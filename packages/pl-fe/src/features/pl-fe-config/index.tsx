@@ -15,6 +15,7 @@ import Form from 'pl-fe/components/ui/form';
 import FormActions from 'pl-fe/components/ui/form-actions';
 import FormGroup from 'pl-fe/components/ui/form-group';
 import Input from 'pl-fe/components/ui/input';
+import Select from 'pl-fe/components/ui/select';
 import Streamfield from 'pl-fe/components/ui/streamfield';
 import Textarea from 'pl-fe/components/ui/textarea';
 import Toggle from 'pl-fe/components/ui/toggle';
@@ -28,7 +29,6 @@ import toast from 'pl-fe/toast';
 import CryptoAddressInput from './components/crypto-address-input';
 import FooterLinkInput from './components/footer-link-input';
 import PromoPanelInput from './components/promo-panel-input';
-import SitePreview from './components/site-preview';
 
 const messages = defineMessages({
   heading: { id: 'column.plfe_config', defaultMessage: 'Front-end configuration' },
@@ -180,17 +180,7 @@ const PlFeConfigEditor: React.FC = () => {
     <Column label={intl.formatMessage(messages.heading)}>
       <Form onSubmit={handleSubmit}>
         <fieldset className='space-y-6' disabled={isLoading}>
-          <SitePreview plFe={plFe} />
-
-          <FormGroup
-            labelText={<FormattedMessage id='plfe_config.fields.logo_label' defaultMessage='Logo' />}
-            hintText={<FormattedMessage id='plfe_config.hints.logo' defaultMessage='SVG. At most 2 MB. Will be displayed to 50px height, maintaining aspect ratio' />}
-          >
-            <FileInput
-              onChange={handleFileChange('logo')}
-              accept='image/svg+xml,image/png'
-            />
-          </FormGroup>
+          {/* <SitePreview plFe={plFe} /> */}
 
           <CardHeader>
             <CardTitle title={<FormattedMessage id='plfe_config.headings.theme' defaultMessage='Theme' />} />
@@ -209,6 +199,45 @@ const PlFeConfigEditor: React.FC = () => {
               to='/pl-fe/admin/theme'
             />
           </List>
+
+          <FormGroup
+            labelText={<FormattedMessage id='plfe_config.fields.logo_label' defaultMessage='Logo' />}
+            hintText={<FormattedMessage id='plfe_config.hints.logo' defaultMessage='SVG or PNG. At most 2 MB. Will be displayed to 50px height, maintaining aspect ratio' />}
+          >
+            <FileInput
+              onChange={handleFileChange('logo')}
+              accept='image/svg+xml,image/png'
+            />
+          </FormGroup>
+
+          <FormGroup
+            labelText={<FormattedMessage id='plfe_config.fields.logo_dark_label' defaultMessage='Logo (dark)' />}
+            hintText={<FormattedMessage id='plfe_config.hints.logo_dark' defaultMessage='SVG or PNG. At most 2 MB. Will be displayed when in dark mode' />}
+          >
+            <FileInput
+              onChange={handleFileChange('logoDarkMode')}
+              accept='image/svg+xml,image/png'
+            />
+          </FormGroup>
+
+          {(data.logo || data.logoDarkMode) && (
+            <List>
+              <ListItem label={<FormattedMessage id='plfe_config.fields.logo_alignment' defaultMessage='Logo alignment' />}>
+                <Select
+                  className='w-fit'
+                  onChange={handleChange('logoAlignment', (e) => e.target.value)}
+                  defaultValue={data.logoAlignment}
+                >
+                  <option value='center'>
+                    <FormattedMessage id='plfe_config.fields.logo_alignment.center' defaultMessage='Center' />
+                  </option>
+                  <option value='left'>
+                    <FormattedMessage id='plfe_config.fields.logo_alignment.left' defaultMessage='Left' />
+                  </option>
+                </Select>
+              </ListItem>
+            </List>
+          )}
 
           <CardHeader>
             <CardTitle title={<FormattedMessage id='plfe_config.headings.options' defaultMessage='Options' />} />

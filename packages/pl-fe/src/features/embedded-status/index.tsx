@@ -25,7 +25,7 @@ const EmbeddedStatus: React.FC<IEmbeddedStatus> = ({ params }) => {
   const history = useHistory();
   const getStatus = useCallback(makeGetStatus(), []);
   const intl = useIntl();
-  const logoSrc = useLogo();
+  const { src: logoSrc } = useLogo();
 
   const status = useAppSelector(state => getStatus(state, { id: params.statusId }));
 

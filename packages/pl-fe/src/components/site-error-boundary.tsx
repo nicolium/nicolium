@@ -24,7 +24,7 @@ interface ISiteErrorBoundary {
 /** Application-level error boundary. Fills the whole screen. */
 const SiteErrorBoundary: React.FC<ISiteErrorBoundary> = ({ children }) => {
   const { links, sentryDsn } = usePlFeConfig();
-  const logoSrc = useLogo();
+  const { src: logoSrc } = useLogo();
   const textarea = useRef<HTMLTextAreaElement>(null);
 
   const [error, setError] = useState<unknown>();

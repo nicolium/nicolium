@@ -3,7 +3,7 @@ import { useSettings } from './use-settings';
 import { useTheme } from './use-theme';
 
 const useLogo = () => {
-  const { logo, logoDarkMode } = usePlFeConfig();
+  const { logo, logoDarkMode, logoAlignment } = usePlFeConfig();
   const { demo } = useSettings();
 
   const darkMode = ['dark', 'black'].includes(useTheme());
@@ -13,9 +13,7 @@ const useLogo = () => {
     ? logoDarkMode
     : logo || logoDarkMode;
 
-  if (demo) return null;
-
-  return src;
+  return { src: demo ? null : src, alignment: logoAlignment };
 };
 
 export { useLogo };

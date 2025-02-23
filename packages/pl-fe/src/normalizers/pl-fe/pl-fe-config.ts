@@ -41,6 +41,7 @@ const plFeConfigSchema = coerceObject({
   appleAppId: v.fallback(v.nullable(v.string()), null),
   logo: v.fallback(v.string(), ''),
   logoDarkMode: v.fallback(v.nullable(v.string()), null),
+  logoAlignment: v.fallback(v.picklist(['left', 'center']), 'center'),
   brandColor: v.fallback(v.string(), ''),
   accentColor: v.fallback(v.string(), ''),
   colors: v.fallback(v.nullable(v.objectWithRest(

@@ -18,7 +18,7 @@ interface ISiteLogo extends React.ComponentProps<'img'> {
 /** Display the most appropriate site logo based on the theme and configuration. */
 const SiteLogo: React.FC<ISiteLogo> = ({ className, theme, ...rest }) => {
   const intl = useIntl();
-  const logoSrc = useLogo();
+  const { src: logoSrc, alignment } = useLogo();
 
   if (!logoSrc) return null;
 
@@ -26,7 +26,7 @@ const SiteLogo: React.FC<ISiteLogo> = ({ className, theme, ...rest }) => {
     // eslint-disable-next-line jsx-a11y/alt-text
     <img
       alt={intl.formatMessage(messages.logo)}
-      className={clsx('object-contain', className)}
+      className={clsx('object-contain', alignment === 'left' && 'w-fit', className)}
       src={logoSrc}
       {...rest}
     />

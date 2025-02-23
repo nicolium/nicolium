@@ -9,7 +9,6 @@ import ProfileDropdown from 'pl-fe/features/ui/components/profile-dropdown';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useLogo } from 'pl-fe/hooks/use-logo';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { useRegistrationStatus } from 'pl-fe/hooks/use-registration-status';
 import { useSettings } from 'pl-fe/hooks/use-settings';
@@ -46,7 +45,6 @@ const SidebarNavigation = React.memo(() => {
   const { isDeveloper } = useSettings();
   const { account } = useOwnAccount();
   const { isOpen } = useRegistrationStatus();
-  const logoSrc = useLogo();
 
   const notificationCount = useAppSelector((state) => state.notifications.unread);
   const followRequestsCount = useFollowRequestsCount().data || 0;
@@ -159,9 +157,7 @@ const SidebarNavigation = React.memo(() => {
 
   return (
     <Stack space={4}>
-      {logoSrc && (
-        <SiteLogo className='h-12 w-auto cursor-pointer' />
-      )}
+      <SiteLogo className='h-12 w-auto cursor-pointer' />
 
       {account && (
         <Stack space={4}>
