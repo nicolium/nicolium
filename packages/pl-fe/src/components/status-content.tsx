@@ -8,6 +8,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import Emojify from 'pl-fe/features/emoji/emojify';
 import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
+import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useStatusTranslation } from 'pl-fe/queries/statuses/use-status-translation';
 import { useStatusMetaStore } from 'pl-fe/stores/status-meta';
@@ -82,6 +83,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   withMedia,
 }) => {
   const { displaySpoilers } = useSettings();
+  const { greentext } = usePlFeConfig();
 
   const [collapsed, setCollapsed] = useState<boolean | null>(null);
   const [onlyEmoji, setOnlyEmoji] = useState(false);
@@ -144,7 +146,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     mentions: status.mentions,
     hasQuote: !!status.quote_id,
     emojis: status.emojis,
-  }, true), [content]);
+  }, true, greentext), [content]);
 
   useEffect(() => {
     setLineClamp(!spoilerNode.current || spoilerNode.current.clientHeight >= 96);

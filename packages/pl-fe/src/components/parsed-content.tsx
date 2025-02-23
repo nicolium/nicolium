@@ -62,12 +62,12 @@ const uniqueHashtagsWithCaseHandling = (hashtags: string[]) => {
 };
 
 function parseContent(props: IParsedContent): ReturnType<typeof domToReact>;
-function parseContent(props: IParsedContent, extractHashtags: true): {
+function parseContent(props: IParsedContent, extractHashtags: true, greentext: boolean): {
   hashtags: Array<string>;
   content: ReturnType<typeof domToReact>;
 };
 
-function parseContent({ html, mentions, hasQuote, emojis }: IParsedContent, extractHashtags = false) {
+function parseContent({ html, mentions, hasQuote, emojis }: IParsedContent, extractHashtags = false, greentext = false) {
   if (html.length === 0) {
     return extractHashtags ? { content: null, hashtags: [] } : null;
   }
@@ -85,8 +85,11 @@ function parseContent({ html, mentions, hasQuote, emojis }: IParsedContent, extr
   const hashtags: Array<string> = [];
 
   const options: HTMLReactParserOptions = {
-    replace(domNode, index) {
+    replace(domNode) {
       if (!(domNode instanceof Element)) {
+        if (greentext && domNode.data.startsWith('>')) {
+          return <span className='dark:text-accent-green text-green-600'>{domNode.data}</span>;
+        }
         return;
       }
 
