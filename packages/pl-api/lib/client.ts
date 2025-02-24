@@ -4308,11 +4308,11 @@ class PlApiClient {
       /**
        * List rules
        *
-       * Requires features{@link Features['pleromaAdminRules']}.
+       * Requires features{@link Features['adminRules']}.
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminrules}
        */
       getRules: async () => {
-        const response = await this.request('/api/v1/pleroma/admin/rules');
+        const response = await this.request(this.features.version.software === GOTOSOCIAL ? '/api/v1/admin/instance/rules' : '/api/v1/pleroma/admin/rules');
 
         return v.parse(filteredArray(adminRuleSchema), response.json);
       },
@@ -4320,11 +4320,14 @@ class PlApiClient {
       /**
        * Create a rule
        *
-       * Requires features{@link Features['pleromaAdminRules']}.
+       * Requires features{@link Features['adminRules']}.
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#post-apiv1pleromaadminrules}
        */
       createRule: async (params: AdminCreateRuleParams) => {
-        const response = await this.request('/api/v1/pleroma/admin/rules', { method: 'POST', body: params });
+        const response = await this.request(
+          this.features.version.software === GOTOSOCIAL ? '/api/v1/admin/instance/rules' : '/api/v1/pleroma/admin/rules',
+          { method: 'POST', body: params },
+        );
 
         return v.parse(adminRuleSchema, response.json);
       },
@@ -4332,11 +4335,14 @@ class PlApiClient {
       /**
        * Update a rule
        *
-       * Requires features{@link Features['pleromaAdminRules']}.
+       * Requires features{@link Features['adminRules']}.
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#patch-apiv1pleromaadminrulesid}
        */
       updateRule: async (ruleId: string, params: AdminUpdateRuleParams) => {
-        const response = await this.request(`/api/v1/pleroma/admin/rules/${ruleId}`, { method: 'PATCH', body: params });
+        const response = await this.request(
+          `/api/v1/${this.features.version.software === GOTOSOCIAL ? 'admin/instance' : 'pleroma/admin'}/rules/${ruleId}`,
+          { method: 'PATCH', body: params },
+        );
 
         return v.parse(adminRuleSchema, response.json);
       },
@@ -4344,11 +4350,14 @@ class PlApiClient {
       /**
        * Delete a rule
        *
-       * Requires features{@link Features['pleromaAdminRules']}.
+       * Requires features{@link Features['adminRules']}.
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#delete-apiv1pleromaadminrulesid}
        */
       deleteRule: async (ruleId: string) => {
-        const response = await this.request(`/api/v1/pleroma/admin/rules/${ruleId}`, { method: 'DELETE' });
+        const response = await this.request(
+          `/api/v1/${this.features.version.software === GOTOSOCIAL ? 'admin/instance' : 'pleroma/admin'}/rules/${ruleId}`,
+          { method: 'DELETE' },
+        );
 
         return response.json as {};
       },

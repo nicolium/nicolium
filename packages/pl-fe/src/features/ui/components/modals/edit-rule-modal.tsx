@@ -6,6 +6,7 @@ import FormGroup from 'pl-fe/components/ui/form-group';
 import Input from 'pl-fe/components/ui/input';
 import Modal from 'pl-fe/components/ui/modal';
 import { useTextField } from 'pl-fe/hooks/forms/use-text-field';
+import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useRules } from 'pl-fe/queries/admin/use-rules';
 import toast from 'pl-fe/toast';
 
@@ -26,6 +27,7 @@ interface EditRuleModalProps {
 
 const EditRuleModal: React.FC<BaseModalProps & EditRuleModalProps> = ({ onClose, rule }) => {
   const intl = useIntl();
+  const features = useFeatures();
 
   const { createRule, updateRule } = useRules();
 
@@ -79,15 +81,17 @@ const EditRuleModal: React.FC<BaseModalProps & EditRuleModalProps> = ({ onClose,
             {...text}
           />
         </FormGroup>
-        <FormGroup
-          labelText={<FormattedMessage id='admin.edit_rule.fields.priority_label' defaultMessage='Rule priority' />}
-        >
-          <Input
-            placeholder={intl.formatMessage(messages.rulePriorityPlaceholder)}
-            type='number'
-            {...priority}
-          />
-        </FormGroup>
+        {features.adminRulesPriority && (
+          <FormGroup
+            labelText={<FormattedMessage id='admin.edit_rule.fields.priority_label' defaultMessage='Rule priority' />}
+          >
+            <Input
+              placeholder={intl.formatMessage(messages.rulePriorityPlaceholder)}
+              type='number'
+              {...priority}
+            />
+          </FormGroup>
+        )}
       </Form>
     </Modal>
   );

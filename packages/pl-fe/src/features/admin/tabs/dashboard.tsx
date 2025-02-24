@@ -81,7 +81,7 @@ const Dashboard: React.FC = () => {
           />
         )}
 
-        {features.pleromaAdminRules && (
+        {features.adminRules && (
           <ListItem
             to='/pl-fe/admin/rules'
             label={<FormattedMessage id='column.admin.rules' defaultMessage='Instance rules' />}

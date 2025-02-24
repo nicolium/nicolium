@@ -1,5 +1,7 @@
 import * as v from 'valibot';
 
+import { datetimeSchema } from '../utils';
+
 /**
  * @category Admin schemas
  * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminrules}
@@ -9,6 +11,9 @@ const adminRuleSchema = v.object({
   text: v.fallback(v.string(), ''),
   hint: v.fallback(v.string(), ''),
   priority: v.fallback(v.nullable(v.number()), null),
+
+  created_at: v.fallback(v.optional(datetimeSchema), undefined),
+  updated_at: v.fallback(v.optional(datetimeSchema), undefined),
 });
 
 /**

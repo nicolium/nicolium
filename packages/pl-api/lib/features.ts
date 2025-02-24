@@ -682,6 +682,28 @@ const getFeatures = (instance: Instance) => {
     ]),
 
     /**
+     * Ability to manage instance rules by admins.
+     * @see GET /api/v1/pleroma/admin/rules
+     * @see POST /api/v1/pleroma/admin/rules
+     * @see PATCH /api/v1/pleroma/admin/rules/:id
+     * @see DELETE /api/v1/pleroma/admin/rules/:id
+     * @see GET /api/v1/admin/instance/rules
+     * @see GET /api/v1/admin/instance/rules/:id
+     * @see POST /api/v1/admin/instance/rules
+     * @see PATCH /api/v1/admin/instance/rules/:id
+     * @see DELETE /api/v1/admin/instance/rules/:id
+     */
+    adminRules: any([
+      v.software === GOTOSOCIAL,
+      v.software === PLEROMA && v.build === REBASED && gte(v.version, '2.5.0'),
+      v.software === PLEROMA && gte(v.version, '2.7.0'),
+    ]),
+
+    adminRulesPriority: any([
+      v.software === PLEROMA && gte(v.version, '2.7.0'),
+    ])
+
+    /**
      * @see GET /api/v2/notifications/:group_key
      * @see GET /api/v2/notifications/:group_key
      * @see POST /api/v2/notifications/:group_key/dismiss
@@ -1010,18 +1032,6 @@ const getFeatures = (instance: Instance) => {
     pleromaAdminModerationLog: v.software === PLEROMA,
 
     pleromaAdminRelays: v.software === PLEROMA,
-
-    /**
-     * Ability to manage instance rules by admins.
-     * @see GET /api/v1/pleroma/admin/rules
-     * @see POST /api/v1/pleroma/admin/rules
-     * @see PATCH /api/v1/pleroma/admin/rules/:id
-     * @see DELETE /api/v1/pleroma/admin/rules/:id
-     */
-    pleromaAdminRules: any([
-      v.software === PLEROMA && v.build === REBASED && gte(v.version, '2.5.0'),
-      v.software === PLEROMA && gte(v.version, '2.7.0'),
-    ]),
 
     pleromaAdminStatuses: v.software === PLEROMA,
 
