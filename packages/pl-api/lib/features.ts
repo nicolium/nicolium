@@ -145,14 +145,6 @@ const HOMETOWN = 'hometown';
 const PL = 'pl';
 
 /**
- * Rebased, fork of Pleroma developed by Soapbox author.
- *
- * @category Software
- * @see {@link https://gitlab.com/soapbox-pub/rebased}
- */
-const REBASED = 'soapbox';
-
-/**
  * Backend name reserved only for tests.
  *
  * @category Software
@@ -216,7 +208,6 @@ const getFeatures = (instance: Instance) => {
      * @see PATCH /api/v1/accounts/update_credentials
      */
     accountLocation: any([
-      v.software === PLEROMA && v.build === REBASED && gte(v.version, '2.5.0'),
       v.software === PLEROMA && v.build === PL,
     ]),
 
@@ -363,7 +354,6 @@ const getFeatures = (instance: Instance) => {
      * @see DELETE /api/v1/pleroma/chats/:id
      */
     chatsDelete: any([
-      v.build === REBASED,
       v.software === PLEROMA && v.build === PL,
     ]),
 
@@ -581,7 +571,6 @@ const getFeatures = (instance: Instance) => {
       v.software === DITTO,
       v.software === MASTODON,
       v.software === PIXELFED,
-      v.software === PLEROMA && gte(v.version, '2.6.0') && v.build === REBASED,
       v.software === PLEROMA && gte(v.version, '2.7.0'),
       v.software === TAKAHE,
     ]),
@@ -695,13 +684,12 @@ const getFeatures = (instance: Instance) => {
      */
     adminRules: any([
       v.software === GOTOSOCIAL,
-      v.software === PLEROMA && v.build === REBASED && gte(v.version, '2.5.0'),
       v.software === PLEROMA && gte(v.version, '2.7.0'),
     ]),
 
     adminRulesPriority: any([
       v.software === PLEROMA && gte(v.version, '2.7.0'),
-    ])
+    ]),
 
     /**
      * @see GET /api/v2/notifications/:group_key
@@ -803,7 +791,6 @@ const getFeatures = (instance: Instance) => {
       v.software === GOTOSOCIAL,
       v.software === MASTODON && gte(v.compatVersion, '4.0.0'),
       v.software === MITRA && gte(v.version, '2.18.0'),
-      v.software === PLEROMA && v.build === REBASED && gte(v.version, '2.6.0'),
       v.software === PLEROMA && gte(v.version, '2.7.0'),
     ]),
 
@@ -889,7 +876,6 @@ const getFeatures = (instance: Instance) => {
       v.software === DITTO,
       v.software === GOTOSOCIAL,
       v.software === MASTODON,
-      v.software === PLEROMA && v.build === REBASED && gte(v.version, '2.5.0'),
       v.software === PLEROMA && v.build === PL,
     ]),
 
@@ -1064,7 +1050,6 @@ const getFeatures = (instance: Instance) => {
       v.software === MASTODON,
       v.software === PLEROMA && v.build === AKKOMA,
       v.software === PLEROMA && v.build === PL,
-      v.software === PLEROMA && v.build === REBASED,
       v.software === GOTOSOCIAL,
     ]),
 
@@ -1139,7 +1124,6 @@ const getFeatures = (instance: Instance) => {
     quotePosts: any([
       v.software === ICESHRIMP_NET,
       v.software === FRIENDICA && gte(v.version, '2023.3.0'),
-      v.software === PLEROMA && [REBASED, AKKOMA].includes(v.build!) && gte(v.version, '2.5.0'),
       instance.api_versions['quote_posting.pleroma.pl-api'] >= 1,
       instance.feature_quote === true,
     ]),
@@ -1445,7 +1429,6 @@ export {
   GLITCH,
   HOMETOWN,
   PL,
-  REBASED,
   UNRELEASED,
   type Features,
   type Backend as BackendVersion,
