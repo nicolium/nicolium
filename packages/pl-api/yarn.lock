@@ -2693,10 +2693,10 @@ typedoc-plugin-valibot@^1.0.0:
   resolved "https://registry.yarnpkg.com/typedoc-plugin-valibot/-/typedoc-plugin-valibot-1.0.0.tgz#9a7e586d993f5e6c9efe60ab12724e4fb24f7efe"
   integrity sha512-3LJSPc/aAKvxsfJx3/qgI1HBJvh4JNmtQYzcbxiQrVdiloIQwh4g0KtwvHV9CCl6gAnDxdnFMdE5gbhne2wXuw==
 
-typedoc@^0.27.6:
-  version "0.27.6"
-  resolved "https://registry.yarnpkg.com/typedoc/-/typedoc-0.27.6.tgz#7e8d067bd5386b7908afcb12c9054a83e8bb326b"
-  integrity sha512-oBFRoh2Px6jFx366db0lLlihcalq/JzyCVp7Vaq1yphL/tbgx2e+bkpkCgJPunaPvPwoTOXSwasfklWHm7GfAw==
+typedoc@^0.27.8:
+  version "0.27.8"
+  resolved "https://registry.yarnpkg.com/typedoc/-/typedoc-0.27.8.tgz#9d4c4aa3c6889090d8fa4776367e353697d3e706"
+  integrity sha512-q0/2TUunNEDmWkn23ULKGXieK8cgGuAmBUXC/HcZ/rgzMI9Yr4Nq3in1K1vT1NZ9zx6M78yTk3kmIPbwJgK5KA==
   dependencies:
     "@gerrit0/mini-shiki" "^1.24.0"
     lunr "^2.3.9"
