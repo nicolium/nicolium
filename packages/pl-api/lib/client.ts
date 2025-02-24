@@ -3767,13 +3767,16 @@ class PlApiClient {
 
       /**
        * Mark report as resolved
+       *
        * Mark a report as resolved with no further action taken.
+       *
+       * @param action_taken_comment Optional admin comment on the action taken in response to this report. Supported by GoToSocial only.
        * @see {@link https://docs.joinmastodon.org/methods/admin/reports/#resolve}
        */
-      resolveReport: async (reportId: string) => {
+      resolveReport: async (reportId: string, action_taken_comment?: string) => {
         let response;
         if (this.features.mastodonAdmin) {
-          response = await this.request(`/api/v1/admin/reports/${reportId}/resolve`, { method: 'POST' });
+          response = await this.request(`/api/v1/admin/reports/${reportId}/resolve`, { method: 'POST',  body: { action_taken_comment } });
         } else {
           response = await this.request(`/api/v1/pleroma/admin/reports/${reportId}`, {
             method: 'PATCH',
