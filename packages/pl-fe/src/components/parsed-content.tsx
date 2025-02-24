@@ -88,7 +88,7 @@ function parseContent({ html, mentions, hasQuote, emojis }: IParsedContent, extr
     replace(domNode) {
       if (!(domNode instanceof Element)) {
         if (greentext && domNode.data.startsWith('>')) {
-          return <span className='dark:text-accent-green text-green-600'>{domNode.data}</span>;
+          return <span className='dark:text-accent-green text-lime-600'>{domNode.data}</span>;
         }
         return;
       }
