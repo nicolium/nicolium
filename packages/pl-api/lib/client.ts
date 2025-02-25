@@ -1280,6 +1280,8 @@ class PlApiClient {
 
     /**
      * Change account password
+     *
+     * Requires features{@link Features['changePassword']}.
      * @see {@link https://docs.gotosocial.org/en/latest/api/swagger}
      * @see {@link https://codeberg.org/silverpill/mitra/src/commit/f15c19527191d82bc3643f984deca43d1527525d/docs/openapi.yaml}
      * @see {@link https://git.pleroma.social/pleroma/pleroma/-/blob/develop/lib/pleroma/web/api_spec/operations/twitter_util_operation.ex?ref_type=heads#L68}
