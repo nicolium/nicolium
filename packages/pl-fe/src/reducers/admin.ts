@@ -8,8 +8,8 @@ import {
   ADMIN_REPORT_PATCH_SUCCESS,
   ADMIN_USERS_FETCH_SUCCESS,
   ADMIN_USER_DELETE_SUCCESS,
-  ADMIN_USER_APPROVE_REQUEST,
   ADMIN_USER_APPROVE_SUCCESS,
+  ADMIN_USER_REJECT_SUCCESS,
   type AdminActions,
 } from 'pl-fe/actions/admin';
 import { normalizeAdminReport, type AdminReport as MinifiedReport } from 'pl-fe/normalizers/admin-report';
@@ -119,12 +119,12 @@ const admin = (state = initialState, action: AdminActions): State => {
       return create(state, (draft) => importUsers(draft, action.users, action.params));
     case ADMIN_USER_DELETE_SUCCESS:
       return create(state, (draft) => deleteUser(draft, action.accountId));
-    case ADMIN_USER_APPROVE_REQUEST:
+    case ADMIN_USER_APPROVE_SUCCESS:
+      return create(state, (draft) => approveUser(draft, action.user));
+    case ADMIN_USER_REJECT_SUCCESS:
       return create(state, (draft) => {
         draft.awaitingApproval = draft.awaitingApproval.filter(value => value !== action.accountId);
       });
-    case ADMIN_USER_APPROVE_SUCCESS:
-      return create(state, (draft) => approveUser(draft, action.user));
     default:
       return state;
   }

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { approveUser, deleteUser } from 'pl-fe/actions/admin';
+import { approveUser, rejectUser } from 'pl-fe/actions/admin';
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import { AuthorizeRejectButtons } from 'pl-fe/components/authorize-reject-buttons';
 import HStack from 'pl-fe/components/ui/hstack';
@@ -23,7 +23,7 @@ const UnapprovedAccount: React.FC<IUnapprovedAccount> = ({ accountId }) => {
   if (!account) return null;
 
   const handleApprove = () => dispatch(approveUser(account.id));
-  const handleReject = () => dispatch(deleteUser(account.id));
+  const handleReject = () => dispatch(rejectUser(account.id));
 
   return (
     <HStack space={4} justifyContent='between'>
