@@ -4,6 +4,7 @@ export * from './admin/account';
 export * from './admin/announcement';
 export * from './admin/canonical-email-block';
 export * from './admin/cohort';
+export * from './admin/custom-emoji';
 export * from './admin/dimension';
 export * from './admin/domain';
 export * from './admin/domain-allow';

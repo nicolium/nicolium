@@ -9,6 +9,7 @@ import {
   adminAnnouncementSchema,
   adminCanonicalEmailBlockSchema,
   adminCohortSchema,
+  adminCustomEmojiSchema,
   adminDimensionSchema,
   adminDomainAllowSchema,
   adminDomainBlockSchema,
@@ -114,6 +115,7 @@ import type {
 import type {
   AdminAccountAction,
   AdminCreateAnnouncementParams,
+  AdminCreateCustomEmojiParams,
   AdminCreateDomainBlockParams,
   AdminCreateDomainParams,
   AdminCreateIpBlockParams,
@@ -122,6 +124,7 @@ import type {
   AdminGetAccountsParams,
   AdminGetAnnouncementsParams,
   AdminGetCanonicalEmailBlocks,
+  AdminGetCustomEmojisParams,
   AdminGetDimensionsParams,
   AdminGetDomainAllowsParams,
   AdminGetDomainBlocksParams,
@@ -135,6 +138,7 @@ import type {
   AdminMeasureKey,
   AdminPerformAccountActionParams,
   AdminUpdateAnnouncementParams,
+  AdminUpdateCustomEmojiParams,
   AdminUpdateDomainBlockParams,
   AdminUpdateReportParams,
   AdminUpdateRuleParams,
@@ -4377,6 +4381,68 @@ class PlApiClient {
         const response = await this.request('/api/v1/pleroma/admin/config', { method: 'POST', body: { configs: params } });
 
         return v.parse(pleromaConfigSchema, response.json);
+      },
+    },
+
+    customEmojis: {
+      /**
+       * View local and remote emojis available to/known by this instance.
+       *
+       * Requires features{@link Features['adminCustomEmojis']}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getCustomEmojis: (params: AdminGetCustomEmojisParams) =>
+        this.#paginatedGet('/api/v1/admin/custom_emojis', { params }, adminCustomEmojiSchema),
+
+      /**
+       * Get the admin view of a single emoji.
+       *
+       * Requires features{@link Features['adminCustomEmojis']}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      getCustomEmoji: async (emojiId: string) => {
+        const response = await this.request(`/api/v1/admin/custom_emojis/${emojiId}`);
+
+        return v.parse(adminCustomEmojiSchema, response.json);
+      },
+
+      /**
+       * Get the admin view of a single emoji.
+       *
+       * Requires features{@link Features['adminCustomEmojis']}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      createCustomEmoji: async (params: AdminCreateCustomEmojiParams) => {
+        const response = await this.request(
+          '/api/v1/admin/custom_emojis',
+          { method: 'POST', body: params, contentType: '' },
+        );
+
+        return v.parse(adminCustomEmojiSchema, response.json);
+      },
+
+      updateCustomEmoji: async (emojiId: string, params: AdminUpdateCustomEmojiParams) => {
+        const response = await this.request(
+          `/api/v1/admin/custom_emojis/${emojiId}`,
+          { method: 'PATCH', body: params, contentType: '' },
+        );
+
+        return v.parse(adminCustomEmojiSchema, response.json);
+      },
+
+      /**
+       * Delete a **local** emoji with the given ID from the instance.
+       *
+       * Requires features{@link Features['adminCustomEmojis']}.
+       * @see {@link https://docs.gotosocial.org/en/latest/api/swagger/}
+       */
+      deleteCustomEmoji: async (emojiId: string) => {
+        const response = await this.request(
+          `/api/v1/admin/custom_emojis/${emojiId}`,
+          { method: 'DELETE' },
+        );
+
+        return v.parse(adminCustomEmojiSchema, response.json);
       },
     },
   };

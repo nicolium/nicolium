@@ -302,6 +302,28 @@ type AdminUpdateRuleParams = Partial<AdminCreateRuleParams>;
 /**
  * @category Request params
  */
+interface AdminGetCustomEmojisParams extends Pick<PaginationParams, 'limit'> {
+  filter?: string;
+  max_shortcode_domain?: string;
+  min_shortcode_domain?: string;
+}
+
+interface AdminCreateCustomEmojiParams {
+  shortcode: string;
+  image: File;
+  category?: string;
+}
+
+interface AdminUpdateCustomEmojiParams {
+  type: 'disable' | 'copy' | 'modify';
+  shortcode?: string;
+  image?: File;
+  category?: string;
+}
+
+/**
+ * @category Request params
+ */
 interface AdminGetGroupsParams {
 }
 
@@ -333,5 +355,8 @@ export type {
   AdminGetModerationLogParams,
   AdminCreateRuleParams,
   AdminUpdateRuleParams,
+  AdminGetCustomEmojisParams,
+  AdminCreateCustomEmojiParams,
+  AdminUpdateCustomEmojiParams,
   AdminGetGroupsParams,
 };

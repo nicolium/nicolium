@@ -671,6 +671,15 @@ const getFeatures = (instance: Instance) => {
     ]),
 
     /**
+     * @see GET /api/v1/admin/custom_emojis
+     * @see GET /api/v1/admin/custom_emojis/:id
+     * @see POST /api/v1/admin/custom_emojis
+     * @see PATCH /api/v1/admin/custom_emojis/:id
+     * @see DELETE /api/v1/admin/custom_emojis/:id
+     */
+    adminCustomEmojis: v.software === GOTOSOCIAL,
+
+    /**
      * Ability to manage instance rules by admins.
      * @see GET /api/v1/pleroma/admin/rules
      * @see POST /api/v1/pleroma/admin/rules
