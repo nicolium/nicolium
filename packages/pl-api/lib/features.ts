@@ -168,7 +168,7 @@ const getFeatures = (instance: Instance) => {
      */
     accountAvatarDescription: any([
       v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
-      v.software === PLEROMA && v.build === PL,
+      v.software === PLEROMA && gte(v.version, '2.8.0'),
     ]),
 
     /**
