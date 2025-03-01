@@ -6,7 +6,6 @@ import { useHistory } from 'react-router-dom';
 
 import { fetchStatus } from 'pl-fe/actions/statuses';
 import { showStatusHoverCard } from 'pl-fe/components/hover-status-wrapper';
-import Card, { CardBody } from 'pl-fe/components/ui/card';
 import StatusContainer from 'pl-fe/containers/status-container';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
@@ -80,17 +79,6 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
 
   if (!statusId) return null;
 
-  const renderStatus = (statusId: string) => (
-    // @ts-ignore
-    <StatusContainer
-      key={statusId}
-      id={statusId}
-      hoverable={false}
-      hideActionBar
-      muted
-    />
-  );
-
   return (
     <div
       className={clsx({
@@ -108,11 +96,14 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Card variant='rounded' className='relative isolate overflow-hidden black:rounded-xl black:border black:border-gray-800'>
-        <CardBody>
-          {renderStatus(statusId)}
-        </CardBody>
-      </Card>
+      <StatusContainer
+        className='isolate black:rounded-xl black:border black:border-gray-800'
+        key={statusId}
+        id={statusId}
+        hoverable={false}
+        hideActionBar
+        muted
+      />
     </div>
   );
 };

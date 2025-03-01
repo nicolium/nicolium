@@ -52,6 +52,7 @@ interface IStatus {
   showGroup?: boolean;
   accountAction?: React.ReactElement;
   fromBookmarks?: boolean;
+  className?: string;
 }
 
 const Status: React.FC<IStatus> = (props) => {
@@ -71,6 +72,7 @@ const Status: React.FC<IStatus> = (props) => {
     variant = 'rounded',
     showGroup = true,
     fromBookmarks = false,
+    className,
   } = props;
 
   const intl = useIntl();
@@ -358,7 +360,7 @@ const Status: React.FC<IStatus> = (props) => {
       >
         <Card
           variant={variant}
-          className={clsx('status__wrapper space-y-4', `status-${actualStatus.visibility}`, {
+          className={clsx('status__wrapper space-y-4', className, `status-${actualStatus.visibility}`, {
             'py-6 sm:p-5': variant === 'rounded',
             'status-reply': !!status.in_reply_to_id,
             muted,
