@@ -629,7 +629,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MASTODON && gte(v.compatVersion, '4.1.0'),
       v.software === PIXELFED,
       v.software === PLEROMA && v.build === AKKOMA,
-      v.software === PLEROMA && v.build === PL,
+      v.software === PLEROMA && gte(v.version, '2.9.0'),
       v.software === TAKAHE && gte(v.version, '0.9.0'),
     ]),
 
@@ -643,7 +643,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MASTODON && gte(v.compatVersion, '4.0.0'),
       v.software === PIXELFED,
       v.software === PLEROMA && v.build === AKKOMA,
-      v.software === PLEROMA && v.build === PL,
+      v.software === PLEROMA && gte(v.version, '2.9.0'),
       v.software === TAKAHE && gte(v.version, '0.9.0'),
     ]),
 
@@ -1058,7 +1058,7 @@ const getFeatures = (instance: Instance) => {
     postLanguages: any([
       v.software === MASTODON,
       v.software === PLEROMA && v.build === AKKOMA,
-      v.software === PLEROMA && v.build === PL,
+      v.software === PLEROMA && gte(v.version, '2.9.0'),
       v.software === GOTOSOCIAL,
     ]),
 
