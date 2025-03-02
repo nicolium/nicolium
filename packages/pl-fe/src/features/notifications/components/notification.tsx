@@ -217,18 +217,6 @@ const Notification: React.FC<INotification> = (props) => {
   const { accounts } = notification;
   const account = accounts[0];
 
-  const getHandlers = () => ({
-    reply: handleReply,
-    favourite: handleHotkeyFavourite,
-    boost: handleHotkeyBoost,
-    mention: handleMention,
-    open: handleOpen,
-    openProfile: handleOpenProfile,
-    moveUp: handleMoveUp,
-    moveDown: handleMoveDown,
-    toggleSensitive: handleHotkeyToggleSensitive,
-  });
-
   const handleOpen = () => {
     if (status && typeof status === 'object' && account && typeof account === 'object') {
       history.push(`/@${account.acct}/posts/${status.id}`);
@@ -305,6 +293,18 @@ const Notification: React.FC<INotification> = (props) => {
     if (onMoveDown) {
       onMoveDown(notification.group_key);
     }
+  };
+
+  const handlers = {
+    reply: handleReply,
+    favourite: handleHotkeyFavourite,
+    boost: handleHotkeyBoost,
+    mention: handleMention,
+    open: handleOpen,
+    openProfile: handleOpenProfile,
+    moveUp: handleMoveUp,
+    moveDown: handleMoveDown,
+    toggleSensitive: handleHotkeyToggleSensitive,
   };
 
   const displayedType = notification.type === 'mention' && (notification.subtype === 'reply' || status?.in_reply_to_account_id === me) ? 'reply' : notification.type;
@@ -402,7 +402,7 @@ const Notification: React.FC<INotification> = (props) => {
   );
 
   return (
-    <HotKeys handlers={getHandlers()} data-testid='notification'>
+    <HotKeys handlers={handlers} data-testid='notification'>
       <div
         className='notification focusable'
         tabIndex={0}
