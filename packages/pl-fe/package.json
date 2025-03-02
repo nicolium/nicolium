@@ -3,7 +3,7 @@
   "displayName": "pl-fe",
   "version": "0.0.1",
   "type": "module",
-  "description": "Web-based federated social media client, a fork of Soapbox",
+  "description": "Mastodon-compatible social media front-end",
   "homepage": "https://github.com/mkljczk/pl-fe",
   "repository": {
     "type": "git",

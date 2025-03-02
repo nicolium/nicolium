@@ -61,7 +61,7 @@ const config = defineConfig(({ command }) => ({
       manifest: {
         name: 'pl-fe',
         short_name: 'pl-fe',
-        description: 'Web-based federated social media client, a fork of Soapbox',
+        description: 'Mastodon-compatible social media front-endx',
         icons: [
           {
             src: '/instance/images/logo.png',
