@@ -44,7 +44,7 @@ type LongPressOptions = {
 };
 
 const useLongPress = (callback: (e: Event) => void, options: LongPressOptions = {}) => {
-  const { threshold = 400, onStart, onFinish, onCancel, allowScroll = false, scrollThreshold = 20 } = options;
+  const { threshold = 400, onStart, onFinish, onCancel, allowScroll = false, scrollThreshold = 40 } = options;
   const isLongPressActive = React.useRef(false);
   const isPressed = React.useRef(false);
   const timerId = React.useRef<NodeJS.Timeout>();
