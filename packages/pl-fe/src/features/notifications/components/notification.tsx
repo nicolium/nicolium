@@ -246,7 +246,7 @@ const Notification: React.FC<INotification> = (props) => {
   const handleMention = useCallback((e?: KeyboardEvent) => {
     e?.preventDefault();
 
-    dispatch(replyCompose(status, account));
+    dispatch(mentionCompose(account));
   }, [account]);
 
   const handleReply = useCallback((e?: KeyboardEvent) => {
