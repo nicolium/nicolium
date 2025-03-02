@@ -231,7 +231,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
         return mutingAction();
       } else if (actionType === 'blocking') {
         return blockingAction();
-      } else if (actionType === 'follow_request') {
+      } else if (actionType === 'follow_request' && !account.relationship?.followed_by) {
         return followRequestAction();
       } else if (actionType === 'biting') {
         return bitingAction();

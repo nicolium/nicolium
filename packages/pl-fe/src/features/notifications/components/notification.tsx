@@ -333,26 +333,33 @@ const Notification: React.FC<INotification> = (props) => {
   const renderContent = () => {
     switch (type) {
       case 'follow':
+        return (
+          <AccountContainer
+            id={account.id}
+            avatarSize={avatarSize}
+            withRelationship
+          />
+        );
       case 'follow_request':
-        return account && typeof account === 'object' ? (
+        return (
           <AccountContainer
             id={account.id}
             avatarSize={avatarSize}
             actionType='follow_request'
             withRelationship
           />
-        ) : null;
+        );
       case 'bite':
-        return account && typeof account === 'object' ? (
+        return (
           <AccountContainer
             id={account.id}
             avatarSize={avatarSize}
             actionType='biting'
             withRelationship
           />
-        ) : null;
+        );
       case 'move':
-        return account && typeof account === 'object' && notification.target && typeof notification.target === 'object' ? (
+        return notification.target ? (
           <AccountContainer
             id={notification.target_id}
             avatarSize={avatarSize}
@@ -369,7 +376,7 @@ const Notification: React.FC<INotification> = (props) => {
       case 'event_reminder':
       case 'participation_accepted':
       case 'participation_request':
-        return status && typeof status === 'object' ? (
+        return status ? (
           <StatusContainer
             id={status.id}
             onMoveDown={handleMoveDown}
