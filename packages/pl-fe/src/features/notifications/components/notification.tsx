@@ -218,7 +218,7 @@ const Notification: React.FC<INotification> = (props) => {
   const account = accounts[0];
 
   const getHandlers = () => ({
-    reply: handleMention,
+    reply: handleReply,
     favourite: handleHotkeyFavourite,
     boost: handleHotkeyBoost,
     mention: handleMention,
@@ -244,6 +244,12 @@ const Notification: React.FC<INotification> = (props) => {
   };
 
   const handleMention = useCallback((e?: KeyboardEvent) => {
+    e?.preventDefault();
+
+    dispatch(replyCompose(status, account));
+  }, [account]);
+
+  const handleReply = useCallback((e?: KeyboardEvent) => {
     e?.preventDefault();
 
     if (status) {
