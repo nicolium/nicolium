@@ -182,10 +182,7 @@ const statusToTextMentions = (status: Pick<Status, 'account' | 'mentions'>, acco
   const author = status.account.acct;
   const mentions = status.mentions.map((m) => m.acct) || [];
 
-  return [...new Set([author, ...mentions]
-    .filter(acct => acct !== account.acct))]
-    .map(m => `@${m} `)
-    .join('');
+  return [...new Set([author, ...mentions].filter(acct => acct !== account.acct))].map(m => `@${m} `).join('');
 };
 
 const statusToMentionsArray = (status: Pick<Status, 'account' | 'mentions'>, account: Pick<Account, 'acct'>, rebloggedBy?: Pick<Account, 'acct'>) => {

@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage, IntlShape, MessageDescriptor } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
-import { mentionCompose } from 'pl-fe/actions/compose';
+import { mentionCompose, replyCompose } from 'pl-fe/actions/compose';
 import { reblog, favourite, unreblog, unfavourite } from 'pl-fe/actions/interactions';
 import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import Icon from 'pl-fe/components/icon';
@@ -246,7 +246,9 @@ const Notification: React.FC<INotification> = (props) => {
   const handleMention = useCallback((e?: KeyboardEvent) => {
     e?.preventDefault();
 
-    if (account && typeof account === 'object') {
+    if (status) {
+      dispatch(replyCompose(status, account));
+    } else {
       dispatch(mentionCompose(account));
     }
   }, [account]);
