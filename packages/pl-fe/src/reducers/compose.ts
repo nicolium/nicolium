@@ -75,7 +75,7 @@ const getResetFileKey = () => Math.floor((Math.random() * 0x10000));
 
 interface ComposePoll {
   options: Array<string>;
-  options_map: Array<Partial<Record<Language, string>>>;
+  options_map: Array<Record<Language | string, string>>;
   expires_in: number;
   multiple: boolean;
   hide_totals: boolean;
@@ -95,7 +95,7 @@ interface Compose {
   content_type: string;
   draft_id: string | null;
   editorState: string | null;
-  editorStateMap: Partial<Record<Language, string | null>>;
+  editorStateMap: Record<Language | string, string | null>;
   focusDate: Date | null;
   group_id: string | null;
   idempotencyKey: string;
@@ -114,17 +114,17 @@ interface Compose {
   schedule: Date | null;
   sensitive: boolean;
   spoiler_text: string;
-  spoilerTextMap: Partial<Record<Language, string>>;
+  spoilerTextMap: Record<Language | string, string>;
   suggestions: Array<string> | Array<Emoji>;
   suggestion_token: string | null;
   tagHistory: Array<string>;
   text: string;
-  textMap: Partial<Record<Language, string>>;
+  textMap: Record<Language | string, string>;
   to: Array<string>;
   parent_reblogged_by: string | null;
   dismissed_quotes: Array<string>;
-  language: Language | null;
-  modified_language: Language | null;
+  language: Language | string | null;
+  modified_language: Language | string | null;
   suggested_language: string | null;
   federated: boolean;
   approvalRequired: boolean;
@@ -532,6 +532,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.content_type = action.contentType || 'text/plain';
         compose.quote = action.status.quote_id;
         compose.group_id = action.status.group_id;
+        compose.language = action.status.language;
 
         compose.media_attachments = action.status.media_attachments;
 

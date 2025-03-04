@@ -234,7 +234,7 @@ const LanguageDropdownButton: React.FC<ILanguageDropdownButton> = ({ composeId }
 
   let buttonLabel = intl.formatMessage(messages.languagePrompt);
   if (language) {
-    const list: string[] = [languagesObject[modifiedLanguage || language]];
+    const list: string[] = [languagesObject[(modifiedLanguage || language) as Language]];
     if (languagesCount) list.push(intl.formatMessage(messages.multipleLanguages, {
       count: languagesCount,
     }));
