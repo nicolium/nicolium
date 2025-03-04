@@ -79,8 +79,8 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, statusId, obfusca
 
   return (
     <button
-      className={clsx('group flex cursor-pointer items-center gap-2 overflow-hidden rounded-md border border-gray-400 px-1.5 py-1 transition-colors', {
-        'bg-primary-100 dark:border-primary-400 dark:bg-primary-400 black:border-primary-600 black:bg-primary-600': reaction.me,
+      className={clsx('group flex cursor-pointer items-center gap-2 overflow-hidden rounded-md border border-gray-400 px-1.5 py-1 transition-all', {
+        'bg-primary-100 dark:border-primary-500 dark:bg-primary-500 dark:ring-2 dark:ring-primary-300 black:border-primary-600 black:bg-primary-600': reaction.me,
         'bg-transparent dark:border-primary-700 dark:bg-primary-700 black:border-primary-800 black:bg-primary-800': !reaction.me,
         'cursor-pointer': !unauthenticated,
         'hover:bg-primary-200 hover:dark:border-primary-300 hover:dark:bg-primary-300 hover:black:bg-primary-500': reaction.me && !unauthenticated,
