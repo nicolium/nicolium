@@ -95,7 +95,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, statusId, obfusca
       disabled={unauthenticated}
       {...bind}
     >
-      <Emoji className='h-5 max-w-48' emoji={reaction.name} src={reaction.url || undefined} />
+      <Emoji className='h-5 max-w-48 transition-transform hover:scale-125' emoji={reaction.name} src={reaction.url || undefined} />
 
       <Text size='xs' weight='semibold' theme='inherit'>
         <AnimatedNumber value={reaction.count} obfuscate={obfuscate} short />
