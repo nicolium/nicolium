@@ -4,7 +4,9 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting, saveSettings } from 'pl-fe/actions/settings';
 import List, { ListItem } from 'pl-fe/components/list';
+import Button from 'pl-fe/components/ui/button';
 import Form from 'pl-fe/components/ui/form';
+import HStack from 'pl-fe/components/ui/hstack';
 import { Mutliselect, SelectDropdown } from 'pl-fe/features/forms';
 import SettingToggle from 'pl-fe/features/notifications/components/setting-toggle';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
@@ -133,6 +135,11 @@ const Preferences = () => {
     debouncedSave(dispatch);
   };
 
+  const onThemeReset = () => {
+    dispatch(changeSetting(['themeMode'], plFeConfig.defaultSettings.themeMode, { save: false }));
+    dispatch(changeSetting(['theme', 'brandColor'], undefined, { showAlert: true }));
+  };
+
   const displayMediaOptions = React.useMemo(() => ({
     default: intl.formatMessage(messages.displayPostsDefault),
     hide_all: intl.formatMessage(messages.displayPostsHideAll),
@@ -180,6 +187,12 @@ const Preferences = () => {
           allowTintChange={false}
         />
       </List>
+
+      <HStack justifyContent='end'>
+        <Button theme='secondary' onClick={onThemeReset}>
+          <FormattedMessage id='preferences.fields.theme_reset' defaultMessage='Reset theme' />
+        </Button>
+      </HStack>
 
       <List>
         <ListItem label={<FormattedMessage id='preferences.fields.language_label' defaultMessage='Display language' />}>
