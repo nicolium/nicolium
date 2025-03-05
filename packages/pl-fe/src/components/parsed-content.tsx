@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 
 import Emojify from 'pl-fe/features/emoji/emojify';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
+import Purify from 'pl-fe/utils/url-purify';
 
 import HashtagLink from './hashtag-link';
 import HoverAccountWrapper from './hover-account-wrapper';
@@ -62,12 +63,12 @@ const uniqueHashtagsWithCaseHandling = (hashtags: string[]) => {
 };
 
 function parseContent(props: IParsedContent): ReturnType<typeof domToReact>;
-function parseContent(props: IParsedContent, extractHashtags: true, greentext: boolean): {
+function parseContent(props: IParsedContent, extractHashtags: true, cleanUrls: boolean, greentext: boolean): {
   hashtags: Array<string>;
   content: ReturnType<typeof domToReact>;
 };
 
-function parseContent({ html, mentions, hasQuote, emojis }: IParsedContent, extractHashtags = false, greentext = false) {
+function parseContent({ html, mentions, hasQuote, emojis }: IParsedContent, extractHashtags = false, cleanUrls = false, greentext = false) {
   if (html.length === 0) {
     return extractHashtags ? { content: null, hashtags: [] } : null;
   }
@@ -108,8 +109,9 @@ function parseContent({ html, mentions, hasQuote, emojis }: IParsedContent, extr
           // eslint-disable-next-line jsx-a11y/no-static-element-interactions
           <a
             {...domNode.attribs}
+            href={cleanUrls ? Purify.clearUrl(domNode.attribs.href) : domNode.attribs.href}
             onClick={(e) => e.stopPropagation()}
-            rel='nofollow noopener'
+            rel='nofollow noopener noreferrer'
             target='_blank'
             title={domNode.attribs.href}
           >

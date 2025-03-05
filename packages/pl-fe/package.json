@@ -55,6 +55,7 @@
     "@lexical/utils": "^0.23.1",
     "@mkljczk/lexical-remark": "^0.4.0",
     "@mkljczk/react-hotkeys": "^1.2.2",
+    "@mkljczk/url-purify": "^0.0.1",
     "@reach/combobox": "^0.18.0",
     "@reach/rect": "^0.18.0",
     "@reach/tabs": "^0.18.0",

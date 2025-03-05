@@ -37,6 +37,7 @@ const settingsSchema = v.object({
   autoTranslate: v.fallback(v.boolean(), false),
   knownLanguages: v.fallback(v.array(v.string()), []),
   showWrenchButton: v.fallback(v.boolean(), false),
+  cleanUrls: v.fallback(v.boolean(), false),
 
   theme: v.fallback(v.optional(v.object({
     brandColor: v.fallback(v.string(), ''),

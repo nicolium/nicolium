@@ -1727,6 +1727,11 @@
     lodash "^4.17.21"
     mousetrap "^1.6.5"
 
+"@mkljczk/url-purify@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@mkljczk/url-purify/-/url-purify-0.0.1.tgz#4406b43e9cc054c67ca48fd6d684c700e119c85c"
+  integrity sha512-7QmSb6+d5aGVBZqBP8XkQQ3Z97YQXo8tHW9hq99aZWW7M7ugIxvb6arNjRqA/CKgiTc3tQGfvAS0SGfu5zedOw==
+
 "@nexusmods/eslint-plugin-nexusmods@^0.0.7":
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/@nexusmods/eslint-plugin-nexusmods/-/eslint-plugin-nexusmods-0.0.7.tgz#2db1e8e50096480fd725d9978560c4c6d26c782d"
