@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useLayoutEffect, Suspense, useMemo } from 'react';
+import React, { useEffect, useLayoutEffect, useMemo, useState, Suspense } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { changeSetting, saveSettings } from 'pl-fe/actions/settings';
@@ -8,7 +8,7 @@ import { useTheme } from 'pl-fe/hooks/use-theme';
 import { useCustomEmojis } from 'pl-fe/queries/instance/use-custom-emojis';
 import { useSettingsStore } from 'pl-fe/stores/settings';
 
-import { buildCustomEmojis } from '../../emoji';
+import { buildCustomEmojiCategories } from '../../emoji';
 import { EmojiPicker } from '../../ui/util/async-components';
 
 import type { CustomEmoji as BaseCustomEmoji } from 'pl-api';
@@ -209,12 +209,16 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
     document.body.style.overflow = '';
   }, []);
 
+  const customEmojiCategories = useMemo(() => {
+    return withCustom ? buildCustomEmojiCategories(customEmojis || [], intl) : undefined;
+  }, [withCustom, customEmojis]);
+
   return (
     visible ? (
       <RenderAfter update={update}>
         <Suspense>
           <EmojiPicker
-            custom={withCustom ? [{ emojis: buildCustomEmojis(customEmojis || []) }] : undefined}
+            custom={customEmojiCategories}
             title={title}
             onEmojiSelect={handlePick}
             recent={frequentlyUsedEmojis}

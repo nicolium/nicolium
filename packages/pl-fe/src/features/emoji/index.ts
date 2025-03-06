@@ -1,3 +1,5 @@
+import { IntlShape } from 'react-intl';
+
 import type { Emoji as EmojiMart, CustomEmoji as EmojiMartCustom } from './data';
 import type { CustomEmoji as BaseCustomEmoji } from 'pl-api';
 
@@ -56,7 +58,7 @@ const validEmojiChar = (c: string) =>
 const buildCustomEmojis = (customEmojis: Array<BaseCustomEmoji>) => {
   const emojis: EmojiMart<EmojiMartCustom>[] = [];
 
-  customEmojis.forEach((emoji: any) => {
+  customEmojis.forEach((emoji) => {
     const shortcode = emoji.shortcode;
     const url = emoji.static_url;
     const name = shortcode.replace(':', '');
@@ -72,6 +74,39 @@ const buildCustomEmojis = (customEmojis: Array<BaseCustomEmoji>) => {
   return emojis;
 };
 
+const buildCustomEmojiCategories = (customEmojis: Array<BaseCustomEmoji>, intl?: IntlShape) => {
+  const emojiCategories: Record<string, EmojiMart<EmojiMartCustom>[]> = {};
+
+  for (const emoji of customEmojis) {
+    const categoryName = emoji.category || 'uncategorized';
+    if (!emojiCategories[categoryName]) {
+      emojiCategories[categoryName] = [];
+    }
+    const category = emojiCategories[categoryName];
+
+    const shortcode = emoji.shortcode;
+    const url = emoji.static_url;
+    const name = shortcode.replace(':', '');
+
+    category.push({
+      id: name,
+      name,
+      keywords: [name],
+      skins: [{ src: url }],
+    });
+  }
+
+  return Object.entries(emojiCategories)
+    .toSorted((a, b) => a[0].localeCompare(b[0]))
+    .map(([categoryName, emojis]) => ({
+      id: categoryName,
+      name: categoryName === 'uncategorized' && intl
+        ? intl.formatMessage({ id: 'emoji_button.uncategorized', defaultMessage: 'Uncategorized' })
+        : categoryName.replace(/^pack:/, ''),
+      emojis,
+    }));
+};
+
 export {
   type CustomEmoji,
   type NativeEmoji,
@@ -79,5 +114,6 @@ export {
   isCustomEmoji,
   isNativeEmoji,
   buildCustomEmojis,
+  buildCustomEmojiCategories,
   validEmojiChar,
 };

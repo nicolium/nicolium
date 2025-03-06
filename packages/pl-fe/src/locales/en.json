@@ -691,6 +691,7 @@
   "emoji_button.skins_choose": "Choose default skin tone",
   "emoji_button.symbols": "Symbols",
   "emoji_button.travel": "Travel & Places",
+  "emoji_button.uncategorized": "Uncategorized",
   "empty_column.account_blocked": "You are blocked by @{accountUsername}.",
   "empty_column.account_favourited_statuses": "This user doesn't have any liked posts yet.",
   "empty_column.account_timeline": "No posts here!",
