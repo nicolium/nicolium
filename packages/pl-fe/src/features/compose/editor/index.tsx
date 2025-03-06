@@ -130,17 +130,6 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
           ? compose.text
           : compose.textMap[compose.modified_language] || '';
 
-        if (!text && navigator.userAgent.includes('Ladybird/')) {
-          const paragraph = $createParagraphNode();
-          const textNode = $createTextNode(placeholder || intl.formatMessage(messages.placeholder));
-
-          paragraph.append(textNode);
-
-          $getRoot().clear().append(paragraph);
-
-          return;
-        }
-
         if (isWysiwyg) {
           $createRemarkImport({
             handlers: {
