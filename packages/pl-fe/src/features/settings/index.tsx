@@ -42,6 +42,7 @@ const messages = defineMessages({
   security: { id: 'settings.security', defaultMessage: 'Security' },
   sessions: { id: 'settings.sessions', defaultMessage: 'Active sessions' },
   settings: { id: 'settings.settings', defaultMessage: 'Settings' },
+  urlPrivacy: { id: 'settings.url_privacy', defaultMessage: 'URL privacy' },
 });
 
 /** User settings page. */
@@ -92,39 +93,31 @@ const Settings = () => {
           </List>
         </CardBody>
 
-        {any([
-          features.changeEmail,
-          features.changePassword,
-          features.manageMfa,
-          features.sessions,
-        ]) && (
-          <>
-            <CardHeader>
-              <CardTitle title={intl.formatMessage(messages.security)} />
-            </CardHeader>
+        <CardHeader>
+          <CardTitle title={intl.formatMessage(messages.security)} />
+        </CardHeader>
 
-            <CardBody>
-              <List>
-                {features.changeEmail && <ListItem label={intl.formatMessage(messages.changeEmail)} to='/settings/email' />}
-                {features.changePassword && <ListItem label={intl.formatMessage(messages.changePassword)} to='/settings/password' />}
-                {features.manageMfa && (
-                  <>
-                    <ListItem label={intl.formatMessage(messages.configureMfa)} to='/settings/mfa'>
-                      <span>
-                        {isMfaEnabled ?
-                          intl.formatMessage(messages.mfaEnabled) :
-                          intl.formatMessage(messages.mfaDisabled)}
-                      </span>
-                    </ListItem>
-                  </>
-                )}
-                {features.sessions && (
-                  <ListItem label={intl.formatMessage(messages.sessions)} to='/settings/tokens' />
-                )}
-              </List>
-            </CardBody>
-          </>
-        )}
+        <CardBody>
+          <List>
+            {features.changeEmail && <ListItem label={intl.formatMessage(messages.changeEmail)} to='/settings/email' />}
+            {features.changePassword && <ListItem label={intl.formatMessage(messages.changePassword)} to='/settings/password' />}
+            {features.manageMfa && (
+              <>
+                <ListItem label={intl.formatMessage(messages.configureMfa)} to='/settings/mfa'>
+                  <span>
+                    {isMfaEnabled ?
+                      intl.formatMessage(messages.mfaEnabled) :
+                      intl.formatMessage(messages.mfaDisabled)}
+                  </span>
+                </ListItem>
+              </>
+            )}
+            {features.sessions && (
+              <ListItem label={intl.formatMessage(messages.sessions)} to='/settings/tokens' />
+            )}
+            <ListItem label={intl.formatMessage(messages.urlPrivacy)} to='/settings/url_privacy' />
+          </List>
+        </CardBody>
 
         {features.chats ? (
           <>

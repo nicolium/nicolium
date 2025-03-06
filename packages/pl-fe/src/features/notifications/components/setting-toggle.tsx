@@ -13,10 +13,12 @@ interface ISettingToggle {
   settingPath: string[];
   /** Callback when the setting is toggled. */
   onChange: (settingPath: string[], checked: boolean) => void;
+  /** Whether the toggle is disabled. */
+  disabled?: boolean;
 }
 
 /** Stateful toggle to change user settings. */
-const SettingToggle: React.FC<ISettingToggle> = ({ id, settings, settingPath, onChange }) => {
+const SettingToggle: React.FC<ISettingToggle> = ({ id, settings, settingPath, onChange, disabled }) => {
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
     onChange(settingPath, target.checked);
@@ -27,6 +29,7 @@ const SettingToggle: React.FC<ISettingToggle> = ({ id, settings, settingPath, on
       id={id}
       checked={!!get(settings, settingPath)}
       onChange={handleChange}
+      disabled={disabled}
     />
   );
 };

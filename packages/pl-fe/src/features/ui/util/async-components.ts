@@ -90,6 +90,7 @@ export const Share = lazy(() => import('pl-fe/features/share'));
 export const Status = lazy(() => import('pl-fe/features/status'));
 export const TestTimeline = lazy(() => import('pl-fe/features/test-timeline'));
 export const ThemeEditor = lazy(() => import('pl-fe/features/theme-editor'));
+export const UrlPrivacy = lazy(() => import('pl-fe/features/url-privacy'));
 export const UserIndex = lazy(() => import('pl-fe/features/admin/user-index'));
 
 // Panels

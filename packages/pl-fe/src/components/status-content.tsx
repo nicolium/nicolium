@@ -82,7 +82,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   preview,
   withMedia,
 }) => {
-  const { cleanUrls, displaySpoilers } = useSettings();
+  const { urlPrivacy, displaySpoilers } = useSettings();
   const { greentext } = usePlFeConfig();
 
   const [collapsed, setCollapsed] = useState<boolean | null>(null);
@@ -146,7 +146,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     mentions: status.mentions,
     hasQuote: !!status.quote_id,
     emojis: status.emojis,
-  }, true, cleanUrls, greentext), [content]);
+  }, true, urlPrivacy.clearLinksInContent, greentext), [content]);
 
   useEffect(() => {
     setLineClamp(!spoilerNode.current || spoilerNode.current.clientHeight >= 96);

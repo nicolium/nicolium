@@ -139,6 +139,7 @@ import {
   StatusHoverCard,
   TestTimeline,
   ThemeEditor,
+  UrlPrivacy,
   UserIndex,
 } from './util/async-components';
 import GlobalHotkeys from './util/global-hotkeys';
@@ -304,6 +305,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       <WrappedRoute path='/settings/mfa' layout={DefaultLayout} component={MfaForm} exact />
       <WrappedRoute path='/settings/tokens' layout={DefaultLayout} component={AuthTokenList} content={children} />
       {features.interactionRequests && <WrappedRoute path='/settings/interaction_policies' layout={DefaultLayout} component={InteractionPolicies} content={children} />}
+      <WrappedRoute path='/settings/url_privacy' layout={DefaultLayout} component={UrlPrivacy} content={children} />
       <WrappedRoute path='/settings' layout={DefaultLayout} component={Settings} content={children} />
       <WrappedRoute path='/pl-fe/config' adminOnly layout={DefaultLayout} component={PlFeConfig} content={children} />
 

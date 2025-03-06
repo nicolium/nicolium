@@ -14,6 +14,9 @@
 // I hope I got this relicensing stuff right xD
 import { URLPurify, type SerializedRules } from '@mkljczk/url-purify';
 
+import KVStore from 'pl-fe/storage/kv-store';
+import { store } from 'pl-fe/store';
+
 // Adapted from ClearURLs Rules
 // https://github.com/ClearURLs/Rules/blob/master/data.min.json
 // Licensed under the LGPL-3.0 license.
@@ -88,6 +91,24 @@ const DEFAULT_RULESET: SerializedRules = {
 
 const Purify = new URLPurify({
   rulesFromMemory: DEFAULT_RULESET,
+  onFetchedRules: (hash, rules) => {
+    const me = store.getState().auth.me;
+
+    KVStore.setItem('url-purify-rules:last', me || '');
+    KVStore.setItem(`url-purify-rules:${me}`, {
+      hash,
+      rules,
+      fetchedAt: Date.now(),
+    });
+  },
+});
+
+KVStore.getItem('url-purify-rules:last', (url: string) => {
+  if (!url) return;
+  KVStore.getItem(`url-purify-rules:${url}`, (rules: any) => {
+    if (!rules) return;
+    Purify.setRules(rules.rules, rules.hash);
+  });
 });
 
 export default Purify;

@@ -37,7 +37,13 @@ const settingsSchema = v.object({
   autoTranslate: v.fallback(v.boolean(), false),
   knownLanguages: v.fallback(v.array(v.string()), []),
   showWrenchButton: v.fallback(v.boolean(), false),
-  cleanUrls: v.fallback(v.boolean(), false),
+  urlPrivacy: coerceObject({
+    clearLinksInCompose: v.fallback(v.boolean(), true),
+    clearLinksInContent: v.fallback(v.boolean(), true),
+    allowReferralMarketing: v.fallback(v.boolean(), false),
+    rulesUrl: v.fallback(v.string(), ''),
+    hashUrl: v.fallback(v.string(), ''),
+  }),
 
   theme: v.fallback(v.optional(v.object({
     brandColor: v.fallback(v.string(), ''),
