@@ -10,7 +10,7 @@ import Form from 'pl-fe/components/ui/form';
 import FormActions from 'pl-fe/components/ui/form-actions';
 import FormGroup from 'pl-fe/components/ui/form-group';
 import Textarea from 'pl-fe/components/ui/textarea';
-import SettingToggle from 'pl-fe/features/notifications/components/setting-toggle';
+import SettingToggle from 'pl-fe/features/settings/components/setting-toggle';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useSettingsStore } from 'pl-fe/stores/settings';
 import toast from 'pl-fe/toast';
