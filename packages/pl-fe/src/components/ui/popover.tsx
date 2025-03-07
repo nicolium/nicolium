@@ -108,7 +108,7 @@ const Popover: React.FC<IPopover> = ({ children, content, referenceElementClassN
               className={
                 clsx(
                   'overflow-hidden rounded-lg bg-white shadow-2xl dark:bg-gray-900 dark:ring-2 dark:ring-primary-700',
-                  { 'p-6': !isFlush },
+                  { 'p-4': !isFlush },
                 )
               }
               {...getFloatingProps()}

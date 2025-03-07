@@ -1,9 +1,14 @@
 import clsx from 'clsx';
 import React, { useState, useRef, useLayoutEffect, CSSProperties } from 'react';
+import { FormattedMessage } from 'react-intl';
 
+import AltIndicator from 'pl-fe/components/alt-indicator';
 import Blurhash from 'pl-fe/components/blurhash';
 import Icon from 'pl-fe/components/icon';
 import StillImage from 'pl-fe/components/still-image';
+import Popover from 'pl-fe/components/ui/popover';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import { MIMETYPE_ICONS } from 'pl-fe/components/upload';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { useSettings } from 'pl-fe/hooks/use-settings';
@@ -11,6 +16,7 @@ import { truncateFilename } from 'pl-fe/utils/media';
 
 import { isIOS } from '../is-mobile';
 import { isPanoramic, isPortrait, isNonConformingRatio, minimumAspectRatio, maximumAspectRatio } from '../utils/media-aspect-ratio';
+
 
 import type { MediaAttachment } from 'pl-api';
 
@@ -167,20 +173,40 @@ const Item: React.FC<IItem> = ({
     const letterboxed = total === 1 && shouldLetterbox(attachment);
 
     thumbnail = (
-      <a
-        className='media-gallery__item-thumbnail'
-        href={attachment.url}
-        onClick={handleClick}
-        target='_blank'
-      >
-        <StillImage
-          className='size-full'
-          src={mediaPreview ? attachment.preview_url : attachment.url}
-          alt={attachment.description}
-          letterboxed={letterboxed}
-          showExt
-        />
-      </a>
+      <>
+        <a
+          className='media-gallery__item-thumbnail'
+          href={attachment.url}
+          onClick={handleClick}
+          target='_blank'
+        >
+          <StillImage
+            className='size-full'
+            src={mediaPreview ? attachment.preview_url : attachment.url}
+            alt={attachment.description}
+            letterboxed={letterboxed}
+            showExt
+          />
+        </a>
+        {attachment.description && (
+          <Popover
+            interaction='click'
+            referenceElementClassName='cursor-pointer'
+            content={
+              <Stack space={1} className='max-w-80'>
+                <Text weight='semibold'>
+                  <FormattedMessage id='media-gallery.description' defaultMessage='Image description' />
+                </Text>
+                <Text>
+                  {attachment.description}
+                </Text>
+              </Stack>
+            }
+          >
+            <AltIndicator className='absolute bottom-2 left-2 z-10 opacity-80 transition-opacity hover:opacity-100' />
+          </Popover>
+        )}
+      </>
     );
   } else if (attachment.type === 'gifv') {
     const conditionalAttributes: React.VideoHTMLAttributes<HTMLVideoElement> = {};
