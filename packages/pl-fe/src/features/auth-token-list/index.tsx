@@ -1,11 +1,13 @@
 import React, { useEffect } from 'react';
-import { defineMessages, FormattedDate, useIntl } from 'react-intl';
+import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
 import { fetchOAuthTokens, revokeOAuthTokenById } from 'pl-fe/actions/security';
+import Badge from 'pl-fe/components/badge';
 import Button from 'pl-fe/components/ui/button';
 import Card, { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card';
 import Column from 'pl-fe/components/ui/column';
 import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
@@ -51,19 +53,82 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
 
   return (
     <div className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
-      <Stack space={2}>
-        <Stack>
-          <Text size='md' weight='medium'>{token.app_name}</Text>
+      <Stack space={2} className='h-full justify-between'>
+        <Stack space={1}>
+          <Text size='md' weight='medium'>
+            <HStack space={1} alignItems='center'>
+              {token.app_name}
+              {token.app_website && (
+                <a href={token.app_website} target='_blank' rel='noopener'>
+                  <Icon
+                    src={require('@tabler/icons/outline/external-link.svg')}
+                    className='inline size-4 text-inherit'
+                  />
+                </a>
+              )}
+            </HStack>
+          </Text>
+          {token.scopes?.length > 0 && (
+            <HStack space={2} alignItems='center' wrap>
+              <Text size='sm' theme='muted'>
+                <FormattedMessage
+                  id='security.tokens.scopes'
+                  defaultMessage='Scopes:'
+                />
+              </Text>
+              {token.scopes.map((scope, index) => (
+                <Badge title={scope} slug='opaque' key={scope} />
+              ))}
+            </HStack>
+          )}
+          {token.created_at && (
+            <Text size='sm' theme='muted'>
+              <FormattedMessage
+                id='security.tokens.created_at'
+                defaultMessage='Created on {date}'
+                values={{ date: <FormattedDate
+                  value={token.created_at}
+                  hour12
+                  year='numeric'
+                  month='short'
+                  day='2-digit'
+                  hour='numeric'
+                  minute='2-digit'
+                /> }}
+              />
+            </Text>
+          )}
+          {token.last_used && (
+            <Text size='sm' theme='muted'>
+              <FormattedMessage
+                id='security.tokens.last_used'
+                defaultMessage='Last used on {date}'
+                values={{ date: <FormattedDate
+                  value={token.last_used}
+                  hour12
+                  year='numeric'
+                  month='short'
+                  day='2-digit'
+                  hour='numeric'
+                  minute='2-digit'
+                /> }}
+              />
+            </Text>
+          )}
           {token.valid_until && (
             <Text size='sm' theme='muted'>
-              <FormattedDate
-                value={token.valid_until}
-                hour12
-                year='numeric'
-                month='short'
-                day='2-digit'
-                hour='numeric'
-                minute='2-digit'
+              <FormattedMessage
+                id='security.tokens.valid_until'
+                defaultMessage='Expires on {date}'
+                values={{ date: <FormattedDate
+                  value={token.valid_until}
+                  hour12
+                  year='numeric'
+                  month='short'
+                  day='2-digit'
+                  hour='numeric'
+                  minute='2-digit'
+                /> }}
               />
             </Text>
           )}

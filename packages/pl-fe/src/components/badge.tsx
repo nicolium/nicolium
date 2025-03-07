@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 import { hexToHsl } from 'pl-fe/utils/theme';
 
 interface IBadge {
-  title: React.ReactNode;
+  title: React.ReactNode | string;
   slug: string;
   color?: string;
 }

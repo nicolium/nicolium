@@ -1260,11 +1260,11 @@ class PlApiClient {
      * Requires features{@link Features['sessions']}.
      * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#get-apioauth_tokens}
      */
-    getOauthTokens: async () => {
-      const response = await this.request('/api/oauth_tokens');
-
-      return v.parse(filteredArray(oauthTokenSchema), response.json);
-    },
+    getOauthTokens: () => this.#paginatedGet(
+      this.features.version.software === GOTOSOCIAL ? '/api/v1/tokens' : '/api/oauth_tokens',
+      {},
+      oauthTokenSchema,
+    ),
 
     /**
      * Revoke a user session by its ID
@@ -1272,8 +1272,17 @@ class PlApiClient {
      * Requires features{@link Features['sessions']}.
      * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#delete-apioauth_tokensid}
      */
-    deleteOauthToken: async (oauthTokenId: number) => {
-      const response = await this.request(`/api/oauth_tokens/${oauthTokenId}`, { method: 'DELETE' });
+    deleteOauthToken: async (oauthTokenId: string) => {
+      let response;
+
+      switch (this.features.version.software) {
+        case GOTOSOCIAL:
+          response = await this.request(`/api/v1/tokens/${oauthTokenId}/invalidate`, { method: 'POST' });
+          break;
+        default:
+          response = await this.request(`/api/oauth_tokens/${oauthTokenId}`, { method: 'DELETE' });
+          break;
+      }
 
       return response.json as {};
     },

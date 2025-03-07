@@ -8,7 +8,7 @@ import Button from 'pl-fe/components/ui/button';
 import Form from 'pl-fe/components/ui/form';
 import HStack from 'pl-fe/components/ui/hstack';
 import { Mutliselect, SelectDropdown } from 'pl-fe/features/forms';
-import SettingToggle from 'pl-fe/features/notifications/components/setting-toggle';
+import SettingToggle from 'pl-fe/features/settings/components/setting-toggle';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
