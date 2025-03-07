@@ -9,8 +9,10 @@ import {
   biteAccount,
 } from 'pl-fe/actions/accounts';
 import { useFollow } from 'pl-fe/api/hooks/accounts/use-follow';
+import { useRelationship } from 'pl-fe/api/hooks/accounts/use-relationship';
 import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
+import Spinner from 'pl-fe/components/ui/spinner';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
@@ -62,11 +64,13 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
   const { isLoggedIn, me } = useLoggedIn();
   const { follow, unfollow } = useFollow();
 
+  const { relationship } = useRelationship(account.id);
+
   const { mutate: authorizeFollowRequest } = useAcceptFollowRequestMutation(account.id);
   const { mutate: rejectFollowRequest } = useRejectFollowRequestMutation(account.id);
 
   const handleFollow = () => {
-    if (account.relationship?.following || account.relationship?.requested) {
+    if (relationship?.following || relationship?.requested) {
       unfollow(account.id);
     } else {
       follow(account.id);
@@ -74,7 +78,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
   };
 
   const handleBlock = () => {
-    if (account.relationship?.blocking) {
+    if (relationship?.blocking) {
       dispatch(unblockAccount(account.id));
     } else {
       dispatch(blockAccount(account.id));
@@ -82,7 +86,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
   };
 
   const handleMute = () => {
-    if (account.relationship?.muting) {
+    if (relationship?.muting) {
       dispatch(unmuteAccount(account.id));
     } else {
       dispatch(muteAccount(account.id));
@@ -113,7 +117,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
 
   /** Handles actionType='muting' */
   const mutingAction = () => {
-    const isMuted = account.relationship?.muting;
+    const isMuted = relationship?.muting;
     const messageKey = isMuted ? messages.unmute : messages.mute;
     const text = intl.formatMessage(messageKey, { name: account.username });
 
@@ -129,7 +133,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
 
   /** Handles actionType='blocking' */
   const blockingAction = () => {
-    const isBlocked = account.relationship?.blocking;
+    const isBlocked = relationship?.blocking;
     const messageKey = isBlocked ? messages.unblock : messages.block;
     const text = intl.formatMessage(messageKey, { name: account.username });
 
@@ -159,7 +163,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
   };
 
   const followRequestAction = () => {
-    if (account.relationship?.followed_by) return null;
+    if (relationship?.followed_by) return null;
 
     return (
       <HStack space={2}>
@@ -223,25 +227,33 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
   }
 
   if (me !== account.id) {
-    const isFollowing = account.relationship?.following;
-    const blockedBy = account.relationship?.blocked_by as boolean;
+    const isFollowing = relationship?.following;
+    const blockedBy = relationship?.blocked_by as boolean;
 
     if (actionType) {
       if (actionType === 'muting') {
         return mutingAction();
       } else if (actionType === 'blocking') {
         return blockingAction();
-      } else if (actionType === 'follow_request' && !account.relationship?.followed_by) {
+      } else if (actionType === 'follow_request' && !relationship?.followed_by) {
         return followRequestAction();
       } else if (actionType === 'biting') {
         return bitingAction();
       }
     }
 
-    if (!account.relationship) {
+    if (!relationship) {
       // Wait until the relationship is loaded
-      return null;
-    } else if (account.relationship?.requested) {
+      return (
+        <Button
+          size='xs'
+          theme='primary'
+          className='px-4'
+          disabled
+          text={<Spinner size={20} withText={false} />}
+        />
+      );
+    } else if (relationship?.requested) {
       // Awaiting acceptance
       return (
         <Button
@@ -251,7 +263,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
           onClick={handleFollow}
         />
       );
-    } else if (!account.relationship?.blocking && !account.relationship?.muting) {
+    } else if (!relationship?.blocking && !relationship?.muting) {
       // Follow & Unfollow
       return (
         <Button
@@ -268,7 +280,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
           )}
         </Button>
       );
-    } else if (account.relationship?.blocking) {
+    } else if (relationship?.blocking) {
       // Unblock
       return (
         <Button
