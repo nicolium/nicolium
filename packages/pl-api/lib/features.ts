@@ -1267,8 +1267,14 @@ const getFeatures = (instance: Instance) => {
      * Ability to manage account sessions.
      * @see GET /api/oauth_tokens.json
      * @see DELETE /api/oauth_tokens/:id
+     * @see GET /api/v1/tokens
+     * @see GET /api/v1/tokens/:id
+     * @see POST /api/v1/tokens/:id/invalidate
      */
-    sessions: v.software === PLEROMA,
+    sessions: any([
+      v.software === PLEROMA,
+      v.software === GOTOSOCIAL && gte(v.version, '0.18.2'),
+    ]),
 
     /**
      * Can store client settings in the database.

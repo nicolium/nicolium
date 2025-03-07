@@ -26,7 +26,7 @@ const initialState: State = {
   },
 };
 
-const deleteToken = (state: State, tokenId: number) => state.tokens = state.tokens.filter(token => token.id !== tokenId);
+const deleteToken = (state: State, tokenId: string) => state.tokens = state.tokens.filter(token => token.id !== tokenId);
 
 const importMfa = (state: State, data: any) => state.mfa = data;
 

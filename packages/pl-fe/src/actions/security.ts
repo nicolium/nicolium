@@ -21,11 +21,11 @@ const REVOKE_TOKEN_SUCCESS = 'REVOKE_TOKEN_SUCCESS' as const;
 
 const fetchOAuthTokens = () =>
   (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).settings.getOauthTokens().then((tokens) => {
+    getClient(getState).settings.getOauthTokens().then(({ items: tokens }) => {
       dispatch<SecurityAction>({ type: FETCH_TOKENS_SUCCESS, tokens });
     });
 
-const revokeOAuthTokenById = (tokenId: number) =>
+const revokeOAuthTokenById = (tokenId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState).settings.deleteOauthToken(tokenId).then(() => {
       dispatch<SecurityAction>({ type: REVOKE_TOKEN_SUCCESS, tokenId });
@@ -65,7 +65,7 @@ const moveAccount = (targetAccount: string, password: string) =>
 
 type SecurityAction =
   | { type: typeof FETCH_TOKENS_SUCCESS; tokens: Array<OauthToken> }
-  | { type: typeof REVOKE_TOKEN_SUCCESS; tokenId: number }
+  | { type: typeof REVOKE_TOKEN_SUCCESS; tokenId: string }
   | { type: typeof AUTH_LOGGED_OUT; account: Account }
 
 export {
