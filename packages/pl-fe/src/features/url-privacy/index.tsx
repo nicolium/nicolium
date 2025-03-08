@@ -13,7 +13,7 @@ import Input from 'pl-fe/components/ui/input';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 
-import SettingToggle from '../notifications/components/setting-toggle';
+import SettingToggle from '../settings/components/setting-toggle';
 
 const messages = defineMessages({
   urlPrivacy: { id: 'settings.url_privacy', defaultMessage: 'URL privacy' },

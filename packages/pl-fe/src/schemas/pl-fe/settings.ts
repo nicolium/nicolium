@@ -39,7 +39,7 @@ const settingsSchema = v.object({
   showWrenchButton: v.fallback(v.boolean(), false),
   urlPrivacy: coerceObject({
     clearLinksInCompose: v.fallback(v.boolean(), true),
-    clearLinksInContent: v.fallback(v.boolean(), true),
+    clearLinksInContent: v.fallback(v.boolean(), false),
     allowReferralMarketing: v.fallback(v.boolean(), false),
     rulesUrl: v.fallback(v.string(), ''),
     hashUrl: v.fallback(v.string(), ''),

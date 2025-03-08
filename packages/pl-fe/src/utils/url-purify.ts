@@ -15,7 +15,6 @@
 import { URLPurify, type SerializedRules } from '@mkljczk/url-purify';
 
 import KVStore from 'pl-fe/storage/kv-store';
-import { store } from 'pl-fe/store';
 
 // Adapted from ClearURLs Rules
 // https://github.com/ClearURLs/Rules/blob/master/data.min.json
@@ -91,16 +90,16 @@ const DEFAULT_RULESET: SerializedRules = {
 
 const Purify = new URLPurify({
   rulesFromMemory: DEFAULT_RULESET,
-  onFetchedRules: (hash, rules) => {
-    const me = store.getState().auth.me;
+  // onFetchedRules: (hash, rules) => {
+  //   const me = store.getState().auth.me;
 
-    KVStore.setItem('url-purify-rules:last', me || '');
-    KVStore.setItem(`url-purify-rules:${me}`, {
-      hash,
-      rules,
-      fetchedAt: Date.now(),
-    });
-  },
+  //   KVStore.setItem('url-purify-rules:last', me || '');
+  //   KVStore.setItem(`url-purify-rules:${me}`, {
+  //     hash,
+  //     rules,
+  //     fetchedAt: Date.now(),
+  //   });
+  // },
 });
 
 KVStore.getItem('url-purify-rules:last', (url: string) => {

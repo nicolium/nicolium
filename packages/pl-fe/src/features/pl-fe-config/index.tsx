@@ -55,7 +55,7 @@ const messages = defineMessages({
 
 type ValueGetter<T1 = Element, T2 = any> = (e: React.ChangeEvent<T1>) => T2;
 type StreamItemConfigPath = ['promoPanel', 'items'] | ['navlinks', 'homeFooter'] | ['cryptoAddresses'];
-type ThemeChangeHandler = (theme: string) => void;
+type ThemeChangeHandler = (theme: 'system' | 'light' | 'dark' | 'black') => void;
 
 const PlFeConfigEditor: React.FC = () => {
   const intl = useIntl();
@@ -189,7 +189,7 @@ const PlFeConfigEditor: React.FC = () => {
           <List>
             <ListItem label={<FormattedMessage id='plfe_config.fields.theme_label' defaultMessage='Default theme' />}>
               <ThemeSelector
-                value={plFe.defaultSettings?.themeMode}
+                value={plFe.defaultSettings?.themeMode || 'system'}
                 onChange={handleThemeChange}
               />
             </ListItem>

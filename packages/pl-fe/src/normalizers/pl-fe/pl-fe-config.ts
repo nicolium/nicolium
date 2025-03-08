@@ -1,6 +1,7 @@
 import trimStart from 'lodash/trimStart';
 import * as v from 'valibot';
 
+import { settingsSchema } from 'pl-fe/schemas/pl-fe/settings';
 import { coerceObject, filteredArray } from 'pl-fe/schemas/utils';
 
 const promoPanelItemSchema = coerceObject({
@@ -54,7 +55,7 @@ const plFeConfigSchema = coerceObject({
     v.record(v.string(), v.string()),
   )), null),
   copyright: v.fallback(v.string(), `♥${new Date().getFullYear()}. Copying is an act of love. Please copy and share.`),
-  defaultSettings: v.fallback(v.record(v.string(), v.any()), {}),
+  defaultSettings: v.fallback(v.partial(settingsSchema), {}),
   gdpr: v.fallback(v.boolean(), false),
   gdprUrl: v.fallback(v.string(), ''),
   greentext: v.fallback(v.boolean(), false),

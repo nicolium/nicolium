@@ -13,7 +13,7 @@ const messages = defineMessages({
 
 interface IThemeSelector {
   value: string;
-  onChange: (value: string) => void;
+  onChange: (value: 'system' | 'light' | 'dark' | 'black') => void;
 }
 
 /** Pure theme selector. */
@@ -36,7 +36,7 @@ const ThemeSelector: React.FC<IThemeSelector> = ({ value, onChange }) => {
   }, [value]);
 
   const handleChange: React.ChangeEventHandler<HTMLSelectElement> = e => {
-    onChange(e.target.value);
+    onChange(e.target.value as any);
   };
 
   return (
