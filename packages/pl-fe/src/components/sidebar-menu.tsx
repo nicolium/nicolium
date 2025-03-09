@@ -37,7 +37,6 @@ const messages = defineMessages({
   lists: { id: 'column.lists', defaultMessage: 'Lists' },
   groups: { id: 'column.groups', defaultMessage: 'Groups' },
   events: { id: 'column.events', defaultMessage: 'Events' },
-  developers: { id: 'navigation.developers', defaultMessage: 'Developers' },
   dashboard: { id: 'navigation.dashboard', defaultMessage: 'Dashboard' },
   scheduledStatuses: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
   drafts: { id: 'navigation.drafts', defaultMessage: 'Drafts' },
@@ -361,15 +360,6 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
                       to='/followed_tags'
                       icon={require('@tabler/icons/outline/hash.svg')}
                       text={intl.formatMessage(messages.followedTags)}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {settings.isDeveloper && (
-                    <SidebarLink
-                      to='/developers'
-                      icon={require('@tabler/icons/outline/code.svg')}
-                      text={intl.formatMessage(messages.developers)}
                       onClick={closeSidebar}
                     />
                   )}

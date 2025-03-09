@@ -4,7 +4,6 @@ import { Redirect, Route, useHistory, RouteProps, RouteComponentProps, match as 
 
 import Layout from 'pl-fe/components/ui/layout';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { useSettings } from 'pl-fe/hooks/use-settings';
 
 import ColumnForbidden from '../components/column-forbidden';
 import ColumnLoading from '../components/column-loading';
@@ -23,7 +22,6 @@ interface IWrappedRoute extends RouteProps {
   publicRoute?: boolean;
   staffOnly?: boolean;
   adminOnly?: boolean;
-  developerOnly?: boolean;
 }
 
 const WrappedRoute: React.FC<IWrappedRoute> = ({
@@ -34,13 +32,11 @@ const WrappedRoute: React.FC<IWrappedRoute> = ({
   publicRoute = false,
   staffOnly = false,
   adminOnly = false,
-  developerOnly = false,
   ...rest
 }) => {
   const history = useHistory();
 
   const { account } = useOwnAccount();
-  const { isDeveloper } = useSettings();
 
   const renderComponent = ({ match }: RouteComponentProps) => (
     <ErrorBoundary FallbackComponent={FallbackError}>
@@ -62,7 +58,6 @@ const WrappedRoute: React.FC<IWrappedRoute> = ({
 
   const authorized = [
     account || publicRoute,
-    developerOnly ? isDeveloper : true,
     staffOnly ? account && (account.is_admin || account.is_moderator) : true,
     adminOnly ? account && account.is_admin : true,
   ].every(c => c);

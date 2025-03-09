@@ -4,7 +4,6 @@ import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
 
 import { StatProvider } from 'pl-fe/contexts/stat-context';
-import { createGlobals } from 'pl-fe/globals';
 import { queryClient } from 'pl-fe/queries/client';
 
 import { checkOnboardingStatus } from '../actions/onboarding';
@@ -14,9 +13,6 @@ import { store } from '../store';
 import PlFeHead from './pl-fe-head';
 import PlFeLoad from './pl-fe-load';
 import PlFeMount from './pl-fe-mount';
-
-// Configure global functions for developers
-createGlobals(store);
 
 // Preload happens synchronously
 store.dispatch(preload() as any);

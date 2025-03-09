@@ -26,6 +26,7 @@ const messages = defineMessages({
   changePassword: { id: 'settings.change_password', defaultMessage: 'Change password' },
   configureMfa: { id: 'settings.configure_mfa', defaultMessage: 'Configure MFA' },
   deleteAccount: { id: 'settings.delete_account', defaultMessage: 'Delete account' },
+  developers: { id: 'navigation.developers', defaultMessage: 'Developers' },
   domainBlocks: { id: 'navigation_bar.domain_blocks', defaultMessage: 'Domain blocks' },
   editProfile: { id: 'settings.edit_profile', defaultMessage: 'Edit profile' },
   exportData: { id: 'column.export_data', defaultMessage: 'Export data' },
@@ -167,6 +168,8 @@ const Settings = () => {
                 {features.accountBackups && (
                   <ListItem label={intl.formatMessage(messages.backups)} to='/settings/backups' />
                 )}
+
+                <ListItem label={intl.formatMessage(messages.developers)} to='/developers' />
 
                 {features.federating && (features.accountMoving ? (
                   <ListItem label={intl.formatMessage(messages.accountMigration)} to='/settings/migration' />

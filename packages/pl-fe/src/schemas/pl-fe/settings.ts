@@ -54,8 +54,6 @@ const settingsSchema = v.object({
   systemFont: v.fallback(v.boolean(), false),
   demetricator: v.fallback(v.boolean(), false),
 
-  isDeveloper: v.fallback(v.boolean(), false),
-
   chats: coerceObject({
     mainWindow: v.fallback(v.picklist(['minimized', 'open']), 'minimized'),
     sound: v.fallback(v.boolean(), true),

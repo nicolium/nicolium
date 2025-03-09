@@ -321,13 +321,13 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       {features.adminRules && <WrappedRoute path='/pl-fe/admin/rules' staffOnly layout={AdminLayout} component={Rules} content={children} exact />}
       <WrappedRoute path='/info' layout={EmptyLayout} component={ServerInfo} content={children} />
 
-      <WrappedRoute path='/developers/apps/create' developerOnly layout={DefaultLayout} component={CreateApp} content={children} />
-      <WrappedRoute path='/developers/settings_store' developerOnly layout={DefaultLayout} component={SettingsStore} content={children} />
-      <WrappedRoute path='/developers/timeline' developerOnly layout={DefaultLayout} component={TestTimeline} content={children} />
-      <WrappedRoute path='/developers/sw' developerOnly layout={DefaultLayout} component={ServiceWorkerInfo} content={children} />
+      <WrappedRoute path='/developers/apps/create' layout={DefaultLayout} component={CreateApp} content={children} />
+      <WrappedRoute path='/developers/settings_store' layout={DefaultLayout} component={SettingsStore} content={children} />
+      <WrappedRoute path='/developers/timeline' layout={DefaultLayout} component={TestTimeline} content={children} />
+      <WrappedRoute path='/developers/sw' layout={DefaultLayout} component={ServiceWorkerInfo} content={children} />
       <WrappedRoute path='/developers' layout={DefaultLayout} component={Developers} content={children} />
-      <WrappedRoute path='/error/network' developerOnly layout={EmptyLayout} component={lazy(() => Promise.reject(new TypeError('Failed to fetch dynamically imported module: TEST')))} content={children} />
-      <WrappedRoute path='/error' developerOnly layout={EmptyLayout} component={IntentionalError} content={children} />
+      <WrappedRoute path='/error/network' layout={EmptyLayout} component={lazy(() => Promise.reject(new TypeError('Failed to fetch dynamically imported module: TEST')))} content={children} />
+      <WrappedRoute path='/error' layout={EmptyLayout} component={IntentionalError} content={children} />
 
       {hasCrypto && <WrappedRoute path='/donate/crypto' publicRoute layout={DefaultLayout} component={CryptoDonate} content={children} />}
       {features.federating && <WrappedRoute path='/federation_restrictions' publicRoute layout={DefaultLayout} component={FederationRestrictions} content={children} />}

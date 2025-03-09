@@ -11,7 +11,6 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { useRegistrationStatus } from 'pl-fe/hooks/use-registration-status';
-import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useFollowRequestsCount } from 'pl-fe/queries/accounts/use-follow-requests';
 import { useInteractionRequestsCount } from 'pl-fe/queries/statuses/use-interaction-requests';
 
@@ -28,7 +27,6 @@ const messages = defineMessages({
   events: { id: 'column.events', defaultMessage: 'Events' },
   profileDirectory: { id: 'navigation_bar.profile_directory', defaultMessage: 'Profile directory' },
   followedTags: { id: 'navigation_bar.followed_tags', defaultMessage: 'Followed hashtags' },
-  developers: { id: 'navigation.developers', defaultMessage: 'Developers' },
   scheduledStatuses: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
   drafts: { id: 'navigation.drafts', defaultMessage: 'Drafts' },
   conversations: { id: 'navigation.direct_messages', defaultMessage: 'Direct messages' },
@@ -42,7 +40,6 @@ const SidebarNavigation = React.memo(() => {
 
   const instance = useInstance();
   const features = useFeatures();
-  const { isDeveloper } = useSettings();
   const { account } = useOwnAccount();
   const { isOpen } = useRegistrationStatus();
 
@@ -125,14 +122,6 @@ const SidebarNavigation = React.memo(() => {
         });
       }
 
-      if (isDeveloper) {
-        menu.push({
-          to: '/developers',
-          icon: require('@tabler/icons/outline/code.svg'),
-          text: intl.formatMessage(messages.developers),
-        });
-      }
-
       if (scheduledStatusCount > 0) {
         menu.push({
           to: '/scheduled_statuses',
@@ -153,7 +142,7 @@ const SidebarNavigation = React.memo(() => {
     }
 
     return menu;
-  }, [!!account, features, isDeveloper, followRequestsCount, interactionRequestsCount, scheduledStatusCount, draftCount]);
+  }, [!!account, features, followRequestsCount, interactionRequestsCount, scheduledStatusCount, draftCount]);
 
   return (
     <Stack space={4}>
