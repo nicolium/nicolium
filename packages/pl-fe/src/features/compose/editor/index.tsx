@@ -170,6 +170,7 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
         handlers: {
           hashtag: (node) => ({ type: 'text', value: node.getTextContent() }),
           mention: (node) => ({ type: 'text', value: node.getTextContent() }),
+          autolink: (node) => ({ type: 'text', value: node.getTextContent() }),
         },
       })));
     }
