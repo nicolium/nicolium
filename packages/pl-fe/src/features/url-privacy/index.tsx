@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeSetting } from 'pl-fe/actions/settings';
 import List, { ListItem } from 'pl-fe/components/list';
 import Button from 'pl-fe/components/ui/button';
 import Card, { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card';
@@ -10,10 +9,9 @@ import Form from 'pl-fe/components/ui/form';
 import FormActions from 'pl-fe/components/ui/form-actions';
 import FormGroup from 'pl-fe/components/ui/form-group';
 import Input from 'pl-fe/components/ui/input';
+import Toggle from 'pl-fe/components/ui/toggle';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useSettings } from 'pl-fe/hooks/use-settings';
-
-import SettingToggle from '../settings/components/setting-toggle';
 
 const messages = defineMessages({
   urlPrivacy: { id: 'settings.url_privacy', defaultMessage: 'URL privacy' },
@@ -25,14 +23,17 @@ const UrlPrivacy = () => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const settings = useSettings();
+  const { urlPrivacy } = useSettings();
+
+  const [clearLinksInCompose, setClearLinksInCompose] = useState(urlPrivacy.clearLinksInCompose);
+  const [clearLinksInContent, setClearLinksInContent] = useState(urlPrivacy.clearLinksInContent);
+  const [allowReferralMarketing, setAllowReferralMarketing] = useState(urlPrivacy.allowReferralMarketing);
+  const [hashUrl, setHashUrl] = useState(urlPrivacy.hashUrl);
+  const [rulesUrl, setRulesUrl] = useState(urlPrivacy.rulesUrl);
+
 
   useEffect(() => {
   }, [dispatch]);
-
-  const onToggleChange = (key: string[], checked: boolean) => {
-    dispatch(changeSetting(key, checked));
-  };
 
   return (
     <Column label={intl.formatMessage(messages.urlPrivacy)} transparent withHeader={false}>
@@ -45,20 +46,15 @@ const UrlPrivacy = () => {
           <Form>
             <List>
               <ListItem label={<FormattedMessage id='url_privacy.clear_links_in_compose' defaultMessage='Suggest removing tracking parameters when composing a post' />}>
-                <SettingToggle settings={settings} settingPath={['urlPrivacy', 'clearLinksInCompose']} onChange={onToggleChange} />
+                <Toggle checked={clearLinksInCompose} onChange={({ target }) => setClearLinksInCompose(target.checked)} />
               </ListItem>
 
               <ListItem label={<FormattedMessage id='url_privacy.clear_links_in_content' defaultMessage='Remove tracking parameters from displayed posts' />}>
-                <SettingToggle settings={settings} settingPath={['urlPrivacy', 'clearLinksInContent']} onChange={onToggleChange} />
+                <Toggle checked={clearLinksInContent} onChange={({ target }) => setClearLinksInContent(target.checked)} />
               </ListItem>
 
               <ListItem label={<FormattedMessage id='url_privacy.allow_referral_marketing' defaultMessage='Make exception for referral marketing parameters' />}>
-                <SettingToggle
-                  settings={settings}
-                  settingPath={['urlPrivacy', 'allowReferralMarketing']}
-                  onChange={onToggleChange}
-                  disabled={!(settings.urlPrivacy.clearLinksInCompose || settings.urlPrivacy.clearLinksInContent)}
-                />
+                <Toggle checked={allowReferralMarketing} onChange={({ target }) => setAllowReferralMarketing(target.checked)} disabled={!clearLinksInCompose && !clearLinksInContent} />
               </ListItem>
             </List>
 
@@ -69,8 +65,8 @@ const UrlPrivacy = () => {
               <Input
                 type='text'
                 placeholder={intl.formatMessage(messages.rulesUrlPlaceholder)}
-                value={settings.urlPrivacy.rulesUrl}
-                // onChange={handleChange('tileServer', (e) => e.target.value)}
+                value={rulesUrl}
+                onChange={({ target }) => setRulesUrl(target.value)}
               />
             </FormGroup>
 
@@ -81,8 +77,8 @@ const UrlPrivacy = () => {
               <Input
                 type='text'
                 placeholder={intl.formatMessage(messages.hashUrlPlaceholder)}
-                value={settings.urlPrivacy.rulesUrl}
-                // onChange={handleChange('tileServer', (e) => e.target.value)}
+                value={hashUrl}
+                onChange={({ target }) => setHashUrl(target.value)}
               />
             </FormGroup>
 
