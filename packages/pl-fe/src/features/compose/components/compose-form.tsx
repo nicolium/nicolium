@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import { CLEAR_EDITOR_COMMAND, TextNode, type LexicalEditor } from 'lexical';
+import { $getNodeByKey, CLEAR_EDITOR_COMMAND, TextNode, type LexicalEditor } from 'lexical';
 import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
@@ -11,6 +11,8 @@ import {
   fetchComposeSuggestions,
   selectComposeSuggestion,
   uploadCompose,
+  ignoreClearLinkSuggestion,
+  suggestClearLink,
 } from 'pl-fe/actions/compose';
 import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
@@ -30,6 +32,7 @@ import WarningContainer from '../containers/warning-container';
 import { $createEmojiNode } from '../editor/nodes/emoji-node';
 import { countableText } from '../util/counter';
 
+import ClearLinkSuggestion from './clear-link-suggestion';
 import ContentTypeButton from './content-type-button';
 import InteractionPolicyButton from './interaction-policy-button';
 import LanguageDropdown from './language-dropdown';
@@ -47,6 +50,7 @@ import UploadForm from './upload-form';
 import VisualCharacterCounter from './visual-character-counter';
 import Warning from './warning';
 
+import type { LinkNode } from '@lexical/link';
 import type { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
 import type { Emoji } from 'pl-fe/features/emoji';
 
@@ -172,6 +176,29 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     dispatch(uploadCompose(id, files, intl));
   };
 
+  const onAcceptClearLinkSuggestion = (key: string) => {
+    const editor = editorRef.current;
+    const suggestion = compose.clear_link_suggestion;
+    if (!editor || !suggestion) return;
+
+    editor.update(() => {
+      const node: LinkNode | null = $getNodeByKey(key);
+      if (node) {
+        node.setURL(suggestion.cleanUrl);
+        const children = node.getChildren();
+        const textNode = children[0] as TextNode;
+        if (children.length === 1 && textNode.getType() === 'text' && textNode.getTextContent() === suggestion.originalUrl) {
+          textNode.setTextContent(suggestion.cleanUrl);
+        }
+      }
+      dispatch(suggestClearLink(id, null));
+    });
+  };
+
+  const onRejectClearLinkSuggestion = (key: string) => {
+    dispatch(ignoreClearLinkSuggestion(id, key));
+  };
+
   useEffect(() => {
     document.addEventListener('click', handleClick, true);
 
@@ -280,6 +307,8 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
           />
         </Suspense>
       </div>
+
+      <ClearLinkSuggestion composeId={id} handleAccept={onAcceptClearLinkSuggestion} handleReject={onRejectClearLinkSuggestion} />
 
       {composeModifiers}
 

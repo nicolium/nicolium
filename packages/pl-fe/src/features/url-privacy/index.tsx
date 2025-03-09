@@ -26,7 +26,7 @@ const UrlPrivacy = () => {
 
   const { urlPrivacy } = useSettings();
 
-  // const [clearLinksInCompose, setClearLinksInCompose] = useState(urlPrivacy.clearLinksInCompose);
+  const [clearLinksInCompose, setClearLinksInCompose] = useState(urlPrivacy.clearLinksInCompose);
   const [clearLinksInContent, setClearLinksInContent] = useState(urlPrivacy.clearLinksInContent);
   // const [allowReferralMarketing, setAllowReferralMarketing] = useState(urlPrivacy.allowReferralMarketing);
   const [hashUrl, setHashUrl] = useState(urlPrivacy.hashUrl);
@@ -35,7 +35,7 @@ const UrlPrivacy = () => {
   const onSubmit = () => {
     dispatch(changeSetting(['urlPrivacy'], {
       ...urlPrivacy,
-      // clearLinksInCompose,
+      clearLinksInCompose,
       clearLinksInContent,
       // allowReferralMarketing,
       hashUrl,
@@ -59,9 +59,9 @@ const UrlPrivacy = () => {
         <CardBody>
           <Form onSubmit={onSubmit}>
             <List>
-              {/* <ListItem label={<FormattedMessage id='url_privacy.clear_links_in_compose' defaultMessage='Suggest removing tracking parameters when composing a post' />}>
+              <ListItem label={<FormattedMessage id='url_privacy.clear_links_in_compose' defaultMessage='Suggest removing tracking parameters when composing a post' />}>
                 <Toggle checked={clearLinksInCompose} onChange={({ target }) => setClearLinksInCompose(target.checked)} />
-              </ListItem> */}
+              </ListItem>
 
               <ListItem label={<FormattedMessage id='url_privacy.clear_links_in_content' defaultMessage='Remove tracking parameters from displayed posts' />}>
                 <Toggle checked={clearLinksInContent} onChange={({ target }) => setClearLinksInContent(target.checked)} />

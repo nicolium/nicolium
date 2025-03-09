@@ -55,9 +55,11 @@ import {
   COMPOSE_CHANGE_MEDIA_ORDER,
   COMPOSE_ADD_SUGGESTED_QUOTE,
   COMPOSE_FEDERATED_CHANGE,
+  COMPOSE_INTERACTION_POLICY_OPTION_CHANGE,
+  COMPOSE_CLEAR_LINK_SUGGESTION_CREATE,
+  COMPOSE_CLEAR_LINK_SUGGESTION_IGNORE,
   type ComposeAction,
   type ComposeSuggestionSelectAction,
-  COMPOSE_INTERACTION_POLICY_OPTION_CHANGE,
 } from '../actions/compose';
 import { EVENT_COMPOSE_CANCEL, EVENT_FORM_SET, type EventsAction } from '../actions/events';
 import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS, type MeAction } from '../actions/me';
@@ -89,6 +91,12 @@ const newPoll = (params: Partial<ComposePoll> = {}): ComposePoll => ({
   hide_totals: false,
   ...params,
 });
+
+interface ClearLinkSuggestion {
+  key: string;
+  originalUrl: string;
+  cleanUrl: string;
+}
 
 interface Compose {
   caretPosition: number | null;
@@ -129,6 +137,8 @@ interface Compose {
   federated: boolean;
   approvalRequired: boolean;
   interactionPolicy: InteractionPolicy | null;
+  dismissed_clear_links_suggestions: Array<string>;
+  clear_link_suggestion: ClearLinkSuggestion | null;
 }
 
 const newCompose = (params: Partial<Compose> = {}): Compose => ({
@@ -170,6 +180,8 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
   federated: true,
   approvalRequired: false,
   interactionPolicy: null,
+  dismissed_clear_links_suggestions: [],
+  clear_link_suggestion: null,
   ...params,
 });
 
@@ -688,6 +700,17 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
       });
     case INSTANCE_FETCH_SUCCESS:
       return updateCompose(state, 'default', (compose) => updateDefaultContentType(compose, action.instance));
+    case COMPOSE_CLEAR_LINK_SUGGESTION_CREATE:
+      return updateCompose(state, action.composeId, compose => {
+        compose.clear_link_suggestion = action.suggestion;
+      });
+    case COMPOSE_CLEAR_LINK_SUGGESTION_IGNORE:
+      return updateCompose(state, action.composeId, compose => {
+        if (compose.clear_link_suggestion?.key === action.key) {
+          compose.clear_link_suggestion = null;
+        }
+        compose.dismissed_clear_links_suggestions.push(action.key);
+      });
     default:
       return state;
   }
@@ -695,6 +718,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
 
 export {
   type Compose,
+  type ClearLinkSuggestion,
   statusToMentionsAccountIdsArray,
   initialState,
   compose as default,

@@ -25,6 +25,7 @@ import type { Emoji } from 'pl-fe/features/emoji';
 import type { Policy, Rule, Scope } from 'pl-fe/features/interaction-policies';
 import type { Account } from 'pl-fe/normalizers/account';
 import type { Status } from 'pl-fe/normalizers/status';
+import type { ClearLinkSuggestion } from 'pl-fe/reducers/compose';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 import type { History } from 'pl-fe/types/history';
 
@@ -94,6 +95,9 @@ const COMPOSE_ADD_SUGGESTED_QUOTE = 'COMPOSE_ADD_SUGGESTED_QUOTE' as const;
 const COMPOSE_ADD_SUGGESTED_LANGUAGE = 'COMPOSE_ADD_SUGGESTED_LANGUAGE' as const;
 
 const COMPOSE_INTERACTION_POLICY_OPTION_CHANGE = 'COMPOSE_INTERACTION_POLICY_OPTION_CHANGE' as const;
+
+const COMPOSE_CLEAR_LINK_SUGGESTION_CREATE = 'COMPOSE_CLEAR_LINK_SUGGESTION_CREATE' as const;
+const COMPOSE_CLEAR_LINK_SUGGESTION_IGNORE = 'COMPOSE_CLEAR_LINK_SUGGESTION_IGNORE' as const;
 
 const getAccount = makeGetAccount();
 
@@ -942,6 +946,18 @@ const changeComposeInteractionPolicyOption = (composeId: string, policy: Policy,
   initial,
 });
 
+const suggestClearLink = (composeId: string, suggestion: ClearLinkSuggestion | null) => ({
+  type: COMPOSE_CLEAR_LINK_SUGGESTION_CREATE,
+  composeId,
+  suggestion,
+});
+
+const ignoreClearLinkSuggestion = (composeId: string, key: string) => ({
+  type: COMPOSE_CLEAR_LINK_SUGGESTION_IGNORE,
+  composeId,
+  key,
+});
+
 type ComposeAction =
   ComposeSetStatusAction
   | ReturnType<typeof changeCompose>
@@ -994,7 +1010,9 @@ type ComposeAction =
   | ReturnType<typeof addSuggestedQuote>
   | ReturnType<typeof addSuggestedLanguage>
   | ReturnType<typeof changeComposeFederated>
-  | ReturnType<typeof changeComposeInteractionPolicyOption>;
+  | ReturnType<typeof changeComposeInteractionPolicyOption>
+  | ReturnType<typeof suggestClearLink>
+  | ReturnType<typeof ignoreClearLinkSuggestion>;
 
 export {
   COMPOSE_CHANGE,
@@ -1049,6 +1067,8 @@ export {
   COMPOSE_ADD_SUGGESTED_LANGUAGE,
   COMPOSE_FEDERATED_CHANGE,
   COMPOSE_INTERACTION_POLICY_OPTION_CHANGE,
+  COMPOSE_CLEAR_LINK_SUGGESTION_CREATE,
+  COMPOSE_CLEAR_LINK_SUGGESTION_IGNORE,
   setComposeToStatus,
   replyCompose,
   cancelReplyCompose,
@@ -1096,6 +1116,8 @@ export {
   addSuggestedLanguage,
   changeComposeFederated,
   changeComposeInteractionPolicyOption,
+  suggestClearLink,
+  ignoreClearLinkSuggestion,
   type ComposeReplyAction,
   type ComposeSuggestionSelectAction,
   type ComposeAction,

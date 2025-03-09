@@ -1,15 +1,18 @@
+import { AutoLinkNode, LinkNode } from '@lexical/link';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
 import { $createRemarkExport } from '@mkljczk/lexical-remark';
-import { $getRoot } from 'lexical';
+import { $nodesOfType, $getRoot, type EditorState, $getNodeByKey } from 'lexical';
 import debounce from 'lodash/debounce';
 import { useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
-import { addSuggestedLanguage, addSuggestedQuote, setEditorState } from 'pl-fe/actions/compose';
+import { addSuggestedLanguage, addSuggestedQuote, setEditorState, suggestClearLink } from 'pl-fe/actions/compose';
 import { fetchStatus } from 'pl-fe/actions/statuses';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
+import { useSettings } from 'pl-fe/hooks/use-settings';
 import { getStatusIdsFromLinksInContent } from 'pl-fe/utils/status';
+import Purify from 'pl-fe/utils/url-purify';
 
 import type { LanguageIdentificationModel } from 'fasttext.wasm.js/dist/models/language-identification/common.js';
 
@@ -25,6 +28,54 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
   const dispatch = useAppDispatch();
   const [editor] = useLexicalComposerContext();
   const features = useFeatures();
+  const { urlPrivacy } = useSettings();
+
+  const checkUrls = useCallback(debounce((editorState: EditorState) => {
+    dispatch(async (_, getState) => {
+      if (!urlPrivacy.clearLinksInCompose) return;
+
+      const state = getState();
+      const compose = state.compose[composeId];
+
+      editorState.read(() => {
+        const compareUrl = (url: string) => {
+          const cleanUrl = Purify.clearUrl(url);
+          return {
+            originalUrl: url,
+            cleanUrl,
+            isDirty: cleanUrl !== url,
+          };
+        };
+
+        if (compose.clear_link_suggestion?.key) {
+          const node = $getNodeByKey(compose.clear_link_suggestion.key);
+          const url = (node as LinkNode | null)?.getURL?.();
+          if (!url || node === null || !compareUrl(url).isDirty) {
+            dispatch(suggestClearLink(composeId, null));
+          } else {
+            return;
+          }
+        }
+
+        const links = [...$nodesOfType(AutoLinkNode), ...$nodesOfType(LinkNode)];
+
+        for (const link of links) {
+          if (compose.dismissed_clear_links_suggestions.includes(link.getKey())) {
+            continue;
+          }
+
+          const { originalUrl, cleanUrl, isDirty } = compareUrl(link.getURL());
+          if (!isDirty) {
+            continue;
+          }
+
+          if (isDirty) {
+            return dispatch(suggestClearLink(composeId, { key: link.getKey(), originalUrl, cleanUrl }));
+          }
+        }
+      });
+    });
+  }, 2000), [urlPrivacy.clearLinksInCompose]);
 
   const getQuoteSuggestions = useCallback(debounce((text: string) => {
     dispatch(async (_, getState) => {
@@ -97,6 +148,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
       const isEmpty = text === '';
       const data = isEmpty ? null : JSON.stringify(editorState.toJSON());
       dispatch(setEditorState(composeId, data, text));
+      checkUrls(editorState);
       getQuoteSuggestions(plainText);
       detectLanguage(plainText);
     });
