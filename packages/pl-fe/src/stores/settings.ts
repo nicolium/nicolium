@@ -3,9 +3,14 @@ import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
 import { settingsSchema, type Settings } from 'pl-fe/schemas/pl-fe/settings';
+import { updateRulesFromUrl } from 'pl-fe/utils/url-purify';
 
 import type { Emoji } from 'pl-fe/features/emoji';
+import type { store } from 'pl-fe/store';
 import type { APIEntity } from 'pl-fe/types/entities';
+
+let lazyStore: typeof store;
+import('pl-fe/store').then(({ store }) => lazyStore = store).catch(() => {});
 
 const settingsSchemaPartial = v.partial(settingsSchema);
 
@@ -33,7 +38,16 @@ const changeSetting = (object: APIEntity, path: string[], value: any) => {
   return changeSetting(object[path[0]], path.slice(1), value);
 };
 
-const mergeSettings = (state: State) => state.settings = { ...state.defaultSettings, ...state.userSettings };
+const mergeSettings = (state: State) => {
+  const mergedSettings = { ...state.defaultSettings, ...state.userSettings };
+  if (mergedSettings.urlPrivacy.rulesUrl && state.settings.urlPrivacy.rulesUrl !== mergedSettings.urlPrivacy.rulesUrl) {
+    const me = lazyStore?.getState().me;
+    if (me) {
+      updateRulesFromUrl(me, mergedSettings.urlPrivacy.rulesUrl, mergedSettings.urlPrivacy.hashUrl);
+    }
+  }
+  state.settings = mergedSettings;
+};
 
 const useSettingsStore = create<State>()(mutative((set) => ({
   defaultSettings: v.parse(settingsSchema, {}),
@@ -90,4 +104,3 @@ const useSettingsStore = create<State>()(mutative((set) => ({
 }), { enableAutoFreeze: true }));
 
 export { useSettingsStore };
-

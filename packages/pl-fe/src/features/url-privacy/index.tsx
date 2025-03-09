@@ -64,7 +64,7 @@ const UrlPrivacy = () => {
 
             <FormGroup
               labelText={<FormattedMessage id='url_privacy.rules_url.label' defaultMessage='URL cleaning rules database address' />}
-              hintText={<FormattedMessage id='url_privacy.rules_url.placeholder' defaultMessage='Rules database in ClearURLs-compatible format, eg. {url}' values={{ url: 'https://rules2.clearurls.xyz/data.minify.json' }} />}
+              hintText={<FormattedMessage id='url_privacy.rules_url.hint' defaultMessage='Rules database in ClearURLs-compatible format, eg. {url}' values={{ url: 'https://rules2.clearurls.xyz/data.minify.json' }} />}
             >
               <Input
                 type='text'
@@ -76,7 +76,7 @@ const UrlPrivacy = () => {
 
             <FormGroup
               labelText={<FormattedMessage id='url_privacy.hash_url.label' defaultMessage='URL cleaning rules hash address (optional)' />}
-              hintText={<FormattedMessage id='url_privacy.hash_url.placeholder' defaultMessage='SHA256 hash of rules database, used to avoid unnecessary fetches, eg. {url}' values={{ url: 'https://rules2.clearurls.xyz/rules.minify.hash' }} />}
+              hintText={<FormattedMessage id='url_privacy.hash_url.hint' defaultMessage='SHA256 hash of rules database, used to avoid unnecessary fetches, eg. {url}' values={{ url: 'https://rules2.clearurls.xyz/rules.minify.hash' }} />}
             >
               <Input
                 type='text'

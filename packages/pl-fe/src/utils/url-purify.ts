@@ -15,6 +15,22 @@
 import { URLPurify, type SerializedRules } from '@mkljczk/url-purify';
 
 import KVStore from 'pl-fe/storage/kv-store';
+import { Me } from 'pl-fe/types/pl-fe';
+
+interface KVStoreItem {
+  hashUrl: string;
+  rulesUrl: string;
+  hash: string;
+  rules: SerializedRules;
+  fetchedAt: number;
+}
+
+const sha256 = async (message: string) =>
+  Array.from(new Uint8Array(
+    await window.crypto.subtle.digest('SHA-256', (new TextEncoder()).encode(message)),
+  ))
+    .map((b) => b.toString(16).padStart(2, '0'))
+    .join('');
 
 // Adapted from ClearURLs Rules
 // https://github.com/ClearURLs/Rules/blob/master/data.min.json
@@ -90,24 +106,48 @@ const DEFAULT_RULESET: SerializedRules = {
 
 const Purify = new URLPurify({
   rulesFromMemory: DEFAULT_RULESET,
-  // onFetchedRules: (hash, rules) => {
-  //   const me = store.getState().auth.me;
-
-  //   KVStore.setItem('url-purify-rules:last', me || '');
-  //   KVStore.setItem(`url-purify-rules:${me}`, {
-  //     hash,
-  //     rules,
-  //     fetchedAt: Date.now(),
-  //   });
-  // },
 });
 
-KVStore.getItem('url-purify-rules:last', (url: string) => {
-  if (!url) return;
-  KVStore.getItem(`url-purify-rules:${url}`, (rules: any) => {
+const updateRulesFromUrl = async (user: Me, rulesUrl: string, hashUrl: string, oldHash?: string) => {
+  if (oldHash) {
+    const newHash = await fetch(hashUrl).then((response) => response.text());
+    if (newHash === oldHash) return;
+  }
+
+  const rules = await fetch(rulesUrl).then((response) => response.text());
+
+  const parsedRules = JSON.parse(rules);
+  const hash = await sha256(rules);
+  Purify.setRules(parsedRules, hash);
+
+  await KVStore.setItem('url-purify-rules:last', user);
+  return KVStore.setItem<KVStoreItem>(`url-purify-rules:${user}`, {
+    hashUrl,
+    rulesUrl,
+    hash,
+    rules: parsedRules,
+    fetchedAt: Date.now(),
+  });
+};
+
+const getRulesForUser = (user: Me) => {
+  if (!user || typeof user !== 'string') return;
+  KVStore.getItem<KVStoreItem>(`url-purify-rules:${user}`, (rules) => {
     if (!rules) return;
     Purify.setRules(rules.rules, rules.hash);
-  });
-});
 
-export default Purify;
+    if (rules.fetchedAt + 1000 * 60 * 60 * 24 < Date.now()) {
+      updateRulesFromUrl(user, rules.rulesUrl, rules.hashUrl, rules.hash);
+    }
+  });
+};
+
+const getRulesFromMemory = () => {
+  KVStore.getItem('url-purify-rules:last', (url: string) => {
+    getRulesForUser(url);
+  });
+};
+
+getRulesFromMemory();
+
+export { Purify as default, getRulesForUser, updateRulesFromUrl };
