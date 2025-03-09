@@ -50,14 +50,17 @@ const saveSettings = (opts?: SettingOpts) =>
   };
 
 /** Update settings store for Mastodon, etc. */
-const updateAuthAccount = (url: string, settings: any) => {
+const updateAuthAccount = async (url: string, settings: any) => {
   const key = `authAccount:${url}`;
-  return KVStore.getItem(key).then((oldAccount: any) => {
+  const oldAccount: any = await KVStore.getItem(key);
+  try {
     if (!oldAccount) return;
     if (!oldAccount.settings_store) oldAccount.settings_store = {};
     oldAccount.settings_store[FE_NAME] = settings;
-    KVStore.setItem(key, oldAccount);
-  }).catch(console.error);
+    await KVStore.setItem(key, oldAccount);
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const updateSettingsStore = (settings: any) =>

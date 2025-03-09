@@ -1,8 +1,10 @@
+import { defineMessages } from 'react-intl';
 import * as v from 'valibot';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
 import { settingsSchema, type Settings } from 'pl-fe/schemas/pl-fe/settings';
+import toast from 'pl-fe/toast';
 import { updateRulesFromUrl } from 'pl-fe/utils/url-purify';
 
 import type { Emoji } from 'pl-fe/features/emoji';
@@ -11,6 +13,11 @@ import type { APIEntity } from 'pl-fe/types/entities';
 
 let lazyStore: typeof store;
 import('pl-fe/store').then(({ store }) => lazyStore = store).catch(() => {});
+
+const messages = defineMessages({
+  updateSuccess: { id: 'url_privacy.update.success', defaultMessage: 'Successfully updated rules database' },
+  updateFail: { id: 'url_privacy.update.fail', defaultMessage: 'Failed to update rules database URL' },
+});
 
 const settingsSchemaPartial = v.partial(settingsSchema);
 
@@ -38,12 +45,16 @@ const changeSetting = (object: APIEntity, path: string[], value: any) => {
   return changeSetting(object[path[0]], path.slice(1), value);
 };
 
-const mergeSettings = (state: State) => {
+const mergeSettings = (state: State, updating = false) => {
   const mergedSettings = { ...state.defaultSettings, ...state.userSettings };
-  if (mergedSettings.urlPrivacy.rulesUrl && state.settings.urlPrivacy.rulesUrl !== mergedSettings.urlPrivacy.rulesUrl) {
+  if (updating && mergedSettings.urlPrivacy.rulesUrl && state.settings.urlPrivacy.rulesUrl !== mergedSettings.urlPrivacy.rulesUrl) {
     const me = lazyStore?.getState().me;
     if (me) {
-      updateRulesFromUrl(me, mergedSettings.urlPrivacy.rulesUrl, mergedSettings.urlPrivacy.hashUrl);
+      updateRulesFromUrl(me, mergedSettings.urlPrivacy.rulesUrl, mergedSettings.urlPrivacy.hashUrl).then(() => {
+        toast.success(messages.updateSuccess);
+      }).catch(() => {
+        toast.error(messages.updateFail);
+      });
     }
   }
   state.settings = mergedSettings;
@@ -79,7 +90,7 @@ const useSettingsStore = create<State>()(mutative((set) => ({
     state.userSettings.saved = false;
     changeSetting(state.userSettings, path, value);
 
-    mergeSettings(state);
+    mergeSettings(state, true);
   }),
 
   rememberEmojiUse: (emoji: Emoji) => set((state: State) => {

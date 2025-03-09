@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import { changeSetting } from 'pl-fe/actions/settings';
 import List, { ListItem } from 'pl-fe/components/list';
 import Button from 'pl-fe/components/ui/button';
 import Card, { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card';
@@ -31,6 +32,18 @@ const UrlPrivacy = () => {
   const [hashUrl, setHashUrl] = useState(urlPrivacy.hashUrl);
   const [rulesUrl, setRulesUrl] = useState(urlPrivacy.rulesUrl);
 
+  const onSubmit = () => {
+    dispatch(changeSetting(['urlPrivacy'], {
+      clearLinksInCompose,
+      clearLinksInContent,
+      allowReferralMarketing,
+      hashUrl,
+      rulesUrl,
+    }, {
+      save: true,
+      showAlert: true,
+    }));
+  };
 
   useEffect(() => {
   }, [dispatch]);
@@ -43,7 +56,7 @@ const UrlPrivacy = () => {
         </CardHeader>
 
         <CardBody>
-          <Form>
+          <Form onSubmit={onSubmit}>
             <List>
               <ListItem label={<FormattedMessage id='url_privacy.clear_links_in_compose' defaultMessage='Suggest removing tracking parameters when composing a post' />}>
                 <Toggle checked={clearLinksInCompose} onChange={({ target }) => setClearLinksInCompose(target.checked)} />
