@@ -64,7 +64,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
   const { isLoggedIn, me } = useLoggedIn();
   const { follow, unfollow } = useFollow();
 
-  const { relationship } = useRelationship(account.id);
+  const { relationship } = useRelationship(account.id, { enabled: true });
 
   const { mutate: authorizeFollowRequest } = useAcceptFollowRequestMutation(account.id);
   const { mutate: rejectFollowRequest } = useRejectFollowRequestMutation(account.id);
@@ -163,8 +163,6 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
   };
 
   const followRequestAction = () => {
-    if (relationship?.followed_by) return null;
-
     return (
       <HStack space={2}>
         <Button
