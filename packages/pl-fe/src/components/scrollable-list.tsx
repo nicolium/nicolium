@@ -120,7 +120,13 @@ const ScrollableList = React.forwardRef<Virtualizer<any, any>, IScrollableList>(
   useEffect(() => {
     if (showLoading) return;
 
-    if (typeof initialIndex === 'number') virtualizer.scrollToIndex(initialIndex);
+    if (typeof initialIndex === 'number') {
+      const targetIndex = (initialIndex === 0) ? initialIndex : initialIndex + 1;
+      virtualizer.scrollToIndex(targetIndex);
+      setTimeout(() => {
+        virtualizer.scrollToIndex(targetIndex);
+      }, 1);
+    }
   }, [showLoading, initialIndex]);
 
   useEffect(() => {

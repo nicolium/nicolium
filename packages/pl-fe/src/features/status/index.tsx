@@ -104,7 +104,7 @@ const StatusDetails: React.FC<IStatusDetails> = (props) => {
     <Stack space={4}>
       <Column label={intl.formatMessage(titleMessage())}>
         <PullToRefresh onRefresh={handleRefresh}>
-          <Thread status={status} />
+          <Thread key={status.id} status={status} />
         </PullToRefresh>
       </Column>
 
