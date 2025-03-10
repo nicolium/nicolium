@@ -64,7 +64,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
   const { isLoggedIn, me } = useLoggedIn();
   const { follow, unfollow } = useFollow();
 
-  const { relationship } = useRelationship(account.id, { enabled: true });
+  const { relationship, isLoading } = useRelationship(account.id, { enabled: true });
 
   const { mutate: authorizeFollowRequest } = useAcceptFollowRequestMutation(account.id);
   const { mutate: rejectFollowRequest } = useRejectFollowRequestMutation(account.id);
@@ -241,6 +241,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) =
     }
 
     if (!relationship) {
+      if (!isLoading) return null;
       // Wait until the relationship is loaded
       return (
         <Button
