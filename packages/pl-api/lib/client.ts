@@ -898,6 +898,14 @@ class PlApiClient {
       this.#paginatedGet('/api/v1/follow_requests', { params }, accountSchema),
 
     /**
+     * View outgoing follow requests
+     *
+     * Requires features{@link Features['outgoingFollowRequests']}.
+     */
+    getOutgoingFollowRequests: async (params?: GetFollowRequestsParams) =>
+      this.#paginatedGet('/api/v1/pleroma/outgoing_follow_requests', { params }, accountSchema),
+
+    /**
      * Accept follow request
      * @see {@link https://docs.joinmastodon.org/methods/follow_requests/#accept}
      */

@@ -1011,6 +1011,11 @@ const getFeatures = (instance: Instance) => {
      */
     notificationsRequestsAcceptMultiple: instance.api_versions.mastodon >= 1,
 
+    /**
+     * @see GET /api/v1/pleroma/outgoing_follow_requests
+     */
+    outgoingFollowRequests: v.build === PL && gte(v.version, '2.8.0'),
+
     pleromaAdminAccounts: v.software === PLEROMA,
 
     /**
