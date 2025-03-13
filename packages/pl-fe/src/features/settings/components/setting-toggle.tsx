@@ -11,6 +11,8 @@ interface ISettingToggle {
   settings: Settings;
   /** Array of key names leading into the setting map. */
   settingPath: string[];
+  /** Value set if the setting is undefined. */
+  defaultValue?: boolean;
   /** Callback when the setting is toggled. */
   onChange: (settingPath: string[], checked: boolean) => void;
   /** Whether the toggle is disabled. */
@@ -18,16 +20,18 @@ interface ISettingToggle {
 }
 
 /** Stateful toggle to change user settings. */
-const SettingToggle: React.FC<ISettingToggle> = ({ id, settings, settingPath, onChange, disabled }) => {
+const SettingToggle: React.FC<ISettingToggle> = ({ id, settings, settingPath, defaultValue, onChange, disabled }) => {
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
     onChange(settingPath, target.checked);
   };
 
+  const checked = !!get(settings, settingPath, defaultValue);
+
   return (
     <Toggle
       id={id}
-      checked={!!get(settings, settingPath)}
+      checked={checked}
       onChange={handleChange}
       disabled={disabled}
     />

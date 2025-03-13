@@ -168,11 +168,11 @@ const Preferences = () => {
     <Form>
       <List>
         <ListItem label={<FormattedMessage id='home.column_settings.show_reblogs' defaultMessage='Show reposts in home timeline' />}>
-          <SettingToggle settings={settings} settingPath={['timelines', 'home', 'shows', 'reblog']} onChange={onToggleChange} />
+          <SettingToggle settings={settings} settingPath={['timelines', 'home', 'shows', 'reblog']} defaultValue onChange={onToggleChange} />
         </ListItem>
 
         <ListItem label={<FormattedMessage id='home.column_settings.show_replies' defaultMessage='Show replies in home timeline' />}>
-          <SettingToggle settings={settings} settingPath={['timelines', 'home', 'shows', 'reply']} onChange={onToggleChange} />
+          <SettingToggle settings={settings} settingPath={['timelines', 'home', 'shows', 'reply']} defaultValue onChange={onToggleChange} />
         </ListItem>
       </List>
 
