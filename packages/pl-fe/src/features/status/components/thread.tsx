@@ -415,13 +415,11 @@ const Thread: React.FC<IThread> = ({
           placeholderComponent={() => <PlaceholderStatus variant='slim' />}
           initialTopMostItemIndex={initialIndex}
           itemClassName={itemClassName}
-          listClassName={
-            clsx({
-              'h-full': isModal,
-            })
-          }
+          listClassName={clsx({
+            'h-full': isModal,
+          })}
           useWindowScroll={!isModal}
-          customScrollParent={node.current || undefined}
+          customScrollParent={isModal && node.current || undefined}
         >
           {children}
         </ScrollableList>
