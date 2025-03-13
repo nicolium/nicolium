@@ -35,6 +35,11 @@ const useFollowRequests = makeUseFollowRequests((data) => data.pages.map(page =>
 
 const useFollowRequestsCount = makeUseFollowRequests((data) => data.pages.map(page => page.items).flat().length);
 
+const useOutgoingFollowRequests = makePaginatedResponseQuery(
+  () => ['accountsLists', 'outgoingFollowRequests'],
+  (client) => client.myAccount.getOutgoingFollowRequests().then(minifyAccountList),
+);
+
 const useAcceptFollowRequestMutation = (accountId: string) => {
   const client = useClient();
   const dispatch = useAppDispatch();
@@ -73,6 +78,7 @@ export {
   appendFollowRequest,
   useFollowRequests,
   useFollowRequestsCount,
+  useOutgoingFollowRequests,
   useAcceptFollowRequestMutation,
   useRejectFollowRequestMutation,
   prefetchFollowRequests,

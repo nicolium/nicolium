@@ -70,6 +70,7 @@ export const ModerationLog = lazy(() => import('pl-fe/features/admin/moderation-
 export const Mutes = lazy(() => import('pl-fe/features/mutes'));
 export const NewStatus = lazy(() => import('pl-fe/features/new-status'));
 export const Notifications = lazy(() => import('pl-fe/features/notifications'));
+export const OutgoingFollowRequests = lazy(() => import('pl-fe/features/follow-requests/components/outgoing-follow-requests'));
 export const PasswordReset = lazy(() => import('pl-fe/features/auth-login/components/password-reset'));
 export const PinnedStatuses = lazy(() => import('pl-fe/features/pinned-statuses'));
 export const PlFeConfig = lazy(() => import('pl-fe/features/pl-fe-config'));

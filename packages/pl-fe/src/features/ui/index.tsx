@@ -117,6 +117,7 @@ import {
   Mutes,
   NewStatus,
   Notifications,
+  OutgoingFollowRequests,
   PasswordReset,
   PinnedStatuses,
   PlFeConfig,
@@ -252,6 +253,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       {features.chats && <WrappedRoute path='/chats/:chatId' layout={ChatsLayout} component={ChatIndex} content={children} />}
 
       <WrappedRoute path='/follow_requests' layout={DefaultLayout} component={FollowRequests} content={children} />
+      {features.outgoingFollowRequests && <WrappedRoute path='/outgoing_follow_requests' layout={DefaultLayout} component={OutgoingFollowRequests} content={children} />}
       <WrappedRoute path='/blocks' layout={DefaultLayout} component={Blocks} content={children} />
       {features.federating && <WrappedRoute path='/domain_blocks' layout={DefaultLayout} component={DomainBlocks} content={children} />}
       <WrappedRoute path='/mutes' layout={DefaultLayout} component={Mutes} content={children} />
