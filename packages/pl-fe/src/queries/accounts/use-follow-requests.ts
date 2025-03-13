@@ -1,5 +1,7 @@
 import { useMutation, type InfiniteData } from '@tanstack/react-query';
 
+import { importEntities } from 'pl-fe/actions/importer';
+import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useClient } from 'pl-fe/hooks/use-client';
 import { queryClient } from 'pl-fe/queries/client';
 import { makePaginatedResponseQuery } from 'pl-fe/queries/utils/make-paginated-response-query';
@@ -35,21 +37,29 @@ const useFollowRequestsCount = makeUseFollowRequests((data) => data.pages.map(pa
 
 const useAcceptFollowRequestMutation = (accountId: string) => {
   const client = useClient();
+  const dispatch = useAppDispatch();
 
   return useMutation({
     mutationKey: ['accountsLists', 'followRequests', accountId],
     mutationFn: () => client.myAccount.acceptFollowRequest(accountId),
-    onSettled: () => removeFollowRequest(accountId),
+    onSettled: ((relationship) => {
+      removeFollowRequest(accountId);
+      dispatch(importEntities({ relationships: [relationship] }));
+    }),
   });
 };
 
 const useRejectFollowRequestMutation = (accountId: string) => {
   const client = useClient();
+  const dispatch = useAppDispatch();
 
   return useMutation({
     mutationKey: ['accountsLists', 'followRequests', accountId],
     mutationFn: () => client.myAccount.rejectFollowRequest(accountId),
-    onSettled: () => removeFollowRequest(accountId),
+    onSettled: ((relationship) => {
+      removeFollowRequest(accountId);
+      dispatch(importEntities({ relationships: [relationship] }));
+    }),
   });
 };
 
