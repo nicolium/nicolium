@@ -101,7 +101,6 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
   placeholderComponent: Placeholder,
   placeholderCount = 0,
   initialTopMostItemIndex = 0,
-  style = {},
   useWindowScroll = true,
   ...params
 }, ref) => {
@@ -236,10 +235,10 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
 
   return (
     <Virtuoso
-      {...params}
-      ref={ref}
-      id={id}
       useWindowScroll={useWindowScroll}
+      {...params}
+      overscan={window.innerHeight * 1.5}
+      ref={ref}
       data={data}
       totalCount={data.length}
       startReached={onScrollToTop}
@@ -248,8 +247,6 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
       itemContent={renderItem}
       initialTopMostItemIndex={initialIndex}
       rangeChanged={handleRangeChange}
-      className={className}
-      style={style}
       context={{
         listClassName,
         itemClassName,
