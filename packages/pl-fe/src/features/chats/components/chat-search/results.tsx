@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useCallback, useState } from 'react';
+import { Virtuoso } from 'react-virtuoso';
 
-import ScrollableList from 'pl-fe/components/scrollable-list';
 import Avatar from 'pl-fe/components/ui/avatar';
 import HStack from 'pl-fe/components/ui/hstack';
 import Stack from 'pl-fe/components/ui/stack';
@@ -54,23 +54,19 @@ const Results = ({ accountSearchResult, onSelect, parentRef }: IResults) => {
     </button>
   ), []);
 
-  // <div className='relative grow'>
   return (
-    <>
-      <ScrollableList
-        itemClassName='px-2'
-        loadMoreClassName='mx-4 mb-4'
-        onScroll={(startIndex, endIndex) => {
-          setNearTop(startIndex === 0);
-          setNearBottom(endIndex === accounts?.length);
-        }}
-        isLoading={isFetching}
-        hasMore={hasNextPage}
-        onLoadMore={handleLoadMore}
-        parentRef={parentRef}
-      >
-        {(accounts || []).map((chat) => renderAccount(chat))}
-      </ScrollableList>
+    <div className='relative grow'>
+      <Virtuoso
+        data={accounts}
+        itemContent={(_index, chat) => (
+          <div className='px-2'>
+            {renderAccount(chat)}
+          </div>
+        )}
+        endReached={handleLoadMore}
+        atTopStateChange={(atTop) => setNearTop(atTop)}
+        atBottomStateChange={(atBottom) => setNearBottom(atBottom)}
+      />
 
       <div
         className={clsx('pointer-events-none absolute inset-x-0 top-[58px] flex justify-center rounded-t-lg bg-gradient-to-b from-white to-transparent pb-12 pt-8 transition-opacity duration-500 black:from-black dark:from-gray-900', {
@@ -84,7 +80,7 @@ const Results = ({ accountSearchResult, onSelect, parentRef }: IResults) => {
           'opacity-100': !isNearBottom,
         })}
       />
-    </>
+    </div>
   );
 };
 

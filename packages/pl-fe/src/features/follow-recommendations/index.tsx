@@ -30,7 +30,11 @@ const FollowRecommendations: React.FC = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <Stack space={4}>
-        <ScrollableList isLoading={isFetching} itemClassName='pb-4'>
+        <ScrollableList
+          scrollKey='followRecommendations'
+          isLoading={isFetching}
+          itemClassName='pb-4'
+        >
           {suggestions.map((suggestion) => (
             <AccountContainer
               key={suggestion.account_id}

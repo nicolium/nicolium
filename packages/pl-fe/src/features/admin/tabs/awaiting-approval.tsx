@@ -33,6 +33,7 @@ const AwaitingApproval: React.FC = () => {
 
   return (
     <ScrollableList
+      scrollKey='awaitingApproval'
       isLoading={isLoading}
       showLoading={showLoading}
       emptyMessage={intl.formatMessage(messages.emptyMessage)}

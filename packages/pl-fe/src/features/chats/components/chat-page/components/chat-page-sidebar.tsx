@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
@@ -18,7 +18,6 @@ const messages = defineMessages({
 const ChatPageSidebar = () => {
   const intl = useIntl();
   const history = useHistory();
-  const listRef = useRef<HTMLDivElement>(null);
 
   const handleClickChat = (chat: Chat) => {
     history.push(`/chats/${chat.id}`);
@@ -33,7 +32,7 @@ const ChatPageSidebar = () => {
   };
 
   return (
-    <Stack space={4} className='relative h-full'>
+    <Stack space={4} className='h-full'>
       <Stack space={4} className='px-4 pt-6'>
         <HStack alignItems='center' justifyContent='between'>
           <CardTitle title={intl.formatMessage(messages.title)} />
@@ -54,8 +53,8 @@ const ChatPageSidebar = () => {
         </HStack>
       </Stack>
 
-      <Stack className='h-full grow overflow-auto' ref={listRef}>
-        <ChatList onClickChat={handleClickChat} parentRef={listRef} topOffset={68} />
+      <Stack className='h-full grow overflow-auto'>
+        <ChatList onClickChat={handleClickChat} />
       </Stack>
     </Stack>
   );

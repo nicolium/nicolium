@@ -1,17 +1,19 @@
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
-import React, { useCallback, useMemo } from 'react';
+import React, { useRef, useCallback, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import LoadGap from 'pl-fe/components/load-gap';
-import ScrollableList, { type IScrollableListWithContainer } from 'pl-fe/components/scrollable-list';
+import ScrollableList, { type IScrollableList } from 'pl-fe/components/scrollable-list';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import StatusContainer from 'pl-fe/containers/status-container';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
 import PendingStatus from 'pl-fe/features/ui/components/pending-status';
 
-interface IStatusList extends Omit<IScrollableListWithContainer, 'onLoadMore' | 'children'> {
+import type { VirtuosoHandle } from 'react-virtuoso';
+
+interface IStatusList extends Omit<IScrollableList, 'onLoadMore' | 'children'> {
   /** Unique key to preserve the scroll position when navigating back. */
   scrollKey: string;
   /** List of status IDs to display. */
@@ -29,7 +31,7 @@ interface IStatusList extends Omit<IScrollableListWithContainer, 'onLoadMore' | 
   /** Whether we expect an additional page of data. */
   hasMore: boolean;
   /** Message to display when the list is loaded but empty. */
-  emptyMessage: React.ReactNode;
+  emptyMessage?: React.ReactNode;
   /** ID of the timeline in Redux. */
   timelineId?: string;
   /** Whether to display a gap or border between statuses in the list. */
@@ -52,6 +54,8 @@ const StatusList: React.FC<IStatusList> = ({
   className,
   ...other
 }) => {
+  const node = useRef<VirtuosoHandle>(null);
+
   const getFeaturedStatusCount = () => featuredStatusIds?.length || 0;
 
   const getCurrentStatusIndex = (id: string, featured: boolean): number => {
@@ -84,6 +88,14 @@ const StatusList: React.FC<IStatusList> = ({
     const element = document.querySelector<HTMLDivElement>(selector);
 
     if (element) element.focus();
+
+    node.current?.scrollIntoView({
+      index,
+      behavior: 'smooth',
+      done: () => {
+        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
+      },
+    });
   };
 
   const renderLoadGap = (index: number) => {
@@ -200,10 +212,10 @@ const StatusList: React.FC<IStatusList> = ({
       onLoadMore={handleLoadOlder}
       placeholderComponent={() => <PlaceholderStatus variant={divideType === 'border' ? 'slim' : 'rounded'} />}
       placeholderCount={20}
-      className={className}
+      ref={node}
       listClassName={clsx('divide-y divide-solid divide-gray-200 dark:divide-gray-800', {
         'divide-none': divideType !== 'border',
-      })}
+      }, className)}
       itemClassName={clsx({
         'pb-3': divideType !== 'border',
       })}

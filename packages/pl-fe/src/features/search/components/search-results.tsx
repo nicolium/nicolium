@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useSearchParams } from 'react-router-dom-v5-compat';
 
@@ -23,6 +23,8 @@ import { useSuggestedAccounts } from 'pl-fe/queries/trends/use-suggested-account
 import { useTrendingLinks } from 'pl-fe/queries/trends/use-trending-links';
 import { useTrendingStatuses } from 'pl-fe/queries/trends/use-trending-statuses';
 
+import type { VirtuosoHandle } from 'react-virtuoso';
+
 type SearchFilter = 'accounts' | 'hashtags' | 'statuses' | 'links';
 
 const messages = defineMessages({
@@ -33,6 +35,8 @@ const messages = defineMessages({
 });
 
 const SearchResults = () => {
+  const node = useRef<VirtuosoHandle>(null);
+
   const intl = useIntl();
   const features = useFeatures();
 
@@ -126,6 +130,14 @@ const SearchResults = () => {
     const element = document.querySelector<HTMLDivElement>(selector);
 
     if (element) element.focus();
+
+    node.current?.scrollIntoView({
+      index,
+      behavior: 'smooth',
+      done: () => {
+        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
+      },
+    });
   };
 
   let searchResults: Array<JSX.Element> | undefined;
@@ -237,6 +249,8 @@ const SearchResults = () => {
 
       {noResultsMessage || (
         <ScrollableList
+          scrollKey={`searchResults:${selectedFilter}:${value}`}
+          ref={node}
           id='search-results'
           key={selectedFilter}
           isLoading={submitted && isLoading}

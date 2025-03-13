@@ -1,5 +1,6 @@
 import userEvent from '@testing-library/user-event';
 import React from 'react';
+import { VirtuosoMockContext } from 'react-virtuoso';
 
 import { __stub } from 'pl-fe/api';
 import { ChatContext } from 'pl-fe/contexts/chat-context';
@@ -63,10 +64,11 @@ const store = {
 };
 
 const renderComponentWithChatContext = () => render(
-  <ChatContext.Provider value={{ chat }}>
-    <ChatMessageList chat={chat} />
-  </ChatContext.Provider>,
-  undefined,
+  <VirtuosoMockContext.Provider value={{ viewportHeight: 300, itemHeight: 100 }}>
+    <ChatContext.Provider value={{ chat }}>
+      <ChatMessageList chat={chat} />
+    </ChatContext.Provider>
+  </VirtuosoMockContext.Provider>,
   store,
 );
 

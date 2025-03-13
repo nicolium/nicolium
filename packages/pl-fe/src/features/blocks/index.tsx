@@ -34,6 +34,7 @@ const Blocks: React.FC = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <ScrollableList
+        scrollKey='blocks'
         onLoadMore={fetchNextPage}
         hasMore={hasNextPage}
         emptyMessage={emptyMessage}

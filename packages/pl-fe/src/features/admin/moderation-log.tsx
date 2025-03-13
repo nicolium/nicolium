@@ -33,6 +33,7 @@ const ModerationLog = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <ScrollableList
+        scrollKey='moderationLog'
         isLoading={isLoading}
         showLoading={showLoading}
         emptyMessage={intl.formatMessage(messages.emptyMessage)}

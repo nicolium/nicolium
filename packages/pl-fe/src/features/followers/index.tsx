@@ -55,6 +55,7 @@ const Followers: React.FC<IFollowers> = ({ params }) => {
   return (
     <Column label={intl.formatMessage(messages.heading)} transparent>
       <ScrollableList
+        scrollKey='followers'
         hasMore={hasNextPage}
         onLoadMore={fetchNextPage}
         emptyMessage={<FormattedMessage id='account.followers.empty' defaultMessage='No one follows this user yet.' />}

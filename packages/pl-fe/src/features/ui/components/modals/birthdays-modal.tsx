@@ -30,7 +30,7 @@ const BirthdaysModal = ({ onClose }: BaseModalProps) => {
         emptyMessage={emptyMessage}
         listClassName='max-w-full'
         itemClassName='pb-3'
-        estimatedSize={42}
+        useWindowScroll={false}
       >
         {accountIds.map(id =>
           <Account key={id} accountId={id} />,

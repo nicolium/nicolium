@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
@@ -17,7 +17,6 @@ interface MentionsModalProps {
 }
 
 const MentionsModal: React.FC<BaseModalProps & MentionsModalProps> = ({ onClose, statusId }) => {
-  const modalRef = useRef<HTMLDivElement>(null);
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const getStatus = useCallback(makeGetStatus(), []);
@@ -46,8 +45,7 @@ const MentionsModal: React.FC<BaseModalProps & MentionsModalProps> = ({ onClose,
       <ScrollableList
         listClassName='max-w-full'
         itemClassName='pb-3'
-        estimatedSize={42}
-        parentRef={modalRef}
+        useWindowScroll={false}
       >
         {accountIds.map(id =>
           <AccountContainer key={id} id={id} />,
@@ -60,7 +58,6 @@ const MentionsModal: React.FC<BaseModalProps & MentionsModalProps> = ({ onClose,
     <Modal
       title={<FormattedMessage id='column.mentions' defaultMessage='Mentions' />}
       onClose={onClickClose}
-      ref={modalRef}
     >
       {body}
     </Modal>

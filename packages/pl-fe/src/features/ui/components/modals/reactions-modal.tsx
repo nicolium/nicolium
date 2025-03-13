@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import ScrollableList from 'pl-fe/components/scrollable-list';
@@ -29,7 +29,6 @@ interface ReactionsModalProps {
 }
 
 const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClose, statusId, reaction: initialReaction }) => {
-  const modalRef = useRef<HTMLDivElement>(null);
   const intl = useIntl();
   const [reaction, setReaction] = useState(initialReaction);
 
@@ -91,8 +90,7 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
         itemClassName='pb-3'
         style={{ height: 'calc(80vh - 88px)' }}
         isLoading={typeof isLoading === 'boolean' ? isLoading : true}
-        estimatedSize={42}
-        parentRef={modalRef}
+        useWindowScroll={false}
       >
         {accounts.map((account) =>
           <AccountContainer key={`${account.id}-${account.reaction}`} id={account.id} emoji={account.reaction} emojiUrl={account.reactionUrl} />,
@@ -105,7 +103,6 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
     <Modal
       title={<FormattedMessage id='column.reactions' defaultMessage='Reactions' />}
       onClose={onClickClose}
-      ref={modalRef}
     >
       {body}
     </Modal>

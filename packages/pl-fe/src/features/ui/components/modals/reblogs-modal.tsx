@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import ScrollableList from 'pl-fe/components/scrollable-list';
@@ -14,8 +14,6 @@ interface ReblogsModalProps {
 }
 
 const ReblogsModal: React.FC<BaseModalProps & ReblogsModalProps> = ({ onClose, statusId }) => {
-  const modalRef = useRef<HTMLDivElement>(null);
-
   const { data: accountIds, isLoading, hasNextPage, fetchNextPage } = useStatusReblogs(statusId);
 
   const onClickClose = () => {
@@ -38,8 +36,7 @@ const ReblogsModal: React.FC<BaseModalProps & ReblogsModalProps> = ({ onClose, s
         hasMore={hasNextPage}
         isLoading={typeof isLoading === 'boolean' ? isLoading : true}
         onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
-        estimatedSize={42}
-        parentRef={modalRef}
+        useWindowScroll={false}
       >
         {accountIds.map((id) =>
           <AccountContainer key={id} id={id} />,
@@ -52,7 +49,6 @@ const ReblogsModal: React.FC<BaseModalProps & ReblogsModalProps> = ({ onClose, s
     <Modal
       title={<FormattedMessage id='column.reblogs' defaultMessage='Reposts' />}
       onClose={onClickClose}
-      ref={modalRef}
     >
       {body}
     </Modal>

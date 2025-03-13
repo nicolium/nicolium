@@ -35,6 +35,7 @@ const ScheduledStatuses = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <ScrollableList
+        scrollKey='scheduledStatuses'
         hasMore={hasMore}
         isLoading={typeof isLoading === 'boolean' ? isLoading : true}
         onLoadMore={() => handleLoadMore(dispatch)}

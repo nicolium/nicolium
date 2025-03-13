@@ -117,6 +117,7 @@ const Announcements: React.FC = () => {
           <FormattedMessage id='admin.announcements.action' defaultMessage='Create announcement' />
         </Button>
         <ScrollableList
+          scrollKey='announcements'
           emptyMessage={emptyMessage}
           itemClassName='py-3 first:pt-0 last:pb-0'
           isLoading={isLoading}

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import ScrollableList from 'pl-fe/components/scrollable-list';
@@ -19,7 +19,6 @@ interface FamiliarFollowersModalProps {
 }
 
 const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalProps> = ({ accountId, onClose }) => {
-  const modalRef = useRef<HTMLDivElement>(null);
   const account = useAppSelector(state => getAccount(state, accountId));
   const { data: familiarFollowerIds } = useFamiliarFollowers(accountId);
 
@@ -45,8 +44,7 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
         emptyMessage={emptyMessage}
         itemClassName='pb-3'
         style={{ height: 'calc(80vh - 88px)' }}
-        estimatedSize={42}
-        parentRef={modalRef}
+        useWindowScroll={false}
       >
         {familiarFollowerIds.map(id =>
           <AccountContainer key={id} id={id} />,
@@ -65,7 +63,6 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
         />
       }
       onClose={onClickClose}
-      ref={modalRef}
     >
       {body}
     </Modal>

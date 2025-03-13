@@ -32,6 +32,7 @@ const Reports: React.FC = () => {
 
   return (
     <ScrollableList
+      scrollKey='adminReports'
       isLoading={isLoading}
       showLoading={showLoading}
       emptyMessage={intl.formatMessage(messages.emptyMessage)}

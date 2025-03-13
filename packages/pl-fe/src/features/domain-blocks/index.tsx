@@ -43,6 +43,7 @@ const DomainBlocks: React.FC = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <ScrollableList
+        scrollKey='domainBlocks'
         onLoadMore={() => handleLoadMore(dispatch)}
         hasMore={hasMore}
         emptyMessage={emptyMessage}

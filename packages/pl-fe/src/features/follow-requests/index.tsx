@@ -20,6 +20,7 @@ const FollowRequests: React.FC = () => {
 
   const body = accountIds ? (
     <ScrollableList
+      scrollKey='followRequests'
       hasMore={hasNextPage}
       isLoading={typeof isLoading === 'boolean' ? isLoading : true}
       onLoadMore={() => fetchNextPage({ cancelRefetch: false })}

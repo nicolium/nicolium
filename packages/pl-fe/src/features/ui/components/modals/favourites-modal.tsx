@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import ScrollableList from 'pl-fe/components/scrollable-list';
@@ -14,8 +14,6 @@ interface FavouritesModalProps {
 }
 
 const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onClose, statusId }) => {
-  const modalRef = useRef<HTMLDivElement>(null);
-
   const { data: accountIds, isLoading, hasNextPage, fetchNextPage } = useStatusFavourites(statusId);
 
   const onClickClose = () => {
@@ -38,8 +36,7 @@ const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onCl
         hasMore={hasNextPage}
         isLoading={typeof isLoading === 'boolean' ? isLoading : true}
         onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
-        estimatedSize={42}
-        parentRef={modalRef}
+        useWindowScroll={false}
       >
         {accountIds.map(id =>
           <AccountContainer key={id} id={id} />,
@@ -52,7 +49,6 @@ const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onCl
     <Modal
       title={<FormattedMessage id='column.favourites' defaultMessage='Likes' />}
       onClose={onClickClose}
-      ref={modalRef}
     >
       {body}
     </Modal>

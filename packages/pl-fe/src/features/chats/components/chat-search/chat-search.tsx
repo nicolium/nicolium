@@ -89,7 +89,7 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
   };
 
   return (
-    <Stack space={4} className='relative -mt-1 h-full overflow-auto'>
+    <Stack space={4} className='-mt-1 h-full grow'>
       <div className='px-4 pt-1'>
         <Input
           data-testid='search'
@@ -112,7 +112,7 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
         />
       </div>
 
-      <Stack className='h-full grow overflow-auto' ref={parentRef}>
+      <Stack className='grow' ref={parentRef}>
         {renderBody()}
       </Stack>
     </Stack>

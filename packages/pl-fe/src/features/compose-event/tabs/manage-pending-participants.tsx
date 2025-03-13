@@ -60,6 +60,7 @@ const ManagePendingParticipants: React.FC<IManagePendingParticipants> = ({ statu
   return accounts ? (
     <Stack space={3}>
       <ScrollableList
+        scrollKey={`eventPendingParticipants:${statusId}`}
         emptyMessage={<FormattedMessage id='empty_column.event_participant_requests' defaultMessage='There are no pending event participation requests.' />}
         hasMore={hasNextPage}
         isLoading={typeof isLoading === 'boolean' ? isLoading : true}

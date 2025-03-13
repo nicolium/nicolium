@@ -32,10 +32,10 @@ const EventParticipantsModal: React.FC<BaseModalProps & EventParticipantsModalPr
         emptyMessage={emptyMessage}
         listClassName='max-w-full'
         itemClassName='pb-3'
-        estimatedSize={42}
         hasMore={hasNextPage}
         isLoading={typeof isLoading === 'boolean' ? isLoading : true}
         onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
+        useWindowScroll={false}
       >
         {accountIds.map(id => <AccountContainer key={id} id={id} />)}
       </ScrollableList>

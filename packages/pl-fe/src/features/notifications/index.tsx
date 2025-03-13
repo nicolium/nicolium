@@ -23,6 +23,7 @@ import FilterBar from './components/filter-bar';
 import Notification from './components/notification';
 
 import type { RootState } from 'pl-fe/store';
+import type { VirtuosoHandle } from 'react-virtuoso';
 
 const messages = defineMessages({
   title: { id: 'column.notifications', defaultMessage: 'Notifications' },
@@ -64,6 +65,7 @@ const Notifications = () => {
   // const isUnread = useAppSelector(state => state.notifications.unread > 0);
   const hasMore = useAppSelector(state => state.notifications.hasMore);
 
+  const node = useRef<VirtuosoHandle>(null);
   const scrollableContentRef = useRef<Array<JSX.Element> | null>(null);
 
   // const handleLoadGap = (maxId) => {
@@ -80,8 +82,12 @@ const Notifications = () => {
     dispatch(expandNotifications({ maxId: minId }));
   }, 300, { leading: true }), [displayedNotifications]);
 
-  const handleScroll = useCallback(debounce((startIndex?: number) => {
-    dispatch(scrollTopNotifications(startIndex === 0));
+  const handleScrollToTop = useCallback(debounce(() => {
+    dispatch(scrollTopNotifications(true));
+  }, 100), []);
+
+  const handleScroll = useCallback(debounce(() => {
+    dispatch(scrollTopNotifications(false));
   }, 100), []);
 
   const handleMoveUp = (id: string) => {
@@ -99,6 +105,14 @@ const Notifications = () => {
     const element = document.querySelector<HTMLDivElement>(selector);
 
     if (element) element.focus();
+
+    node.current?.scrollIntoView({
+      index,
+      behavior: 'smooth',
+      done: () => {
+        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
+      },
+    });
   };
 
   const handleDequeueNotifications = useCallback(() => {
@@ -114,6 +128,7 @@ const Notifications = () => {
 
     return () => {
       handleLoadOlder.cancel?.();
+      handleScrollToTop.cancel();
       handleScroll.cancel?.();
       dispatch(scrollTopNotifications(false));
     };
@@ -153,6 +168,8 @@ const Notifications = () => {
 
   const scrollContainer = (
     <ScrollableList
+      ref={node}
+      scrollKey='notifications'
       isLoading={isLoading}
       showLoading={isLoading && displayedNotifications.length === 0}
       hasMore={hasMore}
@@ -160,6 +177,7 @@ const Notifications = () => {
       placeholderComponent={PlaceholderNotification}
       placeholderCount={20}
       onLoadMore={handleLoadOlder}
+      onScrollToTop={handleScrollToTop}
       onScroll={handleScroll}
       listClassName={clsx('divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800', {
         'animate-pulse': displayedNotifications.length === 0,

@@ -28,6 +28,7 @@ const DraftStatuses = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <ScrollableList
+        scrollKey='draftStatuses'
         emptyMessage={emptyMessage}
         listClassName='divide-y divide-solid divide-gray-200 dark:divide-gray-800'
       >

@@ -20,6 +20,7 @@ const OutgoingFollowRequests: React.FC = () => {
 
   const body = accountIds ? (
     <ScrollableList
+      scrollKey='outgoingFollowRequests'
       hasMore={hasNextPage}
       isLoading={typeof isLoading === 'boolean' ? isLoading : true}
       onLoadMore={() => fetchNextPage({ cancelRefetch: false })}

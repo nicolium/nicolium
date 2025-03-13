@@ -242,6 +242,7 @@ const InteractionRequests = () => {
     <Column label={intl.formatMessage(messages.title)} withHeader={false}>
       <PullToRefresh onRefresh={() => refetch()}>
         <ScrollableList
+          scrollKey='interactionRequests'
           isLoading={isFetching}
           showLoading={isLoading}
           hasMore={hasNextPage}

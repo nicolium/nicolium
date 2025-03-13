@@ -127,6 +127,7 @@
     "react-sparklines": "^1.7.0",
     "react-sticky-box": "^2.0.5",
     "react-swipeable-views": "^0.14.0",
+    "react-virtuoso": "^4.12.5",
     "redux": "^5.0.1",
     "redux-thunk": "^3.1.0",
     "reselect": "^5.1.1",

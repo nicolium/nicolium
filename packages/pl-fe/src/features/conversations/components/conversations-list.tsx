@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce';
-import React from 'react';
+import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { expandConversations } from 'pl-fe/actions/conversations';
@@ -9,8 +9,11 @@ import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 
 import Conversation from './conversation';
 
+import type { VirtuosoHandle } from 'react-virtuoso';
+
 const ConversationsList: React.FC = () => {
   const dispatch = useAppDispatch();
+  const ref = useRef<VirtuosoHandle>(null);
 
   const conversations = useAppSelector((state) => state.conversations.items);
   const isLoading = useAppSelector((state) => state.conversations.isLoading);
@@ -33,6 +36,14 @@ const ConversationsList: React.FC = () => {
     const element = document.querySelector<HTMLDivElement>(selector);
 
     if (element) element.focus();
+
+    ref.current?.scrollIntoView({
+      index,
+      behavior: 'smooth',
+      done: () => {
+        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
+      },
+    });
   };
 
   const handleLoadOlder = debounce(() => {
@@ -41,6 +52,8 @@ const ConversationsList: React.FC = () => {
 
   return (
     <ScrollableList
+      scrollKey='direct'
+      ref={ref}
       hasMore={hasMore}
       onLoadMore={handleLoadOlder}
       id='direct-list'

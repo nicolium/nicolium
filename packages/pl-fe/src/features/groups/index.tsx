@@ -68,6 +68,7 @@ const Groups: React.FC = () => {
       )}
 
       <ScrollableList
+        scrollKey='groups'
         emptyMessage={renderBlankslate()}
         emptyMessageCard={false}
         itemClassName='pb-4 last:pb-0'

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import ScrollableList from 'pl-fe/components/scrollable-list';
@@ -14,8 +14,6 @@ interface DislikesModalProps {
 }
 
 const DislikesModal: React.FC<BaseModalProps & DislikesModalProps> = ({ onClose, statusId }) => {
-  const modalRef = useRef<HTMLDivElement>(null);
-
   const { data: accountIds, isLoading, hasNextPage, fetchNextPage } = useStatusDislikes(statusId);
 
   const onClickClose = () => {
@@ -38,8 +36,7 @@ const DislikesModal: React.FC<BaseModalProps & DislikesModalProps> = ({ onClose,
         hasMore={hasNextPage}
         isLoading={typeof isLoading === 'boolean' ? isLoading : true}
         onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
-        estimatedSize={42}
-        parentRef={modalRef}
+        useWindowScroll={false}
       >
         {accountIds.map(id =>
           <AccountContainer key={id} id={id} />,
@@ -52,7 +49,6 @@ const DislikesModal: React.FC<BaseModalProps & DislikesModalProps> = ({ onClose,
     <Modal
       title={<FormattedMessage id='column.dislikes' defaultMessage='Dislikes' />}
       onClose={onClickClose}
-      ref={modalRef}
     >
       {body}
     </Modal>
