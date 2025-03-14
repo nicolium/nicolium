@@ -12,15 +12,16 @@ Changes made since the project forked from Soapbox in April 2024.
 
 **Behavior:**
 - Notifications of the same type and reposts of the same post are grouped client-side.
-- Date is displayed for notifications that are not about new posts.
+- Date is displayed fobr notifications that are not about new posts.
 - Replies to your posts are displayed differently to other mentions in notification list.
 - Hashtags from the last line of a post are displayed in a separate component. Adapted [from Mastodon](https://github.com/mastodon/mastodon/pull/26499).
 - Native grouped notifications are used on Mastodon.
+- Likes, reposts and reactions lists are displayed on long press of respective buttons.
 
 **Settings:**
 - You can add image description to your avatar/backend, if supported by backend.
 - GoToSocial users can manage post interaction policies.
-- Users caan set interface theme color.
+- Users can set interface theme color.
 
 **Composing posts:**
 - WYSIWYG text formatting, available if Markdown is supported.
@@ -32,6 +33,7 @@ Changes made since the project forked from Soapbox in April 2024.
 - New visibility scopes are supported – local-only and list-only for Pleroma. Local-only is a separate switch on GoToSocial.
 - On backends that support explicit mentioning, you can choose to include mentions in your replies body.
 - GoToSocial users can set per-post interaction policies.
+- When adding a URL with tracking parameters, a suggestion to remove them from the URL is displayed.
 
 **Features:**
 - The most recent scrobble is displayed on user profile/card.
@@ -45,6 +47,9 @@ Changes made since the project forked from Soapbox in April 2024.
 - Interaction requests are supported. You can review pending requests and you get informed if your backend doesn't let you reply to a post. Supported on GoToSocial.
 - Events with external sign up are supported.
 - Application name used to post a status is displayed.
+- Outgoing follow requests are displayed, if supported by backend.
+- It is possible to remove tracking parameters from URLs in displayed posts.
+- Displayed media now have a button for alternative text preview.
 
 ### Changed
 
@@ -63,6 +68,11 @@ Changes made since the project forked from Soapbox in April 2024.
 - Moved missing description confirmation option back to Settings page.
 - Profile fields can be reordered on the Edit profile page.
 - Explicit addressing can be disabled on supported backends.
+- Developers options are no longer hidden behind a challenge.
+
+**Composing posts:**
+- Custom emojis are now split into categories.
+- GoToSocial users can post with date in the past.
 
 **UI changes:**
 - Removed header. Search bar and profile dropdown are moved to the sidebar. Mobile sidebar button is moved to the thumb navigation.
@@ -86,7 +96,6 @@ Changes made since the project forked from Soapbox in April 2024.
 - Search page uses URL params now.
 
 **Dependencies:**
-- `@tanstack/react-virtual` is used for list virtualization, instead of `react-virtuoso`. This improves compatibility with Ladybird browser.
 - Replaced `react-popper` and `react-overlays` with `@floating-ui/react`.
 - `uuid` package is replaced by the `randomUUID()` method.
 
@@ -105,3 +114,5 @@ Changes made since the project forked from Soapbox in April 2024.
 - Post tombstones don't interrupt status navigation with hotkeys.
 - Emojis are supported in poll options.
 - Unsupported content types are not listed as available, when composing a post.
+- Admin dashboard now works on non-Pleroma backends.
+- Removed excessive calls to `fetchOwnAccounts`.
