@@ -7,6 +7,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 import Emojify from 'pl-fe/features/emoji/emojify';
+import { useSettings } from 'pl-fe/hooks/use-settings';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 import Purify from 'pl-fe/utils/url-purify';
 
@@ -62,13 +63,18 @@ const uniqueHashtagsWithCaseHandling = (hashtags: string[]) => {
   });
 };
 
-function parseContent(props: IParsedContent): ReturnType<typeof domToReact>;
+function parseContent(props: IParsedContent, extractHashtags?: false, cleanUrls?: boolean, greentext?: boolean): ReturnType<typeof domToReact>;
 function parseContent(props: IParsedContent, extractHashtags: true, cleanUrls: boolean, greentext: boolean): {
   hashtags: Array<string>;
   content: ReturnType<typeof domToReact>;
 };
 
-function parseContent({ html, mentions, hasQuote, emojis }: IParsedContent, extractHashtags = false, cleanUrls = false, greentext = false) {
+function parseContent({
+  html,
+  mentions,
+  hasQuote,
+  emojis,
+}: IParsedContent, extractHashtags = false, cleanUrls = false, greentext = false) {
   if (html.length === 0) {
     return extractHashtags ? { content: null, hashtags: [] } : null;
   }
@@ -192,6 +198,10 @@ function parseContent({ html, mentions, hasQuote, emojis }: IParsedContent, extr
   return content;
 }
 
-const ParsedContent: React.FC<IParsedContent> = React.memo((props) => parseContent(props), (prevProps, nextProps) => prevProps.html === nextProps.html);
+const ParsedContent: React.FC<IParsedContent> = React.memo((props) => {
+  const settings = useSettings();
+
+  return parseContent(props, false, settings.urlPrivacy.clearLinksInContent, false);
+}, (prevProps, nextProps) => prevProps.html === nextProps.html);
 
 export { ParsedContent, parseContent };
