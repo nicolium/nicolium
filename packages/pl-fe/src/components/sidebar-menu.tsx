@@ -1,4 +1,5 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
+import { useInfiniteQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
@@ -19,6 +20,7 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useRegistrationStatus } from 'pl-fe/hooks/use-registration-status';
 import { useFollowRequestsCount } from 'pl-fe/queries/accounts/use-follow-requests';
+import { scheduledStatusesCountQueryOptions } from 'pl-fe/queries/statuses/scheduled-statuses';
 import { useInteractionRequestsCount } from 'pl-fe/queries/statuses/use-interaction-requests';
 import { makeGetOtherAccounts } from 'pl-fe/selectors';
 import { useSettingsStore } from 'pl-fe/stores/settings';
@@ -98,7 +100,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
   const { settings } = useSettingsStore();
   const followRequestsCount = useFollowRequestsCount().data || 0;
   const interactionRequestsCount = useInteractionRequestsCount().data || 0;
-  const scheduledStatusCount = useAppSelector((state) => Object.keys(state.scheduled_statuses).length);
+  const scheduledStatusCount = useInfiniteQuery(scheduledStatusesCountQueryOptions).data || 0;
   const draftCount = useAppSelector((state) => Object.keys(state.draft_statuses).length);
   // const dashboardCount = useAppSelector((state) => state.admin.openReports.count() + state.admin.awaitingApproval.count());
   const [sidebarVisible, setSidebarVisible] = useState(isSidebarOpen);

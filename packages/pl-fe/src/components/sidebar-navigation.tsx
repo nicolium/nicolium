@@ -1,3 +1,4 @@
+import { useInfiniteQuery } from '@tanstack/react-query';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -12,6 +13,7 @@ import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { useRegistrationStatus } from 'pl-fe/hooks/use-registration-status';
 import { useFollowRequestsCount } from 'pl-fe/queries/accounts/use-follow-requests';
+import { scheduledStatusesCountQueryOptions } from 'pl-fe/queries/statuses/scheduled-statuses';
 import { useInteractionRequestsCount } from 'pl-fe/queries/statuses/use-interaction-requests';
 
 import Account from './account';
@@ -47,7 +49,7 @@ const SidebarNavigation = React.memo(() => {
   const followRequestsCount = useFollowRequestsCount().data || 0;
   const interactionRequestsCount = useInteractionRequestsCount().data || 0;
   const dashboardCount = useAppSelector((state) => state.admin.openReports.length + state.admin.awaitingApproval.length);
-  const scheduledStatusCount = useAppSelector((state) => Object.keys(state.scheduled_statuses).length);
+  const scheduledStatusCount = useInfiniteQuery(scheduledStatusesCountQueryOptions).data || 0;
   const draftCount = useAppSelector((state) => Object.keys(state.draft_statuses).length);
 
   const restrictUnauth = instance.pleroma.metadata.restrict_unauthenticated;
