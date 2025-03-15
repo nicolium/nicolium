@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
+import React from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchOAuthTokens, revokeOAuthTokenById } from 'pl-fe/actions/security';
 import Badge from 'pl-fe/components/badge';
 import Button from 'pl-fe/components/ui/button';
 import Card, { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card';
@@ -11,8 +11,8 @@ import Icon from 'pl-fe/components/ui/icon';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { oauthTokensQueryOptions, revokeOauthTokenMutationOptions } from 'pl-fe/queries/security/oauth-tokens';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
 import type { OauthToken } from 'pl-api';
@@ -31,8 +31,9 @@ interface IAuthToken {
 }
 
 const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
+
+  const revokeMutation = useMutation(revokeOauthTokenMutationOptions(token.id));
 
   const { openModal } = useModalsStore();
 
@@ -43,11 +44,11 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
         message: intl.formatMessage(messages.revokeSessionMessage),
         confirm: intl.formatMessage(messages.revokeSessionConfirm),
         onConfirm: () => {
-          dispatch(revokeOAuthTokenById(token.id));
+          revokeMutation.mutate();
         },
       });
     else {
-      dispatch(revokeOAuthTokenById(token.id));
+      revokeMutation.mutate();
     }
   };
 
@@ -144,18 +145,15 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
 };
 
 const AuthTokenList: React.FC = () => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
-  const tokens = useAppSelector(state => state.security.tokens.toReversed());
+
+  const { data: tokens } = useInfiniteQuery(oauthTokensQueryOptions);
+
   const currentTokenId = useAppSelector(state => {
     const currentToken = Object.values(state.auth.tokens).find((token) => token.me === state.auth.me);
 
     return currentToken?.id;
   });
-
-  useEffect(() => {
-    dispatch(fetchOAuthTokens());
-  }, []);
 
   const body = tokens ? (
     <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
