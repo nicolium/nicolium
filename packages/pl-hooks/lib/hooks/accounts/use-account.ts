@@ -16,7 +16,6 @@ interface Account extends NormalizedAccount {
 
 interface UseAccountOpts {
   withRelationship?: boolean;
-  withScrobble?: boolean;
   withMoveTarget?: boolean;
 }
 

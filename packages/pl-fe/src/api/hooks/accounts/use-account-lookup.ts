@@ -16,7 +16,6 @@ import type { Account as BaseAccount } from 'pl-api';
 
 interface UseAccountLookupOpts {
   withRelationship?: boolean;
-  withScrobble?: boolean;
 }
 
 const useAccountLookup = (acct: string | undefined, opts: UseAccountLookupOpts = {}) => {
@@ -24,7 +23,7 @@ const useAccountLookup = (acct: string | undefined, opts: UseAccountLookupOpts =
   const features = useFeatures();
   const history = useHistory();
   const { me } = useLoggedIn();
-  const { withRelationship, withScrobble } = opts;
+  const { withRelationship } = opts;
 
   const { entity: account, isUnauthorized, ...result } = useEntityLookup<BaseAccount, Account>(
     Entities.ACCOUNTS,
@@ -41,7 +40,7 @@ const useAccountLookup = (acct: string | undefined, opts: UseAccountLookupOpts =
   const {
     scrobble,
     isLoading: isScrobbleLoading,
-  } = useAccountScrobble(account?.id, { enabled: withScrobble });
+  } = useAccountScrobble(account?.id);
 
   const isBlocked = account?.relationship?.blocked_by === true;
   const isUnavailable = (me === account?.id) ? false : (isBlocked && !features.blockersVisible);
