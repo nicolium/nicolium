@@ -7,7 +7,6 @@ import * as v from 'valibot';
 
 import { biteAccount, blockAccount, pinAccount, removeFromFollowers, unblockAccount, unmuteAccount, unpinAccount } from 'pl-fe/actions/accounts';
 import { mentionCompose, directCompose } from 'pl-fe/actions/compose';
-import { blockDomain, unblockDomain } from 'pl-fe/actions/domain-blocks';
 import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
 import { useFollow } from 'pl-fe/api/hooks/accounts/use-follow';
 import Badge from 'pl-fe/components/badge';
@@ -26,6 +25,7 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { useChats } from 'pl-fe/queries/chats';
 import { queryClient } from 'pl-fe/queries/client';
+import { blockDomainMutationOptions, unblockDomainMutationOptions } from 'pl-fe/queries/settings/domain-blocks';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import { useSettingsStore } from 'pl-fe/stores/settings';
 import toast from 'pl-fe/toast';
@@ -99,6 +99,9 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const { software } = useAppSelector((state) => state.auth.client.features.version);
 
   const { getOrCreateChatByAccountId } = useChats();
+
+  const { mutate: blockDomain } = useMutation(blockDomainMutationOptions);
+  const { mutate: unblockDomain } = useMutation(unblockDomainMutationOptions);
 
   const createAndNavigateToChat = useMutation({
     mutationFn: (accountId: string) => getOrCreateChatByAccountId(accountId),
@@ -203,12 +206,12 @@ const Header: React.FC<IHeader> = ({ account }) => {
       heading: <FormattedMessage id='confirmations.domain_block.heading' defaultMessage='Block {domain}' values={{ domain }} />,
       message: <FormattedMessage id='confirmations.domain_block.message' defaultMessage='Are you really, really sure you want to block the entire {domain}? In most cases a few targeted blocks or mutes are sufficient and preferable. You will not see content from that domain in any public timelines or your notifications.' values={{ domain: <strong>{domain}</strong> }} />,
       confirm: intl.formatMessage(messages.blockDomainConfirm),
-      onConfirm: () => dispatch(blockDomain(domain)),
+      onConfirm: () => blockDomain(domain),
     });
   };
 
   const onUnblockDomain = (domain: string) => {
-    dispatch(unblockDomain(domain));
+    unblockDomain(domain);
   };
 
   const onProfileExternal = (url: string) => {
