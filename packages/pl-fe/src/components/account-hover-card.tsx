@@ -1,4 +1,5 @@
 import { autoUpdate, flip, shift, useFloating, useTransitionStyles } from '@floating-ui/react';
+import { useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
@@ -16,7 +17,7 @@ import ActionButton from 'pl-fe/features/ui/components/action-button';
 import { UserPanel } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useAccountScrobble } from 'pl-fe/queries/accounts/use-account-scrobble';
+import { accountScrobbleQueryOptions } from 'pl-fe/queries/accounts/account-scrobble';
 import { useAccountHoverCardStore } from 'pl-fe/stores/account-hover-card';
 
 import { showAccountHoverCard } from './hover-account-wrapper';
@@ -54,7 +55,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
 
   const me = useAppSelector(state => state.me);
   const { account } = useAccount(accountId || undefined, { withRelationship: true });
-  const { scrobble } = useAccountScrobble(accountId || undefined);
+  const { data: scrobble } = useQuery(accountScrobbleQueryOptions(account?.id));
   const badges = getBadges(account);
 
   useEffect(() => {

@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
@@ -13,7 +14,7 @@ import Text from 'pl-fe/components/ui/text';
 import Emojify from 'pl-fe/features/emoji/emojify';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
-import { useAccountScrobble } from 'pl-fe/queries/accounts/use-account-scrobble';
+import { accountScrobbleQueryOptions } from 'pl-fe/queries/accounts/account-scrobble';
 import { capitalize } from 'pl-fe/utils/strings';
 
 import ProfileFamiliarFollowers from '../profile-familiar-followers';
@@ -42,7 +43,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   const me = useAppSelector(state => state.me);
   const ownAccount = account?.id === me;
 
-  const { scrobble } = useAccountScrobble(account?.id);
+  const { data: scrobble } = useQuery(accountScrobbleQueryOptions(account?.id));
 
   const getStaffBadge = (): React.ReactNode => {
     if (account?.is_admin) {
