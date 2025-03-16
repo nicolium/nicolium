@@ -44,7 +44,9 @@ const prepareRequest = (provider: string) =>
 
     const query = queryString.stringify(params);
 
-    location.href = `${baseURL}/oauth/prepare_request?${query.toString()}`;
+    setTimeout(() => {
+      location.href = `${baseURL}/oauth/prepare_request?${query.toString()}`;
+    }, 100);
   };
 
 export {

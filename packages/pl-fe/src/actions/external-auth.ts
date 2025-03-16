@@ -59,7 +59,9 @@ const externalAuthorize = (instance: Instance, baseURL: string) => {
     localStorage.setItem('plfe:external:baseurl', baseURL);
     localStorage.setItem('plfe:external:scopes', scopes);
 
-    window.location.href = `${baseURL}/oauth/authorize?${query.toString()}`;
+    setTimeout(() => {
+      window.location.href = `${baseURL}/oauth/authorize?${query.toString()}`;
+    }, 100);
   });
 };
 
