@@ -144,8 +144,9 @@ const getRulesForUser = (user: Me) => {
 
 const getRulesFromMemory = () => {
   KVStore.getItem('url-purify-rules:last', (url: string) => {
+    if (!url) return;
     getRulesForUser(url);
-  });
+  }).catch(() => {});
 };
 
 getRulesFromMemory();
