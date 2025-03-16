@@ -28,6 +28,7 @@ const config = defineConfig(({ command }) => ({
   assetsInclude: ['**/*.oga'],
   server: {
     port: Number(process.env.PORT ?? 3036),
+    hmr: process.env.HMR_DISABLED === 'true' ? false : undefined,
   },
   plugins: [
     checker({ typescript: true }),
