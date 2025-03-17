@@ -193,15 +193,16 @@ const Item: React.FC<IItem> = ({
             interaction='click'
             referenceElementClassName='cursor-pointer'
             content={
-              <Stack space={1} className='max-w-80'>
+              <Stack space={1} className='max-h-[32rem] max-w-96 overflow-auto p-4'>
                 <Text weight='semibold'>
                   <FormattedMessage id='media-gallery.description' defaultMessage='Image description' />
                 </Text>
-                <Text>
+                <Text className='whitespace-pre-wrap'>
                   {attachment.description}
                 </Text>
               </Stack>
             }
+            isFlush
           >
             <AltIndicator className='absolute bottom-2 left-2 z-10 opacity-80 transition-opacity hover:opacity-100' />
           </Popover>
