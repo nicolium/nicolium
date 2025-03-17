@@ -838,7 +838,10 @@ const getFeatures = (instance: Instance) => {
      * View posts from specific instance.
      * @see GET /api/v1/timelines/public
      */
-    instanceTimeline: v.software === PLEROMA,
+    instanceTimeline: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA && gte(v.version, '2.7.0'),
+    ]),
 
     /**
      * Mastodon server information API v2.
@@ -872,6 +875,7 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/timelines/list/:list_id
      */
     lists: any([
+      v.software === AKKOMA,
       v.software === FIREFISH,
       v.software === FRIENDICA,
       v.software === GOTOSOCIAL,
@@ -902,6 +906,7 @@ const getFeatures = (instance: Instance) => {
      * Can sign in using username instead of e-mail address.
      */
     logInWithUsername: any([
+      v.software === AKKOMA,
       v.software === PLEROMA,
       v.software === TOKI,
     ]),
@@ -911,7 +916,10 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/pleroma/aliases
      * @see PATCH /api/v1/accounts/update_credentials
      */
-    manageAccountAliases: v.software === PLEROMA,
+    manageAccountAliases: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * @see GET /api/pleroma/accounts/mfa
@@ -920,7 +928,10 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/pleroma/accounts/mfa/confirm/:method
      * @see DELETE /api/pleroma/accounts/mfa/:method
      */
-    manageMfa: v.software === PLEROMA,
+    manageMfa: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * Can perform moderation actions with account and reports.
@@ -953,6 +964,7 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v2/media
      */
     mediaV2: any([
+      v.software === AKKOMA,
       v.software === FIREFISH,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
@@ -974,7 +986,10 @@ const getFeatures = (instance: Instance) => {
      * Ability to hide notifications from people you don't follow.
      * @see PUT /api/pleroma/notification_settings
      */
-    muteStrangers: v.software === PLEROMA,
+    muteStrangers: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * Ability to mute users.
@@ -983,6 +998,7 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v1/accounts/:id/unmute
      */
     mutes: any([
+      v.software === AKKOMA,
       v.software === FIREFISH,
       v.software === FRIENDICA,
       v.software === GOTOSOCIAL && gte(v.version, '0.16.0'),
@@ -1000,6 +1016,7 @@ const getFeatures = (instance: Instance) => {
      * @see PUT /api/v1/accounts/:id/mute
      */
     mutesDuration: any([
+      v.software === AKKOMA,
       v.software === FIREFISH,
       v.software === GOTOSOCIAL && gte(v.version, '0.16.0'),
       v.software === ICESHRIMP,
@@ -1015,6 +1032,7 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/accounts/relationships
      */
     notes: any([
+      v.software === AKKOMA,
       v.software === MASTODON,
       v.software === PLEROMA && gte(v.version, '2.5.0'),
       v.software === GOTOSOCIAL,
@@ -1023,12 +1041,18 @@ const getFeatures = (instance: Instance) => {
     /**
      * @see DELETE /api/v1/notifications/destroy_multiple
      */
-    notificationsDismissMultiple: v.software === PLEROMA,
+    notificationsDismissMultiple: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * @see GET /api/v1/notifications
      */
-    notificationsExcludeVisibilities: v.software === PLEROMA,
+    notificationsExcludeVisibilities: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * @see GET /api/v1/notifications/unread_count
@@ -1040,6 +1064,7 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/notifications
      */
     notificationsIncludeTypes: any([
+      v.software === AKKOMA,
       v.software === FIREFISH,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
@@ -1066,7 +1091,10 @@ const getFeatures = (instance: Instance) => {
      */
     outgoingFollowRequests: v.build === PL && gte(v.version, '2.8.0'),
 
-    pleromaAdminAccounts: v.software === PLEROMA,
+    pleromaAdminAccounts: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * Ability to manage announcements by admins.
@@ -1077,19 +1105,34 @@ const getFeatures = (instance: Instance) => {
      * @see DELETE /api/v1/pleroma/admin/announcements/:id
      * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminannouncements}
      */
-    pleromaAdminAnnouncements: v.software === PLEROMA,
+    pleromaAdminAnnouncements: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
-    pleromaAdminModerationLog: v.software === PLEROMA,
+    pleromaAdminModerationLog: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
-    pleromaAdminRelays: v.software === PLEROMA,
+    pleromaAdminRelays: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
-    pleromaAdminStatuses: v.software === PLEROMA,
+    pleromaAdminStatuses: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * Displays a form to follow a user when logged out.
      * @see POST /main/ostatus
      */
-    pleromaRemoteFollow: v.software === PLEROMA,
+    pleromaRemoteFollow: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * Can add polls to statuses.
@@ -1111,8 +1154,8 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v1/statuses
      */
     postLanguages: any([
+      v.software === AKKOMA,
       v.software === MASTODON,
-      v.software === PLEROMA && v.build === AKKOMA,
       v.software === PLEROMA && gte(v.version, '2.9.0'),
       v.software === GOTOSOCIAL,
     ]),
@@ -1121,7 +1164,7 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/akkoma/preferred_frontend/available
      * @see PUT /api/v1/akkoma/preferred_frontend
      */
-    preferredFrontends: v.software === PLEROMA && v.build === AKKOMA,
+    preferredFrontends: v.software === AKKOMA,
 
     /**
      * Can set privacy scopes on statuses.
@@ -1145,6 +1188,7 @@ const getFeatures = (instance: Instance) => {
      * @see PATCH /api/v1/accounts/update_credentials
      */
     profileFields: any([
+      v.software === AKKOMA,
       v.software === DITTO,
       v.software === GOTOSOCIAL,
       v.software === ICESHRIMP,
@@ -1159,7 +1203,10 @@ const getFeatures = (instance: Instance) => {
      * Returns favorites timeline of any user
      * @see GET /api/v1/pleroma/accounts/:id/favourites
      */
-    publicFavourites: v.software === PLEROMA,
+    publicFavourites: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * Can display a timeline of all known public statuses.
@@ -1167,6 +1214,7 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/timelines/public
      */
     publicTimeline: any([
+      v.software === AKKOMA,
       v.software === DITTO,
       v.software === FIREFISH,
       v.software === FRIENDICA,
@@ -1197,6 +1245,7 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v1/statuses/:id/reblog
      */
     reblogVisibility: any([
+      v.software === AKKOMA,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === PLEROMA,
@@ -1206,31 +1255,38 @@ const getFeatures = (instance: Instance) => {
      * Interact with statuses from another instance while logged-out.
      * @see POST /api/v1/pleroma/remote_interaction
      */
-    remoteInteractions: v.software === PLEROMA && gte(v.version, '2.5.0'),
+    remoteInteractions: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA && gte(v.version, '2.5.0'),
+    ]),
 
     /**
      * Ability to remove an account from your followers.
      * @see POST /api/v1/accounts/:id/remove_from_followers
      */
     removeFromFollowers: any([
+      v.software === AKKOMA,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === MITRA && gte(v.version, '2.17.0'),
       v.software === PLEROMA && gte(v.version, '2.5.0'),
-      v.software === PLEROMA && v.build === AKKOMA,
     ]),
 
     /**
      * Can request a password reset email through the API.
      * @see POST /auth/password
      */
-    resetPassword: v.software === PLEROMA,
+    resetPassword: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * Ability to post statuses in Markdown, BBCode, and HTML.
      * @see POST /api/v1/statuses
      */
     richText: any([
+      v.software === AKKOMA,
       v.software === MASTODON && v.build === GLITCH,
       v.software === PLEROMA,
       v.software === MITRA,
@@ -1242,6 +1298,7 @@ const getFeatures = (instance: Instance) => {
      * Ability to follow account feeds using RSS.
      */
     rssFeeds: any([
+      v.software === AKKOMA,
       v.software === MASTODON,
       v.software === PLEROMA,
       v.software === GOTOSOCIAL,
@@ -1261,6 +1318,7 @@ const getFeatures = (instance: Instance) => {
      * @see {@link https://docs.joinmastodon.org/methods/scheduled_statuses/}
      */
     scheduledStatuses: any([
+      v.software === AKKOMA,
       v.software === FIREFISH,
       v.software === FRIENDICA,
       v.software === MASTODON,
@@ -1282,7 +1340,7 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/pleroma/accounts/:id/scrobbles
      * @see POST /api/v1/pleroma/scrobble
      */
-    scrobbles: v.software === PLEROMA && v.build !== AKKOMA,
+    scrobbles: v.software === PLEROMA,
 
     /**
      * Ability to search statuses from the given account.
@@ -1290,6 +1348,7 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v2/search
      */
     searchFromAccount: any([
+      v.software === AKKOMA,
       v.software === DITTO,
       v.software === GOTOSOCIAL,
       v.software === ICESHRIMP,
@@ -1301,6 +1360,7 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v1/user/email_change
      */
     changeEmail: any([
+      v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.16.0'),
       v.software === PLEROMA,
     ]),
@@ -1312,6 +1372,7 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/pleroma/change_password
      */
     changePassword: any([
+      v.software === AKKOMA,
       v.software === GOTOSOCIAL,
       v.software === MITRA,
       v.software === PIXELFED,
@@ -1327,6 +1388,7 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v1/tokens/:id/invalidate
      */
     sessions: any([
+      v.software === AKKOMA,
       v.software === PLEROMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.18.2'),
     ]),
@@ -1335,7 +1397,10 @@ const getFeatures = (instance: Instance) => {
      * Can store client settings in the database.
      * @see PATCH /api/v1/accounts/update_credentials
      */
-    settingsStore: v.software === PLEROMA,
+    settingsStore: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * Can set content warnings on statuses.
@@ -1433,7 +1498,10 @@ const getFeatures = (instance: Instance) => {
      * Whether the backend allows adding users you don't follow to lists.
      * @see POST /api/v1/lists/:id/accounts
      */
-    unrestrictedLists: v.software === PLEROMA,
+    unrestrictedLists: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
   };
 };
 

@@ -2066,7 +2066,7 @@ class PlApiClient {
      */
     translateStatus: async (statusId: string, lang?: string) => {
       let response;
-      if (this.features.version.build === AKKOMA) {
+      if (this.features.version.software === AKKOMA) {
         response = await this.request(`/api/v1/statuses/${statusId}/translations/${lang}`);
 
       } else {
@@ -3212,7 +3212,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/instance/#translation_languages}
      */
     getInstanceTranslationLanguages: async () => {
-      if (this.features.version.build === AKKOMA) {
+      if (this.features.version.software === AKKOMA) {
         const response = await this.request<{
           source: Array<{ code: string; name: string }>;
           target: Array<{ code: string; name: string }>;
