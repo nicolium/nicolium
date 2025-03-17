@@ -96,11 +96,6 @@ const fixVersion = (version: string) => {
     return version.split('rc').join('-rc');
   }
 
-  // Rename Akkoma to Pleroma+akkoma
-  if (version.includes('Akkoma')) {
-    return '2.7.2 (compatible; Pleroma 2.4.50+akkoma)';
-  }
-
   // Set Takahē version to a Pleroma-like string
   if (version.startsWith('takahe/')) {
     return `0.0.0 (compatible; Takahe ${version.slice(7)})`;

@@ -176,13 +176,19 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/pleroma/backups
      * @see POST /api/v1/pleroma/backups
      */
-    accountBackups: v.software === PLEROMA,
+    accountBackups: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * The accounts API allows an acct instead of an ID.
      * @see GET /api/v1/accounts/:acct_or_id
      */
-    accountByUsername: v.software === PLEROMA,
+    accountByUsername: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * Ability to create accounts.
@@ -201,7 +207,10 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v1/accounts/:id/unpin
      * @see GET /api/v1/pleroma/accounts/:id/endorsements
      */
-    accountEndorsements: v.software === PLEROMA && gte(v.version, '2.5.0'),
+    accountEndorsements: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA && gte(v.version, '2.5.0'),
+    ]),
 
     /**
      * Ability to set one's location on their profile.
@@ -216,6 +225,7 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/accounts/lookup
      */
     accountLookup: any([
+      v.software === AKKOMA,
       v.software === DITTO,
       v.software === FIREFISH,
       v.software === GOTOSOCIAL,
@@ -232,13 +242,17 @@ const getFeatures = (instance: Instance) => {
      * Move followers to a different ActivityPub account.
      * @see POST /api/pleroma/move_account
      */
-    accountMoving: v.software === PLEROMA && gte(v.version, '2.5.0'),
+    accountMoving: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA && gte(v.version, '2.5.0'),
+    ]),
 
     /**
      * Ability to subscribe to notifications every time an account posts.
      * @see POST /api/v1/accounts/:id/follow
      */
     accountNotifies: any([
+      v.software === AKKOMA,
       v.software === MASTODON,
       v.software === PLEROMA && gte(v.version, '2.5.0'),
       v.software === GOTOSOCIAL,
@@ -248,7 +262,10 @@ const getFeatures = (instance: Instance) => {
      * Ability to address a status to a list of users.
      * @see POST /api/v1/statuses
      */
-    addressableLists: v.software === PLEROMA && gte(v.version, '1.0.2'),
+    addressableLists: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * Can display announcements set by admins.
@@ -257,6 +274,7 @@ const getFeatures = (instance: Instance) => {
      * @see {@link https://docs.joinmastodon.org/methods/announcements/}
      */
     announcements: any([
+      v.software === AKKOMA,
       v.software === FIREFISH,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
@@ -311,6 +329,7 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/bookmarks
      */
     bookmarks: any([
+      v.software === AKKOMA,
       v.software === DITTO,
       v.software === FIREFISH,
       v.software === GOTOSOCIAL,
@@ -330,6 +349,7 @@ const getFeatures = (instance: Instance) => {
      * @see PATCH /api/v1/accounts/update_credentials
      */
     bots: any([
+      v.software === AKKOMA,
       v.software === GOTOSOCIAL,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
@@ -364,6 +384,7 @@ const getFeatures = (instance: Instance) => {
      * @see {@link https://docs.joinmastodon.org/methods/conversations/}
      */
     conversations: any([
+      v.software === AKKOMA,
       v.software === FIREFISH,
       v.software === FRIENDICA,
       v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
@@ -378,12 +399,18 @@ const getFeatures = (instance: Instance) => {
     /**
      * @see GET /api/v1/conversations
      */
-    conversationsByRecipients: v.software === PLEROMA,
+    conversationsByRecipients: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * @see POST /api/v1/statuses
      */
-    createStatusExpiration: v.software === PLEROMA,
+    createStatusExpiration: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * Ability to address recipients of a status explicitly (with `to`).
@@ -397,18 +424,25 @@ const getFeatures = (instance: Instance) => {
     /**
      * @see POST /api/v1/statuses
      */
-    createStatusReplyToConversation: v.software === PLEROMA,
+    createStatusReplyToConversation: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * Ability to address a status to a list of users.
      * @see POST /api/v1/statuses
      */
-    createStatusListScope: v.software === PLEROMA,
+    createStatusListScope: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * @see POST /api/v1/statuses
      */
     createStatusLocalScope: any([
+      v.software === AKKOMA,
       v.software === ICESHRIMP_NET,
       v.software === PLEROMA,
     ]),
@@ -428,7 +462,10 @@ const getFeatures = (instance: Instance) => {
     /**
      * @see POST /api/v1/statuses
      */
-    createStatusPreview: v.software === PLEROMA,
+    createStatusPreview: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * Ability to add non-standard reactions to a status.
@@ -443,6 +480,7 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/pleroma/delete_account
      */
     deleteAccount: any([
+      v.software === AKKOMA,
       v.software === GOTOSOCIAL,
       v.software === PLEROMA,
     ]),
@@ -461,6 +499,7 @@ const getFeatures = (instance: Instance) => {
      * @see PATCH /api/v1/accounts/update_credentials
      */
     editProfile: any([
+      v.software === AKKOMA,
       v.software === FIREFISH,
       v.software === FRIENDICA,
       v.software === GOTOSOCIAL,
@@ -515,6 +554,7 @@ const getFeatures = (instance: Instance) => {
      * @see POST /v1/statuses/:id/unreact/:emoji
      */
     emojiReacts: any([
+      v.software === AKKOMA,
       v.software === FIREFISH,
       v.software === MITRA && gte(v.version, '2.21.0'),
       v.software === PLEROMA,
@@ -527,6 +567,7 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/statuses/:id/emoji_reactioned_by
      */
     emojiReactsList: any([
+      v.software === AKKOMA,
       v.software === PLEROMA,
       instance.api_versions['emoji_reaction.fedibird.pl-api'] >= 1,
     ]),
@@ -592,6 +633,7 @@ const getFeatures = (instance: Instance) => {
      * @see {@link https://docs.joinmastodon.org/methods/filters/#v1}
      */
     filters: any([
+      v.software === AKKOMA,
       v.software === GOTOSOCIAL,
       v.software === PLEROMA,
     ]),
@@ -625,10 +667,10 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/followed_tags
      */
     followedHashtagsList: any([
+      v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
       v.software === MASTODON && gte(v.compatVersion, '4.1.0'),
       v.software === PIXELFED,
-      v.software === PLEROMA && v.build === AKKOMA,
       v.software === PLEROMA && gte(v.version, '2.9.0'),
       v.software === TAKAHE && gte(v.version, '0.9.0'),
     ]),
@@ -639,10 +681,10 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v1/tags/:name/unfollow
      */
     followHashtags: any([
+      v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
       v.software === MASTODON && gte(v.compatVersion, '4.0.0'),
       v.software === PIXELFED,
-      v.software === PLEROMA && v.build === AKKOMA,
       v.software === PLEROMA && gte(v.version, '2.9.0'),
       v.software === TAKAHE && gte(v.version, '0.9.0'),
     ]),
@@ -652,6 +694,7 @@ const getFeatures = (instance: Instance) => {
      * @see PATCH /api/v1/accounts/update_credentials
      */
     followRequests: any([
+      v.software === AKKOMA,
       v.software === FIREFISH,
       v.software === GOTOSOCIAL,
       v.software === MASTODON,
@@ -665,6 +708,7 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/pleroma/frontend_configurations
      */
     frontendConfigurations: any([
+      v.software === AKKOMA,
       v.software === DITTO,
       v.software === ICESHRIMP_NET,
       v.software === PLEROMA,
@@ -747,6 +791,7 @@ const getFeatures = (instance: Instance) => {
      * @see PATCH /api/v1/accounts/update_credentials
      */
     hideNetwork: any([
+      v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.15.0'),
       v.software === PLEROMA,
     ]),
@@ -757,6 +802,7 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v1/import
      */
     importBlocks: any([
+      v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
       v.software === PLEROMA,
     ]),
@@ -768,6 +814,7 @@ const getFeatures = (instance: Instance) => {
 
      */
     importFollows: any([
+      v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
       v.software === PLEROMA,
     ]),
@@ -776,7 +823,10 @@ const getFeatures = (instance: Instance) => {
      * Import a .csv file with a list of muted users.
      * @see POST /api/pleroma/mutes_import
      */
-    importMutes: v.software === PLEROMA,
+    importMutes: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
 
     /**
      * Allow to specify mode of data import to either `merge` or `overwrite`.
