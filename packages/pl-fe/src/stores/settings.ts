@@ -35,13 +35,16 @@ type State = {
   rememberLanguageUse: (language: string) => void;
 }
 
-const changeSetting = (object: APIEntity, path: string[], value: any) => {
+const changeSetting = (object: APIEntity, path: string[], value: any, root?: Settings) => {
   if (path.length === 1) {
     object[path[0]] = value;
     return;
   }
 
-  if (typeof object[path[0]] !== 'object') object[path[0]] = {};
+  if (typeof object[path[0]] !== 'object') {
+    const value = root && root[path[0] as keyof Settings] as APIEntity || {};
+    object[path[0]] = value;
+  }
   return changeSetting(object[path[0]], path.slice(1), value);
 };
 
@@ -88,7 +91,7 @@ const useSettingsStore = create<State>()(mutative((set) => ({
 
   changeSetting: (path: string[], value: any) => set((state: State) => {
     state.userSettings.saved = false;
-    changeSetting(state.userSettings, path, value);
+    changeSetting(state.userSettings, path, value, state.defaultSettings);
 
     mergeSettings(state, true);
   }),
