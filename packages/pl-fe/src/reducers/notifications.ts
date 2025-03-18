@@ -47,12 +47,8 @@ const filterUnique = (notification: NotificationGroup, index: number, notificati
   notifications.findIndex(({ group_key }) => group_key === notification.group_key) === index;
 
 // For sorting the notifications
-const comparator = (a: Pick<NotificationGroup, 'most_recent_notification_id'>, b: Pick<NotificationGroup, 'most_recent_notification_id'>) => {
-  const parse = (m: Pick<NotificationGroup, 'most_recent_notification_id'>) => parseId(m.most_recent_notification_id);
-  if (parse(a) < parse(b)) return 1;
-  if (parse(a) > parse(b)) return -1;
-  return 0;
-};
+const comparator = (a: Pick<NotificationGroup, 'most_recent_notification_id'>, b: Pick<NotificationGroup, 'most_recent_notification_id'>) =>
+  b.most_recent_notification_id.localeCompare(a.most_recent_notification_id);
 
 // Count how many notifications appear after the given ID (for unread count)
 const countFuture = (notifications: Array<NotificationGroup>, lastId: string | number) =>
