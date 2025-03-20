@@ -241,6 +241,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MASTODON,
       v.software === MITRA,
       v.software === PLEROMA && gte(v.version, '2.5.0'),
+      v.software === SNAC,
       v.software === TAKAHE && gte(v.version, '0.6.1'),
       v.software === TOKI,
       v.software === WORDPRESS,
@@ -288,6 +289,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === PLEROMA,
+      v.software === SNAC,
       v.software === TAKAHE && gte(v.version, '0.7.0'),
     ]),
 
@@ -363,6 +365,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === PLEROMA,
+      v.software === SNAC,
     ]),
 
     /**
@@ -892,6 +895,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MASTODON,
       v.software === MITRA,
       v.software === PLEROMA,
+      v.software === SNAC,
     ]),
 
     /**
@@ -1204,6 +1208,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MASTODON,
       v.software === MITRA,
       v.software === PLEROMA,
+      v.software === SNAC,
       v.software === TAKAHE && gte(v.version, '0.7.0'),
     ]),
 
@@ -1232,6 +1237,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MASTODON,
       v.software === MITRA,
       v.software === PLEROMA,
+      v.software === SNAC,
       v.software === TAKAHE,
       v.software === TOKI,
       v.software === WORDPRESS,
@@ -1509,6 +1515,7 @@ const getFeatures = (instance: Instance) => {
     unrestrictedLists: any([
       v.software === AKKOMA,
       v.software === PLEROMA,
+      v.software === SNAC,
     ]),
   };
 };
