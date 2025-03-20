@@ -88,6 +88,14 @@ const PIXELFED = 'Pixelfed';
 const PLEROMA = 'Pleroma';
 
 /**
+ * snac, a simple, minimalistic ActivityPub instance written in portable C
+ *
+ * @category Software
+ * @see {@link https://codeberg.org/grunfink/snac2/}
+ */
+const SNAC = 'snac';
+
+/**
  * Takahē, backend with support for serving multiple domains.
  *
  * @category Software
@@ -1550,6 +1558,7 @@ const parseVersion = (version: string): Backend => {
 };
 
 export {
+  AKKOMA,
   DITTO,
   FIREFISH,
   FRIENDICA,
@@ -1560,10 +1569,10 @@ export {
   MITRA,
   PIXELFED,
   PLEROMA,
+  SNAC,
   TAKAHE,
   TOKI,
   WORDPRESS,
-  AKKOMA,
   GLITCH,
   HOMETOWN,
   PL,

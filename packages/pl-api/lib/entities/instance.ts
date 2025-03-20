@@ -5,6 +5,7 @@ import { accountSchema } from './account';
 import { ruleSchema } from './rule';
 import { coerceObject, filteredArray, mimeSchema } from './utils';
 
+const SNAC_REGEX = /^([0-9.]*) \(not true; really snac\/([\w.]*)\)/;
 const WORDPRESS_REGEX = /^WordPress\/[\w+.-]*, EMA\/([\w+.-]*)/;
 
 const getApiVersions = (instance: any): Record<string, number> => ({
@@ -105,6 +106,12 @@ const fixVersion = (version: string) => {
 
   if (wordPressMatch) {
     return `0.0.0 (compatible; WordPress ${wordPressMatch[1]})`;
+  }
+
+  const snacMatch = SNAC_REGEX.exec(version);
+
+  if (snacMatch) {
+    return `${snacMatch[1]} (compatible; snac ${snacMatch[2]})`;
   }
 
   return version;
