@@ -18,7 +18,6 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import Motion from 'pl-fe/features/ui/util/optional-motion';
-import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
 import type { MediaAttachment } from 'pl-api';
@@ -86,8 +85,6 @@ const Upload: React.FC<IUpload> = ({
 }) => {
   const intl = useIntl();
   const { openModal } = useModalsStore();
-
-  const { missingDescriptionModal } = useSettings();
 
   const [hovered, setHovered] = useState(false);
   const [focused, setFocused] = useState(false);
@@ -226,7 +223,7 @@ const Upload: React.FC<IUpload> = ({
               </div>
             )}
 
-            {missingDescriptionModal && !description && (
+            {!description && (
               <AltIndicator
                 warning
                 title={intl.formatMessage(messages.descriptionMissingTitle)}
