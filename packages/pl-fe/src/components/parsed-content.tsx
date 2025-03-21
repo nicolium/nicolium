@@ -111,11 +111,13 @@ function parseContent({
       if (domNode.name === 'a') {
         const classes = domNode.attribs.class?.split(' ');
 
+        const href = domNode.attribs.href && cleanUrls ? Purify.clearUrl(domNode.attribs.href) : domNode.attribs.href;
+
         const fallback = (
           // eslint-disable-next-line jsx-a11y/no-static-element-interactions
           <a
             {...domNode.attribs}
-            href={cleanUrls ? Purify.clearUrl(domNode.attribs.href) : domNode.attribs.href}
+            href={href}
             onClick={(e) => e.stopPropagation()}
             rel='nofollow noopener noreferrer'
             target='_blank'
