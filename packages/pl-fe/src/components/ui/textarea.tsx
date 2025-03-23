@@ -8,7 +8,7 @@ import { getTextDirection } from 'pl-fe/utils/rtl';
 import Stack from './stack';
 import Text from './text';
 
-interface ITextarea extends Pick<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'id' | 'maxLength' | 'onChange' | 'onClick' | 'onKeyDown' | 'onPaste' | 'required' | 'disabled' | 'rows' | 'readOnly'> {
+interface ITextarea extends Pick<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'className' | 'id' | 'lang' | 'maxLength' | 'onChange' | 'onClick' | 'onKeyDown' | 'onKeyUp' | 'onPaste' | 'required' | 'disabled' | 'rows' | 'readOnly'> {
   /** Put the cursor into the input on mount. */
   autoFocus?: boolean;
   /** Allows the textarea height to grow while typing */
@@ -52,6 +52,7 @@ const Textarea = React.forwardRef(({
   theme = 'default',
   maxLength,
   value,
+  className,
   ...props
 }: ITextarea, ref: React.ForwardedRef<HTMLTextAreaElement>) => {
   const length = value?.length || 0;
@@ -98,7 +99,7 @@ const Textarea = React.forwardRef(({
           'font-mono': isCodeEditor,
           'text-red-600 border-red-600': hasError,
           'resize-none': !isResizeable,
-        })}
+        }, className)}
         dir={value?.length ? getTextDirection(value, { fallback: direction }) : undefined}
       />
 

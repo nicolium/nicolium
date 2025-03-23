@@ -4,11 +4,12 @@ import fileSpreadsheetIcon from '@tabler/icons/outline/file-spreadsheet.svg';
 import fileTextIcon from '@tabler/icons/outline/file-text.svg';
 import fileZipIcon from '@tabler/icons/outline/file-zip.svg';
 import defaultIcon from '@tabler/icons/outline/paperclip.svg';
+import editIcon from '@tabler/icons/outline/pencil.svg';
 import presentationIcon from '@tabler/icons/outline/presentation.svg';
 import xIcon from '@tabler/icons/outline/x.svg';
 import zoomInIcon from '@tabler/icons/outline/zoom-in.svg';
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { spring } from 'react-motion';
 
@@ -67,14 +68,13 @@ interface IUpload extends Pick<React.HTMLAttributes<HTMLDivElement>, 'onDragStar
   media: MediaAttachment;
   onSubmit?(): void;
   onDelete?(): void;
-  onDescriptionChange?(description: string): void;
+  onDescriptionChange?(description: string): Promise<void>;
   descriptionLimit?: number;
   withPreview?: boolean;
 }
 
 const Upload: React.FC<IUpload> = ({
   media,
-  onSubmit,
   onDelete,
   onDescriptionChange,
   onDragStart,
@@ -86,17 +86,6 @@ const Upload: React.FC<IUpload> = ({
   const intl = useIntl();
   const { openModal } = useModalsStore();
 
-  const [hovered, setHovered] = useState(false);
-  const [focused, setFocused] = useState(false);
-  const [dirtyDescription, setDirtyDescription] = useState<string | null>(null);
-
-  const handleKeyDown: React.KeyboardEventHandler = (e) => {
-    if (onSubmit && e.keyCode === 13 && (e.ctrlKey || e.metaKey)) {
-      handleInputBlur();
-      onSubmit();
-    }
-  };
-
   const handleUndoClick: React.MouseEventHandler = e => {
     if (onDelete) {
       e.stopPropagation();
@@ -104,41 +93,25 @@ const Upload: React.FC<IUpload> = ({
     }
   };
 
-  const handleInputChange: React.ChangeEventHandler<HTMLTextAreaElement> = e => {
-    setDirtyDescription(e.target.value);
-  };
-
-  const handleMouseEnter = () => {
-    setHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setHovered(false);
-  };
-
-  const handleInputFocus = () => {
-    setFocused(true);
-  };
-
-  const handleClick = () => {
-    setFocused(true);
-  };
-
-  const handleInputBlur = () => {
-    setFocused(false);
-    setDirtyDescription(null);
-
-    if (dirtyDescription !== null && onDescriptionChange) {
-      onDescriptionChange(dirtyDescription);
-    }
-  };
-
   const handleOpenModal = () => {
     openModal('MEDIA', { media: [media], index: 0 });
   };
 
-  const active = hovered || focused;
-  const description = dirtyDescription || (dirtyDescription !== '' && media.description) || '';
+  const handleOpenAltTextModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    if (!onDescriptionChange) return;
+
+    openModal('ALT_TEXT', {
+      media,
+      previousDescription: media.description,
+      descriptionLimit: descriptionLimit!,
+      onSubmit: (newDescription: string) => onDescriptionChange(newDescription),
+    });
+  };
+
+  const description = media.description;
   const focusX = media.type === 'image' && media.meta?.focus?.x || undefined;
   const focusY = media.type === 'image' && media.meta?.focus?.y || undefined;
   const x = focusX ? ((focusX / 2) + .5) * 100 : undefined;
@@ -157,9 +130,6 @@ const Upload: React.FC<IUpload> = ({
     <div
       className='relative m-[5px] min-w-[40%] flex-1 overflow-hidden rounded'
       tabIndex={0}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onClick={handleClick}
       role='button'
       draggable
       onDragStart={onDragStart}
@@ -178,6 +148,16 @@ const Upload: React.FC<IUpload> = ({
             }}
           >
             <HStack className='absolute right-2 top-2 z-10' space={2}>
+              {onDescriptionChange && (
+                <IconButton
+                  onClick={handleOpenAltTextModal}
+                  src={editIcon}
+                  theme='dark'
+                  className='hover:scale-105 hover:bg-gray-900'
+                  iconClassName='h-5 w-5'
+                  title={intl.formatMessage(messages.description)}
+                />
+              )}
               {(withPreview && mediaType !== 'unknown' && Boolean(media.url)) && (
                 <IconButton
                   onClick={handleOpenModal}
@@ -200,39 +180,20 @@ const Upload: React.FC<IUpload> = ({
               )}
             </HStack>
 
-            {onDescriptionChange && (
-              <div
-                className={clsx('absolute inset-x-0 bottom-0 z-[2px] bg-gradient-to-b from-transparent via-gray-900/50 to-gray-900/80 p-2.5 opacity-0 transition-opacity duration-100 ease-linear', {
-                  'opacity-100': active,
-                })}
-              >
-                <label>
-                  <span style={{ display: 'none' }}>{intl.formatMessage(messages.description)}</span>
+            <HStack space={2} justifyContent='between' className='absolute inset-x-2 bottom-2 z-10'>
+              <span className='overflow-hidden text-ellipsis rounded bg-gray-900 px-2 py-1 text-xs font-medium text-white'>
+                {media.url.split('/').at(-1)}
+              </span>
 
-                  <textarea
-                    className='m-0 w-full rounded-md border border-solid border-white/25 bg-transparent p-2.5 text-sm text-white placeholder:text-white/60'
-                    placeholder={intl.formatMessage(messages.description)}
-                    value={description}
-                    maxLength={descriptionLimit}
-                    onFocus={handleInputFocus}
-                    onChange={handleInputChange}
-                    onBlur={handleInputBlur}
-                    onKeyDown={handleKeyDown}
+              {onDescriptionChange && !description && (
+                <button onClick={handleOpenAltTextModal}>
+                  <AltIndicator
+                    warning
+                    title={intl.formatMessage(messages.descriptionMissingTitle)}
                   />
-                </label>
-              </div>
-            )}
-
-            {!description && (
-              <AltIndicator
-                warning
-                title={intl.formatMessage(messages.descriptionMissingTitle)}
-                className={clsx('absolute bottom-2 left-2 z-10 transition-opacity duration-100 ease-linear', {
-                  'opacity-0 pointer-events-none': active,
-                  'opacity-100': !active,
-                })}
-              />
-            )}
+                </button>
+              )}
+            </HStack>
 
             <div className='absolute inset-0 z-[-1] size-full'>
               {mediaType === 'video' && (

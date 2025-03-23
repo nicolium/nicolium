@@ -10,6 +10,7 @@ import ModalLoading from './modal-loading';
 /* eslint sort-keys: "error" */
 const MODAL_COMPONENTS = {
   ACCOUNT_MODERATION: lazy(() => import('pl-fe/features/ui/components/modals/account-moderation-modal')),
+  ALT_TEXT: lazy(() => import('pl-fe/features/ui/components/modals/alt-text-modal')),
   BIRTHDAYS: lazy(() => import('pl-fe/features/ui/components/modals/birthdays-modal')),
   BOOST: lazy(() => import('pl-fe/features/ui/components/modals/boost-modal')),
   COMPARE_HISTORY: lazy(() => import('pl-fe/features/ui/components/modals/compare-history-modal')),

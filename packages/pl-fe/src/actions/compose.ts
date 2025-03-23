@@ -529,11 +529,11 @@ const uploadComposeFail = (composeId: string, error: unknown) => ({
 
 const changeUploadCompose = (composeId: string, mediaId: string, params: Record<string, any>) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
+    if (!isLoggedIn(getState)) return Promise.resolve();
 
     dispatch(changeUploadComposeRequest(composeId));
 
-    dispatch(updateMedia(mediaId, params)).then(response => {
+    return dispatch(updateMedia(mediaId, params)).then(response => {
       dispatch(changeUploadComposeSuccess(composeId, response));
     }).catch(error => {
       dispatch(changeUploadComposeFail(composeId, mediaId, error));
