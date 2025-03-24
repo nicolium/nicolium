@@ -64,6 +64,10 @@ const gifvAttachmentSchema = v.object({
   meta: v.fallback(v.object({
     duration: v.fallback(v.optional(v.number()), undefined),
     original: v.fallback(v.optional(imageMetaSchema), undefined),
+    focus: v.fallback(v.optional(v.object({
+      x: v.pipe(v.number(), v.minValue(-1), v.maxValue(1)),
+      y: v.pipe(v.number(), v.minValue(-1), v.maxValue(1)),
+    })), undefined),
   }), {}),
 });
 
