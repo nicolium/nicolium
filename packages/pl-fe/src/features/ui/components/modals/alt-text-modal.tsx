@@ -86,24 +86,25 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({ composeId,
 
   const handleSave = () => {
     handleSubmit();
-    // onClose();
   };
 
   return (
     <Modal
       title={<FormattedMessage id='alt_text_modal.header' defaultMessage='Add alt text' />}
-      // onClose={onClickClose}
       confirmationAction={handleSave}
       confirmationText={<FormattedMessage id='alt_text_modal.confirmation' defaultMessage='Save' />}
       confirmationDisabled={isSaving}
+      secondaryAction={() => onClose('ALT_TEXT')}
+      secondaryText={<FormattedMessage id='alt_text_modal.cancel' defaultMessage='Cancel' />}
     >
       <Stack space={2}>
         <div className='relative overflow-hidden rounded-md'>
           <Blurhash hash={media.blurhash} className='media-gallery__preview' />
           <div
-            className='relative h-40 w-full overflow-hidden bg-contain bg-center bg-no-repeat'
+            className='relative h-64 max-h-96 w-full overflow-hidden bg-contain bg-center bg-no-repeat'
             style={{
               backgroundImage: media.type === 'image' ? `url(${media.preview_url})` : undefined,
+              height: media.type === 'image' || media.type === 'video' ? media.meta.original?.height : undefined,
             }}
           >
             <div className='absolute inset-0 size-full'>
