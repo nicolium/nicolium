@@ -37,6 +37,9 @@ const preprocessAccount = v.transform((account: any) => {
   const fqn = account.fqn || guessFqn(account);
   const domain = fqn.split('@')[1] || '';
 
+  const isCat = account.pleroma?.is_cat ?? account.is_cat;
+  const speakAsCat = account.pleroma?.speak_as_cat ?? account.speak_as_cat ?? isCat;
+
   return {
     username,
     fqn,
@@ -76,6 +79,8 @@ const preprocessAccount = v.transform((account: any) => {
 
       'location',
     ])),
+    is_cat: isCat,
+    speak_as_cat: speakAsCat,
     ...(pick(account.other_settings || {}), ['birthday', 'location']),
     __meta: pick(account, ['pleroma', 'source']),
     ...account,
@@ -150,6 +155,9 @@ const baseAccountSchema = v.object({
   domain: v.fallback(v.string(), ''),
 
   pronouns: v.fallback(v.array(v.string()), []),
+
+  is_cat: v.fallback(v.optional(v.boolean()), false),
+  speak_as_cat: v.fallback(v.optional(v.boolean()), false),
 
   __meta: coerceObject({
     pleroma: v.fallback(v.any(), undefined),

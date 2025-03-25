@@ -227,7 +227,7 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
       dirtyRef.current = false;
       onClose();
       return '';
-    }).catch((err: unknown) => {
+    }).catch(() => {
       setIsSaving(false);
       toast.error(messages.savingFailed);
     });
