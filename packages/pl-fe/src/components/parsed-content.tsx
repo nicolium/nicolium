@@ -102,7 +102,11 @@ function parseContent({
     replace(domNode) {
       if (!(domNode instanceof Element)) {
         const data = speakAsCat ? nyaize(domNode.data) : domNode.data;
-        if (greentext && data.startsWith('>')) {
+
+        // @ts-ignore
+        if (greentext && (data.startsWith('>') || domNode.prev?.greentext)) {
+          // @ts-ignore
+          domNode.greentext = true;
           return <span className='dark:text-accent-green text-lime-600'>{data}</span>;
         }
 
@@ -119,8 +123,22 @@ function parseContent({
         return <></>;
       }
 
+      // @ts-ignore
+      if (domNode.name !== 'br' && domNode.prev?.greentext) {
+        domNode.attribs.class += ' greentext';
+        // @ts-ignore
+        domNode.greentext = true;
+      }
+
       if (domNode.name === 'a') {
         const classes = domNode.attribs.class?.split(' ');
+
+        // @ts-ignore
+        if (domNode.prev?.greentext) {
+          classes.push('greentext');
+          // @ts-ignore
+          domNode.greentext = true;
+        }
 
         const href = domNode.attribs.href && cleanUrls ? Purify.clearUrl(domNode.attribs.href) : domNode.attribs.href;
 
