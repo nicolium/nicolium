@@ -68,7 +68,7 @@ interface IUpload extends Pick<React.HTMLAttributes<HTMLDivElement>, 'onDragStar
   media: MediaAttachment;
   onSubmit?(): void;
   onDelete?(): void;
-  onDescriptionChange?(description: string): Promise<void>;
+  onDescriptionChange?(description: string, position: [number, number]): Promise<void>;
   descriptionLimit?: number;
   withPreview?: boolean;
 }
@@ -103,11 +103,16 @@ const Upload: React.FC<IUpload> = ({
 
     if (!onDescriptionChange) return;
 
+    const focusX = (media.type === 'image' || media.type === 'gifv') && media.meta.focus?.x || 0;
+    const focusY = (media.type === 'image' || media.type === 'gifv') && media.meta.focus?.y || 0;
+
     openModal('ALT_TEXT', {
       media,
+      withPosition: !!onDragStart,
       previousDescription: media.description,
+      previousPosition: [focusX / 2 + 0.5, focusY / -2 + 0.5],
       descriptionLimit: descriptionLimit!,
-      onSubmit: (newDescription: string) => onDescriptionChange(newDescription),
+      onSubmit: (newDescription: string, newPosition: [number, number]) => onDescriptionChange(newDescription, newPosition),
     });
   };
 

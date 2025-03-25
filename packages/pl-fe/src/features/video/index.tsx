@@ -62,19 +62,24 @@ const findElementPosition = (el: HTMLElement) => {
   };
 };
 
-const getPointerPosition = (el: HTMLElement, event: MouseEvent & TouchEvent): Position => {
+const getPointerPosition = (
+  el: HTMLElement,
+  event: Pick<MouseEvent, 'pageX' | 'pageY'> | Pick<TouchEvent, 'changedTouches'> | Pick<React.TouchEvent, 'changedTouches'>,
+): Position => {
   const box = findElementPosition(el);
   const boxW = el.offsetWidth;
   const boxH = el.offsetHeight;
   const boxY = box.top;
   const boxX = box.left;
 
-  let pageY = event.pageY;
-  let pageX = event.pageX;
+  let pageX, pageY;
 
-  if (event.changedTouches) {
+  if ('changedTouches' in event) {
     pageX = event.changedTouches[0].pageX;
     pageY = event.changedTouches[0].pageY;
+  } else {
+    pageX = event.pageX;
+    pageY = event.pageY;
   }
 
   return {

@@ -7,7 +7,7 @@ import resizeImage from 'pl-fe/utils/resize-image';
 
 import { getClient } from '../api';
 
-import type { MediaAttachment, UploadMediaParams } from 'pl-api';
+import type { MediaAttachment, UpdateMediaParams, UploadMediaParams } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const messages = defineMessages({
@@ -18,7 +18,7 @@ const messages = defineMessages({
 
 const noOp = () => {};
 
-const updateMedia = (mediaId: string, params: Record<string, any>) =>
+const updateMedia = (mediaId: string, params: UpdateMediaParams) =>
   (_dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState()).media.updateMedia(mediaId, params);
 

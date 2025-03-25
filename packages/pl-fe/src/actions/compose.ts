@@ -19,7 +19,7 @@ import { saveSettings } from './settings';
 import { createStatus } from './statuses';
 
 import type { EditorState } from 'lexical';
-import type { Account as BaseAccount, CreateStatusParams, CustomEmoji, Group, MediaAttachment, Status as BaseStatus, Tag, Poll, ScheduledStatus, InteractionPolicy } from 'pl-api';
+import type { Account as BaseAccount, CreateStatusParams, CustomEmoji, Group, MediaAttachment, Status as BaseStatus, Tag, Poll, ScheduledStatus, InteractionPolicy, UpdateMediaParams } from 'pl-api';
 import type { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
 import type { Emoji } from 'pl-fe/features/emoji';
 import type { Policy, Rule, Scope } from 'pl-fe/features/interaction-policies';
@@ -527,7 +527,7 @@ const uploadComposeFail = (composeId: string, error: unknown) => ({
   error,
 });
 
-const changeUploadCompose = (composeId: string, mediaId: string, params: Record<string, any>) =>
+const changeUploadCompose = (composeId: string, mediaId: string, params: UpdateMediaParams) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return Promise.resolve();
 

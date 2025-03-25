@@ -211,6 +211,7 @@
   "aliases.search": "Search your old account",
   "aliases.success.add": "Account alias created successfully",
   "aliases.success.remove": "Account alias removed successfully",
+  "alt_text_modal.cancel": "Cancel",
   "alt_text_modal.confirmation": "Save",
   "alt_text_modal.describe_for_people_with_hearing_impairments": "Describe this for people with hearing impairments…",
   "alt_text_modal.describe_for_people_with_visual_impairments": "Describe this for people with visual impairments…",

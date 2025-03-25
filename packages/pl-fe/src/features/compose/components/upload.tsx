@@ -21,8 +21,11 @@ const UploadCompose: React.FC<IUploadCompose> = ({ composeId, id, onSubmit, onDr
 
   const media = useCompose(composeId).media_attachments.find(item => item.id === id)!;
 
-  const handleDescriptionChange = (description: string) => {
-    return dispatch(changeUploadCompose(composeId, media.id, { description }));
+  const handleDescriptionChange = (description: string, position?: [number, number]) => {
+    return dispatch(changeUploadCompose(composeId, media.id, {
+      description,
+      focus: position ? `${((position[0] - 0.5) * 2).toFixed(2)},${((position[1] - 0.5) * -2).toFixed(2)}` : undefined,
+    }));
   };
 
   const handleDelete = () => {
