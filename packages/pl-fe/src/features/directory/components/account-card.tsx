@@ -76,7 +76,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
             align='left'
             className='line-clamp-2 inline text-ellipsis [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
           >
-            <ParsedContent html={account.note} emojis={account.emojis} />
+            <ParsedContent html={account.note} emojis={account.emojis} speakAsCat={account.speak_as_cat} />
           </Text>
         )}
       </Stack>

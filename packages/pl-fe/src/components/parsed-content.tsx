@@ -30,6 +30,9 @@ interface IParsedContent {
   hasQuote?: boolean;
   /** Related custom emojis. */
   emojis?: Array<CustomEmoji>;
+  cleanUrls?: boolean;
+  greentext?: boolean;
+  speakAsCat?: boolean;
 }
 
 // Adapted from Mastodon https://github.com/mastodon/mastodon/blob/main/app/javascript/mastodon/components/hashtag_bar.tsx
@@ -64,8 +67,8 @@ const uniqueHashtagsWithCaseHandling = (hashtags: string[]) => {
   });
 };
 
-function parseContent(props: IParsedContent, extractHashtags?: false, cleanUrls?: boolean, greentext?: boolean, speakAsCat?: boolean): ReturnType<typeof domToReact>;
-function parseContent(props: IParsedContent, extractHashtags: true, cleanUrls: boolean, greentext: boolean, speakAsCat: boolean): {
+function parseContent(props: IParsedContent, extractHashtags?: false): ReturnType<typeof domToReact>;
+function parseContent(props: IParsedContent, extractHashtags: true): {
   hashtags: Array<string>;
   content: ReturnType<typeof domToReact>;
 };
@@ -75,7 +78,10 @@ function parseContent({
   mentions,
   hasQuote,
   emojis,
-}: IParsedContent, extractHashtags = false, cleanUrls = false, greentext = false, speakAsCat = false) {
+  cleanUrls = false,
+  greentext = false,
+  speakAsCat = false,
+}: IParsedContent, extractHashtags = false) {
   if (html.length === 0) {
     return extractHashtags ? { content: null, hashtags: [] } : null;
   }
@@ -208,7 +214,11 @@ function parseContent({
 const ParsedContent: React.FC<IParsedContent> = React.memo((props) => {
   const settings = useSettings();
 
-  return parseContent(props, false, settings.urlPrivacy.clearLinksInContent, false, false);
+  if (props.cleanUrls === undefined) {
+    props = { ...props, cleanUrls: settings.urlPrivacy.clearLinksInContent };
+  }
+
+  return parseContent(props, false);
 }, (prevProps, nextProps) => prevProps.html === nextProps.html);
 
 export { ParsedContent, parseContent };

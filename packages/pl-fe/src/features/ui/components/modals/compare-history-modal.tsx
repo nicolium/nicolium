@@ -35,7 +35,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
     body = (
       <div className='divide-y divide-solid divide-gray-200 dark:divide-gray-800'>
         {versions?.map((version) => {
-          const content = <ParsedContent html={version.content} mentions={status?.mentions} hasQuote={!!status?.quote_id} emojis={version.emojis} />;
+          const content = <ParsedContent html={version.content} mentions={status?.mentions} hasQuote={!!status?.quote_id} emojis={version.emojis} speakAsCat={status.account.speak_as_cat} />;
 
           const poll = typeof version.poll !== 'string' && version.poll;
 
@@ -66,7 +66,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
                         />
 
                         <span>
-                          <ParsedContent html={option.title} emojis={version.emojis} />
+                          <ParsedContent html={option.title} emojis={version.emojis} speakAsCat={status.account.speak_as_cat} />
                         </span>
                       </HStack>
                     ))}

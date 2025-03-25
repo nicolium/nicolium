@@ -29,7 +29,7 @@ const guessFqn = (account: Pick<Account, 'acct' | 'url'>): string => {
 const filterBadges = (tags?: string[]) =>
   tags?.filter(tag => tag.startsWith('badge:')).map(tag => v.parse(roleSchema, { id: tag, name: tag.replace(/^badge:/, '') }));
 
-const MKLJCZK_ACCOUNTS = ['https://pl.fediverse.pl/users/mkljczk', 'https://gts.mkljczk.pl/users/mkljczk'];
+const MKLJCZK_ACCOUNTS = ['https://pl.fediverse.pl/users/mkljczk', 'https://gts.mkljczk.pl/users/mkljczk', 'https://gts.mkljczk.pl/@mkljczk'];
 
 const preprocessAccount = v.transform((account: any) => {
   if (!account?.acct) return null;
