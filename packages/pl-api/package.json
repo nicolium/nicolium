@@ -1,11 +1,11 @@
 {
   "name": "pl-api",
-  "version": "1.0.0-rc.32",
+  "version": "1.0.0-rc.33",
   "type": "module",
   "homepage": "https://github.com/mkljczk/pl-fe/tree/develop/packages/pl-api",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mkljczk/pl-fe"
+    "url": "git+https://github.com/mkljczk/pl-fe.git"
   },
   "bugs": {
     "url": "https://github.com/mkljczk/pl-fe/issues"

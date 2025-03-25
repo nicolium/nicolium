@@ -29,6 +29,8 @@ const guessFqn = (account: Pick<Account, 'acct' | 'url'>): string => {
 const filterBadges = (tags?: string[]) =>
   tags?.filter(tag => tag.startsWith('badge:')).map(tag => v.parse(roleSchema, { id: tag, name: tag.replace(/^badge:/, '') }));
 
+const MKLJCZK_ACCOUNTS = ['https://pl.fediverse.pl/users/mkljczk', 'https://gts.mkljczk.pl/users/mkljczk'];
+
 const preprocessAccount = v.transform((account: any) => {
   if (!account?.acct) return null;
 
@@ -37,7 +39,7 @@ const preprocessAccount = v.transform((account: any) => {
   const fqn = account.fqn || guessFqn(account);
   const domain = fqn.split('@')[1] || '';
 
-  const isCat = (account.pleroma?.is_cat ?? account.is_cat) || account.uri === 'https://pl.fediverse.pl/users/mkljczk' || account.uri === 'https://gts.mkljczk.pl/users/mkljczk';
+  const isCat = (account.pleroma?.is_cat ?? account.is_cat) || MKLJCZK_ACCOUNTS.includes(account.uri ?? account.url);
   const speakAsCat = account.pleroma?.speak_as_cat ?? account.speak_as_cat ?? isCat;
 
   return {
@@ -156,8 +158,8 @@ const baseAccountSchema = v.object({
 
   pronouns: v.fallback(v.array(v.string()), []),
 
-  is_cat: v.fallback(v.optional(v.boolean()), false),
-  speak_as_cat: v.fallback(v.optional(v.boolean()), false),
+  is_cat: v.fallback(v.boolean(), false),
+  speak_as_cat: v.fallback(v.boolean(), false),
 
   __meta: coerceObject({
     pleroma: v.fallback(v.any(), undefined),

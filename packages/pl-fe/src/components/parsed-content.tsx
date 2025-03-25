@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import Emojify from 'pl-fe/features/emoji/emojify';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
+import nyaize from 'pl-fe/utils/nyaize';
 import Purify from 'pl-fe/utils/url-purify';
 
 import HashtagLink from './hashtag-link';
@@ -63,8 +64,8 @@ const uniqueHashtagsWithCaseHandling = (hashtags: string[]) => {
   });
 };
 
-function parseContent(props: IParsedContent, extractHashtags?: false, cleanUrls?: boolean, greentext?: boolean): ReturnType<typeof domToReact>;
-function parseContent(props: IParsedContent, extractHashtags: true, cleanUrls: boolean, greentext: boolean): {
+function parseContent(props: IParsedContent, extractHashtags?: false, cleanUrls?: boolean, greentext?: boolean, speakAsCat?: boolean): ReturnType<typeof domToReact>;
+function parseContent(props: IParsedContent, extractHashtags: true, cleanUrls: boolean, greentext: boolean, speakAsCat: boolean): {
   hashtags: Array<string>;
   content: ReturnType<typeof domToReact>;
 };
@@ -74,7 +75,7 @@ function parseContent({
   mentions,
   hasQuote,
   emojis,
-}: IParsedContent, extractHashtags = false, cleanUrls = false, greentext = false) {
+}: IParsedContent, extractHashtags = false, cleanUrls = false, greentext = false, speakAsCat = false) {
   if (html.length === 0) {
     return extractHashtags ? { content: null, hashtags: [] } : null;
   }
@@ -94,9 +95,13 @@ function parseContent({
   const options: HTMLReactParserOptions = {
     replace(domNode) {
       if (!(domNode instanceof Element)) {
-        if (greentext && domNode.data.startsWith('>')) {
-          return <span className='dark:text-accent-green text-lime-600'>{domNode.data}</span>;
+        const data = speakAsCat ? nyaize(domNode.data) : domNode.data;
+        if (greentext && data.startsWith('>')) {
+          return <span className='dark:text-accent-green text-lime-600'>{data}</span>;
         }
+
+        if (speakAsCat) return <>{data}</>;
+
         return;
       }
 
@@ -203,7 +208,7 @@ function parseContent({
 const ParsedContent: React.FC<IParsedContent> = React.memo((props) => {
   const settings = useSettings();
 
-  return parseContent(props, false, settings.urlPrivacy.clearLinksInContent, false);
+  return parseContent(props, false, settings.urlPrivacy.clearLinksInContent, false, false);
 }, (prevProps, nextProps) => prevProps.html === nextProps.html);
 
 export { ParsedContent, parseContent };

@@ -146,7 +146,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     mentions: status.mentions,
     hasQuote: !!status.quote_id,
     emojis: status.emojis,
-  }, true, urlPrivacy.clearLinksInContent, greentext), [content]);
+  }, true, urlPrivacy.clearLinksInContent, greentext, status.account.speak_as_cat), [content]);
 
   useEffect(() => {
     setLineClamp(!spoilerNode.current || spoilerNode.current.clientHeight >= 96);
