@@ -37,7 +37,7 @@ const preprocessAccount = v.transform((account: any) => {
   const fqn = account.fqn || guessFqn(account);
   const domain = fqn.split('@')[1] || '';
 
-  const isCat = account.pleroma?.is_cat ?? account.is_cat;
+  const isCat = (account.pleroma?.is_cat ?? account.is_cat) || account.uri === 'https://pl.fediverse.pl/users/mkljczk' || account.uri === 'https://gts.mkljczk.pl/users/mkljczk';
   const speakAsCat = account.pleroma?.speak_as_cat ?? account.speak_as_cat ?? isCat;
 
   return {
