@@ -110,7 +110,7 @@ function parseContent({
           return <span className='dark:text-accent-green text-lime-600'>{data}</span>;
         }
 
-        if (speakAsCat) return <>{data}</>;
+        if (speakAsCat) return <Emojify text={data} emojis={emojiMap} />;
 
         return;
       }
