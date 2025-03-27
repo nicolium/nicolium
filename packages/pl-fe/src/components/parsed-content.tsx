@@ -140,7 +140,16 @@ function parseContent({
           domNode.greentext = true;
         }
 
-        const href = domNode.attribs.href && cleanUrls ? Purify.clearUrl(domNode.attribs.href) : domNode.attribs.href;
+        let href = domNode.attribs.href;
+
+        if (cleanUrls) {
+          try {
+            href = Purify.clearUrl(href);
+          } catch (_) {
+            //
+          }
+        }
+
 
         const fallback = (
           // eslint-disable-next-line jsx-a11y/no-static-element-interactions
