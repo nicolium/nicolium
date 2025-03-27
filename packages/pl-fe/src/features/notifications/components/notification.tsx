@@ -411,7 +411,7 @@ const Notification: React.FC<INotification> = (props) => {
   );
 
   return (
-    <HotKeys handlers={handlers} data-testid='notification' attach={node.current || undefined}>
+    <HotKeys handlers={handlers} data-testid='notification' attachRef={node}>
       <div
         className='notification focusable'
         tabIndex={0}

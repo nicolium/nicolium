@@ -346,7 +346,7 @@ const Thread: React.FC<IThread> = ({
       {status.deleted ? (
         <Tombstone id={status.id} onMoveUp={handleMoveUp} onMoveDown={handleMoveDown} deleted />
       ) : (
-        <HotKeys handlers={handlers} attach={statusRef.current || undefined}>
+        <HotKeys handlers={handlers} attachRef={statusRef}>
           <div
             ref={statusRef}
             className='focusable relative'

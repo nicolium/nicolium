@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React from 'react';
+import React, { useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
@@ -96,6 +96,8 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
   const { account: ownAccount } = useOwnAccount();
   const { account } = useAccount(interactionRequest.account_id);
 
+  const node = useRef<HTMLDivElement>(null);
+
   const { mutate: authorize } = useAuthorizeInteractionRequestMutation(interactionRequest.id);
   const { mutate: reject } = useRejectInteractionRequestMutation(interactionRequest.id);
 
@@ -173,7 +175,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
   };
 
   return (
-    <HotKeys handlers={handlers}>
+    <HotKeys handlers={handlers} attachRef={node}>
       <div className='notification focusable' tabIndex={0}>
         <div className='focusable p-4'>
           <Stack space={2}>

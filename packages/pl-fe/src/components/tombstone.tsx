@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Text from 'pl-fe/components/ui/text';
@@ -13,13 +13,15 @@ interface ITombstone {
 
 /** Represents a deleted item. */
 const Tombstone: React.FC<ITombstone> = ({ id, onMoveUp, onMoveDown, deleted }) => {
+  const node = useRef<HTMLDivElement>(null);
+
   const handlers = {
     moveUp: () => onMoveUp?.(id),
     moveDown: () => onMoveDown?.(id),
   };
 
   return (
-    <HotKeys handlers={handlers}>
+    <HotKeys handlers={handlers} attachRef={node}>
       <div className='h-16'>
         <div
           className='focusable flex h-[42px] items-center justify-center rounded-lg border-2 border-gray-200 text-center dark:border-gray-800'
