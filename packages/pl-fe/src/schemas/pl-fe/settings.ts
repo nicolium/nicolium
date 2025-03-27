@@ -19,7 +19,7 @@ const settingsSchema = v.object({
   deleteModal: v.fallback(v.boolean(), true),
   missingDescriptionModal: v.fallback(v.boolean(), true),
   defaultPrivacy: v.fallback(v.picklist(['public', 'unlisted', 'private', 'direct']), 'public'),
-  defaultContentType: v.fallback(v.picklist(['text/plain', 'text/markdown', 'text/html']), 'text/plain'),
+  defaultContentType: v.fallback(v.picklist(['text/plain', 'text/markdown', 'text/html', 'wysiwyg']), 'text/plain'),
   themeMode: v.fallback(v.picklist(['system', 'light', 'dark', 'black']), 'system'),
   locale: v.fallback(
     v.pipe(

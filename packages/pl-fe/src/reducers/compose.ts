@@ -313,7 +313,11 @@ const importAccount = (compose: Compose, account: CredentialAccount) => {
 const updateDefaultContentType = (compose: Compose, instance: Instance) => {
   const postFormats = instance.pleroma.metadata.post_formats;
 
-  compose.content_type = postFormats.includes(compose.content_type) ? compose.content_type : postFormats.includes('text/markdown') ? 'text/markdown' : postFormats[0];
+  compose.content_type = postFormats.includes(compose.content_type) || (postFormats.includes('text/markdown') && compose.content_type === 'wysiwyg')
+    ? compose.content_type
+    : postFormats.includes('text/markdown')
+      ? 'text/markdown'
+      : postFormats[0];
 };
 
 const updateCompose = (state: State, key: string, updater: (compose: Compose) => void) =>
@@ -541,7 +545,10 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.focusDate = new Date();
         compose.caretPosition = null;
         compose.idempotencyKey = crypto.randomUUID();
-        compose.content_type = action.contentType || 'text/plain';
+        const contentType = action.contentType === 'text/markdown' && state.default.content_type === 'wysiwyg'
+          ? 'wysiwyg'
+          : action.contentType || 'text/plain';
+        compose.content_type = contentType;
         compose.quote = action.status.quote_id;
         compose.group_id = action.status.group_id;
         compose.language = action.status.language;

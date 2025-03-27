@@ -99,6 +99,7 @@ const messages = defineMessages({
   content_type_plaintext: { id: 'preferences.options.content_type_plaintext', defaultMessage: 'Plain text' },
   content_type_markdown: { id: 'preferences.options.content_type_markdown', defaultMessage: 'Markdown' },
   content_type_html: { id: 'preferences.options.content_type_html', defaultMessage: 'HTML' },
+  content_type_wysiwyg: { id: 'preferences.options.content_type_wysiwyg', defaultMessage: 'WYSIWYG' },
   brandColor: { id: 'preferences.options.brand_color', defaultMessage: 'Base color' },
 });
 
@@ -160,6 +161,8 @@ const Preferences = () => {
       'text/markdown': intl.formatMessage(messages.content_type_markdown),
       'text/html': intl.formatMessage(messages.content_type_html),
     }).filter(([key]) => postFormats.includes(key));
+
+    if (postFormats.includes('text/markdown')) options.push(['wysiwyg', intl.formatMessage(messages.content_type_wysiwyg)]);
 
     if (options.length > 1) return Object.fromEntries(options);
   }, [settings.locale]);
