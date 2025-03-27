@@ -472,10 +472,12 @@ const getFeatures = (instance: Instance) => {
 
     /**
      * @see POST /api/v1/statuses
+     * @see POST /api/v1/statuses/preview
      */
     createStatusPreview: any([
       v.software === AKKOMA,
       v.software === PLEROMA,
+      v.software === MITRA,
     ]),
 
     /**

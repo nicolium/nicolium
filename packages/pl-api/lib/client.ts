@@ -2004,7 +2004,11 @@ class PlApiClient {
         fixedParams.visibility = 'circle';
       }
 
-      const response = await this.request('/api/v1/statuses', {
+      const input = params.preview && this.features.version.software === MITRA
+        ? '/api/v1/statuses/preview'
+        : '/api/v1/statuses';
+
+      const response = await this.request(input, {
         method: 'POST',
         body: fixedParams,
       });
