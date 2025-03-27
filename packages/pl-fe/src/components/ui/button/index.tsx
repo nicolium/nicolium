@@ -2,11 +2,14 @@ import clsx from 'clsx';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import DropdownMenu from 'pl-fe/components/dropdown-menu';
+
 import Icon from '../icon';
 
 import { useButtonStyles } from './useButtonStyles';
 
 import type { ButtonSizes, ButtonThemes } from './useButtonStyles';
+import type { Menu } from 'pl-fe/components/dropdown-menu';
 
 interface IButton extends Pick<
   React.ComponentProps<'button'>,
@@ -30,6 +33,8 @@ interface IButton extends Pick<
   href?: string;
   /** Styles the button visually with a predefined theme. */
   theme?: ButtonThemes;
+  /** Menu items to display as a secondary action. */
+  actionsMenu?: Menu;
 }
 
 /** Customizable button element with various themes. */
@@ -48,11 +53,12 @@ const Button = React.forwardRef<HTMLButtonElement, IButton>(({
   href,
   type = 'button',
   className,
+  actionsMenu,
   ...props
 }, ref): JSX.Element => {
   const body = text || children;
 
-  const themeClass = useButtonStyles({
+  const { innerStyle, outerStyle } = useButtonStyles({
     theme,
     block,
     disabled,
@@ -68,7 +74,11 @@ const Button = React.forwardRef<HTMLButtonElement, IButton>(({
   const renderButton = () => (
     <button
       {...props}
-      className={clsx('rtl:space-x-reverse', themeClass, className)}
+      className={clsx('rtl:space-x-reverse', {
+        [outerStyle]: !actionsMenu,
+        [innerStyle]: true,
+        [className || '']: true,
+      })}
       disabled={disabled}
       onClick={handleClick}
       ref={ref}
@@ -85,23 +95,39 @@ const Button = React.forwardRef<HTMLButtonElement, IButton>(({
     </button>
   );
 
+  let button = renderButton();
+
   if (to) {
-    return (
+    button = (
       <Link to={to} tabIndex={-1} className='inline-flex'>
-        {renderButton()}
+        {button}
       </Link>
     );
   }
 
   if (href) {
-    return (
+    button = (
       <a href={href} target='_blank' rel='noopener' tabIndex={-1} className='inline-flex'>
-        {renderButton()}
+        {button}
       </a>
     );
   }
 
-  return renderButton();
+  if (actionsMenu?.length) {
+    button = (
+      <div className={outerStyle}>
+        {button}
+
+        <div className='h-5 w-px bg-gray-200/50' />
+
+        <DropdownMenu items={actionsMenu} placement='bottom'>
+          <Icon src={require('@tabler/icons/filled/caret-down.svg')} className='size-4' />
+        </DropdownMenu>
+      </div>
+    );
+  }
+
+  return button;
 });
 
 export { Button as default };

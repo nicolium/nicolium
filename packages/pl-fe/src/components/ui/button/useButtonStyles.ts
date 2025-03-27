@@ -14,11 +14,18 @@ const themes = {
   muted: 'border border-solid bg-transparent border-gray-400 dark:border-gray-800 hover:border-primary-300 dark:hover:border-primary-700 focus:border-primary-500 text-gray-800 dark:text-gray-100 focus:ring-primary-500',
 };
 
+const gaps = {
+  xs: 'gap-x-1.5',
+  sm: 'gap-x-2',
+  md: 'gap-x-2',
+  lg: 'gap-x-2',
+};
+
 const sizes = {
-  xs: 'gap-x-1.5 px-2 py-1 text-xs',
-  sm: 'gap-x-2 px-3 py-1.5 text-xs leading-4',
-  md: 'gap-x-2 px-4 py-2 text-sm',
-  lg: 'gap-x-2 px-6 py-3 text-base',
+  xs: 'px-2 py-1 text-xs',
+  sm: 'px-3 py-1.5 text-xs leading-4',
+  md: 'px-4 py-2 text-sm',
+  lg: 'px-6 py-3 text-base',
 };
 
 type ButtonSizes = keyof typeof sizes
@@ -38,15 +45,22 @@ const useButtonStyles = ({
   disabled,
   size,
 }: IButtonStyles) => {
-  const buttonStyle = clsx({
+  const outerStyle = clsx({
     'inline-flex items-center place-content-center border font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 appearance-none transition-all': true,
     'select-none disabled:opacity-75 disabled:cursor-default': disabled,
     [`${themes[theme]}`]: true,
     [`${sizes[size]}`]: true,
+    [`${gaps[size]}`]: true,
     'flex w-full justify-center': block,
   });
 
-  return buttonStyle;
+  const innerStyle = clsx({
+    'inline-flex items-center': true,
+    [`${gaps[size]}`]: true,
+    'flex w-full justify-center': block,
+  });
+
+  return { innerStyle, outerStyle };
 };
 
 export { useButtonStyles, ButtonSizes, ButtonThemes };

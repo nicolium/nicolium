@@ -58,6 +58,8 @@ import {
   COMPOSE_INTERACTION_POLICY_OPTION_CHANGE,
   COMPOSE_CLEAR_LINK_SUGGESTION_CREATE,
   COMPOSE_CLEAR_LINK_SUGGESTION_IGNORE,
+  COMPOSE_PREVIEW_SUCCESS,
+  COMPOSE_PREVIEW_CANCEL,
   type ComposeAction,
   type ComposeSuggestionSelectAction,
 } from '../actions/compose';
@@ -67,7 +69,7 @@ import { FE_NAME } from '../actions/settings';
 import { TIMELINE_DELETE, type TimelineAction } from '../actions/timelines';
 import { unescapeHTML } from '../utils/html';
 
-import type { InteractionPolicy, CredentialAccount, Instance, MediaAttachment, Tag } from 'pl-api';
+import type { CredentialAccount, Instance, InteractionPolicy, MediaAttachment, Status as BaseStatus, Tag } from 'pl-api';
 import type { Emoji } from 'pl-fe/features/emoji';
 import type { Language } from 'pl-fe/features/preferences';
 import type { Account } from 'pl-fe/normalizers/account';
@@ -139,6 +141,7 @@ interface Compose {
   interactionPolicy: InteractionPolicy | null;
   dismissed_clear_links_suggestions: Array<string>;
   clear_link_suggestion: ClearLinkSuggestion | null;
+  preview: BaseStatus | null;
 }
 
 const newCompose = (params: Partial<Compose> = {}): Compose => ({
@@ -182,6 +185,7 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
   interactionPolicy: null,
   dismissed_clear_links_suggestions: [],
   clear_link_suggestion: null,
+  preview: null,
   ...params,
 });
 
@@ -717,6 +721,14 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
           compose.clear_link_suggestion = null;
         }
         compose.dismissed_clear_links_suggestions.push(action.key);
+      });
+    case COMPOSE_PREVIEW_SUCCESS:
+      return updateCompose(state, action.composeId, compose => {
+        compose.preview = action.status;
+      });
+    case COMPOSE_PREVIEW_CANCEL:
+      return updateCompose(state, action.composeId, compose => {
+        compose.preview = null;
       });
     default:
       return state;

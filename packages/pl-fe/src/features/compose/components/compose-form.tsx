@@ -25,6 +25,7 @@ import { useDraggedFiles } from 'pl-fe/hooks/use-dragged-files';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 
+import PreviewComposeContainer from '../containers/preview-compose-container';
 import QuotedStatusContainer from '../containers/quoted-status-container';
 import ReplyIndicatorContainer from '../containers/reply-indicator-container';
 import UploadButtonContainer from '../containers/upload-button-container';
@@ -52,6 +53,7 @@ import Warning from './warning';
 
 import type { LinkNode } from '@lexical/link';
 import type { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
+import type { Menu } from 'pl-fe/components/dropdown-menu';
 import type { Emoji } from 'pl-fe/features/emoji';
 
 const messages = defineMessages({
@@ -63,6 +65,7 @@ const messages = defineMessages({
   message: { id: 'compose_form.message', defaultMessage: 'Message' },
   schedule: { id: 'compose_form.schedule', defaultMessage: 'Schedule' },
   saveChanges: { id: 'compose_form.save_changes', defaultMessage: 'Save changes' },
+  preview: { id: 'compose_form.preview', defaultMessage: 'Preview post' },
 });
 
 interface IComposeForm<ID extends string> {
@@ -149,6 +152,12 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     dispatch(submitCompose(id, { history, onSuccess: () => {
       editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
     } }));
+  };
+
+  const handlePreview = (e?: React.FormEvent<Element>) => {
+    e?.preventDefault();
+
+    dispatch(submitCompose(id, { history }, true));
   };
 
   const onSuggestionsClearRequested = () => {
@@ -253,6 +262,14 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   if (features.richText) selectButtons.push(<ContentTypeButton key='compose-type-button' composeId={id} />);
   if (features.postLanguages) selectButtons.push(<LanguageDropdown key='language-dropdown' composeId={id} />);
 
+  const actionsMenu: Menu | undefined = features.createStatusPreview ? [
+    {
+      text: intl.formatMessage(messages.preview),
+      action: handlePreview,
+      icon: require('@tabler/icons/outline/eye.svg'),
+    },
+  ] : undefined;
+
   return (
     <Stack className='w-full' space={4} ref={formRef} onClick={handleClick} element='form' onSubmit={handleSubmit}>
       {!!compose.in_reply_to && compose.approvalRequired && (
@@ -314,6 +331,8 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
 
       <QuotedStatusContainer composeId={id} />
 
+      <PreviewComposeContainer composeId={id} />
+
       <div
         className={clsx('flex flex-wrap items-center justify-between', {
           'hidden': condensed,
@@ -330,7 +349,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
             </HStack>
           )}
 
-          <Button type='submit' theme='primary' icon={publishIcon} text={publishText} disabled={!canSubmit} />
+          <Button type='submit' theme='primary' icon={publishIcon} text={publishText} disabled={!canSubmit} actionsMenu={actionsMenu} />
         </HStack>
       </div>
     </Stack>

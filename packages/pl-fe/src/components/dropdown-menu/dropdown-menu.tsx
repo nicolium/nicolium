@@ -216,10 +216,9 @@ const DropdownMenu = (props: IDropdownMenu) => {
     React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent<HTMLButtonElement>
   > = (event) => {
     event.stopPropagation();
+    event.preventDefault();
 
     if (onShiftClick && event.shiftKey) {
-      event.preventDefault();
-
       onShiftClick(event);
       return;
     }

@@ -35,6 +35,8 @@ const COMPOSE_CHANGE = 'COMPOSE_CHANGE' as const;
 const COMPOSE_SUBMIT_REQUEST = 'COMPOSE_SUBMIT_REQUEST' as const;
 const COMPOSE_SUBMIT_SUCCESS = 'COMPOSE_SUBMIT_SUCCESS' as const;
 const COMPOSE_SUBMIT_FAIL = 'COMPOSE_SUBMIT_FAIL' as const;
+const COMPOSE_PREVIEW_SUCCESS = 'COMPOSE_PREVIEW_SUCCESS' as const;
+const COMPOSE_PREVIEW_CANCEL = 'COMPOSE_PREVIEW_CANCEL' as const;
 const COMPOSE_REPLY = 'COMPOSE_REPLY' as const;
 const COMPOSE_EVENT_REPLY = 'COMPOSE_EVENT_REPLY' as const;
 const COMPOSE_REPLY_CANCEL = 'COMPOSE_REPLY_CANCEL' as const;
@@ -341,7 +343,7 @@ interface SubmitComposeOpts {
   onSuccess?: () => void;
 }
 
-const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
+const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     const { history, force = false, onSuccess } = opts;
 
@@ -357,23 +359,25 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
     const { forceImplicitAddressing } = useSettingsStore.getState().settings;
     const explicitAddressing = state.auth.client.features.createStatusExplicitAddressing && !forceImplicitAddressing;
 
-    if (!validateSchedule(state, composeId)) {
-      toast.error(messages.scheduleError);
-      return;
-    }
+    if (!preview) {
+      if (!validateSchedule(state, composeId)) {
+        toast.error(messages.scheduleError);
+        return;
+      }
 
-    if ((!status || !status.length) && media.length === 0) {
-      return;
-    }
+      if ((!status || !status.length) && media.length === 0) {
+        return;
+      }
 
-    if (!force && needsDescriptions(state, composeId)) {
-      useModalsStore.getState().openModal('MISSING_DESCRIPTION', {
-        onContinue: () => {
-          useModalsStore.getState().closeModal('MISSING_DESCRIPTION');
-          dispatch(submitCompose(composeId, { history, force: true, onSuccess }));
-        },
-      });
-      return;
+      if (!force && needsDescriptions(state, composeId)) {
+        useModalsStore.getState().openModal('MISSING_DESCRIPTION', {
+          onContinue: () => {
+            useModalsStore.getState().closeModal('MISSING_DESCRIPTION');
+            dispatch(submitCompose(composeId, { history, force: true, onSuccess }));
+          },
+        });
+        return;
+      }
     }
 
     // https://stackoverflow.com/a/30007882 for domain regex
@@ -383,12 +387,15 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
       to = [...new Set([...to, ...mentions.map(mention => mention.replace(/&#x20;/g, '').trim().slice(1))])];
     }
 
-    dispatch(submitComposeRequest(composeId));
-    useModalsStore.getState().closeModal('COMPOSE');
+    if (!preview) {
+      dispatch(submitComposeRequest(composeId));
 
-    if (compose.language && !statusId) {
-      useSettingsStore.getState().rememberLanguageUse(compose.language);
-      dispatch(saveSettings());
+      useModalsStore.getState().closeModal('COMPOSE');
+
+      if (compose.language && !statusId && !preview) {
+        useSettingsStore.getState().rememberLanguageUse(compose.language);
+        dispatch(saveSettings());
+      }
     }
 
     const idempotencyKey = compose.idempotencyKey;
@@ -403,11 +410,12 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
       spoiler_text: compose.spoiler_text,
       visibility: compose.privacy,
       content_type: contentType,
-      scheduled_at: compose.schedule?.toISOString(),
+      scheduled_at: preview ? undefined : compose.schedule?.toISOString(),
       language: compose.language || compose.suggested_language || undefined,
       to: explicitAddressing && to.length ? to : undefined,
       local_only: !compose.federated,
       interaction_policy: ['public', 'unlisted', 'private'].includes(compose.privacy) && compose.interactionPolicy || undefined,
+      preview,
     };
 
     if (compose.poll) {
@@ -440,7 +448,8 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}) =>
     }
 
     return dispatch(createStatus(params, idempotencyKey, statusId)).then((data) => {
-      handleComposeSubmit(dispatch, getState, composeId, data, status, !!statusId);
+      if (!preview) handleComposeSubmit(dispatch, getState, composeId, data, status, !!statusId);
+      else if (data.scheduled_at === null) dispatch(previewComposeSuccess(composeId, data));
       onSuccess?.();
     }).catch((error) => {
       dispatch(submitComposeFail(composeId, error));
@@ -464,6 +473,17 @@ const submitComposeFail = (composeId: string, error: unknown) => ({
   type: COMPOSE_SUBMIT_FAIL,
   composeId,
   error,
+});
+
+const previewComposeSuccess = (composeId: string, status: BaseStatus) => ({
+  type: COMPOSE_PREVIEW_SUCCESS,
+  composeId,
+  status,
+});
+
+const cancelPreviewCompose = (composeId: string) => ({
+  type: COMPOSE_PREVIEW_CANCEL,
+  composeId,
 });
 
 const uploadCompose = (composeId: string, files: FileList, intl: IntlShape) =>
@@ -971,6 +991,8 @@ type ComposeAction =
   | ReturnType<typeof submitComposeRequest>
   | ReturnType<typeof submitComposeSuccess>
   | ReturnType<typeof submitComposeFail>
+  | ReturnType<typeof previewComposeSuccess>
+  | ReturnType<typeof cancelPreviewCompose>
   | ReturnType<typeof changeUploadComposeRequest>
   | ReturnType<typeof changeUploadComposeSuccess>
   | ReturnType<typeof changeUploadComposeFail>
@@ -1019,6 +1041,8 @@ export {
   COMPOSE_SUBMIT_REQUEST,
   COMPOSE_SUBMIT_SUCCESS,
   COMPOSE_SUBMIT_FAIL,
+  COMPOSE_PREVIEW_SUCCESS,
+  COMPOSE_PREVIEW_CANCEL,
   COMPOSE_REPLY,
   COMPOSE_REPLY_CANCEL,
   COMPOSE_EVENT_REPLY,
@@ -1118,6 +1142,7 @@ export {
   changeComposeInteractionPolicyOption,
   suggestClearLink,
   ignoreClearLinkSuggestion,
+  cancelPreviewCompose,
   type ComposeReplyAction,
   type ComposeSuggestionSelectAction,
   type ComposeAction,

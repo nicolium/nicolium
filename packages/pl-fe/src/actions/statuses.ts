@@ -38,10 +38,12 @@ const STATUS_UNFILTER = 'STATUS_UNFILTER' as const;
 
 const createStatus = (params: CreateStatusParams, idempotencyKey: string, statusId: string | null) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch<StatusesAction>({ type: STATUS_CREATE_REQUEST, params, idempotencyKey, editing: !!statusId });
+    if (!params.preview) dispatch<StatusesAction>({ type: STATUS_CREATE_REQUEST, params, idempotencyKey, editing: !!statusId });
 
     return (statusId === null ? getClient(getState()).statuses.createStatus(params) : getClient(getState()).statuses.editStatus(statusId, params))
       .then((status) => {
+        if (params.preview) return status;
+
         // The backend might still be processing the rich media attachment
         const expectsCard = status.scheduled_at === null && !status.card && shouldHaveCard(status);
 
