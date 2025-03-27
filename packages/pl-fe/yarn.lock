@@ -1596,7 +1596,7 @@
     "@lexical/utils" "0.29.0"
     lexical "0.29.0"
 
-"@lexical/markdown@0.29.0":
+"@lexical/markdown@0.29.0", "@lexical/markdown@^0.29.0":
   version "0.29.0"
   resolved "https://registry.yarnpkg.com/@lexical/markdown/-/markdown-0.29.0.tgz#673ca4fb1cbedf2b17e905cf9a229ce0eb505b65"
   integrity sha512-4Od8WoDoviv9DxJZVgrIORTIAzyoGOpztbGbIBXguGmwvy7NnHQDh9fZYIYRrdI1Awp1VVGdJ3ku/7KTgSOoRw==

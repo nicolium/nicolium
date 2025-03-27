@@ -1,6 +1,6 @@
 import { AutoLinkNode, LinkNode } from '@lexical/link';
+import { $convertToMarkdownString } from '@lexical/markdown';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { $createRemarkExport } from '@mkljczk/lexical-remark';
 import { $nodesOfType, $getRoot, type EditorState, $getNodeByKey } from 'lexical';
 import debounce from 'lodash/debounce';
 import { useCallback, useEffect } from 'react';
@@ -13,6 +13,8 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import { getStatusIdsFromLinksInContent } from 'pl-fe/utils/status';
 import Purify from 'pl-fe/utils/url-purify';
+
+import { TRANSFORMERS } from '../transformers';
 
 import type { LanguageIdentificationModel } from 'fasttext.wasm.js/dist/models/language-identification/common.js';
 
@@ -136,21 +138,18 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
   useEffect(() => {
     return editor.registerUpdateListener(({ editorState }) => {
       const plainText = editorState.read(() => $getRoot().getTextContent());
-      let text = plainText;
-      if (isWysiwyg) {
-        text = editorState.read($createRemarkExport({
-          handlers: {
-            hashtag: (node) => ({ type: 'text', value: node.getTextContent() }),
-            mention: (node) => ({ type: 'text', value: node.getTextContent() }),
-          },
-        }));
-      }
-      const isEmpty = text === '';
-      const data = isEmpty ? null : JSON.stringify(editorState.toJSON());
-      dispatch(setEditorState(composeId, data, text));
-      checkUrls(editorState);
-      getQuoteSuggestions(plainText);
-      detectLanguage(plainText);
+      editor.update(() => {
+        let text = plainText;
+        if (isWysiwyg) {
+          text = $convertToMarkdownString(TRANSFORMERS);
+        }
+        const isEmpty = text === '';
+        const data = isEmpty ? null : JSON.stringify(editorState.toJSON());
+        dispatch(setEditorState(composeId, data, text));
+        checkUrls(editorState);
+        getQuoteSuggestions(plainText);
+        detectLanguage(plainText);
+      });
     });
   }, [editor]);
 

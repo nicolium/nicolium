@@ -49,6 +49,7 @@
     "@lexical/hashtag": "^0.29.0",
     "@lexical/link": "^0.29.0",
     "@lexical/list": "^0.29.0",
+    "@lexical/markdown": "^0.29.0",
     "@lexical/react": "^0.29.0",
     "@lexical/rich-text": "^0.29.0",
     "@lexical/selection": "^0.29.0",
