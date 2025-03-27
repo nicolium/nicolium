@@ -144,7 +144,7 @@ const AutosuggestInput: React.FC<IAutosuggestInput> = ({
 
   const onBlur = () => {
     setSuggestionsHidden(true);
-    setFocused(true);
+    setFocused(false);
   };
 
   const onFocus = () => {
