@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage, IntlShape, MessageDescriptor } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -206,6 +206,8 @@ const Notification: React.FC<INotification> = (props) => {
   const { openModal } = useModalsStore();
   const { settings } = useSettingsStore();
 
+  const node = useRef<HTMLDivElement>(null);
+
   const notification = useAppSelector((state) => getNotification(state, props.notification));
   const status = getNotificationStatus(notification);
 
@@ -409,11 +411,12 @@ const Notification: React.FC<INotification> = (props) => {
   );
 
   return (
-    <HotKeys handlers={handlers} data-testid='notification'>
+    <HotKeys handlers={handlers} data-testid='notification' attach={node.current || undefined}>
       <div
         className='notification focusable'
         tabIndex={0}
         aria-label={ariaLabel}
+        ref={node}
       >
         <div className='focusable p-4'>
           <div className='mb-2'>

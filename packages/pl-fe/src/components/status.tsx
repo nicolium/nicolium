@@ -311,7 +311,7 @@ const Status: React.FC<IStatus> = (props) => {
     };
 
     return (
-      <HotKeys handlers={minHandlers}>
+      <HotKeys handlers={minHandlers} attach={node.current || undefined}>
         <div className={clsx('status__wrapper text-center', { focusable })} tabIndex={focusable ? 0 : undefined} ref={node}>
           <Text theme='muted'>
             <FormattedMessage id='status.filtered' defaultMessage='Filtered' />: {status.filtered.join(', ')}.
@@ -348,7 +348,7 @@ const Status: React.FC<IStatus> = (props) => {
   };
 
   return (
-    <HotKeys handlers={handlers} data-testid='status'>
+    <HotKeys handlers={handlers} data-testid='status' attach={node.current || undefined}>
       <div
         className={clsx('status cursor-pointer', { focusable })}
         tabIndex={focusable && !muted ? 0 : undefined}
