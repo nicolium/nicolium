@@ -1418,6 +1418,8 @@ const getFeatures = (instance: Instance) => {
       v.software === PLEROMA,
     ]),
 
+    shoutbox: instance.api_versions['shout.pleroma.pl-api'] >= 1,
+
     /**
      * Can set content warnings on statuses.
      * @see POST /api/v1/statuses
