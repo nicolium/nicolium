@@ -4,6 +4,7 @@
  * LICENSE file in the `/src/features/compose/editor` directory.
  */
 
+import { $convertFromMarkdownString, $convertToMarkdownString } from '@lexical/markdown';
 import { AutoLinkPlugin, createLinkMatcherWithRegExp } from '@lexical/react/LexicalAutoLinkPlugin';
 import { ClearEditorPlugin } from '@lexical/react/LexicalClearEditorPlugin';
 import { LexicalComposer, type InitialConfigType } from '@lexical/react/LexicalComposer';
@@ -15,7 +16,6 @@ import { LinkPlugin } from '@lexical/react/LexicalLinkPlugin';
 import { ListPlugin } from '@lexical/react/LexicalListPlugin';
 import { OnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
 import { RichTextPlugin } from '@lexical/react/LexicalRichTextPlugin';
-import { $createRemarkExport, $createRemarkImport } from '@mkljczk/lexical-remark';
 import clsx from 'clsx';
 import { $createParagraphNode, $createTextNode, $getRoot, type EditorState, type LexicalEditor } from 'lexical';
 import React, { useMemo, useState } from 'react';
@@ -24,7 +24,6 @@ import { defineMessages, useIntl } from 'react-intl';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useCompose } from 'pl-fe/hooks/use-compose';
 
-import { importImage } from './handlers/image';
 import { useNodes } from './nodes';
 import AutosuggestPlugin from './plugins/autosuggest-plugin';
 import FloatingBlockTypeToolbarPlugin from './plugins/floating-block-type-toolbar-plugin';
@@ -34,6 +33,7 @@ import FocusPlugin from './plugins/focus-plugin';
 import RefPlugin from './plugins/ref-plugin';
 import StatePlugin from './plugins/state-plugin';
 import SubmitPlugin from './plugins/submit-plugin';
+import { TRANSFORMERS } from './transformers';
 
 const LINK_MATCHERS = [
   createLinkMatcherWithRegExp(
@@ -131,11 +131,7 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
           : compose.textMap[compose.modified_language] || '';
 
         if (isWysiwyg) {
-          $createRemarkImport({
-            handlers: {
-              image: importImage,
-            },
-          })(text);
+          $convertFromMarkdownString(text, TRANSFORMERS);
         } else {
           const paragraph = $createParagraphNode();
           const textNode = $createTextNode(text);
@@ -166,13 +162,9 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
 
   const handleChange = (_: EditorState, editor: LexicalEditor) => {
     if (onChange) {
-      onChange(editor.getEditorState().read($createRemarkExport({
-        handlers: {
-          hashtag: (node) => ({ type: 'text', value: node.getTextContent() }),
-          mention: (node) => ({ type: 'text', value: node.getTextContent() }),
-          autolink: (node) => ({ type: 'text', value: node.getTextContent() }),
-        },
-      })));
+      editor.update(() => {
+        onChange($convertToMarkdownString(TRANSFORMERS));
+      });
     }
   };
 
