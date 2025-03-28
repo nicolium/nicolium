@@ -79,6 +79,7 @@ import {
 } from './entities';
 import { circleSchema } from './entities/circle';
 import { type GroupedNotificationsResults, groupedNotificationsResultsSchema, type NotificationGroup } from './entities/grouped-notifications-results';
+import { ShoutMessage, shoutMessageSchema } from './entities/shout-message';
 import { filteredArray } from './entities/utils';
 import { AKKOMA, type Features, getFeatures, GOTOSOCIAL, MITRA, PIXELFED } from './features';
 import request, { getNextLink, getPrevLink, type RequestBody, type RequestMeta } from './request';
@@ -251,7 +252,6 @@ import type {
   GetTrendingTags,
 } from './params/trends';
 import type { PaginatedResponse } from './responses';
-import { ShoutMessage, shoutMessageSchema } from './entities/shout-message';
 
 const GROUPED_TYPES = ['favourite', 'reblog', 'emoji_reaction', 'event_reminder', 'participation_accepted', 'participation_request'];
 
@@ -289,7 +289,7 @@ class PlApiClient {
   #shoutSocket?: {
     message: (text: string) => void;
     close: () => void;
-  }
+  };
 
   /**
    *
@@ -2782,7 +2782,6 @@ class PlApiClient {
       const ws = new WebSocket(path);
 
       ws.onmessage = (event) => {
-        // @eslint-disable-next-line @typescript-eslint/no-unused-vars
         const [_, __, ___, type, payload] = JSON.parse(event.data as string);
         if (type === 'new_msg') {
           const message = v.parse(payload, shoutMessageSchema);
@@ -2807,7 +2806,7 @@ class PlApiClient {
         },
       };
     },
-  }
+  };
 
   public readonly notifications = {
     /**
