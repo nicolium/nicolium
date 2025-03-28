@@ -1,0 +1,59 @@
+import { verifyCredentials } from './auth';
+import { getMeToken, getMeUrl } from './me';
+
+import type { PlApiClient, ShoutMessage } from 'pl-api';
+import type { AppDispatch, RootState } from 'pl-fe/store';
+
+const SHOUTBOX_MESSAGE_IMPORT = 'SHOUTBOX_MESSAGE_IMPORT' as const;
+const SHOUTBOX_MESSAGES_IMPORT = 'SHOUTBOX_MESSAGES_IMPORT' as const;
+const SHOUTBOX_CONNECT = 'SHOUTBOX_CONNECT' as const;
+
+const importShoutboxMessages = (messages: ShoutMessage[]) => ({
+  type: SHOUTBOX_MESSAGES_IMPORT,
+  messages,
+});
+
+const importShoutboxMessage = (message: ShoutMessage) => ({
+  type: SHOUTBOX_MESSAGE_IMPORT,
+  message,
+});
+
+const connectShoutbox = (dispatch: AppDispatch, getState: () => RootState) => {
+  const state = getState();
+  const token = getMeToken(state);
+  const accountUrl = getMeUrl(state);
+
+  if (!accountUrl) return;
+
+  return dispatch(verifyCredentials(token, accountUrl)).then((account) => {
+    if (account.__meta.pleroma?.chat_token) {
+      const socket = state.auth.client.shoutbox.connect(account.__meta.pleroma?.chat_token, {
+        onMessage: (message) => dispatch(importShoutboxMessage(message)),
+        onMessages: (messages) => dispatch(importShoutboxMessages(messages)),
+      });
+
+      return dispatch({
+        type: SHOUTBOX_CONNECT,
+        socket,
+      });
+    }
+  });
+};
+
+type ShoutboxAction =
+  | {
+    type: typeof SHOUTBOX_CONNECT;
+    socket: ReturnType<(InstanceType<typeof PlApiClient>)['shoutbox']['connect']>;
+  }
+  | ReturnType<typeof importShoutboxMessages>
+  | ReturnType<typeof importShoutboxMessage>;
+
+export {
+  SHOUTBOX_MESSAGES_IMPORT,
+  SHOUTBOX_MESSAGE_IMPORT,
+  SHOUTBOX_CONNECT,
+  importShoutboxMessages,
+  importShoutboxMessage,
+  connectShoutbox,
+  type ShoutboxAction,
+};

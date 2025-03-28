@@ -251,6 +251,7 @@ import type {
   GetTrendingTags,
 } from './params/trends';
 import type { PaginatedResponse } from './responses';
+import { ShoutMessage, shoutMessageSchema } from './entities/shout-message';
 
 const GROUPED_TYPES = ['favourite', 'reblog', 'emoji_reaction', 'event_reminder', 'participation_accepted', 'participation_request'];
 
@@ -285,6 +286,10 @@ class PlApiClient {
     unsubscribe: (stream: string, params?: { list?: string; tag?: string }) => void;
     close: () => void;
   };
+  #shoutSocket?: {
+    message: (text: string) => void;
+    close: () => void;
+  }
 
   /**
    *
@@ -2764,6 +2769,45 @@ class PlApiClient {
       return this.#socket;
     },
   };
+
+  public readonly shoutbox = {
+    connect: (token: string, { onMessage, onMessages }: {
+      onMessages: (messages: Array<ShoutMessage>) => void;
+      onMessage: (message: ShoutMessage) => void;
+    }) => {
+      if (this.#shoutSocket) return this.#shoutSocket;
+
+      const path = buildFullPath('/socket/websocket', this.baseURL, { token, vsn: '2.0.0' });
+
+      const ws = new WebSocket(path);
+
+      ws.onmessage = (event) => {
+        // @eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const [_, __, ___, type, payload] = JSON.parse(event.data as string);
+        if (type === 'new_msg') {
+          const message = v.parse(payload, shoutMessageSchema);
+          onMessage(message);
+        } else if (type === 'messages') {
+          const messages = v.parse(filteredArray(shoutMessageSchema), payload.messages);
+          onMessages(messages);
+        }
+      };
+
+      ws.onopen = () => {
+        ws.send(JSON.stringify(['3', '3', 'chat:public', 'phx_join', {}]));
+      };
+
+      this.#shoutSocket = {
+        message: (text: string) => {
+          ws.send(JSON.stringify({ type: 'message', text }));
+        },
+        close: () => {
+          ws.close();
+          this.#shoutSocket = undefined;
+        },
+      };
+    },
+  }
 
   public readonly notifications = {
     /**

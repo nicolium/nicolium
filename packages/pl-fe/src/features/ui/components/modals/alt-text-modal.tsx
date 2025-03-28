@@ -158,7 +158,7 @@ const Preview: React.FC<PreviewProps> = ({ media, position: [x, y], onPositionCh
       </div>
       {withFocalPoint && (
         <div
-          className='pointer-events-none absolute h-24 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white'
+          className='pointer-events-none absolute size-24 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-white'
           style={{
             top: `${y * 100}%`,
             left: `${x * 100}%`,

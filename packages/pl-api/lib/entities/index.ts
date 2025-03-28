@@ -67,6 +67,7 @@ export * from './rule';
 export * from './scheduled-status';
 export * from './scrobble';
 export * from './search';
+export * from './shout-message';
 export * from './status';
 export * from './status-edit';
 export * from './status-source';
