@@ -7,6 +7,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useInstance } from 'pl-fe/hooks/use-instance';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 
 import type { Chat } from 'pl-api';
@@ -16,6 +17,7 @@ interface IChatListShoutboxInterface {
 }
 
 const ChatListShoutbox: React.FC<IChatListShoutboxInterface> = ({ onClick }) => {
+  const instance = useInstance();
   const { logo } = usePlFeConfig();
   const messages = useAppSelector((state) => state.shoutbox.messages);
 
@@ -43,7 +45,7 @@ const ChatListShoutbox: React.FC<IChatListShoutboxInterface> = ({ onClick }) => 
           <Stack alignItems='start' className='overflow-hidden'>
             <div className='flex w-full grow items-center space-x-1'>
               <Text weight='bold' size='sm' align='left' truncate>
-                <FormattedMessage id='chat_list_item_shoutbox' defaultMessage='Instance shoutbox' />
+                <FormattedMessage id='chat_list_item_shoutbox' defaultMessage='{instance} shoutbox' values={{ instance: instance.title }} />
               </Text>
             </div>
 

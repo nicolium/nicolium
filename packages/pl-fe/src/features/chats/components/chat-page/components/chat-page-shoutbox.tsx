@@ -7,12 +7,14 @@ import HStack from 'pl-fe/components/ui/hstack';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
+import { useInstance } from 'pl-fe/hooks/use-instance';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 
 import Shoutbox from '../../shoutbox';
 
 const ChatPageShoutbox = () => {
   const history = useHistory();
+  const instance = useInstance();
   const { logo } = usePlFeConfig();
 
   return (
@@ -32,7 +34,7 @@ const ChatPageShoutbox = () => {
           <Stack alignItems='start' className='h-11 overflow-hidden'>
             <div className='flex w-full grow items-center space-x-1'>
               <Text weight='bold' size='sm' align='left' truncate>
-                <FormattedMessage id='chat_list_item_shoutbox' defaultMessage='Instance shoutbox' />
+                <FormattedMessage id='chat_list_item_shoutbox' defaultMessage='{instance} shoutbox' values={{ instance: instance.title }} />
               </Text>
             </div>
           </Stack>

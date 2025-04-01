@@ -7,6 +7,7 @@ import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
+import { useInstance } from 'pl-fe/hooks/use-instance';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 
 import Shoutbox from '../shoutbox';
@@ -15,6 +16,7 @@ import ChatPaneHeader from './chat-pane-header';
 
 const ShoutboxWindow = () => {
   const { changeScreen, isOpen, toggleChatPane } = useChatContext();
+  const instance = useInstance();
   const { logo } = usePlFeConfig();
 
   const closeChat = () => {
@@ -43,7 +45,7 @@ const ShoutboxWindow = () => {
               <Stack alignItems='start'>
                 <div className='flex grow items-center space-x-1'>
                   <Text size='sm' weight='bold' truncate>
-                    <FormattedMessage id='chat_list_item_shoutbox' defaultMessage='Instance shoutbox' />
+                    <FormattedMessage id='chat_list_item_shoutbox' defaultMessage='{instance} shoutbox' values={{ instance: instance.title }} />
                   </Text>
                 </div>
               </Stack>
