@@ -12,6 +12,7 @@ import ChatSearch from '../chat-search/chat-search';
 import ChatPaneHeader from '../chat-widget/chat-pane-header';
 import ChatWindow from '../chat-widget/chat-window';
 import ChatSearchHeader from '../chat-widget/headers/chat-search-header';
+import ShoutboxWindow from '../chat-widget/shoutbox-window';
 import { Pane } from '../ui/pane';
 
 import Blankslate from './blankslate';
@@ -27,7 +28,7 @@ const ChatPane = () => {
 
   const handleClickChat = (nextChat: Chat | 'shoutbox') => {
     if (nextChat === 'shoutbox') {
-      // changeScreen(ChatWidgetScreens.SHOUTBOX);
+      changeScreen(ChatWidgetScreens.SHOUTBOX);
     } else {
       changeScreen(ChatWidgetScreens.CHAT, nextChat.id);
     }
@@ -56,6 +57,15 @@ const ChatPane = () => {
     return (
       <Pane isOpen={isOpen}>
         <ChatWindow />
+      </Pane>
+    );
+  }
+
+  // Shoutbox
+  if (screen === ChatWidgetScreens.SHOUTBOX) {
+    return (
+      <Pane isOpen={isOpen}>
+        <ShoutboxWindow />
       </Pane>
     );
   }
