@@ -48,7 +48,6 @@ const connectShoutbox = () => (dispatch: AppDispatch, getState: () => RootState)
         onMessage: (message) => dispatch(importShoutboxMessage(message)),
         onMessages: (messages) => dispatch(importShoutboxMessages(messages)),
       });
-
       return dispatch({
         type: SHOUTBOX_CONNECT,
         socket,

@@ -2807,6 +2807,8 @@ class PlApiClient {
           this.#shoutSocket = undefined;
         },
       };
+
+      return this.#shoutSocket;
     },
   };
 
