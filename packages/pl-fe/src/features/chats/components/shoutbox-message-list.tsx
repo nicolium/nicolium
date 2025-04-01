@@ -83,15 +83,17 @@ const ShoutboxMessageList: React.FC = () => {
                     'ml-auto': isMyMessage,
                   })}
                 >
-                  <HoverAccountWrapper accountId={shoutboxMessage.author.id} element='span'>
-                    <Link to={`/@${shoutboxMessage.author.acct}`} title={shoutboxMessage.author.acct}>
-                      <Avatar
-                        src={shoutboxMessage.author.avatar}
-                        alt={shoutboxMessage.author.avatar_description}
-                        size={32}
-                      />
-                    </Link>
-                  </HoverAccountWrapper>
+                  {!isMyMessage && (
+                    <HoverAccountWrapper accountId={shoutboxMessage.author.id} element='span'>
+                      <Link to={`/@${shoutboxMessage.author.acct}`} title={shoutboxMessage.author.acct}>
+                        <Avatar
+                          src={shoutboxMessage.author.avatar}
+                          alt={shoutboxMessage.author.avatar_description}
+                          size={32}
+                        />
+                      </Link>
+                    </HoverAccountWrapper>
+                  )}
 
                   <Stack
                     space={0.5}
