@@ -2785,7 +2785,7 @@ class PlApiClient {
       ws.onmessage = (event) => {
         const [_, __, ___, type, payload] = JSON.parse(event.data as string);
         if (type === 'new_msg') {
-          const message = v.parse(payload, shoutMessageSchema);
+          const message = v.parse(shoutMessageSchema, payload);
           onMessage(message);
         } else if (type === 'messages') {
           const messages = v.parse(filteredArray(shoutMessageSchema), payload.messages);
