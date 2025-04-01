@@ -6,7 +6,7 @@ import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Stack from 'pl-fe/components/ui/stack';
 import PlaceholderChat from 'pl-fe/features/placeholder/components/placeholder-chat';
-import { useFeatures } from 'pl-fe/hooks/use-features';
+import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useChats } from 'pl-fe/queries/chats';
 
 import ChatListItem from './chat-list-item';
@@ -20,10 +20,10 @@ interface IChatList {
 }
 
 const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false }) => {
-  const { shoutbox } = useFeatures();
+  const showShoutbox = useAppSelector((state) => !state.shoutbox.isLoading);
   const { chatsQuery: { data: chats, isFetching, hasNextPage, fetchNextPage, refetch } } = useChats();
 
-  const allChats: Array<Chat | 'shoutbox'> | undefined = shoutbox ? ['shoutbox', ...(chats || [])] : chats;
+  const allChats: Array<Chat | 'shoutbox'> | undefined = showShoutbox ? ['shoutbox', ...(chats || [])] : chats;
 
   const [isNearBottom, setNearBottom] = useState<boolean>(false);
   const [isNearTop, setNearTop] = useState<boolean>(true);
