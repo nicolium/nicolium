@@ -8,7 +8,6 @@ import { useChats } from 'pl-fe/queries/chats';
 
 import ChatList from '../chat-list';
 import ChatSearch from '../chat-search/chat-search';
-import EmptyResultsBlankslate from '../chat-search/empty-results-blankslate';
 import ChatPaneHeader from '../chat-widget/chat-pane-header';
 import ChatWindow from '../chat-widget/chat-window';
 import ChatSearchHeader from '../chat-widget/headers/chat-search-header';
@@ -32,11 +31,7 @@ const ChatPane = () => {
     if (Number(chats?.length) > 0 || isLoading) {
       return (
         <Stack space={4} className='h-full grow'>
-          {(Number(chats?.length) > 0 || isLoading) ? (
-            <ChatList onClickChat={handleClickChat} />
-          ) : (
-            <EmptyResultsBlankslate />
-          )}
+          <ChatList onClickChat={handleClickChat} />
         </Stack>
       );
     } else if (chats?.length === 0) {
