@@ -1,7 +1,9 @@
 import clsx from 'clsx';
 import React, { MutableRefObject, useEffect, useState } from 'react';
 
+import { createShoutboxMessage } from 'pl-fe/actions/shoutbox';
 import Stack from 'pl-fe/components/ui/stack';
+import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 
 import { clearNativeInputValue } from './chat';
 import ShoutboxComposer from './shoutbox-composer';
@@ -15,6 +17,8 @@ interface ChatInterface {
 }
 
 const Shoutbox: React.FC<ChatInterface> = ({ inputRef, className }) => {
+  const dispatch = useAppDispatch();
+
   const [content, setContent] = useState<string>('');
   const [resetContentKey, setResetContentKey] = useState<number>(fileKeyGen());
   const [errorMessage] = useState<string>();
@@ -22,17 +26,7 @@ const Shoutbox: React.FC<ChatInterface> = ({ inputRef, className }) => {
   const isSubmitDisabled = content.length === 0;
 
   const submitMessage = () => {
-    // dispatch(shoutboxmess)
-    // createChatMessage.mutate({ chatId: chat.id, content, mediaId: attachment?.id }, {
-    //   onSuccess: () => {
-    //     setErrorMessage(undefined);
-    //   },
-    //   onError: (error: { response: PlfeResponse }, _variables, context) => {
-    //     const message = error.response?.json?.error;
-    //     setErrorMessage(message || intl.formatMessage(messages.failedToSend));
-    //     setContent(context.prevContent as string);
-    //   },
-    // });
+    dispatch(createShoutboxMessage(content));
 
     clearState();
   };

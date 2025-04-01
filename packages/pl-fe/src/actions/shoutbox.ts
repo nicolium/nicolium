@@ -27,6 +27,14 @@ const importShoutboxMessage = (message: ShoutMessage) => (dispatch: AppDispatch)
   });
 };
 
+const createShoutboxMessage = (message: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+  const socket = getState().shoutbox.socket;
+
+  if (!socket) return;
+
+  socket.message(message);
+};
+
 const connectShoutbox = () => (dispatch: AppDispatch, getState: () => RootState) => {
   const state = getState();
   const token = getMeToken(state);
@@ -70,5 +78,6 @@ export {
   importShoutboxMessages,
   importShoutboxMessage,
   connectShoutbox,
+  createShoutboxMessage,
   type ShoutboxAction,
 };

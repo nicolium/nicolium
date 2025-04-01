@@ -2775,6 +2775,7 @@ class PlApiClient {
       onMessages: (messages: Array<ShoutMessage>) => void;
       onMessage: (message: ShoutMessage) => void;
     }) => {
+      let counter = 0;
       if (this.#shoutSocket) return this.#shoutSocket;
 
       const path = buildFullPath('/socket/websocket', this.baseURL, { token, vsn: '2.0.0' });
@@ -2798,7 +2799,8 @@ class PlApiClient {
 
       this.#shoutSocket = {
         message: (text: string) => {
-          ws.send(JSON.stringify({ type: 'message', text }));
+          // guess this is meant to be incremented on each call but idk
+          ws.send(JSON.stringify(['3', `${++counter}`, 'chat:public', 'new_msg', { 'text': text }]));
         },
         close: () => {
           ws.close();

@@ -102,22 +102,6 @@ const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxC
           />
         </Stack>
       </HStack>
-
-      <HStack alignItems='center' className='h-5' space={1}>
-        {errorMessage && (
-          <>
-            <Text theme='danger' size='xs'>
-              {errorMessage}
-            </Text>
-
-            <button onClick={onSubmit} className='flex hover:underline'>
-              <Text theme='primary' size='xs' tag='span'>
-                {intl.formatMessage(messages.retry)}
-              </Text>
-            </button>
-          </>
-        )}
-      </HStack>
     </div>
   );
 });
