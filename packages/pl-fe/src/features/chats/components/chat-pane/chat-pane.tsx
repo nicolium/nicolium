@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import Stack from 'pl-fe/components/ui/stack';
 import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
+import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useChats } from 'pl-fe/queries/chats';
 
 import ChatList from '../chat-list';
@@ -19,16 +20,21 @@ import type { Chat } from 'pl-api';
 
 const ChatPane = () => {
   const { unreadChatsCount } = useStatContext();
+  const { shoutbox } = useFeatures();
 
   const { screen, changeScreen, isOpen, toggleChatPane } = useChatContext();
   const { chatsQuery: { data: chats, isLoading } } = useChats();
 
-  const handleClickChat = (nextChat: Chat) => {
-    changeScreen(ChatWidgetScreens.CHAT, nextChat.id);
+  const handleClickChat = (nextChat: Chat | 'shoutbox') => {
+    if (nextChat === 'shoutbox') {
+      // changeScreen(ChatWidgetScreens.SHOUTBOX);
+    } else {
+      changeScreen(ChatWidgetScreens.CHAT, nextChat.id);
+    }
   };
 
   const renderBody = () => {
-    if (Number(chats?.length) > 0 || isLoading) {
+    if (Number(chats?.length) > 0 || shoutbox || isLoading) {
       return (
         <Stack space={4} className='h-full grow'>
           <ChatList onClickChat={handleClickChat} />

@@ -6,17 +6,24 @@ import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Stack from 'pl-fe/components/ui/stack';
 import PlaceholderChat from 'pl-fe/features/placeholder/components/placeholder-chat';
+import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useChats } from 'pl-fe/queries/chats';
 
 import ChatListItem from './chat-list-item';
+import ChatListShoutbox from './chat-list-shoutbox';
+
+import type { Chat } from 'pl-api';
 
 interface IChatList {
-  onClickChat: (chat: any) => void;
+  onClickChat: (chat: Chat | 'shoutbox') => void;
   useWindowScroll?: boolean;
 }
 
 const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false }) => {
+  const { shoutbox } = useFeatures();
   const { chatsQuery: { data: chats, isFetching, hasNextPage, fetchNextPage, refetch } } = useChats();
+
+  const allChats: Array<Chat | 'shoutbox'> | undefined = shoutbox ? ['shoutbox', ...(chats || [])] : chats;
 
   const [isNearBottom, setNearBottom] = useState<boolean>(false);
   const [isNearTop, setNearTop] = useState<boolean>(true);
@@ -50,11 +57,11 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
           atTopStateChange={(atTop) => setNearTop(atTop)}
           atBottomStateChange={(atBottom) => setNearBottom(atBottom)}
           useWindowScroll={useWindowScroll}
-          data={chats}
+          data={allChats}
           endReached={handleLoadMore}
           itemContent={(_index, chat) => (
             <div className='px-2'>
-              <ChatListItem chat={chat} onClick={onClickChat} />
+              {chat === 'shoutbox' ? <ChatListShoutbox onClick={onClickChat} /> : <ChatListItem chat={chat} onClick={onClickChat} />}
             </div>
           )}
           components={{

@@ -19,8 +19,8 @@ const ChatPageSidebar = () => {
   const intl = useIntl();
   const history = useHistory();
 
-  const handleClickChat = (chat: Chat) => {
-    history.push(`/chats/${chat.id}`);
+  const handleClickChat = (chat: Chat | 'shoutbox') => {
+    history.push(`/chats/${chat === 'shoutbox' ? 'shoutbox' : chat.id}`);
   };
 
   const handleChatCreate = () => {

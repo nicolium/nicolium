@@ -8,6 +8,7 @@ import { fetchFilters } from 'pl-fe/actions/filters';
 import { fetchMarker } from 'pl-fe/actions/markers';
 import { expandNotifications } from 'pl-fe/actions/notifications';
 import { register as registerPushNotifications } from 'pl-fe/actions/push-notifications/registerer';
+import { connectShoutbox } from 'pl-fe/actions/shoutbox';
 import { fetchHomeTimeline } from 'pl-fe/actions/timelines';
 import { useUserStream } from 'pl-fe/api/hooks/streaming/use-user-stream';
 import SidebarNavigation from 'pl-fe/components/sidebar-navigation';
@@ -419,6 +420,10 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
 
     if (account.locked) {
       setTimeout(() => prefetchFollowRequests(client), 700);
+    }
+
+    if (features.shoutbox) {
+      dispatch(connectShoutbox());
     }
 
     setTimeout(() => {

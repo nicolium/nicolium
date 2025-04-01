@@ -1,4 +1,5 @@
 import { verifyCredentials } from './auth';
+import { importEntities } from './importer';
 import { getMeToken, getMeUrl } from './me';
 
 import type { PlApiClient, ShoutMessage } from 'pl-api';
@@ -8,17 +9,25 @@ const SHOUTBOX_MESSAGE_IMPORT = 'SHOUTBOX_MESSAGE_IMPORT' as const;
 const SHOUTBOX_MESSAGES_IMPORT = 'SHOUTBOX_MESSAGES_IMPORT' as const;
 const SHOUTBOX_CONNECT = 'SHOUTBOX_CONNECT' as const;
 
-const importShoutboxMessages = (messages: ShoutMessage[]) => ({
-  type: SHOUTBOX_MESSAGES_IMPORT,
-  messages,
-});
+const importShoutboxMessages = (messages: ShoutMessage[]) => (dispatch: AppDispatch): ShoutboxAction => {
+  dispatch(importEntities({ accounts: messages.map((message) => message.author) }));
 
-const importShoutboxMessage = (message: ShoutMessage) => ({
-  type: SHOUTBOX_MESSAGE_IMPORT,
-  message,
-});
+  return dispatch({
+    type: SHOUTBOX_MESSAGES_IMPORT,
+    messages,
+  });
+};
 
-const connectShoutbox = (dispatch: AppDispatch, getState: () => RootState) => {
+const importShoutboxMessage = (message: ShoutMessage) => (dispatch: AppDispatch): ShoutboxAction => {
+  dispatch(importEntities({ accounts: [message.author] }));
+
+  return dispatch({
+    type: SHOUTBOX_MESSAGE_IMPORT,
+    message,
+  });
+};
+
+const connectShoutbox = () => (dispatch: AppDispatch, getState: () => RootState) => {
   const state = getState();
   const token = getMeToken(state);
   const accountUrl = getMeUrl(state);
@@ -45,8 +54,14 @@ type ShoutboxAction =
     type: typeof SHOUTBOX_CONNECT;
     socket: ReturnType<(InstanceType<typeof PlApiClient>)['shoutbox']['connect']>;
   }
-  | ReturnType<typeof importShoutboxMessages>
-  | ReturnType<typeof importShoutboxMessage>;
+  | {
+    type: typeof SHOUTBOX_MESSAGE_IMPORT;
+    message: ShoutMessage;
+  }
+  | {
+    type: typeof SHOUTBOX_MESSAGES_IMPORT;
+    messages: ShoutMessage[];
+  }
 
 export {
   SHOUTBOX_MESSAGES_IMPORT,
