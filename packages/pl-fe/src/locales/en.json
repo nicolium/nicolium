@@ -273,6 +273,7 @@
   "chat_composer.unblock": "Unblock",
   "chat_list_item.blocked_you": "This user has blocked you",
   "chat_list_item.blocking": "You have blocked this user",
+  "chat_list_item_shoutbox": "Instance shoutbox",
   "chat_message_list.blocked": "You blocked this user",
   "chat_message_list.blocked_by": "You are blocked by",
   "chat_message_list.network_failure.action": "Try again",
