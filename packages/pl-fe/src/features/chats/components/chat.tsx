@@ -184,4 +184,4 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
   );
 };
 
-export { Chat as default };
+export { Chat as default, clearNativeInputValue };

@@ -172,7 +172,6 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
     </div>
   );
 
-
   /** Render a single item. */
   const renderItem = (_i: number, element: JSX.Element): JSX.Element => {
     if (showPlaceholder) {

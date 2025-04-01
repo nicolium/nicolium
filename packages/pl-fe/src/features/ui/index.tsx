@@ -252,6 +252,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       {features.chats && <WrappedRoute path='/chats' exact layout={ChatsLayout} component={ChatIndex} content={children} />}
       {features.chats && <WrappedRoute path='/chats/new' layout={ChatsLayout} component={ChatIndex} content={children} />}
       {features.chats && <WrappedRoute path='/chats/settings' layout={ChatsLayout} component={ChatIndex} content={children} />}
+      {features.shoutbox && <WrappedRoute path='/chats/shoutbox' layout={ChatsLayout} component={ChatIndex} content={children} />}
       {features.chats && <WrappedRoute path='/chats/:chatId' layout={ChatsLayout} component={ChatIndex} content={children} />}
 
       <WrappedRoute path='/follow_requests' layout={DefaultLayout} component={FollowRequests} content={children} />

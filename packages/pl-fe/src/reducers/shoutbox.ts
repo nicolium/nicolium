@@ -4,11 +4,13 @@ import type { PlApiClient, ShoutMessage } from 'pl-api';
 
 interface State {
   socket: ReturnType<(InstanceType<typeof PlApiClient>)['shoutbox']['connect']> | null;
+  isLoading: boolean;
   messages: Array<ShoutMessage>;
 }
 
 const initialState: State = {
   socket: null,
+  isLoading: true,
   messages: [],
 };
 
@@ -17,7 +19,7 @@ const shoutboxReducer = (state = initialState, action: ShoutboxAction) => {
     case SHOUTBOX_CONNECT:
       return { ...state, socket: action.socket };
     case SHOUTBOX_MESSAGES_IMPORT:
-      return { ...state, messages: action.messages };
+      return { ...state, messages: action.messages, isLoading: false };
     case SHOUTBOX_MESSAGE_IMPORT:
       return { ...state, messages: [...state.messages, action.message] };
     default:
