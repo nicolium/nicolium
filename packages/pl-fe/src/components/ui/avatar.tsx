@@ -31,7 +31,7 @@ const Avatar = (props: IAvatar) => {
   const { alt, src, size = AVATAR_SIZE, className, isCat } = props;
 
   const [color, setColor] = useState<string | undefined>(undefined);
-  const [isAvatarMissing, setIsAvatarMissing] = useState<boolean>(false);
+  const [isAvatarMissing, setIsAvatarMissing] = useState(false);
 
   const handleLoadFailure = () => setIsAvatarMissing(true);
 
@@ -59,24 +59,22 @@ const Avatar = (props: IAvatar) => {
   if (isAvatarMissing) {
     return (
       <div
-        style={{
-          width: size,
-          height: size,
-          color,
-        }}
-        className={clsx('flex items-center justify-center rounded-lg bg-gray-200 leading-[0] dark:bg-gray-900', isCat && 'avatar__cat', className)}
+        style={style}
+        className={clsx('relative rounded-lg bg-gray-200 leading-[0] dark:bg-gray-900', isCat && 'avatar__cat', className)}
       >
-        <Icon
-          src={require('@tabler/icons/outline/photo-off.svg')}
-          className='size-4 text-gray-500 dark:text-gray-700'
-        />
+        <div className='absolute inset-0 z-[1] flex items-center justify-center rounded-lg bg-gray-200 dark:bg-gray-900'>
+          <Icon
+            src={require('@tabler/icons/outline/photo-off.svg')}
+            className='size-4 text-gray-500 dark:text-gray-700'
+          />
+        </div>
       </div>
     );
   }
 
   return (
     <StillImage
-      className={clsx('rounded-lg leading-[0]', isCat && 'avatar__cat', className)}
+      className={clsx('rounded-lg leading-[0]', isCat && 'avatar__cat bg-gray-200 dark:bg-gray-900', className)}
       innerClassName='rounded-lg'
       style={style}
       src={src}
