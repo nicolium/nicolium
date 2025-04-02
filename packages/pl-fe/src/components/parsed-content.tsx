@@ -101,16 +101,12 @@ function parseContent({
   const options: HTMLReactParserOptions = {
     replace(domNode) {
       if (!(domNode instanceof Element)) {
-        const data = speakAsCat ? nyaize(domNode.data) : domNode.data;
-
         // @ts-ignore
-        if (greentext && (data.startsWith('>') || domNode.prev?.greentext)) {
+        if (greentext && (domNode.data.startsWith('>') || domNode.prev?.greentext)) {
           // @ts-ignore
           domNode.greentext = true;
-          return <span className='dark:text-accent-green text-lime-600'>{data}</span>;
+          return <span className='dark:text-accent-green text-lime-600'>{domNode.data}</span>;
         }
-
-        if (speakAsCat) return data;
 
         return;
       }
@@ -220,7 +216,9 @@ function parseContent({
 
     transform(reactNode, _domNode, index) {
       if (typeof reactNode === 'string') {
-        return <Emojify key={index} text={reactNode} emojis={emojiMap} />;
+        const text = speakAsCat ? nyaize(reactNode) : reactNode;
+
+        return <Emojify key={index} text={text} emojis={emojiMap} />;
       }
 
       return reactNode as JSX.Element;
