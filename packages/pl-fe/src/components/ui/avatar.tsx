@@ -1,11 +1,13 @@
 import clsx from 'clsx';
 import { FastAverageColor } from 'fast-average-color';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import StillImage, { IStillImage } from 'pl-fe/components/still-image';
 
 import Icon from './icon';
+
+const COLOR_CACHE = new Map<string, string>();
 
 const AVATAR_SIZE = 42;
 
@@ -33,12 +35,19 @@ const Avatar = (props: IAvatar) => {
 
   const handleLoadFailure = () => setIsAvatarMissing(true);
 
-  const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    const color = fac.getColor(e.currentTarget);
-    if (!color.error) {
-      setColor(color.hex);
+  useEffect(() => {
+    if (COLOR_CACHE.has(src)) {
+      setColor(COLOR_CACHE.get(src));
+      return;
     }
-  };
+
+    fac.getColorAsync(src).then(color => {
+      if (!color.error) {
+        COLOR_CACHE.set(src, color.hex);
+        setColor(color.hex);
+      }
+    }).catch(() => setColor(undefined));
+  }, [src]);
 
   const style: React.CSSProperties = React.useMemo(() => ({
     width: size,
@@ -73,7 +82,6 @@ const Avatar = (props: IAvatar) => {
       src={src}
       alt={alt || intl.formatMessage(messages.avatar)}
       onError={handleLoadFailure}
-      onLoad={handleLoad}
     />
   );
 };

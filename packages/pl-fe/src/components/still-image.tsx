@@ -74,7 +74,6 @@ const StillImage: React.FC<IStillImage> = ({
         className={clsx(baseClassName, {
           'invisible group-hover:visible': hoverToPlay,
         })}
-        crossOrigin='anonymous'
       />
 
       {hoverToPlay && (
