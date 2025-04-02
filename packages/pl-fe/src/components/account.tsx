@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -136,6 +136,8 @@ const Account = ({
   const overflowRef = useRef<HTMLDivElement>(null);
   const actionRef = useRef<HTMLDivElement>(null);
 
+  const [style, setStyle] = useState<React.CSSProperties>({});
+
   const me = useAppSelector((state) => state.me);
   const username = useAppSelector((state) => account ? getAcct(account, displayFqn(state)) : null);
 
@@ -174,6 +176,18 @@ const Account = ({
   };
 
   const intl = useIntl();
+
+  useLayoutEffect(() => {
+    const style: React.CSSProperties = {};
+    const actionWidth = actionRef.current?.clientWidth || 0;
+
+    if (overflowRef.current) {
+      style.maxWidth = Math.max(0, overflowRef.current.clientWidth - (withAvatar ? avatarSize + 12 : 0) - (actionWidth ? actionWidth + 12 : 0));
+    }
+
+    setStyle(style);
+  }, [overflowRef, actionRef]);
+
 
   if (!account) {
     return null;
@@ -261,7 +275,7 @@ const Account = ({
             </ProfilePopper>
           )}
 
-          <div className='grow overflow-hidden'>
+          <div className='grow overflow-hidden' style={style}>
             <ProfilePopper
               condition={showAccountHoverCard}
               wrapper={(children) => <HoverAccountWrapper accountId={account.id} element='span'>{children}</HoverAccountWrapper>}
