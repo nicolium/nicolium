@@ -102,6 +102,8 @@ const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxC
           />
         </Stack>
       </HStack>
+
+      <div className='h-5' />
     </div>
   );
 });
