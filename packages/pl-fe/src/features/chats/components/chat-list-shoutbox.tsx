@@ -55,11 +55,14 @@ const ChatListShoutbox: React.FC<IChatListShoutboxInterface> = ({ onClick }) => 
                   align='left'
                   size='sm'
                   weight='medium'
-                  theme='default'
+                  theme='muted'
                   truncate
                   className='truncate-child pointer-events-none h-5 w-full'
                 >
-                  <Text weight='bold' size='sm' align='left' truncate tag='span'>{lastMessage.author.display_name || `@${lastMessage.author.username}`}: </Text>
+                  <Text weight='bold' size='sm' align='left' theme='muted' truncate tag='span'>
+                    {lastMessage.author.display_name || `@${lastMessage.author.username}`}:
+                    {' '}
+                  </Text>
                   <ParsedContent html={lastMessage.text} />
                 </Text>
               </>
