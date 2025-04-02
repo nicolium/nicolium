@@ -8,6 +8,8 @@ interface IStillImage {
   alt?: string;
   /** Extra class names for the outer <div> container. */
   className?: string;
+  /** Extra class names for the inner <img> element. */
+  innerClassName?: string;
   /** URL to the image */
   src: string;
   /** Extra CSS styles on the outer <div> element. */
@@ -18,6 +20,8 @@ interface IStillImage {
   showExt?: boolean;
   /** Callback function if the image fails to load */
   onError?(): void;
+  /** Callback function if the image loads successfully */
+  onLoad?: React.ReactEventHandler<HTMLImageElement>;
   /** Treat as animated, no matter the extension */
   isGif?: boolean;
   /** Specify that the group is defined by the parent */
@@ -26,7 +30,7 @@ interface IStillImage {
 
 /** Renders images on a canvas, only playing GIFs if autoPlayGif is enabled. */
 const StillImage: React.FC<IStillImage> = ({
-  alt, className, src, style, letterboxed = false, showExt = false, onError, isGif, noGroup,
+  alt, className, innerClassName, src, style, letterboxed = false, showExt = false, onError, onLoad, isGif, noGroup,
 }) => {
   const { autoPlayGif } = useSettings();
 
@@ -37,16 +41,20 @@ const StillImage: React.FC<IStillImage> = ({
     src && !autoPlayGif && ((isGif) || src.endsWith('.gif') || src.startsWith('blob:'))
   );
 
-  const handleImageLoad = () => {
+  const handleImageLoad: React.ReactEventHandler<HTMLImageElement> = (e) => {
     if (hoverToPlay && canvas.current && img.current) {
       canvas.current.width = img.current.naturalWidth;
       canvas.current.height = img.current.naturalHeight;
       canvas.current.getContext('2d')?.drawImage(img.current, 0, 0);
     }
+
+    if (onLoad) {
+      onLoad(e);
+    }
   };
 
   /** ClassNames shared between the `<img>` and `<canvas>` elements. */
-  const baseClassName = clsx('block size-full', {
+  const baseClassName = clsx('block size-full', innerClassName, {
     'object-contain': letterboxed,
     'object-cover': !letterboxed,
   });
@@ -54,7 +62,7 @@ const StillImage: React.FC<IStillImage> = ({
   return (
     <div
       data-testid='still-image-container'
-      className={clsx(className, 'relative isolate overflow-hidden', { 'group': !noGroup })}
+      className={clsx(className, 'relative isolate', { 'group': !noGroup })}
       style={style}
     >
       <img
@@ -66,6 +74,7 @@ const StillImage: React.FC<IStillImage> = ({
         className={clsx(baseClassName, {
           'invisible group-hover:visible': hoverToPlay,
         })}
+        crossOrigin='anonymous'
       />
 
       {hoverToPlay && (

@@ -91,6 +91,7 @@ const Report: React.FC<IReport> = ({ id }) => {
             alt={targetAccount.avatar_description}
             size={32}
             className='overflow-hidden'
+            isCat={targetAccount.is_cat}
           />
         </Link>
       </HoverAccountWrapper>

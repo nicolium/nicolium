@@ -70,7 +70,7 @@ const HomeLayout: React.FC<IHomeLayout> = ({ children }) => {
             <CardBody>
               <HStack alignItems='start' space={2}>
                 <Link to={`/@${acct}`}>
-                  <Avatar src={avatar} alt={account?.avatar_description} size={42} />
+                  <Avatar src={avatar} alt={account?.avatar_description} isCat={account?.is_cat} size={42} />
                 </Link>
 
                 <div className='w-full translate-y-0.5'>

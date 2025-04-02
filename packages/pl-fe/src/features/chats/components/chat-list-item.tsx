@@ -94,6 +94,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
             alt={chat.account.avatar_description}
             size={40}
             className='flex-none'
+            isCat={chat.account.is_cat}
           />
 
           <Stack alignItems='start' className='overflow-hidden'>

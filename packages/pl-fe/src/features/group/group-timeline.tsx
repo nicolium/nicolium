@@ -77,7 +77,7 @@ const GroupTimeline: React.FC<IGroupTimeline> = (props) => {
             })}
           >
             <Link to={`/@${account.acct}`}>
-              <Avatar src={account.avatar} alt={account.avatar_description} size={42} />
+              <Avatar src={account.avatar} alt={account.avatar_description} size={42} isCat={account.is_cat} />
             </Link>
 
             <ComposeForm

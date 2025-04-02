@@ -27,6 +27,7 @@ const AvatarStack: React.FC<IAvatarStack> = ({ accountIds, limit = 3 }) => {
             src={account.avatar}
             alt={account.avatar_description}
             size={20}
+            isCat={account.is_cat}
           />
         </div>
       ))}
