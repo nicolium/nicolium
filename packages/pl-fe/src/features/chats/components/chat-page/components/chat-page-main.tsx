@@ -128,7 +128,7 @@ const ChatPageMain = () => {
   return (
     <Stack className='h-full overflow-hidden'>
       <HStack alignItems='center' justifyContent='between' space={2} className='w-full p-4'>
-        <HStack alignItems='center' space={2} className='overflow-hidden'>
+        <HStack alignItems='center' space={2}>
           <HStack alignItems='center'>
             <IconButton
               src={require('@tabler/icons/outline/arrow-left.svg')}
