@@ -136,7 +136,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
 
         <HStack alignItems='center' space={2}>
           {features.chatsDelete && (
-            <div className='hidden text-gray-600 hover:text-gray-100 group-hover:block'>
+            <div className='max-w-0 overflow-hidden text-gray-600 hover:text-gray-100 group-hover:max-w-full'>
               <DropdownMenu items={menu}>
                 <IconButton
                   src={require('@tabler/icons/outline/dots.svg')}
