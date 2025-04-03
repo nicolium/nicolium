@@ -178,14 +178,28 @@ const Account = ({
   const intl = useIntl();
 
   useLayoutEffect(() => {
-    const style: React.CSSProperties = {};
-    const actionWidth = actionRef.current?.clientWidth || 0;
+    const onResize = () => {
+      const style: React.CSSProperties = {};
+      const actionWidth = actionRef.current?.clientWidth || 0;
+
+      if (overflowRef.current) {
+        style.maxWidth = Math.max(0, overflowRef.current.clientWidth - (withAvatar ? avatarSize + 12 : 0) - (actionWidth ? actionWidth + 12 : 0));
+      }
+
+      setStyle(style);
+    };
+
+    onResize();
 
     if (overflowRef.current) {
-      style.maxWidth = Math.max(0, overflowRef.current.clientWidth - (withAvatar ? avatarSize + 12 : 0) - (actionWidth ? actionWidth + 12 : 0));
-    }
+      const targetElement = overflowRef.current;
+      const resizeObserver = new ResizeObserver(onResize);
+      resizeObserver.observe(targetElement);
 
-    setStyle(style);
+      return () => {
+        resizeObserver.unobserve(targetElement);
+      };
+    }
   }, [overflowRef, actionRef]);
 
 
