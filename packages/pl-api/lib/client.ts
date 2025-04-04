@@ -1581,14 +1581,27 @@ class PlApiClient {
      * Imports your mutes.
      *
      * Requires features{@link Features['importMutes']}.
+     * `overwrite` mode requires features{@link Features['importOverwrite']}.
      * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#apipleromamutes_import}
      */
-    importMutes: async (list: File | string) => {
-      const response = await this.request('/api/pleroma/mutes_import', {
-        method: 'POST',
-        body: { list },
-        contentType: '',
-      });
+    importMutes: async (list: File | string, mode?: 'merge' | 'overwrite') => {
+      let response;
+
+      switch (this.features.version.software) {
+        case GOTOSOCIAL:
+          response = await this.request('/api/v1/import', {
+            method: 'POST',
+            body: { data: list, type: 'blocks', mode },
+            contentType: '',
+          });
+          break;
+        default:
+          response = await this.request('/api/pleroma/mutes_import', {
+            method: 'POST',
+            body: { list },
+            contentType: '',
+          });
+      }
 
       return response.json;
     },

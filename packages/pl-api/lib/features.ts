@@ -837,9 +837,11 @@ const getFeatures = (instance: Instance) => {
     /**
      * Import a .csv file with a list of muted users.
      * @see POST /api/pleroma/mutes_import
+     * @see POST /api/v1/import
      */
     importMutes: any([
       v.software === AKKOMA,
+      v.software === GOTOSOCIAL && gte(v.version, '0.19.0'),
       v.software === PLEROMA,
     ]),
 

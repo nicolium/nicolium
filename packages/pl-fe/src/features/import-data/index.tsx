@@ -42,7 +42,7 @@ const ImportData = () => {
     <Column label={intl.formatMessage(messages.heading)}>
       {features.importFollows && <DataImporter action={importFollows} messages={followMessages} allowOverwrite={features.importOverwrite} />}
       {features.importBlocks && <DataImporter action={importBlocks} messages={blockMessages} allowOverwrite={features.importOverwrite} />}
-      {features.importMutes && <DataImporter action={importMutes} messages={muteMessages} />}
+      {features.importMutes && <DataImporter action={importMutes} messages={muteMessages} allowOverwrite={features.importOverwrite} />}
     </Column>
   );
 };
