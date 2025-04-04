@@ -123,6 +123,10 @@ interface AccountCredentials {
   enable_rss?: boolean;
   /** GoToSocial: whether to publicly display followers/follows. */
   hide_collections?: boolean;
+  /** Whether the user is a cat. */
+  is_cat?: boolean;
+  /** Whether the user speaks as a cat. */
+  speak_as_cat?: boolean;
 }
 
 /** Convert an account into an update_credentials request object. */
@@ -130,7 +134,7 @@ const accountToCredentials = (account: Account): AccountCredentials => {
   const hideNetwork = hidesNetwork(account);
 
   return {
-    ...(pick(account, ['discoverable', 'bot', 'display_name', 'locked', 'location', 'avatar_description', 'header_description', 'enable_rss', 'hide_collections'])),
+    ...(pick(account, ['discoverable', 'bot', 'display_name', 'locked', 'location', 'avatar_description', 'header_description', 'enable_rss', 'hide_collections', 'is_cat', 'speak_as_cat'])),
     note: account.__meta.source?.note ?? '',
     fields_attributes: [...account.__meta.source?.fields ?? []],
     stranger_notifications: account.__meta.pleroma?.notification_settings?.block_from_strangers === true,
@@ -426,6 +430,30 @@ const EditProfile: React.FC = () => {
                 onChange={handleCheckboxChange('enable_rss')}
               />
             </ListItem>
+          )}
+
+          {features.accountIsCat && (
+            <>
+              <ListItem
+                label={<FormattedMessage id='edit_profile.fields.is_cat_label' defaultMessage='The user is a cat' />}
+                hint={<FormattedMessage id='edit_profile.hints.is_cat' defaultMessage='Mark this account as a cat.' />}
+              >
+                <Toggle
+                  checked={data.is_cat}
+                  onChange={handleCheckboxChange('is_cat')}
+                />
+              </ListItem>
+
+              <ListItem
+                label={<FormattedMessage id='edit_profile.fields.speak_as_cat_label' defaultMessage='The user speaks as a cat' />}
+                hint={<FormattedMessage id='edit_profile.hints.speak_as_cat' defaultMessage='Your posts will get nyanified.' />}
+              >
+                <Toggle
+                  checked={data.speak_as_cat}
+                  onChange={handleCheckboxChange('speak_as_cat')}
+                />
+              </ListItem>
+            </>
           )}
         </List>
 

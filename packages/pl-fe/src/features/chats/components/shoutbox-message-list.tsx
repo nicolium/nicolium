@@ -85,7 +85,7 @@ const ShoutboxMessageList: React.FC = () => {
                 >
                   {!isMyMessage && (
                     <HoverAccountWrapper accountId={shoutboxMessage.author.id} element='span'>
-                      <Link to={`/@${shoutboxMessage.author.acct}`} title={shoutboxMessage.author.acct}>
+                      <Link className='mb-0.5' to={`/@${shoutboxMessage.author.acct}`} title={shoutboxMessage.author.acct}>
                         <Avatar
                           src={shoutboxMessage.author.avatar}
                           alt={shoutboxMessage.author.avatar_description}
@@ -116,7 +116,6 @@ const ShoutboxMessageList: React.FC = () => {
                             // '!bg-transparent !p-0 emoji-lg': isOnlyEmoji,
                           })
                         }
-                        // ref={setBubbleRef}
                         tabIndex={0}
                       >
                         <Text size='sm' theme='inherit' className='break-word-nested'>

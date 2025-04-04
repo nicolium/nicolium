@@ -2775,7 +2775,8 @@ class PlApiClient {
       onMessages: (messages: Array<ShoutMessage>) => void;
       onMessage: (message: ShoutMessage) => void;
     }) => {
-      let counter = 0;
+      let counter = 2;
+      let intervalId: NodeJS.Timeout;
       if (this.#shoutSocket) return this.#shoutSocket;
 
       const path = buildFullPath('/socket/websocket', this.baseURL, { token, vsn: '2.0.0' });
@@ -2794,7 +2795,15 @@ class PlApiClient {
       };
 
       ws.onopen = () => {
-        ws.send(JSON.stringify(['3', '3', 'chat:public', 'phx_join', {}]));
+        ws.send(JSON.stringify(['3', `${++counter}`, 'chat:public', 'phx_join', {}]));
+
+        intervalId = setInterval(() => {
+          ws.send(JSON.stringify([null, `${++counter}`, 'phoenix', 'heartbeat', {}]));
+        }, 5000);
+      };
+
+      ws.onclose = () => {
+        clearInterval(intervalId);
       };
 
       this.#shoutSocket = {
@@ -2805,6 +2814,7 @@ class PlApiClient {
         close: () => {
           ws.close();
           this.#shoutSocket = undefined;
+          clearInterval(intervalId);
         },
       };
 

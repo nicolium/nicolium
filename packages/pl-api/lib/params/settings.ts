@@ -120,6 +120,11 @@ interface UpdateCredentialsParams {
    * Requires features{@link Features['accountEnableRss']}.
   */
   enable_rss?: boolean;
+
+  /** Whether the user is a cat */
+  is_cat?: boolean;
+  /** Whether the user speaks as a cat */
+  speak_as_cat?: boolean;
 }
 
 /**

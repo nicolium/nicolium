@@ -220,6 +220,8 @@ const getFeatures = (instance: Instance) => {
       v.software === PLEROMA && gte(v.version, '2.5.0'),
     ]),
 
+    accountIsCat: instance.api_versions['cats.pleroma.pl-api'] >= 1,
+
     /**
      * Ability to set one's location on their profile.
      * @see PATCH /api/v1/accounts/update_credentials
