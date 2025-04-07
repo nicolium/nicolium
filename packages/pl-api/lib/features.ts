@@ -251,6 +251,13 @@ const getFeatures = (instance: Instance) => {
     ]),
 
     /**
+     * @see PATCH /api/v1/accounts/update_credentials
+     */
+    accountMentionPolicy: any([
+      v.software === MITRA,
+    ]),
+
+    /**
      * Move followers to a different ActivityPub account.
      * @see POST /api/pleroma/move_account
      */

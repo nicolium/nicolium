@@ -54,8 +54,8 @@ const preprocessAccount = v.transform((account: any) => {
     ...(account.role?.permissions ? {
       is_admin: (account.role?.permissions & 0x1) === 0x1,
     } : {}),
+    ap_id: account.pleroma?.ap_id ?? account.actor_id,
     ...(pick(account.pleroma || {}, [
-      'ap_id',
       'background_image',
       'relationship',
       'is_moderator',
@@ -157,6 +157,9 @@ const baseAccountSchema = v.object({
   domain: v.fallback(v.string(), ''),
 
   pronouns: v.fallback(v.array(v.string()), []),
+
+  mention_policy: v.fallback(v.picklist(['none', 'only_known', 'only_followers']), 'none'),
+  subscribers_count: v.fallback(v.number(), 0),
 
   is_cat: v.fallback(v.boolean(), false),
   speak_as_cat: v.fallback(v.boolean(), false),

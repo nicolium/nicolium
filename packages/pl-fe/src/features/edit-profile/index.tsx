@@ -26,6 +26,8 @@ import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import toast from 'pl-fe/toast';
 import { isDefaultAvatar, isDefaultHeader } from 'pl-fe/utils/accounts';
 
+import { SelectDropdown } from '../forms';
+
 import AvatarPicker from './components/avatar-picker';
 import HeaderPicker from './components/header-picker';
 
@@ -55,6 +57,9 @@ const messages = defineMessages({
   displayNamePlaceholder: { id: 'edit_profile.fields.display_name_placeholder', defaultMessage: 'Name' },
   locationPlaceholder: { id: 'edit_profile.fields.location_placeholder', defaultMessage: 'Location' },
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
+  mentionPolicyNone: { id: 'edit_profile.fields.mention_policy.none', defaultMessage: 'Everybody' },
+  mentionPolicyOnlyKnown: { id: 'edit_profile.fields.mention_policy.only_known', defaultMessage: 'Everybody except new accounts' },
+  mentionPolicyOnlyContacts: { id: 'edit_profile.fields.mention_policy.only_contacts', defaultMessage: 'People I follow and my followers' },
 });
 
 /**
@@ -127,6 +132,8 @@ interface AccountCredentials {
   is_cat?: boolean;
   /** Whether the user speaks as a cat. */
   speak_as_cat?: boolean;
+  /** Mention policy */
+  mention_policy?: string;
 }
 
 /** Convert an account into an update_credentials request object. */
@@ -134,7 +141,7 @@ const accountToCredentials = (account: Account): AccountCredentials => {
   const hideNetwork = hidesNetwork(account);
 
   return {
-    ...(pick(account, ['discoverable', 'bot', 'display_name', 'locked', 'location', 'avatar_description', 'header_description', 'enable_rss', 'hide_collections', 'is_cat', 'speak_as_cat'])),
+    ...(pick(account, ['discoverable', 'bot', 'display_name', 'locked', 'location', 'avatar_description', 'header_description', 'enable_rss', 'hide_collections', 'is_cat', 'speak_as_cat', 'mention_policy'])),
     note: account.__meta.source?.note ?? '',
     fields_attributes: [...account.__meta.source?.fields ?? []],
     stranger_notifications: account.__meta.pleroma?.notification_settings?.block_from_strangers === true,
@@ -454,6 +461,25 @@ const EditProfile: React.FC = () => {
                 />
               </ListItem>
             </>
+          )}
+
+          {features.accountMentionPolicy && (
+            <ListItem
+              label={<FormattedMessage id='preferences.fields.mention_policy_label' defaultMessage='Accept mentions from' />}
+              hint={<FormattedMessage id='preferences.hints.mention_policy' defaultMessage='Applies to direct messages and public posts' />}
+            >
+              <SelectDropdown
+                key={data.mention_policy ? 'true' : 'false'}
+                className='max-w-fit'
+                items={{
+                  none: intl.formatMessage(messages.mentionPolicyNone),
+                  only_known: intl.formatMessage(messages.mentionPolicyOnlyKnown),
+                  only_contacts: intl.formatMessage(messages.mentionPolicyOnlyContacts),
+                }}
+                defaultValue={data.mention_policy}
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => handleFieldChange('mention_policy')(event.target.value)}
+              />
+            </ListItem>
           )}
         </List>
 

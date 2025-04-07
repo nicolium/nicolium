@@ -133,6 +133,12 @@ interface UpdateCredentialsParams {
   is_cat?: boolean;
   /** Whether the user speaks as a cat */
   speak_as_cat?: boolean;
+
+  /**
+   * Mention policy
+   * Required features{@link Features['accountMentionPolicy']}.
+   */
+  mention_policy?: 'none' | 'only_known' | 'only_contacts';
 }
 
 /**
