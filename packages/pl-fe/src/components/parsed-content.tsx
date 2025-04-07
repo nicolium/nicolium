@@ -18,6 +18,8 @@ import StatusMention from './status-mention';
 
 import type { CustomEmoji, Mention } from 'pl-api';
 
+const GREENTEXT_CLASS = 'dark:text-accent-green text-lime-600';
+
 const nodesToText = (nodes: Array<DOMNode>): string =>
   nodes.map(node => node.type === 'text' ? node.data : node.type === 'tag' ? nodesToText(node.children as Array<DOMNode>) : '').join('');
 
@@ -105,7 +107,7 @@ function parseContent({
         if (greentext && (domNode.data.startsWith('>') || domNode.prev?.greentext)) {
           // @ts-ignore
           domNode.greentext = true;
-          return <span className='dark:text-accent-green text-lime-600'>{domNode.data}</span>;
+          return <span className={GREENTEXT_CLASS}>{domNode.data}</span>;
         }
 
         return;
@@ -121,7 +123,7 @@ function parseContent({
 
       // @ts-ignore
       if (domNode.name !== 'br' && domNode.prev?.greentext) {
-        domNode.attribs.class += ' greentext';
+        domNode.attribs.class = `${domNode.attribs.class || ''} ${GREENTEXT_CLASS}`;
         // @ts-ignore
         domNode.greentext = true;
       }
@@ -131,7 +133,7 @@ function parseContent({
 
         // @ts-ignore
         if (domNode.prev?.greentext) {
-          classes.push('greentext');
+          classes.push(GREENTEXT_CLASS);
           // @ts-ignore
           domNode.greentext = true;
         }
