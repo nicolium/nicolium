@@ -1070,6 +1070,11 @@ const getFeatures = (instance: Instance) => {
     /**
      * @see GET /api/v1/notifications
      */
+    notificationsExcludeTypes: v.software !== MITRA,
+
+    /**
+     * @see GET /api/v1/notifications
+     */
     notificationsExcludeVisibilities: any([
       v.software === AKKOMA,
       v.software === PLEROMA,

@@ -1,7 +1,7 @@
 /**
  * @category Request params
  */
-interface CreateAccountParams {
+type CreateAccountParams = {
   /** String. The desired username for the account */
   username: string;
   /** String. The email address to be used for login */
@@ -31,7 +31,15 @@ interface CreateAccountParams {
   domain?: string;
 
   accepts_email_list?: boolean;
-}
+
+  /** Invite code */
+  invite_code?: string;
+} & ({
+  /** EIP-4361 message */
+  message: string;
+  /** EIP-4361 signature (required if message is present) */
+  signature: string;
+} | {})
 
 /**
  * @category Request params

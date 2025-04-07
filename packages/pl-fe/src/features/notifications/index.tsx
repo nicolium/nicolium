@@ -17,6 +17,7 @@ import Portal from 'pl-fe/components/ui/portal';
 import PlaceholderNotification from 'pl-fe/features/placeholder/components/placeholder-notification';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 
 import FilterBar from './components/filter-bar';
@@ -54,10 +55,11 @@ const getNotifications = createSelector([
 
 const Notifications = () => {
   const dispatch = useAppDispatch();
+  const features = useFeatures();
   const intl = useIntl();
   const settings = useSettings();
 
-  const showFilterBar = settings.notifications.quickFilter.show;
+  const showFilterBar = (features.notificationsExcludeTypes || features.notificationsIncludeTypes) && settings.notifications.quickFilter.show;
   const activeFilter = settings.notifications.quickFilter.active;
   const [topNotification, setTopNotification] = useState<string>();
   const { queuedNotificationCount, displayedNotifications } = useAppSelector(state => getNotifications(state, topNotification));
@@ -188,7 +190,7 @@ const Notifications = () => {
   );
 
   return (
-    <Column label={intl.formatMessage(messages.title)} withHeader={false}>
+    <Column label={intl.formatMessage(messages.title)} withHeader={!showFilterBar}>
       {filterBarContainer}
 
       <Portal>
