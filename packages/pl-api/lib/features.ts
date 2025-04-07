@@ -195,6 +195,7 @@ const getFeatures = (instance: Instance) => {
      */
     accountByUsername: any([
       v.software === AKKOMA,
+      v.software === MITRA,
       v.software === PLEROMA,
     ]),
 
