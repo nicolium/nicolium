@@ -833,14 +833,23 @@ const getFeatures = (instance: Instance) => {
     ]),
 
     /**
+     * Move followers from remote alias.
+     * @see POST /api/v1/settings/import_followers
+     */
+    importFollowers: any([
+      v.software === MITRA && gte(v.version, '2.18.0'),
+    ]),
+
+    /**
      * Import a .csv file with a list of followed users.
      * @see POST /api/pleroma/follow_import
+     * @see POST /api/v1/settings/import_follows
      * @see POST /api/v1/import
-
      */
     importFollows: any([
       v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
+      v.software === MITRA && gte(v.version, '1.10.0'),
       v.software === PLEROMA,
     ]),
 

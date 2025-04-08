@@ -1537,6 +1537,12 @@ class PlApiClient {
             contentType: '',
           });
           break;
+        case MITRA:
+          response = await this.request('/api/v1/settings/import_follows', {
+            method: 'POST',
+            body: { follows_csv: typeof list === 'string' ? list : await list.text() },
+          });
+          break;
         default:
           response = await this.request('/api/pleroma/follow_import', {
             method: 'POST',
@@ -1544,6 +1550,20 @@ class PlApiClient {
             contentType: '',
           });
       }
+
+      return response.json;
+    },
+
+    /**
+    * Move followers from remote alias. (experimental?)
+    *
+    * Requires features{@link Features['importFollowers']}.
+    */
+    importFollowers: async (list: File | string, actorId: string) => {
+      const response = await this.request('/api/v1/settings/import_followers', {
+        method: 'POST',
+        body: { from_actor_id: actorId, followers_csv: typeof list === 'string' ? list : await list.text() },
+      });
 
       return response.json;
     },
