@@ -15,8 +15,6 @@ import Preferences from '../preferences';
 
 import MessagesSettings from './components/messages-settings';
 
-const any = (arr: Array<any>): boolean => arr.some(Boolean);
-
 const messages = defineMessages({
   accountAliases: { id: 'navigation_bar.account_aliases', defaultMessage: 'Account aliases' },
   accountMigration: { id: 'settings.account_migration', defaultMessage: 'Move account' },
@@ -140,51 +138,35 @@ const Settings = () => {
           <Preferences />
         </CardBody>
 
-        {any([
-          features.importBlocks,
-          features.importFollows,
-          features.importMutes,
-          features.exportData,
-          features.accountBackups,
-          features.federating && features.accountMoving,
-          features.federating && features.manageAccountAliases,
-          features.deleteAccount,
-          features.deleteAccountWithoutPassword,
-        ]) && (
-          <>
-            <CardHeader>
-              <CardTitle title={intl.formatMessage(messages.other)} />
-            </CardHeader>
+        <CardHeader>
+          <CardTitle title={intl.formatMessage(messages.other)} />
+        </CardHeader>
 
-            <CardBody>
-              <List>
-                {(features.importBlocks || features.importFollows || features.importMutes) && (
-                  <ListItem label={intl.formatMessage(messages.importData)} to='/settings/import' />
-                )}
+        <CardBody>
+          <List>
+            {(features.importBlocks || features.importFollows || features.importMutes) && (
+              <ListItem label={intl.formatMessage(messages.importData)} to='/settings/import' />
+            )}
 
-                {features.exportData && (
-                  <ListItem label={intl.formatMessage(messages.exportData)} to='/settings/export' />
-                )}
+            <ListItem label={intl.formatMessage(messages.exportData)} to='/settings/export' />
 
-                {features.accountBackups && (
-                  <ListItem label={intl.formatMessage(messages.backups)} to='/settings/backups' />
-                )}
+            {features.accountBackups && (
+              <ListItem label={intl.formatMessage(messages.backups)} to='/settings/backups' />
+            )}
 
-                <ListItem label={intl.formatMessage(messages.developers)} to='/developers' />
+            <ListItem label={intl.formatMessage(messages.developers)} to='/developers' />
 
-                {features.federating && (features.accountMoving ? (
-                  <ListItem label={intl.formatMessage(messages.accountMigration)} to='/settings/migration' />
-                ) : features.manageAccountAliases && (
-                  <ListItem label={intl.formatMessage(messages.accountAliases)} to='/settings/aliases' />
-                ))}
+            {features.federating && (features.accountMoving ? (
+              <ListItem label={intl.formatMessage(messages.accountMigration)} to='/settings/migration' />
+            ) : features.manageAccountAliases && (
+              <ListItem label={intl.formatMessage(messages.accountAliases)} to='/settings/aliases' />
+            ))}
 
-                {features.deleteAccount || features.deleteAccountWithoutPassword && (
-                  <ListItem label={<Text theme='danger'>{intl.formatMessage(messages.deleteAccount)}</Text>} to='/settings/account' />
-                )}
-              </List>
-            </CardBody>
-          </>
-        )}
+            {features.deleteAccount || features.deleteAccountWithoutPassword && (
+              <ListItem label={<Text theme='danger'>{intl.formatMessage(messages.deleteAccount)}</Text>} to='/settings/account' />
+            )}
+          </List>
+        </CardBody>
       </Card>
     </Column>
   );

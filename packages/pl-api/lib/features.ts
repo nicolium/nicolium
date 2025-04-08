@@ -618,9 +618,6 @@ const getFeatures = (instance: Instance) => {
      */
     events: instance.api_versions['events.pleroma.pl-api'] >= 1,
 
-    /** Whether to allow exporting follows/blocks/mutes to CSV by paginating the API. */
-    exportData: true,
-
     /**
      * Export followers to CSV file
      * @see GET /api/v1/settings/export_followers

@@ -299,7 +299,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       <WrappedRoute path='/circle' layout={DefaultLayout} component={Circle} content={children} />
 
       <WrappedRoute path='/settings/profile' layout={DefaultLayout} component={EditProfile} content={children} />
-      {features.exportData && <WrappedRoute path='/settings/export' layout={DefaultLayout} component={ExportData} content={children} />}
+      <WrappedRoute path='/settings/export' layout={DefaultLayout} component={ExportData} content={children} />
       {(features.importBlocks || features.importFollows || features.importMutes) && <WrappedRoute path='/settings/import' layout={DefaultLayout} component={ImportData} content={children} />}
       {features.manageAccountAliases && <WrappedRoute path='/settings/aliases' layout={DefaultLayout} component={Aliases} content={children} />}
       {features.accountMoving && <WrappedRoute path='/settings/migration' layout={DefaultLayout} component={Migration} content={children} />}
