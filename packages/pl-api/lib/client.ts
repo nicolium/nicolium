@@ -1661,7 +1661,7 @@ class PlApiClient {
       });
 
       return response.data;
-    }
+    },
 
     /**
      * Updates user notification settings
