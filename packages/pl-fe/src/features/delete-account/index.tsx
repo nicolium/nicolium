@@ -17,8 +17,8 @@ import toast from 'pl-fe/toast';
 const messages = defineMessages({
   passwordFieldLabel: { id: 'security.fields.password.label', defaultMessage: 'Password' },
   deleteHeader: { id: 'security.headers.delete', defaultMessage: 'Delete account' },
-  deleteText: { id: 'security.text.delete', defaultMessage: 'To delete your account, enter your password then click Delete Account. This is a permanent action that cannot be undone. Your account will be destroyed from this server, and a deletion request will be sent to other servers. It\'s not guaranteed that all servers will purge your account.' },
-  localDeleteText: { id: 'security.text.delete.local', defaultMessage: 'To delete your account, enter your password then click Delete Account. This is a permanent action that cannot be undone.' },
+  deleteText: { id: 'security.text.delete', defaultMessage: 'To delete your account, enter your password and then click Delete account. This is a permanent action that cannot be undone. Your account will be destroyed from this server, and a deletion request will be sent to other servers. It\'s not guaranteed that all servers will purge your account.' },
+  localDeleteText: { id: 'security.text.delete.local', defaultMessage: 'To delete your account, enter your password and then click Delete account. This is a permanent action that cannot be undone.' },
   deleteSubmit: { id: 'security.submit.delete', defaultMessage: 'Delete account' },
   deleteAccountSuccess: { id: 'security.delete_account.success', defaultMessage: 'Account successfully deleted.' },
   deleteAccountFail: { id: 'security.delete_account.fail', defaultMessage: 'Account deletion failed.' },
@@ -65,14 +65,16 @@ const DeleteAccount = () => {
           </Text>
 
           <Form onSubmit={handleSubmit}>
-            <FormGroup labelText={intl.formatMessage(messages.passwordFieldLabel)}>
-              <Input
-                type='password'
-                name='password'
-                onChange={handleInputChange}
-                value={password}
-              />
-            </FormGroup>
+            {!features.deleteAccountWithoutPassword && (
+              <FormGroup labelText={intl.formatMessage(messages.passwordFieldLabel)}>
+                <Input
+                  type='password'
+                  name='password'
+                  onChange={handleInputChange}
+                  value={password}
+                />
+              </FormGroup>
+            )}
 
             <FormActions>
               <Button type='submit' theme='danger' disabled={isLoading}>

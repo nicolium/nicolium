@@ -511,6 +511,11 @@ const getFeatures = (instance: Instance) => {
     ]),
 
     /**
+     * @see POST /api/v1/settings/delete_account
+     */
+    deleteAccountWithoutPassword: v.software === MITRA && gte(v.version, '2.14.0'),
+
+    /**
      * Allow to register on a given domain
      * @see GET /api/v1/pleroma/admin/domains
      * @see POST /api/v1/pleroma/admin/domains

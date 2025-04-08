@@ -1423,6 +1423,17 @@ class PlApiClient {
     },
 
     /**
+     * Requires features{@link Features['deleteAccountWithoutPassword']}.
+     */
+    deleteAccountWithoutPassword: async () => {
+      const response = await this.request('/api/v1/settings/delete_account', {
+        method: 'POST',
+      });
+
+      return response.json as {};
+    },
+
+    /**
      * Disable an account
      *
      * Requires features{@link Features['disableAccount']}.

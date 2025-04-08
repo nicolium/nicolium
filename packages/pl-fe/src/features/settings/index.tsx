@@ -149,6 +149,7 @@ const Settings = () => {
           features.federating && features.accountMoving,
           features.federating && features.manageAccountAliases,
           features.deleteAccount,
+          features.deleteAccountWithoutPassword,
         ]) && (
           <>
             <CardHeader>
@@ -177,7 +178,7 @@ const Settings = () => {
                   <ListItem label={intl.formatMessage(messages.accountAliases)} to='/settings/aliases' />
                 ))}
 
-                {features.deleteAccount && (
+                {features.deleteAccount || features.deleteAccountWithoutPassword && (
                   <ListItem label={<Text theme='danger'>{intl.formatMessage(messages.deleteAccount)}</Text>} to='/settings/account' />
                 )}
               </List>
