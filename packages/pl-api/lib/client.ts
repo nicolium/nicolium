@@ -2151,6 +2151,8 @@ class PlApiClient {
      * Boost a status
      * Reshare a status on your own profile.
      * @see {@link https://docs.joinmastodon.org/methods/statuses/#reblog}
+     *
+     * Specifying reblog visibility requires features{@link Features['reblogVisibility']}.
      */
     reblogStatus: async (statusId: string, visibility?: string) => {
       const response = await this.request(`/api/v1/statuses/${statusId}/reblog`, { method: 'POST', body: { visibility } });

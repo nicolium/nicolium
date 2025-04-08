@@ -10,7 +10,6 @@ import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { makeGetStatus } from 'pl-fe/selectors';
 
 import type { BaseModalProps } from '../modal-root';
-import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
 
 const messages = defineMessages({
   cancel_reblog: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },
@@ -19,17 +18,18 @@ const messages = defineMessages({
 
 interface BoostModalProps {
   statusId: string;
-  onReblog: (status: Pick<StatusEntity, 'id' | 'reblogged'>) => void;
+  onReblog: () => void;
+  visibility?: string;
 }
 
-const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({ statusId, onReblog, onClose }) => {
+const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({ statusId, onReblog, visibility, onClose }) => {
   const getStatus = useCallback(makeGetStatus(), []);
 
   const intl = useIntl();
   const status = useAppSelector(state => getStatus(state, { id: statusId }))!;
 
   const handleReblog = () => {
-    onReblog(status);
+    onReblog();
     onClose('BOOST');
   };
 
@@ -37,7 +37,11 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({ statusId, onRe
 
   return (
     <Modal
-      title={<FormattedMessage id='boost_modal.title' defaultMessage='Repost?' />}
+      title={visibility === 'unlisted'
+        ? <FormattedMessage id='boost_modal.title.unlisted' defaultMessage='Repost unlisted?' />
+        : visibility === 'private'
+          ? <FormattedMessage id='boost_modal.title.private' defaultMessage='Repost privately?' />
+          : <FormattedMessage id='boost_modal.title' defaultMessage='Repost?' />}
       confirmationAction={handleReblog}
       confirmationText={intl.formatMessage(buttonText)}
     >

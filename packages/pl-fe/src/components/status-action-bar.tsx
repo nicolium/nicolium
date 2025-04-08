@@ -94,6 +94,10 @@ const messages = defineMessages({
   quotePost: { id: 'status.quote', defaultMessage: 'Quote post' },
   reblog: { id: 'status.reblog', defaultMessage: 'Repost' },
   reblog_private: { id: 'status.reblog_private', defaultMessage: 'Repost to original audience' },
+  reblog_visibility: { id: 'status.reblog_visibility', defaultMessage: 'Repost to specific audience' },
+  reblog_visibility_public: { id: 'status.reblog_visibility_public', defaultMessage: 'Public repost' },
+  reblog_visibility_unlisted: { id: 'status.reblog_visibility_unlisted', defaultMessage: 'Unlisted repost' },
+  reblog_visibility_private: { id: 'status.reblog_visibility_private', defaultMessage: 'Followers-only repost' },
   redraft: { id: 'status.redraft', defaultMessage: 'Delete & re-draft' },
   redraftConfirm: { id: 'confirmations.redraft.confirm', defaultMessage: 'Delete & redraft' },
   redraftHeading: { id: 'confirmations.redraft.heading', defaultMessage: 'Delete & redraft' },
@@ -658,12 +662,12 @@ const MenuButton: React.FC<IMenuButton> = ({
       dispatch(togglePin(status));
     };
 
-    const handleReblogClick: React.EventHandler<React.MouseEvent> = (e) => {
-      const modalReblog = () => dispatch(toggleReblog(status));
+    const handleReblogClick = (e: React.MouseEvent | React.KeyboardEvent, visibility?: string) => {
+      const modalReblog = () => dispatch(toggleReblog(status, visibility));
       if ((e && e.shiftKey) || !boostModal) {
         modalReblog();
       } else {
-        openModal('BOOST', { statusId: status.id, onReblog: modalReblog });
+        openModal('BOOST', { statusId: status.id, onReblog: modalReblog, visibility });
       }
     };
 
@@ -860,6 +864,30 @@ const MenuButton: React.FC<IMenuButton> = ({
     });
 
     menu.push(null);
+
+    if (publicStatus && !status.reblogged && features.reblogVisibility) {
+      menu.push({
+        text: intl.formatMessage(messages.reblog_visibility),
+        icon: require('@tabler/icons/outline/repeat.svg'),
+        items: [
+          {
+            text: intl.formatMessage(messages.reblog_visibility_public),
+            action: (e) => handleReblogClick(e, 'public'),
+            icon: require('@tabler/icons/outline/world.svg'),
+          },
+          {
+            text: intl.formatMessage(messages.reblog_visibility_unlisted),
+            action: (e) => handleReblogClick(e, 'unlisted'),
+            icon: require('@tabler/icons/outline/lock-open.svg'),
+          },
+          {
+            text: intl.formatMessage(messages.reblog_visibility_private),
+            action: (e) => handleReblogClick(e, 'private'),
+            icon: require('@tabler/icons/outline/lock.svg'),
+          },
+        ],
+      });
+    }
 
     if (ownAccount) {
       if (publicStatus) {

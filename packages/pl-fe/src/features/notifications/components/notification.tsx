@@ -270,7 +270,7 @@ const Notification: React.FC<INotification> = (props) => {
         } else {
           openModal('BOOST', {
             statusId: status.id,
-            onReblog: (status) => {
+            onReblog: () => {
               dispatch(reblog(status));
             },
           });
