@@ -19,6 +19,8 @@ const messages = defineMessages({
   deleteHeader: { id: 'security.headers.delete', defaultMessage: 'Delete account' },
   deleteText: { id: 'security.text.delete', defaultMessage: 'To delete your account, enter your password and then click Delete account. This is a permanent action that cannot be undone. Your account will be destroyed from this server, and a deletion request will be sent to other servers. It\'s not guaranteed that all servers will purge your account.' },
   localDeleteText: { id: 'security.text.delete.local', defaultMessage: 'To delete your account, enter your password and then click Delete account. This is a permanent action that cannot be undone.' },
+  deleteWithoutPasswordText: { id: 'security.text.delete.without_password', defaultMessage: 'To delete your account, click Delete account. This is a permanent action that cannot be undone. Your account will be destroyed from this server, and a deletion request will be sent to other servers. It\'s not guaranteed that all servers will purge your account.' },
+  localDeleteWithoutPasswordText: { id: 'security.text.delete.local.without_password', defaultMessage: 'To delete your account, click Delete account. This is a permanent action that cannot be undone.' },
   deleteSubmit: { id: 'security.submit.delete', defaultMessage: 'Delete account' },
   deleteAccountSuccess: { id: 'security.delete_account.success', defaultMessage: 'Account successfully deleted.' },
   deleteAccountFail: { id: 'security.delete_account.fail', defaultMessage: 'Account deletion failed.' },
@@ -61,7 +63,13 @@ const DeleteAccount = () => {
         <Stack space={4}>
           <Text theme='muted'>
 
-            {intl.formatMessage(features.federating ? messages.deleteText : messages.localDeleteText)}
+            {intl.formatMessage(features.deleteAccountWithoutPassword
+              ? (features.federating
+                ? messages.deleteWithoutPasswordText
+                : messages.localDeleteWithoutPasswordText)
+              : features.federating
+                ? messages.deleteText
+                : messages.localDeleteText)}
           </Text>
 
           <Form onSubmit={handleSubmit}>
