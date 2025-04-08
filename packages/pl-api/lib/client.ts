@@ -1638,6 +1638,32 @@ class PlApiClient {
     },
 
     /**
+     * Export followers to CSV file
+     *
+     * Requires features{@link Features['exportFollowers']}.
+     */
+    exportFollowers: async () => {
+      const response = await this.request('/api/v1/settings/export_followers', {
+        method: 'GET',
+      });
+
+      return response.data;
+    },
+
+    /**
+     * Export follows to CSV file
+     *
+     * Requires features{@link Features['exportFollows']}.
+     */
+    exportFollows: async () => {
+      const response = await this.request('/api/v1/settings/export_follows', {
+        method: 'GET',
+      });
+
+      return response.data;
+    }
+
+    /**
      * Updates user notification settings
      *
      * Requires features{@link Features['muteStrangers']}.

@@ -621,6 +621,18 @@ const getFeatures = (instance: Instance) => {
     /** Whether to allow exporting follows/blocks/mutes to CSV by paginating the API. */
     exportData: true,
 
+    /**
+     * Export followers to CSV file
+     * @see GET /api/v1/settings/export_followers
+     */
+    exportFollowers: v.software === MITRA && gte(v.version, '1.27.0'),
+
+    /**
+     * Export follows to CSV file
+     * @see GET /api/v1/settings/export_follows
+     */
+    exportFollows: v.software === MITRA && gte(v.version, '1.27.0'),
+
     /** Whether the accounts who favourited or emoji-reacted to a status can be viewed through the API. */
     exposableReactions: any([
       v.software === FIREFISH,
