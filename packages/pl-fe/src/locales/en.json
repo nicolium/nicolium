@@ -63,6 +63,7 @@
   "account.subscribe": "Subscribe to notifications from @{name}",
   "account.subscribe.failure": "An error occurred trying to subscribe to this account.",
   "account.subscribe.success": "You have subscribed to this account.",
+  "account.subscribers": "Subscribers",
   "account.unblock": "Unblock @{name}",
   "account.unblock_domain": "Unhide {domain}",
   "account.unendorse": "Don't feature on profile",
