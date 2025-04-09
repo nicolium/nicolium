@@ -2492,7 +2492,7 @@ class PlApiClient {
       const response = await this.request <{}>(`/api/v1/statuses/${statusId}/load_conversation`, { method: 'POST' });
 
       return response.json;
-    }
+    },
   };
 
   public readonly media = {
