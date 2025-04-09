@@ -287,6 +287,36 @@ const getFeatures = (instance: Instance) => {
     ]),
 
     /**
+     * @see GET /api/v1/admin/custom_emojis
+     * @see GET /api/v1/admin/custom_emojis/:id
+     * @see POST /api/v1/admin/custom_emojis
+     * @see PATCH /api/v1/admin/custom_emojis/:id
+     * @see DELETE /api/v1/admin/custom_emojis/:id
+     */
+    adminCustomEmojis: v.software === GOTOSOCIAL,
+
+    /**
+     * Ability to manage instance rules by admins.
+     * @see GET /api/v1/pleroma/admin/rules
+     * @see POST /api/v1/pleroma/admin/rules
+     * @see PATCH /api/v1/pleroma/admin/rules/:id
+     * @see DELETE /api/v1/pleroma/admin/rules/:id
+     * @see GET /api/v1/admin/instance/rules
+     * @see GET /api/v1/admin/instance/rules/:id
+     * @see POST /api/v1/admin/instance/rules
+     * @see PATCH /api/v1/admin/instance/rules/:id
+     * @see DELETE /api/v1/admin/instance/rules/:id
+     */
+    adminRules: any([
+      v.software === GOTOSOCIAL,
+      v.software === PLEROMA && gte(v.version, '2.7.0'),
+    ]),
+
+    adminRulesPriority: any([
+      v.software === PLEROMA && gte(v.version, '2.7.0'),
+    ]),
+
+    /**
      * Can display announcements set by admins.
      * @see GET /api/v1/announcements
      * @see POST /api/v1/announcements/:id/dismiss
@@ -745,42 +775,13 @@ const getFeatures = (instance: Instance) => {
     /**
      * Whether client settings can be retrieved from the API.
      * @see GET /api/pleroma/frontend_configurations
+     * @see PATCH /api/v1/accounts/update_credentials
      */
     frontendConfigurations: any([
       v.software === AKKOMA,
       v.software === DITTO,
-      v.software === ICESHRIMP_NET,
+      v.software === MITRA && gte(v.version, '1.20.0'),
       v.software === PLEROMA,
-    ]),
-
-    /**
-     * @see GET /api/v1/admin/custom_emojis
-     * @see GET /api/v1/admin/custom_emojis/:id
-     * @see POST /api/v1/admin/custom_emojis
-     * @see PATCH /api/v1/admin/custom_emojis/:id
-     * @see DELETE /api/v1/admin/custom_emojis/:id
-     */
-    adminCustomEmojis: v.software === GOTOSOCIAL,
-
-    /**
-     * Ability to manage instance rules by admins.
-     * @see GET /api/v1/pleroma/admin/rules
-     * @see POST /api/v1/pleroma/admin/rules
-     * @see PATCH /api/v1/pleroma/admin/rules/:id
-     * @see DELETE /api/v1/pleroma/admin/rules/:id
-     * @see GET /api/v1/admin/instance/rules
-     * @see GET /api/v1/admin/instance/rules/:id
-     * @see POST /api/v1/admin/instance/rules
-     * @see PATCH /api/v1/admin/instance/rules/:id
-     * @see DELETE /api/v1/admin/instance/rules/:id
-     */
-    adminRules: any([
-      v.software === GOTOSOCIAL,
-      v.software === PLEROMA && gte(v.version, '2.7.0'),
-    ]),
-
-    adminRulesPriority: any([
-      v.software === PLEROMA && gte(v.version, '2.7.0'),
     ]),
 
     /**
@@ -1449,15 +1450,6 @@ const getFeatures = (instance: Instance) => {
       v.software === AKKOMA,
       v.software === PLEROMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.18.2'),
-    ]),
-
-    /**
-     * Can store client settings in the database.
-     * @see PATCH /api/v1/accounts/update_credentials
-     */
-    settingsStore: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
     ]),
 
     shoutbox: instance.api_versions['shout.pleroma.pl-api'] >= 1,

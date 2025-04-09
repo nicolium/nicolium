@@ -68,7 +68,7 @@ const updateSettingsStore = (settings: any) =>
     const state = getState();
     const client = getClient(state);
 
-    if (client.features.settingsStore) {
+    if (client.features.frontendConfigurations) {
       return dispatch(patchMe({
         settings_store: {
           [FE_NAME]: settings,

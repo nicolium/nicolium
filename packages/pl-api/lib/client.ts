@@ -1171,6 +1171,14 @@ class PlApiClient {
 
       if (params.settings_store) {
         (params as any).pleroma_settings_store = params.settings_store;
+
+        if (this.features.version.software === MITRA) {
+          await this.request('/api/v1/settings/client_config', {
+            method: 'POST',
+            body: params.settings_store,
+          });
+        }
+
         delete params.settings_store;
       }
 
@@ -3399,9 +3407,17 @@ class PlApiClient {
      * Requires features{@link Features['frontendConfigurations']}.
      */
     getFrontendConfigurations: async () => {
-      const response = await this.request('/api/pleroma/frontend_configurations');
+      let response;
 
-      return v.parse(v.fallback(v.record(v.string(), v.record(v.string(), v.any())), {}), response.json);
+      switch (this.features.version.software) {
+        case MITRA:
+          response = (await this.request('/api/v1/accounts/verify_credentials')).json?.client_config;
+          break;
+        default:
+          response = (await this.request('/api/pleroma/frontend_configurations')).json;
+      }
+
+      return v.parse(v.fallback(v.record(v.string(), v.record(v.string(), v.any())), {}), response);
     },
   };
 
