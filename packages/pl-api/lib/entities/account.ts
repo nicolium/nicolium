@@ -158,10 +158,38 @@ const baseAccountSchema = v.object({
 
   pronouns: v.fallback(v.array(v.string()), []),
 
+  /** Mention policy */
   mention_policy: v.fallback(v.picklist(['none', 'only_known', 'only_followers']), 'none'),
+  /** The reported subscribers of this user */
   subscribers_count: v.fallback(v.number(), 0),
+  /** Identity proofs */
+  identity_proofs: filteredArray(v.object({
+    /** The key of a given field's key-value pair */
+    name: v.fallback(v.string(), ''),
+    /** The value associated with the name key */
+    value: v.fallback(v.string(), ''),
+    /** Timestamp of when the server verified the field value */
+    verified_at: v.fallback(datetimeSchema, new Date().toISOString()),
+  })),
+  /** Payment options */
+  payment_options: filteredArray(v.object({
+    /** Payment type */
+    type: v.picklist(['link', 'monero-subscription']),
+    /** Link name (only for link type) */
+    name: v.fallback(v.nullable(v.string()), null),
+    /** Link URL (only for link type) */
+    href: v.fallback(v.nullable(v.string()), null),
+    /** CAIP-2 chain ID (only for monero-subscription type) */
+    chain_id: v.fallback(v.nullable(v.string()), null),
+    /** Subscription price (only for monero-subscription type) */
+    price: v.fallback(v.nullable(v.string()), null),
+    /** Unique identifier of a proposal object */
+    object_id: v.fallback(v.nullable(v.string()), null),
+  })),
 
+  /** Whether the user is a cat */
   is_cat: v.fallback(v.boolean(), false),
+  /** Whether the user's posts should be nyanified */
   speak_as_cat: v.fallback(v.boolean(), false),
 
   __meta: coerceObject({
