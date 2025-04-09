@@ -946,6 +946,18 @@ const getFeatures = (instance: Instance) => {
     listsFavourites: instance.api_versions['favourite_list.fedibird.pl-api'] >= 1,
 
     /**
+     * Can load latest activities from outbox.
+     * @see POST /api/v1/accounts/:id/load_activities
+     */
+    loadActivities: v.software === MITRA && gte(v.version, '2.16.0'),
+
+    /**
+     * Can load conversation from a remote server.
+     * @see POST /api/v1/statuses/:id/load_conversation
+     */
+    loadConversation: v.software === MITRA && gte(v.version, '2.25.0'),
+
+    /**
      * Ability to post statuses that don't federate.
      * @see POST /api/v1/statuses
      */

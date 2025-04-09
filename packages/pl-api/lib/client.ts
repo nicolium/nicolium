@@ -888,6 +888,17 @@ class PlApiClient {
 
       return v.parse(scrobbleSchema, response.json);
     },
+
+    /**
+     * Load latest activities from outbox
+     *
+     * Requires features{@link Features['loadActivities']}
+     */
+    loadActivities: async (accountId: string) => {
+      const response = await this.request<{}>(`/api/v1/accounts/${accountId}/load_activities`);
+
+      return response.json;
+    },
   };
 
   public readonly myAccount = {
@@ -2471,6 +2482,17 @@ class PlApiClient {
 
     getStatusMentionedUsers: async (statusId: string, params?: GetStatusMentionedUsersParams) =>
       this.#paginatedGet(`/api/v1/statuses/${statusId}/mentioned_by`, { params }, accountSchema),
+
+    /**
+     * Load conversation from a remote server.
+     *
+     * Requires features{@link Features['loadConversation']}.
+     */
+    loadConversation: async (statusId: string) => {
+      const response = await this.request <{}>(`/api/v1/statuses/${statusId}/load_conversation`, { method: 'POST' });
+
+      return response.json;
+    }
   };
 
   public readonly media = {
