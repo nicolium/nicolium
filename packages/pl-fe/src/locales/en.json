@@ -998,6 +998,7 @@
   "lightbox.next": "Next",
   "lightbox.previous": "Previous",
   "lightbox.view_context": "View context",
+  "link_preview.more_from_author": "More from {name}",
   "list.click_to_add": "Click here to add people",
   "list_adder.header_title": "Add or Remove from Lists",
   "lists.account.add": "Add to list",

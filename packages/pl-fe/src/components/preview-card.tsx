@@ -1,6 +1,8 @@
 import clsx from 'clsx';
 import { type MediaAttachment, type PreviewCard as CardEntity, mediaAttachmentSchema } from 'pl-api';
 import React, { useState, useEffect } from 'react';
+import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 import * as v from 'valibot';
 
 import Blurhash from 'pl-fe/components/blurhash';
@@ -8,8 +10,12 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import { addAutoPlay } from 'pl-fe/utils/media';
 import { getTextDirection } from 'pl-fe/utils/rtl';
+
+import HoverAccountWrapper from './hover-account-wrapper';
+import Avatar from './ui/avatar';
 
 /** Props for `PreviewCard`. */
 interface IPreviewCard {
@@ -108,7 +114,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
 
   const interactive = card.type !== 'link';
   horizontal = typeof horizontal === 'boolean' ? horizontal : interactive || embedded;
-  const className = clsx('status-card', { horizontal, compact, interactive }, `status-card--${card.type}`);
+  const className = clsx('status-card relative z-10 bg-white black:bg-black dark:bg-primary-900', { horizontal, compact, interactive }, `status-card--${card.type}`);
   const ratio = getRatio(card);
   const height = (compact && !embedded) ? (width / (16 / 9)) : (width / ratio);
 
@@ -236,7 +242,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
     );
   }
 
-  return (
+  const link = (
     <a
       href={card.url}
       className={className}
@@ -249,6 +255,40 @@ const PreviewCard: React.FC<IPreviewCard> = ({
       {description}
     </a>
   );
+
+  if (card.authors.length) {
+    return (
+      <Stack>
+        {link}
+        <div className='-mt-4 rounded-lg border border-t-0 border-solid border-gray-200 bg-gray-100 p-2 pt-6 black:bg-primary-900 dark:border-gray-800 dark:bg-primary-700'>
+          <Text theme='muted' className='flex items-center gap-2'>
+            <FormattedMessage
+              id='link_preview.more_from_author'
+              defaultMessage='More from {name}'
+              values={{
+                name: card.authors.map(author => (
+                  <HoverAccountWrapper key={author.url} accountId={author.account?.id} element='bdi'>
+                    <Link to={`/@${author.account?.acct}`}>
+                      <HStack space={1} alignItems='center'>
+                        {author.account && (
+                          <Avatar src={author.account?.avatar} size={16} />
+                        )}
+                        <Text weight='medium'>
+                          <Emojify text={author.account?.display_name || author.name} emojis={author.account?.emojis} />
+                        </Text>
+                      </HStack>
+                    </Link>
+                  </HoverAccountWrapper>
+                )),
+              }}
+            />
+          </Text>
+        </div>
+      </Stack>
+    );
+  }
+
+  return link;
 };
 
 /** Trim the text, adding ellipses if it's too long. */

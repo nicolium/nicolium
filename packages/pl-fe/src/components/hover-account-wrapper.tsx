@@ -12,7 +12,7 @@ const showAccountHoverCard = debounce((openAccountHoverCard, ref, accountId) => 
 }, 600);
 
 interface IHoverAccountWrapper {
-  accountId: string;
+  accountId?: string;
   element?: 'div' | 'span' | 'bdi';
   className?: string;
   children: React.ReactNode;
@@ -27,6 +27,8 @@ const HoverAccountWrapper: React.FC<IHoverAccountWrapper> = React.memo(({ accoun
   const ref = useRef<HTMLDivElement>(null);
 
   const handleMouseEnter = () => {
+    if (!accountId) return;
+
     if (!isMobile(window.innerWidth)) {
       dispatch(fetchAccount(accountId));
       showAccountHoverCard(openAccountHoverCard, ref, accountId);
