@@ -104,7 +104,12 @@ function parseContent({
     replace(domNode) {
       if (!(domNode instanceof Element)) {
         // @ts-ignore
-        if (greentext && (domNode.data.startsWith('>') || domNode.prev?.greentext)) {
+        domNode.preGreentext = (!domNode.prev || domNode.prev.preGreentext) && !domNode.data.trim().length;
+
+        // @ts-ignore
+        const data = domNode.prev?.preGreentext ? domNode.data.trim() : domNode.data;
+        // @ts-ignore
+        if (greentext && (data.startsWith('>') || domNode.prev?.greentext)) {
           // @ts-ignore
           domNode.greentext = true;
           return <span className={GREENTEXT_CLASS}>{domNode.data}</span>;
@@ -119,6 +124,11 @@ function parseContent({
 
       if (domNode.attribs.class?.split(' ').some(className => selectors.includes(className))) {
         return <></>;
+      }
+
+      if (domNode.attribs.class?.split(' ').includes('h-card')) {
+        // @ts-ignore
+        domNode.preGreentext = !domNode.prev || domNode.prev.preGreentext;
       }
 
       // @ts-ignore
