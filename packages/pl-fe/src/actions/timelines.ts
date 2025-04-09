@@ -16,6 +16,7 @@ import type {
   PaginatedResponse,
   PublicTimelineParams,
   Status as BaseStatus,
+  LinkTimelineParams,
 } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
@@ -293,6 +294,22 @@ const fetchHashtagTimeline = (hashtag: string, { tags }: Record<string, any> = {
     return dispatch(handleTimelineExpand(timelineId, fn, false, done));
   };
 
+const fetchLinkTimeline = (url: string, expand = false, done = noOp) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    const state = getState();
+    const timelineId = `link:${url}`;
+
+    const params: LinkTimelineParams = {};
+
+    if (expand && state.timelines[timelineId]?.isLoading) return;
+
+    if (useSettingsStore.getState().settings.autoTranslate) params.language = getLocale();
+
+    const fn = (expand && state.timelines[timelineId]?.next?.()) || getClient(state).timelines.linkTimeline(url, params);
+
+    return dispatch(handleTimelineExpand(timelineId, fn, false, done));
+  };
+
 const expandTimelineRequest = (timeline: string) => ({
   type: TIMELINE_EXPAND_REQUEST,
   timeline,
@@ -361,6 +378,7 @@ export {
   fetchListTimeline,
   fetchGroupTimeline,
   fetchHashtagTimeline,
+  fetchLinkTimeline,
   expandTimelineSuccess,
   scrollTopTimeline,
   type TimelineAction,

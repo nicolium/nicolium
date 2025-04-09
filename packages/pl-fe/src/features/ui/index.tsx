@@ -108,6 +108,7 @@ import {
   InteractionPolicies,
   InteractionRequests,
   LandingTimeline,
+  LinkTimeline,
   ListTimeline,
   Lists,
   LoginPage,
@@ -234,6 +235,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       <Redirect from='/registration/:token' to='/invite/:token' />
 
       <WrappedRoute path='/tags/:id' publicRoute layout={DefaultLayout} component={HashtagTimeline} content={children} />
+      <WrappedRoute path='/links/:url' publicRoute layout={DefaultLayout} component={LinkTimeline} content={children} />
 
       {features.lists && <WrappedRoute path='/lists' layout={DefaultLayout} component={Lists} content={children} />}
       {features.lists && <WrappedRoute path='/list/:id' layout={DefaultLayout} component={ListTimeline} content={children} />}
