@@ -108,6 +108,7 @@ import type {
   GetAccountFollowingParams,
   GetAccountParams,
   GetAccountStatusesParams,
+  GetAccountSubscribersParams,
   GetRelationshipsParams,
   GetScrobblesParams,
   ReportAccountParams,
@@ -593,6 +594,14 @@ class PlApiClient {
      */
     getAccountFollowing: async (accountId: string, params?: GetAccountFollowingParams) =>
       this.#paginatedGet(`/api/v1/accounts/${accountId}/following`, { params }, accountSchema),
+
+    /**
+     * Subscriptions to the given user.
+     *
+     * Requires features{@link Features['subscriptions']}.
+     */
+    getAccountSubscribers: async (accountId: string, params?: GetAccountSubscribersParams) =>
+      this.#paginatedGet(`/api/v1/accounts/${accountId}/subscribers`, { params }, accountSchema),
 
     /**
      * Get account’s featured tags

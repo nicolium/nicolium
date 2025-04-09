@@ -1476,6 +1476,18 @@ const getFeatures = (instance: Instance) => {
     statusDislikes: v.software === FRIENDICA && gte(v.version, '2023.3.0'),
 
     /**
+     * @see GET    /api/v1/accounts/:id/subscribers
+     * @see POST   /api/v1/subscriptions
+     * @see GET    /api/v1/subscriptions/options
+     * @see POST   /api/v1/subscriptions/options
+     * @see GET    /api/v1/subscriptions/find
+     * @see POST   /api/v1/subscriptions/invoices
+     * @see GET    /api/v1/subscriptions/invoices/:id
+     * @see DELETE /api/v1/subscriptions/invoices/:id
+     */
+    subscriptions: v.software === MITRA,
+
+    /**
      * Can display suggested accounts.
      * @see {@link https://docs.joinmastodon.org/methods/suggestions/}
      */
