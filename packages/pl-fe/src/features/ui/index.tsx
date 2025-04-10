@@ -415,11 +415,13 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
       }));
     }
 
-    if (account.is_admin) {
+    if (account.is_admin && features.pleromaAdminAccounts) {
       dispatch(fetchConfig());
     }
 
-    setTimeout(() => dispatch(fetchFilters()), 500);
+    if (features.filters || features.filtersV2) {
+      setTimeout(() => dispatch(fetchFilters()), 500);
+    }
 
     if (account.locked) {
       setTimeout(() => prefetchFollowRequests(client), 700);
@@ -429,9 +431,11 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
       dispatch(connectShoutbox());
     }
 
-    setTimeout(() => {
-      queryClient.prefetchInfiniteQuery(scheduledStatusesQueryOptions);
-    }, 900);
+    if (features.scheduledStatuses) {
+      setTimeout(() => {
+        queryClient.prefetchInfiniteQuery(scheduledStatusesQueryOptions);
+      }, 900);
+    }
   };
 
   useEffect(() => {
