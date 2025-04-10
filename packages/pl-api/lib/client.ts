@@ -1499,14 +1499,27 @@ class PlApiClient {
        * Requires features{@link Features['manageMfa']}.
        */
       getMfaSettings: async () => {
-        const response = await this.request('/api/pleroma/accounts/mfa');
+        let response;
+
+        switch (this.features.version.software) {
+          case GOTOSOCIAL:
+            response = await this.request('/api/v1/user').then(({ json }) => ({
+              settings: {
+                enabled: !!json?.two_factor_enabled_at,
+                method: 'totp',
+              },
+            }));
+            break;
+          default:
+            response = (await this.request('/api/pleroma/accounts/mfa')).json;
+        }
 
         return v.parse(v.object({
           settings: v.object({
             enabled: v.boolean(),
             totp: v.boolean(),
           }),
-        }), response.json);
+        }), response);
       },
 
       /**
@@ -1524,36 +1537,66 @@ class PlApiClient {
        * Requires features{@link Features['manageMfa']}.
        */
       getMfaSetup: async (method: 'totp') => {
-        const response = await this.request(`/api/pleroma/accounts/mfa/setup/${method}`);
+        let response;
+
+        switch (this.features.version.software) {
+          case GOTOSOCIAL:
+            response = await this.request('/api/v1/user/2fa/qruri').then(({ data }) => ({
+              provisioning_uri: data,
+              key: new URL(data).searchParams.get('secret'),
+            }));
+            break;
+          default:
+            response = (await this.request(`/api/pleroma/accounts/mfa/setup/${method}`)).json;
+        }
 
         return v.parse(v.object({
-          key: v.string(),
+          key: v.fallback(v.string(), ''),
           provisioning_uri: v.string(),
-        }), response.json);
+        }), response);
       },
 
       /**
        * Requires features{@link Features['manageMfa']}.
        */
       confirmMfaSetup: async (method: 'totp', code: string, password: string) => {
-        const response = await this.request(`/api/pleroma/accounts/mfa/confirm/${method}`, {
-          method: 'POST',
-          body: { code, password },
-        });
+        let response;
 
-        if (response.json?.error) throw response.json.error;
+        switch (this.features.version.software) {
+          case GOTOSOCIAL:
+            response = await this.request('/api/v1/user/2fa/enable', { method: 'POST', body: { code } });
+            break;
+          default:
+            response = (await this.request(`/api/pleroma/accounts/mfa/confirm/${method}`, {
+              method: 'POST',
+              body: { code, password },
+            })).json;
+        }
 
-        return response.json as {};
+        if (response?.error) throw response.error;
+
+        return response as {};
       },
 
       /**
        * Requires features{@link Features['manageMfa']}.
        */
       disableMfa: async (method: 'totp', password: string) => {
-        const response = await this.request(`/api/pleroma/accounts/mfa/${method}`, {
-          method: 'DELETE',
-          body: { password },
-        });
+        let response;
+
+        switch (this.features.version.software) {
+          case GOTOSOCIAL:
+            response = await this.request('/api/v1/user/2fa/disable', {
+              method: 'POST',
+              body: { password },
+            });
+            break;
+          default:
+            response = await this.request(`/api/pleroma/accounts/mfa/${method}`, {
+              method: 'DELETE',
+              body: { password },
+            });
+        }
 
         if (response.json?.error) throw response.json.error;
 

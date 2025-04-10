@@ -4,8 +4,7 @@ import { importEntities } from 'pl-fe/actions/importer';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useClient } from 'pl-fe/hooks/use-client';
 
-import type { SearchParams } from 'pl-api';
-import type { PaginationParams } from 'pl-api/dist/params/common';
+import type { PaginationParams, SearchParams } from 'pl-api';
 
 const useSearchAccounts = (
   query: string,

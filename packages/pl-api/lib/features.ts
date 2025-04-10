@@ -987,12 +987,28 @@ const getFeatures = (instance: Instance) => {
 
     /**
      * @see GET /api/pleroma/accounts/mfa
-     * @see GET /api/pleroma/accounts/mfa/backup_codes
      * @see GET /api/pleroma/accounts/mfa/setup/:method
      * @see POST /api/pleroma/accounts/mfa/confirm/:method
      * @see DELETE /api/pleroma/accounts/mfa/:method
      */
     manageMfa: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+      v.software === GOTOSOCIAL && gte(v.version, '0.19.0'),
+    ]),
+
+    /**
+     * @see GET /api/pleroma/accounts/mfa/backup_codes
+     */
+    manageMfaBackupCodes: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
+
+    /**
+     * @see POST /api/v1/user/2fa/enable
+     */
+    manageMfaRequiresPassword: any([
       v.software === AKKOMA,
       v.software === PLEROMA,
     ]),

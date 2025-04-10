@@ -12,6 +12,7 @@ import Input from 'pl-fe/components/ui/input';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useFeatures } from 'pl-fe/hooks/use-features';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
@@ -28,6 +29,7 @@ const OtpConfirmForm: React.FC = () => {
   const intl = useIntl();
   const history = useHistory();
   const dispatch = useAppDispatch();
+  const features = useFeatures();
 
   const [state, setState] = useState<{ password: string; isLoading: boolean; code: string; qrCodeURI: string; confirmKey: string }>({
     password: '',
@@ -101,20 +103,22 @@ const OtpConfirmForm: React.FC = () => {
           />
         </FormGroup>
 
-        <FormGroup
-          labelText={intl.formatMessage(messages.passwordPlaceholder)}
-          hintText={<FormattedMessage id='mfa.mfa_setup.password_hint' defaultMessage='Enter your current password to confirm your identity.' />}
-        >
-          <Input
-            type='password'
-            name='password'
-            placeholder={intl.formatMessage(messages.passwordPlaceholder)}
-            onChange={handleInputChange}
-            disabled={state.isLoading}
-            value={state.password}
-            required
-          />
-        </FormGroup>
+        {features.manageMfaRequiresPassword && (
+          <FormGroup
+            labelText={intl.formatMessage(messages.passwordPlaceholder)}
+            hintText={<FormattedMessage id='mfa.mfa_setup.password_hint' defaultMessage='Enter your current password to confirm your identity.' />}
+          >
+            <Input
+              type='password'
+              name='password'
+              placeholder={intl.formatMessage(messages.passwordPlaceholder)}
+              onChange={handleInputChange}
+              disabled={state.isLoading}
+              value={state.password}
+              required
+            />
+          </FormGroup>
+        )}
 
         <FormActions>
           <Button
