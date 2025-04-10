@@ -2158,10 +2158,10 @@ pkg-types@^1.0.3, pkg-types@^1.1.1:
     mlly "^1.7.1"
     pathe "^1.1.2"
 
-pl-api@^1.0.0-rc.16:
-  version "1.0.0-rc.16"
-  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-1.0.0-rc.16.tgz#8eafdea0323ab2b76d9e3d133ea5d266d7fe9e0b"
-  integrity sha512-1Bu3/HFG3enhHCtzG9ZtEtgGa2x7/ZKVPToO3WsTkyqwSnshFbnAPypw3YeSwRHtYieyBSAugbI9Kngu4Rq5BQ==
+pl-api@^1.0.0-rc.46:
+  version "1.0.0-rc.46"
+  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-1.0.0-rc.46.tgz#48c350b7c224d0b150075001faf9bfa7238cd37c"
+  integrity sha512-izay+cl5QlxNdPaYwAtnCw9XNBo35tTvRrkIB8FFQ8+yqnvv8usjno8CMLZVslk7Ujjc2wmATesIWLhyWJorhg==
   dependencies:
     blurhash "^2.0.5"
     http-link-header "^1.1.3"
@@ -2170,8 +2170,8 @@ pl-api@^1.0.0-rc.16:
     lodash.pick "^4.4.0"
     object-to-formdata "^4.5.1"
     query-string "^9.1.1"
-    semver "^7.6.3"
-    valibot "^1.0.0-beta.9"
+    semver "^7.7.1"
+    valibot "^1.0.0-beta.12"
 
 possible-typed-array-names@^1.0.0:
   version "1.0.0"
@@ -2324,6 +2324,11 @@ semver@^7.6.0, semver@^7.6.2, semver@^7.6.3:
   version "7.6.3"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.6.3.tgz#980f7b5550bc175fb4dc09403085627f9eb33143"
   integrity sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==
+
+semver@^7.7.1:
+  version "7.7.1"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.1.tgz#abd5098d82b18c6c81f6074ff2647fd3e7220c9f"
+  integrity sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA==
 
 semver@~7.5.4:
   version "7.5.4"
@@ -2612,6 +2617,11 @@ uri-js@^4.2.2, uri-js@^4.4.1:
   integrity sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==
   dependencies:
     punycode "^2.1.0"
+
+valibot@^1.0.0-beta.12:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/valibot/-/valibot-1.0.0.tgz#1f82514296abcd23d0ae4280088ba85f8651c564"
+  integrity sha512-1Hc0ihzWxBar6NGeZv7fPLY0QuxFMyxwYR2sF1Blu7Wq7EnremwY2W02tit2ij2VJT8HcSkHAQqmFfl77f73Yw==
 
 valibot@^1.0.0-beta.9:
   version "1.0.0-beta.9"
