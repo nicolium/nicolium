@@ -8,6 +8,7 @@ import { fetchFilters } from 'pl-fe/actions/filters';
 import { fetchMarker } from 'pl-fe/actions/markers';
 import { expandNotifications } from 'pl-fe/actions/notifications';
 import { register as registerPushNotifications } from 'pl-fe/actions/push-notifications/registerer';
+import { connectShoutbox } from 'pl-fe/actions/shoutbox';
 import { fetchHomeTimeline } from 'pl-fe/actions/timelines';
 import { useUserStream } from 'pl-fe/api/hooks/streaming/use-user-stream';
 import SidebarNavigation from 'pl-fe/components/sidebar-navigation';
@@ -107,6 +108,7 @@ import {
   InteractionPolicies,
   InteractionRequests,
   LandingTimeline,
+  LinkTimeline,
   ListTimeline,
   Lists,
   LoginPage,
@@ -233,6 +235,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       <Redirect from='/registration/:token' to='/invite/:token' />
 
       <WrappedRoute path='/tags/:id' publicRoute layout={DefaultLayout} component={HashtagTimeline} content={children} />
+      <WrappedRoute path='/links/:url' publicRoute layout={DefaultLayout} component={LinkTimeline} content={children} />
 
       {features.lists && <WrappedRoute path='/lists' layout={DefaultLayout} component={Lists} content={children} />}
       {features.lists && <WrappedRoute path='/list/:id' layout={DefaultLayout} component={ListTimeline} content={children} />}
@@ -251,6 +254,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       {features.chats && <WrappedRoute path='/chats' exact layout={ChatsLayout} component={ChatIndex} content={children} />}
       {features.chats && <WrappedRoute path='/chats/new' layout={ChatsLayout} component={ChatIndex} content={children} />}
       {features.chats && <WrappedRoute path='/chats/settings' layout={ChatsLayout} component={ChatIndex} content={children} />}
+      {features.shoutbox && <WrappedRoute path='/chats/shoutbox' layout={ChatsLayout} component={ChatIndex} content={children} />}
       {features.chats && <WrappedRoute path='/chats/:chatId' layout={ChatsLayout} component={ChatIndex} content={children} />}
 
       <WrappedRoute path='/follow_requests' layout={DefaultLayout} component={FollowRequests} content={children} />
@@ -297,7 +301,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       <WrappedRoute path='/circle' layout={DefaultLayout} component={Circle} content={children} />
 
       <WrappedRoute path='/settings/profile' layout={DefaultLayout} component={EditProfile} content={children} />
-      {features.exportData && <WrappedRoute path='/settings/export' layout={DefaultLayout} component={ExportData} content={children} />}
+      <WrappedRoute path='/settings/export' layout={DefaultLayout} component={ExportData} content={children} />
       {(features.importBlocks || features.importFollows || features.importMutes) && <WrappedRoute path='/settings/import' layout={DefaultLayout} component={ImportData} content={children} />}
       {features.manageAccountAliases && <WrappedRoute path='/settings/aliases' layout={DefaultLayout} component={Aliases} content={children} />}
       {features.accountMoving && <WrappedRoute path='/settings/migration' layout={DefaultLayout} component={Migration} content={children} />}
@@ -419,6 +423,10 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
 
     if (account.locked) {
       setTimeout(() => prefetchFollowRequests(client), 700);
+    }
+
+    if (features.shoutbox) {
+      dispatch(connectShoutbox());
     }
 
     setTimeout(() => {

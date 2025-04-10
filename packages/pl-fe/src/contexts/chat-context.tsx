@@ -16,7 +16,8 @@ enum ChatWidgetScreens {
   INBOX = 'INBOX',
   SEARCH = 'SEARCH',
   CHAT = 'CHAT',
-  CHAT_SETTINGS = 'CHAT_SETTINGS'
+  CHAT_SETTINGS = 'CHAT_SETTINGS',
+  SHOUTBOX = 'SHOUTBOX',
 }
 
 interface IChatProvider {

@@ -1,6 +1,6 @@
 {
   "name": "pl-api",
-  "version": "1.0.0-rc.34",
+  "version": "1.0.0-rc.45",
   "type": "module",
   "homepage": "https://github.com/mkljczk/pl-fe/tree/develop/packages/pl-api",
   "repository": {
@@ -35,7 +35,7 @@
     "typedoc-material-theme": "^1.3.0",
     "typedoc-plugin-valibot": "^1.0.0",
     "typescript": "^5.7.3",
-    "vite": "^6.1.2",
+    "vite": "^6.1.4",
     "vite-plugin-dts": "^4.5.0",
     "ws": "^8.18.0"
   },

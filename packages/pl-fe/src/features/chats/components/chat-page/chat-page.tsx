@@ -7,6 +7,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import ChatPageMain from './components/chat-page-main';
 import ChatPageNew from './components/chat-page-new';
 import ChatPageSettings from './components/chat-page-settings';
+import ChatPageShoutbox from './components/chat-page-shoutbox';
 import ChatPageSidebar from './components/chat-page-sidebar';
 
 interface IChatPage {
@@ -18,7 +19,7 @@ const ChatPage: React.FC<IChatPage> = ({ chatId }) => {
 
   const path = history.location.pathname;
   const isSidebarHidden = matchPath(path, {
-    path: ['/chats/settings', '/chats/new', '/chats/:chatId'],
+    path: ['/chats/settings', '/chats/new', '/chats/:chatId', '/chats/shoutbox'],
     exact: true,
   });
 
@@ -80,6 +81,9 @@ const ChatPage: React.FC<IChatPage> = ({ chatId }) => {
             </Route>
             <Route path='/chats/settings'>
               <ChatPageSettings />
+            </Route>
+            <Route path='/chats/shoutbox'>
+              <ChatPageShoutbox />
             </Route>
             <Route>
               <ChatPageMain />

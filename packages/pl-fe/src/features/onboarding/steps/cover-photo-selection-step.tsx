@@ -118,6 +118,7 @@ const CoverPhotoSelectionStep = ({ onNext }: { onNext: () => void }) => {
               <Avatar
                 src={account.avatar}
                 alt={account.avatar_description}
+                isCat={account.is_cat}
                 size={64}
                 className='-mt-8 mb-2 ring-2 ring-white dark:ring-primary-800'
               />

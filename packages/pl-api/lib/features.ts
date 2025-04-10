@@ -195,6 +195,7 @@ const getFeatures = (instance: Instance) => {
      */
     accountByUsername: any([
       v.software === AKKOMA,
+      v.software === MITRA,
       v.software === PLEROMA,
     ]),
 
@@ -219,6 +220,8 @@ const getFeatures = (instance: Instance) => {
       v.software === AKKOMA,
       v.software === PLEROMA && gte(v.version, '2.5.0'),
     ]),
+
+    accountIsCat: instance.api_versions['cats.pleroma.pl-api'] >= 1,
 
     /**
      * Ability to set one's location on their profile.
@@ -248,6 +251,13 @@ const getFeatures = (instance: Instance) => {
     ]),
 
     /**
+     * @see PATCH /api/v1/accounts/update_credentials
+     */
+    accountMentionPolicy: any([
+      v.software === MITRA,
+    ]),
+
+    /**
      * Move followers to a different ActivityPub account.
      * @see POST /api/pleroma/move_account
      */
@@ -274,6 +284,36 @@ const getFeatures = (instance: Instance) => {
     addressableLists: any([
       v.software === AKKOMA,
       v.software === PLEROMA,
+    ]),
+
+    /**
+     * @see GET /api/v1/admin/custom_emojis
+     * @see GET /api/v1/admin/custom_emojis/:id
+     * @see POST /api/v1/admin/custom_emojis
+     * @see PATCH /api/v1/admin/custom_emojis/:id
+     * @see DELETE /api/v1/admin/custom_emojis/:id
+     */
+    adminCustomEmojis: v.software === GOTOSOCIAL,
+
+    /**
+     * Ability to manage instance rules by admins.
+     * @see GET /api/v1/pleroma/admin/rules
+     * @see POST /api/v1/pleroma/admin/rules
+     * @see PATCH /api/v1/pleroma/admin/rules/:id
+     * @see DELETE /api/v1/pleroma/admin/rules/:id
+     * @see GET /api/v1/admin/instance/rules
+     * @see GET /api/v1/admin/instance/rules/:id
+     * @see POST /api/v1/admin/instance/rules
+     * @see PATCH /api/v1/admin/instance/rules/:id
+     * @see DELETE /api/v1/admin/instance/rules/:id
+     */
+    adminRules: any([
+      v.software === GOTOSOCIAL,
+      v.software === PLEROMA && gte(v.version, '2.7.0'),
+    ]),
+
+    adminRulesPriority: any([
+      v.software === PLEROMA && gte(v.version, '2.7.0'),
     ]),
 
     /**
@@ -364,6 +404,8 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
+      v.software === MITRA && gte(v.version, '3.22.0'),
+      v.software === PIXELFED,
       v.software === PLEROMA,
       v.software === SNAC,
     ]),
@@ -499,6 +541,11 @@ const getFeatures = (instance: Instance) => {
     ]),
 
     /**
+     * @see POST /api/v1/settings/delete_account
+     */
+    deleteAccountWithoutPassword: v.software === MITRA && gte(v.version, '2.14.0'),
+
+    /**
      * Allow to register on a given domain
      * @see GET /api/v1/pleroma/admin/domains
      * @see POST /api/v1/pleroma/admin/domains
@@ -601,8 +648,17 @@ const getFeatures = (instance: Instance) => {
      */
     events: instance.api_versions['events.pleroma.pl-api'] >= 1,
 
-    /** Whether to allow exporting follows/blocks/mutes to CSV by paginating the API. */
-    exportData: true,
+    /**
+     * Export followers to CSV file
+     * @see GET /api/v1/settings/export_followers
+     */
+    exportFollowers: v.software === MITRA && gte(v.version, '1.27.0'),
+
+    /**
+     * Export follows to CSV file
+     * @see GET /api/v1/settings/export_follows
+     */
+    exportFollows: v.software === MITRA && gte(v.version, '1.27.0'),
 
     /** Whether the accounts who favourited or emoji-reacted to a status can be viewed through the API. */
     exposableReactions: any([
@@ -719,42 +775,13 @@ const getFeatures = (instance: Instance) => {
     /**
      * Whether client settings can be retrieved from the API.
      * @see GET /api/pleroma/frontend_configurations
+     * @see PATCH /api/v1/accounts/update_credentials
      */
     frontendConfigurations: any([
       v.software === AKKOMA,
       v.software === DITTO,
-      v.software === ICESHRIMP_NET,
+      v.software === MITRA && gte(v.version, '1.20.0'),
       v.software === PLEROMA,
-    ]),
-
-    /**
-     * @see GET /api/v1/admin/custom_emojis
-     * @see GET /api/v1/admin/custom_emojis/:id
-     * @see POST /api/v1/admin/custom_emojis
-     * @see PATCH /api/v1/admin/custom_emojis/:id
-     * @see DELETE /api/v1/admin/custom_emojis/:id
-     */
-    adminCustomEmojis: v.software === GOTOSOCIAL,
-
-    /**
-     * Ability to manage instance rules by admins.
-     * @see GET /api/v1/pleroma/admin/rules
-     * @see POST /api/v1/pleroma/admin/rules
-     * @see PATCH /api/v1/pleroma/admin/rules/:id
-     * @see DELETE /api/v1/pleroma/admin/rules/:id
-     * @see GET /api/v1/admin/instance/rules
-     * @see GET /api/v1/admin/instance/rules/:id
-     * @see POST /api/v1/admin/instance/rules
-     * @see PATCH /api/v1/admin/instance/rules/:id
-     * @see DELETE /api/v1/admin/instance/rules/:id
-     */
-    adminRules: any([
-      v.software === GOTOSOCIAL,
-      v.software === PLEROMA && gte(v.version, '2.7.0'),
-    ]),
-
-    adminRulesPriority: any([
-      v.software === PLEROMA && gte(v.version, '2.7.0'),
     ]),
 
     /**
@@ -821,23 +848,34 @@ const getFeatures = (instance: Instance) => {
     ]),
 
     /**
+     * Move followers from remote alias.
+     * @see POST /api/v1/settings/import_followers
+     */
+    importFollowers: any([
+      v.software === MITRA && gte(v.version, '2.18.0'),
+    ]),
+
+    /**
      * Import a .csv file with a list of followed users.
      * @see POST /api/pleroma/follow_import
+     * @see POST /api/v1/settings/import_follows
      * @see POST /api/v1/import
-
      */
     importFollows: any([
       v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
+      v.software === MITRA && gte(v.version, '1.10.0'),
       v.software === PLEROMA,
     ]),
 
     /**
      * Import a .csv file with a list of muted users.
      * @see POST /api/pleroma/mutes_import
+     * @see POST /api/v1/import
      */
     importMutes: any([
       v.software === AKKOMA,
+      v.software === GOTOSOCIAL && gte(v.version, '0.19.0'),
       v.software === PLEROMA,
     ]),
 
@@ -908,6 +946,18 @@ const getFeatures = (instance: Instance) => {
     listsFavourites: instance.api_versions['favourite_list.fedibird.pl-api'] >= 1,
 
     /**
+     * Can load latest activities from outbox.
+     * @see POST /api/v1/accounts/:id/load_activities
+     */
+    loadActivities: v.software === MITRA && gte(v.version, '2.16.0'),
+
+    /**
+     * Can load conversation from a remote server.
+     * @see POST /api/v1/statuses/:id/load_conversation
+     */
+    loadConversation: v.software === MITRA && gte(v.version, '2.25.0'),
+
+    /**
      * Ability to post statuses that don't federate.
      * @see POST /api/v1/statuses
      */
@@ -937,12 +987,28 @@ const getFeatures = (instance: Instance) => {
 
     /**
      * @see GET /api/pleroma/accounts/mfa
-     * @see GET /api/pleroma/accounts/mfa/backup_codes
      * @see GET /api/pleroma/accounts/mfa/setup/:method
      * @see POST /api/pleroma/accounts/mfa/confirm/:method
      * @see DELETE /api/pleroma/accounts/mfa/:method
      */
     manageMfa: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+      v.software === GOTOSOCIAL && gte(v.version, '0.19.0'),
+    ]),
+
+    /**
+     * @see GET /api/pleroma/accounts/mfa/backup_codes
+     */
+    manageMfaBackupCodes: any([
+      v.software === AKKOMA,
+      v.software === PLEROMA,
+    ]),
+
+    /**
+     * @see POST /api/v1/user/2fa/enable
+     */
+    manageMfaRequiresPassword: any([
       v.software === AKKOMA,
       v.software === PLEROMA,
     ]),
@@ -1059,6 +1125,11 @@ const getFeatures = (instance: Instance) => {
       v.software === AKKOMA,
       v.software === PLEROMA,
     ]),
+
+    /**
+     * @see GET /api/v1/notifications
+     */
+    notificationsExcludeTypes: v.software !== MITRA,
 
     /**
      * @see GET /api/v1/notifications
@@ -1409,15 +1480,6 @@ const getFeatures = (instance: Instance) => {
       v.software === GOTOSOCIAL && gte(v.version, '0.18.2'),
     ]),
 
-    /**
-     * Can store client settings in the database.
-     * @see PATCH /api/v1/accounts/update_credentials
-     */
-    settingsStore: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
-
     shoutbox: instance.api_versions['shout.pleroma.pl-api'] >= 1,
 
     /**
@@ -1432,6 +1494,18 @@ const getFeatures = (instance: Instance) => {
      * @see GET  /api/friendica/statuses/:id/disliked_by
      */
     statusDislikes: v.software === FRIENDICA && gte(v.version, '2023.3.0'),
+
+    /**
+     * @see GET    /api/v1/accounts/:id/subscribers
+     * @see POST   /api/v1/subscriptions
+     * @see GET    /api/v1/subscriptions/options
+     * @see POST   /api/v1/subscriptions/options
+     * @see GET    /api/v1/subscriptions/find
+     * @see POST   /api/v1/subscriptions/invoices
+     * @see GET    /api/v1/subscriptions/invoices/:id
+     * @see DELETE /api/v1/subscriptions/invoices/:id
+     */
+    subscriptions: v.software === MITRA,
 
     /**
      * Can display suggested accounts.

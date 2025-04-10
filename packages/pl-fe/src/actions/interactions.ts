@@ -47,13 +47,13 @@ const messages = defineMessages({
   selectFolder: { id: 'status.bookmark.select_folder', defaultMessage: 'Select folder' },
 });
 
-const reblog = (status: Pick<Status, 'id'>) =>
+const reblog = (status: Pick<Status, 'id'>, visibility?: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return noOp();
 
     dispatch(reblogRequest(status.id));
 
-    return getClient(getState()).statuses.reblogStatus(status.id).then((response) => {
+    return getClient(getState()).statuses.reblogStatus(status.id, visibility).then((response) => {
       // The reblog API method returns a new status wrapped around the original. In this case we are only
       // interested in how the original is modified, hence passing it skipping the wrapper
       if (response.reblog) dispatch(importEntities({ statuses: [response.reblog] }));
@@ -73,11 +73,11 @@ const unreblog = (status: Pick<Status, 'id'>) =>
     });
   };
 
-const toggleReblog = (status: Pick<Status, 'id' | 'reblogged'>) => {
+const toggleReblog = (status: Pick<Status, 'id' | 'reblogged'>, visibility?: string) => {
   if (status.reblogged) {
     return unreblog(status);
   } else {
-    return reblog(status);
+    return reblog(status, visibility);
   }
 };
 

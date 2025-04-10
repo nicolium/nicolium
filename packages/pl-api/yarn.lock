@@ -2889,10 +2889,10 @@ vite-plugin-dts@^4.5.0:
     local-pkg "^0.5.1"
     magic-string "^0.30.17"
 
-vite@^6.1.2:
-  version "6.1.2"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-6.1.2.tgz#2c046f1de13ca7a63de5ae42237ccdcde97dbf55"
-  integrity sha512-EiXfDyO/uNKhYOSlZ6+9qBz4H46A8Lr07pyjmb88KTbJ+xkXvnqtxvgtg2VxPU6Kfj8Ep0un9JLqdrCWLqIanw==
+vite@^6.1.4:
+  version "6.1.4"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-6.1.4.tgz#1088fc981a59686b461a4780322d410a1fd39f9f"
+  integrity sha512-VzONrF/qqEg/JBwHXBJdVSmBZBhwiPGinyUb0SQLByqQwi6o8UvX5TWLkpvkq3tvN8Cr273ieZDt36CGwWRMvA==
   dependencies:
     esbuild "^0.24.2"
     postcss "^8.5.2"

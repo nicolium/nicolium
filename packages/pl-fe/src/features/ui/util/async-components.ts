@@ -59,6 +59,7 @@ export const IntentionalError = lazy(() => import('pl-fe/features/intentional-er
 export const InteractionPolicies = lazy(() => import('pl-fe/features/interaction-policies'));
 export const InteractionRequests = lazy(() => import('pl-fe/features/interaction-requests'));
 export const LandingTimeline = lazy(() => import('pl-fe/features/landing-timeline'));
+export const LinkTimeline = lazy(() => import('pl-fe/features/link-timeline'));
 export const Lists = lazy(() => import('pl-fe/features/lists'));
 export const ListTimeline = lazy(() => import('pl-fe/features/list-timeline'));
 export const LoginPage = lazy(() => import('pl-fe/features/auth-login/components/login-page'));

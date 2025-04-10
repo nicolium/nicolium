@@ -125,7 +125,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
   };
 
   const renderItems = (items: Menu | undefined) => (
-    <ul>
+    <ul className='overflow-hidden'>
       {items?.map((item, idx) => (
         <DropdownMenuItem
           key={idx}
@@ -147,7 +147,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
             {Component && <Component handleClose={handleClose} />}
             {(items?.length || touchscreen) && renderItems(items)}
           </div>
-          <div className={clsx({ 'w-full': touchscreen, 'fit-content': !touchscreen })}>
+          <div className={clsx({ 'w-full': touchscreen, 'fit-content mr-auto': !touchscreen })}>
             {tab !== undefined && (
               <>
                 <HStack className='mx-2 my-1 text-gray-700 dark:text-gray-300' space={3} alignItems='center'>

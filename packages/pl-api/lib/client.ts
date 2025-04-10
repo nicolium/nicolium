@@ -70,6 +70,9 @@ import {
   statusSchema,
   statusSourceSchema,
   streamingEventSchema,
+  subscriptionDetailsSchema,
+  subscriptionInvoiceSchema,
+  subscriptionOptionSchema,
   suggestionSchema,
   tagSchema,
   tokenSchema,
@@ -79,6 +82,7 @@ import {
 } from './entities';
 import { circleSchema } from './entities/circle';
 import { type GroupedNotificationsResults, groupedNotificationsResultsSchema, type NotificationGroup } from './entities/grouped-notifications-results';
+import { ShoutMessage, shoutMessageSchema } from './entities/shout-message';
 import { filteredArray } from './entities/utils';
 import { AKKOMA, type Features, getFeatures, GOTOSOCIAL, MITRA, PIXELFED } from './features';
 import request, { getNextLink, getPrevLink, type RequestBody, type RequestMeta } from './request';
@@ -107,6 +111,7 @@ import type {
   GetAccountFollowingParams,
   GetAccountParams,
   GetAccountStatusesParams,
+  GetAccountSubscribersParams,
   GetRelationshipsParams,
   GetScrobblesParams,
   ReportAccountParams,
@@ -283,6 +288,10 @@ class PlApiClient {
     unlisten: (listener: any) => void;
     subscribe: (stream: string, params?: { list?: string; tag?: string }) => void;
     unsubscribe: (stream: string, params?: { list?: string; tag?: string }) => void;
+    close: () => void;
+  };
+  #shoutSocket?: {
+    message: (text: string) => void;
     close: () => void;
   };
 
@@ -590,6 +599,14 @@ class PlApiClient {
       this.#paginatedGet(`/api/v1/accounts/${accountId}/following`, { params }, accountSchema),
 
     /**
+     * Subscriptions to the given user.
+     *
+     * Requires features{@link Features['subscriptions']}.
+     */
+    getAccountSubscribers: async (accountId: string, params?: GetAccountSubscribersParams) =>
+      this.#paginatedGet(`/api/v1/accounts/${accountId}/subscribers`, { params }, accountSchema),
+
+    /**
      * Get account’s featured tags
      * Tags featured by this account.
      *
@@ -870,6 +887,17 @@ class PlApiClient {
       const response = await this.request('/api/v1/pleroma/scrobble', { body: params });
 
       return v.parse(scrobbleSchema, response.json);
+    },
+
+    /**
+     * Load latest activities from outbox
+     *
+     * Requires features{@link Features['loadActivities']}
+     */
+    loadActivities: async (accountId: string) => {
+      const response = await this.request<{}>(`/api/v1/accounts/${accountId}/load_activities`);
+
+      return response.json;
     },
   };
 
@@ -1157,6 +1185,14 @@ class PlApiClient {
 
       if (params.settings_store) {
         (params as any).pleroma_settings_store = params.settings_store;
+
+        if (this.features.version.software === MITRA) {
+          await this.request('/api/v1/settings/client_config', {
+            method: 'POST',
+            body: params.settings_store,
+          });
+        }
+
         delete params.settings_store;
       }
 
@@ -1418,6 +1454,17 @@ class PlApiClient {
     },
 
     /**
+     * Requires features{@link Features['deleteAccountWithoutPassword']}.
+     */
+    deleteAccountWithoutPassword: async () => {
+      const response = await this.request('/api/v1/settings/delete_account', {
+        method: 'POST',
+      });
+
+      return response.json as {};
+    },
+
+    /**
      * Disable an account
      *
      * Requires features{@link Features['disableAccount']}.
@@ -1452,14 +1499,27 @@ class PlApiClient {
        * Requires features{@link Features['manageMfa']}.
        */
       getMfaSettings: async () => {
-        const response = await this.request('/api/pleroma/accounts/mfa');
+        let response;
+
+        switch (this.features.version.software) {
+          case GOTOSOCIAL:
+            response = await this.request('/api/v1/user').then(({ json }) => ({
+              settings: {
+                enabled: !!json?.two_factor_enabled_at,
+                method: 'totp',
+              },
+            }));
+            break;
+          default:
+            response = (await this.request('/api/pleroma/accounts/mfa')).json;
+        }
 
         return v.parse(v.object({
           settings: v.object({
             enabled: v.boolean(),
             totp: v.boolean(),
           }),
-        }), response.json);
+        }), response);
       },
 
       /**
@@ -1477,36 +1537,66 @@ class PlApiClient {
        * Requires features{@link Features['manageMfa']}.
        */
       getMfaSetup: async (method: 'totp') => {
-        const response = await this.request(`/api/pleroma/accounts/mfa/setup/${method}`);
+        let response;
+
+        switch (this.features.version.software) {
+          case GOTOSOCIAL:
+            response = await this.request('/api/v1/user/2fa/qruri').then(({ data }) => ({
+              provisioning_uri: data,
+              key: new URL(data).searchParams.get('secret'),
+            }));
+            break;
+          default:
+            response = (await this.request(`/api/pleroma/accounts/mfa/setup/${method}`)).json;
+        }
 
         return v.parse(v.object({
-          key: v.string(),
+          key: v.fallback(v.string(), ''),
           provisioning_uri: v.string(),
-        }), response.json);
+        }), response);
       },
 
       /**
        * Requires features{@link Features['manageMfa']}.
        */
       confirmMfaSetup: async (method: 'totp', code: string, password: string) => {
-        const response = await this.request(`/api/pleroma/accounts/mfa/confirm/${method}`, {
-          method: 'POST',
-          body: { code, password },
-        });
+        let response;
 
-        if (response.json?.error) throw response.json.error;
+        switch (this.features.version.software) {
+          case GOTOSOCIAL:
+            response = await this.request('/api/v1/user/2fa/enable', { method: 'POST', body: { code } });
+            break;
+          default:
+            response = (await this.request(`/api/pleroma/accounts/mfa/confirm/${method}`, {
+              method: 'POST',
+              body: { code, password },
+            })).json;
+        }
 
-        return response.json as {};
+        if (response?.error) throw response.error;
+
+        return response as {};
       },
 
       /**
        * Requires features{@link Features['manageMfa']}.
        */
       disableMfa: async (method: 'totp', password: string) => {
-        const response = await this.request(`/api/pleroma/accounts/mfa/${method}`, {
-          method: 'DELETE',
-          body: { password },
-        });
+        let response;
+
+        switch (this.features.version.software) {
+          case GOTOSOCIAL:
+            response = await this.request('/api/v1/user/2fa/disable', {
+              method: 'POST',
+              body: { password },
+            });
+            break;
+          default:
+            response = await this.request(`/api/pleroma/accounts/mfa/${method}`, {
+              method: 'DELETE',
+              body: { password },
+            });
+        }
 
         if (response.json?.error) throw response.json.error;
 
@@ -1532,6 +1622,12 @@ class PlApiClient {
             contentType: '',
           });
           break;
+        case MITRA:
+          response = await this.request('/api/v1/settings/import_follows', {
+            method: 'POST',
+            body: { follows_csv: typeof list === 'string' ? list : await list.text() },
+          });
+          break;
         default:
           response = await this.request('/api/pleroma/follow_import', {
             method: 'POST',
@@ -1539,6 +1635,20 @@ class PlApiClient {
             contentType: '',
           });
       }
+
+      return response.json;
+    },
+
+    /**
+    * Move followers from remote alias. (experimental?)
+    *
+    * Requires features{@link Features['importFollowers']}.
+    */
+    importFollowers: async (list: File | string, actorId: string) => {
+      const response = await this.request('/api/v1/settings/import_followers', {
+        method: 'POST',
+        body: { from_actor_id: actorId, followers_csv: typeof list === 'string' ? list : await list.text() },
+      });
 
       return response.json;
     },
@@ -1576,16 +1686,55 @@ class PlApiClient {
      * Imports your mutes.
      *
      * Requires features{@link Features['importMutes']}.
+     * `overwrite` mode requires features{@link Features['importOverwrite']}.
      * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#apipleromamutes_import}
      */
-    importMutes: async (list: File | string) => {
-      const response = await this.request('/api/pleroma/mutes_import', {
-        method: 'POST',
-        body: { list },
-        contentType: '',
-      });
+    importMutes: async (list: File | string, mode?: 'merge' | 'overwrite') => {
+      let response;
+
+      switch (this.features.version.software) {
+        case GOTOSOCIAL:
+          response = await this.request('/api/v1/import', {
+            method: 'POST',
+            body: { data: list, type: 'blocks', mode },
+            contentType: '',
+          });
+          break;
+        default:
+          response = await this.request('/api/pleroma/mutes_import', {
+            method: 'POST',
+            body: { list },
+            contentType: '',
+          });
+      }
 
       return response.json;
+    },
+
+    /**
+     * Export followers to CSV file
+     *
+     * Requires features{@link Features['exportFollowers']}.
+     */
+    exportFollowers: async () => {
+      const response = await this.request('/api/v1/settings/export_followers', {
+        method: 'GET',
+      });
+
+      return response.data;
+    },
+
+    /**
+     * Export follows to CSV file
+     *
+     * Requires features{@link Features['exportFollows']}.
+     */
+    exportFollows: async () => {
+      const response = await this.request('/api/v1/settings/export_follows', {
+        method: 'GET',
+      });
+
+      return response.data;
     },
 
     /**
@@ -2133,6 +2282,8 @@ class PlApiClient {
      * Boost a status
      * Reshare a status on your own profile.
      * @see {@link https://docs.joinmastodon.org/methods/statuses/#reblog}
+     *
+     * Specifying reblog visibility requires features{@link Features['reblogVisibility']}.
      */
     reblogStatus: async (statusId: string, visibility?: string) => {
       const response = await this.request(`/api/v1/statuses/${statusId}/reblog`, { method: 'POST', body: { visibility } });
@@ -2374,6 +2525,17 @@ class PlApiClient {
 
     getStatusMentionedUsers: async (statusId: string, params?: GetStatusMentionedUsersParams) =>
       this.#paginatedGet(`/api/v1/statuses/${statusId}/mentioned_by`, { params }, accountSchema),
+
+    /**
+     * Load conversation from a remote server.
+     *
+     * Requires features{@link Features['loadConversation']}.
+     */
+    loadConversation: async (statusId: string) => {
+      const response = await this.request <{}>(`/api/v1/statuses/${statusId}/load_conversation`, { method: 'POST' });
+
+      return response.json;
+    },
   };
 
   public readonly media = {
@@ -3261,9 +3423,17 @@ class PlApiClient {
      * Requires features{@link Features['frontendConfigurations']}.
      */
     getFrontendConfigurations: async () => {
-      const response = await this.request('/api/pleroma/frontend_configurations');
+      let response;
 
-      return v.parse(v.fallback(v.record(v.string(), v.record(v.string(), v.any())), {}), response.json);
+      switch (this.features.version.software) {
+        case MITRA:
+          response = (await this.request('/api/v1/accounts/verify_credentials')).json?.client_config;
+          break;
+        default:
+          response = (await this.request('/api/pleroma/frontend_configurations')).json;
+      }
+
+      return v.parse(v.fallback(v.record(v.string(), v.record(v.string(), v.any())), {}), response);
     },
   };
 
@@ -4585,6 +4755,58 @@ class PlApiClient {
     },
   };
 
+  public readonly shoutbox = {
+    connect: (token: string, { onMessage, onMessages }: {
+      onMessages: (messages: Array<ShoutMessage>) => void;
+      onMessage: (message: ShoutMessage) => void;
+    }) => {
+      let counter = 2;
+      let intervalId: NodeJS.Timeout;
+      if (this.#shoutSocket) return this.#shoutSocket;
+
+      const path = buildFullPath('/socket/websocket', this.baseURL, { token, vsn: '2.0.0' });
+
+      const ws = new WebSocket(path);
+
+      ws.onmessage = (event) => {
+        const [_, __, ___, type, payload] = JSON.parse(event.data as string);
+        if (type === 'new_msg') {
+          const message = v.parse(shoutMessageSchema, payload);
+          onMessage(message);
+        } else if (type === 'messages') {
+          const messages = v.parse(filteredArray(shoutMessageSchema), payload.messages);
+          onMessages(messages);
+        }
+      };
+
+      ws.onopen = () => {
+        ws.send(JSON.stringify(['3', `${++counter}`, 'chat:public', 'phx_join', {}]));
+
+        intervalId = setInterval(() => {
+          ws.send(JSON.stringify([null, `${++counter}`, 'phoenix', 'heartbeat', {}]));
+        }, 5000);
+      };
+
+      ws.onclose = () => {
+        clearInterval(intervalId);
+      };
+
+      this.#shoutSocket = {
+        message: (text: string) => {
+          // guess this is meant to be incremented on each call but idk
+          ws.send(JSON.stringify(['3', `${++counter}`, 'chat:public', 'new_msg', { 'text': text }]));
+        },
+        close: () => {
+          ws.close();
+          this.#shoutSocket = undefined;
+          clearInterval(intervalId);
+        },
+      };
+
+      return this.#shoutSocket;
+    },
+  };
+
   public readonly events = {
     /**
      * Creates an event
@@ -5093,6 +5315,106 @@ class PlApiClient {
       const response = await this.request<{}>('/api/v1/pleroma/rss_feed_subscriptions', { method: 'DELETE', body: { url } });
 
       return response.json;
+    },
+  };
+
+  public readonly subscriptions = {
+    /**
+     * Add subscriber or extend existing subscription.
+     *
+     * Requires features{@link Features['subscriptions']}.
+     * @param subscriberId - The subscriber ID.
+     * @param duration - The subscription duration (in seconds).
+     */
+    createSubscription: async(subscriberId: string, duration: number) => {
+      const response = await this.request('/api/v1/subscriptions', { method: 'POST', body: { subscriber_id: subscriberId, duration } });
+
+      return v.parse(subscriptionDetailsSchema, response.json);
+    },
+
+    /**
+     * Get list of subscription options
+     *
+     * Requires features{@link Features['subscriptions']}.
+     */
+    getSubscriptionOptions: async () => {
+      const response = await this.request('/api/v1/subscriptions/options');
+
+      return v.parse(filteredArray(subscriptionOptionSchema), response.json);
+    },
+
+    /**
+     * Enable subscriptions or update subscription settings
+     *
+     * Requires features{@link Features['subscriptions']}.
+     * @param type - Subscription type
+     * @param chainId - CAIP-2 chain ID.
+     * @param price - Subscription price (only for Monero)
+     * @param payoutAddress - Payout address (only for Monero)
+     */
+    updateSubscription: async(type: 'monero', chainId?: string, price?: number, payoutAddress?: string) => {
+      const response = await this.request('/api/v1/subscriptions/options', { method: 'POST', body: { type, chain_id: chainId, price, payout_address: payoutAddress } });
+
+      return v.parse(accountSchema, response.json);
+    },
+
+    /**
+     * Find subscription by sender and recipient
+     *
+     * Requires features{@link Features['subscriptions']}.
+     * @param senderId - Sender ID.
+     * @param recipientId - Recipient ID.
+     */
+    findSubscription: async(senderId: string, recipientId: string) => {
+      const response = await this.request('/api/v1/subscriptions/find', { method: 'POST', body: { sender_id: senderId, recipient_id: recipientId } });
+
+      return v.parse(subscriptionDetailsSchema, response.json);
+    },
+
+    /**
+     * Create invoice
+     *
+     * Requires features{@link Features['subscriptions']}.
+     * @param senderId - Sender ID.
+     * @param recipientId - Recipient ID.
+     * @param chainId - CAIP-2 chain ID.
+     * @param amount - Requested payment amount (in atomic units).
+     */
+    createInvoice: async(senderId: string, recipientId: string, chainId: string, amount: number) => {
+      const response = await this.request('/api/v1/subscriptions/invoices', {
+        method: 'POST',
+        body: {
+          sender_id: senderId, recipient_id: recipientId, chain_id: chainId, amount,
+        },
+      });
+
+      return v.parse(subscriptionInvoiceSchema, response.json);
+    },
+
+    /**
+     * View information about an invoice.
+     *
+     * Requires features{@link Features['invoices']}.
+     * @param invoiceId - Invoice ID
+     */
+    getInvoice: async(invoiceId: string) => {
+      const response = await this.request(`/api/v1/subscriptions/invoices/${invoiceId}`);
+
+      return v.parse(subscriptionInvoiceSchema, response.json);
+    },
+
+    /**
+     * Cancel invoice.
+     *
+     * Requires features{@link Features['invoices']}.
+     * @param invoiceId - Invoice ID
+     */
+    cancelInvoice: async(invoiceId: string) => {
+      const response = await this.request(`/api/v1/subscriptions/invoices/${invoiceId}`, {
+        method: 'DELETE',
+      });
+
+      return v.parse(subscriptionInvoiceSchema, response.json);
     },
   };
 

@@ -17,7 +17,6 @@ import { truncateFilename } from 'pl-fe/utils/media';
 import { isIOS } from '../is-mobile';
 import { isPanoramic, isPortrait, isNonConformingRatio, minimumAspectRatio, maximumAspectRatio } from '../utils/media-aspect-ratio';
 
-
 import type { MediaAttachment } from 'pl-api';
 
 const ATTACHMENT_LIMIT = 4;

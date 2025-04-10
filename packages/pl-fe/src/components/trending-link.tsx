@@ -1,5 +1,6 @@
 import { TrendsLink } from 'pl-api';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { getTextDirection } from 'pl-fe/utils/rtl';
 
@@ -56,7 +57,11 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
             </Text>
           </HStack>
 
-          {!!count && accountsCountRenderer(count)}
+          {!!count && (
+            <Link to={`/links/${encodeURIComponent(trendingLink.url)}`} className='hover:underline'>
+              {accountsCountRenderer(count)}
+            </Link>
+          )}
         </HStack>
       </Stack>
     </a>

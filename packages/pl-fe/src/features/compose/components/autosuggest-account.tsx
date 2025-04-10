@@ -13,7 +13,7 @@ const AutosuggestAccount: React.FC<IAutosuggestAccount> = ({ id }) => {
 
   return (
     <div className='snap-start snap-always'>
-      <Account account={account} hideActions showAccountHoverCard={false} />
+      <Account account={account} hideActions showAccountHoverCard={false} disabled />
     </div>
   );
 

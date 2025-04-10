@@ -43,3 +43,60 @@
 .underline-line-through {
   text-decoration: underline line-through;
 }
+
+// Adapted from Iceshrimp which I guess took it from Misskey
+// https://iceshrimp.dev/iceshrimp/iceshrimp/src/branch/dev/packages/client/src/components/global/MkAvatar.vue
+.avatar__cat {
+  img {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+  }
+
+  &::before,
+	&::after {
+		background: #ebbcba;
+		border: solid 0.05em currentcolor;
+		box-sizing: border-box;
+		content: "";
+		display: inline-block;
+		height: 50%;
+		width: 50%;
+	}
+
+	&::before {
+		border-radius: 0 75% 75%;
+		transform: rotate(37.5deg) skew(30deg);
+	}
+
+	&::after {
+		border-radius: 75% 0 75% 75%;
+		transform: rotate(-37.5deg) skew(-30deg);
+	}
+
+	&:hover {
+		&::before {
+			animation: earwiggleleft 1s infinite;
+		}
+
+		&::after {
+			animation: earwiggleright 1s infinite;
+		}
+	}
+}
+
+@keyframes earwiggleleft {
+	0% { transform: rotate(37.6deg) skew(30deg); }
+	25% { transform: rotate(10deg) skew(30deg); }
+	50% { transform: rotate(20deg) skew(30deg); }
+	75% { transform: rotate(0deg) skew(30deg); }
+	100% { transform: rotate(37.6deg) skew(30deg); }
+}
+
+@keyframes earwiggleright {
+	0% { transform: rotate(-37.6deg) skew(-30deg); }
+	30% { transform: rotate(-10deg) skew(-30deg); }
+	55% { transform: rotate(-20deg) skew(-30deg); }
+	75% { transform: rotate(0deg) skew(-30deg); }
+	100% { transform: rotate(-37.6deg) skew(-30deg); }
+}

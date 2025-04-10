@@ -58,6 +58,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
               alt={account.avatar_description}
               className='!absolute bottom-0 left-3 translate-y-1/2 bg-white ring-2 ring-white dark:bg-primary-900 dark:ring-primary-900'
               size={64}
+              isCat={account.is_cat}
             />
           </Link>
         </HoverAccountWrapper>

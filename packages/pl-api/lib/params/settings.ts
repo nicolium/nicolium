@@ -1,7 +1,7 @@
 /**
  * @category Request params
  */
-interface CreateAccountParams {
+type CreateAccountParams = {
   /** String. The desired username for the account */
   username: string;
   /** String. The email address to be used for login */
@@ -31,7 +31,15 @@ interface CreateAccountParams {
   domain?: string;
 
   accepts_email_list?: boolean;
-}
+
+  /** Invite code */
+  invite_code?: string;
+} & ({
+  /** EIP-4361 message */
+  message: string;
+  /** EIP-4361 signature (required if message is present) */
+  signature: string;
+} | {})
 
 /**
  * @category Request params
@@ -120,6 +128,17 @@ interface UpdateCredentialsParams {
    * Requires features{@link Features['accountEnableRss']}.
   */
   enable_rss?: boolean;
+
+  /** Whether the user is a cat */
+  is_cat?: boolean;
+  /** Whether the user speaks as a cat */
+  speak_as_cat?: boolean;
+
+  /**
+   * Mention policy
+   * Required features{@link Features['accountMentionPolicy']}.
+   */
+  mention_policy?: 'none' | 'only_known' | 'only_contacts';
 }
 
 /**

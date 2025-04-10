@@ -6,6 +6,7 @@ import Column from 'pl-fe/components/ui/column';
 import Stack from 'pl-fe/components/ui/stack';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useFeatures } from 'pl-fe/hooks/use-features';
 
 import DisableOtpForm from './mfa/disable-otp-form';
 import EnableOtpForm from './mfa/enable-otp-form';
@@ -25,6 +26,7 @@ const messages = defineMessages({
 const MfaForm: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const features = useFeatures();
   const [displayOtpForm, setDisplayOtpForm] = useState<boolean>(false);
 
   useEffect(() => {
@@ -44,8 +46,8 @@ const MfaForm: React.FC = () => {
         <DisableOtpForm />
       ) : (
         <Stack space={4}>
-          <EnableOtpForm displayOtpForm={displayOtpForm} handleSetupProceedClick={handleSetupProceedClick} />
-          {displayOtpForm && <OtpConfirmForm />}
+          {features.manageMfaBackupCodes && <EnableOtpForm displayOtpForm={displayOtpForm} handleSetupProceedClick={handleSetupProceedClick} />}
+          {(displayOtpForm || !features.manageMfaBackupCodes) && <OtpConfirmForm />}
         </Stack>
       )}
     </Column>

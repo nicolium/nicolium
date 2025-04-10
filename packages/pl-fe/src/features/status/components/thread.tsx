@@ -150,7 +150,7 @@ const Thread: React.FC<IThread> = ({
       if ((e && e.shiftKey) || !boostModal) {
         handleModalReblog(status);
       } else {
-        openModal('BOOST', { statusId: status.id, onReblog: handleModalReblog });
+        openModal('BOOST', { statusId: status.id, onReblog: () => handleModalReblog(status) });
       }
     }
   };

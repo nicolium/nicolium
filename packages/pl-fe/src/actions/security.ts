@@ -36,7 +36,9 @@ const deleteAccount = (password: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const account = getLoggedInAccount(getState())!;
 
-    return getClient(getState).settings.deleteAccount(password).then(() => {
+    const client = getClient(getState);
+
+    return (client.features.deleteAccount ? client.settings.deleteAccount(password) : client.settings.deleteAccountWithoutPassword()).then(() => {
       dispatch<SecurityAction>({ type: AUTH_LOGGED_OUT, account });
       toast.success(messages.loggedOut);
     });

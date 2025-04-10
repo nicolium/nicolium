@@ -245,19 +245,29 @@ const Status: React.FC<IStatus> = (props) => {
         );
       }
 
+      const values = {
+        name: <FormattedList type='conjunction' value={renderedAccounts} />,
+        count: accounts.length,
+      };
+
       return (
         <StatusInfo
           avatarSize={avatarSize}
           icon={<Icon src={require('@tabler/icons/outline/repeat.svg')} className='size-4 text-green-600' />}
           text={
-            <FormattedMessage
-              id='status.reblogged_by'
-              defaultMessage='{name} reposted'
-              values={{
-                name: <FormattedList type='conjunction' value={renderedAccounts} />,
-                count: accounts.length,
-              }}
-            />
+            status.visibility === 'private' ? (
+              <FormattedMessage
+                id='status.reblogged_by_private'
+                defaultMessage='{name} reposted to followers'
+                values={values}
+              />
+            ) : (
+              <FormattedMessage
+                id='status.reblogged_by'
+                defaultMessage='{name} reposted'
+                values={values}
+              />
+            )
           }
         />
       );

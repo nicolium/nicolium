@@ -130,7 +130,9 @@
         "vars": "all",
         "args": "none",
         "ignoreRestSiblings": true,
-        "caughtErrors": "none"
+        "caughtErrors": "none",
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_"
       }
     ],
     "no-useless-escape": "warn",

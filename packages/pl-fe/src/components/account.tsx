@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -136,6 +136,8 @@ const Account = ({
   const overflowRef = useRef<HTMLDivElement>(null);
   const actionRef = useRef<HTMLDivElement>(null);
 
+  const [style, setStyle] = useState<React.CSSProperties>({});
+
   const me = useAppSelector((state) => state.me);
   const username = useAppSelector((state) => account ? getAcct(account, displayFqn(state)) : null);
 
@@ -175,6 +177,32 @@ const Account = ({
 
   const intl = useIntl();
 
+  useLayoutEffect(() => {
+    const onResize = () => {
+      const style: React.CSSProperties = {};
+      const actionWidth = actionRef.current?.clientWidth || 0;
+
+      if (overflowRef.current) {
+        style.maxWidth = Math.max(0, overflowRef.current.clientWidth - (withAvatar ? avatarSize + 12 : 0) - (actionWidth ? actionWidth + 12 : 0));
+      }
+
+      setStyle(style);
+    };
+
+    onResize();
+
+    if (overflowRef.current) {
+      const targetElement = overflowRef.current;
+      const resizeObserver = new ResizeObserver(onResize);
+      resizeObserver.observe(targetElement);
+
+      return () => {
+        resizeObserver.unobserve(targetElement);
+      };
+    }
+  }, [overflowRef, actionRef]);
+
+
   if (!account) {
     return null;
   }
@@ -191,9 +219,9 @@ const Account = ({
   if (disabled) return (
     <div data-testid='account' className='group block w-full shrink-0' ref={overflowRef}>
       <HStack alignItems={actionAlignment} space={3} justifyContent='between'>
-        <HStack alignItems='center' space={3} className='overflow-hidden'>
+        <HStack alignItems='center' space={3}>
           <div className='rounded-lg'>
-            <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} />
+            <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} isCat={account.is_cat} />
             {emoji && (
               <Emoji
                 className='!absolute -right-1.5 bottom-0 size-5'
@@ -242,14 +270,14 @@ const Account = ({
   return (
     <div data-testid='account' className='group block w-full shrink-0' ref={overflowRef}>
       <HStack alignItems={actionAlignment} space={3} justifyContent='between'>
-        <HStack alignItems={withAccountNote || note ? 'top' : 'center'} space={3} className='overflow-hidden'>
+        <HStack alignItems={withAccountNote || note ? 'top' : 'center'} space={3}>
           {withAvatar && (
             <ProfilePopper
               condition={showAccountHoverCard}
               wrapper={(children) => <HoverAccountWrapper className='relative' accountId={account.id} element='span'>{children}</HoverAccountWrapper>}
             >
               <LinkEl className='rounded-lg' {...linkProps}>
-                <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} />
+                <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} isCat={account.is_cat} />
                 {emoji && (
                   <Emoji
                     className='!absolute -right-1.5 bottom-0 size-5'
@@ -261,7 +289,7 @@ const Account = ({
             </ProfilePopper>
           )}
 
-          <div className='grow overflow-hidden'>
+          <div className='grow overflow-hidden' style={style}>
             <ProfilePopper
               condition={showAccountHoverCard}
               wrapper={(children) => <HoverAccountWrapper accountId={account.id} element='span'>{children}</HoverAccountWrapper>}

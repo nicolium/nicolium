@@ -88,12 +88,13 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
       tabIndex={0}
     >
       <HStack alignItems='center' justifyContent='between' space={2} className='w-full'>
-        <HStack alignItems='center' space={2} className='overflow-hidden'>
+        <HStack alignItems='center' space={2}>
           <Avatar
             src={chat.account.avatar}
             alt={chat.account.avatar_description}
             size={40}
             className='flex-none'
+            isCat={chat.account.is_cat}
           />
 
           <Stack alignItems='start' className='overflow-hidden'>
@@ -136,7 +137,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
 
         <HStack alignItems='center' space={2}>
           {features.chatsDelete && (
-            <div className='hidden text-gray-600 hover:text-gray-100 group-hover:block'>
+            <div className='max-w-0 overflow-hidden text-gray-600 hover:text-gray-100 group-hover:max-w-full'>
               <DropdownMenu items={menu}>
                 <IconButton
                   src={require('@tabler/icons/outline/dots.svg')}

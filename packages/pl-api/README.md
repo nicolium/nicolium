@@ -40,6 +40,8 @@ For unsupported projects, it falls back to a basic feature set, though every met
 * [`pl-fe`](https://github.com/mkljczk/pl-fe/tree/develop/packages/pl-fe) is a web client for Mastodon-compatible servers forked from Soapbox. It uses `pl-api` for API interactions.
 * [`pl-hooks`](https://github.com/mkljczk/pl-fe/tree/develop/packages/pl-hooks) is a work-in-progress library utilizing `pl-api`.
 
+If you are using `pl-api` in your project, please open a pull request with a link to the project.
+
 ## License
 
 `pl-api` utilizes parts of code from [Soapbox](https://gitlab.com/soapbox-pub/soapbox) and bases off official [Mastodon documentation](https://docs.joinmastodon.org).

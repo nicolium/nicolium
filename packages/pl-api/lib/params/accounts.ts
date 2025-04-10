@@ -30,6 +30,14 @@ type GetAccountFollowingParams = PaginationParams & WithRelationshipsParam;
 /**
  * @category Request params
  */
+interface GetAccountSubscribersParams extends PaginationParams, WithRelationshipsParam {
+  /** Include expired subscriptions. */
+  include_expired?: boolean;
+}
+
+/**
+ * @category Request params
+ */
 interface FollowAccountParams {
   /** Boolean. Receive this account’s reblogs in home timeline? Defaults to true. */
   reblogs?: boolean;
@@ -111,6 +119,7 @@ export type {
   GetAccountStatusesParams,
   GetAccountFollowersParams,
   GetAccountFollowingParams,
+  GetAccountSubscribersParams,
   FollowAccountParams,
   GetRelationshipsParams,
   SearchAccountParams,

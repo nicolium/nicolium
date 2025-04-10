@@ -128,7 +128,7 @@ const ChatPageMain = () => {
   return (
     <Stack className='h-full overflow-hidden'>
       <HStack alignItems='center' justifyContent='between' space={2} className='w-full p-4'>
-        <HStack alignItems='center' space={2} className='overflow-hidden'>
+        <HStack alignItems='center' space={2}>
           <HStack alignItems='center'>
             <IconButton
               src={require('@tabler/icons/outline/arrow-left.svg')}
@@ -137,7 +137,7 @@ const ChatPageMain = () => {
             />
 
             <Link to={`/@${chat.account.acct}`}>
-              <Avatar src={chat.account.avatar} alt={chat.account.avatar_description} size={40} className='flex-none' />
+              <Avatar src={chat.account.avatar} alt={chat.account.avatar_description} size={40} className='flex-none' isCat={chat.account.is_cat} />
             </Link>
           </HStack>
 
@@ -157,7 +157,7 @@ const ChatPageMain = () => {
           src={require('@tabler/icons/outline/info-circle.svg')}
           component={() => (
             <HStack className='px-4 py-2' alignItems='center' space={3}>
-              <Avatar src={chat.account.avatar_static} alt={chat.account.avatar_description} size={50} />
+              <Avatar src={chat.account.avatar_static} alt={chat.account.avatar_description} size={50} isCat={chat.account.is_cat} />
               <Stack>
                 <Text weight='semibold'>{chat.account.display_name}</Text>
                 <Text size='sm' theme='primary'>@{chat.account.acct}</Text>

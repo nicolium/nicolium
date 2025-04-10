@@ -18,6 +18,8 @@ import StatusMention from './status-mention';
 
 import type { CustomEmoji, Mention } from 'pl-api';
 
+const GREENTEXT_CLASS = 'dark:text-accent-green text-lime-600';
+
 const nodesToText = (nodes: Array<DOMNode>): string =>
   nodes.map(node => node.type === 'text' ? node.data : node.type === 'tag' ? nodesToText(node.children as Array<DOMNode>) : '').join('');
 
@@ -101,16 +103,17 @@ function parseContent({
   const options: HTMLReactParserOptions = {
     replace(domNode) {
       if (!(domNode instanceof Element)) {
-        const data = speakAsCat ? nyaize(domNode.data) : domNode.data;
+        // @ts-ignore
+        domNode.preGreentext = (!domNode.prev || domNode.prev.preGreentext) && !domNode.data.trim().length;
 
+        // @ts-ignore
+        const data = domNode.prev?.preGreentext ? domNode.data.trim() : domNode.data;
         // @ts-ignore
         if (greentext && (data.startsWith('>') || domNode.prev?.greentext)) {
           // @ts-ignore
           domNode.greentext = true;
-          return <span className='dark:text-accent-green text-lime-600'>{data}</span>;
+          return <span className={GREENTEXT_CLASS}>{domNode.data}</span>;
         }
-
-        if (speakAsCat) return data;
 
         return;
       }
@@ -123,9 +126,14 @@ function parseContent({
         return <></>;
       }
 
+      if (domNode.attribs.class?.split(' ').includes('h-card')) {
+        // @ts-ignore
+        domNode.preGreentext = !domNode.prev || domNode.prev.preGreentext;
+      }
+
       // @ts-ignore
       if (domNode.name !== 'br' && domNode.prev?.greentext) {
-        domNode.attribs.class += ' greentext';
+        domNode.attribs.class = `${domNode.attribs.class || ''} ${GREENTEXT_CLASS}`;
         // @ts-ignore
         domNode.greentext = true;
       }
@@ -135,12 +143,20 @@ function parseContent({
 
         // @ts-ignore
         if (domNode.prev?.greentext) {
-          classes.push('greentext');
+          classes.push(GREENTEXT_CLASS);
           // @ts-ignore
           domNode.greentext = true;
         }
 
-        const href = domNode.attribs.href && cleanUrls ? Purify.clearUrl(domNode.attribs.href) : domNode.attribs.href;
+        let href = domNode.attribs.href;
+
+        if (cleanUrls) {
+          try {
+            href = Purify.clearUrl(href);
+          } catch (_) {
+            //
+          }
+        }
 
         const fallback = (
           // eslint-disable-next-line jsx-a11y/no-static-element-interactions
@@ -212,7 +228,9 @@ function parseContent({
 
     transform(reactNode, _domNode, index) {
       if (typeof reactNode === 'string') {
-        return <Emojify key={index} text={reactNode} emojis={emojiMap} />;
+        const text = speakAsCat ? nyaize(reactNode) : reactNode;
+
+        return <Emojify key={index} text={text} emojis={emojiMap} />;
       }
 
       return reactNode as JSX.Element;
