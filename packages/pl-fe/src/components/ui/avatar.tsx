@@ -36,6 +36,8 @@ const Avatar = (props: IAvatar) => {
   const handleLoadFailure = () => setIsAvatarMissing(true);
 
   useEffect(() => {
+    if (!isCat) return;
+
     if (COLOR_CACHE.has(src)) {
       setColor(COLOR_CACHE.get(src));
       return;
@@ -47,7 +49,7 @@ const Avatar = (props: IAvatar) => {
         setColor(color.hex);
       }
     }).catch(() => setColor(undefined));
-  }, [src]);
+  }, [src, isCat]);
 
   const style: React.CSSProperties = React.useMemo(() => ({
     width: size,
