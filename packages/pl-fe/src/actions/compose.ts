@@ -447,13 +447,19 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
       params.group_id = compose.group_id;
     }
 
-    return dispatch(createStatus(params, idempotencyKey, statusId)).then((data) => {
-      if (!preview) handleComposeSubmit(dispatch, getState, composeId, data, status, !!statusId);
-      else if (data.scheduled_at === null) dispatch(previewComposeSuccess(composeId, data));
-      onSuccess?.();
-    }).catch((error) => {
-      dispatch(submitComposeFail(composeId, error));
-    });
+    if (preview) {
+      getClient(state).statuses.previewStatus(params).then((data) => {
+        dispatch(previewComposeSuccess(composeId, data));
+        onSuccess?.();
+      }).catch(() => {});
+    } else {
+      return dispatch(createStatus(params, idempotencyKey, statusId)).then((data) => {
+        handleComposeSubmit(dispatch, getState, composeId, data, status, !!statusId);
+        onSuccess?.();
+      }).catch((error) => {
+        dispatch(submitComposeFail(composeId, error));
+      });
+    }
   };
 
 const submitComposeRequest = (composeId: string) => ({
@@ -475,7 +481,7 @@ const submitComposeFail = (composeId: string, error: unknown) => ({
   error,
 });
 
-const previewComposeSuccess = (composeId: string, status: BaseStatus) => ({
+const previewComposeSuccess = (composeId: string, status: Partial<BaseStatus>) => ({
   type: COMPOSE_PREVIEW_SUCCESS,
   composeId,
   status,

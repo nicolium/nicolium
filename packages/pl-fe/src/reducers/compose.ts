@@ -141,7 +141,7 @@ interface Compose {
   interactionPolicy: InteractionPolicy | null;
   dismissed_clear_links_suggestions: Array<string>;
   clear_link_suggestion: ClearLinkSuggestion | null;
-  preview: BaseStatus | null;
+  preview: Partial<BaseStatus> | null;
 }
 
 const newCompose = (params: Partial<Compose> = {}): Compose => ({

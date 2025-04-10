@@ -166,6 +166,12 @@ const statusWithoutAccountSchema = v.pipe(v.any(), v.transform(preprocess), v.ob
   quote: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
 }));
 
+const partialStatusSchema = v.partial(v.object({
+  ...baseStatusSchema.entries,
+  reblog: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
+  quote: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
+}));
+
 /**
  * @category Entity types
  */
@@ -183,4 +189,4 @@ type Status = v.InferOutput<typeof baseStatusSchema> & {
   quote: Status | null;
 }
 
-export { statusSchema, statusWithoutAccountSchema, type Status, type StatusWithoutAccount };
+export { statusSchema, statusWithoutAccountSchema, partialStatusSchema, type Status, type StatusWithoutAccount };

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { cancelPreviewCompose } from 'pl-fe/actions/compose';
@@ -17,6 +17,7 @@ import Text from 'pl-fe/components/ui/text';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useCompose } from 'pl-fe/hooks/use-compose';
+import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 
 import type { Status } from 'pl-fe/normalizers/status';
 
@@ -35,18 +36,22 @@ interface IQuotedStatusContainer {
 const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
+  const { account: ownAccount } = useOwnAccount();
 
-  const status = useCompose(composeId).preview as unknown as Status;
+  const previewedStatus = useCompose(composeId).preview as unknown as Status;
 
   const handleClose = () => {
     dispatch(cancelPreviewCompose(composeId));
   };
 
+  const status = useMemo(() => previewedStatus ? ({
+    ...previewedStatus,
+    account: previewedStatus.account || ownAccount,
+  }) : null, [previewedStatus, ownAccount]);
+
   if (!status) {
     return null;
   }
-
-  const account = status.account;
 
   return (
     <OutlineBox>
@@ -66,7 +71,7 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
           />
         </HStack>
         <AccountContainer
-          id={account.id}
+          id={status.account.id}
           timestamp={status.created_at}
           withRelationship={false}
           showAccountHoverCard={false}
@@ -82,7 +87,7 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
 
               {status.quote_id && <QuotedStatusIndicator statusId={status.quote_id} />}
 
-              {status.media_attachments.length > 0 && (
+              {status.media_attachments?.length > 0 && (
                 <div className='relative'>
                   <SensitiveContentOverlay status={status} />
                   <StatusMedia status={status} muted />

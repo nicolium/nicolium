@@ -96,7 +96,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   const statusMeta = statusesMeta[status.id] || {};
   const { data: translation } = useStatusTranslation(status.id, statusMeta.targetLanguage);
 
-  const withSpoiler = status.spoiler_text.length > 0;
+  const withSpoiler = status.spoiler_text?.length > 0;
   const expanded = !withSpoiler || statusMeta.expanded || false;
 
   const maybeSetCollapsed = (): void => {

@@ -57,6 +57,7 @@ import {
   notificationRequestSchema,
   notificationSchema,
   oauthTokenSchema,
+  partialStatusSchema,
   pleromaConfigSchema,
   pollSchema,
   relationshipSchema,
@@ -84,7 +85,7 @@ import { circleSchema } from './entities/circle';
 import { type GroupedNotificationsResults, groupedNotificationsResultsSchema, type NotificationGroup } from './entities/grouped-notifications-results';
 import { ShoutMessage, shoutMessageSchema } from './entities/shout-message';
 import { filteredArray } from './entities/utils';
-import { AKKOMA, type Features, getFeatures, GOTOSOCIAL, MITRA, PIXELFED } from './features';
+import { AKKOMA, type Features, getFeatures, GOTOSOCIAL, MITRA, PIXELFED, PLEROMA } from './features';
 import request, { getNextLink, getPrevLink, type RequestBody, type RequestMeta } from './request';
 import { buildFullPath } from './utils/url';
 
@@ -2164,6 +2165,26 @@ class PlApiClient {
 
       if (response.json?.scheduled_at) return v.parse(scheduledStatusSchema, response.json);
       return v.parse(statusSchema, response.json);
+    },
+
+    /**
+     * Requires features{@link Features['createStatusPreview']}.
+     */
+    previewStatus: async (params: CreateStatusParams) => {
+      const input = this.features.version.software === PLEROMA || this.features.version.software === AKKOMA
+        ? '/api/v1/statuses'
+        : '/api/v1/statuses/preview';
+
+      if (this.features.version.software === PLEROMA || this.features.version.software === AKKOMA) {
+        params.preview = true;
+      }
+
+      const response = await this.request(input, {
+        method: 'POST',
+        body: params,
+      });
+
+      return v.parse(v.partial(partialStatusSchema), response.json);
     },
 
     /**

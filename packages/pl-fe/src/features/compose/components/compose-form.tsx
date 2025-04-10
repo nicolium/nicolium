@@ -14,9 +14,11 @@ import {
   ignoreClearLinkSuggestion,
   suggestClearLink,
 } from 'pl-fe/actions/compose';
-import Button from 'pl-fe/components/ui/button';
+import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
+import SvgIcon from 'pl-fe/components/ui/svg-icon';
 import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
 import { ComposeEditor } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
@@ -66,7 +68,58 @@ const messages = defineMessages({
   schedule: { id: 'compose_form.schedule', defaultMessage: 'Schedule' },
   saveChanges: { id: 'compose_form.save_changes', defaultMessage: 'Save changes' },
   preview: { id: 'compose_form.preview', defaultMessage: 'Preview post' },
+  more: { id: 'compose_form.more', defaultMessage: 'More' },
 });
+
+interface IComposeButton extends Pick<
+  React.ComponentProps<'button'>,
+  'children' | 'disabled' | 'onClick' | 'onMouseDown' | 'onKeyDown' | 'onKeyPress' | 'title' | 'type'
+> {
+  /** URL to an SVG icon to render inside the button. */
+  icon?: string;
+  /** Text inside the button. Takes precedence over `children`. */
+  text?: React.ReactNode;
+  /** Menu items to display as a secondary action. */
+  actionsMenu?: Menu;
+}
+
+const ComposeButton: React.FC<IComposeButton> = ({ actionsMenu, disabled, icon, text, ...props }) => {
+  const intl = useIntl();
+
+  const containerClassName = 'flex items-center gap-px overflow-hidden rounded-full text-sm font-medium text-gray-100';
+  const buttonClassName = 'inline-flex select-none appearance-none border border-transparent bg-primary-500 transition-all hover:bg-primary-400 focus:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:ring-offset-2 disabled:cursor-default disabled:opacity-75 dark:hover:bg-primary-600';
+
+  const button = (
+    <button
+      {...props}
+      disabled={disabled}
+      className={clsx({
+        'place-content-center items-center gap-x-2 px-4 py-2 rtl:space-x-reverse': true,
+        [buttonClassName]: true,
+        'pr-2': actionsMenu,
+        [containerClassName]: !actionsMenu,
+      })}
+    >
+      {icon ? <Icon src={icon} className='size-4' /> : null}
+      <span>{text}</span>
+    </button>
+  );
+
+  if (actionsMenu) {
+    return (
+      <div className={containerClassName}>
+        {button}
+        <DropdownMenu items={actionsMenu} placement='bottom' disabled={disabled}>
+          <button className={clsx('h-full cursor-pointer py-2.5 pl-1 pr-3', buttonClassName)} title={intl.formatMessage(messages.more)}>
+            <SvgIcon src={require('@tabler/icons/filled/caret-down.svg')} className='size-4' />
+          </button>
+        </DropdownMenu>
+      </div>
+    );
+  }
+
+  return button;
+};
 
 interface IComposeForm<ID extends string> {
   id: ID extends 'default' ? never : ID;
@@ -349,7 +402,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
             </HStack>
           )}
 
-          <Button type='submit' theme='primary' icon={publishIcon} text={publishText} disabled={!canSubmit} actionsMenu={actionsMenu} />
+          <ComposeButton type='submit' icon={publishIcon} text={publishText} disabled={!canSubmit} actionsMenu={actionsMenu} />
         </HStack>
       </div>
     </Stack>
