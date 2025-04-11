@@ -141,7 +141,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   const ensureHistoryBuffer = () => {
     const { state } = history.location;
     if (!state || (state as any).plFeModalKey !== modalHistoryKey.current) {
-      history.push(history.location, { ...(state as any), plFeModalKey: modalHistoryKey.current });
+      history.push({ ...history.location, state: { ...(state as any), plFeModalKey: modalHistoryKey.current } });
     }
   };
 
