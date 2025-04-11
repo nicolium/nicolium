@@ -219,7 +219,7 @@ const Account = ({
   if (disabled) return (
     <div data-testid='account' className='group block w-full shrink-0' ref={overflowRef}>
       <HStack alignItems={actionAlignment} space={3} justifyContent='between'>
-        <HStack alignItems='center' space={3}>
+        <HStack alignItems='center' space={3} className='max-w-full'>
           <div className='rounded-lg'>
             <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} isCat={account.is_cat} />
             {emoji && (
@@ -270,7 +270,7 @@ const Account = ({
   return (
     <div data-testid='account' className='group block w-full shrink-0' ref={overflowRef}>
       <HStack alignItems={actionAlignment} space={3} justifyContent='between'>
-        <HStack alignItems={withAccountNote || note ? 'top' : 'center'} space={3}>
+        <HStack alignItems={withAccountNote || note ? 'top' : 'center'} space={3} className='max-w-full'>
           {withAvatar && (
             <ProfilePopper
               condition={showAccountHoverCard}
