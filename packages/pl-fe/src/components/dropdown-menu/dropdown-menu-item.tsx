@@ -122,7 +122,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
 
         <div className={clsx('overflow-hidden text-xs', { 'mr-2': item.count || item.type === 'toggle' || item.items?.length })}>
           <div className='truncate text-base'>{item.text}</div>
-          <div className='mt-0.5'>{item.meta}</div>
+          {item.meta && (<div className='mt-0.5'>{item.meta}</div>)}
         </div>
 
         {item.count ? (
