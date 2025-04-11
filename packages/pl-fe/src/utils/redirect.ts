@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const LOCAL_STORAGE_REDIRECT_KEY = 'plfe:redirect-uri';
+const LOCAL_STORAGE_REDIRECT_KEY = 'plfe:redirect_uri';
 
 const getRedirectUrl = () => {
   let redirectUri = localStorage.getItem(LOCAL_STORAGE_REDIRECT_KEY);
