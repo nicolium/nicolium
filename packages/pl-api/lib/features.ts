@@ -971,6 +971,7 @@ const getFeatures = (instance: Instance) => {
      */
     logInWithUsername: any([
       v.software === AKKOMA,
+      v.software === MITRA,
       v.software === PLEROMA,
       v.software === TOKI,
     ]),
