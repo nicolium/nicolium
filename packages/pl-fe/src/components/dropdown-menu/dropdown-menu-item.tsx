@@ -120,9 +120,13 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
       >
         {item.icon && <Icon src={item.icon} className='mr-3 size-5 flex-none rtl:ml-3 rtl:mr-0' />}
 
-        <div className={clsx('overflow-hidden text-xs', { 'mr-2': item.count || item.type === 'toggle' || item.items?.length })}>
-          <div className='truncate text-base'>{item.text}</div>
-          {item.meta && (<div className='mt-0.5'>{item.meta}</div>)}
+        <div className={clsx('truncate', { 'text-xs': item.meta, 'text-base': !item.meta, 'mr-2': item.count || item.type === 'toggle' || item.items?.length })}>
+          {item.meta ? (
+            <>
+              <div className='truncate text-base'>{item.text}</div>
+              <div className='mt-0.5'>{item.meta}</div>
+            </>
+          ) : item.text}
         </div>
 
         {item.count ? (
