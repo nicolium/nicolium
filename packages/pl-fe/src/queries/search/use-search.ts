@@ -27,7 +27,7 @@ const useSearchAccounts = (
     }),
     enabled: !!query?.trim(),
     initialPageParam: 0,
-    getNextPageParam: (_, allPages) => allPages.flat().length,
+    getNextPageParam: (_, allPages) => allPages.at(-1)?.length === 0 ? undefined : allPages.flat().length,
     select: (data) => data.pages.flat(),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
@@ -54,7 +54,7 @@ const useSearchStatuses = (
     }),
     enabled: !!query?.trim(),
     initialPageParam: 0,
-    getNextPageParam: (_, allPages) => allPages.flat().length,
+    getNextPageParam: (_, allPages) => allPages.at(-1)?.length === 0 ? undefined : allPages.flat().length,
     select: (data) => data.pages.flat(),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
@@ -75,7 +75,7 @@ const useSearchHashtags = (
     }, { signal }).then(({ hashtags }) => hashtags),
     enabled: !!query?.trim(),
     initialPageParam: 0,
-    getNextPageParam: (_, allPages) => allPages.flat().length,
+    getNextPageParam: (_, allPages) => allPages.at(-1)?.length === 0 ? undefined : allPages.flat().length,
     select: (data) => data.pages.flat(),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
@@ -101,7 +101,7 @@ const useSearchGroups = (
     }),
     enabled: !!query?.trim(),
     initialPageParam: 0,
-    getNextPageParam: (_, allPages) => allPages.flat().length,
+    getNextPageParam: (_, allPages) => allPages.at(-1)?.length === 0 ? undefined : allPages.flat().length,
     select: (data) => data.pages.flat(),
     staleTime: 5 * 60 * 1000, // 5 minutes
   });
