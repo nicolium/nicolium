@@ -441,14 +441,15 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
     case COMPOSE_RESET:
     case COMPOSE_SUBMIT_SUCCESS:
       return create(state, (draft) => {
-        draft[action.composeId] = newCompose({
+        draft[action.composeId] = create(state.default, (draft) => ({
+          ...draft,
           idempotencyKey: crypto.randomUUID(),
           in_reply_to: action.composeId.startsWith('reply:') ? action.composeId.slice(6) : null,
           ...(action.composeId.startsWith('group:') ? {
             privacy: 'group',
             group_id: action.composeId.slice(6),
           } : undefined),
-        });
+        }));
       });
     case COMPOSE_SUBMIT_FAIL:
       return updateCompose(state, action.composeId, compose => {
