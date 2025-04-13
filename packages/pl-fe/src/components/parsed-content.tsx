@@ -25,10 +25,11 @@ const nodesToText = (nodes: Array<DOMNode>): string =>
 
 const isHostNotVisible = (href: string, nodes: Array<DOMNode>): false | string => {
   try {
-    const { host } = new URL(href);
+    let { host } = new URL(href);
+    host = host.replace(/^www\./, '');
     const text = nodesToText(nodes).trim();
 
-    if (new RegExp(`^(https?://)?(www\.)?${host}(/|$)`).test(text)) {
+    if (new RegExp(`^(https?://)?(www.)?${host}(/|$)`).test(text)) {
       return false;
     } else {
       return host;
