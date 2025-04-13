@@ -147,6 +147,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     hasQuote: !!status.quote_id,
     emojis: status.emojis,
     cleanUrls: urlPrivacy.clearLinksInContent,
+    displayTargetHost: urlPrivacy.displayTargetHost,
     greentext,
     speakAsCat: status.account.speak_as_cat,
   }, true), [content]);

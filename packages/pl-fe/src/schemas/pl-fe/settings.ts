@@ -43,6 +43,7 @@ const settingsSchema = v.object({
     allowReferralMarketing: v.fallback(v.boolean(), false),
     rulesUrl: v.fallback(v.string(), ''),
     hashUrl: v.fallback(v.string(), ''),
+    displayTargetHost: v.fallback(v.boolean(), true),
   }),
 
   theme: v.fallback(v.optional(v.object({

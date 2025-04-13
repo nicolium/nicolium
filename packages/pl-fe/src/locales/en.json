@@ -1670,6 +1670,7 @@
   "upload_progress.label": "Uploading…",
   "url_privacy.clear_links_in_compose": "Suggest removing tracking parameters when composing a post",
   "url_privacy.clear_links_in_content": "Remove tracking parameters from displayed posts",
+  "url_privacy.display_target_host": "Always display the domain external links lead to",
   "url_privacy.hash_url.hint": "SHA256 hash of rules database, used to avoid unnecessary fetches, eg. {url}",
   "url_privacy.hash_url.label": "URL cleaning rules hash address (optional)",
   "url_privacy.hash_url.placeholder": "Hash URL",

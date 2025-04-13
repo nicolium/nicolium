@@ -26,6 +26,7 @@ const UrlPrivacy = () => {
 
   const { urlPrivacy } = useSettings();
 
+  const [displayTargetHost, setDisplayTargetHost] = useState(urlPrivacy.displayTargetHost);
   const [clearLinksInCompose, setClearLinksInCompose] = useState(urlPrivacy.clearLinksInCompose);
   const [clearLinksInContent, setClearLinksInContent] = useState(urlPrivacy.clearLinksInContent);
   // const [allowReferralMarketing, setAllowReferralMarketing] = useState(urlPrivacy.allowReferralMarketing);
@@ -35,6 +36,7 @@ const UrlPrivacy = () => {
   const onSubmit = () => {
     dispatch(changeSetting(['urlPrivacy'], {
       ...urlPrivacy,
+      displayTargetHost,
       clearLinksInCompose,
       clearLinksInContent,
       // allowReferralMarketing,
@@ -58,6 +60,12 @@ const UrlPrivacy = () => {
 
         <CardBody>
           <Form onSubmit={onSubmit}>
+            <List>
+              <ListItem label={<FormattedMessage id='url_privacy.display_target_host' defaultMessage='Always display the domain external links lead to' />}>
+                <Toggle checked={displayTargetHost} onChange={({ target }) => setDisplayTargetHost(target.checked)} />
+              </ListItem>
+            </List>
+
             <List>
               <ListItem label={<FormattedMessage id='url_privacy.clear_links_in_compose' defaultMessage='Suggest removing tracking parameters when composing a post' />}>
                 <Toggle checked={clearLinksInCompose} onChange={({ target }) => setClearLinksInCompose(target.checked)} />

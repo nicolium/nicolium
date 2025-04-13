@@ -23,6 +23,21 @@ const GREENTEXT_CLASS = 'dark:text-accent-green text-lime-600';
 const nodesToText = (nodes: Array<DOMNode>): string =>
   nodes.map(node => node.type === 'text' ? node.data : node.type === 'tag' ? nodesToText(node.children as Array<DOMNode>) : '').join('');
 
+const isHostNotVisible = (href: string, nodes: Array<DOMNode>): false | string => {
+  try {
+    const { host } = new URL(href);
+    const text = nodesToText(nodes).trim();
+
+    if (new RegExp(`^(https?://)?(www\.)?${host}(/|$)`).test(text)) {
+      return false;
+    } else {
+      return host;
+    }
+  } catch (e) {
+    return false;
+  }
+};
+
 interface IParsedContent {
   /** HTML content to display. */
   html: string;
@@ -32,7 +47,10 @@ interface IParsedContent {
   hasQuote?: boolean;
   /** Related custom emojis. */
   emojis?: Array<CustomEmoji>;
+  /** Whether to call a function to remove tracking parameters from URLs. */
   cleanUrls?: boolean;
+  /** Whether to display link target domain when it's not part of the text. */
+  displayTargetHost?: boolean;
   greentext?: boolean;
   speakAsCat?: boolean;
 }
@@ -81,6 +99,7 @@ function parseContent({
   hasQuote,
   emojis,
   cleanUrls = false,
+  displayTargetHost = true,
   greentext = false,
   speakAsCat = false,
 }: IParsedContent, extractHashtags = false) {
@@ -158,6 +177,8 @@ function parseContent({
           }
         }
 
+        const host = displayTargetHost && isHostNotVisible(href, domNode.children as Array<DOMNode>);
+
         const fallback = (
           // eslint-disable-next-line jsx-a11y/no-static-element-interactions
           <a
@@ -168,7 +189,10 @@ function parseContent({
             target='_blank'
             title={domNode.attribs.href}
           >
-            {domToReact(domNode.children as DOMNode[], options)}
+            {domToReact(domNode.children as Array<DOMNode>, options)}
+            {host && (
+              <span className='text-xs lowercase'>{' '}[{host}]</span>
+            )}
           </a>
         );
 
@@ -196,7 +220,7 @@ function parseContent({
           }
         }
 
-        if (classes?.includes('hashtag')) {
+        if (classes?.includes('hashtag') || domNode.attribs.rel === 'tag') {
           const hashtag = nodesToText(domNode.children as Array<DOMNode>);
           if (hashtag) {
             return <HashtagLink hashtag={hashtag.replace(/^#/, '')} />;
@@ -248,10 +272,10 @@ function parseContent({
 }
 
 const ParsedContent: React.FC<IParsedContent> = React.memo((props) => {
-  const settings = useSettings();
+  const { urlPrivacy } = useSettings();
 
   if (props.cleanUrls === undefined) {
-    props = { ...props, cleanUrls: settings.urlPrivacy.clearLinksInContent };
+    props = { ...props, cleanUrls: urlPrivacy.clearLinksInContent, displayTargetHost: urlPrivacy.displayTargetHost };
   }
 
   return parseContent(props, false);
