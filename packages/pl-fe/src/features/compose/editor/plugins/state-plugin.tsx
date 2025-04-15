@@ -41,7 +41,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
 
       editorState.read(() => {
         const compareUrl = (url: string) => {
-          const cleanUrl = Purify.clearUrl(url);
+          const cleanUrl = Purify.clearUrl(url, true, false);
           return {
             originalUrl: url,
             cleanUrl,

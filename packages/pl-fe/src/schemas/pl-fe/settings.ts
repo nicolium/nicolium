@@ -44,6 +44,9 @@ const settingsSchema = v.object({
     rulesUrl: v.fallback(v.string(), ''),
     hashUrl: v.fallback(v.string(), ''),
     displayTargetHost: v.fallback(v.boolean(), true),
+    redirectLinksMode: v.fallback(v.picklist(['off', 'auto', 'manual']), 'off'),
+    redirectServicesUrl: v.fallback(v.string(), ''),
+    redirectServices: v.fallback(v.record(v.string(), v.string()), {}),
   }),
 
   theme: v.fallback(v.optional(v.object({

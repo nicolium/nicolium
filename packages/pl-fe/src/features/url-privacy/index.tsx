@@ -1,5 +1,7 @@
+import { mappings } from '@mkljczk/url-purify';
 import React, { useEffect, useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
+import { useMutative } from 'use-mutative';
 
 import { changeSetting } from 'pl-fe/actions/settings';
 import List, { ListItem } from 'pl-fe/components/list';
@@ -12,16 +14,27 @@ import FormGroup from 'pl-fe/components/ui/form-group';
 import Input from 'pl-fe/components/ui/input';
 import Toggle from 'pl-fe/components/ui/toggle';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useSettings } from 'pl-fe/hooks/use-settings';
+import KVStore from 'pl-fe/storage/kv-store';
+import { KVStoreRedirectServicesItem } from 'pl-fe/utils/url-purify';
+
+import { SelectDropdown } from '../forms';
 
 const messages = defineMessages({
   urlPrivacy: { id: 'settings.url_privacy', defaultMessage: 'URL privacy' },
   rulesUrlPlaceholder: { id: 'url_privacy.rules_url.placeholder', defaultMessage: 'Rules URL' },
   hashUrlPlaceholder: { id: 'url_privacy.hash_url.placeholder', defaultMessage: 'Hash URL' },
+  redirectLinksModeOff: { id: 'url_privacy.redirect_links_mode.off', defaultMessage: 'Disabled' },
+  redirectLinksModeAuto: { id: 'url_privacy.redirect_links_mode.auto', defaultMessage: 'From URL' },
+  redirectLinksModeManual: { id: 'url_privacy.redirect_links_mode.manual', defaultMessage: 'Specify manually' },
+  redirectServicesUrlPlaceholder: { id: 'url_privacy.redirect_services_url.placeholder', defaultMessage: 'Rules URL' },
+  redirectServicePlaceholder: { id: 'url_privacy.redirect_services_url.placeholder', defaultMessage: 'eg. https://proxy.example.org' },
 });
 
 const UrlPrivacy = () => {
   const dispatch = useAppDispatch();
+  const me = useAppSelector((state) => state.me);
   const intl = useIntl();
 
   const { urlPrivacy } = useSettings();
@@ -29,23 +42,60 @@ const UrlPrivacy = () => {
   const [displayTargetHost, setDisplayTargetHost] = useState(urlPrivacy.displayTargetHost);
   const [clearLinksInCompose, setClearLinksInCompose] = useState(urlPrivacy.clearLinksInCompose);
   const [clearLinksInContent, setClearLinksInContent] = useState(urlPrivacy.clearLinksInContent);
-  // const [allowReferralMarketing, setAllowReferralMarketing] = useState(urlPrivacy.allowReferralMarketing);
   const [hashUrl, setHashUrl] = useState(urlPrivacy.hashUrl);
   const [rulesUrl, setRulesUrl] = useState(urlPrivacy.rulesUrl);
+  const [redirectLinksMode, setRedirectLinksMode] = useState(urlPrivacy.redirectLinksMode);
+  const [redirectServicesUrl, setRedirectServicesUrl] = useState(urlPrivacy.redirectServicesUrl);
+  const [redirectServices, setRedirectServices] = useMutative(urlPrivacy.redirectServices);
 
   const onSubmit = () => {
-    dispatch(changeSetting(['urlPrivacy'], {
+    const value = {
       ...urlPrivacy,
       displayTargetHost,
       clearLinksInCompose,
       clearLinksInContent,
-      // allowReferralMarketing,
       hashUrl,
       rulesUrl,
-    }, {
+      redirectLinksMode,
+      redirectServicesUrl,
+      redirectServices,
+    };
+
+    switch (redirectLinksMode) {
+      case 'off':
+        value.redirectServicesUrl = '';
+        value.redirectServices = {};
+        break;
+      case 'manual':
+        value.redirectServicesUrl = '';
+        break;
+      case 'auto':
+        value.redirectServices = {};
+        break;
+    }
+
+    dispatch(changeSetting(['urlPrivacy'], value, {
       save: true,
       showAlert: true,
     }));
+  };
+
+  const handleChangeRedirectLinksMode = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (redirectLinksMode === 'auto' && event.target.value === 'manual') {
+      KVStore.getItem<KVStoreRedirectServicesItem>(`url-purify-redirect-services:${me}`).then((services) => {
+        if (!services?.redirectServices) return;
+
+        setRedirectServices(
+          Object.fromEntries(
+            mappings.map(({ name, targets }) => ([
+              name,
+              services.redirectServices.find((service) => targets.includes(service.type) && service.instances.length)?.instances[0].split('|')[0] || '',
+            ])),
+          ),
+        );
+      }).catch(() => { });
+    }
+    return setRedirectLinksMode(event.target.value as 'off');
   };
 
   useEffect(() => {
@@ -74,10 +124,6 @@ const UrlPrivacy = () => {
               <ListItem label={<FormattedMessage id='url_privacy.clear_links_in_content' defaultMessage='Remove tracking parameters from displayed posts' />}>
                 <Toggle checked={clearLinksInContent} onChange={({ target }) => setClearLinksInContent(target.checked)} />
               </ListItem>
-
-              {/* <ListItem label={<FormattedMessage id='url_privacy.allow_referral_marketing' defaultMessage='Make exception for referral marketing parameters' />}>
-                <Toggle checked={allowReferralMarketing} onChange={({ target }) => setAllowReferralMarketing(target.checked)} disabled={!clearLinksInCompose && !clearLinksInContent} />
-              </ListItem> */}
             </List>
 
             <FormGroup
@@ -103,6 +149,55 @@ const UrlPrivacy = () => {
                 onChange={({ target }) => setHashUrl(target.value)}
               />
             </FormGroup>
+
+            <List>
+              <ListItem label={<FormattedMessage id='url_privacy.redirect_links_mode' defaultMessage='Redirect links to popular websites to privacy-respecting proxy services' />}>
+                <SelectDropdown
+                  className='max-w-fit'
+                  items={{
+                    off: intl.formatMessage(messages.redirectLinksModeOff),
+                    auto: intl.formatMessage(messages.redirectLinksModeAuto),
+                    manual: intl.formatMessage(messages.redirectLinksModeManual),
+                  }}
+                  defaultValue={redirectLinksMode}
+                  onChange={handleChangeRedirectLinksMode}
+                />
+              </ListItem>
+            </List>
+
+            {redirectLinksMode === 'auto' && (
+              <FormGroup
+                labelText={<FormattedMessage id='url_privacy.redirect_services_url.label' defaultMessage='Redirect services URLs database address' />}
+                hintText={<FormattedMessage id='url_privacy.redirect_services_url.hint' defaultMessage='URLs database in Farside-compatible format, eg. {url}' values={{ url: 'https://raw.githubusercontent.com/benbusby/farside/refs/heads/main/services.json' }} />}
+              >
+                <Input
+                  type='text'
+                  placeholder={intl.formatMessage(messages.redirectServicesUrlPlaceholder)}
+                  value={redirectServicesUrl}
+                  onChange={({ target }) => setRedirectServicesUrl(target.value)}
+                />
+              </FormGroup>
+            )}
+
+            {redirectLinksMode === 'manual' && (
+              mappings.map((service) => (
+                <FormGroup
+                  key={service.name}
+                  labelText={<FormattedMessage id='url_privacy.redirect_services.name' defaultMessage='{name}' values={{ name: service.name }} />}
+                  hintText={<FormattedMessage id='url_privacy.redirect_services.patterns' defaultMessage='Matches: {pattern}, eg. {services}, leave empty for no redirect' values={{ pattern: service.urlPattern, services: <FormattedList value={service.targets} /> }} />}
+                >
+                  <Input
+                    outerClassName='grow'
+                    type='text'
+                    value={redirectServices[service.name]}
+                    onChange={(e) => setRedirectServices((services) => {
+                      services[service.name] = e.target.value;
+                    })}
+                    placeholder={intl.formatMessage(messages.redirectServicePlaceholder)}
+                  />
+                </FormGroup>
+              ))
+            )}
 
             <FormActions>
               <Button type='submit'>

@@ -1775,10 +1775,10 @@
     lodash "^4.17.21"
     mousetrap "^1.6.5"
 
-"@mkljczk/url-purify@^0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@mkljczk/url-purify/-/url-purify-0.0.2.tgz#f6aed0f750ab49b8cf9d3e8169b2b358c1d4519f"
-  integrity sha512-OH5bb84cf7rpwPxE8y0JzkdPMCysC1ZO5wEZZf/cxBGa5io6XKV1f6WHZwU/CYUaBFDYana3ctU4FZdCNH6slg==
+"@mkljczk/url-purify@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@mkljczk/url-purify/-/url-purify-0.0.3.tgz#e5121927617b007d2f91f6e08c73552a4f3c06dc"
+  integrity sha512-3O4QO/nH9yV/GKim+yKvQF1cKWN0dBAsxC5Ve50d1PaUYQFSd4y733eRGt+zRcPZrvgyAkyZZ5Bx7dAHWX+bBQ==
 
 "@napi-rs/wasm-runtime@^0.2.7":
   version "0.2.7"
@@ -8850,6 +8850,11 @@ uri-js@^4.2.2:
   integrity sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==
   dependencies:
     punycode "^2.1.0"
+
+use-mutative@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/use-mutative/-/use-mutative-1.2.1.tgz#ee86017899f48027bf87b9d42c6c3a237997a536"
+  integrity sha512-cXvnAWmCxjcxYNitIwLJJEmjLISQTIfj0T88xfk1xNM0knmnOfEQPeU4+CDWBAcK0IXP7ey8fKeGc0seh+5OBA==
 
 use-sync-external-store@^1.4.0:
   version "1.4.0"

@@ -4,8 +4,9 @@ import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
 import { settingsSchema, type Settings } from 'pl-fe/schemas/pl-fe/settings';
+import KVStore from 'pl-fe/storage/kv-store';
 import toast from 'pl-fe/toast';
-import { updateRulesFromUrl } from 'pl-fe/utils/url-purify';
+import { KVStoreRedirectServicesItem, resetRules, setManualRedirectServices, updateRedirectServicesFromUrl, updateRulesFromUrl } from 'pl-fe/utils/url-purify';
 
 import type { Emoji } from 'pl-fe/features/emoji';
 import type { store } from 'pl-fe/store';
@@ -15,8 +16,10 @@ let lazyStore: typeof store;
 import('pl-fe/store').then(({ store }) => lazyStore = store).catch(() => {});
 
 const messages = defineMessages({
-  updateSuccess: { id: 'url_privacy.update.success', defaultMessage: 'Successfully updated rules database' },
-  updateFail: { id: 'url_privacy.update.fail', defaultMessage: 'Failed to update rules database URL' },
+  rulesUpdateSuccess: { id: 'url_privacy.update.success', defaultMessage: 'Successfully updated rules database' },
+  rulesUpdateFail: { id: 'url_privacy.update.fail', defaultMessage: 'Failed to update rules database URL' },
+  redirectServicesUpdateSuccess: { id: 'url_privacy.redirect_services_update.success', defaultMessage: 'Successfully updated redirect services' },
+  redirectServicesUpdateFail: { id: 'url_privacy.redirect_services_update.fail', defaultMessage: 'Failed to update redirect services URL' },
 });
 
 const settingsSchemaPartial = v.partial(settingsSchema);
@@ -50,14 +53,35 @@ const changeSetting = (object: APIEntity, path: string[], value: any, root?: Set
 
 const mergeSettings = (state: State, updating = false) => {
   const mergedSettings = { ...state.defaultSettings, ...state.userSettings };
-  if (updating && mergedSettings.urlPrivacy.rulesUrl && state.settings.urlPrivacy.rulesUrl !== mergedSettings.urlPrivacy.rulesUrl) {
+  if (updating) {
     const me = lazyStore?.getState().me;
     if (me) {
-      updateRulesFromUrl(me, mergedSettings.urlPrivacy.rulesUrl, mergedSettings.urlPrivacy.hashUrl).then(() => {
-        toast.success(messages.updateSuccess);
-      }).catch(() => {
-        toast.error(messages.updateFail);
-      });
+      if (mergedSettings.urlPrivacy.rulesUrl && state.settings.urlPrivacy.rulesUrl !== mergedSettings.urlPrivacy.rulesUrl) {
+        updateRulesFromUrl(me, mergedSettings.urlPrivacy.rulesUrl, mergedSettings.urlPrivacy.hashUrl).then(() => {
+          toast.success(messages.rulesUpdateSuccess);
+        }).catch(() => {
+          toast.error(messages.rulesUpdateFail);
+        });
+      } else if (!mergedSettings.urlPrivacy.rulesUrl && state.settings.urlPrivacy.rulesUrl !== mergedSettings.urlPrivacy.rulesUrl) {
+        resetRules(me).then(() => {
+          toast.success(messages.rulesUpdateSuccess);
+        }).catch(() => {
+          toast.error(messages.rulesUpdateFail);
+        });
+      }
+      if (mergedSettings.urlPrivacy.redirectLinksMode === 'auto' && mergedSettings.urlPrivacy.redirectServicesUrl && state.settings.urlPrivacy.redirectServicesUrl !== mergedSettings.urlPrivacy.redirectServicesUrl) {
+        updateRedirectServicesFromUrl(me, mergedSettings.urlPrivacy.redirectServicesUrl).then(() => {
+          toast.success(messages.redirectServicesUpdateSuccess);
+        }).catch(() => {
+          toast.error(messages.redirectServicesUpdateFail);
+        });
+      } else if (mergedSettings.urlPrivacy.redirectLinksMode === 'manual') {
+        setManualRedirectServices(me, mergedSettings.urlPrivacy.redirectServices).then(() => {
+          toast.success(messages.redirectServicesUpdateSuccess);
+        }).catch(() => {
+          toast.error(messages.redirectServicesUpdateFail);
+        });
+      }
     }
   }
   state.settings = mergedSettings;
@@ -80,6 +104,45 @@ const useSettingsStore = create<State>()(mutative((set) => ({
     if (typeof settings !== 'object') return;
 
     state.userSettings = v.parse(settingsSchemaPartial, settings);
+
+    const me = lazyStore?.getState().me;
+    if (me) {
+      KVStore.getItem<string>('url-purify-rules:last').then((value) => {
+        if (value !== me) {
+          if (state.userSettings.urlPrivacy?.rulesUrl) {
+            updateRulesFromUrl(me, state.userSettings.urlPrivacy.rulesUrl, state.userSettings.urlPrivacy.hashUrl).then(() => {
+              toast.success(messages.rulesUpdateSuccess);
+            }).catch(() => {
+              toast.error(messages.rulesUpdateFail);
+            });
+          } else {
+            resetRules(me);
+          }
+          switch (state.userSettings.urlPrivacy?.redirectLinksMode) {
+            case 'auto':
+              updateRedirectServicesFromUrl(me, state.userSettings.urlPrivacy?.redirectServicesUrl);
+              break;
+            case 'manual':
+              setManualRedirectServices(me, state.userSettings.urlPrivacy.redirectServices);
+              break;
+            default:
+              setManualRedirectServices(me, {});
+              break;
+          }
+        } else {
+          KVStore.getItem<KVStoreRedirectServicesItem>(`url-purify-redirect-services:${me}`).then((services) => {
+            if (state.userSettings.urlPrivacy?.redirectLinksMode === 'auto') {
+              if (services?.redirectServicesUrl !== state.userSettings.urlPrivacy?.redirectServicesUrl) {
+                updateRedirectServicesFromUrl(me, state.userSettings.urlPrivacy?.redirectServicesUrl);
+              }
+            } else {
+              setManualRedirectServices(me, state.userSettings.urlPrivacy?.redirectServices || {});
+            }
+          }).catch(() => {});
+        }
+      }).catch(() => {});
+    }
+
     mergeSettings(state);
   }),
 

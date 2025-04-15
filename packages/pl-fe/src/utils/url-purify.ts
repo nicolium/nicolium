@@ -12,16 +12,22 @@
 // along with this program. If not, see <https://www.gnu.org/licenses/>.
 //
 // I hope I got this relicensing stuff right xD
-import { URLPurify, type SerializedRules } from '@mkljczk/url-purify';
+import { mappings, URLPurify, type SerializedRules, type SerializedServices } from '@mkljczk/url-purify';
 
 import KVStore from 'pl-fe/storage/kv-store';
 import { Me } from 'pl-fe/types/pl-fe';
 
-interface KVStoreItem {
-  hashUrl: string;
-  rulesUrl: string;
-  hash: string;
+interface KVStoreRulesItem {
+  hashUrl?: string;
+  rulesUrl?: string;
+  hash?: string;
   rules: SerializedRules;
+  fetchedAt: number;
+}
+
+interface KVStoreRedirectServicesItem {
+  redirectServicesUrl?: string;
+  redirectServices: SerializedServices;
   fetchedAt: number;
 }
 
@@ -106,10 +112,17 @@ const DEFAULT_RULESET: SerializedRules = {
 
 const Purify = new URLPurify({
   rulesFromMemory: DEFAULT_RULESET,
+  instancePickMode: 'random',
 });
 
-const updateRulesFromUrl = async (user: Me, rulesUrl: string, hashUrl: string, oldHash?: string) => {
-  if (oldHash) {
+const resetRules = async (user: Me) => {
+  Purify.setRules(DEFAULT_RULESET);
+  await KVStore.setItem('url-purify-rules:last', user);
+  return KVStore.removeItem(`url-purify-rules:${user}`);
+};
+
+const updateRulesFromUrl = async (user: Me, rulesUrl: string, hashUrl?: string, oldHash?: string) => {
+  if (oldHash && hashUrl) {
     const newHash = await fetch(hashUrl).then((response) => response.text());
     if (newHash === oldHash) return;
   }
@@ -121,7 +134,7 @@ const updateRulesFromUrl = async (user: Me, rulesUrl: string, hashUrl: string, o
   Purify.setRules(parsedRules, hash);
 
   await KVStore.setItem('url-purify-rules:last', user);
-  return KVStore.setItem<KVStoreItem>(`url-purify-rules:${user}`, {
+  return KVStore.setItem<KVStoreRulesItem>(`url-purify-rules:${user}`, {
     hashUrl,
     rulesUrl,
     hash,
@@ -130,25 +143,82 @@ const updateRulesFromUrl = async (user: Me, rulesUrl: string, hashUrl: string, o
   });
 };
 
+const updateRedirectServicesFromUrl = async (user: Me, redirectServicesUrl: string) => {
+  const redirectServices = await fetch(redirectServicesUrl).then((response) => response.text());
+
+  const parsedRedirectServices = JSON.parse(redirectServices);
+  Purify.setRedirectServices(parsedRedirectServices);
+
+  await KVStore.setItem('url-purify-redirect-services:last', user);
+  return KVStore.setItem<KVStoreRedirectServicesItem>(`url-purify-redirect-services:${user}`, {
+    redirectServicesUrl,
+    redirectServices: parsedRedirectServices,
+    fetchedAt: Date.now(),
+  });
+};
+
+const setManualRedirectServices = async (user: Me, redirectServices: Record<string, string>) => {
+  const parsedRedirectServices: SerializedServices = Object.entries(redirectServices).filter(([_, instance]) => instance.trim()).map((service) => ({
+    fallback: service[1],
+    instances: [service[1]],
+    test_url: '',
+    type: mappings.find((mapping) => mapping.name === service[0])?.targets[0] || 'unknown',
+  }));
+  Purify.setRedirectServices(parsedRedirectServices);
+
+  await KVStore.setItem('url-purify-redirect-services:last', user);
+  return KVStore.setItem<KVStoreRedirectServicesItem>(`url-purify-redirect-services:${user}`, {
+    redirectServices: parsedRedirectServices,
+    fetchedAt: Date.now(),
+  });
+};
+
 const getRulesForUser = (user: Me) => {
   if (!user || typeof user !== 'string') return;
-  KVStore.getItem<KVStoreItem>(`url-purify-rules:${user}`, (rules) => {
-    if (!rules) return;
+  KVStore.getItem<KVStoreRulesItem>(`url-purify-rules:${user}`).then((rules) => {
+    if (!rules?.rulesUrl) return;
     Purify.setRules(rules.rules, rules.hash);
 
     if (rules.fetchedAt + 1000 * 60 * 60 * 24 < Date.now()) {
       updateRulesFromUrl(user, rules.rulesUrl, rules.hashUrl, rules.hash);
     }
-  });
+  }).catch(() => {});
 };
 
 const getRulesFromMemory = () => {
-  KVStore.getItem('url-purify-rules:last', (url: string) => {
+  KVStore.getItem<string>('url-purify-rules:last').then((url) => {
     if (!url) return;
     getRulesForUser(url);
   }).catch(() => {});
 };
 
-getRulesFromMemory();
+const getRedirectServicesForUser = (user: Me) => {
+  if (!user || typeof user !== 'string') return;
+  KVStore.getItem<KVStoreRedirectServicesItem>(`url-purify-redirect-services:${user}`).then((services) => {
+    if (!services) return;
+    Purify.setRedirectServices(services.redirectServices);
 
-export { Purify as default, getRulesForUser, updateRulesFromUrl };
+    if (services.redirectServicesUrl && services.fetchedAt + 1000 * 60 * 60 * 24 < Date.now()) {
+      updateRedirectServicesFromUrl(user, services.redirectServicesUrl);
+    }
+  }).catch(() => {});
+};
+
+const getRedirectServicesFromMemory = () => {
+  KVStore.getItem<string>('url-purify-redirect-services:last').then((url) => {
+    if (!url) return;
+    getRedirectServicesForUser(url);
+  }).catch(() => {});
+};
+
+getRulesFromMemory();
+getRedirectServicesFromMemory();
+
+export {
+  Purify as default,
+  resetRules,
+  setManualRedirectServices,
+  updateRedirectServicesFromUrl,
+  updateRulesFromUrl,
+  type KVStoreRedirectServicesItem,
+};

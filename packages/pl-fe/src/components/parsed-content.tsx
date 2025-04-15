@@ -50,6 +50,8 @@ interface IParsedContent {
   emojis?: Array<CustomEmoji>;
   /** Whether to call a function to remove tracking parameters from URLs. */
   cleanUrls?: boolean;
+  /** Whether to call a function to redirect URLs to popular websites to privacy-respecting proxy services. */
+  redirectUrls?: boolean;
   /** Whether to display link target domain when it's not part of the text. */
   displayTargetHost?: boolean;
   greentext?: boolean;
@@ -100,6 +102,7 @@ function parseContent({
   hasQuote,
   emojis,
   cleanUrls = false,
+  redirectUrls = false,
   displayTargetHost = true,
   greentext = false,
   speakAsCat = false,
@@ -172,7 +175,7 @@ function parseContent({
 
         if (cleanUrls) {
           try {
-            href = Purify.clearUrl(href);
+            href = Purify.clearUrl(href, cleanUrls, redirectUrls);
           } catch (_) {
             //
           }
@@ -275,9 +278,11 @@ function parseContent({
 const ParsedContent: React.FC<IParsedContent> = React.memo((props) => {
   const { urlPrivacy } = useSettings();
 
-  if (props.cleanUrls === undefined) {
-    props = { ...props, cleanUrls: urlPrivacy.clearLinksInContent, displayTargetHost: urlPrivacy.displayTargetHost };
-  }
+  props = { ...props };
+
+  if (props.cleanUrls === undefined) props.cleanUrls = urlPrivacy.clearLinksInContent;
+  if (props.redirectUrls === undefined) props.redirectUrls = urlPrivacy.redirectLinksMode !== 'off';
+  if (props.displayTargetHost === undefined) props.displayTargetHost = urlPrivacy.displayTargetHost;
 
   return parseContent(props, false);
 }, (prevProps, nextProps) => prevProps.html === nextProps.html);
