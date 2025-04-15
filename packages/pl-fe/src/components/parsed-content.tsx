@@ -123,6 +123,12 @@ function parseContent({
 
   const hashtags: Array<string> = [];
 
+  const transformText = (data: string, key?: React.Key) => {
+    const text = speakAsCat ? nyaize(data) : data;
+
+    return <Emojify key={key} text={text} emojis={emojiMap} />;
+  };
+
   const options: HTMLReactParserOptions = {
     replace(domNode) {
       if (!(domNode instanceof Element)) {
@@ -135,7 +141,7 @@ function parseContent({
         if (greentext && (data.startsWith('>') || domNode.prev?.greentext)) {
           // @ts-ignore
           domNode.greentext = true;
-          return <span className={GREENTEXT_CLASS}>{domNode.data}</span>;
+          return <span className={GREENTEXT_CLASS}>{transformText(domNode.data)}</span>;
         }
 
         return;
@@ -256,9 +262,7 @@ function parseContent({
 
     transform(reactNode, _domNode, index) {
       if (typeof reactNode === 'string') {
-        const text = speakAsCat ? nyaize(reactNode) : reactNode;
-
-        return <Emojify key={index} text={text} emojis={emojiMap} />;
+        return transformText(reactNode, index);
       }
 
       return reactNode as JSX.Element;
