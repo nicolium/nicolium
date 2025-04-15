@@ -176,12 +176,14 @@ interface VerifyCredentialsFailAction {
 }
 
 const verifyCredentials = (token: string, accountUrl?: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+  async (dispatch: AppDispatch, getState: () => RootState) => {
     const baseURL = parseBaseURL(accountUrl) || BuildConfig.BACKEND_URL;
 
     dispatch<VerifyCredentialsRequestAction>({ type: VERIFY_CREDENTIALS_REQUEST, token });
 
     const client = new PlApiClient(baseURL, token);
+
+    await client.instance.getInstance();
 
     return client.settings.verifyCredentials().then((account) => {
       dispatch(importEntities({ accounts: [account] }));
