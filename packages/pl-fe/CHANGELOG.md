@@ -10,6 +10,8 @@ Changes made since the project forked from Soapbox in April 2024.
 
 ### Added
 
+- Cat ears
+
 **Behavior:**
 - Notifications of the same type and reposts of the same post are grouped client-side.
 - Date is displayed fobr notifications that are not about new posts.
@@ -34,6 +36,7 @@ Changes made since the project forked from Soapbox in April 2024.
 - On backends that support explicit mentioning, you can choose to include mentions in your replies body.
 - GoToSocial users can set per-post interaction policies.
 - When adding a URL with tracking parameters, a suggestion to remove them from the URL is displayed.
+- On supported backends, you can see post preview before posting.
 
 **Features:**
 - The most recent scrobble is displayed on user profile/card.
@@ -50,6 +53,10 @@ Changes made since the project forked from Soapbox in April 2024.
 - Outgoing follow requests are displayed, if supported by backend.
 - It is possible to remove tracking parameters from URLs in displayed posts.
 - Displayed media now have a button for alternative text preview.
+- Links in displayed posts can be configured to always display target domain, even when it's not a part of their content.
+- Users can configure redirects from popular websites to proxy services like Nitter and Piped in displayed posts.
+- It is possible to boost a post with specific visibility, if supported by backend.
+- Pleroma shoutbox is displayed on chats page.
 
 ### Changed
 
