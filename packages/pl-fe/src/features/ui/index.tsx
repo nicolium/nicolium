@@ -493,7 +493,7 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
         <div className='z-10 flex min-h-screen flex-col'>
           <Layout>
             <Layout.Sidebar>
-              {!standalone && <SidebarNavigation />}
+              {!(standalone && !me) && <SidebarNavigation />}
             </Layout.Sidebar>
 
             <SwitchingColumnsArea>
