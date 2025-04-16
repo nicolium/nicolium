@@ -65,7 +65,7 @@ const supportsEmojiReacts = async (accountUrl: string): Promise<'true' | 'false'
   const domain = new URL(accountUrl).hostname;
   let domainCapabilities = capabilities.domains[domain];
 
-  if (!domainCapabilities || domainCapabilities.lastChecked > Date.now() - 1000 * 60 * 60 * 24 * (domainCapabilities.failed ? 1 : 7)) {
+  if (!domainCapabilities || domainCapabilities.lastChecked < Date.now() - 1000 * 60 * 60 * 24 * (domainCapabilities.failed ? 1 : 7)) {
     domainCapabilities = await fetchCapabilities(domain);
   }
 
