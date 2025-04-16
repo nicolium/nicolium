@@ -1277,7 +1277,7 @@
   "preferences.fields.autoload_timelines_label": "Automatically load new posts when scrolled to the top of the page",
   "preferences.fields.boost_modal_label": "Show confirmation dialog before reposting",
   "preferences.fields.check_emoji_react_supports_hint": "This will expose your IP address to the instances you’re interacting with.",
-  "preferences.fields.check_emoji_react_supports_label": "Check whether remote hosts support emoji reactions when reacting",
+  "preferences.fields.check_emoji_react_supports_label": "Check whether remote hosts supports emoji reactions when reacting",
   "preferences.fields.content_type_label": "Default post format",
   "preferences.fields.delete_modal_label": "Show confirmation dialog before deleting a post",
   "preferences.fields.demetricator_label": "Hide social media counters",

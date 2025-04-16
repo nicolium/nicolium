@@ -276,7 +276,7 @@ const Preferences = () => {
 
         {features.emojiReacts && standalone && (
           <ListItem
-            label={<FormattedMessage id='preferences.fields.check_emoji_react_supports_label' defaultMessage='Check whether remote hosts support emoji reactions when reacting' />}
+            label={<FormattedMessage id='preferences.fields.check_emoji_react_supports_label' defaultMessage='Check whether remote hosts supports emoji reactions when reacting' />}
             hint={<FormattedMessage id='preferences.fields.check_emoji_react_supports_hint' defaultMessage='This will expose your IP address to the instances you’re interacting with.' />}
           >
             <SettingToggle settings={settings} settingPath={['checkEmojiReactsSupport']} onChange={onToggleChange} />
