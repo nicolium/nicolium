@@ -174,7 +174,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
   // Ex: use /login instead of /auth, but redirect /auth to /login
   return (
     <Switch>
-      {standalone && <Redirect from='/' to='/login/external' exact />}
+      {standalone && !isLoggedIn && <Redirect from='/' to='/login/external' exact />}
 
       <WrappedRoute path='/logout' layout={EmptyLayout} component={LogoutPage} publicRoute exact />
 

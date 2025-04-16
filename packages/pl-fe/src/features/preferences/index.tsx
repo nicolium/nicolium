@@ -10,11 +10,13 @@ import HStack from 'pl-fe/components/ui/hstack';
 import { Mutliselect, SelectDropdown } from 'pl-fe/features/forms';
 import SettingToggle from 'pl-fe/features/settings/components/setting-toggle';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import colors from 'pl-fe/utils/colors';
+import { isStandalone } from 'pl-fe/utils/state';
 
 import { PaletteListItem } from '../theme-editor';
 import ThemeToggle from '../ui/components/theme-toggle';
@@ -114,6 +116,7 @@ const Preferences = () => {
   const settings = useSettings();
   const plFeConfig = usePlFeConfig();
   const instance = useInstance();
+  const standalone = useAppSelector(isStandalone);
 
   const brandColor = settings.theme?.brandColor || plFeConfig.brandColor || '#d80482';
 
@@ -268,6 +271,15 @@ const Preferences = () => {
         {features.emojiReacts && (
           <ListItem label={<FormattedMessage id='preferences.fields.wrench_label' defaultMessage='Display wrench reaction button' />} >
             <SettingToggle settings={settings} settingPath={['showWrenchButton']} onChange={onToggleChange} />
+          </ListItem>
+        )}
+
+        {features.emojiReacts && standalone && (
+          <ListItem
+            label={<FormattedMessage id='preferences.fields.check_emoji_react_supports_label' defaultMessage='Check whether remote hosts support emoji reactions when reacting' />}
+            hint={<FormattedMessage id='preferences.fields.check_emoji_react_supports_hint' defaultMessage='This will expose your IP address to the instances you’re interacting with.' />}
+          >
+            <SettingToggle settings={settings} settingPath={['checkEmojiReactsSupport']} onChange={onToggleChange} />
           </ListItem>
         )}
       </List>

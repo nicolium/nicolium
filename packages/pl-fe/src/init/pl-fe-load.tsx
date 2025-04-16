@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { fetchInstance } from 'pl-fe/actions/instance';
+import { checkIfStandalone, fetchInstance } from 'pl-fe/actions/instance';
 import { fetchMe } from 'pl-fe/actions/me';
 import { loadPlFeConfig } from 'pl-fe/actions/pl-fe';
 import LoadingScreen from 'pl-fe/components/loading-screen';
@@ -11,17 +11,17 @@ import { useLocale } from 'pl-fe/hooks/use-locale';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import MESSAGES from 'pl-fe/messages';
 
+import type { AppDispatch } from 'pl-fe/store';
+
 /** Load initial data from the backend */
-const loadInitial = () => {
-  // @ts-ignore
-  return async(dispatch, getState) => {
-    // Await for authenticated fetch
-    await dispatch(fetchMe());
-    // Await for feature detection
-    await dispatch(fetchInstance());
-    // Await for configuration
-    await dispatch(loadPlFeConfig());
-  };
+const loadInitial = () => async(dispatch: AppDispatch) => {
+  dispatch(checkIfStandalone());
+  // Await for authenticated fetch
+  await dispatch(fetchMe());
+  // Await for feature detection
+  await dispatch(fetchInstance());
+  // Await for configuration
+  await dispatch(loadPlFeConfig());
 };
 
 interface IPlFeLoad {

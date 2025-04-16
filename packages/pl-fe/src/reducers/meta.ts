@@ -1,4 +1,4 @@
-import { INSTANCE_FETCH_FAIL, type InstanceAction } from 'pl-fe/actions/instance';
+import { STANDALONE_CHECK_SUCCESS, type InstanceAction } from 'pl-fe/actions/instance';
 
 const initialState = {
   /** Whether /api/v1/instance 404'd (and we should display the external auth form). */
@@ -7,11 +7,8 @@ const initialState = {
 
 const meta = (state = initialState, action: InstanceAction): typeof initialState => {
   switch (action.type) {
-    case INSTANCE_FETCH_FAIL:
-      if ((action.error as any)?.response?.status === 404) {
-        return { instance_fetch_failed: true };
-      }
-      return state;
+    case STANDALONE_CHECK_SUCCESS:
+      return { instance_fetch_failed: !action.ok };
     default:
       return state;
   }

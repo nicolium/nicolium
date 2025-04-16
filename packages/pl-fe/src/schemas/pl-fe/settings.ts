@@ -48,6 +48,7 @@ const settingsSchema = v.object({
     redirectServicesUrl: v.fallback(v.string(), ''),
     redirectServices: v.fallback(v.record(v.string(), v.string()), {}),
   }),
+  checkEmojiReactsSupport: v.fallback(v.boolean(), false),
 
   theme: v.fallback(v.optional(v.object({
     brandColor: v.fallback(v.string(), ''),
@@ -99,6 +100,7 @@ const settingsSchema = v.object({
   saved: v.fallback(v.boolean(), true),
 
   demo: v.fallback(v.boolean(), false),
+
 });
 
 type Settings = v.InferOutput<typeof settingsSchema>;

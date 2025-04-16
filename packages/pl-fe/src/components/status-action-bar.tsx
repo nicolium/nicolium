@@ -490,13 +490,13 @@ const WrenchButton: React.FC<IActionButton> = ({
     if (wrenches?.me) {
       dispatch(unEmojiReact(status.id, '🔧'));
     } else {
-      dispatch(emojiReact(status.id, '🔧'));
+      dispatch(emojiReact(status.id, '🔧', undefined, intl));
     }
   };
 
   const handleWrenchLongPress = () => {
     if (features.customEmojiReacts && hasLongerWrench) {
-      dispatch(emojiReact(status.id, hasLongerWrench.shortcode, hasLongerWrench.url));
+      dispatch(emojiReact(status.id, hasLongerWrench.shortcode, hasLongerWrench.url, intl));
     } else if (wrenches?.count) {
       openModal('REACTIONS', { statusId: status.id, reaction: wrenches.name });
     }
@@ -524,11 +524,12 @@ const EmojiPickerButton: React.FC<Omit<IActionButton, 'onOpenUnauthorizedModal'>
   me,
 }) => {
   const dispatch = useAppDispatch();
+  const intl = useIntl();
 
   const features = useFeatures();
 
   const handlePickEmoji = (emoji: EmojiType) => {
-    dispatch(emojiReact(status.id, emoji.custom ? emoji.id : emoji.native, emoji.custom ? emoji.imageUrl : undefined));
+    dispatch(emojiReact(status.id, emoji.custom ? emoji.id : emoji.native, emoji.custom ? emoji.imageUrl : undefined, intl));
   };
 
   return me && !withLabels && features.emojiReacts && (

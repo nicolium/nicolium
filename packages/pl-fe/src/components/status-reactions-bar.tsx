@@ -65,7 +65,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, statusId, obfusca
     } else if (reaction.me) {
       dispatch(unEmojiReact(statusId, reaction.name));
     } else {
-      dispatch(emojiReact(statusId, reaction.name, reaction.url));
+      dispatch(emojiReact(statusId, reaction.name, reaction.url, intl));
     }
   };
 
@@ -112,7 +112,7 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
   const features = useFeatures();
 
   const handlePickEmoji = (emoji: EmojiType) => {
-    dispatch(emojiReact(status.id, emoji.custom ? emoji.id : emoji.native, emoji.custom ? emoji.imageUrl : undefined));
+    dispatch(emojiReact(status.id, emoji.custom ? emoji.id : emoji.native, emoji.custom ? emoji.imageUrl : undefined, intl));
   };
 
   if ((demetricator || status.emoji_reactions.length === 0) && collapsed) return null;
