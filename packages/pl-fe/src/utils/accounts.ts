@@ -34,6 +34,7 @@ const DEFAULT_HEADERS: string[] = [
   '/headers/original/missing.png', // Mastodon
   '/api/v1/accounts/identicon', // Mitra
   '/images/banner.png', // Pleroma
+  '/assets/transparent.png', // Iceshrimp.net
   require('pl-fe/assets/images/header-missing.png'), // header not provided by backend
 ];
 
