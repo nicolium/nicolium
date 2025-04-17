@@ -1247,6 +1247,7 @@ const getFeatures = (instance: Instance) => {
     postLanguages: any([
       v.software === AKKOMA,
       v.software === MASTODON,
+      v.software === MITRA && gte(v.version, '3.23.0'),
       v.software === PLEROMA && gte(v.version, '2.9.0'),
       v.software === GOTOSOCIAL,
     ]),
