@@ -85,7 +85,7 @@ import { circleSchema } from './entities/circle';
 import { type GroupedNotificationsResults, groupedNotificationsResultsSchema, type NotificationGroup } from './entities/grouped-notifications-results';
 import { ShoutMessage, shoutMessageSchema } from './entities/shout-message';
 import { filteredArray } from './entities/utils';
-import { AKKOMA, type Features, getFeatures, GOTOSOCIAL, MITRA, PIXELFED, PLEROMA } from './features';
+import { AKKOMA, type Features, getFeatures, GOTOSOCIAL, ICESHRIMP_NET, MITRA, PIXELFED, PLEROMA } from './features';
 import request, { getNextLink, getPrevLink, type RequestBody, type RequestMeta } from './request';
 import { buildFullPath } from './utils/url';
 
@@ -862,7 +862,15 @@ class PlApiClient {
      * @see {@link https://github.com/purifetchi/Toki/blob/master/Toki/Controllers/MastodonApi/Bite/BiteController.cs}
      */
     biteAccount: async (accountId: string) => {
-      const response = await this.request('/api/v1/bite', { method: 'POST', params: { id: accountId } });
+      let response;
+      switch (this.features.version.software) {
+        case ICESHRIMP_NET:
+          response = await this.request(`/api/v1/users/${accountId}/bite`, { method: 'POST' });
+          break;
+        default:
+          response = await this.request('/api/v1/bite', { method: 'POST', params: { id: accountId } });
+          break;
+      }
 
       return response.json as {};
     },
