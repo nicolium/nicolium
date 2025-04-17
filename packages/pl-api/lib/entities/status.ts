@@ -108,6 +108,7 @@ const preprocess = (status: any) => {
   if (!status) return null;
   status = {
     // @ts-ignore
+    emoji_reactions: status.reactions,
     ...(pick(status.pleroma || {}, [
       'quote',
       'quote_id',
