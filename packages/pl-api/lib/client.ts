@@ -865,7 +865,7 @@ class PlApiClient {
       let response;
       switch (this.features.version.software) {
         case ICESHRIMP_NET:
-          response = await this.request(`/api/v1/users/${accountId}/bite`, { method: 'POST' });
+          response = await this.request('/api/v1/bite', { method: 'POST', body: accountId });
           break;
         default:
           response = await this.request('/api/v1/bite', { method: 'POST', params: { id: accountId } });
