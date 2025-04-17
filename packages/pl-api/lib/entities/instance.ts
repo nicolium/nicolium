@@ -310,13 +310,14 @@ const instanceSchema = v.pipe(
   // Detect GoToSocial
     if (typeof data.configuration?.accounts?.allow_custom_css === 'boolean') {
       data.version = `0.0.0 (compatible; GoToSocial ${data.version})`;
-      if (!data.pleroma) {
-        data.pleroma = {
-          metadata: {
-            post_formats: data.configuration?.statuses?.supported_mime_types,
-          },
-        };
-      }
+    }
+
+    if (!data.pleroma) {
+      data.pleroma = {
+        metadata: {
+          post_formats: data.configuration?.statuses?.supported_mime_types,
+        },
+      };
     }
 
     const apiVersions = getApiVersions(data);
