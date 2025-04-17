@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { fetchBubbleTimeline } from 'pl-fe/actions/timelines';
+import { useBubbleStream } from 'pl-fe/api/hooks/streaming/use-bubble-stream';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import Column from 'pl-fe/components/ui/column';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
@@ -31,6 +32,8 @@ const BubbleTimeline = () => {
   };
 
   const handleRefresh = () => dispatch(fetchBubbleTimeline({ onlyMedia }, true));
+
+  useBubbleStream({ onlyMedia });
 
   useEffect(() => {
     dispatch(fetchBubbleTimeline({ onlyMedia }));

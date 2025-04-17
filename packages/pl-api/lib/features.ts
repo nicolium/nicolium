@@ -414,7 +414,12 @@ const getFeatures = (instance: Instance) => {
      * Can display a timeline of statuses from instances selected by instance admin.
      * @see GET /api/v1/timelines/bubble
      */
-    bubbleTimeline: instance.api_versions['bubble_timeline.pleroma.pl-api'] >= 1,
+    bubbleTimeline: any([
+      instance.api_versions['bubble_timeline.pleroma.pl-api'] >= 1,
+      v.software === ICESHRIMP_NET,
+    ]),
+
+    bubbleTimelineStreaming: v.software === ICESHRIMP_NET,
 
     /**
      * Pleroma chats API.
