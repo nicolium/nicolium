@@ -6,6 +6,7 @@ import { useBubbleStream } from 'pl-fe/api/hooks/streaming/use-bubble-stream';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import Column from 'pl-fe/components/ui/column';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useTheme } from 'pl-fe/hooks/use-theme';
@@ -21,6 +22,7 @@ const BubbleTimeline = () => {
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
+  const features = useFeatures();
   const settings = useSettings();
   const onlyMedia = settings.timelines.bubble?.other.onlyMedia ?? false;
 
@@ -33,7 +35,7 @@ const BubbleTimeline = () => {
 
   const handleRefresh = () => dispatch(fetchBubbleTimeline({ onlyMedia }, true));
 
-  useBubbleStream({ onlyMedia });
+  useBubbleStream({ onlyMedia, enabled: features.bubbleTimelineStreaming });
 
   useEffect(() => {
     dispatch(fetchBubbleTimeline({ onlyMedia }));
