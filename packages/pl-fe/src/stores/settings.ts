@@ -1,3 +1,4 @@
+import isEqual from 'lodash/isEqual';
 import { defineMessages } from 'react-intl';
 import * as v from 'valibot';
 import { create } from 'zustand';
@@ -75,7 +76,7 @@ const mergeSettings = (state: State, updating = false) => {
         }).catch(() => {
           toast.error(messages.redirectServicesUpdateFail);
         });
-      } else if (mergedSettings.urlPrivacy.redirectLinksMode === 'manual') {
+      } else if (mergedSettings.urlPrivacy.redirectLinksMode === 'manual' && !isEqual(state.settings.urlPrivacy.redirectServices, mergedSettings.urlPrivacy.redirectServices)) {
         setManualRedirectServices(me, mergedSettings.urlPrivacy.redirectServices).then(() => {
           toast.success(messages.redirectServicesUpdateSuccess);
         }).catch(() => {
