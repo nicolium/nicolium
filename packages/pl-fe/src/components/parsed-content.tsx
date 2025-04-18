@@ -29,7 +29,7 @@ const isHostNotVisible = (href: string, nodes: Array<DOMNode>): false | string =
     host = host.replace(/^www\./, '');
     const text = nodesToText(nodes).trim();
 
-    if (new RegExp(`^(https?://)?(www.)?${host}(/|$)`).test(text)) {
+    if (new RegExp(`^(https?://)?(www.)?${host}(/|$)`, 'i').test(text)) {
       return false;
     } else {
       return host;
