@@ -215,10 +215,12 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v1/accounts/:id/pin
      * @see POST /api/v1/accounts/:id/unpin
      * @see GET /api/v1/pleroma/accounts/:id/endorsements
+     * @see GET /api/v1/accounts/:id/endorsements
      */
     accountEndorsements: any([
       v.software === AKKOMA,
       v.software === PLEROMA && gte(v.version, '2.5.0'),
+      instance.api_versions.mastodon >= 6,
     ]),
 
     accountIsCat: instance.api_versions['cats.pleroma.pl-api'] >= 1,

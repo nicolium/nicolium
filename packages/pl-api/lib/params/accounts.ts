@@ -86,7 +86,7 @@ interface ReportAccountParams {
 /**
  * @category Request params
  */
-type GetAccountEndorsementsParams = WithRelationshipsParam;
+type GetAccountEndorsementsParams = Omit<PaginationParams, 'min_id'> & WithRelationshipsParam;
 
 /**
  * @category Request params

@@ -809,12 +809,14 @@ class PlApiClient {
      *
      * Requires features{@link Features['accountEndorsements']}.
      * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#apiv1pleromaaccountsidendorsements}
+     * @see {@link https://docs.joinmastodon.org/methods/accounts/endorsements}
      */
-    getAccountEndorsements: async (accountId: string, params?: GetAccountEndorsementsParams) => {
-      const response = await this.request(`/api/v1/pleroma/accounts/${accountId}/endorsements`, { params });
-
-      return v.parse(filteredArray(accountSchema), response.json);
-    },
+    getAccountEndorsements: async (accountId: string, params?: GetAccountEndorsementsParams) =>
+      this.#paginatedGet(
+        `/api/v1/${[PLEROMA, AKKOMA].includes(this.features.version.software as string) ? 'pleroma/' : ''}accounts/${accountId}/endorsements`,
+        { params },
+        accountSchema,
+      ),
 
     /**
      * Birthday reminders
