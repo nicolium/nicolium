@@ -215,6 +215,7 @@
   "alt_text_modal.cancel": "Anuluj",
   "alt_text_modal.confirmation": "Zapisz",
   "alt_text_modal.header": "Dodaj tekst alternatywny",
+  "alt_text_modal.saving_failed": "Nie udało się zapisać tekstu alternatywnego",
   "announcements.title": "Ogłoszenia",
   "app_create.name_label": "Nazwa aplikacji",
   "app_create.name_placeholder": "np. „pl-fe”",
