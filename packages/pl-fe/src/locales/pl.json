@@ -213,6 +213,7 @@
   "aliases.success.add": "Pomyślnie utworzono alias konta",
   "aliases.success.remove": "Pomyślnie usunięto alias konta",
   "alt_text_modal.cancel": "Anuluj",
+  "alt_text_modal.confirmation": "Zapisz",
   "announcements.title": "Ogłoszenia",
   "app_create.name_label": "Nazwa aplikacji",
   "app_create.name_placeholder": "np. „pl-fe”",
