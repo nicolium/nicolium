@@ -254,6 +254,7 @@
   "bookmarks.edit_folder": "Edytuj folder",
   "boost_modal.combo": "Naciśnij {combo}, aby pominąć to następnym razem",
   "boost_modal.title": "Czy chcesz podbić?",
+  "boost_modal.title.private": "Czy chcesz podbić prywatnie?",
   "bundle_column_error.body": "Coś poszło nie tak podczas ładowania tej strony.",
   "bundle_column_error.retry": "Spróbuj ponownie",
   "bundle_column_error.title": "Błąd sieci",
