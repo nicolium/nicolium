@@ -1,15 +1,16 @@
 import * as v from 'valibot';
 
 import { statusSchema } from './status';
+import { filteredArray } from './utils';
 
 /**
  * @category Schemas
  * @see {@link https://docs.joinmastodon.org/entities/Context/}
  */
 const contextSchema = v.object({
-  ancestors: v.array(statusSchema),
-  descendants: v.array(statusSchema),
-  references: v.fallback(v.array(statusSchema), []),
+  ancestors: filteredArray(statusSchema),
+  descendants: filteredArray(statusSchema),
+  references: v.fallback(filteredArray(statusSchema), []),
 });
 
 /**
