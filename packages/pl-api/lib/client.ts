@@ -5283,7 +5283,7 @@ class PlApiClient {
     /**
      * Requires features{@link Features['circles']}.
      */
-    getCircles: async (circleId: string) => {
+    getCircle: async (circleId: string) => {
       const response = await this.request(`/api/v1/circles/${circleId}`);
 
       return v.parse(circleSchema, response.json);
