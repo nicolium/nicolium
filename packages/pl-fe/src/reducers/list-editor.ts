@@ -1,12 +1,6 @@
 import { create } from 'mutative';
 
 import {
-  LIST_CREATE_REQUEST,
-  LIST_CREATE_FAIL,
-  LIST_CREATE_SUCCESS,
-  LIST_UPDATE_REQUEST,
-  LIST_UPDATE_FAIL,
-  LIST_UPDATE_SUCCESS,
   LIST_EDITOR_RESET,
   LIST_EDITOR_SETUP,
   LIST_EDITOR_TITLE_CHANGE,
@@ -24,7 +18,6 @@ import {
 interface State {
   listId: string | null;
   isSubmitting: boolean;
-  isChanged: boolean;
   title: string;
 
   accounts: {
@@ -42,7 +35,6 @@ interface State {
 const initialState: State = {
   listId: null,
   isSubmitting: false,
-  isChanged: false,
   title: '',
 
   accounts: {
@@ -70,24 +62,6 @@ const listEditorReducer = (state: State = initialState, action: ListsAction): St
     case LIST_EDITOR_TITLE_CHANGE:
       return create(state, (draft) => {
         draft.title = action.value;
-        draft.isChanged = true;
-      });
-    case LIST_CREATE_REQUEST:
-    case LIST_UPDATE_REQUEST:
-      return create(state, (draft) => {
-        draft.isSubmitting = true;
-        draft.isChanged = false;
-      });
-    case LIST_CREATE_FAIL:
-    case LIST_UPDATE_FAIL:
-      return create(state, (draft) => {
-        draft.isSubmitting = false;
-      });
-    case LIST_CREATE_SUCCESS:
-    case LIST_UPDATE_SUCCESS:
-      return create(state, (draft) => {
-        draft.isSubmitting = false;
-        draft.listId = action.list.id;
       });
     case LIST_ACCOUNTS_FETCH_REQUEST:
       return create(state, (draft) => {

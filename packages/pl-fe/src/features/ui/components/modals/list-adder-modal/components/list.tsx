@@ -6,6 +6,7 @@ import Icon from 'pl-fe/components/icon';
 import IconButton from 'pl-fe/components/icon-button';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useList } from 'pl-fe/queries/accounts/use-lists';
 
 const messages = defineMessages({
   remove: { id: 'lists.account.remove', defaultMessage: 'Remove from list' },
@@ -20,7 +21,7 @@ const List: React.FC<IList> = ({ listId }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const list = useAppSelector((state) => state.lists[listId]);
+  const { data: list } = useList(listId);
   const added = useAppSelector((state) => state.listAdder.lists.items.includes(listId));
 
   const onRemove = () => dispatch(removeFromListAdder(listId));

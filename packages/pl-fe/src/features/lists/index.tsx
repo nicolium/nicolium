@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
-import { createSelector } from 'reselect';
 
-import { fetchLists } from 'pl-fe/actions/lists';
 import List, { ListItem } from 'pl-fe/components/list';
 import Card from 'pl-fe/components/ui/card';
 import Column from 'pl-fe/components/ui/column';
@@ -10,36 +8,29 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Stack from 'pl-fe/components/ui/stack';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useLists } from 'pl-fe/queries/accounts/use-lists';
 
 import NewListForm from './components/new-list-form';
 
 import type { List as ListEntity } from 'pl-api';
-import type { RootState } from 'pl-fe/store';
 
 const messages = defineMessages({
   heading: { id: 'column.lists', defaultMessage: 'Lists' },
   subheading: { id: 'lists.subheading', defaultMessage: 'Your lists' },
 });
 
-const getOrderedLists = createSelector([(state: RootState) => state.lists], lists => {
+const getOrderedLists = (lists: Array<ListEntity>) => {
   if (!lists) {
     return lists;
   }
 
   return Object.values(lists).filter((item): item is ListEntity => !!item).sort((a, b) => a.title.localeCompare(b.title));
-});
+};
 
 const Lists: React.FC = () => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const lists = useAppSelector((state) => getOrderedLists(state));
-
-  useEffect(() => {
-    dispatch(fetchLists());
-  }, []);
+  const { data: lists } = useLists(getOrderedLists);
 
   if (!lists) {
     return (

@@ -1,3 +1,4 @@
+import { queryClient } from 'pl-fe/queries/client';
 import { selectAccount } from 'pl-fe/selectors';
 import toast from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
@@ -9,24 +10,9 @@ import { importEntities } from './importer';
 import type { Account, List, PaginatedResponse } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
-const LIST_FETCH_SUCCESS = 'LIST_FETCH_SUCCESS' as const;
-const LIST_FETCH_FAIL = 'LIST_FETCH_FAIL' as const;
-
-const LISTS_FETCH_SUCCESS = 'LISTS_FETCH_SUCCESS' as const;
-
 const LIST_EDITOR_TITLE_CHANGE = 'LIST_EDITOR_TITLE_CHANGE' as const;
 const LIST_EDITOR_RESET = 'LIST_EDITOR_RESET' as const;
 const LIST_EDITOR_SETUP = 'LIST_EDITOR_SETUP' as const;
-
-const LIST_CREATE_REQUEST = 'LIST_CREATE_REQUEST' as const;
-const LIST_CREATE_SUCCESS = 'LIST_CREATE_SUCCESS' as const;
-const LIST_CREATE_FAIL = 'LIST_CREATE_FAIL' as const;
-
-const LIST_UPDATE_REQUEST = 'LIST_UPDATE_REQUEST' as const;
-const LIST_UPDATE_SUCCESS = 'LIST_UPDATE_SUCCESS' as const;
-const LIST_UPDATE_FAIL = 'LIST_UPDATE_FAIL' as const;
-
-const LIST_DELETE_SUCCESS = 'LIST_DELETE_SUCCESS' as const;
 
 const LIST_ACCOUNTS_FETCH_REQUEST = 'LIST_ACCOUNTS_FETCH_REQUEST' as const;
 const LIST_ACCOUNTS_FETCH_SUCCESS = 'LIST_ACCOUNTS_FETCH_SUCCESS' as const;
@@ -47,59 +33,13 @@ const LIST_ADDER_LISTS_FETCH_REQUEST = 'LIST_ADDER_LISTS_FETCH_REQUEST' as const
 const LIST_ADDER_LISTS_FETCH_SUCCESS = 'LIST_ADDER_LISTS_FETCH_SUCCESS' as const;
 const LIST_ADDER_LISTS_FETCH_FAIL = 'LIST_ADDER_LISTS_FETCH_FAIL' as const;
 
-const fetchList = (listId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
-
-  if (getState().lists[listId]) {
-    return;
-  }
-
-  return getClient(getState()).lists.getList(listId)
-    .then((data) => dispatch(fetchListSuccess(data)))
-    .catch(err => dispatch(fetchListFail(listId, err)));
-};
-
-const fetchListSuccess = (list: List) => ({
-  type: LIST_FETCH_SUCCESS,
-  list,
-});
-
-const fetchListFail = (listId: string, error: unknown) => ({
-  type: LIST_FETCH_FAIL,
-  listId,
-  error,
-});
-
-const fetchLists = () => (dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
-
-  return getClient(getState()).lists.getLists()
-    .then((data) => dispatch(fetchListsSuccess(data)));
-};
-
-const fetchListsSuccess = (lists: Array<List>) => ({
-  type: LISTS_FETCH_SUCCESS,
-  lists,
-});
-
-const submitListEditor = (shouldReset?: boolean) => (dispatch: AppDispatch, getState: () => RootState) => {
-  const listId = getState().listEditor.listId!;
-  const title = getState().listEditor.title;
-
-  if (listId === null) {
-    dispatch(createList(title, shouldReset));
-  } else {
-    dispatch(updateList(listId, title, shouldReset));
-  }
-};
-
 interface ListEditorSetupAction {
   type: typeof LIST_EDITOR_SETUP;
   list: List;
 }
 
-const setupListEditor = (listId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  const list = getState().lists[listId];
+const setupListEditor = (listId: string) => (dispatch: AppDispatch) => {
+  const list = queryClient.getQueryData<Array<List>>(['lists'])?.find((list) => list.id === listId);
   if (!list) return;
 
   dispatch<ListEditorSetupAction>({
@@ -115,78 +55,8 @@ const changeListEditorTitle = (value: string) => ({
   value,
 });
 
-const createList = (title: string, shouldReset?: boolean) => (dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
-
-  dispatch(createListRequest());
-
-  return getClient(getState()).lists.createList({ title }).then((data) => {
-    dispatch(createListSuccess(data));
-
-    if (shouldReset) {
-      dispatch(resetListEditor());
-    }
-  }).catch(err => dispatch(createListFail(err)));
-};
-
-const createListRequest = () => ({
-  type: LIST_CREATE_REQUEST,
-});
-
-const createListSuccess = (list: List) => ({
-  type: LIST_CREATE_SUCCESS,
-  list,
-});
-
-const createListFail = (error: unknown) => ({
-  type: LIST_CREATE_FAIL,
-  error,
-});
-
-const updateList = (listId: string, title: string, shouldReset?: boolean) => (dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
-
-  dispatch(updateListRequest(listId));
-
-  return getClient(getState()).lists.updateList(listId, { title }).then((data) => {
-    dispatch(updateListSuccess(data));
-
-    if (shouldReset) {
-      dispatch(resetListEditor());
-    }
-  }).catch(err => dispatch(updateListFail(listId, err)));
-};
-
-const updateListRequest = (listId: string) => ({
-  type: LIST_UPDATE_REQUEST,
-  listId,
-});
-
-const updateListSuccess = (list: List) => ({
-  type: LIST_UPDATE_SUCCESS,
-  list,
-});
-
-const updateListFail = (listId: string, error: unknown) => ({
-  type: LIST_UPDATE_FAIL,
-  listId,
-  error,
-});
-
 const resetListEditor = () => ({
   type: LIST_EDITOR_RESET,
-});
-
-const deleteList = (listId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
-
-  return getClient(getState()).lists.deleteList(listId)
-    .then(() => dispatch(deleteListSuccess(listId)));
-};
-
-const deleteListSuccess = (listId: string) => ({
-  type: LIST_DELETE_SUCCESS,
-  listId,
 });
 
 const fetchListAccounts = (listId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
@@ -293,7 +163,6 @@ const setupListAdder = (accountId: string) => (dispatch: AppDispatch, getState: 
     type: LIST_ADDER_SETUP,
     account,
   });
-  dispatch(fetchLists());
   dispatch(fetchAccountLists(accountId));
 };
 
@@ -333,19 +202,9 @@ const removeFromListAdder = (listId: string) => (dispatch: AppDispatch, getState
 };
 
 type ListsAction =
-  | ReturnType<typeof fetchListSuccess>
-  | ReturnType<typeof fetchListFail>
-  | ReturnType<typeof fetchListsSuccess>
   | ListEditorSetupAction
   | ReturnType<typeof changeListEditorTitle>
-  | ReturnType<typeof createListRequest>
-  | ReturnType<typeof createListSuccess>
-  | ReturnType<typeof createListFail>
-  | ReturnType<typeof updateListRequest>
-  | ReturnType<typeof updateListSuccess>
-  | ReturnType<typeof updateListFail>
   | ReturnType<typeof resetListEditor>
-  | ReturnType<typeof deleteListSuccess>
   | ReturnType<typeof fetchListAccountsRequest>
   | ReturnType<typeof fetchListAccountsSuccess>
   | ReturnType<typeof fetchListAccountsFail>
@@ -361,19 +220,9 @@ type ListsAction =
   | ReturnType<typeof fetchAccountListsFail>;
 
 export {
-  LIST_FETCH_SUCCESS,
-  LIST_FETCH_FAIL,
-  LISTS_FETCH_SUCCESS,
   LIST_EDITOR_TITLE_CHANGE,
   LIST_EDITOR_RESET,
   LIST_EDITOR_SETUP,
-  LIST_CREATE_REQUEST,
-  LIST_CREATE_SUCCESS,
-  LIST_CREATE_FAIL,
-  LIST_UPDATE_REQUEST,
-  LIST_UPDATE_SUCCESS,
-  LIST_UPDATE_FAIL,
-  LIST_DELETE_SUCCESS,
   LIST_ACCOUNTS_FETCH_REQUEST,
   LIST_ACCOUNTS_FETCH_SUCCESS,
   LIST_ACCOUNTS_FETCH_FAIL,
@@ -387,13 +236,9 @@ export {
   LIST_ADDER_LISTS_FETCH_REQUEST,
   LIST_ADDER_LISTS_FETCH_SUCCESS,
   LIST_ADDER_LISTS_FETCH_FAIL,
-  fetchList,
-  fetchLists,
-  submitListEditor,
   setupListEditor,
   changeListEditorTitle,
   resetListEditor,
-  deleteList,
   fetchListSuggestions,
   clearListSuggestions,
   changeListSuggestions,

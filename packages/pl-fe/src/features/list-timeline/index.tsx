@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
-import { deleteList, fetchList } from 'pl-fe/actions/lists';
 import { fetchListTimeline } from 'pl-fe/actions/timelines';
 import { useListStream } from 'pl-fe/api/hooks/streaming/use-list-stream';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
@@ -11,9 +10,9 @@ import Button from 'pl-fe/components/ui/button';
 import Column from 'pl-fe/components/ui/column';
 import Spinner from 'pl-fe/components/ui/spinner';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
 import { useTheme } from 'pl-fe/hooks/use-theme';
+import { useDeleteList, useList } from 'pl-fe/queries/accounts/use-lists';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
 import Timeline from '../ui/components/timeline';
@@ -34,12 +33,12 @@ const ListTimeline: React.FC = () => {
   const isMobile = useIsMobile();
   const { openModal } = useModalsStore();
 
-  const list = useAppSelector((state) => state.lists[id]);
+  const { data: list, isFetching } = useList(id);
+  const { mutate: deleteList } = useDeleteList();
 
   useListStream(id);
 
   useEffect(() => {
-    dispatch(fetchList(id));
     dispatch(fetchListTimeline(id));
   }, [id]);
 
@@ -59,14 +58,14 @@ const ListTimeline: React.FC = () => {
       message: intl.formatMessage(messages.deleteMessage),
       confirm: intl.formatMessage(messages.deleteConfirm),
       onConfirm: () => {
-        dispatch(deleteList(id));
+        deleteList(id);
       },
     });
   };
 
   const title = list ? list.title : id;
 
-  if (typeof list === 'undefined') {
+  if (!list && isFetching) {
     return (
       <Column>
         <div>
@@ -74,7 +73,7 @@ const ListTimeline: React.FC = () => {
         </div>
       </Column>
     );
-  } else if (list === false) {
+  } else if (!list) {
     return (
       <MissingIndicator />
     );

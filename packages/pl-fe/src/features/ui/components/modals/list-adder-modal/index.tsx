@@ -8,7 +8,7 @@ import AccountContainer from 'pl-fe/containers/account-container';
 import { getOrderedLists } from 'pl-fe/features/lists';
 import NewListForm from 'pl-fe/features/lists/components/new-list-form';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useLists } from 'pl-fe/queries/accounts/use-lists';
 
 import List from './components/list';
 
@@ -27,7 +27,7 @@ const ListAdderModal: React.FC<BaseModalProps & ListAdderModalProps> = ({ accoun
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const listIds = useAppSelector((state) => getOrderedLists(state).map(list => list.id));
+  const { data: listIds = [] } = useLists((lists) => getOrderedLists(lists).map(list => list.id));
 
   useEffect(() => {
     dispatch(setupListAdder(accountId));

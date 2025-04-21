@@ -17,7 +17,6 @@ import filters from './filters';
 import instance from './instance';
 import listAdder from './list-adder';
 import listEditor from './list-editor';
-import lists from './lists';
 import me from './me';
 import meta from './meta';
 import notifications from './notifications';
@@ -47,7 +46,6 @@ const reducers = {
   instance,
   listAdder,
   listEditor,
-  lists,
   me,
   meta,
   notifications,

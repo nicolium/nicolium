@@ -1,15 +1,14 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useIntl, defineMessages, IntlShape } from 'react-intl';
 
 import { changeComposeFederated, changeComposeVisibility } from 'pl-fe/actions/compose';
-import { fetchLists } from 'pl-fe/actions/lists';
 import DropdownMenu, { MenuItem } from 'pl-fe/components/dropdown-menu';
 import Button from 'pl-fe/components/ui/button';
 import { getOrderedLists } from 'pl-fe/features/lists';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useCompose } from 'pl-fe/hooks/use-compose';
 import { useFeatures } from 'pl-fe/hooks/use-features';
+import { useLists } from 'pl-fe/queries/accounts/use-lists';
 
 import type { Features } from 'pl-api';
 
@@ -111,7 +110,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
   const dispatch = useAppDispatch();
 
   const compose = useCompose(composeId);
-  const lists = useAppSelector((state) => getOrderedLists(state));
+  const { data: lists = [] } = useLists(getOrderedLists);
 
   const value = compose.privacy;
   const unavailable = compose.id;
@@ -130,10 +129,6 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
       active: item.value === value,
     })),
   }));
-
-  useEffect(() => {
-    if (features.addressableLists) dispatch(fetchLists());
-  }, []);
 
   if (features.localOnlyStatuses) items.push({
     icon: require('@tabler/icons/outline/affiliate.svg'),

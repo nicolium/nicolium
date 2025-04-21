@@ -1,13 +1,14 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeListEditorTitle, submitListEditor } from 'pl-fe/actions/lists';
+import { changeListEditorTitle } from 'pl-fe/actions/lists';
 import Button from 'pl-fe/components/ui/button';
 import Form from 'pl-fe/components/ui/form';
 import HStack from 'pl-fe/components/ui/hstack';
 import Input from 'pl-fe/components/ui/input';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useCreateList } from 'pl-fe/queries/accounts/use-lists';
 
 const messages = defineMessages({
   label: { id: 'lists.new.title_placeholder', defaultMessage: 'New list title' },
@@ -19,8 +20,9 @@ const NewListForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const value = useAppSelector((state) => state.listEditor.title);
-  const disabled = useAppSelector((state) => !!state.listEditor.isSubmitting);
+  const { title: value, isSubmitting: disabled } = useAppSelector((state) => state.listEditor);
+
+  const { mutate: createList } = useCreateList();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     dispatch(changeListEditorTitle(e.target.value));
@@ -28,7 +30,7 @@ const NewListForm: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent<Element>) => {
     e.preventDefault();
-    dispatch(submitListEditor(true));
+    createList({ title: value });
   };
 
   const label = intl.formatMessage(messages.label);
