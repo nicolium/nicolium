@@ -1113,7 +1113,7 @@ class PlApiClient {
      * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#get-apiv1pleromabookmark_folders}
      */
     getBookmarkFolders: async () => {
-      const response = await this.request('/api/v1/pleroma/bookmark_folders');
+      const response = await this.request(this.features.version.software === PLEROMA ? '/api/v1/pleroma/bookmark_folders' : '/api/v1/bookmark_categories');
 
       return v.parse(filteredArray(bookmarkFolderSchema), response.json);
     },
@@ -1122,10 +1122,14 @@ class PlApiClient {
      * Creates a bookmark folder
      *
      * Requires features{@link Features['bookmarkFolders']}.
+     * Specifying folder emoji requires features{@link Features['bookmarkFolderEmojis']}.
      * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#post-apiv1pleromabookmark_folders}
      */
     createBookmarkFolder: async (params: CreateBookmarkFolderParams) => {
-      const response = await this.request('/api/v1/pleroma/bookmark_folders', { method: 'POST', body: params });
+      const response = await this.request(
+        this.features.version.software === PLEROMA ? '/api/v1/pleroma/bookmark_folders' : '/api/v1/bookmark_categories',
+        { method: 'POST', body: { title: params.name, ...params } },
+      );
 
       return v.parse(bookmarkFolderSchema, response.json);
     },
@@ -1134,10 +1138,14 @@ class PlApiClient {
      * Updates a bookmark folder
      *
      * Requires features{@link Features['bookmarkFolders']}.
+     * Specifying folder emoji requires features{@link Features['bookmarkFolderEmojis']}.
      * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#patch-apiv1pleromabookmark_foldersid}
      */
     updateBookmarkFolder: async (bookmarkFolderId: string, params: UpdateBookmarkFolderParams) => {
-      const response = await this.request(`/api/v1/pleroma/bookmark_folders/${bookmarkFolderId}`, { method: 'PATCH', body: params });
+      const response = await this.request(
+        `${this.features.version.software === PLEROMA ? '/api/v1/pleroma/bookmark_folders' : '/api/v1/bookmark_categories'}/${bookmarkFolderId}`,
+        { method: 'PATCH', body: { title: params.name, ...params } },
+      );
 
       return v.parse(bookmarkFolderSchema, response.json);
     },
@@ -1149,7 +1157,10 @@ class PlApiClient {
      * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#delete-apiv1pleromabookmark_foldersid}
      */
     deleteBookmarkFolder: async (bookmarkFolderId: string) => {
-      const response = await this.request(`/api/v1/pleroma/bookmark_folders/${bookmarkFolderId}`, { method: 'DELETE' });
+      const response = await this.request(
+        `${this.features.version.software === PLEROMA ? '/api/v1/pleroma/bookmark_folders' : '/api/v1/bookmark_categories'}/${bookmarkFolderId}`,
+        { method: 'DELETE' },
+      );
 
       return v.parse(bookmarkFolderSchema, response.json);
     },
@@ -2159,7 +2170,7 @@ class PlApiClient {
       if (params.content_type === 'text/markdown' && this.#instance.api_versions['kmyblue_markdown.fedibird.pl-api'] >= 1) {
         fixedParams.markdown = true;
       }
-      if (params.visibility?.startsWith('circle:')) {
+      if (params.visibility?.startsWith('api/v1/bookmark_categories')) {
         fixedParams.circle_id = params.visibility.slice(7);
         fixedParams.visibility = 'circle';
       }

@@ -12,6 +12,7 @@ import EmojiPickerDropdown from 'pl-fe/features/emoji/components/emoji-picker-dr
 import { messages as emojiMessages } from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
 import { useTextField } from 'pl-fe/hooks/forms/use-text-field';
 import { useClickOutside } from 'pl-fe/hooks/use-click-outside';
+import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useBookmarkFolder, useUpdateBookmarkFolder } from 'pl-fe/queries/statuses/use-bookmark-folders';
 import toast from 'pl-fe/toast';
 
@@ -97,6 +98,7 @@ interface EditBookmarkFolderModalProps {
 const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModalProps> = ({ folderId, onClose }) => {
   const intl = useIntl();
 
+  const features = useFeatures();
   const { data: bookmarkFolder } = useBookmarkFolder(folderId);
   const { mutate: updateBookmarkFolder, isPending } = useUpdateBookmarkFolder(folderId);
 
@@ -142,11 +144,13 @@ const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModal
       confirmationText={<FormattedMessage id='edit_bookmark_folder_modal.confirm' defaultMessage='Save' />}
     >
       <HStack space={2}>
-        <EmojiPicker
-          emoji={emoji}
-          emojiUrl={emojiUrl}
-          onPickEmoji={handleEmojiPick}
-        />
+        {features.bookmarkFolderEmojis && (
+          <EmojiPicker
+            emoji={emoji}
+            emojiUrl={emojiUrl}
+            onPickEmoji={handleEmojiPick}
+          />
+        )}
         <label className='grow'>
           <span style={{ display: 'none' }}>{label}</span>
 

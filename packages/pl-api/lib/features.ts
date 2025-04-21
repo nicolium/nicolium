@@ -373,7 +373,12 @@ const getFeatures = (instance: Instance) => {
      * @see PATCH /api/v1/pleroma/bookmark_folders/:id
      * @see DELETE /api/v1/pleroma/bookmark_folders/:id
      */
-    bookmarkFolders: instance.api_versions['bookmark_folders.pleroma.pl-api'] >= 1,
+    bookmarkFolders: any([
+      instance.api_versions['bookmark_folders.pleroma.pl-api'] >= 1,
+      instance.api_versions['kmyblue_bookmark_category.fedibird.pl-api'] >= 1,
+    ]),
+
+    bookmarkFolderEmojis: instance.api_versions['bookmark_folders.pleroma.pl-api'] >= 1,
 
     /**
      * Can bookmark statuses.
