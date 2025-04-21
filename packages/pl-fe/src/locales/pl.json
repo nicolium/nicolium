@@ -410,6 +410,7 @@
   "column.migration": "Migracja konta",
   "column.mutes": "Wyciszeni użytkownicy",
   "column.notifications": "Powiadomienia",
+  "column.outgoing_follow_requests": "Wychodzące prośby o możliwość obserwacji",
   "column.pins": "Przypięte wpisy",
   "column.plfe_config": "Konfiguracja pl-fe",
   "column.preferences": "Preferencje",
