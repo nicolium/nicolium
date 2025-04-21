@@ -8,9 +8,10 @@ import { getOrderedLists } from 'pl-fe/features/lists';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useCompose } from 'pl-fe/hooks/use-compose';
 import { useFeatures } from 'pl-fe/hooks/use-features';
+import { useCircles } from 'pl-fe/queries/accounts/use-circles';
 import { useLists } from 'pl-fe/queries/accounts/use-lists';
 
-import type { Features } from 'pl-api';
+import type { Circle, Features } from 'pl-api';
 
 const messages = defineMessages({
   public_short: { id: 'privacy.public.short', defaultMessage: 'Public' },
@@ -27,6 +28,8 @@ const messages = defineMessages({
   local_long: { id: 'privacy.local.long', defaultMessage: 'Only visible on your instance' },
   list_short: { id: 'privacy.list.short', defaultMessage: 'List only' },
   list_long: { id: 'privacy.list.long', defaultMessage: 'Visible to members of a list' },
+  circle_short: { id: 'privacy.circle.short', defaultMessage: 'Circle only' },
+  circle_long: { id: 'privacy.circle.long', defaultMessage: 'Visible to members of a circle' },
   subscribers_short: { id: 'privacy.subscribers.short', defaultMessage: 'Subscribers-only' },
   subscribers_long: { id: 'privacy.subscribers.long', defaultMessage: 'Post to users subscribing you only' },
 
@@ -42,7 +45,7 @@ interface Option {
   items?: Array<Omit<Option, 'items'>>;
 }
 
-const getItems = (features: Features, lists: ReturnType<typeof getOrderedLists>, intl: IntlShape) => [
+const getItems = (features: Features, lists: ReturnType<typeof getOrderedLists>, circles: Array<Circle>, intl: IntlShape) => [
   {
     icon: require('@tabler/icons/outline/world.svg'),
     value: 'public',
@@ -96,6 +99,17 @@ const getItems = (features: Features, lists: ReturnType<typeof getOrderedLists>,
     text: intl.formatMessage(messages.list_short),
     meta: intl.formatMessage(messages.list_long),
   } as Option : undefined,
+  features.circles && Object.keys(circles).length ? {
+    icon: require('@tabler/icons/outline/chart-circles.svg'),
+    value: '',
+    items: Object.values(circles).map((circle) => ({
+      icon: require('@tabler/icons/outline/list.svg'),
+      value: `circle:${circle.id}`,
+      text: circle.title,
+    })),
+    text: intl.formatMessage(messages.circle_short),
+    meta: intl.formatMessage(messages.circle_long),
+  } as Option : undefined,
 ].filter((option): option is Option => !!option);
 
 interface IPrivacyDropdown {
@@ -111,6 +125,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
 
   const compose = useCompose(composeId);
   const { data: lists = [] } = useLists(getOrderedLists);
+  const { data: circles = [] } = useCircles(getOrderedLists);
 
   const value = compose.privacy;
   const unavailable = compose.id;
@@ -118,7 +133,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
   const onChange = (value: string) => value && dispatch(changeComposeVisibility(composeId,
     value));
 
-  const options = useMemo(() => getItems(features, lists, intl), [features, lists]);
+  const options = useMemo(() => getItems(features, lists, circles, intl), [features, lists, circles]);
   const items: Array<MenuItem> = options.map(item => ({
     ...item,
     action: item.value ? () => onChange(item.value) : undefined,

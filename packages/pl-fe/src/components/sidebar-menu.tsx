@@ -37,6 +37,7 @@ const messages = defineMessages({
   profileDirectory: { id: 'navigation_bar.profile_directory', defaultMessage: 'Profile directory' },
   bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
   lists: { id: 'column.lists', defaultMessage: 'Lists' },
+  circles: { id: 'column.circles', defaultMessage: 'Circles' },
   groups: { id: 'column.groups', defaultMessage: 'Groups' },
   events: { id: 'column.events', defaultMessage: 'Events' },
   dashboard: { id: 'navigation.dashboard', defaultMessage: 'Dashboard' },
@@ -279,6 +280,15 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
                       to='/lists'
                       icon={require('@tabler/icons/outline/list.svg')}
                       text={intl.formatMessage(messages.lists)}
+                      onClick={closeSidebar}
+                    />
+                  )}
+
+                  {features.circles && (
+                    <SidebarLink
+                      to='/circles'
+                      icon={require('@tabler/icons/outline/chart-circles.svg')}
+                      text={intl.formatMessage(messages.circles)}
                       onClick={closeSidebar}
                     />
                   )}

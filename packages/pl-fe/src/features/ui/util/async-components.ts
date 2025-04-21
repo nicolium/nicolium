@@ -14,6 +14,7 @@ export const Bookmarks = lazy(() => import('pl-fe/features/bookmarks'));
 export const BubbleTimeline = lazy(() => import('pl-fe/features/bubble-timeline'));
 export const ChatIndex = lazy(() => import('pl-fe/features/chats'));
 export const Circle = lazy(() => import('pl-fe/features/circle'));
+export const Circles = lazy(() => import('pl-fe/features/circles'));
 export const CommunityTimeline = lazy(() => import('pl-fe/features/community-timeline'));
 export const ComposeEditor = lazy(() => import('pl-fe/features/compose/editor'));
 export const ComposeEvent = lazy(() => import('pl-fe/features/compose-event'));

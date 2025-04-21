@@ -26,6 +26,7 @@ const messages = defineMessages({
   followRequests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
   bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
   lists: { id: 'column.lists', defaultMessage: 'Lists' },
+  circles: { id: 'column.circles', defaultMessage: 'Circles' },
   events: { id: 'column.events', defaultMessage: 'Events' },
   profileDirectory: { id: 'navigation_bar.profile_directory', defaultMessage: 'Profile directory' },
   followedTags: { id: 'navigation_bar.followed_tags', defaultMessage: 'Followed hashtags' },
@@ -97,6 +98,14 @@ const SidebarNavigation = React.memo(() => {
           to: '/lists',
           text: intl.formatMessage(messages.lists),
           icon: require('@tabler/icons/outline/list.svg'),
+        });
+      }
+
+      if (features.circles) {
+        menu.push({
+          to: '/circles',
+          text: intl.formatMessage(messages.circles),
+          icon: require('@tabler/icons/outline/chart-circles.svg'),
         });
       }
 

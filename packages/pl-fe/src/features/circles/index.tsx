@@ -8,31 +8,23 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Stack from 'pl-fe/components/ui/stack';
-import { useLists } from 'pl-fe/queries/accounts/use-lists';
+import { useCircles } from 'pl-fe/queries/accounts/use-circles';
 
-import NewListForm from './components/new-list-form';
+import { getOrderedLists } from '../lists';
 
-import type { List as ListEntity } from 'pl-api';
+import NewCircleForm from './components/new-circle-form';
 
 const messages = defineMessages({
-  heading: { id: 'column.circles', defaultMessage: 'Lists' },
-  subheading: { id: 'lists.subheading', defaultMessage: 'Your lists' },
+  heading: { id: 'column.circles', defaultMessage: 'Circles' },
+  subheading: { id: 'circles.subheading', defaultMessage: 'Your circles' },
 });
 
-const getOrderedLists = (lists: Array<Pick<ListEntity, 'title'>>) => {
-  if (!lists) {
-    return lists;
-  }
-
-  return Object.values(lists).filter((item): item is ListEntity => !!item).sort((a, b) => a.title.localeCompare(b.title));
-};
-
-const Lists: React.FC = () => {
+const Circles: React.FC = () => {
   const intl = useIntl();
 
-  const { data: lists } = useLists(getOrderedLists);
+  const { data: circles } = useCircles(getOrderedLists);
 
-  if (!lists) {
+  if (!circles) {
     return (
       <Column>
         <Spinner />
@@ -40,27 +32,27 @@ const Lists: React.FC = () => {
     );
   }
 
-  const emptyMessage = <FormattedMessage id='empty_column.lists' defaultMessage="You don't have any lists yet. When you create one, it will show up here." />;
+  const emptyMessage = <FormattedMessage id='empty_column.circles' defaultMessage="You don't have any circles yet. When you create one, it will show up here." />;
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <Stack space={4}>
-        <NewListForm />
+        <NewCircleForm />
 
-        {!Object.keys(lists).length ? (
+        {!Object.keys(circles).length ? (
           <Card variant='rounded' size='lg'>
             {emptyMessage}
           </Card>
         ) : (
           <List>
-            {lists.map((list: any) => (
+            {circles.map((circle) => (
               <ListItem
-                key={list.id}
-                to={`/list/${list.id}`}
+                key={circle.id}
+                // to={`/circles/${circle.id}`}
                 label={
                   <HStack alignItems='center' space={2}>
                     <Icon src={require('@tabler/icons/outline/list.svg')} size={20} />
-                    <span>{list.title}</span>
+                    <span>{circle.title}</span>
                   </HStack>
                 }
               />
@@ -72,4 +64,4 @@ const Lists: React.FC = () => {
   );
 };
 
-export { Lists as default, getOrderedLists };
+export { Circles as default };

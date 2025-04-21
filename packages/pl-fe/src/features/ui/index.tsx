@@ -64,6 +64,7 @@ import {
   ChatIndex,
   ChatWidget,
   Circle,
+  Circles,
   CommunityTimeline,
   ComposeEvent,
   Conversations,
@@ -239,6 +240,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
 
       {features.lists && <WrappedRoute path='/lists' layout={DefaultLayout} component={Lists} content={children} />}
       {features.lists && <WrappedRoute path='/list/:id' layout={DefaultLayout} component={ListTimeline} content={children} />}
+      {features.circles && <WrappedRoute path='/circles' layout={DefaultLayout} component={Circles} content={children} />}
       {features.bookmarks && <WrappedRoute path='/bookmarks/all' layout={DefaultLayout} component={Bookmarks} content={children} />}
       {features.bookmarks && <WrappedRoute path='/bookmarks/:id' layout={DefaultLayout} component={Bookmarks} content={children} />}
       <WrappedRoute path='/bookmarks' layout={DefaultLayout} component={BookmarkFolders} content={children} />
