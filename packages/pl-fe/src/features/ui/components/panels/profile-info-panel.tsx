@@ -167,7 +167,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
         <ProfileStats account={account} />
 
         {!!account.note && (
-          <Markup size='sm'>
+          <Markup className='break-words' size='sm'>
             <ParsedContent html={account.note} emojis={account.emojis} speakAsCat={account.speak_as_cat} />
           </Markup>
         )}
