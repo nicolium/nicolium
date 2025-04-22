@@ -919,7 +919,13 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/bookmarks/#get}
      */
     getBookmarks: async (params?: GetBookmarksParams) =>
-      this.#paginatedGet('/api/v1/bookmarks', { params }, statusSchema),
+      this.#paginatedGet(
+        this.features.bookmarkFoldersMultiple && params?.folder_id
+          ? `/api/v1/bookmark_categories/${params.folder_id}/statuses`
+          : '/api/v1/bookmarks',
+        { params },
+        statusSchema,
+      ),
 
     /**
      * View favourited statuses
