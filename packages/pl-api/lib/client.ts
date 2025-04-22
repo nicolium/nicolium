@@ -1170,6 +1170,30 @@ class PlApiClient {
 
       return v.parse(bookmarkFolderSchema, response.json);
     },
+
+    /**
+     * Requires features{@link Features.bookmarkFoldersMultiple}.
+     */
+    addBookmarkToFolder: async (statusId: string, folderId: string) => {
+      const response = await this.request <{}>(
+        `/api/v1/bookmark_categories/${folderId}/statuses`,
+        { method: 'POST', params: { status_ids: [statusId] } },
+      );
+
+      return response.json;
+    },
+
+    /**
+     * Requires features{@link Features.bookmarkFoldersMultiple}.
+     */
+    removeBookmarkFromFolder: async (statusId: string, folderId: string) => {
+      const response = await this.request<{}>(
+        `/api/v1/bookmark_categories/${folderId}/statuses`,
+        { method: 'DELETE', params: { status_ids: [statusId] } },
+      );
+
+      return response.json;
+    },
   };
 
   public readonly settings = {
@@ -2593,7 +2617,7 @@ class PlApiClient {
      * Requires features{@link Features.bookmarkFoldersMultiple}.
      */
     getStatusBookmarkFolders: async (statusId: string) => {
-      const response = await this.request(`/api/v1/statuses/${statusId}/categories`, { method: 'GET' });
+      const response = await this.request(`/api/v1/statuses/${statusId}/bookmark_categories`, { method: 'GET' });
 
       return v.parse(filteredArray(bookmarkFolderSchema), response.json);
     },

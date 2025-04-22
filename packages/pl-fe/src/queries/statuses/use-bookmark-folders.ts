@@ -63,4 +63,44 @@ const useUpdateBookmarkFolder = (folderId: string) => {
   });
 };
 
-export { useBookmarkFolders, useBookmarkFolder, useCreateBookmarkFolder, useDeleteBookmarkFolder, useUpdateBookmarkFolder };
+const useStatusBookmarkFolders = (statusId: string) => {
+  const client = useClient();
+  const features = useFeatures();
+
+  return useQuery({
+    queryKey: ['bookmarkFolders', 'status', statusId],
+    queryFn: () => client.statuses.getStatusBookmarkFolders(statusId).then(response => response.map((folder) => folder.id)),
+    enabled: features.bookmarkFoldersMultiple,
+  });
+};
+
+const useAddBookmarkToFolder = (statusId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['bookmarkFolders', 'add', statusId],
+    mutationFn: (folderId: string) => client.myAccount.addBookmarkToFolder(statusId, folderId),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['bookmarkFolders', 'status', statusId] }),
+  });
+};
+
+const useRemoveBookmarkFromFolder = (statusId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['bookmarkFolders', 'remove', statusId],
+    mutationFn: (folderId: string) => client.myAccount.removeBookmarkFromFolder(statusId, folderId),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['bookmarkFolders', 'status', statusId] }),
+  });
+};
+
+export {
+  useBookmarkFolders,
+  useBookmarkFolder,
+  useCreateBookmarkFolder,
+  useDeleteBookmarkFolder,
+  useUpdateBookmarkFolder,
+  useStatusBookmarkFolders,
+  useAddBookmarkToFolder,
+  useRemoveBookmarkFromFolder,
+};
