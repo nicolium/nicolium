@@ -428,6 +428,7 @@
   "common.cancel": "Anuluj",
   "compare_history_modal.header": "Historia edycji",
   "compose.character_counter.title": "Wykorzystano {chars} z {maxChars} {maxChars, plural, one {znaku} other {znaków}}",
+  "compose.clear_link_suggestion.body": "Adres {url} prawdopodobnie zawiera elementy śledzące, służące do znaczenia Twojej aktywności w sieci. Nie są one potrzebne, aby URL działał. Czy chcesz je usunąć?",
   "compose.edit_success": "Twój wpis został zedytowany",
   "compose.invalid_schedule": "Musisz zaplanować wpis przynajmniej 5 minut wcześniej.",
   "compose.language_dropdown.add_language": "Dodaj język",
