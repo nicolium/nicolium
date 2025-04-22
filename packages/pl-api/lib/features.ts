@@ -366,6 +366,8 @@ const getFeatures = (instance: Instance) => {
     /** Whether people who blocked you are visible through the API. */
     blockersVisible: instance.api_versions['blockers_visible.pleroma.pl-api'] >= 1,
 
+    bookmarkFolderEmojis: instance.api_versions['bookmark_folders.pleroma.pl-api'] >= 1,
+
     /**
      * Can group bookmarks in folders.
      * @see GET /api/v1/pleroma/bookmark_folders
@@ -378,7 +380,7 @@ const getFeatures = (instance: Instance) => {
       instance.api_versions['kmyblue_bookmark_category.fedibird.pl-api'] >= 1,
     ]),
 
-    bookmarkFolderEmojis: instance.api_versions['bookmark_folders.pleroma.pl-api'] >= 1,
+    bookmarkFoldersMultiple: instance.api_versions['kmyblue_bookmark_category.fedibird.pl-api'] >= 1,
 
     /**
      * Can bookmark statuses.

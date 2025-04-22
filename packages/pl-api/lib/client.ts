@@ -2352,6 +2352,10 @@ class PlApiClient {
     bookmarkStatus: async (statusId: string, folderId?: string) => {
       const response = await this.request(`/api/v1/statuses/${statusId}/bookmark`, { method: 'POST', body: { folder_id: folderId } });
 
+      if (folderId && this.features.bookmarkFoldersMultiple) {
+        await this.request(`/api/v1/bookmark_categories/${folderId}/statuses`, { method: 'POST', params: { status_ids: [statusId] } });
+      }
+
       return v.parse(statusSchema, response.json);
     },
 
@@ -2571,12 +2575,21 @@ class PlApiClient {
     /**
      * Load conversation from a remote server.
      *
-     * Requires features{@link Features['loadConversation']}.
+     * Requires features{@link Features.loadConversation}.
      */
     loadConversation: async (statusId: string) => {
       const response = await this.request <{}>(`/api/v1/statuses/${statusId}/load_conversation`, { method: 'POST' });
 
       return response.json;
+    },
+
+    /**
+     * Requires features{@link Features.bookmarkFoldersMultiple}.
+     */
+    getStatusBookmarkFolders: async (statusId: string) => {
+      const response = await this.request(`/api/v1/statuses/${statusId}/categories`, { method: 'GET' });
+
+      return v.parse(filteredArray(bookmarkFolderSchema), response.json);
     },
   };
 
