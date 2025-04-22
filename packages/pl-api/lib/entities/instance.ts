@@ -312,15 +312,15 @@ const instanceSchema = v.pipe(
       data.version = `0.0.0 (compatible; GoToSocial ${data.version})`;
     }
 
+    const apiVersions = getApiVersions(data);
+
     if (!data.pleroma) {
       data.pleroma = {
         metadata: {
-          post_formats: data.configuration?.statuses?.supported_mime_types,
+          post_formats: data.configuration?.statuses?.supported_mime_types || (apiVersions['kmyblue_markdown.fedibird.pl-api'] ? ['text/plain', 'text/markdown'] : []),
         },
       };
     }
-
-    const apiVersions = getApiVersions(data);
 
     if (data.domain) return { account_domain: data.domain, ...data, api_versions: apiVersions };
 
