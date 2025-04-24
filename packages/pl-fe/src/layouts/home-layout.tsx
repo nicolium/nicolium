@@ -26,6 +26,7 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
+import { useSettings } from 'pl-fe/hooks/use-settings';
 
 interface IHomeLayout {
   children: React.ReactNode;
@@ -39,6 +40,7 @@ const HomeLayout: React.FC<IHomeLayout> = ({ children }) => {
   const { account } = useOwnAccount();
   const features = useFeatures();
   const plFeConfig = usePlFeConfig();
+  const { disableUserProvidedMedia } = useSettings();
 
   const composeId = 'home';
   const composeBlock = useRef<HTMLDivElement>(null);
@@ -69,9 +71,11 @@ const HomeLayout: React.FC<IHomeLayout> = ({ children }) => {
           >
             <CardBody>
               <HStack alignItems='start' space={2}>
-                <Link to={`/@${acct}`}>
-                  <Avatar src={avatar} alt={account?.avatar_description} isCat={account?.is_cat} size={42} />
-                </Link>
+                {!disableUserProvidedMedia && (
+                  <Link to={`/@${acct}`}>
+                    <Avatar src={avatar} alt={account?.avatar_description} isCat={account?.is_cat} size={42} />
+                  </Link>
+                )}
 
                 <div className='w-full translate-y-0.5'>
                   <ComposeForm
