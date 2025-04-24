@@ -5,6 +5,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import StillImage, { IStillImage } from 'pl-fe/components/still-image';
 import { useSettings } from 'pl-fe/hooks/use-settings';
+import { isDefaultAvatar } from 'pl-fe/utils/accounts';
 
 import AltIndicator from '../alt-indicator';
 
@@ -66,7 +67,7 @@ const Avatar = (props: IAvatar) => {
   }), [size, color]);
 
   if (disableUserProvidedMedia) {
-    if (isAvatarMissing || !alt) return null;
+    if (isAvatarMissing || !alt || isDefaultAvatar(src)) return null;
     return (
       <Popover
         interaction='hover'

@@ -572,7 +572,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
     let header: React.ReactNode;
 
     if (settings.disableUserProvidedMedia) {
-      if (!account.header_description) return null;
+      if (!account.header_description || isDefaultHeader(account.header)) return null;
       else return (
         <Popover
           interaction='hover'
