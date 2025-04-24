@@ -20,7 +20,7 @@ import MovedNote from 'pl-fe/features/account-timeline/components/moved-note';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
 import SubscriptionButton from 'pl-fe/features/ui/components/subscription-button';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { useChats } from 'pl-fe/queries/chats';
@@ -79,6 +79,9 @@ const messages = defineMessages({
   profileExternal: { id: 'account.profile_external', defaultMessage: 'View profile on {domain}' },
   header: { id: 'account.header.alt', defaultMessage: 'Profile header' },
   subscribeFeed: { id: 'account.rss_feed', defaultMessage: 'Subscribe to RSS feed' },
+  loadActivities: { id: 'account.load_activities', defaultMessage: 'Fetch latest posts' },
+  loadActivitiesSuccess: { id: 'account.load_activities.success', defaultMessage: 'Scheduled fetching latest posts' },
+  loadActivitiesFail: { id: 'account.load_activities.fail', defaultMessage: 'Failed to fetch latest posts' },
 });
 
 interface IHeader {
@@ -89,6 +92,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const intl = useIntl();
   const history = useHistory();
   const dispatch = useAppDispatch();
+  const client = useClient();
 
   const features = useFeatures();
   const { account: ownAccount } = useOwnAccount();
@@ -96,7 +100,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const { openModal } = useModalsStore();
   const { settings } = useSettingsStore();
 
-  const { software } = useAppSelector((state) => state.auth.client.features.version);
+  const { software } = features.version;
 
   const { getOrCreateChatByAccountId } = useChats();
 
@@ -187,6 +191,12 @@ const Header: React.FC<IHeader> = ({ account }) => {
     dispatch(biteAccount(account.id))
       .then(() => toast.success(intl.formatMessage(messages.userBit, { acct: account.acct })))
       .catch(() => toast.error(intl.formatMessage(messages.userBiteFail, { acct: account.acct })));
+  };
+
+  const onLoadActivities = () => {
+    client.accounts.loadActivities(account.id)
+      .then(() => toast.success(intl.formatMessage(messages.loadActivitiesSuccess)))
+      .catch(() => toast.error(intl.formatMessage(messages.loadActivitiesFail)));
   };
 
   const onReport = () => {
@@ -420,6 +430,14 @@ const Header: React.FC<IHeader> = ({ account }) => {
           text: intl.formatMessage(messages.bite, { name: account.username }),
           action: onBite,
           icon: require('@tabler/icons/outline/pacman.svg'),
+        });
+      }
+
+      if (features.loadActivities && !account.local) {
+        menu.push({
+          text: intl.formatMessage(messages.loadActivities),
+          action: onLoadActivities,
+          icon: require('@tabler/icons/outline/refresh.svg'),
         });
       }
 

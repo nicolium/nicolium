@@ -906,7 +906,7 @@ class PlApiClient {
      * Requires features{@link Features.loadActivities}
      */
     loadActivities: async (accountId: string) => {
-      const response = await this.request<{}>(`/api/v1/accounts/${accountId}/load_activities`);
+      const response = await this.request<{}>(`/api/v1/accounts/${accountId}/load_activities`, { method: 'POST' });
 
       return response.json;
     },

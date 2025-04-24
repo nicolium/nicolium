@@ -23,6 +23,7 @@ import { languages } from 'pl-fe/features/preferences';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useCanInteract } from 'pl-fe/hooks/use-can-interact';
+import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
@@ -83,6 +84,9 @@ const messages = defineMessages({
   groupModDelete: { id: 'status.group_mod_delete', defaultMessage: 'Delete post from group' },
   group_remove_account: { id: 'status.remove_account_from_group', defaultMessage: 'Remove account from group' },
   group_remove_post: { id: 'status.remove_post_from_group', defaultMessage: 'Remove post from group' },
+  loadConversation: { id: 'status.load_conversation', defaultMessage: 'Load conversation from remote server' },
+  loadConversationError: { id: 'status.load_conversation.error', defaultMessage: 'Failed to load conversation from a remote server' },
+  loadConversationSuccess: { id: 'status.load_conversation.success', defaultMessage: 'Scheduled loading conversation from a remote server' },
   markStatusNotSensitive: { id: 'admin.statuses.actions.mark_status_not_sensitive', defaultMessage: 'Mark post not sensitive' },
   markStatusSensitive: { id: 'admin.statuses.actions.mark_status_sensitive', defaultMessage: 'Mark post sensitive' },
   mention: { id: 'status.mention', defaultMessage: 'Mention @{name}' },
@@ -586,6 +590,7 @@ const MenuButton: React.FC<IMenuButton> = ({
   const dispatch = useAppDispatch();
   const match = useRouteMatch<{ groupId: string }>('/groups/:groupId');
   const { boostModal } = useSettings();
+  const client = useClient();
 
   const { statuses: statusesMeta, fetchTranslation, hideTranslation } = useStatusMetaStore();
   const targetLanguage = statusesMeta[status.id]?.targetLanguage;
@@ -727,6 +732,12 @@ const MenuButton: React.FC<IMenuButton> = ({
       dispatch(toggleMuteStatus(status));
     };
 
+    const handleLoadConversationClick = () => {
+      client.statuses.loadConversation(status.id)
+        .then(() => toast.success(messages.loadConversationSuccess))
+        .catch((error) => toast.error(messages.loadConversationError));
+    };
+
     const handleCopy: React.EventHandler<React.MouseEvent> = (e) => {
       const { uri } = status;
 
@@ -863,6 +874,14 @@ const MenuButton: React.FC<IMenuButton> = ({
       action: handleConversationMuteClick,
       icon: mutingConversation ? require('@tabler/icons/outline/bell.svg') : require('@tabler/icons/outline/bell-off.svg'),
     });
+
+    if (!status.in_reply_to_id && features.loadConversation) {
+      menu.push({
+        text: intl.formatMessage(messages.loadConversation),
+        action: handleLoadConversationClick,
+        icon: require('@tabler/icons/outline/refresh.svg'),
+      });
+    }
 
     menu.push(null);
 
