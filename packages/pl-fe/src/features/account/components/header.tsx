@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import clsx from 'clsx';
 import { GOTOSOCIAL, MASTODON, mediaAttachmentSchema } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -9,12 +10,16 @@ import { biteAccount, blockAccount, pinAccount, removeFromFollowers, unblockAcco
 import { mentionCompose, directCompose } from 'pl-fe/actions/compose';
 import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
 import { useFollow } from 'pl-fe/api/hooks/accounts/use-follow';
+import AltIndicator from 'pl-fe/components/alt-indicator';
 import Badge from 'pl-fe/components/badge';
 import DropdownMenu, { Menu } from 'pl-fe/components/dropdown-menu';
 import StillImage from 'pl-fe/components/still-image';
 import Avatar from 'pl-fe/components/ui/avatar';
 import HStack from 'pl-fe/components/ui/hstack';
 import IconButton from 'pl-fe/components/ui/icon-button';
+import Popover from 'pl-fe/components/ui/popover';
+import Stack from 'pl-fe/components/ui/stack';
+import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import MovedNote from 'pl-fe/features/account-timeline/components/moved-note';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
@@ -23,11 +28,11 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
+import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useChats } from 'pl-fe/queries/chats';
 import { queryClient } from 'pl-fe/queries/client';
 import { blockDomainMutationOptions, unblockDomainMutationOptions } from 'pl-fe/queries/settings/domain-blocks';
 import { useModalsStore } from 'pl-fe/stores/modals';
-import { useSettingsStore } from 'pl-fe/stores/settings';
 import toast from 'pl-fe/toast';
 import { isDefaultHeader } from 'pl-fe/utils/accounts';
 import copy from 'pl-fe/utils/copy';
@@ -98,7 +103,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const { account: ownAccount } = useOwnAccount();
   const { follow } = useFollow();
   const { openModal } = useModalsStore();
-  const { settings } = useSettingsStore();
+  const settings = useSettings();
 
   const { software } = features.version;
 
@@ -566,6 +571,29 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const renderHeader = () => {
     let header: React.ReactNode;
 
+    if (settings.disableUserProvidedMedia) {
+      if (!account.header_description) return null;
+      else return (
+        <Popover
+          interaction='hover'
+          referenceElementClassName='cursor-pointer'
+          content={
+            <Stack space={1} className='max-h-[32rem] max-w-96 overflow-auto p-4'>
+              <Text weight='semibold'>
+                <FormattedMessage id='account.header.description' defaultMessage='Header description' />
+              </Text>
+              <Text className='whitespace-pre-wrap'>
+                {account.header_description}
+              </Text>
+            </Stack>
+          }
+          isFlush
+        >
+          <AltIndicator className='ml-6 mt-6 w-fit' message={<FormattedMessage id='account.header.alt' defaultMessage='Header' />} />
+        </Popover>
+      );
+    }
+
     if (account.header) {
       header = (
         <StillImage
@@ -655,7 +683,11 @@ const Header: React.FC<IHeader> = ({ account }) => {
       )}
 
       <div>
-        <div className='relative isolate flex h-32 w-full flex-col justify-center overflow-hidden bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 md:rounded-t-xl lg:h-48'>
+        <div
+          className={clsx('relative isolate flex w-full flex-col justify-center overflow-hidden black:rounded-t-none md:rounded-t-xl', {
+            'h-32 bg-gray-200 dark:bg-gray-900/50 lg:h-48': !settings.disableUserProvidedMedia,
+          })}
+        >
           {renderHeader()}
 
           <div className='absolute left-2 top-2'>

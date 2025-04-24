@@ -3,9 +3,12 @@ import fileCodeIcon from '@tabler/icons/outline/file-code.svg';
 import fileSpreadsheetIcon from '@tabler/icons/outline/file-spreadsheet.svg';
 import fileTextIcon from '@tabler/icons/outline/file-text.svg';
 import fileZipIcon from '@tabler/icons/outline/file-zip.svg';
+import audioIcon from '@tabler/icons/outline/music.svg';
 import defaultIcon from '@tabler/icons/outline/paperclip.svg';
 import editIcon from '@tabler/icons/outline/pencil.svg';
+import imageIcon from '@tabler/icons/outline/photo.svg';
 import presentationIcon from '@tabler/icons/outline/presentation.svg';
+import videoIcon from '@tabler/icons/outline/video.svg';
 import xIcon from '@tabler/icons/outline/x.svg';
 import zoomInIcon from '@tabler/icons/outline/zoom-in.svg';
 import clsx from 'clsx';
@@ -55,6 +58,10 @@ const MIMETYPE_ICONS: Record<string, string> = {
   'application/x-abiword': fileTextIcon,
   'application/vnd.openxmlformats-officedocument.wordprocessingml.document': fileTextIcon,
   'application/vnd.oasis.opendocument.text': fileTextIcon,
+  image: imageIcon,
+  video: videoIcon,
+  gifv: videoIcon,
+  audio: audioIcon,
 };
 
 const messages = defineMessages({

@@ -17,6 +17,8 @@ import { truncateFilename } from 'pl-fe/utils/media';
 import { isIOS } from '../is-mobile';
 import { isPanoramic, isPortrait, isNonConformingRatio, minimumAspectRatio, maximumAspectRatio } from '../utils/media-aspect-ratio';
 
+import HStack from './ui/hstack';
+
 import type { MediaAttachment } from 'pl-api';
 
 const ATTACHMENT_LIMIT = 4;
@@ -315,13 +317,52 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
     visible,
   } = props;
 
+  const { disableUserProvidedMedia } = useSettings();
+
   const [width, setWidth] = useState<number>(defaultWidth);
 
   const node = useRef<HTMLDivElement>(null);
 
+  useLayoutEffect(() => {
+    if (node.current) {
+      const { offsetWidth } = node.current;
+
+      if (cacheWidth) {
+        cacheWidth(offsetWidth);
+      }
+
+      setWidth(offsetWidth);
+    }
+  }, [node.current]);
+
   const handleClick = (index: number) => {
     onOpenMedia(media, index);
   };
+
+  if (disableUserProvidedMedia) {
+    return (
+      <Stack space={2}>
+        {media.map((attachment, index) => (
+          <HStack element='button' alignItems='center' space={2} key={attachment.id} onClick={() => handleClick(index)}>
+            <Icon
+              className='size-4 min-w-fit text-gray-800 dark:text-gray-200'
+              src={MIMETYPE_ICONS[(attachment.type === 'unknown' && attachment.mime_type) || attachment.type] || require('@tabler/icons/outline/paperclip.svg')}
+            />
+            <Text align='left'>
+              {attachment.description || {
+                image: <FormattedMessage id='media.default_description.image' defaultMessage='Image' />,
+                video: <FormattedMessage id='media.default_description.video' defaultMessage='Video' />,
+                gifv: <FormattedMessage id='media.default_description.gifv' defaultMessage='GIFV' />,
+                audio: <FormattedMessage id='media.default_description.audio' defaultMessage='Audio' />,
+                unknown: <FormattedMessage id='media.default_description.attachment' defaultMessage='Attachment' />,
+              }[attachment.type]}
+            </Text>
+          </HStack>
+          // <MediaItem key={index} item={item} />
+        ))}
+      </Stack>
+    );
+  }
 
   const getSizeDataSingle = (): SizeData => {
     const w = width || defaultWidth;
@@ -563,18 +604,6 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
       visible={visible}
     />
   ));
-
-  useLayoutEffect(() => {
-    if (node.current) {
-      const { offsetWidth } = node.current;
-
-      if (cacheWidth) {
-        cacheWidth(offsetWidth);
-      }
-
-      setWidth(offsetWidth);
-    }
-  }, [node.current]);
 
   return (
     <div

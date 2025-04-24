@@ -25,7 +25,7 @@ interface IUserPanel {
 
 const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) => {
   const intl = useIntl();
-  const { demetricator } = useSettings();
+  const { demetricator, disableUserProvidedMedia } = useSettings();
   const { account } = useAccount(accountId);
   const fqn = useAppSelector((state) => displayFqn(state));
 
@@ -38,26 +38,30 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
     <div className='relative'>
       <Stack space={2}>
         <Stack>
-          <div className='relative -mx-4 -mt-4 h-24 overflow-hidden bg-gray-200'>
-            {header && (
-              <StillImage src={account.header} alt={account.header_description} />
-            )}
-          </div>
+          {!disableUserProvidedMedia && (
+            <div className='relative -mx-4 -mt-4 h-24 overflow-hidden bg-gray-200'>
+              {header && (
+                <StillImage src={account.header} alt={account.header_description} />
+              )}
+            </div>
+          )}
 
-          <HStack justifyContent='between'>
-            <Link
-              to={`/@${account.acct}`}
-              title={acct}
-              className='-mt-12 block'
-            >
-              <Avatar
-                src={account.avatar}
-                alt={account.avatar_description}
-                isCat={account.is_cat}
-                size={80}
-                className='size-20 bg-gray-50 ring-2 ring-white'
-              />
-            </Link>
+          <HStack justifyContent={disableUserProvidedMedia ? 'end' : 'between'}>
+            {!disableUserProvidedMedia && (
+              <Link
+                to={`/@${account.acct}`}
+                title={acct}
+                className='-mt-12 block'
+              >
+                <Avatar
+                  src={account.avatar}
+                  alt={account.avatar_description}
+                  isCat={account.is_cat}
+                  size={80}
+                  className='size-20 bg-gray-50 ring-2 ring-white'
+                />
+              </Link>
+            )}
 
             {action && (
               <div className='mt-2'>{action}</div>

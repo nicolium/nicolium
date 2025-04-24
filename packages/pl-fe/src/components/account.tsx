@@ -14,6 +14,7 @@ import VerificationBadge from 'pl-fe/components/verification-badge';
 import Emojify from 'pl-fe/features/emoji/emojify';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useSettings } from 'pl-fe/hooks/use-settings';
 import { getAcct } from 'pl-fe/utils/accounts';
 import { displayFqn } from 'pl-fe/utils/state';
 
@@ -140,6 +141,7 @@ const Account = ({
 
   const me = useAppSelector((state) => state.me);
   const username = useAppSelector((state) => account ? getAcct(account, displayFqn(state)) : null);
+  const { disableUserProvidedMedia } = useSettings();
 
   const handleAction = () => {
     onActionClick!(account);
@@ -220,16 +222,20 @@ const Account = ({
     <div data-testid='account' className='group block w-full shrink-0' ref={overflowRef}>
       <HStack alignItems={actionAlignment} space={3} justifyContent='between'>
         <HStack alignItems='center' space={3} className='max-w-full'>
-          <div className='rounded-lg'>
-            <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} isCat={account.is_cat} />
-            {emoji && (
-              <Emoji
-                className='!absolute -right-1.5 bottom-0 size-5'
-                emoji={emoji}
-                src={emojiUrl}
-              />
-            )}
-          </div>
+          {disableUserProvidedMedia ? (
+            <Avatar src={account.avatar} alt={account.avatar_description} />
+          ) : (
+            <div className='rounded-lg'>
+              <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} isCat={account.is_cat} />
+              {emoji && (
+                <Emoji
+                  className='!absolute -right-1.5 bottom-0 size-5'
+                  emoji={emoji}
+                  src={emojiUrl}
+                />
+              )}
+            </div>
+          )}
 
           <div className='grow overflow-hidden'>
             <HStack space={1} alignItems='center' grow>
@@ -250,7 +256,7 @@ const Account = ({
               <HStack alignItems='center' space={1}>
                 <Text theme='muted' size='sm' direction='ltr' truncate>@{username}</Text>
 
-                {account.favicon && (
+                {account.favicon && !disableUserProvidedMedia && (
                   <InstanceFavicon account={account} disabled />
                 )}
 
@@ -271,7 +277,9 @@ const Account = ({
     <div data-testid='account' className='group block w-full shrink-0' ref={overflowRef}>
       <HStack alignItems={actionAlignment} space={3} justifyContent='between'>
         <HStack alignItems={withAccountNote || note ? 'top' : 'center'} space={3} className='max-w-full'>
-          {withAvatar && (
+          {withAvatar && (disableUserProvidedMedia ? (
+            <Avatar src={account.avatar} alt={account.avatar_description} />
+          ) : (
             <ProfilePopper
               condition={showAccountHoverCard}
               wrapper={(children) => <HoverAccountWrapper className='relative' accountId={account.id} element='span'>{children}</HoverAccountWrapper>}
@@ -287,7 +295,7 @@ const Account = ({
                 )}
               </LinkEl>
             </ProfilePopper>
-          )}
+          ))}
 
           <div className='grow overflow-hidden' style={style}>
             <ProfilePopper
@@ -315,7 +323,7 @@ const Account = ({
               <HStack alignItems='center' space={1}>
                 <Text theme='muted' size='sm' direction='ltr' truncate>@{username}</Text>
 
-                {account.favicon && (
+                {account.favicon && !disableUserProvidedMedia && (
                   <InstanceFavicon account={account} disabled={!withLinkToProfile} />
                 )}
 

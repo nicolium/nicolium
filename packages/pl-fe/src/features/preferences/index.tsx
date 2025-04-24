@@ -282,6 +282,13 @@ const Preferences = () => {
             <SettingToggle settings={settings} settingPath={['checkEmojiReactsSupport']} onChange={onToggleChange} />
           </ListItem>
         )}
+
+        <ListItem
+          label={<FormattedMessage id='preferences.fields.disable_user_provided_media_label' defaultMessage='Do not display user-provided media' />}
+          hint={<FormattedMessage id='preferences.fields.disable_user_provided_media_hint' defaultMessage='This will hide images, videos, and other media uploaded by users and display alternative text instead.' />}
+        >
+          <SettingToggle settings={settings} settingPath={['disableUserProvidedMedia']} onChange={onToggleChange} />
+        </ListItem>
       </List>
 
       <List>

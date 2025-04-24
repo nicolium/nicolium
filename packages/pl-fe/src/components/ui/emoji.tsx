@@ -1,6 +1,7 @@
 import React from 'react';
 
 import StillImage from 'pl-fe/components/still-image';
+import { useSettings } from 'pl-fe/hooks/use-settings';
 import { removeVS16s, toCodePoints } from 'pl-fe/utils/emoji';
 import { joinPublicPath } from 'pl-fe/utils/static';
 
@@ -12,6 +13,7 @@ interface IEmoji extends Pick<React.ImgHTMLAttributes<HTMLImageElement>, 'alt' |
 
 /** A single emoji image. */
 const Emoji: React.FC<IEmoji> = (props): JSX.Element | null => {
+  const { disableUserProvidedMedia } = useSettings();
   const { emoji, alt, src, noGroup, ...rest } = props;
 
   let filename;
@@ -24,6 +26,7 @@ const Emoji: React.FC<IEmoji> = (props): JSX.Element | null => {
   if (!filename && !src) return null;
 
   if (src) {
+    if (disableUserProvidedMedia) return <>{alt || emoji}</>;
     return (
       <StillImage
         alt={alt || emoji}
@@ -40,7 +43,7 @@ const Emoji: React.FC<IEmoji> = (props): JSX.Element | null => {
     <img
       draggable='false'
       alt={alt || emoji}
-      src={src || joinPublicPath(`packs/emoji/${filename}.svg`)}
+      src={joinPublicPath(`packs/emoji/${filename}.svg`)}
       {...rest}
     />
   );

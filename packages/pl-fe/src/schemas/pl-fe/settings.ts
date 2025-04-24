@@ -49,6 +49,7 @@ const settingsSchema = v.object({
     redirectServices: v.fallback(v.record(v.string(), v.string()), {}),
   }),
   checkEmojiReactsSupport: v.fallback(v.boolean(), false),
+  disableUserProvidedMedia: v.fallback(v.boolean(), false),
 
   theme: v.fallback(v.optional(v.object({
     brandColor: v.fallback(v.string(), ''),

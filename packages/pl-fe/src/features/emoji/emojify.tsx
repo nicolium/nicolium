@@ -1,6 +1,7 @@
 import split from 'graphemesplit';
 import React from 'react';
 
+import { useSettings } from 'pl-fe/hooks/use-settings';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 
 import unicodeMapping from './mapping';
@@ -34,6 +35,8 @@ interface IEmojify {
 }
 
 const Emojify: React.FC<IEmojify> = React.memo(({ text, emojis = {} }) => {
+  const { disableUserProvidedMedia } = useSettings();
+
   if (Array.isArray(emojis)) emojis = makeEmojiMap(emojis);
 
   const nodes = [];
@@ -76,7 +79,7 @@ const Emojify: React.FC<IEmojify> = React.memo(({ text, emojis = {} }) => {
       nodes.push(
         <img key={index} draggable={false} className='emojione transition-transform hover:scale-125' alt={unqualified} title={`:${shortcode}:`} src={`/packs/emoji/${unified}.svg`} />,
       );
-    } else if (c === ':') {
+    } else if (!disableUserProvidedMedia && c === ':') {
       if (!open) {
         clearStack();
       }
