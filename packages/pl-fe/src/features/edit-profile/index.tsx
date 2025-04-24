@@ -7,6 +7,7 @@ import { updateNotificationSettings } from 'pl-fe/actions/accounts';
 import { patchMe } from 'pl-fe/actions/me';
 import BirthdayInput from 'pl-fe/components/birthday-input';
 import List, { ListItem } from 'pl-fe/components/list';
+import Accordion from 'pl-fe/components/ui/accordion';
 import Button from 'pl-fe/components/ui/button';
 import Column from 'pl-fe/components/ui/column';
 import Form from 'pl-fe/components/ui/form';
@@ -60,6 +61,12 @@ const messages = defineMessages({
   mentionPolicyNone: { id: 'edit_profile.fields.mention_policy.none', defaultMessage: 'Everybody' },
   mentionPolicyOnlyKnown: { id: 'edit_profile.fields.mention_policy.only_known', defaultMessage: 'Everybody except new accounts' },
   mentionPolicyOnlyContacts: { id: 'edit_profile.fields.mention_policy.only_contacts', defaultMessage: 'People I follow and my followers' },
+  webLayoutMicroblog: { id: 'edit_profile.fields.web_layout.microblog', defaultMessage: 'Classic microblog layout' },
+  webLayoutGallery: { id: 'edit_profile.fields.web_layout.gallery', defaultMessage: 'Media-only gallery layout' },
+  webVisibilityPublic: { id: 'edit_profile.fields.web_visibility.public', defaultMessage: 'Show public posts only' },
+  webVisibilityUnlisted: { id: 'edit_profile.fields.web_visibility.unlisted', defaultMessage: 'Show public and unlisted posts' },
+  webVisibilityNone: { id: 'edit_profile.fields.web_visibility.none', defaultMessage: 'Show no posts' },
+  customCSSLabel: { id: 'edit_profile.fields.custom_css_label', defaultMessage: 'Custom CSS' },
 });
 
 /**
@@ -134,6 +141,9 @@ interface AccountCredentials {
   speak_as_cat?: boolean;
   /** Mention policy */
   mention_policy?: string;
+  web_layout?: string;
+  web_visibility?: string;
+  custom_css?: string;
 }
 
 /** Convert an account into an update_credentials request object. */
@@ -141,7 +151,7 @@ const accountToCredentials = (account: Account): AccountCredentials => {
   const hideNetwork = hidesNetwork(account);
 
   return {
-    ...(pick(account, ['discoverable', 'bot', 'display_name', 'locked', 'location', 'avatar_description', 'header_description', 'enable_rss', 'hide_collections', 'is_cat', 'speak_as_cat', 'mention_policy'])),
+    ...(pick(account, ['discoverable', 'bot', 'display_name', 'locked', 'location', 'avatar_description', 'header_description', 'enable_rss', 'hide_collections', 'is_cat', 'speak_as_cat', 'mention_policy', 'web_visibility', 'web_layout'])),
     note: account.__meta.source?.note ?? '',
     fields_attributes: [...account.__meta.source?.fields ?? []],
     stranger_notifications: account.__meta.pleroma?.notification_settings?.block_from_strangers === true,
@@ -200,6 +210,7 @@ const EditProfile: React.FC = () => {
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState<AccountCredentials>({});
   const [muteStrangers, setMuteStrangers] = useState(false);
+  const [customCSSEditorExpanded, setCustomCSSEditorExpanded] = useState(false);
 
   const avatar = useImageField({ maxPixels: 400 * 400, preview: nonDefaultAvatar(account?.avatar) });
   const header = useImageField({ maxPixels: 1920 * 1080, preview: nonDefaultHeader(account?.header) });
@@ -416,7 +427,7 @@ const EditProfile: React.FC = () => {
             </ListItem>
           )}
 
-          {features.profileDirectory && (
+          {features.accountDiscoverability && (
             <ListItem
               label={<FormattedMessage id='edit_profile.fields.discoverable_label' defaultMessage='Allow account discovery' />}
               hint={<FormattedMessage id='edit_profile.hints.discoverable' defaultMessage='Display account in profile directory and allow indexing by external services' />}
@@ -463,6 +474,39 @@ const EditProfile: React.FC = () => {
             </>
           )}
 
+          {features.accountWebLayout && (
+            <ListItem
+              label={<FormattedMessage id='preferences.fields.web_layout_label' defaultMessage='Layout of the web view of your profile' />}
+            >
+              <SelectDropdown
+                className='max-w-fit'
+                items={{
+                  microblog: intl.formatMessage(messages.webLayoutMicroblog),
+                  gallery: intl.formatMessage(messages.webLayoutGallery),
+                }}
+                defaultValue={data.web_layout}
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => handleFieldChange('web_layout')(event.target.value)}
+              />
+            </ListItem>
+          )}
+
+          {features.accountWebVisibility && (
+            <ListItem
+              label={<FormattedMessage id='preferences.fields.web_visibility_label' defaultMessage='Visibility level of posts displayed on your profile' />}
+            >
+              <SelectDropdown
+                className='max-w-fit'
+                items={{
+                  public: intl.formatMessage(messages.webVisibilityPublic),
+                  unlisted: intl.formatMessage(messages.webVisibilityUnlisted),
+                  none: intl.formatMessage(messages.webVisibilityNone),
+                }}
+                defaultValue={data.web_visibility}
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => handleFieldChange('web_visibility')(event.target.value)}
+              />
+            </ListItem>
+          )}
+
           {features.accountMentionPolicy && (
             <ListItem
               label={<FormattedMessage id='preferences.fields.mention_policy_label' defaultMessage='Accept mentions from' />}
@@ -495,6 +539,30 @@ const EditProfile: React.FC = () => {
             maxItems={maxFields}
             draggable
           />
+        )}
+
+        {instance.configuration.accounts?.allow_custom_css && (
+          <Accordion
+            headline={intl.formatMessage(messages.customCSSLabel)}
+            expanded={customCSSEditorExpanded}
+            onToggle={setCustomCSSEditorExpanded}
+          >
+            <FormGroup>
+              <Textarea
+                value={data.custom_css}
+                onChange={handleTextChange('custom_css')}
+                isCodeEditor
+                rows={12}
+              />
+              <p className='mt-0.5 text-right text-xs text-gray-700 dark:text-gray-600'>
+                <FormattedMessage
+                  id='edit_profile.custom_css.remaining_characters'
+                  defaultMessage='{remaining, plural, one {# character} other {# characters}} remaining'
+                  values={{ remaining: 5000 - (data.custom_css || '').length }}
+                />
+              </p>
+            </FormGroup>
+          </Accordion>
         )}
 
         <FormActions>

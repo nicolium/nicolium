@@ -1,3 +1,6 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import type { Features } from '../features';
+
 /**
  * @category Request params
  */
@@ -57,7 +60,10 @@ interface UpdateCredentialsParams {
   locked?: boolean;
   /** Boolean. Whether the account has a bot flag. */
   bot?: boolean;
-  /** Boolean. Whether the account should be shown in the profile directory. */
+  /**
+   * Boolean. Whether the account should be shown in the profile directory.
+   * Requires features{@link Features.accountDiscoverability}
+   */
   discoverable?: boolean;
   /** Boolean. Whether to hide followers and followed accounts. */
   hide_collections?: boolean;
@@ -115,19 +121,39 @@ interface UpdateCredentialsParams {
   /**
    * Description of avatar image, for alt-text.
    *
-   * Requires features{@link Features['accountAvatarDescription']}.
+   * Requires features{@link Features.accountAvatarDescription}.
    */
   avatar_description?: boolean;
   /**
    * Description of header image, for alt-text.
-   * Requires features{@link Features['accountAvatarDescription']}.
+   * Requires features{@link Features.accountAvatarDescription}.
    */
   header_description?: boolean;
   /**
+   * Custom CSS to use when rendering this account's profile or statuses. String must be no more than 5,000 characters (~5kb).
+   * Requires `instance.configuration.accounts.allow_custom_css`.
+   */
+  custom_css?: string;
+  /**
    * Enable RSS feed for this account's Public posts at `/[username]/feed.rss`
-   * Requires features{@link Features['accountEnableRss']}.
+   * Requires features{@link Features.accountEnableRss}.
   */
   enable_rss?: boolean;
+  /**
+   * Layout to use for the web view of the account.
+   * - `microblog`: default, classic microblog layout.
+   * - `gallery`: gallery layout with media only.
+   * Requires features{@link Features.accountWebLayout}.
+   */
+  web_layout?: 'microblog' | 'gallery';
+  /**
+   * Posts to show on the web view of the account.
+   * - `public`: default, show only Public visibility posts on the web.
+   * - `unlisted`: show Public and Unlisted visibility posts on the web.
+   * - `none`: show no posts on the web, not even Public ones.
+   * Requires features{@link Features.accountWebVisibility}.
+   */
+  web_visibility?: 'public' | 'unlisted' | 'none';
 
   /** Whether the user is a cat */
   is_cat?: boolean;
@@ -136,7 +162,7 @@ interface UpdateCredentialsParams {
 
   /**
    * Mention policy
-   * Required features{@link Features['accountMentionPolicy']}.
+   * Required features{@link Features.accountMentionPolicy}.
    */
   mention_policy?: 'none' | 'only_known' | 'only_contacts';
 }

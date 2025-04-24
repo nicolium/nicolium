@@ -206,6 +206,18 @@ const getFeatures = (instance: Instance) => {
     accountCreation: true,
 
     /**
+     * Ability to control account discoverability.
+     * @see PATCH /api/v1/accounts/update_credentials
+     */
+    accountDiscoverability: any([
+      v.software === FRIENDICA,
+      v.software === GOTOSOCIAL,
+      v.software === MASTODON,
+      v.software === MITRA,
+      instance.api_versions['profile_directory.pleroma.pl-api'] >= 1,
+    ]),
+
+    /**
      * @see PATCH /api/v1/accounts/update_credentials
      */
     accountEnableRss: v.software === GOTOSOCIAL,
@@ -277,6 +289,20 @@ const getFeatures = (instance: Instance) => {
       v.software === MASTODON,
       v.software === PLEROMA && gte(v.version, '2.5.0'),
       v.software === GOTOSOCIAL,
+    ]),
+
+    /**
+     * @see PATCH /api/v1/accounts/update_credentials
+     */
+    accountWebLayout: any([
+      v.software === GOTOSOCIAL && gte(v.version, '0.19.0'),
+    ]),
+
+    /**
+      * @see PATCH /api/v1/accounts/update_credentials
+      */
+    accountWebVisibility: any([
+      v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
     ]),
 
     /**
