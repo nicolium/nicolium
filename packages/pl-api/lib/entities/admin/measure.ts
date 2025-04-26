@@ -1,6 +1,6 @@
 import * as v from 'valibot';
 
-import { datetimeSchema } from '../utils';
+import { dateSchema } from '../utils';
 
 /**
  * @category Admin schemas
@@ -11,10 +11,10 @@ const adminMeasureSchema = v.object({
   unit: v.fallback(v.nullable(v.string()), null),
   total: v.pipe(v.unknown(), v.transform(Number)),
   human_value: v.fallback(v.optional(v.string()), undefined),
-  previous_total: v.fallback(v.optional(v.pipe(v.unknown(), v.transform(String))), undefined),
+  previous_total: v.fallback(v.optional(v.pipe(v.unknown(), v.transform(Number))), undefined),
   data: v.array(v.object({
-    date: datetimeSchema,
-    value: v.pipe(v.unknown(), v.transform(String)),
+    date: dateSchema,
+    value: v.pipe(v.unknown(), v.transform(Number)),
   })),
 });
 

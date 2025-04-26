@@ -9,6 +9,8 @@ const datetimeSchema = v.pipe(
   v.regex(/^\d{4}-\d{2}-\d{2}T([01]\d|2[0-3]):[0-5]\d:[0-5]\d(\.\d+)?(([+-]\d{2}:?\d{2})|(Z)?)$/),
 );
 
+const dateSchema = v.pipe(v.string(), v.transform((value) => value.slice(0, 10)), v.regex(/^\d{4}-\d{2}-\d{2}$/));
+
 /** Validates individual items in an array, dropping any that aren't valid. */
 const filteredArray = <T>(schema: v.BaseSchema<any, T, v.BaseIssue<unknown>>) =>
   v.pipe(
@@ -35,4 +37,4 @@ const coerceObject = <T extends v.ObjectEntries>(shape: T) =>
     v.object(shape),
   );
 
-export { filteredArray, emojiSchema, datetimeSchema, mimeSchema, coerceObject };
+export { filteredArray, emojiSchema, datetimeSchema, dateSchema, mimeSchema, coerceObject };

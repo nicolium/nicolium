@@ -4237,7 +4237,7 @@ class PlApiClient {
        * @see {@link https://docs.joinmastodon.org/methods/admin/dimensions/#get}
        */
       getDimensions: async (keys: AdminDimensionKey[], params?: AdminGetDimensionsParams) => {
-        const response = await this.request('/api/v1/admin/dimensions', { params: { ...params, keys } });
+        const response = await this.request('/api/v1/admin/dimensions', { method: 'POST', params: { ...params, keys } });
 
         return v.parse(filteredArray(adminDimensionSchema), response.json);
       },
@@ -4394,7 +4394,7 @@ class PlApiClient {
        * @see {@link https://docs.joinmastodon.org/methods/admin/measures/#get}
        */
       getMeasures: async (keys: AdminMeasureKey[], start_at: string, end_at: string, params?: AdminGetMeasuresParams) => {
-        const response = await this.request('/api/v1/admin/measures', { params: { ...params, keys, start_at, end_at } });
+        const response = await this.request('/api/v1/admin/measures', { method: 'POST', params: { ...params, keys, start_at, end_at } });
 
         return v.parse(filteredArray(adminMeasureSchema), response.json);
       },
@@ -4409,7 +4409,7 @@ class PlApiClient {
        * @see {@link https://docs.joinmastodon.org/methods/admin/retention/#create}
        */
       getRetention: async (start_at: string, end_at: string, frequency: 'day' | 'month') => {
-        const response = await this.request('/api/v1/admin/retention', { params: { start_at, end_at, frequency } });
+        const response = await this.request('/api/v1/admin/retention', { method: 'POST', params: { start_at, end_at, frequency } });
 
         return v.parse(adminCohortSchema, response.json);
       },

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import List, { ListItem } from 'pl-fe/components/list';
@@ -10,6 +10,7 @@ import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import sourceCode from 'pl-fe/utils/code';
 
+import { Counter } from '../components/counter';
 import { DashCounter, DashCounters } from '../components/dashcounter';
 import RegistrationModePicker from '../components/registration-mode-picker';
 
@@ -29,25 +30,73 @@ const Dashboard: React.FC = () => {
   const mau = instance.usage.users.active_month ?? instance.pleroma.stats.mau;
   const retention = (userCount && mau) ? Math.round(mau / userCount * 100) : undefined;
 
+  const [endDay] = useState<string>(new Date().toISOString().slice(0, 10));
+  const [startDay] = useState<string>(new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10));
+
   if (!account) return null;
 
   return (
     <Stack space={6} className='mt-4'>
       <DashCounters>
-        <DashCounter
-          count={mau}
-          label={<FormattedMessage id='admin.dashcounters.mau_label' defaultMessage='monthly active users' />}
-        />
-        <DashCounter
-          to='/pl-fe/admin/users'
-          count={userCount}
-          label={<FormattedMessage id='admin.dashcounters.user_count_label' defaultMessage='total users' />}
-        />
-        <DashCounter
-          count={retention}
-          label={<FormattedMessage id='admin.dashcounters.retention_label' defaultMessage='user retention' />}
-          percent
-        />
+        {features.mastodonAdminMetrics ? (
+          <Counter
+            measure='new_users'
+            startAt={startDay}
+            endAt={endDay}
+            to='/pl-fe/admin/users'
+            label={<FormattedMessage id='admin.counters.new_users' defaultMessage='new users' />}
+          />
+        ) : (
+          <DashCounter
+            to='/pl-fe/admin/users'
+            count={userCount}
+            label={<FormattedMessage id='admin.dashcounters.user_count_label' defaultMessage='total users' />}
+          />
+        )}
+        {features.mastodonAdminMetrics ? (
+          <Counter
+            measure='active_users'
+            startAt={startDay}
+            endAt={endDay}
+            label={<FormattedMessage id='admin.counters.active_users' defaultMessage='active users' />}
+          />
+        ) : (
+          <DashCounter
+            count={mau}
+            label={<FormattedMessage id='admin.dashcounters.mau_label' defaultMessage='monthly active users' />}
+          />
+        )}
+        {!features.mastodonAdminMetrics && (
+          <DashCounter
+            count={retention}
+            label={<FormattedMessage id='admin.dashcounters.retention_label' defaultMessage='user retention' />}
+            percent
+          />
+        )}
+        {features.mastodonAdminMetrics && (
+          <>
+            <Counter
+              measure='interactions'
+              startAt={startDay}
+              endAt={endDay}
+              label={<FormattedMessage id='admin.counters.interactions' defaultMessage='interactions' />}
+            />
+            <Counter
+              measure='opened_reports'
+              startAt={startDay}
+              endAt={endDay}
+              to='/pl-fe/admin/reports'
+              label={<FormattedMessage id='admin.counters.opened_reports' defaultMessage='reports opened' />}
+            />
+            <Counter
+              measure='resolved_reports'
+              startAt={startDay}
+              endAt={endDay}
+              to='/pl-fe/admin/reports'
+              label={<FormattedMessage id='admin.counters.resolved_reports' defaultMessage='reports resolved' />}
+            />
+          </>
+        )}
         <DashCounter
           to='/timeline/local'
           count={statusCount}
