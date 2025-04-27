@@ -1,5 +1,5 @@
 import pick from 'lodash/pick';
-import { GOTOSOCIAL } from 'pl-api';
+import { type CredentialAccount, GOTOSOCIAL } from 'pl-api';
 import React, { useState, useEffect } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
@@ -21,6 +21,7 @@ import Toggle from 'pl-fe/components/ui/toggle';
 import { useImageField } from 'pl-fe/hooks/forms/use-image-field';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
@@ -33,7 +34,6 @@ import AvatarPicker from './components/avatar-picker';
 import HeaderPicker from './components/header-picker';
 
 import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield';
-import type { Account } from 'pl-fe/normalizers/account';
 
 const nonDefaultAvatar = (url: string | undefined) => url && isDefaultAvatar(url) ? undefined : url;
 const nonDefaultHeader = (url: string | undefined) => url && isDefaultHeader(url) ? undefined : url;
@@ -42,7 +42,7 @@ const nonDefaultHeader = (url: string | undefined) => url && isDefaultHeader(url
  * Whether the user is hiding their follows and/or followers.
  * Pleroma's config is granular, but we simplify it into one setting.
  */
-const hidesNetwork = ({ __meta }: Account): boolean => Boolean(
+const hidesNetwork = ({ __meta }: Pick<CredentialAccount, '__meta'>): boolean => Boolean(
   __meta.pleroma?.hide_followers && __meta.pleroma?.hide_follows && __meta.pleroma?.hide_followers_count && __meta.pleroma?.hide_follows_count,
 );
 
@@ -147,19 +147,18 @@ interface AccountCredentials {
 }
 
 /** Convert an account into an update_credentials request object. */
-const accountToCredentials = (account: Account): AccountCredentials => {
+const accountToCredentials = (account: CredentialAccount): AccountCredentials => {
   const hideNetwork = hidesNetwork(account);
 
   return {
-    ...(pick(account, ['discoverable', 'bot', 'display_name', 'locked', 'location', 'avatar_description', 'header_description', 'enable_rss', 'hide_collections', 'is_cat', 'speak_as_cat', 'mention_policy', 'web_visibility', 'web_layout'])),
-    note: account.__meta.source?.note ?? '',
+    ...(pick(account, ['birthday', 'bot', 'custom_css', 'display_name', 'locked', 'location', 'avatar_description', 'header_description', 'enable_rss', 'hide_collections', 'is_cat', 'speak_as_cat', 'mention_policy'])),
+    ...(pick(account.source, ['discoverable', 'note', 'web_layout', 'web_visibility'])),
     fields_attributes: [...account.__meta.source?.fields ?? []],
     stranger_notifications: account.__meta.pleroma?.notification_settings?.block_from_strangers === true,
     hide_followers: hideNetwork,
     hide_follows: hideNetwork,
     hide_followers_count: hideNetwork,
     hide_follows_count: hideNetwork,
-    birthday: account.birthday ?? undefined,
   };
 };
 
@@ -195,6 +194,7 @@ const EditProfile: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const instance = useInstance();
+  const client = useClient();
 
   const { account } = useOwnAccount();
   const features = useFeatures();
@@ -207,7 +207,7 @@ const EditProfile: React.FC = () => {
     ?.filter(type => type.startsWith('image/'))
     .join(',');
 
-  const [isLoading, setLoading] = useState(false);
+  const [isLoading, setLoading] = useState(true);
   const [data, setData] = useState<AccountCredentials>({});
   const [muteStrangers, setMuteStrangers] = useState(false);
   const [customCSSEditorExpanded, setCustomCSSEditorExpanded] = useState(false);
@@ -216,12 +216,15 @@ const EditProfile: React.FC = () => {
   const header = useImageField({ maxPixels: 1920 * 1080, preview: nonDefaultHeader(account?.header) });
 
   useEffect(() => {
-    if (account) {
-      const credentials = accountToCredentials(account);
-      const strangerNotifications = account.__meta.pleroma?.notification_settings?.block_from_strangers === true;
+    client.settings.verifyCredentials().then((credentialAccount) => {
+      const credentials = accountToCredentials(credentialAccount);
+      const strangerNotifications = credentialAccount.__meta.pleroma?.notification_settings?.block_from_strangers === true;
       setData(credentials);
       setMuteStrangers(strangerNotifications);
-    }
+      setLoading(false);
+    }).catch(() => {
+      setLoading(false);
+    });
   }, [account?.id]);
 
   /** Set a single key in the request data. */

@@ -150,8 +150,10 @@ const baseAccountSchema = v.object({
   local: v.fallback(v.optional(v.boolean()), false),
 
   avatar_description: v.fallback(v.string(), ''),
+  custom_css: v.fallback(v.string(), ''),
   enable_rss: v.fallback(v.boolean(), false),
   header_description: v.fallback(v.string(), ''),
+  hide_collections: v.fallback(v.optional(v.boolean()), undefined),
 
   verified: v.fallback(v.optional(v.boolean()), undefined),
   domain: v.fallback(v.string(), ''),
@@ -235,6 +237,11 @@ const untypedCredentialAccountSchema = v.pipe(v.any(), preprocessAccount, v.obje
     discoverable: v.fallback(v.optional(v.boolean()), undefined),
     actor_type: v.fallback(v.optional(v.string()), undefined),
     show_birthday: v.fallback(v.optional(v.boolean()), undefined),
+
+    also_known_as_uris: v.fallback(v.optional(v.array(v.string())), undefined),
+    status_content_type: v.fallback(v.optional(v.string()), undefined),
+    web_layout: v.fallback(v.optional(v.picklist(['microblog', 'gallery'])), undefined),
+    web_visibility: v.fallback(v.optional(v.picklist(['public', 'unlisted', 'none'])), undefined),
   })), null),
   role: v.fallback(v.nullable(roleSchema), null),
 
