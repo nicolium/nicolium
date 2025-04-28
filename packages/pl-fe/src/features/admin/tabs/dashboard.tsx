@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, FormattedNumber } from 'react-intl';
 
 import List, { ListItem } from 'pl-fe/components/list';
 import { CardTitle } from 'pl-fe/components/ui/card';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
+import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
@@ -12,12 +13,19 @@ import sourceCode from 'pl-fe/utils/code';
 
 import { Counter } from '../components/counter';
 import { DashCounter, DashCounters } from '../components/dashcounter';
+import { Dimension } from '../components/dimension';
 import RegistrationModePicker from '../components/registration-mode-picker';
+import { Retention } from '../components/retention';
 
 const Dashboard: React.FC = () => {
   const instance = useInstance();
   const features = useFeatures();
   const { account } = useOwnAccount();
+
+  const { pendingReports, pendingUsers } = useAppSelector((state) => ({
+    pendingReports: state.admin.openReports.length,
+    pendingUsers: state.admin.awaitingApproval.length,
+  }));
 
   const v = features.version;
 
@@ -30,8 +38,9 @@ const Dashboard: React.FC = () => {
   const mau = instance.usage.users.active_month ?? instance.pleroma.stats.mau;
   const retention = (userCount && mau) ? Math.round(mau / userCount * 100) : undefined;
 
-  const [endDay] = useState<string>(new Date().toISOString().slice(0, 10));
-  const [startDay] = useState<string>(new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10));
+  const [today] = useState<string>(new Date().toISOString().slice(0, 10));
+  const [monthAgo] = useState<string>(new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10));
+  const [sixMonthsAgo] = useState<string>(new Date(new Date().getTime() - 30 * 6 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10));
 
   if (!account) return null;
 
@@ -41,8 +50,8 @@ const Dashboard: React.FC = () => {
         {features.mastodonAdminMetrics ? (
           <Counter
             measure='new_users'
-            startAt={startDay}
-            endAt={endDay}
+            startAt={monthAgo}
+            endAt={today}
             to='/pl-fe/admin/users'
             label={<FormattedMessage id='admin.counters.new_users' defaultMessage='new users' />}
           />
@@ -56,8 +65,8 @@ const Dashboard: React.FC = () => {
         {features.mastodonAdminMetrics ? (
           <Counter
             measure='active_users'
-            startAt={startDay}
-            endAt={endDay}
+            startAt={monthAgo}
+            endAt={today}
             label={<FormattedMessage id='admin.counters.active_users' defaultMessage='active users' />}
           />
         ) : (
@@ -77,21 +86,21 @@ const Dashboard: React.FC = () => {
           <>
             <Counter
               measure='interactions'
-              startAt={startDay}
-              endAt={endDay}
+              startAt={monthAgo}
+              endAt={today}
               label={<FormattedMessage id='admin.counters.interactions' defaultMessage='interactions' />}
             />
             <Counter
               measure='opened_reports'
-              startAt={startDay}
-              endAt={endDay}
+              startAt={monthAgo}
+              endAt={today}
               to='/pl-fe/admin/reports'
               label={<FormattedMessage id='admin.counters.opened_reports' defaultMessage='reports opened' />}
             />
             <Counter
               measure='resolved_reports'
-              startAt={startDay}
-              endAt={endDay}
+              startAt={monthAgo}
+              endAt={today}
               to='/pl-fe/admin/reports'
               label={<FormattedMessage id='admin.counters.resolved_reports' defaultMessage='reports resolved' />}
             />
@@ -106,6 +115,52 @@ const Dashboard: React.FC = () => {
           count={domainCount}
           label={<FormattedMessage id='admin.dashcounters.domain_count_label' defaultMessage='peers' />}
         />
+        <List>
+          <ListItem size='sm' to='/pl-fe/admin/reports' label={<FormattedMessage id='admin.links.pending_reports' defaultMessage='{count, plural, one {{formattedCount} pending report} other {{formattedCount} pending reports}}' values={{ count: pendingReports, formattedCount: <strong><FormattedNumber value={pendingReports} /></strong> }} />} />
+          <ListItem size='sm' to='/pl-fe/admin/users' label={<FormattedMessage id='admin.links.pending_users' defaultMessage='{count, plural, one {{formattedCount} pending user} other {{formattedCount} pending users}}' values={{ count: pendingUsers, formattedCount: <strong><FormattedNumber value={pendingUsers} /></strong> }} />} />
+          {/* <ListItem size='sm' to='/pl-fe/admin' label={<FormattedMessage id='admin.links.pending_tags' defaultMessage='{count} pending tags' values={{ count: <strong>0</strong> }} />} />
+          <ListItem size='sm' to='/pl-fe/admin' label={<FormattedMessage id='admin.links.pending_appeals' defaultMessage='{count} pending appeals' values={{ count: <strong>0</strong> }} />} /> */}
+        </List>
+        {features.mastodonAdminMetrics && (
+          <>
+            <Dimension
+              dimension='sources'
+              startAt={monthAgo}
+              endAt={today}
+              params={{ limit: 8 }}
+              label={<FormattedMessage id='admin.dimensions.sources' defaultMessage='Sign-up sources' />}
+            />
+            <Dimension
+              dimension='languages'
+              startAt={monthAgo}
+              endAt={today}
+              params={{ limit: 8 }}
+              label={<FormattedMessage id='admin.dimensions.top_languages' defaultMessage='Top active languages' />}
+            />
+            <Dimension
+              dimension='servers'
+              startAt={monthAgo}
+              endAt={today}
+              params={{ limit: 8 }}
+              label={<FormattedMessage id='admin.dimensions.top_servers' defaultMessage='Top active servers' />}
+            />
+            <Retention startAt={sixMonthsAgo} endAt={today} frequency='month' />
+            <Dimension
+              dimension='software_versions'
+              startAt={monthAgo}
+              endAt={today}
+              params={{ limit: 4 }}
+              label={<FormattedMessage id='admin.dimensions.software' defaultMessage='Software' />}
+            />
+            <Dimension
+              dimension='space_usage'
+              startAt={monthAgo}
+              endAt={today}
+              params={{ limit: 3 }}
+              label={<FormattedMessage id='admin.dimensions.media_storage' defaultMessage='Media storage' />}
+            />
+          </>
+        )}
       </DashCounters>
 
       <List>
@@ -175,9 +230,11 @@ const Dashboard: React.FC = () => {
           </a>
         </ListItem>
 
-        <ListItem label={<FormattedMessage id='admin.software.backend' defaultMessage='Backend' />}>
-          <span>{v.software + (v.build ? `+${v.build}` : '')} {v.version}</span>
-        </ListItem>
+        {!features.mastodonAdminMetrics && (
+          <ListItem label={<FormattedMessage id='admin.software.backend' defaultMessage='Backend' />}>
+            <span>{v.software + (v.build ? `+${v.build}` : '')} {v.version}</span>
+          </ListItem>
+        )}
       </List>
     </Stack>
   );

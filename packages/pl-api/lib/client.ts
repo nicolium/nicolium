@@ -4411,7 +4411,7 @@ class PlApiClient {
       getRetention: async (start_at: string, end_at: string, frequency: 'day' | 'month') => {
         const response = await this.request('/api/v1/admin/retention', { method: 'POST', params: { start_at, end_at, frequency } });
 
-        return v.parse(adminCohortSchema, response.json);
+        return v.parse(filteredArray(adminCohortSchema), response.json);
       },
     },
 

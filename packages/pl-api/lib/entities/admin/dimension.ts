@@ -6,13 +6,13 @@ import * as v from 'valibot';
  */
 const adminDimensionSchema = v.object({
   key: v.string(),
-  data: v.object({
+  data: v.array(v.object({
     key: v.string(),
     human_key: v.string(),
     value: v.string(),
     unit: v.fallback(v.optional(v.string()), undefined),
     human_value: v.fallback(v.optional(v.string()), undefined),
-  }),
+  })),
 });
 
 /**

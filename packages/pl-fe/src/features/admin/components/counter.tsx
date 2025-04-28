@@ -79,7 +79,7 @@ const Counter: React.FC<ICounter> = ({
         {label}
       </Text>
 
-      <div>
+      <div className='mt-auto'>
         <Sparklines width={259} height={55} data={data?.[0].data.map(x => x.value * 1) || []}>
           <SparklinesCurve />
         </Sparklines>
@@ -87,15 +87,17 @@ const Counter: React.FC<ICounter> = ({
     </>
   );
 
+  const className = 'relative flex flex-col rounded bg-gray-200 font-medium dark:bg-gray-800';
+
   if (to) {
     return (
-      <Link to={to} className='relative rounded bg-gray-200 font-medium transition-transform hover:-translate-y-1 dark:bg-gray-800' target={target}>
+      <Link to={to} className={clsx(className, 'transition-transform hover:-translate-y-1')} target={target}>
         {inner}
       </Link>
     );
   } else {
     return (
-      <div className='relative rounded bg-gray-200 font-medium dark:bg-gray-800'>
+      <div className={className}>
         {inner}
       </div>
     );

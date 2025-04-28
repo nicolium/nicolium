@@ -12,7 +12,7 @@ const adminCohortSchema = v.object({
   data: v.array(v.object({
     date: datetimeSchema,
     rate: v.number(),
-    value: v.pipe(v.number(), v.integer()),
+    value: v.pipe(v.unknown(), v.transform(Number)),
   })),
 });
 
