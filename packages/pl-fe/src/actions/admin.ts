@@ -79,7 +79,10 @@ const fetchReports = (params?: AdminGetReportsParams) =>
 
 const closeReport = (reportId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).admin.reports.resolveReport(reportId);
+    getClient(getState).admin.reports.resolveReport(reportId).then((report) => {
+      dispatch<AdminActions>({ type: ADMIN_REPORT_PATCH_SUCCESS, report, reportId });
+      return report;
+    });
 
 const fetchUsers = (params?: AdminGetAccountsParams) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
