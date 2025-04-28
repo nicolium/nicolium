@@ -151,8 +151,8 @@ const accountToCredentials = (account: CredentialAccount): AccountCredentials =>
   const hideNetwork = hidesNetwork(account);
 
   return {
-    ...(pick(account, ['birthday', 'bot', 'custom_css', 'display_name', 'locked', 'location', 'avatar_description', 'header_description', 'enable_rss', 'hide_collections', 'is_cat', 'speak_as_cat', 'mention_policy'])),
-    ...(pick(account.source, ['discoverable', 'note', 'web_layout', 'web_visibility'])),
+    ...(pick(account, ['birthday', 'bot', 'custom_css', 'discoverable', 'display_name', 'locked', 'location', 'avatar_description', 'header_description', 'enable_rss', 'hide_collections', 'is_cat', 'speak_as_cat', 'mention_policy'])),
+    ...(pick(account.source, ['note', 'web_layout', 'web_visibility'])),
     fields_attributes: [...account.__meta.source?.fields ?? []],
     stranger_notifications: account.__meta.pleroma?.notification_settings?.block_from_strangers === true,
     hide_followers: hideNetwork,
