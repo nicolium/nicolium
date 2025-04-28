@@ -240,6 +240,8 @@ const EditProfile: React.FC = () => {
     if (header.file !== undefined) params.header = header.file || '';
     if (avatar.file !== undefined) params.avatar = avatar.file || '';
 
+    if (!instance.configuration.accounts?.allow_custom_css) delete params.custom_css;
+
     promises.push(dispatch(patchMe(params as any)));
 
     if (features.muteStrangers) {
