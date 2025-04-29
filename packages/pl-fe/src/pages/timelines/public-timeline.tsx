@@ -8,21 +8,21 @@ import { usePublicStream } from 'pl-fe/api/hooks/streaming/use-public-stream';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import Accordion from 'pl-fe/components/ui/accordion';
 import Column from 'pl-fe/components/ui/column';
+import PinnedHostsPicker from 'pl-fe/features/remote-timeline/components/pinned-hosts-picker';
+import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useTheme } from 'pl-fe/hooks/use-theme';
 
-import PinnedHostsPicker from '../remote-timeline/components/pinned-hosts-picker';
-import Timeline from '../ui/components/timeline';
 
 const messages = defineMessages({
   title: { id: 'column.public', defaultMessage: 'Fediverse timeline' },
   dismiss: { id: 'fediverse_tab.explanation_box.dismiss', defaultMessage: 'Don\'t show again' },
 });
 
-const CommunityTimeline = () => {
+const PublicTimelinePage = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -104,4 +104,4 @@ const CommunityTimeline = () => {
   );
 };
 
-export { CommunityTimeline as default };
+export { PublicTimelinePage as default };

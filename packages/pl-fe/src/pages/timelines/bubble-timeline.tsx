@@ -1,42 +1,43 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
-import { useCommunityStream } from 'pl-fe/api/hooks/streaming/use-community-stream';
+import { fetchBubbleTimeline } from 'pl-fe/actions/timelines';
+import { useBubbleStream } from 'pl-fe/api/hooks/streaming/use-bubble-stream';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import Column from 'pl-fe/components/ui/column';
+import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useTheme } from 'pl-fe/hooks/use-theme';
 
-import Timeline from '../ui/components/timeline';
-
 const messages = defineMessages({
-  title: { id: 'column.community', defaultMessage: 'Local timeline' },
+  title: { id: 'column.bubble', defaultMessage: 'Bubble timeline' },
 });
 
-const CommunityTimeline = () => {
+const BubbleTimelinePage = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const theme = useTheme();
 
+  const features = useFeatures();
   const settings = useSettings();
-  const onlyMedia = settings.timelines['public:local']?.other.onlyMedia ?? false;
+  const onlyMedia = settings.timelines.bubble?.other.onlyMedia ?? false;
 
-  const timelineId = 'public:local';
+  const timelineId = 'bubble';
   const isMobile = useIsMobile();
 
   const handleLoadMore = () => {
-    dispatch(fetchPublicTimeline({ onlyMedia, local: true }, true));
+    dispatch(fetchBubbleTimeline({ onlyMedia }, true));
   };
 
-  const handleRefresh = () => dispatch(fetchPublicTimeline({ onlyMedia, local: true }));
+  const handleRefresh = () => dispatch(fetchBubbleTimeline({ onlyMedia }, true));
 
-  useCommunityStream({ onlyMedia });
+  useBubbleStream({ onlyMedia, enabled: features.bubbleTimelineStreaming });
 
   useEffect(() => {
-    dispatch(fetchPublicTimeline({ onlyMedia, local: true }));
+    dispatch(fetchBubbleTimeline({ onlyMedia }));
   }, [onlyMedia]);
 
   return (
@@ -49,7 +50,7 @@ const CommunityTimeline = () => {
           timelineId={`${timelineId}${onlyMedia ? ':media' : ''}`}
           prefix='home'
           onLoadMore={handleLoadMore}
-          emptyMessage={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />}
+          emptyMessage={<FormattedMessage id='empty_column.bubble' defaultMessage='There is nothing here! Write something publicly to fill it up' />}
           divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
         />
       </PullToRefresh>
@@ -57,4 +58,4 @@ const CommunityTimeline = () => {
   );
 };
 
-export { CommunityTimeline as default };
+export { BubbleTimelinePage as default };

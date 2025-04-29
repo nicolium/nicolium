@@ -4,9 +4,9 @@ import { FormattedMessage } from 'react-intl';
 import { changeComposeInteractionPolicyOption } from 'pl-fe/actions/compose';
 import Modal from 'pl-fe/components/ui/modal';
 import Stack from 'pl-fe/components/ui/stack';
-import { InteractionPolicyConfig, type Policy, type Rule, type Scope } from 'pl-fe/features/interaction-policies';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useCompose } from 'pl-fe/hooks/use-compose';
+import { InteractionPolicyConfig, type Policy, type Rule, type Scope } from 'pl-fe/pages/settings/interaction-policies';
 import { useInteractionPolicies } from 'pl-fe/queries/settings/use-interaction-policies';
 
 import type { BaseModalProps } from '../modal-root';

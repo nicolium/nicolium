@@ -18,6 +18,9 @@ import Input from 'pl-fe/components/ui/input';
 import Streamfield from 'pl-fe/components/ui/streamfield';
 import Textarea from 'pl-fe/components/ui/textarea';
 import Toggle from 'pl-fe/components/ui/toggle';
+import AvatarPicker from 'pl-fe/features/edit-profile/components/avatar-picker';
+import HeaderPicker from 'pl-fe/features/edit-profile/components/header-picker';
+import { SelectDropdown } from 'pl-fe/features/forms';
 import { useImageField } from 'pl-fe/hooks/forms/use-image-field';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
@@ -27,11 +30,6 @@ import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import toast from 'pl-fe/toast';
 import { isDefaultAvatar, isDefaultHeader } from 'pl-fe/utils/accounts';
-
-import { SelectDropdown } from '../forms';
-
-import AvatarPicker from './components/avatar-picker';
-import HeaderPicker from './components/header-picker';
 
 import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield';
 
@@ -190,7 +188,7 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({ index, va
 };
 
 /** Edit profile page. */
-const EditProfile: React.FC = () => {
+const EditProfilePage: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const instance = useInstance();
@@ -584,4 +582,4 @@ const EditProfile: React.FC = () => {
   );
 };
 
-export { EditProfile as default };
+export { EditProfilePage as default };

@@ -3,19 +3,56 @@ import { FormattedMessage } from 'react-intl';
 
 import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
 import { useCommunityStream } from 'pl-fe/api/hooks/streaming/use-community-stream';
+import Markup from 'pl-fe/components/markup';
+import { ParsedContent } from 'pl-fe/components/parsed-content';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import Column from 'pl-fe/components/ui/column';
+import Stack from 'pl-fe/components/ui/stack';
+import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
 import { useTheme } from 'pl-fe/hooks/use-theme';
+import AboutPage from 'pl-fe/pages/about';
+import { getTextDirection } from 'pl-fe/utils/rtl';
 
-import AboutPage from '../about';
-import Timeline from '../ui/components/timeline';
 
-import { SiteBanner } from './components/site-banner';
+interface ILogoText extends Pick<React.HTMLAttributes<HTMLHeadingElement>, 'dir'> {
+  children: React.ReactNode;
+}
 
-const LandingTimeline = () => {
+/** Big text in site colors, for displaying the site name. Resizes itself according to the screen size. */
+const LogoText: React.FC<ILogoText> = ({ children, dir }) => (
+  <h1
+    className='-my-5 overflow-hidden text-ellipsis bg-gradient-to-br from-accent-500 via-primary-500 to-gradient-end bg-clip-text text-5xl font-extrabold !leading-tight text-transparent lg:text-6xl xl:text-7xl'
+    dir={dir}
+  >
+    {children}
+  </h1>
+);
+
+const SiteBanner: React.FC = () => {
+  const instance = useInstance();
+
+  return (
+    <Stack space={6}>
+      <LogoText dir={getTextDirection(instance.title)}>
+        {instance.title}
+      </LogoText>
+
+      {instance.description.trim().length > 0 && (
+        <Markup
+          size='lg'
+          direction={getTextDirection(instance.description)}
+        >
+          <ParsedContent html={instance.description} />
+        </Markup>
+      )}
+    </Stack>
+  );
+};
+
+const LandingTimelinePage = () => {
   const dispatch = useAppDispatch();
   const instance = useInstance();
   const theme = useTheme();
@@ -65,4 +102,4 @@ const LandingTimeline = () => {
   );
 };
 
-export { LandingTimeline as default };
+export { LandingTimelinePage as default };

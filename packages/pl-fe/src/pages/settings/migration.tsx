@@ -25,7 +25,7 @@ const messages = defineMessages({
   currentPasswordFieldLabel: { id: 'migration.fields.confirm_password.label', defaultMessage: 'Current password' },
 });
 
-const Migration = () => {
+const MigrationPage = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const instance = useInstance();
@@ -130,4 +130,4 @@ const Migration = () => {
   );
 };
 
-export { Migration as default };
+export { MigrationPage as default };

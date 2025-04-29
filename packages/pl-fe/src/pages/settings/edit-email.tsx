@@ -24,7 +24,7 @@ const messages = defineMessages({
 
 const initialState = { email: '', password: '' };
 
-const EditEmail = () => {
+const EditEmailPage = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -84,4 +84,4 @@ const EditEmail = () => {
   );
 };
 
-export { EditEmail as default };
+export { EditEmailPage as default };

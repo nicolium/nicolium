@@ -92,7 +92,7 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement }) => {
   );
 };
 
-const Announcements: React.FC = () => {
+const AdminAnnouncementsPage: React.FC = () => {
   const intl = useIntl();
   const { openModal } = useModalsStore();
 
@@ -132,4 +132,4 @@ const Announcements: React.FC = () => {
   );
 };
 
-export { Announcements as default };
+export { AdminAnnouncementsPage as default };

@@ -28,7 +28,7 @@ const MOCK_STATUSES: any[] = [
 const timelineId = 'test';
 const onlyMedia = false;
 
-const TestTimeline: React.FC = () => {
+const TestTimelinePage: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -51,4 +51,4 @@ const TestTimeline: React.FC = () => {
   );
 };
 
-export { TestTimeline as default };
+export { TestTimelinePage as default };

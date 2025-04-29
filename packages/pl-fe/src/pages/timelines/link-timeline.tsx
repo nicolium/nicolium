@@ -12,13 +12,13 @@ const messages = defineMessages({
   header: { id: 'column.link_timeline', defaultMessage: 'Posts linking to {url}' },
 });
 
-interface ILinkTimeline {
+interface ILinkTimelinePage {
   params?: {
     url?: string;
   };
 }
 
-const HashtagTimeline: React.FC<ILinkTimeline> = ({ params }) => {
+const LinkTimelinePage: React.FC<ILinkTimelinePage> = ({ params }) => {
   const url = decodeURIComponent(params?.url || '');
 
   const intl = useIntl();
@@ -53,4 +53,4 @@ const HashtagTimeline: React.FC<ILinkTimeline> = ({ params }) => {
   );
 };
 
-export { HashtagTimeline as default };
+export { LinkTimelinePage as default };

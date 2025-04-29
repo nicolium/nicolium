@@ -25,7 +25,7 @@ const messages = defineMessages({
 
 const initialState = { currentPassword: '', newPassword: '', newPasswordConfirmation: '' };
 
-const EditPassword = () => {
+const EditPasswordPage = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -102,4 +102,4 @@ const EditPassword = () => {
   );
 };
 
-export { EditPassword as default };
+export { EditPasswordPage as default };

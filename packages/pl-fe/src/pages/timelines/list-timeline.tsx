@@ -15,7 +15,7 @@ import { useTheme } from 'pl-fe/hooks/use-theme';
 import { useDeleteList, useList } from 'pl-fe/queries/accounts/use-lists';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
-import Timeline from '../ui/components/timeline';
+import Timeline from '../../features/ui/components/timeline';
 
 const messages = defineMessages({
   deleteHeading: { id: 'confirmations.delete_list.heading', defaultMessage: 'Delete list' },
@@ -25,7 +25,7 @@ const messages = defineMessages({
   deleteList: { id: 'lists.delete', defaultMessage: 'Delete list' },
 });
 
-const ListTimeline: React.FC = () => {
+const ListTimelinePage: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
@@ -119,4 +119,4 @@ const ListTimeline: React.FC = () => {
   );
 };
 
-export { ListTimeline as default };
+export { ListTimelinePage as default };

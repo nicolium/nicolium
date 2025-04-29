@@ -59,7 +59,7 @@ const Backup: React.FC<IBackup> = ({ backup }) => {
   );
 };
 
-const Backups = () => {
+const BackupsPage = () => {
   const intl = useIntl();
 
   const { data: backups = [], isLoading } = useBackups();
@@ -105,4 +105,4 @@ const Backups = () => {
   );
 };
 
-export { Backups as default };
+export { BackupsPage as default };

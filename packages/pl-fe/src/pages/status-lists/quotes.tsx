@@ -13,7 +13,7 @@ const messages = defineMessages({
   heading: { id: 'column.quotes', defaultMessage: 'Post quotes' },
 });
 
-const Quotes: React.FC = () => {
+const QuotesPage: React.FC = () => {
   const intl = useIntl();
   const { statusId } = useParams<{ statusId: string }>();
   const theme = useTheme();
@@ -50,4 +50,4 @@ const Quotes: React.FC = () => {
   );
 };
 
-export { Quotes as default };
+export { QuotesPage as default };

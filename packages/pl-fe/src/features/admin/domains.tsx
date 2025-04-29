@@ -102,7 +102,7 @@ const Domain: React.FC<IDomain> = ({ domain }) => {
   );
 };
 
-const Domains: React.FC = () => {
+const AdminDomainsPage: React.FC = () => {
   const intl = useIntl();
 
   const { openModal } = useModalsStore();
@@ -148,4 +148,4 @@ const Domains: React.FC = () => {
   );
 };
 
-export { Domains as default };
+export { AdminDomainsPage as default };

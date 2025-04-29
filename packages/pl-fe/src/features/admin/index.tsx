@@ -14,7 +14,7 @@ const messages = defineMessages({
   heading: { id: 'column.admin.dashboard', defaultMessage: 'Dashboard' },
 });
 
-const Admin: React.FC = () => {
+const AdminPage: React.FC = () => {
   const intl = useIntl();
   const { account } = useOwnAccount();
 
@@ -33,4 +33,4 @@ const Admin: React.FC = () => {
   );
 };
 
-export { Admin as default };
+export { AdminPage as default };

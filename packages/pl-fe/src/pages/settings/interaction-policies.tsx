@@ -13,7 +13,7 @@ import Text from 'pl-fe/components/ui/text';
 import { useInteractionPolicies } from 'pl-fe/queries/settings/use-interaction-policies';
 import toast from 'pl-fe/toast';
 
-import Warning from '../compose/components/warning';
+import Warning from '../../features/compose/components/warning';
 
 import type { InteractionPolicy } from 'pl-api';
 
@@ -143,7 +143,7 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({ interacti
   );
 };
 
-const InteractionPolicies = () => {
+const InteractionPoliciesPage = () => {
   const { interactionPolicies: initial, updateInteractionPolicies, isUpdating } = useInteractionPolicies();
   const intl = useIntl();
   const [interactionPolicies, setInteractionPolicies] = useState(initial);
@@ -208,7 +208,7 @@ const InteractionPolicies = () => {
 };
 
 export {
-  InteractionPolicies as default,
+  InteractionPoliciesPage as default,
   InteractionPolicyConfig,
   type Policy,
   type Rule,
