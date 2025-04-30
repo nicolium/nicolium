@@ -46,8 +46,8 @@ interface StandaloneCheckSuccessAction {
 }
 
 const checkIfStandalone = () => (dispatch: AppDispatch) =>
-  staticFetch('/api/v1/instance')
-    .then(({ ok }) => dispatch<StandaloneCheckSuccessAction>({ type: STANDALONE_CHECK_SUCCESS, ok }))
+  staticFetch('/api/v1/instance', { method: 'HEAD' })
+    .then(({ ok, headers }) => dispatch<StandaloneCheckSuccessAction>({ type: STANDALONE_CHECK_SUCCESS, ok: ok && headers.get('content-type') === 'application/json' }))
     .catch((err) => dispatch<StandaloneCheckSuccessAction>({ type: STANDALONE_CHECK_SUCCESS, ok: err.response?.ok }));
 
 type InstanceAction =
