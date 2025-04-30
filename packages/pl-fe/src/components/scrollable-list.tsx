@@ -96,7 +96,6 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
   listClassName,
   itemClassName,
   loadMoreClassName,
-  id,
   hasMore,
   placeholderComponent: Placeholder,
   placeholderCount = 0,
