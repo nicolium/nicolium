@@ -108,7 +108,7 @@ const MuteModal: React.FC<MuteModalProps & BaseModalProps> = ({ accountId, onClo
               <Stack space={2}>
                 <Text weight='medium'><FormattedMessage id='mute_modal.duration' defaultMessage='Duration' />: </Text>
 
-                <DurationSelector onDurationChange={handleChangeMuteDuration} />
+                <DurationSelector onDurationChange={handleChangeMuteDuration} value={duration} />
               </Stack>
             )}
           </>

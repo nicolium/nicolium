@@ -203,7 +203,7 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
           {intl.formatMessage(messages.pollDuration)}
         </Text>
 
-        <DurationSelector onDurationChange={handleSelectDuration} />
+        <DurationSelector onDurationChange={handleSelectDuration} value={expiresIn || (2 * 24 * 60 * 60)} />
       </Stack>
 
       {/* Remove Poll */}

@@ -11,16 +11,17 @@ const messages = defineMessages({
 
 interface IDurationSelector {
   onDurationChange(expiresIn: number): void;
+  value: number;
 }
 
-const DurationSelector = ({ onDurationChange }: IDurationSelector) => {
+const DurationSelector = ({ onDurationChange, value }: IDurationSelector) => {
   const intl = useIntl();
 
-  const [days, setDays] = useState<number>(2);
-  const [hours, setHours] = useState<number>(0);
-  const [minutes, setMinutes] = useState<number>(0);
+  const [days, setDays] = useState<number>(Math.floor(value / (24 * 60 * 60)));
+  const [hours, setHours] = useState<number>(Math.floor((value % (24 * 60 * 60)) / (60 * 60)));
+  const [minutes, setMinutes] = useState<number>(Math.floor((value % (60 * 60)) / 60));
 
-  const value = (days * 24 * 60 * 60) + (hours * 60 * 60) + (minutes * 60);
+  const newValue = (days * 24 * 60 * 60) + (hours * 60 * 60) + (minutes * 60);
 
   useEffect(() => {
     if (days === 7) {
@@ -30,8 +31,8 @@ const DurationSelector = ({ onDurationChange }: IDurationSelector) => {
   }, [days]);
 
   useEffect(() => {
-    onDurationChange(value);
-  }, [value]);
+    onDurationChange(newValue);
+  }, [newValue]);
 
   return (
     <div className='grid grid-cols-1 gap-2 sm:grid-cols-3'>
