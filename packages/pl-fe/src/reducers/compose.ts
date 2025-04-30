@@ -559,6 +559,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.language = action.status.language;
 
         compose.media_attachments = action.status.media_attachments;
+        compose.sensitive = action.status.sensitive;
 
         if (action.status.spoiler_text.length > 0) {
           compose.spoiler_text = action.status.spoiler_text;

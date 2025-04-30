@@ -118,7 +118,7 @@ const messages = defineMessages({
 interface ComposeSetStatusAction {
   type: typeof COMPOSE_SET_STATUS;
   composeId: string;
-  status: Pick<Status, 'id' | 'account' | 'content' | 'group_id' | 'in_reply_to_id' | 'language' | 'media_attachments' | 'mentions' | 'quote_id' | 'spoiler_text' | 'visibility'>;
+  status: Pick<Status, 'id' | 'account' | 'content' | 'group_id' | 'in_reply_to_id' | 'language' | 'media_attachments' | 'mentions' | 'quote_id' | 'sensitive' | 'spoiler_text' | 'visibility'>;
   poll?: Poll | null;
   rawText: string;
   explicitAddressing: boolean;
