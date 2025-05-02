@@ -890,7 +890,7 @@
   "groups.empty.subtitle": "Odkrywaj grupy do których możesz dołączyć lub utwórz własną.",
   "groups.empty.title": "Brak grup",
   "groups.pending.count": "{number, plural, one {# oczekujące zgłoszenie} few {# oczekujące zgłoszenia} other {# oczekujących zgłoszeń}}",
-  "hashtag.follow": "Obserwuj hashtagi",
+  "hashtag.follow": "Obserwuj hashtag",
   "hashtags.and_other": "…i {count, plural, other {# więcej}}",
   "home.column_settings.show_reblogs": "Pokazuj podbicia",
   "home.column_settings.show_replies": "Pokazuj odpowiedzi",
