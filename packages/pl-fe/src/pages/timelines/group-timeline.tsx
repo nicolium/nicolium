@@ -18,18 +18,18 @@ import { useDraggedFiles } from 'pl-fe/hooks/use-dragged-files';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { makeGetStatusIds } from 'pl-fe/selectors';
 
-import Timeline from '../ui/components/timeline';
-import { ComposeForm } from '../ui/util/async-components';
+import Timeline from '../../features/ui/components/timeline';
+import { ComposeForm } from '../../features/ui/util/async-components';
 
 type RouteParams = { groupId: string };
 
-interface IGroupTimeline {
+interface IGroupTimelinePage {
   params: RouteParams;
 }
 
 const getStatusIds = makeGetStatusIds();
 
-const GroupTimeline: React.FC<IGroupTimeline> = (props) => {
+const GroupTimelinePage: React.FC<IGroupTimelinePage> = (props) => {
   const intl = useIntl();
   const { account } = useOwnAccount();
   const dispatch = useAppDispatch();
@@ -119,4 +119,4 @@ const GroupTimeline: React.FC<IGroupTimeline> = (props) => {
   );
 };
 
-export { GroupTimeline as default };
+export { GroupTimelinePage as default };

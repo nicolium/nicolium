@@ -37,7 +37,7 @@ interface IBookmarks {
   };
 }
 
-const Bookmarks: React.FC<IBookmarks> = ({ params }) => {
+const BookmarksPage: React.FC<IBookmarks> = ({ params }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const history = useHistory();
@@ -126,4 +126,4 @@ const Bookmarks: React.FC<IBookmarks> = ({ params }) => {
   );
 };
 
-export { Bookmarks as default };
+export { BookmarksPage as default };

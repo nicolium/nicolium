@@ -15,13 +15,13 @@ import { useTheme } from 'pl-fe/hooks/use-theme';
 import { useFollowHashtagMutation, useUnfollowHashtagMutation } from 'pl-fe/queries/hashtags/use-followed-tags';
 import { useHashtag } from 'pl-fe/queries/hashtags/use-hashtag';
 
-interface IHashtagTimeline {
+interface IHashtagTimelinePage {
   params?: {
     id?: string;
   };
 }
 
-const HashtagTimeline: React.FC<IHashtagTimeline> = ({ params }) => {
+const HashtagTimelinePage: React.FC<IHashtagTimelinePage> = ({ params }) => {
   const tagId = params?.id || '';
 
   const features = useFeatures();
@@ -81,4 +81,4 @@ const HashtagTimeline: React.FC<IHashtagTimeline> = ({ params }) => {
   );
 };
 
-export { HashtagTimeline as default };
+export { HashtagTimelinePage as default };

@@ -15,10 +15,10 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { useSettings } from 'pl-fe/hooks/use-settings';
+import { PaletteListItem } from 'pl-fe/pages/dashboard/theme-editor';
 import colors from 'pl-fe/utils/colors';
 import { isStandalone } from 'pl-fe/utils/state';
 
-import { PaletteListItem } from '../theme-editor';
 import ThemeToggle from '../ui/components/theme-toggle';
 
 import type { AppDispatch } from 'pl-fe/store';

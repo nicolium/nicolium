@@ -19,7 +19,7 @@ const messages = defineMessages({
   title: { id: 'column.home', defaultMessage: 'Home' },
 });
 
-const HomeTimeline: React.FC = () => {
+const HomeTimelinePage: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const features = useFeatures();
@@ -109,4 +109,4 @@ const HomeTimeline: React.FC = () => {
   );
 };
 
-export { HomeTimeline as default };
+export { HomeTimelinePage as default };

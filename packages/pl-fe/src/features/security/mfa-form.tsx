@@ -12,13 +12,6 @@ import DisableOtpForm from './mfa/disable-otp-form';
 import EnableOtpForm from './mfa/enable-otp-form';
 import OtpConfirmForm from './mfa/otp-confirm-form';
 
-/*
-Security settings page for user account
-Routed to /settings/mfa
-Includes following features:
-- Set up Multi-factor Auth
-*/
-
 const messages = defineMessages({
   heading: { id: 'column.mfa', defaultMessage: 'Multi-factor authentication' },
 });

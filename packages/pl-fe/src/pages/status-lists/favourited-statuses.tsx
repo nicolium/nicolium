@@ -23,7 +23,7 @@ interface IFavourites {
 }
 
 /** Timeline displaying a user's favourited statuses. */
-const Favourites: React.FC<IFavourites> = ({ params }) => {
+const FavouritedStatusesPage: React.FC<IFavourites> = ({ params }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { account: ownAccount } = useOwnAccount();
@@ -99,4 +99,4 @@ const Favourites: React.FC<IFavourites> = ({ params }) => {
   );
 };
 
-export { Favourites as default };
+export { FavouritedStatusesPage as default };

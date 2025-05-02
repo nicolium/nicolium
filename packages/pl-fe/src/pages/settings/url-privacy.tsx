@@ -13,13 +13,12 @@ import FormActions from 'pl-fe/components/ui/form-actions';
 import FormGroup from 'pl-fe/components/ui/form-group';
 import Input from 'pl-fe/components/ui/input';
 import Toggle from 'pl-fe/components/ui/toggle';
+import { SelectDropdown } from 'pl-fe/features/forms';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import KVStore from 'pl-fe/storage/kv-store';
 import { KVStoreRedirectServicesItem } from 'pl-fe/utils/url-purify';
-
-import { SelectDropdown } from '../forms';
 
 const messages = defineMessages({
   urlPrivacy: { id: 'settings.url_privacy', defaultMessage: 'URL privacy' },

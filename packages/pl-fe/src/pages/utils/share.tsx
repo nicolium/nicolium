@@ -4,7 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { openComposeWithText } from 'pl-fe/actions/compose';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 
-const Share: React.FC = () => {
+const SharePage: React.FC = () => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
@@ -31,4 +31,4 @@ const Share: React.FC = () => {
   return null;
 };
 
-export { Share as default };
+export { SharePage as default };

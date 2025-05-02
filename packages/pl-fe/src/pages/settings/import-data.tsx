@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
-import { FormattedMessage, MessageDescriptor, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl, type MessageDescriptor } from 'react-intl';
 
+import {
+  importFollows,
+  importBlocks,
+  importMutes,
+} from 'pl-fe/actions/import-data';
 import List, { ListItem } from 'pl-fe/components/list';
 import Button from 'pl-fe/components/ui/button';
+import Column from 'pl-fe/components/ui/column';
 import FileInput from 'pl-fe/components/ui/file-input';
 import Form from 'pl-fe/components/ui/form';
 import FormActions from 'pl-fe/components/ui/form-actions';
@@ -10,8 +16,32 @@ import FormGroup from 'pl-fe/components/ui/form-group';
 import Text from 'pl-fe/components/ui/text';
 import Toggle from 'pl-fe/components/ui/toggle';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useFeatures } from 'pl-fe/hooks/use-features';
 
 import type { AppDispatch, RootState } from 'pl-fe/store';
+
+const messages = defineMessages({
+  heading: { id: 'column.import_data', defaultMessage: 'Import data' },
+  submit: { id: 'import_data.actions.import', defaultMessage: 'Import' },
+});
+
+const followMessages = defineMessages({
+  input_label: { id: 'import_data.follows_label', defaultMessage: 'Follows' },
+  input_hint: { id: 'import_data.hints.follows', defaultMessage: 'CSV file containing a list of followed accounts' },
+  submit: { id: 'import_data.actions.import_follows', defaultMessage: 'Import follows' },
+});
+
+const blockMessages = defineMessages({
+  input_label: { id: 'import_data.blocks_label', defaultMessage: 'Blocks' },
+  input_hint: { id: 'import_data.hints.blocks', defaultMessage: 'CSV file containing a list of blocked accounts' },
+  submit: { id: 'import_data.actions.import_blocks', defaultMessage: 'Import blocks' },
+});
+
+const muteMessages = defineMessages({
+  input_label: { id: 'import_data.mutes_label', defaultMessage: 'Mutes' },
+  input_hint: { id: 'import_data.hints.mutes', defaultMessage: 'CSV file containing a list of muted accounts' },
+  submit: { id: 'import_data.actions.import_mutes', defaultMessage: 'Import mutes' },
+});
 
 interface IDataImporter {
   messages: {
@@ -83,4 +113,17 @@ const DataImporter: React.FC<IDataImporter> = ({ messages, action, accept = '.cs
   );
 };
 
-export { DataImporter as default };
+const ImportDataPage = () => {
+  const intl = useIntl();
+  const features = useFeatures();
+
+  return (
+    <Column label={intl.formatMessage(messages.heading)}>
+      {features.importFollows && <DataImporter action={importFollows} messages={followMessages} allowOverwrite={features.importOverwrite} />}
+      {features.importBlocks && <DataImporter action={importBlocks} messages={blockMessages} allowOverwrite={features.importOverwrite} />}
+      {features.importMutes && <DataImporter action={importMutes} messages={muteMessages} allowOverwrite={features.importOverwrite} />}
+    </Column>
+  );
+};
+
+export { ImportDataPage as default };

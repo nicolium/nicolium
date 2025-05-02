@@ -8,23 +8,21 @@ import IconButton from 'pl-fe/components/icon-button';
 import Column from 'pl-fe/components/ui/column';
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
+import PinnedHostsPicker from 'pl-fe/features/remote-timeline/components/pinned-hosts-picker';
+import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useTheme } from 'pl-fe/hooks/use-theme';
 
-import Timeline from '../ui/components/timeline';
-
-import PinnedHostsPicker from './components/pinned-hosts-picker';
-
-interface IRemoteTimeline {
+interface IRemoteTimelinePage {
   params?: {
     instance?: string;
   };
 }
 
 /** View statuses from a remote instance. */
-const RemoteTimeline: React.FC<IRemoteTimeline> = ({ params }) => {
+const RemoteTimelinePage: React.FC<IRemoteTimelinePage> = ({ params }) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const theme = useTheme();
@@ -88,4 +86,4 @@ const RemoteTimeline: React.FC<IRemoteTimeline> = ({ params }) => {
   );
 };
 
-export { RemoteTimeline as default };
+export { RemoteTimelinePage as default };

@@ -12,6 +12,7 @@ import Column from 'pl-fe/components/ui/column';
 import Form from 'pl-fe/components/ui/form';
 import FormActions from 'pl-fe/components/ui/form-actions';
 import ColorPicker from 'pl-fe/features/pl-fe-config/components/color-picker';
+import Palette, { ColorGroup } from 'pl-fe/features/theme-editor/components/palette';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
@@ -19,8 +20,6 @@ import { normalizeColors } from 'pl-fe/hooks/use-theme-css';
 import { plFeConfigSchema } from 'pl-fe/normalizers/pl-fe/pl-fe-config';
 import toast from 'pl-fe/toast';
 import { download } from 'pl-fe/utils/download';
-
-import Palette, { ColorGroup } from './components/palette';
 
 import type { ColorChangeHandler } from 'react-color';
 
@@ -47,7 +46,7 @@ interface IThemeEditor {
 }
 
 /** UI for editing Tailwind theme colors. */
-const ThemeEditor: React.FC<IThemeEditor> = () => {
+const ThemeEditorPage: React.FC<IThemeEditor> = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -285,4 +284,4 @@ const ColorListItem: React.FC<IColorListItem> = ({ label, value, onChange }) => 
   );
 };
 
-export { ThemeEditor as default, PaletteListItem };
+export { ThemeEditorPage as default, PaletteListItem };

@@ -11,7 +11,7 @@ const messages = defineMessages({
   heading: { id: 'column.mutes', defaultMessage: 'Mutes' },
 });
 
-const Mutes: React.FC = () => {
+const MutesPage: React.FC = () => {
   const intl = useIntl();
 
   const {
@@ -48,4 +48,4 @@ const Mutes: React.FC = () => {
   );
 };
 
-export { Mutes as default };
+export { MutesPage as default };

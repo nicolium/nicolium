@@ -19,7 +19,7 @@ const messages = defineMessages({
   confirmation: { id: 'password_reset.confirmation', defaultMessage: 'Check your email for confirmation.' },
 });
 
-const PasswordReset = () => {
+const PasswordResetPage = () => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const features = useFeatures();
@@ -63,4 +63,4 @@ const PasswordReset = () => {
   );
 };
 
-export { PasswordReset as default };
+export { PasswordResetPage as default };

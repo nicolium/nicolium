@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 
 import { useModalsStore } from 'pl-fe/stores/modals';
 
-const NewStatus = () => {
+const NewStatusPage = () => {
   const { openModal } = useModalsStore();
 
   useEffect(() => {
@@ -15,4 +15,4 @@ const NewStatus = () => {
   );
 };
 
-export { NewStatus as default };
+export { NewStatusPage as default };

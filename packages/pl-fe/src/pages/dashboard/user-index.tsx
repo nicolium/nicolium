@@ -16,7 +16,7 @@ const messages = defineMessages({
   searchPlaceholder: { id: 'admin.user_index.search_input_placeholder', defaultMessage: 'Who are you looking for?' },
 });
 
-const UserIndex: React.FC = () => {
+const UserIndexPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
@@ -68,4 +68,4 @@ const UserIndex: React.FC = () => {
   );
 };
 
-export { UserIndex as default };
+export { UserIndexPage as default };

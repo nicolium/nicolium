@@ -14,7 +14,7 @@ const messages = defineMessages({
   heading: { id: 'column.pins', defaultMessage: 'Pinned posts' },
 });
 
-const PinnedStatuses = () => {
+const PinnedStatusesPage = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { username } = useParams<{ username: string }>();
@@ -49,4 +49,4 @@ const PinnedStatuses = () => {
   );
 };
 
-export { PinnedStatuses as default };
+export { PinnedStatusesPage as default };

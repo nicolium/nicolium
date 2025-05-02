@@ -11,7 +11,7 @@ const messages = defineMessages({
   heading: { id: 'column.blocks', defaultMessage: 'Blocks' },
 });
 
-const Blocks: React.FC = () => {
+const BlocksPage: React.FC = () => {
   const intl = useIntl();
 
   const {
@@ -49,4 +49,4 @@ const Blocks: React.FC = () => {
   );
 };
 
-export { Blocks as default };
+export { BlocksPage as default };

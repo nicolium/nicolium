@@ -144,7 +144,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
   );
 };
 
-const AuthTokenList: React.FC = () => {
+const AuthTokenListPage: React.FC = () => {
   const intl = useIntl();
 
   const { data: tokens } = useInfiniteQuery(oauthTokensQueryOptions);
@@ -178,4 +178,4 @@ const AuthTokenList: React.FC = () => {
   );
 };
 
-export { AuthTokenList as default };
+export { AuthTokenListPage as default };
