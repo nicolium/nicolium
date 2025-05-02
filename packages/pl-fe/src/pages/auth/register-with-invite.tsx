@@ -11,7 +11,7 @@ interface RegisterInviteParams {
 }
 
 /** Page to register with an invitation. */
-const RegisterInvite: React.FC = () => {
+const RegisterWithInvitePage: React.FC = () => {
   const instance = useInstance();
   const { token } = useParams<RegisterInviteParams>();
 
@@ -37,4 +37,4 @@ const RegisterInvite: React.FC = () => {
   );
 };
 
-export { RegisterInvite as default };
+export { RegisterWithInvitePage as default };

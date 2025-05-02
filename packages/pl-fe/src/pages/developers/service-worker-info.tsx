@@ -9,9 +9,8 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
+import Indicator from 'pl-fe/features/developers/components/indicator';
 import { unregisterSW } from 'pl-fe/utils/sw';
-
-import Indicator from './components/indicator';
 
 const messages = defineMessages({
   heading: { id: 'column.developers.service_worker', defaultMessage: 'Service Worker' },

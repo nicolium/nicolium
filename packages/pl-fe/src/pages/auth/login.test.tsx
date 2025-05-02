@@ -4,7 +4,7 @@ import * as v from 'valibot';
 
 import { render, screen } from 'pl-fe/jest/test-helpers';
 
-import LoginPage from './login-page';
+import LoginPage from './login';
 
 describe('<LoginPage />', () => {
   it('renders correctly on load', () => {

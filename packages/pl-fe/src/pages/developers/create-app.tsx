@@ -32,7 +32,7 @@ const BLANK_PARAMS = {
 
 type Params = typeof BLANK_PARAMS;
 
-const CreateApp: React.FC = () => {
+const CreateAppPage: React.FC = () => {
   const intl = useIntl();
   const { account } = useOwnAccount();
 
@@ -202,4 +202,4 @@ const CreateApp: React.FC = () => {
   );
 };
 
-export { CreateApp as default };
+export { CreateAppPage as default };

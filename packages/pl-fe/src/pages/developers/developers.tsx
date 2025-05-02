@@ -28,7 +28,7 @@ const DashWidget: React.FC<IDashWidget> = ({ to, onClick, children }) => {
   }
 };
 
-const Developers: React.FC = () => {
+const DevelopersPage: React.FC = () => {
   const intl = useIntl();
 
   const showToast = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -111,4 +111,4 @@ const Developers: React.FC = () => {
   );
 };
 
-export { Developers as default };
+export { DevelopersPage as default };

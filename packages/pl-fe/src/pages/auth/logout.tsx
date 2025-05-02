@@ -6,7 +6,7 @@ import { logOut } from 'pl-fe/actions/auth';
 import Spinner from 'pl-fe/components/ui/spinner';
 
 /** Component that logs the user out when rendered */
-const Logout: React.FC = () => {
+const LogoutPage: React.FC = () => {
   const dispatch = useDispatch();
   const [done, setDone] = useState(false);
 
@@ -23,4 +23,4 @@ const Logout: React.FC = () => {
   }
 };
 
-export { Logout as default };
+export { LogoutPage as default };
