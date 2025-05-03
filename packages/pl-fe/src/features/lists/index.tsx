@@ -15,7 +15,7 @@ import NewListForm from './components/new-list-form';
 import type { List as ListEntity } from 'pl-api';
 
 const messages = defineMessages({
-  heading: { id: 'column.circles', defaultMessage: 'Lists' },
+  heading: { id: 'column.lists', defaultMessage: 'Lists' },
   subheading: { id: 'lists.subheading', defaultMessage: 'Your lists' },
 });
 
