@@ -22,7 +22,7 @@ const messages = defineMessages({
   deleteAccountFail: { id: 'security.delete_account.fail', defaultMessage: 'Account deletion failed.' },
 });
 
-const DeleteAccount = () => {
+const DeleteAccountPage = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const features = useFeatures();
@@ -92,4 +92,4 @@ const DeleteAccount = () => {
   );
 };
 
-export { DeleteAccount as default };
+export { DeleteAccountPage as default };

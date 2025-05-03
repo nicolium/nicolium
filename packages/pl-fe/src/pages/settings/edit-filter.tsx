@@ -16,11 +16,10 @@ import Stack from 'pl-fe/components/ui/stack';
 import Streamfield from 'pl-fe/components/ui/streamfield';
 import Text from 'pl-fe/components/ui/text';
 import Toggle from 'pl-fe/components/ui/toggle';
+import { SelectDropdown } from 'pl-fe/features/forms';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import toast from 'pl-fe/toast';
-
-import { SelectDropdown } from '../forms';
 
 import type { FilterContext } from 'pl-api';
 import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield';
@@ -92,7 +91,7 @@ const FilterField: StreamfieldComponent<IFilterField> = ({ value, onChange }) =>
   );
 };
 
-const EditFilter: React.FC<IEditFilter> = ({ params }) => {
+const EditFilterPage: React.FC<IEditFilter> = ({ params }) => {
   const intl = useIntl();
   const history = useHistory();
   const dispatch = useAppDispatch();
@@ -289,4 +288,4 @@ const EditFilter: React.FC<IEditFilter> = ({ params }) => {
   );
 };
 
-export { EditFilter as default };
+export { EditFilterPage as default };

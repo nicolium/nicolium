@@ -35,7 +35,7 @@ const contexts = {
   account: messages.accounts,
 };
 
-const Filters = () => {
+const FiltersPage = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const history = useHistory();
@@ -123,4 +123,4 @@ const Filters = () => {
   );
 };
 
-export { Filters as default };
+export { FiltersPage as default };

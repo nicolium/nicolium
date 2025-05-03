@@ -19,6 +19,9 @@ import Select from 'pl-fe/components/ui/select';
 import Streamfield from 'pl-fe/components/ui/streamfield';
 import Textarea from 'pl-fe/components/ui/textarea';
 import Toggle from 'pl-fe/components/ui/toggle';
+import CryptoAddressInput from 'pl-fe/features/pl-fe-config/components/crypto-address-input';
+import FooterLinkInput from 'pl-fe/features/pl-fe-config/components/footer-link-input';
+import PromoPanelInput from 'pl-fe/features/pl-fe-config/components/promo-panel-input';
 import ThemeSelector from 'pl-fe/features/ui/components/theme-selector';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
@@ -26,9 +29,6 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 import { cryptoAddressSchema, footerItemSchema, plFeConfigSchema, promoPanelItemSchema, type PlFeConfig } from 'pl-fe/normalizers/pl-fe/pl-fe-config';
 import toast from 'pl-fe/toast';
 
-import CryptoAddressInput from './components/crypto-address-input';
-import FooterLinkInput from './components/footer-link-input';
-import PromoPanelInput from './components/promo-panel-input';
 
 const messages = defineMessages({
   heading: { id: 'column.plfe_config', defaultMessage: 'Front-end configuration' },

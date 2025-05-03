@@ -72,7 +72,7 @@ const Rule: React.FC<IRule> = ({ rule }) => {
   );
 };
 
-const Rules: React.FC = () => {
+const RulesPage: React.FC = () => {
   const intl = useIntl();
 
   const { openModal } = useModalsStore();
@@ -112,4 +112,4 @@ const Rules: React.FC = () => {
   );
 };
 
-export { Rules as default };
+export { RulesPage as default };

@@ -14,7 +14,7 @@ const messages = defineMessages({
   emptyMessage: { id: 'admin.moderation_log.empty_message', defaultMessage: 'You have not performed any moderation actions yet. When you do, a history will be shown here.' },
 });
 
-const ModerationLog = () => {
+const ModerationLogPage = () => {
   const intl = useIntl();
 
   const {
@@ -71,4 +71,4 @@ const LogItem: React.FC<ILogItem> = ({ log }) => (
   </Stack>
 );
 
-export { ModerationLog as default };
+export { ModerationLogPage as default };

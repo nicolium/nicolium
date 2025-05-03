@@ -112,7 +112,7 @@ const NewRelayForm: React.FC = () => {
   );
 };
 
-const Relays: React.FC = () => {
+const RelaysPage: React.FC = () => {
   const intl = useIntl();
 
   const { data: relays, isFetching } = useRelays();
@@ -142,4 +142,4 @@ const Relays: React.FC = () => {
   );
 };
 
-export { Relays as default };
+export { RelaysPage as default };

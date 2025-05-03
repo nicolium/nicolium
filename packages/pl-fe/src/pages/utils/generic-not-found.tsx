@@ -2,8 +2,8 @@ import React from 'react';
 
 import MissingIndicator from '../../components/missing-indicator';
 
-const GenericNotFound = () => (
+const GenericNotFoundPage = () => (
   <MissingIndicator />
 );
 
-export { GenericNotFound as default };
+export { GenericNotFoundPage as default };

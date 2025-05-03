@@ -13,7 +13,7 @@ const messages = defineMessages({
   unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
 });
 
-const DomainBlocks: React.FC = () => {
+const DomainBlocksPage: React.FC = () => {
   const intl = useIntl();
 
   const { data: domains, hasNextPage, fetchNextPage } = useInfiniteQuery(domainBlocksQueryOptions);
@@ -51,4 +51,4 @@ const DomainBlocks: React.FC = () => {
   );
 };
 
-export { DomainBlocks as default };
+export { DomainBlocksPage as default };
