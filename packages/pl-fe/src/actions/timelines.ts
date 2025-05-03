@@ -236,6 +236,7 @@ const fetchAccountTimeline = (accountId: string, { exclude_replies, pinned, only
     if (pinned || only_media) params.with_muted = true;
     if (useSettingsStore.getState().settings.autoTranslate) params.language = getLocale();
 
+    if (!expand && state.timelines[timelineId]?.loaded) return;
     if (expand && state.timelines[timelineId]?.isLoading) return;
 
     const fn = (expand && state.timelines[timelineId]?.next?.()) || getClient(state).accounts.getAccountStatuses(accountId, params);

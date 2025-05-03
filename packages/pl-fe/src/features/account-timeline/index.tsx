@@ -53,14 +53,12 @@ const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = fal
   }, [params.username]);
 
   useEffect(() => {
-    if (account && !withReplies) {
-      dispatch(fetchAccountTimeline(account.id, { pinned: true }));
-    }
-  }, [account?.id, withReplies]);
-
-  useEffect(() => {
     if (account) {
       dispatch(fetchAccountTimeline(account.id, { exclude_replies: !withReplies }));
+
+      if (!withReplies) {
+        dispatch(fetchAccountTimeline(account.id, { pinned: true }));
+      }
     }
   }, [account?.id, withReplies]);
 
