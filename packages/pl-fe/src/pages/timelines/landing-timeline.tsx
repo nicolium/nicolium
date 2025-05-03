@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -16,14 +17,14 @@ import { useTheme } from 'pl-fe/hooks/use-theme';
 import AboutPage from 'pl-fe/pages/utils/about';
 import { getTextDirection } from 'pl-fe/utils/rtl';
 
-interface ILogoText extends Pick<React.HTMLAttributes<HTMLHeadingElement>, 'dir'> {
+interface ILogoText extends Pick<React.HTMLAttributes<HTMLHeadingElement>, 'className' | 'dir'> {
   children: React.ReactNode;
 }
 
 /** Big text in site colors, for displaying the site name. Resizes itself according to the screen size. */
-const LogoText: React.FC<ILogoText> = ({ children, dir }) => (
+const LogoText: React.FC<ILogoText> = ({ children, className, dir }) => (
   <h1
-    className='-my-5 overflow-hidden text-ellipsis bg-gradient-to-br from-accent-500 via-primary-500 to-gradient-end bg-clip-text text-5xl font-extrabold !leading-tight text-transparent lg:text-6xl xl:text-7xl'
+    className={clsx('overflow-hidden text-ellipsis bg-gradient-to-br from-accent-500 via-primary-500 to-gradient-end bg-clip-text text-5xl font-extrabold !leading-tight text-transparent lg:text-6xl xl:text-7xl', className)}
     dir={dir}
   >
     {children}
@@ -35,7 +36,7 @@ const SiteBanner: React.FC = () => {
 
   return (
     <Stack space={6}>
-      <LogoText dir={getTextDirection(instance.title)}>
+      <LogoText className='-my-5' dir={getTextDirection(instance.title)}>
         {instance.title}
       </LogoText>
 
