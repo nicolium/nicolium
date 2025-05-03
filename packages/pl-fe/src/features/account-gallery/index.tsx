@@ -29,6 +29,7 @@ const AccountGallery = () => {
   const attachments: Array<AccountGalleryAttachment> = useAppSelector((state) => account ? getAccountGallery(state, account.id) : []);
   const isLoading = useAppSelector((state) => state.timelines[`account:${account?.id}:with_replies:media`]?.isLoading);
   const hasMore = useAppSelector((state) => state.timelines[`account:${account?.id}:with_replies:media`]?.hasMore);
+  const afterInitialLoad = useAppSelector((state) => state.timelines[`account:${account?.id}:with_replies:media`]?.loaded);
 
   const handleScrollToBottom = () => {
     if (hasMore) {
@@ -59,7 +60,7 @@ const AccountGallery = () => {
   };
 
   useEffect(() => {
-    if (account) {
+    if (account && !afterInitialLoad) {
       dispatch(fetchAccountTimeline(account.id, { only_media: true, limit: 40 }));
     }
   }, [account?.id]);

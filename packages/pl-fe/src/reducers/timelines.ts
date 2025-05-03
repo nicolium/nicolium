@@ -36,6 +36,7 @@ interface Timeline {
   totalQueuedItemsCount: number; //used for queuedItems overflow for MAX_QUEUED_ITEMS+
   loadingFailed: boolean;
   isPartial: boolean;
+  loaded: boolean;
 }
 
 const newTimeline = (): Timeline => ({
@@ -50,6 +51,7 @@ const newTimeline = (): Timeline => ({
   totalQueuedItemsCount: 0, //used for queuedItems overflow for MAX_QUEUED_ITEMS+
   loadingFailed: false,
   isPartial: false,
+  loaded: false,
 });
 
 const initialState: State = {};
@@ -105,6 +107,7 @@ const expandNormalizedTimeline = (
     timeline.isPartial = isPartial;
     timeline.next = next;
     timeline.prev = prev;
+    timeline.loaded = true;
 
     if (!next && !isLoadingRecent) timeline.hasMore = false;
 
