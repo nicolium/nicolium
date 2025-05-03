@@ -44,7 +44,7 @@ import Text from './ui/text';
 
 import type { Menu } from 'pl-fe/components/dropdown-menu';
 import type { Emoji as EmojiType } from 'pl-fe/features/emoji';
-import type { UnauthorizedModalAction } from 'pl-fe/features/ui/components/modals/unauthorized-modal';
+import type { UnauthorizedModalAction } from 'pl-fe/modals/unauthorized-modal';
 import type { Account } from 'pl-fe/normalizers/account';
 import type { Group } from 'pl-fe/normalizers/group';
 import type { SelectedStatus } from 'pl-fe/selectors';

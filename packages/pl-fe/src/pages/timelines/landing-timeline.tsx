@@ -13,9 +13,8 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
 import { useTheme } from 'pl-fe/hooks/use-theme';
-import AboutPage from 'pl-fe/pages/about';
+import AboutPage from 'pl-fe/pages/utils/about';
 import { getTextDirection } from 'pl-fe/utils/rtl';
-
 
 interface ILogoText extends Pick<React.HTMLAttributes<HTMLHeadingElement>, 'dir'> {
   children: React.ReactNode;
@@ -102,4 +101,4 @@ const LandingTimelinePage = () => {
   );
 };
 
-export { LandingTimelinePage as default };
+export { LandingTimelinePage as default, LogoText };

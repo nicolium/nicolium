@@ -204,7 +204,6 @@ const Account = ({
     }
   }, [overflowRef, actionRef]);
 
-
   if (!account) {
     return null;
   }

@@ -29,7 +29,6 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 import { cryptoAddressSchema, footerItemSchema, plFeConfigSchema, promoPanelItemSchema, type PlFeConfig } from 'pl-fe/normalizers/pl-fe/pl-fe-config';
 import toast from 'pl-fe/toast';
 
-
 const messages = defineMessages({
   heading: { id: 'column.plfe_config', defaultMessage: 'Front-end configuration' },
   saved: { id: 'plfe_config.saved', defaultMessage: 'pl-fe config saved!' },
