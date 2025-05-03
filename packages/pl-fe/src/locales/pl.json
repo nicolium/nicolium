@@ -664,6 +664,7 @@
   "edit_profile.fields.display_name_label": "Nazwa wyświetlana",
   "edit_profile.fields.display_name_placeholder": "Nazwa",
   "edit_profile.fields.hide_network_label": "Ukryj swoją sieć",
+  "edit_profile.fields.is_cat_label": "Ten użytkownik jest kotem",
   "edit_profile.fields.location_label": "Lokalizacja",
   "edit_profile.fields.location_placeholder": "Lokalizacja",
   "edit_profile.fields.locked_label": "Zablokuj konto",
