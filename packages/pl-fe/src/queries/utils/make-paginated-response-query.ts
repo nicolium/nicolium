@@ -8,6 +8,7 @@ const makePaginatedResponseQuery = <T1 extends Array<any>, T2, T3 = Array<T2>>(
   queryKey: (...params: T1) => Array<string | undefined>,
   queryFn: (client: PlApiClient, params: T1) => Promise<PaginatedResponse<T2>>,
   select?: (data: InfiniteData<PaginatedResponse<T2>>) => T3,
+  enabled?: (...params: T1) => boolean,
 ) => (...params: T1) => {
     const client = useClient();
 
@@ -17,6 +18,7 @@ const makePaginatedResponseQuery = <T1 extends Array<any>, T2, T3 = Array<T2>>(
       initialPageParam: { previous: null, next: null, items: [], partial: false } as Awaited<ReturnType<typeof queryFn>>,
       getNextPageParam: (page) => page.next ? page : undefined,
       select: select ?? ((data) => data.pages.map(page => page.items).flat() as T3),
+      enabled: enabled?.(...params) ?? true,
     });
   };
 
