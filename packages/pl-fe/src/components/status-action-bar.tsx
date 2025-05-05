@@ -11,8 +11,6 @@ import { deleteStatusModal, toggleStatusSensitivityModal } from 'pl-fe/actions/m
 import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
 import { changeSetting } from 'pl-fe/actions/settings';
 import { deleteStatus, editStatus, toggleMuteStatus } from 'pl-fe/actions/statuses';
-import { deleteFromTimelines } from 'pl-fe/actions/timelines';
-import { useDeleteGroupStatus } from 'pl-fe/api/hooks/groups/use-delete-group-status';
 import { useGroup } from 'pl-fe/api/hooks/groups/use-group';
 import { useGroupRelationship } from 'pl-fe/api/hooks/groups/use-group-relationship';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
@@ -596,7 +594,6 @@ const MenuButton: React.FC<IMenuButton> = ({
   const targetLanguage = statusesMeta[status.id]?.targetLanguage;
   const { openModal } = useModalsStore();
   const { group } = useGroup((status.group as Group)?.id as string);
-  const deleteGroupStatus = useDeleteGroupStatus(group as Group, status.id);
   const { mutate: blockGroupMember } = useBlockGroupUserMutation(status.group?.id as string, status.account.id);
   const { getOrCreateChatByAccountId } = useChats();
 
@@ -640,13 +637,13 @@ const MenuButton: React.FC<IMenuButton> = ({
 
     const doDeleteStatus = (withRedraft = false) => {
       if (!deleteModal) {
-        dispatch(deleteStatus(status.id, withRedraft));
+        dispatch(deleteStatus(status.id, undefined, withRedraft));
       } else {
         openModal('CONFIRM', {
           heading: intl.formatMessage(withRedraft ? messages.redraftHeading : messages.deleteHeading),
           message: intl.formatMessage(withRedraft ? messages.redraftMessage : messages.deleteMessage),
           confirm: intl.formatMessage(withRedraft ? messages.redraftConfirm : messages.deleteConfirm),
-          onConfirm: () => dispatch(deleteStatus(status.id, withRedraft)),
+          onConfirm: () => dispatch(deleteStatus(status.id, undefined, withRedraft)),
         });
       }
     };
@@ -765,11 +762,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         message: intl.formatMessage(messages.deleteFromGroupMessage, { name: <strong className='break-words'>{account.username}</strong> }),
         confirm: intl.formatMessage(messages.deleteConfirm),
         onConfirm: () => {
-          deleteGroupStatus.mutate(status.id, {
-            onSuccess() {
-              dispatch(deleteFromTimelines(status.id));
-            },
-          });
+          dispatch(deleteStatus(status.id, group?.id));
         },
       });
     };

@@ -108,7 +108,7 @@ const fetchStatus = (statusId: string, intl?: IntlShape) =>
     });
   };
 
-const deleteStatus = (statusId: string, withRedraft = false) =>
+const deleteStatus = (statusId: string, groupId?: string, withRedraft = false) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
@@ -119,7 +119,11 @@ const deleteStatus = (statusId: string, withRedraft = false) =>
 
     dispatch<StatusesAction>({ type: STATUS_DELETE_REQUEST, params: status });
 
-    return getClient(state).statuses.deleteStatus(statusId).then(response => {
+    return (
+      groupId
+        ? getClient(state).experimental.groups.deleteGroupStatus(statusId, groupId)
+        : getClient(state).statuses.deleteStatus(statusId)
+    ).then(response => {
       dispatch<StatusesAction>({ type: STATUS_DELETE_SUCCESS, statusId });
       dispatch(deleteFromTimelines(statusId));
 

@@ -125,7 +125,7 @@ describe('deleteStatus()', () => {
           { type: 'MODAL_CLOSE', modalType: 'COMPOSE', modalProps: undefined },
           { type: 'MODAL_OPEN', modalType: 'COMPOSE', modalProps: undefined },
         ];
-        await store.dispatch(deleteStatus(statusId, true));
+        await store.dispatch(deleteStatus(statusId, undefined, true));
         const actions = store.getActions();
 
         expect(actions).toEqual(expectedActions);
@@ -151,7 +151,7 @@ describe('deleteStatus()', () => {
             error: new Error('Network Error'),
           },
         ];
-        await store.dispatch(deleteStatus(statusId, true));
+        await store.dispatch(deleteStatus(statusId, undefined, true));
         const actions = store.getActions();
 
         expect(actions).toEqual(expectedActions);
