@@ -5655,7 +5655,7 @@ class PlApiClient {
       deleteGroupStatus: async (groupId: string, statusId: string) => {
         const response = await this.request(`/api/v1/groups/${groupId}/statuses/${statusId}`, { method: 'DELETE' });
 
-        return response.json as {};
+        return v.parse(statusSchema, response.json);
       },
 
       /** list accounts blocked from interacting with the group */
