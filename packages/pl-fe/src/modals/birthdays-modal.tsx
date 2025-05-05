@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -7,13 +6,13 @@ import ScrollableList from 'pl-fe/components/scrollable-list';
 import Modal from 'pl-fe/components/ui/modal';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Account from 'pl-fe/features/birthdays/account';
-import { birthdayRemindersQueryOptions } from 'pl-fe/queries/accounts/birthday-reminders';
+import { useBirthdayReminders } from 'pl-fe/queries/accounts/use-birthday-reminders';
 
 import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
 const BirthdaysModal = ({ onClose }: BaseModalProps) => {
   const [[day, month]] = useState(getCurrentDate);
-  const { data: accountIds } = useQuery(birthdayRemindersQueryOptions(month, day));
+  const { data: accountIds } = useBirthdayReminders(month, day);
 
   const onClickClose = () => {
     onClose('BIRTHDAYS');

@@ -1,10 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
 import React, { useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Widget from 'pl-fe/components/ui/widget';
 import AccountContainer from 'pl-fe/containers/account-container';
-import { birthdayRemindersQueryOptions } from 'pl-fe/queries/accounts/birthday-reminders';
+import { useBirthdayReminders } from 'pl-fe/queries/accounts/use-birthday-reminders';
 
 const timeToMidnight = () => {
   const now = new Date();
@@ -29,7 +28,7 @@ interface IBirthdayPanel {
 const BirthdayPanel = ({ limit }: IBirthdayPanel) => {
   const [[day, month], setDate] = useState(getCurrentDate);
 
-  const { data: birthdays = [] } = useQuery(birthdayRemindersQueryOptions(month, day));
+  const { data: birthdays = [] } = useBirthdayReminders(month, day);
   const birthdaysToRender = birthdays.slice(0, limit);
 
   const timeout = useRef<NodeJS.Timeout>();

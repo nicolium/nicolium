@@ -5,7 +5,7 @@ import errorsMiddleware from './middleware/errors';
 import soundsMiddleware from './middleware/sounds';
 import appReducer from './reducers';
 
-const untypedStore = configureStore({
+const store = configureStore({
   reducer: appReducer,
   middleware: () => new Tuple(
     thunk,
@@ -14,10 +14,6 @@ const untypedStore = configureStore({
   ),
   devTools: true,
 });
-
-const store = untypedStore as Omit<typeof untypedStore, 'dispatch'> & {
-  dispatch: AppDispatch;
-};
 
 type Store = typeof store;
 
