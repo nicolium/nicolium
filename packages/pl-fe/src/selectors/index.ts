@@ -49,8 +49,6 @@ const makeGetAccount = () => createSelector([
   };
 });
 
-type SelectedAccount = Exclude<ReturnType<ReturnType<typeof makeGetAccount>>, null>;
-
 const toServerSideType = (columnType: string): Filter['context'][0] => {
   switch (columnType) {
     case 'home':
@@ -314,13 +312,11 @@ export {
   selectAccounts,
   selectOwnAccount,
   makeGetAccount,
-  type SelectedAccount,
   getFilters,
   regexFromFilters,
   makeGetStatus,
   type SelectedStatus,
   makeGetNotification,
-  type SelectedNotification,
   makeGetReport,
   makeGetOtherAccounts,
   makeGetHosts,

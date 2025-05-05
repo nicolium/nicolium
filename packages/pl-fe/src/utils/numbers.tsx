@@ -49,12 +49,9 @@ const shortNumberFormat = (number: any, max?: number): React.ReactNode => {
 /** Check if an entity ID is an integer (eg not a FlakeId). */
 const isIntegerId = (id: string): boolean => new RegExp(/^-?[0-9]+$/g).test(id);
 
-const roundTo10 = (num: number) => Math.round(num / 10) * 10;
-
 export {
   isNumber,
   roundDown,
   shortNumberFormat,
   isIntegerId,
-  roundTo10,
 };
