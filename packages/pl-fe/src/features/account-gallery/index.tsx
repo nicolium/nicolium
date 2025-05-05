@@ -1,22 +1,18 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { useParams } from 'react-router-dom';
 
-import { fetchAccountTimeline } from 'pl-fe/actions/timelines';
 import { useAccountLookup } from 'pl-fe/api/hooks/accounts/use-account-lookup';
 import LoadMore from 'pl-fe/components/load-more';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import Column from 'pl-fe/components/ui/column';
 import Spinner from 'pl-fe/components/ui/spinner';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { type AccountGalleryAttachment, getAccountGallery } from 'pl-fe/selectors';
+import { type AccountGalleryAttachment, useAccountGallery } from 'pl-fe/hooks/use-account-gallery';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
 import MediaItem from './components/media-item';
 
 const AccountGallery = () => {
-  const dispatch = useAppDispatch();
   const { username } = useParams<{ username: string }>();
   const { openModal } = useModalsStore();
 
@@ -26,9 +22,7 @@ const AccountGallery = () => {
     isUnavailable,
   } = useAccountLookup(username, { withRelationship: true });
 
-  const attachments: Array<AccountGalleryAttachment> = useAppSelector((state) => account ? getAccountGallery(state, account.id) : []);
-  const isLoading = useAppSelector((state) => state.timelines[`account:${account?.id}:with_replies:media`]?.isLoading);
-  const hasMore = useAppSelector((state) => state.timelines[`account:${account?.id}:with_replies:media`]?.hasMore);
+  const { data: attachments, isFetching, isLoading, hasNextPage: hasMore, fetchNextPage } = useAccountGallery(account?.id!);
 
   const handleScrollToBottom = () => {
     if (hasMore) {
@@ -37,9 +31,7 @@ const AccountGallery = () => {
   };
 
   const handleLoadMore = () => {
-    if (account) {
-      dispatch(fetchAccountTimeline(account.id, { only_media: true }, true));
-    }
+    fetchNextPage({ cancelRefetch: false });
   };
 
   const handleLoadOlder: React.MouseEventHandler = e => {
@@ -49,22 +41,13 @@ const AccountGallery = () => {
 
   const handleOpenMedia = (attachment: AccountGalleryAttachment) => {
     if (attachment.type === 'video') {
-      openModal('VIDEO', { media: attachment, statusId: attachment.status.id });
+      openModal('VIDEO', { media: attachment, statusId: attachment.status_id });
     } else {
-      const media = attachment.status.media_attachments;
-      const index = media.findIndex((x) => x.id === attachment.id);
-
-      openModal('MEDIA', { media, index, statusId: attachment.status.id });
+      openModal('MEDIA', { index: attachment.index, statusId: attachment.status_id });
     }
   };
 
-  useEffect(() => {
-    if (account) {
-      dispatch(fetchAccountTimeline(account.id, { only_media: true, limit: 40 }));
-    }
-  }, [account?.id]);
-
-  if (accountLoading || (!attachments && isLoading)) {
+  if (accountLoading || isLoading) {
     return (
       <Column>
         <Spinner />
@@ -80,8 +63,8 @@ const AccountGallery = () => {
 
   let loadOlder = null;
 
-  if (hasMore && !(isLoading && attachments.length === 0)) {
-    loadOlder = <LoadMore className='my-auto mt-4' visible={!isLoading} onClick={handleLoadOlder} />;
+  if (hasMore && !(isFetching && attachments.length === 0)) {
+    loadOlder = <LoadMore className='my-auto mt-4' visible={!isFetching} onClick={handleLoadOlder} />;
   }
 
   if (isUnavailable) {
@@ -99,7 +82,7 @@ const AccountGallery = () => {
       <div role='feed' className='grid grid-cols-2 gap-1 overflow-hidden rounded-md sm:grid-cols-3'>
         {attachments.map((attachment, index) => (
           <MediaItem
-            key={`${attachment.status.id}+${attachment.id}`}
+            key={`${attachment.status_id}+${attachment.id}`}
             attachment={attachment}
             onOpenMedia={handleOpenMedia}
             isLast={index === attachments.length - 1}
@@ -115,7 +98,7 @@ const AccountGallery = () => {
 
       {loadOlder}
 
-      {isLoading && attachments.length === 0 && (
+      {isFetching && attachments.length === 0 && (
         <div className='relative flex-auto px-8 py-4'>
           <Spinner />
         </div>

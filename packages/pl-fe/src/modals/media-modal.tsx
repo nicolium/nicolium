@@ -47,7 +47,7 @@ const containerStyle: React.CSSProperties = {
 };
 
 interface MediaModalProps {
-  media: Array<MediaAttachment>;
+  media?: Array<MediaAttachment>;
   statusId?: string;
   index: number;
   time?: number;
@@ -55,7 +55,6 @@ interface MediaModalProps {
 
 const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   const {
-    media,
     statusId,
     onClose,
     time = 0,
@@ -66,6 +65,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector((state) => statusId ? getStatus(state, { id: statusId }) : undefined);
+  const media = status?.media_attachments || props.media || [];
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
   const [index, setIndex] = useState<number | null>(null);

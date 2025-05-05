@@ -2,13 +2,14 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import Blurhash from 'pl-fe/components/blurhash';
 import Icon from 'pl-fe/components/icon';
 import StillImage from 'pl-fe/components/still-image';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import { isIOS } from 'pl-fe/is-mobile';
 
-import type { AccountGalleryAttachment } from 'pl-fe/selectors';
+import type { AccountGalleryAttachment } from 'pl-fe/hooks/use-account-gallery';
 
 interface IMediaItem {
   attachment: AccountGalleryAttachment;
@@ -18,7 +19,8 @@ interface IMediaItem {
 
 const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) => {
   const { autoPlayGif, displayMedia } = useSettings();
-  const [visible, setVisible] = useState<boolean>(displayMedia !== 'hide_all' && !attachment.status?.sensitive || displayMedia === 'show_all');
+  const { account } = useAccount(attachment.account_id);
+  const [visible, setVisible] = useState<boolean>(displayMedia !== 'hide_all' && !attachment.sensitive || displayMedia === 'show_all');
 
   const handleMouseEnter: React.MouseEventHandler<HTMLVideoElement> = e => {
     const video = e.target as HTMLVideoElement;
@@ -49,8 +51,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
     }
   };
 
-  const status = attachment.status;
-  const title = status.spoiler_text || attachment.description;
+  const title = attachment.description;
 
   let thumbnail: React.ReactNode = '';
   let icon;
@@ -119,7 +120,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
 
   return (
     <div className='col-span-1'>
-      <Link className='media-gallery__item-thumbnail aspect-1' to={`/@${status.account.acct}/posts/${status.id}`} onClick={handleClick} title={title}>
+      <Link className='media-gallery__item-thumbnail aspect-1' to={`/@${account?.acct}/posts/${attachment.status_id}`} onClick={handleClick} title={title}>
         <Blurhash
           hash={attachment.blurhash}
           className={clsx('media-gallery__preview', {

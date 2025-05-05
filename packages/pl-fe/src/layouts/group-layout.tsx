@@ -116,7 +116,9 @@ const GroupLayout: React.FC<IGroupLayout> = ({ params, children }) => {
         {!me && (
           <SignUpPanel />
         )}
-        <GroupMediaPanel group={group} />
+        {group && (group.relationship?.member || !group.locked) && (
+          <GroupMediaPanel group={group} />
+        )}
         <LinkFooter />
       </Layout.Aside>
     </>

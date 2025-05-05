@@ -2,16 +2,14 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { useGroup } from 'pl-fe/api/hooks/groups/use-group';
-import { useGroupMedia } from 'pl-fe/api/hooks/groups/use-group-media';
 import LoadMore from 'pl-fe/components/load-more';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import Column from 'pl-fe/components/ui/column';
 import Spinner from 'pl-fe/components/ui/spinner';
 import MediaItem from 'pl-fe/features/account-gallery/components/media-item';
+import { type AccountGalleryAttachment, useGroupGallery } from 'pl-fe/hooks/use-account-gallery';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
-import type { Status } from 'pl-fe/normalizers/status';
-import type { AccountGalleryAttachment } from 'pl-fe/selectors';
 
 interface IGroupGallery {
   params: { groupId: string };
@@ -24,27 +22,13 @@ const GroupGallery: React.FC<IGroupGallery> = (props) => {
 
   const { group, isLoading: groupIsLoading } = useGroup(groupId);
 
-  const {
-    entities: statuses,
-    fetchNextPage,
-    isLoading,
-    isFetching,
-    hasNextPage,
-  } = useGroupMedia(groupId);
-
-  const attachments = statuses.reduce<AccountGalleryAttachment[]>((result, status) => {
-    result.push(...status.media_attachments.map((a) => ({ ...a, status, account: status.account })));
-    return result;
-  }, []);
+  const { data: attachments, isFetching, isLoading, hasNextPage, fetchNextPage } = useGroupGallery(groupId);
 
   const handleOpenMedia = (attachment: AccountGalleryAttachment) => {
     if (attachment.type === 'video') {
-      openModal('VIDEO', { media: attachment, statusId: attachment.status.id });
+      openModal('VIDEO', { media: attachment, statusId: attachment.status_id });
     } else {
-      const media = (attachment.status as Status).media_attachments;
-      const index = media.findIndex((x) => x.id === attachment.id);
-
-      openModal('MEDIA', { media, index, statusId: attachment.status.id });
+      openModal('MEDIA', { index: attachment.index, statusId: attachment.status_id });
     }
   };
 
@@ -71,7 +55,7 @@ const GroupGallery: React.FC<IGroupGallery> = (props) => {
       <div role='feed' className='mt-4 grid grid-cols-2 gap-1 overflow-hidden rounded-md sm:grid-cols-3'>
         {attachments.map((attachment, index) => (
           <MediaItem
-            key={`${attachment.status.id}+${attachment.id}`}
+            key={`${attachment.status_id}+${attachment.id}`}
             attachment={attachment}
             onOpenMedia={handleOpenMedia}
             isLast={index === attachments.length - 1}
@@ -86,7 +70,7 @@ const GroupGallery: React.FC<IGroupGallery> = (props) => {
       </div>
 
       {hasNextPage && (
-        <LoadMore className='mt-4' disabled={isFetching} onClick={fetchNextPage} />
+        <LoadMore className='mt-4' disabled={isFetching} onClick={() => fetchNextPage({ cancelRefetch: false })} />
       )}
     </Column>
   );

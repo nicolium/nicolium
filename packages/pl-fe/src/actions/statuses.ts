@@ -11,7 +11,7 @@ import { setComposeToStatus } from './compose';
 import { importEntities } from './importer';
 import { deleteFromTimelines } from './timelines';
 
-import type { CreateStatusParams, Status as BaseStatus, ScheduledStatus } from 'pl-api';
+import type { CreateStatusParams, Status as BaseStatus, ScheduledStatus, StatusSource } from 'pl-api';
 import type { Status } from 'pl-fe/normalizers/status';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 import type { IntlShape } from 'react-intl';
@@ -128,7 +128,7 @@ const deleteStatus = (statusId: string, groupId?: string, withRedraft = false) =
       dispatch(deleteFromTimelines(statusId));
 
       if (withRedraft) {
-        dispatch(setComposeToStatus(status, poll, response.text || '', response.spoiler_text, response.content_type, withRedraft));
+        dispatch(setComposeToStatus(status, poll, response.text || '', response.spoiler_text, (response as StatusSource).content_type, withRedraft));
         useModalsStore.getState().openModal('COMPOSE');
       }
     })
