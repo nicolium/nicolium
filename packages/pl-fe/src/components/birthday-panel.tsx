@@ -59,7 +59,6 @@ const BirthdayPanel = ({ limit }: IBirthdayPanel) => {
       {birthdaysToRender.map(accountId => (
         <AccountContainer
           key={accountId}
-          // @ts-ignore: TS thinks `id` is passed to <Account>, but it isn't
           id={accountId}
           withRelationship={false}
         />

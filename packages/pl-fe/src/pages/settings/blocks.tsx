@@ -1,11 +1,12 @@
+import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useBlocks } from 'pl-fe/api/hooks/accounts/use-account-list';
-import Account from 'pl-fe/components/account';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Column from 'pl-fe/components/ui/column';
 import Spinner from 'pl-fe/components/ui/spinner';
+import AccountContainer from 'pl-fe/containers/account-container';
+import { useBlocks } from 'pl-fe/queries/account-lists/use-blocks';
 
 const messages = defineMessages({
   heading: { id: 'column.blocks', defaultMessage: 'Blocks' },
@@ -15,10 +16,11 @@ const BlocksPage: React.FC = () => {
   const intl = useIntl();
 
   const {
-    accounts,
+    data = [],
     hasNextPage,
     fetchNextPage,
     isLoading,
+    isFetching,
   } = useBlocks();
 
   if (isLoading) {
@@ -39,10 +41,11 @@ const BlocksPage: React.FC = () => {
         hasMore={hasNextPage}
         emptyMessage={emptyMessage}
         emptyMessageCard={false}
-        itemClassName='pb-4 last:pb-0'
+        itemClassName={clsx('pb-4', { 'last:pb-0': !hasNextPage })}
+        isLoading={isFetching}
       >
-        {accounts.map((account) => (
-          <Account key={account.id} account={account} actionType='blocking' />
+        {data.map((accountId) => (
+          <AccountContainer key={accountId} id={accountId} actionType='blocking' />
         ))}
       </ScrollableList>
     </Column>

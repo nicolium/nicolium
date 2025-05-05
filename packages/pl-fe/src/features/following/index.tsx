@@ -1,13 +1,13 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useFollowing } from 'pl-fe/api/hooks/accounts/use-account-list';
 import { useAccountLookup } from 'pl-fe/api/hooks/accounts/use-account-lookup';
-import Account from 'pl-fe/components/account';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Column from 'pl-fe/components/ui/column';
 import Spinner from 'pl-fe/components/ui/spinner';
+import AccountContainer from 'pl-fe/containers/account-container';
+import { useFollowing } from 'pl-fe/queries/account-lists/use-follows';
 
 const messages = defineMessages({
   heading: { id: 'column.following', defaultMessage: 'Following' },
@@ -26,9 +26,10 @@ const Following: React.FC<IFollowing> = ({ params }) => {
   const { account, isUnavailable } = useAccountLookup(params?.username);
 
   const {
-    accounts,
+    data = [],
     hasNextPage,
     fetchNextPage,
+    isFetching,
     isLoading,
   } = useFollowing(account?.id);
 
@@ -60,9 +61,13 @@ const Following: React.FC<IFollowing> = ({ params }) => {
         onLoadMore={fetchNextPage}
         emptyMessage={<FormattedMessage id='account.follows.empty' defaultMessage="This user doesn't follow anyone yet." />}
         itemClassName='pb-4'
+        isLoading={isFetching}
       >
-        {accounts.map((account) => (
-          <Account key={account.id} account={account} />
+        {data.map((accountId) => (
+          <AccountContainer
+            key={accountId}
+            id={accountId}
+          />
         ))}
       </ScrollableList>
     </Column>
