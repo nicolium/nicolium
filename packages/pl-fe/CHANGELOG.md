@@ -38,6 +38,9 @@ Changes made since the project forked from Soapbox in April 2024.
 - When adding a URL with tracking parameters, a suggestion to remove them from the URL is displayed.
 - On supported backends, you can see post preview before posting.
 
+**Dashboard:**
+- Dashboard main page displays metrics included in Mastodon admin dashboard, if supported by backend.
+
 **Features:**
 - The most recent scrobble is displayed on user profile/card.
 - Users can generate *interaction circles* for their profiles.
@@ -57,6 +60,7 @@ Changes made since the project forked from Soapbox in April 2024.
 - Users can configure redirects from popular websites to proxy services like Nitter and Piped in displayed posts.
 - It is possible to boost a post with specific visibility, if supported by backend.
 - Pleroma shoutbox is displayed on chats page.
+- Displaying user-provided media can be disabled, media descriptions will be displayed instead.
 
 ### Changed
 
@@ -123,3 +127,4 @@ Changes made since the project forked from Soapbox in April 2024.
 - Unsupported content types are not listed as available, when composing a post.
 - Admin dashboard now works on non-Pleroma backends.
 - Removed excessive calls to `fetchOwnAccounts`.
+- Media modal displays the whole thread correctly.
