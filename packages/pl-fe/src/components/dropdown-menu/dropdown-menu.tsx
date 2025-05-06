@@ -143,7 +143,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
     <div ref={ref}>
       {items?.some(item => item?.items?.length) ? (
         <ReactSwipeableViews animateHeight index={tab === undefined ? 0 : 1}>
-          <div className={clsx({ 'w-full': touchscreen })}>
+          <div className={clsx('max-w-full', { 'w-full': touchscreen })}>
             {Component && <Component handleClose={handleClose} />}
             {(items?.length || touchscreen) && renderItems(items)}
           </div>
