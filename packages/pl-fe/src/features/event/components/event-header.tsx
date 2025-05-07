@@ -419,21 +419,23 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
             </span>
           </HStack>
 
-          <HStack alignItems='center' space={2}>
-            <Icon src={require('@tabler/icons/outline/users.svg')} />
-            <a href='#' className='hover:underline' onClick={handleParticipantsClick}>
-              <span>
-                <FormattedMessage
-                  id='event.participants'
-                  defaultMessage='{count} {rawCount, plural, one {person} other {people}} going'
-                  values={{
-                    rawCount: event.participants_count || 0,
-                    count: shortNumberFormat(event.participants_count || 0),
-                  }}
-                />
-              </span>
-            </a>
-          </HStack>
+          {event.join_mode !== 'external' || event.participants_count > 0 && (
+            <HStack alignItems='center' space={2}>
+              <Icon src={require('@tabler/icons/outline/users.svg')} />
+              <a href='#' className='hover:underline' onClick={handleParticipantsClick}>
+                <span>
+                  <FormattedMessage
+                    id='event.participants'
+                    defaultMessage='{count} {rawCount, plural, one {person} other {people}} going'
+                    values={{
+                      rawCount: event.participants_count,
+                      count: shortNumberFormat(event.participants_count),
+                    }}
+                  />
+                </span>
+              </a>
+            </HStack>
+          )}
 
           <EventDate status={status} />
 
