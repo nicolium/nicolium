@@ -44,6 +44,11 @@ const messages = defineMessages({
   unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
   quotePost: { id: 'event.quote', defaultMessage: 'Quote event' },
   reblog: { id: 'event.reblog', defaultMessage: 'Repost event' },
+  reblog_private: { id: 'status.reblog_private', defaultMessage: 'Repost to original audience' },
+  cancel_reblog_private: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },
+  reblog_visibility_public: { id: 'status.reblog_visibility_public', defaultMessage: 'Public repost' },
+  reblog_visibility_unlisted: { id: 'status.reblog_visibility_unlisted', defaultMessage: 'Unlisted repost' },
+  reblog_visibility_private: { id: 'status.reblog_visibility_private', defaultMessage: 'Followers-only repost' },
   unreblog: { id: 'event.unreblog', defaultMessage: 'Un-repost event' },
   pin: { id: 'status.pin', defaultMessage: 'Pin on profile' },
   unpin: { id: 'status.unpin', defaultMessage: 'Unpin from profile' },
@@ -125,8 +130,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
     dispatch(toggleBookmark(status));
   };
 
-  const handleReblogClick = () => {
-    const modalReblog = () => dispatch(toggleReblog(status));
+  const handleReblogClick = (visibility?: string) => {
+    const modalReblog = () => dispatch(toggleReblog(status, visibility));
     if (!boostModal) {
       modalReblog();
     } else {
@@ -238,10 +243,30 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       });
     }
 
-    if (['public', 'unlisted'].includes(status.visibility)) {
+    if (ownAccount.id === account.id && ['public', 'unlisted'].includes(status.visibility)) {
       menu.push({
         text: intl.formatMessage(status.reblogged ? messages.unreblog : messages.reblog),
-        action: handleReblogClick,
+        ...(features.reblogVisibility && !status.reblogged ? {
+          items: [
+            {
+              text: intl.formatMessage(messages.reblog_visibility_public),
+              action: () => handleReblogClick('public'),
+              icon: require('@tabler/icons/outline/world.svg'),
+            },
+            {
+              text: intl.formatMessage(messages.reblog_visibility_unlisted),
+              action: () => handleReblogClick('unlisted'),
+              icon: require('@tabler/icons/outline/lock-open.svg'),
+            },
+            {
+              text: intl.formatMessage(messages.reblog_visibility_private),
+              action: () => handleReblogClick('private'),
+              icon: require('@tabler/icons/outline/lock.svg'),
+            },
+          ],
+        } : {
+          action: () => handleReblogClick(),
+        }),
         icon: require('@tabler/icons/outline/repeat.svg'),
       });
 
@@ -252,6 +277,12 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
           icon: require('@tabler/icons/outline/quote.svg'),
         });
       }
+    } else if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
+      menu.push({
+        text: intl.formatMessage(status.reblogged ? messages.cancel_reblog_private : messages.reblog_private),
+        action: () => handleReblogClick(),
+        icon: require('@tabler/icons/outline/repeat.svg'),
+      });
     }
 
     menu.push(null);
