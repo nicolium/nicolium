@@ -12,6 +12,7 @@ const {
   NODE_ENV,
   BACKEND_URL,
   FE_SUBDIRECTORY,
+  WITH_LANDING_PAGE,
 } = process.env;
 
 const sanitizeURL = (url: string | undefined = ''): string => {
@@ -28,6 +29,7 @@ const env = {
   NODE_ENV: NODE_ENV || 'development',
   BACKEND_URL: sanitizeURL(BACKEND_URL),
   FE_SUBDIRECTORY: sanitizeBasename(FE_SUBDIRECTORY),
+  WITH_LANDING_PAGE: WITH_LANDING_PAGE === 'true',
 };
 
 export type PlFeEnv = typeof env;

@@ -872,6 +872,7 @@
   "gdpr.title": "{siteTitle} uses cookies",
   "generic.logo": "Logo",
   "generic.saved": "Saved",
+  "getting_started.footer_notice": "Proudly made in Poland. {emoji}",
   "getting_started.open_source_notice": "{code_name} is open source software. You can contribute or report issues at {code_link} (v{code_version}).",
   "group.cancel_request": "Cancel request",
   "group.delete.success": "Group successfully deleted",

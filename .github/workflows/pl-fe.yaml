@@ -34,13 +34,11 @@ jobs:
       working-directory: ./packages/pl-fe
       run: yarn lint
 
-    - name: build
+    - name: Build
       env:
         NODE_ENV: production
       working-directory: ./packages/pl-fe
-      run: |
-          yarn build
-          cp dist/index.html dist/404.html
+      run: yarn build
 
     - name: i18n
       working-directory: ./packages/pl-fe
@@ -48,7 +46,7 @@ jobs:
           yarn i18n
           git diff
           git diff --quiet || (echo "Locale files are out of date. Please run \`yarn i18n\`" && exit 1)
-    
+
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
@@ -57,7 +55,16 @@ jobs:
 
     - name: Include archive
       working-directory: ./packages/pl-fe/dist
-      run: zip -r pl-fe.zip .
+      run: zip -r ../pl-fe.zip .
+
+    - name: build
+      env:
+        NODE_ENV: production
+      working-directory: ./packages/pl-fe
+      run: |
+          WITH_LANDING_PAGE=true yarn build
+          cp dist/index.html dist/404.html
+          cp pl-fe.zip dist/pl-fe.zip
 
     - name: Install pl-api deps
       working-directory: ./packages/pl-api
