@@ -11,6 +11,7 @@ import { register as registerPushNotifications } from 'pl-fe/actions/push-notifi
 import { connectShoutbox } from 'pl-fe/actions/shoutbox';
 import { fetchHomeTimeline } from 'pl-fe/actions/timelines';
 import { useUserStream } from 'pl-fe/api/hooks/streaming/use-user-stream';
+import { WITH_LANDING_PAGE } from 'pl-fe/build-config';
 import SidebarNavigation from 'pl-fe/components/sidebar-navigation';
 import ThumbNavigation from 'pl-fe/components/thumb-navigation';
 import Layout from 'pl-fe/components/ui/layout';
@@ -108,6 +109,7 @@ import {
   IntentionalError,
   InteractionPolicies,
   InteractionRequests,
+  LandingPage,
   LandingTimeline,
   LinkTimeline,
   ListTimeline,
@@ -175,7 +177,9 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
   // Ex: use /login instead of /auth, but redirect /auth to /login
   return (
     <Switch>
-      {standalone && !isLoggedIn && <Redirect from='/' to='/login/external' exact />}
+      {standalone && !isLoggedIn && (WITH_LANDING_PAGE
+        ? <WrappedRoute path='/' exact layout={DefaultLayout} component={LandingPage} publicRoute />
+        : <Redirect from='/' to='/login/external' exact />)}
 
       <WrappedRoute path='/logout' layout={EmptyLayout} component={LogoutPage} publicRoute exact />
 

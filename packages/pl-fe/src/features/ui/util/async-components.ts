@@ -37,6 +37,7 @@ export const HomeTimeline = lazy(() => import('pl-fe/pages/timelines/home-timeli
 export const ImportData = lazy(() => import('pl-fe/pages/settings/import-data'));
 export const IntentionalError = lazy(() => import('pl-fe/pages/utils/intentional-error'));
 export const InteractionPolicies = lazy(() => import('pl-fe/pages/settings/interaction-policies'));
+export const LandingPage = lazy(() => import('pl-fe/pages/utils/landing'));
 export const LandingTimeline = lazy(() => import('pl-fe/pages/timelines/landing-timeline'));
 export const LinkTimeline = lazy(() => import('pl-fe/pages/timelines/link-timeline'));
 export const ListTimeline = lazy(() => import('pl-fe/pages/timelines/list-timeline'));
