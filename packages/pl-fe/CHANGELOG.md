@@ -14,7 +14,7 @@ Changes made since the project forked from Soapbox in April 2024.
 
 **Behavior:**
 - Notifications of the same type and reposts of the same post are grouped client-side.
-- Date is displayed fobr notifications that are not about new posts.
+- Date is displayed for notifications that are not about new posts.
 - Replies to your posts are displayed differently to other mentions in notification list.
 - Hashtags from the last line of a post are displayed in a separate component. Adapted [from Mastodon](https://github.com/mastodon/mastodon/pull/26499).
 - Native grouped notifications are used on Mastodon.
