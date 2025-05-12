@@ -89,11 +89,12 @@ const CardHeader: React.FC<ICardHeader> = ({ className, children, backHref, onBa
 
 interface ICardTitle {
   title: React.ReactNode;
+  truncate?: boolean;
 }
 
 /** A card's title. */
-const CardTitle: React.FC<ICardTitle> = ({ title }): JSX.Element => (
-  <Text size='xl' weight='bold' tag='h1' data-testid='card-title' truncate>{title}</Text>
+const CardTitle: React.FC<ICardTitle> = ({ title, truncate = true }): JSX.Element => (
+  <Text size='xl' weight='bold' tag='h1' data-testid='card-title' truncate={truncate}>{title}</Text>
 );
 
 interface ICardBody {
