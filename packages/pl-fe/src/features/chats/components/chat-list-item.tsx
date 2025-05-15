@@ -88,7 +88,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
       tabIndex={0}
     >
       <HStack alignItems='center' justifyContent='between' space={2} className='w-full'>
-        <HStack alignItems='center' space={2}>
+        <HStack alignItems='center' space={2} className='overflow-hidden'>
           <Avatar
             src={chat.account.avatar}
             alt={chat.account.avatar_description}
