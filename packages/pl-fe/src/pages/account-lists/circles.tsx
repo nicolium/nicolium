@@ -11,9 +11,8 @@ import Icon from 'pl-fe/components/ui/icon';
 import Input from 'pl-fe/components/ui/input';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Stack from 'pl-fe/components/ui/stack';
+import { getOrderedLists } from 'pl-fe/pages/account-lists/lists';
 import { useCircles, useCreateCircle } from 'pl-fe/queries/accounts/use-circles';
-
-import { getOrderedLists } from '../lists';
 
 const messages = defineMessages({
   heading: { id: 'column.circles', defaultMessage: 'Circles' },
@@ -69,7 +68,7 @@ const NewCircleForm: React.FC = () => {
   );
 };
 
-const Circles: React.FC = () => {
+const CirclesPage: React.FC = () => {
   const intl = useIntl();
 
   const { data: circles } = useCircles(getOrderedLists);
@@ -114,4 +113,4 @@ const Circles: React.FC = () => {
   );
 };
 
-export { Circles as default };
+export { CirclesPage as default };

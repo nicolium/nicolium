@@ -13,14 +13,14 @@ const messages = defineMessages({
   heading: { id: 'column.followers', defaultMessage: 'Followers' },
 });
 
-interface IFollowers {
+interface IFollowersPage {
   params?: {
     username?: string;
   };
 }
 
 /** Displays a list of accounts who follow the given account. */
-const Followers: React.FC<IFollowers> = ({ params }) => {
+const FollowersPage: React.FC<IFollowersPage> = ({ params }) => {
   const intl = useIntl();
 
   const { account, isUnavailable } = useAccountLookup(params?.username);
@@ -74,4 +74,4 @@ const Followers: React.FC<IFollowers> = ({ params }) => {
   );
 };
 
-export { Followers as default };
+export { FollowersPage as default };

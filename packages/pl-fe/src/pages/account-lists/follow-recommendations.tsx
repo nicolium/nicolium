@@ -12,7 +12,7 @@ const messages = defineMessages({
   heading: { id: 'follow_recommendations.heading', defaultMessage: 'Suggested profiles' },
 });
 
-const FollowRecommendations: React.FC = () => {
+const FollowRecommendationsPage: React.FC = () => {
   const intl = useIntl();
 
   const { data: suggestions, isFetching } = useSuggestions();
@@ -48,4 +48,4 @@ const FollowRecommendations: React.FC = () => {
   );
 };
 
-export { FollowRecommendations as default };
+export { FollowRecommendationsPage as default };

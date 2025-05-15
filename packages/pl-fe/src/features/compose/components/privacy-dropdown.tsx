@@ -4,10 +4,10 @@ import { useIntl, defineMessages, IntlShape } from 'react-intl';
 import { changeComposeFederated, changeComposeVisibility } from 'pl-fe/actions/compose';
 import DropdownMenu, { MenuItem } from 'pl-fe/components/dropdown-menu';
 import Button from 'pl-fe/components/ui/button';
-import { getOrderedLists } from 'pl-fe/features/lists';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useCompose } from 'pl-fe/hooks/use-compose';
 import { useFeatures } from 'pl-fe/hooks/use-features';
+import { getOrderedLists } from 'pl-fe/pages/account-lists/lists';
 import { useCircles } from 'pl-fe/queries/accounts/use-circles';
 import { useLists } from 'pl-fe/queries/accounts/use-lists';
 

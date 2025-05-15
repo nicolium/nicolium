@@ -7,13 +7,13 @@ import Spinner from 'pl-fe/components/ui/spinner';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { useOutgoingFollowRequests } from 'pl-fe/queries/accounts/use-follow-requests';
 
-import FollowRequestsTabs from './follow-requests-tabs';
+import { FollowRequestsTabs } from './follow-requests';
 
 const messages = defineMessages({
   heading: { id: 'column.outgoing_follow_requests', defaultMessage: 'Outgoing follow requests' },
 });
 
-const OutgoingFollowRequests: React.FC = () => {
+const OutgoingFollowRequestsPage: React.FC = () => {
   const intl = useIntl();
 
   const { data: accountIds, isLoading, hasNextPage, fetchNextPage } = useOutgoingFollowRequests();
@@ -42,4 +42,4 @@ const OutgoingFollowRequests: React.FC = () => {
   );
 };
 
-export { OutgoingFollowRequests as default };
+export { OutgoingFollowRequestsPage as default };

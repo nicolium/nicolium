@@ -5,9 +5,8 @@ import { setupListAdder, resetListAdder } from 'pl-fe/actions/lists';
 import { CardHeader, CardTitle } from 'pl-fe/components/ui/card';
 import Modal from 'pl-fe/components/ui/modal';
 import AccountContainer from 'pl-fe/containers/account-container';
-import { getOrderedLists } from 'pl-fe/features/lists';
-import NewListForm from 'pl-fe/features/lists/components/new-list-form';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { NewListForm, getOrderedLists } from 'pl-fe/pages/account-lists/lists';
 import { useLists } from 'pl-fe/queries/accounts/use-lists';
 
 import List from './components/list';
