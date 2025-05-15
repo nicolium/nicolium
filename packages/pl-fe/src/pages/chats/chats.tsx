@@ -1,8 +1,7 @@
 import React from 'react';
 
 import { ChatProvider } from 'pl-fe/contexts/chat-context';
-
-import ChatPage from './components/chat-page/chat-page';
+import ChatPage from 'pl-fe/features/chats/components/chat-page/chat-page';
 
 interface IChatIndex {
   params?: {

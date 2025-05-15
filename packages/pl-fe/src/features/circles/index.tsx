@@ -1,23 +1,73 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import List, { ListItem } from 'pl-fe/components/list';
+import Button from 'pl-fe/components/ui/button';
 import Card from 'pl-fe/components/ui/card';
 import Column from 'pl-fe/components/ui/column';
+import Form from 'pl-fe/components/ui/form';
 import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
+import Input from 'pl-fe/components/ui/input';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Stack from 'pl-fe/components/ui/stack';
-import { useCircles } from 'pl-fe/queries/accounts/use-circles';
+import { useCircles, useCreateCircle } from 'pl-fe/queries/accounts/use-circles';
 
 import { getOrderedLists } from '../lists';
-
-import NewCircleForm from './components/new-circle-form';
 
 const messages = defineMessages({
   heading: { id: 'column.circles', defaultMessage: 'Circles' },
   subheading: { id: 'circles.subheading', defaultMessage: 'Your circles' },
+  label: { id: 'circles.new.title_placeholder', defaultMessage: 'New circle title' },
+  title: { id: 'circles.new.create', defaultMessage: 'Add circle' },
+  create: { id: 'circles.new.create_title', defaultMessage: 'Add circle' },
 });
+
+const NewCircleForm: React.FC = () => {
+  const intl = useIntl();
+
+  const [title, setTitle] = useState('');
+
+  const { mutate: createCircle, isPending } = useCreateCircle();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+
+  const handleSubmit = (e: React.FormEvent<Element>) => {
+    e.preventDefault();
+    createCircle(title);
+  };
+
+  const label = intl.formatMessage(messages.label);
+  const create = intl.formatMessage(messages.create);
+
+  return (
+    <Form onSubmit={handleSubmit}>
+      <HStack space={2} alignItems='center'>
+        <label className='grow'>
+          <span style={{ display: 'none' }}>{label}</span>
+
+          <Input
+            type='text'
+            value={title}
+            disabled={isPending}
+            onChange={handleChange}
+            placeholder={label}
+          />
+        </label>
+
+        <Button
+          disabled={isPending}
+          onClick={handleSubmit}
+          theme='primary'
+        >
+          {create}
+        </Button>
+      </HStack>
+    </Form>
+  );
+};
 
 const Circles: React.FC = () => {
   const intl = useIntl();

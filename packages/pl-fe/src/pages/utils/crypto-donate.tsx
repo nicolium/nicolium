@@ -4,15 +4,14 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import Accordion from 'pl-fe/components/ui/accordion';
 import Column from 'pl-fe/components/ui/column';
 import Stack from 'pl-fe/components/ui/stack';
+import SiteWallet from 'pl-fe/features/crypto-donate/components/site-wallet';
 import { useInstance } from 'pl-fe/hooks/use-instance';
-
-import SiteWallet from './components/site-wallet';
 
 const messages = defineMessages({
   heading: { id: 'column.crypto_donate', defaultMessage: 'Donate cryptocurrency' },
 });
 
-const CryptoDonate: React.FC = (): JSX.Element => {
+const CryptoDonatePage: React.FC = (): JSX.Element => {
   const intl = useIntl();
   const instance = useInstance();
 
@@ -39,4 +38,4 @@ const CryptoDonate: React.FC = (): JSX.Element => {
   );
 };
 
-export { CryptoDonate as default };
+export { CryptoDonatePage as default };

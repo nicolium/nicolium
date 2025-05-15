@@ -9,7 +9,7 @@ import { useInstance } from 'pl-fe/hooks/use-instance';
 import { makeGetHosts } from 'pl-fe/selectors';
 import { federationRestrictionsDisclosed } from 'pl-fe/utils/state';
 
-import RestrictedInstance from './components/restricted-instance';
+import RestrictedInstance from '../../features/federation-restrictions/components/restricted-instance';
 
 const messages = defineMessages({
   heading: { id: 'column.federation_restrictions', defaultMessage: 'Federation restrictions' },
@@ -19,7 +19,7 @@ const messages = defineMessages({
   notDisclosed: { id: 'federation_restrictions.not_disclosed_message', defaultMessage: '{siteTitle} does not disclose federation restrictions through the API.' },
 });
 
-const FederationRestrictions = () => {
+const FederationRestrictionsPage = () => {
   const intl = useIntl();
   const instance = useInstance();
 
@@ -55,4 +55,4 @@ const FederationRestrictions = () => {
   );
 };
 
-export { FederationRestrictions as default };
+export { FederationRestrictionsPage as default };

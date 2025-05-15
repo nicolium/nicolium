@@ -5,16 +5,15 @@ import Column from 'pl-fe/components/ui/column';
 import Divider from 'pl-fe/components/ui/divider';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
+import LinkFooter from 'pl-fe/features/ui/components/link-footer';
+import PromoPanel from 'pl-fe/features/ui/components/panels/promo-panel';
 import { useInstance } from 'pl-fe/hooks/use-instance';
-
-import LinkFooter from '../ui/components/link-footer';
-import PromoPanel from '../ui/components/panels/promo-panel';
 
 const messages = defineMessages({
   heading: { id: 'column.info', defaultMessage: 'Server information' },
 });
 
-const ServerInfo = () => {
+const ServerInfoPage = () => {
   const intl = useIntl();
   const instance = useInstance();
 
@@ -38,4 +37,4 @@ const ServerInfo = () => {
   );
 };
 
-export { ServerInfo as default };
+export { ServerInfoPage as default };
