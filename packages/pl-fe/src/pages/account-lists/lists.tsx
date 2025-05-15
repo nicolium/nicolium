@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { changeListEditorTitle } from 'pl-fe/actions/lists';
 import List, { ListItem } from 'pl-fe/components/list';
 import Button from 'pl-fe/components/ui/button';
 import Card from 'pl-fe/components/ui/card';
@@ -12,8 +11,6 @@ import Icon from 'pl-fe/components/ui/icon';
 import Input from 'pl-fe/components/ui/input';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Stack from 'pl-fe/components/ui/stack';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useCreateList, useLists } from 'pl-fe/queries/accounts/use-lists';
 
 import type { List as ListEntity } from 'pl-api';
@@ -35,15 +32,14 @@ const getOrderedLists = (lists: Array<Pick<ListEntity, 'title'>>) => {
 };
 
 const NewListForm: React.FC = () => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const { title: value, isSubmitting: disabled } = useAppSelector((state) => state.listEditor);
+  const [value, setValue] = useState('');
 
-  const { mutate: createList } = useCreateList();
+  const { mutate: createList, isPending } = useCreateList();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeListEditorTitle(e.target.value));
+    setValue(e.target.value);
   };
 
   const handleSubmit = (e: React.FormEvent<Element>) => {
@@ -63,14 +59,14 @@ const NewListForm: React.FC = () => {
           <Input
             type='text'
             value={value}
-            disabled={disabled}
+            disabled={isPending}
             onChange={handleChange}
             placeholder={label}
           />
         </label>
 
         <Button
-          disabled={disabled}
+          disabled={isPending}
           onClick={handleSubmit}
           theme='primary'
         >
