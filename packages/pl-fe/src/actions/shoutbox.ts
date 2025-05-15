@@ -1,6 +1,7 @@
-import { verifyCredentials } from './auth';
+import { getClient } from 'pl-fe/api';
+
 import { importEntities } from './importer';
-import { getMeToken, getMeUrl } from './me';
+import { getMeUrl } from './me';
 
 import type { PlApiClient, ShoutMessage } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
@@ -37,14 +38,15 @@ const createShoutboxMessage = (message: string) => (dispatch: AppDispatch, getSt
 
 const connectShoutbox = () => (dispatch: AppDispatch, getState: () => RootState) => {
   const state = getState();
-  const token = getMeToken(state);
   const accountUrl = getMeUrl(state);
 
   if (!accountUrl) return;
 
-  return dispatch(verifyCredentials(token, accountUrl)).then((account) => {
+  const client = getClient(state);
+
+  return client.settings.verifyCredentials().then((account) => {
     if (account.__meta.pleroma?.chat_token) {
-      const socket = state.auth.client.shoutbox.connect(account.__meta.pleroma?.chat_token, {
+      const socket = client.shoutbox.connect(account.__meta.pleroma?.chat_token, {
         onMessage: (message) => dispatch(importShoutboxMessage(message)),
         onMessages: (messages) => dispatch(importShoutboxMessages(messages)),
       });
