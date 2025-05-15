@@ -926,6 +926,7 @@
   "gdpr.title": "{siteTitle} utilise des cookies",
   "generic.logo": "Logo",
   "generic.saved": "Enregistré",
+  "getting_started.footer_notice": "Fièrement conçu en Pologne. {emoji}",
   "getting_started.open_source_notice": "{code_name} est un logiciel libre. Vous pouvez contribuer et envoyer vos commentaires et rapports de bogues via {code_link} (v{code_version}).",
   "group.cancel_request": "Annuler la demande",
   "group.delete.success": "Le groupe a été supprimé avec succès",
