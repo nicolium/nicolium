@@ -20,7 +20,7 @@ interface IEventInformation {
   params: RouteParams;
 }
 
-const EventInformation: React.FC<IEventInformation> = ({ params }) => {
+const EventInformationPage: React.FC<IEventInformation> = ({ params }) => {
   const dispatch = useAppDispatch();
   const getStatus = useCallback(makeGetStatus(), []);
   const intl = useIntl();
@@ -195,4 +195,4 @@ const EventInformation: React.FC<IEventInformation> = ({ params }) => {
   );
 };
 
-export { EventInformation as default };
+export { EventInformationPage as default };

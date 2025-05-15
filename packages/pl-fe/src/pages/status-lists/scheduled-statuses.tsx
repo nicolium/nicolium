@@ -6,13 +6,13 @@ import ScrollableList from 'pl-fe/components/scrollable-list';
 import Column from 'pl-fe/components/ui/column';
 import { scheduledStatusesQueryOptions } from 'pl-fe/queries/statuses/scheduled-statuses';
 
-import ScheduledStatus from './components/scheduled-status';
+import ScheduledStatus from '../../features/scheduled-statuses/components/scheduled-status';
 
 const messages = defineMessages({
   heading: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
 });
 
-const ScheduledStatuses = () => {
+const ScheduledStatusesPage = () => {
   const intl = useIntl();
 
   const { data: scheduledStatuses = [], isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery(scheduledStatusesQueryOptions);
@@ -34,4 +34,4 @@ const ScheduledStatuses = () => {
   );
 };
 
-export { ScheduledStatuses as default };
+export { ScheduledStatusesPage as default };

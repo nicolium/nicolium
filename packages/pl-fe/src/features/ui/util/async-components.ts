@@ -10,6 +10,7 @@ export const Blocks = lazy(() => import('pl-fe/pages/settings/blocks'));
 export const Bookmarks = lazy(() => import('pl-fe/pages/status-lists/bookmarks'));
 export const BubbleTimeline = lazy(() => import('pl-fe/pages/timelines/bubble-timeline'));
 export const ChatIndex = lazy(() => import('pl-fe/pages/chats/chats'));
+export const Circles = lazy(() => import('pl-fe/pages/account-lists/circles'));
 export const CommunityTimeline = lazy(() => import('pl-fe/pages/timelines/community-timeline'));
 export const Conversations = lazy(() => import('pl-fe/pages/status-lists/conversations'));
 export const CreateApp = lazy(() => import('pl-fe/pages/developers/create-app'));
@@ -17,6 +18,7 @@ export const CryptoDonate = lazy(() => import('pl-fe/pages/utils/crypto-donate')
 export const Dashboard = lazy(() => import('pl-fe/pages/dashboard/dashboard'));
 export const DeleteAccount = lazy(() => import('pl-fe/pages/settings/delete-account'));
 export const Developers = lazy(() => import('pl-fe/pages/developers/developers'));
+export const Directory = lazy(() => import('pl-fe/pages/account-lists/directory'));
 export const DomainBlocks = lazy(() => import('pl-fe/pages/settings/domain-blocks'));
 export const Domains = lazy(() => import('pl-fe/pages/dashboard/domains'));
 export const EditEmail = lazy(() => import('pl-fe/pages/settings/edit-email'));
@@ -29,6 +31,10 @@ export const ExternalLogin = lazy(() => import('pl-fe/pages/auth/external-login'
 export const FavouritedStatuses = lazy(() => import('pl-fe/pages/status-lists/favourited-statuses'));
 export const FederationRestrictions = lazy(() => import('pl-fe/pages/utils/federation-restrictions'));
 export const Filters = lazy(() => import('pl-fe/pages/settings'));
+export const Followers = lazy(() => import('pl-fe/pages/account-lists/followers'));
+export const Following = lazy(() => import('pl-fe/pages/account-lists/following'));
+export const FollowRecommendations = lazy(() => import('pl-fe/pages/account-lists/follow-recommendations'));
+export const FollowRequests = lazy(() => import('pl-fe/pages/account-lists/follow-requests'));
 export const GenericNotFound = lazy(() => import('pl-fe/pages/utils/generic-not-found'));
 export const GroupBlockedMembers = lazy(() => import('pl-fe/pages/groups/group-blocked-members'));
 export const GroupGallery = lazy(() => import('pl-fe/pages/groups/group-gallery'));
@@ -44,6 +50,7 @@ export const InteractionPolicies = lazy(() => import('pl-fe/pages/settings/inter
 export const LandingPage = lazy(() => import('pl-fe/pages/utils/landing'));
 export const LandingTimeline = lazy(() => import('pl-fe/pages/timelines/landing-timeline'));
 export const LinkTimeline = lazy(() => import('pl-fe/pages/timelines/link-timeline'));
+export const Lists = lazy(() => import('pl-fe/pages/account-lists/lists'));
 export const ListTimeline = lazy(() => import('pl-fe/pages/timelines/list-timeline'));
 export const LoginPage = lazy(() => import('pl-fe/pages/auth/login'));
 export const LogoutPage = lazy(() => import('pl-fe/pages/auth/logout'));
@@ -53,6 +60,7 @@ export const Migration = lazy(() => import('pl-fe/pages/settings/migration'));
 export const ModerationLog = lazy(() => import('pl-fe/pages/dashboard/moderation-log'));
 export const Mutes = lazy(() => import('pl-fe/pages/settings/mutes'));
 export const NewStatus = lazy(() => import('pl-fe/pages/utils/new-status'));
+export const OutgoingFollowRequests = lazy(() => import('pl-fe/pages/account-lists/outgoing-follow-requests'));
 export const PasswordReset = lazy(() => import('pl-fe/pages/auth/password-reset'));
 export const PinnedStatuses = lazy(() => import('pl-fe/pages/status-lists/pinned-statuses'));
 export const PlFeConfig = lazy(() => import('pl-fe/pages/dashboard/pl-fe-config'));
@@ -73,30 +81,23 @@ export const ThemeEditor = lazy(() => import('pl-fe/pages/dashboard/theme-editor
 export const UrlPrivacy = lazy(() => import('pl-fe/pages/settings/url-privacy'));
 export const UserIndex = lazy(() => import('pl-fe/pages/dashboard/user-index'));
 
+export const DraftStatuses = lazy(() => import('pl-fe/pages/status-lists/draft-statuses'));
+export const EventDiscussion = lazy(() => import('pl-fe/pages/statuses/event-discussion'));
+export const EventInformation = lazy(() => import('pl-fe/pages/statuses/event-information'));
+export const Events = lazy(() => import('pl-fe/pages/status-lists/events'));
+export const InteractionRequests = lazy(() => import('pl-fe/pages/status-lists/interaction-requests'));
+export const ScheduledStatuses = lazy(() => import('pl-fe/pages/status-lists/scheduled-statuses'));
+export const Status = lazy(() => import('pl-fe/pages/statuses/status'));
+
 export const AccountGallery = lazy(() => import('pl-fe/features/account-gallery'));
 export const AccountTimeline = lazy(() => import('pl-fe/features/account-timeline'));
 export const BookmarkFolders = lazy(() => import('pl-fe/features/bookmark-folders'));
 export const Circle = lazy(() => import('pl-fe/features/circle'));
-export const Circles = lazy(() => import('pl-fe/pages/account-lists/circles'));
 export const ComposeEditor = lazy(() => import('pl-fe/features/compose/editor'));
 export const ComposeEvent = lazy(() => import('pl-fe/features/compose-event'));
-export const Directory = lazy(() => import('pl-fe/pages/account-lists/directory'));
-export const DraftStatuses = lazy(() => import('pl-fe/features/draft-statuses'));
-export const EventDiscussion = lazy(() => import('pl-fe/features/event/event-discussion'));
-export const EventInformation = lazy(() => import('pl-fe/features/event/event-information'));
-export const Events = lazy(() => import('pl-fe/features/events'));
 export const FollowedTags = lazy(() => import('pl-fe/features/followed-tags'));
-export const Followers = lazy(() => import('pl-fe/pages/account-lists/followers'));
-export const Following = lazy(() => import('pl-fe/pages/account-lists/following'));
-export const FollowRecommendations = lazy(() => import('pl-fe/pages/account-lists/follow-recommendations'));
-export const FollowRequests = lazy(() => import('pl-fe/pages/account-lists/follow-requests'));
-export const InteractionRequests = lazy(() => import('pl-fe/features/interaction-requests'));
-export const Lists = lazy(() => import('pl-fe/pages/account-lists/lists'));
 export const Notifications = lazy(() => import('pl-fe/features/notifications'));
-export const OutgoingFollowRequests = lazy(() => import('pl-fe/pages/account-lists/outgoing-follow-requests'));
-export const ScheduledStatuses = lazy(() => import('pl-fe/features/scheduled-statuses'));
 export const Search = lazy(() => import('pl-fe/features/search'));
-export const Status = lazy(() => import('pl-fe/features/status'));
 
 // Panels
 export const AccountNotePanel = lazy(() => import('pl-fe/features/ui/components/panels/account-note-panel'));

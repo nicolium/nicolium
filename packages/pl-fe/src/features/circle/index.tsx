@@ -115,25 +115,29 @@ const Circle: React.FC = () => {
 
           const avatarUrl = users[i].avatar || avatarMissing;
 
-          await new Promise(resolve => {
-            const img = new Image();
+          try {
+            await new Promise(resolve => {
+              const img = new Image();
 
-            img.onload = () => {
-              ctx.save();
-              ctx.beginPath();
-              ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-              ctx.closePath();
-              ctx.clip();
+              img.onload = () => {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                ctx.closePath();
+                ctx.clip();
 
-              ctx.drawImage(img, centerX - radius, centerY - radius, radius * 2, radius * 2);
-              ctx.restore();
+                ctx.drawImage(img, centerX - radius, centerY - radius, radius * 2, radius * 2);
+                ctx.restore();
 
-              resolve(null);
-            };
+                resolve(null);
+              };
 
-            img.setAttribute('crossorigin', 'anonymous');
-            img.src = avatarUrl;
-          });
+              img.setAttribute('crossorigin', 'anonymous');
+              img.src = avatarUrl;
+            });
+          } catch (_) {
+            //
+          }
         }
       }
 

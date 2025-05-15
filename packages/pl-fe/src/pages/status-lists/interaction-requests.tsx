@@ -216,7 +216,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
   );
 };
 
-const InteractionRequests = () => {
+const InteractionRequestsPage = () => {
   const intl = useIntl();
 
   const { data = [], fetchNextPage, hasNextPage, isFetching, isLoading, refetch } = useFlatInteractionRequests();
@@ -268,4 +268,4 @@ const InteractionRequests = () => {
   );
 };
 
-export { InteractionRequests as default };
+export { InteractionRequestsPage as default };

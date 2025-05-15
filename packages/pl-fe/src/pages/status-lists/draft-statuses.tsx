@@ -7,13 +7,13 @@ import Column from 'pl-fe/components/ui/column';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 
-import DraftStatus from './components/draft-status';
+import DraftStatus from '../../features/draft-statuses/components/draft-status';
 
 const messages = defineMessages({
   heading: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
 });
 
-const DraftStatuses = () => {
+const DraftStatusesPage = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -38,4 +38,4 @@ const DraftStatuses = () => {
   );
 };
 
-export { DraftStatuses as default };
+export { DraftStatusesPage as default };

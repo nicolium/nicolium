@@ -13,8 +13,8 @@ import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { makeGetStatus } from 'pl-fe/selectors';
 
-import Thread from './components/thread';
-import ThreadLoginCta from './components/thread-login-cta';
+import Thread from '../../features/status/components/thread';
+import ThreadLoginCta from '../../features/status/components/thread-login-cta';
 
 const messages = defineMessages({
   title: { id: 'status.title', defaultMessage: 'Post details' },
@@ -43,7 +43,7 @@ interface IStatusDetails {
   params: RouteParams;
 }
 
-const StatusDetails: React.FC<IStatusDetails> = (props) => {
+const StatusPage: React.FC<IStatusDetails> = (props) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const { isLoggedIn } = useLoggedIn();
@@ -113,4 +113,4 @@ const StatusDetails: React.FC<IStatusDetails> = (props) => {
   );
 };
 
-export { StatusDetails as default };
+export { StatusPage as default };

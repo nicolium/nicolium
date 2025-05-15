@@ -13,9 +13,9 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { makeGetStatus } from 'pl-fe/selectors';
 
-import { makeGetDescendantsIds } from '../status/components/thread';
-import ThreadStatus from '../status/components/thread-status';
-import { ComposeForm } from '../ui/util/async-components';
+import { makeGetDescendantsIds } from '../../features/status/components/thread';
+import ThreadStatus from '../../features/status/components/thread-status';
+import { ComposeForm } from '../../features/ui/util/async-components';
 
 import type { MediaAttachment } from 'pl-api';
 import type { VirtuosoHandle } from 'react-virtuoso';
@@ -28,7 +28,7 @@ interface IEventDiscussion {
   onOpenVideo: (video: MediaAttachment, time: number) => void;
 }
 
-const EventDiscussion: React.FC<IEventDiscussion> = ({ params: { statusId: statusId } }) => {
+const EventDiscussionPage: React.FC<IEventDiscussion> = ({ params: { statusId: statusId } }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -165,4 +165,4 @@ const EventDiscussion: React.FC<IEventDiscussion> = ({ params: { statusId: statu
   );
 };
 
-export { EventDiscussion as default };
+export { EventDiscussionPage as default };
