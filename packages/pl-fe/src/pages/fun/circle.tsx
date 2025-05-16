@@ -36,7 +36,7 @@ const messages = defineMessages({
   done: { id: 'interactions_circle.state.done', defaultMessage: 'Finalizing…' },
 });
 
-const Circle: React.FC = () => {
+const CirclePage: React.FC = () => {
   const [{ state, progress }, setProgress] = useState<{
     state: 'unrequested' | 'pending' | 'fetchingStatuses' | 'fetchingFavourites' | 'fetchingAvatars' | 'drawing' | 'done';
     progress: number;
@@ -220,4 +220,4 @@ const Circle: React.FC = () => {
   );
 };
 
-export { Circle as default };
+export { CirclePage as default };

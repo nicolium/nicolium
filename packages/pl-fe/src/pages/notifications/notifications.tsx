@@ -5,31 +5,122 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { createSelector } from 'reselect';
 
 import {
+  type FilterType,
   expandNotifications,
   markReadNotifications,
   scrollTopNotifications,
+  setFilter,
 } from 'pl-fe/actions/notifications';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import ScrollTopButton from 'pl-fe/components/scroll-top-button';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Column from 'pl-fe/components/ui/column';
+import Icon from 'pl-fe/components/ui/icon';
 import Portal from 'pl-fe/components/ui/portal';
+import Tabs from 'pl-fe/components/ui/tabs';
 import PlaceholderNotification from 'pl-fe/features/placeholder/components/placeholder-notification';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 
-import FilterBar from './components/filter-bar';
-import Notification from './components/notification';
+import Notification from '../../features/notifications/components/notification';
 
+import type { Item } from 'pl-fe/components/ui/tabs';
 import type { RootState } from 'pl-fe/store';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
 const messages = defineMessages({
   title: { id: 'column.notifications', defaultMessage: 'Notifications' },
   queue: { id: 'notifications.queue_label', defaultMessage: 'Click to see {count} new {count, plural, one {notification} other {notifications}}' },
+  all: { id: 'notifications.filter.all', defaultMessage: 'All' },
+  mentions: { id: 'notifications.filter.mentions', defaultMessage: 'Mentions' },
+  statuses: { id: 'notifications.filter.statuses', defaultMessage: 'Updates from people you follow' },
+  favourites: { id: 'notifications.filter.favourites', defaultMessage: 'Likes' },
+  boosts: { id: 'notifications.filter.boosts', defaultMessage: 'Reposts' },
+  polls: { id: 'notifications.filter.polls', defaultMessage: 'Poll results' },
+  events: { id: 'notifications.filter.events', defaultMessage: 'Events' },
+  follows: { id: 'notifications.filter.follows', defaultMessage: 'Follows' },
 });
+
+const FilterBar = () => {
+  const intl = useIntl();
+  const dispatch = useAppDispatch();
+  const settings = useSettings();
+  const features = useFeatures();
+
+  const selectedFilter = settings.notifications.quickFilter.active;
+  const advancedMode = settings.notifications.quickFilter.advanced;
+
+  const onClick = (notificationType: FilterType) => () => {
+    try {
+      dispatch(setFilter(notificationType, true));
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const items: Item[] = [
+    {
+      text: intl.formatMessage(messages.all),
+      action: onClick('all'),
+      name: 'all',
+    },
+  ];
+
+  if (!advancedMode) {
+    items.push({
+      text: intl.formatMessage(messages.mentions),
+      action: onClick('mention'),
+      name: 'mention',
+    });
+  } else {
+    items.push({
+      text: <Icon className='size-4' src={require('@tabler/icons/outline/at.svg')} />,
+      title: intl.formatMessage(messages.mentions),
+      action: onClick('mention'),
+      name: 'mention',
+    });
+    if (features.accountNotifies) items.push({
+      text: <Icon className='size-4' src={require('@tabler/icons/outline/bell-ringing.svg')} />,
+      title: intl.formatMessage(messages.statuses),
+      action: onClick('status'),
+      name: 'status',
+    });
+    items.push({
+      text: <Icon className='size-4' src={require('@tabler/icons/outline/star.svg')} />,
+      title: intl.formatMessage(messages.favourites),
+      action: onClick('favourite'),
+      name: 'favourite',
+    });
+    items.push({
+      text: <Icon className='size-4' src={require('@tabler/icons/outline/repeat.svg')} />,
+      title: intl.formatMessage(messages.boosts),
+      action: onClick('reblog'),
+      name: 'reblog',
+    });
+    if (features.polls) items.push({
+      text: <Icon className='size-4' src={require('@tabler/icons/outline/chart-bar.svg')} />,
+      title: intl.formatMessage(messages.polls),
+      action: onClick('poll'),
+      name: 'poll',
+    });
+    if (features.events) items.push({
+      text: <Icon className='size-4' src={require('@tabler/icons/outline/calendar.svg')} />,
+      title: intl.formatMessage(messages.events),
+      action: onClick('events'),
+      name: 'events',
+    });
+    items.push({
+      text: <Icon className='size-4' src={require('@tabler/icons/outline/user-plus.svg')} />,
+      title: intl.formatMessage(messages.follows),
+      action: onClick('follow'),
+      name: 'follow',
+    });
+  }
+
+  return <Tabs items={items} activeItem={selectedFilter} />;
+};
 
 const getNotifications = createSelector([
   (state: RootState) => state.notifications.items,
@@ -53,7 +144,7 @@ const getNotifications = createSelector([
   };
 });
 
-const Notifications = () => {
+const NotificationsPage = () => {
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const intl = useIntl();
@@ -208,4 +299,4 @@ const Notifications = () => {
   );
 };
 
-export { Notifications as default };
+export { NotificationsPage as default };

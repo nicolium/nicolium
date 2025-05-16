@@ -73,7 +73,7 @@ const NewFolderForm: React.FC = () => {
   );
 };
 
-const BookmarkFolders: React.FC = () => {
+const BookmarkFoldersPage: React.FC = () => {
   const intl = useIntl();
   const features = useFeatures();
 
@@ -128,4 +128,4 @@ const BookmarkFolders: React.FC = () => {
   );
 };
 
-export { BookmarkFolders as default, NewFolderForm };
+export { BookmarkFoldersPage as default, NewFolderForm };

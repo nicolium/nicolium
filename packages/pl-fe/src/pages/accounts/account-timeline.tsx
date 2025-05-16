@@ -18,14 +18,14 @@ import { makeGetStatusIds } from 'pl-fe/selectors';
 
 const getStatusIds = makeGetStatusIds();
 
-interface IAccountTimeline {
+interface IAccountTimelinePage {
   params: {
     username: string;
   };
   withReplies?: boolean;
 }
 
-const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = false }) => {
+const AccountTimelinePage: React.FC<IAccountTimelinePage> = ({ params, withReplies = false }) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const features = useFeatures();
@@ -103,4 +103,4 @@ const AccountTimeline: React.FC<IAccountTimeline> = ({ params, withReplies = fal
   );
 };
 
-export { AccountTimeline as default };
+export { AccountTimelinePage as default };

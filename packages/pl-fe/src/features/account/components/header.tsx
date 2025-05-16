@@ -13,6 +13,7 @@ import { useFollow } from 'pl-fe/api/hooks/accounts/use-follow';
 import AltIndicator from 'pl-fe/components/alt-indicator';
 import Badge from 'pl-fe/components/badge';
 import DropdownMenu, { Menu } from 'pl-fe/components/dropdown-menu';
+import Icon from 'pl-fe/components/icon';
 import StillImage from 'pl-fe/components/still-image';
 import Avatar from 'pl-fe/components/ui/avatar';
 import HStack from 'pl-fe/components/ui/hstack';
@@ -21,7 +22,7 @@ import Popover from 'pl-fe/components/ui/popover';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
-import MovedNote from 'pl-fe/features/account-timeline/components/moved-note';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
 import SubscriptionButton from 'pl-fe/features/ui/components/subscription-button';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
@@ -88,6 +89,37 @@ const messages = defineMessages({
   loadActivitiesSuccess: { id: 'account.load_activities.success', defaultMessage: 'Scheduled fetching latest posts' },
   loadActivitiesFail: { id: 'account.load_activities.fail', defaultMessage: 'Failed to fetch latest posts' },
 });
+
+interface IMovedNote {
+  from: AccountEntity;
+  to: AccountEntity;
+}
+
+const MovedNote: React.FC<IMovedNote> = ({ from, to }) => (
+  <div className='p-4'>
+    <HStack className='mb-2' alignItems='center' space={1.5}>
+      <Icon
+        src={require('@tabler/icons/outline/briefcase.svg')}
+        className='flex-none text-primary-600 dark:text-primary-400'
+      />
+
+      <div className='truncate'>
+        <Text theme='muted' size='sm' truncate>
+          <FormattedMessage
+            id='notification.move'
+            defaultMessage='{name} moved to {targetName}'
+            values={{
+              name: <span><Emojify text={from.display_name} emojis={from.emojis} /></span>,
+              targetName: to.acct,
+            }}
+          />
+        </Text>
+      </div>
+    </HStack>
+
+    <Account account={to} withRelationship={false} />
+  </div>
+);
 
 interface IHeader {
   account?: Account;

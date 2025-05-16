@@ -7,8 +7,8 @@ import Stack from 'pl-fe/components/ui/stack';
 import Tabs from 'pl-fe/components/ui/tabs';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 
-import { EditEvent } from './tabs/edit-event';
-import { ManagePendingParticipants } from './tabs/manage-pending-participants';
+import { EditEvent } from '../../features/compose-event/tabs/edit-event';
+import { ManagePendingParticipants } from '../../features/compose-event/tabs/manage-pending-participants';
 
 const messages = defineMessages({
   manageEvent: { id: 'navigation_bar.manage_event', defaultMessage: 'Manage event' },
@@ -21,11 +21,11 @@ type RouteParams = {
   statusId?: string;
 };
 
-interface IComposeEvent {
+interface IComposeEventPage {
   params: RouteParams;
 }
 
-const ComposeEvent: React.FC<IComposeEvent> = ({ params }) => {
+const ComposeEventPage: React.FC<IComposeEventPage> = ({ params }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -64,4 +64,4 @@ const ComposeEvent: React.FC<IComposeEvent> = ({ params }) => {
   );
 };
 
-export { ComposeEvent as default };
+export { ComposeEventPage as default };
