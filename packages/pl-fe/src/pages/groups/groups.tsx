@@ -8,9 +8,8 @@ import ScrollableList from 'pl-fe/components/scrollable-list';
 import Button from 'pl-fe/components/ui/button';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
+import PlaceholderGroupCard from 'pl-fe/features/placeholder/components/placeholder-group-card';
 import { useModalsStore } from 'pl-fe/stores/modals';
-
-import PlaceholderGroupCard from '../../features/placeholder/components/placeholder-group-card';
 
 const Groups: React.FC = () => {
   const { openModal } = useModalsStore();

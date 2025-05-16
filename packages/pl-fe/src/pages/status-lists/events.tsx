@@ -10,11 +10,10 @@ import Card, { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card'
 import Column from 'pl-fe/components/ui/column';
 import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
+import PlaceholderEventPreview from 'pl-fe/features/placeholder/components/placeholder-event-preview';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { makeGetStatus } from 'pl-fe/selectors';
-
-import PlaceholderEventPreview from '../../features/placeholder/components/placeholder-event-preview';
 
 const messages = defineMessages({
   title: { id: 'column.events', defaultMessage: 'Events' },

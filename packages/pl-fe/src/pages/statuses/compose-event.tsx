@@ -5,10 +5,9 @@ import { cancelEventCompose } from 'pl-fe/actions/events';
 import Column from 'pl-fe/components/ui/column';
 import Stack from 'pl-fe/components/ui/stack';
 import Tabs from 'pl-fe/components/ui/tabs';
+import { EditEvent } from 'pl-fe/features/compose-event/tabs/edit-event';
+import { ManagePendingParticipants } from 'pl-fe/features/compose-event/tabs/manage-pending-participants';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-
-import { EditEvent } from '../../features/compose-event/tabs/edit-event';
-import { ManagePendingParticipants } from '../../features/compose-event/tabs/manage-pending-participants';
 
 const messages = defineMessages({
   manageEvent: { id: 'navigation_bar.manage_event', defaultMessage: 'Manage event' },

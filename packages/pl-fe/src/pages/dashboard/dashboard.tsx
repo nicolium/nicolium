@@ -3,12 +3,11 @@ import { defineMessages, useIntl } from 'react-intl';
 import { Switch, Route } from 'react-router-dom';
 
 import Column from 'pl-fe/components/ui/column';
+import AdminTabs from 'pl-fe/features/admin/components/admin-tabs';
+import Waitlist from 'pl-fe/features/admin/tabs/awaiting-approval';
+import Dashboard from 'pl-fe/features/admin/tabs/dashboard';
+import Reports from 'pl-fe/features/admin/tabs/reports';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-
-import AdminTabs from '../../features/admin/components/admin-tabs';
-import Waitlist from '../../features/admin/tabs/awaiting-approval';
-import Dashboard from '../../features/admin/tabs/dashboard';
-import Reports from '../../features/admin/tabs/reports';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.dashboard', defaultMessage: 'Dashboard' },

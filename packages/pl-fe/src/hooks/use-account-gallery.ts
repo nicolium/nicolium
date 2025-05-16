@@ -7,7 +7,6 @@ import { useAppSelector } from './use-app-selector';
 import type { MediaAttachment } from 'pl-api';
 import type { RootState } from 'pl-fe/store';
 
-
 type AccountGalleryAttachment = MediaAttachment & {
   index: number;
   sensitive: boolean;

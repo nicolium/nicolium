@@ -4,12 +4,11 @@ import { defineMessages, useIntl } from 'react-intl';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Accordion from 'pl-fe/components/ui/accordion';
 import Column from 'pl-fe/components/ui/column';
+import RestrictedInstance from 'pl-fe/features/federation-restrictions/components/restricted-instance';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { makeGetHosts } from 'pl-fe/selectors';
 import { federationRestrictionsDisclosed } from 'pl-fe/utils/state';
-
-import RestrictedInstance from '../../features/federation-restrictions/components/restricted-instance';
 
 const messages = defineMessages({
   heading: { id: 'column.federation_restrictions', defaultMessage: 'Federation restrictions' },

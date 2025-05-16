@@ -4,10 +4,9 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { fetchDraftStatuses } from 'pl-fe/actions/draft-statuses';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Column from 'pl-fe/components/ui/column';
+import DraftStatus from 'pl-fe/features/draft-statuses/components/draft-status';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-
-import DraftStatus from '../../features/draft-statuses/components/draft-status';
 
 const messages = defineMessages({
   heading: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },

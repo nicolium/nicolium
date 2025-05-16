@@ -12,6 +12,8 @@ import Icon from 'pl-fe/components/ui/icon';
 import Input from 'pl-fe/components/ui/input';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Textarea from 'pl-fe/components/ui/textarea';
+import AvatarPicker from 'pl-fe/features/edit-profile/components/avatar-picker';
+import HeaderPicker from 'pl-fe/features/edit-profile/components/header-picker';
 import { useImageField } from 'pl-fe/hooks/forms/use-image-field';
 import { useTextField } from 'pl-fe/hooks/forms/use-text-field';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
@@ -19,9 +21,6 @@ import { useInstance } from 'pl-fe/hooks/use-instance';
 import toast from 'pl-fe/toast';
 import { isDefaultAvatar, isDefaultHeader } from 'pl-fe/utils/accounts';
 import { unescapeHTML } from 'pl-fe/utils/html';
-
-import AvatarPicker from '../../features/edit-profile/components/avatar-picker';
-import HeaderPicker from '../../features/edit-profile/components/header-picker';
 
 const nonDefaultAvatar = (url: string | undefined) => url && isDefaultAvatar(url) ? undefined : url;
 const nonDefaultHeader = (url: string | undefined) => url && isDefaultHeader(url) ? undefined : url;

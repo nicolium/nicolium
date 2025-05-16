@@ -9,13 +9,12 @@ import MissingIndicator from 'pl-fe/components/missing-indicator';
 import Button from 'pl-fe/components/ui/button';
 import Column from 'pl-fe/components/ui/column';
 import Spinner from 'pl-fe/components/ui/spinner';
+import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
 import { useTheme } from 'pl-fe/hooks/use-theme';
 import { useDeleteList, useList } from 'pl-fe/queries/accounts/use-lists';
 import { useModalsStore } from 'pl-fe/stores/modals';
-
-import Timeline from '../../features/ui/components/timeline';
 
 const messages = defineMessages({
   deleteHeading: { id: 'confirmations.delete_list.heading', defaultMessage: 'Delete list' },

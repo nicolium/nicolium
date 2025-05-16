@@ -8,14 +8,13 @@ import ScrollableList from 'pl-fe/components/scrollable-list';
 import Tombstone from 'pl-fe/components/tombstone';
 import Stack from 'pl-fe/components/ui/stack';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
+import { makeGetDescendantsIds } from 'pl-fe/features/status/components/thread';
+import ThreadStatus from 'pl-fe/features/status/components/thread-status';
 import PendingStatus from 'pl-fe/features/ui/components/pending-status';
+import { ComposeForm } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { makeGetStatus } from 'pl-fe/selectors';
-
-import { makeGetDescendantsIds } from '../../features/status/components/thread';
-import ThreadStatus from '../../features/status/components/thread-status';
-import { ComposeForm } from '../../features/ui/util/async-components';
 
 import type { MediaAttachment } from 'pl-api';
 import type { VirtuosoHandle } from 'react-virtuoso';

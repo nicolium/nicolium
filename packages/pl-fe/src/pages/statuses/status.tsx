@@ -8,13 +8,12 @@ import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import Column from 'pl-fe/components/ui/column';
 import Stack from 'pl-fe/components/ui/stack';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
+import Thread from 'pl-fe/features/status/components/thread';
+import ThreadLoginCta from 'pl-fe/features/status/components/thread-login-cta';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { makeGetStatus } from 'pl-fe/selectors';
-
-import Thread from '../../features/status/components/thread';
-import ThreadLoginCta from '../../features/status/components/thread-login-cta';
 
 const messages = defineMessages({
   title: { id: 'status.title', defaultMessage: 'Post details' },

@@ -6,10 +6,9 @@ import LoadMore from 'pl-fe/components/load-more';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import Column from 'pl-fe/components/ui/column';
 import Spinner from 'pl-fe/components/ui/spinner';
-import MediaItem from 'pl-fe/features/account-gallery/components/media-item';
 import { type AccountGalleryAttachment, useGroupGallery } from 'pl-fe/hooks/use-account-gallery';
+import MediaItem from 'pl-fe/pages/accounts/account-gallery';
 import { useModalsStore } from 'pl-fe/stores/modals';
-
 
 interface IGroupGallery {
   params: { groupId: string };

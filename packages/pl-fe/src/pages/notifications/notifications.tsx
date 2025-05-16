@@ -18,13 +18,13 @@ import Column from 'pl-fe/components/ui/column';
 import Icon from 'pl-fe/components/ui/icon';
 import Portal from 'pl-fe/components/ui/portal';
 import Tabs from 'pl-fe/components/ui/tabs';
+import Notification from 'pl-fe/features/notifications/components/notification';
 import PlaceholderNotification from 'pl-fe/features/placeholder/components/placeholder-notification';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 
-import Notification from '../../features/notifications/components/notification';
 
 import type { Item } from 'pl-fe/components/ui/tabs';
 import type { RootState } from 'pl-fe/store';

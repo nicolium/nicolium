@@ -12,14 +12,13 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
+import Timeline from 'pl-fe/features/ui/components/timeline';
+import { ComposeForm } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useDraggedFiles } from 'pl-fe/hooks/use-dragged-files';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { makeGetStatusIds } from 'pl-fe/selectors';
-
-import Timeline from '../../features/ui/components/timeline';
-import { ComposeForm } from '../../features/ui/util/async-components';
 
 type RouteParams = { groupId: string };
 

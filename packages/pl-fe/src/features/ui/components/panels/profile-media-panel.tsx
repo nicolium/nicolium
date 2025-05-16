@@ -5,9 +5,8 @@ import Spinner from 'pl-fe/components/ui/spinner';
 import Text from 'pl-fe/components/ui/text';
 import Widget from 'pl-fe/components/ui/widget';
 import { type AccountGalleryAttachment, useAccountGallery } from 'pl-fe/hooks/use-account-gallery';
+import MediaItem from 'pl-fe/pages/accounts/account-gallery';
 import { useModalsStore } from 'pl-fe/stores/modals';
-
-import MediaItem from '../../../account-gallery/components/media-item';
 
 import type { Account } from 'pl-fe/normalizers/account';
 

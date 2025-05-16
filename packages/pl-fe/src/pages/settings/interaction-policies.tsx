@@ -10,10 +10,9 @@ import FormActions from 'pl-fe/components/ui/form-actions';
 import { InlineMultiselect } from 'pl-fe/components/ui/inline-multiselect';
 import Tabs from 'pl-fe/components/ui/tabs';
 import Text from 'pl-fe/components/ui/text';
+import Warning from 'pl-fe/features/compose/components/warning';
 import { useInteractionPolicies } from 'pl-fe/queries/settings/use-interaction-policies';
 import toast from 'pl-fe/toast';
-
-import Warning from '../../features/compose/components/warning';
 
 import type { InteractionPolicy } from 'pl-api';
 

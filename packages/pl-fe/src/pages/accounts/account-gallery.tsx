@@ -236,4 +236,4 @@ const AccountGalleryPage = () => {
   );
 };
 
-export { AccountGalleryPage as default };
+export { AccountGalleryPage as default, MediaItem };
