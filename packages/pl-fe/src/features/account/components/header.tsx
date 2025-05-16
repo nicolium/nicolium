@@ -10,6 +10,7 @@ import { biteAccount, blockAccount, pinAccount, removeFromFollowers, unblockAcco
 import { mentionCompose, directCompose } from 'pl-fe/actions/compose';
 import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
 import { useFollow } from 'pl-fe/api/hooks/accounts/use-follow';
+import Account from 'pl-fe/components/account';
 import AltIndicator from 'pl-fe/components/alt-indicator';
 import Badge from 'pl-fe/components/badge';
 import DropdownMenu, { Menu } from 'pl-fe/components/dropdown-menu';
@@ -39,7 +40,7 @@ import { isDefaultHeader } from 'pl-fe/utils/accounts';
 import copy from 'pl-fe/utils/copy';
 
 import type { PlfeResponse } from 'pl-fe/api';
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
 
 const messages = defineMessages({
   edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },
@@ -122,7 +123,7 @@ const MovedNote: React.FC<IMovedNote> = ({ from, to }) => (
 );
 
 interface IHeader {
-  account?: Account;
+  account?: AccountEntity;
 }
 
 const Header: React.FC<IHeader> = ({ account }) => {
@@ -711,7 +712,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
   return (
     <div className='-mx-4 -mt-4 sm:-mx-6 sm:-mt-6'>
       {(account.moved && typeof account.moved === 'object') && (
-        <MovedNote from={account} to={account.moved as Account} />
+        <MovedNote from={account} to={account.moved as AccountEntity} />
       )}
 
       <div>

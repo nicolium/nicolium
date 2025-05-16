@@ -25,7 +25,6 @@ import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 
-
 import type { Item } from 'pl-fe/components/ui/tabs';
 import type { RootState } from 'pl-fe/store';
 import type { VirtuosoHandle } from 'react-virtuoso';
