@@ -157,7 +157,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
   const valueOption = useMemo(() => [
     options,
     options.filter(option => option.items).map(option => option.items).flat(),
-  ].flat().find(item => item!.value === value), [value]);
+  ].flat().find(item => item!.value === value), [value, lists, circles]);
 
   if (unavailable) {
     return null;

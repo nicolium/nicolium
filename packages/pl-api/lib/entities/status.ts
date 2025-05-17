@@ -89,6 +89,7 @@ const baseStatusSchema = v.object({
   quote_url: v.fallback(v.optional(v.string()), undefined),
   quotes_count: v.fallback(v.number(), 0),
   bookmark_folder: v.fallback(v.nullable(v.string()), null),
+  list_id: v.fallback(v.nullable(v.number()), null),
 
   event: v.fallback(v.nullable(statusEventSchema), null),
   translation: v.fallback(v.union([v.nullable(translationSchema), v.literal(false)]), null),
@@ -123,6 +124,7 @@ const preprocess = (status: any) => {
       'pinned_at',
       'quotes_count',
       'bookmark_folder',
+      'list_id',
 
       'event',
       'translation',

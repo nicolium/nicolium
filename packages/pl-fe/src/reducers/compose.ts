@@ -260,10 +260,11 @@ const updateSuggestionTags = (compose: Compose, token: string, tags: Tag[]) => {
   compose.suggestion_token = token;
 };
 
-const privacyPreference = (a: string, b: string) => {
+const privacyPreference = (a: string, b: string, list_id: number | null) => {
   const order = ['public', 'unlisted', 'mutuals_only', 'private', 'direct', 'local'];
 
   if (a === 'group') return a;
+  if (a === 'list' && list_id !== null) return `list:${list_id}`;
 
   return order[Math.max(order.indexOf(a), order.indexOf(b), 0)];
 };
@@ -391,7 +392,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.to = to;
         compose.parent_reblogged_by = action.rebloggedBy?.id || null;
         compose.text = !action.explicitAddressing ? statusToTextMentions(action.status, action.account) : '';
-        compose.privacy = privacyPreference(action.status.visibility, defaultCompose.privacy);
+        compose.privacy = privacyPreference(action.status.visibility, defaultCompose.privacy, action.status.list_id);
         compose.focusDate = new Date();
         compose.caretPosition = null;
         compose.idempotencyKey = crypto.randomUUID();
@@ -417,7 +418,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.to = [author];
         compose.parent_reblogged_by = null;
         compose.text = '';
-        compose.privacy = privacyPreference(action.status.visibility, defaultCompose.privacy);
+        compose.privacy = privacyPreference(action.status.visibility, defaultCompose.privacy, action.status.list_id);
         compose.focusDate = new Date();
         compose.caretPosition = null;
         compose.idempotencyKey = crypto.randomUUID();

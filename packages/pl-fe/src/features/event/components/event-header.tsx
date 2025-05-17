@@ -72,7 +72,7 @@ const messages = defineMessages({
 });
 
 interface IEventHeader {
-  status?: Pick<Status, 'id' | 'account' | 'bookmarked' | 'event' | 'group_id' | 'pinned' | 'reblog_id' | 'reblogged' | 'sensitive' | 'uri' | 'url' | 'visibility'>;
+  status?: Pick<Status, 'id' | 'account' | 'bookmarked' | 'event' | 'group_id' | 'pinned' | 'reblog_id' | 'reblogged' | 'sensitive' | 'uri' | 'url' | 'visibility' | 'list_id'>;
 }
 
 const EventHeader: React.FC<IEventHeader> = ({ status }) => {

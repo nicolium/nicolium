@@ -167,7 +167,7 @@ const changeCompose = (composeId: string, text: string) => ({
 interface ComposeReplyAction {
   type: typeof COMPOSE_REPLY;
   composeId: string;
-  status: Pick<Status, 'id' | 'account' | 'group_id' | 'mentions' | 'spoiler_text' | 'visibility'>;
+  status: Pick<Status, 'id' | 'account' | 'group_id' | 'list_id' | 'mentions' | 'spoiler_text' | 'visibility'>;
   account: Pick<Account, 'acct'>;
   explicitAddressing: boolean;
   preserveSpoilers: boolean;
@@ -210,7 +210,7 @@ const cancelReplyCompose = () => ({
 interface ComposeQuoteAction {
   type: typeof COMPOSE_QUOTE;
   composeId: string;
-  status: Pick<Status, 'id' | 'account' | 'visibility' | 'group_id'>;
+  status: Pick<Status, 'id' | 'account' | 'visibility' | 'group_id' | 'list_id'>;
   account: Pick<Account, 'acct'> | undefined;
   explicitAddressing: boolean;
 }
