@@ -1470,6 +1470,7 @@ const getFeatures = (instance: Instance) => {
      */
     scheduledStatusesBackwards: any([
       v.software === GOTOSOCIAL && gte(v.version, '0.18.0'),
+      instance.api_versions['backwards_schedule_at.pleroma.pl-api'] >= 1,
     ]),
 
     /**
