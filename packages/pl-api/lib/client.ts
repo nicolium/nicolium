@@ -1445,6 +1445,16 @@ class PlApiClient {
             },
           });
           break;
+        case ICESHRIMP_NET:
+          await this.#getIceshrimpAccessToken();
+          response = await this.request('/api/iceshrimp/auth/change-password', {
+            method: 'POST',
+            body: {
+              oldPassword: current_password,
+              newPassword: new_password,
+            },
+          });
+          break;
         case MITRA:
           response = await this.request('/api/v1/settings/change_password', {
             method: 'POST',
