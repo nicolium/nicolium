@@ -281,6 +281,7 @@ class PlApiClient {
 
   baseURL: string;
   #accessToken?: string;
+  #iceshrimpAccessToken?: string;
   #instance: Instance = v.parse(instanceSchema, {});
   public request = request.bind(this) as typeof request;
   public features: Features = getFeatures(this.#instance);
@@ -505,9 +506,49 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/oauth/#token}
      */
     getToken: async (params: GetTokenParams) => {
-      const response = await this.request('/oauth/token', { method: 'POST', body: params });
+      if (this.features.version.software === ICESHRIMP_NET && params.grant_type === 'password') {
+        const loginResponse = (await this.request<{
+          token: string;
+        }>('/api/iceshrimp/auth/login', {
+          method: 'POST',
+          body: {
+            username: params.username,
+            password: params.password,
+          }
+        })).json;
+        this.#iceshrimpAccessToken = loginResponse.token;
 
-      return v.parse(tokenSchema, { scope: params.scope || '', ...response.json });
+        const mastodonTokenResponse = (await this.request<{
+          id: string;
+          token: string;
+          created_at: string;
+          scopes: Array<string>;
+        }>('/api/iceshrimp/sessions/mastodon', {
+          method: 'POST',
+          body: {
+            appName: params.client_id,
+            scopes: params.scope?.split(' '),
+            flags: {
+              supportsHtmlFormatting: true,
+              autoDetectQuotes: false,
+              isPleroma: true,
+              supportsInlineMedia: true,
+            },
+          },
+        })).json;
+
+        return v.parse(tokenSchema, {
+          access_token: mastodonTokenResponse.token,
+          token_type: 'Bearer',
+          scope: mastodonTokenResponse.scopes.join(' '),
+          created_at: new Date(mastodonTokenResponse.created_at).getTime(),
+          id: mastodonTokenResponse.id,
+        });
+      } else {
+        const response = await this.request('/oauth/token', { method: 'POST', body: params });
+
+        return v.parse(tokenSchema, { scope: params.scope || '', ...response.json });
+      }
     },
 
     /**
@@ -1849,6 +1890,12 @@ class PlApiClient {
       const response = await this.request('/api/v1/akkoma/preferred_frontend', { method: 'PUT', body: { frontend_name: frontendName } });
 
       return v.parse(v.object({ frontend_name: v.string() }), response.json);
+    },
+
+    authorizeIceshrimp: async () => {
+      const response = await this.request<string>('/api/v1/accounts/authorize_iceshrimp', { method: 'POST' });
+
+      return response.json;
     },
   };
 
@@ -5724,6 +5771,12 @@ class PlApiClient {
     this.features = getFeatures(this.#instance);
   };
 
+  #getIceshrimpAccessToken = async () => {
+    if (this.features.version.software === ICESHRIMP_NET) {
+      this.#iceshrimpAccessToken = await this.settings.authorizeIceshrimp();
+    }
+  }
+
   get accessToken(): string | undefined {
     return this.#accessToken;
   }
@@ -5733,6 +5786,12 @@ class PlApiClient {
 
     this.#socket?.close();
     this.#accessToken = accessToken;
+
+    this.#getIceshrimpAccessToken();
+  }
+
+  get iceshrimpAccessToken(): string | undefined {
+    return this.#iceshrimpAccessToken;
   }
 
   get instanceInformation() {

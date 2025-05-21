@@ -12,6 +12,9 @@ const getInstanceScopes = (instance: Instance, admin: boolean =  true) => {
   let scopes;
 
   switch (v.software) {
+    case ICESHRIMP_NET:
+      scopes = 'read write follow push iceshrimp';
+      break;
     case TOKI:
       scopes = 'read write follow push write:bites';
       break;

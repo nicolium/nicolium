@@ -28,6 +28,8 @@ class PlApiDirectoryClient {
 
   /** Unused. */
   accessToken: string | undefined = undefined;
+  /** Unused. */
+  iceshrimpAccessToken: string | undefined = undefined;
   /**
    * Server directory URL.
    */

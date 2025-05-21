@@ -32,6 +32,8 @@ interface GetTokenParams {
   redirect_uri: string;
   /** String. List of requested OAuth scopes, separated by spaces (or by pluses, if using query parameters). If `code` was provided, then this must be equal to the `scope` requested from the user. Otherwise, it must be a subset of `scopes` declared during app registration. If not provided, defaults to `read`. */
   scope?: string;
+  username?: string;
+  password?: string;
 }
 
 /**

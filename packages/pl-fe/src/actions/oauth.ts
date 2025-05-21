@@ -13,8 +13,9 @@ import { getBaseURL } from 'pl-fe/utils/state';
 
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
-const obtainOAuthToken = (params: GetTokenParams, baseURL?: string) =>{
+const obtainOAuthToken = async (params: GetTokenParams, baseURL?: string) =>{
   const client = new PlApiClient(baseURL || BuildConfig.BACKEND_URL || '');
+  await client.instance.getInstance();
 
   return client.oauth.getToken(params);
 };
