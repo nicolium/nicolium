@@ -5782,6 +5782,7 @@ class PlApiClient {
   };
 
   #getIceshrimpAccessToken = async () => {
+    if (this.#iceshrimpAccessToken) return;
     if (this.features.version.software === ICESHRIMP_NET) {
       this.#iceshrimpAccessToken = await this.settings.authorizeIceshrimp();
     }
