@@ -514,7 +514,7 @@ class PlApiClient {
           body: {
             username: params.username,
             password: params.password,
-          }
+          },
         })).json;
         this.#iceshrimpAccessToken = loginResponse.token;
 
@@ -5785,7 +5785,7 @@ class PlApiClient {
     if (this.features.version.software === ICESHRIMP_NET) {
       this.#iceshrimpAccessToken = await this.settings.authorizeIceshrimp();
     }
-  }
+  };
 
   get accessToken(): string | undefined {
     return this.#accessToken;
