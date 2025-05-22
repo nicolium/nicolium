@@ -81,6 +81,9 @@ const preprocessAccount = v.transform((account: any) => {
 
       'location',
     ])),
+    ...(pick(account.akkoma || {}, [
+      'permit_followback',
+    ])),
     is_cat: isCat,
     speak_as_cat: speakAsCat,
     ...(pick(account.other_settings || {}), ['birthday', 'location']),
@@ -148,6 +151,8 @@ const baseAccountSchema = v.object({
 
   location: v.fallback(v.optional(v.string()), undefined),
   local: v.fallback(v.optional(v.boolean()), false),
+
+  permit_followback: v.fallback(v.optional(v.boolean()), undefined),
 
   avatar_description: v.fallback(v.string(), ''),
   custom_css: v.fallback(v.string(), ''),
