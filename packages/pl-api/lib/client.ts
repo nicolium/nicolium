@@ -120,6 +120,7 @@ import type {
 } from './params/accounts';
 import type {
   AdminAccountAction,
+  AdminCreateAccountParams,
   AdminCreateAnnouncementParams,
   AdminCreateCustomEmojiParams,
   AdminCreateDomainBlockParams,
@@ -3779,6 +3780,15 @@ class PlApiClient {
         }
 
         return v.safeParse(adminAccountSchema, response.json).output || {};
+      },
+
+      /**
+       * Requires features{@link Features.pleromaAdminAccounts}.
+       */
+      createAccount: async (params: AdminCreateAccountParams) => {
+        const response = await this.request('/api/v1/admin/accounts', { method: 'POST', body: { users: [params] } });
+
+        return v.parse(adminAccountSchema, response.json[0]);
       },
 
       /**

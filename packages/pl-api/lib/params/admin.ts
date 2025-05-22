@@ -29,6 +29,15 @@ interface AdminGetAccountsParams extends PaginationParams {
 /**
  * @category Request params
  */
+interface AdminCreateAccountParams {
+  nickname: string;
+  email: string;
+  password: string;
+}
+
+/**
+ * @category Request params
+ */
 type AdminAccountAction = 'none' | 'sensitive' | 'disable' | 'silence' | 'suspend';
 
 /**
@@ -329,6 +338,7 @@ interface AdminGetGroupsParams {
 
 export type {
   AdminGetAccountsParams,
+  AdminCreateAccountParams,
   AdminAccountAction,
   AdminPerformAccountActionParams,
   AdminGetDomainBlocksParams,
