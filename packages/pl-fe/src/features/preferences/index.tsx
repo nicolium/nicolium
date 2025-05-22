@@ -7,6 +7,7 @@ import List, { ListItem } from 'pl-fe/components/list';
 import Button from 'pl-fe/components/ui/button';
 import Form from 'pl-fe/components/ui/form';
 import HStack from 'pl-fe/components/ui/hstack';
+import StepSlider from 'pl-fe/components/ui/step-slider';
 import { Mutliselect, SelectDropdown } from 'pl-fe/features/forms';
 import SettingToggle from 'pl-fe/features/settings/components/setting-toggle';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
@@ -90,6 +91,8 @@ const languages = {
 
 type Language = keyof typeof languages;
 
+const INTERFACE_SIZES = ['sm', 'md', 'lg', 'xl'] as const;
+
 const messages = defineMessages({
   heading: { id: 'column.preferences', defaultMessage: 'Preferences' },
   displayPostsDefault: { id: 'preferences.fields.display_media.default', defaultMessage: 'Hide posts marked as sensitive' },
@@ -136,6 +139,11 @@ const Preferences = () => {
     if (newBrandColor === brandColor) return;
 
     dispatch(changeSetting(['theme', 'brandColor'], newBrandColor, { showAlert: true, save: false }));
+    debouncedSave(dispatch);
+  };
+
+  const onInterfaceSizeChange = (value: number) => {
+    dispatch(changeSetting(['theme', 'interfaceSize'], INTERFACE_SIZES[value], { showAlert: true, save: false }));
     debouncedSave(dispatch);
   };
 
@@ -192,6 +200,11 @@ const Preferences = () => {
           onChange={(palette) => onBrandColorChange(palette['500'])}
           allowTintChange={false}
         />
+        <ListItem label={<div className='whitespace-nowrap'><FormattedMessage id='preferences.fields.interface_size' defaultMessage='Interface size' /></div>}>
+          <div className='flex w-full flex-col'>
+            <StepSlider value={INTERFACE_SIZES.indexOf(settings.theme?.interfaceSize || 'md')} steps={4} onChange={onInterfaceSizeChange} />
+          </div>
+        </ListItem>
       </List>
 
       <HStack justifyContent='end'>

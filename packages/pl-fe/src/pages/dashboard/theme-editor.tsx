@@ -254,7 +254,7 @@ interface IPaletteListItem {
 
 /** Palette editor inside a ListItem. */
 const PaletteListItem: React.FC<IPaletteListItem> = ({ label, palette, onChange, resetKey, allowTintChange }) => typeof palette === 'string' ? null : (
-  <ListItem label={<div className='w-20'>{label}</div>}>
+  <ListItem label={<div className='whitespace-nowrap'>{label}</div>}>
     <Palette palette={palette} onChange={onChange} resetKey={resetKey} allowTintChange={allowTintChange} />
   </ListItem>
 );

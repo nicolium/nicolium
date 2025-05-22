@@ -59,12 +59,15 @@ const Avatar = (props: IAvatar) => {
     }).catch(() => setColor(undefined));
   }, [src, isCat]);
 
-  const style: React.CSSProperties = React.useMemo(() => ({
-    width: size,
-    height: size,
-    fontSize: size,
-    color,
-  }), [size, color]);
+  const style: React.CSSProperties = React.useMemo(() => {
+    const value = `${size / 16}rem`;
+    return {
+      width: value,
+      height: value,
+      fontSize: value,
+      color,
+    };
+  }, [size, color]);
 
   if (disableUserProvidedMedia) {
     if (isAvatarMissing || !alt || isDefaultAvatar(src)) return null;

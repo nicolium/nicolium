@@ -1345,6 +1345,7 @@
   "preferences.fields.display_media.hide_all": "Always hide media posts",
   "preferences.fields.display_media.show_all": "Always show posts",
   "preferences.fields.implicit_addressing_label": "Include mentions in post content when replying",
+  "preferences.fields.interface_size": "Interface size",
   "preferences.fields.known_languages_label": "Languages you know",
   "preferences.fields.language_label": "Display language",
   "preferences.fields.media_display_label": "Sensitive content",

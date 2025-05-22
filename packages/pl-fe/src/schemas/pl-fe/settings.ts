@@ -55,6 +55,7 @@ const settingsSchema = v.object({
     brandColor: v.fallback(v.string(), ''),
     accentColor: v.fallback(v.string(), ''),
     colors: v.any(),
+    interfaceSize: v.fallback(v.picklist(['sm', 'md', 'lg', 'xl']), 'md'),
   })), undefined),
 
   systemFont: v.fallback(v.boolean(), false),

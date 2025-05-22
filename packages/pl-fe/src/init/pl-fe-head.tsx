@@ -15,7 +15,7 @@ const Helmet = React.lazy(() => import('pl-fe/components/helmet'));
 const PlFeHead = () => {
   const locale = useLocale();
   const direction = useLocaleDirection(locale);
-  const { reduceMotion, underlineLinks, demetricator, systemFont } = useSettings();
+  const { reduceMotion, underlineLinks, demetricator, systemFont, theme: themeSettings } = useSettings();
   const plFeConfig = usePlFeConfig();
   const theme = useTheme();
 
@@ -40,7 +40,13 @@ const PlFeHead = () => {
 
   return (
     <Helmet>
-      <html lang={locale} className={clsx('h-full', { 'dark': theme === 'dark', 'dark black': theme === 'black' })} />
+      <html
+        lang={locale}
+        className={clsx('h-full', `text-${themeSettings?.interfaceSize || 'md'}`, {
+          'dark': theme === 'dark',
+          'dark black': theme === 'black',
+        })}
+      />
       <body className={bodyClass} dir={direction} />
       {themeCss && <style id='theme' type='text/css'>{`:root{${themeCss}}`}</style>}
       {['dark', 'black'].includes(theme) && <style type='text/css'>{':root { color-scheme: dark; }'}</style>}
