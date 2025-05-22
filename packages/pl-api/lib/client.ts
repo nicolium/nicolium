@@ -404,6 +404,25 @@ class PlApiClient {
     };
   };
 
+  #paginatedIceshrimpAccountsList = async <T> (url: string, fn: (body: T) => Array<string>): Promise<PaginatedResponse<Account>> => {
+    await this.#getIceshrimpAccessToken();
+
+    const response = (await this.request<T>(url));
+    const ids = fn(response.json);
+
+    const accounts = await this.accounts.getAccounts(ids);
+
+    const prevLink = getPrevLink(response);
+    const nextLink = getNextLink(response);
+
+    return {
+      previous: prevLink ? () => this.#paginatedIceshrimpAccountsList(prevLink, fn) : null,
+      next: nextLink ? () => this.#paginatedIceshrimpAccountsList(nextLink, fn) : null,
+      items: accounts,
+      partial: response.status === 206,
+    };
+  };
+
   #groupNotifications = ({ previous, next, items, ...response }: PaginatedResponse<Notification>, params?: GetGroupedNotificationsParams): PaginatedResponse<GroupedNotificationsResults, false> => {
     const notificationGroups: Array<NotificationGroup> = [];
 
@@ -988,8 +1007,15 @@ class PlApiClient {
      *
      * Requires features{@link Features.outgoingFollowRequests}.
      */
-    getOutgoingFollowRequests: async (params?: GetFollowRequestsParams) =>
-      this.#paginatedGet('/api/v1/pleroma/outgoing_follow_requests', { params }, accountSchema),
+    getOutgoingFollowRequests: async (params?: GetFollowRequestsParams) => {
+      if (this.features.version.software === ICESHRIMP_NET) {
+        return this.#paginatedIceshrimpAccountsList(
+          '/api/iceshrimp/follow_requests/outgoing',
+          (response: Array<{ user: {id: string } }>) => response.map(({ user }) => user.id),
+        );
+      }
+      return this.#paginatedGet('/api/v1/pleroma/outgoing_follow_requests', { params }, accountSchema);
+    },
 
     /**
      * Accept follow request

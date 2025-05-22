@@ -1223,7 +1223,10 @@ const getFeatures = (instance: Instance) => {
     /**
      * @see GET /api/v1/pleroma/outgoing_follow_requests
      */
-    outgoingFollowRequests: v.build === PL && gte(v.version, '2.8.0'),
+    outgoingFollowRequests: any([
+      v.software === ICESHRIMP_NET,
+      v.build === PL && gte(v.version, '2.8.0'),
+    ]),
 
     pleromaAdminAccounts: any([
       v.software === AKKOMA,
