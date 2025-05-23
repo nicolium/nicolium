@@ -132,7 +132,7 @@
     "redux": "^5.0.1",
     "redux-thunk": "^3.1.0",
     "reselect": "^5.1.1",
-    "resize-observer-polyfill": "^1.5.1",
+    "resize-observer": "^1.0.4",
     "sass": "^1.86.3",
     "stringz": "^2.1.0",
     "tiny-queue": "^0.2.1",
