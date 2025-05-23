@@ -362,7 +362,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
           <div
             data-testid='dropdown-menu'
             ref={refs.setFloating}
-            className='z-[1001]'
+            className='z-[1001] block'
             style={{
               position: strategy,
               top: y ?? 0,
