@@ -13,7 +13,7 @@ interface IEmoji extends Pick<React.ImgHTMLAttributes<HTMLImageElement>, 'alt' |
 
 /** A single emoji image. */
 const Emoji: React.FC<IEmoji> = (props): JSX.Element | null => {
-  const { disableUserProvidedMedia } = useSettings();
+  const { disableUserProvidedMedia, systemEmojiFont } = useSettings();
   const { emoji, alt, src, noGroup, ...rest } = props;
 
   let filename;
@@ -38,6 +38,8 @@ const Emoji: React.FC<IEmoji> = (props): JSX.Element | null => {
       />
     );
   }
+
+  if (systemEmojiFont) return <>{emoji}</>;
 
   return (
     <img

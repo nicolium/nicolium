@@ -331,6 +331,10 @@ const Preferences = () => {
           <SettingToggle settings={settings} settingPath={['systemFont']} onChange={onToggleChange} />
         </ListItem>
 
+        <ListItem label={<FormattedMessage id='preferences.fields.system_emoji_font_label' defaultMessage='Use system emoji font' />}>
+          <SettingToggle settings={settings} settingPath={['systemEmojiFont']} onChange={onToggleChange} />
+        </ListItem>
+
         <ListItem label={<FormattedMessage id='preferences.fields.reduce_motion_label' defaultMessage='Reduce motion in animations' />}>
           <SettingToggle settings={settings} settingPath={['reduceMotion']} onChange={onToggleChange} />
         </ListItem>

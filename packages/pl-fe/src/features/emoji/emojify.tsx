@@ -35,7 +35,7 @@ interface IEmojify {
 }
 
 const Emojify: React.FC<IEmojify> = React.memo(({ text, emojis = {} }) => {
-  const { disableUserProvidedMedia } = useSettings();
+  const { disableUserProvidedMedia, systemEmojiFont } = useSettings();
 
   if (Array.isArray(emojis)) emojis = makeEmojiMap(emojis);
 
@@ -63,7 +63,7 @@ const Emojify: React.FC<IEmojify> = React.memo(({ text, emojis = {} }) => {
     // unqualified emojis aren't in emoji-mart's mappings so we just add FEOF
     const unqualified = c + String.fromCodePoint(65039);
 
-    if (c in unicodeMapping) {
+    if (!systemEmojiFont && c in unicodeMapping) {
       clearStack();
 
       const { unified, shortcode } = unicodeMapping[c];
@@ -71,7 +71,7 @@ const Emojify: React.FC<IEmojify> = React.memo(({ text, emojis = {} }) => {
       nodes.push(
         <img key={index} draggable={false} className='emojione transition-transform hover:scale-125' alt={c} title={`:${shortcode}:`} src={`/packs/emoji/${unified}.svg`} />,
       );
-    } else if (unqualified in unicodeMapping) {
+    } else if (!systemEmojiFont && unqualified in unicodeMapping) {
       clearStack();
 
       const { unified, shortcode } = unicodeMapping[unqualified];

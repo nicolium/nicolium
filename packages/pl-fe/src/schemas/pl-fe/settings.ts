@@ -59,6 +59,7 @@ const settingsSchema = v.object({
   })), undefined),
 
   systemFont: v.fallback(v.boolean(), false),
+  systemEmojiFont: v.fallback(v.boolean(), false),
   demetricator: v.fallback(v.boolean(), false),
 
   chats: coerceObject({
