@@ -6863,10 +6863,10 @@ pkg-dir@^4.1.0:
   dependencies:
     find-up "^4.0.0"
 
-pl-api@^1.0.0-rc.64:
-  version "1.0.0-rc.64"
-  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-1.0.0-rc.64.tgz#9f1951362b6bea70fbad2286612219a235756618"
-  integrity sha512-WNa79HgXhff0u5Kvz2kRa+avKOIGYbNmOFfIBRJQqwnmK7xrehxkJovMwZqeJ8fxmtrLI4lMNGdSPwWlBZKGkw==
+pl-api@^1.0.0-rc.66:
+  version "1.0.0-rc.66"
+  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-1.0.0-rc.66.tgz#07c1b44b201c014dae88ce6100ab9706ed7a0f6b"
+  integrity sha512-WqSEZKY/7z4ADggYI3jVsaClb+Q8tW+W64ZlVsWqeKAx1uNJbatMG1zRh1MlaxVj+d86zFFKQvF+PN1Uqcxa1g==
   dependencies:
     blurhash "^2.0.5"
     http-link-header "^1.1.3"
@@ -6876,7 +6876,7 @@ pl-api@^1.0.0-rc.64:
     object-to-formdata "^4.5.1"
     query-string "^9.1.1"
     semver "^7.7.1"
-    valibot "^1.0.0-beta.12"
+    valibot "^1.1.0"
 
 possible-typed-array-names@^1.0.0:
   version "1.0.0"
@@ -8892,10 +8892,10 @@ util@^0.12.5:
     is-typed-array "^1.1.3"
     which-typed-array "^1.1.2"
 
-valibot@^1.0.0-beta.12:
-  version "1.0.0-beta.12"
-  resolved "https://registry.yarnpkg.com/valibot/-/valibot-1.0.0-beta.12.tgz#7c0457c8b86b47c3b04fe66e990a589c79eae96a"
-  integrity sha512-j3WIxJ0pmUFMfdfUECn3YnZPYOiG0yHYcFEa/+RVgo0I+MXE3ToLt7gNRLtY5pwGfgNmsmhenGZfU5suu9ijUA==
+valibot@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/valibot/-/valibot-1.1.0.tgz#873bb1af9e1577391690307bfe0520bd1360ec2d"
+  integrity sha512-Nk8lX30Qhu+9txPYTwM0cFlWLdPFsFr6LblzqIySfbZph9+BFsAHsNvHOymEviUepeIW6KFHzpX8TKhbptBXXw==
 
 value-equal@^1.0.1:
   version "1.0.1"
