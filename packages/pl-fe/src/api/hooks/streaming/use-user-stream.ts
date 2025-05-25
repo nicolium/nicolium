@@ -26,14 +26,14 @@ import { useTimelineStream } from './use-timeline-stream';
 import type { Announcement, AnnouncementReaction, FollowRelationshipUpdate, Relationship, StreamingEvent } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
-const updateAnnouncementReactions = ({ announcement_id: id, name }: AnnouncementReaction) => {
+const updateAnnouncementReactions = (reaction: AnnouncementReaction) => {
   queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
     prevResult.map(value => {
-      if (value.id !== id) return value;
+      if (value.id !== reaction.announcement_id) return value;
 
       return {
         ...value,
-        reactions: updateReactions(value.reactions, name, -1, true),
+        reactions: updateReactions(value.reactions, reaction.name, reaction.count, undefined, true),
       };
     }),
   );
