@@ -4,6 +4,7 @@ import { announcementSchema } from './announcement';
 import { announcementReactionSchema } from './announcement-reaction';
 import { chatSchema } from './chat';
 import { conversationSchema } from './conversation';
+import { emojiReactionSchema } from './emoji-reaction';
 import { markersSchema } from './marker';
 import { notificationSchema } from './notification';
 import { statusSchema } from './status';
@@ -107,6 +108,11 @@ const notificationsMergedEventSchema = v.object({
   event: v.literal('notifications_merged'),
 });
 
+const emojiReactionStreamingEventSchema = v.object({
+  ...baseStreamingEventSchema.entries,
+  payload: v.pipe(v.any(), v.transform((payload: any) => JSON.parse(payload)), emojiReactionSchema),
+});
+
 /**
  * @category Schemas
  * @see {@link https://docs.joinmastodon.org/methods/streaming/#events}
@@ -130,6 +136,7 @@ const streamingEventSchema: v.BaseSchema<any, StreamingEvent, v.BaseIssue<unknow
     respondStreamingEventSchema,
     markerStreamingEventSchema,
     notificationsMergedEventSchema,
+    emojiReactionStreamingEventSchema,
   ]),
 ) as any;
 
