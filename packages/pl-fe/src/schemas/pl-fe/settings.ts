@@ -38,63 +38,63 @@ const settingsSchema = v.object({
   knownLanguages: v.fallback(v.array(v.string()), []),
   showWrenchButton: v.fallback(v.boolean(), false),
   urlPrivacy: coerceObject({
-    clearLinksInCompose: v.fallback(v.boolean(), true),
-    clearLinksInContent: v.fallback(v.boolean(), false),
-    allowReferralMarketing: v.fallback(v.boolean(), false),
-    rulesUrl: v.fallback(v.string(), ''),
-    hashUrl: v.fallback(v.string(), ''),
-    displayTargetHost: v.fallback(v.boolean(), true),
-    redirectLinksMode: v.fallback(v.picklist(['off', 'auto', 'manual']), 'off'),
-    redirectServicesUrl: v.fallback(v.string(), ''),
-    redirectServices: v.fallback(v.record(v.string(), v.string()), {}),
+    clearLinksInCompose: v.optional(v.boolean(), true),
+    clearLinksInContent: v.optional(v.boolean(), false),
+    allowReferralMarketing: v.optional(v.boolean(), false),
+    rulesUrl: v.optional(v.string(), ''),
+    hashUrl: v.optional(v.string(), ''),
+    displayTargetHost: v.optional(v.boolean(), true),
+    redirectLinksMode: v.optional(v.picklist(['off', 'auto', 'manual']), 'off'),
+    redirectServicesUrl: v.optional(v.string(), ''),
+    redirectServices: v.optional(v.record(v.string(), v.string()), {}),
   }),
   checkEmojiReactsSupport: v.fallback(v.boolean(), false),
   disableUserProvidedMedia: v.fallback(v.boolean(), false),
 
-  theme: v.fallback(v.optional(v.object({
-    brandColor: v.fallback(v.string(), ''),
-    accentColor: v.fallback(v.string(), ''),
-    colors: v.any(),
-    interfaceSize: v.fallback(v.picklist(['sm', 'md', 'lg', 'xl']), 'md'),
-  })), undefined),
+  theme: coerceObject({
+    brandColor: v.optional(v.string(), ''),
+    accentColor: v.optional(v.string(), ''),
+    colors: v.optional(v.any()),
+    interfaceSize: v.optional(v.picklist(['sm', 'md', 'lg', 'xl']), 'md'),
+  }),
 
   systemFont: v.fallback(v.boolean(), false),
   systemEmojiFont: v.fallback(v.boolean(), false),
   demetricator: v.fallback(v.boolean(), false),
 
   chats: coerceObject({
-    mainWindow: v.fallback(v.picklist(['minimized', 'open']), 'minimized'),
-    sound: v.fallback(v.boolean(), true),
+    mainWindow: v.optional(v.picklist(['minimized', 'open']), 'minimized'),
+    sound: v.optional(v.boolean(), true),
   }),
 
   timelines: v.fallback(v.record(v.string(), coerceObject({
     shows: coerceObject({
-      reblog: v.fallback(v.boolean(), true),
-      reply: v.fallback(v.boolean(), true),
-      direct: v.fallback(v.boolean(), false),
+      reblog: v.optional(v.boolean(), true),
+      reply: v.optional(v.boolean(), true),
+      direct: v.optional(v.boolean(), false),
     }),
     other: coerceObject({
-      onlyMedia: v.fallback(v.boolean(), false),
+      onlyMedia: v.optional(v.boolean(), false),
     }),
   })), {}),
 
   account_timeline: coerceObject({
     shows: coerceObject({
-      pinned: v.fallback(v.boolean(), true),
+      pinned: v.optional(v.boolean(), true),
     }),
   }),
 
   remote_timeline: coerceObject({
-    pinnedHosts: v.fallback(v.array(v.string()), []),
+    pinnedHosts: v.optional(v.array(v.string()), []),
   }),
 
   notifications: coerceObject({
     quickFilter: coerceObject({
-      active: v.fallback(v.string(), 'all'),
-      advanced: v.fallback(v.boolean(), false),
-      show: v.fallback(v.boolean(), true),
+      active: v.optional(v.string(), 'all'),
+      advanced: v.optional(v.boolean(), false),
+      show: v.optional(v.boolean(), true),
     }),
-    sounds: v.fallback(v.record(v.string(), v.boolean()), {}),
+    sounds: v.optional(v.record(v.string(), v.boolean()), {}),
   }),
 
   frequentlyUsedEmojis: v.fallback(v.record(v.string(), v.number()), {}),
