@@ -65,11 +65,11 @@ const baseStatusSchema = v.object({
   language: v.fallback(v.nullable(v.string()), null),
   text: v.fallback(v.nullable(v.string()), null),
   edited_at: v.fallback(v.nullable(datetimeSchema), null),
-  favourited: v.pipe(v.unknown(), v.transform(Boolean)),
-  reblogged: v.pipe(v.unknown(), v.transform(Boolean)),
-  muted: v.pipe(v.unknown(), v.transform(Boolean)),
-  bookmarked: v.pipe(v.unknown(), v.transform(Boolean)),
-  pinned: v.pipe(v.unknown(), v.transform(Boolean)),
+  favourited: v.fallback(v.pipe(v.unknown(), v.transform(Boolean)), false),
+  reblogged: v.fallback(v.pipe(v.unknown(), v.transform(Boolean)), false),
+  muted: v.fallback(v.pipe(v.unknown(), v.transform(Boolean)), false),
+  bookmarked: v.fallback(v.pipe(v.unknown(), v.transform(Boolean)), false),
+  pinned: v.fallback(v.pipe(v.unknown(), v.transform(Boolean)), false),
   filtered: filteredArray(filterResultSchema),
   approval_status: v.fallback(v.nullable(v.picklist(['pending', 'approval', 'rejected'])), null),
   group: v.fallback(v.nullable(groupSchema), null),
@@ -103,6 +103,8 @@ const baseStatusSchema = v.object({
   disliked: v.fallback(v.pipe(v.unknown(), v.transform(Boolean)), false),
 
   interaction_policy: interactionPolicySchema,
+
+  content_type: v.fallback(v.nullable(v.string()), null),
 });
 
 const preprocess = (status: any) => {

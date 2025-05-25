@@ -2340,10 +2340,22 @@
   resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-14.5.2.tgz#db7257d727c891905947bd1c1a99da20e03c2ebd"
   integrity sha512-YAh82Wh4TIrxYLmfGcixwD18oIjyC1pFQC2Y01F2lzV2HTMiYrI0nze0FD0ocB//CKS/7jIUgae+adPqxK5yCQ==
 
+"@transfem-org/sfm-js@^0.24.6":
+  version "0.24.6"
+  resolved "https://activitypub.software/api/v4/projects/2/packages/npm/@transfem-org/sfm-js/-/@transfem-org/sfm-js-0.24.6.tgz#eedf939027773d993e45b6eb19b67f88cb36cbba"
+  integrity sha1-7t+TkCd3PZk+RbbrGbZ/iMs2y7o=
+  dependencies:
+    "@twemoji/parser" "15.0.0"
+
 "@trysound/sax@0.2.0":
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/@trysound/sax/-/sax-0.2.0.tgz#cccaab758af56761eb7bf37af6f03f326dd798ad"
   integrity sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==
+
+"@twemoji/parser@15.0.0":
+  version "15.0.0"
+  resolved "https://registry.yarnpkg.com/@twemoji/parser/-/parser-15.0.0.tgz#8ae9749659ef524b5f0e6ee1412d0e48865e77bf"
+  integrity sha512-lh9515BNsvKSNvyUqbj5yFu83iIDQ77SwVcsN/SnEGawczhsKU6qWuogewN1GweTi5Imo5ToQ9s+nNTf97IXvg==
 
 "@twemoji/svg@^15.0.0":
   version "15.0.0"
@@ -6863,10 +6875,10 @@ pkg-dir@^4.1.0:
   dependencies:
     find-up "^4.0.0"
 
-pl-api@^1.0.0-rc.67:
-  version "1.0.0-rc.67"
-  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-1.0.0-rc.67.tgz#e1a98e7f94bcedef7f0cf89295b917f2050ca42e"
-  integrity sha512-IrAVsUMuY/vhye8jPYQuHtyycexfheU6hj1ithFYyVhOfoctqkNACVQ8WpvPRXh68T+0o+uASMhzRFvdVDSLnA==
+pl-api@^1.0.0-rc.68:
+  version "1.0.0-rc.68"
+  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-1.0.0-rc.68.tgz#c334e710e349403bebcd89e42dbc87efc0b4d612"
+  integrity sha512-CMSlxTsKL965J03Y4OfwQq/uV4hSh/daBcsVw2Tzx0KTtR/nnUE+hwfw0E0PypMFxZojPuZEGbxpuoT1JXgPSQ==
   dependencies:
     blurhash "^2.0.5"
     http-link-header "^1.1.3"
