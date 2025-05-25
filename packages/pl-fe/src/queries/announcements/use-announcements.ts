@@ -15,7 +15,7 @@ const updateReactions = (reactions: AnnouncementReaction[], name: string, count:
   const idx = reactions.findIndex(reaction => reaction.name === name);
 
   if (idx > -1) {
-    reactions = reactions.map(reaction => reaction.name === name ? updateReaction(reaction, count, me, overwrite) : reaction);
+    return reactions.map(reaction => reaction.name === name ? updateReaction(reaction, count, me, overwrite) : reaction);
   }
 
   return [...reactions, updateReaction(v.parse(announcementReactionSchema, { name }), count, me, overwrite)];
