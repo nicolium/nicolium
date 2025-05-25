@@ -200,8 +200,8 @@ const baseAccountSchema = v.object({
   speak_as_cat: v.fallback(v.boolean(), false),
 
   __meta: coerceObject({
-    pleroma: v.fallback(v.any(), undefined),
-    source: v.fallback(v.any(), undefined),
+    pleroma: v.optional(v.any(), undefined),
+    source: v.optional(v.any(), undefined),
   }),
 });
 

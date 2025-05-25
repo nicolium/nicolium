@@ -110,6 +110,7 @@ const notificationsMergedEventSchema = v.object({
 
 const emojiReactionStreamingEventSchema = v.object({
   ...baseStreamingEventSchema.entries,
+  event: v.literal('emoji_reaction'),
   payload: v.pipe(v.any(), v.transform((payload: any) => JSON.parse(payload)), emojiReactionSchema),
 });
 
