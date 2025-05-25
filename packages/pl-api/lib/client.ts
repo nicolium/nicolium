@@ -84,7 +84,7 @@ import {
 import { circleSchema } from './entities/circle';
 import { type GroupedNotificationsResults, groupedNotificationsResultsSchema, type NotificationGroup } from './entities/grouped-notifications-results';
 import { ShoutMessage, shoutMessageSchema } from './entities/shout-message';
-import { filteredArray } from './entities/utils';
+import { coerceObject, filteredArray } from './entities/utils';
 import { AKKOMA, type Features, getFeatures, GOTOSOCIAL, ICESHRIMP_NET, MITRA, PIXELFED, PLEROMA } from './features';
 import request, { getNextLink, getPrevLink, type RequestBody, type RequestMeta } from './request';
 import { buildFullPath } from './utils/url';
@@ -1636,7 +1636,7 @@ class PlApiClient {
             response = await this.request('/api/v1/user').then(({ json }) => ({
               settings: {
                 enabled: !!json?.two_factor_enabled_at,
-                method: 'totp',
+                totp: !!json?.two_factor_enabled_at,
               },
             }));
             break;
@@ -1645,7 +1645,7 @@ class PlApiClient {
         }
 
         return v.parse(v.object({
-          settings: v.object({
+          settings: coerceObject({
             enabled: v.boolean(),
             totp: v.boolean(),
           }),
