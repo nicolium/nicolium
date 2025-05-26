@@ -47,7 +47,7 @@ const PlFeHead = () => {
           'dark black': theme === 'black',
         })}
         // @ts-ignore
-        style={themeCss + ['dark', 'black'].includes(theme) ? 'color-scheme: dark;' : ''}
+        style={themeCss + (['dark', 'black'].includes(theme) ? 'color-scheme: dark;' : '')}
       />
       <body className={bodyClass} dir={direction} />
       <meta name='theme-color' content={plFeConfig.brandColor} />
