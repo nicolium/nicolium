@@ -46,10 +46,10 @@ const PlFeHead = () => {
           'dark': theme === 'dark',
           'dark black': theme === 'black',
         })}
+        // @ts-ignore
+        style={themeCss + ['dark', 'black'].includes(theme) ? 'color-scheme: dark;' : ''}
       />
       <body className={bodyClass} dir={direction} />
-      {themeCss && <style id='theme' type='text/css'>{`:root{${themeCss}}`}</style>}
-      {['dark', 'black'].includes(theme) && <style type='text/css'>{':root { color-scheme: dark; }'}</style>}
       <meta name='theme-color' content={plFeConfig.brandColor} />
     </Helmet>
   );

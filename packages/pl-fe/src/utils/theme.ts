@@ -76,7 +76,7 @@ const generateNeutral = (brandColor: string): string | null => {
   return hslToHex({ h, s: 20, l: 55 });
 };
 
-const parseShades = (obj: Record<string, any>, color: string, shades: Record<string, any>): void => {
+const parseShades = (obj: Record<string, string>, color: string, shades: Record<string, any>): void => {
   if (!shades) return;
 
   if (typeof shades === 'string') {
@@ -98,7 +98,7 @@ const parseShades = (obj: Record<string, any>, color: string, shades: Record<str
 };
 
 // Convert colors as CSS variables
-const parseColors = (colors: TailwindColorPalette): TailwindColorPalette =>
+const parseColors = (colors: TailwindColorPalette): Record<string, string> =>
   Object.keys(colors).reduce((obj, color) => {
     parseShades(obj, color, colors[color] as TailwindColorObject);
     return obj;
