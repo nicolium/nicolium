@@ -35,6 +35,8 @@ import {
   credentialApplicationSchema,
   customEmojiSchema,
   domainBlockSchema,
+  driveFileSchema,
+  driveFolderSchema,
   emojiReactionSchema,
   extendedDescriptionSchema,
   familiarFollowersSchema,
@@ -159,6 +161,7 @@ import type {
   GetChatsParams,
 } from './params/chats';
 import type { GetCircleStatusesParams } from './params/circles';
+import type { UpdateFileParams } from './params/drive';
 import type {
   CreateEventParams,
   EditEventParams,
@@ -5593,6 +5596,119 @@ class PlApiClient {
       });
 
       return v.parse(subscriptionInvoiceSchema, response.json);
+    },
+  };
+
+  public readonly drive = {
+    getDrive: async () => {
+      await this.#getIceshrimpAccessToken();
+
+      const response = await this.request('/api/iceshrimp/drive/folder');
+
+      return v.parse(driveFolderSchema, response.json);
+    },
+
+    getFolder: async (id: string) => {
+      await this.#getIceshrimpAccessToken();
+
+      const response = await this.request(`/api/iceshrimp/drive/folder/${id}`);
+
+      return v.parse(driveFolderSchema, response.json);
+    },
+
+    createFolder: async (name: string, parentId: string) => {
+      await this.#getIceshrimpAccessToken();
+
+      const response = await this.request('/api/iceshrimp/drive/folder', {
+        method: 'POST',
+        body: { name, parentId },
+      });
+
+      return v.parse(driveFolderSchema, response.json);
+    },
+
+    updateFolder: async (id: string, name: string) => {
+      await this.#getIceshrimpAccessToken();
+
+      const response = await this.request(`/api/iceshrimp/drive/folder/${id}`, {
+        method: 'PUT',
+        body: name,
+      });
+
+      return v.parse(driveFolderSchema, response.json);
+    },
+
+    deleteFolder: async (id: string) => {
+      await this.#getIceshrimpAccessToken();
+
+      const response = await this.request<{}>(`/api/iceshrimp/drive/folder/${id}`, {
+        method: 'DELETE',
+      });
+
+      return response;
+    },
+
+    moveFolder: async (id: string, targetFolderId: string) => {
+      await this.#getIceshrimpAccessToken();
+
+      const response = await this.request(`/api/iceshrimp/drive/folder/${id}/move`, {
+        method: 'POST',
+        body: { folderId: targetFolderId },
+      });
+
+      return v.parse(driveFolderSchema, response.json);
+    },
+
+    getFile: async (id: string) => {
+      await this.#getIceshrimpAccessToken();
+
+      const response = await this.request(`/api/iceshrimp/drive/${id}`);
+
+      return v.parse(driveFileSchema, response.json);
+    },
+
+    createFile: async (file: File, folderId: string) => {
+      await this.#getIceshrimpAccessToken();
+
+      const response = await this.request('/api/iceshrimp/drive', {
+        method: 'POST',
+        body: { file, folderId },
+        contentType: '',
+      });
+
+      return v.parse(driveFileSchema, response.json);
+    },
+
+    updateFile: async (id: string, params: UpdateFileParams) => {
+      await this.#getIceshrimpAccessToken();
+
+      const response = await this.request(`/api/iceshrimp/drive/${id}`, {
+        method: 'PUT',
+        body: params,
+      });
+
+      return v.parse(driveFileSchema, response.json);
+    },
+
+    deleteFile: async (id: string) => {
+      await this.#getIceshrimpAccessToken();
+
+      const response = await this.request<{}>(`/api/iceshrimp/drive/${id}`, {
+        method: 'DELETE',
+      });
+
+      return response;
+    },
+
+    moveFile: async (id: string, targetFolderId: string) => {
+      await this.#getIceshrimpAccessToken();
+
+      const response = await this.request(`/api/iceshrimp/drive/${id}/move`, {
+        method: 'POST',
+        body: { folderId: targetFolderId },
+      });
+
+      return v.parse(driveFolderSchema, response.json);
     },
   };
 
