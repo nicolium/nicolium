@@ -7,6 +7,7 @@ import * as v from 'valibot';
 const webPushSubscriptionSchema = v.object({
   id: v.pipe(v.unknown(), v.transform(String)),
   endpoint: v.string(),
+  standard: v.fallback(v.boolean(), false),
   alerts: v.record(v.string(), v.boolean()),
   server_key: v.string(),
 });

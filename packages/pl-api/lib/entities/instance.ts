@@ -1,4 +1,3 @@
-/* eslint sort-keys: "error" */
 import * as v from 'valibot';
 
 import { accountSchema } from './account';
@@ -159,10 +158,14 @@ const configurationSchema = coerceObject({
   }),
   urls: coerceObject({
     streaming: v.fallback(v.optional(v.pipe(v.string(), v.url())), undefined),
+    about: v.fallback(v.nullable(v.string()), null),
+    privacy_policy: v.fallback(v.nullable(v.string()), null),
+    terms_of_service: v.fallback(v.nullable(v.string()), null),
   }),
   vapid: coerceObject({
     public_key: v.fallback(v.string(), ''),
   }),
+  limited_federation: v.optional(v.boolean(), undefined),
 });
 
 const contactSchema = coerceObject({
@@ -253,6 +256,8 @@ const registrations = coerceObject({
   approval_required: v.fallback(v.boolean(), false),
   enabled: v.fallback(v.boolean(), false),
   message: v.fallback(v.optional(v.string()), undefined),
+  min_age: v.fallback(v.nullable(v.number()), null),
+  reason_required: v.fallback(v.nullable(v.boolean()), null),
 });
 
 const statsSchema = coerceObject({

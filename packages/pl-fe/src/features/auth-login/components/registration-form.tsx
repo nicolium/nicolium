@@ -58,7 +58,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   const needsConfirmation = instance.pleroma.metadata.account_activation_required;
   const needsApproval = instance.registrations.approval_required;
   const supportsAccountLookup = features.accountLookup;
-  const birthdayRequired = instance.pleroma.metadata.birthday_required;
+  const birthdayRequired = instance.pleroma.metadata.birthday_required || instance.registrations.min_age;
   const domains = instance.pleroma.metadata.multitenancy.enabled ? instance.pleroma.metadata.multitenancy.domains!.filter((domain) => domain.public) : undefined;
 
   const [captchaLoading, setCaptchaLoading] = useState(true);
@@ -319,7 +319,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
 
           {birthdayRequired && (
             <BirthdayInput
-              value={params.birthday || ''}
+              value={params.date_of_birth || ''}
               onChange={onBirthdayChange}
               required
             />

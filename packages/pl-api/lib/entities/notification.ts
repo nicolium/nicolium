@@ -47,7 +47,7 @@ const reportNotificationSchema = v.object({
 const severedRelationshipNotificationSchema = v.object({
   ...baseNotificationSchema.entries,
   type: v.literal('severed_relationships'),
-  relationship_severance_event: relationshipSeveranceEventSchema,
+  event: relationshipSeveranceEventSchema,
 });
 
 const moderationWarningNotificationSchema = v.object({

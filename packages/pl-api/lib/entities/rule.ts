@@ -4,6 +4,10 @@ const baseRuleSchema = v.object({
   id: v.string(),
   text: v.fallback(v.string(), ''),
   hint: v.fallback(v.string(), ''),
+  translations: v.optional(v.record(v.string(), v.object({
+    text: v.fallback(v.string(), ''),
+    hint: v.fallback(v.string(), ''),
+  })), undefined),
 });
 
 /**

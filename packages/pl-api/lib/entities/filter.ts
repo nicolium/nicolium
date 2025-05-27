@@ -47,9 +47,9 @@ const filterSchema = v.pipe(
     title: v.string(),
     context: v.array(v.picklist(['home', 'notifications', 'public', 'thread', 'account'])),
     expires_at: v.fallback(v.nullable(datetimeSchema), null),
-    filter_action: v.fallback(v.picklist(['warn', 'hide']), 'warn'),
-    keywords: filteredArray(filterKeywordSchema),
-    statuses: filteredArray(filterStatusSchema),
+    filter_action: v.fallback(v.picklist(['warn', 'hide', 'blur']), 'warn'),
+    keywords: v.optional(filteredArray(filterKeywordSchema), undefined),
+    statuses: v.optional(filteredArray(filterStatusSchema), undefined),
   }),
 );
 

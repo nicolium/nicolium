@@ -17,6 +17,8 @@ type CreateAccountParams = {
   locale: string;
   /** String. If registrations require manual approval, this text will be reviewed by moderators. */
   reason?: string;
+  /** String ([Date](https://docs.joinmastodon.org/api/datetime-format/#date)), required if the server has a minimum age requirement */
+  date_of_birth?: string;
 
   fullname?: string;
   bio?: string;
@@ -28,7 +30,6 @@ type CreateAccountParams = {
   captcha_answer_data?: string;
   /** invite token required when the registrations aren't public. */
   token?: string;
-  birthday?: string;
 
   /** optional, domain id, if multitenancy is enabled. */
   domain?: string;

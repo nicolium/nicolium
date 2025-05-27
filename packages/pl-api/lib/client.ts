@@ -29,6 +29,7 @@ import {
   bookmarkFolderSchema,
   chatMessageSchema,
   chatSchema,
+  circleSchema,
   contextSchema,
   conversationSchema,
   credentialAccountSchema,
@@ -44,6 +45,7 @@ import {
   filterKeywordSchema,
   filterSchema,
   filterStatusSchema,
+  groupedNotificationsResultsSchema,
   groupMemberSchema,
   groupRelationshipSchema,
   groupSchema,
@@ -62,6 +64,7 @@ import {
   partialStatusSchema,
   pleromaConfigSchema,
   pollSchema,
+  privacyPolicySchema,
   relationshipSchema,
   reportSchema,
   rssFeedSchema,
@@ -69,6 +72,7 @@ import {
   scheduledStatusSchema,
   scrobbleSchema,
   searchSchema,
+  shoutMessageSchema,
   statusEditSchema,
   statusSchema,
   statusSourceSchema,
@@ -78,14 +82,12 @@ import {
   subscriptionOptionSchema,
   suggestionSchema,
   tagSchema,
+  termfsOfServiceSchema,
   tokenSchema,
   translationSchema,
   trendsLinkSchema,
   webPushSubscriptionSchema,
 } from './entities';
-import { circleSchema } from './entities/circle';
-import { type GroupedNotificationsResults, groupedNotificationsResultsSchema, type NotificationGroup } from './entities/grouped-notifications-results';
-import { ShoutMessage, shoutMessageSchema } from './entities/shout-message';
 import { coerceObject, filteredArray } from './entities/utils';
 import { AKKOMA, type Features, getFeatures, GOTOSOCIAL, ICESHRIMP_NET, MITRA, PIXELFED, PLEROMA } from './features';
 import request, { getNextLink, getPrevLink, type RequestBody, type RequestMeta } from './request';
@@ -97,10 +99,13 @@ import type {
   AdminAnnouncement,
   AdminModerationLogEntry,
   AdminReport,
+  GroupedNotificationsResults,
   GroupRole,
   Instance,
   Notification,
+  NotificationGroup,
   PleromaConfig,
+  ShoutMessage,
   Status,
   StreamingEvent,
 } from './entities';
@@ -1278,7 +1283,7 @@ class PlApiClient {
     createAccount: async (params: CreateAccountParams) => {
       const response = await this.request('/api/v1/accounts', {
         method: 'POST',
-        body: { language: params.locale, ...params },
+        body: { language: params.locale, birthday: params.date_of_birth, ...params },
       });
 
       return v.parse(tokenSchema, response.json);
@@ -2352,10 +2357,12 @@ class PlApiClient {
     /**
      * Delete a status
      * Delete one of your own statuses.
+     *
+     * `delete_media` parameters requires features{@link Features.deleteMedia}.
      * @see {@link https://docs.joinmastodon.org/methods/statuses/#delete}
-    */
-    deleteStatus: async (statusId: string) => {
-      const response = await this.request(`/api/v1/statuses/${statusId}`, { method: 'DELETE' });
+     */
+    deleteStatus: async (statusId: string, deleteMedia?: boolean) => {
+      const response = await this.request(`/api/v1/statuses/${statusId}`, { method: 'DELETE', params: { delete_media: deleteMedia } });
 
       return v.parse(statusSourceSchema, response.json);
     },
@@ -2748,6 +2755,21 @@ class PlApiClient {
       });
 
       return v.parse(mediaAttachmentSchema, response.json);
+    },
+
+    /**
+     * Update media attachment
+     * Update a MediaAttachment’s parameters, before it is attached to a status and posted.
+     *
+     * Requires features{@link Features.deleteMedia}.
+     * @see {@link https://docs.joinmastodon.org/methods/media/delete}
+     */
+    deleteMedia: async (attachmentId: string) => {
+      const response = await this.request<{}>(`/api/v1/media/${attachmentId}`, {
+        method: 'DELETE',
+      });
+
+      return response.json;
     },
   };
 
@@ -3606,6 +3628,39 @@ class PlApiClient {
       }
 
       return v.parse(v.fallback(v.record(v.string(), v.record(v.string(), v.any())), {}), response);
+    },
+
+    /**
+     * View privacy policy
+     * Obtain the contents of this server's privacy policy.
+     * @see {@link https://docs.joinmastodon.org/methods/instance/privacy_policy}
+     */
+    getInstancePrivacyPolicy: async () => {
+      const response = await this.request('/api/v1/instance/privacy_policy');
+
+      return v.parse(privacyPolicySchema, response.json);
+    },
+
+    /**
+     * View terms of service
+     * Obtain the contents of this server's terms of service, if configured.
+     * @see {@link https://docs.joinmastodon.org/methods/instance/terms_of_service}
+     */
+    getInstanceTermsOfService: async () => {
+      const response = await this.request('/api/v1/instance/terms_of_service');
+
+      return v.parse(termfsOfServiceSchema, response.json);
+    },
+
+    /**
+      * View a specific version of the terms of service
+      * Obtain the contents of this server's terms of service, for a specified date, if configured.
+      * @see {@link https://docs.joinmastodon.org/methods/instance/terms_of_service_date}
+      */
+    getInstanceTermsOfServiceForDate: async (date: string) => {
+      const response = await this.request(`/api/v1/instance/terms_of_service/${date}`);
+
+      return v.parse(termfsOfServiceSchema, response.json);
     },
   };
 

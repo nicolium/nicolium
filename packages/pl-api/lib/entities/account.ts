@@ -131,6 +131,7 @@ const baseAccountSchema = v.object({
   followers_count: v.fallback(v.number(), 0),
   following_count: v.fallback(v.number(), 0),
   roles: filteredArray(roleSchema),
+  hide_collections: v.fallback(v.optional(v.boolean()), undefined),
 
   fqn: v.string(),
   ap_id: v.fallback(v.nullable(v.string()), null),
@@ -158,7 +159,6 @@ const baseAccountSchema = v.object({
   custom_css: v.fallback(v.string(), ''),
   enable_rss: v.fallback(v.boolean(), false),
   header_description: v.fallback(v.string(), ''),
-  hide_collections: v.fallback(v.optional(v.boolean()), undefined),
 
   verified: v.fallback(v.optional(v.boolean()), undefined),
   domain: v.fallback(v.string(), ''),
@@ -230,6 +230,7 @@ const accountSchema: v.BaseSchema<any, Account, v.BaseIssue<unknown>> = untypedA
 const untypedCredentialAccountSchema = v.pipe(v.any(), preprocessAccount, v.object({
   ...accountWithMovedAccountSchema.entries,
   source: v.fallback(v.nullable(v.object({
+    attribution_domains: v.fallback(v.nullable(v.array(v.string())), null),
     note: v.fallback(v.string(), ''),
     fields: filteredArray(fieldSchema),
     privacy: v.picklist(['public', 'unlisted', 'private', 'direct']),
