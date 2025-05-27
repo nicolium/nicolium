@@ -82,7 +82,7 @@ import {
   subscriptionOptionSchema,
   suggestionSchema,
   tagSchema,
-  termfsOfServiceSchema,
+  termsOfServiceSchema,
   tokenSchema,
   translationSchema,
   trendsLinkSchema,
@@ -3649,7 +3649,7 @@ class PlApiClient {
     getInstanceTermsOfService: async () => {
       const response = await this.request('/api/v1/instance/terms_of_service');
 
-      return v.parse(termfsOfServiceSchema, response.json);
+      return v.parse(termsOfServiceSchema, response.json);
     },
 
     /**
@@ -3660,7 +3660,7 @@ class PlApiClient {
     getInstanceTermsOfServiceForDate: async (date: string) => {
       const response = await this.request(`/api/v1/instance/terms_of_service/${date}`);
 
-      return v.parse(termfsOfServiceSchema, response.json);
+      return v.parse(termsOfServiceSchema, response.json);
     },
   };
 

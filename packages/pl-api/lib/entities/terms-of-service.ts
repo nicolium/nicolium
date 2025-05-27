@@ -6,7 +6,7 @@ import { dateSchema } from './utils';
  * @category Schemas
  * @see {@link https://docs.joinmastodon.org/entities/TermsOfService/}
  */
-const termfsOfServiceSchema = v.object({
+const termsOfServiceSchema = v.object({
   effective_date: dateSchema,
   effective: v.boolean(),
   content: v.string(),
@@ -16,6 +16,6 @@ const termfsOfServiceSchema = v.object({
 /**
  * @category Entity types
  */
-type TermfsOfService = v.InferOutput<typeof termfsOfServiceSchema>;
+type TermsOfService = v.InferOutput<typeof termsOfServiceSchema>;
 
-export { termfsOfServiceSchema, type TermfsOfService };
+export { termsOfServiceSchema, type TermsOfService };
