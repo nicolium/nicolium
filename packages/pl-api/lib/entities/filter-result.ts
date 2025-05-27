@@ -1,6 +1,8 @@
 import * as v from 'valibot';
 
-import { filterSchema } from './filter';
+import { baseFilterSchema } from './filter';
+
+const filterSchema = v.omit(baseFilterSchema, ['keywords', 'statuses']);
 
 /**
  * @category Schemas

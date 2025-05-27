@@ -37,6 +37,7 @@ const importConfigs = (state: State, configs: PleromaConfig['configs']) => {
     const approvalRequired = getConfigValue(value, ':account_approval_required') as boolean | undefined;
 
     state.registrations = {
+      ...state.registrations,
       enabled: registrationsOpen ?? state.registrations.enabled,
       approval_required: approvalRequired ?? state.registrations.approval_required,
     };

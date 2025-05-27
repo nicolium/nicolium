@@ -21,6 +21,16 @@ const filterStatusSchema = v.object({
   status_id: v.string(),
 });
 
+const baseFilterSchema = v.object({
+  id: v.string(),
+  title: v.string(),
+  context: v.array(v.picklist(['home', 'notifications', 'public', 'thread', 'account'])),
+  expires_at: v.fallback(v.nullable(datetimeSchema), null),
+  filter_action: v.fallback(v.picklist(['warn', 'hide', 'blur']), 'warn'),
+  keywords: filteredArray(filterKeywordSchema),
+  statuses: filteredArray(filterStatusSchema),
+});
+
 /**
  * @category Schemas
  * @see {@link https://docs.joinmastodon.org/entities/Filter/}
@@ -42,15 +52,7 @@ const filterSchema = v.pipe(
     }
     return filter;
   }),
-  v.object({
-    id: v.string(),
-    title: v.string(),
-    context: v.array(v.picklist(['home', 'notifications', 'public', 'thread', 'account'])),
-    expires_at: v.fallback(v.nullable(datetimeSchema), null),
-    filter_action: v.fallback(v.picklist(['warn', 'hide', 'blur']), 'warn'),
-    keywords: v.optional(filteredArray(filterKeywordSchema), undefined),
-    statuses: v.optional(filteredArray(filterStatusSchema), undefined),
-  }),
+  baseFilterSchema,
 );
 
 /**
@@ -58,4 +60,4 @@ const filterSchema = v.pipe(
  */
 type Filter = v.InferOutput<typeof filterSchema>;
 
-export { filterKeywordSchema, filterStatusSchema, filterSchema, type Filter };
+export { filterKeywordSchema, filterStatusSchema, baseFilterSchema, filterSchema, type Filter };
