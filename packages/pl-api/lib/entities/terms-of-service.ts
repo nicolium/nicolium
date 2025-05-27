@@ -4,7 +4,7 @@ import { dateSchema } from './utils';
 
 /**
  * @category Schemas
- * @see {@link https://docs.joinmastodon.org/entities/TermfsOfService/}
+ * @see {@link https://docs.joinmastodon.org/entities/TermsOfService/}
  */
 const termfsOfServiceSchema = v.object({
   effective_date: dateSchema,
