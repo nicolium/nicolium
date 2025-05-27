@@ -352,6 +352,29 @@ const Preferences = () => {
         </ListItem>
       </List>
 
+      {instance.pleroma.metadata.post_formats.includes('text/x.misskeymarkdown') && (
+        <List>
+          <ListItem
+            label={<FormattedMessage id='preferences.fields.render_mfm_label' defaultMessage='Render Misskey Flavored Markdown' />}
+            hint={<FormattedMessage id='preferences.fields.render_mfm_hint' defaultMessage='MFM support is experimental, not all node types are supported.' />}
+          >
+            <SettingToggle settings={settings} settingPath={['renderMfm']} onChange={onToggleChange} />
+          </ListItem>
+
+          <ListItem
+            label={<FormattedMessage id='preferences.fields.render_advanced_mfm_label' defaultMessage='Enable advanced MFM' />}
+          >
+            <SettingToggle settings={settings} settingPath={['renderAdvancedMfm']} onChange={onToggleChange} disabled={!settings.renderMfm} />
+          </ListItem>
+
+          <ListItem
+            label={<FormattedMessage id='preferences.fields.render_animated_mfm_label' defaultMessage='Enable animated MFM' />}
+          >
+            <SettingToggle settings={settings} settingPath={['renderAnimatedMfm']} onChange={onToggleChange} disabled={!settings.renderMfm} />
+          </ListItem>
+        </List>
+      )}
+
       {features.translations && (
         <List>
           <ListItem label={<FormattedMessage id='preferences.fields.auto_translate_label' defaultMessage='Automatically translate posts in unknown languages' />}>

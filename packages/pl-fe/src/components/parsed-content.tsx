@@ -23,11 +23,11 @@ const GREENTEXT_CLASS = 'dark:text-accent-green text-lime-600';
 const nodesToText = (nodes: Array<DOMNode>): string =>
   nodes.map(node => node.type === 'text' ? node.data : node.type === 'tag' ? nodesToText(node.children as Array<DOMNode>) : '').join('');
 
-const isHostNotVisible = (href: string, nodes: Array<DOMNode>): false | string => {
+const isHostNotVisible = (href: string, text?: string): false | string => {
   try {
     let { host } = new URL(href);
     host = host.replace(/^www\./, '');
-    const text = nodesToText(nodes).trim();
+    if (!text) return host;
 
     if (new RegExp(`^(https?://)?(www.)?${host}(/|$)`, 'i').test(text)) {
       return false;
@@ -38,6 +38,55 @@ const isHostNotVisible = (href: string, nodes: Array<DOMNode>): false | string =
     return false;
   }
 };
+
+interface IParsedUrl extends React.HTMLAttributes<HTMLAnchorElement> {
+  /** Whether to call a function to remove tracking parameters from URLs. */
+  cleanUrls?: boolean;
+  /** Whether to call a function to redirect URLs to popular websites to privacy-respecting proxy services. */
+  redirectUrls?: boolean;
+  /** Whether to display link target domain when it's not part of the text. */
+  displayTargetHost?: boolean;
+  href: string;
+  childrenPlain?: string;
+}
+
+const ParsedUrl: React.FC<IParsedUrl> = React.memo((props) => {
+  const { urlPrivacy } = useSettings();
+
+  props = { ...props };
+
+  if (props.cleanUrls === undefined) props.cleanUrls = urlPrivacy.clearLinksInContent;
+  if (props.redirectUrls === undefined) props.redirectUrls = urlPrivacy.redirectLinksMode !== 'off';
+  if (props.displayTargetHost === undefined) props.displayTargetHost = urlPrivacy.displayTargetHost;
+
+  let href = props.href;
+
+  if (props.cleanUrls) {
+    try {
+      href = Purify.clearUrl(href, props.cleanUrls, props.redirectUrls);
+    } catch (_) {
+      //
+    }
+  }
+
+  const host = props.displayTargetHost && isHostNotVisible(href, props.childrenPlain);
+
+  return (
+    <a
+      {...props}
+      href={href}
+      onClick={(e) => e.stopPropagation()}
+      rel='nofollow noopener noreferrer'
+      target='_blank'
+      title={props.href}
+    >
+      {props.children}
+      {host && (
+        <span className='text-xs lowercase'>{' '}[{host}]</span>
+      )}
+    </a>
+  );
+});
 
 interface IParsedContent {
   /** HTML content to display. */
@@ -177,34 +226,39 @@ function parseContent({
           domNode.greentext = true;
         }
 
-        let href = domNode.attribs.href;
+        // let href = domNode.attribs.href;
 
-        if (cleanUrls) {
-          try {
-            href = Purify.clearUrl(href, cleanUrls, redirectUrls);
-          } catch (_) {
-            //
-          }
-        }
+        // if (cleanUrls) {
+        //   try {
+        //     href = Purify.clearUrl(href, cleanUrls, redirectUrls);
+        //   } catch (_) {
+        //     //
+        //   }
+        // }
 
-        const host = displayTargetHost && isHostNotVisible(href, domNode.children as Array<DOMNode>);
+        // const host = displayTargetHost && isHostNotVisible(href, domNode.children as Array<DOMNode>);
 
         const fallback = (
-          // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-          <a
-            {...domNode.attribs}
-            href={href}
-            onClick={(e) => e.stopPropagation()}
-            rel='nofollow noopener noreferrer'
-            target='_blank'
-            title={domNode.attribs.href}
-          >
+          <ParsedUrl {...domNode.attribs as any} childrenPlain={nodesToText(domNode.children as Array<DOMNode>).trim()}>
             {domToReact(domNode.children as Array<DOMNode>, options)}
-            {host && (
-              <span className='text-xs lowercase'>{' '}[{host}]</span>
-            )}
-          </a>
+          </ParsedUrl>
         );
+        //   (
+        //   // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+        //   <a
+        //     {...domNode.attribs}
+        //     href={href}
+        //     onClick={(e) => e.stopPropagation()}
+        //     rel='nofollow noopener noreferrer'
+        //     target='_blank'
+        //     title={domNode.attribs.href}
+        //   >
+        //     {domToReact(domNode.children as Array<DOMNode>, options)}
+        //     {host && (
+        //       <span className='text-xs lowercase'>{' '}[{host}]</span>
+        //     )}
+        //   </a>
+        // );
 
         if (classes?.includes('mention')) {
           if (mentions) {
@@ -291,4 +345,4 @@ const ParsedContent: React.FC<IParsedContent> = React.memo((props) => {
   return parseContent(props, false);
 }, (prevProps, nextProps) => prevProps.html === nextProps.html);
 
-export { ParsedContent, parseContent };
+export { ParsedContent, ParsedUrl, parseContent };

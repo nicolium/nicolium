@@ -19,6 +19,7 @@ import { getTextDirection } from '../utils/rtl';
 import HashtagsBar from './hashtags-bar';
 import Markup from './markup';
 import { parseContent } from './parsed-content';
+import { ParsedMfm } from './parsed-mfm';
 import Poll from './polls/poll';
 import StatusMedia from './status-media';
 import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
@@ -82,7 +83,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   preview,
   withMedia,
 }) => {
-  const { urlPrivacy, displaySpoilers } = useSettings();
+  const { urlPrivacy, displaySpoilers, renderMfm } = useSettings();
   const { greentext } = usePlFeConfig();
 
   const [collapsed, setCollapsed] = useState<boolean | null>(null);
@@ -141,17 +142,26 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     [status.content, translation, statusMeta.currentLanguage],
   );
 
-  const { content: parsedContent, hashtags } = useMemo(() => parseContent({
-    html: content,
-    mentions: status.mentions,
-    hasQuote: !!status.quote_id,
-    emojis: status.emojis,
-    cleanUrls: urlPrivacy.clearLinksInContent,
-    redirectUrls: urlPrivacy.redirectLinksMode !== 'off',
-    displayTargetHost: urlPrivacy.displayTargetHost,
-    greentext,
-    speakAsCat: status.account.speak_as_cat,
-  }, true), [content]);
+  const { content: parsedContent, hashtags } = useMemo(() => {
+    if (renderMfm && !translation && status.content_type === 'text/x.misskeymarkdown' && status.text) {
+      return {
+        content: <ParsedMfm text={status.text} emojis={status.emojis} mentions={status.mentions} />,
+        hashtags: [],
+      };
+    }
+
+    return parseContent({
+      html: content,
+      mentions: status.mentions,
+      hasQuote: !!status.quote_id,
+      emojis: status.emojis,
+      cleanUrls: urlPrivacy.clearLinksInContent,
+      redirectUrls: urlPrivacy.redirectLinksMode !== 'off',
+      displayTargetHost: urlPrivacy.displayTargetHost,
+      greentext,
+      speakAsCat: status.account.speak_as_cat,
+    }, true);
+  }, [content, renderMfm]);
 
   useEffect(() => {
     setLineClamp(!spoilerNode.current || spoilerNode.current.clientHeight >= 96);
