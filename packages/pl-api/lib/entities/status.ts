@@ -11,6 +11,7 @@ import { mediaAttachmentSchema } from './media-attachment';
 import { mentionSchema } from './mention';
 import { pollSchema } from './poll';
 import { previewCardSchema } from './preview-card';
+import { type Quote, quoteSchema, type ShallowQuote, shallowQuoteSchema } from './quote';
 import { rssFeedSchema } from './rss-feed';
 import { tagSchema } from './tag';
 import { translationSchema } from './translation';
@@ -109,12 +110,37 @@ const baseStatusSchema = v.object({
 
 const preprocess = (status: any) => {
   if (!status) return null;
+
+  let quote: {
+    state: string;
+    status: any;
+  } | {
+    state: string;
+    status_id: string;
+  } | null = null;
+
+  const quotedStatus = status.quote ?? status.pleroma?.quote;
+  const quotedStatusId = quotedStatus?.id ?? status.quote_id ?? status.pleroma?.quote_id;
+  if (quotedStatus?.state) {
+    quote = quotedStatus;
+  } else if (quotedStatus) {
+    quote = {
+      state: 'accepted',
+      status: quotedStatus,
+    };
+  } else {
+    if (quotedStatusId) {
+      quote = {
+        state: 'accepted',
+        status_id: quotedStatusId,
+      };
+    }
+  }
+
   status = {
     // @ts-ignore
     emoji_reactions: status.reactions,
     ...(pick(status.pleroma || {}, [
-      'quote',
-      'quote_id',
       'local',
       'conversation_id',
       'direct_conversation_id',
@@ -137,6 +163,8 @@ const preprocess = (status: any) => {
       'disliked',
     ])),
     ...status,
+    quote,
+    quote_id: quotedStatusId,
   };
 
   if (!status.interaction_policy && status.comments_disabled === true) {
@@ -168,13 +196,13 @@ const statusWithoutAccountSchema = v.pipe(v.any(), v.transform(preprocess), v.ob
   account: v.fallback(v.nullable(accountSchema), null),
   reblog: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
 
-  quote: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
+  quote: v.fallback(v.nullable(v.lazy(() => v.union([quoteSchema, shallowQuoteSchema]))), null),
 }));
 
 const partialStatusSchema = v.partial(v.object({
   ...baseStatusSchema.entries,
   reblog: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
-  quote: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
+  quote: v.fallback(v.nullable(v.lazy(() => v.union([quoteSchema, shallowQuoteSchema]))), null),
 }));
 
 /**
@@ -183,7 +211,7 @@ const partialStatusSchema = v.partial(v.object({
 type StatusWithoutAccount = Omit<v.InferOutput<typeof baseStatusSchema>, 'account'> & {
   account: Account | null;
   reblog: Status | null;
-  quote: Status | null;
+  quote: Quote | ShallowQuote | null;
 }
 
 /**
@@ -191,7 +219,7 @@ type StatusWithoutAccount = Omit<v.InferOutput<typeof baseStatusSchema>, 'accoun
  */
 type Status = v.InferOutput<typeof baseStatusSchema> & {
   reblog: Status | null;
-  quote: Status | null;
+  quote: Quote | ShallowQuote | null;
 }
 
 export { statusSchema, statusWithoutAccountSchema, partialStatusSchema, type Status, type StatusWithoutAccount };

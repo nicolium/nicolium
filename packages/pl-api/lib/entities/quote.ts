@@ -1,0 +1,33 @@
+import * as v from 'valibot';
+
+import { statusSchema } from './status';
+
+/**
+ * @category Schemas
+ * @see {@link https://docs.joinmastodon.org/entities/Quote/}
+ */
+const quoteSchema = v.object({
+  state: v.fallback(v.picklist(['pending', 'accepted', 'rejected', 'revoked', 'deleted', 'unauthorized']), 'accepted'),
+  status: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
+});
+
+/**
+ * @category Entity types
+ */
+type Quote = v.InferOutput<typeof quoteSchema>;
+
+/**
+ * @category Schemas
+ * @see {@link https://docs.joinmastodon.org/entities/ShallowQuote/}
+ */
+const shallowQuoteSchema = v.object({
+  state: v.fallback(v.picklist(['pending', 'accepted', 'rejected', 'revoked', 'deleted', 'unauthorized']), 'accepted'),
+  status_id: v.fallback(v.nullable(v.string()), null),
+});
+
+/**
+ * @category Entity types
+ */
+type ShallowQuote = v.InferOutput<typeof shallowQuoteSchema>;
+
+export { quoteSchema, shallowQuoteSchema, type Quote, type ShallowQuote };

@@ -79,7 +79,7 @@ const importEntities = (entities: {
       processAccount(status.account);
     }
 
-    if (status.quote) processStatus(status.quote);
+    if (status.quote && 'status' in status.quote && status.quote.status) processStatus(status.quote.status);
     if (status.reblog) processStatus(status.reblog);
     if (status.poll) polls[status.poll.id] = status.poll;
     if (status.group) groups[status.group.id] = status.group;

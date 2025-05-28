@@ -117,7 +117,7 @@ const normalizeStatus = (status: BaseStatus & {
     showFiltered: null as null | boolean,
     deleted: false,
     ...status,
-    quote_id: status.quote?.id || status.quote_id || null,
+    quote_id: status.quote_id || null,
     account: normalizeAccount(status.account),
     accounts: status.accounts?.map(normalizeAccount),
     mentions,
