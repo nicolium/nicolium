@@ -6,7 +6,6 @@ import { useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { type ComposeReplyAction, mentionCompose, replyCompose } from 'pl-fe/actions/compose';
-import { reblog, toggleFavourite, unreblog } from 'pl-fe/actions/interactions';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import StatusActionBar from 'pl-fe/components/status-action-bar';
 import Tombstone from 'pl-fe/components/tombstone';
@@ -16,6 +15,7 @@ import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import PendingStatus from 'pl-fe/features/ui/components/pending-status';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useFavouriteStatus, useReblogStatus, useUnfavouriteStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
 import { RootState } from 'pl-fe/store';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import { useSettingsStore } from 'pl-fe/stores/settings';
@@ -117,6 +117,11 @@ const Thread: React.FC<IThread> = ({
   const { openModal } = useModalsStore();
   const { settings } = useSettingsStore();
 
+  const { mutate: favouriteStatus } = useFavouriteStatus(status.id);
+  const { mutate: unfavouriteStatus } = useUnfavouriteStatus(status.id);
+  const { mutate: reblogStatus } = useReblogStatus(status.id);
+  const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
+
   const getThread = useCallback(makeGetThread(), []);
 
   const { ancestorsIds, descendantsIds } = useAppSelector((state) => getThread(state, status.id));
@@ -135,22 +140,21 @@ const Thread: React.FC<IThread> = ({
   };
 
   const handleFavouriteClick = (status: SelectedStatus) => {
-    dispatch(toggleFavourite(status));
+    if (status.favourited) unfavouriteStatus();
+    else favouriteStatus();
   };
 
   const handleReplyClick = (status: ComposeReplyAction['status']) => dispatch(replyCompose(status));
 
-  const handleModalReblog = (status: Pick<SelectedStatus, 'id'>) => dispatch(reblog(status));
-
   const handleReblogClick = (status: SelectedStatus, e?: React.MouseEvent) => {
     const boostModal = settings.boostModal;
     if (status.reblogged) {
-      dispatch(unreblog(status));
+      unreblogStatus();
     } else {
       if ((e && e.shiftKey) || !boostModal) {
-        handleModalReblog(status);
+        reblogStatus(undefined);
       } else {
-        openModal('BOOST', { statusId: status.id, onReblog: () => handleModalReblog(status) });
+        openModal('BOOST', { statusId: status.id, onReblog: () => reblogStatus(undefined) });
       }
     }
   };

@@ -3,7 +3,6 @@ import { defineMessages, useIntl, FormattedList, FormattedMessage, IntlShape, Me
 import { Link, useHistory } from 'react-router-dom';
 
 import { mentionCompose, replyCompose } from 'pl-fe/actions/compose';
-import { reblog, favourite, unreblog, unfavourite } from 'pl-fe/actions/interactions';
 import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import Icon from 'pl-fe/components/icon';
 import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
@@ -18,6 +17,7 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
+import { useFavouriteStatus, useUnfavouriteStatus, useReblogStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
 import { makeGetNotification } from 'pl-fe/selectors';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import { useSettingsStore } from 'pl-fe/stores/settings';
@@ -211,6 +211,11 @@ const Notification: React.FC<INotification> = (props) => {
   const notification = useAppSelector((state) => getNotification(state, props.notification));
   const status = getNotificationStatus(notification);
 
+  const { mutate: favouriteStatus } = useFavouriteStatus(status?.id!);
+  const { mutate: unfavouriteStatus } = useUnfavouriteStatus(status?.id!);
+  const { mutate: reblogStatus } = useReblogStatus(status?.id!);
+  const { mutate: unreblogStatus } = useUnreblogStatus(status?.id!);
+
   const history = useHistory();
   const intl = useIntl();
   const instance = useInstance();
@@ -252,9 +257,9 @@ const Notification: React.FC<INotification> = (props) => {
   const handleHotkeyFavourite = useCallback((e?: KeyboardEvent) => {
     if (status && typeof status === 'object') {
       if (status.favourited) {
-        dispatch(unfavourite(status));
+        unfavouriteStatus();
       } else {
-        dispatch(favourite(status));
+        favouriteStatus();
       }
     }
   }, [status]);
@@ -263,15 +268,15 @@ const Notification: React.FC<INotification> = (props) => {
     if (status && typeof status === 'object') {
       const boostModal = settings.boostModal;
       if (status.reblogged) {
-        dispatch(unreblog(status));
+        unreblogStatus();
       } else {
         if (e?.shiftKey || !boostModal) {
-          dispatch(reblog(status));
+          reblogStatus(undefined);
         } else {
           openModal('BOOST', {
             statusId: status.id,
             onReblog: () => {
-              dispatch(reblog(status));
+              reblogStatus(undefined);
             },
           });
         }

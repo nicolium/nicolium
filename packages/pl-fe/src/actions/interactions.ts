@@ -15,7 +15,6 @@ const REBLOG_REQUEST = 'REBLOG_REQUEST' as const;
 const REBLOG_FAIL = 'REBLOG_FAIL' as const;
 
 const FAVOURITE_REQUEST = 'FAVOURITE_REQUEST' as const;
-const FAVOURITE_SUCCESS = 'FAVOURITE_SUCCESS' as const;
 const FAVOURITE_FAIL = 'FAVOURITE_FAIL' as const;
 
 const DISLIKE_REQUEST = 'DISLIKE_REQUEST' as const;
@@ -25,7 +24,6 @@ const UNREBLOG_REQUEST = 'UNREBLOG_REQUEST' as const;
 const UNREBLOG_FAIL = 'UNREBLOG_FAIL' as const;
 
 const UNFAVOURITE_REQUEST = 'UNFAVOURITE_REQUEST' as const;
-const UNFAVOURITE_SUCCESS = 'UNFAVOURITE_SUCCESS' as const;
 
 const UNDISLIKE_REQUEST = 'UNDISLIKE_REQUEST' as const;
 
@@ -37,8 +35,6 @@ const BOOKMARK_SUCCESS = 'BOOKMARKED_SUCCESS' as const;
 
 const UNBOOKMARK_SUCCESS = 'UNBOOKMARKED_SUCCESS' as const;
 
-const noOp = () => new Promise(f => f(undefined));
-
 const messages = defineMessages({
   bookmarkAdded: { id: 'status.bookmarked', defaultMessage: 'Bookmark added.' },
   bookmarkRemoved: { id: 'status.unbookmarked', defaultMessage: 'Bookmark removed.' },
@@ -47,166 +43,59 @@ const messages = defineMessages({
   selectFolder: { id: 'status.bookmark.select_folder', defaultMessage: 'Select folder' },
 });
 
-const reblog = (status: Pick<Status, 'id'>, visibility?: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return noOp();
+interface ReblogRequest {
+  type: typeof REBLOG_REQUEST;
+  statusId: string;
+}
 
-    dispatch(reblogRequest(status.id));
+interface ReblogFail {
+  type: typeof REBLOG_FAIL;
+  statusId: string;
+  error: unknown;
+}
 
-    return getClient(getState()).statuses.reblogStatus(status.id, visibility).then((response) => {
-      // The reblog API method returns a new status wrapped around the original. In this case we are only
-      // interested in how the original is modified, hence passing it skipping the wrapper
-      if (response.reblog) dispatch(importEntities({ statuses: [response.reblog] }));
-    }).catch(error => {
-      dispatch(reblogFail(status.id, error));
-    });
-  };
+interface UnreblogRequest {
+  type: typeof UNREBLOG_REQUEST;
+  statusId: string;
+}
 
-const unreblog = (status: Pick<Status, 'id'>) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return noOp();
+interface UnreblogFail {
+  type: typeof UNREBLOG_FAIL;
+  statusId: string;
+  error: unknown;
+}
 
-    dispatch(unreblogRequest(status.id));
+interface FavouriteRequest {
+  type: typeof FAVOURITE_REQUEST;
+  statusId: string;
+}
 
-    return getClient(getState()).statuses.unreblogStatus(status.id).catch(error => {
-      dispatch(unreblogFail(status.id, error));
-    });
-  };
+interface FavouriteFail {
+  type: typeof FAVOURITE_FAIL;
+  statusId: string;
+  error: unknown;
+}
 
-const toggleReblog = (status: Pick<Status, 'id' | 'reblogged'>, visibility?: string) => {
-  if (status.reblogged) {
-    return unreblog(status);
-  } else {
-    return reblog(status, visibility);
-  }
-};
+interface UnfavouriteRequest {
+  type: typeof UNFAVOURITE_REQUEST;
+  statusId: string;
+}
 
-const reblogRequest = (statusId: string) => ({
-  type: REBLOG_REQUEST,
-  statusId,
-});
+interface DislikeRequest {
+  type: typeof DISLIKE_REQUEST;
+  statusId: string;
+}
 
-const reblogFail = (statusId: string, error: unknown) => ({
-  type: REBLOG_FAIL,
-  statusId,
-  error,
-});
+interface DislikeFail {
+  type: typeof DISLIKE_FAIL;
+  statusId: string;
+  error: unknown;
+}
 
-const unreblogRequest = (statusId: string) => ({
-  type: UNREBLOG_REQUEST,
-  statusId,
-});
-
-const unreblogFail = (statusId: string, error: unknown) => ({
-  type: UNREBLOG_FAIL,
-  statusId,
-  error,
-});
-
-const favourite = (status: Pick<Status, 'id'>) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return noOp();
-
-    dispatch(favouriteRequest(status.id));
-
-    return getClient(getState()).statuses.favouriteStatus(status.id).then((response) => {
-      dispatch(favouriteSuccess(response));
-    }).catch((error) => {
-      dispatch(favouriteFail(status.id, error));
-    });
-  };
-
-const unfavourite = (status: Pick<Status, 'id'>) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return noOp();
-
-    dispatch(unfavouriteRequest(status.id));
-
-    return getClient(getState()).statuses.unfavouriteStatus(status.id).then((response) => {
-      dispatch(unfavouriteSuccess(response));
-    });
-  };
-
-const toggleFavourite = (status: Pick<Status, 'id' | 'favourited'>) => {
-  if (status.favourited) {
-    return unfavourite(status);
-  } else {
-    return favourite(status);
-  }
-};
-
-const favouriteRequest = (statusId: string) => ({
-  type: FAVOURITE_REQUEST,
-  statusId,
-});
-
-const favouriteSuccess = (status: Status) => ({
-  type: FAVOURITE_SUCCESS,
-  status,
-  statusId: status.id,
-});
-
-const favouriteFail = (statusId: string, error: unknown) => ({
-  type: FAVOURITE_FAIL,
-  statusId,
-  error,
-});
-
-const unfavouriteRequest = (statusId: string) => ({
-  type: UNFAVOURITE_REQUEST,
-  statusId,
-});
-
-const unfavouriteSuccess = (status: Status) => ({
-  type: UNFAVOURITE_SUCCESS,
-  status,
-  statusId: status.id,
-});
-
-const dislike = (status: Pick<Status, 'id'>) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
-
-    dispatch(dislikeRequest(status.id));
-
-    return getClient(getState).statuses.dislikeStatus(status.id).catch((error) => {
-      dispatch(dislikeFail(status.id, error));
-    });
-  };
-
-const undislike = (status: Pick<Status, 'id'>) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
-
-    dispatch(undislikeRequest(status.id));
-
-    return getClient(getState).statuses.undislikeStatus(status.id);
-  };
-
-const toggleDislike = (status: Pick<Status, 'id' | 'disliked'>) =>
-  (dispatch: AppDispatch) => {
-    if (status.disliked) {
-      dispatch(undislike(status));
-    } else {
-      dispatch(dislike(status));
-    }
-  };
-
-const dislikeRequest = (statusId: string) => ({
-  type: DISLIKE_REQUEST,
-  statusId,
-});
-
-const dislikeFail = (statusId: string, error: unknown) => ({
-  type: DISLIKE_FAIL,
-  statusId,
-  error,
-});
-
-const undislikeRequest = (statusId: string) => ({
-  type: UNDISLIKE_REQUEST,
-  statusId,
-});
+interface UndislikeRequest {
+  type: typeof UNDISLIKE_REQUEST;
+  statusId: string;
+}
 
 const bookmark = (status: Pick<Status, 'id'>, folderId?: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -318,18 +207,16 @@ const remoteInteraction = (ap_id: string, profile: string) =>
     getClient(getState).accounts.remoteInteraction(ap_id, profile).then((data) => data.url);
 
 type InteractionsAction =
-  | ReturnType<typeof reblogRequest>
-  | ReturnType<typeof reblogFail>
-  | ReturnType<typeof unreblogRequest>
-  | ReturnType<typeof unreblogFail>
-  | ReturnType<typeof favouriteRequest>
-  | ReturnType<typeof favouriteSuccess>
-  | ReturnType<typeof favouriteFail>
-  | ReturnType<typeof unfavouriteRequest>
-  | ReturnType<typeof unfavouriteSuccess>
-  | ReturnType<typeof dislikeRequest>
-  | ReturnType<typeof dislikeFail>
-  | ReturnType<typeof undislikeRequest>
+  | ReblogRequest
+  | ReblogFail
+  | UnreblogRequest
+  | UnreblogFail
+  | FavouriteRequest
+  | FavouriteFail
+  | UnfavouriteRequest
+  | DislikeRequest
+  | DislikeFail
+  | UndislikeRequest
   | ReturnType<typeof bookmarkSuccess>
   | ReturnType<typeof unbookmarkSuccess>
   | ReturnType<typeof pinSuccess>
@@ -339,26 +226,17 @@ export {
   REBLOG_REQUEST,
   REBLOG_FAIL,
   FAVOURITE_REQUEST,
-  FAVOURITE_SUCCESS,
   FAVOURITE_FAIL,
   DISLIKE_REQUEST,
   DISLIKE_FAIL,
   UNREBLOG_REQUEST,
   UNREBLOG_FAIL,
   UNFAVOURITE_REQUEST,
-  UNFAVOURITE_SUCCESS,
   UNDISLIKE_REQUEST,
   PIN_SUCCESS,
   UNPIN_SUCCESS,
   BOOKMARK_SUCCESS,
   UNBOOKMARK_SUCCESS,
-  reblog,
-  unreblog,
-  toggleReblog,
-  favourite,
-  unfavourite,
-  toggleFavourite,
-  toggleDislike,
   bookmark,
   toggleBookmark,
   togglePin,

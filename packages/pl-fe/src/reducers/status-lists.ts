@@ -34,8 +34,6 @@ import {
   type FavouritesAction,
 } from 'pl-fe/actions/favourites';
 import {
-  FAVOURITE_SUCCESS,
-  UNFAVOURITE_SUCCESS,
   BOOKMARK_SUCCESS,
   UNBOOKMARK_SUCCESS,
   PIN_SUCCESS,
@@ -161,10 +159,6 @@ const statusLists = (state = initialState, action: BookmarksAction | EventsActio
       return create(state, draft => normalizeList(draft, action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks', action.statuses, action.next));
     case BOOKMARKED_STATUSES_EXPAND_SUCCESS:
       return create(state, draft => appendToList(draft, action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks', action.statuses, action.next));
-    case FAVOURITE_SUCCESS:
-      return create(state, draft => prependOneToList(draft, 'favourites', action.status));
-    case UNFAVOURITE_SUCCESS:
-      return create(state, draft => removeOneFromList(draft, 'favourites', action.status));
     case BOOKMARK_SUCCESS:
       return create(state, draft => addBookmarkToLists(draft, action.status));
     case UNBOOKMARK_SUCCESS:

@@ -5,7 +5,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { blockAccount } from 'pl-fe/actions/accounts';
 import { directCompose, mentionCompose, quoteCompose } from 'pl-fe/actions/compose';
 import { fetchEventIcs } from 'pl-fe/actions/events';
-import { toggleBookmark, togglePin, toggleReblog } from 'pl-fe/actions/interactions';
+import { toggleBookmark, togglePin } from 'pl-fe/actions/interactions';
 import { deleteStatusModal, toggleStatusSensitivityModal } from 'pl-fe/actions/moderation';
 import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
 import { deleteStatus } from 'pl-fe/actions/statuses';
@@ -24,6 +24,7 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useChats } from 'pl-fe/queries/chats';
+import { useReblogStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import copy from 'pl-fe/utils/copy';
 import { download } from 'pl-fe/utils/download';
@@ -89,6 +90,9 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const isStaff = ownAccount ? ownAccount.is_admin || ownAccount.is_moderator : false;
   const isAdmin = ownAccount ? ownAccount.is_admin : false;
 
+  const { mutate: reblogStatus } = useReblogStatus(status?.id!);
+  const { mutate: unreblogStatus } = useUnreblogStatus(status?.id!);
+
   if (!status || !status.event) {
     return (
       <>
@@ -131,7 +135,10 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleReblogClick = (visibility?: string) => {
-    const modalReblog = () => dispatch(toggleReblog(status, visibility));
+    const modalReblog = () => {
+      if (status.reblogged) unreblogStatus();
+      else reblogStatus(visibility);
+    };
     if (!boostModal) {
       modalReblog();
     } else {

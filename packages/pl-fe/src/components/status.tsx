@@ -4,7 +4,6 @@ import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-
 import { Link, useHistory } from 'react-router-dom';
 
 import { mentionCompose, replyCompose } from 'pl-fe/actions/compose';
-import { toggleFavourite, toggleReblog } from 'pl-fe/actions/interactions';
 import { unfilterStatus } from 'pl-fe/actions/statuses';
 import Card from 'pl-fe/components/ui/card';
 import Icon from 'pl-fe/components/ui/icon';
@@ -17,6 +16,7 @@ import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useFavouriteStatus, useReblogStatus, useUnfavouriteStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
 import { makeGetStatus, type SelectedStatus } from 'pl-fe/selectors';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import { useStatusMetaStore } from 'pl-fe/stores/status-meta';
@@ -88,6 +88,11 @@ const Status: React.FC<IStatus> = (props) => {
   const getStatus = useMemo(makeGetStatus, []);
   const actualStatus = useAppSelector(state => status.reblog_id && getStatus(state, { id: status.reblog_id }) || status)!;
 
+  const { mutate: favouriteStatus } = useFavouriteStatus(actualStatus.id);
+  const { mutate: unfavouriteStatus } = useUnfavouriteStatus(actualStatus.id);
+  const { mutate: reblogStatus } = useReblogStatus(actualStatus.id);
+  const { mutate: unreblogStatus } = useUnreblogStatus(actualStatus.id);
+
   const isReblog = status.reblog_id;
   const statusUrl = `/@${actualStatus.account.acct}/posts/${actualStatus.id}`;
   const group = actualStatus.group;
@@ -140,11 +145,15 @@ const Status: React.FC<IStatus> = (props) => {
 
   const handleHotkeyFavourite = (e?: KeyboardEvent) => {
     e?.preventDefault();
-    dispatch(toggleFavourite(actualStatus));
+    if (status.favourited) unfavouriteStatus();
+    else favouriteStatus();
   };
 
   const handleHotkeyBoost = (e?: KeyboardEvent) => {
-    const modalReblog = () => dispatch(toggleReblog(actualStatus));
+    const modalReblog = () => {
+      if (status.reblogged) unreblogStatus();
+      else reblogStatus(undefined);
+    };
     if ((e && e.shiftKey) || !boostModal) {
       modalReblog();
     } else {
