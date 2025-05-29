@@ -3796,7 +3796,7 @@ class PlApiClient {
         if (this.features.mastodonAdmin) {
           response = await this.request(`/api/v1/admin/accounts/${accountId}`);
         } else {
-          response = await this.request(`/api/v1/admin/users/${accountId}`);
+          response = await this.request(`/api/v1/pleroma/admin/users/${accountId}`);
         }
 
         return v.parse(adminAccountSchema, response.json);
@@ -3815,7 +3815,7 @@ class PlApiClient {
         } else {
           const account = await this.admin.accounts.getAccount(accountId)!;
 
-          response = await this.request('/api/v1/pleroma/admin/users/approve', { body: { nicknames: [account.account!.username] } });
+          response = await this.request('/api/v1/pleroma/admin/users/approve', { method: 'PATCH', body: { nicknames: [account.username] } });
           response.json = response.json?.users?.[0];
         }
 
@@ -3835,9 +3835,8 @@ class PlApiClient {
         } else {
           const account = await this.admin.accounts.getAccount(accountId)!;
 
-          response = await this.request('/api/v1/pleroma/admin/users/approve', { body: {
-            method: 'DELETE',
-            nicknames: [account.account!.username],
+          response = await this.request('/api/v1/pleroma/admin/users', { method: 'DELETE', body: {
+            nicknames: [account.username],
           } });
         }
 
@@ -3848,20 +3847,33 @@ class PlApiClient {
        * Requires features{@link Features.pleromaAdminAccounts}.
        */
       createAccount: async (params: AdminCreateAccountParams) => {
-        const response = await this.request('/api/v1/admin/accounts', { method: 'POST', body: { users: [params] } });
+        const response = await this.request('/api/v1/pleroma/admin/users', { method: 'POST', body: { users: [params] } });
 
-        return v.parse(adminAccountSchema, response.json[0]);
+        return v.parse(v.object({
+          nickname: v.string(),
+          email: v.string(),
+        }), response.json[0]?.data);
       },
 
       /**
        * Delete an account
-       * Permanently delete data for a suspended account.
+       * Permanently delete data for a suspended accountusers
        * @see {@link https://docs.joinmastodon.org/methods/admin/accounts/#delete}
        */
       deleteAccount: async (accountId: string) => {
-        const response = await this.request(`/api/v1/admin/accounts/${accountId}`, { method: 'DELETE' });
+        let response;
 
-        return v.parse(adminAccountSchema, response.json);
+        if (this.features.mastodonAdmin) {
+          response = await this.request(`/api/v1/admin/accounts/${accountId}`, { method: 'DELETE' });
+        } else {
+          const account = await this.admin.accounts.getAccount(accountId)!;
+
+          response = await this.request('/api/v1/pleroma/admin/users', { method: 'DELETE', body: {
+            nicknames: [account.username],
+          } });
+        }
+
+        return v.safeParse(adminAccountSchema, response.json).output || {};
       },
 
       /**
@@ -3880,7 +3892,7 @@ class PlApiClient {
           switch (type) {
             case 'disable':
             case 'suspend':
-              response = await this.request('/api/v1/pleroma/admin/users/deactivate', { body: { nicknames: [account.account!.username] } });
+              response = await this.request('/api/v1/pleroma/admin/users/deactivate', { body: { nicknames: [account.username] } });
               break;
             default:
               response = { json: {} };
@@ -3904,8 +3916,8 @@ class PlApiClient {
           response = await this.request(`/api/v1/admin/accounts/${accountId}/enable`, { method: 'POST' });
         } else {
           const account = await this.admin.accounts.getAccount(accountId)!;
-
-          response = await this.request('/api/v1/pleroma/admin/users/activate', { body: { nicknames: [account.account!.username] } });
+          console.log(account);
+          response = await this.request('/api/v1/pleroma/admin/users/activate', { method: 'PATCH', body: { nicknames: [account.username] } });
           response.json = response.json?.users?.[0];
         }
 
@@ -3936,7 +3948,7 @@ class PlApiClient {
         } else {
           const { account } = await this.admin.accounts.getAccount(accountId)!;
 
-          response = await this.request('/api/v1/pleroma/admin/users/activate', { body: { nicknames: [account!.acct] } });
+          response = await this.request('/api/v1/pleroma/admin/users/activate', { method: 'PATCH', body: { nicknames: [account!.acct] } });
           response.json = response.json?.users?.[0];
         }
 
