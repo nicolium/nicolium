@@ -1557,6 +1557,25 @@ const getFeatures = (instance: Instance) => {
     statusDislikes: v.software === FRIENDICA && gte(v.version, '2023.3.0'),
 
     /**
+     * @see GET /api/web/stories/v1/recent
+     * @see GET /api/web/stories/v1/viewers
+     * @see GET /api/web/stories/v1/profile/:id
+     * @see GET /api/web/stories/v1/exists/:id
+     * @see GET /api/web/stories/v1/poll/results
+     * @see POST /api/web/stories/v1/viewed
+     * @see POST /api/web/stories/v1/react
+     * @see POST /api/web/stories/v1/comment
+     * @see POST /api/web/stories/v1/publish/poll
+     * @see POST /api/web/stories/v1/poll/vote
+     * @see POST /api/web/stories/v1/report
+     * @see POST /api/web/stories/v1/add
+     * @see POST /api/web/stories/v1/crop
+     * @see POST /api/web/stories/v1/publish
+     * @see DELETE /api/web/stories/v1/delete/:id
+     */
+    stories: v.software === PIXELFED,
+
+    /**
      * @see GET    /api/v1/accounts/:id/subscribers
      * @see POST   /api/v1/subscriptions
      * @see GET    /api/v1/subscriptions/options
