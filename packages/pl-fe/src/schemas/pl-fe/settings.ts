@@ -54,12 +54,12 @@ const settingsSchema = v.object({
   checkEmojiReactsSupport: v.fallback(v.boolean(), false),
   disableUserProvidedMedia: v.fallback(v.boolean(), false),
 
-  theme: coerceObject({
-    brandColor: v.optional(v.string(), ''),
-    accentColor: v.optional(v.string(), ''),
+  theme: v.optional(coerceObject({
+    brandColor: v.optional(v.string()),
+    accentColor: v.optional(v.string()),
     colors: v.optional(v.any()),
-    interfaceSize: v.optional(v.picklist(['sm', 'md', 'lg', 'xl']), 'md'),
-  }),
+    interfaceSize: v.fallback(v.picklist(['sm', 'md', 'lg', 'xl']), 'md'),
+  }), undefined),
 
   systemFont: v.fallback(v.boolean(), false),
   systemEmojiFont: v.fallback(v.boolean(), false),
@@ -106,7 +106,6 @@ const settingsSchema = v.object({
   saved: v.fallback(v.boolean(), true),
 
   demo: v.fallback(v.boolean(), false),
-
 });
 
 type Settings = v.InferOutput<typeof settingsSchema>;
