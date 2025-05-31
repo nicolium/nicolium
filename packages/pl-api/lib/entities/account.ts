@@ -229,17 +229,17 @@ const accountSchema: v.BaseSchema<any, Account, v.BaseIssue<unknown>> = untypedA
 
 const untypedCredentialAccountSchema = v.pipe(v.any(), preprocessAccount, v.object({
   ...accountWithMovedAccountSchema.entries,
-  source: v.fallback(v.nullable(v.object({
-    attribution_domains: v.fallback(v.nullable(v.array(v.string())), null),
-    note: v.fallback(v.string(), ''),
-    fields: filteredArray(fieldSchema),
-    privacy: v.picklist(['public', 'unlisted', 'private', 'direct']),
-    sensitive: v.fallback(v.boolean(), false),
-    language: v.fallback(v.nullable(v.string()), null),
-    follow_requests_count: v.fallback(v.pipe(v.number(), v.integer(), v.minValue(0)), 0),
+  source: v.fallback(v.nullable(coerceObject({
+    attribution_domains: v.fallback(v.optional(v.nullable(v.array(v.string()))), null),
+    note: v.fallback(v.optional(v.string()), ''),
+    fields: v.fallback(v.optional(filteredArray(fieldSchema)), []),
+    privacy: v.fallback(v.optional(v.picklist(['public', 'unlisted', 'private', 'direct'])), 'public'),
+    sensitive: v.fallback(v.optional(v.boolean()), false),
+    language: v.fallback(v.optional(v.nullable(v.string())), null),
+    follow_requests_count: v.fallback(v.optional(v.pipe(v.number(), v.integer(), v.minValue(0))), 0),
 
-    show_role: v.fallback(v.nullable(v.optional(v.boolean())), undefined),
-    no_rich_text: v.fallback(v.nullable(v.optional(v.boolean())), undefined),
+    show_role: v.fallback(v.optional(v.nullable(v.boolean())), undefined),
+    no_rich_text: v.fallback(v.optional(v.nullable(v.boolean())), undefined),
     discoverable: v.fallback(v.optional(v.boolean()), undefined),
     actor_type: v.fallback(v.optional(v.string()), undefined),
     show_birthday: v.fallback(v.optional(v.boolean()), undefined),
