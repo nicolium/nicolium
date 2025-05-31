@@ -694,16 +694,42 @@ const getFeatures = (instance: Instance) => {
     events: instance.api_versions['events.pleroma.pl-api'] >= 1,
 
     /**
+    * Export blocks to CSV file
+    * @see GET /api/v1/exports/blocks.csv
+    */
+    exportBlocks: v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
+
+    /**
      * Export followers to CSV file
+     * @see GET /api/v1/exports/followers.csv
      * @see GET /api/v1/settings/export_followers
      */
-    exportFollowers: v.software === MITRA && gte(v.version, '1.27.0'),
+    exportFollowers: any([
+      v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
+      v.software === MITRA && gte(v.version, '1.27.0'),
+    ]),
 
     /**
      * Export follows to CSV file
+     * @see GET /api/v1/exports/following.csv
      * @see GET /api/v1/settings/export_follows
      */
-    exportFollows: v.software === MITRA && gte(v.version, '1.27.0'),
+    exportFollows: any([
+      v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
+      v.software === MITRA && gte(v.version, '1.27.0'),
+    ]),
+
+    /**
+      * Export lists to CSV file
+      * @see GET /api/v1/exports/lists.csv
+      */
+    exportLists: v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
+
+    /**
+      * Export mutes to CSV file
+      * @see GET /api/v1/exports/mutes.csv
+      */
+    exportMutes: v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
 
     /** Whether the accounts who favourited or emoji-reacted to a status can be viewed through the API. */
     exposableReactions: any([

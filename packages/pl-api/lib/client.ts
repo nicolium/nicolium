@@ -1859,9 +1859,19 @@ class PlApiClient {
      * Requires features{@link Features.exportFollowers}.
      */
     exportFollowers: async () => {
-      const response = await this.request('/api/v1/settings/export_followers', {
-        method: 'GET',
-      });
+      let response;
+
+      switch (this.features.version.software) {
+        case GOTOSOCIAL:
+          response = await this.request('/api/v1/exports/followers.csv', {
+            method: 'GET',
+          });
+          break;
+        default:
+          response = await this.request('/api/v1/settings/export_followers', {
+            method: 'GET',
+          });
+      }
 
       return response.data;
     },
@@ -1872,7 +1882,56 @@ class PlApiClient {
      * Requires features{@link Features.exportFollows}.
      */
     exportFollows: async () => {
-      const response = await this.request('/api/v1/settings/export_follows', {
+      let response;
+
+      switch (this.features.version.software) {
+        case GOTOSOCIAL:
+          response = await this.request('/api/v1/exports/following.csv', {
+            method: 'GET',
+          });
+          break;
+        default:
+          response = await this.request('/api/v1/settings/export_follows', {
+            method: 'GET',
+          });
+      }
+
+      return response.data;
+    },
+
+    /**
+      * Export lists to CSV file
+      *
+      * Requires features{@link Features.exportLists}.
+      */
+    exportLists: async () => {
+      const response = await this.request('/api/v1/exports/lists.csv', {
+        method: 'GET',
+      });
+
+      return response.data;
+    },
+
+    /**
+      * Export blocks to CSV file
+      *
+      * Requires features{@link Features.exportBlocks}.
+      */
+    exportBlocks: async () => {
+      const response = await this.request('/api/v1/exports/blocks.csv', {
+        method: 'GET',
+      });
+
+      return response.data;
+    },
+
+    /**
+      * Export mutes to CSV file
+      *
+      * Requires features{@link Features.exportMutes}.
+      */
+    exportMutes: async () => {
+      const response = await this.request('/api/v1/exports/mutes.csv', {
         method: 'GET',
       });
 
