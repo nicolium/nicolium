@@ -991,6 +991,8 @@
   "interactions_circle.compose": "Share",
   "interactions_circle.confirmation_heading": "Do you want to generate an interaction circle for the user @{username}?",
   "interactions_circle.download": "Download",
+  "interactions_circle.error.image_loading": "Failed to load one of the avatars",
+  "interactions_circle.error.image_loading.multiple": "Failed to load some of the avatars",
   "interactions_circle.start": "Generate",
   "interactions_circle.state.done": "Finalizing…",
   "interactions_circle.state.drawing": "Drawing circle",

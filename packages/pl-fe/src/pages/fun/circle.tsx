@@ -18,6 +18,7 @@ import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { useModalsStore } from 'pl-fe/stores/modals';
+import toast from 'pl-fe/toast';
 
 const toRad = (x: number) => x * (Math.PI / 180);
 
@@ -34,6 +35,8 @@ const messages = defineMessages({
   fetchingAvatars: { id: 'interactions_circle.state.fetching_avatars', defaultMessage: 'Fetching avatars' },
   drawing: { id: 'interactions_circle.state.drawing', defaultMessage: 'Drawing circle' },
   done: { id: 'interactions_circle.state.done', defaultMessage: 'Finalizing…' },
+  imageLoadingError: { id: 'interactions_circle.error.image_loading', defaultMessage: 'Failed to load one of the avatars' },
+  imageLoadingMultipleError: { id: 'interactions_circle.error.image_loading.multiple', defaultMessage: 'Failed to load some of the avatars' },
 });
 
 const CirclePage: React.FC = () => {
@@ -90,6 +93,8 @@ const CirclePage: React.FC = () => {
 
       const ownAvatar = account?.avatar || avatarMissing;
 
+      let imageLoadingErorrs = 0;
+
       for (const layer of [
         { index: 0, off: 0, distance: 0, count: 1, radius: 110, users: [{ avatar: ownAvatar }] },
         { index: 1, off: 1, distance: 200, count: 8, radius: 64, users: users.slice(0, 8) },
@@ -115,6 +120,7 @@ const CirclePage: React.FC = () => {
           const avatarUrl = users[i].avatar || avatarMissing;
 
           try {
+            // eslint-disable-next-line no-loop-func
             await new Promise(resolve => {
               const img = new Image();
 
@@ -131,6 +137,11 @@ const CirclePage: React.FC = () => {
                 resolve(null);
               };
 
+              img.onerror = () => {
+                imageLoadingErorrs++;
+                resolve(null);
+              };
+
               img.setAttribute('crossorigin', 'anonymous');
               img.src = avatarUrl;
             });
@@ -138,6 +149,10 @@ const CirclePage: React.FC = () => {
             //
           }
         }
+      }
+
+      if (imageLoadingErorrs) {
+        toast.info(imageLoadingErorrs > 1 ? messages.imageLoadingMultipleError : messages.imageLoadingError);
       }
 
       setProgress({ state: 'done', progress: 100 });
