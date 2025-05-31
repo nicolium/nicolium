@@ -88,7 +88,7 @@ const CirclePage: React.FC = () => {
       // https://github.com/duiker101/twitter-interaction-circles
       const ctx = canvasRef.current?.getContext('2d')!;
 
-      const ownAvatar = (account?.avatar && !account.avatar.endsWith('/identicon') && account.avatar) || avatarMissing;
+      const ownAvatar = account?.avatar || avatarMissing;
 
       for (const layer of [
         { index: 0, off: 0, distance: 0, count: 1, radius: 110, users: [{ avatar: ownAvatar }] },
