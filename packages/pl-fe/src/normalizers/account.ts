@@ -1,8 +1,8 @@
 import type { Account as BaseAccount } from 'pl-api';
 
 const normalizeAccount = (account: BaseAccount) => {
-  const missingAvatar = require('pl-fe/assets/images/avatar-missing.png');
-  const missingHeader = require('pl-fe/assets/images/header-missing.png');
+  const missingAvatar: string = require('pl-fe/assets/images/avatar-missing.png');
+  const missingHeader: string = require('pl-fe/assets/images/header-missing.png');
 
   return {
     mute_expires_at: null,

@@ -48,7 +48,8 @@ const processCircle = (setProgress: (progress: {
 
           interaction.reblogs += 1;
           interaction.acct = status.reblog.account.acct;
-          interaction.avatar = status.reblog.account.avatar_static || status.reblog.account.avatar;
+          const avatarUrl = status.reblog.account.avatar_static || status.reblog.account.avatar;
+          interaction.avatar = avatarUrl?.endsWith('/identicon') ? '' : avatarUrl;
           interaction.avatar_description = status.reblog.account.avatar_description;
         } else if (status.in_reply_to_account_id) {
           if (status.in_reply_to_account_id === me) return;

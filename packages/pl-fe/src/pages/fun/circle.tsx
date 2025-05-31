@@ -21,7 +21,7 @@ import { useModalsStore } from 'pl-fe/stores/modals';
 
 const toRad = (x: number) => x * (Math.PI / 180);
 
-const avatarMissing = require('pl-fe/assets/images/avatar-missing.png');
+const avatarMissing: string = require('pl-fe/assets/images/avatar-missing.png');
 
 const HEIGHT = 1000;
 const WIDTH = 1000;
@@ -88,11 +88,10 @@ const CirclePage: React.FC = () => {
       // https://github.com/duiker101/twitter-interaction-circles
       const ctx = canvasRef.current?.getContext('2d')!;
 
-      // ctx.fillStyle = '#C5EDCE';
-      // ctx.fillRect(0, 0, 1000, 1000);
+      const ownAvatar = (account?.avatar && !account.avatar.endsWith('/identicon') && account.avatar) || avatarMissing;
 
       for (const layer of [
-        { index: 0, off: 0, distance: 0, count: 1, radius: 110, users: [{ avatar: account?.avatar || avatarMissing }] },
+        { index: 0, off: 0, distance: 0, count: 1, radius: 110, users: [{ avatar: ownAvatar }] },
         { index: 1, off: 1, distance: 200, count: 8, radius: 64, users: users.slice(0, 8) },
         { index: 2, off: 9, distance: 330, count: 15, radius: 58, users: users.slice(8, 23) },
         { index: 3, off: 24, distance: 450, count: 26, radius: 50, users: users.slice(23, 49) },
