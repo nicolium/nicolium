@@ -1,4 +1,4 @@
-<!-- IMPORTANT: remember to remove this flag immediately on july 1st -->
+!-- IMPORTANT: remember to remove this flag immediately on july 1st -->
 # pl-fe 🏳️‍🌈
 
 [![GitHub Repo stars](https://img.shields.io/github/stars/mkljczk/pl-fe)](https://github.com/mkljczk/pl-fe)

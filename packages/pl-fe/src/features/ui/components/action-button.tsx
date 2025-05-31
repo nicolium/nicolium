@@ -29,8 +29,8 @@ const messages = defineMessages({
   follow: { id: 'account.follow', defaultMessage: 'Follow' },
   mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
   remote_follow: { id: 'account.remote_follow', defaultMessage: 'Remote follow' },
-  requested: { id: 'account.requested', defaultMessage: 'Awaiting approval. Click to cancel follow request' },
-  requested_small: { id: 'account.requested_small', defaultMessage: 'Awaiting approval' },
+  requested: { id: 'account.requested', defaultMessage: 'Follow requested. Click to cancel' },
+  requested_small: { id: 'account.requested_small', defaultMessage: 'Follow requested' },
   unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
   unfollow: { id: 'account.unfollow', defaultMessage: 'Unfollow' },
   unmute: { id: 'account.unmute', defaultMessage: 'Unmute @{name}' },
@@ -55,7 +55,7 @@ interface IActionButton {
  * May say "Unblock" or something else, depending on the relationship and
  * `actionType` prop.
  */
-const ActionButton: React.FC<IActionButton> = ({ account, actionType, small }) => {
+const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = true }) => {
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const intl = useIntl();
