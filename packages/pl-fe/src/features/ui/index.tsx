@@ -222,6 +222,9 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       <Redirect from='/users/:username' to='/@:username' />
       <Redirect from='/registration' to='/' exact />
 
+      {/* Iceshrimp.NET web routes */}
+      <WrappedRoute path='/notes/:statusId' publicRoute exact layout={DefaultLayout} component={Status} content={children} />
+
       {/* Mastodon rendered pages */}
       <Redirect from='/admin' to='/pl-fe/admin' />
       <Redirect from='/terms' to='/about' />
