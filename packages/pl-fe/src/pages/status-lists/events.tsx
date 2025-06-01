@@ -11,7 +11,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import PlaceholderEventPreview from 'pl-fe/features/placeholder/components/placeholder-event-preview';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useJoinedEvents, useRecentEvents } from 'pl-fe/queries/status-lists/use-events-lists';
+import { useJoinedEventsTimeline, useRecentEventsTimeline } from 'pl-fe/queries/timelines/use-events-lists';
 import { makeGetStatus } from 'pl-fe/selectors';
 
 const messages = defineMessages({
@@ -90,8 +90,8 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
 const EventsPage = () => {
   const intl = useIntl();
 
-  const { data: recentEvents = [], isLoading: recentEventsLoading } = useRecentEvents();
-  const { data: joinedEvents = [], isLoading: joinedEventsLoading } = useJoinedEvents();
+  const { data: recentEvents = [], isLoading: recentEventsLoading } = useRecentEventsTimeline();
+  const { data: joinedEvents = [], isLoading: joinedEventsLoading } = useJoinedEventsTimeline();
 
   return (
     <Column label={intl.formatMessage(messages.title)}>
