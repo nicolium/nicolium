@@ -10,15 +10,6 @@ import {
   type BookmarksAction,
 } from 'pl-fe/actions/bookmarks';
 import {
-  RECENT_EVENTS_FETCH_REQUEST,
-  RECENT_EVENTS_FETCH_SUCCESS,
-  RECENT_EVENTS_FETCH_FAIL,
-  JOINED_EVENTS_FETCH_REQUEST,
-  JOINED_EVENTS_FETCH_SUCCESS,
-  JOINED_EVENTS_FETCH_FAIL,
-  type EventsAction,
-} from 'pl-fe/actions/events';
-import {
   FAVOURITED_STATUSES_FETCH_REQUEST,
   FAVOURITED_STATUSES_FETCH_SUCCESS,
   FAVOURITED_STATUSES_FETCH_FAIL,
@@ -65,8 +56,6 @@ const initialState: State = {
   favourites: newStatusList(),
   bookmarks: newStatusList(),
   pins: newStatusList(),
-  recent_events: newStatusList(),
-  joined_events: newStatusList(),
 };
 
 const getStatusId = (status: string | Pick<Status, 'id'>) => typeof status === 'string' ? status : status.id;
@@ -127,7 +116,7 @@ const removeBookmarkFromLists = (state: State, status: Pick<Status, 'id' | 'book
   }
 };
 
-const statusLists = (state = initialState, action: BookmarksAction | EventsAction | FavouritesAction | InteractionsAction | PinStatusesAction | StatusesAction): State => {
+const statusLists = (state = initialState, action: BookmarksAction | FavouritesAction | InteractionsAction | PinStatusesAction | StatusesAction): State => {
   switch (action.type) {
     case FAVOURITED_STATUSES_FETCH_REQUEST:
     case FAVOURITED_STATUSES_EXPAND_REQUEST:
@@ -169,18 +158,6 @@ const statusLists = (state = initialState, action: BookmarksAction | EventsActio
       return create(state, draft => prependOneToList(draft, 'pins', action.status));
     case UNPIN_SUCCESS:
       return create(state, draft => removeOneFromList(draft, 'pins', action.status));
-    case RECENT_EVENTS_FETCH_REQUEST:
-      return create(state, draft => setLoading(draft, 'recent_events', true));
-    case RECENT_EVENTS_FETCH_FAIL:
-      return create(state, draft => setLoading(draft, 'recent_events', false));
-    case RECENT_EVENTS_FETCH_SUCCESS:
-      return create(state, draft => normalizeList(draft, 'recent_events', action.statuses, action.next));
-    case JOINED_EVENTS_FETCH_REQUEST:
-      return create(state, draft => setLoading(draft, 'joined_events', true));
-    case JOINED_EVENTS_FETCH_FAIL:
-      return create(state, draft => setLoading(draft, 'joined_events', false));
-    case JOINED_EVENTS_FETCH_SUCCESS:
-      return create(state, draft => normalizeList(draft, 'joined_events', action.statuses, action.next));
     default:
       return state;
   }

@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import ReactSwipeableViews from 'react-swipeable-views';
 
-import { fetchJoinedEvents, fetchRecentEvents } from 'pl-fe/actions/events';
 import EventPreview from 'pl-fe/components/event-preview';
 import Button from 'pl-fe/components/ui/button';
 import Card, { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card';
@@ -11,8 +10,8 @@ import Column from 'pl-fe/components/ui/column';
 import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import PlaceholderEventPreview from 'pl-fe/features/placeholder/components/placeholder-event-preview';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useJoinedEvents, useRecentEvents } from 'pl-fe/queries/status-lists/use-events-lists';
 import { makeGetStatus } from 'pl-fe/selectors';
 
 const messages = defineMessages({
@@ -91,17 +90,8 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
 const EventsPage = () => {
   const intl = useIntl();
 
-  const dispatch = useAppDispatch();
-
-  const recentEvents = useAppSelector((state) => state.status_lists.recent_events!.items);
-  const recentEventsLoading = useAppSelector((state) => state.status_lists.recent_events!.isLoading);
-  const joinedEvents = useAppSelector((state) => state.status_lists.joined_events!.items);
-  const joinedEventsLoading = useAppSelector((state) => state.status_lists.joined_events!.isLoading);
-
-  useEffect(() => {
-    dispatch(fetchRecentEvents());
-    dispatch(fetchJoinedEvents());
-  }, []);
+  const { data: recentEvents = [], isLoading: recentEventsLoading } = useRecentEvents();
+  const { data: joinedEvents = [], isLoading: joinedEventsLoading } = useJoinedEvents();
 
   return (
     <Column label={intl.formatMessage(messages.title)}>

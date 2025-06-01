@@ -6,7 +6,7 @@ import toast from 'pl-fe/toast';
 import { importEntities } from './importer';
 import { STATUS_FETCH_SOURCE_FAIL, STATUS_FETCH_SOURCE_REQUEST, STATUS_FETCH_SOURCE_SUCCESS } from './statuses';
 
-import type { CreateEventParams, Location, MediaAttachment, PaginatedResponse, Status } from 'pl-api';
+import type { CreateEventParams, Location, MediaAttachment, Status } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const EVENT_JOIN_REQUEST = 'EVENT_JOIN_REQUEST' as const;
@@ -18,13 +18,6 @@ const EVENT_LEAVE_FAIL = 'EVENT_LEAVE_FAIL' as const;
 const EVENT_COMPOSE_CANCEL = 'EVENT_COMPOSE_CANCEL' as const;
 
 const EVENT_FORM_SET = 'EVENT_FORM_SET' as const;
-
-const RECENT_EVENTS_FETCH_REQUEST = 'RECENT_EVENTS_FETCH_REQUEST' as const;
-const RECENT_EVENTS_FETCH_SUCCESS = 'RECENT_EVENTS_FETCH_SUCCESS' as const;
-const RECENT_EVENTS_FETCH_FAIL = 'RECENT_EVENTS_FETCH_FAIL' as const;
-const JOINED_EVENTS_FETCH_REQUEST = 'JOINED_EVENTS_FETCH_REQUEST' as const;
-const JOINED_EVENTS_FETCH_SUCCESS = 'JOINED_EVENTS_FETCH_SUCCESS' as const;
-const JOINED_EVENTS_FETCH_FAIL = 'JOINED_EVENTS_FETCH_FAIL' as const;
 
 const noOp = () => new Promise(f => f(undefined));
 
@@ -190,61 +183,13 @@ const initEventEdit = (statusId: string) => (dispatch: AppDispatch, getState: ()
   });
 };
 
-const fetchRecentEvents = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (getState().status_lists.recent_events?.isLoading) {
-      return;
-    }
-
-    dispatch<EventsAction>({ type: RECENT_EVENTS_FETCH_REQUEST });
-
-    return getClient(getState()).timelines.publicTimeline({
-      only_events: true,
-    }).then(response => {
-      dispatch(importEntities({ statuses: response.items }));
-      dispatch<EventsAction>({
-        type: RECENT_EVENTS_FETCH_SUCCESS,
-        statuses: response.items,
-        next: response.next,
-      });
-    }).catch(error => {
-      dispatch<EventsAction>({ type: RECENT_EVENTS_FETCH_FAIL, error });
-    });
-  };
-
-const fetchJoinedEvents = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (getState().status_lists.joined_events?.isLoading) {
-      return;
-    }
-
-    dispatch<EventsAction>({ type: JOINED_EVENTS_FETCH_REQUEST });
-
-    getClient(getState).events.getJoinedEvents().then(response => {
-      dispatch(importEntities({ statuses: response.items }));
-      dispatch<EventsAction>({
-        type: JOINED_EVENTS_FETCH_SUCCESS,
-        statuses: response.items,
-        next: response.next,
-      });
-    }).catch(error => {
-      dispatch<EventsAction>({ type: JOINED_EVENTS_FETCH_FAIL, error });
-    });
-  };
-
 type EventsAction =
   | ReturnType<typeof joinEventRequest>
   | ReturnType<typeof joinEventFail>
   | ReturnType<typeof leaveEventRequest>
   | ReturnType<typeof leaveEventFail>
   | ReturnType<typeof cancelEventCompose>
-  | EventFormSetAction
-  | { type: typeof RECENT_EVENTS_FETCH_REQUEST }
-  | { type: typeof RECENT_EVENTS_FETCH_SUCCESS; statuses: Array<Status>; next: (() => Promise<PaginatedResponse<Status>>) | null }
-  | { type: typeof RECENT_EVENTS_FETCH_FAIL; error: unknown }
-  | { type: typeof JOINED_EVENTS_FETCH_REQUEST }
-  | { type: typeof JOINED_EVENTS_FETCH_SUCCESS; statuses: Array<Status>; next: (() => Promise<PaginatedResponse<Status>>) | null }
-  | { type: typeof JOINED_EVENTS_FETCH_FAIL; error: unknown }
+  | EventFormSetAction;
 
 export {
   EVENT_JOIN_REQUEST,
@@ -253,19 +198,11 @@ export {
   EVENT_LEAVE_FAIL,
   EVENT_COMPOSE_CANCEL,
   EVENT_FORM_SET,
-  RECENT_EVENTS_FETCH_REQUEST,
-  RECENT_EVENTS_FETCH_SUCCESS,
-  RECENT_EVENTS_FETCH_FAIL,
-  JOINED_EVENTS_FETCH_REQUEST,
-  JOINED_EVENTS_FETCH_SUCCESS,
-  JOINED_EVENTS_FETCH_FAIL,
   submitEvent,
   joinEvent,
   leaveEvent,
   fetchEventIcs,
   cancelEventCompose,
   initEventEdit,
-  fetchRecentEvents,
-  fetchJoinedEvents,
   type EventsAction,
 };
