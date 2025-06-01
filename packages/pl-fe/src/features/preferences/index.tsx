@@ -149,7 +149,7 @@ const Preferences = () => {
 
   const onThemeReset = () => {
     dispatch(changeSetting(['themeMode'], plFeConfig.defaultSettings.themeMode, { save: false }));
-    dispatch(changeSetting(['theme', 'brandColor'], undefined, { showAlert: true }));
+    dispatch(changeSetting(['theme'], undefined, { showAlert: true }));
   };
 
   const displayMediaOptions = React.useMemo(() => ({
