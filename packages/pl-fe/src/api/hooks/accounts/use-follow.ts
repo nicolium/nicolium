@@ -46,6 +46,7 @@ const useFollow = () => {
         [accountId]: (relationship) => ({
           ...relationship,
           following: false,
+          requested: false,
         }),
       },
     });
