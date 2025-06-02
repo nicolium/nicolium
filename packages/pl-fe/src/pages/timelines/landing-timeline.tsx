@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
@@ -58,6 +58,8 @@ const LandingTimelinePage = () => {
   const theme = useTheme();
   const isMobile = useIsMobile();
 
+  const [timelineFailed, setTimelineFailed] = useState(false);
+
   const timelineEnabled = !instance.pleroma.metadata.restrict_unauthenticated.timelines.local;
 
   const timelineId = 'public:local';
@@ -72,7 +74,9 @@ const LandingTimelinePage = () => {
 
   useEffect(() => {
     if (timelineEnabled) {
-      dispatch(fetchPublicTimeline({ local: true }));
+      dispatch(fetchPublicTimeline({ local: true }, false, undefined, () => {
+        setTimelineFailed(true);
+      }));
     }
   }, []);
 
@@ -82,7 +86,7 @@ const LandingTimelinePage = () => {
         <SiteBanner />
       </div>
 
-      {timelineEnabled ? (
+      {timelineEnabled && !timelineFailed ? (
         <PullToRefresh onRefresh={handleRefresh}>
           <Timeline
             className='black:p-0 black:sm:p-4 black:sm:pt-0'

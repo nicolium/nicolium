@@ -158,7 +158,7 @@ const deduplicateStatuses = (statuses: Array<BaseStatus>) => {
   return deduplicatedStatuses;
 };
 
-const handleTimelineExpand = (timelineId: string, fn: Promise<PaginatedResponse<BaseStatus>>, isLoadingRecent: boolean, done = noOp) =>
+const handleTimelineExpand = (timelineId: string, fn: Promise<PaginatedResponse<BaseStatus>>, isLoadingRecent: boolean, done = noOp, onError?: (error: any) => void) =>
   (dispatch: AppDispatch) => {
     dispatch(expandTimelineRequest(timelineId));
 
@@ -180,6 +180,7 @@ const handleTimelineExpand = (timelineId: string, fn: Promise<PaginatedResponse<
     }).catch(error => {
       dispatch(expandTimelineFail(timelineId, error));
       done();
+      onError?.(error);
     });
   };
 
@@ -197,7 +198,7 @@ const fetchHomeTimeline = (expand = false, done = noOp) =>
     return dispatch(handleTimelineExpand('home', fn, false, done));
   };
 
-const fetchPublicTimeline = ({ onlyMedia, local, instance }: Record<string, any> = {}, expand = false, done = noOp) =>
+const fetchPublicTimeline = ({ onlyMedia, local, instance }: Record<string, any> = {}, expand = false, done = noOp, onError = noOp) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const timelineId = `${instance ? 'remote' : 'public'}${local ? ':local' : ''}${onlyMedia ? ':media' : ''}${instance ? `:${instance}` : ''}`;
@@ -209,7 +210,7 @@ const fetchPublicTimeline = ({ onlyMedia, local, instance }: Record<string, any>
 
     const fn = (expand && state.timelines[timelineId]?.next?.()) || getClient(state).timelines.publicTimeline(params);
 
-    return dispatch(handleTimelineExpand(timelineId, fn, false, done));
+    return dispatch(handleTimelineExpand(timelineId, fn, false, done, onError));
   };
 
 const fetchBubbleTimeline = ({ onlyMedia }: Record<string, any> = {}, expand = false, done = noOp) =>
