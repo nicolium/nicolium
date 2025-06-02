@@ -1,6 +1,7 @@
 import split from 'graphemesplit';
 import React from 'react';
 
+import Emoji from 'pl-fe/components/ui/emoji';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 
@@ -22,7 +23,8 @@ const MaybeEmoji: React.FC<IMaybeEmoji> = ({ text, emojis }) => {
     const filename = emoji.static_url;
 
     if (filename?.length > 0) {
-      return <img draggable={false} className='emojione transition-transform hover:scale-125' alt={text} title={text} src={filename} />;
+      return <Emoji className='emojione transition-transform hover:scale-125' emoji={text} src={filename} />;
+      // return <img draggable={false} className='emojione transition-transform hover:scale-125' alt={text} title={text} src={filename} />;
     }
   }
 
