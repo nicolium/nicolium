@@ -1253,9 +1253,12 @@ const getFeatures = (instance: Instance) => {
     notificationsRequestsAcceptMultiple: instance.api_versions.mastodon >= 1,
 
     /**
+     * @see GET api/iceshrimp/follow_requests/outgoing
+     * @see GET /api/v1/follow_requests/outgoing
      * @see GET /api/v1/pleroma/outgoing_follow_requests
      */
     outgoingFollowRequests: any([
+      v.software === GOTOSOCIAL && gte(v.version, '0.20.0'),
       v.software === ICESHRIMP_NET,
       v.build === PL && gte(v.version, '2.8.0'),
     ]),

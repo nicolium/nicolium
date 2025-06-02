@@ -1027,7 +1027,14 @@ class PlApiClient {
           (response: Array<{ user: {id: string } }>) => response.map(({ user }) => user.id),
         );
       }
-      return this.#paginatedGet('/api/v1/pleroma/outgoing_follow_requests', { params }, accountSchema);
+
+      switch (this.features.version.software) {
+        case GOTOSOCIAL:
+          return this.#paginatedGet('/api/v1/follow_requests/outgoing', { params }, accountSchema);
+
+        default:
+          return this.#paginatedGet('/api/v1/pleroma/outgoing_follow_requests', { params }, accountSchema);
+      }
     },
 
     /**
