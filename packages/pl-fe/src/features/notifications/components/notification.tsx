@@ -142,7 +142,7 @@ const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMe
   },
   bite: {
     id: 'notification.bite',
-    defaultMessage: '{name} has bit you',
+    defaultMessage: '{name} has bit {hasStatus, plural, =0 {you} other {your status}}',
   },
   reply: {
     id: 'notification.reply',
@@ -156,6 +156,7 @@ const buildMessage = (
   accounts: Array<Pick<Account, 'acct' | 'display_name' | 'emojis' | 'id'>>,
   targetName: string,
   instanceTitle: string,
+  hasStatus: boolean,
 ): React.ReactNode => {
   const renderedAccounts = accounts.slice(0, 2).map(account => buildLink(account)).filter(Boolean);
 
@@ -175,6 +176,7 @@ const buildMessage = (
     targetName,
     instance: instanceTitle,
     count: accounts.length,
+    hasStatus: +hasStatus,
   });
 };
 
@@ -188,7 +190,7 @@ interface INotification {
 }
 
 const getNotificationStatus = (n: Pick<NotificationGroup, 'type'> & ({ status: StatusEntity } | { })): StatusEntity | null => {
-  if (['mention', 'status', 'reblog', 'favourite', 'poll', 'update', 'emoji_reaction', 'event_reminder', 'participation_accepted', 'participation_request'].includes(n.type))
+  if (['mention', 'status', 'reblog', 'favourite', 'poll', 'update', 'emoji_reaction', 'event_reminder', 'participation_accepted', 'participation_request', 'bite'].includes(n.type))
     // @ts-ignore
     return n.status;
   return null;
@@ -338,6 +340,19 @@ const Notification: React.FC<INotification> = (props) => {
   };
 
   const renderContent = () => {
+    if (type === 'bite' && status) {
+      return (
+        <StatusContainer
+          id={status.id}
+          onMoveDown={handleMoveDown}
+          onMoveUp={handleMoveUp}
+          avatarSize={avatarSize}
+          contextType='notifications'
+          showGroup={false}
+        />
+      );
+    }
+
     switch (type) {
       case 'follow':
         return (
@@ -401,7 +416,7 @@ const Notification: React.FC<INotification> = (props) => {
   const targetName = notification.type === 'move' ? notification.target.acct : '';
 
   const message: React.ReactNode = account && typeof account === 'object'
-    ? buildMessage(intl, displayedType, accounts, targetName, instance.title)
+    ? buildMessage(intl, displayedType, accounts, targetName, instance.title, !!status)
     : null;
 
   const ariaLabel = (

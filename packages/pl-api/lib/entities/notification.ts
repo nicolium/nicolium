@@ -22,7 +22,7 @@ const baseNotificationSchema = v.object({
 
 const accountNotificationSchema = v.object({
   ...baseNotificationSchema.entries,
-  type: v.picklist(['follow', 'follow_request', 'admin.sign_up', 'bite']),
+  type: v.picklist(['follow', 'follow_request', 'admin.sign_up']),
 });
 
 const mentionNotificationSchema = v.object({
@@ -83,6 +83,12 @@ const eventParticipationRequestNotificationSchema = v.object({
   participation_message: v.fallback(v.nullable(v.string()), null),
 });
 
+const biteNotificationSchema = v.object({
+  ...baseNotificationSchema.entries,
+  type: v.literal('bite'),
+  status: v.fallback(v.nullable(statusSchema), null),
+});
+
 /**
  * @category Schemas
  * @see {@link https://docs.joinmastodon.org/entities/Notification/}
@@ -108,6 +114,7 @@ const notificationSchema: v.BaseSchema<any, Notification, v.BaseIssue<unknown>> 
     emojiReactionNotificationSchema,
     chatMentionNotificationSchema,
     eventParticipationRequestNotificationSchema,
+    biteNotificationSchema,
   ])) as any;
 
 /**
@@ -124,6 +131,7 @@ type Notification = v.InferOutput<
 | typeof emojiReactionNotificationSchema
 | typeof chatMentionNotificationSchema
 | typeof eventParticipationRequestNotificationSchema
+| typeof biteNotificationSchema
 >;
 
 export { notificationSchema, type Notification };

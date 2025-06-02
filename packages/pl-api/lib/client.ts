@@ -481,7 +481,7 @@ class PlApiClient {
         return accounts;
       }, {})),
       statuses: Object.values(items.reduce<Record<string, Status>>((statuses, notification) => {
-        if ('status' in notification) statuses[notification.status.id] = notification.status;
+        if ('status' in notification && notification.status) statuses[notification.status.id] = notification.status;
         return statuses;
       }, {})),
       notification_groups: notificationGroups,

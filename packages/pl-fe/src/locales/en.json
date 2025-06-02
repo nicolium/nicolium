@@ -1203,7 +1203,7 @@
   "new_group_panel.title": "Create group",
   "notification.admin.report": "{name} reported {target}",
   "notification.admin.sign_up": "{name} signed up",
-  "notification.bite": "{name} has bit you",
+  "notification.bite": "{name} has bit {hasStatus, plural, =0 {you} other {your status}}",
   "notification.favourite": "{name} liked your post",
   "notification.follow": "{name} followed you",
   "notification.follow_request": "{name} has requested to follow you",
