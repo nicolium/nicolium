@@ -35,7 +35,7 @@ const settingsSchema = v.object({
   explanationBox: v.fallback(v.boolean(), true),
   autoloadTimelines: v.fallback(v.boolean(), true),
   autoloadMore: v.fallback(v.boolean(), true),
-  preserveSpoilers: v.fallback(v.boolean(), false),
+  preserveSpoilers: v.fallback(v.boolean(), true),
   forceImplicitAddressing: v.fallback(v.boolean(), false),
   autoTranslate: v.fallback(v.boolean(), false),
   knownLanguages: v.fallback(v.array(v.string()), []),
