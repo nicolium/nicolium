@@ -185,7 +185,7 @@ const statusSchema: v.BaseSchema<any, Status, v.BaseIssue<unknown>> = v.pipe(v.a
   ...baseStatusSchema.entries,
   reblog: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
 
-  quote: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
+  quote: v.fallback(v.nullable(v.lazy(() => v.union([quoteSchema, shallowQuoteSchema]))), null),
 })) as any;
 
 /**
