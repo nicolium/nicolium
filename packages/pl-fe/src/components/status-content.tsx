@@ -269,7 +269,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
       }
 
       if (status.poll_id) {
-        output.push(<Poll id={status.poll_id} key='poll' status={status} language={statusMeta.currentLanguage} />);
+        output.push(<Poll id={status.poll_id} key='poll' status={status} language={statusMeta.currentLanguage} truncate={collapsable} />);
       }
 
       if (translatable) {
@@ -305,7 +305,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
       }
 
       if (status.poll_id) {
-        output.push(<Poll id={status.poll_id} key='poll' status={status} language={statusMeta.currentLanguage} />);
+        output.push(<Poll id={status.poll_id} key='poll' status={status} language={statusMeta.currentLanguage} truncate={collapsable} />);
       }
 
       if (translatable) {

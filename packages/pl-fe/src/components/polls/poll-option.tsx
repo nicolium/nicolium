@@ -31,7 +31,7 @@ interface IPollOptionText extends IPollOption {
   percent: number;
 }
 
-const PollOptionText: React.FC<IPollOptionText> = ({ poll, option, index, active, onToggle }) => {
+const PollOptionText: React.FC<IPollOptionText> = ({ poll, option, index, active, onToggle, truncate }) => {
   const handleOptionChange: React.EventHandler<React.ChangeEvent> = () => onToggle(index);
 
   const handleOptionKeyPress: React.EventHandler<React.KeyboardEvent> = e => {
@@ -61,12 +61,13 @@ const PollOptionText: React.FC<IPollOptionText> = ({ poll, option, index, active
       />
 
       <div className='grid w-full items-center'>
-        <div className='col-start-1 row-start-1 ml-4 mr-6 justify-self-center'>
-          <div className='text-primary-600 dark:text-white'>
+        <div className='col-start-1 row-start-1 max-w-full justify-self-center overflow-hidden pl-4 pr-6'>
+          <div className={clsx('text-primary-600 dark:text-white', { truncate })}>
             <Text
               theme='inherit'
               weight='medium'
               align='center'
+              className='line-clamp-1 inline text-ellipsis break-words'
             >
               <ParsedContent html={option.title} emojis={poll.emojis} />
             </Text>
@@ -103,10 +104,11 @@ interface IPollOption {
   active: boolean;
   onToggle: (value: number) => void;
   language?: string | null;
+  truncate?: boolean;
 }
 
 const PollOption: React.FC<IPollOption> = (props): JSX.Element | null => {
-  const { index, poll, option, showResults, language } = props;
+  const { index, poll, option, showResults, language, truncate } = props;
 
   const intl = useIntl();
 
@@ -132,11 +134,11 @@ const PollOption: React.FC<IPollOption> = (props): JSX.Element | null => {
           >
             <PollPercentageBar percent={percent} leading={leading} />
 
-            <div className='text-primary-600 dark:text-white'>
+            <div className='overflow-hidden text-primary-600 dark:text-white'>
               <Text
                 theme='inherit'
                 weight='medium'
-                className='relative'
+                className={clsx('relative break-words', { truncate })}
               >
                 <ParsedContent html={(language && option.title_map) && option.title_map[language] || option.title} emojis={poll.emojis} />
               </Text>
