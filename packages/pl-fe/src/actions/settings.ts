@@ -2,6 +2,7 @@ import { defineMessage } from 'react-intl';
 
 import { patchMe } from 'pl-fe/actions/me';
 import { getClient } from 'pl-fe/api';
+import { NODE_ENV } from 'pl-fe/build-config';
 import messages from 'pl-fe/messages';
 import { makeGetAccount } from 'pl-fe/selectors';
 import KVStore from 'pl-fe/storage/kv-store';
@@ -11,7 +12,7 @@ import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
-const FE_NAME = 'pl_fe';
+const FE_NAME = NODE_ENV === 'production' ? 'pl_fe' : 'pl_fe_dev';
 
 /** Options when changing/saving settings. */
 type SettingOpts = {

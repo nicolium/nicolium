@@ -2,6 +2,7 @@ import { createSelector } from 'reselect';
 import * as v from 'valibot';
 
 import { getHost } from 'pl-fe/actions/instance';
+import { NODE_ENV } from 'pl-fe/build-config';
 import { plFeConfigSchema } from 'pl-fe/normalizers/pl-fe/pl-fe-config';
 import KVStore from 'pl-fe/storage/kv-store';
 import { useSettingsStore } from 'pl-fe/stores/settings';
@@ -39,9 +40,10 @@ const fetchPlFeConfig = (host: string | null) =>
 
     if (features.frontendConfigurations) {
       return dispatch(fetchFrontendConfigurations()).then(data => {
-        if (data.pl_fe) {
-          dispatch(importPlFeConfig(data.pl_fe, host));
-          return data.pl_fe;
+        const key = NODE_ENV === 'production' ? 'pl_fe' : 'pl_fe_dev';
+        if (data[key]) {
+          dispatch(importPlFeConfig(data[key], host));
+          return data[key];
         } else {
           return dispatch(fetchPlFeJson(host));
         }
