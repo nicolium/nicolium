@@ -26,7 +26,11 @@ const Emoji: React.FC<IEmoji> = (props): JSX.Element | null => {
   if (!filename && !src) return null;
 
   if (src) {
-    if (disableUserProvidedMedia) return <>{alt || emoji}</>;
+    if (disableUserProvidedMedia) return (
+      <>
+        {alt || <span className={rest.className}>{emoji}</span>}
+      </>
+    );
     return (
       <StillImage
         alt={alt || emoji}
@@ -39,7 +43,7 @@ const Emoji: React.FC<IEmoji> = (props): JSX.Element | null => {
     );
   }
 
-  if (systemEmojiFont) return <>{emoji}</>;
+  if (systemEmojiFont) return <span className={rest.className}>{emoji}</span>;
 
   return (
     <img
