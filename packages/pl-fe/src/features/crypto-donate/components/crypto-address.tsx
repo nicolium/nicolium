@@ -8,7 +8,6 @@ import Text from 'pl-fe/components/ui/text';
 import { CryptoIcon } from 'pl-fe/features/ui/util/async-components';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
-import { getExplorerUrl } from '../utils/block-explorer';
 import { getTitle } from '../utils/coin-db';
 
 interface ICryptoAddress {
@@ -28,7 +27,6 @@ const CryptoAddress: React.FC<ICryptoAddress> = (props): JSX.Element => {
   };
 
   const title = getTitle(ticker);
-  const explorerUrl = getExplorerUrl(ticker, address);
 
   return (
     <Stack>
@@ -45,12 +43,6 @@ const CryptoAddress: React.FC<ICryptoAddress> = (props): JSX.Element => {
           <a className='ml-1 text-gray-500 rtl:ml-0 rtl:mr-1' href='#' onClick={handleModalClick}>
             <Icon src={require('@tabler/icons/outline/qrcode.svg')} size={20} />
           </a>
-
-          {explorerUrl && (
-            <a className='ml-1 text-gray-500 rtl:ml-0 rtl:mr-1' href={explorerUrl} target='_blank'>
-              <Icon src={require('@tabler/icons/outline/external-link.svg')} size={20} />
-            </a>
-          )}
         </HStack>
       </HStack>
 
