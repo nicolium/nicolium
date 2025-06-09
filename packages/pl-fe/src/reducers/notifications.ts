@@ -41,8 +41,6 @@ const initialState: State = {
   lastRead: -1,
 };
 
-const parseId = (id: string | number) => parseInt(id as string, 10);
-
 const filterUnique = (notification: NotificationGroup, index: number, notifications: Array<NotificationGroup>) =>
   notifications.findIndex(({ group_key }) => group_key === notification.group_key) === index;
 
@@ -55,7 +53,8 @@ const comparator = (a: Pick<NotificationGroup, 'most_recent_notification_id'>, b
 // Count how many notifications appear after the given ID (for unread count)
 const countFuture = (notifications: Array<NotificationGroup>, lastId: string | number) =>
   notifications.reduce((acc, notification) => {
-    if (parseId(notification.group_key) > parseId(lastId)) {
+    const length = Math.max(notification.group_key.length, lastId.toString().length);
+    if (notification.group_key.padStart(length, '0').localeCompare(lastId.toString().padStart(length, '0')) === 1) {
       return acc + 1;
     } else {
       return acc;
