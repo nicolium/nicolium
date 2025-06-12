@@ -1,3 +1,4 @@
+import { HashtagNode } from '@lexical/hashtag';
 import { AutoLinkNode, LinkNode } from '@lexical/link';
 import { $convertToMarkdownString } from '@lexical/markdown';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
@@ -6,7 +7,7 @@ import debounce from 'lodash/debounce';
 import { useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
-import { addSuggestedLanguage, addSuggestedQuote, setEditorState, suggestClearLink } from 'pl-fe/actions/compose';
+import { addSuggestedLanguage, addSuggestedQuote, setEditorState, suggestClearLink, suggestHashtagCasing } from 'pl-fe/actions/compose';
 import { fetchStatus } from 'pl-fe/actions/statuses';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
@@ -30,7 +31,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
   const dispatch = useAppDispatch();
   const [editor] = useLexicalComposerContext();
   const features = useFeatures();
-  const { urlPrivacy } = useSettings();
+  const { urlPrivacy, ignoreHashtagCasingSuggestions } = useSettings();
 
   const checkUrls = useCallback(debounce((editorState: EditorState) => {
     dispatch(async (_, getState) => {
@@ -78,6 +79,32 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
       });
     });
   }, 2000), [urlPrivacy.clearLinksInCompose]);
+
+  const checkHashtagCasingSuggestions = useCallback(debounce((editorState: EditorState) => {
+    dispatch(async (_, getState) => {
+      if (ignoreHashtagCasingSuggestions) return;
+
+      const state = getState();
+      const compose = state.compose[composeId];
+
+      if (compose.hashtag_casing_suggestion_ignored) return;
+
+      editorState.read(() => {
+        const hashtagNodes = $nodesOfType(HashtagNode);
+
+        for (const tag of hashtagNodes) {
+          const text = tag.getTextContent();
+
+          if (text.length > 10 && text.toLowerCase() === text && !text.match(/[0-9]/)) {
+            dispatch(suggestHashtagCasing(composeId, text));
+            return;
+          }
+        }
+
+        dispatch(suggestHashtagCasing(composeId, null));
+      });
+    });
+  }, 1000), [ignoreHashtagCasingSuggestions]);
 
   const getQuoteSuggestions = useCallback(debounce((text: string) => {
     dispatch(async (_, getState) => {
@@ -147,6 +174,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
         const data = isEmpty ? null : JSON.stringify(editorState.toJSON());
         dispatch(setEditorState(composeId, data, text));
         checkUrls(editorState);
+        checkHashtagCasingSuggestions(editorState);
         getQuoteSuggestions(plainText);
         detectLanguage(plainText);
       });

@@ -37,6 +37,7 @@ import { countableText } from '../util/counter';
 
 import ClearLinkSuggestion from './clear-link-suggestion';
 import ContentTypeButton from './content-type-button';
+import HashtagCasingSuggestion from './hashtag-casing-suggestion';
 import InteractionPolicyButton from './interaction-policy-button';
 import LanguageDropdown from './language-dropdown';
 import PollButton from './poll-button';
@@ -379,6 +380,8 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
       </div>
 
       <ClearLinkSuggestion composeId={id} handleAccept={onAcceptClearLinkSuggestion} handleReject={onRejectClearLinkSuggestion} />
+
+      <HashtagCasingSuggestion composeId={id} />
 
       {composeModifiers}
 

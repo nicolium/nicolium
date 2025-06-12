@@ -101,6 +101,9 @@ const COMPOSE_INTERACTION_POLICY_OPTION_CHANGE = 'COMPOSE_INTERACTION_POLICY_OPT
 const COMPOSE_CLEAR_LINK_SUGGESTION_CREATE = 'COMPOSE_CLEAR_LINK_SUGGESTION_CREATE' as const;
 const COMPOSE_CLEAR_LINK_SUGGESTION_IGNORE = 'COMPOSE_CLEAR_LINK_SUGGESTION_IGNORE' as const;
 
+const COMPOSE_HASHTAG_CASING_SUGGESTION_SET = 'COMPOSE_HASHTAG_CASING_SUGGESTION_SET' as const;
+const COMPOSE_HASHTAG_CASING_SUGGESTION_IGNORE = 'COMPOSE_HASHTAG_CASING_SUGGESTION_IGNORE' as const;
+
 const getAccount = makeGetAccount();
 
 const messages = defineMessages({
@@ -984,6 +987,17 @@ const ignoreClearLinkSuggestion = (composeId: string, key: string) => ({
   key,
 });
 
+const suggestHashtagCasing = (composeId: string, suggestion: string | null) => ({
+  type: COMPOSE_HASHTAG_CASING_SUGGESTION_SET,
+  composeId,
+  suggestion,
+});
+
+const ignoreHashtagCasingSuggestion = (composeId: string) => ({
+  type: COMPOSE_HASHTAG_CASING_SUGGESTION_IGNORE,
+  composeId,
+});
+
 type ComposeAction =
   ComposeSetStatusAction
   | ReturnType<typeof changeCompose>
@@ -1040,7 +1054,9 @@ type ComposeAction =
   | ReturnType<typeof changeComposeFederated>
   | ReturnType<typeof changeComposeInteractionPolicyOption>
   | ReturnType<typeof suggestClearLink>
-  | ReturnType<typeof ignoreClearLinkSuggestion>;
+  | ReturnType<typeof ignoreClearLinkSuggestion>
+  | ReturnType<typeof suggestHashtagCasing>
+  | ReturnType<typeof ignoreHashtagCasingSuggestion>;
 
 export {
   COMPOSE_CHANGE,
@@ -1099,6 +1115,8 @@ export {
   COMPOSE_INTERACTION_POLICY_OPTION_CHANGE,
   COMPOSE_CLEAR_LINK_SUGGESTION_CREATE,
   COMPOSE_CLEAR_LINK_SUGGESTION_IGNORE,
+  COMPOSE_HASHTAG_CASING_SUGGESTION_SET,
+  COMPOSE_HASHTAG_CASING_SUGGESTION_IGNORE,
   setComposeToStatus,
   replyCompose,
   cancelReplyCompose,
@@ -1149,6 +1167,8 @@ export {
   suggestClearLink,
   ignoreClearLinkSuggestion,
   cancelPreviewCompose,
+  suggestHashtagCasing,
+  ignoreHashtagCasingSuggestion,
   type ComposeReplyAction,
   type ComposeSuggestionSelectAction,
   type ComposeAction,

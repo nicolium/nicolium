@@ -60,6 +60,8 @@ import {
   COMPOSE_CLEAR_LINK_SUGGESTION_IGNORE,
   COMPOSE_PREVIEW_SUCCESS,
   COMPOSE_PREVIEW_CANCEL,
+  COMPOSE_HASHTAG_CASING_SUGGESTION_SET,
+  COMPOSE_HASHTAG_CASING_SUGGESTION_IGNORE,
   type ComposeAction,
   type ComposeSuggestionSelectAction,
 } from '../actions/compose';
@@ -142,6 +144,8 @@ interface Compose {
   dismissed_clear_links_suggestions: Array<string>;
   clear_link_suggestion: ClearLinkSuggestion | null;
   preview: Partial<BaseStatus> | null;
+  hashtag_casing_suggestion: string | null;
+  hashtag_casing_suggestion_ignored: boolean | null;
 }
 
 const newCompose = (params: Partial<Compose> = {}): Compose => ({
@@ -186,6 +190,8 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
   dismissed_clear_links_suggestions: [],
   clear_link_suggestion: null,
   preview: null,
+  hashtag_casing_suggestion: null,
+  hashtag_casing_suggestion_ignored: null,
   ...params,
 });
 
@@ -732,6 +738,15 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
     case COMPOSE_PREVIEW_CANCEL:
       return updateCompose(state, action.composeId, compose => {
         compose.preview = null;
+      });
+    case COMPOSE_HASHTAG_CASING_SUGGESTION_SET:
+      return updateCompose(state, action.composeId, compose => {
+        compose.hashtag_casing_suggestion = action.suggestion;
+      });
+    case COMPOSE_HASHTAG_CASING_SUGGESTION_IGNORE:
+      return updateCompose(state, action.composeId, compose => {
+        compose.hashtag_casing_suggestion = null;
+        compose.hashtag_casing_suggestion_ignored = true;
       });
     default:
       return state;
