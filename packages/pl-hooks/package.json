@@ -2,13 +2,13 @@
   "name": "pl-hooks",
   "version": "0.0.13",
   "type": "module",
-  "homepage": "https://github.com/mkljczk/pl-fe/tree/develop/packages/pl-hooks",
+  "homepage": "https://codeberg.org/mkljczk/pl-fe/src/branch/develop/packages/pl-hooks",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mkljczk/pl-fe"
+    "url": "https://codeberg.org/mkljczk/pl-fe"
   },
   "bugs": {
-    "url": "https://github.com/mkljczk/pl-fe/issues"
+    "url": "https://codeberg.org/mkljczk/pl-fe/issues"
   },
   "scripts": {
     "dev": "vite",

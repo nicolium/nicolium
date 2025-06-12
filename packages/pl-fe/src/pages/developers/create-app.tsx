@@ -166,7 +166,7 @@ const CreateAppPage: React.FC = () => {
         <FormGroup labelText={<FormattedMessage id='app_create.website_label' defaultMessage='Website' />}>
           <Input
             type='text'
-            placeholder='https://github.com/mkljczk/pl-fe'
+            placeholder='https://codeberg.org/mkljczk/pl-fe'
             onChange={handleParamChange('website')}
             value={params.website}
           />
@@ -175,7 +175,7 @@ const CreateAppPage: React.FC = () => {
         <FormGroup labelText={<FormattedMessage id='app_create.redirect_uri_label' defaultMessage='Redirect URIs' />}>
           <Input
             type='text'
-            placeholder='https://github.com/mkljczk/pl-fe'
+            placeholder='https://codeberg.org/mkljczk/pl-fe'
             onChange={handleParamChange('redirect_uris')}
             value={params.redirect_uris}
             required

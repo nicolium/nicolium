@@ -1,7 +1,7 @@
 # `pl-api`
 
-[![GitHub License](https://img.shields.io/github/license/mkljczk/pl-fe)](https://github.com/mkljczk/pl-fe?tab=AGPL-3.0-1-ov-file#readme)
-[![NPM Version](https://img.shields.io/npm/v/pl-api)
+[![NPM License](https://img.shields.io/npm/l/pl-api)
+![NPM Version](https://img.shields.io/npm/v/pl-api)
 ![NPM Downloads](https://img.shields.io/npm/dw/pl-api)](https://www.npmjs.com/package/pl-api)
 
 A JavaScript library for interacting with Mastodon API-compatible servers, focused on support for projects extending the official Mastodon API.
@@ -37,8 +37,8 @@ For unsupported projects, it falls back to a basic feature set, though every met
 
 ## Projects using `pl-api`
 
-* [`pl-fe`](https://github.com/mkljczk/pl-fe/tree/develop/packages/pl-fe) is a web client for Mastodon-compatible servers forked from Soapbox. It uses `pl-api` for API interactions.
-* [`pl-hooks`](https://github.com/mkljczk/pl-fe/tree/develop/packages/pl-hooks) is a work-in-progress library utilizing `pl-api`.
+* [`pl-fe`](https://codeberg.org/mkljczk/pl-fe/src/branch/develop/packages/pl-fe) is a web client for Mastodon-compatible servers forked from Soapbox. It uses `pl-api` for API interactions.
+* [`pl-hooks`](https://codeberg.org/mkljczk/pl-fe/src/branch/develop/packages/pl-hooks) is a work-in-progress library utilizing `pl-api`.
 
 If you are using `pl-api` in your project, please open a pull request with a link to the project.
 

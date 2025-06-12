@@ -2,6 +2,6 @@
   "name": "pl-fe",
   "description": "Mastodon-compatible social media front-end.",
   "keywords": ["fediverse"],
-  "website": "https://github.com/mkljczk/pl-fe",
+  "website": "https://codeberg.org/mkljczk/pl-fe",
   "stack": "container"
 }

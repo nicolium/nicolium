@@ -1,5 +1,6 @@
 # pl-fe
 
+[![Codeberg Repo stars](https://img.shields.io/gitea/stars/mkljczk/pl-fe?gitea_url=https%3A%2F%2Fcodeberg.org&logo=Codeberg)](https://codeberg.org/mkljczk/pl-fe)
 [![GitHub Repo stars](https://img.shields.io/github/stars/mkljczk/pl-fe)](https://github.com/mkljczk/pl-fe)
 [![GitHub License](https://img.shields.io/github/license/mkljczk/pl-fe)](https://github.com/mkljczk/pl-fe?tab=AGPL-3.0-1-ov-file#readme)
 [![Weblate project translated](https://img.shields.io/weblate/progress/pl-fe)](https://hosted.weblate.org/engage/pl-fe/)
@@ -47,7 +48,7 @@ More projects to be announced.
 
 ## Contributing
 
-This project is hosted on [Codeberg](https://codeberg.org/mkljczk/pl-fe) and [GitHub](https://github.com/mkljczk/pl-fe). Most development currently happens on GitHub, but you can contribute on both platforms.
+This project is hosted on [Codeberg](https://codeberg.org/mkljczk/pl-fe) and [GitHub](https://github.com/mkljczk/pl-fe). You can open issues on Codeberg or create merge requests on both platforms.
 
 Code contributions are welcome. I will provide contributing guidelines after I decide whether the current monorepo model is the correct approach.
 

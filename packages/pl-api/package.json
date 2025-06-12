@@ -2,13 +2,13 @@
   "name": "pl-api",
   "version": "1.0.0-rc.77",
   "type": "module",
-  "homepage": "https://github.com/mkljczk/pl-fe/tree/develop/packages/pl-api",
+  "homepage": "https://codeberg.org/mkljczk/pl-fe/src/branch/develop/packages/pl-api",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mkljczk/pl-fe.git"
+    "url": "git+https://codeberg.org/mkljczk/pl-fe.git"
   },
   "bugs": {
-    "url": "https://github.com/mkljczk/pl-fe/issues"
+    "url": "https://codeberg.org/mkljczk/pl-fe/issues"
   },
   "scripts": {
     "dev": "vite",
@@ -31,8 +31,8 @@
     "eslint-plugin-compat": "6.0.2",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-promise": "^7.2.1",
-    "typedoc": "^0.27.8",
-    "typedoc-material-theme": "^1.3.0",
+    "typedoc": "^0.28.5",
+    "typedoc-material-theme": "^1.4.0",
     "typedoc-plugin-valibot": "^1.0.0",
     "typescript": "^5.7.3",
     "vite": "^6.3.3",

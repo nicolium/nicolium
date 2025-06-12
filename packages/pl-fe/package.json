@@ -4,17 +4,17 @@
   "version": "0.0.1",
   "type": "module",
   "description": "Mastodon-compatible social media front-end",
-  "homepage": "https://github.com/mkljczk/pl-fe",
+  "homepage": "https://codeberg.org/mkljczk/pl-fe",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mkljczk/pl-fe"
+    "url": "https://codeberg.org/mkljczk/pl-fe"
   },
   "keywords": [
     "fediverse",
     "pleroma"
   ],
   "bugs": {
-    "url": "https://github.com/mkljczk/pl-fe/issues"
+    "url": "https://codeberg.org/mkljczk/pl-fe/issues"
   },
   "scripts": {
     "start": "npx vite serve",

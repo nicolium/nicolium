@@ -889,7 +889,7 @@
   "generic.logo": "Logo",
   "generic.saved": "Zapisano",
   "getting_started.footer_notice": "Z dumą tworzone w Polsce. {emoji}",
-  "getting_started.open_source_notice": "{code_name} jest oprogramowaniem o otwartym źródle. Możesz pomóc w rozwoju lub zgłaszać błędy na GitHubie tutaj: {code_link} (v{code_version}).",
+  "getting_started.open_source_notice": "{code_name} jest oprogramowaniem o otwartym źródle. Możesz pomóc w rozwoju lub zgłaszać błędy na Codebergu tutaj: {code_link} (v{code_version}).",
   "group.cancel_request": "Anuluj zgłoszenie",
   "group.delete.success": "Pomyślnie usunięto grupę",
   "group.demote.user.success": "@{name} jest teraz członkiem",
