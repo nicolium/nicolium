@@ -194,7 +194,10 @@ const Status: React.FC<IStatus> = (props) => {
     (node.current?.querySelector('.emoji-picker-dropdown') as HTMLButtonElement)?.click();
   };
 
-  const handleUnfilter = () => dispatch(unfilterStatus(status.filtered.length ? status.id : actualStatus.id));
+  const handleUnfilter = () => {
+    dispatch(unfilterStatus(actualStatus.id));
+    if (actualStatus.id !== status.id) dispatch(unfilterStatus(status.id));
+  };
 
   const statusInfo = useMemo(() => {
     if (isReblog && showGroup && group) {

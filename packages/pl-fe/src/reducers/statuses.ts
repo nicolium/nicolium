@@ -255,7 +255,7 @@ const statuses = (state = initialState, action: EmojiReactsAction | EventsAction
       return create(state, (draft) => {
         const status = draft[action.statusId];
         if (status) {
-          status.showFiltered = false;
+          status.showFiltered = true;
         }
       });
     case TIMELINE_DELETE:
