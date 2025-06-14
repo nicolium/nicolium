@@ -13,7 +13,7 @@ const buildStatus = (state: RootState, scheduledStatus: ScheduledStatus) => {
   const status = v.parse(statusSchema, {
     account,
     content: scheduledStatus.params.text?.replace(new RegExp('\n', 'g'), '<br>'), /* eslint-disable-line no-control-regex */
-    created_at: scheduledStatus.params.scheduled_at,
+    created_at: scheduledStatus.scheduled_at,
     id: scheduledStatus.id,
     in_reply_to_id: scheduledStatus.params.in_reply_to_id,
     media_attachments: scheduledStatus.media_attachments,
