@@ -53,8 +53,8 @@ const comparator = (a: Pick<NotificationGroup, 'most_recent_notification_id'>, b
 // Count how many notifications appear after the given ID (for unread count)
 const countFuture = (notifications: Array<NotificationGroup>, lastId: string | number) =>
   notifications.reduce((acc, notification) => {
-    const length = Math.max(notification.group_key.length, lastId.toString().length);
-    if (notification.group_key.padStart(length, '0').localeCompare(lastId.toString().padStart(length, '0')) === 1) {
+    const length = Math.max(notification.most_recent_notification_id.length, lastId.toString().length);
+    if (notification.most_recent_notification_id.padStart(length, '0').localeCompare(lastId.toString().padStart(length, '0')) === 1) {
       return acc + 1;
     } else {
       return acc;
