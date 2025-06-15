@@ -1109,7 +1109,6 @@ const getFeatures = (instance: Instance) => {
      */
     mastodonAdminMetrics: v.software === MASTODON && gte(v.version, '3.5.0'),
 
-
     /**
      * Can perform moderation actions with account and reports.
      * @see {@link https://docs.joinmastodon.org/methods/admin/}

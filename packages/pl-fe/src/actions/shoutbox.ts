@@ -11,7 +11,7 @@ const SHOUTBOX_MESSAGES_IMPORT = 'SHOUTBOX_MESSAGES_IMPORT' as const;
 const SHOUTBOX_CONNECT = 'SHOUTBOX_CONNECT' as const;
 
 const importShoutboxMessages = (messages: ShoutMessage[]) => (dispatch: AppDispatch): ShoutboxAction => {
-  dispatch(importEntities({ accounts: messages.map((message) => message.author) }));
+  dispatch(importEntities({ accounts: messages.map((message) => message.author) }, { override: false }));
 
   return dispatch({
     type: SHOUTBOX_MESSAGES_IMPORT,
@@ -20,7 +20,7 @@ const importShoutboxMessages = (messages: ShoutMessage[]) => (dispatch: AppDispa
 };
 
 const importShoutboxMessage = (message: ShoutMessage) => (dispatch: AppDispatch): ShoutboxAction => {
-  dispatch(importEntities({ accounts: [message.author] }));
+  dispatch(importEntities({ accounts: [message.author] }, { override: false }));
 
   return dispatch({
     type: SHOUTBOX_MESSAGE_IMPORT,

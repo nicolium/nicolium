@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Virtuoso, VirtuosoHandle } from 'react-virtuoso';
 
+import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
 import Avatar from 'pl-fe/components/ui/avatar';
@@ -15,7 +16,80 @@ import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 
 import { ChatMessageListList, ChatMessageListScroller } from './chat-message-list';
 
+import type { ShoutMessage } from 'pl-fe/reducers/shoutbox';
+
 const START_INDEX = 10000;
+
+interface IShoutboxMessage {
+  message: ShoutMessage;
+  isMyMessage: boolean;
+}
+
+const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) => {
+  const { account } = useAccount(message.author_id);
+
+  if (!account) return null;
+
+  return (
+    <div key={message.id} className='group relative px-4 py-2 hover:bg-gray-200/40 dark:hover:bg-gray-800/40'>
+      <HStack
+        space={2}
+        alignItems='bottom'
+        justifyContent={isMyMessage ? 'end' : 'start'}
+        className={clsx({
+          'ml-auto': isMyMessage,
+        })}
+      >
+        {!isMyMessage && (
+          <HoverAccountWrapper accountId={account.id} element='span'>
+            <Link className='mb-0.5' to={`/@${account.acct}`} title={account.acct}>
+              <Avatar
+                src={account.avatar}
+                alt={account.avatar_description}
+                size={32}
+              />
+            </Link>
+          </HoverAccountWrapper>
+        )}
+
+        <Stack
+          space={0.5}
+          className={clsx({
+            'max-w-[85%]': true,
+            'order-3': isMyMessage,
+            'order-1': !isMyMessage,
+          })}
+          alignItems={isMyMessage ? 'end' : 'start'}
+        >
+          <HStack alignItems='bottom' className='max-w-full'>
+            <div
+              className={
+                clsx({
+                  'text-ellipsis break-words relative rounded-md py-2 px-3 max-w-full space-y-2 [&_.mention]:underline': true,
+                  '[&_.mention]:text-primary-600 dark:[&_.mention]:text-accent-blue': !isMyMessage,
+                  '[&_.mention]:text-white dark:[&_.mention]:white': isMyMessage,
+                  'bg-primary-500 text-white': isMyMessage,
+                  'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100': !isMyMessage,
+                  // '!bg-transparent !p-0 emoji-lg': isOnlyEmoji,
+                })
+              }
+              tabIndex={0}
+            >
+              <Text size='sm' theme='inherit' className='break-word-nested'>
+                <ParsedContent html={message.text} />
+              </Text>
+            </div>
+          </HStack>
+          {!isMyMessage && (
+            <Text size='xs' theme='muted'>
+              <Emojify text={account.display_name} emojis={account.emojis} />
+            </Text>
+          )}
+        </Stack>
+      </HStack>
+    </div>
+  );
+};
 
 /** Scrollable list of shoutbox messages. */
 const ShoutboxMessageList: React.FC = () => {
@@ -70,69 +144,13 @@ const ShoutboxMessageList: React.FC = () => {
           {...initialScrollPositionProps}
           data={shoutboxMessages}
           followOutput='auto'
-          itemContent={(index, shoutboxMessage) => {
-            const isMyMessage = shoutboxMessage.author.id === me;
-
-            return (
-              <div key={shoutboxMessage.id} className='group relative px-4 py-2 hover:bg-gray-200/40 dark:hover:bg-gray-800/40'>
-                <HStack
-                  space={2}
-                  alignItems='bottom'
-                  justifyContent={isMyMessage ? 'end' : 'start'}
-                  className={clsx({
-                    'ml-auto': isMyMessage,
-                  })}
-                >
-                  {!isMyMessage && (
-                    <HoverAccountWrapper accountId={shoutboxMessage.author.id} element='span'>
-                      <Link className='mb-0.5' to={`/@${shoutboxMessage.author.acct}`} title={shoutboxMessage.author.acct}>
-                        <Avatar
-                          src={shoutboxMessage.author.avatar}
-                          alt={shoutboxMessage.author.avatar_description}
-                          size={32}
-                        />
-                      </Link>
-                    </HoverAccountWrapper>
-                  )}
-
-                  <Stack
-                    space={0.5}
-                    className={clsx({
-                      'max-w-[85%]': true,
-                      'order-3': isMyMessage,
-                      'order-1': !isMyMessage,
-                    })}
-                    alignItems={isMyMessage ? 'end' : 'start'}
-                  >
-                    <HStack alignItems='bottom' className='max-w-full'>
-                      <div
-                        className={
-                          clsx({
-                            'text-ellipsis break-words relative rounded-md py-2 px-3 max-w-full space-y-2 [&_.mention]:underline': true,
-                            '[&_.mention]:text-primary-600 dark:[&_.mention]:text-accent-blue': !isMyMessage,
-                            '[&_.mention]:text-white dark:[&_.mention]:white': isMyMessage,
-                            'bg-primary-500 text-white': isMyMessage,
-                            'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100': !isMyMessage,
-                            // '!bg-transparent !p-0 emoji-lg': isOnlyEmoji,
-                          })
-                        }
-                        tabIndex={0}
-                      >
-                        <Text size='sm' theme='inherit' className='break-word-nested'>
-                          <ParsedContent html={shoutboxMessage.text} />
-                        </Text>
-                      </div>
-                    </HStack>
-                    {!isMyMessage && (
-                      <Text size='xs' theme='muted'>
-                        <Emojify text={shoutboxMessage.author.display_name} emojis={shoutboxMessage.author.emojis} />
-                      </Text>
-                    )}
-                  </Stack>
-                </HStack>
-              </div>
-            );
-          }}
+          itemContent={(index, shoutboxMessage) => (
+            <ShoutboxMessage
+              key={shoutboxMessage.id}
+              message={shoutboxMessage}
+              isMyMessage={shoutboxMessage.author_id === me}
+            />
+          )}
           components={{
             List: ChatMessageListList,
             Scroller: ChatMessageListScroller,

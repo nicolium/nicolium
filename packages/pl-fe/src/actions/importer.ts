@@ -3,7 +3,7 @@ import { Entities } from 'pl-fe/entity-store/entities';
 import { normalizeGroup } from 'pl-fe/normalizers/group';
 
 import type { Account as BaseAccount, Group as BaseGroup, Poll as BasePoll, Relationship as BaseRelationship, Status as BaseStatus } from 'pl-api';
-import type { AppDispatch } from 'pl-fe/store';
+import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const STATUS_IMPORT = 'STATUS_IMPORT' as const;
 const STATUSES_IMPORT = 'STATUSES_IMPORT' as const;
@@ -51,11 +51,17 @@ const importEntities = (entities: {
   statuses?: Array<BaseStatus & { expectsCard?: boolean } | undefined | null>;
   relationships?: Array<BaseRelationship | undefined | null>;
 }, options: {
+  // Whether to replace existing entities. Set to false when working with potentially outdated data. Currently, only implemented for accounts.
+  override?: boolean;
   withParents?: boolean;
   idempotencyKey?: string;
 } = {
   withParents: true,
-}) => (dispatch: AppDispatch) => {
+}) => (dispatch: AppDispatch, getState: () => RootState) => {
+  const override = options.override ?? true;
+
+  const state: RootState = !override ? getState() : undefined as any;
+
   const accounts: Record<string, BaseAccount> = {};
   const groups: Record<string, BaseGroup> = {};
   const polls: Record<string, BasePoll> = {};
@@ -63,6 +69,8 @@ const importEntities = (entities: {
   const statuses: Record<string, BaseStatus> = {};
 
   const processAccount = (account: BaseAccount, withSelf = true) => {
+    if (!override && state.entities[Entities.ACCOUNTS]?.store[account.id]) return;
+
     if (withSelf) accounts[account.id] = account;
 
     if (account.moved) processAccount(account.moved);

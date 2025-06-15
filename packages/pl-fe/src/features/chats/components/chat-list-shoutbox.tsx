@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
 import Avatar from 'pl-fe/components/ui/avatar';
 import HStack from 'pl-fe/components/ui/hstack';
@@ -28,6 +29,7 @@ const ChatListShoutbox: React.FC<IChatListShoutboxInterface> = ({ onClick }) => 
   };
 
   const lastMessage = messages.at(-1);
+  const { account: lastMessageAuthor } = useAccount(lastMessage?.author_id);
 
   return (
     <div
@@ -59,10 +61,12 @@ const ChatListShoutbox: React.FC<IChatListShoutboxInterface> = ({ onClick }) => 
                   truncate
                   className='truncate-child pointer-events-none h-5 w-full'
                 >
-                  <Text weight='bold' size='sm' align='left' theme='muted' truncate tag='span'>
-                    {lastMessage.author.display_name || `@${lastMessage.author.username}`}:
-                    {' '}
-                  </Text>
+                  {lastMessageAuthor && (
+                    <Text weight='bold' size='sm' align='left' theme='muted' truncate tag='span'>
+                      {lastMessageAuthor.display_name || `@${lastMessageAuthor.username}`}:
+                      {' '}
+                    </Text>
+                  )}
                   <ParsedContent html={lastMessage.text} />
                 </Text>
               </>
