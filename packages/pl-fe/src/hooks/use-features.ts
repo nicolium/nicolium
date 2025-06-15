@@ -8,7 +8,7 @@ const useFeatures = (): Features => {
   useInstance();
   const features = useAppSelector(state => state.auth.client.features);
 
-  return { ...features, interactionRequests: true, scheduledStatuses: true };
+  return features;
 };
 
 export { useFeatures };
