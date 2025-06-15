@@ -19,14 +19,10 @@ const EVENT_COMPOSE_CANCEL = 'EVENT_COMPOSE_CANCEL' as const;
 
 const EVENT_FORM_SET = 'EVENT_FORM_SET' as const;
 
-const noOp = () => new Promise(f => f(undefined));
-
 const messages = defineMessages({
   exceededImageSizeLimit: { id: 'upload_error.image_size_limit', defaultMessage: 'Image exceeds the current file size limit ({limit})' },
   success: { id: 'compose_event.submit_success', defaultMessage: 'Your event was created' },
   editSuccess: { id: 'compose_event.edit_success', defaultMessage: 'Your event was edited' },
-  joinSuccess: { id: 'join_event.success', defaultMessage: 'Joined the event' },
-  joinRequestSuccess: { id: 'join_event.request_success', defaultMessage: 'Requested to join the event' },
   view: { id: 'toast.view', defaultMessage: 'View' },
   authorized: { id: 'compose_event.participation_requests.authorize_success', defaultMessage: 'User accepted' },
   rejected: { id: 'compose_event.participation_requests.reject_success', defaultMessage: 'User rejected' },
@@ -88,70 +84,29 @@ const submitEvent = ({
     });
   };
 
-const joinEvent = (statusId: string, participationMessage?: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const status = getState().statuses[statusId];
+interface JoinEventRequest {
+  type: typeof EVENT_JOIN_REQUEST;
+  statusId: string;
+}
 
-    if (!status || !status.event || status.event.join_state) {
-      return dispatch(noOp);
-    }
+interface JoinEventFail {
+  type: typeof EVENT_JOIN_FAIL;
+  error: unknown;
+  statusId: string;
+  previousState: Exclude<Status['event'], null>['join_state'] | null;
+}
 
-    dispatch(joinEventRequest(status.id));
+interface LeaveEventRequest {
+  type: typeof EVENT_LEAVE_REQUEST;
+  statusId: string;
+}
 
-    return getClient(getState).events.joinEvent(statusId, participationMessage).then((data) => {
-      dispatch(importEntities({ statuses: [data] }));
-      toast.success(
-        data.event?.join_state === 'pending' ? messages.joinRequestSuccess : messages.joinSuccess,
-        {
-          actionLabel: messages.view,
-          actionLink: `/@${data.account.acct}/events/${data.id}`,
-        },
-      );
-    }).catch((error) => {
-      dispatch(joinEventFail(error, status.id, status?.event?.join_state || null));
-    });
-  };
-
-const joinEventRequest = (statusId: string) => ({
-  type: EVENT_JOIN_REQUEST,
-  statusId,
-});
-
-const joinEventFail = (error: unknown, statusId: string, previousState: Exclude<Status['event'], null>['join_state'] | null) => ({
-  type: EVENT_JOIN_FAIL,
-  error,
-  statusId,
-  previousState,
-});
-
-const leaveEvent = (statusId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const status = getState().statuses[statusId];
-
-    if (!status || !status.event || !status.event.join_state) {
-      return dispatch(noOp);
-    }
-
-    dispatch(leaveEventRequest(status.id));
-
-    return getClient(getState).events.leaveEvent(statusId).then((data) => {
-      dispatch(importEntities({ statuses: [data] }));
-    }).catch((error) => {
-      dispatch(leaveEventFail(error, status.id, status?.event?.join_state || null));
-    });
-  };
-
-const leaveEventRequest = (statusId: string) => ({
-  type: EVENT_LEAVE_REQUEST,
-  statusId,
-});
-
-const leaveEventFail = (error: unknown, statusId: string, previousState: Exclude<Status['event'], null>['join_state'] | null) => ({
-  type: EVENT_LEAVE_FAIL,
-  statusId,
-  error,
-  previousState,
-});
+interface LeaveEventFail {
+  type: typeof EVENT_LEAVE_FAIL;
+  statusId: string;
+  error: unknown;
+  previousState: Exclude<Status['event'], null>['join_state'] | null;
+}
 
 const fetchEventIcs = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
@@ -184,10 +139,10 @@ const initEventEdit = (statusId: string) => (dispatch: AppDispatch, getState: ()
 };
 
 type EventsAction =
-  | ReturnType<typeof joinEventRequest>
-  | ReturnType<typeof joinEventFail>
-  | ReturnType<typeof leaveEventRequest>
-  | ReturnType<typeof leaveEventFail>
+  JoinEventRequest
+  | JoinEventFail
+  | LeaveEventRequest
+  | LeaveEventFail
   | ReturnType<typeof cancelEventCompose>
   | EventFormSetAction;
 
@@ -199,8 +154,6 @@ export {
   EVENT_COMPOSE_CANCEL,
   EVENT_FORM_SET,
   submitEvent,
-  joinEvent,
-  leaveEvent,
   fetchEventIcs,
   cancelEventCompose,
   initEventEdit,

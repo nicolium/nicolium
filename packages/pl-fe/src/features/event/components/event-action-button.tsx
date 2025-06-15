@@ -1,10 +1,9 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { joinEvent, leaveEvent } from 'pl-fe/actions/events';
 import Button from 'pl-fe/components/ui/button';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useJoinEventMutation, useLeaveEventMutation } from 'pl-fe/queries/statuses/use-event-interactions';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
 import type { ButtonThemes } from 'pl-fe/components/ui/button/useButtonStyles';
@@ -23,10 +22,12 @@ interface IEventAction {
 
 const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary' }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const { openModal } = useModalsStore();
   const me = useAppSelector((state) => state.me);
+
+  const { mutate: joinEvent } = useJoinEventMutation(status.id);
+  const { mutate: leaveEvent } = useLeaveEventMutation(status.id);
 
   const event = status.event!;
 
@@ -46,9 +47,10 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
 
   const handleJoin: React.EventHandler<React.MouseEvent> = (e) => {
     e.preventDefault();
+    e.stopPropagation();
 
     if (event.join_mode === 'free') {
-      dispatch(joinEvent(status.id));
+      joinEvent(undefined);
     } else {
       openModal('JOIN_EVENT', {
         statusId: status.id,
@@ -64,10 +66,10 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
         heading: intl.formatMessage(messages.leaveHeading),
         message: intl.formatMessage(messages.leaveMessage),
         confirm: intl.formatMessage(messages.leaveConfirm),
-        onConfirm: () => dispatch(leaveEvent(status.id)),
+        onConfirm: () => leaveEvent(),
       });
     } else {
-      dispatch(leaveEvent(status.id));
+      leaveEvent();
     }
   };
 

@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { joinEvent } from 'pl-fe/actions/events';
 import FormGroup from 'pl-fe/components/ui/form-group';
 import Modal from 'pl-fe/components/ui/modal';
 import Textarea from 'pl-fe/components/ui/textarea';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useJoinEventMutation } from 'pl-fe/queries/statuses/use-event-interactions';
 
 import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
@@ -21,7 +20,8 @@ interface JoinEventModalProps {
 
 const JoinEventModal: React.FC<BaseModalProps & JoinEventModalProps> = ({ onClose, statusId }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+
+  const { mutate: joinEvent } = useJoinEventMutation(statusId);
 
   const [participationMessage, setParticipationMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -36,9 +36,10 @@ const JoinEventModal: React.FC<BaseModalProps & JoinEventModalProps> = ({ onClos
 
   const handleSubmit = () => {
     setIsSubmitting(true);
-    dispatch(joinEvent(statusId, participationMessage)).then(() => {
-      handleClose();
-    }).catch(() => {});
+    joinEvent(participationMessage, {
+      onSuccess: () => handleClose(),
+      onError: () => setIsSubmitting(false),
+    });
   };
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = e => {
