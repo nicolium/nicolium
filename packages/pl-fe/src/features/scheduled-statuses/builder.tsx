@@ -10,6 +10,13 @@ const buildStatus = (state: RootState, scheduledStatus: ScheduledStatus) => {
   const me = state.me as string;
   const account = state.entities[Entities.ACCOUNTS]?.store[me];
 
+  const poll = scheduledStatus.params.poll ? {
+    id: `${scheduledStatus.id}-poll`,
+    ...scheduledStatus.params.poll,
+    options: scheduledStatus.params.poll.options.map((option) => ({ title: option })),
+    voted: true,
+  } : null;
+
   const status = v.parse(statusSchema, {
     account,
     content: scheduledStatus.params.text?.replace(new RegExp('\n', 'g'), '<br>'), /* eslint-disable-line no-control-regex */
@@ -17,7 +24,7 @@ const buildStatus = (state: RootState, scheduledStatus: ScheduledStatus) => {
     id: scheduledStatus.id,
     in_reply_to_id: scheduledStatus.params.in_reply_to_id,
     media_attachments: scheduledStatus.media_attachments,
-    poll: scheduledStatus.params.poll,
+    poll,
     sensitive: scheduledStatus.params.sensitive,
     uri: `/scheduled_statuses/${scheduledStatus.id}`,
     url: `/scheduled_statuses/${scheduledStatus.id}`,
