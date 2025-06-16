@@ -1,0 +1,86 @@
+name: pl-fe CI
+
+on:
+  push:
+    branches: ["develop"]
+  pull_request:
+    branches: ["develop"]
+
+jobs:
+  build:
+    runs-on: docker
+    name: Test and upload artifacts
+    strategy:
+      matrix:
+        node-version: [22.x]
+
+    steps:
+      - name: Install system dependencies
+        run: sudo apt install -y unzip
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install deps
+        working-directory: ./packages/pl-fe
+        run: yarn install --ignore-scripts
+
+      - name: Lint
+        working-directory: ./packages/pl-fe
+        run: yarn lint
+
+      - name: Build
+        env:
+          NODE_ENV: production
+        working-directory: ./packages/pl-fe
+        run: yarn build
+
+      - name: i18n
+        working-directory: ./packages/pl-fe
+        run: |
+          yarn i18n
+          git diff
+          git diff --quiet || (echo "Locale files are out of date. Please run \`yarn i18n\`" && exit 1)
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: pl-fe
+          path: packages/pl-fe/dist
+
+      - name: Include archive
+        working-directory: ./packages/pl-fe/dist
+        run: zip -r ../pl-fe.zip .
+
+      - name: build
+        env:
+          NODE_ENV: production
+        working-directory: ./packages/pl-fe
+        run: |
+          WITH_LANDING_PAGE=true yarn build
+          cp dist/index.html dist/404.html
+          cp pl-fe.zip dist/pl-fe.zip
+
+      - name: Install pl-api deps
+        working-directory: ./packages/pl-api
+        run: yarn install --ignore-scripts
+
+      - name: Build pl-api documentation
+        working-directory: ./packages/pl-api
+        run: npx typedoc
+
+      - name: Copy pl-api documentation
+        working-directory: ./packages/pl-api
+        run: cp docs ../pl-fe/dist/pl-api-docs -r
+
+      - name: Deploy to Cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy packages/pl-fe/dist --project-name=plfe
