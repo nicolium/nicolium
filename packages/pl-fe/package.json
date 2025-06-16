@@ -110,7 +110,7 @@
     "process": "^0.11.10",
     "punycode": "^2.1.1",
     "qrcode.react": "^4.2.0",
-    "query-string": "^9.1.1",
+    "query-string": "^9.2.1",
     "react": "^18.3.1",
     "react-color": "^2.19.3",
     "react-datepicker": "^8.3.0",
