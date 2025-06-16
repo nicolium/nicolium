@@ -8,6 +8,8 @@ on:
 
 jobs:
   build:
+    container:
+      image: "ghcr.io/catthehacker/ubuntu:runner-22.04"
     runs-on: docker
     name: Test and upload artifacts
     strategy:
@@ -16,7 +18,9 @@ jobs:
 
     steps:
       - name: Install system dependencies
-        run: sudo apt install -y unzip
+        run: |
+          sudo apt update
+          sudo apt install -y zip
 
       - name: Checkout code
         uses: actions/checkout@v3
@@ -47,17 +51,11 @@ jobs:
           git diff
           git diff --quiet || (echo "Locale files are out of date. Please run \`yarn i18n\`" && exit 1)
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: pl-fe
-          path: packages/pl-fe/dist
-
       - name: Include archive
         working-directory: ./packages/pl-fe/dist
         run: zip -r ../pl-fe.zip .
 
-      - name: build
+      - name: Build with landing page
         env:
           NODE_ENV: production
         working-directory: ./packages/pl-fe
@@ -78,8 +76,12 @@ jobs:
         working-directory: ./packages/pl-api
         run: cp docs ../pl-fe/dist/pl-api-docs -r
 
+      - name: cloudflare lol
+        working-directory: .
+        run: yarn add wrangler -W
+
       - name: Deploy to Cloudflare
-        uses: cloudflare/wrangler-action@v3
+        uses: https://github.com/cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
