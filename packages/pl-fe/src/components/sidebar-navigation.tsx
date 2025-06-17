@@ -46,11 +46,16 @@ const SidebarNavigation = React.memo(() => {
   const { account } = useOwnAccount();
   const { isOpen } = useRegistrationStatus();
 
+  const authenticatedScheduledStatusesCountQueryOptions = useMemo(() => ({
+    ...scheduledStatusesCountQueryOptions,
+    enabled: !!account,
+  }), [!!account]);
+
   const notificationCount = useAppSelector((state) => state.notifications.unread);
   const followRequestsCount = useFollowRequestsCount().data || 0;
   const interactionRequestsCount = useInteractionRequestsCount().data || 0;
   const dashboardCount = useAppSelector((state) => state.admin.openReports.length + state.admin.awaitingApproval.length);
-  const scheduledStatusCount = useInfiniteQuery(scheduledStatusesCountQueryOptions).data || 0;
+  const scheduledStatusCount = useInfiniteQuery(authenticatedScheduledStatusesCountQueryOptions).data || 0;
   const draftCount = useAppSelector((state) => Object.keys(state.draft_statuses).length);
 
   const restrictUnauth = instance.pleroma.metadata.restrict_unauthenticated;

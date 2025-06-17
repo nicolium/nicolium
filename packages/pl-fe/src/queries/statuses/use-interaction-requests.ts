@@ -4,6 +4,7 @@ import { importEntities } from 'pl-fe/actions/importer';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
+import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 
 import type { InteractionRequest, PaginatedResponse } from 'pl-api';
 import type { AppDispatch } from 'pl-fe/store';
@@ -36,13 +37,14 @@ const useInteractionRequests = <T>(
   const client = useClient();
   const features = useFeatures();
   const dispatch = useAppDispatch();
+  const { isLoggedIn } = useLoggedIn();
 
   return useInfiniteQuery({
     queryKey: ['interactionRequests'],
     queryFn: ({ pageParam }) => pageParam.next?.() || client.interactionRequests.getInteractionRequests().then(response => minifyInteractionRequestsList(dispatch, response)),
     initialPageParam: { previous: null, next: null, items: [], partial: false } as PaginatedResponse<MinifiedInteractionRequest>,
     getNextPageParam: (page) => page.next ? page : undefined,
-    enabled: features.interactionRequests,
+    enabled: isLoggedIn && features.interactionRequests,
     select,
   });
 };

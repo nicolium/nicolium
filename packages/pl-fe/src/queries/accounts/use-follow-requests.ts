@@ -29,6 +29,7 @@ const makeUseFollowRequests = <T>(select: ((data: InfiniteData<PaginatedResponse
   () => ['accountsLists', 'followRequests'],
   (client) => client.myAccount.getFollowRequests().then(minifyAccountList),
   select,
+  'isLoggedIn',
 );
 
 const useFollowRequests = makeUseFollowRequests((data) => data.pages.map(page => page.items).flat());
