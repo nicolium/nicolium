@@ -486,7 +486,7 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
       }
 
       case 'unicodeEmoji': {
-        return <Emoji emoji={token.props.emoji} className='!h-[2em] !w-[2em]' />;
+        return <Emoji emoji={token.props.emoji} className='emojione !h-[2em] !w-[2em]' />;
       }
 
       // TODO
