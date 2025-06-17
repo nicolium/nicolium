@@ -160,7 +160,7 @@ const SettingsPage = () => {
               <ListItem label={intl.formatMessage(messages.accountAliases)} to='/settings/aliases' />
             ))}
 
-            {features.deleteAccount || features.deleteAccountWithoutPassword && (
+            {(features.deleteAccount || features.deleteAccountWithoutPassword) && (
               <ListItem label={<Text theme='danger'>{intl.formatMessage(messages.deleteAccount)}</Text>} to='/settings/account' />
             )}
           </List>
