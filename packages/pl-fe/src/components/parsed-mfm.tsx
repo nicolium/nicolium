@@ -513,7 +513,7 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
   }).flat(Infinity);
 
   return (
-    <bdi className='plfe-mfm'>
+    <bdi className='plfe-mfm block overflow-hidden'>
       <span>
         {genEl(rootAst, 1)}
       </span>
