@@ -740,6 +740,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
+      v.software === MITRA && gte(v.version, '4.5.0'),
       v.software === TAKAHE && gte(v.version, '0.6.1'),
       v.software === TOKI,
       instance.api_versions['exposable_reactions.pleroma.pl-api'] >= 1,
