@@ -4,7 +4,6 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Modal from 'pl-fe/components/ui/modal';
-import Spinner from 'pl-fe/components/ui/spinner';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
@@ -36,30 +35,22 @@ const MentionsModal: React.FC<BaseModalProps & MentionsModalProps> = ({ onClose,
     fetchData();
   }, []);
 
-  let body;
-
-  if (!accountIds) {
-    body = <Spinner />;
-  } else {
-    body = (
-      <ScrollableList
-        listClassName='max-w-full'
-        itemClassName='pb-3'
-        useWindowScroll={false}
-      >
-        {accountIds.map(id =>
-          <AccountContainer key={id} id={id} />,
-        )}
-      </ScrollableList>
-    );
-  }
-
   return (
     <Modal
       title={<FormattedMessage id='column.mentions' defaultMessage='Mentions' />}
       onClose={onClickClose}
     >
-      {body}
+      <ScrollableList
+        listClassName='max-w-full'
+        itemClassName='pb-3'
+        style={{ height: 'calc(80vh - 88px)' }}
+        isLoading={!accountIds}
+        useWindowScroll={false}
+      >
+        {(accountIds || []).map(id =>
+          <AccountContainer key={id} id={id} />,
+        )}
+      </ScrollableList>
     </Modal>
   );
 };
