@@ -23,7 +23,6 @@ import { fetchMeSuccess, fetchMeFail } from 'pl-fe/actions/me';
 import { obtainOAuthToken, revokeOAuthToken } from 'pl-fe/actions/oauth';
 import { startOnboarding } from 'pl-fe/actions/onboarding';
 import * as BuildConfig from 'pl-fe/build-config';
-import { custom } from 'pl-fe/custom';
 import { queryClient } from 'pl-fe/queries/client';
 import { selectAccount } from 'pl-fe/selectors';
 import { unsetSentryAccount } from 'pl-fe/sentry';
@@ -55,8 +54,6 @@ const VERIFY_CREDENTIALS_FAIL = 'VERIFY_CREDENTIALS_FAIL' as const;
 
 const AUTH_ACCOUNT_REMEMBER_SUCCESS = 'AUTH_ACCOUNT_REMEMBER_SUCCESS' as const;
 
-const customApp = custom('app');
-
 const messages = defineMessages({
   loggedOut: { id: 'auth.logged_out', defaultMessage: 'Logged out.' },
   awaitingApproval: { id: 'auth.awaiting_approval', defaultMessage: 'Your account is awaiting approval' },
@@ -67,7 +64,7 @@ const noOp = () => new Promise(f => f(undefined));
 
 const createAppAndToken = () =>
   (dispatch: AppDispatch) =>
-    dispatch(getAuthApp()).then(() =>
+    dispatch(createAuthApp()).then(() =>
       dispatch(createAppToken()),
     );
 
@@ -75,16 +72,6 @@ interface AuthAppCreatedAction {
   type: typeof AUTH_APP_CREATED;
   app: CredentialApplication;
 }
-
-/** Create an auth app, or use it from build config */
-const getAuthApp = () =>
-  (dispatch: AppDispatch) => {
-    if (customApp?.client_secret) {
-      return noOp().then(() => dispatch<AuthAppCreatedAction>({ type: AUTH_APP_CREATED, app: customApp }));
-    } else {
-      return dispatch(createAuthApp());
-    }
-  };
 
 const createAuthApp = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -227,7 +214,7 @@ const loadCredentials = (token: string, accountUrl: string) =>
     .finally(() => dispatch(verifyCredentials(token, accountUrl)));
 
 const logIn = (username: string, password: string) =>
-  (dispatch: AppDispatch) => dispatch(getAuthApp()).then(() =>
+  (dispatch: AppDispatch) => dispatch(createAuthApp()).then(() =>
     dispatch(createUserToken(normalizeUsername(username), password)),
   ).catch((error: { response: PlfeResponse }) => {
     if ((error.response?.json as any)?.error === 'mfa_required') {
