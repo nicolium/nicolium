@@ -669,11 +669,11 @@ const getFeatures = (instance: Instance) => {
 
     /**
      * @see GET /api/v1/pleroma/statuses/:id/reactions/:emoji?
-     *
      * @see GET /api/v1/statuses/:id/emoji_reactioned_by
      */
     emojiReactsList: any([
       v.software === AKKOMA,
+      v.software === ICESHRIMP_NET,
       v.software === PLEROMA,
       instance.api_versions['emoji_reaction.fedibird.pl-api'] >= 1,
     ]),
