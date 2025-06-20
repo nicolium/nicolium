@@ -44,6 +44,14 @@ const authUserSchema = v.object({
   url: v.string(),
 });
 
+const tokenWithAppSchema = v.object({
+  ...tokenSchema.entries,
+  client_id: v.fallback(v.optional(v.string()), undefined),
+  client_secret: v.fallback(v.optional(v.string()), undefined),
+});
+
+type TokenWithApp = v.InferOutput<typeof tokenWithAppSchema>;
+
 interface AuthUser {
   access_token: string;
   id: string;
@@ -52,7 +60,7 @@ interface AuthUser {
 
 interface State {
   app: CredentialApplication | null;
-  tokens: Record<string, Token>;
+  tokens: Record<string, TokenWithApp>;
   users: Record<string, AuthUser>;
   me: string | null;
   client: InstanceType<typeof PlApiClient>;
@@ -78,7 +86,7 @@ const getLocalState = (): State | undefined => {
 
   return ({
     app: state.app && v.parse(applicationSchema, state.app),
-    tokens: Object.fromEntries(Object.entries(state.tokens).map(([key, value]) => [key, v.parse(tokenSchema, value)])),
+    tokens: Object.fromEntries(Object.entries(state.tokens).map(([key, value]) => [key, v.parse(tokenWithAppSchema, value)])),
     users: Object.fromEntries(Object.entries(state.users).map(([key, value]) => [key, v.parse(authUserSchema, value)])),
     me: state.me,
     client: new PlApiClient(parseBaseURL(state.me) || backendUrl, state.users[state.me]?.access_token),
@@ -189,8 +197,12 @@ const initialState: State = initialize({
   ...localState,
 });
 
-const importToken = (state: State | Draft<State>, token: Token) => {
-  state.tokens[token.access_token] = token;
+const importToken = (state: State | Draft<State>, token: Token, app?: CredentialApplication) => {
+  state.tokens[token.access_token] = {
+    client_id: app?.client_id,
+    client_secret: app?.client_secret,
+    ...token,
+  };
 };
 
 // Users are now stored by their ActivityPub ID instead of their
@@ -309,7 +321,7 @@ const reducer = (state: State, action: Action): State => {
       });
     case AUTH_LOGGED_IN:
       return updateState(state, (draft) => {
-        importToken(draft, action.token);
+        importToken(draft, action.token, action.app);
       });
     case AUTH_LOGGED_OUT:
       return updateState(state, (draft) => {

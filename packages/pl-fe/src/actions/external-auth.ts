@@ -73,7 +73,8 @@ const externalLogin = (host: string) => {
 
 const loginWithCode = (code: string) =>
   (dispatch: AppDispatch) => {
-    const { client_id, client_secret, redirect_uri } = JSON.parse(localStorage.getItem('plfe:external:app')!);
+    const app = JSON.parse(localStorage.getItem('plfe:external:app')!);
+    const { client_id, client_secret, redirect_uri } = app;
     const baseURL = localStorage.getItem('plfe:external:baseurl')!;
     const scope = localStorage.getItem('plfe:external:scopes')!;
 
@@ -87,7 +88,7 @@ const loginWithCode = (code: string) =>
     };
 
     return obtainOAuthToken(params, baseURL)
-      .then((token) => dispatch(authLoggedIn(token)))
+      .then((token) => dispatch(authLoggedIn(token, app)))
       .then(({ access_token }) => dispatch(verifyCredentials(access_token, baseURL)))
       .then((account) => dispatch(switchAccount(account.id)))
       .then(() => window.location.href = '/');

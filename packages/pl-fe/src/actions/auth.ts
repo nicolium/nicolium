@@ -125,7 +125,7 @@ const createUserToken = (username: string, password: string) =>
     };
 
     return obtainOAuthToken(params)
-      .then((token) => dispatch(authLoggedIn(token)));
+      .then((token) => dispatch(authLoggedIn(token, app)));
   };
 
 const otpVerify = (code: string, mfa_token: string) =>
@@ -142,7 +142,7 @@ const otpVerify = (code: string, mfa_token: string) =>
       challenge_type: 'totp',
       // redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
       // scope: getScopes(getState()),
-    }).then((token) => dispatch(authLoggedIn(token)));
+    }).then((token) => dispatch(authLoggedIn(token, app)));
   };
 
 interface VerifyCredentialsRequestAction {
@@ -243,10 +243,12 @@ const logOut = () =>
 
     if (!account) return dispatch(noOp);
 
+    const token = state.auth.users[account.url]!.access_token;
+
     const params = {
-      client_id: state.auth.app?.client_id!,
-      client_secret: state.auth.app?.client_secret!,
-      token: state.auth.users[account.url]!.access_token,
+      client_id: state.auth.tokens[token]?.client_id || state.auth.app?.client_id!,
+      client_secret: state.auth.tokens[token]?.client_secret || state.auth.app?.client_secret!,
+      token,
     };
 
     return dispatch(revokeOAuthToken(params))
@@ -294,14 +296,15 @@ const fetchOwnAccounts = () =>
   };
 
 const register = (params: CreateAccountParams) =>
-  (dispatch: AppDispatch) => {
+  async (dispatch: AppDispatch) => {
     params.fullname = params.username;
 
-    return dispatch(createAppAndToken())
-      .then(() => dispatch(createAccount(params)))
+    const { app } = await dispatch(createAppAndToken());
+
+    return dispatch(createAccount(params))
       .then(({ token }: { token: Token }) => {
         dispatch(startOnboarding());
-        return dispatch(authLoggedIn(token));
+        return dispatch(authLoggedIn(token, app));
       });
   };
 
@@ -311,11 +314,12 @@ const fetchCaptcha = () =>
 interface AuthLoggedInAction {
   type: typeof AUTH_LOGGED_IN;
   token: Token;
+  app?: CredentialApplication;
 }
 
-const authLoggedIn = (token: Token) =>
+const authLoggedIn = (token: Token, app?: CredentialApplication | null) =>
   (dispatch: AppDispatch) => {
-    dispatch<AuthLoggedInAction>({ type: AUTH_LOGGED_IN, token });
+    dispatch<AuthLoggedInAction>({ type: AUTH_LOGGED_IN, token, app: app || undefined });
     return token;
   };
 
