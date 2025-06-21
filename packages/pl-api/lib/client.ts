@@ -527,7 +527,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/oauth/#authorize}
      */
     authorize: async (params: OauthAuthorizeParams) => {
-      const response = await this.request('/oauth/authorize', { params });
+      const response = await this.request('/oauth/authorize', { params, contentType: '' });
 
       return v.parse(v.string(), response.json);
     },
@@ -577,7 +577,7 @@ class PlApiClient {
           id: mastodonTokenResponse.id,
         });
       } else {
-        const response = await this.request('/oauth/token', { method: 'POST', body: params });
+        const response = await this.request('/oauth/token', { method: 'POST', body: params, contentType: '' });
 
         return v.parse(tokenSchema, { scope: params.scope || '', ...response.json });
       }
@@ -589,7 +589,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/oauth/#revoke}
      */
     revokeToken: async (params: RevokeTokenParams) => {
-      const response = await this.request('/oauth/revoke', { method: 'POST', body: params });
+      const response = await this.request('/oauth/revoke', { method: 'POST', body: params, contentType: '' });
 
       this.#socket?.close();
 
