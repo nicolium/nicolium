@@ -6875,10 +6875,10 @@ pkg-dir@^4.1.0:
   dependencies:
     find-up "^4.0.0"
 
-pl-api@^1.0.0-rc.80:
-  version "1.0.0-rc.80"
-  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-1.0.0-rc.80.tgz#669cc9c8747e03c78314a6a2f8290a32db620623"
-  integrity sha512-4rJRk+xkoPPRMMdLn7+h7zRA/N07Ho5oEEkE92pSx7HA/CxwFPGOXA1VttJ6p6my27zxPIduMM2RHwCLYbUfVA==
+pl-api@^1.0.0-rc.81:
+  version "1.0.0-rc.81"
+  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-1.0.0-rc.81.tgz#51c64c5ccf5749f56d1df63748ae9c664032b390"
+  integrity sha512-ZRwYel2XhT+4z3X33b5jydiqDP9RjK9hPwngqvaWT7Nm6m+GrtljLa1X5S0GN622/7Ko2oGZYGMVzGt0nB0knQ==
   dependencies:
     blurhash "^2.0.5"
     http-link-header "^1.1.3"

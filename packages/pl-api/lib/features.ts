@@ -88,6 +88,14 @@ const PIXELFED = 'Pixelfed';
 const PLEROMA = 'Pleroma';
 
 /**
+ * Sharkey, a Sharkish microblogging platform.
+ *
+ * @category Software
+ * @see {@link https://activitypub.software/TransFem-org/Sharkey}
+ */
+const SHARKEY = 'Sharkey';
+
+/**
  * snac, a simple, minimalistic ActivityPub instance written in portable C
  *
  * @category Software
@@ -215,6 +223,7 @@ const getFeatures = (instance: Instance) => {
       v.software === GOTOSOCIAL,
       v.software === MASTODON,
       v.software === MITRA,
+      v.software === SHARKEY,
       instance.api_versions['profile_directory.pleroma.pl-api'] >= 1,
     ]),
 
@@ -259,6 +268,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MASTODON,
       v.software === MITRA,
       v.software === PLEROMA && gte(v.version, '2.5.0'),
+      v.software === SHARKEY,
       v.software === SNAC,
       v.software === TAKAHE && gte(v.version, '0.6.1'),
       v.software === TOKI,
@@ -426,6 +436,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MITRA && gte(v.version, '3.3.0'),
       v.software === PIXELFED,
       v.software === PLEROMA,
+      v.software === SHARKEY,
       v.software === TAKAHE && gte(v.version, '0.9.0'),
       v.software === TOKI,
     ]),
@@ -487,6 +498,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MASTODON,
       v.software === PIXELFED,
       v.software === PLEROMA,
+      v.software === SHARKEY,
       v.software === TAKAHE,
     ]),
 
@@ -741,6 +753,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === MITRA && gte(v.version, '4.5.0'),
+      v.software === SHARKEY,
       v.software === TAKAHE && gte(v.version, '0.6.1'),
       v.software === TOKI,
       instance.api_versions['exposable_reactions.pleroma.pl-api'] >= 1,
@@ -778,6 +791,7 @@ const getFeatures = (instance: Instance) => {
       v.software === AKKOMA,
       v.software === GOTOSOCIAL,
       v.software === PLEROMA,
+      v.software === SHARKEY,
     ]),
 
     /**
@@ -1008,6 +1022,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MASTODON,
       v.software === MITRA,
       v.software === PLEROMA,
+      v.software === SHARKEY,
       v.software === SNAC,
     ]),
 
@@ -1169,6 +1184,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MITRA,
       v.software === PIXELFED,
       v.software === PLEROMA,
+      v.software === SHARKEY,
       v.software === TAKAHE,
     ]),
 
@@ -1312,12 +1328,13 @@ const getFeatures = (instance: Instance) => {
      */
     polls: any([
       v.software === FIREFISH,
+      v.software === GOTOSOCIAL,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === MITRA && gte(v.version, '3.15.0'),
+      v.software === SHARKEY,
       v.software === TAKAHE && gte(v.version, '0.8.0'),
-      v.software === GOTOSOCIAL,
       instance.api_versions['polls.pleroma.pl-api'] >= 1,
     ]),
 
@@ -1327,10 +1344,11 @@ const getFeatures = (instance: Instance) => {
      */
     postLanguages: any([
       v.software === AKKOMA,
+      v.software === GOTOSOCIAL,
       v.software === MASTODON,
       v.software === MITRA && gte(v.version, '3.23.0'),
       v.software === PLEROMA && gte(v.version, '2.9.0'),
-      v.software === GOTOSOCIAL,
+      v.software === SHARKEY,
     ]),
 
     /**
@@ -1369,6 +1387,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MASTODON,
       v.software === MITRA,
       v.software === PLEROMA,
+      v.software === SHARKEY,
       v.software === SNAC,
       v.software === TAKAHE && gte(v.version, '0.7.0'),
     ]),
@@ -1411,6 +1430,7 @@ const getFeatures = (instance: Instance) => {
     quotePosts: any([
       v.software === ICESHRIMP_NET,
       v.software === FRIENDICA && gte(v.version, '2023.3.0'),
+      v.software === SHARKEY,
       instance.api_versions['quote_posting.pleroma.pl-api'] >= 1,
       instance.feature_quote === true,
     ]),
@@ -1496,9 +1516,10 @@ const getFeatures = (instance: Instance) => {
       v.software === AKKOMA,
       v.software === FIREFISH,
       v.software === FRIENDICA,
+      v.software === GOTOSOCIAL && gte(v.version, '0.18.0'),
       v.software === MASTODON,
       v.software === PLEROMA,
-      v.software === GOTOSOCIAL && gte(v.version, '0.18.0'),
+      v.software === SHARKEY,
     ]),
 
     /**
@@ -1645,6 +1666,7 @@ const getFeatures = (instance: Instance) => {
       v.software === FRIENDICA,
       v.software === ICESHRIMP,
       v.software === MASTODON,
+      v.software === SHARKEY,
       instance.api_versions['v2_suggestions.pleroma.pl-api'] >= 1,
     ]),
 
@@ -1675,6 +1697,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP,
       v.software === MASTODON,
       v.software === PIXELFED,
+      v.software === SHARKEY,
     ]),
 
     /**
