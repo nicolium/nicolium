@@ -34,8 +34,8 @@ const noOp = () => new Promise(f => f(undefined));
 
 const createAccount = (params: CreateAccountParams) =>
   async (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState()).settings.createAccount(params).then((token) =>
-      ({ params, token }),
+    getClient(getState()).settings.createAccount(params).then((response) =>
+      ({ params, response }),
     );
 
 const fetchAccount = (accountId: string) =>

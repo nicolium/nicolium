@@ -1297,6 +1297,10 @@ class PlApiClient {
         body: { language: params.locale, birthday: params.date_of_birth, ...params },
       });
 
+      if ('identifier' in response.json) return v.parse(v.object({
+        message: v.string(),
+        identifier: v.string(),
+      }), response.json);
       return v.parse(tokenSchema, response.json);
     },
 

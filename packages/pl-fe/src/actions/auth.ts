@@ -302,9 +302,13 @@ const register = (params: CreateAccountParams) =>
     const { app } = await dispatch(createAppAndToken());
 
     return dispatch(createAccount(params))
-      .then(({ token }: { token: Token }) => {
-        dispatch(startOnboarding());
-        return dispatch(authLoggedIn(token, app));
+      .then(({ response }) => {
+        if ('identifier' in response) {
+          toast.info(response.message);
+        } else {
+          dispatch(startOnboarding());
+          return dispatch(authLoggedIn(response, app));
+        }
       });
   };
 
