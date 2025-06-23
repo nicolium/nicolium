@@ -89,10 +89,10 @@ const mergeSettings = (state: State, updating = false) => {
 };
 
 const useSettingsStore = create<State>()(mutative((set) => ({
-  defaultSettings: v.parse(settingsSchema, {}),
+  defaultSettings: v.parse(settingsSchema, { locale: navigator.language }),
   userSettings: {},
 
-  settings: v.parse(settingsSchema, {}),
+  settings: v.parse(settingsSchema, { locale: navigator.language }),
 
   loadDefaultSettings: (settings: APIEntity) => set((state: State) => {
     if (typeof settings !== 'object') return;
