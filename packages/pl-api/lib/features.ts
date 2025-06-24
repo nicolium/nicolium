@@ -470,6 +470,31 @@ const getFeatures = (instance: Instance) => {
     bubbleTimelineStreaming: v.software === ICESHRIMP_NET,
 
     /**
+     * @see POST /api/v1/user/email_change
+     */
+    changeEmail: any([
+      v.software === AKKOMA,
+      v.software === GOTOSOCIAL && gte(v.version, '0.16.0'),
+      v.software === PLEROMA,
+    ]),
+
+    /**
+     * @see POST /api/v1/user/password_change
+     * @see POST /api/v1/settings/change_password
+     * @see POST /api/v1.1/accounts/change-password
+     * @see POST /api/iceshrimp/auth/change-password
+     * @see POST /api/pleroma/change_password
+     */
+    changePassword: any([
+      v.software === AKKOMA,
+      v.software === GOTOSOCIAL,
+      v.software === ICESHRIMP_NET,
+      v.software === MITRA,
+      v.software === PIXELFED,
+      v.software === PLEROMA,
+    ]),
+
+    /**
      * Pleroma chats API.
      * @see {@link https://docs.pleroma.social/backend/development/API/chats/}
      */
@@ -1551,31 +1576,6 @@ const getFeatures = (instance: Instance) => {
       v.software === GOTOSOCIAL,
       v.software === ICESHRIMP,
       v.software === MASTODON,
-      v.software === PLEROMA,
-    ]),
-
-    /**
-     * @see POST /api/v1/user/email_change
-     */
-    changeEmail: any([
-      v.software === AKKOMA,
-      v.software === GOTOSOCIAL && gte(v.version, '0.16.0'),
-      v.software === PLEROMA,
-    ]),
-
-    /**
-     * @see POST /api/v1/user/password_change
-     * @see POST /api/v1/settings/change_password
-     * @see POST /api/v1.1/accounts/change-password
-     * @see POST /api/iceshrimp/auth/change-password
-     * @see POST /api/pleroma/change_password
-     */
-    changePassword: any([
-      v.software === AKKOMA,
-      v.software === GOTOSOCIAL,
-      v.software === ICESHRIMP_NET,
-      v.software === MITRA,
-      v.software === PIXELFED,
       v.software === PLEROMA,
     ]),
 
