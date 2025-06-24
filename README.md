@@ -58,6 +58,14 @@ Code contributions are welcome. I will provide contributing guidelines after I d
 <img src="https://hosted.weblate.org/widget/pl-fe/287x66-grey.png" alt="Translation status" />
 </a>
 
+## FAQ / Common misconceptions
+
+### What does the project name mean?
+
+I named the project after my personal fork of Pleroma, called simply `pl`, which I don't really recommend running in production. They were meant to be recommended together. However, `pl-fe` evolved into something more serious than a little fork. This is a bad and confusing name, but I don't really care about branding.
+
+I will bite people calling `pl-fe` *Polish front-end* or *Polish Soapbox*. And I don't mean sending them the [`Bite` activity](https://ns.mia.jetzt/as/) (which work in pl-fe on supported backends btw).
+
 ## License
 
 `pl-fe` is a fork of [Soapbox](https://gitlab.com/soapbox-pub/soapbox/) and inherits a lot of code from [Mastodon](https://github.com/mastodon/mastodon/).
