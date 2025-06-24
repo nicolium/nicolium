@@ -369,6 +369,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === PLEROMA,
+      v.software === SHARKEY,
       v.software === SNAC,
       v.software === TAKAHE && gte(v.version, '0.7.0'),
     ]),
