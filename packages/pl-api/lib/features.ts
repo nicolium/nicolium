@@ -265,6 +265,7 @@ const getFeatures = (instance: Instance) => {
       v.software === FIREFISH,
       v.software === GOTOSOCIAL,
       v.software === ICESHRIMP,
+      v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === MITRA,
       v.software === PLEROMA && gte(v.version, '2.5.0'),
@@ -380,7 +381,7 @@ const getFeatures = (instance: Instance) => {
      */
     announcementsReactions: v.software === MASTODON,
 
-    kmyblue_antenna: instance.api_versions['kmyblue_antenna.fedibird.pl-api'] >= 1,
+    antennas: instance.api_versions['kmyblue_antenna.fedibird.pl-api'] >= 1,
 
     /**
      * Set your birthday and view upcoming birthdays.
@@ -1572,7 +1573,7 @@ const getFeatures = (instance: Instance) => {
     changePassword: any([
       v.software === AKKOMA,
       v.software === GOTOSOCIAL,
-      v.software === ICESHRIMP,
+      v.software === ICESHRIMP_NET,
       v.software === MITRA,
       v.software === PIXELFED,
       v.software === PLEROMA,
@@ -1717,6 +1718,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP,
       v.software === MASTODON,
       v.software === PIXELFED,
+      v.software === SHARKEY,
     ]),
 
     /**
