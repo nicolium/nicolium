@@ -64,7 +64,7 @@ Code contributions are welcome. I will provide contributing guidelines after I d
 
 I named the project after my personal fork of Pleroma, called simply `pl`, which I don't really recommend running in production. They were meant to be recommended together. However, `pl-fe` evolved into something more serious than a little fork. This is a bad and confusing name, but I don't really care about branding.
 
-I will bite people calling `pl-fe` *Polish front-end* or *Polish Soapbox*. And I don't mean sending them the [`Bite` activity](https://ns.mia.jetzt/as/) (which work in pl-fe on supported backends btw).
+I will bite people calling `pl-fe` *Polish front-end* or *Polish Soapbox*. And I don't mean sending them the [`Bite` activity](https://ns.mia.jetzt/as/) (which works in pl-fe on supported backends btw).
 
 ## License
 
