@@ -1,17 +1,14 @@
-import debounce from 'lodash/debounce';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { fetchBookmarkedStatuses, expandBookmarkedStatuses } from 'pl-fe/actions/bookmarks';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import StatusList from 'pl-fe/components/status-list';
 import Column from 'pl-fe/components/ui/column';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
 import { useTheme } from 'pl-fe/hooks/use-theme';
+import { useBookmarks } from 'pl-fe/queries/status-lists/use-bookmarks';
 import { useBookmarkFolder, useDeleteBookmarkFolder } from 'pl-fe/queries/statuses/use-bookmark-folders';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
@@ -27,10 +24,6 @@ const messages = defineMessages({
   deleteFolderFail: { id: 'bookmarks.delete_folder.fail', defaultMessage: 'Failed to delete folder' },
 });
 
-const handleLoadMore = debounce((dispatch, folderId) => {
-  dispatch(expandBookmarkedStatuses(folderId));
-}, 300, { leading: true });
-
 interface IBookmarks {
   params?: {
     id?: string;
@@ -38,7 +31,6 @@ interface IBookmarks {
 }
 
 const BookmarksPage: React.FC<IBookmarks> = ({ params }) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
   const history = useHistory();
   const theme = useTheme();
@@ -50,17 +42,9 @@ const BookmarksPage: React.FC<IBookmarks> = ({ params }) => {
   const { data: folder } = useBookmarkFolder(folderId);
   const { mutate: deleteBookmarkFolder } = useDeleteBookmarkFolder();
 
-  const bookmarksKey = folderId ? `bookmarks:${folderId}` : 'bookmarks';
+  const { data: statusIds = [], isFetching, hasNextPage, fetchNextPage, refetch } = useBookmarks(folderId);
 
-  const statusIds = useAppSelector((state) => state.status_lists[bookmarksKey]?.items || []);
-  const isLoading = useAppSelector((state) => state.status_lists[bookmarksKey]?.isLoading === true);
-  const hasMore = useAppSelector((state) => !!state.status_lists[bookmarksKey]?.next);
-
-  React.useEffect(() => {
-    dispatch(fetchBookmarkedStatuses(folderId));
-  }, [folderId]);
-
-  const handleRefresh = () => dispatch(fetchBookmarkedStatuses(folderId));
+  const handleRefresh = () => refetch();
 
   const handleEditFolder = () => {
     if (!folderId) return;
@@ -115,9 +99,9 @@ const BookmarksPage: React.FC<IBookmarks> = ({ params }) => {
           loadMoreClassName='black:sm:mx-4'
           statusIds={statusIds}
           scrollKey='bookmarked_statuses'
-          hasMore={hasMore}
-          isLoading={typeof isLoading === 'boolean' ? isLoading : true}
-          onLoadMore={() => handleLoadMore(dispatch, folderId)}
+          hasMore={hasNextPage}
+          isLoading={isFetching}
+          onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
           emptyMessage={emptyMessage}
           divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
         />

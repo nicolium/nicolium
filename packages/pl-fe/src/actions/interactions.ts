@@ -1,7 +1,3 @@
-import { defineMessages } from 'react-intl';
-
-import { useModalsStore } from 'pl-fe/stores/modals';
-import toast, { type IToastOptions } from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 
 import { getClient } from '../api';
@@ -30,18 +26,6 @@ const UNDISLIKE_REQUEST = 'UNDISLIKE_REQUEST' as const;
 const PIN_SUCCESS = 'PIN_SUCCESS' as const;
 
 const UNPIN_SUCCESS = 'UNPIN_SUCCESS' as const;
-
-const BOOKMARK_SUCCESS = 'BOOKMARKED_SUCCESS' as const;
-
-const UNBOOKMARK_SUCCESS = 'UNBOOKMARKED_SUCCESS' as const;
-
-const messages = defineMessages({
-  bookmarkAdded: { id: 'status.bookmarked', defaultMessage: 'Bookmark added.' },
-  bookmarkRemoved: { id: 'status.unbookmarked', defaultMessage: 'Bookmark removed.' },
-  folderChanged: { id: 'status.bookmark_folder_changed', defaultMessage: 'Changed folder' },
-  view: { id: 'toast.view', defaultMessage: 'View' },
-  selectFolder: { id: 'status.bookmark.select_folder', defaultMessage: 'Select folder' },
-});
 
 interface ReblogRequest {
   type: typeof REBLOG_REQUEST;
@@ -97,63 +81,6 @@ interface UndislikeRequest {
   statusId: string;
 }
 
-const bookmark = (status: Pick<Status, 'id'>, folderId?: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-
-    const features = state.auth.client.features;
-
-    return getClient(getState()).statuses.bookmarkStatus(status.id, folderId).then((response) => {
-      dispatch(importEntities({ statuses: [response] }));
-      dispatch(bookmarkSuccess(response));
-
-      let opts: IToastOptions = {
-        actionLabel: messages.view,
-        actionLink: folderId ? `/bookmarks/${folderId}` : '/bookmarks/all',
-      };
-
-      if (features.bookmarkFolders && typeof folderId !== 'string') {
-        opts = {
-          actionLabel: messages.selectFolder,
-          action: () => useModalsStore.getState().openModal('SELECT_BOOKMARK_FOLDER', {
-            statusId: status.id,
-          }),
-        };
-      }
-
-      toast.success(typeof folderId === 'string' ? messages.folderChanged : messages.bookmarkAdded, opts);
-    });
-  };
-
-const unbookmark = (status: Pick<Status, 'id'>) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).statuses.unbookmarkStatus(status.id).then(response => {
-      dispatch(importEntities({ statuses: [response] }));
-      dispatch(unbookmarkSuccess(response));
-      toast.success(messages.bookmarkRemoved);
-    });
-
-const toggleBookmark = (status: Pick<Status, 'id' | 'bookmarked'>) =>
-  (dispatch: AppDispatch) => {
-    if (status.bookmarked) {
-      dispatch(unbookmark(status));
-    } else {
-      dispatch(bookmark(status));
-    }
-  };
-
-const bookmarkSuccess = (status: Status) => ({
-  type: BOOKMARK_SUCCESS,
-  status,
-  statusId: status.id,
-});
-
-const unbookmarkSuccess = (status: Status) => ({
-  type: UNBOOKMARK_SUCCESS,
-  status,
-  statusId: status.id,
-});
-
 const pin = (status: Pick<Status, 'id'>, accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
@@ -202,10 +129,6 @@ const unpinSuccess = (status: Status, accountId: string) => ({
   accountId,
 });
 
-const remoteInteraction = (ap_id: string, profile: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).accounts.remoteInteraction(ap_id, profile).then((data) => data.url);
-
 type InteractionsAction =
   | ReblogRequest
   | ReblogFail
@@ -217,8 +140,6 @@ type InteractionsAction =
   | DislikeRequest
   | DislikeFail
   | UndislikeRequest
-  | ReturnType<typeof bookmarkSuccess>
-  | ReturnType<typeof unbookmarkSuccess>
   | ReturnType<typeof pinSuccess>
   | ReturnType<typeof unpinSuccess>
 
@@ -235,11 +156,6 @@ export {
   UNDISLIKE_REQUEST,
   PIN_SUCCESS,
   UNPIN_SUCCESS,
-  BOOKMARK_SUCCESS,
-  UNBOOKMARK_SUCCESS,
-  bookmark,
-  toggleBookmark,
   togglePin,
-  remoteInteraction,
   type InteractionsAction,
 };

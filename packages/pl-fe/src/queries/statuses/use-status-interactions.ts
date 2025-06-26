@@ -1,12 +1,25 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { InfiniteData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { defineMessages } from 'react-intl';
 
 import { importEntities } from 'pl-fe/actions/importer';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useClient } from 'pl-fe/hooks/use-client';
+import { useFeatures } from 'pl-fe/hooks/use-features';
 import { makePaginatedResponseQuery } from 'pl-fe/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from 'pl-fe/queries/utils/minify-list';
+import { useModalsStore } from 'pl-fe/stores/modals';
+import toast, { IToastOptions } from 'pl-fe/toast';
 
+import type { PaginatedResponse } from 'pl-api';
 import type { InteractionsAction } from 'pl-fe/actions/interactions';
+
+const messages = defineMessages({
+  bookmarkAdded: { id: 'status.bookmarked', defaultMessage: 'Bookmark added.' },
+  bookmarkRemoved: { id: 'status.unbookmarked', defaultMessage: 'Bookmark removed.' },
+  folderChanged: { id: 'status.bookmark_folder_changed', defaultMessage: 'Changed folder' },
+  view: { id: 'toast.view', defaultMessage: 'View' },
+  selectFolder: { id: 'status.bookmark.select_folder', defaultMessage: 'Select folder' },
+});
 
 const queryKey = {
   getDislikedBy: 'statusDislikes',
@@ -140,6 +153,90 @@ const useUnreblogStatus = (statusId: string) => {
   });
 };
 
+const useBookmarkStatus = (statusId: string) => {
+  const client = useClient();
+  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+  const features = useFeatures();
+  const { openModal } = useModalsStore();
+
+  let previouslyBookmarked = false;
+  let previousFolder: string | null;
+
+  return useMutation({
+    mutationKey: ['statuses', 'bookmark', statusId],
+    mutationFn: (folderId?: string) => {
+      dispatch((_, getState) => {
+        const status = getState().statuses[statusId];
+        previouslyBookmarked = status?.bookmarked;
+        previousFolder = status?.bookmark_folder;
+      });
+      return client.statuses.bookmarkStatus(statusId, folderId);
+    },
+    onSettled: (status, _, folderId) => {
+      dispatch(importEntities({ statuses: [status] }));
+      queryClient.invalidateQueries({ queryKey: ['accountsLists', 'statusReblogs', statusId] });
+
+      if (previousFolder) {
+        queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
+          ['statusLists', 'bookmarks', previousFolder],
+          (data) => data ? {
+            ...data,
+            pages: data.pages.map(({ items, ...page }) => ({ ...page, items: items.filter((id) => id !== statusId) })),
+          } : undefined);
+      }
+
+      if (!previouslyBookmarked) {
+        queryClient.invalidateQueries({ queryKey: ['statusLists', 'bookmarks', undefined] });
+      }
+
+      if (folderId) {
+        queryClient.invalidateQueries({ queryKey: ['statusLists', 'bookmarks', folderId] });
+      }
+
+      let opts: IToastOptions = {
+        actionLabel: messages.view,
+        actionLink: folderId ? `/bookmarks/${folderId}` : '/bookmarks/all',
+      };
+
+      if (features.bookmarkFolders && typeof folderId !== 'string') {
+        opts = {
+          actionLabel: messages.selectFolder,
+          action: () => openModal('SELECT_BOOKMARK_FOLDER', {
+            statusId,
+          }),
+        };
+      }
+
+      toast.success(typeof folderId === 'string' ? messages.folderChanged : messages.bookmarkAdded, opts);
+    },
+  });
+};
+
+const useUnbookmarkStatus = (statusId: string) => {
+  const client = useClient();
+  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['statuses', 'bookmark', statusId],
+    mutationFn: () => client.statuses.unbookmarkStatus(statusId),
+    onSettled: (status) => {
+      dispatch(importEntities({ statuses: [status] }));
+
+      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>({
+        queryKey: ['statusLists', 'bookmarks'],
+        exact: false,
+      }, (data) => data ? {
+        ...data,
+        pages: data.pages.map(({ items, ...page }) => ({ ...page, items: items.filter((id) => id !== statusId) })),
+      } : undefined);
+
+      toast.success(messages.bookmarkRemoved);
+    },
+  });
+};
+
 export {
   useStatusDislikes,
   useStatusFavourites,
@@ -151,4 +248,6 @@ export {
   useUndislikeStatus,
   useReblogStatus,
   useUnreblogStatus,
+  useBookmarkStatus,
+  useUnbookmarkStatus,
 };

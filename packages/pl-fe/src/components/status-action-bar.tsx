@@ -6,7 +6,7 @@ import { useHistory, useRouteMatch } from 'react-router-dom';
 import { blockAccount } from 'pl-fe/actions/accounts';
 import { directCompose, mentionCompose, quoteCompose, replyCompose } from 'pl-fe/actions/compose';
 import { emojiReact, unEmojiReact } from 'pl-fe/actions/emoji-reacts';
-import { toggleBookmark, togglePin } from 'pl-fe/actions/interactions';
+import { togglePin } from 'pl-fe/actions/interactions';
 import { deleteStatusModal, toggleStatusSensitivityModal } from 'pl-fe/actions/moderation';
 import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
 import { changeSetting } from 'pl-fe/actions/settings';
@@ -30,7 +30,7 @@ import { useChats } from 'pl-fe/queries/chats';
 import { useBlockGroupUserMutation } from 'pl-fe/queries/groups/use-group-blocks';
 import { useCustomEmojis } from 'pl-fe/queries/instance/use-custom-emojis';
 import { useTranslationLanguages } from 'pl-fe/queries/instance/use-translation-languages';
-import { useDislikeStatus, useFavouriteStatus, useReblogStatus, useUndislikeStatus, useUnfavouriteStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
+import { useBookmarkStatus, useDislikeStatus, useFavouriteStatus, useReblogStatus, useUnbookmarkStatus, useUndislikeStatus, useUnfavouriteStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import { useStatusMetaStore } from 'pl-fe/stores/status-meta';
 import toast from 'pl-fe/toast';
@@ -622,6 +622,8 @@ const MenuButton: React.FC<IMenuButton> = ({
   const { group } = useGroup((status.group as Group)?.id as string);
   const { mutate: blockGroupMember } = useBlockGroupUserMutation(status.group?.id as string, status.account.id);
   const { getOrCreateChatByAccountId } = useChats();
+  const { mutate: bookmarkStatus } = useBookmarkStatus(status.id);
+  const { mutate: unbookmarkStatus } = useUnbookmarkStatus(status.id);
 
   const { groupRelationship } = useGroupRelationship(status.group_id || undefined);
   const features = useFeatures();
@@ -654,7 +656,8 @@ const MenuButton: React.FC<IMenuButton> = ({
     const { username, local: localAccount } = status.account;
 
     const handleBookmarkClick: React.EventHandler<React.MouseEvent> = (e) => {
-      dispatch(toggleBookmark(status));
+      if (status.bookmarked) unbookmarkStatus();
+      else bookmarkStatus(undefined);
     };
 
     const handleBookmarkFolderClick = () => {
@@ -1099,7 +1102,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     }
 
     return menu;
-  }, [me, targetLanguage, status.muted, status.emoji_reactions.length > 0, status.pinned, status.reblogged]);
+  }, [me, targetLanguage, status.bookmarked, status.muted, status.emoji_reactions.length > 0, status.pinned, status.reblogged]);
 
   return useMemo(() => (
     <DropdownMenu items={menu}>

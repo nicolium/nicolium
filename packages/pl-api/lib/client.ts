@@ -3986,7 +3986,6 @@ class PlApiClient {
           response = await this.request(`/api/v1/admin/accounts/${accountId}/enable`, { method: 'POST' });
         } else {
           const account = await this.admin.accounts.getAccount(accountId)!;
-          console.log(account);
           response = await this.request('/api/v1/pleroma/admin/users/activate', { method: 'PATCH', body: { nicknames: [account.username] } });
           response.json = response.json?.users?.[0];
         }

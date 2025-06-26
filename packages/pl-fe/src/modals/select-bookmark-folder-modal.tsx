@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { bookmark } from 'pl-fe/actions/interactions';
 import { ListItem } from 'pl-fe/components/list';
 import { RadioGroup, RadioItem } from 'pl-fe/components/radio';
 import Emoji from 'pl-fe/components/ui/emoji';
@@ -11,11 +10,11 @@ import Modal from 'pl-fe/components/ui/modal';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Stack from 'pl-fe/components/ui/stack';
 import Toggle from 'pl-fe/components/ui/toggle';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { NewFolderForm } from 'pl-fe/pages/status-lists/bookmark-folders';
 import { useAddBookmarkToFolder, useBookmarkFolders, useRemoveBookmarkFromFolder, useStatusBookmarkFolders } from 'pl-fe/queries/statuses/use-bookmark-folders';
+import { useBookmarkStatus } from 'pl-fe/queries/statuses/use-status-interactions';
 import { makeGetStatus } from 'pl-fe/selectors';
 
 import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
@@ -27,7 +26,6 @@ interface SelectBookmarkFolderModalProps {
 const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseModalProps> = ({ statusId, onClose }) => {
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector(state => getStatus(state, { id: statusId }))!;
-  const dispatch = useAppDispatch();
   const features = useFeatures();
 
   const [selectedFolder, setSelectedFolder] = useState(status.bookmark_folder);
@@ -36,14 +34,15 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
   const { data: selectedBookmarkFolders, isPending: fetchingSelectedBookmarkFolders } = useStatusBookmarkFolders(statusId);
   const { mutate: addBookmarkToFolder, isPending: addingBookmarkToFolder } = useAddBookmarkToFolder(statusId);
   const { mutate: removeBookmarkFromFolder, isPending: removingBookmarkFromFolder } = useRemoveBookmarkFromFolder(statusId);
+  const { mutate: bookmarkStatus } = useBookmarkStatus(status.id);
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = e => {
     const folderId = e.target.value;
     setSelectedFolder(folderId);
 
-    dispatch(bookmark(status, folderId)).then(() => {
-      onClose('SELECT_BOOKMARK_FOLDER');
-    }).catch(() => {});
+    bookmarkStatus(folderId, {
+      onSuccess: () => onClose('SELECT_BOOKMARK_FOLDER'),
+    });
   };
 
   const onClickClose = () => {

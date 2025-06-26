@@ -1,15 +1,6 @@
 import { create } from 'mutative';
 
 import {
-  BOOKMARKED_STATUSES_FETCH_REQUEST,
-  BOOKMARKED_STATUSES_FETCH_SUCCESS,
-  BOOKMARKED_STATUSES_FETCH_FAIL,
-  BOOKMARKED_STATUSES_EXPAND_REQUEST,
-  BOOKMARKED_STATUSES_EXPAND_SUCCESS,
-  BOOKMARKED_STATUSES_EXPAND_FAIL,
-  type BookmarksAction,
-} from 'pl-fe/actions/bookmarks';
-import {
   FAVOURITED_STATUSES_FETCH_REQUEST,
   FAVOURITED_STATUSES_FETCH_SUCCESS,
   FAVOURITED_STATUSES_FETCH_FAIL,
@@ -25,8 +16,6 @@ import {
   type FavouritesAction,
 } from 'pl-fe/actions/favourites';
 import {
-  BOOKMARK_SUCCESS,
-  UNBOOKMARK_SUCCESS,
   PIN_SUCCESS,
   UNPIN_SUCCESS,
   type InteractionsAction,
@@ -54,7 +43,6 @@ type State = Record<string, StatusList>;
 
 const initialState: State = {
   favourites: newStatusList(),
-  bookmarks: newStatusList(),
   pins: newStatusList(),
 };
 
@@ -100,23 +88,7 @@ const removeOneFromList = (state: State, listType: string, status: string | Pick
   list.items = list.items.filter(id => id !== statusId);
 };
 
-const addBookmarkToLists = (state: State, status: Pick<Status, 'id' | 'bookmark_folder'>) => {
-  prependOneToList(state, 'bookmarks', status);
-  const folderId = status.bookmark_folder;
-  if (folderId) {
-    prependOneToList(state, `bookmarks:${folderId}`, status);
-  }
-};
-
-const removeBookmarkFromLists = (state: State, status: Pick<Status, 'id' | 'bookmark_folder'>) => {
-  removeOneFromList(state, 'bookmarks', status);
-  const folderId = status.bookmark_folder;
-  if (folderId) {
-    removeOneFromList(state, `bookmarks:${folderId}`, status);
-  }
-};
-
-const statusLists = (state = initialState, action: BookmarksAction | FavouritesAction | InteractionsAction | PinStatusesAction | StatusesAction): State => {
+const statusLists = (state = initialState, action: FavouritesAction | InteractionsAction | PinStatusesAction | StatusesAction): State => {
   switch (action.type) {
     case FAVOURITED_STATUSES_FETCH_REQUEST:
     case FAVOURITED_STATUSES_EXPAND_REQUEST:
@@ -138,20 +110,6 @@ const statusLists = (state = initialState, action: BookmarksAction | FavouritesA
       return create(state, draft => normalizeList(draft, `favourites:${action.accountId}`, action.statuses, action.next));
     case ACCOUNT_FAVOURITED_STATUSES_EXPAND_SUCCESS:
       return create(state, draft => appendToList(draft, `favourites:${action.accountId}`, action.statuses, action.next));
-    case BOOKMARKED_STATUSES_FETCH_REQUEST:
-    case BOOKMARKED_STATUSES_EXPAND_REQUEST:
-      return create(state, draft => setLoading(draft, action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks', true));
-    case BOOKMARKED_STATUSES_FETCH_FAIL:
-    case BOOKMARKED_STATUSES_EXPAND_FAIL:
-      return create(state, draft => setLoading(draft, action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks', false));
-    case BOOKMARKED_STATUSES_FETCH_SUCCESS:
-      return create(state, draft => normalizeList(draft, action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks', action.statuses, action.next));
-    case BOOKMARKED_STATUSES_EXPAND_SUCCESS:
-      return create(state, draft => appendToList(draft, action.folderId ? `bookmarks:${action.folderId}` : 'bookmarks', action.statuses, action.next));
-    case BOOKMARK_SUCCESS:
-      return create(state, draft => addBookmarkToLists(draft, action.status));
-    case UNBOOKMARK_SUCCESS:
-      return create(state, draft => removeBookmarkFromLists(draft, action.status));
     case PINNED_STATUSES_FETCH_SUCCESS:
       return create(state, draft => normalizeList(draft, 'pins', action.statuses, action.next));
     case PIN_SUCCESS:
