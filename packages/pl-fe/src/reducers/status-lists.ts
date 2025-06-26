@@ -113,9 +113,9 @@ const statusLists = (state = initialState, action: FavouritesAction | Interactio
     case PINNED_STATUSES_FETCH_SUCCESS:
       return create(state, draft => normalizeList(draft, 'pins', action.statuses, action.next));
     case PIN_SUCCESS:
-      return create(state, draft => prependOneToList(draft, 'pins', action.status));
+      return create(state, draft => prependOneToList(draft, 'pins', action.statusId));
     case UNPIN_SUCCESS:
-      return create(state, draft => removeOneFromList(draft, 'pins', action.status));
+      return create(state, draft => removeOneFromList(draft, 'pins', action.statusId));
     default:
       return state;
   }

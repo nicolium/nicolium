@@ -5,7 +5,6 @@ import { Link, useHistory } from 'react-router-dom';
 import { blockAccount } from 'pl-fe/actions/accounts';
 import { directCompose, mentionCompose, quoteCompose } from 'pl-fe/actions/compose';
 import { fetchEventIcs } from 'pl-fe/actions/events';
-import { togglePin } from 'pl-fe/actions/interactions';
 import { deleteStatusModal, toggleStatusSensitivityModal } from 'pl-fe/actions/moderation';
 import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
 import { deleteStatus } from 'pl-fe/actions/statuses';
@@ -24,7 +23,7 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useChats } from 'pl-fe/queries/chats';
-import { useBookmarkStatus, useReblogStatus, useUnbookmarkStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
+import { useBookmarkStatus, usePinStatus, useReblogStatus, useUnbookmarkStatus, useUnpinStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import copy from 'pl-fe/utils/copy';
 import { download } from 'pl-fe/utils/download';
@@ -94,6 +93,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const { mutate: unreblogStatus } = useUnreblogStatus(status?.id!);
   const { mutate: bookmarkStatus } = useBookmarkStatus(status?.id!);
   const { mutate: unbookmarkStatus } = useUnbookmarkStatus(status?.id!);
+  const { mutate: pinStatus } = usePinStatus(status?.id!);
+  const { mutate: unpinStatus } = useUnpinStatus(status?.id!);
 
   if (!status || !status.event) {
     return (
@@ -154,7 +155,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handlePinClick = () => {
-    dispatch(togglePin(status));
+    if (status.pinned) unpinStatus();
+    else pinStatus();
   };
 
   const handleDeleteClick = () => {

@@ -6,7 +6,6 @@ import { useHistory, useRouteMatch } from 'react-router-dom';
 import { blockAccount } from 'pl-fe/actions/accounts';
 import { directCompose, mentionCompose, quoteCompose, replyCompose } from 'pl-fe/actions/compose';
 import { emojiReact, unEmojiReact } from 'pl-fe/actions/emoji-reacts';
-import { togglePin } from 'pl-fe/actions/interactions';
 import { deleteStatusModal, toggleStatusSensitivityModal } from 'pl-fe/actions/moderation';
 import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
 import { changeSetting } from 'pl-fe/actions/settings';
@@ -30,7 +29,7 @@ import { useChats } from 'pl-fe/queries/chats';
 import { useBlockGroupUserMutation } from 'pl-fe/queries/groups/use-group-blocks';
 import { useCustomEmojis } from 'pl-fe/queries/instance/use-custom-emojis';
 import { useTranslationLanguages } from 'pl-fe/queries/instance/use-translation-languages';
-import { useBookmarkStatus, useDislikeStatus, useFavouriteStatus, useReblogStatus, useUnbookmarkStatus, useUndislikeStatus, useUnfavouriteStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
+import { useBookmarkStatus, useDislikeStatus, useFavouriteStatus, usePinStatus, useReblogStatus, useUnbookmarkStatus, useUndislikeStatus, useUnfavouriteStatus, useUnpinStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import { useStatusMetaStore } from 'pl-fe/stores/status-meta';
 import toast from 'pl-fe/toast';
@@ -624,6 +623,8 @@ const MenuButton: React.FC<IMenuButton> = ({
   const { getOrCreateChatByAccountId } = useChats();
   const { mutate: bookmarkStatus } = useBookmarkStatus(status.id);
   const { mutate: unbookmarkStatus } = useUnbookmarkStatus(status.id);
+  const { mutate: pinStatus } = usePinStatus(status?.id!);
+  const { mutate: unpinStatus } = useUnpinStatus(status?.id!);
 
   const { groupRelationship } = useGroupRelationship(status.group_id || undefined);
   const features = useFeatures();
@@ -693,7 +694,8 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handlePinClick: React.EventHandler<React.MouseEvent> = (e) => {
-      dispatch(togglePin(status));
+      if (status.pinned) unpinStatus();
+      else pinStatus();
     };
 
     const handleReblogClick = (e: React.MouseEvent | React.KeyboardEvent, visibility?: string) => {

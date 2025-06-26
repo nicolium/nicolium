@@ -2,6 +2,7 @@ import { InfiniteData, useMutation, useQuery, useQueryClient } from '@tanstack/r
 import { defineMessages } from 'react-intl';
 
 import { importEntities } from 'pl-fe/actions/importer';
+import { PIN_SUCCESS, UNPIN_SUCCESS, type InteractionsAction } from 'pl-fe/actions/interactions';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
@@ -11,7 +12,6 @@ import { useModalsStore } from 'pl-fe/stores/modals';
 import toast, { IToastOptions } from 'pl-fe/toast';
 
 import type { PaginatedResponse } from 'pl-api';
-import type { InteractionsAction } from 'pl-fe/actions/interactions';
 
 const messages = defineMessages({
   bookmarkAdded: { id: 'status.bookmarked', defaultMessage: 'Bookmark added.' },
@@ -237,6 +237,34 @@ const useUnbookmarkStatus = (statusId: string) => {
   });
 };
 
+const usePinStatus = (statusId: string) => {
+  const client = useClient();
+  const dispatch = useAppDispatch();
+
+  return useMutation({
+    mutationKey: ['statuses', 'pin', statusId],
+    mutationFn: () => client.statuses.pinStatus(statusId),
+    onSuccess: (status) => {
+      dispatch(importEntities({ statuses: [status] }));
+      dispatch<InteractionsAction>({ type: PIN_SUCCESS, statusId: status.id, accountId: status.account.id });
+    },
+  });
+};
+
+const useUnpinStatus = (statusId: string) => {
+  const client = useClient();
+  const dispatch = useAppDispatch();
+
+  return useMutation({
+    mutationKey: ['statuses', 'unpin', statusId],
+    mutationFn: () => client.statuses.unpinStatus(statusId),
+    onSuccess: (status) => {
+      dispatch(importEntities({ statuses: [status] }));
+      dispatch<InteractionsAction>({ type: UNPIN_SUCCESS, statusId: status.id, accountId: status.account.id });
+    },
+  });
+};
+
 export {
   useStatusDislikes,
   useStatusFavourites,
@@ -250,4 +278,6 @@ export {
   useUnreblogStatus,
   useBookmarkStatus,
   useUnbookmarkStatus,
+  usePinStatus,
+  useUnpinStatus,
 };

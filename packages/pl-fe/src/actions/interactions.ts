@@ -1,12 +1,3 @@
-import { isLoggedIn } from 'pl-fe/utils/auth';
-
-import { getClient } from '../api';
-
-import { importEntities } from './importer';
-
-import type { Status } from 'pl-api';
-import type { AppDispatch, RootState } from 'pl-fe/store';
-
 const REBLOG_REQUEST = 'REBLOG_REQUEST' as const;
 const REBLOG_FAIL = 'REBLOG_FAIL' as const;
 
@@ -81,53 +72,17 @@ interface UndislikeRequest {
   statusId: string;
 }
 
-const pin = (status: Pick<Status, 'id'>, accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
+interface PinSuccess {
+  type: typeof PIN_SUCCESS;
+  statusId: string;
+  accountId: string;
+}
 
-    return getClient(getState()).statuses.pinStatus(status.id).then(response => {
-      dispatch(importEntities({ statuses: [response] }));
-      dispatch(pinSuccess(response, accountId));
-    }).catch(error => {
-    });
-  };
-
-const pinSuccess = (status: Status, accountId: string) => ({
-  type: PIN_SUCCESS,
-  status,
-  statusId: status.id,
-  accountId,
-});
-
-const unpin = (status: Pick<Status, 'id'>, accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
-
-    return getClient(getState()).statuses.unpinStatus(status.id).then(response => {
-      dispatch(importEntities({ statuses: [response] }));
-      dispatch(unpinSuccess(response, accountId));
-    });
-  };
-
-const togglePin = (status: Pick<Status, 'id' | 'pinned'>) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const accountId = getState().me;
-
-    if (!accountId) return;
-
-    if (status.pinned) {
-      dispatch(unpin(status, accountId));
-    } else {
-      dispatch(pin(status, accountId));
-    }
-  };
-
-const unpinSuccess = (status: Status, accountId: string) => ({
-  type: UNPIN_SUCCESS,
-  status,
-  statusId: status.id,
-  accountId,
-});
+interface UnpinSuccess {
+  type: typeof UNPIN_SUCCESS;
+  statusId: string;
+  accountId: string;
+}
 
 type InteractionsAction =
   | ReblogRequest
@@ -140,8 +95,8 @@ type InteractionsAction =
   | DislikeRequest
   | DislikeFail
   | UndislikeRequest
-  | ReturnType<typeof pinSuccess>
-  | ReturnType<typeof unpinSuccess>
+  | PinSuccess
+  | UnpinSuccess
 
 export {
   REBLOG_REQUEST,
@@ -156,6 +111,5 @@ export {
   UNDISLIKE_REQUEST,
   PIN_SUCCESS,
   UNPIN_SUCCESS,
-  togglePin,
   type InteractionsAction,
 };
