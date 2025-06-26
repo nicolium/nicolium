@@ -1,17 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchMfa } from 'pl-fe/actions/mfa';
 import List, { ListItem } from 'pl-fe/components/list';
 import Card, { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card';
 import Column from 'pl-fe/components/ui/column';
 import Text from 'pl-fe/components/ui/text';
 import Preferences from 'pl-fe/features/preferences';
 import MessagesSettings from 'pl-fe/features/settings/components/messages-settings';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
+import { useMfaConfig } from 'pl-fe/queries/settings/use-mfa';
 
 const messages = defineMessages({
   accountAliases: { id: 'navigation_bar.account_aliases', defaultMessage: 'Account aliases' },
@@ -44,18 +42,13 @@ const messages = defineMessages({
 
 /** User settings page. */
 const SettingsPage = () => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const mfa = useAppSelector((state) => state.security.mfa);
+  const { data: mfa } = useMfaConfig();
   const features = useFeatures();
   const { account } = useOwnAccount();
 
-  const isMfaEnabled = mfa.settings?.totp;
-
-  useEffect(() => {
-    if (features.manageMfa) dispatch(fetchMfa());
-  }, [dispatch]);
+  const isMfaEnabled = mfa?.settings.totp;
 
   if (!account) return null;
 

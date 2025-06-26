@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { setupMfa, confirmMfa } from 'pl-fe/actions/mfa';
 import Button from 'pl-fe/components/ui/button';
 import Form from 'pl-fe/components/ui/form';
 import FormActions from 'pl-fe/components/ui/form-actions';
@@ -11,8 +10,9 @@ import FormGroup from 'pl-fe/components/ui/form-group';
 import Input from 'pl-fe/components/ui/input';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
+import { useConfirmMfa } from 'pl-fe/queries/settings/use-mfa';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
@@ -28,19 +28,20 @@ const messages = defineMessages({
 const OtpConfirmForm: React.FC = () => {
   const intl = useIntl();
   const history = useHistory();
-  const dispatch = useAppDispatch();
   const features = useFeatures();
+  const client = useClient();
 
-  const [state, setState] = useState<{ password: string; isLoading: boolean; code: string; qrCodeURI: string; confirmKey: string }>({
+  const { mutate: confirmMfa, isPending } = useConfirmMfa();
+
+  const [state, setState] = useState<{ password: string; code: string; qrCodeURI: string; confirmKey: string }>({
     password: '',
-    isLoading: false,
     code: '',
     qrCodeURI: '',
     confirmKey: '',
   });
 
   useEffect(() => {
-    dispatch(setupMfa('totp')).then((data) => {
+    client.settings.mfa.getMfaSetup('totp').then((data) => {
       setState((prevState) => ({ ...prevState, qrCodeURI: data.provisioning_uri, confirmKey: data.key }));
     }).catch(() => {
       toast.error(intl.formatMessage(messages.qrFail));
@@ -56,12 +57,14 @@ const OtpConfirmForm: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     setState((prevState) => ({ ...prevState, isLoading: true }));
 
-    dispatch(confirmMfa('totp', state.code, state.password)).then((r) => {
-      toast.success(intl.formatMessage(messages.mfaConfirmSuccess));
-      history.push('../auth/edit');
-    }).catch(() => {
-      toast.error(intl.formatMessage(messages.confirmFail));
-      setState((prevState) => ({ ...prevState, isLoading: false }));
+    confirmMfa(state, {
+      onSuccess: () => {
+        toast.success(intl.formatMessage(messages.mfaConfirmSuccess));
+        history.push('../auth/edit');
+      },
+      onError: () => {
+        toast.error(intl.formatMessage(messages.confirmFail));
+      },
     });
 
     e.preventDefault();
@@ -96,7 +99,7 @@ const OtpConfirmForm: React.FC = () => {
             placeholder={intl.formatMessage(messages.codePlaceholder)}
             onChange={handleInputChange}
             autoComplete='off'
-            disabled={state.isLoading}
+            disabled={isPending}
             value={state.code}
             type='text'
             required
@@ -113,7 +116,7 @@ const OtpConfirmForm: React.FC = () => {
               name='password'
               placeholder={intl.formatMessage(messages.passwordPlaceholder)}
               onChange={handleInputChange}
-              disabled={state.isLoading}
+              disabled={isPending}
               value={state.password}
               required
             />
@@ -126,14 +129,14 @@ const OtpConfirmForm: React.FC = () => {
             theme='tertiary'
             text={intl.formatMessage(messages.mfaCancelButton)}
             onClick={() => history.push('../auth/edit')}
-            disabled={state.isLoading}
+            disabled={isPending}
           />
 
           <Button
             type='submit'
             theme='primary'
             text={intl.formatMessage(messages.mfaSetupConfirmButton)}
-            disabled={state.isLoading}
+            disabled={isPending}
           />
         </FormActions>
       </Form>

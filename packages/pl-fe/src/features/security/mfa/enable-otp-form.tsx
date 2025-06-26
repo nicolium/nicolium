@@ -2,13 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { fetchBackupCodes } from 'pl-fe/actions/mfa';
 import Button from 'pl-fe/components/ui/button';
 import FormActions from 'pl-fe/components/ui/form-actions';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useClient } from 'pl-fe/hooks/use-client';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
@@ -23,14 +22,14 @@ interface IEnableOtpForm {
 }
 
 const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupProceedClick }) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
   const history = useHistory();
+  const client = useClient();
 
   const [backupCodes, setBackupCodes] = useState<Array<string>>([]);
 
   useEffect(() => {
-    dispatch(fetchBackupCodes()).then(({ codes: backupCodes }) => {
+    client.settings.mfa.getMfaBackupCodes().then(({ codes: backupCodes }) => {
       setBackupCodes(backupCodes);
     })
       .catch(() => {

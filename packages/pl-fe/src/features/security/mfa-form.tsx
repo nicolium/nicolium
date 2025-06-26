@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import { fetchMfa } from 'pl-fe/actions/mfa';
 import Column from 'pl-fe/components/ui/column';
 import Stack from 'pl-fe/components/ui/stack';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
+import { useMfaConfig } from 'pl-fe/queries/settings/use-mfa';
 
 import DisableOtpForm from './mfa/disable-otp-form';
 import EnableOtpForm from './mfa/enable-otp-form';
@@ -18,24 +16,19 @@ const messages = defineMessages({
 
 const MfaForm: React.FC = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const features = useFeatures();
   const [displayOtpForm, setDisplayOtpForm] = useState<boolean>(false);
 
-  useEffect(() => {
-    dispatch(fetchMfa());
-  }, []);
+  const { data: mfa } = useMfaConfig();
 
   const handleSetupProceedClick = (event: React.MouseEvent) => {
     event.preventDefault();
     setDisplayOtpForm(true);
   };
 
-  const mfa = useAppSelector((state) => state.security.mfa);
-
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      {mfa.settings.totp ? (
+      {mfa?.settings.totp ? (
         <DisableOtpForm />
       ) : (
         <Stack space={4}>

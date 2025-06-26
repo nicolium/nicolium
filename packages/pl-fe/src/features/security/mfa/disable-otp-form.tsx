@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
-import { disableMfa } from 'pl-fe/actions/mfa';
 import Button from 'pl-fe/components/ui/button';
 import Form from 'pl-fe/components/ui/form';
 import FormActions from 'pl-fe/components/ui/form-actions';
@@ -11,6 +10,7 @@ import Input from 'pl-fe/components/ui/input';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useDisableMfa } from 'pl-fe/queries/settings/use-mfa';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
@@ -21,22 +21,23 @@ const messages = defineMessages({
 });
 
 const DisableOtpForm: React.FC = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [password, setPassword] = useState('');
 
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const history = useHistory();
 
+  const { mutate: disableMfa, isPending } = useDisableMfa();
+
   const handleSubmit = useCallback(() => {
-    setIsLoading(true);
-    dispatch(disableMfa('totp', password)).then(() => {
-      toast.success(intl.formatMessage(messages.mfaDisableSuccess));
-      history.push('../auth/edit');
-    }).finally(() => {
-      setIsLoading(false);
-    }).catch(() => {
-      toast.error(intl.formatMessage(messages.disableFail));
+    disableMfa(password, {
+      onSuccess: () => {
+        toast.success(intl.formatMessage(messages.mfaDisableSuccess));
+        history.push('../auth/edit');
+      },
+      onError: () => {
+        toast.error(intl.formatMessage(messages.disableFail));
+      },
     });
   }, [password, dispatch, intl]);
 
@@ -65,7 +66,7 @@ const DisableOtpForm: React.FC = () => {
           placeholder={intl.formatMessage(messages.passwordPlaceholder)}
           name='password'
           onChange={handleInputChange}
-          disabled={isLoading}
+          disabled={isPending}
           value={password}
           required
         />
@@ -73,7 +74,7 @@ const DisableOtpForm: React.FC = () => {
 
       <FormActions>
         <Button
-          disabled={isLoading}
+          disabled={isPending}
           theme='danger'
           type='submit'
           text={intl.formatMessage(messages.mfa_setup_disable_button)}
