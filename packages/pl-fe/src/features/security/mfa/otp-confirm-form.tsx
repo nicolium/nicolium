@@ -12,7 +12,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useConfirmMfa } from 'pl-fe/queries/settings/use-mfa';
+import { useConfirmMfa } from 'pl-fe/queries/security/use-mfa';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({

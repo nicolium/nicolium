@@ -10,7 +10,7 @@ import Input from 'pl-fe/components/ui/input';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useDisableMfa } from 'pl-fe/queries/settings/use-mfa';
+import { useDisableMfa } from 'pl-fe/queries/security/use-mfa';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({

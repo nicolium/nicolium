@@ -9,7 +9,7 @@ import Preferences from 'pl-fe/features/preferences';
 import MessagesSettings from 'pl-fe/features/settings/components/messages-settings';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { useMfaConfig } from 'pl-fe/queries/settings/use-mfa';
+import { useMfaConfig } from 'pl-fe/queries/security/use-mfa';
 
 const messages = defineMessages({
   accountAliases: { id: 'navigation_bar.account_aliases', defaultMessage: 'Account aliases' },

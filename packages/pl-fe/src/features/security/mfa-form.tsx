@@ -4,7 +4,7 @@ import { useIntl, defineMessages } from 'react-intl';
 import Column from 'pl-fe/components/ui/column';
 import Stack from 'pl-fe/components/ui/stack';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useMfaConfig } from 'pl-fe/queries/settings/use-mfa';
+import { useMfaConfig } from 'pl-fe/queries/security/use-mfa';
 
 import DisableOtpForm from './mfa/disable-otp-form';
 import EnableOtpForm from './mfa/enable-otp-form';
