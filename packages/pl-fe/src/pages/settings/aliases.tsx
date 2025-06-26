@@ -1,8 +1,7 @@
 import clsx from 'clsx';
-import React, { useEffect } from 'react';
+import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { addToAliases, changeAliasesSuggestions, clearAliasesSuggestions, fetchAliases, fetchAliasesSuggestions, removeFromAliases } from 'pl-fe/actions/aliases';
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import AccountComponent from 'pl-fe/components/account';
 import Icon from 'pl-fe/components/icon';
@@ -13,10 +12,10 @@ import { CardHeader, CardTitle } from 'pl-fe/components/ui/card';
 import Column from 'pl-fe/components/ui/column';
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
+import { useSearchAccounts } from 'pl-fe/queries/search/use-search';
+import { useAccountAliases, useAddAccountAlias, useDeleteAccountAlias } from 'pl-fe/queries/settings/use-account-aliases';
 
 const messages = defineMessages({
   heading: { id: 'column.aliases', defaultMessage: 'Account aliases' },
@@ -37,17 +36,18 @@ interface IAccount {
 
 const Account: React.FC<IAccount> = ({ accountId, aliases }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const features = useFeatures();
 
   const me = useAppSelector((state) => state.me);
   const { account } = useAccount(accountId);
 
+  const { mutate: addAccountAlias } = useAddAccountAlias();
+
   const apId = account?.ap_id;
   const name = features.accountMoving ? account?.acct : apId;
   const added = name ? aliases.includes(name) : false;
 
-  const handleOnAdd = () => dispatch(addToAliases(account!));
+  const handleOnAdd = () => addAccountAlias(name!);
 
   if (!account) return null;
 
@@ -69,28 +69,31 @@ const Account: React.FC<IAccount> = ({ accountId, aliases }) => {
   );
 };
 
-const Search: React.FC = () => {
-  const dispatch = useAppDispatch();
+interface IAliasesSearch {
+  onSubmit: (value: string) => void;
+}
+
+const Search: React.FC<IAliasesSearch> = ({ onSubmit }) => {
   const intl = useIntl();
 
-  const value = useAppSelector(state => state.aliases.suggestions.value);
+  const [value, setValue] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeAliasesSuggestions(e.target.value));
+    setValue(e.target.value);
   };
 
   const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.keyCode === 13) {
-      dispatch(fetchAliasesSuggestions(value));
+      onSubmit(value);
     }
   };
 
   const handleSubmit = () => {
-    dispatch(fetchAliasesSuggestions(value));
+    onSubmit(value);
   };
 
   const handleClear = () => {
-    dispatch(clearAliasesSuggestions());
+    onSubmit('');
   };
 
   const hasValue = value.length > 0;
@@ -120,27 +123,15 @@ const Search: React.FC = () => {
 
 const AliasesPage = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
-  const features = useFeatures();
-  const { account } = useOwnAccount();
 
-  const aliases = useAppSelector((state): Array<string> => {
-    if (features.accountMoving) {
-      return [...state.aliases.aliases.items];
-    } else {
-      return account?.__meta.pleroma?.also_known_as ?? [];
-    }
-  });
+  const [query, setQuery] = useState('');
 
-  const searchAccountIds = useAppSelector((state) => state.aliases.suggestions.items);
-  const loaded = useAppSelector((state) => state.aliases.suggestions.loaded);
+  const { data: aliases = [] } = useAccountAliases();
+  const { data: searchAccountIds = [], isFetched } = useSearchAccounts(query);
+  const { mutate: deleteAccountAlias } = useDeleteAccountAlias();
 
-  useEffect(() => {
-    dispatch(fetchAliases);
-  }, []);
-
-  const handleFilterDelete: React.MouseEventHandler<HTMLDivElement> = e => {
-    dispatch(removeFromAliases(e.currentTarget.dataset.value as string));
+  const handleAliasDelete: React.MouseEventHandler<HTMLDivElement> = e => {
+    deleteAccountAlias(e.currentTarget.dataset.value as string);
   };
 
   const emptyMessage = <FormattedMessage id='empty_column.aliases' defaultMessage="You haven't created any account alias yet." />;
@@ -150,14 +141,14 @@ const AliasesPage = () => {
       <CardHeader>
         <CardTitle title={intl.formatMessage(messages.subheading_add_new)} />
       </CardHeader>
-      <Search />
+      <Search onSubmit={setQuery} />
       {
-        loaded && searchAccountIds.length === 0 ? (
+        isFetched && searchAccountIds.length === 0 ? (
           <div className='empty-column-indicator'>
             <FormattedMessage id='empty_column.aliases.suggestions' defaultMessage='There are no account suggestions available for the provided term.' />
           </div>
         ) : (
-          <div className='mb-4 overflow-y-auto'>
+          <div className='mb-4 max-h-72 overflow-y-auto'>
             {searchAccountIds.map(accountId => <Account key={accountId} accountId={accountId} aliases={aliases} />)}
           </div>
         )
@@ -177,7 +168,7 @@ const AliasesPage = () => {
                 {' '}
                 <Text tag='span'>{alias}</Text>
               </div>
-              <div className='flex items-center' role='button' tabIndex={0} onClick={handleFilterDelete} data-value={alias} aria-label={intl.formatMessage(messages.delete)}>
+              <div className='flex items-center' role='button' tabIndex={0} onClick={handleAliasDelete} data-value={alias} aria-label={intl.formatMessage(messages.delete)}>
                 <Icon className='mr-1.5' src={require('@tabler/icons/outline/x.svg')} />
                 <Text weight='bold' theme='muted'><FormattedMessage id='aliases.aliases_list_delete' defaultMessage='Unlink alias' /></Text>
               </div>

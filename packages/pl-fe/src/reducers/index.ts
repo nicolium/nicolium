@@ -7,7 +7,6 @@ import entities from 'pl-fe/entity-store/reducer';
 import accounts_meta from './accounts-meta';
 import admin from './admin';
 import admin_user_index from './admin-user-index';
-import aliases from './aliases';
 import auth from './auth';
 import compose from './compose';
 import contexts from './contexts';
@@ -34,7 +33,6 @@ const reducers = {
   accounts_meta,
   admin,
   admin_user_index,
-  aliases,
   auth,
   compose,
   contexts,
