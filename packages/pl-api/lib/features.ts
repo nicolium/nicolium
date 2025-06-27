@@ -72,6 +72,14 @@ const MASTODON = 'Mastodon';
 const MITRA = 'Mitra';
 
 /**
+ * NeoDB, 'mark the things you love'.
+ *
+ * @category Software
+ * @see {@link https://neodb.net/}
+ */
+const NEODB = 'NeoDB';
+
+/**
  * Pixelfed, a federated image sharing platform.
  *
  * @category Software
@@ -105,6 +113,8 @@ const SNAC = 'snac';
 
 /**
  * Takahē, backend with support for serving multiple domains.
+ * Takahē 0.12.0 and newer refer to its fork — Incarnator
+ * @see {@link https://github.com/avaraline/incarnator}
  *
  * @category Software
  * @see {@link https://jointakahe.org/}
@@ -174,6 +184,7 @@ const UNRELEASED = 'unreleased';
 const getFeatures = (instance: Instance) => {
   const v = parseVersion(instance.version || '');
   const federation = !!instance.pleroma.metadata.federation.enabled;
+  console.log(v);
 
   return {
     version: v,
@@ -267,6 +278,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === MITRA,
+      v.software === NEODB,
       v.software === PLEROMA && gte(v.version, '2.5.0'),
       v.software === SHARKEY,
       v.software === SNAC,
@@ -367,6 +379,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
+      v.software === NEODB,
       v.software === PLEROMA,
       v.software === SHARKEY,
       v.software === SNAC,
@@ -435,6 +448,7 @@ const getFeatures = (instance: Instance) => {
       v.software === FRIENDICA,
       v.software === MASTODON,
       v.software === MITRA && gte(v.version, '3.3.0'),
+      v.software === NEODB,
       v.software === PIXELFED,
       v.software === PLEROMA,
       v.software === SHARKEY,
@@ -522,6 +536,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
+      v.software === NEODB,
       v.software === PIXELFED,
       v.software === PLEROMA,
       v.software === SHARKEY,
@@ -651,6 +666,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === MITRA,
+      v.software === NEODB,
       v.software === PIXELFED,
       v.software === PLEROMA,
       v.software === TAKAHE && gte(v.version, '0.7.0'),
@@ -669,6 +685,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === MITRA,
+      v.software === NEODB,
       v.software === TAKAHE && gte(v.version, '0.8.0'),
       instance.api_versions['editing.pleroma.pl-api'] >= 1,
     ]),
@@ -779,6 +796,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === MITRA && gte(v.version, '4.5.0'),
+      v.software === NEODB,
       v.software === SHARKEY,
       v.software === TAKAHE && gte(v.version, '0.6.1'),
       v.software === TOKI,
@@ -792,6 +810,7 @@ const getFeatures = (instance: Instance) => {
     familiarFollowers: any([
       v.software === DITTO,
       v.software === MASTODON,
+      v.software === NEODB,
       v.software === PIXELFED,
       v.software === PLEROMA && gte(v.version, '2.7.0'),
       v.software === TAKAHE,
@@ -804,7 +823,11 @@ const getFeatures = (instance: Instance) => {
      * @see DELETE /api/v1/featured_tags
      * @see GET /api/v1/featured_tags/suggestions
      */
-    featuredTags: v.software === MASTODON,
+    featuredTags: any([
+      v.software === MASTODON,
+      v.software === NEODB,
+      v.software === TAKAHE && gte(v.version, '0.12.0'),
+    ]),
 
     /** Whether the instance federates. */
     federating: federation,
@@ -852,6 +875,7 @@ const getFeatures = (instance: Instance) => {
       v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
       v.software === MASTODON && gte(v.compatVersion, '4.1.0'),
+      v.software === NEODB,
       v.software === PIXELFED,
       v.software === PLEROMA && gte(v.version, '2.9.0'),
       v.software === TAKAHE && gte(v.version, '0.9.0'),
@@ -866,6 +890,7 @@ const getFeatures = (instance: Instance) => {
       v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
       v.software === MASTODON && gte(v.compatVersion, '4.0.0'),
+      v.software === NEODB,
       v.software === PIXELFED,
       v.software === PLEROMA && gte(v.version, '2.9.0'),
       v.software === TAKAHE && gte(v.version, '0.9.0'),
@@ -1047,9 +1072,11 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === MITRA,
+      v.software === NEODB,
       v.software === PLEROMA,
       v.software === SHARKEY,
       v.software === SNAC,
+      v.software === TAKAHE && gte(v.version, '0.12.0'),
     ]),
 
     /**
@@ -1172,6 +1199,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === MITRA,
+      v.software === NEODB,
       v.software === PLEROMA,
       v.software === TAKAHE,
       v.software === TOKI,
@@ -1208,6 +1236,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === MITRA,
+      v.software === NEODB,
       v.software === PIXELFED,
       v.software === PLEROMA,
       v.software === SHARKEY,
@@ -1225,6 +1254,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
+      v.software === NEODB,
       v.software === PLEROMA,
       v.software === TAKAHE,
     ]),
@@ -1277,6 +1307,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
+      v.software === NEODB,
       v.software === PLEROMA && gte(v.version, '2.5.0'),
       v.software === TAKAHE && gte(v.version, '0.6.2'),
       v.software === GOTOSOCIAL,
@@ -1359,6 +1390,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === MITRA && gte(v.version, '3.15.0'),
+      v.software === NEODB,
       v.software === SHARKEY,
       v.software === TAKAHE && gte(v.version, '0.8.0'),
       instance.api_versions['polls.pleroma.pl-api'] >= 1,
@@ -1412,6 +1444,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === MITRA,
+      v.software === NEODB,
       v.software === PLEROMA,
       v.software === SHARKEY,
       v.software === SNAC,
@@ -1442,6 +1475,7 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === MITRA,
+      v.software === NEODB,
       v.software === PLEROMA,
       v.software === SNAC,
       v.software === TAKAHE,
@@ -1717,8 +1751,10 @@ const getFeatures = (instance: Instance) => {
       v.software === FRIENDICA && gte(v.version, '2022.12.0'),
       v.software === ICESHRIMP,
       v.software === MASTODON,
+      v.software === NEODB,
       v.software === PIXELFED,
       v.software === SHARKEY,
+      v.software === TAKAHE && gte(v.version, '0.12.0'),
     ]),
 
     /**

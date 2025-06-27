@@ -96,9 +96,14 @@ const fixVersion = (version: string) => {
     return version.split('rc').join('-rc');
   }
 
+
   // Set Takahē version to a Pleroma-like string
   if (version.startsWith('takahe/')) {
     return `0.0.0 (compatible; Takahe ${version.slice(7)})`;
+  }
+  // Set NeoDB version to a Pleroma-like string
+  if (version.startsWith('neodb/')) {
+    return `0.0.0 (compatible; NeoDB ${version.slice(7)})`;
   }
 
   const wordPressMatch = WORDPRESS_REGEX.exec(version);
