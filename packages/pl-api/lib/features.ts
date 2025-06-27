@@ -184,7 +184,6 @@ const UNRELEASED = 'unreleased';
 const getFeatures = (instance: Instance) => {
   const v = parseVersion(instance.version || '');
   const federation = !!instance.pleroma.metadata.federation.enabled;
-  console.log(v);
 
   return {
     version: v,
