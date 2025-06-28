@@ -84,16 +84,16 @@ const Report: React.FC<IReport> = ({ id }) => {
 
   return (
     <HStack space={3} className='p-3' key={report.id}>
-      <HoverAccountWrapper accountId={targetAccount.id} element='span'>
-        <Link to={`/@${acct}`} title={acct}>
+      <Link to={`/@${acct}`} title={acct}>
+        <HoverAccountWrapper accountId={targetAccount.id} element='span'>
           <Avatar
             src={targetAccount.avatar}
             alt={targetAccount.avatar_description}
             size={32}
             isCat={targetAccount.is_cat}
           />
-        </Link>
-      </HoverAccountWrapper>
+        </HoverAccountWrapper>
+      </Link>
 
       <Stack space={3} className='overflow-hidden' grow>
         <Text tag='h4' weight='bold'>
@@ -101,9 +101,11 @@ const Report: React.FC<IReport> = ({ id }) => {
             id='admin.reports.report_title'
             defaultMessage='Report on {acct}'
             values={{ acct: (
-              <HoverAccountWrapper accountId={targetAccount.id} element='span'>
-                <Link to={`/@${acct}`} title={acct}>@{acct}</Link>
-              </HoverAccountWrapper>
+              <Link to={`/@${acct}`} title={acct}>
+                <HoverAccountWrapper accountId={targetAccount.id} element='span'>
+                  @{acct}
+                </HoverAccountWrapper>
+              </Link>
             ) }}
           />
         </Text>
@@ -136,15 +138,15 @@ const Report: React.FC<IReport> = ({ id }) => {
             <HStack space={1}>
               <Text theme='muted' tag='span'>&mdash;</Text>
 
-              <HoverAccountWrapper accountId={account.id} element='span'>
-                <Link
-                  to={`/@${reporterAcct}`}
-                  title={reporterAcct}
-                  className='text-primary-600 hover:underline dark:text-accent-blue'
-                >
+              <Link
+                to={`/@${reporterAcct}`}
+                title={reporterAcct}
+                className='text-primary-600 hover:underline dark:text-accent-blue'
+              >
+                <HoverAccountWrapper accountId={account.id} element='span'>
                   @{reporterAcct}
-                </Link>
-              </HoverAccountWrapper>
+                </HoverAccountWrapper>
+              </Link>
             </HStack>
           )}
         </Stack>

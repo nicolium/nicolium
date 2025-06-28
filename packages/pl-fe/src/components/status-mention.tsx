@@ -20,16 +20,16 @@ const StatusMention: React.FC<IStatusMention> = ({ accountId, fallback }) => {
   );
 
   return (
-    <HoverAccountWrapper accountId={accountId} element='span'>
-      <Link
-        to={`/@${account.acct}`}
-        className='text-primary-600 hover:underline dark:text-accent-blue'
-        dir='ltr'
-        onClick={(e) => e.stopPropagation()}
-      >
+    <Link
+      to={`/@${account.acct}`}
+      className='text-primary-600 hover:underline dark:text-accent-blue'
+      dir='ltr'
+      onClick={(e) => e.stopPropagation()}
+    >
+      <HoverAccountWrapper accountId={accountId} element='span'>
         @{account.acct}
-      </Link>
-    </HoverAccountWrapper>
+      </HoverAccountWrapper>
+    </Link>
   );
 };
 

@@ -37,8 +37,8 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
   }
 
   const accounts: Array<React.ReactNode> = familiarFollowers.map(account => !!account && (
-    <HoverAccountWrapper accountId={account.id} key={account.id} element='span'>
-      <Link className='mention inline-block' to={`/@${account.acct}`}>
+    <Link className='mention inline-block' to={`/@${account.acct}`}>
+      <HoverAccountWrapper accountId={account.id} key={account.id} element='span'>
         <HStack space={1} alignItems='center' grow>
           <Text size='sm' theme='primary' truncate>
             <Emojify text={account.display_name} emojis={account.emojis} />
@@ -46,8 +46,8 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
 
           {account.verified && <VerificationBadge />}
         </HStack>
-      </Link>
-    </HoverAccountWrapper>
+      </HoverAccountWrapper>
+    </Link>
   )).filter(Boolean);
 
   if (familiarFollowerIds.length > 2) {

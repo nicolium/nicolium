@@ -68,8 +68,8 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
           className='h-32 w-full rounded-t-lg object-cover'
         />
 
-        <HoverAccountWrapper key={account.id} accountId={account.id} element='span'>
-          <Link to={`/@${account.acct}`} title={account.acct}>
+        <Link to={`/@${account.acct}`} title={account.acct}>
+          <HoverAccountWrapper key={account.id} accountId={account.id} element='span'>
             <Avatar
               src={account.avatar}
               alt={account.avatar_description}
@@ -77,8 +77,8 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
               size={64}
               isCat={account.is_cat}
             />
-          </Link>
-        </HoverAccountWrapper>
+          </HoverAccountWrapper>
+        </Link>
       </div>
 
       <Stack space={4} className='p-3 pt-10'>

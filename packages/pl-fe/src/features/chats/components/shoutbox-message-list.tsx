@@ -41,15 +41,15 @@ const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) =
         })}
       >
         {!isMyMessage && (
-          <HoverAccountWrapper accountId={account.id} element='span'>
-            <Link className='mb-0.5' to={`/@${account.acct}`} title={account.acct}>
+          <Link className='mb-0.5' to={`/@${account.acct}`} title={account.acct}>
+            <HoverAccountWrapper accountId={account.id} element='span'>
               <Avatar
                 src={account.avatar}
                 alt={account.avatar_description}
                 size={32}
               />
-            </Link>
-          </HoverAccountWrapper>
+            </HoverAccountWrapper>
+          </Link>
         )}
 
         <Stack

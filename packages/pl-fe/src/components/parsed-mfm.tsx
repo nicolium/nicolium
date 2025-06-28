@@ -410,16 +410,16 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
           if (mention) {
             return (
               <bdi>
-                <HoverAccountWrapper accountId={mention.id} element='span'>
-                  <Link
-                    to={`/@${mention.acct}`}
-                    className='text-primary-600 hover:underline dark:text-accent-blue'
-                    dir='ltr'
-                    onClick={(e) => e.stopPropagation()}
-                  >
+                <Link
+                  to={`/@${mention.acct}`}
+                  className='text-primary-600 hover:underline dark:text-accent-blue'
+                  dir='ltr'
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <HoverAccountWrapper accountId={mention.id} element='span'>
                     @{mention.username}
-                  </Link>
-                </HoverAccountWrapper>
+                  </HoverAccountWrapper>
+                </Link>
               </bdi>
             );
           }

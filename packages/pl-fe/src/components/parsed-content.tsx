@@ -265,16 +265,16 @@ function parseContent({
             const mention = mentions.find(({ url }) => domNode.attribs.href === url);
             if (mention) {
               return (
-                <HoverAccountWrapper accountId={mention.id} element='span'>
-                  <Link
-                    to={`/@${mention.acct}`}
-                    className='text-primary-600 hover:underline dark:text-accent-blue'
-                    dir='ltr'
-                    onClick={(e) => e.stopPropagation()}
-                  >
+                <Link
+                  to={`/@${mention.acct}`}
+                  className='text-primary-600 hover:underline dark:text-accent-blue'
+                  dir='ltr'
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <HoverAccountWrapper accountId={mention.id} element='span'>
                     @{mention.username}
-                  </Link>
-                </HoverAccountWrapper>
+                  </HoverAccountWrapper>
+                </Link>
               );
             }
           } else if (domNode.attribs['data-user']) {

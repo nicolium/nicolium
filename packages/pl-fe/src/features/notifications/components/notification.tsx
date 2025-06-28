@@ -37,15 +37,15 @@ const notificationForScreenReader = (intl: IntlShape, message: string, timestamp
 };
 
 const buildLink = (account: Pick<Account, 'acct' | 'display_name' | 'emojis' | 'id'>): JSX.Element => (
-  <HoverAccountWrapper key={account.acct} element='bdi' accountId={account.id}>
-    <Link
-      className='font-bold text-gray-800 hover:underline dark:text-gray-200'
-      title={account.acct}
-      to={`/@${account.acct}`}
-    >
+  <Link
+    className='font-bold text-gray-800 hover:underline dark:text-gray-200'
+    title={account.acct}
+    to={`/@${account.acct}`}
+  >
+    <HoverAccountWrapper key={account.acct} element='bdi' accountId={account.id}>
       <Emojify text={account.display_name} emojis={account.emojis} />
-    </Link>
-  </HoverAccountWrapper>
+    </HoverAccountWrapper>
+  </Link>
 );
 
 const icons: Partial<Record<NotificationType | 'reply', string>> = {
