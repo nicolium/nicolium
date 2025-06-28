@@ -244,6 +244,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
         closeModal('DROPDOWN_MENU');
       };
       openModal('DROPDOWN_MENU', {
+        element: refs.reference.current as HTMLButtonElement,
         content: <DropdownMenuContent handleClose={handleClose} items={items} component={component} touchscreen />,
       });
     } else {
@@ -256,7 +257,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
     }
   };
 
-  const handleClose = (goBack: any = true) => {
+  const handleClose = () => {
     (refs.reference.current as HTMLButtonElement)?.focus();
 
     closeDropdownMenu();
