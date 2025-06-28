@@ -32,10 +32,12 @@ interface IInstanceFavicon {
 
 const messages = defineMessages({
   bot: { id: 'account.badges.bot', defaultMessage: 'Bot' },
+  timeline: { id: 'account.instance_favicon', defaultMessage: 'Visit {domain} timeline' },
 });
 
 const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
   const history = useHistory();
+  const intl = useIntl();
 
   const handleClick: React.MouseEventHandler = (e) => {
     e.stopPropagation();
@@ -59,6 +61,7 @@ const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
       className='size-4 flex-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2'
       onClick={handleClick}
       disabled={disabled}
+      title={intl.formatMessage(messages.timeline, { domain: account.domain })}
     >
       <img src={account.favicon} alt='' title={account.domain} className='max-h-full w-full' />
     </button>

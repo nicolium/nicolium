@@ -34,6 +34,7 @@
   "account.header.alt": "Profile header",
   "account.header.description": "Header description",
   "account.hide_reblogs": "Hide reposts from @{name}",
+  "account.instance_favicon": "Visit {domain} timeline",
   "account.last_status": "Last active",
   "account.link_verified_on": "Ownership of this link was checked on {date}",
   "account.load_activities": "Fetch latest posts",
