@@ -1,8 +1,15 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { defineMessages } from 'react-intl';
 
 import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
+import toast from 'pl-fe/toast';
+
+const messages = defineMessages({
+  createSuccess: { id: 'aliases.success.add', defaultMessage: 'Account alias created successfully' },
+  removeSuccess: { id: 'aliases.success.remove', defaultMessage: 'Account alias removed successfully' },
+});
 
 const useAccountAliases = () => {
   const client = useClient();
@@ -25,6 +32,7 @@ const useAddAccountAlias = () => {
   return useMutation({
     mutationKey: ['settings', 'accountAliases'],
     mutationFn: (acct: string) => client.settings.addAccountAlias(acct),
+    onSuccess: () => toast.success(messages.createSuccess),
     onSettled: () => queryClient.invalidateQueries({
       queryKey: ['settings', 'accountAliases'],
     }),
@@ -38,6 +46,7 @@ const useDeleteAccountAlias = () => {
   return useMutation({
     mutationKey: ['settings', 'accountAliases'],
     mutationFn: (acct: string) => client.settings.deleteAccountAlias(acct),
+    onSuccess: () => toast.success(messages.removeSuccess),
     onSettled: () => queryClient.invalidateQueries({
       queryKey: ['settings', 'accountAliases'],
     }),
