@@ -21,7 +21,8 @@ const messages = defineMessages({
   notifications: { id: 'navigation.notifications', defaultMessage: 'Notifications' },
   chats: { id: 'navigation.chats', defaultMessage: 'Chats' },
   compose: { id: 'navigation.compose', defaultMessage: 'Compose' },
-  sidebar: { id: 'navigation.sidebar', defaultMessage: 'Open sidebar' },
+  openSidebar: { id: 'navigation.sidebar', defaultMessage: 'Open sidebar' },
+  closeSidebar: { id: 'navigation.sidebar.close', defaultMessage: 'Close sidebar' },
 });
 
 const ThumbNavigation: React.FC = React.memo((): JSX.Element => {
@@ -32,7 +33,7 @@ const ThumbNavigation: React.FC = React.memo((): JSX.Element => {
 
   const match = useRouteMatch<{ groupId: string }>('/groups/:groupId');
 
-  const { openSidebar } = useUiStore();
+  const { openSidebar, closeSidebar, isSidebarOpen } = useUiStore();
   const { openModal } = useModalsStore();
   const { unreadChatsCount } = useStatContext();
 
@@ -67,8 +68,8 @@ const ThumbNavigation: React.FC = React.memo((): JSX.Element => {
     <div className='fixed inset-x-0 bottom-0 z-50 flex w-full overflow-x-auto border-t border-solid border-gray-200 bg-white/90 shadow-2xl backdrop-blur-md black:bg-black/80 dark:border-gray-800 dark:bg-primary-900/90 lg:hidden'>
       <button
         className='flex flex-1 flex-col items-center px-2 py-4 text-lg text-gray-600'
-        onClick={openSidebar}
-        title={intl.formatMessage(messages.sidebar)}
+        onClick={isSidebarOpen ? closeSidebar : openSidebar}
+        title={intl.formatMessage(isSidebarOpen ? messages.closeSidebar : messages.openSidebar)}
       >
         <Icon
           src={require('@tabler/icons/outline/menu-2.svg')}

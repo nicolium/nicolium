@@ -1172,6 +1172,7 @@
   "navigation.notifications": "Notifications",
   "navigation.search": "Search",
   "navigation.sidebar": "Open sidebar",
+  "navigation.sidebar.close": "Close sidebar",
   "navigation.source_code": "Source code",
   "navigation_bar.account_aliases": "Account aliases",
   "navigation_bar.blocks": "Blocks",
