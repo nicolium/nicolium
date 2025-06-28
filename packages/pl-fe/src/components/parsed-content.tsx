@@ -53,15 +53,16 @@ interface IParsedUrl extends React.HTMLAttributes<HTMLAnchorElement> {
 const ParsedUrl: React.FC<IParsedUrl> = React.memo((props) => {
   const { urlPrivacy } = useSettings();
 
-  props = { ...props };
+  // eslint-disable-next-line prefer-const
+  let { cleanUrls, redirectUrls, displayTargetHost, childrenPlain, ...anchorProps } = props;
 
-  if (props.cleanUrls === undefined) props.cleanUrls = urlPrivacy.clearLinksInContent;
-  if (props.redirectUrls === undefined) props.redirectUrls = urlPrivacy.redirectLinksMode !== 'off';
-  if (props.displayTargetHost === undefined) props.displayTargetHost = urlPrivacy.displayTargetHost;
+  if (cleanUrls === undefined) cleanUrls = urlPrivacy.clearLinksInContent;
+  if (redirectUrls === undefined) redirectUrls = urlPrivacy.redirectLinksMode !== 'off';
+  if (displayTargetHost === undefined) displayTargetHost = urlPrivacy.displayTargetHost;
 
   let href = props.href;
 
-  if (props.cleanUrls) {
+  if (cleanUrls) {
     try {
       href = Purify.clearUrl(href, props.cleanUrls, props.redirectUrls);
     } catch (_) {
@@ -69,11 +70,11 @@ const ParsedUrl: React.FC<IParsedUrl> = React.memo((props) => {
     }
   }
 
-  const host = props.displayTargetHost && isHostNotVisible(href, props.childrenPlain);
+  const host = displayTargetHost && isHostNotVisible(href, childrenPlain);
 
   return (
     <a
-      {...props}
+      {...anchorProps}
       href={href}
       onClick={(e) => e.stopPropagation()}
       rel='nofollow noopener noreferrer'
