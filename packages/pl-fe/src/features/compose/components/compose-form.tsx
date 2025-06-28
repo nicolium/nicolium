@@ -87,7 +87,7 @@ interface IComposeButton extends Pick<
 const ComposeButton: React.FC<IComposeButton> = ({ actionsMenu, disabled, icon, text, ...props }) => {
   const intl = useIntl();
 
-  const containerClassName = 'flex items-center gap-px overflow-hidden rounded-full text-sm font-medium text-gray-100';
+  const containerClassName = 'flex items-center gap-px text-sm font-medium text-gray-100';
   const buttonClassName = 'inline-flex select-none appearance-none border border-transparent bg-primary-500 transition-all hover:bg-primary-400 focus:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:ring-offset-2 disabled:cursor-default disabled:opacity-75 dark:hover:bg-primary-600';
 
   const button = (
@@ -97,8 +97,9 @@ const ComposeButton: React.FC<IComposeButton> = ({ actionsMenu, disabled, icon, 
       className={clsx({
         'place-content-center items-center gap-x-2 px-4 py-2 rtl:space-x-reverse': true,
         [buttonClassName]: true,
-        'pr-2': actionsMenu,
+        'rounded-l-full pr-2': actionsMenu,
         [containerClassName]: !actionsMenu,
+        'rounded-full': !actionsMenu,
       })}
     >
       {icon ? <Icon src={icon} className='size-4' /> : null}
@@ -111,7 +112,7 @@ const ComposeButton: React.FC<IComposeButton> = ({ actionsMenu, disabled, icon, 
       <div className={containerClassName}>
         {button}
         <DropdownMenu items={actionsMenu} placement='bottom' disabled={disabled}>
-          <button className={clsx('h-full cursor-pointer py-2.5 pl-1 pr-3', buttonClassName)} title={intl.formatMessage(messages.more)}>
+          <button className={clsx('h-full cursor-pointer py-2.5 pl-1 pr-3 last:rounded-r-full', buttonClassName)} title={intl.formatMessage(messages.more)}>
             <SvgIcon src={require('@tabler/icons/filled/caret-down.svg')} className='size-4' />
           </button>
         </DropdownMenu>
