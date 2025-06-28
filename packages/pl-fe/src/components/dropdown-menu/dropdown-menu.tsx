@@ -2,6 +2,7 @@ import { offset, Placement, useFloating, flip, arrow, shift, autoUpdate } from '
 import clsx from 'clsx';
 import { supportsPassiveEvents } from 'detect-passive-events';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 import ReactSwipeableViews from 'react-swipeable-views';
 
 import HStack from 'pl-fe/components/ui/hstack';
@@ -12,6 +13,10 @@ import { useModalsStore } from 'pl-fe/stores/modals';
 import { useUiStore } from 'pl-fe/stores/ui';
 
 import DropdownMenuItem, { MenuItem } from './dropdown-menu-item';
+
+const messages = defineMessages({
+  back: { id: 'card.back.label', defaultMessage: 'Back' },
+});
 
 type Menu = Array<MenuItem | null>;
 
@@ -38,6 +43,8 @@ interface IDropdownMenu {
 const listenerOptions = supportsPassiveEvents ? { passive: true } : false;
 
 const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, items, component: Component, touchscreen }) => {
+  const intl = useIntl();
+
   const [tab, setTab] = useState<number>();
   const ref = useRef<HTMLDivElement>(null);
 
@@ -157,6 +164,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
                     iconClassName='h-5 w-5'
                     onClick={handleExitSubmenu}
                     autoFocus
+                    title={intl.formatMessage(messages.back)}
                   />
                   {items![tab]?.text}
                 </HStack>
