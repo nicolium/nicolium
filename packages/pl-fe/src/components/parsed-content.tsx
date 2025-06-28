@@ -226,39 +226,11 @@ function parseContent({
           domNode.greentext = true;
         }
 
-        // let href = domNode.attribs.href;
-
-        // if (cleanUrls) {
-        //   try {
-        //     href = Purify.clearUrl(href, cleanUrls, redirectUrls);
-        //   } catch (_) {
-        //     //
-        //   }
-        // }
-
-        // const host = displayTargetHost && isHostNotVisible(href, domNode.children as Array<DOMNode>);
-
         const fallback = (
           <ParsedUrl {...domNode.attribs as any} childrenPlain={nodesToText(domNode.children as Array<DOMNode>).trim()}>
             {domToReact(domNode.children as Array<DOMNode>, options)}
           </ParsedUrl>
         );
-        //   (
-        //   // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-        //   <a
-        //     {...domNode.attribs}
-        //     href={href}
-        //     onClick={(e) => e.stopPropagation()}
-        //     rel='nofollow noopener noreferrer'
-        //     target='_blank'
-        //     title={domNode.attribs.href}
-        //   >
-        //     {domToReact(domNode.children as Array<DOMNode>, options)}
-        //     {host && (
-        //       <span className='text-xs lowercase'>{' '}[{host}]</span>
-        //     )}
-        //   </a>
-        // );
 
         if (classes?.includes('mention')) {
           if (mentions) {
