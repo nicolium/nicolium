@@ -537,6 +537,7 @@
   "compose_form.preview_label": "Preview",
   "compose_form.publish": "Post",
   "compose_form.publish_loud": "{publish}!",
+  "compose_form.remaining_character_count": "Remaining characters: {value} of {max}",
   "compose_form.save_changes": "Save changes",
   "compose_form.schedule": "Schedule",
   "compose_form.sensitive.marked": "Media is marked as sensitive",
