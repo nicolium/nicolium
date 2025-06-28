@@ -318,7 +318,7 @@ const Thread: React.FC<IThread> = ({
         offset: -146,
       });
 
-      setTimeout(() => statusRef.current?.querySelector<HTMLDivElement>('.detailed-actualStatus')?.focus(), 0);
+      setTimeout(() => (node.current?.querySelector('.detailed-actualStatus') as HTMLDivElement)?.focus(), 100);
     }, 0);
   }, [status.id, ancestorsIds.length]);
 
