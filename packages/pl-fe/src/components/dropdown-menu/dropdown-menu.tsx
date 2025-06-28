@@ -310,6 +310,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
   }, []);
 
   useEffect(() => {
+    (refs.reference.current as HTMLButtonElement).setAttribute('aria-expanded', String(isOpen));
     setTimeout(() => setIsDisplayed(isOpen), isOpen ? 0 : 150);
 
   }, [isOpen]);
@@ -324,6 +325,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
       onClick: handleClick,
       onKeyPress: handleKeyPress,
       ref: refs.setReference,
+      'aria-expanded': isOpen,
     });
   }, [children, !!items?.length, component]);
 
