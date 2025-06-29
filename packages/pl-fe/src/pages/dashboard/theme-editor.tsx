@@ -55,6 +55,7 @@ const ThemeEditorPage: React.FC<IThemeEditor> = () => {
   const rawConfig = useAppSelector(state => state.plfe);
 
   const [colors, setColors] = useState(normalizeColors(plFeConfig));
+  const [isDefault, setIsDefault] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [resetKey, setResetKey] = useState(crypto.randomUUID());
 
@@ -63,6 +64,7 @@ const ThemeEditorPage: React.FC<IThemeEditor> = () => {
   const updateColors = (key: string) => (newColors: ColorGroup) => {
     if (typeof colors[key] === 'string') return;
 
+    setIsDefault(false);
     setColors({
       ...colors,
       [key]: {
@@ -73,6 +75,7 @@ const ThemeEditorPage: React.FC<IThemeEditor> = () => {
   };
 
   const updateColor = (key: string) => (hex: string) => {
+    setIsDefault(false);
     setColors({
       ...colors,
       [key]: hex,
@@ -81,6 +84,7 @@ const ThemeEditorPage: React.FC<IThemeEditor> = () => {
 
   const setTheme = (theme: any) => {
     setResetKey(crypto.randomUUID());
+    setIsDefault(false);
     setTimeout(() => setColors(theme));
   };
 
@@ -89,13 +93,19 @@ const ThemeEditorPage: React.FC<IThemeEditor> = () => {
   };
 
   const updateTheme = async () => {
-    const params = { ...rawConfig, colors };
+    let params;
+    if (isDefault) {
+      params = { ...rawConfig, colors: undefined, brandColor: undefined, accentColor: undefined };
+    } else {
+      params = { ...rawConfig, colors };
+    }
     await dispatch(updatePlFeConfig(params));
   };
 
   const restoreDefaultTheme = () => {
     const config = v.parse(plFeConfigSchema, { brandColor: '#d80482' });
     setTheme(normalizeColors(config));
+    setIsDefault(true);
   };
 
   const exportTheme = () => {

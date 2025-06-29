@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 
+import InlineStyle from 'pl-fe/components/inline-style';
 import { useLocale, useLocaleDirection } from 'pl-fe/hooks/use-locale';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { useSettings } from 'pl-fe/hooks/use-settings';
@@ -39,19 +40,23 @@ const PlFeHead = () => {
   }, [dsn]);
 
   return (
-    <Helmet>
-      <html
-        lang={locale}
-        className={clsx('h-full', `text-${themeSettings?.interfaceSize || 'md'}`, {
-          'dark': theme === 'dark',
-          'dark black': theme === 'black',
-        })}
-        // @ts-ignore
-        style={themeCss + (['dark', 'black'].includes(theme) ? 'color-scheme: dark;' : '')}
-      />
-      <body className={bodyClass} dir={direction} />
-      <meta name='theme-color' content={plFeConfig.brandColor} />
-    </Helmet>
+    <>
+      <Helmet>
+        <html
+          lang={locale}
+          className={clsx('h-full', `text-${themeSettings?.interfaceSize || 'md'}`, {
+            'dark': theme === 'dark',
+            'dark black': theme === 'black',
+          })}
+        />
+        <body className={bodyClass} dir={direction} />
+        <meta name='theme-color' content={plFeConfig.brandColor} />
+      </Helmet>
+      <InlineStyle>{`:root { ${themeCss} }`}</InlineStyle>
+      {['dark', 'black'].includes(theme) && (
+        <InlineStyle>{':root { color-scheme: dark; }'}</InlineStyle>
+      )}
+    </>
   );
 };
 

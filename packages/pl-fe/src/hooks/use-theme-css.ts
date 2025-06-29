@@ -80,7 +80,7 @@ const useThemeCss = (overwriteConfig?: PlFeConfig) => {
     } catch (_) {
       return generateThemeCss({});
     }
-  }, [demo, plFeConfig, theme]);
+  }, [overwriteConfig, demo, plFeConfig, theme]);
 };
 
 export { normalizeColors, useThemeCss };

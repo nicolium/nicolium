@@ -22,6 +22,7 @@ import Toggle from 'pl-fe/components/ui/toggle';
 import CryptoAddressInput from 'pl-fe/features/pl-fe-config/components/crypto-address-input';
 import FooterLinkInput from 'pl-fe/features/pl-fe-config/components/footer-link-input';
 import PromoPanelInput from 'pl-fe/features/pl-fe-config/components/promo-panel-input';
+import SitePreview from 'pl-fe/features/pl-fe-config/components/site-preview';
 import ThemeSelector from 'pl-fe/features/ui/components/theme-selector';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
@@ -179,7 +180,7 @@ const PlFeConfigEditor: React.FC = () => {
     <Column label={intl.formatMessage(messages.heading)}>
       <Form onSubmit={handleSubmit}>
         <fieldset className='space-y-6' disabled={isLoading}>
-          {/* <SitePreview plFe={plFe} /> */}
+          <SitePreview plFe={plFe} />
 
           <CardHeader>
             <CardTitle title={<FormattedMessage id='plfe_config.headings.theme' defaultMessage='Theme' />} />

@@ -2,10 +2,10 @@ import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import InlineStyle from 'pl-fe/components/inline-style';
 import BackgroundShapes from 'pl-fe/features/ui/components/background-shapes';
 import { useSystemTheme } from 'pl-fe/hooks/use-system-theme';
 import { useThemeCss } from 'pl-fe/hooks/use-theme-css';
-import { useSettingsStore } from 'pl-fe/stores/settings';
 
 import type { PlFeConfig } from 'pl-fe/normalizers/pl-fe/pl-fe-config';
 
@@ -16,9 +16,7 @@ interface ISitePreview {
 
 /** Renders a preview of the website's style with the configuration applied. */
 const SitePreview: React.FC<ISitePreview> = ({ plFe }) => {
-  const { defaultSettings } = useSettingsStore();
-
-  const userTheme = defaultSettings.themeMode;
+  const userTheme = plFe.defaultSettings.themeMode;
   const systemTheme = useSystemTheme();
 
   const dark = ['dark', 'black'].includes(userTheme as string) || (userTheme === 'system' && systemTheme === 'black');
@@ -32,13 +30,14 @@ const SitePreview: React.FC<ISitePreview> = ({ plFe }) => {
     'h-40 overflow-hidden rounded-lg',
     {
       'bg-white': !dark,
-      'bg-gray-900': dark,
+      'bg-gray-900': dark && userTheme !== 'black',
+      'bg-black': userTheme === 'black',
     });
 
   return (
     <div className={bodyClass}>
-      <style>{`.site-preview {${themeCss}}`}</style>
-      <BackgroundShapes position='absolute' />
+      <InlineStyle>{`.site-preview {${themeCss}}`}</InlineStyle>
+      <BackgroundShapes position='absolute' hidden={userTheme === 'black'} />
 
       <div className='absolute z-[2] self-center overflow-hidden rounded-lg bg-accent-500 p-2 text-white'>
         <FormattedMessage id='site_preview.preview' defaultMessage='Preview' />
