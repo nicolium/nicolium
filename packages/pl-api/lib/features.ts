@@ -1,4 +1,5 @@
 import semverCoerce from 'semver/functions/coerce';
+import gt from 'semver/functions/gt';
 import gte from 'semver/functions/gte';
 import semverParse from 'semver/functions/parse';
 
@@ -620,6 +621,7 @@ const getFeatures = (instance: Instance) => {
      */
     customEmojiReacts: any([
       instance.api_versions['custom_emoji_reactions.pleroma.pl-api'] >= 1,
+      v.software === DITTO && gt(v.version, '1.2.0'),
       v.software === MITRA && gte(v.version, '3.4.0'),
     ]),
 
