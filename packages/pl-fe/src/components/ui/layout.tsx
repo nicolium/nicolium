@@ -6,6 +6,7 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 
 interface ISidebar {
   children: React.ReactNode;
+  shrink?: boolean;
 }
 interface IAside {
   children?: React.ReactNode;
@@ -13,6 +14,7 @@ interface IAside {
 
 interface ILayout {
   children: React.ReactNode;
+  fullWidth?: boolean;
 }
 
 interface LayoutComponent extends React.FC<ILayout> {
@@ -22,17 +24,25 @@ interface LayoutComponent extends React.FC<ILayout> {
 }
 
 /** Layout container, to hold Sidebar, Main, and Aside. */
-const Layout: LayoutComponent = ({ children }) => (
+const Layout: LayoutComponent = ({ children, fullWidth }) => (
   <div className='relative flex grow flex-col black:pt-0 sm:pt-4'>
-    <div className='mx-auto w-full max-w-3xl grow sm:px-6 md:grid md:max-w-7xl md:grid-cols-12 md:gap-8 md:px-8 xl:max-w-[1440px]'>
+    <div
+      className={clsx(
+        'mx-auto w-full max-w-3xl grow sm:px-6 md:gap-8 md:px-8',
+        {
+          'flex md:max-w-full': fullWidth,
+          'md:grid md:max-w-7xl md:grid-cols-12 xl:max-w-[1440px]': !fullWidth,
+        },
+      )}
+    >
       {children}
     </div>
   </div>
 );
 
 /** Left sidebar container in the UI. */
-const Sidebar: React.FC<ISidebar> = ({ children }) => (
-  <div className='hidden lg:col-span-3 lg:block'>
+const Sidebar: React.FC<ISidebar> = ({ children, shrink }) => (
+  <div className={clsx('hidden lg:block', { 'lg:col-span-3': !shrink, 'w-fit': shrink })}>
     <StickyBox offsetTop={16} className='pb-4'>
       {children}
     </StickyBox>

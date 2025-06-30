@@ -488,6 +488,9 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
     pointerEvents: isDropdownMenuOpen ? 'none' : undefined,
   };
 
+  // to be used with the deck
+  const fullWidth = false;
+
   return (
     <GlobalHotkeys node={node}>
       <div ref={node} style={style}>
@@ -500,9 +503,9 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
         <BackgroundShapes />
 
         <div className='z-10 flex min-h-screen flex-col'>
-          <Layout>
-            <Layout.Sidebar>
-              {!(standalone && !me) && <SidebarNavigation />}
+          <Layout fullWidth={fullWidth}>
+            <Layout.Sidebar shrink={fullWidth}>
+              {!(standalone && !me) && <SidebarNavigation shrink={fullWidth} />}
             </Layout.Sidebar>
 
             <SwitchingColumnsArea>

@@ -10,7 +10,12 @@ import HStack from 'pl-fe/components/ui/hstack';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
-const ComposeButton = () => {
+interface IComposeButton {
+  /** Whether the button should shrink to fit in a smaller space. */
+  shrink?: boolean;
+}
+
+const ComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
   const location = useLocation();
   const isOnGroupPage = location.pathname.startsWith('/group/');
   const match = useRouteMatch<{ groupId: string }>('/groups/:groupId');
@@ -18,13 +23,13 @@ const ComposeButton = () => {
   const isGroupMember = !!group?.relationship?.member;
 
   if (isOnGroupPage && isGroupMember) {
-    return <GroupComposeButton />;
+    return <GroupComposeButton shrink={shrink} />;
   }
 
-  return <HomeComposeButton />;
+  return <HomeComposeButton shrink={shrink} />;
 };
 
-const HomeComposeButton = () => {
+const HomeComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
   const { openModal } = useModalsStore();
   const onOpenCompose = () => openModal('COMPOSE');
 
@@ -34,13 +39,16 @@ const HomeComposeButton = () => {
       size='lg'
       onClick={onOpenCompose}
       block
+      icon={shrink ? require('@tabler/icons/outline/plus.svg') : undefined}
     >
-      <FormattedMessage id='navigation.compose' defaultMessage='Compose' />
+      {!shrink && (
+        <FormattedMessage id='navigation.compose' defaultMessage='Compose' />
+      )}
     </Button>
   );
 };
 
-const GroupComposeButton = () => {
+const GroupComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
   const dispatch = useAppDispatch();
   const match = useRouteMatch<{ groupId: string }>('/groups/:groupId');
   const { group } = useGroup(match?.params.groupId || '');
@@ -57,13 +65,16 @@ const GroupComposeButton = () => {
       size='lg'
       onClick={onOpenCompose}
       block
+      icon={shrink ? require('@tabler/icons/outline/plus.svg') : undefined}
     >
-      <HStack space={3} alignItems='center'>
-        <Avatar className='-my-1 border-2 border-white' size={30} src={group.avatar} alt={group.avatar_description} />
-        <span>
-          <FormattedMessage id='navigation.compose_group' defaultMessage='Compose to group' />
-        </span>
-      </HStack>
+      {!shrink && (
+        <HStack space={3} alignItems='center'>
+          <Avatar className='-my-1 border-2 border-white' size={30} src={group.avatar} alt={group.avatar_description} />
+          <span>
+            <FormattedMessage id='navigation.compose_group' defaultMessage='Compose to group' />
+          </span>
+        </HStack>
+      )}
     </Button>
   );
 };

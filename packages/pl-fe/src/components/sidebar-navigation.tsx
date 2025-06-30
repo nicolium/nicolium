@@ -1,4 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
+import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -21,6 +22,7 @@ import DropdownMenu, { Menu } from './dropdown-menu';
 import SearchInput from './search-input';
 import SidebarNavigationLink from './sidebar-navigation-link';
 import SiteLogo from './site-logo';
+import Avatar from './ui/avatar';
 
 const messages = defineMessages({
   followRequests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
@@ -36,8 +38,13 @@ const messages = defineMessages({
   interactionRequests: { id: 'navigation.interaction_requests', defaultMessage: 'Interaction requests' },
 });
 
+interface ISidebarNavigation {
+  /** Whether the sidebar is in shrinked mode. */
+  shrink?: boolean;
+}
+
 /** Desktop sidebar with links to different views in the app. */
-const SidebarNavigation = React.memo(() => {
+const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) => {
   const intl = useIntl();
   const { unreadChatsCount } = useStatContext();
 
@@ -161,24 +168,41 @@ const SidebarNavigation = React.memo(() => {
   }, [!!account, features, followRequestsCount, interactionRequestsCount, scheduledStatusCount, draftCount]);
 
   return (
-    <Stack space={4}>
-      <SiteLogo className='h-12 w-auto cursor-pointer' />
+    <Stack space={4} alignItems={shrink ? 'center' : undefined}>
+      <SiteLogo
+        className={clsx('h-12 w-auto cursor-pointer', {
+          'max-w-10 h-auto': shrink,
+        })}
+      />
 
       {account && (
         <Stack space={4}>
           <div className='relative flex items-center'>
             <ProfileDropdown account={account}>
-              <Account
-                account={account}
-                action={<Icon src={require('@tabler/icons/outline/chevron-down.svg')} className='text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500' />}
-                disabled
-                withLinkToProfile={false}
-              />
+              {shrink ? (
+                <Avatar
+                  src={account.avatar}
+                  alt={account.avatar_description}
+                  isCat={account.is_cat}
+                  username={account.username}
+                  size={40}
+                />
+              // className='size-10 bg-gray-50 ring-2 ring-white'
+              ) : (
+                <Account
+                  account={account}
+                  action={<Icon src={require('@tabler/icons/outline/chevron-down.svg')} className='text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500' />}
+                  disabled
+                  withLinkToProfile={false}
+                />
+              )}
             </ProfileDropdown>
           </div>
-          <div className='block w-full max-w-xs'>
-            <SearchInput />
-          </div>
+          {!shrink && (
+            <div className='block w-full max-w-xs'>
+              <SearchInput />
+            </div>
+          )}
         </Stack>
       )}
 
@@ -188,12 +212,14 @@ const SidebarNavigation = React.memo(() => {
           icon={require('@tabler/icons/outline/home.svg')}
           activeIcon={require('@tabler/icons/filled/home.svg')}
           text={<FormattedMessage id='tabs_bar.home' defaultMessage='Home' />}
+          shrink={shrink}
         />
 
         <SidebarNavigationLink
           to='/search'
           icon={require('@tabler/icons/outline/search.svg')}
           text={<FormattedMessage id='tabs_bar.search' defaultMessage='Search' />}
+          shrink={shrink}
         />
 
         {account && (
@@ -204,6 +230,7 @@ const SidebarNavigation = React.memo(() => {
               activeIcon={require('@tabler/icons/filled/bell.svg')}
               count={notificationCount}
               text={<FormattedMessage id='tabs_bar.notifications' defaultMessage='Notifications' />}
+              shrink={shrink}
             />
 
             {features.chats && (
@@ -213,6 +240,7 @@ const SidebarNavigation = React.memo(() => {
                 count={unreadChatsCount}
                 countMax={9}
                 text={<FormattedMessage id='navigation.chats' defaultMessage='Chats' />}
+                shrink={shrink}
               />
             )}
 
@@ -222,6 +250,7 @@ const SidebarNavigation = React.memo(() => {
                 icon={require('@tabler/icons/outline/mail.svg')}
                 activeIcon={require('@tabler/icons/filled/mail.svg')}
                 text={<FormattedMessage id='navigation.direct_messages' defaultMessage='Direct messages' />}
+                shrink={shrink}
               />
             )}
 
@@ -231,6 +260,7 @@ const SidebarNavigation = React.memo(() => {
                 icon={require('@tabler/icons/outline/circles.svg')}
                 activeIcon={require('@tabler/icons/filled/circles.svg')}
                 text={<FormattedMessage id='tabs_bar.groups' defaultMessage='Groups' />}
+                shrink={shrink}
               />
             )}
 
@@ -239,6 +269,7 @@ const SidebarNavigation = React.memo(() => {
               icon={require('@tabler/icons/outline/user.svg')}
               activeIcon={require('@tabler/icons/filled/user.svg')}
               text={<FormattedMessage id='tabs_bar.profile' defaultMessage='Profile' />}
+              shrink={shrink}
             />
 
             <SidebarNavigationLink
@@ -246,6 +277,7 @@ const SidebarNavigation = React.memo(() => {
               icon={require('@tabler/icons/outline/settings.svg')}
               activeIcon={require('@tabler/icons/filled/settings.svg')}
               text={<FormattedMessage id='tabs_bar.settings' defaultMessage='Settings' />}
+              shrink={shrink}
             />
 
             {(account.is_admin || account.is_moderator) && (
@@ -254,6 +286,7 @@ const SidebarNavigation = React.memo(() => {
                 icon={require('@tabler/icons/outline/dashboard.svg')}
                 count={dashboardCount}
                 text={<FormattedMessage id='tabs_bar.dashboard' defaultMessage='Dashboard' />}
+                shrink={shrink}
               />
             )}
           </>
@@ -267,6 +300,7 @@ const SidebarNavigation = React.memo(() => {
                 icon={features.federating ? require('@tabler/icons/outline/affiliate.svg') : require('@tabler/icons/outline/world.svg')}
                 activeIcon={features.federating ? require('@tabler/icons/filled/affiliate.svg') : undefined}
                 text={features.federating ? <FormattedMessage id='tabs_bar.local' defaultMessage='Local' /> : <FormattedMessage id='tabs_bar.all' defaultMessage='All' />}
+                shrink={shrink}
               />
             )}
 
@@ -276,6 +310,7 @@ const SidebarNavigation = React.memo(() => {
                 icon={require('@tabler/icons/outline/chart-bubble.svg')}
                 activeIcon={require('@tabler/icons/filled/chart-bubble.svg')}
                 text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
+                shrink={shrink}
               />
             )}
 
@@ -284,6 +319,7 @@ const SidebarNavigation = React.memo(() => {
                 to='/timeline/fediverse'
                 icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
                 text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
+                shrink={shrink}
               />
             )}
           </>
@@ -294,6 +330,7 @@ const SidebarNavigation = React.memo(() => {
             <SidebarNavigationLink
               icon={require('@tabler/icons/outline/dots-circle-horizontal.svg')}
               text={<FormattedMessage id='tabs_bar.more' defaultMessage='More' />}
+              shrink={shrink}
             />
           </DropdownMenu>
         )}
@@ -304,19 +341,21 @@ const SidebarNavigation = React.memo(() => {
               to='/login'
               icon={require('@tabler/icons/outline/login.svg')}
               text={<FormattedMessage id='account.login' defaultMessage='Log in' />}
+              shrink={shrink}
             />
 
             {isOpen && <SidebarNavigationLink
               to='/signup'
               icon={require('@tabler/icons/outline/user-plus.svg')}
               text={<FormattedMessage id='account.register' defaultMessage='Sign up' />}
+              shrink={shrink}
             />}
           </Stack>
         )}
       </Stack>
 
       {account && (
-        <ComposeButton />
+        <ComposeButton shrink={shrink} />
       )}
     </Stack>
   );

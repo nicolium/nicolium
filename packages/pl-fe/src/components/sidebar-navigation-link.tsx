@@ -22,11 +22,12 @@ interface ISidebarNavigationLink {
   to?: string;
   /** Callback when the link is clicked. */
   onClick?: React.EventHandler<React.MouseEvent>;
+    shrink?: boolean;
 }
 
 /** Desktop sidebar navigation link. */
 const SidebarNavigationLink = React.memo(React.forwardRef((props: ISidebarNavigationLink, ref: React.ForwardedRef<HTMLAnchorElement>): JSX.Element => {
-  const { icon, activeIcon, text, to = '', count, countMax, onClick } = props;
+  const { icon, activeIcon, text, to = '', count, countMax, onClick, shrink } = props;
   const isActive = location.pathname === to;
 
   const { demetricator } = useSettings();
@@ -69,7 +70,9 @@ const SidebarNavigationLink = React.memo(React.forwardRef((props: ISidebarNaviga
         />
       </span>
 
-      <Text weight='semibold' theme='inherit'>{text}</Text>
+      {!shrink && (
+        <Text weight='semibold' theme='inherit'>{text}</Text>
+      )}
     </NavLink>
   );
 }), (prevProps, nextProps) => prevProps.count === nextProps.count);
