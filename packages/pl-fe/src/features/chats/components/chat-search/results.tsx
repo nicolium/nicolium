@@ -41,7 +41,7 @@ const Results = ({ accountSearchResult, onSelect, parentRef }: IResults) => {
       data-testid='account'
     >
       <HStack alignItems='center' space={2}>
-        <Avatar src={account.avatar} alt={account.avatar_description} size={40} isCat={account.is_cat} />
+        <Avatar src={account.avatar} alt={account.avatar_description} size={40} isCat={account.is_cat} username={account.username} />
 
         <Stack alignItems='start'>
           <div className='flex grow items-center space-x-1'>

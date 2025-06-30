@@ -210,7 +210,7 @@ const CirclePage: React.FC = () => {
               {users?.map(user => (
                 <Link key={user.id} to={`/@${user.acct}`}>
                   <HStack space={2} alignItems='center'>
-                    <Avatar size={20} src={user.avatar!} alt={user.avatar_description} />
+                    <Avatar size={20} src={user.avatar!} alt={user.avatar_description} username={user.acct} />
                     <Text size='sm' weight='semibold' truncate>
                       {user.acct}
                     </Text>

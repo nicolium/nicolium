@@ -73,7 +73,7 @@ const HomeLayout: React.FC<IHomeLayout> = ({ children }) => {
               <HStack alignItems='start' space={2}>
                 {!disableUserProvidedMedia && (
                   <Link to={`/@${acct}`}>
-                    <Avatar src={avatar} alt={account?.avatar_description} isCat={account?.is_cat} size={42} />
+                    <Avatar src={avatar} alt={account?.avatar_description} isCat={account?.is_cat} size={42} username={account?.username} />
                   </Link>
                 )}
 

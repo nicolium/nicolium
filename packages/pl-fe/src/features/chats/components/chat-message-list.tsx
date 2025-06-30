@@ -186,7 +186,7 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
     return (
       <Stack alignItems='center' justifyContent='center' className='h-full grow'>
         <Stack alignItems='center' space={2}>
-          <Avatar src={chat.account.avatar} alt={chat.account.avatar_description} size={75} isCat={chat.account.is_cat} />
+          <Avatar src={chat.account.avatar} alt={chat.account.avatar_description} size={75} isCat={chat.account.is_cat} username={chat.account.username} />
           <Text align='center'>
             <>
               <Text tag='span'>{intl.formatMessage(messages.blockedBy)}</Text>

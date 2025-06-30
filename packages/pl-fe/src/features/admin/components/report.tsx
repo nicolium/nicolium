@@ -91,6 +91,7 @@ const Report: React.FC<IReport> = ({ id }) => {
             alt={targetAccount.avatar_description}
             size={32}
             isCat={targetAccount.is_cat}
+            username={targetAccount.username}
           />
         </HoverAccountWrapper>
       </Link>

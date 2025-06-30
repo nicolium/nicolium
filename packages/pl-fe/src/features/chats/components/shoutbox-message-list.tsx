@@ -47,6 +47,8 @@ const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) =
                 src={account.avatar}
                 alt={account.avatar_description}
                 size={32}
+                isCat={account.is_cat}
+                username={account.username}
               />
             </HoverAccountWrapper>
           </Link>

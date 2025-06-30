@@ -741,6 +741,8 @@ const Header: React.FC<IHeader> = ({ account }) => {
                 size={96}
                 className='relative size-24 rounded-lg bg-white ring-4 ring-white black:ring-black dark:bg-primary-900 dark:ring-primary-900'
                 isCat={account.is_cat}
+                username={account.username}
+                showAlt
               />
             </a>
             {account.verified && (

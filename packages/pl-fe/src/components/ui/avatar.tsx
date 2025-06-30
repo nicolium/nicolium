@@ -20,6 +20,8 @@ const AVATAR_SIZE = 42;
 
 const messages = defineMessages({
   avatar: { id: 'account.avatar.alt', defaultMessage: 'Avatar' },
+  avatar_with_username: { id: 'account.avatar.with_username', defaultMessage: 'Avatar for {username}' },
+  avatar_with_content: { id: 'account.avatar.with_content', defaultMessage: 'Avatar for {username}: {alt}' },
 });
 
 interface IAvatar extends Pick<IStillImage, 'alt' | 'src' | 'onError' | 'className'> {
@@ -27,6 +29,8 @@ interface IAvatar extends Pick<IStillImage, 'alt' | 'src' | 'onError' | 'classNa
   size?: number;
   /** Whether the user is a cat. */
   isCat?: boolean;
+  username?: string;
+  showAlt?: boolean;
 }
 
 const fac = new FastAverageColor();
@@ -108,13 +112,19 @@ const Avatar = (props: IAvatar) => {
     );
   }
 
+  const altText = props.showAlt && alt
+    ? intl.formatMessage(messages.avatar_with_content, { username: props.username, alt })
+    : props.username
+      ? intl.formatMessage(messages.avatar_with_username, { username: props.username })
+      : intl.formatMessage(messages.avatar);
+
   return (
     <StillImage
       className={clsx('rounded-lg leading-[0]', isCat && 'avatar__cat bg-gray-200 dark:bg-gray-900', className)}
       innerClassName='rounded-lg text-sm'
       style={style}
       src={src}
-      alt={alt || intl.formatMessage(messages.avatar)}
+      alt={altText}
       onError={handleLoadFailure}
     />
   );

@@ -225,10 +225,10 @@ const Account = ({
       <HStack alignItems={actionAlignment} space={3} justifyContent='between'>
         <HStack alignItems='center' space={3} className='max-w-full'>
           {disableUserProvidedMedia ? (
-            <Avatar src={account.avatar} alt={account.avatar_description} />
+            <Avatar src={account.avatar} alt={account.avatar_description} username={account.username} />
           ) : (
             <div className='rounded-lg'>
-              <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} isCat={account.is_cat} />
+              <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} isCat={account.is_cat} username={account.username} />
               {emoji && (
                 <Emoji
                   className='!absolute -right-1.5 bottom-0 size-5'
@@ -280,14 +280,14 @@ const Account = ({
       <HStack alignItems={actionAlignment} space={3} justifyContent='between'>
         <HStack alignItems={withAccountNote || note ? 'top' : 'center'} space={3} className='max-w-full'>
           {withAvatar && (disableUserProvidedMedia ? (
-            <Avatar src={account.avatar} alt={account.avatar_description} />
+            <Avatar src={account.avatar} alt={account.avatar_description} username={account.username} />
           ) : (
             <ProfilePopper
               condition={showAccountHoverCard}
               wrapper={(children) => <HoverAccountWrapper className='relative' accountId={account.id} element='span'>{children}</HoverAccountWrapper>}
             >
               <LinkEl className='rounded-lg' {...linkProps}>
-                <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} isCat={account.is_cat} />
+                <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} isCat={account.is_cat} username={account.username} />
                 {emoji && (
                   <Emoji
                     className='!absolute -right-1.5 bottom-0 size-5'

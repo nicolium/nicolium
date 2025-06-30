@@ -271,7 +271,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
                     <Link to={`/@${author.account?.acct}`}>
                       <HStack space={1} alignItems='center'>
                         {author.account && (
-                          <Avatar src={author.account?.avatar} size={16} />
+                          <Avatar src={author.account?.avatar} size={16} username={author.account.username} />
                         )}
                         <Text weight='medium'>
                           <Emojify text={author.account?.display_name || author.name} emojis={author.account?.emojis} />
