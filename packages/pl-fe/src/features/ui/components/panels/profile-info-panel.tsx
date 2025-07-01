@@ -130,8 +130,6 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   const memberSinceDate = intl.formatDate(account.created_at, { month: 'long', year: 'numeric' });
   const badges = getBadges();
 
-  account.pronouns = ['she', 'her'];
-
   return (
     <div className='mt-6 min-w-0 flex-1 sm:px-2'>
       <Stack space={2}>
