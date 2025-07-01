@@ -54,6 +54,7 @@
   "account.posts_with_replies": "Posts & replies",
   "account.profile": "Profile",
   "account.profile_external": "View profile on {domain}",
+  "account.pronouns.with_label": "Pronouns: {pronouns}",
   "account.register": "Sign up",
   "account.remote_follow": "Remote follow",
   "account.remove_from_followers": "Remove this follower",

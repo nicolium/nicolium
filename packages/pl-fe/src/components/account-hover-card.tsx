@@ -27,6 +27,10 @@ import Scrobble from './scrobble';
 
 import type { Account } from 'pl-fe/normalizers/account';
 
+const messages = {
+  pronouns: { id: 'account.pronouns.with_label', defaultMessage: 'Pronouns: {pronouns}' },
+};
+
 const getBadges = (
   account?: Pick<Account, 'is_admin' | 'is_moderator'>,
 ): JSX.Element[] => {
@@ -153,6 +157,22 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
                 </Text>
               </HStack>
             ) : null}
+
+            {account.pronouns.length > 0 && (
+              <HStack alignItems='center' space={0.5}>
+                <Icon
+                  src={require('@tabler/icons/outline/tags.svg')}
+                  className='size-4 text-gray-800 dark:text-gray-200'
+                />
+
+                <Text
+                  size='sm'
+                  title={intl.formatMessage(messages.pronouns, { pronouns: account.pronouns.join('/') })}
+                >
+                  {account.pronouns.join('/')}
+                </Text>
+              </HStack>
+            )}
 
             {!!scrobble && <Scrobble scrobble={scrobble} />}
 

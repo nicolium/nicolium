@@ -28,6 +28,7 @@ const messages = defineMessages({
   account_locked: { id: 'account.locked_info', defaultMessage: 'This account privacy status is set to locked. The owner manually reviews who can follow them.' },
   deactivated: { id: 'account.deactivated', defaultMessage: 'Deactivated' },
   bot: { id: 'account.badges.bot', defaultMessage: 'Bot' },
+  pronouns: { id: 'account.pronouns.with_label', defaultMessage: 'Pronouns: {pronouns}' },
 });
 
 interface IProfileInfoPanel {
@@ -129,6 +130,8 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   const memberSinceDate = intl.formatDate(account.created_at, { month: 'long', year: 'numeric' });
   const badges = getBadges();
 
+  account.pronouns = ['she', 'her'];
+
   return (
     <div className='mt-6 min-w-0 flex-1 sm:px-2'>
       <Stack space={2}>
@@ -204,6 +207,22 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
           ) : null}
 
           {renderBirthday()}
+
+          {account.pronouns.length > 0 ? (
+            <HStack
+              alignItems='center' space={0.5}
+              title={intl.formatMessage(messages.pronouns, { pronouns: account.pronouns.join('/') })}
+            >
+              <Icon
+                src={require('@tabler/icons/outline/tags.svg')}
+                className='size-4 text-gray-800 dark:text-gray-200'
+              />
+
+              <Text size='sm'>
+                {account.pronouns.join('/')}
+              </Text>
+            </HStack>
+          ) : null}
         </div>
 
         {scrobble && <Scrobble scrobble={scrobble} />}
