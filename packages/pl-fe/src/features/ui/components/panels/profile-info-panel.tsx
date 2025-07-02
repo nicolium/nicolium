@@ -231,7 +231,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
       {account.fields.length > 0 && (
         <Stack space={2} className='mt-4 xl:hidden'>
           {account.fields.map((field, i) => (
-            <ProfileField field={field} key={i} emojis={account.emojis} />
+            <ProfileField field={field} key={i} emojis={account.emojis} accountId={account.id} />
           ))}
         </Stack>
       )}

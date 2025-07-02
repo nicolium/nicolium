@@ -14,12 +14,14 @@ import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
+import { isTimezoneLabel } from 'pl-fe/features/ui/components/profile-field';
 import { UserPanel } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { accountScrobbleQueryOptions } from 'pl-fe/queries/accounts/account-scrobble';
 import { useAccountHoverCardStore } from 'pl-fe/stores/account-hover-card';
 
+import AccountLocalTime from './account-local-time';
 import { showAccountHoverCard } from './hover-account-wrapper';
 import { ParsedContent } from './parsed-content';
 import { dateFormatOptions } from './relative-timestamp';
@@ -77,6 +79,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
     };
   }, []);
 
+
   const { x, y, strategy, refs, context, placement } = useFloating({
     open: !!account,
     elements: {
@@ -114,6 +117,8 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
   if (!account) return null;
   const memberSinceDate = intl.formatDate(account.created_at, { month: 'long', year: 'numeric' });
   const followedBy = me !== account.id && account.relationship?.followed_by === true;
+
+  const timezoneField = account.fields.find(field => isTimezoneLabel(field.name));
 
   return (
     <div
@@ -157,6 +162,10 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
                 </Text>
               </HStack>
             ) : null}
+
+            {timezoneField && (
+              <AccountLocalTime accountId={account.id} field={timezoneField} />
+            )}
 
             {account.pronouns.length > 0 && (
               <HStack alignItems='center' space={0.5}>

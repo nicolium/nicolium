@@ -1,7 +1,8 @@
 import clsx from 'clsx';
 import React from 'react';
-import { defineMessages, useIntl, FormatDateOptions } from 'react-intl';
+import { defineMessages, useIntl, type FormatDateOptions } from 'react-intl';
 
+import AccountLocalTime from 'pl-fe/components/account-local-time';
 import Markup from 'pl-fe/components/markup';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
 import HStack from 'pl-fe/components/ui/hstack';
@@ -15,6 +16,8 @@ import type { Account } from 'pl-fe/normalizers/account';
 const getTicker = (value: string): string => (value.match(/\$([a-zA-Z]*)/i) || [])[1];
 const isTicker = (value: string): boolean => Boolean(getTicker(value));
 const isZapEmoji = (value: string) => /^\u26A1[\uFE00-\uFE0F]?$/.test(value);
+
+const isTimezoneLabel = (value: string) => /^time( |)zone$/i.test(value);
 
 const messages = defineMessages({
   linkVerifiedOn: { id: 'account.link_verified_on', defaultMessage: 'Ownership of this link was checked on {date}' },
@@ -30,12 +33,13 @@ const dateFormatOptions: FormatDateOptions = {
 };
 
 interface IProfileField {
+  accountId: string;
   field: Account['fields'][number];
   emojis?: Account['emojis'];
 }
 
 /** Renders a single profile field. */
-const ProfileField: React.FC<IProfileField> = ({ field, emojis }) => {
+const ProfileField: React.FC<IProfileField> = ({ accountId, field, emojis }) => {
   const intl = useIntl();
 
   if (isTicker(field.name)) {
@@ -72,9 +76,12 @@ const ProfileField: React.FC<IProfileField> = ({ field, emojis }) => {
             <ParsedContent html={field.value} emojis={emojis} />
           </Markup>
         </HStack>
+        {isTimezoneLabel(field.name) && (
+          <AccountLocalTime accountId={accountId} field={field} />
+        )}
       </dd>
     </dl>
   );
 };
 
-export { ProfileField as default };
+export { ProfileField as default, isTimezoneLabel };
