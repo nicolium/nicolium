@@ -12,8 +12,10 @@ import {
   setFilter,
 } from 'pl-fe/actions/notifications';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
+import ScrollTopButton from 'pl-fe/components/scroll-top-button';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Icon from 'pl-fe/components/ui/icon';
+import Portal from 'pl-fe/components/ui/portal';
 import Tabs from 'pl-fe/components/ui/tabs';
 import Notification from 'pl-fe/features/notifications/components/notification';
 import PlaceholderNotification from 'pl-fe/features/placeholder/components/placeholder-notification';
@@ -148,7 +150,7 @@ const NotificationsColumn = () => {
   const showFilterBar = (features.notificationsExcludeTypes || features.notificationsIncludeTypes) && settings.notifications.quickFilter.show;
   const activeFilter = settings.notifications.quickFilter.active;
   const [topNotification, setTopNotification] = useState<string>();
-  const { displayedNotifications } = useAppSelector(state => getNotifications(state, topNotification));
+  const { queuedNotificationCount, displayedNotifications } = useAppSelector(state => getNotifications(state, topNotification));
   const isLoading = useAppSelector(state => state.notifications.isLoading);
   // const isUnread = useAppSelector(state => state.notifications.unread > 0);
   const hasMore = useAppSelector(state => state.notifications.hasMore);
@@ -278,6 +280,14 @@ const NotificationsColumn = () => {
   return (
     <>
       {filterBarContainer}
+
+      <Portal>
+        <ScrollTopButton
+          onClick={handleDequeueNotifications}
+          count={queuedNotificationCount}
+          message={messages.queue}
+        />
+      </Portal>
 
       <PullToRefresh onRefresh={handleRefresh}>
         {scrollContainer}
