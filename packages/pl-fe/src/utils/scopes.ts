@@ -1,4 +1,4 @@
-import { getFeatures, ICESHRIMP_NET, PLEROMA, TOKI, type Instance } from 'pl-api';
+import { getFeatures, HOLLO, ICESHRIMP_NET, PLEROMA, TOKI, type Instance } from 'pl-api';
 
 import type { RootState } from 'pl-fe/store';
 
@@ -27,6 +27,7 @@ const getInstanceScopes = (instance: Instance, admin: boolean =  true) => {
 
   if (admin) {
     switch (v.software) {
+      case HOLLO:
       case ICESHRIMP_NET:
         break;
       case PLEROMA:

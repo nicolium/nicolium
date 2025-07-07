@@ -41,6 +41,14 @@ const FRIENDICA = 'Friendica';
 const GOTOSOCIAL = 'GoToSocial';
 
 /**
+ * Hollo, federated single-user microblogging software.
+ *
+ * @category Software
+ * @see {@link https://docs.hollo.social/}
+ */
+const HOLLO = 'Hollo';
+
+/**
  * Iceshrimp, yet another Misskey fork.
  *
  * @category Software
@@ -1820,6 +1828,7 @@ export {
   FIREFISH,
   FRIENDICA,
   GOTOSOCIAL,
+  HOLLO,
   ICESHRIMP,
   ICESHRIMP_NET,
   MASTODON,

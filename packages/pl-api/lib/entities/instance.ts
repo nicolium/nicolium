@@ -317,7 +317,12 @@ const instanceV1Schema = coerceObject({
 const instanceSchema = v.pipe(
   v.any(),
   v.transform((data: any) => {
-  // Detect GoToSocial
+    // Detect Hollo
+    if (data.source_url === 'https://github.com/fedify-dev/hollo') {
+      data.version = `0.0.0 (compatible; Hollo ${data.version})`;
+    }
+
+    // Detect GoToSocial
     if (typeof data.configuration?.accounts?.allow_custom_css === 'boolean') {
       data.version = `0.0.0 (compatible; GoToSocial ${data.version})`;
     }
