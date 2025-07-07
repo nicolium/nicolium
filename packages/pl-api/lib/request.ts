@@ -72,7 +72,7 @@ function request<T = any>(this: Pick<PlApiClient, 'accessToken' | 'iceshrimpAcce
         const data = xhr.response;
         let json: T = undefined!;
 
-        if (xhr.getResponseHeader('content-type')?.includes('application/json')) {
+        if (xhr.getResponseHeader('content-type')?.match(/(text|application)\/json/)) {
           try {
             json = JSON.parse(data);
           } catch (e) {
@@ -108,7 +108,7 @@ function request<T = any>(this: Pick<PlApiClient, 'accessToken' | 'iceshrimpAcce
 
     let json: T = undefined!;
 
-    if (res.headers.get('content-type')?.includes('application/json')) {
+    if (res.headers.get('content-type')?.match(/(text|application)\/json/)) {
       try {
         json = JSON.parse(data);
       } catch (e) {
