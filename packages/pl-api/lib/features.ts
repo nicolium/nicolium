@@ -239,6 +239,7 @@ const getFeatures = (instance: Instance) => {
     accountDiscoverability: any([
       v.software === FRIENDICA,
       v.software === GOTOSOCIAL,
+      v.software === HOLLO,
       v.software === MASTODON,
       v.software === MITRA,
       v.software === SHARKEY,
@@ -282,6 +283,7 @@ const getFeatures = (instance: Instance) => {
       v.software === DITTO,
       v.software === FIREFISH,
       v.software === GOTOSOCIAL,
+      v.software === HOLLO,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
@@ -451,6 +453,7 @@ const getFeatures = (instance: Instance) => {
       v.software === DITTO,
       v.software === FIREFISH,
       v.software === GOTOSOCIAL,
+      v.software === HOLLO,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === FRIENDICA,
@@ -471,6 +474,7 @@ const getFeatures = (instance: Instance) => {
     bots: any([
       v.software === AKKOMA,
       v.software === GOTOSOCIAL,
+      v.software === HOLLO,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
@@ -630,6 +634,7 @@ const getFeatures = (instance: Instance) => {
     customEmojiReacts: any([
       instance.api_versions['custom_emoji_reactions.pleroma.pl-api'] >= 1,
       v.software === DITTO && gt(v.version, '1.2.0'),
+      v.software === HOLLO,
       v.software === MITRA && gte(v.version, '3.4.0'),
     ]),
 
@@ -726,6 +731,7 @@ const getFeatures = (instance: Instance) => {
     emojiReacts: any([
       v.software === AKKOMA,
       v.software === FIREFISH,
+      v.software === HOLLO,
       v.software === MITRA && gte(v.version, '2.21.0'),
       v.software === PLEROMA,
       instance ? instance.configuration.reactions.max_reactions > 0 : false,
@@ -801,6 +807,7 @@ const getFeatures = (instance: Instance) => {
       v.software === FIREFISH,
       v.software === FRIENDICA,
       v.software === GOTOSOCIAL,
+      v.software === HOLLO,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
@@ -818,6 +825,7 @@ const getFeatures = (instance: Instance) => {
      */
     familiarFollowers: any([
       v.software === DITTO,
+      v.software === HOLLO,
       v.software === MASTODON,
       v.software === NEODB,
       v.software === PIXELFED,
@@ -833,6 +841,7 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/featured_tags/suggestions
      */
     featuredTags: any([
+      v.software === HOLLO,
       v.software === MASTODON,
       v.software === NEODB,
       v.software === TAKAHE && gte(v.version, '0.12.0'),
@@ -883,6 +892,7 @@ const getFeatures = (instance: Instance) => {
     followedHashtagsList: any([
       v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
+      v.software === HOLLO,
       v.software === MASTODON && gte(v.compatVersion, '4.1.0'),
       v.software === NEODB,
       v.software === PIXELFED,
@@ -898,6 +908,7 @@ const getFeatures = (instance: Instance) => {
     followHashtags: any([
       v.software === AKKOMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
+      v.software === HOLLO,
       v.software === MASTODON && gte(v.compatVersion, '4.0.0'),
       v.software === NEODB,
       v.software === PIXELFED,
@@ -1077,6 +1088,7 @@ const getFeatures = (instance: Instance) => {
       v.software === FIREFISH,
       v.software === FRIENDICA,
       v.software === GOTOSOCIAL,
+      v.software === HOLLO,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
@@ -1449,6 +1461,7 @@ const getFeatures = (instance: Instance) => {
       v.software === AKKOMA,
       v.software === DITTO,
       v.software === GOTOSOCIAL,
+      v.software === HOLLO,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
