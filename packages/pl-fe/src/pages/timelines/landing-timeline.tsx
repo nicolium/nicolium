@@ -7,12 +7,15 @@ import { useCommunityStream } from 'pl-fe/api/hooks/streaming/use-community-stre
 import Markup from 'pl-fe/components/markup';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
+import Button from 'pl-fe/components/ui/button';
 import Column from 'pl-fe/components/ui/column';
+import HStack from 'pl-fe/components/ui/hstack';
 import Stack from 'pl-fe/components/ui/stack';
 import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
+import { useRegistrationStatus } from 'pl-fe/hooks/use-registration-status';
 import { useTheme } from 'pl-fe/hooks/use-theme';
 import AboutPage from 'pl-fe/pages/utils/about';
 import { getTextDirection } from 'pl-fe/utils/rtl';
@@ -57,6 +60,7 @@ const LandingTimelinePage = () => {
   const instance = useInstance();
   const theme = useTheme();
   const isMobile = useIsMobile();
+  const { isOpen } = useRegistrationStatus();
 
   const [timelineFailed, setTimelineFailed] = useState(false);
 
@@ -82,9 +86,20 @@ const LandingTimelinePage = () => {
 
   return (
     <Column transparent={!isMobile} withHeader={false}>
-      <div className='my-12 mb-16 px-4 sm:mb-20'>
+      <div className='mb-4 mt-12 px-4 lg:mb-12'>
         <SiteBanner />
       </div>
+
+      <HStack className='mb-4 lg:hidden' justifyContent='end' space={4}>
+        <Button theme='tertiary' to='/login'>
+          <FormattedMessage id='thread_login.login' defaultMessage='Log in' />
+        </Button>
+        {isOpen && (
+          <Button to='/signup'>
+            <FormattedMessage id='thread_login.signup' defaultMessage='Sign up' />
+          </Button>
+        )}
+      </HStack>
 
       {timelineEnabled && !timelineFailed ? (
         <PullToRefresh onRefresh={handleRefresh}>
