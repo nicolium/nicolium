@@ -22,16 +22,6 @@ const ADMIN_USERS_FETCH_SUCCESS = 'ADMIN_USERS_FETCH_SUCCESS' as const;
 
 const ADMIN_USER_DELETE_SUCCESS = 'ADMIN_USER_DELETE_SUCCESS' as const;
 
-const ADMIN_USER_INDEX_EXPAND_FAIL = 'ADMIN_USER_INDEX_EXPAND_FAIL' as const;
-const ADMIN_USER_INDEX_EXPAND_REQUEST = 'ADMIN_USER_INDEX_EXPAND_REQUEST' as const;
-const ADMIN_USER_INDEX_EXPAND_SUCCESS = 'ADMIN_USER_INDEX_EXPAND_SUCCESS' as const;
-
-const ADMIN_USER_INDEX_FETCH_FAIL = 'ADMIN_USER_INDEX_FETCH_FAIL' as const;
-const ADMIN_USER_INDEX_FETCH_REQUEST = 'ADMIN_USER_INDEX_FETCH_REQUEST' as const;
-const ADMIN_USER_INDEX_FETCH_SUCCESS = 'ADMIN_USER_INDEX_FETCH_SUCCESS' as const;
-
-const ADMIN_USER_INDEX_QUERY_SET = 'ADMIN_USER_INDEX_QUERY_SET' as const;
-
 const fetchConfig = () =>
   (dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState).admin.config.getPleromaConfig()
@@ -166,48 +156,6 @@ const setRole = (accountId: string, role: 'user' | 'moderator' | 'admin') =>
     }
   };
 
-const setUserIndexQuery = (query: string) => ({ type: ADMIN_USER_INDEX_QUERY_SET, query });
-
-const fetchUserIndex = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const { query, isLoading } = getState().admin_user_index;
-
-    if (isLoading) return;
-
-    dispatch<AdminActions>({ type: ADMIN_USER_INDEX_FETCH_REQUEST });
-
-    const params: AdminGetAccountsParams = {
-      origin: 'local',
-      status: 'active',
-      username: query,
-    };
-
-    dispatch(fetchUsers(params))
-      .then((data) => {
-        const { items, total, next } = data;
-        dispatch<AdminActions>({ type: ADMIN_USER_INDEX_FETCH_SUCCESS, users: items, total, next, params });
-      }).catch(() => {
-        dispatch<AdminActions>({ type: ADMIN_USER_INDEX_FETCH_FAIL });
-      });
-  };
-
-const expandUserIndex = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const { params, next, isLoading, loaded } = getState().admin_user_index;
-
-    if (!loaded || isLoading || !next) return;
-
-    dispatch<AdminActions>({ type: ADMIN_USER_INDEX_EXPAND_REQUEST });
-
-    next()
-      .then((data) => {
-        const { items, total, next } = data;
-        dispatch<AdminActions>({ type: ADMIN_USER_INDEX_EXPAND_SUCCESS, users: items, total, next, params });
-      }).catch(() => {
-        dispatch<AdminActions>({ type: ADMIN_USER_INDEX_EXPAND_FAIL });
-      });
-  };
-
 type AdminActions =
   | { type: typeof ADMIN_CONFIG_FETCH_SUCCESS; configs: PleromaConfig['configs']; needsReboot: boolean }
   | { type: typeof ADMIN_CONFIG_UPDATE_REQUEST; configs: PleromaConfig['configs'] }
@@ -215,14 +163,7 @@ type AdminActions =
   | { type: typeof ADMIN_REPORTS_FETCH_SUCCESS; reports: Array<AdminReport>; params?: AdminGetReportsParams }
   | { type: typeof ADMIN_REPORT_PATCH_SUCCESS; report: AdminReport; reportId: string }
   | { type: typeof ADMIN_USERS_FETCH_SUCCESS; users: Array<AdminAccount>; params?: AdminGetAccountsParams; next: (() => Promise<PaginatedResponse<AdminAccount>>) | null }
-  | { type: typeof ADMIN_USER_DELETE_SUCCESS; accountId: string }
-  | ReturnType<typeof setUserIndexQuery>
-  | { type: typeof ADMIN_USER_INDEX_FETCH_REQUEST }
-  | { type: typeof ADMIN_USER_INDEX_FETCH_SUCCESS; users: Array<AdminAccount>; total?: number; next: (() => Promise<PaginatedResponse<AdminAccount>>) | null; params?: AdminGetAccountsParams }
-  | { type: typeof ADMIN_USER_INDEX_FETCH_FAIL }
-  | { type: typeof ADMIN_USER_INDEX_EXPAND_REQUEST }
-  | { type: typeof ADMIN_USER_INDEX_EXPAND_SUCCESS; users: Array<AdminAccount>; total?: number; next: (() => Promise<PaginatedResponse<AdminAccount>>) | null; params: AdminGetAccountsParams | null }
-  | { type: typeof ADMIN_USER_INDEX_EXPAND_FAIL };
+  | { type: typeof ADMIN_USER_DELETE_SUCCESS; accountId: string };
 
 export {
   ADMIN_CONFIG_FETCH_SUCCESS,
@@ -232,13 +173,6 @@ export {
   ADMIN_REPORT_PATCH_SUCCESS,
   ADMIN_USERS_FETCH_SUCCESS,
   ADMIN_USER_DELETE_SUCCESS,
-  ADMIN_USER_INDEX_EXPAND_FAIL,
-  ADMIN_USER_INDEX_EXPAND_REQUEST,
-  ADMIN_USER_INDEX_EXPAND_SUCCESS,
-  ADMIN_USER_INDEX_FETCH_FAIL,
-  ADMIN_USER_INDEX_FETCH_REQUEST,
-  ADMIN_USER_INDEX_FETCH_SUCCESS,
-  ADMIN_USER_INDEX_QUERY_SET,
   fetchConfig,
   updateConfig,
   updatePlFeConfig,
@@ -251,8 +185,5 @@ export {
   toggleStatusSensitivity,
   setBadges,
   setRole,
-  setUserIndexQuery,
-  fetchUserIndex,
-  expandUserIndex,
   type AdminActions,
 };

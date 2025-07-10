@@ -6,7 +6,6 @@ import entities from 'pl-fe/entity-store/reducer';
 
 import accounts_meta from './accounts-meta';
 import admin from './admin';
-import admin_user_index from './admin-user-index';
 import auth from './auth';
 import compose from './compose';
 import contexts from './contexts';
@@ -32,7 +31,6 @@ import timelines from './timelines';
 const reducers = {
   accounts_meta,
   admin,
-  admin_user_index,
   auth,
   compose,
   contexts,
