@@ -7,10 +7,12 @@ import { queryClient } from 'pl-fe/queries/client';
 import { makePaginatedResponseQuery } from 'pl-fe/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from 'pl-fe/queries/utils/minify-list';
 
+import { filterById } from '../utils/filter-id';
+
 import type { PaginatedResponse, PlApiClient } from 'pl-api';
 
 const appendFollowRequest = (accountId: string) =>
-  queryClient.setQueryData<InfiniteData<ReturnType<typeof minifyAccountList>>>(['accountsLists', 'followRequests'], (data) => {
+  queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(['accountsLists', 'followRequests'], (data) => {
     if (!data || data.pages.some(page => page.items.includes(accountId))) return data;
 
     return {
@@ -20,10 +22,7 @@ const appendFollowRequest = (accountId: string) =>
   });
 
 const removeFollowRequest = (accountId: string) =>
-  queryClient.setQueryData<InfiniteData<ReturnType<typeof minifyAccountList>>>(['accountsLists', 'followRequests'], (data) => data ? {
-    ...data,
-    pages: data.pages.map(({ items, ...page }) => ({ ...page, items: items.filter((id) => id !== accountId) })),
-  } : undefined);
+  queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(['accountsLists', 'followRequests'], filterById(accountId));
 
 const makeUseFollowRequests = <T>(select: ((data: InfiniteData<PaginatedResponse<string>>) => T)) => makePaginatedResponseQuery(
   () => ['accountsLists', 'followRequests'],

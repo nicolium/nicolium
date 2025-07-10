@@ -5,6 +5,8 @@ import { queryClient } from 'pl-fe/queries/client';
 import { makePaginatedResponseQuery } from 'pl-fe/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from 'pl-fe/queries/utils/minify-list';
 
+import { filterById } from '../utils/filter-id';
+
 import { removeGroupMember } from './use-group-members';
 
 const appendGroupBlock = (groupId: string, accountId: string) =>
@@ -18,10 +20,7 @@ const appendGroupBlock = (groupId: string, accountId: string) =>
   });
 
 const removeGroupBlock = (groupId: string, accountId: string) =>
-  queryClient.setQueryData<InfiniteData<ReturnType<typeof minifyAccountList>>>(['accountsLists', 'groupBlocks', groupId], (data) => data ? {
-    ...data,
-    pages: data.pages.map(({ items, ...page }) => ({ ...page, items: items.filter((id) => id !== accountId) })),
-  } : undefined);
+  queryClient.setQueryData<InfiniteData<ReturnType<typeof minifyAccountList>>>(['accountsLists', 'groupBlocks', groupId], filterById(accountId));
 
 const useGroupBlocks = makePaginatedResponseQuery(
   (groupId: string) => ['accountsLists', 'groupBlocks', groupId],

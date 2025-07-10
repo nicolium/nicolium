@@ -11,6 +11,8 @@ import { minifyAccountList } from 'pl-fe/queries/utils/minify-list';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import toast, { IToastOptions } from 'pl-fe/toast';
 
+import { filterById } from '../utils/filter-id';
+
 import type { PaginatedResponse } from 'pl-api';
 
 const messages = defineMessages({
@@ -180,10 +182,8 @@ const useBookmarkStatus = (statusId: string) => {
       if (previousFolder) {
         queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
           ['statusLists', 'bookmarks', previousFolder],
-          (data) => data ? {
-            ...data,
-            pages: data.pages.map(({ items, ...page }) => ({ ...page, items: items.filter((id) => id !== statusId) })),
-          } : undefined);
+          filterById(statusId),
+        );
       }
 
       if (!previouslyBookmarked) {
@@ -227,10 +227,7 @@ const useUnbookmarkStatus = (statusId: string) => {
       queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>({
         queryKey: ['statusLists', 'bookmarks'],
         exact: false,
-      }, (data) => data ? {
-        ...data,
-        pages: data.pages.map(({ items, ...page }) => ({ ...page, items: items.filter((id) => id !== statusId) })),
-      } : undefined);
+      }, filterById(statusId));
 
       toast.success(messages.bookmarkRemoved);
     },
