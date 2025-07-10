@@ -1,13 +1,10 @@
 import React from 'react';
 
-import { approveUser, rejectUser } from 'pl-fe/actions/admin';
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import { AuthorizeRejectButtons } from 'pl-fe/components/authorize-reject-buttons';
 import HStack from 'pl-fe/components/ui/hstack';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useAdminAccount, useAdminApproveAccountMutation, useAdminRejectAccountMutation } from 'pl-fe/queries/admin/use-accounts';
 
 interface IUnapprovedAccount {
   accountId: string;
@@ -15,15 +12,14 @@ interface IUnapprovedAccount {
 
 /** Displays an unapproved account for moderation purposes. */
 const UnapprovedAccount: React.FC<IUnapprovedAccount> = ({ accountId }) => {
-  const dispatch = useAppDispatch();
+  const { data: adminAccount } = useAdminAccount(accountId);
 
-  const { account } = useAccount(accountId);
-  const adminAccount = useAppSelector(state => state.admin.users[accountId]);
+  const { mutate: rejectAccount } = useAdminRejectAccountMutation(accountId);
+  const { mutate: approveAccount } = useAdminApproveAccountMutation(accountId);
+
+  const account = adminAccount?.account;
 
   if (!account) return null;
-
-  const handleApprove = () => dispatch(approveUser(account.id));
-  const handleReject = () => dispatch(rejectUser(account.id));
 
   return (
     <HStack space={4} justifyContent='between'>
@@ -38,8 +34,8 @@ const UnapprovedAccount: React.FC<IUnapprovedAccount> = ({ accountId }) => {
 
       <Stack justifyContent='center'>
         <AuthorizeRejectButtons
-          onAuthorize={handleApprove}
-          onReject={handleReject}
+          onAuthorize={() => approveAccount()}
+          onReject={() => rejectAccount()}
           countdown={3000}
         />
       </Stack>

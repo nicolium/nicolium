@@ -368,14 +368,19 @@ class PlApiClient {
   }): Promise<PaginatedResponse<AdminAccount>> => {
     const response = await this.request('/api/v1/pleroma/admin/users', { params });
 
+    const adminAccounts = v.parse(filteredArray(adminAccountSchema), response.json?.users);
+    // uncomment when pleroma gets /api/v1/accounts?id[] support
+    // const accounts = await this.accounts.getAccounts(adminAccounts.map(({ id }) => id));
+    // adminAccounts.forEach((adminAccount) => adminAccount.account = accounts.find(({ id }) => id === adminAccount.id) || null);
+
     return {
       previous: !params.page ? null : () => this.#paginatedPleromaAccounts({ ...params, page: params.page! - 1 }),
       next: response.json?.count > (params.page_size * ((params.page || 1) - 1) + response.json?.users?.length)
         ? () => this.#paginatedPleromaAccounts({ ...params, page: (params.page || 0) + 1 })
         : null,
-      items: v.parse(filteredArray(adminAccountSchema), response.json?.users),
+      items: adminAccounts,
       partial: response.status === 206,
-      total: response.json?.total,
+      total: response.json?.count,
     };
   };
 

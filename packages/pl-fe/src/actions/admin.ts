@@ -22,12 +22,6 @@ const ADMIN_USERS_FETCH_SUCCESS = 'ADMIN_USERS_FETCH_SUCCESS' as const;
 
 const ADMIN_USER_DELETE_SUCCESS = 'ADMIN_USER_DELETE_SUCCESS' as const;
 
-const ADMIN_USER_APPROVE_REQUEST = 'ADMIN_USER_APPROVE_REQUEST' as const;
-const ADMIN_USER_APPROVE_SUCCESS = 'ADMIN_USER_APPROVE_SUCCESS' as const;
-
-const ADMIN_USER_REJECT_REQUEST = 'ADMIN_USER_REJECT_REQUEST' as const;
-const ADMIN_USER_REJECT_SUCCESS = 'ADMIN_USER_REJECT_SUCCESS' as const;
-
 const ADMIN_USER_INDEX_EXPAND_FAIL = 'ADMIN_USER_INDEX_EXPAND_FAIL' as const;
 const ADMIN_USER_INDEX_EXPAND_REQUEST = 'ADMIN_USER_INDEX_EXPAND_REQUEST' as const;
 const ADMIN_USER_INDEX_EXPAND_SUCCESS = 'ADMIN_USER_INDEX_EXPAND_SUCCESS' as const;
@@ -106,30 +100,6 @@ const deactivateUser = (accountId: string, report_id?: string) =>
 const deleteUser = (accountId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState).admin.accounts.deleteAccount(accountId);
-
-const approveUser = (accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-
-    dispatch<AdminActions>({ type: ADMIN_USER_APPROVE_REQUEST, accountId });
-
-    return getClient(state).admin.accounts.approveAccount(accountId).then((user) => {
-      dispatch<AdminActions>({ type: ADMIN_USER_APPROVE_SUCCESS, user, accountId });
-
-      return user;
-    });
-  };
-
-const rejectUser = (accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-
-    dispatch<AdminActions>({ type: ADMIN_USER_REJECT_REQUEST, accountId });
-
-    return getClient(state).admin.accounts.rejectAccount(accountId).then(() => {
-      dispatch<AdminActions>({ type: ADMIN_USER_REJECT_SUCCESS, accountId });
-    });
-  };
 
 const deleteStatus = (statusId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
@@ -246,10 +216,6 @@ type AdminActions =
   | { type: typeof ADMIN_REPORT_PATCH_SUCCESS; report: AdminReport; reportId: string }
   | { type: typeof ADMIN_USERS_FETCH_SUCCESS; users: Array<AdminAccount>; params?: AdminGetAccountsParams; next: (() => Promise<PaginatedResponse<AdminAccount>>) | null }
   | { type: typeof ADMIN_USER_DELETE_SUCCESS; accountId: string }
-  | { type: typeof ADMIN_USER_APPROVE_REQUEST; accountId: string }
-  | { type: typeof ADMIN_USER_APPROVE_SUCCESS; user: AdminAccount; accountId: string }
-  | { type: typeof ADMIN_USER_REJECT_REQUEST; accountId: string }
-  | { type: typeof ADMIN_USER_REJECT_SUCCESS; accountId: string }
   | ReturnType<typeof setUserIndexQuery>
   | { type: typeof ADMIN_USER_INDEX_FETCH_REQUEST }
   | { type: typeof ADMIN_USER_INDEX_FETCH_SUCCESS; users: Array<AdminAccount>; total?: number; next: (() => Promise<PaginatedResponse<AdminAccount>>) | null; params?: AdminGetAccountsParams }
@@ -266,10 +232,6 @@ export {
   ADMIN_REPORT_PATCH_SUCCESS,
   ADMIN_USERS_FETCH_SUCCESS,
   ADMIN_USER_DELETE_SUCCESS,
-  ADMIN_USER_APPROVE_REQUEST,
-  ADMIN_USER_APPROVE_SUCCESS,
-  ADMIN_USER_REJECT_REQUEST,
-  ADMIN_USER_REJECT_SUCCESS,
   ADMIN_USER_INDEX_EXPAND_FAIL,
   ADMIN_USER_INDEX_EXPAND_REQUEST,
   ADMIN_USER_INDEX_EXPAND_SUCCESS,
@@ -285,8 +247,6 @@ export {
   fetchUsers,
   deactivateUser,
   deleteUser,
-  approveUser,
-  rejectUser,
   deleteStatus,
   toggleStatusSensitivity,
   setBadges,

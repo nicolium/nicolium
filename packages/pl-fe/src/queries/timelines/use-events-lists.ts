@@ -4,7 +4,7 @@ import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-respo
 import { minifyStatusList } from '../utils/minify-list';
 
 const recentEventsQueryOptions = makePaginatedResponseQueryOptions(
-  () => ['statusLists', 'recentEvents'],
+  ['statusLists', 'recentEvents'],
   (client) => client.timelines.publicTimeline({
     only_events: true,
   }).then(minifyStatusList),
@@ -16,7 +16,7 @@ const useRecentEventsTimeline = () => useInfiniteQuery({
 });
 
 const joinedEventsQueryOptions = makePaginatedResponseQueryOptions(
-  () => ['statusLists', 'joinedEvents'],
+  ['statusLists', 'joinedEvents'],
   (client) => client.events.getJoinedEvents().then(minifyStatusList),
 )();
 

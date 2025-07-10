@@ -4,6 +4,7 @@ import { useRouteMatch } from 'react-router-dom';
 
 import Tabs from 'pl-fe/components/ui/tabs';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { usePendingUsersCount } from 'pl-fe/queries/admin/use-accounts';
 
 const messages = defineMessages({
   dashboard: { id: 'admin_nav.dashboard', defaultMessage: 'Dashboard' },
@@ -15,7 +16,7 @@ const AdminTabs: React.FC = () => {
   const intl = useIntl();
   const match = useRouteMatch();
 
-  const approvalCount = useAppSelector(state => state.admin.awaitingApproval.length);
+  const { data: awaitingApprovalCount } = usePendingUsersCount();
   const reportsCount = useAppSelector(state => state.admin.openReports.length);
 
   const tabs = [{
@@ -31,7 +32,7 @@ const AdminTabs: React.FC = () => {
     name: '/pl-fe/admin/approval',
     text: intl.formatMessage(messages.waitlist),
     to: '/pl-fe/admin/approval',
-    count: approvalCount,
+    count: awaitingApprovalCount,
   }];
 
   return <Tabs items={tabs} activeItem={match.path} />;

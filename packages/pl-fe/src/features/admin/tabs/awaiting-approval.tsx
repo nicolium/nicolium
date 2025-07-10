@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { fetchUsers } from 'pl-fe/actions/admin';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useAdminAccounts } from 'pl-fe/queries/admin/use-accounts';
 
 import UnapprovedAccount from '../components/unapproved-account';
 
@@ -15,27 +13,22 @@ const messages = defineMessages({
 
 const AwaitingApproval: React.FC = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
-  const accountIds = useAppSelector(state => state.admin.awaitingApproval);
+  const { data, isPending, isFetching } = useAdminAccounts({
+    origin: 'local',
+    status: 'pending',
+  });
 
-  const [isLoading, setLoading] = useState(true);
+  const [accountIds, setAccountIds] = useState(data || []);
 
   useEffect(() => {
-    dispatch(fetchUsers({
-      origin: 'local',
-      status: 'pending',
-    }))
-      .then(() => setLoading(false))
-      .catch(() => {});
-  }, []);
-
-  const showLoading = isLoading && accountIds.length === 0;
+    if (data && data.length > accountIds.length) setAccountIds(data);
+  }, [data]);
 
   return (
     <ScrollableList
       scrollKey='awaitingApproval'
-      isLoading={isLoading}
-      showLoading={showLoading}
+      isLoading={isFetching}
+      showLoading={isPending}
       emptyMessage={intl.formatMessage(messages.emptyMessage)}
       listClassName='divide-y divide-solid divide-gray-200 dark:divide-gray-800'
     >

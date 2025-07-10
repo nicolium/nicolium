@@ -14,6 +14,7 @@ import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { useRegistrationStatus } from 'pl-fe/hooks/use-registration-status';
 import { useFollowRequestsCount } from 'pl-fe/queries/accounts/use-follow-requests';
+import { usePendingUsersCount } from 'pl-fe/queries/admin/use-accounts';
 import { scheduledStatusesCountQueryOptions } from 'pl-fe/queries/statuses/scheduled-statuses';
 import { useInteractionRequestsCount } from 'pl-fe/queries/statuses/use-interaction-requests';
 
@@ -61,7 +62,8 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   const notificationCount = useAppSelector((state) => state.notifications.unread);
   const followRequestsCount = useFollowRequestsCount().data || 0;
   const interactionRequestsCount = useInteractionRequestsCount().data || 0;
-  const dashboardCount = useAppSelector((state) => state.admin.openReports.length + state.admin.awaitingApproval.length);
+  const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
+  const dashboardCount = useAppSelector((state) => state.admin.openReports.length + awaitingApprovalCount);
   const scheduledStatusCount = useInfiniteQuery(authenticatedScheduledStatusesCountQueryOptions).data || 0;
   const draftCount = useAppSelector((state) => Object.keys(state.draft_statuses).length);
 

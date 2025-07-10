@@ -7,9 +7,7 @@ import {
   ADMIN_REPORTS_FETCH_SUCCESS,
   ADMIN_REPORT_PATCH_SUCCESS,
   ADMIN_USERS_FETCH_SUCCESS,
-  ADMIN_USER_DELETE_SUCCESS,
-  ADMIN_USER_APPROVE_SUCCESS,
-  ADMIN_USER_REJECT_SUCCESS,
+  // ADMIN_USER_DELETE_SUCCESS,
   type AdminActions,
 } from 'pl-fe/actions/admin';
 import { normalizeAdminReport, type AdminReport as MinifiedReport } from 'pl-fe/normalizers/admin-report';
@@ -22,7 +20,6 @@ interface State {
   openReports: Array<string>;
   users: Record<string, MinifiedUser>;
   latestUsers: Array<string>;
-  awaitingApproval: Array<string>;
   configs: Array<Config>;
   needsReboot: boolean;
 }
@@ -32,21 +29,11 @@ const initialState: State = {
   openReports: [],
   users: {},
   latestUsers: [],
-  awaitingApproval: [],
   configs: [],
   needsReboot: false,
 };
 
 const toIds = (items: any[]) => items.map(item => item.id);
-
-const maybeImportUnapproved = (state: State, users: Array<AdminAccount>, params?: AdminGetAccountsParams) => {
-  if (params?.origin === 'local' && params.status === 'pending') {
-    const newIds = toIds(users);
-    state.awaitingApproval = [...new Set([...state.awaitingApproval, ...newIds])];
-  } else {
-    return state;
-  }
-};
 
 const maybeImportLatest = (state: State, users: Array<AdminAccount>, params?: AdminGetAccountsParams) => {
   if (params?.origin === 'local' && params.status === 'active') {
@@ -60,7 +47,7 @@ const minifyUser = (user: AdminAccount) => omit(user, ['account']);
 type MinifiedUser = ReturnType<typeof minifyUser>;
 
 const importUsers = (state: State, users: Array<AdminAccount>, params?: AdminGetAccountsParams) => {
-  maybeImportUnapproved(state, users, params);
+  // maybeImportUnapproved(state, users, params);
   maybeImportLatest(state, users, params);
 
   users.forEach(user => {
@@ -69,16 +56,16 @@ const importUsers = (state: State, users: Array<AdminAccount>, params?: AdminGet
   });
 };
 
-const deleteUser = (state: State, accountId: string) => {
-  state.awaitingApproval = state.awaitingApproval.filter(id => id !== accountId);
-  delete state.users[accountId];
-};
+// const deleteUser = (state: State, accountId: string) => {
+//   state.awaitingApproval = state.awaitingApproval.filter(id => id !== accountId);
+//   delete state.users[accountId];
+// };
 
-const approveUser = (state: State, user: AdminAccount) => {
-  const normalizedUser = minifyUser(user);
-  state.awaitingApproval = state.awaitingApproval.filter(id => id !== user.id);
-  state.users[user.id] = normalizedUser;
-};
+// const approveUser = (state: State, user: AdminAccount) => {
+//   const normalizedUser = minifyUser(user);
+//   state.awaitingApproval = state.awaitingApproval.filter(id => id !== user.id);
+//   state.users[user.id] = normalizedUser;
+// };
 
 const importReports = (state: State, reports: Array<AdminReport>) => {
   reports.forEach(report => {
@@ -117,14 +104,8 @@ const admin = (state = initialState, action: AdminActions): State => {
       return create(state, (draft) => handleReportDiffs(draft, action.report));
     case ADMIN_USERS_FETCH_SUCCESS:
       return create(state, (draft) => importUsers(draft, action.users, action.params));
-    case ADMIN_USER_DELETE_SUCCESS:
-      return create(state, (draft) => deleteUser(draft, action.accountId));
-    case ADMIN_USER_APPROVE_SUCCESS:
-      return create(state, (draft) => approveUser(draft, action.user));
-    case ADMIN_USER_REJECT_SUCCESS:
-      return create(state, (draft) => {
-        draft.awaitingApproval = draft.awaitingApproval.filter(value => value !== action.accountId);
-      });
+    // case ADMIN_USER_DELETE_SUCCESS:
+    //   return create(state, (draft) => deleteUser(draft, action.accountId));
     default:
       return state;
   }

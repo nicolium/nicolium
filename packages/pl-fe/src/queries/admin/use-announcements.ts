@@ -15,7 +15,7 @@ import { queryClient } from 'pl-fe/queries/client';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 
 const useAnnouncements = makePaginatedResponseQuery(
-  () => ['admin', 'announcements'],
+  ['admin', 'announcements'],
   (client) => client.admin.announcements.getAnnouncements(),
 );
 

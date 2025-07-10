@@ -5,6 +5,7 @@ import { useStatContext } from 'pl-fe/contexts/stat-context';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useSettings } from 'pl-fe/hooks/use-settings';
+import { usePendingUsersCount } from 'pl-fe/queries/admin/use-accounts';
 import { RootState } from 'pl-fe/store';
 import FaviconService from 'pl-fe/utils/favicon-service';
 
@@ -13,8 +14,7 @@ FaviconService.initFaviconService();
 const getNotifTotals = (state: RootState): number => {
   const notifications = state.notifications.unread || 0;
   const reports = state.admin.openReports.length;
-  const approvals = state.admin.awaitingApproval.length;
-  return notifications + reports + approvals;
+  return notifications + reports;
 };
 
 interface IHelmet {
@@ -24,7 +24,8 @@ interface IHelmet {
 const Helmet: React.FC<IHelmet> = ({ children }) => {
   const instance = useInstance();
   const { unreadChatsCount } = useStatContext();
-  const unreadCount = useAppSelector((state) => getNotifTotals(state) + unreadChatsCount);
+  const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
+  const unreadCount = useAppSelector((state) => getNotifTotals(state) + unreadChatsCount + awaitingApprovalCount);
   const { demetricator } = useSettings();
 
   const hasUnreadNotifications = React.useMemo(() => !(unreadCount < 1 || demetricator), [unreadCount, demetricator]);

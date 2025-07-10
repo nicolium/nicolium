@@ -37,7 +37,7 @@ const useFollowRequests = makeUseFollowRequests((data) => data.pages.map(page =>
 const useFollowRequestsCount = makeUseFollowRequests((data) => data.pages.map(page => page.items).flat().length);
 
 const useOutgoingFollowRequests = makePaginatedResponseQuery(
-  () => ['accountsLists', 'outgoingFollowRequests'],
+  ['accountsLists', 'outgoingFollowRequests'],
   (client) => client.myAccount.getOutgoingFollowRequests().then(minifyAccountList),
 );
 
