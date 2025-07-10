@@ -2,7 +2,6 @@ import React, { useCallback, useState } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import { closeReport } from 'pl-fe/actions/admin';
 import { deactivateUserModal, deleteUserModal } from 'pl-fe/actions/moderation';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
@@ -14,6 +13,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useReport, useResolveReport } from 'pl-fe/queries/admin/use-reports';
 import { makeGetReport } from 'pl-fe/selectors';
 import toast from 'pl-fe/toast';
 
@@ -33,9 +33,12 @@ const Report: React.FC<IReport> = ({ id }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
+  const { data: minifiedReport } = useReport(id);
+  const { mutate: resolveReport } = useResolveReport(id);
+
   const getReport = useCallback(makeGetReport(), []);
 
-  const report = useAppSelector((state) => getReport(state, id));
+  const report = useAppSelector((state) => getReport(state, minifiedReport));
 
   const [accordionExpanded, setAccordionExpanded] = useState(false);
 
@@ -56,10 +59,12 @@ const Report: React.FC<IReport> = ({ id }) => {
   }];
 
   const handleCloseReport = () => {
-    dispatch(closeReport(report.id)).then(() => {
-      const message = intl.formatMessage(messages.reportClosed, { name: targetAccount.username as string });
-      toast.success(message);
-    }).catch(() => {});
+    resolveReport(undefined, {
+      onSuccess: () => {
+        const message = intl.formatMessage(messages.reportClosed, { name: targetAccount.username as string });
+        toast.success(message);
+      },
+    });
   };
 
   const handleDeactivateUser = () => {

@@ -3,8 +3,8 @@ import { useIntl, defineMessages } from 'react-intl';
 import { useRouteMatch } from 'react-router-dom';
 
 import Tabs from 'pl-fe/components/ui/tabs';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { usePendingUsersCount } from 'pl-fe/queries/admin/use-accounts';
+import { usePendingReportsCount } from 'pl-fe/queries/admin/use-reports';
 
 const messages = defineMessages({
   dashboard: { id: 'admin_nav.dashboard', defaultMessage: 'Dashboard' },
@@ -17,7 +17,7 @@ const AdminTabs: React.FC = () => {
   const match = useRouteMatch();
 
   const { data: awaitingApprovalCount } = usePendingUsersCount();
-  const reportsCount = useAppSelector(state => state.admin.openReports.length);
+  const { data: pendingReportsCount = 0 } = usePendingReportsCount();
 
   const tabs = [{
     name: '/pl-fe/admin',
@@ -27,7 +27,7 @@ const AdminTabs: React.FC = () => {
     name: '/pl-fe/admin/reports',
     text: intl.formatMessage(messages.reports),
     to: '/pl-fe/admin/reports',
-    count: reportsCount,
+    count: pendingReportsCount,
   }, {
     name: '/pl-fe/admin/approval',
     text: intl.formatMessage(messages.waitlist),

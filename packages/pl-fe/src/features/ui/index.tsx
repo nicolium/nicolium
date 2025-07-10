@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { Suspense, lazy, useEffect, useRef } from 'react';
 import { Redirect, Switch, useHistory, useLocation } from 'react-router-dom';
 
-import { fetchConfig, fetchReports } from 'pl-fe/actions/admin';
+import { fetchConfig } from 'pl-fe/actions/admin';
 import { fetchDraftStatuses } from 'pl-fe/actions/draft-statuses';
 import { fetchFilters } from 'pl-fe/actions/filters';
 import { fetchMarker } from 'pl-fe/actions/markers';
@@ -42,6 +42,7 @@ import SearchLayout from 'pl-fe/layouts/search-layout';
 import StatusLayout from 'pl-fe/layouts/status-layout';
 import { prefetchFollowRequests } from 'pl-fe/queries/accounts/use-follow-requests';
 import { pendingUsersQuery } from 'pl-fe/queries/admin/use-accounts';
+import { pendingReportsQuery } from 'pl-fe/queries/admin/use-reports';
 import { queryClient } from 'pl-fe/queries/client';
 import { prefetchCustomEmojis } from 'pl-fe/queries/instance/use-custom-emojis';
 import { scheduledStatusesQueryOptions } from 'pl-fe/queries/statuses/scheduled-statuses';
@@ -418,7 +419,7 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
       .catch(console.error);
 
     if (account.is_admin || account.is_moderator) {
-      dispatch(fetchReports({ resolved: false }));
+      queryClient.prefetchInfiniteQuery(pendingReportsQuery);
       queryClient.prefetchInfiniteQuery(pendingUsersQuery);
     }
 

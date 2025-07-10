@@ -5,17 +5,13 @@ import { getClient } from '../api';
 
 import { deleteFromTimelines } from './timelines';
 
-import type { AdminGetReportsParams, AdminReport, PleromaConfig, Status } from 'pl-api';
+import type { PleromaConfig } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const ADMIN_CONFIG_FETCH_SUCCESS = 'ADMIN_CONFIG_FETCH_SUCCESS' as const;
 
 const ADMIN_CONFIG_UPDATE_REQUEST = 'ADMIN_CONFIG_UPDATE_REQUEST' as const;
 const ADMIN_CONFIG_UPDATE_SUCCESS = 'ADMIN_CONFIG_UPDATE_SUCCESS' as const;
-
-const ADMIN_REPORTS_FETCH_SUCCESS = 'ADMIN_REPORTS_FETCH_SUCCESS' as const;
-
-const ADMIN_REPORT_PATCH_SUCCESS = 'ADMIN_REPORT_PATCH_SUCCESS' as const;
 
 const ADMIN_USER_DELETE_SUCCESS = 'ADMIN_USER_DELETE_SUCCESS' as const;
 
@@ -47,23 +43,6 @@ const updatePlFeConfig = (data: Record<string, any>) =>
 
     return dispatch(updateConfig(params));
   };
-
-const fetchReports = (params?: AdminGetReportsParams) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).admin.reports.getReports(params)
-      .then(({ items }) => {
-        items.forEach((report) => {
-          dispatch(importEntities({ statuses: report.statuses as Array<Status>, accounts: [report.account?.account, report.target_account?.account] }));
-          dispatch<AdminActions>({ type: ADMIN_REPORTS_FETCH_SUCCESS, reports: items, params });
-        });
-      });
-
-const closeReport = (reportId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).admin.reports.resolveReport(reportId).then((report) => {
-      dispatch<AdminActions>({ type: ADMIN_REPORT_PATCH_SUCCESS, report, reportId });
-      return report;
-    });
 
 const deactivateUser = (accountId: string, report_id?: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -145,22 +124,16 @@ type AdminActions =
   | { type: typeof ADMIN_CONFIG_FETCH_SUCCESS; configs: PleromaConfig['configs']; needsReboot: boolean }
   | { type: typeof ADMIN_CONFIG_UPDATE_REQUEST; configs: PleromaConfig['configs'] }
   | { type: typeof ADMIN_CONFIG_UPDATE_SUCCESS; configs: PleromaConfig['configs']; needsReboot: boolean }
-  | { type: typeof ADMIN_REPORTS_FETCH_SUCCESS; reports: Array<AdminReport>; params?: AdminGetReportsParams }
-  | { type: typeof ADMIN_REPORT_PATCH_SUCCESS; report: AdminReport; reportId: string }
   | { type: typeof ADMIN_USER_DELETE_SUCCESS; accountId: string };
 
 export {
   ADMIN_CONFIG_FETCH_SUCCESS,
   ADMIN_CONFIG_UPDATE_REQUEST,
   ADMIN_CONFIG_UPDATE_SUCCESS,
-  ADMIN_REPORTS_FETCH_SUCCESS,
-  ADMIN_REPORT_PATCH_SUCCESS,
   ADMIN_USER_DELETE_SUCCESS,
   fetchConfig,
   updateConfig,
   updatePlFeConfig,
-  fetchReports,
-  closeReport,
   deactivateUser,
   deleteUser,
   deleteStatus,

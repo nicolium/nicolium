@@ -3,7 +3,7 @@ import { store } from 'pl-fe/store';
 
 import { queryClient } from '../client';
 
-import type { Account, AdminAccount, PaginatedResponse, Status } from 'pl-api';
+import type { Account, AdminAccount, AdminReport, PaginatedResponse, Status } from 'pl-api';
 
 const minifyList = <T1, T2>({ previous, next, items, ...response }: PaginatedResponse<T1>, minifier: (value: T1) => T2, importer?: (items: Array<T1>) => void): PaginatedResponse<T2> => {
   importer?.(items);
@@ -26,6 +26,13 @@ const minifyAccountList = (response: PaginatedResponse<Account>): PaginatedRespo
     store.dispatch(importEntities({ accounts }) as any);
   });
 
+// const minifyAdminAccount = ({ account, ...adminAccount }: AdminAccount) => {
+//   store.dispatch(importEntities({ accounts: [account] }) as any);
+//   queryClient.setQueryData(['admin', 'accounts', adminAccount.id], adminAccount);
+
+//   return adminAccount;
+// };
+
 const minifyAdminAccountList = (response: PaginatedResponse<AdminAccount>) =>
   minifyList(response, (account) => account.id, (accounts) => {
     store.dispatch(importEntities({ accounts: accounts.map((account) => account.account) }) as any);
@@ -34,4 +41,26 @@ const minifyAdminAccountList = (response: PaginatedResponse<AdminAccount>) =>
     }
   });
 
-export { minifyList, minifyAccountList, minifyStatusList, minifyAdminAccountList };
+const minifyAdminReport = ({ account, action_taken_by_account, assigned_account, target_account, statuses, ...adminReport }: AdminReport) => {
+  store.dispatch(importEntities({
+    accounts: [account.account, action_taken_by_account?.account, assigned_account?.account, target_account?.account],
+    statuses: statuses as any,
+  }) as any);
+  return {
+    account_id: account.id,
+    action_taken_by_account_id: action_taken_by_account?.id,
+    assigned_account_id: assigned_account?.id,
+    target_account_id: target_account?.id,
+    status_ids: statuses.map(({ id }) => id),
+    ...adminReport,
+  };
+};
+
+const minifyAdminReportList = (response: PaginatedResponse<AdminReport>) =>
+  minifyList(response, (report) => report.id, (reports) => {
+    for (const report of reports) {
+      queryClient.setQueryData(['admin', 'reports', report.id], minifyAdminReport(report));
+    }
+  });
+
+export { minifyList, minifyAccountList, minifyStatusList, minifyAdminAccountList, minifyAdminReport, minifyAdminReportList };

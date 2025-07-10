@@ -5,11 +5,11 @@ import List, { ListItem } from 'pl-fe/components/list';
 import { CardTitle } from 'pl-fe/components/ui/card';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { usePendingUsersCount } from 'pl-fe/queries/admin/use-accounts';
+import { usePendingReportsCount } from 'pl-fe/queries/admin/use-reports';
 import sourceCode from 'pl-fe/utils/code';
 
 import { Counter } from '../components/counter';
@@ -24,9 +24,7 @@ const Dashboard: React.FC = () => {
   const { account } = useOwnAccount();
 
   const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
-  const { pendingReports } = useAppSelector((state) => ({
-    pendingReports: state.admin.openReports.length,
-  }));
+  const { data: pendingReportsCount = 0 } = usePendingReportsCount();
 
   const v = features.version;
 
@@ -117,7 +115,7 @@ const Dashboard: React.FC = () => {
           label={<FormattedMessage id='admin.dashcounters.domain_count_label' defaultMessage='peers' />}
         />
         <List>
-          <ListItem size='sm' to='/pl-fe/admin/reports' label={<FormattedMessage id='admin.links.pending_reports' defaultMessage='{count, plural, one {{formattedCount} pending report} other {{formattedCount} pending reports}}' values={{ count: pendingReports, formattedCount: <strong><FormattedNumber value={pendingReports} /></strong> }} />} />
+          <ListItem size='sm' to='/pl-fe/admin/reports' label={<FormattedMessage id='admin.links.pending_reports' defaultMessage='{count, plural, one {{formattedCount} pending report} other {{formattedCount} pending reports}}' values={{ count: pendingReportsCount, formattedCount: <strong><FormattedNumber value={pendingReportsCount} /></strong> }} />} />
           <ListItem size='sm' to='/pl-fe/admin/users' label={<FormattedMessage id='admin.links.pending_users' defaultMessage='{count, plural, one {{formattedCount} pending user} other {{formattedCount} pending users}}' values={{ count: awaitingApprovalCount, formattedCount: <strong><FormattedNumber value={awaitingApprovalCount} /></strong> }} />} />
           {/* <ListItem size='sm' to='/pl-fe/admin' label={<FormattedMessage id='admin.links.pending_tags' defaultMessage='{count} pending tags' values={{ count: <strong>0</strong> }} />} />
           <ListItem size='sm' to='/pl-fe/admin' label={<FormattedMessage id='admin.links.pending_appeals' defaultMessage='{count} pending appeals' values={{ count: <strong>0</strong> }} />} /> */}

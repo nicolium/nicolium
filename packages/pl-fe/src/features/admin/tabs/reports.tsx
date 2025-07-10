@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { fetchReports } from 'pl-fe/actions/admin';
 import ScrollableList from 'pl-fe/components/scrollable-list';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useReports } from 'pl-fe/queries/admin/use-reports';
 
 import Report from '../components/report';
 
@@ -16,29 +14,20 @@ const messages = defineMessages({
 
 const Reports: React.FC = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
-  const [isLoading, setLoading] = useState(true);
-
-  const reports = useAppSelector(state => state.admin.openReports);
-
-  useEffect(() => {
-    dispatch(fetchReports())
-      .then(() => setLoading(false))
-      .catch(() => {});
-  }, []);
-
-  const showLoading = isLoading && reports.length === 0;
+  const { data: reportIds = [], isPending } = useReports({
+    resolved: false,
+  });
 
   return (
     <ScrollableList
       scrollKey='adminReports'
-      isLoading={isLoading}
-      showLoading={showLoading}
+      isLoading={isPending}
+      showLoading={isPending}
       emptyMessage={intl.formatMessage(messages.emptyMessage)}
       listClassName='divide-y divide-solid divide-gray-200 dark:divide-gray-800'
     >
-      {reports.map(report => report && <Report id={report} key={report} />)}
+      {reportIds.map(report => report && <Report id={report} key={report} />)}
     </ScrollableList>
   );
 };

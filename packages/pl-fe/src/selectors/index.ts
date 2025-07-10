@@ -12,6 +12,7 @@ import type { Filter, NotificationGroup, Relationship } from 'pl-api';
 import type { EntityStore } from 'pl-fe/entity-store/types';
 import type { Account } from 'pl-fe/normalizers/account';
 import type { Group } from 'pl-fe/normalizers/group';
+import type { minifyAdminReport } from 'pl-fe/queries/utils/minify-list';
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 import type { MRFSimple } from 'pl-fe/schemas/pleroma';
 import type { RootState } from 'pl-fe/store';
@@ -202,14 +203,14 @@ const makeGetReport = () => {
 
   return createSelector(
     [
-      (state: RootState, reportId: string) => state.admin.reports[reportId],
-      (state: RootState, reportId: string) => selectAccount(state, state.admin.reports[reportId]?.account_id || ''),
-      (state: RootState, reportId: string) => selectAccount(state, state.admin.reports[reportId]?.target_account_id || ''),
-      (state: RootState, reportId: string) => state.admin.reports[reportId]!.status_ids
+      (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => report,
+      (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => selectAccount(state, report?.account_id || ''),
+      (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => selectAccount(state, report?.target_account_id || ''),
+      (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => report?.status_ids
         .map((statusId) => getStatus(state, { id: statusId }))
         .filter((status): status is SelectedStatus => status !== null),
     ],
-    (report, account, target_account, statuses) => {
+    (report, account, target_account, statuses = []) => {
       if (!report) return null;
       return {
         ...report,
