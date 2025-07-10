@@ -39,7 +39,11 @@ const messages = defineMessages({
   links: { id: 'search_results.links', defaultMessage: 'News' },
 });
 
-const SearchInput = () => {
+interface ISearchInput {
+  placeholder?: string;
+}
+
+const SearchInput: React.FC<ISearchInput> = ({ placeholder }) => {
   const [params, setParams] = useSearchParams();
   const [value, setValue] = useState(params.get('q') || '');
 
@@ -82,13 +86,13 @@ const SearchInput = () => {
     <div
       className='sticky top-[76px] z-10 w-full bg-white/90 backdrop-blur black:bg-black/80 dark:bg-primary-900/90'
     >
-      <label htmlFor='search' className='sr-only'>{intl.formatMessage(messages.placeholder)}</label>
+      <label htmlFor='search' className='sr-only'>{placeholder || intl.formatMessage(messages.placeholder)}</label>
 
       <div className='relative'>
         <Input
           type='text'
           id='search'
-          placeholder={intl.formatMessage(messages.placeholder)}
+          placeholder={placeholder || intl.formatMessage(messages.placeholder)}
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
@@ -115,7 +119,6 @@ const SearchInput = () => {
               className='size-4 text-gray-600'
             />
           )}
-
         </div>
       </div>
     </div>
@@ -375,4 +378,4 @@ const SearchPage = () => {
   );
 };
 
-export { SearchPage as default };
+export { SearchInput, SearchPage as default };

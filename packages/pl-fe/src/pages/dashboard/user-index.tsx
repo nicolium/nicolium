@@ -1,14 +1,13 @@
-import debounce from 'lodash/debounce';
-import React, { useCallback, useEffect } from 'react';
+import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
+import { useSearchParams } from 'react-router-dom-v5-compat';
 
-import { expandUserIndex, fetchUserIndex, setUserIndexQuery } from 'pl-fe/actions/admin';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Column from 'pl-fe/components/ui/column';
-import Input from 'pl-fe/components/ui/input';
 import AccountContainer from 'pl-fe/containers/account-container';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useAdminAccounts } from 'pl-fe/queries/admin/use-accounts';
+
+import { SearchInput } from '../search/search';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.users', defaultMessage: 'Users' },
@@ -16,51 +15,32 @@ const messages = defineMessages({
   searchPlaceholder: { id: 'admin.user_index.search_input_placeholder', defaultMessage: 'Who are you looking for?' },
 });
 
+
 const UserIndexPage: React.FC = () => {
-  const dispatch = useAppDispatch();
+  const [params] = useSearchParams();
+  const query = params.get('q') || '';
+
   const intl = useIntl();
 
-  const { isLoading, items, total, query, next } = useAppSelector((state) => state.admin_user_index);
-
-  const handleLoadMore = () => {
-    if (!isLoading) dispatch(expandUserIndex());
-  };
-
-  const updateQuery = useCallback(debounce(() => {
-    dispatch(fetchUserIndex());
-  }, 900, { leading: true }), []);
-
-  const handleQueryChange: React.ChangeEventHandler<HTMLInputElement> = e => {
-    dispatch(setUserIndexQuery(e.target.value));
-    updateQuery();
-  };
-
-  useEffect(() => {
-    updateQuery();
-  }, []);
-
-  const hasMore = (total === undefined || items.length < total) && !!next;
-
-  const showLoading = isLoading && !items.length;
+  const { data: accountIds, isPending, isFetching, hasNextPage, fetchNextPage } = useAdminAccounts({
+    origin: 'local',
+    status: 'active',
+    username: query,
+  });
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <Input
-        value={query}
-        onChange={handleQueryChange}
-        placeholder={intl.formatMessage(messages.searchPlaceholder)}
-      />
+      <SearchInput />
       <ScrollableList
         scrollKey='userIndex'
-        hasMore={hasMore}
-        isLoading={isLoading}
-        showLoading={showLoading}
-        onLoadMore={handleLoadMore}
+        hasMore={hasNextPage}
+        isLoading={isFetching}
+        showLoading={isPending}
+        onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
         emptyMessage={intl.formatMessage(messages.empty)}
-        className='mt-4'
         itemClassName='pb-4'
       >
-        {items.map(id =>
+        {(accountIds || []).map(id =>
           <AccountContainer key={id} id={id} withDate />,
         )}
       </ScrollableList>
