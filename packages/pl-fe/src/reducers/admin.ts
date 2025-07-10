@@ -1,4 +1,3 @@
-import omit from 'lodash/omit';
 import { create } from 'mutative';
 
 import {
@@ -6,20 +5,17 @@ import {
   ADMIN_CONFIG_UPDATE_SUCCESS,
   ADMIN_REPORTS_FETCH_SUCCESS,
   ADMIN_REPORT_PATCH_SUCCESS,
-  ADMIN_USERS_FETCH_SUCCESS,
   // ADMIN_USER_DELETE_SUCCESS,
   type AdminActions,
 } from 'pl-fe/actions/admin';
 import { normalizeAdminReport, type AdminReport as MinifiedReport } from 'pl-fe/normalizers/admin-report';
 
-import type { AdminAccount, AdminGetAccountsParams, AdminReport } from 'pl-api';
+import type { AdminReport } from 'pl-api';
 import type { Config } from 'pl-fe/utils/config-db';
 
 interface State {
   reports: Record<string, MinifiedReport>;
   openReports: Array<string>;
-  users: Record<string, MinifiedUser>;
-  latestUsers: Array<string>;
   configs: Array<Config>;
   needsReboot: boolean;
 }
@@ -27,33 +23,8 @@ interface State {
 const initialState: State = {
   reports: {},
   openReports: [],
-  users: {},
-  latestUsers: [],
   configs: [],
   needsReboot: false,
-};
-
-const toIds = (items: any[]) => items.map(item => item.id);
-
-const maybeImportLatest = (state: State, users: Array<AdminAccount>, params?: AdminGetAccountsParams) => {
-  if (params?.origin === 'local' && params.status === 'active') {
-    const newIds = toIds(users);
-    state.latestUsers = newIds;
-  }
-};
-
-const minifyUser = (user: AdminAccount) => omit(user, ['account']);
-
-type MinifiedUser = ReturnType<typeof minifyUser>;
-
-const importUsers = (state: State, users: Array<AdminAccount>, params?: AdminGetAccountsParams) => {
-  // maybeImportUnapproved(state, users, params);
-  maybeImportLatest(state, users, params);
-
-  users.forEach(user => {
-    const normalizedUser = minifyUser(user);
-    state.users[user.id] = normalizedUser;
-  });
 };
 
 // const deleteUser = (state: State, accountId: string) => {
@@ -102,8 +73,6 @@ const admin = (state = initialState, action: AdminActions): State => {
       return create(state, (draft) => importReports(draft, action.reports));
     case ADMIN_REPORT_PATCH_SUCCESS:
       return create(state, (draft) => handleReportDiffs(draft, action.report));
-    case ADMIN_USERS_FETCH_SUCCESS:
-      return create(state, (draft) => importUsers(draft, action.users, action.params));
     // case ADMIN_USER_DELETE_SUCCESS:
     //   return create(state, (draft) => deleteUser(draft, action.accountId));
     default:

@@ -1,4 +1,3 @@
-import { fetchRelationships } from 'pl-fe/actions/accounts';
 import { importEntities } from 'pl-fe/actions/importer';
 import { filterBadges, getTagDiff } from 'pl-fe/utils/badges';
 
@@ -6,7 +5,7 @@ import { getClient } from '../api';
 
 import { deleteFromTimelines } from './timelines';
 
-import type { Account, AdminAccount, AdminGetAccountsParams, AdminGetReportsParams, AdminReport, PaginatedResponse, PleromaConfig, Status } from 'pl-api';
+import type { AdminGetReportsParams, AdminReport, PleromaConfig, Status } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const ADMIN_CONFIG_FETCH_SUCCESS = 'ADMIN_CONFIG_FETCH_SUCCESS' as const;
@@ -17,8 +16,6 @@ const ADMIN_CONFIG_UPDATE_SUCCESS = 'ADMIN_CONFIG_UPDATE_SUCCESS' as const;
 const ADMIN_REPORTS_FETCH_SUCCESS = 'ADMIN_REPORTS_FETCH_SUCCESS' as const;
 
 const ADMIN_REPORT_PATCH_SUCCESS = 'ADMIN_REPORT_PATCH_SUCCESS' as const;
-
-const ADMIN_USERS_FETCH_SUCCESS = 'ADMIN_USERS_FETCH_SUCCESS' as const;
 
 const ADMIN_USER_DELETE_SUCCESS = 'ADMIN_USER_DELETE_SUCCESS' as const;
 
@@ -67,18 +64,6 @@ const closeReport = (reportId: string) =>
       dispatch<AdminActions>({ type: ADMIN_REPORT_PATCH_SUCCESS, report, reportId });
       return report;
     });
-
-const fetchUsers = (params?: AdminGetAccountsParams) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-
-    return getClient(state).admin.accounts.getAccounts(params).then((res) => {
-      dispatch(importEntities({ accounts: res.items.map(({ account }) => account).filter((account): account is Account => account !== null) }));
-      dispatch(fetchRelationships(res.items.map((account) => account.id)));
-      dispatch<AdminActions>({ type: ADMIN_USERS_FETCH_SUCCESS, users: res.items, params, next: res.next });
-      return res;
-    });
-  };
 
 const deactivateUser = (accountId: string, report_id?: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -162,7 +147,6 @@ type AdminActions =
   | { type: typeof ADMIN_CONFIG_UPDATE_SUCCESS; configs: PleromaConfig['configs']; needsReboot: boolean }
   | { type: typeof ADMIN_REPORTS_FETCH_SUCCESS; reports: Array<AdminReport>; params?: AdminGetReportsParams }
   | { type: typeof ADMIN_REPORT_PATCH_SUCCESS; report: AdminReport; reportId: string }
-  | { type: typeof ADMIN_USERS_FETCH_SUCCESS; users: Array<AdminAccount>; params?: AdminGetAccountsParams; next: (() => Promise<PaginatedResponse<AdminAccount>>) | null }
   | { type: typeof ADMIN_USER_DELETE_SUCCESS; accountId: string };
 
 export {
@@ -171,14 +155,12 @@ export {
   ADMIN_CONFIG_UPDATE_SUCCESS,
   ADMIN_REPORTS_FETCH_SUCCESS,
   ADMIN_REPORT_PATCH_SUCCESS,
-  ADMIN_USERS_FETCH_SUCCESS,
   ADMIN_USER_DELETE_SUCCESS,
   fetchConfig,
   updateConfig,
   updatePlFeConfig,
   fetchReports,
   closeReport,
-  fetchUsers,
   deactivateUser,
   deleteUser,
   deleteStatus,
