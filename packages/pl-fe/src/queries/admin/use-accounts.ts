@@ -5,6 +5,7 @@ import { importEntities } from 'pl-fe/actions/importer';
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useClient } from 'pl-fe/hooks/use-client';
+import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 
 import { filterById } from '../utils/filter-id';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
@@ -43,10 +44,15 @@ const pendingUsersQuery = makePaginatedResponseQueryOptions(
   (client) => client.admin.accounts.getAccounts({ origin: 'local', status: 'pending' }).then(minifyAdminAccountList),
 )();
 
-const usePendingUsersCount = () => useInfiniteQuery({
-  ...pendingUsersQuery,
-  select: (data) => data.pages.at(-1)?.total || data.pages.flat().length || 0,
-});
+const usePendingUsersCount = () => {
+  const { account } = useOwnAccount();
+
+  return useInfiniteQuery({
+    ...pendingUsersQuery,
+    select: (data) => data.pages.at(-1)?.total || data.pages.flat().length || 0,
+    enabled: account?.is_admin || account?.is_moderator,
+  });
+};
 
 const useAdminApproveAccountMutation = (accountId: string) => {
   const client = useClient();
