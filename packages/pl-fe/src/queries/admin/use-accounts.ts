@@ -49,7 +49,7 @@ const usePendingUsersCount = () => {
 
   return useInfiniteQuery({
     ...pendingUsersQuery,
-    select: (data) => data.pages.at(-1)?.total || data.pages.flat().length || 0,
+    select: (data) => data.pages.at(-1)?.total || data.pages.map(page => page.items).flat().length || 0,
     enabled: account?.is_admin || account?.is_moderator,
   });
 };
