@@ -26,7 +26,7 @@ const AdminTabs: React.FC = () => {
   }, {
     name: '/pl-fe/admin/reports',
     text: intl.formatMessage(messages.reports),
-    to: '/pl-fe/admin/reports',
+    to: '/pl-fe/admin/reports?resolved=false',
     count: pendingReportsCount,
   }, {
     name: '/pl-fe/admin/approval',
