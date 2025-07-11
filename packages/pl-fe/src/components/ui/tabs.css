@@ -7,12 +7,12 @@
 }
 
 [data-reach-tab-list] {
-  @apply flex;
+  @apply flex overflow-auto;
 }
 
 [data-reach-tab] {
   @apply flex-1 flex justify-center items-center
-  py-4 px-1 text-center font-medium text-sm text-gray-700
+  min-w-fit py-4 px-1 text-center font-medium text-sm text-gray-700
   dark:text-gray-600 hover:text-gray-800 dark:hover:text-gray-500
   focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-offset-2 dark:ring-gray-800 dark:ring-offset-0 dark:focus-visible:ring-primary-500;
 }
