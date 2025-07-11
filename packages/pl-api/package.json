@@ -47,7 +47,7 @@
     "lodash.omit": "^4.5.0",
     "lodash.pick": "^4.4.0",
     "object-to-formdata": "^4.5.1",
-    "query-string": "^9.1.1",
+    "query-string": "^9.2.2",
     "semver": "^7.7.1",
     "valibot": "^1.1.0"
   },
