@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useMemo } from 'react';
 
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useEntityLookup } from 'pl-fe/entity-store/hooks/use-entity-lookup';
@@ -19,11 +18,10 @@ interface UseAccountLookupOpts {
 const useAccountLookup = (acct: string | undefined, opts: UseAccountLookupOpts = {}) => {
   const client = useClient();
   const features = useFeatures();
-  const history = useHistory();
   const { me } = useLoggedIn();
   const { withRelationship } = opts;
 
-  const { entity: account, isUnauthorized, ...result } = useEntityLookup<BaseAccount, Account>(
+  const { entity, isUnauthorized, ...result } = useEntityLookup<BaseAccount, Account>(
     Entities.ACCOUNTS,
     (account) => account.acct.toLowerCase() === acct?.toLowerCase(),
     () => client.accounts.lookupAccount(acct!),
@@ -33,16 +31,12 @@ const useAccountLookup = (acct: string | undefined, opts: UseAccountLookupOpts =
   const {
     relationship,
     isLoading: isRelationshipLoading,
-  } = useRelationship(account?.id, { enabled: withRelationship });
+  } = useRelationship(entity?.id, { enabled: withRelationship });
 
-  const isBlocked = account?.relationship?.blocked_by === true;
-  const isUnavailable = (me === account?.id) ? false : (isBlocked && !features.blockersVisible);
+  const isBlocked = entity?.relationship?.blocked_by === true;
+  const isUnavailable = (me === entity?.id) ? false : (isBlocked && !features.blockersVisible);
 
-  useEffect(() => {
-    if (isUnauthorized) {
-      history.push('/login');
-    }
-  }, [isUnauthorized]);
+  const account = useMemo(() => entity ? { ...entity, relationship } : undefined, [entity, relationship]);
 
   return {
     ...result,
@@ -50,7 +44,7 @@ const useAccountLookup = (acct: string | undefined, opts: UseAccountLookupOpts =
     isRelationshipLoading,
     isUnauthorized,
     isUnavailable,
-    account: account ? { ...account, relationship } : undefined,
+    account,
   };
 };
 

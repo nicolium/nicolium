@@ -35,11 +35,15 @@ const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
   const history = useHistory();
   const username = params?.username || '';
 
-  const { account } = useAccountLookup(username, { withRelationship: true });
+  const { account, isUnauthorized } = useAccountLookup(username, { withRelationship: true });
 
   const me = useAppSelector(state => state.me);
   const features = useFeatures();
   const { displayFqn } = usePlFeConfig();
+
+  if (isUnauthorized) {
+    return <Redirect to='/login' />;
+  }
 
   // Fix case of username
   if (account && account.acct !== username) {
