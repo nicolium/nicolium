@@ -29,6 +29,7 @@ const customEmojiReactionSchema = v.object({
 const emojiReactionSchema = v.pipe(
   v.any(),
   v.transform((reaction: any) => reaction ? {
+    url: reaction.url,
     static_url: reaction.url,
     account_ids: reaction.accounts?.map((account: any) => account?.id),
     ...reaction,
