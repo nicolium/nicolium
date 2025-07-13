@@ -2673,8 +2673,12 @@ class PlApiClient {
       let response;
       if (apiVersions['emoji_reactions.pleroma.pl-api'] >= 1 || this.features.version.software === ICESHRIMP_NET) {
         response = await this.request(`/api/v1/pleroma/statuses/${statusId}/reactions${emoji ? `/${emoji}` : ''}`);
-      } else if (apiVersions['emoji_reaction.fedibird.pl-api'] >= 1) {
-        response = await this.request(`/api/v1/statuses/${statusId}/emoji_reactioned_by`);
+      } else {
+        if (apiVersions['emoji_reaction.fedibird.pl-api'] >= 1) {
+          response = await this.request(`/api/v1/statuses/${statusId}/emoji_reactioned_by`);
+        } else {
+          response = await this.request(`/api/v1/statuses/${statusId}/reactions`, { params: { emoji } });
+        }
         response.json = response.json?.reduce((acc: Array<any>, cur: any) => {
           if (emoji && cur.name !== emoji) return acc;
 
