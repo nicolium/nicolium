@@ -20,7 +20,7 @@ const Helmet: React.FC<IHelmet> = ({ children }) => {
   const { unreadChatsCount } = useStatContext();
   const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
   const { data: pendingReportsCount = 0 } = usePendingReportsCount();
-  const unreadCount = useAppSelector((state) => state.notifications.unread || 0 + unreadChatsCount + awaitingApprovalCount + pendingReportsCount);
+  const unreadCount = useAppSelector((state) => (state.notifications.unread || 0) + unreadChatsCount + awaitingApprovalCount + pendingReportsCount);
   const { demetricator } = useSettings();
 
   const hasUnreadNotifications = React.useMemo(() => !(unreadCount < 1 || demetricator), [unreadCount, demetricator]);
