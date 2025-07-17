@@ -21,7 +21,7 @@ const Reports: React.FC = () => {
   const intl = useIntl();
   const [params, setParams] = useSearchParams();
 
-  const resolved = params.get('resolved');
+  const resolved = params.get('resolved') as any as boolean;
   const accountId = params.get('account_id') || undefined;
   const targetAccountId = params.get('target_account_id') || undefined;
 
@@ -29,7 +29,7 @@ const Reports: React.FC = () => {
   const { account: targetAccount } = useAccount(targetAccountId);
 
   const { data: reportIds = [], isPending } = useReports({
-    resolved: resolved === 'true' ? true : resolved === 'false' ? false : undefined,
+    resolved,
     account_id: accountId,
     target_account_id: targetAccountId,
   });
