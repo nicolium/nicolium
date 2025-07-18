@@ -5913,10 +5913,10 @@ isomorphic-dompurify@^2.19.0:
     dompurify "^3.2.3"
     jsdom "^25.0.1"
 
-isows@^1.0.6:
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/isows/-/isows-1.0.6.tgz#0da29d706fa51551c663c627ace42769850f86e7"
-  integrity sha512-lPHCayd40oW98/I0uvgaHKWCSvkzY27LjWLbtzOm64yQ+G3Q5npjjbdppU65iZXkK1Zt+kH9pfegli0AYfwYYw==
+isows@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/isows/-/isows-1.0.7.tgz#1c06400b7eed216fbba3bcbd68f12490fc342915"
+  integrity sha512-I1fSfDCZL5P0v33sVqeTDSpcstAg/N+wF5HS033mogOVIp4B+oHC7oOCsA3axAbBSGTJ8QubbNmnIRN/h8U7hg==
 
 iterator.prototype@^1.1.4:
   version "1.1.4"
@@ -6998,19 +6998,19 @@ pkg-dir@^4.1.0:
   dependencies:
     find-up "^4.0.0"
 
-pl-api@^1.0.0-rc.84:
-  version "1.0.0-rc.84"
-  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-1.0.0-rc.84.tgz#3bb2a3befee692159ecae80b10a6fd5fd01705fa"
-  integrity sha512-8STLCsVEqNynFUoXTECpzPbpdsyEQXJcgdSWLXQA/KghQeFAUfVMzCY8v6BEK2N5CmG+qFGDmCxiWaFlwchP3g==
+pl-api@^1.0.0-rc.85:
+  version "1.0.0-rc.85"
+  resolved "https://registry.yarnpkg.com/pl-api/-/pl-api-1.0.0-rc.85.tgz#2e23aeb55506f6fe896e4b6f894eee090f36d63b"
+  integrity sha512-G6pSQhd7mANwZajTls4RPSV20GXqfKTOI6lNuB0HaYhl3bmDHxcv+RFsUAIvx75hK5/WJzNg08hY4sqdZSsWXw==
   dependencies:
     blurhash "^2.0.5"
     http-link-header "^1.1.3"
-    isows "^1.0.6"
+    isows "^1.0.7"
     lodash.omit "^4.5.0"
     lodash.pick "^4.4.0"
     object-to-formdata "^4.5.1"
-    query-string "^9.1.1"
-    semver "^7.7.1"
+    query-string "^9.2.2"
+    semver "^7.7.2"
     valibot "^1.1.0"
 
 possible-typed-array-names@^1.0.0:
@@ -7356,7 +7356,7 @@ qrcode.react@^4.2.0:
   resolved "https://registry.yarnpkg.com/qrcode.react/-/qrcode.react-4.2.0.tgz#1bce8363f348197d145c0da640929a24c83cbca3"
   integrity sha512-QpgqWi8rD9DsS9EP3z7BT+5lY5SFhsqGjpgW5DY/i3mK4M9DTBNz3ErMi8BWYEfI3L0d8GIbGmcdFAS1uIRGjA==
 
-query-string@^9.1.1, query-string@^9.2.2:
+query-string@^9.2.2:
   version "9.2.2"
   resolved "https://registry.yarnpkg.com/query-string/-/query-string-9.2.2.tgz#a0104824edfdd2c1db2f18af71cef7abf6a3b20f"
   integrity sha512-pDSIZJ9sFuOp6VnD+5IkakSVf+rICAuuU88Hcsr6AKL0QtxSIfVuKiVP2oahFI7tk3CRSexwV+Ya6MOoTxzg9g==
@@ -8046,10 +8046,10 @@ semver@^7.5.4, semver@^7.6.0, semver@^7.6.2, semver@^7.6.3:
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.6.3.tgz#980f7b5550bc175fb4dc09403085627f9eb33143"
   integrity sha512-oVekP1cKtI+CTDvHWYFUcMtsK/00wmAEfyqKfNdARm8u1wNVhSgaX7A8d4UuIlUI5e84iEwOhs7ZPYRmzU9U6A==
 
-semver@^7.7.1:
-  version "7.7.1"
-  resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.1.tgz#abd5098d82b18c6c81f6074ff2647fd3e7220c9f"
-  integrity sha512-hlq8tAfn0m/61p4BVRcPzIGr6LKiMwo4VM6dGi6pt4qcRkmNzTcWq6eCEjEh+qXjkMDvPlOFFSGwQjoEa6gyMA==
+semver@^7.7.2:
+  version "7.7.2"
+  resolved "https://registry.yarnpkg.com/semver/-/semver-7.7.2.tgz#67d99fdcd35cec21e6f8b87a7fd515a33f982b58"
+  integrity sha512-RF0Fw+rO5AMf9MAyaRXI4AV0Ulj5lMHqVxxdSgiVbixSCXoEmmX/jk0CuJw4+3SqroYO9VoUh+HcuJivvtJemA==
 
 serialize-javascript@^6.0.1, serialize-javascript@^6.0.2:
   version "6.0.2"

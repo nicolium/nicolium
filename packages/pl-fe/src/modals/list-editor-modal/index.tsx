@@ -14,7 +14,6 @@ import Search from './components/search';
 import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
 const messages = defineMessages({
-  changeTitle: { id: 'lists.edit.submit', defaultMessage: 'Change title' },
   addToList: { id: 'lists.account.add', defaultMessage: 'Add to list' },
   removeFromList: { id: 'lists.account.remove', defaultMessage: 'Remove from list' },
   editList: { id: 'lists.edit', defaultMessage: 'Edit list' },
@@ -48,11 +47,7 @@ const ListEditorModal: React.FC<BaseModalProps & ListEditorModalProps> = ({ list
       title={<FormattedMessage id='lists.edit' defaultMessage='Edit list' />}
       onClose={onClickClose}
     >
-      <CardHeader>
-        <CardTitle title={intl.formatMessage(messages.changeTitle)} />
-      </CardHeader>
       <EditListForm />
-      <br />
 
       {accountIds.length > 0 && (
         <div>
