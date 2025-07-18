@@ -10,7 +10,7 @@ import { filteredArray } from './utils';
 const listSchema = v.object({
   id: v.pipe(v.unknown(), v.transform(String)),
   title: v.string(),
-  replies_policy: v.fallback(v.optional(v.string()), undefined),
+  replies_policy: v.fallback(v.optional(v.picklist(['none', 'list', 'followed'])), undefined),
   exclusive: v.fallback(v.optional(v.boolean()), undefined),
   antennas: filteredArray(v.lazy(() => antennaSchema)),
   notify: v.fallback(v.optional(v.boolean()), undefined),

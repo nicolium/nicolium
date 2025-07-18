@@ -1100,12 +1100,22 @@ const getFeatures = (instance: Instance) => {
       v.software === TAKAHE && gte(v.version, '0.12.0'),
     ]),
 
+    listsExclusive: any([
+      v.software === GOTOSOCIAL,
+      v.software === MASTODON && gte(v.version, '4.2.0'),
+    ]),
+
     /**
      * Can add a list to favourites.
      * @see POST /api/v1/lists/:list_id/favourite
      * @see POST /api/v1/lists/:list_id/unfavourite
      */
     listsFavourites: instance.api_versions['favourite_list.fedibird.pl-api'] >= 1,
+
+    listsRepliesPolicy: any([
+      v.software === GOTOSOCIAL,
+      v.software === MASTODON && gte(v.version, '3.3.0'),
+    ]),
 
     /**
      * Can load latest activities from outbox.
