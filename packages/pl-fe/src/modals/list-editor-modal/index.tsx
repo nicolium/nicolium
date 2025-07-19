@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { setupListEditor, resetListEditor } from 'pl-fe/actions/lists';
@@ -27,6 +27,8 @@ const ListEditorModal: React.FC<BaseModalProps & ListEditorModalProps> = ({ list
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
+  const [tab, setTab] = useState<'info' | 'members'>('info');
+
   const accountIds = useAppSelector((state) => state.listEditor.accounts.items);
   const searchAccountIds = useAppSelector((state) => state.listEditor.suggestions.items);
 
@@ -44,30 +46,37 @@ const ListEditorModal: React.FC<BaseModalProps & ListEditorModalProps> = ({ list
 
   return (
     <Modal
-      title={<FormattedMessage id='lists.edit' defaultMessage='Edit list' />}
+      title={tab === 'info' ? <FormattedMessage id='lists.edit' defaultMessage='Edit list' /> : <FormattedMessage id='lists.manage_members' defaultMessage='Manage list memebrs' />}
       onClose={onClickClose}
+      onBack={tab === 'members' ? () => setTab('info') : undefined}
     >
-      <EditListForm />
+      {tab === 'info'
+        ? <EditListForm onTabChange={setTab} />
+        : (
+          <>
+            {accountIds.length > 0 && (
+              <>
+                <div>
+                  <CardHeader>
+                    <CardTitle title={intl.formatMessage(messages.removeFromList)} />
+                  </CardHeader>
+                  <div className='max-h-48 overflow-y-auto'>
+                    {accountIds.map(accountId => <Account key={accountId} accountId={accountId} />)}
+                  </div>
+                </div>
+                <br />
+              </>
+            )}
 
-      {accountIds.length > 0 && (
-        <div>
-          <CardHeader>
-            <CardTitle title={intl.formatMessage(messages.removeFromList)} />
-          </CardHeader>
-          <div className='max-h-48 overflow-y-auto'>
-            {accountIds.map(accountId => <Account key={accountId} accountId={accountId} />)}
-          </div>
-        </div>
-      )}
-
-      <br />
-      <CardHeader>
-        <CardTitle title={intl.formatMessage(messages.addToList)} />
-      </CardHeader>
-      <Search />
-      <div className='max-h-48 overflow-y-auto'>
-        {searchAccountIds.map(accountId => <Account key={accountId} accountId={accountId} />)}
-      </div>
+            <CardHeader>
+              <CardTitle title={intl.formatMessage(messages.addToList)} />
+            </CardHeader>
+            <Search />
+            <div className='max-h-48 overflow-y-auto'>
+              {searchAccountIds.map(accountId => <Account key={accountId} accountId={accountId} />)}
+            </div>
+          </>
+        )}
     </Modal>
   );
 };

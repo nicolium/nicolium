@@ -22,7 +22,13 @@ const messages = defineMessages({
   repliesPolicyFollowed: { id: 'lists.replies_policy.followed', defaultMessage: 'Any followed user' },
 });
 
-const ListForm = () => {
+interface IListForm {
+  onTabChange: (tab: 'members') => void;
+}
+
+const ListForm: React.FC<IListForm> = ({
+  onTabChange,
+}) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const features = useFeatures();
@@ -65,39 +71,42 @@ const ListForm = () => {
         />
       </FormGroup>
 
-      {(features.listsRepliesPolicy || features.listsExclusive) && (
-        <List>
-          {features.listsRepliesPolicy && (
-            <ListItem
-              label={<FormattedMessage id='lists.edit.show_replies_to' defaultMessage='Include replies from list members to' />}
-            >
-              <SelectDropdown
-                key={repliesPolicy}
-                className='max-w-fit'
-                items={{
-                  none: intl.formatMessage(messages.repliesPolicyNone),
-                  list: intl.formatMessage(messages.repliesPolicyList),
-                  followed: intl.formatMessage(messages.repliesPolicyFollowed),
-                }}
-                defaultValue={repliesPolicy || 'list'}
-                onChange={handleChangeRepliesPolicy}
-              />
-            </ListItem>
-          )}
+      <List>
+        {features.listsRepliesPolicy && (
+          <ListItem
+            label={<FormattedMessage id='lists.edit.show_replies_to' defaultMessage='Include replies from list members to' />}
+          >
+            <SelectDropdown
+              key={repliesPolicy}
+              className='max-w-fit'
+              items={{
+                none: intl.formatMessage(messages.repliesPolicyNone),
+                list: intl.formatMessage(messages.repliesPolicyList),
+                followed: intl.formatMessage(messages.repliesPolicyFollowed),
+              }}
+              defaultValue={repliesPolicy || 'list'}
+              onChange={handleChangeRepliesPolicy}
+            />
+          </ListItem>
+        )}
 
-          {features.listsExclusive && (
-            <ListItem
-              label={<FormattedMessage id='lists.exclusive' defaultMessage='Hide members in Home' />}
-              hint={<FormattedMessage id='lists.exclusive_hint' defaultMessage='If someone is on this list, hide them in your Home feed to avoid seeing their posts twice.' />}
-            >
-              <Toggle
-                checked={exclusive}
-                onChange={handleChangeExclusive}
-              />
-            </ListItem>
-          )}
-        </List>
-      )}
+        {features.listsExclusive && (
+          <ListItem
+            label={<FormattedMessage id='lists.exclusive' defaultMessage='Hide members in Home' />}
+            hint={<FormattedMessage id='lists.exclusive_hint' defaultMessage='If someone is on this list, hide them in your Home feed to avoid seeing their posts twice.' />}
+          >
+            <Toggle
+              checked={exclusive}
+              onChange={handleChangeExclusive}
+            />
+          </ListItem>
+        )}
+
+        <ListItem
+          label={<FormattedMessage id='lists.manage_members' defaultMessage='Manage list members' />}
+          onClick={() => onTabChange('members')}
+        />
+      </List>
 
       <FormActions>
         <Button onClick={handleClick} disabled={disabled}>

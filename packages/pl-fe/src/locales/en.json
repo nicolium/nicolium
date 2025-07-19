@@ -1081,6 +1081,7 @@
   "lists.edit.title": "List title",
   "lists.exclusive": "Hide members in Home",
   "lists.exclusive_hint": "If someone is on this list, hide them in your Home feed to avoid seeing their posts twice.",
+  "lists.manage_members": "Manage list members",
   "lists.new.create": "Add list",
   "lists.new.create_title": "Add list",
   "lists.new.save": "Save list",
