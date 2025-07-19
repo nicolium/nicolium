@@ -93,7 +93,7 @@ const Dashboard: React.FC = () => {
               measure='opened_reports'
               startAt={monthAgo}
               endAt={today}
-              to='/pl-fe/admin/reports?resolved=false'
+              to='/pl-fe/admin/reports'
               label={<FormattedMessage id='admin.counters.opened_reports' defaultMessage='reports opened' />}
             />
             <Counter
