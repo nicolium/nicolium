@@ -135,6 +135,7 @@ import {
   RegistrationPage,
   Relays,
   RemoteTimeline,
+  Report,
   Rules,
   ScheduledStatuses,
   Search,
@@ -330,6 +331,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       <WrappedRoute path='/pl-fe/admin' staffOnly layout={AdminLayout} component={Dashboard} content={children} exact />
       <WrappedRoute path='/pl-fe/admin/approval' staffOnly layout={AdminLayout} component={Dashboard} content={children} exact />
       <WrappedRoute path='/pl-fe/admin/reports' staffOnly layout={AdminLayout} component={Dashboard} content={children} exact />
+      <WrappedRoute path='/pl-fe/admin/reports/:reportId' staffOnly layout={AdminLayout} component={Report} content={children} exact />
       <WrappedRoute path='/pl-fe/admin/log' staffOnly layout={AdminLayout} component={ModerationLog} content={children} exact />
       <WrappedRoute path='/pl-fe/admin/users' staffOnly layout={AdminLayout} component={UserIndex} content={children} exact />
       <WrappedRoute path='/pl-fe/admin/theme' staffOnly layout={AdminLayout} component={ThemeEditor} content={children} exact />

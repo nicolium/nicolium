@@ -78,6 +78,7 @@ export const PinnedStatuses = lazy(() => import('pl-fe/pages/status-lists/pinned
 export const PlFeConfig = lazy(() => import('pl-fe/pages/dashboard/pl-fe-config'));
 export const PublicTimeline = lazy(() => import('pl-fe/pages/timelines/public-timeline'));
 export const Quotes = lazy(() => import('pl-fe/pages/status-lists/quotes'));
+export const Report = lazy(() => import('pl-fe/pages/dashboard/report'));
 export const RegisterInvite = lazy(() => import('pl-fe/pages/auth/register-with-invite'));
 export const RegistrationPage = lazy(() => import('pl-fe/pages/auth/registration'));
 export const Relays = lazy(() => import('pl-fe/pages/dashboard/relays'));
