@@ -1102,7 +1102,11 @@ const getFeatures = (instance: Instance) => {
 
     listsExclusive: any([
       v.software === GOTOSOCIAL,
+      v.software === HOLLO,
+      v.software === ICESHRIMP_NET,
       v.software === MASTODON && gte(v.version, '4.2.0'),
+      v.software === NEODB,
+      v.software === TAKAHE && gte(v.version, '0.12.0'),
     ]),
 
     /**
@@ -1113,8 +1117,12 @@ const getFeatures = (instance: Instance) => {
     listsFavourites: instance.api_versions['favourite_list.fedibird.pl-api'] >= 1,
 
     listsRepliesPolicy: any([
+      v.software === FRIENDICA && gte(v.version, '2024.12.0'),
       v.software === GOTOSOCIAL,
+      v.software === HOLLO,
       v.software === MASTODON && gte(v.version, '3.3.0'),
+      v.software === NEODB,
+      v.software === TAKAHE && gte(v.version, '0.12.0'),
     ]),
 
     /**
