@@ -1210,6 +1210,8 @@ const getFeatures = (instance: Instance) => {
       v.software === PLEROMA && v.build === PL,
     ]),
 
+    mastodonAdminResolveReportWithComment: v.software === GOTOSOCIAL,
+
     /**
      * @see POST /api/v1/admin/dimensions
      * @see POST /api/v1/admin/measures

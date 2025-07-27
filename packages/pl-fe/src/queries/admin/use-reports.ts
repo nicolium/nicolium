@@ -8,7 +8,7 @@ import { makePaginatedResponseQuery } from '../utils/make-paginated-response-que
 import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';
 import { minifyAdminReport, minifyAdminReportList } from '../utils/minify-list';
 
-import type { AdminGetReportsParams, PaginationParams } from 'pl-api';
+import type { AdminGetReportsParams, AdminUpdateReportParams, PaginationParams } from 'pl-api';
 
 const useReports = makePaginatedResponseQuery(
   (params: Omit<AdminGetReportsParams, keyof PaginationParams>) => ['admin', 'reportLists', params],
@@ -41,6 +41,45 @@ const usePendingReportsCount = () => {
   });
 };
 
+const useUpdateReport = (reportId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'reports', reportId],
+    mutationFn: (params: AdminUpdateReportParams) => client.admin.reports.updateReport(reportId, params),
+    onSuccess: (report) => {
+      queryClient.setQueryData(['admin', 'reports', reportId], minifyAdminReport(report));
+    },
+  });
+};
+
+const useSelfAssignReport = (reportId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'reports', reportId],
+    mutationFn: () => client.admin.reports.assignReportToSelf(reportId),
+    onSuccess: (report) => {
+      queryClient.setQueryData(['admin', 'reports', reportId], minifyAdminReport(report));
+    },
+  });
+};
+
+const useUnassignReport = (reportId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'reports', reportId],
+    mutationFn: () => client.admin.reports.unassignReport(reportId),
+    onSuccess: (report) => {
+      queryClient.setQueryData(['admin', 'reports', reportId], minifyAdminReport(report));
+    },
+  });
+};
+
 const useResolveReport = (reportId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
@@ -52,7 +91,7 @@ const useResolveReport = (reportId: string) => {
       queryClient.setQueryData(['admin', 'reports', reportId], minifyAdminReport(report));
       queryClient.setQueriesData({
         queryKey: ['admin', 'reportLists', {
-          resolved: false,
+          resolved: undefined,
         }],
         exact: false,
       }, filterById(reportId));
@@ -66,4 +105,29 @@ const useResolveReport = (reportId: string) => {
   });
 };
 
-export { useReports, useReport, pendingReportsQuery, usePendingReportsCount, useResolveReport };
+const useReopenReport = (reportId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'reports', reportId],
+    mutationFn: () => client.admin.reports.reopenReport(reportId),
+    onSuccess: (report) => {
+      queryClient.setQueryData(['admin', 'reports', reportId], minifyAdminReport(report));
+      queryClient.setQueriesData({
+        queryKey: ['admin', 'reportLists', {
+          resolved: true,
+        }],
+        exact: false,
+      }, filterById(reportId));
+      queryClient.invalidateQueries({
+        queryKey: ['admin', 'reportLists', {
+          resolved: undefined,
+        }],
+        exact: false,
+      });
+    },
+  });
+};
+
+export { useReports, useReport, pendingReportsQuery, usePendingReportsCount, useUpdateReport, useSelfAssignReport, useUnassignReport, useResolveReport, useReopenReport };

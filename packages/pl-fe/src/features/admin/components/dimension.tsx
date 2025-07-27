@@ -10,7 +10,7 @@ interface IDimension {
   dimension: AdminDimensionKey;
   startAt: string;
   endAt: string;
-  label: JSX.Element;
+  label?: JSX.Element;
   params: AdminGetDimensionsParams;
 }
 
@@ -73,7 +73,9 @@ const Dimension: React.FC<IDimension> = ({
 
   return (
     <div>
-      <Text className='border-b border-primary-200 pb-1 dark:border-gray-800' weight='medium' size='sm'>{label}</Text>
+      {label && (
+        <Text className='border-b border-primary-200 pb-1 dark:border-gray-800' weight='medium' size='sm'>{label}</Text>
+      )}
 
       {content}
     </div>

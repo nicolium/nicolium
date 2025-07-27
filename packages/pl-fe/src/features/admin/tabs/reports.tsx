@@ -21,14 +21,14 @@ const Reports: React.FC = () => {
   const intl = useIntl();
   const [params, setParams] = useSearchParams();
 
-  const resolved = params.get('resolved') as any as boolean;
+  const resolved = params.get('resolved') as any as boolean || undefined;
   const accountId = params.get('account_id') || undefined;
   const targetAccountId = params.get('target_account_id') || undefined;
 
   const { account } = useAccount(accountId);
   const { account: targetAccount } = useAccount(targetAccountId);
 
-  const { data: reportIds = [], isPending } = useReports({
+  const { data: reportIds = [], isPending, hasNextPage, fetchNextPage } = useReports({
     resolved,
     account_id: accountId,
     target_account_id: targetAccountId,
@@ -71,7 +71,9 @@ const Reports: React.FC = () => {
         isLoading={isPending}
         showLoading={isPending}
         emptyMessage={intl.formatMessage(messages.emptyMessage)}
-        listClassName='divide-y divide-solid divide-gray-200 dark:divide-gray-800'
+        hasMore={hasNextPage}
+        onLoadMore={fetchNextPage}
+        itemClassName='pt-4'
       >
         {reportIds.map(report => report && <Report id={report} key={report} />)}
       </ScrollableList>

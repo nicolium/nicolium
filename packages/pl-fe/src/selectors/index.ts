@@ -206,16 +206,18 @@ const makeGetReport = () => {
       (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => report,
       (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => selectAccount(state, report?.account_id || ''),
       (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => selectAccount(state, report?.target_account_id || ''),
+      (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => selectAccount(state, report?.assigned_account_id || ''),
       (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => report?.status_ids
         .map((statusId) => getStatus(state, { id: statusId }))
         .filter((status): status is SelectedStatus => status !== null),
     ],
-    (report, account, target_account, statuses = []) => {
+    (report, account, target_account, assigned_account, statuses = []) => {
       if (!report) return null;
       return {
         ...report,
         account,
         target_account,
+        assigned_account,
         statuses,
       };
     },

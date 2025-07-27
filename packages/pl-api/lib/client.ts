@@ -4238,7 +4238,7 @@ class PlApiClient {
           return this.#paginatedGet('/api/v1/admin/reports', { params }, adminReportSchema);
         } else {
           return this.#paginatedPleromaReports({
-            state: params?.resolved === true ? 'resolved' : params?.resolved === false ? 'open' : undefined,
+            state: params?.resolved === true ? 'resolved' : 'open',
             page_size: params?.limit || 100,
           });
         }
@@ -4297,6 +4297,7 @@ class PlApiClient {
        *
        * Mark a report as resolved with no further action taken.
        *
+       * `action_taken_comment` param requires features{@link Features.mastodonAdminResolveReportWithComment}.
        * @param action_taken_comment Optional admin comment on the action taken in response to this report. Supported by GoToSocial only.
        * @see {@link https://docs.joinmastodon.org/methods/admin/reports/#resolve}
        */
