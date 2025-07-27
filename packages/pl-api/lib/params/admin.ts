@@ -98,8 +98,8 @@ interface AdminGetReportsParams extends PaginationParams {
  * @category Request params
  */
 interface AdminUpdateReportParams {
-  /** String. Change the classification of the report to `spam`, `violation`, or `other`. */
-  category?: 'spam' | 'violation' | 'other';
+  /** String. Change the classification of the report to `spam`, `legal`, `violation`, or `other`. */
+  category?: 'spam' | 'legal' | 'violation' | 'other';
   /** Array of Integer. For `violation` category reports, specify the ID of the exact rules broken. Rules and their IDs are available via [GET /api/v1/instance/rules](https://docs.joinmastodon.org/methods/instance/#rules) and [GET /api/v1/instance](https://docs.joinmastodon.org/methods/instance/#get). */
   rule_ids?: string[];
 }
