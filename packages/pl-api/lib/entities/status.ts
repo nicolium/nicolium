@@ -103,6 +103,7 @@ const baseStatusSchema = v.object({
   dislikes_count: v.fallback(v.number(), 0),
   disliked: v.fallback(v.pipe(v.unknown(), v.transform(Boolean)), false),
 
+  local_only: v.fallback(v.optional(v.boolean()), undefined),
   interaction_policy: interactionPolicySchema,
 
   content_type: v.fallback(v.nullable(v.string()), null),

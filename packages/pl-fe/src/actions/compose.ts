@@ -170,7 +170,7 @@ const changeCompose = (composeId: string, text: string) => ({
 interface ComposeReplyAction {
   type: typeof COMPOSE_REPLY;
   composeId: string;
-  status: Pick<Status, 'id' | 'account' | 'group_id' | 'list_id' | 'mentions' | 'spoiler_text' | 'visibility'>;
+  status: Pick<Status, 'id' | 'account' | 'group_id' | 'list_id' | 'local_only' | 'mentions' | 'spoiler_text' | 'visibility'>;
   account: Pick<Account, 'acct'>;
   explicitAddressing: boolean;
   preserveSpoilers: boolean;

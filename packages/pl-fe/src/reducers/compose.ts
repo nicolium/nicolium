@@ -399,6 +399,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.parent_reblogged_by = action.rebloggedBy?.id || null;
         compose.text = !action.explicitAddressing ? statusToTextMentions(action.status, action.account) : '';
         compose.privacy = privacyPreference(action.status.visibility, defaultCompose.privacy, action.status.list_id);
+        compose.federated = action.status.local_only !== true;
         compose.focusDate = new Date();
         compose.caretPosition = null;
         compose.idempotencyKey = crypto.randomUUID();
