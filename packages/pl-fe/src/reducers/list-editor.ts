@@ -63,7 +63,6 @@ const listEditorReducer = (state: State = initialState, action: ListsAction): St
     case LIST_EDITOR_RESET:
       return initialState;
     case LIST_EDITOR_SETUP:
-      console.log(action.list);
       return create(state, (draft) => {
         draft.listId = action.list.id;
         draft.title = action.list.title;
