@@ -71,7 +71,7 @@ const messages = defineMessages({
   bite: { id: 'account.bite', defaultMessage: 'Bite @{name}' },
   removeFromFollowers: { id: 'account.remove_from_followers', defaultMessage: 'Remove this follower' },
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
-  add_or_remove_from_list: { id: 'account.add_or_remove_from_list', defaultMessage: 'Add or Remove from lists' },
+  add_or_remove_from_list: { id: 'account.add_or_remove_from_list', defaultMessage: 'Add or remove from lists' },
   search: { id: 'account.search', defaultMessage: 'Search from @{name}' },
   searchSelf: { id: 'account.search_self', defaultMessage: 'Search your posts' },
   unfollowConfirm: { id: 'confirmations.unfollow.confirm', defaultMessage: 'Unfollow' },

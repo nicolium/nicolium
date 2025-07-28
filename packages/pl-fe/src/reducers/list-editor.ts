@@ -4,14 +4,9 @@ import {
   LIST_EDITOR_RESET,
   LIST_EDITOR_SETUP,
   LIST_EDITOR_TITLE_CHANGE,
-  LIST_ACCOUNTS_FETCH_REQUEST,
-  LIST_ACCOUNTS_FETCH_SUCCESS,
-  LIST_ACCOUNTS_FETCH_FAIL,
   LIST_EDITOR_SUGGESTIONS_READY,
   LIST_EDITOR_SUGGESTIONS_CLEAR,
   LIST_EDITOR_SUGGESTIONS_CHANGE,
-  LIST_EDITOR_ADD_SUCCESS,
-  LIST_EDITOR_REMOVE_SUCCESS,
   type ListsAction,
   LIST_EDITOR_EXCLUSIVE_CHANGE,
   LIST_EDITOR_REPLIES_POLICY_CHANGE,
@@ -27,12 +22,6 @@ interface State {
   repliesPolicy: List['replies_policy'];
   exclusive?: boolean;
 
-  accounts: {
-    items: Array<string>;
-    loaded: boolean;
-    isLoading: boolean;
-  };
-
   suggestions: {
     value: string;
     items: Array<string>;
@@ -45,12 +34,6 @@ const initialState: State = {
   title: '',
   repliesPolicy: undefined,
   exclusive: false,
-
-  accounts: {
-    items: [],
-    loaded: false,
-    isLoading: false,
-  },
 
   suggestions: {
     value: '',
@@ -82,20 +65,6 @@ const listEditorReducer = (state: State = initialState, action: ListsAction): St
       return create(state, (draft) => {
         draft.repliesPolicy = action.repliesPolicy;
       });
-    case LIST_ACCOUNTS_FETCH_REQUEST:
-      return create(state, (draft) => {
-        draft.accounts.isLoading = true;
-      });
-    case LIST_ACCOUNTS_FETCH_FAIL:
-      return create(state, (draft) => {
-        draft.accounts.isLoading = false;
-      });
-    case LIST_ACCOUNTS_FETCH_SUCCESS:
-      return create(state, (draft) => {
-        draft.accounts.isLoading = false;
-        draft.accounts.loaded = true;
-        draft.accounts.items = action.accounts.map((item: { id: string }) => item.id);
-      });
     case LIST_EDITOR_SUGGESTIONS_CHANGE:
       return create(state, (draft) => {
         draft.suggestions.value = action.value;
@@ -108,14 +77,6 @@ const listEditorReducer = (state: State = initialState, action: ListsAction): St
       return create(state, (draft) => {
         draft.suggestions.items = [];
         draft.suggestions.value = '';
-      });
-    case LIST_EDITOR_ADD_SUCCESS:
-      return create(state, (draft) => {
-        draft.accounts.items = [action.accountId, ...draft.accounts.items];
-      });
-    case LIST_EDITOR_REMOVE_SUCCESS:
-      return create(state, (draft) => {
-        draft.accounts.items = draft.accounts.items.filter(id => id !== action.accountId);
       });
     default:
       return state;

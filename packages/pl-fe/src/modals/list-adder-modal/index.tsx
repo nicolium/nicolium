@@ -1,13 +1,11 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { setupListAdder, resetListAdder } from 'pl-fe/actions/lists';
 import { CardHeader, CardTitle } from 'pl-fe/components/ui/card';
 import Modal from 'pl-fe/components/ui/modal';
 import AccountContainer from 'pl-fe/containers/account-container';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { NewListForm, getOrderedLists } from 'pl-fe/pages/account-lists/lists';
-import { useLists } from 'pl-fe/queries/accounts/use-lists';
+import { useLists, useListsForAccount } from 'pl-fe/queries/accounts/use-lists';
 
 import List from './components/list';
 
@@ -24,17 +22,10 @@ interface ListAdderModalProps {
 
 const ListAdderModal: React.FC<BaseModalProps & ListAdderModalProps> = ({ accountId, onClose }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+
+  const { data: accountListIds = [] } = useListsForAccount(accountId);
 
   const { data: listIds = [] } = useLists((lists) => getOrderedLists(lists).map(list => list.id));
-
-  useEffect(() => {
-    dispatch(setupListAdder(accountId));
-
-    return () => {
-      dispatch(resetListAdder());
-    };
-  }, []);
 
   const onClickClose = () => {
     onClose('LIST_ADDER');
@@ -42,7 +33,7 @@ const ListAdderModal: React.FC<BaseModalProps & ListAdderModalProps> = ({ accoun
 
   return (
     <Modal
-      title={<FormattedMessage id='list_adder.header_title' defaultMessage='Add or Remove from Lists' />}
+      title={<FormattedMessage id='list_adder.header_title' defaultMessage='Add or remove from lists' />}
       onClose={onClickClose}
     >
       <AccountContainer id={accountId} withRelationship={false} />
@@ -60,7 +51,7 @@ const ListAdderModal: React.FC<BaseModalProps & ListAdderModalProps> = ({ accoun
         <CardTitle title={intl.formatMessage(messages.subheading)} />
       </CardHeader>
       <div>
-        {listIds.map(listId => <List key={listId} listId={listId} />)}
+        {listIds.map(listId => <List key={listId} accountId={accountId} listId={listId} added={accountListIds.includes(listId)} />)}
       </div>
     </Modal>
   );

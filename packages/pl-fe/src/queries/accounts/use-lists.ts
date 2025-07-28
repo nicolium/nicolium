@@ -1,11 +1,14 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { type InfiniteData, useMutation, useQuery } from '@tanstack/react-query';
 
 import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 
 import { queryClient } from '../client';
+import { filterById } from '../utils/filter-id';
+import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
+import { minifyAccountList } from '../utils/minify-list';
 
-import type { CreateListParams, List, UpdateListParams } from 'pl-api';
+import type { CreateListParams, List, PaginatedResponse, UpdateListParams } from 'pl-api';
 
 const useLists = <T>(
   select?: ((data: Array<List>) => T),
@@ -58,4 +61,48 @@ const useUpdateList = (listId: string) => {
   });
 };
 
-export { useLists, useList, useCreateList, useDeleteList, useUpdateList };
+const useListAccounts = makePaginatedResponseQuery(
+  (listId: string) => ['accountsLists', 'lists', listId],
+  (client, [listId]) => client.lists.getListAccounts(listId).then(minifyAccountList),
+);
+
+const useAddAccountsToList = (listId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['accountsLists', 'lists', listId, 'add'],
+    mutationFn: (accountIds: Array<string>) => client.lists.addListAccounts(listId, accountIds),
+    onSettled: (_, __, accountIds) => {
+      queryClient.invalidateQueries({ queryKey: ['accountsLists', 'lists', listId] });
+      accountIds.forEach((accountId) =>
+        queryClient.setQueryData<Array<string>>(['lists', 'forAccount', accountId], (listIds) => listIds ? [...listIds, listId] : undefined),
+      );
+    },
+  });
+};
+
+const useRemoveAccountsFromList = (listId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['accountsLists', 'lists', listId, 'remove'],
+    mutationFn: (accountIds: Array<string>) => client.lists.deleteListAccounts(listId, accountIds),
+    onSettled: (_, __, accountIds) => {
+      queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(['accountsLists', 'lists', listId], filterById(accountIds));
+      accountIds.forEach((accountId) =>
+        queryClient.setQueryData<Array<string>>(['lists', 'forAccount', accountId], listIds => listIds?.filter(id => id !== listId)),
+      );
+    },
+  });
+};
+
+const useListsForAccount = (accountId: string) => {
+  const client = useClient();
+
+  return useQuery({
+    queryKey: ['lists', 'forAccount', accountId],
+    queryFn: () => client.accounts.getAccountLists(accountId).then((lists) => lists.map((list) => list.id)),
+  });
+};
+
+export { useLists, useList, useCreateList, useDeleteList, useUpdateList, useListAccounts, useAddAccountsToList, useRemoveAccountsFromList, useListsForAccount };

@@ -1,12 +1,10 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { removeFromListEditor, addToListEditor } from 'pl-fe/actions/lists';
 import IconButton from 'pl-fe/components/icon-button';
 import HStack from 'pl-fe/components/ui/hstack';
 import AccountContainer from 'pl-fe/containers/account-container';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useAddAccountsToList, useRemoveAccountsFromList } from 'pl-fe/queries/accounts/use-lists';
 
 const messages = defineMessages({
   remove: { id: 'lists.account.remove', defaultMessage: 'Remove from list' },
@@ -14,21 +12,23 @@ const messages = defineMessages({
 });
 
 interface IAccount {
+  listId: string;
   accountId: string;
+  added?: boolean;
 }
 
-const Account: React.FC<IAccount> = ({ accountId }) => {
+const Account: React.FC<IAccount> = ({ listId, accountId, added }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
-  const isAdded = useAppSelector((state) => state.listEditor.accounts.items.includes(accountId));
+  const { mutate: addToList } = useAddAccountsToList(listId);
+  const { mutate: removeFromList } = useRemoveAccountsFromList(listId);
 
-  const onRemove = () => dispatch(removeFromListEditor(accountId));
-  const onAdd = () => dispatch(addToListEditor(accountId));
+  const onAdd = () => addToList([accountId]);
+  const onRemove = () => removeFromList([accountId]);
 
   let button;
 
-  if (isAdded) {
+  if (added) {
     button = <IconButton src={require('@tabler/icons/outline/x.svg')} iconClassName='h-5 w-5' title={intl.formatMessage(messages.remove)} onClick={onRemove} />;
   } else {
     button = <IconButton src={require('@tabler/icons/outline/plus.svg')} iconClassName='h-5 w-5' title={intl.formatMessage(messages.add)} onClick={onAdd} />;

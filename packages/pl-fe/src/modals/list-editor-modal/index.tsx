@@ -6,6 +6,7 @@ import { CardHeader, CardTitle } from 'pl-fe/components/ui/card';
 import Modal from 'pl-fe/components/ui/modal';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useListAccounts } from 'pl-fe/queries/accounts/use-lists';
 
 import Account from './components/account';
 import EditListForm from './components/edit-list-form';
@@ -29,7 +30,7 @@ const ListEditorModal: React.FC<BaseModalProps & ListEditorModalProps> = ({ list
 
   const [tab, setTab] = useState<'info' | 'members'>('info');
 
-  const accountIds = useAppSelector((state) => state.listEditor.accounts.items);
+  const { data: accountIds = [] } = useListAccounts(listId);
   const searchAccountIds = useAppSelector((state) => state.listEditor.suggestions.items);
 
   useEffect(() => {
@@ -61,7 +62,7 @@ const ListEditorModal: React.FC<BaseModalProps & ListEditorModalProps> = ({ list
                     <CardTitle title={intl.formatMessage(messages.removeFromList)} />
                   </CardHeader>
                   <div className='max-h-48 overflow-y-auto'>
-                    {accountIds.map(accountId => <Account key={accountId} accountId={accountId} />)}
+                    {accountIds.map(accountId => <Account key={accountId} listId={listId} accountId={accountId} added={accountIds.includes(accountId)} />)}
                   </div>
                 </div>
                 <br />
@@ -73,7 +74,7 @@ const ListEditorModal: React.FC<BaseModalProps & ListEditorModalProps> = ({ list
             </CardHeader>
             <Search />
             <div className='max-h-48 overflow-y-auto'>
-              {searchAccountIds.map(accountId => <Account key={accountId} accountId={accountId} />)}
+              {searchAccountIds.map(accountId => <Account key={accountId} listId={listId} accountId={accountId} added={accountIds.includes(accountId)} />)}
             </div>
           </>
         )}

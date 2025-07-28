@@ -13,7 +13,6 @@ import conversations from './conversations';
 import draft_statuses from './draft-statuses';
 import filters from './filters';
 import instance from './instance';
-import listAdder from './list-adder';
 import listEditor from './list-editor';
 import me from './me';
 import meta from './meta';
@@ -39,7 +38,6 @@ const reducers = {
   entities,
   filters,
   instance,
-  listAdder,
   listEditor,
   me,
   meta,

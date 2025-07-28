@@ -1,12 +1,9 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { removeFromListAdder, addToListAdder } from 'pl-fe/actions/lists';
 import Icon from 'pl-fe/components/icon';
 import IconButton from 'pl-fe/components/icon-button';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useList } from 'pl-fe/queries/accounts/use-lists';
+import { useAddAccountsToList, useList, useRemoveAccountsFromList } from 'pl-fe/queries/accounts/use-lists';
 
 const messages = defineMessages({
   remove: { id: 'lists.account.remove', defaultMessage: 'Remove from list' },
@@ -14,18 +11,21 @@ const messages = defineMessages({
 });
 
 interface IList {
+  accountId: string;
   listId: string;
+  added?: boolean;
 }
 
-const List: React.FC<IList> = ({ listId }) => {
+const List: React.FC<IList> = ({ listId, accountId, added }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const { data: list } = useList(listId);
-  const added = useAppSelector((state) => state.listAdder.lists.items.includes(listId));
 
-  const onRemove = () => dispatch(removeFromListAdder(listId));
-  const onAdd = () => dispatch(addToListAdder(listId));
+  const { mutate: addToList } = useAddAccountsToList(listId);
+  const { mutate: removeFromList } = useRemoveAccountsFromList(listId);
+
+  const onAdd = () => addToList([accountId]);
+  const onRemove = () => removeFromList([accountId]);
 
   if (!list) return null;
 
