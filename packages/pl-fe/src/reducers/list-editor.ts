@@ -4,12 +4,9 @@ import {
   LIST_EDITOR_RESET,
   LIST_EDITOR_SETUP,
   LIST_EDITOR_TITLE_CHANGE,
-  LIST_EDITOR_SUGGESTIONS_READY,
-  LIST_EDITOR_SUGGESTIONS_CLEAR,
-  LIST_EDITOR_SUGGESTIONS_CHANGE,
-  type ListsAction,
   LIST_EDITOR_EXCLUSIVE_CHANGE,
   LIST_EDITOR_REPLIES_POLICY_CHANGE,
+  type ListsAction,
 } from '../actions/lists';
 
 import type { List } from 'pl-api';
@@ -21,11 +18,6 @@ interface State {
   title: string;
   repliesPolicy: List['replies_policy'];
   exclusive?: boolean;
-
-  suggestions: {
-    value: string;
-    items: Array<string>;
-  };
 }
 
 const initialState: State = {
@@ -34,11 +26,6 @@ const initialState: State = {
   title: '',
   repliesPolicy: undefined,
   exclusive: false,
-
-  suggestions: {
-    value: '',
-    items: [],
-  },
 };
 
 const listEditorReducer = (state: State = initialState, action: ListsAction): State => {
@@ -64,19 +51,6 @@ const listEditorReducer = (state: State = initialState, action: ListsAction): St
     case LIST_EDITOR_REPLIES_POLICY_CHANGE:
       return create(state, (draft) => {
         draft.repliesPolicy = action.repliesPolicy;
-      });
-    case LIST_EDITOR_SUGGESTIONS_CHANGE:
-      return create(state, (draft) => {
-        draft.suggestions.value = action.value;
-      });
-    case LIST_EDITOR_SUGGESTIONS_READY:
-      return create(state, (draft) => {
-        draft.suggestions.items = action.accounts.map((item: { id: string }) => item.id);
-      });
-    case LIST_EDITOR_SUGGESTIONS_CLEAR:
-      return create(state, (draft) => {
-        draft.suggestions.items = [];
-        draft.suggestions.value = '';
       });
     default:
       return state;

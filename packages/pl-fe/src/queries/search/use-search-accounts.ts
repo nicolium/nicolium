@@ -8,7 +8,7 @@ import type { SearchAccountParams } from 'pl-api';
 
 const useAccountSearch = (
   query: string,
-  params?: Omit<SearchAccountParams, 'limit' | 'offset'>,
+  params?: Omit<SearchAccountParams, 'offset'>,
 ) => {
   const client = useClient();
   const dispatch = useAppDispatch();

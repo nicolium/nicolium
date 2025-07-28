@@ -5,8 +5,8 @@ import { setupListEditor, resetListEditor } from 'pl-fe/actions/lists';
 import { CardHeader, CardTitle } from 'pl-fe/components/ui/card';
 import Modal from 'pl-fe/components/ui/modal';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useListAccounts } from 'pl-fe/queries/accounts/use-lists';
+import { useAccountSearch } from 'pl-fe/queries/search/use-search-accounts';
 
 import Account from './components/account';
 import EditListForm from './components/edit-list-form';
@@ -29,9 +29,10 @@ const ListEditorModal: React.FC<BaseModalProps & ListEditorModalProps> = ({ list
   const dispatch = useAppDispatch();
 
   const [tab, setTab] = useState<'info' | 'members'>('info');
+  const [searchValue, setSearchValue] = useState('');
 
   const { data: accountIds = [] } = useListAccounts(listId);
-  const searchAccountIds = useAppSelector((state) => state.listEditor.suggestions.items);
+  const { data: searchAccountIds = [] } = useAccountSearch(searchValue, { following: true, limit: 5 });
 
   useEffect(() => {
     dispatch(setupListEditor(listId));
@@ -72,7 +73,7 @@ const ListEditorModal: React.FC<BaseModalProps & ListEditorModalProps> = ({ list
             <CardHeader>
               <CardTitle title={intl.formatMessage(messages.addToList)} />
             </CardHeader>
-            <Search />
+            <Search value={searchValue} onSubmit={setSearchValue} />
             <div className='max-h-48 overflow-y-auto'>
               {searchAccountIds.map(accountId => <Account key={accountId} listId={listId} accountId={accountId} added={accountIds.includes(accountId)} />)}
             </div>
