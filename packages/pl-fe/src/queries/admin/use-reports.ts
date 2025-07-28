@@ -27,8 +27,8 @@ const useReport = (reportId: string) => {
 };
 
 const pendingReportsQuery = makePaginatedResponseQueryOptions(
-  ['admin', 'reportLists', { resolved: false }],
-  (client) => client.admin.reports.getReports({ resolved: false }).then(minifyAdminReportList),
+  ['admin', 'reportLists', { resolved: undefined }],
+  (client) => client.admin.reports.getReports({ resolved: undefined }).then(minifyAdminReportList),
 )();
 
 const usePendingReportsCount = () => {
