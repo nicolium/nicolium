@@ -13,8 +13,6 @@ const ADMIN_CONFIG_FETCH_SUCCESS = 'ADMIN_CONFIG_FETCH_SUCCESS' as const;
 const ADMIN_CONFIG_UPDATE_REQUEST = 'ADMIN_CONFIG_UPDATE_REQUEST' as const;
 const ADMIN_CONFIG_UPDATE_SUCCESS = 'ADMIN_CONFIG_UPDATE_SUCCESS' as const;
 
-const ADMIN_USER_DELETE_SUCCESS = 'ADMIN_USER_DELETE_SUCCESS' as const;
-
 const fetchConfig = () =>
   (dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState).admin.config.getPleromaConfig()
@@ -123,14 +121,12 @@ const setRole = (accountId: string, role: 'user' | 'moderator' | 'admin') =>
 type AdminActions =
   | { type: typeof ADMIN_CONFIG_FETCH_SUCCESS; configs: PleromaConfig['configs']; needsReboot: boolean }
   | { type: typeof ADMIN_CONFIG_UPDATE_REQUEST; configs: PleromaConfig['configs'] }
-  | { type: typeof ADMIN_CONFIG_UPDATE_SUCCESS; configs: PleromaConfig['configs']; needsReboot: boolean }
-  | { type: typeof ADMIN_USER_DELETE_SUCCESS; accountId: string };
+  | { type: typeof ADMIN_CONFIG_UPDATE_SUCCESS; configs: PleromaConfig['configs']; needsReboot: boolean };
 
 export {
   ADMIN_CONFIG_FETCH_SUCCESS,
   ADMIN_CONFIG_UPDATE_REQUEST,
   ADMIN_CONFIG_UPDATE_SUCCESS,
-  ADMIN_USER_DELETE_SUCCESS,
   fetchConfig,
   updateConfig,
   updatePlFeConfig,
