@@ -1130,6 +1130,7 @@
   "login_form.divider": "or",
   "login_form.external": "Sign in from remote instance",
   "login_form.header": "Sign in",
+  "suspicious_url_warning.body": "This post might include a suspicious link. Please be cautious before entering any personal data or payment information.",
   "manage_group.blocked_members": "Banned members",
   "manage_group.confirmation.copy": "Copy link",
   "manage_group.confirmation.info_1": "As the owner of this group, you can assign staff, delete posts and much more.",
