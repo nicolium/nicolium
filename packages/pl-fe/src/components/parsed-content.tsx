@@ -4,6 +4,7 @@ import DOMPurify from 'isomorphic-dompurify';
 import groupBy from 'lodash/groupBy';
 import minBy from 'lodash/minBy';
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import Emojify from 'pl-fe/features/emoji/emojify';
@@ -19,6 +20,15 @@ import StatusMention from './status-mention';
 import type { CustomEmoji, Mention } from 'pl-api';
 
 const GREENTEXT_CLASS = 'dark:text-accent-green text-lime-600';
+
+const checkSuspiciousUrl = (url: string): boolean => {
+  try {
+    const { host } = new URL(url);
+    return /^verify\.form/.test(host);
+  } catch (e) {
+    return false;
+  }
+};
 
 const nodesToText = (nodes: Array<DOMNode>): string =>
   nodes.map(node => node.type === 'text' ? node.data : node.type === 'tag' ? nodesToText(node.children as Array<DOMNode>) : '').join('');
@@ -173,6 +183,8 @@ function parseContent({
 
   const hashtags: Array<string> = [];
 
+  let hasSuspiciousUrl = false;
+
   const transformText = (data: string, key?: React.Key) => {
     const text = speakAsCat ? nyaize(data) : data;
 
@@ -264,6 +276,10 @@ function parseContent({
           }
         }
 
+        if (checkSuspiciousUrl(domNode.attribs.href)) {
+          hasSuspiciousUrl = true;
+        }
+
         return fallback;
       }
 
@@ -296,7 +312,21 @@ function parseContent({
     },
   };
 
-  const content = parse(DOMPurify.sanitize(html, { ADD_ATTR: ['target'], USE_PROFILES: { html: true } }), options);
+  let content = parse(DOMPurify.sanitize(html, { ADD_ATTR: ['target'], USE_PROFILES: { html: true } }), options);
+
+  if (hasSuspiciousUrl) {
+    content = (
+      <>
+        <div className='mb-2 rounded border border-solid border-gray-400 px-2.5 py-2 text-xs text-gray-900 dark:border-gray-800 dark:text-white'>
+          <FormattedMessage
+            id='suspicious_url_warning.body'
+            defaultMessage='This post might include a suspicious link. Please be cautious before entering any personal data or payment information.'
+          />
+        </div>
+        {content}
+      </>
+    );
+  }
 
   if (extractHashtags) return {
     content,
