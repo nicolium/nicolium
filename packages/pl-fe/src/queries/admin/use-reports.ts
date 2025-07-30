@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from 'pl-fe/hooks/use-client';
+import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 
 import { filterById } from '../utils/filter-id';
@@ -33,11 +34,12 @@ const pendingReportsQuery = makePaginatedResponseQueryOptions(
 
 const usePendingReportsCount = () => {
   const { account } = useOwnAccount();
+  const instance = useInstance();
 
   return useInfiniteQuery({
     ...pendingReportsQuery,
     select: (data) => data.pages.at(-1)?.total || data.pages.map(page => page.items).flat().length || 0,
-    enabled: account?.is_admin || account?.is_moderator,
+    enabled: !!instance.domain && (account?.is_admin || account?.is_moderator),
   });
 };
 

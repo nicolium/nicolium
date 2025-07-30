@@ -4235,6 +4235,10 @@ class PlApiClient {
        */
       getReports: async (params?: AdminGetReportsParams) => {
         if (this.features.mastodonAdmin) {
+          if (params?.resolved === undefined && (this.features.version.software === GOTOSOCIAL || this.features.version.software === PLEROMA)) {
+            if (!params) params = {};
+            params.resolved = false;
+          }
           return this.#paginatedGet('/api/v1/admin/reports', { params }, adminReportSchema);
         } else {
           return this.#paginatedPleromaReports({
