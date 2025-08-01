@@ -26,12 +26,12 @@ const minifyAccountList = (response: PaginatedResponse<Account>): PaginatedRespo
     store.dispatch(importEntities({ accounts }) as any);
   });
 
-// const minifyAdminAccount = ({ account, ...adminAccount }: AdminAccount) => {
-//   store.dispatch(importEntities({ accounts: [account] }) as any);
-//   queryClient.setQueryData(['admin', 'accounts', adminAccount.id], adminAccount);
+const minifyAdminAccount = ({ account, ...adminAccount }: AdminAccount) => {
+  store.dispatch(importEntities({ accounts: [account] }) as any);
+  queryClient.setQueryData(['admin', 'accounts', adminAccount.id], adminAccount);
 
-//   return adminAccount;
-// };
+  return adminAccount;
+};
 
 const minifyAdminAccountList = (response: PaginatedResponse<AdminAccount>) =>
   minifyList(response, (account) => account.id, (accounts) => {
@@ -63,4 +63,4 @@ const minifyAdminReportList = (response: PaginatedResponse<AdminReport>) =>
     }
   });
 
-export { minifyList, minifyAccountList, minifyStatusList, minifyAdminAccountList, minifyAdminReport, minifyAdminReportList };
+export { minifyList, minifyAccountList, minifyStatusList, minifyAdminAccount, minifyAdminAccountList, minifyAdminReport, minifyAdminReportList };

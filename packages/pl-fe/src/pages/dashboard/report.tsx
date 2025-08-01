@@ -34,8 +34,6 @@ const messages = defineMessages({
   reportCommentConfirm: { id: 'report.resolve.comment.confirm', defaultMessage: 'Resolve report' },
 });
 
-type RouteParams = { reportId: string };
-
 interface IReportStatuses {
   statusIds: Array<string>;
 }
@@ -75,6 +73,8 @@ const ReportStatuses: React.FC<IReportStatuses> = ({ statusIds }) => {
     </div>
   );
 };
+
+type RouteParams = { reportId: string };
 
 interface IReportPage {
   params: RouteParams;
@@ -175,19 +175,23 @@ const ReportPage: React.FC<IReportPage> = (props) => {
                 </Text>
               </td>
             </tr>
-            <tr className='border-b border-primary-200 last:border-none dark:border-gray-800'>
-              <td className='p-2.5'>
-                <Text weight='medium' size='sm' tag='span'>
-                  <FormattedMessage id='admin.report.reported_by' defaultMessage='Reported by' />
-                </Text>
-              </td>
+            {report.account && (
+              <tr className='border-b border-primary-200 last:border-none dark:border-gray-800'>
+                <td className='p-2.5'>
+                  <Text weight='medium' size='sm' tag='span'>
+                    <FormattedMessage id='admin.report.reported_by' defaultMessage='Reported by' />
+                  </Text>
+                </td>
 
-              <td className='p-2.5 text-end'>
-                <Text size='sm'>
-                  {report.account?.acct}
-                </Text>
-              </td>
-            </tr>
+                <td className='p-2.5 text-end'>
+                  <Text size='sm' className='hover:underline'>
+                    <Link to={`/pl-fe/admin/accounts/${report.account_id}`}>
+                      @{report.account.acct}
+                    </Link>
+                  </Text>
+                </td>
+              </tr>
+            )}
             <tr className='border-b border-primary-200 last:border-none dark:border-gray-800'>
               <td className='p-2.5'>
                 <Text weight='medium' size='sm' tag='span'>
@@ -212,8 +216,8 @@ const ReportPage: React.FC<IReportPage> = (props) => {
                 <td className='p-2.5 text-end'>
                   {report.assigned_account ? (
                     <HStack space={2} alignItems='center' justifyContent='end'>
-                      <Text size='sm'>
-                        <Link to={`/@${report.assigned_account.acct}`}>
+                      <Text size='sm' className='hover:underline'>
+                        <Link to={`/pl-fe/admin/accounts/${report.assigned_account.id}`}>
                           @{report.assigned_account.acct}
                         </Link>
                       </Text>
@@ -263,8 +267,8 @@ const ReportPage: React.FC<IReportPage> = (props) => {
           />
         )}
         <ListItem
-          label={<FormattedMessage id='admin.report.moderate' defaultMessage='Open account in moderation interface' />}
-          onClick={() => openModal('ACCOUNT_MODERATION', { accountId: report.target_account_id })}
+          label={<FormattedMessage id='admin.report.moderate' defaultMessage='Moderate account' />}
+          to={`/pl-fe/admin/accounts/${report.target_account_id}`}
         />
       </List>
     </Column>

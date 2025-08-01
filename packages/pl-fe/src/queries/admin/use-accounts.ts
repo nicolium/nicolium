@@ -1,5 +1,5 @@
 import { InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { PaginatedResponse, type AdminAccount, type AdminGetAccountsParams, type PaginationParams } from 'pl-api';
+
 
 import { importEntities } from 'pl-fe/actions/importer';
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
@@ -10,7 +10,9 @@ import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { filterById } from '../utils/filter-id';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';
-import { minifyAdminAccountList } from '../utils/minify-list';
+import { minifyAdminAccount, minifyAdminAccountList } from '../utils/minify-list';
+
+import type { AdminPerformAccountActionParams, PaginatedResponse, AdminAccount, AdminGetAccountsParams, PaginationParams, AdminAccountAction } from 'pl-api';
 
 
 const useAdminAccounts = makePaginatedResponseQuery(
@@ -93,4 +95,109 @@ const useAdminRejectAccountMutation = (accountId: string) => {
   });
 };
 
-export { useAdminAccount, useAdminAccounts, pendingUsersQuery, usePendingUsersCount, useAdminApproveAccountMutation, useAdminRejectAccountMutation };
+const useAdminDeleteAccountMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'acounts', accountId],
+    mutationFn: () => client.admin.accounts.deleteAccount(accountId),
+    onSuccess: () => {
+      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>({
+        queryKey: ['admin', 'accountLists'],
+        exact: false,
+      }, filterById(accountId));
+    },
+  });
+};
+
+const useAdminPerformAccountActionMutation = (accountId: string, type: AdminAccountAction) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'acounts', accountId],
+    mutationFn: (params?: AdminPerformAccountActionParams) => client.admin.accounts.performAccountAction(accountId, type, params),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['admin', 'accountLists'], exact: false });
+    },
+  });
+};
+
+const useAdminEnableAccountMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'acounts', accountId],
+    mutationFn: () => client.admin.accounts.enableAccount(accountId),
+    onSuccess: (account) => {
+      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>({
+        queryKey: ['admin', 'accountLists', { status: 'disabled' }],
+        exact: false,
+      }, filterById(accountId));
+      minifyAdminAccount(account);
+    },
+  });
+};
+
+const useAdminUnsilenceAccountMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'acounts', accountId],
+    mutationFn: () => client.admin.accounts.unsilenceAccount(accountId),
+    onSuccess: (account) => {
+      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>({
+        queryKey: ['admin', 'accountLists', { status: 'silenced' }],
+        exact: false,
+      }, filterById(accountId));
+      minifyAdminAccount(account);
+    },
+  });
+};
+
+const useAdminUnsuspendAccountMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'acounts', accountId],
+    mutationFn: () => client.admin.accounts.unsuspendAccount(accountId),
+    onSuccess: (account) => {
+      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>({
+        queryKey: ['admin', 'accountLists', { status: 'suspended' }],
+        exact: false,
+      }, filterById(accountId));
+      minifyAdminAccount(account);
+    },
+  });
+};
+
+const useAdminUnsensitiveAccountMutation = (accountId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'acounts', accountId],
+    mutationFn: () => client.admin.accounts.unsensitiveAccount(accountId),
+    onSuccess: (account) => {
+      minifyAdminAccount(account);
+    },
+  });
+};
+
+export {
+  useAdminAccount,
+  useAdminAccounts,
+  pendingUsersQuery,
+  usePendingUsersCount,
+  useAdminApproveAccountMutation,
+  useAdminRejectAccountMutation,
+  useAdminDeleteAccountMutation,
+  useAdminPerformAccountActionMutation,
+  useAdminEnableAccountMutation,
+  useAdminUnsilenceAccountMutation,
+  useAdminUnsuspendAccountMutation,
+  useAdminUnsensitiveAccountMutation,
+};

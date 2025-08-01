@@ -204,10 +204,6 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
     dispatch(initReport(ReportableEntities.STATUS, account, { status }));
   };
 
-  const handleModerate = () => {
-    openModal('ACCOUNT_MODERATION', { accountId: account.id });
-  };
-
   const handleModerateStatus = () => {
     window.open(`/pleroma/admin/#/statuses/${status.id}/`, '_blank');
   };
@@ -357,8 +353,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       menu.push(null);
 
       menu.push({
-        text: intl.formatMessage(messages.adminAccount, { name: account.username }),
-        action: handleModerate,
+        text: intl.formatMessage(messages.adminAccount, { name: username }),
+        to: `/pl-fe/admin/accounts/${account.id}`,
         icon: require('@tabler/icons/outline/gavel.svg'),
       });
 

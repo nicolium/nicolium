@@ -9,7 +9,6 @@ import ModalLoading from './modal-loading';
 
 /* eslint sort-keys: "error" */
 const MODAL_COMPONENTS = {
-  ACCOUNT_MODERATION: lazy(() => import('pl-fe/modals/account-moderation-modal')),
   ALT_TEXT: lazy(() => import('pl-fe/modals/alt-text-modal')),
   BIRTHDAYS: lazy(() => import('pl-fe/modals/birthdays-modal')),
   BOOST: lazy(() => import('pl-fe/modals/boost-modal')),

@@ -64,7 +64,9 @@ const Report: React.FC<IReport> = ({ id }) => {
               />
             </Text>
             <HoverAccountWrapper accountId={account.id} element='span'>
-              @{reporterAcct}
+              <Link to={`/pl-fe/admin/accounts/${account.id}`}>
+                @{reporterAcct}
+              </Link>
             </HoverAccountWrapper>
           </HStack>
         )}

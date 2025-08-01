@@ -1,9 +1,10 @@
 import { lazy } from 'react';
 
 // Pages
+export const AboutPage = lazy(() => import('pl-fe/pages/utils/about'));
 export const AccountGallery = lazy(() => import('pl-fe/pages/accounts/account-gallery'));
 export const AccountTimeline = lazy(() => import('pl-fe/pages/accounts/account-timeline'));
-export const AboutPage = lazy(() => import('pl-fe/pages/utils/about'));
+export const AdminAccount = lazy(() => import('pl-fe/pages/dashboard/account'));
 export const Aliases = lazy(() => import('pl-fe/pages/settings/aliases'));
 export const Announcements = lazy(() => import('pl-fe/pages/dashboard/announcements'));
 export const AuthTokenList = lazy(() => import('pl-fe/pages/settings/auth-token-list'));

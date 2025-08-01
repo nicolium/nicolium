@@ -5,7 +5,6 @@ import { MuteModalProps } from 'pl-fe/modals/mute-modal';
 
 import type { ICryptoAddress } from 'pl-fe/features/crypto-donate/components/crypto-address';
 import type { ModalType } from 'pl-fe/features/ui/components/modal-root';
-import type { AccountModerationModalProps } from 'pl-fe/modals/account-moderation-modal';
 import type { AltTextModalProps } from 'pl-fe/modals/alt-text-modal';
 import type { BoostModalProps } from 'pl-fe/modals/boost-modal';
 import type { CompareHistoryModalProps } from 'pl-fe/modals/compare-history-modal';
@@ -41,7 +40,6 @@ import type { UnauthorizedModalProps } from 'pl-fe/modals/unauthorized-modal';
 import type { VideoModalProps } from 'pl-fe/modals/video-modal';
 
 type OpenModalProps =
-  | [type: 'ACCOUNT_MODERATION', props: AccountModerationModalProps]
   | [type: 'ALT_TEXT', props: AltTextModalProps]
   | [type: 'BIRTHDAYS' | 'CREATE_GROUP' | 'HOTKEYS']
   | [type: 'BOOST', props: BoostModalProps]

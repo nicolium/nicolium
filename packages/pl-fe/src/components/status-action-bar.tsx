@@ -777,11 +777,6 @@ const MenuButton: React.FC<IMenuButton> = ({
       copy(uri);
     };
 
-    const onModerate: React.MouseEventHandler = (e) => {
-      const account = status.account;
-      openModal('ACCOUNT_MODERATION', { accountId: account.id });
-    };
-
     const handleDeleteStatus: React.EventHandler<React.MouseEvent> = (e) => {
       dispatch(deleteStatusModal(intl, status.id));
     };
@@ -1073,7 +1068,7 @@ const MenuButton: React.FC<IMenuButton> = ({
 
       menu.push({
         text: intl.formatMessage(messages.adminAccount, { name: username }),
-        action: onModerate,
+        to: `/pl-fe/admin/accounts/${status.account_id}`,
         icon: require('@tabler/icons/outline/gavel.svg'),
       });
 

@@ -56,6 +56,7 @@ import {
   AccountGallery,
   AccountHoverCard,
   AccountTimeline,
+  AdminAccount,
   Aliases,
   Announcements,
   AuthTokenList,
@@ -329,6 +330,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       <WrappedRoute path='/pl-fe/config' adminOnly layout={DefaultLayout} component={PlFeConfig} content={children} />
 
       <WrappedRoute path='/pl-fe/admin' staffOnly layout={AdminLayout} component={Dashboard} content={children} exact />
+      <WrappedRoute path='/pl-fe/admin/accounts/:accountId' staffOnly layout={AdminLayout} component={AdminAccount} content={children} exact />
       <WrappedRoute path='/pl-fe/admin/approval' staffOnly layout={AdminLayout} component={Dashboard} content={children} exact />
       <WrappedRoute path='/pl-fe/admin/reports' staffOnly layout={AdminLayout} component={Dashboard} content={children} exact />
       <WrappedRoute path='/pl-fe/admin/reports/:reportId' staffOnly layout={AdminLayout} component={Report} content={children} exact />

@@ -272,10 +272,6 @@ const Header: React.FC<IHeader> = ({ account }) => {
     });
   };
 
-  const onModerate = () => {
-    openModal('ACCOUNT_MODERATION', { accountId: account.id });
-  };
-
   const onRemoveFromFollowers = () => {
     const unfollowModal = settings.unfollowModal;
     if (unfollowModal) {
@@ -549,7 +545,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
       menu.push({
         text: intl.formatMessage(messages.adminAccount, { name: account.username }),
-        action: onModerate,
+        to: `/pl-fe/admin/accounts/${account.id}`,
         icon: require('@tabler/icons/outline/gavel.svg'),
       });
     }
