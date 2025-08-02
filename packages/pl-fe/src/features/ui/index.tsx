@@ -388,6 +388,7 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
   const features = useFeatures();
   const vapidKey = useAppSelector(state => getVapidKey(state));
   const client = useClient();
+  const instance = useInstance();
 
   const { isDropdownMenuOpen } = useUiStore();
   const standalone = useAppSelector(isStandalone);
@@ -477,8 +478,8 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
 
   // The user has logged in
   useEffect(() => {
-    loadAccountData();
-  }, [!!account]);
+    if (instance.fetched) loadAccountData();
+  }, [!!account, instance.fetched]);
 
   useEffect(() => {
     dispatch(registerPushNotifications());
