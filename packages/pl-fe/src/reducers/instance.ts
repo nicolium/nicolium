@@ -8,9 +8,9 @@ import { PLEROMA_PRELOAD_IMPORT, type PreloadAction } from 'pl-fe/actions/preloa
 import KVStore from 'pl-fe/storage/kv-store';
 import ConfigDB from 'pl-fe/utils/config-db';
 
-const initialState: State = v.parse(instanceSchema, {});
+const initialState: State = { fetched: false, ...v.parse(instanceSchema, {}) };
 
-type State = Instance;
+type State = Instance & { fetched : boolean };
 
 const preloadImport = (state: State, action: Record<string, any>, path: string) => {
   const instance = action.data[path];
@@ -87,10 +87,10 @@ const handleInstanceFetchFail = (state: State, error: any) => {
 const instance = (state = initialState, action: AdminActions | InstanceAction | PreloadAction): State => {
   switch (action.type) {
     case PLEROMA_PRELOAD_IMPORT:
-      return create(state, (draft) => preloadImport(draft, action, '/api/v1/instance'));
+      return create(state, (draft) => ({ fetched: true, ...preloadImport(draft, action, '/api/v1/instance') }));
     case INSTANCE_FETCH_SUCCESS:
       persistInstance(action.instance);
-      return action.instance;
+      return { fetched: true, ...action.instance };
     case INSTANCE_FETCH_FAIL:
       return handleInstanceFetchFail(state, action.error);
     case ADMIN_CONFIG_UPDATE_REQUEST:
