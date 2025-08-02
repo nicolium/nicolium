@@ -42,7 +42,7 @@ const Blurhash: React.FC<IBlurhash> = React.memo(({
     try {
       const pixels = decode(hash, width, height);
       const ctx = canvas.getContext('2d');
-      const imageData = new ImageData(pixels, width, height);
+      const imageData = new ImageData(new Uint8ClampedArray(pixels), width, height);
 
       if (!ctx) return;
       ctx.putImageData(imageData, 0, 0);
