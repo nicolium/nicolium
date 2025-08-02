@@ -409,6 +409,9 @@ importers:
       stringz:
         specifier: ^2.1.0
         version: 2.1.0
+      tabbable:
+        specifier: ^6.2.0
+        version: 6.2.0
       tiny-queue:
         specifier: ^0.2.1
         version: 0.2.1
