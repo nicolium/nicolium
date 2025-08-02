@@ -41,8 +41,6 @@ import RemoteInstanceLayout from 'pl-fe/layouts/remote-instance-layout';
 import SearchLayout from 'pl-fe/layouts/search-layout';
 import StatusLayout from 'pl-fe/layouts/status-layout';
 import { prefetchFollowRequests } from 'pl-fe/queries/accounts/use-follow-requests';
-import { pendingUsersQuery } from 'pl-fe/queries/admin/use-accounts';
-import { pendingReportsQuery } from 'pl-fe/queries/admin/use-reports';
 import { queryClient } from 'pl-fe/queries/client';
 import { prefetchCustomEmojis } from 'pl-fe/queries/instance/use-custom-emojis';
 import { scheduledStatusesQueryOptions } from 'pl-fe/queries/statuses/scheduled-statuses';
@@ -422,11 +420,6 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
       // @ts-ignore
       .then(() => dispatch(fetchMarker(['notifications'])))
       .catch(console.error);
-
-    if (account.is_admin || account.is_moderator) {
-      queryClient.prefetchInfiniteQuery(pendingReportsQuery);
-      queryClient.prefetchInfiniteQuery(pendingUsersQuery);
-    }
 
     if (account.is_admin && features.pleromaAdminAccounts) {
       dispatch(fetchConfig());
