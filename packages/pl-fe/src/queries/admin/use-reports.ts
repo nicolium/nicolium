@@ -132,4 +132,4 @@ const useReopenReport = (reportId: string) => {
   });
 };
 
-export { useReports, useReport, pendingReportsQuery, usePendingReportsCount, useUpdateReport, useSelfAssignReport, useUnassignReport, useResolveReport, useReopenReport };
+export { useReports, useReport, usePendingReportsCount, useUpdateReport, useSelfAssignReport, useUnassignReport, useResolveReport, useReopenReport };

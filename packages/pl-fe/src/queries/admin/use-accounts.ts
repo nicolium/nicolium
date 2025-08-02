@@ -190,7 +190,6 @@ const useAdminUnsensitiveAccountMutation = (accountId: string) => {
 export {
   useAdminAccount,
   useAdminAccounts,
-  pendingUsersQuery,
   usePendingUsersCount,
   useAdminApproveAccountMutation,
   useAdminRejectAccountMutation,
