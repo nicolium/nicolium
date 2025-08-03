@@ -56,12 +56,12 @@ const ListItem: React.FC<IListItem> = ({ className, label, hint, children, to, h
     return null;
   }), [children, domId]);
 
-  const classNames = clsx('flex items-center justify-between overflow-hidden bg-gradient-to-r from-gradient-start/20 to-gradient-end/20 first:rounded-t-lg last:rounded-b-lg dark:from-gradient-start/10 dark:to-gradient-end/10',
+  const classNames = clsx('flex items-center justify-between overflow-hidden bg-gradient-to-r from-gradient-start/10 to-gradient-end/10 first:rounded-t-lg last:rounded-b-lg dark:from-gradient-start/10 dark:to-gradient-end/10',
     className,
     {
       'px-4 py-2': size === 'md',
       'px-2 py-0.5': size === 'sm',
-      'cursor-pointer hover:from-gradient-start/30 hover:to-gradient-end/30 dark:hover:from-gradient-start/5 dark:hover:to-gradient-end/5': typeof to !== 'undefined' || typeof onClick !== 'undefined' || typeof onSelect !== 'undefined',
+      'cursor-pointer hover:from-gradient-start/20 hover:to-gradient-end/20 dark:hover:from-gradient-start/5 dark:hover:to-gradient-end/5': typeof to !== 'undefined' || typeof onClick !== 'undefined' || typeof onSelect !== 'undefined',
     },
   );
 
