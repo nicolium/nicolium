@@ -13,7 +13,7 @@ const Picker: React.FC<any> = (props) => {
   const ref = useRef(null);
 
   useEffect(() => {
-    const input = { ...props, data, ref, getImageURL, getSpritesheetURL };
+    const input = { ...props, data, ref, autoFocus: true, getImageURL, getSpritesheetURL };
 
     new EmojiPicker(input);
   }, []);
