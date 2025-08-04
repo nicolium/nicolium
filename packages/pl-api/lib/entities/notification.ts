@@ -101,6 +101,8 @@ const notificationSchema: v.BaseSchema<any, Notification, v.BaseIssue<unknown>> 
     ...notification,
     type: notification.type === 'pleroma:report'
       ? 'admin.report'
+      : notification.type === 'reaction'
+      ? 'emoji_reaction'
       : notification.type?.replace(/^pleroma:/, ''),
   })),
   v.variant('type', [

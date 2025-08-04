@@ -12,6 +12,7 @@ const NOTIFICATION_TYPES = [
   'move',
   'chat_mention',
   'emoji_reaction',
+  'reaction',
   'update',
   'event_reminder',
   'participation_request',
