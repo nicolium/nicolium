@@ -27,15 +27,15 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install deps
-      working-directory: ./packages/pl-hooks
-      run: yarn install --ignore-scripts
+      working-directory: .
+      run: pnpm install
 
     - name: Lint
       working-directory: ./packages/pl-hooks
-      run: yarn lint
+      run: pnpm lint
 
     - name: build
       env:
         NODE_ENV: production
       working-directory: ./packages/pl-hooks
-      run: yarn build
+      run: pnpm build

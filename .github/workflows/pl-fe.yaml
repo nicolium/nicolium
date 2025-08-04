@@ -27,25 +27,31 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install deps
-      working-directory: ./packages/pl-fe
-      run: yarn install --ignore-scripts
+      working-directory: .
+      run: pnpm install
 
     - name: Lint
       working-directory: ./packages/pl-fe
-      run: yarn lint
+      run: pnpm lint
+
+    - name: Build pl-api
+      env:
+        NODE_ENV: production
+      working-directory: ./packages/pl-api
+      run: pnpm build
 
     - name: Build
       env:
         NODE_ENV: production
       working-directory: ./packages/pl-fe
-      run: yarn build
+      run: pnpm build
 
     - name: i18n
       working-directory: ./packages/pl-fe
       run: |
-          yarn i18n
+          pnpm i18n
           git diff
-          git diff --quiet || (echo "Locale files are out of date. Please run \`yarn i18n\`" && exit 1)
+          git diff --quiet || (echo "Locale files are out of date. Please run \`pnpm i18n\`" && exit 1)
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
@@ -62,13 +68,9 @@ jobs:
         NODE_ENV: production
       working-directory: ./packages/pl-fe
       run: |
-          WITH_LANDING_PAGE=true yarn build
+          WITH_LANDING_PAGE=true pnpm build
           cp dist/index.html dist/404.html
           cp pl-fe.zip dist/pl-fe.zip
-
-    - name: Install pl-api deps
-      working-directory: ./packages/pl-api
-      run: yarn install --ignore-scripts
 
     - name: Build pl-api documentation
       working-directory: ./packages/pl-api

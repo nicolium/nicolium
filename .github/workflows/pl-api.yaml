@@ -9,7 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    name: Test for a successful build
+    name: Test for pl-api formatting
     strategy:
       matrix:
         node-version: [22.x]
@@ -27,15 +27,10 @@ jobs:
         node-version: ${{ matrix.node-version }}
 
     - name: Install deps
-      working-directory: ./packages/pl-api
-      run: yarn install --ignore-scripts
+      working-directory: .
+      run: pnpm install
 
     - name: Lint
       working-directory: ./packages/pl-api
-      run: yarn lint
+      run: pnpm lint
 
-    - name: Build
-      env:
-        NODE_ENV: production
-      working-directory: ./packages/pl-api
-      run: yarn build
