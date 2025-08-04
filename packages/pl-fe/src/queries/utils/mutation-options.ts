@@ -1,5 +1,4 @@
-import type { DefaultError } from '@tanstack/query-core';
-import type { UseMutationOptions } from '@tanstack/react-query';
+import type { DefaultError, UseMutationOptions } from '@tanstack/react-query';
 
 // From https://github.com/TanStack/query/discussions/6096#discussioncomment-9685102
 const mutationOptions = <

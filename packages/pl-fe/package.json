@@ -105,7 +105,7 @@
     "multiselect-react-dropdown": "^2.0.25",
     "mutative": "^1.1.0",
     "path-browserify": "^1.0.1",
-    "pl-api": "^1.0.0-rc.89",
+    "pl-api": "workspace:*",
     "postcss": "^8.5.3",
     "process": "^0.11.10",
     "punycode": "^2.1.1",
@@ -196,13 +196,5 @@
     "vite-plugin-require": "^1.2.14",
     "vite-plugin-static-copy": "^2.2.0",
     "vitest": "^2.1.9"
-  },
-  "resolutions": {
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
-    "glob-parent": "^6.0.1",
-    "jsonwebtoken": "^9.0.0",
-    "loader-utils": "^2.0.3"
-  },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  }
 }
