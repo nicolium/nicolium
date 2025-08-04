@@ -36,15 +36,15 @@ jobs:
       working-directory: .
       run: pnpm install
 
-    - name: Lint
-      working-directory: ./packages/pl-fe
-      run: pnpm lint
-
     - name: Build pl-api
       env:
         NODE_ENV: production
       working-directory: ./packages/pl-api
       run: pnpm build
+
+    - name: Lint
+      working-directory: ./packages/pl-fe
+      run: pnpm lint
 
     - name: Build
       env:
