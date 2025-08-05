@@ -50,7 +50,7 @@ const config: Config = {
         'mono': [
           'Roboto Mono',
           'ui-monospace',
-          'mono',
+          'monospace',
         ],
       },
       spacing: {
