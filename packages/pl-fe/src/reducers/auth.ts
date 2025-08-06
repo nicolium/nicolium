@@ -24,9 +24,15 @@ import { ME_FETCH_SKIP, type MeAction } from '../actions/me';
 import type { PlfeResponse } from 'pl-fe/api';
 import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
 
-const preloadedInstance = decodeFromMarkup('initial-results', pleromaDecoder)['/api/v1/instance'];
-const parsedInstance = v.safeParse(instanceSchema, preloadedInstance);
-const instance = parsedInstance.success ? parsedInstance.output : undefined;
+const instance = (() => {
+  try {
+    const preloadedInstance = decodeFromMarkup('initial-results', pleromaDecoder)['/api/v1/instance'];
+    const parsedInstance = v.safeParse(instanceSchema, preloadedInstance);
+    return parsedInstance.success ? parsedInstance.output : undefined;
+  } catch (e) {
+    return undefined;
+  }
+})();
 
 type Action = AuthAction | MeAction | PreloadAction;
 
