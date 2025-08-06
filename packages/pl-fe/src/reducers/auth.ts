@@ -1,9 +1,9 @@
 import trim from 'lodash/trim';
 import { create, Draft } from 'mutative';
-import { applicationSchema, PlApiClient, tokenSchema, type CredentialAccount, type CredentialApplication, type Token } from 'pl-api';
+import { applicationSchema, instanceSchema, PlApiClient, tokenSchema, type CredentialAccount, type CredentialApplication, type Token } from 'pl-api';
 import * as v from 'valibot';
 
-import { MASTODON_PRELOAD_IMPORT, type PreloadAction } from 'pl-fe/actions/preload';
+import { decodeFromMarkup, MASTODON_PRELOAD_IMPORT, pleromaDecoder, type PreloadAction } from 'pl-fe/actions/preload';
 import * as BuildConfig from 'pl-fe/build-config';
 import { coerceObject } from 'pl-fe/schemas/utils';
 import KVStore from 'pl-fe/storage/kv-store';
@@ -23,6 +23,10 @@ import { ME_FETCH_SKIP, type MeAction } from '../actions/me';
 
 import type { PlfeResponse } from 'pl-fe/api';
 import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
+
+const preloadedInstance = decodeFromMarkup('initial-results', pleromaDecoder)['/api/v1/instance'];
+const parsedInstance = v.safeParse(instanceSchema, preloadedInstance);
+const instance = parsedInstance.success ? parsedInstance.output : undefined;
 
 type Action = AuthAction | MeAction | PreloadAction;
 
@@ -89,7 +93,9 @@ const getLocalState = (): State | undefined => {
     tokens: Object.fromEntries(Object.entries(state.tokens).map(([key, value]) => [key, v.parse(tokenWithAppSchema, value)])),
     users: Object.fromEntries(Object.entries(state.users).map(([key, value]) => [key, v.parse(authUserSchema, value)])),
     me: state.me,
-    client: new PlApiClient(parseBaseURL(state.me) || backendUrl, state.users[state.me]?.access_token),
+    client: new PlApiClient(parseBaseURL(state.me) || backendUrl, state.users[state.me]?.access_token, {
+      instance,
+    }),
   });
 };
 
@@ -193,7 +199,7 @@ const initialState: State = initialize({
   tokens: {},
   users: {},
   me: null,
-  client: new PlApiClient(backendUrl),
+  client: new PlApiClient(backendUrl, undefined, { instance }),
   ...localState,
 });
 

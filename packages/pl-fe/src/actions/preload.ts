@@ -67,6 +67,8 @@ interface PreloadAction {
 export {
   PLEROMA_PRELOAD_IMPORT,
   MASTODON_PRELOAD_IMPORT,
+  pleromaDecoder,
+  decodeFromMarkup,
   preload,
   preloadMastodon,
   type PreloadAction,

@@ -10,7 +10,7 @@ import ConfigDB from 'pl-fe/utils/config-db';
 
 const initialState: State = { fetched: false, ...v.parse(instanceSchema, {}) };
 
-type State = Instance & { fetched : boolean };
+type State = Instance & { fetched: boolean };
 
 const preloadImport = (state: State, action: PreloadAction, path: string): State => {
   const instance = action.data[path];
