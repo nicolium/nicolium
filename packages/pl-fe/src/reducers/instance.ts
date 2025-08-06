@@ -12,9 +12,14 @@ const initialState: State = { fetched: false, ...v.parse(instanceSchema, {}) };
 
 type State = Instance & { fetched : boolean };
 
-const preloadImport = (state: State, action: Record<string, any>, path: string) => {
+const preloadImport = (state: State, action: PreloadAction, path: string): State => {
   const instance = action.data[path];
-  return instance ? v.parse(instanceSchema, instance) : state;
+  const parsedInstance = v.safeParse(instanceSchema, instance);
+
+  if (parsedInstance.success) {
+    return { fetched: true, ...parsedInstance.output };
+  }
+  return state;
 };
 
 const getConfigValue = (instanceConfig: Array<any>, key: string) => {
@@ -87,7 +92,7 @@ const handleInstanceFetchFail = (state: State, error: any) => {
 const instance = (state = initialState, action: AdminActions | InstanceAction | PreloadAction): State => {
   switch (action.type) {
     case PLEROMA_PRELOAD_IMPORT:
-      return create(state, (draft) => ({ fetched: true, ...preloadImport(draft, action, '/api/v1/instance') }));
+      return preloadImport(state, action, '/api/v1/instance');
     case INSTANCE_FETCH_SUCCESS:
       persistInstance(action.instance);
       return { fetched: true, ...action.instance };
