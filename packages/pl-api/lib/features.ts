@@ -536,6 +536,13 @@ const getFeatures = (instance: Instance) => {
 
     circles: instance.api_versions['kmyblue_circle_history.fedibird.pl-api'] >= 1,
 
+    composeAllowHeadings: any([
+      v.software !== PLEROMA && v.software !== AKKOMA,
+      instance.pleroma.metadata.markup.allow_headings,
+    ]),
+
+    composeAllowInlineImages: instance.pleroma.metadata.markup.allow_inline_images,
+
     /**
      * Mastodon's newer solution for direct messaging.
      * @see {@link https://docs.joinmastodon.org/methods/conversations/}

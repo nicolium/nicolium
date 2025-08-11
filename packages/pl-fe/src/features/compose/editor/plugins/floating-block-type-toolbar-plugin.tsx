@@ -24,6 +24,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { uploadFile } from 'pl-fe/actions/compose';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 
 import { $createImageNode } from '../nodes/image-node';
@@ -101,9 +102,7 @@ const BlockTypeFloatingToolbar = ({
  }): JSX.Element => {
   const intl = useIntl();
   const popupCharStylesEditorRef = useRef<HTMLDivElement | null>(null);
-  const instance = useInstance();
-
-  const allowInlineImages = instance.pleroma.metadata.markup.allow_inline_images;
+  const { composeAllowInlineImages } = useFeatures();
 
   const updateBlockTypeFloatingToolbar = useCallback(() => {
     const selection = $getSelection();
@@ -202,7 +201,7 @@ const BlockTypeFloatingToolbar = ({
     >
       {editor.isEditable() && (
         <>
-          {allowInlineImages && <UploadButton onSelectFile={createImage} />}
+          {composeAllowInlineImages && <UploadButton onSelectFile={createImage} />}
           <ToolbarButton
             onClick={createHorizontalLine}
             aria-label={intl.formatMessage(messages.createHorizontalLine)}

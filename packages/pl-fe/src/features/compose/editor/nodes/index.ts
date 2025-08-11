@@ -11,7 +11,7 @@ import { ListItemNode, ListNode } from '@lexical/list';
 import { HorizontalRuleNode } from '@lexical/react/LexicalHorizontalRuleNode';
 import { HeadingNode, QuoteNode } from '@lexical/rich-text';
 
-import { useInstance } from 'pl-fe/hooks/use-instance';
+import { useFeatures } from 'pl-fe/hooks/use-features';
 
 import { EmojiNode } from './emoji-node';
 import { ImageNode } from './image-node';
@@ -20,7 +20,7 @@ import { MentionNode } from './mention-node';
 import type { Klass, LexicalNode } from 'lexical';
 
 const useNodes = (isWysiwyg?: boolean) => {
-  const instance = useInstance();
+  const { composeAllowHeadings, composeAllowInlineImages } = useFeatures();
 
   const nodes: Array<Klass<LexicalNode>> = [
     AutoLinkNode,
@@ -41,8 +41,8 @@ const useNodes = (isWysiwyg?: boolean) => {
     );
   }
 
-  if (instance.pleroma.metadata.markup.allow_headings) nodes.push(HeadingNode);
-  if (instance.pleroma.metadata.markup.allow_inline_images) nodes.push(ImageNode);
+  if (composeAllowHeadings) nodes.push(HeadingNode);
+  if (composeAllowInlineImages) nodes.push(ImageNode);
 
   return nodes;
 };

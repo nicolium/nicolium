@@ -40,7 +40,7 @@ import { createPortal } from 'react-dom';
 import { defineMessages, useIntl } from 'react-intl';
 
 import Icon from 'pl-fe/components/ui/icon';
-import { useInstance } from 'pl-fe/hooks/use-instance';
+import { useFeatures } from 'pl-fe/hooks/use-features';
 
 import { getDOMRangeRect } from '../utils/get-dom-range-rect';
 import { getSelectedNode } from '../utils/get-selected-node';
@@ -109,7 +109,7 @@ const BlockTypeDropdown = ({ editor, anchorElem, blockType, icon }: {
   blockType: keyof typeof blockTypeToBlockName;
   icon: string;
 }) => {
-  const instance = useInstance();
+  const { composeAllowHeadings } = useFeatures();
 
   const [showDropDown, setShowDropDown] = useState(false);
 
@@ -200,7 +200,7 @@ const BlockTypeDropdown = ({ editor, anchorElem, blockType, icon }: {
               active={blockType === 'paragraph'}
               icon={blockTypeToIcon.paragraph}
             />
-            {instance.pleroma.metadata.markup.allow_headings === true && (
+            {composeAllowHeadings && (
               <>
                 <ToolbarButton
                   onClick={() => formatHeading('h1')}
