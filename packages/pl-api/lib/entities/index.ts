@@ -43,6 +43,7 @@ export * from './extended-description';
 export * from './familiar-followers';
 export * from './featured-tag';
 export * from './filter';
+export * from './filter-result';
 export * from './group';
 export * from './group-member';
 export * from './group-relationship';
