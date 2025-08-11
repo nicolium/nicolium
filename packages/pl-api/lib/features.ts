@@ -1528,6 +1528,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MITRA,
       v.software === NEODB,
       v.software === PLEROMA,
+      v.software === SHARKEY,
       v.software === SNAC,
       v.software === TAKAHE,
       v.software === TOKI,
