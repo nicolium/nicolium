@@ -878,6 +878,8 @@ const getFeatures = (instance: Instance) => {
       v.software === MASTODON,
     ]),
 
+    filtersV2BlurAction: v.software === MASTODON && gte(v.version, '4.4.0'),
+
     /**
      * Allows setting the focal point of a media attachment.
      * @see {@link https://docs.joinmastodon.org/methods/media/}

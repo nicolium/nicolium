@@ -36,7 +36,7 @@ type FilterContext = 'home' | 'notifications' | 'public' | 'thread' | 'account';
 interface CreateFilterParams {
   title: string;
   context: Array<FilterContext>;
-  filter_action?: 'warn' | 'hide';
+  filter_action?: 'warn' | 'hide' | 'blur';
   expires_in?: number;
   keywords_attributes: Array<{
     keyword: string;
@@ -50,7 +50,7 @@ interface CreateFilterParams {
 interface UpdateFilterParams {
   title?: string;
   context?: Array<FilterContext>;
-  filter_action?: 'warn' | 'hide';
+  filter_action?: 'warn' | 'hide' | 'blur';
   expires_in?: number;
   keywords_attributes?: Array<{
     keyword: string;
