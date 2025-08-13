@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React from 'react';
+import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import Button from 'pl-fe/components/ui/button';
@@ -8,23 +8,30 @@ import Text from 'pl-fe/components/ui/text';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useStatusMetaStore } from 'pl-fe/stores/status-meta';
 
+import type { FilterResult } from 'pl-api';
 import type { Status } from 'pl-fe/normalizers/status';
 
-const useMediaVisible = (status: Pick<Status, 'media_attachments' | 'sensitive'> & { id?: string }, displayMedia: 'default' | 'show_all' | 'hide_all') => {
-  let visible = !status.sensitive;
-
+const useMediaVisible = (status: Pick<Status, 'filtered' | 'media_attachments' | 'sensitive'> & { id?: string }, displayMedia: 'default' | 'show_all' | 'hide_all'): [boolean, Array<FilterResult>] => {
   const statusesMeta = useStatusMetaStore().statuses;
   const mediaVisible = status.id ? statusesMeta[status.id]?.mediaVisible : undefined;
 
-  if (mediaVisible !== undefined) visible = mediaVisible;
-  else if (displayMedia === 'show_all') visible = true;
-  else if (displayMedia === 'hide_all' && status.media_attachments.length) visible = false;
+  return useMemo(() => {
+    let visible = !status.sensitive;
 
-  return visible;
+    const filterResults = status.filtered.filter(({ filter }) => filter.filter_action === 'blur');
+
+    if (filterResults.length) return [mediaVisible !== undefined ? mediaVisible : false, filterResults];
+
+    if (mediaVisible !== undefined) visible = mediaVisible;
+    else if (displayMedia === 'show_all') visible = true;
+    else if (displayMedia === 'hide_all' && status.media_attachments.length) visible = false;
+
+    return [visible, []];
+  }, [status.sensitive, status.filtered, mediaVisible]);
 };
 
-const useShowOverlay = (status: Pick<Status, 'id' | 'media_attachments' | 'sensitive'>, displayMedia: 'default' | 'show_all' | 'hide_all') => {
-  const visible = useMediaVisible(status, displayMedia);
+const useShowOverlay = (status: Pick<Status, 'id' | 'filtered' | 'media_attachments' | 'sensitive'>, displayMedia: 'default' | 'show_all' | 'hide_all') => {
+  const [visible] = useMediaVisible(status, displayMedia);
 
   const showHideButton = status.sensitive || (status.media_attachments.length && displayMedia === 'hide_all');
 
@@ -40,10 +47,11 @@ const messages = defineMessages({
   sensitiveTitle: { id: 'status.sensitive_warning', defaultMessage: 'Sensitive content' },
   sensitiveSubtitle: { id: 'status.sensitive_warning.subtitle', defaultMessage: 'This content may not be suitable for all audiences.' },
   show: { id: 'moderation_overlay.show', defaultMessage: 'Show content' },
+  matchesFilter: { id: 'status.sensitive_warning.matches_filter', defaultMessage: 'Matches filter “<span>{title}</span>”' },
 });
 
 interface ISensitiveContentOverlay {
-  status: Pick<Status, 'id' | 'sensitive' | 'media_attachments'>;
+  status: Pick<Status, 'id' | 'filtered' | 'sensitive' | 'media_attachments'>;
 }
 
 const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveContentOverlay>((props, ref) => {
@@ -52,7 +60,9 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
   const intl = useIntl();
   const { displayMedia } = useSettings();
 
-  const visible = useMediaVisible(status, displayMedia);
+  const [visible, filters] = useMediaVisible(status, displayMedia);
+
+  const matchedFilters = useMemo(() => filters.map(({ filter }) => filter.title), [filters]);
 
   const { hideStatusMedia, revealStatusMedia } = useStatusMetaStore();
 
@@ -91,7 +101,10 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
               </Text>
 
               <Text theme='white' size='sm' weight='medium'>
-                {intl.formatMessage(messages.sensitiveSubtitle)}
+                {filters.length ? intl.formatMessage(messages.matchesFilter, {
+                  title: matchedFilters.join(', '),
+                  span: (chunks) => <span className='filter-name'>{chunks}</span>,
+                }) : intl.formatMessage(messages.sensitiveSubtitle)}
               </Text>
             </div>
 

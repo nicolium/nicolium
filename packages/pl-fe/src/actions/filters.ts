@@ -35,12 +35,12 @@ const fetchFilter = (filterId: string) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState).filtering.getFilter(filterId);
 
-const createFilter = (title: string, expires_in: number | undefined, context: Array<FilterContext>, hide: boolean, keywords_attributes: FilterKeywords) =>
+const createFilter = (title: string, expires_in: number | undefined, context: Array<FilterContext>, filter_action: Filter['filter_action'], keywords_attributes: FilterKeywords) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState).filtering.createFilter({
       title,
       context,
-      filter_action: hide ? 'hide' : 'warn',
+      filter_action,
       expires_in,
       keywords_attributes,
     }).then(response => {
@@ -49,12 +49,12 @@ const createFilter = (title: string, expires_in: number | undefined, context: Ar
       return response;
     });
 
-const updateFilter = (filterId: string, title: string, expires_in: number | undefined, context: Array<FilterContext>, hide: boolean, keywords_attributes: FilterKeywords) =>
+const updateFilter = (filterId: string, title: string, expires_in: number | undefined, context: Array<FilterContext>, filter_action: Filter['filter_action'], keywords_attributes: FilterKeywords) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState).filtering.updateFilter(filterId, {
       title,
       context,
-      filter_action: hide ? 'hide' : 'warn',
+      filter_action,
       expires_in,
       keywords_attributes,
     }).then(response => {

@@ -1,3 +1,4 @@
+import { Filter, type FilterContext } from 'pl-api';
 import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
@@ -12,6 +13,7 @@ import FormActions from 'pl-fe/components/ui/form-actions';
 import FormGroup from 'pl-fe/components/ui/form-group';
 import HStack from 'pl-fe/components/ui/hstack';
 import Input from 'pl-fe/components/ui/input';
+import Select from 'pl-fe/components/ui/select';
 import Stack from 'pl-fe/components/ui/stack';
 import Streamfield from 'pl-fe/components/ui/streamfield';
 import Text from 'pl-fe/components/ui/text';
@@ -21,7 +23,6 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import toast from 'pl-fe/toast';
 
-import type { FilterContext } from 'pl-api';
 import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield';
 
 interface IFilterField {
@@ -50,6 +51,11 @@ const messages = defineMessages({
   drop_hint: { id: 'column.filters.drop_hint', defaultMessage: 'Filtered posts will disappear irreversibly, even if filter is later removed' },
   hide_header: { id: 'column.filters.hide_header', defaultMessage: 'Hide completely' },
   hide_hint: { id: 'column.filters.hide_hint', defaultMessage: 'Completely hide the filtered content, instead of showing a warning' },
+  filter_action_header: { id: 'column.filters.filter_action_header', defaultMessage: 'Filter action' },
+  filter_action_hint: { id: 'column.filters.filter_action_hint', defaultMessage: 'Choose which action to perform when a post matches the filter' },
+  filter_action_warn: { id: 'column.filters.filter_action_warn', defaultMessage: 'Hide with a warning' },
+  filter_action_blur: { id: 'column.filters.filter_action_blur', defaultMessage: 'Hide media with a warning' },
+  filter_action_hide: { id: 'column.filters.filter_action_hide', defaultMessage: 'Hide completely' },
   add_new: { id: 'column.filters.add_new', defaultMessage: 'Add new filter' },
   edit: { id: 'column.filters.edit', defaultMessage: 'Edit filter' },
   create_error: { id: 'column.filters.create_error', defaultMessage: 'Error adding filter' },
@@ -107,7 +113,7 @@ const EditFilterPage: React.FC<IEditFilter> = ({ params }) => {
   const [notifications, setNotifications] = useState(false);
   const [conversations, setConversations] = useState(false);
   const [accounts, setAccounts] = useState(false);
-  const [hide, setHide] = useState(false);
+  const [filterAction, setFilterAction] = useState<Filter['filter_action']>('warn');
   const [keywords, setKeywords] = useState<IFilterField[]>([{ keyword: '', whole_word: false }]);
 
   const expirations = useMemo(() => ({
@@ -145,8 +151,8 @@ const EditFilterPage: React.FC<IEditFilter> = ({ params }) => {
     }
 
     dispatch(params.id
-      ? updateFilter(params.id, title, expiresIn, context, hide, keywords)
-      : createFilter(title, expiresIn, context, hide, keywords)).then(() => {
+      ? updateFilter(params.id, title, expiresIn, context, filterAction, keywords)
+      : createFilter(title, expiresIn, context, filterAction, keywords)).then(() => {
       history.push('/filters');
     }).catch(() => {
       toast.error(intl.formatMessage(messages.create_error));
@@ -172,7 +178,7 @@ const EditFilterPage: React.FC<IEditFilter> = ({ params }) => {
           setNotifications(filter.context.includes('notifications'));
           setConversations(filter.context.includes('thread'));
           setAccounts(filter.context.includes('account'));
-          setHide(filter.filter_action === 'hide');
+          setFilterAction(filter.filter_action);
           setKeywords(filter.keywords);
         } else {
           setNotFound(true);
@@ -265,15 +271,28 @@ const EditFilterPage: React.FC<IEditFilter> = ({ params }) => {
         </List>
 
         <List>
-          <ListItem
-            label={intl.formatMessage(features.filtersV2 ? messages.hide_header : messages.drop_header)}
-            hint={intl.formatMessage(features.filtersV2 ? messages.hide_hint : messages.drop_hint)}
-          >
-            <Toggle
-              checked={hide}
-              onChange={({ target }) => setHide(target.checked)}
-            />
-          </ListItem>
+          {features.filtersV2BlurAction ? (
+            <ListItem
+              label={intl.formatMessage(messages.filter_action_header)}
+              hint={intl.formatMessage(messages.filter_action_hint)}
+            >
+              <Select value={filterAction} onChange={({ target }) => setFilterAction(target.value as Filter['filter_action'])}>
+                <option value='warn'>{intl.formatMessage(messages.filter_action_warn)}</option>
+                <option value='hide'>{intl.formatMessage(messages.filter_action_hide)}</option>
+                <option value='blur'>{intl.formatMessage(messages.filter_action_blur)}</option>
+              </Select>
+            </ListItem>
+          ) : (
+            <ListItem
+              label={intl.formatMessage(features.filtersV2 ? messages.hide_header : messages.drop_header)}
+              hint={intl.formatMessage(features.filtersV2 ? messages.hide_hint : messages.drop_hint)}
+            >
+              <Toggle
+                checked={filterAction === 'hide'}
+                onChange={({ target }) => setFilterAction(target.checked ? 'hide' : 'warn')}
+              />
+            </ListItem>
+          )}
         </List>
 
         {features.filtersV2 && keywordsField}

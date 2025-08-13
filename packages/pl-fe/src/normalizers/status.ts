@@ -121,7 +121,6 @@ const normalizeStatus = (status: BaseStatus & {
     account: normalizeAccount(status.account),
     accounts: status.accounts?.map(normalizeAccount),
     mentions,
-    filtered: status.filtered?.map(result => result.filter.title),
     event,
     group,
     media_attachments,

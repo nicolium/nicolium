@@ -8,7 +8,7 @@ import { validId } from 'pl-fe/utils/auth';
 import ConfigDB from 'pl-fe/utils/config-db';
 import { shouldFilter } from 'pl-fe/utils/timelines';
 
-import type { Filter, NotificationGroup, Relationship } from 'pl-api';
+import type { Filter, FilterResult, NotificationGroup, Relationship } from 'pl-api';
 import type { EntityStore } from 'pl-fe/entity-store/types';
 import type { Account } from 'pl-fe/normalizers/account';
 import type { Group } from 'pl-fe/normalizers/group';
@@ -100,8 +100,8 @@ const regexFromFilters = (filters: Array<Filter>) => {
 };
 
 const checkFiltered = (index: string, filters: Array<Filter>) =>
-  filters.reduce((result: Array<string>, filter) =>
-    result.concat(filter.keywords.reduce((result: Array<string>, keyword) => {
+  filters.reduce((result: Array<FilterResult>, filter) =>
+    result.concat(filter.keywords.reduce((result: Array<FilterResult>, keyword) => {
       let expr = escapeRegExp(keyword.keyword);
 
       if (keyword.whole_word) {
@@ -116,7 +116,7 @@ const checkFiltered = (index: string, filters: Array<Filter>) =>
 
       const regex = new RegExp(expr);
 
-      if (regex.test(index)) return result.concat(filter.title);
+      if (regex.test(index)) return result.concat({ filter, keyword_matches: null, status_matches: null });
       return result;
     }, [])), []);
 

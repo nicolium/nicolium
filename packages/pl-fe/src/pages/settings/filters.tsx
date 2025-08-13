@@ -93,7 +93,9 @@ const FiltersPage = () => {
                     {filtersV2 ? (
                       filter.filter_action === 'hide' ?
                         <FormattedMessage id='filters.filters_list_hide_completely' defaultMessage='Hide content' /> :
-                        <FormattedMessage id='filters.filters_list_warn' defaultMessage='Display warning' />
+                        filter.filter_action === 'blur' ?
+                          <FormattedMessage id='filters.filters_list_blur' defaultMessage='Hide media with a warning' /> :
+                          <FormattedMessage id='filters.filters_list_warn' defaultMessage='Display warning' />
                     ) : (filter.filter_action === 'hide' ?
                       <FormattedMessage id='filters.filters_list_drop' defaultMessage='Drop' /> :
                       <FormattedMessage id='filters.filters_list_hide' defaultMessage='Hide' />)}

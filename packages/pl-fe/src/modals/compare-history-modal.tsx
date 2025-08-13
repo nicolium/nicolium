@@ -13,6 +13,7 @@ import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useStatusHistory } from 'pl-fe/queries/statuses/use-status-history';
 
 import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { Status } from 'pl-fe/normalizers/status';
 
 interface CompareHistoryModalProps {
   statusId: string;
@@ -75,7 +76,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
               )}
 
               {version.media_attachments.length > 0 && (
-                <AttachmentThumbs status={version} />
+                <AttachmentThumbs status={version as Status} />
               )}
 
               <Text align='right' tag='span' theme='muted' size='sm'>

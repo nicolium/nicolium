@@ -97,7 +97,8 @@ const Status: React.FC<IStatus> = (props) => {
   const statusUrl = `/@${actualStatus.account.acct}/posts/${actualStatus.id}`;
   const group = actualStatus.group;
 
-  const filtered = (status.filtered?.length || actualStatus.filtered?.length) > 0;
+  const filterResults = useMemo(() => [...status.filtered, ...actualStatus.filtered].filter(({ filter }) => filter.filter_action === 'warn'), [status.filtered, actualStatus.filtered]);
+  const filtered = filterResults.length > 0;
 
   // Track height changes we know about to compensate scrolling.
   useEffect(() => {
@@ -336,7 +337,7 @@ const Status: React.FC<IStatus> = (props) => {
       <HotKeys handlers={minHandlers} attachRef={node}>
         <div className={clsx('status__wrapper text-center', { focusable })} tabIndex={focusable ? 0 : undefined} ref={node}>
           <Text theme='muted'>
-            <FormattedMessage id='status.filtered' defaultMessage='Filtered' />: {status.filtered.join(', ')}.
+            <FormattedMessage id='status.filtered' defaultMessage='Filtered' />: {filterResults.map(({ filter }) => filter.title).join(', ')}.
             {' '}
             <button className='text-primary-600 hover:underline dark:text-accent-blue' onClick={handleUnfilter}>
               <FormattedMessage id='status.show_filter_reason' defaultMessage='Show anyway' />
