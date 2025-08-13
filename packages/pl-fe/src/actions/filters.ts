@@ -12,6 +12,7 @@ const FILTERS_FETCH_SUCCESS = 'FILTERS_FETCH_SUCCESS' as const;
 
 const messages = defineMessages({
   added: { id: 'filters.added', defaultMessage: 'Filter added.' },
+  updated: { id: 'filters.updated', defaultMessage: 'Filter updated.' },
   removed: { id: 'filters.removed', defaultMessage: 'Filter deleted.' },
 });
 
@@ -58,7 +59,7 @@ const updateFilter = (filterId: string, title: string, expires_in: number | unde
       expires_in,
       keywords_attributes,
     }).then(response => {
-      toast.success(messages.added);
+      toast.success(messages.updated);
 
       return response;
     });
