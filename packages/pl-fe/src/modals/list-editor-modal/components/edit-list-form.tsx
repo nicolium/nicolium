@@ -11,12 +11,15 @@ import Toggle from 'pl-fe/components/ui/toggle';
 import { SelectDropdown } from 'pl-fe/features/forms';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useList, useUpdateList } from 'pl-fe/queries/accounts/use-lists';
+import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   save: { id: 'lists.new.save', defaultMessage: 'Save list' },
   repliesPolicyNone: { id: 'lists.replies_policy.none', defaultMessage: 'No one' },
   repliesPolicyList: { id: 'lists.replies_policy.list', defaultMessage: 'Members of the list' },
   repliesPolicyFollowed: { id: 'lists.replies_policy.followed', defaultMessage: 'Any followed user' },
+  success: { id: 'lists.edit.success', defaultMessage: 'List updated successfully' },
+  error: { id: 'lists.edit.error', defaultMessage: 'Error updating list' },
 });
 
 interface IListForm {
@@ -34,6 +37,7 @@ const ListForm: React.FC<IListForm> = ({
   const { data: list } = useList(listId);
   const { mutate: updateList, isPending: disabled } = useUpdateList(listId!);
 
+  console.log(list);
   const [title, setTitle] = useState(list!.title);
   const [repliesPolicy, setRepliesPolicy] = useState(list!.replies_policy);
   const [exclusive, setExclusive] = useState(list!.exclusive);
@@ -45,7 +49,14 @@ const ListForm: React.FC<IListForm> = ({
   };
 
   const handleUpdate = () => {
-    updateList({ title, replies_policy: repliesPolicy, exclusive });
+    updateList({ title, replies_policy: repliesPolicy, exclusive, notify }, {
+      onSuccess: () => {
+        toast.success(intl.formatMessage(messages.success));
+      },
+      onError: () => {
+        toast.error(intl.formatMessage(messages.error));
+      },
+    });
   };
 
   return (
@@ -95,7 +106,7 @@ const ListForm: React.FC<IListForm> = ({
         {features.listsNotifications && (
           <ListItem
             label={<FormattedMessage id='lists.notifications' defaultMessage='Subscribe' />}
-            hint={<FormattedMessage id='lists.notifications_hint' defaultMessage='Subscribe to receive notifications for new posts in the list.' />}
+            hint={<FormattedMessage id='lists.notifications_hint' defaultMessage='Receive notifications for new posts in the list.' />}
           >
             <Toggle
               checked={notify}
