@@ -37,10 +37,7 @@ const ListForm: React.FC<IListForm> = ({
   const [title, setTitle] = useState(list!.title);
   const [repliesPolicy, setRepliesPolicy] = useState(list!.replies_policy);
   const [exclusive, setExclusive] = useState(list!.exclusive);
-
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
-    setTitle(e.target.value);
-  };
+  const [notify, setNotify] = useState(list!.notify);
 
   const handleSubmit: React.FormEventHandler<Element> = e => {
     e.preventDefault();
@@ -49,14 +46,6 @@ const ListForm: React.FC<IListForm> = ({
 
   const handleUpdate = () => {
     updateList({ title, replies_policy: repliesPolicy, exclusive });
-  };
-
-  const handleChangeRepliesPolicy = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setRepliesPolicy(e.target.value as 'none');
-  };
-
-  const handleChangeExclusive = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setExclusive(e.target.checked);
   };
 
   return (
@@ -68,7 +57,7 @@ const ListForm: React.FC<IListForm> = ({
           outerClassName='grow'
           type='text'
           value={title}
-          onChange={handleChange}
+          onChange={(e) => setTitle(e.target.value)}
         />
       </FormGroup>
 
@@ -86,7 +75,7 @@ const ListForm: React.FC<IListForm> = ({
                 followed: intl.formatMessage(messages.repliesPolicyFollowed),
               }}
               defaultValue={repliesPolicy || 'list'}
-              onChange={handleChangeRepliesPolicy}
+              onChange={(e) => setRepliesPolicy(e.target.value as 'none')}
             />
           </ListItem>
         )}
@@ -98,7 +87,19 @@ const ListForm: React.FC<IListForm> = ({
           >
             <Toggle
               checked={exclusive}
-              onChange={handleChangeExclusive}
+              onChange={(e) => setExclusive(e.target.checked)}
+            />
+          </ListItem>
+        )}
+
+        {features.listsNotifications && (
+          <ListItem
+            label={<FormattedMessage id='lists.notifications' defaultMessage='Subscribe' />}
+            hint={<FormattedMessage id='lists.notifications_hint' defaultMessage='Subscribe to receive notifications for new posts in the list.' />}
+          >
+            <Toggle
+              checked={notify}
+              onChange={(e) => setNotify(e.target.checked)}
             />
           </ListItem>
         )}

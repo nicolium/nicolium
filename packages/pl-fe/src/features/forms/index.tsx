@@ -106,7 +106,7 @@ interface ISelectDropdown {
   hint?: React.ReactNode;
   items: Record<string, string>;
   defaultValue?: string;
-  onChange?: React.ChangeEventHandler;
+  onChange?: React.ChangeEventHandler<HTMLSelectElement>;
 }
 
 const SelectDropdown: React.FC<ISelectDropdown> = (props) => {

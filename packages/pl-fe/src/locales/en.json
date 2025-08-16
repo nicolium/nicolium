@@ -1107,6 +1107,8 @@
   "lists.new.create_title": "Add list",
   "lists.new.save": "Save list",
   "lists.new.title_placeholder": "New list title",
+  "lists.notifications": "Subscribe",
+  "lists.notifications_hint": "Subscribe to receive notifications for new posts in the list.",
   "lists.replies_policy.followed": "Any followed user",
   "lists.replies_policy.list": "Members of the list",
   "lists.replies_policy.none": "No one",
