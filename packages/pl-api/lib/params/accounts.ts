@@ -11,6 +11,8 @@ type GetAccountParams = WithMutedParam;
 interface GetAccountStatusesParams extends PaginationParams, WithMutedParam, OnlyEventsParam, OnlyMediaParam, LanguageParam {
   /** Boolean. Filter out statuses in reply to a different account. */
   exclude_replies?: boolean;
+  /** Boolean. Filter out boosts from the response. */
+  exclude_reblogs?: boolean;
   /** Boolean. Filter for pinned statuses only. Defaults to false, which includes all statuses. Pinned statuses do not receive special priority in the order of the returned results. */
   pinned?: boolean;
   /** String. Filter for statuses using a specific hashtag. */
