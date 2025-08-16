@@ -16,6 +16,7 @@ export const BubbleTimeline = lazy(() => import('pl-fe/pages/timelines/bubble-ti
 export const ChatIndex = lazy(() => import('pl-fe/pages/chats/chats'));
 export const Circle = lazy(() => import('pl-fe/pages/fun/circle'));
 export const Circles = lazy(() => import('pl-fe/pages/account-lists/circles'));
+export const CircleTimeline = lazy(() => import('pl-fe/pages/timelines/circle-timeline'));
 export const CommunityTimeline = lazy(() => import('pl-fe/pages/timelines/community-timeline'));
 export const ComposeEvent = lazy(() => import('pl-fe/pages/statuses/compose-event'));
 export const Conversations = lazy(() => import('pl-fe/pages/status-lists/conversations'));

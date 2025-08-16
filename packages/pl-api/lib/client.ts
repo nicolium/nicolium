@@ -168,7 +168,7 @@ import type {
   GetChatMessagesParams,
   GetChatsParams,
 } from './params/chats';
-import type { GetCircleStatusesParams } from './params/circles';
+import type { GetCircleAccountsParams, GetCircleStatusesParams } from './params/circles';
 import type { UpdateFileParams } from './params/drive';
 import type {
   CreateEventParams,
@@ -5618,6 +5618,39 @@ class PlApiClient {
       const response = await this.request<{}>(`/api/v1/circles/${circleId}`, { method: 'DELETE' });
 
       return response.json;
+    },
+
+    /**
+     * View accounts in a circle
+     * Requires features{@link Features.circles}.
+     */
+    getCircleAccounts: async (circleId: string, params?: GetCircleAccountsParams) =>
+      this.#paginatedGet(`/api/v1/circles/${circleId}/accounts`, { params }, accountSchema),
+
+    /**
+     * Add accounts to a circle
+     * Add accounts to the given circle. Note that the user must be following these accounts.
+     * Requires features{@link Features.circles}.
+     */
+    addCircleAccounts: async (circleId: string, accountIds: string[]) => {
+      const response = await this.request(`/api/v1/circles/${circleId}/accounts`, {
+        method: 'POST', body: { account_ids: accountIds },
+      });
+
+      return response.json as {};
+    },
+
+    /**
+     * Remove accounts from circle
+     * Remove accounts from the given circle.
+     * Requires features{@link Features.circles}.
+     */
+    deleteCircleAccounts: async (circleId: string, accountIds: string[]) => {
+      const response = await this.request(`/api/v1/circles/${circleId}/accounts`, {
+        method: 'DELETE', body: { account_ids: accountIds },
+      });
+
+      return response.json as {};
     },
 
     getCircleStatuses: (circleId: string, params: GetCircleStatusesParams) =>

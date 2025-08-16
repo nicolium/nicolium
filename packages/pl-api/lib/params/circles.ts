@@ -5,6 +5,12 @@ import { PaginationParams } from './common';
  */
 type GetCircleStatusesParams = PaginationParams;
 
+/**
+ * @category Request params
+ */
+type GetCircleAccountsParams = PaginationParams;
+
 export type {
   GetCircleStatusesParams,
+  GetCircleAccountsParams,
 };

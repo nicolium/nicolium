@@ -9,6 +9,7 @@ import { importEntities } from './importer';
 import type {
   Account as BaseAccount,
   GetAccountStatusesParams,
+  GetCircleStatusesParams,
   GroupTimelineParams,
   HashtagTimelineParams,
   HomeTimelineParams,
@@ -260,6 +261,21 @@ const fetchListTimeline = (listId: string, expand = false, done = noOp) =>
     return dispatch(handleTimelineExpand(timelineId, fn, false, done));
   };
 
+const fetchCircleTimeline = (circleId: string, expand = false, done = noOp) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    const state = getState();
+    const timelineId = `circle:${circleId}`;
+
+    const params: GetCircleStatusesParams = {};
+    // if (useSettingsStore.getState().settings.autoTranslate) params.language = getLocale();
+
+    if (expand && state.timelines[timelineId]?.isLoading) return;
+
+    const fn = (expand && state.timelines[timelineId]?.next?.()) || getClient(state).circles.getCircleStatuses(circleId, params);
+
+    return dispatch(handleTimelineExpand(timelineId, fn, false, done));
+  };
+
 const fetchGroupTimeline = (groupId: string, { only_media, limit }: Record<string, any> = {}, expand = false, done = noOp) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
@@ -378,6 +394,7 @@ export {
   fetchBubbleTimeline,
   fetchAccountTimeline,
   fetchListTimeline,
+  fetchCircleTimeline,
   fetchGroupTimeline,
   fetchHashtagTimeline,
   fetchLinkTimeline,

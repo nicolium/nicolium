@@ -1,11 +1,14 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { type InfiniteData, useMutation, useQuery } from '@tanstack/react-query';
 
 import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 
 import { queryClient } from '../client';
+import { filterById } from '../utils/filter-id';
+import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
+import { minifyAccountList } from '../utils/minify-list';
 
-import type { Circle } from 'pl-api';
+import type { Circle, PaginatedResponse } from 'pl-api';
 
 const useCircles = <T>(
   select?: ((data: Array<Circle>) => T),
@@ -58,4 +61,33 @@ const useUpdateCircle = (circleId: string) => {
   });
 };
 
-export { useCircles, useCircle, useCreateCircle, useDeleteCircle, useUpdateCircle };
+const useCircleAccounts = makePaginatedResponseQuery(
+  (circleId: string) => ['accountsLists', 'circles', circleId],
+  (client, [circleId]) => client.circles.getCircleAccounts(circleId).then(minifyAccountList),
+);
+
+const useAddAccountsToCircle = (circleId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['accountsLists', 'circles', circleId, 'add'],
+    mutationFn: (accountIds: Array<string>) => client.circles.addCircleAccounts(circleId, accountIds),
+    onSettled: (_, __, accountIds) => {
+      queryClient.invalidateQueries({ queryKey: ['accountsLists', 'circles', circleId] });
+    },
+  });
+};
+
+const useRemoveAccountsFromCircle = (circleId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['accountsLists', 'circles', circleId, 'remove'],
+    mutationFn: (accountIds: Array<string>) => client.circles.deleteCircleAccounts(circleId, accountIds),
+    onSettled: (_, __, accountIds) => {
+      queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(['accountsLists', 'circles', circleId], filterById(accountIds));
+    },
+  });
+};
+
+export { useCircles, useCircle, useCreateCircle, useDeleteCircle, useUpdateCircle, useCircleAccounts, useAddAccountsToCircle, useRemoveAccountsFromCircle };

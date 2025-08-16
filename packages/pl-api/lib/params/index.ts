@@ -2,6 +2,7 @@ export * from './accounts';
 export * from './admin';
 export * from './apps';
 export * from './chats';
+export * from './circles';
 export type { PaginationParams } from './common';
 export * from './events';
 export * from './filtering';

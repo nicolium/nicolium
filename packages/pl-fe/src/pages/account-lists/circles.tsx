@@ -97,7 +97,7 @@ const CirclesPage: React.FC = () => {
             {circles.map((circle) => (
               <ListItem
                 key={circle.id}
-                // to={`/circles/${circle.id}`}
+                to={`/circles/${circle.id}`}
                 label={
                   <HStack alignItems='center' space={2}>
                     <Icon src={require('@tabler/icons/outline/list.svg')} size={20} />

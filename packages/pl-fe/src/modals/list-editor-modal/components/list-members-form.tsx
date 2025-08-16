@@ -4,7 +4,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { CardHeader, CardTitle } from 'pl-fe/components/ui/card';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
-import { useListAccounts } from 'pl-fe/queries/accounts/use-lists';
+import { useAddAccountsToList, useListAccounts, useRemoveAccountsFromList } from 'pl-fe/queries/accounts/use-lists';
 import { useAccountSearch } from 'pl-fe/queries/search/use-search-accounts';
 
 import Account from './account';
@@ -27,6 +27,12 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
   const { data: accountIds = [] } = useListAccounts(listId);
   const { data: searchAccountIds = [] } = useAccountSearch(searchValue, { following: true, limit: 5 });
 
+  const { mutate: addToList } = useAddAccountsToList(listId);
+  const { mutate: removeFromList } = useRemoveAccountsFromList(listId);
+
+  const onAdd = (accountId: string) => addToList([accountId]);
+  const onRemove = (accountId: string) => removeFromList([accountId]);
+
   return (
     <Stack space={2}>
       {accountIds.length > 0 ? (
@@ -35,7 +41,7 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
             <CardTitle title={intl.formatMessage(messages.removeFromList)} />
           </CardHeader>
           <div className='max-h-48 overflow-y-auto'>
-            {accountIds.map(accountId => <Account key={accountId} listId={listId} accountId={accountId} added={accountIds.includes(accountId)} />)}
+            {accountIds.map(accountId => <Account key={accountId} accountId={accountId} added={accountIds.includes(accountId)} onAdd={onAdd} onRemove={onRemove} />)}
           </div>
         </div>
       ) : (
@@ -50,7 +56,7 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
         </CardHeader>
         <Search value={searchValue} onSubmit={setSearchValue} />
         <div className='max-h-48 overflow-y-auto'>
-          {searchAccountIds.map(accountId => <Account key={accountId} listId={listId} accountId={accountId} added={accountIds.includes(accountId)} />)}
+          {searchAccountIds.map(accountId => <Account key={accountId} accountId={accountId} added={accountIds.includes(accountId)} onAdd={onAdd} onRemove={onRemove} />)}
         </div>
       </div>
     </Stack>

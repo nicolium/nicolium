@@ -7,6 +7,7 @@ import type { ICryptoAddress } from 'pl-fe/features/crypto-donate/components/cry
 import type { ModalType } from 'pl-fe/features/ui/components/modal-root';
 import type { AltTextModalProps } from 'pl-fe/modals/alt-text-modal';
 import type { BoostModalProps } from 'pl-fe/modals/boost-modal';
+import type { CircleEditorModalProps } from 'pl-fe/modals/circle-editor-modal';
 import type { CompareHistoryModalProps } from 'pl-fe/modals/compare-history-modal';
 import type { ComponentModalProps } from 'pl-fe/modals/component-modal';
 import type { ComposeInteractionPolicyModalProps } from 'pl-fe/modals/compose-interaction-policy-modal';
@@ -43,6 +44,7 @@ type OpenModalProps =
   | [type: 'ALT_TEXT', props: AltTextModalProps]
   | [type: 'BIRTHDAYS' | 'CREATE_GROUP' | 'HOTKEYS']
   | [type: 'BOOST', props: BoostModalProps]
+  | [type: 'CIRCLE_EDITOR', props: CircleEditorModalProps]
   | [type: 'COMPARE_HISTORY', props: CompareHistoryModalProps]
   | [type: 'COMPONENT', props: ComponentModalProps]
   | [type: 'COMPOSE', props?: ComposeModalProps]

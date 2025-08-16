@@ -12,6 +12,7 @@ const MODAL_COMPONENTS = {
   ALT_TEXT: lazy(() => import('pl-fe/modals/alt-text-modal')),
   BIRTHDAYS: lazy(() => import('pl-fe/modals/birthdays-modal')),
   BOOST: lazy(() => import('pl-fe/modals/boost-modal')),
+  CIRCLE_EDITOR: lazy(() => import('pl-fe/modals/circle-editor-modal')),
   COMPARE_HISTORY: lazy(() => import('pl-fe/modals/compare-history-modal')),
   COMPONENT: lazy(() => import('pl-fe/modals/component-modal')),
   COMPOSE: lazy(() => import('pl-fe/modals/compose-modal')),

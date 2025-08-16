@@ -37,7 +37,6 @@ const ListForm: React.FC<IListForm> = ({
   const { data: list } = useList(listId);
   const { mutate: updateList, isPending: disabled } = useUpdateList(listId!);
 
-  console.log(list);
   const [title, setTitle] = useState(list!.title);
   const [repliesPolicy, setRepliesPolicy] = useState(list!.replies_policy);
   const [exclusive, setExclusive] = useState(list!.exclusive);
