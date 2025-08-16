@@ -1128,6 +1128,11 @@ const getFeatures = (instance: Instance) => {
      */
     listsFavourites: instance.api_versions['favourite_list.fedibird.pl-api'] >= 1,
 
+    /**
+     * Can set to receive notifications for new posts in a list.
+     */
+    listsNotifications: instance.api_versions['kmyblue_list_notification.fedibird.pl-api'] >= 1,
+
     listsRepliesPolicy: any([
       v.software === FRIENDICA && gte(v.version, '2024.12.0'),
       v.software === GOTOSOCIAL,
