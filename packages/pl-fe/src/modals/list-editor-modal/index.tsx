@@ -1,46 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import React, { useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 
-import { setupListEditor, resetListEditor } from 'pl-fe/actions/lists';
-import { CardHeader, CardTitle } from 'pl-fe/components/ui/card';
 import Modal from 'pl-fe/components/ui/modal';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useListAccounts } from 'pl-fe/queries/accounts/use-lists';
-import { useAccountSearch } from 'pl-fe/queries/search/use-search-accounts';
+import Spinner from 'pl-fe/components/ui/spinner';
+import { useList } from 'pl-fe/queries/accounts/use-lists';
 
-import Account from './components/account';
 import EditListForm from './components/edit-list-form';
-import Search from './components/search';
+import ListMembersForm from './components/list-members-form';
 
 import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
-
-const messages = defineMessages({
-  addToList: { id: 'lists.account.add', defaultMessage: 'Add to list' },
-  removeFromList: { id: 'lists.account.remove', defaultMessage: 'Remove from list' },
-  editList: { id: 'lists.edit', defaultMessage: 'Edit list' },
-});
 
 interface ListEditorModalProps {
   listId: string;
 }
 
 const ListEditorModal: React.FC<BaseModalProps & ListEditorModalProps> = ({ listId, onClose }) => {
-  const intl = useIntl();
-  const dispatch = useAppDispatch();
-
   const [tab, setTab] = useState<'info' | 'members'>('info');
-  const [searchValue, setSearchValue] = useState('');
 
-  const { data: accountIds = [] } = useListAccounts(listId);
-  const { data: searchAccountIds = [] } = useAccountSearch(searchValue, { following: true, limit: 5 });
+  const { isFetched } = useList(listId);
 
-  useEffect(() => {
-    dispatch(setupListEditor(listId));
-
-    return () => {
-      dispatch(resetListEditor());
-    };
-  }, []);
 
   const onClickClose = () => {
     onClose('LIST_EDITOR');
@@ -52,33 +30,10 @@ const ListEditorModal: React.FC<BaseModalProps & ListEditorModalProps> = ({ list
       onClose={onClickClose}
       onBack={tab === 'members' ? () => setTab('info') : undefined}
     >
-      {tab === 'info'
-        ? <EditListForm onTabChange={setTab} />
-        : (
-          <>
-            {accountIds.length > 0 && (
-              <>
-                <div>
-                  <CardHeader>
-                    <CardTitle title={intl.formatMessage(messages.removeFromList)} />
-                  </CardHeader>
-                  <div className='max-h-48 overflow-y-auto'>
-                    {accountIds.map(accountId => <Account key={accountId} listId={listId} accountId={accountId} added={accountIds.includes(accountId)} />)}
-                  </div>
-                </div>
-                <br />
-              </>
-            )}
-
-            <CardHeader>
-              <CardTitle title={intl.formatMessage(messages.addToList)} />
-            </CardHeader>
-            <Search value={searchValue} onSubmit={setSearchValue} />
-            <div className='max-h-48 overflow-y-auto'>
-              {searchAccountIds.map(accountId => <Account key={accountId} listId={listId} accountId={accountId} added={accountIds.includes(accountId)} />)}
-            </div>
-          </>
-        )}
+      {isFetched ? (tab === 'info'
+        ? <EditListForm listId={listId} onTabChange={setTab} />
+        : <ListMembersForm listId={listId} />
+      ) : <Spinner />}
     </Modal>
   );
 };

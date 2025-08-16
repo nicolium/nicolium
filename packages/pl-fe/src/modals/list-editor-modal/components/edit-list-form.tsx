@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeListEditorExclusive, changeListEditorRepliesPolicy, changeListEditorTitle } from 'pl-fe/actions/lists';
 import List, { ListItem } from 'pl-fe/components/list';
 import Button from 'pl-fe/components/ui/button';
 import Form from 'pl-fe/components/ui/form';
@@ -10,10 +9,8 @@ import FormGroup from 'pl-fe/components/ui/form-group';
 import Input from 'pl-fe/components/ui/input';
 import Toggle from 'pl-fe/components/ui/toggle';
 import { SelectDropdown } from 'pl-fe/features/forms';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useUpdateList } from 'pl-fe/queries/accounts/use-lists';
+import { useList, useUpdateList } from 'pl-fe/queries/accounts/use-lists';
 
 const messages = defineMessages({
   save: { id: 'lists.new.save', defaultMessage: 'Save list' },
@@ -23,39 +20,43 @@ const messages = defineMessages({
 });
 
 interface IListForm {
+  listId: string;
   onTabChange: (tab: 'members') => void;
 }
 
 const ListForm: React.FC<IListForm> = ({
+  listId,
   onTabChange,
 }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const features = useFeatures();
 
-  const { title: value, listId, repliesPolicy, exclusive } = useAppSelector((state) => state.listEditor);
-
+  const { data: list } = useList(listId);
   const { mutate: updateList, isPending: disabled } = useUpdateList(listId!);
 
+  const [title, setTitle] = useState(list!.title);
+  const [repliesPolicy, setRepliesPolicy] = useState(list!.replies_policy);
+  const [exclusive, setExclusive] = useState(list!.exclusive);
+
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
-    dispatch(changeListEditorTitle(e.target.value));
+    setTitle(e.target.value);
   };
 
   const handleSubmit: React.FormEventHandler<Element> = e => {
     e.preventDefault();
-    updateList({ title: value, replies_policy: repliesPolicy, exclusive });
+    handleUpdate();
   };
 
-  const handleClick = () => {
-    updateList({ title: value, replies_policy: repliesPolicy, exclusive });
+  const handleUpdate = () => {
+    updateList({ title, replies_policy: repliesPolicy, exclusive });
   };
 
   const handleChangeRepliesPolicy = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch(changeListEditorRepliesPolicy(e.target.value as 'none'));
+    setRepliesPolicy(e.target.value as 'none');
   };
 
   const handleChangeExclusive = (e: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(changeListEditorExclusive(e.target.checked));
+    setExclusive(e.target.checked);
   };
 
   return (
@@ -66,7 +67,7 @@ const ListForm: React.FC<IListForm> = ({
         <Input
           outerClassName='grow'
           type='text'
-          value={value}
+          value={title}
           onChange={handleChange}
         />
       </FormGroup>
@@ -109,7 +110,7 @@ const ListForm: React.FC<IListForm> = ({
       </List>
 
       <FormActions>
-        <Button onClick={handleClick} disabled={disabled}>
+        <Button onClick={handleUpdate} disabled={disabled}>
           <FormattedMessage id='lists.edit.save' defaultMessage='Save list' />
         </Button>
       </FormActions>

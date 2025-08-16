@@ -8,6 +8,6 @@ import { useAppSelector } from './use-app-selector';
 (window as any).plapi = plapi;
 
 /** Get features for the current instance. */
-const useFeatures = (): Features => useAppSelector(state => state.auth.client.features);
+const useFeatures = (): Features => ({ ...useAppSelector(state => state.auth.client.features), filtersV2BlurAction: true });
 
 export { useFeatures };
