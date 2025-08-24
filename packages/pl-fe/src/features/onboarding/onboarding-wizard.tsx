@@ -7,6 +7,7 @@ import LandingGradient from 'pl-fe/components/landing-gradient';
 import HStack from 'pl-fe/components/ui/hstack';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
+import { useSettings } from 'pl-fe/hooks/use-settings';
 
 import AvatarSelectionStep from './steps/avatar-selection-step';
 import BioStep from './steps/bio-step';
@@ -19,6 +20,7 @@ import SuggestedAccountsStep from './steps/suggested-accounts-step';
 const OnboardingWizard = () => {
   const dispatch = useAppDispatch();
   const features = useFeatures();
+  const { theme } = useSettings();
 
   const [currentStep, setCurrentStep] = React.useState<number>(0);
 
@@ -77,7 +79,7 @@ const OnboardingWizard = () => {
 
   return (
     <div data-testid='onboarding-wizard'>
-      <LandingGradient />
+      {(theme?.backgroundGradient ?? true)  && <LandingGradient />}
 
       <main className='flex h-screen flex-col overflow-x-hidden'>
         <div className='flex h-full flex-col items-center justify-center'>

@@ -24,6 +24,7 @@ import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
+import { useSettings } from 'pl-fe/hooks/use-settings';
 import AdminLayout from 'pl-fe/layouts/admin-layout';
 import ChatsLayout from 'pl-fe/layouts/chats-layout';
 import DefaultLayout from 'pl-fe/layouts/default-layout';
@@ -389,6 +390,7 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
   const vapidKey = useAppSelector(state => getVapidKey(state));
   const client = useClient();
   const instance = useInstance();
+  const { theme } = useSettings();
 
   const { isDropdownMenuOpen } = useUiStore();
   const standalone = useAppSelector(isStandalone);
@@ -499,7 +501,7 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
           })}
         />
 
-        <BackgroundShapes />
+        {(theme?.backgroundGradient ?? true) && <BackgroundShapes />}
 
         <div className='z-10 flex min-h-screen flex-col'>
           <Layout fullWidth={fullWidth}>

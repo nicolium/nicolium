@@ -60,6 +60,7 @@ const settingsSchema = v.object({
     accentColor: v.optional(v.string()),
     colors: v.optional(v.any()),
     interfaceSize: v.fallback(v.picklist(['sm', 'md', 'lg', 'xl']), 'md'),
+    backgroundGradient: v.optional(v.boolean(), true),
   }), undefined),
 
   systemFont: v.fallback(v.boolean(), false),

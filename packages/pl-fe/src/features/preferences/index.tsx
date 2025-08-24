@@ -205,6 +205,9 @@ const Preferences = () => {
             <StepSlider value={INTERFACE_SIZES.indexOf(settings.theme?.interfaceSize || 'md')} steps={4} onChange={onInterfaceSizeChange} />
           </div>
         </ListItem>
+        <ListItem label={<FormattedMessage id='preferences.fields.theme.display_background_gradient' defaultMessage='Display background gradient' />}>
+          <SettingToggle settings={settings} settingPath={['theme', 'backgroundGradient']} defaultValue onChange={onToggleChange} />
+        </ListItem>
       </List>
 
       <HStack justifyContent='end'>

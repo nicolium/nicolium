@@ -1419,6 +1419,7 @@
   "preferences.fields.system_emoji_font_label": "Use system emoji font",
   "preferences.fields.system_font_label": "Use system's default font",
   "preferences.fields.theme": "Theme",
+  "preferences.fields.theme.display_background_gradient": "Display background gradient",
   "preferences.fields.theme_reset": "Reset theme",
   "preferences.fields.underline_links_label": "Always underline links in posts",
   "preferences.fields.unfollow_modal_label": "Show confirmation dialog before unfollowing someone",
