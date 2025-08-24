@@ -11,6 +11,7 @@ import { useSettingsStore } from 'pl-fe/stores/settings';
 
 import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
 import type { DraftStatus } from 'pl-fe/reducers/draft-statuses';
+import { fetchStatus } from 'pl-fe/actions/statuses';
 
 const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.draft_status_delete.confirm', defaultMessage: 'Discard' },
@@ -45,6 +46,7 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
   };
 
   const handleEditClick = () => {
+    if (status.in_reply_to_id) dispatch(fetchStatus(status.in_reply_to_id));
     dispatch(setComposeToStatus(status, status.poll, source.text, source.spoiler_text, source.content_type, false, source.draft_id, source.editorState));
     openModal('COMPOSE');
   };

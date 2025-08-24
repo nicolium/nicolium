@@ -32,7 +32,7 @@ const buildStatus = (state: RootState, draftStatus: DraftStatus) => {
     in_reply_to_id: draftStatus.in_reply_to,
     media_attachments: draftStatus.media_attachments,
     poll: buildPoll(draftStatus),
-    quote: draftStatus.quote,
+    quote_id: draftStatus.quote,
     sensitive: draftStatus.sensitive,
     spoiler_text: draftStatus.spoiler_text,
     uri: `/draft_statuses/${draftStatus.draft_id}`,
