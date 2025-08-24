@@ -3,6 +3,7 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { setComposeToStatus } from 'pl-fe/actions/compose';
 import { cancelDraftStatus } from 'pl-fe/actions/draft-statuses';
+import { fetchStatus } from 'pl-fe/actions/statuses';
 import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
@@ -11,7 +12,6 @@ import { useSettingsStore } from 'pl-fe/stores/settings';
 
 import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
 import type { DraftStatus } from 'pl-fe/reducers/draft-statuses';
-import { fetchStatus } from 'pl-fe/actions/statuses';
 
 const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.draft_status_delete.confirm', defaultMessage: 'Discard' },

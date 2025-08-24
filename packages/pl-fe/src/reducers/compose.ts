@@ -306,7 +306,7 @@ const importAccount = (compose: Compose, account: CredentialAccount) => {
 
   if (settings.defaultPrivacy) compose.privacy = settings.defaultPrivacy;
   if (settings.defaultContentType) compose.content_type = settings.defaultContentType;
-  compose.tagHistory = tagHistory.get(account.id);
+  compose.tagHistory = tagHistory.get(account.id) || [];
 };
 
 // const updateSetting = (compose: Compose, path: string[], value: string) => {
