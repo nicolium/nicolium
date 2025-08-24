@@ -2,8 +2,7 @@ import { HashtagNode } from '@lexical/hashtag';
 import { AutoLinkNode, LinkNode } from '@lexical/link';
 import { $convertToMarkdownString } from '@lexical/markdown';
 import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
-import { CAN_USE_BEFORE_INPUT, IS_APPLE_WEBKIT, IS_IOS, IS_SAFARI } from '@lexical/utils';
-import { $nodesOfType, $getRoot, type EditorState, $getNodeByKey, KEY_ENTER_COMMAND, $getSelection, $isRangeSelection, INSERT_PARAGRAPH_COMMAND, INSERT_LINE_BREAK_COMMAND, COMMAND_PRIORITY_CRITICAL } from 'lexical';
+import { $nodesOfType, $getRoot, type EditorState, $getNodeByKey } from 'lexical';
 import debounce from 'lodash/debounce';
 import { useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
@@ -164,32 +163,6 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
   }, 750), []);
 
   useEffect(() => {
-    // Adapted from https://github.com/facebook/lexical/blob/main/packages/lexical-rich-text/src/index.ts#L929
-    editor.registerCommand<KeyboardEvent | null>(
-      KEY_ENTER_COMMAND,
-      (event) => {
-        const selection = $getSelection();
-        if (!$isRangeSelection(selection)) {
-          return false;
-        }
-
-        if (event !== null) {
-          if (
-            (IS_IOS || IS_SAFARI || IS_APPLE_WEBKIT) &&
-            CAN_USE_BEFORE_INPUT
-          ) {
-            return false;
-          }
-          event.preventDefault();
-          if (event.ctrlKey && event.shiftKey) {
-            return editor.dispatchCommand(INSERT_PARAGRAPH_COMMAND, undefined);
-          }
-        }
-        return editor.dispatchCommand(INSERT_LINE_BREAK_COMMAND, false);
-      },
-      COMMAND_PRIORITY_CRITICAL,
-    );
-
     return editor.registerUpdateListener(({ editorState }) => {
       const plainText = editorState.read(() => $getRoot().getTextContent());
       editor.update(() => {
