@@ -9,9 +9,7 @@ import Toggle from 'pl-fe/components/ui/toggle';
 import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
-import { useTheme } from 'pl-fe/hooks/use-theme';
 import { useFollowHashtagMutation, useUnfollowHashtagMutation } from 'pl-fe/queries/hashtags/use-followed-tags';
 import { useHashtag } from 'pl-fe/queries/hashtags/use-hashtag';
 
@@ -28,8 +26,6 @@ const HashtagTimelinePage: React.FC<IHashtagTimelinePage> = ({ params }) => {
   const dispatch = useAppDispatch();
   const { data: tag } = useHashtag(tagId);
   const { isLoggedIn } = useLoggedIn();
-  const theme = useTheme();
-  const isMobile = useIsMobile();
 
   const { mutate: followHashtag } = useFollowHashtagMutation(tagId);
   const { mutate: unfollowHashtag } = useUnfollowHashtagMutation(tagId);
@@ -54,7 +50,7 @@ const HashtagTimelinePage: React.FC<IHashtagTimelinePage> = ({ params }) => {
   }, [tagId]);
 
   return (
-    <Column label={`#${tagId}`} transparent={!isMobile}>
+    <Column label={`#${tagId}`}>
       {features.followHashtags && isLoggedIn && (
         <List>
           <ListItem
@@ -69,13 +65,11 @@ const HashtagTimelinePage: React.FC<IHashtagTimelinePage> = ({ params }) => {
         </List>
       )}
       <Timeline
-        className='black:p-0 black:sm:p-4 black:sm:pt-0'
         loadMoreClassName='black:sm:mx-4'
         scrollKey='hashtag_timeline'
         timelineId={`hashtag:${tagId}`}
         onLoadMore={handleLoadMore}
         emptyMessage={<FormattedMessage id='empty_column.hashtag' defaultMessage='There is nothing in this hashtag yet.' />}
-        divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
       />
     </Column>
   );

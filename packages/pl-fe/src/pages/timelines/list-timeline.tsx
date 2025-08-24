@@ -11,8 +11,6 @@ import Column from 'pl-fe/components/ui/column';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
-import { useTheme } from 'pl-fe/hooks/use-theme';
 import { useDeleteList, useList } from 'pl-fe/queries/accounts/use-lists';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
@@ -28,8 +26,6 @@ const ListTimelinePage: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
-  const theme = useTheme();
-  const isMobile = useIsMobile();
   const { openModal } = useModalsStore();
 
   const { data: list, isFetching } = useList(id);
@@ -103,16 +99,13 @@ const ListTimelinePage: React.FC = () => {
     <Column
       label={title}
       action={<DropdownMenu items={items} src={require('@tabler/icons/outline/dots-vertical.svg')} />}
-      transparent={!isMobile}
     >
       <Timeline
-        className='black:p-0 black:sm:p-4 black:sm:pt-0'
         loadMoreClassName='black:sm:mx-4'
         scrollKey='list_timeline'
         timelineId={`list:${id}`}
         onLoadMore={handleLoadMore}
         emptyMessage={emptyMessage}
-        divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
       />
     </Column>
   );

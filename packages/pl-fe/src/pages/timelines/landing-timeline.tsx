@@ -14,9 +14,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
 import { useRegistrationStatus } from 'pl-fe/hooks/use-registration-status';
-import { useTheme } from 'pl-fe/hooks/use-theme';
 import AboutPage from 'pl-fe/pages/utils/about';
 import { getTextDirection } from 'pl-fe/utils/rtl';
 
@@ -58,8 +56,6 @@ const SiteBanner: React.FC = () => {
 const LandingTimelinePage = () => {
   const dispatch = useAppDispatch();
   const instance = useInstance();
-  const theme = useTheme();
-  const isMobile = useIsMobile();
   const { isOpen } = useRegistrationStatus();
 
   const [timelineFailed, setTimelineFailed] = useState(false);
@@ -85,7 +81,7 @@ const LandingTimelinePage = () => {
   }, []);
 
   return (
-    <Column transparent={!isMobile} withHeader={false}>
+    <Column withHeader={false}>
       <div className='mb-4 mt-12 px-4 lg:mb-12'>
         <SiteBanner />
       </div>
@@ -104,14 +100,12 @@ const LandingTimelinePage = () => {
       {timelineEnabled && !timelineFailed ? (
         <PullToRefresh onRefresh={handleRefresh}>
           <Timeline
-            className='black:p-0 black:sm:p-4 black:sm:pt-0'
-            loadMoreClassName='black:sm:mx-4'
+              loadMoreClassName='black:sm:mx-4'
             scrollKey={`${timelineId}_timeline`}
             timelineId={timelineId}
             prefix='home'
             onLoadMore={handleLoadMore}
             emptyMessage={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />}
-            divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
           />
         </PullToRefresh>
       ) : (

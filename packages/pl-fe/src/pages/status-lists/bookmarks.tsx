@@ -6,8 +6,6 @@ import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import StatusList from 'pl-fe/components/status-list';
 import Column from 'pl-fe/components/ui/column';
-import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
-import { useTheme } from 'pl-fe/hooks/use-theme';
 import { useBookmarks } from 'pl-fe/queries/status-lists/use-bookmarks';
 import { useBookmarkFolder, useDeleteBookmarkFolder } from 'pl-fe/queries/statuses/use-bookmark-folders';
 import { useModalsStore } from 'pl-fe/stores/modals';
@@ -33,8 +31,6 @@ interface IBookmarks {
 const BookmarksPage: React.FC<IBookmarks> = ({ params }) => {
   const intl = useIntl();
   const history = useHistory();
-  const theme = useTheme();
-  const isMobile = useIsMobile();
 
   const folderId = params?.id;
 
@@ -91,11 +87,9 @@ const BookmarksPage: React.FC<IBookmarks> = ({ params }) => {
     <Column
       label={folder ? folder.name : intl.formatMessage(messages.heading)}
       action={<DropdownMenu items={items} src={require('@tabler/icons/outline/dots-vertical.svg')} />}
-      transparent={!isMobile}
     >
       <PullToRefresh onRefresh={handleRefresh}>
         <StatusList
-          className='black:p-0 black:sm:p-4 black:sm:pt-0'
           loadMoreClassName='black:sm:mx-4'
           statusIds={statusIds}
           scrollKey='bookmarked_statuses'
@@ -103,7 +97,6 @@ const BookmarksPage: React.FC<IBookmarks> = ({ params }) => {
           isLoading={isFetching}
           onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
           emptyMessage={emptyMessage}
-          divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
         />
       </PullToRefresh>
     </Column>

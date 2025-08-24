@@ -12,8 +12,6 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
-import { useTheme } from 'pl-fe/hooks/use-theme';
 
 const messages = defineMessages({
   title: { id: 'column.home', defaultMessage: 'Home' },
@@ -24,10 +22,8 @@ const HomeTimelinePage: React.FC = () => {
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const instance = useInstance();
-  const theme = useTheme();
 
   const polling = useRef<NodeJS.Timeout | null>(null);
-  const isMobile = useIsMobile();
 
   const isPartial = useAppSelector(state => state.timelines.home?.isPartial === true);
 
@@ -60,15 +56,13 @@ const HomeTimelinePage: React.FC = () => {
   useEffect(() => checkIfReloadNeeded(isPartial), [isPartial]);
 
   return (
-    <Column className='py-0' label={intl.formatMessage(messages.title)} transparent={!isMobile} withHeader={false}>
+    <Column className='py-0' label={intl.formatMessage(messages.title)} withHeader={false}>
       <PullToRefresh onRefresh={handleRefresh}>
         <Timeline
-          className='black:p-0 black:sm:p-4 black:sm:pt-0'
           loadMoreClassName='black:sm:mx-4'
           scrollKey='home_timeline'
           onLoadMore={handleLoadMore}
           timelineId='home'
-          divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
           emptyMessage={
             <Stack space={1}>
               <Text size='xl' weight='medium' align='center'>

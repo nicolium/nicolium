@@ -110,7 +110,6 @@ const GroupTimelinePage: React.FC<IGroupTimelinePage> = (props) => {
           </Stack>
         }
         emptyMessageCard={false}
-        divideType='border'
         showGroup={false}
         featuredStatusIds={featuredStatusIds}
       />

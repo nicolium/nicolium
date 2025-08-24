@@ -11,9 +11,7 @@ import Text from 'pl-fe/components/ui/text';
 import PinnedHostsPicker from 'pl-fe/features/remote-timeline/components/pinned-hosts-picker';
 import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
 import { useSettings } from 'pl-fe/hooks/use-settings';
-import { useTheme } from 'pl-fe/hooks/use-theme';
 
 interface IRemoteTimelinePage {
   params?: {
@@ -25,7 +23,6 @@ interface IRemoteTimelinePage {
 const RemoteTimelinePage: React.FC<IRemoteTimelinePage> = ({ params }) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
-  const theme = useTheme();
 
   const instance = params?.instance as string;
   const settings = useSettings();
@@ -34,7 +31,6 @@ const RemoteTimelinePage: React.FC<IRemoteTimelinePage> = ({ params }) => {
   const onlyMedia = settings.timelines.remote?.other.onlyMedia ?? false;
 
   const pinned = settings.remote_timeline.pinnedHosts.includes(instance);
-  const isMobile = useIsMobile();
 
   const handleCloseClick: React.MouseEventHandler = () => {
     history.push('/timeline/fediverse');
@@ -51,7 +47,7 @@ const RemoteTimelinePage: React.FC<IRemoteTimelinePage> = ({ params }) => {
   }, [onlyMedia]);
 
   return (
-    <Column label={instance} transparent={!isMobile}>
+    <Column label={instance}>
       {instance && <PinnedHostsPicker host={instance} />}
 
       {!pinned && (
@@ -68,7 +64,6 @@ const RemoteTimelinePage: React.FC<IRemoteTimelinePage> = ({ params }) => {
       )}
 
       <Timeline
-        className='black:p-0 black:sm:p-4 black:sm:pt-0'
         loadMoreClassName='black:sm:mx-4'
         scrollKey={`${timelineId}_${instance}_timeline`}
         timelineId={`${timelineId}${onlyMedia ? ':media' : ''}:${instance}`}
@@ -80,7 +75,6 @@ const RemoteTimelinePage: React.FC<IRemoteTimelinePage> = ({ params }) => {
             values={{ instance }}
           />
         }
-        divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
       />
     </Column>
   );

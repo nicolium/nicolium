@@ -6,8 +6,6 @@ import { expandTimelineSuccess } from 'pl-fe/actions/timelines';
 import Column from 'pl-fe/components/ui/column';
 import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
-import { useTheme } from 'pl-fe/hooks/use-theme';
 
 const messages = defineMessages({
   title: { id: 'column.test', defaultMessage: 'Test timeline' },
@@ -31,8 +29,6 @@ const onlyMedia = false;
 const TestTimelinePage: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const theme = useTheme();
-  const isMobile = useIsMobile();
 
   React.useEffect(() => {
     dispatch(importEntities({ statuses: MOCK_STATUSES }));
@@ -40,12 +36,11 @@ const TestTimelinePage: React.FC = () => {
   }, []);
 
   return (
-    <Column label={intl.formatMessage(messages.title)} transparent={!isMobile}>
+    <Column label={intl.formatMessage(messages.title)}>
       <Timeline
         scrollKey={`${timelineId}_timeline`}
         timelineId={`${timelineId}${onlyMedia ? ':media' : ''}`}
         emptyMessage={<FormattedMessage id='empty_column.test' defaultMessage='The test timeline is empty.' />}
-        divideType={(theme === 'black' || isMobile) ? 'border' : 'space'}
       />
     </Column>
   );

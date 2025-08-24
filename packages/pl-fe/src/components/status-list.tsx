@@ -34,8 +34,6 @@ interface IStatusList extends Omit<IScrollableList, 'onLoadMore' | 'children'> {
   emptyMessage?: React.ReactNode;
   /** ID of the timeline in Redux. */
   timelineId?: string;
-  /** Whether to display a gap or border between statuses in the list. */
-  divideType?: 'space' | 'border';
   /** Whether to show group information. */
   showGroup?: boolean;
 }
@@ -45,7 +43,6 @@ const StatusList: React.FC<IStatusList> = ({
   statusIds,
   lastStatusId,
   featuredStatusIds,
-  divideType = 'border',
   onLoadMore,
   timelineId,
   isLoading,
@@ -123,7 +120,7 @@ const StatusList: React.FC<IStatusList> = ({
       onMoveDown={handleMoveDown}
       contextType={timelineId}
       showGroup={showGroup}
-      variant={divideType === 'border' ? 'slim' : 'rounded'}
+      variant='slim'
       fromBookmarks={other.scrollKey === 'bookmarked_statuses'}
     />
   );
@@ -135,7 +132,7 @@ const StatusList: React.FC<IStatusList> = ({
       <PendingStatus
         key={statusId}
         idempotencyKey={idempotencyKey}
-        variant={divideType === 'border' ? 'slim' : 'rounded'}
+        variant='slim'
       />
     );
   };
@@ -153,7 +150,7 @@ const StatusList: React.FC<IStatusList> = ({
           onMoveDown={handleMoveDown}
           contextType={timelineId}
           showGroup={showGroup}
-          variant={divideType === 'border' ? 'slim' : 'default'}
+          variant='slim'
         />
       ));
     };
@@ -187,7 +184,7 @@ const StatusList: React.FC<IStatusList> = ({
     } else {
       return statuses;
     }
-  }, [featuredStatusIds, statusIds, isLoading, timelineId, showGroup, divideType]);
+  }, [featuredStatusIds, statusIds, isLoading, timelineId, showGroup]);
 
   if (isPartial) {
     return (
@@ -210,15 +207,10 @@ const StatusList: React.FC<IStatusList> = ({
       isLoading={isLoading}
       showLoading={isLoading && statusIds.length === 0}
       onLoadMore={handleLoadOlder}
-      placeholderComponent={() => <PlaceholderStatus variant={divideType === 'border' ? 'slim' : 'rounded'} />}
+      placeholderComponent={() => <PlaceholderStatus variant='slim' />}
       placeholderCount={20}
       ref={node}
-      listClassName={clsx('divide-y divide-solid divide-gray-200 dark:divide-gray-800', {
-        'divide-none': divideType !== 'border',
-      }, className)}
-      itemClassName={clsx({
-        'pb-3': divideType !== 'border',
-      })}
+      listClassName={clsx('divide-y divide-solid divide-gray-200 dark:divide-gray-800', className)}
       {...other}
     >
       {scrollableContent}
