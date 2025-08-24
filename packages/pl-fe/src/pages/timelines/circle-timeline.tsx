@@ -98,7 +98,7 @@ const CircleTimelinePage: React.FC = () => {
       action={<DropdownMenu items={items} src={require('@tabler/icons/outline/dots-vertical.svg')} />}
     >
       <Timeline
-        loadMoreClassName='black:sm:mx-4'
+        loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
         scrollKey='circle_timeline'
         timelineId={`circle:${id}`}
         onLoadMore={handleLoadMore}

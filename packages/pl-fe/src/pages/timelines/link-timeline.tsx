@@ -36,7 +36,7 @@ const LinkTimelinePage: React.FC<ILinkTimelinePage> = ({ params }) => {
       label={intl.formatMessage(messages.header, { url: url.replace(/^https?:\/\//, '') })}
     >
       <Timeline
-        loadMoreClassName='black:sm:mx-4'
+        loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
         scrollKey='link_timeline'
         timelineId={`link:${url}`}
         onLoadMore={handleLoadMore}

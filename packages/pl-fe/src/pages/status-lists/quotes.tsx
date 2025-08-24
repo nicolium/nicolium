@@ -31,7 +31,7 @@ const QuotesPage: React.FC = () => {
     <Column label={intl.formatMessage(messages.heading)}>
       <PullToRefresh onRefresh={handleRefresh}>
         <StatusList
-          loadMoreClassName='black:sm:mx-4'
+          loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
           statusIds={statusIds}
           scrollKey={`quotes:${statusId}`}
           hasMore={hasNextPage}

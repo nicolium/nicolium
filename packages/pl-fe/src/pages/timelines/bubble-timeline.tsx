@@ -40,7 +40,7 @@ const BubbleTimelinePage = () => {
     <Column className='-mt-3 sm:mt-0' label={intl.formatMessage(messages.title)}>
       <PullToRefresh onRefresh={handleRefresh}>
         <Timeline
-          loadMoreClassName='black:sm:mx-4'
+          loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
           scrollKey={`${timelineId}_timeline`}
           timelineId={`${timelineId}${onlyMedia ? ':media' : ''}`}
           prefix='home'
