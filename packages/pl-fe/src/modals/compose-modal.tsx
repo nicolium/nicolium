@@ -31,7 +31,7 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({ onClose, c
   const compose = useCompose(composeId);
   const { openModal } = useModalsStore();
 
-  const { id: statusId, privacy, in_reply_to: inReplyTo, quote, group_id: groupId } = compose!;
+  const { id: statusId, privacy, in_reply_to: inReplyTo, quote, group_id: groupId } = compose;
 
   const { isDragging, isDraggedOver } = useDraggedFiles(node, (files) => {
     dispatch(uploadCompose(composeId, files, intl));
@@ -42,10 +42,14 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({ onClose, c
       openModal('CONFIRM', {
         heading: statusId
           ? <FormattedMessage id='confirmations.cancel_editing.heading' defaultMessage='Cancel post editing' />
-          : <FormattedMessage id='confirmations.cancel.heading' defaultMessage='Discard post' />,
+          : compose.draft_id
+            ? <FormattedMessage id='confirmations.cancel_draft.heading' defaultMessage='Discard draft changes' />
+            : <FormattedMessage id='confirmations.cancel.heading' defaultMessage='Discard post' />,
         message: statusId
           ? <FormattedMessage id='confirmations.cancel_editing.message' defaultMessage='Are you sure you want to cancel editing this post? All changes will be lost.' />
-          : <FormattedMessage id='confirmations.cancel.message' defaultMessage='Are you sure you want to cancel creating this post?' />,
+          : compose.draft_id
+            ? <FormattedMessage id='confirmations.cancel_editing.message' defaultMessage='Are you sure you want to cancel editing this draft post? All changes will be lost.' />
+            : <FormattedMessage id='confirmations.cancel.message' defaultMessage='Are you sure you want to cancel creating this post?' />,
         confirm: intl.formatMessage(statusId ? messages.cancelEditing : messages.confirm),
         onConfirm: () => {
           onClose('COMPOSE');
