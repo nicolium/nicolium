@@ -23,7 +23,6 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useDraggedFiles } from 'pl-fe/hooks/use-dragged-files';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useIsMobile } from 'pl-fe/hooks/use-is-mobile';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { useSettings } from 'pl-fe/hooks/use-settings';
@@ -44,7 +43,6 @@ const HomeLayout: React.FC<IHomeLayout> = ({ children }) => {
 
   const composeId = 'home';
   const composeBlock = useRef<HTMLDivElement>(null);
-  const isMobile = useIsMobile();
 
   const hasCrypto = typeof plFeConfig.cryptoAddresses[0]?.ticker === 'string';
   const cryptoLimit = plFeConfig.cryptoDonatePanel.limit;
@@ -58,13 +56,12 @@ const HomeLayout: React.FC<IHomeLayout> = ({ children }) => {
 
   return (
     <>
-      <Layout.Main className={clsx('black:space-y-0 dark:divide-gray-800', { 'pt-3 sm:pt-0 space-y-3': !isMobile })}>
+      <Layout.Main className='black:space-y-0 dark:divide-gray-800 sm:space-y-3'>
         {me && (
           <Card
-            className={clsx('relative z-[1] border-gray-200 transition black:border-b black:border-gray-800 dark:border-gray-800', {
+            className={clsx('relative z-[1] border-gray-200 transition black:border-b black:border-gray-800 dark:border-gray-800 max-sm:border-b max-sm:shadow-none', {
               'border-2 border-primary-600 border-dashed z-[99]': isDragging,
               'ring-2 ring-offset-2 ring-primary-600': isDraggedOver,
-              'border-b': isMobile,
             })}
             variant='rounded'
             ref={composeBlock}
