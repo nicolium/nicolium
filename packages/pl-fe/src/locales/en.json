@@ -1228,6 +1228,7 @@
   "navigation_bar.blocks": "Blocks",
   "navigation_bar.compose": "Compose a post",
   "navigation_bar.compose_direct": "Direct message",
+  "navigation_bar.compose_draft": "Edit draft post",
   "navigation_bar.compose_edit": "Edit post",
   "navigation_bar.compose_group": "Compose to group",
   "navigation_bar.compose_group_reply": "Reply to group post",
