@@ -100,7 +100,7 @@ const LandingTimelinePage = () => {
       {timelineEnabled && !timelineFailed ? (
         <PullToRefresh onRefresh={handleRefresh}>
           <Timeline
-              loadMoreClassName='black:sm:mx-4'
+            loadMoreClassName='black:sm:mx-4'
             scrollKey={`${timelineId}_timeline`}
             timelineId={timelineId}
             prefix='home'
