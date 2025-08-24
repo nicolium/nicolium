@@ -67,10 +67,14 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
         openModal('CONFIRM', {
           heading: isEditing
             ? <FormattedMessage id='confirmations.cancel_editing.heading' defaultMessage='Cancel post editing' />
-            : <FormattedMessage id='confirmations.cancel.heading' defaultMessage='Discard post' />,
+            : compose.draft_id
+              ? <FormattedMessage id='confirmations.cancel_draft.heading' defaultMessage='Discard draft changes' />
+              : <FormattedMessage id='confirmations.cancel.heading' defaultMessage='Discard post' />,
           message: isEditing
             ? <FormattedMessage id='confirmations.cancel_editing.message' defaultMessage='Are you sure you want to cancel editing this post? All changes will be lost.' />
-            : <FormattedMessage id='confirmations.cancel.message' defaultMessage='Are you sure you want to cancel creating this post?' />,
+            : compose.draft_id
+              ? <FormattedMessage id='confirmations.cancel_editing.message' defaultMessage='Are you sure you want to cancel editing this draft post? All changes will be lost.' />
+              : <FormattedMessage id='confirmations.cancel.message' defaultMessage='Are you sure you want to cancel creating this post?' />,
           confirm: intl.formatMessage(messages.confirm),
           onConfirm: () => {
             onClose('COMPOSE');
