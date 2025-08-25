@@ -4,6 +4,7 @@ import React from 'react';
 import Emoji from 'pl-fe/components/ui/emoji';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
+import { joinPublicPath } from 'pl-fe/utils/static';
 
 import unicodeMapping from './mapping';
 
@@ -71,7 +72,7 @@ const Emojify: React.FC<IEmojify> = React.memo(({ text, emojis = {} }) => {
       const { unified, shortcode } = unicodeMapping[c];
 
       nodes.push(
-        <img key={index} draggable={false} className='emojione transition-transform hover:scale-125' alt={c} title={`:${shortcode}:`} src={`/packs/emoji/${unified}.svg`} />,
+        <img key={index} draggable={false} className='emojione transition-transform hover:scale-125' alt={c} title={`:${shortcode}:`} src={joinPublicPath(`packs/emoji/${unified}.svg`)} />,
       );
     } else if (!systemEmojiFont && unqualified in unicodeMapping) {
       clearStack();
@@ -79,7 +80,7 @@ const Emojify: React.FC<IEmojify> = React.memo(({ text, emojis = {} }) => {
       const { unified, shortcode } = unicodeMapping[unqualified];
 
       nodes.push(
-        <img key={index} draggable={false} className='emojione transition-transform hover:scale-125' alt={unqualified} title={`:${shortcode}:`} src={`/packs/emoji/${unified}.svg`} />,
+        <img key={index} draggable={false} className='emojione transition-transform hover:scale-125' alt={unqualified} title={`:${shortcode}:`} src={joinPublicPath(`packs/emoji/${unified}.svg`)} />,
       );
     } else if (!disableUserProvidedMedia && c === ':') {
       if (!open) {
