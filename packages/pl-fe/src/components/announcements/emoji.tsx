@@ -20,7 +20,7 @@ const Emoji: React.FC<IEmoji> = ({ emoji, emojiMap, hovered }) => {
     if (systemEmojiFont) return <>{emoji}</>;
 
     // @ts-ignore
-    const { filename, shortCode } = unicodeMapping[emoji];
+    const { unified, shortCode } = unicodeMapping[emoji];
     const title = shortCode ? `:${shortCode}:` : '';
 
     return (
@@ -29,7 +29,7 @@ const Emoji: React.FC<IEmoji> = ({ emoji, emojiMap, hovered }) => {
         className='emojione m-0 block'
         alt={emoji}
         title={title}
-        src={joinPublicPath(`packs/emoji/${filename}.svg`)}
+        src={joinPublicPath(`packs/emoji/${unified}.svg`)}
       />
     );
   } else if (emojiMap[emoji]) {
