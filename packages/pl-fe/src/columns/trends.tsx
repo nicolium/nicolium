@@ -1,0 +1,86 @@
+import clsx from 'clsx';
+import React from 'react';
+
+import Hashtag from 'pl-fe/components/hashtag';
+import ScrollableList from 'pl-fe/components/scrollable-list';
+import TrendingLink from 'pl-fe/components/trending-link';
+import AccountContainer from 'pl-fe/containers/account-container';
+import StatusContainer from 'pl-fe/containers/status-container';
+import PlaceholderAccount from 'pl-fe/features/placeholder/components/placeholder-account';
+import PlaceholderHashtag from 'pl-fe/features/placeholder/components/placeholder-hashtag';
+import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
+import useTrends from 'pl-fe/queries/trends';
+import { useSuggestedAccounts } from 'pl-fe/queries/trends/use-suggested-accounts';
+import { useTrendingLinks } from 'pl-fe/queries/trends/use-trending-links';
+import { useTrendingStatuses } from 'pl-fe/queries/trends/use-trending-statuses';
+
+interface ITrendsColumn {
+  type: 'accounts' | 'hashtags' | 'statuses' | 'links';
+  emptyMessage?: JSX.Element;
+  multiColumn?: boolean;
+}
+
+const TrendsColumn: React.FC<ITrendsColumn> = ({ type, multiColumn }) => {
+  const { data: accounts, isFetching: isFetchingAccounts, isLoading: isLoadingAccounts } = useSuggestedAccounts();
+  const { data: trendingTags, isFetching: isFetchingTags, isLoading: isLoadingTags } = useTrends();
+  const { data: trendingStatuses, isFetching: isFetchingStatuses, isLoading: isLoadingStatuses } = useTrendingStatuses();
+  const { data: trendingLinks, isFetching: isFetchingLinks, isLoading: isLoadingLinks } = useTrendingLinks();
+
+  let placeholderComponent = PlaceholderStatus;
+
+  let children;
+  let isFetching;
+  let isLoading;
+
+  switch (type) {
+    case 'accounts': {
+      children = accounts?.map(account => <AccountContainer key={account.account_id} id={account.account_id} />);
+      isFetching = isFetchingAccounts;
+      isLoading = isLoadingAccounts;
+      placeholderComponent = PlaceholderAccount;
+      break;
+    }
+    case 'hashtags': {
+      children = trendingTags?.map(tag => <Hashtag key={tag.name} hashtag={tag} />);
+      isFetching = isFetchingTags;
+      isLoading = isLoadingTags;
+      placeholderComponent = PlaceholderHashtag;
+      break;
+    }
+    case 'statuses': {
+      children = trendingStatuses?.map(statusId => <StatusContainer key={statusId} id={statusId} />);
+      isFetching = isFetchingStatuses;
+      isLoading = isLoadingStatuses;
+      break;
+    }
+    case 'links': {
+      children = trendingLinks?.map(link => <TrendingLink key={link.id} trendingLink={link} />);
+      isFetching = isFetchingLinks;
+      isLoading = isLoadingLinks;
+      break;
+    }
+  }
+
+  return (
+    <ScrollableList
+      scrollKey={`trends:${type}`}
+      // ref={node}
+      id='trends'
+      key={type}
+      isLoading={isFetching}
+      showLoading={isLoading}
+      placeholderComponent={placeholderComponent}
+      placeholderCount={20}
+      listClassName={type === 'statuses' ? 'divide-y divide-solid divide-gray-200 dark:divide-gray-800' : ''}
+      itemClassName={clsx({
+        'pb-4': type === 'accounts' || type === 'links',
+        'pb-3': type === 'hashtags',
+      })}
+      useWindowScroll={!multiColumn}
+    >
+      {children || []}
+    </ScrollableList>
+  );
+};
+
+export { TrendsColumn as default };
