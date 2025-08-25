@@ -94,7 +94,6 @@ import {
   FavouritedStatuses,
   FederationRestrictions,
   Filters,
-  FollowRecommendations,
   FollowRequests,
   FollowedTags,
   Followers,
@@ -260,7 +259,6 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       <WrappedRoute path='/notifications' layout={DefaultLayout} component={Notifications} content={children} />
 
       <WrappedRoute path='/search' layout={SearchLayout} component={Search} content={children} publicRoute />
-      {features.suggestions && <WrappedRoute path='/suggestions' publicRoute layout={DefaultLayout} component={FollowRecommendations} content={children} />}
       {features.profileDirectory && <WrappedRoute path='/directory' publicRoute layout={DefaultLayout} component={Directory} content={children} />}
       {features.events && <WrappedRoute path='/events/new' layout={EventsLayout} component={ComposeEvent} content={children} />}
       {features.events && <WrappedRoute path='/events' layout={EventsLayout} component={Events} content={children} />}

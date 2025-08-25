@@ -45,7 +45,6 @@ export const Filters = lazy(() => import('pl-fe/pages/settings/filters'));
 export const FollowedTags = lazy(() => import('pl-fe/pages/settings'));
 export const Followers = lazy(() => import('pl-fe/pages/account-lists/followers'));
 export const Following = lazy(() => import('pl-fe/pages/account-lists/following'));
-export const FollowRecommendations = lazy(() => import('pl-fe/pages/account-lists/follow-recommendations'));
 export const FollowRequests = lazy(() => import('pl-fe/pages/account-lists/follow-requests'));
 export const GenericNotFound = lazy(() => import('pl-fe/pages/utils/generic-not-found'));
 export const GroupBlockedMembers = lazy(() => import('pl-fe/pages/groups/group-blocked-members'));
