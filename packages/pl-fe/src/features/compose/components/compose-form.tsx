@@ -229,6 +229,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     dispatch(saveDraftStatus(id));
     closeModal('COMPOSE');
     dispatch(resetCompose(id));
+    editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
 
     toast.success(messages.draftSaved, {
       actionLabel: messages.view,
