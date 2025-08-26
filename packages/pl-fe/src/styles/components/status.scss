@@ -26,8 +26,7 @@
   }
 }
 
-.focusable:focus,
-.focusable-within:focus-within {
+.focusable:focus {
   @apply outline-0 ring-2 ring-primary-300;
 }
 
@@ -63,25 +62,4 @@ a.status-card {
 
 .status-card__image-image {
   @apply block w-full h-full object-cover bg-cover bg-center;
-}
-
-.status-card--link {
-  @apply flex flex-col md:flex-row;
-}
-
-.material-status {
-  @apply pb-2.5;
-
-  &__status {
-    @apply pt-4 pb-0 px-2.5 rounded-[10px];
-    box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.1);
-  }
-
-  .status {
-    @apply px-2.5 py-2;
-
-    &__content {
-      @apply pt-2.5;
-    }
-  }
 }
