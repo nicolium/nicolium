@@ -132,7 +132,7 @@ const appendStatus = (state: State, timelineId: string, statusId: string) => {
   const oldIds = state[timelineId]?.items || [];
   const unread = state[timelineId]?.unread || 0;
 
-  if (oldIds.includes(statusId)) return state;
+  if (oldIds.includes(statusId) || state[timelineId]?.queuedItems.includes(statusId)) return state;
 
   const newIds = addStatusId(oldIds, statusId);
 
