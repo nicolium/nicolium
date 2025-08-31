@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import HStack from 'pl-fe/components/ui/hstack';
@@ -29,8 +29,7 @@ interface IListItem {
 }
 
 const ListItem: React.FC<IListItem> = ({ className, label, hint, children, to, href, onClick, onSelect, isSelected, size = 'md' }) => {
-  const id = crypto.randomUUID();
-  const domId = `list-group-${id}`;
+  const [domId] = useState(`list-group-${crypto.randomUUID()}`);
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
