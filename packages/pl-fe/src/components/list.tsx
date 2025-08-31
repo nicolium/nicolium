@@ -12,7 +12,7 @@ interface IList {
 }
 
 const List: React.FC<IList> = ({ children }) => (
-  <div className='space-y-0.5'>{children}</div>
+  <div className='⁂-list'>{children}</div>
 );
 
 interface IListItem {
@@ -22,13 +22,12 @@ interface IListItem {
   to?: string;
   href?: string;
   onClick?(): void;
-  onSelect?(): void;
   isSelected?: boolean;
   children?: React.ReactNode;
   size?: 'sm' | 'md';
 }
 
-const ListItem: React.FC<IListItem> = ({ className, label, hint, children, to, href, onClick, onSelect, isSelected, size = 'md' }) => {
+const ListItem: React.FC<IListItem> = ({ className, label, hint, children, to, href, onClick, isSelected, size = 'md' }) => {
   const [domId] = useState(`list-group-${crypto.randomUUID()}`);
 
   const onKeyDown = (e: React.KeyboardEvent) => {
@@ -37,7 +36,7 @@ const ListItem: React.FC<IListItem> = ({ className, label, hint, children, to, h
     }
   };
 
-  const LabelComp = to || href || onClick || onSelect ? 'span' : 'label';
+  const LabelComp = to || href || onClick ? 'span' : 'label';
 
   const renderChildren = React.useCallback(() => React.Children.map(children, (child) => {
     if (React.isValidElement(child)) {
@@ -55,61 +54,33 @@ const ListItem: React.FC<IListItem> = ({ className, label, hint, children, to, h
     return null;
   }), [children, domId]);
 
-  const classNames = clsx('flex items-center justify-between overflow-hidden bg-gradient-to-r from-gradient-start/10 to-gradient-end/10 first:rounded-t-lg last:rounded-b-lg dark:from-gradient-start/10 dark:to-gradient-end/10',
+  const classNames = clsx('⁂-list-item',
     className,
     {
-      'px-4 py-2': size === 'md',
-      'px-2 py-0.5': size === 'sm',
-      'cursor-pointer hover:from-gradient-start/20 hover:to-gradient-end/20 dark:hover:from-gradient-start/5 dark:hover:to-gradient-end/5': typeof to !== 'undefined' || typeof onClick !== 'undefined' || typeof onSelect !== 'undefined',
+      '⁂-list-item--md': size === 'md',
+      '⁂-list-item--sm': size === 'sm',
     },
   );
 
   const body = (
     <>
-      <div className='flex flex-col py-1.5 pr-4 rtl:pl-4 rtl:pr-0'>
-        <LabelComp className='text-gray-900 dark:text-gray-100' htmlFor={domId}>{label}</LabelComp>
+      <div className='⁂-list-item__label'>
+        <LabelComp htmlFor={domId}>{label}</LabelComp>
 
         {hint ? (
-          <span className='text-sm text-gray-700 dark:text-gray-600'>{hint}</span>
+          <span className='⁂-list-item__hint'>{hint}</span>
         ) : null}
       </div>
 
       {(to || href || onClick) ? (
-        <HStack space={1} alignItems='center' className='overflow-hidden text-gray-700 dark:text-gray-600'>
+        <HStack space={1} alignItems='center' className='⁂-list-item__body'>
           {children}
 
-          <Icon src={require('@tabler/icons/outline/chevron-right.svg')} className='ml-1 rtl:rotate-180' />
+          <Icon src={require('@tabler/icons/outline/chevron-right.svg')} />
         </HStack>
       ) : null}
 
-      {onSelect ? (
-        <div className='flex flex-row items-center text-gray-700 dark:text-gray-600'>
-          {children}
-
-          <div
-            className={
-              clsx({
-                'flex h-6 w-6 items-center justify-center rounded-full border-2 border-solid border-primary-500 dark:border-primary-400 transition': true,
-                'bg-primary-500 dark:bg-primary-400': isSelected,
-                'bg-transparent': !isSelected,
-              })
-            }
-          >
-            <Icon
-              src={require('@tabler/icons/outline/check.svg')}
-              className={
-                clsx({
-                  'h-4 w-4 text-white dark:text-white transition-all duration-500': true,
-                  'opacity-0 scale-50': !isSelected,
-                  'opacity-100 scale-100': isSelected,
-                })
-              }
-            />
-          </div>
-        </div>
-      ) : null}
-
-      {typeof to === 'undefined' && typeof onClick === 'undefined' && typeof onSelect === 'undefined' ? renderChildren() : null}
+      {typeof to === 'undefined' && typeof onClick === 'undefined' ? renderChildren() : null}
     </>
   );
 
@@ -120,7 +91,7 @@ const ListItem: React.FC<IListItem> = ({ className, label, hint, children, to, h
   );
 
   const Comp = onClick || href ? 'a' : 'div';
-  const linkProps = onClick || onSelect || href ? { onClick: onClick || onSelect, onKeyDown, tabIndex: 0, role: 'link', ...(href && { href, target: '_blank' }) } : {};
+  const linkProps = onClick || href ? { onClick, onKeyDown, tabIndex: 0, role: 'link', ...(href && { href, target: '_blank' }) } : {};
 
   return (
     <Comp
