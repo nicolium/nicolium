@@ -56,7 +56,7 @@ const PublicTimelinePage = () => {
     <Column className='-mt-3 sm:mt-0' label={intl.formatMessage(messages.title)}>
       <PinnedHostsPicker />
 
-      {showExplanationBox && <div className='mb-4 black:mx-4'>
+      {showExplanationBox && (
         <Accordion
           headline={<FormattedMessage id='fediverse_tab.explanation_box.title' defaultMessage='What is the Fediverse?' />}
           action={dismissExplanationBox}
@@ -82,7 +82,7 @@ const PublicTimelinePage = () => {
             }}
           />
         </Accordion>
-      </div>}
+      )}
       <PullToRefresh onRefresh={handleRefresh}>
         <Timeline
           loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
