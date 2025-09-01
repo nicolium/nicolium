@@ -1,8 +1,10 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { Redirect } from 'react-router-dom';
 
+import { changeSetting } from 'pl-fe/actions/settings';
 import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
+import DropdownMenu, { type Menu } from 'pl-fe/components/dropdown-menu';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import Column from 'pl-fe/components/ui/column';
@@ -14,6 +16,7 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { makeGetStatus } from 'pl-fe/selectors';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 
 const messages = defineMessages({
   title: { id: 'status.title', defaultMessage: 'Post details' },
@@ -31,6 +34,8 @@ const messages = defineMessages({
   replyConfirm: { id: 'confirmations.reply.confirm', defaultMessage: 'Reply' },
   replyMessage: { id: 'confirmations.reply.message', defaultMessage: 'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?' },
   blockAndReport: { id: 'confirmations.block.block_and_report', defaultMessage: 'Block and report' },
+  treeView: { id: 'status.thread.tree_view', defaultMessage: 'Tree view' },
+  linearView: { id: 'status.thread.linear_view', defaultMessage: 'Linear view' },
 });
 
 type RouteParams = {
@@ -52,6 +57,8 @@ const StatusPage: React.FC<IStatusDetails> = (props) => {
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
 
+  const { settings: { threads: { displayMode } } } = useSettingsStore();
+
   /** Fetch the status (and context) from the API. */
   const fetchData = () => {
     const { params } = props;
@@ -69,6 +76,23 @@ const StatusPage: React.FC<IStatusDetails> = (props) => {
   }, [props.params.statusId]);
 
   const handleRefresh = () => fetchData();
+
+  const items: Menu = useMemo(() => [
+    {
+      text: intl.formatMessage(messages.treeView),
+      action: () => dispatch(changeSetting(['threads', 'displayMode'], 'tree')),
+      icon: require('@tabler/icons/outline/list-tree.svg'),
+      type: 'radio',
+      checked: displayMode === 'tree',
+    },
+    {
+      text: intl.formatMessage(messages.linearView),
+      action: () => dispatch(changeSetting(['threads', 'displayMode'], 'linear')),
+      icon: require('@tabler/icons/outline/list.svg'),
+      type: 'radio',
+      checked: displayMode === 'linear',
+    },
+  ], [displayMode]);
 
   if (status?.event) {
     return (
@@ -101,7 +125,10 @@ const StatusPage: React.FC<IStatusDetails> = (props) => {
 
   return (
     <Stack space={4}>
-      <Column label={intl.formatMessage(titleMessage())}>
+      <Column
+        label={intl.formatMessage(titleMessage())}
+        action={<DropdownMenu items={items} src={require('@tabler/icons/outline/dots-vertical.svg')} />}
+      >
         <PullToRefresh onRefresh={handleRefresh}>
           <Thread key={status.id} status={status} />
         </PullToRefresh>

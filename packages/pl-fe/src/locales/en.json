@@ -1716,6 +1716,8 @@
   "status.show_original": "Show original",
   "status.spoiler.collapse": "Collapse",
   "status.spoiler.expand": "Expand",
+  "status.thread.linear_view": "Linear view",
+  "status.thread.tree_view": "Tree view",
   "status.title": "Post details",
   "status.title_direct": "Direct message",
   "status.translate": "Translate",

@@ -3,7 +3,11 @@
     @apply shadow-none p-0;
   }
 
-  .status__content-wrapper {
+  &:not(&--linear) .status__content-wrapper {
     @apply pl-[54px] rtl:pl-0 rtl:pr-[calc(54px)];
   }
+}
+
+div:last-child > .thread__status--linear hr {
+  display: none;
 }

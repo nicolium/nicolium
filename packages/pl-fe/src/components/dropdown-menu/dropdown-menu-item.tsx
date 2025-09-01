@@ -21,7 +21,7 @@ interface MenuItem {
   target?: React.HTMLAttributeAnchorTarget;
   text: string;
   to?: string;
-  type?: 'toggle';
+  type?: 'toggle' | 'radio';
   items?: Array<Omit<MenuItem, 'items'>>;
 }
 
@@ -120,7 +120,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
       >
         {item.icon && <Icon src={item.icon} className='mr-3 size-5 flex-none rtl:ml-3 rtl:mr-0' />}
 
-        <div className={clsx('truncate', { 'text-xs': item.meta, 'text-base': !item.meta, 'mr-2': item.count || item.type === 'toggle' || item.items?.length })}>
+        <div className={clsx('truncate', { 'text-xs': item.meta, 'text-base': !item.meta, 'mr-2': item.count || item.type === 'toggle' || item.type === 'radio' || item.items?.length })}>
           {item.meta ? (
             <>
               <div className='truncate text-base'>{item.text}</div>
@@ -135,9 +135,9 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
           </span>
         ) : null}
 
-        {item.type === 'toggle' && (
+        {(item.type === 'toggle' || item.type === 'radio') && (
           <div className='ml-auto'>
-            <Toggle checked={item.checked} onChange={handleChange} />
+            <Toggle checked={item.checked} onChange={handleChange} radio={item.type === 'radio'} />
           </div>
         )}
 

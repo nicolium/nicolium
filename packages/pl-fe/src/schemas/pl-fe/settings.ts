@@ -93,6 +93,10 @@ const settingsSchema = v.object({
     pinnedHosts: v.optional(v.array(v.string()), []),
   }),
 
+  threads: coerceObject({
+    displayMode: v.optional(v.picklist(['tree', 'linear']), 'tree'),
+  }),
+
   notifications: coerceObject({
     quickFilter: coerceObject({
       active: v.optional(v.string(), 'all'),

@@ -12,6 +12,7 @@ interface IThreadStatus {
   focusedStatusId: string;
   onMoveUp: (id: string) => void;
   onMoveDown: (id: string) => void;
+  linear?: boolean;
 }
 
 /** Status with reply-connector in threads. */
@@ -32,6 +33,8 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): JSX.Element => {
   }
 
   const renderConnector = (): JSX.Element | null => {
+    if (props.linear) return null;
+
     const isConnectedTop = replyToId && replyToId !== focusedStatusId;
     const isConnectedBottom = replyCount > 0;
     const isConnected = isConnectedTop || isConnectedBottom;
@@ -48,7 +51,7 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): JSX.Element => {
   };
 
   return (
-    <div className='thread__status relative pb-4'>
+    <div className={clsx('thread__status relative pb-4', { 'thread__status--linear': props.linear })}>
       {renderConnector()}
       {isLoaded ? (
         // @ts-ignore FIXME
@@ -56,6 +59,7 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): JSX.Element => {
       ) : (
         <PlaceholderStatus variant='default' />
       )}
+      {props.linear && <hr className='-mx-4 mt-2 max-w-[100vw] border-t-2 black:border-t dark:border-gray-800' />}
     </div>
   );
 };
