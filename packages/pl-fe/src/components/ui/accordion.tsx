@@ -4,9 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 
-import HStack from './hstack';
 import Icon from './icon';
-import Text from './text';
 
 import type { Menu } from 'pl-fe/components/dropdown-menu';
 
@@ -46,17 +44,20 @@ const Accordion: React.FC<IAccordion> = ({ headline, children, menu, expanded = 
   };
 
   return (
-    <div className='rounded-lg bg-white text-gray-900 shadow dark:bg-primary-800 dark:text-gray-100 dark:shadow-none'>
+    <div className={clsx('⁂-accordion', {
+      '⁂-accordion--expanded': expanded,
+    })}
+    >
       <button
         type='button'
         onClick={handleToggle}
         title={intl.formatMessage(expanded ? messages.collapse : messages.expand)}
         aria-expanded={expanded}
-        className='flex w-full items-center justify-between px-4 py-3 font-semibold'
+        className='⁂-accordion__header'
       >
         <span>{headline}</span>
 
-        <HStack alignItems='center' space={2}>
+        <div className='⁂-accordion__header__actions'>
           {menu && (
             <DropdownMenu
               items={menu}
@@ -64,31 +65,21 @@ const Accordion: React.FC<IAccordion> = ({ headline, children, menu, expanded = 
             />
           )}
           {action && actionIcon && (
-            <button onClick={handleAction} title={actionLabel}>
-              <Icon
-                src={actionIcon}
-                className='size-5 text-gray-700 dark:text-gray-600'
-              />
+            <button className='⁂-accordion__header__action' onClick={handleAction} title={actionLabel}>
+              <Icon src={actionIcon} />
             </button>
           )}
           <Icon
             src={require('@tabler/icons/outline/chevron-down.svg')}
-            className={clsx('size-5 text-gray-700 transition-transform dark:text-gray-600', {
-              'rotate-180': expanded,
-            })}
+            className='⁂-accordion__header__chevron'
           />
-        </HStack>
+        </div>
       </button>
 
       <div
-        className={
-          clsx({
-            'p-4 rounded-b-lg border-t border-solid border-gray-100 dark:border-primary-900 black:border-black': true,
-            'h-0 hidden': !expanded,
-          })
-        }
+        className='⁂-accordion__body'
       >
-        <Text>{children}</Text>
+        <p>{children}</p>
       </div>
     </div>
   );

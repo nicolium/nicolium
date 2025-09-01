@@ -1,5 +1,44 @@
-.⁂-select {
-  @apply truncate rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 disabled:opacity-50 black:bg-black dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:ring-1 dark:ring-gray-800 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:text-sm;
+@use 'mixins';
+
+.⁂-accordion {
+  @apply rounded-lg bg-white text-gray-900 shadow dark:bg-primary-800 dark:text-gray-100 dark:shadow-none;
+
+  &__header {
+    @apply flex w-full items-center justify-between px-4 py-3 font-semibold;
+  
+    &__actions {
+      @apply flex items-center gap-2;
+    }
+
+    &__action .⁂-icon {
+      @apply size-5 text-gray-700 dark:text-gray-600;
+    }
+
+    &__chevron {
+      @apply size-5 text-gray-700 transition-transform dark:text-gray-600;
+    }
+  }
+
+  &__body {
+    @apply p-4 rounded-b-lg border-t border-solid border-gray-100 dark:border-primary-900 black:border-black;
+  }
+
+  &:not(&--expanded) {
+    .⁂-accordion {
+      &__header__chevron {
+        transform: rotate(180deg);
+      }
+
+      &__body {
+        height: 0;
+        display: none;
+
+        p {
+          @include mixins.text();
+        }
+      }
+    }
+  }
 }
 
 .⁂-list {
@@ -65,4 +104,8 @@ a.⁂-list-item,
   cursor: pointer;
 
   @apply hover:from-gradient-start/20 hover:to-gradient-end/20 dark:hover:from-gradient-start/5 dark:hover:to-gradient-end/5;
+}
+
+.⁂-select {
+  @apply truncate rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 disabled:opacity-50 black:bg-black dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:ring-1 dark:ring-gray-800 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:text-sm;
 }
