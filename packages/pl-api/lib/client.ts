@@ -3942,7 +3942,7 @@ class PlApiClient {
       deleteAccount: async (accountId: string) => {
         let response;
 
-        if (this.features.mastodonAdmin) {
+        if (this.features.mastodonAdmin || this.features.version.software === MITRA) {
           response = await this.request(`/api/v1/admin/accounts/${accountId}`, { method: 'DELETE' });
         } else {
           const account = await this.admin.accounts.getAccount(accountId)!;
@@ -4387,7 +4387,13 @@ class PlApiClient {
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#delete-apiv1pleromaadminstatusesid}
        */
       deleteStatus: async (statusId: string) => {
-        const response = await this.request(`/api/v1/pleroma/admin/statuses/${statusId}`, { method: 'DELETE' });
+        let response;
+
+        if (this.features.version.software === MITRA) {
+          response = await this.request(`/api/v1/admin/posts/${statusId}`, { method: 'DELETE' });
+        } else {
+          response = await this.request(`/api/v1/pleroma/admin/statuses/${statusId}`, { method: 'DELETE' });
+        }
 
         return response.json as {};
       },
