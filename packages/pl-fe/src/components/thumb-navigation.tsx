@@ -53,27 +53,25 @@ const ThumbNavigation: React.FC = React.memo((): JSX.Element => {
 
   const composeButton = (
     <button
-      className='flex flex-1 flex-col items-center px-1.5 py-3.5 text-lg text-gray-600'
+      className='⁂-thumb-navigation__item ⁂-thumb-navigation__item--compose'
       onClick={handleOpenComposeModal}
       title={intl.formatMessage(messages.compose)}
     >
       <Icon
         src={require('@tabler/icons/outline/square-rounded-plus.svg')}
-        className='size-6 text-gray-600 black:text-white'
       />
     </button>
   );
 
   return (
-    <div className='fixed inset-x-0 bottom-0 z-50 flex w-full overflow-x-auto border-t border-solid border-gray-200 bg-white/90 shadow-2xl backdrop-blur-md black:bg-black/80 dark:border-gray-800 dark:bg-primary-900/90 lg:hidden'>
+    <div className='⁂-thumb-navigation'>
       <button
-        className='flex flex-1 flex-col items-center px-2 py-4 text-lg text-gray-600'
+        className='⁂-thumb-navigation__item'
         onClick={isSidebarOpen ? closeSidebar : openSidebar}
         title={intl.formatMessage(isSidebarOpen ? messages.closeSidebar : messages.openSidebar)}
       >
         <Icon
           src={require('@tabler/icons/outline/menu-2.svg')}
-          className='size-5 text-gray-600 black:text-white'
         />
       </button>
 

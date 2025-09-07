@@ -34,27 +34,15 @@ const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({ count, countMax, 
   const icon = (active && activeSrc) || src;
 
   return (
-    <NavLink to={to} exact={exact} className='flex flex-1 flex-col items-center space-y-1 px-2 py-4 text-lg text-gray-600' title={text}>
+    <NavLink to={to} exact={exact} className={clsx('⁂-thumb-navigation__item', { '⁂-thumb-navigation__item--active': active })} title={text}>
       {!demetricator && count !== undefined ? (
         <IconWithCounter
           src={icon}
-          className={clsx({
-            'h-5 w-5': true,
-            'text-gray-600 black:text-white': !active,
-            'text-primary-500': active,
-          })}
           count={count}
           countMax={countMax}
         />
       ) : (
-        <Icon
-          src={icon}
-          className={clsx({
-            'h-5 w-5': true,
-            'text-gray-600 black:text-white': !active,
-            'text-primary-500': active,
-          })}
-        />
+        <Icon src={icon} />
       )}
     </NavLink>
   );
