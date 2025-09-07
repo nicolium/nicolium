@@ -34,7 +34,7 @@
         display: none;
 
         p {
-          @include mixins.text();
+          @include mixins.text;
         }
       }
     }
