@@ -20,12 +20,3 @@ noscript {
 .emojione {
   @apply w-4 h-4 -mt-[0.2ex] mb-[0.2ex] inline-block align-middle object-contain;
 }
-
-body.system-font,
-body.system-font .font-sans {
-  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
-}
-
-body.system-font .font-mono {
-  font-family: ui-monospace, monospace;
-}

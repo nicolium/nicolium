@@ -57,9 +57,7 @@ const ThumbNavigation: React.FC = React.memo((): JSX.Element => {
       onClick={handleOpenComposeModal}
       title={intl.formatMessage(messages.compose)}
     >
-      <Icon
-        src={require('@tabler/icons/outline/square-rounded-plus.svg')}
-      />
+      <Icon src={require('@tabler/icons/outline/square-rounded-plus.svg')} />
     </button>
   );
 
@@ -70,9 +68,7 @@ const ThumbNavigation: React.FC = React.memo((): JSX.Element => {
         onClick={isSidebarOpen ? closeSidebar : openSidebar}
         title={intl.formatMessage(isSidebarOpen ? messages.closeSidebar : messages.openSidebar)}
       >
-        <Icon
-          src={require('@tabler/icons/outline/menu-2.svg')}
-        />
+        <Icon src={require('@tabler/icons/outline/menu-2.svg')} />
       </button>
 
       <ThumbNavigationLink

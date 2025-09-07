@@ -25,12 +25,12 @@ const PlFeHead = () => {
   const themeCss = useThemeCss();
   const dsn = plFeConfig.sentryDsn;
 
-  const bodyClass = clsx('h-full bg-white text-base antialiased black:bg-black dark:bg-gray-800', {
+  const bodyClass = clsx({
     'no-reduce-motion': !reduceMotion,
     'underline-links': underlineLinks,
     'demetricator': demetricator,
     'system-font': systemFont,
-    'overflow-hidden': withModals,
+    'with-modals': withModals,
   });
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const PlFeHead = () => {
       <Helmet>
         <html
           lang={locale}
-          className={clsx('h-full', `text-${themeSettings?.interfaceSize || 'md'}`, {
+          className={clsx(`text-${themeSettings?.interfaceSize || 'md'}`, {
             'dark': theme === 'dark',
             'dark black': theme === 'black',
           })}

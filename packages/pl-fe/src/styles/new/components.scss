@@ -109,28 +109,3 @@ a.⁂-list-item,
 .⁂-select {
   @apply truncate rounded-md border-gray-300 py-2 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 disabled:opacity-50 black:bg-black dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:ring-1 dark:ring-gray-800 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:text-sm;
 }
-
-.⁂-thumb-navigation {
-  @apply fixed inset-x-0 bottom-0 z-50 flex w-full overflow-x-auto border-t border-solid border-gray-200 bg-white/90 shadow-2xl backdrop-blur-md black:bg-black/80 dark:border-gray-800 dark:bg-primary-900/90 lg:hidden;
-
-  &__item {
-    @apply flex flex-1 flex-col items-center px-2 py-4 text-lg text-gray-600;
-
-      .⁂-icon {
-        @apply size-5 text-gray-600 black:text-white;
-
-      }
-
-    &--active .⁂-icon {
-      @apply text-primary-500;
-    }
-
-    &--compose {
-      @apply px-1.5 py-3.5;
-
-      .⁂-icon {
-        @apply size-6;
-      }
-    }
-  }
-}
