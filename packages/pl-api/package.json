@@ -23,7 +23,7 @@
     "@types/lodash.omit": "^4.5.9",
     "@types/lodash.pick": "^4.4.9",
     "@types/node": "^22.13.11",
-    "@types/semver": "^7.5.8",
+    "@types/semver": "^7.7.1",
     "@typescript-eslint/eslint-plugin": "^8.24.1",
     "@typescript-eslint/parser": "^8.24.0",
     "eslint": "8.57.1",
