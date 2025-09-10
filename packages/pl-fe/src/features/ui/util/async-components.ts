@@ -127,6 +127,7 @@ export const ComposeForm = lazy(() => import('pl-fe/features/compose/components/
 export const CryptoAddress = lazy(() => import('pl-fe/features/crypto-donate/components/crypto-address'));
 export const CryptoIcon = lazy(() => import('pl-fe/features/crypto-donate/components/crypto-icon'));
 export const DatePicker = lazy(() => import('pl-fe/features/birthdays/date-picker'));
+export const DropdownNavigation = lazy(() => import('pl-fe/components/dropdown-navigation'));
 export const EmojiPicker = lazy(() => import('pl-fe/features/emoji/components/emoji-picker'));
 export const EventHeader = lazy(() => import('pl-fe/features/event/components/event-header'));
 export const LightningAddress = lazy(() => import('pl-fe/features/crypto-donate/components/lightning-address'));
@@ -134,6 +135,5 @@ export const MfaForm = lazy(() => import('pl-fe/features/security/mfa-form'));
 export const ModalRoot = lazy(() => import('pl-fe/features/ui/components/modal-root'));
 export const OnboardingWizard = lazy(() => import('pl-fe/features/onboarding/onboarding-wizard'));
 export const AccountHoverCard = lazy(() => import('pl-fe/components/account-hover-card'));
-export const SidebarMenu = lazy(() => import('pl-fe/components/sidebar-menu'));
 export const StatusHoverCard = lazy(() => import('pl-fe/components/status-hover-card'));
 export const Video = lazy(() => import('pl-fe/features/video'));

@@ -53,7 +53,7 @@ const messages = defineMessages({
   conversations: { id: 'navigation.direct_messages', defaultMessage: 'Direct messages' },
 });
 
-interface ISidebarLink {
+interface IDropdownNavigationLink {
   href?: string;
   to?: string;
   icon: string;
@@ -61,7 +61,7 @@ interface ISidebarLink {
   onClick: React.EventHandler<React.MouseEvent>;
 }
 
-const SidebarLink: React.FC<ISidebarLink> = React.memo(({ href, to, icon, text, onClick }) => {
+const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(({ href, to, icon, text, onClick }) => {
   const body = (
     <>
       <div className='⁂-dropdown-navigation__icon'>
@@ -87,7 +87,7 @@ const SidebarLink: React.FC<ISidebarLink> = React.memo(({ href, to, icon, text, 
   );
 });
 
-const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
+const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
@@ -223,7 +223,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
             <Stack space={4}>
               <Divider />
 
-              <SidebarLink
+              <DropdownNavigationLink
                 to={`/@${account.acct}`}
                 icon={require('@tabler/icons/outline/user.svg')}
                 text={intl.formatMessage(messages.profile)}
@@ -231,7 +231,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
               />
 
               {(account.locked || followRequestsCount > 0) && (
-                <SidebarLink
+                <DropdownNavigationLink
                   to='/follow_requests'
                   icon={require('@tabler/icons/outline/user-plus.svg')}
                   text={intl.formatMessage(messages.followRequests)}
@@ -240,7 +240,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
               )}
 
               {(interactionRequestsCount > 0) && (
-                <SidebarLink
+                <DropdownNavigationLink
                   to='/interaction_requests'
                   icon={require('@tabler/icons/outline/flag-question.svg')}
                   text={intl.formatMessage(messages.interactionRequests)}
@@ -249,7 +249,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
               )}
 
               {features.conversations && (
-                <SidebarLink
+                <DropdownNavigationLink
                   to='/conversations'
                   icon={require('@tabler/icons/outline/mail.svg')}
                   text={intl.formatMessage(messages.conversations)}
@@ -258,7 +258,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
               )}
 
               {features.bookmarks && (
-                <SidebarLink
+                <DropdownNavigationLink
                   to='/bookmarks'
                   icon={require('@tabler/icons/outline/bookmark.svg')}
                   text={intl.formatMessage(messages.bookmarks)}
@@ -267,7 +267,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
               )}
 
               {features.groups && (
-                <SidebarLink
+                <DropdownNavigationLink
                   to='/groups'
                   icon={require('@tabler/icons/outline/circles.svg')}
                   text={intl.formatMessage(messages.groups)}
@@ -276,7 +276,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
               )}
 
               {features.lists && (
-                <SidebarLink
+                <DropdownNavigationLink
                   to='/lists'
                   icon={require('@tabler/icons/outline/list.svg')}
                   text={intl.formatMessage(messages.lists)}
@@ -285,7 +285,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
               )}
 
               {features.circles && (
-                <SidebarLink
+                <DropdownNavigationLink
                   to='/circles'
                   icon={require('@tabler/icons/outline/chart-circles.svg')}
                   text={intl.formatMessage(messages.circles)}
@@ -294,7 +294,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
               )}
 
               {features.events && (
-                <SidebarLink
+                <DropdownNavigationLink
                   to='/events'
                   icon={require('@tabler/icons/outline/calendar-event.svg')}
                   text={intl.formatMessage(messages.events)}
@@ -303,7 +303,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
               )}
 
               {features.profileDirectory && (
-                <SidebarLink
+                <DropdownNavigationLink
                   to='/directory'
                   icon={require('@tabler/icons/outline/address-book.svg')}
                   text={intl.formatMessage(messages.profileDirectory)}
@@ -312,7 +312,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
               )}
 
               {scheduledStatusCount > 0 && (
-                <SidebarLink
+                <DropdownNavigationLink
                   to='/scheduled_statuses'
                   icon={require('@tabler/icons/outline/calendar-stats.svg')}
                   text={intl.formatMessage(messages.scheduledStatuses)}
@@ -321,7 +321,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
               )}
 
               {draftCount > 0 && (
-                <SidebarLink
+                <DropdownNavigationLink
                   to='/draft_statuses'
                   icon={require('@tabler/icons/outline/notes.svg')}
                   text={intl.formatMessage(messages.drafts)}
@@ -332,7 +332,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
               {features.publicTimeline && <>
                 <Divider />
 
-                <SidebarLink
+                <DropdownNavigationLink
                   to='/timeline/local'
                   icon={features.federating ? require('@tabler/icons/outline/affiliate.svg') : require('@tabler/icons/outline/world.svg')}
                   text={features.federating ? <FormattedMessage id='tabs_bar.local' defaultMessage='Local' /> : <FormattedMessage id='tabs_bar.all' defaultMessage='All' />}
@@ -340,7 +340,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
                 />
 
                 {features.bubbleTimeline && (
-                  <SidebarLink
+                  <DropdownNavigationLink
                     to='/timeline/bubble'
                     icon={require('@tabler/icons/outline/chart-bubble.svg')}
                     text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
@@ -349,7 +349,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
                 )}
 
                 {features.federating && (
-                  <SidebarLink
+                  <DropdownNavigationLink
                     to='/timeline/fediverse'
                     icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
                     text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
@@ -360,7 +360,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
 
               <Divider />
 
-              <SidebarLink
+              <DropdownNavigationLink
                 to='/settings/preferences'
                 icon={require('@tabler/icons/outline/settings.svg')}
                 text={intl.formatMessage(messages.preferences)}
@@ -368,7 +368,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
               />
 
               {features.followedHashtagsList && (
-                <SidebarLink
+                <DropdownNavigationLink
                   to='/followed_tags'
                   icon={require('@tabler/icons/outline/hash.svg')}
                   text={intl.formatMessage(messages.followedTags)}
@@ -377,7 +377,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
               )}
 
               {(account.is_admin || account.is_moderator) && (
-                <SidebarLink
+                <DropdownNavigationLink
                   to='/admin'
                   icon={require('@tabler/icons/outline/dashboard.svg')}
                   text={intl.formatMessage(messages.dashboard)}
@@ -388,7 +388,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
 
               <Divider />
 
-              <SidebarLink
+              <DropdownNavigationLink
                 to='/logout'
                 icon={require('@tabler/icons/outline/logout.svg')}
                 text={intl.formatMessage(messages.logout)}
@@ -397,7 +397,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
 
               <Divider />
 
-              <SidebarLink
+              <DropdownNavigationLink
                 href={sourceCode.url}
                 icon={require('@tabler/icons/outline/code.svg')}
                 text={intl.formatMessage(messages.sourceCode)}
@@ -438,7 +438,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
         ) : (
           <div>
             {features.publicTimeline && !restrictUnauth.timelines.local && <>
-              <SidebarLink
+              <DropdownNavigationLink
                 to='/timeline/local'
                 icon={features.federating ? require('@tabler/icons/outline/affiliate.svg') : require('@tabler/icons/outline/world.svg')}
                 text={features.federating ? <FormattedMessage id='tabs_bar.local' defaultMessage='Local' /> : <FormattedMessage id='tabs_bar.all' defaultMessage='All' />}
@@ -446,7 +446,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
               />
 
               {features.bubbleTimeline && !restrictUnauth.timelines.bubble && (
-                <SidebarLink
+                <DropdownNavigationLink
                   to='/timeline/bubble'
                   icon={require('@tabler/icons/outline/chart-bubble.svg')}
                   text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
@@ -455,7 +455,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
               )}
 
               {features.federating && !restrictUnauth.timelines.federated && (
-                <SidebarLink
+                <DropdownNavigationLink
                   to='/timeline/fediverse'
                   icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
                   text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
@@ -466,7 +466,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
               <Divider />
             </>}
 
-            <SidebarLink
+            <DropdownNavigationLink
               to='/login'
               icon={require('@tabler/icons/outline/login.svg')}
               text={intl.formatMessage(messages.login)}
@@ -474,7 +474,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
             />
 
             {isOpen && (
-              <SidebarLink
+              <DropdownNavigationLink
                 to='/signup'
                 icon={require('@tabler/icons/outline/user-plus.svg')}
                 text={intl.formatMessage(messages.register)}
@@ -484,7 +484,7 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
 
             <Divider />
 
-            <SidebarLink
+            <DropdownNavigationLink
               href={sourceCode.url}
               icon={require('@tabler/icons/outline/code.svg')}
               text={intl.formatMessage(messages.sourceCode)}
@@ -497,4 +497,4 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
   );
 });
 
-export { SidebarMenu as default };
+export { DropdownNavigation as default };

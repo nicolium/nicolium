@@ -81,6 +81,7 @@ import {
   DomainBlocks,
   Domains,
   DraftStatuses,
+  DropdownNavigation,
   EditEmail,
   EditFilter,
   EditGroup,
@@ -144,7 +145,6 @@ import {
   Settings,
   SettingsStore,
   Share,
-  SidebarMenu,
   Status,
   StatusHoverCard,
   TestTimeline,
@@ -513,7 +513,7 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
           </Layout>
 
           <Suspense>
-            <SidebarMenu />
+            <DropdownNavigation />
           </Suspense>
 
           {me && features.chats && (
