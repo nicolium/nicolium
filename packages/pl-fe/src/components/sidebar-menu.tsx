@@ -63,25 +63,25 @@ interface ISidebarLink {
 
 const SidebarLink: React.FC<ISidebarLink> = React.memo(({ href, to, icon, text, onClick }) => {
   const body = (
-    <HStack space={2} alignItems='center'>
-      <div className='relative inline-flex rounded-lg bg-primary-100 p-2 dark:bg-gray-800'>
-        <Icon src={icon} className='size-5 text-primary-500' />
+    <>
+      <div className='⁂-dropdown-navigation__icon'>
+        <Icon src={icon} />
       </div>
 
       <Text tag='span' weight='medium' theme='inherit'>{text}</Text>
-    </HStack>
+    </>
   );
 
   if (to) {
     return (
-      <NavLink className='group rounded-lg text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800' to={to} onClick={onClick}>
+      <NavLink className='⁂-dropdown-navigation__link' to={to} onClick={onClick}>
         {body}
       </NavLink>
     );
   }
 
   return (
-    <a className='group rounded-lg text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800' href={href} target='_blank' onClick={onClick}>
+    <a className='⁂-dropdown-navigation__link' href={href} target='_blank' onClick={onClick}>
       {body}
     </a>
   );
@@ -184,8 +184,9 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
       aria-expanded={isSidebarOpen}
       className={
         clsx({
-          'z-[1000]': isSidebarOpen || sidebarVisible,
-          hidden: !(isSidebarOpen || sidebarVisible),
+          '⁂-dropdown-navigation__container': true,
+          '⁂-dropdown-navigation__container--partially-visible': isSidebarOpen || sidebarVisible,
+          '⁂-dropdown-navigation__container--visible': isSidebarOpen && sidebarVisible,
         })
       }
       ref={containerRef}
@@ -195,8 +196,8 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
       onTouchEnd={handleTouchEnd}
     >
       <div
-        className={clsx('fixed inset-0 cursor-default bg-gray-500 black:bg-gray-900 no-reduce-motion:transition-opacity dark:bg-gray-700', {
-          'no-reduce-motion:opacity-0': !(sidebarVisible && isSidebarOpen),
+        className={clsx('⁂-dropdown-navigation__overlay', {
+          '': !(sidebarVisible && isSidebarOpen),
           'opacity-20': (sidebarVisible && isSidebarOpen),
         })}
         role='button'
@@ -204,302 +205,293 @@ const SidebarMenu: React.FC = React.memo((): JSX.Element | null => {
       />
 
       <div
-        className={
-          clsx('fixed bottom-[60px] left-2 z-[1000] flex max-h-[calc(100dvh-68px)] w-full max-w-xs flex-1 origin-bottom-left flex-col overflow-hidden rounded-xl bg-white/90 shadow-lg backdrop-blur-md ease-in-out black:bg-black/90 no-reduce-motion:transition-transform dark:border dark:border-gray-800 dark:bg-primary-900/90 dark:shadow-none rtl:right-2 rtl:origin-bottom-right', {
-            'scale-100': sidebarVisible && isSidebarOpen,
-            'no-reduce-motion:scale-0': !(sidebarVisible && isSidebarOpen),
-          })
-        }
+        className='⁂-dropdown-navigation'
       >
-        <div className='relative size-full overflow-auto'>
-          <div className='p-4'>
-            {account ? (
-              <Stack space={4}>
-                <Link to={`/@${account.acct}`} onClick={closeSidebar}>
-                  <Account account={account} showAccountHoverCard={false} withLinkToProfile={false} />
-                </Link>
+        {account ? (
+          <div>
+            <Link to={`/@${account.acct}`} onClick={closeSidebar}>
+              <Account account={account} showAccountHoverCard={false} withLinkToProfile={false} />
+            </Link>
 
-                {!settings.demetricator && (
-                  <ProfileStats
-                    account={account}
-                    onClickHandler={handleClose}
-                  />
-                )}
+            {!settings.demetricator && (
+              <ProfileStats
+                account={account}
+                onClickHandler={handleClose}
+              />
+            )}
 
-                <Stack space={4}>
-                  <Divider />
+            <Stack space={4}>
+              <Divider />
 
-                  <SidebarLink
-                    to={`/@${account.acct}`}
-                    icon={require('@tabler/icons/outline/user.svg')}
-                    text={intl.formatMessage(messages.profile)}
-                    onClick={closeSidebar}
-                  />
+              <SidebarLink
+                to={`/@${account.acct}`}
+                icon={require('@tabler/icons/outline/user.svg')}
+                text={intl.formatMessage(messages.profile)}
+                onClick={closeSidebar}
+              />
 
-                  {(account.locked || followRequestsCount > 0) && (
-                    <SidebarLink
-                      to='/follow_requests'
-                      icon={require('@tabler/icons/outline/user-plus.svg')}
-                      text={intl.formatMessage(messages.followRequests)}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {(interactionRequestsCount > 0) && (
-                    <SidebarLink
-                      to='/interaction_requests'
-                      icon={require('@tabler/icons/outline/flag-question.svg')}
-                      text={intl.formatMessage(messages.interactionRequests)}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {features.conversations && (
-                    <SidebarLink
-                      to='/conversations'
-                      icon={require('@tabler/icons/outline/mail.svg')}
-                      text={intl.formatMessage(messages.conversations)}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {features.bookmarks && (
-                    <SidebarLink
-                      to='/bookmarks'
-                      icon={require('@tabler/icons/outline/bookmark.svg')}
-                      text={intl.formatMessage(messages.bookmarks)}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {features.groups && (
-                    <SidebarLink
-                      to='/groups'
-                      icon={require('@tabler/icons/outline/circles.svg')}
-                      text={intl.formatMessage(messages.groups)}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {features.lists && (
-                    <SidebarLink
-                      to='/lists'
-                      icon={require('@tabler/icons/outline/list.svg')}
-                      text={intl.formatMessage(messages.lists)}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {features.circles && (
-                    <SidebarLink
-                      to='/circles'
-                      icon={require('@tabler/icons/outline/chart-circles.svg')}
-                      text={intl.formatMessage(messages.circles)}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {features.events && (
-                    <SidebarLink
-                      to='/events'
-                      icon={require('@tabler/icons/outline/calendar-event.svg')}
-                      text={intl.formatMessage(messages.events)}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {features.profileDirectory && (
-                    <SidebarLink
-                      to='/directory'
-                      icon={require('@tabler/icons/outline/address-book.svg')}
-                      text={intl.formatMessage(messages.profileDirectory)}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {scheduledStatusCount > 0 && (
-                    <SidebarLink
-                      to='/scheduled_statuses'
-                      icon={require('@tabler/icons/outline/calendar-stats.svg')}
-                      text={intl.formatMessage(messages.scheduledStatuses)}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {draftCount > 0 && (
-                    <SidebarLink
-                      to='/draft_statuses'
-                      icon={require('@tabler/icons/outline/notes.svg')}
-                      text={intl.formatMessage(messages.drafts)}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {features.publicTimeline && <>
-                    <Divider />
-
-                    <SidebarLink
-                      to='/timeline/local'
-                      icon={features.federating ? require('@tabler/icons/outline/affiliate.svg') : require('@tabler/icons/outline/world.svg')}
-                      text={features.federating ? <FormattedMessage id='tabs_bar.local' defaultMessage='Local' /> : <FormattedMessage id='tabs_bar.all' defaultMessage='All' />}
-                      onClick={closeSidebar}
-                    />
-
-                    {features.bubbleTimeline && (
-                      <SidebarLink
-                        to='/timeline/bubble'
-                        icon={require('@tabler/icons/outline/chart-bubble.svg')}
-                        text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
-                        onClick={closeSidebar}
-                      />
-                    )}
-
-                    {features.federating && (
-                      <SidebarLink
-                        to='/timeline/fediverse'
-                        icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
-                        text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
-                        onClick={closeSidebar}
-                      />
-                    )}
-                  </>}
-
-                  <Divider />
-
-                  <SidebarLink
-                    to='/settings/preferences'
-                    icon={require('@tabler/icons/outline/settings.svg')}
-                    text={intl.formatMessage(messages.preferences)}
-                    onClick={closeSidebar}
-                  />
-
-                  {features.followedHashtagsList && (
-                    <SidebarLink
-                      to='/followed_tags'
-                      icon={require('@tabler/icons/outline/hash.svg')}
-                      text={intl.formatMessage(messages.followedTags)}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {(account.is_admin || account.is_moderator) && (
-                    <SidebarLink
-                      to='/admin'
-                      icon={require('@tabler/icons/outline/dashboard.svg')}
-                      text={intl.formatMessage(messages.dashboard)}
-                      onClick={closeSidebar}
-                      // count={dashboardCount} WIP
-                    />
-                  )}
-
-                  <Divider />
-
-                  <SidebarLink
-                    to='/logout'
-                    icon={require('@tabler/icons/outline/logout.svg')}
-                    text={intl.formatMessage(messages.logout)}
-                    onClick={onClickLogOut}
-                  />
-
-                  <Divider />
-
-                  <SidebarLink
-                    href={sourceCode.url}
-                    icon={require('@tabler/icons/outline/code.svg')}
-                    text={intl.formatMessage(messages.sourceCode)}
-                    onClick={closeSidebar}
-                  />
-
-                  <Divider />
-
-                  <Stack space={4}>
-                    <button type='button' onClick={handleSwitcherClick} className='py-1'>
-                      <HStack alignItems='center' justifyContent='between'>
-                        <Text tag='span'>
-                          <FormattedMessage id='profile_dropdown.switch_account' defaultMessage='Switch accounts' />
-                        </Text>
-
-                        <Icon
-                          src={require('@tabler/icons/outline/chevron-down.svg')}
-                          className={clsx('size-4 text-gray-900 transition-transform dark:text-gray-100', {
-                            'rotate-180': switcher,
-                          })}
-                        />
-                      </HStack>
-                    </button>
-
-                    {switcher && (
-                      <div className='border-t-2 border-solid border-gray-100 black:border-t dark:border-gray-800'>
-                        {otherAccounts.map(account => renderAccount(account))}
-
-                        <NavLink className='flex items-center space-x-1 py-2' to='/login/add' onClick={handleClose}>
-                          <Icon className='size-4 text-primary-500' src={require('@tabler/icons/outline/plus.svg')} />
-                          <Text size='sm' weight='medium'>{intl.formatMessage(messages.addAccount)}</Text>
-                        </NavLink>
-                      </div>
-                    )}
-                  </Stack>
-                </Stack>
-              </Stack>
-            ) : (
-              <Stack space={4}>
-                {features.publicTimeline && !restrictUnauth.timelines.local && <>
-                  <SidebarLink
-                    to='/timeline/local'
-                    icon={features.federating ? require('@tabler/icons/outline/affiliate.svg') : require('@tabler/icons/outline/world.svg')}
-                    text={features.federating ? <FormattedMessage id='tabs_bar.local' defaultMessage='Local' /> : <FormattedMessage id='tabs_bar.all' defaultMessage='All' />}
-                    onClick={closeSidebar}
-                  />
-
-                  {features.bubbleTimeline && !restrictUnauth.timelines.bubble && (
-                    <SidebarLink
-                      to='/timeline/bubble'
-                      icon={require('@tabler/icons/outline/chart-bubble.svg')}
-                      text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  {features.federating && !restrictUnauth.timelines.federated && (
-                    <SidebarLink
-                      to='/timeline/fediverse'
-                      icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
-                      text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
-                      onClick={closeSidebar}
-                    />
-                  )}
-
-                  <Divider />
-                </>}
-
+              {(account.locked || followRequestsCount > 0) && (
                 <SidebarLink
-                  to='/login'
-                  icon={require('@tabler/icons/outline/login.svg')}
-                  text={intl.formatMessage(messages.login)}
+                  to='/follow_requests'
+                  icon={require('@tabler/icons/outline/user-plus.svg')}
+                  text={intl.formatMessage(messages.followRequests)}
                   onClick={closeSidebar}
                 />
+              )}
 
-                {isOpen && (
-                  <SidebarLink
-                    to='/signup'
-                    icon={require('@tabler/icons/outline/user-plus.svg')}
-                    text={intl.formatMessage(messages.register)}
-                    onClick={closeSidebar}
-                  />
-                )}
+              {(interactionRequestsCount > 0) && (
+                <SidebarLink
+                  to='/interaction_requests'
+                  icon={require('@tabler/icons/outline/flag-question.svg')}
+                  text={intl.formatMessage(messages.interactionRequests)}
+                  onClick={closeSidebar}
+                />
+              )}
 
+              {features.conversations && (
+                <SidebarLink
+                  to='/conversations'
+                  icon={require('@tabler/icons/outline/mail.svg')}
+                  text={intl.formatMessage(messages.conversations)}
+                  onClick={closeSidebar}
+                />
+              )}
+
+              {features.bookmarks && (
+                <SidebarLink
+                  to='/bookmarks'
+                  icon={require('@tabler/icons/outline/bookmark.svg')}
+                  text={intl.formatMessage(messages.bookmarks)}
+                  onClick={closeSidebar}
+                />
+              )}
+
+              {features.groups && (
+                <SidebarLink
+                  to='/groups'
+                  icon={require('@tabler/icons/outline/circles.svg')}
+                  text={intl.formatMessage(messages.groups)}
+                  onClick={closeSidebar}
+                />
+              )}
+
+              {features.lists && (
+                <SidebarLink
+                  to='/lists'
+                  icon={require('@tabler/icons/outline/list.svg')}
+                  text={intl.formatMessage(messages.lists)}
+                  onClick={closeSidebar}
+                />
+              )}
+
+              {features.circles && (
+                <SidebarLink
+                  to='/circles'
+                  icon={require('@tabler/icons/outline/chart-circles.svg')}
+                  text={intl.formatMessage(messages.circles)}
+                  onClick={closeSidebar}
+                />
+              )}
+
+              {features.events && (
+                <SidebarLink
+                  to='/events'
+                  icon={require('@tabler/icons/outline/calendar-event.svg')}
+                  text={intl.formatMessage(messages.events)}
+                  onClick={closeSidebar}
+                />
+              )}
+
+              {features.profileDirectory && (
+                <SidebarLink
+                  to='/directory'
+                  icon={require('@tabler/icons/outline/address-book.svg')}
+                  text={intl.formatMessage(messages.profileDirectory)}
+                  onClick={closeSidebar}
+                />
+              )}
+
+              {scheduledStatusCount > 0 && (
+                <SidebarLink
+                  to='/scheduled_statuses'
+                  icon={require('@tabler/icons/outline/calendar-stats.svg')}
+                  text={intl.formatMessage(messages.scheduledStatuses)}
+                  onClick={closeSidebar}
+                />
+              )}
+
+              {draftCount > 0 && (
+                <SidebarLink
+                  to='/draft_statuses'
+                  icon={require('@tabler/icons/outline/notes.svg')}
+                  text={intl.formatMessage(messages.drafts)}
+                  onClick={closeSidebar}
+                />
+              )}
+
+              {features.publicTimeline && <>
                 <Divider />
 
                 <SidebarLink
-                  href={sourceCode.url}
-                  icon={require('@tabler/icons/outline/code.svg')}
-                  text={intl.formatMessage(messages.sourceCode)}
+                  to='/timeline/local'
+                  icon={features.federating ? require('@tabler/icons/outline/affiliate.svg') : require('@tabler/icons/outline/world.svg')}
+                  text={features.federating ? <FormattedMessage id='tabs_bar.local' defaultMessage='Local' /> : <FormattedMessage id='tabs_bar.all' defaultMessage='All' />}
                   onClick={closeSidebar}
                 />
+
+                {features.bubbleTimeline && (
+                  <SidebarLink
+                    to='/timeline/bubble'
+                    icon={require('@tabler/icons/outline/chart-bubble.svg')}
+                    text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
+                    onClick={closeSidebar}
+                  />
+                )}
+
+                {features.federating && (
+                  <SidebarLink
+                    to='/timeline/fediverse'
+                    icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
+                    text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
+                    onClick={closeSidebar}
+                  />
+                )}
+              </>}
+
+              <Divider />
+
+              <SidebarLink
+                to='/settings/preferences'
+                icon={require('@tabler/icons/outline/settings.svg')}
+                text={intl.formatMessage(messages.preferences)}
+                onClick={closeSidebar}
+              />
+
+              {features.followedHashtagsList && (
+                <SidebarLink
+                  to='/followed_tags'
+                  icon={require('@tabler/icons/outline/hash.svg')}
+                  text={intl.formatMessage(messages.followedTags)}
+                  onClick={closeSidebar}
+                />
+              )}
+
+              {(account.is_admin || account.is_moderator) && (
+                <SidebarLink
+                  to='/admin'
+                  icon={require('@tabler/icons/outline/dashboard.svg')}
+                  text={intl.formatMessage(messages.dashboard)}
+                  onClick={closeSidebar}
+                  // count={dashboardCount} WIP
+                />
+              )}
+
+              <Divider />
+
+              <SidebarLink
+                to='/logout'
+                icon={require('@tabler/icons/outline/logout.svg')}
+                text={intl.formatMessage(messages.logout)}
+                onClick={onClickLogOut}
+              />
+
+              <Divider />
+
+              <SidebarLink
+                href={sourceCode.url}
+                icon={require('@tabler/icons/outline/code.svg')}
+                text={intl.formatMessage(messages.sourceCode)}
+                onClick={closeSidebar}
+              />
+
+              <Divider />
+
+              <Stack space={4}>
+                <button type='button' onClick={handleSwitcherClick} className='py-1'>
+                  <HStack alignItems='center' justifyContent='between'>
+                    <Text tag='span'>
+                      <FormattedMessage id='profile_dropdown.switch_account' defaultMessage='Switch accounts' />
+                    </Text>
+
+                    <Icon
+                      src={require('@tabler/icons/outline/chevron-down.svg')}
+                      className={clsx('size-4 text-gray-900 transition-transform dark:text-gray-100', {
+                        'rotate-180': switcher,
+                      })}
+                    />
+                  </HStack>
+                </button>
+
+                {switcher && (
+                  <div className='border-t-2 border-solid border-gray-100 black:border-t dark:border-gray-800'>
+                    {otherAccounts.map(account => renderAccount(account))}
+
+                    <NavLink className='flex items-center space-x-1 py-2' to='/login/add' onClick={handleClose}>
+                      <Icon className='size-4 text-primary-500' src={require('@tabler/icons/outline/plus.svg')} />
+                      <Text size='sm' weight='medium'>{intl.formatMessage(messages.addAccount)}</Text>
+                    </NavLink>
+                  </div>
+                )}
               </Stack>
-            )}
+            </Stack>
           </div>
-        </div>
+        ) : (
+          <div>
+            {features.publicTimeline && !restrictUnauth.timelines.local && <>
+              <SidebarLink
+                to='/timeline/local'
+                icon={features.federating ? require('@tabler/icons/outline/affiliate.svg') : require('@tabler/icons/outline/world.svg')}
+                text={features.federating ? <FormattedMessage id='tabs_bar.local' defaultMessage='Local' /> : <FormattedMessage id='tabs_bar.all' defaultMessage='All' />}
+                onClick={closeSidebar}
+              />
+
+              {features.bubbleTimeline && !restrictUnauth.timelines.bubble && (
+                <SidebarLink
+                  to='/timeline/bubble'
+                  icon={require('@tabler/icons/outline/chart-bubble.svg')}
+                  text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
+                  onClick={closeSidebar}
+                />
+              )}
+
+              {features.federating && !restrictUnauth.timelines.federated && (
+                <SidebarLink
+                  to='/timeline/fediverse'
+                  icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
+                  text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
+                  onClick={closeSidebar}
+                />
+              )}
+
+              <Divider />
+            </>}
+
+            <SidebarLink
+              to='/login'
+              icon={require('@tabler/icons/outline/login.svg')}
+              text={intl.formatMessage(messages.login)}
+              onClick={closeSidebar}
+            />
+
+            {isOpen && (
+              <SidebarLink
+                to='/signup'
+                icon={require('@tabler/icons/outline/user-plus.svg')}
+                text={intl.formatMessage(messages.register)}
+                onClick={closeSidebar}
+              />
+            )}
+
+            <Divider />
+
+            <SidebarLink
+              href={sourceCode.url}
+              icon={require('@tabler/icons/outline/code.svg')}
+              text={intl.formatMessage(messages.sourceCode)}
+              onClick={closeSidebar}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

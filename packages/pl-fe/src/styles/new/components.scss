@@ -41,6 +41,26 @@
   }
 }
 
+.⁂-divider {
+  @apply relative;
+
+  > div::first-child {
+    @apply absolute inset-0 flex items-center;
+
+    > div {
+      @apply w-full border-t-2 border-solid border-gray-100 black:border-t dark:border-gray-800;
+    }
+  }
+
+  &__text {
+    @apply relative flex justify-center;
+
+    > span {
+      @apply bg-white px-2 text-gray-700 black:bg-black dark:bg-gray-900 dark:text-gray-600;
+    }
+  }
+}
+
 .⁂-list {
   @apply space-y-0.5;
 }
