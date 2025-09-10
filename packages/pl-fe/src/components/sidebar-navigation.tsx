@@ -172,12 +172,8 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   }, [!!account, features, followRequestsCount, interactionRequestsCount, scheduledStatusCount, draftCount]);
 
   return (
-    <Stack space={4} alignItems={shrink ? 'center' : undefined}>
-      <SiteLogo
-        className={clsx('h-12 w-auto cursor-pointer', {
-          'max-w-10 h-auto': shrink,
-        })}
-      />
+    <div className={clsx('⁂-sidebar-navigation', { '⁂-sidebar-navigation__narrow': shrink })}>
+      <SiteLogo />
 
       {account && (
         <Stack space={4}>
@@ -361,7 +357,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
       {account && (
         <ComposeButton shrink={shrink} />
       )}
-    </Stack>
+    </div>
   );
 });
 

@@ -27,7 +27,7 @@ body {
   }
 
   &__container {
-    @apply z-1000;
+    @apply z-[1000];
 
     &:not(&--partially-visible) {
       @apply hidden;
@@ -47,7 +47,7 @@ body {
   }
 
   &__link {
-    @apply group rounded-lg text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800 flex flex-col gap-2 items-center;
+    @apply rounded-lg text-gray-900 hover:bg-gray-50 dark:text-gray-100 dark:hover:bg-gray-800 flex gap-2 items-center;
 
     &__icon {
       @apply relative inline-flex rounded-lg bg-primary-100 p-2 dark:bg-gray-800;
@@ -55,6 +55,42 @@ body {
       > div {
         @apply size-5 text-primary-500;
       }
+    }
+  }
+
+  &__account-switcher {
+    @apply flex flex-col gap-4;
+
+    button {
+      @apply flex items-center justify-between py-1;
+
+      .⁂-icon {
+        @apply size-4 text-gray-900 transition-transform dark:text-gray-100;
+      }
+    }
+
+    &__accounts {
+      @apply border-t-2 border-solid border-gray-100 black:border-t dark:border-gray-800;
+
+      > a {
+        @apply block py-2;
+
+        > div {
+          @apply pointer-events-none;
+        }
+      }
+    }
+
+    &__add {
+      @apply flex items-center space-x-1 py-2;
+
+      .⁂-icon {
+        @apply size-4 text-primary-500;
+      }
+    }
+
+    &--expanded button .⁂-icon {
+      @apply rotate-180;
     }
   }
 
@@ -84,6 +120,22 @@ body {
       .⁂-icon {
         @apply size-6;
       }
+    }
+  }
+}
+
+.⁂-sidebar-navigation {
+  @apply flex flex-col gap-4;
+
+  .⁂-site-logo {
+    @apply h-12 w-auto cursor-pointer;
+  }
+
+  &--narrow {
+    @apply items-center;
+
+    .⁂-site-logo {
+      @apply max-w-10 h-auto;
     }
   }
 }

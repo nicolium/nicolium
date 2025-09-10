@@ -64,7 +64,7 @@ interface IDropdownNavigationLink {
 const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(({ href, to, icon, text, onClick }) => {
   const body = (
     <>
-      <div className='⁂-dropdown-navigation__icon'>
+      <div className='⁂-dropdown-navigation__link__icon'>
         <Icon src={icon} />
       </div>
 
@@ -149,8 +149,8 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
   };
 
   const renderAccount = (account: AccountEntity) => (
-    <a href='#' className='block py-2' onClick={handleSwitchAccount(account)} key={account.id}>
-      <div className='pointer-events-none'>
+    <a href='#' onClick={handleSwitchAccount(account)} key={account.id}>
+      <div>
         <Account account={account} showAccountHoverCard={false} withRelationship={false} withLinkToProfile={false} />
       </div>
     </a>
@@ -196,10 +196,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
       onTouchEnd={handleTouchEnd}
     >
       <div
-        className={clsx('⁂-dropdown-navigation__overlay', {
-          '': !(sidebarVisible && isSidebarOpen),
-          'opacity-20': (sidebarVisible && isSidebarOpen),
-        })}
+        className='⁂-dropdown-navigation__overlay'
         role='button'
         onClick={handleClose}
       />
@@ -406,33 +403,32 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
 
               <Divider />
 
-              <Stack space={4}>
-                <button type='button' onClick={handleSwitcherClick} className='py-1'>
-                  <HStack alignItems='center' justifyContent='between'>
-                    <Text tag='span'>
-                      <FormattedMessage id='profile_dropdown.switch_account' defaultMessage='Switch accounts' />
-                    </Text>
+              <div
+                className={clsx('⁂-dropdown-navigation__account-switcher', {
+                  '⁂-dropdown-navigation__account-switcher--expanded': switcher,
+                })}
+              >
+                <button type='button' onClick={handleSwitcherClick}>
+                  <Text tag='span'>
+                    <FormattedMessage id='profile_dropdown.switch_account' defaultMessage='Switch accounts' />
+                  </Text>
 
-                    <Icon
-                      src={require('@tabler/icons/outline/chevron-down.svg')}
-                      className={clsx('size-4 text-gray-900 transition-transform dark:text-gray-100', {
-                        'rotate-180': switcher,
-                      })}
-                    />
-                  </HStack>
+                  <Icon
+                    src={require('@tabler/icons/outline/chevron-down.svg')}
+                  />
                 </button>
 
                 {switcher && (
-                  <div className='border-t-2 border-solid border-gray-100 black:border-t dark:border-gray-800'>
+                  <div className='⁂-dropdown-navigation__account-switcher__accounts'>
                     {otherAccounts.map(account => renderAccount(account))}
 
-                    <NavLink className='flex items-center space-x-1 py-2' to='/login/add' onClick={handleClose}>
-                      <Icon className='size-4 text-primary-500' src={require('@tabler/icons/outline/plus.svg')} />
+                    <NavLink className='⁂-dropdown-navigation__account-switcher__add' to='/login/add' onClick={handleClose}>
+                      <Icon src={require('@tabler/icons/outline/plus.svg')} />
                       <Text size='sm' weight='medium'>{intl.formatMessage(messages.addAccount)}</Text>
                     </NavLink>
                   </div>
                 )}
-              </Stack>
+              </div>
             </Stack>
           </div>
         ) : (

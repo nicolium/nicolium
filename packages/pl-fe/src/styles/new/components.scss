@@ -44,7 +44,7 @@
 .⁂-divider {
   @apply relative;
 
-  > div::first-child {
+  > div:first-child {
     @apply absolute inset-0 flex items-center;
 
     > div {
