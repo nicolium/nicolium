@@ -9,7 +9,6 @@ import { fetchOwnAccounts, logOut, switchAccount } from 'pl-fe/actions/auth';
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import Account from 'pl-fe/components/account';
 import Divider from 'pl-fe/components/ui/divider';
-import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
