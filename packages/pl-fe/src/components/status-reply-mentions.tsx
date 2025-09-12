@@ -31,7 +31,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
   // The post is a reply, but it has no mentions.
   // Rare, but it can happen.
   if (to.length === 0) {
-    return (
+    const body = (
       <div className='mb-1 block text-sm text-gray-700 dark:text-gray-600'>
         <FormattedMessage
           id='reply_mentions.reply_empty'
@@ -39,6 +39,22 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
         />
       </div>
     );
+
+    if (hoverable) {
+      return (
+        <HoverStatusWrapper statusId={status.in_reply_to_id!} inline>
+          <span
+            key='hoverstatus'
+            className='cursor-pointer hover:underline'
+            role='presentation'
+          >
+            {body}
+          </span>
+        </HoverStatusWrapper>
+      );
+    } else {
+      return body;
+    }
   }
 
   // The typical case with a reply-to and a list of mentions.
@@ -82,9 +98,9 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
           accounts: <FormattedList type='conjunction' value={accounts} />,
           // @ts-ignore wtf?
           hover: (children: React.ReactNode) => {
-            if (hoverable && status.in_reply_to_id) {
+            if (hoverable) {
               return (
-                <HoverStatusWrapper statusId={status.in_reply_to_id} inline>
+                <HoverStatusWrapper statusId={status.in_reply_to_id!} inline>
                   <span
                     key='hoverstatus'
                     className='cursor-pointer hover:underline'
