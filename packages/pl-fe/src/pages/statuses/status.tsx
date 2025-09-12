@@ -36,6 +36,7 @@ const messages = defineMessages({
   blockAndReport: { id: 'confirmations.block.block_and_report', defaultMessage: 'Block and report' },
   treeView: { id: 'status.thread.tree_view', defaultMessage: 'Tree view' },
   linearView: { id: 'status.thread.linear_view', defaultMessage: 'Linear view' },
+  expandAll: { id: 'status.thread.expand_all', defaultMessage: 'Expand all posts' },
 });
 
 type RouteParams = {
@@ -55,9 +56,10 @@ const StatusPage: React.FC<IStatusDetails> = (props) => {
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector((state) => getStatus(state, { id: props.params.statusId }));
 
+  const [expandAllStatuses, setExpandAllStatuses] = useState<() => void>();
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
 
-  const { settings: { threads: { displayMode } } } = useSettingsStore();
+  const { settings: { displaySpoilers, threads: { displayMode } } } = useSettingsStore();
 
   /** Fetch the status (and context) from the API. */
   const fetchData = () => {
@@ -77,22 +79,36 @@ const StatusPage: React.FC<IStatusDetails> = (props) => {
 
   const handleRefresh = () => fetchData();
 
-  const items: Menu = useMemo(() => [
-    {
-      text: intl.formatMessage(messages.treeView),
-      action: () => dispatch(changeSetting(['threads', 'displayMode'], 'tree')),
-      icon: require('@tabler/icons/outline/list-tree.svg'),
-      type: 'radio',
-      checked: displayMode === 'tree',
-    },
-    {
-      text: intl.formatMessage(messages.linearView),
-      action: () => dispatch(changeSetting(['threads', 'displayMode'], 'linear')),
-      icon: require('@tabler/icons/outline/list.svg'),
-      type: 'radio',
-      checked: displayMode === 'linear',
-    },
-  ], [displayMode]);
+  const items = useMemo(() => {
+    const menu: Menu = [
+      {
+        text: intl.formatMessage(messages.treeView),
+        action: () => dispatch(changeSetting(['threads', 'displayMode'], 'tree')),
+        icon: require('@tabler/icons/outline/list-tree.svg'),
+        type: 'radio',
+        checked: displayMode === 'tree',
+      },
+      {
+        text: intl.formatMessage(messages.linearView),
+        action: () => dispatch(changeSetting(['threads', 'displayMode'], 'linear')),
+        icon: require('@tabler/icons/outline/list.svg'),
+        type: 'radio',
+        checked: displayMode === 'linear',
+      },
+    ];
+
+    if (!displaySpoilers && expandAllStatuses) {
+      menu.push(
+        null,
+        {
+          text: intl.formatMessage(messages.expandAll),
+          action: expandAllStatuses,
+          icon: require('@tabler/icons/outline/chevron-down.svg'),
+        },
+      );
+    }
+    return menu;
+  }, [displayMode, expandAllStatuses]);
 
   if (status?.event) {
     return (
@@ -130,7 +146,7 @@ const StatusPage: React.FC<IStatusDetails> = (props) => {
         action={<DropdownMenu items={items} src={require('@tabler/icons/outline/dots-vertical.svg')} />}
       >
         <PullToRefresh onRefresh={handleRefresh}>
-          <Thread key={status.id} status={status} />
+          <Thread key={status.id} status={status} setExpandAllStatuses={(fn) => setExpandAllStatuses(() => fn)} />
         </PullToRefresh>
       </Column>
 

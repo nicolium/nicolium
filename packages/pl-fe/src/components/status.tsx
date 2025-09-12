@@ -79,7 +79,7 @@ const Status: React.FC<IStatus> = (props) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
 
-  const { toggleStatusMediaHidden } = useStatusMetaStore();
+  const { toggleStatusesMediaHidden } = useStatusMetaStore();
   const { openModal } = useModalsStore();
   const { boostModal } = useSettings();
   const didShowCard = useRef(false);
@@ -188,7 +188,7 @@ const Status: React.FC<IStatus> = (props) => {
   };
 
   const handleHotkeyToggleSensitive = () => {
-    toggleStatusMediaHidden(actualStatus.id);
+    toggleStatusesMediaHidden([actualStatus.id]);
   };
 
   const handleHotkeyReact = () => {

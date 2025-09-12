@@ -93,7 +93,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   const node = useRef<HTMLDivElement>(null);
   const spoilerNode = useRef<HTMLSpanElement>(null);
 
-  const { statuses: statusesMeta, collapseStatus, expandStatus } = useStatusMetaStore();
+  const { statuses: statusesMeta, collapseStatuses, expandStatuses } = useStatusMetaStore();
   const statusMeta = statusesMeta[status.id] || {};
   const { data: translation } = useStatusTranslation(status.id, statusMeta.targetLanguage);
 
@@ -123,9 +123,9 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     e.stopPropagation();
 
     if (expanded) {
-      collapseStatus(status.id);
+      collapseStatuses([status.id]);
       setCollapsed(null);
-    } else expandStatus(status.id);
+    } else expandStatuses([status.id]);
   };
 
   useLayoutEffect(() => {

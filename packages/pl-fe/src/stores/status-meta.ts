@@ -3,11 +3,11 @@ import { mutative } from 'zustand-mutative';
 
 type State = {
   statuses: Record<string, { expanded?: boolean; mediaVisible?: boolean; currentLanguage?: string; targetLanguage?: string }>;
-  expandStatus: (statusId: string) => void;
-  collapseStatus: (statusId: string) => void;
-  revealStatusMedia: (statusId: string) => void;
-  hideStatusMedia: (statusId: string) => void;
-  toggleStatusMediaHidden: (statusId: string) => void;
+  expandStatuses: (statusIds: Array<string>) => void;
+  collapseStatuses: (statusIds: Array<string>) => void;
+  revealStatusesMedia: (statusIds: Array<string>) => void;
+  hideStatusesMedia: (statusIds: Array<string>) => void;
+  toggleStatusesMediaHidden: (statusIds: Array<string>) => void;
   fetchTranslation: (statusId: string, targetLanguage: string) => void;
   hideTranslation: (statusId: string) => void;
   setStatusLanguage: (statusId: string, language: string) => void;
@@ -15,27 +15,41 @@ type State = {
 
 const useStatusMetaStore = create<State>()(mutative((set) => ({
   statuses: {},
-  expandStatus: (statusId) => set((state: State) => {
-    if (!state.statuses[statusId]) state.statuses[statusId] = {};
+  expandStatuses: (statusIds) => set((state: State) => {
+    for (const statusId of statusIds) {
+      if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
-    state.statuses[statusId].expanded = true;
+      state.statuses[statusId].expanded = true;
+    }
   }),
-  collapseStatus: (statusId) => set((state: State) => {
-    if (!state.statuses[statusId]) state.statuses[statusId] = {};
+  collapseStatuses: (statusIds) => set((state: State) => {
+    for (const statusId of statusIds) {
+      if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
-    state.statuses[statusId].expanded = false;
+      state.statuses[statusId].expanded = false;
+    }
   }),
-  revealStatusMedia: (statusId) => set((state: State) => {
-    if (!state.statuses[statusId]) state.statuses[statusId] = {};
+  revealStatusesMedia: (statusIds) => set((state: State) => {
+    for (const statusId of statusIds) {
+      if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
-    state.statuses[statusId].mediaVisible = true;
+      state.statuses[statusId].mediaVisible = true;
+    }
   }),
-  hideStatusMedia: (statusId) => set((state: State) => {
-    if (!state.statuses[statusId]) state.statuses[statusId] = {};
+  hideStatusesMedia: (statusIds) => set((state: State) => {
+    for (const statusId of statusIds) {
+      if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
-    state.statuses[statusId].mediaVisible = false;
+      state.statuses[statusId].mediaVisible = false;
+    }
   }),
-  toggleStatusMediaHidden: (statusId) => (state: State) => state[state.statuses[statusId].mediaVisible ? 'hideStatusMedia' : 'revealStatusMedia'](statusId),
+  toggleStatusesMediaHidden: (statusIds) => (state: State) => {
+    for (const statusId of statusIds) {
+      if (!state.statuses[statusId]) state.statuses[statusId] = {};
+
+      state.statuses[statusId].mediaVisible = !state.statuses[statusId].mediaVisible;
+    }
+  },
   fetchTranslation: (statusId, targetLanguage) => set((state: State) => {
     if (!state.statuses[statusId]) state.statuses[statusId] = {};
 

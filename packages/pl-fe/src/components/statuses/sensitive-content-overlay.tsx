@@ -64,13 +64,13 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
 
   const matchedFilters = useMemo(() => filters.map(({ filter }) => filter.title), [filters]);
 
-  const { hideStatusMedia, revealStatusMedia } = useStatusMetaStore();
+  const { hideStatusesMedia, revealStatusesMedia } = useStatusMetaStore();
 
   const toggleVisibility = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();
 
-    if (visible) hideStatusMedia(status.id);
-    else revealStatusMedia(status.id);
+    if (visible) hideStatusesMedia([status.id]);
+    else revealStatusesMedia([status.id]);
   };
 
   if (!useShowOverlay(status, displayMedia)) return null;

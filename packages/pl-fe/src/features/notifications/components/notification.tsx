@@ -204,7 +204,7 @@ const Notification: React.FC<INotification> = (props) => {
   const getNotification = useCallback(makeGetNotification(), []);
 
   const { me } = useLoggedIn();
-  const { toggleStatusMediaHidden } = useStatusMetaStore();
+  const { toggleStatusesMediaHidden } = useStatusMetaStore();
   const { openModal } = useModalsStore();
   const { settings } = useSettingsStore();
 
@@ -288,7 +288,7 @@ const Notification: React.FC<INotification> = (props) => {
 
   const handleHotkeyToggleSensitive = useCallback(() => {
     if (status && typeof status === 'object') {
-      toggleStatusMediaHidden(status.id);
+      toggleStatusesMediaHidden([status.id]);
     }
   }, [status]);
 

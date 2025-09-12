@@ -125,19 +125,21 @@ interface IThread {
   withMedia?: boolean;
   isModal?: boolean;
   itemClassName?: string;
+  setExpandAllStatuses?: (fn: () => void) => void;
 }
 
-const Thread: React.FC<IThread> = ({
+const Thread = ({
   itemClassName,
   status,
   isModal,
   withMedia = true,
-}) => {
+  setExpandAllStatuses,
+}: IThread) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
   const intl = useIntl();
 
-  const { toggleStatusMediaHidden } = useStatusMetaStore();
+  const { expandStatuses, revealStatusesMedia, toggleStatusesMediaHidden } = useStatusMetaStore();
   const { openModal } = useModalsStore();
   const { settings: { boostModal, threads: { displayMode } } } = useSettingsStore();
 
@@ -235,7 +237,7 @@ const Thread: React.FC<IThread> = ({
   };
 
   const handleHotkeyToggleSensitive = () => {
-    toggleStatusMediaHidden(status.id);
+    toggleStatusesMediaHidden([status.id]);
   };
 
   const handleMoveUp = (id: string) => {
@@ -413,6 +415,12 @@ const Thread: React.FC<IThread> = ({
   const children = useMemo(() => renderChildren(thread), [thread, linear]);
   if (isModal) children.unshift(<div key='padding' className='h-4' />);
 
+  useEffect(() => {
+    setExpandAllStatuses?.(() => {
+      expandStatuses(thread);
+      revealStatusesMedia(thread);
+    });
+  }, [thread]);
 
   return (
     <Stack
