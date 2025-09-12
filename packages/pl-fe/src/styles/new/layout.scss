@@ -1,9 +1,10 @@
 html {
-  @apply h-full;
+  height: 100%;
 }
 
 body {
-  @apply h-full bg-white text-base antialiased black:bg-black dark:bg-gray-800;
+  @apply bg-white text-base antialiased black:bg-black dark:bg-gray-800;
+  height: 100%;
 
   &.system-font,
   &.system-font .font-sans {
@@ -17,6 +18,10 @@ body {
   &.with-modals {
     @apply overflow-hidden;
   }
+}
+
+#pl-fe {
+  height: 100%;
 }
 
 .⁂-dropdown-navigation {
