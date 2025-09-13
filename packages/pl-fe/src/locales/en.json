@@ -1405,6 +1405,7 @@
   "preferences.fields.implicit_addressing_label": "Include mentions in post content when replying",
   "preferences.fields.interface_size": "Interface size",
   "preferences.fields.known_languages_label": "Languages you know",
+  "preferences.fields.language_hint": "You can help translating the {software} interface into your language on <link>Weblate</link>.",
   "preferences.fields.language_label": "Display language",
   "preferences.fields.media_display_label": "Sensitive content",
   "preferences.fields.mention_policy_label": "Accept mentions from",

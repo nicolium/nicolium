@@ -8,6 +8,7 @@ import Button from 'pl-fe/components/ui/button';
 import Form from 'pl-fe/components/ui/form';
 import HStack from 'pl-fe/components/ui/hstack';
 import StepSlider from 'pl-fe/components/ui/step-slider';
+import Text from 'pl-fe/components/ui/text';
 import { Mutliselect, SelectDropdown } from 'pl-fe/features/forms';
 import SettingToggle from 'pl-fe/features/settings/components/setting-toggle';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
@@ -17,6 +18,7 @@ import { useInstance } from 'pl-fe/hooks/use-instance';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import { PaletteListItem } from 'pl-fe/pages/dashboard/theme-editor';
+import sourceCode from 'pl-fe/utils/code';
 import colors from 'pl-fe/utils/colors';
 import { isStandalone } from 'pl-fe/utils/state';
 
@@ -217,7 +219,21 @@ const Preferences = () => {
       </HStack>
 
       <List>
-        <ListItem label={<FormattedMessage id='preferences.fields.language_label' defaultMessage='Display language' />}>
+        <ListItem
+          label={<FormattedMessage id='preferences.fields.language_label' defaultMessage='Display language' />}
+          hint={
+            <FormattedMessage
+              id='preferences.fields.language_hint'
+              defaultMessage='You can help translating the {software} interface into your language on <link>Weblate</link>.'
+              values={{
+                software: sourceCode.displayName,
+                link: (children: React.ReactNode) => (
+                  <a className='underline' href='https://hosted.weblate.org/projects/pl-fe/pl-fe/' rel='noopener' target='_blank'>{children}</a>
+                ),
+              }}
+            />
+          }
+        >
           <SelectDropdown
             className='max-w-[200px]'
             items={languages}
