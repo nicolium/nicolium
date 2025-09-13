@@ -164,7 +164,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
   }
 
   return (
-    <DropdownMenu items={items}>
+    <DropdownMenu items={items} width='16rem'>
       <Button
         theme='muted'
         size='xs'

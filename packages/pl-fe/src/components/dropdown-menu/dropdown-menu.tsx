@@ -25,6 +25,7 @@ interface IDropdownMenuContent {
   items?: Menu;
   component?: React.FC<{ handleClose: () => any }>;
   touchscreen?: boolean;
+  width?: React.CSSProperties['width'];
 }
 
 interface IDropdownMenu {
@@ -38,11 +39,14 @@ interface IDropdownMenu {
   placement?: Placement;
   src?: string;
   title?: string;
+  width?: React.CSSProperties['width'];
 }
 
 const listenerOptions = supportsPassiveEvents ? { passive: true } : false;
 
-const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, items, component: Component, touchscreen }) => {
+const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, items, component: Component, touchscreen, width }) => {
+  if (touchscreen) width = undefined;
+
   const intl = useIntl();
 
   const [tab, setTab] = useState<number>();
@@ -149,12 +153,12 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
   return (
     <div ref={ref}>
       {items?.some(item => item?.items?.length) ? (
-        <ReactSwipeableViews animateHeight index={tab === undefined ? 0 : 1}>
-          <div className={clsx('max-w-full', { 'w-full': touchscreen })}>
+        <ReactSwipeableViews animateHeight index={tab === undefined ? 0 : 1} style={{ width }}>
+          <div className={clsx('max-w-full', { 'w-full': touchscreen })} style={{ width }}>
             {Component && <Component handleClose={handleClose} />}
             {(items?.length || touchscreen) && renderItems(items)}
           </div>
-          <div className={clsx({ 'w-full': touchscreen, 'fit-content mr-auto': !touchscreen })}>
+          <div className={clsx({ 'w-full': touchscreen, 'fit-content mr-auto': !touchscreen })}  style={{ width }}>
             {tab !== undefined && (
               <>
                 <HStack className='mx-2 my-1 text-gray-700 dark:text-gray-300' space={3} alignItems='center'>
@@ -195,6 +199,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
     placement: initialPlacement = 'top',
     src = require('@tabler/icons/outline/dots.svg'),
     title = 'Menu',
+    width,
   } = props;
 
   const { openDropdownMenu, closeDropdownMenu } = useUiStore();
@@ -381,7 +386,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
             }}
           >
             <div className={getClassName()}>
-              <DropdownMenuContent handleClose={handleClose} items={items} component={component} />
+              <DropdownMenuContent handleClose={handleClose} items={items} component={component} width={width} />
 
               {/* Arrow */}
               <div

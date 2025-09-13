@@ -18,6 +18,8 @@ import { usePendingUsersCount } from 'pl-fe/queries/admin/use-accounts';
 import { usePendingReportsCount } from 'pl-fe/queries/admin/use-reports';
 import { scheduledStatusesCountQueryOptions } from 'pl-fe/queries/statuses/scheduled-statuses';
 import { useInteractionRequestsCount } from 'pl-fe/queries/statuses/use-interaction-requests';
+import { useModalsStore } from 'pl-fe/stores/modals';
+import sourceCode from 'pl-fe/utils/code';
 
 import Account from './account';
 import DropdownMenu, { Menu } from './dropdown-menu';
@@ -38,6 +40,9 @@ const messages = defineMessages({
   drafts: { id: 'navigation.drafts', defaultMessage: 'Drafts' },
   conversations: { id: 'navigation.direct_messages', defaultMessage: 'Direct messages' },
   interactionRequests: { id: 'navigation.interaction_requests', defaultMessage: 'Interaction requests' },
+  help: { id: 'navigation.help', defaultMessage: 'Help' },
+  keyboardShortcuts: { id: 'navigation.keyboard_shortcuts', defaultMessage: 'Keyboard shortcuts' },
+  sourceCode: { id: 'navigation.source_code', defaultMessage: 'Source code' },
 });
 
 interface ISidebarNavigation {
@@ -49,6 +54,7 @@ interface ISidebarNavigation {
 const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) => {
   const intl = useIntl();
   const { unreadChatsCount } = useStatContext();
+  const { openModal } = useModalsStore();
 
   const instance = useInstance();
   const features = useFeatures();
@@ -166,6 +172,26 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
           count: draftCount,
         });
       }
+
+      menu.push(null);
+
+      menu.push({
+        icon: require('@tabler/icons/outline/help-circle.svg'),
+        text: intl.formatMessage(messages.help),
+        items: [
+          {
+            action: () => openModal('HOTKEYS'),
+            icon: require('@tabler/icons/outline/keyboard.svg'),
+            text: intl.formatMessage(messages.keyboardShortcuts),
+          },
+          {
+            href: sourceCode.url,
+            target: '_blank',
+            icon: require('@tabler/icons/outline/code.svg'),
+            text: intl.formatMessage(messages.sourceCode),
+          },
+        ],
+      });
     }
 
     return menu;
@@ -326,7 +352,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         )}
 
         {menu.length > 0 && (
-          <DropdownMenu items={menu} placement='top'>
+          <DropdownMenu items={menu} placement='top' width='16rem'>
             <SidebarNavigationLink
               icon={require('@tabler/icons/outline/dots-circle-horizontal.svg')}
               text={<FormattedMessage id='tabs_bar.more' defaultMessage='More' />}
