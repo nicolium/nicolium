@@ -21,6 +21,10 @@
 
   &__body {
     @apply p-4 rounded-b-lg border-t border-solid border-gray-100 dark:border-primary-900 black:border-black;
+
+    p {
+      @include mixins.text;
+    }
   }
 
   &:not(&--expanded) {
@@ -32,10 +36,6 @@
       &__body {
         height: 0;
         display: none;
-
-        p {
-          @include mixins.text;
-        }
       }
     }
   }
