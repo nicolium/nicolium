@@ -163,9 +163,6 @@ importers:
       '@lexical/utils':
         specifier: ^0.29.0
         version: 0.29.0
-      '@mkljczk/react-hotkeys':
-        specifier: ^1.3.0
-        version: 1.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       '@mkljczk/url-purify':
         specifier: ^0.0.3
         version: 0.0.3
@@ -1962,12 +1959,6 @@ packages:
 
   '@microsoft/tsdoc@0.15.1':
     resolution: {integrity: sha512-4aErSrCR/On/e5G2hDP0wjooqDdauzEbIq8hIkIe5pXV0rtWJZvdCEKL0ykZxex+IxIwBp0eGeV48hQN07dXtw==}
-
-  '@mkljczk/react-hotkeys@1.3.0':
-    resolution: {integrity: sha512-xfcYZ/J2YCpakRDEZd0ZdCQ2wx75Pmub9JksyBWX+W56UGDeMbmI8nPedG6V89JhUlgFsijZVVlVeDHIuzG6Hw==}
-    peerDependencies:
-      react: '>= 16.0.0'
-      react-dom: '>= 16.0.0'
 
   '@mkljczk/url-purify@0.0.3':
     resolution: {integrity: sha512-3O4QO/nH9yV/GKim+yKvQF1cKWN0dBAsxC5Ve50d1PaUYQFSd4y733eRGt+zRcPZrvgyAkyZZ5Bx7dAHWX+bBQ==}
@@ -4889,9 +4880,6 @@ packages:
 
   mlly@1.7.4:
     resolution: {integrity: sha512-qmdSIPC4bDJXgZTCR7XosJiNKySV7O215tsPtDN9iEO/7q/76b/ijtgRu/+epFXSJhijtTCCGp3DWS549P3xKw==}
-
-  mousetrap@1.6.5:
-    resolution: {integrity: sha512-QNo4kEepaIBwiT8CDhP98umTetp+JNfQYBWvC1pc6/OAibuXtRcxZ58Qz8skvEHYvURne/7R8T5VoOI7rDsEUA==}
 
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
@@ -8225,13 +8213,6 @@ snapshots:
       resolve: 1.22.10
 
   '@microsoft/tsdoc@0.15.1': {}
-
-  '@mkljczk/react-hotkeys@1.3.0(react-dom@18.3.1(react@18.3.1))(react@18.3.1)':
-    dependencies:
-      lodash: 4.17.21
-      mousetrap: 1.6.5
-      react: 18.3.1
-      react-dom: 18.3.1(react@18.3.1)
 
   '@mkljczk/url-purify@0.0.3': {}
 
@@ -11696,8 +11677,6 @@ snapshots:
       pathe: 2.0.3
       pkg-types: 1.3.1
       ufo: 1.6.1
-
-  mousetrap@1.6.5: {}
 
   ms@2.1.3: {}
 

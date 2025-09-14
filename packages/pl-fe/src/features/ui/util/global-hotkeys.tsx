@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import React, { useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { resetCompose } from 'pl-fe/actions/compose';
@@ -7,35 +7,35 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
-import { HotKeys } from '../components/hotkeys';
+import { Hotkeys } from '../components/hotkeys';
 
 import type { LexicalEditor } from 'lexical';
 
-const keyMap = {
-  help: '?',
-  new: 'n',
-  search: ['/', 's'],
-  forceNew: 'option+n',
-  reply: 'r',
-  favourite: 'f',
-  react: 'e',
-  boost: 'b',
-  mention: 'm',
-  open: ['enter', 'o'],
-  openProfile: 'p',
-  moveDown: ['down', 'j'],
-  moveUp: ['up', 'k'],
-  back: 'backspace',
-  goToHome: 'g h',
-  goToNotifications: 'g n',
-  goToFavourites: 'g f',
-  goToProfile: ['g p', 'g u'],
-  goToBlocked: 'g b',
-  goToMuted: 'g m',
-  goToRequests: 'g r',
-  toggleSensitive: ['h', 'x'],
-  openMedia: 'a',
-};
+// const keyMap = {
+//   help: '?',
+//   search: ['/', 's'],
+//   back: 'backspace',
+//   new: 'n',
+//   forceNew: 'option+n',
+//   reply: 'r',
+//   favourite: 'f',
+//   boost: 'b',
+//   mention: 'm',
+//   react: 'e',
+//   open: ['enter', 'o'],
+//   openProfile: 'p',
+//   moveDown: ['down', 'j'],
+//   moveUp: ['up', 'k'],
+//   toggleSensitive: ['h', 'x'],
+//   openMedia: 'a',
+//   goToHome: 'g h',
+//   goToNotifications: 'g n',
+//   goToFavourites: 'g f',
+//   goToProfile: ['g p', 'g u'],
+//   goToBlocked: 'g b',
+//   goToMuted: 'g m',
+//   goToRequests: 'g r',
+// };
 
 interface IGlobalHotkeys {
   children: React.ReactNode;
@@ -43,22 +43,10 @@ interface IGlobalHotkeys {
 }
 
 const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
-  const hotkeys = useRef<HTMLDivElement | null>(null);
-
   const history = useHistory();
   const dispatch = useAppDispatch();
   const { account } = useOwnAccount();
   const { openModal } = useModalsStore();
-
-  const setHotkeysRef: React.LegacyRef<typeof HotKeys> = (c: any) => {
-    hotkeys.current = c;
-
-    if (!account || !hotkeys.current) return;
-
-    // @ts-ignore
-    hotkeys.current.__mousetrap__.stopCallback = (_e, element) =>
-      ['TEXTAREA', 'SELECT', 'INPUT', 'EM-EMOJI-PICKER'].includes(element.tagName) || !!element.closest('[contenteditable]');
-  };
 
   const handlers = useMemo(() => {
     const handleHotkeyNew = (e?: KeyboardEvent) => {
@@ -159,9 +147,9 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
   }, [account?.id]);
 
   return (
-    <HotKeys keyMap={keyMap} handlers={handlers} ref={setHotkeysRef} attach={window} focused>
+    <Hotkeys handlers={handlers} global>
       {children}
-    </HotKeys>
+    </Hotkeys>
   );
 };
 

@@ -11,7 +11,7 @@ import StatusActionBar from 'pl-fe/components/status-action-bar';
 import Tombstone from 'pl-fe/components/tombstone';
 import Stack from 'pl-fe/components/ui/stack';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
-import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
+import { Hotkeys } from 'pl-fe/features/ui/components/hotkeys';
 import PendingStatus from 'pl-fe/features/ui/components/pending-status';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
@@ -380,10 +380,10 @@ const Thread = ({
       {status.deleted ? (
         <Tombstone id={status.id} onMoveUp={handleMoveUp} onMoveDown={handleMoveDown} deleted />
       ) : (
-        <HotKeys handlers={handlers} attachRef={statusRef}>
+        <Hotkeys handlers={handlers}>
           <div
             ref={statusRef}
-            className='focusable relative'
+            className='relative'
             tabIndex={0}
             // FIXME: no "reblogged by" text is added for the screen reader
             aria-label={textForScreenReader(intl, status)}
@@ -403,7 +403,7 @@ const Thread = ({
               withLabels
             />
           </div>
-        </HotKeys>
+        </Hotkeys>
       )}
 
       {hasDescendants && (

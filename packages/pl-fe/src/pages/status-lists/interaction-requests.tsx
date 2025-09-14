@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useRef } from 'react';
+import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
@@ -17,7 +17,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { buildLink } from 'pl-fe/features/notifications/components/notification';
-import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
+import { Hotkeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { type MinifiedInteractionRequest, useAuthorizeInteractionRequestMutation, useFlatInteractionRequests, useRejectInteractionRequestMutation } from 'pl-fe/queries/statuses/use-interaction-requests';
@@ -96,8 +96,6 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
   const { account: ownAccount } = useOwnAccount();
   const { account } = useAccount(interactionRequest.account_id);
 
-  const node = useRef<HTMLDivElement>(null);
-
   const { mutate: authorize } = useAuthorizeInteractionRequestMutation(interactionRequest.id);
   const { mutate: reject } = useRejectInteractionRequestMutation(interactionRequest.id);
 
@@ -175,44 +173,42 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
   };
 
   return (
-    <HotKeys handlers={handlers} attachRef={node}>
-      <div className='notification focusable' tabIndex={0}>
-        <div className='focusable p-4'>
-          <Stack space={2}>
-            <div>
-              <HStack alignItems='center' space={3}>
-                <div
-                  className='flex justify-end'
-                  style={{ flexBasis: avatarSize }}
-                >
-                  <Icon
-                    src={icons[interactionRequest.type]}
-                    className='flex-none text-primary-600 dark:text-primary-400'
-                  />
-                </div>
+    <Hotkeys handlers={handlers} className='notification focusable' tabIndex={0}>
+      <div className='focusable p-4'>
+        <Stack space={2}>
+          <div>
+            <HStack alignItems='center' space={3}>
+              <div
+                className='flex justify-end'
+                style={{ flexBasis: avatarSize }}
+              >
+                <Icon
+                  src={icons[interactionRequest.type]}
+                  className='flex-none text-primary-600 dark:text-primary-400'
+                />
+              </div>
 
-                <div className='truncate'>
+              <div className='truncate'>
+                <Text theme='muted' size='xs' truncate>
+                  {message}
+                </Text>
+              </div>
+
+              {interactionRequest.type !== 'reply' && (
+                <div className='ml-auto'>
                   <Text theme='muted' size='xs' truncate>
-                    {message}
+                    <RelativeTimestamp timestamp={interactionRequest.created_at} theme='muted' size='sm' className='whitespace-nowrap' />
                   </Text>
                 </div>
+              )}
+            </HStack>
+          </div>
 
-                {interactionRequest.type !== 'reply' && (
-                  <div className='ml-auto'>
-                    <Text theme='muted' size='xs' truncate>
-                      <RelativeTimestamp timestamp={interactionRequest.created_at} theme='muted' size='sm' className='whitespace-nowrap' />
-                    </Text>
-                  </div>
-                )}
-              </HStack>
-            </div>
-
-            {interactionRequest.status_id && <InteractionRequestStatus id={interactionRequest.status_id} hasReply={interactionRequest.type === 'reply'} actions={interactionRequest.reply_id ? undefined : actions} />}
-            {interactionRequest.reply_id && <InteractionRequestStatus id={interactionRequest.reply_id} isReply actions={actions} />}
-          </Stack>
-        </div>
+          {interactionRequest.status_id && <InteractionRequestStatus id={interactionRequest.status_id} hasReply={interactionRequest.type === 'reply'} actions={interactionRequest.reply_id ? undefined : actions} />}
+          {interactionRequest.reply_id && <InteractionRequestStatus id={interactionRequest.reply_id} isReply actions={actions} />}
+        </Stack>
       </div>
-    </HotKeys>
+    </Hotkeys>
   );
 };
 

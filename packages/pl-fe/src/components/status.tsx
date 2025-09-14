@@ -12,7 +12,7 @@ import Text from 'pl-fe/components/ui/text';
 import AccountContainer from 'pl-fe/containers/account-container';
 import Emojify from 'pl-fe/features/emoji/emojify';
 import StatusTypeIcon from 'pl-fe/features/status/components/status-type-icon';
-import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
+import { Hotkeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useSettings } from 'pl-fe/hooks/use-settings';
@@ -328,23 +328,29 @@ const Status: React.FC<IStatus> = (props) => {
   );
 
   if (filtered && actualStatus.showFiltered !== true) {
-    const minHandlers = muted ? undefined : {
+    const body = (
+      <div className={clsx('status__wrapper text-center', { focusable })} ref={node}>
+        <Text theme='muted'>
+          <FormattedMessage id='status.filtered' defaultMessage='Filtered' />: {filterResults.map(({ filter }) => filter.title).join(', ')}.
+          {' '}
+          <button className='text-primary-600 hover:underline dark:text-accent-blue' onClick={handleUnfilter}>
+            <FormattedMessage id='status.show_filter_reason' defaultMessage='Show anyway' />
+          </button>
+        </Text>
+      </div>
+    );
+
+    if (muted) return body;
+
+    const minHandlers = {
       moveUp: handleHotkeyMoveUp,
       moveDown: handleHotkeyMoveDown,
     };
 
     return (
-      <HotKeys handlers={minHandlers} attachRef={node}>
-        <div className={clsx('status__wrapper text-center', { focusable })} tabIndex={focusable ? 0 : undefined} ref={node}>
-          <Text theme='muted'>
-            <FormattedMessage id='status.filtered' defaultMessage='Filtered' />: {filterResults.map(({ filter }) => filter.title).join(', ')}.
-            {' '}
-            <button className='text-primary-600 hover:underline dark:text-accent-blue' onClick={handleUnfilter}>
-              <FormattedMessage id='status.show_filter_reason' defaultMessage='Show anyway' />
-            </button>
-          </Text>
-        </div>
-      </HotKeys>
+      <Hotkeys handlers={minHandlers} focusable={focusable}>
+        {body}
+      </Hotkeys>
     );
   }
 
@@ -356,7 +362,87 @@ const Status: React.FC<IStatus> = (props) => {
     );
   }
 
-  const handlers = muted ? undefined : {
+  const body = (
+    <div
+      className={clsx('status cursor-pointer', { focusable })}
+      data-featured={featured ? 'true' : null}
+      aria-label={textForScreenReader(intl, actualStatus, rebloggedByText)}
+      ref={node}
+      onClick={handleClick}
+      role='link'
+    >
+      <Card
+        variant={variant}
+        className={clsx('status__wrapper space-y-4', className, `status-${actualStatus.visibility}`, {
+          'py-6 sm:p-5': variant === 'rounded',
+          'status-reply': !!status.in_reply_to_id,
+          muted,
+          read: unread === false,
+        })}
+        data-id={status.id}
+      >
+        {statusInfo}
+
+        <AccountContainer
+          key={actualStatus.account_id}
+          id={actualStatus.account_id}
+          timestamp={actualStatus.created_at}
+          timestampUrl={statusUrl}
+          action={accountAction}
+          hideActions={!accountAction}
+          showEdit={!!actualStatus.edited_at}
+          showAccountHoverCard={hoverable}
+          withLinkToProfile={hoverable}
+          approvalStatus={actualStatus.approval_status}
+          avatarSize={avatarSize}
+          items={(
+            <>
+              <StatusTypeIcon visibility={actualStatus.visibility} />
+              <StatusLanguagePicker status={actualStatus} />
+            </>
+          )}
+        />
+
+        <div className='status__content-wrapper'>
+          <StatusReplyMentions status={actualStatus} hoverable={hoverable} />
+
+          <Stack className='relative z-0'>
+            {actualStatus.event ? <EventPreview className='shadow-xl' status={actualStatus} /> : (
+              <StatusContent
+                status={actualStatus}
+                onClick={handleClick}
+                collapsable
+                translatable
+                withMedia
+              />
+            )}
+          </Stack>
+
+          <StatusReactionsBar status={actualStatus} collapsed />
+
+          {!hideActionBar && (
+            <div
+              className={clsx({
+                'pt-2': actualStatus.emoji_reactions.length,
+                'pt-4': !actualStatus.emoji_reactions.length,
+              })}
+            >
+              <StatusActionBar
+                status={actualStatus}
+                rebloggedBy={isReblog ? status.account : undefined}
+                fromBookmarks={fromBookmarks}
+                expandable
+              />
+            </div>
+          )}
+        </div>
+      </Card>
+    </div >
+  );
+
+  if (muted) return body;
+
+  const handlers = {
     reply: handleHotkeyReply,
     favourite: handleHotkeyFavourite,
     boost: handleHotkeyBoost,
@@ -371,84 +457,9 @@ const Status: React.FC<IStatus> = (props) => {
   };
 
   return (
-    <HotKeys handlers={handlers} data-testid='status' attachRef={node}>
-      <div
-        className={clsx('status cursor-pointer', { focusable })}
-        tabIndex={focusable && !muted ? 0 : undefined}
-        data-featured={featured ? 'true' : null}
-        aria-label={textForScreenReader(intl, actualStatus, rebloggedByText)}
-        ref={node}
-        onClick={handleClick}
-        role='link'
-      >
-        <Card
-          variant={variant}
-          className={clsx('status__wrapper space-y-4', className, `status-${actualStatus.visibility}`, {
-            'py-6 sm:p-5': variant === 'rounded',
-            'status-reply': !!status.in_reply_to_id,
-            muted,
-            read: unread === false,
-          })}
-          data-id={status.id}
-        >
-          {statusInfo}
-
-          <AccountContainer
-            key={actualStatus.account_id}
-            id={actualStatus.account_id}
-            timestamp={actualStatus.created_at}
-            timestampUrl={statusUrl}
-            action={accountAction}
-            hideActions={!accountAction}
-            showEdit={!!actualStatus.edited_at}
-            showAccountHoverCard={hoverable}
-            withLinkToProfile={hoverable}
-            approvalStatus={actualStatus.approval_status}
-            avatarSize={avatarSize}
-            items={(
-              <>
-                <StatusTypeIcon visibility={actualStatus.visibility} />
-                <StatusLanguagePicker status={actualStatus} />
-              </>
-            )}
-          />
-
-          <div className='status__content-wrapper'>
-            <StatusReplyMentions status={actualStatus} hoverable={hoverable} />
-
-            <Stack className='relative z-0'>
-              {actualStatus.event ? <EventPreview className='shadow-xl' status={actualStatus} /> : (
-                <StatusContent
-                  status={actualStatus}
-                  onClick={handleClick}
-                  collapsable
-                  translatable
-                  withMedia
-                />
-              )}
-            </Stack>
-
-            <StatusReactionsBar status={actualStatus} collapsed />
-
-            {!hideActionBar && (
-              <div
-                className={clsx({
-                  'pt-2': actualStatus.emoji_reactions.length,
-                  'pt-4': !actualStatus.emoji_reactions.length,
-                })}
-              >
-                <StatusActionBar
-                  status={actualStatus}
-                  rebloggedBy={isReblog ? status.account : undefined}
-                  fromBookmarks={fromBookmarks}
-                  expandable
-                />
-              </div>
-            )}
-          </div>
-        </Card>
-      </div >
-    </HotKeys >
+    <Hotkeys handlers={handlers} focusable={focusable} data-testid='status'>
+      {body}
+    </Hotkeys>
   );
 };
 

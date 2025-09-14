@@ -193,6 +193,7 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
                   },
                 )}
                 lang={language || undefined}
+                data-compose-id={composeId}
               />
             </div>
           }

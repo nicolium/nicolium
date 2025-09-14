@@ -122,7 +122,7 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
       label: <FormattedMessage id='keyboard_shortcuts.favourites' defaultMessage='to open likes list' />,
     },
     isLoggedIn && {
-      key: <><Hotkey>g</Hotkey> + <Hotkey>p</Hotkey></>,
+      key: <><Hotkey>g</Hotkey> + <Hotkey>u</Hotkey></>,
       label: <FormattedMessage id='keyboard_shortcuts.my_profile' defaultMessage='to open your profile' />,
     },
     isLoggedIn && {

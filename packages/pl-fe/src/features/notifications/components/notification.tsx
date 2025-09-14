@@ -12,7 +12,7 @@ import Text from 'pl-fe/components/ui/text';
 import AccountContainer from 'pl-fe/containers/account-container';
 import StatusContainer from 'pl-fe/containers/status-container';
 import Emojify from 'pl-fe/features/emoji/emojify';
-import { HotKeys } from 'pl-fe/features/ui/components/hotkeys';
+import { Hotkeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useInstance } from 'pl-fe/hooks/use-instance';
@@ -431,14 +431,14 @@ const Notification: React.FC<INotification> = (props) => {
   );
 
   return (
-    <HotKeys handlers={handlers} data-testid='notification' attachRef={node}>
+    <Hotkeys handlers={handlers} data-testid='notification'>
       <div
-        className='notification focusable'
+        className='notification'
         tabIndex={0}
         aria-label={ariaLabel}
         ref={node}
       >
-        <div className='focusable p-4'>
+        <div className='p-4'>
           <div className='mb-2'>
             <HStack alignItems='center' space={3}>
               <div
@@ -479,7 +479,7 @@ const Notification: React.FC<INotification> = (props) => {
           </div>
         </div>
       </div>
-    </HotKeys>
+    </Hotkeys>
   );
 };
 
