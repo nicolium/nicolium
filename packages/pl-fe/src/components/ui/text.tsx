@@ -114,11 +114,9 @@ const Text = React.forwardRef<any, IText>(
         {...filteredProps}
         ref={ref}
         style={{
-          textDecoration: tag === 'abbr' ? 'underline dotted' : undefined,
           direction,
         }}
         className={clsx({
-          'cursor-default': tag === 'abbr',
           truncate: truncate,
           [sizes[size]]: true,
           [themes[theme]]: true,
