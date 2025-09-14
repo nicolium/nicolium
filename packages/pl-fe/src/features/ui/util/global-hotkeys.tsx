@@ -56,8 +56,10 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
 
       if (element) {
         ((element as any).__lexicalEditor as LexicalEditor).dispatchCommand(FOCUS_EDITOR_COMMAND, undefined);
+        return element.getAttribute('data-compose-id');
       } else {
         openModal('COMPOSE');
+        return 'compose-modal';
       }
     };
 
@@ -75,8 +77,8 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
     };
 
     const handleHotkeyForceNew = (e?: KeyboardEvent) => {
-      handleHotkeyNew(e);
-      dispatch(resetCompose());
+      const composeId = handleHotkeyNew(e);
+      dispatch(resetCompose(composeId || undefined));
     };
 
     const handleHotkeyBack = () => {
