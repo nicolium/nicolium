@@ -192,39 +192,32 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
     }
   }, [children]);
 
-  if (!visible) {
-    return (
-      <div className='z-50 transition-all' ref={ref} style={{ opacity: 0 }} />
-    );
-  }
-
   return (
     <div
       ref={ref}
-      className={clsx('fixed left-0 top-0 z-[100] size-full overflow-y-auto overflow-x-hidden transition-opacity ease-in-out', {
-        'pointer-events-none': !visible,
+      className={clsx('⁂-modal-root', {
+        '⁂-modal-root--visible': visible,
+        '⁂-modal-root--revealed': visible && revealed,
       })}
-      style={{ opacity: revealed ? 1 : 0 }}
+      data-modal-type={type}
     >
-      <div
-        role='presentation'
-        id='modal-overlay'
-        className={clsx('fixed inset-0 bg-gray-500/90 black:bg-gray-900/90 dark:bg-gray-700/90', {
-          'opacity-60': type === 'DROPDOWN_MENU',
-        })}
-        onClick={handleOnClose}
-      />
+      {visible && (
+        <>
+          <div
+            role='presentation'
+            id='modal-overlay'
+            className='⁂-modal-root__overlay'
+            onClick={handleOnClose}
+          />
 
-      <div
-        role='dialog'
-        className={clsx({
-          'my-2 mx-auto relative pointer-events-none flex items-center min-h-[calc(100%-3.5rem)]': true,
-          'p-4 md:p-0': type !== 'MEDIA',
-          '!my-0': type === 'MEDIA' || type === 'DROPDOWN_MENU',
-        })}
-      >
-        {children}
-      </div>
+          <div
+            role='dialog'
+            className='⁂-modal-root__modal'
+          >
+            {children}
+          </div>
+        </>
+      )}
     </div>
   );
 };

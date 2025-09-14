@@ -494,14 +494,14 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
     <GlobalHotkeys node={node}>
       <div ref={node} style={style}>
         <div
-          className={clsx('pointer-events-none fixed z-[90] h-screen w-screen transition', {
-            'backdrop-blur': isDragging,
+          className={clsx('⁂-dragging-area', {
+            '⁂-dragging-area--dragging': isDragging,
           })}
         />
 
         {(theme?.backgroundGradient ?? true) && <BackgroundShapes />}
 
-        <div className='z-10 flex min-h-screen flex-col'>
+        <div className='⁂-layout'>
           <Layout fullWidth={fullWidth}>
             <Layout.Sidebar shrink={fullWidth}>
               {!(standalone && !me) && <SidebarNavigation shrink={fullWidth} />}

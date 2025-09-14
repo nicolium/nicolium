@@ -3,7 +3,9 @@
     @apply font-sans;
   } @else if $family == mono {
     @apply font-mono;
-  } 
+  } @else {
+    @warn "Unknown font family `#{$family}`.";
+  }
 
   @if $size == sm {
     @apply text-sm;
@@ -17,6 +19,8 @@
     @apply text-2xl;
   } @else if $size == 3xl {
     @apply text-3xl;
+  } @else {
+    @warn "Unknown font size `#{$size}`.";
   }
 
   @if $theme == default {
@@ -35,18 +39,24 @@
     @apply text-inherit;
   } @else if $theme == white {
     @apply text-white;
+  } @else {
+    @warn "Unknown text theme `#{$theme}`.";
   }
 
   @if $tracking == normal {
     @apply tracking-normal;
   } @else if $tracking == wide {
     @apply tracking-wide;
+  } @else {
+    @warn "Unknown letter spacing `#{$tracking}`.";
   }
 
   @if $transform == normal {
     @apply normal-case;
   } @else if $transform == uppercase {
     @apply uppercase;
+  } @else {
+    @warn "Unknown text transform `#{$transform}`.";
   }
 
   @if $truncate {
@@ -61,5 +71,7 @@
     @apply font-semibold;
   } @else if $weight == bold {
     @apply font-bold;
+  } @else {
+    @warn "Unknown font weight `#{$weight}`.";
   }
 }

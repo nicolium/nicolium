@@ -61,6 +61,18 @@
   }
 }
 
+.⁂-icon {
+  @apply relative flex shrink-0 flex-col;
+
+  &__counter {
+    @apply absolute -right-3 -top-2 flex h-5 min-w-[20px] shrink-0 items-center justify-center whitespace-nowrap break-words;
+  }
+}
+
+.⁂-counter {
+  @apply flex h-5 min-w-[20px] max-w-[26px] items-center justify-center rounded-full bg-secondary-500 text-xs font-medium text-white ring-2 ring-white black:ring-black dark:ring-gray-800
+}
+
 .⁂-list {
   @apply space-y-0.5;
 }
