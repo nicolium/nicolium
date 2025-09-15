@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react';
 
-type SystemTheme = 'light' | 'black';
+import { useSettings } from './use-settings';
+
+import type { Theme } from './use-theme';
 
 /** Get the system color scheme of the system. */
-const useSystemTheme = (): SystemTheme => {
+const useSystemTheme = (): Theme => {
   const query = window.matchMedia('(prefers-color-scheme: dark)');
   const [dark, setDark] = useState(query.matches);
+  const { theme } = useSettings();
 
   const handleChange = (event: MediaQueryListEvent) => {
     setDark(event.matches);
@@ -29,7 +32,7 @@ const useSystemTheme = (): SystemTheme => {
     };
   }, []);
 
-  return dark ? 'black' : 'light';
+  return dark ? (theme?.systemDarkThemePreference || 'black') : 'light';
 };
 
 export { useSystemTheme };

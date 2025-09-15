@@ -12,7 +12,7 @@ import Search from './search';
 
 const messages = defineMessages({
   addToList: { id: 'lists.account.add', defaultMessage: 'Add to list' },
-  removeFromList: { id: 'lists.account.remove', defaultMessage: 'List members' },
+  removeFromList: { id: 'lists.account.remove', defaultMessage: 'Remove from list' },
 });
 
 interface IListMembersForm {

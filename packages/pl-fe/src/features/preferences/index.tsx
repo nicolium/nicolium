@@ -107,6 +107,8 @@ const messages = defineMessages({
   content_type_html: { id: 'preferences.options.content_type_html', defaultMessage: 'HTML' },
   content_type_wysiwyg: { id: 'preferences.options.content_type_wysiwyg', defaultMessage: 'WYSIWYG' },
   brandColor: { id: 'preferences.options.brand_color', defaultMessage: 'Base color' },
+  dark: { id: 'theme_toggle.dark', defaultMessage: 'Dark' },
+  black: { id: 'theme_toggle.black', defaultMessage: 'Black' },
 });
 
 const debouncedSave = debounce((dispatch: AppDispatch) => {
@@ -165,6 +167,11 @@ const Preferences = () => {
     private: intl.formatMessage(messages.privacy_followers_only),
   }), [settings.locale]);
 
+  const systemDarkThemePreferenceOptions = React.useMemo(() => ({
+    dark: intl.formatMessage(messages.dark),
+    black: intl.formatMessage(messages.black),
+  }), [settings.locale]);
+
   const defaultContentTypeOptions = React.useMemo(() => {
     const postFormats = instance.pleroma.metadata.post_formats;
 
@@ -209,6 +216,20 @@ const Preferences = () => {
         <ListItem label={<FormattedMessage id='preferences.fields.theme.display_background_gradient' defaultMessage='Display background gradient' />}>
           <SettingToggle settings={settings} settingPath={['theme', 'backgroundGradient']} defaultValue onChange={onToggleChange} />
         </ListItem>
+        {settings.themeMode === 'system' && (
+          <ListItem
+            label={<FormattedMessage id='preferences.fields.theme.dark_theme_preference_label' defaultMessage='Dark theme preference' />}
+            hint={<FormattedMessage id='preferences.fields.theme.dark_theme_preference_hint' defaultMessage='Select dark theme to be used when theme is set to "System"' />}
+          >
+            <SelectDropdown
+              className='max-w-[200px]'
+              items={systemDarkThemePreferenceOptions}
+              defaultValue={settings.theme?.systemDarkThemePreference || 'black'}
+              onChange={(event: React.ChangeEvent<HTMLSelectElement>) => onSelectChange(event, ['theme', 'systemDarkThemePreference'])}
+            />
+            <SettingToggle settings={settings} settingPath={['theme', 'systemDarkThemePreference']} defaultValue onChange={onToggleChange} />
+          </ListItem>
+        )}
       </List>
 
       <HStack justifyContent='end'>

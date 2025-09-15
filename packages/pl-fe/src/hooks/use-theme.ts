@@ -14,4 +14,4 @@ const useTheme = (): Theme => {
   return themeMode === 'system' ? systemTheme : themeMode;
 };
 
-export { useTheme };
+export { useTheme, type Theme };

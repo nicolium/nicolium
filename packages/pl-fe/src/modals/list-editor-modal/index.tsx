@@ -26,7 +26,7 @@ const ListEditorModal: React.FC<BaseModalProps & ListEditorModalProps> = ({ list
 
   return (
     <Modal
-      title={tab === 'info' ? <FormattedMessage id='lists.edit' defaultMessage='Edit list' /> : <FormattedMessage id='lists.manage_members' defaultMessage='Manage list memebrs' />}
+      title={tab === 'info' ? <FormattedMessage id='lists.edit' defaultMessage='Edit list' /> : <FormattedMessage id='lists.manage_members' defaultMessage='Manage list members' />}
       onClose={onClickClose}
       onBack={tab === 'members' ? () => setTab('info') : undefined}
     >
