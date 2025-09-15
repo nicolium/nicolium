@@ -238,7 +238,7 @@ const InteractionRequestsPage = () => {
 
   return (
     <Column label={intl.formatMessage(messages.title)}>
-      <PullToRefresh onRefresh={() => refetch()}>
+      <PullToRefresh onRefresh={refetch}>
         <ScrollableList
           scrollKey='interactionRequests'
           isLoading={isFetching}

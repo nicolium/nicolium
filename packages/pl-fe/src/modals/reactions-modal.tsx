@@ -2,6 +2,7 @@ import clsx from 'clsx';
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
+import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Emoji from 'pl-fe/components/ui/emoji';
 import Modal from 'pl-fe/components/ui/modal';
@@ -32,7 +33,7 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
   const intl = useIntl();
   const [reaction, setReaction] = useState(initialReaction);
 
-  const { data: reactions, isLoading } = useStatusReactions(statusId);
+  const { data: reactions, isLoading, refetch } = useStatusReactions(statusId);
 
   const onClickClose = () => {
     onClose('REACTIONS');
@@ -82,20 +83,22 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
 
     body = (<>
       {reactions.length > 0 && renderFilterBar()}
-      <ScrollableList
-        emptyMessage={emptyMessage}
-        listClassName={clsx('max-w-full', {
-          '!mt-4': reactions.length > 0,
-        })}
-        itemClassName='pb-3'
-        style={{ height: reactions.length > 0 ? 'calc(80vh - 159px)' : 'calc(80vh - 88px)' }}
-        isLoading={typeof isLoading === 'boolean' ? isLoading : true}
-        useWindowScroll={false}
-      >
-        {accounts.map((account) =>
-          <AccountContainer key={`${account.id}-${account.reaction}`} id={account.id} emoji={account.reaction} emojiUrl={account.reactionUrl} />,
-        )}
-      </ScrollableList>
+      <PullToRefresh onRefresh={refetch}>
+        <ScrollableList
+          emptyMessage={emptyMessage}
+          listClassName={clsx('max-w-full', {
+            '!mt-4': reactions.length > 0,
+          })}
+          itemClassName='pb-3'
+          style={{ height: reactions.length > 0 ? 'calc(80vh - 159px)' : 'calc(80vh - 88px)' }}
+          isLoading={typeof isLoading === 'boolean' ? isLoading : true}
+          useWindowScroll={false}
+        >
+          {accounts.map((account) =>
+            <AccountContainer key={`${account.id}-${account.reaction}`} id={account.id} emoji={account.reaction} emojiUrl={account.reactionUrl} />,
+          )}
+        </ScrollableList>
+      </PullToRefresh>
     </>);
   }
 

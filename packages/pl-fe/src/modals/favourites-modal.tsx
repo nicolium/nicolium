@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Modal from 'pl-fe/components/ui/modal';
 import Spinner from 'pl-fe/components/ui/spinner';
@@ -14,7 +15,7 @@ interface FavouritesModalProps {
 }
 
 const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onClose, statusId }) => {
-  const { data: accountIds, isLoading, hasNextPage, fetchNextPage } = useStatusFavourites(statusId);
+  const { data: accountIds, isLoading, hasNextPage, fetchNextPage, refetch } = useStatusFavourites(statusId);
 
   const onClickClose = () => {
     onClose('FAVOURITES');
@@ -28,20 +29,22 @@ const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onCl
     const emptyMessage = <FormattedMessage id='empty_column.favourites' defaultMessage='No one has liked this post yet. When someone does, they will show up here.' />;
 
     body = (
-      <ScrollableList
-        emptyMessage={emptyMessage}
-        listClassName='max-w-full'
-        itemClassName='pb-3'
-        style={{ height: 'calc(80vh - 88px)' }}
-        hasMore={hasNextPage}
-        isLoading={typeof isLoading === 'boolean' ? isLoading : true}
-        onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
-        useWindowScroll={false}
-      >
-        {accountIds.map(id =>
-          <AccountContainer key={id} id={id} />,
-        )}
-      </ScrollableList>
+      <PullToRefresh onRefresh={refetch}>
+        <ScrollableList
+          emptyMessage={emptyMessage}
+          listClassName='max-w-full'
+          itemClassName='pb-3'
+          style={{ height: 'calc(80vh - 88px)' }}
+          hasMore={hasNextPage}
+          isLoading={typeof isLoading === 'boolean' ? isLoading : true}
+          onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
+          useWindowScroll={false}
+        >
+          {accountIds.map(id =>
+            <AccountContainer key={id} id={id} />,
+          )}
+        </ScrollableList>
+      </PullToRefresh>
     );
   }
 

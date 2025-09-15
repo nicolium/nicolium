@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Modal from 'pl-fe/components/ui/modal';
 import Spinner from 'pl-fe/components/ui/spinner';
@@ -14,7 +15,7 @@ interface DislikesModalProps {
 }
 
 const DislikesModal: React.FC<BaseModalProps & DislikesModalProps> = ({ onClose, statusId }) => {
-  const { data: accountIds, isLoading, hasNextPage, fetchNextPage } = useStatusDislikes(statusId);
+  const { data: accountIds, isLoading, hasNextPage, fetchNextPage, refetch } = useStatusDislikes(statusId);
 
   const onClickClose = () => {
     onClose('DISLIKES');
@@ -28,20 +29,22 @@ const DislikesModal: React.FC<BaseModalProps & DislikesModalProps> = ({ onClose,
     const emptyMessage = <FormattedMessage id='empty_column.dislikes' defaultMessage='No one has disliked this post yet. When someone does, they will show up here.' />;
 
     body = (
-      <ScrollableList
-        emptyMessage={emptyMessage}
-        listClassName='max-w-full'
-        itemClassName='pb-3'
-        style={{ height: 'calc(80vh - 88px)' }}
-        hasMore={hasNextPage}
-        isLoading={typeof isLoading === 'boolean' ? isLoading : true}
-        onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
-        useWindowScroll={false}
-      >
-        {accountIds.map(id =>
-          <AccountContainer key={id} id={id} />,
-        )}
-      </ScrollableList>
+      <PullToRefresh onRefresh={refetch}>
+        <ScrollableList
+          emptyMessage={emptyMessage}
+          listClassName='max-w-full'
+          itemClassName='pb-3'
+          style={{ height: 'calc(80vh - 88px)' }}
+          hasMore={hasNextPage}
+          isLoading={typeof isLoading === 'boolean' ? isLoading : true}
+          onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
+          useWindowScroll={false}
+        >
+          {accountIds.map(id =>
+            <AccountContainer key={id} id={id} />,
+          )}
+        </ScrollableList>
+      </PullToRefresh>
     );
   }
 

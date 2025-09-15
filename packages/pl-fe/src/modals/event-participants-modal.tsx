@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Modal from 'pl-fe/components/ui/modal';
 import Spinner from 'pl-fe/components/ui/spinner';
@@ -14,7 +15,7 @@ interface EventParticipantsModalProps {
 }
 
 const EventParticipantsModal: React.FC<BaseModalProps & EventParticipantsModalProps> = ({ onClose, statusId }) => {
-  const { data: accountIds, isLoading, hasNextPage, fetchNextPage } = useEventParticipations(statusId);
+  const { data: accountIds, isLoading, hasNextPage, fetchNextPage, refetch } = useEventParticipations(statusId);
 
   const onClickClose = () => {
     onClose('EVENT_PARTICIPANTS');
@@ -28,17 +29,19 @@ const EventParticipantsModal: React.FC<BaseModalProps & EventParticipantsModalPr
     const emptyMessage = <FormattedMessage id='empty_column.event_participants' defaultMessage='No one joined this event yet. When someone does, they will show up here.' />;
 
     body = (
-      <ScrollableList
-        emptyMessage={emptyMessage}
-        listClassName='max-w-full'
-        itemClassName='pb-3'
-        hasMore={hasNextPage}
-        isLoading={typeof isLoading === 'boolean' ? isLoading : true}
-        onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
-        useWindowScroll={false}
-      >
-        {accountIds.map(id => <AccountContainer key={id} id={id} />)}
-      </ScrollableList>
+      <PullToRefresh onRefresh={refetch}>
+        <ScrollableList
+          emptyMessage={emptyMessage}
+          listClassName='max-w-full'
+          itemClassName='pb-3'
+          hasMore={hasNextPage}
+          isLoading={typeof isLoading === 'boolean' ? isLoading : true}
+          onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
+          useWindowScroll={false}
+        >
+          {accountIds.map(id => <AccountContainer key={id} id={id} />)}
+        </ScrollableList>
+      </PullToRefresh>
     );
   }
 
