@@ -227,7 +227,6 @@ const Preferences = () => {
               defaultValue={settings.theme?.systemDarkThemePreference || 'black'}
               onChange={(event: React.ChangeEvent<HTMLSelectElement>) => onSelectChange(event, ['theme', 'systemDarkThemePreference'])}
             />
-            <SettingToggle settings={settings} settingPath={['theme', 'systemDarkThemePreference']} defaultValue onChange={onToggleChange} />
           </ListItem>
         )}
       </List>
