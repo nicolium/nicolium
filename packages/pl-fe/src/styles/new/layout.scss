@@ -110,7 +110,7 @@ body {
   &__item {
     @apply flex flex-1 flex-col items-center px-2 py-4 text-lg text-gray-600;
 
-    .⁂-icon {
+    .⁂-icon, .svg-icon {
       @apply size-5 text-gray-600 black:text-white;
 
     }
