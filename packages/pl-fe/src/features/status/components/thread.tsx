@@ -20,6 +20,7 @@ import { RootState } from 'pl-fe/store';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import { useSettingsStore } from 'pl-fe/stores/settings';
 import { useStatusMetaStore } from 'pl-fe/stores/status-meta';
+import { selectChild } from 'pl-fe/utils/scroll-utils';
 import { textForScreenReader } from 'pl-fe/utils/status';
 
 import DetailedStatus from './detailed-status';
@@ -241,50 +242,35 @@ const Thread = ({
   };
 
   const handleMoveUp = (id: string) => {
+    const modalOffset = isModal ? 1 : 0;
     if (id === status.id) {
-      _selectChild(statusIndex - 1);
+      selectChild(statusIndex - 1 + modalOffset, scroller, node.current || undefined);
     } else {
       let index = thread.indexOf(id);
 
       if (index === -1) {
         index = thread.indexOf(id);
-        _selectChild(index);
+        selectChild(index + modalOffset, scroller, node.current || undefined);
       } else {
-        _selectChild(index - 1);
+        selectChild(index - 1 + modalOffset, scroller, node.current || undefined);
       }
     }
   };
 
   const handleMoveDown = (id: string) => {
+    const modalOffset = isModal ? 1 : 0;
     if (id === status.id) {
-      _selectChild(statusIndex + 1);
+      selectChild(statusIndex + 1 + modalOffset, scroller, node.current || undefined);
     } else {
       let index = thread.indexOf(id);
 
       if (index === -1) {
         index = thread.indexOf(id);
-        _selectChild(index);
+        selectChild(index + modalOffset, scroller, node.current || undefined);
       } else {
-        _selectChild(index + 1);
+        selectChild(index + 1 + modalOffset, scroller, node.current || undefined);
       }
     }
-  };
-
-  const _selectChild = (index: number) => {
-    if (isModal) index = index + 1;
-
-    const selector = `[data-index="${index}"] .focusable`;
-    const element = node.current?.querySelector<HTMLDivElement>(selector);
-
-    if (element) element.focus();
-
-    scroller.current?.scrollIntoView({
-      index,
-      behavior: 'smooth',
-      done: () => {
-        if (!element) node.current?.querySelector<HTMLDivElement>(selector)?.focus();
-      },
-    });
   };
 
   const renderTombstone = (id: string) => (

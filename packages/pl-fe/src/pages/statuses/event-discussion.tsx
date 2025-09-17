@@ -15,6 +15,7 @@ import { ComposeForm } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { makeGetStatus } from 'pl-fe/selectors';
+import { selectChild } from 'pl-fe/utils/scroll-utils';
 
 import type { MediaAttachment } from 'pl-api';
 import type { VirtuosoHandle } from 'react-virtuoso';
@@ -60,27 +61,12 @@ const EventDiscussionPage: React.FC<IEventDiscussion> = ({ params: { statusId: s
 
   const handleMoveUp = (id: string) => {
     const index = descendantsIds.indexOf(id);
-    _selectChild(index - 1);
+    selectChild(index - 1, scroller, node.current || undefined);
   };
 
   const handleMoveDown = (id: string) => {
     const index = descendantsIds.indexOf(id);
-    _selectChild(index + 1);
-  };
-
-  const _selectChild = (index: number) => {
-    const selector = `#thread [data-index="${index}"] .focusable`;
-    const element = document.querySelector<HTMLDivElement>(selector);
-
-    if (element) element.focus();
-
-    scroller.current?.scrollIntoView({
-      index,
-      behavior: 'smooth',
-      done: () => {
-        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
-      },
-    });
+    selectChild(index + 1, scroller, node.current || undefined);
   };
 
   const renderTombstone = (id: string) => (

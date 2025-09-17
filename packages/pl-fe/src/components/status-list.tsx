@@ -10,6 +10,7 @@ import Text from 'pl-fe/components/ui/text';
 import StatusContainer from 'pl-fe/containers/status-container';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
 import PendingStatus from 'pl-fe/features/ui/components/pending-status';
+import { selectChild } from 'pl-fe/utils/scroll-utils';
 
 import type { VirtuosoHandle } from 'react-virtuoso';
 
@@ -65,12 +66,12 @@ const StatusList: React.FC<IStatusList> = ({
 
   const handleMoveUp = (id: string, featured: boolean = false) => {
     const elementIndex = getCurrentStatusIndex(id, featured) - 1;
-    selectChild(elementIndex);
+    selectChild(elementIndex, node, document.getElementById('status-list') || undefined);
   };
 
   const handleMoveDown = (id: string, featured: boolean = false) => {
     const elementIndex = getCurrentStatusIndex(id, featured) + 1;
-    selectChild(elementIndex);
+    selectChild(elementIndex, node, document.getElementById('status-list') || undefined);
   };
 
   const handleLoadOlder = useCallback(debounce(() => {
@@ -79,21 +80,6 @@ const StatusList: React.FC<IStatusList> = ({
       onLoadMore(maxId);
     }
   }, 300, { leading: true }), [onLoadMore, lastStatusId, statusIds.at(-1)]);
-
-  const selectChild = (index: number) => {
-    const selector = `#status-list [data-index="${index}"] .focusable`;
-    const element = document.querySelector<HTMLDivElement>(selector);
-
-    if (element) element.focus();
-
-    node.current?.scrollIntoView({
-      index,
-      behavior: 'smooth',
-      done: () => {
-        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
-      },
-    });
-  };
 
   const renderLoadGap = (index: number) => {
     const ids = statusIds;

@@ -10,6 +10,7 @@ import PlaceholderAccount from 'pl-fe/features/placeholder/components/placeholde
 import PlaceholderHashtag from 'pl-fe/features/placeholder/components/placeholder-hashtag';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
 import { useSearchAccounts, useSearchHashtags, useSearchStatuses } from 'pl-fe/queries/search/use-search';
+import { selectChild } from 'pl-fe/utils/scroll-utils';
 
 import TrendsColumn from './trends';
 
@@ -46,29 +47,14 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
     if (!resultsIds) return;
 
     const elementIndex = getCurrentIndex(id) - 1;
-    selectChild(elementIndex);
+    selectChild(elementIndex, node, document.getElementById('search-results') || undefined);
   };
 
   const handleMoveDown = (id: string) => {
     if (!resultsIds) return;
 
     const elementIndex = getCurrentIndex(id) + 1;
-    selectChild(elementIndex);
-  };
-
-  const selectChild = (index: number) => {
-    const selector = `#search-results [data-index="${index}"] .focusable`;
-    const element = document.querySelector<HTMLDivElement>(selector);
-
-    if (element) element.focus();
-
-    node.current?.scrollIntoView({
-      index,
-      behavior: 'smooth',
-      done: () => {
-        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
-      },
-    });
+    selectChild(elementIndex, node, document.getElementById('search-results') || undefined);
   };
 
   const handleLoadMore = () => activeQuery.fetchNextPage({ cancelRefetch: false });

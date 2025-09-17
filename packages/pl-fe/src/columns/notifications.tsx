@@ -23,6 +23,7 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useSettings } from 'pl-fe/hooks/use-settings';
+import { selectChild } from 'pl-fe/utils/scroll-utils';
 
 import type { Item } from 'pl-fe/components/ui/tabs';
 import type { RootState } from 'pl-fe/store';
@@ -182,27 +183,12 @@ const NotificationsColumn = () => {
 
   const handleMoveUp = (id: string) => {
     const elementIndex = displayedNotifications.findIndex(item => item !== null && item.group_key === id) - 1;
-    _selectChild(elementIndex);
+    selectChild(elementIndex, node);
   };
 
   const handleMoveDown = (id: string) => {
     const elementIndex = displayedNotifications.findIndex(item => item !== null && item.group_key === id) + 1;
-    _selectChild(elementIndex);
-  };
-
-  const _selectChild = (index: number) => {
-    const selector = `[data-index="${index}"] .focusable`;
-    const element = document.querySelector<HTMLDivElement>(selector);
-
-    if (element) element.focus();
-
-    node.current?.scrollIntoView({
-      index,
-      behavior: 'smooth',
-      done: () => {
-        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
-      },
-    });
+    selectChild(elementIndex, node);
   };
 
   const handleDequeueNotifications = useCallback(() => {

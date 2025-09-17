@@ -6,6 +6,7 @@ import { expandConversations } from 'pl-fe/actions/conversations';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { selectChild } from 'pl-fe/utils/scroll-utils';
 
 import Conversation from './conversation';
 
@@ -23,27 +24,12 @@ const ConversationsList: React.FC = () => {
 
   const handleMoveUp = (id: string) => {
     const elementIndex = getCurrentIndex(id) - 1;
-    selectChild(elementIndex);
+    selectChild(elementIndex, ref, document.getElementById('direct-list') || undefined);
   };
 
   const handleMoveDown = (id: string) => {
     const elementIndex = getCurrentIndex(id) + 1;
-    selectChild(elementIndex);
-  };
-
-  const selectChild = (index: number) => {
-    const selector = `#direct-list [data-index="${index}"] .focusable`;
-    const element = document.querySelector<HTMLDivElement>(selector);
-
-    if (element) element.focus();
-
-    ref.current?.scrollIntoView({
-      index,
-      behavior: 'smooth',
-      done: () => {
-        if (!element) document.querySelector<HTMLDivElement>(selector)?.focus();
-      },
-    });
+    selectChild(elementIndex, ref, document.getElementById('direct-list') || undefined);
   };
 
   const handleLoadOlder = debounce(() => {
