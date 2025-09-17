@@ -1428,6 +1428,8 @@ const getFeatures = (instance: Instance) => {
       v.software === PLEROMA,
     ]),
 
+    pleromaAdminStatusesRedact: instance.api_versions['admin_statuses_redact.pleroma.pl-api'] >= 1,
+
     /**
      * Displays a form to follow a user when logged out.
      * @see POST /main/ostatus

@@ -4397,6 +4397,24 @@ class PlApiClient {
 
         return response.json as {};
       },
+
+      /**
+       * Requires features{@link Features.pleromaAdminStatusesRedact}
+       */
+      redactStatus: async (statusId: string, params: EditStatusParams & { overwrite?: boolean }) => {
+        const response = await this.request(`/api/v1/pleroma/admin/statuses/${statusId}/redact`, { method: 'PUT', body: params });
+
+        return v.parse(statusSchema, response.json);
+      },
+
+      /**
+       * Requires features{@link Features.pleromaAdminStatusesRedact}
+       */
+      getStatusSource: async (statusId: string) => {
+        const response = await this.request(`/api/v1/pleroma/admin/statuses/${statusId}/source`);
+
+        return v.parse(statusSourceSchema, response.json);
+      },
     },
 
     trends: {
