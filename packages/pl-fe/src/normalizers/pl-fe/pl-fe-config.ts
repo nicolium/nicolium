@@ -54,7 +54,7 @@ const plFeConfigSchema = coerceObject({
     },
     v.record(v.string(), v.string()),
   )), null),
-  copyright: v.fallback(v.string(), `♥${new Date().getFullYear()}. Copying is an act of love. Please copy and share.`),
+  copyright: v.fallback(v.string(), 'skibidi dop dop dop yes yes'),
   defaultSettings: v.fallback(v.partial(settingsSchema), {}),
   gdpr: v.fallback(v.boolean(), false),
   gdprUrl: v.fallback(v.string(), ''),
