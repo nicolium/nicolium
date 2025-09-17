@@ -36,11 +36,19 @@ const STATUS_UNMUTE_SUCCESS = 'STATUS_UNMUTE_SUCCESS' as const;
 
 const STATUS_UNFILTER = 'STATUS_UNFILTER' as const;
 
-const createStatus = (params: CreateStatusParams, idempotencyKey: string, statusId: string | null) =>
+const createStatus = (params: CreateStatusParams, idempotencyKey: string, statusId: string | null, redacting = false) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!params.preview) dispatch<StatusesAction>({ type: STATUS_CREATE_REQUEST, params, idempotencyKey, editing: !!statusId });
+    if (!params.preview) dispatch<StatusesAction>({ type: STATUS_CREATE_REQUEST, params, idempotencyKey, editing: !!statusId, redacting });
 
-    return (statusId === null ? getClient(getState()).statuses.createStatus(params) : getClient(getState()).statuses.editStatus(statusId, params))
+    const client = getClient(getState());
+
+    return (
+      statusId === null
+        ? client.statuses.createStatus(params)
+        : redacting
+          ? client.admin.statuses.redactStatus(statusId, params)
+          : client.statuses.editStatus(statusId, params)
+    )
       .then((status) => {
         if (params.preview) return status;
 
@@ -241,7 +249,7 @@ const unfilterStatus = (statusId: string) => ({
 });
 
 type StatusesAction =
-  | { type: typeof STATUS_CREATE_REQUEST; params: CreateStatusParams; idempotencyKey: string; editing: boolean }
+  | { type: typeof STATUS_CREATE_REQUEST; params: CreateStatusParams; idempotencyKey: string; editing: boolean; redacting: boolean }
   | { type: typeof STATUS_CREATE_SUCCESS; status: BaseStatus | ScheduledStatus; params: CreateStatusParams; idempotencyKey: string; editing: boolean }
   | { type: typeof STATUS_CREATE_FAIL; error: unknown; params: CreateStatusParams; idempotencyKey: string; editing: boolean }
   | { type: typeof STATUS_FETCH_SOURCE_REQUEST }

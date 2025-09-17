@@ -70,8 +70,9 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({ onClose, c
   const renderTitle = () => {
     if (compose.draft_id) {
       return <FormattedMessage id='navigation_bar.compose_draft' defaultMessage='Edit draft post' />;
-    }
-    if (statusId) {
+    } else if (compose.redacting) {
+      return <FormattedMessage id='navigation_bar.compose_redact' defaultMessage='Redact post' />;
+    } else if (statusId) {
       return <FormattedMessage id='navigation_bar.compose_edit' defaultMessage='Edit post' />;
     } else if (privacy === 'direct') {
       return <FormattedMessage id='navigation_bar.compose_direct' defaultMessage='Direct message' />;

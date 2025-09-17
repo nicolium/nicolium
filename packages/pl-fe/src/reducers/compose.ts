@@ -64,6 +64,7 @@ import {
   COMPOSE_HASHTAG_CASING_SUGGESTION_IGNORE,
   type ComposeAction,
   type ComposeSuggestionSelectAction,
+  COMPOSE_REDACTING_OVERWRITE_CHANGE,
 } from '../actions/compose';
 import { EVENT_COMPOSE_CANCEL, EVENT_FORM_SET, type EventsAction } from '../actions/events';
 import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS, type MeAction } from '../actions/me';
@@ -146,6 +147,8 @@ interface Compose {
   preview: Partial<BaseStatus> | null;
   hashtag_casing_suggestion: string | null;
   hashtag_casing_suggestion_ignored: boolean | null;
+  redacting: boolean;
+  redactingOverwrite: boolean;
 }
 
 const newCompose = (params: Partial<Compose> = {}): Compose => ({
@@ -192,6 +195,8 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
   preview: null,
   hashtag_casing_suggestion: null,
   hashtag_casing_suggestion_ignored: null,
+  redacting: false,
+  redactingOverwrite: false,
   ...params,
 });
 
@@ -569,6 +574,8 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.media_attachments = action.status.media_attachments;
         compose.sensitive = action.status.sensitive;
 
+        compose.redacting = action.redacting || false;
+
         if (action.status.spoiler_text.length > 0) {
           compose.spoiler_text = action.status.spoiler_text;
         } else {
@@ -748,6 +755,10 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
       return updateCompose(state, action.composeId, compose => {
         compose.hashtag_casing_suggestion = null;
         compose.hashtag_casing_suggestion_ignored = true;
+      });
+    case COMPOSE_REDACTING_OVERWRITE_CHANGE:
+      return updateCompose(state, action.composeId, compose => {
+        compose.redactingOverwrite = action.value;
       });
     default:
       return state;

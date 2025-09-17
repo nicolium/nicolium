@@ -14,13 +14,16 @@ import {
   ignoreClearLinkSuggestion,
   suggestClearLink,
   resetCompose,
+  changeComposeRedactingOverwrite,
 } from 'pl-fe/actions/compose';
 import { saveDraftStatus } from 'pl-fe/actions/draft-statuses';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
+import List, { ListItem } from 'pl-fe/components/list';
 import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import SvgIcon from 'pl-fe/components/ui/svg-icon';
+import Toggle from 'pl-fe/components/ui/toggle';
 import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
 import { ComposeEditor } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
@@ -285,6 +288,10 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     dispatch(ignoreClearLinkSuggestion(id, key));
   };
 
+  const handleChangeRedactingOverwrite: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    dispatch(changeComposeRedactingOverwrite(id, e.target.checked));
+  };
+
   useEffect(() => {
     document.addEventListener('click', handleClick, true);
 
@@ -438,6 +445,21 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
 
           <ComposeButton type='submit' icon={publishIcon} text={publishText} disabled={!canSubmit} actionsMenu={actionsMenu} />
         </HStack>
+
+        {compose.redacting && (
+          <List>
+            <ListItem
+              className='mt-2'
+              label={<FormattedMessage id='compose.redact.overwrite_label' defaultMessage='Overwrite existing status' />}
+              hint={<FormattedMessage id='compose.redact.overwrite_hint' defaultMessage='This will replace the status with a new one, without keeping edit history. The update will not federate.' />}
+            >
+              <Toggle
+                checked={compose.redactingOverwrite}
+                onChange={handleChangeRedactingOverwrite}
+              />
+            </ListItem>
+          </List>
+        )}
       </div>
     </Stack>
   );

@@ -4402,7 +4402,7 @@ class PlApiClient {
        * Requires features{@link Features.pleromaAdminStatusesRedact}
        */
       redactStatus: async (statusId: string, params: EditStatusParams & { overwrite?: boolean }) => {
-        const response = await this.request(`/api/v1/pleroma/admin/statuses/${statusId}/redact`, { method: 'PUT', body: params });
+        const response = await this.request(`/api/v1/pleroma/admin/statuses/${statusId}/redact`, { method: 'PATCH', body: params });
 
         return v.parse(statusSchema, response.json);
       },

@@ -104,12 +104,15 @@ const COMPOSE_CLEAR_LINK_SUGGESTION_IGNORE = 'COMPOSE_CLEAR_LINK_SUGGESTION_IGNO
 const COMPOSE_HASHTAG_CASING_SUGGESTION_SET = 'COMPOSE_HASHTAG_CASING_SUGGESTION_SET' as const;
 const COMPOSE_HASHTAG_CASING_SUGGESTION_IGNORE = 'COMPOSE_HASHTAG_CASING_SUGGESTION_IGNORE' as const;
 
+const COMPOSE_REDACTING_OVERWRITE_CHANGE = 'COMPOSE_REDACTING_OVERWRITE_CHANGE' as const;
+
 const getAccount = makeGetAccount();
 
 const messages = defineMessages({
   scheduleError: { id: 'compose.invalid_schedule', defaultMessage: 'You must schedule a post at least 5 minutes out.' },
   success: { id: 'compose.submit_success', defaultMessage: 'Your post was sent!' },
   editSuccess: { id: 'compose.edit_success', defaultMessage: 'Your post was edited' },
+  redactSuccess: { id: 'compose.redact_success', defaultMessage: 'The post was redacted' },
   scheduledSuccess: { id: 'compose.scheduled_success', defaultMessage: 'Your post was scheduled' },
   uploadErrorLimit: { id: 'upload_error.limit', defaultMessage: 'File upload limit exceeded.' },
   uploadErrorPoll: { id: 'upload_error.poll', defaultMessage: 'File upload not allowed with polls.' },
@@ -130,6 +133,7 @@ interface ComposeSetStatusAction {
   withRedraft?: boolean;
   draftId?: string;
   editorState?: string | null;
+  redacting?: boolean;
 }
 
 const setComposeToStatus = (
@@ -141,6 +145,7 @@ const setComposeToStatus = (
   withRedraft?: boolean,
   draftId?: string,
   editorState?: string | null,
+  redacting?: boolean,
 ) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const { features } = getClient(getState);
@@ -158,6 +163,7 @@ const setComposeToStatus = (
       withRedraft,
       draftId,
       editorState,
+      redacting,
     });
   };
 
@@ -299,7 +305,7 @@ const directComposeById = (accountId: string) =>
     useModalsStore.getState().openModal('COMPOSE');
   };
 
-const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, composeId: string, data: BaseStatus | ScheduledStatus, status: string, edit?: boolean) => {
+const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, composeId: string, data: BaseStatus | ScheduledStatus, status: string, edit?: boolean, redact?: boolean) => {
   if (!dispatch || !getState) return;
 
   const state = getState();
@@ -310,7 +316,7 @@ const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, c
   dispatch(submitComposeSuccess(composeId, data, accountUrl, draftId));
   if (data.scheduled_at === null) {
     dispatch(insertIntoTagHistory(composeId, data.tags || [], status));
-    toast.success(edit ? messages.editSuccess : messages.success, {
+    toast.success(redact ? messages.redactSuccess : edit ? messages.editSuccess : messages.success, {
       actionLabel: messages.view,
       actionLink: (data.visibility === 'direct' && getClient(getState()).features.conversations) ? '/conversations' : `/@${data.account.acct}/posts/${data.id}`,
     });
@@ -456,8 +462,13 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
         onSuccess?.();
       }).catch(() => {});
     } else {
-      return dispatch(createStatus(params, idempotencyKey, statusId)).then((data) => {
-        handleComposeSubmit(dispatch, getState, composeId, data, status, !!statusId);
+      if (compose.redacting) {
+      // @ts-ignore
+        params.overwrite = compose.redactingOverwrite;
+      }
+
+      return dispatch(createStatus(params, idempotencyKey, statusId, compose.redacting)).then((data) => {
+        handleComposeSubmit(dispatch, getState, composeId, data, status, !!statusId, compose.redacting);
         onSuccess?.();
       }).catch((error) => {
         dispatch(submitComposeFail(composeId, error));
@@ -998,6 +1009,12 @@ const ignoreHashtagCasingSuggestion = (composeId: string) => ({
   composeId,
 });
 
+const changeComposeRedactingOverwrite = (composeId: string, value: boolean) => ({
+  type: COMPOSE_REDACTING_OVERWRITE_CHANGE,
+  composeId,
+  value,
+});
+
 type ComposeAction =
   ComposeSetStatusAction
   | ReturnType<typeof changeCompose>
@@ -1056,7 +1073,8 @@ type ComposeAction =
   | ReturnType<typeof suggestClearLink>
   | ReturnType<typeof ignoreClearLinkSuggestion>
   | ReturnType<typeof suggestHashtagCasing>
-  | ReturnType<typeof ignoreHashtagCasingSuggestion>;
+  | ReturnType<typeof ignoreHashtagCasingSuggestion>
+  | ReturnType<typeof changeComposeRedactingOverwrite>;
 
 export {
   COMPOSE_CHANGE,
@@ -1117,6 +1135,7 @@ export {
   COMPOSE_CLEAR_LINK_SUGGESTION_IGNORE,
   COMPOSE_HASHTAG_CASING_SUGGESTION_SET,
   COMPOSE_HASHTAG_CASING_SUGGESTION_IGNORE,
+  COMPOSE_REDACTING_OVERWRITE_CHANGE,
   setComposeToStatus,
   replyCompose,
   cancelReplyCompose,
@@ -1169,6 +1188,7 @@ export {
   cancelPreviewCompose,
   suggestHashtagCasing,
   ignoreHashtagCasingSuggestion,
+  changeComposeRedactingOverwrite,
   type ComposeReplyAction,
   type ComposeSuggestionSelectAction,
   type ComposeAction,

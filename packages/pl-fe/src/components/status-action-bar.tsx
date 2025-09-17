@@ -4,6 +4,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import { blockAccount } from 'pl-fe/actions/accounts';
+import { redactStatus } from 'pl-fe/actions/admin';
 import { directCompose, mentionCompose, quoteCompose, replyCompose } from 'pl-fe/actions/compose';
 import { emojiReact, unEmojiReact } from 'pl-fe/actions/emoji-reacts';
 import { deleteStatusModal, toggleStatusSensitivityModal } from 'pl-fe/actions/moderation';
@@ -100,6 +101,7 @@ const messages = defineMessages({
   reblog_visibility_public: { id: 'status.reblog_visibility_public', defaultMessage: 'Public repost' },
   reblog_visibility_unlisted: { id: 'status.reblog_visibility_unlisted', defaultMessage: 'Unlisted repost' },
   reblog_visibility_private: { id: 'status.reblog_visibility_private', defaultMessage: 'Followers-only repost' },
+  redact: { id: 'status.redact', defaultMessage: 'Redact' },
   redraft: { id: 'status.redraft', defaultMessage: 'Delete & re-draft' },
   redraftConfirm: { id: 'confirmations.redraft.confirm', defaultMessage: 'Delete & redraft' },
   redraftHeading: { id: 'confirmations.redraft.heading', defaultMessage: 'Delete & redraft' },
@@ -825,6 +827,10 @@ const MenuButton: React.FC<IMenuButton> = ({
       }
     };
 
+    const handleRedactStatus: React.EventHandler<React.MouseEvent> = () => {
+      dispatch(redactStatus(status.id));
+    };
+
     const menu: Menu = [];
 
     if (expandable) {
@@ -1085,6 +1091,15 @@ const MenuButton: React.FC<IMenuButton> = ({
           text: intl.formatMessage(status.sensitive === false ? messages.markStatusSensitive : messages.markStatusNotSensitive),
           action: handleToggleStatusSensitivity,
           icon: require('@tabler/icons/outline/alert-triangle.svg'),
+        });
+      }
+
+      if (isAdmin && features.pleromaAdminStatusesRedact) {
+        menu.push({
+          text: intl.formatMessage(messages.redact),
+          action: handleRedactStatus,
+          icon: require('@tabler/icons/outline/pencil.svg'),
+          destructive: true,
         });
       }
 

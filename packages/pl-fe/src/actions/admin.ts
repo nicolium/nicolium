@@ -1,8 +1,11 @@
 import { importEntities } from 'pl-fe/actions/importer';
+import { useModalsStore } from 'pl-fe/stores/modals';
 import { filterBadges, getTagDiff } from 'pl-fe/utils/badges';
 
 import { getClient } from '../api';
 
+import { setComposeToStatus } from './compose';
+import { STATUS_FETCH_SOURCE_FAIL, type StatusesAction } from './statuses';
 import { deleteFromTimelines } from './timelines';
 
 import type { PleromaConfig } from 'pl-api';
@@ -118,6 +121,20 @@ const setRole = (accountId: string, role: 'user' | 'moderator' | 'admin') =>
     }
   };
 
+const redactStatus = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+  const state = getState();
+
+  const status = state.statuses[statusId]!;
+  const poll = status.poll_id ? state.polls[status.poll_id] : undefined;
+
+  return getClient(state).statuses.getStatusSource(statusId).then(response => {
+    dispatch(setComposeToStatus(status, poll, response.text, response.spoiler_text, response.content_type, false, undefined, undefined, true));
+    useModalsStore.getState().openModal('COMPOSE');
+  }).catch(error => {
+    dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_FAIL, error });
+  });
+};
+
 type AdminActions =
   | { type: typeof ADMIN_CONFIG_FETCH_SUCCESS; configs: PleromaConfig['configs']; needsReboot: boolean }
   | { type: typeof ADMIN_CONFIG_UPDATE_REQUEST; configs: PleromaConfig['configs'] }
@@ -136,5 +153,6 @@ export {
   toggleStatusSensitivity,
   setBadges,
   setRole,
+  redactStatus,
   type AdminActions,
 };
