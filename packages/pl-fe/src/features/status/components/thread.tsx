@@ -309,7 +309,42 @@ const Thread = ({
   };
 
   const renderChildren = (list: Array<string>) => list.map(id => {
-    if (id === status.id) return focusedStatus;
+    if (id === status.id) return (
+      <div className={clsx({ 'pb-4': hasDescendants })} key={status.id}>
+        {status.deleted ? (
+          <Tombstone id={status.id} onMoveUp={handleMoveUp} onMoveDown={handleMoveDown} deleted />
+        ) : (
+          <Hotkeys handlers={handlers}>
+            <div
+              ref={statusRef}
+              className='relative'
+              tabIndex={0}
+              // FIXME: no "reblogged by" text is added for the screen reader
+              aria-label={textForScreenReader(intl, status)}
+            >
+
+              <DetailedStatus
+                status={status}
+                onOpenCompareHistoryModal={handleOpenCompareHistoryModal}
+              />
+
+              <hr className='-mx-4 mb-2 max-w-[100vw] border-t-2 black:border-t dark:border-gray-800' />
+
+              <StatusActionBar
+                status={status}
+                expandable={isModal}
+                space='lg'
+                withLabels
+              />
+            </div>
+          </Hotkeys>
+        )}
+
+        {hasDescendants && (
+          <hr className='-mx-4 mt-2 max-w-[100vw] border-t-2 black:border-t dark:border-gray-800' />
+        )}
+      </div>
+    );
 
     if (id.endsWith('-tombstone')) {
       return renderTombstone(id);
@@ -361,44 +396,7 @@ const Thread = ({
     react: handleHotkeyReact,
   };
 
-  const focusedStatus = (
-    <div className={clsx({ 'pb-4': hasDescendants })} key={status.id}>
-      {status.deleted ? (
-        <Tombstone id={status.id} onMoveUp={handleMoveUp} onMoveDown={handleMoveDown} deleted />
-      ) : (
-        <Hotkeys handlers={handlers}>
-          <div
-            ref={statusRef}
-            className='relative'
-            tabIndex={0}
-            // FIXME: no "reblogged by" text is added for the screen reader
-            aria-label={textForScreenReader(intl, status)}
-          >
-
-            <DetailedStatus
-              status={status}
-              onOpenCompareHistoryModal={handleOpenCompareHistoryModal}
-            />
-
-            <hr className='-mx-4 mb-2 max-w-[100vw] border-t-2 black:border-t dark:border-gray-800' />
-
-            <StatusActionBar
-              status={status}
-              expandable={isModal}
-              space='lg'
-              withLabels
-            />
-          </div>
-        </Hotkeys>
-      )}
-
-      {hasDescendants && (
-        <hr className='-mx-4 mt-2 max-w-[100vw] border-t-2 black:border-t dark:border-gray-800' />
-      )}
-    </div>
-  );
-
-  const children = useMemo(() => renderChildren(thread), [thread, linear]);
+  const children = useMemo(() => renderChildren(thread), [thread, linear, status]);
   if (isModal) children.unshift(<div key='padding' className='h-4' />);
 
   useEffect(() => {
