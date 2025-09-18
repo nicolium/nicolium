@@ -153,7 +153,7 @@ const WORDPRESS = 'WordPress';
  * @category Software
  * @see {@link https://akkoma.dev/AkkomaGang/akkoma}
  */
-const AKKOMA = 'akkoma';
+const AKKOMA = 'Akkoma';
 
 /**
  * glitch-soc, fork of Mastodon with a number of experimental features.
