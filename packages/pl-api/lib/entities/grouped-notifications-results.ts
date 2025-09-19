@@ -107,7 +107,9 @@ const notificationGroupSchema: v.BaseSchema<any, NotificationGroup, v.BaseIssue<
     ...notification,
     type: notification.type === 'pleroma:report'
       ? 'admin.report'
-      : notification.type?.replace(/^pleroma:/, ''),
+      : notification.type === 'reaction'
+        ? 'emoji_reaction'
+        : notification.type?.replace(/^pleroma:/, ''),
   })),
   v.variant('type', [
     accountNotificationGroupSchema,
