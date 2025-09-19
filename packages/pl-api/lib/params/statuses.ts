@@ -86,7 +86,15 @@ interface CreateStatusOptionalParams {
    * ID of the status being quoted, if any.
    * Requires features{@link Features['quotePosts']}.
    */
+  quoted_status_id?: string;
+  /**
+   * Deprecated, use `quoted_status_id` instead.
+   */
   quote_id?: string;
+  /**
+   * Sets who is allowed to quote the status. When omitted, the user's default setting will be used instead. Ignored if `visibility` is `private` or `direct`, in which case the policy will always be set to `nobody`.\
+   */
+  quote_approval_policy?: 'public' | 'followers' | 'nobody';
 
   /**
    * If set to true, this status will be "local only" and will NOT be federated beyond the local timeline(s). If set to false (default), this status will be federated to your followers beyond the local timeline(s).
@@ -143,12 +151,22 @@ type GetFavouritedByParams = Omit<PaginationParams, 'min_id'>
 /**
  * @category Request params
  */
-type EditStatusOptionalParams = Pick<CreateStatusOptionalParams, 'content_type' | 'sensitive' | 'spoiler_text' | 'language'>;
+type EditStatusOptionalParams = Pick<CreateStatusOptionalParams, 'content_type' | 'sensitive' | 'spoiler_text' | 'language' | 'quote_approval_policy'>;
 
 /**
  * @category Request params
  */
 type EditStatusParams = (CreateStatusWithContent | CreateStatusWithMedia) & EditStatusOptionalParams;
+
+/**
+ * @category Request params
+ */
+interface EditInteractionPolicyParams {
+  /**
+   * Sets who is allowed to quote the status. Ignored if `visibility` is `private` or `direct`, in which case the policy will always be set to `nobody`. Changing the policy does not invalidate past quotes.
+   */
+  quote_approval_policy: ['public', 'followers', 'nobody'];
+}
 
 /**
  * @category Request params
@@ -173,6 +191,7 @@ export type {
   GetRebloggedByParams,
   GetFavouritedByParams,
   EditStatusParams,
+  EditInteractionPolicyParams,
   GetStatusQuotesParams,
   GetStatusReferencesParams,
   GetStatusMentionedUsersParams,

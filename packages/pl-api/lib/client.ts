@@ -243,6 +243,7 @@ import type {
 } from './params/settings';
 import type {
   CreateStatusParams,
+  EditInteractionPolicyParams,
   EditStatusParams,
   GetFavouritedByParams,
   GetRebloggedByParams,
@@ -2394,6 +2395,8 @@ class PlApiClient {
         fixedParams.circle_id = params.visibility.slice(7);
         fixedParams.visibility = 'circle';
       }
+      if (params.quote_id && this.#instance.api_versions.mastodon >= 7) params.quoted_status_id = params.quote_id;
+      else if (params.quoted_status_id && (this.#instance.api_versions.mastodon || 0) < 7) params.quote_id = params.quoted_status_id;
 
       const input = params.preview && this.features.version.software === MITRA
         ? '/api/v1/statuses/preview'
@@ -2593,6 +2596,17 @@ class PlApiClient {
     },
 
     /**
+     * Revoke a quote post
+     * Revoke quote authorization of status `quoting_status_id`, detaching status `id`.
+     * @see {@link https://docs.joinmastodon.org/methods/statuses/#revoke_quote}
+     */
+    revokeQuote: async (statusId: string, quotingStatusId: string) => {
+      const response = await this.request(`/api/v1/statuses/${statusId}/quotes/${quotingStatusId}/revoke`, { method: 'POST' });
+
+      return v.parse(statusSchema, response.json);
+    },
+
+    /**
      * Mute a conversation
      * Do not receive notifications for the thread that this status is part of. Must be a thread in which you are a participant.
      * @see {@link https://docs.joinmastodon.org/methods/statuses/#mute}
@@ -2652,6 +2666,17 @@ class PlApiClient {
         fixedParams.markdown = true;
       }
 
+      const response = await this.request(`/api/v1/statuses/${statusId}`, { method: 'PUT', body: params });
+
+      return v.parse(statusSchema, response.json);
+    },
+
+    /**
+     * Edit a status' interaction policies
+     * Edit a given status to change its interaction policies. Currently, this means changing its quote approval policy.
+     * @see {@link https://docs.joinmastodon.org/methods/statuses/#edit_interaction_policy}
+     */
+    editInteractionPolicy: async (statusId: string, params: EditInteractionPolicyParams) => {
       const response = await this.request(`/api/v1/statuses/${statusId}`, { method: 'PUT', body: params });
 
       return v.parse(statusSchema, response.json);
@@ -2759,9 +2784,14 @@ class PlApiClient {
      * View quotes for a given status
      *
      * Requires features{@link Features.quotePosts}.
+     * @see {@link https://docs.joinmastodon.org/methods/statuses/#quotes}
      */
     getStatusQuotes: async (statusId: string, params?: GetStatusQuotesParams) =>
-      this.#paginatedGet(`/api/v1/pleroma/statuses/${statusId}/quotes`, { params }, statusSchema),
+      this.#paginatedGet(
+        this.#instance.api_versions.mastodon >= 7 ? `/api/v1/statuses/${statusId}/quotes` : `/api/v1/pleroma/statuses/${statusId}/quotes`,
+        { params },
+        statusSchema,
+      ),
 
     /**
      * Returns the list of accounts that have disliked the status as known by the current server

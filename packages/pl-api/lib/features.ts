@@ -1553,9 +1553,12 @@ const getFeatures = (instance: Instance) => {
       v.software === ICESHRIMP_NET,
       v.software === FRIENDICA && gte(v.version, '2023.3.0'),
       v.software === SHARKEY,
+      instance.api_versions.mastodon >= 7,
       instance.api_versions['quote_posting.pleroma.pl-api'] >= 1,
       instance.feature_quote === true,
     ]),
+
+    quoteApprovalPolicies: instance.api_versions.mastodon >= 7,
 
     /**
      * Ability to boost a status to a selected scope.
