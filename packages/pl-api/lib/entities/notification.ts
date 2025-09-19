@@ -34,7 +34,7 @@ const mentionNotificationSchema = v.object({
 
 const statusNotificationSchema = v.object({
   ...baseNotificationSchema.entries,
-  type: v.picklist(['status', 'reblog', 'favourite', 'poll', 'update', 'event_reminder']),
+  type: v.picklist(['status', 'reblog', 'favourite', 'poll', 'update', 'quote', 'quoted_update', 'event_reminder']),
   status: statusSchema,
 });
 
