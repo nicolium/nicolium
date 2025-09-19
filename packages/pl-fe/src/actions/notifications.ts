@@ -35,7 +35,7 @@ const NOTIFICATIONS_SCROLL_TOP = 'NOTIFICATIONS_SCROLL_TOP' as const;
 
 const FILTER_TYPES = {
   all: undefined,
-  mention: ['mention'],
+  mention: ['mention', 'quote'],
   favourite: ['favourite', 'emoji_reaction', 'reaction'],
   reblog: ['reblog'],
   poll: ['poll'],

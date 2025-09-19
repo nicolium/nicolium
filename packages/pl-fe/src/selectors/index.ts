@@ -191,7 +191,7 @@ type SelectedNotification = NotificationGroup & {
 } & ({
   type: 'follow' | 'follow_request' | 'admin.sign_up' | 'bite';
 } | {
-  type: 'status' | 'mention' | 'reblog' | 'favourite' | 'poll' | 'update' | 'emoji_reaction' | 'event_reminder' | 'participation_accepted' | 'participation_request';
+  type: 'status' | 'mention' | 'reblog' | 'favourite' | 'poll' | 'update' | 'emoji_reaction' | 'event_reminder' | 'participation_accepted' | 'participation_request' | 'quote' | 'quoted_update';
   status: MinifiedStatus;
 } | {
   type: 'move';

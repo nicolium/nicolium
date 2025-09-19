@@ -18,6 +18,8 @@ const NOTIFICATION_TYPES = [
   'participation_request',
   'participation_accepted',
   'bite',
+  'quote',
+  'quoted_update',
 ] as const;
 
 /** Notification types to exclude from the "All" filter by default. */

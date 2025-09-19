@@ -46,7 +46,7 @@ const mentionNotificationGroupSchema = v.object({
 
 const statusNotificationGroupSchema = v.object({
   ...baseNotificationGroupSchema.entries,
-  type: v.picklist(['status', 'reblog', 'favourite', 'poll', 'update', 'event_reminder']),
+  type: v.picklist(['status', 'reblog', 'favourite', 'poll', 'update', 'event_reminder', 'quote', 'quoted_update']),
   status_id: v.string(),
 });
 

@@ -65,6 +65,8 @@ const icons: Partial<Record<NotificationType | 'reply', string>> = {
   participation_accepted: require('@tabler/icons/outline/calendar-event.svg'),
   bite: require('@tabler/icons/outline/pacman.svg'),
   reply: require('@tabler/icons/outline/corner-up-left.svg'),
+  quote: require('@tabler/icons/outline/quote.svg'),
+  quoted_update: require('@tabler/icons/outline/pencil.svg'),
 };
 
 const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMessages({
@@ -148,6 +150,14 @@ const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMe
     id: 'notification.reply',
     defaultMessage: '{name} replied to your post',
   },
+  quote: {
+    id: 'notification.quote',
+    defaultMessage: '{name} quoted your post',
+  },
+  quoted_update: {
+    id: 'notification.quoted_update',
+    defaultMessage: '{name} edited a post you quoted',
+  },
 });
 
 const buildMessage = (
@@ -190,7 +200,7 @@ interface INotification {
 }
 
 const getNotificationStatus = (n: Pick<NotificationGroup, 'type'> & ({ status: StatusEntity } | { })): StatusEntity | null => {
-  if (['mention', 'status', 'reblog', 'favourite', 'poll', 'update', 'emoji_reaction', 'event_reminder', 'participation_accepted', 'participation_request', 'bite'].includes(n.type))
+  if (['mention', 'status', 'reblog', 'favourite', 'poll', 'update', 'emoji_reaction', 'event_reminder', 'participation_accepted', 'participation_request', 'bite', 'quote', 'quoted_update'].includes(n.type))
     // @ts-ignore
     return n.status;
   return null;
@@ -398,6 +408,8 @@ const Notification: React.FC<INotification> = (props) => {
       case 'event_reminder':
       case 'participation_accepted':
       case 'participation_request':
+      case 'quote':
+      case 'quoted_update':
         return status ? (
           <StatusContainer
             id={status.id}
