@@ -1279,6 +1279,8 @@
   "notification.pleroma:participation_accepted": "You were accepted to join the event",
   "notification.pleroma:participation_request": "{name} wants to join your event",
   "notification.poll": "A poll you have voted in has ended",
+  "notification.quote": "{name} quoted your post",
+  "notification.quoted_update": "{name} edited a post you quoted",
   "notification.reblog": "{name} reposted your post",
   "notification.reply": "{name} replied to your post",
   "notification.severed_relationships": "Lost connections with {name}",

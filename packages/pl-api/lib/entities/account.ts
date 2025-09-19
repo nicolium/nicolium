@@ -239,7 +239,7 @@ const untypedCredentialAccountSchema = v.pipe(v.any(), preprocessAccount, v.obje
     sensitive: v.fallback(v.optional(v.boolean()), false),
     language: v.fallback(v.optional(v.nullable(v.string())), null),
     follow_requests_count: v.fallback(v.optional(v.pipe(v.number(), v.integer(), v.minValue(0))), 0),
-    hide_collections: v.fallback(v.nullable(v.boolean()), null),
+    hide_collections: v.fallback(v.optional(v.boolean()), undefined),
     discoverable: v.fallback(v.optional(v.boolean()), undefined),
     indexable: v.fallback(v.nullable(v.boolean()), null),
     quote_policy: v.fallback(v.nullable(v.picklist(['public', 'followers', 'nobody'])), null),
