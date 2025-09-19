@@ -163,6 +163,7 @@ const configurationSchema = coerceObject({
   }),
   urls: coerceObject({
     streaming: v.fallback(v.optional(v.pipe(v.string(), v.url())), undefined),
+    status: v.fallback(v.optional(v.pipe(v.string(), v.url())), undefined),
     about: v.fallback(v.nullable(v.string()), null),
     privacy_policy: v.fallback(v.nullable(v.string()), null),
     terms_of_service: v.fallback(v.nullable(v.string()), null),
@@ -263,6 +264,7 @@ const registrations = coerceObject({
   message: v.fallback(v.optional(v.string()), undefined),
   min_age: v.fallback(v.nullable(v.number()), null),
   reason_required: v.fallback(v.nullable(v.boolean()), null),
+  url: v.fallback(v.nullable(v.pipe(v.string(), v.url())), null),
 });
 
 const statsSchema = coerceObject({
@@ -355,7 +357,7 @@ const instanceSchema = v.pipe(
     })),
     languages: v.fallback(v.array(v.string()), []),
     pleroma: pleromaSchema,
-    registrations: registrations,
+    registrations,
     rules: filteredArray(ruleSchema),
     stats: statsSchema,
     thumbnail: thumbnailSchema,

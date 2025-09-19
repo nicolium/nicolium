@@ -122,7 +122,9 @@ const baseAccountSchema = v.object({
   bot: v.fallback(v.boolean(), false),
   group: v.fallback(v.boolean(), false),
   discoverable: v.fallback(v.boolean(), false),
+  indexable: v.fallback(v.nullable(v.boolean()), null),
   noindex: v.fallback(v.nullable(v.boolean()), null),
+  memorial: v.fallback(v.nullable(v.boolean()), null),
   suspended: v.fallback(v.optional(v.boolean()), undefined),
   limited: v.fallback(v.optional(v.boolean()), undefined),
   created_at: v.fallback(datetimeSchema, new Date().toISOString()),
@@ -237,10 +239,12 @@ const untypedCredentialAccountSchema = v.pipe(v.any(), preprocessAccount, v.obje
     sensitive: v.fallback(v.optional(v.boolean()), false),
     language: v.fallback(v.optional(v.nullable(v.string())), null),
     follow_requests_count: v.fallback(v.optional(v.pipe(v.number(), v.integer(), v.minValue(0))), 0),
+    hide_collections: v.fallback(v.nullable(v.boolean()), null),
+    discoverable: v.fallback(v.nullable(v.boolean()), null),
+    indexable: v.fallback(v.nullable(v.boolean()), null),
 
     show_role: v.fallback(v.optional(v.nullable(v.boolean())), undefined),
     no_rich_text: v.fallback(v.optional(v.nullable(v.boolean())), undefined),
-    discoverable: v.fallback(v.optional(v.boolean()), undefined),
     actor_type: v.fallback(v.optional(v.string()), undefined),
     show_birthday: v.fallback(v.optional(v.boolean()), undefined),
 

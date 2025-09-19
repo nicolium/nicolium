@@ -25,6 +25,7 @@ import {
   announcementSchema,
   antennaSchema,
   applicationSchema,
+  authorizationServerMetadataSchema,
   backupSchema,
   bookmarkFolderSchema,
   chatMessageSchema,
@@ -89,6 +90,7 @@ import {
   tokenSchema,
   translationSchema,
   trendsLinkSchema,
+  userInfoSchema,
   webPushSubscriptionSchema,
 } from './entities';
 import { coerceObject, filteredArray } from './entities/utils';
@@ -599,6 +601,23 @@ class PlApiClient {
       this.#socket?.close();
 
       return response.json as {};
+    },
+
+    /**
+     * Retrieve user information
+     * Retrieves standardised OIDC claims about the currently authenticated user.
+     * see {@link https://docs.joinmastodon.org/methods/oauth/#userinfo}
+     */
+    userinfo: async () => {
+      const response = await this.request('/oauth/userinfo');
+
+      return v.parse(userInfoSchema, response.json);
+    },
+
+    authorizationServerMetadata: async () => {
+      const response = await this.request('/.well-known/oauth-authorization-server');
+
+      return v.parse(authorizationServerMetadataSchema, response.json);
     },
 
     /**
