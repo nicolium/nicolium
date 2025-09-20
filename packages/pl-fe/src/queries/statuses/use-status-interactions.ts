@@ -6,6 +6,7 @@ import { PIN_SUCCESS, UNPIN_SUCCESS, type InteractionsAction } from 'pl-fe/actio
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
+import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { makePaginatedResponseQuery } from 'pl-fe/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from 'pl-fe/queries/utils/minify-list';
 import { useModalsStore } from 'pl-fe/stores/modals';
@@ -237,12 +238,15 @@ const useUnbookmarkStatus = (statusId: string) => {
 const usePinStatus = (statusId: string) => {
   const client = useClient();
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+  const { me } = useLoggedIn();
 
   return useMutation({
     mutationKey: ['statuses', 'pin', statusId],
     mutationFn: () => client.statuses.pinStatus(statusId),
     onSuccess: (status) => {
       dispatch(importEntities({ statuses: [status] }));
+      queryClient.invalidateQueries({ queryKey: ['statusLists', 'pins', me] });
       dispatch<InteractionsAction>({ type: PIN_SUCCESS, statusId: status.id, accountId: status.account.id });
     },
   });
@@ -251,12 +255,15 @@ const usePinStatus = (statusId: string) => {
 const useUnpinStatus = (statusId: string) => {
   const client = useClient();
   const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
+  const { me } = useLoggedIn();
 
   return useMutation({
     mutationKey: ['statuses', 'unpin', statusId],
     mutationFn: () => client.statuses.unpinStatus(statusId),
     onSuccess: (status) => {
       dispatch(importEntities({ statuses: [status] }));
+      queryClient.setQueryData(['statusLists', 'pins', me], filterById(statusId));
       dispatch<InteractionsAction>({ type: UNPIN_SUCCESS, statusId: status.id, accountId: status.account.id });
     },
   });
