@@ -6,6 +6,7 @@ import { isNativeEmoji } from 'pl-fe/features/emoji';
 import emojiSearch from 'pl-fe/features/emoji/search';
 import { Language } from 'pl-fe/features/preferences';
 import { queryClient } from 'pl-fe/queries/client';
+import { cancelDraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
 import { selectAccount, selectOwnAccount, makeGetAccount } from 'pl-fe/selectors';
 import { tagHistory } from 'pl-fe/settings';
 import { useModalsStore } from 'pl-fe/stores/modals';
@@ -313,7 +314,12 @@ const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, c
   const accountUrl = getAccount(state, state.me as string)!.url;
   const draftId = getState().compose[composeId]!.draft_id;
 
-  dispatch(submitComposeSuccess(composeId, data, accountUrl, draftId));
+  dispatch(submitComposeSuccess(composeId, data));
+
+  if (draftId) {
+    cancelDraftStatus(queryClient, accountUrl, draftId);
+  }
+
   if (data.scheduled_at === null) {
     dispatch(insertIntoTagHistory(composeId, data.tags || [], status));
     toast.success(redact ? messages.redactSuccess : edit ? messages.editSuccess : messages.success, {
@@ -481,12 +487,10 @@ const submitComposeRequest = (composeId: string) => ({
   composeId,
 });
 
-const submitComposeSuccess = (composeId: string, status: BaseStatus | ScheduledStatus, accountUrl: string, draftId?: string | null) => ({
+const submitComposeSuccess = (composeId: string, status: BaseStatus | ScheduledStatus) => ({
   type: COMPOSE_SUBMIT_SUCCESS,
   composeId,
   status,
-  accountUrl,
-  draftId,
 });
 
 const submitComposeFail = (composeId: string, error: unknown) => ({

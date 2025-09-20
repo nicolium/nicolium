@@ -4,7 +4,7 @@ import * as v from 'valibot';
 import { Entities } from 'pl-fe/entity-store/entities';
 import { normalizeStatus } from 'pl-fe/normalizers/status';
 
-import type { DraftStatus } from 'pl-fe/reducers/draft-statuses';
+import type { DraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
 import type { RootState } from 'pl-fe/store';
 
 const buildPoll = (draftStatus: DraftStatus) => {

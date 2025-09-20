@@ -10,7 +10,6 @@ import auth from './auth';
 import compose from './compose';
 import contexts from './contexts';
 import conversations from './conversations';
-import draft_statuses from './draft-statuses';
 import filters from './filters';
 import instance from './instance';
 import me from './me';
@@ -33,7 +32,6 @@ const reducers = {
   compose,
   contexts,
   conversations,
-  draft_statuses,
   entities,
   filters,
   instance,

@@ -17,7 +17,7 @@ import { buildStatus } from '../builder';
 import DraftStatusActionBar from './draft-status-action-bar';
 
 import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
-import type { DraftStatus as DraftStatusType } from 'pl-fe/reducers/draft-statuses';
+import type { DraftStatus as DraftStatusType } from 'pl-fe/queries/statuses/use-draft-statuses';
 
 interface IDraftStatus {
   draftStatus: DraftStatusType;

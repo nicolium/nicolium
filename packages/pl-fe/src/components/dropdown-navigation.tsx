@@ -20,6 +20,7 @@ import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useRegistrationStatus } from 'pl-fe/hooks/use-registration-status';
 import { useFollowRequestsCount } from 'pl-fe/queries/accounts/use-follow-requests';
 import { scheduledStatusesCountQueryOptions } from 'pl-fe/queries/statuses/scheduled-statuses';
+import { useDraftStatusesCountQuery } from 'pl-fe/queries/statuses/use-draft-statuses';
 import { useInteractionRequestsCount } from 'pl-fe/queries/statuses/use-interaction-requests';
 import { makeGetOtherAccounts } from 'pl-fe/selectors';
 import { useSettingsStore } from 'pl-fe/stores/settings';
@@ -107,7 +108,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
   const followRequestsCount = useFollowRequestsCount().data || 0;
   const interactionRequestsCount = useInteractionRequestsCount().data || 0;
   const scheduledStatusCount = useInfiniteQuery(authenticatedScheduledStatusesCountQueryOptions).data || 0;
-  const draftCount = useAppSelector((state) => Object.keys(state.draft_statuses).length);
+  const { data: draftCount = 0 } = useDraftStatusesCountQuery();
   // const dashboardCount = useAppSelector((state) => state.admin.openReports.count() + state.admin.awaitingApproval.count());
   const [sidebarVisible, setSidebarVisible] = useState(isSidebarOpen);
   const touchStart = useRef(0);

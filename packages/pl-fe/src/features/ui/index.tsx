@@ -3,7 +3,6 @@ import React, { Suspense, lazy, useEffect, useRef } from 'react';
 import { Redirect, Switch, useHistory, useLocation } from 'react-router-dom';
 
 import { fetchConfig } from 'pl-fe/actions/admin';
-import { fetchDraftStatuses } from 'pl-fe/actions/draft-statuses';
 import { fetchFilters } from 'pl-fe/actions/filters';
 import { fetchMarker } from 'pl-fe/actions/markers';
 import { expandNotifications } from 'pl-fe/actions/notifications';
@@ -413,8 +412,6 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
     if (!account) return;
 
     prefetchCustomEmojis(client);
-
-    dispatch(fetchDraftStatuses());
 
     dispatch(fetchHomeTimeline());
 

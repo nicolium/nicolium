@@ -17,6 +17,7 @@ import { useFollowRequestsCount } from 'pl-fe/queries/accounts/use-follow-reques
 import { usePendingUsersCount } from 'pl-fe/queries/admin/use-accounts';
 import { usePendingReportsCount } from 'pl-fe/queries/admin/use-reports';
 import { scheduledStatusesCountQueryOptions } from 'pl-fe/queries/statuses/scheduled-statuses';
+import { useDraftStatusesCountQuery } from 'pl-fe/queries/statuses/use-draft-statuses';
 import { useInteractionRequestsCount } from 'pl-fe/queries/statuses/use-interaction-requests';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import sourceCode from 'pl-fe/utils/code';
@@ -72,8 +73,8 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
   const { data: pendingReportsCount = 0 } = usePendingReportsCount();
   const dashboardCount = pendingReportsCount + awaitingApprovalCount;
-  const scheduledStatusCount = useInfiniteQuery(authenticatedScheduledStatusesCountQueryOptions).data || 0;
-  const draftCount = useAppSelector((state) => Object.keys(state.draft_statuses).length);
+  const { data: scheduledStatusCount = 0 } = useInfiniteQuery(authenticatedScheduledStatusesCountQueryOptions);
+  const { data: draftCount = 0 } = useDraftStatusesCountQuery();
 
   const restrictUnauth = instance.pleroma.metadata.restrict_unauthenticated;
 

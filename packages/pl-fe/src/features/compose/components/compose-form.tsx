@@ -16,7 +16,6 @@ import {
   resetCompose,
   changeComposeRedactingOverwrite,
 } from 'pl-fe/actions/compose';
-import { saveDraftStatus } from 'pl-fe/actions/draft-statuses';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import List, { ListItem } from 'pl-fe/components/list';
 import HStack from 'pl-fe/components/ui/hstack';
@@ -31,6 +30,7 @@ import { useCompose } from 'pl-fe/hooks/use-compose';
 import { useDraggedFiles } from 'pl-fe/hooks/use-dragged-files';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
+import { usePersistDraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
@@ -154,6 +154,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   const compose = useCompose(id);
   const maxTootChars = configuration.statuses.max_characters;
   const features = useFeatures();
+  const persistDraftStatus = usePersistDraftStatus();
 
   const {
     spoiler_text: spoilerText,
@@ -229,7 +230,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   const handleSaveDraft = (e?: React.FormEvent<Element>) => {
     e?.preventDefault();
 
-    dispatch(saveDraftStatus(id));
+    persistDraftStatus(id);
     closeModal('COMPOSE');
     dispatch(resetCompose(id));
     editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);

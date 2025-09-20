@@ -2,16 +2,16 @@ import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { setComposeToStatus } from 'pl-fe/actions/compose';
-import { cancelDraftStatus } from 'pl-fe/actions/draft-statuses';
 import { fetchStatus } from 'pl-fe/actions/statuses';
 import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useCancelDraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import { useSettingsStore } from 'pl-fe/stores/settings';
 
 import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
-import type { DraftStatus } from 'pl-fe/reducers/draft-statuses';
+import type { DraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
 
 const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.draft_status_delete.confirm', defaultMessage: 'Discard' },
@@ -30,17 +30,18 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
   const { openModal } = useModalsStore();
   const { settings } = useSettingsStore();
   const dispatch = useAppDispatch();
+  const cancelDraftStatus = useCancelDraftStatus();
 
   const handleCancelClick = () => {
     const deleteModal = settings.deleteModal;
     if (!deleteModal) {
-      dispatch(cancelDraftStatus(source.draft_id));
+      cancelDraftStatus(source.draft_id);
     } else {
       openModal('CONFIRM', {
         heading: intl.formatMessage(messages.deleteHeading),
         message: intl.formatMessage(messages.deleteMessage),
         confirm: intl.formatMessage(messages.deleteConfirm),
-        onConfirm: () => dispatch(cancelDraftStatus(source.draft_id)),
+        onConfirm: () => cancelDraftStatus(source.draft_id),
       });
     }
   };

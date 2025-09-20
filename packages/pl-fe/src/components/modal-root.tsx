@@ -4,9 +4,9 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { cancelReplyCompose } from 'pl-fe/actions/compose';
-import { saveDraftStatus } from 'pl-fe/actions/draft-statuses';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { usePrevious } from 'pl-fe/hooks/use-previous';
+import { usePersistDraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
 import type { ModalType } from 'pl-fe/features/ui/components/modal-root';
@@ -38,6 +38,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   const history = useHistory();
   const dispatch = useAppDispatch();
 
+  const persistDraftStatus = usePersistDraftStatus();
   const { openModal } = useModalsStore();
 
   const [revealed, setRevealed] = useState(!!children);
@@ -85,7 +86,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
           },
           secondary: intl.formatMessage(messages.saveDraft),
           onSecondary: isEditing ? undefined : () => {
-            dispatch(saveDraftStatus('compose-modal'));
+            persistDraftStatus('compose-modal');
             onClose('COMPOSE');
             dispatch(cancelReplyCompose());
           },
