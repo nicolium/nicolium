@@ -35,7 +35,7 @@ const credentialApplicationSchema = v.pipe(
     ...applicationSchema.pipe[2].entries,
     client_id: v.string(),
     client_secret: v.string(),
-    client_secret_expires_at: v.pipe(v.unknown(), v.transform(Number)),
+    client_secret_expires_at: v.fallback(v.nullable(v.pipe(v.unknown(), v.transform(Number))), null),
   }),
 );
 
