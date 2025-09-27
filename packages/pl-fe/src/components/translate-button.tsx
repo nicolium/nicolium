@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
@@ -62,22 +61,20 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   if (!features.translations || !renderTranslate || !supportsLanguages || translationQuery.data === false) return null;
 
   const button = (
-    <button className='w-fit' onClick={handleTranslate}>
-      <HStack alignItems='center' space={1} className='text-primary-600 hover:underline dark:text-gray-600'>
-        <Icon src={require('@tabler/icons/outline/language.svg')} className='size-4' />
-        <span>
-          {translationQuery.data ? (
-            <FormattedMessage id='status.show_original' defaultMessage='Show original' />
-          ) : translationQuery.isLoading ? (
-            <FormattedMessage id='status.translating' defaultMessage='Translating…' />
-          ) : (
-            <FormattedMessage id='status.translate' defaultMessage='Translate' />
-          )}
-        </span>
-        {translationQuery.isLoading && (
-          <Icon src={require('@tabler/icons/outline/loader-2.svg')} className='size-4 animate-spin' />
+    <button className='flex w-fit items-center gap-1 text-primary-600 hover:underline dark:text-gray-600' onClick={handleTranslate}>
+      <Icon src={require('@tabler/icons/outline/language.svg')} className='size-4' />
+      <span>
+        {translationQuery.data ? (
+          <FormattedMessage id='status.show_original' defaultMessage='Show original' />
+        ) : translationQuery.isLoading ? (
+          <FormattedMessage id='status.translating' defaultMessage='Translating…' />
+        ) : (
+          <FormattedMessage id='status.translate' defaultMessage='Translate' />
         )}
-      </HStack>
+      </span>
+      {translationQuery.isLoading && (
+        <Icon src={require('@tabler/icons/outline/loader-2.svg')} className='size-4 animate-spin' />
+      )}
     </button>
   );
 
