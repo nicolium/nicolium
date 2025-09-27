@@ -193,7 +193,7 @@
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-pwa": "^0.21.1",
     "vite-plugin-require": "^1.2.14",
-    "vite-plugin-static-copy": "^2.2.0",
+    "vite-plugin-static-copy": "^2.3.2",
     "vitest": "^2.1.9"
   }
 }
