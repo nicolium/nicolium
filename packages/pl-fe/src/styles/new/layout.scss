@@ -80,13 +80,13 @@ body {
 
     &__accounts {
       @apply border-t-2 border-solid border-gray-100 black:border-t dark:border-gray-800;
+    }
 
-      > a {
-        @apply block py-2;
+    &__account {
+      @apply block py-2;
 
-        > div {
-          @apply pointer-events-none;
-        }
+      > div {
+        @apply pointer-events-none;
       }
     }
 

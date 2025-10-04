@@ -149,7 +149,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
   };
 
   const renderAccount = (account: AccountEntity) => (
-    <a href='#' onClick={handleSwitchAccount(account)} key={account.id}>
+    <a className='⁂-dropdown-navigation__account-switcher__account' href='#' onClick={handleSwitchAccount(account)} key={account.id}>
       <div>
         <Account account={account} showAccountHoverCard={false} withRelationship={false} withLinkToProfile={false} />
       </div>
@@ -222,7 +222,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
 
               <DropdownNavigationLink
                 to={`/@${account.acct}`}
-                icon={require('@tabler/icons/outline/user.svg')}
+                icon={require('@phosphor-icons/core/regular/user.svg')}
                 text={intl.formatMessage(messages.profile)}
                 onClick={closeSidebar}
               />
@@ -230,7 +230,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               {(account.locked || followRequestsCount > 0) && (
                 <DropdownNavigationLink
                   to='/follow_requests'
-                  icon={require('@tabler/icons/outline/user-plus.svg')}
+                  icon={require('@phosphor-icons/core/regular/user-plus.svg')}
                   text={intl.formatMessage(messages.followRequests)}
                   onClick={closeSidebar}
                 />
@@ -239,7 +239,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               {(interactionRequestsCount > 0) && (
                 <DropdownNavigationLink
                   to='/interaction_requests'
-                  icon={require('@tabler/icons/outline/flag-question.svg')}
+                  icon={require('@phosphor-icons/core/regular/heart-half.svg')}
                   text={intl.formatMessage(messages.interactionRequests)}
                   onClick={closeSidebar}
                 />
@@ -248,7 +248,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               {features.conversations && (
                 <DropdownNavigationLink
                   to='/conversations'
-                  icon={require('@tabler/icons/outline/mail.svg')}
+                  icon={require('@phosphor-icons/core/regular/envelope-simple.svg')}
                   text={intl.formatMessage(messages.conversations)}
                   onClick={closeSidebar}
                 />
@@ -257,7 +257,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               {features.bookmarks && (
                 <DropdownNavigationLink
                   to='/bookmarks'
-                  icon={require('@tabler/icons/outline/bookmark.svg')}
+                  icon={require('@phosphor-icons/core/regular/bookmarks.svg')}
                   text={intl.formatMessage(messages.bookmarks)}
                   onClick={closeSidebar}
                 />
@@ -266,7 +266,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               {features.groups && (
                 <DropdownNavigationLink
                   to='/groups'
-                  icon={require('@tabler/icons/outline/circles.svg')}
+                  icon={require('@phosphor-icons/core/regular/users-three.svg')}
                   text={intl.formatMessage(messages.groups)}
                   onClick={closeSidebar}
                 />
@@ -275,7 +275,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               {features.lists && (
                 <DropdownNavigationLink
                   to='/lists'
-                  icon={require('@tabler/icons/outline/list.svg')}
+                  icon={require('@phosphor-icons/core/regular/list-dashes.svg')}
                   text={intl.formatMessage(messages.lists)}
                   onClick={closeSidebar}
                 />
@@ -284,7 +284,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               {features.circles && (
                 <DropdownNavigationLink
                   to='/circles'
-                  icon={require('@tabler/icons/outline/chart-circles.svg')}
+                  icon={require('@phosphor-icons/core/regular/circles-three.svg')}
                   text={intl.formatMessage(messages.circles)}
                   onClick={closeSidebar}
                 />
@@ -293,7 +293,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               {features.events && (
                 <DropdownNavigationLink
                   to='/events'
-                  icon={require('@tabler/icons/outline/calendar-event.svg')}
+                  icon={require('@phosphor-icons/core/regular/calendar-dot.svg')}
                   text={intl.formatMessage(messages.events)}
                   onClick={closeSidebar}
                 />
@@ -302,7 +302,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               {features.profileDirectory && (
                 <DropdownNavigationLink
                   to='/directory'
-                  icon={require('@tabler/icons/outline/address-book.svg')}
+                  icon={require('@phosphor-icons/core/regular/address-book.svg')}
                   text={intl.formatMessage(messages.profileDirectory)}
                   onClick={closeSidebar}
                 />
@@ -311,7 +311,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               {scheduledStatusCount > 0 && (
                 <DropdownNavigationLink
                   to='/scheduled_statuses'
-                  icon={require('@tabler/icons/outline/calendar-stats.svg')}
+                  icon={require('@phosphor-icons/core/regular/hourglass.svg')}
                   text={intl.formatMessage(messages.scheduledStatuses)}
                   onClick={closeSidebar}
                 />
@@ -320,7 +320,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               {draftCount > 0 && (
                 <DropdownNavigationLink
                   to='/draft_statuses'
-                  icon={require('@tabler/icons/outline/notes.svg')}
+                  icon={require('@phosphor-icons/core/regular/pencil-simple.svg')}
                   text={intl.formatMessage(messages.drafts)}
                   onClick={closeSidebar}
                 />
@@ -331,7 +331,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
 
                 <DropdownNavigationLink
                   to='/timeline/local'
-                  icon={features.federating ? require('@tabler/icons/outline/affiliate.svg') : require('@tabler/icons/outline/world.svg')}
+                  icon={require('@phosphor-icons/core/regular/planet.svg')}
                   text={features.federating ? <FormattedMessage id='tabs_bar.local' defaultMessage='Local' /> : <FormattedMessage id='tabs_bar.all' defaultMessage='All' />}
                   onClick={closeSidebar}
                 />
@@ -339,7 +339,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 {features.bubbleTimeline && (
                   <DropdownNavigationLink
                     to='/timeline/bubble'
-                    icon={require('@tabler/icons/outline/chart-bubble.svg')}
+                    icon={require('@phosphor-icons/core/regular/graph.svg')}
                     text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
                     onClick={closeSidebar}
                   />
@@ -348,7 +348,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 {features.federating && (
                   <DropdownNavigationLink
                     to='/timeline/fediverse'
-                    icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
+                    icon={require('@phosphor-icons/core/regular/fediverse-logo.svg')}
                     text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
                     onClick={closeSidebar}
                   />
@@ -359,7 +359,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
 
               <DropdownNavigationLink
                 to='/settings/preferences'
-                icon={require('@tabler/icons/outline/settings.svg')}
+                icon={require('@phosphor-icons/core/regular/sliders-horizontal.svg')}
                 text={intl.formatMessage(messages.preferences)}
                 onClick={closeSidebar}
               />
@@ -367,7 +367,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               {features.followedHashtagsList && (
                 <DropdownNavigationLink
                   to='/followed_tags'
-                  icon={require('@tabler/icons/outline/hash.svg')}
+                  icon={require('@phosphor-icons/core/regular/hash.svg')}
                   text={intl.formatMessage(messages.followedTags)}
                   onClick={closeSidebar}
                 />
@@ -376,7 +376,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               {(account.is_admin || account.is_moderator) && (
                 <DropdownNavigationLink
                   to='/admin'
-                  icon={require('@tabler/icons/outline/dashboard.svg')}
+                  icon={require('@phosphor-icons/core/regular/gauge.svg')}
                   text={intl.formatMessage(messages.dashboard)}
                   onClick={closeSidebar}
                   // count={dashboardCount} WIP
@@ -387,7 +387,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
 
               <DropdownNavigationLink
                 to='/logout'
-                icon={require('@tabler/icons/outline/logout.svg')}
+                icon={require('@phosphor-icons/core/regular/sign-out.svg')}
                 text={intl.formatMessage(messages.logout)}
                 onClick={onClickLogOut}
               />
@@ -396,7 +396,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
 
               <DropdownNavigationLink
                 href={sourceCode.url}
-                icon={require('@tabler/icons/outline/code.svg')}
+                icon={require('@phosphor-icons/core/regular/code.svg')}
                 text={intl.formatMessage(messages.sourceCode)}
                 onClick={closeSidebar}
               />
@@ -414,7 +414,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                   </Text>
 
                   <Icon
-                    src={require('@tabler/icons/outline/chevron-down.svg')}
+                    src={require('@phosphor-icons/core/regular/caret-down.svg')}
                   />
                 </button>
 
@@ -423,7 +423,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                     {otherAccounts.map(account => renderAccount(account))}
 
                     <NavLink className='⁂-dropdown-navigation__account-switcher__add' to='/login/add' onClick={handleClose}>
-                      <Icon src={require('@tabler/icons/outline/plus.svg')} />
+                      <Icon src={require('@phosphor-icons/core/regular/plus.svg')} />
                       <Text size='sm' weight='medium'>{intl.formatMessage(messages.addAccount)}</Text>
                     </NavLink>
                   </div>
@@ -436,7 +436,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
             {features.publicTimeline && !restrictUnauth.timelines.local && <>
               <DropdownNavigationLink
                 to='/timeline/local'
-                icon={features.federating ? require('@tabler/icons/outline/affiliate.svg') : require('@tabler/icons/outline/world.svg')}
+                icon={require('@phosphor-icons/core/regular/planet.svg')}
                 text={features.federating ? <FormattedMessage id='tabs_bar.local' defaultMessage='Local' /> : <FormattedMessage id='tabs_bar.all' defaultMessage='All' />}
                 onClick={closeSidebar}
               />
@@ -444,7 +444,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               {features.bubbleTimeline && !restrictUnauth.timelines.bubble && (
                 <DropdownNavigationLink
                   to='/timeline/bubble'
-                  icon={require('@tabler/icons/outline/chart-bubble.svg')}
+                  icon={require('@phosphor-icons/core/regular/graph.svg')}
                   text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
                   onClick={closeSidebar}
                 />
@@ -453,7 +453,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               {features.federating && !restrictUnauth.timelines.federated && (
                 <DropdownNavigationLink
                   to='/timeline/fediverse'
-                  icon={require('@tabler/icons/outline/topology-star-ring-3.svg')}
+                  icon={require('@phosphor-icons/core/regular/fediverse-logo.svg')}
                   text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
                   onClick={closeSidebar}
                 />
@@ -464,7 +464,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
 
             <DropdownNavigationLink
               to='/login'
-              icon={require('@tabler/icons/outline/login.svg')}
+              icon={require('@phosphor-icons/core/regular/sign-in.svg')}
               text={intl.formatMessage(messages.login)}
               onClick={closeSidebar}
             />
@@ -472,7 +472,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
             {isOpen && (
               <DropdownNavigationLink
                 to='/signup'
-                icon={require('@tabler/icons/outline/user-plus.svg')}
+                icon={require('@phosphor-icons/core/regular/user-plus.svg')}
                 text={intl.formatMessage(messages.register)}
                 onClick={closeSidebar}
               />
@@ -482,7 +482,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
 
             <DropdownNavigationLink
               href={sourceCode.url}
-              icon={require('@tabler/icons/outline/code.svg')}
+              icon={require('@phosphor-icons/core/regular/code.svg')}
               text={intl.formatMessage(messages.sourceCode)}
               onClick={closeSidebar}
             />

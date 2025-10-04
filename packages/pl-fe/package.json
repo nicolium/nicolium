@@ -55,6 +55,7 @@
     "@lexical/selection": "^0.29.0",
     "@lexical/utils": "^0.29.0",
     "@mkljczk/url-purify": "^0.0.3",
+    "@phosphor-icons/core": "^2.1.1",
     "@reach/combobox": "^0.18.0",
     "@reach/rect": "^0.18.0",
     "@reach/tabs": "^0.18.0",
