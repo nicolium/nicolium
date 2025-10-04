@@ -253,8 +253,8 @@ const LanguageDropdownButton: React.FC<ILanguageDropdownButton> = ({ composeId }
         theme='muted'
         size='xs'
         text={buttonLabel}
-        icon={require('@tabler/icons/outline/language.svg')}
-        secondaryIcon={require('@tabler/icons/outline/chevron-down.svg')}
+        icon={require('@phosphor-icons/core/regular/translate.svg')}
+        secondaryIcon={require('@phosphor-icons/core/regular/caret-down.svg')}
         title={intl.formatMessage(messages.languagePrompt)}
       />
     </DropdownMenu>

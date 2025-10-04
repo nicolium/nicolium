@@ -69,7 +69,7 @@ const ChatPaneHeader = (props: IChatPaneHeader) => {
 
         <IconButton
           onClick={onToggle}
-          src={require('@tabler/icons/outline/chevron-up.svg')}
+          src={require('@phosphor-icons/core/regular/caret-up.svg')}
           iconClassName={clsx('size-5 text-gray-600 transition-transform', {
             'rotate-180': isOpen,
           })}

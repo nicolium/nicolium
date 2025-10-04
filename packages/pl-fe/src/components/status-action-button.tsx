@@ -33,17 +33,17 @@ const StatusActionCounter: React.FC<IStatusActionCounter> = React.memo(({ count 
 interface IStatusActionButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   iconClassName?: string;
   icon: string;
+  filledIcon?: string;
   count?: number;
   active?: boolean;
   color?: Color;
-  filled?: boolean;
   text?: React.ReactNode;
   theme?: 'default' | 'inverse';
   onLongPress?: (event: React.MouseEvent | React.TouchEvent) => void;
 }
 
 const StatusActionButton = React.forwardRef<HTMLButtonElement, IStatusActionButton>((props, ref): JSX.Element => {
-  const { icon, className, iconClassName, active, color, filled = false, count = 0, text, theme = 'default', onLongPress, ...filteredProps } = props;
+  const { icon, filledIcon, className, iconClassName, active, color, count = 0, text, theme = 'default', onLongPress, ...filteredProps } = props;
 
   const longPressBind = useLongPress((e) => {
     if (!onLongPress || e.type !== 'touchstart') return;
@@ -57,13 +57,8 @@ const StatusActionButton = React.forwardRef<HTMLButtonElement, IStatusActionButt
   const renderIcon = () => {
     return (
       <Icon
-        src={icon}
-        className={clsx(
-          {
-            'fill-accent-300 text-accent-300 hover:fill-accent-300': active && filled && color === COLORS.accent,
-          },
-          iconClassName,
-        )}
+        src={active && filledIcon || icon}
+        className={iconClassName}
       />
     );
   };

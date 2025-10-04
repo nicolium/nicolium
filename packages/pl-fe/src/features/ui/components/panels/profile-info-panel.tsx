@@ -177,7 +177,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
           {account.local ? (
             <HStack alignItems='center' space={0.5}>
               <Icon
-                src={require('@tabler/icons/outline/calendar.svg')}
+                src={require('@phosphor-icons/core/regular/calendar-dots.svg')}
                 className='size-4 text-gray-800 dark:text-gray-200'
               />
 

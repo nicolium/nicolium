@@ -23,7 +23,7 @@ const ChatPageShoutbox = () => {
         <HStack alignItems='center' space={2} className='overflow-hidden'>
           <HStack alignItems='center'>
             <IconButton
-              src={require('@tabler/icons/outline/arrow-left.svg')}
+              src={require('@phosphor-icons/core/regular/arrow-left.svg')}
               className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
               onClick={() => history.push('/chats')}
             />

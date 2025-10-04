@@ -18,7 +18,7 @@ const NewEventPanel = () => (
     </Stack>
 
     <Button
-      icon={require('@tabler/icons/outline/calendar-event.svg')}
+      icon={require('@phosphor-icons/core/regular/calendar-dot.svg')}
       theme='secondary'
       block
       to='/events/new'

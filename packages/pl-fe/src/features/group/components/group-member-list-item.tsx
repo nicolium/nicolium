@@ -132,13 +132,13 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
       if (isMemberUser) {
         items.push({
           text: intl.formatMessage(messages.groupModPromoteMod, { role: GroupRoles.ADMIN }),
-          icon: require('@tabler/icons/outline/briefcase.svg'),
+          icon: require('@phosphor-icons/core/regular/suitcase.svg'),
           action: handleAdminAssignment,
         });
       } else if (isMemberAdmin) {
         items.push({
           text: intl.formatMessage(messages.groupModDemote, { role: GroupRoles.ADMIN, name: account.username }),
-          icon: require('@tabler/icons/outline/briefcase.svg'),
+          icon: require('@phosphor-icons/core/regular/suitcase.svg'),
           action: handleUserAssignment,
           destructive: true,
         });

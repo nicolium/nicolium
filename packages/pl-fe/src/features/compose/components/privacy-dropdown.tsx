@@ -47,52 +47,52 @@ interface Option {
 
 const getItems = (features: Features, lists: ReturnType<typeof getOrderedLists>, circles: Array<Circle>, intl: IntlShape) => [
   {
-    icon: require('@tabler/icons/outline/world.svg'),
+    icon: require('@phosphor-icons/core/regular/globe.svg'),
     value: 'public',
     text: intl.formatMessage(messages.public_short),
     meta: intl.formatMessage(messages.public_long),
   },
   {
-    icon: require('@tabler/icons/outline/lock-open.svg'),
+    icon: require('@phosphor-icons/core/regular/lock-open.svg'),
     value: 'unlisted',
     text: intl.formatMessage(messages.unlisted_short),
     meta: intl.formatMessage(messages.unlisted_long),
   },
   {
-    icon: require('@tabler/icons/outline/lock.svg'),
+    icon: require('@phosphor-icons/core/regular/lock.svg'),
     value: 'private',
     text: intl.formatMessage(messages.private_short),
     meta: intl.formatMessage(messages.private_long),
   },
   features.createStatusMutualsOnlyScope ? {
-    icon: require('@tabler/icons/outline/users-group.svg'),
+    icon: require('@phosphor-icons/core/regular/users-three.svg'),
     value: 'mutuals_only',
     text: intl.formatMessage(messages.mutuals_only_short),
     meta: intl.formatMessage(messages.mutuals_only_long),
   } : undefined,
   features.createStatusSubscribersScope ? {
-    icon: require('@tabler/icons/outline/coin.svg'),
+    icon: require('@phosphor-icons/core/regular/coins.svg'),
     value: 'subscribers',
     text: intl.formatMessage(messages.subscribers_short),
     meta: intl.formatMessage(messages.subscribers_long),
   } : undefined,
   {
-    icon: require('@tabler/icons/outline/mail.svg'),
+    icon: require('@phosphor-icons/core/regular/envelope-simple.svg'),
     value: 'direct',
     text: intl.formatMessage(messages.direct_short),
     meta: intl.formatMessage(messages.direct_long),
   },
   features.createStatusLocalScope ? {
-    icon: require('@tabler/icons/outline/affiliate.svg'),
+    icon: require('@phosphor-icons/core/regular/planet.svg'),
     value: 'local',
     text: intl.formatMessage(messages.local_short),
     meta: intl.formatMessage(messages.local_long),
   } : undefined,
   features.createStatusListScope && Object.keys(lists).length ? {
-    icon: require('@tabler/icons/outline/list.svg'),
+    icon: require('@phosphor-icons/core/regular/list-dashes.svg'),
     value: '',
     items: Object.values(lists).map((list) => ({
-      icon: require('@tabler/icons/outline/list.svg'),
+      icon: require('@phosphor-icons/core/regular/list-dashes.svg'),
       value: `list:${list.id}`,
       text: list.title,
     })),
@@ -100,10 +100,10 @@ const getItems = (features: Features, lists: ReturnType<typeof getOrderedLists>,
     meta: intl.formatMessage(messages.list_long),
   } as Option : undefined,
   features.circles && Object.keys(circles).length ? {
-    icon: require('@tabler/icons/outline/chart-circles.svg'),
+    icon: require('@phosphor-icons/core/regular/circles-three.svg'),
     value: '',
     items: Object.values(circles).map((circle) => ({
-      icon: require('@tabler/icons/outline/list.svg'),
+      icon: require('@phosphor-icons/core/regular/list-dashes.svg'),
       value: `circle:${circle.id}`,
       text: circle.title,
     })),
@@ -146,7 +146,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
   }));
 
   if (features.localOnlyStatuses) items.push({
-    icon: require('@tabler/icons/outline/affiliate.svg'),
+    icon: require('@phosphor-icons/core/regular/planet.svg'),
     text: intl.formatMessage(messages.local_short),
     meta: intl.formatMessage(messages.local_long),
     type: 'toggle',
@@ -172,7 +172,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
           privacy: valueOption?.text,
         })}
         icon={valueOption?.icon}
-        secondaryIcon={require('@tabler/icons/outline/chevron-down.svg')}
+        secondaryIcon={require('@phosphor-icons/core/regular/caret-down.svg')}
         title={intl.formatMessage(messages.change_privacy)}
       />
     </DropdownMenu>

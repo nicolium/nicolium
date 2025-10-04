@@ -29,7 +29,7 @@ const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = React.memo(({ stat
 
   if (!status.content_map || Object.keys(status.content_map).length < 2) return null;
 
-  const icon = <Icon className='size-4 text-gray-700 dark:text-gray-600' src={require('@tabler/icons/outline/language.svg')} />;
+  const icon = <Icon className='size-4 text-gray-700 dark:text-gray-600' src={require('@phosphor-icons/core/regular/translate.svg')} />;
 
   return (
     <>

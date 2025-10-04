@@ -64,7 +64,7 @@ const EmojiPicker: React.FC<IEmojiPicker> = ({ emoji, emojiUrl, ...props }) => {
       >
         {emoji
           ? <Emoji className='size-5' emoji={emoji} src={emojiUrl} />
-          : <Icon className='size-5 text-gray-600 hover:text-gray-700 dark:hover:text-gray-500' src={require('@tabler/icons/outline/mood-happy.svg')} />}
+          : <Icon className='size-5 text-gray-600 hover:text-gray-700 dark:hover:text-gray-500' src={require('@phosphor-icons/core/regular/smiley.svg')} />}
       </button>
 
       {createPortal(

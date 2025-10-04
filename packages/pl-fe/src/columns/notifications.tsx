@@ -75,43 +75,43 @@ const FilterBar = () => {
     });
   } else {
     items.push({
-      text: <Icon className='size-4' src={require('@tabler/icons/outline/at.svg')} />,
+      text: <Icon className='size-4' src={require('@phosphor-icons/core/regular/at.svg')} />,
       title: intl.formatMessage(messages.mentions),
       action: onClick('mention'),
       name: 'mention',
     });
     if (features.accountNotifies) items.push({
-      text: <Icon className='size-4' src={require('@tabler/icons/outline/bell-ringing.svg')} />,
+      text: <Icon className='size-4' src={require('@phosphor-icons/core/regular/bell-simple-ringing.svg')} />,
       title: intl.formatMessage(messages.statuses),
       action: onClick('status'),
       name: 'status',
     });
     items.push({
-      text: <Icon className='size-4' src={require('@tabler/icons/outline/star.svg')} />,
+      text: <Icon className='size-4' src={require('@phosphor-icons/core/regular/star.svg')} />,
       title: intl.formatMessage(messages.favourites),
       action: onClick('favourite'),
       name: 'favourite',
     });
     items.push({
-      text: <Icon className='size-4' src={require('@tabler/icons/outline/repeat.svg')} />,
+      text: <Icon className='size-4' src={require('@phosphor-icons/core/regular/repeat.svg')} />,
       title: intl.formatMessage(messages.boosts),
       action: onClick('reblog'),
       name: 'reblog',
     });
     if (features.polls) items.push({
-      text: <Icon className='size-4' src={require('@tabler/icons/outline/chart-bar.svg')} />,
+      text: <Icon className='size-4' src={require('@phosphor-icons/core/regular/chart-bar.svg')} />,
       title: intl.formatMessage(messages.polls),
       action: onClick('poll'),
       name: 'poll',
     });
     if (features.events) items.push({
-      text: <Icon className='size-4' src={require('@tabler/icons/outline/calendar.svg')} />,
+      text: <Icon className='size-4' src={require('@phosphor-icons/core/regular/calendar-dots.svg')} />,
       title: intl.formatMessage(messages.events),
       action: onClick('events'),
       name: 'events',
     });
     items.push({
-      text: <Icon className='size-4' src={require('@tabler/icons/outline/user-plus.svg')} />,
+      text: <Icon className='size-4' src={require('@phosphor-icons/core/regular/user-plus.svg')} />,
       title: intl.formatMessage(messages.follows),
       action: onClick('follow'),
       name: 'follow',

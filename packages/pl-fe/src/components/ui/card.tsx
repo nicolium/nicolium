@@ -69,7 +69,7 @@ const CardHeader: React.FC<ICardHeader> = ({ className, children, backHref, onBa
 
     return (
       <Comp {...backAttributes} className='⁂-card-header__button' aria-label={intl.formatMessage(messages.back)}>
-        <SvgIcon src={require('@tabler/icons/outline/arrow-left.svg')} />
+        <SvgIcon src={require('@phosphor-icons/core/regular/arrow-left.svg')} />
         <span className='⁂-card-header__button__label' data-testid='back-button'>{intl.formatMessage(messages.back)}</span>
       </Comp>
     );

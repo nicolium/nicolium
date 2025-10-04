@@ -56,7 +56,7 @@ const SubscriptionButton = ({ account }: ISubscriptionButton) => {
   if (isRequested || isFollowing) {
     return (
       <IconButton
-        src={isSubscribed ? require('@tabler/icons/outline/bell-ringing.svg') : require('@tabler/icons/outline/bell.svg')}
+        src={isSubscribed ? require('@phosphor-icons/core/regular/bell-simple-ringing.svg') : require('@phosphor-icons/core/regular/bell-simple.svg')}
         onClick={handleToggle}
         title={title}
         theme='outlined'

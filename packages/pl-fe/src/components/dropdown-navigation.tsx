@@ -293,7 +293,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               {features.events && (
                 <DropdownNavigationLink
                   to='/events'
-                  icon={require('@phosphor-icons/core/regular/calendar-dot.svg')}
+                  icon={require('@phosphor-icons/core/regular/calendar-dots.svg')}
                   text={intl.formatMessage(messages.events)}
                   onClick={closeSidebar}
                 />

@@ -62,7 +62,7 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
 
   const button = (
     <button className='flex w-fit items-center gap-1 text-primary-600 hover:underline dark:text-gray-600' onClick={handleTranslate}>
-      <Icon src={require('@tabler/icons/outline/language.svg')} className='size-4' />
+      <Icon src={require('@phosphor-icons/core/regular/translate.svg')} className='size-4' />
       <span>
         {translationQuery.data ? (
           <FormattedMessage id='status.show_original' defaultMessage='Show original' />

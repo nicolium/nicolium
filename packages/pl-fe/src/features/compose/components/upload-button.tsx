@@ -56,8 +56,8 @@ const UploadButton: React.FC<IUploadButton> = ({
 
   const src = icon || (
     onlyImages(attachmentTypes)
-      ? require('@tabler/icons/outline/photo.svg')
-      : require('@tabler/icons/outline/paperclip.svg')
+      ? require('@phosphor-icons/core/regular/image.svg')
+      : require('@phosphor-icons/core/regular/paperclip.svg')
   );
 
   return (

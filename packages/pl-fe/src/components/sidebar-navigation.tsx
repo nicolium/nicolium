@@ -136,7 +136,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         menu.push({
           to: '/events',
           text: intl.formatMessage(messages.events),
-          icon: require('@phosphor-icons/core/regular/calendar-dot.svg'),
+          icon: require('@phosphor-icons/core/regular/calendar-dots.svg'),
         });
       }
 

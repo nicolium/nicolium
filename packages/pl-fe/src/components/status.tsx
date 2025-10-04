@@ -205,7 +205,7 @@ const Status: React.FC<IStatus> = (props) => {
       return (
         <StatusInfo
           avatarSize={avatarSize}
-          icon={<Icon src={require('@tabler/icons/outline/repeat.svg')} className='size-4 text-green-600' />}
+          icon={<Icon src={require('@phosphor-icons/core/regular/repeat.svg')} className='size-4 text-green-600' />}
           text={
             <FormattedMessage
               id='status.reblogged_by_with_group'
@@ -266,7 +266,7 @@ const Status: React.FC<IStatus> = (props) => {
       return (
         <StatusInfo
           avatarSize={avatarSize}
-          icon={<Icon src={require('@tabler/icons/outline/repeat.svg')} className='size-4 text-green-600' />}
+          icon={<Icon src={require('@phosphor-icons/core/regular/repeat.svg')} className='size-4 text-green-600' />}
           text={
             status.visibility === 'private' ? (
               <FormattedMessage

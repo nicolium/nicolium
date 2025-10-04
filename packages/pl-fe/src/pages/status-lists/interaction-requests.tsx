@@ -37,9 +37,9 @@ const messages = defineMessages({
 });
 
 const icons = {
-  favourite: require('@tabler/icons/outline/star.svg'),
-  reblog: require('@tabler/icons/outline/repeat.svg'),
-  reply: require('@tabler/icons/outline/corner-up-left.svg'),
+  favourite: require('@phosphor-icons/core/regular/star.svg'),
+  reblog: require('@phosphor-icons/core/regular/repeat.svg'),
+  reply: require('@phosphor-icons/core/regular/arrow-bend-up-left.svg'),
 };
 
 const avatarSize = 42;

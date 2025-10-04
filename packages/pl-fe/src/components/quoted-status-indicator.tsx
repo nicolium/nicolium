@@ -20,7 +20,7 @@ const QuotedStatusIndicator: React.FC<IQuotedStatusIndicator> = ({ statusId }) =
 
   return (
     <HStack alignItems='center' space={1}>
-      <Icon className='size-5' src={require('@tabler/icons/outline/quote.svg')} aria-hidden />
+      <Icon className='size-5' src={require('@phosphor-icons/core/regular/quotes.svg')} aria-hidden />
       <Text truncate>{status.url}</Text>
     </HStack>
   );

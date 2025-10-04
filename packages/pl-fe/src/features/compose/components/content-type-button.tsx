@@ -36,7 +36,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId }) => {
 
   if (postFormats.includes('text/plain')) {
     options.push({
-      icon: require('@tabler/icons/outline/pilcrow.svg'),
+      icon: require('@phosphor-icons/core/regular/paragraph.svg'),
       text: intl.formatMessage(messages.content_type_plaintext),
       value: 'text/plain',
     });
@@ -44,7 +44,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId }) => {
 
   if (postFormats.includes('text/markdown')) {
     options.push({
-      icon: require('@tabler/icons/outline/markdown.svg'),
+      icon: require('@phosphor-icons/core/regular/markdown-logo.svg'),
       text: intl.formatMessage(messages.content_type_markdown),
       value: 'text/markdown',
     });
@@ -52,7 +52,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId }) => {
 
   if (postFormats.includes('text/x.misskeymarkdown')) {
     options.push({
-      icon: require('@tabler/icons/outline/sparkles.svg'),
+      icon: require('@phosphor-icons/core/regular/sparkle.svg'),
       text: intl.formatMessage(messages.content_type_mfm),
       value: 'text/x.misskeymarkdown',
     });
@@ -60,7 +60,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId }) => {
 
   if (postFormats.includes('text/html')) {
     options.push({
-      icon: require('@tabler/icons/outline/html.svg'),
+      icon: require('@phosphor-icons/core/regular/file-html.svg'),
       text: intl.formatMessage(messages.content_type_html),
       value: 'text/html',
     });
@@ -68,7 +68,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId }) => {
 
   if (postFormats.includes('text/markdown')) {
     options.push({
-      icon: require('@tabler/icons/outline/text-caption.svg'),
+      icon: require('@phosphor-icons/core/regular/text-indent.svg'),
       text: intl.formatMessage(messages.content_type_wysiwyg),
       value: 'wysiwyg',
     });
@@ -90,7 +90,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId }) => {
         size='xs'
         text={option?.text}
         icon={option?.icon}
-        secondaryIcon={require('@tabler/icons/outline/chevron-down.svg')}
+        secondaryIcon={require('@phosphor-icons/core/regular/caret-down.svg')}
         title={intl.formatMessage(messages.change_content_type)}
       />
     </DropdownMenu>

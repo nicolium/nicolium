@@ -100,7 +100,7 @@ const MovedNote: React.FC<IMovedNote> = ({ from, to }) => (
   <div className='p-4'>
     <HStack className='mb-2' alignItems='center' space={1.5}>
       <Icon
-        src={require('@tabler/icons/outline/briefcase.svg')}
+        src={require('@phosphor-icons/core/regular/suitcase.svg')}
         className='flex-none text-primary-600 dark:text-primary-400'
       />
 
@@ -410,7 +410,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       menu.push({
         text: intl.formatMessage(messages.mention, { name: account.username }),
         action: onMention,
-        icon: require('@tabler/icons/outline/at.svg'),
+        icon: require('@phosphor-icons/core/regular/at.svg'),
       });
 
       if (features.privacyScopes) {
@@ -426,13 +426,13 @@ const Header: React.FC<IHeader> = ({ account }) => {
           menu.push({
             text: intl.formatMessage(messages.hideReblogs, { name: account.username }),
             action: onReblogToggle,
-            icon: require('@tabler/icons/outline/repeat.svg'),
+            icon: require('@phosphor-icons/core/regular/repeat.svg'),
           });
         } else {
           menu.push({
             text: intl.formatMessage(messages.showReblogs, { name: account.username }),
             action: onReblogToggle,
-            icon: require('@tabler/icons/outline/repeat.svg'),
+            icon: require('@phosphor-icons/core/regular/repeat.svg'),
           });
         }
 
@@ -651,7 +651,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
     if (account.accepts_chat_messages) {
       return (
         <IconButton
-          src={require('@tabler/icons/outline/messages.svg')}
+          src={require('@phosphor-icons/core/regular/chats.svg')}
           onClick={() => createAndNavigateToChat.mutate(account.id)}
           title={intl.formatMessage(messages.chat, { name: account.username })}
           theme='outlined'

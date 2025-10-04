@@ -123,7 +123,7 @@ const ComposeButton: React.FC<IComposeButton> = ({ actionsMenu, disabled, icon, 
         {button}
         <DropdownMenu items={actionsMenu} placement='bottom' disabled={disabled}>
           <button className={clsx('h-full cursor-pointer py-2.5 pl-1 pr-3 last:rounded-r-full', buttonClassName)} title={intl.formatMessage(messages.more)}>
-            <SvgIcon src={require('@tabler/icons/filled/caret-down.svg')} className='size-4' />
+            <SvgIcon src={require('@phosphor-icons/core/regular/caret-down.svg')} className='size-4' />
           </button>
         </DropdownMenu>
       </div>
@@ -328,10 +328,10 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   if (isEditing) {
     publishText = intl.formatMessage(messages.saveChanges);
   } else if (privacy === 'direct') {
-    publishIcon = require('@tabler/icons/outline/mail.svg');
+    publishIcon = require('@phosphor-icons/core/regular/envelope-simple.svg');
     publishText = intl.formatMessage(messages.message);
   } else if (privacy === 'private' || privacy === 'mutuals_only') {
-    publishIcon = require('@tabler/icons/outline/lock.svg');
+    publishIcon = require('@phosphor-icons/core/regular/lock.svg');
     publishText = intl.formatMessage(messages.publish);
   } else {
     publishText = privacy !== 'unlisted' ? intl.formatMessage(messages.publishLoud, { publish: intl.formatMessage(messages.publish) }) : intl.formatMessage(messages.publish);
@@ -353,14 +353,14 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     actionsMenu.push({
       text: intl.formatMessage(messages.preview),
       action: handlePreview,
-      icon: require('@tabler/icons/outline/eye.svg'),
+      icon: require('@phosphor-icons/core/regular/eye.svg'),
     });
   }
 
   actionsMenu.push({
     text: intl.formatMessage(messages.saveDraft),
     action: handleSaveDraft,
-    icon: require('@tabler/icons/outline/notes.svg'),
+    icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
   });
 
   return (

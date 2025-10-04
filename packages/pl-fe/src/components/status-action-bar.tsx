@@ -242,7 +242,7 @@ const ReplyButton: React.FC<IReplyButton> = ({
   const replyButton = (
     <StatusActionButton
       title={replyTitle}
-      icon={require('@tabler/icons/outline/message-circle.svg')}
+      icon={status.in_reply_to_id ? require('@phosphor-icons/core/regular/arrow-bend-double-up-left.svg') : require('@phosphor-icons/core/regular/arrow-bend-up-left.svg')}
       onClick={handleReplyClick}
       count={status.replies_count}
       text={withLabels ? intl.formatMessage(messages.reply) : undefined}
@@ -293,12 +293,12 @@ const ReblogButton: React.FC<IReblogButton> = ({
   const { mutate: reblogStatus } = useReblogStatus(status.id);
   const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
 
-  let reblogIcon = require('@tabler/icons/outline/repeat.svg');
+  let reblogIcon = require('@phosphor-icons/core/regular/repeat.svg');
 
   if (status.visibility === 'direct') {
-    reblogIcon = require('@tabler/icons/outline/mail.svg');
+    reblogIcon = require('@phosphor-icons/core/regular/envelope-simple.svg');
   } else if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
-    reblogIcon = require('@tabler/icons/outline/lock.svg');
+    reblogIcon = require('@phosphor-icons/core/regular/lock.svg');
   }
 
   const handleReblogClick: React.EventHandler<React.MouseEvent> = e => {
@@ -365,11 +365,11 @@ const ReblogButton: React.FC<IReblogButton> = ({
   const reblogMenu = [{
     text: intl.formatMessage(status.reblogged ? messages.cancel_reblog_private : messages.reblog),
     action: handleReblogClick,
-    icon: require('@tabler/icons/outline/repeat.svg'),
+    icon: require('@phosphor-icons/core/regular/repeat.svg'),
   }, {
     text: intl.formatMessage(messages.quotePost),
     action: handleQuoteClick,
-    icon: require('@tabler/icons/outline/quote.svg'),
+    icon: require('@phosphor-icons/core/regular/quotes.svg'),
   }];
 
   return (
@@ -422,9 +422,9 @@ const FavouriteButton: React.FC<IActionButton> = ({
   const favouriteButton = (
     <StatusActionButton
       title={intl.formatMessage(messages.favourite)}
-      icon={features.statusDislikes ? require('@tabler/icons/outline/thumb-up.svg') : require('@tabler/icons/outline/star.svg')}
+      icon={features.statusDislikes ? require('@phosphor-icons/core/regular/thumbs-up.svg') : require('@phosphor-icons/core/regular/star.svg')}
+      filledIcon={features.statusDislikes ? require('@phosphor-icons/core/fill/thumbs-up-fill.svg') : require('@phosphor-icons/core/fill/star-fill.svg')}
       color='accent'
-      filled
       onClick={handleFavouriteClick}
       onLongPress={handleFavouriteLongPress}
       active={status.favourited}
@@ -481,9 +481,9 @@ const DislikeButton: React.FC<IActionButton> = ({
   return (
     <StatusActionButton
       title={intl.formatMessage(messages.disfavourite)}
-      icon={require('@tabler/icons/outline/thumb-down.svg')}
+      icon={require('@phosphor-icons/core/regular/thumbs-down.svg')}
+      filledIcon={require('@phosphor-icons/core/fill/thumbs-down-fill.svg')}
       color='accent'
-      filled
       onClick={handleDislikeClick}
       onLongPress={handleDislikeLongPress}
       active={status.disliked}
@@ -534,9 +534,9 @@ const WrenchButton: React.FC<IActionButton> = ({
   return (
     <StatusActionButton
       title={intl.formatMessage(messages.wrench)}
-      icon={require('@tabler/icons/outline/tool.svg')}
+      icon={require('@phosphor-icons/core/regular/wrench.svg')}
+      filledIcon={require('@phosphor-icons/core/fill/wrench-fill.svg')}
       color='accent'
-      filled
       onClick={handleWrenchClick}
       onLongPress={handleWrenchLongPress}
       active={wrenches?.me}
@@ -589,7 +589,7 @@ const ShareButton: React.FC<Pick<IActionButton, 'status' | 'statusActionButtonTh
   return canShare && (
     <StatusActionButton
       title={intl.formatMessage(messages.share)}
-      icon={require('@tabler/icons/outline/upload.svg')}
+      icon={require('@phosphor-icons/core/regular/export.svg')}
       onClick={handleShareClick}
       theme={statusActionButtonTheme}
     />
@@ -865,7 +865,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(messages.viewReactions),
         action: handleOpenReactionsModal,
-        icon: require('@tabler/icons/outline/mood-happy.svg'),
+        icon: require('@phosphor-icons/core/regular/smiley.svg'),
       });
     }
 
@@ -918,7 +918,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     if (publicStatus && !status.reblogged && features.reblogVisibility) {
       menu.push({
         text: intl.formatMessage(messages.reblog_visibility),
-        icon: require('@tabler/icons/outline/repeat.svg'),
+        icon: require('@phosphor-icons/core/regular/repeat.svg'),
         items: [
           {
             text: intl.formatMessage(messages.reblog_visibility_public),
@@ -951,7 +951,7 @@ const MenuButton: React.FC<IMenuButton> = ({
           menu.push({
             text: intl.formatMessage(status.reblogged ? messages.cancel_reblog_private : messages.reblog_private),
             action: handleReblogClick,
-            icon: require('@tabler/icons/outline/repeat.svg'),
+            icon: require('@phosphor-icons/core/regular/repeat.svg'),
           });
         }
       }
@@ -980,14 +980,14 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(messages.mention, { name: username }),
         action: handleMentionClick,
-        icon: require('@tabler/icons/outline/at.svg'),
+        icon: require('@phosphor-icons/core/regular/at.svg'),
       });
 
       if (status.account.accepts_chat_messages === true) {
         menu.push({
           text: intl.formatMessage(messages.chat, { name: username }),
           action: handleChatClick,
-          icon: require('@tabler/icons/outline/messages.svg'),
+          icon: require('@phosphor-icons/core/regular/chats.svg'),
         });
       } else if (features.privacyScopes) {
         menu.push({
@@ -1021,13 +1021,13 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: intl.formatMessage(messages.hideTranslation),
           action: handleTranslate,
-          icon: require('@tabler/icons/outline/language.svg'),
+          icon: require('@phosphor-icons/core/regular/translate.svg'),
         });
       } else {
         menu.push({
           text: intl.formatMessage(messages.translate),
           action: handleTranslate,
-          icon: require('@tabler/icons/outline/language.svg'),
+          icon: require('@phosphor-icons/core/regular/translate.svg'),
         });
       }
 
@@ -1120,7 +1120,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     <DropdownMenu items={menu}>
       <StatusActionButton
         title={intl.formatMessage(messages.more)}
-        icon={require('@tabler/icons/outline/dots.svg')}
+        icon={require('@phosphor-icons/core/regular/dots-three.svg')}
         theme={statusActionButtonTheme}
       />
     </DropdownMenu>

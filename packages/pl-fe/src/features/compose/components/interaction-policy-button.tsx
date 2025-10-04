@@ -31,7 +31,7 @@ const InteractionPolicyButton: React.FC<IInteractionPolicyButton> = ({ composeId
 
   return (
     <ComposeFormButton
-      icon={require('@tabler/icons/outline/adjustments-star.svg')}
+      icon={require('@phosphor-icons/core/regular/sliders.svg')}
       title={intl.formatMessage(messages.label)}
       onClick={handleClick}
       active={!!interactionPolicy}

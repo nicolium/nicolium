@@ -275,21 +275,21 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         } : {
           action: () => handleReblogClick(),
         }),
-        icon: require('@tabler/icons/outline/repeat.svg'),
+        icon: require('@phosphor-icons/core/regular/repeat.svg'),
       });
 
       if (features.quotePosts) {
         menu.push({
           text: intl.formatMessage(messages.quotePost),
           action: handleQuoteClick,
-          icon: require('@tabler/icons/outline/quote.svg'),
+          icon: require('@phosphor-icons/core/regular/quotes.svg'),
         });
       }
     } else if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
       menu.push({
         text: intl.formatMessage(status.reblogged ? messages.cancel_reblog_private : messages.reblog_private),
         action: () => handleReblogClick(),
-        icon: require('@tabler/icons/outline/repeat.svg'),
+        icon: require('@phosphor-icons/core/regular/repeat.svg'),
       });
     }
 
@@ -314,14 +314,14 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       menu.push({
         text: intl.formatMessage(messages.mention, { name: username }),
         action: handleMentionClick,
-        icon: require('@tabler/icons/outline/at.svg'),
+        icon: require('@phosphor-icons/core/regular/at.svg'),
       });
 
       if (status.account.accepts_chat_messages === true) {
         menu.push({
           text: intl.formatMessage(messages.chat, { name: username }),
           action: handleChatClick,
-          icon: require('@tabler/icons/outline/messages.svg'),
+          icon: require('@phosphor-icons/core/regular/chats.svg'),
         });
       } else if (features.privacyScopes) {
         menu.push({

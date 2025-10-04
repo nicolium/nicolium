@@ -114,7 +114,7 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
           >
             {onBack && (
               <IconButton
-                src={require('@tabler/icons/outline/arrow-left.svg')}
+                src={require('@phosphor-icons/core/regular/arrow-left.svg')}
                 title={intl.formatMessage(messages.back)}
                 onClick={onBack}
                 className='text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-200 rtl:rotate-180'

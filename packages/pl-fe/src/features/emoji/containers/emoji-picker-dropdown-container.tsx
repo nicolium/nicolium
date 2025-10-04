@@ -77,7 +77,7 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
             'text-white/80 hover:text-white bg-transparent dark:bg-transparent': theme === 'inverse',
           })}
           ref={refs.setReference}
-          src={require('@tabler/icons/outline/mood-smile.svg')}
+          src={require('@phosphor-icons/core/regular/smiley.svg')}
           title={title}
           aria-label={title}
           aria-expanded={isOpen}

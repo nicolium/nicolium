@@ -94,7 +94,7 @@ const ChatPane = () => {
             toggleChatPane();
           }
         }}
-        secondaryActionIcon={require('@tabler/icons/outline/edit.svg')}
+        secondaryActionIcon={require('@phosphor-icons/core/regular/note-pencil.svg')}
       />
 
       {isOpen ? renderBody() : null}
