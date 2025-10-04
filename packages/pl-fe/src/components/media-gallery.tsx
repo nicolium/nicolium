@@ -38,8 +38,6 @@ interface Dimensions {
 interface SizeData {
   style: CSSProperties;
   itemsDimensions: Dimensions[];
-  size: number;
-  width: number;
 }
 
 const getAspectRatio = (attachment: MediaAttachment) =>
@@ -59,9 +57,7 @@ interface IItem {
   attachment: MediaAttachment;
   standalone?: boolean;
   index: number;
-  size: number;
   onClick: (index: number) => void;
-  displayWidth?: number;
   dimensions: Dimensions;
   last?: boolean;
   total: number;
@@ -378,8 +374,6 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
     return {
       style: { height: getHeight() },
       itemsDimensions: [],
-      size: 1,
-      width,
     };
   };
 
@@ -567,13 +561,34 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
     return {
       style,
       itemsDimensions,
-      size,
-      width: w,
     };
   };
 
   const getSizeData = (size: number): Readonly<SizeData> => {
     const w = width || defaultWidth;
+
+    if (compact) {
+      return {
+        style: {},
+        itemsDimensions: [...new Array(size)].map(() => ({
+          w: 'auto',
+          h: 'auto',
+          top: 'auto',
+          right: 'auto',
+          bottom: 'auto',
+          left: 'auto',
+          float: 'left',
+          position: 'relative',
+          // height = dimensions.h;
+          // top = dimensions.t || 'auto';
+          // right = dimensions.r || 'auto';
+          // bottom = dimensions.b || 'auto';
+          // left = dimensions.l || 'auto';
+          // float = dimensions.float || 'left';
+          // position = dimensions.pos || 'relative';
+        })),
+      };
+    }
 
     if (w) {
       if (size === 1) return getSizeDataSingle();
@@ -583,8 +598,6 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
     return {
       style: { height },
       itemsDimensions: [],
-      size,
-      width: w,
     };
   };
 
@@ -596,8 +609,6 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
       onClick={handleClick}
       attachment={attachment}
       index={i}
-      size={sizeData.size}
-      displayWidth={sizeData.width}
       dimensions={sizeData.itemsDimensions[i]}
       last={i === ATTACHMENT_LIMIT - 1}
       total={media.length}

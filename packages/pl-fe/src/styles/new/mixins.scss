@@ -2,7 +2,7 @@
   @if $family == sans {
     @apply font-sans;
   } @else if $family == mono {
-    font-family: Roboto Mono, ui-monospace, monospace;
+    font-family: 'Roboto Mono', ui-monospace, monospace;
   } @else {
     @warn "Unknown font family `#{$family}`.";
   }
@@ -50,7 +50,7 @@
   }
 
   @if $tracking == normal {
-    letter-spacing: 0em;
+    letter-spacing: 0;
   } @else if $tracking == wide {
     letter-spacing: 0.025em;
   } @else {
@@ -90,18 +90,18 @@
 
     @if $size == md {
       padding: 1rem;
-      @media (min-width: 581px) {
+      @media (width >= 581px) {
         border-radius: 0.75rem;
       }
     } @else if $size == lg {
       padding: 1rem;
-      @media (min-width: 581px) {
+      @media (width >= 581px) {
         padding: 1.5rem;
         border-radius: 0.75rem;
       }
     } @else if $size == xl {
       padding: 1rem;
-      @media (min-width: 581px) {
+      @media (width >= 581px) {
         padding: 2.5rem;
         border-radius: 1.5rem;
       }

@@ -131,7 +131,7 @@ const Preview: React.FC<PreviewProps> = ({ media, position: [x, y], onPositionCh
 
   return (
     <div className='relative overflow-hidden rounded-md'>
-      <Blurhash hash={media.blurhash} className='media-gallery__preview' />
+      <Blurhash hash={media.blurhash} className='⁂-media-gallery__preview' />
       <div
         className={clsx(
           'relative h-64 max-h-96 w-full overflow-hidden bg-contain bg-center bg-no-repeat',

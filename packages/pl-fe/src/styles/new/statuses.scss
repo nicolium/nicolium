@@ -74,7 +74,8 @@
     background: transparent;
 
     .⁂-media-gallery__item {
-      size: 3rem;
+      height: 3rem;
+      width: 3rem;
       inset: auto;
       float: left;
 
@@ -84,7 +85,8 @@
       }
 
       &__icons svg {
-        size: 2rem;
+        height: 2rem;
+        width: 2rem;
       }
     }
 
