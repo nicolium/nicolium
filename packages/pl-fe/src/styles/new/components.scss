@@ -161,3 +161,11 @@ a.⁂-list-item,
 .⁂-card-title {
   @include mixins.text($size: xl, $weight: bold, $truncate: truncate);
 }
+
+.⁂-animated-number {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow: hidden;
+}

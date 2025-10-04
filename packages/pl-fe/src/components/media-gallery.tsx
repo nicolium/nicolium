@@ -159,14 +159,14 @@ const Item: React.FC<IItem> = ({
 
     return (
       <div
-        className={clsx('media-gallery__item', standalone)}
+        className={clsx('⁂-media-gallery__item', standalone)}
         key={attachment.id}
         style={{ position, float, left, top, right, bottom, height, width: `${width}%` }}
       >
-        <a className='media-gallery__item-thumbnail' href={attachment.url} target='_blank' style={{ cursor: 'pointer' }}>
-          <Blurhash hash={attachment.blurhash} className='media-gallery__preview' />
-          <span className='media-gallery__item__icons'>{attachmentIcon}</span>
-          <span className='media-gallery__filename__label'>{filename}</span>
+        <a className='⁂-media-gallery__item-thumbnail' href={attachment.url} target='_blank' style={{ cursor: 'pointer' }}>
+          <Blurhash hash={attachment.blurhash} className='⁂-media-gallery__preview' />
+          <span className='⁂-media-gallery__item__icons'>{attachmentIcon}</span>
+          <span className='⁂-media-gallery__filename__label'>{filename}</span>
         </a>
       </div>
     );
@@ -176,7 +176,7 @@ const Item: React.FC<IItem> = ({
     thumbnail = (
       <>
         <a
-          className='media-gallery__item-thumbnail'
+          className='⁂-media-gallery__item-thumbnail'
           href={attachment.url}
           onClick={handleClick}
           target='_blank'
@@ -220,9 +220,9 @@ const Item: React.FC<IItem> = ({
     }
 
     thumbnail = (
-      <div className={clsx('media-gallery__gifv', { autoplay: autoPlayGif })}>
+      <div className={clsx('⁂-media-gallery__gifv', { autoplay: autoPlayGif })}>
         <video
-          className='media-gallery__item-gifv-thumbnail'
+          className='⁂-media-gallery__item-gifv-thumbnail'
           aria-label={attachment.description}
           title={attachment.description}
           role='application'
@@ -235,26 +235,26 @@ const Item: React.FC<IItem> = ({
           {...conditionalAttributes}
         />
 
-        <span className='media-gallery__gifv__label'>GIF</span>
+        <span className='⁂-media-gallery__gifv__label'>GIF</span>
       </div>
     );
   } else if (attachment.type === 'audio') {
     thumbnail = (
       <a
-        className={clsx('media-gallery__item-thumbnail')}
+        className={clsx('⁂-media-gallery__item-thumbnail')}
         href={attachment.url}
         onClick={handleClick}
         target='_blank'
         title={attachment.description}
       >
-        <span className='media-gallery__item__icons'><Icon src={require('@tabler/icons/outline/volume.svg')} /></span>
-        <span className='media-gallery__file-extension__label uppercase'>{ext}</span>
+        <span className='⁂-media-gallery__item__icons'><Icon src={require('@tabler/icons/outline/volume.svg')} /></span>
+        <span className='⁂-media-gallery__file-extension__label uppercase'>{ext}</span>
       </a>
     );
   } else if (attachment.type === 'video') {
     thumbnail = (
       <a
-        className={clsx('media-gallery__item-thumbnail')}
+        className={clsx('⁂-media-gallery__item-thumbnail')}
         href={attachment.url}
         onClick={handleClick}
         target='_blank'
@@ -268,25 +268,25 @@ const Item: React.FC<IItem> = ({
         >
           <source src={attachment.url} />
         </video>
-        <span className='media-gallery__file-extension__label uppercase'>{ext}</span>
+        <span className='⁂-media-gallery__file-extension__label uppercase'>{ext}</span>
       </a>
     );
   }
 
   return (
     <div
-      className={clsx('media-gallery__item', `media-gallery__item--${attachment.type}`, standalone)}
+      className={clsx('⁂-media-gallery__item', `⁂-media-gallery__item--${attachment.type}`, standalone)}
       key={attachment.id}
       style={{ position, float, left, top, right, bottom, height, width: `${width}%` }}
     >
       {last && total > ATTACHMENT_LIMIT && (
-        <div className='media-gallery__item-overflow'>
+        <div className='⁂-media-gallery__item-overflow'>
           +{total - ATTACHMENT_LIMIT + 1}
         </div>
       )}
       <Blurhash
         hash={attachment.blurhash}
-        className='media-gallery__preview'
+        className='⁂-media-gallery__preview'
       />
       {(visible || !attachment.blurhash) && thumbnail}
     </div>
@@ -607,8 +607,8 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
 
   return (
     <div
-      className={clsx(className, 'media-gallery overflow-hidden rounded-md', {
-        'media-gallery--compact !h-12 bg-transparent': compact,
+      className={clsx(className, '⁂-media-gallery', {
+        '⁂-media-gallery--compact': compact,
       })}
       style={sizeData.style}
       ref={node}

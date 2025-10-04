@@ -466,7 +466,7 @@ const Video: React.FC<IVideo> = ({
       tabIndex={0}
     >
       {!fullscreen && (
-        <Blurhash hash={blurhash} className='media-gallery__preview' />
+        <Blurhash hash={blurhash} className='⁂-media-gallery__preview' />
       )}
 
       <video

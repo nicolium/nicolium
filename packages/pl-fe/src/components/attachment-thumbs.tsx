@@ -18,7 +18,7 @@ const AttachmentThumbs = ({ status, onClick }: IAttachmentThumbs) => {
   const { displayMedia } = useSettings();
   const { openModal } = useModalsStore();
 
-  const fallback = <div className='media-gallery--compact' />;
+  const fallback = <div className='⁂-media-gallery--compact' />;
   const onOpenMedia = (media: Array<MediaAttachment>, index: number) => openModal('MEDIA', { media, index });
 
   const [visible] = useMediaVisible(status, displayMedia);

@@ -148,7 +148,7 @@ const Upload: React.FC<IUpload> = ({
       onDragEnter={onDragEnter}
       onDragEnd={onDragEnd}
     >
-      <Blurhash hash={media.blurhash} className='media-gallery__preview' />
+      <Blurhash hash={media.blurhash} className='⁂-media-gallery__preview' />
       <Motion defaultStyle={{ scale: 0.8 }} style={{ scale: spring(1, { stiffness: 180, damping: 12 }) }}>
         {({ scale }) => (
           <div

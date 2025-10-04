@@ -87,7 +87,7 @@ const AnimatedNumber: React.FC<IAnimatedNumber> = ({ value, obfuscate, short, ma
   return (
     <TransitionMotion styles={styles} willEnter={willEnter} willLeave={willLeave}>
       {items => (
-        <span className='relative inline-flex flex-col items-stretch overflow-hidden'>
+        <span className='⁂-animated-number'>
           {items.map(({ key, data, style }) => (
             <span
               key={key}
