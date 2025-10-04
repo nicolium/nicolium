@@ -5,9 +5,6 @@ import { Link } from 'react-router-dom';
 
 import SvgIcon from 'pl-fe/components/ui/svg-icon';
 
-import HStack from './hstack';
-import Text from './text';
-
 const sizes = {
   md: 'p-4 sm:rounded-xl',
   lg: 'p-4 sm:p-6 sm:rounded-xl',
@@ -71,19 +68,19 @@ const CardHeader: React.FC<ICardHeader> = ({ className, children, backHref, onBa
     const backAttributes = backHref ? { to: backHref } : { onClick: onBackClick };
 
     return (
-      <Comp {...backAttributes} className='rounded-full text-gray-900 focus:ring-2 focus:ring-primary-500 dark:text-gray-100' aria-label={intl.formatMessage(messages.back)}>
-        <SvgIcon src={require('@tabler/icons/outline/arrow-left.svg')} className='size-6 rtl:rotate-180' />
-        <span className='sr-only' data-testid='back-button'>{intl.formatMessage(messages.back)}</span>
+      <Comp {...backAttributes} className='⁂-card-header__button' aria-label={intl.formatMessage(messages.back)}>
+        <SvgIcon src={require('@tabler/icons/outline/arrow-left.svg')} />
+        <span className='⁂-card-header__button__label' data-testid='back-button'>{intl.formatMessage(messages.back)}</span>
       </Comp>
     );
   };
 
   return (
-    <HStack alignItems='center' space={2} className={className}>
+    <div className={clsx('⁂-card-header', className)}>
       {renderBackButton()}
 
       {children}
-    </HStack>
+    </div>
   );
 };
 
@@ -94,7 +91,7 @@ interface ICardTitle {
 
 /** A card's title. */
 const CardTitle: React.FC<ICardTitle> = ({ title, truncate = true }): JSX.Element => (
-  <Text size='xl' weight='bold' tag='h1' data-testid='card-title' truncate={truncate}>{title}</Text>
+  <h1 className='⁂-card-title' data-testid='card-title'>{title}</h1>
 );
 
 interface ICardBody {

@@ -2,23 +2,29 @@
   @if $family == sans {
     @apply font-sans;
   } @else if $family == mono {
-    @apply font-mono;
+    font-family: Roboto Mono, ui-monospace, monospace;
   } @else {
     @warn "Unknown font family `#{$family}`.";
   }
 
   @if $size == sm {
-    @apply text-sm;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
   } @else if $size == md {
-    @apply text-base leading-5;
+    font-size: 0.9375rem;
+    line-height: 1.25rem;
   } @else if $size == lg {
-    @apply text-lg;
+    font-size: 1.125rem;
+    line-height: 1.75rem;
   } @else if $size == xl {
-    @apply text-xl;
+    font-size: 1.25rem;
+    line-height: 1.75rem;
   } @else if $size == 2xl {
-    @apply text-2xl;
+    font-size: 1.5rem;
+    line-height: 2rem;
   } @else if $size == 3xl {
-    @apply text-3xl;
+    font-size: 1.875rem;
+    line-height: 2.25rem;
   } @else {
     @warn "Unknown font size `#{$size}`.";
   }
@@ -36,42 +42,77 @@
   } @else if $theme == success {
     @apply text-success-600;
   } @else if $theme == inherit {
-    @apply text-inherit;
+    color: inherit;
   } @else if $theme == white {
-    @apply text-white;
+    color: #fff;
   } @else {
     @warn "Unknown text theme `#{$theme}`.";
   }
 
   @if $tracking == normal {
-    @apply tracking-normal;
+    letter-spacing: 0em;
   } @else if $tracking == wide {
-    @apply tracking-wide;
+    letter-spacing: 0.025em;
   } @else {
     @warn "Unknown letter spacing `#{$tracking}`.";
   }
 
   @if $transform == normal {
-    @apply normal-case;
+    text-transform: none;
   } @else if $transform == uppercase {
-    @apply uppercase;
+    text-transform: uppercase;
   } @else {
     @warn "Unknown text transform `#{$transform}`.";
   }
 
   @if $truncate {
-    @apply truncate;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   @if $weight == normal {
-    @apply font-normal;
+    font-weight: 400;
   } @else if $weight == medium {
-    @apply font-medium;
+    font-weight: 500;
   } @else if $weight == semibold {
-    @apply font-semibold;
+    font-weight: 600;
   } @else if $weight == bold {
-    @apply font-bold;
+    font-weight: 700;
   } @else {
     @warn "Unknown font weight `#{$weight}`.";
+  }
+}
+
+@mixin card($variant: default, $size: md) {
+  @if $variant == rounded {
+    @apply bg-white dark:bg-primary-900 black:bg-black text-gray-900 dark:text-gray-100 shadow-lg dark:shadow-none;
+
+    @if $size == md {
+      padding: 1rem;
+      @media (min-width: 581px) {
+        border-radius: 0.75rem;
+      }
+    } @else if $size == lg {
+      padding: 1rem;
+      @media (min-width: 581px) {
+        padding: 1.5rem;
+        border-radius: 0.75rem;
+      }
+    } @else if $size == xl {
+      padding: 1rem;
+      @media (min-width: 581px) {
+        padding: 2.5rem;
+        border-radius: 1.5rem;
+      }
+    } @else {
+    @warn "Unknown card size `#{$size}`.";
+  }
+  } @else if $variant == slim {
+    @apply py-4;
+  }
+
+  @if $size != xl {
+    @apply .black:rounded-none;
   }
 }
