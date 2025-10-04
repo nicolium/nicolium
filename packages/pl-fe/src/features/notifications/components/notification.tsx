@@ -63,7 +63,7 @@ const icons: Partial<Record<NotificationType | 'reply', string>> = {
   event_reminder: require('@phosphor-icons/core/regular/calendar-star.svg'),
   participation_request: require('@phosphor-icons/core/regular/calendar-dot.svg'),
   participation_accepted: require('@phosphor-icons/core/regular/calendar-dot.svg'),
-  bite: require('@tabler/icons/outline/pacman.svg'),
+  bite: require('@phosphor-icons/core/regular/tooth.svg'),
   reply: require('@phosphor-icons/core/regular/arrow-bend-up-left.svg'),
   quote: require('@phosphor-icons/core/regular/quotes.svg'),
   quoted_update: require('@phosphor-icons/core/regular/pencil-simple-line.svg'),

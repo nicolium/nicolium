@@ -463,7 +463,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
         menu.push({
           text: intl.formatMessage(messages.bite, { name: account.username }),
           action: onBite,
-          icon: require('@tabler/icons/outline/pacman.svg'),
+          icon: require('@phosphor-icons/core/regular/tooth.svg'),
         });
       }
 

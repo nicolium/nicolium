@@ -157,7 +157,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
         size='sm'
         text={text}
         onClick={handleBite}
-        icon={require('@tabler/icons/outline/pacman.svg')}
+        icon={require('@phosphor-icons/core/regular/tooth.svg')}
       />
     );
   };
