@@ -70,7 +70,7 @@ const SearchInput: React.FC<ISearchInput> = ({ placeholder }) => {
 
   return (
     <div
-      className='sticky top-[76px] z-10 w-full bg-white/90 backdrop-blur black:bg-black/80 dark:bg-primary-900/90'
+      className='sticky top-[74px] z-10 w-full bg-white/90 backdrop-blur black:bg-black/80 dark:bg-primary-900/90'
     >
       <label htmlFor='search' className='sr-only'>{placeholder || intl.formatMessage(messages.placeholder)}</label>
 
