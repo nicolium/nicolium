@@ -280,13 +280,13 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
           case 'fg': {
             let color = validColor(token.props.args.color);
             color = color ?? 'f00';
-            style = { color: color, overflowWrap: 'anywhere' };
+            style = { color: `#${color}`, overflowWrap: 'anywhere' };
             break;
           }
           case 'bg': {
             let color = validColor(token.props.args.color);
             color = color ?? 'f00';
-            style = { backgroundColor: color, overflowWrap: 'anywhere' };
+            style = { backgroundColor: `#${color}`, overflowWrap: 'anywhere' };
             break;
           }
           case 'border': {
