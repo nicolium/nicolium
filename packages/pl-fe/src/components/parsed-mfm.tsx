@@ -351,7 +351,6 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
             <span>
               {`$[${token.props.name} `}
               {genEl(token.children, scale)}
-              ]
             </span>
           );
         } else {
