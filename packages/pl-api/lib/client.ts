@@ -3080,11 +3080,11 @@ class PlApiClient {
       this.#paginatedGet('/api/v1/timelines/bubble', { params }, statusSchema),
 
     /**
-     * View antennatimeline
+     * View antenna timeline
      * Requires features{@link Features.antennas}.
      */
     antennaTimeline: (antennaId: string, params?: AntennaTimelineParams) =>
-      this.#paginatedGet(`/api/v1/timelines/list/${antennaId}`, { params }, statusSchema),
+      this.#paginatedGet(`/api/v1/timelines/antenna/${antennaId}`, { params }, statusSchema),
 
     /**
      * Requires features{@link Features.wrenchedTimeline}.
