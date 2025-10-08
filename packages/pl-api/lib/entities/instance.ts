@@ -235,6 +235,7 @@ const pleromaSchema = coerceObject({
         bubble: v.fallback(v.boolean(), false),
         federated: v.fallback(v.boolean(), false),
         local: v.fallback(v.boolean(), false),
+        wrenched: v.fallback(v.boolean(), false),
       }),
     }),
     translation: coerceObject({

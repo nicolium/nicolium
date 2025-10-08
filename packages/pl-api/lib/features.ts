@@ -1833,6 +1833,12 @@ const getFeatures = (instance: Instance) => {
       v.software === PLEROMA,
       v.software === SNAC,
     ]),
+
+    /**
+     * Can display a timeline of most recently wrenched statuses.
+     * @see GET /api/v1/pleroma/timelines/wrenched
+     */
+    wrenchedTimeline: instance.api_versions['wrenched_timeline.pleroma.pl-api'] >= 1,
   };
 };
 

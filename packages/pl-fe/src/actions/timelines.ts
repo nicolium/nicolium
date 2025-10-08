@@ -229,6 +229,21 @@ const fetchBubbleTimeline = ({ onlyMedia }: Record<string, any> = {}, expand = f
     return dispatch(handleTimelineExpand(timelineId, fn, false, done));
   };
 
+const fetchWrenchedTimeline = ({ onlyMedia }: Record<string, any> = {}, expand = false, done = noOp) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    const state = getState();
+    const timelineId = `wrenched${onlyMedia ? ':media' : ''}`;
+
+    const params: PublicTimelineParams = { only_media: onlyMedia };
+    if (useSettingsStore.getState().settings.autoTranslate) params.language = getLocale();
+
+    if (expand && state.timelines[timelineId]?.isLoading) return;
+
+    const fn = (expand && state.timelines[timelineId]?.next?.()) || getClient(state).timelines.wrenchedTimeline(params);
+
+    return dispatch(handleTimelineExpand(timelineId, fn, false, done));
+  };
+
 const fetchAccountTimeline = (accountId: string, { exclude_replies, pinned, only_media, limit }: Record<string, any> = {}, expand = false, done = noOp) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
@@ -392,6 +407,7 @@ export {
   fetchHomeTimeline,
   fetchPublicTimeline,
   fetchBubbleTimeline,
+  fetchWrenchedTimeline,
   fetchAccountTimeline,
   fetchListTimeline,
   fetchCircleTimeline,

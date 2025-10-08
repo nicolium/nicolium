@@ -150,6 +150,7 @@ import {
   ThemeEditor,
   UrlPrivacy,
   UserIndex,
+  WrenchedTimeline,
 } from './util/async-components';
 import GlobalHotkeys from './util/global-hotkeys';
 import { WrappedRoute } from './util/react-router-helpers';
@@ -198,6 +199,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       {features.federating && <WrappedRoute path='/timeline/local' exact layout={HomeLayout} component={CommunityTimeline} content={children} publicRoute />}
       {features.federating && <WrappedRoute path='/timeline/fediverse' exact layout={HomeLayout} component={PublicTimeline} content={children} publicRoute />}
       {features.bubbleTimeline && <WrappedRoute path='/timeline/bubble' exact layout={HomeLayout} component={BubbleTimeline} content={children} publicRoute />}
+      {features.wrenchedTimeline && <WrappedRoute path='/timeline/wrenched' exact layout={HomeLayout} component={WrenchedTimeline} content={children} publicRoute />}
       {features.federating && <WrappedRoute path='/timeline/:instance' exact layout={RemoteInstanceLayout} component={RemoteTimeline} content={children} />}
 
       {features.conversations && <WrappedRoute path='/conversations' layout={DefaultLayout} component={Conversations} content={children} />}

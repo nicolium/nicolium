@@ -87,6 +87,11 @@ type GroupTimelineParams = PaginationParams & WithMutedParam & OnlyMediaParam & 
  */
 type BubbleTimelineParams = PaginationParams & WithMutedParam & OnlyEventsParam & OnlyMediaParam & LanguageParam;
 
+/**
+ * @category Request params
+ */
+type WrenchedTimelineParams = PaginationParams & WithMutedParam & OnlyEventsParam & OnlyMediaParam & LanguageParam;
+
 export type {
   PublicTimelineParams,
   HashtagTimelineParams,
@@ -98,4 +103,5 @@ export type {
   GroupTimelineParams,
   BubbleTimelineParams,
   AntennaTimelineParams,
+  WrenchedTimelineParams,
 };

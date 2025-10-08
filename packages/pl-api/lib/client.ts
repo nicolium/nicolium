@@ -266,6 +266,7 @@ import type {
   ListTimelineParams,
   PublicTimelineParams,
   SaveMarkersParams,
+  WrenchedTimelineParams,
 } from './params/timelines';
 import type {
   GetTrendingLinks,
@@ -3084,6 +3085,12 @@ class PlApiClient {
      */
     antennaTimeline: (antennaId: string, params?: AntennaTimelineParams) =>
       this.#paginatedGet(`/api/v1/timelines/list/${antennaId}`, { params }, statusSchema),
+
+    /**
+     * Requires features{@link Features.wrenchedTimeline}.
+     */
+    wrenchedTimeline: async (params?: WrenchedTimelineParams) =>
+      this.#paginatedGet('/api/v1/pleroma/timelines/wrenched', { params }, statusSchema),
   };
 
   public readonly lists = {

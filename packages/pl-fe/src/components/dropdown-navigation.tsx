@@ -353,6 +353,15 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                     onClick={closeSidebar}
                   />
                 )}
+
+                {features.wrenchedTimeline && (
+                  <DropdownNavigationLink
+                    to='/timeline/wrenched'
+                    icon={require('@phosphor-icons/core/regular/wrench.svg')}
+                    text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
+                    onClick={closeSidebar}
+                  />
+                )}
               </>}
 
               <Divider />
@@ -455,6 +464,15 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                   to='/timeline/fediverse'
                   icon={require('@phosphor-icons/core/regular/fediverse-logo.svg')}
                   text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
+                  onClick={closeSidebar}
+                />
+              )}
+
+              {features.wrenchedTimeline && !restrictUnauth.timelines.wrenched && (
+                <DropdownNavigationLink
+                  to='/timeline/wrenched'
+                  icon={require('@phosphor-icons/core/regular/wrench.svg')}
+                  text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
                   onClick={closeSidebar}
                 />
               )}

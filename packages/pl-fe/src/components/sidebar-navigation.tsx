@@ -324,6 +324,16 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
 
         {(features.publicTimeline) && (
           <>
+            {(features.wrenchedTimeline && (account || !restrictUnauth.timelines.wrenched)) && (
+              <SidebarNavigationLink
+                to='/timeline/wrenched'
+                icon={require('@phosphor-icons/core/regular/wrench.svg')}
+                activeIcon={require('@phosphor-icons/core/fill/wrench-fill.svg')}
+                text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
+                shrink={shrink}
+              />
+            )}
+
             {(account || !restrictUnauth.timelines.local) && (
               <SidebarNavigationLink
                 to='/timeline/local'

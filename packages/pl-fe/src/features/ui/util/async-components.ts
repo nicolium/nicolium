@@ -97,6 +97,7 @@ export const TestTimeline = lazy(() => import('pl-fe/pages/timelines/test-timeli
 export const ThemeEditor = lazy(() => import('pl-fe/pages/dashboard/theme-editor'));
 export const UrlPrivacy = lazy(() => import('pl-fe/pages/settings/url-privacy'));
 export const UserIndex = lazy(() => import('pl-fe/pages/dashboard/user-index'));
+export const WrenchedTimeline = lazy(() => import('pl-fe/pages/timelines/wrenched-timeline'));
 
 // Panels
 export const AccountNotePanel = lazy(() => import('pl-fe/features/ui/components/panels/account-note-panel'));
