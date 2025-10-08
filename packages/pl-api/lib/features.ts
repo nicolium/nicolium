@@ -532,6 +532,7 @@ const getFeatures = (instance: Instance) => {
      */
     chatsDelete: any([
       v.software === PLEROMA && v.build === PL,
+      instance.api_versions['chat_delete.pleroma.pl-api'] >= 1,
     ]),
 
     circles: instance.api_versions['kmyblue_circle_history.fedibird.pl-api'] >= 1,
@@ -1225,6 +1226,7 @@ const getFeatures = (instance: Instance) => {
       v.software === GOTOSOCIAL,
       v.software === MASTODON,
       v.software === PLEROMA && v.build === PL,
+      instance.api_versions['mastodon_admin_api.pleroma.pl-api'] >= 1,
     ]),
 
     mastodonAdminResolveReportWithComment: v.software === GOTOSOCIAL,
