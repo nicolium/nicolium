@@ -29,7 +29,7 @@ const ThemeSelector: React.FC<IThemeSelector> = ({ value, onChange }) => {
       case 'dark':
         return require('@phosphor-icons/core/regular/moon.svg');
       case 'black':
-        return require('@phosphor-icons/core/regular/moon-starsa.svg');
+        return require('@phosphor-icons/core/regular/moon-stars.svg');
       default:
         return null;
     }
