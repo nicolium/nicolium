@@ -103,7 +103,7 @@ const StatusPage: React.FC<IStatusDetails> = (props) => {
         {
           text: intl.formatMessage(messages.expandAll),
           action: expandAllStatuses,
-          icon: require('@tabler/icons/outline/chevron-down.svg'),
+          icon: require('@phosphor-icons/core/regular/caret-down.svg'),
         },
       );
     }

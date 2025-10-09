@@ -23,13 +23,13 @@ const ThemeSelector: React.FC<IThemeSelector> = ({ value, onChange }) => {
   const themeIconSrc = useMemo(() => {
     switch (value) {
       case 'system':
-        return require('@tabler/icons/outline/device-desktop.svg');
+        return require('@phosphor-icons/core/regular/desktop.svg');
       case 'light':
-        return require('@tabler/icons/outline/sun.svg');
+        return require('@phosphor-icons/core/regular/sun-dim.svg');
       case 'dark':
-        return require('@tabler/icons/outline/moon.svg');
+        return require('@phosphor-icons/core/regular/moon.svg');
       case 'black':
-        return require('@tabler/icons/outline/shadow.svg');
+        return require('@phosphor-icons/core/regular/moon-starsa.svg');
       default:
         return null;
     }
@@ -58,7 +58,7 @@ const ThemeSelector: React.FC<IThemeSelector> = ({ value, onChange }) => {
         </Select>
 
         <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3'>
-          <Icon src={require('@tabler/icons/outline/chevron-down.svg')} className='size-4 text-gray-600 dark:text-gray-700' />
+          <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} className='size-4 text-gray-600 dark:text-gray-700' />
         </div>
       </div>
     </label>

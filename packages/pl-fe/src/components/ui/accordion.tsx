@@ -70,7 +70,7 @@ const Accordion: React.FC<IAccordion> = ({ headline, children, menu, expanded = 
             </button>
           )}
           <Icon
-            src={require('@tabler/icons/outline/chevron-down.svg')}
+            src={require('@phosphor-icons/core/regular/caret-down.svg')}
             className='⁂-accordion__header__chevron'
           />
         </div>

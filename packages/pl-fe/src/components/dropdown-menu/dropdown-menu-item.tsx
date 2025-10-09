@@ -142,7 +142,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
         )}
 
         {!!item.items?.length && (
-          <Icon src={require('@tabler/icons/outline/chevron-right.svg')} containerClassName='ml-auto' className='size-5 flex-none' />
+          <Icon src={require('@phosphor-icons/core/regular/caret-right.svg')} containerClassName='ml-auto' className='size-5 flex-none' />
         )}
       </a>
     </li>

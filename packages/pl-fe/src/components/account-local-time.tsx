@@ -78,7 +78,7 @@ const AccountLocalTime: React.FC<IAccountLocalTime> = ({ accountId, field }) => 
   return (
     <HStack className='mt-1' alignItems='center' space={0.5} title={intl.formatMessage(messages.timezone, { timezone: field.value })}>
       <Icon
-        src={require('@tabler/icons/outline/clock.svg')}
+        src={require('@phosphor-icons/core/regular/clock.svg')}
         className='size-4 text-gray-800 dark:text-gray-200'
       />
       <Text size='sm'>

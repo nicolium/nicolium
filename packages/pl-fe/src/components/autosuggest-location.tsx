@@ -7,10 +7,10 @@ import Text from 'pl-fe/components/ui/text';
 
 import type { Location } from 'pl-api';
 
-const buildingCommunityIcon = require('@tabler/icons/outline/building-community.svg');
-const homeIcon = require('@tabler/icons/outline/home-2.svg');
-const mapPinIcon = require('@tabler/icons/outline/map-pin.svg');
-const roadIcon = require('@tabler/icons/outline/road.svg');
+const buildingCommunityIcon = require('@phosphor-icons/core/regular/city.svg');
+const homeIcon = require('@phosphor-icons/core/regular/house.svg');
+const mapPinIcon = require('@phosphor-icons/core/regular/map-pin.svg');
+const roadIcon = require('@phosphor-icons/core/regular/road-horizon.svg');
 
 const ADDRESS_ICONS: Record<string, string> = {
   house: homeIcon,

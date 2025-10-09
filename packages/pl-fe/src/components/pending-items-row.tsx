@@ -44,7 +44,7 @@ const PendingItemsRow: React.FC<IPendingItemsRow> = ({ to, count, size = 'md' })
       </HStack>
 
       <Icon
-        src={require('@tabler/icons/outline/chevron-right.svg')}
+        src={require('@phosphor-icons/core/regular/caret-right.svg')}
         className='size-5 text-gray-600 transition-colors group-hover:text-gray-700 dark:text-gray-600 dark:group-hover:text-gray-500'
       />
     </HStack>

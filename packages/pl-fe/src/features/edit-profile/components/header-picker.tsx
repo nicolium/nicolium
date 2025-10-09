@@ -82,7 +82,7 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
         justifyContent='center'
       >
         <Icon
-          src={require('@tabler/icons/outline/photo-plus.svg')}
+          src={require('@phosphor-icons/core/regular/upload.svg')}
           className='size-4.5'
         />
 

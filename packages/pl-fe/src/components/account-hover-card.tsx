@@ -170,7 +170,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
             {account.pronouns.length > 0 && (
               <HStack alignItems='center' space={0.5}>
                 <Icon
-                  src={require('@tabler/icons/outline/tags.svg')}
+                  src={require('@phosphor-icons/core/regular/tag.svg')}
                   className='size-4 text-gray-800 dark:text-gray-200'
                 />
 

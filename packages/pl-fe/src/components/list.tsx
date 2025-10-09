@@ -76,7 +76,7 @@ const ListItem: React.FC<IListItem> = ({ className, label, hint, children, to, h
         <HStack space={1} alignItems='center' className='⁂-list-item__body'>
           {children}
 
-          <Icon src={require('@tabler/icons/outline/chevron-right.svg')} />
+          <Icon src={require('@phosphor-icons/core/regular/caret-right.svg')} />
         </HStack>
       ) : null}
 
