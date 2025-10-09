@@ -11,14 +11,14 @@ import { useStatusMetaStore } from 'pl-fe/stores/status-meta';
 import type { FilterResult } from 'pl-api';
 import type { Status } from 'pl-fe/normalizers/status';
 
-const useMediaVisible = (status: Pick<Status, 'filtered' | 'media_attachments' | 'sensitive'> & { id?: string }, displayMedia: 'default' | 'show_all' | 'hide_all'): [boolean, Array<FilterResult>] => {
+const useMediaVisible = (status: Pick<Status, 'media_attachments' | 'sensitive'> & Partial<Pick<Status, 'filtered' | 'id'>>, displayMedia: 'default' | 'show_all' | 'hide_all'): [boolean, Array<FilterResult>] => {
   const statusesMeta = useStatusMetaStore().statuses;
   const mediaVisible = status.id ? statusesMeta[status.id]?.mediaVisible : undefined;
 
   return useMemo(() => {
     let visible = !status.sensitive;
 
-    const filterResults = status.filtered.filter(({ filter }) => filter.filter_action === 'blur');
+    const filterResults = status.filtered?.filter(({ filter }) => filter.filter_action === 'blur') || [];
 
     if (filterResults.length) return [mediaVisible !== undefined ? mediaVisible : false, filterResults];
 
