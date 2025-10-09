@@ -20,6 +20,8 @@ const messages = defineMessages({
   unlisted_long: { id: 'privacy.unlisted.long', defaultMessage: 'Do not post to public timelines' },
   private_short: { id: 'privacy.private.short', defaultMessage: 'Followers-only' },
   private_long: { id: 'privacy.private.long', defaultMessage: 'Post to followers only' },
+  conversation_short: { id: 'privacy.conversation.short', defaultMessage: 'Conversation' },
+  conversation_long: { id: 'privacy.conversation.long', defaultMessage: 'Post to recipients of the parent post' },
   mutuals_only_short: { id: 'privacy.mutuals_only.short', defaultMessage: 'Mutuals-only' },
   mutuals_only_long: { id: 'privacy.mutuals_only.long', defaultMessage: 'Post to mutually followed users only' },
   direct_short: { id: 'privacy.direct.short', defaultMessage: 'Direct' },
@@ -45,7 +47,7 @@ interface Option {
   items?: Array<Omit<Option, 'items'>>;
 }
 
-const getItems = (features: Features, lists: ReturnType<typeof getOrderedLists>, circles: Array<Circle>, intl: IntlShape) => [
+const getItems = (features: Features, lists: ReturnType<typeof getOrderedLists>, circles: Array<Circle>, isReply: boolean, intl: IntlShape) => [
   {
     icon: require('@phosphor-icons/core/regular/globe.svg'),
     value: 'public',
@@ -64,6 +66,12 @@ const getItems = (features: Features, lists: ReturnType<typeof getOrderedLists>,
     text: intl.formatMessage(messages.private_short),
     meta: intl.formatMessage(messages.private_long),
   },
+  isReply && features.createStatusConversationScope ? {
+    icon: require('@phosphor-icons/core/regular/chats-circle.svg'),
+    value: 'conversation',
+    text: intl.formatMessage(messages.conversation_short),
+    meta: intl.formatMessage(messages.conversation_long),
+  } : undefined,
   features.createStatusMutualsOnlyScope ? {
     icon: require('@phosphor-icons/core/regular/users-three.svg'),
     value: 'mutuals_only',
@@ -127,13 +135,15 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
   const { data: lists = [] } = useLists(getOrderedLists);
   const { data: circles = [] } = useCircles(getOrderedLists);
 
+  const isReply = !!compose.in_reply_to;
+
   const value = compose.privacy;
   const unavailable = compose.id;
 
   const onChange = (value: string) => value && dispatch(changeComposeVisibility(composeId,
     value));
 
-  const options = useMemo(() => getItems(features, lists, circles, intl), [features, lists, circles]);
+  const options = useMemo(() => getItems(features, lists, circles, isReply, intl), [features, lists, circles, isReply]);
   const items: Array<MenuItem> = options.map(item => ({
     ...item,
     action: item.value ? () => onChange(item.value) : undefined,

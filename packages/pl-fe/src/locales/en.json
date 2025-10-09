@@ -1456,6 +1456,8 @@
   "privacy.change": "Adjust post privacy",
   "privacy.circle.long": "Visible to members of a circle",
   "privacy.circle.short": "Circle only",
+  "privacy.conversation.long": "Post to recipients of the parent post",
+  "privacy.conversation.short": "Conversation",
   "privacy.direct.long": "Post to mentioned users only",
   "privacy.direct.short": "Direct",
   "privacy.list.long": "Visible to members of a list",

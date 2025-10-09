@@ -49,6 +49,7 @@ interface CreateStatusOptionalParams {
    * `local` — Requires features{@link Features['createStatusLocalScope']}.
    * `mutuals_only` — Requires features{@link Features['createStatusMutualsOnlyScope']}.
    * `subscribers` — Requires features{@link Features['createStatusSubscribersScope']}.
+   * `conversation` — Requires features{@link Features['createStatusConversationScope']}.
    * `list:LIST_ID` — Requires features{@link Features['createStatusListScope']}.
    * `circle:LIST_ID` — Requires features{@link Features['circles']}.
    */

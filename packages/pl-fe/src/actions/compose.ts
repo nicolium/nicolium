@@ -183,6 +183,7 @@ interface ComposeReplyAction {
   preserveSpoilers: boolean;
   rebloggedBy?: Pick<Account, 'acct' | 'id'>;
   approvalRequired?: boolean;
+  conversationScope: boolean;
 }
 
 const replyCompose = (
@@ -208,6 +209,7 @@ const replyCompose = (
       preserveSpoilers,
       rebloggedBy,
       approvalRequired,
+      conversationScope: features.createStatusConversationScope,
     });
     useModalsStore.getState().openModal('COMPOSE');
   };
@@ -223,13 +225,15 @@ interface ComposeQuoteAction {
   status: Pick<Status, 'id' | 'account' | 'visibility' | 'group_id' | 'list_id'>;
   account: Pick<Account, 'acct'> | undefined;
   explicitAddressing: boolean;
+  conversationScope: boolean;
 }
 
 const quoteCompose = (status: ComposeQuoteAction['status']) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const { forceImplicitAddressing } = useSettingsStore.getState().settings;
-    const explicitAddressing = state.auth.client.features.createStatusExplicitAddressing && !forceImplicitAddressing;
+    const { createStatusConversationScope, createStatusExplicitAddressing } = state.auth.client.features;
+    const explicitAddressing = createStatusExplicitAddressing && !forceImplicitAddressing;
 
     dispatch<ComposeQuoteAction>({
       type: COMPOSE_QUOTE,
@@ -237,6 +241,7 @@ const quoteCompose = (status: ComposeQuoteAction['status']) =>
       status,
       account: selectOwnAccount(state),
       explicitAddressing,
+      conversationScope: createStatusConversationScope,
     });
     useModalsStore.getState().openModal('COMPOSE');
   };

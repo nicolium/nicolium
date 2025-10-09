@@ -572,6 +572,12 @@ const getFeatures = (instance: Instance) => {
     ]),
 
     /**
+     * Ability to post statuses to the recipients of parent post.
+     * @see POST /api/v1/statuses
+     */
+    createStatusConversationScope: v.software === MITRA,
+
+    /**
      * @see POST /api/v1/statuses
      */
     createStatusExpiration: any([
