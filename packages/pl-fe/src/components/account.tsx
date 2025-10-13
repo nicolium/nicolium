@@ -340,7 +340,7 @@ const Account = ({
               <HStack alignItems='center' space={1}>
                 <Text theme='muted' size='sm' direction='ltr' truncate>@{username}</Text>
 
-                {account.locked && (
+                {!timestamp && account.locked && (
                   <>
                     <Icon
                       src={require('@phosphor-icons/core/regular/lock.svg')}
