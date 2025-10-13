@@ -141,7 +141,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
             <div className='max-w-0 overflow-hidden text-gray-600 hover:text-gray-100 group-hover:max-w-full'>
               <DropdownMenu items={menu}>
                 <IconButton
-                  src={require('@tabler/icons/outline/dots.svg')}
+                  src={require('@phosphor-icons/core/regular/dots-three.svg')}
                   title='Settings'
                   className='text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500'
                   iconClassName='h-4 w-4'

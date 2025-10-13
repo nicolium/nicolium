@@ -225,7 +225,7 @@ const ThemeEditorPage: React.FC<IThemeEditor> = () => {
             }, {
               text: intl.formatMessage(messages.import),
               action: importTheme,
-              icon: require('@tabler/icons/outline/upload.svg'),
+              icon: require('@phosphor-icons/core/regular/export.svg'),
             }, {
               text: intl.formatMessage(messages.export),
               action: exportTheme,

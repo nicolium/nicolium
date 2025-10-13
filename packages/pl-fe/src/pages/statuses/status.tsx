@@ -91,7 +91,7 @@ const StatusPage: React.FC<IStatusDetails> = (props) => {
       {
         text: intl.formatMessage(messages.linearView),
         action: () => dispatch(changeSetting(['threads', 'displayMode'], 'linear')),
-        icon: require('@tabler/icons/outline/list.svg'),
+        icon: require('@phosphor-icons/core/regular/list-bullets.svg'),
         type: 'radio',
         checked: displayMode === 'linear',
       },

@@ -84,7 +84,7 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
   return (
     <DropdownMenu items={menu} placement='bottom'>
       <IconButton
-        src={require('@tabler/icons/outline/dots.svg')}
+        src={require('@phosphor-icons/core/regular/dots-three.svg')}
         theme='secondary'
         iconClassName='h-5 w-5'
         className='self-stretch px-2.5'

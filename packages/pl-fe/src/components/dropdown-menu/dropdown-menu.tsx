@@ -197,7 +197,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
     onOpen,
     onShiftClick,
     placement: initialPlacement = 'top',
-    src = require('@tabler/icons/outline/dots.svg'),
+    src = require('@phosphor-icons/core/regular/dots-three.svg'),
     title = 'Menu',
     width,
   } = props;

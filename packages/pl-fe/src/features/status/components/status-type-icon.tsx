@@ -25,7 +25,7 @@ const STATUS_TYPE_ICONS: Record<string, string> = {
   private: require('@phosphor-icons/core/regular/lock.svg'),
   mutuals_only: require('@tabler/icons/outline/users-group.svg'),
   local: require('@tabler/icons/outline/affiliate.svg'),
-  list: require('@tabler/icons/outline/list.svg'),
+  list: require('@phosphor-icons/core/regular/list-bullets.svg'),
   subscribers: require('@tabler/icons/outline/coin.svg'),
 };
 

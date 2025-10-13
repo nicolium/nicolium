@@ -39,7 +39,7 @@ const List: React.FC<IList> = ({ listId, accountId, added }) => {
 
   return (
     <div className='flex items-center gap-1.5 px-2 py-4 text-black dark:text-white'>
-      <Icon src={require('@tabler/icons/outline/list.svg')} />
+      <Icon src={require('@phosphor-icons/core/regular/list-bullets.svg')} />
       <span className='grow'>
         {list.title}
       </span>

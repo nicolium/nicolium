@@ -109,7 +109,7 @@ const ListsPage: React.FC = () => {
                 to={`/list/${list.id}`}
                 label={
                   <HStack alignItems='center' space={2}>
-                    <Icon src={require('@tabler/icons/outline/list.svg')} size={20} />
+                    <Icon src={require('@phosphor-icons/core/regular/list-bullets.svg')} size={20} />
                     <span>{list.title}</span>
                   </HStack>
                 }

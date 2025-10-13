@@ -340,7 +340,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
     if (features.rssFeeds && account.local && (software !== GOTOSOCIAL || account.enable_rss)) {
       menu.push({
         text: intl.formatMessage(messages.subscribeFeed),
-        icon: require('@tabler/icons/outline/rss.svg'),
+        icon: require('@phosphor-icons/core/regular/rss.svg'),
         href: software === MASTODON ? `${account.url}.rss` : `${account.url}/feed.rss`,
         target: '_blank',
       });
@@ -350,7 +350,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       menu.push({
         text: intl.formatMessage(messages.share, { name: account.username }),
         action: handleShare,
-        icon: require('@tabler/icons/outline/upload.svg'),
+        icon: require('@phosphor-icons/core/regular/export.svg'),
       });
     }
 
@@ -388,18 +388,18 @@ const Header: React.FC<IHeader> = ({ account }) => {
       menu.push({
         text: intl.formatMessage(messages.edit_profile),
         to: '/settings/profile',
-        icon: require('@tabler/icons/outline/user.svg'),
+        icon: require('@phosphor-icons/core/regular/user.svg'),
       });
       menu.push({
         text: intl.formatMessage(messages.preferences),
         to: '/settings',
-        icon: require('@tabler/icons/outline/settings.svg'),
+        icon: require('@phosphor-icons/core/regular/sliders-horizontal.svg'),
       });
       menu.push(null);
       menu.push({
         text: intl.formatMessage(messages.mutes),
         to: '/mutes',
-        icon: require('@tabler/icons/outline/circle-x.svg'),
+        icon: require('@phosphor-icons/core/regular/speaker-simple-x.svg'),
       });
       menu.push({
         text: intl.formatMessage(messages.blocks),
@@ -440,7 +440,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
           menu.push({
             text: intl.formatMessage(messages.add_or_remove_from_list),
             action: onAddToList,
-            icon: require('@tabler/icons/outline/list.svg'),
+            icon: require('@phosphor-icons/core/regular/list-bullets.svg'),
           });
         }
 
@@ -448,14 +448,14 @@ const Header: React.FC<IHeader> = ({ account }) => {
           menu.push({
             text: intl.formatMessage(account.relationship?.endorsed ? messages.unendorse : messages.endorse),
             action: onEndorseToggle,
-            icon: require('@tabler/icons/outline/user-check.svg'),
+            icon: account.relationship?.endorsed ? require('@phosphor-icons/core/regular/user-minus.svg') : require('@phosphor-icons/core/regular/user-check.svg'),
           });
         }
       } else if (features.lists && features.unrestrictedLists) {
         menu.push({
           text: intl.formatMessage(messages.add_or_remove_from_list),
           action: onAddToList,
-          icon: require('@tabler/icons/outline/list.svg'),
+          icon: require('@phosphor-icons/core/regular/list-bullets.svg'),
         });
       }
 
@@ -481,7 +481,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
         menu.push({
           text: intl.formatMessage(messages.removeFromFollowers),
           action: onRemoveFromFollowers,
-          icon: require('@tabler/icons/outline/user-x.svg'),
+          icon: require('@phosphor-icons/core/regular/user-minus.svg'),
         });
       }
 
@@ -489,13 +489,13 @@ const Header: React.FC<IHeader> = ({ account }) => {
         menu.push({
           text: intl.formatMessage(messages.unmute, { name: account.username }),
           action: onMute,
-          icon: require('@tabler/icons/outline/circle-x.svg'),
+          icon: require('@phosphor-icons/core/regular/speaker-simple-x.svg'),
         });
       } else {
         menu.push({
           text: intl.formatMessage(messages.mute, { name: account.username }),
           action: onMute,
-          icon: require('@tabler/icons/outline/circle-x.svg'),
+          icon: require('@phosphor-icons/core/regular/speaker-simple-x.svg'),
         });
       }
 
@@ -673,7 +673,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
     return (
       <IconButton
-        src={require('@tabler/icons/outline/upload.svg')}
+        src={require('@phosphor-icons/core/regular/export.svg')}
         onClick={handleShare}
         title={intl.formatMessage(messages.share, { name: account.username })}
         theme='outlined'
@@ -692,7 +692,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
     return (
       <IconButton
-        src={require('@tabler/icons/outline/rss.svg')}
+        src={require('@phosphor-icons/core/regular/rss.svg')}
         href={href}
         title={intl.formatMessage(messages.subscribeFeed)}
         theme='outlined'
@@ -757,7 +757,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
               {menu.length > 0 && (
                 <DropdownMenu items={menu} placement='bottom-end'>
                   <IconButton
-                    src={require('@tabler/icons/outline/dots.svg')}
+                    src={require('@phosphor-icons/core/regular/dots-three.svg')}
                     theme='outlined'
                     className='px-2'
                     iconClassName='h-4 w-4'

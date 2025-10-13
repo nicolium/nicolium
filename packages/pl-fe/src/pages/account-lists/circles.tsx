@@ -100,7 +100,7 @@ const CirclesPage: React.FC = () => {
                 to={`/circles/${circle.id}`}
                 label={
                   <HStack alignItems='center' space={2}>
-                    <Icon src={require('@tabler/icons/outline/list.svg')} size={20} />
+                    <Icon src={require('@phosphor-icons/core/regular/list-bullets.svg')} size={20} />
                     <span>{circle.title}</span>
                   </HStack>
                 }

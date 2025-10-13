@@ -187,7 +187,7 @@ const ChatMessage = (props: IChatMessage) => {
               data-testid='chat-message-menu'
             >
               <Icon
-                src={require('@tabler/icons/outline/dots.svg')}
+                src={require('@phosphor-icons/core/regular/dots-three.svg')}
                 className='size-4'
               />
             </button>

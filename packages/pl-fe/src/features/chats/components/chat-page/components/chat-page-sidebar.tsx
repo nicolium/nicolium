@@ -39,7 +39,7 @@ const ChatPageSidebar = () => {
 
           <HStack space={1}>
             <IconButton
-              src={require('@tabler/icons/outline/settings.svg')}
+              src={require('@phosphor-icons/core/regular/sliders-horizontal.svg')}
               iconClassName='h-5 w-5 text-gray-600'
               onClick={handleSettingsClick}
             />

@@ -56,7 +56,7 @@ const messages = defineMessages({
 });
 
 const blockTypeToIcon = {
-  bullet: require('@tabler/icons/outline/list.svg'),
+  bullet: require('@phosphor-icons/core/regular/list-bullets.svg'),
   check: require('@tabler/icons/outline/list-check.svg'),
   code: require('@tabler/icons/outline/code.svg'),
   h1: require('@tabler/icons/outline/h-1.svg'),

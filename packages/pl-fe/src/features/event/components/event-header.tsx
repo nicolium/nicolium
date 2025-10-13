@@ -335,7 +335,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       menu.push({
         text: intl.formatMessage(messages.mute, { name: username }),
         action: handleMuteClick,
-        icon: require('@tabler/icons/outline/circle-x.svg'),
+        icon: require('@phosphor-icons/core/regular/speaker-simple-x.svg'),
       });
       menu.push({
         text: intl.formatMessage(messages.block, { name: username }),
@@ -419,7 +419,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
           <DropdownMenu items={makeMenu()} placement='bottom-end'>
             <IconButton
-              src={require('@tabler/icons/outline/dots.svg')}
+              src={require('@phosphor-icons/core/regular/dots-three.svg')}
               theme='outlined'
               className='h-[30px] px-2'
               iconClassName='h-4 w-4'
