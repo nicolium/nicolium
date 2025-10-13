@@ -1,11 +1,12 @@
 import React from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import StillImage from 'pl-fe/components/still-image';
 import Avatar from 'pl-fe/components/ui/avatar';
 import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
@@ -15,6 +16,10 @@ import { useSettings } from 'pl-fe/hooks/use-settings';
 import { getAcct } from 'pl-fe/utils/accounts';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
 import { displayFqn } from 'pl-fe/utils/state';
+
+const messages = defineMessages({
+  account_locked: { id: 'account.locked_info', defaultMessage: 'This account privacy status is set to locked. The owner manually reviews who can follow them.' },
+});
 
 interface IUserPanel {
   accountId: string;
@@ -88,10 +93,18 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
             </HStack>
           </Link>
 
-          <HStack>
+          <HStack alignItems='center' space={1}>
             <Text size='sm' theme='muted' direction='ltr' truncate>
               @{getAcct(account, fqn)}
             </Text>
+
+            {account.locked && (
+              <Icon
+                src={require('@phosphor-icons/core/regular/lock.svg')}
+                alt={intl.formatMessage(messages.account_locked)}
+                className='size-4 text-gray-600'
+              />
+            )}
           </HStack>
         </Stack>
 

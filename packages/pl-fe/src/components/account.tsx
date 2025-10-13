@@ -33,6 +33,7 @@ interface IInstanceFavicon {
 const messages = defineMessages({
   bot: { id: 'account.badges.bot', defaultMessage: 'Bot' },
   timeline: { id: 'account.instance_favicon', defaultMessage: 'Visit {domain} timeline' },
+  account_locked: { id: 'account.locked_info', defaultMessage: 'This account privacy status is set to locked. The owner manually reviews who can follow them.' },
 });
 
 const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
@@ -258,6 +259,20 @@ const Account = ({
               <HStack alignItems='center' space={1}>
                 <Text theme='muted' size='sm' direction='ltr' truncate>@{username}</Text>
 
+                {account.locked && (
+                  <>
+                    <Icon
+                      src={require('@phosphor-icons/core/regular/lock.svg')}
+                      alt={intl.formatMessage(messages.account_locked)}
+                      className='size-4 text-gray-600'
+                    />
+
+                    {account.favicon && !disableUserProvidedMedia && (
+                      <Text tag='span' theme='muted' size='sm'>&middot;</Text>
+                    )}
+                  </>
+                )}
+
                 {account.favicon && !disableUserProvidedMedia && (
                   <InstanceFavicon account={account} disabled />
                 )}
@@ -324,6 +339,19 @@ const Account = ({
             <Stack space={withAccountNote || note ? 1 : 0}>
               <HStack alignItems='center' space={1}>
                 <Text theme='muted' size='sm' direction='ltr' truncate>@{username}</Text>
+
+                {account.locked && (
+                  <>
+                    <Icon
+                      src={require('@phosphor-icons/core/regular/lock.svg')}
+                      alt={intl.formatMessage(messages.account_locked)}
+                      className='size-4 text-gray-600'
+                    />
+                    {account.favicon && !disableUserProvidedMedia && (
+                      <Text tag='span' theme='muted' size='sm'>&middot;</Text>
+                    )}
+                  </>
+                )}
 
                 {account.favicon && !disableUserProvidedMedia && (
                   <InstanceFavicon account={account} disabled={!withLinkToProfile} />
