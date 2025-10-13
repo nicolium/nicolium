@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 
 import { changeComposeInteractionPolicyOption } from 'pl-fe/actions/compose';
 import Modal from 'pl-fe/components/ui/modal';
 import Stack from 'pl-fe/components/ui/stack';
+import Warning from 'pl-fe/features/compose/components/warning';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useCompose } from 'pl-fe/hooks/use-compose';
 import { InteractionPolicyConfig, type Policy, type Rule, type Scope } from 'pl-fe/pages/settings/interaction-policies';
@@ -51,6 +53,21 @@ const ComposeInteractionPolicyModal: React.FC<BaseModalProps & ComposeInteractio
       closePosition={composeId === 'compose-modal' ? 'left' : undefined}
     >
       <Stack space={4}>
+        <Warning
+          message={
+            <FormattedMessage
+              id='interaction_policies.preferences_hint'
+              defaultMessage='Control, who can interact with this post. You can also configure the default interaction policies in <link>Preferences > Interaction policies</link>.'
+              values={{
+                link: (children: React.ReactNode) => (
+                  <Link className='font-bold text-gray-800 hover:underline dark:text-gray-200' to={'/settings/interaction_policies'}>
+                    {children}
+                  </Link>
+                ),
+              }}
+            />
+          }
+        />
         <InteractionPolicyConfig
           interactionPolicy={interactionPolicy}
           visibility={compose.privacy as 'public'}

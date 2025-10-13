@@ -37,6 +37,7 @@ const WarningWrapper: React.FC<IWarningWrapper> = ({ composeId }) => {
             }}
           />
         )}
+        animated
       />
     );
   }
@@ -50,6 +51,7 @@ const WarningWrapper: React.FC<IWarningWrapper> = ({ composeId }) => {
             defaultMessage="This post won't be listed under any hashtag as it is unlisted. Only public posts can be searched by hashtag."
           />
         )}
+        animated
       />
     );
   }
@@ -64,7 +66,7 @@ const WarningWrapper: React.FC<IWarningWrapper> = ({ composeId }) => {
       </span>
     );
 
-    return <Warning message={message} />;
+    return <Warning message={message} animated />;
   }
 
   return null;

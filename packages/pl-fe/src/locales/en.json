@@ -1007,6 +1007,7 @@
   "interaction_policies.entry.public": "Everyone",
   "interaction_policies.fail": "Failed to update interaction policies",
   "interaction_policies.mentioned_warning": "Mentioned users can always reply.",
+  "interaction_policies.preferences_hint": "Control, who can interact with this post. You can also configure the default interaction policies in <link>Preferences > Interaction policies</link>.",
   "interaction_policies.rule.always": "Always",
   "interaction_policies.rule.with_approval": "Require approval",
   "interaction_policies.success": "Updated interaction policies",
