@@ -51,7 +51,7 @@
   }
 
   &__volume {
-    @apply inline-flex cursor-pointer h-6 relative overflow-hidden before:content-[''] before:w-12 before:bg-white/35 before:rounded before:absolute before:h-1 before:left-0 before:top-1/2;
+    @apply inline-flex cursor-pointer h-6 relative overflow-hidden before:content-[''] before:w-12 before:bg-black/35 dark:before:bg-white/35 before:rounded before:absolute before:h-1 before:left-0 before:top-1/2;
     flex: 0 0 auto;
 
     .no-reduce-motion & {
