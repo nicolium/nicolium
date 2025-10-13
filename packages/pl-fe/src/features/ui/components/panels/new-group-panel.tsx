@@ -30,7 +30,7 @@ const NewGroupPanel = () => {
         theme='secondary'
         block
       >
-        <FormattedMessage id='new_group_panel.action' defaultMessage='Create Group' />
+        <FormattedMessage id='new_group_panel.action' defaultMessage='Create group' />
       </Button>
     </Stack>
   );

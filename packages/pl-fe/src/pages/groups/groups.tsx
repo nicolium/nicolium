@@ -47,7 +47,7 @@ const Groups: React.FC = () => {
         onClick={createGroup}
         theme='secondary'
       >
-        <FormattedMessage id='new_group_panel.action' defaultMessage='Create Group' />
+        <FormattedMessage id='new_group_panel.action' defaultMessage='Create group' />
       </Button>
     </Stack>
   );
@@ -62,7 +62,7 @@ const Groups: React.FC = () => {
           theme='secondary'
           block
         >
-          <FormattedMessage id='new_group_panel.action' defaultMessage='Create Group' />
+          <FormattedMessage id='new_group_panel.action' defaultMessage='Create group' />
         </Button>
       )}
 

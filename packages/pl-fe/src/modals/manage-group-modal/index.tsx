@@ -16,7 +16,7 @@ import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 import type { Group } from 'pl-fe/normalizers/group';
 
 const messages = defineMessages({
-  create: { id: 'manage_group.create', defaultMessage: 'Create Group' },
+  create: { id: 'manage_group.create', defaultMessage: 'Create group' },
   done: { id: 'manage_group.done', defaultMessage: 'Done' },
 });
 
