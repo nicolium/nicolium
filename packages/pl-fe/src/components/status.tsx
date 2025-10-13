@@ -51,7 +51,6 @@ interface IStatus {
   hoverable?: boolean;
   variant?: 'default' | 'rounded' | 'slim';
   showGroup?: boolean;
-  accountAction?: React.ReactElement;
   fromBookmarks?: boolean;
   className?: string;
 }
@@ -59,7 +58,6 @@ interface IStatus {
 const Status: React.FC<IStatus> = (props) => {
   const {
     status,
-    accountAction,
     avatarSize = 42,
     focusable = true,
     hoverable = true,
@@ -385,33 +383,31 @@ const Status: React.FC<IStatus> = (props) => {
         {statusInfo}
 
         <div className='flex'>
-          <div className='grow'>
-            <AccountContainer
-              key={actualStatus.account_id}
-              id={actualStatus.account_id}
-              action={accountAction}
-              hideActions={!accountAction}
-              showAccountHoverCard={hoverable}
-              withLinkToProfile={hoverable}
-              approvalStatus={actualStatus.approval_status}
-              avatarSize={avatarSize}
-            />
-          </div>
+          <AccountContainer
+            key={actualStatus.account_id}
+            id={actualStatus.account_id}
+            action={
+              <div className='flex flex-row-reverse items-center gap-1 self-baseline'>
+                <Link to={statusUrl} className='hover:underline' onClick={(event) => event.stopPropagation()}>
+                  <RelativeTimestamp timestamp={actualStatus.created_at} theme='muted' size='sm' className='whitespace-nowrap' />
+                </Link>
+                <StatusTypeIcon visibility={actualStatus.visibility} />
+                <StatusLanguagePicker status={actualStatus} />
+                {!!actualStatus.edited_at && (
+                  <>
+                    <Text tag='span' theme='muted' size='sm'>&middot;</Text>
 
-          <div className='flex flex-row-reverse items-center gap-1 self-baseline'>
-            <Link to={statusUrl} className='hover:underline' onClick={(event) => event.stopPropagation()}>
-              <RelativeTimestamp timestamp={actualStatus.created_at} theme='muted' size='sm' className='whitespace-nowrap' />
-            </Link>
-            <StatusTypeIcon visibility={actualStatus.visibility} />
-            <StatusLanguagePicker status={actualStatus} />
-            {!!actualStatus.edited_at && (
-              <>
-                <Text tag='span' theme='muted' size='sm'>&middot;</Text>
-
-                <Icon className='size-4 text-gray-700 dark:text-gray-600' src={require('@phosphor-icons/core/regular/pencil-simple.svg')} />
-              </>
-            )}
-          </div>
+                    <Icon className='size-4 text-gray-700 dark:text-gray-600' src={require('@phosphor-icons/core/regular/pencil-simple.svg')} />
+                  </>
+                )}
+              </div>
+            }
+            showAccountHoverCard={hoverable}
+            withLinkToProfile={hoverable}
+            approvalStatus={actualStatus.approval_status}
+            avatarSize={avatarSize}
+            actionAlignment='top'
+          />
         </div>
 
         <div className='status__content-wrapper'>

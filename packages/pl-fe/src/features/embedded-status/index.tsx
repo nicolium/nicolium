@@ -4,12 +4,10 @@ import { useHistory } from 'react-router-dom';
 
 import { fetchStatus } from 'pl-fe/actions/statuses';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
-import SiteLogo from 'pl-fe/components/site-logo';
 import Status from 'pl-fe/components/status';
 import Spinner from 'pl-fe/components/ui/spinner';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useLogo } from 'pl-fe/hooks/use-logo';
 import { iframeId } from 'pl-fe/iframe';
 import { makeGetStatus } from 'pl-fe/selectors';
 
@@ -25,7 +23,6 @@ const EmbeddedStatus: React.FC<IEmbeddedStatus> = ({ params }) => {
   const history = useHistory();
   const getStatus = useCallback(makeGetStatus(), []);
   const intl = useIntl();
-  const { src: logoSrc } = useLogo();
 
   const status = useAppSelector(state => getStatus(state, { id: params.statusId }));
 
@@ -49,17 +46,11 @@ const EmbeddedStatus: React.FC<IEmbeddedStatus> = ({ params }) => {
     }, '*');
   }, [status, loading]);
 
-  const logo = logoSrc && (
-    <div className='ml-4 flex justify-center align-middle'>
-      <SiteLogo className='max-h-[20px] max-w-[112px]' />
-    </div>
-  );
-
   const renderInner = () => {
     if (loading) {
       return <Spinner />;
     } else if (status) {
-      return <Status status={status} accountAction={logo || undefined} variant='default' />;
+      return <Status status={status} variant='default' />;
     } else {
       return <MissingIndicator nested />;
     }
