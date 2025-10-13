@@ -569,33 +569,6 @@ const EmojiPickerButton: React.FC<Omit<IActionButton, 'onOpenUnauthorizedModal'>
   );
 };
 
-const ShareButton: React.FC<Pick<IActionButton, 'status' | 'statusActionButtonTheme'>> = ({
-  status,
-  statusActionButtonTheme,
-}) => {
-  const intl = useIntl();
-
-  const handleShareClick = () => {
-    navigator.share({
-      text: status.search_index,
-      url: status.uri,
-    }).catch((e) => {
-      if (e.name !== 'AbortError') console.error(e);
-    });
-  };
-
-  const canShare = ('share' in navigator) && (status.visibility === 'public' || status.visibility === 'group');
-
-  return canShare && (
-    <StatusActionButton
-      title={intl.formatMessage(messages.share)}
-      icon={require('@phosphor-icons/core/regular/export.svg')}
-      onClick={handleShareClick}
-      theme={statusActionButtonTheme}
-    />
-  );
-};
-
 interface IMenuButton extends IActionButton {
   expandable?: boolean;
   fromBookmarks?: boolean;
@@ -779,6 +752,15 @@ const MenuButton: React.FC<IMenuButton> = ({
       copy(uri);
     };
 
+    const handleShare = () => {
+      navigator.share({
+        text: status.search_index,
+        url: status.uri,
+      }).catch((e) => {
+        if (e.name !== 'AbortError') console.error(e);
+      });
+    };
+
     const handleDeleteStatus: React.EventHandler<React.MouseEvent> = (e) => {
       dispatch(deleteStatusModal(intl, status.id));
     };
@@ -848,11 +830,19 @@ const MenuButton: React.FC<IMenuButton> = ({
         icon: require('@phosphor-icons/core/regular/clipboard.svg'),
       });
 
+      if ('share' in navigator) {
+        menu.push({
+          text: intl.formatMessage(messages.share),
+          action: handleShare,
+          icon: require('@phosphor-icons/core/regular/export.svg'),
+        });
+      }
+
       if (features.embeds && localAccount) {
         menu.push({
           text: intl.formatMessage(messages.embed),
           action: handleEmbed,
-          icon: require('@phosphor-icons/core/regular/export.svg'),
+          icon: require('@phosphor-icons/core/regular/code-simple.svg'),
         });
       }
     }
@@ -1229,11 +1219,6 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
         statusActionButtonTheme={statusActionButtonTheme}
         withLabels={withLabels}
         me={me}
-      />
-
-      <ShareButton
-        status={status}
-        statusActionButtonTheme={statusActionButtonTheme}
       />
 
       <MenuButton
