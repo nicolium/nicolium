@@ -84,7 +84,7 @@ const StatusPage: React.FC<IStatusDetails> = (props) => {
       {
         text: intl.formatMessage(messages.treeView),
         action: () => dispatch(changeSetting(['threads', 'displayMode'], 'tree')),
-        icon: require('@tabler/icons/outline/list-tree.svg'),
+        icon: require('@phosphor-icons/core/regular/tree-view.svg'),
         type: 'radio',
         checked: displayMode === 'tree',
       },

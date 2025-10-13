@@ -223,12 +223,12 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       {
         text: intl.formatMessage(messages.exportIcs),
         action: handleExportClick,
-        icon: require('@tabler/icons/outline/calendar-plus.svg'),
+        icon: require('@phosphor-icons/core/regular/calendar-plus.svg'),
       },
       {
         text: intl.formatMessage(messages.copy),
         action: handleCopy,
-        icon: require('@phosphor-icons/core/regular/link-simple.svg'),
+        icon: require('@phosphor-icons/core/regular/clipboard.svg'),
       },
     ];
 
@@ -439,7 +439,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
         <Stack space={1}>
           <HStack alignItems='center' space={2}>
-            <Icon src={require('@tabler/icons/outline/flag-3.svg')} />
+            <Icon src={require('@phosphor-icons/core/regular/flag-banner.svg')} />
             <span>
               <FormattedMessage
                 id='event.organized_by'
@@ -460,7 +460,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
           {event.join_mode !== 'external' || event.participants_count > 0 && (
             <HStack alignItems='center' space={2}>
-              <Icon src={require('@tabler/icons/outline/users.svg')} />
+              <Icon src={require('@phosphor-icons/core/regular/users.svg')} />
               <a href='#' className='hover:underline' onClick={handleParticipantsClick}>
                 <span>
                   <FormattedMessage

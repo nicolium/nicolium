@@ -74,7 +74,7 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
         })}
       >
         <Icon
-          src={require('@tabler/icons/outline/camera-plus.svg')}
+          src={require('@phosphor-icons/core/regular/camera-plus.svg')}
           className='size-5 text-white'
         />
       </HStack>

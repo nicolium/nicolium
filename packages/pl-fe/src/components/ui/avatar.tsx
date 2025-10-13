@@ -104,7 +104,7 @@ const Avatar = (props: IAvatar) => {
       >
         <div className='absolute inset-0 z-[1] flex items-center justify-center rounded-lg bg-gray-200 dark:bg-gray-900'>
           <Icon
-            src={require('@tabler/icons/outline/photo-off.svg')}
+            src={require('@phosphor-icons/core/regular/image-square.svg')}
             className='size-4 text-gray-500 dark:text-gray-700'
           />
         </div>

@@ -212,7 +212,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
               title={intl.formatMessage(messages.pronouns, { pronouns: account.pronouns.join('/') })}
             >
               <Icon
-                src={require('@tabler/icons/outline/tags.svg')}
+                src={require('@phosphor-icons/core/regular/tag.svg')}
                 className='size-4 text-gray-800 dark:text-gray-200'
               />
 

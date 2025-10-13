@@ -73,7 +73,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
 
     if (fullMediaRemoval) {
       items.push((
-        <Restriction key='fullMediaRemoval' icon={require('@tabler/icons/outline/photo-off.svg')}>
+        <Restriction key='fullMediaRemoval' icon={require('@phosphor-icons/core/regular/image-broken.svg')}>
           <FormattedMessage
             id='federation_restriction.full_media_removal'
             defaultMessage='Full media removal'
@@ -82,7 +82,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
       ));
     } else if (partialMediaRemoval) {
       items.push((
-        <Restriction key='partialMediaRemoval' icon={require('@tabler/icons/outline/photo-off.svg')}>
+        <Restriction key='partialMediaRemoval' icon={require('@phosphor-icons/core/regular/image-broken.svg')}>
           <FormattedMessage
             id='federation_restriction.partial_media_removal'
             defaultMessage='Partial media removal'
@@ -113,7 +113,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
 
     if (remoteInstance.federation.reject === true) {
       return (
-        <Restriction icon={require('@tabler/icons/outline/shield-x.svg')}>
+        <Restriction icon={require('@phosphor-icons/core/regular/x.svg')}>
           <FormattedMessage
             id='remote_instance.federation_panel.restricted_message'
             defaultMessage='{siteTitle} blocks all activities from {host}.'
@@ -124,7 +124,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
     } else if (hasRestrictions(remoteInstance)) {
       return (
         <>
-          <Restriction icon={require('@tabler/icons/outline/shield-lock.svg')}>
+          <Restriction icon={require('@phosphor-icons/core/regular/lock.svg')}>
             <FormattedMessage
               id='remote_instance.federation_panel.some_restrictions_message'
               defaultMessage='{siteTitle} has placed some restrictions on {host}.'
@@ -137,7 +137,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
       );
     } else {
       return (
-        <Restriction icon={require('@tabler/icons/outline/shield-check.svg')}>
+        <Restriction icon={require('@phosphor-icons/core/regular/check.svg')}>
           <FormattedMessage
             id='remote_instance.federation_panel.no_restrictions_message'
             defaultMessage='{siteTitle} has placed no restrictions on {host}.'

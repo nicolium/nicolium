@@ -71,7 +71,7 @@ const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
     fileElement.current?.click();
   };
 
-  const src = require('@tabler/icons/outline/photo.svg');
+  const src = require('@phosphor-icons/core/regular/image.svg');
 
   return (
     <label>
@@ -205,7 +205,7 @@ const BlockTypeFloatingToolbar = ({
           <ToolbarButton
             onClick={createHorizontalLine}
             aria-label={intl.formatMessage(messages.createHorizontalLine)}
-            icon={require('@tabler/icons/outline/line-dashed.svg')}
+            icon={require('@phosphor-icons/core/regular/minus.svg')}
           />
         </>
       )}
