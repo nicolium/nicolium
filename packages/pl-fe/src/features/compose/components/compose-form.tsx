@@ -328,7 +328,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   if (isEditing) {
     publishText = intl.formatMessage(messages.saveChanges);
   } else if (privacy === 'direct') {
-    publishIcon = require('@phosphor-icons/core/regular/envelope-simple.svg');
+    publishIcon = require('@phosphor-icons/core/regular/at.svg');
     publishText = intl.formatMessage(messages.message);
   } else if (privacy === 'private' || privacy === 'mutuals_only') {
     publishIcon = require('@phosphor-icons/core/regular/lock.svg');

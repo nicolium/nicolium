@@ -99,7 +99,7 @@ const messages = defineMessages({
   reblog_private: { id: 'status.reblog_private', defaultMessage: 'Repost to original audience' },
   reblog_visibility: { id: 'status.reblog_visibility', defaultMessage: 'Repost to specific audience' },
   reblog_visibility_public: { id: 'status.reblog_visibility_public', defaultMessage: 'Public repost' },
-  reblog_visibility_unlisted: { id: 'status.reblog_visibility_unlisted', defaultMessage: 'Unlisted repost' },
+  reblog_visibility_unlisted: { id: 'status.reblog_visibility_unlisted', defaultMessage: 'Quiet public repost' },
   reblog_visibility_private: { id: 'status.reblog_visibility_private', defaultMessage: 'Followers-only repost' },
   redact: { id: 'status.redact', defaultMessage: 'Redact' },
   redraft: { id: 'status.redraft', defaultMessage: 'Delete & re-draft' },
@@ -296,7 +296,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
   let reblogIcon = require('@phosphor-icons/core/regular/repeat.svg');
 
   if (status.visibility === 'direct') {
-    reblogIcon = require('@phosphor-icons/core/regular/envelope-simple.svg');
+    reblogIcon = require('@phosphor-icons/core/regular/at.svg');
   } else if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
     reblogIcon = require('@phosphor-icons/core/regular/lock.svg');
   }
@@ -918,7 +918,7 @@ const MenuButton: React.FC<IMenuButton> = ({
           {
             text: intl.formatMessage(messages.reblog_visibility_unlisted),
             action: (e) => handleReblogClick(e, 'unlisted'),
-            icon: require('@phosphor-icons/core/regular/lock-open.svg'),
+            icon: require('@phosphor-icons/core/regular/moon.svg'),
           },
           {
             text: intl.formatMessage(messages.reblog_visibility_private),
@@ -983,7 +983,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: intl.formatMessage(messages.direct, { name: username }),
           action: handleDirectClick,
-          icon: require('@phosphor-icons/core/regular/envelope-simple.svg'),
+          icon: require('@phosphor-icons/core/regular/at.svg'),
         });
       }
 

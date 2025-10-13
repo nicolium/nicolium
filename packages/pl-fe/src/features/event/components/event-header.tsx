@@ -47,7 +47,7 @@ const messages = defineMessages({
   reblog_private: { id: 'status.reblog_private', defaultMessage: 'Repost to original audience' },
   cancel_reblog_private: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },
   reblog_visibility_public: { id: 'status.reblog_visibility_public', defaultMessage: 'Public repost' },
-  reblog_visibility_unlisted: { id: 'status.reblog_visibility_unlisted', defaultMessage: 'Unlisted repost' },
+  reblog_visibility_unlisted: { id: 'status.reblog_visibility_unlisted', defaultMessage: 'Quiet public repost' },
   reblog_visibility_private: { id: 'status.reblog_visibility_private', defaultMessage: 'Followers-only repost' },
   unreblog: { id: 'event.unreblog', defaultMessage: 'Un-repost event' },
   pin: { id: 'status.pin', defaultMessage: 'Pin on profile' },
@@ -264,7 +264,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
             {
               text: intl.formatMessage(messages.reblog_visibility_unlisted),
               action: () => handleReblogClick('unlisted'),
-              icon: require('@phosphor-icons/core/regular/lock-open.svg'),
+              icon: require('@phosphor-icons/core/regular/moon.svg'),
             },
             {
               text: intl.formatMessage(messages.reblog_visibility_private),
