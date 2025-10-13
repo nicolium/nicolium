@@ -8,10 +8,8 @@ import { ScrollContext } from 'react-router-scroll-4';
 import * as BuildConfig from 'pl-fe/build-config';
 import LoadingScreen from 'pl-fe/components/loading-screen';
 import SiteErrorBoundary from 'pl-fe/components/site-error-boundary';
-import { ModalRoot, OnboardingWizard } from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { ModalRoot } from 'pl-fe/features/ui/util/async-components';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { useCachedLocationHandler } from 'pl-fe/utils/redirect';
 
@@ -24,11 +22,8 @@ const PlFeMount = () => {
   useCachedLocationHandler();
 
   const { isLoggedIn } = useLoggedIn();
-  const { account } = useOwnAccount();
   const plFeConfig = usePlFeConfig();
 
-  const needsOnboarding = useAppSelector(state => state.onboarding.needsOnboarding);
-  const showOnboarding = account && needsOnboarding;
   const { redirectRootNoLogin, gdpr } = plFeConfig;
 
   // @ts-ignore: I don't actually know what these should be, lol
@@ -59,10 +54,7 @@ const PlFeMount = () => {
 
               <Route>
                 <Suspense fallback={<LoadingScreen />}>
-                  {showOnboarding
-                    ? <OnboardingWizard />
-                    : <UI />
-                  }
+                  <UI />
                 </Suspense>
 
                 <Suspense>

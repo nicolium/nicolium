@@ -15,7 +15,6 @@ import instance from './instance';
 import me from './me';
 import meta from './meta';
 import notifications from './notifications';
-import onboarding from './onboarding';
 import pending_statuses from './pending-statuses';
 import plfe from './pl-fe';
 import polls from './polls';
@@ -37,7 +36,6 @@ const reducers = {
   me,
   meta,
   notifications,
-  onboarding,
   pending_statuses,
   plfe,
   polls,

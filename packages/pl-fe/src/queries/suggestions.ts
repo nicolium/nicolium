@@ -51,33 +51,4 @@ const useDismissSuggestion = () => {
   });
 };
 
-const useOnboardingSuggestions = () => {
-  const client = useClient();
-  const dispatch = useAppDispatch();
-
-  const getSuggestions = async () => {
-    const response = await client.myAccount.getSuggestions();
-
-    const accounts = response.map(({ account }) => account);
-    const accountIds = accounts.map((account) => account.id);
-    dispatch(importEntities({ accounts }));
-    dispatch(fetchRelationships(accountIds));
-
-    return response;
-  };
-
-  const result = useQuery({
-    queryKey: ['suggestions', 'v2'],
-    queryFn: () => getSuggestions(),
-    placeholderData: keepPreviousData,
-  });
-
-  const data = result.data;
-
-  return {
-    ...result,
-    data,
-  };
-};
-
-export { useOnboardingSuggestions, useSuggestions, useDismissSuggestion };
+export { useSuggestions, useDismissSuggestion };

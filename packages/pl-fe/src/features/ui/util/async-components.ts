@@ -134,7 +134,6 @@ export const EventHeader = lazy(() => import('pl-fe/features/event/components/ev
 export const LightningAddress = lazy(() => import('pl-fe/features/crypto-donate/components/lightning-address'));
 export const MfaForm = lazy(() => import('pl-fe/features/security/mfa-form'));
 export const ModalRoot = lazy(() => import('pl-fe/features/ui/components/modal-root'));
-export const OnboardingWizard = lazy(() => import('pl-fe/features/onboarding/onboarding-wizard'));
 export const AccountHoverCard = lazy(() => import('pl-fe/components/account-hover-card'));
 export const StatusHoverCard = lazy(() => import('pl-fe/components/status-hover-card'));
 export const Video = lazy(() => import('pl-fe/features/video'));

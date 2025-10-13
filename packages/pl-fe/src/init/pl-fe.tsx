@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import { StatProvider } from 'pl-fe/contexts/stat-context';
 import { queryClient } from 'pl-fe/queries/client';
 
-import { checkOnboardingStatus } from '../actions/onboarding';
 import { preload } from '../actions/preload';
 import { store } from '../store';
 
@@ -16,9 +15,6 @@ import PlFeMount from './pl-fe-mount';
 
 // Preload happens synchronously
 store.dispatch(preload() as any);
-
-// This happens synchronously
-store.dispatch(checkOnboardingStatus() as any);
 
 /** The root React node of the application. */
 const PlFe: React.FC = () => (

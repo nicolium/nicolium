@@ -21,7 +21,6 @@ import { createAccount } from 'pl-fe/actions/accounts';
 import { createApp } from 'pl-fe/actions/apps';
 import { fetchMeSuccess, fetchMeFail } from 'pl-fe/actions/me';
 import { obtainOAuthToken, revokeOAuthToken } from 'pl-fe/actions/oauth';
-import { startOnboarding } from 'pl-fe/actions/onboarding';
 import * as BuildConfig from 'pl-fe/build-config';
 import { queryClient } from 'pl-fe/queries/client';
 import { selectAccount } from 'pl-fe/selectors';
@@ -306,7 +305,6 @@ const register = (params: CreateAccountParams) =>
         if ('identifier' in response) {
           toast.info(response.message);
         } else {
-          dispatch(startOnboarding());
           return dispatch(authLoggedIn(response, app));
         }
       });
