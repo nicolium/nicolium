@@ -102,7 +102,6 @@ interface IAccount {
   withDate?: boolean;
   withLinkToProfile?: boolean;
   withRelationship?: boolean;
-  showEdit?: boolean;
   approvalStatus?: StatusApprovalStatus | null;
   emoji?: string;
   emojiUrl?: string;
@@ -130,7 +129,6 @@ const Account = ({
   withDate = false,
   withLinkToProfile = true,
   withRelationship = true,
-  showEdit = false,
   approvalStatus,
   emoji,
   emojiUrl,
@@ -382,14 +380,6 @@ const Account = ({
                     </Text>
                   </>
                 )}
-
-                {showEdit ? (
-                  <>
-                    <Text tag='span' theme='muted' size='sm'>&middot;</Text>
-
-                    <Icon className='size-4 text-gray-700 dark:text-gray-600' src={require('@phosphor-icons/core/regular/pencil-simple.svg')} />
-                  </>
-                ) : null}
 
                 {actionType === 'muting' && account.mute_expires_at ? (
                   <>

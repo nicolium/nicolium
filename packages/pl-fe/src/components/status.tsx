@@ -23,6 +23,7 @@ import { useStatusMetaStore } from 'pl-fe/stores/status-meta';
 import { textForScreenReader } from 'pl-fe/utils/status';
 
 import EventPreview from './event-preview';
+import RelativeTimestamp from './relative-timestamp';
 import StatusActionBar from './status-action-bar';
 import StatusContent from './status-content';
 import StatusLanguagePicker from './status-language-picker';
@@ -383,25 +384,35 @@ const Status: React.FC<IStatus> = (props) => {
       >
         {statusInfo}
 
-        <AccountContainer
-          key={actualStatus.account_id}
-          id={actualStatus.account_id}
-          timestamp={actualStatus.created_at}
-          timestampUrl={statusUrl}
-          action={accountAction}
-          hideActions={!accountAction}
-          showEdit={!!actualStatus.edited_at}
-          showAccountHoverCard={hoverable}
-          withLinkToProfile={hoverable}
-          approvalStatus={actualStatus.approval_status}
-          avatarSize={avatarSize}
-          items={(
-            <>
-              <StatusTypeIcon visibility={actualStatus.visibility} />
-              <StatusLanguagePicker status={actualStatus} />
-            </>
-          )}
-        />
+        <div className='flex'>
+          <div className='grow'>
+            <AccountContainer
+              key={actualStatus.account_id}
+              id={actualStatus.account_id}
+              action={accountAction}
+              hideActions={!accountAction}
+              showAccountHoverCard={hoverable}
+              withLinkToProfile={hoverable}
+              approvalStatus={actualStatus.approval_status}
+              avatarSize={avatarSize}
+            />
+          </div>
+
+          <div className='flex flex-row-reverse items-center gap-1 self-baseline'>
+            <Link to={statusUrl} className='hover:underline' onClick={(event) => event.stopPropagation()}>
+              <RelativeTimestamp timestamp={actualStatus.created_at} theme='muted' size='sm' className='whitespace-nowrap' />
+            </Link>
+            <StatusTypeIcon visibility={actualStatus.visibility} />
+            <StatusLanguagePicker status={actualStatus} />
+            {!!actualStatus.edited_at && (
+              <>
+                <Text tag='span' theme='muted' size='sm'>&middot;</Text>
+
+                <Icon className='size-4 text-gray-700 dark:text-gray-600' src={require('@phosphor-icons/core/regular/pencil-simple.svg')} />
+              </>
+            )}
+          </div>
+        </div>
 
         <div className='status__content-wrapper'>
           <StatusReplyMentions status={actualStatus} hoverable={hoverable} />
