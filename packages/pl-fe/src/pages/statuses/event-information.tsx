@@ -95,7 +95,7 @@ const EventInformationPage: React.FC<IEventInformation> = ({ params }) => {
           <FormattedMessage id='event.location' defaultMessage='Location' />
         </Text>
         <HStack space={2} alignItems='center'>
-          <Icon src={require('@tabler/icons/outline/map-pin.svg')} />
+          <Icon src={require('@phosphor-icons/core/regular/map-pin.svg')} />
           <Text>{text}</Text>
         </HStack>
       </Stack>

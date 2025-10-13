@@ -83,7 +83,7 @@ const EventPreview: React.FC<IEventPreview> = ({ status, className, hideAction, 
 
           {event.location && (
             <HStack alignItems='center' space={2}>
-              <Icon src={require('@tabler/icons/outline/map-pin.svg')} />
+              <Icon src={require('@phosphor-icons/core/regular/map-pin.svg')} />
               <span>
                 {event.location.name}
               </span>

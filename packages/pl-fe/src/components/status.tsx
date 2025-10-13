@@ -288,7 +288,7 @@ const Status: React.FC<IStatus> = (props) => {
       return (
         <StatusInfo
           avatarSize={avatarSize}
-          icon={<Icon src={require('@tabler/icons/outline/pinned.svg')} className='size-4 text-gray-600 dark:text-gray-400' />}
+          icon={<Icon src={require('@phosphor-icons/core/regular/push-pin.svg')} className='size-4 text-gray-600 dark:text-gray-400' />}
           text={
             <FormattedMessage id='status.pinned' defaultMessage='Pinned post' />
           }

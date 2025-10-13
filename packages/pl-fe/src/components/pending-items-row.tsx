@@ -26,7 +26,7 @@ const PendingItemsRow: React.FC<IPendingItemsRow> = ({ to, count, size = 'md' })
         })}
         >
           <Icon
-            src={require('@tabler/icons/outline/exclamation-circle.svg')}
+            src={require('@phosphor-icons/core/regular/warning-circle.svg')}
             className={clsx({
               'h-5 w-5': size === 'md',
               'h-7 w-7': size === 'lg',

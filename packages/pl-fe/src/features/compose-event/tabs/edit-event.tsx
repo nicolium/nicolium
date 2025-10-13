@@ -162,7 +162,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
 
   const renderLocation = () => location && (
     <HStack className='h-[38px] text-gray-700 dark:text-gray-500' alignItems='center' space={2}>
-      <Icon src={ADDRESS_ICONS[location.type] || require('@tabler/icons/outline/map-pin.svg')} />
+      <Icon src={ADDRESS_ICONS[location.type] || require('@phosphor-icons/core/regular/map-pin.svg')} />
       <Stack className='grow'>
         <Text>{location.description}</Text>
         <Text theme='muted' size='xs'>{[location.street, location.locality, location.country].filter(val => val?.trim()).join(' · ')}</Text>

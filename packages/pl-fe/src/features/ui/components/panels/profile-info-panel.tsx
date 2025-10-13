@@ -194,7 +194,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
           {account.location ? (
             <HStack alignItems='center' space={0.5}>
               <Icon
-                src={require('@tabler/icons/outline/map-pin.svg')}
+                src={require('@phosphor-icons/core/regular/map-pin.svg')}
                 className='size-4 text-gray-800 dark:text-gray-200'
               />
 

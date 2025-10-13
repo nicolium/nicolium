@@ -57,17 +57,17 @@ const messages = defineMessages({
 
 const blockTypeToIcon = {
   bullet: require('@phosphor-icons/core/regular/list-bullets.svg'),
-  check: require('@tabler/icons/outline/list-check.svg'),
-  code: require('@tabler/icons/outline/code.svg'),
-  h1: require('@tabler/icons/outline/h-1.svg'),
-  h2: require('@tabler/icons/outline/h-2.svg'),
-  h3: require('@tabler/icons/outline/h-3.svg'),
-  h4: require('@tabler/icons/outline/h-4.svg'),
-  h5: require('@tabler/icons/outline/h-5.svg'),
-  h6: require('@tabler/icons/outline/h-6.svg'),
-  number: require('@tabler/icons/outline/list-numbers.svg'),
-  paragraph: require('@tabler/icons/outline/align-left.svg'),
-  quote: require('@tabler/icons/outline/blockquote.svg'),
+  check: require('@phosphor-icons/core/regular/list-checks.svg'),
+  code: require('@phosphor-icons/core/regular/code.svg'),
+  h1: require('@phosphor-icons/core/regular/text-h-one.svg'),
+  h2: require('@phosphor-icons/core/regular/text-h-two.svg'),
+  h3: require('@phosphor-icons/core/regular/text-h-three.svg'),
+  h4: require('@phosphor-icons/core/regular/text-h-four.svg'),
+  h5: require('@phosphor-icons/core/regular/text-h-five.svg'),
+  h6: require('@phosphor-icons/core/regular/text-h-six.svg'),
+  number: require('@phosphor-icons/core/regular/list-numbers.svg'),
+  paragraph: require('@phosphor-icons/core/regular/text-align-left.svg'),
+  quote: require('@phosphor-icons/core/regular/quotes.svg'),
 };
 
 const blockTypeToBlockName = {
@@ -366,7 +366,7 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isBold}
             aria-label={intl.formatMessage(messages.formatBold)}
-            icon={require('@tabler/icons/outline/bold.svg')}
+            icon={require('@phosphor-icons/core/regular/text-b.svg')}
           />
           <ToolbarButton
             onClick={() => {
@@ -374,7 +374,7 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isItalic}
             aria-label={intl.formatMessage(messages.formatItalic)}
-            icon={require('@tabler/icons/outline/italic.svg')}
+            icon={require('@phosphor-icons/core/regular/text-italic.svg')}
           />
           <ToolbarButton
             onClick={() => {
@@ -382,7 +382,7 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isUnderline}
             aria-label={intl.formatMessage(messages.formatUnderline)}
-            icon={require('@tabler/icons/outline/underline.svg')}
+            icon={require('@phosphor-icons/core/regular/text-underline.svg')}
           />
           <ToolbarButton
             onClick={() => {
@@ -390,7 +390,7 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isStrikethrough}
             aria-label={intl.formatMessage(messages.formatStrikethrough)}
-            icon={require('@tabler/icons/outline/strikethrough.svg')}
+            icon={require('@phosphor-icons/core/regular/text-strikethrough.svg')}
           />
           <ToolbarButton
             onClick={() => {
@@ -398,13 +398,13 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isCode}
             aria-label={intl.formatMessage(messages.insertCodeBlock)}
-            icon={require('@tabler/icons/outline/code.svg')}
+            icon={require('@phosphor-icons/core/regular/text-code.svg')}
           />
           <ToolbarButton
             onClick={insertLink}
             active={isLink}
             aria-label={intl.formatMessage(messages.insertLink)}
-            icon={require('@tabler/icons/outline/link.svg')}
+            icon={require('@phosphor-icons/core/regular/link-simple-horizontal.svg')}
           />
         </>
       )}

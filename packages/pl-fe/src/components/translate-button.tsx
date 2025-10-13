@@ -73,7 +73,7 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
         )}
       </span>
       {translationQuery.isLoading && (
-        <Icon src={require('@tabler/icons/outline/loader-2.svg')} className='size-4 animate-spin' />
+        <Icon src={require('@phosphor-icons/core/regular/circle-notch.svg')} className='size-4 animate-spin' />
       )}
     </button>
   );

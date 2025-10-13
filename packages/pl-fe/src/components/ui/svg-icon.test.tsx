@@ -1,4 +1,4 @@
-import IconCode from '@tabler/icons/outline/code.svg';
+import IconCode from '@phosphor-icons/core/regular/code.svg';
 import React from 'react';
 
 import { render, screen } from 'pl-fe/jest/test-helpers';

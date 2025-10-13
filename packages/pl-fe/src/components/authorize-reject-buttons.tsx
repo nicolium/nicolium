@@ -159,7 +159,7 @@ const AuthorizeRejectButton: React.FC<IAuthorizeRejectButton> = ({ theme, icon, 
       }
     >
       <IconButton
-        src={isLoading ? require('@tabler/icons/filled/player-stop.svg') : icon}
+        src={isLoading ? require('@phosphor-icons/core/fill/stop-fill.svg') : icon}
         onClick={action}
         theme='seamless'
         className='size-10 items-center justify-center bg-white focus:!ring-0 dark:!bg-gray-900'
