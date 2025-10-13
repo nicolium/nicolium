@@ -321,7 +321,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         menu.push({
           text: intl.formatMessage(messages.chat, { name: username }),
           action: handleChatClick,
-          icon: require('@phosphor-icons/core/regular/chats.svg'),
+          icon: require('@phosphor-icons/core/regular/chats-teardrop.svg'),
         });
       } else if (features.privacyScopes) {
         menu.push({

@@ -977,7 +977,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: intl.formatMessage(messages.chat, { name: username }),
           action: handleChatClick,
-          icon: require('@phosphor-icons/core/regular/chats.svg'),
+          icon: require('@phosphor-icons/core/regular/chats-teardrop.svg'),
         });
       } else if (features.privacyScopes) {
         menu.push({

@@ -651,7 +651,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
     if (account.accepts_chat_messages) {
       return (
         <IconButton
-          src={require('@phosphor-icons/core/regular/chats.svg')}
+          src={require('@phosphor-icons/core/regular/chats-teardrop.svg')}
           onClick={() => createAndNavigateToChat.mutate(account.id)}
           title={intl.formatMessage(messages.chat, { name: account.username })}
           theme='outlined'

@@ -57,7 +57,7 @@ const icons: Partial<Record<NotificationType | 'reply', string>> = {
   status: require('@phosphor-icons/core/regular/bell-simple-ringing.svg'),
   poll: require('@phosphor-icons/core/regular/chart-bar.svg'),
   move: require('@phosphor-icons/core/regular/suitcase.svg'),
-  chat_mention: require('@phosphor-icons/core/regular/chats.svg'),
+  chat_mention: require('@phosphor-icons/core/regular/chats-teardrop.svg'),
   emoji_reaction: require('@phosphor-icons/core/regular/smiley.svg'),
   update: require('@phosphor-icons/core/regular/pencil-simple-line.svg'),
   event_reminder: require('@phosphor-icons/core/regular/calendar-star.svg'),
