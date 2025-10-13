@@ -228,7 +228,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       {
         text: intl.formatMessage(messages.copy),
         action: handleCopy,
-        icon: require('@tabler/icons/outline/link.svg'),
+        icon: require('@phosphor-icons/core/regular/link-simple.svg'),
       },
     ];
 

@@ -232,7 +232,7 @@ const ReportPage: React.FC<IReportPage> = (props) => {
                     <IconButton
                       className='ml-auto'
                       iconClassName='h-4 w-4'
-                      src={require('@tabler/icons/outline/plus.svg')}
+                      src={require('@phosphor-icons/core/regular/plus.svg')}
                       onClick={handleSelfAssignReport}
                       text={intl.formatMessage(messages.reportAssign)}
                     />

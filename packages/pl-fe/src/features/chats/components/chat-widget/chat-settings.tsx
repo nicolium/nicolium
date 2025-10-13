@@ -128,7 +128,7 @@ const ChatSettings = () => {
 
           {features.chatsDelete && (
             <button onClick={handleLeaveChat} className='flex w-full items-center space-x-2 text-sm font-bold text-danger-600'>
-              <Icon src={require('@tabler/icons/outline/logout.svg')} className='size-5' />
+              <Icon src={require('@phosphor-icons/core/regular/sign-out.svg')} className='size-5' />
               <span>{intl.formatMessage(messages.leaveChat)}</span>
             </button>
           )}

@@ -54,7 +54,7 @@ const Search: React.FC<ISearch> = ({ value, onSubmit }) => {
               onSubmit('');
             }}
           >
-            <Icon src={require('@tabler/icons/outline/backspace.svg')} aria-label={intl.formatMessage(messages.search)} className={clsx('size-5 text-gray-600', { hidden: !hasValue })} />
+            <Icon src={require('@phosphor-icons/core/regular/backspace.svg')} aria-label={intl.formatMessage(messages.search)} className={clsx('size-5 text-gray-600', { hidden: !hasValue })} />
           </div>
         </label>
 

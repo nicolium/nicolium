@@ -147,7 +147,7 @@ const PollOption: React.FC<IPollOption> = (props): JSX.Element | null => {
             <HStack space={2} alignItems='center' className='relative'>
               {voted ? (
                 <Icon
-                  src={require('@tabler/icons/outline/circle-check.svg')}
+                  src={require('@phosphor-icons/core/regular/check-circle.svg')}
                   alt={intl.formatMessage(messages.voted)}
                   className='size-4 text-primary-600 dark:fill-white dark:text-primary-800'
                 />

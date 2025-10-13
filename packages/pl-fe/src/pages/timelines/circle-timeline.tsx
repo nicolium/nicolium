@@ -95,7 +95,7 @@ const CircleTimelinePage: React.FC = () => {
   return (
     <Column
       label={title}
-      action={<DropdownMenu items={items} src={require('@tabler/icons/outline/dots-vertical.svg')} />}
+      action={<DropdownMenu items={items} src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')} />}
     >
       <Timeline
         loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'

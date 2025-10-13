@@ -87,7 +87,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
       {visible ? (
         <Button
           text={intl.formatMessage(messages.hide)}
-          icon={require('@tabler/icons/outline/eye-off.svg')}
+          icon={require('@phosphor-icons/core/regular/eye-slash.svg')}
           onClick={toggleVisibility}
           theme='primary'
           size='sm'
@@ -113,7 +113,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
                 type='button'
                 theme='outline'
                 size='sm'
-                icon={require('@tabler/icons/outline/eye.svg')}
+                icon={require('@phosphor-icons/core/regular/eye.svg')}
                 onClick={toggleVisibility}
               >
                 {intl.formatMessage(messages.show)}

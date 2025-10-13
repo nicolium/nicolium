@@ -86,7 +86,7 @@ const ChatWindow = () => {
           </HStack>
         }
         secondaryAction={secondaryAction()}
-        secondaryActionIcon={isOpen ? require('@tabler/icons/outline/info-circle.svg') : require('@phosphor-icons/core/regular/pencil-simple.svg')}
+        secondaryActionIcon={isOpen ? require('@phosphor-icons/core/regular/info.svg') : require('@phosphor-icons/core/regular/pencil-simple.svg')}
         isToggleable={!isOpen}
         isOpen={isOpen}
         onToggle={toggleChatPane}

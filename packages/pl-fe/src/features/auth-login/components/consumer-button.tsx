@@ -13,12 +13,12 @@ const messages = defineMessages({
 
 /** Map between OAuth providers and brand icons. */
 const BRAND_ICONS: Record<string, string> = {
-  twitter: require('@tabler/icons/outline/brand-twitter.svg'),
-  facebook: require('@tabler/icons/outline/brand-facebook.svg'),
-  google: require('@tabler/icons/outline/brand-google.svg'),
-  microsoft: require('@tabler/icons/outline/brand-windows.svg'),
-  slack: require('@tabler/icons/outline/brand-slack.svg'),
-  github: require('@tabler/icons/outline/brand-github.svg'),
+  twitter: require('@phosphor-icons/core/regular/twitter-logo.svg'),
+  facebook: require('@phosphor-icons/core/regular/facebook-logo.svg'),
+  google: require('@phosphor-icons/core/regular/google-logo.svg'),
+  microsoft: require('@phosphor-icons/core/regular/squares-four.svg'),
+  slack: require('@phosphor-icons/core/regular/slack-logo.svg'),
+  github: require('@phosphor-icons/core/regular/github-logo.svg'),
 };
 
 interface IConsumerButton {
@@ -30,7 +30,7 @@ const ConsumerButton: React.FC<IConsumerButton> = ({ provider }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const icon = BRAND_ICONS[provider] || require('@tabler/icons/outline/key.svg');
+  const icon = BRAND_ICONS[provider] || require('@phosphor-icons/core/regular/key.svg');
 
   const handleClick = () => {
     dispatch(prepareRequest(provider));

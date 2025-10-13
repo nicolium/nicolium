@@ -48,7 +48,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
             avatarSize={42}
             icon={
               <Icon
-                src={require('@tabler/icons/outline/circles.svg')}
+                src={require('@phosphor-icons/core/regular/users-three.svg')}
                 className='size-4 text-primary-600 dark:text-accent-blue'
               />
             }

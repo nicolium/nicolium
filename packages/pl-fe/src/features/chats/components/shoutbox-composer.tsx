@@ -94,7 +94,7 @@ const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxC
           ) : null}
 
           <IconButton
-            src={require('@tabler/icons/outline/send.svg')}
+            src={require('@phosphor-icons/core/regular/paper-plane-right.svg')}
             iconClassName='h-5 w-5'
             className='text-primary-500'
             disabled={isSubmitDisabled}

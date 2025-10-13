@@ -142,7 +142,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
       )}
       <HStack space={1} alignItems='center'>
         <Text tag='span' theme='muted'>
-          <Icon src={require('@tabler/icons/outline/link.svg')} />
+          <Icon src={require('@phosphor-icons/core/regular/link-simple.svg')} />
         </Text>
         <Text tag='span' theme='muted' size='sm' direction={direction}>
           {card.provider_name}
@@ -179,7 +179,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
       let iconVariant = require('@phosphor-icons/core/regular/play.svg');
 
       if (card.type === 'photo') {
-        iconVariant = require('@tabler/icons/outline/zoom-in.svg');
+        iconVariant = require('@phosphor-icons/core/regular/magnifying-glass-plus.svg');
       }
 
       embed = (

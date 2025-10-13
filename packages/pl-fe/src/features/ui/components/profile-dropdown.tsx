@@ -81,14 +81,14 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
     menu.push({
       text: intl.formatMessage(messages.add),
       to: '/login/add',
-      icon: require('@tabler/icons/outline/plus.svg'),
+      icon: require('@phosphor-icons/core/regular/plus.svg'),
     });
 
     menu.push({
       text: intl.formatMessage(messages.logout, { acct: account.acct }),
       to: '/logout',
       action: handleLogOut,
-      icon: require('@tabler/icons/outline/logout.svg'),
+      icon: require('@phosphor-icons/core/regular/sign-out.svg'),
     });
 
     return () => (

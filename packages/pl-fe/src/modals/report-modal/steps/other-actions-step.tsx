@@ -103,7 +103,7 @@ const OtherActionsStep = ({
             </Stack>
           ) : (
             <Button
-              icon={require('@tabler/icons/outline/plus.svg')}
+              icon={require('@phosphor-icons/core/regular/plus.svg')}
               theme='tertiary'
               size='sm'
               onClick={() => setShowAdditionalStatuses(true)}

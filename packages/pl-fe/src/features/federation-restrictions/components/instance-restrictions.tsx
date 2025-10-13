@@ -93,7 +93,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
 
     if (!fullMediaRemoval && media_nsfw) {
       items.push((
-        <Restriction key='mediaNsfw' icon={require('@tabler/icons/outline/eye-off.svg')}>
+        <Restriction key='mediaNsfw' icon={require('@phosphor-icons/core/regular/eye-slash.svg')}>
           <FormattedMessage
             id='federation_restriction.media_nsfw'
             defaultMessage='Attachments marked NSFW'

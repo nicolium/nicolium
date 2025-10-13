@@ -41,7 +41,7 @@ const CryptoAddress: React.FC<ICryptoAddress> = (props): JSX.Element => {
 
         <HStack alignItems='center' className='ml-auto'>
           <a className='ml-1 text-gray-500 rtl:ml-0 rtl:mr-1' href='#' onClick={handleModalClick}>
-            <Icon src={require('@tabler/icons/outline/qrcode.svg')} size={20} />
+            <Icon src={require('@phosphor-icons/core/regular/qr-code.svg')} size={20} />
           </a>
         </HStack>
       </HStack>

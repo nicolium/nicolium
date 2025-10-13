@@ -149,7 +149,7 @@ const Item: React.FC<IItem> = ({
     const attachmentIcon = (
       <Icon
         className='size-16 text-gray-800 dark:text-gray-200'
-        src={MIMETYPE_ICONS[attachment.mime_type as string] || require('@tabler/icons/outline/paperclip.svg')}
+        src={MIMETYPE_ICONS[attachment.mime_type as string] || require('@phosphor-icons/core/regular/paperclip.svg')}
       />
     );
 
@@ -342,7 +342,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
           <HStack element='button' alignItems='center' space={2} key={attachment.id} onClick={() => handleClick(index)}>
             <Icon
               className='size-4 min-w-fit text-gray-800 dark:text-gray-200'
-              src={MIMETYPE_ICONS[(attachment.type === 'unknown' && attachment.mime_type) || attachment.type] || require('@tabler/icons/outline/paperclip.svg')}
+              src={MIMETYPE_ICONS[(attachment.type === 'unknown' && attachment.mime_type) || attachment.type] || require('@phosphor-icons/core/regular/paperclip.svg')}
             />
             <Text align='left'>
               {attachment.description || {

@@ -16,7 +16,7 @@ interface IUploadProgress {
 const UploadProgress: React.FC<IUploadProgress> = ({ progress }) => (
   <HStack alignItems='center' space={2}>
     <Icon
-      src={require('@tabler/icons/outline/cloud-upload.svg')}
+      src={require('@phosphor-icons/core/regular/upload-simple.svg')}
       className='size-7 text-gray-500'
     />
 

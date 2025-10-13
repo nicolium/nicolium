@@ -39,7 +39,7 @@ const HomeComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
       size='lg'
       onClick={onOpenCompose}
       block
-      icon={shrink ? require('@tabler/icons/outline/plus.svg') : undefined}
+      icon={shrink ? require('@phosphor-icons/core/regular/plus.svg') : undefined}
     >
       {!shrink && (
         <FormattedMessage id='navigation.compose' defaultMessage='Compose' />
@@ -65,7 +65,7 @@ const GroupComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
       size='lg'
       onClick={onOpenCompose}
       block
-      icon={shrink ? require('@tabler/icons/outline/plus.svg') : undefined}
+      icon={shrink ? require('@phosphor-icons/core/regular/plus.svg') : undefined}
     >
       {!shrink && (
         <HStack space={3} alignItems='center'>

@@ -86,7 +86,7 @@ const BookmarksPage: React.FC<IBookmarks> = ({ params }) => {
   return (
     <Column
       label={folder ? folder.name : intl.formatMessage(messages.heading)}
-      action={<DropdownMenu items={items} src={require('@tabler/icons/outline/dots-vertical.svg')} />}
+      action={<DropdownMenu items={items} src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')} />}
     >
       <PullToRefresh onRefresh={handleRefresh}>
         <StatusList

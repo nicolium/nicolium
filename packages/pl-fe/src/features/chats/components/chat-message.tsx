@@ -128,7 +128,7 @@ const ChatMessage = (props: IChatMessage) => {
       menu.push({
         text: intl.formatMessage(messages.copy),
         action: () => handleCopyText(chatMessage),
-        icon: require('@tabler/icons/outline/copy.svg'),
+        icon: require('@phosphor-icons/core/regular/clipboard.svg'),
       });
     }
 

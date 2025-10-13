@@ -1,4 +1,4 @@
-import defaultIcon from '@tabler/icons/outline/paperclip.svg';
+import defaultIcon from '@phosphor-icons/core/regular/paperclip.svg';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';

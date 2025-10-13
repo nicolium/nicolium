@@ -143,7 +143,7 @@ const StatusPage: React.FC<IStatusDetails> = (props) => {
     <Stack space={4}>
       <Column
         label={intl.formatMessage(titleMessage())}
-        action={<DropdownMenu items={items} src={require('@tabler/icons/outline/dots-vertical.svg')} />}
+        action={<DropdownMenu items={items} src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')} />}
       >
         <PullToRefresh onRefresh={handleRefresh}>
           <Thread key={status.id} status={status} setExpandAllStatuses={(fn) => setExpandAllStatuses(() => fn)} />

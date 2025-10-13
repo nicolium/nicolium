@@ -398,7 +398,7 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isCode}
             aria-label={intl.formatMessage(messages.insertCodeBlock)}
-            icon={require('@phosphor-icons/core/regular/text-code.svg')}
+            icon={require('@phosphor-icons/core/regular/code.svg')}
           />
           <ToolbarButton
             onClick={insertLink}

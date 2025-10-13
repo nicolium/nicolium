@@ -89,7 +89,7 @@ const RulesPage: React.FC = () => {
       <Stack className='gap-4'>
         <Button
           className='sm:w-fit sm:self-end'
-          icon={require('@tabler/icons/outline/plus.svg')}
+          icon={require('@phosphor-icons/core/regular/plus.svg')}
           onClick={handleCreateRule}
           theme='secondary'
           block

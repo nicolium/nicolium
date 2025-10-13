@@ -278,7 +278,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                   onClick={handlePrevClick}
                   aria-label={intl.formatMessage(messages.previous)}
                 >
-                  <Icon src={require('@tabler/icons/outline/arrow-left.svg')} className='size-5' />
+                  <Icon src={require('@phosphor-icons/core/regular/arrow-left.svg')} className='size-5' />
                 </button>
               </div>
             )}
@@ -300,7 +300,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                   onClick={handleNextClick}
                   aria-label={intl.formatMessage(messages.next)}
                 >
-                  <Icon src={require('@tabler/icons/outline/arrow-right.svg')} className='size-5' />
+                  <Icon src={require('@phosphor-icons/core/regular/arrow-right.svg')} className='size-5' />
                 </button>
               </div>
             )}

@@ -119,7 +119,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
   if (!visible) {
     icon = (
       <span className='⁂-media-gallery__item__icons'>
-        <Icon src={require('@tabler/icons/outline/eye-off.svg')} />
+        <Icon src={require('@phosphor-icons/core/regular/eye-slash.svg')} />
       </span>
     );
   }

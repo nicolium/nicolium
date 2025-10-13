@@ -96,7 +96,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
     return (
       <HStack alignItems='center' space={0.5}>
         <Icon
-          src={require('@tabler/icons/outline/balloon.svg')}
+          src={hasBirthday ? require('@phosphor-icons/core/regular/cake.svg') : require('@phosphor-icons/core/regular/balloon.svg')}
           className='size-4 text-gray-800 dark:text-gray-200'
         />
 

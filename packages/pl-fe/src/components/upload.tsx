@@ -1,16 +1,25 @@
+import bookIcon from '@phosphor-icons/core/regular/book.svg';
+import fileArchiveIcon from '@phosphor-icons/core/regular/file-archive.svg';
+import fileCodeIcon from '@phosphor-icons/core/regular/file-code.svg';
+import fileCSSIcon from '@phosphor-icons/core/regular/file-css.svg';
+import fileDocIcon from '@phosphor-icons/core/regular/file-doc.svg';
+import fileHtmlIcon from '@phosphor-icons/core/regular/file-html.svg';
+import fileJSIcon from '@phosphor-icons/core/regular/file-js.svg';
+import filePdfIcon from '@phosphor-icons/core/regular/file-pdf.svg';
+import filePptIcon from '@phosphor-icons/core/regular/file-ppt.svg';
+import filePythonIcon from '@phosphor-icons/core/regular/file-py.svg';
+import fileTextIcon from '@phosphor-icons/core/regular/file-text.svg';
+import fileXlsIcon from '@phosphor-icons/core/regular/file-xls.svg';
+import fileZipIcon from '@phosphor-icons/core/regular/file-zip.svg';
+import imageIcon from '@phosphor-icons/core/regular/image.svg';
+import zoomInIcon from '@phosphor-icons/core/regular/magnifying-glass-plus.svg';
+import audioIcon from '@phosphor-icons/core/regular/music-notes-simple.svg';
+import defaultIcon from '@phosphor-icons/core/regular/paperclip.svg';
 import editIcon from '@phosphor-icons/core/regular/pencil-simple.svg';
+import presentationIcon from '@phosphor-icons/core/regular/presentation.svg';
+import spreadsheetIcon from '@phosphor-icons/core/regular/table.svg';
+import videoIcon from '@phosphor-icons/core/regular/video.svg';
 import xIcon from '@phosphor-icons/core/regular/x.svg';
-import bookIcon from '@tabler/icons/outline/book.svg';
-import fileCodeIcon from '@tabler/icons/outline/file-code.svg';
-import fileSpreadsheetIcon from '@tabler/icons/outline/file-spreadsheet.svg';
-import fileTextIcon from '@tabler/icons/outline/file-text.svg';
-import fileZipIcon from '@tabler/icons/outline/file-zip.svg';
-import audioIcon from '@tabler/icons/outline/music.svg';
-import defaultIcon from '@tabler/icons/outline/paperclip.svg';
-import imageIcon from '@tabler/icons/outline/photo.svg';
-import presentationIcon from '@tabler/icons/outline/presentation.svg';
-import videoIcon from '@tabler/icons/outline/video.svg';
-import zoomInIcon from '@tabler/icons/outline/zoom-in.svg';
 import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -27,36 +36,38 @@ import { useModalsStore } from 'pl-fe/stores/modals';
 import type { MediaAttachment } from 'pl-api';
 
 const MIMETYPE_ICONS: Record<string, string> = {
-  'application/x-freearc': fileZipIcon,
-  'application/x-bzip': fileZipIcon,
-  'application/x-bzip2': fileZipIcon,
-  'application/gzip': fileZipIcon,
-  'application/vnd.rar': fileZipIcon,
-  'application/x-tar': fileZipIcon,
+  'application/x-freearc': fileArchiveIcon,
+  'application/x-bzip': fileArchiveIcon,
+  'application/x-bzip2': fileArchiveIcon,
+  'application/gzip': fileArchiveIcon,
+  'application/vnd.rar': fileArchiveIcon,
+  'application/x-tar': fileArchiveIcon,
   'application/zip': fileZipIcon,
-  'application/x-7z-compressed': fileZipIcon,
-  'application/x-csh': fileCodeIcon,
-  'application/html': fileCodeIcon,
-  'text/javascript': fileCodeIcon,
+  'application/x-7z-compressed': fileArchiveIcon,
+  'application/x-csh': fileCSSIcon,
+  'application/html': fileHtmlIcon,
+  'text/javascript': fileJSIcon,
+  'application/javascript': fileJSIcon,
   'application/json': fileCodeIcon,
   'application/ld+json': fileCodeIcon,
   'application/x-httpd-php': fileCodeIcon,
   'application/x-sh': fileCodeIcon,
   'application/xhtml+xml': fileCodeIcon,
   'application/xml': fileCodeIcon,
+  'text/x-script.python': filePythonIcon,
   'application/epub+zip': bookIcon,
-  'application/vnd.oasis.opendocument.spreadsheet': fileSpreadsheetIcon,
-  'application/vnd.ms-excel': fileSpreadsheetIcon,
-  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': fileSpreadsheetIcon,
-  'application/pdf': fileTextIcon,
+  'application/vnd.oasis.opendocument.spreadsheet': spreadsheetIcon,
+  'application/vnd.ms-excel': fileXlsIcon,
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': fileXlsIcon,
+  'application/pdf': filePdfIcon,
   'application/vnd.oasis.opendocument.presentation': presentationIcon,
-  'application/vnd.ms-powerpoint': presentationIcon,
+  'application/vnd.ms-powerpoint': filePptIcon,
   'application/vnd.openxmlformats-officedocument.presentationml.presentation': presentationIcon,
   'text/plain': fileTextIcon,
   'application/rtf': fileTextIcon,
-  'application/msword': fileTextIcon,
+  'application/msword': fileDocIcon,
   'application/x-abiword': fileTextIcon,
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': fileTextIcon,
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': fileDocIcon,
   'application/vnd.oasis.opendocument.text': fileTextIcon,
   image: imageIcon,
   video: videoIcon,

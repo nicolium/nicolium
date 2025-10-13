@@ -23,10 +23,10 @@ const messages: Record<string, MessageDescriptor> = defineMessages({
 const STATUS_TYPE_ICONS: Record<string, string> = {
   direct: require('@phosphor-icons/core/regular/envelope-simple.svg'),
   private: require('@phosphor-icons/core/regular/lock.svg'),
-  mutuals_only: require('@tabler/icons/outline/users-group.svg'),
-  local: require('@tabler/icons/outline/affiliate.svg'),
+  mutuals_only: require('@phosphor-icons/core/regular/users-three.svg'),
+  local: require('@phosphor-icons/core/regular/planet.svg'),
   list: require('@phosphor-icons/core/regular/list-bullets.svg'),
-  subscribers: require('@tabler/icons/outline/coin.svg'),
+  subscribers: require('@phosphor-icons/core/regular/coins.svg'),
 };
 
 const StatusTypeIcon: React.FC<IStatusTypeIcon> = React.memo(({ visibility }) => {

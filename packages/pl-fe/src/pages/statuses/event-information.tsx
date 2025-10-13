@@ -158,7 +158,7 @@ const EventInformationPage: React.FC<IEventInformation> = ({ params }) => {
 
         {status.event.links.map(link => (
           <HStack space={2} alignItems='center'>
-            <Icon src={require('@tabler/icons/outline/link.svg')} />
+            <Icon src={require('@phosphor-icons/core/regular/link-simple.svg')} />
             <a href={link.remote_url || link.url} className='text-primary-600 hover:underline dark:text-accent-blue' target='_blank'>
               {(link.remote_url || link.url).replace(/^https?:\/\//, '')}
             </a>

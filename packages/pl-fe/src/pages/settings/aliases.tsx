@@ -55,7 +55,7 @@ const Account: React.FC<IAccount> = ({ accountId, aliases }) => {
 
   if (!added && accountId !== me) {
     button = (
-      <IconButton src={require('@tabler/icons/outline/plus.svg')} iconClassName='h-5 w-5' title={intl.formatMessage(messages.add)} onClick={handleOnAdd} />
+      <IconButton src={require('@phosphor-icons/core/regular/plus.svg')} iconClassName='h-5 w-5' title={intl.formatMessage(messages.add)} onClick={handleOnAdd} />
     );
   }
 
@@ -113,7 +113,7 @@ const Search: React.FC<IAliasesSearch> = ({ onSubmit }) => {
         />
 
         <div role='button' tabIndex={hasValue ? 0 : -1} className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto' onClick={handleClear}>
-          <Icon src={require('@tabler/icons/outline/backspace.svg')} aria-label={intl.formatMessage(messages.search)} className={clsx('size-5 text-gray-600', { 'hidden': !hasValue })} />
+          <Icon src={require('@phosphor-icons/core/regular/backspace.svg')} aria-label={intl.formatMessage(messages.search)} className={clsx('size-5 text-gray-600', { 'hidden': !hasValue })} />
         </div>
       </label>
       <Button onClick={handleSubmit}>{intl.formatMessage(messages.searchTitle)}</Button>

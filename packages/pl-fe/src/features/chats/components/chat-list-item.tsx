@@ -68,7 +68,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
         },
       });
     },
-    icon: require('@tabler/icons/outline/logout.svg'),
+    icon: require('@phosphor-icons/core/regular/sign-out.svg'),
   }], []);
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (event) => {

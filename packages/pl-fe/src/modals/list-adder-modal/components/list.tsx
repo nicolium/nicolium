@@ -34,7 +34,7 @@ const List: React.FC<IList> = ({ listId, accountId, added }) => {
   if (added) {
     button = <IconButton iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/x.svg')} title={intl.formatMessage(messages.remove)} onClick={onRemove} />;
   } else {
-    button = <IconButton iconClassName='h-5 w-5' src={require('@tabler/icons/outline/plus.svg')} title={intl.formatMessage(messages.add)} onClick={onAdd} />;
+    button = <IconButton iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/plus.svg')} title={intl.formatMessage(messages.add)} onClick={onAdd} />;
   }
 
   return (

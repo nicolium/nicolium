@@ -161,7 +161,7 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
         <div role='button' tabIndex={0} className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-5 rtl:left-0 rtl:right-auto' onClick={handleClear}>
           <Icon
             className='size-5 text-gray-600'
-            src={isSearching ? require('@tabler/icons/outline/backspace.svg') : require('@phosphor-icons/core/regular/magnifying-glass.svg')}
+            src={isSearching ? require('@phosphor-icons/core/regular/backspace.svg') : require('@phosphor-icons/core/regular/magnifying-glass.svg')}
             aria-label={intl.formatMessage(messages.search)}
           />
         </div>
@@ -200,11 +200,11 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
               {features.multiLanguage && !!language && !active && (
                 code in textMap ? (
                   <button title={intl.formatMessage(messages.deleteLanguage)} onClick={handleDeleteLanguageClick}>
-                    <Icon className='size-4' src={require('@tabler/icons/outline/minus.svg')} />
+                    <Icon className='size-4' src={require('@phosphor-icons/core/regular/minus.svg')} />
                   </button>
                 ) : (
                   <button title={intl.formatMessage(messages.addLanguage)} onClick={handleAddLanguageClick}>
-                    <Icon className='size-4' src={require('@tabler/icons/outline/plus.svg')} />
+                    <Icon className='size-4' src={require('@phosphor-icons/core/regular/plus.svg')} />
                   </button>
                 )
               )}
