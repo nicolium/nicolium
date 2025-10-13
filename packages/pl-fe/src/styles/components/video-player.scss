@@ -12,26 +12,40 @@
 
 .video-player {
   &__controls {
-    background: linear-gradient(0deg, #000000d9 0, #00000073 60%, transparent);
+    @apply bg-primary-200 dark:bg-primary-700 box-border ring-0 transition-all duration-300 ease-in-out;
+    position: absolute;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: -4rem;
+    z-index: 2;
+    opacity: 0.8;
+    border-radius: 0.625rem;
+    padding: 0.25rem 0.75rem;
+
+    &--visible {
+      bottom: 0.75rem;
+    }
+
+    &:has(.video-player__seek) {
+      padding-top: 0.5rem;
+    }
   }
 
   &__buttons {
-    @apply flex min-w-[30px] items-center text-base whitespace-nowrap overflow-hidden text-ellipsis flex-initial;
+    @apply flex items-center text-base whitespace-nowrap overflow-hidden text-ellipsis flex-initial gap-1;
     flex: 0 1 auto;
 
     .player-button {
-      @apply inline-block outline-0 bg-transparent text-base border-0 text-white/75 active:text-white hover:text-white focus:text-white;
+      @apply block outline-0 bg-transparent text-base border-0 text-black dark:text-white rounded-full;
       flex: 0 0 auto;
-      padding: 5px 6px;
+      padding: 4px;
+
+      &:hover {
+        @apply dark:bg-primary-200/20 bg-primary-700/20 rounded-full;
+      }
 
       .svg-icon {
         @apply w-5 h-5;
-      }
-
-      &:active,
-      &:hover,
-      &:focus {
-        @apply text-white;
       }
     }
   }
@@ -56,7 +70,6 @@
     &__handle {
       @apply bg-accent-500 absolute z-[3] rounded-[50%] size-3 top-1/2 left-0 -ml-1.5 opacity-0;
       transform: translate(0, -50%);
-      box-shadow: 1px 2px 6px #0003;
 
       .no-reduce-motion & {
         transition: opacity 100ms linear;
@@ -71,11 +84,10 @@
   }
 
   &__seek {
-    @apply cursor-pointer h-6 relative before:content-[''] before:w-full before:bg-white/35 before:rounded before:block before:absolute before:h-1 before:top-3.5;
+    @apply cursor-pointer h-3 relative before:content-[''] before:w-full before:bg-black/35 dark:before:bg-white/35 before:rounded before:block before:absolute before:h-1 before:top-1;
 
     &__handle {
-      @apply bg-accent-500 absolute z-[3] opacity-0 rounded-[50%] size-3 top-2.5 -ml-1.5;
-      box-shadow: 1px 2px 6px #0003;
+      @apply bg-accent-500 absolute z-[3] opacity-0 rounded-[50%] size-3 -ml-1.5;
 
       .no-reduce-motion & {
         transition: opacity 0.1s ease;

@@ -19,6 +19,7 @@ const messages = defineMessages({
   pause: { id: 'video.pause', defaultMessage: 'Pause' },
   mute: { id: 'video.mute', defaultMessage: 'Mute sound' },
   unmute: { id: 'video.unmute', defaultMessage: 'Unmute sound' },
+  download: { id: 'video.download', defaultMessage: 'Download file' },
   fullscreen: { id: 'video.fullscreen', defaultMessage: 'Full screen' },
   exit_fullscreen: { id: 'video.exit_fullscreen', defaultMessage: 'Exit full screen' },
 });
@@ -493,10 +494,15 @@ const Video: React.FC<IVideo> = ({
         onVolumeChange={handleVolumeChange}
       />
 
-      <div className={clsx('video-player__controls absolute inset-x-0 bottom-0 z-[2] box-border px-4 py-0 opacity-0 ring-0 transition-opacity duration-100 ease-in-out', { 'opacity-100': paused || hovered })}>
+      <div
+        className={clsx(
+          'video-player__controls',
+          { 'video-player__controls--visible': paused || hovered },
+        )}
+      >
         <div className='video-player__seek' onMouseDown={handleMouseDown} ref={seek}>
-          <div className='absolute top-3.5 block h-1 rounded bg-white/20' style={{ width: `${buffer}%` }} />
-          <div className='absolute top-3.5 block h-1 rounded bg-accent-500' style={{ width: `${progress}%` }} />
+          <div className='absolute top-1 block h-1 rounded bg-black/20 dark:bg-white/20' style={{ width: `${buffer}%` }} />
+          <div className='absolute top-1 block h-1 rounded bg-accent-500' style={{ width: `${progress}%` }} />
 
           <span
             className={clsx('video-player__seek__handle', { 'opacity-100': dragging })}
@@ -506,7 +512,7 @@ const Video: React.FC<IVideo> = ({
           />
         </div>
 
-        <div className='mx-[-5px] my-0 flex justify-between pb-2'>
+        <div className='mx-[-5px] my-0 flex justify-between'>
           <div className='video-player__buttons left'>
             <button
               type='button'
@@ -539,9 +545,9 @@ const Video: React.FC<IVideo> = ({
             </div>
 
             {(detailed || fullscreen) && (
-              <span>
-                <span className='text-sm font-medium text-white'>{formatTime(currentTime)}</span>
-                <span className='mx-1.5 my-0 inline-block text-sm font-medium text-white'>/</span>
+              <span className='text-black dark:text-white'>
+                <span className='text-sm font-medium'>{formatTime(currentTime)}</span>
+                <span className='mx-1.5 my-0 inline-block text-sm font-medium'>/</span>
                 <span className='text-sm font-medium'>{formatTime(duration)}</span>
               </span>
             )}
@@ -552,6 +558,16 @@ const Video: React.FC<IVideo> = ({
           </div>
 
           <div className='video-player__buttons right'>
+            <a
+              title={intl.formatMessage(messages.download)}
+              aria-label={intl.formatMessage(messages.download)}
+              className='player-button text-inherit'
+              href={src}
+              download
+              target='_blank'
+            >
+              <Icon src={require('@phosphor-icons/core/regular/download-simple.svg')} />
+            </a>
             <button
               type='button'
               title={intl.formatMessage(fullscreen ? messages.exit_fullscreen : messages.fullscreen)}

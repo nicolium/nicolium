@@ -316,7 +316,7 @@ const Audio: React.FC<IAudio> = (props) => {
   };
 
   const _draw = () => {
-    visualizer.current?.draw(_getCX(), _getCY(), _getAccentColor(), _getRadius(), _getScaleCoefficient());
+    visualizer.current?.draw(_getCX(), _getCY(), _getAccentColor() || '#ffffff', _getRadius(), _getScaleCoefficient());
   };
 
   const _getRadius = (): number => ((height || props.height || 0) - (PADDING * _getScaleCoefficient()) * 2) / 2;
@@ -327,7 +327,7 @@ const Audio: React.FC<IAudio> = (props) => {
 
   const _getCY = (): number => Math.floor(_getRadius() + (PADDING * _getScaleCoefficient()));
 
-  const _getAccentColor = (): string => accentColor || '#ffffff';
+  const _getAccentColor = () => accentColor || undefined;
 
   const _getBackgroundColor = (): string => backgroundColor || '#000000';
 
@@ -493,15 +493,19 @@ const Audio: React.FC<IAudio> = (props) => {
         />
       </div>
 
-      <div className='video-player__controls absolute bottom-0 left-0 z-[2] box-border bg-transparent px-4 py-0 pt-2.5 opacity-100 ring-0 transition-opacity duration-100 ease-in-out'>
-        <div className='mx-[-5px] my-0 flex justify-between pb-2'>
+      <div className={clsx(
+        'video-player__controls video-player__controls--visible',
+        // { 'video-player__controls--visible': paused || hovered },
+      )}
+      >
+        <div className='mx-[-5px] my-0 flex justify-between'>
           <div className='video-player__buttons left'>
 
             <button
               type='button'
               title={intl.formatMessage(paused ? messages.play : messages.pause)}
               aria-label={intl.formatMessage(paused ? messages.play : messages.pause)}
-              className='player-button text-current opacity-[75] hover:text-current hover:opacity-100 focus:text-current focus:opacity-100 active:text-current active:opacity-100'
+              className={clsx('player-button', fullscreen && 'py-2.5')}
               onClick={togglePlay}
             >
               <Icon src={paused ? require('@phosphor-icons/core/regular/play.svg') : require('@phosphor-icons/core/regular/pause.svg')} />
@@ -511,25 +515,14 @@ const Audio: React.FC<IAudio> = (props) => {
               type='button'
               title={intl.formatMessage(muted ? messages.unmute : messages.mute)}
               aria-label={intl.formatMessage(muted ? messages.unmute : messages.mute)}
-              className='player-button text-current opacity-[75] hover:text-current hover:opacity-100 focus:text-current focus:opacity-100 active:text-current active:opacity-100'
+              className={clsx('player-button', fullscreen && 'py-2.5')}
               onClick={toggleMute}
             >
               <Icon src={muted ? require('@phosphor-icons/core/regular/speaker-x.svg') : require('@phosphor-icons/core/regular/speaker-high.svg')} />
             </button>
 
-            <div
-              className={clsx('video-player__volume before:bg-white/10', { 'overflow-visible w-12 mr-4': hovered })}
-              ref={slider}
-              onMouseDown={handleVolumeMouseDown}
-            >
-              <div
-                className='video-player__volume__current'
-                style={{
-                  width: `${volume * 100}%`,
-                  backgroundColor: _getAccentColor(),
-                }}
-              />
-
+            <div className={clsx('video-player__volume', { 'overflow-visible w-12 mr-4': hovered })} onMouseDown={handleVolumeMouseDown} ref={slider}>
+              <div className='video-player__volume__current' style={{ width: `${volume * 100}%`, backgroundColor: _getAccentColor() }} />
               <span
                 className={clsx('video-player__volume__handle', { 'opacity-100': dragging || hovered })}
                 tabIndex={0}
@@ -537,7 +530,7 @@ const Audio: React.FC<IAudio> = (props) => {
               />
             </div>
 
-            <span className='mx-[5px] my-0 inline flex-initial overflow-hidden text-ellipsis'>
+            <span className='my-0 inline flex-initial overflow-hidden text-ellipsis text-black dark:text-white'>
               <span className='text-sm font-medium text-current'>{formatTime(Math.floor(currentTime))}</span>
               {getDuration() && (<>
                 <span className='mx-1.5 my-0 inline-block text-sm font-medium text-current'>/</span>
@@ -550,7 +543,7 @@ const Audio: React.FC<IAudio> = (props) => {
             <a
               title={intl.formatMessage(messages.download)}
               aria-label={intl.formatMessage(messages.download)}
-              className='text-inherit'
+              className='player-button text-inherit'
               href={src}
               download
               target='_blank'
