@@ -65,7 +65,7 @@ const SearchInput = React.memo(() => {
   const makeMenu = () => [
     {
       text: intl.formatMessage(messages.action, { query: value }),
-      icon: require('@tabler/icons/outline/search.svg'),
+      icon: require('@phosphor-icons/core/regular/magnifying-glass.svg'),
       action: handleSubmit,
     },
   ];
@@ -97,12 +97,12 @@ const SearchInput = React.memo(() => {
           onClick={handleClear}
         >
           <SvgIcon
-            src={require('@tabler/icons/outline/search.svg')}
+            src={require('@phosphor-icons/core/regular/magnifying-glass.svg')}
             className={clsx('size-4 text-gray-600', { hidden: hasValue })}
           />
 
           <SvgIcon
-            src={require('@tabler/icons/outline/x.svg')}
+            src={require('@phosphor-icons/core/regular/x.svg')}
             className={clsx('size-4 text-gray-600', { hidden: !hasValue })}
             aria-label={intl.formatMessage(messages.placeholder)}
           />

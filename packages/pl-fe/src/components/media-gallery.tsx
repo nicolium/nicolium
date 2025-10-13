@@ -243,7 +243,7 @@ const Item: React.FC<IItem> = ({
         target='_blank'
         title={attachment.description}
       >
-        <span className='⁂-media-gallery__item__icons'><Icon src={require('@tabler/icons/outline/volume.svg')} /></span>
+        <span className='⁂-media-gallery__item__icons'><Icon src={require('@phosphor-icons/core/regular/speaker-high.svg')} /></span>
         <span className='⁂-media-gallery__file-extension__label uppercase'>{ext}</span>
       </a>
     );

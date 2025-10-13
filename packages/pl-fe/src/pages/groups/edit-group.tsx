@@ -104,7 +104,7 @@ const EditGroup: React.FC<IEditGroup> = ({ params: { groupId } }) => {
             placeholder={intl.formatMessage(messages.groupNamePlaceholder)}
             maxLength={maxName}
             {...displayName}
-            append={<Icon className='size-5 text-gray-600' src={require('@tabler/icons/outline/lock.svg')} />}
+            append={<Icon className='size-5 text-gray-600' src={require('@phosphor-icons/core/regular/lock.svg')} />}
             disabled
           />
         </FormGroup>

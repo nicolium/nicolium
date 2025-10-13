@@ -39,7 +39,7 @@ const Domain: React.FC<IDomain> = ({ domain }) => {
       <Text tag='span'>
         {domain}
       </Text>
-      <IconButton iconClassName='h-5 w-5' src={require('@tabler/icons/outline/lock-open.svg')} title={intl.formatMessage(messages.unblockDomain, { domain })} onClick={handleDomainUnblock} />
+      <IconButton iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/lock-open.svg')} title={intl.formatMessage(messages.unblockDomain, { domain })} onClick={handleDomainUnblock} />
     </HStack>
   );
 };

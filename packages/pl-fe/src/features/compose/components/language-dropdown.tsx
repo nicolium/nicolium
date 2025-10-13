@@ -161,7 +161,7 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
         <div role='button' tabIndex={0} className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-5 rtl:left-0 rtl:right-auto' onClick={handleClear}>
           <Icon
             className='size-5 text-gray-600'
-            src={isSearching ? require('@tabler/icons/outline/backspace.svg') : require('@tabler/icons/outline/search.svg')}
+            src={isSearching ? require('@tabler/icons/outline/backspace.svg') : require('@phosphor-icons/core/regular/magnifying-glass.svg')}
             aria-label={intl.formatMessage(messages.search)}
           />
         </div>

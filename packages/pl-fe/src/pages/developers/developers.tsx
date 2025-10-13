@@ -77,7 +77,7 @@ const DevelopersPage: React.FC = () => {
           </DashWidget>
 
           <DashWidget to='/error/network'>
-            <SvgIcon src={require('@tabler/icons/outline/refresh.svg')} className='text-gray-700 dark:text-gray-600' />
+            <SvgIcon src={require('@phosphor-icons/core/regular/arrows-clockwise.svg')} className='text-gray-700 dark:text-gray-600' />
 
             <Text>
               <FormattedMessage id='developers.navigation.network_error_label' defaultMessage='Network error' />

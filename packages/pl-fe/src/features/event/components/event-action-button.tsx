@@ -37,7 +37,7 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
         className='min-w-max'
         size='sm'
         theme={theme}
-        icon={require('@tabler/icons/outline/external-link.svg')}
+        icon={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
         href={status.url}
       >
         <FormattedMessage id='event.join_state.empty' defaultMessage='Participate' />
@@ -90,14 +90,14 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
   switch (event.join_state) {
     case 'accept':
       buttonLabel = <FormattedMessage id='event.join_state.accept' defaultMessage='Going' />;
-      buttonIcon = require('@tabler/icons/outline/check.svg');
+      buttonIcon = require('@phosphor-icons/core/regular/check.svg');
       break;
     case 'pending':
       buttonLabel = <FormattedMessage id='event.join_state.pending' defaultMessage='Pending' />;
       break;
     case 'reject':
       buttonLabel = <FormattedMessage id='event.join_state.rejected' defaultMessage='Going' />;
-      buttonIcon = require('@tabler/icons/outline/ban.svg');
+      buttonIcon = require('@phosphor-icons/core/regular/prohibit.svg');
       buttonDisabled = true;
       break;
     default:

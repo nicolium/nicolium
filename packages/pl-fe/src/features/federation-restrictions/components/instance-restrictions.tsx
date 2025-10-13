@@ -53,7 +53,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
 
     if (followers_only) {
       items.push((
-        <Restriction key='followersOnly' icon={require('@tabler/icons/outline/lock.svg')}>
+        <Restriction key='followersOnly' icon={require('@phosphor-icons/core/regular/lock.svg')}>
           <FormattedMessage
             id='federation_restriction.followers_only'
             defaultMessage='Hidden except to followers'
@@ -62,7 +62,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
       ));
     } else if (federated_timeline_removal) {
       items.push((
-        <Restriction key='federatedTimelineRemoval' icon={require('@tabler/icons/outline/lock-open.svg')}>
+        <Restriction key='federatedTimelineRemoval' icon={require('@phosphor-icons/core/regular/lock-open.svg')}>
           <FormattedMessage
             id='federation_restriction.federated_timeline_removal'
             defaultMessage='Fediverse timeline removal'

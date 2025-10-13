@@ -42,7 +42,7 @@ const GroupListItem = (props: IGroupListItem) => {
             <HStack className='text-gray-700 dark:text-gray-600' space={1} alignItems='center'>
               <Icon
                 className='size-4.5'
-                src={group.locked ? require('@tabler/icons/outline/lock.svg') : require('@tabler/icons/outline/world.svg')}
+                src={group.locked ? require('@phosphor-icons/core/regular/lock.svg') : require('@phosphor-icons/core/regular/globe.svg')}
               />
 
               <Text theme='inherit' tag='span' size='sm' weight='medium'>

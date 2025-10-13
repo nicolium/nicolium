@@ -110,7 +110,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
     const fileExtension = remoteURL.slice(fileExtensionLastIndex + 1).toUpperCase();
     thumbnail = (
       <div className={clsx('⁂-media-gallery__item-thumbnail', { 'rounded-br-md': isLast })}>
-        <span className='⁂-media-gallery__item__icons'><Icon src={require('@tabler/icons/outline/volume.svg')} /></span>
+        <span className='⁂-media-gallery__item__icons'><Icon src={require('@phosphor-icons/core/regular/speaker-high.svg')} /></span>
         <span className='⁂-media-gallery__file-extension__label'>{fileExtension}</span>
       </div>
     );

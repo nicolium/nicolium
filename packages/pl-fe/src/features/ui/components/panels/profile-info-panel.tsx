@@ -157,7 +157,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
             {account.locked && (
               <Icon
-                src={require('@tabler/icons/outline/lock.svg')}
+                src={require('@phosphor-icons/core/regular/lock.svg')}
                 alt={intl.formatMessage(messages.account_locked)}
                 className='size-4 text-gray-600'
               />

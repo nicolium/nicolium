@@ -45,7 +45,7 @@ const ChatPageSidebar = () => {
             />
 
             <IconButton
-              src={require('@tabler/icons/outline/edit.svg')}
+              src={require('@phosphor-icons/core/regular/pencil-simple.svg')}
               iconClassName='h-5 w-5 text-gray-600'
               onClick={handleChatCreate}
             />

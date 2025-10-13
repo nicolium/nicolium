@@ -60,7 +60,7 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
     if (canShare) {
       items.push({
         text: intl.formatMessage(messages.share),
-        icon: require('@tabler/icons/outline/share.svg'),
+        icon: require('@phosphor-icons/core/regular/export.svg'),
         action: handleShare,
       });
     }

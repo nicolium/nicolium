@@ -136,14 +136,14 @@ const ChatMessage = (props: IChatMessage) => {
       menu.push({
         text: intl.formatMessage(messages.delete),
         action: () => handleDeleteMessage.mutate(chatMessage.id),
-        icon: require('@tabler/icons/outline/trash.svg'),
+        icon: require('@phosphor-icons/core/regular/trash.svg'),
         destructive: true,
       });
     } else {
       menu.push({
         text: intl.formatMessage(messages.deleteForMe),
         action: () => handleDeleteMessage.mutate(chatMessage.id),
-        icon: require('@tabler/icons/outline/trash.svg'),
+        icon: require('@phosphor-icons/core/regular/trash.svg'),
         destructive: true,
       });
     }

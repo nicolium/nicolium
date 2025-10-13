@@ -95,13 +95,13 @@ const SearchInput: React.FC<ISearchInput> = ({ placeholder }) => {
         >
           {params.get('q') === value ? (
             <SvgIcon
-              src={require('@tabler/icons/outline/x.svg')}
+              src={require('@phosphor-icons/core/regular/x.svg')}
               className='size-4 text-gray-600'
               aria-label={intl.formatMessage(messages.placeholder)}
             />
           ) : (
             <SvgIcon
-              src={require('@tabler/icons/outline/search.svg')}
+              src={require('@phosphor-icons/core/regular/magnifying-glass.svg')}
               className='size-4 text-gray-600'
             />
           )}
@@ -172,7 +172,7 @@ const SearchResults = () => {
     <>
       {accountId ? (
         <HStack className='border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800' alignItems='center' space={2}>
-          <IconButton iconClassName='h-5 w-5' src={require('@tabler/icons/outline/x.svg')} onClick={handleUnsetAccount} />
+          <IconButton iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/x.svg')} onClick={handleUnsetAccount} />
           <Text truncate>
             <FormattedMessage
               id='search_results.filter_message'

@@ -158,7 +158,7 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
 
       items.push({
         text: intl.formatMessage(messages.groupModBlock, { name: account.username }),
-        icon: require('@tabler/icons/outline/ban.svg'),
+        icon: require('@phosphor-icons/core/regular/prohibit.svg'),
         action: handleBlockFromGroup,
         destructive: true,
       });

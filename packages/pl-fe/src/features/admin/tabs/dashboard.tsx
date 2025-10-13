@@ -224,7 +224,7 @@ const Dashboard: React.FC = () => {
 
             <Icon
               className='size-4'
-              src={require('@tabler/icons/outline/external-link.svg')}
+              src={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
             />
           </a>
         </ListItem>

@@ -30,7 +30,7 @@ const GroupRelationship = ({ group }: IGroupRelationship) => {
         src={
           isOwner
             ? require('@tabler/icons/outline/users.svg')
-            : require('@tabler/icons/outline/gavel.svg')
+            : require('@phosphor-icons/core/regular/gavel.svg')
         }
       />
 

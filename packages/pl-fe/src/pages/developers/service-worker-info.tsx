@@ -125,7 +125,7 @@ const ServiceWorkerInfo: React.FC<IServiceWorkerInfo> = () => {
                 <span className='truncate'>{url}</span>
                 <Icon
                   className='size-4'
-                  src={require('@tabler/icons/outline/external-link.svg')}
+                  src={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
                 />
               </a>
             </ListItem>

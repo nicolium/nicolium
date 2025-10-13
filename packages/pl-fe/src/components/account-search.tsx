@@ -74,12 +74,12 @@ const AccountSearch: React.FC<IAccountSearch> = ({ onSelected, ...rest }) => {
           onClick={handleClear}
         >
           <SvgIcon
-            src={require('@tabler/icons/outline/search.svg')}
+            src={require('@phosphor-icons/core/regular/magnifying-glass.svg')}
             className={clsx('size-4 text-gray-400', { hidden: !isEmpty() })}
           />
 
           <SvgIcon
-            src={require('@tabler/icons/outline/x.svg')}
+            src={require('@phosphor-icons/core/regular/x.svg')}
             className={clsx('size-4 text-gray-400', { hidden: isEmpty() })}
             aria-label={intl.formatMessage(messages.placeholder)}
           />

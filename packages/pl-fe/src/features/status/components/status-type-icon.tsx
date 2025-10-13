@@ -21,8 +21,8 @@ const messages: Record<string, MessageDescriptor> = defineMessages({
 });
 
 const STATUS_TYPE_ICONS: Record<string, string> = {
-  direct: require('@tabler/icons/outline/mail.svg'),
-  private: require('@tabler/icons/outline/lock.svg'),
+  direct: require('@phosphor-icons/core/regular/envelope-simple.svg'),
+  private: require('@phosphor-icons/core/regular/lock.svg'),
   mutuals_only: require('@tabler/icons/outline/users-group.svg'),
   local: require('@tabler/icons/outline/affiliate.svg'),
   list: require('@tabler/icons/outline/list.svg'),

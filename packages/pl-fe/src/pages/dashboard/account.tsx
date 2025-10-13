@@ -284,7 +284,7 @@ const AdminAccountPage: React.FC<IAdminAccountPage> = (props) => {
 
         {features.version.software === PLEROMA && (
           <HStack justifyContent='center'>
-            <Button icon={require('@tabler/icons/outline/external-link.svg')} size='sm' theme='secondary' onClick={handleAdminFE}>
+            <Button icon={require('@phosphor-icons/core/regular/arrow-square-out.svg')} size='sm' theme='secondary' onClick={handleAdminFE}>
               <FormattedMessage id='account_moderation_modal.admin_fe' defaultMessage='Open in AdminFE' />
             </Button>
           </HStack>

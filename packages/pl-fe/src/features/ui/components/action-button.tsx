@@ -269,7 +269,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
           size='sm'
           disabled={blockedBy}
           theme={isFollowing ? 'secondary' : 'primary'}
-          icon={blockedBy ? require('@tabler/icons/outline/ban.svg') : (!isFollowing && require('@tabler/icons/outline/plus.svg'))}
+          icon={blockedBy ? require('@phosphor-icons/core/regular/prohibit.svg') : (!isFollowing && require('@tabler/icons/outline/plus.svg'))}
           onClick={handleFollow}
         >
           {isFollowing ? (

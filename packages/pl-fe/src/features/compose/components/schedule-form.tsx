@@ -83,7 +83,7 @@ const ScheduleForm: React.FC<IScheduleForm> = ({ composeId }) => {
         <IconButton
           iconClassName='h-4 w-4'
           className='bg-transparent text-gray-400 hover:text-gray-600'
-          src={require('@tabler/icons/outline/x.svg')}
+          src={require('@phosphor-icons/core/regular/x.svg')}
           onClick={handleRemove}
           title={intl.formatMessage(messages.remove)}
         />

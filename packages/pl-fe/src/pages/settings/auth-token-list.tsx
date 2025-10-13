@@ -62,7 +62,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
               {token.app_website && (
                 <a href={token.app_website} target='_blank' rel='noopener'>
                   <Icon
-                    src={require('@tabler/icons/outline/external-link.svg')}
+                    src={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
                     className='inline size-4 text-inherit'
                   />
                 </a>

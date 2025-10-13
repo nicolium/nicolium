@@ -167,7 +167,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
         <Text>{location.description}</Text>
         <Text theme='muted' size='xs'>{[location.street, location.locality, location.country].filter(val => val?.trim()).join(' · ')}</Text>
       </Stack>
-      <IconButton title={intl.formatMessage(messages.resetLocation)} src={require('@tabler/icons/outline/x.svg')} onClick={() => onChangeLocation(null)} />
+      <IconButton title={intl.formatMessage(messages.resetLocation)} src={require('@phosphor-icons/core/regular/x.svg')} onClick={() => onChangeLocation(null)} />
     </HStack>
   );
 
@@ -181,7 +181,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
           {banner ? (
             <>
               <img className='size-full object-cover' src={banner.url} alt='' />
-              <IconButton className='absolute right-2 top-2' src={require('@tabler/icons/outline/x.svg')} onClick={handleClearBanner} />
+              <IconButton className='absolute right-2 top-2' src={require('@phosphor-icons/core/regular/x.svg')} onClick={handleClearBanner} />
             </>
           ) : (
             <UploadButton disabled={isUploading} onSelectFile={handleFiles} />

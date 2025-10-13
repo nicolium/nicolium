@@ -106,7 +106,7 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({ onAuthorize
         <HStack space={3} alignItems='center'>
           <AuthorizeRejectButton
             theme='danger'
-            icon={require('@tabler/icons/outline/x.svg')}
+            icon={require('@phosphor-icons/core/regular/x.svg')}
             action={handleReject}
             isLoading={state === 'rejecting'}
             disabled={state === 'authorizing'}
@@ -114,7 +114,7 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({ onAuthorize
           />
           <AuthorizeRejectButton
             theme='primary'
-            icon={require('@tabler/icons/outline/check.svg')}
+            icon={require('@phosphor-icons/core/regular/check.svg')}
             action={handleAuthorize}
             isLoading={state === 'authorizing'}
             disabled={state === 'rejecting'}

@@ -23,7 +23,7 @@ const Account: React.FC<IAccount> = ({ accountId, added, onAdd, onRemove }) => {
   let button;
 
   if (added) {
-    button = <IconButton src={require('@tabler/icons/outline/x.svg')} iconClassName='h-5 w-5' title={intl.formatMessage(messages.remove)} onClick={() => onRemove(accountId)} />;
+    button = <IconButton src={require('@phosphor-icons/core/regular/x.svg')} iconClassName='h-5 w-5' title={intl.formatMessage(messages.remove)} onClick={() => onRemove(accountId)} />;
   } else {
     button = <IconButton src={require('@tabler/icons/outline/plus.svg')} iconClassName='h-5 w-5' title={intl.formatMessage(messages.add)} onClick={() => onAdd(accountId)} />;
   }

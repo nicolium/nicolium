@@ -237,7 +237,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
           >
             <IconButton
               title={intl.formatMessage(messages.close)}
-              src={require('@tabler/icons/outline/x.svg')}
+              src={require('@phosphor-icons/core/regular/x.svg')}
               onClick={() => onClose('MEDIA')}
               theme='dark'
               className='!p-1.5 hover:scale-105 hover:bg-gray-900'
@@ -246,7 +246,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
             <HStack alignItems='center' space={2}>
               <IconButton
-                src={require('@tabler/icons/outline/download.svg')}
+                src={require('@phosphor-icons/core/regular/download-simple.svg')}
                 theme='dark'
                 className='!p-1.5 hover:scale-105 hover:bg-gray-900'
                 iconClassName='h-5 w-5'
@@ -255,7 +255,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
               {status && (
                 <IconButton
-                  src={isFullScreen ? require('@tabler/icons/outline/arrows-minimize.svg') : require('@tabler/icons/outline/arrows-maximize.svg')}
+                  src={isFullScreen ? require('@phosphor-icons/core/regular/arrows-in-simple.svg') : require('@phosphor-icons/core/regular/arrows-out-simple.svg')}
                   title={intl.formatMessage(isFullScreen ? messages.minimize : messages.expand)}
                   theme='dark'
                   className='hidden !p-1.5 hover:scale-105 hover:bg-gray-900 xl:block'

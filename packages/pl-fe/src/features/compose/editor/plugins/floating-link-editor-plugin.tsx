@@ -193,7 +193,7 @@ const FloatingLinkEditor = ({
                 editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
               }}
             >
-              <Icon className='size-5' src={require('@tabler/icons/outline/x.svg')} />
+              <Icon className='size-5' src={require('@phosphor-icons/core/regular/x.svg')} />
             </div>
           </>
         ) : (
@@ -210,7 +210,7 @@ const FloatingLinkEditor = ({
                 setEditMode(true);
               }}
             >
-              <Icon className='size-5' src={require('@tabler/icons/outline/pencil.svg')} />
+              <Icon className='size-5' src={require('@phosphor-icons/core/regular/pencil-simple.svg')} />
             </div>
           </>
         )}

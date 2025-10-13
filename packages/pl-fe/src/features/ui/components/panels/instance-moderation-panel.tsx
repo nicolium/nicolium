@@ -35,7 +35,7 @@ const InstanceModerationPanel: React.FC<IInstanceModerationPanel> = ({ host }) =
   const makeMenu = () => [{
     text: intl.formatMessage(messages.editFederation),
     action: handleEditFederation,
-    icon: require('@tabler/icons/outline/edit.svg'),
+    icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
   }];
 
   const menu = makeMenu();

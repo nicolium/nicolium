@@ -83,12 +83,12 @@ const CircleTimelinePage: React.FC = () => {
     {
       text: intl.formatMessage(messages.editCircle),
       action: handleEditClick,
-      icon: require('@tabler/icons/outline/edit.svg'),
+      icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
     },
     {
       text: intl.formatMessage(messages.deleteCircle),
       action: handleDeleteClick,
-      icon: require('@tabler/icons/outline/trash.svg'),
+      icon: require('@phosphor-icons/core/regular/trash.svg'),
     },
   ];
 

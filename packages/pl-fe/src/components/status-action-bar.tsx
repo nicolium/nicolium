@@ -836,7 +836,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     if (expandable) {
       menu.push({
         text: intl.formatMessage(messages.open),
-        icon: require('@tabler/icons/outline/arrows-vertical.svg'),
+        icon: require('@phosphor-icons/core/regular/arrows-vertical.svg'),
         to: `/@${status.account.acct}/posts/${status.id}`,
       });
     }
@@ -845,14 +845,14 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(messages.copy),
         action: handleCopy,
-        icon: require('@tabler/icons/outline/clipboard-copy.svg'),
+        icon: require('@phosphor-icons/core/regular/clipboard.svg'),
       });
 
       if (features.embeds && localAccount) {
         menu.push({
           text: intl.formatMessage(messages.embed),
           action: handleEmbed,
-          icon: require('@tabler/icons/outline/share.svg'),
+          icon: require('@phosphor-icons/core/regular/export.svg'),
         });
       }
     }
@@ -875,7 +875,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(status.bookmarked ? messages.unbookmark : messages.bookmark),
         action: handleBookmarkClick,
-        icon: status.bookmarked ? require('@tabler/icons/outline/bookmark-off.svg') : require('@tabler/icons/outline/bookmark.svg'),
+        icon: status.bookmarked ? require('@phosphor-icons/core/regular/bookmark.svg') : require('@phosphor-icons/core/regular/bookmark-simple.svg'),
       });
     }
 
@@ -883,7 +883,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(status.bookmark_folder ? messages.bookmarkChangeFolder : messages.bookmarkSetFolder),
         action: handleBookmarkFolderClick,
-        icon: require('@tabler/icons/outline/folders.svg'),
+        icon: require('@phosphor-icons/core/regular/folders.svg'),
       });
     }
 
@@ -891,7 +891,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       const { hostname: domain } = new URL(status.uri);
       menu.push({
         text: intl.formatMessage(messages.external, { domain }),
-        icon: require('@tabler/icons/outline/external-link.svg'),
+        icon: require('@phosphor-icons/core/regular/arrow-square-out.svg'),
         href: status.uri,
         target: '_blank',
       });
@@ -902,14 +902,14 @@ const MenuButton: React.FC<IMenuButton> = ({
     menu.push({
       text: intl.formatMessage(mutingConversation ? messages.unmuteConversation : messages.muteConversation),
       action: handleConversationMuteClick,
-      icon: mutingConversation ? require('@tabler/icons/outline/bell.svg') : require('@tabler/icons/outline/bell-off.svg'),
+      icon: mutingConversation ? require('@phosphor-icons/core/regular/bell-simple.svg') : require('@phosphor-icons/core/regular/bell-simple-slash.svg'),
     });
 
     if (!status.in_reply_to_id && features.loadConversation) {
       menu.push({
         text: intl.formatMessage(messages.loadConversation),
         action: handleLoadConversationClick,
-        icon: require('@tabler/icons/outline/refresh.svg'),
+        icon: require('@phosphor-icons/core/regular/arrows-clockwise.svg'),
       });
     }
 
@@ -923,17 +923,17 @@ const MenuButton: React.FC<IMenuButton> = ({
           {
             text: intl.formatMessage(messages.reblog_visibility_public),
             action: (e) => handleReblogClick(e, 'public'),
-            icon: require('@tabler/icons/outline/world.svg'),
+            icon: require('@phosphor-icons/core/regular/globe.svg'),
           },
           {
             text: intl.formatMessage(messages.reblog_visibility_unlisted),
             action: (e) => handleReblogClick(e, 'unlisted'),
-            icon: require('@tabler/icons/outline/lock-open.svg'),
+            icon: require('@phosphor-icons/core/regular/lock-open.svg'),
           },
           {
             text: intl.formatMessage(messages.reblog_visibility_private),
             action: (e) => handleReblogClick(e, 'private'),
-            icon: require('@tabler/icons/outline/lock.svg'),
+            icon: require('@phosphor-icons/core/regular/lock.svg'),
           },
         ],
       });
@@ -944,7 +944,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: intl.formatMessage(status.pinned ? messages.unpin : messages.pin),
           action: handlePinClick,
-          icon: status.pinned ? require('@tabler/icons/outline/pinned-off.svg') : require('@tabler/icons/outline/pin.svg'),
+          icon: status.pinned ? require('@phosphor-icons/core/regular/push-pin-slash.svg') : require('@phosphor-icons/core/regular/push-pin.svg'),
         });
       } else {
         if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
@@ -959,20 +959,20 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(messages.delete),
         action: handleDeleteClick,
-        icon: require('@tabler/icons/outline/trash.svg'),
+        icon: require('@phosphor-icons/core/regular/trash.svg'),
         destructive: true,
       });
       if (features.editStatuses) {
         menu.push({
           text: intl.formatMessage(messages.edit),
           action: handleEditClick,
-          icon: require('@tabler/icons/outline/edit.svg'),
+          icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
         });
       } else {
         menu.push({
           text: intl.formatMessage(messages.redraft),
           action: handleRedraftClick,
-          icon: require('@tabler/icons/outline/edit.svg'),
+          icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
           destructive: true,
         });
       }
@@ -993,7 +993,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: intl.formatMessage(messages.direct, { name: username }),
           action: handleDirectClick,
-          icon: require('@tabler/icons/outline/mail.svg'),
+          icon: require('@phosphor-icons/core/regular/envelope-simple.svg'),
         });
       }
 
@@ -1002,17 +1002,17 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(messages.mute, { name: username }),
         action: handleMuteClick,
-        icon: require('@tabler/icons/outline/volume-3.svg'),
+        icon: require('@phosphor-icons/core/regular/speaker-x.svg'),
       });
       menu.push({
         text: intl.formatMessage(messages.block, { name: username }),
         action: handleBlockClick,
-        icon: require('@tabler/icons/outline/ban.svg'),
+        icon: require('@phosphor-icons/core/regular/prohibit.svg'),
       });
       menu.push({
         text: intl.formatMessage(messages.report, { name: username }),
         action: handleReport,
-        icon: require('@tabler/icons/outline/flag.svg'),
+        icon: require('@phosphor-icons/core/regular/flag.svg'),
       });
     }
 
@@ -1034,7 +1034,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(messages.addKnownLanguage, { language: languages[status.language as 'en'] || status.language }),
         action: handleIgnoreLanguage,
-        icon: require('@tabler/icons/outline/flag.svg'),
+        icon: require('@phosphor-icons/core/regular/flag.svg'),
       });
     }
 
@@ -1054,7 +1054,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: 'Ban from Group',
           action: handleBlockFromGroup,
-          icon: require('@tabler/icons/outline/ban.svg'),
+          icon: require('@phosphor-icons/core/regular/prohibit.svg'),
           destructive: true,
         });
       }
@@ -1063,7 +1063,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: intl.formatMessage(messages.groupModDelete),
           action: handleDeleteFromGroup,
-          icon: require('@tabler/icons/outline/trash.svg'),
+          icon: require('@phosphor-icons/core/regular/trash.svg'),
           destructive: true,
         });
       }
@@ -1075,14 +1075,14 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(messages.adminAccount, { name: username }),
         to: `/pl-fe/admin/accounts/${status.account_id}`,
-        icon: require('@tabler/icons/outline/gavel.svg'),
+        icon: require('@phosphor-icons/core/regular/gavel.svg'),
       });
 
       if (isAdmin && features.pleromaAdminStatuses) {
         menu.push({
           text: intl.formatMessage(messages.admin_status),
           href: `/pleroma/admin/#/statuses/${status.id}/`,
-          icon: require('@tabler/icons/outline/pencil.svg'),
+          icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
         });
       }
 
@@ -1090,7 +1090,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: intl.formatMessage(status.sensitive === false ? messages.markStatusSensitive : messages.markStatusNotSensitive),
           action: handleToggleStatusSensitivity,
-          icon: require('@tabler/icons/outline/alert-triangle.svg'),
+          icon: require('@phosphor-icons/core/regular/warning.svg'),
         });
       }
 
@@ -1098,7 +1098,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: intl.formatMessage(messages.redact),
           action: handleRedactStatus,
-          icon: require('@tabler/icons/outline/pencil.svg'),
+          icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
           destructive: true,
         });
       }
@@ -1107,7 +1107,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: intl.formatMessage(messages.deleteStatus),
           action: handleDeleteStatus,
-          icon: require('@tabler/icons/outline/trash.svg'),
+          icon: require('@phosphor-icons/core/regular/trash.svg'),
           destructive: true,
         });
       }

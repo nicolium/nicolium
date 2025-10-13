@@ -235,7 +235,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
     if (features.federating && !account.local) {
       menu.push({
         text: intl.formatMessage(messages.external, { domain }),
-        icon: require('@tabler/icons/outline/external-link.svg'),
+        icon: require('@phosphor-icons/core/regular/arrow-square-out.svg'),
         href: status.uri,
         target: '_blank',
       });
@@ -247,7 +247,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       menu.push({
         text: intl.formatMessage(status.bookmarked ? messages.unbookmark : messages.bookmark),
         action: handleBookmarkClick,
-        icon: status.bookmarked ? require('@tabler/icons/outline/bookmark-off.svg') : require('@tabler/icons/outline/bookmark.svg'),
+        icon: status.bookmarked ? require('@phosphor-icons/core/regular/bookmark.svg') : require('@phosphor-icons/core/regular/bookmark-simple.svg'),
       });
     }
 
@@ -259,17 +259,17 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
             {
               text: intl.formatMessage(messages.reblog_visibility_public),
               action: () => handleReblogClick('public'),
-              icon: require('@tabler/icons/outline/world.svg'),
+              icon: require('@phosphor-icons/core/regular/globe.svg'),
             },
             {
               text: intl.formatMessage(messages.reblog_visibility_unlisted),
               action: () => handleReblogClick('unlisted'),
-              icon: require('@tabler/icons/outline/lock-open.svg'),
+              icon: require('@phosphor-icons/core/regular/lock-open.svg'),
             },
             {
               text: intl.formatMessage(messages.reblog_visibility_private),
               action: () => handleReblogClick('private'),
-              icon: require('@tabler/icons/outline/lock.svg'),
+              icon: require('@phosphor-icons/core/regular/lock.svg'),
             },
           ],
         } : {
@@ -300,14 +300,14 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         menu.push({
           text: intl.formatMessage(status.pinned ? messages.unpin : messages.pin),
           action: handlePinClick,
-          icon: status.pinned ? require('@tabler/icons/outline/pinned-off.svg') : require('@tabler/icons/outline/pin.svg'),
+          icon: status.pinned ? require('@phosphor-icons/core/regular/push-pin-slash.svg') : require('@phosphor-icons/core/regular/push-pin.svg'),
         });
       }
 
       menu.push({
         text: intl.formatMessage(messages.delete),
         action: handleDeleteClick,
-        icon: require('@tabler/icons/outline/trash.svg'),
+        icon: require('@phosphor-icons/core/regular/trash.svg'),
         destructive: true,
       });
     } else {
@@ -327,7 +327,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         menu.push({
           text: intl.formatMessage(messages.direct, { name: username }),
           action: handleDirectClick,
-          icon: require('@tabler/icons/outline/mail.svg'),
+          icon: require('@phosphor-icons/core/regular/envelope-simple.svg'),
         });
       }
 
@@ -340,12 +340,12 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       menu.push({
         text: intl.formatMessage(messages.block, { name: username }),
         action: handleBlockClick,
-        icon: require('@tabler/icons/outline/ban.svg'),
+        icon: require('@phosphor-icons/core/regular/prohibit.svg'),
       });
       menu.push({
         text: intl.formatMessage(messages.report, { name: username }),
         action: handleReport,
-        icon: require('@tabler/icons/outline/flag.svg'),
+        icon: require('@phosphor-icons/core/regular/flag.svg'),
       });
     }
 
@@ -355,14 +355,14 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       menu.push({
         text: intl.formatMessage(messages.adminAccount, { name: username }),
         to: `/pl-fe/admin/accounts/${account.id}`,
-        icon: require('@tabler/icons/outline/gavel.svg'),
+        icon: require('@phosphor-icons/core/regular/gavel.svg'),
       });
 
       if (isAdmin && features.pleromaAdminStatuses) {
         menu.push({
           text: intl.formatMessage(messages.adminStatus),
           action: handleModerateStatus,
-          icon: require('@tabler/icons/outline/pencil.svg'),
+          icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
         });
       }
 
@@ -370,7 +370,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         menu.push({
           text: intl.formatMessage(status.sensitive === false ? messages.markStatusSensitive : messages.markStatusNotSensitive),
           action: handleToggleStatusSensitivity,
-          icon: require('@tabler/icons/outline/alert-triangle.svg'),
+          icon: require('@phosphor-icons/core/regular/warning.svg'),
         });
       }
 
@@ -378,7 +378,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         menu.push({
           text: intl.formatMessage(messages.deleteStatus),
           action: handleDeleteStatus,
-          icon: require('@tabler/icons/outline/trash.svg'),
+          icon: require('@phosphor-icons/core/regular/trash.svg'),
           destructive: true,
         });
       }

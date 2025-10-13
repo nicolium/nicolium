@@ -113,7 +113,7 @@ const ChatPageMain = () => {
 
   const menuItems: Menu = [
     {
-      icon: require('@tabler/icons/outline/ban.svg'),
+      icon: require('@phosphor-icons/core/regular/prohibit.svg'),
       text: intl.formatMessage(isBlocking ? messages.unblockUser : messages.blockUser, { acct: chat.account.acct }),
       action: isBlocking ? handleUnblockUser : handleBlockUser,
     },

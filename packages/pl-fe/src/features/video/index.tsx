@@ -516,7 +516,7 @@ const Video: React.FC<IVideo> = ({
               onClick={togglePlay}
               autoFocus={autoFocus}
             >
-              <Icon src={paused ? require('@tabler/icons/outline/player-play.svg') : require('@tabler/icons/outline/player-pause.svg')} />
+              <Icon src={paused ? require('@phosphor-icons/core/regular/play.svg') : require('@phosphor-icons/core/regular/pause.svg')} />
             </button>
 
             <button
@@ -526,7 +526,7 @@ const Video: React.FC<IVideo> = ({
               className={clsx('player-button', detailed || fullscreen && 'py-2.5')}
               onClick={toggleMute}
             >
-              <Icon src={muted ? require('@tabler/icons/outline/volume-3.svg') : require('@tabler/icons/outline/volume.svg')} />
+              <Icon src={muted ? require('@phosphor-icons/core/regular/speaker-x.svg') : require('@phosphor-icons/core/regular/speaker-high.svg')} />
             </button>
 
             <div className={clsx('video-player__volume', { 'overflow-visible w-12 mr-4': hovered })} onMouseDown={handleVolumeMouseDown} ref={slider}>
@@ -559,7 +559,7 @@ const Video: React.FC<IVideo> = ({
               className={clsx('player-button', detailed || fullscreen && 'py-2.5')}
               onClick={toggleFullscreen}
             >
-              <Icon src={fullscreen ? require('@tabler/icons/outline/arrows-minimize.svg') : require('@tabler/icons/outline/arrows-maximize.svg')} />
+              <Icon src={fullscreen ? require('@phosphor-icons/core/regular/arrows-in-simple.svg') : require('@phosphor-icons/core/regular/arrows-out-simple.svg')} />
             </button>
           </div>
         </div>

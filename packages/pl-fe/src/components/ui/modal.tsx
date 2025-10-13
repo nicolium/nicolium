@@ -65,7 +65,7 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
   cancelAction,
   cancelText,
   children,
-  closeIcon = require('@tabler/icons/outline/x.svg'),
+  closeIcon = require('@phosphor-icons/core/regular/x.svg'),
   closePosition = 'right',
   confirmationAction,
   confirmationDisabled,

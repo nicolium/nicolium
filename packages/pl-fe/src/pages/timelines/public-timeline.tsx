@@ -60,7 +60,7 @@ const PublicTimelinePage = () => {
         <Accordion
           headline={<FormattedMessage id='fediverse_tab.explanation_box.title' defaultMessage='What is the Fediverse?' />}
           action={dismissExplanationBox}
-          actionIcon={require('@tabler/icons/outline/x.svg')}
+          actionIcon={require('@phosphor-icons/core/regular/x.svg')}
           actionLabel={intl.formatMessage(messages.dismiss)}
           expanded={explanationBoxExpanded}
           onToggle={toggleExplanationBox}

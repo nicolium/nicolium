@@ -360,14 +360,14 @@ const Header: React.FC<IHeader> = ({ account }) => {
       menu.push({
         text: intl.formatMessage(messages.profileExternal, { domain }),
         action: () => onProfileExternal(account.url),
-        icon: require('@tabler/icons/outline/external-link.svg'),
+        icon: require('@phosphor-icons/core/regular/arrow-square-out.svg'),
       });
     }
 
     menu.push({
       text: intl.formatMessage(messages.copy),
       action: handleCopy,
-      icon: require('@tabler/icons/outline/clipboard-copy.svg'),
+      icon: require('@phosphor-icons/core/regular/clipboard.svg'),
     });
 
     if (!ownAccount) return menu;
@@ -376,7 +376,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       menu.push({
         text: intl.formatMessage(account.id === ownAccount.id ? messages.searchSelf : messages.search, { name: account.username }),
         to: '/search?' + new URLSearchParams({ type: 'statuses', accountId: account.id }).toString(),
-        icon: require('@tabler/icons/outline/search.svg'),
+        icon: require('@phosphor-icons/core/regular/magnifying-glass.svg'),
       });
     }
 
@@ -404,7 +404,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       menu.push({
         text: intl.formatMessage(messages.blocks),
         to: '/blocks',
-        icon: require('@tabler/icons/outline/ban.svg'),
+        icon: require('@phosphor-icons/core/regular/prohibit.svg'),
       });
     } else {
       menu.push({
@@ -417,7 +417,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
         menu.push({
           text: intl.formatMessage(messages.direct, { name: account.username }),
           action: onDirect,
-          icon: require('@tabler/icons/outline/mail.svg'),
+          icon: require('@phosphor-icons/core/regular/envelope-simple.svg'),
         });
       }
 
@@ -471,7 +471,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
         menu.push({
           text: intl.formatMessage(messages.loadActivities),
           action: onLoadActivities,
-          icon: require('@tabler/icons/outline/refresh.svg'),
+          icon: require('@phosphor-icons/core/regular/arrows-clockwise.svg'),
         });
       }
 
@@ -503,20 +503,20 @@ const Header: React.FC<IHeader> = ({ account }) => {
         menu.push({
           text: intl.formatMessage(messages.unblock, { name: account.username }),
           action: onBlock,
-          icon: require('@tabler/icons/outline/ban.svg'),
+          icon: require('@phosphor-icons/core/regular/prohibit.svg'),
         });
       } else {
         menu.push({
           text: intl.formatMessage(messages.block, { name: account.username }),
           action: onBlock,
-          icon: require('@tabler/icons/outline/ban.svg'),
+          icon: require('@phosphor-icons/core/regular/prohibit.svg'),
         });
       }
 
       menu.push({
         text: intl.formatMessage(messages.report, { name: account.username }),
         action: onReport,
-        icon: require('@tabler/icons/outline/flag.svg'),
+        icon: require('@phosphor-icons/core/regular/flag.svg'),
       });
     }
 
@@ -529,13 +529,13 @@ const Header: React.FC<IHeader> = ({ account }) => {
         menu.push({
           text: intl.formatMessage(messages.unblockDomain, { domain }),
           action: () => onUnblockDomain(domain),
-          icon: require('@tabler/icons/outline/ban.svg'),
+          icon: require('@phosphor-icons/core/regular/prohibit.svg'),
         });
       } else {
         menu.push({
           text: intl.formatMessage(messages.blockDomain, { domain }),
           action: () => onBlockDomain(domain),
-          icon: require('@tabler/icons/outline/ban.svg'),
+          icon: require('@phosphor-icons/core/regular/prohibit.svg'),
         });
       }
     }
@@ -546,7 +546,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       menu.push({
         text: intl.formatMessage(messages.adminAccount, { name: account.username }),
         to: `/pl-fe/admin/accounts/${account.id}`,
-        icon: require('@tabler/icons/outline/gavel.svg'),
+        icon: require('@phosphor-icons/core/regular/gavel.svg'),
       });
     }
 

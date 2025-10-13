@@ -74,12 +74,12 @@ const BookmarksPage: React.FC<IBookmarks> = ({ params }) => {
     {
       text: intl.formatMessage(messages.editFolder),
       action: handleEditFolder,
-      icon: require('@tabler/icons/outline/edit.svg'),
+      icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
     },
     {
       text: intl.formatMessage(messages.deleteFolder),
       action: handleDeleteFolder,
-      icon: require('@tabler/icons/outline/trash.svg'),
+      icon: require('@phosphor-icons/core/regular/trash.svg'),
     },
   ] : [];
 
