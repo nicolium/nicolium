@@ -222,6 +222,18 @@ const Video: React.FC<IVideo> = ({
   }, 60);
 
   const handleMouseDown: React.MouseEventHandler = e => {
+    const wasPlaying = !paused;
+
+    const handleMouseUp = () => {
+      document.removeEventListener('mousemove', handleMouseMove, true);
+      document.removeEventListener('mouseup', handleMouseUp, true);
+      document.removeEventListener('touchmove', handleMouseMove, true);
+      document.removeEventListener('touchend', handleMouseUp, true);
+
+      setDragging(false);
+      if (wasPlaying) video.current?.play();
+    };
+
     document.addEventListener('mousemove', handleMouseMove, true);
     document.addEventListener('mouseup', handleMouseUp, true);
     document.addEventListener('touchmove', handleMouseMove, true);
@@ -235,15 +247,6 @@ const Video: React.FC<IVideo> = ({
     e.stopPropagation();
   };
 
-  const handleMouseUp = () => {
-    document.removeEventListener('mousemove', handleMouseMove, true);
-    document.removeEventListener('mouseup', handleMouseUp, true);
-    document.removeEventListener('touchmove', handleMouseMove, true);
-    document.removeEventListener('touchend', handleMouseUp, true);
-
-    setDragging(false);
-    video.current?.play();
-  };
 
   const handleMouseMove = throttle(e => {
     if (seek.current && video.current) {
