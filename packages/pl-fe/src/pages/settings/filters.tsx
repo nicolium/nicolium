@@ -71,7 +71,7 @@ const FiltersPage = () => {
 
       <ScrollableList
         scrollKey='filters'
-        emptyMessage={emptyMessage}
+        emptyMessageText={emptyMessage}
         itemClassName='pb-4 last:pb-0'
       >
         {filters.map((filter) => (

@@ -31,7 +31,7 @@ const DislikesModal: React.FC<BaseModalProps & DislikesModalProps> = ({ onClose,
     body = (
       <PullToRefresh onRefresh={refetch}>
         <ScrollableList
-          emptyMessage={emptyMessage}
+          emptyMessageText={emptyMessage}
           listClassName='max-w-full'
           itemClassName='pb-3'
           style={{ height: 'calc(80vh - 88px)' }}

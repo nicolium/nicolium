@@ -105,7 +105,8 @@ const LandingTimelinePage = () => {
             timelineId={timelineId}
             prefix='home'
             onLoadMore={handleLoadMore}
-            emptyMessage={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />}
+            emptyMessageText={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />}
+            emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
           />
         </PullToRefresh>
       ) : (

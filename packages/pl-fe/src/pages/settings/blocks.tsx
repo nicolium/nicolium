@@ -39,8 +39,7 @@ const BlocksPage: React.FC = () => {
         scrollKey='blocks'
         onLoadMore={fetchNextPage}
         hasMore={hasNextPage}
-        emptyMessage={emptyMessage}
-        emptyMessageCard={false}
+        emptyMessageText={emptyMessage}
         itemClassName={clsx('pb-4', { 'last:pb-0': !hasNextPage })}
         isLoading={isFetching}
       >

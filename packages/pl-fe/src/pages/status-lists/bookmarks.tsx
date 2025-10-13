@@ -96,7 +96,7 @@ const BookmarksPage: React.FC<IBookmarks> = ({ params }) => {
           hasMore={hasNextPage}
           isLoading={isFetching}
           onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
-          emptyMessage={emptyMessage}
+          emptyMessageText={emptyMessage}
         />
       </PullToRefresh>
     </Column>

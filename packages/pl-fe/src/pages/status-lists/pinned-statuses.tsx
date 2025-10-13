@@ -33,7 +33,7 @@ const PinnedStatusesPage = () => {
         scrollKey='pinned_statuses'
         hasMore={hasMore}
         isLoading={isLoading}
-        emptyMessage={<FormattedMessage id='pinned_statuses.none' defaultMessage='No pins to show.' />}
+        emptyMessageText={<FormattedMessage id='pinned_statuses.none' defaultMessage='No pins to show.' />}
       />
     </Column>
   );

@@ -27,7 +27,7 @@ const BirthdaysModal = ({ onClose }: BaseModalProps) => {
 
     body = (
       <ScrollableList
-        emptyMessage={emptyMessage}
+        emptyMessageText={emptyMessage}
         listClassName='max-w-full'
         itemClassName='pb-3'
         useWindowScroll={false}

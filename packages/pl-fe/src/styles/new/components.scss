@@ -171,3 +171,7 @@ a.⁂-list-item,
   align-items: stretch;
   overflow: hidden;
 }
+
+div[data-viewport-type="window"]:has(.⁂-empty-message) {
+  position: initial!important;
+}

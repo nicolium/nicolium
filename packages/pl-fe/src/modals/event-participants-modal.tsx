@@ -31,7 +31,7 @@ const EventParticipantsModal: React.FC<BaseModalProps & EventParticipantsModalPr
     body = (
       <PullToRefresh onRefresh={refetch}>
         <ScrollableList
-          emptyMessage={emptyMessage}
+          emptyMessageText={emptyMessage}
           listClassName='max-w-full'
           itemClassName='pb-3'
           hasMore={hasNextPage}

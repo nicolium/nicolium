@@ -105,7 +105,8 @@ const ListTimelinePage: React.FC = () => {
         scrollKey='list_timeline'
         timelineId={`list:${id}`}
         onLoadMore={handleLoadMore}
-        emptyMessage={emptyMessage}
+        emptyMessageText={emptyMessage}
+        emptyMessageIcon={require('@phosphor-icons/core/regular/list-bullets.svg')}
       />
     </Column>
   );

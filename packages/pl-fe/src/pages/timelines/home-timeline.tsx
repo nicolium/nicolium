@@ -63,7 +63,7 @@ const HomeTimelinePage: React.FC = () => {
           scrollKey='home_timeline'
           onLoadMore={handleLoadMore}
           timelineId='home'
-          emptyMessage={
+          emptyMessageText={
             <Stack space={1}>
               <Text size='xl' weight='medium' align='center'>
                 <FormattedMessage
@@ -97,6 +97,7 @@ const HomeTimelinePage: React.FC = () => {
               )}
             </Stack>
           }
+          emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
         />
       </PullToRefresh>
     </Column>

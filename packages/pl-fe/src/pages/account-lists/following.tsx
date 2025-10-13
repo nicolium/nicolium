@@ -59,7 +59,7 @@ const FollowingPage: React.FC<IFollowingPage> = ({ params }) => {
         scrollKey='following'
         hasMore={hasNextPage}
         onLoadMore={fetchNextPage}
-        emptyMessage={<FormattedMessage id='account.follows.empty' defaultMessage="This user doesn't follow anyone yet." />}
+        emptyMessageText={<FormattedMessage id='account.follows.empty' defaultMessage="This user doesn't follow anyone yet." />}
         itemClassName='pb-4'
         isLoading={isFetching}
       >

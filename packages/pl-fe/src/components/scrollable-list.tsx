@@ -4,9 +4,10 @@ import { useHistory } from 'react-router-dom';
 import { Virtuoso, Components, VirtuosoProps, VirtuosoHandle, ListRange, IndexLocationWithAlign } from 'react-virtuoso';
 
 import LoadMore from 'pl-fe/components/load-more';
-import Card from 'pl-fe/components/ui/card';
 import Spinner from 'pl-fe/components/ui/spinner';
 import { useSettings } from 'pl-fe/hooks/use-settings';
+
+import { EmptyMessage } from './empty-message';
 
 /** Custom Viruoso component context. */
 type Context = {
@@ -48,12 +49,12 @@ interface IScrollableList extends VirtuosoProps<any, any> {
   hasMore?: boolean;
   /** Additional element to display at the top of the list. */
   prepend?: React.ReactNode;
-  /** Whether to display the prepended element. */
-  alwaysPrepend?: boolean;
   /** Message to display when the list is loaded but empty. */
   emptyMessage?: React.ReactNode;
-  /** Should the empty message be displayed in a Card */
-  emptyMessageCard?: boolean;
+  /** Message to display when the list is loaded but empty. */
+  emptyMessageText?: React.ReactNode;
+  /** Message to display next to the emptyMessage text. */
+  emptyMessageIcon?: string;
   /** Scrollable content. */
   children: Iterable<React.ReactNode>;
   /** Callback when the list is scrolled to the top. */
@@ -83,11 +84,11 @@ interface IScrollableList extends VirtuosoProps<any, any> {
 const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
   scrollKey,
   prepend = null,
-  alwaysPrepend,
   children,
   isLoading,
   emptyMessage,
-  emptyMessageCard = true,
+  emptyMessageText,
+  emptyMessageIcon,
   showLoading,
   onScroll,
   onScrollToTop,
@@ -153,23 +154,13 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
   }, []);
 
   /* Render an empty state instead of the scrollable list. */
-  const renderEmpty = (): JSX.Element => (
-    <div className='mt-2'>
-      {alwaysPrepend && prepend}
-
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        <>
-          {emptyMessageCard ? (
-            <Card variant='rounded' size='lg'>
-              {emptyMessage}
-            </Card>
-          ) : emptyMessage}
-        </>
-      )}
-    </div>
-  );
+  const renderEmpty = (): JSX.Element => {
+    return isLoading ? (
+      <Spinner />
+    ) : emptyMessageText ? (
+      <EmptyMessage text={emptyMessageText} icon={emptyMessageIcon} />
+    ) : <>{emptyMessage}</>;
+  };
 
   /** Render a single item. */
   const renderItem = (_i: number, element: JSX.Element): JSX.Element => {
@@ -250,9 +241,9 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
         itemClassName,
       }}
       components={{
-        Header: () => <>{prepend}</>,
+        Header: prepend ? () => <>{prepend}</> : undefined,
         ScrollSeekPlaceholder: Placeholder as any,
-        EmptyPlaceholder: () => renderEmpty(),
+        EmptyPlaceholder: renderEmpty,
         List,
         Item,
         Footer: loadMore,

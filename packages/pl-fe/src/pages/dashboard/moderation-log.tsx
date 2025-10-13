@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, FormattedDate, useIntl } from 'react-intl';
+import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Column from 'pl-fe/components/ui/column';
@@ -11,7 +11,6 @@ import type { AdminModerationLogEntry } from 'pl-api';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.moderation_log', defaultMessage: 'Moderation log' },
-  emptyMessage: { id: 'admin.moderation_log.empty_message', defaultMessage: 'You have not performed any moderation actions yet. When you do, a history will be shown here.' },
 });
 
 const ModerationLogPage = () => {
@@ -36,7 +35,7 @@ const ModerationLogPage = () => {
         scrollKey='moderationLog'
         isLoading={isLoading}
         showLoading={showLoading}
-        emptyMessage={intl.formatMessage(messages.emptyMessage)}
+        emptyMessageText={<FormattedMessage id='admin.moderation_log.empty_message' defaultMessage='You have not performed any moderation actions yet. When you do, a history will be shown here.' />}
         hasMore={hasNextPage}
         onLoadMore={handleLoadMore}
         listClassName='divide-y divide-solid divide-gray-200 dark:divide-gray-800'

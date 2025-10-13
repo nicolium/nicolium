@@ -24,7 +24,7 @@ const ScheduledStatusesPage = () => {
         hasMore={hasNextPage}
         isLoading={typeof isLoading === 'boolean' ? isLoading : true}
         onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
-        emptyMessage={emptyMessage}
+        emptyMessageText={emptyMessage}
         listClassName='divide-y divide-solid divide-gray-200 dark:divide-gray-800'
       >
         {scheduledStatuses.map((status) => <ScheduledStatus key={status.id} scheduledStatus={status} />)}

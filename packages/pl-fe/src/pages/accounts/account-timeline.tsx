@@ -98,7 +98,7 @@ const AccountTimelinePage: React.FC<IAccountTimelinePage> = ({ params, withRepli
       isLoading={isLoading}
       hasMore={hasMore}
       onLoadMore={handleLoadMore}
-      emptyMessage={<FormattedMessage id='empty_column.account_timeline' defaultMessage='No posts here!' />}
+      emptyMessageText={<FormattedMessage id='empty_column.account_timeline' defaultMessage='No posts here!' />}
     />
   );
 };

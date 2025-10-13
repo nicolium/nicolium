@@ -127,7 +127,7 @@ const RelaysPage: React.FC = () => {
         {relays && (
           <ScrollableList
             scrollKey='relays'
-            emptyMessage={emptyMessage}
+            emptyMessageText={emptyMessage}
             itemClassName='py-3 first:pt-0 last:pb-0'
             isLoading={isFetching}
             showLoading={isFetching && !relays?.length}

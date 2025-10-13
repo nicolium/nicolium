@@ -159,7 +159,7 @@ const AliasesPage = () => {
       <div className='flex-1'>
         <ScrollableList
           scrollKey='aliases'
-          emptyMessage={emptyMessage}
+          emptyMessageText={emptyMessage}
         >
           {aliases.map((alias, i) => (
             <HStack alignItems='center' justifyContent='between' space={1} key={i} className='p-2'>

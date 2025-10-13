@@ -85,7 +85,7 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
       {reactions.length > 0 && renderFilterBar()}
       <PullToRefresh onRefresh={refetch}>
         <ScrollableList
-          emptyMessage={emptyMessage}
+          emptyMessageText={emptyMessage}
           listClassName={clsx('max-w-full', {
             '!mt-4': reactions.length > 0,
           })}

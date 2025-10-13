@@ -22,7 +22,7 @@ const FollowedTagsPage = () => {
     <Column label={intl.formatMessage(messages.heading)}>
       <ScrollableList
         scrollKey='followedTags'
-        emptyMessage={emptyMessage}
+        emptyMessageText={emptyMessage}
         isLoading={isLoading}
         hasMore={hasNextPage}
         onLoadMore={fetchNextPage}

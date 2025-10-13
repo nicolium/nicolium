@@ -244,7 +244,7 @@ const InteractionRequestsPage = () => {
           isLoading={isFetching}
           showLoading={isLoading}
           hasMore={hasNextPage}
-          emptyMessage={emptyMessage}
+          emptyMessageText={emptyMessage}
           onLoadMore={() => fetchNextPage()}
           listClassName={clsx('divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800', {
             'animate-pulse': data?.length === 0,

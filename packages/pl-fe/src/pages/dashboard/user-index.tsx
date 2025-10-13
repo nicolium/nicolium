@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useSearchParams } from 'react-router-dom-v5-compat';
 
 import ScrollableList from 'pl-fe/components/scrollable-list';
@@ -11,8 +11,6 @@ import { SearchInput } from '../search/search';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.users', defaultMessage: 'Users' },
-  empty: { id: 'admin.user_index.empty', defaultMessage: 'No users found.' },
-  searchPlaceholder: { id: 'admin.user_index.search_input_placeholder', defaultMessage: 'Who are you looking for?' },
 });
 
 
@@ -37,7 +35,7 @@ const UserIndexPage: React.FC = () => {
         isLoading={isFetching}
         showLoading={isPending}
         onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
-        emptyMessage={intl.formatMessage(messages.empty)}
+        emptyMessageText={<FormattedMessage id='admin.user_index.empty' defaultMessage='No users found.' />}
         itemClassName='pb-4'
       >
         {(accountIds || []).map(id =>

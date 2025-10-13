@@ -40,7 +40,7 @@ const DomainBlocksPage: React.FC = () => {
         scrollKey='domainBlocks'
         onLoadMore={handleLoadMore}
         hasMore={hasNextPage}
-        emptyMessage={emptyMessage}
+        emptyMessageText={emptyMessage}
         listClassName='divide-y divide-gray-200 dark:divide-gray-800'
       >
         {domains.map((domain) =>

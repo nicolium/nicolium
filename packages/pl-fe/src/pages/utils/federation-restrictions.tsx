@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Accordion from 'pl-fe/components/ui/accordion';
@@ -14,8 +14,6 @@ const messages = defineMessages({
   heading: { id: 'column.federation_restrictions', defaultMessage: 'Federation restrictions' },
   boxTitle: { id: 'federation_restrictions.explanation_box.title', defaultMessage: 'Instance-specific policies' },
   boxMessage: { id: 'federation_restrictions.explanation_box.message', defaultMessage: 'Normally servers on the Fediverse can communicate freely. {siteTitle} has imposed restrictions on the following servers.' },
-  emptyMessage: { id: 'federation_restrictions.empty_message', defaultMessage: '{siteTitle} has not restricted any instances.' },
-  notDisclosed: { id: 'federation_restrictions.not_disclosed_message', defaultMessage: '{siteTitle} does not disclose federation restrictions through the API.' },
 });
 
 const FederationRestrictionsPage = () => {
@@ -33,7 +31,9 @@ const FederationRestrictionsPage = () => {
     setExplanationBoxExpanded(setting);
   };
 
-  const emptyMessage = disclosed ? messages.emptyMessage : messages.notDisclosed;
+  const emptyMessage = disclosed
+    ? <FormattedMessage id='federation_restrictions.empty_message' defaultMessage='{siteTitle} has not restricted any instances.' values={{ siteTitle: instance.title }} />
+    : <FormattedMessage id='federation_restrictions.not_disclosed_message' defaultMessage='{siteTitle} does not disclose federation restrictions through the API.' values={{ siteTitle: instance.title }} />;
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -46,7 +46,7 @@ const FederationRestrictionsPage = () => {
       </Accordion>
 
       <div className='pt-4'>
-        <ScrollableList emptyMessage={intl.formatMessage(emptyMessage, { siteTitle: instance.title })}>
+        <ScrollableList emptyMessageText={emptyMessage}>
           {hosts.map((host) => <RestrictedInstance key={host} host={host} />)}
         </ScrollableList>
       </div>

@@ -69,7 +69,7 @@ const HashtagTimelinePage: React.FC<IHashtagTimelinePage> = ({ params }) => {
         scrollKey='hashtag_timeline'
         timelineId={`hashtag:${tagId}`}
         onLoadMore={handleLoadMore}
-        emptyMessage={<FormattedMessage id='empty_column.hashtag' defaultMessage='There is nothing in this hashtag yet.' />}
+        emptyMessageText={<FormattedMessage id='empty_column.hashtag' defaultMessage='There is nothing in this hashtag yet.' />}
       />
     </Column>
   );

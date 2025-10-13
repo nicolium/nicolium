@@ -84,8 +84,7 @@ const GroupBlockedMembers: React.FC<IGroupBlockedMembers> = ({ params }) => {
     <Column label={intl.formatMessage(messages.heading)} backHref={`/groups/${group.id}/manage`}>
       <ScrollableList
         scrollKey={`groupBlockedMembers:${groupId}`}
-        emptyMessage={emptyMessage}
-        emptyMessageCard={false}
+        emptyMessageText={emptyMessage}
       >
         {accountIds.map((accountId) =>
           <BlockedMember key={accountId} accountId={accountId} groupId={groupId} />,

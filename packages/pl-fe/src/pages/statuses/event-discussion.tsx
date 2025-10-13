@@ -141,7 +141,7 @@ const EventDiscussionPage: React.FC<IEventDiscussion> = ({ params: { statusId: s
           id='thread'
           placeholderComponent={() => <PlaceholderStatus variant='slim' />}
           initialTopMostItemIndex={0}
-          emptyMessage={<FormattedMessage id='event.discussion.empty' defaultMessage='No one has commented this event yet. When someone does, they will appear here.' />}
+          emptyMessageText={<FormattedMessage id='event.discussion.empty' defaultMessage='No one has commented this event yet. When someone does, they will appear here.' />}
         >
           {children}
         </ScrollableList>

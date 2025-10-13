@@ -37,7 +37,7 @@ const QuotesPage: React.FC = () => {
           hasMore={hasNextPage}
           isLoading={typeof isLoading === 'boolean' ? isLoading : true}
           onLoadMore={handleLoadMore}
-          emptyMessage={emptyMessage}
+          emptyMessageText={emptyMessage}
         />
       </PullToRefresh>
     </Column>

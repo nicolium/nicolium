@@ -132,7 +132,7 @@ const AdminDomainsPage: React.FC = () => {
         {domains && (
           <ScrollableList
             scrollKey='domains'
-            emptyMessage={emptyMessage}
+            emptyMessageText={emptyMessage}
             itemClassName='py-3 first:pt-0 last:pb-0'
             isLoading={isFetching}
             showLoading={isFetching && !domains?.length}

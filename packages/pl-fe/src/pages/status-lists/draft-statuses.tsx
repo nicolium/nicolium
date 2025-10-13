@@ -21,7 +21,7 @@ const DraftStatusesPage = () => {
     <Column label={intl.formatMessage(messages.heading)}>
       <ScrollableList
         scrollKey='draftStatuses'
-        emptyMessage={emptyMessage}
+        emptyMessageText={emptyMessage}
         listClassName='divide-y divide-solid divide-gray-200 dark:divide-gray-800'
       >
         {drafts.toReversed().map((draft) => <DraftStatus key={draft.draft_id} draftStatus={draft} />)}

@@ -31,10 +31,9 @@ const MutesPage: React.FC = () => {
           isLoading={isFetching}
           onLoadMore={fetchNextPage}
           hasMore={hasNextPage}
-          emptyMessage={
+          emptyMessageText={
             <FormattedMessage id='empty_column.mutes' defaultMessage="You haven't muted any users yet." />
           }
-          emptyMessageCard={false}
         >
           {data.map((accountId) =>
             <AccountContainer key={accountId} id={accountId} actionType='muting' />,

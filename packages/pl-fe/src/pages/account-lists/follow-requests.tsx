@@ -82,7 +82,7 @@ const FollowRequestsPage: React.FC = () => {
       hasMore={hasNextPage}
       isLoading={typeof isLoading === 'boolean' ? isLoading : true}
       onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
-      emptyMessage={<FormattedMessage id='empty_column.follow_requests' defaultMessage="You don't have any follow requests yet. When you receive one, it will show up here." />}
+      emptyMessageText={<FormattedMessage id='empty_column.follow_requests' defaultMessage="You don't have any follow requests yet. When you receive one, it will show up here." />}
     >
       {accountIds.map(id =>
         <AccountAuthorize key={id} id={id} />,

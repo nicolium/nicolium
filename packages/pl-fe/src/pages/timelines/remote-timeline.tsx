@@ -68,13 +68,14 @@ const RemoteTimelinePage: React.FC<IRemoteTimelinePage> = ({ params }) => {
         scrollKey={`${timelineId}_${instance}_timeline`}
         timelineId={`${timelineId}${onlyMedia ? ':media' : ''}:${instance}`}
         onLoadMore={handleLoadMore}
-        emptyMessage={
+        emptyMessageText={
           <FormattedMessage
             id='empty_column.remote'
             defaultMessage='There is nothing here! Manually follow users from {instance} to fill it up.'
             values={{ instance }}
           />
         }
+        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
       />
     </Column>
   );

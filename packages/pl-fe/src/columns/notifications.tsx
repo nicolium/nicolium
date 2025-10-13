@@ -249,7 +249,7 @@ const NotificationsColumn = () => {
       isLoading={isLoading}
       showLoading={isLoading && displayedNotifications.length === 0}
       hasMore={hasMore}
-      emptyMessage={emptyMessage}
+      emptyMessageText={emptyMessage}
       placeholderComponent={PlaceholderNotification}
       placeholderCount={20}
       onLoadMore={handleLoadOlder}

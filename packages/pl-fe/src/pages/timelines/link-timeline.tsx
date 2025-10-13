@@ -40,7 +40,8 @@ const LinkTimelinePage: React.FC<ILinkTimelinePage> = ({ params }) => {
         scrollKey='link_timeline'
         timelineId={`link:${url}`}
         onLoadMore={handleLoadMore}
-        emptyMessage={<FormattedMessage id='empty_column.link_timeline' defaultMessage='There are no posts with this link yet.' />}
+        emptyMessageText={<FormattedMessage id='empty_column.link_timeline' defaultMessage='There are no posts with this link yet.' />}
+        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
       />
     </Column>
   );

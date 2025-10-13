@@ -58,7 +58,7 @@ const FavouritedStatusesPage: React.FC<IFavourites> = ({ params }) => {
         hasMore={hasNextPage}
         isLoading={isFetching}
         onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
-        emptyMessage={emptyMessage}
+        emptyMessageText={emptyMessage}
       />
     </Column>
   );

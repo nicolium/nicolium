@@ -102,7 +102,8 @@ const CircleTimelinePage: React.FC = () => {
         scrollKey='circle_timeline'
         timelineId={`circle:${id}`}
         onLoadMore={handleLoadMore}
-        emptyMessage={emptyMessage}
+        emptyMessageText={emptyMessage}
+        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
       />
     </Column>
   );

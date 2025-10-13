@@ -1,18 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import { useAdminAccounts } from 'pl-fe/queries/admin/use-accounts';
 
 import UnapprovedAccount from '../components/unapproved-account';
 
-const messages = defineMessages({
-  heading: { id: 'column.admin.awaiting_approval', defaultMessage: 'Awaiting Approval' },
-  emptyMessage: { id: 'admin.awaiting_approval.empty_message', defaultMessage: 'There is nobody waiting for approval. When a new user signs up, you can review them here.' },
-});
-
 const AwaitingApproval: React.FC = () => {
-  const intl = useIntl();
   const { data, isPending, isFetching } = useAdminAccounts({
     origin: 'local',
     status: 'pending',
@@ -29,7 +23,7 @@ const AwaitingApproval: React.FC = () => {
       scrollKey='awaitingApproval'
       isLoading={isFetching}
       showLoading={isPending}
-      emptyMessage={intl.formatMessage(messages.emptyMessage)}
+      emptyMessageText={<FormattedMessage id='admin.awaiting_approval.empty_message' defaultMessage='There is nobody waiting for approval. When a new user signs up, you can review them here.' />}
       listClassName='divide-y divide-solid divide-gray-200 dark:divide-gray-800'
     >
       {accountIds.map(id => (

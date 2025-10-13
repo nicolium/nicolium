@@ -9,9 +9,7 @@ import { useGroup } from 'pl-fe/api/hooks/groups/use-group';
 import { useGroupStream } from 'pl-fe/api/hooks/streaming/use-group-stream';
 import Avatar from 'pl-fe/components/ui/avatar';
 import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
 import Timeline from 'pl-fe/features/ui/components/timeline';
 import { ComposeForm } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
@@ -95,21 +93,8 @@ const GroupTimelinePage: React.FC<IGroupTimelinePage> = (props) => {
         scrollKey='group_timeline'
         timelineId={composeId}
         onLoadMore={handleLoadMore}
-        emptyMessage={
-          <Stack space={4} className='py-6' justifyContent='center' alignItems='center'>
-            <div className='rounded-full bg-gray-200 p-4 dark:bg-gray-800'>
-              <Icon
-                src={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
-                className='size-6 text-gray-600'
-              />
-            </div>
-
-            <Text theme='muted'>
-              <FormattedMessage id='empty_column.group' defaultMessage='There are no posts in this group yet.' />
-            </Text>
-          </Stack>
-        }
-        emptyMessageCard={false}
+        emptyMessageText={<FormattedMessage id='empty_column.group' defaultMessage='There are no posts in this group yet.' />}
+        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
         showGroup={false}
         featuredStatusIds={featuredStatusIds}
       />
