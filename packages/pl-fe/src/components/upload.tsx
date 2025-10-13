@@ -1,3 +1,5 @@
+import editIcon from '@phosphor-icons/core/regular/pencil-simple.svg';
+import xIcon from '@phosphor-icons/core/regular/x.svg';
 import bookIcon from '@tabler/icons/outline/book.svg';
 import fileCodeIcon from '@tabler/icons/outline/file-code.svg';
 import fileSpreadsheetIcon from '@tabler/icons/outline/file-spreadsheet.svg';
@@ -5,11 +7,9 @@ import fileTextIcon from '@tabler/icons/outline/file-text.svg';
 import fileZipIcon from '@tabler/icons/outline/file-zip.svg';
 import audioIcon from '@tabler/icons/outline/music.svg';
 import defaultIcon from '@tabler/icons/outline/paperclip.svg';
-import editIcon from '@phosphor-icons/core/regular/pencil-simple.svg';
 import imageIcon from '@tabler/icons/outline/photo.svg';
 import presentationIcon from '@tabler/icons/outline/presentation.svg';
 import videoIcon from '@tabler/icons/outline/video.svg';
-import xIcon from '@phosphor-icons/core/regular/x.svg';
 import zoomInIcon from '@tabler/icons/outline/zoom-in.svg';
 import clsx from 'clsx';
 import React from 'react';
