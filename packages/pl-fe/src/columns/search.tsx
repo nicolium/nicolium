@@ -60,8 +60,7 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
   const handleLoadMore = () => activeQuery.fetchNextPage({ cancelRefetch: false });
 
   let searchResults;
-  const hasMore = activeQuery.hasNextPage;
-  const isLoading = activeQuery.isFetching;
+  const { hasNextPage: hasMore, isFetching, isLoading } = activeQuery;
   let placeholderComponent = PlaceholderStatus;
   let resultsIds: Array<string>;
 
@@ -72,7 +71,7 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
       if (searchAccountsQuery.data && searchAccountsQuery.data.length > 0) {
         resultsIds = searchAccountsQuery.data;
         searchResults = searchAccountsQuery.data.map(accountId => <AccountContainer key={accountId} id={accountId} />);
-      } else if (!isLoading) {
+      } else if (!isFetching) {
         return (
           <div className='empty-column-indicator'>
             <FormattedMessage
@@ -91,7 +90,7 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
       if (searchStatusesQuery.data && searchStatusesQuery.data.length > 0) {
         resultsIds = searchStatusesQuery.data;
         searchResults = searchStatusesQuery.data.map(statusId => <StatusContainer key={statusId} id={statusId} onMoveUp={handleMoveUp} onMoveDown={handleMoveDown} />);
-      } else if (!isLoading) {
+      } else if (!isFetching) {
         return (
           <div className='empty-column-indicator'>
             <FormattedMessage
@@ -110,7 +109,7 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
       if (searchHashtagsQuery.data && searchHashtagsQuery.data.length > 0) {
         resultsIds = searchHashtagsQuery.data.map(hashtag => hashtag.name);
         searchResults = searchHashtagsQuery.data.map(hashtag => <Hashtag key={hashtag.name} hashtag={hashtag} />);
-      } else if (!isLoading) {
+      } else if (!isFetching) {
         return (
           <div className='empty-column-indicator'>
             <FormattedMessage
@@ -131,7 +130,7 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
       ref={node}
       id='search-results'
       key={type}
-      isLoading={!!query && isLoading}
+      isLoading={!!query && isFetching}
       showLoading={isLoading}
       hasMore={hasMore}
       onLoadMore={handleLoadMore}
