@@ -1,9 +1,8 @@
 import clsx from 'clsx';
 import React, { MutableRefObject, useEffect, useState } from 'react';
 
-import { createShoutboxMessage } from 'pl-fe/actions/shoutbox';
 import Stack from 'pl-fe/components/ui/stack';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useCreateShoutboxMessage } from 'pl-fe/stores/shoutbox';
 
 import { clearNativeInputValue } from './chat';
 import ShoutboxComposer from './shoutbox-composer';
@@ -17,16 +16,16 @@ interface ChatInterface {
 }
 
 const Shoutbox: React.FC<ChatInterface> = ({ inputRef, className }) => {
-  const dispatch = useAppDispatch();
-
   const [content, setContent] = useState<string>('');
   const [resetContentKey, setResetContentKey] = useState<number>(fileKeyGen());
   const [errorMessage] = useState<string>();
 
+  const { mutate: createShoutboxMessage } = useCreateShoutboxMessage();
+
   const isSubmitDisabled = content.length === 0;
 
   const submitMessage = () => {
-    dispatch(createShoutboxMessage(content));
+    createShoutboxMessage?.(content);
 
     clearState();
   };
@@ -81,6 +80,7 @@ const Shoutbox: React.FC<ChatInterface> = ({ inputRef, className }) => {
         onSubmit={sendMessage}
         errorMessage={errorMessage}
         resetContentKey={resetContentKey}
+        disabled={!createShoutboxMessage}
       />
     </Stack>
   );

@@ -6,8 +6,8 @@ import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Stack from 'pl-fe/components/ui/stack';
 import PlaceholderChat from 'pl-fe/features/placeholder/components/placeholder-chat';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useChats } from 'pl-fe/queries/chats';
+import { useShoutboxStore } from 'pl-fe/stores/shoutbox';
 
 import ChatListItem from './chat-list-item';
 import ChatListShoutbox from './chat-list-shoutbox';
@@ -20,7 +20,8 @@ interface IChatList {
 }
 
 const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false }) => {
-  const showShoutbox = useAppSelector((state) => !state.shoutbox.isLoading);
+  const showShoutbox = !useShoutboxStore().isLoading;
+
   const { chatsQuery: { data: chats, isFetching, hasNextPage, fetchNextPage, refetch } } = useChats();
 
   const allChats: Array<Chat | 'shoutbox'> | undefined = showShoutbox ? ['shoutbox', ...(chats || [])] : chats;

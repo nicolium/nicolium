@@ -19,7 +19,6 @@ import pending_statuses from './pending-statuses';
 import plfe from './pl-fe';
 import polls from './polls';
 import push_notifications from './push-notifications';
-import shoutbox from './shoutbox';
 import statuses from './statuses';
 import timelines from './timelines';
 
@@ -40,7 +39,6 @@ const reducers = {
   plfe,
   polls,
   push_notifications,
-  shoutbox,
   statuses,
   timelines,
 };

@@ -1,8 +1,6 @@
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
-import { MuteModalProps } from 'pl-fe/modals/mute-modal';
-
 import type { ICryptoAddress } from 'pl-fe/features/crypto-donate/components/crypto-address';
 import type { ModalType } from 'pl-fe/features/ui/components/modal-root';
 import type { AltTextModalProps } from 'pl-fe/modals/alt-text-modal';
@@ -31,6 +29,7 @@ import type { ListEditorModalProps } from 'pl-fe/modals/list-editor-modal';
 import type { MediaModalProps } from 'pl-fe/modals/media-modal';
 import type { MentionsModalProps } from 'pl-fe/modals/mentions-modal';
 import type { MissingDescriptionModalProps } from 'pl-fe/modals/missing-description-modal';
+import type { MuteModalProps } from 'pl-fe/modals/mute-modal';
 import type { ReactionsModalProps } from 'pl-fe/modals/reactions-modal';
 import type { ReblogsModalProps } from 'pl-fe/modals/reblogs-modal';
 import type { ReplyMentionsModalProps } from 'pl-fe/modals/reply-mentions-modal';

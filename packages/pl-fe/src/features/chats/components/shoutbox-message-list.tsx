@@ -13,10 +13,11 @@ import Text from 'pl-fe/components/ui/text';
 import Emojify from 'pl-fe/features/emoji/emojify';
 import PlaceholderChatMessage from 'pl-fe/features/placeholder/components/placeholder-chat-message';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useShoutboxStore, type ShoutMessage } from 'pl-fe/stores/shoutbox';
 
 import { ChatMessageListList, ChatMessageListScroller } from './chat-message-list';
 
-import type { ShoutMessage } from 'pl-fe/reducers/shoutbox';
+import type {  } from 'pl-fe/reducers/shoutbox';
 
 const START_INDEX = 10000;
 
@@ -99,7 +100,7 @@ const ShoutboxMessageList: React.FC = () => {
   const [firstItemIndex, setFirstItemIndex] = useState(START_INDEX - 20);
 
   const me = useAppSelector(state => state.me);
-  const { isLoading, messages: shoutboxMessages } = useAppSelector(state => state.shoutbox);
+  const { messages: shoutboxMessages = [], isLoading } = useShoutboxStore();
 
   const lastShoutboxMessage = shoutboxMessages?.at(-1) || null;
 
