@@ -17,8 +17,6 @@ import { useShoutboxStore, type ShoutMessage } from 'pl-fe/stores/shoutbox';
 
 import { ChatMessageListList, ChatMessageListScroller } from './chat-message-list';
 
-import type {  } from 'pl-fe/reducers/shoutbox';
-
 const START_INDEX = 10000;
 
 interface IShoutboxMessage {
