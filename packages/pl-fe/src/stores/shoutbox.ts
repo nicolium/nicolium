@@ -3,7 +3,7 @@ import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
 import { useClient } from 'pl-fe/hooks/use-client';
-import { useInstance } from 'pl-fe/hooks/use-instance';
+import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 
 import type { PlApiClient, ShoutMessage as BaseShoutMessage } from 'pl-api';
@@ -21,18 +21,22 @@ type State = {
   isLoading: boolean;
   setMessages: (messages: Array<BaseShoutMessage>) => void;
   pushMessage: (message: BaseShoutMessage) => void;
+  setSocket: (socket: State['socket']) => void;
 };
 
 const useShoutboxStore = create<State>()(mutative((set) => ({
   socket: null,
   messages: [],
   isLoading: true,
-  setMessages: (messages: Array<BaseShoutMessage>) => set((state: State) => {
+  setMessages: (messages) => set((state: State) => {
     state.messages = messages.map(minifyMessage);
     state.isLoading = false;
   }),
-  pushMessage: (message: BaseShoutMessage) => set((state: State) => {
+  pushMessage: (message) => set((state: State) => {
     state.messages.push(minifyMessage(message));
+  }),
+  setSocket: (socket) => set((state: State) => {
+    state.socket = socket;
   }),
 }), {
   enableAutoFreeze: false,
@@ -40,12 +44,12 @@ const useShoutboxStore = create<State>()(mutative((set) => ({
 
 const useShoutboxSubscription = () => {
   const client = useClient();
-  const instance = useInstance();
+  const { shoutbox: shoutboxAvailable } = useFeatures();
   const { isLoggedIn } = useLoggedIn();
   const shoutboxStore = useShoutboxStore();
 
   useEffect(() => {
-    if (!(instance.fetched && isLoggedIn)) return;
+    if (!(shoutboxAvailable && isLoggedIn)) return;
 
     let socket: ReturnType<(InstanceType<typeof PlApiClient>)['shoutbox']['connect']>;
 
@@ -55,13 +59,15 @@ const useShoutboxSubscription = () => {
           onMessage: (message) => shoutboxStore.pushMessage(message),
           onMessages: (messages) => shoutboxStore.setMessages(messages),
         });
+        shoutboxStore.setSocket(socket);
       }
     }).catch(() => {});
 
     return () => {
       socket?.close();
+      shoutboxStore.setSocket(null);
     };
-  }, [instance.fetched && isLoggedIn]);
+  }, [shoutboxAvailable && isLoggedIn]);
 };
 
 const useCreateShoutboxMessage = () => {
