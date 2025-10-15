@@ -1696,6 +1696,7 @@ const getFeatures = (instance: Instance) => {
      */
     sessions: any([
       v.software === AKKOMA,
+      v.software === ICESHRIMP_NET,
       v.software === PLEROMA,
       v.software === GOTOSOCIAL && gte(v.version, '0.18.2'),
     ]),
