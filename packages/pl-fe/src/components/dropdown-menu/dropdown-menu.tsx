@@ -1,4 +1,4 @@
-import { offset, Placement, useFloating, flip, arrow, shift, autoUpdate } from '@floating-ui/react';
+import { arrow, autoUpdate, flip, offset, Placement, shift, size, useFloating } from '@floating-ui/react';
 import clsx from 'clsx';
 import { supportsPassiveEvents } from 'detect-passive-events';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -151,7 +151,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
   );
 
   return (
-    <div ref={ref}>
+    <div className='max-h-full overflow-auto' ref={ref}>
       {items?.some(item => item?.items?.length) ? (
         <ReactSwipeableViews animateHeight index={tab === undefined ? 0 : 1} style={{ width }}>
           <div className={clsx('max-w-full', { 'w-full': touchscreen })} style={{ width }}>
@@ -220,6 +220,11 @@ const DropdownMenu = (props: IDropdownMenu) => {
       }),
       arrow({
         element: arrowRef,
+      }),
+      size({
+        apply: ({ availableHeight, elements }) => {
+          elements.floating.style.maxHeight = `${Math.max(50, availableHeight - 12)}px`;
+        },
       }),
     ],
     whileElementsMounted: autoUpdate,
@@ -378,7 +383,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
           <div
             data-testid='dropdown-menu'
             ref={refs.setFloating}
-            className='z-[1001] block'
+            className='z-[1001] flex'
             style={{
               position: strategy,
               top: y ?? 0,
