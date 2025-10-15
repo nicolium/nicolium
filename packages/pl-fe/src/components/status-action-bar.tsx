@@ -983,7 +983,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: intl.formatMessage(messages.direct, { name: username }),
           action: handleDirectClick,
-          icon: require('@phosphor-icons/core/regular/at.svg'),
+          icon: require('@phosphor-icons/core/regular/chat-circle.svg'),
         });
       }
 

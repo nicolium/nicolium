@@ -327,7 +327,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         menu.push({
           text: intl.formatMessage(messages.direct, { name: username }),
           action: handleDirectClick,
-          icon: require('@phosphor-icons/core/regular/envelope-simple.svg'),
+          icon: require('@phosphor-icons/core/regular/chat-circle.svg'),
         });
       }
 
