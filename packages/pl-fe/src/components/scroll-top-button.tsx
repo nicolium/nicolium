@@ -4,7 +4,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useIntl, MessageDescriptor } from 'react-intl';
 
 import Icon from 'pl-fe/components/ui/icon';
-import Text from 'pl-fe/components/ui/text';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 
 interface IScrollTopButton {
@@ -81,26 +80,15 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
 
   return (
     <div
-      className={clsx(
-        'fixed left-1/2 z-50 -translate-x-1/2 transition-all', {
-          'top-2 opacity-100': visible,
-          '-top-4 opacity-0': !visible,
-        })}
+      className={clsx('⁂-scroll-top-button', { '⁂-scroll-top-button--visible': visible })}
       aria-hidden={!visible}
     >
-      <button
-        className='flex cursor-pointer items-center space-x-1.5 whitespace-nowrap rounded-full bg-primary-600/80 px-4 py-2 text-white backdrop-blur-md transition-transform hover:scale-105 hover:bg-primary-700/80 active:scale-100'
-        onClick={handleClick}
-        tabIndex={visible ? 0 : -1}
-      >
-        <Icon
-          className='size-4'
-          src={require('@phosphor-icons/core/regular/arrow-line-up.svg')}
-        />
+      <button onClick={handleClick} tabIndex={visible ? 0 : -1}>
+        <Icon src={require('@phosphor-icons/core/regular/arrow-line-up.svg')} />
 
-        <Text theme='inherit' size='sm'>
+        <p>
           {intl.formatMessage(message, { count })}
-        </Text>
+        </p>
       </button>
     </div>
   );

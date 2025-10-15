@@ -51,6 +51,7 @@ const AutosuggestInput: React.FC<IAutosuggestInput> = ({
   const [tokenStart, setTokenStart] = useState<number | null>(0);
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const suggestionsRef = useRef<HTMLUListElement>(null);
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const [tokenStart, token] = textAtCursorMatchesToken(
@@ -110,7 +111,7 @@ const AutosuggestInput: React.FC<IAutosuggestInput> = ({
       case 'ArrowUp':
         if (!suggestionsHidden && (suggestions.length > 0 || menu)) {
           e.preventDefault();
-          setSelectedSuggestion((selectedSuggestion) => Math.min(selectedSuggestion - 1, lastIndex));
+          setSelectedSuggestion((selectedSuggestion) => Math.max(selectedSuggestion - 1, 0));
         }
 
         break;
@@ -184,9 +185,8 @@ const AutosuggestInput: React.FC<IAutosuggestInput> = ({
         key={key}
         data-index={i}
         className={clsx({
-          'px-4 py-2.5 text-sm text-gray-700 dark:text-gray-500 focus:bg-gray-100 dark:focus:bg-primary-800 group': true,
-          'hover:bg-gray-100 dark:hover:bg-gray-800': i !== selectedSuggestion,
-          'bg-gray-100 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800': i === selectedSuggestion,
+          '⁂-autosuggest-suggestions__item': true,
+          '⁂-autosuggest-suggestions__item--selected': i === selectedSuggestion,
         })}
         onMouseDown={onSuggestionClick}
         onTouchEnd={onSuggestionClick}
@@ -209,7 +209,7 @@ const AutosuggestInput: React.FC<IAutosuggestInput> = ({
   };
 
   const renderMenu = () => {
-    const { menu, suggestions } = props;
+    const { menu } = props;
 
     if (!menu) {
       return null;
@@ -217,9 +217,7 @@ const AutosuggestInput: React.FC<IAutosuggestInput> = ({
 
     return menu.map((item, i) => (
       <a
-        className={clsx('flex cursor-pointer items-center space-x-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 dark:text-gray-500 dark:hover:bg-gray-800 dark:focus:bg-primary-800', {
-          selected: suggestions.length - selectedSuggestion === i,
-        })}
+        className={'⁂-autosuggest-suggestions__menu-item'}
         href='#'
         role='button'
         tabIndex={0}
@@ -277,14 +275,13 @@ const AutosuggestInput: React.FC<IAutosuggestInput> = ({
       <div
         style={setPortalPosition()}
         className={clsx({
-          'fixed w-full z-[1001] shadow bg-white dark:bg-gray-900 rounded-lg py-1 dark:ring-2 dark:ring-primary-700 focus:outline-none': true,
-          hidden: !visible,
-          block: visible,
+          '⁂-autosuggest-suggestions': true,
+          '⁂-autosuggest-suggestions--visible': visible,
         })}
       >
-        <div className='space-y-0.5'>
+        <ul className='⁂-autosuggest-suggestions__items' ref={suggestionsRef}>
           {props.suggestions.map(renderSuggestion)}
-        </div>
+        </ul>
 
         {renderMenu()}
       </div>

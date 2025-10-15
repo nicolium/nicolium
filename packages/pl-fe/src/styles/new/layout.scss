@@ -272,3 +272,15 @@ body {
   min-height: 100vh;
   flex-direction: column;
 }
+
+.⁂-background-shapes {
+  @apply fixed pointer-events-none inset-x-0 top-0 flex justify-center overflow-hidden black:hidden;
+
+  &--preview {
+    @apply absolute;
+  }
+
+  > div {
+    @apply bg-gradient-sm lg:bg-gradient-light lg:dark:bg-gradient-dark h-screen w-screen;
+  }
+}

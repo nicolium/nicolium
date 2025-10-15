@@ -37,7 +37,7 @@ const SitePreview: React.FC<ISitePreview> = ({ plFe }) => {
   return (
     <div className={bodyClass}>
       <InlineStyle>{`.site-preview {${themeCss}}`}</InlineStyle>
-      <BackgroundShapes position='absolute' hidden={userTheme === 'black'} />
+      <BackgroundShapes preview hidden={userTheme === 'black'} />
 
       <div className='absolute z-[2] self-center overflow-hidden rounded-lg bg-accent-500 p-2 text-white'>
         <FormattedMessage id='site_preview.preview' defaultMessage='Preview' />

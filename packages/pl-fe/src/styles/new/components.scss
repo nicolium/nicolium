@@ -172,6 +172,62 @@ a.⁂-list-item,
   overflow: hidden;
 }
 
+.⁂-scroll-top-button {
+  @apply fixed left-1/2 z-50 -translate-x-1/2 transition-all -top-4 opacity-0;
+
+  &--visible {
+    @apply top-2 opacity-100;
+  }
+
+  button {
+    @apply flex cursor-pointer items-center space-x-1.5 whitespace-nowrap rounded-full bg-primary-600/80 px-4 py-2 text-white backdrop-blur-md transition-transform hover:scale-105 hover:bg-primary-700/80 active:scale-100;
+  
+    .⁂-icon svg {
+      @apply size-4;
+    }
+
+    p {
+      @include mixins.text($theme: inherit, $size: sm);
+    }
+  }
+}
+
+.⁂-dropdown-menu {
+  @apply z-[1001] flex;
+
+  > div {
+    @apply z-[1001] bg-white py-1 shadow-lg ease-in-out focus:outline-none black:bg-black no-reduce-motion:transition-all dark:bg-gray-900 dark:ring-2 dark:ring-primary-700 rounded-md min-w-56 max-w-sm duration-100;
+  }
+
+  &__arrow {
+    @apply pointer-events-none absolute z-[-1] size-3 bg-white black:bg-black dark:bg-gray-900;
+  }
+}
+
+.⁂-autosuggest-suggestions {
+  @apply fixed w-full z-[1001] shadow bg-white dark:bg-gray-900 rounded-lg py-1 dark:ring-2 dark:ring-primary-700 focus:outline-none hidden;
+
+  &--visible, &:focus-within {
+    @apply block;
+  }
+
+  &__items {
+    @apply space-y-0.5;
+  }
+
+  &__item {
+    @apply px-4 py-2.5 text-sm text-gray-700 dark:text-gray-500 focus:bg-gray-100 dark:focus:bg-primary-800 hover:bg-gray-100 dark:hover:bg-gray-800;
+
+    &--selected {
+      @apply bg-gray-100 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800;
+    }
+  }
+
+  &__menu-item {
+    @apply flex cursor-pointer items-center space-x-2 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-100 focus:bg-gray-100 dark:text-gray-500 dark:hover:bg-gray-800 dark:focus:bg-primary-800;
+  }
+}
+
 div[data-viewport-type="window"]:has(.⁂-empty-message) {
   position: initial!important;
 }
