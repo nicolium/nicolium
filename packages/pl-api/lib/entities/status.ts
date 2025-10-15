@@ -121,9 +121,10 @@ const preprocess = (status: any) => {
   } | null = null;
 
   const quotedStatus = status.quote ?? status.pleroma?.quote;
-  const quotedStatusId = quotedStatus?.id ?? status.quote_id ?? status.pleroma?.quote_id;
+  let quotedStatusId = quotedStatus?.id ?? status.quote_id ?? status.pleroma?.quote_id;
   if (quotedStatus?.state) {
     quote = quotedStatus;
+    quotedStatusId = quotedStatus.quoted_status.id;
   } else if (quotedStatus) {
     quote = {
       state: 'accepted',
