@@ -199,7 +199,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   }, [!!account, features, followRequestsCount, interactionRequestsCount, scheduledStatusCount, draftCount]);
 
   return (
-    <div className={clsx('⁂-sidebar-navigation', { '⁂-sidebar-navigation__narrow': shrink })}>
+    <div className={clsx('⁂-sidebar-navigation', { '⁂-sidebar-navigation--narrow': shrink })}>
       <SiteLogo />
 
       {account && (
@@ -233,13 +233,12 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         </Stack>
       )}
 
-      <Stack space={1.5}>
+      <div className='⁂-sidebar-navigation__links'>
         <SidebarNavigationLink
           to='/'
           icon={require('@phosphor-icons/core/regular/house.svg')}
           activeIcon={require('@phosphor-icons/core/fill/house-fill.svg')}
           text={<FormattedMessage id='tabs_bar.home' defaultMessage='Home' />}
-          shrink={shrink}
         />
 
         <SidebarNavigationLink
@@ -247,7 +246,6 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
           icon={require('@phosphor-icons/core/regular/magnifying-glass.svg')}
           activeIcon={require('@phosphor-icons/core/fill/magnifying-glass-fill.svg')}
           text={<FormattedMessage id='tabs_bar.search' defaultMessage='Search' />}
-          shrink={shrink}
         />
 
         {account && (
@@ -258,7 +256,6 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               activeIcon={require('@phosphor-icons/core/fill/bell-simple-fill.svg')}
               count={notificationCount}
               text={<FormattedMessage id='tabs_bar.notifications' defaultMessage='Notifications' />}
-              shrink={shrink}
             />
 
             {features.chats && (
@@ -269,7 +266,6 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                 count={unreadChatsCount}
                 countMax={9}
                 text={<FormattedMessage id='navigation.chats' defaultMessage='Chats' />}
-                shrink={shrink}
               />
             )}
 
@@ -279,7 +275,6 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                 icon={require('@phosphor-icons/core/regular/envelope-simple.svg')}
                 activeIcon={require('@phosphor-icons/core/fill/envelope-simple-fill.svg')}
                 text={<FormattedMessage id='navigation.direct_messages' defaultMessage='Direct messages' />}
-                shrink={shrink}
               />
             )}
 
@@ -289,7 +284,6 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                 icon={require('@phosphor-icons/core/regular/users-three.svg')}
                 activeIcon={require('@phosphor-icons/core/fill/users-three-fill.svg')}
                 text={<FormattedMessage id='tabs_bar.groups' defaultMessage='Groups' />}
-                shrink={shrink}
               />
             )}
 
@@ -298,7 +292,6 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               icon={require('@phosphor-icons/core/regular/user.svg')}
               activeIcon={require('@phosphor-icons/core/fill/user-fill.svg')}
               text={<FormattedMessage id='tabs_bar.profile' defaultMessage='Profile' />}
-              shrink={shrink}
             />
 
             <SidebarNavigationLink
@@ -306,7 +299,6 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               icon={require('@phosphor-icons/core/regular/sliders-horizontal.svg')}
               activeIcon={require('@phosphor-icons/core/fill/sliders-horizontal-fill.svg')}
               text={<FormattedMessage id='tabs_bar.settings' defaultMessage='Settings' />}
-              shrink={shrink}
             />
 
             {(account.is_admin || account.is_moderator) && (
@@ -316,7 +308,6 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                 activeIcon={require('@phosphor-icons/core/fill/gauge-fill.svg')}
                 count={dashboardCount}
                 text={<FormattedMessage id='tabs_bar.dashboard' defaultMessage='Dashboard' />}
-                shrink={shrink}
               />
             )}
           </>
@@ -330,7 +321,6 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                 icon={require('@phosphor-icons/core/regular/wrench.svg')}
                 activeIcon={require('@phosphor-icons/core/fill/wrench-fill.svg')}
                 text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
-                shrink={shrink}
               />
             )}
 
@@ -340,7 +330,6 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                 icon={require('@phosphor-icons/core/regular/planet.svg')}
                 activeIcon={require('@phosphor-icons/core/fill/planet-fill.svg')}
                 text={features.federating ? <FormattedMessage id='tabs_bar.local' defaultMessage='Local' /> : <FormattedMessage id='tabs_bar.all' defaultMessage='All' />}
-                shrink={shrink}
               />
             )}
 
@@ -350,7 +339,6 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                 icon={require('@phosphor-icons/core/regular/graph.svg')}
                 activeIcon={require('@phosphor-icons/core/fill/graph-fill.svg')}
                 text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
-                shrink={shrink}
               />
             )}
 
@@ -360,7 +348,6 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                 icon={require('@phosphor-icons/core/regular/fediverse-logo.svg')}
                 activeIcon={require('@phosphor-icons/core/fill/fediverse-logo-fill.svg')}
                 text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
-                shrink={shrink}
               />
             )}
           </>
@@ -371,7 +358,6 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
             <SidebarNavigationLink
               icon={require('@phosphor-icons/core/regular/dots-three-circle.svg')}
               text={<FormattedMessage id='tabs_bar.more' defaultMessage='More' />}
-              shrink={shrink}
             />
           </DropdownMenu>
         )}
@@ -383,7 +369,6 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               icon={require('@phosphor-icons/core/regular/sign-in.svg')}
               activeIcon={require('@phosphor-icons/core/fill/sign-in-fill.svg')}
               text={<FormattedMessage id='account.login' defaultMessage='Log in' />}
-              shrink={shrink}
             />
 
             {isOpen && <SidebarNavigationLink
@@ -391,11 +376,10 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               icon={require('@phosphor-icons/core/regular/user-plus.svg')}
               activeIcon={require('@phosphor-icons/core/fill/user-plus-fill.svg')}
               text={<FormattedMessage id='account.register' defaultMessage='Sign up' />}
-              shrink={shrink}
             />}
           </Stack>
         )}
-      </Stack>
+      </div>
 
       {account && (
         <ComposeButton shrink={shrink} />
