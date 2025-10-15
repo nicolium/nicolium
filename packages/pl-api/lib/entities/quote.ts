@@ -8,7 +8,7 @@ import { statusSchema } from './status';
  */
 const quoteSchema = v.object({
   state: v.fallback(v.picklist(['pending', 'accepted', 'rejected', 'revoked', 'deleted', 'unauthorized']), 'accepted'),
-  status: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
+  quoted_status: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
 });
 
 /**
@@ -22,7 +22,7 @@ type Quote = v.InferOutput<typeof quoteSchema>;
  */
 const shallowQuoteSchema = v.object({
   state: v.fallback(v.picklist(['pending', 'accepted', 'rejected', 'revoked', 'deleted', 'unauthorized']), 'accepted'),
-  status_id: v.fallback(v.nullable(v.string()), null),
+  quoted_status_id: v.fallback(v.nullable(v.string()), null),
 });
 
 /**
