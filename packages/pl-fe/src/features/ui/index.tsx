@@ -498,7 +498,7 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
 
         {(theme?.backgroundGradient ?? true) && <BackgroundShapes />}
 
-        <div className='⁂-layout'>
+        <div className='⁂-layout__container'>
           <Layout fullWidth={fullWidth}>
             <Layout.Sidebar shrink={fullWidth}>
               {!(standalone && !me) && <SidebarNavigation shrink={fullWidth} />}

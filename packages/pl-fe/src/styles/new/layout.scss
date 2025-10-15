@@ -173,7 +173,7 @@ body {
 
   &__icon {
     @apply relative rounded-lg inline-flex p-2.5 transition-colors duration-200;
-  
+
     svg {
       width: 1.25rem;
       height: 1.25rem;
@@ -269,8 +269,57 @@ body {
 
 .⁂-layout {
   display: flex;
-  min-height: 100vh;
-  flex-direction: column;
+  flex-grow: 1;
+
+  &__content {
+    @apply mx-auto w-full max-w-3xl grow black:pt-0 sm:px-6 sm:pt-4 md:gap-8 md:px-8;
+
+    &--full-width {
+      @apply flex md:max-w-full;
+    }
+
+    &:not(&--full-width) {
+      @apply md:grid md:max-w-7xl md:grid-cols-12 xl:max-w-[1440px];
+    }
+  }
+  
+  &__container {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+  &__sidebar {
+    @apply hidden lg:block;
+
+    &--shrink {
+      @apply w-fit;
+    }
+
+    &:not(&--shrink) {
+      @apply lg:col-span-3;
+    }
+
+    &__content {
+      @apply pb-4;
+    }
+  }
+
+  &__main {
+    @apply md:col-span-12 lg:col-span-9 xl:col-span-6 pb-14 lg:pb-0 xl:pb-16 black:border-gray-800 lg:black:border-l xl:black:border-r;
+
+    &--chats-page {
+      @apply xl:pb-16;
+    }
+  }
+
+  &__aside {
+    @apply hidden xl:col-span-3 xl:block;
+
+    &__content {
+      @apply space-y-6 pb-12;
+    }
+  }
 }
 
 .⁂-background-shapes {

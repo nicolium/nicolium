@@ -25,13 +25,12 @@ interface LayoutComponent extends React.FC<ILayout> {
 
 /** Layout container, to hold Sidebar, Main, and Aside. */
 const Layout: LayoutComponent = ({ children, fullWidth }) => (
-  <div className='relative flex grow flex-col black:pt-0 sm:pt-4'>
+  <div className='⁂-layout'>
     <div
       className={clsx(
-        'mx-auto w-full max-w-3xl grow sm:px-6 md:gap-8 md:px-8',
+        '⁂-layout__content',
         {
-          'flex md:max-w-full': fullWidth,
-          'md:grid md:max-w-7xl md:grid-cols-12 xl:max-w-[1440px]': !fullWidth,
+          '⁂-layout__content--full-width': fullWidth,
         },
       )}
     >
@@ -42,8 +41,8 @@ const Layout: LayoutComponent = ({ children, fullWidth }) => (
 
 /** Left sidebar container in the UI. */
 const Sidebar: React.FC<ISidebar> = ({ children, shrink }) => (
-  <div className={clsx('hidden lg:block', { 'lg:col-span-3': !shrink, 'w-fit': shrink })}>
-    <StickyBox offsetTop={16} className='pb-4'>
+  <div className={clsx('⁂-layout__sidebar', { '⁂-layout__sidebar--shrink': shrink })}>
+    <StickyBox offsetTop={16} className='⁂-layout__sidebar__content'>
       {children}
     </StickyBox>
   </div>
@@ -56,8 +55,8 @@ const Main: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, classN
   return (
     <main
       className={clsx({
-        'md:col-span-12 lg:col-span-9 xl:col-span-6 pb-14 lg:pb-0 xl:pb-16 black:border-gray-800 lg:black:border-l xl:black:border-r': true,
-        'xl:pb-16': features.chats,
+        '⁂-layout__main': true,
+        '⁂-layout__main--chats-page': features.chats,
       }, className)}
     >
       {children}
@@ -67,8 +66,8 @@ const Main: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, classN
 
 /** Right sidebar container in the UI. */
 const Aside: React.FC<IAside> = ({ children }) => (
-  <aside className='hidden xl:col-span-3 xl:block'>
-    <StickyBox offsetTop={16} className='space-y-6 pb-12'>
+  <aside className='⁂-layout__aside'>
+    <StickyBox offsetTop={16} className='⁂-layout__aside__content'>
       <Suspense>
         {children}
       </Suspense>
