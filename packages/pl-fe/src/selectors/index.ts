@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect';
 
-// import { getLocale } from 'pl-fe/actions/settings';
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useSettingsStore } from 'pl-fe/stores/settings';
 import { getDomain } from 'pl-fe/utils/accounts';
@@ -245,8 +244,8 @@ const makeGetOtherAccounts = () => createSelector([
 
 const getSimplePolicy = createSelector([
   (state: RootState) => state.admin.configs,
-  (state: RootState) => state.instance.pleroma.metadata.federation.mrf_simple,
-], (configs, instancePolicy) => ({
+  (state: RootState) => state.instance.pleroma.metadata.federation.mrf_simple_info,
+], (configs, instancePolicy): MRFSimple => ({
   ...instancePolicy,
   ...ConfigDB.toSimplePolicy(configs),
 }));
@@ -265,7 +264,7 @@ const getRemoteInstanceFederation = (state: RootState, host: string): HostFedera
   const simplePolicy = getSimplePolicy(state);
 
   return Object.fromEntries(
-    Object.entries(simplePolicy).map(([key, hosts]) => [key, hosts.includes(host)]),
+    Object.entries(simplePolicy).map(([key, hosts]) => [key, hosts.some(entry => entry[0] === host)]),
   ) as HostFederation;
 };
 

@@ -1,26 +1,33 @@
+import { mrfSimpleSchema, type MRFSimple } from 'pl-fe/schemas/pleroma';
 import ConfigDB from 'pl-fe/utils/config-db';
 
 import { fetchConfig, updateConfig } from './admin';
 
-import type { MRFSimple } from 'pl-fe/schemas/pleroma';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
-const simplePolicyMerge = (simplePolicy: MRFSimple, host: string, restrictions: Record<string, any>) => {
+const simplePolicyMerge = (simplePolicy: Partial<MRFSimple>, host: string, restrictions: Record<string, any>): MRFSimple => {
   const entries = Object.entries(simplePolicy).map(([key, hosts]) => {
     const isRestricted = restrictions[key];
 
-    const set = new Set(hosts);
+    hosts = [...hosts];
 
     if (isRestricted) {
-      set.add(host);
+      if (!hosts.some((tuple) => tuple[0] === host)) {
+        hosts.push([host, '']);
+      }
     } else {
-      set.delete(host);
+      hosts = hosts.filter((tuple) => tuple[0] !== host);
     }
 
-    return [key, [...set]];
+    return [key, hosts];
   });
 
-  return Object.fromEntries(entries);
+  return Object.fromEntries([
+    ...Object.keys(
+      (mrfSimpleSchema as any).wrapped.pipe[2].entries as typeof mrfSimpleSchema.entries,
+    ).map((key) => [key, []]),
+    ...entries,
+  ]);
 };
 
 const updateMrf = (host: string, restrictions: Record<string, any>) =>

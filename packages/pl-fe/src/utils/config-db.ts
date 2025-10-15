@@ -1,7 +1,7 @@
 import trimStart from 'lodash/trimStart';
 import * as v from 'valibot';
 
-import { mrfSimpleSchema } from 'pl-fe/schemas/pleroma';
+import { mrfSimpleSchema, type MRFSimple } from 'pl-fe/schemas/pleroma';
 
 import type { PleromaConfig } from 'pl-api';
 
@@ -16,13 +16,14 @@ const find = (
   config.group === group && config.key === key,
 );
 
-const toSimplePolicy = (configs: PleromaConfig['configs']) => {
+const toSimplePolicy = (configs: PleromaConfig['configs']): Partial<MRFSimple> => {
   const config = find(configs, ':pleroma', ':mrf_simple');
 
   const reducer = (acc: Record<string, any>, curr: Record<string, any>) => {
     const key = curr.tuple?.[0] as string;
     const hosts = curr.tuple?.[1] as Array<string>;
-    return acc[trimStart(key, ':')] = hosts;
+    acc[trimStart(key, ':')] = hosts;
+    return acc;
   };
 
   if (config) {
@@ -30,12 +31,12 @@ const toSimplePolicy = (configs: PleromaConfig['configs']) => {
     const result = value.reduce(reducer, {});
     return v.parse(mrfSimpleSchema, result);
   } else {
-    return v.parse(mrfSimpleSchema, {});
+    return {};
   }
 };
 
 const fromSimplePolicy = (simplePolicy: Policy) => {
-  const mapper = ([key, hosts]: [key: string, hosts: Array<string>]) => ({ tuple: [`:${key}`, hosts] });
+  const mapper = ([key, hosts]: [key: string, hosts: Array<[string, string]>]) => ({ tuple: [`:${key}`, hosts.map(host => ({ tuple: host }))] });
 
   const value = Object.entries(simplePolicy).map(mapper);
 

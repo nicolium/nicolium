@@ -32,9 +32,8 @@ const getConfigValue = (instanceConfig: Array<any>, key: string) => {
 const importConfigs = (state: State, configs: PleromaConfig['configs']) => {
   // FIXME: This is pretty hacked together. Need to make a cleaner map.
   const config = ConfigDB.find(configs, ':pleroma', ':instance');
-  const simplePolicy = ConfigDB.toSimplePolicy(configs);
 
-  if (!config && !simplePolicy) return state;
+  if (!config) return state;
 
   if (config) {
     const value = config.value || [];
@@ -46,10 +45,6 @@ const importConfigs = (state: State, configs: PleromaConfig['configs']) => {
       enabled: registrationsOpen ?? state.registrations.enabled,
       approval_required: approvalRequired ?? state.registrations.approval_required,
     };
-  }
-
-  if (simplePolicy) {
-    state.pleroma.metadata.federation.mrf_simple = simplePolicy;
   }
 };
 

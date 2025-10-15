@@ -188,18 +188,36 @@ const pleromaSchema = coerceObject({
     federation: coerceObject({
       enabled: v.fallback(v.boolean(), true), // Assume true unless explicitly false
       mrf_policies: v.fallback(v.optional(v.array(v.string())), undefined),
-      mrf_simple: coerceObject({
-        accept: v.fallback(v.array(v.string()), []),
-        avatar_removal: v.fallback(v.array(v.string()), []),
-        banner_removal: v.fallback(v.array(v.string()), []),
-        federated_timeline_removal: v.fallback(v.array(v.string()), []),
-        followers_only: v.fallback(v.array(v.string()), []),
-        media_nsfw: v.fallback(v.array(v.string()), []),
-        media_removal: v.fallback(v.array(v.string()), []),
-        reject: v.fallback(v.array(v.string()), []),
-        reject_deletes: v.fallback(v.array(v.string()), []),
-        report_removal: v.fallback(v.array(v.string()), []),
-      }),
+      mrf_simple: coerceObject(v.entriesFromList(
+        [
+          'accept',
+          'avatar_removal',
+          'banner_removal',
+          'federated_timeline_removal',
+          'followers_only',
+          'media_nsfw',
+          'media_removal',
+          'reject',
+          'reject_deletes',
+          'report_removal',
+        ],
+        v.fallback(v.array(v.string()), []),
+      )),
+      mrf_simple_info: coerceObject(v.entriesFromList(
+        [
+          'accept',
+          'avatar_removal',
+          'banner_removal',
+          'federated_timeline_removal',
+          'followers_only',
+          'media_nsfw',
+          'media_removal',
+          'reject',
+          'reject_deletes',
+          'report_removal',
+        ],
+        v.fallback(v.array(v.tuple([v.string(), v.string()])), []),
+      )),
     }),
     fields_limits: coerceObject({
       max_fields: v.fallback(v.pipe(v.number(), v.integer(), v.minValue(0)), 4),

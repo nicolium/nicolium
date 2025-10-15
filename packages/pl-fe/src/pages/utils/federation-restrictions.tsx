@@ -47,7 +47,7 @@ const FederationRestrictionsPage = () => {
 
       <div className='pt-4'>
         <ScrollableList emptyMessageText={emptyMessage}>
-          {hosts.map((host) => <RestrictedInstance key={host} host={host} />)}
+          {hosts.map(([host]) => <RestrictedInstance key={host} host={host} />)}
         </ScrollableList>
       </div>
     </Column>
