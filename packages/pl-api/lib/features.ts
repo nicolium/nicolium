@@ -172,14 +172,6 @@ const GLITCH = 'glitch';
 const HOMETOWN = 'hometown';
 
 /**
- * Pl, fork of Pleroma developed by pl-api author.
- *
- * @category Software
- * @see {@link https://github.com/mkljczk/pl}
- */
-const PL = 'pl';
-
-/**
  * Backend name reserved only for tests.
  *
  * @category Software
@@ -271,7 +263,7 @@ const getFeatures = (instance: Instance) => {
      * @see PATCH /api/v1/accounts/update_credentials
      */
     accountLocation: any([
-      v.software === PLEROMA && v.build === PL,
+      instance.api_versions['account_location.pleroma.pl-api'] >= 1,
     ]),
 
     /**
@@ -531,7 +523,6 @@ const getFeatures = (instance: Instance) => {
      * @see DELETE /api/v1/pleroma/chats/:id
      */
     chatsDelete: any([
-      v.software === PLEROMA && v.build === PL,
       instance.api_versions['chat_delete.pleroma.pl-api'] >= 1,
     ]),
 
@@ -1231,7 +1222,6 @@ const getFeatures = (instance: Instance) => {
       v.software === DITTO,
       v.software === GOTOSOCIAL,
       v.software === MASTODON,
-      v.software === PLEROMA && v.build === PL,
       instance.api_versions['mastodon_admin_api.pleroma.pl-api'] >= 1,
     ]),
 
@@ -1399,7 +1389,7 @@ const getFeatures = (instance: Instance) => {
     outgoingFollowRequests: any([
       v.software === GOTOSOCIAL && gte(v.version, '0.20.0'),
       v.software === ICESHRIMP_NET,
-      v.build === PL && gte(v.version, '2.8.0'),
+      instance.api_versions['outgoing_follow_requests.pleroma.pl-api'] >= 1,
     ]),
 
     pleromaAdminAccounts: any([
@@ -1912,7 +1902,6 @@ export {
   WORDPRESS,
   GLITCH,
   HOMETOWN,
-  PL,
   UNRELEASED,
   type Features,
   type Backend as BackendVersion,
