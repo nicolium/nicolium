@@ -114,7 +114,7 @@ const PollOption: React.FC<IPollOption> = (props): JSX.Element | null => {
 
   if (!poll) return null;
 
-  const pollVotesCount = poll.voters_count || poll.votes_count;
+  const pollVotesCount = (poll.multiple && poll.voters_count) || poll.votes_count;
   const percent = pollVotesCount === 0 ? 0 : (option.votes_count / pollVotesCount) * 100;
   const voted = poll.own_votes?.includes(index);
   const message = intl.formatMessage(messages.votes, { votes: option.votes_count });

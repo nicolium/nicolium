@@ -8,6 +8,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import Tooltip from 'pl-fe/components/ui/tooltip';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useStatusMetaStore } from 'pl-fe/stores/status-meta';
 
 import RelativeTimestamp from '../relative-timestamp';
 
@@ -23,11 +24,14 @@ interface IPollFooter {
   poll: Poll;
   showResults: boolean;
   selected: Selected;
+  statusId: string;
 }
 
-const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected }): JSX.Element => {
+const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, statusId }): JSX.Element => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
+
+  const { toggleShowPollResults } = useStatusMetaStore();
 
   const handleVote = () => dispatch(vote(poll.id, Object.keys(selected) as any as number[]));
 
@@ -45,7 +49,7 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected }): JSX
 
   let votesCount = null;
 
-  if (poll.voters_count !== null && poll.voters_count !== undefined) {
+  if (poll.multiple && poll.voters_count !== null) {
     votesCount = <FormattedMessage id='poll.total_people' defaultMessage='{count, plural, one {# person} other {# people}}' values={{ count: poll.voters_count }} />;
   } else {
     votesCount = <FormattedMessage id='poll.total_votes' defaultMessage='{count, plural, one {# vote} other {# votes}}' values={{ count: poll.votes_count }} />;
@@ -77,6 +81,22 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected }): JSX
             <button className='text-gray-600 underline' onClick={handleRefresh} data-testid='poll-refresh'>
               <Text theme='muted' weight='medium'>
                 <FormattedMessage id='poll.refresh' defaultMessage='Refresh' />
+              </Text>
+            </button>
+
+            <Text theme='muted'>&middot;</Text>
+          </>
+        )}
+
+        {(!poll.voted && !poll.expired) && (
+          <>
+            <button className='text-gray-600 underline' onClick={() => toggleShowPollResults(statusId)} data-testid='poll-refresh'>
+              <Text theme='muted' weight='medium'>
+                {showResults ? (
+                  <FormattedMessage id='poll.hide_results' defaultMessage='Hide results' />
+                ) : (
+                  <FormattedMessage id='poll.show_results' defaultMessage='Show results' />
+                )}
               </Text>
             </button>
 

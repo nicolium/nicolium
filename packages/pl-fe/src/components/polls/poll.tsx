@@ -7,6 +7,7 @@ import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useModalsStore } from 'pl-fe/stores/modals';
+import { useStatusMetaStore } from 'pl-fe/stores/status-meta';
 
 import PollFooter from './poll-footer';
 import PollOption from './poll-option';
@@ -17,7 +18,7 @@ type Selected = Record<number, boolean>;
 
 interface IPoll {
   id: string;
-  status?: Pick<Status, 'url'>;
+  status: Pick<Status, 'id' | 'url'>;
   language?: string;
   truncate?: boolean;
 }
@@ -33,6 +34,10 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): JSX.Element 
 
   const isLoggedIn = useAppSelector((state) => state.me);
   const poll = useAppSelector((state) => state.polls[id]);
+
+  const { statuses: statusesMeta } = useStatusMetaStore();
+
+  const showPollResults = !!statusesMeta[status.id]?.showPollResults;
 
   const [selected, setSelected] = useState({} as Selected);
 
@@ -67,7 +72,7 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): JSX.Element 
 
   if (!poll) return null;
 
-  const showResults = poll.voted || poll.expired;
+  const showResults = poll.voted || poll.expired || !!showPollResults;
 
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
@@ -99,6 +104,7 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): JSX.Element 
           poll={poll}
           showResults={showResults}
           selected={selected}
+          statusId={status.id}
         />
       </Stack>
     </div>

@@ -2,7 +2,13 @@ import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
 type State = {
-  statuses: Record<string, { expanded?: boolean; mediaVisible?: boolean; currentLanguage?: string; targetLanguage?: string }>;
+  statuses: Record<string, {
+    expanded?: boolean;
+    mediaVisible?: boolean;
+    currentLanguage?: string;
+    targetLanguage?: string;
+    showPollResults?: boolean;
+  }>;
   expandStatuses: (statusIds: Array<string>) => void;
   collapseStatuses: (statusIds: Array<string>) => void;
   revealStatusesMedia: (statusIds: Array<string>) => void;
@@ -11,6 +17,7 @@ type State = {
   fetchTranslation: (statusId: string, targetLanguage: string) => void;
   hideTranslation: (statusId: string) => void;
   setStatusLanguage: (statusId: string, language: string) => void;
+  toggleShowPollResults: (statusId: string) => void;
 };
 
 const useStatusMetaStore = create<State>()(mutative((set) => ({
@@ -64,6 +71,11 @@ const useStatusMetaStore = create<State>()(mutative((set) => ({
     if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
     state.statuses[statusId].currentLanguage = language;
+  }),
+  toggleShowPollResults: (statusId) => set((state: State) => {
+    if (!state.statuses[statusId]) state.statuses[statusId] = {};
+
+    state.statuses[statusId].showPollResults = !state.statuses[statusId].showPollResults;
   }),
 })));
 
