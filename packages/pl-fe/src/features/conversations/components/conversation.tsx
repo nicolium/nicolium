@@ -56,6 +56,7 @@ const Conversation: React.FC<IConversation> = ({ conversationId, onMoveUp, onMov
       onMoveUp={handleHotkeyMoveUp}
       onMoveDown={handleHotkeyMoveDown}
       onClick={handleClick}
+      variant='slim'
     />
   );
 };

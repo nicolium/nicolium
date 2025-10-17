@@ -46,6 +46,7 @@ const ConversationsList: React.FC = () => {
       isLoading={isLoading}
       showLoading={isLoading && conversations.length === 0}
       emptyMessageText={<FormattedMessage id='empty_column.direct' defaultMessage="You don't have any direct messages yet. When you send or receive one, it will show up here." />}
+      listClassName='divide-y divide-solid divide-gray-200 dark:divide-gray-800'
     >
       {conversations.map((item: any) => (
         <Conversation
