@@ -93,7 +93,6 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
     ],
     whileElementsMounted: autoUpdate,
   });
-  console.log(x, y, context, refs);
 
   const { styles } = useTransitionStyles(context, {
     initial: {
