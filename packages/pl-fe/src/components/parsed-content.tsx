@@ -181,7 +181,7 @@ function parseContent({
   // Quote posting
   if (hasQuote) selectors.push('quote-inline');
 
-  const hashtags: Array<string> = [];
+  let hashtags: Array<string> = [];
 
   let hasSuspiciousUrl = false;
 
@@ -287,15 +287,26 @@ function parseContent({
         for (const child of domNode.children) {
           switch (child.type) {
             case 'text':
-              if (child.data.trim().length) return;
+              if (child.data.trim().length) {
+                hashtags = [];
+                return;
+              }
               break;
             case 'tag':
-              if (child.name !== 'a') return;
-              if (!child.attribs.class?.split(' ').includes('hashtag')) return;
+              if (child.name !== 'a') {
+                hashtags = [];
+                return;
+              }
+              if (!child.attribs.class?.split(' ').includes('hashtag')) {
+                hashtags = [];
+                return;
+              }
               hashtags.push(normalizeHashtag(nodesToText([child])));
               break;
             default:
+              hashtags = [];
               return;
+
           }
         }
 
