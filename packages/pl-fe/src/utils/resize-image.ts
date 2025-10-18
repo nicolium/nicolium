@@ -157,20 +157,21 @@ const resizeImage = async (
   img: HTMLImageElement,
   inputFile: File,
   maxPixels: number,
+  force = false,
 ) => {
-  const { width, height } = img;
+  let { width, height } = img;
   const type = inputFile.type || 'image/png';
 
-  const newWidth = Math.round(Math.sqrt(maxPixels * (width / height)));
-  const newHeight = Math.round(Math.sqrt(maxPixels * (height / width)));
-
-  if (!hasCanvasExtractPermission) throw new Error();
+  if (!force && width * height <= maxPixels) {
+    width = Math.round(Math.sqrt(maxPixels * (width / height)));
+    height = Math.round(Math.sqrt(maxPixels * (height / width)));
+  }
 
   const orientation = await getOrientation(img, type);
 
   return processImage(img, {
-    width: newWidth,
-    height: newHeight,
+    width,
+    height,
     name: inputFile.name,
     orientation,
     type,
@@ -178,7 +179,9 @@ const resizeImage = async (
 };
 
 /** Resize an image to the maximum number of pixels. */
-const resize = async (inputFile: File, maxPixels = DEFAULT_MAX_PIXELS): Promise<File> => {
+const resize = async (inputFile: File, maxPixels = DEFAULT_MAX_PIXELS, force = false): Promise<File> => {
+  if (!hasCanvasExtractPermission) return inputFile;
+
   if (!inputFile.type.match(/image.*/) || inputFile.type === 'image/gif') {
     return inputFile;
   }
@@ -186,12 +189,12 @@ const resize = async (inputFile: File, maxPixels = DEFAULT_MAX_PIXELS): Promise<
   try {
     const img = await loadImage(inputFile);
 
-    if (img.width * img.height < maxPixels) {
+    if (!force && img.width * img.height <= maxPixels) {
       return inputFile;
     }
 
     try {
-      return await resizeImage(img, inputFile, maxPixels);
+      return await resizeImage(img, inputFile, maxPixels, force);
     } catch (error) {
       console.error(error);
       return (inputFile);
@@ -201,6 +204,4 @@ const resize = async (inputFile: File, maxPixels = DEFAULT_MAX_PIXELS): Promise<
   }
 };
 
-export {
-  resize as default,
-};
+export { resize as default };

@@ -9,6 +9,7 @@ import { getClient } from '../api';
 
 import type { MediaAttachment, UpdateMediaParams, UploadMediaParams } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 
 const messages = defineMessages({
   exceededImageSizeLimit: { id: 'upload_error.image_size_limit', defaultMessage: 'Image exceeds the current file size limit ({limit})' },
@@ -35,9 +36,13 @@ const uploadFile = (
   changeTotal: (value: number) => void = () => {},
 ) => async (dispatch: AppDispatch, getState: () => RootState) => {
   if (!isLoggedIn(getState)) return;
+  const { stripMetadata } = useSettingsStore.getState().settings;
+
   const maxImageSize = getState().instance.configuration.media_attachments.image_size_limit;
   const maxVideoSize = getState().instance.configuration.media_attachments.video_size_limit;
   const maxVideoDuration = getState().instance.configuration.media_attachments.video_duration_limit;
+
+  const imageMatrixLimit = getState().instance.configuration.media_attachments.image_matrix_limit;
 
   const isImage = file.type.match(/image.*/);
   const isVideo = file.type.match(/video.*/);
@@ -63,7 +68,7 @@ const uploadFile = (
   }
 
   // FIXME: Don't define const in loop
-  resizeImage(file).then(resized => {
+  resizeImage(file, imageMatrixLimit, stripMetadata).then(resized => {
     const data = new FormData();
     data.append('file', resized);
     // Account for disparity in size of original image and resized data

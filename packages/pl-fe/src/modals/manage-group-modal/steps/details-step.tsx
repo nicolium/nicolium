@@ -10,6 +10,7 @@ import HeaderPicker from 'pl-fe/features/edit-profile/components/header-picker';
 import { usePreview } from 'pl-fe/hooks/forms/use-preview';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useInstance } from 'pl-fe/hooks/use-instance';
+import { useSettings } from 'pl-fe/hooks/use-settings';
 import resizeImage from 'pl-fe/utils/resize-image';
 
 import type { CreateGroupParams } from 'pl-api';
@@ -28,6 +29,7 @@ interface IDetailsStep {
 const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
   const intl = useIntl();
   const instance = useInstance();
+  const { stripMetadata } = useSettings();
 
   const {
     display_name: displayName = '',
@@ -49,7 +51,7 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
     async (files: FileList | null) => {
       const file = files ? files[0] : undefined;
       if (file) {
-        const resized = await resizeImage(file, maxPixels);
+        const resized = await resizeImage(file, maxPixels, stripMetadata);
         onChange({
           ...params,
           [property]: resized,

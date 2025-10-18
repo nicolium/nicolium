@@ -14,7 +14,7 @@ const checkCanvasExtractPermission = () => {
 
   const { data } = ctx.getImageData(0, 0, 1, 1);
 
-  return data.join(',') === '4,130,216,255';
+  return data.join(',') === '216,4,130,255';
 };
 
 const hasCanvasExtractPermission = checkCanvasExtractPermission();

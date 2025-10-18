@@ -2,6 +2,8 @@ import { useState } from 'react';
 
 import resizeImage from 'pl-fe/utils/resize-image';
 
+import { useSettings } from '../use-settings';
+
 import { usePreview } from './use-preview';
 
 interface UseImageFieldOpts {
@@ -13,6 +15,8 @@ interface UseImageFieldOpts {
 
 /** Returns props for `<input type="file">`, and optionally resizes the file. */
 const useImageField = (opts: UseImageFieldOpts = {}) => {
+  const { stripMetadata } = useSettings();
+
   const [file, setFile] = useState<File | null>();
   const src = usePreview(file) || (file === null ? undefined : opts.preview);
 
@@ -21,7 +25,7 @@ const useImageField = (opts: UseImageFieldOpts = {}) => {
     if (!file) return;
 
     if (typeof opts.maxPixels === 'number') {
-      setFile(await resizeImage(file, opts.maxPixels));
+      setFile(await resizeImage(file, opts.maxPixels, stripMetadata));
     } else {
       setFile(file);
     }
