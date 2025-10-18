@@ -164,8 +164,8 @@ importers:
         specifier: ^0.29.0
         version: 0.29.0
       '@mkljczk/url-purify':
-        specifier: ^0.0.3
-        version: 0.0.3
+        specifier: ^0.0.5
+        version: 0.0.5
       '@phosphor-icons/core':
         specifier: ^2.1.1
         version: 2.1.1
@@ -1861,8 +1861,8 @@ packages:
   '@microsoft/tsdoc@0.15.1':
     resolution: {integrity: sha512-4aErSrCR/On/e5G2hDP0wjooqDdauzEbIq8hIkIe5pXV0rtWJZvdCEKL0ykZxex+IxIwBp0eGeV48hQN07dXtw==}
 
-  '@mkljczk/url-purify@0.0.3':
-    resolution: {integrity: sha512-3O4QO/nH9yV/GKim+yKvQF1cKWN0dBAsxC5Ve50d1PaUYQFSd4y733eRGt+zRcPZrvgyAkyZZ5Bx7dAHWX+bBQ==}
+  '@mkljczk/url-purify@0.0.5':
+    resolution: {integrity: sha512-Ejrr9xiiZNkjT9hRmLfqkpL5uU/0Loo5tzh24wJXT3CDevccINnbmrvxQyW8DU5iSKfetWkYWvFHP5ntREw9VQ==}
 
   '@napi-rs/wasm-runtime@0.2.12':
     resolution: {integrity: sha512-ZVWUcfwY4E/yPitQJl481FjFo3K22D6qF0DuFH6Y/nbnE11GY5uguDxZMGXPQ8WQ0128MXQD7TnfHyK4oWoIJQ==}
@@ -8137,7 +8137,7 @@ snapshots:
 
   '@microsoft/tsdoc@0.15.1': {}
 
-  '@mkljczk/url-purify@0.0.3': {}
+  '@mkljczk/url-purify@0.0.5': {}
 
   '@napi-rs/wasm-runtime@0.2.12':
     dependencies:
@@ -10287,7 +10287,7 @@ snapshots:
       tinyglobby: 0.2.14
       unrs-resolver: 1.11.1
     optionalDependencies:
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.38.0(eslint@8.57.1)(typescript@5.7.3))(eslint-import-resolver-typescript@4.4.4)(eslint@8.57.1)
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.38.0(eslint@8.57.1)(typescript@5.9.2))(eslint-import-resolver-typescript@4.4.4)(eslint@8.57.1)
     transitivePeerDependencies:
       - supports-color
 
