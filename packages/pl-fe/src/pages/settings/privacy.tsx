@@ -208,7 +208,7 @@ const Privacy = () => {
                 label={<FormattedMessage id='url_privacy.strip_metadata' defaultMessage='Strip metadata from uploaded images' />}
                 hint={
                   hasCanvasExtractPermission
-                    ? <FormattedMessage id='url_privacy.strip_metadata.hint' defaultMessage='Removes EXIF metadata such as geolocation from images before hitting the server. This is usually done server-side, regardless of client settings.' />
+                    ? <FormattedMessage id='url_privacy.strip_metadata.hint' defaultMessage='Removes metadata such as EXIF tags, including geolocation, from images before hitting the server. This is usually done server-side, regardless of client settings.' />
                     : <FormattedMessage id='url_privacy.strip_metadata.hint_no_permission' defaultMessage='This option requires additional permissions to function. Please enable canvas extraction permission in your browser settings.' />
                 }
               >
