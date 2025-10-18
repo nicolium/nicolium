@@ -105,7 +105,7 @@ const SettingsPage = () => {
             {features.sessions && (
               <ListItem label={intl.formatMessage(messages.sessions)} to='/settings/tokens' />
             )}
-            <ListItem label={<FormattedMessage id='settings.privacy' defaultMessage='Privacy' />} to='/settings/url_privacy' />
+            <ListItem label={<FormattedMessage id='settings.privacy' defaultMessage='Privacy' />} to='/settings/privacy' />
           </List>
         </CardBody>
 
