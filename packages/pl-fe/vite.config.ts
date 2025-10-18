@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import { fileURLToPath, URL } from 'node:url';
 
 import react from '@vitejs/plugin-react';
+import browserslistToEsbuild from 'browserslist-to-esbuild';
 import { bundleStats } from 'rollup-plugin-bundle-stats';
 import { defineConfig } from 'vite';
 import checker from 'vite-plugin-checker';
@@ -24,6 +25,7 @@ const config = defineConfig(({ command }) => ({
       },
     },
     sourcemap: true,
+    target: browserslistToEsbuild(),
   },
   assetsInclude: ['**/*.oga'],
   server: {
