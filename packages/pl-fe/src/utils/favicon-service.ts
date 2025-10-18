@@ -17,6 +17,8 @@ const checkCanvasExtractPermission = () => {
   return data.join(',') === '4,130,216,255';
 };
 
+const hasCanvasExtractPermission = checkCanvasExtractPermission();
+
 type Favicon = {
   favcanvas: HTMLCanvasElement;
   favimg: HTMLImageElement;
@@ -33,7 +35,7 @@ const createFaviconService = () => {
 
   /** Start the favicon service */
   const initFaviconService = (): void => {
-    if (!checkCanvasExtractPermission()) return;
+    if (!hasCanvasExtractPermission) return;
 
     const nodes: NodeListOf<HTMLLinkElement> = document.querySelectorAll('link[rel="icon"]');
     nodes.forEach(favicon => {
@@ -96,4 +98,4 @@ const createFaviconService = () => {
 
 const FaviconService = createFaviconService();
 
-export { checkCanvasExtractPermission, FaviconService as default };
+export { hasCanvasExtractPermission, FaviconService as default };

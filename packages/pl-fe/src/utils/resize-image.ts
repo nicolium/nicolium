@@ -1,4 +1,4 @@
-import { checkCanvasExtractPermission } from './favicon-service';
+import { hasCanvasExtractPermission } from './favicon-service';
 
 /* eslint-disable no-case-declarations */
 const DEFAULT_MAX_PIXELS = 1920 * 1080;
@@ -153,52 +153,53 @@ const processImage = (
   }, type);
 });
 
-const resizeImage = (
+const resizeImage = async (
   img: HTMLImageElement,
   inputFile: File,
   maxPixels: number,
-) => new Promise<File>((resolve, reject) => {
+) => {
   const { width, height } = img;
   const type = inputFile.type || 'image/png';
 
   const newWidth = Math.round(Math.sqrt(maxPixels * (width / height)));
   const newHeight = Math.round(Math.sqrt(maxPixels * (height / width)));
 
-  if (!checkCanvasExtractPermission()) return reject();
+  if (!hasCanvasExtractPermission) throw new Error();
 
-  getOrientation(img, type)
-    .then(orientation => processImage(img, {
-      width: newWidth,
-      height: newHeight,
-      name: inputFile.name,
-      orientation,
-      type,
-    }))
-    .then(resolve)
-    .catch(reject);
-});
+  const orientation = await getOrientation(img, type);
+
+  return processImage(img, {
+    width: newWidth,
+    height: newHeight,
+    name: inputFile.name,
+    orientation,
+    type,
+  });
+};
 
 /** Resize an image to the maximum number of pixels. */
-const resize = (inputFile: File, maxPixels = DEFAULT_MAX_PIXELS) => new Promise<File>((resolve) => {
+const resize = async (inputFile: File, maxPixels = DEFAULT_MAX_PIXELS): Promise<File> => {
   if (!inputFile.type.match(/image.*/) || inputFile.type === 'image/gif') {
-    resolve(inputFile);
-    return;
+    return inputFile;
   }
 
-  loadImage(inputFile).then(img => {
+  try {
+    const img = await loadImage(inputFile);
+
     if (img.width * img.height < maxPixels) {
-      resolve(inputFile);
-      return;
+      return inputFile;
     }
 
-    resizeImage(img, inputFile, maxPixels)
-      .then(resolve)
-      .catch(error => {
-        console.error(error);
-        resolve(inputFile);
-      });
-  }).catch(() => resolve(inputFile));
-});
+    try {
+      return await resizeImage(img, inputFile, maxPixels);
+    } catch (error) {
+      console.error(error);
+      return (inputFile);
+    }
+  } catch (error) {
+    return inputFile;
+  }
+};
 
 export {
   resize as default,
