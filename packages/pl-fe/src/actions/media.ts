@@ -1,5 +1,6 @@
 import { defineMessages, type IntlShape } from 'react-intl';
 
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import toast from 'pl-fe/toast';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 import { formatBytes, getVideoDuration } from 'pl-fe/utils/media';
@@ -9,7 +10,6 @@ import { getClient } from '../api';
 
 import type { MediaAttachment, UpdateMediaParams, UploadMediaParams } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
-import { useSettingsStore } from 'pl-fe/stores/settings';
 
 const messages = defineMessages({
   exceededImageSizeLimit: { id: 'upload_error.image_size_limit', defaultMessage: 'Image exceeds the current file size limit ({limit})' },

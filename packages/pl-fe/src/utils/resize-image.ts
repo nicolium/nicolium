@@ -1,7 +1,7 @@
+/* eslint-disable no-case-declarations */
 import { hasCanvasExtractPermission } from './favicon-service';
 
-/* eslint-disable no-case-declarations */
-const DEFAULT_MAX_PIXELS = 1920 * 1080;
+const DEFAULT_MAX_PIXELS = 7680 * 4320;
 
 interface BrowserCanvasQuirks {
   'image-orientation-automatic'?: boolean;
