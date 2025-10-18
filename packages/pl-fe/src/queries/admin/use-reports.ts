@@ -39,7 +39,7 @@ const usePendingReportsCount = () => {
   return useInfiniteQuery({
     ...pendingReportsQuery,
     select: (data) => data.pages.at(-1)?.total || data.pages.map(page => page.items).flat().length || 0,
-    enabled: !!instance.fetched && (account?.is_admin || account?.is_moderator),
+    enabled: !!instance.fetched && !!(account?.is_admin || account?.is_moderator),
   });
 };
 

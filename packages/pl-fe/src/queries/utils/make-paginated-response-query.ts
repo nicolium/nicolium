@@ -37,7 +37,7 @@ const makePaginatedResponseQuery = <T1 extends Array<any>, T2, T3 = PaginatedRes
 
         return items as T3;
       }),
-      enabled: enabled === 'isLoggedIn' ? !!account : enabled === 'isAdmin' ? (account?.is_admin || account?.is_moderator) :  (enabled?.(...params) ?? true),
+      enabled: enabled === 'isLoggedIn' ? !!account : enabled === 'isAdmin' ? !!(account?.is_admin || account?.is_moderator) : (enabled?.(...params) ?? true),
     });
   };
 
