@@ -95,7 +95,7 @@ export const Share = lazy(() => import('pl-fe/pages/utils/share'));
 export const Status = lazy(() => import('pl-fe/pages/statuses/status'));
 export const TestTimeline = lazy(() => import('pl-fe/pages/timelines/test-timeline'));
 export const ThemeEditor = lazy(() => import('pl-fe/pages/dashboard/theme-editor'));
-export const UrlPrivacy = lazy(() => import('pl-fe/pages/settings/url-privacy'));
+export const Privacy = lazy(() => import('pl-fe/pages/settings/privacy'));
 export const UserIndex = lazy(() => import('pl-fe/pages/dashboard/user-index'));
 export const WrenchedTimeline = lazy(() => import('pl-fe/pages/timelines/wrenched-timeline'));
 

@@ -37,7 +37,7 @@ const messages = defineMessages({
   security: { id: 'settings.security', defaultMessage: 'Security' },
   sessions: { id: 'settings.sessions', defaultMessage: 'Active sessions' },
   settings: { id: 'settings.settings', defaultMessage: 'Settings' },
-  urlPrivacy: { id: 'settings.url_privacy', defaultMessage: 'URL privacy' },
+  privacy: { id: 'settings.privacy', defaultMessage: 'Privacy' },
 });
 
 /** User settings page. */
@@ -105,7 +105,7 @@ const SettingsPage = () => {
             {features.sessions && (
               <ListItem label={intl.formatMessage(messages.sessions)} to='/settings/tokens' />
             )}
-            <ListItem label={intl.formatMessage(messages.urlPrivacy)} to='/settings/url_privacy' />
+            <ListItem label={<FormattedMessage id='settings.privacy' defaultMessage='Privacy' />} to='/settings/url_privacy' />
           </List>
         </CardBody>
 
