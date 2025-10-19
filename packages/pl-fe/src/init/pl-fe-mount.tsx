@@ -60,12 +60,10 @@ const PlFeMount = () => {
                   <ModalRoot />
                 </Suspense>
 
-                <div id='toaster'>
-                  <Toaster
-                    position='top-right'
-                    containerClassName='top-4'
-                  />
-                </div>
+                <Toaster
+                  position='top-right'
+                  containerClassName='top-4'
+                />
               </Route>
             </Switch>
           </ScrollContext>
