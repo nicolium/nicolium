@@ -58,7 +58,7 @@ const PendingStatus: React.FC<IPendingStatus> = ({ idempotencyKey, className, mu
 
   return (
     <div className={clsx('opacity-50', className)}>
-      <div className={clsx('status', { 'status-reply': !!status.in_reply_to_id, muted })} data-id={status.id}>
+      <div data-id={status.id}>
         <Card
           className={clsx(`status-${status.visibility}`, {
             'py-6 sm:p-5': variant === 'rounded',

@@ -367,8 +367,12 @@ const Status: React.FC<IStatus> = (props) => {
 
   const body = (
     <div
-      className={clsx('status cursor-pointer')}
+      className={clsx('⁂-status', {
+        '⁂-status--reply': !!status.in_reply_to_id,
+      })}
       data-featured={featured ? 'true' : null}
+      data-visibility={actualStatus.visibility}
+      data-id={status.id}
       aria-label={textForScreenReader(intl, actualStatus, rebloggedByText)}
       ref={node}
       onClick={handleClick}
@@ -376,13 +380,11 @@ const Status: React.FC<IStatus> = (props) => {
     >
       <Card
         variant={variant}
-        className={clsx('status__wrapper space-y-4', className, `status-${actualStatus.visibility}`, {
+        className={clsx('⁂-status__wrapper status-wrapper', className, {
           'py-6 sm:p-5': variant === 'rounded',
-          'status-reply': !!status.in_reply_to_id,
           muted,
           read: unread === false,
         })}
-        data-id={status.id}
       >
         {statusInfo}
 
