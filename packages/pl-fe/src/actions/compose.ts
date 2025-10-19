@@ -298,19 +298,6 @@ const directCompose = (account: ComposeDirectAction['account']) =>
     useModalsStore.getState().openModal('COMPOSE');
   };
 
-const directComposeById = (accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const account = selectAccount(getState(), accountId);
-    if (!account) return;
-
-    dispatch<ComposeDirectAction>({
-      type: COMPOSE_DIRECT,
-      composeId: 'compose-modal',
-      account,
-    });
-    useModalsStore.getState().openModal('COMPOSE');
-  };
-
 const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, composeId: string, data: BaseStatus | ScheduledStatus, status: string, edit?: boolean, redact?: boolean) => {
   if (!dispatch || !getState) return;
 
@@ -1153,7 +1140,6 @@ export {
   resetCompose,
   mentionCompose,
   directCompose,
-  directComposeById,
   submitCompose,
   uploadFile,
   uploadCompose,

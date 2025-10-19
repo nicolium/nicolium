@@ -170,7 +170,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
   const { isLoggedIn } = useLoggedIn();
   const standalone = useAppSelector(isStandalone);
 
-  const { authenticatedProfile, cryptoAddresses } = usePlFeConfig();
+  const { authenticatedProfile, cryptoAddresses, redirectRootNoLogin } = usePlFeConfig();
   const hasCrypto = cryptoAddresses.length > 0;
 
   // NOTE: Mastodon and Pleroma route some basenames to the backend.
@@ -180,6 +180,10 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
   // Ex: use /login instead of /auth, but redirect /auth to /login
   return (
     <Switch>
+      {(!isLoggedIn && redirectRootNoLogin) && (
+        <Redirect exact from='/' to={redirectRootNoLogin} />
+      )}
+
       {standalone && !isLoggedIn && (WITH_LANDING_PAGE
         ? <WrappedRoute path='/' exact layout={DefaultLayout} component={LandingPage} publicRoute />
         : <Redirect from='/' to='/login/external' exact />)}
