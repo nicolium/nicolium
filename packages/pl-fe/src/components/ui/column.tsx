@@ -53,8 +53,6 @@ interface IColumn {
   className?: string;
   /** Extra class name for the <CardBody> element. */
   bodyClassName?: string;
-  /** Ref forwarded to column. */
-  ref?: React.Ref<HTMLDivElement>;
   /** Children to display in the column. */
   children?: React.ReactNode;
   /** Action for the ColumnHeader, displayed at the end. */
@@ -64,7 +62,7 @@ interface IColumn {
 }
 
 /** A backdrop for the main section of the UI. */
-const Column = React.forwardRef<HTMLDivElement, IColumn>((props, ref): JSX.Element => {
+const Column: React.FC<IColumn> = (props): JSX.Element => {
   const { backHref, children, label, transparent = false, withHeader = true, className, bodyClassName, action, size } = props;
   const plFeConfig = usePlFeConfig();
   const [isScrolled, setIsScrolled] = useState(false);
@@ -82,7 +80,7 @@ const Column = React.forwardRef<HTMLDivElement, IColumn>((props, ref): JSX.Eleme
   }, []);
 
   return (
-    <div role='region' className='relative' ref={ref} aria-label={label} column-type={transparent ? 'transparent' : 'filled'}>
+    <div role='region' className='relative' aria-label={label} column-type={transparent ? 'transparent' : 'filled'}>
       <Helmet>
         <title>{label}</title>
 
@@ -117,7 +115,7 @@ const Column = React.forwardRef<HTMLDivElement, IColumn>((props, ref): JSX.Eleme
       </Card>
     </div>
   );
-});
+};
 
 export {
   Column as default,
