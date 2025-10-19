@@ -18,7 +18,6 @@ import '@fontsource/roboto-mono/400.css';
 import 'line-awesome/dist/font-awesome-line-awesome/css/all.css';
 import 'react-datepicker/dist/react-datepicker.css';
 
-import './iframe';
 import './styles/i18n/arabic.css';
 import './styles/i18n/javanese.css';
 import './styles/application.scss';
