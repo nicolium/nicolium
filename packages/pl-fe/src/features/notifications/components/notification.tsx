@@ -333,14 +333,14 @@ const Notification: React.FC<INotification> = (props) => {
         <Emoji
           emoji={notification.emoji}
           src={notification.emoji_url || undefined}
-          className='size-4 flex-none'
+          className='⁂-notification__icon ⁂-notification__icon--emoji'
         />
       );
     } else if (icons[displayedType]) {
       return (
         <Icon
           src={icons[displayedType]!}
-          className='flex-none text-primary-600 dark:text-primary-400'
+          className='⁂-notification__icon'
         />
       );
     } else {
