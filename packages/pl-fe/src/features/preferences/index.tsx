@@ -388,6 +388,8 @@ const Preferences = () => {
         <ListItem label={<FormattedMessage id='preferences.fields.autoload_more_label' defaultMessage='Automatically load more items when scrolled to the bottom of the page' />}>
           <SettingToggle settings={settings} settingPath={['autoloadMore']} onChange={onToggleChange} />
         </ListItem>
+
+        <ListItem label={<FormattedMessage id='column.navigation_settings' defaultMessage='Navigation settings' />} to='/settings/navigation' />
       </List>
 
       {instance.pleroma.metadata.post_formats.includes('text/x.misskeymarkdown') && (

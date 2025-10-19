@@ -123,6 +123,7 @@ import {
   Migration,
   ModerationLog,
   Mutes,
+  NavigationSettings,
   NewStatus,
   Notifications,
   OutgoingFollowRequests,
@@ -327,6 +328,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       {features.interactionRequests && <WrappedRoute path='/settings/interaction_policies' layout={DefaultLayout} component={InteractionPolicies} content={children} />}
       <Redirect from='/settings/url_privacy' to='/settings/privacy' />
       <WrappedRoute path='/settings/privacy' layout={DefaultLayout} component={Privacy} content={children} />
+      <WrappedRoute path='/settings/navigation' layout={DefaultLayout} component={NavigationSettings} content={children} />
       <WrappedRoute path='/settings' layout={DefaultLayout} component={Settings} content={children} />
       <WrappedRoute path='/pl-fe/config' adminOnly layout={DefaultLayout} component={PlFeConfig} content={children} />
 
