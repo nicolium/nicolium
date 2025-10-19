@@ -332,7 +332,7 @@ const Status: React.FC<IStatus> = (props) => {
 
   if (filtered && actualStatus.showFiltered !== true) {
     const body = (
-      <div className={clsx('status__wrapper text-center', { focusable })} ref={node}>
+      <div className={clsx('status__wrapper text-center')} ref={node}>
         <Text theme='muted'>
           <FormattedMessage id='status.filtered' defaultMessage='Filtered' />: {filterResults.map(({ filter }) => filter.title).join(', ')}.
           {' '}
@@ -367,7 +367,7 @@ const Status: React.FC<IStatus> = (props) => {
 
   const body = (
     <div
-      className={clsx('status cursor-pointer', { focusable })}
+      className={clsx('status cursor-pointer')}
       data-featured={featured ? 'true' : null}
       aria-label={textForScreenReader(intl, actualStatus, rebloggedByText)}
       ref={node}
