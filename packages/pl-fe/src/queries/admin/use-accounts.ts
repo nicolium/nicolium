@@ -22,16 +22,17 @@ const useAdminAccounts = makePaginatedResponseQuery(
   'isAdmin',
 );
 
-const useAdminAccount = (accountId: string) => {
+const useAdminAccount = (accountId?: string) => {
   const client = useClient();
   const dispatch = useAppDispatch();
 
   const query = useQuery<AdminAccount>({
     queryKey: ['admin', 'accounts', accountId],
-    queryFn: () => client.admin.accounts.getAccount(accountId).then(({ account, ...adminAccount }) => {
+    queryFn: () => client.admin.accounts.getAccount(accountId!).then(({ account, ...adminAccount }) => {
       dispatch(importEntities({ accounts: [account] }));
       return adminAccount as AdminAccount;
     }),
+    enabled: !!accountId,
   });
 
   const { account } = useAccount(query.data ? accountId : undefined);

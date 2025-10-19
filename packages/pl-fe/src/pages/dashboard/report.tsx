@@ -3,6 +3,7 @@ import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-
 import { Link } from 'react-router-dom';
 import ReactSwipeableViews from 'react-swipeable-views';
 
+import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import Account from 'pl-fe/components/account';
 import List, { ListItem } from 'pl-fe/components/list';
 import Card from 'pl-fe/components/ui/card';
@@ -92,6 +93,9 @@ const ReportPage: React.FC<IReportPage> = (props) => {
 
   const report = useAppSelector((state) => getReport(state, minifiedReport));
 
+  const { account: authorAccount } = useAccount(report?.account_id);
+  const { account: targetAccount } = useAccount(report?.target_account_id);
+
   const { mutate: selfAssignReport } = useSelfAssignReport(reportId);
   const { mutate: unassignReport } = useUnassignReport(reportId);
   const { mutate: resolveReport } = useResolveReport(reportId);
@@ -148,14 +152,14 @@ const ReportPage: React.FC<IReportPage> = (props) => {
 
     <Column label={intl.formatMessage(messages.columnHeading, { id: reportId })}>
       <div className='mb-4 grid grid-cols-1 gap-2 md:grid-cols-2'>
-        {report.target_account && (
-          <Link to={`/@${report.target_account.acct}`} className='h-fit'>
+        {targetAccount && (
+          <Link to={`/@${targetAccount.acct}`} className='h-fit'>
             <Card variant='rounded'>
               <Stack space={2}>
                 <Text size='md' weight='medium'>
                   <FormattedMessage id='admin.report.target_account' defaultMessage='Reported account' />
                 </Text>
-                <Account account={report.target_account} disabled hideActions />
+                <Account account={targetAccount} disabled hideActions />
               </Stack>
             </Card>
           </Link>
@@ -175,7 +179,7 @@ const ReportPage: React.FC<IReportPage> = (props) => {
                 </Text>
               </td>
             </tr>
-            {report.account && (
+            {authorAccount && (
               <tr className='border-b border-primary-200 last:border-none dark:border-gray-800'>
                 <td className='p-2.5'>
                   <Text weight='medium' size='sm' tag='span'>
@@ -186,7 +190,7 @@ const ReportPage: React.FC<IReportPage> = (props) => {
                 <td className='p-2.5 text-end'>
                   <Text size='sm' className='hover:underline'>
                     <Link to={`/pl-fe/admin/accounts/${report.account_id}`}>
-                      @{report.account.acct}
+                      @{authorAccount.acct}
                     </Link>
                   </Text>
                 </td>

@@ -42,6 +42,13 @@ const minifyAdminAccountList = (response: PaginatedResponse<AdminAccount>) =>
   });
 
 const minifyAdminReport = ({ account, action_taken_by_account, assigned_account, target_account, statuses, ...adminReport }: AdminReport) => {
+  minifyAdminAccountList({
+    items: [account, action_taken_by_account, assigned_account, target_account].filter((a): a is AdminAccount => !!a),
+    previous: null,
+    next: null,
+    partial: false,
+  });
+
   store.dispatch(importEntities({
     accounts: [account.account, action_taken_by_account?.account, assigned_account?.account, target_account?.account],
     statuses: statuses as any,
