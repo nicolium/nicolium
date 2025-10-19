@@ -25,8 +25,8 @@ const rememberPlFeConfig = (host: string | null) =>
   (dispatch: AppDispatch) =>
     KVStore.getItemOrError(`plfe_config:${host}`).then(plFeConfig => {
       dispatch({ type: PLFE_CONFIG_REMEMBER_SUCCESS, host, plFeConfig });
-      return plFeConfig;
-    }).catch(() => {});
+      return true;
+    }).catch(() => false);
 
 const fetchFrontendConfigurations = () =>
   (dispatch: AppDispatch, getState: () => RootState) =>
@@ -54,12 +54,17 @@ const fetchPlFeConfig = (host: string | null) =>
 
 /** Tries to remember the config from browser storage before fetching it */
 const loadPlFeConfig = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+  async (dispatch: AppDispatch, getState: () => RootState) => {
     const host = getHost(getState());
 
-    return dispatch(rememberPlFeConfig(host)).then(() =>
-      dispatch(fetchPlFeConfig(host)),
-    );
+    const result = await dispatch(rememberPlFeConfig(host));
+
+    if (result) {
+      dispatch(fetchPlFeConfig(host));
+      return;
+    } else {
+      return dispatch(fetchPlFeConfig(host));
+    }
   };
 
 const fetchPlFeJson = (host: string | null) =>
