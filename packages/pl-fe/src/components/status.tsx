@@ -203,6 +203,7 @@ const Status: React.FC<IStatus> = (props) => {
     if (isReblog && showGroup && group) {
       return (
         <StatusInfo
+          className='-mb-1'
           avatarSize={avatarSize}
           icon={<Icon src={require('@phosphor-icons/core/regular/repeat.svg')} className='size-4 text-green-600' />}
           text={
@@ -264,6 +265,7 @@ const Status: React.FC<IStatus> = (props) => {
 
       return (
         <StatusInfo
+          className='-mb-1'
           avatarSize={avatarSize}
           icon={<Icon src={require('@phosphor-icons/core/regular/repeat.svg')} className='size-4 text-green-600' />}
           text={
@@ -286,6 +288,7 @@ const Status: React.FC<IStatus> = (props) => {
     } else if (featured) {
       return (
         <StatusInfo
+          className='-mb-1'
           avatarSize={avatarSize}
           icon={<Icon src={require('@phosphor-icons/core/regular/push-pin.svg')} className='size-4 text-gray-600 dark:text-gray-400' />}
           text={
@@ -296,6 +299,7 @@ const Status: React.FC<IStatus> = (props) => {
     } else if (showGroup && group) {
       return (
         <StatusInfo
+          className='-mb-1'
           avatarSize={avatarSize}
           icon={<Icon src={require('@phosphor-icons/core/regular/users-three.svg')} className='size-4 text-primary-600 dark:text-accent-blue' />}
           text={

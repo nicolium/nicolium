@@ -45,6 +45,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
       return (
         <div className='mb-4'>
           <StatusInfo
+            className='-mb-1'
             avatarSize={42}
             icon={
               <Icon

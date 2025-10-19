@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 
 import HStack from 'pl-fe/components/ui/hstack';
@@ -7,11 +8,12 @@ interface IStatusInfo {
   avatarSize: number;
   icon: React.ReactNode;
   text: React.ReactNode;
+  className?: string;
   title?: string;
 }
 
 const StatusInfo = (props: IStatusInfo) => {
-  const { avatarSize, icon, text, title } = props;
+  const { avatarSize, icon, text, className, title } = props;
 
   const onClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation();
@@ -21,7 +23,7 @@ const StatusInfo = (props: IStatusInfo) => {
     <HStack
       space={2}
       alignItems='center'
-      className='-mb-1 w-fit max-w-full cursor-default rounded-full border border-gray-200 bg-gray-100 px-3 py-1 black:border-gray-800 black:bg-gray-900 dark:border-transparent dark:bg-primary-800 rtl:space-x-reverse'
+      className={clsx('w-fit max-w-full cursor-default rounded-full border border-gray-200 bg-gray-100 px-3 py-1 black:border-gray-800 black:bg-gray-900 dark:border-transparent dark:bg-primary-800 rtl:space-x-reverse', className)}
       onClick={onClick}
       style={{ marginLeft: avatarSize - 25, maxWidth: `calc(100% - ${avatarSize - 25}px)` }}
       title={title}
