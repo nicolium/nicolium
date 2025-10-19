@@ -12,7 +12,7 @@
 
 .video-player {
   &__controls {
-    @apply bg-primary-200 dark:bg-primary-700 box-border ring-0 transition-all duration-300 ease-in-out;
+    @apply bg-primary-200 dark:bg-primary-700 black:bg-primary-800 box-border ring-0 transition-all duration-300 ease-in-out;
     position: absolute;
     left: 0.75rem;
     right: 0.75rem;

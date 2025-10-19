@@ -41,7 +41,7 @@ const GroupMembers: React.FC<IGroupMembers> = (props) => {
         showLoading={!group || isFetchingPending || isLoading && members.length === 0}
         placeholderComponent={PlaceholderAccount}
         placeholderCount={3}
-        className='divide-y divide-solid divide-gray-200 dark:divide-gray-800'
+        className='divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800'
         itemClassName='py-3 last:pb-0'
         prepend={(pendingCount > 0) && (
           <div className={clsx('py-3', { 'border-b border-gray-200 dark:border-gray-800': members.length })}>

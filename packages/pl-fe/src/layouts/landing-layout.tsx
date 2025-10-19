@@ -19,7 +19,7 @@ const LandingLayout: React.FC<ILandingLayout> = ({ children }) => {
 
   return (
     <>
-      <Layout.Main className='space-y-3 pt-3 dark:divide-gray-800 sm:pt-0'>
+      <Layout.Main className='space-y-3 pt-3 black:divide-gray-800 dark:divide-primary-800 sm:pt-0'>
         {children}
       </Layout.Main>
 

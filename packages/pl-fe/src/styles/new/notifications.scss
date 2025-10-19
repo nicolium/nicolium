@@ -1,0 +1,22 @@
+@use 'mixins'; 
+
+.⁂-notification {
+  @apply flex flex-col gap-2 p-4;
+
+  &__header {
+    @apply flex items-center gap-3;
+  }
+
+  &__info {
+    @apply min-w-0 flex-1;
+  }
+
+  &__timestamp {
+    @apply ml-auto flex-none;
+    @include mixins.text($size: xs, $theme: muted, $truncate: true);
+  }
+
+  .status__wrapper {
+    @apply p-0;
+  }
+}

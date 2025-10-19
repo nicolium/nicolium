@@ -62,7 +62,10 @@
 }
 
 .⁂-icon {
-  @apply relative flex shrink-0 flex-col;
+  display: flex;
+  position: relative;
+  flex-shrink: 0;
+  flex-direction: column;
 
   &__counter {
     @apply absolute -right-3 -top-2 flex h-5 min-w-[20px] shrink-0 items-center justify-center whitespace-nowrap break-words;
@@ -161,7 +164,7 @@ a.⁂-list-item,
 }
 
 .⁂-card-title {
-  @include mixins.text($size: xl, $weight: bold, $truncate: truncate);
+  @include mixins.text($size: xl, $weight: bold, $truncate: true);
 }
 
 .⁂-animated-number {

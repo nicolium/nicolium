@@ -448,28 +448,21 @@ const Notification: React.FC<INotification> = (props) => {
   return (
     <Hotkeys handlers={handlers} data-testid='notification'>
       <div
-        className='notification flex flex-col gap-2 p-4'
+        className='⁂-notification'
         tabIndex={0}
         aria-label={ariaLabel}
         ref={node}
       >
         {!['mention', 'status'].includes(notification.type) ? (
-          <HStack alignItems='center' space={3}>
-            <div className='min-w-0 flex-1'>
+          <div className='⁂-notification__header'>
+            <div className='⁂-notification__info'>
               {statusInfo}
             </div>
 
-            <div className='ml-auto flex-none'>
-              <Text
-                theme='muted'
-                size='xs'
-                truncate
-                data-testid='message'
-              >
-                <RelativeTimestamp timestamp={notification.latest_page_notification_at!} theme='muted' size='sm' className='whitespace-nowrap' />
-              </Text>
-            </div>
-          </HStack>
+            <p className='⁂-notification__timestamp'>
+              <RelativeTimestamp timestamp={notification.latest_page_notification_at!} theme='muted' size='sm' className='whitespace-nowrap' />
+            </p>
+          </div>
         ) : statusInfo}
 
         {renderContent()}

@@ -24,7 +24,7 @@ const AwaitingApproval: React.FC = () => {
       isLoading={isFetching}
       showLoading={isPending}
       emptyMessageText={<FormattedMessage id='admin.awaiting_approval.empty_message' defaultMessage='There is nobody waiting for approval. When a new user signs up, you can review them here.' />}
-      listClassName='divide-y divide-solid divide-gray-200 dark:divide-gray-800'
+      listClassName='divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800'
     >
       {accountIds.map(id => (
         <div key={id} className='px-5 py-4'>

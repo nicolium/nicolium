@@ -41,7 +41,7 @@ const DomainBlocksPage: React.FC = () => {
         onLoadMore={handleLoadMore}
         hasMore={hasNextPage}
         emptyMessageText={emptyMessage}
-        listClassName='divide-y divide-gray-200 dark:divide-gray-800'
+        listClassName='divide-y divide-gray-200 black:divide-gray-800 dark:divide-primary-800'
       >
         {domains.map((domain) =>
           <Domain key={domain} domain={domain} />,

@@ -196,7 +196,7 @@ const StatusList: React.FC<IStatusList> = ({
       placeholderComponent={() => <PlaceholderStatus variant='slim' />}
       placeholderCount={20}
       ref={node}
-      listClassName={clsx('divide-y divide-solid divide-gray-200 dark:divide-gray-800', className)}
+      listClassName={clsx('divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800', className)}
       {...other}
     >
       {scrollableContent}

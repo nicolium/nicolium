@@ -71,7 +71,7 @@ const TrendsColumn: React.FC<ITrendsColumn> = ({ type, multiColumn }) => {
       showLoading={isLoading}
       placeholderComponent={placeholderComponent}
       placeholderCount={20}
-      listClassName={type === 'statuses' ? 'divide-y divide-solid divide-gray-200 dark:divide-gray-800' : ''}
+      listClassName={type === 'statuses' ? 'divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800' : ''}
       itemClassName={clsx({
         'pb-4': type === 'accounts' || type === 'links',
         'pb-3': type === 'hashtags',

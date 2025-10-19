@@ -33,7 +33,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
     body = <Spinner />;
   } else {
     body = (
-      <div className='divide-y divide-solid divide-gray-200 dark:divide-gray-800'>
+      <div className='divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800'>
         {versions?.map((version) => {
           const content = <ParsedContent html={version.content} mentions={status?.mentions} hasQuote={!!status?.quote_id} emojis={version.emojis} speakAsCat={status.account.speak_as_cat} />;
 

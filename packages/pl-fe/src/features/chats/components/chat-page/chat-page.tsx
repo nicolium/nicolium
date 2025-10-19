@@ -59,7 +59,7 @@ const ChatPage: React.FC<IChatPage> = ({ chatId }) => {
       className='h-screen overflow-hidden bg-white text-gray-900 shadow-lg black:bg-transparent dark:bg-primary-900 dark:text-gray-100 dark:shadow-none sm:rounded-t-xl'
     >
       <div
-        className='grid h-full grid-cols-9 overflow-hidden dark:divide-solid dark:divide-gray-800 sm:black:divide-x sm:dark:divide-x-2'
+        className='grid h-full grid-cols-9 overflow-hidden dark:divide-solid black:divide-gray-800 dark:divide-primary-800 sm:black:divide-x sm:dark:divide-x-2'
         data-testid='chat-page'
       >
         <Stack
