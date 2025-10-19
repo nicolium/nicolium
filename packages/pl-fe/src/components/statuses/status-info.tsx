@@ -17,29 +17,19 @@ const StatusInfo = (props: IStatusInfo) => {
   };
 
   return (
-    // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <div
-      // eslint-disable-next-line jsx-a11y/aria-role
-      role='status-info'
+    <HStack
+      space={2}
+      alignItems='center'
+      className='-mb-2 w-fit cursor-default rounded-full border border-gray-200 bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700 black:border-gray-800 black:bg-gray-900 dark:border-transparent dark:bg-primary-800 dark:text-gray-600 rtl:space-x-reverse'
       onClick={onClick}
+      style={{ marginLeft: avatarSize + 12 }}
     >
-      <HStack
-        space={3}
-        alignItems='center'
-        className='cursor-default text-xs font-medium text-gray-700 dark:text-gray-600 rtl:space-x-reverse'
-      >
-        <div
-          className='flex justify-end'
-          style={{ width: avatarSize }}
-        >
-          {icon}
-        </div>
+      {icon}
 
-        <Text size='xs' theme='muted' weight='medium' truncate>
-          {text}
-        </Text>
-      </HStack>
-    </div>
+      <Text size='xs' theme='muted' weight='medium' truncate>
+        {text}
+      </Text>
+    </HStack>
   );
 };
 
