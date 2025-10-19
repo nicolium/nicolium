@@ -31,7 +31,7 @@ import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 const BIG_EMOJI_LIMIT = 10;
 
 interface IReadMoreButton {
-  onClick: React.MouseEventHandler;
+  onClick?: React.MouseEventHandler;
   quote?: boolean;
   poll?: boolean;
   preview?: boolean;
@@ -253,78 +253,40 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
       </Stack>
     );
 
-    if (onClick) {
-      if (status.content) {
-        output.push(
-          <Markup
-            ref={node}
-            tabIndex={0}
-            key='content'
-            className={className}
-            direction={direction}
-            lang={status.language || undefined}
-            size={textSize}
-          >
-            {parsedContent}
-          </Markup>,
-        );
-      }
+    if (status.content) {
+      output.push(
+        <Markup
+          ref={node}
+          tabIndex={0}
+          key='content'
+          className={className}
+          direction={direction}
+          lang={status.language || undefined}
+          size={textSize}
+        >
+          {parsedContent}
+        </Markup>,
+      );
+    }
 
-      if (collapsed) {
-        output.push(<ReadMoreButton onClick={onClick} key='read-more' quote={isQuote} poll={hasPoll} />);
-      }
+    if (collapsed) {
+      output.push(<ReadMoreButton onClick={onClick} key='read-more' quote={isQuote} poll={hasPoll} preview={preview} />);
+    }
 
-      if (status.poll_id) {
-        output.push(<Poll id={status.poll_id} key='poll' status={status} language={statusMeta.currentLanguage} truncate={collapsable} />);
-      }
+    if (status.poll_id) {
+      output.push(<Poll id={status.poll_id} key='poll' status={status} language={statusMeta.currentLanguage} truncate={collapsable} />);
+    }
 
-      if (translatable) {
-        output.push(<TranslateButton status={status} key='translate' />);
-      }
+    if (translatable) {
+      output.push(<TranslateButton status={status} key='translate' />);
+    }
 
-      if (media) {
-        output.push(media);
-      }
+    if (media) {
+      output.push(media);
+    }
 
-      if (hashtags.length) {
-        output.push(<HashtagsBar key='hashtags' hashtags={hashtags} />);
-      }
-    } else {
-      if (status.content) {
-        output.push(
-          <Markup
-            ref={node}
-            tabIndex={0}
-            key='content'
-            className={className}
-            direction={direction}
-            lang={status.language || undefined}
-            size={textSize}
-          >
-            {parsedContent}
-          </Markup>,
-        );
-      }
-
-      if (collapsed) {
-        output.push(<ReadMoreButton onClick={() => {}} key='read-more' quote={isQuote} preview={preview} />);
-      }
-
-      if (status.poll_id) {
-        output.push(<Poll id={status.poll_id} key='poll' status={status} language={statusMeta.currentLanguage} truncate={collapsable} />);
-      }
-
-      if (translatable) {
-        output.push(<TranslateButton status={status} />);
-      }
-
-      if (media) {
-        output.push(media);
-      }
-
-      if (hashtags.length) {
-        output.push(<HashtagsBar key='hashtags' hashtags={hashtags} />);
-      }
+    if (hashtags.length) {
+      output.push(<HashtagsBar key='hashtags' hashtags={hashtags} />);
     }
   }
 
