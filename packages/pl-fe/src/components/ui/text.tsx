@@ -54,7 +54,7 @@ type Sizes = keyof typeof sizes
 type Tags = 'abbr' | 'p' | 'span' | 'pre' | 'time' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'label' | 'div' | 'blockquote'
 type Directions = 'ltr' | 'rtl'
 
-interface IText extends Pick<React.HTMLAttributes<HTMLParagraphElement>, 'dangerouslySetInnerHTML' | 'tabIndex' | 'lang'> {
+interface IText extends Pick<React.HTMLAttributes<HTMLParagraphElement>, 'dangerouslySetInnerHTML' | 'tabIndex' | 'lang' | 'onClick' | 'role'> {
   /** Text content. */
   children?: React.ReactNode;
   /** How to align the text. */
@@ -105,7 +105,7 @@ const Text = React.forwardRef<any, IText>(
       ...filteredProps
     } = props;
 
-    const Comp: React.ElementType = tag;
+    const Comp = tag as any as 'p';
 
     const alignmentClass = typeof align === 'string' ? alignments[align] : '';
 

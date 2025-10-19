@@ -118,7 +118,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     }
   };
 
-  const toggleExpanded: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+  const toggleExpanded: React.MouseEventHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -190,7 +190,13 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
 
   if (spoilerText) {
     output.push(
-      <Text key='spoiler' size='2xl' weight='medium'>
+      <Text
+        key='spoiler'
+        size='2xl'
+        weight='medium'
+        aria-expanded={expanded}
+        {...(expandable ? { onClick: toggleExpanded, role: 'button' } : {})}
+      >
         <span className={clsx({ 'line-clamp-3': !expanded && lineClamp })} ref={spoilerNode}>
           <Emojify text={spoilerText} emojis={status.emojis} />
         </span>
