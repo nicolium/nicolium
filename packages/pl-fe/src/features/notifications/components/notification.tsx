@@ -40,6 +40,7 @@ const buildLink = (account: Pick<Account, 'acct' | 'display_name' | 'emojis' | '
     className='font-bold text-gray-800 hover:underline dark:text-gray-200'
     title={account.acct}
     to={`/@${account.acct}`}
+    key={account.id}
   >
     <HoverAccountWrapper key={account.acct} element='bdi' accountId={account.id}>
       <Emojify text={account.display_name} emojis={account.emojis} />
