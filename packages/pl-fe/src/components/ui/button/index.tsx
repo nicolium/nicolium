@@ -55,7 +55,6 @@ const Button = React.forwardRef<HTMLButtonElement, IButton>(({
   const themeClass = useButtonStyles({
     theme,
     block,
-    disabled,
     size,
   });
 
@@ -68,7 +67,7 @@ const Button = React.forwardRef<HTMLButtonElement, IButton>(({
   const renderButton = () => (
     <button
       {...props}
-      className={clsx('rtl:space-x-reverse', themeClass, className)}
+      className={clsx(themeClass, className)}
       disabled={disabled}
       onClick={handleClick}
       ref={ref}

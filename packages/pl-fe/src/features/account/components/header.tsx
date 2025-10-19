@@ -749,7 +749,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
           </div>
 
           <div className='mt-6 flex w-full justify-end sm:pb-1'>
-            <HStack space={2} className='mt-10'>
+            <HStack space={2} className='mt-10' wrap>
               <SubscriptionButton account={account} />
               {renderMessageButton()}
               {renderShareButton()}

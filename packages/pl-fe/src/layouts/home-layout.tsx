@@ -3,10 +3,9 @@ import React, { useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
+import 'pl-fe/styles/new/timelines.scss';
 import { uploadCompose } from 'pl-fe/actions/compose';
 import Avatar from 'pl-fe/components/ui/avatar';
-import Card, { CardBody } from 'pl-fe/components/ui/card';
-import HStack from 'pl-fe/components/ui/hstack';
 import Layout from 'pl-fe/components/ui/layout';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
 import {
@@ -56,41 +55,38 @@ const HomeLayout: React.FC<IHomeLayout> = ({ children }) => {
 
   return (
     <>
-      <Layout.Main className='black:space-y-0 dark:divide-gray-800 sm:space-y-3'>
+      <Layout.Main className='⁂-layout__main--home'>
         {me && (
-          <Card
-            className={clsx('relative z-[1] border-gray-200 transition black:border-b black:border-gray-800 dark:border-gray-800 max-sm:border-b max-sm:shadow-none', {
-              'border-2 border-primary-600 border-dashed z-[99]': isDragging,
-              'ring-2 ring-offset-2 ring-primary-600': isDraggedOver,
+          <div
+            className={clsx('⁂-compose-block', {
+              '⁂-compose-block--dragging': isDragging,
+              '⁂-compose-block--dragged-over': isDraggedOver,
             })}
-            variant='rounded'
             ref={composeBlock}
           >
-            <CardBody>
-              <HStack alignItems='start' space={2}>
-                {!disableUserProvidedMedia && (
-                  <Link to={`/@${acct}`}>
-                    <Avatar src={avatar} alt={account?.avatar_description} isCat={account?.is_cat} size={42} username={account?.username} />
-                  </Link>
-                )}
+            <div className='⁂-compose-block__body'>
+              {!disableUserProvidedMedia && (
+                <Link className='⁂-compose-block__avatar' to={`/@${acct}`}>
+                  <Avatar src={avatar} alt={account?.avatar_description} isCat={account?.is_cat} size={42} username={account?.username} />
+                </Link>
+              )}
 
-                <div className='w-full translate-y-0.5'>
-                  <ComposeForm
-                    id={composeId}
-                    shouldCondense
-                    autoFocus={false}
-                    clickableAreaRef={composeBlock}
-                    withAvatar
-                    transparent
-                  />
-                </div>
-              </HStack>
-            </CardBody>
-          </Card>
+              <div className='⁂-compose-block__form'>
+                <ComposeForm
+                  id={composeId}
+                  shouldCondense
+                  autoFocus={false}
+                  clickableAreaRef={composeBlock}
+                  withAvatar
+                  transparent
+                />
+              </div>
+            </div>
+          </div>
         )}
 
         {children}
-      </Layout.Main>
+      </Layout.Main >
 
       <Layout.Aside>
         {!me && (

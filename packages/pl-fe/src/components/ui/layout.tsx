@@ -56,7 +56,7 @@ const Main: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, classN
     <main
       className={clsx({
         '⁂-layout__main': true,
-        '⁂-layout__main--chats-page': features.chats,
+        '⁂-layout__main--chats': features.chats,
       }, className)}
     >
       {children}

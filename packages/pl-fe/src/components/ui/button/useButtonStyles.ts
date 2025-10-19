@@ -27,7 +27,6 @@ type ButtonThemes = keyof typeof themes
 type IButtonStyles = {
   theme: ButtonThemes;
   block: boolean;
-  disabled: boolean;
   size: ButtonSizes;
 }
 
@@ -35,12 +34,10 @@ type IButtonStyles = {
 const useButtonStyles = ({
   theme,
   block,
-  disabled,
   size,
 }: IButtonStyles) => {
   const buttonStyle = clsx({
-    'inline-flex items-center place-content-center border font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 appearance-none transition-all': true,
-    'select-none disabled:opacity-75 disabled:cursor-default': disabled,
+    'rtl:space-x-reverse inline-flex items-center place-content-center border font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 appearance-none transition-all disabled:select-none disabled:opacity-75 disabled:cursor-default': true,
     [`${themes[theme]}`]: true,
     [`${sizes[size]}`]: true,
     'flex w-full justify-center': block,

@@ -5,8 +5,8 @@ import { useLocation, useRouteMatch } from 'react-router-dom';
 import { groupComposeModal } from 'pl-fe/actions/compose';
 import { useGroup } from 'pl-fe/api/hooks/groups/use-group';
 import Avatar from 'pl-fe/components/ui/avatar';
-import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
+import Icon from 'pl-fe/components/ui/icon';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useModalsStore } from 'pl-fe/stores/modals';
 
@@ -34,17 +34,14 @@ const HomeComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
   const onOpenCompose = () => openModal('COMPOSE');
 
   return (
-    <Button
-      theme='accent'
-      size='lg'
+    <button
+      className='⁂-sidebar-navigation__compose-button'
       onClick={onOpenCompose}
-      block
-      icon={shrink ? require('@phosphor-icons/core/regular/plus.svg') : undefined}
     >
-      {!shrink && (
-        <FormattedMessage id='navigation.compose' defaultMessage='Compose' />
-      )}
-    </Button>
+      {shrink
+        ? <Icon src={require('@phosphor-icons/core/regular/plus.svg')} />
+        : <FormattedMessage id='navigation.compose' defaultMessage='Compose' />}
+    </button>
   );
 };
 
@@ -60,22 +57,19 @@ const GroupComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
   };
 
   return (
-    <Button
-      theme='accent'
-      size='lg'
+    <button
+      className='⁂-sidebar-navigation__compose-button'
       onClick={onOpenCompose}
-      block
-      icon={shrink ? require('@phosphor-icons/core/regular/plus.svg') : undefined}
     >
-      {!shrink && (
-        <HStack space={3} alignItems='center'>
+      {shrink
+        ? <Icon src={require('@phosphor-icons/core/regular/plus.svg')} />
+        : <HStack space={3} alignItems='center'>
           <Avatar className='-my-1 border-2 border-white' size={30} src={group.avatar} alt={group.avatar_description} />
           <span>
             <FormattedMessage id='navigation.compose_group' defaultMessage='Compose to group' />
           </span>
-        </HStack>
-      )}
-    </Button>
+        </HStack>}
+    </button>
   );
 };
 

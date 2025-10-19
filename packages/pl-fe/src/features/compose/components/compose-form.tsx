@@ -5,6 +5,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 import { length } from 'stringz';
 
+import 'pl-fe/styles/new/compose.scss';
 import {
   submitCompose,
   clearComposeSuggestions,
@@ -97,40 +98,19 @@ interface IComposeButton extends Pick<
 const ComposeButton: React.FC<IComposeButton> = ({ actionsMenu, disabled, icon, text, ...props }) => {
   const intl = useIntl();
 
-  const containerClassName = 'flex items-center gap-px text-sm font-medium text-gray-100';
-  const buttonClassName = 'inline-flex select-none appearance-none border border-transparent bg-primary-500 transition-all hover:bg-primary-400 focus:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:ring-offset-2 disabled:cursor-default disabled:opacity-75 dark:hover:bg-primary-600';
-
-  const button = (
-    <button
-      {...props}
-      disabled={disabled}
-      className={clsx({
-        'place-content-center items-center gap-x-2 px-4 py-2 rtl:space-x-reverse': true,
-        [buttonClassName]: true,
-        'rounded-l-full pr-2': actionsMenu,
-        [containerClassName]: !actionsMenu,
-        'rounded-full': !actionsMenu,
-      })}
-    >
-      {icon ? <Icon src={icon} className='size-4' /> : null}
-      <span>{text}</span>
-    </button>
+  return (
+    <div className='⁂-compose-form__button__container'>
+      <button {...props} disabled={disabled} className='⁂-compose-form__button'>
+        {icon ? <Icon src={icon} /> : null}
+        <span>{text}</span>
+      </button>
+      <DropdownMenu items={actionsMenu} placement='bottom' disabled={disabled}>
+        <button className='⁂-compose-form__button__actions' title={intl.formatMessage(messages.more)}>
+          <SvgIcon src={require('@phosphor-icons/core/regular/caret-down.svg')} />
+        </button>
+      </DropdownMenu>
+    </div>
   );
-
-  if (actionsMenu) {
-    return (
-      <div className={containerClassName}>
-        {button}
-        <DropdownMenu items={actionsMenu} placement='bottom' disabled={disabled}>
-          <button className={clsx('h-full cursor-pointer py-2.5 pl-1 pr-3 last:rounded-r-full', buttonClassName)} title={intl.formatMessage(messages.more)}>
-            <SvgIcon src={require('@phosphor-icons/core/regular/caret-down.svg')} className='size-4' />
-          </button>
-        </DropdownMenu>
-      </div>
-    );
-  }
-
-  return button;
 };
 
 interface IComposeForm<ID extends string> {
@@ -175,7 +155,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
 
   const [composeFocused, setComposeFocused] = useState(false);
 
-  const formRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const editorRef = useRef<LexicalEditor>(null);
 
   const { isDraggedOver } = useDraggedFiles(formRef);
@@ -302,14 +282,14 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   }, []);
 
   const renderButtons = useCallback(() => (
-    <HStack alignItems='center' space={2}>
+    <div className='⁂-compose-form__buttons'>
       <UploadButtonContainer composeId={id} />
       <EmojiPickerDropdown onPickEmoji={handleEmojiPick} condensed={shouldCondense} />
       {features.polls && <PollButton composeId={id} />}
       {features.scheduledStatuses && <ScheduleButton composeId={id} />}
       {anyMedia && features.spoilers && <SensitiveMediaButton composeId={id} />}
       {features.interactionRequests && <InteractionPolicyButton composeId={id} />}
-    </HStack>
+    </div>
   ), [features, id, anyMedia]);
 
   const showModifiers = !condensed && (compose.media_attachments.length || compose.is_uploading || compose.poll?.options.length || compose.schedule);
@@ -347,7 +327,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   if (features.richText) selectButtons.push(<ContentTypeButton key='compose-type-button' composeId={id} />);
   if (features.postLanguages) selectButtons.push(<LanguageDropdown key='language-dropdown' composeId={id} />);
 
-  const actionsMenu: Menu | undefined = [];
+  const actionsMenu: Menu = [];
 
   if (features.createStatusPreview) {
     actionsMenu.push({
@@ -364,7 +344,14 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   });
 
   return (
-    <Stack className='w-full' space={4} ref={formRef} onClick={handleClick} element='form' onSubmit={handleSubmit}>
+    <form
+      className={clsx('⁂-compose-form', {
+        '⁂-compose-form--with-avatar': withAvatar,
+      })}
+      ref={formRef}
+      onClick={handleClick}
+      onSubmit={handleSubmit}
+    >
       {!!compose.in_reply_to && compose.approvalRequired && (
         <Warning
           message={(
@@ -402,10 +389,10 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
           <ComposeEditor
             key={modifiedLanguage}
             ref={editorRef}
-            className={transparent
-              ? ''
-              : 'rounded-md border-gray-400 px-3 py-2 ring-2 focus-within:border-primary-500 focus-within:ring-primary-500 dark:border-gray-800 dark:ring-gray-800 dark:focus-within:border-primary-500 dark:focus-within:ring-primary-500'}
-            placeholderClassName={transparent ? '' : 'pt-2'}
+            className={clsx('⁂-compose-form__editor', {
+              '⁂-compose-form__editor--transparent': transparent,
+            })}
+            placeholderClassName='⁂-compose-form__editor__placeholder'
             composeId={id}
             condensed={condensed}
             eventDiscussion={!!event}
@@ -429,23 +416,22 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
       <PreviewComposeContainer composeId={id} />
 
       <div
-        className={clsx('flex flex-wrap items-center justify-between', {
-          'hidden': condensed,
-          'ml-[-56px] sm:ml-0': withAvatar,
+        className={clsx('⁂-compose-form__footer', {
+          '⁂-compose-form__footer--condensed': condensed,
         })}
       >
         {renderButtons()}
 
-        <HStack space={4} alignItems='center' className='ml-auto rtl:ml-0 rtl:mr-auto'>
+        <div className='⁂-compose-form__actions'>
           {maxTootChars && (
-            <HStack space={1} alignItems='center'>
+            <div className='⁂-compose-form__counter'>
               <TextCharacterCounter max={maxTootChars} text={text} />
               <VisualCharacterCounter max={maxTootChars} text={text} />
-            </HStack>
+            </div>
           )}
 
           <ComposeButton type='submit' icon={publishIcon} text={publishText} disabled={!canSubmit} actionsMenu={actionsMenu} />
-        </HStack>
+        </div>
 
         {compose.redacting && (
           <List>
@@ -462,7 +448,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
           </List>
         )}
       </div>
-    </Stack>
+    </form>
   );
 };
 

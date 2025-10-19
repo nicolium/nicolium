@@ -44,7 +44,7 @@ const SpoilerInput: React.FC<ISpoilerInput> = ({
       theme={theme}
       searchTokens={[':']}
       id='cw-spoiler-input'
-      className='rounded-md !bg-transparent dark:!bg-transparent'
+      className='⁂-compose-form__spoiler-input'
       lang={modified_language || undefined}
     />
   );

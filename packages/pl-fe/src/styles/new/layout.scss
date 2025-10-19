@@ -2,6 +2,9 @@
 
 html {
   height: 100%;
+
+  --font-sans: pl-fe i18n, 'Inter', ui-sans-serif, system-ui, -apple-system, 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  --font-mono: 'Roboto Mono', ui-monospace, monospace;
 }
 
 body {
@@ -162,6 +165,14 @@ body {
   &__links {
     @apply flex flex-col gap-y-1.5;
   }
+
+  &__compose-button {
+    @include mixins.button($theme: accent, $size: lg, $block: true);
+
+    svg {
+      @apply size-4;
+    }
+  }
 }
 
 .⁂-sidebar-navigation-link {
@@ -308,7 +319,7 @@ body {
   &__main {
     @apply md:col-span-12 lg:col-span-9 xl:col-span-6 pb-14 lg:pb-0 xl:pb-16 black:border-gray-800 lg:black:border-l xl:black:border-r;
 
-    &--chats-page {
+    &--chats {
       @apply xl:pb-16;
     }
   }
