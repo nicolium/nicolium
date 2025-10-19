@@ -17,7 +17,7 @@ const messages = defineMessages({
 
 type CardSizes = keyof typeof sizes
 
-interface ICard {
+interface ICard extends Pick<React.HTMLAttributes<HTMLDivElement>, 'role' | 'aria-label'> {
   /** The type of card. */
   variant?: 'default' | 'rounded' | 'slim';
   /** Card size preset. */

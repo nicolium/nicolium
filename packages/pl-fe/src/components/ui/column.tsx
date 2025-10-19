@@ -80,7 +80,7 @@ const Column: React.FC<IColumn> = (props): JSX.Element => {
   }, []);
 
   return (
-    <div role='region' className='relative' aria-label={label} column-type={transparent ? 'transparent' : 'filled'}>
+    <Card role='region' aria-label={label} column-type={transparent ? 'transparent' : 'filled'} size={size} variant={transparent ? undefined : 'rounded'} className={clsx('relative', className)}>
       <Helmet>
         <title>{label}</title>
 
@@ -93,27 +93,25 @@ const Column: React.FC<IColumn> = (props): JSX.Element => {
         )}
       </Helmet>
 
-      <Card size={size} variant={transparent ? undefined : 'rounded'} className={className}>
-        {withHeader && (
-          <ColumnHeader
-            label={label}
-            backHref={backHref}
-            className={clsx({
-              'rounded-t-3xl': !isScrolled && !transparent,
-              'sticky top-0 z-10 bg-white/90 dark:bg-primary-900/90 black:bg-black/80 backdrop-blur': !transparent,
-              'p-4 sm:p-0 sm:pb-4 black:p-4': transparent,
-              '-mt-4 -mx-4 p-4': size !== 'lg' && !transparent,
-              '-mt-4 -mx-4 p-4 sm:-mt-6 sm:-mx-6 sm:p-6': size === 'lg' && !transparent,
-            })}
-            action={action}
-          />
-        )}
+      {withHeader && (
+        <ColumnHeader
+          label={label}
+          backHref={backHref}
+          className={clsx({
+            'rounded-t-3xl': !isScrolled && !transparent,
+            'sticky top-0 z-10 bg-white/90 dark:bg-primary-900/90 black:bg-black/80 backdrop-blur': !transparent,
+            'p-4 sm:p-0 sm:pb-4 black:p-4': transparent,
+            '-mt-4 -mx-4 p-4': size !== 'lg' && !transparent,
+            '-mt-4 -mx-4 p-4 sm:-mt-6 sm:-mx-6 sm:p-6': size === 'lg' && !transparent,
+          })}
+          action={action}
+        />
+      )}
 
-        <CardBody className={bodyClassName}>
-          {children}
-        </CardBody>
-      </Card>
-    </div>
+      <CardBody className={bodyClassName}>
+        {children}
+      </CardBody>
+    </Card>
   );
 };
 
