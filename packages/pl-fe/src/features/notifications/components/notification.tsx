@@ -443,40 +443,36 @@ const Notification: React.FC<INotification> = (props) => {
     )
   );
 
+  const statusInfo = <StatusInfo avatarSize={avatarSize} icon={renderIcon()} text={message} title={ariaLabel} />;
+
   return (
     <Hotkeys handlers={handlers} data-testid='notification'>
       <div
-        className='notification'
+        className='notification flex flex-col gap-2 p-4'
         tabIndex={0}
         aria-label={ariaLabel}
         ref={node}
       >
-        <div className='p-4'>
-          <div className='mb-2'>
-            <HStack alignItems='center' space={3}>
-              <div className='min-w-0 flex-1'>
-                <StatusInfo avatarSize={avatarSize} icon={renderIcon()} text={message} title={ariaLabel} />
-              </div>
+        {!['mention', 'status'].includes(notification.type) ? (
+          <HStack alignItems='center' space={3}>
+            <div className='min-w-0 flex-1'>
+              {statusInfo}
+            </div>
 
-              {!['mention', 'status'].includes(notification.type) && (
-                <div className='ml-auto flex-none'>
-                  <Text
-                    theme='muted'
-                    size='xs'
-                    truncate
-                    data-testid='message'
-                  >
-                    <RelativeTimestamp timestamp={notification.latest_page_notification_at!} theme='muted' size='sm' className='whitespace-nowrap' />
-                  </Text>
-                </div>
-              )}
-            </HStack>
-          </div>
+            <div className='ml-auto flex-none'>
+              <Text
+                theme='muted'
+                size='xs'
+                truncate
+                data-testid='message'
+              >
+                <RelativeTimestamp timestamp={notification.latest_page_notification_at!} theme='muted' size='sm' className='whitespace-nowrap' />
+              </Text>
+            </div>
+          </HStack>
+        ) : statusInfo}
 
-          <div>
-            {renderContent()}
-          </div>
-        </div>
+        {renderContent()}
       </div>
     </Hotkeys>
   );
