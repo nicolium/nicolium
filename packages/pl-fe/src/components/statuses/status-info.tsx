@@ -20,7 +20,7 @@ const StatusInfo = (props: IStatusInfo) => {
     <HStack
       space={2}
       alignItems='center'
-      className='-mb-2 w-fit cursor-default rounded-full border border-gray-200 bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700 black:border-gray-800 black:bg-gray-900 dark:border-transparent dark:bg-primary-800 dark:text-gray-600 rtl:space-x-reverse'
+      className='-mb-2 w-fit cursor-default rounded-full border border-gray-200 bg-gray-100 px-3 py-1 black:border-gray-800 black:bg-gray-900 dark:border-transparent dark:bg-primary-800 rtl:space-x-reverse'
       onClick={onClick}
       style={{ marginLeft: avatarSize + 12 }}
     >
