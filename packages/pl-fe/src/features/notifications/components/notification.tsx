@@ -27,6 +27,7 @@ import { NotificationType } from 'pl-fe/utils/notification';
 import type { NotificationGroup } from 'pl-api';
 import type { Account } from 'pl-fe/normalizers/account';
 import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
+import StatusInfo from 'pl-fe/components/statuses/status-info';
 
 const notificationForScreenReader = (intl: IntlShape, message: string, timestamp: string) => {
   const output = [message];
@@ -427,7 +428,7 @@ const Notification: React.FC<INotification> = (props) => {
 
   const targetName = notification.type === 'move' ? notification.target.acct : '';
 
-  const message: React.ReactNode = account && typeof account === 'object'
+  const message: React.ReactNode = accounts.length
     ? buildMessage(intl, displayedType, accounts, targetName, instance.title, !!status)
     : null;
 
@@ -435,7 +436,7 @@ const Notification: React.FC<INotification> = (props) => {
     notificationForScreenReader(
       intl,
       intl.formatMessage(messages[displayedType], {
-        name: account && typeof account === 'object' ? account.acct : '',
+        name: accounts.length ? intl.formatList(accounts.map(account => account.acct), { type: 'conjunction' }) : '',
         targetName,
       }),
       notification.latest_page_notification_at!,
@@ -453,26 +454,12 @@ const Notification: React.FC<INotification> = (props) => {
         <div className='p-4'>
           <div className='mb-2'>
             <HStack alignItems='center' space={3}>
-              <div
-                className='flex justify-end'
-                style={{ flexBasis: avatarSize }}
-              >
-                {renderIcon()}
-              </div>
-
-              <div className='truncate'>
-                <Text
-                  theme='muted'
-                  size='xs'
-                  truncate
-                  data-testid='message'
-                >
-                  {message}
-                </Text>
+              <div className='min-w-0 flex-1'>
+                <StatusInfo avatarSize={avatarSize} icon={renderIcon()} text={message} title={ariaLabel} />
               </div>
 
               {!['mention', 'status'].includes(notification.type) && (
-                <div className='ml-auto'>
+                <div className='ml-auto flex-none'>
                   <Text
                     theme='muted'
                     size='xs'
