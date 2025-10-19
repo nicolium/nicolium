@@ -6,6 +6,7 @@ import { mentionCompose, replyCompose } from 'pl-fe/actions/compose';
 import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import Icon from 'pl-fe/components/icon';
 import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
+import StatusInfo from 'pl-fe/components/statuses/status-info';
 import Emoji from 'pl-fe/components/ui/emoji';
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
@@ -27,7 +28,6 @@ import { NotificationType } from 'pl-fe/utils/notification';
 import type { NotificationGroup } from 'pl-api';
 import type { Account } from 'pl-fe/normalizers/account';
 import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
-import StatusInfo from 'pl-fe/components/statuses/status-info';
 
 const notificationForScreenReader = (intl: IntlShape, message: string, timestamp: string) => {
   const output = [message];
