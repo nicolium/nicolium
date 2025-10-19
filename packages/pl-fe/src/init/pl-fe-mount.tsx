@@ -13,7 +13,6 @@ import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { useCachedLocationHandler } from 'pl-fe/utils/redirect';
 
-const GdprBanner = React.lazy(() => import('pl-fe/components/gdpr-banner'));
 const EmbeddedStatus = React.lazy(() => import('pl-fe/features/embedded-status'));
 const UI = React.lazy(() => import('pl-fe/features/ui'));
 
@@ -24,7 +23,7 @@ const PlFeMount = () => {
   const { isLoggedIn } = useLoggedIn();
   const plFeConfig = usePlFeConfig();
 
-  const { redirectRootNoLogin, gdpr } = plFeConfig;
+  const { redirectRootNoLogin } = plFeConfig;
 
   // @ts-ignore: I don't actually know what these should be, lol
   const shouldUpdateScroll = (prevRouterProps, { location }) =>
@@ -60,12 +59,6 @@ const PlFeMount = () => {
                 <Suspense>
                   <ModalRoot />
                 </Suspense>
-
-                {(gdpr && !isLoggedIn) && (
-                  <Suspense>
-                    <GdprBanner />
-                  </Suspense>
-                )}
 
                 <div id='toaster'>
                   <Toaster

@@ -56,8 +56,6 @@ const plFeConfigSchema = coerceObject({
   )), null),
   copyright: v.fallback(v.string(), 'skibidi dop dop dop yes yes'),
   defaultSettings: v.fallback(v.partial(settingsSchema), {}),
-  gdpr: v.fallback(v.boolean(), false),
-  gdprUrl: v.fallback(v.string(), ''),
   greentext: v.fallback(v.boolean(), false),
   promoPanel: promoPanelSchema,
   navlinks: v.fallback(v.record(v.string(), filteredArray(footerItemSchema)), {}),
