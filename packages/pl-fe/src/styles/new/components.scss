@@ -1,26 +1,43 @@
 @use 'mixins';
 
 .⁂-accordion {
-  @apply rounded-lg bg-white text-gray-900 shadow dark:bg-primary-800 dark:text-gray-100 dark:shadow-none;
+  border-radius: 0.5rem;
+  @apply bg-white text-gray-900 shadow dark:bg-primary-800 dark:text-gray-100 dark:shadow-none;
 
   &__header {
-    @apply flex w-full items-center justify-between px-4 py-3 font-semibold;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
   
     &__actions {
-      @apply flex items-center gap-2;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     &__action .⁂-icon {
-      @apply size-5 text-gray-700 dark:text-gray-600;
+      width: 1.25rem;
+      height: 1.25rem;
+      @apply text-gray-700 dark:text-gray-600;
     }
 
     &__chevron {
-      @apply size-5 text-gray-700 transition-transform dark:text-gray-600;
+      width: 1.25rem;
+      height: 1.25rem;
+      @apply text-gray-700 transition-transform dark:text-gray-600;
     }
   }
 
   &__body {
-    @apply p-4 rounded-b-lg border-t border-solid border-gray-100 dark:border-primary-900 black:border-black;
+    padding: 1rem;
+    border-bottom-right-radius: 0.5rem;
+    border-bottom-left-radius: 0.5rem;
+    border-top-width: 1px;
+    border-style: solid;
+    @apply border-gray-100 dark:border-primary-900 black:border-black;
 
     p {
       @include mixins.text;
@@ -42,18 +59,26 @@
 }
 
 .⁂-divider {
-  @apply relative;
+  position: relative;
 
   > div:first-child {
-    @apply absolute inset-0 flex items-center;
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
 
     > div {
-      @apply w-full border-t-2 border-solid border-gray-100 black:border-t dark:border-gray-800;
+      width: 100%;
+      border-top-width: 2px;
+      border-style: solid;
+      @apply border-gray-100 black:border-t dark:border-gray-800;
     }
   }
 
   &__text {
-    @apply relative flex justify-center;
+    position: relative;
+    display: flex;
+    justify-content: center;
 
     > span {
       @apply bg-white px-2 text-gray-700 black:bg-black dark:bg-gray-900 dark:text-gray-600;
@@ -83,11 +108,25 @@
 }
 
 .⁂-counter {
-  @apply flex h-5 min-w-[20px] max-w-[26px] items-center justify-center rounded-full bg-secondary-500 text-xs font-medium text-white ring-2 ring-white black:ring-black dark:ring-gray-800
+  display: flex;
+  height: 1.25rem;
+  min-width: 1.25rem;
+  max-width: 1.625rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  color: white;
+
+  @apply bg-secondary-500 ring-2 ring-white black:ring-black dark:ring-gray-800;
 }
 
 .⁂-list {
-  @apply space-y-0.5;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
 }
 
 .⁂-list-item {
@@ -117,7 +156,9 @@
   }
 
   &__label {
-    @apply flex flex-col py-1.5 pr-4 rtl:pl-4 rtl:pr-0;
+    display: flex;
+    flex-direction: column;
+    @apply py-1.5 pr-4 rtl:pl-4 rtl:pr-0;
 
     > :first-child {
       @apply text-gray-900 dark:text-gray-100;
@@ -193,10 +234,19 @@ a.⁂-list-item,
   }
 
   button {
-    @apply flex cursor-pointer items-center space-x-1.5 whitespace-nowrap rounded-full bg-primary-600/80 px-4 py-2 text-white backdrop-blur-md transition-transform hover:scale-105 hover:bg-primary-700/80 active:scale-100;
+    display: flex;
+    cursor: pointer;
+    align-items: center;
+    gap: 0.375rem;
+    white-space: nowrap;
+    border-radius: 9999px;
+    padding: 0.5rem 1rem;
+    color: white;
+    @apply bg-primary-600/80 backdrop-blur-md transition-transform hover:scale-105 hover:bg-primary-700/80 active:scale-100;
   
     .⁂-icon svg {
-      @apply size-4;
+      width: 1rem;
+      height: 1rem;
     }
 
     p {
@@ -206,10 +256,12 @@ a.⁂-list-item,
 }
 
 .⁂-dropdown-menu {
-  @apply z-[1001] flex;
+  z-index: 1001;
+  display: flex;
 
   > div {
-    @apply z-[1001] bg-white py-1 shadow-lg ease-in-out focus:outline-none black:bg-black no-reduce-motion:transition-all dark:bg-gray-900 dark:ring-2 dark:ring-primary-700 rounded-md min-w-56 max-w-sm duration-100;
+    z-index: 1001;
+    @apply bg-white py-1 shadow-lg ease-in-out focus:outline-none black:bg-black no-reduce-motion:transition-all dark:bg-gray-900 dark:ring-2 dark:ring-primary-700 rounded-md min-w-56 max-w-sm duration-100;
   }
 
   &__arrow {
