@@ -1,5 +1,10 @@
 .loading-indicator-wrapper {
-  @apply h-screen w-screen flex justify-center items-center;
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .loading-indicator {
@@ -7,7 +12,9 @@
 }
 
 .loading-indicator__container {
-  @apply w-10 h-10 relative;
+  width: 2.5rem;
+  height: 2.5rem;
+  position: relative;
 }
 
 .loading-indicator__figure {
