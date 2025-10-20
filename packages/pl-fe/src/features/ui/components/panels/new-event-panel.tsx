@@ -9,7 +9,7 @@ const NewEventPanel = () => (
   <Stack space={2}>
     <Stack>
       <Text size='lg' weight='bold'>
-        <FormattedMessage id='new_event_panel.title' defaultMessage='Create New Event' />
+        <FormattedMessage id='new_event_panel.title' defaultMessage='Create new event' />
       </Text>
 
       <Text theme='muted' size='sm'>

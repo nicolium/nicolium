@@ -1,4 +1,5 @@
 import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import { useGroups } from 'pl-fe/api/hooks/groups/use-groups';
 import Widget from 'pl-fe/components/ui/widget';
@@ -15,7 +16,7 @@ const MyGroupsPanel = () => {
 
   return (
     <Widget
-      title='My Groups'
+      title={<FormattedMessage id='my_groups_panel.title' defaultMessage='My groups' />}
     >
       {isFetching ? (
         new Array(3).fill(0).map((_, idx) => (
