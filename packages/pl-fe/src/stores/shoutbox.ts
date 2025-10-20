@@ -2,11 +2,16 @@ import { useEffect } from 'react';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
+import { importEntities } from 'pl-fe/actions/importer';
 import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 
 import type { PlApiClient, ShoutMessage as BaseShoutMessage } from 'pl-api';
+import type { store } from 'pl-fe/store';
+
+let lazyStore: typeof store;
+import('pl-fe/store').then(({ store }) => lazyStore = store).catch(() => {});
 
 const minifyMessage = ({ author, ...message }: BaseShoutMessage) => ({
   author_id: author.id,
@@ -29,10 +34,12 @@ const useShoutboxStore = create<State>()(mutative((set) => ({
   messages: [],
   isLoading: true,
   setMessages: (messages) => set((state: State) => {
+    lazyStore?.dispatch(importEntities({ accounts: messages.map((msg) => msg.author) }) as any);
     state.messages = messages.map(minifyMessage);
     state.isLoading = false;
   }),
   pushMessage: (message) => set((state: State) => {
+    lazyStore?.dispatch(importEntities({ accounts: [message.author] }) as any);
     state.messages.push(minifyMessage(message));
   }),
   setSocket: (socket) => set((state: State) => {
