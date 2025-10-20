@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import AutosuggestAccountInput from 'pl-fe/components/autosuggest-account-input';
@@ -74,7 +74,7 @@ const SearchInput = React.memo(() => {
 
   return (
     <div className='w-full'>
-      <label htmlFor='search' className='sr-only'>{intl.formatMessage(messages.placeholder)}</label>
+      <label htmlFor='search' className='sr-only'><FormattedMessage id='search.placeholder' defaultMessage='Search' /></label>
 
       <div className='relative'>
         <AutosuggestAccountInput

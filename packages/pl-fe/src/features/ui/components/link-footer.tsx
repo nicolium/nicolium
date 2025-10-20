@@ -2,7 +2,6 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { WITH_LANDING_PAGE } from 'pl-fe/build-config';
-import Text from 'pl-fe/components/ui/text';
 import Emojify from 'pl-fe/features/emoji/emojify';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import sourceCode from 'pl-fe/utils/code';

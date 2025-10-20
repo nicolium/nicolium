@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedDate, useIntl } from 'react-intl';
 
 import IconButton from 'pl-fe/components/icon-button';
 import { DatePicker } from 'pl-fe/features/ui/util/async-components';
@@ -76,7 +76,7 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
           aria-label={intl.formatMessage(messages.previousMonth)}
           title={intl.formatMessage(messages.previousMonth)}
         />
-        {intl.formatDate(date, { month: 'long' })}
+        <FormattedDate value={date} month='long' />
         <IconButton
           className='datepicker__button rtl:rotate-180'
           src={require('@phosphor-icons/core/regular/caret-right.svg')}
@@ -95,7 +95,7 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
           aria-label={intl.formatMessage(messages.previousYear)}
           title={intl.formatMessage(messages.previousYear)}
         />
-        {intl.formatDate(date, { year: 'numeric' })}
+        <FormattedDate value={date} year='numeric' />
         <IconButton
           className='datepicker__button rtl:rotate-180'
           src={require('@phosphor-icons/core/regular/caret-right.svg')}

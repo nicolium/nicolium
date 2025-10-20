@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, IntlShape } from 'react-intl';
+import { defineMessages, FormattedMessage, IntlShape } from 'react-intl';
 
 import { fetchAccountByUsername } from 'pl-fe/actions/accounts';
 import { deactivateUser, deleteUser, deleteStatus, toggleStatusSensitivity } from 'pl-fe/actions/admin';
@@ -15,7 +15,6 @@ import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const messages = defineMessages({
   deactivateUserHeading: { id: 'confirmations.admin.deactivate_user.heading', defaultMessage: 'Deactivate @{acct}' },
-  deactivateUserPrompt: { id: 'confirmations.admin.deactivate_user.message', defaultMessage: 'You are about to deactivate @{acct}. Deactivating a user is a reversible action.' },
   deactivateUserConfirm: { id: 'confirmations.admin.deactivate_user.confirm', defaultMessage: 'Deactivate @{name}' },
   userDeactivated: { id: 'admin.users.user_deactivated_message', defaultMessage: '@{acct} was deactivated' },
   deleteUserHeading: { id: 'confirmations.admin.delete_user.heading', defaultMessage: 'Delete @{acct}' },
@@ -50,7 +49,7 @@ const deactivateUserModal = (intl: IntlShape, accountId: string, afterConfirm = 
         </OutlineBox>
 
         <Text>
-          {intl.formatMessage(messages.deactivateUserPrompt, { acct })}
+          <FormattedMessage id='confirmations.admin.deactivate_user.message' defaultMessage='You are about to deactivate @{acct}. Deactivating a user is a reversible action.' values={{ acct }} />
         </Text>
       </Stack>
     );
@@ -84,7 +83,7 @@ const deleteUserModal = (intl: IntlShape, accountId: string, afterConfirm = () =
         </OutlineBox>
 
         <Text>
-          {intl.formatMessage(messages.deleteUserPrompt, { acct })}
+          <FormattedMessage id='confirmations.admin.delete_user.message' defaultMessage='You are about to delete @{acct}. THIS IS A DESTRUCTIVE ACTION THAT CANNOT BE UNDONE.' values={{ acct }} />
         </Text>
       </Stack>
     );

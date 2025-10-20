@@ -250,7 +250,7 @@ const Account = ({
 
               {account.verified && <VerificationBadge />}
 
-              {account.bot && <Badge slug='bot' title={intl.formatMessage(messages.bot)} />}
+              {account.bot && <Badge slug='bot' title={<FormattedMessage id='account.badges.bot' defaultMessage='Bot' />} />}
             </HStack>
 
             <Stack space={withAccountNote || note ? 1 : 0}>
@@ -329,7 +329,7 @@ const Account = ({
 
                   {account.verified && <VerificationBadge />}
 
-                  {account.bot && <Badge slug='bot' title={intl.formatMessage(messages.bot)} />}
+                  {account.bot && <Badge slug='bot' title={<FormattedMessage id='account.badges.bot' defaultMessage='Bot' />} />}
                 </HStack>
               </LinkEl>
             </ProfilePopper>

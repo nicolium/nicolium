@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { vote } from 'pl-fe/actions/polls';
 import Stack from 'pl-fe/components/ui/stack';
@@ -23,14 +23,9 @@ interface IPoll {
   truncate?: boolean;
 }
 
-const messages = defineMessages({
-  multiple: { id: 'poll.choose_multiple', defaultMessage: 'Choose as many as you\'d like.' },
-});
-
 const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): JSX.Element | null => {
   const { openModal } = useModalsStore();
   const dispatch = useAppDispatch();
-  const intl = useIntl();
 
   const isLoggedIn = useAppSelector((state) => state.me);
   const poll = useAppSelector((state) => state.polls[id]);
@@ -79,7 +74,7 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): JSX.Element 
     <div onClick={e => e.stopPropagation()}>
       {!showResults && poll.multiple && (
         <Text className='mb-4' theme='muted' size='sm'>
-          {intl.formatMessage(messages.multiple)}
+          <FormattedMessage id='poll.choose_multiple' defaultMessage="Choose as many as you'd like." />
         </Text>
       )}
 

@@ -312,6 +312,7 @@
   "chat_composer.unblock": "Unblock",
   "chat_list_item.blocked_you": "This user has blocked you",
   "chat_list_item.blocking": "You have blocked this user",
+  "chat_list_item.settings": "Chat settings",
   "chat_list_item_shoutbox": "{instance} shoutbox",
   "chat_message_list.blocked": "You blocked this user",
   "chat_message_list.blocked_by": "You are blocked by",
