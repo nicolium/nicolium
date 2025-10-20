@@ -102,7 +102,7 @@ export const WrenchedTimeline = lazy(() => import('pl-fe/pages/timelines/wrenche
 // Panels
 export const AccountNotePanel = lazy(() => import('pl-fe/features/ui/components/panels/account-note-panel'));
 export const AnnouncementsPanel = lazy(() => import('pl-fe/components/announcements/announcements-panel'));
-export const BirthdayPanel = lazy(() => import('pl-fe/components/birthday-panel'));
+export const BirthdayPanel = lazy(() => import('pl-fe/features/ui/components/panels/birthday-panel'));
 export const CryptoDonatePanel = lazy(() => import('pl-fe/features/crypto-donate/components/crypto-donate-panel'));
 export const GroupMediaPanel = lazy(() => import('pl-fe/features/ui/components/panels/group-media-panel'));
 export const InstanceInfoPanel = lazy(() => import('pl-fe/features/ui/components/panels/instance-info-panel'));

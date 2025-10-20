@@ -25,6 +25,9 @@
   } @else if $size == 3xl {
     font-size: 1.875rem;
     line-height: 2.25rem;
+  } @else if $size == inherit {
+    font-size: inherit;
+    line-height: inherit;
   } @else {
     @warn "Unknown font size `#{$size}`.";
   }

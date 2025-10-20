@@ -337,10 +337,51 @@ body {
   @apply fixed pointer-events-none inset-x-0 top-0 flex justify-center overflow-hidden black:hidden;
 
   &--preview {
-    @apply absolute;
+    position: absolute;
   }
 
   > div {
-    @apply bg-gradient-sm lg:bg-gradient-light lg:dark:bg-gradient-dark h-screen w-screen;
+    height: 100vh;
+    width: 100vw;
+    @apply bg-gradient-sm lg:bg-gradient-light lg:dark:bg-gradient-dark;
+  }
+}
+
+.⁂-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+
+    h1 {
+      @include mixins.text($size: xl, $weight: bold);
+    }
+  }
+
+  &__icon {
+    margin-left: 0.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    @apply text-black dark:text-white rtl:rotate-180;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+.⁂-footer-text {
+  @include mixins.text($size: sm, $theme: muted);
+
+  a {
+    @include mixins.text($size: inherit, $theme: subtle);
+    text-decoration-line: underline;
   }
 }
