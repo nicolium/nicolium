@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 
 import { useRelationship } from 'pl-fe/api/hooks/accounts/use-relationship';
@@ -27,6 +27,7 @@ const messages = defineMessages({
   leaveHeading: { id: 'chat_settings.leave.heading', defaultMessage: 'Leave chat' },
   leaveConfirm: { id: 'chat_settings.leave.confirm', defaultMessage: 'Leave chat' },
   leaveChat: { id: 'chat_settings.options.leave_chat', defaultMessage: 'Leave chat' },
+  settings: { id: 'chat_list_item.settings', defaultMessage: 'Chat settings' },
 });
 
 interface IChatListItemInterface {
@@ -114,7 +115,9 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
                 className='pointer-events-none h-5 w-full italic'
                 data-testid='chat-last-message'
               >
-                {intl.formatMessage(isBlocked ? messages.blockedYou : messages.blocking)}
+                {isBlocked
+                  ? <FormattedMessage id='chat_list_item.blocked_you' defaultMessage='This user has blocked you' />
+                  : <FormattedMessage id='chat_list_item.blocking' defaultMessage='You have blocked this user' />}
               </Text>
             ) : (
               <>
@@ -142,7 +145,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
               <DropdownMenu items={menu}>
                 <IconButton
                   src={require('@phosphor-icons/core/regular/dots-three.svg')}
-                  title='Settings'
+                  title={intl.formatMessage(messages.settings)}
                   className='text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500'
                   iconClassName='h-4 w-4'
                 />
