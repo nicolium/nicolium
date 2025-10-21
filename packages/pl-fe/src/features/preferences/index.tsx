@@ -68,7 +68,7 @@ const languages = {
   nl: 'Nederlands',
   no: 'Norsk',
   oc: 'Occitan',
-  pl: 'Polski',
+  pl: 'Polszczyzna',
   pt: 'Português',
   'pt-BR': 'Português do Brasil',
   ro: 'Română',
