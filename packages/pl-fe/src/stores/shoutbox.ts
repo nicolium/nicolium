@@ -34,7 +34,7 @@ const useShoutboxStore = create<State>()(mutative((set) => ({
   messages: [],
   isLoading: true,
   setMessages: (messages) => set((state: State) => {
-    lazyStore?.dispatch(importEntities({ accounts: messages.map((msg) => msg.author) }) as any);
+    lazyStore?.dispatch(importEntities({ accounts: messages.map((msg) => msg.author) }, { override: false }) as any);
     state.messages = messages.map(minifyMessage);
     state.isLoading = false;
   }),
