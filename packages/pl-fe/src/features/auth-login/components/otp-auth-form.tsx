@@ -63,7 +63,7 @@ const OtpAuthForm: React.FC<IOtpAuthForm> = ({ mfa_token, small }) => {
         <Input
           name='code'
           type='text'
-          autoComplete='off'
+          autoComplete='one-time-code'
           autoFocus
           required
         />

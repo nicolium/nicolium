@@ -98,7 +98,7 @@ const OtpConfirmForm: React.FC = () => {
             name='code'
             placeholder={intl.formatMessage(messages.codePlaceholder)}
             onChange={handleInputChange}
-            autoComplete='off'
+            autoComplete='one-time-code'
             disabled={isPending}
             value={state.code}
             type='text'
