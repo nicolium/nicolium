@@ -8,8 +8,9 @@ import { setComposeToStatus } from './compose';
 import { STATUS_FETCH_SOURCE_FAIL, type StatusesAction } from './statuses';
 import { deleteFromTimelines } from './timelines';
 
-import type { PleromaConfig } from 'pl-api';
+import type { PleromaConfig, Poll } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
+import { queryClient } from 'pl-fe/queries/client';
 
 const ADMIN_CONFIG_FETCH_SUCCESS = 'ADMIN_CONFIG_FETCH_SUCCESS' as const;
 
@@ -125,7 +126,7 @@ const redactStatus = (statusId: string) => (dispatch: AppDispatch, getState: () 
   const state = getState();
 
   const status = state.statuses[statusId]!;
-  const poll = status.poll_id ? state.polls[status.poll_id] : undefined;
+  const poll = status.poll_id ? queryClient.getQueryData<Poll>(['statuses', 'polls', status.poll_id]) : undefined;
 
   return getClient(state).statuses.getStatusSource(statusId).then(response => {
     dispatch(setComposeToStatus(status, poll, response.text, response.spoiler_text, response.content_type, false, undefined, undefined, true));

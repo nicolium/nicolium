@@ -131,14 +131,13 @@ const makeGetStatus = () => createSelector(
       if (group) return state.entities[Entities.GROUPS]?.store[group] as Group;
       return undefined;
     },
-    (state: RootState, { id }: APIStatus) => state.polls[id] || null,
     (_state: RootState, { username }: APIStatus) => username,
     getFilters,
     (state: RootState) => state.me,
     (state: RootState) => state.auth.client.features,
   ],
 
-  (statusBase, statusReblog, statusQuote, statusGroup, poll, username, filters, me, features) => {
+  (statusBase, statusReblog, statusQuote, statusGroup, username, filters, me, features) => {
     // const locale = getLocale('en');
 
     if (!statusBase) return null;
@@ -159,7 +158,6 @@ const makeGetStatus = () => createSelector(
       reblog: statusReblog || null,
       quote: statusQuote || null,
       group: statusGroup || null,
-      poll,
       filtered,
     };
   },

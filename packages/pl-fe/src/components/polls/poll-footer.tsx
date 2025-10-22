@@ -1,13 +1,12 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchPoll, vote } from 'pl-fe/actions/polls';
 import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import Tooltip from 'pl-fe/components/ui/tooltip';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { usePollQuery, usePollVoteMutation } from 'pl-fe/queries/statuses/use-poll';
 import { useStatusMetaActions } from 'pl-fe/stores/status-meta';
 
 import RelativeTimestamp from '../relative-timestamp';
@@ -28,15 +27,17 @@ interface IPollFooter {
 }
 
 const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, statusId }): JSX.Element => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
+
+  const { refetch } = usePollQuery(poll.id);
+  const { mutate: vote } = usePollVoteMutation(poll.id);
 
   const { toggleShowPollResults } = useStatusMetaActions();
 
-  const handleVote = () => dispatch(vote(poll.id, Object.keys(selected) as any as number[]));
+  const handleVote = () => vote(Object.keys(selected) as any as number[]);
 
   const handleRefresh: React.EventHandler<React.MouseEvent> = (e) => {
-    dispatch(fetchPoll(poll.id));
+    refetch();
     e.stopPropagation();
     e.preventDefault();
   };

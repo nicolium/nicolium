@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { vote } from 'pl-fe/actions/polls';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { usePollQuery, usePollVoteMutation } from 'pl-fe/queries/statuses/use-poll';
 import { useModalsActions } from 'pl-fe/stores/modals';
 import { useStatusMeta } from 'pl-fe/stores/status-meta';
 
@@ -25,10 +24,12 @@ interface IPoll {
 
 const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): JSX.Element | null => {
   const { openModal } = useModalsActions();
-  const dispatch = useAppDispatch();
 
   const isLoggedIn = useAppSelector((state) => state.me);
-  const poll = useAppSelector((state) => state.polls[id]);
+
+  const { data: poll } = usePollQuery(id);
+  // TODO: handle pending mutation state
+  const { mutate: vote } = usePollVoteMutation(id);
 
   const { showPollResults } = useStatusMeta(status.id);
 
@@ -39,8 +40,6 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): JSX.Element 
       action: 'POLL_VOTE',
       ap_id: status?.url,
     });
-
-  const handleVote = (selectedId: number) => dispatch(vote(id, [selectedId]));
 
   const toggleOption = (value: number) => {
     if (isLoggedIn) {
@@ -56,7 +55,7 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): JSX.Element 
         const tmp: Selected = {};
         tmp[value] = true;
         setSelected(tmp);
-        handleVote(value);
+        vote([value]);
       }
     } else {
       openUnauthorizedModal();

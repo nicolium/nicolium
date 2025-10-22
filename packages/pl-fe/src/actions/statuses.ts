@@ -11,7 +11,7 @@ import { setComposeToStatus } from './compose';
 import { importEntities } from './importer';
 import { deleteFromTimelines } from './timelines';
 
-import type { CreateStatusParams, Status as BaseStatus, ScheduledStatus, StatusSource } from 'pl-api';
+import type { CreateStatusParams, Status as BaseStatus, ScheduledStatus, StatusSource, Poll } from 'pl-api';
 import type { Status } from 'pl-fe/normalizers/status';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 import type { IntlShape } from 'react-intl';
@@ -91,7 +91,7 @@ const editStatus = (statusId: string) => (dispatch: AppDispatch, getState: () =>
   const state = getState();
 
   const status = state.statuses[statusId]!;
-  const poll = status.poll_id ? state.polls[status.poll_id] : undefined;
+  const poll = status.poll_id ? queryClient.getQueryData<Poll>(['statuses', 'polls', status.poll_id]) : undefined;
 
   dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_REQUEST });
 
@@ -123,7 +123,7 @@ const deleteStatus = (statusId: string, groupId?: string, withRedraft = false) =
     const state = getState();
 
     const status = state.statuses[statusId]!;
-    const poll = status.poll_id ? state.polls[status.poll_id] : undefined;
+    const poll = status.poll_id ? queryClient.getQueryData<Poll>(['statuses', 'polls', status.poll_id]) : undefined;
 
     dispatch<StatusesAction>({ type: STATUS_DELETE_REQUEST, params: status });
 

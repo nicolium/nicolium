@@ -17,7 +17,6 @@ import meta from './meta';
 import notifications from './notifications';
 import pending_statuses from './pending-statuses';
 import plfe from './pl-fe';
-import polls from './polls';
 import push_notifications from './push-notifications';
 import statuses from './statuses';
 import timelines from './timelines';
@@ -37,7 +36,6 @@ const reducers = {
   notifications,
   pending_statuses,
   plfe,
-  polls,
   push_notifications,
   statuses,
   timelines,
