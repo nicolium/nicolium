@@ -1,4 +1,5 @@
 import { importEntities } from 'pl-fe/actions/importer';
+import { queryClient } from 'pl-fe/queries/client';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import { filterBadges, getTagDiff } from 'pl-fe/utils/badges';
 
@@ -10,7 +11,6 @@ import { deleteFromTimelines } from './timelines';
 
 import type { PleromaConfig, Poll } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
-import { queryClient } from 'pl-fe/queries/client';
 
 const ADMIN_CONFIG_FETCH_SUCCESS = 'ADMIN_CONFIG_FETCH_SUCCESS' as const;
 
