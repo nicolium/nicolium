@@ -19,11 +19,14 @@ Changes made since the project forked from Soapbox in April 2024.
 - Hashtags from the last line of a post are displayed in a separate component. Adapted [from Mastodon](https://github.com/mastodon/mastodon/pull/26499).
 - Native grouped notifications are used on Mastodon.
 - Likes, reposts and reactions lists are displayed on long press of respective buttons.
+- User local time is displayed on profile and in account hover card, if specified in profile fields.
 
 **Settings:**
 - You can add image description to your avatar/backend, if supported by backend.
 - GoToSocial users can manage post interaction policies.
 - Users can set interface theme color.
+- Users can adjust interface size.
+- Users can use system font for emoji rendering.
 
 **Composing posts:**
 - WYSIWYG text formatting, available if Markdown is supported.
@@ -37,6 +40,7 @@ Changes made since the project forked from Soapbox in April 2024.
 - GoToSocial users can set per-post interaction policies.
 - When adding a URL with tracking parameters, a suggestion to remove them from the URL is displayed.
 - On supported backends, you can see post preview before posting.
+- When entering a long, all-lowercase hashtag, a suggestion about hashtag accessibility is displayed.
 
 **Dashboard:**
 - Dashboard main page displays metrics included in Mastodon admin dashboard, if supported by backend.
@@ -61,6 +65,7 @@ Changes made since the project forked from Soapbox in April 2024.
 - It is possible to boost a post with specific visibility, if supported by backend.
 - Pleroma shoutbox is displayed on chats page.
 - Displaying user-provided media can be disabled, media descriptions will be displayed instead.
+- MFM can be displayed on compatible backends.
 
 ### Changed
 
@@ -74,6 +79,7 @@ Changes made since the project forked from Soapbox in April 2024.
 - Mentions and hashtags in bio no longer link to external pages.
 - Quotes are counted with reblogs for non-detailed statuses.
 - Reactions/favourites/reblogs list modal is displayed on long press.
+- Various accessibility changes, focused on screen reader compatibility.
 
 **Settings:**
 - Moved missing description confirmation option back to Settings page.
@@ -105,6 +111,8 @@ Changes made since the project forked from Soapbox in April 2024.
 - Posts are now emojified during render, instead of when inserting posts to the state.
 - Barrel exports are no longer used.
 - Search page uses URL params now.
+- Themes use `adoptedStyleSheets` to work with stricter CSP.
+- Settings store uses a different key in development environment.
 
 **Dependencies:**
 - Replaced `react-popper` and `react-overlays` with `@floating-ui/react`.
@@ -117,6 +125,8 @@ Changes made since the project forked from Soapbox in April 2024.
 - Removed Rumble-specific embed handling.
 - Removed option that pretends to disable name editing for verified users.
 - Removed Call to Action banner.
+- Removed links to block explorers for crypto addresses.
+- Removed support for custom apps provided during build.
 
 ### Fixed
 
