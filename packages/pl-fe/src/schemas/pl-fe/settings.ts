@@ -1,6 +1,7 @@
 import * as v from 'valibot';
 
 import { locales } from 'pl-fe/messages';
+import { DEFAULT_NAVIGATION_ITEMS } from 'pl-fe/utils/navigation';
 
 import { coerceObject } from '../utils';
 
@@ -110,6 +111,13 @@ const settingsSchema = v.object({
 
   frequentlyUsedEmojis: v.fallback(v.record(v.string(), v.number()), {}),
   frequentlyUsedLanguages: v.fallback(v.record(v.string(), v.number()), {}),
+
+  navigation: coerceObject({
+    items: v.optional(v.array(coerceObject({
+      id: v.string(),
+      pinned: v.optional(v.boolean(), false),
+    })), DEFAULT_NAVIGATION_ITEMS),
+  }),
 
   saved: v.fallback(v.boolean(), true),
 

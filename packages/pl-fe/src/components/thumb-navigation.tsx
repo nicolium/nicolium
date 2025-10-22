@@ -1,44 +1,52 @@
-import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import React, { useMemo } from 'react';
+import { useIntl } from 'react-intl';
 import { useRouteMatch } from 'react-router-dom';
 
 import { groupComposeModal } from 'pl-fe/actions/compose';
 import ThumbNavigationLink from 'pl-fe/components/thumb-navigation-link';
 import Icon from 'pl-fe/components/ui/icon';
-import { useStatContext } from 'pl-fe/contexts/stat-context';
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
+import { useNavigationItems } from 'pl-fe/hooks/use-navigation-items';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { useModalsStore } from 'pl-fe/stores/modals';
+import { useSettingsStore } from 'pl-fe/stores/settings';
 import { useUiStore } from 'pl-fe/stores/ui';
+import { NAVIGATION_ICONS, navigationMessages, getPinnedNavigationItems, type NavigationItemId } from 'pl-fe/utils/navigation';
 import { isStandalone } from 'pl-fe/utils/state';
-
-const messages = defineMessages({
-  home: { id: 'navigation.home', defaultMessage: 'Home' },
-  search: { id: 'navigation.search', defaultMessage: 'Search' },
-  notifications: { id: 'navigation.notifications', defaultMessage: 'Notifications' },
-  chats: { id: 'navigation.chats', defaultMessage: 'Chats' },
-  compose: { id: 'navigation.compose', defaultMessage: 'Compose' },
-  openSidebar: { id: 'navigation.sidebar', defaultMessage: 'Open sidebar' },
-  closeSidebar: { id: 'navigation.sidebar.close', defaultMessage: 'Close sidebar' },
-});
 
 const ThumbNavigation: React.FC = React.memo((): JSX.Element => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { account } = useOwnAccount();
-  const features = useFeatures();
+  const { settings } = useSettingsStore();
 
   const match = useRouteMatch<{ groupId: string }>('/groups/:groupId');
 
   const { openSidebar, closeSidebar, isSidebarOpen } = useUiStore();
   const { openModal } = useModalsStore();
-  const { unreadChatsCount } = useStatContext();
 
   const standalone = useAppSelector(isStandalone);
-  const notificationCount = useAppSelector((state) => state.notifications.unread);
+
+  // Use the navigation items hook
+  const { items: allNavigationItems } = useNavigationItems();
+
+  // Get pinned navigation items from settings
+  const pinnedItems = useMemo(
+    () => getPinnedNavigationItems(settings.navigation.items),
+    [settings.navigation.items],
+  );
+
+  // Get first 4 pinned items that are available
+  const visibleItems = useMemo(() => {
+    return pinnedItems
+      .map(({ id }) => allNavigationItems.find(item => item.id === id))
+      .filter((item): item is typeof allNavigationItems[number] => {
+        return item !== undefined && item.show && (!standalone || item.id !== 'search' || !!account);
+      })
+      .slice(0, 4);
+  }, [pinnedItems, allNavigationItems, standalone, account]);
 
   const handleOpenComposeModal = () => {
     if (match?.params.groupId) {
@@ -55,7 +63,7 @@ const ThumbNavigation: React.FC = React.memo((): JSX.Element => {
     <button
       className='⁂-thumb-navigation__item ⁂-thumb-navigation__item--compose'
       onClick={handleOpenComposeModal}
-      title={intl.formatMessage(messages.compose)}
+      title={intl.formatMessage(navigationMessages.compose)}
     >
       <Icon src={require('@phosphor-icons/core/regular/plus-square.svg')} />
     </button>
@@ -66,67 +74,31 @@ const ThumbNavigation: React.FC = React.memo((): JSX.Element => {
       <button
         className='⁂-thumb-navigation__item'
         onClick={isSidebarOpen ? closeSidebar : openSidebar}
-        title={intl.formatMessage(isSidebarOpen ? messages.closeSidebar : messages.openSidebar)}
+        title={intl.formatMessage(isSidebarOpen ? navigationMessages.closeSidebar : navigationMessages.openSidebar)}
       >
         <Icon src={require('@phosphor-icons/core/regular/list.svg')} />
       </button>
 
-      <ThumbNavigationLink
-        src={require('@phosphor-icons/core/regular/house.svg')}
-        activeSrc={require('@phosphor-icons/core/fill/house-fill.svg')}
-        text={intl.formatMessage(messages.home)}
-        to='/'
-        exact
-      />
+      {visibleItems.map(item => {
+        const navItem = NAVIGATION_ICONS[item.id as NavigationItemId];
 
-      {/* {features.groups && (
-        <ThumbNavigationLink
-          src={require('@phosphor-icons/core/regular/users-three.svg')}
-          activeSrc={require('@phosphor-icons/core/fill/users-three-fill.svg')}
-          text={<FormattedMessage id='tabs_bar.groups' defaultMessage='Groups' />}
-          to='/groups'
-          exact
-        />
-      )} */}
+        if (!navItem) return null;
 
-      {account && !features.chats && composeButton}
-
-      {(!standalone || account) && (
-        <ThumbNavigationLink
-          src={require('@phosphor-icons/core/regular/magnifying-glass.svg')}
-          activeSrc={require('@phosphor-icons/core/fill/magnifying-glass-fill.svg')}
-          text={intl.formatMessage(messages.search)}
-          to='/search'
-          exact
-        />
-      )}
-
-      {account && (
-        <ThumbNavigationLink
-          src={require('@phosphor-icons/core/regular/bell-simple.svg')}
-          activeSrc={require('@phosphor-icons/core/fill/bell-simple-fill.svg')}
-          text={intl.formatMessage(messages.notifications)}
-          to='/notifications'
-          exact
-          count={notificationCount}
-        />
-      )}
-
-      {account && features.chats && (
-        <>
+        return (
           <ThumbNavigationLink
-            src={require('@phosphor-icons/core/regular/chats-teardrop.svg')}
-            activeSrc={require('@phosphor-icons/core/fill/chats-teardrop-fill.svg')}
-            text={intl.formatMessage(messages.chats)}
-            to='/chats'
+            key={item.id}
+            src={navItem.src}
+            activeSrc={navItem.activeSrc}
+            text={item.text}
+            to={item.to}
             exact
-            count={unreadChatsCount}
-            countMax={9}
+            count={item.count}
+            countMax={item.id === 'chats' ? 9 : undefined}
           />
+        );
+      })}
 
-          {composeButton}
-        </>
-      )}
+      {account && composeButton}
     </div>
   );
 });

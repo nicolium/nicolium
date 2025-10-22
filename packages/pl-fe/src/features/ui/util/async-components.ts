@@ -71,6 +71,7 @@ export const MediaGallery = lazy(() => import('pl-fe/components/media-gallery'))
 export const Migration = lazy(() => import('pl-fe/pages/settings/migration'));
 export const ModerationLog = lazy(() => import('pl-fe/pages/dashboard/moderation-log'));
 export const Mutes = lazy(() => import('pl-fe/pages/settings/mutes'));
+export const NavigationSettings = lazy(() => import('pl-fe/pages/settings/navigation'));
 export const NewStatus = lazy(() => import('pl-fe/pages/utils/new-status'));
 export const Notifications = lazy(() => import('pl-fe/pages/notifications/notifications'));
 export const OutgoingFollowRequests = lazy(() => import('pl-fe/pages/account-lists/outgoing-follow-requests'));
