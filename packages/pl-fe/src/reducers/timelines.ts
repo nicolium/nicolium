@@ -253,11 +253,17 @@ const getTimelinesForStatus = (status: Pick<BaseStatus, 'visibility' | 'group'> 
 
 // Given an OrderedSet of IDs, replace oldId with newId maintaining its position
 const replaceId = (ids: Array<string>, oldId: string, newId: string) => {
+  if (ids.includes(newId)) return false;
+
+  let found = false;
   const index = ids.indexOf(oldId);
 
   if (index > -1) {
     ids[index] = newId;
+    found = true;
   }
+
+  return found;
 };
 
 const importPendingStatus = (state: State, params: CreateStatusParams, idempotencyKey: string) => {
@@ -275,8 +281,12 @@ const replacePendingStatus = (state: State, idempotencyKey: string, newId: strin
 
   // Loop through timelines and replace the pending status with the real one
   for (const timelineId in state) {
-    replaceId(state[timelineId].items, oldId, newId);
-    replaceId(state[timelineId].queuedItems, oldId, newId);
+    const found = replaceId(state[timelineId].items, oldId, newId);
+    if (found) {
+      state[timelineId].queuedItems = state[timelineId].queuedItems.filter(id => id !== oldId);
+    } else {
+      replaceId(state[timelineId].queuedItems, oldId, newId);
+    }
   }
 };
 
