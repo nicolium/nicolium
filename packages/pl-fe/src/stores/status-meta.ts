@@ -83,7 +83,9 @@ const useStatusMetaStore = create<State>()(mutative((set) => ({
   },
 })));
 
-const useStatusMeta = (statusId: string) => useStatusMetaStore((state) => state.statuses[statusId] || {});
+const emptyStatusMeta = {};
+
+const useStatusMeta = (statusId: string) => useStatusMetaStore((state) => state.statuses[statusId] || emptyStatusMeta);
 const useStatusMetaActions = () => useStatusMetaStore((state) => state.actions);
 
 export { useStatusMetaStore, useStatusMeta, useStatusMetaActions };
