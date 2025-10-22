@@ -31,8 +31,8 @@ import { useBlockGroupUserMutation } from 'pl-fe/queries/groups/use-group-blocks
 import { useCustomEmojis } from 'pl-fe/queries/instance/use-custom-emojis';
 import { useTranslationLanguages } from 'pl-fe/queries/instance/use-translation-languages';
 import { useBookmarkStatus, useDislikeStatus, useFavouriteStatus, usePinStatus, useReblogStatus, useUnbookmarkStatus, useUndislikeStatus, useUnfavouriteStatus, useUnpinStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
-import { useModalsStore } from 'pl-fe/stores/modals';
-import { useStatusMetaStore } from 'pl-fe/stores/status-meta';
+import { useModalsActions } from 'pl-fe/stores/modals';
+import { useStatusMeta, useStatusMetaActions } from 'pl-fe/stores/status-meta';
 import toast from 'pl-fe/toast';
 import copy from 'pl-fe/utils/copy';
 
@@ -287,7 +287,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
   const intl = useIntl();
 
   const { boostModal } = useSettings();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const canReblog = useCanInteract(status, 'can_reblog');
 
   const { mutate: reblogStatus } = useReblogStatus(status.id);
@@ -393,7 +393,7 @@ const FavouriteButton: React.FC<IActionButton> = ({
   const features = useFeatures();
   const intl = useIntl();
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const canFavourite = useCanInteract(status, 'can_favourite');
 
   const { mutate: favouriteStatus } = useFavouriteStatus(status.id);
@@ -455,7 +455,7 @@ const DislikeButton: React.FC<IActionButton> = ({
   const features = useFeatures();
   const intl = useIntl();
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const { mutate: dislikeStatus } = useDislikeStatus(status.id);
   const { mutate: undislikeStatus } = useUndislikeStatus(status.id);
@@ -506,7 +506,7 @@ const WrenchButton: React.FC<IActionButton> = ({
   const intl = useIntl();
   const features = useFeatures();
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const { showWrenchButton } = useSettings();
 
   const { data: hasLongerWrench } = useCustomEmojis(getLongerWrench);
@@ -590,9 +590,9 @@ const MenuButton: React.FC<IMenuButton> = ({
   const { boostModal } = useSettings();
   const client = useClient();
 
-  const { statuses: statusesMeta, fetchTranslation, hideTranslation } = useStatusMetaStore();
-  const targetLanguage = statusesMeta[status.id]?.targetLanguage;
-  const { openModal } = useModalsStore();
+  const { fetchTranslation, hideTranslation } = useStatusMetaActions();
+  const { targetLanguage } = useStatusMeta(status.id);
+  const { openModal } = useModalsActions();
   const { group } = useGroup((status.group as Group)?.id as string);
   const { mutate: blockGroupMember } = useBlockGroupUserMutation(status.group?.id as string, status.account.id);
   const { getOrCreateChatByAccountId } = useChats();
@@ -1137,7 +1137,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   rebloggedBy,
 }) => {
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const me = useAppSelector(state => state.me);
 

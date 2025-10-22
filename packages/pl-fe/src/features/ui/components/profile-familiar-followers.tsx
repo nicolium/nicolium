@@ -11,7 +11,7 @@ import Emojify from 'pl-fe/features/emoji/emojify';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFamiliarFollowers } from 'pl-fe/queries/accounts/use-familiar-followers';
 import { makeGetAccount } from 'pl-fe/selectors';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import type { Account } from 'pl-fe/normalizers/account';
 
@@ -22,7 +22,7 @@ interface IProfileFamiliarFollowers {
 }
 
 const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account }) => {
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const { data: familiarFollowerIds = [] } = useFamiliarFollowers(account.id);
   const familiarFollowers = useAppSelector(state => familiarFollowerIds.slice(0, 2).map(accountId => getAccount(state, accountId)));
 

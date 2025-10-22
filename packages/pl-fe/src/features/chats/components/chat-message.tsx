@@ -14,7 +14,7 @@ import { MediaGallery } from 'pl-fe/features/ui/util/async-components';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { ChatKeys, useChatActions } from 'pl-fe/queries/chats';
 import { queryClient } from 'pl-fe/queries/client';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import { stripHTML } from 'pl-fe/utils/html';
 import { onlyEmoji } from 'pl-fe/utils/rich-content';
 
@@ -49,7 +49,7 @@ interface IChatMessage {
 const ChatMessage = (props: IChatMessage) => {
   const { chat, chatMessage } = props;
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const intl = useIntl();
 
   const me = useAppSelector((state) => state.me);

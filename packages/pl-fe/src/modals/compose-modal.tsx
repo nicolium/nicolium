@@ -10,7 +10,7 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useCompose } from 'pl-fe/hooks/use-compose';
 import { useDraggedFiles } from 'pl-fe/hooks/use-dragged-files';
 import { usePersistDraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
@@ -29,7 +29,7 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({ onClose, c
   const dispatch = useAppDispatch();
   const node = useRef<HTMLDivElement>(null);
   const compose = useCompose(composeId);
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const persistDraftStatus = usePersistDraftStatus();
 
   const { id: statusId, privacy, in_reply_to: inReplyTo, quote, group_id: groupId } = compose;

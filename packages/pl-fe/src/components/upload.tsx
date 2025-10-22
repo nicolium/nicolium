@@ -31,7 +31,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import Motion from 'pl-fe/features/ui/util/optional-motion';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import type { MediaAttachment } from 'pl-api';
 
@@ -102,7 +102,7 @@ const Upload: React.FC<IUpload> = ({
   withPreview = true,
 }) => {
   const intl = useIntl();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const handleUndoClick: React.MouseEventHandler = e => {
     if (onDelete) {

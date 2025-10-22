@@ -34,7 +34,7 @@ import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useChats } from 'pl-fe/queries/chats';
 import { queryClient } from 'pl-fe/queries/client';
 import { blockDomainMutationOptions, unblockDomainMutationOptions } from 'pl-fe/queries/settings/domain-blocks';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 import { isDefaultHeader } from 'pl-fe/utils/accounts';
 import copy from 'pl-fe/utils/copy';
@@ -135,7 +135,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const features = useFeatures();
   const { account: ownAccount } = useOwnAccount();
   const { follow } = useFollow();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const settings = useSettings();
 
   const { software } = features.version;

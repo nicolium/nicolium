@@ -2,7 +2,7 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { useCompose } from 'pl-fe/hooks/use-compose';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import ComposeFormButton from './compose-form-button';
 
@@ -17,7 +17,7 @@ interface IInteractionPolicyButton {
 const InteractionPolicyButton: React.FC<IInteractionPolicyButton> = ({ composeId }) => {
   const intl = useIntl();
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const handleClick = () => {
     openModal('COMPOSE_INTERACTION_POLICY', {

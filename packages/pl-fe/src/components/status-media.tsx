@@ -5,7 +5,7 @@ import PreviewCard from 'pl-fe/components/preview-card';
 import PlaceholderCard from 'pl-fe/features/placeholder/components/placeholder-card';
 import { MediaGallery, Video, Audio } from 'pl-fe/features/ui/util/async-components';
 import { useSettings } from 'pl-fe/hooks/use-settings';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import { useMediaVisible } from './statuses/sensitive-content-overlay';
 
@@ -27,7 +27,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   muted = false,
   onClick,
 }) => {
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const { displayMedia } = useSettings();
 
   const [visible] = useMediaVisible(status, displayMedia);

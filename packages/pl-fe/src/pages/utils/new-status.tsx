@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 const NewStatusPage = () => {
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   useEffect(() => {
     openModal('COMPOSE');

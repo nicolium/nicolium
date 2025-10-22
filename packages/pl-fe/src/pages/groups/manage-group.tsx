@@ -12,7 +12,7 @@ import Spinner from 'pl-fe/components/ui/spinner';
 import Text from 'pl-fe/components/ui/text';
 import Emojify from 'pl-fe/features/emoji/emojify';
 import ColumnForbidden from 'pl-fe/features/ui/components/column-forbidden';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
 type RouteParams = { groupId: string };
@@ -38,7 +38,7 @@ interface IManageGroup {
 const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
   const { groupId: id } = params;
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const history = useHistory();
   const intl = useIntl();
 

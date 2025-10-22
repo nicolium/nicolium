@@ -15,7 +15,7 @@ import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useChatActions } from 'pl-fe/queries/chats';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import type { Chat } from 'pl-api';
 import type { Menu } from 'pl-fe/components/dropdown-menu';
@@ -34,7 +34,7 @@ interface IChatListItemInterface {
 }
 
 const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const intl = useIntl();
   const features = useFeatures();
   const history = useHistory();

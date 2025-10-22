@@ -19,7 +19,7 @@ import { usePendingReportsCount } from 'pl-fe/queries/admin/use-reports';
 import { scheduledStatusesCountQueryOptions } from 'pl-fe/queries/statuses/scheduled-statuses';
 import { useDraftStatusesCountQuery } from 'pl-fe/queries/statuses/use-draft-statuses';
 import { useInteractionRequestsCount } from 'pl-fe/queries/statuses/use-interaction-requests';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import sourceCode from 'pl-fe/utils/code';
 
 import Account from './account';
@@ -55,7 +55,7 @@ interface ISidebarNavigation {
 const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) => {
   const intl = useIntl();
   const { unreadChatsCount } = useStatContext();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const instance = useInstance();
   const features = useFeatures();

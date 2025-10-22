@@ -11,7 +11,7 @@ import Spinner from 'pl-fe/components/ui/spinner';
 import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useCircle, useDeleteCircle } from 'pl-fe/queries/accounts/use-circles';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 const messages = defineMessages({
   deleteHeading: { id: 'confirmations.delete_circle.heading', defaultMessage: 'Delete circle' },
@@ -25,7 +25,7 @@ const CircleTimelinePage: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const { data: circle, isFetching } = useCircle(id);
   const { mutate: deleteCircle } = useDeleteCircle();

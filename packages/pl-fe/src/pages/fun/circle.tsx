@@ -17,7 +17,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
 const toRad = (x: number) => x * (Math.PI / 180);
@@ -51,7 +51,7 @@ const CirclePage: React.FC = () => {
   const dispatch = useAppDispatch();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const { account } = useOwnAccount();
 
   useEffect(() => {

@@ -3,7 +3,7 @@ import debounce from 'lodash/debounce';
 import React, { useRef } from 'react';
 
 import { isMobile } from 'pl-fe/is-mobile';
-import { useStatusHoverCardStore } from 'pl-fe/stores/status-hover-card';
+import { useStatusHoverCardActions } from 'pl-fe/stores/status-hover-card';
 
 const showStatusHoverCard = debounce((openStatusHoverCard, ref, statusId) => {
   openStatusHoverCard(ref, statusId);
@@ -18,7 +18,7 @@ interface IHoverStatusWrapper {
 
 /** Makes a status hover card appear when the wrapped element is hovered. */
 const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({ statusId, children, inline = false, className }) => {
-  const { openStatusHoverCard, closeStatusHoverCard } = useStatusHoverCardStore();
+  const { openStatusHoverCard, closeStatusHoverCard } = useStatusHoverCardActions();
 
   const ref = useRef<HTMLDivElement>(null);
   const Elem: keyof JSX.IntrinsicElements = inline ? 'span' : 'div';

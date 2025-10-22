@@ -8,7 +8,7 @@ import StatusList from 'pl-fe/components/status-list';
 import Column from 'pl-fe/components/ui/column';
 import { useBookmarks } from 'pl-fe/queries/status-lists/use-bookmarks';
 import { useBookmarkFolder, useDeleteBookmarkFolder } from 'pl-fe/queries/statuses/use-bookmark-folders';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
@@ -34,7 +34,7 @@ const BookmarksPage: React.FC<IBookmarks> = ({ params }) => {
 
   const folderId = params?.id;
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const { data: folder } = useBookmarkFolder(folderId);
   const { mutate: deleteBookmarkFolder } = useDeleteBookmarkFolder();
 

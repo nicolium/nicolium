@@ -6,14 +6,13 @@ import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
 import { useSettings } from 'pl-fe/hooks/use-settings';
-import { useStatusMetaStore } from 'pl-fe/stores/status-meta';
+import { useStatusMeta, useStatusMetaActions } from 'pl-fe/stores/status-meta';
 
 import type { FilterResult } from 'pl-api';
 import type { Status } from 'pl-fe/normalizers/status';
 
 const useMediaVisible = (status: Pick<Status, 'media_attachments' | 'sensitive'> & Partial<Pick<Status, 'filtered' | 'id'>>, displayMedia: 'default' | 'show_all' | 'hide_all'): [boolean, Array<FilterResult>] => {
-  const statusesMeta = useStatusMetaStore().statuses;
-  const mediaVisible = status.id ? statusesMeta[status.id]?.mediaVisible : undefined;
+  const { mediaVisible } = useStatusMeta(status.id as string);
 
   return useMemo(() => {
     let visible = !status.sensitive;
@@ -64,7 +63,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
 
   const matchedFilters = useMemo(() => filters.map(({ filter }) => filter.title), [filters]);
 
-  const { hideStatusesMedia, revealStatusesMedia } = useStatusMetaStore();
+  const { hideStatusesMedia, revealStatusesMedia } = useStatusMetaActions();
 
   const toggleVisibility = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.stopPropagation();

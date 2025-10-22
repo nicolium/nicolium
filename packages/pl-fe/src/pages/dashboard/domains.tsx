@@ -10,7 +10,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import Indicator from 'pl-fe/features/developers/components/indicator';
 import { useDomains } from 'pl-fe/queries/admin/use-domains';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
 import type { AdminDomain as DomainEntity } from 'pl-api';
@@ -31,7 +31,7 @@ interface IDomain {
 const Domain: React.FC<IDomain> = ({ domain }) => {
   const intl = useIntl();
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const { deleteDomain } = useDomains();
 
   const handleEditDomain = (domain: DomainEntity) => () => {
@@ -104,7 +104,7 @@ const Domain: React.FC<IDomain> = ({ domain }) => {
 const AdminDomainsPage: React.FC = () => {
   const intl = useIntl();
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const { data: domains, isFetching, refetch } = useDomains();
 
   const handleCreateDomain = () => {

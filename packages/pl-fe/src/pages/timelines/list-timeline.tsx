@@ -12,7 +12,7 @@ import Spinner from 'pl-fe/components/ui/spinner';
 import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useDeleteList, useList } from 'pl-fe/queries/accounts/use-lists';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 const messages = defineMessages({
   deleteHeading: { id: 'confirmations.delete_list.heading', defaultMessage: 'Delete list' },
@@ -26,7 +26,7 @@ const ListTimelinePage: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { id } = useParams<{ id: string }>();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const { data: list, isFetching } = useList(id);
   const { mutate: deleteList } = useDeleteList();

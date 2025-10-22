@@ -9,7 +9,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { useAnnouncements, useDeleteAnnouncementMutation } from 'pl-fe/queries/admin/use-announcements';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
 import type { AdminAnnouncement } from 'pl-api';
@@ -29,7 +29,7 @@ interface IAnnouncement {
 const Announcement: React.FC<IAnnouncement> = ({ announcement }) => {
   const intl = useIntl();
   const { mutate: deleteAnnouncement } = useDeleteAnnouncementMutation();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const handleEditAnnouncement = () => {
     openModal('EDIT_ANNOUNCEMENT', { announcement });
@@ -94,7 +94,7 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement }) => {
 
 const AdminAnnouncementsPage: React.FC = () => {
   const intl = useIntl();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const { data: announcements = [], isLoading, isPending } = useAnnouncements();
 

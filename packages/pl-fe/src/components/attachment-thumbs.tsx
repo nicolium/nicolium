@@ -2,7 +2,7 @@ import React, { Suspense } from 'react';
 
 import { MediaGallery } from 'pl-fe/features/ui/util/async-components';
 import { useSettings } from 'pl-fe/hooks/use-settings';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import { useMediaVisible } from './statuses/sensitive-content-overlay';
 
@@ -16,7 +16,7 @@ interface IAttachmentThumbs {
 
 const AttachmentThumbs = ({ status, onClick }: IAttachmentThumbs) => {
   const { displayMedia } = useSettings();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const fallback = <div className='⁂-media-gallery--compact' />;
   const onOpenMedia = (media: Array<MediaAttachment>, index: number) => openModal('MEDIA', { media, index });

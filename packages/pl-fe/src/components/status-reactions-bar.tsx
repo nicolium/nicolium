@@ -14,7 +14,7 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { useLongPress } from 'pl-fe/hooks/use-long-press';
 import { useSettings } from 'pl-fe/hooks/use-settings';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import AnimatedNumber from './animated-number';
 
@@ -43,7 +43,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, statusId, obfusca
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const features = useFeatures();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const bind = useLongPress((e) => {
     if (!features.emojiReactsList || e.type !== 'touchstart') return;

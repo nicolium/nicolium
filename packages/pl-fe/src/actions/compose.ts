@@ -211,7 +211,7 @@ const replyCompose = (
       approvalRequired,
       conversationScope: features.createStatusConversationScope,
     });
-    useModalsStore.getState().openModal('COMPOSE');
+    useModalsStore.getState().actions.openModal('COMPOSE');
   };
 
 const cancelReplyCompose = () => ({
@@ -243,7 +243,7 @@ const quoteCompose = (status: ComposeQuoteAction['status']) =>
       explicitAddressing,
       conversationScope: createStatusConversationScope,
     });
-    useModalsStore.getState().openModal('COMPOSE');
+    useModalsStore.getState().actions.openModal('COMPOSE');
   };
 
 const cancelQuoteCompose = (composeId: string) => ({
@@ -256,7 +256,7 @@ const groupComposeModal = (group: Pick<Group, 'id'>) =>
     const composeId = `group:${group.id}`;
 
     dispatch(groupCompose(composeId, group.id));
-    useModalsStore.getState().openModal('COMPOSE', { composeId });
+    useModalsStore.getState().actions.openModal('COMPOSE', { composeId });
   };
 
 const resetCompose = (composeId = 'compose-modal') => ({
@@ -279,7 +279,7 @@ const mentionCompose = (account: ComposeMentionAction['account']) =>
       composeId: 'compose-modal',
       account: account,
     });
-    useModalsStore.getState().openModal('COMPOSE');
+    useModalsStore.getState().actions.openModal('COMPOSE');
   };
 
 interface ComposeDirectAction {
@@ -295,7 +295,7 @@ const directCompose = (account: ComposeDirectAction['account']) =>
       composeId: 'compose-modal',
       account,
     });
-    useModalsStore.getState().openModal('COMPOSE');
+    useModalsStore.getState().actions.openModal('COMPOSE');
   };
 
 const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, composeId: string, data: BaseStatus | ScheduledStatus, status: string, edit?: boolean, redact?: boolean) => {
@@ -377,9 +377,9 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
       }
 
       if (!force && needsDescriptions(state, composeId)) {
-        useModalsStore.getState().openModal('MISSING_DESCRIPTION', {
+        useModalsStore.getState().actions.openModal('MISSING_DESCRIPTION', {
           onContinue: () => {
-            useModalsStore.getState().closeModal('MISSING_DESCRIPTION');
+            useModalsStore.getState().actions.closeModal('MISSING_DESCRIPTION');
             dispatch(submitCompose(composeId, { history, force: true, onSuccess }));
           },
         });
@@ -397,7 +397,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
     if (!preview) {
       dispatch(submitComposeRequest(composeId));
 
-      useModalsStore.getState().closeModal('COMPOSE');
+      useModalsStore.getState().actions.closeModal('COMPOSE');
 
       if (compose.language && !statusId && !preview) {
         useSettingsStore.getState().rememberLanguageUse(compose.language);
@@ -877,7 +877,7 @@ const changePollSettings = (composeId: string, expiresIn?: number, isMultiple?: 
 const openComposeWithText = (composeId: string, text = '') =>
   (dispatch: AppDispatch) => {
     dispatch(resetCompose(composeId));
-    useModalsStore.getState().openModal('COMPOSE');
+    useModalsStore.getState().actions.openModal('COMPOSE');
     dispatch(changeCompose(composeId, text));
   };
 

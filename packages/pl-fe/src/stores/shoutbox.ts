@@ -24,36 +24,45 @@ type State = {
   socket: ReturnType<(InstanceType<typeof PlApiClient>)['shoutbox']['connect']> | null;
   messages: Array<ShoutMessage>;
   isLoading: boolean;
-  setMessages: (messages: Array<BaseShoutMessage>) => void;
-  pushMessage: (message: BaseShoutMessage) => void;
-  setSocket: (socket: State['socket']) => void;
+  actions: {
+    setMessages: (messages: Array<BaseShoutMessage>) => void;
+    pushMessage: (message: BaseShoutMessage) => void;
+    setSocket: (socket: State['socket']) => void;
+  };
 };
 
 const useShoutboxStore = create<State>()(mutative((set) => ({
   socket: null,
   messages: [],
   isLoading: true,
-  setMessages: (messages) => set((state: State) => {
-    lazyStore?.dispatch(importEntities({ accounts: messages.map((msg) => msg.author) }, { override: false }) as any);
-    state.messages = messages.map(minifyMessage);
-    state.isLoading = false;
-  }),
-  pushMessage: (message) => set((state: State) => {
-    lazyStore?.dispatch(importEntities({ accounts: [message.author] }) as any);
-    state.messages.push(minifyMessage(message));
-  }),
-  setSocket: (socket) => set((state: State) => {
-    state.socket = socket;
-  }),
+  actions: {
+    setMessages: (messages) => set((state: State) => {
+      lazyStore?.dispatch(importEntities({ accounts: messages.map((msg) => msg.author) }, { override: false }) as any);
+      state.messages = messages.map(minifyMessage);
+      state.isLoading = false;
+    }),
+    pushMessage: (message) => set((state: State) => {
+      lazyStore?.dispatch(importEntities({ accounts: [message.author] }) as any);
+      state.messages.push(minifyMessage(message));
+    }),
+    setSocket: (socket) => set((state: State) => {
+      state.socket = socket;
+    }),
+  },
 }), {
   enableAutoFreeze: false,
 }));
+
+const useShoutboxMessages = () => useShoutboxStore((state) => state.messages);
+const useShoutboxIsLoading = () => useShoutboxStore((state) => state.isLoading);
+const useShoutboxSocket = () => useShoutboxStore((state) => state.socket);
+const useShoutboxActions = () => useShoutboxStore((state) => state.actions);
 
 const useShoutboxSubscription = () => {
   const client = useClient();
   const { shoutbox: shoutboxAvailable } = useFeatures();
   const { isLoggedIn } = useLoggedIn();
-  const shoutboxStore = useShoutboxStore();
+  const shoutboxStore = useShoutboxActions();
 
   useEffect(() => {
     if (!(shoutboxAvailable && isLoggedIn)) return;
@@ -78,8 +87,8 @@ const useShoutboxSubscription = () => {
 };
 
 const useCreateShoutboxMessage = () => {
-  const { socket } = useShoutboxStore();
+  const socket = useShoutboxSocket();
   return { mutate: socket?.message };
 };
 
-export { useShoutboxStore, useShoutboxSubscription, useCreateShoutboxMessage, type ShoutMessage };
+export { useShoutboxStore, useShoutboxMessages, useShoutboxIsLoading, useShoutboxSubscription, useCreateShoutboxMessage, type ShoutMessage };

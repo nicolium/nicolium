@@ -13,7 +13,7 @@ import Text from 'pl-fe/components/ui/text';
 import Emojify from 'pl-fe/features/emoji/emojify';
 import PlaceholderChatMessage from 'pl-fe/features/placeholder/components/placeholder-chat-message';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useShoutboxStore, type ShoutMessage } from 'pl-fe/stores/shoutbox';
+import { useShoutboxIsLoading, useShoutboxMessages, type ShoutMessage } from 'pl-fe/stores/shoutbox';
 
 import { ChatMessageListList, ChatMessageListScroller } from './chat-message-list';
 
@@ -98,7 +98,8 @@ const ShoutboxMessageList: React.FC = () => {
   const [firstItemIndex, setFirstItemIndex] = useState(START_INDEX - 20);
 
   const me = useAppSelector(state => state.me);
-  const { messages: shoutboxMessages = [], isLoading } = useShoutboxStore();
+  const shoutboxMessages = useShoutboxMessages() || [];
+  const isLoading = useShoutboxIsLoading();
 
   const lastShoutboxMessage = shoutboxMessages?.at(-1) || null;
 

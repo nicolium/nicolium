@@ -44,7 +44,7 @@ import { queryClient } from 'pl-fe/queries/client';
 import { prefetchCustomEmojis } from 'pl-fe/queries/instance/use-custom-emojis';
 import { scheduledStatusesQueryOptions } from 'pl-fe/queries/statuses/scheduled-statuses';
 import { useShoutboxSubscription } from 'pl-fe/stores/shoutbox';
-import { useUiStore } from 'pl-fe/stores/ui';
+import { useIsDropdownMenuOpen } from 'pl-fe/stores/ui';
 import { getVapidKey } from 'pl-fe/utils/auth';
 import { isStandalone } from 'pl-fe/utils/state';
 
@@ -396,7 +396,7 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
   const instance = useInstance();
   const { theme } = useSettings();
 
-  const { isDropdownMenuOpen } = useUiStore();
+  const isDropdownMenuOpen = useIsDropdownMenuOpen();
   const standalone = useAppSelector(isStandalone);
 
   useShoutboxSubscription();

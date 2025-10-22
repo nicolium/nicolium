@@ -13,7 +13,7 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useChatActions } from 'pl-fe/queries/chats';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import ChatPaneHeader from './chat-pane-header';
 
@@ -40,7 +40,7 @@ const ChatSettings = () => {
   const intl = useIntl();
   const features = useFeatures();
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const { chat, changeScreen, toggleChatPane } = useChatContext();
   const { deleteChat } = useChatActions(chat?.id as string);
 

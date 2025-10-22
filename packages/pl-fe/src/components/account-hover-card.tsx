@@ -19,7 +19,7 @@ import { UserPanel } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { accountScrobbleQueryOptions } from 'pl-fe/queries/accounts/account-scrobble';
-import { useAccountHoverCardStore } from 'pl-fe/stores/account-hover-card';
+import { useAccountHoverCardActions, useAccountHoverCardStore } from 'pl-fe/stores/account-hover-card';
 
 import AccountLocalTime from './account-local-time';
 import { showAccountHoverCard } from './hover-account-wrapper';
@@ -57,7 +57,8 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
   const history = useHistory();
   const intl = useIntl();
 
-  const { accountId, ref, updateAccountHoverCard, closeAccountHoverCard } = useAccountHoverCardStore();
+  const { accountId, ref } = useAccountHoverCardStore();
+  const { updateAccountHoverCard, closeAccountHoverCard } = useAccountHoverCardActions();
 
   const me = useAppSelector(state => state.me);
   const { account } = useAccount(accountId || undefined, { withRelationship: true });

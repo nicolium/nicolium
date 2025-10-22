@@ -8,7 +8,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import Tooltip from 'pl-fe/components/ui/tooltip';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useStatusMetaStore } from 'pl-fe/stores/status-meta';
+import { useStatusMetaActions } from 'pl-fe/stores/status-meta';
 
 import RelativeTimestamp from '../relative-timestamp';
 
@@ -31,7 +31,7 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const { toggleShowPollResults } = useStatusMetaStore();
+  const { toggleShowPollResults } = useStatusMetaActions();
 
   const handleVote = () => dispatch(vote(poll.id, Object.keys(selected) as any as number[]));
 

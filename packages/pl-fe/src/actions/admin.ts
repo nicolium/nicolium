@@ -129,7 +129,7 @@ const redactStatus = (statusId: string) => (dispatch: AppDispatch, getState: () 
 
   return getClient(state).statuses.getStatusSource(statusId).then(response => {
     dispatch(setComposeToStatus(status, poll, response.text, response.spoiler_text, response.content_type, false, undefined, undefined, true));
-    useModalsStore.getState().openModal('COMPOSE');
+    useModalsStore.getState().actions.openModal('COMPOSE');
   }).catch(error => {
     dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_FAIL, error });
   });

@@ -7,7 +7,7 @@ import Avatar from 'pl-fe/components/ui/avatar';
 import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import { useDraggedFiles } from 'pl-fe/hooks/use-dragged-files';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 const messages = defineMessages({
   changeDescriptionHeading: { id: 'group.upload_avatar.alt.heading', defaultMessage: 'Change avatar description' },
@@ -28,7 +28,7 @@ interface IMediaInput {
 const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
   className, src, onChange, accept, disabled, description, onChangeDescription,
 }, ref) => {
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const intl = useIntl();
 
   const picker = useRef<HTMLLabelElement>(null);

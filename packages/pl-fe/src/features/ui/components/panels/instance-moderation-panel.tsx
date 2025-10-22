@@ -7,7 +7,7 @@ import InstanceRestrictions from 'pl-fe/features/federation-restrictions/compone
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { makeGetRemoteInstance } from 'pl-fe/selectors';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 const getRemoteInstance = makeGetRemoteInstance();
 
@@ -23,7 +23,7 @@ interface IInstanceModerationPanel {
 /** Widget for moderators to manage a remote instance. */
 const InstanceModerationPanel: React.FC<IInstanceModerationPanel> = ({ host }) => {
   const intl = useIntl();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const { account } = useOwnAccount();
   const remoteInstance = useAppSelector(state => getRemoteInstance(state, host));

@@ -7,7 +7,7 @@ import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useCancelDraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import { useSettingsStore } from 'pl-fe/stores/settings';
 
 import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
@@ -27,7 +27,7 @@ interface IDraftStatusActionBar {
 const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status }) => {
   const intl = useIntl();
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const { settings } = useSettingsStore();
   const dispatch = useAppDispatch();
   const cancelDraftStatus = useCancelDraftStatus();

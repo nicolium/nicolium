@@ -13,7 +13,7 @@ import LoginForm from 'pl-fe/features/auth-login/components/login-form';
 import OtpAuthForm from 'pl-fe/features/auth-login/components/otp-auth-form';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import { getRedirectUrl } from 'pl-fe/utils/redirect';
 import { isStandalone } from 'pl-fe/utils/state';
 
@@ -21,7 +21,7 @@ import type { PlfeResponse } from 'pl-fe/api';
 
 const LoginPage = () => {
   const dispatch = useAppDispatch();
-  const { closeModal } = useModalsStore();
+  const { closeModal } = useModalsActions();
 
   const me = useAppSelector((state) => state.me);
   const standalone = useAppSelector((state) => isStandalone(state));

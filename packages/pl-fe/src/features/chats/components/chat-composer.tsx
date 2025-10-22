@@ -14,7 +14,7 @@ import UploadButton from 'pl-fe/features/compose/components/upload-button';
 import emojiSearch from 'pl-fe/features/emoji/search';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import { textAtCursorMatchesToken } from 'pl-fe/utils/suggestions';
 
 import ChatTextarea from './chat-textarea';
@@ -78,7 +78,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const { chat } = useChatContext();
   const { relationship } = useRelationship(chat?.account.id, { enabled: !!chat });
 

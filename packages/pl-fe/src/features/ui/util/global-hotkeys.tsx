@@ -5,7 +5,7 @@ import { resetCompose } from 'pl-fe/actions/compose';
 import { FOCUS_EDITOR_COMMAND } from 'pl-fe/features/compose/editor/plugins/focus-plugin';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import { Hotkeys } from '../components/hotkeys';
 
@@ -46,7 +46,7 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const { account } = useOwnAccount();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const handlers = useMemo(() => {
     const handleHotkeyNew = (e?: KeyboardEvent) => {

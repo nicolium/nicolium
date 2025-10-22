@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import HoverStatusWrapper from 'pl-fe/components/hover-status-wrapper';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import type { Status } from 'pl-fe/normalizers/status';
 
@@ -14,7 +14,7 @@ interface IStatusReplyMentions {
 }
 
 const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable = true }) => {
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const handleOpenMentionsModal: React.MouseEventHandler<HTMLSpanElement> = (e) => {
     e.stopPropagation();

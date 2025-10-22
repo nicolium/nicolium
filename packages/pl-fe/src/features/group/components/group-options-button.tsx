@@ -5,7 +5,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { useLeaveGroup } from 'pl-fe/api/hooks/groups/use-leave-group';
 import DropdownMenu, { Menu } from 'pl-fe/components/dropdown-menu';
 import IconButton from 'pl-fe/components/ui/icon-button';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
@@ -22,7 +22,7 @@ interface IGroupActionButton {
 }
 
 const GroupOptionsButton = ({ group }: IGroupActionButton) => {
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const intl = useIntl();
 
   const leaveGroup = useLeaveGroup(group);

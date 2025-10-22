@@ -11,8 +11,8 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { useModalsStore } from 'pl-fe/stores/modals';
-import { useUiStore } from 'pl-fe/stores/ui';
+import { useModalsActions } from 'pl-fe/stores/modals';
+import { useIsSidebarOpen, useUiStoreActions } from 'pl-fe/stores/ui';
 import { isStandalone } from 'pl-fe/utils/state';
 
 const messages = defineMessages({
@@ -33,8 +33,9 @@ const ThumbNavigation: React.FC = React.memo((): JSX.Element => {
 
   const match = useRouteMatch<{ groupId: string }>('/groups/:groupId');
 
-  const { openSidebar, closeSidebar, isSidebarOpen } = useUiStore();
-  const { openModal } = useModalsStore();
+  const isSidebarOpen = useIsSidebarOpen();
+  const { openSidebar, closeSidebar } = useUiStoreActions();
+  const { openModal } = useModalsActions();
   const { unreadChatsCount } = useStatContext();
 
   const standalone = useAppSelector(isStandalone);

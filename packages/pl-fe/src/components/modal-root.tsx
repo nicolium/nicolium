@@ -7,7 +7,7 @@ import { cancelReplyCompose } from 'pl-fe/actions/compose';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { usePrevious } from 'pl-fe/hooks/use-previous';
 import { usePersistDraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import type { ModalType } from 'pl-fe/features/ui/components/modal-root';
 import type { Compose } from 'pl-fe/reducers/compose';
@@ -39,7 +39,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   const dispatch = useAppDispatch();
 
   const persistDraftStatus = usePersistDraftStatus();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const [revealed, setRevealed] = useState(!!children);
 

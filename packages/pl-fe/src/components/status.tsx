@@ -18,8 +18,8 @@ import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useFavouriteStatus, useReblogStatus, useUnfavouriteStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
 import { makeGetStatus, type SelectedStatus } from 'pl-fe/selectors';
-import { useModalsStore } from 'pl-fe/stores/modals';
-import { useStatusMetaStore } from 'pl-fe/stores/status-meta';
+import { useModalsActions } from 'pl-fe/stores/modals';
+import { useStatusMetaActions } from 'pl-fe/stores/status-meta';
 import { textForScreenReader } from 'pl-fe/utils/status';
 
 import EventPreview from './event-preview';
@@ -78,8 +78,8 @@ const Status: React.FC<IStatus> = (props) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
 
-  const { toggleStatusesMediaHidden } = useStatusMetaStore();
-  const { openModal } = useModalsStore();
+  const { toggleStatusesMediaHidden } = useStatusMetaActions();
+  const { openModal } = useModalsActions();
   const { boostModal } = useSettings();
   const didShowCard = useRef(false);
   const node = useRef<HTMLDivElement>(null);

@@ -24,7 +24,7 @@ import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useChats } from 'pl-fe/queries/chats';
 import { useBookmarkStatus, usePinStatus, useReblogStatus, useUnbookmarkStatus, useUnpinStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import copy from 'pl-fe/utils/copy';
 import { download } from 'pl-fe/utils/download';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
@@ -80,7 +80,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const dispatch = useAppDispatch();
   const history = useHistory();
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const { getOrCreateChatByAccountId } = useChats();
 
   const features = useFeatures();

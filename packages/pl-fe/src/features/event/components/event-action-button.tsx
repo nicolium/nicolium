@@ -4,7 +4,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import Button from 'pl-fe/components/ui/button';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useJoinEventMutation, useLeaveEventMutation } from 'pl-fe/queries/statuses/use-event-interactions';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import type { ButtonThemes } from 'pl-fe/components/ui/button/useButtonStyles';
 import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
@@ -23,7 +23,7 @@ interface IEventAction {
 const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary' }) => {
   const intl = useIntl();
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const me = useAppSelector((state) => state.me);
 
   const { mutate: joinEvent } = useJoinEventMutation(status.id);

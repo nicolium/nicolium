@@ -5,7 +5,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Text from 'pl-fe/components/ui/text';
 import { type Language, languages } from 'pl-fe/features/preferences';
-import { useStatusMetaStore } from 'pl-fe/stores/status-meta';
+import { useStatusMeta, useStatusMetaActions } from 'pl-fe/stores/status-meta';
 
 import DropdownMenu from './dropdown-menu';
 
@@ -23,9 +23,8 @@ interface IStatusLanguagePicker {
 const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = React.memo(({ status, showLabel }) => {
   const intl = useIntl();
 
-  const { statuses, setStatusLanguage } = useStatusMetaStore();
-
-  const { currentLanguage } = statuses[status.id] || {};
+  const { currentLanguage } = useStatusMeta(status.id);
+  const { setStatusLanguage } = useStatusMetaActions();
 
   if (!status.content_map || Object.keys(status.content_map).length < 2) return null;
 

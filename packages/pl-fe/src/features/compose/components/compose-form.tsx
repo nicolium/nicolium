@@ -32,7 +32,7 @@ import { useDraggedFiles } from 'pl-fe/hooks/use-dragged-files';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { usePersistDraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
 import PreviewComposeContainer from '../containers/preview-compose-container';
@@ -129,7 +129,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { configuration } = useInstance();
-  const { closeModal } = useModalsStore();
+  const { closeModal } = useModalsActions();
 
   const compose = useCompose(id);
   const maxTootChars = configuration.statuses.max_characters;

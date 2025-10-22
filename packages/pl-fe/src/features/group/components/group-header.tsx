@@ -11,7 +11,7 @@ import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import Emojify from 'pl-fe/features/emoji/emojify';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import { isDefaultHeader } from 'pl-fe/utils/accounts';
 
 import GroupActionButton from './group-action-button';
@@ -32,7 +32,7 @@ interface IGroupHeader {
 
 const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
   const intl = useIntl();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const [isHeaderMissing, setIsHeaderMissing] = useState<boolean>(false);
 

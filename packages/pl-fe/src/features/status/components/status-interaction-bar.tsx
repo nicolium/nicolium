@@ -7,7 +7,7 @@ import AnimatedNumber from 'pl-fe/components/animated-number';
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import type { Status } from 'pl-fe/normalizers/status';
 
@@ -16,7 +16,7 @@ interface IStatusInteractionBar {
 }
 
 const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.Element | null => {
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const features = useFeatures();
   const { account } = status;
 

@@ -8,7 +8,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { useRules } from 'pl-fe/queries/admin/use-rules';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
 import type { AdminRule } from 'pl-api';
@@ -27,7 +27,7 @@ interface IRule {
 
 const Rule: React.FC<IRule> = ({ rule }) => {
   const intl = useIntl();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const { deleteRule } = useRules();
 
   const handleEditRule = (rule: AdminRule) => () => {
@@ -75,7 +75,7 @@ const Rule: React.FC<IRule> = ({ rule }) => {
 const RulesPage: React.FC = () => {
   const intl = useIntl();
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const { data, isLoading } = useRules();
 
   const handleCreateRule = () => {

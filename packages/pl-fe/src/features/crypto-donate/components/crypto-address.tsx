@@ -6,7 +6,7 @@ import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { CryptoIcon } from 'pl-fe/features/ui/util/async-components';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import { getTitle } from '../utils/coin-db';
 
@@ -19,7 +19,7 @@ interface ICryptoAddress {
 const CryptoAddress: React.FC<ICryptoAddress> = (props): JSX.Element => {
   const { address, ticker, note } = props;
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const handleModalClick = (e: React.MouseEvent<HTMLElement>): void => {
     openModal('CRYPTO_DONATE', props);

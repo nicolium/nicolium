@@ -4,10 +4,10 @@ import { FormattedMessage } from 'react-intl';
 import Button from 'pl-fe/components/ui/button';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 const NewGroupPanel = () => {
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const createGroup = () => {
     openModal('CREATE_GROUP');

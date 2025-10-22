@@ -5,7 +5,7 @@ import React, { useRef } from 'react';
 import { fetchAccount } from 'pl-fe/actions/accounts';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { isMobile } from 'pl-fe/is-mobile';
-import { useAccountHoverCardStore } from 'pl-fe/stores/account-hover-card';
+import { useAccountHoverCardActions } from 'pl-fe/stores/account-hover-card';
 
 const showAccountHoverCard = debounce((openAccountHoverCard, ref, accountId) => {
   openAccountHoverCard(ref, accountId);
@@ -22,7 +22,7 @@ interface IHoverAccountWrapper {
 const HoverAccountWrapper: React.FC<IHoverAccountWrapper> = React.memo(({ accountId, children, element: Elem = 'div', className }) => {
   const dispatch = useAppDispatch();
 
-  const { openAccountHoverCard, closeAccountHoverCard } = useAccountHoverCardStore();
+  const { openAccountHoverCard, closeAccountHoverCard } = useAccountHoverCardActions();
 
   const ref = useRef<HTMLDivElement>(null);
 

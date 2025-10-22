@@ -181,4 +181,6 @@ const useSettingsStore = create<State>()(mutative((set) => ({
   }),
 }), { enableAutoFreeze: true }));
 
-export { useSettingsStore };
+const useSettings = () => useSettingsStore().settings;
+
+export { useSettingsStore, useSettings };

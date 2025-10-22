@@ -3,7 +3,7 @@ import React from 'react';
 
 import Blurhash from 'pl-fe/components/blurhash';
 import Icon from 'pl-fe/components/ui/icon';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import ChatUploadPreview from './chat-upload-preview';
 
@@ -16,7 +16,7 @@ interface IChatUpload {
 
 /** An attachment uploaded to the chat composer, before sending. */
 const ChatUpload: React.FC<IChatUpload> = ({ attachment, onDelete }) => {
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const clickable = attachment.type !== 'unknown';
 
   const handleOpenModal = () => {

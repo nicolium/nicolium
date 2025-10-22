@@ -15,7 +15,7 @@ import PlaceholderAccount from 'pl-fe/features/placeholder/components/placeholde
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useBlockGroupUserMutation } from 'pl-fe/queries/groups/use-group-blocks';
 import { useKickGroupMemberMutation, type MinifiedGroupMember } from 'pl-fe/queries/groups/use-group-members';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
 import type { Menu as IMenu } from 'pl-fe/components/dropdown-menu';
@@ -50,7 +50,7 @@ interface IGroupMemberListItem {
 const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const { mutate: blockGroupMember } = useBlockGroupUserMutation(group.id, member.account_id);
   const { mutate: kickGroupMember } = useKickGroupMemberMutation(group.id, member.account_id);

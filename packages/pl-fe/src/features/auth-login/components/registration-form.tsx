@@ -19,7 +19,7 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useSettings } from 'pl-fe/hooks/use-settings';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import type { CreateAccountParams } from 'pl-api';
 
@@ -53,7 +53,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   const { locale } = useSettings();
   const features = useFeatures();
   const instance = useInstance();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const needsConfirmation = instance.pleroma.metadata.account_activation_required;
   const needsApproval = instance.registrations.approval_required;

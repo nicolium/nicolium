@@ -9,7 +9,7 @@ import { showStatusHoverCard } from 'pl-fe/components/hover-status-wrapper';
 import StatusContainer from 'pl-fe/containers/status-container';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useStatusHoverCardStore } from 'pl-fe/stores/status-hover-card';
+import { useStatusHoverCardActions, useStatusHoverCardStore } from 'pl-fe/stores/status-hover-card';
 
 interface IStatusHoverCard {
   visible?: boolean;
@@ -21,7 +21,9 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
   const intl = useIntl();
   const history = useHistory();
 
-  const { statusId, ref, closeStatusHoverCard, updateStatusHoverCard } = useStatusHoverCardStore();
+  const { statusId, ref } = useStatusHoverCardStore();
+  const { closeStatusHoverCard, updateStatusHoverCard } = useStatusHoverCardActions();
+
 
   const status = useAppSelector(state => state.statuses[statusId!]);
 

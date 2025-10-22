@@ -6,8 +6,8 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useModalsStore } from 'pl-fe/stores/modals';
-import { useStatusMetaStore } from 'pl-fe/stores/status-meta';
+import { useModalsActions } from 'pl-fe/stores/modals';
+import { useStatusMeta } from 'pl-fe/stores/status-meta';
 
 import PollFooter from './poll-footer';
 import PollOption from './poll-option';
@@ -24,15 +24,13 @@ interface IPoll {
 }
 
 const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): JSX.Element | null => {
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const dispatch = useAppDispatch();
 
   const isLoggedIn = useAppSelector((state) => state.me);
   const poll = useAppSelector((state) => state.polls[id]);
 
-  const { statuses: statusesMeta } = useStatusMetaStore();
-
-  const showPollResults = !!statusesMeta[status.id]?.showPollResults;
+  const { showPollResults } = useStatusMeta(status.id);
 
   const [selected, setSelected] = useState({} as Selected);
 

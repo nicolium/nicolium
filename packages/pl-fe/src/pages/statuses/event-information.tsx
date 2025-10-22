@@ -12,7 +12,7 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { makeGetStatus } from 'pl-fe/selectors';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 type RouteParams = { statusId: string };
 
@@ -27,7 +27,7 @@ const EventInformationPage: React.FC<IEventInformation> = ({ params }) => {
 
   const status = useAppSelector(state => getStatus(state, { id: params.statusId }))!;
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const { tileServer } = usePlFeConfig();
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);

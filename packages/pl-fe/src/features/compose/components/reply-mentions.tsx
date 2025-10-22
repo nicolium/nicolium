@@ -3,7 +3,7 @@ import { FormattedList, FormattedMessage } from 'react-intl';
 
 import { useCompose } from 'pl-fe/hooks/use-compose';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import { useSettingsStore } from 'pl-fe/stores/settings';
 
 interface IReplyMentions {
@@ -11,7 +11,7 @@ interface IReplyMentions {
 }
 
 const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const features = useFeatures();
   const compose = useCompose(composeId);
   const to = compose.to;

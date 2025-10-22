@@ -19,7 +19,7 @@ import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useReopenReport, useReport, useResolveReport, useSelfAssignReport, useUnassignReport } from 'pl-fe/queries/admin/use-reports';
 import { makeGetReport } from 'pl-fe/selectors';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
@@ -87,7 +87,7 @@ const ReportPage: React.FC<IReportPage> = (props) => {
   const features = useFeatures();
   const intl = useIntl();
   const { data: minifiedReport } = useReport(reportId);
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const getReport = useCallback(makeGetReport(), []);
 

@@ -16,7 +16,7 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useChat, useChatActions, useChats } from 'pl-fe/queries/chats';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import Chat from '../../chat';
 
@@ -48,7 +48,7 @@ const ChatPageMain = () => {
 
   const { chatId } = useParams<{ chatId: string }>();
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const { data: chat } = useChat(chatId);
   const { currentChatId } = useChatContext();
   const { chatsQuery: { data: chats, isLoading } } = useChats();

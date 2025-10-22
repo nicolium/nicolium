@@ -24,7 +24,7 @@ import { useDraftStatusesCountQuery } from 'pl-fe/queries/statuses/use-draft-sta
 import { useInteractionRequestsCount } from 'pl-fe/queries/statuses/use-interaction-requests';
 import { makeGetOtherAccounts } from 'pl-fe/selectors';
 import { useSettingsStore } from 'pl-fe/stores/settings';
-import { useUiStore } from 'pl-fe/stores/ui';
+import { useIsSidebarOpen, useUiStoreActions } from 'pl-fe/stores/ui';
 import sourceCode from 'pl-fe/utils/code';
 
 import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
@@ -66,7 +66,8 @@ const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(({ 
 const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
   const dispatch = useAppDispatch();
 
-  const { isSidebarOpen, closeSidebar } = useUiStore();
+  const isSidebarOpen = useIsSidebarOpen();
+  const { closeSidebar } = useUiStoreActions();
 
   const me = useAppSelector((state) => state.me);
 

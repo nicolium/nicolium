@@ -13,7 +13,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { oauthTokensQueryOptions, revokeOauthTokenMutationOptions } from 'pl-fe/queries/security/oauth-tokens';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import type { OauthToken } from 'pl-api';
 
@@ -35,7 +35,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
 
   const revokeMutation = useMutation(revokeOauthTokenMutationOptions(token.id));
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   const handleRevoke = () => {
     if (isCurrent)

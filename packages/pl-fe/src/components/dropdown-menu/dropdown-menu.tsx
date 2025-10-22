@@ -9,8 +9,8 @@ import HStack from 'pl-fe/components/ui/hstack';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import Portal from 'pl-fe/components/ui/portal';
 import { userTouching } from 'pl-fe/is-mobile';
-import { useModalsStore } from 'pl-fe/stores/modals';
-import { useUiStore } from 'pl-fe/stores/ui';
+import { useModalsActions } from 'pl-fe/stores/modals';
+import { useUiStoreActions } from 'pl-fe/stores/ui';
 
 import DropdownMenuItem, { MenuItem } from './dropdown-menu-item';
 
@@ -202,8 +202,8 @@ const DropdownMenu = (props: IDropdownMenu) => {
     width,
   } = props;
 
-  const { openDropdownMenu, closeDropdownMenu } = useUiStore();
-  const { openModal, closeModal } = useModalsStore();
+  const { openDropdownMenu, closeDropdownMenu } = useUiStoreActions();
+  const { openModal, closeModal } = useModalsActions();
 
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isDisplayed, setIsDisplayed] = useState<boolean>(false);

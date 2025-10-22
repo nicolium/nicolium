@@ -8,7 +8,7 @@ import Button from 'pl-fe/components/ui/button';
 import { importEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
 import type { Group, GroupRelationship } from 'pl-api';
@@ -30,7 +30,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const joinGroup = useJoinGroup(group);
   const leaveGroup = useLeaveGroup(group);
 

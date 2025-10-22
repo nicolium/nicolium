@@ -8,7 +8,7 @@ import Avatar from 'pl-fe/components/ui/avatar';
 import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 interface IComposeButton {
   /** Whether the button should shrink to fit in a smaller space. */
@@ -30,7 +30,7 @@ const ComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
 };
 
 const HomeComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const onOpenCompose = () => openModal('COMPOSE');
 
   return (

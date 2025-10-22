@@ -9,7 +9,7 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { makePaginatedResponseQuery } from 'pl-fe/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from 'pl-fe/queries/utils/minify-list';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 import toast, { IToastOptions } from 'pl-fe/toast';
 
 import { filterById } from '../utils/filter-id';
@@ -161,7 +161,7 @@ const useBookmarkStatus = (statusId: string) => {
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const features = useFeatures();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
 
   let previouslyBookmarked = false;
   let previousFolder: string | null;

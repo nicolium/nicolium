@@ -98,7 +98,7 @@ const editStatus = (statusId: string) => (dispatch: AppDispatch, getState: () =>
   return getClient(state).statuses.getStatusSource(statusId).then(response => {
     dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_SUCCESS });
     dispatch(setComposeToStatus(status, poll, response.text, response.spoiler_text, response.content_type, false));
-    useModalsStore.getState().openModal('COMPOSE');
+    useModalsStore.getState().actions.openModal('COMPOSE');
   }).catch(error => {
     dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_FAIL, error });
   });
@@ -137,7 +137,7 @@ const deleteStatus = (statusId: string, groupId?: string, withRedraft = false) =
 
       if (withRedraft) {
         dispatch(setComposeToStatus(status, poll, response.text || '', response.spoiler_text, (response as StatusSource).content_type, withRedraft));
-        useModalsStore.getState().openModal('COMPOSE');
+        useModalsStore.getState().actions.openModal('COMPOSE');
       }
     })
       .catch(error => {

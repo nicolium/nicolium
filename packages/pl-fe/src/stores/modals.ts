@@ -85,37 +85,45 @@ type Modals = Array<{
 
 type State = {
   modals: Modals;
-  /** Open a modal of the given type */
-  openModal: (...[modalType, modalProps]: OpenModalProps) => void;
-  /** Close the modal */
-  closeModal: (modalType?: ModalType) => void;
+  actions: {
+    /** Open a modal of the given type */
+    openModal: (...[modalType, modalProps]: OpenModalProps) => void;
+    /** Close the modal */
+    closeModal: (modalType?: ModalType) => void;
+  };
 };
 
 const useModalsStore = create<State>()(mutative((set) => ({
   modals: [],
-  openModal: (...[modalType, modalProps]) => set((state: State) => {
-    state.modals.push({ modalType, modalProps });
-  }),
-  closeModal: (modalType) => set((state: State) => {
-    if (state.modals.length === 0) {
-      return;
-    }
-    let closedModal: Record<string, any> | undefined;
-    if (modalType === undefined) {
-      closedModal = state.modals[state.modals.length - 1].modalProps;
-      state.modals = state.modals.slice(0, -1);
-    } else if (state.modals.some((modal) => modalType === modal.modalType)) {
-      const lastIndex = state.modals.findLastIndex((modal) => modalType === modal.modalType);
-      closedModal = state.modals[lastIndex].modalProps;
-      state.modals = state.modals.slice(0, lastIndex);
-    }
-    if (closedModal?.element) {
-      const element = closedModal.element;
-      setTimeout(() => element.focus(), 0);
-    }
-  }),
+  actions: {
+    openModal: (...[modalType, modalProps]) => set((state: State) => {
+      state.modals.push({ modalType, modalProps });
+    }),
+    closeModal: (modalType) => set((state: State) => {
+      if (state.modals.length === 0) {
+        return;
+      }
+      let closedModal: Record<string, any> | undefined;
+      if (modalType === undefined) {
+        closedModal = state.modals[state.modals.length - 1].modalProps;
+        state.modals = state.modals.slice(0, -1);
+      } else if (state.modals.some((modal) => modalType === modal.modalType)) {
+        const lastIndex = state.modals.findLastIndex((modal) => modalType === modal.modalType);
+        closedModal = state.modals[lastIndex].modalProps;
+        state.modals = state.modals.slice(0, lastIndex);
+      }
+      if (closedModal?.element) {
+        const element = closedModal.element;
+        setTimeout(() => element.focus(), 0);
+      }
+    }),
+  },
 }), {
   enableAutoFreeze: false,
 }));
 
-export { useModalsStore };
+const useModalsActions = () => useModalsStore((state) => state.actions);
+const useModals = () => useModalsStore((state) => state.modals);
+const useHasModals = () => useModals().length > 0;
+
+export { useModalsStore, useModalsActions, useModals, useHasModals };

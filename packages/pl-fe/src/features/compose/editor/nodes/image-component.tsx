@@ -32,7 +32,7 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import { useSettings } from 'pl-fe/hooks/use-settings';
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsActions } from 'pl-fe/stores/modals';
 
 import { $isImageNode } from './image-node';
 
@@ -95,7 +95,7 @@ const ImageComponent = ({
   src: string;
 }): JSX.Element => {
   const intl = useIntl();
-  const { openModal } = useModalsStore();
+  const { openModal } = useModalsActions();
   const { missingDescriptionModal } = useSettings();
 
   const imageRef = useRef<null | HTMLImageElement>(null);

@@ -5,7 +5,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
 import { useChats } from 'pl-fe/queries/chats';
-import { useShoutboxStore } from 'pl-fe/stores/shoutbox';
+import { useShoutboxIsLoading } from 'pl-fe/stores/shoutbox';
 
 import ChatList from '../chat-list';
 import ChatSearch from '../chat-search/chat-search';
@@ -21,7 +21,7 @@ import type { Chat } from 'pl-api';
 
 const ChatPane = () => {
   const { unreadChatsCount } = useStatContext();
-  const showShoutbox = !useShoutboxStore().isLoading;
+  const showShoutbox = !useShoutboxIsLoading();
 
   const { screen, changeScreen, isOpen, toggleChatPane } = useChatContext();
   const { chatsQuery: { data: chats, isLoading } } = useChats();
