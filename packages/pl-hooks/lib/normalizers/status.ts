@@ -58,7 +58,6 @@ const normalizeStatus = ({ account, accounts, reblog, poll, group, quote, ...sta
     expectsCard: false,
     showFiltered: null as null | boolean,
     ...status,
-    quote_id: quote?.id || status.quote_id || null,
     mentions,
     filtered: status.filtered?.map(result => result.filter.title),
     event,

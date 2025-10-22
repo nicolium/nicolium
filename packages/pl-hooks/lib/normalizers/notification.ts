@@ -70,7 +70,7 @@ const normalizeNotification = (notification: BaseNotification | DeduplicatedNoti
       status_id: string;
     }
     | {
-      type: 'status' | 'reblog' | 'favourite' | 'poll' | 'update' | 'event_reminder';
+      type: 'status' | 'reblog' | 'favourite' | 'poll' | 'update' | 'event_reminder' | 'quote' | 'quoted_update';
       status_id: string;
      }
     | {

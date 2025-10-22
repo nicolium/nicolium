@@ -26,5 +26,6 @@ export default defineConfig({
     alias: [
       { find: 'pl-hooks', replacement: fileURLToPath(new URL('./lib', import.meta.url)) },
     ],
+    dedupe: ['valibot'],
   },
 });

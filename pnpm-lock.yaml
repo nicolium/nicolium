@@ -588,7 +588,7 @@ importers:
   packages/pl-hooks:
     dependencies:
       '@tanstack/react-query':
-        specifier: ^5.59.16
+        specifier: ^5.84.1
         version: 5.84.1(react@18.3.1)
       lodash:
         specifier: ^4.17.21
@@ -4256,6 +4256,7 @@ packages:
 
   intersection-observer@0.12.2:
     resolution: {integrity: sha512-7m1vEcPCxXYI8HqnL8CKI6siDyD+eIWSwgB3DZA+ZTogxk9I4CDnj4wilt9x/+/QbHI4YG5YZNmC6458/e9Ktg==}
+    deprecated: The Intersection Observer polyfill is no longer needed and can safely be removed. Intersection Observer has been Baseline since 2019.
 
   intl-messageformat@10.7.16:
     resolution: {integrity: sha512-UmdmHUmp5CIKKjSoE10la5yfU+AYJAaiYLsodbjL4lji83JNvgOQUjGaGhGrpFCb0Uh7sl7qfP1IyILa8Z40ug==}
