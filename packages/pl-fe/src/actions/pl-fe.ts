@@ -82,7 +82,7 @@ const importPlFeConfig = (plFeConfig: APIEntity, host: string | null) => {
     plFeConfig.brandColor = '#d80482';
   }
 
-  useSettingsStore.getState().loadDefaultSettings(plFeConfig?.defaultSettings);
+  useSettingsStore.getState().actions.loadDefaultSettings(plFeConfig?.defaultSettings);
 
   return {
     type: PLFE_CONFIG_REQUEST_SUCCESS,

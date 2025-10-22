@@ -12,7 +12,7 @@ import { type Language, languages as languagesObject } from 'pl-fe/features/pref
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useCompose } from 'pl-fe/hooks/use-compose';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 
 const getFrequentlyUsedLanguages = (languageCounters: Record<string, number>) => (
   Object.keys(languageCounters)

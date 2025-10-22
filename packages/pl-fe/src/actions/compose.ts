@@ -400,7 +400,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
       useModalsStore.getState().actions.closeModal('COMPOSE');
 
       if (compose.language && !statusId && !preview) {
-        useSettingsStore.getState().rememberLanguageUse(compose.language);
+        useSettingsStore.getState().actions.rememberLanguageUse(compose.language);
         dispatch(saveSettings());
       }
     }
@@ -724,7 +724,7 @@ const selectComposeSuggestion = (composeId: string, position: number, token: str
       completion = isNativeEmoji(suggestion) ? suggestion.native : suggestion.colons;
       startPosition = position - 1;
 
-      useSettingsStore.getState().rememberEmojiUse(suggestion);
+      useSettingsStore.getState().actions.rememberEmojiUse(suggestion);
       dispatch(saveSettings());
     } else if (typeof suggestion === 'string' && suggestion[0] === '#') {
       completion = suggestion;

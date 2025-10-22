@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 import Text from 'pl-fe/components/ui/text';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 
 interface INavlinks {
   type: string;

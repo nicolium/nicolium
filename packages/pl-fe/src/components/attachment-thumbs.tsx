@@ -1,8 +1,8 @@
 import React, { Suspense } from 'react';
 
 import { MediaGallery } from 'pl-fe/features/ui/util/async-components';
-import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useModalsActions } from 'pl-fe/stores/modals';
+import { useSettings } from 'pl-fe/stores/settings';
 
 import { useMediaVisible } from './statuses/sensitive-content-overlay';
 

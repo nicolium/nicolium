@@ -8,7 +8,7 @@ import Column from 'pl-fe/components/ui/column';
 import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 
 const messages = defineMessages({
   title: { id: 'column.bubble', defaultMessage: 'Bubble timeline' },

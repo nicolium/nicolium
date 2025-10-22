@@ -24,7 +24,7 @@ type SettingOpts = {
 const saveSuccessMessage = defineMessage({ id: 'settings.save.success', defaultMessage: 'Your preferences have been saved!' });
 
 const changeSetting = (path: string[], value: any, opts?: SettingOpts) => {
-  useSettingsStore.getState().changeSetting(path, value);
+  useSettingsStore.getState().actions.changeSetting(path, value);
 
   if (opts?.save !== false) return saveSettings(opts);
   return () => {};
@@ -34,7 +34,7 @@ const saveSettings = (opts?: SettingOpts) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return;
 
-    const { userSettings, userSettingsSaving } = useSettingsStore.getState();
+    const { userSettings, actions: { userSettingsSaving } } = useSettingsStore.getState();
     if (userSettings.saved) return;
 
     const { saved, ...data } = userSettings;

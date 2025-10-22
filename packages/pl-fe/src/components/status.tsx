@@ -15,10 +15,10 @@ import StatusTypeIcon from 'pl-fe/features/status/components/status-type-icon';
 import { Hotkeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useFavouriteStatus, useReblogStatus, useUnfavouriteStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
 import { makeGetStatus, type SelectedStatus } from 'pl-fe/selectors';
 import { useModalsActions } from 'pl-fe/stores/modals';
+import { useSettings } from 'pl-fe/stores/settings';
 import { useStatusMetaActions } from 'pl-fe/stores/status-meta';
 import { textForScreenReader } from 'pl-fe/utils/status';
 

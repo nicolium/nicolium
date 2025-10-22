@@ -1,5 +1,6 @@
+import { useSettings } from 'pl-fe/stores/settings';
+
 import { usePlFeConfig } from './use-pl-fe-config';
-import { useSettings } from './use-settings';
 import { useTheme } from './use-theme';
 
 const useLogo = () => {

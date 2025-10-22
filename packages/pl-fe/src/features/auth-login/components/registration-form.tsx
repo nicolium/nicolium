@@ -18,8 +18,8 @@ import CaptchaField from 'pl-fe/features/auth-login/components/captcha';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useModalsActions } from 'pl-fe/stores/modals';
+import { useSettings } from 'pl-fe/stores/settings';
 
 import type { CreateAccountParams } from 'pl-api';
 

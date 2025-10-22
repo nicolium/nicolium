@@ -11,7 +11,7 @@ import { addSuggestedLanguage, addSuggestedQuote, setEditorState, suggestClearLi
 import { fetchStatus } from 'pl-fe/actions/statuses';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 import { getStatusIdsFromLinksInContent } from 'pl-fe/utils/status';
 import Purify from 'pl-fe/utils/url-purify';
 

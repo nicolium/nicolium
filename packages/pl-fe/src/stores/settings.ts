@@ -31,12 +31,14 @@ type State = {
 
   settings: Settings;
 
-  loadDefaultSettings: (settings: APIEntity) => void;
-  loadUserSettings: (settings: APIEntity) => void;
-  userSettingsSaving: () => void;
-  changeSetting: (path: string[], value: any) => void;
-  rememberEmojiUse: (emoji: Emoji) => void;
-  rememberLanguageUse: (language: string) => void;
+  actions: {
+    loadDefaultSettings: (settings: APIEntity) => void;
+    loadUserSettings: (settings: APIEntity) => void;
+    userSettingsSaving: () => void;
+    changeSetting: (path: string[], value: any) => void;
+    rememberEmojiUse: (emoji: Emoji) => void;
+    rememberLanguageUse: (language: string) => void;
+  };
 }
 
 const changeSetting = (object: APIEntity, path: string[], value: any, root?: Settings) => {
@@ -94,93 +96,96 @@ const useSettingsStore = create<State>()(mutative((set) => ({
 
   settings: v.parse(settingsSchema, { locale: navigator.language }),
 
-  loadDefaultSettings: (settings: APIEntity) => set((state: State) => {
-    if (typeof settings !== 'object') return;
+  actions: {
+    loadDefaultSettings: (settings: APIEntity) => set((state: State) => {
+      if (typeof settings !== 'object') return;
 
-    state.defaultSettings = v.parse(settingsSchema, settings);
-    mergeSettings(state);
-  }),
+      state.defaultSettings = v.parse(settingsSchema, settings);
+      mergeSettings(state);
+    }),
 
-  loadUserSettings: (settings?: APIEntity) => set((state: State) => {
-    if (typeof settings !== 'object') return;
+    loadUserSettings: (settings?: APIEntity) => set((state: State) => {
+      if (typeof settings !== 'object') return;
 
-    state.userSettings = v.parse(settingsSchemaPartial, settings);
+      state.userSettings = v.parse(settingsSchemaPartial, settings);
 
-    const me = lazyStore?.getState().me;
-    if (me) {
-      KVStore.getItem<string>('url-purify-rules:last').then((value) => {
-        if (value !== me) {
-          if (state.userSettings.urlPrivacy?.rulesUrl) {
-            updateRulesFromUrl(me, state.userSettings.urlPrivacy.rulesUrl, state.userSettings.urlPrivacy.hashUrl).then(() => {
-              toast.success(messages.rulesUpdateSuccess);
-            }).catch(() => {
-              toast.error(messages.rulesUpdateFail);
-            });
-          } else {
-            resetRules(me);
-          }
-          switch (state.userSettings.urlPrivacy?.redirectLinksMode) {
-            case 'auto':
-              updateRedirectServicesFromUrl(me, state.userSettings.urlPrivacy?.redirectServicesUrl);
-              break;
-            case 'manual':
-              setManualRedirectServices(me, state.userSettings.urlPrivacy.redirectServices);
-              break;
-            default:
-              setManualRedirectServices(me, {});
-              break;
-          }
-        } else {
-          KVStore.getItem<KVStoreRedirectServicesItem>(`url-purify-redirect-services:${me}`).then((services) => {
-            if (state.userSettings.urlPrivacy?.redirectLinksMode === 'auto') {
-              if (services?.redirectServicesUrl !== state.userSettings.urlPrivacy?.redirectServicesUrl) {
-                updateRedirectServicesFromUrl(me, state.userSettings.urlPrivacy?.redirectServicesUrl);
-              }
+      const me = lazyStore?.getState().me;
+      if (me) {
+        KVStore.getItem<string>('url-purify-rules:last').then((value) => {
+          if (value !== me) {
+            if (state.userSettings.urlPrivacy?.rulesUrl) {
+              updateRulesFromUrl(me, state.userSettings.urlPrivacy.rulesUrl, state.userSettings.urlPrivacy.hashUrl).then(() => {
+                toast.success(messages.rulesUpdateSuccess);
+              }).catch(() => {
+                toast.error(messages.rulesUpdateFail);
+              });
             } else {
-              setManualRedirectServices(me, state.userSettings.urlPrivacy?.redirectServices || {});
+              resetRules(me);
             }
-          }).catch(() => {});
-        }
-      }).catch(() => {});
-    }
+            switch (state.userSettings.urlPrivacy?.redirectLinksMode) {
+              case 'auto':
+                updateRedirectServicesFromUrl(me, state.userSettings.urlPrivacy?.redirectServicesUrl);
+                break;
+              case 'manual':
+                setManualRedirectServices(me, state.userSettings.urlPrivacy.redirectServices);
+                break;
+              default:
+                setManualRedirectServices(me, {});
+                break;
+            }
+          } else {
+            KVStore.getItem<KVStoreRedirectServicesItem>(`url-purify-redirect-services:${me}`).then((services) => {
+              if (state.userSettings.urlPrivacy?.redirectLinksMode === 'auto') {
+                if (services?.redirectServicesUrl !== state.userSettings.urlPrivacy?.redirectServicesUrl) {
+                  updateRedirectServicesFromUrl(me, state.userSettings.urlPrivacy?.redirectServicesUrl);
+                }
+              } else {
+                setManualRedirectServices(me, state.userSettings.urlPrivacy?.redirectServices || {});
+              }
+            }).catch(() => {});
+          }
+        }).catch(() => {});
+      }
 
-    mergeSettings(state);
-  }),
+      mergeSettings(state);
+    }),
 
-  userSettingsSaving: () => set((state: State) => {
-    state.userSettings.saved = true;
+    userSettingsSaving: () => set((state: State) => {
+      state.userSettings.saved = true;
 
-    mergeSettings(state);
-  }),
+      mergeSettings(state);
+    }),
 
-  changeSetting: (path: string[], value: any) => set((state: State) => {
-    state.userSettings.saved = false;
-    changeSetting(state.userSettings, path, value, state.defaultSettings);
+    changeSetting: (path: string[], value: any) => set((state: State) => {
+      state.userSettings.saved = false;
+      changeSetting(state.userSettings, path, value, state.defaultSettings);
 
-    mergeSettings(state, true);
-  }),
+      mergeSettings(state, true);
+    }),
 
-  rememberEmojiUse: (emoji: Emoji) => set((state: State) => {
-    const settings = state.userSettings;
-    if (!settings.frequentlyUsedEmojis) settings.frequentlyUsedEmojis = {};
+    rememberEmojiUse: (emoji: Emoji) => set((state: State) => {
+      const settings = state.userSettings;
+      if (!settings.frequentlyUsedEmojis) settings.frequentlyUsedEmojis = {};
 
-    settings.frequentlyUsedEmojis[emoji.id] = (settings.frequentlyUsedEmojis[emoji.id] || 0) + 1;
-    settings.saved = false;
+      settings.frequentlyUsedEmojis[emoji.id] = (settings.frequentlyUsedEmojis[emoji.id] || 0) + 1;
+      settings.saved = false;
 
-    mergeSettings(state);
-  }),
+      mergeSettings(state);
+    }),
 
-  rememberLanguageUse: (language: string) => set((state: State) => {
-    const settings = state.userSettings;
-    if (!settings.frequentlyUsedLanguages) settings.frequentlyUsedLanguages = {};
+    rememberLanguageUse: (language: string) => set((state: State) => {
+      const settings = state.userSettings;
+      if (!settings.frequentlyUsedLanguages) settings.frequentlyUsedLanguages = {};
 
-    settings.frequentlyUsedLanguages[language] = (settings.frequentlyUsedLanguages[language] || 0) + 1;
-    settings.saved = false;
+      settings.frequentlyUsedLanguages[language] = (settings.frequentlyUsedLanguages[language] || 0) + 1;
+      settings.saved = false;
 
-    mergeSettings(state);
-  }),
+      mergeSettings(state);
+    }),
+  },
 }), { enableAutoFreeze: true }));
 
 const useSettings = () => useSettingsStore().settings;
+const useSettingsStoreActions = () => useSettingsStore().actions;
 
-export { useSettingsStore, useSettings };
+export { useSettingsStore, useSettings, useSettingsStoreActions };

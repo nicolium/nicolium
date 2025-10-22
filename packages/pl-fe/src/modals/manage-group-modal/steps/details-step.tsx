@@ -10,7 +10,7 @@ import HeaderPicker from 'pl-fe/features/edit-profile/components/header-picker';
 import { usePreview } from 'pl-fe/hooks/forms/use-preview';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 import resizeImage from 'pl-fe/utils/resize-image';
 
 import type { CreateGroupParams } from 'pl-api';

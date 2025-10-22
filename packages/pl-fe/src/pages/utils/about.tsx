@@ -6,8 +6,8 @@ import { Navlinks } from 'pl-fe/components/navlinks';
 import Card from 'pl-fe/components/ui/card';
 import { languages } from 'pl-fe/features/preferences';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
-import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useAboutPage } from 'pl-fe/queries/pl-fe/use-about-page';
+import { useSettings } from 'pl-fe/stores/settings';
 
 /** Displays arbitrary user-uploaded HTML on a page at `/about/:slug` */
 const AboutPage: React.FC = () => {

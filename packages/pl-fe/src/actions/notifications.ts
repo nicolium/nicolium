@@ -243,7 +243,7 @@ const setFilter = (filterType: FilterType, abort?: boolean) =>
     const settingsStore = useSettingsStore.getState();
     const activeFilter = settingsStore.settings.notifications.quickFilter.active as FilterType;
 
-    settingsStore.changeSetting(['notifications', 'quickFilter', 'active'], filterType);
+    settingsStore.actions.changeSetting(['notifications', 'quickFilter', 'active'], filterType);
 
     dispatch(expandNotifications(undefined, undefined, abort));
     if (activeFilter !== filterType) dispatch(saveSettings());

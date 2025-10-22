@@ -1,7 +1,7 @@
 import React from 'react';
 
 import StillImage from 'pl-fe/components/still-image';
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 import { removeVS16s, toCodePoints } from 'pl-fe/utils/emoji';
 import { joinPublicPath } from 'pl-fe/utils/static';
 

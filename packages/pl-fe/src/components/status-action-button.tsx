@@ -4,7 +4,7 @@ import React from 'react';
 import Icon from 'pl-fe/components/ui/icon';
 import Text from 'pl-fe/components/ui/text';
 import { useLongPress } from 'pl-fe/hooks/use-long-press';
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 
 import AnimatedNumber from './animated-number';
 

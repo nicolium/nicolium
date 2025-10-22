@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useIntl, MessageDescriptor } from 'react-intl';
 
 import Icon from 'pl-fe/components/ui/icon';
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 
 interface IScrollTopButton {
   /** Callback when clicked, and also when scrolled to the top. */

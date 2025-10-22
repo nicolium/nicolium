@@ -4,9 +4,9 @@ import { Helmet as ReactHelmet } from 'react-helmet-async';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useSettings } from 'pl-fe/hooks/use-settings';
 import { usePendingUsersCount } from 'pl-fe/queries/admin/use-accounts';
 import { usePendingReportsCount } from 'pl-fe/queries/admin/use-reports';
+import { useSettings } from 'pl-fe/stores/settings';
 import FaviconService from 'pl-fe/utils/favicon-service';
 
 FaviconService.initFaviconService();

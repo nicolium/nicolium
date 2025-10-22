@@ -12,7 +12,7 @@ import FormGroup from 'pl-fe/components/ui/form-group';
 import Textarea from 'pl-fe/components/ui/textarea';
 import SettingToggle from 'pl-fe/features/settings/components/setting-toggle';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettingsStore, useSettingsStoreActions } from 'pl-fe/stores/settings';
 import toast from 'pl-fe/toast';
 
 const isJSONValid = (text: any): boolean => {
@@ -33,7 +33,8 @@ const messages = defineMessages({
 const SettingsStore: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const { settings, userSettings, loadUserSettings } = useSettingsStore();
+  const { settings, userSettings } = useSettingsStore();
+  const { loadUserSettings } = useSettingsStoreActions();
 
   const [rawJSON, setRawJSON] = useState<string>(JSON.stringify(userSettings, null, 2));
   const [jsonValid, setJsonValid] = useState(true);

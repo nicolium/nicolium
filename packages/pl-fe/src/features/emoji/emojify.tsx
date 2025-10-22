@@ -2,7 +2,7 @@ import split from 'graphemesplit';
 import React from 'react';
 
 import Emoji from 'pl-fe/components/ui/emoji';
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 import { joinPublicPath } from 'pl-fe/utils/static';
 

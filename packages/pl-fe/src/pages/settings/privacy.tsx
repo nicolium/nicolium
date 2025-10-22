@@ -16,8 +16,8 @@ import Toggle from 'pl-fe/components/ui/toggle';
 import { SelectDropdown } from 'pl-fe/features/forms';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useSettings } from 'pl-fe/hooks/use-settings';
 import KVStore from 'pl-fe/storage/kv-store';
+import { useSettings } from 'pl-fe/stores/settings';
 import { hasCanvasExtractPermission } from 'pl-fe/utils/favicon-service';
 import { KVStoreRedirectServicesItem } from 'pl-fe/utils/url-purify';
 

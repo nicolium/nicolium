@@ -5,7 +5,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from 'pl-fe/stores/status-meta';
 
 import type { FilterResult } from 'pl-api';

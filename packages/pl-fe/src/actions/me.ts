@@ -87,7 +87,7 @@ const patchMe = (params: UpdateCredentialsParams) =>
 const fetchMeSuccess = (account: CredentialAccount) => {
   setSentryAccount(account);
 
-  useSettingsStore.getState().loadUserSettings(account.settings_store?.[FE_NAME]);
+  useSettingsStore.getState().actions.loadUserSettings(account.settings_store?.[FE_NAME]);
 
   return {
     type: ME_FETCH_SUCCESS,

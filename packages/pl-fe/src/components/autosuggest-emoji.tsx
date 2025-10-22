@@ -2,7 +2,7 @@ import React from 'react';
 
 import { isCustomEmoji } from 'pl-fe/features/emoji';
 import unicodeMapping from 'pl-fe/features/emoji/mapping';
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 import { joinPublicPath } from 'pl-fe/utils/static';
 
 import type { Emoji } from 'pl-fe/features/emoji';

@@ -19,7 +19,7 @@ import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { useFavouriteStatus, useUnfavouriteStatus, useReblogStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
 import { makeGetNotification } from 'pl-fe/selectors';
 import { useModalsActions } from 'pl-fe/stores/modals';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettings } from 'pl-fe/stores/settings';
 import { useStatusMetaActions } from 'pl-fe/stores/status-meta';
 import { NotificationType } from 'pl-fe/utils/notification';
 
@@ -216,7 +216,7 @@ const Notification: React.FC<INotification> = (props) => {
   const { me } = useLoggedIn();
   const { toggleStatusesMediaHidden } = useStatusMetaActions();
   const { openModal } = useModalsActions();
-  const { settings } = useSettingsStore();
+  const settings = useSettings();
 
   const node = useRef<HTMLDivElement>(null);
 

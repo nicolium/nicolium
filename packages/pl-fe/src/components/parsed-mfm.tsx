@@ -5,7 +5,7 @@ import { clamp } from 'lodash';
 import React, { CSSProperties } from 'react';
 import { Link } from 'react-router-dom';
 
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 import nyaize from 'pl-fe/utils/nyaize';
 

@@ -13,8 +13,8 @@ import Text from 'pl-fe/components/ui/text';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useSettings } from 'pl-fe/hooks/use-settings';
 import { makeGetStatusIds } from 'pl-fe/selectors';
+import { useSettings } from 'pl-fe/stores/settings';
 
 const getStatusIds = makeGetStatusIds();
 

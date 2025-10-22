@@ -5,7 +5,7 @@ import { Virtuoso, Components, VirtuosoProps, VirtuosoHandle, ListRange, IndexLo
 
 import LoadMore from 'pl-fe/components/load-more';
 import Spinner from 'pl-fe/components/ui/spinner';
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 
 import { EmptyMessage } from './empty-message';
 

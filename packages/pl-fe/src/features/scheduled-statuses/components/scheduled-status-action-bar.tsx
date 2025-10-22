@@ -6,7 +6,7 @@ import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
 import { cancelScheduledStatusMutationOptions } from 'pl-fe/queries/statuses/scheduled-statuses';
 import { useModalsActions } from 'pl-fe/stores/modals';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettings } from 'pl-fe/stores/settings';
 
 import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
 
@@ -26,7 +26,7 @@ const ScheduledStatusActionBar: React.FC<IScheduledStatusActionBar> = ({ status 
 
   const { mutate: cancelScheduledStatus } = useMutation(cancelScheduledStatusMutationOptions(status.id));
   const { openModal } = useModalsActions();
-  const { settings } = useSettingsStore();
+  const settings = useSettings();
 
   const handleCancelClick = () => {
     const deleteModal = settings.deleteModal;

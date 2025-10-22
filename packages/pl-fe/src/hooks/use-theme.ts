@@ -1,4 +1,5 @@
-import { useSettings } from './use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
+
 import { useSystemTheme } from './use-system-theme';
 
 type Theme = 'light' | 'dark' | 'black';

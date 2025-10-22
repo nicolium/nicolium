@@ -15,7 +15,7 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import messages from 'pl-fe/messages';
 import { queryClient } from 'pl-fe/queries/client';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettings } from 'pl-fe/stores/settings';
 import { getUnreadChatsCount, updateChatListItem } from 'pl-fe/utils/chats';
 import { play, soundCache } from 'pl-fe/utils/sounds';
 
@@ -103,7 +103,7 @@ const useUserStream = () => {
   const { isLoggedIn } = useLoggedIn();
   const dispatch = useAppDispatch();
   const statContext = useStatContext();
-  const { settings } = useSettingsStore();
+  const settings = useSettings();
 
   const listener = useCallback((event: StreamingEvent) => {
     switch (event.event) {

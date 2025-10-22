@@ -31,8 +31,8 @@ import * as v from 'valibot';
 import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import IconButton from 'pl-fe/components/ui/icon-button';
-import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useModalsActions } from 'pl-fe/stores/modals';
+import { useSettings } from 'pl-fe/stores/settings';
 
 import { $isImageNode } from './image-node';
 

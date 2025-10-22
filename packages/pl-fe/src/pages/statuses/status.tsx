@@ -16,7 +16,7 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { makeGetStatus } from 'pl-fe/selectors';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettings } from 'pl-fe/stores/settings';
 
 const messages = defineMessages({
   title: { id: 'status.title', defaultMessage: 'Post details' },
@@ -59,7 +59,7 @@ const StatusPage: React.FC<IStatusDetails> = (props) => {
   const [expandAllStatuses, setExpandAllStatuses] = useState<() => void>();
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
 
-  const { settings: { displaySpoilers, threads: { displayMode } } } = useSettingsStore();
+  const { displaySpoilers, threads: { displayMode } } = useSettings();
 
   /** Fetch the status (and context) from the API. */
   const fetchData = () => {

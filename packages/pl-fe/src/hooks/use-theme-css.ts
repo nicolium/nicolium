@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 
+import { useSettings } from 'pl-fe/stores/settings';
 import { toTailwind } from 'pl-fe/utils/tailwind';
 import { generateAccent, generateThemeCss } from 'pl-fe/utils/theme';
 
 import { usePlFeConfig } from './use-pl-fe-config';
-import { useSettings } from './use-settings';
 
 import type { PlFeConfig } from 'pl-fe/normalizers/pl-fe/pl-fe-config';
 

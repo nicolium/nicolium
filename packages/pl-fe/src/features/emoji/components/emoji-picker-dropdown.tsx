@@ -3,10 +3,9 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { changeSetting, saveSettings } from 'pl-fe/actions/settings';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useTheme } from 'pl-fe/hooks/use-theme';
 import { useCustomEmojis } from 'pl-fe/queries/instance/use-custom-emojis';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettings , useSettingsStoreActions } from 'pl-fe/stores/settings';
 
 import { buildCustomEmojiCategories } from '../../emoji';
 import { EmojiPicker } from '../../ui/util/async-components';
@@ -125,7 +124,7 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
   const dispatch = useAppDispatch();
   const title = intl.formatMessage(messages.emoji);
   const theme = useTheme();
-  const { rememberEmojiUse } = useSettingsStore();
+  const { rememberEmojiUse } = useSettingsStoreActions();
 
   const { data: customEmojis } = useCustomEmojis(getCustomEmojis);
 

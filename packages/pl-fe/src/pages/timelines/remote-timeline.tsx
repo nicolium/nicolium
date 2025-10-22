@@ -11,7 +11,7 @@ import Text from 'pl-fe/components/ui/text';
 import PinnedHostsPicker from 'pl-fe/features/remote-timeline/components/pinned-hosts-picker';
 import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 
 interface IRemoteTimelinePage {
   params?: {

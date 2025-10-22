@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-import { useSettings } from './use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 
 import type { Theme } from './use-theme';
 

@@ -18,7 +18,7 @@ import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFavouriteStatus, useReblogStatus, useUnfavouriteStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
 import { RootState } from 'pl-fe/store';
 import { useModalsActions } from 'pl-fe/stores/modals';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettings } from 'pl-fe/stores/settings';
 import { useStatusMetaActions } from 'pl-fe/stores/status-meta';
 import { selectChild } from 'pl-fe/utils/scroll-utils';
 import { textForScreenReader } from 'pl-fe/utils/status';
@@ -142,7 +142,7 @@ const Thread = ({
 
   const { expandStatuses, revealStatusesMedia, toggleStatusesMediaHidden } = useStatusMetaActions();
   const { openModal } = useModalsActions();
-  const { settings: { boostModal, threads: { displayMode } } } = useSettingsStore();
+  const { boostModal, threads: { displayMode } } = useSettings();
 
   const { mutate: favouriteStatus } = useFavouriteStatus(status.id);
   const { mutate: unfavouriteStatus } = useUnfavouriteStatus(status.id);

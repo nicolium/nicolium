@@ -23,7 +23,7 @@ import PlaceholderNotification from 'pl-fe/features/placeholder/components/place
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 import { selectChild } from 'pl-fe/utils/scroll-utils';
 
 import type { Item } from 'pl-fe/components/ui/tabs';

@@ -22,7 +22,7 @@ import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useDirectory } from 'pl-fe/queries/accounts/use-directory';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettings } from 'pl-fe/stores/settings';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
 
 const messages = defineMessages({
@@ -40,7 +40,7 @@ interface IAccountCard {
 const AccountCard: React.FC<IAccountCard> = ({ id }) => {
   const me = useAppSelector((state) => state.me);
   const { account } = useAccount(id);
-  const { autoPlayGif } = useSettingsStore().settings;
+  const { autoPlayGif } = useSettings();
 
   if (!account) return null;
 

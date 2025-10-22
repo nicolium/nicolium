@@ -14,8 +14,8 @@ import Toggle from 'pl-fe/components/ui/toggle';
 import SettingToggle from 'pl-fe/features/settings/components/setting-toggle';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useUpdateCredentials } from 'pl-fe/queries/accounts';
+import { useSettings } from 'pl-fe/stores/settings';
 
 type FormData = {
   accepts_chat_messages?: boolean;

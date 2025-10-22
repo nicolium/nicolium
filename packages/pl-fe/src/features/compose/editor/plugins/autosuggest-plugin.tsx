@@ -38,7 +38,7 @@ import AutosuggestEmoji from 'pl-fe/components/autosuggest-emoji';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useCompose } from 'pl-fe/hooks/use-compose';
 import { selectAccount } from 'pl-fe/selectors';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { useSettingsStoreActions } from 'pl-fe/stores/settings';
 import { textAtCursorMatchesToken } from 'pl-fe/utils/suggestions';
 
 import AutosuggestAccount from '../../components/autosuggest-account';
@@ -286,7 +286,7 @@ const AutosuggestPlugin = ({
   suggestionsHidden,
   setSuggestionsHidden,
 }: AutosuggestPluginProps): JSX.Element | null => {
-  const { rememberEmojiUse } = useSettingsStore();
+  const { rememberEmojiUse } = useSettingsStoreActions();
   const { suggestions } = useCompose(composeId);
   const dispatch = useAppDispatch();
 

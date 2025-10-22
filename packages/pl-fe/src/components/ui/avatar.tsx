@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import StillImage, { IStillImage } from 'pl-fe/components/still-image';
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 import { isDefaultAvatar } from 'pl-fe/utils/accounts';
 
 import AltIndicator from '../alt-indicator';

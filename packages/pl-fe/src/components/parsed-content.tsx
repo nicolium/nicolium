@@ -8,7 +8,7 @@ import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
 import Emojify from 'pl-fe/features/emoji/emojify';
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
 import nyaize from 'pl-fe/utils/nyaize';
 import Purify from 'pl-fe/utils/url-purify';

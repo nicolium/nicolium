@@ -7,9 +7,9 @@ import Text from 'pl-fe/components/ui/text';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useSettings } from 'pl-fe/hooks/use-settings';
 import { useTranslationLanguages } from 'pl-fe/queries/instance/use-translation-languages';
 import { useStatusTranslation } from 'pl-fe/queries/statuses/use-status-translation';
+import { useSettings } from 'pl-fe/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from 'pl-fe/stores/status-meta';
 
 import type { Status } from 'pl-fe/normalizers/status';

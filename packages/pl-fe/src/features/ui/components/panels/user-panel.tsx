@@ -12,7 +12,7 @@ import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import Emojify from 'pl-fe/features/emoji/emojify';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useSettings } from 'pl-fe/hooks/use-settings';
+import { useSettings } from 'pl-fe/stores/settings';
 import { getAcct } from 'pl-fe/utils/accounts';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
 import { displayFqn } from 'pl-fe/utils/state';
