@@ -281,6 +281,7 @@ body {
 .⁂-layout {
   display: flex;
   flex-grow: 1;
+  z-index: 1;
 
   &__content {
     @apply mx-auto w-full max-w-3xl grow black:pt-0 sm:px-6 sm:pt-4 md:gap-8 md:px-8;
