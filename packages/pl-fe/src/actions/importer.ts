@@ -120,7 +120,11 @@ const importEntities = (entities: {
       queryClient.setQueryData<BasePoll>(['statuses', 'polls', poll.id], poll);
     }
   }
-  if (!isEmpty(relationships)) dispatch(importEntityStoreEntities(Object.values(relationships), Entities.RELATIONSHIPS));
+  if (!isEmpty(relationships)) {
+    for (const relationship of Object.values(relationships)) {
+      queryClient.setQueryData<BaseRelationship>(['accountRelationships', relationship.id], relationship);
+    }
+  }
   if (!isEmpty(statuses)) dispatch<ImportStatusesAction>({ type: STATUSES_IMPORT, statuses: Object.values(statuses) });
 };
 

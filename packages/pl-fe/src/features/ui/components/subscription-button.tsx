@@ -1,9 +1,9 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useFollow } from 'pl-fe/api/hooks/accounts/use-follow';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import { useFeatures } from 'pl-fe/hooks/use-features';
+import { useFollowMutation } from 'pl-fe/queries/accounts/use-relationship';
 import toast from 'pl-fe/toast';
 
 import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
@@ -24,7 +24,7 @@ interface ISubscriptionButton {
 const SubscriptionButton = ({ account }: ISubscriptionButton) => {
   const features = useFeatures();
   const intl = useIntl();
-  const { follow } = useFollow();
+  const { mutate: follow, isPending } = useFollowMutation(account.id);
 
   const isFollowing = account.relationship?.following;
   const isRequested = account.relationship?.requested;
@@ -35,13 +35,15 @@ const SubscriptionButton = ({ account }: ISubscriptionButton) => {
 
   const onNotifyToggle = () => {
     if (account.relationship?.notifying) {
-      follow(account.id, { notify: false })
-        ?.then(() => toast.success(intl.formatMessage(messages.unsubscribeSuccess)))
-        .catch(() => toast.error(intl.formatMessage(messages.unsubscribeFailure)));
+      follow({ notify: false }, {
+        onSuccess: () => toast.success(intl.formatMessage(messages.unsubscribeSuccess)),
+        onError: () => toast.error(intl.formatMessage(messages.unsubscribeFailure)),
+      });
     } else {
-      follow(account.id, { notify: true })
-        ?.then(() => toast.success(intl.formatMessage(messages.subscribeSuccess)))
-        .catch(() => toast.error(intl.formatMessage(messages.subscribeFailure)));
+      follow({ notify: true }, {
+        onSuccess: () => toast.success(intl.formatMessage(messages.subscribeSuccess)),
+        onError: () => toast.error(intl.formatMessage(messages.subscribeFailure)),
+      });
     }
   };
 
@@ -58,6 +60,7 @@ const SubscriptionButton = ({ account }: ISubscriptionButton) => {
       <IconButton
         src={isSubscribed ? require('@phosphor-icons/core/regular/bell-simple-ringing.svg') : require('@phosphor-icons/core/regular/bell-simple.svg')}
         onClick={handleToggle}
+        disabled={isPending}
         title={title}
         theme='outlined'
         className='px-2'

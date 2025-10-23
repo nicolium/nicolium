@@ -6,8 +6,7 @@ import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { type Account, normalizeAccount } from 'pl-fe/normalizers/account';
-
-import { useRelationship } from './use-relationship';
+import { useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
 
 import type { Account as BaseAccount } from 'pl-api';
 
@@ -29,9 +28,9 @@ const useAccountLookup = (acct: string | undefined, opts: UseAccountLookupOpts =
   );
 
   const {
-    relationship,
+    data: relationship,
     isLoading: isRelationshipLoading,
-  } = useRelationship(entity?.id, { enabled: withRelationship });
+  } = useRelationshipQuery(withRelationship ? entity?.id : undefined);
 
   const isBlocked = entity?.relationship?.blocked_by === true;
   const isUnavailable = (me === entity?.id) ? false : (isBlocked && !features.blockersVisible);

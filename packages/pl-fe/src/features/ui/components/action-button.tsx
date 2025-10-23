@@ -8,8 +8,6 @@ import {
   unmuteAccount,
   biteAccount,
 } from 'pl-fe/actions/accounts';
-import { useFollow } from 'pl-fe/api/hooks/accounts/use-follow';
-import { useRelationship } from 'pl-fe/api/hooks/accounts/use-relationship';
 import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
 import Spinner from 'pl-fe/components/ui/spinner';
@@ -17,6 +15,7 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { useAcceptFollowRequestMutation, useRejectFollowRequestMutation } from 'pl-fe/queries/accounts/use-follow-requests';
+import { useRelationshipQuery, useFollowMutation, useUnfollowMutation } from 'pl-fe/queries/accounts/use-relationship';
 import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
@@ -62,18 +61,20 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
 
   const { openModal } = useModalsActions();
   const { isLoggedIn, me } = useLoggedIn();
-  const { follow, unfollow } = useFollow();
 
-  const { relationship, isLoading } = useRelationship(account.id, { enabled: true });
+  const { mutate: follow, isPending: isPendingFollow } = useFollowMutation(account.id);
+  const { mutate: unfollow, isPending: isPendingUnfollow } = useUnfollowMutation(account.id);
+
+  const { data: relationship, isLoading } = useRelationshipQuery(account.id);
 
   const { mutate: authorizeFollowRequest } = useAcceptFollowRequestMutation(account.id);
   const { mutate: rejectFollowRequest } = useRejectFollowRequestMutation(account.id);
 
   const handleFollow = () => {
     if (relationship?.following || relationship?.requested) {
-      unfollow(account.id);
+      unfollow();
     } else {
-      follow(account.id);
+      follow(undefined);
     }
   };
 
@@ -240,9 +241,9 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
       }
     }
 
+    if (!relationship && !isLoading) return null;
+
     if (!relationship) {
-      if (!isLoading) return null;
-      // Wait until the relationship is loaded
       return (
         <Button
           size='xs'
@@ -267,7 +268,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
       return (
         <Button
           size='sm'
-          disabled={blockedBy}
+          disabled={blockedBy || isPendingFollow || isPendingUnfollow}
           theme={isFollowing ? 'secondary' : 'primary'}
           icon={blockedBy ? require('@phosphor-icons/core/regular/prohibit.svg') : (!isFollowing && require('@phosphor-icons/core/regular/plus.svg'))}
           onClick={handleFollow}

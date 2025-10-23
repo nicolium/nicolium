@@ -8,14 +8,13 @@ import Divider from 'pl-fe/components/ui/divider';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
-import { Entities } from 'pl-fe/entity-store/entities';
 import PlaceholderChatMessage from 'pl-fe/features/placeholder/components/placeholder-chat-message';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
 import { useChatActions, useChatMessages } from 'pl-fe/queries/chats';
 
 import ChatMessage from './chat-message';
 
-import type { Chat, Relationship } from 'pl-api';
+import type { Chat } from 'pl-api';
 import type { ChatMessage as ChatMessageEntity } from 'pl-fe/normalizers/chat-message';
 
 const messages = defineMessages({
@@ -86,9 +85,9 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
     refetch,
   } = useChatMessages(chat);
 
-  const formattedChatMessages = chatMessages || [];
+  const isBlocked = !!useRelationshipQuery(chat.account.id).data?.blocked_by;
 
-  const isBlocked = !!useAppSelector((state) => (state.entities[Entities.RELATIONSHIPS]?.store[chat.account.id] as Relationship)?.blocked_by);
+  const formattedChatMessages = chatMessages || [];
 
   const lastChatMessage = chatMessages ? chatMessages[chatMessages.length - 1] : null;
 

@@ -11,10 +11,9 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
-import { Entities } from 'pl-fe/entity-store/entities';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
+import { useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
 import { useChat, useChatActions, useChats } from 'pl-fe/queries/chats';
 import { useModalsActions } from 'pl-fe/stores/modals';
 
@@ -22,8 +21,6 @@ import Chat from '../../chat';
 
 import BlankslateEmpty from './blankslate-empty';
 import BlankslateWithChats from './blankslate-with-chats';
-
-import type { Relationship } from 'pl-api';
 
 const messages = defineMessages({
   blockMessage: { id: 'chat_settings.block.message', defaultMessage: 'Blocking will prevent this profile from direct messaging you and viewing your content. You can unblock later.' },
@@ -57,7 +54,7 @@ const ChatPageMain = () => {
 
   const { deleteChat } = useChatActions(chat?.id as string);
 
-  const isBlocking = !!useAppSelector((state) => chat?.account?.id && (state.entities[Entities.RELATIONSHIPS]?.store[chat.account.id] as Relationship)?.blocked_by);
+  const isBlocked = !!useRelationshipQuery(chat?.account.id).data?.blocked_by;
 
   const handleBlockUser = () => {
     openModal('CONFIRM', {
@@ -114,8 +111,8 @@ const ChatPageMain = () => {
   const menuItems: Menu = [
     {
       icon: require('@phosphor-icons/core/regular/prohibit.svg'),
-      text: intl.formatMessage(isBlocking ? messages.unblockUser : messages.blockUser, { acct: chat.account.acct }),
-      action: isBlocking ? handleUnblockUser : handleBlockUser,
+      text: intl.formatMessage(isBlocked ? messages.unblockUser : messages.blockUser, { acct: chat.account.acct }),
+      action: isBlocked ? handleUnblockUser : handleBlockUser,
     },
   ];
 

@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 
 import { unblockAccount } from 'pl-fe/actions/accounts';
-import { useRelationship } from 'pl-fe/api/hooks/accounts/use-relationship';
 import Button from 'pl-fe/components/ui/button';
 import Combobox, { ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover } from 'pl-fe/components/ui/combobox';
 import HStack from 'pl-fe/components/ui/hstack';
@@ -14,6 +13,7 @@ import UploadButton from 'pl-fe/features/compose/components/upload-button';
 import emojiSearch from 'pl-fe/features/emoji/search';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useInstance } from 'pl-fe/hooks/use-instance';
+import { useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
 import { useModalsActions } from 'pl-fe/stores/modals';
 import { textAtCursorMatchesToken } from 'pl-fe/utils/suggestions';
 
@@ -80,7 +80,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
 
   const { openModal } = useModalsActions();
   const { chat } = useChatContext();
-  const { relationship } = useRelationship(chat?.account.id, { enabled: !!chat });
+  const { data: relationship } = useRelationshipQuery(chat?.account.id);
 
   const isBlocked = relationship?.blocked_by && false;
   const isBlocking = relationship?.blocking && false;

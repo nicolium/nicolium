@@ -9,7 +9,6 @@ import * as v from 'valibot';
 import { biteAccount, blockAccount, pinAccount, removeFromFollowers, unblockAccount, unmuteAccount, unpinAccount } from 'pl-fe/actions/accounts';
 import { mentionCompose, directCompose } from 'pl-fe/actions/compose';
 import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
-import { useFollow } from 'pl-fe/api/hooks/accounts/use-follow';
 import Account from 'pl-fe/components/account';
 import AltIndicator from 'pl-fe/components/alt-indicator';
 import Badge from 'pl-fe/components/badge';
@@ -30,6 +29,7 @@ import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
+import { useFollowMutation } from 'pl-fe/queries/accounts/use-relationship';
 import { useChats } from 'pl-fe/queries/chats';
 import { queryClient } from 'pl-fe/queries/client';
 import { blockDomainMutationOptions, unblockDomainMutationOptions } from 'pl-fe/queries/settings/domain-blocks';
@@ -134,7 +134,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
   const features = useFeatures();
   const { account: ownAccount } = useOwnAccount();
-  const { follow } = useFollow();
+  const { mutate: follow } = useFollowMutation(account?.id!);
   const { openModal } = useModalsActions();
   const settings = useSettings();
 
@@ -207,9 +207,9 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
   const onReblogToggle = () => {
     if (account.relationship?.showing_reblogs) {
-      follow(account.id, { reblogs: false });
+      follow({ reblogs: false });
     } else {
-      follow(account.id, { reblogs: true });
+      follow({ reblogs: true });
     }
   };
 

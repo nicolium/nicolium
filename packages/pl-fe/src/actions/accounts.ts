@@ -5,7 +5,6 @@ import {
   type Relationship,
 } from 'pl-api';
 
-import { Entities } from 'pl-fe/entity-store/entities';
 import { queryClient } from 'pl-fe/queries/client';
 import { selectAccount } from 'pl-fe/selectors';
 import { isLoggedIn } from 'pl-fe/utils/auth';
@@ -177,8 +176,7 @@ const fetchRelationships = (accountIds: string[]) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
-    const loadedRelationships = getState().entities[Entities.RELATIONSHIPS]?.store;
-    const newAccountIds = accountIds.filter(id => !loadedRelationships?.[id]);
+    const newAccountIds = accountIds.filter(id => !queryClient.getQueryData(['accountRelationships', id]));
 
     if (newAccountIds.length === 0) {
       return null;

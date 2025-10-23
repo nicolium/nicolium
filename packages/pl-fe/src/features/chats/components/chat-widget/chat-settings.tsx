@@ -8,16 +8,13 @@ import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
-import { Entities } from 'pl-fe/entity-store/entities';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
+import { useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
 import { useChatActions } from 'pl-fe/queries/chats';
 import { useModalsActions } from 'pl-fe/stores/modals';
 
 import ChatPaneHeader from './chat-pane-header';
-
-import type { Relationship } from 'pl-api';
 
 const messages = defineMessages({
   blockMessage: { id: 'chat_settings.block.message', defaultMessage: 'Blocking will prevent this profile from direct messaging you and viewing your content. You can unblock later.' },
@@ -44,7 +41,7 @@ const ChatSettings = () => {
   const { chat, changeScreen, toggleChatPane } = useChatContext();
   const { deleteChat } = useChatActions(chat?.id as string);
 
-  const isBlocking = !!useAppSelector((state) => chat?.account?.id && (state.entities[Entities.RELATIONSHIPS]?.store[chat.account.id] as Relationship)?.blocked_by);
+  const isBlocked = !!useRelationshipQuery(chat?.account.id).data?.blocked_by;
 
   const closeSettings = () => {
     changeScreen(ChatWidgetScreens.CHAT, chat?.id);
@@ -121,9 +118,9 @@ const ChatSettings = () => {
         </HStack>
 
         <Stack space={5}>
-          <button onClick={isBlocking ? handleUnblockUser : handleBlockUser} className='flex w-full items-center space-x-2 text-sm font-bold text-primary-600 dark:text-accent-blue'>
+          <button onClick={isBlocked ? handleUnblockUser : handleBlockUser} className='flex w-full items-center space-x-2 text-sm font-bold text-primary-600 dark:text-accent-blue'>
             <Icon src={require('@phosphor-icons/core/regular/prohibit.svg')} className='size-5' />
-            <span>{intl.formatMessage(isBlocking ? messages.unblockUser : messages.blockUser, { acct: chat.account.acct })}</span>
+            <span>{intl.formatMessage(isBlocked ? messages.unblockUser : messages.blockUser, { acct: chat.account.acct })}</span>
           </button>
 
           {features.chatsDelete && (

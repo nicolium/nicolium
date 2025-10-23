@@ -5,7 +5,7 @@ import { changeSetting, saveSettings } from 'pl-fe/actions/settings';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useTheme } from 'pl-fe/hooks/use-theme';
 import { useCustomEmojis } from 'pl-fe/queries/instance/use-custom-emojis';
-import { useSettings , useSettingsStoreActions } from 'pl-fe/stores/settings';
+import { useSettings, useSettingsStoreActions } from 'pl-fe/stores/settings';
 
 import { buildCustomEmojiCategories } from '../../emoji';
 import { EmojiPicker } from '../../ui/util/async-components';
