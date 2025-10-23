@@ -123,7 +123,7 @@ const useUnblockAccountMutation = (accountId: string) => {
     mutationKey: ['accountRelationships', accountId],
     mutationFn: () => client.filtering.unblockAccount(accountId),
     onMutate: () => updateRelationship(accountId, {
-      blocking: true,
+      blocking: false,
     }, queryClient),
     onError: (_err, _variables, context) => restorePreviousRelationship(accountId, context, queryClient),
     onSuccess: (data) => {
