@@ -1,8 +1,8 @@
 import {
-  PLEROMA,
   type UpdateNotificationSettingsParams,
   type CreateAccountParams,
   type Relationship,
+  type MuteAccountParams,
 } from 'pl-api';
 
 import { queryClient } from 'pl-fe/queries/client';
@@ -123,18 +123,12 @@ const muteAccount = (accountId: string, notifications?: boolean, duration = 0) =
 
     const client = getClient(getState);
 
-    const params: Record<string, any> = {
+    const params: MuteAccountParams = {
       notifications,
     };
 
     if (duration) {
-      const v = client.features.version;
-
-      if (v.software === PLEROMA) {
-        params.expires_in = duration;
-      } else {
-        params.duration = duration;
-      }
+      params.duration = duration;
     }
 
     return client.filtering.muteAccount(accountId, params)
