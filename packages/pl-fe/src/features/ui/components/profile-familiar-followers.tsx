@@ -2,20 +2,41 @@ import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
+import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import AvatarStack from 'pl-fe/components/avatar-stack';
 import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import Emojify from 'pl-fe/features/emoji/emojify';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFamiliarFollowers } from 'pl-fe/queries/accounts/use-familiar-followers';
-import { makeGetAccount } from 'pl-fe/selectors';
 import { useModalsActions } from 'pl-fe/stores/modals';
 
 import type { Account } from 'pl-fe/normalizers/account';
 
-const getAccount = makeGetAccount();
+interface IFamiliarFollowerLink {
+  id: string;
+}
+
+const FamiliarFollowerLink: React.FC<IFamiliarFollowerLink> = ({ id }) => {
+  const { account } = useAccount(id);
+
+  if (!account) return null;
+
+  return (
+    <Link className='mention inline-block' to={`/@${account.acct}`} key={account.id}>
+      <HoverAccountWrapper accountId={account.id} element='span'>
+        <HStack space={1} alignItems='center' grow>
+          <Text size='sm' theme='primary' truncate>
+            <Emojify text={account.display_name} emojis={account.emojis} />
+          </Text>
+
+          {account.verified && <VerificationBadge />}
+        </HStack>
+      </HoverAccountWrapper>
+    </Link>
+  );
+};
 
 interface IProfileFamiliarFollowers {
   account: Account;
@@ -24,7 +45,7 @@ interface IProfileFamiliarFollowers {
 const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account }) => {
   const { openModal } = useModalsActions();
   const { data: familiarFollowerIds = [] } = useFamiliarFollowers(account.id);
-  const familiarFollowers = useAppSelector(state => familiarFollowerIds.slice(0, 2).map(accountId => getAccount(state, accountId)));
+  const displayedFamiliarFollowerIds = familiarFollowerIds.slice(0, 2);
 
   const openFamiliarFollowersModal = () => {
     openModal('FAMILIAR_FOLLOWERS', {
@@ -36,19 +57,9 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
     return null;
   }
 
-  const accounts: Array<React.ReactNode> = familiarFollowers.map(account => !!account && (
-    <Link className='mention inline-block' to={`/@${account.acct}`}>
-      <HoverAccountWrapper accountId={account.id} key={account.id} element='span'>
-        <HStack space={1} alignItems='center' grow>
-          <Text size='sm' theme='primary' truncate>
-            <Emojify text={account.display_name} emojis={account.emojis} />
-          </Text>
-
-          {account.verified && <VerificationBadge />}
-        </HStack>
-      </HoverAccountWrapper>
-    </Link>
-  )).filter(Boolean);
+  const accounts: Array<React.ReactNode> = displayedFamiliarFollowerIds.map(accountId => (
+    <FamiliarFollowerLink id={accountId} key={accountId} />
+  ));
 
   if (familiarFollowerIds.length > 2) {
     accounts.push(
@@ -56,7 +67,7 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
         <FormattedMessage
           id='account.familiar_followers.more'
           defaultMessage='{count, plural, one {# other} other {# others}} you follow'
-          values={{ count: familiarFollowerIds.length - familiarFollowers.length }}
+          values={{ count: familiarFollowerIds.length - displayedFamiliarFollowerIds.length }}
         />
       </span>,
     );

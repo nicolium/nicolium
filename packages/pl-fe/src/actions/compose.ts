@@ -7,7 +7,7 @@ import emojiSearch from 'pl-fe/features/emoji/search';
 import { Language } from 'pl-fe/features/preferences';
 import { queryClient } from 'pl-fe/queries/client';
 import { cancelDraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
-import { selectAccount, selectOwnAccount, makeGetAccount } from 'pl-fe/selectors';
+import { selectAccount, selectOwnAccount } from 'pl-fe/selectors';
 import { tagHistory } from 'pl-fe/settings';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import { useSettingsStore } from 'pl-fe/stores/settings';
@@ -106,8 +106,6 @@ const COMPOSE_HASHTAG_CASING_SUGGESTION_SET = 'COMPOSE_HASHTAG_CASING_SUGGESTION
 const COMPOSE_HASHTAG_CASING_SUGGESTION_IGNORE = 'COMPOSE_HASHTAG_CASING_SUGGESTION_IGNORE' as const;
 
 const COMPOSE_REDACTING_OVERWRITE_CHANGE = 'COMPOSE_REDACTING_OVERWRITE_CHANGE' as const;
-
-const getAccount = makeGetAccount();
 
 const messages = defineMessages({
   scheduleError: { id: 'compose.invalid_schedule', defaultMessage: 'You must schedule a post at least 5 minutes out.' },
@@ -303,7 +301,7 @@ const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, c
 
   const state = getState();
 
-  const accountUrl = getAccount(state, state.me as string)!.url;
+  const accountUrl = selectOwnAccount(state)!.url;
   const draftId = getState().compose[composeId]!.draft_id;
 
   dispatch(submitComposeSuccess(composeId, data));

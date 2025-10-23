@@ -3,12 +3,10 @@ import { statusSchema } from 'pl-api';
 import * as v from 'valibot';
 
 import { normalizeStatus } from 'pl-fe/normalizers/status';
-import { makeGetAccount } from 'pl-fe/selectors';
+import { selectOwnAccount } from 'pl-fe/selectors';
 
 import type { PendingStatus } from 'pl-fe/reducers/pending-statuses';
 import type { RootState } from 'pl-fe/store';
-
-const getAccount = makeGetAccount();
 
 const buildMentions = (pendingStatus: PendingStatus) => {
   if (pendingStatus.in_reply_to_id) {
@@ -30,8 +28,7 @@ const buildPoll = (pendingStatus: PendingStatus) => {
 };
 
 const buildStatus = (state: RootState, pendingStatus: PendingStatus, idempotencyKey: string) => {
-  const me = state.me as string;
-  const account = getAccount(state, me);
+  const account = selectOwnAccount(state)!;
   const inReplyToId = pendingStatus.in_reply_to_id;
 
   const status = {

@@ -1,22 +1,12 @@
-import { useCallback } from 'react';
+import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 
-import { makeGetAccount } from 'pl-fe/selectors';
-
-import { useAppSelector } from './use-app-selector';
+import { useLoggedIn } from './use-logged-in';
 
 /** Get the logged-in account from the store, if any. */
 const useOwnAccount = () => {
-  const getAccount = useCallback(makeGetAccount(), []);
+  const { me } = useLoggedIn();
 
-  const account = useAppSelector((state) => {
-    const { me } = state;
-
-    if (typeof me === 'string') {
-      return getAccount(state, me);
-    }
-  });
-
-  return { account: account || undefined };
+  return useAccount(typeof me === 'string' ? me : undefined);
 };
 
 export {

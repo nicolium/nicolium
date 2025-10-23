@@ -1,8 +1,8 @@
 import { statusSchema } from 'pl-api';
 import * as v from 'valibot';
 
-import { Entities } from 'pl-fe/entity-store/entities';
 import { normalizeStatus } from 'pl-fe/normalizers/status';
+import { selectOwnAccount } from 'pl-fe/selectors';
 
 import type { DraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
 import type { RootState } from 'pl-fe/store';
@@ -20,8 +20,7 @@ const buildPoll = (draftStatus: DraftStatus) => {
 };
 
 const buildStatus = (state: RootState, draftStatus: DraftStatus) => {
-  const me = state.me as string;
-  const account = state.entities[Entities.ACCOUNTS]?.store[me];
+  const account = selectOwnAccount(state);
 
   const status = v.parse(statusSchema, {
     id: 'draft',

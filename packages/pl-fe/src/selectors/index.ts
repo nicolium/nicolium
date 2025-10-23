@@ -7,7 +7,7 @@ import { validId } from 'pl-fe/utils/auth';
 import ConfigDB from 'pl-fe/utils/config-db';
 import { shouldFilter } from 'pl-fe/utils/timelines';
 
-import type { Filter, FilterResult, NotificationGroup, Relationship } from 'pl-api';
+import type { Filter, FilterResult, NotificationGroup } from 'pl-api';
 import type { EntityStore } from 'pl-fe/entity-store/types';
 import type { Account } from 'pl-fe/normalizers/account';
 import type { Group } from 'pl-fe/normalizers/group';
@@ -29,25 +29,6 @@ const selectOwnAccount = (state: RootState) => {
     return selectAccount(state, state.me);
   }
 };
-
-const getAccountBase = (state: RootState, accountId: string) => state.entities[Entities.ACCOUNTS]?.store[accountId] as Account | undefined;
-const getAccountRelationship = (state: RootState, accountId: string) => state.entities[Entities.RELATIONSHIPS]?.store[accountId] as Relationship | undefined;
-const getAccountMeta = (state: RootState, accountId: string) => state.accounts_meta[accountId];
-
-const makeGetAccount = () => createSelector([
-  getAccountBase,
-  getAccountRelationship,
-  getAccountMeta,
-], (account, relationship, meta) => {
-  if (!account) return null;
-  return {
-    ...account,
-    relationship,
-    __meta: { meta, ...account.__meta },
-    // @ts-ignore
-    is_admin: meta?.role ? (meta.role.permissions & 0x1) === 0x1 : account.is_admin,
-  };
-});
 
 const toServerSideType = (columnType: string): Filter['context'][0] => {
   switch (columnType) {
@@ -309,7 +290,6 @@ export {
   selectAccount,
   selectAccounts,
   selectOwnAccount,
-  makeGetAccount,
   getFilters,
   regexFromFilters,
   makeGetStatus,

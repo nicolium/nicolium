@@ -51,7 +51,6 @@ const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
 
   return {
     ...result,
-    isLoading: result.isLoading,
     isRelationshipLoading,
     isUnauthorized,
     isUnavailable,

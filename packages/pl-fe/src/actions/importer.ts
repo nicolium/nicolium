@@ -2,6 +2,7 @@ import { importEntities as importEntityStoreEntities } from 'pl-fe/entity-store/
 import { Entities } from 'pl-fe/entity-store/entities';
 import { normalizeGroup } from 'pl-fe/normalizers/group';
 import { queryClient } from 'pl-fe/queries/client';
+import { selectAccount } from 'pl-fe/selectors';
 
 import type { Account as BaseAccount, Group as BaseGroup, Poll as BasePoll, Relationship as BaseRelationship, Status as BaseStatus } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
@@ -70,7 +71,7 @@ const importEntities = (entities: {
   const statuses: Record<string, BaseStatus> = {};
 
   const processAccount = (account: BaseAccount, withSelf = true) => {
-    if (!override && state.entities[Entities.ACCOUNTS]?.store[account.id]) return;
+    if (!override && selectAccount(state, account.id)) return;
 
     if (withSelf) accounts[account.id] = account;
 

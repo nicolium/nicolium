@@ -1,14 +1,13 @@
 import { statusSchema, type ScheduledStatus } from 'pl-api';
 import * as v from 'valibot';
 
-import { Entities } from 'pl-fe/entity-store/entities';
 import { normalizeStatus } from 'pl-fe/normalizers/status';
+import { selectOwnAccount } from 'pl-fe/selectors';
 
 import type { RootState } from 'pl-fe/store';
 
 const buildStatus = (state: RootState, scheduledStatus: ScheduledStatus) => {
-  const me = state.me as string;
-  const account = state.entities[Entities.ACCOUNTS]?.store[me];
+  const account = selectOwnAccount(state);
 
   const poll = scheduledStatus.params.poll ? {
     id: `${scheduledStatus.id}-poll`,
