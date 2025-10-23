@@ -9,8 +9,16 @@ const relationships = memoize((client: PlApiClient) => create({
   scheduler: bufferScheduler(200),
 }));
 
+// TODO: proper multi-client support
+const translations = memoize((lang: string, client: PlApiClient) => create({
+  fetcher: (ids: string[]) => client.statuses.translateStatuses(ids, lang),
+  resolver: keyResolver('id'),
+  scheduler: bufferScheduler(200),
+}));
+
 const batcher = {
   relationships,
+  translations,
 };
 
 export { batcher };
