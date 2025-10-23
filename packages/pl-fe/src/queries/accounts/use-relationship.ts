@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { ACCOUNT_BLOCK_SUCCESS, ACCOUNT_MUTE_SUCCESS, type AccountsAction } from 'pl-fe/actions/accounts';
+import { batcher } from 'pl-fe/api/batcher';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useClient } from 'pl-fe/hooks/use-client';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
@@ -34,7 +35,7 @@ const useRelationshipQuery = (accountId?: string) => {
 
   return useQuery({
     queryKey: ['accountRelationships', accountId],
-    queryFn: () => client.accounts.getRelationships([accountId!]).then(arr => arr[0]),
+    queryFn: () => batcher.relationships(client).fetch(accountId!).then((data) => data || undefined),
     enabled: isLoggedIn && !!accountId,
   });
 };

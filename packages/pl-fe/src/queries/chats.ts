@@ -4,6 +4,7 @@ import { type Chat, type ChatMessage as BaseChatMessage, type PaginatedResponse,
 import * as v from 'valibot';
 
 import { importEntities } from 'pl-fe/actions/importer';
+import { batcher } from 'pl-fe/api/batcher';
 import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
@@ -17,7 +18,6 @@ import { flattenPages, updatePageItem } from 'pl-fe/utils/queries';
 
 import { useRelationshipQuery } from './accounts/use-relationship';
 import { queryClient } from './client';
-import { useFetchRelationships } from './relationships';
 
 const ChatKeys = {
   chat: (chatId?: string) => ['chats', 'chat', chatId] as const,
@@ -60,7 +60,6 @@ const useChats = () => {
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const { setUnreadChatsCount } = useStatContext();
-  const fetchRelationships = useFetchRelationships();
   const { me } = useLoggedIn();
 
   const getChats = async (pageParam?: Pick<PaginatedResponse<Chat>, 'next'>): Promise<PaginatedResponse<Chat>> => {
@@ -70,7 +69,8 @@ const useChats = () => {
     setUnreadChatsCount(sumBy(data, (chat) => chat.unread));
 
     // Set the relationships to these users in the redux store.
-    fetchRelationships.mutate({ accountIds: items.map((item) => item.account.id) });
+    const fetcher = batcher.relationships(client).fetch;
+    items.map((item) => item.account.id).forEach(fetcher);
     dispatch(importEntities({ accounts: items.map((item) => item.account) }));
 
     return response;
@@ -101,13 +101,11 @@ const useChats = () => {
 const useChat = (chatId?: string) => {
   const client = useClient();
   const dispatch = useAppDispatch();
-  const fetchRelationships = useFetchRelationships();
 
   const getChat = async () => {
     if (chatId) {
       const data = await client.chats.getChat(chatId);
 
-      fetchRelationships.mutate({ accountIds: [data.account.id] });
       dispatch(importEntities({ accounts: [data.account] }));
 
       return data;

@@ -214,6 +214,9 @@ importers:
       '@vitejs/plugin-react':
         specifier: ^4.3.4
         version: 4.7.0(vite@5.4.21(@types/node@22.17.0)(sass@1.89.2)(terser@5.44.0))
+      '@yornaath/batshit':
+        specifier: ^0.11.1
+        version: 0.11.1
       abortcontroller-polyfill:
         specifier: ^1.7.8
         version: 1.7.8
@@ -2898,6 +2901,12 @@ packages:
 
   '@xtuc/long@4.2.2':
     resolution: {integrity: sha512-NuHqBY1PB/D8xU6s/thBgOAiAP7HOYDQ32+BFZILJ8ivkUkAHQnWfn6WhL79Owj1qmUnoN/YPhktdIoucipkAQ==}
+
+  '@yornaath/batshit-devtools@1.7.1':
+    resolution: {integrity: sha512-AyttV1Njj5ug+XqEWY1smV45dTWMlWKtj1B8jcFYgBKUFyUlF/qEhD+iP1E5UaRYW6hQRYD9T2WNDwFTrOMWzQ==}
+
+  '@yornaath/batshit@0.11.1':
+    resolution: {integrity: sha512-LYsrHbsdGivKIr2IDcwaqrEYoW2W27a68GT4eW1jlM7nHO3KtH2qItqaOD57wiiOpYzxFRTVz7LUZMVMSfaekQ==}
 
   abortcontroller-polyfill@1.7.8:
     resolution: {integrity: sha512-9f1iZ2uWh92VcrU9Y8x+LdM4DLj75VE0MJB8zuF1iUnroEptStw+DQ8EQPMUdfe5k+PkB1uUfDQfWbhstH8LrQ==}
@@ -9404,6 +9413,12 @@ snapshots:
   '@xtuc/ieee754@1.2.0': {}
 
   '@xtuc/long@4.2.2': {}
+
+  '@yornaath/batshit-devtools@1.7.1': {}
+
+  '@yornaath/batshit@0.11.1':
+    dependencies:
+      '@yornaath/batshit-devtools': 1.7.1
 
   abortcontroller-polyfill@1.7.8: {}
 

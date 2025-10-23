@@ -1,5 +1,6 @@
 import { type CreateAccountParams, type Relationship } from 'pl-api';
 
+import { batcher } from 'pl-fe/api/batcher';
 import { queryClient } from 'pl-fe/queries/client';
 import { selectAccount } from 'pl-fe/selectors';
 import { isLoggedIn } from 'pl-fe/utils/auth';
@@ -85,7 +86,9 @@ const fetchRelationships = (accountIds: string[]) =>
       return null;
     }
 
-    return getClient(getState()).accounts.getRelationships(newAccountIds)
+    const fetcher = batcher.relationships(getClient(getState())).fetch;
+
+    return Promise.all(newAccountIds.map(fetcher))
       .then(response => dispatch(importEntities({ relationships: response })));
   };
 

@@ -1,0 +1,16 @@
+import { bufferScheduler, create, keyResolver } from '@yornaath/batshit';
+import memoize from 'lodash/memoize';
+
+import type { PlApiClient } from 'pl-api';
+
+const relationships = memoize((client: PlApiClient) => create({
+  fetcher: (ids: string[]) => client.accounts.getRelationships(ids),
+  resolver: keyResolver('id'),
+  scheduler: bufferScheduler(200),
+}));
+
+const batcher = {
+  relationships,
+};
+
+export { batcher };
