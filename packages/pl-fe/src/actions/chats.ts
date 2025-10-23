@@ -3,7 +3,7 @@ import { useSettingsStore } from 'pl-fe/stores/settings';
 
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
-const toggleMainWindow = () =>
+const toggleChatPane = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const main = useSettingsStore.getState().settings.chats.mainWindow;
     const state = main === 'minimized' ? 'open' : 'minimized';
@@ -11,5 +11,5 @@ const toggleMainWindow = () =>
   };
 
 export {
-  toggleMainWindow,
+  toggleChatPane,
 };

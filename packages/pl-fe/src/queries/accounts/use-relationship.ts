@@ -236,6 +236,23 @@ const useRemoveAccountFromFollowersMutation = (accountId: string) => {
   });
 };
 
+const useUpdateAccountNoteMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['accountNote', accountId],
+    mutationFn: (note: string) => client.accounts.updateAccountNote(accountId, note),
+    onMutate: (note) => updateRelationship(accountId, {
+      note,
+    }, queryClient),
+    onError: (_err, _variables, context) => restorePreviousRelationship(accountId, context, queryClient),
+    onSuccess: (data) => {
+      queryClient.setQueryData(['accountRelationships', accountId], data);
+    },
+  });
+};
+
 export {
   useRelationshipQuery,
   useFollowAccountMutation,
@@ -247,4 +264,5 @@ export {
   usePinAccountMutation,
   useUnpinAccountMutation,
   useRemoveAccountFromFollowersMutation,
+  useUpdateAccountNoteMutation,
 };

@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { toggleMainWindow } from 'pl-fe/actions/chats';
+import { toggleChatPane } from 'pl-fe/actions/chats';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useChat } from 'pl-fe/queries/chats';
 import { useSettings } from 'pl-fe/stores/settings';
@@ -45,13 +45,13 @@ const ChatProvider: React.FC<IChatProvider> = ({ children }) => {
     setScreen(screen);
   };
 
-  const toggleChatPane = () => dispatch(toggleMainWindow());
+  const handleChatPaneToggle = () => dispatch(toggleChatPane());
 
   const value = useMemo(() => ({
     chat,
     isOpen,
     isUsingMainChatPage,
-    toggleChatPane,
+    toggleChatPane: handleChatPaneToggle,
     screen,
     changeScreen,
     currentChatId,

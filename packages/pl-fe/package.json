@@ -65,6 +65,7 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.10",
     "@tailwindcss/typography": "^0.5.16",
+    "@tanstack/react-pacer": "^0.16.4",
     "@tanstack/react-query": "^5.62.11",
     "@transfem-org/sfm-js": "^0.24.6",
     "@twemoji/svg": "^15.0.0",

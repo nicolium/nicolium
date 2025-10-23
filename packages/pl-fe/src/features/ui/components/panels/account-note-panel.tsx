@@ -1,23 +1,15 @@
-import debounce from 'lodash/debounce';
-import React, { useEffect, useRef, useState } from 'react';
+import { debounce } from '@tanstack/react-pacer/debouncer';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { submitAccountNote } from 'pl-fe/actions/account-notes';
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
 import Textarea from 'pl-fe/components/ui/textarea';
 import Widget from 'pl-fe/components/ui/widget';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useUpdateAccountNoteMutation } from 'pl-fe/queries/accounts/use-relationship';
 
 import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
-import type { AppDispatch } from 'pl-fe/store';
-
-const onSave = debounce(
-  (dispatch: AppDispatch, accountId: string, value: string, callback: () => void) =>
-    dispatch(submitAccountNote(accountId, value)).then(() => callback()),
-  900,
-);
 
 const messages = defineMessages({
   placeholder: { id: 'account_note.placeholder', defaultMessage: 'Click to add a note' },
@@ -30,8 +22,11 @@ interface IAccountNotePanel {
 
 const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const me = useAppSelector((state) => state.me);
+
+  const { mutate: updateAccountNote } = useUpdateAccountNoteMutation(account.id);
+
+  const debouncedUpdateAccountNote = useCallback(debounce(updateAccountNote, { wait: 900 }), []);
 
   const textarea = useRef<HTMLTextAreaElement>(null);
 
@@ -41,9 +36,11 @@ const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
   const handleChange: React.ChangeEventHandler<HTMLTextAreaElement> = e => {
     setValue(e.target.value);
 
-    onSave(dispatch, account.id, e.target.value, () => {
-      setSaved(true);
-      setTimeout(() => setSaved(false), 2000);
+    debouncedUpdateAccountNote(e.target.value, {
+      onSuccess: () => {
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
+      },
     });
   };
 
