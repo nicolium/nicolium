@@ -3,7 +3,6 @@ import React, { useCallback, useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
-import { blockAccount } from 'pl-fe/actions/accounts';
 import { redactStatus } from 'pl-fe/actions/admin';
 import { directCompose, mentionCompose, quoteCompose, replyCompose } from 'pl-fe/actions/compose';
 import { emojiReact, unEmojiReact } from 'pl-fe/actions/emoji-reacts';
@@ -24,6 +23,7 @@ import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
+import { useBlockAccountMutation, useUnblockAccountMutation } from 'pl-fe/queries/accounts/use-relationship';
 import { useChats } from 'pl-fe/queries/chats';
 import { useBlockGroupUserMutation } from 'pl-fe/queries/groups/use-group-blocks';
 import { useCustomEmojis } from 'pl-fe/queries/instance/use-custom-emojis';
@@ -50,6 +50,7 @@ const messages = defineMessages({
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
   admin_status: { id: 'status.admin_status', defaultMessage: 'Open this post in the moderation interface' },
   block: { id: 'account.block', defaultMessage: 'Block @{name}' },
+  unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
   blocked: { id: 'group.group_mod_block.success', defaultMessage: '@{name} is banned' },
   blockAndReport: { id: 'confirmations.block.block_and_report', defaultMessage: 'Block and report' },
   blockConfirm: { id: 'confirmations.block.confirm', defaultMessage: 'Block' },
@@ -579,6 +580,8 @@ const MenuButton: React.FC<IMenuButton> = ({
   const { mutate: unbookmarkStatus } = useUnbookmarkStatus(status.id);
   const { mutate: pinStatus } = usePinStatus(status?.id!);
   const { mutate: unpinStatus } = useUnpinStatus(status?.id!);
+  const { mutate: blockAccount } = useBlockAccountMutation(status.account_id);
+  const { mutate: unblockAccount } = useUnblockAccountMutation(status.account_id);
 
   const { groupRelationship } = useGroupRelationship(status.group_id || undefined);
   const features = useFeatures();
@@ -691,13 +694,17 @@ const MenuButton: React.FC<IMenuButton> = ({
         heading: <FormattedMessage id='confirmations.block.heading' defaultMessage='Block @{name}' values={{ name: account.acct }} />,
         message: <FormattedMessage id='confirmations.block.message' defaultMessage='Are you sure you want to block {name}?' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
         confirm: intl.formatMessage(messages.blockConfirm),
-        onConfirm: () => dispatch(blockAccount(account.id)),
+        onConfirm: () => blockAccount(),
         secondary: intl.formatMessage(messages.blockAndReport),
         onSecondary: () => {
-          dispatch(blockAccount(account.id));
+          blockAccount();
           dispatch(initReport(ReportableEntities.STATUS, account, { status }));
         },
       });
+    };
+
+    const handleUnblockClick: React.EventHandler<React.MouseEvent> = (e) => {
+      unblockAccount();
     };
 
     const handleEmbed = () => {
@@ -973,11 +980,19 @@ const MenuButton: React.FC<IMenuButton> = ({
         action: handleMuteClick,
         icon: require('@phosphor-icons/core/regular/speaker-x.svg'),
       });
-      menu.push({
-        text: intl.formatMessage(messages.block, { name: username }),
-        action: handleBlockClick,
-        icon: require('@phosphor-icons/core/regular/prohibit.svg'),
-      });
+      if (status.account.relationship?.blocking) {
+        menu.push({
+          text: intl.formatMessage(messages.unblock, { name: username }),
+          action: handleUnblockClick,
+          icon: require('@phosphor-icons/core/regular/prohibit.svg'),
+        });
+      } else {
+        menu.push({
+          text: intl.formatMessage(messages.block, { name: username }),
+          action: handleBlockClick,
+          icon: require('@phosphor-icons/core/regular/prohibit.svg'),
+        });
+      }
       menu.push({
         text: intl.formatMessage(messages.report, { name: username }),
         action: handleReport,

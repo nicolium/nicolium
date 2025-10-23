@@ -12,7 +12,6 @@ import {
   fetchAccountByUsername,
   fetchRelationships,
   muteAccount,
-  removeFromFollowers,
   unblockAccount,
   unmuteAccount,
 } from './accounts';
@@ -767,72 +766,6 @@ describe('unsubscribeAccount()', () => {
           { type: 'ACCOUNT_UNSUBSCRIBE_FAIL', error: new Error('Network Error') },
         ];
         await store.dispatch(unsubscribeAccount(id));
-        const actions = store.getActions();
-
-        expect(actions).toEqual(expectedActions);
-      });
-    });
-  });
-});
-
-describe('removeFromFollowers()', () => {
-  const id = '1';
-
-  describe('when logged out', () => {
-    beforeEach(() => {
-      const state = { ...rootState, me: null };
-      store = mockStore(state);
-    });
-
-    it('should do nothing', async() => {
-      await store.dispatch(removeFromFollowers(id));
-      const actions = store.getActions();
-
-      expect(actions).toEqual([]);
-    });
-  });
-
-  describe('when logged in', () => {
-    beforeEach(() => {
-      const state = { ...rootState, me: '123' };
-      store = mockStore(state);
-    });
-
-    describe('with a successful API request', () => {
-      beforeEach(() => {
-        __stub((mock) => {
-          mock.onPost(`/api/v1/accounts/${id}/remove_from_followers`).reply(200, {});
-        });
-      });
-
-      it('should dispatch the correct actions', async() => {
-        const expectedActions = [
-          { type: 'ACCOUNT_REMOVE_FROM_FOLLOWERS_REQUEST', id },
-          {
-            type: 'ACCOUNT_REMOVE_FROM_FOLLOWERS_SUCCESS',
-            relationship: {},
-          },
-        ];
-        await store.dispatch(removeFromFollowers(id));
-        const actions = store.getActions();
-
-        expect(actions).toEqual(expectedActions);
-      });
-    });
-
-    describe('with an unsuccessful API request', () => {
-      beforeEach(() => {
-        __stub((mock) => {
-          mock.onPost(`/api/v1/accounts/${id}/remove_from_followers`).networkError();
-        });
-      });
-
-      it('should dispatch the correct actions', async() => {
-        const expectedActions = [
-          { type: 'ACCOUNT_REMOVE_FROM_FOLLOWERS_REQUEST', id },
-          { type: 'ACCOUNT_REMOVE_FROM_FOLLOWERS_FAIL', id, error: new Error('Network Error') },
-        ];
-        await store.dispatch(removeFromFollowers(id));
         const actions = store.getActions();
 
         expect(actions).toEqual(expectedActions);

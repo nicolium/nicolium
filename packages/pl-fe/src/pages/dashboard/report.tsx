@@ -175,7 +175,7 @@ const ReportPage: React.FC<IReportPage> = (props) => {
 
               <td className='p-2.5 text-end'>
                 <Text size='sm'>
-                  <FormattedDate value={report.created_at}  year='2-digit' month='short' day='2-digit' weekday='short' />
+                  <FormattedDate value={report.created_at} year='2-digit' month='short' day='2-digit' weekday='short' />
                 </Text>
               </td>
             </tr>

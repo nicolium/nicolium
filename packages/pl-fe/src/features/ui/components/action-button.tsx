@@ -1,21 +1,22 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import {
-  blockAccount,
-  unblockAccount,
-  muteAccount,
-  unmuteAccount,
-  biteAccount,
-} from 'pl-fe/actions/accounts';
 import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
 import Spinner from 'pl-fe/components/ui/spinner';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { useAcceptFollowRequestMutation, useRejectFollowRequestMutation } from 'pl-fe/queries/accounts/use-follow-requests';
-import { useRelationshipQuery, useFollowMutation, useUnfollowMutation } from 'pl-fe/queries/accounts/use-relationship';
+import {
+  useRelationshipQuery,
+  useBlockAccountMutation,
+  useUnblockAccountMutation,
+  useMuteAccountMutation,
+  useUnmuteAccountMutation,
+  useFollowAccountMutation,
+  useUnfollowAccountMutation,
+} from 'pl-fe/queries/accounts/use-relationship';
 import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
@@ -55,15 +56,19 @@ interface IActionButton {
  * `actionType` prop.
  */
 const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = true }) => {
-  const dispatch = useAppDispatch();
   const features = useFeatures();
   const intl = useIntl();
+  const client = useClient();
 
   const { openModal } = useModalsActions();
   const { isLoggedIn, me } = useLoggedIn();
 
-  const { mutate: follow, isPending: isPendingFollow } = useFollowMutation(account.id);
-  const { mutate: unfollow, isPending: isPendingUnfollow } = useUnfollowMutation(account.id);
+  const { mutate: followAccount, isPending: isPendingFollow } = useFollowAccountMutation(account.id);
+  const { mutate: unfollowAccount, isPending: isPendingUnfollow } = useUnfollowAccountMutation(account.id);
+  const { mutate: blockAccount } = useBlockAccountMutation(account.id);
+  const { mutate: unblockAccount } = useUnblockAccountMutation(account.id);
+  const { mutate: muteAccount } = useMuteAccountMutation(account.id);
+  const { mutate: unmuteAccount } = useUnmuteAccountMutation(account.id);
 
   const { data: relationship, isLoading } = useRelationshipQuery(account.id);
 
@@ -72,25 +77,25 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
 
   const handleFollow = () => {
     if (relationship?.following || relationship?.requested) {
-      unfollow();
+      unfollowAccount();
     } else {
-      follow(undefined);
+      followAccount(undefined);
     }
   };
 
   const handleBlock = () => {
     if (relationship?.blocking) {
-      dispatch(unblockAccount(account.id));
+      unblockAccount();
     } else {
-      dispatch(blockAccount(account.id));
+      blockAccount();
     }
   };
 
   const handleMute = () => {
     if (relationship?.muting) {
-      dispatch(unmuteAccount(account.id));
+      unmuteAccount();
     } else {
-      dispatch(muteAccount(account.id));
+      muteAccount(undefined);
     }
   };
 
@@ -103,7 +108,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
   };
 
   const handleBite = () => {
-    dispatch(biteAccount(account.id))
+    client.accounts.biteAccount(account.id)
       .then(() => toast.success(intl.formatMessage(messages.userBit, { acct: account.acct })))
       .catch(() => toast.error(intl.formatMessage(messages.userBiteFail, { acct: account.acct })));
   };

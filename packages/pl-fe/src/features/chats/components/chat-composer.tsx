@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 
-import { unblockAccount } from 'pl-fe/actions/accounts';
 import Button from 'pl-fe/components/ui/button';
 import Combobox, { ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover } from 'pl-fe/components/ui/combobox';
 import HStack from 'pl-fe/components/ui/hstack';
@@ -11,9 +10,8 @@ import Text from 'pl-fe/components/ui/text';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
 import UploadButton from 'pl-fe/features/compose/components/upload-button';
 import emojiSearch from 'pl-fe/features/emoji/search';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
+import { useRelationshipQuery, useUnblockAccountMutation } from 'pl-fe/queries/accounts/use-relationship';
 import { useModalsActions } from 'pl-fe/stores/modals';
 import { textAtCursorMatchesToken } from 'pl-fe/utils/suggestions';
 
@@ -76,11 +74,11 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
   uploadProgress,
 }, ref) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const { openModal } = useModalsActions();
   const { chat } = useChatContext();
   const { data: relationship } = useRelationshipQuery(chat?.account.id);
+  const { mutate: unblockAccount } = useUnblockAccountMutation(chat?.account.id!);
 
   const isBlocked = relationship?.blocked_by && false;
   const isBlocking = relationship?.blocking && false;
@@ -146,7 +144,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
       message: intl.formatMessage(messages.unblockMessage),
       confirm: intl.formatMessage(messages.unblockConfirm),
       confirmationTheme: 'primary',
-      onConfirm: () => dispatch(unblockAccount(chat?.account.id as string)),
+      onConfirm: () => unblockAccount(),
     });
   };
 

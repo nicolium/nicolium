@@ -158,7 +158,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
             {Component && <Component handleClose={handleClose} />}
             {(items?.length || touchscreen) && renderItems(items)}
           </div>
-          <div className={clsx({ 'w-full': touchscreen, 'fit-content mr-auto': !touchscreen })}  style={{ width }}>
+          <div className={clsx({ 'w-full': touchscreen, 'fit-content mr-auto': !touchscreen })} style={{ width }}>
             {tab !== undefined && (
               <>
                 <HStack className='mx-2 my-1 text-gray-700 dark:text-gray-300' space={3} alignItems='center'>

@@ -3,7 +3,6 @@ import { type CredentialAccount, GOTOSOCIAL } from 'pl-api';
 import React, { useState, useEffect } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { updateNotificationSettings } from 'pl-fe/actions/accounts';
 import { patchMe } from 'pl-fe/actions/me';
 import BirthdayInput from 'pl-fe/components/birthday-input';
 import List, { ListItem } from 'pl-fe/components/list';
@@ -244,9 +243,9 @@ const EditProfilePage: React.FC = () => {
 
     if (features.muteStrangers) {
       promises.push(
-        dispatch(updateNotificationSettings({
+        client.settings.updateNotificationSettings({
           block_from_strangers: muteStrangers,
-        })).catch(console.error),
+        }).catch(console.error),
       );
     }
 

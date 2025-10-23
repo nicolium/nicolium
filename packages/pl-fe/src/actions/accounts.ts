@@ -1,9 +1,4 @@
-import {
-  type UpdateNotificationSettingsParams,
-  type CreateAccountParams,
-  type Relationship,
-  type MuteAccountParams,
-} from 'pl-api';
+import { type CreateAccountParams, type Relationship } from 'pl-api';
 
 import { queryClient } from 'pl-fe/queries/client';
 import { selectAccount } from 'pl-fe/selectors';
@@ -13,13 +8,11 @@ import { getClient, type PlfeResponse } from '../api';
 
 import { importEntities } from './importer';
 
-import type { MinifiedSuggestion } from 'pl-fe/queries/trends/use-suggested-accounts';
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 import type { History } from 'pl-fe/types/history';
 
 const ACCOUNT_BLOCK_SUCCESS = 'ACCOUNT_BLOCK_SUCCESS' as const;
-
 const ACCOUNT_MUTE_SUCCESS = 'ACCOUNT_MUTE_SUCCESS' as const;
 
 const maybeRedirectLogin = (error: { response: PlfeResponse }, history?: History) => {
@@ -28,8 +21,6 @@ const maybeRedirectLogin = (error: { response: PlfeResponse }, history?: History
     history.push('/login');
   }
 };
-
-const noOp = () => new Promise(f => f(undefined));
 
 const createAccount = (params: CreateAccountParams) =>
   async (dispatch: AppDispatch, getState: () => RootState) =>
@@ -84,88 +75,6 @@ const fetchAccountByUsername = (username: string, history?: History) =>
     }
   };
 
-const blockAccount = (accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return null;
-
-    return getClient(getState).filtering.blockAccount(accountId)
-      .then(response => {
-        dispatch(importEntities({ relationships: [response] }));
-
-        queryClient.setQueryData<Array<MinifiedSuggestion>>(['suggestions'], suggestions => suggestions
-          ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
-          : undefined);
-
-        // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
-        return dispatch(blockAccountSuccess(response, getState().statuses));
-      });
-  };
-
-const unblockAccount = (accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return null;
-
-    return getClient(getState).filtering.unblockAccount(accountId)
-      .then(response => {
-        dispatch(importEntities({ relationships: [response] }));
-      });
-  };
-
-const blockAccountSuccess = (relationship: Relationship, statuses: Record<string, MinifiedStatus>) => ({
-  type: ACCOUNT_BLOCK_SUCCESS,
-  relationship,
-  statuses,
-});
-
-const muteAccount = (accountId: string, notifications?: boolean, duration = 0) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return null;
-
-    const client = getClient(getState);
-
-    const params: MuteAccountParams = {
-      notifications,
-    };
-
-    if (duration) {
-      params.duration = duration;
-    }
-
-    return client.filtering.muteAccount(accountId, params)
-      .then(response => {
-        dispatch(importEntities({ relationships: [response] }));
-
-        queryClient.setQueryData<Array<MinifiedSuggestion>>(['suggestions'], suggestions => suggestions
-          ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
-          : undefined);
-
-        // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
-        return dispatch(muteAccountSuccess(response, getState().statuses));
-      });
-  };
-
-const unmuteAccount = (accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return null;
-
-    return getClient(getState()).filtering.unmuteAccount(accountId)
-      .then(response => dispatch(importEntities({ relationships: [response] })));
-  };
-
-const muteAccountSuccess = (relationship: Relationship, statuses: Record<string, MinifiedStatus>) => ({
-  type: ACCOUNT_MUTE_SUCCESS,
-  relationship,
-  statuses,
-});
-
-const removeFromFollowers = (accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return null;
-
-    return getClient(getState()).accounts.removeAccountFromFollowers(accountId)
-      .then(response => dispatch(importEntities({ relationships: [response] })));
-  };
-
 const fetchRelationships = (accountIds: string[]) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
@@ -180,28 +89,6 @@ const fetchRelationships = (accountIds: string[]) =>
       .then(response => dispatch(importEntities({ relationships: response })));
   };
 
-const pinAccount = (accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return dispatch(noOp);
-
-    return getClient(getState).accounts.pinAccount(accountId).then(response =>
-      dispatch(importEntities({ relationships: [response] })),
-    );
-  };
-
-const unpinAccount = (accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return dispatch(noOp);
-
-    return getClient(getState).accounts.unpinAccount(accountId).then(response =>
-      dispatch(importEntities({ relationships: [response] })),
-    );
-  };
-
-const updateNotificationSettings = (params: UpdateNotificationSettingsParams) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).settings.updateNotificationSettings(params).then((data) => ({ params, data }));
-
 const accountLookup = (acct: string, signal?: AbortSignal) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState()).accounts.lookupAccount(acct, { signal }).then((account) => {
@@ -209,13 +96,11 @@ const accountLookup = (acct: string, signal?: AbortSignal) =>
       return account;
     });
 
-const biteAccount = (accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).accounts.biteAccount(accountId);
-
-type AccountsAction =
-  | ReturnType<typeof blockAccountSuccess>
-  | ReturnType<typeof muteAccountSuccess>;
+type AccountsAction = {
+    type: typeof ACCOUNT_BLOCK_SUCCESS | typeof ACCOUNT_MUTE_SUCCESS;
+    relationship: Relationship;
+    statuses: Record<string, MinifiedStatus>;
+  };
 
 export {
   ACCOUNT_BLOCK_SUCCESS,
@@ -223,16 +108,7 @@ export {
   createAccount,
   fetchAccount,
   fetchAccountByUsername,
-  blockAccount,
-  unblockAccount,
-  muteAccount,
-  unmuteAccount,
-  removeFromFollowers,
   fetchRelationships,
-  pinAccount,
-  unpinAccount,
-  updateNotificationSettings,
   accountLookup,
-  biteAccount,
   type AccountsAction,
 };

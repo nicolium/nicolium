@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { muteAccount } from 'pl-fe/actions/accounts';
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import HStack from 'pl-fe/components/ui/hstack';
 import Modal from 'pl-fe/components/ui/modal';
@@ -9,8 +8,8 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import Toggle from 'pl-fe/components/ui/toggle';
 import DurationSelector from 'pl-fe/features/compose/components/polls/duration-selector';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
+import { useMuteAccountMutation } from 'pl-fe/queries/accounts/use-relationship';
 
 import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
@@ -19,21 +18,23 @@ interface MuteModalProps {
 }
 
 const MuteModal: React.FC<MuteModalProps & BaseModalProps> = ({ accountId, onClose }) => {
-  const dispatch = useAppDispatch();
-
   const { account } = useAccount(accountId || undefined);
   const [notifications, setNotifications] = useState(true);
   const [duration, setDuration] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const mutesDuration = useFeatures().mutesDuration;
 
+  const { mutate: muteAccount } = useMuteAccountMutation(accountId);
+
   if (!account) return null;
 
   const handleClick = () => {
     setIsSubmitting(true);
-    dispatch(muteAccount(account.id, notifications, duration))?.then(() => {
-      setIsSubmitting(false);
-      onClose('MUTE');
+    muteAccount({ notifications, duration }, {
+      onSuccess: () => {
+        setIsSubmitting(false);
+        onClose('MUTE');
+      },
     });
   };
 

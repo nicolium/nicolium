@@ -2,7 +2,6 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
-import { blockAccount } from 'pl-fe/actions/accounts';
 import { directCompose, mentionCompose, quoteCompose } from 'pl-fe/actions/compose';
 import { fetchEventIcs } from 'pl-fe/actions/events';
 import { deleteStatusModal, toggleStatusSensitivityModal } from 'pl-fe/actions/moderation';
@@ -21,6 +20,7 @@ import Emojify from 'pl-fe/features/emoji/emojify';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
+import { useBlockAccountMutation } from 'pl-fe/queries/accounts/use-relationship';
 import { useChats } from 'pl-fe/queries/chats';
 import { useBookmarkStatus, usePinStatus, useReblogStatus, useUnbookmarkStatus, useUnpinStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
 import { useModalsActions } from 'pl-fe/stores/modals';
@@ -95,6 +95,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const { mutate: unbookmarkStatus } = useUnbookmarkStatus(status?.id!);
   const { mutate: pinStatus } = usePinStatus(status?.id!);
   const { mutate: unpinStatus } = useUnpinStatus(status?.id!);
+  const { mutate: blockAccount } = useBlockAccountMutation(status?.account.id!);
 
   if (!status || !status.event) {
     return (
@@ -191,10 +192,10 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       heading: <FormattedMessage id='confirmations.block.heading' defaultMessage='Block @{name}' values={{ name: account.acct }} />,
       message: <FormattedMessage id='confirmations.block.message' defaultMessage='Are you sure you want to block {name}?' values={{ name: <strong>@{account.acct}</strong> }} />,
       confirm: intl.formatMessage(messages.blockConfirm),
-      onConfirm: () => dispatch(blockAccount(account.id)),
+      onConfirm: () => blockAccount(),
       secondary: intl.formatMessage(messages.blockAndReport),
       onSecondary: () => {
-        dispatch(blockAccount(account.id));
+        blockAccount();
         dispatch(initReport(ReportableEntities.STATUS, account, { status }));
       },
     });

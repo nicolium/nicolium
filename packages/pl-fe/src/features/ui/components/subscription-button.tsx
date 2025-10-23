@@ -3,7 +3,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import IconButton from 'pl-fe/components/ui/icon-button';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useFollowMutation } from 'pl-fe/queries/accounts/use-relationship';
+import { useFollowAccountMutation } from 'pl-fe/queries/accounts/use-relationship';
 import toast from 'pl-fe/toast';
 
 import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
@@ -24,7 +24,7 @@ interface ISubscriptionButton {
 const SubscriptionButton = ({ account }: ISubscriptionButton) => {
   const features = useFeatures();
   const intl = useIntl();
-  const { mutate: follow, isPending } = useFollowMutation(account.id);
+  const { mutate: follow, isPending } = useFollowAccountMutation(account.id);
 
   const isFollowing = account.relationship?.following;
   const isRequested = account.relationship?.requested;

@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { blockAccount } from 'pl-fe/actions/accounts';
 import { submitReport, ReportableEntities } from 'pl-fe/actions/reports';
 import { fetchAccountTimeline } from 'pl-fe/actions/timelines';
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
@@ -15,6 +14,7 @@ import AccountContainer from 'pl-fe/containers/account-container';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useInstance } from 'pl-fe/hooks/use-instance';
+import { useBlockAccountMutation } from 'pl-fe/queries/accounts/use-relationship';
 
 import ConfirmationStep from './steps/confirmation-step';
 import OtherActionsStep from './steps/other-actions-step';
@@ -81,6 +81,8 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({ onClose, acc
 
   const { account } = useAccount(accountId || undefined);
 
+  const { mutate: blockAccount } = useBlockAccountMutation(accountId);
+
   const [block, setBlock] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { rules } = useInstance();
@@ -109,7 +111,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({ onClose, acc
       });
 
     if (block && account) {
-      dispatch(blockAccount(account.id));
+      blockAccount();
     }
   };
 

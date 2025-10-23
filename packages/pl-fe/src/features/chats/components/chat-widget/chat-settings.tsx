@@ -1,16 +1,14 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { blockAccount, unblockAccount } from 'pl-fe/actions/accounts';
 import Avatar from 'pl-fe/components/ui/avatar';
 import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
+import { useBlockAccountMutation, useUnblockAccountMutation, useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
 import { useChatActions } from 'pl-fe/queries/chats';
 import { useModalsActions } from 'pl-fe/stores/modals';
 
@@ -33,13 +31,15 @@ const messages = defineMessages({
 });
 
 const ChatSettings = () => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
   const features = useFeatures();
 
   const { openModal } = useModalsActions();
   const { chat, changeScreen, toggleChatPane } = useChatContext();
   const { deleteChat } = useChatActions(chat?.id as string);
+
+  const { mutate: blockAccount } = useBlockAccountMutation(chat?.account.id!);
+  const { mutate: unblockAccount } = useUnblockAccountMutation(chat?.account.id!);
 
   const isBlocked = !!useRelationshipQuery(chat?.account.id).data?.blocked_by;
 
@@ -58,7 +58,7 @@ const ChatSettings = () => {
       message: intl.formatMessage(messages.blockMessage),
       confirm: intl.formatMessage(messages.blockConfirm),
       confirmationTheme: 'primary',
-      onConfirm: () => dispatch(blockAccount(chat?.account.id as string)),
+      onConfirm: () => blockAccount(),
     });
   };
 
@@ -68,7 +68,7 @@ const ChatSettings = () => {
       message: intl.formatMessage(messages.unblockMessage),
       confirm: intl.formatMessage(messages.unblockConfirm),
       confirmationTheme: 'primary',
-      onConfirm: () => dispatch(unblockAccount(chat?.account.id as string)),
+      onConfirm: () => unblockAccount(),
     });
   };
 
