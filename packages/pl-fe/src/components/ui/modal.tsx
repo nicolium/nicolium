@@ -106,7 +106,7 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
       })}
     >
       {title && (
-        <div className='sticky top-0 z-10 bg-white/75 p-6 pb-2 backdrop-blur black:bg-black/80 dark:bg-primary-900/75'>
+        <div className='sticky top-0 z-10 bg-white/75 p-6 pb-2 backdrop-blur backdrop-saturate-200 black:bg-black/75 dark:bg-primary-900/75'>
           <div
             className={clsx('flex w-full items-center gap-2', {
               'flex-row-reverse': closePosition === 'left',

@@ -242,7 +242,7 @@ a.⁂-list-item,
     border-radius: 9999px;
     padding: 0.5rem 1rem;
     color: white;
-    @apply bg-primary-600/80 backdrop-blur-md transition-transform hover:scale-105 hover:bg-primary-700/80 active:scale-100;
+    @apply bg-primary-600/80 backdrop-blur-md backdrop-saturate-200 transition-transform hover:scale-105 hover:bg-primary-700/80 active:scale-100;
   
     .⁂-icon svg {
       width: 1rem;
