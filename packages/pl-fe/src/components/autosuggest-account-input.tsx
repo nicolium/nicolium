@@ -1,12 +1,16 @@
-import throttle from 'lodash/throttle';
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React from 'react';
 
-import { accountSearch } from 'pl-fe/actions/accounts';
 import AutosuggestInput, { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useDebounce } from 'pl-fe/hooks/use-debounce';
+import { useAccountSearch } from 'pl-fe/queries/search/use-search-accounts';
 
 import type { Menu } from 'pl-fe/components/dropdown-menu';
 import type { InputThemes } from 'pl-fe/components/ui/input';
+
+const SEARCH_PARAMS = {
+  limit: 5,
+  resolve: false,
+};
 
 const noOp = () => { };
 
@@ -30,31 +34,11 @@ const AutosuggestAccountInput: React.FC<IAutosuggestAccountInput> = ({
   value = '',
   ...rest
 }) => {
-  const dispatch = useAppDispatch();
-  const [accountIds, setAccountIds] = useState<Array<string>>([]);
-  const controller = useRef(new AbortController());
-
-  const refreshCancelToken = () => {
-    controller.current.abort();
-    controller.current = new AbortController();
-  };
-
-  const clearResults = () => {
-    setAccountIds([]);
-  };
-
-  const handleAccountSearch = useCallback(throttle((q) => {
-    dispatch(accountSearch(q, controller.current.signal))
-      .then((accounts: { id: string }[]) => {
-        const accountIds = accounts.map(account => account.id);
-        setAccountIds(accountIds);
-      })
-      .catch(noOp);
-  }, 900, { leading: true, trailing: true }), []);
+  // should ignore debounce on clearing input
+  const debouncedValue = useDebounce(value, 900);
+  const { data: accountIds = [] } = useAccountSearch(debouncedValue, SEARCH_PARAMS);
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
-    refreshCancelToken();
-    handleAccountSearch(e.target.value);
     onChange(e);
   };
 
@@ -63,18 +47,6 @@ const AutosuggestAccountInput: React.FC<IAutosuggestAccountInput> = ({
       onSelected(suggestion);
     }
   };
-
-  useEffect(() => {
-    if (rest.autoFocus) {
-      handleAccountSearch('');
-    }
-  }, []);
-
-  useEffect(() => {
-    if (value === '') {
-      clearResults();
-    }
-  }, [value]);
 
   return (
     <AutosuggestInput

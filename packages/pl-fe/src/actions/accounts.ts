@@ -208,13 +208,6 @@ const updateNotificationSettings = (params: UpdateNotificationSettingsParams) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState).settings.updateNotificationSettings(params).then((data) => ({ params, data }));
 
-const accountSearch = (q: string, signal?: AbortSignal) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState()).accounts.searchAccounts(q, { resolve: false, limit: 4, following: true }, { signal }).then((accounts) => {
-      dispatch(importEntities({ accounts }));
-      return accounts;
-    });
-
 const accountLookup = (acct: string, signal?: AbortSignal) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState()).accounts.lookupAccount(acct, { signal }).then((account) => {
@@ -245,7 +238,6 @@ export {
   pinAccount,
   unpinAccount,
   updateNotificationSettings,
-  accountSearch,
   accountLookup,
   biteAccount,
   type AccountsAction,
