@@ -18,85 +18,18 @@ const PIN_SUCCESS = 'PIN_SUCCESS' as const;
 
 const UNPIN_SUCCESS = 'UNPIN_SUCCESS' as const;
 
-interface ReblogRequest {
-  type: typeof REBLOG_REQUEST;
+type InteractionsAction = {
+  type: typeof REBLOG_REQUEST | typeof UNREBLOG_REQUEST | typeof FAVOURITE_REQUEST | typeof UNFAVOURITE_REQUEST | typeof DISLIKE_REQUEST | typeof UNDISLIKE_REQUEST;
   statusId: string;
-}
-
-interface ReblogFail {
-  type: typeof REBLOG_FAIL;
+} | {
+  type: typeof REBLOG_FAIL | typeof UNREBLOG_FAIL | typeof FAVOURITE_FAIL | typeof DISLIKE_FAIL;
   statusId: string;
   error: unknown;
-}
-
-interface UnreblogRequest {
-  type: typeof UNREBLOG_REQUEST;
-  statusId: string;
-}
-
-interface UnreblogFail {
-  type: typeof UNREBLOG_FAIL;
-  statusId: string;
-  error: unknown;
-}
-
-interface FavouriteRequest {
-  type: typeof FAVOURITE_REQUEST;
-  statusId: string;
-}
-
-interface FavouriteFail {
-  type: typeof FAVOURITE_FAIL;
-  statusId: string;
-  error: unknown;
-}
-
-interface UnfavouriteRequest {
-  type: typeof UNFAVOURITE_REQUEST;
-  statusId: string;
-}
-
-interface DislikeRequest {
-  type: typeof DISLIKE_REQUEST;
-  statusId: string;
-}
-
-interface DislikeFail {
-  type: typeof DISLIKE_FAIL;
-  statusId: string;
-  error: unknown;
-}
-
-interface UndislikeRequest {
-  type: typeof UNDISLIKE_REQUEST;
-  statusId: string;
-}
-
-interface PinSuccess {
-  type: typeof PIN_SUCCESS;
+} | {
+  type: typeof PIN_SUCCESS | typeof UNPIN_SUCCESS;
   statusId: string;
   accountId: string;
-}
-
-interface UnpinSuccess {
-  type: typeof UNPIN_SUCCESS;
-  statusId: string;
-  accountId: string;
-}
-
-type InteractionsAction =
-  | ReblogRequest
-  | ReblogFail
-  | UnreblogRequest
-  | UnreblogFail
-  | FavouriteRequest
-  | FavouriteFail
-  | UnfavouriteRequest
-  | DislikeRequest
-  | DislikeFail
-  | UndislikeRequest
-  | PinSuccess
-  | UnpinSuccess
+};
 
 export {
   REBLOG_REQUEST,
