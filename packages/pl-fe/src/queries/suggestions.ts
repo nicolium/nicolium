@@ -4,6 +4,7 @@ import { fetchRelationships } from 'pl-fe/actions/accounts';
 import { importEntities } from 'pl-fe/actions/importer';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useClient } from 'pl-fe/hooks/use-client';
+import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 
 import { removePageItem } from '../utils/queries';
 
@@ -14,6 +15,7 @@ const SuggestionKeys = {
 const useSuggestions = () => {
   const client = useClient();
   const dispatch = useAppDispatch();
+  const { isLoggedIn } = useLoggedIn();
 
   const getSuggestions = async () => {
     const response = await client.myAccount.getSuggestions();
@@ -26,18 +28,12 @@ const useSuggestions = () => {
     return response.map(({ account, ...x }) => ({ ...x, account_id: account.id }));
   };
 
-  const result = useQuery({
+  return useQuery({
     queryKey: SuggestionKeys.suggestions,
     queryFn: () => getSuggestions(),
     placeholderData: keepPreviousData,
+    enabled: isLoggedIn,
   });
-
-  const data = result.data;
-
-  return {
-    ...result,
-    data: data || [],
-  };
 };
 
 const useDismissSuggestion = () => {

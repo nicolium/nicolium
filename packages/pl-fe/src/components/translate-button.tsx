@@ -27,7 +27,7 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   const knownLanguages = autoTranslate ? [...settings.knownLanguages, intl.locale] : [intl.locale];
 
   const me = useAppSelector((state) => state.me);
-  const { translationLanguages } = useTranslationLanguages();
+  const { data: translationLanguages = {} } = useTranslationLanguages();
   const { fetchTranslation, hideTranslation } = useStatusMetaActions();
   const { targetLanguage } = useStatusMeta(status.id);
 

@@ -585,7 +585,7 @@ const MenuButton: React.FC<IMenuButton> = ({
   const instance = useInstance();
   const { autoTranslate, deleteModal, knownLanguages } = useSettings();
 
-  const { translationLanguages } = useTranslationLanguages();
+  const { data: translationLanguages = {} } = useTranslationLanguages();
   const { mutate: reblogStatus } = useReblogStatus(status.id);
   const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
 

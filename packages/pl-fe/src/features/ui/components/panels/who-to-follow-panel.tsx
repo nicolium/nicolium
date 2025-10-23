@@ -23,7 +23,7 @@ const WhoToFollowPanel = ({ limit }: IWhoToFollowPanel) => {
   const features = useFeatures();
   const intl = useIntl();
 
-  const { data: suggestions, isFetching } = useSuggestions();
+  const { data: suggestions = [], isFetching } = useSuggestions();
   const dismissSuggestion = useDismissSuggestion();
 
   const suggestionsToRender = suggestions.slice(0, limit);

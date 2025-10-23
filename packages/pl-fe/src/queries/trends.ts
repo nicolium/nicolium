@@ -11,15 +11,13 @@ const useTrends = () => {
   const features = useFeatures();
   const { isLoggedIn } = useLoggedIn();
 
-  const result = useQuery<ReadonlyArray<Tag>>({
+  return useQuery<ReadonlyArray<Tag>>({
     queryKey: ['trends', 'tags'],
     queryFn: () => client.trends.getTrendingTags(),
     placeholderData: [],
     staleTime: 600000, // 10 minutes
     enabled: isLoggedIn && features.trends,
   });
-
-  return result;
 };
 
 export { useTrends as default };

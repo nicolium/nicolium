@@ -24,17 +24,12 @@ const useTranslationLanguages = () => {
     return client.instance.getInstanceTranslationLanguages();
   };
 
-  const { data, ...result } = useQuery({
+  return useQuery({
     queryKey: ['translationLanguages'],
     queryFn: getTranslationLanguages,
     placeholderData: {},
     enabled: isLoggedIn && features.translations,
   });
-
-  return {
-    translationLanguages: data || {},
-    ...result,
-  };
 };
 
 export { useTranslationLanguages };
