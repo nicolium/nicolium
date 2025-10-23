@@ -1,8 +1,90 @@
+@use 'mixins';
+
 .⁂-status {
   @apply cursor-pointer;
 
   &__wrapper {
     @apply space-y-4;
+  }
+}
+
+.⁂-status-reactions-bar {
+  @apply flex gap-2 flex-wrap pt-2;
+
+  &__button {
+    @apply flex cursor-pointer items-center gap-2 overflow-hidden rounded-md border border-gray-400 px-1.5 py-1 transition-all bg-transparent dark:border-primary-700 dark:bg-primary-700 black:border-primary-800 black:bg-primary-800;
+
+    &:not(:disabled) {
+      @apply hover:bg-primary-100 hover:dark:border-primary-600 hover:dark:bg-primary-600 hover:black:bg-primary-700 cursor-pointer;
+    }
+
+    &--active {
+      @apply bg-primary-100 dark:border-primary-500 dark:bg-primary-500 dark:ring-2 dark:ring-primary-300 black:border-primary-600 black:bg-primary-600;
+    
+      &:not(:disabled) {
+        @apply hover:bg-primary-200 hover:dark:border-primary-300 hover:dark:bg-primary-300 hover:black:bg-primary-500;
+      }
+    }
+
+    img, svg {
+      @apply h-5 max-w-48 transition-transform;
+    }
+
+    &:hover img, &:hover svg {
+      @apply scale-125;
+    }
+
+    p {
+      @include mixins.text($theme: inherit, $size: xs, $weight: semibold);
+    }
+  }
+
+  &__picker-button {
+    @apply cursor-pointer rounded-md border border-gray-400 bg-transparent p-1.5 transition-colors hover:bg-gray-50 black:border-primary-800 black:bg-primary-800 hover:black:bg-primary-700 dark:border-primary-700 dark:bg-primary-700 hover:dark:border-primary-600 hover:dark:bg-primary-600;
+
+    svg {
+      @apply size-4;
+    }
+  }
+}
+
+.⁂-status-action-bar {
+  @apply flex items-center gap-2;
+
+  &--md {
+    @apply gap-8;
+  }
+
+  &--lg {
+    @apply justify-between grow;
+  }
+
+  &__button {
+    @apply -m-1 flex items-center rounded-full p-2 rtl:space-x-reverse transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:ring-offset-0 text-gray-600 hover:text-gray-800 dark:hover:text-white bg-transparent hover:bg-primary-100 dark:hover:bg-primary-800 black:hover:bg-gray-800;
+  
+    &:not(:disabled) {
+      @apply hover:text-gray-600 dark:hover:text-white;
+    }
+
+    span {
+      @include mixins.text($theme: inherit, $size: sm);
+    }
+
+    &:has(.⁂-status-action-bar__button__text) {
+      @apply gap-2;
+    }
+
+    &:not(:has(.⁂-status-action-bar__button__text)) {
+      @apply gap-1;
+    }
+
+    &--active {
+      @apply text-accent-300 hover:text-accent-300 dark:hover:text-accent-300;
+
+      &.⁂-status-action-bar__button--reblog {
+        @apply text-success-600 dark:text-success-400 hover:text-success-600 dark:hover:text-success-400;
+      }
+    }
   }
 }
 
@@ -108,5 +190,23 @@
     .⁂-media-gallery__file-extension__label {
       display: none;
     }
+  }
+}
+
+.⁂-interaction-popover {
+  @apply flex flex-col gap-1 max-w-96;
+
+  &__header {
+    @include mixins.text($weight: semibold, $align: center);
+  }
+
+  &__description {
+    @include mixins.text($theme: muted, $align: center);
+  }
+}
+
+.⁂-media-modal {
+  .⁂-status-action-bar__button {
+    @apply text-white/80 hover:text-white bg-transparent dark:bg-transparent;
   }
 }

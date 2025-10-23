@@ -4,9 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { emojiReact, unEmojiReact } from 'pl-fe/actions/emoji-reacts';
 import Emoji from 'pl-fe/components/ui/emoji';
-import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
-import Text from 'pl-fe/components/ui/text';
 import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
 import unicodeMapping from 'pl-fe/features/emoji/mapping';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
@@ -79,12 +77,8 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, statusId, obfusca
 
   return (
     <button
-      className={clsx('group flex cursor-pointer items-center gap-2 overflow-hidden rounded-md border border-gray-400 px-1.5 py-1 transition-all', {
-        'bg-primary-100 dark:border-primary-500 dark:bg-primary-500 dark:ring-2 dark:ring-primary-300 black:border-primary-600 black:bg-primary-600': reaction.me,
-        'bg-transparent dark:border-primary-700 dark:bg-primary-700 black:border-primary-800 black:bg-primary-800': !reaction.me,
-        'cursor-pointer': !unauthenticated,
-        'hover:bg-primary-200 hover:dark:border-primary-300 hover:dark:bg-primary-300 hover:black:bg-primary-500': reaction.me && !unauthenticated,
-        'hover:bg-primary-100 hover:dark:border-primary-600 hover:dark:bg-primary-600 hover:black:bg-primary-700': !reaction.me && !unauthenticated,
+      className={clsx('⁂-status-reactions-bar__button', {
+        '⁂-status-reactions-bar__button--active': reaction.me,
       })}
       key={reaction.name}
       onClick={handleClick}
@@ -95,11 +89,11 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, statusId, obfusca
       disabled={unauthenticated}
       {...bind}
     >
-      <Emoji className='h-5 max-w-48 transition-transform group-hover:scale-125' emoji={reaction.name} src={reaction.url || undefined} />
+      <Emoji emoji={reaction.name} src={reaction.url || undefined} />
 
-      <Text size='xs' weight='semibold' theme='inherit'>
+      <p>
         <AnimatedNumber value={reaction.count} obfuscate={obfuscate} short />
-      </Text>
+      </p>
     </button>
   );
 };
@@ -121,7 +115,7 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
   const sortedReactions = status.emoji_reactions.toSorted((a, b) => (b.count || 0) - (a.count || 0));
 
   return (
-    <HStack className='pt-2' space={2} wrap>
+    <div className='⁂-status-reactions-bar'>
       {sortedReactions.map((reaction) => reaction.count ? (
         <StatusReaction
           key={reaction.name}
@@ -134,17 +128,14 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
       {me && (
         <EmojiPickerDropdown onPickEmoji={handlePickEmoji}>
           <button
-            className='emoji-picker-dropdown cursor-pointer rounded-md border border-gray-400 bg-transparent p-1.5 transition-colors hover:bg-gray-50 black:border-primary-800 black:bg-primary-800 hover:black:bg-primary-700 dark:border-primary-700 dark:bg-primary-700 hover:dark:border-primary-600 hover:dark:bg-primary-600'
+            className='⁂-status-reactions-bar__picker-button emoji-picker-dropdown'
             title={intl.formatMessage(messages.addEmoji)}
           >
-            <Icon
-              className='size-4'
-              src={require('@phosphor-icons/core/regular/smiley-sticker.svg')}
-            />
+            <Icon src={require('@phosphor-icons/core/regular/smiley-sticker.svg')} />
           </button>
         </EmojiPickerDropdown>
       )}
-    </HStack>
+    </div>
   );
 };
 

@@ -215,7 +215,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   };
 
   return (
-    <div className='media-modal pointer-events-auto fixed inset-0 z-[9999] h-full bg-gray-900/90'>
+    <div className='⁂-media-modal media-modal pointer-events-auto fixed inset-0 z-[9999] h-full bg-gray-900/90'>
       <div
         className='absolute inset-0'
         role='presentation'
@@ -314,7 +314,6 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
               <StatusActionBar
                 status={status}
                 space='md'
-                statusActionButtonTheme='inverse'
                 expandable
               />
             </HStack>

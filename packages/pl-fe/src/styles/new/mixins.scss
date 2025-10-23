@@ -1,4 +1,4 @@
-@mixin text($family: sans, $size: md, $theme: default, $tracking: normal, $transform: normal, $truncate: false, $weight: normal) {
+@mixin text($family: sans, $size: md, $theme: default, $tracking: normal, $transform: normal, $truncate: false, $weight: normal, $align: none) {
   @if $family == sans {
     font-family: var(--font-sans);
   } @else if $family == mono {
@@ -87,6 +87,14 @@
     font-weight: 700;
   } @else {
     @warn "Unknown font weight `#{$weight}`.";
+  }
+
+  @if $align == left {
+    text-align: left;
+  } @else if $align == center {
+    text-align: center;
+  } @else if $align == right {
+    text-align: right;
   }
 }
 
