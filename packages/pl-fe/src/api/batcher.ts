@@ -13,7 +13,7 @@ const relationships = memoize((client: PlApiClient) => create({
 const translations = memoize((lang: string, client: PlApiClient) => create({
   fetcher: (ids: string[]) => client.statuses.translateStatuses(ids, lang),
   resolver: keyResolver('id'),
-  scheduler: bufferScheduler(200),
+  scheduler: bufferScheduler(100),
 }));
 
 const batcher = {
