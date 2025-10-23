@@ -8,7 +8,7 @@ const useAccountRelationship = (accountId?: string) => {
   const queryClient = usePlHooksQueryClient();
 
   return useQuery({
-    queryKey: ['accounts', 'entities', accountId],
+    queryKey: ['accounts', 'relationships', accountId],
     queryFn: async () => (await client.accounts.getRelationships([accountId!]))[0],
     enabled: !!accountId,
   }, queryClient);
