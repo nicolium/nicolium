@@ -66,7 +66,7 @@
       @apply hover:text-gray-600 dark:hover:text-white;
     }
 
-    span {
+    &__text {
       @include mixins.text($theme: inherit, $size: sm);
     }
 
