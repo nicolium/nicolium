@@ -7,9 +7,7 @@ const normalizeGroup = (group: BaseGroup) => {
   return {
     ...group,
     avatar: group.avatar || group.avatar_static || missingAvatar,
-    avatar_static: group.avatar_static || missingAvatar,
     header: group.header || group.header_static || missingHeader,
-    header_static: group.header_static || missingHeader,
   };
 };
 

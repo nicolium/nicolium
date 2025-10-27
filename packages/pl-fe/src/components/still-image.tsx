@@ -39,7 +39,7 @@ const StillImage: React.FC<IStillImage> = ({
   const canvas = useRef<HTMLCanvasElement>(null);
   const img = useRef<HTMLImageElement>(null);
 
-  const hoverToPlay = src && !autoPlayGif && ((isGif) || src.endsWith('.gif') || src.startsWith('blob:') || (src && staticSrc && src !== staticSrc));
+  const hoverToPlay = src && !autoPlayGif && (isGif || src.endsWith('.gif') || src.startsWith('blob:') || (src && staticSrc && src !== staticSrc));
 
   const handleImageLoad: React.ReactEventHandler<HTMLImageElement> = (e) => {
     if (hoverToPlay && !staticSrc && canvas.current && img.current) {

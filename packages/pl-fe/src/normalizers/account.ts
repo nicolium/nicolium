@@ -8,9 +8,7 @@ const normalizeAccount = (account: BaseAccount) => {
     mute_expires_at: null,
     ...account,
     avatar: account.avatar || account.avatar_static || missingAvatar,
-    avatar_static: account.avatar_static || missingAvatar,
     header: account.header || account.header_static || missingHeader,
-    header_static: account.header_static || missingHeader,
   };
 };
 

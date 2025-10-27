@@ -110,7 +110,7 @@ const ChatSettings = () => {
 
       <Stack space={4} className='mx-auto w-5/6'>
         <HStack alignItems='center' space={3}>
-          <Avatar src={chat.account.avatar_static} alt={chat.account.avatar_description} size={50} isCat={chat.account.is_cat} username={chat.account.username} />
+          <Avatar src={chat.account.avatar} staticSrc={chat.account.avatar_static} alt={chat.account.avatar_description} size={50} isCat={chat.account.is_cat} username={chat.account.username} />
           <Stack>
             <Text weight='semibold'>{chat.account.display_name}</Text>
             <Text size='sm' theme='primary'>@{chat.account.acct}</Text>

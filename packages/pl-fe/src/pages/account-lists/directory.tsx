@@ -12,6 +12,7 @@ import LoadMore from 'pl-fe/components/load-more';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
 import { RadioGroup, RadioItem } from 'pl-fe/components/radio';
 import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
+import StillImage from 'pl-fe/components/still-image';
 import Avatar from 'pl-fe/components/ui/avatar';
 import { CardTitle } from 'pl-fe/components/ui/card';
 import Column from 'pl-fe/components/ui/column';
@@ -22,7 +23,6 @@ import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useDirectory } from 'pl-fe/queries/accounts/use-directory';
-import { useSettings } from 'pl-fe/stores/settings';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
 
 const messages = defineMessages({
@@ -40,7 +40,6 @@ interface IAccountCard {
 const AccountCard: React.FC<IAccountCard> = ({ id }) => {
   const me = useAppSelector((state) => state.me);
   const { account } = useAccount(id);
-  const { autoPlayGif } = useSettings();
 
   if (!account) return null;
 
@@ -62,8 +61,9 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
           <ActionButton account={account} small />
         </div>
 
-        <img
-          src={autoPlayGif ? account.header : account.header_static}
+        <StillImage
+          src={account.header}
+          staticSrc={account.header_static}
           alt={account.header_description}
           className='h-32 w-full rounded-t-lg object-cover'
         />

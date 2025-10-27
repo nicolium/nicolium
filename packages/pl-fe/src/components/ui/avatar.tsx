@@ -24,7 +24,7 @@ const messages = defineMessages({
   avatar_with_content: { id: 'account.avatar.with_content', defaultMessage: 'Avatar for {username}: {alt}' },
 });
 
-interface IAvatar extends Pick<IStillImage, 'alt' | 'src' | 'onError' | 'className'> {
+interface IAvatar extends Pick<IStillImage, 'alt' | 'src' | 'staticSrc' | 'onError' | 'className'> {
   /** Width and height of the avatar in pixels. */
   size?: number;
   /** Whether the user is a cat. */
