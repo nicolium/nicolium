@@ -65,17 +65,15 @@ const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
         )}
       </HStack>}
     >
-      <div className='-mx-2'>
-        <Textarea
-          id={`account-note-${account.id}`}
-          theme='transparent'
-          placeholder={intl.formatMessage(messages.placeholder)}
-          value={value || ''}
-          onChange={handleChange}
-          ref={textarea}
-          autoGrow
-        />
-      </div>
+      <Textarea
+        id={`account-note-${account.id}`}
+        theme='transparent'
+        placeholder={intl.formatMessage(messages.placeholder)}
+        value={value || ''}
+        onChange={handleChange}
+        ref={textarea}
+        autoGrow
+      />
     </Widget>
   );
 };
