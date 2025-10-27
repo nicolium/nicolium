@@ -1,25 +1,29 @@
 /** Default header filenames from various backends */
-const DEFAULT_HEADERS: string[] = [
+const DEFAULT_HEADERS: Array<string | RegExp> = [
   '/assets/default_header.webp', // GoToSocial
   '/headers/original/missing.png', // Mastodon
   '/api/v1/accounts/identicon', // Mitra
+  /\/static\/img\/missing\.[a-z0-9]+\.png$/, // NeoDB
+  '/storage/headers/missing.png', // Pixelfed
   '/images/banner.png', // Pleroma
   '/assets/transparent.png', // Iceshrimp.net
 ];
 
 /** Check if the avatar is a default avatar */
-const isDefaultHeader = (url: string = '') =>  url === '' || DEFAULT_HEADERS.some(header => url.endsWith(header));
+const isDefaultHeader = (url: string = '') =>  url === '' || DEFAULT_HEADERS.some(header => typeof header === 'string' ? url.endsWith(header) : header.test(url));
 
 /** Default avatar filenames from various backends */
-const DEFAULT_AVATARS = [
-  ...([1, 2, 3, 4, 5, 6].map(i => `/assets/default_avatars/GoToSocial_icon${i}.webp`)), // GoToSocial
+const DEFAULT_AVATARS: Array<string | RegExp> = [
+  /\/assets\/default_avatars\/GoToSocial_icon[1-6]\.webp$/, // GoToSocial
   '/avatars/original/missing.png', // Mastodon
   '/api/v1/accounts/identicon', // Mitra
+  '/s/img/avatar.svg', // NeoDB
+  '/avatars/default.jpg', // Pixelfed
   '/images/avi.png', // Pleroma
 ];
 
 /** Check if the avatar is a default avatar */
-const isDefaultAvatar = (url: string = '') => url === '' || DEFAULT_AVATARS.some(avatar => url.endsWith(avatar));
+const isDefaultAvatar = (url: string = '') => url === '' || DEFAULT_AVATARS.some(avatar => typeof avatar === 'string' ? url.endsWith(avatar) : avatar.test(url));
 
 export {
   isDefaultHeader,
