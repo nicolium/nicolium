@@ -67,6 +67,18 @@
     }
   }
 
+  &__poll {
+    @apply flex flex-col gap-y-4;
+
+    &__options {
+      @apply flex flex-col gap-2;
+    }
+
+    &__option {
+      @apply flex items-center justify-between gap-4;
+    }
+  }
+
   &__schedule {
     @apply flex flex-col gap-2;
 
