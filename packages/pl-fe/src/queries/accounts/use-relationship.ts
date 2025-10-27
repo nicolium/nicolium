@@ -105,6 +105,10 @@ const useBlockAccountMutation = (accountId: string) => {
         ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
         : undefined);
 
+      queryClient.invalidateQueries({
+        queryKey: ['accountsLists', 'blocked'],
+      });
+
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
       return dispatch<AccountsAction>((dispatch, getState) => dispatch({
         type: ACCOUNT_BLOCK_SUCCESS,
@@ -150,6 +154,10 @@ const useMuteAccountMutation = (accountId: string) => {
       queryClient.setQueryData<Array<MinifiedSuggestion>>(['suggestions'], suggestions => suggestions
         ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
         : undefined);
+
+      queryClient.invalidateQueries({
+        queryKey: ['accountsLists', 'muted'],
+      });
 
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
       return dispatch<AccountsAction>((dispatch, getState) => dispatch({
