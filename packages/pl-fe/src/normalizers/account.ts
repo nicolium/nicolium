@@ -1,17 +1,5 @@
-import type { Account as BaseAccount } from 'pl-api';
+import type { Account } from 'pl-api';
 
-const normalizeAccount = (account: BaseAccount) => {
-  const missingAvatar: string = require('pl-fe/assets/images/avatar-missing.png');
-  const missingHeader: string = require('pl-fe/assets/images/header-missing.png');
-
-  return {
-    mute_expires_at: null,
-    ...account,
-    avatar: account.avatar || account.avatar_static || missingAvatar,
-    header: account.header || account.header_static || missingHeader,
-  };
-};
-
-type Account = ReturnType<typeof normalizeAccount>;
+const normalizeAccount = (account: Account) => account;
 
 export { normalizeAccount, type Account };

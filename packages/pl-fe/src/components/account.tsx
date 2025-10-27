@@ -108,6 +108,7 @@ interface IAccount {
   note?: string;
   items?: React.ReactNode;
   disabled?: boolean;
+  muteExpiresAt?: string | null;
 }
 
 const Account = ({
@@ -135,6 +136,7 @@ const Account = ({
   note,
   items,
   disabled,
+  muteExpiresAt,
 }: IAccount) => {
   const overflowRef = useRef<HTMLDivElement>(null);
   const actionRef = useRef<HTMLDivElement>(null);
@@ -381,11 +383,11 @@ const Account = ({
                   </>
                 )}
 
-                {actionType === 'muting' && account.mute_expires_at ? (
+                {actionType === 'muting' && muteExpiresAt ? (
                   <>
                     <Text tag='span' theme='muted' size='sm'>&middot;</Text>
 
-                    <Text theme='muted' size='sm'><RelativeTimestamp timestamp={account.mute_expires_at} futureDate /></Text>
+                    <Text theme='muted' size='sm'><RelativeTimestamp timestamp={muteExpiresAt} futureDate /></Text>
                   </>
                 ) : null}
 

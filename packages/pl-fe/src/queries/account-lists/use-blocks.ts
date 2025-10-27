@@ -1,5 +1,5 @@
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
-import { minifyAccountList } from '../utils/minify-list';
+import { minifyAccountList, minifyMutedAccountList } from '../utils/minify-list';
 
 const useBlocks = makePaginatedResponseQuery(
   ['accountsLists', 'blocked'],
@@ -8,7 +8,7 @@ const useBlocks = makePaginatedResponseQuery(
 
 const useMutes = makePaginatedResponseQuery(
   ['accountsLists', 'muted'],
-  (client) => client.filtering.getMutes({ with_relationships: true }).then(minifyAccountList),
+  (client) => client.filtering.getMutes({ with_relationships: true }).then(minifyMutedAccountList),
 );
 
 export { useBlocks, useMutes };

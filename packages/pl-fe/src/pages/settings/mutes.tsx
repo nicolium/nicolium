@@ -35,8 +35,8 @@ const MutesPage: React.FC = () => {
             <FormattedMessage id='empty_column.mutes' defaultMessage="You haven't muted any users yet." />
           }
         >
-          {data.map((accountId) =>
-            <AccountContainer key={accountId} id={accountId} actionType='muting' />,
+          {data.map(([accountId, muteExpiresAt]) =>
+            <AccountContainer key={accountId} id={accountId} actionType='muting' muteExpiresAt={muteExpiresAt} />,
           )}
         </ScrollableList>
       </Stack>
