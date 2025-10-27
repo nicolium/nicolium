@@ -9,12 +9,13 @@ interface IEmoji extends Pick<React.ImgHTMLAttributes<HTMLImageElement>, 'alt' |
   /** Unicode emoji character. */
   emoji?: string;
   noGroup?: boolean;
+  staticSrc?: string;
 }
 
 /** A single emoji image. */
 const Emoji: React.FC<IEmoji> = (props): JSX.Element | null => {
   const { disableUserProvidedMedia, systemEmojiFont } = useSettings();
-  const { emoji, alt, src, noGroup, ...rest } = props;
+  const { emoji, alt, src, staticSrc, noGroup, ...rest } = props;
 
   let filename;
 
@@ -35,6 +36,7 @@ const Emoji: React.FC<IEmoji> = (props): JSX.Element | null => {
       <StillImage
         alt={alt || emoji}
         src={src}
+        staticSrc={staticSrc}
         isGif
         noGroup={noGroup}
         letterboxed

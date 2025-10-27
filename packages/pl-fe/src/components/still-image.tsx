@@ -12,6 +12,8 @@ interface IStillImage {
   innerClassName?: string;
   /** URL to the image */
   src: string;
+  /** URL to the static image */
+  staticSrc?: string;
   /** Extra CSS styles on the outer <div> element. */
   style?: React.CSSProperties;
   /** Whether to display the image contained vs filled in its container. */
@@ -30,19 +32,17 @@ interface IStillImage {
 
 /** Renders images on a canvas, only playing GIFs if autoPlayGif is enabled. */
 const StillImage: React.FC<IStillImage> = ({
-  alt, className, innerClassName, src, style, letterboxed = false, showExt = false, onError, onLoad, isGif, noGroup,
+  alt, className, innerClassName, src, staticSrc, style, letterboxed = false, showExt = false, onError, onLoad, isGif, noGroup,
 }) => {
   const { autoPlayGif } = useSettings();
 
   const canvas = useRef<HTMLCanvasElement>(null);
   const img = useRef<HTMLImageElement>(null);
 
-  const hoverToPlay = (
-    src && !autoPlayGif && ((isGif) || src.endsWith('.gif') || src.startsWith('blob:'))
-  );
+  const hoverToPlay = src && !autoPlayGif && ((isGif) || src.endsWith('.gif') || src.startsWith('blob:') || (src && staticSrc && src !== staticSrc));
 
   const handleImageLoad: React.ReactEventHandler<HTMLImageElement> = (e) => {
-    if (hoverToPlay && canvas.current && img.current) {
+    if (hoverToPlay && !staticSrc && canvas.current && img.current) {
       canvas.current.width = img.current.naturalWidth;
       canvas.current.height = img.current.naturalHeight;
       const context = canvas.current.getContext('2d');
@@ -80,14 +80,18 @@ const StillImage: React.FC<IStillImage> = ({
         })}
       />
 
-      {hoverToPlay && (
+      {hoverToPlay && (staticSrc ? (
+        <img
+          src={staticSrc}
+          alt={alt}
+          className={clsx(baseClassName, 'absolute top-0 group-hover:invisible')}
+        />
+      ) : (
         <canvas
           ref={canvas}
-          className={clsx(baseClassName, {
-            'absolute group-hover:invisible top-0': hoverToPlay,
-          })}
+          className={clsx(baseClassName, 'absolute top-0 group-hover:invisible')}
         />
-      )}
+      ))}
 
       {(hoverToPlay && showExt) && (
         <div className='pointer-events-none absolute bottom-2 left-2 opacity-90 group-hover:hidden'>
