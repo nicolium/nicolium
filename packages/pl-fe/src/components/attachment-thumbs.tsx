@@ -10,7 +10,7 @@ import type { MediaAttachment } from 'pl-api';
 import type { Status } from 'pl-fe/normalizers/status';
 
 interface IAttachmentThumbs {
-  status: Pick<Status, 'media_attachments' | 'sensitive'> & Partial<Pick<Status, 'filtered'>>;
+  status: Pick<Status, 'media_attachments' | 'sensitive'> & Partial<Pick<Status, 'filtered' | 'id'>>;
   onClick?(): void;
 }
 
@@ -19,7 +19,7 @@ const AttachmentThumbs = ({ status, onClick }: IAttachmentThumbs) => {
   const { openModal } = useModalsActions();
 
   const fallback = <div className='⁂-media-gallery--compact' />;
-  const onOpenMedia = (media: Array<MediaAttachment>, index: number) => openModal('MEDIA', { media, index });
+  const onOpenMedia = (media: Array<MediaAttachment>, index: number) => openModal('MEDIA', { statusId: status.id, media, index });
 
   const [visible] = useMediaVisible(status, displayMedia);
 
