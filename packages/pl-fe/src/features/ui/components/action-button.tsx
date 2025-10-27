@@ -20,7 +20,7 @@ import {
 import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account } from 'pl-api';
 
 const messages = defineMessages({
   block: { id: 'account.block', defaultMessage: 'Block @{name}' },

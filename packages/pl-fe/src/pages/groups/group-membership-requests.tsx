@@ -12,8 +12,8 @@ import Spinner from 'pl-fe/components/ui/spinner';
 import ColumnForbidden from 'pl-fe/features/ui/components/column-forbidden';
 import toast from 'pl-fe/toast';
 
+import type { Account as AccountEntity } from 'pl-api';
 import type { PlfeResponse } from 'pl-fe/api';
-import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
 
 type RouteParams = { groupId: string };
 

@@ -7,7 +7,7 @@ import Emojify from 'pl-fe/features/emoji/emojify';
 import { WhoToFollowPanel } from 'pl-fe/features/ui/util/async-components';
 import { useEndorsedAccounts } from 'pl-fe/queries/accounts/use-endorsed-accounts';
 
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account } from 'pl-api';
 
 interface IPinnedAccountsPanel {
   account: Pick<Account, 'id' | 'display_name' | 'emojis'>;

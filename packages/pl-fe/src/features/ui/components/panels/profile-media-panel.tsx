@@ -8,7 +8,7 @@ import { type AccountGalleryAttachment, useAccountGallery } from 'pl-fe/hooks/us
 import { MediaItem } from 'pl-fe/pages/accounts/account-gallery';
 import { useModalsActions } from 'pl-fe/stores/modals';
 
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account } from 'pl-api';
 
 interface IProfileMediaPanel {
   account?: Account;

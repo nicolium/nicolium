@@ -26,7 +26,7 @@ import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import toast from 'pl-fe/toast';
 import { badgeToTag, tagToBadge, getBadges } from 'pl-fe/utils/badges';
 
-import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
+import type { Account as AccountEntity } from 'pl-api';
 
 const messages = defineMessages({
   columnHeading: { id: 'column.admin.account', defaultMessage: 'Moderate @{acct}' },

@@ -12,7 +12,7 @@ import Emojify from 'pl-fe/features/emoji/emojify';
 import { useFamiliarFollowers } from 'pl-fe/queries/accounts/use-familiar-followers';
 import { useModalsActions } from 'pl-fe/stores/modals';
 
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account } from 'pl-api';
 
 interface IFamiliarFollowerLink {
   id: string;

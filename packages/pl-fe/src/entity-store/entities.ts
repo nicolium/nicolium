@@ -1,5 +1,4 @@
-import type { GroupMember, GroupRelationship, Group } from 'pl-api';
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account, Group, GroupMember, GroupRelationship } from 'pl-api';
 
 enum Entities {
   ACCOUNTS = 'Accounts',

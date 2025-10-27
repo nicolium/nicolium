@@ -21,7 +21,7 @@ import ProfileFamiliarFollowers from '../profile-familiar-followers';
 import ProfileField from '../profile-field';
 import ProfileStats from '../profile-stats';
 
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account } from 'pl-api';
 
 const messages = defineMessages({
   linkVerifiedOn: { id: 'account.link_verified_on', defaultMessage: 'Ownership of this link was checked on {date}' },

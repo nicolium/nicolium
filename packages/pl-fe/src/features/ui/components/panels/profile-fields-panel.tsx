@@ -5,7 +5,7 @@ import Widget from 'pl-fe/components/ui/widget';
 
 import ProfileField from '../profile-field';
 
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account } from 'pl-api';
 
 interface IProfileFieldsPanel {
   account: Pick<Account, 'emojis' | 'fields' | 'id'>;

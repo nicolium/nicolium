@@ -22,7 +22,7 @@ import {
 import { ME_FETCH_SKIP, type MeAction } from '../actions/me';
 
 import type { PlfeResponse } from 'pl-fe/api';
-import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
+import type { Account as AccountEntity } from 'pl-api';
 
 const instance = (() => {
   try {

@@ -8,8 +8,6 @@ import * as v from 'valibot';
 
 import { unescapeHTML } from 'pl-fe/utils/html';
 
-import { normalizeAccount } from './account';
-
 const domParser = new DOMParser();
 
 type StatusApprovalStatus = Exclude<BaseStatus['approval_status'], null>;
@@ -117,8 +115,6 @@ const normalizeStatus = (status: BaseStatus & {
     deleted: false,
     ...status,
     quote_id: status.quote_id || null,
-    account: normalizeAccount(status.account),
-    accounts: status.accounts?.map(normalizeAccount),
     mentions,
     event,
     group,

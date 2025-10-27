@@ -7,7 +7,7 @@ import Text from 'pl-fe/components/ui/text';
 import { useSettings } from 'pl-fe/stores/settings';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
 
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account } from 'pl-api';
 
 const messages = defineMessages({
   followers: { id: 'account.followers', defaultMessage: 'Followers' },

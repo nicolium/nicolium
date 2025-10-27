@@ -11,7 +11,7 @@ import { normalizeUsername } from 'pl-fe/utils/input';
 
 import { AUTH_LOGGED_OUT, messages } from './auth';
 
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const changePassword = (oldPassword: string, newPassword: string) =>

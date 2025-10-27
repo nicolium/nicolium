@@ -23,8 +23,7 @@ import { useSettings } from 'pl-fe/stores/settings';
 import { useStatusMetaActions } from 'pl-fe/stores/status-meta';
 import { NotificationType } from 'pl-fe/utils/notification';
 
-import type { NotificationGroup } from 'pl-api';
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account, NotificationGroup } from 'pl-api';
 import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
 
 const notificationForScreenReader = (intl: IntlShape, message: string, timestamp: string) => {

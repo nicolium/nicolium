@@ -5,10 +5,9 @@ import { useEntityLookup } from 'pl-fe/entity-store/hooks/use-entity-lookup';
 import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
-import { type Account, normalizeAccount } from 'pl-fe/normalizers/account';
 import { useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
 
-import type { Account as BaseAccount } from 'pl-api';
+import type { Account } from 'pl-api';
 
 interface UseAccountLookupOpts {
   withRelationship?: boolean;
@@ -20,11 +19,11 @@ const useAccountLookup = (acct: string | undefined, opts: UseAccountLookupOpts =
   const { me } = useLoggedIn();
   const { withRelationship } = opts;
 
-  const { entity, isUnauthorized, ...result } = useEntityLookup<BaseAccount, Account>(
+  const { entity, isUnauthorized, ...result } = useEntityLookup<Account>(
     Entities.ACCOUNTS,
     (account) => account.acct.toLowerCase() === acct?.toLowerCase(),
     () => client.accounts.lookupAccount(acct!),
-    { enabled: !!acct, transform: normalizeAccount },
+    { enabled: !!acct },
   );
 
   const {

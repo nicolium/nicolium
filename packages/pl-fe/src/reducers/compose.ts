@@ -72,10 +72,9 @@ import { FE_NAME } from '../actions/settings';
 import { TIMELINE_DELETE, type TimelineAction } from '../actions/timelines';
 import { unescapeHTML } from '../utils/html';
 
-import type { CredentialAccount, Instance, InteractionPolicy, MediaAttachment, Status as BaseStatus, Tag } from 'pl-api';
+import type { Account, CredentialAccount, Instance, InteractionPolicy, MediaAttachment, Status as BaseStatus, Tag } from 'pl-api';
 import type { Emoji } from 'pl-fe/features/emoji';
 import type { Language } from 'pl-fe/features/preferences';
-import type { Account } from 'pl-fe/normalizers/account';
 import type { Status } from 'pl-fe/normalizers/status';
 
 const getResetFileKey = () => Math.floor((Math.random() * 0x10000));

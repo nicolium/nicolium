@@ -1,4 +1,4 @@
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account } from 'pl-api';
 
 /** Convert a plain tag into a badge. */
 const tagToBadge = (tag: string) => `badge:${tag}`;

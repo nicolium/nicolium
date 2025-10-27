@@ -6,7 +6,7 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useFollowAccountMutation } from 'pl-fe/queries/accounts/use-relationship';
 import toast from 'pl-fe/toast';
 
-import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
+import type { Account as AccountEntity } from 'pl-api';
 
 const messages = defineMessages({
   subscribe: { id: 'account.subscribe', defaultMessage: 'Subscribe to notifications from @{name}' },

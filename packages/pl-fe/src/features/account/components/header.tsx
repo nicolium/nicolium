@@ -45,8 +45,8 @@ import { useSettings } from 'pl-fe/stores/settings';
 import toast from 'pl-fe/toast';
 import copy from 'pl-fe/utils/copy';
 
+import type { Account as AccountEntity } from 'pl-api';
 import type { PlfeResponse } from 'pl-fe/api';
-import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
 
 const messages = defineMessages({
   edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },

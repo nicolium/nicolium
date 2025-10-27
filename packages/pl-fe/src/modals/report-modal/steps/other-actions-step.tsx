@@ -12,7 +12,7 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 import StatusCheckBox from 'pl-fe/modals/report-modal/components/status-check-box';
 import { getDomain } from 'pl-fe/utils/accounts';
 
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account } from 'pl-api';
 
 const messages = defineMessages({
   addAdditionalStatuses: { id: 'report.other_actions.add_additional', defaultMessage: 'Would you like to add additional statuses to this report?' },

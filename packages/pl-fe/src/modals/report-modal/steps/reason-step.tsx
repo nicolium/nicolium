@@ -8,7 +8,7 @@ import Text from 'pl-fe/components/ui/text';
 import Textarea from 'pl-fe/components/ui/textarea';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account } from 'pl-api';
 
 const messages = defineMessages({
   placeholder: { id: 'report.placeholder', defaultMessage: 'Additional comments' },

@@ -9,7 +9,7 @@ import Widget from 'pl-fe/components/ui/widget';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useUpdateAccountNoteMutation } from 'pl-fe/queries/accounts/use-relationship';
 
-import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
+import type { Account as AccountEntity } from 'pl-api';
 
 const messages = defineMessages({
   placeholder: { id: 'account_note.placeholder', defaultMessage: 'Click to add a note' },

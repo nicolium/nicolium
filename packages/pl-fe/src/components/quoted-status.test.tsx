@@ -1,7 +1,6 @@
 import React from 'react';
 
 import { render, screen, rootState } from 'pl-fe/jest/test-helpers';
-import { normalizeAccount } from 'pl-fe/normalizers/account';
 import { normalizeStatus } from 'pl-fe/normalizers/status';
 
 import QuotedStatus from './quoted-status';
@@ -10,11 +9,11 @@ import type { ReducerStatus } from 'pl-fe/reducers/statuses';
 
 describe('<QuotedStatus />', () => {
   it('renders content', () => {
-    const account = normalizeAccount({
+    const account = {
       id: '1',
       acct: 'alex',
       url: 'https://soapbox.test/users/alex',
-    });
+    };
 
     const status = normalizeStatus({
       id: '1',

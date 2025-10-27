@@ -2,7 +2,7 @@ import { EntityCallbacks } from 'pl-fe/entity-store/hooks/types';
 import { useTransaction } from 'pl-fe/entity-store/hooks/use-transaction';
 import { useClient } from 'pl-fe/hooks/use-client';
 
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account } from 'pl-api';
 
 const useSuggest = () => {
   const client = useClient();

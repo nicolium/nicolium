@@ -11,7 +11,7 @@ import Emojify from 'pl-fe/features/emoji/emojify';
 import { CryptoAddress, LightningAddress } from 'pl-fe/features/ui/util/async-components';
 import { unescapeHTML } from 'pl-fe/utils/html';
 
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account } from 'pl-api';
 
 const getTicker = (value: string): string => (value.match(/\$([a-zA-Z]*)/i) || [])[1];
 const isTicker = (value: string): boolean => Boolean(getTicker(value));

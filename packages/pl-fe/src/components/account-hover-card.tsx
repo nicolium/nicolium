@@ -27,7 +27,7 @@ import { ParsedContent } from './parsed-content';
 import { dateFormatOptions } from './relative-timestamp';
 import Scrobble from './scrobble';
 
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account } from 'pl-api';
 
 const messages = {
   pronouns: { id: 'account.pronouns.with_label', defaultMessage: 'Pronouns: {pronouns}' },

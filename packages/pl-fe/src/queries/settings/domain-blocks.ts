@@ -6,8 +6,8 @@ import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-respo
 import { mutationOptions } from '../utils/mutation-options';
 
 import type { MinifiedSuggestion } from '../trends/use-suggested-accounts';
+import type { Account } from 'pl-api';
 import type { EntityStore } from 'pl-fe/entity-store/types';
-import type { Account } from 'pl-fe/normalizers/account';
 import type { RootState, Store } from 'pl-fe/store';
 
 let store: Store;

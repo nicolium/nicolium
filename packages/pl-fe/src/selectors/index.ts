@@ -7,9 +7,8 @@ import { validId } from 'pl-fe/utils/auth';
 import ConfigDB from 'pl-fe/utils/config-db';
 import { shouldFilter } from 'pl-fe/utils/timelines';
 
-import type { Filter, FilterResult, NotificationGroup, Group } from 'pl-api';
+import type { Account, Filter, FilterResult, Group, NotificationGroup } from 'pl-api';
 import type { EntityStore } from 'pl-fe/entity-store/types';
-import type { Account } from 'pl-fe/normalizers/account';
 import type { minifyAdminReport } from 'pl-fe/queries/utils/minify-list';
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 import type { MRFSimple } from 'pl-fe/schemas/pleroma';

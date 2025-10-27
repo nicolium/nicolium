@@ -1,4 +1,4 @@
-import type { Account } from 'pl-fe/normalizers/account';
+import type { Account } from 'pl-api';
 
 const getDomainFromURL = (account: Pick<Account, 'url'>): string => {
   try {

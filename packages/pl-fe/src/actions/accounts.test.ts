@@ -3,7 +3,6 @@ import { Map as ImmutableMap } from 'immutable';
 import { __stub } from 'pl-fe/api';
 import { buildInstance, buildRelationship } from 'pl-fe/jest/factory';
 import { mockStore, rootState } from 'pl-fe/jest/test-helpers';
-import { normalizeAccount } from 'pl-fe/normalizers/account';
 
 import {
   createAccount,
@@ -51,12 +50,12 @@ describe('fetchAccount()', () => {
 
   describe('when the account has "should_refetch" set to false', () => {
     beforeEach(() => {
-      const account = normalizeAccount({
+      const account = {
         id,
         acct: 'justin-username',
         display_name: 'Justin L',
         avatar: 'test.jpg',
-      });
+      };
 
       const state = {
         ...rootState,
@@ -149,13 +148,13 @@ describe('fetchAccountByUsername()', () => {
   let state, account: any;
 
   beforeEach(() => {
-    account = normalizeAccount({
+    account = {
       id,
       acct: username,
       display_name: 'Tiger',
       avatar: 'test.jpg',
       birthday: undefined,
-    });
+    };
 
     state = {
       ...rootState,

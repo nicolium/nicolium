@@ -20,10 +20,9 @@ import { saveSettings } from './settings';
 import { createStatus } from './statuses';
 
 import type { EditorState } from 'lexical';
-import type { Account as BaseAccount, CreateStatusParams, CustomEmoji, Group, MediaAttachment, Status as BaseStatus, Tag, Poll, ScheduledStatus, InteractionPolicy, UpdateMediaParams } from 'pl-api';
+import type { Account, CreateStatusParams, CustomEmoji, Group, MediaAttachment, Status as BaseStatus, Tag, Poll, ScheduledStatus, InteractionPolicy, UpdateMediaParams } from 'pl-api';
 import type { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
 import type { Emoji } from 'pl-fe/features/emoji';
-import type { Account } from 'pl-fe/normalizers/account';
 import type { Status } from 'pl-fe/normalizers/status';
 import type { Policy, Rule, Scope } from 'pl-fe/pages/settings/interaction-policies';
 import type { ClearLinkSuggestion } from 'pl-fe/reducers/compose';
@@ -688,7 +687,7 @@ interface ComposeSuggestionsReadyAction {
   composeId: string;
   token: string;
   emojis?: Emoji[];
-  accounts?: BaseAccount[];
+  accounts?: Account[];
 }
 
 const readyComposeSuggestionsEmojis = (composeId: string, token: string, emojis: Emoji[]) => ({
@@ -698,7 +697,7 @@ const readyComposeSuggestionsEmojis = (composeId: string, token: string, emojis:
   emojis,
 });
 
-const readyComposeSuggestionsAccounts = (composeId: string, token: string, accounts: BaseAccount[]) => ({
+const readyComposeSuggestionsAccounts = (composeId: string, token: string, accounts: Account[]) => ({
   type: COMPOSE_SUGGESTIONS_READY,
   composeId,
   token,

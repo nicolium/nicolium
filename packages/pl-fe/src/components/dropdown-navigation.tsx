@@ -27,7 +27,7 @@ import { useSettings } from 'pl-fe/stores/settings';
 import { useIsSidebarOpen, useUiStoreActions } from 'pl-fe/stores/ui';
 import sourceCode from 'pl-fe/utils/code';
 
-import type { Account as AccountEntity } from 'pl-fe/normalizers/account';
+import type { Account as AccountEntity } from 'pl-api';
 
 interface IDropdownNavigationLink {
   href?: string;
