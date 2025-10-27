@@ -59,7 +59,7 @@ const ScheduleForm: React.FC<IScheduleForm> = ({ composeId }) => {
 
   return (
     <Stack space={2}>
-      <Text weight='medium'>
+      <Text theme='muted'>
         <FormattedMessage id='datepicker.hint' defaultMessage='Scheduled to post at…' />
       </Text>
       <HStack space={2} alignItems='center'>
