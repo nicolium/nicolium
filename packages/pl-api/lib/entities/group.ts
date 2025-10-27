@@ -1,5 +1,7 @@
 import * as v from 'valibot';
 
+import { getDomainFromURL } from '../utils/domain';
+
 import { customEmojiSchema } from './custom-emoji';
 import { groupRelationshipSchema } from './group-relationship';
 import { datetimeSchema, filteredArray } from './utils';
@@ -8,8 +10,11 @@ import { datetimeSchema, filteredArray } from './utils';
  * @category Schemas
  */
 const groupSchema = v.pipe(v.any(), v.transform((group: any) => {
+  const domain = getDomainFromURL(group);
+
   if (group?.config) {
     return {
+      domain,
       display_name: group.name,
       members_count: group.member_count,
       note: group.short_description,
@@ -25,7 +30,7 @@ const groupSchema = v.pipe(v.any(), v.transform((group: any) => {
       ...group,
     };
   }
-  return group;
+  return { domain, ...group };
 }), v.object({
   avatar: v.fallback(v.string(), ''),
   avatar_static: v.fallback(v.string(), ''),

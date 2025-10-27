@@ -1,30 +1,12 @@
 import pick from 'lodash.pick';
 import * as v from 'valibot';
 
+import { guessFqn } from '../utils/domain';
+
 import { customEmojiSchema } from './custom-emoji';
 import { relationshipSchema } from './relationship';
 import { roleSchema } from './role';
 import { coerceObject, datetimeSchema, filteredArray } from './utils';
-
-const getDomainFromURL = (account: Pick<Account, 'url'>): string => {
-  try {
-    const url = account.url;
-    return new URL(url).host;
-  } catch {
-    return '';
-  }
-};
-
-const guessFqn = (account: Pick<Account, 'acct' | 'url'>): string => {
-  const acct = account.acct;
-  const [user, domain] = acct.split('@');
-
-  if (domain) {
-    return acct;
-  } else {
-    return [user, getDomainFromURL(account)].join('@');
-  }
-};
 
 const filterBadges = (tags?: string[]) =>
   tags?.filter(tag => tag.startsWith('badge:')).map(tag => v.parse(roleSchema, { id: tag, name: tag.replace(/^badge:/, '') }));
