@@ -1,10 +1,13 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage, IntlShape, MessageDescriptor } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
 
 import { mentionCompose, replyCompose } from 'pl-fe/actions/compose';
+import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
 import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import Icon from 'pl-fe/components/icon';
+import Markup from 'pl-fe/components/markup';
+import { ParsedContent } from 'pl-fe/components/parsed-content';
 import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
 import StatusInfo from 'pl-fe/components/statuses/status-info';
 import Emoji from 'pl-fe/components/ui/emoji';
@@ -17,7 +20,7 @@ import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { useFavouriteStatus, useUnfavouriteStatus, useReblogStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
-import { makeGetNotification } from 'pl-fe/selectors';
+import { makeGetNotification, makeGetStatus } from 'pl-fe/selectors';
 import { useModalsActions } from 'pl-fe/stores/modals';
 import { useSettings } from 'pl-fe/stores/settings';
 import { useStatusMetaActions } from 'pl-fe/stores/status-meta';
@@ -191,11 +194,37 @@ const buildMessage = (
 
 const avatarSize = 48;
 
+interface IStatusPreview {
+  status: StatusEntity;
+}
+
+const StatusPreview: React.FC<IStatusPreview> = ({ status }) => {
+  const output: Array<React.ReactNode> = [];
+
+  if (status.content) {
+    output.push(
+      <Markup
+        truncate
+        className='line-clamp-2 inline text-ellipsis [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
+        size='sm'
+      >
+        <ParsedContent key='content' html={status.content} mentions={status.mentions} hasQuote={!!status.quote_id} emojis={status.emojis} />
+      </Markup>,
+    );
+  }
+
+  if (status.media_attachments.length) {
+    output.push(<AttachmentThumbs key='attachments' status={status} />);
+  }
+
+  return output;
+};
+
 interface INotification {
   notification: NotificationGroup;
   onMoveUp?: (notificationId: string) => void;
   onMoveDown?: (notificationId: string) => void;
-  onReblog?: (status: StatusEntity, e?: KeyboardEvent) => void;
+  compact?: boolean;
 }
 
 const getNotificationStatus = (n: Pick<NotificationGroup, 'type'> & ({ status: StatusEntity } | { })): StatusEntity | null => {
@@ -206,7 +235,7 @@ const getNotificationStatus = (n: Pick<NotificationGroup, 'type'> & ({ status: S
 };
 
 const Notification: React.FC<INotification> = (props) => {
-  const { onMoveUp, onMoveDown } = props;
+  const { onMoveUp, onMoveDown, compact } = props;
 
   const dispatch = useAppDispatch();
 
@@ -350,7 +379,7 @@ const Notification: React.FC<INotification> = (props) => {
 
   const renderContent = () => {
     if (type === 'bite' && status) {
-      return (
+      return compact ? <StatusPreview status={status} /> : (
         <StatusContainer
           id={status.id}
           onMoveDown={handleMoveDown}
@@ -411,16 +440,17 @@ const Notification: React.FC<INotification> = (props) => {
       case 'quote':
       case 'quoted_update':
         return status ? (
-          <StatusContainer
-            id={status.id}
-            onMoveDown={handleMoveDown}
-            onMoveUp={handleMoveUp}
-            avatarSize={avatarSize}
-            contextType='notifications'
-            showGroup={false}
-            variant='slim'
-          />
-        ) : null;
+          compact ? <StatusPreview status={status} /> : (
+            <StatusContainer
+              id={status.id}
+              onMoveDown={handleMoveDown}
+              onMoveUp={handleMoveUp}
+              avatarSize={avatarSize}
+              contextType='notifications'
+              showGroup={false}
+              variant='slim'
+            />
+          )) : null;
       default:
         return null;
     }
@@ -443,7 +473,7 @@ const Notification: React.FC<INotification> = (props) => {
     )
   );
 
-  const statusInfo = <StatusInfo avatarSize={avatarSize} icon={renderIcon()} text={message} title={ariaLabel} />;
+  const statusInfo = <StatusInfo avatarSize={compact ? 0 : avatarSize} icon={renderIcon()} text={message} title={ariaLabel} />;
 
   return (
     <Hotkeys handlers={handlers} data-testid='notification'>
@@ -453,7 +483,7 @@ const Notification: React.FC<INotification> = (props) => {
         aria-label={ariaLabel}
         ref={node}
       >
-        {!['mention', 'status'].includes(notification.type) ? (
+        {compact || !['mention', 'status'].includes(notification.type) ? (
           <div className='⁂-notification__header'>
             <div className='⁂-notification__info'>
               {statusInfo}

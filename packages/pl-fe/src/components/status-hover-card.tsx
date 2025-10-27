@@ -24,7 +24,6 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
   const { statusId, ref } = useStatusHoverCardStore();
   const { closeStatusHoverCard, updateStatusHoverCard } = useStatusHoverCardActions();
 
-
   const status = useAppSelector(state => state.statuses[statusId!]);
 
   useEffect(() => {
