@@ -7,11 +7,12 @@
  * @see module:pl-fe/actions/security
 */
 import {
+  type Account,
   credentialAccountSchema,
-  PlApiClient,
   type CreateAccountParams,
   type CredentialAccount,
   type CredentialApplication,
+  PlApiClient,
   type Token,
 } from 'pl-api';
 import { defineMessages } from 'react-intl';
@@ -37,7 +38,6 @@ import { type PlfeResponse, getClient } from '../api';
 
 import { importEntities } from './importer';
 
-import type { Account } from 'pl-api';
 import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const SWITCH_ACCOUNT = 'SWITCH_ACCOUNT' as const;

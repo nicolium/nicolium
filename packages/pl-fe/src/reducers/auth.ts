@@ -1,6 +1,6 @@
 import trim from 'lodash/trim';
 import { create, Draft } from 'mutative';
-import { applicationSchema, instanceSchema, PlApiClient, tokenSchema, type CredentialAccount, type CredentialApplication, type Token } from 'pl-api';
+import { type Account as AccountEntity, applicationSchema, instanceSchema, PlApiClient, tokenSchema, type CredentialAccount, type CredentialApplication, type Token } from 'pl-api';
 import * as v from 'valibot';
 
 import { decodeFromMarkup, MASTODON_PRELOAD_IMPORT, pleromaDecoder, type PreloadAction } from 'pl-fe/actions/preload';
@@ -22,7 +22,6 @@ import {
 import { ME_FETCH_SKIP, type MeAction } from '../actions/me';
 
 import type { PlfeResponse } from 'pl-fe/api';
-import type { Account as AccountEntity } from 'pl-api';
 
 const instance = (() => {
   try {
