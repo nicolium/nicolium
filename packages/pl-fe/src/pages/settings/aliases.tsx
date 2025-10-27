@@ -5,12 +5,12 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import AccountComponent from 'pl-fe/components/account';
 import Icon from 'pl-fe/components/icon';
-import IconButton from 'pl-fe/components/icon-button';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Button from 'pl-fe/components/ui/button';
 import { CardHeader, CardTitle } from 'pl-fe/components/ui/card';
 import Column from 'pl-fe/components/ui/column';
 import HStack from 'pl-fe/components/ui/hstack';
+import IconButton from 'pl-fe/components/ui/icon-button';
 import Text from 'pl-fe/components/ui/text';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
@@ -55,7 +55,7 @@ const Account: React.FC<IAccount> = ({ accountId, aliases }) => {
 
   if (!added && accountId !== me) {
     button = (
-      <IconButton src={require('@phosphor-icons/core/regular/plus.svg')} iconClassName='h-5 w-5' title={intl.formatMessage(messages.add)} onClick={handleOnAdd} />
+      <IconButton src={require('@phosphor-icons/core/regular/plus.svg')} className='text-gray-400 hover:text-gray-600' iconClassName='h-5 w-5' title={intl.formatMessage(messages.add)} onClick={handleOnAdd} />
     );
   }
 

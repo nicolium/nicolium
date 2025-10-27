@@ -1,3 +1,5 @@
+@use 'mixins';
+
 .⁂-compose-form {
   @apply flex flex-col gap-y-4 w-full;
 
@@ -62,6 +64,26 @@
 
     &__actions {
       @apply h-full cursor-pointer py-2.5 pl-1 pr-3 last:rounded-r-full inline-flex select-none appearance-none border border-transparent bg-primary-500 transition-all hover:bg-primary-400 focus:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:ring-offset-2 disabled:cursor-default disabled:opacity-75 dark:hover:bg-primary-600;
+    }
+  }
+
+  &__schedule {
+    @apply flex flex-col gap-2;
+
+    &__hint {
+      @include mixins.text($theme: muted);
+    }
+
+    &__date {
+      @apply flex items-center gap-2;
+    }
+
+    .⁂-icon-button {
+      @apply bg-transparent text-gray-400 hover:text-gray-600;
+
+      svg {
+        @apply size-4;
+      }
     }
   }
 }

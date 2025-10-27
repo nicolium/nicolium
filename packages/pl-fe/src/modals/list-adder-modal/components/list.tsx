@@ -2,7 +2,7 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import Icon from 'pl-fe/components/icon';
-import IconButton from 'pl-fe/components/icon-button';
+import IconButton from 'pl-fe/components/ui/icon-button';
 import { useAddAccountsToList, useList, useRemoveAccountsFromList } from 'pl-fe/queries/accounts/use-lists';
 
 const messages = defineMessages({
@@ -32,9 +32,9 @@ const List: React.FC<IList> = ({ listId, accountId, added }) => {
   let button;
 
   if (added) {
-    button = <IconButton iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/x.svg')} title={intl.formatMessage(messages.remove)} onClick={onRemove} />;
+    button = <IconButton className='text-gray-400 hover:text-gray-600' iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/x.svg')} title={intl.formatMessage(messages.remove)} onClick={onRemove} />;
   } else {
-    button = <IconButton iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/plus.svg')} title={intl.formatMessage(messages.add)} onClick={onAdd} />;
+    button = <IconButton className='text-gray-400 hover:text-gray-600' iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/plus.svg')} title={intl.formatMessage(messages.add)} onClick={onAdd} />;
   }
 
   return (

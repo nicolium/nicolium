@@ -5,7 +5,7 @@ import { fetchAccount } from 'pl-fe/actions/accounts';
 import { addToMentions, removeFromMentions } from 'pl-fe/actions/compose';
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import AccountComponent from 'pl-fe/components/account';
-import IconButton from 'pl-fe/components/icon-button';
+import IconButton from 'pl-fe/components/ui/icon-button';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useCompose } from 'pl-fe/hooks/use-compose';
 
@@ -42,9 +42,9 @@ const Account: React.FC<IAccount> = ({ composeId, accountId, author }) => {
   let button;
 
   if (added) {
-    button = <IconButton src={require('@phosphor-icons/core/regular/x.svg')} iconClassName='h-5 w-5' title={intl.formatMessage(messages.remove)} onClick={onRemove} />;
+    button = <IconButton src={require('@phosphor-icons/core/regular/x.svg')} className='text-gray-400 hover:text-gray-600' iconClassName='h-5 w-5' title={intl.formatMessage(messages.remove)} onClick={onRemove} />;
   } else {
-    button = <IconButton src={require('@phosphor-icons/core/regular/plus.svg')} iconClassName='h-5 w-5' title={intl.formatMessage(messages.add)} onClick={onAdd} />;
+    button = <IconButton src={require('@phosphor-icons/core/regular/plus.svg')} className='text-gray-400 hover:text-gray-600' iconClassName='h-5 w-5' title={intl.formatMessage(messages.add)} onClick={onAdd} />;
   }
 
   return (

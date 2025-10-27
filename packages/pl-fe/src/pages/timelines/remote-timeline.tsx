@@ -4,9 +4,9 @@ import { useHistory } from 'react-router-dom';
 
 import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
 import { useRemoteStream } from 'pl-fe/api/hooks/streaming/use-remote-stream';
-import IconButton from 'pl-fe/components/icon-button';
 import Column from 'pl-fe/components/ui/column';
 import HStack from 'pl-fe/components/ui/hstack';
+import IconButton from 'pl-fe/components/ui/icon-button';
 import Text from 'pl-fe/components/ui/text';
 import PinnedHostsPicker from 'pl-fe/features/remote-timeline/components/pinned-hosts-picker';
 import Timeline from 'pl-fe/features/ui/components/timeline';
@@ -52,7 +52,7 @@ const RemoteTimelinePage: React.FC<IRemoteTimelinePage> = ({ params }) => {
 
       {!pinned && (
         <HStack className='mb-4 px-2' space={2}>
-          <IconButton iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/x.svg')} onClick={handleCloseClick} />
+          <IconButton className='text-gray-400 hover:text-gray-600' iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/x.svg')} onClick={handleCloseClick} />
           <Text>
             <FormattedMessage
               id='remote_timeline.filter_message'

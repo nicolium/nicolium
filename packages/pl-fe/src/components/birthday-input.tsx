@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedDate, useIntl } from 'react-intl';
 
-import IconButton from 'pl-fe/components/icon-button';
+import IconButton from 'pl-fe/components/ui/icon-button';
 import { DatePicker } from 'pl-fe/features/ui/util/async-components';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
@@ -69,7 +69,8 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
     <div className='flex flex-col gap-2'>
       <div className='flex items-center justify-between'>
         <IconButton
-          className='datepicker__button rtl:rotate-180'
+          className='datepicker__button text-gray-400 hover:text-gray-600 rtl:rotate-180'
+          iconClassName='size-4'
           src={require('@phosphor-icons/core/regular/caret-left.svg')}
           onClick={decreaseMonth}
           disabled={prevMonthButtonDisabled}
@@ -78,7 +79,8 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
         />
         <FormattedDate value={date} month='long' />
         <IconButton
-          className='datepicker__button rtl:rotate-180'
+          className='datepicker__button text-gray-400 hover:text-gray-600 rtl:rotate-180'
+          iconClassName='size-4'
           src={require('@phosphor-icons/core/regular/caret-right.svg')}
           onClick={increaseMonth}
           disabled={nextMonthButtonDisabled}
@@ -88,7 +90,8 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
       </div>
       <div className='flex items-center justify-between'>
         <IconButton
-          className='datepicker__button rtl:rotate-180'
+          className='datepicker__button text-gray-400 hover:text-gray-600 rtl:rotate-180'
+          iconClassName='size-4'
           src={require('@phosphor-icons/core/regular/caret-left.svg')}
           onClick={decreaseYear}
           disabled={prevYearButtonDisabled}
@@ -97,7 +100,8 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
         />
         <FormattedDate value={date} year='numeric' />
         <IconButton
-          className='datepicker__button rtl:rotate-180'
+          className='datepicker__button text-gray-400 hover:text-gray-600 rtl:rotate-180'
+          iconClassName='size-4'
           src={require('@phosphor-icons/core/regular/caret-right.svg')}
           onClick={increaseYear}
           disabled={nextYearButtonDisabled}

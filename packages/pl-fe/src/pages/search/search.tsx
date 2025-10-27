@@ -5,9 +5,9 @@ import { useSearchParams } from 'react-router-dom-v5-compat';
 
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import SearchColumn from 'pl-fe/columns/search';
-import IconButton from 'pl-fe/components/icon-button';
 import Column from 'pl-fe/components/ui/column';
 import HStack from 'pl-fe/components/ui/hstack';
+import IconButton from 'pl-fe/components/ui/icon-button';
 import Input from 'pl-fe/components/ui/input';
 import SvgIcon from 'pl-fe/components/ui/svg-icon';
 import Tabs from 'pl-fe/components/ui/tabs';
@@ -172,7 +172,7 @@ const SearchResults = () => {
     <>
       {accountId ? (
         <HStack className='border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800' alignItems='center' space={2}>
-          <IconButton iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/x.svg')} onClick={handleUnsetAccount} />
+          <IconButton className='text-gray-400 hover:text-gray-600' iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/x.svg')} onClick={handleUnsetAccount} />
           <Text truncate>
             <FormattedMessage
               id='search_results.filter_message'

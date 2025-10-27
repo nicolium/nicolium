@@ -3,11 +3,8 @@ import React, { Suspense, useCallback } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { setSchedule, removeSchedule } from 'pl-fe/actions/compose';
-import IconButton from 'pl-fe/components/icon-button';
-import HStack from 'pl-fe/components/ui/hstack';
+import IconButton from 'pl-fe/components/ui/icon-button';
 import Input from 'pl-fe/components/ui/input';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
 import { DatePicker } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useCompose } from 'pl-fe/hooks/use-compose';
@@ -58,11 +55,11 @@ const ScheduleForm: React.FC<IScheduleForm> = ({ composeId }) => {
   }
 
   return (
-    <Stack space={2}>
-      <Text theme='muted'>
+    <div className='⁂-compose-form__schedule'>
+      <p className='⁂-compose-form__schedule__hint'>
         <FormattedMessage id='datepicker.hint' defaultMessage='Scheduled to post at…' />
-      </Text>
-      <HStack space={2} alignItems='center'>
+      </p>
+      <div className='⁂-compose-form__schedule__date'>
         <Suspense fallback={<Input type='text' disabled />}>
           <DatePicker
             selected={scheduledAt}
@@ -81,14 +78,12 @@ const ScheduleForm: React.FC<IScheduleForm> = ({ composeId }) => {
           />
         </Suspense>
         <IconButton
-          iconClassName='h-4 w-4'
-          className='bg-transparent text-gray-400 hover:text-gray-600'
           src={require('@phosphor-icons/core/regular/x.svg')}
           onClick={handleRemove}
           title={intl.formatMessage(messages.remove)}
         />
-      </HStack>
-    </Stack>
+      </div>
+    </div>
   );
 };
 
