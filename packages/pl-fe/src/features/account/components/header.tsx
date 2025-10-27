@@ -43,7 +43,6 @@ import { blockDomainMutationOptions, unblockDomainMutationOptions } from 'pl-fe/
 import { useModalsActions } from 'pl-fe/stores/modals';
 import { useSettings } from 'pl-fe/stores/settings';
 import toast from 'pl-fe/toast';
-import { isDefaultHeader } from 'pl-fe/utils/accounts';
 import copy from 'pl-fe/utils/copy';
 
 import type { PlfeResponse } from 'pl-fe/api';
@@ -614,7 +613,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
     let header: React.ReactNode;
 
     if (settings.disableUserProvidedMedia) {
-      if (!account.header_description || isDefaultHeader(account.header)) return null;
+      if (!account.header_description || account.header_default) return null;
       else return (
         <Popover
           interaction='hover'
@@ -644,7 +643,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
         />
       );
 
-      if (!isDefaultHeader(account.header)) {
+      if (!account.header_default) {
         header = (
           <a href={account.header} onClick={handleHeaderClick} target='_blank'>
             {header}

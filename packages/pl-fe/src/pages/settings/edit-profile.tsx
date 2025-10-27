@@ -28,12 +28,8 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import toast from 'pl-fe/toast';
-import { isDefaultAvatar, isDefaultHeader } from 'pl-fe/utils/accounts';
 
 import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield';
-
-const nonDefaultAvatar = (url: string | undefined) => url && isDefaultAvatar(url) ? undefined : url;
-const nonDefaultHeader = (url: string | undefined) => url && isDefaultHeader(url) ? undefined : url;
 
 /**
  * Whether the user is hiding their follows and/or followers.
@@ -209,8 +205,8 @@ const EditProfilePage: React.FC = () => {
   const [muteStrangers, setMuteStrangers] = useState(false);
   const [customCSSEditorExpanded, setCustomCSSEditorExpanded] = useState(false);
 
-  const avatar = useImageField({ maxPixels: 400 * 400, preview: nonDefaultAvatar(account?.avatar) });
-  const header = useImageField({ maxPixels: 1920 * 1080, preview: nonDefaultHeader(account?.header) });
+  const avatar = useImageField({ maxPixels: 400 * 400, preview: account?.avatar_default === false ? account.avatar : undefined });
+  const header = useImageField({ maxPixels: 1920 * 1080, preview: account?.header_default === false ? account.header : undefined });
 
   useEffect(() => {
     client.settings.verifyCredentials().then((credentialAccount) => {

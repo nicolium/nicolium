@@ -19,11 +19,7 @@ import { useTextField } from 'pl-fe/hooks/forms/use-text-field';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import toast from 'pl-fe/toast';
-import { isDefaultAvatar, isDefaultHeader } from 'pl-fe/utils/accounts';
 import { unescapeHTML } from 'pl-fe/utils/html';
-
-const nonDefaultAvatar = (url: string | undefined) => url && isDefaultAvatar(url) ? undefined : url;
-const nonDefaultHeader = (url: string | undefined) => url && isDefaultHeader(url) ? undefined : url;
 
 const messages = defineMessages({
   heading: { id: 'navigation_bar.edit_group', defaultMessage: 'Edit Group' },
@@ -47,8 +43,8 @@ const EditGroup: React.FC<IEditGroup> = ({ params: { groupId } }) => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const avatar = useImageField({ maxPixels: 400 * 400, preview: nonDefaultAvatar(group?.avatar) });
-  const header = useImageField({ maxPixels: 1920 * 1080, preview: nonDefaultHeader(group?.header) });
+  const avatar = useImageField({ maxPixels: 400 * 400, preview: group?.avatar_default === false ? group.avatar : undefined });
+  const header = useImageField({ maxPixels: 1920 * 1080, preview: group?.header_default === false ? group.header : undefined });
 
   const displayName = useTextField(group?.display_name);
   const note = useTextField(unescapeHTML(group?.note));

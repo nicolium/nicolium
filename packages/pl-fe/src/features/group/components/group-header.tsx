@@ -12,7 +12,6 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import Emojify from 'pl-fe/features/emoji/emojify';
 import { useModalsActions } from 'pl-fe/stores/modals';
-import { isDefaultHeader } from 'pl-fe/utils/accounts';
 
 import GroupActionButton from './group-action-button';
 import GroupMemberCount from './group-member-count';
@@ -101,7 +100,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
         />
       );
 
-      if (!isDefaultHeader(group.header)) {
+      if (!group.header_default) {
         header = (
           <a href={group.header} onClick={handleHeaderClick} target='_blank' className='relative w-full'>
             {header}

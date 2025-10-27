@@ -1,5 +1,6 @@
 import * as v from 'valibot';
 
+import { isDefaultAvatar, isDefaultHeader } from '../utils/accounts';
 import { getDomainFromURL } from '../utils/domain';
 
 import { customEmojiSchema } from './custom-emoji';
@@ -35,6 +36,8 @@ const groupSchema = v.pipe(v.any(), v.transform((group: any) => {
     ...group,
     avatar: group.avatar || group.avatar_static,
     header: group.header || group.header_static,
+    avatar_default: isDefaultAvatar(group.avatar || group.avatar_static),
+    header_default: isDefaultHeader(group.header || group.header_static),
   };
 }), v.object({
   avatar: v.fallback(v.string(), ''),
@@ -58,6 +61,9 @@ const groupSchema = v.pipe(v.any(), v.transform((group: any) => {
 
   avatar_description: v.fallback(v.string(), ''),
   header_description: v.fallback(v.string(), ''),
+
+  avatar_default: v.fallback(v.boolean(), false),
+  header_default: v.fallback(v.boolean(), false),
 }));
 
 /**
