@@ -39,7 +39,7 @@ const DEFAULT_HEADERS: string[] = [
 ];
 
 /** Check if the avatar is a default avatar */
-const isDefaultHeader = (url: string) => DEFAULT_HEADERS.some(header => url.endsWith(header));
+const isDefaultHeader = (url: string) =>  url === '' || DEFAULT_HEADERS.some(header => url.endsWith(header));
 
 /** Default avatar filenames from various backends */
 const DEFAULT_AVATARS = [
@@ -51,7 +51,7 @@ const DEFAULT_AVATARS = [
 ];
 
 /** Check if the avatar is a default avatar */
-const isDefaultAvatar = (url: string) => DEFAULT_AVATARS.some(avatar => url.endsWith(avatar));
+const isDefaultAvatar = (url: string) => url === '' || DEFAULT_AVATARS.some(avatar => url.endsWith(avatar));
 
 export {
   getDomain,
