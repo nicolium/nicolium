@@ -1,17 +1,28 @@
 .⁂-compose-form {
   @apply flex flex-col gap-y-4 w-full;
 
+  &__select-buttons {
+    @apply flex gap-2 flex-wrap;
+  }
+
+  &--transparent &__select-buttons {
+    @apply -mb-2;
+  }
+
   &__spoiler-input {
     @apply rounded-md !bg-transparent dark:!bg-transparent;
   }
 
-  &__editor:not(&__editor--transparent) {
+  &:not(&--transparent) &__editor {
     @apply rounded-md border-gray-400 px-3 py-2 ring-2 focus-within:border-primary-500 focus-within:ring-primary-500 dark:border-gray-800 dark:ring-gray-800 dark:focus-within:border-primary-500 dark:focus-within:ring-primary-500;
 
+    &__placeholder {
+      @apply pt-2;
+    }
   }
 
-  &__editor:not(&__editor--transparent) &__editor__placeholder {
-    @apply pt-2;
+  &__modifiers {
+    @apply flex flex-col gap-4 font-[inherit] text-sm text-gray-900;
   }
 
   &__footer {

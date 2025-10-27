@@ -19,9 +19,7 @@ import {
 } from 'pl-fe/actions/compose';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import List, { ListItem } from 'pl-fe/components/list';
-import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
-import Stack from 'pl-fe/components/ui/stack';
 import SvgIcon from 'pl-fe/components/ui/svg-icon';
 import Toggle from 'pl-fe/components/ui/toggle';
 import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
@@ -296,11 +294,11 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   const showModifiers = !condensed && (compose.media_attachments.length || compose.is_uploading || compose.poll?.options.length || compose.schedule);
 
   const composeModifiers = showModifiers && (
-    <Stack space={4} className='font-[inherit] text-sm text-gray-900'>
+    <div className='⁂-compose-form__modifiers'>
       <UploadForm composeId={id} onSubmit={handleSubmit} />
       <PollForm composeId={id} />
       <ScheduleForm composeId={id} />
-    </Stack>
+    </div>
   );
 
   let publishText: string | JSX.Element = '';
@@ -347,6 +345,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   return (
     <form
       className={clsx('⁂-compose-form', {
+        '⁂-compose-form--transparent': transparent,
         '⁂-compose-form--with-avatar': withAvatar,
       })}
       ref={formRef}
@@ -370,9 +369,9 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
       {!shouldCondense && !event && !group && <ReplyMentions composeId={id} />}
 
       {selectButtons.length > 0 && (
-        <HStack space={2} wrap className={clsx(transparent && '-mb-2')}>
+        <div className='⁂-compose-form__select-buttons'>
           {selectButtons}
-        </HStack>
+        </div>
       )}
 
       {features.spoilers && (
@@ -390,9 +389,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
           <ComposeEditor
             key={modifiedLanguage}
             ref={editorRef}
-            className={clsx('⁂-compose-form__editor', {
-              '⁂-compose-form__editor--transparent': transparent,
-            })}
+            className='⁂-compose-form__editor'
             placeholderClassName='⁂-compose-form__editor__placeholder'
             composeId={id}
             condensed={condensed}

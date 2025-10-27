@@ -120,8 +120,7 @@ const Avatar = (props: IAvatar) => {
 
   return (
     <StillImage
-      className={clsx('rounded-lg leading-[0]', isCat && 'avatar__cat bg-gray-200 dark:bg-gray-900', className)}
-      innerClassName='rounded-[inherit] text-sm'
+      className={clsx('⁂-avatar', isCat && '⁂-avatar--cat', className)}
       style={style}
       src={src || require('pl-fe/assets/images/avatar-missing.png')}
       alt={altText}
