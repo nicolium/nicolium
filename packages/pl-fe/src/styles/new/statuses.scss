@@ -88,7 +88,7 @@
   }
 }
 
-.thread__status {
+.thread__status, [column-type='filled'] {
   .⁂-status__wrapper {
     padding: 0;
     box-shadow: none;
