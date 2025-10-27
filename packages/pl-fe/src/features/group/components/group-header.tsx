@@ -19,7 +19,7 @@ import GroupOptionsButton from './group-options-button';
 import GroupPrivacy from './group-privacy';
 import GroupRelationship from './group-relationship';
 
-import type { Group } from 'pl-fe/normalizers/group';
+import type { Group } from 'pl-api';
 
 const messages = defineMessages({
   header: { id: 'group.header.alt', defaultMessage: 'Group header' },

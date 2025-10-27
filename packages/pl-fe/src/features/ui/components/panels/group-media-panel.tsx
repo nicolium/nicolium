@@ -8,7 +8,7 @@ import { type AccountGalleryAttachment, useGroupGallery } from 'pl-fe/hooks/use-
 import { MediaItem } from 'pl-fe/pages/accounts/account-gallery';
 import { useModalsActions } from 'pl-fe/stores/modals';
 
-import type { Group } from 'pl-fe/normalizers/group';
+import type { Group } from 'pl-api';
 
 interface IGroupMediaPanel {
   group: Group;

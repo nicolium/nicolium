@@ -7,7 +7,7 @@ import Popover from 'pl-fe/components/ui/popover';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 
-import type { Group } from 'pl-fe/normalizers/group';
+import type { Group } from 'pl-api';
 
 interface IGroupPolicy {
   group: Pick<Group, 'locked'>;

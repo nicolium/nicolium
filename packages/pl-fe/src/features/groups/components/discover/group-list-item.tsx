@@ -11,7 +11,7 @@ import Emojify from 'pl-fe/features/emoji/emojify';
 import GroupActionButton from 'pl-fe/features/group/components/group-action-button';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
 
-import type { Group } from 'pl-fe/normalizers/group';
+import type { Group } from 'pl-api';
 
 interface IGroupListItem {
   group: Pick<Group, 'id' | 'avatar' | 'avatar_description' | 'display_name' | 'emojis' | 'locked' | 'members_count' | 'relationship'>;

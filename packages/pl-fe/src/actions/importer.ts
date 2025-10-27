@@ -1,6 +1,5 @@
 import { importEntities as importEntityStoreEntities } from 'pl-fe/entity-store/actions';
 import { Entities } from 'pl-fe/entity-store/entities';
-import { normalizeGroup } from 'pl-fe/normalizers/group';
 import { queryClient } from 'pl-fe/queries/client';
 import { selectAccount } from 'pl-fe/selectors';
 
@@ -114,7 +113,7 @@ const importEntities = (entities: {
   }
 
   if (!isEmpty(accounts)) dispatch(importEntityStoreEntities(Object.values(accounts), Entities.ACCOUNTS));
-  if (!isEmpty(groups)) dispatch(importEntityStoreEntities(Object.values(groups).map(normalizeGroup), Entities.GROUPS));
+  if (!isEmpty(groups)) dispatch(importEntityStoreEntities(Object.values(groups), Entities.GROUPS));
   if (!isEmpty(polls)) {
     for (const poll of Object.values(polls)) {
       queryClient.setQueryData<BasePoll>(['statuses', 'polls', poll.id], poll);

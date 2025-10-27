@@ -9,7 +9,6 @@ import * as v from 'valibot';
 import { unescapeHTML } from 'pl-fe/utils/html';
 
 import { normalizeAccount } from './account';
-import { normalizeGroup } from './group';
 
 const domParser = new DOMParser();
 
@@ -106,7 +105,7 @@ const normalizeStatus = (status: BaseStatus & {
   }
 
   // Normalize group
-  const group = status.group ? normalizeGroup(status.group) : null;
+  const group = status.group || null;
 
   return {
     account_id: status.account.id,

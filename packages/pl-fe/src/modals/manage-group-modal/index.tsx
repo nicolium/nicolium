@@ -10,10 +10,9 @@ import toast from 'pl-fe/toast';
 import ConfirmationStep from './steps/confirmation-step';
 import DetailsStep from './steps/details-step';
 
-import type { CreateGroupParams } from 'pl-api';
+import type { CreateGroupParams, Group } from 'pl-api';
 import type { PlfeResponse } from 'pl-fe/api';
 import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
-import type { Group } from 'pl-fe/normalizers/group';
 
 const messages = defineMessages({
   create: { id: 'manage_group.create', defaultMessage: 'Create group' },

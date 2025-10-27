@@ -11,10 +11,10 @@ import GroupRelationship from 'pl-fe/features/group/components/group-relationshi
 
 import GroupAvatar from './groups/group-avatar';
 
-import type { Group as GroupEntity } from 'pl-fe/normalizers/group';
+import type { Group } from 'pl-api';
 
 interface IGroupCard {
-  group: GroupEntity;
+  group: Group;
 }
 
 const GroupCard: React.FC<IGroupCard> = ({ group }) => (

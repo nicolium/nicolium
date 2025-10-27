@@ -6,7 +6,7 @@ import { render, screen } from 'pl-fe/jest/test-helpers';
 
 import GroupRelationship from './group-relationship';
 
-import type { Group } from 'pl-fe/normalizers/group';
+import type { Group } from 'pl-api';
 
 let group: Group;
 

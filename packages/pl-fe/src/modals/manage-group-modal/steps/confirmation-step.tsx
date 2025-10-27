@@ -11,7 +11,7 @@ import Text from 'pl-fe/components/ui/text';
 import toast from 'pl-fe/toast';
 import copy from 'pl-fe/utils/copy';
 
-import type { Group } from 'pl-fe/normalizers/group';
+import type { Group } from 'pl-api';
 
 interface IConfirmationStep {
   group: Group | null;

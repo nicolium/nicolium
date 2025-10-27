@@ -4,21 +4,19 @@ import { useHistory } from 'react-router-dom';
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useEntity } from 'pl-fe/entity-store/hooks/use-entity';
 import { useClient } from 'pl-fe/hooks/use-client';
-import { normalizeGroup, type Group } from 'pl-fe/normalizers/group';
 
 import { useGroupRelationship } from './use-group-relationship';
 
-import type { Group as BaseGroup } from 'pl-api';
+import type { Group } from 'pl-api';
 
 const useGroup = (groupId: string, refetch = true) => {
   const client = useClient();
   const history = useHistory();
 
-  const { entity: group, isUnauthorized, ...result } = useEntity<BaseGroup, Group>(
+  const { entity: group, isUnauthorized, ...result } = useEntity<Group, Group>(
     [Entities.GROUPS, groupId],
     () => client.experimental.groups.getGroup(groupId),
     {
-      transform: normalizeGroup,
       refetch,
       enabled: !!groupId,
     },

@@ -30,6 +30,7 @@ interface IAvatar extends Pick<IStillImage, 'alt' | 'src' | 'staticSrc' | 'onErr
   isCat?: boolean;
   username?: string;
   showAlt?: boolean;
+  isDefault?: boolean;
 }
 
 const fac = new FastAverageColor();
@@ -39,7 +40,7 @@ const Avatar = (props: IAvatar) => {
   const intl = useIntl();
   const { disableUserProvidedMedia } = useSettings();
 
-  const { alt, src, size = AVATAR_SIZE, className, isCat } = props;
+  const { alt, src, size = AVATAR_SIZE, className, isCat, isDefault } = props;
 
   const [color, setColor] = useState<string | undefined>(undefined);
   const [isAvatarMissing, setIsAvatarMissing] = useState(false);
@@ -73,7 +74,7 @@ const Avatar = (props: IAvatar) => {
   }, [size, color]);
 
   if (disableUserProvidedMedia) {
-    if (isAvatarMissing || !alt || isDefaultAvatar(src)) return null;
+    if (isAvatarMissing || !alt || isDefault) return null;
     return (
       <Popover
         interaction='hover'
@@ -122,7 +123,7 @@ const Avatar = (props: IAvatar) => {
       className={clsx('rounded-lg leading-[0]', isCat && 'avatar__cat bg-gray-200 dark:bg-gray-900', className)}
       innerClassName='rounded-[inherit] text-sm'
       style={style}
-      src={src}
+      src={src || require('pl-fe/assets/images/avatar-missing.png')}
       alt={altText}
       onError={handleLoadFailure}
     />

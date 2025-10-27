@@ -18,8 +18,8 @@ import { useKickGroupMemberMutation, type MinifiedGroupMember } from 'pl-fe/quer
 import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 
+import type { Group } from 'pl-api';
 import type { Menu as IMenu } from 'pl-fe/components/dropdown-menu';
-import type { Group } from 'pl-fe/normalizers/group';
 
 const messages = defineMessages({
   adminLimitTitle: { id: 'group.member.admin.limit.title', defaultMessage: 'Admin limit reached' },

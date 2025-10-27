@@ -1,4 +1,4 @@
-import { type CustomEmoji, GroupRoles } from 'pl-api';
+import { type CustomEmoji, GroupRoles, Group } from 'pl-api';
 import React, { useCallback, useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory, useRouteMatch } from 'react-router-dom';
@@ -42,7 +42,6 @@ import type { Menu } from 'pl-fe/components/dropdown-menu';
 import type { Emoji as EmojiType } from 'pl-fe/features/emoji';
 import type { UnauthorizedModalAction } from 'pl-fe/modals/unauthorized-modal';
 import type { Account } from 'pl-fe/normalizers/account';
-import type { Group } from 'pl-fe/normalizers/group';
 import type { SelectedStatus } from 'pl-fe/selectors';
 import type { Me } from 'pl-fe/types/pl-fe';
 
