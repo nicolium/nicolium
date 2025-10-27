@@ -7,12 +7,12 @@
  * @see module:pl-fe/actions/security
 */
 import {
-  type Account,
   credentialAccountSchema,
+  PlApiClient,
+  type Account,
   type CreateAccountParams,
   type CredentialAccount,
   type CredentialApplication,
-  PlApiClient,
   type Token,
 } from 'pl-api';
 import { defineMessages } from 'react-intl';

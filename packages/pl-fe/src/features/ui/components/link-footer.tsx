@@ -1,13 +1,12 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { WITH_LANDING_PAGE } from 'pl-fe/build-config';
 import Emojify from 'pl-fe/features/emoji/emojify';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import sourceCode from 'pl-fe/utils/code';
 
 const messages = defineMessages({
-  footerNotice: { id: 'getting_started.footer_notice', defaultMessage: 'Proudly made in Poland. {emoji}' },
+  meow: { id: 'footer.meow', defaultMessage: 'meow :3 {emoji}' },
 });
 
 const LinkFooter: React.FC = (): JSX.Element => {
@@ -31,11 +30,9 @@ const LinkFooter: React.FC = (): JSX.Element => {
           />
         )}
       </p>
-      {WITH_LANDING_PAGE && (
-        <p className='⁂-footer-text'>
-          <Emojify text={intl.formatMessage(messages.footerNotice, { emoji: '🇵🇱🏳️‍⚧️' })} />
-        </p>
-      )}
+      <p className='⁂-footer-text' aria-hidden>
+        <Emojify text={intl.formatMessage(messages.meow, { emoji: '🐱' })} />
+      </p>
     </>
   );
 };
