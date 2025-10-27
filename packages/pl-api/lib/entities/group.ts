@@ -13,8 +13,7 @@ const groupSchema = v.pipe(v.any(), v.transform((group: any) => {
   const domain = getDomainFromURL(group);
 
   if (group?.config) {
-    return {
-      domain,
+    group = {
       display_name: group.name,
       members_count: group.member_count,
       note: group.short_description,
@@ -30,7 +29,13 @@ const groupSchema = v.pipe(v.any(), v.transform((group: any) => {
       ...group,
     };
   }
-  return { domain, ...group };
+
+  return {
+    domain,
+    ...group,
+    avatar: group.avatar || group.avatar_static,
+    header: group.header || group.header_static,
+  };
 }), v.object({
   avatar: v.fallback(v.string(), ''),
   avatar_static: v.fallback(v.string(), ''),
