@@ -19,9 +19,10 @@ const messages = defineMessages({
 
 interface IContentTypeButton {
   composeId: string;
+  compact?: boolean;
 }
 
-const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId }) => {
+const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const instance = useInstance();
@@ -88,10 +89,10 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId }) => {
       <Button
         theme='muted'
         size='xs'
-        text={option?.text}
+        text={compact ? undefined : option?.text}
         icon={option?.icon}
         secondaryIcon={require('@phosphor-icons/core/regular/caret-down.svg')}
-        title={intl.formatMessage(messages.change_content_type)}
+        title={compact ? option?.text : intl.formatMessage(messages.change_content_type)}
       />
     </DropdownMenu>
   );

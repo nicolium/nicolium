@@ -218,9 +218,10 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
 
 interface ILanguageDropdownButton {
   composeId: string;
+  compact?: boolean;
 }
 
-const LanguageDropdownButton: React.FC<ILanguageDropdownButton> = ({ composeId }) => {
+const LanguageDropdownButton: React.FC<ILanguageDropdownButton> = ({ composeId, compact }) => {
   const intl = useIntl();
 
   const {
@@ -232,7 +233,7 @@ const LanguageDropdownButton: React.FC<ILanguageDropdownButton> = ({ composeId }
 
   const languagesCount = Object.keys(textMap).length;
 
-  let buttonLabel = intl.formatMessage(messages.languagePrompt);
+  let buttonLabel = compact ? undefined : intl.formatMessage(messages.languagePrompt);
   if (language) {
     const list: string[] = [languagesObject[(modifiedLanguage || language) as Language]];
     if (languagesCount) list.push(intl.formatMessage(messages.multipleLanguages, {

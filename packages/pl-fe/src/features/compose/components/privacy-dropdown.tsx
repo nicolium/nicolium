@@ -122,10 +122,12 @@ const getItems = (features: Features, lists: ReturnType<typeof getOrderedLists>,
 
 interface IPrivacyDropdown {
   composeId: string;
+  compact?: boolean;
 }
 
 const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
   composeId,
+  compact,
 }) => {
   const intl = useIntl();
   const features = useFeatures();
@@ -173,17 +175,19 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
     return null;
   }
 
+  const text = compose.federated ? valueOption?.text : intl.formatMessage(messages.local, {
+    privacy: valueOption?.text,
+  });
+
   return (
     <DropdownMenu items={items} width='16rem'>
       <Button
         theme='muted'
         size='xs'
-        text={compose.federated ? valueOption?.text : intl.formatMessage(messages.local, {
-          privacy: valueOption?.text,
-        })}
+        text={compact ? undefined : text}
         icon={valueOption?.icon}
         secondaryIcon={require('@phosphor-icons/core/regular/caret-down.svg')}
-        title={intl.formatMessage(messages.change_privacy)}
+        title={compact ? text : intl.formatMessage(messages.change_privacy)}
       />
     </DropdownMenu>
   );

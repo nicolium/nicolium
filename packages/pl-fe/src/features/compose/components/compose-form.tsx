@@ -122,9 +122,10 @@ interface IComposeForm<ID extends string> {
   group?: string;
   withAvatar?: boolean;
   transparent?: boolean;
+  compact?: boolean;
 }
 
-const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickableAreaRef, event, group, withAvatar, transparent }: IComposeForm<ID>) => {
+const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickableAreaRef, event, group, withAvatar, transparent, compact }: IComposeForm<ID>) => {
   const history = useHistory();
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -323,9 +324,9 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
 
   const selectButtons = [];
 
-  if (features.privacyScopes && !group && !groupId) selectButtons.push(<PrivacyDropdown key='privacy-dropdown' composeId={id} />);
-  if (features.richText) selectButtons.push(<ContentTypeButton key='compose-type-button' composeId={id} />);
-  if (features.postLanguages) selectButtons.push(<LanguageDropdown key='language-dropdown' composeId={id} />);
+  if (features.privacyScopes && !group && !groupId) selectButtons.push(<PrivacyDropdown key='privacy-dropdown' composeId={id} compact={compact} />);
+  if (features.richText) selectButtons.push(<ContentTypeButton key='compose-type-button' composeId={id} compact={compact} />);
+  if (features.postLanguages) selectButtons.push(<LanguageDropdown key='language-dropdown' composeId={id} compact={compact} />);
 
   const actionsMenu: Menu = [];
 
@@ -425,7 +426,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
         <div className='⁂-compose-form__actions'>
           {maxTootChars && (
             <div className='⁂-compose-form__counter'>
-              <TextCharacterCounter max={maxTootChars} text={text} />
+              {!compact && <TextCharacterCounter max={maxTootChars} text={text} />}
               <VisualCharacterCounter max={maxTootChars} text={text} />
             </div>
           )}
