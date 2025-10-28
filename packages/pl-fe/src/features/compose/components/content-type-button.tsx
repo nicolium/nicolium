@@ -27,7 +27,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
   const dispatch = useAppDispatch();
   const instance = useInstance();
 
-  const contentType = useCompose(composeId).content_type;
+  const { contentType } = useCompose(composeId);
 
   const handleChange = (contentType: string) => () => dispatch(changeComposeContentType(composeId, contentType));
 

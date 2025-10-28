@@ -15,7 +15,7 @@ interface IReplyIndicatorContainer {
 const ReplyIndicatorContainer: React.FC<IReplyIndicatorContainer> = ({ composeId }) => {
   const getStatus = useCallback(makeGetStatus(), []);
 
-  const { in_reply_to: inReplyToId, id: statusId } = useCompose(composeId);
+  const { inReplyToId, id: statusId } = useCompose(composeId);
   const status = useAppSelector(state => getStatus(state, { id: inReplyToId! }));
   const dispatch = useAppDispatch();
 

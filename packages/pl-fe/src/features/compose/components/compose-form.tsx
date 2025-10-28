@@ -136,20 +136,20 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   const persistDraftStatus = usePersistDraftStatus();
 
   const {
-    spoiler_text: spoilerText,
-    privacy,
-    is_submitting: isSubmitting,
-    is_changing_upload: isChangingUpload,
-    is_uploading: isUploading,
-    schedule: scheduledAt,
-    group_id: groupId,
+    spoilerText,
+    visibility,
+    isSubmitting,
+    isChangingUpload,
+    isUploading,
+    scheduledAt,
+    groupId,
     text,
-    modified_language: modifiedLanguage,
+    modifiedLanguage,
   } = compose;
 
   const hasPoll = !!compose.poll;
   const isEditing = compose.id !== null;
-  const anyMedia = compose.media_attachments.length > 0;
+  const anyMedia = compose.mediaAttachments.length > 0;
 
   const [composeFocused, setComposeFocused] = useState(false);
 
@@ -246,7 +246,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
 
   const onAcceptClearLinkSuggestion = (key: string) => {
     const editor = editorRef.current;
-    const suggestion = compose.clear_link_suggestion;
+    const suggestion = compose.clearLinkSuggestion;
     if (!editor || !suggestion) return;
 
     editor.update(() => {
@@ -290,7 +290,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     </div>
   ), [features, id, anyMedia]);
 
-  const showModifiers = !condensed && (compose.media_attachments.length || compose.is_uploading || compose.poll?.options.length || compose.schedule);
+  const showModifiers = !condensed && (compose.mediaAttachments.length || compose.isUploading || compose.poll?.options.length || compose.scheduledAt);
 
   const composeModifiers = showModifiers && (
     <div className='⁂-compose-form__modifiers'>
@@ -305,14 +305,14 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
 
   if (isEditing) {
     publishText = intl.formatMessage(messages.saveChanges);
-  } else if (privacy === 'direct') {
+  } else if (visibility === 'direct') {
     publishIcon = require('@phosphor-icons/core/regular/at.svg');
     publishText = intl.formatMessage(messages.message);
-  } else if (privacy === 'private' || privacy === 'mutuals_only') {
+  } else if (visibility === 'private' || visibility === 'mutuals_only') {
     publishIcon = require('@phosphor-icons/core/regular/lock.svg');
     publishText = intl.formatMessage(messages.publish);
   } else {
-    publishText = privacy !== 'unlisted' ? intl.formatMessage(messages.publishLoud, { publish: intl.formatMessage(messages.publish) }) : intl.formatMessage(messages.publish);
+    publishText = visibility !== 'unlisted' ? intl.formatMessage(messages.publishLoud, { publish: intl.formatMessage(messages.publish) }) : intl.formatMessage(messages.publish);
   }
 
   if (scheduledAt) {
@@ -351,7 +351,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
       onClick={handleClick}
       onSubmit={handleSubmit}
     >
-      {!!compose.in_reply_to && compose.approvalRequired && (
+      {!!compose.inReplyToId && compose.approvalRequired && (
         <Warning
           message={(
             <FormattedMessage id='compose_form.approval_required' defaultMessage='The reply needs to be approved by the post author.' />

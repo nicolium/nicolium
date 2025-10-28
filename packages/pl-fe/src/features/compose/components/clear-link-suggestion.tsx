@@ -20,7 +20,7 @@ const ClearLinkSuggestion = ({
   handleReject,
 }: IClearLinkSuggestion) => {
   const compose = useCompose(composeId);
-  const suggestion = compose.clear_link_suggestion;
+  const suggestion = compose.clearLinkSuggestion;
 
   if (!suggestion) return null;
 

@@ -19,7 +19,7 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
   const { forceImplicitAddressing } = useSettings();
   const explicitAddressing = features.createStatusExplicitAddressing && !forceImplicitAddressing;
 
-  if (!explicitAddressing || !compose.in_reply_to || !to) {
+  if (!explicitAddressing || !compose.inReplyToId || !to) {
     return null;
   }
 
@@ -31,7 +31,7 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
     });
   };
 
-  if (!compose.parent_reblogged_by && to.length === 0) {
+  if (!compose.parentRebloggedById && to.length === 0) {
     return null;
   }
 

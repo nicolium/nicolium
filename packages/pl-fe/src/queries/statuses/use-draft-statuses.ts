@@ -64,7 +64,7 @@ const usePersistDraftStatus = () => {
 
       const draft = {
         ...compose,
-        draft_id: compose.draft_id || crypto.randomUUID(),
+        draft_id: compose.draftId || crypto.randomUUID(),
       };
 
       const drafts = queryClient.getQueryData<Record<string, DraftStatus>>(['draftStatuses']) || {};

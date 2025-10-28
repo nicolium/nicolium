@@ -23,7 +23,7 @@ const ScheduleButton: React.FC<IScheduleButton> = ({ composeId, disabled }) => {
 
   const compose = useCompose(composeId);
 
-  const active = !!compose.schedule;
+  const active = !!compose.scheduledAt;
   const unavailable = !!compose.id;
 
   const handleClick = () => {

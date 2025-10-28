@@ -21,8 +21,8 @@ const messages = defineMessages({
 const checkComposeContent = (compose?: Compose) =>
   !!compose && [
     compose.editorState && compose.editorState.length > 0,
-    compose.spoiler_text.length > 0,
-    compose.media_attachments.length > 0,
+    compose.spoilerText.length > 0,
+    compose.mediaAttachments.length > 0,
     compose.poll !== null,
   ].some(check => check === true);
 
@@ -68,12 +68,12 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
         openModal('CONFIRM', {
           heading: isEditing
             ? <FormattedMessage id='confirmations.cancel_editing.heading' defaultMessage='Cancel post editing' />
-            : compose.draft_id
+            : compose.draftId
               ? <FormattedMessage id='confirmations.cancel_draft.heading' defaultMessage='Discard draft changes' />
               : <FormattedMessage id='confirmations.cancel.heading' defaultMessage='Discard post' />,
           message: isEditing
             ? <FormattedMessage id='confirmations.cancel_editing.message' defaultMessage='Are you sure you want to discard the changes to this post? All changes will be lost.' />
-            : compose.draft_id
+            : compose.draftId
               ? <FormattedMessage id='confirmations.cancel_draft_editing.message' defaultMessage='Are you sure you want to discard the changes to this draft post? All changes will be lost.' />
               : <FormattedMessage id='confirmations.cancel.message' defaultMessage='Are you sure you want to discard the currently composed post?' />,
           confirm: intl.formatMessage(messages.confirm),

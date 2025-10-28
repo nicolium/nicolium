@@ -23,7 +23,7 @@ const PollButton: React.FC<IPollButton> = ({ composeId, disabled }) => {
 
   const compose = useCompose(composeId);
 
-  const unavailable = compose.is_uploading;
+  const unavailable = compose.isUploading;
   const active = compose.poll !== null;
 
   const onClick = () => {

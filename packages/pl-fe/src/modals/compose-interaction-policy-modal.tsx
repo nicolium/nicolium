@@ -13,6 +13,8 @@ import { useInteractionPolicies } from 'pl-fe/queries/settings/use-interaction-p
 
 import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
+const MANAGABLE_VISIBILITIES = ['public', 'unlisted', 'private'];
+
 interface ComposeInteractionPolicyModalProps {
   composeId: string;
 }
@@ -22,7 +24,7 @@ const ComposeInteractionPolicyModal: React.FC<BaseModalProps & ComposeInteractio
   const { interactionPolicies: initial } = useInteractionPolicies();
   const compose = useCompose(composeId);
 
-  const canManageInteractionPolicies = compose.privacy === 'public' || compose.privacy === 'unlisted' || compose.privacy === 'private';
+  const canManageInteractionPolicies = MANAGABLE_VISIBILITIES.includes(compose.visibility);
 
   useEffect(() => {
     if (!canManageInteractionPolicies) {
@@ -35,7 +37,7 @@ const ComposeInteractionPolicyModal: React.FC<BaseModalProps & ComposeInteractio
     return null;
   }
 
-  const interactionPolicy = (compose.interactionPolicy || initial[compose.privacy as 'public']);
+  const interactionPolicy = (compose.interactionPolicy || initial[compose.visibility as 'public']);
 
   const onClickClose = () => {
     onClose('COMPOSE_INTERACTION_POLICY');
@@ -70,7 +72,7 @@ const ComposeInteractionPolicyModal: React.FC<BaseModalProps & ComposeInteractio
         />
         <InteractionPolicyConfig
           interactionPolicy={interactionPolicy}
-          visibility={compose.privacy as 'public'}
+          visibility={compose.visibility as 'public'}
           onChange={onChange}
           singlePost
         />

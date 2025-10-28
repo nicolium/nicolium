@@ -32,7 +32,7 @@ const ScheduleForm: React.FC<IScheduleForm> = ({ composeId }) => {
   const intl = useIntl();
   const features = useFeatures();
 
-  const scheduledAt = useCompose(composeId).schedule;
+  const { scheduledAt } = useCompose(composeId);
   const active = !!scheduledAt;
 
   const onSchedule = (date: Date | null) => {

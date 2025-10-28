@@ -55,7 +55,7 @@ const Option: React.FC<IOption> = ({
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const { suggestions, modified_language: language } = useCompose(composeId);
+  const { suggestions, modifiedLanguage: language } = useCompose(composeId);
 
   const handleOptionTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => onChange(index, event.target.value);
 
@@ -120,7 +120,7 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
   const intl = useIntl();
   const { configuration } = useInstance();
 
-  const { poll, language, modified_language: modifiedLanguage } = useCompose(composeId);
+  const { poll, language, modifiedLanguage } = useCompose(composeId);
 
   const options = !modifiedLanguage || modifiedLanguage === language ? poll?.options : poll?.options_map.map((option, key) => option[modifiedLanguage] || poll.options[key]);
   const expiresIn = poll?.expires_in;

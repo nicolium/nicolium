@@ -25,9 +25,9 @@ const InteractionPolicyButton: React.FC<IInteractionPolicyButton> = ({ composeId
     });
   };
 
-  const { privacy, interactionPolicy } = useCompose(composeId);
+  const { visibility, interactionPolicy } = useCompose(composeId);
 
-  if (!['public', 'unlisted', 'private'].includes(privacy)) return null;
+  if (!['public', 'unlisted', 'private'].includes(visibility)) return null;
 
   return (
     <ComposeFormButton

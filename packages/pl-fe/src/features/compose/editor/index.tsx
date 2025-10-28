@@ -99,7 +99,7 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
   placeholder,
 }, ref) => {
   const dispatch = useAppDispatch();
-  const { content_type: contentType, modified_language: language } = useCompose(composeId);
+  const { contentType, modifiedLanguage: language } = useCompose(composeId);
   const isWysiwyg = contentType === 'wysiwyg';
   const nodes = useNodes(isWysiwyg);
   const intl = useIntl();
@@ -117,18 +117,18 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
 
       if (!compose) return;
 
-      const editorState = !compose.modified_language || compose.modified_language === compose.language
+      const editorState = !compose.modifiedLanguage || compose.modifiedLanguage === compose.language
         ? compose.editorState
-        : compose.editorStateMap[compose.modified_language] || '';
+        : compose.editorStateMap[compose.modifiedLanguage] || '';
 
       if (editorState) {
         return editorState;
       }
 
       return () => {
-        const text = !compose.modified_language || compose.modified_language === compose.language
+        const text = !compose.modifiedLanguage || compose.modifiedLanguage === compose.language
           ? compose.text
-          : compose.textMap[compose.modified_language] || '';
+          : compose.textMap[compose.modifiedLanguage] || '';
 
         if (isWysiwyg) {
           $convertFromMarkdownString(text, TRANSFORMERS);

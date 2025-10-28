@@ -26,7 +26,7 @@ const HashtagCasingSuggestion = ({
   const dispatch = useAppDispatch();
 
   const compose = useCompose(composeId);
-  const suggestion = compose.hashtag_casing_suggestion;
+  const suggestion = compose.hashtagCasingSuggestion;
 
   const onIgnore = () => {
     dispatch(ignoreHashtagCasingSuggestion(composeId));

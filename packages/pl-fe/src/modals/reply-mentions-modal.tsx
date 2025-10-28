@@ -19,10 +19,10 @@ const ReplyMentionsModal: React.FC<BaseModalProps & ReplyMentionsModalProps> = (
   const compose = useCompose(composeId);
 
   const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector(state => getStatus(state, { id: compose.in_reply_to! }));
+  const status = useAppSelector(state => getStatus(state, { id: compose.inReplyToId! }));
   const { account } = useOwnAccount();
 
-  const mentions = statusToMentionsAccountIdsArray(status!, account!, compose.parent_reblogged_by);
+  const mentions = statusToMentionsAccountIdsArray(status!, account!, compose.parentRebloggedById);
   const author = status?.account_id;
 
   const onClickClose = () => {

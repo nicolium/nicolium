@@ -19,7 +19,7 @@ const UploadCompose: React.FC<IUploadCompose> = ({ composeId, id, onSubmit, onDr
   const dispatch = useAppDispatch();
   const { pleroma: { metadata: { description_limit: descriptionLimit } } } = useInstance();
 
-  const media = useCompose(composeId).media_attachments.find(item => item.id === id)!;
+  const media = useCompose(composeId).mediaAttachments.find(item => item.id === id)!;
 
   const handleDescriptionChange = (description: string, position?: [number, number]) => {
     return dispatch(changeUploadCompose(composeId, media.id, {

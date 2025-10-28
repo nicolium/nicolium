@@ -17,7 +17,7 @@ interface IUploadForm {
 const UploadForm: React.FC<IUploadForm> = ({ composeId, onSubmit }) => {
   const dispatch = useAppDispatch();
 
-  const { is_uploading: isUploading, media_attachments: mediaAttachments } = useCompose(composeId);
+  const { isUploading, mediaAttachments } = useCompose(composeId);
 
   const mediaIds = mediaAttachments.map((item) => item.id);
 

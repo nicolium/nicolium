@@ -32,7 +32,7 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({ onClose, c
   const { openModal } = useModalsActions();
   const persistDraftStatus = usePersistDraftStatus();
 
-  const { id: statusId, privacy, in_reply_to: inReplyTo, quote, group_id: groupId } = compose;
+  const { id: statusId, visibility, inReplyToId, quote, groupId } = compose;
 
   const { isDragging, isDraggedOver } = useDraggedFiles(node, (files) => {
     dispatch(uploadCompose(composeId, files, intl));
@@ -43,12 +43,12 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({ onClose, c
       openModal('CONFIRM', {
         heading: statusId
           ? <FormattedMessage id='confirmations.cancel_editing.heading' defaultMessage='Cancel post editing' />
-          : compose.draft_id
+          : compose.draftId
             ? <FormattedMessage id='confirmations.cancel_draft.heading' defaultMessage='Discard draft changes' />
             : <FormattedMessage id='confirmations.cancel.heading' defaultMessage='Discard post' />,
         message: statusId
           ? <FormattedMessage id='confirmations.cancel_editing.message' defaultMessage='Are you sure you want to cancel editing this post? All changes will be lost.' />
-          : compose.draft_id
+          : compose.draftId
             ? <FormattedMessage id='confirmations.cancel_draft_editing.message' defaultMessage='Are you sure you want to cancel editing this draft post? All changes will be lost.' />
             : <FormattedMessage id='confirmations.cancel.message' defaultMessage='Are you sure you want to cancel creating this post?' />,
         confirm: intl.formatMessage(statusId ? messages.cancelEditing : messages.confirm),
@@ -69,19 +69,19 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({ onClose, c
   };
 
   const renderTitle = () => {
-    if (compose.draft_id) {
+    if (compose.draftId) {
       return <FormattedMessage id='navigation_bar.compose_draft' defaultMessage='Edit draft post' />;
     } else if (compose.redacting) {
       return <FormattedMessage id='navigation_bar.compose_redact' defaultMessage='Redact post' />;
     } else if (statusId) {
       return <FormattedMessage id='navigation_bar.compose_edit' defaultMessage='Edit post' />;
-    } else if (privacy === 'direct') {
+    } else if (visibility === 'direct') {
       return <FormattedMessage id='navigation_bar.compose_direct' defaultMessage='Direct message' />;
-    } else if (inReplyTo && groupId) {
+    } else if (inReplyToId && groupId) {
       return <FormattedMessage id='navigation_bar.compose_group_reply' defaultMessage='Reply to group post' />;
     } else if (groupId) {
       return <FormattedMessage id='navigation_bar.compose_group' defaultMessage='Compose to group' />;
-    } else if (inReplyTo) {
+    } else if (inReplyToId) {
       return <FormattedMessage id='navigation_bar.compose_reply' defaultMessage='Reply to post' />;
     } else if (quote) {
       return <FormattedMessage id='navigation_bar.compose_quote' defaultMessage='Quote post' />;

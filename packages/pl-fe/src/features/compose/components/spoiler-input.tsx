@@ -24,13 +24,13 @@ const SpoilerInput: React.FC<ISpoilerInput> = ({
 }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const { language, modified_language, spoiler_text: spoilerText, spoilerTextMap, suggestions } = useCompose(composeId);
+  const { language, modifiedLanguage, spoilerText, spoilerTextMap, suggestions } = useCompose(composeId);
 
   const handleChangeSpoilerText: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     dispatch(changeComposeSpoilerText(composeId, e.target.value));
   };
 
-  const value = !modified_language || modified_language === language ? spoilerText : spoilerTextMap[modified_language] || '';
+  const value = !modifiedLanguage || modifiedLanguage === language ? spoilerText : spoilerTextMap[modifiedLanguage] || '';
 
   return (
     <AutosuggestInput
@@ -45,7 +45,7 @@ const SpoilerInput: React.FC<ISpoilerInput> = ({
       searchTokens={[':']}
       id='cw-spoiler-input'
       className='⁂-compose-form__spoiler-input'
-      lang={modified_language || undefined}
+      lang={modifiedLanguage || undefined}
     />
   );
 };

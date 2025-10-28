@@ -14,13 +14,13 @@ interface IUploadButtonContainer {
 
 const UploadButtonContainer: React.FC<IUploadButtonContainer> = ({ composeId }) => {
   const dispatch = useAppDispatch();
-  const { is_uploading: disabled, resetFileKey } = useCompose(composeId);
+  const { isUploading, resetFileKey } = useCompose(composeId);
 
   const onSelectFile = (files: FileList, intl: IntlShape) => {
     dispatch(uploadCompose(composeId, files, intl));
   };
 
-  return <UploadButton disabled={disabled} resetFileKey={resetFileKey} onSelectFile={onSelectFile} />;
+  return <UploadButton disabled={isUploading} resetFileKey={resetFileKey} onSelectFile={onSelectFile} />;
 };
 
 export { UploadButtonContainer as default };

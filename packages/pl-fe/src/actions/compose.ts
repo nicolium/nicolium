@@ -301,7 +301,7 @@ const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, c
   const state = getState();
 
   const accountUrl = selectOwnAccount(state)!.url;
-  const draftId = getState().compose[composeId]!.draft_id;
+  const draftId = getState().compose[composeId]!.draftId;
 
   dispatch(submitComposeSuccess(composeId, data));
 
@@ -324,7 +324,7 @@ const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, c
 };
 
 const needsDescriptions = (state: RootState, composeId: string) => {
-  const media = state.compose[composeId]!.media_attachments;
+  const media = state.compose[composeId]!.mediaAttachments;
   const missingDescriptionModal = useSettingsStore.getState().settings.missingDescriptionModal;
 
   const hasMissing = media.filter(item => !item.description).length > 0;
@@ -333,12 +333,12 @@ const needsDescriptions = (state: RootState, composeId: string) => {
 };
 
 const validateSchedule = (state: RootState, composeId: string) => {
-  const schedule = state.compose[composeId]?.schedule;
-  if (!schedule) return true;
+  const scheduledAt = state.compose[composeId]?.scheduledAt;
+  if (!scheduledAt) return true;
 
   const fiveMinutesFromNow = new Date(new Date().getTime() + 300000);
 
-  return schedule.getTime() > fiveMinutesFromNow.getTime() || (state.auth.client.features.scheduledStatusesBackwards && schedule.getTime() < new Date().getTime());
+  return scheduledAt.getTime() > fiveMinutesFromNow.getTime() || (state.auth.client.features.scheduledStatusesBackwards && scheduledAt.getTime() < new Date().getTime());
 };
 
 interface SubmitComposeOpts {
@@ -357,7 +357,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
     const compose = state.compose[composeId]!;
 
     const status = compose.text;
-    const media = compose.media_attachments;
+    const media = compose.mediaAttachments;
     const statusId = compose.id;
     let to = compose.to;
     const { forceImplicitAddressing } = useSettingsStore.getState().settings;
@@ -403,22 +403,22 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
     }
 
     const idempotencyKey = compose.idempotencyKey;
-    const contentType = compose.content_type === 'wysiwyg' ? 'text/markdown' : compose.content_type;
+    const contentType = compose.contentType === 'wysiwyg' ? 'text/markdown' : compose.contentType;
 
     const params: CreateStatusParams = {
       status,
-      in_reply_to_id: compose.in_reply_to || undefined,
+      in_reply_to_id: compose.inReplyToId || undefined,
       quote_id: compose.quote || undefined,
       media_ids: media.map(item => item.id),
       sensitive: compose.sensitive,
-      spoiler_text: compose.spoiler_text,
-      visibility: compose.privacy,
+      spoiler_text: compose.spoilerText,
+      visibility: compose.visibility,
       content_type: contentType,
-      scheduled_at: preview ? undefined : compose.schedule?.toISOString(),
-      language: compose.language || compose.suggested_language || undefined,
+      scheduled_at: preview ? undefined : compose.scheduledAt?.toISOString(),
+      language: compose.language || compose.suggestedLanguage || undefined,
       to: explicitAddressing && to.length ? to : undefined,
-      local_only: !compose.federated,
-      interaction_policy: ['public', 'unlisted', 'private'].includes(compose.privacy) && compose.interactionPolicy || undefined,
+      local_only: compose.local_only,
+      interaction_policy: ['public', 'unlisted', 'private'].includes(compose.visibility) && compose.interactionPolicy || undefined,
       preview,
     };
 
@@ -438,7 +438,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
 
       if (params.spoiler_text) {
         params.spoiler_text_map = compose.spoilerTextMap;
-        params.spoiler_text_map[compose.language] = compose.spoiler_text;
+        params.spoiler_text_map[compose.language] = compose.spoilerText;
       }
 
       const poll = params.poll;
@@ -447,8 +447,8 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
       }
     }
 
-    if (compose.privacy === 'group' && compose.group_id) {
-      params.group_id = compose.group_id;
+    if (compose.visibility === 'group' && compose.groupId) {
+      params.group_id = compose.groupId;
     }
 
     if (preview) {
@@ -504,7 +504,7 @@ const uploadCompose = (composeId: string, files: FileList, intl: IntlShape) =>
     if (!isLoggedIn(getState)) return;
     const attachmentLimit = getState().instance.configuration.statuses.max_media_attachments;
 
-    const media = getState().compose[composeId]?.media_attachments;
+    const media = getState().compose[composeId]?.mediaAttachments;
     const progress = new Array(files.length).fill(0);
     let total = Array.from(files).reduce((a, v) => a + v.size, 0);
 

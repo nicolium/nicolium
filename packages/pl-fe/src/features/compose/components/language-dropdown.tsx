@@ -49,7 +49,7 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
 
   const {
     language,
-    modified_language: modifiedLanguage,
+    modifiedLanguage,
     textMap,
   } = useCompose(composeId);
 
@@ -226,8 +226,8 @@ const LanguageDropdownButton: React.FC<ILanguageDropdownButton> = ({ composeId, 
 
   const {
     language,
-    modified_language: modifiedLanguage,
-    suggested_language: suggestedLanguage,
+    modifiedLanguage,
+    suggestedLanguage,
     textMap,
   } = useCompose(composeId);
 

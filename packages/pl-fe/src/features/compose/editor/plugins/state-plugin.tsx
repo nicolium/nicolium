@@ -50,8 +50,8 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
           };
         };
 
-        if (compose.clear_link_suggestion?.key) {
-          const node = $getNodeByKey(compose.clear_link_suggestion.key);
+        if (compose.clearLinkSuggestion?.key) {
+          const node = $getNodeByKey(compose.clearLinkSuggestion.key);
           const url = (node as LinkNode | null)?.getURL?.();
           if (!url || node === null || !compareUrl(url).isDirty) {
             dispatch(suggestClearLink(composeId, null));
@@ -63,7 +63,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
         const links = [...$nodesOfType(AutoLinkNode), ...$nodesOfType(LinkNode)];
 
         for (const link of links) {
-          if (compose.dismissed_clear_links_suggestions.includes(link.getKey())) {
+          if (compose.dismissedClearLinksSuggestions.includes(link.getKey())) {
             continue;
           }
 
@@ -87,7 +87,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
       const state = getState();
       const compose = state.compose[composeId];
 
-      if (compose.hashtag_casing_suggestion_ignored) return;
+      if (compose.hashtagCasingSuggestionIgnored) return;
 
       editorState.read(() => {
         const hashtagNodes = $nodesOfType(HashtagNode);
@@ -118,7 +118,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
       let quoteId: string | undefined;
 
       for (const id of ids) {
-        if (compose?.dismissed_quotes.includes(id)) continue;
+        if (compose?.dismissedQuotes.includes(id)) continue;
 
         if (state.statuses[id]) {
           quoteId = id;

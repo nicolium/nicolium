@@ -137,9 +137,9 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
   const { data: lists = [] } = useLists(getOrderedLists);
   const { data: circles = [] } = useCircles(getOrderedLists);
 
-  const isReply = !!compose.in_reply_to;
+  const isReply = !!compose.inReplyToId;
 
-  const value = compose.privacy;
+  const value = compose.visibility;
   const unavailable = compose.id;
 
   const onChange = (value: string) => value && dispatch(changeComposeVisibility(composeId,
@@ -162,7 +162,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
     text: intl.formatMessage(messages.local_short),
     meta: intl.formatMessage(messages.local_long),
     type: 'toggle',
-    checked: !compose.federated,
+    checked: compose.local_only,
     onChange: () => dispatch(changeComposeFederated(composeId)),
   });
 
@@ -175,7 +175,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
     return null;
   }
 
-  const text = compose.federated ? valueOption?.text : intl.formatMessage(messages.local, {
+  const text = compose.visibility ? valueOption?.text : intl.formatMessage(messages.local, {
     privacy: valueOption?.text,
   });
 
