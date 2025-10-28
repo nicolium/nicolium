@@ -139,8 +139,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     spoiler_text: spoilerText,
     privacy,
     is_submitting: isSubmitting,
-    is_changing_upload:
-    isChangingUpload,
+    is_changing_upload: isChangingUpload,
     is_uploading: isUploading,
     schedule: scheduledAt,
     group_id: groupId,

@@ -103,49 +103,64 @@ interface ClearLinkSuggestion {
 }
 
 interface Compose {
-  caretPosition: number | null;
-  content_type: string;
-  draft_id: string | null;
+  // User-edited text
   editorState: string | null;
   editorStateMap: Record<Language | string, string | null>;
-  focusDate: Date | null;
-  group_id: string | null;
-  idempotencyKey: string;
-  id: string | null;
-  in_reply_to: string | null;
-  is_changing_upload: boolean;
-  is_composing: boolean;
-  is_submitting: boolean;
-  is_uploading: boolean;
-  media_attachments: Array<MediaAttachment>;
-  poll: ComposePoll | null;
-  privacy: string;
-  progress: number;
-  quote: string | null;
-  resetFileKey: number | null;
-  schedule: Date | null;
-  sensitive: boolean;
   spoiler_text: string;
   spoilerTextMap: Record<Language | string, string>;
+  text: string;
+  textMap: Record<Language | string, string>;
+
+  // Non-text content
+  poll: ComposePoll | null;
+  media_attachments: Array<MediaAttachment>;
+
+  // Post settings
+  content_type: string;
+  privacy: string;
+  federated: boolean;
+  language: Language | string | null;
+  sensitive: boolean;
+  interactionPolicy: InteractionPolicy | null;
+  schedule: Date | null;
+
+  // References to other posts/groups/users
+  draft_id: string | null;
+  group_id: string | null;
+  id: string | null;
+  in_reply_to: string | null;
+  quote: string | null;
+  to: Array<string>;
+  parent_reblogged_by: string | null;
+
+  // State flags
+  is_changing_upload: boolean;
+  is_submitting: boolean;
+  is_uploading: boolean;
+  progress: number;
+
+  // Internal
+  caretPosition: number | null;
+  idempotencyKey: string;
+  resetFileKey: number | null;
+
+  // Currently modified language
+  modified_language: Language | string | null;
+
+  // Suggestions
+  approvalRequired: boolean;
+  suggested_language: string | null;
   suggestions: Array<string> | Array<Emoji>;
   suggestion_token: string | null;
   tagHistory: Array<string>;
-  text: string;
-  textMap: Record<Language | string, string>;
-  to: Array<string>;
-  parent_reblogged_by: string | null;
-  dismissed_quotes: Array<string>;
-  language: Language | string | null;
-  modified_language: Language | string | null;
-  suggested_language: string | null;
-  federated: boolean;
-  approvalRequired: boolean;
-  interactionPolicy: InteractionPolicy | null;
   dismissed_clear_links_suggestions: Array<string>;
   clear_link_suggestion: ClearLinkSuggestion | null;
   preview: Partial<BaseStatus> | null;
+  dismissed_quotes: Array<string>;
   hashtag_casing_suggestion: string | null;
   hashtag_casing_suggestion_ignored: boolean | null;
+
+  // Moderation features
   redacting: boolean;
   redactingOverwrite: boolean;
 }
@@ -156,13 +171,11 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
   draft_id: null,
   editorState: null,
   editorStateMap: {},
-  focusDate: null,
   group_id: null,
   idempotencyKey: '',
   id: null,
   in_reply_to: null,
   is_changing_upload: false,
-  is_composing: false,
   is_submitting: false,
   is_uploading: false,
   media_attachments: [],
@@ -406,7 +419,6 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.text = !action.explicitAddressing ? statusToTextMentions(action.status, action.account) : '';
         compose.privacy = privacyPreference(action.status.visibility, defaultCompose.privacy, action.status.list_id, action.conversationScope);
         compose.federated = action.status.local_only !== true;
-        compose.focusDate = new Date();
         compose.caretPosition = null;
         compose.idempotencyKey = crypto.randomUUID();
         compose.content_type = defaultCompose.content_type;
@@ -432,7 +444,6 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.parent_reblogged_by = null;
         compose.text = '';
         compose.privacy = privacyPreference(action.status.visibility, defaultCompose.privacy, action.status.list_id);
-        compose.focusDate = new Date();
         compose.caretPosition = null;
         compose.idempotencyKey = crypto.randomUUID();
         compose.content_type = defaultCompose.content_type;
@@ -492,7 +503,6 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
     case COMPOSE_MENTION:
       return updateCompose(state, 'compose-modal', compose => {
         compose.text = [compose.text.trim(), `@${action.account.acct} `].filter((str) => str.length !== 0).join(' ');
-        compose.focusDate = new Date();
         compose.caretPosition = null;
         compose.idempotencyKey = crypto.randomUUID();
       });
@@ -500,7 +510,6 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
       return updateCompose(state, 'compose-modal', compose => {
         compose.text = [compose.text.trim(), `@${action.account.acct} `].filter((str) => str.length !== 0).join(' ');
         compose.privacy = 'direct';
-        compose.focusDate = new Date();
         compose.caretPosition = null;
         compose.idempotencyKey = crypto.randomUUID();
       });
@@ -508,7 +517,6 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
       return updateCompose(state, action.composeId, compose => {
         compose.privacy = 'group';
         compose.group_id = action.groupId;
-        compose.focusDate = new Date();
         compose.caretPosition = null;
         compose.idempotencyKey = crypto.randomUUID();
       });
@@ -561,7 +569,6 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.parent_reblogged_by = null;
         compose.in_reply_to = action.status.in_reply_to_id;
         compose.privacy = action.status.visibility;
-        compose.focusDate = new Date();
         compose.caretPosition = null;
         compose.idempotencyKey = crypto.randomUUID();
         const contentType = action.contentType === 'text/markdown' && state.default.content_type === 'wysiwyg'
