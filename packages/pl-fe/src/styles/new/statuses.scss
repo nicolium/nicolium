@@ -88,9 +88,14 @@
   }
 }
 
-.thread__status, [column-type='filled'] {
+.thread__status {
   .⁂-status__wrapper {
     padding: 0;
+  }
+}
+
+.thread__status, [column-type='filled'] {
+  .⁂-status__wrapper {
     box-shadow: none;
   }
 }
