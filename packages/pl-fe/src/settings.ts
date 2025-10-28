@@ -49,10 +49,6 @@ class Settings {
 /** Remember push notification settings. */
 const pushNotificationsSetting = new Settings('plfe_push_notification_data');
 
-/** Remember hashtag usage. */
-const tagHistory = new Settings('plfe_tag_history');
-
 export {
   pushNotificationsSetting,
-  tagHistory,
 };

@@ -8,7 +8,6 @@ import { Language } from 'pl-fe/features/preferences';
 import { queryClient } from 'pl-fe/queries/client';
 import { cancelDraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
 import { selectAccount, selectOwnAccount } from 'pl-fe/selectors';
-import { tagHistory } from 'pl-fe/settings';
 import { useModalsStore } from 'pl-fe/stores/modals';
 import { useSettingsStore } from 'pl-fe/stores/settings';
 import toast from 'pl-fe/toast';
@@ -56,8 +55,6 @@ const COMPOSE_SUGGESTIONS_CLEAR = 'COMPOSE_SUGGESTIONS_CLEAR' as const;
 const COMPOSE_SUGGESTIONS_READY = 'COMPOSE_SUGGESTIONS_READY' as const;
 const COMPOSE_SUGGESTION_SELECT = 'COMPOSE_SUGGESTION_SELECT' as const;
 const COMPOSE_SUGGESTION_TAGS_UPDATE = 'COMPOSE_SUGGESTION_TAGS_UPDATE' as const;
-
-const COMPOSE_TAG_HISTORY_UPDATE = 'COMPOSE_TAG_HISTORY_UPDATE' as const;
 
 const COMPOSE_SPOILERNESS_CHANGE = 'COMPOSE_SPOILERNESS_CHANGE' as const;
 const COMPOSE_TYPE_CHANGE = 'COMPOSE_TYPE_CHANGE' as const;
@@ -310,7 +307,6 @@ const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, c
   }
 
   if (data.scheduled_at === null) {
-    dispatch(insertIntoTagHistory(composeId, data.tags || [], status));
     toast.success(redact ? messages.redactSuccess : edit ? messages.editSuccess : messages.success, {
       actionLabel: messages.view,
       actionLink: (data.visibility === 'direct' && getClient(getState()).features.conversations) ? '/conversations' : `/@${data.account.acct}/posts/${data.id}`,
@@ -748,30 +744,6 @@ const updateSuggestionTags = (composeId: string, token: string, tags: Array<Tag>
   tags,
 });
 
-const updateTagHistory = (composeId: string, tags: string[]) => ({
-  type: COMPOSE_TAG_HISTORY_UPDATE,
-  composeId,
-  tags,
-});
-
-const insertIntoTagHistory = (composeId: string, recognizedTags: Array<Tag>, text: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const oldHistory = state.compose[composeId]!.tagHistory;
-    const me = state.me;
-    const names = recognizedTags
-      .filter(tag => text.match(new RegExp(`#${tag.name}`, 'i')))
-      .map(tag => tag.name);
-    const intersectedOldHistory = oldHistory.filter(name => names.findIndex(newName => newName.toLowerCase() === name.toLowerCase()) === -1);
-
-    names.push(...intersectedOldHistory);
-
-    const newHistory = names.slice(0, 1000);
-
-    tagHistory.set(me as string, newHistory);
-    dispatch(updateTagHistory(composeId, newHistory));
-  };
-
 const changeComposeSpoilerness = (composeId: string) => ({
   type: COMPOSE_SPOILERNESS_CHANGE,
   composeId,
@@ -1036,7 +1008,6 @@ type ComposeAction =
   | ComposeSuggestionsReadyAction
   | ComposeSuggestionSelectAction
   | ReturnType<typeof updateSuggestionTags>
-  | ReturnType<typeof updateTagHistory>
   | ReturnType<typeof changeComposeSpoilerness>
   | ReturnType<typeof changeComposeContentType>
   | ReturnType<typeof changeComposeSpoilerText>
@@ -1094,7 +1065,6 @@ export {
   COMPOSE_SUGGESTIONS_READY,
   COMPOSE_SUGGESTION_SELECT,
   COMPOSE_SUGGESTION_TAGS_UPDATE,
-  COMPOSE_TAG_HISTORY_UPDATE,
   COMPOSE_SPOILERNESS_CHANGE,
   COMPOSE_TYPE_CHANGE,
   COMPOSE_SPOILER_TEXT_CHANGE,

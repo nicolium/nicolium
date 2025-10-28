@@ -1,7 +1,6 @@
 import { create } from 'mutative';
 
 import { INSTANCE_FETCH_SUCCESS, type InstanceAction } from 'pl-fe/actions/instance';
-import { tagHistory } from 'pl-fe/settings';
 
 import {
   COMPOSE_CHANGE,
@@ -24,7 +23,6 @@ import {
   COMPOSE_SUGGESTIONS_READY,
   COMPOSE_SUGGESTION_SELECT,
   COMPOSE_SUGGESTION_TAGS_UPDATE,
-  COMPOSE_TAG_HISTORY_UPDATE,
   COMPOSE_SPOILERNESS_CHANGE,
   COMPOSE_TYPE_CHANGE,
   COMPOSE_SPOILER_TEXT_CHANGE,
@@ -151,7 +149,6 @@ interface Compose {
   approvalRequired: boolean;
   suggestedLanguage: string | null;
   suggestions: Array<string> | Array<Emoji>;
-  tagHistory: Array<string>;
   dismissedClearLinksSuggestions: Array<string>;
   clearLinkSuggestion: ClearLinkSuggestion | null;
   preview: Partial<BaseStatus> | null;
@@ -188,7 +185,6 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
   spoilerText: '',
   spoilerTextMap: {},
   suggestions: [],
-  tagHistory: [],
   text: '',
   textMap: {},
   to: [],
@@ -321,7 +317,6 @@ const importAccount = (compose: Compose, account: CredentialAccount) => {
 
   if (settings.defaultPrivacy) compose.visibility = settings.defaultPrivacy;
   if (settings.defaultContentType) compose.contentType = settings.defaultContentType;
-  compose.tagHistory = tagHistory.get(account.id) || [];
 };
 
 // const updateSetting = (compose: Compose, path: string[], value: string) => {
@@ -528,10 +523,6 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
       return updateCompose(state, action.composeId, compose => insertSuggestion(compose, action.position, action.token, action.completion, action.path));
     case COMPOSE_SUGGESTION_TAGS_UPDATE:
       return updateCompose(state, action.composeId, compose => updateSuggestionTags(compose, action.token, action.tags));
-    case COMPOSE_TAG_HISTORY_UPDATE:
-      return updateCompose(state, action.composeId, compose => {
-        compose.tagHistory = action.tags;
-      });
     case TIMELINE_DELETE:
       return updateCompose(state, 'compose-modal', compose => {
         if (action.statusId === compose.inReplyToId) {
