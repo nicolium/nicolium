@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import throttle from 'lodash/throttle';
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import Icon from 'pl-fe/components/icon';
@@ -66,7 +66,6 @@ const Audio: React.FC<IAudio> = (props) => {
   const [muted, setMuted] = useState(false);
   const [volume, setVolume] = useState(0.5);
   const [dragging, setDragging] = useState(false);
-  const [hovered, setHovered] = useState(false);
 
   const visualizer = useRef<Visualizer>(new Visualizer(TICK_SIZE));
   const audioContext = useRef<AudioContext | null>(null);
@@ -149,13 +148,23 @@ const Audio: React.FC<IAudio> = (props) => {
     }
   };
 
-  const toggleMute = () => {
-    const nextMuted = !muted;
-
-    setMuted(nextMuted);
-
+  const handleVolumeChange = () => {
     if (audio.current) {
+      setVolume(audio.current.volume);
+      setMuted(audio.current.muted);
+    }
+  };
+
+  const toggleMute = () => {
+    if (audio.current) {
+      const nextMuted = !audio.current.muted;
+      const nextVolume = nextMuted ? 0 : 1;
+
+      setVolume(nextVolume);
+      setMuted(nextMuted);
+
       audio.current.muted = nextMuted;
+      audio.current.volume = nextVolume;
     }
   };
 
@@ -202,7 +211,7 @@ const Audio: React.FC<IAudio> = (props) => {
     audio.current?.play();
   };
 
-  const handleMouseMove = throttle((e) => {
+  const handleMouseMove = useCallback(throttle((e) => {
     if (audio.current && seek.current) {
       const { x } = getPointerPosition(seek.current, e);
       const currentTime = audio.current.duration * x;
@@ -212,7 +221,7 @@ const Audio: React.FC<IAudio> = (props) => {
         audio.current.currentTime = currentTime;
       }
     }
-  }, 15);
+  }, 15), [audio.current, seek.current]);
 
   const handleTimeUpdate = () => {
     if (audio.current) {
@@ -221,18 +230,22 @@ const Audio: React.FC<IAudio> = (props) => {
     }
   };
 
-  const handleMouseVolSlide = throttle(e => {
+  const handleMouseVolSlide = useCallback(throttle(e => {
     if (audio.current && slider.current) {
       const { x } = getPointerPosition(slider.current, e);
 
       if (!isNaN(x)) {
-        setVolume(x);
-        audio.current.volume = x;
+        const volume = Math.max(0, Math.min(1, x));
+
+        setVolume(volume);
+        setMuted(volume === 0);
+        audio.current.volume = volume;
+        audio.current.muted = volume === 0;
       }
     }
-  }, 15);
+  }, 60), [audio.current, slider.current]);
 
-  const handleScroll = throttle(() => {
+  const handleScroll = useCallback(throttle(() => {
     if (!canvas.current || !audio.current) {
       return;
     }
@@ -249,15 +262,7 @@ const Audio: React.FC<IAudio> = (props) => {
 
       setPaused(true);
     }
-  }, 150, { trailing: true });
-
-  const handleMouseEnter = () => {
-    setHovered(true);
-  };
-
-  const handleMouseLeave = () => {
-    setHovered(false);
-  };
+  }, 150, { trailing: true }), [canvas.current, audio.current, paused]);
 
   const handleLoadedData = () => {
     if (audio.current) {
@@ -432,8 +437,6 @@ const Audio: React.FC<IAudio> = (props) => {
         width: '100%',
         height: fullscreen ? '100%' : (height || props.height),
       }}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
       tabIndex={0}
       onKeyDown={handleKeyDown}
       onClick={e => e.stopPropagation()}
@@ -445,6 +448,7 @@ const Audio: React.FC<IAudio> = (props) => {
         onPlay={handlePlay}
         onPause={handlePause}
         onProgress={handleProgress}
+        onVolumeChange={handleVolumeChange}
         onLoadedData={handleLoadedData}
         crossOrigin='anonymous'
       />
@@ -493,11 +497,7 @@ const Audio: React.FC<IAudio> = (props) => {
         />
       </div>
 
-      <div className={clsx(
-        'video-player__controls video-player__controls--visible',
-        // { 'video-player__controls--visible': paused || hovered },
-      )}
-      >
+      <div className='video-player__controls video-player__controls--visible'>
         <div className='mx-[-5px] my-0 flex justify-between'>
           <div className='video-player__buttons left'>
 

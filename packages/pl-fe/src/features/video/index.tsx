@@ -199,27 +199,20 @@ const Video: React.FC<IVideo> = ({
     document.removeEventListener('touchend', handleVolumeMouseUp, true);
   };
 
-  const handleMouseVolSlide = throttle(e => {
-    if (slider.current) {
+  const handleMouseVolSlide = useCallback(throttle(e => {
+    if (video.current && slider.current) {
       const { x } = getPointerPosition(slider.current, e);
 
       if (!isNaN(x)) {
-        let slideamt = x;
+        const volume = Math.max(0, Math.min(1, x));
 
-        if (x > 1) {
-          slideamt = 1;
-        } else if (x < 0) {
-          slideamt = 0;
-        }
-
-        if (video.current) {
-          video.current.volume = slideamt;
-        }
-
-        setVolume(slideamt);
+        setVolume(volume);
+        setMuted(volume === 0);
+        video.current.volume = volume;
+        video.current.muted = volume === 0;
       }
     }
-  }, 60);
+  }, 60), [video.current, slider.current]);
 
   const handleMouseDown: React.MouseEventHandler = e => {
     const wasPlaying = !paused;
@@ -248,7 +241,7 @@ const Video: React.FC<IVideo> = ({
   };
 
 
-  const handleMouseMove = throttle(e => {
+  const handleMouseMove = useCallback(throttle(e => {
     if (seek.current && video.current) {
       const { x } = getPointerPosition(seek.current, e);
       const currentTime = Math.floor(video.current.duration * x);
@@ -258,7 +251,7 @@ const Video: React.FC<IVideo> = ({
         setCurrentTime(currentTime);
       }
     }
-  }, 60);
+  }, 60), [seek.current, video.current]);
 
   const seekBy = (time: number) => {
     if (video.current) {
@@ -387,9 +380,14 @@ const Video: React.FC<IVideo> = ({
 
   const toggleMute = () => {
     if (video.current) {
-      const muted = !video.current.muted;
-      setMuted(!muted);
-      video.current.muted = muted;
+      const nextMuted = !video.current.muted;
+      const nextVolume = nextMuted ? 0 : 1;
+
+      setVolume(nextVolume);
+      setMuted(nextMuted);
+
+      video.current.muted = nextMuted;
+      video.current.volume = nextVolume;
     }
   };
 
@@ -538,10 +536,10 @@ const Video: React.FC<IVideo> = ({
               <Icon src={muted ? require('@phosphor-icons/core/regular/speaker-x.svg') : require('@phosphor-icons/core/regular/speaker-high.svg')} />
             </button>
 
-            <div className={clsx('video-player__volume')} onMouseDown={handleVolumeMouseDown} ref={slider}>
+            <div className='video-player__volume' onMouseDown={handleVolumeMouseDown} ref={slider}>
               <div className='video-player__volume__current' style={{ width: `${volume * 100}%` }} />
               <span
-                className={clsx('video-player__volume__handle')}
+                className='video-player__volume__handle'
                 tabIndex={0}
                 style={{ left: `${volume * 100}%` }}
               />

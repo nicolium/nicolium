@@ -1,5 +1,5 @@
 import throttle from 'lodash/throttle';
-import React, { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
 
 import { getPointerPosition } from 'pl-fe/features/video';
 
@@ -33,7 +33,7 @@ const Slider: React.FC<ISlider> = ({ value, onChange }) => {
     document.removeEventListener('touchend', handleMouseUp, true);
   };
 
-  const handleMouseSlide = throttle(e => {
+  const handleMouseSlide = useCallback(throttle(e => {
     if (node.current) {
       const { x } = getPointerPosition(node.current, e);
 
@@ -49,7 +49,7 @@ const Slider: React.FC<ISlider> = ({ value, onChange }) => {
         onChange(slideamt);
       }
     }
-  }, 60);
+  }, 60), [node.current]);
 
   return (
     <div
