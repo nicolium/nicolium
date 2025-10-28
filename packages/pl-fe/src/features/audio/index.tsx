@@ -521,10 +521,10 @@ const Audio: React.FC<IAudio> = (props) => {
               <Icon src={muted ? require('@phosphor-icons/core/regular/speaker-x.svg') : require('@phosphor-icons/core/regular/speaker-high.svg')} />
             </button>
 
-            <div className={clsx('video-player__volume', { 'overflow-visible w-12 mr-4': hovered })} onMouseDown={handleVolumeMouseDown} ref={slider}>
+            <div className='video-player__volume' onMouseDown={handleVolumeMouseDown} ref={slider}>
               <div className='video-player__volume__current' style={{ width: `${volume * 100}%`, backgroundColor: _getAccentColor() }} />
               <span
-                className={clsx('video-player__volume__handle', { 'opacity-100': dragging || hovered })}
+                className='video-player__volume__handle'
                 tabIndex={0}
                 style={{ left: `${volume * 100}%`, backgroundColor: _getAccentColor() }}
               />

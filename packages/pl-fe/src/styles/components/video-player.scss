@@ -51,12 +51,7 @@
   }
 
   &__volume {
-    @apply inline-flex cursor-pointer h-6 relative overflow-hidden before:content-[''] before:w-12 before:bg-black/35 dark:before:bg-white/35 before:rounded before:absolute before:h-1 before:left-0 before:top-1/2;
-    flex: 0 0 auto;
-
-    .no-reduce-motion & {
-      transition: all 100ms linear;
-    }
+    @apply inline-flex cursor-pointer h-6 relative before:content-[''] before:w-12 before:bg-black/35 dark:before:bg-white/35 before:rounded before:absolute before:h-1 before:left-0 before:top-1/2 w-12 mr-4;
 
     &::before {
       transform: translate(0, -50%);
@@ -68,12 +63,8 @@
     }
 
     &__handle {
-      @apply bg-accent-500 absolute z-[3] rounded-[50%] size-3 top-1/2 left-0 -ml-1.5 opacity-0;
+      @apply bg-accent-500 absolute z-[3] rounded-[50%] size-3 top-1/2 left-0 -ml-1.5;
       transform: translate(0, -50%);
-
-      .no-reduce-motion & {
-        transition: opacity 100ms linear;
-      }
     }
   }
 
@@ -87,7 +78,7 @@
     @apply cursor-pointer h-3 relative before:content-[''] before:w-full before:bg-black/35 dark:before:bg-white/35 before:rounded before:block before:absolute before:h-1 before:top-1;
 
     &__handle {
-      @apply bg-accent-500 absolute z-[3] opacity-0 rounded-[50%] size-3 -ml-1.5;
+      @apply bg-accent-500 absolute z-[3] rounded-[50%] size-3 -ml-1.5;
 
       .no-reduce-motion & {
         transition: opacity 0.1s ease;
