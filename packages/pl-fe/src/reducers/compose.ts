@@ -110,17 +110,17 @@ interface Compose {
   textMap: Record<Language | string, string>;
 
   // Non-text content
-  poll: ComposePoll | null;
   mediaAttachments: Array<MediaAttachment>;
+  poll: ComposePoll | null;
 
   // Post settings
   contentType: string;
-  visibility: string;
-  local_only: boolean;
-  language: Language | string | null;
-  sensitive: boolean;
   interactionPolicy: InteractionPolicy | null;
+  language: Language | string | null;
+  local_only: boolean;
   scheduledAt: Date | null;
+  sensitive: boolean;
+  visibility: string;
 
   // References to other posts/groups/users
   draftId: string | null;
@@ -147,14 +147,14 @@ interface Compose {
 
   // Suggestions
   approvalRequired: boolean;
-  suggestedLanguage: string | null;
-  suggestions: Array<string> | Array<Emoji>;
-  dismissedClearLinksSuggestions: Array<string>;
   clearLinkSuggestion: ClearLinkSuggestion | null;
-  preview: Partial<BaseStatus> | null;
+  dismissedClearLinksSuggestions: Array<string>;
   dismissedQuotes: Array<string>;
   hashtagCasingSuggestion: string | null;
   hashtagCasingSuggestionIgnored: boolean | null;
+  preview: Partial<BaseStatus> | null;
+  suggestedLanguage: string | null;
+  suggestions: Array<string> | Array<Emoji>;
 
   // Moderation features
   redacting: boolean;
@@ -162,47 +162,56 @@ interface Compose {
 }
 
 const newCompose = (params: Partial<Compose> = {}): Compose => ({
-  caretPosition: null,
-  contentType: 'text/plain',
-  draftId: null,
   editorState: null,
   editorStateMap: {},
+  spoilerText: '',
+  spoilerTextMap: {},
+  text: '',
+  textMap: {},
+
+  mediaAttachments: [],
+  poll: null,
+
+  contentType: 'text/plain',
+  interactionPolicy: null,
+  language: null,
+  local_only: false,
+  scheduledAt: null,
+  sensitive: false,
+  visibility: 'public',
+
+  draftId: null,
   groupId: null,
-  idempotencyKey: '',
   id: null,
   inReplyToId: null,
+  quote: null,
+  to: [],
+  parentRebloggedById: null,
+
   isChangingUpload: false,
   isSubmitting: false,
   isUploading: false,
-  mediaAttachments: [],
-  poll: null,
-  visibility: 'public',
   progress: 0,
-  quote: null,
+
+  caretPosition: null,
+  idempotencyKey: '',
   resetFileKey: null,
-  scheduledAt: null,
-  sensitive: false,
-  spoilerText: '',
-  spoilerTextMap: {},
-  suggestions: [],
-  text: '',
-  textMap: {},
-  to: [],
-  parentRebloggedById: null,
-  dismissedQuotes: [],
-  language: null,
+
   modifiedLanguage: null,
-  suggestedLanguage: null,
-  local_only: false,
+
   approvalRequired: false,
-  interactionPolicy: null,
-  dismissedClearLinksSuggestions: [],
   clearLinkSuggestion: null,
-  preview: null,
+  dismissedClearLinksSuggestions: [],
+  dismissedQuotes: [],
   hashtagCasingSuggestion: null,
   hashtagCasingSuggestionIgnored: null,
+  preview: null,
+  suggestedLanguage: null,
+  suggestions: [],
+
   redacting: false,
   redactingOverwrite: false,
+
   ...params,
 });
 
