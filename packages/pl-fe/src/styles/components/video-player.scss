@@ -69,6 +69,8 @@
   }
 
   &__link {
+    @apply px-2.5 py-0.5 xl:hidden;
+
     a {
       @apply no-underline text-sm font-medium text-white hover:underline active:underline focus:underline;
     }

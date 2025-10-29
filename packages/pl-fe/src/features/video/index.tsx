@@ -554,7 +554,7 @@ const Video: React.FC<IVideo> = ({
             )}
 
             {link && (
-              <span className='video-player__link px-2.5 py-0.5'>{link}</span>
+              <span className='video-player__link'>{link}</span>
             )}
           </div>
 
