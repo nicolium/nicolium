@@ -90,7 +90,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
   }
 
   return (
-    <div className='mb-1 block text-sm text-gray-700 dark:text-gray-600'>
+    <div className='⁂-status-reply-mentions'>
       <FormattedMessage
         id='reply_mentions.reply.hoverable'
         defaultMessage='<hover>Replying to</hover> {accounts}'
@@ -101,11 +101,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
             if (hoverable) {
               return (
                 <HoverStatusWrapper statusId={status.in_reply_to_id!} inline>
-                  <span
-                    key='hoverstatus'
-                    className='cursor-pointer hover:underline'
-                    role='presentation'
-                  >
+                  <span className='cursor-pointer hover:underline' role='presentation'>
                     {children}
                   </span>
                 </HoverStatusWrapper>

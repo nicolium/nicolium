@@ -7,7 +7,6 @@ import { mentionCompose, replyCompose } from 'pl-fe/actions/compose';
 import { unfilterStatus } from 'pl-fe/actions/statuses';
 import Card from 'pl-fe/components/ui/card';
 import Icon from 'pl-fe/components/ui/icon';
-import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import AccountContainer from 'pl-fe/containers/account-container';
 import Emojify from 'pl-fe/features/emoji/emojify';
@@ -414,17 +413,15 @@ const Status: React.FC<IStatus> = (props) => {
         <div className='status__content-wrapper'>
           <StatusReplyMentions status={actualStatus} hoverable={hoverable} />
 
-          <Stack className='relative z-0'>
-            {actualStatus.event ? <EventPreview className='shadow-xl' status={actualStatus} /> : (
-              <StatusContent
-                status={actualStatus}
-                onClick={handleClick}
-                collapsable
-                translatable
-                withMedia
-              />
-            )}
-          </Stack>
+          {actualStatus.event ? <EventPreview className='shadow-xl' status={actualStatus} /> : (
+            <StatusContent
+              status={actualStatus}
+              onClick={handleClick}
+              collapsable
+              translatable
+              withMedia
+            />
+          )}
 
           <StatusReactionsBar status={actualStatus} collapsed />
 

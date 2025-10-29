@@ -11,10 +11,8 @@ import Column from 'pl-fe/components/ui/column';
 import Stack from 'pl-fe/components/ui/stack';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
 import Thread from 'pl-fe/features/status/components/thread';
-import ThreadLoginCta from 'pl-fe/features/status/components/thread-login-cta';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { makeGetStatus } from 'pl-fe/selectors';
 import { useSettings } from 'pl-fe/stores/settings';
 
@@ -51,7 +49,6 @@ interface IStatusDetails {
 const StatusPage: React.FC<IStatusDetails> = (props) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
-  const { isLoggedIn } = useLoggedIn();
 
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector((state) => getStatus(state, { id: props.params.statusId }));
@@ -149,8 +146,6 @@ const StatusPage: React.FC<IStatusDetails> = (props) => {
           <Thread key={status.id} status={status} setExpandAllStatuses={(fn) => setExpandAllStatuses(() => fn)} />
         </PullToRefresh>
       </Column>
-
-      {!isLoggedIn && <ThreadLoginCta />}
     </Stack>
   );
 };

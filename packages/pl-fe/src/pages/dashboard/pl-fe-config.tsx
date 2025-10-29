@@ -42,7 +42,6 @@ const messages = defineMessages({
   greentextLabel: { id: 'plfe_config.greentext_label', defaultMessage: 'Enable greentext support' },
   authenticatedProfileLabel: { id: 'plfe_config.authenticated_profile_label', defaultMessage: 'Profiles require authentication' },
   authenticatedProfileHint: { id: 'plfe_config.authenticated_profile_hint', defaultMessage: 'Users must be logged-in to view replies and media on user profiles.' },
-  displayCtaLabel: { id: 'plfe_config.cta_label', defaultMessage: 'Display call to action panels if not authenticated' },
   mediaPreviewLabel: { id: 'plfe_config.media_preview_label', defaultMessage: 'Prefer preview media for thumbnails' },
   mediaPreviewHint: { id: 'plfe_config.media_preview_hint', defaultMessage: 'Some backends provide an optimized version of media for display in timelines. However, these preview images may be too small without additional configuration.' },
   tileServerLabel: { id: 'plfe_config.tile_server_label', defaultMessage: 'Map tile server' },
@@ -265,13 +264,6 @@ const PlFeConfigEditor: React.FC = () => {
               <Toggle
                 checked={plFe.mediaPreview === true}
                 onChange={handleChange('mediaPreview', (e) => e.target.checked)}
-              />
-            </ListItem>
-
-            <ListItem label={intl.formatMessage(messages.displayCtaLabel)}>
-              <Toggle
-                checked={plFe.displayCta === true}
-                onChange={handleChange('displayCta', (e) => e.target.checked)}
               />
             </ListItem>
 

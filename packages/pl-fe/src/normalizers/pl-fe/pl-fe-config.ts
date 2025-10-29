@@ -72,7 +72,6 @@ const plFeConfigSchema = coerceObject({
   authenticatedProfile: v.fallback(v.boolean(), false),
   linkFooterMessage: v.fallback(v.string(), ''),
   links: v.fallback(v.record(v.string(), v.string()), {}),
-  displayCta: v.fallback(v.boolean(), false),
   tileServer: v.fallback(v.string(), ''),
   tileServerAttribution: v.fallback(v.string(), ''),
   redirectRootNoLogin: v.fallback(v.pipe(v.string(), v.transform((url: string) => {
