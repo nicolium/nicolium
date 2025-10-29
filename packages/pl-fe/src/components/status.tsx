@@ -396,7 +396,7 @@ const Status: React.FC<IStatus> = (props) => {
                 <StatusLanguagePicker status={actualStatus} />
                 {!!actualStatus.edited_at && (
                   <>
-                    <Text tag='span' theme='muted' size='sm'>&middot;</Text>
+                    <span className='⁂-separator' />
 
                     <Icon className='size-4 text-gray-700 dark:text-gray-600' src={require('@phosphor-icons/core/regular/pencil-simple.svg')} />
                   </>

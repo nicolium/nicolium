@@ -73,7 +73,7 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
               </Text>
             </Tooltip>
 
-            <Text theme='muted'>&middot;</Text>
+            <span className='⁂-separator' />
           </>
         )}
 
@@ -85,7 +85,7 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
               </Text>
             </button>
 
-            <Text theme='muted'>&middot;</Text>
+            <span className='⁂-separator' />
           </>
         )}
 
@@ -101,7 +101,7 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
               </Text>
             </button>
 
-            <Text theme='muted'>&middot;</Text>
+            <span className='⁂-separator' />
           </>
         )}
 
@@ -111,7 +111,7 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
 
         {poll.expires_at !== null && (
           <>
-            <Text theme='muted'>&middot;</Text>
+            <span className='⁂-separator' />
             <Text weight='medium' theme='muted' data-testid='poll-expiration'>{timeRemaining}</Text>
           </>
         )}

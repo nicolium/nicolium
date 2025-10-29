@@ -395,3 +395,9 @@ div:has(.⁂-background-shapes), .dark {
     text-decoration-line: underline;
   }
 }
+
+.⁂-separator::before {
+  @include mixins.text($size: sm, $theme: muted);
+  content: '·';
+  user-select: none;
+}

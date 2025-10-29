@@ -32,7 +32,7 @@ const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = React.memo(({ stat
 
   return (
     <>
-      <Text tag='span' theme='muted' size='sm'>&middot;</Text>
+      <span className='⁂-separator' />
 
       <DropdownMenu
         items={Object.keys(status.content_map).map((language) => ({

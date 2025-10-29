@@ -119,38 +119,40 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
           <HStack space={1} alignItems='center'>
             <span>
               <Text tag='span' theme='muted' size='sm'>
-                <a href={actualStatus.url} target='_blank' rel='noopener' className='hover:underline'>
-                  <FormattedDate value={new Date(actualStatus.created_at)} hour12 year='numeric' month='short' day='2-digit' hour='numeric' minute='2-digit' />
-                </a>
+                <HStack space={1} alignItems='center' wrap>
+                  <a href={actualStatus.url} target='_blank' rel='noopener' className='hover:underline'>
+                    <FormattedDate value={new Date(actualStatus.created_at)} hour12 year='numeric' month='short' day='2-digit' hour='numeric' minute='2-digit' />
+                  </a>
 
-                {actualStatus.application && (
-                  <>
-                    {' · '}
-                    <a
-                      href={(actualStatus.application.website) ? actualStatus.application.website : '#'}
-                      target='_blank'
-                      rel='noopener'
-                      className='hover:underline'
-                      title={intl.formatMessage(messages.applicationName, { name: actualStatus.application.name })}
-                    >
-                      {actualStatus.application.name}
-                    </a>
-                  </>
-                )}
+                  {actualStatus.application && (
+                    <>
+                      <span className='⁂-separator' />
+                      <a
+                        href={(actualStatus.application.website) ? actualStatus.application.website : '#'}
+                        target='_blank'
+                        rel='noopener'
+                        className='hover:underline'
+                        title={intl.formatMessage(messages.applicationName, { name: actualStatus.application.name })}
+                      >
+                        {actualStatus.application.name}
+                      </a>
+                    </>
+                  )}
 
-                {actualStatus.edited_at && (
-                  <>
-                    {' · '}
-                    <div
-                      className='inline hover:underline'
-                      onClick={handleOpenCompareHistoryModal}
-                      role='button'
-                      tabIndex={0}
-                    >
-                      <FormattedMessage id='status.edited' defaultMessage='Edited {date}' values={{ date: intl.formatDate(new Date(actualStatus.edited_at), { hour12: true, month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit' }) }} />
-                    </div>
-                  </>
-                )}
+                  {actualStatus.edited_at && (
+                    <>
+                      <span className='⁂-separator' />
+                      <div
+                        className='inline hover:underline'
+                        onClick={handleOpenCompareHistoryModal}
+                        role='button'
+                        tabIndex={0}
+                      >
+                        <FormattedMessage id='status.edited' defaultMessage='Edited {date}' values={{ date: intl.formatDate(new Date(actualStatus.edited_at), { hour12: true, month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit' }) }} />
+                      </div>
+                    </>
+                  )}
+                </HStack>
               </Text>
             </span>
 

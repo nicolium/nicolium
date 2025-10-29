@@ -1,3 +1,17 @@
+.⁂-account-card {
+  @apply block w-full shrink-0;
+
+  > div {
+    @apply flex gap-3 justify-between items-center;
+  }
+
+  &--action-top {
+    > div {
+      @apply items-start;
+    }
+  }
+}
+
 .⁂-avatar {
   @apply rounded-lg leading-[0];
 
