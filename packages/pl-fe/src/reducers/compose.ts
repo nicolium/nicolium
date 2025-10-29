@@ -246,7 +246,6 @@ const appendMedia = (compose: Compose, media: MediaAttachment, defaultSensitive?
   compose.mediaAttachments.push(media);
   compose.isUploading = false;
   compose.resetFileKey = Math.floor((Math.random() * 0x10000));
-  compose.idempotencyKey = crypto.randomUUID();
 
   if (prevSize === 0 && (defaultSensitive || compose.sensitive)) {
     compose.sensitive = true;
@@ -257,7 +256,6 @@ const removeMedia = (compose: Compose, mediaId: string) => {
   const prevSize = compose.mediaAttachments.length;
 
   compose.mediaAttachments = compose.mediaAttachments.filter(item => item.id !== mediaId);
-  compose.idempotencyKey = crypto.randomUUID();
 
   if (prevSize === 1) {
     compose.sensitive = false;
@@ -272,7 +270,6 @@ const insertSuggestion = (compose: Compose, position: number, token: string | nu
     compose.poll.options[path[2]] = updateText(compose.poll.options[path[2]]);
   }
   compose.suggestions = [];
-  compose.idempotencyKey = crypto.randomUUID();
 };
 
 const updateSuggestionTags = (compose: Compose, token: string, tags: Tag[]) => {
@@ -368,12 +365,10 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
     case COMPOSE_TYPE_CHANGE:
       return updateCompose(state, action.composeId, compose => {
         compose.contentType = action.value;
-        compose.idempotencyKey = crypto.randomUUID();
       });
     case COMPOSE_SPOILERNESS_CHANGE:
       return updateCompose(state, action.composeId, compose => {
         compose.sensitive = !compose.sensitive;
-        compose.idempotencyKey = crypto.randomUUID();
       });
     case COMPOSE_SPOILER_TEXT_CHANGE:
       return updateCompose(state, action.composeId, compose => {
@@ -386,23 +381,19 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
     case COMPOSE_VISIBILITY_CHANGE:
       return updateCompose(state, action.composeId, compose => {
         compose.visibility = action.value;
-        compose.idempotencyKey = crypto.randomUUID();
       });
     case COMPOSE_LANGUAGE_CHANGE:
       return updateCompose(state, action.composeId, compose => {
         compose.language = action.value;
         compose.modifiedLanguage = action.value;
-        compose.idempotencyKey = crypto.randomUUID();
       });
     case COMPOSE_MODIFIED_LANGUAGE_CHANGE:
       return updateCompose(state, action.composeId, compose => {
         compose.modifiedLanguage = action.value;
-        compose.idempotencyKey = crypto.randomUUID();
       });
     case COMPOSE_CHANGE:
       return updateCompose(state, action.composeId, compose => {
         compose.text = action.text;
-        compose.idempotencyKey = crypto.randomUUID();
       });
     case COMPOSE_REPLY:
       return updateCompose(state, action.composeId, compose => {
@@ -420,7 +411,6 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.visibility = privacyPreference(action.status.visibility, defaultCompose.visibility, action.status.list_id, action.conversationScope);
         compose.localOnly = action.status.local_only === true;
         compose.caretPosition = null;
-        compose.idempotencyKey = crypto.randomUUID();
         compose.contentType = defaultCompose.contentType;
         compose.approvalRequired = action.approvalRequired || false;
         if (action.preserveSpoilers && action.status.spoiler_text) {
@@ -432,7 +422,6 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
       return updateCompose(state, action.composeId, compose => {
         compose.inReplyToId = action.status.id;
         compose.to = statusToMentionsArray(action.status, action.account);
-        compose.idempotencyKey = crypto.randomUUID();
       });
     case COMPOSE_QUOTE:
       return updateCompose(state, 'compose-modal', compose => {
@@ -445,7 +434,6 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.text = '';
         compose.visibility = privacyPreference(action.status.visibility, defaultCompose.visibility, action.status.list_id);
         compose.caretPosition = null;
-        compose.idempotencyKey = crypto.randomUUID();
         compose.contentType = defaultCompose.contentType;
         compose.spoilerText = '';
 
@@ -504,21 +492,18 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
       return updateCompose(state, 'compose-modal', compose => {
         compose.text = [compose.text.trim(), `@${action.account.acct} `].filter((str) => str.length !== 0).join(' ');
         compose.caretPosition = null;
-        compose.idempotencyKey = crypto.randomUUID();
       });
     case COMPOSE_DIRECT:
       return updateCompose(state, 'compose-modal', compose => {
         compose.text = [compose.text.trim(), `@${action.account.acct} `].filter((str) => str.length !== 0).join(' ');
         compose.visibility = 'direct';
         compose.caretPosition = null;
-        compose.idempotencyKey = crypto.randomUUID();
       });
     case COMPOSE_GROUP_POST:
       return updateCompose(state, action.composeId, compose => {
         compose.visibility = 'group';
         compose.groupId = action.groupId;
         compose.caretPosition = null;
-        compose.idempotencyKey = crypto.randomUUID();
       });
     case COMPOSE_SUGGESTIONS_CLEAR:
       return updateCompose(state, action.composeId, compose => {
@@ -564,7 +549,6 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.inReplyToId = action.status.in_reply_to_id;
         compose.visibility = action.status.visibility;
         compose.caretPosition = null;
-        compose.idempotencyKey = crypto.randomUUID();
         const contentType = action.contentType === 'text/markdown' && state.default.contentType === 'wysiwyg'
           ? 'wysiwyg'
           : action.contentType || 'text/plain';
