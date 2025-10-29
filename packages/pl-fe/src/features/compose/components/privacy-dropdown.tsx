@@ -140,7 +140,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
   const isReply = !!compose.inReplyToId;
 
   const value = compose.visibility;
-  const unavailable = compose.id;
+  const unavailable = !!compose.editedId;
 
   const onChange = (value: string) => value && dispatch(changeComposeVisibility(composeId,
     value));
@@ -162,7 +162,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
     text: intl.formatMessage(messages.local_short),
     meta: intl.formatMessage(messages.local_long),
     type: 'toggle',
-    checked: compose.local_only,
+    checked: compose.localOnly,
     onChange: () => dispatch(changeComposeFederated(composeId)),
   });
 

@@ -64,7 +64,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
       const hasComposeContent = checkComposeContent(compose);
 
       if (hasComposeContent && type === 'COMPOSE') {
-        const isEditing = compose!.id !== null;
+        const isEditing = compose!.editedId !== null;
         openModal('CONFIRM', {
           heading: isEditing
             ? <FormattedMessage id='confirmations.cancel_editing.heading' defaultMessage='Cancel post editing' />

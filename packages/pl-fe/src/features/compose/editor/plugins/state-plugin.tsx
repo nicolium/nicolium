@@ -111,7 +111,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
       const state = getState();
       const compose = state.compose[composeId];
 
-      if (!features.quotePosts || compose?.quote) return;
+      if (!features.quotePosts || compose?.quoteId) return;
 
       const ids = getStatusIdsFromLinksInContent(text);
 

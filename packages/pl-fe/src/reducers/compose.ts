@@ -117,7 +117,7 @@ interface Compose {
   contentType: string;
   interactionPolicy: InteractionPolicy | null;
   language: Language | string | null;
-  local_only: boolean;
+  localOnly: boolean;
   scheduledAt: Date | null;
   sensitive: boolean;
   visibility: string;
@@ -125,9 +125,9 @@ interface Compose {
   // References to other posts/groups/users
   draftId: string | null;
   groupId: string | null;
-  id: string | null;
+  editedId: string | null;
   inReplyToId: string | null;
-  quote: string | null;
+  quoteId: string | null;
   to: Array<string>;
   parentRebloggedById: string | null;
 
@@ -175,16 +175,16 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
   contentType: 'text/plain',
   interactionPolicy: null,
   language: null,
-  local_only: false,
+  localOnly: false,
   scheduledAt: null,
   sensitive: false,
   visibility: 'public',
 
   draftId: null,
   groupId: null,
-  id: null,
+  editedId: null,
   inReplyToId: null,
-  quote: null,
+  quoteId: null,
   to: [],
   parentRebloggedById: null,
 
@@ -418,7 +418,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.parentRebloggedById = action.rebloggedBy?.id || null;
         compose.text = !action.explicitAddressing ? statusToTextMentions(action.status, action.account) : '';
         compose.visibility = privacyPreference(action.status.visibility, defaultCompose.visibility, action.status.list_id, action.conversationScope);
-        compose.local_only = action.status.local_only === true;
+        compose.localOnly = action.status.local_only === true;
         compose.caretPosition = null;
         compose.idempotencyKey = crypto.randomUUID();
         compose.contentType = defaultCompose.contentType;
@@ -439,7 +439,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         const author = action.status.account.acct;
         const defaultCompose = state.default;
 
-        compose.quote = action.status.id;
+        compose.quoteId = action.status.id;
         compose.to = [author];
         compose.parentRebloggedById = null;
         compose.text = '';
@@ -536,8 +536,8 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
       return updateCompose(state, 'compose-modal', compose => {
         if (action.statusId === compose.inReplyToId) {
           compose.inReplyToId = null;
-        } if (action.statusId === compose.quote) {
-          compose.quote = null;
+        } if (action.statusId === compose.quoteId) {
+          compose.quoteId = null;
         }
       });
     case COMPOSE_UPLOAD_CHANGE_SUCCESS:
@@ -556,7 +556,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
       return updateCompose(state, 'compose-modal', compose => {
         const mentions = action.explicitAddressing ? getExplicitMentions(action.status.account.id, action.status) : [];
         if (!action.withRedraft && !action.draftId) {
-          compose.id = action.status.id;
+          compose.editedId = action.status.id;
         }
         compose.text = action.rawText || unescapeHTML(expandMentions(action.status));
         compose.to = mentions;
@@ -569,7 +569,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
           ? 'wysiwyg'
           : action.contentType || 'text/plain';
         compose.contentType = contentType;
-        compose.quote = action.status.quote_id;
+        compose.quoteId = action.status.quote_id;
         compose.groupId = action.status.group_id;
         compose.language = action.status.language;
 
@@ -691,7 +691,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
       });
     case COMPOSE_ADD_SUGGESTED_QUOTE:
       return updateCompose(state, action.composeId, compose => {
-        compose.quote = action.quoteId;
+        compose.quoteId = action.quoteId;
       });
     case COMPOSE_ADD_SUGGESTED_LANGUAGE:
       return updateCompose(state, action.composeId, compose => {
@@ -712,12 +712,12 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
       });
     case COMPOSE_QUOTE_CANCEL:
       return updateCompose(state, action.composeId, (compose) => {
-        if (compose.quote) compose.dismissedQuotes.push(compose.quote);
-        compose.quote = null;
+        if (compose.quoteId) compose.dismissedQuotes.push(compose.quoteId);
+        compose.quoteId = null;
       });
     case COMPOSE_FEDERATED_CHANGE:
       return updateCompose(state, action.composeId, compose => {
-        compose.local_only = !compose.local_only;
+        compose.localOnly = !compose.localOnly;
       });
     case COMPOSE_INTERACTION_POLICY_OPTION_CHANGE:
       return updateCompose(state, action.composeId, compose => {

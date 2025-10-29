@@ -148,7 +148,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   } = compose;
 
   const hasPoll = !!compose.poll;
-  const isEditing = compose.id !== null;
+  const isEditing = compose.editedId !== null;
   const anyMedia = compose.mediaAttachments.length > 0;
 
   const [composeFocused, setComposeFocused] = useState(false);

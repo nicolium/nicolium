@@ -354,7 +354,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
 
     const status = compose.text;
     const media = compose.mediaAttachments;
-    const statusId = compose.id;
+    const editedId = compose.editedId;
     let to = compose.to;
     const { forceImplicitAddressing } = useSettingsStore.getState().settings;
     const explicitAddressing = state.auth.client.features.createStatusExplicitAddressing && !forceImplicitAddressing;
@@ -392,7 +392,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
 
       useModalsStore.getState().actions.closeModal('COMPOSE');
 
-      if (compose.language && !statusId && !preview) {
+      if (compose.language && !editedId && !preview) {
         useSettingsStore.getState().actions.rememberLanguageUse(compose.language);
         dispatch(saveSettings());
       }
@@ -404,7 +404,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
     const params: CreateStatusParams = {
       status,
       in_reply_to_id: compose.inReplyToId || undefined,
-      quote_id: compose.quote || undefined,
+      quote_id: compose.quoteId || undefined,
       media_ids: media.map(item => item.id),
       sensitive: compose.sensitive,
       spoiler_text: compose.spoilerText,
@@ -413,7 +413,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
       scheduled_at: preview ? undefined : compose.scheduledAt?.toISOString(),
       language: compose.language || compose.suggestedLanguage || undefined,
       to: explicitAddressing && to.length ? to : undefined,
-      local_only: compose.local_only,
+      local_only: compose.localOnly,
       interaction_policy: ['public', 'unlisted', 'private'].includes(compose.visibility) && compose.interactionPolicy || undefined,
       preview,
     };
@@ -458,8 +458,8 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
         params.overwrite = compose.redactingOverwrite;
       }
 
-      return dispatch(createStatus(params, idempotencyKey, statusId, compose.redacting)).then((data) => {
-        handleComposeSubmit(dispatch, getState, composeId, data, status, !!statusId, compose.redacting);
+      return dispatch(createStatus(params, idempotencyKey, editedId, compose.redacting)).then((data) => {
+        handleComposeSubmit(dispatch, getState, composeId, data, status, !!editedId, compose.redacting);
         onSuccess?.();
       }).catch((error) => {
         dispatch(submitComposeFail(composeId, error));

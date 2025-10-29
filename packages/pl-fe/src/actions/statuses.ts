@@ -36,18 +36,18 @@ const STATUS_UNMUTE_SUCCESS = 'STATUS_UNMUTE_SUCCESS' as const;
 
 const STATUS_UNFILTER = 'STATUS_UNFILTER' as const;
 
-const createStatus = (params: CreateStatusParams, idempotencyKey: string, statusId: string | null, redacting = false) =>
+const createStatus = (params: CreateStatusParams, idempotencyKey: string, editedId: string | null, redacting = false) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!params.preview) dispatch<StatusesAction>({ type: STATUS_CREATE_REQUEST, params, idempotencyKey, editing: !!statusId, redacting });
+    if (!params.preview) dispatch<StatusesAction>({ type: STATUS_CREATE_REQUEST, params, idempotencyKey, editing: !!editedId, redacting });
 
     const client = getClient(getState());
 
     return (
-      statusId === null
+      editedId === null
         ? client.statuses.createStatus(params)
         : redacting
-          ? client.admin.statuses.redactStatus(statusId, params)
-          : client.statuses.editStatus(statusId, params)
+          ? client.admin.statuses.redactStatus(editedId, params)
+          : client.statuses.editStatus(editedId, params)
     )
       .then((status) => {
         if (params.preview) return status;
@@ -61,7 +61,7 @@ const createStatus = (params: CreateStatusParams, idempotencyKey: string, status
           queryClient.invalidateQueries(scheduledStatusesQueryOptions);
         }
 
-        dispatch<StatusesAction>({ type: STATUS_CREATE_SUCCESS, status, params, idempotencyKey, editing: !!statusId });
+        dispatch<StatusesAction>({ type: STATUS_CREATE_SUCCESS, status, params, idempotencyKey, editing: !!editedId });
 
         // Poll the backend for the updated card
         if (expectsCard) {
@@ -82,7 +82,7 @@ const createStatus = (params: CreateStatusParams, idempotencyKey: string, status
 
         return status;
       }).catch(error => {
-        dispatch<StatusesAction>({ type: STATUS_CREATE_FAIL, error, params, idempotencyKey, editing: !!statusId });
+        dispatch<StatusesAction>({ type: STATUS_CREATE_FAIL, error, params, idempotencyKey, editing: !!editedId });
         throw error;
       });
   };
