@@ -2,7 +2,6 @@ import React from 'react';
 import { defineMessages, MessageDescriptor, useIntl } from 'react-intl';
 
 import Icon from 'pl-fe/components/ui/icon';
-import Text from 'pl-fe/components/ui/text';
 
 import type { Status } from 'pl-fe/normalizers/status';
 

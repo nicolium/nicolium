@@ -8,6 +8,10 @@
   }
 }
 
+.⁂-status-reply-mentions {
+  @apply mb-1 block text-sm text-gray-700 dark:text-gray-600;
+}
+
 .⁂-status-reactions-bar {
   @apply flex gap-2 flex-wrap pt-2;
 
