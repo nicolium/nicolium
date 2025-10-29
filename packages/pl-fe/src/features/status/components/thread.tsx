@@ -320,6 +320,7 @@ const Thread = ({
               <DetailedStatus
                 status={status}
                 onOpenCompareHistoryModal={handleOpenCompareHistoryModal}
+                withMedia={withMedia}
               />
 
               <hr className='-mx-4 mb-2 max-w-[100vw] border-t-2 black:border-t dark:border-gray-800' />
