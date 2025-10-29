@@ -195,13 +195,7 @@ const Thread = ({
     e?.preventDefault();
 
     if (media && media.length) {
-      const firstAttachment = media[0];
-
-      if (media.length === 1 && firstAttachment.type === 'video') {
-        openModal('VIDEO', { media: firstAttachment, statusId: status.id });
-      } else {
-        openModal('MEDIA', { media, index: 0, statusId: status.id });
-      }
+      openModal('MEDIA', { media, index: 0, statusId: status.id });
     }
   };
 

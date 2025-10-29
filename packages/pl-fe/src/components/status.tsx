@@ -125,16 +125,11 @@ const Status: React.FC<IStatus> = (props) => {
 
   const handleHotkeyOpenMedia = (e?: KeyboardEvent) => {
     const status = actualStatus;
-    const firstAttachment = status.media_attachments[0];
 
     e?.preventDefault();
 
-    if (firstAttachment) {
-      if (firstAttachment.type === 'video') {
-        openModal('VIDEO', { statusId: status.id, media: firstAttachment, time: 0 });
-      } else {
-        openModal('MEDIA', { statusId: status.id, media: status.media_attachments, index: 0 });
-      }
+    if (status.media_attachments.length > 0) {
+      openModal('MEDIA', { statusId: status.id, media: status.media_attachments, index: 0 });
     }
   };
 

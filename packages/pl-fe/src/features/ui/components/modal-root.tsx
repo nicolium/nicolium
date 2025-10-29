@@ -47,7 +47,6 @@ const MODAL_COMPONENTS = {
   SELECT_BOOKMARK_FOLDER: lazy(() => import('pl-fe/modals/select-bookmark-folder-modal')),
   TEXT_FIELD: lazy(() => import('pl-fe/modals/text-field-modal')),
   UNAUTHORIZED: lazy(() => import('pl-fe/modals/unauthorized-modal')),
-  VIDEO: lazy(() => import('pl-fe/modals/video-modal')),
 };
 
 type ModalType = keyof typeof MODAL_COMPONENTS | null;
@@ -58,7 +57,7 @@ type BaseModalProps = {
 };
 
 const ModalRoot: React.FC = () => {
-  const renderLoading = (modalId: string) => !['MEDIA', 'VIDEO', 'BOOST', 'CONFIRM'].includes(modalId) ? <ModalLoading /> : null;
+  const renderLoading = (modalId: string) => !['MEDIA', 'BOOST', 'CONFIRM'].includes(modalId) ? <ModalLoading /> : null;
 
   const dispatch = useAppDispatch();
   const modals = useModals();

@@ -37,7 +37,6 @@ import type { ReportModalProps } from 'pl-fe/modals/report-modal';
 import type { SelectBookmarkFolderModalProps } from 'pl-fe/modals/select-bookmark-folder-modal';
 import type { TextFieldModalProps } from 'pl-fe/modals/text-field-modal';
 import type { UnauthorizedModalProps } from 'pl-fe/modals/unauthorized-modal';
-import type { VideoModalProps } from 'pl-fe/modals/video-modal';
 
 type OpenModalProps =
   | [type: 'ALT_TEXT', props: AltTextModalProps]
@@ -75,8 +74,7 @@ type OpenModalProps =
   | [type: 'REPORT', props: ReportModalProps]
   | [type: 'SELECT_BOOKMARK_FOLDER', props: SelectBookmarkFolderModalProps]
   | [type: 'TEXT_FIELD', props: TextFieldModalProps]
-  | [type: 'UNAUTHORIZED', props?: UnauthorizedModalProps]
-  | [type: 'VIDEO', props: VideoModalProps];
+  | [type: 'UNAUTHORIZED', props?: UnauthorizedModalProps];
 
 type Modals = Array<{
   modalType: ModalType;
