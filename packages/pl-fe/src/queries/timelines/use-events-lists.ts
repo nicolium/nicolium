@@ -7,7 +7,10 @@ const recentEventsQueryOptions = makePaginatedResponseQueryOptions(
   ['statusLists', 'recentEvents'],
   (client) => client.timelines.publicTimeline({
     only_events: true,
-  }).then(minifyStatusList),
+  }).then((res) => ({
+    ...res,
+    items: res.items.filter(({ event }) => event),
+  })).then(minifyStatusList),
 )();
 
 const useRecentEventsTimeline = () => useInfiniteQuery({
