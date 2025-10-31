@@ -1543,6 +1543,7 @@
   "schedule_button.remove_schedule": "Post immediately",
   "scheduled_status.cancel": "Cancel",
   "search.action": "Search for “{query}”",
+  "search.clear": "Clear input",
   "search.placeholder": "Search",
   "search_results.accounts": "People",
   "search_results.filter_message": "You are searching for posts from @{acct}.",
