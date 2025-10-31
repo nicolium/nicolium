@@ -19,6 +19,7 @@ type SearchFilter = 'accounts' | 'hashtags' | 'statuses' | 'links';
 const messages = defineMessages({
   heading: { id: 'column.search', defaultMessage: 'Search' },
   placeholder: { id: 'search.placeholder', defaultMessage: 'Search' },
+  clear: { id: 'search.clear', defaultMessage: 'Clear input' },
   accounts: { id: 'search_results.accounts', defaultMessage: 'People' },
   statuses: { id: 'search_results.statuses', defaultMessage: 'Posts' },
   hashtags: { id: 'search_results.hashtags', defaultMessage: 'Hashtags' },
@@ -45,7 +46,7 @@ const SearchInput: React.FC<ISearchInput> = ({ placeholder }) => {
     setValue(value);
   };
 
-  const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
     if (params.get('q') === value) {
@@ -87,17 +88,16 @@ const SearchInput: React.FC<ISearchInput> = ({ placeholder }) => {
           className='pr-10 rtl:pl-10 rtl:pr-3'
         />
 
-        <div
-          role='button'
+        <button
           tabIndex={0}
           className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto'
           onClick={handleClick}
+          title={params.get('q') === value ? intl.formatMessage(messages.clear) : intl.formatMessage(messages.placeholder)}
         >
           {params.get('q') === value ? (
             <SvgIcon
               src={require('@phosphor-icons/core/regular/x.svg')}
               className='size-4 text-gray-600'
-              aria-label={intl.formatMessage(messages.placeholder)}
             />
           ) : (
             <SvgIcon
@@ -105,7 +105,7 @@ const SearchInput: React.FC<ISearchInput> = ({ placeholder }) => {
               className='size-4 text-gray-600'
             />
           )}
-        </div>
+        </button>
       </div>
     </div>
   );

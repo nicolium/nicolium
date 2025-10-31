@@ -13,6 +13,7 @@ import type { History } from 'pl-fe/types/history';
 
 const messages = defineMessages({
   placeholder: { id: 'search.placeholder', defaultMessage: 'Search' },
+  clear: { id: 'search.clear', defaultMessage: 'Clear input' },
   action: { id: 'search.action', defaultMessage: 'Search for “{query}”' },
 });
 
@@ -38,7 +39,7 @@ const SearchInput = React.memo(() => {
     setValue(value);
   };
 
-  const handleClear = (event: React.MouseEvent<HTMLDivElement>) => {
+  const handleClear = (event: React.MouseEvent<HTMLButtonElement>) => {
     setValue('');
   };
 
@@ -90,11 +91,11 @@ const SearchInput = React.memo(() => {
           className='pr-10 rtl:pl-10 rtl:pr-3'
         />
 
-        <div
-          role='button'
+        <button
           tabIndex={0}
           className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto'
           onClick={handleClear}
+          title={hasValue ? intl.formatMessage(messages.clear) : intl.formatMessage(messages.placeholder)}
         >
           <SvgIcon
             src={require('@phosphor-icons/core/regular/magnifying-glass.svg')}
@@ -104,9 +105,8 @@ const SearchInput = React.memo(() => {
           <SvgIcon
             src={require('@phosphor-icons/core/regular/x.svg')}
             className={clsx('size-4 text-gray-600', { hidden: !hasValue })}
-            aria-label={intl.formatMessage(messages.placeholder)}
           />
-        </div>
+        </button>
       </div>
     </div>
   );
