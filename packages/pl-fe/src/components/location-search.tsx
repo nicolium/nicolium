@@ -13,6 +13,7 @@ const noOp = () => {};
 
 const messages = defineMessages({
   placeholder: { id: 'location_search.placeholder', defaultMessage: 'Find an address' },
+  clear: { id: 'search.clear', defaultMessage: 'Clear input' },
 });
 
 interface ILocationSearch {
@@ -66,10 +67,16 @@ const LocationSearch: React.FC<ILocationSearch> = ({ onSelected }) => {
         searchTokens={[]}
         onKeyDown={handleKeyDown}
       />
-      <div role='button' tabIndex={0} className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto' onClick={handleClear}>
+      <button
+        disabled={empty}
+        tabIndex={0}
+        className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto'
+        onClick={handleClear}
+        title={intl.formatMessage(messages.clear)}
+      >
         <Icon src={require('@phosphor-icons/core/regular/magnifying-glass.svg')} className={clsx('size-5 text-gray-600', { 'hidden': !empty })} />
-        <Icon src={require('@phosphor-icons/core/regular/backspace.svg')} className={clsx('size-5 text-gray-600', { 'hidden': empty })} aria-label={intl.formatMessage(messages.placeholder)} />
-      </div>
+        <Icon src={require('@phosphor-icons/core/regular/backspace.svg')} className={clsx('size-5 text-gray-600', { 'hidden': empty })} />
+      </button>
     </div>
   );
 };

@@ -27,6 +27,7 @@ const messages = defineMessages({
   add: { id: 'aliases.account.add', defaultMessage: 'Create alias' },
   search: { id: 'aliases.search', defaultMessage: 'Search your old account' },
   searchTitle: { id: 'tabs_bar.search', defaultMessage: 'Search' },
+  clear: { id: 'search.clear', defaultMessage: 'Clear input' },
 });
 
 interface IAccount {
@@ -93,6 +94,7 @@ const Search: React.FC<IAliasesSearch> = ({ onSubmit }) => {
   };
 
   const handleClear = () => {
+    setValue('');
     onSubmit('');
   };
 
@@ -112,9 +114,14 @@ const Search: React.FC<IAliasesSearch> = ({ onSubmit }) => {
           placeholder={intl.formatMessage(messages.search)}
         />
 
-        <div role='button' tabIndex={hasValue ? 0 : -1} className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto' onClick={handleClear}>
-          <Icon src={require('@phosphor-icons/core/regular/backspace.svg')} aria-label={intl.formatMessage(messages.search)} className={clsx('size-5 text-gray-600', { 'hidden': !hasValue })} />
-        </div>
+        <button
+          disabled={!hasValue}
+          className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto'
+          onClick={handleClear}
+          title={intl.formatMessage(messages.clear)}
+        >
+          <Icon src={require('@phosphor-icons/core/regular/backspace.svg')} className={clsx('size-5 text-gray-600', { 'hidden': !hasValue })} />
+        </button>
       </label>
       <Button onClick={handleSubmit}>{intl.formatMessage(messages.searchTitle)}</Button>
     </div>
@@ -130,7 +137,7 @@ const AliasesPage = () => {
   const { data: searchAccountIds = [], isFetched } = useSearchAccounts(query);
   const { mutate: deleteAccountAlias } = useDeleteAccountAlias();
 
-  const handleAliasDelete: React.MouseEventHandler<HTMLDivElement> = e => {
+  const handleAliasDelete: React.MouseEventHandler<HTMLButtonElement> = e => {
     deleteAccountAlias(e.currentTarget.dataset.value as string);
   };
 
@@ -168,10 +175,12 @@ const AliasesPage = () => {
                 {' '}
                 <Text tag='span'>{alias}</Text>
               </div>
-              <div className='flex items-center' role='button' tabIndex={0} onClick={handleAliasDelete} data-value={alias} aria-label={intl.formatMessage(messages.delete)}>
-                <Icon className='mr-1.5' src={require('@phosphor-icons/core/regular/x.svg')} />
-                <Text weight='bold' theme='muted'><FormattedMessage id='aliases.aliases_list_delete' defaultMessage='Unlink alias' /></Text>
-              </div>
+              <button onClick={handleAliasDelete} data-value={alias} aria-label={intl.formatMessage(messages.delete)}>
+                <Text theme='muted' className='flex items-center gap-1'>
+                  <Icon src={require('@phosphor-icons/core/regular/x.svg')} />
+                  <FormattedMessage id='aliases.aliases_list_delete' defaultMessage='Unlink alias' />
+                </Text>
+              </button>
             </HStack>
           ))}
         </ScrollableList>

@@ -27,6 +27,7 @@ const messages = defineMessages({
   languageSuggestion: { id: 'compose.language_dropdown.suggestion', defaultMessage: '{language} (detected)' },
   multipleLanguages: { id: 'compose.language_dropdown.more_languages', defaultMessage: '{count, plural, one {# more language} other {# more languages}}' },
   search: { id: 'compose.language_dropdown.search', defaultMessage: 'Search language…' },
+  clear: { id: 'search.clear', defaultMessage: 'Clear input' },
   addLanguage: { id: 'compose.language_dropdown.add_language', defaultMessage: 'Add language' },
   deleteLanguage: { id: 'compose.language_dropdown.delete_language', defaultMessage: 'Delete language' },
 });
@@ -147,7 +148,7 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
 
   return (
     <>
-      <label className='relative block grow p-2 pt-1'>
+      <label className='relative m-2 mt-1 block grow'>
         <span style={{ display: 'none' }}>{intl.formatMessage(messages.search)}</span>
 
         <Input
@@ -158,13 +159,17 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
           outerClassName='mt-0'
           placeholder={intl.formatMessage(messages.search)}
         />
-        <div role='button' tabIndex={0} className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-5 rtl:left-0 rtl:right-auto' onClick={handleClear}>
+        <button
+          tabIndex={0}
+          className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-2 rtl:left-0 rtl:right-auto'
+          onClick={handleClear}
+          title={isSearching ? intl.formatMessage(messages.clear) : intl.formatMessage(messages.search)}
+        >
           <Icon
             className='size-5 text-gray-600'
             src={isSearching ? require('@phosphor-icons/core/regular/backspace.svg') : require('@phosphor-icons/core/regular/magnifying-glass.svg')}
-            aria-label={intl.formatMessage(messages.search)}
           />
-        </div>
+        </button>
       </label>
       <div className='-mb-1 h-96 w-full overflow-auto' ref={node} tabIndex={-1}>
         {results.map(([code, name]) => {
