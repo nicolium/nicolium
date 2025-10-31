@@ -30,6 +30,47 @@ const getNextLink = (response: Pick<Response, 'headers'>): string | null =>
 const getPrevLink = (response: Pick<Response, 'headers'>): string | null =>
   getLinks(response).refs.find(link => link.rel.toLocaleLowerCase() === 'prev')?.uri || null;
 
+interface AsyncRefreshHeader {
+  id: string;
+  retry: number;
+}
+
+const isAsyncRefreshHeader = (obj: object): obj is AsyncRefreshHeader =>
+  'id' in obj && 'retry' in obj;
+
+const getAsyncRefreshHeader = (response: Pick<Response, 'headers'>): AsyncRefreshHeader | null => {
+  const value = response.headers.get('mastodon-async-refresh');
+
+  if (!value) {
+    return null;
+  }
+
+  const asyncRefreshHeader: Record<string, unknown> = {};
+
+  value.split(/,\s*/).forEach((pair) => {
+    const [key, val] = pair.split('=', 2);
+
+    let typedValue: string | number;
+
+    if (key && ['id', 'retry'].includes(key) && val) {
+      if (val.startsWith('"')) {
+        typedValue = val.slice(1, -1);
+      } else {
+        typedValue = parseInt(val);
+      }
+
+      asyncRefreshHeader[key] = typedValue;
+    }
+  });
+
+  if (isAsyncRefreshHeader(asyncRefreshHeader)) {
+    return asyncRefreshHeader;
+  }
+
+  return null;
+};
+
+
 interface RequestBody<Params = Record<string, any>> {
   method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
   body?: any;
@@ -131,9 +172,11 @@ export {
   type Response,
   type RequestBody,
   type RequestMeta,
+  type AsyncRefreshHeader,
   getLinks,
   getNextLink,
   getPrevLink,
+  getAsyncRefreshHeader,
   request,
   request as default,
 };

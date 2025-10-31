@@ -25,6 +25,7 @@ import {
   announcementSchema,
   antennaSchema,
   applicationSchema,
+  asyncRefreshSchema,
   authorizationServerMetadataSchema,
   backupSchema,
   bookmarkFolderSchema,
@@ -95,7 +96,7 @@ import {
 } from './entities';
 import { coerceObject, filteredArray } from './entities/utils';
 import { AKKOMA, type Features, getFeatures, GOTOSOCIAL, ICESHRIMP_NET, MITRA, PIXELFED, PLEROMA } from './features';
-import request, { getNextLink, getPrevLink, type RequestBody, type RequestMeta } from './request';
+import request, { getAsyncRefreshHeader, getNextLink, getPrevLink, type RequestBody, type RequestMeta } from './request';
 import { buildFullPath } from './utils/url';
 
 import type {
@@ -2477,7 +2478,9 @@ class PlApiClient {
     getContext: async (statusId: string, params?: GetStatusContextParams) => {
       const response = await this.request(`/api/v1/statuses/${statusId}/context`, { params });
 
-      return v.parse(contextSchema, response.json);
+      const asyncRefreshHeader = getAsyncRefreshHeader(response);
+
+      return { asyncRefreshHeader, ...v.parse(contextSchema, response.json) } ;
     },
 
     /**
@@ -3887,6 +3890,19 @@ class PlApiClient {
       const response = await this.request(`/api/v1/announcements/${announcementId}/reactions/${emoji}`, { method: 'DELETE' });
 
       return response.json as {};
+    },
+  };
+
+  /** Experimental async refreshes API methods */
+  public readonly asyncRefreshes = {
+    /**
+     * Get Status of Async Refresh
+     * @see {@link https://docs.joinmastodon.org/methods/async_refreshes/#show}
+     */
+    show: async (id: string) => {
+      const response = await this.request(`/api/v1_alpha/async_refreshes/${id}`);
+
+      return v.parse(asyncRefreshSchema, response.json);
     },
   };
 

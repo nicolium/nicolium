@@ -161,6 +161,23 @@ const configurationSchema = coerceObject({
   translation: coerceObject({
     enabled: v.fallback(v.boolean(), false),
   }),
+  timelines_access: coerceObject({
+    ...v.entriesFromList(
+      ['hashtag_feeds', 'trending_link_feeds'],
+      coerceObject(
+        v.entriesFromList(
+          ['local', 'remote'],
+          v.fallback(v.picklist(['public', 'authenticated', 'disabled']), 'public'),
+        ),
+      ),
+    ),
+    live_feeds: coerceObject(
+      v.entriesFromList(
+        ['local', 'bubble', 'remote', 'wrenched'],
+        v.fallback(v.picklist(['public', 'authenticated', 'disabled']), 'public'),
+      ),
+    ),
+  }),
   urls: coerceObject({
     streaming: v.fallback(v.optional(v.pipe(v.string(), v.url())), undefined),
     status: v.fallback(v.optional(v.pipe(v.string(), v.url())), undefined),
@@ -354,6 +371,23 @@ const instanceSchema = v.pipe(
       data.pleroma = {
         metadata: {
           post_formats: data.configuration?.statuses?.supported_mime_types || (apiVersions['kmyblue_markdown.fedibird.pl-api'] ? ['text/plain', 'text/markdown'] : []),
+        },
+      };
+    }
+
+    if (data.pleroma?.metadata?.restrict_unauthenticated?.timelines) {
+      const timelines = data.pleroma.metadata.restrict_unauthenticated.timelines;
+      const features = data.pleroma.metadata.features || [];
+
+      if (!data.configuration) data.configuration = {};
+
+      data.configuration.timelines_access = {
+        ...data.configuration.timelines_access,
+        live_feeds: {
+          bubble: timelines.bubble ? 'authenticated' : features.includes('bubble_timeline') ? 'public' : 'disabled',
+          local: timelines.local ? 'authenticated' : 'public',
+          remote: timelines.federated ? 'authenticated' : 'public',
+          wrenched: timelines.wrenched ? 'authenticated' : features.includes('pleroma:wrenched_timeline') ? 'public' : 'disabled',
         },
       };
     }

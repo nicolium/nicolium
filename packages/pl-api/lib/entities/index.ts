@@ -23,6 +23,7 @@ export * from './announcement';
 export * from './announcement-reaction';
 export * from './antenna';
 export * from './application';
+export * from './async-refresh';
 export * from './authorization-server-metadata';
 export * from './backup';
 export * from './bookmark-folder';
