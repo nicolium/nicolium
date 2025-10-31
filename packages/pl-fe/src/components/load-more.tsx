@@ -1,7 +1,6 @@
+import { clsx } from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-
-import Button from 'pl-fe/components/ui/button';
 
 interface ILoadMore {
   onClick: React.MouseEventHandler;
@@ -16,9 +15,9 @@ const LoadMore: React.FC<ILoadMore> = ({ onClick, disabled, visible = true, clas
   }
 
   return (
-    <Button className={className} theme='primary' block disabled={disabled || !visible} onClick={onClick}>
+    <button className={clsx('⁂-load-more', className)} disabled={disabled || !visible} onClick={onClick}>
       <FormattedMessage id='status.load_more' defaultMessage='Load more' />
-    </Button>
+    </button>
   );
 };
 

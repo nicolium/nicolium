@@ -71,7 +71,7 @@ const StatusList: React.FC<IStatusList> = ({
 
   const handleMoveDown = (id: string, featured: boolean = false) => {
     const elementIndex = getCurrentStatusIndex(id, featured) + 1;
-    selectChild(elementIndex, node, document.getElementById('status-list') || undefined);
+    selectChild(elementIndex, node, document.getElementById('status-list') || undefined, scrollableContent.length);
   };
 
   const handleLoadOlder = useCallback(debounce(() => {

@@ -24,3 +24,7 @@
     @apply w-full translate-y-0.5;
   }
 }
+
+.⁂-load-more {
+  @include mixins.button($theme: primary, $block: true);
+}

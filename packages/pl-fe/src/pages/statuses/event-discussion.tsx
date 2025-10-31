@@ -66,7 +66,7 @@ const EventDiscussionPage: React.FC<IEventDiscussion> = ({ params: { statusId: s
 
   const handleMoveDown = (id: string) => {
     const index = descendantsIds.indexOf(id);
-    selectChild(index + 1, scroller, node.current || undefined);
+    selectChild(index + 1, scroller, node.current || undefined, descendantsIds.length);
   };
 
   const renderTombstone = (id: string) => (

@@ -3,7 +3,6 @@ import React, { useRef } from 'react';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-import 'pl-fe/styles/new/timelines.scss';
 import { uploadCompose } from 'pl-fe/actions/compose';
 import Avatar from 'pl-fe/components/ui/avatar';
 import Layout from 'pl-fe/components/ui/layout';

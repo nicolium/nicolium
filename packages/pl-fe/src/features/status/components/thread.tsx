@@ -254,15 +254,15 @@ const Thread = ({
   const handleMoveDown = (id: string) => {
     const modalOffset = isModal ? 1 : 0;
     if (id === status.id) {
-      selectChild(statusIndex + 1 + modalOffset, scroller, node.current || undefined);
+      selectChild(statusIndex + 1 + modalOffset, scroller, node.current || undefined, thread.length + modalOffset);
     } else {
       let index = thread.indexOf(id);
 
       if (index === -1) {
         index = thread.indexOf(id);
-        selectChild(index + modalOffset, scroller, node.current || undefined);
+        selectChild(index + modalOffset, scroller, node.current || undefined, thread.length + modalOffset);
       } else {
-        selectChild(index + 1 + modalOffset, scroller, node.current || undefined);
+        selectChild(index + 1 + modalOffset, scroller, node.current || undefined, thread.length + modalOffset);
       }
     }
   };

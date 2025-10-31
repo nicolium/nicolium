@@ -189,7 +189,7 @@ const NotificationsColumn = () => {
 
   const handleMoveDown = (id: string) => {
     const elementIndex = displayedNotifications.findIndex(item => item !== null && item.group_key === id) + 1;
-    selectChild(elementIndex, node);
+    selectChild(elementIndex, node, undefined, displayedNotifications.length);
   };
 
   const handleDequeueNotifications = useCallback(() => {

@@ -29,7 +29,7 @@ const ConversationsList: React.FC = () => {
 
   const handleMoveDown = (id: string) => {
     const elementIndex = getCurrentIndex(id) + 1;
-    selectChild(elementIndex, ref, document.getElementById('direct-list') || undefined);
+    selectChild(elementIndex, ref, document.getElementById('direct-list') || undefined, conversations.length);
   };
 
   const handleLoadOlder = debounce(() => {
