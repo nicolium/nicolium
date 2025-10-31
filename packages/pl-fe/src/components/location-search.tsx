@@ -70,7 +70,7 @@ const LocationSearch: React.FC<ILocationSearch> = ({ onSelected }) => {
       <button
         disabled={empty}
         tabIndex={0}
-        className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto'
+        className='absolute inset-y-0 right-0 flex items-center px-3 rtl:left-0 rtl:right-auto'
         onClick={handleClear}
         title={intl.formatMessage(messages.clear)}
       >
