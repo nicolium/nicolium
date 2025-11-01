@@ -8,20 +8,22 @@ import { makeGetStatus } from 'pl-fe/selectors';
 
 interface IQuotedStatusIndicator {
   /** The quoted status id. */
-  statusId: string;
+  statusId?: string;
+  /** The quoted status URL. */
+  statusUrl?: string;
 }
 
-const QuotedStatusIndicator: React.FC<IQuotedStatusIndicator> = ({ statusId }) => {
+const QuotedStatusIndicator: React.FC<IQuotedStatusIndicator> = ({ statusId, statusUrl }) => {
   const getStatus = useCallback(makeGetStatus(), []);
 
-  const status = useAppSelector(state => getStatus(state, { id: statusId }));
+  statusUrl = useAppSelector(state => statusUrl || statusId && getStatus(state, { id: statusId })?.url);
 
-  if (!status) return null;
+  if (!statusUrl) return null;
 
   return (
     <HStack alignItems='center' space={1}>
       <Icon className='size-5' src={require('@phosphor-icons/core/regular/quotes.svg')} aria-hidden />
-      <Text truncate>{status.url}</Text>
+      <Text truncate>{statusUrl}</Text>
     </HStack>
   );
 };

@@ -152,6 +152,8 @@ const preprocess = (status: any) => {
       'emoji_reactions',
       'parent_visible',
       'pinned_at',
+      'quote_url',
+      'quote_visible',
       'quotes_count',
       'bookmark_folder',
       'list_id',

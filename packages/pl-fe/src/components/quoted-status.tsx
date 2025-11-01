@@ -103,7 +103,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
                 isQuote
               />
 
-              {status.quote_id && <QuotedStatusIndicator statusId={status.quote_id} />}
+              {status.quote_id && <QuotedStatusIndicator statusId={status.quote_id} statusUrl={status.quote_url} />}
 
               {status.media_attachments.length > 0 && (
                 <div className='relative'>
