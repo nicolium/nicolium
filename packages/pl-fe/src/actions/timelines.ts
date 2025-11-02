@@ -159,7 +159,7 @@ const deduplicateStatuses = (statuses: Array<BaseStatus>) => {
   return deduplicatedStatuses;
 };
 
-const handleTimelineExpand = (timelineId: string, fn: Promise<PaginatedResponse<BaseStatus>>, isLoadingRecent: boolean, done = noOp, onError?: (error: any) => void) =>
+const handleTimelineExpand = (timelineId: string, fn: Promise<PaginatedResponse<BaseStatus>>, done = noOp, onError?: (error: any) => void) =>
   (dispatch: AppDispatch) => {
     dispatch(expandTimelineRequest(timelineId));
 
@@ -175,7 +175,6 @@ const handleTimelineExpand = (timelineId: string, fn: Promise<PaginatedResponse<
         response.next,
         response.previous,
         response.partial,
-        isLoadingRecent,
       ));
       done();
     }).catch(error => {
@@ -196,7 +195,7 @@ const fetchHomeTimeline = (expand = false, done = noOp) =>
 
     const fn = (expand && state.timelines.home?.next?.()) || getClient(state).timelines.homeTimeline(params);
 
-    return dispatch(handleTimelineExpand('home', fn, false, done));
+    return dispatch(handleTimelineExpand('home', fn, done));
   };
 
 const fetchPublicTimeline = ({ onlyMedia, local, instance }: Record<string, any> = {}, expand = false, done = noOp, onError = noOp) =>
@@ -211,7 +210,7 @@ const fetchPublicTimeline = ({ onlyMedia, local, instance }: Record<string, any>
 
     const fn = (expand && state.timelines[timelineId]?.next?.()) || getClient(state).timelines.publicTimeline(params);
 
-    return dispatch(handleTimelineExpand(timelineId, fn, false, done, onError));
+    return dispatch(handleTimelineExpand(timelineId, fn, done, onError));
   };
 
 const fetchBubbleTimeline = ({ onlyMedia }: Record<string, any> = {}, expand = false, done = noOp) =>
@@ -226,7 +225,7 @@ const fetchBubbleTimeline = ({ onlyMedia }: Record<string, any> = {}, expand = f
 
     const fn = (expand && state.timelines[timelineId]?.next?.()) || getClient(state).timelines.bubbleTimeline(params);
 
-    return dispatch(handleTimelineExpand(timelineId, fn, false, done));
+    return dispatch(handleTimelineExpand(timelineId, fn, done));
   };
 
 const fetchWrenchedTimeline = ({ onlyMedia }: Record<string, any> = {}, expand = false, done = noOp) =>
@@ -241,7 +240,7 @@ const fetchWrenchedTimeline = ({ onlyMedia }: Record<string, any> = {}, expand =
 
     const fn = (expand && state.timelines[timelineId]?.next?.()) || getClient(state).timelines.wrenchedTimeline(params);
 
-    return dispatch(handleTimelineExpand(timelineId, fn, false, done));
+    return dispatch(handleTimelineExpand(timelineId, fn, done));
   };
 
 const fetchAccountTimeline = (accountId: string, { exclude_replies, pinned, only_media, limit }: Record<string, any> = {}, expand = false, done = noOp) =>
@@ -258,7 +257,7 @@ const fetchAccountTimeline = (accountId: string, { exclude_replies, pinned, only
 
     const fn = (expand && state.timelines[timelineId]?.next?.()) || getClient(state).accounts.getAccountStatuses(accountId, params);
 
-    return dispatch(handleTimelineExpand(timelineId, fn, false, done));
+    return dispatch(handleTimelineExpand(timelineId, fn, done));
   };
 
 const fetchListTimeline = (listId: string, expand = false, done = noOp) =>
@@ -273,7 +272,7 @@ const fetchListTimeline = (listId: string, expand = false, done = noOp) =>
 
     const fn = (expand && state.timelines[timelineId]?.next?.()) || getClient(state).timelines.listTimeline(listId, params);
 
-    return dispatch(handleTimelineExpand(timelineId, fn, false, done));
+    return dispatch(handleTimelineExpand(timelineId, fn, done));
   };
 
 const fetchCircleTimeline = (circleId: string, expand = false, done = noOp) =>
@@ -288,7 +287,7 @@ const fetchCircleTimeline = (circleId: string, expand = false, done = noOp) =>
 
     const fn = (expand && state.timelines[timelineId]?.next?.()) || getClient(state).circles.getCircleStatuses(circleId, params);
 
-    return dispatch(handleTimelineExpand(timelineId, fn, false, done));
+    return dispatch(handleTimelineExpand(timelineId, fn, done));
   };
 
 const fetchGroupTimeline = (groupId: string, { only_media, limit }: Record<string, any> = {}, expand = false, done = noOp) =>
@@ -304,7 +303,7 @@ const fetchGroupTimeline = (groupId: string, { only_media, limit }: Record<strin
 
     const fn = (expand && state.timelines[timelineId]?.next?.()) || getClient(state).timelines.groupTimeline(groupId, params);
 
-    return dispatch(handleTimelineExpand(timelineId, fn, false, done));
+    return dispatch(handleTimelineExpand(timelineId, fn, done));
   };
 
 const fetchHashtagTimeline = (hashtag: string, { tags }: Record<string, any> = {}, expand = false, done = noOp) =>
@@ -324,7 +323,7 @@ const fetchHashtagTimeline = (hashtag: string, { tags }: Record<string, any> = {
 
     const fn = (expand && state.timelines[timelineId]?.next?.()) || getClient(state).timelines.hashtagTimeline(hashtag, params);
 
-    return dispatch(handleTimelineExpand(timelineId, fn, false, done));
+    return dispatch(handleTimelineExpand(timelineId, fn, done));
   };
 
 const fetchLinkTimeline = (url: string, expand = false, done = noOp) =>
@@ -340,7 +339,7 @@ const fetchLinkTimeline = (url: string, expand = false, done = noOp) =>
 
     const fn = (expand && state.timelines[timelineId]?.next?.()) || getClient(state).timelines.linkTimeline(url, params);
 
-    return dispatch(handleTimelineExpand(timelineId, fn, false, done));
+    return dispatch(handleTimelineExpand(timelineId, fn, done));
   };
 
 const expandTimelineRequest = (timeline: string) => ({
@@ -354,7 +353,6 @@ const expandTimelineSuccess = (
   next: (() => Promise<PaginatedResponse<BaseStatus>>) | null,
   prev: (() => Promise<PaginatedResponse<BaseStatus>>) | null,
   partial: boolean,
-  isLoadingRecent: boolean,
 ) => ({
   type: TIMELINE_EXPAND_SUCCESS,
   timeline,
@@ -362,7 +360,6 @@ const expandTimelineSuccess = (
   next,
   prev,
   partial,
-  isLoadingRecent,
 });
 
 const expandTimelineFail = (timeline: string, error: unknown) => ({

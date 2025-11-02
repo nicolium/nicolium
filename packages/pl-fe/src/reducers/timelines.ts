@@ -96,7 +96,6 @@ const expandNormalizedTimeline = (
   next: (() => Promise<PaginatedResponse<BaseStatus>>) | null,
   prev: (() => Promise<PaginatedResponse<BaseStatus>>) | null,
   isPartial: boolean,
-  isLoadingRecent: boolean,
   pos: ImportPosition = 'end',
 ) => {
   const newIds = getStatusIds(statuses);
@@ -109,7 +108,7 @@ const expandNormalizedTimeline = (
     timeline.prev = prev;
     timeline.loaded = true;
 
-    if (!next && !isLoadingRecent) timeline.hasMore = false;
+    if (!next) timeline.hasMore = false;
 
     // Pinned timelines can be replaced entirely
     if (timelineId.endsWith(':pinned')) {
@@ -325,7 +324,6 @@ const timelines = (state: State = initialState, action: AccountsAction | Interac
         action.next,
         action.prev,
         action.partial,
-        action.isLoadingRecent,
       ));
     case TIMELINE_UPDATE:
       return create(state, (draft) => appendStatus(draft, action.timeline, action.statusId));

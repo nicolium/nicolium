@@ -32,7 +32,7 @@ const TestTimelinePage: React.FC = () => {
 
   React.useEffect(() => {
     dispatch(importEntities({ statuses: MOCK_STATUSES }));
-    dispatch(expandTimelineSuccess(timelineId, MOCK_STATUSES, null, null, false, false));
+    dispatch(expandTimelineSuccess(timelineId, MOCK_STATUSES, null, null, false));
   }, []);
 
   return (
