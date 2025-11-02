@@ -62,6 +62,6 @@ const SidebarNavigationLink = React.memo(React.forwardRef((props: ISidebarNaviga
       <p>{text}</p>
     </NavLink>
   );
-}), (prevProps, nextProps) => prevProps.count === nextProps.count);
+}), (prevProps, nextProps) => prevProps.count === nextProps.count && prevProps.shrink === nextProps.shrink);
 
 export { SidebarNavigationLink as default };

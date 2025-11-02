@@ -4,6 +4,7 @@ import {
   autoUpdate,
   FloatingArrow,
   offset,
+  Placement,
   shift,
   useClick,
   useDismiss,
@@ -29,6 +30,7 @@ interface IPopover {
   /** Add a class to the reference (trigger) element */
   referenceElementClassName?: string;
   offsetOptions?: OffsetOptions;
+  placements?: Placement;
 }
 
 /**
@@ -37,7 +39,7 @@ interface IPopover {
  * Similar to tooltip, but requires a click and is used for larger blocks
  * of information.
  */
-const Popover: React.FC<IPopover> = ({ children, content, referenceElementClassName, interaction = 'hover', isFlush = false, offsetOptions = 10 }) => {
+const Popover: React.FC<IPopover> = ({ children, content, referenceElementClassName, interaction = 'hover', isFlush = false, offsetOptions = 10, placements = ['top', 'bottom'] }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const arrowRef = useRef<SVGSVGElement>(null);
@@ -48,7 +50,7 @@ const Popover: React.FC<IPopover> = ({ children, content, referenceElementClassN
     placement: 'top',
     middleware: [
       autoPlacement({
-        allowedPlacements: ['top', 'bottom'],
+        allowedPlacements: placements,
       }),
       offset(offsetOptions),
       shift({

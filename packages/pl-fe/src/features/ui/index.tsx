@@ -489,8 +489,7 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
     pointerEvents: isDropdownMenuOpen ? 'none' : undefined,
   };
 
-  // to be used with the deck
-  const fullWidth = false;
+  const fullWidth = history.location.pathname.startsWith('/deck');
 
   return (
     <GlobalHotkeys node={node}>

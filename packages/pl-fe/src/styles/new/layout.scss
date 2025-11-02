@@ -305,7 +305,7 @@ body {
     @apply hidden lg:block;
 
     &--shrink {
-      @apply w-fit;
+      @apply w-10;
     }
 
     &:not(&--shrink) {

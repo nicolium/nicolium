@@ -15,9 +15,7 @@ const MyGroupsPanel = () => {
   }
 
   return (
-    <Widget
-      title={<FormattedMessage id='my_groups_panel.title' defaultMessage='My groups' />}
-    >
+    <Widget title={<FormattedMessage id='my_groups_panel.title' defaultMessage='My groups' />}>
       {isFetching ? (
         new Array(3).fill(0).map((_, idx) => (
           <PlaceholderGroupSearch key={idx} withJoinAction={false} />
