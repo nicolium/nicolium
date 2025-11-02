@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { Suspense, lazy, useEffect, useRef } from 'react';
-import { Redirect, Switch, useHistory, useLocation } from 'react-router-dom';
+import { matchPath, Redirect, Switch, useHistory, useLocation } from 'react-router-dom';
 
 import { fetchConfig } from 'pl-fe/actions/admin';
 import { fetchFilters } from 'pl-fe/actions/filters';
@@ -489,7 +489,7 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
     pointerEvents: isDropdownMenuOpen ? 'none' : undefined,
   };
 
-  const fullWidth = history.location.pathname.startsWith('/deck');
+  const fullWidth = !!matchPath(history.location.pathname, '/deck');
 
   return (
     <GlobalHotkeys node={node}>
