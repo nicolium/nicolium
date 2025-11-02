@@ -30,7 +30,7 @@ interface IPopover {
   /** Add a class to the reference (trigger) element */
   referenceElementClassName?: string;
   offsetOptions?: OffsetOptions;
-  placements?: Placement;
+  placements?: Array<Placement>;
 }
 
 /**
