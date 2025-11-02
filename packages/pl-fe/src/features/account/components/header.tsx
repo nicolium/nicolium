@@ -36,6 +36,7 @@ import {
   useUnblockAccountMutation,
   useUnmuteAccountMutation,
   useUnpinAccountMutation,
+  useUpdateAccountNoteMutation,
 } from 'pl-fe/queries/accounts/use-relationship';
 import { useChats } from 'pl-fe/queries/chats';
 import { queryClient } from 'pl-fe/queries/client';
@@ -95,6 +96,10 @@ const messages = defineMessages({
   loadActivities: { id: 'account.load_activities', defaultMessage: 'Fetch latest posts' },
   loadActivitiesSuccess: { id: 'account.load_activities.success', defaultMessage: 'Scheduled fetching latest posts' },
   loadActivitiesFail: { id: 'account.load_activities.fail', defaultMessage: 'Failed to fetch latest posts' },
+  note: { id: 'account_note.modal_header', defaultMessage: 'Edit note for @{name}' },
+  notePlaceholder: { id: 'account_note.placeholder', defaultMessage: 'Add a note' },
+  noteSaved: { id: 'account_note.success', defaultMessage: 'Note saved' },
+  noteSaveFailed: { id: 'account_note.fail', defaultMessage: 'Failed to save note' },
 });
 
 interface IMovedNote {
@@ -147,6 +152,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const { mutate: pinAccount } = usePinAccountMutation(account?.id!);
   const { mutate: unpinAccount } = useUnpinAccountMutation(account?.id!);
   const { mutate: removeFromFollowers } = useRemoveAccountFromFollowersMutation(account?.id!);
+  const { mutate: updateAccountNote } = useUpdateAccountNoteMutation(account?.id!);
   const { openModal } = useModalsActions();
   const settings = useSettings();
 
@@ -247,6 +253,19 @@ const Header: React.FC<IHeader> = ({ account }) => {
     client.accounts.loadActivities(account.id)
       .then(() => toast.success(intl.formatMessage(messages.loadActivitiesSuccess)))
       .catch(() => toast.error(intl.formatMessage(messages.loadActivitiesFail)));
+  };
+
+  const onEditNote = () => {
+    openModal('TEXT_FIELD', {
+      heading: <FormattedMessage id='account_note.modal_header' defaultMessage='Edit note for @{name}' values={{ name: account.acct }} />,
+      placeholder: intl.formatMessage(messages.notePlaceholder),
+      confirm: <FormattedMessage id='account_note.save' defaultMessage='Save note' />,
+      onConfirm: (value) => updateAccountNote(value, {
+        onSuccess: () => toast.success(messages.noteSaved),
+        onError: () => toast.error(messages.noteSaveFailed),
+      }),
+      text: account.relationship?.note || '',
+    });
   };
 
   const onReport = () => {
@@ -484,6 +503,14 @@ const Header: React.FC<IHeader> = ({ account }) => {
           text: intl.formatMessage(messages.loadActivities),
           action: onLoadActivities,
           icon: require('@phosphor-icons/core/regular/arrows-clockwise.svg'),
+        });
+      }
+
+      if (account.relationship && features.notes) {
+        menu.push({
+          text: intl.formatMessage(messages.note, { name: account.acct }),
+          action: onEditNote,
+          icon: require('@phosphor-icons/core/regular/note-pencil.svg'),
         });
       }
 

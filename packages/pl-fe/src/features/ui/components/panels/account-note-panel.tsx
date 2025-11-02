@@ -13,7 +13,6 @@ import type { Account as AccountEntity } from 'pl-api';
 
 const messages = defineMessages({
   placeholder: { id: 'account_note.placeholder', defaultMessage: 'Click to add a note' },
-  saved: { id: 'generic.saved', defaultMessage: 'Saved' },
 });
 
 interface IAccountNotePanel {

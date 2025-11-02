@@ -12,7 +12,7 @@ interface TextFieldModalProps {
   heading: React.ReactNode;
   placeholder?: string;
   confirm: React.ReactNode;
-  onConfirm: (value?: string) => void;
+  onConfirm: (value: string) => void;
   onCancel?: () => void;
   confirmationTheme?: ButtonThemes;
   text?: string;
@@ -28,7 +28,7 @@ const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
   confirmationTheme,
   text,
 }) => {
-  const [value, setValue] = useState(text);
+  const [value, setValue] = useState(text || '');
 
   const handleClick = () => {
     onClose('TEXT_FIELD');
