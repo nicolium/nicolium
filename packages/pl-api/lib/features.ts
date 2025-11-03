@@ -257,7 +257,7 @@ const getFeatures = (instance: Instance) => {
       instance.api_versions.mastodon >= 6,
     ]),
 
-    accountIsCat: instance.api_versions['cats.pleroma.pl-api'] >= 1,
+    accountIsCat: instance.api_versions['is_cat.pleroma.pl-api'] >= 1,
 
     /**
      * Ability to set one's location on their profile.
