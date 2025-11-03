@@ -284,7 +284,7 @@ body {
   z-index: 1;
 
   &__content {
-    @apply mx-auto w-full max-w-3xl grow black:pt-0 sm:px-6 sm:pt-4 md:gap-8 md:px-8;
+    @apply mx-auto w-full max-w-3xl grow black:pt-0 sm:px-6 sm:pt-4 md:gap-4 md:px-8;
 
     &--full-width {
       @apply flex md:max-w-full;
@@ -329,7 +329,7 @@ body {
     @apply hidden xl:col-span-3 xl:block;
 
     &__content {
-      @apply space-y-6 pb-12;
+      @apply space-y-4 pb-12;
     }
   }
 }
