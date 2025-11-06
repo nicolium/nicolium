@@ -113,7 +113,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
 
   const interactive = card.type !== 'link';
   const horizontal = interactive || embedded;
-  const className = clsx('status-card relative z-10 flex-col bg-white black:bg-black dark:bg-primary-900 md:flex-row', { horizontal, compact, interactive }, `status-card--${card.type}`);
+  const className = clsx('status-card relative z-[1] flex-col bg-white black:bg-black dark:bg-primary-900 md:flex-row', { horizontal, compact, interactive }, `status-card--${card.type}`);
   const ratio = getRatio(card);
   const height = (compact && !embedded) ? (width / (16 / 9)) : (width / ratio);
 
