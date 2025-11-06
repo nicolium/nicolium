@@ -1,11 +1,11 @@
-// Converts cryptocurrency-icon's manifest file from a list to a map.
-// See: https://github.com/spothq/cryptocurrency-icons/blob/master/manifest.json
+interface ManifestMap {
+  [s: string]: {
+    symbol: string;
+    name: string;
+    color: string;
+  };
+}
 
-import manifest from 'cryptocurrency-icons/manifest.json';
+export default import.meta.compileTime<ManifestMap>('./manifest-map-compiletime.ts');
 
-const manifestMap = manifest.reduce((acc: Record<string, typeof manifest[0]>, entry) => {
-  acc[entry.symbol.toLowerCase()] = entry;
-  return acc;
-}, {});
-
-export { manifestMap as default };
+export type { ManifestMap };
