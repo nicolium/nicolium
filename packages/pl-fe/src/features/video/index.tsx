@@ -240,7 +240,6 @@ const Video: React.FC<IVideo> = ({
     e.stopPropagation();
   };
 
-
   const handleMouseMove = useCallback(throttle(e => {
     if (seek.current && video.current) {
       const { x } = getPointerPosition(seek.current, e);

@@ -3,7 +3,7 @@ import React from 'react';
 import Stack from 'pl-fe/components/ui/stack';
 import Widget from 'pl-fe/components/ui/widget';
 
-import ProfileField from '../profile-field';
+import { ProfileField } from '../../util/async-components';
 
 import type { Account } from 'pl-api';
 

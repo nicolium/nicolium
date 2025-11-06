@@ -80,7 +80,6 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
     };
   }, []);
 
-
   const { x, y, strategy, refs, context, placement } = useFloating({
     open: !!account,
     elements: {

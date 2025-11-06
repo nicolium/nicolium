@@ -17,8 +17,8 @@ import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { accountScrobbleQueryOptions } from 'pl-fe/queries/accounts/account-scrobble';
 import { capitalize } from 'pl-fe/utils/strings';
 
+import { ProfileField } from '../../util/async-components';
 import ProfileFamiliarFollowers from '../profile-familiar-followers';
-import ProfileField from '../profile-field';
 import ProfileStats from '../profile-stats';
 
 import type { Account } from 'pl-api';

@@ -1,6 +1,5 @@
 import { InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-
 import { importEntities } from 'pl-fe/actions/importer';
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
@@ -13,7 +12,6 @@ import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-respo
 import { minifyAdminAccount, minifyAdminAccountList } from '../utils/minify-list';
 
 import type { AdminPerformAccountActionParams, PaginatedResponse, AdminAccount, AdminGetAccountsParams, PaginationParams, AdminAccountAction } from 'pl-api';
-
 
 const useAdminAccounts = makePaginatedResponseQuery(
   (params: Omit<AdminGetAccountsParams, keyof PaginationParams>) => ['admin', 'accountLists', params],

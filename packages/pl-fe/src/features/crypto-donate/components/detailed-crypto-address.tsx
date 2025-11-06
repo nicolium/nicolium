@@ -2,9 +2,10 @@ import { QRCodeCanvas as QRCode } from 'qrcode.react';
 import React from 'react';
 
 import CopyableInput from 'pl-fe/components/copyable-input';
-import { CryptoIcon } from 'pl-fe/features/ui/util/async-components';
 
 import { getTitle } from '../utils/coin-db';
+
+import CryptoIcon from './crypto-icon';
 
 interface IDetailedCryptoAddress {
   address: string;

@@ -19,7 +19,6 @@ const ListEditorModal: React.FC<BaseModalProps & ListEditorModalProps> = ({ list
 
   const { isFetched } = useList(listId);
 
-
   const onClickClose = () => {
     onClose('LIST_EDITOR');
   };

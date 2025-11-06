@@ -13,7 +13,6 @@ const messages = defineMessages({
   heading: { id: 'column.admin.users', defaultMessage: 'Users' },
 });
 
-
 const UserIndexPage: React.FC = () => {
   const [params] = useSearchParams();
   const query = params.get('q') || '';

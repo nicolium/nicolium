@@ -7,14 +7,19 @@ import Markup from 'pl-fe/components/markup';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
 import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
+import CryptoAddress from 'pl-fe/features/crypto-donate/components/crypto-address';
+import LightningAddress from 'pl-fe/features/crypto-donate/components/lightning-address';
+import coinDB from 'pl-fe/features/crypto-donate/utils/manifest-map';
 import Emojify from 'pl-fe/features/emoji/emojify';
-import { CryptoAddress, LightningAddress } from 'pl-fe/features/ui/util/async-components';
 import { unescapeHTML } from 'pl-fe/utils/html';
 
 import type { Account } from 'pl-api';
 
 const getTicker = (value: string): string => (value.match(/\$([a-zA-Z]*)/i) || [])[1];
-const isTicker = (value: string): boolean => Boolean(getTicker(value));
+const isTicker = (value: string): boolean => {
+  const ticker = getTicker(value);
+  return Boolean(ticker) && Boolean(coinDB[ticker.toLowerCase()]);
+};
 const isZapEmoji = (value: string) => /^\u26A1[\uFE00-\uFE0F]?$/.test(value);
 
 const isTimezoneLabel = (value: string) => /^time( |)zone$/i.test(value);
@@ -49,7 +54,7 @@ const ProfileField: React.FC<IProfileField> = ({ accountId, field, emojis }) => 
         address={unescapeHTML(field.value)}
       />
     );
-  } else if (isZapEmoji(field.name)) {
+  } else if (isZapEmoji(field.name) && field.value.includes('@')) {
     return <LightningAddress address={unescapeHTML(field.value)} />;
   }
 

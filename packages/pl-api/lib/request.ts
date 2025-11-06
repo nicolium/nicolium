@@ -70,7 +70,6 @@ const getAsyncRefreshHeader = (response: Pick<Response, 'headers'>): AsyncRefres
   return null;
 };
 
-
 interface RequestBody<Params = Record<string, any>> {
   method?: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
   body?: any;
