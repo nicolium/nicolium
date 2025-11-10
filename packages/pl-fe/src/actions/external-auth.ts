@@ -36,14 +36,14 @@ const createExternalApp = (instance: Instance, baseURL?: string) => {
     client_name: `${sourceCode.displayName} (${new URL(window.origin).host})`,
     redirect_uris: `${window.location.origin}/login/external`,
     website: sourceCode.homepage,
-    scopes: getInstanceScopes(instance),
+    scopes: getInstanceScopes(instance, undefined, true),
   };
 
   return createApp(params, baseURL);
 };
 
 const externalAuthorize = (instance: Instance, baseURL: string) => {
-  const scopes = getInstanceScopes(instance);
+  const scopes = getInstanceScopes(instance, undefined, true);
 
   return createExternalApp(instance, baseURL).then((app) => {
     const { client_id, redirect_uri } = app;

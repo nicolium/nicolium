@@ -11,7 +11,7 @@ import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const createProviderApp = () =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
-    const scopes = getScopes(getState());
+    const scopes = getScopes(getState(), undefined, true);
 
     const params = {
       client_name: `${sourceCode.displayName} (${new URL(window.origin).host})`,
@@ -27,7 +27,7 @@ const prepareRequest = (provider: string) =>
   async(dispatch: AppDispatch, getState: () => RootState) => {
     const baseURL = isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : '';
 
-    const scopes = getScopes(getState());
+    const scopes = getScopes(getState(), undefined, true);
     const app = await dispatch(createProviderApp());
     const { client_id, redirect_uri } = app;
 
