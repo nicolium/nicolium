@@ -3,6 +3,14 @@ import type { PaginationParams, WithRelationshipsParam } from './common';
 /**
  * @category Request params
  */
+interface BlockAccountParams {
+  /** Number. How long the block should last, in seconds. Defaults to 0 (indefinite). */
+  duration?: number;
+}
+
+/**
+ * @category Request params
+ */
 interface MuteAccountParams {
   /** Boolean. Mute notifications in addition to statuses? Defaults to true. */
   notifications?: boolean;
@@ -61,6 +69,7 @@ interface UpdateFilterParams {
 }
 
 export type {
+  BlockAccountParams,
   MuteAccountParams,
   GetMutesParams,
   GetBlocksParams,

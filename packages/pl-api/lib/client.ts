@@ -181,6 +181,7 @@ import type {
   GetJoinedEventsParams,
 } from './params/events';
 import type {
+  BlockAccountParams,
   CreateFilterParams,
   GetBlocksParams,
   GetDomainBlocksParams,
@@ -2050,9 +2051,10 @@ class PlApiClient {
      * Block account
      * Block the given account. Clients should filter statuses from this account if received (e.g. due to a boost in the Home timeline)
      * @see {@link https://docs.joinmastodon.org/methods/accounts/#block}
+     * `duration` parameter requires features{@link Features.blocksDuration}.
      */
-    blockAccount: async (accountId: string) => {
-      const response = await this.request(`/api/v1/accounts/${accountId}/block`, { method: 'POST' });
+    blockAccount: async (accountId: string, params?: BlockAccountParams) => {
+      const response = await this.request(`/api/v1/accounts/${accountId}/block`, { method: 'POST', body: params });
 
       return v.parse(relationshipSchema, response.json);
     },
@@ -2461,7 +2463,7 @@ class PlApiClient {
      * Delete a status
      * Delete one of your own statuses.
      *
-     * `delete_media` parameters requires features{@link Features.deleteMedia}.
+     * `delete_media` parameter requires features{@link Features.deleteMedia}.
      * @see {@link https://docs.joinmastodon.org/methods/statuses/#delete}
      */
     deleteStatus: async (statusId: string, deleteMedia?: boolean) => {

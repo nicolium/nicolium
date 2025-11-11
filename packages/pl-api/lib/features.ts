@@ -420,6 +420,12 @@ const getFeatures = (instance: Instance) => {
     /** Whether people who blocked you are visible through the API. */
     blockersVisible: instance.api_versions['blockers_visible.pleroma.pl-api'] >= 1,
 
+    /**
+     * Ability to specify how long the account block should last.
+     * @see PUT /api/v1/accounts/:id/block
+     */
+    blocksDuration: instance.api_versions['block_expiration.pleroma.pl-api'] >= 1,
+
     bookmarkFolderEmojis: instance.api_versions['bookmark_folders.pleroma.pl-api'] >= 1,
 
     /**
