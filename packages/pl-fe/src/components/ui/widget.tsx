@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 
 import IconButton from 'pl-fe/components/ui/icon-button';
@@ -13,6 +14,7 @@ interface IWidget {
   actionTitle?: string;
   action?: JSX.Element;
   children?: React.ReactNode;
+  className?: string;
 }
 
 /** Sidebar widget. */
@@ -23,8 +25,9 @@ const Widget: React.FC<IWidget> = ({
   actionIcon = require('@phosphor-icons/core/regular/arrow-right.svg'),
   actionTitle,
   action,
+  className,
 }): JSX.Element => (
-  <div className='⁂-widget'>
+  <div className={clsx('⁂-widget', className)}>
     {(title || action || onActionClick) && (
       <div className='⁂-widget__header'>
         {title && <h1>{title}</h1>}

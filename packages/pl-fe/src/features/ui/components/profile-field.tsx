@@ -3,9 +3,7 @@ import React from 'react';
 import { defineMessages, useIntl, type FormatDateOptions } from 'react-intl';
 
 import AccountLocalTime from 'pl-fe/components/account-local-time';
-import Markup from 'pl-fe/components/markup';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
-import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import CryptoAddress from 'pl-fe/features/crypto-donate/components/crypto-address';
 import LightningAddress from 'pl-fe/features/crypto-donate/components/lightning-address';
@@ -59,28 +57,26 @@ const ProfileField: React.FC<IProfileField> = ({ accountId, field, emojis }) => 
   }
 
   return (
-    <dl>
+    <dl className={clsx('⁂-profile-field', { '⁂-profile-field--verified': field.verified_at })}>
       <dt title={field.name}>
-        <Markup weight='bold' tag='span'>
+        <span data-markup>
           <Emojify text={field.name} emojis={emojis} />
-        </Markup>
+        </span>
       </dt>
 
-      <dd
-        className={clsx({ 'text-success-500': field.verified_at })}
-        title={unescapeHTML(field.value)}
-      >
-        <HStack space={2} alignItems='center'>
+      <dd title={unescapeHTML(field.value)}>
+        <div className='⁂-profile-field__content'>
           {field.verified_at && (
             <span className='flex-none' title={intl.formatMessage(messages.linkVerifiedOn, { date: intl.formatDate(field.verified_at, dateFormatOptions) })}>
               <Icon src={require('@phosphor-icons/core/regular/check.svg')} />
             </span>
           )}
 
-          <Markup className='overflow-hidden break-words' tag='span'>
+          <span data-markup>
             <ParsedContent html={field.value} emojis={emojis} />
-          </Markup>
-        </HStack>
+          </span>
+        </div>
+
         {isTimezoneLabel(field.name) && (
           <AccountLocalTime accountId={accountId} field={field} />
         )}

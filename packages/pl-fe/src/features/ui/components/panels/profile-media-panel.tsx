@@ -2,7 +2,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Spinner from 'pl-fe/components/ui/spinner';
-import Text from 'pl-fe/components/ui/text';
 import Widget from 'pl-fe/components/ui/widget';
 import { type AccountGalleryAttachment, useAccountGallery } from 'pl-fe/hooks/use-account-gallery';
 import { MediaItem } from 'pl-fe/pages/accounts/account-gallery';
@@ -29,7 +28,7 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
 
     if (nineAttachments.length) {
       return (
-        <div className='grid grid-cols-3 gap-0.5 overflow-hidden rounded-md'>
+        <div className='⁂-media-panel__attachments'>
           {nineAttachments.map((attachment, index) => (
             <MediaItem
               key={`${attachment.status_id}+${attachment.id}`}
@@ -42,22 +41,20 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
       );
     } else {
       return (
-        <Text size='sm' theme='muted'>
+        <p className='⁂-media-panel__empty'>
           <FormattedMessage id='media_panel.empty_message' defaultMessage='No media found.' />
-        </Text>
+        </p>
       );
     }
   };
 
   return (
-    <Widget title={<FormattedMessage id='media_panel.title' defaultMessage='Media' />}>
-      <div className='w-full'>
-        {isLoading || !account ? (
-          <Spinner />
-        ) : (
-          renderAttachments()
-        )}
-      </div>
+    <Widget className='⁂-media-panel' title={<FormattedMessage id='media_panel.title' defaultMessage='Media' />}>
+      {isLoading || !account ? (
+        <Spinner />
+      ) : (
+        renderAttachments()
+      )}
     </Widget>
   );
 };

@@ -1,3 +1,5 @@
+@use 'mixins';
+
 .⁂-account-card {
   @apply block w-full shrink-0;
 
@@ -77,4 +79,43 @@
 	55% { transform: rotate(-20deg) skew(-30deg); }
 	75% { transform: rotate(0deg) skew(-30deg); }
 	100% { transform: rotate(-37.6deg) skew(-30deg); }
+}
+
+.⁂-media-panel {
+  .⁂-widget__body {
+    width: 100%;
+  }
+
+  &__attachments {
+    @apply grid grid-cols-3 gap-0.5 overflow-hidden rounded-md;
+  }
+
+  &__empty {
+    @include mixins.text($size: sm, $theme: muted);
+  }
+}
+
+.⁂-profile-field {
+  dt span {
+    @include mixins.text($weight: bold);
+  }
+
+  &--verified dd {
+    @apply text-success-500;
+  }
+
+  &__content {
+    @apply flex items-center gap-2;
+  }
+}
+
+.⁂-profile-fields-panel {
+  .⁂-widget__body {
+    @apply flex flex-col gap-4;
+  }
+
+  span[data-markup] {
+    @include mixins.text();
+    @apply overflow-hidden break-words;
+  }
 }

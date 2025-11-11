@@ -203,8 +203,8 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
       <SiteLogo />
 
       {account && (
-        <Stack space={4}>
-          <div className='relative flex items-center'>
+        <div className='⁂-sidebar-navigation__header'>
+          <div className='⁂-sidebar-navigation__header__account'>
             <ProfileDropdown account={account}>
               {shrink ? (
                 <Avatar
@@ -214,11 +214,10 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                   username={account.username}
                   size={40}
                 />
-              // className='size-10 bg-gray-50 ring-2 ring-white'
               ) : (
                 <Account
                   account={account}
-                  action={<Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} className='text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500' />}
+                  action={<Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} className='⁂-sidebar-navigation__header__account__expand' />}
                   disabled
                   withLinkToProfile={false}
                 />
@@ -226,11 +225,9 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
             </ProfileDropdown>
           </div>
           {!shrink && (
-            <div className='block w-full max-w-xs'>
-              <SearchInput />
-            </div>
+            <SearchInput />
           )}
-        </Stack>
+        </div>
       )}
 
       <div className='⁂-sidebar-navigation__links'>
