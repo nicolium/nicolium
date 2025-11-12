@@ -1,5 +1,9 @@
 @use 'mixins';
 
+.⁂-account-layout {
+  @include mixins.card($size: lg);
+}
+
 .⁂-account-card {
   @apply block w-full shrink-0;
 

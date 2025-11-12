@@ -5,6 +5,14 @@
 
   &__select-buttons {
     @apply flex gap-2 flex-wrap;
+
+    button {
+      @include mixins.button($theme: muted, $size: xs);
+
+      .⁂-icon svg {
+        @apply size-4;
+      }
+    }
   }
 
   &--transparent &__select-buttons {
@@ -96,6 +104,57 @@
       svg {
         @apply size-4;
       }
+    }
+  }
+}
+
+.⁂-language-dropdown {
+  &__search {
+    @apply relative m-2 mt-1 block grow;
+
+    > span {
+      position: absolute;
+      visibility: hidden;
+    }
+
+    button {
+      @apply absolute inset-y-0 right-0 flex cursor-pointer items-center px-2 rtl:left-0 rtl:right-auto;
+    
+      svg {
+        @apply size-5 text-gray-600;
+      }
+    }
+  }
+
+  &__options {
+    @apply -mb-1 h-96 w-full overflow-auto;
+  }
+
+  &__option {
+    @apply flex w-full gap-2 p-2.5 text-left text-sm text-gray-700 dark:text-gray-400 cursor-default;
+
+    &--modified {
+      @apply bg-gray-100 dark:bg-gray-800 black:bg-gray-900 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700;
+
+      .⁂-language-dropdown__option__name {
+        @apply text-black dark:text-white;
+      }
+    }
+
+    &--available {
+      @apply cursor-pointer hover:bg-gray-100 black:hover:bg-gray-900 dark:hover:bg-gray-800;
+    }
+
+    &--active {
+      @apply cursor-pointer;
+    }
+
+    &__name {
+      @apply flex-auto grow text-primary-600 dark:text-primary-400;
+    }
+
+    svg {
+      @apply size-4;
     }
   }
 }

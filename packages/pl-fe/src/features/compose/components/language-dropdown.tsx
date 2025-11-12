@@ -5,7 +5,6 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { addComposeLanguage, changeComposeLanguage, changeComposeModifiedLanguage, deleteComposeLanguage } from 'pl-fe/actions/compose';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import Button from 'pl-fe/components/ui/button';
 import Icon from 'pl-fe/components/ui/icon';
 import Input from 'pl-fe/components/ui/input';
 import { type Language, languages as languagesObject } from 'pl-fe/features/preferences';
@@ -148,8 +147,8 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
 
   return (
     <>
-      <label className='relative m-2 mt-1 block grow'>
-        <span style={{ display: 'none' }}>{intl.formatMessage(messages.search)}</span>
+      <label className='⁂-language-dropdown__search'>
+        <span>{intl.formatMessage(messages.search)}</span>
 
         <Input
           className='w-64'
@@ -161,17 +160,15 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
         />
         <button
           tabIndex={0}
-          className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-2 rtl:left-0 rtl:right-auto'
           onClick={handleClear}
           title={isSearching ? intl.formatMessage(messages.clear) : intl.formatMessage(messages.search)}
         >
           <Icon
-            className='size-5 text-gray-600'
             src={isSearching ? require('@phosphor-icons/core/regular/backspace.svg') : require('@phosphor-icons/core/regular/magnifying-glass.svg')}
           />
         </button>
       </label>
-      <div className='-mb-1 h-96 w-full overflow-auto' ref={node} tabIndex={-1}>
+      <div className='⁂-language-dropdown__options' ref={node} tabIndex={-1}>
         {results.map(([code, name]) => {
           const active = code === language;
           const modified = code === modifiedLanguage;
@@ -184,32 +181,27 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
               data-index={code}
               onClick={handleOptionClick}
               className={clsx(
-                'flex w-full gap-2 p-2.5 text-left text-sm text-gray-700 dark:text-gray-400',
+                '⁂-language-dropdown__option',
                 {
-                  'bg-gray-100 dark:bg-gray-800 black:bg-gray-900 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700': modified,
-                  'cursor-pointer hover:bg-gray-100 black:hover:bg-gray-900 dark:hover:bg-gray-800': !hasMultipleLanguages || code in textMap,
-                  'cursor-pointer': active,
-                  'cursor-default': !active && !(!hasMultipleLanguages || code in textMap),
+                  '⁂-language-dropdown__option--modified': modified,
+                  '⁂-language-dropdown__option--available': !hasMultipleLanguages || code in textMap,
+                  '⁂-language-dropdown__option--active': active,
                 },
               )}
               aria-selected={active}
               ref={active ? focusedItem : null}
             >
-              <div
-                className={clsx('flex-auto grow text-primary-600 dark:text-primary-400', {
-                  'text-black dark:text-white': modified,
-                })}
-              >
+              <div className='⁂-language-dropdown__option__name'>
                 {name}
               </div>
               {features.multiLanguage && !!language && !active && (
                 code in textMap ? (
                   <button title={intl.formatMessage(messages.deleteLanguage)} onClick={handleDeleteLanguageClick}>
-                    <Icon className='size-4' src={require('@phosphor-icons/core/regular/minus.svg')} />
+                    <Icon src={require('@phosphor-icons/core/regular/minus.svg')} />
                   </button>
                 ) : (
                   <button title={intl.formatMessage(messages.addLanguage)} onClick={handleAddLanguageClick}>
-                    <Icon className='size-4' src={require('@phosphor-icons/core/regular/plus.svg')} />
+                    <Icon src={require('@phosphor-icons/core/regular/plus.svg')} />
                   </button>
                 )
               )}
@@ -254,15 +246,13 @@ const LanguageDropdownButton: React.FC<ILanguageDropdownButton> = ({ composeId, 
   return (
     <DropdownMenu
       component={LanguageDropdown}
+      className='⁂-language-dropdown'
     >
-      <Button
-        theme='muted'
-        size='xs'
-        text={buttonLabel}
-        icon={require('@phosphor-icons/core/regular/translate.svg')}
-        secondaryIcon={require('@phosphor-icons/core/regular/caret-down.svg')}
-        title={intl.formatMessage(messages.languagePrompt)}
-      />
+      <button title={intl.formatMessage(messages.languagePrompt)}>
+        <Icon src={require('@phosphor-icons/core/regular/translate.svg')} />
+        {buttonLabel}
+        <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} />
+      </button>
     </DropdownMenu>
   );
 

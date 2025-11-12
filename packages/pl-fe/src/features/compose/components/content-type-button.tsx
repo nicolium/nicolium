@@ -3,7 +3,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { changeComposeContentType } from 'pl-fe/actions/compose';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import Button from 'pl-fe/components/ui/button';
+import Icon from 'pl-fe/components/ui/icon';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useCompose } from 'pl-fe/hooks/use-compose';
 import { useInstance } from 'pl-fe/hooks/use-instance';
@@ -86,14 +86,11 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
         active: contentType === value,
       }))}
     >
-      <Button
-        theme='muted'
-        size='xs'
-        text={compact ? undefined : option?.text}
-        icon={option?.icon}
-        secondaryIcon={require('@phosphor-icons/core/regular/caret-down.svg')}
-        title={compact ? option?.text : intl.formatMessage(messages.change_content_type)}
-      />
+      <button className='⁂-content-type-button' title={compact ? option?.text : intl.formatMessage(messages.change_content_type)}>
+        {option?.icon && <Icon src={option.icon} />}
+        {compact ? undefined : option?.text}
+        <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} />
+      </button>
     </DropdownMenu>
   );
 };

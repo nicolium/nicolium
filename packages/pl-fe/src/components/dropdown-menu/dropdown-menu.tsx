@@ -26,6 +26,7 @@ interface IDropdownMenuContent {
   component?: React.FC<{ handleClose: () => any }>;
   touchscreen?: boolean;
   width?: React.CSSProperties['width'];
+  className?: string;
 }
 
 interface IDropdownMenu {
@@ -40,11 +41,12 @@ interface IDropdownMenu {
   src?: string;
   title?: string;
   width?: React.CSSProperties['width'];
+  className?: string;
 }
 
 const listenerOptions = supportsPassiveEvents ? { passive: true } : false;
 
-const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, items, component: Component, touchscreen, width }) => {
+const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, items, component: Component, touchscreen, width, className }) => {
   if (touchscreen) width = undefined;
 
   const intl = useIntl();
@@ -151,7 +153,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
   );
 
   return (
-    <div className='max-h-full overflow-auto' ref={ref}>
+    <div className={clsx('max-h-full overflow-auto', className)} ref={ref}>
       {items?.some(item => item?.items?.length) ? (
         <ReactSwipeableViews animateHeight index={tab === undefined ? 0 : 1} style={{ width }}>
           <div className={clsx('max-w-full', { 'w-full': touchscreen })} style={{ width }}>
@@ -200,6 +202,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
     src = require('@phosphor-icons/core/regular/dots-three.svg'),
     title = 'Menu',
     width,
+    className,
   } = props;
 
   const { openDropdownMenu, closeDropdownMenu } = useUiStoreActions();
@@ -255,7 +258,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
       };
       openModal('DROPDOWN_MENU', {
         element: refs.reference.current as HTMLButtonElement,
-        content: <DropdownMenuContent handleClose={handleClose} items={items} component={component} touchscreen />,
+        content: <DropdownMenuContent handleClose={handleClose} items={items} component={component} touchscreen className={className} />,
       });
     } else {
       openDropdownMenu();

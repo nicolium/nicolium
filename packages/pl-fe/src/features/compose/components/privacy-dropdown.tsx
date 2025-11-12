@@ -3,7 +3,7 @@ import { useIntl, defineMessages, IntlShape } from 'react-intl';
 
 import { changeComposeFederated, changeComposeVisibility } from 'pl-fe/actions/compose';
 import DropdownMenu, { MenuItem } from 'pl-fe/components/dropdown-menu';
-import Button from 'pl-fe/components/ui/button';
+import Icon from 'pl-fe/components/ui/icon';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useCompose } from 'pl-fe/hooks/use-compose';
 import { useFeatures } from 'pl-fe/hooks/use-features';
@@ -181,14 +181,11 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
 
   return (
     <DropdownMenu items={items} width='16rem'>
-      <Button
-        theme='muted'
-        size='xs'
-        text={compact ? undefined : text}
-        icon={valueOption?.icon}
-        secondaryIcon={require('@phosphor-icons/core/regular/caret-down.svg')}
-        title={compact ? text : intl.formatMessage(messages.change_privacy)}
-      />
+      <button title={compact ? text : intl.formatMessage(messages.change_privacy)}>
+        {valueOption?.icon && <Icon src={valueOption.icon} />}
+        {compact ? undefined : text}
+        <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} />
+      </button>
     </DropdownMenu>
   );
 };

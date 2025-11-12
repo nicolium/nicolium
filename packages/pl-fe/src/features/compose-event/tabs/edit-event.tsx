@@ -33,6 +33,7 @@ import toast from 'pl-fe/toast';
 import UploadButton from '../components/upload-button';
 
 import type { Location } from 'pl-api';
+import ContentTypeButton from 'pl-fe/features/compose/components/content-type-button';
 
 const messages = defineMessages({
   eventNamePlaceholder: { id: 'compose_event.fields.name_placeholder', defaultMessage: 'Name' },
@@ -172,7 +173,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   );
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form className='⁂-edit-event' onSubmit={handleSubmit}>
       <FormGroup
         labelText={<FormattedMessage id='compose_event.fields.banner_label' defaultMessage='Event banner' />}
         hintText={<FormattedMessage id='compose_event.fields.banner_hint' defaultMessage='PNG, GIF or JPG. Landscape format is preferred.' />}
@@ -201,15 +202,18 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
       <FormGroup
         labelText={<FormattedMessage id='compose_event.fields.description_label' defaultMessage='Event description' />}
       >
-        <ComposeEditor
-          key={String(isDisabled)}
-          className='block w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-base text-gray-900 ring-1 placeholder:text-gray-600 focus-within:border-primary-500 focus-within:ring-primary-500 black:bg-black dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:ring-gray-800 dark:placeholder:text-gray-600 dark:focus-within:border-primary-500 dark:focus-within:ring-primary-500 sm:text-sm'
-          placeholderClassName='pt-2'
-          composeId={composeId}
-          placeholder={intl.formatMessage(messages.eventDescriptionPlaceholder)}
-          handleSubmit={handleSubmit}
-          onChange={setText}
-        />
+        <div className='relative'>
+          <ContentTypeButton composeId={composeId} />
+          <ComposeEditor
+            key={String(isDisabled)}
+            className='block w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-base text-gray-900 ring-1 placeholder:text-gray-600 focus-within:border-primary-500 focus-within:ring-primary-500 black:bg-black dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:ring-gray-800 dark:placeholder:text-gray-600 dark:focus-within:border-primary-500 dark:focus-within:ring-primary-500 sm:text-sm'
+            placeholderClassName='pt-2'
+            composeId={composeId}
+            placeholder={intl.formatMessage(messages.eventDescriptionPlaceholder)}
+            handleSubmit={handleSubmit}
+            onChange={setText}
+          />
+        </div>
       </FormGroup>
       <FormGroup
         labelText={<FormattedMessage id='compose_event.fields.location_label' defaultMessage='Event location' />}

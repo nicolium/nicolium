@@ -5,7 +5,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { useHistory } from 'react-router-dom';
 import { length } from 'stringz';
 
-import 'pl-fe/styles/new/compose.scss';
 import {
   submitCompose,
   clearComposeSuggestions,
