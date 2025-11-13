@@ -119,7 +119,7 @@
   }
 
   span[data-markup] {
-    @include mixins.text();
+    @include mixins.text;
     @apply overflow-hidden break-words;
   }
 }
