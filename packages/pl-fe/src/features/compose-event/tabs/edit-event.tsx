@@ -23,6 +23,7 @@ import Input from 'pl-fe/components/ui/input';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import Toggle from 'pl-fe/components/ui/toggle';
+import ContentTypeButton from 'pl-fe/features/compose/components/content-type-button';
 import { isCurrentOrFutureDate } from 'pl-fe/features/compose/components/schedule-form';
 import { ComposeEditor, DatePicker } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
@@ -33,7 +34,6 @@ import toast from 'pl-fe/toast';
 import UploadButton from '../components/upload-button';
 
 import type { Location } from 'pl-api';
-import ContentTypeButton from 'pl-fe/features/compose/components/content-type-button';
 
 const messages = defineMessages({
   eventNamePlaceholder: { id: 'compose_event.fields.name_placeholder', defaultMessage: 'Name' },

@@ -1,7 +1,8 @@
 {
   "private": true,
   "scripts": {
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "prepare": "husky"
   },
   "devDependencies": {
     "husky": "^9.0.0",

@@ -29,7 +29,7 @@
     "lint": "${npm_execpath} run lint:js && ${npm_execpath} run lint:sass",
     "lint:js": "npx eslint --ext .js,.jsx,.cjs,.mjs,.ts,.tsx . --cache",
     "lint:sass": "npx stylelint src/styles/**/*.scss",
-    "precommit": "npx lint-staged"
+    "precommit": "lint-staged"
   },
   "license": "AGPL-3.0-or-later",
   "browserslist": [
@@ -180,9 +180,7 @@
     "eslint-plugin-tailwindcss": "^3.17.5",
     "fake-indexeddb": "^6.0.0",
     "globals": "^15.14.0",
-    "husky": "^9.1.7",
     "jsdom": "^25.0.1",
-    "lint-staged": "^15.3.0",
     "rollup-plugin-bundle-stats": "^4.17.0",
     "stylelint": "^16.12.0",
     "stylelint-config-standard-scss": "^12.0.0",
@@ -198,5 +196,9 @@
     "vite-plugin-require": "^1.2.14",
     "vite-plugin-static-copy": "^2.3.2",
     "vitest": "^2.1.9"
+  },
+  "lint-staged": {
+    "*.{js,cjs,mjs,ts,tsx}": "eslint --cache",
+    "src/styles/**/*.scss": "stylelint"
   }
 }
