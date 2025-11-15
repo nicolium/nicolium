@@ -20,6 +20,7 @@ Changes made since the project forked from Soapbox in April 2024.
 - Native grouped notifications are used on Mastodon.
 - Likes, reposts and reactions lists are displayed on long press of respective buttons.
 - User local time is displayed on profile and in account hover card, if specified in profile fields.
+- Poll results can be displayed before voting.
 
 **Settings:**
 - You can add image description to your avatar/backend, if supported by backend.
@@ -66,6 +67,8 @@ Changes made since the project forked from Soapbox in April 2024.
 - Pleroma shoutbox is displayed on chats page.
 - Displaying user-provided media can be disabled, media descriptions will be displayed instead.
 - MFM can be displayed on compatible backends.
+- Lists can be set as exclusive and replies policy can be set up, if supported by backend.
+- Threads can be displayed in a linear view, similarly to traditional Pleroma-FE, as an alternative to tree view. You can expand spoilers with one click.
 
 ### Changed
 
@@ -90,6 +93,7 @@ Changes made since the project forked from Soapbox in April 2024.
 **Composing posts:**
 - Custom emojis are now split into categories.
 - GoToSocial users can post with date in the past.
+- Post scopes were renamed to match wording used by Mastodon.
 
 **UI changes:**
 - Removed header. Search bar and profile dropdown are moved to the sidebar. Mobile sidebar button is moved to the thumb navigation.
@@ -105,6 +109,11 @@ Changes made since the project forked from Soapbox in April 2024.
 - Event create/edit form is now a page, instead of a modal.
 - A star is used for favorite icon, instead of a heart.
 - Account avatars are squared.
+- Background gradients can be disabled. Some other visual behavior depends on this setting.
+- Tabler Icons were replaced with Phosphor Icons.
+- The entire loading process uses the same animation now.
+- Changed status info and notification title design.
+- Redesigned audio/video player controls.
 
 **Internal:**
 - Migrated some local stores from Redux to Zustand. Other stores have been migrated away from `immutable`, before moving them either to Zustand or TanStack Query.
@@ -113,6 +122,8 @@ Changes made since the project forked from Soapbox in April 2024.
 - Search page uses URL params now.
 - Themes use `adoptedStyleSheets` to work with stricter CSP.
 - Settings store uses a different key in development environment.
+- Styles are being migrated from TailwindCSS to just scss.
+- Default max image size is increased to match Mastodon limits.
 
 **Dependencies:**
 - Replaced `react-popper` and `react-overlays` with `@floating-ui/react`.
@@ -127,6 +138,8 @@ Changes made since the project forked from Soapbox in April 2024.
 - Removed Call to Action banner.
 - Removed links to block explorers for crypto addresses.
 - Removed support for custom apps provided during build.
+- Removed so called 'GDPR banner'.
+- Removed embed page which loads too much for the use case.
 
 ### Fixed
 
@@ -138,3 +151,4 @@ Changes made since the project forked from Soapbox in April 2024.
 - Admin dashboard now works on non-Pleroma backends.
 - Removed excessive calls to `fetchOwnAccounts`.
 - Media modal displays the whole thread correctly.
+- BrowsersList is actually being used now.
