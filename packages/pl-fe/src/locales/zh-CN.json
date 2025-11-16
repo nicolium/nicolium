@@ -969,7 +969,7 @@
   "federation_restrictions.explanation_box.title": "实例相关政策",
   "federation_restrictions.not_disclosed_message": "{siteTitle} 没有通过API向联邦宇宙披露限制。",
   "fediverse_tab.explanation_box.dismiss": "不再显示",
-  "fediverse_tab.explanation_box.explanation": "{site_title} 是联邦宇宙的一部分, 一个由数个站点组成的社交网络。您在这里看到的帖文来自其它站点。您可以自由地与他们打交道，或者屏蔽任何您不喜欢的站点。请注意第二个@符号后的完整用户名，以了解帖文来自哪个站点。要想只看到 {site_title} 的帖文，请访问 {local} 。",
+  "fediverse_tab.explanation_box.explanation": "{site_title} 是联邦宇宙的一部分, 一个由数个站点组成的社交网络。在这里，您可以看到来自整个联邦宇宙（包括其他服务器）的公开帖子。请注意第二个@符号后的完整用户名，以了解帖文来自哪个站点。要想只看到 {site_title} 的帖文，请访问 {local} 。",
   "fediverse_tab.explanation_box.title": "什么是联邦宇宙？",
   "feed_suggestions.heading": "建议的个人资料",
   "feed_suggestions.view_all": "查看全部",
