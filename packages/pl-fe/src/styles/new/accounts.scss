@@ -100,7 +100,7 @@
 }
 
 .⁂-profile-field {
-  dt span {
+  dt span[data-markup] {
     @include mixins.text($weight: bold);
   }
 
