@@ -1,0 +1,21 @@
+site_name: pl-fe Documentation
+site_url: https://pl.mkljczk.pl/docs/
+theme:
+  name: material
+  language: en
+  font: false
+  features:
+    - header.autohide
+  palette:
+    - scheme: slate
+      toggle:
+        icon: material/brightness-7
+        name: Switch to light mode
+    - scheme: default
+      toggle:
+        icon: material/brightness-4
+        name: Switch to dark mode
+plugins:
+  - search:
+      lang: en
+  - include-markdown

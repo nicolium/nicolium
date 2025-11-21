@@ -32,6 +32,11 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'pnpm'
 
+    - name: Setup Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: 3.x
+
     - name: Install deps
       working-directory: .
       run: pnpm install
@@ -85,6 +90,14 @@ jobs:
     - name: Copy pl-api documentation
       working-directory: ./packages/pl-api
       run: cp docs ../pl-fe/dist/pl-api-docs -r
+
+    - name: Build documentation
+      working-directory: .
+      run: pip install mkdocs-material mkdocs-include-markdown-plugin && mkdocs build
+
+    - name: Copy documentation
+      working-directory: .
+      run: cp site ../pl-fe/dist/docs -r
 
     - name: Upload Github Pages artifact
       uses: actions/upload-pages-artifact@v3
