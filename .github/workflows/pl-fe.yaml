@@ -97,7 +97,7 @@ jobs:
 
     - name: Copy documentation
       working-directory: .
-      run: cp site ../pl-fe/dist/docs -r
+      run: cp site ./packages/pl-fe/dist/docs -r
 
     - name: Upload Github Pages artifact
       uses: actions/upload-pages-artifact@v3
