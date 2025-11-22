@@ -1,0 +1,75 @@
+// Adapted from react-simple-pull-to-refresh, licensed under MIT License.
+// https://github.com/thmsgbrt/react-simple-pull-to-refresh/blob/master/LICENCE
+
+.ptr,
+.ptr__children {
+  height: 100%;
+  width: 100%;
+  overflow: visible;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+}
+
+/**
+  * Pull down transition 
+  */
+.ptr__children,
+.ptr__pull-down {
+  transition: transform 0.2s cubic-bezier(0, 0, 0.31, 1);
+}
+
+.ptr__pull-down {
+  position: absolute;
+  overflow: hidden;
+  left: 0;
+  right: 0;
+  top: 0;
+  visibility: hidden;
+
+  > div {
+    display: none;
+  }
+
+  .spinner {
+    margin-top: 0.5rem;
+  }
+}
+
+.ptr--dragging {
+  /**
+    * Hide PullMore content is treshold breached
+    */
+  &.ptr--pull-down-treshold-breached {
+    .ptr__pull-down--pull-more {
+      display: none;
+    }
+  }
+
+  /**
+    * Otherwize, display content
+    */
+  .ptr__pull-down--pull-more {
+    display: block;
+  }
+}
+
+.ptr--pull-down-treshold-breached {
+  /**
+    * Force opacity to 1 is pull down trashold breached
+    */
+  .ptr__pull-down {
+    opacity: 1 !important;
+  }
+
+  /**
+    * And display loader
+    */
+  .ptr__pull-down--loading {
+    display: block;
+  }
+}
+
+.ptr__loader {
+  margin: 0 auto;
+  text-align: center;
+}

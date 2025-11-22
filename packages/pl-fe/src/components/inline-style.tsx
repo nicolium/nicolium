@@ -9,8 +9,8 @@ const InlineStyle: React.FC<IInlineStyle> = ({ children }) => {
   const sheet = useRef(document.adoptedStyleSheets ? new CSSStyleSheet() : document.createElement('style'));
 
   useEffect(() => {
-    if (sheet.current) {
-      const stylesheet = sheet.current;
+    const stylesheet = sheet.current;
+    if (stylesheet) {
       if (stylesheet instanceof CSSStyleSheet) {
         stylesheet.replaceSync(children);
       } else {
