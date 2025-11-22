@@ -103,7 +103,6 @@
     "localforage": "^1.10.0",
     "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^2.9.2",
-    "multiselect-react-dropdown": "^2.0.25",
     "mutative": "^1.1.0",
     "path-browserify": "^1.0.1",
     "pl-api": "workspace:*",

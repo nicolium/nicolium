@@ -11,17 +11,95 @@ select {
   @apply flex text-sm items-center;
 }
 
-.plfe-multiselect {
-  .chip {
-    @apply bg-primary-600 my-1;
+// Adapted from [multiselect-react-dropdown](https://github.com/srigar/multiselect-react-dropdown), licensed under MIT License.
+.multiselect-container {
+  position: relative;
+  text-align: left;
+  width: 100%;
+
+  &--disabled {
+    pointer-events: none;
+    opacity: 0.5;
+}
+
+  input {
+    border: none;
+    margin-top: 3px;
+    background: transparent;
+
+    &:focus {
+      outline: none;
+    }
   }
 
-  .search-wrapper {
+  ul {
+    display: block;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    max-height: 250px;
+    overflow-y: auto;
+  }
+
+  li {
+    padding: 10px;
+
+    &:hover {
+      background: #0096fb;
+      color: #fff;
+      cursor: pointer;
+    }
+  }
+
+  .searchWrapper {
+    border: 1px solid;
+    position: relative;
     @apply rounded-md border-gray-300 bg-white min-h-[38px] max-w-[400px] py-0 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 disabled:opacity-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:ring-1 dark:ring-gray-800 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:text-sm w-auto;
 
     > input {
       @apply first:pl-0 p-1.5 m-0 focus:ring-0 text-base sm:text-sm;
     }
+  }
+
+  .chip {
+    padding: 4px 10px;
+    margin-right: 5px;
+    border-radius: 11px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 13px;
+    line-height: 19px;
+    color: #fff;
+    white-space: nowrap;
+    @apply bg-primary-600 my-1;
+  }
+
+  .optionListContainer {
+    position: absolute;
+    width: 100%;
+    background: #fff;
+    border-radius: 4px;
+    margin-top: 1px;
+    z-index: 2;
+  }
+
+  .highlightOption {
+    @apply bg-primary-600;
+    color: #fff;
+  }
+
+  .displayBlock {
+    display: block;
+  }
+
+  .displayNone {
+    display: none;
+  }
+
+  .notFound {
+    padding: 10px;
+    display: block;
   }
 
   .optionContainer {
@@ -30,9 +108,5 @@ select {
 
   .option {
     @apply hover:bg-primary-600;
-  }
-
-  .highlightOption {
-    @apply bg-primary-600;
   }
 }
