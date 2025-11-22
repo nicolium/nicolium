@@ -70,14 +70,14 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
   const { closeSidebar } = useUiStoreActions();
 
   const me = useAppSelector((state) => state.me);
+  const features = useFeatures();
 
   const authenticatedScheduledStatusesCountQueryOptions = useMemo(() => ({
     ...scheduledStatusesCountQueryOptions,
-    enabled: !!me,
-  }), [me]);
+    enabled: !!me && features.scheduledStatuses,
+  }), [me, features]);
 
   const getOtherAccounts = useCallback(makeGetOtherAccounts(), []);
-  const features = useFeatures();
   const { account } = useAccount(me || undefined);
   const otherAccounts = useAppSelector((state) => getOtherAccounts(state));
   const settings = useSettings();

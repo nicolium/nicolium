@@ -64,8 +64,8 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
 
   const authenticatedScheduledStatusesCountQueryOptions = useMemo(() => ({
     ...scheduledStatusesCountQueryOptions,
-    enabled: !!account,
-  }), [!!account]);
+    enabled: !!account && features.scheduledStatuses,
+  }), [!!account, features]);
 
   const notificationCount = useAppSelector((state) => state.notifications.unread);
   const followRequestsCount = useFollowRequestsCount().data || 0;
