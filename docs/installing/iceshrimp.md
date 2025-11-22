@@ -1,0 +1,56 @@
+# Installing pl-fe as Iceshrimp.NET frontend
+
+Iceshrimp.NET does not have built-in support for alternative frontends. However, there are ways to use `pl-fe` as the frontend for Iceshrimp.NET by rerouting specific requests using a reverse proxy like Nginx.
+
+While this is the only way to use some of Iceshrimp.NET-specific features with `pl-fe`, because of Iceshrimp.NET CORS configuration, remember that it doesn't have full feature parity with the default Iceshrimp.NET frontend. You might prefer using `pl-fe` [in standalone mode](./standalone.md) instead.
+
+## Example Nginx configuration
+
+```nginx
+map $http_upgrade $connection_upgrade {
+  default upgrade;
+  '' close;
+}
+
+map "$http_accept,$http_content_type" $maybe_activitypub {
+  default @plfe;
+
+  "~application/json" @shrimp;
+  "~application/activity\+json" @shrimp;
+  "~application/ld\+json" @shrimp;
+  "~application/ld\+json; *profile=\"https://www.w3.org/ns/activitystreams\"" @shrimp;
+}
+
+server {
+  server_name iceshrimp.example.com;
+  root /var/www/;
+
+  location ~ ^/(Components|openapi|scalar|swagger|css|_content|js|files|avatars|banners|api|inbox|oauth|admin|manifest.json|nodeinfo|.well-known|@(.+)$|[a-zA-Z0-9.]+.css$) {
+    try_files /dev/null @shrimp;
+  }
+
+  location / {
+    try_files $uri $maybe_activitypub;
+  }
+
+  location ~ ^/(users|notes|threads|inbox|emoji|@(.+)) {
+    try_files /dev/null $maybe_activitypub;
+  }
+
+  location @plfe {
+    try_files /index.html /dev/null;
+  }
+
+  location @shrimp {
+    proxy_pass http://localhost:3000;
+    proxy_http_version 1.1;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $host;
+    proxy_set_header Upgrade $http_upgrade;
+    proxy_set_header Connection $connection_upgrade;
+  }
+
+  listen 443 ssl;
+}
+```
