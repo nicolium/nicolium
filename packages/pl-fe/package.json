@@ -133,7 +133,7 @@
     "redux-thunk": "^3.1.0",
     "reselect": "^5.1.1",
     "resize-observer": "^1.0.4",
-    "sass": "^1.86.3",
+    "sass-embedded": "^1.93.3",
     "stringz": "^2.1.0",
     "tabbable": "^6.2.0",
     "tiny-queue": "^0.2.1",
