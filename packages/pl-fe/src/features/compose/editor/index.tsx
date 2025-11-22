@@ -124,6 +124,8 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
       if (editorState) {
         return editorState;
       }
+      
+      console.log(editorState);
 
       return () => {
         const text = !compose.modifiedLanguage || compose.modifiedLanguage === compose.language
@@ -177,7 +179,7 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
   }
 
   return (
-    <LexicalComposer key={isWysiwyg ? 'wysiwyg' : ''} initialConfig={initialConfig}>
+    <LexicalComposer key={isWysiwyg ? 'wysiwyg' : 'no-wysiwyg'} initialConfig={initialConfig}>
       <div className={clsx('lexical relative', className)} data-markup>
         <RichTextPlugin
           contentEditable={
