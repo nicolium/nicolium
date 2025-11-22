@@ -23,6 +23,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useCompose } from 'pl-fe/hooks/use-compose';
+import { usePrevious } from 'pl-fe/hooks/use-previous';
 
 import { useNodes } from './nodes';
 import AutosuggestPlugin from './plugins/autosuggest-plugin';
@@ -101,6 +102,7 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
   const dispatch = useAppDispatch();
   const { contentType, modifiedLanguage: language } = useCompose(composeId);
   const isWysiwyg = contentType === 'wysiwyg';
+  const previouslyWasWysiwyg = usePrevious(isWysiwyg);
   const nodes = useNodes(isWysiwyg);
   const intl = useIntl();
 
@@ -121,7 +123,7 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
         ? compose.editorState
         : compose.editorStateMap[compose.modifiedLanguage] || '';
 
-      if (editorState) {
+      if (editorState && !previouslyWasWysiwyg) {
         return editorState;
       }
 
