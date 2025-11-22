@@ -119,7 +119,7 @@
     "no-loop-func": "error",
     "no-mixed-spaces-and-tabs": "error",
     "no-nested-ternary": "warn",
-    "no-trailing-spaces": "warn",
+    "no-trailing-spaces": "error",
     "no-undef": "error",
     "no-unreachable": "error",
     "no-unused-expressions": "error",
