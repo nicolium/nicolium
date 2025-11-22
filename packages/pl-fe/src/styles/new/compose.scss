@@ -1,53 +1,74 @@
 @use 'mixins';
 
 .⁂-compose-form {
-  @apply flex flex-col gap-y-4 w-full;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
 
   &__select-buttons {
-    @apply flex gap-2 flex-wrap;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
 
     button {
       @include mixins.button($theme: muted, $size: xs);
 
       .⁂-icon svg {
-        @apply size-4;
+        height: 1rem;
+        width: 1rem;
       }
     }
   }
 
   &--transparent &__select-buttons {
-    @apply -mb-2;
+    margin-bottom: -0.5rem;
   }
 
   &__spoiler-input {
-    @apply rounded-md !bg-transparent dark:!bg-transparent;
+    border-radius: 0.375rem;
+    background-color: transparent !important;
   }
 
   &:not(&--transparent) &__editor {
     @apply rounded-md border-gray-400 px-3 py-2 ring-2 focus-within:border-primary-500 focus-within:ring-primary-500 dark:border-gray-800 dark:ring-gray-800 dark:focus-within:border-primary-500 dark:focus-within:ring-primary-500;
 
     &__placeholder {
+      padding-top: 0.5rem;
       @apply pt-2;
     }
   }
 
   &__modifiers {
-    @apply flex flex-col gap-4 font-[inherit] text-sm text-gray-900;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    font-family: inherit;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    @apply text-gray-900;
   }
 
   &__footer {
-    @apply flex flex-wrap items-center justify-between;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
 
     &--condensed {
-      @apply hidden;
+      display: none;
     }
   }
 
   &--with-avatar &__footer {
-    @apply ml-[-56px] sm:ml-0;
+    margin-left: -3.5rem;
+    @apply sm:ml-0;
   }
 
   &__buttons {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
     @apply flex items-center gap-2;
   }
 
@@ -56,11 +77,17 @@
   }
 
   &__counter {
-    @apply flex items-center gap-1;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
   }
 
   &__button {
-    @apply place-content-center items-center gap-x-2 px-4 py-2 rtl:space-x-reverse inline-flex select-none appearance-none border border-transparent bg-primary-500 transition-all hover:bg-primary-400 focus:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:ring-offset-2 disabled:cursor-default disabled:opacity-75 dark:hover:bg-primary-600 rounded-l-full pr-2;
+    place-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    @apply rtl:space-x-reverse inline-flex select-none appearance-none border border-transparent bg-primary-500 transition-all hover:bg-primary-400 focus:bg-primary-500 focus:outline-none focus:ring-2 focus:ring-primary-300 focus:ring-offset-2 disabled:cursor-default disabled:opacity-75 dark:hover:bg-primary-600 rounded-l-full pr-2;
 
     &__container {
       @apply flex items-center gap-px text-sm font-medium text-gray-100;
@@ -76,40 +103,52 @@
   }
 
   &__poll {
-    @apply flex flex-col gap-y-4;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
 
     &__options {
-      @apply flex flex-col gap-2;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
 
     &__option {
-      @apply flex items-center justify-between gap-4;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
     }
   }
 
   &__schedule {
-    @apply flex flex-col gap-2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 
     &__hint {
       @include mixins.text($theme: muted);
     }
 
     &__date {
-      @apply flex items-center gap-2;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     .⁂-icon-button {
-      @apply bg-transparent text-gray-400 hover:text-gray-600;
+      @apply text-gray-400 hover:text-gray-600;
+      background: transparent;
 
       svg {
-        @apply size-4;
+        height: 1rem;
       }
     }
   }
 }
 
 .⁂-modal-root__modal .⁂-compose-form__select-buttons {
-  @apply pt-1;
+  padding-top: 0.25rem;
 }
 
 .⁂-language-dropdown {
