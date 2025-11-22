@@ -28,16 +28,6 @@ unzip pl-fe.zip -d /opt/pleroma/instance/static/
 rm pl-fe.zip
 ```
 
-**Note**: Some Fediverse software (Akkoma, Mitra) use Content Security Policy configuration which disallows the usage of inline styles, which are used by pl-fe for color schemes. [Mangane README](https://github.com/BDX-town/Mangane/) suggests using server configuration to override the default CSP header:
-
-<blockquote>
-<em>Here is an example configuration for nginx:</em>
-<pre><code># add style-src for mangane
-proxy_hide_header Content-Security-Policy;
-add_header Content-Security-Policy "upgrade-insecure-requests;script-src 'self';connect-src 'self' blob: https://example.com wss://example.com;media-src 'self' https:;img-src 'self' data: blob: https:;default-src 'none';base-uri 'self';frame-ancestors 'none';style-src 'self' 'unsafe-inline';font-src 'self';manifest-src 'self';" always;</code></pre>
-<em>Please replace https://example.com with your own domain</em>
-</blockquote>
-
 ## Repository
 
 The repository hosts `pl-fe`, but also libraries related to the project. This includes:
