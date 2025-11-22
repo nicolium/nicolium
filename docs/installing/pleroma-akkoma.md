@@ -18,13 +18,13 @@ On Akkoma, however, there is no `pl-fe` in the default available frontends list 
 
 ### OTP
 ```sh
-./bin/pleroma_ctl frontend install pl-fe --ref develop --build-url https://pl.mkljczk.pl/pl-fe.zip
+./bin/pleroma_ctl frontend install pl-fe --ref develop --build-url https://pl.mkljczk.pl/pl-fe.zip --build-dir .
 ```
 
 ### From Source
 
 ```sh
-mix pleroma.frontend install pl-fe --ref develop --build-url https://pl.mkljczk.pl/pl-fe.zip
+mix pleroma.frontend install pl-fe --ref develop --build-url https://pl.mkljczk.pl/pl-fe.zip --build-dir .
 ```
 
 It is now possible to set `pl-fe` as the primary frontend in the configuration file or via AdminFE:
