@@ -124,8 +124,6 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
       if (editorState) {
         return editorState;
       }
-      
-      console.log(editorState);
 
       return () => {
         const text = !compose.modifiedLanguage || compose.modifiedLanguage === compose.language
