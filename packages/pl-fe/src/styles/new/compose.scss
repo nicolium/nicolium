@@ -108,6 +108,10 @@
   }
 }
 
+.⁂-modal-root__modal .⁂-compose-form__select-buttons {
+  @apply pt-1;
+}
+
 .⁂-language-dropdown {
   &__search {
     @apply relative m-2 mt-1 block grow;
