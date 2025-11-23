@@ -54,3 +54,7 @@ server {
   listen 443 ssl;
 }
 ```
+
+## Example Caddy configuration
+
+There is also a Caddyfile made by [Alexia](https://cyrneko.eu/) used by [The Starlight Network](https://shrimp.starlightnet.work/) instance. You can find it and read more about it [here](https://forge.starlightnet.work/Team/configurations/src/branch/master/pl-fe).
