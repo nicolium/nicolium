@@ -79,10 +79,7 @@ const expandNormalizedConversations = (state: State, conversations: Conversation
     });
   }
 
-  if (!next && !isLoadingRecent) {
-    state.hasMore = false;
-  }
-
+  state.hasMore = !next;
   state.next = next;
   state.isLoading = false;
 };

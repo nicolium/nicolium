@@ -40,12 +40,12 @@ const markConversationRead = (conversationId: string) => (dispatch: AppDispatch,
 const expandConversations = (expand = true) => (dispatch: AppDispatch, getState: () => RootState) => {
   if (!isLoggedIn(getState)) return;
   const state = getState();
+  if (state.conversations.isLoading) return;
+
+  const hasMore = state.conversations.hasMore;
+  if (expand && !hasMore) return;
 
   dispatch(expandConversationsRequest());
-
-  const isLoadingRecent = !!state.conversations.next;
-
-  if (isLoadingRecent && !expand) return;
 
   return (state.conversations.next?.() || getClient(state).timelines.getConversations())
     .then(response => {
@@ -53,7 +53,7 @@ const expandConversations = (expand = true) => (dispatch: AppDispatch, getState:
         accounts: response.items.reduce((aggr: Array<Account>, item) => aggr.concat(item.accounts), []),
         statuses: response.items.map((item) => item.last_status),
       }));
-      dispatch(expandConversationsSuccess(response.items, response.next, isLoadingRecent));
+      dispatch(expandConversationsSuccess(response.items, response.next, expand));
     })
     .catch(err => dispatch(expandConversationsFail(err)));
 };

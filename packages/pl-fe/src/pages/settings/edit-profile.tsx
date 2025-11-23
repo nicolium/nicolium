@@ -170,6 +170,14 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({ index, va
         value={value.name}
         onChange={handleChange('name')}
         placeholder={index === 0 ? intl.formatMessage(messages.firstMetaFieldLabel) : intl.formatMessage(messages.metaFieldLabel)}
+        onFocus={(e) => {
+          const field: HTMLElement | null = e.target.closest('[draggable=true]');
+          if (field) field.draggable = false;
+        }}
+        onBlur={(e) => {
+          const field: HTMLElement | null = e.target.closest('[draggable=false]');
+          if (field) field.draggable = true;
+        }}
       />
       <Input
         type='text'
@@ -177,6 +185,14 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({ index, va
         value={value.value}
         onChange={handleChange('value')}
         placeholder={intl.formatMessage(messages.metaFieldContent)}
+        onFocus={(e) => {
+          const field: HTMLElement | null = e.target.closest('[draggable=true]');
+          if (field) field.draggable = false;
+        }}
+        onBlur={(e) => {
+          const field: HTMLElement | null = e.target.closest('[draggable=false]');
+          if (field) field.draggable = true;
+        }}
       />
     </HStack>
   );
