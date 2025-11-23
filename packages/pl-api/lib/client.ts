@@ -5901,7 +5901,7 @@ class PlApiClient {
       return v.parse(driveFolderSchema, response.json);
     },
 
-    createFolder: async (name: string, parentId: string) => {
+    createFolder: async (name: string, parentId?: string) => {
       await this.#getIceshrimpAccessToken();
 
       const response = await this.request('/api/iceshrimp/drive/folder', {

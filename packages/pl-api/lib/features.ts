@@ -679,6 +679,8 @@ const getFeatures = (instance: Instance) => {
      */
     domains: any([instance.pleroma.metadata.multitenancy.enabled]),
 
+    drive: v.software === ICESHRIMP_NET,
+
     /**
      * Ability to edit profile information.
      * @see PATCH /api/v1/accounts/update_credentials
