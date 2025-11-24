@@ -94,7 +94,7 @@ const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMe
   },
   status: {
     id: 'notification.status',
-    defaultMessage: '{name} just posted',
+    defaultMessage: '{name} {isReblog, plural, =0 {just posted} other {just reposted}}',
   },
   poll: {
     id: 'notification.poll',
@@ -169,6 +169,7 @@ const buildMessage = (
   targetName: string,
   instanceTitle: string,
   hasStatus: boolean,
+  isReblog: boolean,
 ): React.ReactNode => {
   const renderedAccounts = accounts.slice(0, 2).map(account => buildLink(account)).filter(Boolean);
 
@@ -189,6 +190,7 @@ const buildMessage = (
     instance: instanceTitle,
     count: accounts.length,
     hasStatus: +hasStatus,
+    isReblog: type === 'reblog' ? 1 : 0,
   });
 };
 
@@ -459,7 +461,7 @@ const Notification: React.FC<INotification> = (props) => {
   const targetName = notification.type === 'move' ? notification.target.acct : '';
 
   const message: React.ReactNode = accounts.length
-    ? buildMessage(intl, displayedType, accounts, targetName, instance.title, !!status)
+    ? buildMessage(intl, displayedType, accounts, targetName, instance.title, !!status, !!status?.reblog)
     : null;
 
   const ariaLabel = (

@@ -1332,7 +1332,7 @@
   "notification.reblog": "{name} reposted your post",
   "notification.reply": "{name} replied to your post",
   "notification.severed_relationships": "Lost connections with {name}",
-  "notification.status": "{name} just posted",
+  "notification.status": "{name} {isReblog, plural, =0 {just posted} other {just reposted}}",
   "notification.update": "{name} edited a post you interacted with",
   "notifications.filter.all": "All",
   "notifications.filter.boosts": "Reposts",
