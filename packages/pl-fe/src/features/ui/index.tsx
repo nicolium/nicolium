@@ -151,6 +151,7 @@ import {
   Privacy,
   UserIndex,
   WrenchedTimeline,
+  Drive,
 } from './util/async-components';
 import GlobalHotkeys from './util/global-hotkeys';
 import { WrappedRoute } from './util/react-router-helpers';
@@ -314,6 +315,8 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       <WrappedRoute path='/statuses/:statusId' exact layout={StatusLayout} component={Status} content={children} />
       {features.scheduledStatuses && <WrappedRoute path='/scheduled_statuses' layout={DefaultLayout} component={ScheduledStatuses} content={children} />}
       <WrappedRoute path='/draft_statuses' layout={DefaultLayout} component={DraftStatuses} content={children} />
+
+      {features.drive && <WrappedRoute path='/drive/:folderId?' layout={DefaultLayout} component={Drive} content={children} exact />}
 
       <WrappedRoute path='/circle' layout={DefaultLayout} component={Circle} content={children} />
 

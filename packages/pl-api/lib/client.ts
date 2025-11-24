@@ -5952,7 +5952,7 @@ class PlApiClient {
       return v.parse(driveFileSchema, response.json);
     },
 
-    createFile: async (file: File, folderId: string) => {
+    createFile: async (file: File, folderId?: string) => {
       await this.#getIceshrimpAccessToken();
 
       const response = await this.request('/api/iceshrimp/drive', {
@@ -5968,7 +5968,7 @@ class PlApiClient {
       await this.#getIceshrimpAccessToken();
 
       const response = await this.request(`/api/iceshrimp/drive/${id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         body: params,
       });
 
@@ -5993,7 +5993,7 @@ class PlApiClient {
         body: { folderId: targetFolderId },
       });
 
-      return v.parse(driveFolderSchema, response.json);
+      return v.parse(driveFileSchema, response.json);
     },
   };
 

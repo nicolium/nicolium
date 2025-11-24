@@ -29,6 +29,7 @@ export const Directory = lazy(() => import('pl-fe/pages/account-lists/directory'
 export const DomainBlocks = lazy(() => import('pl-fe/pages/settings/domain-blocks'));
 export const Domains = lazy(() => import('pl-fe/pages/dashboard/domains'));
 export const DraftStatuses = lazy(() => import('pl-fe/pages/status-lists/draft-statuses'));
+export const Drive = lazy(() => import('pl-fe/pages/drive/drive'));
 export const EditEmail = lazy(() => import('pl-fe/pages/settings/edit-email'));
 export const EditFilter = lazy(() => import('pl-fe/pages/settings/edit-filter'));
 export const EditGroup = lazy(() => import('pl-fe/pages/groups/edit-group'));

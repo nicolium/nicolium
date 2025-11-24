@@ -6,7 +6,7 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 
 import type { DriveFolder } from 'pl-api';
 
-const useDriveFolder = (folderId?: string) => {
+const useDriveFolderQuery = (folderId?: string) => {
   const client = useClient();
   const features = useFeatures();
 
@@ -17,7 +17,7 @@ const useDriveFolder = (folderId?: string) => {
   });
 };
 
-const useCreateDriveFolder = () => {
+const useCreateDriveFolderMutation = () => {
   const client = useClient();
   const queryClient = useQueryClient();
 
@@ -31,20 +31,31 @@ const useCreateDriveFolder = () => {
   });
 };
 
-const useUpdateDriveFolder = (folderId: string) => {
+const useUpdateDriveFolderMutation = (folderId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
 
+  let previousParentId: string | null;
+
   return useMutation({
     mutationKey: ['drive', 'folders'],
-    mutationFn: (name: string) => client.drive.updateFolder(folderId, name),
+    mutationFn: (name: string) => {
+      const oldFolder = queryClient.getQueryData<DriveFolder>(['drive', 'folders', folderId]);
+      if (oldFolder) {
+        previousParentId = oldFolder.parent_id;
+      } else {
+        previousParentId = null;
+      }
+      return client.drive.updateFolder(folderId, name);
+    },
     onSuccess: (folder) => {
       queryClient.setQueryData(['drive', 'folders', folder.id], folder);
+      queryClient.invalidateQueries({ queryKey: ['drive', 'folders', previousParentId], exact: true });
     },
   });
 };
 
-const useDeleteDriveFolder = (folderId: string) => {
+const useDeleteDriveFolderMutation = (folderId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
 
@@ -63,12 +74,12 @@ const useDeleteDriveFolder = (folderId: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['drive', 'folders', folderId], exact: true });
-      if (previousParentId) queryClient.invalidateQueries({ queryKey: ['drive', 'folders', previousParentId || undefined], exact: true });
+      queryClient.invalidateQueries({ queryKey: ['drive', 'folders', previousParentId], exact: true });
     },
   });
 };
 
-const useMoveDriveFolder = (folderId: string) => {
+const useMoveDriveFolderMutation = (folderId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
 
@@ -93,4 +104,4 @@ const useMoveDriveFolder = (folderId: string) => {
   });
 };
 
-export { useDriveFolder, useCreateDriveFolder, useUpdateDriveFolder, useDeleteDriveFolder, useMoveDriveFolder };
+export { useDriveFolderQuery, useCreateDriveFolderMutation, useUpdateDriveFolderMutation, useDeleteDriveFolderMutation, useMoveDriveFolderMutation };
