@@ -1,7 +1,7 @@
 interface UpdateFileParams {
   filename: string;
   sensitive: boolean;
-  description: string;
+  description?: string;
 }
 
 export type { UpdateFileParams };
