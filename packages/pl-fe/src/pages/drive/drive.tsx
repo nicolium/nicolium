@@ -12,7 +12,7 @@ import IconButton from 'pl-fe/components/ui/icon-button';
 import { MIMETYPE_ICONS } from 'pl-fe/components/upload';
 import ColumnLoading from 'pl-fe/features/ui/components/column-loading';
 import { useCreateDriveFileMutation, useDeleteDriveFileMutation, useUpdateDriveFileMutation } from 'pl-fe/queries/drive/use-drive-file';
-import { useDeleteDriveFolderMutation, useDriveFolderQuery, useUpdateDriveFolderMutation } from 'pl-fe/queries/drive/use-drive-folder';
+import { useCreateDriveFolderMutation, useDeleteDriveFolderMutation, useDriveFolderQuery, useUpdateDriveFolderMutation } from 'pl-fe/queries/drive/use-drive-folder';
 import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 import { download } from 'pl-fe/utils/download';
@@ -54,6 +54,10 @@ const messages = defineMessages({
   fileUpload: { id: 'drive.file.upload', defaultMessage: 'Upload file' },
   fileUploadSuccess: { id: 'drive.file.upload.success', defaultMessage: 'File uploaded successfully.' },
   fileUploadError: { id: 'drive.file.upload.error', defaultMessage: 'Failed to upload file.' },
+  newFolder: { id: 'drive.folder.new', defaultMessage: 'New folder' },
+  newFolderPlaceholder: { id: 'drive.folder.new.placeholder', defaultMessage: 'Folder name' },
+  newFolderSuccess: { id: 'drive.folder.new.success', defaultMessage: 'Folder created successfully.' },
+  newFolderError: { id: 'drive.folder.new.error', defaultMessage: 'Failed to create folder.' },
 });
 
 interface IFile {
@@ -348,8 +352,11 @@ interface IDrivePage {
 const DrivePage: React.FC<IDrivePage> = ({ params }) => {
   const intl = useIntl();
 
+  const { openModal } = useModalsActions();
+
   const { data, isPending } = useDriveFolderQuery(params?.folderId);
   const { mutate: uploadFile } = useCreateDriveFileMutation(params?.folderId);
+  const { mutate: createFolder } = useCreateDriveFolderMutation();
 
   const items: Menu = [
     {
@@ -359,6 +366,24 @@ const DrivePage: React.FC<IDrivePage> = ({ params }) => {
         uploadFile(files[0], {
           onSuccess: () => toast.success(messages.fileUploadSuccess),
           onError: (error) => toast.error(messages.fileUploadError),
+        });
+      },
+    },
+    {
+      text: intl.formatMessage(messages.newFolder),
+      icon: require('@phosphor-icons/core/regular/folder-plus.svg'),
+      action: () => {
+        openModal('TEXT_FIELD', {
+          heading: <FormattedMessage id='drive.folder.create' defaultMessage='Create new folder' />,
+          placeholder: intl.formatMessage(messages.newFolderPlaceholder),
+          confirm: <FormattedMessage id='drive.folder.create.confirm' defaultMessage='Create' />,
+          singleLine: true,
+          onConfirm: (value: string) => {
+            createFolder({ name: value, parentId: params?.folderId }, {
+              onSuccess: () => toast.success(messages.newFolderSuccess),
+              onError: () => toast.error(messages.newFolderError),
+            });
+          },
         });
       },
     },

@@ -5906,7 +5906,7 @@ class PlApiClient {
 
       const response = await this.request('/api/iceshrimp/drive/folder', {
         method: 'POST',
-        body: { name, parentId },
+        body: { name, parentId: parentId || null },
       });
 
       return v.parse(driveFolderSchema, response.json);
