@@ -23,6 +23,8 @@ interface MenuItem {
   to?: string;
   type?: 'toggle' | 'radio';
   items?: Array<Omit<MenuItem, 'items'>>;
+  onSelectFile?: (files: FileList) => void;
+  accept?: string;
 }
 
 interface IDropdownMenuItem {
@@ -37,6 +39,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
   const history = useHistory();
 
   const itemRef = useRef<HTMLAnchorElement>(null);
+  const fileElement = useRef<HTMLInputElement>(null);
 
   const handleClick: React.EventHandler<React.MouseEvent | React.KeyboardEvent> = (event) => {
     event.stopPropagation();
@@ -46,6 +49,11 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
     if (item.items?.length) {
       event.preventDefault();
       onSetTab(index);
+      return;
+    }
+
+    if (item.onSelectFile) {
+      fileElement.current?.click();
       return;
     }
 
@@ -65,6 +73,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
 
   const handleAuxClick: React.EventHandler<React.MouseEvent> = (event) => {
     if (!item) return;
+    if (item.onSelectFile) fileElement.current?.click();
     if (onClick) onClick();
 
     if (event.button === 1 && item.middleClick) {
@@ -85,6 +94,14 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
     if (!item) return;
 
     if (item.onChange) item.onChange(event.target.checked);
+  };
+
+  const handleSelectFileChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    console.log('handleSelectFileChange');
+    console.log(e.target.files, item);
+    if (e.target.files?.length && item?.onSelectFile) {
+      item.onSelectFile(e.target.files);
+    }
   };
 
   useEffect(() => {
@@ -145,6 +162,19 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
           <Icon src={require('@phosphor-icons/core/regular/caret-right.svg')} containerClassName='ml-auto' className='size-5 flex-none' />
         )}
       </a>
+
+      {item.onSelectFile && (
+        <label className='sr-only'>
+          <span>{item.text}</span>
+          <input
+            ref={fileElement}
+            type='file'
+            accept={item.accept}
+            onChange={handleSelectFileChange}
+            className='hidden'
+          />
+        </label>
+      )}
     </li>
   );
 };

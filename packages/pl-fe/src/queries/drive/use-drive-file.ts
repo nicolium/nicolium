@@ -16,14 +16,14 @@ const useDriveFileQuery = (fileId: string) => {
   });
 };
 
-const useCreateDriveFileMutation = () => {
+const useCreateDriveFileMutation = (folderId?: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ['drive', 'files'],
-    mutationFn: ({ file, folderId }: { file: File; folderId?: string }) => client.drive.createFile(file, folderId),
-    onSuccess: (file, { folderId }) => {
+    mutationFn: (file: File) => client.drive.createFile(file, folderId),
+    onSuccess: (file) => {
       queryClient.setQueryData(['drive', 'files', file.id], file);
       queryClient.invalidateQueries({ queryKey: ['drive', 'folders', folderId], exact: true });
     },

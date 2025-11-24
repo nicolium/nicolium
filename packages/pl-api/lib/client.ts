@@ -5957,7 +5957,8 @@ class PlApiClient {
 
       const response = await this.request('/api/iceshrimp/drive', {
         method: 'POST',
-        body: { file, folderId },
+        body: { file },
+        params: { folderId },
         contentType: '',
       });
 

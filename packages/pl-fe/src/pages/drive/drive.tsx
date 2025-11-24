@@ -1,6 +1,7 @@
 import defaultIcon from '@phosphor-icons/core/regular/paperclip.svg';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { useHistory } from 'react-router-dom';
 
 import DropdownMenu, { Menu } from 'pl-fe/components/dropdown-menu';
 import { EmptyMessage } from 'pl-fe/components/empty-message';
@@ -10,10 +11,11 @@ import Icon from 'pl-fe/components/ui/icon';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import { MIMETYPE_ICONS } from 'pl-fe/components/upload';
 import ColumnLoading from 'pl-fe/features/ui/components/column-loading';
-import { useDeleteDriveFileMutation, useUpdateDriveFileMutation } from 'pl-fe/queries/drive/use-drive-file';
+import { useCreateDriveFileMutation, useDeleteDriveFileMutation, useUpdateDriveFileMutation } from 'pl-fe/queries/drive/use-drive-file';
 import { useDeleteDriveFolderMutation, useDriveFolderQuery, useUpdateDriveFolderMutation } from 'pl-fe/queries/drive/use-drive-folder';
 import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
+import { download } from 'pl-fe/utils/download';
 
 import type { DriveFile, DriveFolder, MediaAttachment } from 'pl-api';
 
@@ -49,6 +51,9 @@ const messages = defineMessages({
   fileDelete: { id: 'drive.file.delete', defaultMessage: 'Delete file' },
   fileDeleteSuccess: { id: 'drive.file.delete.success', defaultMessage: 'File deleted successfully.' },
   fileDeleteError: { id: 'drive.file.delete.error', defaultMessage: 'Failed to delete file.' },
+  fileUpload: { id: 'drive.file.upload', defaultMessage: 'Upload file' },
+  fileUploadSuccess: { id: 'drive.file.upload.success', defaultMessage: 'File uploaded successfully.' },
+  fileUploadError: { id: 'drive.file.upload.error', defaultMessage: 'Failed to upload file.' },
 });
 
 interface IFile {
@@ -64,25 +69,30 @@ const File: React.FC<IFile> = ({ file }) => {
 
   const isMedia = file.content_type.match(/image|video|audio/);
 
+  const handleView = () => {
+    if (!isMedia) {
+      download(file.url, file.filename);
+      return;
+    }
+
+    const mediaAttachment = {
+      id: file.id,
+      url: file.url,
+      preview_url: file.thumbnail_url,
+      remote_url: file.url,
+      description: file.description || '',
+      type: file.content_type.split('/')[0] as 'image' | 'video' | 'audio' | 'unknown',
+      mime_type: file.content_type,
+      blurhash: null,
+    } as MediaAttachment;
+
+    openModal('MEDIA', {
+      media: [mediaAttachment],
+      index: 0,
+    });
+  };
+
   const items = useMemo(() => {
-    const handleView = () => {
-      const mediaAttachment = {
-        id: file.id,
-        url: file.url,
-        preview_url: file.thumbnail_url,
-        remote_url: file.url,
-        description: file.description || '',
-        type: file.content_type.split('/')[0] as 'image' | 'video' | 'audio' | 'unknown',
-        mime_type: file.content_type,
-        blurhash: null,
-      } as MediaAttachment;
-
-      openModal('MEDIA', {
-        media: [mediaAttachment],
-        index: 0,
-      });
-    };
-
     const handleRename = () => {
       openModal('TEXT_FIELD', {
         heading: <FormattedMessage id='drive.file.rename' defaultMessage='Rename file' />,
@@ -203,7 +213,7 @@ const File: React.FC<IFile> = ({ file }) => {
   }, [file]);
 
   return (
-    <div className='group relative flex w-32 flex-col items-center gap-2' tabIndex={0}>
+    <div className='group relative flex w-32 flex-col items-center gap-2' tabIndex={0} onDoubleClick={handleView}>
       <div className='invisible absolute self-end group-hover:visible group-focus:visible'>
         <DropdownMenu items={items} placement='right-start'>
           <IconButton
@@ -241,11 +251,16 @@ interface IFolder {
 }
 
 const Folder: React.FC<IFolder> = ({ folder }) => {
+  const history = useHistory();
   const intl = useIntl();
 
   const { openModal } = useModalsActions();
   const { mutate: deleteFolder } = useDeleteDriveFolderMutation(folder.id!);
   const { mutate: updateFolder } = useUpdateDriveFolderMutation(folder.id!);
+
+  const handleEnterFolder = () => {
+    history.push(`/drive/${folder.id}`);
+  };
 
   const items: Menu = useMemo(() => {
     const handleRename = () => {
@@ -299,7 +314,7 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
   }, [folder]);
 
   return (
-    <div className='group relative flex w-32 flex-col items-center gap-2' tabIndex={0}>
+    <div className='group relative flex w-32 flex-col items-center gap-2' tabIndex={0} onDoubleClick={handleEnterFolder}>
       <div className='invisible absolute self-end group-hover:visible group-focus:visible'>
         <DropdownMenu items={items} placement='right-start'>
           <IconButton
@@ -334,6 +349,20 @@ const DrivePage: React.FC<IDrivePage> = ({ params }) => {
   const intl = useIntl();
 
   const { data, isPending } = useDriveFolderQuery(params?.folderId);
+  const { mutate: uploadFile } = useCreateDriveFileMutation(params?.folderId);
+
+  const items: Menu = [
+    {
+      text: intl.formatMessage(messages.fileUpload),
+      icon: require('@phosphor-icons/core/regular/upload.svg'),
+      onSelectFile: (files: FileList) => {
+        uploadFile(files[0], {
+          onSuccess: () => toast.success(messages.fileUploadSuccess),
+          onError: (error) => toast.error(messages.fileUploadError),
+        });
+      },
+    },
+  ];
 
   if (isPending) {
     return <ColumnLoading />;
@@ -345,7 +374,7 @@ const DrivePage: React.FC<IDrivePage> = ({ params }) => {
     <Column
       label={data?.name || intl.formatMessage(messages.heading)}
       backHref={data?.id === null ? '/drive' : data?.parent_id ? `/drive/${data.parent_id}` : undefined}
-      // action={<DropdownMenu items={items} src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')} />}
+      action={<DropdownMenu items={items} src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')} />}
     >
       {isEmpty ? (
         <EmptyMessage
