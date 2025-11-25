@@ -2,6 +2,15 @@
   font-family: 'pl-fe i18n';
   font-style: normal;
   font-display: swap;
+  font-weight: 400;
+  src: url('@fontsource/inter/files/inter-latin-400-normal.woff2') format('woff2'), url('@fontsource/inter/files/inter-latin-400-normal-normal.woff') format('woff');
+  unicode-range: U+0020;
+}
+
+@font-face {
+  font-family: 'pl-fe i18n';
+  font-style: normal;
+  font-display: swap;
   font-weight: 200;
   src: url('@fontsource/tajawal/files/tajawal-arabic-200-normal.woff2') format('woff2'), url('@fontsource/tajawal/files/tajawal-arabic-200-normal.woff') format('woff');
   unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
@@ -59,4 +68,44 @@
   font-weight: 900;
   src: url('@fontsource/tajawal/files/tajawal-arabic-900-normal.woff2') format('woff2'), url('@fontsource/tajawal/files/tajawal-arabic-900-normal.woff') format('woff');
   unicode-range: U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
+/* noto-sans-javanese-javanese-400-normal */
+@font-face {
+  font-family: 'pl-fe i18n';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url('@fontsource/noto-sans-javanese/files/noto-sans-javanese-javanese-400-normal.woff2') format('woff2'), url('@fontsource/noto-sans-javanese/files/noto-sans-javanese-javanese-400-normal.woff') format('woff');
+  unicode-range: U+A980-A9DF;
+}
+
+/* noto-sans-javanese-javanese-500-normal */
+@font-face {
+  font-family: 'pl-fe i18n';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url('@fontsource/noto-sans-javanese/files/noto-sans-javanese-javanese-500-normal.woff2') format('woff2'), url('@fontsource/noto-sans-javanese/files/noto-sans-javanese-javanese-500-normal.woff') format('woff');
+  unicode-range: U+A980-A9DF;
+}
+
+/* noto-sans-javanese-javanese-600-normal */
+@font-face {
+  font-family: 'pl-fe i18n';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url('@fontsource/noto-sans-javanese/files/noto-sans-javanese-javanese-600-normal.woff2') format('woff2'), url('@fontsource/noto-sans-javanese/files/noto-sans-javanese-javanese-600-normal.woff' ) format('woff');
+  unicode-range: U+A980-A9DF;
+}
+
+/* noto-sans-javanese-javanese-700-normal */
+@font-face {
+  font-family: 'pl-fe i18n';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url('@fontsource/noto-sans-javanese/files/noto-sans-javanese-javanese-700-normal.woff2') format('woff2'), url('@fontsource/noto-sans-javanese/files/noto-sans-javanese-javanese-700-normal.woff') format('woff');
+  unicode-range: U+A980-A9DF;
 }

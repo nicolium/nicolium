@@ -170,14 +170,26 @@
   }
 
   &__options {
-    @apply -mb-1 h-96 w-full overflow-auto;
+    margin-bottom: -0.25rem;
+    height: 24rem;
+    width: 100%;
+    overflow: auto;
   }
 
   &__option {
-    @apply flex w-full gap-2 p-2.5 text-left text-sm text-gray-700 dark:text-gray-400 cursor-default;
+    display: flex;
+    width: 100%;
+    gap: 0.5rem;
+    padding: 0.625rem;
+    text-align: left;
+    font-size: 0.875rem;
+    line-height: 1.25;
+    cursor: default;
+    @apply text-gray-700 dark:text-gray-400;
 
     &--modified {
-      @apply bg-gray-100 dark:bg-gray-800 black:bg-gray-900 cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700;
+      cursor: pointer;
+      @apply bg-gray-100 dark:bg-gray-800 black:bg-gray-900 hover:bg-gray-200 dark:hover:bg-gray-700;
 
       .⁂-language-dropdown__option__name {
         @apply text-black dark:text-white;
@@ -197,7 +209,8 @@
     }
 
     svg {
-      @apply size-4;
+      height: 1rem;
+      width: 1rem;
     }
   }
 }
