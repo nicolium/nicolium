@@ -6,7 +6,6 @@ import { useHistory } from 'react-router-dom';
 import DropdownMenu, { Menu } from 'pl-fe/components/dropdown-menu';
 import { EmptyMessage } from 'pl-fe/components/empty-message';
 import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import { MIMETYPE_ICONS } from 'pl-fe/components/upload';
@@ -217,14 +216,12 @@ const File: React.FC<IFile> = ({ file }) => {
   }, [file]);
 
   return (
-    <div className='group relative flex w-32 flex-col items-center gap-2' tabIndex={0} onDoubleClick={handleView}>
-      <div className='invisible absolute self-end group-hover:visible group-focus:visible'>
+    <div className='⁂-drive-file' tabIndex={0} onDoubleClick={handleView}>
+      <div className='⁂-drive-file__button'>
         <DropdownMenu items={items} placement='right-start'>
           <IconButton
             src={require('@phosphor-icons/core/regular/dots-three.svg')}
             title={intl.formatMessage(messages.fileDropdown)}
-            className='text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500'
-            iconClassName='h-4 w-4'
             theme='secondary'
           />
         </DropdownMenu>
@@ -232,18 +229,17 @@ const File: React.FC<IFile> = ({ file }) => {
 
       {file.thumbnail_url && isMedia ? (
         <img
-          className='pointer-events-none size-24 overflow-hidden object-cover'
           src={file.thumbnail_url}
           alt={file.description || undefined}
         />
       ) : (
         <Icon
-          className='m-2 size-20 text-gray-800 dark:text-gray-200'
+          className='⁂-drive-file__icon'
           src={MIMETYPE_ICONS[file.content_type || ''] || defaultIcon}
         />
       )}
 
-      <span className='mt-auto line-clamp-3 inline max-w-full text-ellipsis rounded bg-gray-900 px-2 py-1 text-xs font-medium text-white'>
+      <span className='⁂-drive-file__label'>
         {file.filename}
       </span>
     </div>
@@ -318,25 +314,23 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
   }, [folder]);
 
   return (
-    <div className='group relative flex w-32 flex-col items-center gap-2' tabIndex={0} onDoubleClick={handleEnterFolder}>
-      <div className='invisible absolute self-end group-hover:visible group-focus:visible'>
+    <div className='⁂-drive-file ⁂-drive-folder' tabIndex={0} onDoubleClick={handleEnterFolder}>
+      <div className='⁂-drive-file__button'>
         <DropdownMenu items={items} placement='right-start'>
           <IconButton
             src={require('@phosphor-icons/core/regular/dots-three.svg')}
             title={intl.formatMessage(messages.folderDropdown)}
-            className='text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500'
-            iconClassName='h-4 w-4'
             theme='secondary'
           />
         </DropdownMenu>
       </div>
 
       <Icon
-        className='m-2 size-20 text-gray-800 dark:text-gray-200'
+        className='⁂-drive-file__icon'
         src={require('@phosphor-icons/core/regular/folder.svg')}
       />
 
-      <span className='mt-auto line-clamp-3 inline max-w-full text-ellipsis rounded bg-gray-900 px-2 py-1 text-xs font-medium text-white'>
+      <span className='⁂-drive-file__label'>
         {folder.name}
       </span>
     </div>
@@ -397,6 +391,7 @@ const DrivePage: React.FC<IDrivePage> = ({ params }) => {
 
   return (
     <Column
+      className='⁂-drive-page'
       label={data?.name || intl.formatMessage(messages.heading)}
       backHref={data?.id === null ? '/drive' : data?.parent_id ? `/drive/${data.parent_id}` : undefined}
       action={<DropdownMenu items={items} src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')} />}
@@ -407,10 +402,10 @@ const DrivePage: React.FC<IDrivePage> = ({ params }) => {
           icon={require('@phosphor-icons/core/regular/folder-open.svg')}
         />
       ) : (
-        <HStack wrap space={4}>
+        <div className='⁂-drive-page__files'>
           {data?.folders.map((folder) => <Folder key={folder.id} folder={folder} />)}
           {data?.files.map((file) => <File key={file.id} file={file} />)}
-        </HStack>
+        </div>
       )}
     </Column>
   );

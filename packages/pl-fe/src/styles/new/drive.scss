@@ -1,0 +1,41 @@
+.⁂-drive-page {
+  &__files {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  .⁂-drive-file {
+    @apply relative flex w-32 flex-col items-center gap-2;
+
+    .⁂-icon-button {
+      @apply text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500;
+
+      svg {
+        @apply h-4 w-4;
+      }
+    }
+
+    &__button {
+      @apply opacity-0 absolute self-end transition-opacity duration-200;
+    }
+
+    &:hover, &:focus {
+      .⁂-drive-file__button {
+        @apply opacity-100;
+      }
+    }
+
+    img {
+      @apply pointer-events-none size-24 overflow-hidden object-cover;
+    }
+
+    &__icon {
+      @apply m-2 size-20 text-gray-800 dark:text-gray-200;
+    }
+
+    &__label {
+      @apply mt-auto line-clamp-3 inline max-w-full text-ellipsis rounded bg-gray-900 px-2 py-1 text-xs font-medium text-white;
+    }
+  }
+}
