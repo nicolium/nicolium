@@ -25,6 +25,7 @@ const initialState: State = {
     reblog: true,
     mention: true,
     poll: true,
+    status: true,
   },
   isSubscribed: false,
   browserSupport: false,
