@@ -1,3 +1,5 @@
+@use 'variables';
+
 @mixin text($family: sans, $size: md, $theme: default, $tracking: normal, $transform: normal, $truncate: false, $weight: normal, $align: none) {
   @if $family == sans {
     font-family: var(--font-sans);
@@ -104,18 +106,18 @@
 
     @if $size == md {
       padding: 1rem;
-      @media (width >= 581px) {
+      @media (min-width: variables.$breakpoint-sm) {
         border-radius: 0.75rem;
       }
     } @else if $size == lg {
       padding: 1rem;
-      @media (width >= 581px) {
+      @media (min-width: variables.$breakpoint-sm) {
         padding: 1.5rem;
         border-radius: 0.75rem;
       }
     } @else if $size == xl {
       padding: 1rem;
-      @media (width >= 581px) {
+      @media (min-width: variables.$breakpoint-sm) {
         padding: 2.5rem;
         border-radius: 1.5rem;
       }

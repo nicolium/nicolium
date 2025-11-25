@@ -13,17 +13,6 @@ const messages = defineMessages({
   confirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
 });
 
-const widths = {
-  xs: 'max-w-xs',
-  sm: 'max-w-sm',
-  md: 'max-w-base',
-  lg: 'max-w-lg',
-  xl: 'max-w-xl',
-  '2xl': 'max-w-2xl',
-  '3xl': 'max-w-3xl',
-  '4xl': 'max-w-4xl',
-};
-
 interface IModal {
   /** Callback when the modal is cancelled. */
   cancelAction?: () => void;
@@ -41,8 +30,6 @@ interface IModal {
   confirmationText?: React.ReactNode;
   /** Confirmation button theme. */
   confirmationTheme?: ButtonThemes;
-  /** Whether to use full width style for confirmation button. */
-  confirmationFullWidth?: boolean;
   /** Callback when the modal is closed. */
   onClose?: () => void;
   /** Callback when the secondary action is chosen. */
@@ -54,7 +41,6 @@ interface IModal {
   skipFocus?: boolean;
   /** Title text for the modal. */
   title?: React.ReactNode;
-  width?: keyof typeof widths;
   children?: React.ReactNode;
   className?: string;
   onBack?: () => void;
@@ -71,14 +57,12 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
   confirmationDisabled,
   confirmationText,
   confirmationTheme,
-  confirmationFullWidth,
   onClose,
   secondaryAction,
   secondaryDisabled = false,
   secondaryText,
   skipFocus = false,
   title,
-  width = 'xl',
   className,
   onBack,
 }, ref) => {
@@ -100,50 +84,43 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
     <div
       ref={ref}
       data-testid='modal'
-      className={clsx(className, 'pointer-events-auto relative mx-auto flex max-h-[90vh] w-full flex-col overflow-auto rounded-2xl bg-white text-start align-middle text-gray-900 shadow-xl transition-all ease-in-out black:bg-black dark:bg-primary-900 dark:text-gray-100 md:max-h-[80vh]', widths[width], {
-        'bottom-0': !firstRender,
-        'no-reduce-motion:-bottom-32': firstRender,
-      })}
+      className={clsx('⁂-modal', {
+        '⁂-modal--first-render': firstRender,
+        '⁂-modal--close-position-left': closePosition === 'left',
+      }, className)}
     >
       {title && (
-        <div className='sticky top-0 z-10 bg-white/75 p-6 pb-2 backdrop-blur backdrop-saturate-200 black:bg-black/75 dark:bg-primary-900/75'>
-          <div
-            className={clsx('flex w-full items-center gap-2', {
-              'flex-row-reverse': closePosition === 'left',
-            })}
-          >
+        <div className='⁂-modal__title'>
+          <div>
             {onBack && (
               <IconButton
                 src={require('@phosphor-icons/core/regular/arrow-left.svg')}
                 title={intl.formatMessage(messages.back)}
                 onClick={onBack}
-                className='text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-200 rtl:rotate-180'
               />
             )}
 
-            <h3 className='grow text-lg font-bold leading-6 text-gray-900 dark:text-white'>
-              {title}
-            </h3>
+            <h3>{title}</h3>
 
             {onClose && (
               <IconButton
                 src={closeIcon}
                 title={intl.formatMessage(messages.close)}
                 onClick={onClose}
-                className='text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-200 rtl:rotate-180'
               />
             )}
           </div>
         </div>
       )}
-      <div className={clsx('p-6', { 'pt-0': title })}>
-        <div className='w-full'>
+
+      <div className='⁂-modal__body'>
+        <div className='⁂-modal__children'>
           {children}
         </div>
 
         {confirmationAction && (
           <HStack className='mt-5' justifyContent='between' data-testid='modal-actions'>
-            <div className={clsx({ 'grow': !confirmationFullWidth })}>
+            <div className='grow'>
               {cancelAction && (
                 <Button
                   theme='tertiary'
@@ -154,7 +131,7 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
               )}
             </div>
 
-            <HStack space={2} className={clsx({ 'grow': confirmationFullWidth })}>
+            <HStack space={2}>
               {secondaryAction && (
                 <Button
                   theme='secondary'
@@ -170,7 +147,6 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
                 onClick={confirmationAction}
                 disabled={confirmationDisabled}
                 ref={buttonRef}
-                block={confirmationFullWidth}
               >
                 {confirmationText}
               </Button>

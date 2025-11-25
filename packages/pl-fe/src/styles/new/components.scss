@@ -1,4 +1,5 @@
 @use 'mixins';
+@use 'variables';
 
 .⁂-accordion {
   border-radius: 0.5rem;
@@ -11,7 +12,7 @@
     justify-content: space-between;
     padding: 0.75rem 1rem;
     font-weight: 600;
-  
+
     &__actions {
       display: flex;
       align-items: center;
@@ -243,7 +244,7 @@ a.⁂-list-item,
     padding: 0.5rem 1rem;
     color: white;
     @apply bg-primary-600/80 backdrop-blur-md backdrop-saturate-200 transition-transform hover:scale-105 hover:bg-primary-700/80 active:scale-100;
-  
+
     .⁂-icon svg {
       width: 1rem;
       height: 1rem;
@@ -295,4 +296,58 @@ a.⁂-list-item,
 
 div[data-viewport-type="window"]:has(.⁂-empty-message) {
   position: initial!important;
+}
+
+.⁂-modal {
+  @apply pointer-events-auto relative mx-auto flex w-full flex-col overflow-auto rounded-2xl bg-white text-start align-middle text-gray-900 shadow-xl transition-all ease-in-out black:bg-black dark:bg-primary-900 dark:text-gray-100;
+  max-height: calc(min(90vh, 100dvh));
+  max-width: 36rem;
+
+  @media (min-width: variables.$breakpoint-md) {
+    max-height: calc(min(80vh, 100dvh));
+  }
+
+  &--first-render {
+    @apply no-reduce-motion:-bottom-32;
+  }
+
+  &:not(&--first-render) {
+    @apply bottom-0;
+  }
+
+  &__title {
+    @apply sticky top-0 z-10 bg-white/75 p-6 pb-2 backdrop-blur backdrop-saturate-200 black:bg-black/75 dark:bg-primary-900/75;
+
+    > div {
+      @apply flex w-full items-center gap-2;
+    }
+
+    h3 {
+      @apply grow text-lg font-bold leading-6 text-gray-900 dark:text-white;
+    }
+
+    .⁂-icon-button {
+      @apply text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-200 rtl:rotate-180;
+    }
+  }
+
+  &--close-position-left &__title > div {
+    @apply flex-row-reverse;
+  }
+
+  &__body {
+    @apply p-6;
+  }
+
+  :has(.⁂-modal__title) &__body {
+    @apply pt-0;
+  }
+
+  &__children {
+    @apply w-full;
+  }
+
+  &__actions {
+    @apply flex justify-between mt-5;
+  }
 }

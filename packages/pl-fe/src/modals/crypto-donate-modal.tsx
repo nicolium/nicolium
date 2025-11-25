@@ -9,7 +9,7 @@ import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 const CryptoDonateModal: React.FC<BaseModalProps & ICryptoAddress> = ({ onClose, ...props }) => {
 
   return (
-    <Modal onClose={onClose} width='xs'>
+    <Modal onClose={onClose} className='⁂-crypto-donate-map-modal'>
       <DetailedCryptoAddress {...props} />
     </Modal>
   );

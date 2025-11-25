@@ -88,7 +88,6 @@ const CreateGroupModal: React.FC<BaseModalProps> = ({ onClose }) => {
       confirmationAction={handleNextStep}
       confirmationText={confirmationText}
       confirmationDisabled={isSubmitting}
-      confirmationFullWidth
       onClose={handleClose}
     >
       <Stack space={2}>

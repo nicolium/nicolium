@@ -158,7 +158,7 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
     <Modal
       title={<FormattedMessage id='keyboard_shortcuts.heading' defaultMessage='Keyboard shortcuts' />}
       onClose={() => onClose('HOTKEYS')}
-      width='4xl'
+      className='⁂-hotkey-modal'
     >
       <div className='flex flex-col text-xs lg:flex-row'>
         {columns.map((column, i) => (
