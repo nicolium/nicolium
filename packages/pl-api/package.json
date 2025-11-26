@@ -48,7 +48,7 @@
     "object-to-formdata": "^4.5.1",
     "query-string": "^9.2.2",
     "semver": "^7.7.2",
-    "valibot": "^1.1.0"
+    "valibot": "^1.2.0"
   },
   "module": "./dist/main.es.js",
   "types": "dist/main.d.ts",
