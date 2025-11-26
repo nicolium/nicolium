@@ -1475,11 +1475,23 @@ class PlApiClient {
      * Requires features{@link Features.sessions}.
      * @see {@link https://docs.pleroma.social/backend/development/API/pleroma_api/#get-apioauth_tokens}
      */
-    getOauthTokens: () => this.#paginatedGet(
-      this.features.version.software === GOTOSOCIAL ? '/api/v1/tokens' : '/api/oauth_tokens',
-      {},
-      oauthTokenSchema,
-    ),
+    getOauthTokens: () => {
+      let url;
+
+      switch (this.features.version.software) {
+        case GOTOSOCIAL:
+          url = '/api/v1/tokens';
+          break;
+        case MITRA:
+          url = '/api/v1/settings/sessions';
+          break;
+        default:
+          url = '/api/oauth_tokens';
+          break;
+      }
+
+      return this.#paginatedGet(url, {}, oauthTokenSchema);
+    },
 
     /**
      * Revoke a user session by its ID
@@ -1493,6 +1505,9 @@ class PlApiClient {
       switch (this.features.version.software) {
         case GOTOSOCIAL:
           response = await this.request(`/api/v1/tokens/${oauthTokenId}/invalidate`, { method: 'POST' });
+          break;
+        case MITRA:
+          response = await this.request(`/api/v1/settings/sessions/${oauthTokenId}`, { method: 'DELETE' });
           break;
         default:
           response = await this.request(`/api/oauth_tokens/${oauthTokenId}`, { method: 'DELETE' });

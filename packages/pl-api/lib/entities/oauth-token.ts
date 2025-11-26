@@ -9,6 +9,13 @@ import { datetimeSchema } from './utils';
 const oauthTokenSchema = v.pipe(
   v.any(),
   v.transform((token: any) => {
+    if (token.client_name) {
+      return {
+        ...token,
+        app_name: token.client_name,
+      };
+    }
+
     if (token.application) {
       return {
         ...token,
@@ -31,6 +38,7 @@ const oauthTokenSchema = v.pipe(
     valid_until: v.fallback(v.nullable(datetimeSchema), null),
     last_used: v.fallback(v.nullable(datetimeSchema), null),
     scopes: v.fallback(v.array(v.string()), []),
+    is_current: v.fallback(v.nullable(v.boolean()), null),
   }),
 );
 
