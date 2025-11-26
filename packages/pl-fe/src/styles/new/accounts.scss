@@ -5,30 +5,42 @@
 }
 
 .⁂-account-card {
-  @apply block w-full shrink-0;
+  display: block;
+  width: 100%;
+  flex-shrink: 0;
 
   > div {
-    @apply flex gap-3 justify-between items-center;
+    display: flex;
+    gap: 0.75rem;
+    justify-content: space-between;
+    align-items: center;
   }
 
   &--action-top {
     > div {
-      @apply items-start;
+      align-items: flex-start;
     }
   }
 }
 
 .⁂-avatar {
-  @apply rounded-lg leading-[0];
+  border-radius: 0.5rem;
+  line-height: 0;
 
   img, canvas {
-    @apply rounded-[inherit] text-sm;
+    border-radius: inherit;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
   }
 
   // Adapted from Iceshrimp which I guess took it from Misskey
   // https://iceshrimp.dev/iceshrimp/iceshrimp/src/branch/dev/packages/client/src/components/global/MkAvatar.vue
   &--cat {
-    @apply bg-gray-200 dark:bg-gray-900;
+    background: rgb(var(--color-gray-200));
+
+    &:is(.dark *) {
+      background: rgb(var(--color-gray-900));
+    }
 
     img {
       position: absolute;
@@ -91,7 +103,11 @@
   }
 
   &__attachments {
-    @apply grid grid-cols-3 gap-0.5 overflow-hidden rounded-md;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.125rem;
+    overflow: hidden;
+    border-radius: 0.375rem;
   }
 
   &__empty {
@@ -105,21 +121,26 @@
   }
 
   &--verified dd {
-    @apply text-success-500;
+    color: rgb(var(--color-success-500));
   }
 
   &__content {
-    @apply flex items-center gap-2;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 }
 
 .⁂-profile-fields-panel {
   .⁂-widget__body {
-    @apply flex flex-col gap-4;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   span[data-markup] {
     @include mixins.text;
-    @apply overflow-hidden break-words;
+    overflow: hidden;
+    word-break: break-word;
   }
 }

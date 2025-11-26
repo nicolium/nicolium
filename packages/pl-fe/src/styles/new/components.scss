@@ -3,7 +3,15 @@
 
 .⁂-accordion {
   border-radius: 0.5rem;
-  @apply bg-white text-gray-900 shadow dark:bg-primary-800 dark:text-gray-100 dark:shadow-none;
+  background: white;
+  color: rgb(var(--text-gray-900));
+  @apply shadow;
+
+  &:is(.dark *) {
+    background: rgb(var(--color-primary-800));
+    color: rgb(var(--color-gray-100));
+    box-shadow: none;
+  }
 
   &__header {
     display: flex;
@@ -22,13 +30,24 @@
     &__action .⁂-icon {
       width: 1.25rem;
       height: 1.25rem;
-      @apply text-gray-700 dark:text-gray-600;
+      color: rgb(var(--color-gray-700));
+
+      &:is(.dark *) {
+        color: rgb(var(--color-gray-600));
+      }
     }
 
     &__chevron {
       width: 1.25rem;
       height: 1.25rem;
-      @apply text-gray-700 transition-transform dark:text-gray-600;
+      color: rgb(var(--color-gray-700));
+      transition-property: transform;
+      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+      transition-duration: 150ms;
+
+      &:is(.dark *) {
+        color: rgb(var(--color-gray-600));
+      }
     }
   }
 
@@ -38,7 +57,15 @@
     border-bottom-left-radius: 0.5rem;
     border-top-width: 1px;
     border-style: solid;
-    @apply border-gray-100 dark:border-primary-900 black:border-black;
+    border-color: rgb(var(--color-gray-100));
+
+    &:is(.dark *) {
+      border-color: rgb(var(--color-primary-900));
+    }
+
+    &:is(.dark.black *) {
+      border-color: black;
+    }
 
     p {
       @include mixins.text;
@@ -72,7 +99,15 @@
       width: 100%;
       border-top-width: 2px;
       border-style: solid;
-      @apply border-gray-100 black:border-t dark:border-gray-800;
+      border-color: rgb(var(--color-gray-100));
+
+      &:is(.dark *) {
+        border-top-color: rgb(var(--color-gray-800));
+      }
+
+      &:is(.dark.black *) {
+        border-top-width: 1px;
+      }
     }
   }
 
@@ -82,7 +117,18 @@
     justify-content: center;
 
     > span {
-      @apply bg-white px-2 text-gray-700 black:bg-black dark:bg-gray-900 dark:text-gray-600;
+      background: white;
+      color: rgb(var(--color-gray-700));
+      padding: 0 0.5rem;
+
+      &:is(.dark *) {
+        background: rgb(var(--color-gray-900));
+        color: rgb(var(--color-gray-600));
+      }
+
+      &:is(.dark.black *) {
+        background: black;
+      }
     }
   }
 }
