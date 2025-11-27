@@ -87,7 +87,7 @@ const useMoveDriveFolderMutation = (folderId: string) => {
 
   return useMutation({
     mutationKey: ['drive', 'folders'],
-    mutationFn: (targetFolderId: string) => {
+    mutationFn: (targetFolderId?: string) => {
       const oldFolder = queryClient.getQueryData<DriveFolder>(['drive', 'folders', folderId]);
       if (oldFolder) {
         previousParentId = oldFolder.parent_id;

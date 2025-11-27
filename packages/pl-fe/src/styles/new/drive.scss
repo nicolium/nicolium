@@ -1,3 +1,5 @@
+@use 'mixins';
+
 .⁂-drive-page {
   &__files {
     display: flex;
@@ -37,6 +39,7 @@
       width: 6rem;
       overflow: hidden;
       object-fit: cover;
+      border-radius: 0.5rem;
     }
 
     &__icon {
@@ -66,6 +69,111 @@
       line-height: 1rem;
       font-weight: 500;
       color: #fff;
+    }
+  }
+}
+
+.⁂-drive-breadcrumbs {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  gap: 0.125rem;
+  flex-wrap: wrap;
+
+  &__spacer {
+    padding: 0.25rem;
+  }
+
+  &__item {
+    padding: 0.25rem;
+    border-radius: 0.25rem;
+
+    &--current {
+      padding: 0.25rem 0.5rem;
+      background: rgb(var(--color-gray-200));
+
+      &:is(.dark *) {
+        background: rgb(var(--color-primary-700));
+      }
+
+      &:is(.dark.black *) {
+        background: rgb(var(--color-gray-800));
+      }
+    }
+  }
+
+  &__home {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    span {
+      @include mixins.text($size: sm);
+    }
+  }
+}
+
+.⁂-drive-file-list {
+  .⁂-drive-file {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    width: 100%;
+
+    img {
+      pointer-events: none;
+      margin: 0.5rem;
+      height: 2rem;
+      width: 2rem;
+      overflow: hidden;
+      object-fit: cover;
+      border-radius: 0.5rem;
+    }
+
+    &__icon {
+      margin: 0.5rem;
+      height: 2rem;
+      width: 2rem;
+      color: rgb(var(--color-gray-800));
+
+      &:is(.dark *) {
+        color: rgb(var(--color-gray-200));
+      }
+    }
+
+    &__label {
+      // margin-top: auto;
+      // overflow: hidden;
+      // display: inline;
+      // display: -webkit-box;
+      // -webkit-box-orient: vertical;
+      // -webkit-line-clamp: 3;
+      // max-width: 100%;
+      // text-overflow: ellipsis;
+      // border-radius: 0.25rem;
+      // background-color: rgb(var(--color-gray-900));
+      // padding: 0.25rem 0.5rem;
+      // font-size: 0.75rem;
+      // line-height: 1rem;
+      // font-weight: 500;
+      // color: #fff;
+    }
+
+    &--active {
+      background: rgb(var(--color-primary-100));
+
+      &:is(.dark *) {
+        background: rgb(var(--color-primary-800));
+      }
+
+      &:is(.dark.black *) {
+        background: rgb(var(--color-gray-900));
+      }
+    }
+
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.5;
     }
   }
 }

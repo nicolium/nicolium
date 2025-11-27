@@ -291,6 +291,13 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               text={<FormattedMessage id='tabs_bar.profile' defaultMessage='Profile' />}
             />
 
+            {features.drive && <SidebarNavigationLink
+              to='/drive'
+              icon={require('@phosphor-icons/core/regular/cloud.svg')}
+              activeIcon={require('@phosphor-icons/core/fill/cloud-fill.svg')}
+              text={<FormattedMessage id='column.drive' defaultMessage='Drive' />}
+            />}
+
             <SidebarNavigationLink
               to='/settings'
               icon={require('@phosphor-icons/core/regular/sliders-horizontal.svg')}

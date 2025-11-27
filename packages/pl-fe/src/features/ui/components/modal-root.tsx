@@ -45,6 +45,7 @@ const MODAL_COMPONENTS = {
   REPLY_MENTIONS: lazy(() => import('pl-fe/modals/reply-mentions-modal')),
   REPORT: lazy(() => import('pl-fe/modals/report-modal')),
   SELECT_BOOKMARK_FOLDER: lazy(() => import('pl-fe/modals/select-bookmark-folder-modal')),
+  SELECT_DRIVE_FILE: lazy(() => import('pl-fe/modals/select-drive-file-modal')),
   TEXT_FIELD: lazy(() => import('pl-fe/modals/text-field-modal')),
   UNAUTHORIZED: lazy(() => import('pl-fe/modals/unauthorized-modal')),
 };

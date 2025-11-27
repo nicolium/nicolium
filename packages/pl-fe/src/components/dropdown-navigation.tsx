@@ -266,6 +266,15 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 />
               )}
 
+              {features.drive && (
+                <DropdownNavigationLink
+                  to='/drive'
+                  icon={require('@phosphor-icons/core/regular/cloud.svg')}
+                  text={<FormattedMessage id='column.drive' defaultMessage='Drive' />}
+                  onClick={closeSidebar}
+                />
+              )}
+
               {features.events && (
                 <DropdownNavigationLink
                   to='/events'

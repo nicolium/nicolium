@@ -5948,12 +5948,12 @@ class PlApiClient {
       return response;
     },
 
-    moveFolder: async (id: string, targetFolderId: string) => {
+    moveFolder: async (id: string, targetFolderId?: string) => {
       await this.#getIceshrimpAccessToken();
 
       const response = await this.request(`/api/iceshrimp/drive/folder/${id}/move`, {
         method: 'POST',
-        body: { folderId: targetFolderId },
+        body: { folderId: targetFolderId || null },
       });
 
       return v.parse(driveFolderSchema, response.json);
@@ -6001,12 +6001,12 @@ class PlApiClient {
       return response;
     },
 
-    moveFile: async (id: string, targetFolderId: string) => {
+    moveFile: async (id: string, targetFolderId?: string) => {
       await this.#getIceshrimpAccessToken();
 
       const response = await this.request(`/api/iceshrimp/drive/${id}/move`, {
         method: 'POST',
-        body: { folderId: targetFolderId },
+        body: { folderId: targetFolderId || null },
       });
 
       return v.parse(driveFileSchema, response.json);

@@ -1,7 +1,8 @@
 import defaultIcon from '@phosphor-icons/core/regular/paperclip.svg';
+import { clsx } from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import DropdownMenu, { Menu } from 'pl-fe/components/dropdown-menu';
 import { EmptyMessage } from 'pl-fe/components/empty-message';
@@ -10,8 +11,8 @@ import Icon from 'pl-fe/components/ui/icon';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import { MIMETYPE_ICONS } from 'pl-fe/components/upload';
 import ColumnLoading from 'pl-fe/features/ui/components/column-loading';
-import { useCreateDriveFileMutation, useDeleteDriveFileMutation, useUpdateDriveFileMutation } from 'pl-fe/queries/drive/use-drive-file';
-import { useCreateDriveFolderMutation, useDeleteDriveFolderMutation, useDriveFolderQuery, useUpdateDriveFolderMutation } from 'pl-fe/queries/drive/use-drive-folder';
+import { useCreateDriveFileMutation, useDeleteDriveFileMutation, useMoveDriveFileMutation, useUpdateDriveFileMutation } from 'pl-fe/queries/drive/use-drive-file';
+import { useCreateDriveFolderMutation, useDeleteDriveFolderMutation, useDriveFolderQuery, useMoveDriveFolderMutation, useUpdateDriveFolderMutation } from 'pl-fe/queries/drive/use-drive-folder';
 import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 import { download } from 'pl-fe/utils/download';
@@ -26,6 +27,9 @@ const messages = defineMessages({
   folderRenamePlaceholder: { id: 'drive.folder.rename.placeholder', defaultMessage: 'New folder name' },
   folderRenameSuccess: { id: 'drive.folder.rename.success', defaultMessage: 'Folder renamed successfully.' },
   folderRenameError: { id: 'drive.folder.rename.error', defaultMessage: 'Failed to rename folder.' },
+  folderMove: { id: 'drive.folder.move', defaultMessage: 'Move folder' },
+  folderMoveSuccess: { id: 'drive.folder.move.success', defaultMessage: 'Folder moved successfully.' },
+  folderMoveError: { id: 'drive.folder.move.error', defaultMessage: 'Failed to move folder.' },
   folderDelete: { id: 'drive.folder.delete', defaultMessage: 'Delete folder' },
   folderDeleteSuccess: { id: 'drive.folder.delete.success', defaultMessage: 'Folder deleted successfully.' },
   folderDeleteError: { id: 'drive.folder.delete.error', defaultMessage: 'Failed to delete folder.' },
@@ -47,6 +51,8 @@ const messages = defineMessages({
   unmarkSensitiveSuccess: { id: 'drive.file.unmark_sensitive.success', defaultMessage: 'File unmarked as sensitive.' },
   unmarkSensitiveError: { id: 'drive.file.unmark_sensitive.error', defaultMessage: 'Failed to unmark file as sensitive.' },
   fileMove: { id: 'drive.file.move', defaultMessage: 'Move file' },
+  fileMoveSuccess: { id: 'drive.file.move.success', defaultMessage: 'File moved successfully.' },
+  fileMoveError: { id: 'drive.file.move.error', defaultMessage: 'Failed to move file.' },
   fileDelete: { id: 'drive.file.delete', defaultMessage: 'Delete file' },
   fileDeleteSuccess: { id: 'drive.file.delete.success', defaultMessage: 'File deleted successfully.' },
   fileDeleteError: { id: 'drive.file.delete.error', defaultMessage: 'Failed to delete file.' },
@@ -59,6 +65,86 @@ const messages = defineMessages({
   newFolderError: { id: 'drive.folder.new.error', defaultMessage: 'Failed to create folder.' },
 });
 
+interface IBreadcrumbs {
+  folderId?: string;
+  depth?: number;
+  onClick?: (folderId?: string) => void;
+}
+
+const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) => {
+  const { data } = useDriveFolderQuery(folderId);
+
+  if (!folderId) {
+    const label = depth === 0 && <span><FormattedMessage id='drive.breadcrumbs.home' defaultMessage='Home' /></span>;
+
+    if (onClick || depth === 0) {
+      return (
+        <button
+          className={clsx('⁂-drive-breadcrumbs__item ⁂-drive-breadcrumbs__home', { '⁂-drive-breadcrumbs__item--current': depth === 0 })}
+          onClick={() => onClick?.()}
+          disabled={depth === 0}
+        >
+          <Icon src={require('@phosphor-icons/core/regular/house.svg')} />
+          {label}
+        </button>
+      );
+    } else {
+      return (
+        <Link to='/drive' className='⁂-drive-breadcrumbs__home'>
+          <Icon src={require('@phosphor-icons/core/regular/house.svg')} />
+          {label}
+        </Link>
+      );
+    }
+  }
+
+  if (!data) return null;
+
+  const spacer = (
+    <div className='⁂-drive-breadcrumbs__spacer' aria-hidden>
+      <Icon src={require('@phosphor-icons/core/regular/caret-right.svg')} />
+    </div>
+  );
+
+  const button = onClick ? (
+    <button
+      className={clsx('⁂-drive-breadcrumbs__item', { '⁂-drive-breadcrumbs__item--current': depth === 0 })}
+      onClick={() => onClick?.(folderId)}
+    >
+      {data.name}
+    </button>
+  ) : (
+    <Link
+      to={`/drive/${folderId}`}
+      className={clsx('⁂-drive-breadcrumbs__item', { '⁂-drive-breadcrumbs__item--current': depth === 0 })}
+    >
+      {data.name}
+    </Link>
+  );
+
+  if (depth === 2 && data?.parent_id) {
+    return (
+      <>
+        <Breadcrumbs depth={depth + 1} onClick={onClick} />
+        {spacer}
+        <div className='⁂-drive-breadcrumbs__spacer' aria-hidden>
+          <Icon src={require('@phosphor-icons/core/regular/dots-three.svg')} />
+        </div>
+        {spacer}
+        {button}
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Breadcrumbs folderId={data.parent_id || undefined} depth={depth + 1} onClick={onClick} />
+      {spacer}
+      {button}
+    </>
+  );
+};
+
 interface IFile {
   file: DriveFile;
 }
@@ -69,6 +155,7 @@ const File: React.FC<IFile> = ({ file }) => {
   const { openModal } = useModalsActions();
   const { mutate: updateFile } = useUpdateDriveFileMutation(file.id);
   const { mutate: deleteFile } = useDeleteDriveFileMutation(file.id);
+  const { mutate: moveFile } = useMoveDriveFileMutation(file.id);
 
   const isMedia = file.content_type.match(/image|video|audio/);
 
@@ -158,6 +245,20 @@ const File: React.FC<IFile> = ({ file }) => {
       });
     };
 
+    const handleMove = () => {
+      openModal('SELECT_DRIVE_FILE', {
+        type: 'folder',
+        onSelect: (targetFolder) => {
+          moveFile(targetFolder.id || undefined, {
+            onSuccess: () => toast.success(messages.fileMoveSuccess),
+            onError: () => toast.error(messages.fileMoveError),
+          });
+        },
+        disabled: [file.id],
+        title: <FormattedMessage id='drive.file.move.heading' defaultMessage='Select move destination' />,
+      });
+    };
+
     const handleDelete = () => {
       openModal('CONFIRM', {
         heading: <FormattedMessage id='drive.file.delete' defaultMessage='Delete file' />,
@@ -202,10 +303,11 @@ const File: React.FC<IFile> = ({ file }) => {
         action: handleToggleSensitive,
       },
       null,
-      // {
-      //   text: intl.formatMessage(messages.fileMove),
-      //   icon: require('@phosphor-icons/core/regular/folders.svg'),
-      // },
+      {
+        text: intl.formatMessage(messages.fileMove),
+        icon: require('@phosphor-icons/core/regular/folders.svg'),
+        action: handleMove,
+      },
       {
         text: intl.formatMessage(messages.fileDelete),
         icon: require('@phosphor-icons/core/regular/trash.svg'),
@@ -257,6 +359,7 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
   const { openModal } = useModalsActions();
   const { mutate: deleteFolder } = useDeleteDriveFolderMutation(folder.id!);
   const { mutate: updateFolder } = useUpdateDriveFolderMutation(folder.id!);
+  const { mutate: moveFolder } = useMoveDriveFolderMutation(folder.id!);
 
   const handleEnterFolder = () => {
     history.push(`/drive/${folder.id}`);
@@ -293,6 +396,20 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
       });
     };
 
+    const handleMove = () => {
+      openModal('SELECT_DRIVE_FILE', {
+        type: 'folder',
+        onSelect: (targetFolder) => {
+          moveFolder(targetFolder.id || undefined, {
+            onSuccess: () => toast.success(messages.folderMoveSuccess),
+            onError: () => toast.error(messages.folderMoveError),
+          });
+        },
+        disabled: [folder.id],
+        title: <FormattedMessage id='drive.file.move.heading' defaultMessage='Select move destination' />,
+      });
+    };
+
     return [
       {
         text: intl.formatMessage(messages.folderView),
@@ -303,6 +420,11 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
         text: intl.formatMessage(messages.folderRename),
         icon: require('@phosphor-icons/core/regular/cursor-text.svg'),
         action: handleRename,
+      },
+      {
+        text: intl.formatMessage(messages.folderMove),
+        icon: require('@phosphor-icons/core/regular/folders.svg'),
+        action: handleMove,
       },
       {
         text: intl.formatMessage(messages.folderDelete),
@@ -396,6 +518,9 @@ const DrivePage: React.FC<IDrivePage> = ({ params }) => {
       backHref={data?.id === null ? '/drive' : data?.parent_id ? `/drive/${data.parent_id}` : undefined}
       action={<DropdownMenu items={items} src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')} />}
     >
+      <div className='⁂-drive-breadcrumbs'>
+        <Breadcrumbs folderId={params?.folderId} />
+      </div>
       {isEmpty ? (
         <EmptyMessage
           text={<FormattedMessage id='drive.empty' defaultMessage='There are no files or folders in this folder.' />}
@@ -411,4 +536,4 @@ const DrivePage: React.FC<IDrivePage> = ({ params }) => {
   );
 };
 
-export { DrivePage as default };
+export { DrivePage as default, Breadcrumbs };

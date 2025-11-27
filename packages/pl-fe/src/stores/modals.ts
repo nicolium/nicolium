@@ -35,6 +35,7 @@ import type { ReblogsModalProps } from 'pl-fe/modals/reblogs-modal';
 import type { ReplyMentionsModalProps } from 'pl-fe/modals/reply-mentions-modal';
 import type { ReportModalProps } from 'pl-fe/modals/report-modal';
 import type { SelectBookmarkFolderModalProps } from 'pl-fe/modals/select-bookmark-folder-modal';
+import type { SelectDriveFileModalProps } from 'pl-fe/modals/select-drive-file-modal';
 import type { TextFieldModalProps } from 'pl-fe/modals/text-field-modal';
 import type { UnauthorizedModalProps } from 'pl-fe/modals/unauthorized-modal';
 
@@ -73,6 +74,7 @@ type OpenModalProps =
   | [type: 'REPLY_MENTIONS', props: ReplyMentionsModalProps]
   | [type: 'REPORT', props: ReportModalProps]
   | [type: 'SELECT_BOOKMARK_FOLDER', props: SelectBookmarkFolderModalProps]
+  | [type: 'SELECT_DRIVE_FILE', props: SelectDriveFileModalProps]
   | [type: 'TEXT_FIELD', props: TextFieldModalProps]
   | [type: 'UNAUTHORIZED', props?: UnauthorizedModalProps];
 

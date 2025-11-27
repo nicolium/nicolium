@@ -63,7 +63,7 @@ const useMoveDriveFileMutation = (fileId: string) => {
 
   return useMutation({
     mutationKey: ['drive', 'files'],
-    mutationFn: (folderId: string) => client.drive.moveFile(fileId, folderId),
+    mutationFn: (folderId?: string) => client.drive.moveFile(fileId, folderId),
     onSuccess: (file) => {
       queryClient.invalidateQueries({ queryKey: ['drive', 'folders'], exact: false });
       queryClient.setQueryData(['drive', 'files', file.id], file);
