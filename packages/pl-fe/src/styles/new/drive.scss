@@ -142,21 +142,8 @@
     }
 
     &__label {
-      // margin-top: auto;
-      // overflow: hidden;
-      // display: inline;
-      // display: -webkit-box;
-      // -webkit-box-orient: vertical;
-      // -webkit-line-clamp: 3;
-      // max-width: 100%;
-      // text-overflow: ellipsis;
-      // border-radius: 0.25rem;
-      // background-color: rgb(var(--color-gray-900));
-      // padding: 0.25rem 0.5rem;
-      // font-size: 0.75rem;
-      // line-height: 1rem;
-      // font-weight: 500;
-      // color: #fff;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     &--active {

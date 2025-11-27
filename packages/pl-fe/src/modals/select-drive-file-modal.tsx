@@ -19,6 +19,7 @@ type SelectDriveFileModalProps = {
 } & ({
   type: 'file';
   onSelect: (file: DriveFile) => void;
+  accepted?: Array<string>;
 } | {
   type: 'folder';
   onSelect: (folder: DriveFolder) => void;
@@ -89,7 +90,7 @@ const File: React.FC<IFile> = ({ file, active, disabled, onSelect }) => {
   );
 };
 
-const SelectDriveFileModal: React.FC<SelectDriveFileModalProps & BaseModalProps> = ({ onClose, onSelect, type, disabled, title }) => {
+const SelectDriveFileModal: React.FC<SelectDriveFileModalProps & BaseModalProps> = ({ onClose, onSelect, type, disabled, title, ...props }) => {
   const onClickClose = () => {
     onClose('SELECT_DRIVE_FILE');
   };
@@ -149,7 +150,7 @@ const SelectDriveFileModal: React.FC<SelectDriveFileModalProps & BaseModalProps>
           key={file.id}
           file={file}
           active={selectedFile === file.id}
-          disabled={type === 'folder' || disabled?.includes(file.id)}
+          disabled={type === 'folder' || disabled?.includes(file.id) || ('accepted' in props && props.accepted && !props.accepted.includes(file.content_type))}
           onSelect={({ id }) => {
             if (type === 'file') {
               setSelectedFile(id);

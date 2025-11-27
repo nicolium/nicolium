@@ -42,6 +42,7 @@ import { countableText } from '../util/counter';
 
 import ClearLinkSuggestion from './clear-link-suggestion';
 import ContentTypeButton from './content-type-button';
+import DriveButton from './drive-button';
 import HashtagCasingSuggestion from './hashtag-casing-suggestion';
 import InteractionPolicyButton from './interaction-policy-button';
 import LanguageDropdown from './language-dropdown';
@@ -281,6 +282,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   const renderButtons = useCallback(() => (
     <div className='⁂-compose-form__buttons'>
       <UploadButtonContainer composeId={id} />
+      {features.drive && <DriveButton composeId={id} />}
       <EmojiPickerDropdown onPickEmoji={handleEmojiPick} condensed={shouldCondense} />
       {features.polls && <PollButton composeId={id} />}
       {features.scheduledStatuses && <ScheduleButton composeId={id} />}

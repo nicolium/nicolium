@@ -519,7 +519,7 @@ const uploadCompose = (composeId: string, files: FileList, intl: IntlShape) =>
       dispatch(uploadFile(
         f,
         intl,
-        (data) => dispatch(uploadComposeSuccess(composeId, data, f)),
+        (data) => dispatch(uploadComposeSuccess(composeId, data)),
         (error) => dispatch(uploadComposeFail(composeId, error)),
         ({ loaded }) => {
           progress[i] = loaded;
@@ -543,11 +543,10 @@ const uploadComposeProgress = (composeId: string, loaded: number, total: number)
   total,
 });
 
-const uploadComposeSuccess = (composeId: string, media: MediaAttachment, file: File) => ({
+const uploadComposeSuccess = (composeId: string, media: MediaAttachment) => ({
   type: COMPOSE_UPLOAD_SUCCESS,
   composeId,
   media,
-  file,
 });
 
 const uploadComposeFail = (composeId: string, error: unknown) => ({

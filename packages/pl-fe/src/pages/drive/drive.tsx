@@ -1,8 +1,10 @@
 import defaultIcon from '@phosphor-icons/core/regular/paperclip.svg';
 import { clsx } from 'clsx';
+import { mediaAttachmentSchema, type DriveFile, type DriveFolder } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { Link, useHistory } from 'react-router-dom';
+import * as v from 'valibot';
 
 import DropdownMenu, { Menu } from 'pl-fe/components/dropdown-menu';
 import { EmptyMessage } from 'pl-fe/components/empty-message';
@@ -16,8 +18,6 @@ import { useCreateDriveFolderMutation, useDeleteDriveFolderMutation, useDriveFol
 import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
 import { download } from 'pl-fe/utils/download';
-
-import type { DriveFile, DriveFolder, MediaAttachment } from 'pl-api';
 
 const messages = defineMessages({
   heading: { id: 'column.drive', defaultMessage: 'Drive' },
@@ -165,16 +165,20 @@ const File: React.FC<IFile> = ({ file }) => {
       return;
     }
 
-    const mediaAttachment = {
+    let type = file.content_type.split('/')[0] as 'image' | 'video' | 'audio' | 'unknown';
+    if (!['image', 'video', 'audio', 'unknown'].includes(type)) {
+      type = 'unknown';
+    }
+
+    const mediaAttachment = v.parse(mediaAttachmentSchema, {
       id: file.id,
       url: file.url,
       preview_url: file.thumbnail_url,
       remote_url: file.url,
       description: file.description || '',
-      type: file.content_type.split('/')[0] as 'image' | 'video' | 'audio' | 'unknown',
+      type,
       mime_type: file.content_type,
-      blurhash: null,
-    } as MediaAttachment;
+    });
 
     openModal('MEDIA', {
       media: [mediaAttachment],

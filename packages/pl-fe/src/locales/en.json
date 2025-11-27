@@ -542,6 +542,7 @@
   "compose_form.approval_required": "The reply needs to be approved by the post author.",
   "compose_form.content_type.change": "Change content type",
   "compose_form.direct_message_warning": "This post will only be sent to the mentioned users.",
+  "compose_form.drive_button": "Select from drive",
   "compose_form.event_placeholder": "Post to this event",
   "compose_form.hashtag_warning": "This post won't be listed under any hashtag as it is unlisted. Only public posts can be searched by hashtag.",
   "compose_form.interaction_policy.label": "Manage interaction policy",

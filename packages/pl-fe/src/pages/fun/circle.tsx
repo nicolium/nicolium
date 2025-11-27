@@ -75,7 +75,7 @@ const CirclePage: React.FC = () => {
       const file = new File([blob!], 'interactions_circle.png', { type: 'image/png' });
 
       dispatch(uploadFile(file, intl, (data) => {
-        dispatch(uploadComposeSuccess('compose-modal', data, file));
+        dispatch(uploadComposeSuccess('compose-modal', data));
         openModal('COMPOSE');
       }));
     }, 'image/png');
