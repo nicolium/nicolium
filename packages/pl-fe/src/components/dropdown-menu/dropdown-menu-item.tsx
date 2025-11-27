@@ -97,8 +97,6 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
   };
 
   const handleSelectFileChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    console.log('handleSelectFileChange');
-    console.log(e.target.files, item);
     if (e.target.files?.length && item?.onSelectFile) {
       item.onSelectFile(e.target.files);
     }
