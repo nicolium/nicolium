@@ -252,7 +252,6 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/accounts/:id/endorsements
      */
     accountEndorsements: any([
-      v.software === AKKOMA,
       v.software === PLEROMA && gte(v.version, '2.5.0'),
       instance.api_versions.mastodon >= 6,
     ]),

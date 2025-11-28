@@ -914,7 +914,7 @@ class PlApiClient {
      */
     getAccountEndorsements: async (accountId: string, params?: GetAccountEndorsementsParams) =>
       this.#paginatedGet(
-        `/api/v1/${[PLEROMA, AKKOMA].includes(this.features.version.software as string) ? 'pleroma/' : ''}accounts/${accountId}/endorsements`,
+        `/api/v1/${[PLEROMA].includes(this.features.version.software as string) ? 'pleroma/' : ''}accounts/${accountId}/endorsements`,
         { params },
         accountSchema,
       ),
