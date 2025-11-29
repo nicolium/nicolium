@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Spinner from 'pl-fe/components/ui/spinner';
@@ -22,19 +22,22 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
     openModal('MEDIA', { index: attachment.index, statusId: attachment.status_id });
   };
 
-  const renderAttachments = () => {
-    const publicAttachments = attachments.filter(attachment => attachment.visibility === 'public');
-    const nineAttachments = publicAttachments.slice(0, 9);
+  const children = useMemo(() => {
+    if (isLoading || !account) return <Spinner />;
 
-    if (nineAttachments.length) {
+    const publicVisibilities = ['public', 'unlisted'];
+
+    const publicAttachments = attachments.filter(attachment => publicVisibilities.includes(attachment.visibility)).slice(0, 9);
+
+    if (publicAttachments.length) {
       return (
         <div className='⁂-media-panel__attachments'>
-          {nineAttachments.map((attachment, index) => (
+          {publicAttachments.map((attachment, index) => (
             <MediaItem
               key={`${attachment.status_id}+${attachment.id}`}
               attachment={attachment}
               onOpenMedia={handleOpenMedia}
-              isLast={index === nineAttachments.length - 1}
+              isLast={index === publicAttachments.length - 1}
             />
           ))}
         </div>
@@ -46,15 +49,11 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
         </p>
       );
     }
-  };
+  }, [isLoading, account?.id, attachments]);
 
   return (
     <Widget className='⁂-media-panel' title={<FormattedMessage id='media_panel.title' defaultMessage='Media' />}>
-      {isLoading || !account ? (
-        <Spinner />
-      ) : (
-        renderAttachments()
-      )}
+      {children}
     </Widget>
   );
 };
