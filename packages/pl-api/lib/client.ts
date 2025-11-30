@@ -5801,7 +5801,7 @@ class PlApiClient {
 
   public readonly subscriptions = {
     /**
-     * Add subscriber or extend existing subscription.
+     * Add subscriber or extend existing subscription. Can be used if blockchain integration is not enabled.
      *
      * Requires features{@link Features.subscriptions}.
      * @param subscriberId - The subscriber ID.
