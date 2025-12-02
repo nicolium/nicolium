@@ -79,7 +79,12 @@ body {
       @apply flex items-center justify-between py-1;
 
       .⁂-icon {
-        @apply size-4 text-gray-900 transition-transform dark:text-gray-100;
+        @apply text-gray-900 transition-transform dark:text-gray-100;
+
+        > svg {
+          height: 1rem;
+          width: 1rem;
+        }
       }
     }
 
