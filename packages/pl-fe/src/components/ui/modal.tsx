@@ -4,7 +4,6 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import Button from './button';
 import { ButtonThemes } from './button/useButtonStyles';
-import HStack from './hstack';
 import IconButton from './icon-button';
 
 const messages = defineMessages({
@@ -119,27 +118,27 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
         </div>
 
         {confirmationAction && (
-          <HStack className='mt-5' justifyContent='between' data-testid='modal-actions'>
-            <div className='grow'>
+          <div className='⁂-modal__actions' data-testid='modal-actions'>
+            <div className='⁂-modal__actions__cancel'>
               {cancelAction && (
-                <Button
-                  theme='tertiary'
+                <button
+                  className='⁂-modal__action-cancel'
                   onClick={cancelAction}
                 >
                   {cancelText || <FormattedMessage id='common.cancel' defaultMessage='Cancel' />}
-                </Button>
+                </button>
               )}
             </div>
 
-            <HStack space={2}>
+            <div className='⁂-modal__actions__other'>
               {secondaryAction && (
-                <Button
-                  theme='secondary'
+                <button
+                  className='⁂-modal__action-secondary'
                   onClick={secondaryAction}
                   disabled={secondaryDisabled}
                 >
                   {secondaryText}
-                </Button>
+                </button>
               )}
 
               <Button
@@ -150,8 +149,8 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
               >
                 {confirmationText}
               </Button>
-            </HStack>
-          </HStack>
+            </div>
+          </div>
         )}
       </div>
     </div>

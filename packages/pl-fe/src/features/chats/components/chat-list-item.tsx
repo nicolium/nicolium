@@ -55,7 +55,6 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
         heading: intl.formatMessage(messages.leaveHeading),
         message: intl.formatMessage(messages.leaveMessage),
         confirm: intl.formatMessage(messages.leaveConfirm),
-        confirmationTheme: 'primary',
         onConfirm: () => {
           deleteChat.mutate(undefined, {
             onSuccess() {

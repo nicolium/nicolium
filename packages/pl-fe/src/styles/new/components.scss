@@ -395,5 +395,21 @@ div[data-viewport-type="window"]:has(.⁂-empty-message) {
 
   &__actions {
     @apply flex justify-between mt-5;
+
+    &__cancel {
+      @apply grow;
+    }
+
+    &__other {
+      @apply flex gap-2;
+    }
+
+    button.⁂-modal__action-cancel {
+      @include mixins.button($theme: tertiary);
+    }
+
+    button.⁂-modal__action-secondary {
+      @include mixins.button($theme: secondary);
+    }
   }
 }

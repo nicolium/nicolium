@@ -57,7 +57,6 @@ const ChatSettings = () => {
       heading: intl.formatMessage(messages.blockHeading, { acct: chat?.account.acct }),
       message: intl.formatMessage(messages.blockMessage),
       confirm: intl.formatMessage(messages.blockConfirm),
-      confirmationTheme: 'primary',
       onConfirm: () => blockAccount(),
     });
   };
@@ -67,7 +66,6 @@ const ChatSettings = () => {
       heading: intl.formatMessage(messages.unblockHeading, { acct: chat?.account.acct }),
       message: intl.formatMessage(messages.unblockMessage),
       confirm: intl.formatMessage(messages.unblockConfirm),
-      confirmationTheme: 'primary',
       onConfirm: () => unblockAccount(),
     });
   };
@@ -77,7 +75,6 @@ const ChatSettings = () => {
       heading: intl.formatMessage(messages.leaveHeading),
       message: intl.formatMessage(messages.leaveMessage),
       confirm: intl.formatMessage(messages.leaveConfirm),
-      confirmationTheme: 'primary',
       onConfirm: () => deleteChat.mutate(),
     });
   };

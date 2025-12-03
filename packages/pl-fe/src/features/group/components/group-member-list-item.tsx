@@ -100,7 +100,6 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
       heading: intl.formatMessage(messages.promoteConfirm),
       message: intl.formatMessage(messages.promoteConfirmMessage, { name: account?.username }),
       confirm: intl.formatMessage(messages.promoteConfirm),
-      confirmationTheme: 'primary',
       onConfirm: () => {
         promoteGroupMember({ role: GroupRoles.ADMIN, account_ids: [member.account_id] }, {
           onSuccess() {
