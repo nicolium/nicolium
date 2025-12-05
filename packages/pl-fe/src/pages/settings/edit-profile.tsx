@@ -133,9 +133,9 @@ interface AccountCredentials {
   /** Whether the user speaks as a cat. */
   speak_as_cat?: boolean;
   /** Mention policy */
-  mention_policy?: 'none' | 'only_known' | 'only_contacts';
-  web_layout?: 'microblog' | 'gallery';
-  web_visibility?: 'public' | 'unlisted' | 'none';
+  mention_policy?: UpdateCredentialsParams['mention_policy'];
+  web_layout?: UpdateCredentialsParams['web_layout'];
+  web_visibility?: UpdateCredentialsParams['web_visibility'];
   custom_css?: string;
 }
 
