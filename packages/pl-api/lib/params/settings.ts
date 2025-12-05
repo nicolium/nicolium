@@ -71,7 +71,7 @@ interface UpdateCredentialsParams {
   /** Boolean. Whether public posts should be searchable to anyone. */
   indexable?: boolean;
   /** Hash. The profile fields to be set. Inside this hash, the key is an integer cast to a string (although the exact integer does not matter), and the value is another hash including name and value. By default, max 4 fields. */
-  fields_attributes?: Array<{
+  fields_attributes?: Record<string, {
     /** String. The name of the profile field. By default, max 255 characters. */
     name: string;
     /** String. The value of the profile field. By default, max 255 characters. */
@@ -81,7 +81,7 @@ interface UpdateCredentialsParams {
     /** String. Default post privacy for authored statuses. Can be public, unlisted, or private. */
     privacy?: string;
     /** Boolean. Whether to mark authored statuses as sensitive by default. */
-    sensitive?: string;
+    sensitive?: boolean;
     /** String. Default language to use for authored statuses (ISO 6391) */
     language?: string;
   };
@@ -124,12 +124,12 @@ interface UpdateCredentialsParams {
    *
    * Requires features{@link Features.accountAvatarDescription}.
    */
-  avatar_description?: boolean;
+  avatar_description?: string;
   /**
    * Description of header image, for alt-text.
    * Requires features{@link Features.accountAvatarDescription}.
    */
-  header_description?: boolean;
+  header_description?: string;
   /**
    * Custom CSS to use when rendering this account's profile or statuses. String must be no more than 5,000 characters (~5kb).
    * Requires `instance.configuration.accounts.allow_custom_css`.

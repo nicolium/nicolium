@@ -1,5 +1,5 @@
 import pick from 'lodash/pick';
-import { type CredentialAccount, GOTOSOCIAL } from 'pl-api';
+import { type CredentialAccount, GOTOSOCIAL, type UpdateCredentialsParams } from 'pl-api';
 import React, { useState, useEffect } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
@@ -133,9 +133,9 @@ interface AccountCredentials {
   /** Whether the user speaks as a cat. */
   speak_as_cat?: boolean;
   /** Mention policy */
-  mention_policy?: string;
-  web_layout?: string;
-  web_visibility?: string;
+  mention_policy?: 'none' | 'only_known' | 'only_contacts';
+  web_layout?: 'microblog' | 'gallery';
+  web_visibility?: 'public' | 'unlisted' | 'none';
   custom_css?: string;
 }
 
@@ -244,8 +244,15 @@ const EditProfilePage: React.FC = () => {
   const handleSubmit: React.FormEventHandler = (event) => {
     const promises = [];
 
-    const params = { ...data };
-    if (params.fields_attributes?.length === 0) params.fields_attributes = [{ name: '', value: '' }];
+    const { fields_attributes, ...rest } = data;
+    const params: UpdateCredentialsParams = {
+      ...rest,
+    };
+
+    if (fields_attributes?.length === 0) params.fields_attributes = { '0': { name: '', value: '' } };
+    else if (fields_attributes) params.fields_attributes = Object.fromEntries(
+      fields_attributes.map((field, i) => [i.toString(), field]),
+    );
     if (header.file !== undefined) params.header = header.file || '';
     if (avatar.file !== undefined) params.avatar = avatar.file || '';
 

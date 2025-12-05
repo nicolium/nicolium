@@ -153,7 +153,7 @@ const baseAccountSchema = v.object({
   pronouns: v.fallback(v.array(v.string()), []),
 
   /** Mention policy */
-  mention_policy: v.fallback(v.picklist(['none', 'only_known', 'only_followers']), 'none'),
+  mention_policy: v.fallback(v.picklist(['none', 'only_known', 'only_contacts']), 'none'),
   /** The reported subscribers of this user */
   subscribers_count: v.fallback(v.number(), 0),
   /** Identity proofs */
