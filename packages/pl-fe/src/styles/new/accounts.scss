@@ -116,6 +116,10 @@
 }
 
 .⁂-profile-field {
+  span[data-markup] {
+    word-break: break-word;
+  }
+
   dt span[data-markup] {
     @include mixins.text($weight: bold);
   }
