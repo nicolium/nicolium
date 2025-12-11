@@ -9,6 +9,7 @@ import Text from 'pl-fe/components/ui/text';
 import Emojify from 'pl-fe/features/emoji/emojify';
 import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
+import { useLocalStatusTranslation } from 'pl-fe/queries/statuses/use-local-status-translation';
 import { useStatusTranslation } from 'pl-fe/queries/statuses/use-status-translation';
 import { useSettings } from 'pl-fe/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from 'pl-fe/stores/status-meta';
@@ -96,6 +97,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   const { collapseStatuses, expandStatuses } = useStatusMetaActions();
   const statusMeta = useStatusMeta(status.id);
   const { data: translation } = useStatusTranslation(status.id, statusMeta.targetLanguage);
+  const { data: localTranslation } = useLocalStatusTranslation(status.id, statusMeta.localTargetLanguage);
 
   const withSpoiler = status.spoiler_text?.length > 0;
   const expanded = !withSpoiler || statusMeta.expanded || false;
@@ -134,16 +136,18 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   }, [expanded]);
 
   const content = useMemo(
-    (): string => translation
-      ? translation.content
-      : (status.content_map && statusMeta.currentLanguage)
-        ? (status.content_map[statusMeta.currentLanguage] || status.content)
-        : status.content,
-    [status.content, translation, statusMeta.currentLanguage],
+    (): string => localTranslation
+      ? localTranslation.content
+      : translation
+        ? translation.content
+        : (status.content_map && statusMeta.currentLanguage)
+          ? (status.content_map[statusMeta.currentLanguage] || status.content)
+          : status.content,
+    [status.content, localTranslation, translation, statusMeta.currentLanguage],
   );
 
   const { content: parsedContent, hashtags } = useMemo(() => {
-    if (renderMfm && !translation && status.content_type === 'text/x.misskeymarkdown' && status.text) {
+    if (renderMfm && !localTranslation && !translation && status.content_type === 'text/x.misskeymarkdown' && status.text) {
       return {
         content: <ParsedMfm text={status.text} emojis={status.emojis} mentions={status.mentions} />,
         hashtags: [],

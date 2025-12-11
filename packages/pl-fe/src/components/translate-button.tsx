@@ -8,7 +8,9 @@ import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useTranslationLanguages } from 'pl-fe/queries/instance/use-translation-languages';
+import { useLocalStatusTranslation } from 'pl-fe/queries/statuses/use-local-status-translation';
 import { useStatusTranslation } from 'pl-fe/queries/statuses/use-status-translation';
+import { useLanguageModelAvailability, useLanguageModelAvailabilityActions } from 'pl-fe/stores/language-model-availability';
 import { useSettings } from 'pl-fe/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from 'pl-fe/stores/status-meta';
 
@@ -37,6 +39,22 @@ const canRemoteTranslate = (status: ITranslateButton['status'], instance: Instan
   return true;
 };
 
+type Availability = Awaited<ReturnType<typeof window.Translator.availability>>;
+
+const localTranslationAvailability = async (status: ITranslateButton['status'], locale: string): Promise<Availability | false> => {
+  if (!('Translator' in window)) return 'unavailable';
+
+  if (status.content.length < 0) return false;
+
+  // TODO: support language detection
+  if (status.language === null || locale === status.language || status.content_map?.[locale]) return false;
+
+  return window.Translator.availability({
+    sourceLanguage: status.language,
+    targetLanguage: locale,
+  });
+};
+
 interface ITranslateButton {
   status: Pick<Status, 'id' | 'account' | 'content' | 'content_map' | 'language' | 'visibility'>;
 }
@@ -52,20 +70,43 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   const me = useAppSelector((state) => state.me);
   const { data: translationLanguages = {} } = useTranslationLanguages();
   const { fetchTranslation, hideTranslation } = useStatusMetaActions();
-  const { targetLanguage } = useStatusMeta(status.id);
+  const { fetchLocalTranslation, hideLocalTranslation } = useStatusMetaActions();
+  const languageModelAvailability = useLanguageModelAvailability(status.language!, intl.locale);
+  const { setLanguageModelAvailability } = useLanguageModelAvailabilityActions();
+  const { targetLanguage, localTargetLanguage } = useStatusMeta(status.id);
 
-  const translationQuery = useStatusTranslation(status.id, targetLanguage);
+  const remoteTranslationQuery = useStatusTranslation(status.id, targetLanguage);
+  const localTranslationQuery = useLocalStatusTranslation(status.id, localTargetLanguage);
+
+  const translationQuery = localTargetLanguage ? localTranslationQuery : remoteTranslationQuery;
+
+  const [localTranslate, setLocalTranslate] = React.useState<Exclude<Availability, 'unavailable'> | false>();
 
   const remoteTranslate = features.translations && canRemoteTranslate(status, instance, translationLanguages, intl.locale, !!me);
+
+  useEffect(() => {
+    localTranslationAvailability(status, intl.locale).then((availability) => {
+      setLocalTranslate(availability === 'unavailable' ? false : availability);
+      if (availability) setLanguageModelAvailability(status.language!, intl.locale, availability);
+    }).catch(() => {});
+  }, [status.language, intl.locale]);
 
   const handleTranslate: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
 
-    if (targetLanguage) {
-      hideTranslation(status.id);
-    } else {
-      fetchTranslation(status.id, intl.locale);
+    if (localTargetLanguage) return hideLocalTranslation(status.id);
+
+    if (remoteTranslate) {
+      if (targetLanguage) {
+        hideTranslation(status.id);
+      } else {
+        fetchTranslation(status.id, intl.locale);
+      }
+
+      return;
     }
+
+    fetchLocalTranslation(status.id, intl.locale);
   };
 
   useEffect(() => {
@@ -74,19 +115,49 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
     }
   }, []);
 
-  if (!remoteTranslate || translationQuery.data === false) return null;
+  if (!remoteTranslate && !localTranslate || translationQuery.data === false) return null;
+
+  const translationLabel = () => {
+    if (translationQuery.data) {
+      return (
+        <FormattedMessage id='status.show_original' defaultMessage='Show original' />
+      );
+    }
+
+    if (translationQuery.isLoading) {
+      if (languageModelAvailability === 'downloading') {
+        return (
+          <FormattedMessage id='status.translating.downloading' defaultMessage='Downloading model…' />
+        );
+      }
+
+      return (
+        <FormattedMessage id='status.translating' defaultMessage='Translating…' />
+      );
+    }
+
+    if (remoteTranslate) {
+      return (
+        <FormattedMessage id='status.translate' defaultMessage='Translate' />
+      );
+    }
+
+    if (localTranslate && languageModelAvailability !== 'downloadable') {
+      return (
+        <FormattedMessage id='status.translate.local' defaultMessage='Translate locally' />
+      );
+    }
+
+    return (
+      <FormattedMessage id='status.translate.download' defaultMessage='Download model and translate locally' />
+    );
+  };
 
   const button = (
     <button className='flex w-fit items-center gap-1 text-primary-600 hover:underline dark:text-gray-600' onClick={handleTranslate}>
       <Icon src={require('@phosphor-icons/core/regular/translate.svg')} className='size-4' />
       <span>
-        {translationQuery.data ? (
-          <FormattedMessage id='status.show_original' defaultMessage='Show original' />
-        ) : translationQuery.isLoading ? (
-          <FormattedMessage id='status.translating' defaultMessage='Translating…' />
-        ) : (
-          <FormattedMessage id='status.translate' defaultMessage='Translate' />
-        )}
+        {translationLabel()}
       </span>
       {translationQuery.isLoading && (
         <Icon src={require('@phosphor-icons/core/regular/circle-notch.svg')} className='size-4 animate-spin' />
@@ -108,7 +179,11 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
             defaultMessage='Translated from {lang} {provider}'
             values={{
               lang: languageName,
-              provider: provider ? <FormattedMessage id='status.translated_from_with.provider' defaultMessage='with {provider}' values={{ provider }} /> : undefined,
+              provider: localTargetLanguage
+                ? <FormattedMessage id='status.translated_from_with.provider.local' defaultMessage='using local model' />
+                : provider
+                  ? <FormattedMessage id='status.translated_from_with.provider' defaultMessage='with {provider}' values={{ provider }} />
+                  : undefined,
             }}
           />
         </Text>

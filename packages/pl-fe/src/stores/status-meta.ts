@@ -7,6 +7,7 @@ type State = {
     mediaVisible?: boolean;
     currentLanguage?: string;
     targetLanguage?: string;
+    localTargetLanguage?: string;
     showPollResults?: boolean;
   }>;
   actions: {
@@ -17,6 +18,8 @@ type State = {
     toggleStatusesMediaHidden: (statusIds: Array<string>) => void;
     fetchTranslation: (statusId: string, targetLanguage: string) => void;
     hideTranslation: (statusId: string) => void;
+    fetchLocalTranslation: (statusId: string, targetLanguage: string) => void;
+    hideLocalTranslation: (statusId: string) => void;
     setStatusLanguage: (statusId: string, language: string) => void;
     toggleShowPollResults: (statusId: string) => void;
   };
@@ -69,6 +72,16 @@ const useStatusMetaStore = create<State>()(mutative((set) => ({
       if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
       state.statuses[statusId].targetLanguage = undefined;
+    }),
+    fetchLocalTranslation: (statusId, targetLanguage) => set((state: State) => {
+      if (!state.statuses[statusId]) state.statuses[statusId] = {};
+
+      state.statuses[statusId].localTargetLanguage = targetLanguage;
+    }),
+    hideLocalTranslation: (statusId) => set((state: State) => {
+      if (!state.statuses[statusId]) state.statuses[statusId] = {};
+
+      state.statuses[statusId].localTargetLanguage = undefined;
     }),
     setStatusLanguage: (statusId, language) => set((state: State) => {
       if (!state.statuses[statusId]) state.statuses[statusId] = {};
