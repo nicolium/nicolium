@@ -21,7 +21,7 @@ const canRemoteTranslate = (status: ITranslateButton['status'], instance: Instan
     allow_unauthenticated: allowUnauthenticated,
   } = instance.pleroma.metadata.translation;
 
-  if (status.content.length > 0) return false;
+  if (status.content.length < 0) return false;
 
   // TODO: support language detection
   if (status.language === null || locale === status.language || status.content_map?.[locale]) return false;
