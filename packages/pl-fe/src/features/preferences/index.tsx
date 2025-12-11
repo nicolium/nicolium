@@ -38,6 +38,7 @@ const languages = {
   da: 'Dansk',
   de: 'Deutsch',
   el: 'Ελληνικά',
+  'en-GB': 'English (UK)',
   'en-Shaw': '𐑖𐑱𐑝𐑾𐑯',
   eo: 'Esperanto',
   es: 'Español',
