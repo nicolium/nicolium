@@ -223,7 +223,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
         <Stack
           onClick={handleClickOutside}
           className={
-            clsx('fixed inset-0 h-full grow transition-all', {
+            clsx('⁂-media-modal__content fixed inset-0 h-full grow transition-all', {
               'xl:pr-96': !isFullScreen,
               'xl:pr-0': isFullScreen,
             })

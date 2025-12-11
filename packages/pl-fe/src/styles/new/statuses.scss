@@ -214,12 +214,14 @@
   }
 }
 
-.⁂-media-modal {
-  .⁂-status-action-bar__button {
-    @apply text-white/80 hover:text-white bg-transparent dark:bg-transparent;
+.⁂-media-modal__content {
+  .⁂-status-action-bar {
+    .⁂-status-action-bar__button, .⁂-icon-button {
+      @apply text-white/80 hover:text-white bg-transparent dark:bg-transparent;
 
-    &--active.⁂-status-action-bar__button--reblog {
-      @apply text-success-600 dark:text-success-400 hover:text-success-600 dark:hover:text-success-400;
+      &--active.⁂-status-action-bar__button--reblog {
+        @apply text-success-600 dark:text-success-400 hover:text-success-600 dark:hover:text-success-400;
+      }
     }
   }
 }
