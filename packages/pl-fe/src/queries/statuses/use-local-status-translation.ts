@@ -44,11 +44,12 @@ const useLocalStatusTranslation = (statusId: string, targetLanguage?: string) =>
           sourceLanguage: sourceLanguage!,
           targetLanguage: targetLanguage!,
           monitor: (createMonitor) => {
-            setLanguageModelAvailability(sourceLanguage!, targetLanguage!, 'downloading');
-
-            createMonitor.addEventListener('progress', ((e: ProgressEvent) => {
+            createMonitor.addEventListener('downloadprogress', ((e: ProgressEvent) => {
               setLanguageModelDownloadProgress(sourceLanguage!, targetLanguage!, e);
-              if (e.loaded === e.total) {
+
+              if (e.loaded === 0) {
+                setLanguageModelAvailability(sourceLanguage!, targetLanguage!, 'downloading');
+              } else if (e.loaded === e.total) {
                 setLanguageModelAvailability(sourceLanguage!, targetLanguage!, 'available');
               }
             }) as EventListener);
