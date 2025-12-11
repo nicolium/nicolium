@@ -12,7 +12,30 @@ import { useStatusTranslation } from 'pl-fe/queries/statuses/use-status-translat
 import { useSettings } from 'pl-fe/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from 'pl-fe/stores/status-meta';
 
+import type { Instance } from 'pl-api';
 import type { Status } from 'pl-fe/normalizers/status';
+
+const canRemoteTranslate = (status: ITranslateButton['status'], instance: Instance, supportedLanguages: Record<string, Array<string>>, locale: string, isLoggedIn?: boolean) => {
+  const {
+    allow_remote: allowRemote,
+    allow_unauthenticated: allowUnauthenticated,
+  } = instance.pleroma.metadata.translation;
+
+  if (status.content.length > 0) return false;
+
+  // TODO: support language detection
+  if (status.language === null || locale === status.language || status.content_map?.[locale]) return false;
+
+  if (!['public', 'unlisted'].includes(status.visibility)) return false;
+
+  if (!isLoggedIn && !allowUnauthenticated) return false;
+
+  if (!status.account.local && !allowRemote) return false;
+
+  if (!supportedLanguages[status.language!]?.includes(locale)) return false;
+
+  return true;
+};
 
 interface ITranslateButton {
   status: Pick<Status, 'id' | 'account' | 'content' | 'content_map' | 'language' | 'visibility'>;
@@ -33,14 +56,7 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
 
   const translationQuery = useStatusTranslation(status.id, targetLanguage);
 
-  const {
-    allow_remote: allowRemote,
-    allow_unauthenticated: allowUnauthenticated,
-  } = instance.pleroma.metadata.translation;
-
-  const renderTranslate = (me || allowUnauthenticated) && (allowRemote || status.account.local) && ['public', 'unlisted'].includes(status.visibility) && status.content.length > 0 && status.language !== null && intl.locale !== status.language && !status.content_map?.[intl.locale];
-
-  const supportsLanguages = (translationLanguages[status.language!]?.includes(intl.locale));
+  const remoteTranslate = features.translations && canRemoteTranslate(status, instance, translationLanguages, intl.locale, !!me);
 
   const handleTranslate: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
@@ -53,12 +69,12 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   };
 
   useEffect(() => {
-    if (translationQuery.data === undefined && settings.autoTranslate && features.translations && renderTranslate && supportsLanguages && translationQuery.data !== false && status.language !== null && !knownLanguages.includes(status.language)) {
+    if (translationQuery.data === undefined && settings.autoTranslate && remoteTranslate && status.language !== null && !knownLanguages.includes(status.language)) {
       fetchTranslation(status.id, intl.locale);
     }
   }, []);
 
-  if (!features.translations || !renderTranslate || !supportsLanguages || translationQuery.data === false) return null;
+  if (!remoteTranslate || translationQuery.data === false) return null;
 
   const button = (
     <button className='flex w-fit items-center gap-1 text-primary-600 hover:underline dark:text-gray-600' onClick={handleTranslate}>
