@@ -1,3 +1,5 @@
+/// <reference path="../node_modules/@types/dom-chromium-ai/index.d.ts" />
+
 import './polyfills';
 
 import React from 'react';

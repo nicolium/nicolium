@@ -39,7 +39,7 @@ const canRemoteTranslate = (status: ITranslateButton['status'], instance: Instan
   return true;
 };
 
-type Availability = Awaited<ReturnType<typeof window.Translator.availability>>;
+type Availability = Awaited<ReturnType<typeof Translator.availability>>;
 
 const localTranslationAvailability = async (status: ITranslateButton['status'], locale: string): Promise<Availability | false> => {
   if (!('Translator' in window)) return 'unavailable';
@@ -49,7 +49,7 @@ const localTranslationAvailability = async (status: ITranslateButton['status'], 
   // TODO: support language detection
   if (status.language === null || locale === status.language || status.content_map?.[locale]) return false;
 
-  return window.Translator.availability({
+  return Translator.availability({
     sourceLanguage: status.language,
     targetLanguage: locale,
   });

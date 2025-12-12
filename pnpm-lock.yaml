@@ -452,6 +452,9 @@ importers:
       '@testing-library/user-event':
         specifier: ^14.5.2
         version: 14.6.1(@testing-library/dom@10.4.1)
+      '@types/dom-chromium-ai':
+        specifier: ^0.0.11
+        version: 0.0.11
       '@types/leaflet':
         specifier: ^1.9.15
         version: 1.9.20
@@ -2450,6 +2453,9 @@ packages:
 
   '@types/babel__traverse@7.28.0':
     resolution: {integrity: sha512-8PvcXf70gTDZBgt9ptxJ8elBeBjcLOAcOtoO/mPJjtji1+CdGbHgm77om1GrsPxsiE+uXIpNSK64UYaIwQXd4Q==}
+
+  '@types/dom-chromium-ai@0.0.11':
+    resolution: {integrity: sha512-Li04Mac9ic1vbX/te9re8v1010fh5YB/30dMcJLpIuIyDoT7xE/dIdg9r9UrFZLs5Ztmonb3nP7+LhPpFuHBGw==}
 
   '@types/emscripten@1.40.1':
     resolution: {integrity: sha512-sr53lnYkQNhjHNN0oJDdUm5564biioI5DuOpycufDVK7D3y+GR3oUswe2rlwY1nPNyusHbrJ9WoTyIHl4/Bpwg==}
@@ -8948,6 +8954,8 @@ snapshots:
   '@types/babel__traverse@7.28.0':
     dependencies:
       '@babel/types': 7.28.2
+
+  '@types/dom-chromium-ai@0.0.11': {}
 
   '@types/emscripten@1.40.1': {}
 

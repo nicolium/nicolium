@@ -2,10 +2,10 @@ import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
 type State = {
-  languageModelAvailability: Record<string, Awaited<ReturnType<typeof window.Translator.availability>>>;
+  languageModelAvailability: Record<string, Awaited<ReturnType<typeof Translator.availability>>>;
   languageModelDownloadProgress: Record<string, number>;
   actions: {
-    setLanguageModelAvailability: (sourceLanguage: string, targetLanguage: string, availability: Awaited<ReturnType<typeof window.Translator.availability>>) => void;
+    setLanguageModelAvailability: (sourceLanguage: string, targetLanguage: string, availability: Awaited<ReturnType<typeof Translator.availability>>) => void;
     setLanguageModelDownloadProgress: (sourceLanguage: string, targetLanguage: string, event: ProgressEvent) => void;
   };
 }
