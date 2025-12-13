@@ -36,8 +36,8 @@ const groupSchema = v.pipe(v.any(), v.transform((group: any) => {
     ...group,
     avatar: group.avatar || group.avatar_static,
     header: group.header || group.header_static,
-    avatar_default: isDefaultAvatar(group.avatar || group.avatar_static),
-    header_default: isDefaultHeader(group.header || group.header_static),
+    avatar_default: isDefaultAvatar(group.avatar || group.avatar_static || ''),
+    header_default: isDefaultHeader(group.header || group.header_static || ''),
   };
 }), v.object({
   avatar: v.fallback(v.string(), ''),
