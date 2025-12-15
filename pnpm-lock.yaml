@@ -49,8 +49,8 @@ importers:
         specifier: ^7.7.2
         version: 7.7.2
       valibot:
-        specifier: ^1.1.0
-        version: 1.1.0(typescript@5.9.2)
+        specifier: ^1.2.0
+        version: 1.2.0(typescript@5.9.2)
     devDependencies:
       '@stylistic/eslint-plugin':
         specifier: ^3.1.0
@@ -419,8 +419,8 @@ importers:
         specifier: ^0.12.5
         version: 0.12.5
       valibot:
-        specifier: ^1.1.0
-        version: 1.1.0(typescript@5.7.3)
+        specifier: ^1.2.0
+        version: 1.2.0(typescript@5.7.3)
       zustand:
         specifier: ^5.0.3
         version: 5.0.7(@types/react@18.3.23)(immer@10.1.1)(react@18.3.1)(use-sync-external-store@1.5.0(react@18.3.1))
@@ -597,8 +597,8 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1
       valibot:
-        specifier: ^1.0.0-beta.9
-        version: 1.1.0(typescript@5.9.2)
+        specifier: ^1.2.0
+        version: 1.2.0(typescript@5.9.2)
     devDependencies:
       '@types/lodash':
         specifier: ^4.17.10
@@ -6546,8 +6546,8 @@ packages:
   util@0.12.5:
     resolution: {integrity: sha512-kZf/K6hEIrWHI6XqOFUiiMa+79wE/D8Q+NCNAWclkyg3b4d2k7s0QGepNjiABc+aR3N1PAyHL7p6UcLY6LmrnA==}
 
-  valibot@1.1.0:
-    resolution: {integrity: sha512-Nk8lX30Qhu+9txPYTwM0cFlWLdPFsFr6LblzqIySfbZph9+BFsAHsNvHOymEviUepeIW6KFHzpX8TKhbptBXXw==}
+  valibot@1.2.0:
+    resolution: {integrity: sha512-mm1rxUsmOxzrwnX5arGS+U4T25RdvpPjPN4yR0u9pUBov9+zGVtO84tif1eY4r6zWxVxu3KzIyknJy3rxfRZZg==}
     peerDependencies:
       typescript: '>=5'
     peerDependenciesMeta:
@@ -10550,7 +10550,7 @@ snapshots:
       tinyglobby: 0.2.14
       unrs-resolver: 1.11.1
     optionalDependencies:
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.38.0(eslint@8.57.1)(typescript@5.7.3))(eslint-import-resolver-typescript@4.4.4)(eslint@8.57.1)
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.38.0(eslint@8.57.1)(typescript@5.9.2))(eslint-import-resolver-typescript@4.4.4)(eslint@8.57.1)
     transitivePeerDependencies:
       - supports-color
 
@@ -13614,11 +13614,11 @@ snapshots:
       is-typed-array: 1.1.15
       which-typed-array: 1.1.19
 
-  valibot@1.1.0(typescript@5.7.3):
+  valibot@1.2.0(typescript@5.7.3):
     optionalDependencies:
       typescript: 5.7.3
 
-  valibot@1.1.0(typescript@5.9.2):
+  valibot@1.2.0(typescript@5.9.2):
     optionalDependencies:
       typescript: 5.9.2
 
