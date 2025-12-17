@@ -28,7 +28,7 @@ jobs:
       - run:
           working_directory: packages/pl-fe
           name: Deploy to Vercel
-          command: vercel deploy dist --token $VERCEL_TOKEN --prod=false --confirm
+          command: vercel deploy --token $VERCEL_TOKEN --prod=false --confirm --name pl-fe
 
 workflows:
   deploy_on_pr:
