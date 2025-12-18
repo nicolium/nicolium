@@ -1,3 +1,4 @@
+import { Outlet } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import { useRouteMatch } from 'react-router-dom';
@@ -24,13 +25,6 @@ const messages = defineMessages({
   media: { id: 'group.tabs.media', defaultMessage: 'Media' },
 });
 
-interface IGroupLayout {
-  params?: {
-    groupId?: string;
-  };
-  children: React.ReactNode;
-}
-
 const PrivacyBlankslate = () => (
   <Stack space={4} className='py-10' alignItems='center'>
     <div className='rounded-full bg-gray-200 p-3 dark:bg-gray-800'>
@@ -50,7 +44,7 @@ const PrivacyBlankslate = () => (
 );
 
 /** Layout to display a group. */
-const GroupLayout: React.FC<IGroupLayout> = ({ params, children }) => {
+const GroupLayout = () => {
   const intl = useIntl();
   const match = useRouteMatch();
   const { account: me } = useOwnAccount();
@@ -92,7 +86,7 @@ const GroupLayout: React.FC<IGroupLayout> = ({ params, children }) => {
     if (!isMember && isPrivate) {
       return <PrivacyBlankslate />;
     } else {
-      return children;
+      return <Outlet />;
     }
   };
 

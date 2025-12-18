@@ -1,13 +1,10 @@
+import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 
-interface IChatsLayout {
-  children: React.ReactNode;
-}
-
 /** Custom layout for chats on desktop. */
-const ChatsLayout: React.FC<IChatsLayout> = ({ children }) => (
+const ChatsLayout = () => (
   <div className='grow black:border-gray-800 md:col-span-12 lg:col-span-9 lg:black:border-l'>
-    {children}
+    <Outlet />
   </div>
 );
 

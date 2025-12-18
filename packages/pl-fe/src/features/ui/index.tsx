@@ -159,6 +159,7 @@ import { WrappedRoute } from './util/react-router-helpers';
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
 import 'pl-fe/components/status';
+import { Outlet } from '@tanstack/react-router';
 
 interface ISwitchingColumnsArea {
   children: React.ReactNode;
@@ -383,11 +384,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
   );
 });
 
-interface IUI {
-  children?: React.ReactNode;
-}
-
-const UI: React.FC<IUI> = React.memo(({ children }) => {
+const UI: React.FC = React.memo(() => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const node = useRef<HTMLDivElement | null>(null);
@@ -511,9 +508,7 @@ const UI: React.FC<IUI> = React.memo(({ children }) => {
               {!(standalone && !me) && <SidebarNavigation shrink={fullWidth} />}
             </Layout.Sidebar>
 
-            <SwitchingColumnsArea>
-              {children}
-            </SwitchingColumnsArea>
+            <Outlet />
           </Layout>
 
           <Suspense>

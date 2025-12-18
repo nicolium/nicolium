@@ -8,6 +8,7 @@ import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import ColumnForbidden from '../components/column-forbidden';
 import ColumnLoading from '../components/column-loading';
 import ErrorColumn from '../components/error-column';
+import { Outlet } from '@tanstack/react-router';
 
 type LayoutProps = {
   params?: MatchType['params'];
@@ -77,10 +78,10 @@ interface IFallbackLayout {
   children: JSX.Element;
 }
 
-const FallbackLayout: React.FC<IFallbackLayout> = ({ children }) => (
+const FallbackLayout: React.FC<IFallbackLayout> = () => (
   <>
     <Layout.Main>
-      {children}
+      <Outlet />
     </Layout.Main>
 
     <Layout.Aside />

@@ -1,3 +1,4 @@
+import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 
 import Layout from 'pl-fe/components/ui/layout';
@@ -10,10 +11,6 @@ import {
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 
-interface IDefaultLayout {
-  children: React.ReactNode;
-}
-
 const DefaultLayout: React.FC<IDefaultLayout> = ({ children }) => {
   const me = useAppSelector(state => state.me);
   const features = useFeatures();
@@ -21,7 +18,7 @@ const DefaultLayout: React.FC<IDefaultLayout> = ({ children }) => {
   return (
     <>
       <Layout.Main>
-        {children}
+        <Outlet />
       </Layout.Main>
 
       <Layout.Aside>

@@ -1,3 +1,4 @@
+import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 
 import Layout from 'pl-fe/components/ui/layout';
@@ -11,15 +12,8 @@ import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { federationRestrictionsDisclosed } from 'pl-fe/utils/state';
 
-interface IRemoteInstanceLayout {
-  params?: {
-    instance?: string;
-  };
-  children: React.ReactNode;
-}
-
 /** Layout for viewing a remote instance timeline. */
-const RemoteInstanceLayout: React.FC<IRemoteInstanceLayout> = ({ children, params }) => {
+const RemoteInstanceLayout = () => {
   const host = params!.instance!;
 
   const { account } = useOwnAccount();
@@ -28,7 +22,7 @@ const RemoteInstanceLayout: React.FC<IRemoteInstanceLayout> = ({ children, param
   return (
     <>
       <Layout.Main>
-        {children}
+        <Outlet />
       </Layout.Main>
 
       <Layout.Aside>

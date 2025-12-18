@@ -1,3 +1,4 @@
+import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { FormattedMessage } from 'react-intl';
@@ -23,15 +24,8 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { getAcct } from 'pl-fe/utils/accounts';
 
-interface IProfileLayout {
-  params?: {
-    username?: string;
-  };
-  children: React.ReactNode;
-}
-
 /** Layout to display a user's profile. */
-const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
+const ProfileLayout = () => {
   const history = useHistory();
   const username = params?.username || '';
 
@@ -110,7 +104,7 @@ const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
               <Tabs key={`profile-tabs-${account.id}`} items={tabItems} activeItem={activeItem} />
             )}
 
-            {children}
+            <Outlet />
           </div>
         </Column>
       </Layout.Main>

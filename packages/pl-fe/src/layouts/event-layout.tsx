@@ -1,3 +1,4 @@
+import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { FormattedMessage } from 'react-intl';
@@ -20,14 +21,7 @@ import { makeGetStatus } from 'pl-fe/selectors';
 
 const getStatus = makeGetStatus();
 
-interface IEventLayout {
-  params?: {
-    statusId?: string;
-  };
-  children: React.ReactNode;
-}
-
-const EventLayout: React.FC<IEventLayout> = ({ params, children }) => {
+const EventLayout = () => {
   const me = useAppSelector(state => state.me);
   const features = useFeatures();
 
@@ -79,7 +73,7 @@ const EventLayout: React.FC<IEventLayout> = ({ params, children }) => {
               <Tabs key={`event-tabs-${status.id}`} items={tabs} activeItem={activeItem} />
             )}
 
-            {children}
+            <Outlet />
           </div>
         </Column>
       </Layout.Main>

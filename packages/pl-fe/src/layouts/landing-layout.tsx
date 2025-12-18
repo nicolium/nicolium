@@ -1,3 +1,4 @@
+import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 
 import Layout from 'pl-fe/components/ui/layout';
@@ -9,18 +10,14 @@ import {
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 
-interface ILandingLayout {
-  children: React.ReactNode;
-}
-
-const LandingLayout: React.FC<ILandingLayout> = ({ children }) => {
+const LandingLayout = () => {
   const me = useAppSelector(state => state.me);
   const features = useFeatures();
 
   return (
     <>
       <Layout.Main className='space-y-3 pt-3 black:divide-gray-800 dark:divide-primary-800 sm:pt-0'>
-        {children}
+        <Outlet />
       </Layout.Main>
 
       <Layout.Aside>
