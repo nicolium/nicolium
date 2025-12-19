@@ -1,3 +1,4 @@
+import { Outlet } from '@tanstack/react-router';
 import React, { Suspense, useEffect, useRef } from 'react';
 import { ErrorBoundary, type FallbackProps } from 'react-error-boundary';
 import { Redirect, Route, useHistory, RouteProps, RouteComponentProps, match as MatchType, useLocation } from 'react-router-dom';
@@ -8,7 +9,6 @@ import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import ColumnForbidden from '../components/column-forbidden';
 import ColumnLoading from '../components/column-loading';
 import ErrorColumn from '../components/error-column';
-import { Outlet } from '@tanstack/react-router';
 
 type LayoutProps = {
   params?: MatchType['params'];

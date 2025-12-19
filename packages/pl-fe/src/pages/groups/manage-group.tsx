@@ -12,10 +12,9 @@ import Spinner from 'pl-fe/components/ui/spinner';
 import Text from 'pl-fe/components/ui/text';
 import Emojify from 'pl-fe/features/emoji/emojify';
 import ColumnForbidden from 'pl-fe/features/ui/components/column-forbidden';
+import { manageGroupRoute } from 'pl-fe/features/ui/router';
 import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
-
-type RouteParams = { groupId: string };
 
 const messages = defineMessages({
   heading: { id: 'column.manage_group', defaultMessage: 'Manage group' },
@@ -31,18 +30,14 @@ const messages = defineMessages({
   deleteSuccess: { id: 'group.delete.success', defaultMessage: 'Group successfully deleted' },
 });
 
-interface IManageGroup {
-  params: RouteParams;
-}
-
-const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
-  const { groupId: id } = params;
+const ManageGroup: React.FC = () => {
+  const { groupId } = manageGroupRoute.useParams();
 
   const { openModal } = useModalsActions();
   const history = useHistory();
   const intl = useIntl();
 
-  const { group } = useGroup(id);
+  const { group } = useGroup(groupId);
 
   const deleteGroup = useDeleteGroup();
 

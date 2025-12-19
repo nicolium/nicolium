@@ -1,31 +1,26 @@
+import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
 
 import { openComposeWithText } from 'pl-fe/actions/compose';
+import { shareRoute } from 'pl-fe/features/ui/router';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 
 const SharePage: React.FC = () => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
 
-  const { search } = useLocation();
+  const params = shareRoute.useSearch();
 
   useEffect(() => {
-    const params = new URLSearchParams(search);
-
-    const text = [
-      params.get('title'),
-      params.get('text'),
-      params.get('url'),
-    ]
+    const text = [params.title, params.text, params.url]
       .filter(v => v)
       .join('\n\n');
+
+    navigate({ to: '/' });
 
     if (text) {
       dispatch(openComposeWithText('compose-modal', text));
     }
-
-    history.replace('/');
   });
 
   return null;

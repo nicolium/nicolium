@@ -19,6 +19,7 @@ export const Circles = lazy(() => import('pl-fe/pages/account-lists/circles'));
 export const CircleTimeline = lazy(() => import('pl-fe/pages/timelines/circle-timeline'));
 export const CommunityTimeline = lazy(() => import('pl-fe/pages/timelines/community-timeline'));
 export const ComposeEvent = lazy(() => import('pl-fe/pages/statuses/compose-event'));
+export const EditEvent = lazy(() => import('pl-fe/pages/statuses/compose-event').then(m => ({ default: m.EditEventPage })));
 export const Conversations = lazy(() => import('pl-fe/pages/status-lists/conversations'));
 export const CreateApp = lazy(() => import('pl-fe/pages/developers/create-app'));
 export const CryptoDonate = lazy(() => import('pl-fe/pages/utils/crypto-donate'));

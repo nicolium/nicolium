@@ -1,5 +1,7 @@
+import { Outlet } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { Suspense, lazy, useEffect, useRef } from 'react';
+import { Toaster } from 'react-hot-toast';
 import { matchPath, Redirect, Switch, useHistory, useLocation } from 'react-router-dom';
 
 import { fetchConfig } from 'pl-fe/actions/admin';
@@ -50,6 +52,7 @@ import { isStandalone } from 'pl-fe/utils/state';
 
 import BackgroundShapes from './components/background-shapes';
 import {
+  ModalRoot,
   AboutPage,
   AccountGallery,
   AccountHoverCard,
@@ -159,7 +162,6 @@ import { WrappedRoute } from './util/react-router-helpers';
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
 import 'pl-fe/components/status';
-import { Outlet } from '@tanstack/react-router';
 
 interface ISwitchingColumnsArea {
   children: React.ReactNode;
@@ -172,7 +174,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
   const { isLoggedIn } = useLoggedIn();
   const standalone = useAppSelector(isStandalone);
 
-  const { authenticatedProfile, cryptoAddresses, redirectRootNoLogin } = usePlFeConfig();
+  const { cryptoAddresses, redirectRootNoLogin } = usePlFeConfig();
   const hasCrypto = cryptoAddresses.length > 0;
 
   // NOTE: Mastodon and Pleroma route some basenames to the backend.
@@ -287,10 +289,10 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       {(features.followedHashtagsList) && <WrappedRoute path='/followed_tags' layout={DefaultLayout} component={FollowedTags} content={children} />}
       {features.interactionRequests && <WrappedRoute path='/interaction_requests' layout={DefaultLayout} component={InteractionRequests} content={children} />}
       <WrappedRoute path='/@:username' publicRoute exact layout={ProfileLayout} component={AccountTimeline} content={children} />
-      <WrappedRoute path='/@:username/with_replies' publicRoute={!authenticatedProfile} layout={ProfileLayout} component={AccountTimeline} content={children} componentParams={{ withReplies: true }} />
-      <WrappedRoute path='/@:username/followers' publicRoute={!authenticatedProfile} layout={ProfileLayout} component={Followers} content={children} />
-      <WrappedRoute path='/@:username/following' publicRoute={!authenticatedProfile} layout={ProfileLayout} component={Following} content={children} />
-      <WrappedRoute path='/@:username/media' publicRoute={!authenticatedProfile} layout={ProfileLayout} component={AccountGallery} content={children} />
+      <WrappedRoute path='/@:username/with_replies' publicRoute layout={ProfileLayout} component={AccountTimeline} content={children} componentParams={{ withReplies: true }} />
+      <WrappedRoute path='/@:username/followers' publicRoute layout={ProfileLayout} component={Followers} content={children} />
+      <WrappedRoute path='/@:username/following' publicRoute layout={ProfileLayout} component={Following} content={children} />
+      <WrappedRoute path='/@:username/media' publicRoute layout={ProfileLayout} component={AccountGallery} content={children} />
       <WrappedRoute path='/@:username/tagged/:tag' exact layout={ProfileLayout} component={AccountTimeline} content={children} />
       <WrappedRoute path='/@:username/favorites' layout={ProfileLayout} component={FavouritedStatuses} content={children} />
       <WrappedRoute path='/@:username/pins' layout={ProfileLayout} component={PinnedStatuses} content={children} />
@@ -305,7 +307,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       {features.groups && <WrappedRoute path='/groups' exact layout={GroupsLayout} component={Groups} content={children} />}
       {features.groups && <WrappedRoute path='/groups/:groupId' exact layout={GroupLayout} component={GroupTimeline} content={children} />}
       {features.groups && <WrappedRoute path='/groups/:groupId/members' exact layout={GroupLayout} component={GroupMembers} content={children} />}
-      {features.groups && <WrappedRoute path='/groups/:groupId/media' publicRoute={!authenticatedProfile} layout={GroupLayout} component={GroupGallery} content={children} />}
+      {features.groups && <WrappedRoute path='/groups/:groupId/media' layout={GroupLayout} component={GroupGallery} content={children} />}
       {features.groups && <WrappedRoute path='/groups/:groupId/manage' exact layout={ManageGroupsLayout} component={ManageGroup} content={children} />}
       {features.groups && <WrappedRoute path='/groups/:groupId/manage/edit' exact layout={ManageGroupsLayout} component={EditGroup} content={children} />}
       {features.groups && <WrappedRoute path='/groups/:groupId/manage/blocks' exact layout={ManageGroupsLayout} component={GroupBlockedMembers} content={children} />}
@@ -534,6 +536,14 @@ const UI: React.FC = React.memo(() => {
           </Suspense>
         </div>
       </div>
+      <Suspense>
+        <ModalRoot />
+      </Suspense>
+
+      <Toaster
+        position='top-right'
+        containerClassName='top-4'
+      />
     </GlobalHotkeys>
   );
 });

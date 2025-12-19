@@ -15,6 +15,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import StatusContainer from 'pl-fe/containers/status-container';
 import ColumnLoading from 'pl-fe/features/ui/components/column-loading';
+import { adminReportRoute } from 'pl-fe/features/ui/router';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useReopenReport, useReport, useResolveReport, useSelfAssignReport, useUnassignReport } from 'pl-fe/queries/admin/use-reports';
@@ -75,14 +76,8 @@ const ReportStatuses: React.FC<IReportStatuses> = ({ statusIds }) => {
   );
 };
 
-type RouteParams = { reportId: string };
-
-interface IReportPage {
-  params: RouteParams;
-}
-
-const ReportPage: React.FC<IReportPage> = (props) => {
-  const { reportId } = props.params;
+const ReportPage: React.FC = () => {
+  const { reportId } = adminReportRoute.useParams();
 
   const features = useFeatures();
   const intl = useIntl();

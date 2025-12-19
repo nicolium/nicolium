@@ -7,23 +7,20 @@ import ScrollableList from 'pl-fe/components/scrollable-list';
 import Column from 'pl-fe/components/ui/column';
 import Spinner from 'pl-fe/components/ui/spinner';
 import AccountContainer from 'pl-fe/containers/account-container';
+import { profileFollowersRoute } from 'pl-fe/features/ui/router';
 import { useFollowers } from 'pl-fe/queries/account-lists/use-follows';
 
 const messages = defineMessages({
   heading: { id: 'column.followers', defaultMessage: 'Followers' },
 });
 
-interface IFollowersPage {
-  params?: {
-    username?: string;
-  };
-}
-
 /** Displays a list of accounts who follow the given account. */
-const FollowersPage: React.FC<IFollowersPage> = ({ params }) => {
+const FollowersPage: React.FC = () => {
+  const { username } = profileFollowersRoute.useParams();
+
   const intl = useIntl();
 
-  const { account, isUnavailable } = useAccountLookup(params?.username);
+  const { account, isUnavailable } = useAccountLookup(username);
 
   const {
     data = [],

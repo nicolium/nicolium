@@ -13,6 +13,7 @@ import Tabs from 'pl-fe/components/ui/tabs';
 import Text from 'pl-fe/components/ui/text';
 import GroupHeader from 'pl-fe/features/group/components/group-header';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
+import { layouts } from 'pl-fe/features/ui/router';
 import {
   GroupMediaPanel,
   SignUpPanel,
@@ -45,11 +46,11 @@ const PrivacyBlankslate = () => (
 
 /** Layout to display a group. */
 const GroupLayout = () => {
+  const { groupId } = layouts.group.useParams();
+
   const intl = useIntl();
   const match = useRouteMatch();
   const { account: me } = useOwnAccount();
-
-  const groupId = params?.groupId || '';
 
   const { group } = useGroup(groupId);
   const { accounts: pending } = useGroupMembershipRequests(groupId);

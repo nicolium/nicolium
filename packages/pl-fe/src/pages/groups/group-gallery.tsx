@@ -6,16 +6,13 @@ import LoadMore from 'pl-fe/components/load-more';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import Column from 'pl-fe/components/ui/column';
 import Spinner from 'pl-fe/components/ui/spinner';
+import { groupGalleryRoute } from 'pl-fe/features/ui/router';
 import { type AccountGalleryAttachment, useGroupGallery } from 'pl-fe/hooks/use-account-gallery';
 import { MediaItem } from 'pl-fe/pages/accounts/account-gallery';
 import { useModalsActions } from 'pl-fe/stores/modals';
 
-interface IGroupGallery {
-  params: { groupId: string };
-}
-
-const GroupGallery: React.FC<IGroupGallery> = (props) => {
-  const { groupId } = props.params;
+const GroupGallery: React.FC = () => {
+  const { groupId } = groupGalleryRoute.useParams();
 
   const { openModal } = useModalsActions();
 

@@ -8,24 +8,21 @@ import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
+import { eventInformationRoute } from 'pl-fe/features/ui/router';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { makeGetStatus } from 'pl-fe/selectors';
 import { useModalsActions } from 'pl-fe/stores/modals';
 
-type RouteParams = { statusId: string };
+const EventInformationPage: React.FC = () => {
+  const { statusId } = eventInformationRoute.useParams();
 
-interface IEventInformation {
-  params: RouteParams;
-}
-
-const EventInformationPage: React.FC<IEventInformation> = ({ params }) => {
   const dispatch = useAppDispatch();
   const getStatus = useCallback(makeGetStatus(), []);
   const intl = useIntl();
 
-  const status = useAppSelector(state => getStatus(state, { id: params.statusId }))!;
+  const status = useAppSelector(state => getStatus(state, { id: statusId }))!;
 
   const { openModal } = useModalsActions();
   const { tileServer } = usePlFeConfig();
@@ -33,12 +30,12 @@ const EventInformationPage: React.FC<IEventInformation> = ({ params }) => {
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
 
   useEffect(() => {
-    dispatch(fetchStatus(params.statusId, intl)).then(() => {
+    dispatch(fetchStatus(statusId, intl)).then(() => {
       setIsLoaded(true);
     }).catch(() => {
       setIsLoaded(true);
     });
-  }, [params.statusId]);
+  }, [statusId]);
 
   const handleShowMap: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault();

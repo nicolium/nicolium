@@ -3,6 +3,7 @@ import React from 'react';
 
 import Layout from 'pl-fe/components/ui/layout';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
+import { layouts } from 'pl-fe/features/ui/router';
 import {
   PromoPanel,
   InstanceInfoPanel,
@@ -14,7 +15,7 @@ import { federationRestrictionsDisclosed } from 'pl-fe/utils/state';
 
 /** Layout for viewing a remote instance timeline. */
 const RemoteInstanceLayout = () => {
-  const host = params!.instance!;
+  const { instance } = layouts.remoteInstance.useParams();
 
   const { account } = useOwnAccount();
   const disclosed = useAppSelector(federationRestrictionsDisclosed);
@@ -27,9 +28,9 @@ const RemoteInstanceLayout = () => {
 
       <Layout.Aside>
         <PromoPanel />
-        <InstanceInfoPanel host={host} />
+        <InstanceInfoPanel host={instance} />
         {(disclosed || account?.is_admin) && (
-          <InstanceModerationPanel host={host} />
+          <InstanceModerationPanel host={instance} />
         )}
         <LinkFooter />
       </Layout.Aside>

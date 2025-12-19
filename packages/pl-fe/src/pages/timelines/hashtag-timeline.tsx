@@ -7,20 +7,15 @@ import List, { ListItem } from 'pl-fe/components/list';
 import Column from 'pl-fe/components/ui/column';
 import Toggle from 'pl-fe/components/ui/toggle';
 import Timeline from 'pl-fe/features/ui/components/timeline';
+import { hashtagTimelineRoute } from 'pl-fe/features/ui/router';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { useFollowHashtagMutation, useUnfollowHashtagMutation } from 'pl-fe/queries/hashtags/use-followed-tags';
 import { useHashtag } from 'pl-fe/queries/hashtags/use-hashtag';
 
-interface IHashtagTimelinePage {
-  params?: {
-    id?: string;
-  };
-}
-
-const HashtagTimelinePage: React.FC<IHashtagTimelinePage> = ({ params }) => {
-  const tagId = params?.id || '';
+const HashtagTimelinePage: React.FC = () => {
+  const { id: tagId } = hashtagTimelineRoute.useParams();
 
   const features = useFeatures();
   const dispatch = useAppDispatch();

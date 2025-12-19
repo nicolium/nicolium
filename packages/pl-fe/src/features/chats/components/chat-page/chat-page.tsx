@@ -10,11 +10,7 @@ import ChatPageSettings from './components/chat-page-settings';
 import ChatPageShoutbox from './components/chat-page-shoutbox';
 import ChatPageSidebar from './components/chat-page-sidebar';
 
-interface IChatPage {
-  chatId?: string;
-}
-
-const ChatPage: React.FC<IChatPage> = ({ chatId }) => {
+const ChatPage: React.FC = () => {
   const history = useHistory();
 
   const path = history.location.pathname;

@@ -40,8 +40,6 @@ const messages = defineMessages({
   rawJSONInvalid: { id: 'plfe_config.raw_json_invalid', defaultMessage: 'is invalid' },
   displayFqnLabel: { id: 'plfe_config.display_fqn_label', defaultMessage: 'Display domain (eg @user@domain) for local accounts.' },
   greentextLabel: { id: 'plfe_config.greentext_label', defaultMessage: 'Enable greentext support' },
-  authenticatedProfileLabel: { id: 'plfe_config.authenticated_profile_label', defaultMessage: 'Profiles require authentication' },
-  authenticatedProfileHint: { id: 'plfe_config.authenticated_profile_hint', defaultMessage: 'Users must be logged-in to view replies and media on user profiles.' },
   mediaPreviewLabel: { id: 'plfe_config.media_preview_label', defaultMessage: 'Prefer preview media for thumbnails' },
   mediaPreviewHint: { id: 'plfe_config.media_preview_hint', defaultMessage: 'Some backends provide an optimized version of media for display in timelines. However, these preview images may be too small without additional configuration.' },
   tileServerLabel: { id: 'plfe_config.tile_server_label', defaultMessage: 'Map tile server' },
@@ -264,16 +262,6 @@ const PlFeConfigEditor: React.FC = () => {
               <Toggle
                 checked={plFe.mediaPreview === true}
                 onChange={handleChange('mediaPreview', (e) => e.target.checked)}
-              />
-            </ListItem>
-
-            <ListItem
-              label={intl.formatMessage(messages.authenticatedProfileLabel)}
-              hint={intl.formatMessage(messages.authenticatedProfileHint)}
-            >
-              <Toggle
-                checked={plFe.authenticatedProfile === true}
-                onChange={handleChange('authenticatedProfile', (e) => e.target.checked)}
               />
             </ListItem>
 

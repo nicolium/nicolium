@@ -11,7 +11,7 @@ import {
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 
-const DefaultLayout: React.FC<IDefaultLayout> = ({ children }) => {
+const DefaultLayout: React.FC = () => {
   const me = useAppSelector(state => state.me);
   const features = useFeatures();
 

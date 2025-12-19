@@ -13,6 +13,7 @@ import Icon from 'pl-fe/components/ui/icon';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import { MIMETYPE_ICONS } from 'pl-fe/components/upload';
 import ColumnLoading from 'pl-fe/features/ui/components/column-loading';
+import { driveRoute } from 'pl-fe/features/ui/router';
 import { useCreateDriveFileMutation, useDeleteDriveFileMutation, useMoveDriveFileMutation, useUpdateDriveFileMutation } from 'pl-fe/queries/drive/use-drive-file';
 import { useCreateDriveFolderMutation, useDeleteDriveFolderMutation, useDriveFolderQuery, useMoveDriveFolderMutation, useUpdateDriveFolderMutation } from 'pl-fe/queries/drive/use-drive-folder';
 import { useModalsActions } from 'pl-fe/stores/modals';
@@ -463,19 +464,15 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
   );
 };
 
-interface IDrivePage {
-  params?: {
-    folderId?: string;
-  };
-}
+const DrivePage: React.FC = () => {
+  const { folderId } = driveRoute.useParams();
 
-const DrivePage: React.FC<IDrivePage> = ({ params }) => {
   const intl = useIntl();
 
   const { openModal } = useModalsActions();
 
-  const { data, isPending } = useDriveFolderQuery(params?.folderId);
-  const { mutate: uploadFile } = useCreateDriveFileMutation(params?.folderId);
+  const { data, isPending } = useDriveFolderQuery(folderId);
+  const { mutate: uploadFile } = useCreateDriveFileMutation(folderId);
   const { mutate: createFolder } = useCreateDriveFolderMutation();
 
   const items: Menu = [
@@ -499,7 +496,7 @@ const DrivePage: React.FC<IDrivePage> = ({ params }) => {
           confirm: <FormattedMessage id='drive.folder.create.confirm' defaultMessage='Create' />,
           singleLine: true,
           onConfirm: (value: string) => {
-            createFolder({ name: value, parentId: params?.folderId }, {
+            createFolder({ name: value, parentId: folderId }, {
               onSuccess: () => toast.success(messages.newFolderSuccess),
               onError: () => toast.error(messages.newFolderError),
             });
@@ -523,7 +520,7 @@ const DrivePage: React.FC<IDrivePage> = ({ params }) => {
       action={<DropdownMenu items={items} src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')} />}
     >
       <div className='⁂-drive-breadcrumbs'>
-        <Breadcrumbs folderId={params?.folderId} />
+        <Breadcrumbs folderId={folderId} />
       </div>
       {isEmpty ? (
         <EmptyMessage

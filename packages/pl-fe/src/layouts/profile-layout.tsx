@@ -10,6 +10,7 @@ import Layout from 'pl-fe/components/ui/layout';
 import Tabs from 'pl-fe/components/ui/tabs';
 import Header from 'pl-fe/features/account/components/header';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
+import { layouts } from 'pl-fe/features/ui/router';
 import {
   WhoToFollowPanel,
   ProfileInfoPanel,
@@ -25,9 +26,9 @@ import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { getAcct } from 'pl-fe/utils/accounts';
 
 /** Layout to display a user's profile. */
-const ProfileLayout = () => {
+const ProfileLayout: React.FC = () => {
+  const { username } = layouts.profile.useParams();
   const history = useHistory();
-  const username = params?.username || '';
 
   const { account, isUnauthorized } = useAccountLookup(username, { withRelationship: true });
 

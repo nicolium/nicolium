@@ -74,9 +74,7 @@ const config = defineConfig(({ command }) => ({
           },
         ],
         display: 'standalone',
-        display_override: [
-          'window-controls-overlay',
-        ],
+        display_override: ['window-controls-overlay'],
         theme_color: '#d80482',
         categories: ['social'],
         share_target: {
@@ -130,25 +128,32 @@ const config = defineConfig(({ command }) => ({
       filename: 'sw.ts',
     }),
     viteStaticCopy({
-      targets: [{
-        src: './node_modules/@twemoji/svg/*',
-        dest: 'packs/emoji/',
-      }, {
-        src: './favicon.ico',
-        dest: '.',
-      }, {
-        src: './src/instance',
-        dest: '.',
-      }, {
-        src: './custom/instance',
-        dest: '.',
-      }, {
-        src: './node_modules/fasttext.wasm.js/dist/models/language-identification/assets/lid.176.ftz',
-        dest: 'fastText/models/',
-      }, {
-        src: './node_modules/fasttext.wasm.js/dist/core/fastText.common.wasm',
-        dest: 'fastText/',
-      }],
+      targets: [
+        {
+          src: './node_modules/@twemoji/svg/*',
+          dest: 'packs/emoji/',
+        },
+        {
+          src: './favicon.ico',
+          dest: '.',
+        },
+        {
+          src: './src/instance',
+          dest: '.',
+        },
+        {
+          src: './custom/instance',
+          dest: '.',
+        },
+        {
+          src: './node_modules/fasttext.wasm.js/dist/models/language-identification/assets/lid.176.ftz',
+          dest: 'fastText/models/',
+        },
+        {
+          src: './node_modules/fasttext.wasm.js/dist/core/fastText.common.wasm',
+          dest: 'fastText/',
+        },
+      ],
     }),
     bundleStats(),
     {
@@ -167,7 +172,10 @@ const config = defineConfig(({ command }) => ({
   ],
   resolve: {
     alias: [
-      { find: 'pl-fe', replacement: fileURLToPath(new URL('./src', import.meta.url)) },
+      {
+        find: 'pl-fe',
+        replacement: fileURLToPath(new URL('./src', import.meta.url)),
+      },
     ],
     dedupe: ['@floating-ui/react', 'tabbable', 'query-string', 'valibot'],
   },

@@ -6,6 +6,7 @@ import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import StatusList from 'pl-fe/components/status-list';
 import Column from 'pl-fe/components/ui/column';
+import { bookmarksRoute } from 'pl-fe/features/ui/router';
 import { useBookmarks } from 'pl-fe/queries/status-lists/use-bookmarks';
 import { useBookmarkFolder, useDeleteBookmarkFolder } from 'pl-fe/queries/statuses/use-bookmark-folders';
 import { useModalsActions } from 'pl-fe/stores/modals';
@@ -22,17 +23,12 @@ const messages = defineMessages({
   deleteFolderFail: { id: 'bookmarks.delete_folder.fail', defaultMessage: 'Failed to delete folder' },
 });
 
-interface IBookmarks {
-  params?: {
-    id?: string;
-  };
-}
-
-const BookmarksPage: React.FC<IBookmarks> = ({ params }) => {
+const BookmarksPage: React.FC = () => {
   const intl = useIntl();
   const history = useHistory();
 
-  const folderId = params?.id;
+  let folderId: string | undefined = bookmarksRoute.useParams().folderId;
+  if (folderId === 'all') folderId = undefined;
 
   const { openModal } = useModalsActions();
   const { data: folder } = useBookmarkFolder(folderId);

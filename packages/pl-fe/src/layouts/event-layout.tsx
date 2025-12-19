@@ -9,6 +9,7 @@ import Layout from 'pl-fe/components/ui/layout';
 import Tabs from 'pl-fe/components/ui/tabs';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
+import { layouts } from 'pl-fe/features/ui/router';
 import {
   EventHeader,
   SignUpPanel,
@@ -22,11 +23,12 @@ import { makeGetStatus } from 'pl-fe/selectors';
 const getStatus = makeGetStatus();
 
 const EventLayout = () => {
+  const { statusId } = layouts.event.useParams();
+
   const me = useAppSelector(state => state.me);
   const features = useFeatures();
 
   const history = useHistory();
-  const statusId = params?.statusId!;
 
   const status = useAppSelector(state => getStatus(state, { id: statusId }) || undefined);
 
