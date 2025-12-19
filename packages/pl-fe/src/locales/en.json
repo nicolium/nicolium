@@ -1364,8 +1364,6 @@
   "password_reset.reset": "Reset password",
   "pinned_accounts.title": "{name}’s choices",
   "pinned_statuses.none": "No pins to show.",
-  "plfe_config.authenticated_profile_hint": "Users must be logged-in to view replies and media on user profiles.",
-  "plfe_config.authenticated_profile_label": "Profiles require authentication",
   "plfe_config.copyright_footer.meta_fields.label_placeholder": "Copyright footer",
   "plfe_config.crypto_address.meta_fields.address_placeholder": "Address",
   "plfe_config.crypto_address.meta_fields.note_placeholder": "Note (optional)",
