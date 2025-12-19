@@ -1,14 +1,9 @@
-import { useMatches } from '@tanstack/react-router';
+import { Outlet, useMatches } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { Route, Switch } from 'react-router-dom';
 
 import Stack from 'pl-fe/components/ui/stack';
 
-import ChatPageMain from './components/chat-page-main';
-import ChatPageNew from './components/chat-page-new';
-import ChatPageSettings from './components/chat-page-settings';
-import ChatPageShoutbox from './components/chat-page-shoutbox';
 import ChatPageSidebar from './components/chat-page-sidebar';
 
 const SIDEBAR_HIDDEN_PATHS = ['/chats/settings', '/chats/new', '/chats/:chatId', '/chats/shoutbox'];
@@ -70,20 +65,7 @@ const ChatPage: React.FC = () => {
             'hidden sm:block': !isSidebarHidden,
           })}
         >
-          <Switch>
-            <Route path='/chats/new'>
-              <ChatPageNew />
-            </Route>
-            <Route path='/chats/settings'>
-              <ChatPageSettings />
-            </Route>
-            <Route path='/chats/shoutbox'>
-              <ChatPageShoutbox />
-            </Route>
-            <Route>
-              <ChatPageMain />
-            </Route>
-          </Switch>
+          <Outlet />
         </Stack>
       </div>
     </div>

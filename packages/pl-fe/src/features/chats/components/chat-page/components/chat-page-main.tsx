@@ -1,7 +1,6 @@
-import { useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Link, useParams } from 'react-router-dom';
 
 import DropdownMenu, { type Menu } from 'pl-fe/components/dropdown-menu';
 import Avatar from 'pl-fe/components/ui/avatar';
@@ -11,6 +10,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
+import { chatRoute } from 'pl-fe/features/ui/router';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useBlockAccountMutation, useUnblockAccountMutation, useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
 import { useChat, useChatActions, useChats } from 'pl-fe/queries/chats';
@@ -41,7 +41,7 @@ const ChatPageMain = () => {
   const features = useFeatures();
   const navigate = useNavigate();
 
-  const { chatId } = useParams<{ chatId: string }>();
+  const { chatId } = chatRoute.useParams();
 
   const { openModal } = useModalsActions();
   const { data: chat } = useChat(chatId);
@@ -131,14 +131,14 @@ const ChatPageMain = () => {
               onClick={() => navigate({ to: '/chats' })}
             />
 
-            <Link to={`/@${chat.account.acct}`}>
+            <Link to='@{$username}' params={{ username: chat.account.acct }}>
               <Avatar src={chat.account.avatar} alt={chat.account.avatar_description} size={40} className='flex-none' isCat={chat.account.is_cat} username={chat.account.username} />
             </Link>
           </HStack>
 
           <Stack alignItems='start' className='h-11 overflow-hidden'>
             <div className='flex w-full grow items-center space-x-1'>
-              <Link to={`/@${chat.account.acct}`}>
+              <Link to='@{$username}' params={{ username: chat.account.acct }}>
                 <Text weight='bold' size='sm' align='left' truncate>
                   {chat.account.display_name || `@${chat.account.username}`}
                 </Text>

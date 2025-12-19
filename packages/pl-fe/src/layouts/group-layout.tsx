@@ -1,7 +1,6 @@
-import { Outlet } from '@tanstack/react-router';
+import { Outlet, useLocation } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { useRouteMatch } from 'react-router-dom';
 
 import { useGroup } from 'pl-fe/api/hooks/groups/use-group';
 import { useGroupMembershipRequests } from 'pl-fe/api/hooks/groups/use-group-membership-requests';
@@ -49,7 +48,7 @@ const GroupLayout = () => {
   const { groupId } = layouts.group.useParams();
 
   const intl = useIntl();
-  const match = useRouteMatch();
+  const location = useLocation();
   const { account: me } = useOwnAccount();
 
   const { group } = useGroup(groupId);
@@ -64,7 +63,7 @@ const GroupLayout = () => {
         text: intl.formatMessage(messages.all),
         to: '/groups/$groupId',
         params: { groupId },
-        name: '/groups/:groupId',
+        name: '/groups/$groupId',
       },
     ];
 
@@ -73,13 +72,13 @@ const GroupLayout = () => {
         text: intl.formatMessage(messages.media),
         to: '/groups/$groupId/media',
         params: { groupId },
-        name: '/groups/:groupId/media',
+        name: '/groups/$groupId/media',
       },
       {
         text: intl.formatMessage(messages.members),
         to: '/groups/$groupId/members',
         params: { groupId },
-        name: '/groups/:groupId/members',
+        name: '/groups/$groupId/members',
         count: pending.length,
       },
     );
@@ -104,7 +103,7 @@ const GroupLayout = () => {
           <Tabs
             key={`group-tabs-${groupId}`}
             items={tabItems}
-            activeItem={match.path}
+            activeItem={location.pathname}
           />
 
           {renderChildren()}

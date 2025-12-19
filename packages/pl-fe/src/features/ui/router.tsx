@@ -4,6 +4,7 @@ import {
   createRoute,
   createRouter,
   notFound,
+  Outlet,
   redirect,
   RouterProvider,
 } from '@tanstack/react-router';
@@ -34,6 +35,11 @@ import SearchLayout from 'pl-fe/layouts/search-layout';
 import StatusLayout from 'pl-fe/layouts/status-layout';
 import { instanceInitialState } from 'pl-fe/reducers/instance';
 import { isStandalone } from 'pl-fe/utils/state';
+
+import ChatPageMain from '../chats/components/chat-page/components/chat-page-main';
+import ChatPageNew from '../chats/components/chat-page/components/chat-page-new';
+import ChatPageSettings from '../chats/components/chat-page/components/chat-page-settings';
+import ChatPageShoutbox from '../chats/components/chat-page/components/chat-page-shoutbox';
 
 import ColumnLoading from './components/column-loading';
 import {
@@ -139,6 +145,8 @@ import {
 } from './util/async-components';
 
 import type { Features } from 'pl-api';
+import Layout from 'pl-fe/components/ui/layout';
+
 
 interface RouterContext {
   instance: ReturnType<typeof useInstance>;
@@ -486,7 +494,7 @@ export const newEventRoute = createRoute({
 });
 
 // Chats
-export const chatsIndexRoute = createRoute({
+export const chatsRoute = createRoute({
   getParentRoute: () => layouts.chats,
   path: '/chats',
   component: ChatIndex,
@@ -496,39 +504,27 @@ export const chatsIndexRoute = createRoute({
 });
 
 export const chatsNewRoute = createRoute({
-  getParentRoute: () => layouts.chats,
-  path: '/chats/new',
-  component: ChatIndex,
-  beforeLoad: ({ context: { features } }) => {
-    if (!features.chats) throw notFound();
-  },
+  getParentRoute: () => chatsRoute,
+  path: '/new',
+  component: ChatPageNew,
 });
 
 export const chatsSettingsRoute = createRoute({
-  getParentRoute: () => layouts.chats,
-  path: '/chats/settings',
-  component: ChatIndex,
-  beforeLoad: ({ context: { features } }) => {
-    if (!features.chats) throw notFound();
-  },
+  getParentRoute: () => chatsRoute,
+  path: '/settings',
+  component: ChatPageSettings,
 });
 
 export const shoutboxRoute = createRoute({
-  getParentRoute: () => layouts.chats,
-  path: '/chats/shoutbox',
-  component: ChatIndex,
-  beforeLoad: ({ context: { features } }) => {
-    if (!features.shoutbox) throw notFound();
-  },
+  getParentRoute: () => chatsRoute,
+  path: '/shoutbox',
+  component: ChatPageShoutbox,
 });
 
 export const chatRoute = createRoute({
-  getParentRoute: () => layouts.chats,
-  path: '/chats/$chatId',
-  component: ChatIndex,
-  beforeLoad: ({ context: { features } }) => {
-    if (!features.chats) throw notFound();
-  },
+  getParentRoute: () => chatsRoute,
+  path: '/{-$chatId}',
+  component: ChatPageMain,
 });
 
 // Follow requests and blocks
@@ -1152,7 +1148,6 @@ const routeTree = rootRoute.addChildren([
     adminRulesRoute,
   ]),
   layouts.chats.addChildren([
-    chatsIndexRoute,
     chatsNewRoute,
     chatsSettingsRoute,
     shoutboxRoute,
@@ -1270,6 +1265,22 @@ const routeTree = rootRoute.addChildren([
   ]),
 ]);
 
+const FallbackLayout: React.FC<{ children: JSX.Element }> = ({ children }) => (
+  <>
+    <Layout.Main>
+      {children}
+    </Layout.Main>
+
+    <Layout.Aside />
+  </>
+);
+
+const PendingComponent: React.FC = () => (
+  <FallbackLayout>
+    <ColumnLoading />
+  </FallbackLayout>
+);
+
 const router = createRouter({
   routeTree,
   basepath: FE_SUBDIRECTORY,
@@ -1280,15 +1291,9 @@ const router = createRouter({
     isStandalone: false,
     isAdmin: false,
     hasCrypto: false,
-    // instance,
-    // features,
-    // isStandalone: standalone,
-    // isLoggedIn,
-    // isAdmin: true,
-    // hasCrypto,
   },
   defaultNotFoundComponent: GenericNotFound,
-  defaultPendingComponent: ColumnLoading,
+  defaultPendingComponent: PendingComponent,
 });
 
 declare module '@tanstack/react-router' {

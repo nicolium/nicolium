@@ -1,6 +1,6 @@
+import { useLocation } from '@tanstack/react-router';
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
-import { useRouteMatch } from 'react-router-dom';
 
 import Tabs, { type Item } from 'pl-fe/components/ui/tabs';
 import { usePendingUsersCount } from 'pl-fe/queries/admin/use-accounts';
@@ -14,7 +14,7 @@ const messages = defineMessages({
 
 const AdminTabs: React.FC = () => {
   const intl = useIntl();
-  const match = useRouteMatch();
+  const location = useLocation();
 
   const { data: awaitingApprovalCount } = usePendingUsersCount();
   const { data: pendingReportsCount = 0 } = usePendingReportsCount();
@@ -35,7 +35,7 @@ const AdminTabs: React.FC = () => {
     count: awaitingApprovalCount,
   }];
 
-  return <Tabs items={tabs} activeItem={match.path} />;
+  return <Tabs items={tabs} activeItem={location.pathname} />;
 };
 
 export { AdminTabs as default };

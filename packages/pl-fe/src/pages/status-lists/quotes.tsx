@@ -1,10 +1,10 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useParams } from 'react-router-dom';
 
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
 import StatusList from 'pl-fe/components/status-list';
 import Column from 'pl-fe/components/ui/column';
+import { statusQuotesRoute } from 'pl-fe/features/ui/router';
 import { useStatusQuotes } from 'pl-fe/queries/statuses/use-status-quotes';
 
 const messages = defineMessages({
@@ -13,7 +13,7 @@ const messages = defineMessages({
 
 const QuotesPage: React.FC = () => {
   const intl = useIntl();
-  const { statusId } = useParams<{ statusId: string }>();
+  const { statusId } = statusQuotesRoute.useParams();
 
   const { data: statusIds = [], isLoading, hasNextPage, fetchNextPage, refetch } = useStatusQuotes(statusId);
 

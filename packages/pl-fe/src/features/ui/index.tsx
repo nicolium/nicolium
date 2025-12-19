@@ -2,7 +2,7 @@ import { Outlet, useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { Suspense, lazy, useEffect, useRef } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { matchPath, Redirect, Switch, useLocation } from 'react-router-dom';
+import { Redirect, Switch, useLocation } from 'react-router-dom';
 
 import { fetchConfig } from 'pl-fe/actions/admin';
 import { fetchFilters } from 'pl-fe/actions/filters';
