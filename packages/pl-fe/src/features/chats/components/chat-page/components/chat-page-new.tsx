@@ -1,6 +1,6 @@
+import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import { CardTitle } from 'pl-fe/components/ui/card';
 import HStack from 'pl-fe/components/ui/hstack';
@@ -19,7 +19,7 @@ interface IChatPageNew {
 /** New message form to create a chat. */
 const ChatPageNew: React.FC<IChatPageNew> = () => {
   const intl = useIntl();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   return (
     <Stack className='h-full gap-4'>
@@ -28,7 +28,7 @@ const ChatPageNew: React.FC<IChatPageNew> = () => {
           <IconButton
             src={require('@phosphor-icons/core/regular/arrow-left.svg')}
             className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
-            onClick={() => history.push('/chats')}
+            onClick={() => navigate({ to: '/chats' })}
           />
 
           <CardTitle title={intl.formatMessage(messages.title)} />

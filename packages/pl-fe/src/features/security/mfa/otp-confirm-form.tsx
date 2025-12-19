@@ -1,7 +1,7 @@
+import { useNavigate } from '@tanstack/react-router';
 import { QRCodeCanvas as QRCode } from 'qrcode.react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import Button from 'pl-fe/components/ui/button';
 import Form from 'pl-fe/components/ui/form';
@@ -27,7 +27,7 @@ const messages = defineMessages({
 
 const OtpConfirmForm: React.FC = () => {
   const intl = useIntl();
-  const history = useHistory();
+  const navigate = useNavigate();
   const features = useFeatures();
   const client = useClient();
 
@@ -60,7 +60,7 @@ const OtpConfirmForm: React.FC = () => {
     confirmMfa(state, {
       onSuccess: () => {
         toast.success(intl.formatMessage(messages.mfaConfirmSuccess));
-        history.push('../auth/edit');
+        navigate({ to: '/settings' });
       },
       onError: () => {
         toast.error(intl.formatMessage(messages.confirmFail));
@@ -128,7 +128,7 @@ const OtpConfirmForm: React.FC = () => {
             type='button'
             theme='tertiary'
             text={intl.formatMessage(messages.mfaCancelButton)}
-            onClick={() => history.push('../auth/edit')}
+            onClick={() => navigate({ to: '/settings' })}
             disabled={isPending}
           />
 

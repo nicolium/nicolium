@@ -1,6 +1,6 @@
+import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
 import { useRemoteStream } from 'pl-fe/api/hooks/streaming/use-remote-stream';
@@ -18,7 +18,7 @@ import { useSettings } from 'pl-fe/stores/settings';
 const RemoteTimelinePage: React.FC = () => {
   const { instance } = remoteTimelineRoute.useParams();
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const settings = useSettings();
@@ -29,7 +29,7 @@ const RemoteTimelinePage: React.FC = () => {
   const pinned = settings.remote_timeline.pinnedHosts.includes(instance);
 
   const handleCloseClick: React.MouseEventHandler = () => {
-    history.push('/timeline/fediverse');
+    navigate({ to: '/timeline/fediverse' });
   };
 
   const handleLoadMore = () => {

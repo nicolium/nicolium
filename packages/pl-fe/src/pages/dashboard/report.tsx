@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import React, { useCallback, useState } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 import ReactSwipeableViews from 'react-swipeable-views';
 
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
@@ -148,7 +148,7 @@ const ReportPage: React.FC = () => {
     <Column label={intl.formatMessage(messages.columnHeading, { id: reportId })}>
       <div className='mb-4 grid grid-cols-1 gap-2 md:grid-cols-2'>
         {targetAccount && (
-          <Link to={`/@${targetAccount.acct}`} className='h-fit'>
+          <Link to='/@{$username}' params={{ username: targetAccount.acct }} className='h-fit'>
             <Card variant='rounded'>
               <Stack space={2}>
                 <Text size='md' weight='medium'>
@@ -184,7 +184,7 @@ const ReportPage: React.FC = () => {
 
                 <td className='p-2.5 text-end'>
                   <Text size='sm' className='hover:underline'>
-                    <Link to={`/pl-fe/admin/accounts/${report.account_id}`}>
+                    <Link to='/pl-fe/admin/accounts/$accountId' params={{ accountId: report.account_id }}>
                       @{authorAccount.acct}
                     </Link>
                   </Text>
@@ -216,7 +216,7 @@ const ReportPage: React.FC = () => {
                   {report.assigned_account ? (
                     <HStack space={2} alignItems='center' justifyContent='end'>
                       <Text size='sm' className='hover:underline'>
-                        <Link to={`/pl-fe/admin/accounts/${report.assigned_account.id}`}>
+                        <Link to='/pl-fe/admin/accounts/$accountId' params={{ accountId: report.assigned_account.id }}>
                           @{report.assigned_account.acct}
                         </Link>
                       </Text>

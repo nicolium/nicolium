@@ -1,7 +1,7 @@
+import { Link, useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
-import { Link, useHistory } from 'react-router-dom';
 
 import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import Avatar from 'pl-fe/components/ui/avatar';
@@ -38,7 +38,7 @@ const messages = defineMessages({
 });
 
 const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const intl = useIntl();
 
   const handleClick: React.MouseEventHandler = (e) => {
@@ -48,7 +48,7 @@ const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
 
     const timelineUrl = `/timeline/${account.domain}`;
     if (!(e.ctrlKey || e.metaKey)) {
-      history.push(timelineUrl);
+      navigate({ to: timelineUrl });
     } else {
       window.open(timelineUrl, '_blank');
     }

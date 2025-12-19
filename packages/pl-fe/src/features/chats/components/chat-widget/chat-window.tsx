@@ -1,5 +1,5 @@
+import { Link } from '@tanstack/react-router';
 import React, { useRef } from 'react';
-import { Link } from 'react-router-dom';
 
 import Avatar from 'pl-fe/components/ui/avatar';
 import HStack from 'pl-fe/components/ui/hstack';
@@ -69,7 +69,7 @@ const ChatWindow = () => {
 
             <HStack alignItems='center' space={3}>
               {isOpen && (
-                <Link to={`/@${chat.account.acct}`}>
+                <Link to='/@{$username}' params={{ username: chat.account.acct }}>
                   <Avatar src={chat.account.avatar} alt={chat.account.avatar_description} size={40} isCat={chat.account.is_cat} username={chat.account.username} />
                 </Link>
               )}

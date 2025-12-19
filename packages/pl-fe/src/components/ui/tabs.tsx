@@ -5,11 +5,13 @@ import {
   Tab as ReachTab,
   useTabsContext,
 } from '@reach/tabs';
+import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 
 import Counter from './counter';
+
+import type { LinkProps } from '@tanstack/react-router';
 
 import './tabs.css';
 
@@ -109,15 +111,18 @@ type Item = {
   title?: string;
   /** URL to visit when the tab is selected. */
   href?: string;
-  /** Route to visit when the tab is selected. */
-  to?: string;
   /** Callback when the tab is selected. */
   action?: () => void;
   /** Display a counter over the tab. */
   count?: number;
   /** Unique name for this tab. */
   name: string;
-}
+} & ({
+  /** Route to visit when the tab is selected. */
+  to: LinkProps['to'];
+  params?: LinkProps['params'];
+  search?: LinkProps['search'];
+} | { to?: undefined });
 
 interface ITabs {
   /** Array of structured tab items. */
@@ -128,9 +133,9 @@ interface ITabs {
 
 /** Animated tabs component. */
 const Tabs = ({ items, activeItem }: ITabs) => {
-  const defaultIndex = items.findIndex(({ name }) => name === activeItem);
+  const navigate = useNavigate();
 
-  const history = useHistory();
+  const defaultIndex = items.findIndex(({ name }) => name === activeItem);
 
   const onChange = (selectedIndex: number) => {
     const item = items[selectedIndex];
@@ -138,7 +143,7 @@ const Tabs = ({ items, activeItem }: ITabs) => {
     if (typeof item.action === 'function') {
       item.action();
     } else if (item.to) {
-      history.push(item.to);
+      navigate({ to: item.to, params: item.params, search: item.search });
     }
   };
 

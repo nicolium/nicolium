@@ -1,6 +1,6 @@
+import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import PullToRefresh from 'pl-fe/components/pull-to-refresh';
@@ -25,7 +25,7 @@ const messages = defineMessages({
 
 const BookmarksPage: React.FC = () => {
   const intl = useIntl();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   let folderId: string | undefined = bookmarksRoute.useParams().folderId;
   if (folderId === 'all') folderId = undefined;
@@ -52,7 +52,7 @@ const BookmarksPage: React.FC = () => {
         deleteBookmarkFolder(folderId!, {
           onSuccess() {
             toast.success(messages.deleteFolderSuccess);
-            history.push('/bookmarks');
+            navigate({ to: '/bookmarks' });
           },
           onError() {
             toast.error(messages.deleteFolderFail);

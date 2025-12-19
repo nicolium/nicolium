@@ -1,7 +1,7 @@
 // Adapted from Mastodon https://github.com/mastodon/mastodon/blob/main/app/javascript/mastodon/components/hashtag_bar.tsx
+import { Link } from '@tanstack/react-router';
 import React, { useCallback, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import HStack from './ui/hstack';
 import Text from './ui/text';
@@ -34,7 +34,8 @@ const HashtagsBar: React.FC<IHashtagsBar> = ({ hashtags }) => {
       {revealedHashtags.map((hashtag) => (
         <Link
           key={hashtag}
-          to={`/tags/${hashtag}`}
+          to='/tags/$id'
+          params={{ id: hashtag }}
           onClick={(e) => e.stopPropagation()}
           className='flex items-center rounded-sm bg-gray-100 px-1.5 py-1 text-xs font-medium text-primary-600 black:bg-primary-900 dark:bg-primary-700 dark:text-white'
         >

@@ -1,6 +1,6 @@
+import { useNavigate } from '@tanstack/react-router';
 import React, { useState, useEffect } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import Button from 'pl-fe/components/ui/button';
 import FormActions from 'pl-fe/components/ui/form-actions';
@@ -23,7 +23,7 @@ interface IEnableOtpForm {
 
 const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupProceedClick }) => {
   const intl = useIntl();
-  const history = useHistory();
+  const navigate = useNavigate();
   const client = useClient();
 
   const [backupCodes, setBackupCodes] = useState<Array<string>>([]);
@@ -70,7 +70,7 @@ const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupPr
           <Button
             theme='tertiary'
             text={intl.formatMessage(messages.mfaCancelButton)}
-            onClick={() => history.push('../auth/edit')}
+            onClick={() => navigate({ to: '/settings' })}
           />
 
           {backupCodes.length > 0 && (

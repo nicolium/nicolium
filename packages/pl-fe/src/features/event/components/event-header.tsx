@@ -1,6 +1,6 @@
+import { Link, useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Link, useHistory } from 'react-router-dom';
 
 import { directCompose, mentionCompose, quoteCompose } from 'pl-fe/actions/compose';
 import { fetchEventIcs } from 'pl-fe/actions/events';
@@ -78,7 +78,7 @@ interface IEventHeader {
 const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { openModal } = useModalsActions();
   const { getOrCreateChatByAccountId } = useChats();
@@ -175,7 +175,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
   const handleChatClick = () => {
     getOrCreateChatByAccountId(account.id)
-      .then((chat) => history.push(`/chats/${chat.id}`))
+      .then((chat) => navigate({ to: '/chats/$chatId', params: { chatId: chat.id } }))
       .catch(() => {});
   };
 
@@ -355,7 +355,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
       menu.push({
         text: intl.formatMessage(messages.adminAccount, { name: username }),
-        to: `/pl-fe/admin/accounts/${account.id}`,
+        to: '/pl-fe/admin/accounts/$accountId',
+        params: { accountId: account.id },
         icon: require('@phosphor-icons/core/regular/gavel.svg'),
       });
 
@@ -431,7 +432,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
             <Button
               size='sm'
               theme='secondary'
-              to={`/@${account.acct}/events/${status.id}/edit`}
+              to='/@{$username}/events/$statusId/edit'
+              params={{ username: account.acct, statusId: status.id }}
             >
               <FormattedMessage id='event.manage' defaultMessage='Manage' />
             </Button>
@@ -447,7 +449,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
                 defaultMessage='Organized by {name}'
                 values={{
                   name: (
-                    <Link className='mention inline-block' to={`/@${account.acct}`}>
+                    <Link className='mention inline-block' to='/@{$username}' params={{ username: account.acct }}>
                       <HStack space={1} alignItems='center' grow>
                         <span><Emojify text={account.display_name} emojis={account.emojis} /></span>
                         {account.verified && <VerificationBadge />}

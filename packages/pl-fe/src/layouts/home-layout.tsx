@@ -1,8 +1,7 @@
-import { Outlet } from '@tanstack/react-router';
+import { Outlet , Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import { uploadCompose } from 'pl-fe/actions/compose';
 import Avatar from 'pl-fe/components/ui/avatar';
@@ -62,7 +61,7 @@ const HomeLayout = () => {
           >
             <div className='⁂-compose-block__body'>
               {!disableUserProvidedMedia && (
-                <Link className='⁂-compose-block__avatar' to={`/@${acct}`}>
+                <Link className='⁂-compose-block__avatar' to='/@{$username}' params={{ username: acct }}>
                   <Avatar src={avatar} alt={account?.avatar_description} isCat={account?.is_cat} size={42} username={account?.username} />
                 </Link>
               )}

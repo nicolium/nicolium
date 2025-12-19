@@ -1,7 +1,8 @@
+import { useMatch } from '@tanstack/react-router';
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
 
 import { toggleChatPane } from 'pl-fe/actions/chats';
+import { chatRoute, layouts } from 'pl-fe/features/ui/router';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useChat } from 'pl-fe/queries/chats';
 import { useSettings } from 'pl-fe/stores/settings';
@@ -25,13 +26,12 @@ interface IChatProvider {
 }
 
 const ChatProvider: React.FC<IChatProvider> = ({ children }) => {
-  const history = useHistory();
   const dispatch = useAppDispatch();
   const { chats } = useSettings();
 
-  const path = history.location.pathname;
-  const isUsingMainChatPage = Boolean(path.match(/^\/chats/));
-  const { chatId } = useParams<{ chatId: string }>();
+  const isUsingMainChatPage = !!useMatch({ from: layouts.chats.id, shouldThrow: false });
+  const chatPageMatch = useMatch({ from: chatRoute.id, shouldThrow: false });
+  const { chatId = null } = chatPageMatch?.params ?? {};
 
   const [screen, setScreen] = useState<ChatWidgetScreens>(ChatWidgetScreens.INBOX);
   const [currentChatId, setCurrentChatId] = useState<null | string>(chatId);

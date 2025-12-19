@@ -1,7 +1,7 @@
+import { useNavigate } from '@tanstack/react-router';
 import { Filter, type FilterContext } from 'pl-api';
 import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import { createFilter, fetchFilter, updateFilter } from 'pl-fe/actions/filters';
 import List, { ListItem } from 'pl-fe/components/list';
@@ -98,7 +98,7 @@ const EditFilterPage: React.FC = () => {
   const { filterId } = editFilterRoute.useParams();
 
   const intl = useIntl();
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const features = useFeatures();
 
@@ -152,7 +152,7 @@ const EditFilterPage: React.FC = () => {
     dispatch(filterId !== 'new'
       ? updateFilter(filterId, title, expiresIn, context, filterAction, keywords)
       : createFilter(title, expiresIn, context, filterAction, keywords)).then(() => {
-      history.push('/filters');
+      navigate({ to: '/filters' });
     }).catch(() => {
       toast.error(intl.formatMessage(messages.create_error));
     });

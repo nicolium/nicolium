@@ -1,15 +1,12 @@
+import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import AutosuggestAccountInput from 'pl-fe/components/autosuggest-account-input';
 import SvgIcon from 'pl-fe/components/ui/svg-icon';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { selectAccount } from 'pl-fe/selectors';
-
-import type { AppDispatch, RootState } from 'pl-fe/store';
-import type { History } from 'pl-fe/types/history';
 
 const messages = defineMessages({
   placeholder: { id: 'search.placeholder', defaultMessage: 'Search' },
@@ -17,20 +14,11 @@ const messages = defineMessages({
   action: { id: 'search.action', defaultMessage: 'Search for “{query}”' },
 });
 
-const redirectToAccount = (accountId: string, routerHistory: History) =>
-  (_dispatch: AppDispatch, getState: () => RootState) => {
-    const acct = selectAccount(getState(), accountId)!.acct;
-
-    if (acct && routerHistory) {
-      routerHistory.push(`/@${acct}`);
-    }
-  };
-
 const SearchInput = React.memo(() => {
   const [value, setValue] = useState('');
 
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const intl = useIntl();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -45,7 +33,7 @@ const SearchInput = React.memo(() => {
 
   const handleSubmit = () => {
     setValue('');
-    history.push('/search?' + new URLSearchParams({ q: value }));
+    navigate({ to: '/search', search: { q: value } });
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -60,7 +48,7 @@ const SearchInput = React.memo(() => {
 
   const handleSelected = (accountId: string) => {
     setValue('');
-    dispatch(redirectToAccount(accountId, history));
+    dispatch((_, getState) => navigate({ to: '/@{$username}', params: { username: selectAccount(getState(), accountId)!.acct } }));
   };
 
   const makeMenu = () => [

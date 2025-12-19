@@ -1,6 +1,6 @@
+import { Link, type LinkProps } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import Icon from '../icon';
 
@@ -8,10 +8,10 @@ import { useButtonStyles } from './useButtonStyles';
 
 import type { ButtonSizes, ButtonThemes } from './useButtonStyles';
 
-interface IButton extends Pick<
+type IButton = Pick<
   React.ComponentProps<'button'>,
   'children' | 'className' | 'disabled' | 'onClick' | 'onMouseDown' | 'onKeyDown' | 'onKeyPress' | 'title' | 'type'
-> {
+> & (Pick<LinkProps, 'to' | 'params' | 'search'> | { to?: undefined }) & {
   /** Whether this button expands the width of its container. */
   block?: boolean;
   /** URL to an SVG icon to render inside the button. */
@@ -24,8 +24,6 @@ interface IButton extends Pick<
   size?: ButtonSizes;
   /** Text inside the button. Takes precedence over `children`. */
   text?: React.ReactNode;
-  /** Makes the button into a navlink, if provided. */
-  to?: string;
   /** Makes the button into an anchor, if provided. */
   href?: string;
   /** Styles the button visually with a predefined theme. */
@@ -44,7 +42,6 @@ const Button = React.forwardRef<HTMLButtonElement, IButton>(({
   size = 'md',
   text,
   theme = 'secondary',
-  to,
   href,
   type = 'button',
   className,
@@ -84,9 +81,9 @@ const Button = React.forwardRef<HTMLButtonElement, IButton>(({
     </button>
   );
 
-  if (to) {
+  if (props.to) {
     return (
-      <Link to={to} tabIndex={-1} className='inline-flex'>
+      <Link to={props.to} params={props.params} search={props.search} tabIndex={-1} className='inline-flex'>
         {renderButton()}
       </Link>
     );

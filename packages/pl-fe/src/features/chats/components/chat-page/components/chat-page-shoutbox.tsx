@@ -1,6 +1,6 @@
+import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import Avatar from 'pl-fe/components/ui/avatar';
 import HStack from 'pl-fe/components/ui/hstack';
@@ -13,7 +13,7 @@ import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import Shoutbox from '../../shoutbox';
 
 const ChatPageShoutbox = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const instance = useInstance();
   const { logo } = usePlFeConfig();
 
@@ -25,7 +25,7 @@ const ChatPageShoutbox = () => {
             <IconButton
               src={require('@phosphor-icons/core/regular/arrow-left.svg')}
               className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
-              onClick={() => history.push('/chats')}
+              onClick={() => navigate({ to: '/chats' })}
             />
 
             <Avatar src={logo} alt='' size={40} className='flex-none' />

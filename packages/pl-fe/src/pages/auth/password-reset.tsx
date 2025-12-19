@@ -1,6 +1,6 @@
+import { Navigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Redirect } from 'react-router-dom';
 
 import { resetPassword } from 'pl-fe/actions/security';
 import { BigCard } from 'pl-fe/components/big-card';
@@ -39,7 +39,7 @@ const PasswordResetPage = () => {
     });
   };
 
-  if (success) return <Redirect to='/' />;
+  if (success) return <Navigate to='/' replace />;
 
   return (
     <BigCard title={<FormattedMessage id='password_reset.header' defaultMessage='Reset password' />}>

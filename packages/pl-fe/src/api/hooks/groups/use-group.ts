@@ -1,5 +1,5 @@
+import { useLocation, useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import { Entities } from 'pl-fe/entity-store/entities';
 import { useEntity } from 'pl-fe/entity-store/hooks/use-entity';
@@ -11,7 +11,8 @@ import type { Group } from 'pl-api';
 
 const useGroup = (groupId: string, refetch = true) => {
   const client = useClient();
-  const history = useHistory();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   const { entity: group, isUnauthorized, ...result } = useEntity<Group, Group>(
     [Entities.GROUPS, groupId],
@@ -25,7 +26,8 @@ const useGroup = (groupId: string, refetch = true) => {
 
   useEffect(() => {
     if (isUnauthorized) {
-      history.push('/login');
+      localStorage.setItem('plfe:redirect_uri', location.href);
+      navigate({ to: '/login', replace: true });
     }
   }, [isUnauthorized]);
 

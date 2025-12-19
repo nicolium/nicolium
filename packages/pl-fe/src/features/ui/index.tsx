@@ -1,8 +1,8 @@
-import { Outlet } from '@tanstack/react-router';
+import { Outlet, useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { Suspense, lazy, useEffect, useRef } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { matchPath, Redirect, Switch, useHistory, useLocation } from 'react-router-dom';
+import { matchPath, Redirect, Switch, useLocation } from 'react-router-dom';
 
 import { fetchConfig } from 'pl-fe/actions/admin';
 import { fetchFilters } from 'pl-fe/actions/filters';
@@ -387,7 +387,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
 });
 
 const UI: React.FC = React.memo(() => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const node = useRef<HTMLDivElement | null>(null);
   const me = useAppSelector(state => state.me);
@@ -407,7 +407,7 @@ const UI: React.FC = React.memo(() => {
 
   const handleServiceWorkerPostMessage = ({ data }: MessageEvent) => {
     if (data.type === 'navigate') {
-      history.push(data.path);
+      navigate({ to: data.path });
     } else {
       console.warn('Unknown message type:', data.type);
     }
@@ -491,7 +491,7 @@ const UI: React.FC = React.memo(() => {
     pointerEvents: isDropdownMenuOpen ? 'none' : undefined,
   };
 
-  const fullWidth = !!matchPath(history.location.pathname, '/deck');
+  const fullWidth = false; // !!matchPath(history.location.pathname, '/deck');
 
   return (
     <GlobalHotkeys node={node}>
@@ -536,9 +536,9 @@ const UI: React.FC = React.memo(() => {
           </Suspense>
         </div>
       </div>
-      <Suspense>
+      {/* <Suspense>
         <ModalRoot />
-      </Suspense>
+      </Suspense> */}
 
       <Toaster
         position='top-right'

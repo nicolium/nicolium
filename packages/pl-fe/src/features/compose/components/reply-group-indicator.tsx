@@ -30,7 +30,7 @@ const ReplyGroupIndicator = (props: IReplyGroupIndicator) => {
         defaultMessage='Posting to {groupLink}'
         values={{
           groupLink: (
-            <Link to={`/groups/${group.id}`}>
+            <Link to='/groups/$groupId' params={{ groupId: group.id }}>
               <Emojify text={group.display_name} emojis={group.emojis} />
             </Link>
           ),

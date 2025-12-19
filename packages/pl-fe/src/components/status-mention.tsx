@@ -1,5 +1,5 @@
+import { Link } from '@tanstack/react-router';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 
@@ -21,7 +21,8 @@ const StatusMention: React.FC<IStatusMention> = ({ accountId, fallback }) => {
 
   return (
     <Link
-      to={`/@${account.acct}`}
+      to='/@{$username}'
+      params={{ username: account.acct }}
       className='text-primary-600 hover:underline dark:text-accent-blue'
       dir='ltr'
       onClick={(e) => e.stopPropagation()}

@@ -26,7 +26,6 @@ import type { Status } from 'pl-fe/normalizers/status';
 import type { Policy, Rule, Scope } from 'pl-fe/pages/settings/interaction-policies';
 import type { ClearLinkSuggestion } from 'pl-fe/reducers/compose';
 import type { AppDispatch, RootState } from 'pl-fe/store';
-import type { History } from 'pl-fe/types/history';
 
 let cancelFetchComposeSuggestions = new AbortController();
 
@@ -338,14 +337,13 @@ const validateSchedule = (state: RootState, composeId: string) => {
 };
 
 interface SubmitComposeOpts {
-  history?: History;
   force?: boolean;
   onSuccess?: () => void;
 }
 
 const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
-    const { history, force = false, onSuccess } = opts;
+    const { force = false, onSuccess } = opts;
 
     if (!isLoggedIn(getState)) return;
     const state = getState();
@@ -373,7 +371,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
         useModalsStore.getState().actions.openModal('MISSING_DESCRIPTION', {
           onContinue: () => {
             useModalsStore.getState().actions.closeModal('MISSING_DESCRIPTION');
-            dispatch(submitCompose(composeId, { history, force: true, onSuccess }));
+            dispatch(submitCompose(composeId, { force: true, onSuccess }));
           },
         });
         return;

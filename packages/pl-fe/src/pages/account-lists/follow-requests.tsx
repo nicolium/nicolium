@@ -1,6 +1,6 @@
+import { useMatch } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
-import { useRouteMatch } from 'react-router-dom';
 
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import Account from 'pl-fe/components/account';
@@ -8,7 +8,8 @@ import { AuthorizeRejectButtons } from 'pl-fe/components/authorize-reject-button
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Column from 'pl-fe/components/ui/column';
 import Spinner from 'pl-fe/components/ui/spinner';
-import Tabs from 'pl-fe/components/ui/tabs';
+import Tabs, { type Item } from 'pl-fe/components/ui/tabs';
+import { followRequestsRoute } from 'pl-fe/features/ui/router';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useAcceptFollowRequestMutation, useFollowRequests, useRejectFollowRequestMutation } from 'pl-fe/queries/accounts/use-follow-requests';
 
@@ -51,14 +52,14 @@ const AccountAuthorize: React.FC<IAccountAuthorize> = ({ id }) => {
 
 const FollowRequestsTabs = () => {
   const intl = useIntl();
-  const match = useRouteMatch();
+  const match = useMatch({ from: followRequestsRoute.id, shouldThrow: false });
   const features = useFeatures();
 
   if (!features.outgoingFollowRequests) {
     return null;
   }
 
-  const tabs = [{
+  const tabs: Array<Item> = [{
     name: '/follow_requests',
     text: intl.formatMessage(messages.followRequests),
     to: '/follow_requests',
@@ -68,7 +69,7 @@ const FollowRequestsTabs = () => {
     to: '/outgoing_follow_requests',
   }];
 
-  return <Tabs items={tabs} activeItem={match.path} />;
+  return <Tabs items={tabs} activeItem={match ? '/follow_requests' : '/outgoing_follow_requests'} />;
 };
 
 const FollowRequestsPage: React.FC = () => {

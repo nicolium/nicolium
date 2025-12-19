@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import HoverStatusWrapper from 'pl-fe/components/hover-status-wrapper';
@@ -62,7 +62,8 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
     const link = (
       <Link
         key={account.id}
-        to={`/@${account.acct}`}
+        to='/@{$username}'
+        params={{ username: account.acct }}
         className='inline-block max-w-[200px] truncate align-bottom text-primary-600 no-underline [direction:ltr] hover:text-primary-700 hover:underline dark:text-accent-blue dark:hover:text-accent-blue'
         onClick={(e) => e.stopPropagation()}
       >

@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
@@ -35,7 +35,7 @@ const Report: React.FC<IReport> = ({ id }) => {
   const reporterAcct = account?.acct;
 
   return (
-    <Link to={`/pl-fe/admin/reports/${id}`} className='block rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
+    <Link to='/pl-fe/admin/reports/$reportId' params={{ reportId: id }} className='block rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
       <Stack space={2} className='h-full justify-between'>
         {targetAccount && (
           <HoverAccountWrapper accountId={targetAccount.id} element='span'>
@@ -68,7 +68,7 @@ const Report: React.FC<IReport> = ({ id }) => {
               />
             </Text>
             <HoverAccountWrapper accountId={account.id} element='span'>
-              <Link to={`/pl-fe/admin/accounts/${account.id}`}>
+              <Link to='/pl-fe/admin/accounts/$accountId' params={{ accountId: account.id }}>
                 @{reporterAcct}
               </Link>
             </HoverAccountWrapper>

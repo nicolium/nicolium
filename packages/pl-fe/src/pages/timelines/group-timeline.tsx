@@ -1,7 +1,7 @@
+import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import { groupCompose, uploadCompose } from 'pl-fe/actions/compose';
 import { fetchGroupTimeline } from 'pl-fe/actions/timelines';
@@ -68,7 +68,7 @@ const GroupTimelinePage: React.FC = () => {
               'ring-2 ring-offset-2 ring-primary-600': isDraggedOver,
             })}
           >
-            <Link to={`/@${account.acct}`}>
+            <Link to='/@{$username}' params={{ username: account.acct }}>
               <Avatar src={account.avatar} alt={account.avatar_description} size={42} isCat={account.is_cat} />
             </Link>
 

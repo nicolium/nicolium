@@ -1,7 +1,7 @@
+import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Link, useParams } from 'react-router-dom';
 
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import { useAccountLookup } from 'pl-fe/api/hooks/accounts/use-account-lookup';
@@ -12,6 +12,7 @@ import MissingIndicator from 'pl-fe/components/missing-indicator';
 import StillImage from 'pl-fe/components/still-image';
 import Column from 'pl-fe/components/ui/column';
 import Spinner from 'pl-fe/components/ui/spinner';
+import { profileMediaRoute } from 'pl-fe/features/ui/router';
 import { type AccountGalleryAttachment, useAccountGallery } from 'pl-fe/hooks/use-account-gallery';
 import { isIOS } from 'pl-fe/is-mobile';
 import { useModalsActions } from 'pl-fe/stores/modals';
@@ -126,7 +127,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
 
   return (
     <div className='col-span-1'>
-      <Link className='⁂-media-gallery__item-thumbnail aspect-1' to={`/@${account?.acct}/posts/${attachment.status_id}`} onClick={handleClick} title={title}>
+      <Link className='⁂-media-gallery__item-thumbnail aspect-1' to='/@{$username}/posts/$statusId' params={{ username: account?.acct || 'undefined', statusId: attachment.status_id }} onClick={handleClick} title={title}>
         <Blurhash
           hash={attachment.blurhash}
           className={clsx('⁂-media-gallery__preview', {
@@ -142,7 +143,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
 };
 
 const AccountGalleryPage = () => {
-  const { username } = useParams<{ username: string }>();
+  const { username } = profileMediaRoute.useParams();
   const { openModal } = useModalsActions();
 
   const {

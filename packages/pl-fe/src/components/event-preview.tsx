@@ -42,7 +42,8 @@ const EventPreview: React.FC<IEventPreview> = ({ status, className, hideAction, 
     <Button
       size='sm'
       theme={floatingAction ? 'secondary' : 'primary'}
-      to={`/@${account.acct}/events/${status.id}/edit`}
+      to='/@{$username}/events/$statusId/edit'
+      params={{ username: account.acct, statusId: status.id }}
     >
       <FormattedMessage id='event.manage' defaultMessage='Manage' />
     </Button>

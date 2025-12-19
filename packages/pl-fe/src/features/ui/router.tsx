@@ -389,7 +389,7 @@ export const listsRoute = createRoute({
 
 export const listTimelineRoute = createRoute({
   getParentRoute: () => layouts.default,
-  path: '/list/$id',
+  path: '/list/$listId',
   component: ListTimeline,
   beforeLoad: ({ context: { features } }) => {
     if (!features.lists) throw notFound();
@@ -407,7 +407,7 @@ export const circlesRoute = createRoute({
 
 export const circleTimelineRoute = createRoute({
   getParentRoute: () => layouts.default,
-  path: '/circles/$id',
+  path: '/circles/$circleId',
   component: CircleTimeline,
   beforeLoad: ({ context: { features } }) => {
     if (!features.circles) throw notFound();
@@ -445,12 +445,21 @@ export const notificationsRoute = createRoute({
 export const searchRoute = createRoute({
   getParentRoute: () => layouts.search,
   path: '/search',
+  validateSearch: v.object({
+    type: v.optional(v.picklist(['accounts', 'statuses', 'hashtags', 'links']), 'accounts'),
+    q: v.optional(v.string()),
+    accountId: v.optional(v.string()),
+  }),
   component: Search,
 });
 
 export const directoryRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/directory',
+  validateSearch: v.object({
+    order: v.optional(v.picklist(['active', 'new']), 'active'),
+    local: v.optional(v.boolean(), false),
+  }),
   component: Directory,
   beforeLoad: ({ context: { features } }) => {
     if (!features.profileDirectory) throw notFound();
@@ -513,7 +522,7 @@ export const shoutboxRoute = createRoute({
   },
 });
 
-export const chatIdRoute = createRoute({
+export const chatRoute = createRoute({
   getParentRoute: () => layouts.chats,
   path: '/chats/$chatId',
   component: ChatIndex,
@@ -604,7 +613,7 @@ export const profileRoute = createRoute({
   path: '/',
   component: AccountTimeline,
   validateSearch: v.object({
-    with_replies: v.optional(v.boolean(), false),
+    with_replies: v.optional(v.boolean()),
   }),
 });
 
@@ -960,6 +969,11 @@ export const adminReportsRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/pl-fe/admin/reports',
   component: Dashboard,
+  validateSearch: v.object({
+    resolved: v.optional(v.boolean(), false),
+    account_id: v.optional(v.string()),
+    target_account_id: v.optional(v.string()),
+  }),
   beforeLoad: (options) => {
     requireAuth(options);
     if (!options.context.isAdmin) throw notFound();
@@ -988,6 +1002,9 @@ export const adminUsersRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/pl-fe/admin/users',
   component: UserIndex,
+  validateSearch: v.object({
+    q: v.optional(v.string()),
+  }),
   beforeLoad: ({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   },
@@ -1047,13 +1064,7 @@ export const serverInfoRoute = createRoute({
 
 export const aboutRoute = createRoute({
   getParentRoute: () => layouts.default,
-  path: '/about/$slug',
-  component: AboutPage,
-});
-
-export const aboutIndexRoute = createRoute({
-  getParentRoute: () => layouts.default,
-  path: '/about',
+  path: '/about/{-$slug}',
   component: AboutPage,
 });
 
@@ -1145,7 +1156,7 @@ const routeTree = rootRoute.addChildren([
     chatsNewRoute,
     chatsSettingsRoute,
     shoutboxRoute,
-    chatIdRoute,
+    chatRoute,
   ]),
   layouts.default.addChildren([
     conversationsRoute,
@@ -1189,7 +1200,6 @@ const routeTree = rootRoute.addChildren([
     settingsPrivacyRoute,
     plFeConfigRoute,
     aboutRoute,
-    aboutIndexRoute,
     shareRoute,
     developersRoute,
     developersAppsRoute,

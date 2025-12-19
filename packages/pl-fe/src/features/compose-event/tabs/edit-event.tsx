@@ -1,6 +1,6 @@
+import { useNavigate } from '@tanstack/react-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import { resetCompose } from 'pl-fe/actions/compose';
 import {
@@ -51,7 +51,7 @@ interface IEditEvent {
 const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector((state) => statusId ? getStatus(state, { id: statusId }) : undefined);
@@ -129,7 +129,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
       joinMode: approvalRequired ? 'restricted' : 'free',
       location,
     })).then((status) => {
-      if (status) history.push(`/@${status.account.acct}/events/${status.id}`);
+      if (status) navigate({ to: '/@{$username}/events/$statusId', params: { username: status.account.acct, statusId: status.id } });
       dispatch(resetCompose(composeId));
     }).catch(() => {
     });

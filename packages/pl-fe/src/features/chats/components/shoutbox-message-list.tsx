@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Link } from 'react-router-dom';
 import { Virtuoso, VirtuosoHandle } from 'react-virtuoso';
 
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
@@ -40,7 +40,7 @@ const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) =
         })}
       >
         {!isMyMessage && (
-          <Link className='mb-0.5' to={`/@${account.acct}`} title={account.acct}>
+          <Link className='mb-0.5' to='/@{$username}' params={{ username: account.acct }} title={account.acct}>
             <HoverAccountWrapper accountId={account.id} element='span'>
               <Avatar
                 src={account.avatar}

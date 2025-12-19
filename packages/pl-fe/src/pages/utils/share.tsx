@@ -16,7 +16,7 @@ const SharePage: React.FC = () => {
       .filter(v => v)
       .join('\n\n');
 
-    navigate({ to: '/' });
+    navigate({ to: '/', replace: true });
 
     if (text) {
       dispatch(openComposeWithText('compose-modal', text));

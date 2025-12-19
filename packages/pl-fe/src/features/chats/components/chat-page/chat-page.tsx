@@ -1,6 +1,7 @@
+import { useMatches } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
-import { matchPath, Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 import Stack from 'pl-fe/components/ui/stack';
 
@@ -10,13 +11,11 @@ import ChatPageSettings from './components/chat-page-settings';
 import ChatPageShoutbox from './components/chat-page-shoutbox';
 import ChatPageSidebar from './components/chat-page-sidebar';
 
-const ChatPage: React.FC = () => {
-  const history = useHistory();
+const SIDEBAR_HIDDEN_PATHS = ['/chats/settings', '/chats/new', '/chats/:chatId', '/chats/shoutbox'];
 
-  const path = history.location.pathname;
-  const isSidebarHidden = matchPath(path, {
-    path: ['/chats/settings', '/chats/new', '/chats/:chatId', '/chats/shoutbox'],
-    exact: true,
+const ChatPage: React.FC = () => {
+  const isSidebarHidden = useMatches({
+    select: (matches) => SIDEBAR_HIDDEN_PATHS.some((path) => matches.some(match => match.pathname === path)),
   });
 
   const containerRef = useRef<HTMLDivElement>(null);

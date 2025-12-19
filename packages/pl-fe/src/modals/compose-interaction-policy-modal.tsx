@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import { changeComposeInteractionPolicyOption } from 'pl-fe/actions/compose';
 import Modal from 'pl-fe/components/ui/modal';

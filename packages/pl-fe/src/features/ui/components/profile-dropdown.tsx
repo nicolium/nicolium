@@ -1,7 +1,7 @@
+import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 import { createSelector } from 'reselect';
 
 import { logOut, switchAccount } from 'pl-fe/actions/auth';

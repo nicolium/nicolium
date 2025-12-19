@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { useParams } from 'react-router-dom';
 
 import { fetchCircleTimeline } from 'pl-fe/actions/timelines';
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
@@ -9,6 +8,7 @@ import Button from 'pl-fe/components/ui/button';
 import Column from 'pl-fe/components/ui/column';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Timeline from 'pl-fe/features/ui/components/timeline';
+import { circleTimelineRoute } from 'pl-fe/features/ui/router';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useCircle, useDeleteCircle } from 'pl-fe/queries/accounts/use-circles';
 import { useModalsActions } from 'pl-fe/stores/modals';
@@ -22,24 +22,25 @@ const messages = defineMessages({
 });
 
 const CircleTimelinePage: React.FC = () => {
+  const { circleId } = circleTimelineRoute.useParams();
+
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const { id } = useParams<{ id: string }>();
   const { openModal } = useModalsActions();
 
-  const { data: circle, isFetching } = useCircle(id);
+  const { data: circle, isFetching } = useCircle(circleId);
   const { mutate: deleteCircle } = useDeleteCircle();
 
   useEffect(() => {
-    dispatch(fetchCircleTimeline(id));
-  }, [id]);
+    dispatch(fetchCircleTimeline(circleId));
+  }, [circleId]);
 
   const handleLoadMore = () => {
-    dispatch(fetchCircleTimeline(id, true));
+    dispatch(fetchCircleTimeline(circleId, true));
   };
 
   const handleEditClick = () => {
-    openModal('CIRCLE_EDITOR', { circleId: id });
+    openModal('CIRCLE_EDITOR', { circleId });
   };
 
   const handleDeleteClick = (e: React.MouseEvent | React.KeyboardEvent) => {
@@ -50,12 +51,12 @@ const CircleTimelinePage: React.FC = () => {
       message: intl.formatMessage(messages.deleteMessage),
       confirm: intl.formatMessage(messages.deleteConfirm),
       onConfirm: () => {
-        deleteCircle(id);
+        deleteCircle(circleId);
       },
     });
   };
 
-  const title = circle ? circle.title : id;
+  const title = circle ? circle.title : circleId;
 
   if (!circle && isFetching) {
     return (
@@ -100,7 +101,7 @@ const CircleTimelinePage: React.FC = () => {
       <Timeline
         loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
         scrollKey='circle_timeline'
-        timelineId={`circle:${id}`}
+        timelineId={`circle:${circleId}`}
         onLoadMore={handleLoadMore}
         emptyMessageText={emptyMessage}
         emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}

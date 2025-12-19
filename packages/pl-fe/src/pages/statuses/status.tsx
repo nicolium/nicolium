@@ -1,6 +1,6 @@
+import { Navigate } from '@tanstack/react-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Redirect } from 'react-router-dom';
 
 import { changeSetting } from 'pl-fe/actions/settings';
 import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
@@ -100,7 +100,7 @@ const StatusPage: React.FC = () => {
 
   if (status?.event) {
     return (
-      <Redirect to={`/@${status.account.acct}/events/${status.id}`} />
+      <Navigate to='/@{$username}/events/$statusId' params={{ username: status.account.acct, statusId: status.id }} replace />
     );
   }
 

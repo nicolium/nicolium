@@ -1,8 +1,8 @@
 import { autoUpdate, flip, shift, useFloating, useTransitionStyles } from '@floating-ui/react';
+import { useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import { fetchStatus } from 'pl-fe/actions/statuses';
 import { showStatusHoverCard } from 'pl-fe/components/hover-status-wrapper';
@@ -18,8 +18,8 @@ interface IStatusHoverCard {
 /** Popup status preview that appears when hovering reply to */
 const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
   const dispatch = useAppDispatch();
+  const router = useRouter();
   const intl = useIntl();
-  const history = useHistory();
 
   const { statusId, ref } = useStatusHoverCardStore();
   const { closeStatusHoverCard, updateStatusHoverCard } = useStatusHoverCardActions();
@@ -33,9 +33,11 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
   }, [statusId, status]);
 
   useEffect(() => {
-    const unlisten = history.listen(() => {
-      showStatusHoverCard.cancel();
-      closeStatusHoverCard(true);
+    const unlisten = router.subscribe('onLoad', ({ pathChanged }) => {
+      if (pathChanged) {
+        showStatusHoverCard.cancel();
+        closeStatusHoverCard(true);
+      }
     });
 
     return () => {

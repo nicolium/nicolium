@@ -1,6 +1,6 @@
+import { Navigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { Redirect } from 'react-router-dom';
 
 import { otpVerify, verifyCredentials, switchAccount } from 'pl-fe/actions/auth';
 import { BigCard } from 'pl-fe/components/big-card';
@@ -51,7 +51,7 @@ const OtpAuthForm: React.FC<IOtpAuthForm> = ({ mfa_token, small }) => {
     event.preventDefault();
   };
 
-  if (shouldRedirect) return <Redirect to='/' />;
+  if (shouldRedirect) return <Navigate to='/' replace />;
 
   const form = (
     <Form onSubmit={handleSubmit}>

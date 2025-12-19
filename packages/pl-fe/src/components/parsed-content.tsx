@@ -1,11 +1,11 @@
 /* eslint-disable no-redeclare */
+import { Link } from '@tanstack/react-router';
 import parse, { Element, type HTMLReactParserOptions, domToReact, type DOMNode } from 'html-react-parser';
 import DOMPurify from 'isomorphic-dompurify';
 import groupBy from 'lodash/groupBy';
 import minBy from 'lodash/minBy';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import Emojify from 'pl-fe/features/emoji/emojify';
 import { useSettings } from 'pl-fe/stores/settings';
@@ -251,7 +251,8 @@ function parseContent({
             if (mention) {
               return (
                 <Link
-                  to={`/@${mention.acct}`}
+                  to='/@{$username}'
+                  params={{ username: mention.acct }}
                   className='text-primary-600 hover:underline dark:text-accent-blue'
                   dir='ltr'
                   onClick={(e) => e.stopPropagation()}

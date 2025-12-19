@@ -1,7 +1,7 @@
+import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
@@ -128,7 +128,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
     link: (children: React.ReactNode) => {
       if (interactionRequest.status_id) {
         return (
-          <Link className='font-bold text-gray-800 hover:underline dark:text-gray-200' to={`/@${ownAccount?.acct}/posts/${interactionRequest.status_id}`}>
+          <Link className='font-bold text-gray-800 hover:underline dark:text-gray-200' to='/@{$username}/posts/$statusId' params={{ username: ownAccount?.acct || '', statusId: interactionRequest.status_id }}>
             {children}
           </Link>
         );

@@ -1,9 +1,9 @@
 import { autoUpdate, flip, shift, useFloating, useTransitionStyles } from '@floating-ui/react';
 import { useQuery } from '@tanstack/react-query';
+import { useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import { fetchRelationships } from 'pl-fe/actions/accounts';
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
@@ -54,7 +54,7 @@ interface IAccountHoverCard {
 /** Popup profile preview that appears when hovering avatars and display names. */
 const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const router = useRouter();
   const intl = useIntl();
 
   const { accountId, ref } = useAccountHoverCardStore();
@@ -70,9 +70,11 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
   }, [dispatch, accountId]);
 
   useEffect(() => {
-    const unlisten = history.listen(() => {
-      showAccountHoverCard.cancel();
-      closeAccountHoverCard(true);
+    const unlisten = router.subscribe('onLoad', ({ pathChanged }) => {
+      if (pathChanged) {
+        showAccountHoverCard.cancel();
+        closeAccountHoverCard(true);
+      }
     });
 
     return () => {

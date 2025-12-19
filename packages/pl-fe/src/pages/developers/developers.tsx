@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import Column from 'pl-fe/components/ui/column';
 import SvgIcon from 'pl-fe/components/ui/svg-icon';

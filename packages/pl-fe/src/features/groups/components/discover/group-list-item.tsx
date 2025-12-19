@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import GroupAvatar from 'pl-fe/components/groups/group-avatar';
 import HStack from 'pl-fe/components/ui/hstack';
@@ -27,7 +27,7 @@ const GroupListItem = (props: IGroupListItem) => {
       justifyContent='between'
       data-testid='group-list-item'
     >
-      <Link key={group.id} to={`/groups/${group.id}`} className='overflow-hidden'>
+      <Link key={group.id} to='/groups/$groupId' params={{ groupId: group.id }} className='overflow-hidden'>
         <HStack alignItems='center' space={2}>
           <GroupAvatar
             group={group}

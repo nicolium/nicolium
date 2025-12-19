@@ -1,6 +1,6 @@
+import { useRouter } from '@tanstack/react-router';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useRef, useMemo, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
 import { Virtuoso, Components, VirtuosoProps, VirtuosoHandle, ListRange, IndexLocationWithAlign } from 'react-virtuoso';
 
 import LoadMore from 'pl-fe/components/load-more';
@@ -104,7 +104,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
   useWindowScroll = true,
   ...params
 }, ref) => {
-  const history = useHistory();
+  const { history } = useRouter();
   const { autoloadMore } = useSettings();
 
   // Preserve scroll position

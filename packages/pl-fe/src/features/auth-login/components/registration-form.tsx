@@ -1,7 +1,7 @@
+import { Link, useNavigate } from '@tanstack/react-router';
 import debounce from 'lodash/debounce';
 import React, { useState, useRef, useCallback } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
-import { Link, useHistory } from 'react-router-dom';
 
 import { accountLookup } from 'pl-fe/actions/accounts';
 import { register, verifyCredentials } from 'pl-fe/actions/auth';
@@ -47,7 +47,7 @@ interface IRegistrationForm {
 /** Allows the user to sign up for the website. */
 const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   const intl = useIntl();
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const { locale } = useSettings();
@@ -167,7 +167,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
       return launchModal();
     } else {
       return dispatch(verifyCredentials(access_token)).then(() => {
-        history.push('/');
+        navigate({ to: '/' });
       });
     }
   };
@@ -352,7 +352,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
           />
 
           <FormGroup
-            labelText={intl.formatMessage(messages.agreement, { tos: <Link to='/about/tos' target='_blank' key={0}>{intl.formatMessage(messages.tos)}</Link> })}
+            labelText={intl.formatMessage(messages.agreement, { tos: <Link to='/about/{-$slug}' params={{ slug: 'tos' }} target='_blank' key={0}>{intl.formatMessage(messages.tos)}</Link> })}
           >
             <Checkbox
               name='agreement'

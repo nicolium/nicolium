@@ -2,7 +2,7 @@ import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 import { useRouteMatch } from 'react-router-dom';
 
-import Tabs from 'pl-fe/components/ui/tabs';
+import Tabs, { type Item } from 'pl-fe/components/ui/tabs';
 import { usePendingUsersCount } from 'pl-fe/queries/admin/use-accounts';
 import { usePendingReportsCount } from 'pl-fe/queries/admin/use-reports';
 
@@ -19,7 +19,7 @@ const AdminTabs: React.FC = () => {
   const { data: awaitingApprovalCount } = usePendingUsersCount();
   const { data: pendingReportsCount = 0 } = usePendingReportsCount();
 
-  const tabs = [{
+  const tabs: Array<Item> = [{
     name: '/pl-fe/admin',
     text: intl.formatMessage(messages.dashboard),
     to: '/pl-fe/admin',

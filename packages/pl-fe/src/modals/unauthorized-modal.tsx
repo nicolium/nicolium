@@ -1,6 +1,6 @@
+import { useNavigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import Button from 'pl-fe/components/ui/button';
 import Form from 'pl-fe/components/ui/form';
@@ -37,7 +37,7 @@ interface UnauthorizedModalProps {
 /** Modal to display when a logged-out user tries to do something that requires login. */
 const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({ action, onClose, account: accountId, ap_id: apId }) => {
   const intl = useIntl();
-  const history = useHistory();
+  const navigate = useNavigate();
   const instance = useInstance();
   const { isOpen } = useRegistrationStatus();
   const client = useClient();
@@ -71,12 +71,12 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({ 
   };
 
   const onLogin = () => {
-    history.push('/login');
+    navigate({ to: '/login' });
     onClickClose();
   };
 
   const onRegister = () => {
-    history.push('/signup');
+    navigate({ to: '/signup' });
     onClickClose();
   };
 

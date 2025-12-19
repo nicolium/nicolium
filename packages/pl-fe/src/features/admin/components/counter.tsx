@@ -1,7 +1,7 @@
+import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
 import { FormattedNumber } from 'react-intl';
-import { Link } from 'react-router-dom';
 import { Sparklines, SparklinesCurve } from 'react-sparklines';
 
 import Text from 'pl-fe/components/ui/text';

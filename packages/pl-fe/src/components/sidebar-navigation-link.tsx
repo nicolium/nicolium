@@ -1,12 +1,11 @@
-import clsx from 'clsx';
+import { Link, type LinkProps } from '@tanstack/react-router';
 import React from 'react';
-import { NavLink } from 'react-router-dom';
 
 import { useSettings } from 'pl-fe/stores/settings';
 
 import Icon from './ui/icon';
 
-interface ISidebarNavigationLink {
+interface ISidebarNavigationLink extends Partial<Pick<LinkProps, 'to' | 'params'>> {
   /** Notification count, if any. */
   count?: number;
   /** Optional max to cap count (ie: N+) */
@@ -17,15 +16,13 @@ interface ISidebarNavigationLink {
   activeIcon?: string;
   /** Link label. */
   text: React.ReactNode;
-  /** Route to an internal page. */
-  to?: string;
   /** Callback when the link is clicked. */
   onClick?: React.EventHandler<React.MouseEvent>;
 }
 
 /** Desktop sidebar navigation link. */
 const SidebarNavigationLink = React.memo(React.forwardRef((props: ISidebarNavigationLink, ref: React.ForwardedRef<HTMLAnchorElement>): JSX.Element => {
-  const { icon, activeIcon, text, to = '', count, countMax, onClick } = props;
+  const { icon, activeIcon, text, to, params, count, countMax, onClick } = props;
   const isActive = location.pathname === to;
 
   const { demetricator } = useSettings();
@@ -39,15 +36,14 @@ const SidebarNavigationLink = React.memo(React.forwardRef((props: ISidebarNaviga
   };
 
   return (
-    <NavLink
-      exact
+    <Link
+      activeOptions={{ exact: true }}
+      activeProps={{ className: '⁂-sidebar-navigation-link--active' }}
       to={to}
+      params={params}
       ref={ref}
       onClick={handleClick}
-      className={clsx({
-        '⁂-sidebar-navigation-link': true,
-        '⁂-sidebar-navigation-link--active': isActive,
-      })}
+      className='⁂-sidebar-navigation-link'
     >
       <span
         className='⁂-sidebar-navigation-link__icon'
@@ -60,7 +56,7 @@ const SidebarNavigationLink = React.memo(React.forwardRef((props: ISidebarNaviga
       </span>
 
       <p>{text}</p>
-    </NavLink>
+    </Link>
   );
 }), (prevProps, nextProps) => prevProps.count === nextProps.count);
 

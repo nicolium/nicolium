@@ -1,22 +1,20 @@
+import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
-import { useSearchParams } from 'react-router-dom-v5-compat';
 
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import HStack from 'pl-fe/components/ui/hstack';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import Text from 'pl-fe/components/ui/text';
+import { adminReportsRoute } from 'pl-fe/features/ui/router';
 import { useReports } from 'pl-fe/queries/admin/use-reports';
 
 import Report from '../components/report';
 
 const Reports: React.FC = () => {
-  const [params, setParams] = useSearchParams();
-
-  const resolved = params.get('resolved') as any as boolean || undefined;
-  const accountId = params.get('account_id') || undefined;
-  const targetAccountId = params.get('target_account_id') || undefined;
+  const { resolved, account_id: accountId, target_account_id: targetAccountId } = adminReportsRoute.useSearch();
+  const navigate = useNavigate({ from: adminReportsRoute.fullPath });
 
   const { account } = useAccount(accountId);
   const { account: targetAccount } = useAccount(targetAccountId);
@@ -27,11 +25,7 @@ const Reports: React.FC = () => {
     target_account_id: targetAccountId,
   });
 
-  const handleUnsetAccounts = () => {
-    params.delete('account_id');
-    params.delete('target_account_id');
-    setParams(params => Object.fromEntries(params.entries()));
-  };
+  const handleUnsetAccounts = () => navigate({ search: (prev) => ({ resolved: prev.resolved }) });
 
   return (
     <>

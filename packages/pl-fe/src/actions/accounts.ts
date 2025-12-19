@@ -5,23 +5,15 @@ import { queryClient } from 'pl-fe/queries/client';
 import { selectAccount } from 'pl-fe/selectors';
 import { isLoggedIn } from 'pl-fe/utils/auth';
 
-import { getClient, type PlfeResponse } from '../api';
+import { getClient } from '../api';
 
 import { importEntities } from './importer';
 
 import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 import type { AppDispatch, RootState } from 'pl-fe/store';
-import type { History } from 'pl-fe/types/history';
 
 const ACCOUNT_BLOCK_SUCCESS = 'ACCOUNT_BLOCK_SUCCESS' as const;
 const ACCOUNT_MUTE_SUCCESS = 'ACCOUNT_MUTE_SUCCESS' as const;
-
-const maybeRedirectLogin = (error: { response: PlfeResponse }, history?: History) => {
-  // The client is unauthorized - redirect to login.
-  if (history && error?.response?.status === 401) {
-    history.push('/login');
-  }
-};
 
 const createAccount = (params: CreateAccountParams) =>
   async (dispatch: AppDispatch, getState: () => RootState) =>
@@ -47,7 +39,7 @@ const fetchAccount = (accountId: string) =>
       });
   };
 
-const fetchAccountByUsername = (username: string, history?: History) =>
+const fetchAccountByUsername = (username: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const { auth, me } = getState();
     const features = auth.client.features;
@@ -60,8 +52,6 @@ const fetchAccountByUsername = (username: string, history?: History) =>
     } else if (features.accountLookup) {
       return dispatch(accountLookup(username)).then(account => {
         dispatch(fetchRelationships([account.id]));
-      }).catch(error => {
-        maybeRedirectLogin(error, history);
       });
     } else {
       return getClient(getState()).accounts.searchAccounts(username, { resolve: true, limit: 1 }).then(accounts => {

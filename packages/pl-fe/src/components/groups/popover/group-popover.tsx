@@ -1,6 +1,6 @@
+import { Link, useMatch } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Link, matchPath, useHistory } from 'react-router-dom';
 
 import Button from 'pl-fe/components/ui/button';
 import Divider from 'pl-fe/components/ui/divider';
@@ -11,10 +11,12 @@ import Text from 'pl-fe/components/ui/text';
 import Emojify from 'pl-fe/features/emoji/emojify';
 import GroupMemberCount from 'pl-fe/features/group/components/group-member-count';
 import GroupPrivacy from 'pl-fe/features/group/components/group-privacy';
+import { groupTimelineRoute } from 'pl-fe/features/ui/router';
 
 import GroupAvatar from '../group-avatar';
 
 import type { Group } from 'pl-api';
+
 
 interface IGroupPopoverContainer {
   children: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
@@ -32,13 +34,8 @@ const GroupPopover = (props: IGroupPopoverContainer) => {
   const { children, group, isEnabled } = props;
 
   const intl = useIntl();
-  const history = useHistory();
 
-  const path = history.location.pathname;
-  const shouldHideAction = matchPath(path, {
-    path: ['/groups/:groupId'],
-    exact: true,
-  });
+  const shouldHideAction = !!useMatch({ from: groupTimelineRoute.fullPath, shouldThrow: false });
 
   if (!isEnabled) {
     return children;
@@ -96,7 +93,7 @@ const GroupPopover = (props: IGroupPopoverContainer) => {
 
           {!shouldHideAction && (
             <div className='px-4'>
-              <Link to={`/groups/${group.id}`}>
+              <Link to='/groups/$groupId' params={{ groupId: group.id }}>
                 <Button type='button' theme='secondary' block>
                   {intl.formatMessage(messages.action)}
                 </Button>

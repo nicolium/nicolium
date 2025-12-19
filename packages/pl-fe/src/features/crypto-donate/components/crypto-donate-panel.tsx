@@ -1,6 +1,6 @@
+import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import Text from 'pl-fe/components/ui/text';
 import Widget from 'pl-fe/components/ui/widget';
@@ -19,7 +19,7 @@ interface ICryptoDonatePanel {
 
 const CryptoDonatePanel: React.FC<ICryptoDonatePanel> = ({ limit = 3 }): JSX.Element | null => {
   const intl = useIntl();
-  const history = useHistory();
+  const navigate = useNavigate();
   const instance = useInstance();
 
   const addresses = usePlFeConfig().cryptoAddresses;
@@ -29,7 +29,7 @@ const CryptoDonatePanel: React.FC<ICryptoDonatePanel> = ({ limit = 3 }): JSX.Ele
   }
 
   const handleAction = () => {
-    history.push('/donate/crypto');
+    navigate({ to: '/donate/crypto' });
   };
 
   return (

@@ -1,6 +1,6 @@
+import { Navigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Redirect } from 'react-router-dom';
 
 import { logIn, verifyCredentials, switchAccount } from 'pl-fe/actions/auth';
 import { fetchInstance } from 'pl-fe/actions/instance';
@@ -66,11 +66,11 @@ const LoginPage = () => {
     event.preventDefault();
   };
 
-  if (standalone) return <Redirect to='/login/external' />;
+  if (standalone) return <Navigate to='/login/external' replace />;
 
   if (shouldRedirect) {
     const redirectUri = getRedirectUrl();
-    return <Redirect to={redirectUri} />;
+    return <Navigate to={redirectUri} replace />;
   }
 
   if (mfaAuthNeeded) return <OtpAuthForm mfa_token={mfaToken} />;

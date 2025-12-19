@@ -1,9 +1,9 @@
 // ~~Shamelessly stolen~~ ported to React from Sharkey
 // https://activitypub.software/TransFem-org/Sharkey/-/blob/develop/packages/frontend/src/components/global/MkMfm.ts
+import { Link } from '@tanstack/react-router';
 import * as mfm from '@transfem-org/sfm-js';
 import { clamp } from 'lodash';
 import React, { CSSProperties } from 'react';
-import { Link } from 'react-router-dom';
 
 import { useSettings } from 'pl-fe/stores/settings';
 import { makeEmojiMap } from 'pl-fe/utils/normalizers';
@@ -410,7 +410,8 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
             return (
               <bdi>
                 <Link
-                  to={`/@${mention.acct}`}
+                  to='/@{$username}'
+                  params={{ username: mention.acct }}
                   className='text-primary-600 hover:underline dark:text-accent-blue'
                   dir='ltr'
                   onClick={(e) => e.stopPropagation()}
@@ -427,7 +428,8 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
         return (
           <bdi>
             <Link
-              to={`/@${token.props.acct.slice(1)}`}
+              to='/@{$username}'
+              params={{ username: token.props.acct.slice(1) }}
               className='text-primary-600 hover:underline dark:text-accent-blue'
               dir='ltr'
               onClick={(e) => e.stopPropagation()}

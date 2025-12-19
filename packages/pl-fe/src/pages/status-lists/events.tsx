@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import React, { useCallback, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 import ReactSwipeableViews from 'react-swipeable-views';
 
 import EventPreview from 'pl-fe/components/event-preview';
@@ -27,7 +27,8 @@ const Event = ({ id }: { id: string }) => {
   return (
     <Link
       className='w-full px-1'
-      to={`/@${status.account.acct}/events/${status.id}`}
+      to='/@{$username}/events/$statusId'
+      params={{ username: status.account.acct, statusId: status.id }}
     >
       <EventPreview status={status} floatingAction={false} />
     </Link>

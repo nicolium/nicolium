@@ -1,5 +1,5 @@
+import { Navigate } from '@tanstack/react-router';
 import React, { useEffect } from 'react';
-import { Redirect } from 'react-router-dom';
 
 import { useModalsActions } from 'pl-fe/stores/modals';
 
@@ -11,7 +11,7 @@ const NewStatusPage = () => {
   }, []);
 
   return (
-    <Redirect to='/' />
+    <Navigate to='/' replace />
   );
 };
 

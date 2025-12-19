@@ -9,7 +9,7 @@ import Column from 'pl-fe/components/ui/column';
 import Icon from 'pl-fe/components/ui/icon';
 import Layout from 'pl-fe/components/ui/layout';
 import Stack from 'pl-fe/components/ui/stack';
-import Tabs from 'pl-fe/components/ui/tabs';
+import Tabs, { type Item } from 'pl-fe/components/ui/tabs';
 import Text from 'pl-fe/components/ui/text';
 import GroupHeader from 'pl-fe/features/group/components/group-header';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
@@ -59,22 +59,26 @@ const GroupLayout = () => {
   const isPrivate = group?.locked;
 
   const tabItems = useMemo(() => {
-    const items = [];
-    items.push({
-      text: intl.formatMessage(messages.all),
-      to: `/groups/${groupId}`,
-      name: '/groups/:groupId',
-    });
+    const items: Array<Item> = [
+      {
+        text: intl.formatMessage(messages.all),
+        to: '/groups/$groupId',
+        params: { groupId },
+        name: '/groups/:groupId',
+      },
+    ];
 
     items.push(
       {
         text: intl.formatMessage(messages.media),
-        to: `/groups/${groupId}/media`,
+        to: '/groups/$groupId/media',
+        params: { groupId },
         name: '/groups/:groupId/media',
       },
       {
         text: intl.formatMessage(messages.members),
-        to: `/groups/${groupId}/members`,
+        to: '/groups/$groupId/members',
+        params: { groupId },
         name: '/groups/:groupId/members',
         count: pending.length,
       },

@@ -1,7 +1,7 @@
+import { useMatch, useNavigate } from '@tanstack/react-router';
 import { type Account, type CustomEmoji, type Group, GroupRoles } from 'pl-api';
 import React, { useCallback, useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import { redactStatus } from 'pl-fe/actions/admin';
 import { directCompose, mentionCompose, quoteCompose, replyCompose } from 'pl-fe/actions/compose';
@@ -16,6 +16,7 @@ import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import StatusActionButton from 'pl-fe/components/status-action-button';
 import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
 import { languages } from 'pl-fe/features/preferences';
+import { layouts } from 'pl-fe/features/ui/router';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useCanInteract } from 'pl-fe/hooks/use-can-interact';
@@ -562,9 +563,9 @@ const MenuButton: React.FC<IMenuButton> = ({
   publicStatus,
 }) => {
   const intl = useIntl();
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const match = useRouteMatch<{ groupId: string }>('/groups/:groupId');
+  const match = useMatch({ from: layouts.group.id, shouldThrow: false });
   const { boostModal } = useSettings();
   const client = useClient();
 
@@ -644,7 +645,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleEditClick: React.EventHandler<React.MouseEvent> = () => {
-      if (status.event) history.push(`/@${status.account.acct}/events/${status.id}/edit`);
+      if (status.event) navigate({ to: '/@{$username}/events/$statusId/edit', params: { username: status.account.acct, statusId: status.id } });
       else dispatch(editStatus(status.id));
     };
 
@@ -677,7 +678,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       const account = status.account;
 
       getOrCreateChatByAccountId(account.id)
-        .then((chat) => history.push(`/chats/${chat.id}`))
+        .then((chat) => navigate({ to: '/chats/$chatId', params: { chatId: chat.id } }))
         .catch(() => {});
     };
 
@@ -803,7 +804,8 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(messages.open),
         icon: require('@phosphor-icons/core/regular/arrows-vertical.svg'),
-        to: `/@${status.account.acct}/posts/${status.id}`,
+        to: '/@{$username}/posts/$statusId',
+        params: { username: status.account.acct, statusId: status.id },
       });
     }
 
@@ -1056,7 +1058,8 @@ const MenuButton: React.FC<IMenuButton> = ({
 
       menu.push({
         text: intl.formatMessage(messages.adminAccount, { name: username }),
-        to: `/pl-fe/admin/accounts/${status.account_id}`,
+        to: '/pl-fe/admin/accounts/$accountId',
+        params: { accountId: status.account_id },
         icon: require('@phosphor-icons/core/regular/gavel.svg'),
       });
 

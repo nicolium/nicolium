@@ -1,6 +1,7 @@
+import { useNavigate } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Link, useHistory, useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import DropdownMenu, { type Menu } from 'pl-fe/components/dropdown-menu';
 import Avatar from 'pl-fe/components/ui/avatar';
@@ -38,7 +39,7 @@ const messages = defineMessages({
 const ChatPageMain = () => {
   const intl = useIntl();
   const features = useFeatures();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { chatId } = useParams<{ chatId: string }>();
 
@@ -82,7 +83,7 @@ const ChatPageMain = () => {
       onConfirm: () => {
         deleteChat.mutate(undefined, {
           onSuccess() {
-            history.push('/chats');
+            navigate({ to: '/chats' });
           },
         });
       },
@@ -127,7 +128,7 @@ const ChatPageMain = () => {
             <IconButton
               src={require('@phosphor-icons/core/regular/arrow-left.svg')}
               className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
-              onClick={() => history.push('/chats')}
+              onClick={() => navigate({ to: '/chats' })}
             />
 
             <Link to={`/@${chat.account.acct}`}>

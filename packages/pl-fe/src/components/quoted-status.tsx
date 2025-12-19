@@ -1,7 +1,7 @@
+import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { MouseEventHandler } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import StatusMedia from 'pl-fe/components/status-media';
 import Stack from 'pl-fe/components/ui/stack';
@@ -32,7 +32,7 @@ interface IQuotedStatus {
 /** Status embedded in a quote post. */
 const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) => {
   const intl = useIntl();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleExpandClick: MouseEventHandler<HTMLDivElement> = (e) => {
     if (!status) return;
@@ -41,7 +41,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
     if (!compose && e.button === 0) {
       const statusUrl = `/@${account.acct}/posts/${status.id}`;
       if (!(e.ctrlKey || e.metaKey)) {
-        history.push(statusUrl);
+        navigate({ to: '/@{$username}/posts/$statusId', params: { username: account.acct, statusId: status.id } });
       } else {
         window.open(statusUrl, '_blank');
       }

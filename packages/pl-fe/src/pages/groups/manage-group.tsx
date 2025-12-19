@@ -1,7 +1,7 @@
+import { useNavigate } from '@tanstack/react-router';
 import { GroupRoles } from 'pl-api';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import { useDeleteGroup } from 'pl-fe/api/hooks/groups/use-delete-group';
 import { useGroup } from 'pl-fe/api/hooks/groups/use-group';
@@ -34,7 +34,7 @@ const ManageGroup: React.FC = () => {
   const { groupId } = manageGroupRoute.useParams();
 
   const { openModal } = useModalsActions();
-  const history = useHistory();
+  const navigate = useNavigate();
   const intl = useIntl();
 
   const { group } = useGroup(groupId);
@@ -64,14 +64,14 @@ const ManageGroup: React.FC = () => {
         deleteGroup.mutate(group.id, {
           onSuccess() {
             toast.success(intl.formatMessage(messages.deleteSuccess));
-            history.push('/groups');
+            navigate({ to: '/groups' });
           },
         });
       },
     });
 
   return (
-    <Column label={intl.formatMessage(messages.heading)} backHref={`/groups/${group.id}`}>
+    <Column label={intl.formatMessage(messages.heading)} backHref='/groups/$groupId' backParams={{ groupId: group.id }}>
       <CardBody className='space-y-4'>
         {isOwner && (
           <>

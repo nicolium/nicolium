@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import { fetchAccountByUsername } from 'pl-fe/actions/accounts';
 import { fetchAccountTimeline } from 'pl-fe/actions/timelines';
@@ -23,7 +22,6 @@ const AccountTimelinePage: React.FC = () => {
   const { username } = profileRoute.useParams();
   const { with_replies: withReplies = false } = profileRoute.useSearch();
 
-  const history = useHistory();
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const settings = useSettings();
@@ -44,7 +42,7 @@ const AccountTimelinePage: React.FC = () => {
   const accountUsername = account?.username || username;
 
   useEffect(() => {
-    dispatch(fetchAccountByUsername(username, history))
+    dispatch(fetchAccountByUsername(username))
       .then(() => setAccountLoading(false))
       .catch(() => setAccountLoading(false));
   }, [username]);

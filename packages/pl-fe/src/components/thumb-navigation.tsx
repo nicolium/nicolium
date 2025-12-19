@@ -1,12 +1,13 @@
+import { useMatch } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { useRouteMatch } from 'react-router-dom';
 
 import { groupComposeModal } from 'pl-fe/actions/compose';
 import ThumbNavigationLink from 'pl-fe/components/thumb-navigation-link';
 import Icon from 'pl-fe/components/ui/icon';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
 import { Entities } from 'pl-fe/entity-store/entities';
+import { layouts } from 'pl-fe/features/ui/router';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
@@ -31,7 +32,7 @@ const ThumbNavigation: React.FC = React.memo((): JSX.Element => {
   const { account } = useOwnAccount();
   const features = useFeatures();
 
-  const match = useRouteMatch<{ groupId: string }>('/groups/:groupId');
+  const match = useMatch({ from: layouts.group.id, shouldThrow: false });
 
   const isSidebarOpen = useIsSidebarOpen();
   const { openSidebar, closeSidebar } = useUiStoreActions();

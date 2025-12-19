@@ -1,10 +1,10 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useSearchParams } from 'react-router-dom-v5-compat';
 
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Column from 'pl-fe/components/ui/column';
 import AccountContainer from 'pl-fe/containers/account-container';
+import { adminUsersRoute } from 'pl-fe/features/ui/router';
 import { useAdminAccounts } from 'pl-fe/queries/admin/use-accounts';
 
 import { SearchInput } from '../search/search';
@@ -14,8 +14,7 @@ const messages = defineMessages({
 });
 
 const UserIndexPage: React.FC = () => {
-  const [params] = useSearchParams();
-  const query = params.get('q') || '';
+  const { q: query } = adminUsersRoute.useSearch();
 
   const intl = useIntl();
 

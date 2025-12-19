@@ -1,17 +1,15 @@
+import { useMatch } from '@tanstack/react-router';
 import React from 'react';
-import { useHistory } from 'react-router-dom';
 
 import { ChatProvider } from 'pl-fe/contexts/chat-context';
+import { layouts } from 'pl-fe/features/ui/router';
 
 import ChatPane from '../chat-pane/chat-pane';
 
 const ChatWidget = () => {
-  const history = useHistory();
+  const match = useMatch({ from: layouts.chats.id, shouldThrow: false });
 
-  const path = history.location.pathname;
-  const isChatsPath = Boolean(path.match(/^\/chats/));
-
-  if (isChatsPath) {
+  if (match) {
     return null;
   }
 

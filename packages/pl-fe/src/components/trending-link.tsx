@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import { TrendsLink } from 'pl-api';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import { getTextDirection } from 'pl-fe/utils/rtl';
 
@@ -58,7 +58,7 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
           </HStack>
 
           {!!count && (
-            <Link to={`/links/${encodeURIComponent(trendingLink.url)}`} className='hover:underline'>
+            <Link to='/links/$url' params={{ url: encodeURIComponent(trendingLink.url) }} className='hover:underline'>
               {accountsCountRenderer(count)}
             </Link>
           )}
