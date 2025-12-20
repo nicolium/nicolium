@@ -7,7 +7,7 @@ interface IHashtagLink {
 }
 
 const HashtagLink: React.FC<IHashtagLink> = ({ hashtag }) => (
-  <Link to='/tags/$id' params={{ id: hashtag }} onClick={(e) => e.stopPropagation()}>
+  <Link to='/tags/$id' params={{ id: hashtag }} /* onClick={(e) => e.stopPropagation()} */>
     #{hashtag}
   </Link>
 );

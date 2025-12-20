@@ -7,6 +7,8 @@ import Icon from 'pl-fe/components/ui/icon';
 import Toggle from 'pl-fe/components/ui/toggle';
 import { userTouching } from 'pl-fe/is-mobile';
 
+type Menu = Array<MenuItem | null>;
+
 type MenuItem = {
   action?: React.EventHandler<React.KeyboardEvent | React.MouseEvent>;
   active?: boolean;
@@ -21,7 +23,7 @@ type MenuItem = {
   target?: React.HTMLAttributeAnchorTarget;
   text: string;
   type?: 'toggle' | 'radio';
-  items?: Array<Omit<MenuItem, 'items'>>;
+  items?: Menu;
   onSelectFile?: (files: FileList) => void;
   accept?: string;
 } & ({
@@ -180,4 +182,4 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
   );
 };
 
-export { type MenuItem, DropdownMenuItem as default };
+export { type Menu, type MenuItem, DropdownMenuItem as default };

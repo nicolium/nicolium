@@ -536,9 +536,9 @@ const UI: React.FC = React.memo(() => {
           </Suspense>
         </div>
       </div>
-      {/* <Suspense>
+      <Suspense>
         <ModalRoot />
-      </Suspense> */}
+      </Suspense>
 
       <Toaster
         position='top-right'

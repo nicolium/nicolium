@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
+// import { useHistory } from 'react-router-dom';
 
 import { cancelReplyCompose } from 'pl-fe/actions/compose';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
@@ -35,7 +35,7 @@ interface IModalRoot {
 
 const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) => {
   const intl = useIntl();
-  const history = useHistory();
+  // const history = useHistory();
   const dispatch = useAppDispatch();
 
   const persistDraftStatus = usePersistDraftStatus();
@@ -45,8 +45,8 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
 
   const ref = useRef<HTMLDivElement>(null);
   const activeElement = useRef<HTMLDivElement | null>(revealed ? document.activeElement as HTMLDivElement | null : null);
-  const modalHistoryKey = useRef<number>();
-  const unlistenHistory = useRef<ReturnType<typeof history.listen>>();
+  // const modalHistoryKey = useRef<number>();
+  // const unlistenHistory = useRef<ReturnType<typeof history.listen>>();
 
   const prevChildren = usePrevious(children);
 
@@ -121,33 +121,33 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   }, []);
 
   const handleModalOpen = () => {
-    modalHistoryKey.current = Date.now();
-    unlistenHistory.current = history.listen(({ state }, action) => {
-      if (!(state as any)?.plFeModalKey) {
-        onClose();
-      } else if (action === 'POP') {
-        handleOnClose();
+    // modalHistoryKey.current = Date.now();
+    // unlistenHistory.current = history.listen(({ state }, action) => {
+    //   if (!(state as any)?.plFeModalKey) {
+    //     onClose();
+    //   } else if (action === 'POP') {
+    //     handleOnClose();
 
-        if (onCancel) onCancel();
-      }
-    });
+    //     if (onCancel) onCancel();
+    //   }
+    // });
   };
 
   const handleModalClose = () => {
-    if (unlistenHistory.current) {
-      unlistenHistory.current();
-    }
-    const { state } = history.location;
-    if (state && (state as any).plFeModalKey === modalHistoryKey.current) {
-      history.goBack();
-    }
+    // if (unlistenHistory.current) {
+    //   unlistenHistory.current();
+    // }
+    // const { state } = history.location;
+    // if (state && (state as any).plFeModalKey === modalHistoryKey.current) {
+    //   history.goBack();
+    // }
   };
 
   const ensureHistoryBuffer = () => {
-    const { state } = history.location;
-    if (!state || (state as any).plFeModalKey !== modalHistoryKey.current) {
-      history.push({ ...history.location, state: { ...(state as any), plFeModalKey: modalHistoryKey.current } });
-    }
+    // const { state } = history.location;
+    // if (!state || (state as any).plFeModalKey !== modalHistoryKey.current) {
+    //   history.push({ ...history.location, state: { ...(state as any), plFeModalKey: modalHistoryKey.current } });
+    // }
   };
 
   const getSiblings = () => Array(...(ref.current!.parentElement!.childNodes as any as ChildNode[]))
