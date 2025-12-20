@@ -23,7 +23,7 @@ const ChatPageSidebar = () => {
     if (chat === 'shoutbox') {
       navigate({ to: '/chats/shoutbox' });
     } else {
-      navigate({ to: '/chats/$chatId', params: { chatId: chat.id } });
+      navigate({ to: '/chats/{-$chatId}', params: { chatId: chat.id } });
     }
   };
 

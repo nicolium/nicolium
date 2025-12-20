@@ -230,7 +230,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       <Redirect from='/user-settings' to='/settings/profile' />
       <WrappedRoute path='/notice/:statusId' publicRoute exact layout={DefaultLayout} component={Status} content={children} />
       <Redirect from='/users/:username/statuses/:statusId' to='/@:username/posts/:statusId' />
-      <Redirect from='/users/:username/chats' to='/chats' />
+      <Redirect from='/users/:username/chats' to='/chats/{-$chatId}' />
       <Redirect from='/users/:username' to='/@:username' />
       <Redirect from='/registration' to='/' exact />
 
@@ -272,7 +272,7 @@ const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ chil
       {features.events && <WrappedRoute path='/events/new' layout={EventsLayout} component={ComposeEvent} content={children} />}
       {features.events && <WrappedRoute path='/events' layout={EventsLayout} component={Events} content={children} />}
 
-      {features.chats && <WrappedRoute path='/chats' exact layout={ChatsLayout} component={ChatIndex} content={children} />}
+      {features.chats && <WrappedRoute path='/chats/{-$chatId}' exact layout={ChatsLayout} component={ChatIndex} content={children} />}
       {features.chats && <WrappedRoute path='/chats/new' layout={ChatsLayout} component={ChatIndex} content={children} />}
       {features.chats && <WrappedRoute path='/chats/settings' layout={ChatsLayout} component={ChatIndex} content={children} />}
       {features.shoutbox && <WrappedRoute path='/chats/shoutbox' layout={ChatsLayout} component={ChatIndex} content={children} />}

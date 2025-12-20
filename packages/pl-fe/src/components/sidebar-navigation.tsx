@@ -257,7 +257,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
 
             {features.chats && (
               <SidebarNavigationLink
-                to='/chats'
+                to='/chats/{-$chatId}'
                 icon={require('@phosphor-icons/core/regular/chats-teardrop.svg')}
                 activeIcon={require('@phosphor-icons/core/fill/chats-teardrop-fill.svg')}
                 count={unreadChatsCount}

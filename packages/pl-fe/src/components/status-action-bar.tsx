@@ -678,7 +678,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       const account = status.account;
 
       getOrCreateChatByAccountId(account.id)
-        .then((chat) => navigate({ to: '/chats/$chatId', params: { chatId: chat.id } }))
+        .then((chat) => navigate({ to: '/chats/{-$chatId}', params: { chatId: chat.id } }))
         .catch(() => {});
     };
 
@@ -1027,7 +1027,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       const isGroupAdmin = groupRelationship?.role === GroupRoles.ADMIN;
       // const isStatusFromOwner = group.owner.id === account.id;
 
-      const canBanUser = match?.isExact && (isGroupOwner || isGroupAdmin) && !ownAccount;
+      const canBanUser = match && (isGroupOwner || isGroupAdmin) && !ownAccount;
       const canDeleteStatus = !ownAccount && (isGroupOwner || isGroupAdmin);
 
       if (canBanUser || canDeleteStatus) {

@@ -83,7 +83,7 @@ const ChatPageMain = () => {
       onConfirm: () => {
         deleteChat.mutate(undefined, {
           onSuccess() {
-            navigate({ to: '/chats' });
+            navigate({ to: '/chats/{-$chatId}' });
           },
         });
       },
@@ -128,17 +128,17 @@ const ChatPageMain = () => {
             <IconButton
               src={require('@phosphor-icons/core/regular/arrow-left.svg')}
               className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
-              onClick={() => navigate({ to: '/chats' })}
+              onClick={() => navigate({ to: '/chats/{-$chatId}' })}
             />
 
-            <Link to='@{$username}' params={{ username: chat.account.acct }}>
+            <Link to='/@{$username}' params={{ username: chat.account.acct }}>
               <Avatar src={chat.account.avatar} alt={chat.account.avatar_description} size={40} className='flex-none' isCat={chat.account.is_cat} username={chat.account.username} />
             </Link>
           </HStack>
 
           <Stack alignItems='start' className='h-11 overflow-hidden'>
             <div className='flex w-full grow items-center space-x-1'>
-              <Link to='@{$username}' params={{ username: chat.account.acct }}>
+              <Link to='/@{$username}' params={{ username: chat.account.acct }}>
                 <Text weight='bold' size='sm' align='left' truncate>
                   {chat.account.display_name || `@${chat.account.username}`}
                 </Text>

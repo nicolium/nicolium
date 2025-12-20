@@ -8,7 +8,7 @@ import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 
 import { Card, CardBody, CardHeader, CardTitle, type CardSizes } from './card';
 
-type IColumnHeader = Pick<IColumn, 'label' | 'backHref' | 'className' | 'action'>;
+type IColumnHeader = Pick<IColumn, 'label' | 'backHref' | 'backParams' | 'className' | 'action'>;
 
 /** Contains the column title with optional back button. */
 const ColumnHeader: React.FC<IColumnHeader> = ({ label, backHref, backParams, className, action }) => {

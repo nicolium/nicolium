@@ -170,7 +170,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       toast.error(data?.error);
     },
     onSuccess: (response) => {
-      navigate({ to: '/chats/$chatId', params: { chatId: response.id } });
+      navigate({ to: '/chats/{-$chatId}', params: { chatId: response.id } });
       queryClient.invalidateQueries({
         queryKey: ['chats', 'search'],
       });

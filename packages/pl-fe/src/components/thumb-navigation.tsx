@@ -120,7 +120,7 @@ const ThumbNavigation: React.FC = React.memo((): JSX.Element => {
             src={require('@phosphor-icons/core/regular/chats-teardrop.svg')}
             activeSrc={require('@phosphor-icons/core/fill/chats-teardrop-fill.svg')}
             text={intl.formatMessage(messages.chats)}
-            to='/chats'
+            to='/chats/{-$chatId}'
             exact
             count={unreadChatsCount}
             countMax={9}
