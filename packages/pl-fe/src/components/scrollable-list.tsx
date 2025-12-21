@@ -1,4 +1,4 @@
-import { useRouter } from '@tanstack/react-router';
+import { useLocation } from '@tanstack/react-router';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useRef, useMemo, useCallback } from 'react';
 import { Virtuoso, Components, VirtuosoProps, VirtuosoHandle, ListRange, IndexLocationWithAlign } from 'react-virtuoso';
@@ -104,11 +104,11 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
   useWindowScroll = true,
   ...params
 }, ref) => {
-  const { history } = useRouter();
   const { autoloadMore } = useSettings();
+  const { state: locationState } = useLocation();
 
   // Preserve scroll position
-  const scrollDataKey = `plfe:scrollData:${scrollKey}`;
+  const scrollDataKey = `plfe:scrollData:${scrollKey}:${locationState.key}`;
   const scrollData: SavedScrollPosition | null = useMemo(() => JSON.parse(sessionStorage.getItem(scrollDataKey)!), [scrollDataKey]);
   const topIndex = useRef<number>(scrollData ? scrollData.index : 0);
   const topOffset = useRef<number>(scrollData ? scrollData.offset : 0);
@@ -211,7 +211,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
       return initialTopMostItemIndex;
     }
 
-    if (scrollData && history.action === 'POP') {
+    if (scrollData) {
       return {
         align: 'start',
         index: scrollData.index,
