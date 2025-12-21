@@ -12,6 +12,7 @@ import React, { useMemo } from 'react';
 import * as v from 'valibot';
 
 import { FE_SUBDIRECTORY, WITH_LANDING_PAGE } from 'pl-fe/build-config';
+import Layout from 'pl-fe/components/ui/layout';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
@@ -145,7 +146,6 @@ import {
 } from './util/async-components';
 
 import type { Features } from 'pl-api';
-import Layout from 'pl-fe/components/ui/layout';
 
 
 interface RouterContext {
@@ -171,6 +171,11 @@ const layouts = {
     getParentRoute: () => rootRoute,
     id: 'chats-layout',
     component: ChatsLayout,
+    beforeLoad: (options) => {
+      const { context: { features } } = options;
+      requireAuth(options);
+      if (!features.chats) throw notFound();
+    },
   }),
   default: createRoute({
     getParentRoute: () => rootRoute,
@@ -321,7 +326,11 @@ export const localTimelineRoute = createRoute({
   getParentRoute: () => layouts.home,
   path: '/timeline/local',
   component: CommunityTimeline,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features, instance } } = options;
+    if (instance.configuration.timelines_access.live_feeds.local !== 'public') {
+      requireAuth(options);
+    }
     if (!features.federating) throw notFound();
   },
 });
@@ -330,7 +339,11 @@ export const federatedTimelineRoute = createRoute({
   getParentRoute: () => layouts.home,
   path: '/timeline/fediverse',
   component: PublicTimeline,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features, instance } } = options;
+    if (instance.configuration.timelines_access.live_feeds.remote !== 'public') {
+      requireAuth(options);
+    }
     if (!features.federating) throw notFound();
   },
 });
@@ -339,7 +352,11 @@ export const bubbleTimelineRoute = createRoute({
   getParentRoute: () => layouts.home,
   path: '/timeline/bubble',
   component: BubbleTimeline,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features, instance } } = options;
+    if (instance.configuration.timelines_access.live_feeds.bubble !== 'public') {
+      requireAuth(options);
+    }
     if (!features.bubbleTimeline) throw notFound();
   },
 });
@@ -348,7 +365,11 @@ export const wrenchedTimelineRoute = createRoute({
   getParentRoute: () => layouts.home,
   path: '/timeline/wrenched',
   component: WrenchedTimeline,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features, instance } } = options;
+    if (instance.configuration.timelines_access.live_feeds.wrenched !== 'public') {
+      requireAuth(options);
+    }
     if (!features.wrenchedTimeline) throw notFound();
   },
 });
@@ -357,7 +378,11 @@ export const remoteTimelineRoute = createRoute({
   getParentRoute: () => layouts.remoteInstance,
   path: '/',
   component: RemoteTimeline,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features, instance } } = options;
+    if (instance.configuration.timelines_access.live_feeds.remote !== 'public') {
+      requireAuth(options);
+    }
     if (!features.federating) throw notFound();
   },
 });
@@ -367,7 +392,9 @@ export const conversationsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/conversations',
   component: Conversations,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features } } = options;
+    requireAuth(options);
     if (!features.conversations) throw notFound();
   },
 });
@@ -377,6 +404,12 @@ export const hashtagTimelineRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/tags/$id',
   component: HashtagTimeline,
+  beforeLoad: (options) => {
+    const { context: { instance } } = options;
+    if (instance.configuration.timelines_access.hashtag_feeds.local !== 'public') {
+      requireAuth(options);
+    }
+  },
 });
 
 export const linkTimelineRoute = createRoute({
@@ -390,7 +423,9 @@ export const listsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/lists',
   component: Lists,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features } } = options;
+    requireAuth(options);
     if (!features.lists) throw notFound();
   },
 });
@@ -399,7 +434,9 @@ export const listTimelineRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/list/$listId',
   component: ListTimeline,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features } } = options;
+    requireAuth(options);
     if (!features.lists) throw notFound();
   },
 });
@@ -408,7 +445,9 @@ export const circlesRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/circles',
   component: Circles,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features } } = options;
+    requireAuth(options);
     if (!features.circles) throw notFound();
   },
 });
@@ -417,7 +456,9 @@ export const circleTimelineRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/circles/$circleId',
   component: CircleTimeline,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features } } = options;
+    requireAuth(options);
     if (!features.circles) throw notFound();
   },
 });
@@ -427,7 +468,9 @@ export const bookmarkFoldersRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/bookmarks',
   component: BookmarkFolders,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features } } = options;
+    requireAuth(options);
     if (!features.bookmarks) throw notFound();
     if (!features.bookmarkFolders) throw redirect({ to: '/bookmarks/$folderId', params: { folderId: 'all' } });
   },
@@ -437,7 +480,9 @@ export const bookmarksRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/bookmarks/$folderId',
   component: Bookmarks,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features } } = options;
+    requireAuth(options);
     if (!features.bookmarks) throw notFound();
   },
 });
@@ -447,6 +492,9 @@ export const notificationsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/notifications',
   component: Notifications,
+  beforeLoad: (options) => {
+    requireAuth(options);
+  },
 });
 
 // Search and directory
@@ -488,7 +536,9 @@ export const newEventRoute = createRoute({
   getParentRoute: () => layouts.events,
   path: '/events/new',
   component: ComposeEvent,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features } } = options;
+    requireAuth(options);
     if (!features.events) throw notFound();
   },
 });
@@ -498,8 +548,10 @@ export const chatsRoute = createRoute({
   getParentRoute: () => layouts.chats,
   path: '/chats',
   component: ChatIndex,
-  beforeLoad: ({ context: { features } }) => {
-    if (!features.chats) throw notFound();
+  beforeLoad: (options) => {
+    const { context: { features } } = options;
+    requireAuth(options);
+    if (!features.events) throw notFound();
   },
 });
 
@@ -532,13 +584,18 @@ export const followRequestsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/follow_requests',
   component: FollowRequests,
+  beforeLoad: (options) => {
+    requireAuth(options);
+  },
 });
 
 export const outgoingFollowRequestsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/outgoing_follow_requests',
   component: OutgoingFollowRequests,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features } } = options;
+    requireAuth(options);
     if (!features.outgoingFollowRequests) throw notFound();
   },
 });
@@ -547,13 +604,18 @@ export const blocksRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/blocks',
   component: Blocks,
+  beforeLoad: (options) => {
+    requireAuth(options);
+  },
 });
 
 export const domainBlocksRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/domain_blocks',
   component: DomainBlocks,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features } } = options;
+    requireAuth(options);
     if (!features.federating) throw notFound();
   },
 });
@@ -562,6 +624,9 @@ export const mutesRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/mutes',
   component: Mutes,
+  beforeLoad: (options) => {
+    requireAuth(options);
+  },
 });
 
 // Filters
@@ -569,7 +634,9 @@ export const filtersRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/filters',
   component: Filters,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features } } = options;
+    requireAuth(options);
     if (!features.filters && !features.filtersV2) throw notFound();
   },
 });
@@ -578,7 +645,9 @@ export const editFilterRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/filters/$filterId',
   component: EditFilter,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features } } = options;
+    requireAuth(options);
     if (!features.filters && !features.filtersV2) throw notFound();
   },
 });
@@ -588,7 +657,9 @@ export const followedTagsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/followed_tags',
   component: FollowedTags,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features } } = options;
+    requireAuth(options);
     if (!features.followedHashtagsList) throw notFound();
   },
 });
@@ -598,7 +669,9 @@ export const interactionRequestsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/interaction_requests',
   component: InteractionRequests,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: (options) => {
+    const { context: { features } } = options;
+    requireAuth(options);
     if (!features.interactionRequests) throw notFound();
   },
 });
