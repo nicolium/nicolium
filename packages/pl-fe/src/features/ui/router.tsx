@@ -15,7 +15,7 @@ import Layout from 'pl-fe/components/ui/layout';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
+import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import AdminLayout from 'pl-fe/layouts/admin-layout';
 import ChatsLayout from 'pl-fe/layouts/chats-layout';
@@ -1377,18 +1377,19 @@ declare module '@tanstack/react-router' {
 const RouterWithContext = () => {
   const instance = useInstance();
   const features = useFeatures();
-  const { isLoggedIn } = useLoggedIn();
   const standalone = useAppSelector(isStandalone);
   const { cryptoAddresses } = usePlFeConfig();
   const hasCrypto = cryptoAddresses.length > 0;
+  const { account } = useOwnAccount();
 
   const context = useMemo(() => ({
     instance,
     features,
-    isLoggedIn,
+    isLoggedIn: !!account,
     isStandalone: standalone,
+    isAdmin: account?.is_admin || account?.is_moderator,
     hasCrypto,
-  }), [features.version, isLoggedIn, standalone, hasCrypto]);
+  }), [features.version, standalone, hasCrypto, !!account, account?.is_admin, account?.is_moderator]);
 
   return (
     <RouterProvider router={router} context={context} />
