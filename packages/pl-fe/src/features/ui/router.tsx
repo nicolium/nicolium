@@ -4,7 +4,6 @@ import {
   createRoute,
   createRouter,
   notFound,
-  Outlet,
   redirect,
   RouterProvider,
 } from '@tanstack/react-router';
@@ -161,6 +160,19 @@ const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: React.lazy(() => import('pl-fe/features/ui')),
 });
 
+const requireAuth = ({ context: { isLoggedIn }, location }: { context: RouterContext; location: ParsedLocation }) => {
+  localStorage.setItem('plfe:redirect_uri', location.href);
+  if (!isLoggedIn) throw redirect({
+    to: '/login',
+  });
+};
+
+const requireAuthMiddleware = (next: (options: { context: RouterContext; location: ParsedLocation }) => void) =>
+  (options: { context: RouterContext; location: ParsedLocation }) => {
+    requireAuth(options);
+    next?.(options);
+  };
+
 const layouts = {
   admin: createRoute({
     getParentRoute: () => rootRoute,
@@ -171,11 +183,9 @@ const layouts = {
     getParentRoute: () => rootRoute,
     id: 'chats-layout',
     component: ChatsLayout,
-    beforeLoad: (options) => {
-      const { context: { features } } = options;
-      requireAuth(options);
-      if (!features.chats) throw notFound();
-    },
+    beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
+      if (!features.events) throw notFound();
+    }),
   }),
   default: createRoute({
     getParentRoute: () => rootRoute,
@@ -206,11 +216,13 @@ const layouts = {
     getParentRoute: () => rootRoute,
     path: '/groups/$groupId',
     component: GroupLayout,
+    beforeLoad: requireAuth,
   }),
   groups: createRoute({
     getParentRoute: () => rootRoute,
     id: 'groups-layout',
     component: GroupsLayout,
+    beforeLoad: requireAuth,
   }),
   home: createRoute({
     getParentRoute: () => rootRoute,
@@ -226,6 +238,7 @@ const layouts = {
     getParentRoute: () => rootRoute,
     id: 'manage-groups-layout',
     component: ManageGroupsLayout,
+    beforeLoad: requireAuth,
   }),
   profile: createRoute({
     getParentRoute: () => rootRoute,
@@ -247,13 +260,6 @@ const layouts = {
     id: 'status-layout',
     component: StatusLayout,
   }),
-};
-
-const requireAuth = ({ context: { isLoggedIn }, location }: { context: RouterContext; location: ParsedLocation }) => {
-  localStorage.setItem('plfe:redirect_uri', location.href);
-  if (!isLoggedIn) throw redirect({
-    to: '/login',
-  });
 };
 
 // Root routes
@@ -423,44 +429,36 @@ export const listsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/lists',
   component: Lists,
-  beforeLoad: (options) => {
-    const { context: { features } } = options;
-    requireAuth(options);
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.lists) throw notFound();
-  },
+  }),
 });
 
 export const listTimelineRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/list/$listId',
   component: ListTimeline,
-  beforeLoad: (options) => {
-    const { context: { features } } = options;
-    requireAuth(options);
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.lists) throw notFound();
-  },
+  }),
 });
 
 export const circlesRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/circles',
   component: Circles,
-  beforeLoad: (options) => {
-    const { context: { features } } = options;
-    requireAuth(options);
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.circles) throw notFound();
-  },
+  }),
 });
 
 export const circleTimelineRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/circles/$circleId',
   component: CircleTimeline,
-  beforeLoad: (options) => {
-    const { context: { features } } = options;
-    requireAuth(options);
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.circles) throw notFound();
-  },
+  }),
 });
 
 // Bookmarks
@@ -468,23 +466,19 @@ export const bookmarkFoldersRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/bookmarks',
   component: BookmarkFolders,
-  beforeLoad: (options) => {
-    const { context: { features } } = options;
-    requireAuth(options);
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.bookmarks) throw notFound();
     if (!features.bookmarkFolders) throw redirect({ to: '/bookmarks/$folderId', params: { folderId: 'all' } });
-  },
+  }),
 });
 
 export const bookmarksRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/bookmarks/$folderId',
   component: Bookmarks,
-  beforeLoad: (options) => {
-    const { context: { features } } = options;
-    requireAuth(options);
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.bookmarks) throw notFound();
-  },
+  }),
 });
 
 // Notifications
@@ -492,9 +486,7 @@ export const notificationsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/notifications',
   component: Notifications,
-  beforeLoad: (options) => {
-    requireAuth(options);
-  },
+  beforeLoad: requireAuth,
 });
 
 // Search and directory
@@ -536,11 +528,9 @@ export const newEventRoute = createRoute({
   getParentRoute: () => layouts.events,
   path: '/events/new',
   component: ComposeEvent,
-  beforeLoad: (options) => {
-    const { context: { features } } = options;
-    requireAuth(options);
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.events) throw notFound();
-  },
+  }),
 });
 
 // Chats
@@ -548,11 +538,6 @@ export const chatsRoute = createRoute({
   getParentRoute: () => layouts.chats,
   path: '/chats',
   component: ChatIndex,
-  beforeLoad: (options) => {
-    const { context: { features } } = options;
-    requireAuth(options);
-    if (!features.events) throw notFound();
-  },
 });
 
 export const chatsNewRoute = createRoute({
@@ -584,49 +569,39 @@ export const followRequestsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/follow_requests',
   component: FollowRequests,
-  beforeLoad: (options) => {
-    requireAuth(options);
-  },
+  beforeLoad: requireAuth,
 });
 
 export const outgoingFollowRequestsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/outgoing_follow_requests',
   component: OutgoingFollowRequests,
-  beforeLoad: (options) => {
-    const { context: { features } } = options;
-    requireAuth(options);
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.outgoingFollowRequests) throw notFound();
-  },
+  }),
 });
 
 export const blocksRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/blocks',
   component: Blocks,
-  beforeLoad: (options) => {
-    requireAuth(options);
-  },
+  beforeLoad: requireAuth,
 });
 
 export const domainBlocksRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/domain_blocks',
   component: DomainBlocks,
-  beforeLoad: (options) => {
-    const { context: { features } } = options;
-    requireAuth(options);
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.federating) throw notFound();
-  },
+  }),
 });
 
 export const mutesRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/mutes',
   component: Mutes,
-  beforeLoad: (options) => {
-    requireAuth(options);
-  },
+  beforeLoad: requireAuth,
 });
 
 // Filters
@@ -634,22 +609,18 @@ export const filtersRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/filters',
   component: Filters,
-  beforeLoad: (options) => {
-    const { context: { features } } = options;
-    requireAuth(options);
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.filters && !features.filtersV2) throw notFound();
-  },
+  }),
 });
 
 export const editFilterRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/filters/$filterId',
   component: EditFilter,
-  beforeLoad: (options) => {
-    const { context: { features } } = options;
-    requireAuth(options);
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.filters && !features.filtersV2) throw notFound();
-  },
+  }),
 });
 
 // Followed tags
@@ -657,11 +628,9 @@ export const followedTagsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/followed_tags',
   component: FollowedTags,
-  beforeLoad: (options) => {
-    const { context: { features } } = options;
-    requireAuth(options);
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.followedHashtagsList) throw notFound();
-  },
+  }),
 });
 
 // Interaction requests
@@ -669,11 +638,9 @@ export const interactionRequestsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/interaction_requests',
   component: InteractionRequests,
-  beforeLoad: (options) => {
-    const { context: { features } } = options;
-    requireAuth(options);
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.interactionRequests) throw notFound();
-  },
+  }),
 });
 
 // Profile routes
@@ -773,18 +740,18 @@ export const eventEditRoute = createRoute({
   getParentRoute: () => layouts.event,
   path: '/edit',
   component: EditEvent,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.events) throw notFound();
-  },
+  }),
 });
 
 export const eventDiscussionRoute = createRoute({
   getParentRoute: () => layouts.event,
   path: '/discussion',
   component: EventDiscussion,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.events) throw notFound();
-  },
+  }),
 });
 
 // Groups routes
@@ -871,15 +838,16 @@ export const scheduledStatusesRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/scheduled_statuses',
   component: ScheduledStatuses,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.scheduledStatuses) throw notFound();
-  },
+  }),
 });
 
 export const draftStatusesRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/draft_statuses',
   component: DraftStatuses,
+  beforeLoad: requireAuth,
 });
 
 // Drive
@@ -887,9 +855,9 @@ export const driveRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/drive/{-$folderId}',
   component: Drive,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.drive) throw notFound();
-  },
+  }),
 });
 
 // Circle
@@ -897,6 +865,7 @@ export const circleRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/circle',
   component: Circle,
+  beforeLoad: requireAuth,
 });
 
 // Settings routes
@@ -904,99 +873,116 @@ export const settingsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings',
   component: Settings,
+  beforeLoad: requireAuth,
 });
 
 export const settingsProfileRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/profile',
   component: EditProfile,
+  beforeLoad: requireAuth,
 });
 
 export const settingsExportRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/export',
   component: ExportData,
+  beforeLoad: requireAuth,
 });
 
 export const settingsImportRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/import',
   component: ImportData,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.importBlocks && !features.importFollows && !features.importMutes) throw notFound();
-  },
+  }),
 });
 
 export const settingsAliasesRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/aliases',
   component: Aliases,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.manageAccountAliases) throw notFound();
-  },
+  }),
 });
 
 export const settingsMigrationRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/migration',
   component: Migration,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.accountMoving) throw notFound();
-  },
+  }),
 });
 
 export const settingsBackupsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/backups',
   component: Backups,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.accountBackups) throw notFound();
-  },
+  }),
 });
 
 export const settingsEmailRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/email',
   component: EditEmail,
+  beforeLoad: requireAuth,
 });
 
 export const settingsPasswordRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/password',
   component: EditPassword,
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
+    if (!features.changePassword) throw notFound();
+  }),
 });
 
 export const settingsAccountRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/account',
   component: DeleteAccount,
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
+    if (!features.deleteAccount && !features.deleteAccountWithoutPassword) throw notFound();
+  }),
 });
 
 export const settingsMfaRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/mfa',
   component: MfaForm,
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
+    if (!features.manageMfa) throw notFound();
+  }),
 });
 
 export const settingsTokensRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/tokens',
   component: AuthTokenList,
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
+    if (!features.sessions) throw notFound();
+  }),
 });
 
 export const settingsInteractionPoliciesRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/interaction_policies',
   component: InteractionPolicies,
-  beforeLoad: ({ context: { features } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.interactionRequests) throw notFound();
-  },
+  }),
 });
 
 export const settingsPrivacyRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/privacy',
   component: Privacy,
+  beforeLoad: requireAuth,
 });
 
 // PlFe config
@@ -1004,6 +990,9 @@ export const plFeConfigRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/pl-fe/config',
   component: PlFeConfig,
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
 });
 
 // Admin routes
@@ -1011,27 +1000,27 @@ export const adminDashboardRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/pl-fe/admin',
   component: Dashboard,
-  beforeLoad: ({ context: { isAdmin } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
-  },
+  }),
 });
 
 export const adminAccountRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/pl-fe/admin/accounts/$accountId',
   component: AdminAccount,
-  beforeLoad: ({ context: { isAdmin } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
-  },
+  }),
 });
 
 export const adminApprovalRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/pl-fe/admin/approval',
   component: Dashboard,
-  beforeLoad: ({ context: { isAdmin } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
-  },
+  }),
 });
 
 export const adminReportsRoute = createRoute({
@@ -1043,28 +1032,27 @@ export const adminReportsRoute = createRoute({
     account_id: v.optional(v.string()),
     target_account_id: v.optional(v.string()),
   }),
-  beforeLoad: (options) => {
-    requireAuth(options);
-    if (!options.context.isAdmin) throw notFound();
-  },
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
+    if (!isAdmin) throw notFound();
+  }),
 });
 
 export const adminReportRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/pl-fe/admin/reports/$reportId',
   component: Report,
-  beforeLoad: ({ context: { isAdmin } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
-  },
+  }),
 });
 
 export const adminLogRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/pl-fe/admin/log',
   component: ModerationLog,
-  beforeLoad: ({ context: { isAdmin } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
-  },
+  }),
 });
 
 export const adminUsersRoute = createRoute({
@@ -1074,54 +1062,54 @@ export const adminUsersRoute = createRoute({
   validateSearch: v.object({
     q: v.optional(v.string()),
   }),
-  beforeLoad: ({ context: { isAdmin } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
-  },
+  }),
 });
 
 export const adminThemeRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/pl-fe/admin/theme',
   component: ThemeEditor,
-  beforeLoad: ({ context: { isAdmin } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
-  },
+  }),
 });
 
 export const adminRelaysRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/pl-fe/admin/relays',
   component: Relays,
-  beforeLoad: ({ context: { isAdmin } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
-  },
+  }),
 });
 
 export const adminAnnouncementsRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/pl-fe/admin/announcements',
   component: Announcements,
-  beforeLoad: ({ context: { features, isAdmin } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
     if (!isAdmin || features.announcements) throw notFound();
-  },
+  }),
 });
 
 export const adminDomainsRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/pl-fe/admin/domains',
   component: Domains,
-  beforeLoad: ({ context: { features, isAdmin } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
     if (!isAdmin || features.domains) throw notFound();
-  },
+  }),
 });
 
 export const adminRulesRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/pl-fe/admin/rules',
   component: Rules,
-  beforeLoad: ({ context: { features, isAdmin } }) => {
+  beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
     if (!isAdmin || features.adminRules) throw notFound();
-  },
+  }),
 });
 
 // Info and other routes
@@ -1146,6 +1134,7 @@ export const shareRoute = createRoute({
     text: v.optional(v.string(), ''),
     url: v.optional(v.string(), ''),
   }),
+  beforeLoad: requireAuth,
 });
 
 // Developers routes
@@ -1153,30 +1142,35 @@ export const developersRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/developers',
   component: Developers,
+  beforeLoad: requireAuth,
 });
 
 export const developersAppsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/developers/apps/create',
   component: CreateApp,
+  beforeLoad: requireAuth,
 });
 
 export const developersSettingsStoreRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/developers/settings_store',
   component: SettingsStore,
+  beforeLoad: requireAuth,
 });
 
 export const developersTimelineRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/developers/timeline',
   component: TestTimeline,
+  beforeLoad: requireAuth,
 });
 
 export const developersSwRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/developers/sw',
   component: ServiceWorkerInfo,
+  beforeLoad: requireAuth,
 });
 
 export const errorRoute = createRoute({
