@@ -1,0 +1,36 @@
+version: 2.1
+
+jobs:
+  deploy:
+    docker:
+      - image: cimg/node:24.12.0
+    steps:
+      - checkout
+      - run:
+          name: Install pl-api deps
+          working_directory: packages/pl-api
+          command: pnpm install
+      - run:
+          name: Build pl-api
+          working_directory: packages/pl-api
+          command: pnpm run build
+      - run:
+          name: Install pl-fe deps
+          working_directory: packages/pl-fe
+          command: pnpm install
+      - run:
+          name: Build pl-fe
+          working_directory: packages/pl-fe
+          command: pnpm run build
+      - run:
+          name: Install Vercel CLI
+          command: sudo npm install -g vercel
+      - run:
+          working_directory: packages/pl-fe
+          name: Deploy to Vercel
+          command: vercel deploy --token $VERCEL_TOKEN --prod=false --confirm --name pl-fe
+
+workflows:
+  deploy_on_pr:
+    jobs:
+      - deploy
