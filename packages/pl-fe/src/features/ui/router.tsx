@@ -3,6 +3,7 @@ import {
   createRootRouteWithContext,
   createRoute,
   createRouter,
+  Navigate,
   notFound,
   redirect,
   RouterProvider,
@@ -15,6 +16,7 @@ import Layout from 'pl-fe/components/ui/layout';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
+import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import AdminLayout from 'pl-fe/layouts/admin-layout';
@@ -150,7 +152,6 @@ import type { Features } from 'pl-api';
 interface RouterContext {
   instance: ReturnType<typeof useInstance>;
   features: ReturnType<typeof useFeatures>;
-  isStandalone: boolean;
   isLoggedIn: boolean;
   isAdmin: boolean;
   hasCrypto: boolean;
@@ -263,22 +264,23 @@ const layouts = {
 };
 
 // Root routes
-export const homeTimelineRoute = createRoute({
+const HomeRoute = () => {
+  const { redirectRootNoLogin } = usePlFeConfig();
+  const standalone = useAppSelector(isStandalone);
+  const { isLoggedIn } = useLoggedIn();
+
+  if (!isLoggedIn && redirectRootNoLogin) return <Navigate to={redirectRootNoLogin} replace />;
+  if (standalone && !isLoggedIn && !WITH_LANDING_PAGE) return <Navigate to='/login/external' replace />;
+
+  if (isLoggedIn) return <HomeTimeline />;
+  if (standalone && WITH_LANDING_PAGE) return <LandingPage />;
+  return <LandingTimeline />;
+};
+
+export const homeRoute = createRoute({
   getParentRoute: () => layouts.home,
   path: '/',
-  component: HomeTimeline,
-  beforeLoad: ({ context: { isLoggedIn } }) => {
-    if (!isLoggedIn) throw notFound();
-  },
-});
-
-export const landingTimelineRoute = createRoute({
-  getParentRoute: () => layouts.landing,
-  path: '/',
-  component: LandingTimeline,
-  beforeLoad: ({ context: { isLoggedIn } }) => {
-    if (isLoggedIn) throw notFound();
-  },
+  component: HomeRoute,
 });
 
 // Auth routes
@@ -1301,13 +1303,13 @@ const routeTree = rootRoute.addChildren([
   ]),
   layouts.groups.addChildren([groupsRoute]),
   layouts.home.addChildren([
-    homeTimelineRoute,
+    homeRoute,
     localTimelineRoute,
     federatedTimelineRoute,
     bubbleTimelineRoute,
     wrenchedTimelineRoute,
   ]),
-  layouts.landing.addChildren([landingTimelineRoute]),
+  layouts.landing.addChildren([/*landingTimelineRoute*/]),
   layouts.manageGroups.addChildren([
     manageGroupRoute,
     editGroupRoute,
@@ -1355,7 +1357,6 @@ const router = createRouter({
     instance: instanceInitialState,
     features: {} as Features,
     isLoggedIn: false,
-    isStandalone: false,
     isAdmin: false,
     hasCrypto: false,
   },
@@ -1377,19 +1378,17 @@ declare module '@tanstack/react-router' {
 const RouterWithContext = () => {
   const instance = useInstance();
   const features = useFeatures();
-  const standalone = useAppSelector(isStandalone);
   const { cryptoAddresses } = usePlFeConfig();
   const hasCrypto = cryptoAddresses.length > 0;
   const { account } = useOwnAccount();
 
-  const context = useMemo(() => ({
+  const context: RouterContext = useMemo(() => ({
     instance,
     features,
     isLoggedIn: !!account,
-    isStandalone: standalone,
-    isAdmin: account?.is_admin || account?.is_moderator,
+    isAdmin: !!(account?.is_admin || account?.is_moderator),
     hasCrypto,
-  }), [features.version, standalone, hasCrypto, !!account, account?.is_admin, account?.is_moderator]);
+  }), [features.version, hasCrypto, !!account, account?.is_admin, account?.is_moderator]);
 
   return (
     <RouterProvider router={router} context={context} />
