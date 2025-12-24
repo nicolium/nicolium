@@ -1,4 +1,4 @@
-import { useNavigate, type LinkProps } from '@tanstack/react-router';
+import { useNavigate, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 
@@ -26,11 +26,7 @@ type MenuItem = {
   items?: Menu;
   onSelectFile?: (files: FileList) => void;
   accept?: string;
-} & ({
-  to: LinkProps['to'];
-  params?: LinkProps['params'];
-  search?: LinkProps['search'];
-} | { to?: undefined });
+} & (LinkOptions | { to?: undefined });
 
 interface IDropdownMenuItem {
   index: number;

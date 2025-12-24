@@ -1,4 +1,4 @@
-import { LinkProps, useNavigate, useRouter } from '@tanstack/react-router';
+import { type LinkOptions, useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import throttle from 'lodash/throttle';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -43,8 +43,9 @@ const ColumnHeader: React.FC<IColumnHeader> = ({ label, backHref, backParams, cl
 
 interface IColumn {
   /** Route the back button goes to. */
-  backHref?: LinkProps['to'];
-  backParams?: LinkProps['params'];
+  backHref?: LinkOptions['to'];
+  backParams?: LinkOptions['params'];
+  backSearch?: LinkOptions['search'];
   /** Column title text. */
   label?: string;
   /** Whether this column should have a transparent background. */

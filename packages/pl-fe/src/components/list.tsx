@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
@@ -15,19 +15,18 @@ const List: React.FC<IList> = ({ children }) => (
   <div className='⁂-list'>{children}</div>
 );
 
-interface IListItem {
+type IListItem = {
   className?: string;
   label: React.ReactNode;
   hint?: React.ReactNode;
-  to?: string;
   href?: string;
   onClick?(): void;
   isSelected?: boolean;
   children?: React.ReactNode;
   size?: 'sm' | 'md';
-}
+} & (LinkOptions | {});
 
-const ListItem: React.FC<IListItem> = ({ className, label, hint, children, to, href, onClick, isSelected, size = 'md' }) => {
+const ListItem: React.FC<IListItem> = ({ className, label, hint, children, href, onClick, isSelected, size = 'md', ...rest }) => {
   const [domId] = useState(`list-group-${crypto.randomUUID()}`);
 
   const onKeyDown = (e: React.KeyboardEvent) => {
@@ -36,7 +35,7 @@ const ListItem: React.FC<IListItem> = ({ className, label, hint, children, to, h
     }
   };
 
-  const LabelComp = to || href || onClick ? 'span' : 'label';
+  const LabelComp = 'to' in rest || href || onClick ? 'span' : 'label';
 
   const renderChildren = React.useCallback(() => React.Children.map(children, (child) => {
     if (React.isValidElement(child)) {
@@ -72,7 +71,7 @@ const ListItem: React.FC<IListItem> = ({ className, label, hint, children, to, h
         ) : null}
       </div>
 
-      {(to || href || onClick) ? (
+      {('to' in rest || href || onClick) ? (
         <HStack space={1} alignItems='center' className='⁂-list-item__body'>
           {children}
 
@@ -80,12 +79,12 @@ const ListItem: React.FC<IListItem> = ({ className, label, hint, children, to, h
         </HStack>
       ) : null}
 
-      {typeof to === 'undefined' && typeof onClick === 'undefined' ? renderChildren() : null}
+      {!('to' in rest) && typeof onClick === 'undefined' ? renderChildren() : null}
     </>
   );
 
-  if (to) return (
-    <Link className={classNames} to={to}>
+  if ('to' in rest) return (
+    <Link className={classNames} {...rest}>
       {body}
     </Link>
   );

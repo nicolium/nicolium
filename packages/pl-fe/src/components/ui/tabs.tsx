@@ -11,7 +11,7 @@ import React from 'react';
 
 import Counter from './counter';
 
-import type { LinkProps } from '@tanstack/react-router';
+import type { LinkOptions } from '@tanstack/react-router';
 
 import './tabs.css';
 
@@ -117,12 +117,7 @@ type Item = {
   count?: number;
   /** Unique name for this tab. */
   name: string;
-} & ({
-  /** Route to visit when the tab is selected. */
-  to: LinkProps['to'];
-  params?: LinkProps['params'];
-  search?: LinkProps['search'];
-} | { to?: undefined });
+} & (LinkOptions | { to?: undefined });
 
 interface ITabs {
   /** Array of structured tab items. */

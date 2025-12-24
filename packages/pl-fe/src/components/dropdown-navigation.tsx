@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { Link, type LinkProps } from '@tanstack/react-router';
+import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -29,14 +29,14 @@ import sourceCode from 'pl-fe/utils/code';
 
 import type { Account as AccountEntity } from 'pl-api';
 
-interface IDropdownNavigationLink extends Partial<Pick<LinkProps, 'to' | 'params'>> {
+interface IDropdownNavigationLink extends Partial<LinkOptions> {
   href?: string;
   icon: string;
   text: string | JSX.Element;
   onClick: React.EventHandler<React.MouseEvent>;
 }
 
-const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(({ href, to, params, icon, text, onClick }) => {
+const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(({ href, to, icon, text, onClick, ...rest }) => {
   const body = (
     <>
       <div className='⁂-dropdown-navigation__link__icon'>
@@ -49,7 +49,7 @@ const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(({ 
 
   if (to) {
     return (
-      <Link className='⁂-dropdown-navigation__link' to={to} params={params} onClick={onClick}>
+      <Link className='⁂-dropdown-navigation__link' to={to} {...rest} onClick={onClick}>
         {body}
       </Link>
     );

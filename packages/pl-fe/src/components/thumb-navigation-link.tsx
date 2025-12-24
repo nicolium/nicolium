@@ -1,29 +1,28 @@
-import { Link, useMatchRoute } from '@tanstack/react-router';
+import { Link, useMatchRoute, type LinkOptions } from '@tanstack/react-router';
 import React from 'react';
 
 import IconWithCounter from 'pl-fe/components/icon-with-counter';
 import Icon from 'pl-fe/components/ui/icon';
 import { useSettings } from 'pl-fe/stores/settings';
 
-interface IThumbNavigationLink {
+interface IThumbNavigationLink extends LinkOptions {
   count?: number;
   countMax?: number;
   src: string;
   activeSrc?: string;
   text: string;
-  to: string;
   exact?: boolean;
 }
 
-const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({ count, countMax, src, activeSrc, text, to, exact }): JSX.Element => {
+const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({ count, countMax, src, activeSrc, text, exact, ...props }): JSX.Element => {
   const { demetricator } = useSettings();
 
   const matchRoute = useMatchRoute();
 
-  const icon = (activeSrc && matchRoute({ to }) !== null && activeSrc) || src;
+  const icon = (activeSrc && matchRoute({ to: props.to, params: props.params, search: props.search }) !== null && activeSrc) || src;
 
   return (
-    <Link to={to} activeOptions={{ exact }} className='⁂-thumb-navigation__item' activeProps={{ className: '⁂-thumb-navigation__item--active' }} title={text}>
+    <Link {...props} activeOptions={{ exact }} className='⁂-thumb-navigation__item' activeProps={{ className: '⁂-thumb-navigation__item--active' }} title={text}>
       {!demetricator && count !== undefined ? (
         <IconWithCounter
           src={icon}

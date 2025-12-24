@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { Link, type LinkProps } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 
 import Avatar from 'pl-fe/components/ui/avatar';
@@ -14,13 +14,13 @@ import Chat from '../chat';
 import ChatPaneHeader from './chat-pane-header';
 import ChatSettings from './chat-settings';
 
-const LinkWrapper = ({ enabled, to, children }: { enabled: boolean; to: string; children: React.ReactNode }): JSX.Element => {
+const LinkWrapper = ({ enabled, children, ...rest }: LinkProps & { enabled: boolean; children: React.ReactNode }): JSX.Element => {
   if (!enabled) {
     return <>{children}</>;
   }
 
   return (
-    <Link to={to}>
+    <Link {...rest}>
       {children}
     </Link>
   );
@@ -75,7 +75,7 @@ const ChatWindow = () => {
               )}
 
               <Stack alignItems='start'>
-                <LinkWrapper enabled={isOpen} to={`/@${chat.account.acct}`}>
+                <LinkWrapper enabled={isOpen} to='/@{$username}' params={{ username: chat.account.acct }}>
                   <div className='flex grow items-center space-x-1'>
                     <Text size='sm' weight='bold' truncate>{chat.account.display_name || `@${chat.account.acct}`}</Text>
                     {chat.account.verified && <VerificationBadge />}

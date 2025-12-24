@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
 import { FormattedNumber } from 'react-intl';
@@ -27,24 +27,23 @@ const percIncrease = (a: number, b: number) => {
   return percent;
 };
 
-interface ICounter {
+type ICounter = {
   measure: AdminMeasureKey;
   startAt: string;
   endAt: string;
   label: JSX.Element | string;
-  to?: string;
   params?: AdminGetMeasuresParams;
   target?: string;
-}
+} & (LinkOptions | {});
 
 const Counter: React.FC<ICounter> = ({
   measure,
   startAt,
   endAt,
   label,
-  to,
   params,
   target,
+  ...rest
 }) => {
   const { data } = useMeasures([measure], startAt, endAt, params);
 
@@ -89,9 +88,9 @@ const Counter: React.FC<ICounter> = ({
 
   const className = 'relative flex flex-col rounded bg-gray-200 font-medium dark:bg-gray-800';
 
-  if (to) {
+  if ('to' in rest) {
     return (
-      <Link to={to} className={clsx(className, 'transition-transform hover:-translate-y-1')} target={target}>
+      <Link {...rest} className={clsx(className, 'transition-transform hover:-translate-y-1')} target={target}>
         {inner}
       </Link>
     );

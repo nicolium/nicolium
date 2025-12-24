@@ -1181,6 +1181,12 @@ export const errorRoute = createRoute({
   component: IntentionalError,
 });
 
+export const networkErrorRoute = createRoute({
+  getParentRoute: () => layouts.empty,
+  path: '/error/network',
+  component: React.lazy(() => Promise.reject(new TypeError('Failed to fetch dynamically imported module: TEST'))),
+});
+
 // Crypto donate
 export const cryptoDonateRoute = createRoute({
   getParentRoute: () => layouts.default,
@@ -1285,6 +1291,7 @@ const routeTree = rootRoute.addChildren([
     signupRoute,
     serverInfoRoute,
     errorRoute,
+    networkErrorRoute,
   ]),
   layouts.event.addChildren([
     eventInformationRoute,

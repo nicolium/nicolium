@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { Link, LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -60,7 +60,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
   const getQuotes = () => {
     if (status.quotes_count) {
       return (
-        <InteractionCounter count={status.quotes_count} to={`/@${status.account.acct}/posts/${status.id}/quotes`}>
+        <InteractionCounter count={status.quotes_count} to='/@{$username}/posts/$statusId/quotes' params={{ username: status.account.acct, id: status.id }}>
           <FormattedMessage
             id='status.interactions.quotes'
             defaultMessage='{count, plural, one {Quote} other {Quotes}}'
@@ -131,14 +131,13 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
   );
 };
 
-interface IInteractionCounter {
+type IInteractionCounter = {
   count: number;
   children: React.ReactNode;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
-  to?: string;
-}
+} & (LinkOptions | {});
 
-const InteractionCounter: React.FC<IInteractionCounter> = ({ count, children, onClick, to }) => {
+const InteractionCounter: React.FC<IInteractionCounter> = ({ count, children, onClick, ...rest }) => {
   const features = useFeatures();
 
   const className = clsx({
@@ -159,9 +158,9 @@ const InteractionCounter: React.FC<IInteractionCounter> = ({ count, children, on
     </HStack>
   );
 
-  if (to) {
+  if ('to' in rest) {
     return (
-      <Link to={to} className={className}>
+      <Link className={className} {...rest}>
         {body}
       </Link>
     );

@@ -80,7 +80,7 @@ const ManageGroup: React.FC = () => {
             </CardHeader>
 
             <List>
-              <ListItem label={intl.formatMessage(messages.editGroup)} to={`/groups/${group.id}/manage/edit`}>
+              <ListItem label={intl.formatMessage(messages.editGroup)} to='/groups/$groupId/manage/edit' params={{ groupId: group.id }}>
                 <span><Emojify text={group.display_name} emojis={group.emojis} /></span>
               </ListItem>
             </List>
@@ -92,9 +92,9 @@ const ManageGroup: React.FC = () => {
         </CardHeader>
 
         <List>
-          <ListItem label={intl.formatMessage(messages.pendingRequests)} to={`/groups/${group.id}/manage/requests`} />
+          <ListItem label={intl.formatMessage(messages.pendingRequests)} to='/groups/$groupId/manage/requests' params={{ groupId: group.id }} />
 
-          <ListItem label={intl.formatMessage(messages.blockedMembers)} to={`/groups/${group.id}/manage/blocks`} />
+          <ListItem label={intl.formatMessage(messages.blockedMembers)} to='/groups/$groupId/manage/blocks' params={{ groupId: group.id }} />
         </List>
 
         {isOwner && (

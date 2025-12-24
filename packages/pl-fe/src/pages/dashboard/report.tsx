@@ -267,7 +267,8 @@ const ReportPage: React.FC = () => {
         )}
         <ListItem
           label={<FormattedMessage id='admin.report.moderate' defaultMessage='Moderate account' />}
-          to={`/pl-fe/admin/accounts/${report.target_account_id}`}
+          to='/pl-fe/admin/accounts/$accountId'
+          params={{ accountId: report.target_account_id }}
         />
       </List>
     </Column>

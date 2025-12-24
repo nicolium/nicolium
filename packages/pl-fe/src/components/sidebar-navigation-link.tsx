@@ -1,11 +1,11 @@
-import { Link, type LinkProps } from '@tanstack/react-router';
+import { Link, type LinkOptions } from '@tanstack/react-router';
 import React from 'react';
 
 import { useSettings } from 'pl-fe/stores/settings';
 
 import Icon from './ui/icon';
 
-interface ISidebarNavigationLink extends Partial<Pick<LinkProps, 'to' | 'params'>> {
+interface ISidebarNavigationLink extends Partial<LinkOptions> {
   /** Notification count, if any. */
   count?: number;
   /** Optional max to cap count (ie: N+) */
@@ -22,7 +22,7 @@ interface ISidebarNavigationLink extends Partial<Pick<LinkProps, 'to' | 'params'
 
 /** Desktop sidebar navigation link. */
 const SidebarNavigationLink = React.memo(React.forwardRef((props: ISidebarNavigationLink, ref: React.ForwardedRef<HTMLAnchorElement>): JSX.Element => {
-  const { icon, activeIcon, text, to, params, count, countMax, onClick } = props;
+  const { icon, activeIcon, text, to, count, countMax, onClick, ...rest } = props;
   const isActive = location.pathname === to;
 
   const { demetricator } = useSettings();
@@ -40,10 +40,10 @@ const SidebarNavigationLink = React.memo(React.forwardRef((props: ISidebarNaviga
       activeOptions={{ exact: true }}
       activeProps={{ className: '⁂-sidebar-navigation-link--active' }}
       to={to}
-      params={params}
       ref={ref}
       onClick={handleClick}
       className='⁂-sidebar-navigation-link'
+      {...rest}
     >
       <span
         className='⁂-sidebar-navigation-link__icon'

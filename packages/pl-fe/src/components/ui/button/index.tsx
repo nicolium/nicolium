@@ -1,4 +1,4 @@
-import { Link, type LinkProps } from '@tanstack/react-router';
+import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
 
@@ -11,7 +11,7 @@ import type { ButtonSizes, ButtonThemes } from './useButtonStyles';
 type IButton = Pick<
   React.ComponentProps<'button'>,
   'children' | 'className' | 'disabled' | 'onClick' | 'onMouseDown' | 'onKeyDown' | 'onKeyPress' | 'title' | 'type'
-> & (Pick<LinkProps, 'to' | 'params' | 'search'> | { to?: undefined }) & {
+> & (LinkOptions | { to?: undefined }) & {
   /** Whether this button expands the width of its container. */
   block?: boolean;
   /** URL to an SVG icon to render inside the button. */

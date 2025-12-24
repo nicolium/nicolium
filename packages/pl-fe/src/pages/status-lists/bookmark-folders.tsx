@@ -96,7 +96,8 @@ const BookmarkFoldersPage: React.FC = () => {
 
         <List>
           <ListItem
-            to='/bookmarks/all'
+            to='/bookmarks/$folderId'
+            params={{ folderId: 'all' }}
             label={
               <HStack alignItems='center' space={2}>
                 <Icon src={require('@phosphor-icons/core/regular/bookmarks.svg')} size={20} />
@@ -107,7 +108,8 @@ const BookmarkFoldersPage: React.FC = () => {
           {bookmarkFolders?.map((folder) => (
             <ListItem
               key={folder.id}
-              to={`/bookmarks/${folder.id}`}
+              to='/bookmarks/$folderId'
+              params={{ folderId: folder.id }}
               label={
                 <HStack alignItems='center' space={2}>
                   {folder.emoji ? (

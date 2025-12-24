@@ -15,13 +15,13 @@ const RadioGroup = ({ onChange, children }: IRadioGroup) => {
   return <List>{childrenWithProps}</List>;
 };
 
-interface IRadioItem extends IListItem {
+type IRadioItem = IListItem & {
   label: React.ReactNode;
   hint?: React.ReactNode;
   value: string;
   checked: boolean;
   onChange?: React.ChangeEventHandler;
-}
+};
 
 const RadioItem: React.FC<IRadioItem> = ({ label, hint, checked = false, onChange, value, ...props }) => (
   <ListItem label={label} hint={hint} {...props}>

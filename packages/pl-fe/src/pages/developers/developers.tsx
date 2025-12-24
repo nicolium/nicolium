@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { Link, type LinkOptions } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
@@ -12,17 +12,16 @@ const messages = defineMessages({
   heading: { id: 'column.developers', defaultMessage: 'Developers' },
 });
 
-interface IDashWidget {
-  to?: string;
+interface IDashWidget extends Partial<LinkOptions> {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   children: React.ReactNode;
 }
 
-const DashWidget: React.FC<IDashWidget> = ({ to, onClick, children }) => {
+const DashWidget: React.FC<IDashWidget> = ({ to, onClick, children, ...rest }) => {
   const className = 'bg-gray-200 dark:bg-gray-800 hover:bg-gray-300 dark:hover:bg-gray-800/75 p-4 rounded flex flex-col items-center justify-center space-y-2';
 
   if (to) {
-    return <Link className={className} to={to}>{children}</Link>;
+    return <Link className={className} to={to} {...rest}>{children}</Link>;
   } else {
     return <button className={className} onClick={onClick}>{children}</button>;
   }
