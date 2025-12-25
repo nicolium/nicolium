@@ -382,33 +382,35 @@ const Status: React.FC<IStatus> = (props) => {
       >
         {statusInfo}
 
-        <div className='flex'>
-          <AccountContainer
-            key={actualStatus.account_id}
-            id={actualStatus.account_id}
-            action={
-              <div className='flex flex-row-reverse items-center gap-1 self-baseline'>
-                <Link to={statusUrl} className='hover:underline' onClick={(event) => event.stopPropagation()}>
-                  <RelativeTimestamp timestamp={actualStatus.created_at} theme='muted' size='sm' className='whitespace-nowrap' />
-                </Link>
-                <StatusTypeIcon visibility={actualStatus.visibility} />
-                <StatusLanguagePicker status={actualStatus} />
-                {!!actualStatus.edited_at && (
-                  <>
-                    <span className='⁂-separator' />
+        {actualStatus.account_id && (
+          <div className='flex'>
+            <AccountContainer
+              key={actualStatus.account_id}
+              id={actualStatus.account_id}
+              action={
+                <div className='flex flex-row-reverse items-center gap-1 self-baseline'>
+                  <Link to={statusUrl} className='hover:underline' onClick={(event) => event.stopPropagation()}>
+                    <RelativeTimestamp timestamp={actualStatus.created_at} theme='muted' size='sm' className='whitespace-nowrap' />
+                  </Link>
+                  <StatusTypeIcon visibility={actualStatus.visibility} />
+                  <StatusLanguagePicker status={actualStatus} />
+                  {!!actualStatus.edited_at && (
+                    <>
+                      <span className='⁂-separator' />
 
-                    <Icon className='size-4 text-gray-700 dark:text-gray-600' src={require('@phosphor-icons/core/regular/pencil-simple.svg')} />
-                  </>
-                )}
-              </div>
-            }
-            showAccountHoverCard={hoverable}
-            withLinkToProfile={hoverable}
-            approvalStatus={actualStatus.approval_status}
-            avatarSize={avatarSize}
-            actionAlignment='top'
-          />
-        </div>
+                      <Icon className='size-4 text-gray-700 dark:text-gray-600' src={require('@phosphor-icons/core/regular/pencil-simple.svg')} />
+                    </>
+                  )}
+                </div>
+              }
+              showAccountHoverCard={hoverable}
+              withLinkToProfile={hoverable}
+              approvalStatus={actualStatus.approval_status}
+              avatarSize={avatarSize}
+              actionAlignment='top'
+            />
+          </div>
+        )}
 
         <div className='status__content-wrapper'>
           <StatusReplyMentions status={actualStatus} hoverable={hoverable} />

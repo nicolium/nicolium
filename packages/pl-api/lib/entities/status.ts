@@ -42,7 +42,10 @@ const baseStatusSchema = v.object({
   id: v.string(),
   uri: v.fallback(v.pipe(v.string(), v.url()), ''),
   created_at: v.fallback(datetimeSchema, new Date().toISOString()),
-  account: accountSchema,
+  account: v.pipe(v.unknown(), v.transform((account) => {
+    if ((window as any).__PL_API_FALLBACK_ACCOUNT && JSON.stringify(account) === '{}') return (window as any).__PL_API_FALLBACK_ACCOUNT;
+    return account;
+  }), accountSchema),
   content: v.fallback(v.pipe(v.string(), v.transform((note => note === '<p></p>' ? '' : note))), ''),
   visibility: v.fallback(v.string(), 'public'),
   sensitive: v.pipe(v.unknown(), v.transform(Boolean)),

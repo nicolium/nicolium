@@ -88,15 +88,17 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
       <div ref={node} className='detailed-actualStatus' tabIndex={-1}>
         {renderStatusInfo()}
 
-        <div className='mb-4'>
-          <Account
-            key={account.id}
-            account={account}
-            avatarSize={42}
-            hideActions
-            approvalStatus={actualStatus.approval_status}
-          />
-        </div>
+        {account.id && (
+          <div className='mb-4'>
+            <Account
+              key={account.id}
+              account={account}
+              avatarSize={42}
+              hideActions
+              approvalStatus={actualStatus.approval_status}
+            />
+          </div>
+        )}
 
         <StatusReplyMentions status={actualStatus} />
 

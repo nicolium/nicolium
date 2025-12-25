@@ -83,14 +83,16 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
         space={2}
         onClick={handleExpandClick}
       >
-        <AccountContainer
-          {...actions}
-          id={account.id}
-          timestamp={status.created_at}
-          withRelationship={false}
-          showAccountHoverCard={!compose}
-          withLinkToProfile={!compose}
-        />
+        {account.id && (
+          <AccountContainer
+            {...actions}
+            id={account.id}
+            timestamp={status.created_at}
+            withRelationship={false}
+            showAccountHoverCard={!compose}
+            withLinkToProfile={!compose}
+          />
+        )}
 
         <StatusReplyMentions status={status} hoverable={false} />
 
