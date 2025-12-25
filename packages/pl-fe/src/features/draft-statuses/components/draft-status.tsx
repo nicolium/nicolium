@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Account from 'pl-fe/components/account';
 import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
+import OutlineBox from 'pl-fe/components/outline-box';
 import StatusContent from 'pl-fe/components/status-content';
 import StatusReplyMentions from 'pl-fe/components/status-reply-mentions';
 import HStack from 'pl-fe/components/ui/hstack';
@@ -38,9 +39,9 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
   if (status.quote_id) {
     if ((status.quote_visible ?? true) === false) {
       quote = (
-        <div className='quoted-status-tombstone'>
+        <OutlineBox>
           <p><FormattedMessage id='statuses.quote_tombstone' defaultMessage='Post is unavailable.' /></p>
-        </div>
+        </OutlineBox>
       );
     } else {
       quote = <QuotedStatus statusId={status.quote_id} />;

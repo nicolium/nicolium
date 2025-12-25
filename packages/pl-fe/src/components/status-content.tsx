@@ -19,6 +19,7 @@ import { getTextDirection } from '../utils/rtl';
 
 import HashtagsBar from './hashtags-bar';
 import Markup from './markup';
+import OutlineBox from './outline-box';
 import { parseContent } from './parsed-content';
 import { ParsedMfm } from './parsed-mfm';
 import Poll from './polls/poll';
@@ -235,9 +236,9 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     if (withMedia && status.quote_id) {
       if ((status.quote_visible ?? true) === false) {
         quote = (
-          <div className='quoted-status-tombstone'>
+          <OutlineBox>
             <p><FormattedMessage id='statuses.quote_tombstone' defaultMessage='Post is unavailable.' /></p>
-          </div>
+          </OutlineBox>
         );
       } else {
         quote = <QuotedStatus statusId={status.quote_id} />;
