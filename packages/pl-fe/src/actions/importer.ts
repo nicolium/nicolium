@@ -10,23 +10,6 @@ const STATUS_IMPORT = 'STATUS_IMPORT' as const;
 const STATUSES_IMPORT = 'STATUSES_IMPORT' as const;
 const POLLS_IMPORT = 'POLLS_IMPORT' as const;
 
-// Sometimes Pleroma can return an empty account,
-// or a repost can appear of a deleted account. Skip these statuses.
-const isBroken = (status: BaseStatus) => {
-  try {
-    if (status.scheduled_at !== null) return true;
-    // Skip empty accounts
-    // https://gitlab.com/soapbox-pub/soapbox/-/issues/424
-    if (!status.account.id) return true;
-    // Skip broken reposts
-    // https://gitlab.com/soapbox-pub/rebased/-/issues/28
-    if (status.reblog && !status.reblog.account.id) return true;
-    return false;
-  } catch (e) {
-    return true;
-  }
-};
-
 const isEmpty = (object: Record<string, any>) => !Object.values(object).some(value => value);
 
 interface ImportStatusAction {
@@ -80,7 +63,7 @@ const importEntities = (entities: {
 
   const processStatus = (status: BaseStatus, withSelf = true) => {
     // Skip broken statuses
-    if (isBroken(status)) return;
+    if (status.scheduled_at !== null) return;
 
     if (withSelf) statuses[status.id] = status;
 
