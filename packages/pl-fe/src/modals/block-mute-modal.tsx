@@ -1,20 +1,28 @@
 import React, { useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
+import FormGroup from 'pl-fe/components/ui/form-group';
 import HStack from 'pl-fe/components/ui/hstack';
 import Modal from 'pl-fe/components/ui/modal';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
+import Textarea from 'pl-fe/components/ui/textarea';
 import Toggle from 'pl-fe/components/ui/toggle';
 import DurationSelector from 'pl-fe/features/compose/components/polls/duration-selector';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useBlockAccountMutation, useMuteAccountMutation } from 'pl-fe/queries/accounts/use-relationship';
+import { useBlockAccountMutation, useMuteAccountMutation, useUpdateAccountNoteMutation } from 'pl-fe/queries/accounts/use-relationship';
+import toast from 'pl-fe/toast';
 
 import type { BlockAccountParams, MuteAccountParams } from 'pl-api';
 import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+
+const messages = defineMessages({
+  notePlaceholder: { id: 'account_note.placeholder', defaultMessage: 'Add a note' },
+  noteSaveFailed: { id: 'account_note.fail', defaultMessage: 'Failed to save note' },
+});
 
 interface BlockMuteModalProps {
   action: 'BLOCK' | 'MUTE';
@@ -24,16 +32,21 @@ interface BlockMuteModalProps {
 
 const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accountId, statusId, onClose, action }) => {
   const dispatch = useAppDispatch();
+  const intl = useIntl();
 
-  const { account } = useAccount(accountId || undefined);
+  const { account } = useAccount(accountId || undefined, { withRelationship: true });
   const [notifications, setNotifications] = useState(true);
   const [duration, setDuration] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { blocksDuration, mutesDuration } = useFeatures();
+  const [note, setNote] = useState<string | undefined>(undefined);
+  const { notes, blocksDuration, mutesDuration } = useFeatures();
   const canSetDuration = action === 'MUTE' ? mutesDuration : blocksDuration;
+
+  const currentNote = account?.relationship?.note;
 
   const { mutate: muteAccount } = useMuteAccountMutation(accountId);
   const { mutate: blockAccount } = useBlockAccountMutation(accountId);
+  const { mutate: updateAccountNote } = useUpdateAccountNoteMutation(accountId);
 
   if (!account) return null;
 
@@ -49,6 +62,11 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accoun
         onClose('BLOCK_MUTE');
       },
     });
+    if (notes && note !== undefined && note !== currentNote) {
+      updateAccountNote(note, {
+        onError: () => toast.error(messages.noteSaveFailed),
+      });
+    }
   };
 
   const handleBlockAndReport = () => {
@@ -121,6 +139,39 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accoun
               />
             </HStack>
           </label>
+        )}
+
+        {notes && (
+          <FormGroup
+            labelText={(
+              currentNote ? (
+                <FormattedMessage id='mute_modal.note.label.edit' defaultMessage='Edit account note' />
+              ) : (
+                <FormattedMessage id='mute_modal.note.label.add' defaultMessage='Add account note' />
+              )
+            )}
+            hintText={
+              action === 'MUTE' ? (
+                <FormattedMessage
+                  id='mute_modal.note.hint'
+                  defaultMessage='You can leave an optional note to remember why you muted this account. This note is only visible to you.'
+                />
+              ) : (
+                <FormattedMessage
+                  id='block_modal.note.hint'
+                  defaultMessage='You can leave an optional note to remember why you blocked this account. This note is only visible to you.'
+                />
+              )
+            }
+          >
+            <Textarea
+              className='mt-1'
+              value={note === undefined ? currentNote || '' : note}
+              onChange={({ target }) => setNote(target.value)}
+              autoComplete='off'
+              placeholder={intl.formatMessage(messages.notePlaceholder)}
+            />
+          </FormGroup>
         )}
 
         {canSetDuration && (
