@@ -1,5 +1,5 @@
 /// <reference path="../node_modules/@types/dom-chromium-ai/index.d.ts" />
-(window as any).__PL_API_FALLBACK_ACCOUNT = { id: '', acct: 'undefined', url: location.host };
+(window as any).__PL_API_FALLBACK_ACCOUNT = { id: '', acct: 'undefined', url: location.origin };
 
 import './polyfills';
 
