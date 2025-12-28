@@ -50,7 +50,7 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accoun
 
   if (!account) return null;
 
-  const handleClick = () => {
+  const handleClick = (callback?: () => void) => {
     setIsSubmitting(true);
     const params: MuteAccountParams | BlockAccountParams = { duration: duration || undefined };
     if (action === 'MUTE') {
@@ -60,6 +60,7 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accoun
       onSuccess: () => {
         setIsSubmitting(false);
         onClose('BLOCK_MUTE');
+        if (callback) callback();
       },
     });
     if (notes && note !== undefined && note !== currentNote) {
@@ -70,8 +71,7 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accoun
   };
 
   const handleBlockAndReport = () => {
-    handleClick();
-    dispatch(initReport(ReportableEntities.STATUS, account, { statusId }));
+    handleClick(() => dispatch(initReport(ReportableEntities.STATUS, account, { statusId })));
   };
 
   const handleCancel = () => {
