@@ -11,6 +11,7 @@ import ModalLoading from './modal-loading';
 const MODAL_COMPONENTS = {
   ALT_TEXT: lazy(() => import('pl-fe/modals/alt-text-modal')),
   BIRTHDAYS: lazy(() => import('pl-fe/modals/birthdays-modal')),
+  BLOCK_MUTE: lazy(() => import('pl-fe/modals/block-mute-modal')),
   BOOST: lazy(() => import('pl-fe/modals/boost-modal')),
   CIRCLE_EDITOR: lazy(() => import('pl-fe/modals/circle-editor-modal')),
   COMPARE_HISTORY: lazy(() => import('pl-fe/modals/compare-history-modal')),
@@ -39,7 +40,6 @@ const MODAL_COMPONENTS = {
   MEDIA: lazy(() => import('pl-fe/modals/media-modal')),
   MENTIONS: lazy(() => import('pl-fe/modals/mentions-modal')),
   MISSING_DESCRIPTION: lazy(() => import('pl-fe/modals/missing-description-modal')),
-  MUTE: lazy(() => import('pl-fe/modals/mute-modal')),
   REACTIONS: lazy(() => import('pl-fe/modals/reactions-modal')),
   REBLOGS: lazy(() => import('pl-fe/modals/reblogs-modal')),
   REPLY_MENTIONS: lazy(() => import('pl-fe/modals/reply-mentions-modal')),

@@ -8,7 +8,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useBlockAccountMutation, useUnblockAccountMutation, useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
+import { useUnblockAccountMutation, useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
 import { useChatActions } from 'pl-fe/queries/chats';
 import { useModalsActions } from 'pl-fe/stores/modals';
 
@@ -38,7 +38,6 @@ const ChatSettings = () => {
   const { chat, changeScreen, toggleChatPane } = useChatContext();
   const { deleteChat } = useChatActions(chat?.id as string);
 
-  const { mutate: blockAccount } = useBlockAccountMutation(chat?.account.id!);
   const { mutate: unblockAccount } = useUnblockAccountMutation(chat?.account.id!);
 
   const isBlocked = !!useRelationshipQuery(chat?.account.id).data?.blocked_by;
@@ -53,11 +52,9 @@ const ChatSettings = () => {
   };
 
   const handleBlockUser = () => {
-    openModal('CONFIRM', {
-      heading: intl.formatMessage(messages.blockHeading, { acct: chat?.account.acct }),
-      message: intl.formatMessage(messages.blockMessage),
-      confirm: intl.formatMessage(messages.blockConfirm),
-      onConfirm: () => blockAccount(),
+    openModal('BLOCK_MUTE', {
+      accountId: chat?.account.id!,
+      action: 'BLOCK',
     });
   };
 

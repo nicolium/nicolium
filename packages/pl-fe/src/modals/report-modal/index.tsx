@@ -111,7 +111,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({ onClose, acc
       });
 
     if (block && account) {
-      blockAccount();
+      blockAccount(undefined);
     }
   };
 

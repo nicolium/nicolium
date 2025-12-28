@@ -283,6 +283,7 @@
   "badge_input.placeholder": "Enter a badge…",
   "birthday_panel.title": "Birthdays",
   "birthdays_modal.empty": "None of your friends have birthday today.",
+  "block_modal.auto_expire": "Automatically expire block?",
   "bookmark_folders.add.fail": "Failed to create bookmark folder",
   "bookmark_folders.add.success": "Bookmark folder created successfully",
   "bookmark_folders.all_bookmarks": "All bookmarks",
