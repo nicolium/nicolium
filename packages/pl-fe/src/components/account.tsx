@@ -110,6 +110,7 @@ interface IAccount {
   items?: React.ReactNode;
   disabled?: boolean;
   muteExpiresAt?: string | null;
+  blockExpiresAt?: string | null;
 }
 
 const Account = ({
@@ -138,6 +139,7 @@ const Account = ({
   items,
   disabled,
   muteExpiresAt,
+  blockExpiresAt,
 }: IAccount) => {
   const overflowRef = useRef<HTMLDivElement>(null);
   const actionRef = useRef<HTMLDivElement>(null);
@@ -375,6 +377,14 @@ const Account = ({
                     </Text>
                   </>
                 )}
+
+                {actionType === 'blocking' && blockExpiresAt ? (
+                  <>
+                    <span className='⁂-separator' />
+
+                    <Text theme='muted' size='sm'><RelativeTimestamp timestamp={blockExpiresAt} futureDate /></Text>
+                  </>
+                ) : null}
 
                 {actionType === 'muting' && muteExpiresAt ? (
                   <>

@@ -43,8 +43,8 @@ const BlocksPage: React.FC = () => {
         itemClassName={clsx('pb-4', { 'last:pb-0': !hasNextPage })}
         isLoading={isFetching}
       >
-        {data.map((accountId) => (
-          <AccountContainer key={accountId} id={accountId} actionType='blocking' />
+        {data.map(([accountId, blockExpiresAt]) => (
+          <AccountContainer key={accountId} id={accountId} actionType='blocking' blockExpiresAt={blockExpiresAt} />
         ))}
       </ScrollableList>
     </Column>

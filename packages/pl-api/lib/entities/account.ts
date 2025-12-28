@@ -265,6 +265,21 @@ type CredentialAccount = v.InferOutput<typeof untypedCredentialAccountSchema> & 
  */
 const credentialAccountSchema: v.BaseSchema<any, CredentialAccount, v.BaseIssue<unknown>> = untypedCredentialAccountSchema as any;
 
+const untypedBlockedAccountSchema = v.pipe(v.any(), preprocessAccount, v.object({
+  ...accountWithMovedAccountSchema.entries,
+  block_expires_at: v.fallback(v.nullable(datetimeSchema), null),
+}));
+
+/**
+ * @category Entity types
+ */
+type BlockedAccount = v.InferOutput<typeof untypedBlockedAccountSchema> & WithMoved;
+
+/**
+ * @category Schemas
+ */
+const blockedAccountSchema: v.BaseSchema<any, BlockedAccount, v.BaseIssue<unknown>> = untypedBlockedAccountSchema as any;
+
 const untypedMutedAccountSchema = v.pipe(v.any(), preprocessAccount, v.object({
   ...accountWithMovedAccountSchema.entries,
   mute_expires_at: v.fallback(v.nullable(datetimeSchema), null),
@@ -283,8 +298,10 @@ const mutedAccountSchema: v.BaseSchema<any, MutedAccount, v.BaseIssue<unknown>> 
 export {
   accountSchema,
   credentialAccountSchema,
+  blockedAccountSchema,
   mutedAccountSchema,
   type Account,
   type CredentialAccount,
+  type BlockedAccount,
   type MutedAccount,
 };
