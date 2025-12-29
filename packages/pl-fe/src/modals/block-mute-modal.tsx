@@ -96,7 +96,7 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accoun
         <FormattedMessage id='confirmations.block.heading' defaultMessage='Block @{name}' values={{ name: account.acct }} />
       )}
       onClose={handleCancel}
-      confirmationAction={handleClick}
+      confirmationAction={() => handleClick()}
       confirmationText={action === 'MUTE' ? (
         <FormattedMessage id='confirmations.mute.confirm' defaultMessage='Mute' />
       ) : (
