@@ -2,6 +2,8 @@ import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
+import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
+
 import Button from './button';
 import { ButtonThemes } from './button/useButtonStyles';
 import IconButton from './icon-button';
@@ -11,6 +13,16 @@ const messages = defineMessages({
   close: { id: 'lightbox.close', defaultMessage: 'Close' },
   confirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
 });
+
+const useDefaultCloseIcon = (): string => {
+  const { account } = useOwnAccount();
+
+  if (account?.ap_id === 'https://donotsta.re/users/pmysl' || account?.ap_id === 'https://to.juz.sie.federu.je/users/pmysl') {
+    return require('@phosphor-icons/core/regular/twitter-logo.svg');
+  }
+
+  return require('@phosphor-icons/core/regular/x.svg');
+};
 
 interface IModal {
   /** Callback when the modal is cancelled. */
@@ -50,7 +62,7 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
   cancelAction,
   cancelText,
   children,
-  closeIcon = require('@phosphor-icons/core/regular/x.svg'),
+  closeIcon,
   closePosition = 'right',
   confirmationAction,
   confirmationDisabled,
@@ -68,6 +80,10 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
   const intl = useIntl();
   const buttonRef = React.useRef<HTMLButtonElement>(null);
   const [firstRender, setFirstRender] = React.useState(true);
+
+  const defaultCloseIcon = useDefaultCloseIcon();
+
+  closeIcon = closeIcon || defaultCloseIcon;
 
   React.useEffect(() => {
     setFirstRender(false);
