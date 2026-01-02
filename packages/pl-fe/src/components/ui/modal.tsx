@@ -17,7 +17,7 @@ const messages = defineMessages({
 const useDefaultCloseIcon = (): string => {
   const { account } = useOwnAccount();
 
-  if (account?.url === 'https://donotsta.re/users/pmysl' || account?.url === 'https://to.juz.sie.federu.je/users/pmysl') {
+  if (account?.url === 'https://donotsta.re/users/pmysl' || account?.url === 'https://to.juz.sie.federu.je/@pmysl') {
     return require('@phosphor-icons/core/regular/twitter-logo.svg');
   }
 
