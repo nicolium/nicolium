@@ -704,30 +704,6 @@ export const statusQuotesRoute = createRoute({
   component: Quotes,
 });
 
-export const statusesIdRoute = createRoute({
-  getParentRoute: () => layouts.status,
-  path: '/statuses/$statusId',
-  component: Status,
-});
-
-export const postsIdRoute = createRoute({
-  getParentRoute: () => layouts.default,
-  path: '/posts/$statusId',
-  component: Status,
-});
-
-export const noticeRoute = createRoute({
-  getParentRoute: () => layouts.default,
-  path: '/notice/$statusId',
-  component: Status,
-});
-
-export const notesRoute = createRoute({
-  getParentRoute: () => layouts.default,
-  path: '/notes/$statusId',
-  component: Status,
-});
-
 // Event routes
 export const eventInformationRoute = createRoute({
   getParentRoute: () => layouts.event,
@@ -1280,9 +1256,6 @@ const routeTree = rootRoute.addChildren([
     developersSwRoute,
     cryptoDonateRoute,
     federationRestrictionsRoute,
-    postsIdRoute,
-    noticeRoute,
-    notesRoute,
     loginRoute,
     loginAddRoute,
     resetPasswordRoute,
@@ -1339,7 +1312,6 @@ const routeTree = rootRoute.addChildren([
   layouts.status.addChildren([
     statusRoute,
     statusQuotesRoute,
-    statusesIdRoute,
   ]),
 ]);
 
