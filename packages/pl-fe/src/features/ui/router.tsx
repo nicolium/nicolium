@@ -1223,10 +1223,12 @@ const routeTree = rootRoute.addChildren([
     adminRulesRoute,
   ]),
   layouts.chats.addChildren([
-    chatsNewRoute,
-    chatsSettingsRoute,
-    shoutboxRoute,
-    chatRoute,
+    chatsRoute.addChildren([
+      chatsNewRoute,
+      chatsSettingsRoute,
+      shoutboxRoute,
+      chatRoute,
+    ]),
   ]),
   layouts.default.addChildren([
     conversationsRoute,
