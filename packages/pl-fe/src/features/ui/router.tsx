@@ -185,7 +185,7 @@ const layouts = {
     id: 'chats-layout',
     component: ChatsLayout,
     beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
-      if (!features.events) throw notFound();
+      if (!features.chats) throw notFound();
     }),
   }),
   default: createRoute({
