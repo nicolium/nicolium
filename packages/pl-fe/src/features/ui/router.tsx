@@ -1344,6 +1344,7 @@ const router = createRouter({
   defaultNotFoundComponent: GenericNotFound,
   defaultPendingComponent: PendingComponent,
   scrollRestoration: true,
+  pathParamsAllowedCharacters: ['@'],
 });
 
 declare module '@tanstack/react-router' {
