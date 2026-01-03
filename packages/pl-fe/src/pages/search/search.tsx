@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
+import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
@@ -28,11 +29,12 @@ const messages = defineMessages({
 });
 
 interface ISearchInput {
+  className?: string;
   placeholder?: string;
+  query?: string;
 }
 
-const SearchInput: React.FC<ISearchInput> = ({ placeholder }) => {
-  const { q: query } = searchRoute.useSearch();
+const SearchInput: React.FC<ISearchInput> = ({ className, placeholder, query }) => {
   const navigate = useNavigate({ from: searchRoute.fullPath });
   const [value, setValue] = useState(query || '');
 
@@ -73,7 +75,7 @@ const SearchInput: React.FC<ISearchInput> = ({ placeholder }) => {
 
   return (
     <div
-      className='sticky top-[74px] z-10 w-full bg-white/90 backdrop-blur backdrop-saturate-200 black:bg-black/75 dark:bg-primary-900/90'
+      className={clsx('z-10 w-full bg-white/90 backdrop-blur backdrop-saturate-200 black:bg-black/75 dark:bg-primary-900/90', className)}
     >
       <label htmlFor='search' className='sr-only'>{placeholder || intl.formatMessage(messages.placeholder)}</label>
 
@@ -190,10 +192,12 @@ const SearchResults = () => {
 const SearchPage = () => {
   const intl = useIntl();
 
+  const { q: query } = searchRoute.useSearch();
+
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <div className='space-y-4'>
-        <SearchInput />
+        <SearchInput className='sticky top-[74px]' query={query} />
         <SearchResults />
       </div>
     </Column>
