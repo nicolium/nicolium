@@ -1070,7 +1070,7 @@ export const adminAnnouncementsRoute = createRoute({
   path: '/pl-fe/admin/announcements',
   component: Announcements,
   beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
-    if (!isAdmin || features.announcements) throw notFound();
+    if (!isAdmin || !features.announcements) throw notFound();
   }),
 });
 
@@ -1079,7 +1079,7 @@ export const adminDomainsRoute = createRoute({
   path: '/pl-fe/admin/domains',
   component: Domains,
   beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
-    if (!isAdmin || features.domains) throw notFound();
+    if (!isAdmin || !features.domains) throw notFound();
   }),
 });
 
@@ -1088,7 +1088,7 @@ export const adminRulesRoute = createRoute({
   path: '/pl-fe/admin/rules',
   component: Rules,
   beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
-    if (!isAdmin || features.adminRules) throw notFound();
+    if (!isAdmin || !features.adminRules) throw notFound();
   }),
 });
 
