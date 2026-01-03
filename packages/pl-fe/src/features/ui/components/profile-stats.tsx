@@ -70,7 +70,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
       </Link>
 
       {account.subscribers_count > 0 && (
-        // <NavLink to={`/@${account.acct}/subscribers`} onClick={onClickHandler} title={intl.formatNumber(account.subscribers_count)} className='hover:underline'>
+        // <Link to='/@{$username}/subscribers' params={{ username: account.acct }} onClick={onClickHandler} title={intl.formatNumber(account.subscribers_count)} className='hover:underline'>
         <HStack alignItems='center' space={1}>
           {!demetricator && (
             <Text theme='primary' weight='bold' size='sm'>
@@ -81,7 +81,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
             {intl.formatMessage(messages.subscribers)}
           </Text>
         </HStack>
-        // </NavLink>
+        // </Link>
       )}
     </HStack>
   );
