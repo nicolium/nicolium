@@ -12,7 +12,7 @@ import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
 import { chatRoute } from 'pl-fe/features/ui/router';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useBlockAccountMutation, useUnblockAccountMutation, useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
+import { useUnblockAccountMutation, useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
 import { useChat, useChatActions, useChats } from 'pl-fe/queries/chats';
 import { useModalsActions } from 'pl-fe/stores/modals';
 
@@ -48,7 +48,6 @@ const ChatPageMain = () => {
   const { currentChatId } = useChatContext();
   const { chatsQuery: { data: chats, isLoading } } = useChats();
 
-  const { mutate: blockAccount } = useBlockAccountMutation(chat?.account.id!);
   const { mutate: unblockAccount } = useUnblockAccountMutation(chat?.account.id!);
 
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
@@ -58,11 +57,9 @@ const ChatPageMain = () => {
   const isBlocked = !!useRelationshipQuery(chat?.account.id).data?.blocked_by;
 
   const handleBlockUser = () => {
-    openModal('CONFIRM', {
-      heading: intl.formatMessage(messages.blockHeading, { acct: chat?.account.acct }),
-      message: intl.formatMessage(messages.blockMessage),
-      confirm: intl.formatMessage(messages.blockConfirm),
-      onConfirm: () => blockAccount(),
+    openModal('BLOCK_MUTE', {
+      accountId: chat!.account.id,
+      action: 'BLOCK',
     });
   };
 

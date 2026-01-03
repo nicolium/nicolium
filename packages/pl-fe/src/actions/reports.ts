@@ -12,16 +12,17 @@ enum ReportableEntities {
 }
 
 type ReportedEntity = {
-  status?: Pick<Status, 'id' | 'reblog_id'>;
+  status?: Pick<Status, 'id'>;
+  statusId?: string;
 }
 
 const initReport = (entityType: ReportableEntities, account: Pick<Account, 'id'>, entities?: ReportedEntity) => (dispatch: AppDispatch) => {
-  const { status } = entities || {};
+  const { status, statusId } = entities || {};
 
   return useModalsStore.getState().actions.openModal('REPORT', {
     accountId: account.id,
     entityType,
-    statusIds: status ? [status.id] : [],
+    statusIds: [status?.id, statusId].filter((id): id is string => !!id),
   });
 };
 

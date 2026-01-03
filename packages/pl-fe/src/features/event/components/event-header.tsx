@@ -20,7 +20,6 @@ import Emojify from 'pl-fe/features/emoji/emojify';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { useBlockAccountMutation } from 'pl-fe/queries/accounts/use-relationship';
 import { useChats } from 'pl-fe/queries/chats';
 import { useBookmarkStatus, usePinStatus, useReblogStatus, useUnbookmarkStatus, useUnpinStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
 import { useModalsActions } from 'pl-fe/stores/modals';
@@ -64,8 +63,6 @@ const messages = defineMessages({
   markStatusSensitive: { id: 'admin.statuses.actions.mark_status_sensitive', defaultMessage: 'Mark post sensitive' },
   markStatusNotSensitive: { id: 'admin.statuses.actions.mark_status_not_sensitive', defaultMessage: 'Mark post not sensitive' },
   deleteStatus: { id: 'admin.statuses.actions.delete_status', defaultMessage: 'Delete post' },
-  blockConfirm: { id: 'confirmations.block.confirm', defaultMessage: 'Block' },
-  blockAndReport: { id: 'confirmations.block.block_and_report', defaultMessage: 'Block and report' },
   deleteConfirm: { id: 'confirmations.delete_event.confirm', defaultMessage: 'Delete' },
   deleteHeading: { id: 'confirmations.delete_event.heading', defaultMessage: 'Delete event' },
   deleteMessage: { id: 'confirmations.delete_event.message', defaultMessage: 'Are you sure you want to delete this event?' },
@@ -95,7 +92,6 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const { mutate: unbookmarkStatus } = useUnbookmarkStatus(status?.id!);
   const { mutate: pinStatus } = usePinStatus(status?.id!);
   const { mutate: unpinStatus } = useUnpinStatus(status?.id!);
-  const { mutate: blockAccount } = useBlockAccountMutation(status?.account.id!);
 
   if (!status || !status.event) {
     return (
@@ -184,21 +180,11 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleMuteClick = () => {
-    openModal('MUTE', { accountId: account.id });
+    openModal('BLOCK_MUTE', { accountId: account.id, action: 'MUTE' });
   };
 
   const handleBlockClick = () => {
-    openModal('CONFIRM', {
-      heading: <FormattedMessage id='confirmations.block.heading' defaultMessage='Block @{name}' values={{ name: account.acct }} />,
-      message: <FormattedMessage id='confirmations.block.message' defaultMessage='Are you sure you want to block {name}?' values={{ name: <strong>@{account.acct}</strong> }} />,
-      confirm: intl.formatMessage(messages.blockConfirm),
-      onConfirm: () => blockAccount(),
-      secondary: intl.formatMessage(messages.blockAndReport),
-      onSecondary: () => {
-        blockAccount();
-        dispatch(initReport(ReportableEntities.STATUS, account, { status }));
-      },
-    });
+    openModal('BLOCK_MUTE', { accountId: account.id, action: 'BLOCK' });
   };
 
   const handleReport = () => {

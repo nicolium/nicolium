@@ -7,7 +7,7 @@ import { useClient } from 'pl-fe/hooks/use-client';
 import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 
 import type { MinifiedSuggestion } from '../trends/use-suggested-accounts';
-import type { FollowAccountParams, MuteAccountParams, Relationship } from 'pl-api';
+import type { BlockAccountParams, FollowAccountParams, MuteAccountParams, Relationship } from 'pl-api';
 
 const updateRelationship = (accountId: string, changes: Partial<Relationship> | ((relationship: Relationship) => Relationship), queryClient: ReturnType<typeof useQueryClient>) => {
   const previousRelationship = queryClient.getQueryData<Relationship>(['accountRelationships', accountId]);
@@ -89,7 +89,7 @@ const useBlockAccountMutation = (accountId: string) => {
 
   return useMutation({
     mutationKey: ['accountRelationships', accountId],
-    mutationFn: () => client.filtering.blockAccount(accountId),
+    mutationFn: (params?: BlockAccountParams) => client.filtering.blockAccount(accountId, params),
     onMutate: () => updateRelationship(accountId, {
       blocking: true,
       followed_by: false,

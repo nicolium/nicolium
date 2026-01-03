@@ -4,6 +4,7 @@ import { mutative } from 'zustand-mutative';
 import type { ICryptoAddress } from 'pl-fe/features/crypto-donate/components/crypto-address';
 import type { ModalType } from 'pl-fe/features/ui/components/modal-root';
 import type { AltTextModalProps } from 'pl-fe/modals/alt-text-modal';
+import type { BlockMuteModalProps } from 'pl-fe/modals/block-mute-modal';
 import type { BoostModalProps } from 'pl-fe/modals/boost-modal';
 import type { CircleEditorModalProps } from 'pl-fe/modals/circle-editor-modal';
 import type { CompareHistoryModalProps } from 'pl-fe/modals/compare-history-modal';
@@ -29,7 +30,6 @@ import type { ListEditorModalProps } from 'pl-fe/modals/list-editor-modal';
 import type { MediaModalProps } from 'pl-fe/modals/media-modal';
 import type { MentionsModalProps } from 'pl-fe/modals/mentions-modal';
 import type { MissingDescriptionModalProps } from 'pl-fe/modals/missing-description-modal';
-import type { MuteModalProps } from 'pl-fe/modals/mute-modal';
 import type { ReactionsModalProps } from 'pl-fe/modals/reactions-modal';
 import type { ReblogsModalProps } from 'pl-fe/modals/reblogs-modal';
 import type { ReplyMentionsModalProps } from 'pl-fe/modals/reply-mentions-modal';
@@ -68,7 +68,7 @@ type OpenModalProps =
   | [type: 'MEDIA', props: MediaModalProps]
   | [type: 'MENTIONS', props: MentionsModalProps]
   | [type: 'MISSING_DESCRIPTION', props: MissingDescriptionModalProps]
-  | [type: 'MUTE', props: MuteModalProps]
+  | [type: 'BLOCK_MUTE', props: BlockMuteModalProps]
   | [type: 'REACTIONS', props: ReactionsModalProps]
   | [type: 'REBLOGS', props: ReblogsModalProps]
   | [type: 'REPLY_MENTIONS', props: ReplyMentionsModalProps]

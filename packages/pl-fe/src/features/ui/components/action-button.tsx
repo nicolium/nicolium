@@ -10,7 +10,6 @@ import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
 import { useAcceptFollowRequestMutation, useRejectFollowRequestMutation } from 'pl-fe/queries/accounts/use-follow-requests';
 import {
   useRelationshipQuery,
-  useBlockAccountMutation,
   useUnblockAccountMutation,
   useMuteAccountMutation,
   useUnmuteAccountMutation,
@@ -65,7 +64,6 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
 
   const { mutate: followAccount, isPending: isPendingFollow } = useFollowAccountMutation(account.id);
   const { mutate: unfollowAccount, isPending: isPendingUnfollow } = useUnfollowAccountMutation(account.id);
-  const { mutate: blockAccount } = useBlockAccountMutation(account.id);
   const { mutate: unblockAccount } = useUnblockAccountMutation(account.id);
   const { mutate: muteAccount } = useMuteAccountMutation(account.id);
   const { mutate: unmuteAccount } = useUnmuteAccountMutation(account.id);
@@ -87,7 +85,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
     if (relationship?.blocking) {
       unblockAccount();
     } else {
-      blockAccount();
+      openModal('BLOCK_MUTE', { accountId: account.id, action: 'BLOCK' });
     }
   };
 

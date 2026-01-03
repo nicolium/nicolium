@@ -1,7 +1,7 @@
 import { useMatch, useNavigate } from '@tanstack/react-router';
 import { type Account, type CustomEmoji, type Group, GroupRoles } from 'pl-api';
 import React, { useCallback, useMemo } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 
 import { redactStatus } from 'pl-fe/actions/admin';
 import { directCompose, mentionCompose, quoteCompose, replyCompose } from 'pl-fe/actions/compose';
@@ -24,7 +24,7 @@ import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { useBlockAccountMutation, useUnblockAccountMutation } from 'pl-fe/queries/accounts/use-relationship';
+import { useUnblockAccountMutation } from 'pl-fe/queries/accounts/use-relationship';
 import { useChats } from 'pl-fe/queries/chats';
 import { useBlockGroupUserMutation } from 'pl-fe/queries/groups/use-group-blocks';
 import { useCustomEmojis } from 'pl-fe/queries/instance/use-custom-emojis';
@@ -51,8 +51,6 @@ const messages = defineMessages({
   block: { id: 'account.block', defaultMessage: 'Block @{name}' },
   unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
   blocked: { id: 'group.group_mod_block.success', defaultMessage: '@{name} is banned' },
-  blockAndReport: { id: 'confirmations.block.block_and_report', defaultMessage: 'Block and report' },
-  blockConfirm: { id: 'confirmations.block.confirm', defaultMessage: 'Block' },
   bookmark: { id: 'status.bookmark', defaultMessage: 'Bookmark' },
   bookmarkSetFolder: { id: 'status.bookmark_folder', defaultMessage: 'Set bookmark folder' },
   bookmarkChangeFolder: { id: 'status.bookmark_folder_change', defaultMessage: 'Change bookmark folder' },
@@ -579,7 +577,6 @@ const MenuButton: React.FC<IMenuButton> = ({
   const { mutate: unbookmarkStatus } = useUnbookmarkStatus(status.id);
   const { mutate: pinStatus } = usePinStatus(status?.id!);
   const { mutate: unpinStatus } = useUnpinStatus(status?.id!);
-  const { mutate: blockAccount } = useBlockAccountMutation(status.account_id);
   const { mutate: unblockAccount } = useUnblockAccountMutation(status.account_id);
 
   const { groupRelationship } = useGroupRelationship(status.group_id || undefined);
@@ -683,23 +680,11 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleMuteClick: React.EventHandler<React.MouseEvent> = (e) => {
-      openModal('MUTE', { accountId: status.account.id });
+      openModal('BLOCK_MUTE', { accountId: status.account.id, action: 'MUTE' });
     };
 
     const handleBlockClick: React.EventHandler<React.MouseEvent> = (e) => {
-      const account = status.account;
-
-      openModal('CONFIRM', {
-        heading: <FormattedMessage id='confirmations.block.heading' defaultMessage='Block @{name}' values={{ name: account.acct }} />,
-        message: <FormattedMessage id='confirmations.block.message' defaultMessage='Are you sure you want to block {name}?' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
-        confirm: intl.formatMessage(messages.blockConfirm),
-        onConfirm: () => blockAccount(),
-        secondary: intl.formatMessage(messages.blockAndReport),
-        onSecondary: () => {
-          blockAccount();
-          dispatch(initReport(ReportableEntities.STATUS, account, { status }));
-        },
-      });
+      openModal('BLOCK_MUTE', { accountId: status.account.id, statusId: status.id, action: 'BLOCK' });
     };
 
     const handleUnblockClick: React.EventHandler<React.MouseEvent> = (e) => {

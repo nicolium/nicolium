@@ -3,7 +3,7 @@ import { store } from 'pl-fe/store';
 
 import { queryClient } from '../client';
 
-import type { Account, AdminAccount, AdminReport, MutedAccount, PaginatedResponse, Status } from 'pl-api';
+import type { Account, AdminAccount, AdminReport, BlockedAccount, MutedAccount, PaginatedResponse, Status } from 'pl-api';
 
 const minifyList = <T1, T2>({ previous, next, items, ...response }: PaginatedResponse<T1>, minifier: (value: T1) => T2, importer?: (items: Array<T1>) => void): PaginatedResponse<T2> => {
   importer?.(items);
@@ -23,6 +23,11 @@ const minifyStatusList = (response: PaginatedResponse<Status>): PaginatedRespons
 
 const minifyAccountList = (response: PaginatedResponse<Account>): PaginatedResponse<string> =>
   minifyList(response, (account) => account.id, (accounts) => {
+    store.dispatch(importEntities({ accounts }) as any);
+  });
+
+const minifyBlockedAccountList = (response: PaginatedResponse<BlockedAccount>): PaginatedResponse<[string, string | null]> =>
+  minifyList(response, (account) => [account.id, account.block_expires_at], (accounts) => {
     store.dispatch(importEntities({ accounts }) as any);
   });
 
@@ -75,4 +80,4 @@ const minifyAdminReportList = (response: PaginatedResponse<AdminReport>) =>
     }
   });
 
-export { minifyList, minifyAccountList, minifyMutedAccountList, minifyStatusList, minifyAdminAccount, minifyAdminAccountList, minifyAdminReport, minifyAdminReportList };
+export { minifyList, minifyAccountList, minifyBlockedAccountList, minifyMutedAccountList, minifyStatusList, minifyAdminAccount, minifyAdminAccountList, minifyAdminReport, minifyAdminReportList };

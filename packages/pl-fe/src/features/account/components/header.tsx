@@ -29,7 +29,6 @@ import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import {
-  useBlockAccountMutation,
   useFollowAccountMutation,
   usePinAccountMutation,
   useRemoveAccountFromFollowersMutation,
@@ -82,9 +81,7 @@ const messages = defineMessages({
   search: { id: 'account.search', defaultMessage: 'Search from @{name}' },
   searchSelf: { id: 'account.search_self', defaultMessage: 'Search your posts' },
   unfollowConfirm: { id: 'confirmations.unfollow.confirm', defaultMessage: 'Unfollow' },
-  blockConfirm: { id: 'confirmations.block.confirm', defaultMessage: 'Block' },
   blockDomainConfirm: { id: 'confirmations.domain_block.confirm', defaultMessage: 'Hide entire domain' },
-  blockAndReport: { id: 'confirmations.block.block_and_report', defaultMessage: 'Block and report' },
   removeFromFollowersConfirm: { id: 'confirmations.remove_from_followers.confirm', defaultMessage: 'Remove' },
   userEndorsed: { id: 'account.endorse.success', defaultMessage: 'You are now featuring @{acct} on your profile' },
   userUnendorsed: { id: 'account.unendorse.success', defaultMessage: 'You are no longer featuring @{acct}' },
@@ -146,7 +143,6 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const features = useFeatures();
   const { account: ownAccount } = useOwnAccount();
   const { mutate: followAccount } = useFollowAccountMutation(account?.id!);
-  const { mutate: blockAccount } = useBlockAccountMutation(account?.id!);
   const { mutate: unblockAccount } = useUnblockAccountMutation(account?.id!);
   const { mutate: unmuteAccount } = useUnmuteAccountMutation(account?.id!);
   const { mutate: pinAccount } = usePinAccountMutation(account?.id!);
@@ -201,17 +197,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
     if (account.relationship?.blocking) {
       unblockAccount();
     } else {
-      openModal('CONFIRM', {
-        heading: <FormattedMessage id='confirmations.block.heading' defaultMessage='Block @{name}' values={{ name: account.acct }} />,
-        message: <FormattedMessage id='confirmations.block.message' defaultMessage='Are you sure you want to block {name}?' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
-        confirm: intl.formatMessage(messages.blockConfirm),
-        onConfirm: () => blockAccount(),
-        secondary: intl.formatMessage(messages.blockAndReport),
-        onSecondary: () => {
-          blockAccount();
-          dispatch(initReport(ReportableEntities.ACCOUNT, account));
-        },
-      });
+      openModal('BLOCK_MUTE', { accountId: account.id, action: 'BLOCK' });
     }
   };
 
@@ -276,7 +262,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
     if (account.relationship?.muting) {
       unmuteAccount();
     } else {
-      openModal('MUTE', { accountId: account.id });
+      openModal('BLOCK_MUTE', { accountId: account.id, action: 'MUTE' });
     }
   };
 

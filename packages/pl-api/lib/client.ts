@@ -28,6 +28,7 @@ import {
   asyncRefreshSchema,
   authorizationServerMetadataSchema,
   backupSchema,
+  blockedAccountSchema,
   bookmarkFolderSchema,
   chatMessageSchema,
   chatSchema,
@@ -2126,7 +2127,7 @@ class PlApiClient {
      * @see {@link https://docs.joinmastodon.org/methods/blocks/#get}
      */
     getBlocks: async (params?: GetBlocksParams) =>
-      this.#paginatedGet('/api/v1/blocks', { params }, accountSchema),
+      this.#paginatedGet('/api/v1/blocks', { params }, blockedAccountSchema),
 
     /**
      * Get domain blocks
