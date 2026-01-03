@@ -1,4 +1,4 @@
-import { useNavigate } from '@tanstack/react-router';
+import { linkOptions, useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { MouseEventHandler } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
@@ -33,17 +33,22 @@ interface IQuotedStatus {
 const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) => {
   const intl = useIntl();
   const navigate = useNavigate();
+  const router = useRouter();
 
   const handleExpandClick: MouseEventHandler<HTMLDivElement> = (e) => {
     if (!status) return;
     const account = status.account;
 
     if (!compose && e.button === 0) {
-      const statusUrl = `/@${account.acct}/posts/${status.id}`;
+      const link = linkOptions({
+        to: '/@{$username}/posts/$statusId',
+        params: { username: account.acct, statusId: status.id },
+      });
       if (!(e.ctrlKey || e.metaKey)) {
-        navigate({ to: '/@{$username}/posts/$statusId', params: { username: account.acct, statusId: status.id } });
+        navigate(link);
       } else {
-        window.open(statusUrl, '_blank');
+        const url = router.buildLocation(link).href;
+        window.open(url, '_blank');
       }
       e.stopPropagation();
       e.preventDefault();

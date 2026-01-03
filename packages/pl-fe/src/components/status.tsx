@@ -1,4 +1,4 @@
-import { Link, useNavigate } from '@tanstack/react-router';
+import { Link, linkOptions, useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-intl';
@@ -76,6 +76,7 @@ const Status: React.FC<IStatus> = (props) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const { toggleStatusesMediaHidden } = useStatusMetaActions();
   const { openModal } = useModalsActions();
@@ -92,7 +93,6 @@ const Status: React.FC<IStatus> = (props) => {
   const { mutate: unreblogStatus } = useUnreblogStatus(actualStatus.id);
 
   const isReblog = status.reblog_id;
-  const statusUrl = '/@{$username}/posts/$postId';
   const group = actualStatus.group;
 
   const filterResults = useMemo(() => [...status.filtered, ...actualStatus.filtered].filter(({ filter }) => filter.filter_action === 'warn'), [status.filtered, actualStatus.filtered]);
@@ -111,14 +111,20 @@ const Status: React.FC<IStatus> = (props) => {
       return;
     }
 
+    const link = linkOptions({
+      to: '/@{$username}/posts/$statusId',
+      params: { username: actualStatus.account.acct, statusId: actualStatus.id },
+    });
+
     if (!e || !(e.ctrlKey || e.metaKey)) {
       if (onClick) {
         onClick();
       } else {
-        navigate({ to: '/@{$username}/posts/$statusId', params: { username: actualStatus.account.acct, statusId: actualStatus.id } });
+        navigate(link);
       }
     } else {
-      window.open(statusUrl, '_blank');
+      const url = router.buildLocation(link).href;
+      window.open(url, '_blank');
     }
   };
 

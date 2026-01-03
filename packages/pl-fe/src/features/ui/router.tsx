@@ -144,6 +144,8 @@ import {
   UserIndex,
   WrenchedTimeline,
   EditEvent,
+  Reports,
+  AwaitingApproval,
 } from './util/async-components';
 
 import type { Features } from 'pl-api';
@@ -992,10 +994,10 @@ export const adminAccountRoute = createRoute({
   }),
 });
 
-export const adminApprovalRoute = createRoute({
+export const adminAwaitingApprovalRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/pl-fe/admin/approval',
-  component: Dashboard,
+  component: AwaitingApproval,
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   }),
@@ -1004,7 +1006,7 @@ export const adminApprovalRoute = createRoute({
 export const adminReportsRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/pl-fe/admin/reports',
-  component: Dashboard,
+  component: Reports,
   validateSearch: v.object({
     resolved: v.optional(v.boolean(), false),
     account_id: v.optional(v.string()),
@@ -1187,7 +1189,7 @@ const routeTree = rootRoute.addChildren([
   layouts.admin.addChildren([
     adminDashboardRoute,
     adminAccountRoute,
-    adminApprovalRoute,
+    adminAwaitingApprovalRoute,
     adminReportsRoute,
     adminReportRoute,
     adminLogRoute,

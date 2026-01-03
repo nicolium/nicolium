@@ -1,4 +1,4 @@
-import { Link, useNavigate } from '@tanstack/react-router';
+import { Link, linkOptions, useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
@@ -40,17 +40,18 @@ const messages = defineMessages({
 const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
   const navigate = useNavigate();
   const intl = useIntl();
+  const router = useRouter();
 
   const handleClick: React.MouseEventHandler = (e) => {
     e.stopPropagation();
 
     if (disabled) return;
 
-    const timelineUrl = `/timeline/${account.domain}`;
+    const link = linkOptions({ to: '/timeline/$instance', params: { instance: account.domain } });
     if (!(e.ctrlKey || e.metaKey)) {
-      navigate({ to: timelineUrl });
+      navigate(link);
     } else {
-      window.open(timelineUrl, '_blank');
+      window.open(router.buildLocation(link).href, '_blank');
     }
   };
 
