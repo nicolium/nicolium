@@ -2,7 +2,6 @@ import { Outlet, useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { Suspense, useEffect, useRef } from 'react';
 import { Toaster } from 'react-hot-toast';
-import { Redirect, Switch, useLocation } from 'react-router-dom';
 
 import { fetchConfig } from 'pl-fe/actions/admin';
 import { fetchFilters } from 'pl-fe/actions/filters';
@@ -21,8 +20,6 @@ import { useDraggedFiles } from 'pl-fe/hooks/use-dragged-files';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import DefaultLayout from 'pl-fe/layouts/default-layout';
-import EmptyLayout from 'pl-fe/layouts/empty-layout';
 import { prefetchFollowRequests } from 'pl-fe/queries/accounts/use-follow-requests';
 import { queryClient } from 'pl-fe/queries/client';
 import { prefetchCustomEmojis } from 'pl-fe/queries/instance/use-custom-emojis';
@@ -39,80 +36,13 @@ import {
   AccountHoverCard,
   ChatWidget,
   DropdownNavigation,
-  GenericNotFound,
-  Status,
   StatusHoverCard,
 } from './util/async-components';
 import GlobalHotkeys from './util/global-hotkeys';
-import { WrappedRoute } from './util/react-router-helpers';
 
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
 import 'pl-fe/components/status';
-
-interface ISwitchingColumnsArea {
-  children: React.ReactNode;
-}
-
-const SwitchingColumnsArea: React.FC<ISwitchingColumnsArea> = React.memo(({ children }) => {
-  const { search } = useLocation();
-
-  // NOTE: Mastodon and Pleroma route some basenames to the backend.
-  // When adding new routes, use a basename that does NOT conflict
-  // with a known backend route, but DO redirect the backend route
-  // to the corresponding component as a fallback.
-  // Ex: use /login instead of /auth, but redirect /auth to /login
-  return (
-    <Switch>
-      {/* Mastodon web routes */}
-      <Redirect from='/web/:path1/:path2/:path3' to='/:path1/:path2/:path3' />
-      <Redirect from='/web/:path1/:path2' to='/:path1/:path2' />
-      <Redirect from='/web/:path' to='/:path' />
-      <Redirect from='/timelines/home' to='/' />
-      <Redirect from='/timelines/public/local' to='/timeline/local' />
-      <Redirect from='/timelines/public' to='/timeline/fediverse' />
-      <Redirect from='/timelines/direct' to='/messages' />
-
-      {/* Pleroma FE web routes */}
-      <Redirect from='/main/all' to='/timeline/fediverse' />
-      <Redirect from='/main/public' to='/timeline/local' />
-      <Redirect from='/main/friends' to='/' />
-      <Redirect from='/tag/:id' to='/tags/:id' />
-      <Redirect from='/user-settings' to='/settings/profile' />
-      <WrappedRoute path='/notice/:statusId' publicRoute exact layout={DefaultLayout} component={Status} content={children} />
-      <Redirect from='/users/:username/statuses/:statusId' to='/@:username/posts/:statusId' />
-      <Redirect from='/users/:username/chats' to='/chats/{-$chatId}' />
-      <Redirect from='/users/:username' to='/@:username' />
-      <Redirect from='/registration' to='/' exact />
-
-      {/* Iceshrimp.NET web routes */}
-      <WrappedRoute path='/notes/:statusId' publicRoute exact layout={DefaultLayout} component={Status} content={children} />
-
-      {/* Mastodon rendered pages */}
-      <Redirect from='/admin' to='/pl-fe/admin' />
-      <Redirect from='/terms' to='/about' />
-      <Redirect from='/settings/preferences' to='/settings' />
-      <Redirect from='/settings/two_factor_authentication_methods' to='/settings/mfa' />
-      <Redirect from='/settings/otp_authentication' to='/settings/mfa' />
-      <Redirect from='/settings/applications' to='/developers' />
-      <Redirect from='/auth/edit' to='/settings' />
-      <Redirect from='/auth/confirmation' to={`/email-confirmation${search}`} />
-      <Redirect from='/auth/reset_password' to='/reset-password' />
-      <Redirect from='/auth/edit_password' to='/edit-password' />
-      <Redirect from='/auth/sign_in' to='/login' />
-      <Redirect from='/auth/sign_out' to='/logout' />
-
-      {/* Pleroma hard-coded email URLs */}
-      <Redirect from='/registration/:token' to='/invite/:token' />
-      <Redirect from='/auth/password/new' to='/reset-password' />
-      <Redirect from='/auth/password/edit' to={`/edit-password${search}`} />
-
-      <WrappedRoute layout={EmptyLayout} component={GenericNotFound} content={children} />
-    </Switch>
-  );
-});
-
-SwitchingColumnsArea.displayName = '_';
 
 const UI: React.FC = React.memo(() => {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
 import toast, { Toast as RHToast } from 'react-hot-toast';
@@ -24,7 +24,7 @@ interface IToast {
   message: ToastText;
   type: ToastType;
   action?(): void;
-  actionLink?: string;
+  actionLinkOptions?: LinkOptions;
   actionLabel?: ToastText;
   summary?: string;
 }
@@ -33,7 +33,7 @@ interface IToast {
  * Customizable Toasts for in-app notifications.
  */
 const Toast = (props: IToast) => {
-  const { t, message, type, action, actionLink, actionLabel, summary } = props;
+  const { t, message, type, action, actionLinkOptions, actionLabel, summary } = props;
 
   const dismissToast = () => toast.dismiss(t.id);
 
@@ -85,10 +85,10 @@ const Toast = (props: IToast) => {
       );
     }
 
-    if (actionLink && actionLabel) {
+    if (actionLinkOptions && actionLabel) {
       return (
         <Link
-          to={actionLink}
+          {...actionLinkOptions}
           onClick={dismissToast}
           className={classNames}
           data-testid='toast-action-link'

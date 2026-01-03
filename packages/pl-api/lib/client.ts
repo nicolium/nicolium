@@ -4398,7 +4398,7 @@ class PlApiClient {
       resolveReport: async (reportId: string, action_taken_comment?: string) => {
         let response;
         if (this.features.mastodonAdmin) {
-          response = await this.request(`/api/v1/admin/reports/${reportId}/resolve`, { method: 'POST',  body: { action_taken_comment } });
+          response = await this.request(`/api/v1/admin/reports/${reportId}/resolve`, { method: 'POST', body: { action_taken_comment } });
         } else {
           response = await this.request(`/api/v1/pleroma/admin/reports/${reportId}`, {
             method: 'PATCH',

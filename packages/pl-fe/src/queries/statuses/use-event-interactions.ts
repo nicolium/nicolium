@@ -42,7 +42,10 @@ const useJoinEventMutation = (statusId: string, withToast = true) => {
           status.event?.join_state === 'pending' ? messages.joinRequestSuccess : messages.joinSuccess,
           {
             actionLabel: messages.view,
-            actionLink: `/@${status.account.acct}/events/${status.id}`,
+            actionLinkOptions: {
+              to: '/@{$username}/events/$statusId',
+              params: { username: status.account.acct, statusId: status.id },
+            },
           },
         );
       }

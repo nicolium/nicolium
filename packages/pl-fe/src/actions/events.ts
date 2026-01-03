@@ -76,7 +76,10 @@ const submitEvent = ({
         statusId ? messages.editSuccess : messages.success,
         {
           actionLabel: messages.view,
-          actionLink: `/@${data.account.acct}/events/${data.id}`,
+          actionLinkOptions: {
+            to: '/@{$username}/events/$statusId',
+            params: { username: data.account.acct, statusId: data.id },
+          },
         },
       );
 

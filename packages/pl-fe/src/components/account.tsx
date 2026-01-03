@@ -220,7 +220,8 @@ const Account = ({
 
   const LinkEl: any = withLinkToProfile ? Link : 'div';
   const linkProps = withLinkToProfile ? {
-    to: `/@${account.acct}`,
+    to: '/@{$username}',
+    params: { username: account.acct },
     title: account.acct,
     onClick: (event: React.MouseEvent) => event.stopPropagation(),
   } : {};

@@ -123,7 +123,6 @@
     "react-intl": "^7.0.4",
     "react-motion": "^0.5.2",
     "react-redux": "^9.0.4",
-    "react-router-dom": "^5.3.4",
     "react-sparklines": "^1.7.0",
     "react-sticky-box": "^2.0.5",
     "react-swipeable-views": "^0.14.0",

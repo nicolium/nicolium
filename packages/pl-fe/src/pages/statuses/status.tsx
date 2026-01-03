@@ -37,7 +37,7 @@ const messages = defineMessages({
 });
 
 const StatusPage: React.FC = () => {
-  const { statusId } = statusRoute.useParams();
+  const { username, statusId } = statusRoute.useParams();
 
   const dispatch = useAppDispatch();
   const intl = useIntl();
@@ -99,6 +99,12 @@ const StatusPage: React.FC = () => {
   if (status?.event) {
     return (
       <Navigate to='/@{$username}/events/$statusId' params={{ username: status.account.acct, statusId: status.id }} replace />
+    );
+  }
+
+  if (username && status && username !== status.account.acct) {
+    return (
+      <Navigate to='/@{$username}/posts/$statusId' params={{ username: status.account.acct, statusId: status.id }} replace />
     );
   }
 

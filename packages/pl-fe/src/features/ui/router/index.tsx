@@ -38,12 +38,11 @@ import StatusLayout from 'pl-fe/layouts/status-layout';
 import { instanceInitialState } from 'pl-fe/reducers/instance';
 import { isStandalone } from 'pl-fe/utils/state';
 
-import ChatPageMain from '../chats/components/chat-page/components/chat-page-main';
-import ChatPageNew from '../chats/components/chat-page/components/chat-page-new';
-import ChatPageSettings from '../chats/components/chat-page/components/chat-page-settings';
-import ChatPageShoutbox from '../chats/components/chat-page/components/chat-page-shoutbox';
-
-import ColumnLoading from './components/column-loading';
+import ChatPageMain from '../../chats/components/chat-page/components/chat-page-main';
+import ChatPageNew from '../../chats/components/chat-page/components/chat-page-new';
+import ChatPageSettings from '../../chats/components/chat-page/components/chat-page-settings';
+import ChatPageShoutbox from '../../chats/components/chat-page/components/chat-page-shoutbox';
+import ColumnLoading from '../components/column-loading';
 import {
   AboutPage,
   AccountGallery,
@@ -146,7 +145,9 @@ import {
   EditEvent,
   Reports,
   AwaitingApproval,
-} from './util/async-components';
+} from '../util/async-components';
+
+import ErrorColumn from './error-column';
 
 import type { Features } from 'pl-api';
 
@@ -1184,6 +1185,82 @@ export const federationRestrictionsRoute = createRoute({
   },
 });
 
+// Redirect routes
+const redirectTagRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/tag/$id',
+  component: () => {
+    const { id } = redirectTagRoute.useParams();
+    return <Navigate to='/tags/$id' params={{ id }} replace />;
+  },
+});
+const redirectNoticeStatusRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/notice/$statusId',
+  component: () => {
+    const { statusId } = redirectNoticeStatusRoute.useParams();
+    return <Navigate to='/@{$username}/posts/$statusId' params={{ username: 'undefined', statusId }} replace />;
+  },
+});
+const redirectPleromaStatusRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/users/@{$username}/statuses/$statusId',
+  component: () => {
+    const { username, statusId } = redirectPleromaStatusRoute.useParams();
+    return <Navigate to='/@{$username}/posts/$statusId' params={{ username, statusId }} replace />;
+  },
+});
+const redirectPleromaUsernameRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/users/@{$username}',
+  component: () => {
+    const { username } = redirectPleromaUsernameRoute.useParams();
+    return <Navigate to='/@{$username}' params={{ username }} replace />;
+  },
+});
+const redirectIceshrimpStatusRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/notes/$statusId',
+  component: () => {
+    const { statusId } = redirectIceshrimpStatusRoute.useParams();
+    return <Navigate to='/@{$username}/posts/$statusId' params={{ username: 'undefined', statusId }} replace />;
+  },
+});
+const redirectInviteRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/registration/$token',
+  component: () => {
+    const { token } = redirectInviteRoute.useParams();
+    return <Navigate to='/invite/$token' params={{ token }} replace />;
+  },
+});
+const redirectRoutes = [
+  createRoute({ getParentRoute: () => rootRoute, path: '/timelines/home', component: () => <Navigate to='/' replace /> }),
+  createRoute({ getParentRoute: () => rootRoute, path: '/timelines/public/local', component: () => <Navigate to='/timeline/local' replace /> }),
+  createRoute({    getParentRoute: () => rootRoute, path: '/timelines/public', component: () => <Navigate to='/timeline/fediverse' replace />  }),
+  createRoute({ getParentRoute: () => rootRoute, path: '/timelines/direct', component: () => <Navigate to='/conversations' replace /> }),
+  createRoute({ getParentRoute: () => rootRoute, path: '/main/all', component: () => <Navigate to='/timeline/fediverse' replace /> }),
+  createRoute({ getParentRoute: () => rootRoute, path: '/main/public', component: () => <Navigate to='/timeline/local' replace />  }),
+  createRoute({ getParentRoute: () => rootRoute, path: '/main/friends', component: () => <Navigate to='/' replace /> }),
+  createRoute({ getParentRoute: () => rootRoute, path: '/user-settings', component: () => <Navigate to='/settings/profile' replace /> }),
+  createRoute({ getParentRoute: () => rootRoute, path: '/registration', component: () => <Navigate to='/' replace /> }),
+  createRoute({ getParentRoute: () => rootRoute, path: '/admin', component: () => <Navigate to='/pl-fe/admin' replace /> }),
+  createRoute({ getParentRoute: () => rootRoute, path: '/terms', component: () => <Navigate to='/about/{-$slug}' params={{ slug: undefined }} replace /> }),
+  createRoute({ getParentRoute: () => rootRoute, path: '/settings/preferences', component: () => <Navigate to='/settings' replace /> }),
+  createRoute({ getParentRoute: () => rootRoute, path: '/settings/two_factor_authentication_methods', component: () => <Navigate to='/settings/mfa' replace /> }),
+  createRoute({ getParentRoute: () => rootRoute, path: '/settings/applications', component: () => <Navigate to='/developers' replace /> }),
+  createRoute({ getParentRoute: () => rootRoute, path: '/auth/edit', component: () => <Navigate to='/settings' replace /> }),
+  createRoute({ getParentRoute: () => rootRoute, path: '/auth/reset_password', component: () => <Navigate to='/reset-password' replace /> }),
+  createRoute({ getParentRoute: () => rootRoute, path: '/auth/sign_in', component: () => <Navigate to='/login' replace /> }),
+  createRoute({ getParentRoute: () => rootRoute, path: '/auth/sign_out', component: () => <Navigate to='/logout' replace /> }),
+  createRoute({ getParentRoute: () => rootRoute, path: '/auth/password/new', component: () => <Navigate to='/reset-password' replace /> }),
+  redirectTagRoute,
+  redirectNoticeStatusRoute,
+  redirectPleromaStatusRoute,
+  redirectPleromaUsernameRoute,
+  redirectIceshrimpStatusRoute,
+];
+
 const routeTree = rootRoute.addChildren([
   layouts.admin.addChildren([
     adminDashboardRoute,
@@ -1314,6 +1391,7 @@ const routeTree = rootRoute.addChildren([
     statusRoute,
     statusQuotesRoute,
   ]),
+  ...redirectRoutes,
 ]);
 
 const FallbackLayout: React.FC<{ children: JSX.Element }> = ({ children }) => (
@@ -1344,6 +1422,7 @@ const router = createRouter({
   },
   defaultNotFoundComponent: GenericNotFound,
   defaultPendingComponent: PendingComponent,
+  defaultErrorComponent: ErrorColumn,
   scrollRestoration: true,
   pathParamsAllowedCharacters: ['@'],
 });

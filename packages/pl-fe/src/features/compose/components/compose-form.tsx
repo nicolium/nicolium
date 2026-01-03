@@ -215,7 +215,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
 
     toast.success(messages.draftSaved, {
       actionLabel: messages.view,
-      actionLink: '/draft_statuses',
+      actionLinkOptions: { to: '/draft_statuses' },
     });
   };
 
