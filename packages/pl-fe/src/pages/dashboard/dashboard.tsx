@@ -6,18 +6,17 @@ import { CardTitle } from 'pl-fe/components/ui/card';
 import Column from 'pl-fe/components/ui/column';
 import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
+import { Counter } from 'pl-fe/features/admin/components/counter';
+import { DashCounter, DashCounters } from 'pl-fe/features/admin/components/dashcounter';
+import { Dimension } from 'pl-fe/features/admin/components/dimension';
+import RegistrationModePicker from 'pl-fe/features/admin/components/registration-mode-picker';
+import { Retention } from 'pl-fe/features/admin/components/retention';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { usePendingUsersCount } from 'pl-fe/queries/admin/use-accounts';
 import { usePendingReportsCount } from 'pl-fe/queries/admin/use-reports';
 import sourceCode from 'pl-fe/utils/code';
-
-import { Counter } from '../components/counter';
-import { DashCounter, DashCounters } from '../components/dashcounter';
-import { Dimension } from '../components/dimension';
-import RegistrationModePicker from '../components/registration-mode-picker';
-import { Retention } from '../components/retention';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.dashboard', defaultMessage: 'Dashboard' },

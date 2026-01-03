@@ -8,7 +8,7 @@ export const AdminAccount = lazy(() => import('pl-fe/pages/dashboard/account'));
 export const Aliases = lazy(() => import('pl-fe/pages/settings/aliases'));
 export const Announcements = lazy(() => import('pl-fe/pages/dashboard/announcements'));
 export const AuthTokenList = lazy(() => import('pl-fe/pages/settings/auth-token-list'));
-export const AwaitingApproval = lazy(() => import('pl-fe/features/admin/tabs/awaiting-approval'));
+export const AwaitingApproval = lazy(() => import('pl-fe/pages/dashboard/awaiting-approval'));
 export const Backups = lazy(() => import('pl-fe/pages/settings/backups'));
 export const Blocks = lazy(() => import('pl-fe/pages/settings/blocks'));
 export const BookmarkFolders = lazy(() => import('pl-fe/pages/status-lists/bookmark-folders'));
@@ -24,7 +24,7 @@ export const EditEvent = lazy(() => import('pl-fe/pages/statuses/compose-event')
 export const Conversations = lazy(() => import('pl-fe/pages/status-lists/conversations'));
 export const CreateApp = lazy(() => import('pl-fe/pages/developers/create-app'));
 export const CryptoDonate = lazy(() => import('pl-fe/pages/utils/crypto-donate'));
-export const Dashboard = lazy(() => import('pl-fe/features/admin/tabs/dashboard'));
+export const Dashboard = lazy(() => import('pl-fe/pages/dashboard/dashboard'));
 export const DeleteAccount = lazy(() => import('pl-fe/pages/settings/delete-account'));
 export const Developers = lazy(() => import('pl-fe/pages/developers/developers'));
 export const Directory = lazy(() => import('pl-fe/pages/account-lists/directory'));
@@ -83,7 +83,7 @@ export const PlFeConfig = lazy(() => import('pl-fe/pages/dashboard/pl-fe-config'
 export const PublicTimeline = lazy(() => import('pl-fe/pages/timelines/public-timeline'));
 export const Quotes = lazy(() => import('pl-fe/pages/status-lists/quotes'));
 export const Report = lazy(() => import('pl-fe/pages/dashboard/report'));
-export const Reports = lazy(() => import('pl-fe/features/admin/tabs/reports'));
+export const Reports = lazy(() => import('pl-fe/pages/dashboard/reports'));
 export const RegisterInvite = lazy(() => import('pl-fe/pages/auth/register-with-invite'));
 export const RegistrationPage = lazy(() => import('pl-fe/pages/auth/registration'));
 export const Relays = lazy(() => import('pl-fe/pages/dashboard/relays'));

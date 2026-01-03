@@ -3,9 +3,8 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import Column from 'pl-fe/components/ui/column';
+import UnapprovedAccount from 'pl-fe/features/admin/components/unapproved-account';
 import { useAdminAccounts } from 'pl-fe/queries/admin/use-accounts';
-
-import UnapprovedAccount from '../components/unapproved-account';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.awaiting_approval', defaultMessage: 'Awaiting approval' },

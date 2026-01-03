@@ -8,10 +8,9 @@ import Column from 'pl-fe/components/ui/column';
 import HStack from 'pl-fe/components/ui/hstack';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import Text from 'pl-fe/components/ui/text';
+import Report from 'pl-fe/features/admin/components/report';
 import { adminReportsRoute } from 'pl-fe/features/ui/router';
 import { useReports } from 'pl-fe/queries/admin/use-reports';
-
-import Report from '../components/report';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.reports', defaultMessage: 'Reports' },
