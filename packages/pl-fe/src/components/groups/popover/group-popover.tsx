@@ -17,7 +17,6 @@ import GroupAvatar from '../group-avatar';
 
 import type { Group } from 'pl-api';
 
-
 interface IGroupPopoverContainer {
   children: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
   isEnabled: boolean;

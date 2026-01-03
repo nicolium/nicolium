@@ -150,7 +150,6 @@ import {
 
 import type { Features } from 'pl-api';
 
-
 interface RouterContext {
   instance: ReturnType<typeof useInstance>;
   features: ReturnType<typeof useFeatures>;
