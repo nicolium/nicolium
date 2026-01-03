@@ -1,4 +1,4 @@
-import { Link, type LinkOptions } from '@tanstack/react-router';
+import { Link, useMatchRoute, type LinkOptions } from '@tanstack/react-router';
 import React from 'react';
 
 import { useSettings } from 'pl-fe/stores/settings';
@@ -23,9 +23,13 @@ interface ISidebarNavigationLink extends Partial<LinkOptions> {
 /** Desktop sidebar navigation link. */
 const SidebarNavigationLink = React.memo(React.forwardRef((props: ISidebarNavigationLink, ref: React.ForwardedRef<HTMLAnchorElement>): JSX.Element => {
   const { icon, activeIcon, text, to, count, countMax, onClick, ...rest } = props;
-  const isActive = location.pathname === to;
 
+  const matchRoute = useMatchRoute();
   const { demetricator } = useSettings();
+
+  const LinkComponent = (to === undefined ? 'div' : Link) as typeof Link;
+
+  const isActive = matchRoute({ to }) !== false;
 
   const handleClick: React.EventHandler<React.MouseEvent> = (e) => {
     if (onClick) {
@@ -36,7 +40,7 @@ const SidebarNavigationLink = React.memo(React.forwardRef((props: ISidebarNaviga
   };
 
   return (
-    <Link
+    <LinkComponent
       activeOptions={{ exact: true }}
       activeProps={{ className: '⁂-sidebar-navigation-link--active' }}
       to={to}
@@ -56,7 +60,7 @@ const SidebarNavigationLink = React.memo(React.forwardRef((props: ISidebarNaviga
       </span>
 
       <p>{text}</p>
-    </Link>
+    </LinkComponent>
   );
 }), (prevProps, nextProps) => prevProps.count === nextProps.count);
 

@@ -19,7 +19,7 @@ const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({ count, countMax, 
 
   const matchRoute = useMatchRoute();
 
-  const icon = (activeSrc && matchRoute({ to: props.to, params: props.params, search: props.search }) !== null && activeSrc) || src;
+  const icon = (activeSrc && matchRoute({ to: props.to, params: props.params, search: props.search }) !== false && activeSrc) || src;
 
   return (
     <Link {...props} activeOptions={{ exact }} className='⁂-thumb-navigation__item' activeProps={{ className: '⁂-thumb-navigation__item--active' }} title={text}>
