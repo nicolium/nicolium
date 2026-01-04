@@ -72,6 +72,7 @@
     "@transfem-org/sfm-js": "^0.24.6",
     "@twemoji/svg": "^15.0.0",
     "@uidotdev/usehooks": "^2.4.1",
+    "@use-gesture/react": "^10.3.1",
     "@vitejs/plugin-react": "^4.3.4",
     "@yornaath/batshit": "^0.11.1",
     "abortcontroller-polyfill": "^1.7.8",

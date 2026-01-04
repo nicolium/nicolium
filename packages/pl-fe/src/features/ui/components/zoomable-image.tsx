@@ -1,150 +1,324 @@
-import React from 'react';
+import { useSpring, animated, config, to } from '@react-spring/web';
+import { createUseGesture, dragAction, pinchAction } from '@use-gesture/react';
+import clsx from 'clsx';
+import React, { useState, useCallback, useRef, useEffect } from 'react';
+
+import Blurhash from 'pl-fe/components/blurhash';
+import Spinner from 'pl-fe/components/ui/spinner';
 
 const MIN_SCALE = 1;
 const MAX_SCALE = 4;
+const DOUBLE_CLICK_THRESHOLD = 250;
 
-type Point = { x: number; y: number };
+interface ZoomMatrix {
+  containerWidth: number;
+  containerHeight: number;
+  imageWidth: number;
+  imageHeight: number;
+  initialScale: number;
+}
 
-const getMidpoint = (p1: React.Touch, p2: React.Touch): Point => ({
-  x: (p1.clientX + p2.clientX) / 2,
-  y: (p1.clientY + p2.clientY) / 2,
-});
+const createZoomMatrix = (
+  container: HTMLElement,
+  image: HTMLImageElement,
+  fullWidth: number,
+  fullHeight: number,
+): ZoomMatrix => {
+  const { clientWidth, clientHeight } = container;
+  const { offsetWidth, offsetHeight } = image;
 
-const getDistance = (p1: React.Touch, p2: React.Touch): number =>
-  Math.sqrt(Math.pow(p1.clientX - p2.clientX, 2) + Math.pow(p1.clientY - p2.clientY, 2));
+  const type =
+    fullWidth / fullHeight < clientWidth / clientHeight ? 'width' : 'height';
 
-const clamp = (min: number, max: number, value: number): number => Math.min(max, Math.max(min, value));
+  const initialScale =
+    type === 'width'
+      ? Math.min(clientWidth, fullWidth) / offsetWidth
+      : Math.min(clientHeight, fullHeight) / offsetHeight;
+
+  return {
+    containerWidth: clientWidth,
+    containerHeight: clientHeight,
+    imageWidth: offsetWidth,
+    imageHeight: offsetHeight,
+    initialScale,
+  };
+};
+
+const useGesture = createUseGesture([dragAction, pinchAction]);
+
+const getBounds = (zoomMatrix: ZoomMatrix | null, scale: number) => {
+  if (!zoomMatrix || scale === MIN_SCALE) {
+    return {
+      left: -Infinity,
+      right: Infinity,
+      top: -Infinity,
+      bottom: Infinity,
+    };
+  }
+
+  const { containerWidth, containerHeight, imageWidth, imageHeight } =
+    zoomMatrix;
+
+  const bounds = {
+    left: -Math.max(imageWidth * scale - containerWidth, 0) / 2,
+    right: Math.max(imageWidth * scale - containerWidth, 0) / 2,
+    top: -Math.max(imageHeight * scale - containerHeight, 0) / 2,
+    bottom: Math.max(imageHeight * scale - containerHeight, 0) / 2,
+  };
+
+  return bounds;
+};
 
 interface IZoomableImage {
   alt?: string;
+  lang?: string;
   src: string;
-  onClick?: React.MouseEventHandler;
+  width: number;
+  height: number;
+  onClick?: () => void;
+  onDoubleClick?: () => void;
+  onClose?: () => void;
+  onZoomChange?: (zoomedIn: boolean) => void;
+  zoomedIn?: boolean;
+  blurhash?: string;
 }
 
-class ZoomableImage extends React.PureComponent<IZoomableImage> {
+const ZoomableImage: React.FC<IZoomableImage> = ({
+  alt = '',
+  lang = '',
+  src,
+  width,
+  height,
+  onClick,
+  onDoubleClick,
+  onClose,
+  onZoomChange,
+  zoomedIn,
+  blurhash,
+}) => {
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+    };
 
-  static defaultProps = {
-    alt: '',
-    width: null,
-    height: null,
-  };
+    document.addEventListener('gesturestart', handler);
+    document.addEventListener('gesturechange', handler);
+    document.addEventListener('gestureend', handler);
 
-  state = {
-    scale: MIN_SCALE,
-  };
+    return () => {
+      document.removeEventListener('gesturestart', handler);
+      document.removeEventListener('gesturechange', handler);
+      document.removeEventListener('gestureend', handler);
+    };
+  }, []);
 
-  container: HTMLDivElement | null = null;
-  image: HTMLImageElement | null = null;
-  lastDistance = 0;
+  const [dragging, setDragging] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+  const [error, setError] = useState(false);
 
-  componentDidMount() {
-    this.container?.addEventListener('touchstart', this.handleTouchStart);
-    // on Chrome 56+, touch event listeners will default to passive
-    // https://www.chromestatus.com/features/5093566007214080
-    this.container?.addEventListener('touchmove', this.handleTouchMove, { passive: false });
-  }
+  const containerRef = useRef<HTMLDivElement>(null);
+  const imageRef = useRef<HTMLImageElement>(null);
+  const doubleClickTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>();
+  const zoomMatrixRef = useRef<ZoomMatrix | null>(null);
 
-  componentWillUnmount() {
-    this.container?.removeEventListener('touchstart', this.handleTouchStart);
-    this.container?.removeEventListener('touchend', this.handleTouchMove);
-  }
+  const [style, api] = useSpring(() => ({
+    x: 0,
+    y: 0,
+    scale: 1,
+    onRest: {
+      scale({ value }) {
+        if (!onZoomChange) {
+          return;
+        }
+        if (value === MIN_SCALE) {
+          onZoomChange(false);
+        } else {
+          onZoomChange(true);
+        }
+      },
+    },
+  }));
 
-  handleTouchStart = (e: TouchEvent) => {
-    if (e.touches.length !== 2) return;
-    const [p1, p2] = Array.from(e.touches);
+  useGesture(
+    {
+      onDrag({
+        pinching,
+        cancel,
+        active,
+        last,
+        offset: [x, y],
+        velocity: [, vy],
+        direction: [, dy],
+        tap,
+      }) {
+        if (tap) {
+          if (!doubleClickTimeoutRef.current) {
+            doubleClickTimeoutRef.current = setTimeout(() => {
+              onClick?.();
+              doubleClickTimeoutRef.current = null;
+            }, DOUBLE_CLICK_THRESHOLD);
+          } else {
+            clearTimeout(doubleClickTimeoutRef.current);
+            doubleClickTimeoutRef.current = null;
+            onDoubleClick?.();
+          }
 
-    this.lastDistance = getDistance(p1, p2);
-  };
+          return;
+        }
 
-  handleTouchMove = (e: TouchEvent) => {
-    if (!this.container) return;
+        if (!zoomedIn) {
+          // Swipe up/down to dismiss parent
+          if (last) {
+            if ((vy > 0.5 && dy !== 0) || Math.abs(y) > 150) {
+              onClose?.();
+            }
 
-    const { scrollTop, scrollHeight, clientHeight } = this.container;
-    if (e.touches.length === 1 && scrollTop !== scrollHeight - clientHeight) {
-      // prevent propagating event to MediaModal
-      e.stopPropagation();
+            void api.start({ y: 0, config: config.wobbly });
+            return;
+          } else if (dy !== 0) {
+            void api.start({ y, immediate: true });
+            return;
+          }
+
+          cancel();
+          return;
+        }
+
+        if (pinching) {
+          cancel();
+          return;
+        }
+
+        if (active) {
+          setDragging(true);
+        } else {
+          setDragging(false);
+        }
+
+        void api.start({ x, y });
+      },
+
+      onPinch({ origin: [ox, oy], first, movement: [ms], offset: [s], memo }) {
+        if (!imageRef.current) {
+          return;
+        }
+
+        if (first) {
+          const { width, height, x, y } =
+            imageRef.current.getBoundingClientRect();
+          const tx = ox - (x + width / 2);
+          const ty = oy - (y + height / 2);
+
+          memo = [style.x.get(), style.y.get(), tx, ty];
+        }
+
+        const x = memo[0] - (ms - 1) * memo[2]; // eslint-disable-line @typescript-eslint/no-unsafe-member-access
+        const y = memo[1] - (ms - 1) * memo[3]; // eslint-disable-line @typescript-eslint/no-unsafe-member-access
+
+        void api.start({ scale: s, x, y });
+
+        return memo as [number, number, number, number];
+      },
+    },
+    {
+      target: imageRef,
+      drag: {
+        from: () => [style.x.get(), style.y.get()],
+        filterTaps: true,
+        bounds: () => getBounds(zoomMatrixRef.current, style.scale.get()),
+        rubberband: true,
+      },
+      pinch: {
+        scaleBounds: {
+          min: MIN_SCALE,
+          max: MAX_SCALE,
+        },
+        rubberband: true,
+      },
+    },
+  );
+
+  useEffect(() => {
+    if (!loaded || !containerRef.current || !imageRef.current) {
       return;
     }
-    if (e.touches.length !== 2) return;
+
+    zoomMatrixRef.current = createZoomMatrix(
+      containerRef.current,
+      imageRef.current,
+      width,
+      height,
+    );
+
+    if (!zoomedIn) {
+      void api.start({ scale: MIN_SCALE, x: 0, y: 0 });
+    } else if (style.scale.get() === MIN_SCALE) {
+      void api.start({ scale: zoomMatrixRef.current.initialScale, x: 0, y: 0 });
+    }
+  }, [api, style.scale, zoomedIn, width, height, loaded]);
+
+  const handleClick = useCallback((e: React.MouseEvent) => {
+    // This handler exists to cancel the onClick handler on the media modal which would
+    // otherwise close the modal. It cannot be used for actual click handling because
+    // we don't know if the user is about to pan the image or not.
 
     e.preventDefault();
     e.stopPropagation();
+  }, []);
 
-    const [p1, p2] = Array.from(e.touches);
-    const distance = getDistance(p1, p2);
-    const midpoint = getMidpoint(p1, p2);
-    const scale = clamp(MIN_SCALE, MAX_SCALE, this.state.scale * distance / this.lastDistance);
+  const handleLoad = useCallback(() => {
+    setLoaded(true);
+  }, [setLoaded]);
 
-    this.zoom(scale, midpoint);
+  const handleError = useCallback(() => {
+    setError(true);
+  }, [setError]);
 
-    this.lastDistance = distance;
-  };
+  // Convert the default style transform to a matrix transform to work around
+  // Safari bug https://github.com/mastodon/mastodon/issues/35042
+  const transform = to(
+    [style.scale, style.x, style.y],
+    (s, x, y) => `matrix(${s}, 0, 0, ${s}, ${x}, ${y})`,
+  );
 
-  zoom(nextScale: number, midpoint: Point) {
-    if (!this.container) return;
-
-    const { scale } = this.state;
-    const { scrollLeft, scrollTop } = this.container;
-
-    // math memo:
-    // x = (scrollLeft + midpoint.x) / scrollWidth
-    // x' = (nextScrollLeft + midpoint.x) / nextScrollWidth
-    // scrollWidth = clientWidth * scale
-    // scrollWidth' = clientWidth * nextScale
-    // Solve x = x' for nextScrollLeft
-    const nextScrollLeft = (scrollLeft + midpoint.x) * nextScale / scale - midpoint.x;
-    const nextScrollTop = (scrollTop + midpoint.y) * nextScale / scale - midpoint.y;
-
-    this.setState({ scale: nextScale }, () => {
-      if (!this.container) return;
-      this.container.scrollLeft = nextScrollLeft;
-      this.container.scrollTop = nextScrollTop;
-    });
-  }
-
-  handleClick: React.MouseEventHandler = e => {
-    // don't propagate event to MediaModal
-    e.stopPropagation();
-    const handler = this.props.onClick;
-    if (handler) handler(e);
-  };
-
-  setContainerRef = (c: HTMLDivElement) => {
-    this.container = c;
-  };
-
-  setImageRef = (c: HTMLImageElement) => {
-    this.image = c;
-  };
-
-  render() {
-    const { alt, src } = this.props;
-    const { scale } = this.state;
-    const overflow = scale === 1 ? 'hidden' : 'scroll';
-
-    return (
-      <div
-        className='relative flex size-full items-center justify-center'
-        ref={this.setContainerRef}
-        style={{ overflow }}
-      >
-        <img
-          className='size-auto max-h-[80%] max-w-full object-contain shadow-2xl'
-          role='presentation'
-          ref={this.setImageRef}
-          alt={alt}
-          title={alt}
-          src={src}
+  return (
+    <div
+      className={clsx('⁂-zoomable-image', {
+        '⁂-zoomable-image--zoomed-in': zoomedIn,
+        '⁂-zoomable-image--error': error,
+        '⁂-zoomable-image--dragging': dragging,
+      })}
+      ref={containerRef}
+    >
+      {!loaded && blurhash && (
+        <div
+          className='⁂-zoomable-image__preview'
           style={{
-            transform: `scale(${scale})`,
-            transformOrigin: '0 0',
+            aspectRatio: `${width}/${height}`,
+            height: `min(${height}px, 100%)`,
           }}
-          onClick={this.handleClick}
-        />
-      </div>
-    );
-  }
+        >
+          <Blurhash hash={blurhash} />
+        </div>
+      )}
 
-}
+      <animated.img
+        style={{ transform }}
+        ref={imageRef}
+        alt={alt}
+        lang={lang}
+        src={src}
+        width={width}
+        height={height}
+        draggable={false}
+        onLoad={handleLoad}
+        onError={handleError}
+        onClickCapture={handleClick}
+      />
+
+      {!loaded && !error && <Spinner />}
+    </div>
+  );
+};
 
 export { ZoomableImage as default };

@@ -5,3 +5,31 @@
 .⁂-hotkey-modal {
   @apply max-w-4xl;
 }
+
+.⁂-zoomable-image {
+  @apply relative flex size-full items-center justify-center;
+
+  &--zoomed-in {
+    @apply cursor-grab z-[9999];
+  }
+
+  &--error img {
+    @apply hidden;
+  }
+
+  &--dragging {
+    @apply cursor-grabbing;
+  }
+
+  &__preview {
+    @apply size-auto max-h-[80%] max-w-full absolute z-[1] overflow-hidden;
+
+    canvas {
+      @apply absolute size-full object-cover z-[-1];
+    }
+  }
+
+  img {
+    @apply size-auto max-h-[80%] max-w-full object-contain shadow-2xl;
+  }
+}

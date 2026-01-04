@@ -11,7 +11,7 @@ interface IImageLoader {
   previewSrc?: string;
   width?: number;
   height?: number;
-  onClick?: React.MouseEventHandler;
+  onClick?: () => void;
 }
 
 class ImageLoader extends React.PureComponent<IImageLoader> {
