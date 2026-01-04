@@ -123,7 +123,7 @@ const Dashboard: React.FC = () => {
           />
           <List>
             <ListItem size='sm' to='/pl-fe/admin/reports' search={{ resolved: false }} label={<FormattedMessage id='admin.links.pending_reports' defaultMessage='{count, plural, one {{formattedCount} pending report} other {{formattedCount} pending reports}}' values={{ count: pendingReportsCount, formattedCount: <strong><FormattedNumber value={pendingReportsCount} /></strong> }} />} />
-            <ListItem size='sm' to='/pl-fe/admin/users' label={<FormattedMessage id='admin.links.pending_users' defaultMessage='{count, plural, one {{formattedCount} pending user} other {{formattedCount} pending users}}' values={{ count: awaitingApprovalCount, formattedCount: <strong><FormattedNumber value={awaitingApprovalCount} /></strong> }} />} />
+            <ListItem size='sm' to='/pl-fe/admin/approval' label={<FormattedMessage id='admin.links.pending_users' defaultMessage='{count, plural, one {{formattedCount} pending user} other {{formattedCount} pending users}}' values={{ count: awaitingApprovalCount, formattedCount: <strong><FormattedNumber value={awaitingApprovalCount} /></strong> }} />} />
             {/* <ListItem size='sm' to='/pl-fe/admin' label={<FormattedMessage id='admin.links.pending_tags' defaultMessage='{count} pending tags' values={{ count: <strong>0</strong> }} />} />
             <ListItem size='sm' to='/pl-fe/admin' label={<FormattedMessage id='admin.links.pending_appeals' defaultMessage='{count} pending appeals' values={{ count: <strong>0</strong> }} />} /> */}
           </List>
