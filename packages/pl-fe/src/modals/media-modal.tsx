@@ -33,6 +33,7 @@ const messages = defineMessages({
   previous: { id: 'lightbox.previous', defaultMessage: 'Previous' },
   zoomIn: { id: 'lightbox.zoom_in', defaultMessage: 'Zoom to actual size' },
   zoomOut: { id: 'lightbox.zoom_out', defaultMessage: 'Zoom to fit' },
+  download: { id: 'video.download', defaultMessage: 'Download file' },
 });
 
 // you can't use 100vh, because the viewport height is taller
@@ -289,6 +290,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
               )}
 
               <IconButton
+                title={intl.formatMessage(messages.download)}
                 src={require('@phosphor-icons/core/regular/download-simple.svg')}
                 theme='dark'
                 className='!p-1.5 hover:scale-105 hover:bg-gray-900'
