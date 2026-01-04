@@ -64,6 +64,7 @@ const ModalRoot: React.FC = () => {
   const modals = useModals();
   const { closeModal } = useModalsActions();
   const { modalType: type, modalProps: props } = modals.at(-1) || { modalProps: {}, modalType: null };
+  const index = modals.length - 1;
 
   const onClickClose = (type?: ModalType) => {
     switch (type) {
@@ -80,7 +81,7 @@ const ModalRoot: React.FC = () => {
   const Component = type !== null ? (MODAL_COMPONENTS as Record<keyof typeof MODAL_COMPONENTS, React.ExoticComponent<any>>)[type] : null;
 
   return (
-    <Base onClose={onClickClose} type={type}>
+    <Base onClose={onClickClose} type={type} modalIndex={index}>
       {(Component && !!type) && (
         <Suspense fallback={renderLoading(type)}>
           <Component {...props} onClose={onClickClose} />

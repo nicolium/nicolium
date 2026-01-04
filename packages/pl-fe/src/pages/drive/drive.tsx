@@ -1,9 +1,9 @@
 import defaultIcon from '@phosphor-icons/core/regular/paperclip.svg';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { clsx } from 'clsx';
 import { mediaAttachmentSchema, type DriveFile, type DriveFolder } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Link, useHistory } from 'react-router-dom';
 import * as v from 'valibot';
 
 import DropdownMenu, { Menu } from 'pl-fe/components/dropdown-menu';
@@ -13,6 +13,7 @@ import Icon from 'pl-fe/components/ui/icon';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import { MIMETYPE_ICONS } from 'pl-fe/components/upload';
 import ColumnLoading from 'pl-fe/features/ui/components/column-loading';
+import { driveRoute } from 'pl-fe/features/ui/router';
 import { useCreateDriveFileMutation, useDeleteDriveFileMutation, useMoveDriveFileMutation, useUpdateDriveFileMutation } from 'pl-fe/queries/drive/use-drive-file';
 import { useCreateDriveFolderMutation, useDeleteDriveFolderMutation, useDriveFolderQuery, useMoveDriveFolderMutation, useUpdateDriveFolderMutation } from 'pl-fe/queries/drive/use-drive-folder';
 import { useModalsActions } from 'pl-fe/stores/modals';
@@ -90,7 +91,7 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
       );
     } else {
       return (
-        <Link to='/drive' className='⁂-drive-breadcrumbs__home'>
+        <Link to='/drive/{-$folderId}' params={{ folderId: undefined }} className='⁂-drive-breadcrumbs__home'>
           <Icon src={require('@phosphor-icons/core/regular/house.svg')} />
           {label}
         </Link>
@@ -115,7 +116,8 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
     </button>
   ) : (
     <Link
-      to={`/drive/${folderId}`}
+      to={'/drive/{-$folderId}'}
+      params={{ folderId }}
       className={clsx('⁂-drive-breadcrumbs__item', { '⁂-drive-breadcrumbs__item--current': depth === 0 })}
     >
       {data.name}
@@ -357,7 +359,7 @@ interface IFolder {
 }
 
 const Folder: React.FC<IFolder> = ({ folder }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const intl = useIntl();
 
   const { openModal } = useModalsActions();
@@ -366,7 +368,7 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
   const { mutate: moveFolder } = useMoveDriveFolderMutation(folder.id!);
 
   const handleEnterFolder = () => {
-    history.push(`/drive/${folder.id}`);
+    navigate({ to: '/drive/{-$folderId}', params: { folderId: folder.id || undefined } });
   };
 
   const items: Menu = useMemo(() => {
@@ -418,7 +420,8 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
       {
         text: intl.formatMessage(messages.folderView),
         icon: require('@phosphor-icons/core/regular/folder-open.svg'),
-        to: `/drive/${folder.id}`,
+        to: '/drive/{-$folderId}',
+        params: { folderId: folder.id || undefined },
       },
       {
         text: intl.formatMessage(messages.folderRename),
@@ -463,19 +466,15 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
   );
 };
 
-interface IDrivePage {
-  params?: {
-    folderId?: string;
-  };
-}
+const DrivePage: React.FC = () => {
+  const { folderId } = driveRoute.useParams();
 
-const DrivePage: React.FC<IDrivePage> = ({ params }) => {
   const intl = useIntl();
 
   const { openModal } = useModalsActions();
 
-  const { data, isPending } = useDriveFolderQuery(params?.folderId);
-  const { mutate: uploadFile } = useCreateDriveFileMutation(params?.folderId);
+  const { data, isPending } = useDriveFolderQuery(folderId);
+  const { mutate: uploadFile } = useCreateDriveFileMutation(folderId);
   const { mutate: createFolder } = useCreateDriveFolderMutation();
 
   const items: Menu = [
@@ -499,7 +498,7 @@ const DrivePage: React.FC<IDrivePage> = ({ params }) => {
           confirm: <FormattedMessage id='drive.folder.create.confirm' defaultMessage='Create' />,
           singleLine: true,
           onConfirm: (value: string) => {
-            createFolder({ name: value, parentId: params?.folderId }, {
+            createFolder({ name: value, parentId: folderId }, {
               onSuccess: () => toast.success(messages.newFolderSuccess),
               onError: () => toast.error(messages.newFolderError),
             });
@@ -519,11 +518,12 @@ const DrivePage: React.FC<IDrivePage> = ({ params }) => {
     <Column
       className='⁂-drive-page'
       label={data?.name || intl.formatMessage(messages.heading)}
-      backHref={data?.id === null ? '/drive' : data?.parent_id ? `/drive/${data.parent_id}` : undefined}
+      backHref={'/drive/{-$folderId}'}
+      backParams={{ folderId: data?.parent_id || undefined }}
       action={<DropdownMenu items={items} src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')} />}
     >
       <div className='⁂-drive-breadcrumbs'>
-        <Breadcrumbs folderId={params?.folderId} />
+        <Breadcrumbs folderId={folderId} />
       </div>
       {isEmpty ? (
         <EmptyMessage

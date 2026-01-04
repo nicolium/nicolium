@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
-import { NavLink } from 'react-router-dom';
 
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
@@ -43,7 +43,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
         </HStack>
       )}
 
-      <NavLink to={`/@${account.acct}/followers`} onClick={onClickHandler} title={intl.formatNumber(account.followers_count)} className='hover:underline'>
+      <Link to='/@{$username}/followers' params={{ username: account.acct }} onClick={onClickHandler} title={intl.formatNumber(account.followers_count)} className='hover:underline'>
         <HStack alignItems='center' space={1}>
           {!demetricator && (
             <Text theme='primary' weight='bold' size='sm'>
@@ -54,9 +54,9 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
             {intl.formatMessage(messages.followers)}
           </Text>
         </HStack>
-      </NavLink>
+      </Link>
 
-      <NavLink to={`/@${account.acct}/following`} onClick={onClickHandler} title={intl.formatNumber(account.following_count)} className='hover:underline'>
+      <Link to='/@{$username}/following' params={{ username: account.acct }} onClick={onClickHandler} title={intl.formatNumber(account.following_count)} className='hover:underline'>
         <HStack alignItems='center' space={1}>
           {!demetricator && (
             <Text theme='primary' weight='bold' size='sm'>
@@ -67,10 +67,10 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
             {intl.formatMessage(messages.follows)}
           </Text>
         </HStack>
-      </NavLink>
+      </Link>
 
       {account.subscribers_count > 0 && (
-        // <NavLink to={`/@${account.acct}/subscribers`} onClick={onClickHandler} title={intl.formatNumber(account.subscribers_count)} className='hover:underline'>
+        // <Link to='/@{$username}/subscribers' params={{ username: account.acct }} onClick={onClickHandler} title={intl.formatNumber(account.subscribers_count)} className='hover:underline'>
         <HStack alignItems='center' space={1}>
           {!demetricator && (
             <Text theme='primary' weight='bold' size='sm'>
@@ -81,7 +81,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
             {intl.formatMessage(messages.subscribers)}
           </Text>
         </HStack>
-        // </NavLink>
+        // </Link>
       )}
     </HStack>
   );

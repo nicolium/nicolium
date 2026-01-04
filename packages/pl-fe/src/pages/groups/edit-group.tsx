@@ -14,6 +14,7 @@ import Spinner from 'pl-fe/components/ui/spinner';
 import Textarea from 'pl-fe/components/ui/textarea';
 import AvatarPicker from 'pl-fe/features/edit-profile/components/avatar-picker';
 import HeaderPicker from 'pl-fe/features/edit-profile/components/header-picker';
+import { editGroupRoute } from 'pl-fe/features/ui/router';
 import { useImageField } from 'pl-fe/hooks/forms/use-image-field';
 import { useTextField } from 'pl-fe/hooks/forms/use-text-field';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
@@ -28,13 +29,9 @@ const messages = defineMessages({
   groupSaved: { id: 'group.update.success', defaultMessage: 'Group successfully saved' },
 });
 
-interface IEditGroup {
-  params: {
-    groupId: string;
-  };
-}
+const EditGroup: React.FC = () => {
+  const { groupId } = editGroupRoute.useParams();
 
-const EditGroup: React.FC<IEditGroup> = ({ params: { groupId } }) => {
   const intl = useIntl();
   const instance = useInstance();
 

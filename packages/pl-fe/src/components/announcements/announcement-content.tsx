@@ -1,5 +1,5 @@
+import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import { getTextDirection } from 'pl-fe/utils/rtl';
 
@@ -12,7 +12,7 @@ interface IAnnouncementContent {
 }
 
 const AnnouncementContent: React.FC<IAnnouncementContent> = ({ announcement }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const node = useRef<HTMLDivElement>(null);
   const direction = getTextDirection(announcement.content);
@@ -25,7 +25,7 @@ const AnnouncementContent: React.FC<IAnnouncementContent> = ({ announcement }) =
     if (e.button === 0 && !(e.ctrlKey || e.metaKey)) {
       e.preventDefault();
       e.stopPropagation();
-      history.push(`/@${mention.acct}`);
+      navigate({ to: '/@{$username}', params: { username: mention.acct } });
     }
   };
 
@@ -35,14 +35,14 @@ const AnnouncementContent: React.FC<IAnnouncementContent> = ({ announcement }) =
     if (e.button === 0 && !(e.ctrlKey || e.metaKey)) {
       e.preventDefault();
       e.stopPropagation();
-      history.push(`/tags/${hashtag}`);
+      navigate({ to: '/tags/$id', params: { id: hashtag } });
     }
   };
 
-  const onStatusClick = (status: string, e: MouseEvent) => {
+  const onStatusClick = (statusId: string, e: MouseEvent) => {
     if (e.button === 0 && !(e.ctrlKey || e.metaKey)) {
       e.preventDefault();
-      history.push(status);
+      navigate({ to: '/@{$username}/posts/$statusId', params: { username: 'undefined', statusId } });
     }
   };
 

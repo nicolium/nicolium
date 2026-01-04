@@ -1,7 +1,7 @@
+import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import { groupCompose, uploadCompose } from 'pl-fe/actions/compose';
 import { fetchGroupTimeline } from 'pl-fe/actions/timelines';
@@ -11,6 +11,7 @@ import Avatar from 'pl-fe/components/ui/avatar';
 import HStack from 'pl-fe/components/ui/hstack';
 import Stack from 'pl-fe/components/ui/stack';
 import Timeline from 'pl-fe/features/ui/components/timeline';
+import { groupTimelineRoute } from 'pl-fe/features/ui/router';
 import { ComposeForm } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
@@ -18,21 +19,15 @@ import { useDraggedFiles } from 'pl-fe/hooks/use-dragged-files';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { makeGetStatusIds } from 'pl-fe/selectors';
 
-type RouteParams = { groupId: string };
-
-interface IGroupTimelinePage {
-  params: RouteParams;
-}
-
 const getStatusIds = makeGetStatusIds();
 
-const GroupTimelinePage: React.FC<IGroupTimelinePage> = (props) => {
+const GroupTimelinePage: React.FC = () => {
+  const { groupId } = groupTimelineRoute.useParams();
+
   const intl = useIntl();
   const { account } = useOwnAccount();
   const dispatch = useAppDispatch();
   const composer = useRef<HTMLDivElement>(null);
-
-  const { groupId } = props.params;
 
   const { group } = useGroup(groupId);
 
@@ -73,7 +68,7 @@ const GroupTimelinePage: React.FC<IGroupTimelinePage> = (props) => {
               'ring-2 ring-offset-2 ring-primary-600': isDraggedOver,
             })}
           >
-            <Link to={`/@${account.acct}`}>
+            <Link to='/@{$username}' params={{ username: account.acct }}>
               <Avatar src={account.avatar} alt={account.avatar_description} size={42} isCat={account.is_cat} />
             </Link>
 

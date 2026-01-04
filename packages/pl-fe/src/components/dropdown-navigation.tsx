@@ -1,9 +1,9 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Link, NavLink } from 'react-router-dom';
 
 import { fetchOwnAccounts, logOut, switchAccount } from 'pl-fe/actions/auth';
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
@@ -29,15 +29,14 @@ import sourceCode from 'pl-fe/utils/code';
 
 import type { Account as AccountEntity } from 'pl-api';
 
-interface IDropdownNavigationLink {
+interface IDropdownNavigationLink extends Partial<LinkOptions> {
   href?: string;
-  to?: string;
   icon: string;
   text: string | JSX.Element;
   onClick: React.EventHandler<React.MouseEvent>;
 }
 
-const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(({ href, to, icon, text, onClick }) => {
+const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(({ href, to, icon, text, onClick, ...rest }) => {
   const body = (
     <>
       <div className='⁂-dropdown-navigation__link__icon'>
@@ -50,9 +49,9 @@ const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(({ 
 
   if (to) {
     return (
-      <NavLink className='⁂-dropdown-navigation__link' to={to} onClick={onClick}>
+      <Link className='⁂-dropdown-navigation__link' to={to} {...rest} onClick={onClick}>
         {body}
-      </NavLink>
+      </Link>
     );
   }
 
@@ -182,7 +181,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
       >
         {account ? (
           <div>
-            <Link to={`/@${account.acct}`} onClick={closeSidebar}>
+            <Link to='/@{$username}' params={{ username: account.acct }} onClick={closeSidebar}>
               <Account account={account} showAccountHoverCard={false} withLinkToProfile={false} />
             </Link>
 
@@ -197,7 +196,8 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               <Divider />
 
               <DropdownNavigationLink
-                to={`/@${account.acct}`}
+                to='/@{$username}'
+                params={{ username: account.acct }}
                 icon={require('@phosphor-icons/core/regular/user.svg')}
                 text={<FormattedMessage id='account.profile' defaultMessage='Profile' />}
                 onClick={closeSidebar}
@@ -268,7 +268,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
 
               {features.drive && (
                 <DropdownNavigationLink
-                  to='/drive'
+                  to='/drive/{-$folderId}'
                   icon={require('@phosphor-icons/core/regular/cloud.svg')}
                   text={<FormattedMessage id='column.drive' defaultMessage='Drive' />}
                   onClick={closeSidebar}
@@ -352,7 +352,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               <Divider />
 
               <DropdownNavigationLink
-                to='/settings/preferences'
+                to='/settings'
                 icon={require('@phosphor-icons/core/regular/sliders-horizontal.svg')}
                 text={<FormattedMessage id='navigation_bar.preferences' defaultMessage='Preferences' />}
                 onClick={closeSidebar}
@@ -369,7 +369,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
 
               {(account.is_admin || account.is_moderator) && (
                 <DropdownNavigationLink
-                  to='/admin'
+                  to='/pl-fe/admin'
                   icon={require('@phosphor-icons/core/regular/gauge.svg')}
                   text={<FormattedMessage id='navigation.dashboard' defaultMessage='Dashboard' />}
                   onClick={closeSidebar}
@@ -416,10 +416,10 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                   <div className='⁂-dropdown-navigation__account-switcher__accounts'>
                     {otherAccounts.map(account => renderAccount(account))}
 
-                    <NavLink className='⁂-dropdown-navigation__account-switcher__add' to='/login/add' onClick={handleClose}>
+                    <Link className='⁂-dropdown-navigation__account-switcher__add' to='/login/add' onClick={handleClose}>
                       <Icon src={require('@phosphor-icons/core/regular/plus.svg')} />
                       <Text size='sm' weight='medium'><FormattedMessage id='profile_dropdown.add_account' defaultMessage='Add an existing account' /></Text>
-                    </NavLink>
+                    </Link>
                   </div>
                 )}
               </div>

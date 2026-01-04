@@ -1,6 +1,6 @@
+import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
 import { useRemoteStream } from 'pl-fe/api/hooks/streaming/use-remote-stream';
@@ -10,21 +10,17 @@ import IconButton from 'pl-fe/components/ui/icon-button';
 import Text from 'pl-fe/components/ui/text';
 import PinnedHostsPicker from 'pl-fe/features/remote-timeline/components/pinned-hosts-picker';
 import Timeline from 'pl-fe/features/ui/components/timeline';
+import { remoteTimelineRoute } from 'pl-fe/features/ui/router';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useSettings } from 'pl-fe/stores/settings';
 
-interface IRemoteTimelinePage {
-  params?: {
-    instance?: string;
-  };
-}
-
 /** View statuses from a remote instance. */
-const RemoteTimelinePage: React.FC<IRemoteTimelinePage> = ({ params }) => {
-  const history = useHistory();
+const RemoteTimelinePage: React.FC = () => {
+  const { instance } = remoteTimelineRoute.useParams();
+
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const instance = params?.instance as string;
   const settings = useSettings();
 
   const timelineId = 'remote';
@@ -33,7 +29,7 @@ const RemoteTimelinePage: React.FC<IRemoteTimelinePage> = ({ params }) => {
   const pinned = settings.remote_timeline.pinnedHosts.includes(instance);
 
   const handleCloseClick: React.MouseEventHandler = () => {
-    history.push('/timeline/fediverse');
+    navigate({ to: '/timeline/fediverse' });
   };
 
   const handleLoadMore = () => {

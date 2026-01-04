@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import React, { useCallback, useState } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 import ReactSwipeableViews from 'react-swipeable-views';
 
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
@@ -15,6 +15,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import StatusContainer from 'pl-fe/containers/status-container';
 import ColumnLoading from 'pl-fe/features/ui/components/column-loading';
+import { adminReportRoute } from 'pl-fe/features/ui/router';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useReopenReport, useReport, useResolveReport, useSelfAssignReport, useUnassignReport } from 'pl-fe/queries/admin/use-reports';
@@ -75,14 +76,8 @@ const ReportStatuses: React.FC<IReportStatuses> = ({ statusIds }) => {
   );
 };
 
-type RouteParams = { reportId: string };
-
-interface IReportPage {
-  params: RouteParams;
-}
-
-const ReportPage: React.FC<IReportPage> = (props) => {
-  const { reportId } = props.params;
+const ReportPage: React.FC = () => {
+  const { reportId } = adminReportRoute.useParams();
 
   const features = useFeatures();
   const intl = useIntl();
@@ -153,7 +148,7 @@ const ReportPage: React.FC<IReportPage> = (props) => {
     <Column label={intl.formatMessage(messages.columnHeading, { id: reportId })}>
       <div className='mb-4 grid grid-cols-1 gap-2 md:grid-cols-2'>
         {targetAccount && (
-          <Link to={`/@${targetAccount.acct}`} className='h-fit'>
+          <Link to='/@{$username}' params={{ username: targetAccount.acct }} className='h-fit'>
             <Card variant='rounded'>
               <Stack space={2}>
                 <Text size='md' weight='medium'>
@@ -189,7 +184,7 @@ const ReportPage: React.FC<IReportPage> = (props) => {
 
                 <td className='p-2.5 text-end'>
                   <Text size='sm' className='hover:underline'>
-                    <Link to={`/pl-fe/admin/accounts/${report.account_id}`}>
+                    <Link to='/pl-fe/admin/accounts/$accountId' params={{ accountId: report.account_id }}>
                       @{authorAccount.acct}
                     </Link>
                   </Text>
@@ -221,7 +216,7 @@ const ReportPage: React.FC<IReportPage> = (props) => {
                   {report.assigned_account ? (
                     <HStack space={2} alignItems='center' justifyContent='end'>
                       <Text size='sm' className='hover:underline'>
-                        <Link to={`/pl-fe/admin/accounts/${report.assigned_account.id}`}>
+                        <Link to='/pl-fe/admin/accounts/$accountId' params={{ accountId: report.assigned_account.id }}>
                           @{report.assigned_account.acct}
                         </Link>
                       </Text>
@@ -272,7 +267,8 @@ const ReportPage: React.FC<IReportPage> = (props) => {
         )}
         <ListItem
           label={<FormattedMessage id='admin.report.moderate' defaultMessage='Moderate account' />}
-          to={`/pl-fe/admin/accounts/${report.target_account_id}`}
+          to='/pl-fe/admin/accounts/$accountId'
+          params={{ accountId: report.target_account_id }}
         />
       </List>
     </Column>

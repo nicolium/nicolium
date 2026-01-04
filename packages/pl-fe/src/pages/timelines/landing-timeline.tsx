@@ -15,7 +15,7 @@ import Timeline from 'pl-fe/features/ui/components/timeline';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { useRegistrationStatus } from 'pl-fe/hooks/use-registration-status';
-import AboutPage from 'pl-fe/pages/utils/about';
+import { About } from 'pl-fe/pages/utils/about';
 import { getTextDirection } from 'pl-fe/utils/rtl';
 
 interface ILogoText extends Pick<React.HTMLAttributes<HTMLHeadingElement>, 'className' | 'dir'> {
@@ -110,7 +110,7 @@ const LandingTimelinePage = () => {
           />
         </PullToRefresh>
       ) : (
-        <AboutPage />
+        <About slug='index' />
       )}
     </Column>
   );

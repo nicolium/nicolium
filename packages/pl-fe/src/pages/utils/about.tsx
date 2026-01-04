@@ -1,18 +1,19 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useParams } from 'react-router-dom';
 
 import { Navlinks } from 'pl-fe/components/navlinks';
 import Card from 'pl-fe/components/ui/card';
 import { languages } from 'pl-fe/features/preferences';
+import { aboutRoute } from 'pl-fe/features/ui/router';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { useAboutPage } from 'pl-fe/queries/pl-fe/use-about-page';
 import { useSettings } from 'pl-fe/stores/settings';
 
-/** Displays arbitrary user-uploaded HTML on a page at `/about/:slug` */
-const AboutPage: React.FC = () => {
-  const { slug = 'index' } = useParams<{ slug?: string }>();
+interface IAbout {
+  slug: string;
+}
 
+const About: React.FC<IAbout> = ({ slug }) => {
   const settings = useSettings();
   const plFeConfig = usePlFeConfig();
 
@@ -66,4 +67,11 @@ const AboutPage: React.FC = () => {
   );
 };
 
-export { AboutPage as default };
+/** Displays arbitrary user-uploaded HTML on a page at `/about/:slug` */
+const AboutPage: React.FC = () => {
+  const { slug = 'index' } = aboutRoute.useParams();
+
+  return <About key={slug} slug={slug} />;
+};
+
+export { About, AboutPage as default };

@@ -10,10 +10,9 @@ import Column from 'pl-fe/components/ui/column';
 import HStack from 'pl-fe/components/ui/hstack';
 import Spinner from 'pl-fe/components/ui/spinner';
 import ColumnForbidden from 'pl-fe/features/ui/components/column-forbidden';
+import { groupBlocksRoute } from 'pl-fe/features/ui/router';
 import { useGroupBlocks, useUnblockGroupUserMutation } from 'pl-fe/queries/groups/use-group-blocks';
 import toast from 'pl-fe/toast';
-
-type RouteParams = { groupId: string };
 
 const messages = defineMessages({
   heading: { id: 'column.group_blocked_members', defaultMessage: 'Banned members' },
@@ -54,14 +53,10 @@ const BlockedMember: React.FC<IBlockedMember> = ({ accountId, groupId }) => {
   );
 };
 
-interface IGroupBlockedMembers {
-  params: RouteParams;
-}
+const GroupBlockedMembers: React.FC = () => {
+  const { groupId } = groupBlocksRoute.useParams();
 
-const GroupBlockedMembers: React.FC<IGroupBlockedMembers> = ({ params }) => {
   const intl = useIntl();
-
-  const groupId = params?.groupId;
 
   const { group } = useGroup(groupId);
   const { data: accountIds } = useGroupBlocks(groupId);
@@ -81,7 +76,7 @@ const GroupBlockedMembers: React.FC<IGroupBlockedMembers> = ({ params }) => {
   const emptyMessage = <FormattedMessage id='empty_column.group_blocks' defaultMessage="The group hasn't banned any users yet." />;
 
   return (
-    <Column label={intl.formatMessage(messages.heading)} backHref={`/groups/${group.id}/manage`}>
+    <Column label={intl.formatMessage(messages.heading)} backHref='/groups/$groupId/manage' backParams={{ groupId: group.id }}>
       <ScrollableList
         scrollKey={`groupBlockedMembers:${groupId}`}
         emptyMessageText={emptyMessage}

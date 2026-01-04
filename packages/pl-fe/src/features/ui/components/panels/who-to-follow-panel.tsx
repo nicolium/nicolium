@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import Text from 'pl-fe/components/ui/text';
 import Widget from 'pl-fe/components/ui/widget';
@@ -40,7 +40,7 @@ const WhoToFollowPanel = ({ limit }: IWhoToFollowPanel) => {
     <Widget
       title={<FormattedMessage id='who_to_follow.title' defaultMessage='People to follow' />}
       action={
-        <Link className='text-right' to='/search?type=accounts'>
+        <Link className='text-right' to='/search' search={{ type: 'accounts' }}>
           <Text tag='span' theme='primary' size='sm' className='hover:underline'>
             <FormattedMessage id='feed_suggestions.view_all' defaultMessage='View all' />
           </Text>

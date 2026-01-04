@@ -1,29 +1,30 @@
+import { type LinkOptions, useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import throttle from 'lodash/throttle';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import Helmet from 'pl-fe/components/helmet';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 
 import { Card, CardBody, CardHeader, CardTitle, type CardSizes } from './card';
 
-type IColumnHeader = Pick<IColumn, 'label' | 'backHref' | 'className' | 'action'>;
+type IColumnHeader = Pick<IColumn, 'label' | 'backHref' | 'backParams' | 'className' | 'action'>;
 
 /** Contains the column title with optional back button. */
-const ColumnHeader: React.FC<IColumnHeader> = ({ label, backHref, className, action }) => {
-  const history = useHistory();
+const ColumnHeader: React.FC<IColumnHeader> = ({ label, backHref, backParams, className, action }) => {
+  const navigate = useNavigate();
+  const { history } = useRouter();
 
   const handleBackClick = () => {
     if (backHref) {
-      history.push(backHref);
+      navigate({ to: backHref, params: backParams });
       return;
     }
 
-    if (history.length === 1) {
-      history.push('/');
+    if (!history.canGoBack) {
+      navigate({ to: '/' });
     } else {
-      history.goBack();
+      history.back();
     }
   };
 
@@ -42,7 +43,9 @@ const ColumnHeader: React.FC<IColumnHeader> = ({ label, backHref, className, act
 
 interface IColumn {
   /** Route the back button goes to. */
-  backHref?: string;
+  backHref?: LinkOptions['to'];
+  backParams?: LinkOptions['params'];
+  backSearch?: LinkOptions['search'];
   /** Column title text. */
   label?: string;
   /** Whether this column should have a transparent background. */

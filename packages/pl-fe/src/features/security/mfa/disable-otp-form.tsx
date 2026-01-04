@@ -1,6 +1,6 @@
+import { useNavigate } from '@tanstack/react-router';
 import React, { useState, useCallback } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import Button from 'pl-fe/components/ui/button';
 import Form from 'pl-fe/components/ui/form';
@@ -25,7 +25,7 @@ const DisableOtpForm: React.FC = () => {
 
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { mutate: disableMfa, isPending } = useDisableMfa();
 
@@ -33,7 +33,7 @@ const DisableOtpForm: React.FC = () => {
     disableMfa(password, {
       onSuccess: () => {
         toast.success(intl.formatMessage(messages.mfaDisableSuccess));
-        history.push('../auth/edit');
+        navigate({ to: '/settings' });
       },
       onError: () => {
         toast.error(intl.formatMessage(messages.disableFail));

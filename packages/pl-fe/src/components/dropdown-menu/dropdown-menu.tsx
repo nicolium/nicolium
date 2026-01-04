@@ -12,13 +12,11 @@ import { userTouching } from 'pl-fe/is-mobile';
 import { useModalsActions } from 'pl-fe/stores/modals';
 import { useUiStoreActions } from 'pl-fe/stores/ui';
 
-import DropdownMenuItem, { MenuItem } from './dropdown-menu-item';
+import DropdownMenuItem, { Menu } from './dropdown-menu-item';
 
 const messages = defineMessages({
   back: { id: 'card.back.label', defaultMessage: 'Back' },
 });
-
-type Menu = Array<MenuItem | null>;
 
 interface IDropdownMenuContent {
   handleClose: () => any;

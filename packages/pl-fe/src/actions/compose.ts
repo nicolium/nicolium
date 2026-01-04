@@ -18,6 +18,7 @@ import { uploadFile, updateMedia } from './media';
 import { saveSettings } from './settings';
 import { createStatus } from './statuses';
 
+import type { LinkOptions } from '@tanstack/react-router';
 import type { EditorState } from 'lexical';
 import type { Account, CreateStatusParams, CustomEmoji, Group, MediaAttachment, Status as BaseStatus, Tag, Poll, ScheduledStatus, InteractionPolicy, UpdateMediaParams } from 'pl-api';
 import type { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
@@ -26,7 +27,6 @@ import type { Status } from 'pl-fe/normalizers/status';
 import type { Policy, Rule, Scope } from 'pl-fe/pages/settings/interaction-policies';
 import type { ClearLinkSuggestion } from 'pl-fe/reducers/compose';
 import type { AppDispatch, RootState } from 'pl-fe/store';
-import type { History } from 'pl-fe/types/history';
 
 let cancelFetchComposeSuggestions = new AbortController();
 
@@ -307,14 +307,17 @@ const handleComposeSubmit = (dispatch: AppDispatch, getState: () => RootState, c
   }
 
   if (data.scheduled_at === null) {
+    const linkOptions: LinkOptions = (data.visibility === 'direct' && getClient(getState()).features.conversations)
+      ? { to: '/conversations' }
+      : { to: '/@{$username}/posts/$statusId', params: { username: data.account.acct, statusId: data.id } };
     toast.success(redact ? messages.redactSuccess : edit ? messages.editSuccess : messages.success, {
       actionLabel: messages.view,
-      actionLink: (data.visibility === 'direct' && getClient(getState()).features.conversations) ? '/conversations' : `/@${data.account.acct}/posts/${data.id}`,
+      actionLinkOptions: linkOptions,
     });
   } else {
     toast.success(messages.scheduledSuccess, {
       actionLabel: messages.view,
-      actionLink: '/scheduled_statuses',
+      actionLinkOptions: { to: '/scheduled_statuses' },
     });
   }
 };
@@ -338,14 +341,13 @@ const validateSchedule = (state: RootState, composeId: string) => {
 };
 
 interface SubmitComposeOpts {
-  history?: History;
   force?: boolean;
   onSuccess?: () => void;
 }
 
 const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview = false) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
-    const { history, force = false, onSuccess } = opts;
+    const { force = false, onSuccess } = opts;
 
     if (!isLoggedIn(getState)) return;
     const state = getState();
@@ -373,7 +375,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
         useModalsStore.getState().actions.openModal('MISSING_DESCRIPTION', {
           onContinue: () => {
             useModalsStore.getState().actions.closeModal('MISSING_DESCRIPTION');
-            dispatch(submitCompose(composeId, { history, force: true, onSuccess }));
+            dispatch(submitCompose(composeId, { force: true, onSuccess }));
           },
         });
         return;

@@ -1,22 +1,26 @@
+import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
-import { FormattedList, FormattedMessage } from 'react-intl';
-import { useSearchParams } from 'react-router-dom-v5-compat';
+import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import ScrollableList from 'pl-fe/components/scrollable-list';
+import Column from 'pl-fe/components/ui/column';
 import HStack from 'pl-fe/components/ui/hstack';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import Text from 'pl-fe/components/ui/text';
+import Report from 'pl-fe/features/admin/components/report';
+import { adminReportsRoute } from 'pl-fe/features/ui/router';
 import { useReports } from 'pl-fe/queries/admin/use-reports';
 
-import Report from '../components/report';
+const messages = defineMessages({
+  heading: { id: 'column.admin.reports', defaultMessage: 'Reports' },
+});
 
 const Reports: React.FC = () => {
-  const [params, setParams] = useSearchParams();
+  const intl = useIntl();
 
-  const resolved = params.get('resolved') as any as boolean || undefined;
-  const accountId = params.get('account_id') || undefined;
-  const targetAccountId = params.get('target_account_id') || undefined;
+  const { resolved, account_id: accountId, target_account_id: targetAccountId } = adminReportsRoute.useSearch();
+  const navigate = useNavigate({ from: adminReportsRoute.fullPath });
 
   const { account } = useAccount(accountId);
   const { account: targetAccount } = useAccount(targetAccountId);
@@ -27,14 +31,10 @@ const Reports: React.FC = () => {
     target_account_id: targetAccountId,
   });
 
-  const handleUnsetAccounts = () => {
-    params.delete('account_id');
-    params.delete('target_account_id');
-    setParams(params => Object.fromEntries(params.entries()));
-  };
+  const handleUnsetAccounts = () => navigate({ search: (prev) => ({ resolved: prev.resolved }) });
 
   return (
-    <>
+    <Column label={intl.formatMessage(messages.heading)}>
       {(accountId || targetAccountId) && (
         <HStack className='border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800' alignItems='center' space={2}>
           <IconButton iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/x.svg')} onClick={handleUnsetAccounts} />
@@ -70,7 +70,7 @@ const Reports: React.FC = () => {
       >
         {reportIds.map(report => report && <Report id={report} key={report} />)}
       </ScrollableList>
-    </>
+    </Column>
   );
 };
 

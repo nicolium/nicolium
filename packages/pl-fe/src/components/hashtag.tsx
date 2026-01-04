@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
 import { Sparklines, SparklinesCurve } from 'react-sparklines';
 
 import HStack from 'pl-fe/components/ui/hstack';
@@ -34,7 +34,7 @@ const Hashtag: React.FC<IHashtag> = ({ hashtag }) => {
   return (
     <HStack alignItems='center' justifyContent='between' data-testid='hashtag'>
       <Stack>
-        <Link to={`/tags/${hashtag.name}`} className='hover:underline'>
+        <Link to='/tags/$id' params={{ id: hashtag.name }} className='hover:underline'>
           <Text tag='span' size='sm' weight='semibold'>#{hashtag.name}</Text>
         </Link>
 

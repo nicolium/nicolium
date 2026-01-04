@@ -7,22 +7,19 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import { isNetworkError } from 'pl-fe/utils/errors';
 
+import type { ErrorRouteComponent } from '@tanstack/react-router';
+
 const messages = defineMessages({
   title: { id: 'bundle_column_error.title', defaultMessage: 'Network error' },
   body: { id: 'bundle_column_error.body', defaultMessage: 'Something went wrong while loading this page.' },
   retry: { id: 'bundle_column_error.retry', defaultMessage: 'Try again' },
 });
 
-interface IErrorColumn {
-  error: Error;
-  onRetry?: () => void;
-}
-
-const ErrorColumn: React.FC<IErrorColumn> = ({ error, onRetry = () => location.reload() }) => {
+const ErrorColumn: ErrorRouteComponent = ({ error, reset }) => {
   const intl = useIntl();
 
   const handleRetry = () => {
-    onRetry?.();
+    reset();
   };
 
   if (!isNetworkError(error)) {

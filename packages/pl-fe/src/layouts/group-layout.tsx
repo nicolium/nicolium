@@ -1,6 +1,6 @@
+import { Outlet, useLocation } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { useRouteMatch } from 'react-router-dom';
 
 import { useGroup } from 'pl-fe/api/hooks/groups/use-group';
 import { useGroupMembershipRequests } from 'pl-fe/api/hooks/groups/use-group-membership-requests';
@@ -8,10 +8,11 @@ import Column from 'pl-fe/components/ui/column';
 import Icon from 'pl-fe/components/ui/icon';
 import Layout from 'pl-fe/components/ui/layout';
 import Stack from 'pl-fe/components/ui/stack';
-import Tabs from 'pl-fe/components/ui/tabs';
+import Tabs, { type Item } from 'pl-fe/components/ui/tabs';
 import Text from 'pl-fe/components/ui/text';
 import GroupHeader from 'pl-fe/features/group/components/group-header';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
+import { layouts } from 'pl-fe/features/ui/router';
 import {
   GroupMediaPanel,
   SignUpPanel,
@@ -23,13 +24,6 @@ const messages = defineMessages({
   members: { id: 'group.tabs.members', defaultMessage: 'Members' },
   media: { id: 'group.tabs.media', defaultMessage: 'Media' },
 });
-
-interface IGroupLayout {
-  params?: {
-    groupId?: string;
-  };
-  children: React.ReactNode;
-}
 
 const PrivacyBlankslate = () => (
   <Stack space={4} className='py-10' alignItems='center'>
@@ -50,12 +44,12 @@ const PrivacyBlankslate = () => (
 );
 
 /** Layout to display a group. */
-const GroupLayout: React.FC<IGroupLayout> = ({ params, children }) => {
-  const intl = useIntl();
-  const match = useRouteMatch();
-  const { account: me } = useOwnAccount();
+const GroupLayout = () => {
+  const { groupId } = layouts.group.useParams();
 
-  const groupId = params?.groupId || '';
+  const intl = useIntl();
+  const location = useLocation();
+  const { account: me } = useOwnAccount();
 
   const { group } = useGroup(groupId);
   const { accounts: pending } = useGroupMembershipRequests(groupId);
@@ -64,23 +58,27 @@ const GroupLayout: React.FC<IGroupLayout> = ({ params, children }) => {
   const isPrivate = group?.locked;
 
   const tabItems = useMemo(() => {
-    const items = [];
-    items.push({
-      text: intl.formatMessage(messages.all),
-      to: `/groups/${groupId}`,
-      name: '/groups/:groupId',
-    });
+    const items: Array<Item> = [
+      {
+        text: intl.formatMessage(messages.all),
+        to: '/groups/$groupId',
+        params: { groupId },
+        name: '/groups/$groupId',
+      },
+    ];
 
     items.push(
       {
         text: intl.formatMessage(messages.media),
-        to: `/groups/${groupId}/media`,
-        name: '/groups/:groupId/media',
+        to: '/groups/$groupId/media',
+        params: { groupId },
+        name: '/groups/$groupId/media',
       },
       {
         text: intl.formatMessage(messages.members),
-        to: `/groups/${groupId}/members`,
-        name: '/groups/:groupId/members',
+        to: '/groups/$groupId/members',
+        params: { groupId },
+        name: '/groups/$groupId/members',
         count: pending.length,
       },
     );
@@ -92,7 +90,7 @@ const GroupLayout: React.FC<IGroupLayout> = ({ params, children }) => {
     if (!isMember && isPrivate) {
       return <PrivacyBlankslate />;
     } else {
-      return children;
+      return <Outlet />;
     }
   };
 
@@ -105,7 +103,7 @@ const GroupLayout: React.FC<IGroupLayout> = ({ params, children }) => {
           <Tabs
             key={`group-tabs-${groupId}`}
             items={tabItems}
-            activeItem={match.path}
+            activeItem={location.pathname}
           />
 
           {renderChildren()}

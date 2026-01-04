@@ -1,6 +1,6 @@
+import { Link, useNavigate } from '@tanstack/react-router';
 import React, { useCallback, useRef } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage, IntlShape, MessageDescriptor } from 'react-intl';
-import { Link, useHistory } from 'react-router-dom';
 
 import { mentionCompose, replyCompose } from 'pl-fe/actions/compose';
 import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
@@ -41,7 +41,8 @@ const buildLink = (account: Pick<Account, 'acct' | 'display_name' | 'emojis' | '
   <Link
     className='font-bold text-gray-800 hover:underline dark:text-gray-200'
     title={account.acct}
-    to={`/@${account.acct}`}
+    to='/@{$username}'
+    params={{ username: account.acct }}
     key={account.id}
   >
     <HoverAccountWrapper key={account.acct} element='bdi' accountId={account.id}>
@@ -258,7 +259,7 @@ const Notification: React.FC<INotification> = (props) => {
   const { mutate: reblogStatus } = useReblogStatus(status?.id!);
   const { mutate: unreblogStatus } = useUnreblogStatus(status?.id!);
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const intl = useIntl();
   const instance = useInstance();
 
@@ -268,7 +269,7 @@ const Notification: React.FC<INotification> = (props) => {
 
   const handleOpen = () => {
     if (status && typeof status === 'object' && account && typeof account === 'object') {
-      history.push(`/@${account.acct}/posts/${status.id}`);
+      navigate({ to: '/@{$username}/posts/$statusId', params: { username: account.acct, statusId: status.id } });
     } else {
       handleOpenProfile();
     }
@@ -276,7 +277,7 @@ const Notification: React.FC<INotification> = (props) => {
 
   const handleOpenProfile = () => {
     if (account && typeof account === 'object') {
-      history.push(`/@${account.acct}`);
+      navigate({ to: '/@{$username}', params: { username: account.acct } });
     }
   };
 

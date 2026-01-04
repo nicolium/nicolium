@@ -8,14 +8,11 @@ import { PendingItemsRow } from 'pl-fe/components/pending-items-row';
 import ScrollableList from 'pl-fe/components/scrollable-list';
 import GroupMemberListItem from 'pl-fe/features/group/components/group-member-list-item';
 import PlaceholderAccount from 'pl-fe/features/placeholder/components/placeholder-account';
+import { groupMembersRoute } from 'pl-fe/features/ui/router';
 import { useGroupMembers } from 'pl-fe/queries/groups/use-group-members';
 
-interface IGroupMembers {
-  params: { groupId: string };
-}
-
-const GroupMembers: React.FC<IGroupMembers> = (props) => {
-  const { groupId } = props.params;
+const GroupMembers: React.FC = () => {
+  const { groupId } = groupMembersRoute.useParams();
 
   const { group, isFetching: isFetchingGroup } = useGroup(groupId);
   const { data: owners, isFetching: isFetchingOwners } = useGroupMembers(groupId, GroupRoles.OWNER);
@@ -46,7 +43,8 @@ const GroupMembers: React.FC<IGroupMembers> = (props) => {
         prepend={(pendingCount > 0) && (
           <div className={clsx('py-3', { 'border-b border-gray-200 dark:border-gray-800': members.length })}>
             <PendingItemsRow
-              to={`/groups/${group?.id}/manage/requests`}
+              to='/groups/$groupId/manage/requests'
+              params={{ groupId: group?.id! }}
               count={pendingCount}
             />
           </div>

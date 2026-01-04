@@ -1,9 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import { GOTOSOCIAL, MASTODON, mediaAttachmentSchema } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 import * as v from 'valibot';
 
 import { mentionCompose, directCompose } from 'pl-fe/actions/compose';
@@ -136,7 +136,7 @@ interface IHeader {
 
 const Header: React.FC<IHeader> = ({ account }) => {
   const intl = useIntl();
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const client = useClient();
 
@@ -166,7 +166,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       toast.error(data?.error);
     },
     onSuccess: (response) => {
-      history.push(`/chats/${response.id}`);
+      navigate({ to: '/chats/{-$chatId}', params: { chatId: response.id } });
       queryClient.invalidateQueries({
         queryKey: ['chats', 'search'],
       });
@@ -392,7 +392,8 @@ const Header: React.FC<IHeader> = ({ account }) => {
     if (features.searchFromAccount) {
       menu.push({
         text: intl.formatMessage(account.id === ownAccount.id ? messages.searchSelf : messages.search, { name: account.username }),
-        to: '/search?' + new URLSearchParams({ type: 'statuses', accountId: account.id }).toString(),
+        to: '/search',
+        search: { type: 'statuses', accountId: account.id },
         icon: require('@phosphor-icons/core/regular/magnifying-glass.svg'),
       });
     }
@@ -570,7 +571,8 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
       menu.push({
         text: intl.formatMessage(messages.adminAccount, { name: account.username }),
-        to: `/pl-fe/admin/accounts/${account.id}`,
+        to: '/pl-fe/admin/accounts/$accountId',
+        params: { accountId: account.id },
         icon: require('@phosphor-icons/core/regular/gavel.svg'),
       });
     }

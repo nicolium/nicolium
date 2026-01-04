@@ -1,6 +1,6 @@
+import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import Button from 'pl-fe/components/ui/button';
 import Stack from 'pl-fe/components/ui/stack';
@@ -8,10 +8,10 @@ import Text from 'pl-fe/components/ui/text';
 
 /** To display on the chats main page when no message is selected, but chats are present. */
 const BlankslateWithChats = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleNewChat = () => {
-    history.push('/chats/new');
+    navigate({ to: '/chats/new' });
   };
 
   return (

@@ -1,8 +1,7 @@
+import { Link, useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
-import { useSearchParams } from 'react-router-dom-v5-compat';
 
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import Account from 'pl-fe/components/account';
@@ -19,6 +18,7 @@ import Column from 'pl-fe/components/ui/column';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
+import { directoryRoute } from 'pl-fe/features/ui/router';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInstance } from 'pl-fe/hooks/use-instance';
@@ -72,7 +72,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
           <div className='h-32 w-full rounded-t-lg bg-gray-200 dark:bg-gray-700' />
         )}
 
-        <Link to={`/@${account.acct}`} title={account.acct}>
+        <Link to='/@{$username}' params={{ username: account.acct }} title={account.acct}>
           <HoverAccountWrapper key={account.id} accountId={account.id} element='span'>
             <Avatar
               src={account.avatar}
@@ -145,21 +145,19 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
 
 const DirectoryPage = () => {
   const intl = useIntl();
-  const [params, setParams] = useSearchParams();
+  const { order, local } = directoryRoute.useSearch();
+  const navigate = useNavigate({ from: directoryRoute.fullPath });
   const instance = useInstance();
   const features = useFeatures();
-
-  const order = (params.get('order') || 'active') as 'active' | 'new';
-  const local = !!params.get('local');
 
   const { data: accountIds = [], isLoading, hasNextPage, fetchNextPage } = useDirectory(order, local);
 
   const handleChangeOrder: React.ChangeEventHandler<HTMLInputElement> = e => {
-    setParams({ local: local ? 'true' : '', order: e.target.value });
+    navigate({ search: ({ local }) => ({ local, order: e.target.value as 'active' | 'new' }) });
   };
 
   const handleChangeLocal: React.ChangeEventHandler<HTMLInputElement> = e => {
-    setParams({ local: e.target.value === '1' ? 'true' : '', order });
+    navigate({ search: ({ order }) => ({ local: e.target.checked, order }) });
   };
 
   const handleLoadMore = () => {

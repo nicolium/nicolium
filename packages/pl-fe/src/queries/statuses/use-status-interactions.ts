@@ -197,7 +197,10 @@ const useBookmarkStatus = (statusId: string) => {
 
       let opts: IToastOptions = {
         actionLabel: messages.view,
-        actionLink: folderId ? `/bookmarks/${folderId}` : '/bookmarks/all',
+        actionLinkOptions: {
+          to: '/bookmarks/$folderId',
+          params: { folderId: folderId || 'all' },
+        },
       };
 
       if (features.bookmarkFolders && typeof folderId !== 'string') {

@@ -1,5 +1,5 @@
+import { Link } from '@tanstack/react-router';
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 import Tooltip from 'pl-fe/components/ui/tooltip';
 
@@ -22,7 +22,8 @@ const Mention: React.FC<IMention> = ({ mention: { acct, username }, disabled }) 
   return (
     <Tooltip text={`@${acct}`}>
       <Link
-        to={`/@${acct}`}
+        to='/@{$username}'
+        params={{ username: acct }}
         className='text-primary-600 hover:underline dark:text-accent-blue'
         onClick={handleClick}
         dir='ltr'

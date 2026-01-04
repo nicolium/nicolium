@@ -1,29 +1,27 @@
+import { Link, type LinkOptions } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedNumber } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import Text from 'pl-fe/components/ui/text';
 import { isNumber } from 'pl-fe/utils/numbers';
 
-interface IDashCounter {
+type IDashCounter = {
   count: number | undefined;
   label: React.ReactNode;
-  to?: string;
   percent?: boolean;
-}
+} & (LinkOptions | {});
 
 /** Displays a (potentially clickable) dashboard statistic. */
-const DashCounter: React.FC<IDashCounter> = ({ count, label, to = '#', percent = false }) => {
+const DashCounter: React.FC<IDashCounter> = ({ count, label, percent = false, ...rest }) => {
 
   if (!isNumber(count)) {
     return null;
   }
 
-  return (
-    <Link
-      className='flex cursor-pointer flex-col items-center space-y-2 rounded bg-gray-200 p-4 transition-transform hover:-translate-y-1 dark:bg-gray-800'
-      to={to}
-    >
+  const className = 'flex cursor-pointer flex-col items-center space-y-2 rounded bg-gray-200 p-4 transition-transform hover:-translate-y-1 dark:bg-gray-800';
+
+  const body = (
+    <>
       <Text align='center' size='2xl' weight='medium'>
         <FormattedNumber
           value={count}
@@ -35,6 +33,16 @@ const DashCounter: React.FC<IDashCounter> = ({ count, label, to = '#', percent =
       <Text align='center'>
         {label}
       </Text>
+    </>
+  );
+
+  if (!('to' in rest)) {
+    return <span className={className}>{body}</span>;
+  }
+
+  return (
+    <Link className={className} {...rest}>
+      {body}
     </Link>
   );
 };

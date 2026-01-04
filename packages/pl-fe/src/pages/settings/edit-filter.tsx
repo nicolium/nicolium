@@ -1,7 +1,7 @@
+import { useNavigate } from '@tanstack/react-router';
 import { Filter, type FilterContext } from 'pl-api';
 import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import { createFilter, fetchFilter, updateFilter } from 'pl-fe/actions/filters';
 import List, { ListItem } from 'pl-fe/components/list';
@@ -19,6 +19,7 @@ import Streamfield from 'pl-fe/components/ui/streamfield';
 import Text from 'pl-fe/components/ui/text';
 import Toggle from 'pl-fe/components/ui/toggle';
 import { SelectDropdown } from 'pl-fe/features/forms';
+import { editFilterRoute } from 'pl-fe/features/ui/router';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import toast from 'pl-fe/toast';
@@ -30,10 +31,6 @@ interface IFilterField {
   keyword: string;
   whole_word: boolean;
   _destroy?: boolean;
-}
-
-interface IEditFilter {
-  params: { id?: string };
 }
 
 const messages = defineMessages({
@@ -97,9 +94,11 @@ const FilterField: StreamfieldComponent<IFilterField> = ({ value, onChange }) =>
   );
 };
 
-const EditFilterPage: React.FC<IEditFilter> = ({ params }) => {
+const EditFilterPage: React.FC = () => {
+  const { filterId } = editFilterRoute.useParams();
+
   const intl = useIntl();
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const features = useFeatures();
 
@@ -150,10 +149,10 @@ const EditFilterPage: React.FC<IEditFilter> = ({ params }) => {
       context.push('account');
     }
 
-    dispatch(params.id
-      ? updateFilter(params.id, title, expiresIn, context, filterAction, keywords)
+    dispatch(filterId !== 'new'
+      ? updateFilter(filterId, title, expiresIn, context, filterAction, keywords)
       : createFilter(title, expiresIn, context, filterAction, keywords)).then(() => {
-      history.push('/filters');
+      navigate({ to: '/filters' });
     }).catch(() => {
       toast.error(intl.formatMessage(messages.create_error));
     });
@@ -168,9 +167,9 @@ const EditFilterPage: React.FC<IEditFilter> = ({ params }) => {
     : keywords.filter((_, index) => index !== i));
 
   useEffect(() => {
-    if (params.id) {
+    if (filterId !== 'new') {
       setLoading(true);
-      dispatch(fetchFilter(params.id))?.then((filter) => {
+      dispatch(fetchFilter(filterId))?.then((filter) => {
         if (filter) {
           setTitle(filter.title);
           setHomeTimeline(filter.context.includes('home'));
@@ -186,7 +185,7 @@ const EditFilterPage: React.FC<IEditFilter> = ({ params }) => {
         setLoading(false);
       });
     }
-  }, [params.id]);
+  }, [filterId]);
 
   if (notFound) return <MissingIndicator />;
 
@@ -299,7 +298,7 @@ const EditFilterPage: React.FC<IEditFilter> = ({ params }) => {
 
         <FormActions>
           <Button type='submit' theme='primary' disabled={loading}>
-            {intl.formatMessage(params.id ? messages.edit : messages.add_new)}
+            {intl.formatMessage(filterId !== 'new' ? messages.edit : messages.add_new)}
           </Button>
         </FormActions>
       </Form>

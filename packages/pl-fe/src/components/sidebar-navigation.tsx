@@ -257,7 +257,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
 
             {features.chats && (
               <SidebarNavigationLink
-                to='/chats'
+                to='/chats/{-$chatId}'
                 icon={require('@phosphor-icons/core/regular/chats-teardrop.svg')}
                 activeIcon={require('@phosphor-icons/core/fill/chats-teardrop-fill.svg')}
                 count={unreadChatsCount}
@@ -285,18 +285,21 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
             )}
 
             <SidebarNavigationLink
-              to={`/@${account.acct}`}
+              to='/@{$username}'
+              params={{ username: account.username }}
               icon={require('@phosphor-icons/core/regular/user.svg')}
               activeIcon={require('@phosphor-icons/core/fill/user-fill.svg')}
               text={<FormattedMessage id='tabs_bar.profile' defaultMessage='Profile' />}
             />
 
-            {features.drive && <SidebarNavigationLink
-              to='/drive'
-              icon={require('@phosphor-icons/core/regular/cloud.svg')}
-              activeIcon={require('@phosphor-icons/core/fill/cloud-fill.svg')}
-              text={<FormattedMessage id='column.drive' defaultMessage='Drive' />}
-            />}
+            {features.drive && (
+              <SidebarNavigationLink
+                to='/drive/{-$folderId}'
+                icon={require('@phosphor-icons/core/regular/cloud.svg')}
+                activeIcon={require('@phosphor-icons/core/fill/cloud-fill.svg')}
+                text={<FormattedMessage id='column.drive' defaultMessage='Drive' />}
+              />
+            )}
 
             <SidebarNavigationLink
               to='/settings'

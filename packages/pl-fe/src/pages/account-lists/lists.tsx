@@ -106,7 +106,8 @@ const ListsPage: React.FC = () => {
             {lists.map((list: any) => (
               <ListItem
                 key={list.id}
-                to={`/list/${list.id}`}
+                to='/list/$listId'
+                params={{ listId: list.id }}
                 label={
                   <HStack alignItems='center' space={2}>
                     <Icon src={require('@phosphor-icons/core/regular/list-bullets.svg')} size={20} />

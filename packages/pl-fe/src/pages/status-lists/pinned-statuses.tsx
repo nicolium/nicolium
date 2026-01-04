@@ -1,10 +1,10 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useParams } from 'react-router-dom';
 
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import StatusList from 'pl-fe/components/status-list';
 import Column from 'pl-fe/components/ui/column';
+import { profilePinsRoute } from 'pl-fe/features/ui/router';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { usePinnedStatuses } from 'pl-fe/queries/status-lists/use-pinned-statuses';
 
@@ -14,7 +14,7 @@ const messages = defineMessages({
 
 const PinnedStatusesPage = () => {
   const intl = useIntl();
-  const { username } = useParams<{ username: string }>();
+  const { username } = profilePinsRoute.useParams();
 
   const { account } = useOwnAccount();
   const { data: statusIds = [], isFetching: isLoading, hasNextPage: hasMore } = usePinnedStatuses(account?.id || '');

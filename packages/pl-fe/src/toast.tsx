@@ -6,13 +6,14 @@ import Toast from './components/ui/toast';
 import { httpErrorMessages } from './utils/errors';
 
 import type { PlfeResponse } from './api';
+import type { LinkOptions } from '@tanstack/react-router';
 
 type ToastText = string | MessageDescriptor
 type ToastType = 'success' | 'error' | 'info'
 
 interface IToastOptions {
   action?(): void;
-  actionLink?: string;
+  actionLinkOptions?: LinkOptions;
   actionLabel?: ToastText;
   duration?: number;
   summary?: string;

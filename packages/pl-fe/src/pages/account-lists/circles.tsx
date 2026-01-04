@@ -97,7 +97,8 @@ const CirclesPage: React.FC = () => {
             {circles.map((circle) => (
               <ListItem
                 key={circle.id}
-                to={`/circles/${circle.id}`}
+                to='/circles/$circleId'
+                params={{ circleId: circle.id }}
                 label={
                   <HStack alignItems='center' space={2}>
                     <Icon src={require('@phosphor-icons/core/regular/list-bullets.svg')} size={20} />

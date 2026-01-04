@@ -5,6 +5,7 @@ import { useAccountLookup } from 'pl-fe/api/hooks/accounts/use-account-lookup';
 import MissingIndicator from 'pl-fe/components/missing-indicator';
 import StatusList from 'pl-fe/components/status-list';
 import Column from 'pl-fe/components/ui/column';
+import { profileFavoritesRoute } from 'pl-fe/features/ui/router';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
 import { useFavourites } from 'pl-fe/queries/status-lists/use-favourites';
 
@@ -12,19 +13,14 @@ const messages = defineMessages({
   heading: { id: 'column.favourited_statuses', defaultMessage: 'Liked posts' },
 });
 
-interface IFavourites {
-  params?: {
-    username?: string;
-  };
-}
-
 /** Timeline displaying a user's favourited statuses. */
-const FavouritedStatusesPage: React.FC<IFavourites> = ({ params }) => {
+const FavouritedStatusesPage: React.FC = () => {
+  const { username } = profileFavoritesRoute.useParams();
+
   const intl = useIntl();
   const { account: ownAccount } = useOwnAccount();
-  const { account, isUnavailable } = useAccountLookup(params?.username, { withRelationship: true });
+  const { account, isUnavailable } = useAccountLookup(username, { withRelationship: true });
 
-  const username = params?.username || '';
   const isOwnAccount = username.toLowerCase() === ownAccount?.acct?.toLowerCase();
   const accountId = isOwnAccount ? undefined : account?.id;
 

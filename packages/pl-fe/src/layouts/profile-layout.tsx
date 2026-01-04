@@ -1,14 +1,15 @@
+import { Navigate, Outlet, useLocation } from '@tanstack/react-router';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { FormattedMessage } from 'react-intl';
-import { Redirect, useHistory } from 'react-router-dom';
 
 import { useAccountLookup } from 'pl-fe/api/hooks/accounts/use-account-lookup';
 import Column from 'pl-fe/components/ui/column';
 import Layout from 'pl-fe/components/ui/layout';
-import Tabs from 'pl-fe/components/ui/tabs';
+import Tabs, { type Item } from 'pl-fe/components/ui/tabs';
 import Header from 'pl-fe/features/account/components/header';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
+import { layouts } from 'pl-fe/features/ui/router';
 import {
   WhoToFollowPanel,
   ProfileInfoPanel,
@@ -23,17 +24,10 @@ import { useFeatures } from 'pl-fe/hooks/use-features';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { getAcct } from 'pl-fe/utils/accounts';
 
-interface IProfileLayout {
-  params?: {
-    username?: string;
-  };
-  children: React.ReactNode;
-}
-
 /** Layout to display a user's profile. */
-const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
-  const history = useHistory();
-  const username = params?.username || '';
+const ProfileLayout: React.FC = () => {
+  const { username } = layouts.profile.useParams();
+  const location = useLocation();
 
   const { account, isUnauthorized } = useAccountLookup(username, { withRelationship: true });
 
@@ -42,28 +36,33 @@ const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
   const { displayFqn } = usePlFeConfig();
 
   if (isUnauthorized) {
-    return <Redirect to='/login' />;
+    localStorage.setItem('plfe:redirect_uri', location.href);
+    return <Navigate to='/login' />;
   }
 
   // Fix case of username
   if (account && account.acct !== username) {
-    return <Redirect to={`/@${account.acct}`} />;
+    return <Navigate to='/@{$username}' params={{ username: account.acct }} replace />;
   }
 
-  const tabItems = [
+  const tabItems: Array<Item> = [
     {
       text: <FormattedMessage id='account.posts' defaultMessage='Posts' />,
-      to: `/@${username}`,
+      to: '/@{$username}',
+      params: { username },
       name: 'profile',
     },
     {
       text: <FormattedMessage id='account.posts_with_replies' defaultMessage='Posts & replies' />,
-      to: `/@${username}/with_replies`,
+      to: '/@{$username}',
+      params: { username },
+      search: { with_replies: true },
       name: 'replies',
     },
     {
       text: <FormattedMessage id='account.media' defaultMessage='Media' />,
-      to: `/@${username}/media`,
+      to: '/@{$username}/media',
+      params: { username },
       name: 'media',
     },
   ];
@@ -73,14 +72,15 @@ const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
     if (ownAccount || account.hide_favorites === false) {
       tabItems.push({
         text: <FormattedMessage id='navigation_bar.favourites' defaultMessage='Likes' />,
-        to: `/@${account.acct}/favorites`,
+        to: '/@{$username}/favorites',
+        params: { username: account.acct },
         name: 'likes',
       });
     }
   }
 
   let activeItem;
-  const pathname = history.location.pathname.replace(`@${username}/`, '');
+  const pathname = location.pathname.replace(`@${username}/`, '');
   if (pathname.endsWith('/with_replies')) {
     activeItem = 'replies';
   } else if (pathname.endsWith('/media')) {
@@ -110,7 +110,7 @@ const ProfileLayout: React.FC<IProfileLayout> = ({ params, children }) => {
               <Tabs key={`profile-tabs-${account.id}`} items={tabItems} activeItem={activeItem} />
             )}
 
-            {children}
+            <Outlet />
           </div>
         </Column>
       </Layout.Main>

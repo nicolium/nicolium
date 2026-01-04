@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import Account from 'pl-fe/components/account';
 import StatusContent from 'pl-fe/components/status-content';
@@ -61,7 +61,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                 defaultMessage='Posted in {group}'
                 values={{
                   group: (
-                    <Link to={`/groups/${status.group.id}`} className='hover:underline'>
+                    <Link to='/groups/$groupId' params={{ groupId: status.group.id }} className='hover:underline'>
                       <bdi className='truncate'>
                         <strong className='text-gray-800 dark:text-gray-200'>
                           <Emojify text={status.account.display_name} emojis={status.account.emojis} />

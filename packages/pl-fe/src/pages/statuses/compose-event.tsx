@@ -7,6 +7,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Tabs from 'pl-fe/components/ui/tabs';
 import { EditEvent } from 'pl-fe/features/compose-event/tabs/edit-event';
 import { ManagePendingParticipants } from 'pl-fe/features/compose-event/tabs/manage-pending-participants';
+import { eventEditRoute } from 'pl-fe/features/ui/router';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 
 const messages = defineMessages({
@@ -16,19 +17,11 @@ const messages = defineMessages({
   pending: { id: 'compose_event.tabs.pending', defaultMessage: 'Manage requests' },
 });
 
-type RouteParams = {
-  statusId?: string;
-};
-
-interface IComposeEventPage {
-  params: RouteParams;
-}
-
-const ComposeEventPage: React.FC<IComposeEventPage> = ({ params }) => {
+const EditEventPage = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const statusId = params.statusId || null;
+  const { statusId } = eventEditRoute.useParams();
 
   const [tab, setTab] = useState<'edit' | 'pending'>('edit');
 
@@ -54,13 +47,28 @@ const ComposeEventPage: React.FC<IComposeEventPage> = ({ params }) => {
   };
 
   return (
-    <Column label={intl.formatMessage(statusId ? messages.manageEvent : messages.createEvent)}>
+    <Column label={intl.formatMessage(messages.manageEvent)}>
       <Stack space={2}>
-        {statusId && renderTabs()}
-        {tab === 'edit' ? <EditEvent statusId={statusId} /> : <ManagePendingParticipants statusId={statusId!} />}
+        {renderTabs()}
+        {tab === 'edit' ? <EditEvent statusId={statusId} /> : <ManagePendingParticipants statusId={statusId} />}
       </Stack>
     </Column>
   );
 };
 
-export { ComposeEventPage as default };
+const ComposeEventPage = () => {
+  const intl = useIntl();
+  const dispatch = useAppDispatch();
+
+  useEffect(() => () => {
+    dispatch(cancelEventCompose());
+  }, []);
+
+  return (
+    <Column label={intl.formatMessage(messages.createEvent)}>
+      <EditEvent statusId={null} />
+    </Column>
+  );
+};
+
+export { ComposeEventPage as default, EditEventPage };

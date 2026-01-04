@@ -1,6 +1,6 @@
+import { useMatch } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useLocation, useRouteMatch } from 'react-router-dom';
 
 import { groupComposeModal } from 'pl-fe/actions/compose';
 import { useGroup } from 'pl-fe/api/hooks/groups/use-group';
@@ -10,19 +10,19 @@ import Icon from 'pl-fe/components/ui/icon';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useModalsActions } from 'pl-fe/stores/modals';
 
+import { layouts } from '../router';
+
 interface IComposeButton {
   /** Whether the button should shrink to fit in a smaller space. */
   shrink?: boolean;
 }
 
 const ComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
-  const location = useLocation();
-  const isOnGroupPage = location.pathname.startsWith('/group/');
-  const match = useRouteMatch<{ groupId: string }>('/groups/:groupId');
+  const match = useMatch({ from: layouts.group.id, shouldThrow: false });
   const { group } = useGroup(match?.params.groupId || '');
   const isGroupMember = !!group?.relationship?.member;
 
-  if (isOnGroupPage && isGroupMember) {
+  if (match && isGroupMember) {
     return <GroupComposeButton shrink={shrink} />;
   }
 
@@ -47,7 +47,7 @@ const HomeComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
 
 const GroupComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
   const dispatch = useAppDispatch();
-  const match = useRouteMatch<{ groupId: string }>('/groups/:groupId');
+  const match = useMatch({ from: layouts.group.id, shouldThrow: false });
   const { group } = useGroup(match?.params.groupId || '');
 
   if (!group) return null;

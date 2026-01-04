@@ -1,7 +1,7 @@
+import { Link, linkOptions, useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-intl';
-import { Link, useHistory } from 'react-router-dom';
 
 import { mentionCompose, replyCompose } from 'pl-fe/actions/compose';
 import { unfilterStatus } from 'pl-fe/actions/statuses';
@@ -74,8 +74,9 @@ const Status: React.FC<IStatus> = (props) => {
   } = props;
 
   const intl = useIntl();
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const { toggleStatusesMediaHidden } = useStatusMetaActions();
   const { openModal } = useModalsActions();
@@ -92,7 +93,6 @@ const Status: React.FC<IStatus> = (props) => {
   const { mutate: unreblogStatus } = useUnreblogStatus(actualStatus.id);
 
   const isReblog = status.reblog_id;
-  const statusUrl = `/@${actualStatus.account.acct}/posts/${actualStatus.id}`;
   const group = actualStatus.group;
 
   const filterResults = useMemo(() => [...status.filtered, ...actualStatus.filtered].filter(({ filter }) => filter.filter_action === 'warn'), [status.filtered, actualStatus.filtered]);
@@ -111,14 +111,20 @@ const Status: React.FC<IStatus> = (props) => {
       return;
     }
 
+    const link = linkOptions({
+      to: '/@{$username}/posts/$statusId',
+      params: { username: actualStatus.account.acct, statusId: actualStatus.id },
+    });
+
     if (!e || !(e.ctrlKey || e.metaKey)) {
       if (onClick) {
         onClick();
       } else {
-        history.push(statusUrl);
+        navigate(link);
       }
     } else {
-      window.open(statusUrl, '_blank');
+      const url = router.buildLocation(link).href;
+      window.open(url, '_blank');
     }
   };
 
@@ -161,11 +167,11 @@ const Status: React.FC<IStatus> = (props) => {
   };
 
   const handleHotkeyOpen = () => {
-    history.push(statusUrl);
+    navigate({ to: '/@{$username}/posts/$statusId', params: { username: actualStatus.account.acct, statusId: actualStatus.id } });
   };
 
   const handleHotkeyOpenProfile = () => {
-    history.push(`/@${actualStatus.account.acct}`);
+    navigate({ to: '/@{$username}', params: { username: actualStatus.account.acct } });
   };
 
   const handleHotkeyMoveUp = (e?: KeyboardEvent) => {
@@ -207,7 +213,8 @@ const Status: React.FC<IStatus> = (props) => {
               values={{
                 name: (
                   <Link
-                    to={`/@${status.account.acct}`}
+                    to='/@{$username}'
+                    params={{ username: status.account.acct }}
                     className='hover:underline'
                   >
                     <bdi className='truncate'>
@@ -218,7 +225,7 @@ const Status: React.FC<IStatus> = (props) => {
                   </Link>
                 ),
                 group: (
-                  <Link to={`/groups/${group.id}`} className='hover:underline'>
+                  <Link to='/groups/$groupId' params={{ groupId: group.id }} className='hover:underline'>
                     <strong className='text-gray-800 dark:text-gray-200'>
                       <Emojify text={group.display_name} emojis={group.emojis} />
                     </strong>
@@ -233,7 +240,7 @@ const Status: React.FC<IStatus> = (props) => {
       const accounts = status.accounts || [status.account];
 
       const renderedAccounts = accounts.slice(0, 2).map(account => !!account && (
-        <Link key={account.acct} to={`/@${account.acct}`} className='hover:underline'>
+        <Link key={account.acct} to='/@{$username}' params={{ username: account.acct }} className='hover:underline'>
           <bdi className='truncate'>
             <strong className='text-gray-800 dark:text-gray-200'>
               <Emojify text={account.display_name} emojis={account.emojis} />
@@ -302,7 +309,7 @@ const Status: React.FC<IStatus> = (props) => {
               defaultMessage='Posted in {group}'
               values={{
                 group: (
-                  <Link to={`/groups/${group.id}`} className='hover:underline'>
+                  <Link to='/groups/$groupId' params={{ groupId: group.id }} className='hover:underline'>
                     <bdi className='truncate'>
                       <strong className='text-gray-800 dark:text-gray-200'>
                         <Emojify text={group.display_name} emojis={group.emojis} />
@@ -389,7 +396,7 @@ const Status: React.FC<IStatus> = (props) => {
               id={actualStatus.account_id}
               action={
                 <div className='flex flex-row-reverse items-center gap-1 self-baseline'>
-                  <Link to={statusUrl} className='hover:underline' onClick={(event) => event.stopPropagation()}>
+                  <Link to='/@{$username}/posts/$statusId' params={{ username: actualStatus.account.acct, statusId: actualStatus.id }} className='hover:underline' onClick={(event) => event.stopPropagation()}>
                     <RelativeTimestamp timestamp={actualStatus.created_at} theme='muted' size='sm' className='whitespace-nowrap' />
                   </Link>
                   <StatusTypeIcon visibility={actualStatus.visibility} />

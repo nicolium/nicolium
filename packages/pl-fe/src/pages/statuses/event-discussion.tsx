@@ -11,24 +11,18 @@ import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder
 import { makeGetDescendantsIds } from 'pl-fe/features/status/components/thread';
 import ThreadStatus from 'pl-fe/features/status/components/thread-status';
 import PendingStatus from 'pl-fe/features/ui/components/pending-status';
+import { eventDiscussionRoute } from 'pl-fe/features/ui/router';
 import { ComposeForm } from 'pl-fe/features/ui/util/async-components';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { makeGetStatus } from 'pl-fe/selectors';
 import { selectChild } from 'pl-fe/utils/scroll-utils';
 
-import type { MediaAttachment } from 'pl-api';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
-type RouteParams = { statusId: string };
+const EventDiscussionPage: React.FC = () => {
+  const { statusId } = eventDiscussionRoute.useParams();
 
-interface IEventDiscussion {
-  params: RouteParams;
-  onOpenMedia: (media: Array<MediaAttachment>, index: number) => void;
-  onOpenVideo: (video: MediaAttachment, time: number) => void;
-}
-
-const EventDiscussionPage: React.FC<IEventDiscussion> = ({ params: { statusId: statusId } }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 

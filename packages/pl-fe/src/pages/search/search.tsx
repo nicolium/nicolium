@@ -1,7 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
+import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
-import { useSearchParams } from 'react-router-dom-v5-compat';
 
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import SearchColumn from 'pl-fe/columns/search';
@@ -12,6 +13,7 @@ import Input from 'pl-fe/components/ui/input';
 import SvgIcon from 'pl-fe/components/ui/svg-icon';
 import Tabs from 'pl-fe/components/ui/tabs';
 import Text from 'pl-fe/components/ui/text';
+import { searchRoute } from 'pl-fe/features/ui/router';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 
 type SearchFilter = 'accounts' | 'hashtags' | 'statuses' | 'links';
@@ -27,17 +29,19 @@ const messages = defineMessages({
 });
 
 interface ISearchInput {
+  className?: string;
   placeholder?: string;
+  query?: string;
 }
 
-const SearchInput: React.FC<ISearchInput> = ({ placeholder }) => {
-  const [params, setParams] = useSearchParams();
-  const [value, setValue] = useState(params.get('q') || '');
+const SearchInput: React.FC<ISearchInput> = ({ className, placeholder, query }) => {
+  const navigate = useNavigate({ from: searchRoute.fullPath });
+  const [value, setValue] = useState(query || '');
 
   const intl = useIntl();
 
   const setQuery = (value: string) => {
-    setParams(params => ({ ...Object.fromEntries(params.entries()), q: value }));
+    navigate({ search: (prev) => ({ ...prev, q: value }) });
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +53,7 @@ const SearchInput: React.FC<ISearchInput> = ({ placeholder }) => {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    if (params.get('q') === value) {
+    if (query === value) {
       if (value.length > 0) {
         setValue('');
         setQuery('');
@@ -71,7 +75,7 @@ const SearchInput: React.FC<ISearchInput> = ({ placeholder }) => {
 
   return (
     <div
-      className='sticky top-[74px] z-10 w-full bg-white/90 backdrop-blur backdrop-saturate-200 black:bg-black/75 dark:bg-primary-900/90'
+      className={clsx('z-10 w-full bg-white/90 backdrop-blur backdrop-saturate-200 black:bg-black/75 dark:bg-primary-900/90', className)}
     >
       <label htmlFor='search' className='sr-only'>{placeholder || intl.formatMessage(messages.placeholder)}</label>
 
@@ -92,9 +96,9 @@ const SearchInput: React.FC<ISearchInput> = ({ placeholder }) => {
           tabIndex={0}
           className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto'
           onClick={handleClick}
-          title={params.get('q') === value ? intl.formatMessage(messages.clear) : intl.formatMessage(messages.placeholder)}
+          title={query === value ? intl.formatMessage(messages.clear) : intl.formatMessage(messages.placeholder)}
         >
-          {params.get('q') === value ? (
+          {query === value ? (
             <SvgIcon
               src={require('@phosphor-icons/core/regular/x.svg')}
               className='size-4 text-gray-600'
@@ -116,12 +120,10 @@ const SearchResults = () => {
   const features = useFeatures();
   const queryClient = useQueryClient();
 
-  const [params, setParams] = useSearchParams();
+  const { q: value = '', type: selectedFilter = 'accounts', accountId } = searchRoute.useSearch();
+  const navigate = useNavigate({ from: searchRoute.fullPath });
 
-  const value = params.get('q') || '';
   const submitted = !!value.trim();
-  const selectedFilter = (params.get('type') || 'accounts') as SearchFilter;
-  const accountId = params.get('accountId') || undefined;
 
   const selectFilter = (newActiveFilter: SearchFilter) => {
     if (newActiveFilter === selectedFilter) {
@@ -129,14 +131,13 @@ const SearchResults = () => {
         queryKey: ['search', newActiveFilter, value, newActiveFilter === 'statuses' ? { account_id: accountId } : undefined],
         exact: true,
       });
-    } else setParams(params => ({ ...Object.fromEntries(params.entries()), type: newActiveFilter }));
+    } else navigate({ search: (prev) => ({ ...prev, type: newActiveFilter }) });
   };
 
   const { account } = useAccount(accountId);
 
   const handleUnsetAccount = () => {
-    params.delete('accountId');
-    setParams(params => Object.fromEntries(params.entries()));
+    navigate({ search: ({ accountId, ...prev }) => prev });
   };
 
   const renderFilterBar = () => {
@@ -191,10 +192,12 @@ const SearchResults = () => {
 const SearchPage = () => {
   const intl = useIntl();
 
+  const { q: query } = searchRoute.useSearch();
+
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <div className='space-y-4'>
-        <SearchInput />
+        <SearchInput className='sticky top-[74px]' query={query} />
         <SearchResults />
       </div>
     </Column>

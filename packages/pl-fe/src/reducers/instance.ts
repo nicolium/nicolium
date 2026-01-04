@@ -100,4 +100,4 @@ const instance = (state = initialState, action: AdminActions | InstanceAction | 
       return state;
   }
 };
-export { instance as default };
+export { instance as default, initialState as instanceInitialState };

@@ -1,6 +1,6 @@
+import { useNavigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import { changeSetting } from 'pl-fe/actions/settings';
 import List, { ListItem } from 'pl-fe/components/list';
@@ -33,7 +33,7 @@ const messages = defineMessages({
 const ChatPageSettings = () => {
   const { account } = useOwnAccount();
   const intl = useIntl();
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const settings = useSettings();
   const updateCredentials = useUpdateCredentials();
@@ -58,7 +58,7 @@ const ChatPageSettings = () => {
         <IconButton
           src={require('@phosphor-icons/core/regular/arrow-left.svg')}
           className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
-          onClick={() => history.push('/chats')}
+          onClick={() => navigate({ to: '/chats/{-$chatId}' })}
         />
 
         <CardTitle title={intl.formatMessage(messages.title)} />

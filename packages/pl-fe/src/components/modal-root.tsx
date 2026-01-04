@@ -1,7 +1,7 @@
+import { useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import { cancelReplyCompose } from 'pl-fe/actions/compose';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
@@ -31,11 +31,13 @@ interface IModalRoot {
   onClose: (type?: ModalType) => void;
   type: ModalType;
   children: React.ReactNode;
+  modalIndex: number;
 }
 
-const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) => {
+const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, modalIndex }) => {
   const intl = useIntl();
-  const history = useHistory();
+  const router = useRouter();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const persistDraftStatus = usePersistDraftStatus();
@@ -45,8 +47,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
 
   const ref = useRef<HTMLDivElement>(null);
   const activeElement = useRef<HTMLDivElement | null>(revealed ? document.activeElement as HTMLDivElement | null : null);
-  const modalHistoryKey = useRef<number>();
-  const unlistenHistory = useRef<ReturnType<typeof history.listen>>();
+  const unlistenHistory = useRef<() => void>();
 
   const prevChildren = usePrevious(children);
 
@@ -121,11 +122,11 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
   }, []);
 
   const handleModalOpen = () => {
-    modalHistoryKey.current = Date.now();
-    unlistenHistory.current = history.listen(({ state }, action) => {
-      if (!(state as any)?.plFeModalKey) {
+    unlistenHistory.current = router.history.subscribe(({ action, location }) => {
+      if (action.type === 'PUSH' && location.state.modalIndex === undefined) {
         onClose();
-      } else if (action === 'POP') {
+      }
+      if (action.type === 'BACK') {
         handleOnClose();
 
         if (onCancel) onCancel();
@@ -137,16 +138,16 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type }) 
     if (unlistenHistory.current) {
       unlistenHistory.current();
     }
-    const { state } = history.location;
-    if (state && (state as any).plFeModalKey === modalHistoryKey.current) {
-      history.goBack();
+    if (router.state.location.state.modalIndex === modalIndex + 1) {
+      router.history.go(-1);
     }
   };
 
   const ensureHistoryBuffer = () => {
-    const { state } = history.location;
-    if (!state || (state as any).plFeModalKey !== modalHistoryKey.current) {
-      history.push({ ...history.location, state: { ...(state as any), plFeModalKey: modalHistoryKey.current } });
+    if (router.state.location.state.modalIndex === undefined || (router.state.location.state.modalIndex < modalIndex)) {
+      navigate({ to: router.history.location.pathname, params: (prev) => prev, search: (prev) => prev, state: (prev) => ({ ...prev, modalIndex }) });
+    } else if (router.state.location.state.modalIndex > modalIndex) {
+      router.history.go(-1);
     }
   };
 

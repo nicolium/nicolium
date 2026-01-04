@@ -1,9 +1,9 @@
 import { createSelector } from '@reduxjs/toolkit';
+import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import { type ComposeReplyAction, mentionCompose, replyCompose } from 'pl-fe/actions/compose';
 import ScrollableList from 'pl-fe/components/scrollable-list';
@@ -137,7 +137,7 @@ const Thread = ({
   setExpandAllStatuses,
 }: IThread) => {
   const dispatch = useAppDispatch();
-  const history = useHistory();
+  const navigate = useNavigate();
   const intl = useIntl();
 
   const { expandStatuses, revealStatusesMedia, toggleStatusesMediaHidden } = useStatusMetaActions();
@@ -228,7 +228,7 @@ const Thread = ({
   };
 
   const handleHotkeyOpenProfile = () => {
-    history.push(`/@${status.account.acct}`);
+    navigate({ to: '/@{$username}', params: { username: status.account.acct } });
   };
 
   const handleHotkeyToggleSensitive = () => {

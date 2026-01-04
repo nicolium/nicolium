@@ -1,5 +1,5 @@
+import { useNavigate, useRouter } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import { resetCompose } from 'pl-fe/actions/compose';
 import { FOCUS_EDITOR_COMMAND } from 'pl-fe/features/compose/editor/plugins/focus-plugin';
@@ -43,7 +43,8 @@ interface IGlobalHotkeys {
 }
 
 const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
+  const { history } = useRouter();
   const dispatch = useAppDispatch();
   const { account } = useOwnAccount();
   const { openModal } = useModalsActions();
@@ -72,7 +73,7 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
       if (element?.checkVisibility()) {
         element.focus();
       } else {
-        history.push('/search');
+        navigate({ to: '/search' });
       }
     };
 
@@ -82,10 +83,10 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
     };
 
     const handleHotkeyBack = () => {
-      if (window.history && window.history.length === 1) {
-        history.push('/');
+      if (!history.canGoBack) {
+        navigate({ to: '/' });
       } else {
-        history.goBack();
+        history.back();
       }
     };
 
@@ -94,33 +95,33 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
     };
 
     const handleHotkeyGoToHome = () => {
-      history.push('/');
+      navigate({ to: '/' });
     };
 
     const handleHotkeyGoToNotifications = () => {
-      history.push('/notifications');
+      navigate({ to: '/notifications' });
     };
 
     const handleHotkeyGoToFavourites = () => {
       if (!account) return;
-      history.push(`/@${account.username}/favorites`);
+      navigate({ to: '/@{$username}/favorites', params: { username: account.acct } });
     };
 
     const handleHotkeyGoToProfile = () => {
       if (!account) return;
-      history.push(`/@${account.username}`);
+      navigate({ to: '/@{$username}', params: { username: account.acct } });
     };
 
     const handleHotkeyGoToBlocked = () => {
-      history.push('/blocks');
+      navigate({ to: '/blocks' });
     };
 
     const handleHotkeyGoToMuted = () => {
-      history.push('/mutes');
+      navigate({ to: '/mutes' });
     };
 
     const handleHotkeyGoToRequests = () => {
-      history.push('/follow_requests');
+      navigate({ to: '/follow_requests' });
     };
 
     type HotkeyHandlers = { [key: string]: (keyEvent?: KeyboardEvent) => void };

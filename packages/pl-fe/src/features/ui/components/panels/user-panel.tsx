@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import StillImage from 'pl-fe/components/still-image';
@@ -54,7 +54,8 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
           <HStack justifyContent={disableUserProvidedMedia ? 'end' : 'between'}>
             {!disableUserProvidedMedia && (
               <Link
-                to={`/@${account.acct}`}
+                to='/@{$username}'
+                params={{ username: acct }}
                 title={acct}
                 className='-mt-12 block'
               >
@@ -77,7 +78,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
         </Stack>
 
         <Stack>
-          <Link to={`/@${account.acct}`}>
+          <Link to='/@{$username}' params={{ username: account.acct }}>
             <HStack space={1} alignItems='center'>
               <Text size='lg' weight='bold' truncate>
                 <Emojify text={account.display_name} emojis={account.emojis} />
@@ -111,7 +112,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
         {!demetricator && (
           <HStack alignItems='center' space={3}>
             {account.followers_count >= 0 && (
-              <Link to={`/@${account.acct}/followers`} title={intl.formatNumber(account.followers_count)}>
+              <Link to='/@{$username}/followers' params={{ username: account.acct }} title={intl.formatNumber(account.followers_count)}>
                 <HStack alignItems='center' space={1}>
                   <Text theme='primary' weight='bold' size='sm'>
                     {shortNumberFormat(account.followers_count)}
@@ -124,7 +125,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
             )}
 
             {account.following_count >= 0 && (
-              <Link to={`/@${account.acct}/following`} title={intl.formatNumber(account.following_count)}>
+              <Link to='/@{$username}/following' params={{ username: account.acct }} title={intl.formatNumber(account.following_count)}>
                 <HStack alignItems='center' space={1}>
                   <Text theme='primary' weight='bold' size='sm'>
                     {shortNumberFormat(account.following_count)}

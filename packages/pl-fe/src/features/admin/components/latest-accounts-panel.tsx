@@ -1,6 +1,6 @@
+import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import Widget from 'pl-fe/components/ui/widget';
 import AccountContainer from 'pl-fe/containers/account-container';
@@ -17,7 +17,7 @@ interface ILatestAccountsPanel {
 
 const LatestAccountsPanel: React.FC<ILatestAccountsPanel> = ({ limit = 5 }) => {
   const intl = useIntl();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { data: accountIds } = useAdminAccounts({
     origin: 'local',
@@ -28,7 +28,7 @@ const LatestAccountsPanel: React.FC<ILatestAccountsPanel> = ({ limit = 5 }) => {
   const total = accountIds?.total;
 
   const handleAction = () => {
-    history.push('/pl-fe/admin/users');
+    navigate({ to: '/pl-fe/admin/users' });
   };
 
   return (

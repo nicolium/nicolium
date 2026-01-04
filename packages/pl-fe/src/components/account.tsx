@@ -1,7 +1,7 @@
+import { Link, linkOptions, useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
-import { Link, useHistory } from 'react-router-dom';
 
 import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
 import Avatar from 'pl-fe/components/ui/avatar';
@@ -38,19 +38,20 @@ const messages = defineMessages({
 });
 
 const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const intl = useIntl();
+  const router = useRouter();
 
   const handleClick: React.MouseEventHandler = (e) => {
     e.stopPropagation();
 
     if (disabled) return;
 
-    const timelineUrl = `/timeline/${account.domain}`;
+    const link = linkOptions({ to: '/timeline/$instance', params: { instance: account.domain } });
     if (!(e.ctrlKey || e.metaKey)) {
-      history.push(timelineUrl);
+      navigate(link);
     } else {
-      window.open(timelineUrl, '_blank');
+      window.open(router.buildLocation(link).href, '_blank');
     }
   };
 
@@ -219,7 +220,8 @@ const Account = ({
 
   const LinkEl: any = withLinkToProfile ? Link : 'div';
   const linkProps = withLinkToProfile ? {
-    to: `/@${account.acct}`,
+    to: '/@{$username}',
+    params: { username: account.acct },
     title: account.acct,
     onClick: (event: React.MouseEvent) => event.stopPropagation(),
   } : {};

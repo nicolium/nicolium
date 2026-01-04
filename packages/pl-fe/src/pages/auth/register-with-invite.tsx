@@ -1,19 +1,15 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useParams } from 'react-router-dom';
 
 import { BigCard } from 'pl-fe/components/big-card';
 import RegistrationForm from 'pl-fe/features/auth-login/components/registration-form';
+import { inviteRoute } from 'pl-fe/features/ui/router';
 import { useInstance } from 'pl-fe/hooks/use-instance';
-
-interface RegisterInviteParams {
-  token: string;
-}
 
 /** Page to register with an invitation. */
 const RegisterWithInvitePage: React.FC = () => {
+  const { token } = inviteRoute.useParams();
   const instance = useInstance();
-  const { token } = useParams<RegisterInviteParams>();
 
   const title = (
     <FormattedMessage

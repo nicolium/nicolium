@@ -1,6 +1,6 @@
+import { useNavigate } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
@@ -37,7 +37,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
   const { openModal } = useModalsActions();
   const intl = useIntl();
   const features = useFeatures();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { isUsingMainChatPage } = useChatContext();
   const { deleteChat } = useChatActions(chat?.id as string);
@@ -59,7 +59,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
           deleteChat.mutate(undefined, {
             onSuccess() {
               if (isUsingMainChatPage) {
-                history.push('/chats');
+                navigate({ to: '/chats/{-$chatId}' });
               }
             },
           });

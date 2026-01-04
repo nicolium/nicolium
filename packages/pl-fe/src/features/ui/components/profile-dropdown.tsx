@@ -1,7 +1,7 @@
+import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 import { createSelector } from 'reselect';
 
 import { logOut, switchAccount } from 'pl-fe/actions/auth';
@@ -30,7 +30,7 @@ interface IProfileDropdown {
 
 type IMenuItem = {
   text: string | React.ReactElement | null;
-  to?: string;
+  linkOptions?: LinkOptions;
   toggle?: JSX.Element;
   icon?: string;
   action?: (event: React.MouseEvent) => void;
@@ -63,7 +63,7 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   const ProfileDropdownMenu = useMemo(() => {
     const menu: IMenuItem[] = [];
 
-    menu.push({ text: renderAccount(account), to: `/@${account.acct}` });
+    menu.push({ text: renderAccount(account), linkOptions: { to: '/@{$username}', params: { username: account.acct } } });
 
     otherAccounts.forEach((otherAccount?: AccountEntity) => {
       if (otherAccount && otherAccount.id !== account.id) {
@@ -80,13 +80,13 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
 
     menu.push({
       text: intl.formatMessage(messages.add),
-      to: '/login/add',
+      linkOptions: { to: '/login/add' },
       icon: require('@phosphor-icons/core/regular/plus.svg'),
     });
 
     menu.push({
       text: intl.formatMessage(messages.logout, { acct: account.acct }),
-      to: '/logout',
+      linkOptions: { to: '/logout' },
       action: handleLogOut,
       icon: require('@phosphor-icons/core/regular/sign-out.svg'),
     });
@@ -142,10 +142,10 @@ const MenuItem: React.FC<MenuItemProps> = ({ className, menuItem }) => {
         {menuItem.text}
       </button>
     );
-  } else if (menuItem.to) {
+  } else if (menuItem.linkOptions) {
     return (
       <Link
-        to={menuItem.to}
+        {...menuItem.linkOptions}
         className={baseClassName}
       >
         {menuItem.text}

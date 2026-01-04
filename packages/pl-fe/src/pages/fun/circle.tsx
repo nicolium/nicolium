@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import { processCircle } from 'pl-fe/actions/circle';
 import { resetCompose, uploadComposeSuccess, uploadFile } from 'pl-fe/actions/compose';
@@ -208,7 +208,7 @@ const CirclePage: React.FC = () => {
           >
             <Stack space={2}>
               {users?.map(user => (
-                <Link key={user.id} to={`/@${user.acct}`}>
+                <Link key={user.id} to='/@{$username}' params={{ username: user.acct }}>
                   <HStack space={2} alignItems='center'>
                     <Avatar size={20} src={user.avatar!} alt={user.avatar_description} username={user.acct} />
                     <Text size='sm' weight='semibold' truncate>

@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import { fetchFilters, deleteFilter } from 'pl-fe/actions/filters';
 import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
@@ -38,12 +37,9 @@ const contexts = {
 const FiltersPage = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const history = useHistory();
   const { filtersV2 } = useFeatures();
 
   const filters = useAppSelector((state) => state.filters);
-
-  const handleFilterEdit = (id: string) => () => history.push(`/filters/${id}`);
 
   const handleFilterDelete = (id: string) => () => {
     dispatch(deleteFilter(id)).then(() => dispatch(fetchFilters())).catch(() => {
@@ -61,7 +57,8 @@ const FiltersPage = () => {
     <Column className='filter-settings-panel' label={intl.formatMessage(messages.heading)}>
       <HStack className='mb-4' space={2} justifyContent='end'>
         <Button
-          to='/filters/new'
+          to='/filters/$filterId'
+          params={{ filterId: 'new' }}
           theme='primary'
           size='sm'
         >
@@ -110,7 +107,7 @@ const FiltersPage = () => {
                 </HStack>
               </Stack>
               <HStack space={2} justifyContent='end'>
-                <Button theme='primary' onClick={handleFilterEdit(filter.id)}>
+                <Button theme='primary' to='/filters/$filterId' params={{ filterId: filter.id }}>
                   {intl.formatMessage(messages.edit)}
                 </Button>
                 <Button theme='danger' onClick={handleFilterDelete(filter.id)}>

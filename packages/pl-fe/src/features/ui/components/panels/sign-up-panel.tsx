@@ -1,6 +1,6 @@
+import { Navigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Redirect } from 'react-router-dom';
 
 import { logIn, switchAccount, verifyCredentials } from 'pl-fe/actions/auth';
 import { fetchInstance } from 'pl-fe/actions/instance';
@@ -67,7 +67,7 @@ const SignUpPanel = () => {
 
   if (shouldRedirect) {
     const redirectUri = getRedirectUrl();
-    return <Redirect to={redirectUri} />;
+    return <Navigate to={redirectUri} />;
   }
 
   if (mfaAuthNeeded) return <OtpAuthForm mfa_token={mfaToken} small />;

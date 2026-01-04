@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import { fetchAccountByUsername } from 'pl-fe/actions/accounts';
 import { fetchAccountTimeline } from 'pl-fe/actions/timelines';
@@ -10,6 +9,7 @@ import StatusList from 'pl-fe/components/status-list';
 import Card, { CardBody } from 'pl-fe/components/ui/card';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Text from 'pl-fe/components/ui/text';
+import { profileRoute } from 'pl-fe/features/ui/router';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
@@ -18,20 +18,15 @@ import { useSettings } from 'pl-fe/stores/settings';
 
 const getStatusIds = makeGetStatusIds();
 
-interface IAccountTimelinePage {
-  params: {
-    username: string;
-  };
-  withReplies?: boolean;
-}
+const AccountTimelinePage: React.FC = () => {
+  const { username } = profileRoute.useParams();
+  const { with_replies: withReplies = false } = profileRoute.useSearch();
 
-const AccountTimelinePage: React.FC<IAccountTimelinePage> = ({ params, withReplies = false }) => {
-  const history = useHistory();
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const settings = useSettings();
 
-  const { account } = useAccountLookup(params.username, { withRelationship: true });
+  const { account } = useAccountLookup(username, { withRelationship: true });
   const [accountLoading, setAccountLoading] = useState<boolean>(!account);
 
   const path = withReplies ? `${account?.id}:with_replies` : account?.id;
@@ -44,13 +39,13 @@ const AccountTimelinePage: React.FC<IAccountTimelinePage> = ({ params, withRepli
   const isLoading = useAppSelector(state => state.timelines[`account:${path}`]?.isLoading === true);
   const hasMore = useAppSelector(state => state.timelines[`account:${path}`]?.hasMore === true);
 
-  const accountUsername = account?.username || params.username;
+  const accountUsername = account?.username || username;
 
   useEffect(() => {
-    dispatch(fetchAccountByUsername(params.username, history))
+    dispatch(fetchAccountByUsername(username))
       .then(() => setAccountLoading(false))
       .catch(() => setAccountLoading(false));
-  }, [params.username]);
+  }, [username]);
 
   useEffect(() => {
     if (account) {

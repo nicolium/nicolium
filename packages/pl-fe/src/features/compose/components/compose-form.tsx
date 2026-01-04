@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import { $getNodeByKey, CLEAR_EDITOR_COMMAND, TextNode, type LexicalEditor } from 'lexical';
 import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 import { length } from 'stringz';
 
 import {
@@ -124,7 +123,6 @@ interface IComposeForm<ID extends string> {
 }
 
 const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickableAreaRef, event, group, withAvatar, transparent, compact }: IComposeForm<ID>) => {
-  const history = useHistory();
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { configuration } = useInstance();
@@ -194,15 +192,17 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     if (!canSubmit) return;
     e?.preventDefault();
 
-    dispatch(submitCompose(id, { history, onSuccess: () => {
-      editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
-    } }));
+    dispatch(submitCompose(id, {
+      onSuccess: () => {
+        editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+      },
+    }));
   };
 
   const handlePreview = (e?: React.FormEvent<Element>) => {
     e?.preventDefault();
 
-    dispatch(submitCompose(id, { history }, true));
+    dispatch(submitCompose(id, {}, true));
   };
 
   const handleSaveDraft = (e?: React.FormEvent<Element>) => {
@@ -215,7 +215,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
 
     toast.success(messages.draftSaved, {
       actionLabel: messages.view,
-      actionLink: '/draft_statuses',
+      actionLinkOptions: { to: '/draft_statuses' },
     });
   };
 

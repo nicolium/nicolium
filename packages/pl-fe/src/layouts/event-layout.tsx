@@ -1,13 +1,14 @@
+import { Outlet, useLocation, useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { FormattedMessage } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import Column from 'pl-fe/components/ui/column';
 import Layout from 'pl-fe/components/ui/layout';
-import Tabs from 'pl-fe/components/ui/tabs';
+import Tabs, { type Item } from 'pl-fe/components/ui/tabs';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
 import LinkFooter from 'pl-fe/features/ui/components/link-footer';
+import { layouts } from 'pl-fe/features/ui/router';
 import {
   EventHeader,
   SignUpPanel,
@@ -20,43 +21,40 @@ import { makeGetStatus } from 'pl-fe/selectors';
 
 const getStatus = makeGetStatus();
 
-interface IEventLayout {
-  params?: {
-    statusId?: string;
-  };
-  children: React.ReactNode;
-}
+const EventLayout = () => {
+  const { statusId } = layouts.event.useParams();
 
-const EventLayout: React.FC<IEventLayout> = ({ params, children }) => {
   const me = useAppSelector(state => state.me);
   const features = useFeatures();
 
-  const history = useHistory();
-  const statusId = params?.statusId!;
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const status = useAppSelector(state => getStatus(state, { id: statusId }) || undefined);
 
   const event = status?.event;
 
   if (status && !event) {
-    history.push(`/@${status.account.acct}/posts/${status.id}`);
+    navigate({ to: '/@{$username}/posts/$statusId', params: { username: status.account.acct, statusId: status.id } });
     return (
       <PlaceholderStatus />
     );
   }
 
-  const pathname = history.location.pathname;
+  const pathname = location.pathname;
   const activeItem = pathname.endsWith('/discussion') ? 'discussion' : 'info';
 
-  const tabs = status ? [
+  const tabs: Array<Item> = status ? [
     {
       text: <FormattedMessage id='event.information' defaultMessage='Information' />,
-      to: `/@${status.account.acct}/events/${status.id}`,
+      to: '/@{$username}/events/$statusId',
+      params: { username: status.account.acct, statusId: status.id },
       name: 'info',
     },
     {
       text: <FormattedMessage id='event.discussion' defaultMessage='Discussion' />,
-      to: `/@${status.account.acct}/events/${status.id}/discussion`,
+      to: '/@{$username}/events/$statusId/discussion',
+      params: { username: status.account.acct, statusId: status.id },
       name: 'discussion',
     },
   ] : [];
@@ -79,7 +77,7 @@ const EventLayout: React.FC<IEventLayout> = ({ params, children }) => {
               <Tabs key={`event-tabs-${status.id}`} items={tabs} activeItem={activeItem} />
             )}
 
-            {children}
+            <Outlet />
           </div>
         </Column>
       </Layout.Main>

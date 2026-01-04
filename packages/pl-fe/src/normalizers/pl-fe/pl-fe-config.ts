@@ -69,7 +69,6 @@ const plFeConfigSchema = coerceObject({
     defaultLocale: v.fallback(v.string(), ''), // v.fallback(v.optional(v.string()), undefined),
     locales: filteredArray(v.string()),
   })), {}),
-  authenticatedProfile: v.fallback(v.boolean(), false),
   linkFooterMessage: v.fallback(v.string(), ''),
   links: v.fallback(v.record(v.string(), v.string()), {}),
   tileServer: v.fallback(v.string(), ''),

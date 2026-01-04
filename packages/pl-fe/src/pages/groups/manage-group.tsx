@@ -1,7 +1,7 @@
+import { useNavigate } from '@tanstack/react-router';
 import { GroupRoles } from 'pl-api';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import { useDeleteGroup } from 'pl-fe/api/hooks/groups/use-delete-group';
 import { useGroup } from 'pl-fe/api/hooks/groups/use-group';
@@ -12,10 +12,9 @@ import Spinner from 'pl-fe/components/ui/spinner';
 import Text from 'pl-fe/components/ui/text';
 import Emojify from 'pl-fe/features/emoji/emojify';
 import ColumnForbidden from 'pl-fe/features/ui/components/column-forbidden';
+import { manageGroupRoute } from 'pl-fe/features/ui/router';
 import { useModalsActions } from 'pl-fe/stores/modals';
 import toast from 'pl-fe/toast';
-
-type RouteParams = { groupId: string };
 
 const messages = defineMessages({
   heading: { id: 'column.manage_group', defaultMessage: 'Manage group' },
@@ -31,18 +30,14 @@ const messages = defineMessages({
   deleteSuccess: { id: 'group.delete.success', defaultMessage: 'Group successfully deleted' },
 });
 
-interface IManageGroup {
-  params: RouteParams;
-}
-
-const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
-  const { groupId: id } = params;
+const ManageGroup: React.FC = () => {
+  const { groupId } = manageGroupRoute.useParams();
 
   const { openModal } = useModalsActions();
-  const history = useHistory();
+  const navigate = useNavigate();
   const intl = useIntl();
 
-  const { group } = useGroup(id);
+  const { group } = useGroup(groupId);
 
   const deleteGroup = useDeleteGroup();
 
@@ -69,14 +64,14 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
         deleteGroup.mutate(group.id, {
           onSuccess() {
             toast.success(intl.formatMessage(messages.deleteSuccess));
-            history.push('/groups');
+            navigate({ to: '/groups' });
           },
         });
       },
     });
 
   return (
-    <Column label={intl.formatMessage(messages.heading)} backHref={`/groups/${group.id}`}>
+    <Column label={intl.formatMessage(messages.heading)} backHref='/groups/$groupId' backParams={{ groupId: group.id }}>
       <CardBody className='space-y-4'>
         {isOwner && (
           <>
@@ -85,7 +80,7 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
             </CardHeader>
 
             <List>
-              <ListItem label={intl.formatMessage(messages.editGroup)} to={`/groups/${group.id}/manage/edit`}>
+              <ListItem label={intl.formatMessage(messages.editGroup)} to='/groups/$groupId/manage/edit' params={{ groupId: group.id }}>
                 <span><Emojify text={group.display_name} emojis={group.emojis} /></span>
               </ListItem>
             </List>
@@ -97,9 +92,9 @@ const ManageGroup: React.FC<IManageGroup> = ({ params }) => {
         </CardHeader>
 
         <List>
-          <ListItem label={intl.formatMessage(messages.pendingRequests)} to={`/groups/${group.id}/manage/requests`} />
+          <ListItem label={intl.formatMessage(messages.pendingRequests)} to='/groups/$groupId/manage/requests' params={{ groupId: group.id }} />
 
-          <ListItem label={intl.formatMessage(messages.blockedMembers)} to={`/groups/${group.id}/manage/blocks`} />
+          <ListItem label={intl.formatMessage(messages.blockedMembers)} to='/groups/$groupId/manage/blocks' params={{ groupId: group.id }} />
         </List>
 
         {isOwner && (

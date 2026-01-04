@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import AvatarStack from 'pl-fe/components/avatar-stack';
@@ -24,7 +24,7 @@ const FamiliarFollowerLink: React.FC<IFamiliarFollowerLink> = ({ id }) => {
   if (!account) return null;
 
   return (
-    <Link className='mention inline-block' to={`/@${account.acct}`} key={account.id}>
+    <Link className='mention inline-block' to='/@{$username}' params={{ username: account.acct }} key={account.id}>
       <HoverAccountWrapper accountId={account.id} element='span'>
         <HStack space={1} alignItems='center' grow>
           <Text size='sm' theme='primary' truncate>

@@ -1,7 +1,7 @@
+import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
 import ReactSwipeableViews from 'react-swipeable-views';
 
 import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
@@ -114,7 +114,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     }
 
     const link = (status && (
-      <Link to={`/@${status.account.acct}/posts/${status.id}`}>
+      <Link to='/@{$username}/posts/$statusId' params={{ username: status.account.acct, statusId: status.id }}>
         <FormattedMessage id='lightbox.view_context' defaultMessage='View context' />
       </Link>
     ));

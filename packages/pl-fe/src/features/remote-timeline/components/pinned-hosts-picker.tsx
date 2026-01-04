@@ -20,7 +20,8 @@ const PinnedHostsPicker: React.FC<IPinnedHostsPicker> = ({ host: activeHost }) =
       {pinnedHosts.map((host) => (
         <Button
           key={host}
-          to={`/timeline/${host}`}
+          to='/timeline/$instance'
+          params={{ instance: host }}
           size='sm'
           theme={host === activeHost ? 'accent' : 'secondary'}
         >

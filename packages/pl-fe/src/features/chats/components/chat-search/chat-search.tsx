@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import React, { useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import Icon from 'pl-fe/components/ui/icon';
 import Input from 'pl-fe/components/ui/input';
@@ -31,14 +31,13 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
   const parentRef = useRef<HTMLDivElement>(null);
   const intl = useIntl();
 
-  const debounce = useDebounce;
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { changeScreen } = useChatContext();
   const { getOrCreateChatByAccountId } = useChats();
 
   const [value, setValue] = useState<string>('');
-  const debouncedValue = debounce(value as string, 300);
+  const debouncedValue = useDebounce(value as string, 300);
 
   const accountSearchResult = useAccountSearch(debouncedValue);
   const { data: accounts, isFetching } = accountSearchResult;
@@ -54,7 +53,7 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
     },
     onSuccess: (response) => {
       if (isMainPage) {
-        history.push(`/chats/${response.id}`);
+        navigate({ to: '/chats/{-$chatId}', params: { chatId: response.id } });
       } else {
         changeScreen(ChatWidgetScreens.CHAT, response.id);
       }

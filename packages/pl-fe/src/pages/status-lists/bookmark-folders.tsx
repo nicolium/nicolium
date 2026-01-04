@@ -1,6 +1,6 @@
+import { Navigate } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { Redirect } from 'react-router-dom';
 
 import List, { ListItem } from 'pl-fe/components/list';
 import Button from 'pl-fe/components/ui/button';
@@ -79,7 +79,7 @@ const BookmarkFoldersPage: React.FC = () => {
 
   const { data: bookmarkFolders, isFetching } = useBookmarkFolders(data => data);
 
-  if (!features.bookmarkFolders) return <Redirect to='/bookmarks/all' />;
+  if (!features.bookmarkFolders) return <Navigate to='/bookmarks/$folderId' params={{ folderId: 'all' }} replace />;
 
   if (isFetching) {
     return (
@@ -96,7 +96,8 @@ const BookmarkFoldersPage: React.FC = () => {
 
         <List>
           <ListItem
-            to='/bookmarks/all'
+            to='/bookmarks/$folderId'
+            params={{ folderId: 'all' }}
             label={
               <HStack alignItems='center' space={2}>
                 <Icon src={require('@phosphor-icons/core/regular/bookmarks.svg')} size={20} />
@@ -107,7 +108,8 @@ const BookmarkFoldersPage: React.FC = () => {
           {bookmarkFolders?.map((folder) => (
             <ListItem
               key={folder.id}
-              to={`/bookmarks/${folder.id}`}
+              to='/bookmarks/$folderId'
+              params={{ folderId: folder.id }}
               label={
                 <HStack alignItems='center' space={2}>
                   {folder.emoji ? (

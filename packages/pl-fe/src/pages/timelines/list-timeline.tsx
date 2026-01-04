@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
-import { useParams } from 'react-router-dom';
 
 import { fetchListTimeline } from 'pl-fe/actions/timelines';
 import { useListStream } from 'pl-fe/api/hooks/streaming/use-list-stream';
@@ -10,6 +9,7 @@ import Button from 'pl-fe/components/ui/button';
 import Column from 'pl-fe/components/ui/column';
 import Spinner from 'pl-fe/components/ui/spinner';
 import Timeline from 'pl-fe/features/ui/components/timeline';
+import { listTimelineRoute } from 'pl-fe/features/ui/router';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useDeleteList, useList } from 'pl-fe/queries/accounts/use-lists';
 import { useModalsActions } from 'pl-fe/stores/modals';
@@ -23,26 +23,26 @@ const messages = defineMessages({
 });
 
 const ListTimelinePage: React.FC = () => {
+  const { listId } = listTimelineRoute.useParams();
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const { id } = useParams<{ id: string }>();
   const { openModal } = useModalsActions();
 
-  const { data: list, isFetching } = useList(id);
+  const { data: list, isFetching } = useList(listId);
   const { mutate: deleteList } = useDeleteList();
 
-  useListStream(id);
+  useListStream(listId);
 
   useEffect(() => {
-    dispatch(fetchListTimeline(id));
-  }, [id]);
+    dispatch(fetchListTimeline(listId));
+  }, [listId]);
 
   const handleLoadMore = () => {
-    dispatch(fetchListTimeline(id, true));
+    dispatch(fetchListTimeline(listId, true));
   };
 
   const handleEditClick = () => {
-    openModal('LIST_EDITOR', { listId: id });
+    openModal('LIST_EDITOR', { listId });
   };
 
   const handleDeleteClick = (e: React.MouseEvent | React.KeyboardEvent) => {
@@ -53,12 +53,12 @@ const ListTimelinePage: React.FC = () => {
       message: intl.formatMessage(messages.deleteMessage),
       confirm: intl.formatMessage(messages.deleteConfirm),
       onConfirm: () => {
-        deleteList(id);
+        deleteList(listId);
       },
     });
   };
 
-  const title = list ? list.title : id;
+  const title = list ? list.title : listId;
 
   if (!list && isFetching) {
     return (
@@ -103,7 +103,7 @@ const ListTimelinePage: React.FC = () => {
       <Timeline
         loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
         scrollKey='list_timeline'
-        timelineId={`list:${id}`}
+        timelineId={`list:${listId}`}
         onLoadMore={handleLoadMore}
         emptyMessageText={emptyMessage}
         emptyMessageIcon={require('@phosphor-icons/core/regular/list-bullets.svg')}

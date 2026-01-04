@@ -1,6 +1,6 @@
+import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { useHistory } from 'react-router-dom';
 
 import { CardTitle } from 'pl-fe/components/ui/card';
 import HStack from 'pl-fe/components/ui/hstack';
@@ -17,18 +17,22 @@ const messages = defineMessages({
 
 const ChatPageSidebar = () => {
   const intl = useIntl();
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const handleClickChat = (chat: Chat | 'shoutbox') => {
-    history.push(`/chats/${chat === 'shoutbox' ? 'shoutbox' : chat.id}`);
+    if (chat === 'shoutbox') {
+      navigate({ to: '/chats/shoutbox' });
+    } else {
+      navigate({ to: '/chats/{-$chatId}', params: { chatId: chat.id } });
+    }
   };
 
   const handleChatCreate = () => {
-    history.push('/chats/new');
+    navigate({ to: '/chats/new' });
   };
 
   const handleSettingsClick = () => {
-    history.push('/chats/settings');
+    navigate({ to: '/chats/settings' });
   };
 
   return (

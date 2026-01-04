@@ -10,12 +10,11 @@ import Column from 'pl-fe/components/ui/column';
 import HStack from 'pl-fe/components/ui/hstack';
 import Spinner from 'pl-fe/components/ui/spinner';
 import ColumnForbidden from 'pl-fe/features/ui/components/column-forbidden';
+import { groupMembershipRequestsRoute } from 'pl-fe/features/ui/router';
 import toast from 'pl-fe/toast';
 
 import type { Account as AccountEntity } from 'pl-api';
 import type { PlfeResponse } from 'pl-fe/api';
-
-type RouteParams = { groupId: string };
 
 const messages = defineMessages({
   heading: { id: 'column.group_pending_requests', defaultMessage: 'Pending requests' },
@@ -50,12 +49,9 @@ const MembershipRequest: React.FC<IMembershipRequest> = ({ account, onAuthorize,
   );
 };
 
-interface IGroupMembershipRequests {
-  params: RouteParams;
-}
+const GroupMembershipRequests: React.FC = () => {
+  const { groupId } = groupMembershipRequestsRoute.useParams();
 
-const GroupMembershipRequests: React.FC<IGroupMembershipRequests> = ({ params }) => {
-  const groupId = params?.groupId;
   const intl = useIntl();
 
   const { group } = useGroup(groupId);

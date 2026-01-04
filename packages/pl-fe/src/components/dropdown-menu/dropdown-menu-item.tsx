@@ -1,13 +1,15 @@
+import { useNavigate, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import Counter from 'pl-fe/components/ui/counter';
 import Icon from 'pl-fe/components/ui/icon';
 import Toggle from 'pl-fe/components/ui/toggle';
 import { userTouching } from 'pl-fe/is-mobile';
 
-interface MenuItem {
+type Menu = Array<MenuItem | null>;
+
+type MenuItem = {
   action?: React.EventHandler<React.KeyboardEvent | React.MouseEvent>;
   active?: boolean;
   checked?: boolean;
@@ -20,12 +22,11 @@ interface MenuItem {
   onChange?: (value: boolean) => void;
   target?: React.HTMLAttributeAnchorTarget;
   text: string;
-  to?: string;
   type?: 'toggle' | 'radio';
-  items?: Array<Omit<MenuItem, 'items'>>;
+  items?: Menu;
   onSelectFile?: (files: FileList) => void;
   accept?: string;
-}
+} & (LinkOptions | { to?: undefined });
 
 interface IDropdownMenuItem {
   index: number;
@@ -36,7 +37,7 @@ interface IDropdownMenuItem {
 }
 
 const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdownMenuItem) => {
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const itemRef = useRef<HTMLAnchorElement>(null);
   const fileElement = useRef<HTMLInputElement>(null);
@@ -62,8 +63,8 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
     if (item.to) {
       event.preventDefault();
       if (userTouching.matches) {
-        history.replace(item.to);
-      } else history.push(item.to);
+        navigate({ to: item.to, params: item.params, search: item.search, replace: true });
+      } else navigate({ to: item.to, params: item.params, search: item.search });
     } else if (typeof item.action === 'function') {
       const action = item.action;
       event.preventDefault();
@@ -177,4 +178,4 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
   );
 };
 
-export { type MenuItem, DropdownMenuItem as default };
+export { type Menu, type MenuItem, DropdownMenuItem as default };

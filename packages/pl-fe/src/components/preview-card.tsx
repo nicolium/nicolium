@@ -1,8 +1,8 @@
+import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import { type MediaAttachment, type PreviewCard as CardEntity, mediaAttachmentSchema } from 'pl-api';
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
 import * as v from 'valibot';
 
 import Blurhash from 'pl-fe/components/blurhash';
@@ -267,7 +267,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
               values={{
                 name: card.authors.map(author => (
                   <HoverAccountWrapper key={author.url} accountId={author.account?.id} element='bdi'>
-                    <Link to={`/@${author.account?.acct}`}>
+                    <Link to='/@{$username}' params={{ username: author.account?.acct || '' }}>
                       <HStack space={1} alignItems='center'>
                         {author.account && (
                           <Avatar src={author.account?.avatar} size={16} username={author.account.username} />

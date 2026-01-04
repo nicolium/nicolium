@@ -20,6 +20,7 @@ import Text from 'pl-fe/components/ui/text';
 import Toggle from 'pl-fe/components/ui/toggle';
 import { SelectDropdown } from 'pl-fe/features/forms';
 import ColumnLoading from 'pl-fe/features/ui/components/column-loading';
+import { adminAccountRoute } from 'pl-fe/features/ui/router';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
@@ -136,14 +137,8 @@ const BadgeInput: React.FC<IBadgeInput> = ({ badges, onChange }) => {
   );
 };
 
-type RouteParams = { accountId: string };
-
-interface IAdminAccountPage {
-  params: RouteParams;
-}
-
-const AdminAccountPage: React.FC<IAdminAccountPage> = (props) => {
-  const { accountId } = props.params;
+const AdminAccountPage: React.FC = () => {
+  const { accountId } = adminAccountRoute.useParams();
 
   const intl = useIntl();
   const dispatch = useAppDispatch();

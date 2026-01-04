@@ -1,6 +1,6 @@
+import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import Hashtag from 'pl-fe/components/hashtag';
 import Text from 'pl-fe/components/ui/text';
@@ -32,7 +32,7 @@ const TrendsPanel = ({ limit }: ITrendsPanel) => {
     <Widget
       title={<FormattedMessage id='trends.title' defaultMessage='Trends' />}
       action={
-        <Link className='text-right' to='/search?type=hashtags'>
+        <Link className='text-right' to='/search' search={{ type: 'hashtags' }}>
           <Text tag='span' theme='primary' size='sm' className='hover:underline'>
             {intl.formatMessage(messages.viewAll)}
           </Text>

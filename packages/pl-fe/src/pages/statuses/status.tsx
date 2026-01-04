@@ -1,6 +1,6 @@
+import { Navigate } from '@tanstack/react-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Redirect } from 'react-router-dom';
 
 import { changeSetting } from 'pl-fe/actions/settings';
 import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
@@ -11,6 +11,7 @@ import Column from 'pl-fe/components/ui/column';
 import Stack from 'pl-fe/components/ui/stack';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
 import Thread from 'pl-fe/features/status/components/thread';
+import { statusRoute } from 'pl-fe/features/ui/router';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { makeGetStatus } from 'pl-fe/selectors';
@@ -35,22 +36,14 @@ const messages = defineMessages({
   expandAll: { id: 'status.thread.expand_all', defaultMessage: 'Expand all posts' },
 });
 
-type RouteParams = {
-  statusId: string;
-  groupId?: string;
-};
+const StatusPage: React.FC = () => {
+  const { username, statusId } = statusRoute.useParams();
 
-interface IStatusDetails {
-  params: RouteParams;
-}
-
-const StatusPage: React.FC<IStatusDetails> = (props) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector((state) => getStatus(state, { id: props.params.statusId }));
-
+  const status = useAppSelector((state) => getStatus(state, { id: statusId }));
   const [expandAllStatuses, setExpandAllStatuses] = useState<() => void>();
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
 
@@ -58,8 +51,6 @@ const StatusPage: React.FC<IStatusDetails> = (props) => {
 
   /** Fetch the status (and context) from the API. */
   const fetchData = () => {
-    const { params } = props;
-    const { statusId } = params;
     return dispatch(fetchStatusWithContext(statusId, intl));
   };
 
@@ -70,7 +61,7 @@ const StatusPage: React.FC<IStatusDetails> = (props) => {
     }).catch(() => {
       setIsLoaded(true);
     });
-  }, [props.params.statusId]);
+  }, [statusId]);
 
   const handleRefresh = () => fetchData();
 
@@ -107,7 +98,13 @@ const StatusPage: React.FC<IStatusDetails> = (props) => {
 
   if (status?.event) {
     return (
-      <Redirect to={`/@${status.account.acct}/events/${status.id}`} />
+      <Navigate to='/@{$username}/events/$statusId' params={{ username: status.account.acct, statusId: status.id }} replace />
+    );
+  }
+
+  if (username && status && username !== status.account.acct) {
+    return (
+      <Navigate to='/@{$username}/posts/$statusId' params={{ username: status.account.acct, statusId: status.id }} replace />
     );
   }
 
@@ -121,12 +118,6 @@ const StatusPage: React.FC<IStatusDetails> = (props) => {
         <PlaceholderStatus />
       </Column>
     );
-  }
-
-  if (status.group && typeof status.group === 'object') {
-    if (status.group.id && !props.params.groupId) {
-      return <Redirect to={`/groups/${status.group.id}/posts/${props.params.statusId}`} />;
-    }
   }
 
   const titleMessage = () => {
