@@ -1,6 +1,6 @@
+import { animated, config, useTransition } from '@react-spring/web';
 import React, { useEffect, useState } from 'react';
 import { useIntl, type IntlShape } from 'react-intl';
-import { TransitionMotion, spring } from 'react-motion';
 
 import { useSettings } from 'pl-fe/stores/settings';
 import { isNumber, roundDown } from 'pl-fe/utils/numbers';
@@ -52,7 +52,7 @@ const AnimatedNumber: React.FC<IAnimatedNumber> = ({ value, obfuscate, short, ma
   const intl = useIntl();
   const { reduceMotion } = useSettings();
 
-  const [direction, setDirection] = useState(1);
+  const [direction, setDirection] = useState(0);
   const [displayedValue, setDisplayedValue] = useState<number>(value);
   const [formattedValue, setFormattedValue] = useState<string>(intl.formatNumber(value, { numberingSystem: 'latn' }));
 
@@ -68,37 +68,34 @@ const AnimatedNumber: React.FC<IAnimatedNumber> = ({ value, obfuscate, short, ma
       : short
         ? shortNumberFormat(value, intl, max)
         : intl.formatNumber(value, { numberingSystem: 'latn' }));
-  }, [value]);
+  }, [value, intl, max, obfuscate, short]);
 
-  const willEnter = () => ({ y: -1 * direction });
-
-  const willLeave = () => ({ y: spring(1 * direction, { damping: 35, stiffness: 400 }) });
+  const transitions = useTransition(formattedValue, {
+    from: { y: -1 * direction },
+    enter: { y: 0 },
+    leave: { y: 1 * direction },
+    config: config.slow,
+    immediate: reduceMotion || direction === 0,
+  });
 
   if (reduceMotion) {
     return <>{formattedValue}</>;
   }
 
-  const styles = [{
-    key: `${formattedValue}`,
-    data: formattedValue,
-    style: { y: spring(0, { damping: 35, stiffness: 400 }) },
-  }];
-
   return (
-    <TransitionMotion styles={styles} willEnter={willEnter} willLeave={willLeave}>
-      {items => (
-        <span className='⁂-animated-number'>
-          {items.map(({ key, data, style }) => (
-            <span
-              key={key}
-              style={{ position: (direction * style.y) > 0 ? 'absolute' : 'static', transform: `translateY(${style.y * 100}%)` }}
-            >
-              {data}
-            </span>
-          ))}
-        </span>
-      )}
-    </TransitionMotion>
+    <span className='⁂-animated-number'>
+      {transitions((style, item) => (
+        <animated.span
+          key={item}
+          style={{
+            position: item === formattedValue ? 'static' : 'absolute',
+            transform: style.y.to(y => `translateY(${y * 100}%)`),
+          }}
+        >
+          {item}
+        </animated.span>
+      ))}
+    </span>
   );
 };
 
