@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { type RefCallback, useCallback, useEffect, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import ReactSwipeableViews from 'react-swipeable-views';
 
@@ -15,7 +15,7 @@ import Stack from 'pl-fe/components/ui/stack';
 import Audio from 'pl-fe/features/audio';
 import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
 import Thread from 'pl-fe/features/status/components/thread';
-import ImageLoader from 'pl-fe/features/ui/components/image-loader';
+import ZoomableImage from 'pl-fe/features/ui/components/zoomable-image';
 import Video from 'pl-fe/features/video';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
@@ -31,6 +31,8 @@ const messages = defineMessages({
   minimize: { id: 'lightbox.minimize', defaultMessage: 'Minimize' },
   next: { id: 'lightbox.next', defaultMessage: 'Next' },
   previous: { id: 'lightbox.previous', defaultMessage: 'Previous' },
+  zoomIn: { id: 'lightbox.zoom_in', defaultMessage: 'Zoom to actual size' },
+  zoomOut: { id: 'lightbox.zoom_out', defaultMessage: 'Zoom to fit' },
 });
 
 // you can't use 100vh, because the viewport height is taller
@@ -51,6 +53,7 @@ interface MediaModalProps {
   statusId?: string;
   index: number;
   time?: number;
+  lang?: string;
 }
 
 const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
@@ -68,15 +71,30 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   const media = status?.media_attachments || props.media || [];
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
-  const [index, setIndex] = useState<number | null>(null);
+  const [index, setIndex] = useState<number>(props.index || 0);
+  const [zoomedIn, setZoomedIn] = useState(false);
   const [navigationHidden, setNavigationHidden] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(!status);
+
+  const [viewportDimensions, setViewportDimensions] = useState<{
+      width: number;
+      height: number;
+    }>({ width: 0, height: 0 });
+
+  const handleRef: RefCallback<HTMLDivElement> = useCallback((ele) => {
+    if (ele?.clientWidth && ele.clientHeight) {
+      setViewportDimensions({
+        width: ele.clientWidth,
+        height: ele.clientHeight,
+      });
+    }
+  }, []);
 
   const hasMultipleImages = media.length > 1;
 
   const handleSwipe = (index: number) => setIndex(index % media.length);
-  const handleNextClick = () => setIndex((getIndex() + 1) % media.length);
-  const handlePrevClick = () => setIndex((media.length + getIndex() - 1) % media.length);
+  const handleNextClick = () => setIndex((index + 1) % media.length);
+  const handlePrevClick = () => setIndex((media.length + index - 1) % media.length);
 
   const navigationHiddenClassName = navigationHidden ? 'pointer-events-none opacity-0' : '';
 
@@ -100,11 +118,19 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     window.open(mediaItem?.url);
   };
 
-  const getIndex = () => index !== null ? index : props.index;
-
   const toggleNavigation = () => {
     setNavigationHidden(value => !value && userTouching.matches);
   };
+
+  const currentMedia = media[index];
+
+  const zoomable =
+      currentMedia.type === 'image' && currentMedia.meta.original &&
+      (currentMedia.meta.original.width > viewportDimensions.width || currentMedia.meta.original.height > viewportDimensions.height);
+
+  const handleZoomClick = useCallback(() => {
+    setZoomedIn((prev) => !prev);
+  }, []);
 
   const content = media.map((attachment, i) => {
     let width: number | undefined, height: number | undefined;
@@ -121,14 +147,19 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
     if (attachment.type === 'image') {
       return (
-        <ImageLoader
-          previewSrc={attachment.preview_url}
+        <ZoomableImage
+          blurhash={attachment.blurhash || undefined}
           src={attachment.url}
-          width={width}
-          height={height}
+          width={width!}
+          height={height!}
           alt={attachment.description}
           key={attachment.url}
+          lang={props.lang}
           onClick={toggleNavigation}
+          onDoubleClick={handleZoomClick}
+          onClose={onClose}
+          onZoomChange={setZoomedIn}
+          zoomedIn={zoomedIn && i === index}
         />
       );
     } else if (attachment.type === 'video') {
@@ -141,7 +172,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
           height={height}
           startTime={time}
           detailed
-          autoFocus={i === getIndex()}
+          autoFocus={i === index}
           link={link}
           alt={attachment.description}
           key={attachment.url}
@@ -229,6 +260,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
             })
           }
           justifyContent='between'
+          ref={handleRef}
         >
           <HStack
             alignItems='center'
@@ -245,6 +277,17 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
             />
 
             <HStack alignItems='center' space={2}>
+              {zoomable && (
+                <IconButton
+                  title={intl.formatMessage(zoomedIn ? messages.zoomOut : messages.zoomIn)}
+                  src={zoomedIn ? require('@phosphor-icons/core/regular/magnifying-glass-minus.svg') : require('@phosphor-icons/core/regular/magnifying-glass-plus.svg')}
+                  theme='dark'
+                  className='!p-1.5 hover:scale-105 hover:bg-gray-900'
+                  iconClassName='h-5 w-5'
+                  onClick={handleZoomClick}
+                />
+              )}
+
               <IconButton
                 src={require('@phosphor-icons/core/regular/download-simple.svg')}
                 theme='dark'
@@ -287,7 +330,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
               style={swipeableViewsStyle}
               containerStyle={containerStyle}
               onChangeIndex={handleSwipe}
-              index={getIndex()}
+              index={index}
             >
               {content}
             </ReactSwipeableViews>
