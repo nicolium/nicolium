@@ -1,16 +1,18 @@
 import { Link } from '@tanstack/react-router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { changeComposeInteractionPolicyOption } from 'pl-fe/actions/compose';
+import { changeComposeInteractionPolicyOption, changeComposeQuotePolicyOption } from 'pl-fe/actions/compose';
 import Modal from 'pl-fe/components/ui/modal';
 import Stack from 'pl-fe/components/ui/stack';
 import Warning from 'pl-fe/features/compose/components/warning';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useClient } from 'pl-fe/hooks/use-client';
 import { useCompose } from 'pl-fe/hooks/use-compose';
 import { InteractionPolicyConfig, type Policy, type Rule, type Scope } from 'pl-fe/pages/settings/interaction-policies';
 import { useInteractionPolicies } from 'pl-fe/queries/settings/use-interaction-policies';
 
+import type { CreateStatusParams } from 'pl-api';
 import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
 const MANAGABLE_VISIBILITIES = ['public', 'unlisted', 'private'];
@@ -20,7 +22,9 @@ interface ComposeInteractionPolicyModalProps {
 }
 
 const ComposeInteractionPolicyModal: React.FC<BaseModalProps & ComposeInteractionPolicyModalProps> = ({ composeId, onClose }) => {
+  const client = useClient();
   const dispatch = useAppDispatch();
+  const [initialQuotePolicy, setInitialQuotePolicy] = useState<CreateStatusParams['quote_approval_policy']>(undefined);
   const { interactionPolicies: initial } = useInteractionPolicies();
   const compose = useCompose(composeId);
 
@@ -30,6 +34,10 @@ const ComposeInteractionPolicyModal: React.FC<BaseModalProps & ComposeInteractio
     if (!canManageInteractionPolicies) {
       onClose('COMPOSE_INTERACTION_POLICY');
     }
+
+    client.settings.verifyCredentials().then((credentialAccount) => {
+      setInitialQuotePolicy(credentialAccount.source?.quote_policy || 'public');
+    }).catch(() => {});
   }, []);
 
   if (!canManageInteractionPolicies) {
@@ -45,6 +53,10 @@ const ComposeInteractionPolicyModal: React.FC<BaseModalProps & ComposeInteractio
 
   const onChange = (policy: Policy, rule: Rule, value: Scope[]) => {
     dispatch(changeComposeInteractionPolicyOption(composeId, policy, rule, value, interactionPolicy));
+  };
+
+  const onQuotePolicyChange = (value: CreateStatusParams['quote_approval_policy']) => {
+    dispatch(changeComposeQuotePolicyOption(composeId, value));
   };
 
   return (
@@ -72,8 +84,10 @@ const ComposeInteractionPolicyModal: React.FC<BaseModalProps & ComposeInteractio
         />
         <InteractionPolicyConfig
           interactionPolicy={interactionPolicy}
-          visibility={compose.visibility as 'public'}
           onChange={onChange}
+          quotePolicy={initialQuotePolicy}
+          onQuotePolicyChange={onQuotePolicyChange}
+          visibility={compose.visibility as 'public'}
           singlePost
         />
       </Stack>

@@ -287,7 +287,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
       {features.polls && <PollButton composeId={id} />}
       {features.scheduledStatuses && <ScheduleButton composeId={id} />}
       {anyMedia && features.spoilers && <SensitiveMediaButton composeId={id} />}
-      {features.interactionRequests && <InteractionPolicyButton composeId={id} />}
+      {(features.interactionRequests || features.quoteApprovalPolicies) && <InteractionPolicyButton composeId={id} />}
     </div>
   ), [features, id, anyMedia]);
 

@@ -78,12 +78,14 @@ interface UpdateCredentialsParams {
     value: string;
   }>;
   source?: {
-    /** String. Default post privacy for authored statuses. Can be public, unlisted, or private. */
+    /** String. Default post privacy for authored statuses. Can be `public`, `unlisted`, or `private`. */
     privacy?: string;
     /** Boolean. Whether to mark authored statuses as sensitive by default. */
     sensitive?: boolean;
     /** String. Default language to use for authored statuses (ISO 6391) */
     language?: string;
+    /** String (Enumerable, oneOf `public` `followers` `nobody`). Default quote policy for new posts. */
+    quote_policy?: 'public' | 'followers' | 'nobody';
   };
 
   /** if true, html tags are stripped from all statuses requested from the API */

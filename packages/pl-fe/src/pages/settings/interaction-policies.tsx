@@ -2,6 +2,7 @@ import { create } from 'mutative';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import { patchMe } from 'pl-fe/actions/me';
 import List, { ListItem } from 'pl-fe/components/list';
 import Button from 'pl-fe/components/ui/button';
 import Column from 'pl-fe/components/ui/column';
@@ -11,15 +12,21 @@ import { InlineMultiselect } from 'pl-fe/components/ui/inline-multiselect';
 import Tabs from 'pl-fe/components/ui/tabs';
 import Text from 'pl-fe/components/ui/text';
 import Warning from 'pl-fe/features/compose/components/warning';
+import { SelectDropdown } from 'pl-fe/features/forms';
+import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useClient } from 'pl-fe/hooks/use-client';
+import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useInteractionPolicies } from 'pl-fe/queries/settings/use-interaction-policies';
 import toast from 'pl-fe/toast';
 
-import type { InteractionPolicy } from 'pl-api';
+import type { CreateStatusParams, InteractionPolicy } from 'pl-api';
 
 type Visibility = 'public' | 'unlisted' | 'private';
 type Policy = 'can_favourite' | 'can_reblog' | 'can_reply';
 type Rule = 'always' | 'with_approval';
 type Scope = 'followers' | 'following' | 'mentioned' | 'public';
+
+type QuoteApprovalPolicy = CreateStatusParams['quote_approval_policy'];
 
 const policies: Array<Policy> = ['can_favourite', 'can_reply', 'can_reblog'];
 
@@ -40,6 +47,7 @@ const scopeMessages = defineMessages({
   following: { id: 'interaction_policies.entry.following', defaultMessage: 'People I follow' },
   mentioned: { id: 'interaction_policies.entry.mentioned', defaultMessage: 'Mentioned' },
   public: { id: 'interaction_policies.entry.public', defaultMessage: 'Everyone' },
+  nobody: { id: 'interaction_policies.entry.nobody', defaultMessage: 'Nobody' },
 });
 
 const titleMessages = {
@@ -47,21 +55,25 @@ const titleMessages = {
     can_favourite: { id: 'interaction_policies.title.public.can_favourite', defaultMessage: 'Who can like your public posts?' },
     can_reply: { id: 'interaction_policies.title.public.can_reply', defaultMessage: 'Who can reply to your public posts?' },
     can_reblog: { id: 'interaction_policies.title.public.can_reblog', defaultMessage: 'Who can repost your public posts?' },
+    can_quote: { id: 'interaction_policies.title.public.can_quote', defaultMessage: 'Who can quote your posts?' },
   }),
   unlisted: defineMessages({
     can_favourite: { id: 'interaction_policies.title.unlisted.can_favourite', defaultMessage: 'Who can like your unlisted posts?' },
     can_reply: { id: 'interaction_policies.title.unlisted.can_reply', defaultMessage: 'Who can reply to your unlisted posts?' },
     can_reblog: { id: 'interaction_policies.title.unlisted.can_reblog', defaultMessage: 'Who can repost your unlisted posts?' },
+    can_quote: { id: 'interaction_policies.title.public.can_quote', defaultMessage: 'Who can quote your posts?' },
   }),
   private: defineMessages({
     can_favourite: { id: 'interaction_policies.title.private.can_favourite', defaultMessage: 'Who can like your followers-only post?' },
     can_reply: { id: 'interaction_policies.title.private.can_reply', defaultMessage: 'Who can reply to your followers-only post?' },
     can_reblog: { id: 'interaction_policies.title.private.can_reblog', defaultMessage: 'Who can repost your followers-only post?' },
+    can_quote: { id: 'interaction_policies.title.public.can_quote', defaultMessage: 'Who can quote your posts?' },
   }),
   single_post: defineMessages({
     can_favourite: { id: 'interaction_policies.title.single_post.can_favourite', defaultMessage: 'Who can like this post?' },
     can_reply: { id: 'interaction_policies.title.single_post.can_reply', defaultMessage: 'Who can reply to this post?' },
     can_reblog: { id: 'interaction_policies.title.single_post.can_reblog', defaultMessage: 'Who can repost this post?' },
+    can_quote: { id: 'interaction_policies.title.single_post.can_quote', defaultMessage: 'Who can quote this post?' },
   }),
 };
 
@@ -85,13 +97,16 @@ const options: Record<Visibility, Record<Policy, Array<Scope>>> = {
 
 interface IInteractionPolicyConfig {
   interactionPolicy: InteractionPolicy;
-  visibility: Visibility;
   onChange: (policy: Policy, rule: Rule, value: Scope[]) => void;
+  quotePolicy?: QuoteApprovalPolicy;
+  onQuotePolicyChange?: (value: QuoteApprovalPolicy) => void;
+  visibility: Visibility;
   singlePost?: boolean;
   disabled?: boolean;
 }
 
-const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({ interactionPolicy, visibility, onChange, singlePost, disabled }) => {
+const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({ interactionPolicy, quotePolicy, visibility, onChange, onQuotePolicyChange, singlePost, disabled }) => {
+  const features = useFeatures();
   const intl = useIntl();
 
   const getItems = (policy: Policy) => Object.fromEntries(options[visibility][policy].map(scope => [scope, intl.formatMessage(scopeMessages[scope])])) as Record<Scope, string>;
@@ -102,7 +117,7 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({ interacti
 
   return (
     <>
-      {policies.map((policy) => {
+      {features.interactionRequests && policies.map((policy) => {
         const items = getItems(policy);
 
         if (!Object.keys(items).length) return null;
@@ -138,11 +153,35 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({ interacti
           </React.Fragment>
         );
       })}
+      {features.quoteApprovalPolicies && visibility !== 'private' && (
+        <>
+          <Text size='lg' weight='bold'>
+            {intl.formatMessage(titleMessages[singlePost ? 'single_post' : visibility].can_quote)}
+          </Text>
+
+          <SelectDropdown
+            key={quotePolicy === undefined ? '1' : '0'}
+            items={{
+              public: intl.formatMessage(scopeMessages.public),
+              followers: intl.formatMessage(scopeMessages.followers),
+              nobody: intl.formatMessage(scopeMessages.nobody),
+            }}
+            defaultValue={quotePolicy}
+            onChange={(event) => onQuotePolicyChange?.(event.target.value as QuoteApprovalPolicy)}
+          />
+        </>
+      )}
     </>
   );
 };
 
 const InteractionPoliciesPage = () => {
+  const client = useClient();
+  const dispatch = useAppDispatch();
+  const features = useFeatures();
+
+  const [quotePolicy, setQuotePolicy] = useState<QuoteApprovalPolicy>('public');
+
   const { interactionPolicies: initial, updateInteractionPolicies, isUpdating } = useInteractionPolicies();
   const intl = useIntl();
   const [interactionPolicies, setInteractionPolicies] = useState(initial);
@@ -152,6 +191,13 @@ const InteractionPoliciesPage = () => {
     setInteractionPolicies(initial);
   }, [initial]);
 
+  useEffect(() => {
+    client.settings.verifyCredentials().then((credentialAccount) => {
+      setQuotePolicy(credentialAccount.source?.quote_policy || 'public');
+    }).catch(() => {
+    });
+  }, []);
+
   const handleChange = (visibility: Visibility, policy: Policy, rule: Rule, value: Array<Scope>) => {
     setInteractionPolicies((policies) => create(policies, (draft) => {
       draft[visibility][policy][rule] = value;
@@ -160,9 +206,25 @@ const InteractionPoliciesPage = () => {
   };
 
   const handleSubmit = () => {
-    updateInteractionPolicies(interactionPolicies, {
-      onSuccess: () => toast.success(messages.success),
-      onError: () => toast.success(messages.fail),
+    const promises = [];
+
+    if (features.interactionRequests) {
+      promises.push(new Promise<void>((resolve, reject) => {
+        updateInteractionPolicies(interactionPolicies, {
+          onSuccess: () => resolve(),
+          onError: () => reject(),
+        });
+      }));
+    }
+
+    if (features.quoteApprovalPolicies) {
+      promises.push(dispatch(patchMe({ source: { quote_policy: quotePolicy } })));
+    }
+
+    Promise.all(promises).then(() => {
+      toast.success(intl.formatMessage(messages.success));
+    }).catch(() => {
+      toast.error(intl.formatMessage(messages.fail));
     });
   };
 
@@ -191,8 +253,10 @@ const InteractionPoliciesPage = () => {
 
         <InteractionPolicyConfig
           interactionPolicy={interactionPolicies[visibility]}
-          visibility={visibility}
           onChange={(...props) => handleChange(visibility, ...props)}
+          quotePolicy={quotePolicy}
+          onQuotePolicyChange={setQuotePolicy}
+          visibility={visibility}
           disabled={isUpdating}
         />
 

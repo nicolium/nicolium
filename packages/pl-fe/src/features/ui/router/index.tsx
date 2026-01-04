@@ -954,7 +954,7 @@ export const settingsInteractionPoliciesRoute = createRoute({
   path: '/settings/interaction_policies',
   component: InteractionPolicies,
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
-    if (!features.interactionRequests) throw notFound();
+    if (!features.interactionRequests && !features.quoteApprovalPolicies) throw notFound();
   }),
 });
 

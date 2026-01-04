@@ -63,6 +63,7 @@ import {
   type ComposeAction,
   type ComposeSuggestionSelectAction,
   COMPOSE_REDACTING_OVERWRITE_CHANGE,
+  COMPOSE_QUOTE_POLICY_OPTION_CHANGE,
 } from '../actions/compose';
 import { EVENT_COMPOSE_CANCEL, EVENT_FORM_SET, type EventsAction } from '../actions/events';
 import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS, type MeAction } from '../actions/me';
@@ -70,7 +71,7 @@ import { FE_NAME } from '../actions/settings';
 import { TIMELINE_DELETE, type TimelineAction } from '../actions/timelines';
 import { unescapeHTML } from '../utils/html';
 
-import type { Account, CredentialAccount, Instance, InteractionPolicy, MediaAttachment, Status as BaseStatus, Tag } from 'pl-api';
+import type { Account, CredentialAccount, Instance, InteractionPolicy, MediaAttachment, Status as BaseStatus, Tag, CreateStatusParams } from 'pl-api';
 import type { Emoji } from 'pl-fe/features/emoji';
 import type { Language } from 'pl-fe/features/preferences';
 import type { Status } from 'pl-fe/normalizers/status';
@@ -116,6 +117,7 @@ interface Compose {
   // Post settings
   contentType: string;
   interactionPolicy: InteractionPolicy | null;
+  quoteApprovalPolicy: CreateStatusParams['quote_approval_policy'] | null;
   language: Language | string | null;
   localOnly: boolean;
   scheduledAt: Date | null;
@@ -174,6 +176,7 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
 
   contentType: 'text/plain',
   interactionPolicy: null,
+  quoteApprovalPolicy: null,
   language: null,
   localOnly: false,
   scheduledAt: null,
@@ -711,6 +714,10 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
           interactionPolicy[action.policy][action.rule] = action.value;
           interactionPolicy[action.policy][action.rule === 'always' ? 'with_approval' : 'always'] = interactionPolicy[action.policy][action.rule === 'always' ? 'with_approval' : 'always'].filter(rule => !action.value.includes(rule as any));
         });
+      });
+    case COMPOSE_QUOTE_POLICY_OPTION_CHANGE:
+      return updateCompose(state, action.composeId, compose => {
+        compose.quoteApprovalPolicy = action.value;
       });
     case INSTANCE_FETCH_SUCCESS:
       return updateCompose(state, 'default', (compose) => updateDefaultContentType(compose, action.instance));

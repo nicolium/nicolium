@@ -94,6 +94,7 @@ const COMPOSE_ADD_SUGGESTED_QUOTE = 'COMPOSE_ADD_SUGGESTED_QUOTE' as const;
 const COMPOSE_ADD_SUGGESTED_LANGUAGE = 'COMPOSE_ADD_SUGGESTED_LANGUAGE' as const;
 
 const COMPOSE_INTERACTION_POLICY_OPTION_CHANGE = 'COMPOSE_INTERACTION_POLICY_OPTION_CHANGE' as const;
+const COMPOSE_QUOTE_POLICY_OPTION_CHANGE = 'COMPOSE_QUOTE_POLICY_OPTION_CHANGE' as const;
 
 const COMPOSE_CLEAR_LINK_SUGGESTION_CREATE = 'COMPOSE_CLEAR_LINK_SUGGESTION_CREATE' as const;
 const COMPOSE_CLEAR_LINK_SUGGESTION_IGNORE = 'COMPOSE_CLEAR_LINK_SUGGESTION_IGNORE' as const;
@@ -417,6 +418,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
       to: explicitAddressing && to.length ? to : undefined,
       local_only: compose.localOnly,
       interaction_policy: ['public', 'unlisted', 'private'].includes(compose.visibility) && compose.interactionPolicy || undefined,
+      quote_approval_policy: compose.quoteApprovalPolicy || undefined,
       preview,
     };
 
@@ -952,6 +954,12 @@ const changeComposeInteractionPolicyOption = (composeId: string, policy: Policy,
   initial,
 });
 
+const changeComposeQuotePolicyOption = (composeId: string, value: CreateStatusParams['quote_approval_policy']) => ({
+  type: COMPOSE_QUOTE_POLICY_OPTION_CHANGE,
+  composeId,
+  value,
+});
+
 const suggestClearLink = (composeId: string, suggestion: ClearLinkSuggestion | null) => ({
   type: COMPOSE_CLEAR_LINK_SUGGESTION_CREATE,
   composeId,
@@ -1035,6 +1043,7 @@ type ComposeAction =
   | ReturnType<typeof addSuggestedLanguage>
   | ReturnType<typeof changeComposeFederated>
   | ReturnType<typeof changeComposeInteractionPolicyOption>
+  | ReturnType<typeof changeComposeQuotePolicyOption>
   | ReturnType<typeof suggestClearLink>
   | ReturnType<typeof ignoreClearLinkSuggestion>
   | ReturnType<typeof suggestHashtagCasing>
@@ -1095,6 +1104,7 @@ export {
   COMPOSE_ADD_SUGGESTED_LANGUAGE,
   COMPOSE_FEDERATED_CHANGE,
   COMPOSE_INTERACTION_POLICY_OPTION_CHANGE,
+  COMPOSE_QUOTE_POLICY_OPTION_CHANGE,
   COMPOSE_CLEAR_LINK_SUGGESTION_CREATE,
   COMPOSE_CLEAR_LINK_SUGGESTION_IGNORE,
   COMPOSE_HASHTAG_CASING_SUGGESTION_SET,
@@ -1146,6 +1156,7 @@ export {
   addSuggestedLanguage,
   changeComposeFederated,
   changeComposeInteractionPolicyOption,
+  changeComposeQuotePolicyOption,
   suggestClearLink,
   ignoreClearLinkSuggestion,
   cancelPreviewCompose,
