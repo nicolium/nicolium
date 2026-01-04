@@ -95,7 +95,14 @@ const Status: React.FC<IStatus> = (props) => {
   const isReblog = status.reblog_id;
   const group = actualStatus.group;
 
-  const filterResults = useMemo(() => [...status.filtered, ...actualStatus.filtered].filter(({ filter }) => filter.filter_action === 'warn'), [status.filtered, actualStatus.filtered]);
+  const filterResults = useMemo(() => {
+    return [...status.filtered, ...actualStatus.filtered].filter(({ filter }) => filter.filter_action === 'warn').reduce((uniqueFilters, current) => {
+      if (!uniqueFilters.some(({ filter: uniqueFilter }) => uniqueFilter.id === current.filter.id)) {
+        uniqueFilters.push(current);
+      }
+      return uniqueFilters;
+    }, [] as typeof status.filtered);
+  }, [status.filtered, actualStatus.filtered]);
   const filtered = filterResults.length > 0;
 
   // Track height changes we know about to compensate scrolling.
@@ -332,6 +339,7 @@ const Status: React.FC<IStatus> = (props) => {
   );
 
   if (filtered && actualStatus.showFiltered !== true) {
+    console.log(filterResults);
     const body = (
       <div className={clsx('status__wrapper text-center')} ref={node}>
         <Text theme='muted'>
