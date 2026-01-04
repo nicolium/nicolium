@@ -66,6 +66,8 @@ export * from './poll';
 export * from './preview-card';
 export * from './preview-card-author';
 export * from './privacy-policy';
+export * from './quote';
+export * from './quote-approval';
 export * from './relationship';
 export * from './relationship-severance-event';
 export * from './report';

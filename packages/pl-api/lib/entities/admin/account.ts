@@ -58,6 +58,7 @@ const adminAccountSchema = v.pipe(
     disabled: v.fallback(v.boolean(), false),
     silenced: v.fallback(v.boolean(), false),
     suspended: v.fallback(v.boolean(), false),
+    sensitized: v.fallback(v.boolean(), false),
     account: v.fallback(v.nullable(accountSchema), null),
     created_by_application_id: v.fallback(v.optional(v.string()), undefined),
     invited_by_account_id: v.fallback(v.optional(v.string()), undefined),

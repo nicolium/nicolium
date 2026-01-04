@@ -9,7 +9,7 @@ const featuredTagSchema = v.object({
   name: v.string(),
   url: v.fallback(v.optional(v.string()), undefined),
   statuses_count: v.number(),
-  last_status_at: v.number(),
+  last_status_at: v.fallback(v.nullable(v.number()), null),
 });
 
 /**

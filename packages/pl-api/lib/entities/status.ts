@@ -12,6 +12,7 @@ import { mentionSchema } from './mention';
 import { pollSchema } from './poll';
 import { previewCardSchema } from './preview-card';
 import { type Quote, quoteSchema, type ShallowQuote, shallowQuoteSchema } from './quote';
+import { quoteApprovalSchema } from './quote-approval';
 import { rssFeedSchema } from './rss-feed';
 import { tagSchema } from './tag';
 import { translationSchema } from './translation';
@@ -78,6 +79,7 @@ const baseStatusSchema = v.object({
   approval_status: v.fallback(v.nullable(v.picklist(['pending', 'approval', 'rejected'])), null),
   group: v.fallback(v.nullable(groupSchema), null),
   scheduled_at: v.fallback(v.null(), null),
+  quote_approval: v.fallback(v.nullable(quoteApprovalSchema), null),
 
   quote_id: v.fallback(v.nullable(v.string()), null),
   local: v.fallback(v.optional(v.boolean()), undefined),

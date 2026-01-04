@@ -18,6 +18,7 @@ const relationshipSchema = v.object({
   notifying: v.fallback(v.boolean(), false),
   requested: v.fallback(v.boolean(), false),
   showing_reblogs: v.fallback(v.boolean(), false),
+  languages: v.fallback(v.nullable(v.array(v.string())), null),
 });
 
 /**
