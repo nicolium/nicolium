@@ -339,7 +339,6 @@ const Status: React.FC<IStatus> = (props) => {
   );
 
   if (filtered && actualStatus.showFiltered !== true) {
-    console.log(filterResults);
     const body = (
       <div className={clsx('status__wrapper text-center')} ref={node}>
         <Text theme='muted'>
