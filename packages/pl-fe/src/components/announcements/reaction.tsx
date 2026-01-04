@@ -1,3 +1,4 @@
+import { animated, type AnimatedProps } from '@react-spring/web';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
@@ -13,7 +14,7 @@ interface IReaction {
   announcementId: string;
   reaction: AnnouncementReaction;
   emojiMap: Record<string, CustomEmoji>;
-  style: React.CSSProperties;
+  style: AnimatedProps<React.ComponentProps<'button'>>['style'];
 }
 
 const Reaction: React.FC<IReaction> = ({ announcementId, reaction, emojiMap, style }) => {
@@ -42,7 +43,7 @@ const Reaction: React.FC<IReaction> = ({ announcementId, reaction, emojiMap, sty
   }
 
   return (
-    <button
+    <animated.button
       className={clsx('flex shrink-0 items-center gap-1.5 rounded-sm bg-gray-100 px-1.5 py-1 transition-colors dark:bg-primary-900', {
         'bg-gray-200 dark:bg-primary-800': hovered,
         'bg-primary-200 dark:bg-primary-500': reaction.me,
@@ -59,7 +60,7 @@ const Reaction: React.FC<IReaction> = ({ announcementId, reaction, emojiMap, sty
       <span className='block min-w-[9px] text-center text-xs font-medium text-primary-600 dark:text-white'>
         <AnimatedNumber value={reaction.count} />
       </span>
-    </button>
+    </animated.button>
   );
 };
 

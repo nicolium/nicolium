@@ -1,5 +1,5 @@
+import { useTransition } from '@react-spring/web';
 import React from 'react';
-import { TransitionMotion, spring } from 'react-motion';
 
 import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
 import { useAnnouncements } from 'pl-fe/queries/announcements/use-announcements';
@@ -24,36 +24,36 @@ const ReactionsBar: React.FC<IReactionsBar> = ({ announcementId, reactions, emoj
     addReaction({ announcementId, name: (data as NativeEmoji).native.replace(/:/g, '') });
   };
 
-  const willEnter = () => ({ scale: reduceMotion ? 1 : 0 });
-
-  const willLeave = () => ({ scale: reduceMotion ? 0 : spring(0, { stiffness: 170, damping: 26 }) });
-
   const visibleReactions = reactions.filter(x => x.count > 0);
 
-  const styles = visibleReactions.map(reaction => ({
-    key: reaction.name,
-    data: reaction,
-    style: { scale: reduceMotion ? 1 : spring(1, { stiffness: 150, damping: 13 }) },
-  }));
+  const transitions = useTransition(visibleReactions, {
+    from: {
+      scale: 0,
+    },
+    enter: {
+      scale: 1,
+    },
+    leave: {
+      scale: 0,
+    },
+    immediate: reduceMotion,
+    keys: visibleReactions.map(x => x.name),
+  });
 
   return (
-    <TransitionMotion styles={styles} willEnter={willEnter} willLeave={willLeave}>
-      {items => (
-        <div className='flex flex-wrap items-center gap-1'>
-          {items.map(({ key, data, style }) => (
-            <Reaction
-              key={key}
-              reaction={data}
-              style={{ transform: `scale(${style.scale})`, position: style.scale < 0.5 ? 'absolute' : 'static' }}
-              announcementId={announcementId}
-              emojiMap={emojiMap}
-            />
-          ))}
+    <div className='flex flex-wrap items-center gap-1'>
+      {transitions(({ scale }, reaction) => (
+        <Reaction
+          key={reaction.name}
+          reaction={reaction}
+          style={{ transform: scale.to((s) => `scale(${s})`) }}
+          announcementId={announcementId}
+          emojiMap={emojiMap}
+        />
+      ))}
 
-          {visibleReactions.length < 8 && <EmojiPickerDropdown onPickEmoji={handleEmojiPick} />}
-        </div>
-      )}
-    </TransitionMotion>
+      {visibleReactions.length < 8 && <EmojiPickerDropdown onPickEmoji={handleEmojiPick} />}
+    </div>
   );
 };
 

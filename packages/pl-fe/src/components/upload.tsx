@@ -20,18 +20,18 @@ import presentationIcon from '@phosphor-icons/core/regular/presentation.svg';
 import spreadsheetIcon from '@phosphor-icons/core/regular/table.svg';
 import videoIcon from '@phosphor-icons/core/regular/video.svg';
 import xIcon from '@phosphor-icons/core/regular/x.svg';
+import { animated, config, useSpring } from '@react-spring/web';
 import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { spring } from 'react-motion';
 
 import AltIndicator from 'pl-fe/components/alt-indicator';
 import Blurhash from 'pl-fe/components/blurhash';
 import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import IconButton from 'pl-fe/components/ui/icon-button';
-import Motion from 'pl-fe/features/ui/util/optional-motion';
 import { useModalsActions } from 'pl-fe/stores/modals';
+import { useSettings } from 'pl-fe/stores/settings';
 
 import type { MediaAttachment } from 'pl-api';
 
@@ -103,6 +103,7 @@ const Upload: React.FC<IUpload> = ({
 }) => {
   const intl = useIntl();
   const { openModal } = useModalsActions();
+  const { reduceMotion } = useSettings();
 
   const handleUndoClick: React.MouseEventHandler = e => {
     if (onDelete) {
@@ -142,6 +143,15 @@ const Upload: React.FC<IUpload> = ({
   const mediaType = media.type;
   const mimeType = media.mime_type as string | undefined;
 
+  const styles = useSpring({
+    backgroundImage: mediaType === 'image' ? `url(${media.preview_url})` : undefined,
+    backgroundPosition: typeof x === 'number' && typeof y === 'number' ? `${x}% ${y}%` : undefined,
+    from: { scale: 0.8 },
+    to: { scale: 1 },
+    config: config.stiff,
+    immediate: reduceMotion,
+  });
+
   const uploadIcon = mediaType === 'unknown' && (
     <Icon
       className='mx-auto my-12 size-16 text-gray-800 dark:text-gray-200'
@@ -160,75 +170,67 @@ const Upload: React.FC<IUpload> = ({
       onDragEnd={onDragEnd}
     >
       <Blurhash hash={media.blurhash} className='⁂-media-gallery__preview' />
-      <Motion defaultStyle={{ scale: 0.8 }} style={{ scale: spring(1, { stiffness: 180, damping: 12 }) }}>
-        {({ scale }) => (
-          <div
-            className={clsx('compose-form__upload-thumbnail relative h-40 w-full overflow-hidden bg-contain bg-center bg-no-repeat', mediaType)}
-            style={{
-              transform: `scale(${scale})`,
-              backgroundImage: mediaType === 'image' ? `url(${media.preview_url})` : undefined,
-              backgroundPosition: typeof x === 'number' && typeof y === 'number' ? `${x}% ${y}%` : undefined,
-            }}
-          >
-            <HStack className='absolute right-2 top-2 z-10' space={2}>
-              {onDescriptionChange && (
-                <IconButton
-                  onClick={handleOpenAltTextModal}
-                  src={editIcon}
-                  theme='dark'
-                  className='hover:scale-105 hover:bg-gray-900'
-                  iconClassName='h-5 w-5'
-                  title={intl.formatMessage(messages.description)}
-                />
-              )}
-              {(withPreview && mediaType !== 'unknown' && Boolean(media.url)) && (
-                <IconButton
-                  onClick={handleOpenModal}
-                  src={zoomInIcon}
-                  theme='dark'
-                  className='hover:scale-105 hover:bg-gray-900'
-                  iconClassName='h-5 w-5'
-                  title={intl.formatMessage(messages.preview)}
-                />
-              )}
-              {onDelete && (
-                <IconButton
-                  onClick={handleUndoClick}
-                  src={xIcon}
-                  theme='dark'
-                  className='hover:scale-105 hover:bg-gray-900'
-                  iconClassName='h-5 w-5'
-                  title={intl.formatMessage(messages.delete)}
-                />
-              )}
-            </HStack>
+      <animated.div
+        className={clsx('compose-form__upload-thumbnail relative h-40 w-full overflow-hidden bg-contain bg-center bg-no-repeat', mediaType)}
+        style={styles}
+      >
+        <HStack className='absolute right-2 top-2 z-10' space={2}>
+          {onDescriptionChange && (
+            <IconButton
+              onClick={handleOpenAltTextModal}
+              src={editIcon}
+              theme='dark'
+              className='hover:scale-105 hover:bg-gray-900'
+              iconClassName='h-5 w-5'
+              title={intl.formatMessage(messages.description)}
+            />
+          )}
+          {(withPreview && mediaType !== 'unknown' && Boolean(media.url)) && (
+            <IconButton
+              onClick={handleOpenModal}
+              src={zoomInIcon}
+              theme='dark'
+              className='hover:scale-105 hover:bg-gray-900'
+              iconClassName='h-5 w-5'
+              title={intl.formatMessage(messages.preview)}
+            />
+          )}
+          {onDelete && (
+            <IconButton
+              onClick={handleUndoClick}
+              src={xIcon}
+              theme='dark'
+              className='hover:scale-105 hover:bg-gray-900'
+              iconClassName='h-5 w-5'
+              title={intl.formatMessage(messages.delete)}
+            />
+          )}
+        </HStack>
 
-            <HStack space={2} justifyContent='between' className='absolute inset-x-2 bottom-2 z-10'>
-              <span className='overflow-hidden text-ellipsis rounded bg-gray-900 px-2 py-1 text-xs font-medium text-white'>
-                {media.url.split('/').at(-1)}
-              </span>
+        <HStack space={2} justifyContent='between' className='absolute inset-x-2 bottom-2 z-10'>
+          <span className='overflow-hidden text-ellipsis rounded bg-gray-900 px-2 py-1 text-xs font-medium text-white'>
+            {media.url.split('/').at(-1)}
+          </span>
 
-              {onDescriptionChange && !description && (
-                <button onClick={handleOpenAltTextModal}>
-                  <AltIndicator
-                    warning
-                    title={intl.formatMessage(messages.descriptionMissingTitle)}
-                  />
-                </button>
-              )}
-            </HStack>
+          {onDescriptionChange && !description && (
+            <button onClick={handleOpenAltTextModal}>
+              <AltIndicator
+                warning
+                title={intl.formatMessage(messages.descriptionMissingTitle)}
+              />
+            </button>
+          )}
+        </HStack>
 
-            <div className='absolute inset-0 z-[-1] size-full'>
-              {mediaType === 'video' && (
-                <video className='size-full object-cover' autoPlay playsInline muted loop>
-                  <source src={media.preview_url} />
-                </video>
-              )}
-              {uploadIcon}
-            </div>
-          </div>
-        )}
-      </Motion>
+        <div className='absolute inset-0 z-[-1] size-full'>
+          {mediaType === 'video' && (
+            <video className='size-full object-cover' autoPlay playsInline muted loop>
+              <source src={media.preview_url} />
+            </video>
+          )}
+          {uploadIcon}
+        </div>
+      </animated.div>
     </div>
   );
 };

@@ -58,6 +58,7 @@
     "@reach/combobox": "^0.18.0",
     "@reach/rect": "^0.18.0",
     "@reach/tabs": "^0.18.0",
+    "@react-spring/web": "^10.0.3",
     "@reduxjs/toolkit": "^2.5.0",
     "@sentry/browser": "^8.47.0",
     "@sentry/react": "^8.47.0",

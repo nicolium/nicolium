@@ -1,12 +1,12 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { spring } from 'react-motion';
 
 import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
 import Stack from 'pl-fe/components/ui/stack';
-import OptionalMotion from 'pl-fe/features/ui/util/optional-motion';
 import { useCompose } from 'pl-fe/hooks/use-compose';
+
+import Warning from './warning';
 
 interface IClearLinkSuggestion {
   composeId: string;
@@ -25,9 +25,10 @@ const ClearLinkSuggestion = ({
   if (!suggestion) return null;
 
   return (
-    <OptionalMotion defaultStyle={{ opacity: 0, scaleX: 0.85, scaleY: 0.75 }} style={{ opacity: spring(1, { damping: 35, stiffness: 400 }), scaleX: spring(1, { damping: 35, stiffness: 400 }), scaleY: spring(1, { damping: 35, stiffness: 400 }) }}>
-      {({ opacity, scaleX, scaleY }) => (
-        <Stack space={1} className='rounded border border-solid border-gray-400 bg-transparent px-2.5 py-2 text-xs text-gray-900 dark:border-gray-800 dark:text-white' style={{ opacity: opacity, transform: `scale(${scaleX}, ${scaleY})` }}>
+    <Warning
+      animated
+      message={
+        <Stack space={1}>
           <span>
             <FormattedMessage
               id='compose.clear_link_suggestion.body'
@@ -52,8 +53,8 @@ const ClearLinkSuggestion = ({
             </Button>
           </HStack>
         </Stack>
-      )}
-    </OptionalMotion>
+      }
+    />
   );
 };
 

@@ -1,8 +1,8 @@
+import { animated, useSpring } from '@react-spring/web';
 import clsx from 'clsx';
 import React from 'react';
-import { spring } from 'react-motion';
 
-import Motion from 'pl-fe/features/ui/util/optional-motion';
+import { useSettings } from 'pl-fe/stores/settings';
 
 interface IProgressBar {
   /** Number between 0 and 1 to represent the percentage complete. */
@@ -12,22 +12,29 @@ interface IProgressBar {
 }
 
 /** A horizontal meter filled to the given percentage. */
-const ProgressBar: React.FC<IProgressBar> = ({ progress, size = 'md' }) => (
-  <div
-    className={clsx('h-2.5 w-full overflow-hidden rounded-lg bg-gray-300 dark:bg-primary-800', {
-      'h-2.5': size === 'md',
-      'h-[6px]': size === 'sm',
-    })}
-  >
-    <Motion defaultStyle={{ width: 0 }} style={{ width: spring(progress * 100) }}>
-      {({ width }) => (
-        <div
-          className='h-full bg-secondary-500'
-          style={{ width: `${width}%` }}
-        />
-      )}
-    </Motion>
-  </div>
-);
+const ProgressBar: React.FC<IProgressBar> = ({ progress, size = 'md' }) => {
+  const { reduceMotion } = useSettings();
+
+  const styles = useSpring({
+    from: { width: '0%' },
+    to: { width: `${progress}%` },
+    reset: true,
+    immediate: reduceMotion,
+  });
+
+  return (
+    <div
+      className={clsx('h-2.5 w-full overflow-hidden rounded-lg bg-gray-300 dark:bg-primary-800', {
+        'h-2.5': size === 'md',
+        'h-[6px]': size === 'sm',
+      })}
+    >
+      <animated.div
+        className='h-full bg-secondary-500'
+        style={styles}
+      />
+    </div>
+  );
+};
 
 export { ProgressBar as default };

@@ -1,7 +1,7 @@
+import { animated, config, useSpring } from '@react-spring/web';
 import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { Motion, presets, spring } from 'react-motion';
 
 import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
@@ -16,16 +16,20 @@ const messages = defineMessages({
   votes: { id: 'poll.votes', defaultMessage: '{votes, plural, one {# vote} other {# votes}}' },
 });
 
-const PollPercentageBar: React.FC<{ percent: number; leading: boolean }> = ({ percent, leading }): JSX.Element => (
-  <Motion defaultStyle={{ width: 0 }} style={{ width: spring(percent, { ...presets.gentle, precision: 0.1 }) }}>
-    {({ width }) => (
-      <span
-        className='absolute inset-0 inline-block h-full rounded-l-md bg-primary-100 dark:bg-primary-500'
-        style={{ width: `${width}%` }}
-      />
-    )}
-  </Motion>
-);
+const PollPercentageBar: React.FC<{ percent: number; leading: boolean }> = ({ percent, leading }): JSX.Element => {
+  const styles = useSpring({
+    from: { width: '0%' },
+    to: { width: `${percent}%` },
+    config: config.gentle,
+  });
+
+  return (
+    <animated.span
+      className='absolute inset-0 inline-block h-full rounded-l-md bg-primary-100 dark:bg-primary-500'
+      style={styles}
+    />
+  );
+};
 
 interface IPollOptionText extends IPollOption {
   percent: number;
