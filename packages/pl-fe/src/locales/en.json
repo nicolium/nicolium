@@ -1163,6 +1163,8 @@
   "lightbox.next": "Next",
   "lightbox.previous": "Previous",
   "lightbox.view_context": "View context",
+  "lightbox.zoom_in": "Zoom to actual size",
+  "lightbox.zoom_out": "Zoom to fit",
   "link_preview.more_from_author": "More from {name}",
   "list.click_to_add": "Click here to add people",
   "list_adder.header_title": "Add or remove from lists",
