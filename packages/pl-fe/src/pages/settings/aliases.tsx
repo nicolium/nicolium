@@ -19,7 +19,7 @@ import { useAccountAliases, useAddAccountAlias, useDeleteAccountAlias } from 'pl
 
 const messages = defineMessages({
   heading: { id: 'column.aliases', defaultMessage: 'Account aliases' },
-  subheading_add_new: { id: 'column.aliases.subheading_add_new', defaultMessage: 'Add New Alias' },
+  subheading_add_new: { id: 'column.aliases.subheading_add_new', defaultMessage: 'Add new alias' },
   create_error: { id: 'column.aliases.create_error', defaultMessage: 'Error creating alias' },
   delete_error: { id: 'column.aliases.delete_error', defaultMessage: 'Error deleting alias' },
   subheading_aliases: { id: 'column.aliases.subheading_aliases', defaultMessage: 'Current aliases' },

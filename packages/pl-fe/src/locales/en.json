@@ -386,7 +386,7 @@
   "column.aliases.create_error": "Error creating alias",
   "column.aliases.delete": "Delete",
   "column.aliases.delete_error": "Error deleting alias",
-  "column.aliases.subheading_add_new": "Add New Alias",
+  "column.aliases.subheading_add_new": "Add new alias",
   "column.aliases.subheading_aliases": "Current aliases",
   "column.app_create": "Create app",
   "column.backups": "Backups",
