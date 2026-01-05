@@ -19,35 +19,21 @@
 
 Want to test `pl-fe` with **any existing MastoAPI-compatible server?** Try [pl.mkljczk.pl](https://pl.mkljczk.pl) — enter your server's domain name to use `pl-fe` on any server!
 
-If you want to use `pl-fe` as the default frontend on your server, download the latest build from [pl.mkljczk.pl/pl-fe.zip](http://pl.mkljczk.pl/pl-fe.zip) and install it following the instructions for your backend. For example, on a standard Pleroma installation you can use:
-
-```sh
-curl -O https://pl.mkljczk.pl/pl-fe.zip
-unzip pl-fe.zip -d /opt/pleroma/instance/static/
-rm pl-fe.zip
-```
+If you want to use `pl-fe` on your server, follow the installation instructions in the documentation. We offer guides for [Pleroma/Akkoma](https://pl.mkljczk.pl/docs/installing/pleroma/), [Iceshrimp.NET](https://pl.mkljczk.pl/docs/installing/iceshrimp/), [Mitra](https://pl.mkljczk.pl/docs/installing/mitra/), and [standalone installations](https://pl.mkljczk.pl/docs/installing/standalone/).
 
 ## Repository
 
-The repository hosts `pl-fe`, but also libraries related to the project. This includes:
+The repository hosts `pl-fe`, but also libraries related to the project. Currently, this includes:
 
 - [pl-fe](./packages/pl-fe/) itself — a social networking client app
 - [pl-api](./packages/pl-api) — a library for interacting with Mastodon API-compatible servers, focused on support for projects extending the official Mastodon API. It is used by `pl-fe`.
 - [pl-hooks](./packages/pl-hooks) — a library including hooks for integrating with Mastodon API, based on `pl-api` and TanStack Query. It is intended to be used within `pl-fe`. Work  in progress.
 
-More projects to be announced.
-
 ## Contributing
 
 This project is hosted on [Codeberg](https://codeberg.org/mkljczk/pl-fe) and [GitHub](https://github.com/mkljczk/pl-fe). You can open issues on Codeberg or create pull requests on both platforms.
 
-Code contributions are welcome. I will provide contributing guidelines after I decide whether the current monorepo model is the correct approach.
-
-[Weblate](https://hosted.weblate.org/projects/pl-fe/) is used for project translation.
-
-<a href="https://hosted.weblate.org/engage/pl-fe/">
-<img src="https://hosted.weblate.org/widget/pl-fe/287x66-grey.png" alt="Translation status" />
-</a>
+You can find more information about setting up the development environment in [the documentation](https://pl.mkljczk.pl/docs/contributing/pl-fe/).
 
 ## FAQ / Common misconceptions
 

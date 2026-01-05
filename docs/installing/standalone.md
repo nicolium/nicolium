@@ -13,4 +13,4 @@ pl-fe.example.com {
 }
 ```
 
-This assumes you're serving `pl-fe` under the pl-fe.example.com domain and the `pl-fe` files are located in `/var/www/pl-fe`. You can download `pl-fe` from `https://pl.mkljczk.pl/pl-fe.zip` or [build it from source](../building.md).
+This assumes you're serving `pl-fe` under the pl-fe.example.com domain and the `pl-fe` files are located in `/var/www/pl-fe`. You can download `pl-fe` from `https://pl.mkljczk.pl/pl-fe.zip` or [build it from source](../building/pl-fe.md).
