@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import Button from 'pl-fe/components/ui/button';
 import HStack from 'pl-fe/components/ui/hstack';
@@ -37,18 +37,6 @@ const useShowOverlay = (status: Pick<Status, 'id' | 'filtered' | 'media_attachme
   return !visible || showHideButton;
 };
 
-const messages = defineMessages({
-  delete: { id: 'status.delete', defaultMessage: 'Delete' },
-  deleteConfirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
-  deleteHeading: { id: 'confirmations.delete.heading', defaultMessage: 'Delete post' },
-  deleteMessage: { id: 'confirmations.delete.message', defaultMessage: 'Are you sure you want to delete this post?' },
-  hide: { id: 'moderation_overlay.hide', defaultMessage: 'Hide content' },
-  sensitiveTitle: { id: 'status.sensitive_warning', defaultMessage: 'Sensitive content' },
-  sensitiveSubtitle: { id: 'status.sensitive_warning.subtitle', defaultMessage: 'This content may not be suitable for all audiences.' },
-  show: { id: 'moderation_overlay.show', defaultMessage: 'Show content' },
-  matchesFilter: { id: 'status.sensitive_warning.matches_filter', defaultMessage: 'Matches filter “<span>{title}</span>”' },
-});
-
 interface ISensitiveContentOverlay {
   status: Pick<Status, 'id' | 'filtered' | 'sensitive' | 'media_attachments'>;
 }
@@ -56,7 +44,6 @@ interface ISensitiveContentOverlay {
 const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveContentOverlay>((props, ref) => {
   const { status } = props;
 
-  const intl = useIntl();
   const { displayMedia } = useSettings();
 
   const [visible, filters] = useMediaVisible(status, displayMedia);
@@ -85,7 +72,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
     >
       {visible ? (
         <Button
-          text={intl.formatMessage(messages.hide)}
+          text={<FormattedMessage id='moderation_overlay.hide' defaultMessage='Hide content' />}
           icon={require('@phosphor-icons/core/regular/eye-slash.svg')}
           onClick={toggleVisibility}
           theme='primary'
@@ -96,14 +83,22 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
           <div className='mx-auto space-y-4 text-center' ref={ref}>
             <div className='space-y-1'>
               <Text theme='white' weight='semibold'>
-                {intl.formatMessage(messages.sensitiveTitle)}
+                <FormattedMessage id='status.sensitive_warning' defaultMessage='Sensitive content' />
               </Text>
 
               <Text theme='white' size='sm' weight='medium'>
-                {filters.length ? intl.formatMessage(messages.matchesFilter, {
-                  title: matchedFilters.join(', '),
-                  span: (chunks) => <span className='filter-name'>{chunks}</span>,
-                }) : intl.formatMessage(messages.sensitiveSubtitle)}
+                {filters.length ? (
+                  <FormattedMessage
+                    id='status.sensitive_warning.matches_filter'
+                    defaultMessage='Matches filter “<span>{title}</span>”'
+                    values={{
+                      title: matchedFilters.join(', '),
+                      span: (chunks) => <span className='filter-name'>{chunks}</span>,
+                    }}
+                  />
+                ) : (
+                  <FormattedMessage id='status.sensitive_warning.subtitle' defaultMessage='This content may not be suitable for all audiences.' />
+                )}
               </Text>
             </div>
 
@@ -115,7 +110,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
                 icon={require('@phosphor-icons/core/regular/eye.svg')}
                 onClick={toggleVisibility}
               >
-                {intl.formatMessage(messages.show)}
+                <FormattedMessage id='moderation_overlay.show' defaultMessage='Show content' />
               </Button>
             </HStack>
           </div>

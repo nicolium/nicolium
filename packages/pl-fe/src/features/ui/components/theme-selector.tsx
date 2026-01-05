@@ -1,15 +1,8 @@
 import React, { useMemo } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import Icon from 'pl-fe/components/ui/icon';
 import Select from 'pl-fe/components/ui/select';
-
-const messages = defineMessages({
-  light: { id: 'theme_toggle.light', defaultMessage: 'Light' },
-  dark: { id: 'theme_toggle.dark', defaultMessage: 'Dark' },
-  black: { id: 'theme_toggle.black', defaultMessage: 'Black' },
-  system: { id: 'theme_toggle.system', defaultMessage: 'System' },
-});
 
 interface IThemeSelector {
   value: string;
@@ -18,7 +11,6 @@ interface IThemeSelector {
 
 /** Pure theme selector. */
 const ThemeSelector: React.FC<IThemeSelector> = ({ value, onChange }) => {
-  const intl = useIntl();
 
   const themeIconSrc = useMemo(() => {
     switch (value) {
@@ -51,10 +43,10 @@ const ThemeSelector: React.FC<IThemeSelector> = ({ value, onChange }) => {
           defaultValue={value}
           className='!pl-10'
         >
-          <option value='system'>{intl.formatMessage(messages.system)}</option>
-          <option value='light'>{intl.formatMessage(messages.light)}</option>
-          <option value='dark'>{intl.formatMessage(messages.dark)}</option>
-          <option value='black'>{intl.formatMessage(messages.black)}</option>
+          <option value='system'><FormattedMessage id='theme_toggle.system' defaultMessage='System' /></option>
+          <option value='light'><FormattedMessage id='theme_toggle.light' defaultMessage='Light' /></option>
+          <option value='dark'><FormattedMessage id='theme_toggle.dark' defaultMessage='Dark' /></option>
+          <option value='black'><FormattedMessage id='theme_toggle.black' defaultMessage='Black' /></option>
         </Select>
 
         <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3'>

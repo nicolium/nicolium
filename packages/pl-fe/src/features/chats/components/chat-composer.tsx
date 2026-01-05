@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { defineMessages, IntlShape, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, IntlShape, useIntl } from 'react-intl';
 
 import Button from 'pl-fe/components/ui/button';
 import Combobox, { ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover } from 'pl-fe/components/ui/combobox';
@@ -22,10 +22,6 @@ import type { Emoji, NativeEmoji } from 'pl-fe/features/emoji';
 
 const messages = defineMessages({
   placeholder: { id: 'chat.input.placeholder', defaultMessage: 'Type a message' },
-  send: { id: 'chat.actions.send', defaultMessage: 'Send' },
-  retry: { id: 'chat.retry', defaultMessage: 'Retry?' },
-  blocked: { id: 'chat_message_list.blocked', defaultMessage: 'You blocked this user' },
-  unblock: { id: 'chat_composer.unblock', defaultMessage: 'Unblock' },
   unblockMessage: { id: 'chat_settings.unblock.message', defaultMessage: 'Unblocking will allow this profile to direct message you and view your content.' },
   unblockHeading: { id: 'chat_settings.unblock.heading', defaultMessage: 'Unblock @{acct}' },
   unblockConfirm: { id: 'chat_settings.unblock.confirm', defaultMessage: 'Unblock' },
@@ -152,11 +148,11 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
       <div className='mt-auto p-6 shadow-3xl dark:border-t-2 dark:border-solid dark:border-gray-800'>
         <Stack space={3} alignItems='center'>
           <Text align='center' theme='muted'>
-            {intl.formatMessage(messages.blocked)}
+            <FormattedMessage id='chat_message_list.blocked' defaultMessage='You blocked this user' />
           </Text>
 
           <Button theme='secondary' onClick={handleUnblockUser}>
-            {intl.formatMessage(messages.unblock)}
+            <FormattedMessage id='chat_composer.unblock' defaultMessage='Unblock' />
           </Button>
         </Stack>
       </div>
@@ -248,7 +244,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
 
             <button onClick={onSubmit} className='flex hover:underline'>
               <Text theme='primary' size='xs' tag='span'>
-                {intl.formatMessage(messages.retry)}
+                <FormattedMessage id='chat.retry' defaultMessage='Retry?' />
               </Text>
             </button>
           </>

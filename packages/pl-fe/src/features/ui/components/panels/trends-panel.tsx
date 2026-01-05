@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import Hashtag from 'pl-fe/components/hashtag';
 import Text from 'pl-fe/components/ui/text';
@@ -12,16 +12,7 @@ interface ITrendsPanel {
   limit: number;
 }
 
-const messages = defineMessages({
-  viewAll: {
-    id: 'trends_panel.view_all',
-    defaultMessage: 'View all',
-  },
-});
-
 const TrendsPanel = ({ limit }: ITrendsPanel) => {
-  const intl = useIntl();
-
   const { data: trends, isFetching } = useTrends();
 
   if (!isFetching && !trends?.length) {
@@ -34,7 +25,7 @@ const TrendsPanel = ({ limit }: ITrendsPanel) => {
       action={
         <Link className='text-right' to='/search' search={{ type: 'hashtags' }}>
           <Text tag='span' theme='primary' size='sm' className='hover:underline'>
-            {intl.formatMessage(messages.viewAll)}
+            <FormattedMessage id='trends_panel.view_all' defaultMessage='View all' />
           </Text>
         </Link>
       }

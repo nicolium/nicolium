@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { CardHeader, CardTitle } from 'pl-fe/components/ui/card';
 import Modal from 'pl-fe/components/ui/modal';
@@ -14,18 +14,11 @@ import Search from './list-editor-modal/components/search';
 
 import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
-const messages = defineMessages({
-  addToCircle: { id: 'circles.add_to_circle', defaultMessage: 'Add to circle' },
-  removeFromCircle: { id: 'circles.remove_from_circle', defaultMessage: 'Remove from circle' },
-});
-
 interface CircleEditorModalProps {
   circleId: string;
 }
 
 const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({ circleId, onClose }) => {
-  const intl = useIntl();
-
   const [searchValue, setSearchValue] = useState('');
 
   const { data: circle } = useCircle(circleId);
@@ -52,7 +45,7 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({ 
           {accountIds.length > 0 ? (
             <div>
               <CardHeader>
-                <CardTitle title={intl.formatMessage(messages.removeFromCircle)} />
+                <CardTitle title={<FormattedMessage id='circles.remove_from_circle' defaultMessage='Remove from circle' />} />
               </CardHeader>
               <div className='max-h-48 overflow-y-auto'>
                 {accountIds.map(accountId => <Account key={accountId} accountId={accountId} added={accountIds.includes(accountId)} onAdd={onAdd} onRemove={onRemove} />)}
@@ -66,7 +59,7 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({ 
 
           <div>
             <CardHeader>
-              <CardTitle title={intl.formatMessage(messages.addToCircle)} />
+              <CardTitle title={<FormattedMessage id='circles.add_to_circle' defaultMessage='Add to circle' />} />
             </CardHeader>
             <Search value={searchValue} onSubmit={setSearchValue} />
             <div className='max-h-48 overflow-y-auto'>

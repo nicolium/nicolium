@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { useIntl, defineMessages } from 'react-intl';
+import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
 import Button from './button';
 import HStack from './hstack';
@@ -8,7 +8,6 @@ import Stack from './stack';
 import Text from './text';
 
 const messages = defineMessages({
-  add: { id: 'streamfield.add', defaultMessage: 'Add' },
   remove: { id: 'streamfield.remove', defaultMessage: 'Remove' },
 });
 
@@ -129,7 +128,7 @@ const Streamfield: React.FC<IStreamfield> = ({
           theme='secondary'
           block
         >
-          {intl.formatMessage(messages.add)}
+          <FormattedMessage id='streamfield.add' defaultMessage='Add' />
         </Button>
       )}
     </Stack>

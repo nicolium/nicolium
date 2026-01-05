@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import React from 'react';
-import { useIntl, defineMessages } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
@@ -9,13 +9,6 @@ import { shortNumberFormat } from 'pl-fe/utils/numbers';
 
 import type { Account } from 'pl-api';
 
-const messages = defineMessages({
-  followers: { id: 'account.followers', defaultMessage: 'Followers' },
-  follows: { id: 'account.follows', defaultMessage: 'Following' },
-  statuses: { id: 'account.statuses', defaultMessage: 'Statuses' },
-  subscribers: { id: 'account.subscribers', defaultMessage: 'Subscribers' },
-});
-
 interface IProfileStats {
   account: Pick<Account, 'acct' | 'followers_count' | 'following_count' | 'statuses_count' | 'subscribers_count'> | undefined;
   onClickHandler?: React.MouseEventHandler;
@@ -23,7 +16,6 @@ interface IProfileStats {
 
 /** Display follower and following counts for an account. */
 const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
-  const intl = useIntl();
   const { demetricator } = useSettings();
 
   if (!account) {
@@ -38,7 +30,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
             {shortNumberFormat(account.statuses_count)}
           </Text>
           <Text weight='bold' size='sm'>
-            {intl.formatMessage(messages.statuses)}
+            <FormattedMessage id='account.statuses' defaultMessage='Statuses' />
           </Text>
         </HStack>
       )}
@@ -51,7 +43,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
             </Text>
           )}
           <Text weight='bold' size='sm'>
-            {intl.formatMessage(messages.followers)}
+            <FormattedMessage id='account.followers' defaultMessage='Followers' />
           </Text>
         </HStack>
       </Link>
@@ -64,7 +56,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
             </Text>
           )}
           <Text weight='bold' size='sm'>
-            {intl.formatMessage(messages.follows)}
+            <FormattedMessage id='account.follows' defaultMessage='Following' />
           </Text>
         </HStack>
       </Link>
@@ -78,7 +70,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
             </Text>
           )}
           <Text weight='bold' size='sm'>
-            {intl.formatMessage(messages.subscribers)}
+            <FormattedMessage id='account.subscribers' defaultMessage='Subscribers' />
           </Text>
         </HStack>
         // </Link>

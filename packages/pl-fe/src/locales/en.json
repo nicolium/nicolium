@@ -178,7 +178,7 @@
   "admin.edit_rule.save": "Save",
   "admin.edit_rule.updated": "Rule edited",
   "admin.latest_accounts_panel.more": "Click to see {count, plural, one {# account} other {# accounts}}",
-  "admin.latest_accounts_panel.title": "Latest Accounts",
+  "admin.latest_accounts_panel.title": "Latest accounts",
   "admin.links.pending_reports": "{count, plural, one {{formattedCount} pending report} other {{formattedCount} pending reports}}",
   "admin.links.pending_users": "{count, plural, one {{formattedCount} pending user} other {{formattedCount} pending users}}",
   "admin.moderation_log.empty_message": "You have not performed any moderation actions yet. When you do, a history will be shown here.",

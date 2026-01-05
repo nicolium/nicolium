@@ -1,6 +1,6 @@
 import { Link, useMatch } from '@tanstack/react-router';
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import Button from 'pl-fe/components/ui/button';
 import Divider from 'pl-fe/components/ui/divider';
@@ -23,16 +23,8 @@ interface IGroupPopoverContainer {
   group: Group;
 }
 
-const messages = defineMessages({
-  title: { id: 'group.popover.title', defaultMessage: 'Membership required' },
-  summary: { id: 'group.popover.summary', defaultMessage: 'You must be a member of the group in order to reply to this status.' },
-  action: { id: 'group.popover.action', defaultMessage: 'View group' },
-});
-
 const GroupPopover = (props: IGroupPopoverContainer) => {
   const { children, group, isEnabled } = props;
-
-  const intl = useIntl();
 
   const shouldHideAction = !!useMatch({ from: groupTimelineRoute.fullPath, shouldThrow: false });
 
@@ -83,10 +75,10 @@ const GroupPopover = (props: IGroupPopoverContainer) => {
 
           <Stack space={0.5} className='px-4'>
             <Text weight='semibold'>
-              {intl.formatMessage(messages.title)}
+              <FormattedMessage id='group.popover.title' defaultMessage='Membership required' />
             </Text>
             <Text theme='muted'>
-              {intl.formatMessage(messages.summary)}
+              <FormattedMessage id='group.popover.summary' defaultMessage='You must be a member of the group in order to reply to this status.' />
             </Text>
           </Stack>
 
@@ -94,7 +86,7 @@ const GroupPopover = (props: IGroupPopoverContainer) => {
             <div className='px-4'>
               <Link to='/groups/$groupId' params={{ groupId: group.id }}>
                 <Button type='button' theme='secondary' block>
-                  {intl.formatMessage(messages.action)}
+                  <FormattedMessage id='group.popover.action' defaultMessage='View group' />
                 </Button>
               </Link>
             </div>

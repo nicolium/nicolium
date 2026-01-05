@@ -1,13 +1,12 @@
 import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Widget from 'pl-fe/components/ui/widget';
 import AccountContainer from 'pl-fe/containers/account-container';
 import { useAdminAccounts } from 'pl-fe/queries/admin/use-accounts';
 
 const messages = defineMessages({
-  title: { id: 'admin.latest_accounts_panel.title', defaultMessage: 'Latest Accounts' },
   expand: { id: 'admin.latest_accounts_panel.more', defaultMessage: 'Click to see {count, plural, one {# account} other {# accounts}}' },
 });
 
@@ -33,7 +32,7 @@ const LatestAccountsPanel: React.FC<ILatestAccountsPanel> = ({ limit = 5 }) => {
 
   return (
     <Widget
-      title={intl.formatMessage(messages.title)}
+      title={<FormattedMessage id='admin.latest_accounts_panel.title' defaultMessage='Latest accounts' />}
       onActionClick={handleAction}
       actionTitle={intl.formatMessage(messages.expand, { count: total })}
     >
