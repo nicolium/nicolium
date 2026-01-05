@@ -19,3 +19,6 @@ plugins:
   - search:
       lang: en
   - include-markdown
+
+markdown_extensions:
+  - admonition
