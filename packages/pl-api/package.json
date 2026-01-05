@@ -12,7 +12,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "tsc --p ./tsconfig-build.json && vite build",
+    "build": "vite build",
+    "watch": "vite build --watch",
     "preview": "vite preview",
     "lint": "npx eslint --ext .js,.jsx,.cjs,.mjs,.ts,.tsx . --cache"
   },

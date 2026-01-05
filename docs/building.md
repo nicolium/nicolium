@@ -17,11 +17,9 @@ cd pl-fe
 # Install dependencies
 pnpm install
 # Build the pl-api dependency
-cd packages/pl-api
-pnpm build
-cd ../pl-fe
+pnpm -F pl-api build
 # Build the pl-fe project
-pnpm build
+pnpm -F pl-fe build
 ```
 
 The built files will be located in the `packages/pl-fe/dist` directory. You can [serve them using a static web server](./installing/standalone.md).

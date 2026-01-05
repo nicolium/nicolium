@@ -8,7 +8,7 @@ import { mimeSchema } from './utils';
  */
 const blurhashSchema = v.pipe(v.string(), v.check(
   (value) => isBlurhashValid(value).result,
-  'invalid blurhash', // .errorReason
+  'invalid blurhash',
 ));
 
 const baseAttachmentSchema = v.object({

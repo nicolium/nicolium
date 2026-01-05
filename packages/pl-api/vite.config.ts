@@ -21,4 +21,7 @@ export default defineConfig({
       external: Object.keys(pkg.dependencies),
     },
   },
+  server: {
+    port: Number(process.env.PORT ?? 7313),
+  },
 });
