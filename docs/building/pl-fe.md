@@ -23,3 +23,8 @@ pnpm -F pl-fe build
 ```
 
 The built files will be located in the `packages/pl-fe/dist` directory. You can [serve them using a static web server](./installing/standalone.md).
+
+Following environment variables can be used to customize the instance in build process:
+- `BACKEND_URL` - URL of the Mastodon-compatible instance to connect to. If not set, tries fetching /api/v1/instance from the origin and falls back to standalone mode.
+- `FE_SUBDIRECTORY` - The path where pl-fe is mounted to. Defaults to `/`.
+- `WITH_LANDING_PAGE` - Displays the landing page on the home page, when running in standalone mode.
