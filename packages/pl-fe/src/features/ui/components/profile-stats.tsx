@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, useIntl } from 'react-intl';
 
 import HStack from 'pl-fe/components/ui/hstack';
 import Text from 'pl-fe/components/ui/text';
@@ -16,6 +16,7 @@ interface IProfileStats {
 
 /** Display follower and following counts for an account. */
 const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
+  const intl = useIntl();
   const { demetricator } = useSettings();
 
   if (!account) {
