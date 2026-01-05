@@ -39,7 +39,7 @@ More projects to be announced.
 
 ## Contributing
 
-This project is hosted on [Codeberg](https://codeberg.org/mkljczk/pl-fe) and [GitHub](https://github.com/mkljczk/pl-fe). You can open issues on Codeberg or create merge requests on both platforms.
+This project is hosted on [Codeberg](https://codeberg.org/mkljczk/pl-fe) and [GitHub](https://github.com/mkljczk/pl-fe). You can open issues on Codeberg or create pull requests on both platforms.
 
 Code contributions are welcome. I will provide contributing guidelines after I decide whether the current monorepo model is the correct approach.
 
