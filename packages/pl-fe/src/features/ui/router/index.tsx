@@ -1234,6 +1234,14 @@ const redirectInviteRoute = createRoute({
     return <Navigate to='/invite/$token' params={{ token }} replace />;
   },
 });
+const redirectWithRepliesRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/@{$username}/with_replies',
+  component: () => {
+    const { username } = redirectWithRepliesRoute.useParams();
+    return <Navigate to='/@{$username}' params={{ username }} search={{ with_replies: true }} replace />;
+  },
+});
 const redirectRoutes = [
   createRoute({ getParentRoute: () => rootRoute, path: '/timelines/home', component: () => <Navigate to='/' replace /> }),
   createRoute({ getParentRoute: () => rootRoute, path: '/timelines/public/local', component: () => <Navigate to='/timeline/local' replace /> }),
@@ -1259,6 +1267,8 @@ const redirectRoutes = [
   redirectPleromaStatusRoute,
   redirectPleromaUsernameRoute,
   redirectIceshrimpStatusRoute,
+  redirectInviteRoute,
+  redirectWithRepliesRoute,
 ];
 
 const routeTree = rootRoute.addChildren([
