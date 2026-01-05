@@ -17,10 +17,10 @@ import { useIsSidebarOpen, useUiStoreActions } from 'pl-fe/stores/ui';
 import { isStandalone } from 'pl-fe/utils/state';
 
 const messages = defineMessages({
-  home: { id: 'navigation.home', defaultMessage: 'Home' },
-  search: { id: 'navigation.search', defaultMessage: 'Search' },
-  notifications: { id: 'navigation.notifications', defaultMessage: 'Notifications' },
-  chats: { id: 'navigation.chats', defaultMessage: 'Chats' },
+  home: { id: 'column.home', defaultMessage: 'Home' },
+  search: { id: 'column.search', defaultMessage: 'Search' },
+  notifications: { id: 'column.notifications', defaultMessage: 'Notifications' },
+  chats: { id: 'column.chats', defaultMessage: 'Chats' },
   compose: { id: 'navigation.compose', defaultMessage: 'Compose' },
   openSidebar: { id: 'navigation.sidebar', defaultMessage: 'Open sidebar' },
   closeSidebar: { id: 'navigation.sidebar.close', defaultMessage: 'Close sidebar' },

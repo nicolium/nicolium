@@ -30,17 +30,17 @@ import SiteLogo from './site-logo';
 import Avatar from './ui/avatar';
 
 const messages = defineMessages({
-  followRequests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
+  followRequests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
   bookmarks: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
   lists: { id: 'column.lists', defaultMessage: 'Lists' },
   circles: { id: 'column.circles', defaultMessage: 'Circles' },
   events: { id: 'column.events', defaultMessage: 'Events' },
-  profileDirectory: { id: 'navigation_bar.profile_directory', defaultMessage: 'Profile directory' },
-  followedTags: { id: 'navigation_bar.followed_tags', defaultMessage: 'Followed hashtags' },
+  profileDirectory: { id: 'column.directory', defaultMessage: 'Profile directory' },
+  followedTags: { id: 'column.followed_tags', defaultMessage: 'Followed hashtags' },
   scheduledStatuses: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
-  drafts: { id: 'navigation.drafts', defaultMessage: 'Drafts' },
-  conversations: { id: 'navigation.direct_messages', defaultMessage: 'Direct messages' },
-  interactionRequests: { id: 'navigation.interaction_requests', defaultMessage: 'Interaction requests' },
+  drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
+  conversations: { id: 'column.direct', defaultMessage: 'Direct messages' },
+  interactionRequests: { id: 'column.interaction_requests', defaultMessage: 'Interaction requests' },
   help: { id: 'navigation.help', defaultMessage: 'Help' },
   keyboardShortcuts: { id: 'navigation.keyboard_shortcuts', defaultMessage: 'Keyboard shortcuts' },
   sourceCode: { id: 'navigation.source_code', defaultMessage: 'Source code' },
@@ -262,7 +262,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                 activeIcon={require('@phosphor-icons/core/fill/chats-teardrop-fill.svg')}
                 count={unreadChatsCount}
                 countMax={9}
-                text={<FormattedMessage id='navigation.chats' defaultMessage='Chats' />}
+                text={<FormattedMessage id='column.chats' defaultMessage='Chats' />}
               />
             )}
 
@@ -271,7 +271,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                 to='/conversations'
                 icon={require('@phosphor-icons/core/regular/envelope-simple.svg')}
                 activeIcon={require('@phosphor-icons/core/fill/envelope-simple-fill.svg')}
-                text={<FormattedMessage id='navigation.direct_messages' defaultMessage='Direct messages' />}
+                text={<FormattedMessage id='column.direct' defaultMessage='Direct messages' />}
               />
             )}
 

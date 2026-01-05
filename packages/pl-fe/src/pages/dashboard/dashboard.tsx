@@ -173,7 +173,7 @@ const Dashboard: React.FC = () => {
           {features.pleromaAdminAccounts && account.is_admin && (
             <ListItem
               to='/pl-fe/config'
-              label={<FormattedMessage id='navigation_bar.plfe_config' defaultMessage='Front-end configuration' />}
+              label={<FormattedMessage id='column.plfe_config' defaultMessage='Front-end configuration' />}
             />
           )}
 

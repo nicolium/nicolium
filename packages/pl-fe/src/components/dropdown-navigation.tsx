@@ -207,7 +207,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 <DropdownNavigationLink
                   to='/follow_requests'
                   icon={require('@phosphor-icons/core/regular/user-plus.svg')}
-                  text={<FormattedMessage id='navigation_bar.follow_requests' defaultMessage='Follow requests' />}
+                  text={<FormattedMessage id='column.follow_requests' defaultMessage='Follow requests' />}
                   onClick={closeSidebar}
                 />
               )}
@@ -216,7 +216,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 <DropdownNavigationLink
                   to='/interaction_requests'
                   icon={require('@phosphor-icons/core/regular/heart-half.svg')}
-                  text={<FormattedMessage id='navigation.interaction_requests' defaultMessage='Interaction requests' />}
+                  text={<FormattedMessage id='column.interaction_requests' defaultMessage='Interaction requests' />}
                   onClick={closeSidebar}
                 />
               )}
@@ -225,7 +225,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 <DropdownNavigationLink
                   to='/conversations'
                   icon={require('@phosphor-icons/core/regular/envelope-simple.svg')}
-                  text={<FormattedMessage id='navigation.direct_messages' defaultMessage='Direct messages' />}
+                  text={<FormattedMessage id='column.direct' defaultMessage='Direct messages' />}
                   onClick={closeSidebar}
                 />
               )}
@@ -288,7 +288,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 <DropdownNavigationLink
                   to='/directory'
                   icon={require('@phosphor-icons/core/regular/address-book.svg')}
-                  text={<FormattedMessage id='navigation_bar.profile_directory' defaultMessage='Profile directory' />}
+                  text={<FormattedMessage id='column.directory' defaultMessage='Profile directory' />}
                   onClick={closeSidebar}
                 />
               )}
@@ -306,7 +306,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 <DropdownNavigationLink
                   to='/draft_statuses'
                   icon={require('@phosphor-icons/core/regular/pencil-simple.svg')}
-                  text={<FormattedMessage id='navigation.drafts' defaultMessage='Drafts' />}
+                  text={<FormattedMessage id='column.draft_statuses' defaultMessage='Drafts' />}
                   onClick={closeSidebar}
                 />
               )}
@@ -354,7 +354,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               <DropdownNavigationLink
                 to='/settings'
                 icon={require('@phosphor-icons/core/regular/sliders-horizontal.svg')}
-                text={<FormattedMessage id='navigation_bar.preferences' defaultMessage='Preferences' />}
+                text={<FormattedMessage id='column.preferences' defaultMessage='Preferences' />}
                 onClick={closeSidebar}
               />
 
@@ -362,7 +362,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 <DropdownNavigationLink
                   to='/followed_tags'
                   icon={require('@phosphor-icons/core/regular/hash.svg')}
-                  text={<FormattedMessage id='navigation_bar.followed_tags' defaultMessage='Followed hashtags' />}
+                  text={<FormattedMessage id='column.followed_tags' defaultMessage='Followed hashtags' />}
                   onClick={closeSidebar}
                 />
               )}
@@ -371,7 +371,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 <DropdownNavigationLink
                   to='/pl-fe/admin'
                   icon={require('@phosphor-icons/core/regular/gauge.svg')}
-                  text={<FormattedMessage id='navigation.dashboard' defaultMessage='Dashboard' />}
+                  text={<FormattedMessage id='column.admin.dashboard' defaultMessage='Dashboard' />}
                   onClick={closeSidebar}
                   // count={dashboardCount} WIP
                 />
