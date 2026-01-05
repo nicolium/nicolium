@@ -4,7 +4,7 @@
 
 The most straightforward way to install `pl-fe` as a frontend for Pleroma or Akkoma is to simply download it and place its files in the `/instance/static` directory of your Pleroma/Akkoma installation (usually `/opt/pleroma/instance/static` or `/opt/akkoma/instance/static`, accordingly).
 
-```sh
+```bash
 curl -O https://pl.mkljczk.pl/pl-fe.zip
 unzip pl-fe.zip -d /opt/pleroma/instance/static/
 rm pl-fe.zip
@@ -17,13 +17,13 @@ It is also possible to use the Pleroma frontend management tool. You can find mo
 On Akkoma, however, there is no `pl-fe` in the default available frontends list ([yet?](https://akkoma.dev/AkkomaGang/akkoma/pulls/945)). You can still install it, but you need to explicitly provide the URL to `pl-fe`. To install it from CLI, use:
 
 ### OTP
-```sh
+```bash
 ./bin/pleroma_ctl frontend install pl-fe --ref develop --build-url https://pl.mkljczk.pl/pl-fe.zip --build-dir .
 ```
 
 ### From Source
 
-```sh
+```bash
 mix pleroma.frontend install pl-fe --ref develop --build-url https://pl.mkljczk.pl/pl-fe.zip --build-dir .
 ```
 
