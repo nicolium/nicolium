@@ -41,7 +41,6 @@ const hidesNetwork = ({ __meta }: Pick<CredentialAccount, '__meta'>): boolean =>
 
 const messages = defineMessages({
   heading: { id: 'column.edit_profile', defaultMessage: 'Edit profile' },
-  header: { id: 'edit_profile.header', defaultMessage: 'Edit profile' },
   metaFieldLabel: { id: 'edit_profile.fields.meta_fields.label_placeholder', defaultMessage: 'Label' },
   metaFieldContent: { id: 'edit_profile.fields.meta_fields.content_placeholder', defaultMessage: 'Content' },
   firstMetaFieldLabel: { id: 'edit_profile.fields.meta_fields.label_placeholder.first', defaultMessage: 'Label (e.g. pronouns)' },
@@ -333,7 +332,7 @@ const EditProfilePage: React.FC = () => {
     ? handleFieldChange<string>('header_description') : undefined;
 
   return (
-    <Column label={intl.formatMessage(messages.header)}>
+    <Column label={intl.formatMessage(messages.heading)}>
       <Form onSubmit={handleSubmit}>
         <div className='relative mb-12 flex'>
           <HeaderPicker

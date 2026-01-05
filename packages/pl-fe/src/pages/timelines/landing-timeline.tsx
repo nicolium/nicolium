@@ -88,11 +88,11 @@ const LandingTimelinePage = () => {
 
       <HStack className='mb-4 lg:hidden' justifyContent='end' space={4}>
         <Button theme='tertiary' to='/login'>
-          <FormattedMessage id='thread_login.login' defaultMessage='Log in' />
+          <FormattedMessage id='account.login' defaultMessage='Log in' />
         </Button>
         {isOpen && (
           <Button to='/signup'>
-            <FormattedMessage id='thread_login.signup' defaultMessage='Sign up' />
+            <FormattedMessage id='account.register' defaultMessage='Sign up' />
           </Button>
         )}
       </HStack>

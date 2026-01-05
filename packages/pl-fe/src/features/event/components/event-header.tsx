@@ -57,7 +57,7 @@ const messages = defineMessages({
   direct: { id: 'status.direct', defaultMessage: 'Direct message @{name}' },
   mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
   block: { id: 'account.block', defaultMessage: 'Block @{name}' },
-  report: { id: 'status.report', defaultMessage: 'Report @{name}' },
+  report: { id: 'account.report', defaultMessage: 'Report @{name}' },
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
   adminStatus: { id: 'status.admin_status', defaultMessage: 'Open this post in the moderation interface' },
   markStatusSensitive: { id: 'admin.statuses.actions.mark_status_sensitive', defaultMessage: 'Mark post sensitive' },
