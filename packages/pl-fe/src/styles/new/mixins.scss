@@ -40,7 +40,7 @@
   @if $theme == default {
     @apply text-gray-900 dark:text-gray-100;
   } @else if $theme == danger {
-    @apply text-danger-600;
+    @apply text-danger-700 dark:text-danger-500;
   } @else if $theme == primary {
     @apply text-primary-600 dark:text-accent-blue;
   } @else if $theme == muted {

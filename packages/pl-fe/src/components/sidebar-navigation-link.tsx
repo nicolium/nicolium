@@ -40,27 +40,30 @@ const SidebarNavigationLink = React.memo(React.forwardRef((props: ISidebarNaviga
   };
 
   return (
-    <LinkComponent
-      activeOptions={{ exact: true }}
-      activeProps={{ className: '⁂-sidebar-navigation-link--active' }}
-      to={to}
-      ref={ref}
-      onClick={handleClick}
-      className='⁂-sidebar-navigation-link'
-      {...rest}
-    >
-      <span
-        className='⁂-sidebar-navigation-link__icon'
+    <li>
+      <LinkComponent
+        activeOptions={{ exact: true }}
+        activeProps={{ className: '⁂-sidebar-navigation-link--active' }}
+        to={to}
+        ref={ref}
+        onClick={handleClick}
+        className='⁂-sidebar-navigation-link'
+        {...rest}
       >
-        <Icon
-          src={(isActive && activeIcon) || icon}
-          count={demetricator ? undefined : count}
-          countMax={countMax}
-        />
-      </span>
+        <span
+          className='⁂-sidebar-navigation-link__icon'
+          aria-hidden
+        >
+          <Icon
+            src={(isActive && activeIcon) || icon}
+            count={demetricator ? undefined : count}
+            countMax={countMax}
+          />
+        </span>
 
-      <p>{text}</p>
-    </LinkComponent>
+        <p>{text}</p>
+      </LinkComponent>
+    </li>
   );
 }), (prevProps, nextProps) => prevProps.count === nextProps.count);
 

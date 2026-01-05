@@ -230,7 +230,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         </div>
       )}
 
-      <div className='⁂-sidebar-navigation__links'>
+      <ul className='⁂-sidebar-navigation__links'>
         <SidebarNavigationLink
           to='/'
           icon={require('@phosphor-icons/core/regular/house.svg')}
@@ -386,7 +386,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
             />}
           </Stack>
         )}
-      </div>
+      </ul>
 
       {account && (
         <ComposeButton shrink={shrink} />

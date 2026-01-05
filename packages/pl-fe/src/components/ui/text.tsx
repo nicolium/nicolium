@@ -3,7 +3,7 @@ import React from 'react';
 
 const themes = {
   default: 'text-gray-900 dark:text-gray-100',
-  danger: 'text-danger-600',
+  danger: 'text-danger-700 dark:text-danger-500',
   primary: 'text-primary-600 dark:text-accent-blue',
   muted: 'text-gray-700 dark:text-gray-600',
   subtle: 'text-gray-400 dark:text-gray-500',
