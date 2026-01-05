@@ -22,7 +22,7 @@ import { hasCanvasExtractPermission } from 'pl-fe/utils/favicon-service';
 import { KVStoreRedirectServicesItem } from 'pl-fe/utils/url-purify';
 
 const messages = defineMessages({
-  urlPrivacy: { id: 'settings.url_privacy', defaultMessage: 'URL privacy' },
+  heading: { id: 'column.privacy', defaultMessage: 'Privacy' },
   rulesUrlPlaceholder: { id: 'url_privacy.rules_url.placeholder', defaultMessage: 'Rules URL' },
   hashUrlPlaceholder: { id: 'url_privacy.hash_url.placeholder', defaultMessage: 'Hash URL' },
   redirectLinksModeOff: { id: 'url_privacy.redirect_links_mode.off', defaultMessage: 'Disabled' },
@@ -106,10 +106,10 @@ const Privacy = () => {
   }, [dispatch]);
 
   return (
-    <Column label={intl.formatMessage(messages.urlPrivacy)} transparent withHeader={false}>
+    <Column label={intl.formatMessage(messages.heading)} transparent withHeader={false}>
       <Card className='space-y-4' variant='rounded'>
         <CardHeader backHref='/settings'>
-          <CardTitle title={intl.formatMessage(messages.urlPrivacy)} />
+          <CardTitle title={intl.formatMessage(messages.heading)} />
         </CardHeader>
 
         <CardBody>

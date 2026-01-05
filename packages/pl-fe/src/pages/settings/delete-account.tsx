@@ -16,7 +16,7 @@ import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   passwordFieldLabel: { id: 'security.fields.password.label', defaultMessage: 'Password' },
-  deleteHeader: { id: 'security.headers.delete', defaultMessage: 'Delete account' },
+  deleteHeader: { id: 'column.delete_account', defaultMessage: 'Delete account' },
   deleteSubmit: { id: 'security.submit.delete', defaultMessage: 'Delete account' },
   deleteAccountSuccess: { id: 'security.delete_account.success', defaultMessage: 'Account successfully deleted.' },
   deleteAccountFail: { id: 'security.delete_account.fail', defaultMessage: 'Account deletion failed.' },

@@ -18,7 +18,7 @@ import { useModalsActions } from 'pl-fe/stores/modals';
 import type { OauthToken } from 'pl-api';
 
 const messages = defineMessages({
-  header: { id: 'security.headers.tokens', defaultMessage: 'Sessions' },
+  header: { id: 'column.tokens', defaultMessage: 'Sessions' },
   revoke: { id: 'security.tokens.revoke', defaultMessage: 'Revoke' },
   revokeSessionHeading: { id: 'confirmations.revoke_session.heading', defaultMessage: 'Revoke current session' },
   revokeSessionMessage: { id: 'confirmations.revoke_session.message', defaultMessage: 'You are about to revoke your current session. You will be signed out.' },

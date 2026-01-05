@@ -16,10 +16,10 @@ const messages = defineMessages({
   accountMigration: { id: 'column.migration', defaultMessage: 'Move account' },
   backups: { id: 'column.backups', defaultMessage: 'Backups' },
   blocks: { id: 'column.blocks', defaultMessage: 'Blocks' },
-  changeEmail: { id: 'settings.change_email', defaultMessage: 'Change email' },
-  changePassword: { id: 'settings.change_password', defaultMessage: 'Change password' },
+  changeEmail: { id: 'column.change_email', defaultMessage: 'Change email' },
+  changePassword: { id: 'column.change_password', defaultMessage: 'Change password' },
   configureMfa: { id: 'settings.configure_mfa', defaultMessage: 'Configure MFA' },
-  deleteAccount: { id: 'settings.delete_account', defaultMessage: 'Delete account' },
+  deleteAccount: { id: 'column.delete_account', defaultMessage: 'Delete account' },
   developers: { id: 'column.developers', defaultMessage: 'Developers' },
   domainBlocks: { id: 'column.domain_blocks', defaultMessage: 'Domain blocks' },
   editProfile: { id: 'settings.edit_profile', defaultMessage: 'Edit profile' },
@@ -35,9 +35,9 @@ const messages = defineMessages({
   preferences: { id: 'column.preferences', defaultMessage: 'Preferences' },
   profile: { id: 'settings.profile', defaultMessage: 'Profile' },
   security: { id: 'settings.security', defaultMessage: 'Security' },
-  sessions: { id: 'settings.sessions', defaultMessage: 'Active sessions' },
+  sessions: { id: 'column.tokens', defaultMessage: 'Active sessions' },
   settings: { id: 'settings.settings', defaultMessage: 'Settings' },
-  privacy: { id: 'settings.privacy', defaultMessage: 'Privacy' },
+  privacy: { id: 'column.privacy', defaultMessage: 'Privacy' },
 });
 
 /** User settings page. */
