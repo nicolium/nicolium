@@ -14,7 +14,7 @@ const SubmitPlugin: React.FC<ISubmitPlugin> = ({ composeId, handleSubmit }) => {
   useEffect(() => {
     // Adapted from https://github.com/facebook/lexical/blob/main/packages/lexical-rich-text/src/index.ts#L929
     return editor.registerCommand(KEY_ENTER_COMMAND, (event) => {
-      if (handleSubmit && event?.ctrlKey && !event.shiftKey) {
+      if (handleSubmit && (event?.ctrlKey || event?.metaKey) && !event.shiftKey) {
         handleSubmit();
         return true;
       }
@@ -29,7 +29,7 @@ const SubmitPlugin: React.FC<ISubmitPlugin> = ({ composeId, handleSubmit }) => {
           return false;
         }
         event.preventDefault();
-        if (event.ctrlKey && event.shiftKey) {
+        if ((event.ctrlKey || event.metaKey) && event.shiftKey) {
           return editor.dispatchCommand(INSERT_PARAGRAPH_COMMAND, undefined);
         }
       }
