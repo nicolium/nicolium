@@ -2,7 +2,7 @@
 // https://activitypub.software/TransFem-org/Sharkey/-/blob/develop/packages/frontend/src/components/global/MkMfm.ts
 import { Link } from '@tanstack/react-router';
 import * as mfm from '@transfem-org/sfm-js';
-import { clamp } from 'lodash';
+import clamp from 'lodash/clamp';
 import React, { CSSProperties } from 'react';
 
 import { useSettings } from 'pl-fe/stores/settings';
