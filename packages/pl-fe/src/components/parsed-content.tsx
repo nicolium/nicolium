@@ -253,7 +253,7 @@ function parseContent({
                 <Link
                   to='/@{$username}'
                   params={{ username: mention.acct }}
-                  className='text-primary-600 hover:underline dark:text-accent-blue'
+                  className='text-primary-600 hover:underline dark:text-primary-400'
                   dir='ltr'
                   onClick={(e) => e.stopPropagation()}
                 >

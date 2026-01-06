@@ -57,8 +57,6 @@ const normalizeColors = (theme: Partial<Pick<PlFeConfig, 'brandColor' | 'accentC
     'gradient-start': normalizedColors.primary?.['500'],
     // @ts-ignore
     'gradient-end': normalizedColors.accent?.['500'],
-    // @ts-ignore
-    'accent-blue': normalizedColors.primary?.['600'],
     ...normalizedColors,
   } as typeof normalizedColors;
 };

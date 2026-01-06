@@ -412,7 +412,7 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
                 <Link
                   to='/@{$username}'
                   params={{ username: mention.acct }}
-                  className='text-primary-600 hover:underline dark:text-accent-blue'
+                  className='text-primary-600 hover:underline dark:text-primary-400'
                   dir='ltr'
                   onClick={(e) => e.stopPropagation()}
                 >
@@ -430,7 +430,7 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
             <Link
               to='/@{$username}'
               params={{ username: token.props.acct.slice(1) }}
-              className='text-primary-600 hover:underline dark:text-accent-blue'
+              className='text-primary-600 hover:underline dark:text-primary-400'
               dir='ltr'
               onClick={(e) => e.stopPropagation()}
             >

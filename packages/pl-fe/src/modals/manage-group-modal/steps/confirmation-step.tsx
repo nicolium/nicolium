@@ -48,7 +48,7 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
       <Stack space={3}>
         <Stack>
           <label
-            className='dark:sm:shadow-inset relative h-24 w-full cursor-pointer overflow-hidden rounded-lg bg-primary-100 text-primary-500 dark:bg-gray-800 dark:text-accent-blue sm:h-36 sm:shadow'
+            className='dark:sm:shadow-inset relative h-24 w-full cursor-pointer overflow-hidden rounded-lg bg-primary-100 text-primary-500 dark:bg-gray-800 dark:text-primary-400 sm:h-36 sm:shadow'
           >
             {group.header && <img className='size-full object-cover' src={group.header} alt={group.header_description} />}
           </label>
@@ -62,7 +62,7 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
           <Text size='2xl' weight='bold' align='center'>{group.display_name}</Text>
           <Text
             size='md'
-            className='mx-auto max-w-sm [&_a]:text-primary-600 [&_a]:hover:underline [&_a]:dark:text-accent-blue'
+            className='mx-auto max-w-sm [&_a]:text-primary-600 [&_a]:hover:underline [&_a]:dark:text-primary-400'
           >
             <ParsedContent html={group.note} emojis={group.emojis} />
           </Text>

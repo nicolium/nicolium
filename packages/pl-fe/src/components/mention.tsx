@@ -24,7 +24,7 @@ const Mention: React.FC<IMention> = ({ mention: { acct, username }, disabled }) 
       <Link
         to='/@{$username}'
         params={{ username: acct }}
-        className='text-primary-600 hover:underline dark:text-accent-blue'
+        className='text-primary-600 hover:underline dark:text-primary-400'
         onClick={handleClick}
         dir='ltr'
       >

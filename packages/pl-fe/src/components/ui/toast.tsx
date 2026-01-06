@@ -51,7 +51,7 @@ const Toast = (props: IToast) => {
         return (
           <Icon
             src={require('@phosphor-icons/core/regular/info.svg')}
-            className='size-6 text-primary-600 dark:text-accent-blue'
+            className='size-6 text-primary-600 dark:text-primary-400'
             aria-hidden
           />
         );
@@ -67,7 +67,7 @@ const Toast = (props: IToast) => {
   };
 
   const renderAction = () => {
-    const classNames = 'mt-0.5 flex-shrink-0 rounded-full text-sm font-medium text-primary-600 dark:text-accent-blue hover:underline focus:outline-none';
+    const classNames = 'mt-0.5 flex-shrink-0 rounded-full text-sm font-medium text-primary-600 dark:text-primary-400 hover:underline focus:outline-none';
 
     if (action && actionLabel) {
       return (

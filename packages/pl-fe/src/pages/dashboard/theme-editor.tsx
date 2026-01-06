@@ -195,12 +195,6 @@ const ThemeEditorPage: React.FC = () => {
           />
 
           <ColorListItem
-            label={intl.formatMessage(messages.colorAccentBlue)}
-            value={colors['accent-blue']}
-            onChange={updateColor('accent-blue')}
-          />
-
-          <ColorListItem
             label={intl.formatMessage(messages.colorGradientStart)}
             value={colors['gradient-start']}
             onChange={updateColor('gradient-start')}

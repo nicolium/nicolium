@@ -28,7 +28,7 @@
   }
 
   a {
-    @apply text-primary-600 dark:text-accent-blue hover:underline;
+    @apply text-primary-600 dark:text-primary-400 hover:underline;
   }
 
   strong {
@@ -119,7 +119,7 @@
   }
 
   .status-link {
-    @apply hover:underline text-primary-600 dark:text-accent-blue hover:text-primary-800 dark:hover:text-accent-blue;
+    @apply hover:underline text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-400;
   }
 
   span.invisible {

@@ -309,7 +309,7 @@ const Status: React.FC<IStatus> = (props) => {
         <StatusInfo
           className='-mb-1'
           avatarSize={avatarSize}
-          icon={<Icon src={require('@phosphor-icons/core/regular/users-three.svg')} className='size-4 text-primary-600 dark:text-accent-blue' />}
+          icon={<Icon src={require('@phosphor-icons/core/regular/users-three.svg')} className='size-4 text-primary-600 dark:text-primary-400' />}
           text={
             <FormattedMessage
               id='status.group'
@@ -344,7 +344,7 @@ const Status: React.FC<IStatus> = (props) => {
         <Text theme='muted'>
           <FormattedMessage id='status.filtered' defaultMessage='Filtered' />: {filterResults.map(({ filter }) => filter.title).join(', ')}.
           {' '}
-          <button className='text-primary-600 hover:underline dark:text-accent-blue' onClick={handleUnfilter}>
+          <button className='text-primary-600 hover:underline dark:text-primary-400' onClick={handleUnfilter}>
             <FormattedMessage id='status.show_filter_reason' defaultMessage='Show anyway' />
           </button>
         </Text>

@@ -23,7 +23,7 @@ const StatusMention: React.FC<IStatusMention> = ({ accountId, fallback }) => {
     <Link
       to='/@{$username}'
       params={{ username: account.acct }}
-      className='text-primary-600 hover:underline dark:text-accent-blue'
+      className='text-primary-600 hover:underline dark:text-primary-400'
       dir='ltr'
       onClick={(e) => e.stopPropagation()}
     >

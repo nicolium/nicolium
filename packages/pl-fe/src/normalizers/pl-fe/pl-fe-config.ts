@@ -47,7 +47,6 @@ const plFeConfigSchema = coerceObject({
   accentColor: v.fallback(v.string(), ''),
   colors: v.fallback(v.nullable(v.objectWithRest(
     {
-      'accent-blue': v.string(),
       'gradient-end': v.string(),
       'gradient-start': v.string(),
       greentext: v.string(),

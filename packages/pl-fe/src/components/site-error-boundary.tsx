@@ -100,7 +100,7 @@ const SiteErrorBoundary: React.FC<ISiteErrorBoundary> = ({ children }) => {
                 defaultMessage="We're sorry for the interruption. If the problem persists, please reach out to our support team. You may also try to {clearCookies} (this will log you out)."
                 values={{
                   clearCookies: (
-                    <a href='/' onClick={clearCookies} className='text-primary-600 hover:underline dark:text-accent-blue'>
+                    <a href='/' onClick={clearCookies} className='text-primary-600 hover:underline dark:text-primary-400'>
                       <FormattedMessage
                         id='alert.unexpected.clear_cookies'
                         defaultMessage='clear cookies and browser data'
@@ -118,7 +118,7 @@ const SiteErrorBoundary: React.FC<ISiteErrorBoundary> = ({ children }) => {
             </Text>
 
             <div className='mt-10'>
-              <a href='/' className='text-base font-medium text-primary-600 hover:underline dark:text-accent-blue'>
+              <a href='/' className='text-base font-medium text-primary-600 hover:underline dark:text-primary-400'>
                 <FormattedMessage id='alert.unexpected.return_home' defaultMessage='Return Home' />
                 {' '}
                 <span className='inline-block rtl:rotate-180' aria-hidden='true'>&rarr;</span>

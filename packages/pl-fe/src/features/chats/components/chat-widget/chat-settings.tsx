@@ -112,7 +112,7 @@ const ChatSettings = () => {
         </HStack>
 
         <Stack space={5}>
-          <button onClick={isBlocked ? handleUnblockUser : handleBlockUser} className='flex w-full items-center space-x-2 text-sm font-bold text-primary-600 dark:text-accent-blue'>
+          <button onClick={isBlocked ? handleUnblockUser : handleBlockUser} className='flex w-full items-center space-x-2 text-sm font-bold text-primary-600 dark:text-primary-400'>
             <Icon src={require('@phosphor-icons/core/regular/prohibit.svg')} className='size-5' />
             <span>{intl.formatMessage(isBlocked ? messages.unblockUser : messages.blockUser, { acct: chat.account.acct })}</span>
           </button>

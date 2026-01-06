@@ -52,7 +52,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
             icon={
               <Icon
                 src={require('@phosphor-icons/core/regular/users-three.svg')}
-                className='size-4 text-primary-600 dark:text-accent-blue'
+                className='size-4 text-primary-600 dark:text-primary-400'
               />
             }
             text={

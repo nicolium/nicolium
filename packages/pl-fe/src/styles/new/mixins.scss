@@ -42,7 +42,7 @@
   } @else if $theme == danger {
     @apply text-danger-700 dark:text-danger-500;
   } @else if $theme == primary {
-    @apply text-primary-600 dark:text-accent-blue;
+    @apply text-primary-600 dark:text-primary-400;
   } @else if $theme == muted {
     @apply text-gray-700 dark:text-gray-600;
   } @else if $theme == subtle {
@@ -148,7 +148,7 @@
   } @else if $theme == danger {
     @apply border-transparent bg-danger-100 dark:bg-danger-900 text-danger-600 dark:text-danger-200 hover:bg-danger-600 hover:text-gray-100 dark:hover:text-gray-100 dark:hover:bg-danger-500 focus:ring-danger-500;
   } @else if $theme == transparent {
-    @apply border-transparent bg-transparent text-primary-600 dark:text-accent-blue dark:bg-transparent hover:bg-gray-200 dark:hover:bg-gray-800/50;
+    @apply border-transparent bg-transparent text-primary-600 dark:text-primary-400 dark:bg-transparent hover:bg-gray-200 dark:hover:bg-gray-800/50;
   } @else if $theme == outline {
     @apply border-gray-100 border-2 bg-transparent text-gray-100 hover:bg-white/10;
   } @else if $theme == muted {

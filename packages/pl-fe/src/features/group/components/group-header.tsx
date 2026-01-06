@@ -156,7 +156,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
           <Text
             theme='muted'
             align='center'
-            className='[&_a]:text-primary-600 [&_a]:hover:underline [&_a]:dark:text-accent-blue'
+            className='[&_a]:text-primary-600 [&_a]:hover:underline [&_a]:dark:text-primary-400'
           >
             <ParsedContent html={group.note} emojis={group.emojis} />
           </Text>

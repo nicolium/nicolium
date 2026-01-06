@@ -31,7 +31,7 @@ const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
   };
 
   return (
-    <HStack className='size-full cursor-pointer text-primary-500 dark:text-accent-blue' space={3} alignItems='center' justifyContent='center' element='label'>
+    <HStack className='size-full cursor-pointer text-primary-500 dark:text-primary-400' space={3} alignItems='center' justifyContent='center' element='label'>
       <Icon
         src={require('@phosphor-icons/core/regular/upload.svg')}
         className='size-7'

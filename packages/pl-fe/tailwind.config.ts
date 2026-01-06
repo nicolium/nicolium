@@ -23,7 +23,7 @@ const config: Config = {
     extend: {
       boxShadow: ({ theme }) => ({
         '3xl': '0 25px 75px -15px rgba(0, 0, 0, 0.25)',
-        'inset-ring': `inset 0 0 0 2px ${theme('colors.accent-blue')}`,
+        'inset-ring': `inset 0 0 0 2px ${theme('colors.primary.600')}`,
       }),
       fontSize: {
         base: '0.9375rem',
@@ -65,7 +65,6 @@ const config: Config = {
         success: [50, 100, 200, 300, 400, 500, 600, 700, 800, 900],
         danger: [50, 100, 200, 300, 400, 500, 600, 700, 800, 900],
         accent: [300, 500],
-        'accent-blue': true,
         'gradient-start': true,
         'gradient-end': true,
         'greentext': true,
