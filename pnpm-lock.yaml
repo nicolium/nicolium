@@ -459,13 +459,13 @@ importers:
         specifier: ^1.0.3
         version: 1.0.3
       '@types/react':
-        specifier: ^18.3.18
+        specifier: ^18.3.23
         version: 18.3.23
       '@types/react-color':
         specifier: ^3.0.13
         version: 3.0.13(@types/react@18.3.23)
       '@types/react-dom':
-        specifier: ^18.3.5
+        specifier: ^18.3.7
         version: 18.3.7(@types/react@18.3.23)
       '@types/react-router-dom':
         specifier: ^5.3.3
