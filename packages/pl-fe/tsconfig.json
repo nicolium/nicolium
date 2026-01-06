@@ -1,6 +1,5 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
     "outDir": "dist",
     "sourceMap": true,
     "strict": true,
@@ -14,7 +13,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "paths": {
-      "pl-fe/*": ["src/*"],
+      "pl-fe/*": ["./src/*"],
     },
     "typeRoots": [
       "./src/types",
