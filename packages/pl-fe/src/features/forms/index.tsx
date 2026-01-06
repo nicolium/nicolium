@@ -30,8 +30,6 @@ const SelectDropdown: React.FC<ISelectDropdown> = (props) => {
 
 interface IMultiselect {
   className?: string;
-  label?: React.ReactNode;
-  hint?: React.ReactNode;
   items: Record<string, string>;
   value?: string[];
   onChange?: ((values: string[]) => void);
