@@ -9,7 +9,7 @@ import Spinner from 'pl-fe/components/ui/spinner';
 import { domainBlocksQueryOptions } from 'pl-fe/queries/settings/domain-blocks';
 
 const messages = defineMessages({
-  heading: { id: 'column.domain_blocks', defaultMessage: 'Hidden domains' },
+  heading: { id: 'column.domain_blocks', defaultMessage: 'Domain blocks' },
   unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
 });
 

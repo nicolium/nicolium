@@ -297,7 +297,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 <DropdownNavigationLink
                   to='/scheduled_statuses'
                   icon={require('@phosphor-icons/core/regular/hourglass.svg')}
-                  text={<FormattedMessage id='column.scheduled_statuses' defaultMessage='Scheduled statuses' />}
+                  text={<FormattedMessage id='column.scheduled_statuses' defaultMessage='Scheduled posts' />}
                   onClick={closeSidebar}
                 />
               )}

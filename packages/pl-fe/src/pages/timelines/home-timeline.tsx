@@ -88,7 +88,7 @@ const HomeTimelinePage: React.FC = () => {
                     values={{
                       public: (
                         <Link to='/timeline/local' className='text-primary-600 hover:underline dark:text-primary-400'>
-                          <FormattedMessage id='empty_column.home.local_tab' defaultMessage='the {site_title} tab' values={{ site_title: instance.title }} />
+                          <FormattedMessage id='empty_column.home.local_tab' defaultMessage='the Local tab' />
                         </Link>
                       ),
                     }}

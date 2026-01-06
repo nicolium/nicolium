@@ -26,7 +26,7 @@ import { useDirectory } from 'pl-fe/queries/accounts/use-directory';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
 
 const messages = defineMessages({
-  title: { id: 'column.directory', defaultMessage: 'Browse profiles' },
+  title: { id: 'column.directory', defaultMessage: 'Profile directory' },
   recentlyActive: { id: 'directory.recently_active', defaultMessage: 'Recently active' },
   newArrivals: { id: 'directory.new_arrivals', defaultMessage: 'New arrivals' },
   local: { id: 'directory.local', defaultMessage: 'From {domain} only' },

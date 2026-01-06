@@ -645,7 +645,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
           }
           isFlush
         >
-          <AltIndicator className='ml-6 mt-6 w-fit' message={<FormattedMessage id='account.header.alt' defaultMessage='Header' />} />
+          <AltIndicator className='ml-6 mt-6 w-fit' message={<FormattedMessage id='account.header.alt' defaultMessage='Profile header' />} />
         </Popover>
       );
     }

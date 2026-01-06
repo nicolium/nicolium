@@ -12,7 +12,7 @@ import { useUpdateAccountNoteMutation } from 'pl-fe/queries/accounts/use-relatio
 import type { Account as AccountEntity } from 'pl-api';
 
 const messages = defineMessages({
-  placeholder: { id: 'account_note.placeholder', defaultMessage: 'Click to add a note' },
+  placeholder: { id: 'account_note.placeholder', defaultMessage: 'Add a note' },
 });
 
 interface IAccountNotePanel {

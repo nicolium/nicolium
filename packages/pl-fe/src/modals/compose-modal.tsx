@@ -47,10 +47,10 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({ onClose, c
             ? <FormattedMessage id='confirmations.cancel_draft.heading' defaultMessage='Discard draft changes' />
             : <FormattedMessage id='confirmations.cancel.heading' defaultMessage='Discard post' />,
         message: editedId
-          ? <FormattedMessage id='confirmations.cancel_editing.message' defaultMessage='Are you sure you want to cancel editing this post? All changes will be lost.' />
+          ? <FormattedMessage id='confirmations.cancel_editing.message' defaultMessage='Are you sure you want to discard the changes to this post? All changes will be lost.' />
           : compose.draftId
-            ? <FormattedMessage id='confirmations.cancel_draft_editing.message' defaultMessage='Are you sure you want to cancel editing this draft post? All changes will be lost.' />
-            : <FormattedMessage id='confirmations.cancel.message' defaultMessage='Are you sure you want to cancel creating this post?' />,
+            ? <FormattedMessage id='confirmations.cancel_draft_editing.message' defaultMessage='Are you sure you want to discard the changes to this draft post? All changes will be lost.' />
+            : <FormattedMessage id='confirmations.cancel.message' defaultMessage='Are you sure you want to discard the currently composed post?' />,
         confirm: intl.formatMessage(editedId ? messages.cancelEditing : messages.confirm),
         onConfirm: () => {
           onClose('COMPOSE');

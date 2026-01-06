@@ -29,7 +29,7 @@ const messages = defineMessages({
   redirectLinksModeAuto: { id: 'url_privacy.redirect_links_mode.auto', defaultMessage: 'From URL' },
   redirectLinksModeManual: { id: 'url_privacy.redirect_links_mode.manual', defaultMessage: 'Specify manually' },
   redirectServicesUrlPlaceholder: { id: 'url_privacy.redirect_services_url.placeholder', defaultMessage: 'Rules URL' },
-  redirectServicePlaceholder: { id: 'url_privacy.redirect_services_url.placeholder', defaultMessage: 'eg. https://proxy.example.org' },
+  redirectServicePlaceholder: { id: 'url_privacy.redirect_service_url.placeholder', defaultMessage: 'eg. https://proxy.example.org' },
 });
 
 const Privacy = () => {

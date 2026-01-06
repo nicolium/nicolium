@@ -24,7 +24,7 @@ const messages = defineMessages({
   domainBlocks: { id: 'column.domain_blocks', defaultMessage: 'Domain blocks' },
   editProfile: { id: 'settings.edit_profile', defaultMessage: 'Edit profile' },
   exportData: { id: 'column.export_data', defaultMessage: 'Export data' },
-  filters: { id: 'column.filters', defaultMessage: 'Filters' },
+  filters: { id: 'column.filters', defaultMessage: 'Muted words' },
   importData: { id: 'column.import_data', defaultMessage: 'Import data' },
   interactionPolicies: { id: 'column.interaction_policies', defaultMessage: 'Interaction policies' },
   mfaDisabled: { id: 'mfa.disabled', defaultMessage: 'Disabled' },

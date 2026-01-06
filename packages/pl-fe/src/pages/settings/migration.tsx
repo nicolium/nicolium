@@ -15,7 +15,7 @@ import { useInstance } from 'pl-fe/hooks/use-instance';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
-  heading: { id: 'column.migration', defaultMessage: 'Account migration' },
+  heading: { id: 'column.migration', defaultMessage: 'Move account' },
   submit: { id: 'migration.submit', defaultMessage: 'Move followers' },
   moveAccountSuccess: { id: 'migration.move_account.success', defaultMessage: 'Account successfully moved.' },
   moveAccountFail: { id: 'migration.move_account.fail', defaultMessage: 'Account migration failed.' },
