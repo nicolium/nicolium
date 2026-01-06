@@ -1632,8 +1632,6 @@
   "security.update_password.fail": "Update password failed.",
   "security.update_password.password_confirmation_no_match": "Passwords do not match.",
   "security.update_password.success": "Password successfully updated.",
-  "select.no_options": "No options available",
-  "select.placeholder": "Select",
   "select_bookmark_folder_modal.header_title": "Select folder",
   "settings.configure_mfa": "Configure MFA",
   "settings.edit_profile": "Edit profile",

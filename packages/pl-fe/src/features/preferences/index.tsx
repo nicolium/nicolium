@@ -8,7 +8,7 @@ import Button from 'pl-fe/components/ui/button';
 import Form from 'pl-fe/components/ui/form';
 import HStack from 'pl-fe/components/ui/hstack';
 import StepSlider from 'pl-fe/components/ui/step-slider';
-import { Mutliselect, SelectDropdown } from 'pl-fe/features/forms';
+import { Multiselect, SelectDropdown } from 'pl-fe/features/forms';
 import SettingToggle from 'pl-fe/features/settings/components/setting-toggle';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
@@ -420,7 +420,7 @@ const Preferences = () => {
           </ListItem>
 
           <ListItem className='!overflow-visible' label={<FormattedMessage id='preferences.fields.known_languages_label' defaultMessage='Languages you know' />}>
-            <Mutliselect
+            <Multiselect
               className='max-w-[200px]'
               items={languages}
               value={settings.knownLanguages as string[] | undefined}
