@@ -254,10 +254,6 @@ a.⁂-list-item,
       width: 1.5rem;
       @apply rtl:rotate-180;
     }
-
-    &__label {
-      @apply sr-only;
-    }
   }
 }
 

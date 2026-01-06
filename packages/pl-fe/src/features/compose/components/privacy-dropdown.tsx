@@ -182,9 +182,9 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({
   return (
     <DropdownMenu items={items} width='16rem'>
       <button title={compact ? text : intl.formatMessage(messages.change_privacy)}>
-        {valueOption?.icon && <Icon src={valueOption.icon} />}
+        {valueOption?.icon && <Icon src={valueOption.icon} aria-hidden />}
         {compact ? undefined : text}
-        <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} />
+        <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} aria-hidden />
       </button>
     </DropdownMenu>
   );

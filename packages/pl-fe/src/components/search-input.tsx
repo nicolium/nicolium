@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 
 import AutosuggestAccountInput from 'pl-fe/components/autosuggest-account-input';
 import SvgIcon from 'pl-fe/components/ui/svg-icon';
@@ -63,12 +63,11 @@ const SearchInput = React.memo(() => {
 
   return (
     <div className='w-full'>
-      <label htmlFor='search' className='sr-only'><FormattedMessage id='search.placeholder' defaultMessage='Search' /></label>
-
       <div className='relative'>
         <AutosuggestAccountInput
           id='search'
           placeholder={intl.formatMessage(messages.placeholder)}
+          aria-label={intl.formatMessage(messages.placeholder)}
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
@@ -88,11 +87,13 @@ const SearchInput = React.memo(() => {
           <SvgIcon
             src={require('@phosphor-icons/core/regular/magnifying-glass.svg')}
             className={clsx('size-4 text-gray-600', { hidden: hasValue })}
+            aria-hidden
           />
 
           <SvgIcon
             src={require('@phosphor-icons/core/regular/x.svg')}
             className={clsx('size-4 text-gray-600', { hidden: !hasValue })}
+            aria-hidden
           />
         </button>
       </div>

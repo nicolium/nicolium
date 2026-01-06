@@ -1,7 +1,7 @@
 import { decode } from 'blurhash';
 import React, { useRef, useEffect } from 'react';
 
-interface IBlurhash {
+interface IBlurhash extends Pick<React.CanvasHTMLAttributes<HTMLCanvasElement>, 'className' | 'aria-label' | 'aria-hidden'> {
   /** Hash to render */
   hash: string | null | undefined;
   /** Width of the blurred region in pixels. Defaults to 32. */
@@ -13,8 +13,6 @@ interface IBlurhash {
    * and canvas left untouched.
    */
   dummy?: boolean;
-  /** className of the canvas element. */
-  className?: string;
 }
 
 /**

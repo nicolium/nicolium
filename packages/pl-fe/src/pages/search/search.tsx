@@ -77,13 +77,12 @@ const SearchInput: React.FC<ISearchInput> = ({ className, placeholder, query }) 
     <div
       className={clsx('z-10 w-full bg-white/90 backdrop-blur backdrop-saturate-200 black:bg-black/75 dark:bg-primary-900/90', className)}
     >
-      <label htmlFor='search' className='sr-only'>{placeholder || intl.formatMessage(messages.placeholder)}</label>
-
       <div className='relative'>
         <Input
           type='text'
           id='search'
           placeholder={placeholder || intl.formatMessage(messages.placeholder)}
+          aria-label={placeholder || intl.formatMessage(messages.placeholder)}
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}

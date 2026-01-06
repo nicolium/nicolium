@@ -193,7 +193,7 @@ body {
 }
 
 .⁂-sidebar-navigation-link {
-  @apply flex items-center py-1 text-sm font-semibold space-x-4 rtl:space-x-reverse transition-colors duration-200;
+  @apply flex items-center w-full py-1 text-sm font-semibold space-x-4 rtl:space-x-reverse transition-colors duration-200;
 
   @media (height >= 960px) {
     padding: 0.5rem 0;

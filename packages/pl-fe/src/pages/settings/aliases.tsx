@@ -102,9 +102,7 @@ const Search: React.FC<IAliasesSearch> = ({ onSubmit }) => {
 
   return (
     <div className='flex items-center gap-1'>
-      <label className='relative grow'>
-        <span style={{ display: 'none' }}>{intl.formatMessage(messages.search)}</span>
-
+      <label className='relative grow' title={intl.formatMessage(messages.search)}>
         <input
           className='block w-full rounded-full focus:border-primary-500 focus:ring-primary-500 dark:bg-gray-800 dark:text-white dark:placeholder:text-gray-500 sm:text-sm'
           type='text'
@@ -120,7 +118,7 @@ const Search: React.FC<IAliasesSearch> = ({ onSubmit }) => {
           onClick={handleClear}
           title={intl.formatMessage(messages.clear)}
         >
-          <Icon src={require('@phosphor-icons/core/regular/backspace.svg')} className={clsx('size-5 text-gray-600', { 'hidden': !hasValue })} />
+          <Icon src={require('@phosphor-icons/core/regular/backspace.svg')} className={clsx('size-5 text-gray-600', { 'hidden': !hasValue })} aria-hidden />
         </button>
       </label>
       <Button onClick={handleSubmit}>{intl.formatMessage(messages.searchTitle)}</Button>

@@ -36,9 +36,7 @@ const Search: React.FC<ISearch> = ({ value, onSubmit }) => {
   return (
     <Form onSubmit={handleSubmit}>
       <HStack space={2}>
-        <label className='relative grow'>
-          <span style={{ display: 'none' }}>{intl.formatMessage(messages.search)}</span>
-
+        <label className='relative grow' title={intl.formatMessage(messages.search)}>
           <Input
             type='text'
             value={searchValue}
@@ -54,7 +52,7 @@ const Search: React.FC<ISearch> = ({ value, onSubmit }) => {
               onSubmit('');
             }}
           >
-            <Icon src={require('@phosphor-icons/core/regular/backspace.svg')} aria-label={intl.formatMessage(messages.search)} className={clsx('size-5 text-gray-600', { hidden: !hasValue })} />
+            <Icon src={require('@phosphor-icons/core/regular/backspace.svg')} className={clsx('size-5 text-gray-600', { hidden: !hasValue })} aria-hidden />
           </div>
         </label>
 

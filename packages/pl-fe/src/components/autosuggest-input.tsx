@@ -247,8 +247,6 @@ const AutosuggestInput: React.FC<IAutosuggestInput> = ({
 
   return [
     <div key='input' className='relative w-full'>
-      <label className='sr-only'>{props.placeholder}</label>
-
       <Input
         type='text'
         className={props.className}
@@ -269,6 +267,7 @@ const AutosuggestInput: React.FC<IAutosuggestInput> = ({
         data-testid='autosuggest-input'
         theme={props.theme}
         lang={props.lang}
+        aria-label={props.placeholder}
       />
     </div>,
     <Portal key='portal'>

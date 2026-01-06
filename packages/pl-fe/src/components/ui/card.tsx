@@ -68,9 +68,8 @@ const CardHeader: React.FC<ICardHeader> = ({ className, children, backHref, onBa
     const backAttributes = backHref ? { to: backHref } : { onClick: onBackClick };
 
     return (
-      <Comp {...backAttributes} className='⁂-card-header__button' aria-label={intl.formatMessage(messages.back)}>
-        <SvgIcon src={require('@phosphor-icons/core/regular/arrow-left.svg')} />
-        <span className='⁂-card-header__button__label' data-testid='back-button'>{intl.formatMessage(messages.back)}</span>
+      <Comp {...backAttributes} className='⁂-card-header__button' aria-label={intl.formatMessage(messages.back)} title={intl.formatMessage(messages.back)}>
+        <SvgIcon src={require('@phosphor-icons/core/regular/arrow-left.svg')} aria-hidden />
       </Comp>
     );
   };

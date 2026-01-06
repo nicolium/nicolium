@@ -87,9 +87,9 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
       }))}
     >
       <button className='⁂-content-type-button' title={compact ? option?.text : intl.formatMessage(messages.change_content_type)}>
-        {option?.icon && <Icon src={option.icon} />}
+        {option?.icon && <Icon src={option.icon} aria-hidden />}
         {compact ? undefined : option?.text}
-        <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} />
+        <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} aria-hidden />
       </button>
     </DropdownMenu>
   );

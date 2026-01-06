@@ -66,12 +66,13 @@ const Accordion: React.FC<IAccordion> = ({ headline, children, menu, expanded = 
           )}
           {action && actionIcon && (
             <button className='⁂-accordion__header__action' onClick={handleAction} title={actionLabel}>
-              <Icon src={actionIcon} />
+              <Icon src={actionIcon} aria-hidden />
             </button>
           )}
           <Icon
             src={require('@phosphor-icons/core/regular/caret-down.svg')}
             className='⁂-accordion__header__chevron'
+            aria-hidden
           />
         </div>
       </button>

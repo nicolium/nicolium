@@ -165,6 +165,7 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
         >
           <Icon
             src={isSearching ? require('@phosphor-icons/core/regular/backspace.svg') : require('@phosphor-icons/core/regular/magnifying-glass.svg')}
+            aria-hidden
           />
         </button>
       </label>
@@ -249,9 +250,9 @@ const LanguageDropdownButton: React.FC<ILanguageDropdownButton> = ({ composeId, 
       className='⁂-language-dropdown'
     >
       <button title={intl.formatMessage(messages.languagePrompt)}>
-        <Icon src={require('@phosphor-icons/core/regular/translate.svg')} />
+        <Icon src={require('@phosphor-icons/core/regular/translate.svg')} aria-hidden />
         {buttonLabel}
-        <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} />
+        <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} aria-hidden />
       </button>
     </DropdownMenu>
   );

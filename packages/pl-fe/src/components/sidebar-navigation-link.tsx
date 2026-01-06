@@ -27,7 +27,7 @@ const SidebarNavigationLink = React.memo(React.forwardRef((props: ISidebarNaviga
   const matchRoute = useMatchRoute();
   const { demetricator } = useSettings();
 
-  const LinkComponent = (to === undefined ? 'div' : Link) as typeof Link;
+  const LinkComponent = (to === undefined ? 'button' : Link) as typeof Link;
 
   const isActive = matchRoute({ to }) !== false;
 

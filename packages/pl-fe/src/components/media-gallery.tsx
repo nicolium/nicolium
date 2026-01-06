@@ -283,6 +283,8 @@ const Item: React.FC<IItem> = ({
       <Blurhash
         hash={attachment.blurhash}
         className='⁂-media-gallery__preview'
+        aria-label={!visible ? attachment.description : undefined}
+        aria-hidden={visible}
       />
       {(visible || !attachment.blurhash) && thumbnail}
     </div>

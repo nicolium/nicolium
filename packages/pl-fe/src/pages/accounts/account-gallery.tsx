@@ -134,6 +134,8 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
             'hidden': visible,
             'rounded-br-md': isLast,
           })}
+          aria-label={!visible ? attachment.description : undefined}
+          aria-hidden={visible}
         />
         {visible && thumbnail}
         {!visible && icon}
