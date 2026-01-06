@@ -143,7 +143,7 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
   }, [node.current]);
 
   const isSearching = searchValue !== '';
-  const results = search();
+  const results = useMemo(search, [searchValue]);
 
   return (
     <>

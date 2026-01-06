@@ -1,4 +1,6 @@
-import React, { useCallback, useState } from 'react';
+import fuzzysort from 'fuzzysort';
+import { BookmarkFolder } from 'pl-api';
+import React, { useCallback, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { ListItem } from 'pl-fe/components/list';
@@ -23,12 +25,23 @@ interface SelectBookmarkFolderModalProps {
   statusId: string;
 }
 
+const search = (bookmarkFolders: Array<BookmarkFolder>, term: string) => {
+  if (!term) return bookmarkFolders;
+
+  return fuzzysort.go(term, bookmarkFolders, { key: 'name' }).map(result => result.obj);
+};
+
 const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseModalProps> = ({ statusId, onClose }) => {
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector(state => getStatus(state, { id: statusId }))!;
   const features = useFeatures();
 
   const [selectedFolder, setSelectedFolder] = useState(status.bookmark_folder);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearchChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+    setSearchTerm(e.target.value);
+  };
 
   const { isFetching, data: bookmarkFolders } = useBookmarkFolders(data => data);
   const { data: selectedBookmarkFolders, isPending: fetchingSelectedBookmarkFolders } = useStatusBookmarkFolders(statusId);
@@ -57,10 +70,18 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
     }
   };
 
+  const filteredFolders = useMemo(() => {
+    if (!bookmarkFolders) return [];
+
+    const filtered = search(bookmarkFolders, searchTerm);
+
+    return filtered;
+  }, [bookmarkFolders, searchTerm]);
+
   let items;
 
   if (features.bookmarkFoldersMultiple) {
-    items = (bookmarkFolders || []).map((folder) => (
+    items = (filteredFolders).map((folder) => (
       <ListItem
         key={folder.id}
         label={
@@ -99,7 +120,7 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
     ];
 
     if (!isFetching) {
-      items.push(...((bookmarkFolders || []).map((folder) => (
+      items.push(...((filteredFolders).map((folder) => (
         <RadioItem
           key={folder.id}
           label={
@@ -123,7 +144,7 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
 
   const body = isFetching ? <Spinner /> : (
     <Stack space={4}>
-      <NewFolderForm />
+      <NewFolderForm search onChange={handleSearchChange} />
 
       <RadioGroup onChange={onChange}>
         {items}

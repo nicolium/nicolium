@@ -20,16 +20,27 @@ import toast from 'pl-fe/toast';
 const messages = defineMessages({
   heading: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
   label: { id: 'bookmark_folders.new.title_placeholder', defaultMessage: 'New folder title' },
+  labelWithSearch: { id: 'bookmark_folders.new.title_with_search_placeholder', defaultMessage: 'Search or create new folder' },
   createSuccess: { id: 'bookmark_folders.add.success', defaultMessage: 'Bookmark folder created successfully' },
   createFail: { id: 'bookmark_folders.add.fail', defaultMessage: 'Failed to create bookmark folder' },
 });
 
-const NewFolderForm: React.FC = () => {
+interface INewFolderForm {
+  search?: boolean;
+  onChange?: React.ChangeEventHandler<HTMLInputElement>;
+}
+
+const NewFolderForm: React.FC<INewFolderForm> = ({ search, onChange }) => {
   const intl = useIntl();
 
   const name = useTextField();
 
   const { mutate: createBookmarkFolder, isPending } = useCreateBookmarkFolder();
+
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    name.onChange(e);
+    if (onChange) onChange(e);
+  };
 
   const handleSubmit = (e: React.FormEvent<Element>) => {
     e.preventDefault();
@@ -45,21 +56,20 @@ const NewFolderForm: React.FC = () => {
     });
   };
 
-  const label = intl.formatMessage(messages.label);
+  const label = intl.formatMessage(search ? messages.labelWithSearch : messages.label);
 
   return (
     <Form onSubmit={handleSubmit}>
       <HStack space={2} alignItems='center'>
-        <label className='grow'>
-          <span style={{ display: 'none' }}>{label}</span>
-
-          <Input
-            type='text'
-            placeholder={label}
-            disabled={isPending}
-            {...name}
-          />
-        </label>
+        <Input
+          outerClassName='grow'
+          type='text'
+          placeholder={label}
+          title={label}
+          disabled={isPending}
+          {...name}
+          onChange={handleChange}
+        />
 
         <Button
           disabled={isPending}

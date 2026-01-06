@@ -289,6 +289,7 @@
   "bookmark_folders.edit.success": "Bookmark folder edited successfully",
   "bookmark_folders.new.create_title": "Add folder",
   "bookmark_folders.new.title_placeholder": "New folder title",
+  "bookmark_folders.new.title_with_search_placeholder": "Search or create new folder",
   "bookmarks.delete_folder": "Delete folder",
   "bookmarks.delete_folder.fail": "Failed to delete folder",
   "bookmarks.delete_folder.success": "Folder deleted",

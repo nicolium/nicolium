@@ -151,16 +151,15 @@ const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModal
             onPickEmoji={handleEmojiPick}
           />
         )}
-        <label className='grow'>
-          <span style={{ display: 'none' }}>{label}</span>
 
-          <Input
-            type='text'
-            placeholder={label}
-            disabled={isPending}
-            {...name}
-          />
-        </label>
+        <Input
+          outerClassName='grow'
+          type='text'
+          placeholder={label}
+          title={label}
+          disabled={isPending}
+          {...name}
+        />
       </HStack>
     </Modal>
   );
