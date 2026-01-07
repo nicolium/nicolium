@@ -43,6 +43,7 @@ const messages = defineMessages({
   interactionRequests: { id: 'column.interaction_requests', defaultMessage: 'Interaction requests' },
   help: { id: 'navigation.help', defaultMessage: 'Help' },
   keyboardShortcuts: { id: 'navigation.keyboard_shortcuts', defaultMessage: 'Keyboard shortcuts' },
+  docs: { id: 'navigation.docs', defaultMessage: 'Documentation' },
   sourceCode: { id: 'navigation.source_code', defaultMessage: 'Source code' },
 });
 
@@ -184,6 +185,12 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
             action: () => openModal('HOTKEYS'),
             icon: require('@phosphor-icons/core/regular/keyboard.svg'),
             text: intl.formatMessage(messages.keyboardShortcuts),
+          },
+          {
+            href: 'https://pl.mkljczk.pl/docs/',
+            target: '_blank',
+            icon: require('@phosphor-icons/core/regular/book-open.svg'),
+            text: intl.formatMessage(messages.docs),
           },
           {
             href: sourceCode.url,
