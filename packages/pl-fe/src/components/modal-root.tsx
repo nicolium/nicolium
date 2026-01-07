@@ -1,5 +1,6 @@
 import { useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
+import range from 'lodash/range';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
@@ -145,7 +146,9 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
 
   const ensureHistoryBuffer = () => {
     if (router.state.location.state.modalIndex === undefined || (router.state.location.state.modalIndex < modalIndex)) {
-      navigate({ to: router.history.location.pathname, params: (prev) => prev, search: (prev) => prev, state: (prev) => ({ ...prev, modalIndex }) });
+      range((router.state.location.state.modalIndex ?? -1), modalIndex).forEach((index) => {
+        navigate({ to: router.history.location.pathname, params: (prev) => prev, search: (prev) => prev, state: (prev) => ({ ...prev, modalIndex: index + 1 }) });
+      });
     } else if (router.state.location.state.modalIndex > modalIndex) {
       router.history.go(-1);
     }
