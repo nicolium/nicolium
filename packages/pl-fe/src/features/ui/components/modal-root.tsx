@@ -66,7 +66,8 @@ const ModalRoot: React.FC = () => {
   const { modalType: type, modalProps: props } = modals.at(-1) || { modalProps: {}, modalType: null };
   const index = modals.length - 1;
 
-  const onClickClose = (type?: ModalType) => {
+  const onClickClose = (type?: ModalType, all?: boolean) => {
+    console.log('Closing modal:', type, all);
     switch (type) {
       case 'COMPOSE':
         dispatch(cancelReplyCompose());
@@ -75,7 +76,7 @@ const ModalRoot: React.FC = () => {
         break;
     }
 
-    closeModal(type);
+    closeModal(type, all);
   };
 
   const Component = type !== null ? (MODAL_COMPONENTS as Record<keyof typeof MODAL_COMPONENTS, React.ExoticComponent<any>>)[type] : null;

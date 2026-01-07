@@ -29,7 +29,7 @@ const checkComposeContent = (compose?: Compose) =>
 
 interface IModalRoot {
   onCancel?: () => void;
-  onClose: (type?: ModalType) => void;
+  onClose: (type?: ModalType, all?: boolean) => void;
   type: ModalType;
   children: React.ReactNode;
   modalIndex: number;
@@ -124,8 +124,8 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
 
   const handleModalOpen = () => {
     unlistenHistory.current = router.history.subscribe(({ action, location }) => {
-      if (action.type === 'PUSH' && location.state.modalIndex === undefined) {
-        onClose();
+      if ((action.type === 'REPLACE' || action.type === 'PUSH') && location.state.modalIndex === undefined) {
+        onClose(undefined, true);
       }
       if (action.type === 'BACK') {
         handleOnClose();
