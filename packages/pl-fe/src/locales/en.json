@@ -1679,6 +1679,7 @@
   "status.external": "View post on {domain}",
   "status.favourite": "Like",
   "status.filtered": "Filtered",
+  "status.followed_tag": "You’re following {tags}",
   "status.group": "Posted in {group}",
   "status.group_mod_delete": "Delete post from group",
   "status.hide_translation": "Hide translation",

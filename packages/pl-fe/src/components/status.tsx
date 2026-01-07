@@ -14,6 +14,7 @@ import StatusTypeIcon from 'pl-fe/features/status/components/status-type-icon';
 import { Hotkeys } from 'pl-fe/features/ui/components/hotkeys';
 import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import { useFollowedTags } from 'pl-fe/queries/hashtags/use-followed-tags';
 import { useFavouriteStatus, useReblogStatus, useUnfavouriteStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
 import { makeGetStatus, type SelectedStatus } from 'pl-fe/selectors';
 import { useModalsActions } from 'pl-fe/stores/modals';
@@ -22,6 +23,7 @@ import { useStatusMetaActions } from 'pl-fe/stores/status-meta';
 import { textForScreenReader } from 'pl-fe/utils/status';
 
 import EventPreview from './event-preview';
+import HashtagLink from './hashtag-link';
 import RelativeTimestamp from './relative-timestamp';
 import StatusActionBar from './status-action-bar';
 import StatusContent from './status-content';
@@ -34,6 +36,48 @@ import Tombstone from './tombstone';
 const messages = defineMessages({
   reblogged_by: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
 });
+
+interface IStatusFollowedTagInfo {
+  status: SelectedStatus;
+  avatarSize: number;
+}
+
+const StatusFollowedTagInfo: React.FC<IStatusFollowedTagInfo> = ({ status, avatarSize }) => {
+  const { data: followedTags } = useFollowedTags();
+
+  const filteredTags = status.tags.filter(tag => followedTags?.some(followed => followed.name.toLowerCase() === tag.name.toLowerCase()));
+
+  if (!filteredTags.length) {
+    return null;
+  }
+
+  const tagLinks = filteredTags.slice(0, 2).map(tag => (
+    <HashtagLink key={tag.name} hashtag={tag.name} />
+  ));
+
+  if (filteredTags.length > 2) {
+    tagLinks.push(
+      <FormattedMessage key='more' id='reply_mentions.more' defaultMessage='{count} more' values={{ count: filteredTags.length - 2 }} />,
+    );
+  }
+
+  return (
+    <StatusInfo
+      className='-mb-1'
+      avatarSize={avatarSize}
+      icon={<Icon src={require('@phosphor-icons/core/regular/hash.svg')} className='size-4 text-primary-600 dark:text-primary-400' />}
+      text={
+        <FormattedMessage
+          id='status.followed_tag'
+          defaultMessage='You’re following {tags}'
+          values={{
+            tags: <FormattedList type='conjunction' value={tagLinks} />,
+          }}
+        />
+      }
+    />
+  );
+};
 
 interface IStatus {
   id?: string;
@@ -51,6 +95,7 @@ interface IStatus {
   variant?: 'default' | 'rounded' | 'slim';
   showGroup?: boolean;
   fromBookmarks?: boolean;
+  fromHomeTimeline?: boolean;
   className?: string;
 }
 
@@ -70,6 +115,7 @@ const Status: React.FC<IStatus> = (props) => {
     variant = 'rounded',
     showGroup = true,
     fromBookmarks = false,
+    fromHomeTimeline = false,
     className,
   } = props;
 
@@ -329,6 +375,8 @@ const Status: React.FC<IStatus> = (props) => {
           }
         />
       );
+    } else if (fromHomeTimeline) {
+      return <StatusFollowedTagInfo status={actualStatus} avatarSize={avatarSize} />;
     }
   }, [status.accounts, group?.id]);
 
