@@ -1084,7 +1084,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     }
 
     return menu;
-  }, [me, targetLanguage, status.bookmarked, status.muted, status.emoji_reactions.length > 0, status.pinned, status.reblogged]);
+  }, [me, targetLanguage, status.bookmarked, status.muted, status.emoji_reactions.length > 0, status.pinned, status.reblogged, status.account.relationship]);
 
   return useMemo(() => (
     <DropdownMenu items={menu}>
