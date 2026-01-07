@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl, type MessageDescriptor } from 'react-intl';
 
-import {
-  importFollows,
-  importBlocks,
-  importMutes,
-} from 'pl-fe/actions/import-data';
 import List, { ListItem } from 'pl-fe/components/list';
 import Button from 'pl-fe/components/ui/button';
 import Column from 'pl-fe/components/ui/column';
@@ -15,14 +10,16 @@ import FormActions from 'pl-fe/components/ui/form-actions';
 import FormGroup from 'pl-fe/components/ui/form-group';
 import Text from 'pl-fe/components/ui/text';
 import Toggle from 'pl-fe/components/ui/toggle';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { useClient } from 'pl-fe/hooks/use-client';
 import { useFeatures } from 'pl-fe/hooks/use-features';
-
-import type { AppDispatch, RootState } from 'pl-fe/store';
+import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.import_data', defaultMessage: 'Import data' },
   submit: { id: 'import_data.actions.import', defaultMessage: 'Import' },
+  blocksSuccess: { id: 'import_data.success.blocks', defaultMessage: 'Blocks imported successfully' },
+  followersSuccess: { id: 'import_data.success.followers', defaultMessage: 'Followers imported successfully' },
+  mutesSuccess: { id: 'import_data.success.mutes', defaultMessage: 'Mutes imported successfully' },
 });
 
 const followMessages = defineMessages({
@@ -49,13 +46,12 @@ interface IDataImporter {
     input_hint: MessageDescriptor;
     submit: MessageDescriptor;
   };
-  action: (list: File, overwrite?: boolean) => (dispatch: AppDispatch, getState: () => RootState) => Promise<void>;
+  action: (list: File, overwrite?: boolean) => Promise<void>;
   accept?: string;
   allowOverwrite?: boolean;
 }
 
 const DataImporter: React.FC<IDataImporter> = ({ messages, action, accept = '.csv,text/csv', allowOverwrite }) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -64,7 +60,7 @@ const DataImporter: React.FC<IDataImporter> = ({ messages, action, accept = '.cs
 
   const handleSubmit: React.FormEventHandler = (event) => {
     setIsLoading(true);
-    dispatch(action(file!, overwrite)).then(() => {
+    action(file!, overwrite).then(() => {
       setIsLoading(false);
     }).catch(() => {
       setIsLoading(false);
@@ -114,8 +110,24 @@ const DataImporter: React.FC<IDataImporter> = ({ messages, action, accept = '.cs
 };
 
 const ImportDataPage = () => {
+  const client = useClient();
   const intl = useIntl();
   const features = useFeatures();
+
+  const importFollows = (list: File | string, overwrite?: boolean) =>
+    client.settings.importFollows(list, overwrite ? 'overwrite' : 'merge').then(response => {
+      toast.success(messages.followersSuccess);
+    });
+
+  const importBlocks = (list: File | string, overwrite?: boolean) =>
+    client.settings.importBlocks(list, overwrite ? 'overwrite' : 'merge').then(response => {
+      toast.success(messages.blocksSuccess);
+    });
+
+  const importMutes = (list: File | string) =>
+    client.settings.importMutes(list).then(response => {
+      toast.success(messages.mutesSuccess);
+    });
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>

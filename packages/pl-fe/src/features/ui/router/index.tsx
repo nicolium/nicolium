@@ -12,6 +12,7 @@ import React, { useMemo } from 'react';
 import * as v from 'valibot';
 
 import { FE_SUBDIRECTORY, WITH_LANDING_PAGE } from 'pl-fe/build-config';
+import SiteError from 'pl-fe/components/site-error';
 import Layout from 'pl-fe/components/ui/layout';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
@@ -146,8 +147,6 @@ import {
   Reports,
   AwaitingApproval,
 } from '../util/async-components';
-
-import ErrorColumn from './error-column';
 
 import type { Features } from 'pl-api';
 
@@ -1432,7 +1431,7 @@ const router = createRouter({
   },
   defaultNotFoundComponent: GenericNotFound,
   defaultPendingComponent: PendingComponent,
-  defaultErrorComponent: ErrorColumn,
+  defaultErrorComponent: SiteError,
   scrollRestoration: true,
   pathParamsAllowedCharacters: ['@'],
 });

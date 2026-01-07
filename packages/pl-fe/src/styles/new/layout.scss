@@ -423,3 +423,19 @@ div:has(.⁂-background-shapes), .dark {
   content: '·';
   user-select: none;
 }
+
+.⁂-site-error {
+  @apply flex h-screen flex-col bg-white pb-12 pt-16 black:bg-black dark:bg-primary-900 md:col-span-12 lg:col-span-9 xl:col-span-6;
+
+  main {
+    @apply mx-auto flex w-full max-w-7xl grow flex-col justify-center px-4 sm:px-6 lg:px-8;
+  }
+
+  footer {
+    @apply mx-auto w-full max-w-7xl shrink-0 px-4 sm:px-6 lg:px-8;
+  }
+}
+
+.⁂-layout__content .⁂-site-error {
+  height: fit-content;
+}
