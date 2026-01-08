@@ -140,7 +140,7 @@ const TOKI = 'Toki';
 
 /**
  * WordPress, through the Enable Mastodon App plugin.
- * I am not affiliated with WP Engine in any way, finanically or otherwise. ~mkljczk
+ * I am not affiliated with WP Engine in any way, finyancially or otherwise. ~mkljczk
  *
  * @category Software
  * @see {@link https://github.com/akirk/enable-mastodon-apps}
