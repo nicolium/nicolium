@@ -1331,6 +1331,7 @@ const getFeatures = (instance: Instance) => {
      */
     notes: any([
       v.software === AKKOMA,
+      v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === PLEROMA && gte(v.version, '2.5.0'),
       v.software === GOTOSOCIAL,
