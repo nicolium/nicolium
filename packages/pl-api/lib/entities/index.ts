@@ -40,6 +40,7 @@ export * from './directory/statistics-period';
 export * from './domain-block';
 export * from './drive-file';
 export * from './drive-folder';
+export * from './drive-status';
 export * from './emoji-reaction';
 export * from './extended-description';
 export * from './familiar-followers';

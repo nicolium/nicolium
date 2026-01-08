@@ -41,6 +41,7 @@ import {
   domainBlockSchema,
   driveFileSchema,
   driveFolderSchema,
+  driveStatusSchema,
   emojiReactionSchema,
   extendedDescriptionSchema,
   familiarFollowersSchema,
@@ -6011,6 +6012,14 @@ class PlApiClient {
       });
 
       return v.parse(driveFileSchema, response.json);
+    },
+
+    getDriveStatus: async () => {
+      await this.#getIceshrimpAccessToken();
+
+      const response = await this.request('/api/iceshrimp/drive/status');
+
+      return v.parse(driveStatusSchema, response.json);
     },
   };
 
