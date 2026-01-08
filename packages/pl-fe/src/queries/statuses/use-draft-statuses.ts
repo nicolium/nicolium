@@ -9,7 +9,15 @@ import { filteredArray } from 'pl-fe/schemas/utils';
 import KVStore from 'pl-fe/storage/kv-store';
 import { APIEntity } from 'pl-fe/types/entities';
 
-const draftStatusSchema = v.object({
+const draftStatusSchema = v.pipe(v.any(), v.transform((draft) => ({
+  content_type: draft.contentType,
+  draft_id: draft.draftId,
+  group_id: draft.groupId,
+  in_reply_to: draft.inReplyTo,
+  media_attachments: draft.mediaAttachments,
+  spoiler_text: draft.spoilerText,
+  ...draft,
+})), v.object({
   content_type: v.fallback(v.string(), 'text/plain'),
   draft_id: v.string(),
   editorState: v.fallback(v.nullable(v.string()), null),
@@ -23,7 +31,7 @@ const draftStatusSchema = v.object({
   sensitive: v.fallback(v.boolean(), false),
   spoiler_text: v.fallback(v.string(), ''),
   text: v.fallback(v.string(), ''),
-});
+}));
 
 type DraftStatus = v.InferOutput<typeof draftStatusSchema>;
 
