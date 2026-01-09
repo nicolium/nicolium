@@ -719,16 +719,6 @@ const getFeatures = (instance: Instance) => {
     ]),
 
     /**
-     * Soapbox email list.
-     * @see POST /api/v1/accounts
-     * @see PATCH /api/v1/accounts/update_credentials
-     * @see GET /api/v1/pleroma/admin/email_list/subscribers.csv
-     * @see GET /api/v1/pleroma/admin/email_list/unsubscribers.csv
-     * @see GET /api/v1/pleroma/admin/email_list/combined.csv
-     */
-    emailList: instance.api_versions['email_list.pleroma.pl-api'] >= 1,
-
-    /**
      * Ability to embed posts on external sites.
      * @see GET /api/oembed
      */
