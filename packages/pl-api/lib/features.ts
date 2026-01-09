@@ -713,6 +713,7 @@ const getFeatures = (instance: Instance) => {
       v.software === MASTODON,
       v.software === MITRA,
       v.software === NEODB,
+      v.software === SHARKEY,
       v.software === TAKAHE && gte(v.version, '0.8.0'),
       instance.api_versions['editing.pleroma.pl-api'] >= 1,
     ]),
