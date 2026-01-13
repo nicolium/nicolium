@@ -1744,6 +1744,7 @@
   "status.show_less_all": "Show less for all",
   "status.show_more_all": "Show more for all",
   "status.show_original": "Show original",
+  "status.skip_pinned": "Skip pinned posts",
   "status.spoiler.collapse": "Collapse",
   "status.spoiler.expand": "Expand",
   "status.thread.expand_all": "Expand all posts",

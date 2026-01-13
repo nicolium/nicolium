@@ -12,7 +12,27 @@ import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder
 import PendingStatus from 'pl-fe/features/ui/components/pending-status';
 import { selectChild } from 'pl-fe/utils/scroll-utils';
 
+import Icon from './ui/icon';
+
 import type { VirtuosoHandle } from 'react-virtuoso';
+
+const SkipPinned: React.FC<React.ComponentProps<'button'>> = ({ onClick }) => {
+  return (
+    <button
+      className='absolute right-6 z-10 flex w-fit max-w-full items-center gap-2 rounded-full border border-gray-200 bg-gray-100 px-3 py-1 hover:bg-gray-200 black:border-gray-800 black:bg-gray-900 black:hover:bg-gray-800 dark:border-transparent dark:bg-primary-800 dark:hover:bg-primary-700 rtl:space-x-reverse'
+      onClick={onClick}
+    >
+      <Icon
+        className='size-4 text-gray-600 dark:text-gray-400'
+        src={require('@phosphor-icons/core/regular/arrow-line-down.svg')}
+      />
+
+      <Text size='xs' theme='muted' weight='medium' truncate>
+        <FormattedMessage id='status.skip_pinned' defaultMessage='Skip pinned posts' />
+      </Text>
+    </button>
+  );
+};
 
 interface IStatusList extends Omit<IScrollableList, 'onLoadMore' | 'children'> {
   /** Unique key to preserve the scroll position when navigating back. */
@@ -80,6 +100,14 @@ const StatusList: React.FC<IStatusList> = ({
       onLoadMore(maxId);
     }
   }, 300, { leading: true }), [onLoadMore, lastStatusId, statusIds.at(-1)]);
+
+  const handleSkipPinned = () => {
+    const skipPinned = () => selectChild(getFeaturedStatusCount(), node, document.getElementById('status-list') || undefined, scrollableContent.length, 'start');
+
+    skipPinned();
+
+    setTimeout(() => skipPinned, 0);
+  };
 
   const renderLoadGap = (index: number) => {
     const ids = statusIds;
@@ -188,20 +216,25 @@ const StatusList: React.FC<IStatusList> = ({
   }
 
   return (
-    <ScrollableList
-      id='status-list'
-      key='scrollable-list'
-      isLoading={isLoading}
-      showLoading={isLoading && statusIds.length === 0}
-      onLoadMore={handleLoadOlder}
-      placeholderComponent={() => <PlaceholderStatus variant='slim' />}
-      placeholderCount={20}
-      ref={node}
-      listClassName={clsx('divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800', className)}
-      {...other}
-    >
-      {scrollableContent}
-    </ScrollableList>
+    <>
+      {featuredStatusIds && featuredStatusIds.length > 3 && statusIds.length > 0 && (
+        <SkipPinned onClick={handleSkipPinned} />
+      )}
+      <ScrollableList
+        id='status-list'
+        key='scrollable-list'
+        isLoading={isLoading}
+        showLoading={isLoading && statusIds.length === 0}
+        onLoadMore={handleLoadOlder}
+        placeholderComponent={() => <PlaceholderStatus variant='slim' />}
+        placeholderCount={20}
+        ref={node}
+        listClassName={clsx('divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800', className)}
+        {...other}
+      >
+        {scrollableContent}
+      </ScrollableList>
+    </>
   );
 };
 
