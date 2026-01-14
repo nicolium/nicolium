@@ -191,10 +191,6 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
     dispatch(initReport(ReportableEntities.STATUS, account, { status }));
   };
 
-  const handleModerateStatus = () => {
-    window.open(`/pleroma/admin/#/statuses/${status.id}/`, '_blank');
-  };
-
   const handleToggleStatusSensitivity = () => {
     dispatch(toggleStatusSensitivityModal(intl, status.id, status.sensitive));
   };
@@ -349,7 +345,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       if (isAdmin && features.pleromaAdminStatuses) {
         menu.push({
           text: intl.formatMessage(messages.adminStatus),
-          action: handleModerateStatus,
+          href: `/pleroma/admin/#/statuses/${status.id}/`,
           icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
         });
       }

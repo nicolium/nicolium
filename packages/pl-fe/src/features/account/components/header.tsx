@@ -279,10 +279,6 @@ const Header: React.FC<IHeader> = ({ account }) => {
     unblockDomain(domain);
   };
 
-  const onProfileExternal = (url: string) => {
-    window.open(url, '_blank');
-  };
-
   const onAddToList = () => {
     openModal('LIST_ADDER', {
       accountId: account.id,
@@ -376,7 +372,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
       menu.push({
         text: intl.formatMessage(messages.profileExternal, { domain }),
-        action: () => onProfileExternal(account.url),
+        href: account.url,
         icon: require('@phosphor-icons/core/regular/arrow-square-out.svg'),
       });
     }
