@@ -31,6 +31,7 @@ const config = defineConfig(({ command }) => ({
   server: {
     port: Number(process.env.PORT ?? 7312),
     hmr: process.env.HMR_DISABLED === 'true' ? false : undefined,
+    ws: process.env.WS_DISABLED === 'true' ? false : undefined,
   },
   plugins: [
     checker({ typescript: true }),
