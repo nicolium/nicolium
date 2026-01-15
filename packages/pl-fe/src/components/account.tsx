@@ -14,10 +14,9 @@ import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import Emojify from 'pl-fe/features/emoji/emojify';
 import ActionButton from 'pl-fe/features/ui/components/action-button';
+import { useAcct } from 'pl-fe/hooks/use-acct';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useSettings } from 'pl-fe/stores/settings';
-import { getAcct } from 'pl-fe/utils/accounts';
-import { displayFqn } from 'pl-fe/utils/state';
 
 import Badge from './badge';
 import { ParsedContent } from './parsed-content';
@@ -148,7 +147,7 @@ const Account = ({
   const [style, setStyle] = useState<React.CSSProperties>({});
 
   const me = useAppSelector((state) => state.me);
-  const username = useAppSelector((state) => account ? getAcct(account, displayFqn(state)) : null);
+  const username = useAcct(account);
   const { disableUserProvidedMedia } = useSettings();
 
   const handleAction = () => {
