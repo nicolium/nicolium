@@ -19,9 +19,10 @@ import {
   PinnedAccountsPanel,
   AccountNotePanel,
 } from 'pl-fe/features/ui/util/async-components';
-import { useAcct } from 'pl-fe/hooks/use-acct';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useFeatures } from 'pl-fe/hooks/use-features';
+import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
+import { getAcct } from 'pl-fe/utils/accounts';
 
 /** Layout to display a user's profile. */
 const ProfileLayout: React.FC = () => {
@@ -32,7 +33,7 @@ const ProfileLayout: React.FC = () => {
 
   const me = useAppSelector(state => state.me);
   const features = useFeatures();
-  const acct = useAcct(account);
+  const { displayFqn } = usePlFeConfig();
 
   if (isUnauthorized) {
     localStorage.setItem('plfe:redirect_uri', location.href);
@@ -100,7 +101,7 @@ const ProfileLayout: React.FC = () => {
         </Helmet>
       )}
       <Layout.Main>
-        <Column size='lg' label={account ? `@${acct}` : ''} withHeader={false}>
+        <Column size='lg' label={account ? `@${getAcct(account, displayFqn)}` : ''} withHeader={false}>
           <div className='space-y-4'>
             <Header key={`profile-header-${account?.id}`} account={account} />
             <ProfileInfoPanel username={username} account={account} />

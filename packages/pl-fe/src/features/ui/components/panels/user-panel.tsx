@@ -11,9 +11,11 @@ import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import Emojify from 'pl-fe/features/emoji/emojify';
-import { useAcct } from 'pl-fe/hooks/use-acct';
+import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
 import { useSettings } from 'pl-fe/stores/settings';
+import { getAcct } from 'pl-fe/utils/accounts';
 import { shortNumberFormat } from 'pl-fe/utils/numbers';
+import { displayFqn } from 'pl-fe/utils/state';
 
 const messages = defineMessages({
   account_locked: { id: 'account.locked_info', defaultMessage: 'This account privacy status is set to locked. The owner manually reviews who can follow them.' },
@@ -30,7 +32,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
   const intl = useIntl();
   const { demetricator, disableUserProvidedMedia } = useSettings();
   const { account } = useAccount(accountId);
-  const displayedAcct = useAcct(account);
+  const fqn = useAppSelector((state) => displayFqn(state));
 
   if (!account) return null;
   const acct = !account.acct.includes('@') && domain ? `${account.acct}@${domain}` : account.acct;
@@ -94,7 +96,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
 
           <HStack alignItems='center' space={1}>
             <Text size='sm' theme='muted' direction='ltr' truncate>
-              @{displayedAcct}
+              @{getAcct(account, fqn)}
             </Text>
 
             {account.locked && (
