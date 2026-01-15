@@ -65,7 +65,7 @@ const config = defineConfig(({ command }) => ({
       manifest: {
         name: 'pl-fe',
         short_name: 'pl-fe',
-        description: 'Mastodon-compatible social media front-endx',
+        description: 'Mastodon-compatible social media front-end',
         icons: [
           {
             src: '/instance/images/logo.png',

@@ -37,7 +37,7 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
 
   const sentryEnabled = Boolean(sentryDsn);
   const isProduction = NODE_ENV === 'production';
-  const errorText = String(error) + info?.componentStack;
+  const errorText = String(error) + (info?.componentStack || '');
 
   const clearCookies: React.MouseEventHandler = (e) => {
     localStorage.clear();
