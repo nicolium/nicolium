@@ -306,7 +306,8 @@ body {
   z-index: 1;
 
   &__content {
-    @apply mx-auto w-full max-w-3xl grow black:pt-0 sm:px-6 sm:pt-4 md:gap-4 md:px-8;
+    // FIXME: min-h-[100dvh] is a workaround for some Ladybird bug
+    @apply mx-auto w-full max-w-3xl grow black:pt-0 sm:px-6 sm:pt-4 md:gap-4 md:px-8 min-h-[100dvh];
 
     &--full-width {
       @apply flex md:max-w-full;
