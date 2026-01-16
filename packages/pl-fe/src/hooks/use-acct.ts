@@ -11,7 +11,6 @@ import type { Account } from 'pl-api';
 const useAcct = (account?: Pick<Account, 'fqn' | 'acct' | 'local' | 'url'>): string | undefined => {
   const fqn = useAppSelector((state) => displayFqn(state));
   const instance = useInstance();
-
   const localUrl = useOwnAccount().account?.url;
 
   return useMemo(() => {

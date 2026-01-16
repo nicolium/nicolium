@@ -12,8 +12,8 @@ import Icon from 'pl-fe/components/ui/icon';
 import Stack from 'pl-fe/components/ui/stack';
 import Text from 'pl-fe/components/ui/text';
 import Emojify from 'pl-fe/features/emoji/emojify';
+import { useAcct } from 'pl-fe/hooks/use-acct';
 import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { accountScrobbleQueryOptions } from 'pl-fe/queries/accounts/account-scrobble';
 import { capitalize } from 'pl-fe/utils/strings';
 
@@ -40,7 +40,7 @@ interface IProfileInfoPanel {
 /** User profile metadata, such as location, birthday, etc. */
 const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) => {
   const intl = useIntl();
-  const { displayFqn } = usePlFeConfig();
+  const acct = useAcct(account);
   const me = useAppSelector(state => state.me);
   const ownAccount = account?.id === me;
 
@@ -152,7 +152,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
           <HStack alignItems='center' space={0.5}>
             <Text size='sm' theme='muted' direction='ltr' truncate>
-              @{displayFqn ? account.fqn : account.acct}
+              @{acct}
             </Text>
 
             {account.locked && (

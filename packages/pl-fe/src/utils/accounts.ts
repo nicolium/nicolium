@@ -22,12 +22,7 @@ const getBaseURL = (account: Pick<Account, 'url'>): string => {
   }
 };
 
-const getAcct = (account: Pick<Account, 'fqn' | 'acct'>, displayFqn: boolean): string => (
-  displayFqn === true ? account.fqn : account.acct
-);
-
 export {
   getDomain,
   getBaseURL,
-  getAcct,
 };
