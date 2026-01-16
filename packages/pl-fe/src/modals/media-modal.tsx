@@ -1,8 +1,9 @@
+import { animated, useSpring } from '@react-spring/web';
 import { Link } from '@tanstack/react-router';
+import { useDrag } from '@use-gesture/react';
 import clsx from 'clsx';
-import React, { type RefCallback, useCallback, useEffect, useState } from 'react';
+import React, { type RefCallback, useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
-import ReactSwipeableViews from 'react-swipeable-views';
 
 import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
 import ExtendedVideoPlayer from 'pl-fe/components/extended-video-player';
@@ -25,6 +26,8 @@ import { makeGetStatus } from 'pl-fe/selectors';
 import type { MediaAttachment } from 'pl-api';
 import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
+const MIN_SWIPE_DISTANCE = 400;
+
 const messages = defineMessages({
   close: { id: 'lightbox.close', defaultMessage: 'Close' },
   expand: { id: 'lightbox.expand', defaultMessage: 'Expand' },
@@ -35,19 +38,6 @@ const messages = defineMessages({
   zoomOut: { id: 'lightbox.zoom_out', defaultMessage: 'Zoom to fit' },
   download: { id: 'video.download', defaultMessage: 'Download file' },
 });
-
-// you can't use 100vh, because the viewport height is taller
-// than the visible part of the document in some mobile
-// browsers when its address bar is visible.
-// https://developers.google.com/web/updates/2016/12/url-bar-resizing
-const swipeableViewsStyle: React.CSSProperties = {
-  width: '100%',
-  height: '100%',
-};
-
-const containerStyle: React.CSSProperties = {
-  alignItems: 'center', // center vertically
-};
 
 interface MediaModalProps {
   media?: Array<MediaAttachment>;
@@ -77,6 +67,32 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   const [navigationHidden, setNavigationHidden] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(!status);
 
+  const [wrapperStyles, api] = useSpring(() => ({
+    x: `-${index * 100}%`,
+  }));
+
+  const handleChangeIndex = useCallback(
+    (newIndex: number, animate = false) => {
+      if (newIndex < 0) {
+        newIndex = media.length + newIndex;
+      } else if (newIndex >= media.length) {
+        newIndex = newIndex % media.length;
+      }
+      setIndex(newIndex);
+      setZoomedIn(false);
+      if (animate) {
+        void api.start({ x: `calc(-${newIndex * 100}% + 0px)` });
+      }
+    },
+    [api, media.length],
+  );
+  const handlePrevClick = useCallback(() => {
+    handleChangeIndex(index - 1, true);
+  }, [handleChangeIndex, index]);
+  const handleNextClick = useCallback(() => {
+    handleChangeIndex(index + 1, true);
+  }, [handleChangeIndex, index]);
+
   const [viewportDimensions, setViewportDimensions] = useState<{
       width: number;
       height: number;
@@ -92,10 +108,6 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   }, []);
 
   const hasMultipleImages = media.length > 1;
-
-  const handleSwipe = (index: number) => setIndex(index % media.length);
-  const handleNextClick = () => setIndex((index + 1) % media.length);
-  const handlePrevClick = () => setIndex((media.length + index - 1) % media.length);
 
   const navigationHiddenClassName = navigationHidden ? 'pointer-events-none opacity-0' : '';
 
@@ -113,6 +125,30 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
         break;
     }
   };
+
+  const bind = useDrag(
+    ({ active, movement: [mx], direction: [xDir], cancel }) => {
+      // Disable swipe when zoomed in.
+      if (zoomedIn) {
+        return;
+      }
+
+      // If dragging and swipe distance is enough, change the index.
+      if (
+        active &&
+          Math.abs(mx) > Math.min(window.innerWidth / 4, MIN_SWIPE_DISTANCE)
+      ) {
+        handleChangeIndex(index - xDir);
+        cancel();
+      }
+      // Set the x position via calc to ensure proper centering regardless of screen size.
+      const x = active ? mx : 0;
+      void api.start({
+        x: `calc(-${index * 100}% + ${x}px)`,
+      });
+    },
+    { pointer: { capture: false } },
+  );
 
   const handleDownload = () => {
     const mediaItem = hasMultipleImages ? media[index as number] : media[0];
@@ -133,7 +169,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     setZoomedIn((prev) => !prev);
   }, []);
 
-  const content = media.map((attachment, i) => {
+  const content = useMemo(() => media.map((attachment, i) => {
     let width: number | undefined, height: number | undefined;
     if (attachment.type === 'image' || attachment.type === 'gifv' || attachment.type === 'video') {
       width = (attachment.meta?.original?.width);
@@ -209,7 +245,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     }
 
     return null;
-  });
+  }), [media.length, index, zoomedIn, handleZoomClick]);
 
   // Load data.
   useEffect(() => {
@@ -313,6 +349,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
           {/* Height based on height of top/bottom bars */}
           <div
+            {...bind()}
             className='relative h-[calc(100vh-120px)] w-full grow'
           >
             {hasMultipleImages && (
@@ -328,14 +365,14 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
               </div>
             )}
 
-            <ReactSwipeableViews
-              style={swipeableViewsStyle}
-              containerStyle={containerStyle}
-              onChangeIndex={handleSwipe}
-              index={index}
+            <animated.div
+              style={wrapperStyles}
+              className='media-modal__closer'
+              role='presentation'
+              onClick={() => onClose()}
             >
               {content}
-            </ReactSwipeableViews>
+            </animated.div>
 
             {hasMultipleImages && (
               <div className={clsx('absolute inset-y-0 right-5 z-10 flex items-center transition-opacity', navigationHiddenClassName)}>

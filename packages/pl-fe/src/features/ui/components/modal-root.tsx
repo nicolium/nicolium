@@ -67,7 +67,6 @@ const ModalRoot: React.FC = () => {
   const index = modals.length - 1;
 
   const onClickClose = (type?: ModalType, all?: boolean) => {
-    console.log('Closing modal:', type, all);
     switch (type) {
       case 'COMPOSE':
         dispatch(cancelReplyCompose());
