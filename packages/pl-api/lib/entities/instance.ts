@@ -40,6 +40,13 @@ const instanceV1ToV2 = (data: any) => {
     ...instance
   } = v.parse(instanceV1Schema, data);
 
+  let domain = uri;
+  try {
+    domain = new URL(uri).host;
+  } catch {
+    // Ignore invalid URL
+  }
+
   return {
     ...instance,
     account_domain: instance.account_domain	|| uri,
@@ -74,7 +81,7 @@ const instanceV1ToV2 = (data: any) => {
       email: email,
     },
     description: short_description || description,
-    domain: uri,
+    domain,
     pleroma: {
       ...pleroma,
       metadata: {
