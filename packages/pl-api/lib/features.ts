@@ -17,6 +17,14 @@ const any = (arr: Array<any>): boolean => arr.some(Boolean);
 const DITTO = 'Ditto';
 
 /**
+ * Egregoros, a fediverse server pulled from the akashic records [TODO: fact check this claim ~nicole].
+ *
+ * @category Software
+ * @see {@link https://github.com/egregoros-social/egregoros}
+ */
+const EGREGOROS = 'Egregoros';
+
+/**
  * Firefish, a fork of Misskey. Formerly known as Calckey.
  *
  * @category Software
@@ -164,7 +172,7 @@ const AKKOMA = 'Akkoma';
 const GLITCH = 'glitch';
 
 /**
- * glitch-soc, fork of Mastodon that provides local posting and a wider range of content types.
+ * Hometown, fork of Mastodon that provides local posting and a wider range of content types.
  *
  * @category Software
  * @see {@link https://github.com/hometown-fork/hometown}
@@ -1887,6 +1895,7 @@ const parseVersion = (version: string): Backend => {
 export {
   AKKOMA,
   DITTO,
+  EGREGOROS,
   FIREFISH,
   FRIENDICA,
   GOTOSOCIAL,

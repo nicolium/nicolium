@@ -97,20 +97,19 @@ const instanceV1ToV2 = (data: any) => {
   };
 };
 
+const software: Array<[string, string]> = [['takahe', 'Takahe'], ['neodb', 'NeoDB'], ['egregoros', 'Egregoros']];
+
 const fixVersion = (version: string) => {
   // Handle Mastodon release candidates
   if (new RegExp(/[0-9.]+rc[0-9]+/g).test(version)) {
     return version.split('rc').join('-rc');
   }
 
-  // Set Takahē version to a Pleroma-like string
-  if (version.startsWith('takahe/')) {
-    return `0.0.0 (compatible; Takahe ${version.slice(7)})`;
-  }
-
-  // Set NeoDB version to a Pleroma-like string
-  if (version.startsWith('neodb/')) {
-    return `0.0.0 (compatible; NeoDB ${version.slice(7)})`;
+  // Set Takahē and NeoDB versions to a Pleroma-like string
+  for (const [key, name] of software) {
+    if (version.startsWith(`${key}/`)) {
+      return `0.0.0 (compatible; ${name} ${version.slice(key.length + 1)})`;
+    }
   }
 
   const wordPressMatch = WORDPRESS_REGEX.exec(version);
