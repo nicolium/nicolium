@@ -40,8 +40,15 @@ interface SizeData {
   itemsDimensions: Dimensions[];
 }
 
-const getAspectRatio = (attachment: MediaAttachment) =>
-  (attachment.type === 'gifv' || attachment.type === 'image' || attachment.type === 'video') && attachment.meta.original?.aspect || null;
+const getAspectRatio = (attachment: MediaAttachment) => {
+  if ((attachment.type === 'gifv' || attachment.type === 'image' || attachment.type === 'video') && attachment.meta.original) {
+    if (attachment.meta.original.aspect) {
+      return attachment.meta.original.aspect;
+    }
+    return attachment.meta.original.width / attachment.meta.original.height;
+  }
+  return null;
+};
 
 const withinLimits = (aspectRatio: number) =>
   aspectRatio >= minimumAspectRatio && aspectRatio <= maximumAspectRatio;
