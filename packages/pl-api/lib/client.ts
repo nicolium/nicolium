@@ -1371,7 +1371,7 @@ class PlApiClient {
 
       const response = await this.request('/api/v1/accounts/update_credentials', {
         method: 'PATCH',
-        contentType: (this.features.version.software === GOTOSOCIAL || params.avatar || params.header) ? '' : undefined,
+        contentType: '',
         body: params,
       });
 
