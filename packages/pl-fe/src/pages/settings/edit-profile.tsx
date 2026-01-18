@@ -250,7 +250,7 @@ const EditProfilePage: React.FC = () => {
 
     if (fields_attributes?.length === 0) params.fields_attributes = { '0': { name: '', value: '' } };
     else if (fields_attributes) params.fields_attributes = Object.fromEntries(
-      fields_attributes.map((field, i) => [i.toString(), field]),
+      fields_attributes.map(({ name, value }, i) => [i.toString(), { name, value }]),
     );
     if (header.file !== undefined) params.header = header.file || '';
     if (avatar.file !== undefined) params.avatar = avatar.file || '';
