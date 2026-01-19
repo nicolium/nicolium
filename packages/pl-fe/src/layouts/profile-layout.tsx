@@ -92,6 +92,8 @@ const ProfileLayout: React.FC = () => {
 
   const showTabs = !['/following', '/followers', '/pins'].some(path => pathname.endsWith(path));
 
+  console.log(account);
+
   return (
     <>
       {account?.local === false && (
