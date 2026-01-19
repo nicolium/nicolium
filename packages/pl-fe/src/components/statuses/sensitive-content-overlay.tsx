@@ -105,7 +105,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
             <HStack alignItems='center' justifyContent='center' space={2}>
               <Button
                 type='button'
-                theme='outline'
+                theme='outlined'
                 size='sm'
                 icon={require('@phosphor-icons/core/regular/eye.svg')}
                 onClick={toggleVisibility}
