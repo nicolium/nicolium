@@ -14,6 +14,31 @@ const filterBadges = (tags?: string[]) =>
 
 const MKLJCZK_ACCOUNTS = ['https://pl.fediverse.pl/users/mkljczk', 'https://gts.mkljczk.pl/users/mkljczk', 'https://gts.mkljczk.pl/@mkljczk'];
 
+const paymentOptionSchema = v.variant('type', [
+  v.object({
+    /** Payment type */
+    type: v.literal('link'),
+    /** Link name (only for link type) */
+    name: v.fallback(v.nullable(v.string()), null),
+    /** Link URL (only for link type) */
+    href: v.fallback(v.nullable(v.string()), null),
+    /** Unique identifier of a proposal object */
+    object_id: v.fallback(v.nullable(v.string()), null),
+  }),
+  v.object({
+    /** Payment type */
+    type: v.literal('monero-subscription'),
+    /** CAIP-2 chain ID (only for monero-subscription type) */
+    chain_id: v.fallback(v.nullable(v.string()), null),
+    /** Subscription price (only for monero-subscription type) */
+    price: v.fallback(v.nullable(v.number()), null),
+    /** Minimum payment amount (only for monero-subscription type) */
+    amount_min: v.fallback(v.nullable(v.number()), null),
+    /** Unique identifier of a proposal object */
+    object_id: v.fallback(v.nullable(v.string()), null),
+  }),
+]);
+
 const preprocessAccount = v.transform((account: any) => {
   if (!account?.acct) return null;
 
@@ -166,20 +191,7 @@ const baseAccountSchema = v.object({
     verified_at: v.fallback(datetimeSchema, new Date().toISOString()),
   })),
   /** Payment options */
-  payment_options: filteredArray(v.object({
-    /** Payment type */
-    type: v.picklist(['link', 'monero-subscription']),
-    /** Link name (only for link type) */
-    name: v.fallback(v.nullable(v.string()), null),
-    /** Link URL (only for link type) */
-    href: v.fallback(v.nullable(v.string()), null),
-    /** CAIP-2 chain ID (only for monero-subscription type) */
-    chain_id: v.fallback(v.nullable(v.string()), null),
-    /** Subscription price (only for monero-subscription type) */
-    price: v.fallback(v.nullable(v.string()), null),
-    /** Unique identifier of a proposal object */
-    object_id: v.fallback(v.nullable(v.string()), null),
-  })),
+  payment_options: filteredArray(paymentOptionSchema),
 
   /** Whether the user is a cat */
   is_cat: v.fallback(v.boolean(), false),
