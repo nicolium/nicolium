@@ -423,6 +423,17 @@ const instanceSchema = v.pipe(
     title: v.fallback(v.string(), ''),
     usage: usageSchema,
     version: v.pipe(v.fallback(v.string(), '0.0.0'), v.transform(fixVersion)),
+    blockchains: v.fallback(v.optional(filteredArray(v.object({
+      chain_id: v.fallback(v.nullable(v.string()), null),
+      chain_metadata: coerceObject({
+        is_forwarding_required: v.fallback(v.boolean(), false),
+        description: v.fallback(v.string(), ''),
+        payment_amount_min: v.number(),
+      }),
+      features: coerceObject({
+        subscriptions: v.fallback(v.boolean(), false),
+      }),
+    }))), undefined),
   }),
 );
 

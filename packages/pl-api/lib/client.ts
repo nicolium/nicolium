@@ -5849,7 +5849,7 @@ class PlApiClient {
      * @param recipientId - Recipient ID.
      */
     findSubscription: async(senderId: string, recipientId: string) => {
-      const response = await this.request('/api/v1/subscriptions/find', { method: 'POST', body: { sender_id: senderId, recipient_id: recipientId } });
+      const response = await this.request('/api/v1/subscriptions/find', { params: { sender_id: senderId, recipient_id: recipientId } });
 
       return v.parse(subscriptionDetailsSchema, response.json);
     },

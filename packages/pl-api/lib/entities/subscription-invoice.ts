@@ -7,7 +7,7 @@ import { datetimeSchema } from './utils';
  */
 const subscriptionInvoiceSchema = v.object({
   /** Invoice ID. */
-  invoice_id: v.string(),
+  id: v.string(),
   /** The ID of the sender. */
   sender_id: v.string(),
   /** The ID of the recipient. */
@@ -21,9 +21,9 @@ const subscriptionInvoiceSchema = v.object({
   /** Invoice status. */
   status: v.picklist(['open', 'paid', 'forwarded', 'timeout', 'cancelled', 'underpaid', 'completed', 'failed']),
   /** The date when invoice was created. */
-  created_at: v.fallback(datetimeSchema, new Date().toISOString()),
+  created_at: datetimeSchema,
   /** The date when invoice times out. */
-  invoice_expires_at: v.fallback(datetimeSchema, new Date().toISOString()),
+  invoice_expires_at: datetimeSchema,
 });
 
 /**
