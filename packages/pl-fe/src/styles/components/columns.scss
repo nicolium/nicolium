@@ -1,5 +1,5 @@
 .empty-column-indicator {
-  @apply bg-primary-50 dark:bg-gray-700 text-gray-900 dark:text-gray-300 text-center p-10 flex flex-1 items-center justify-center min-h-[160px] rounded-lg;
+  @apply bg-primary-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 text-center p-10 flex flex-1 items-center justify-center min-h-[160px] rounded-lg;
 
   & > span {
     @apply max-w-[400px];
