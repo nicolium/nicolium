@@ -1,15 +1,19 @@
 @use 'mixins';
 
-.⁂-edit-event .⁂-content-type-button {
-  position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
-  z-index: 11!important;
-  @include mixins.button($theme: muted, $size: xs);
+.⁂-edit-event {
+  @apply space-y-4;
 
-  .⁂-icon svg {
-    width: 1rem;
-    height: 1rem;
+  .⁂-content-type-button {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    z-index: 11!important;
+    @include mixins.button($theme: muted, $size: xs);
+
+    .⁂-icon svg {
+      width: 1rem;
+      height: 1rem;
+    }
   }
 }
 
