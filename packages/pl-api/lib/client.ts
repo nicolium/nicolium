@@ -5445,7 +5445,7 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    getAntennaAccounts: async (antennaId: string) => 
+    getAntennaAccounts: async (antennaId: string) =>
       this.#paginatedGet(`/api/v1/antennas/${antennaId}/accounts`, {}, accountSchema),
 
     /**
@@ -5475,13 +5475,13 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    getAntennaExcludeAccounts: async (antennaId: string) => 
+    getAntennaExcludedAccounts: async (antennaId: string) =>
       this.#paginatedGet(`/api/v1/antennas/${antennaId}/exclude_accounts`, {}, accountSchema),
 
     /**
      * Requires features{@link Features.antennas}.
      */
-    addAntennaExcludeAccounts: async (antennaId: string, accountIds: Array<string>) => {
+    addAntennaExcludedAccounts: async (antennaId: string, accountIds: Array<string>) => {
       const response = await this.request<{}>(`/api/v1/antennas/${antennaId}/exclude_accounts`, {
         method: 'POST',
         body: { account_ids: accountIds },
@@ -5493,7 +5493,7 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    removeAntennaExcludeAccounts: async (antennaId: string, accountIds: Array<string>) => {
+    removeAntennaExcludedAccounts: async (antennaId: string, accountIds: Array<string>) => {
       const response = await this.request<{}>(`/api/v1/antennas/${antennaId}/exclude_accounts`, {
         method: 'DELETE',
         body: { account_ids: accountIds },

@@ -1,5 +1,6 @@
 export * from './accounts';
 export * from './admin';
+export * from './antennas';
 export * from './apps';
 export * from './chats';
 export * from './circles';
