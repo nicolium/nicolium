@@ -1436,6 +1436,13 @@ const router = createRouter({
   pathParamsAllowedCharacters: ['@'],
 });
 
+router.subscribe('onBeforeNavigate', (event) => {
+  if (!event.fromLocation || event.hashChanged || event.hrefChanged || event.pathChanged) return;
+  if (event.fromLocation.state.modalIndex === event.toLocation.state.modalIndex) {
+    window.scrollTo(0, 0);
+  }
+});
+
 declare module '@tanstack/react-router' {
   interface Register {
     router: typeof router;
