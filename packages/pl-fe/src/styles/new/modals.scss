@@ -7,19 +7,27 @@
 }
 
 .⁂-zoomable-image {
-  @apply relative flex size-full items-center justify-center overflow-hidden select-none;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   scrollbar-width: none;
+  overflow: hidden;
+  user-select: none;
 
   &--zoomed-in {
-    @apply cursor-grab z-[9999];
+    z-index: 9999;
+    cursor: grab;
   }
 
   &--error img {
-    @apply hidden;
+    display: none;
   }
 
   &--dragging {
-    @apply cursor-grabbing;
+    cursor: grabbing;
   }
 
   &__preview {
@@ -31,6 +39,11 @@
   }
 
   img {
-    @apply size-auto max-h-[80%] max-w-full object-contain shadow-2xl;
+    @apply shadow-2xl;
+    max-height: 80%;
+    width: auto;
+    height: auto;
+    touch-action: none;
+    user-select: none;
   }
 }
