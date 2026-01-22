@@ -5445,19 +5445,16 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    getAntennaAccounts: async (antennaId: string) => {
-      const response = await this.request(`/api/v1/antennas/${antennaId}/accounts`);
-
-      return v.parse(filteredArray(accountSchema), response.json);
-    },
+    getAntennaAccounts: async (antennaId: string) => 
+      this.#paginatedGet(`/api/v1/antennas/${antennaId}/accounts`, {}, accountSchema),
 
     /**
      * Requires features{@link Features.antennas}.
      */
-    addAntennaAccount: async (antennaId: string, accountId: string) => {
+    addAntennaAccounts: async (antennaId: string, accountIds: Array<string>) => {
       const response = await this.request<{}>(`/api/v1/antennas/${antennaId}/accounts`, {
         method: 'POST',
-        body: { account_ids: [accountId] },
+        body: { account_ids: accountIds },
       });
 
       return response.json;
@@ -5466,10 +5463,10 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    removeAntennaAccount: async (antennaId: string, accountId: string) => {
+    removeAntennaAccounts: async (antennaId: string, accountIds: Array<string>) => {
       const response = await this.request<{}>(`/api/v1/antennas/${antennaId}/accounts`, {
         method: 'DELETE',
-        body: { account_ids: [accountId] },
+        body: { account_ids: accountIds },
       });
 
       return response.json;
@@ -5478,19 +5475,16 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    getAntennaExcludeAccounts: async (antennaId: string) => {
-      const response = await this.request(`/api/v1/antennas/${antennaId}/exclude_accounts`);
-
-      return v.parse(filteredArray(accountSchema), response.json);
-    },
+    getAntennaExcludeAccounts: async (antennaId: string) => 
+      this.#paginatedGet(`/api/v1/antennas/${antennaId}/exclude_accounts`, {}, accountSchema),
 
     /**
      * Requires features{@link Features.antennas}.
      */
-    addAntennaExcludeAccount: async (antennaId: string, accountId: string) => {
+    addAntennaExcludeAccounts: async (antennaId: string, accountIds: Array<string>) => {
       const response = await this.request<{}>(`/api/v1/antennas/${antennaId}/exclude_accounts`, {
         method: 'POST',
-        body: { account_ids: [accountId] },
+        body: { account_ids: accountIds },
       });
 
       return response.json;
@@ -5499,10 +5493,10 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    removeAntennaExcludeAccount: async (antennaId: string, accountId: string) => {
+    removeAntennaExcludeAccounts: async (antennaId: string, accountIds: Array<string>) => {
       const response = await this.request<{}>(`/api/v1/antennas/${antennaId}/exclude_accounts`, {
         method: 'DELETE',
-        body: { account_ids: [accountId] },
+        body: { account_ids: accountIds },
       });
 
       return response.json;
@@ -5523,10 +5517,10 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    addAntennaDomain: async (antennaId: string, domain: string) => {
+    addAntennaDomains: async (antennaId: string, domains: Array<string>) => {
       const response = await this.request<{}>(`/api/v1/antennas/${antennaId}/domains`, {
         method: 'POST',
-        body: { domains: [domain] },
+        body: { domains },
       });
 
       return response.json;
@@ -5535,10 +5529,10 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    removeAntennaDomain: async (antennaId: string, domain: string) => {
+    removeAntennaDomains: async (antennaId: string, domains: Array<string>) => {
       const response = await this.request<{}>(`/api/v1/antennas/${antennaId}/domains`, {
         method: 'DELETE',
-        body: { domains: [domain] },
+        body: { domains },
       });
 
       return response.json;
@@ -5547,10 +5541,10 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    addAntennaExcludeDomain: async (antennaId: string, domain: string) => {
+    addAntennaExcludedDomains: async (antennaId: string, domains: Array<string>) => {
       const response = await this.request<{}>(`/api/v1/antennas/${antennaId}/exclude_domains`, {
         method: 'POST',
-        body: { domains: [domain] },
+        body: { domains },
       });
 
       return response.json;
@@ -5559,10 +5553,10 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    removeAntennaExcludeDomain: async (antennaId: string, domain: string) => {
+    removeAntennaExcludedDomains: async (antennaId: string, domains: Array<string>) => {
       const response = await this.request<{}>(`/api/v1/antennas/${antennaId}/exclude_domains`, {
         method: 'DELETE',
-        body: { domains: [domain] },
+        body: { domains },
       });
 
       return response.json;
@@ -5583,10 +5577,10 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    addAntennaKeyword: async (antennaId: string, keyword: string) => {
+    addAntennaKeywords: async (antennaId: string, keywords: Array<string>) => {
       const response = await this.request<{}>(`/api/v1/antennas/${antennaId}/keywords`, {
         method: 'POST',
-        body: { keywords: [keyword] },
+        body: { keywords },
       });
 
       return response.json;
@@ -5595,10 +5589,10 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    removeAntennaKeyword: async (antennaId: string, keyword: string) => {
+    removeAntennaKeywords: async (antennaId: string, keywords: Array<string>) => {
       const response = await this.request<{}>(`/api/v1/antennas/${antennaId}/keywords`, {
         method: 'DELETE',
-        body: { keywords: [keyword] },
+        body: { keywords },
       });
 
       return response.json;
@@ -5607,10 +5601,10 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    addAntennaExcludeKeyword: async (antennaId: string, keyword: string) => {
+    addAntennaExcludedKeywords: async (antennaId: string, keywords: Array<string>) => {
       const response = await this.request<{}>(`/api/v1/antennas/${antennaId}/exclude_keywords`, {
         method: 'POST',
-        body: { keywords: [keyword] },
+        body: { keywords },
       });
 
       return response.json;
@@ -5619,10 +5613,10 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    removeAntennaExcludeKeyword: async (antennaId: string, keyword: string) => {
+    removeAntennaExcludedKeywords: async (antennaId: string, keywords: Array<string>) => {
       const response = await this.request<{}>(`/api/v1/antennas/${antennaId}/exclude_keywords`, {
         method: 'DELETE',
-        body: { keywords: [keyword] },
+        body: { keywords },
       });
 
       return response.json;
@@ -5667,10 +5661,10 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    addAntennaExcludeTag: async (antennaId: string, tag: string) => {
+    addAntennaExcludedTags: async (antennaId: string, tags: Array<string>) => {
       const response = await this.request<{}>(`/api/v1/antennas/${antennaId}/exclude_tags`, {
         method: 'POST',
-        body: { tags: [tag] },
+        body: { tags },
       });
 
       return response.json;
@@ -5679,10 +5673,10 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    removeAntennaExcludeTag: async (antennaId: string, tag: string) => {
+    removeAntennaExcludedTags: async (antennaId: string, tags: Array<string>) => {
       const response = await this.request<{}>(`/api/v1/antennas/${antennaId}/exclude_tags`, {
         method: 'DELETE',
-        body: { tags: [tag] },
+        body: { tags },
       });
 
       return response.json;
