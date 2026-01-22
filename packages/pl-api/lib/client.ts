@@ -750,7 +750,7 @@ class PlApiClient {
      * Requires features{@link Features.antennas}.
      */
     getAccountExcludeAntennas: async (accountId: string) => {
-      const response = await this.request(`/api/v1/accounts/${accountId}/circles`);
+      const response = await this.request(`/api/v1/accounts/${accountId}/exclude_antennas`);
 
       return v.parse(filteredArray(circleSchema), response.json);
     },
@@ -761,7 +761,7 @@ class PlApiClient {
      * Requires features{@link Features.circles}.
      */
     getAccountCircles: async (accountId: string) => {
-      const response = await this.request(`/api/v1/accounts/${accountId}/exclude_antennas`);
+      const response = await this.request(`/api/v1/accounts/${accountId}/circles`);
 
       return v.parse(filteredArray(antennaSchema), response.json);
     },
