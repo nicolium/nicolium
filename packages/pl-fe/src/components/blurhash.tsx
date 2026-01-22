@@ -40,10 +40,12 @@ const Blurhash: React.FC<IBlurhash> = React.memo(({
     try {
       const pixels = decode(hash, width, height);
       const ctx = canvas.getContext('2d');
-      const imageData = new ImageData(new Uint8ClampedArray(pixels), width, height);
+      const imageData = ctx?.createImageData(width, height);
+      imageData?.data.set(pixels);
 
-      if (!ctx) return;
-      ctx.putImageData(imageData, 0, 0);
+      if (imageData) {
+        ctx?.putImageData(imageData, 0, 0);
+      }
     } catch (err) {
       console.error('Blurhash decoding failure', { err, hash });
     }

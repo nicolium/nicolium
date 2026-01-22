@@ -7,7 +7,8 @@
 }
 
 .⁂-zoomable-image {
-  @apply relative flex size-full items-center justify-center;
+  @apply relative flex size-full items-center justify-center overflow-hidden select-none;
+  scrollbar-width: none;
 
   &--zoomed-in {
     @apply cursor-grab z-[9999];
