@@ -289,9 +289,10 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
         role='presentation'
       >
         <Stack
+          {...bind()}
           onClick={handleClickOutside}
           className={
-            clsx('⁂-media-modal__content fixed inset-0 h-full grow transition-all', {
+            clsx('⁂-media-modal__content fixed inset-0 h-full grow touch-pan-y transition-all', {
               'xl:pr-96': !isFullScreen,
               'xl:pr-0': isFullScreen,
             })
@@ -349,7 +350,6 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
           {/* Height based on height of top/bottom bars */}
           <div
-            {...bind()}
             className='relative h-[calc(100vh-120px)] w-full grow'
           >
             {hasMultipleImages && (

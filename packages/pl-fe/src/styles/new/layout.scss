@@ -7,6 +7,13 @@ html {
   --font-mono: 'Roboto Mono', ui-monospace, monospace;
 }
 
+html:has(body.with-modals),
+body.with-modals {
+  touch-action: none;
+  overscroll-behavior: none;
+  scrollbar-gutter: stable;
+}
+
 body {
   @apply bg-white text-base antialiased black:bg-black dark:bg-gray-800;
   height: 100%;
@@ -21,7 +28,7 @@ body {
   }
 
   &.with-modals {
-    @apply overflow-hidden;
+    overflow: hidden;
   }
 }
 
