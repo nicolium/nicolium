@@ -8,6 +8,7 @@ import { importEntities } from './importer';
 
 import type {
   Account as BaseAccount,
+  AntennaTimelineParams,
   GetAccountStatusesParams,
   GetCircleStatusesParams,
   GroupTimelineParams,
@@ -290,6 +291,21 @@ const fetchCircleTimeline = (circleId: string, expand = false, done = noOp) =>
     return dispatch(handleTimelineExpand(timelineId, fn, done));
   };
 
+const fetchAntennaTimeline = (antennaId: string, expand = false, done = noOp) =>
+  async (dispatch: AppDispatch, getState: () => RootState) => {
+    const state = getState();
+    const timelineId = `antenna:${antennaId}`;
+
+    const params: AntennaTimelineParams = {};
+    // if (useSettingsStore.getState().settings.autoTranslate) params.language = getLocale();
+
+    if (expand && state.timelines[timelineId]?.isLoading) return;
+
+    const fn = (expand && state.timelines[timelineId]?.next?.()) || getClient(state).timelines.antennaTimeline(antennaId, params);
+
+    return dispatch(handleTimelineExpand(timelineId, fn, done));
+  };
+
 const fetchGroupTimeline = (groupId: string, { only_media, limit }: Record<string, any> = {}, expand = false, done = noOp) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
@@ -408,6 +424,7 @@ export {
   fetchAccountTimeline,
   fetchListTimeline,
   fetchCircleTimeline,
+  fetchAntennaTimeline,
   fetchGroupTimeline,
   fetchHashtagTimeline,
   fetchLinkTimeline,

@@ -51,6 +51,8 @@ import {
   AdminAccount,
   Aliases,
   Announcements,
+  Antennas,
+  AntennaTimeline,
   AuthTokenList,
   Backups,
   Blocks,
@@ -461,6 +463,24 @@ export const circleTimelineRoute = createRoute({
   component: CircleTimeline,
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.circles) throw notFound();
+  }),
+});
+
+export const antennasRoute = createRoute({
+  getParentRoute: () => layouts.default,
+  path: '/antennas',
+  component: Antennas,
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
+    if (!features.antennas) throw notFound();
+  }),
+});
+
+export const antennaTimelineRoute = createRoute({
+  getParentRoute: () => layouts.default,
+  path: '/antennas/$antennaId',
+  component: AntennaTimeline,
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
+    if (!features.antennas) throw notFound();
   }),
 });
 
@@ -1301,6 +1321,8 @@ const routeTree = rootRoute.addChildren([
     listTimelineRoute,
     circlesRoute,
     circleTimelineRoute,
+    antennasRoute,
+    antennaTimelineRoute,
     bookmarkFoldersRoute,
     bookmarksRoute,
     notificationsRoute,

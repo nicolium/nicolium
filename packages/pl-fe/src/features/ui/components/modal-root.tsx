@@ -10,6 +10,7 @@ import ModalLoading from './modal-loading';
 /* eslint sort-keys: "error" */
 const MODAL_COMPONENTS = {
   ALT_TEXT: lazy(() => import('pl-fe/modals/alt-text-modal')),
+  ANTENNA_EDITOR: lazy(() => import('pl-fe/modals/antenna-editor-modal')),
   BIRTHDAYS: lazy(() => import('pl-fe/modals/birthdays-modal')),
   BLOCK_MUTE: lazy(() => import('pl-fe/modals/block-mute-modal')),
   BOOST: lazy(() => import('pl-fe/modals/boost-modal')),

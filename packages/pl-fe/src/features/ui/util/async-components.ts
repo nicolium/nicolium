@@ -7,6 +7,8 @@ export const AccountTimeline = lazy(() => import('pl-fe/pages/accounts/account-t
 export const AdminAccount = lazy(() => import('pl-fe/pages/dashboard/account'));
 export const Aliases = lazy(() => import('pl-fe/pages/settings/aliases'));
 export const Announcements = lazy(() => import('pl-fe/pages/dashboard/announcements'));
+export const Antennas = lazy(() => import('pl-fe/pages/account-lists/antennas'));
+export const AntennaTimeline = lazy(() => import('pl-fe/pages/timelines/antenna-timeline'));
 export const AuthTokenList = lazy(() => import('pl-fe/pages/settings/auth-token-list'));
 export const AwaitingApproval = lazy(() => import('pl-fe/pages/dashboard/awaiting-approval'));
 export const Backups = lazy(() => import('pl-fe/pages/settings/backups'));

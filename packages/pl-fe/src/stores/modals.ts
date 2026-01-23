@@ -4,6 +4,7 @@ import { mutative } from 'zustand-mutative';
 import type { ICryptoAddress } from 'pl-fe/features/crypto-donate/components/crypto-address';
 import type { ModalType } from 'pl-fe/features/ui/components/modal-root';
 import type { AltTextModalProps } from 'pl-fe/modals/alt-text-modal';
+import type { AntennaEditorModalProps } from 'pl-fe/modals/antenna-editor-modal';
 import type { BlockMuteModalProps } from 'pl-fe/modals/block-mute-modal';
 import type { BoostModalProps } from 'pl-fe/modals/boost-modal';
 import type { CircleEditorModalProps } from 'pl-fe/modals/circle-editor-modal';
@@ -41,6 +42,7 @@ import type { UnauthorizedModalProps } from 'pl-fe/modals/unauthorized-modal';
 
 type OpenModalProps =
   | [type: 'ALT_TEXT', props: AltTextModalProps]
+  | [type: 'ANTENNA_EDITOR', props: AntennaEditorModalProps]
   | [type: 'BIRTHDAYS' | 'CREATE_GROUP' | 'HOTKEYS']
   | [type: 'BOOST', props: BoostModalProps]
   | [type: 'CIRCLE_EDITOR', props: CircleEditorModalProps]

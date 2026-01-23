@@ -14,7 +14,6 @@ import { useList, useUpdateList } from 'pl-fe/queries/accounts/use-lists';
 import toast from 'pl-fe/toast';
 
 const messages = defineMessages({
-  save: { id: 'lists.new.save', defaultMessage: 'Save list' },
   repliesPolicyNone: { id: 'lists.replies_policy.none', defaultMessage: 'No one' },
   repliesPolicyList: { id: 'lists.replies_policy.list', defaultMessage: 'Members of the list' },
   repliesPolicyFollowed: { id: 'lists.replies_policy.followed', defaultMessage: 'Any followed user' },
