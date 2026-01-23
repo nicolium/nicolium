@@ -100,7 +100,7 @@ const Avatar = (props: IAvatar) => {
     return (
       <div
         style={style}
-        className={clsx('relative rounded-lg bg-gray-200 leading-[0] dark:bg-gray-900', isCat && 'avatar__cat', className)}
+        className={clsx('relative rounded-lg bg-gray-200 dark:bg-gray-900', isCat && 'avatar__cat', className)}
       >
         <div className='absolute inset-0 z-[1] flex items-center justify-center rounded-[inherit] bg-gray-200 dark:bg-gray-900'>
           <Icon

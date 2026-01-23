@@ -126,6 +126,10 @@
     &-thumbnail {
       @apply text-gray-400 cursor-zoom-in block no-underline leading-[0] relative z-[1] h-full w-full;
 
+      img::before {
+        line-height: normal;
+      }
+
       video {
         @apply w-full h-full object-cover;
       }
