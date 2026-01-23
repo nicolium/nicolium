@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
@@ -24,9 +25,11 @@ const messages = defineMessages({
 
 const ListTimelinePage: React.FC = () => {
   const { listId } = listTimelineRoute.useParams();
+
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { openModal } = useModalsActions();
+  const navigate = useNavigate();
 
   const { data: list, isFetching } = useList(listId);
   const { mutate: deleteList } = useDeleteList();
@@ -53,7 +56,11 @@ const ListTimelinePage: React.FC = () => {
       message: intl.formatMessage(messages.deleteMessage),
       confirm: intl.formatMessage(messages.deleteConfirm),
       onConfirm: () => {
-        deleteList(listId);
+        deleteList(listId, {
+          onSuccess: () => {
+            navigate({ to: '/lists', replace: true });
+          },
+        });
       },
     });
   };

@@ -1,3 +1,4 @@
+import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
@@ -27,6 +28,7 @@ const CircleTimelinePage: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { openModal } = useModalsActions();
+  const navigate = useNavigate();
 
   const { data: circle, isFetching } = useCircle(circleId);
   const { mutate: deleteCircle } = useDeleteCircle();
@@ -51,7 +53,11 @@ const CircleTimelinePage: React.FC = () => {
       message: intl.formatMessage(messages.deleteMessage),
       confirm: intl.formatMessage(messages.deleteConfirm),
       onConfirm: () => {
-        deleteCircle(circleId);
+        deleteCircle(circleId, {
+          onSuccess: () => {
+            navigate({ to: '/circles', replace: true });
+          },
+        });
       },
     });
   };
