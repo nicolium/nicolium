@@ -1,0 +1,166 @@
+# pl-api
+
+> A JavaScript library for interacting with Mastodon API-compatible servers
+
+## Overview
+
+pl-api is a TypeScript/JavaScript library that provides a type-safe client for interacting with Mastodon API-compatible servers. It supports 12 independent Mastodon API implementations and 5 forks, abstracting implementation differences between various backends.
+
+- Version: 1.0.0-rc.94
+- License: AGPL-3.0-or-later
+- Homepage: https://codeberg.org/mkljczk/pl-fe/src/branch/develop/packages/pl-api
+- Documentation: https://pl.mkljczk.pl/pl-api-docs
+- NPM package: https://www.npmjs.com/package/pl-api
+
+## Key features
+
+- Type-safe API client using Valibot for validation and normalization
+- Support for multiple Mastodon-compatible backends (Mastodon, Pleroma, Akkoma, Pixelfed, Iceshrimp, Mitra, and more)
+- Feature detection to abstract implementation differences
+- WebSocket streaming support
+- Comprehensive API coverage
+
+## Basic usage
+
+```typescript
+import { PlApiClient } from 'pl-api';
+
+const client = new PlApiClient('https://mastodon.example/', ACCESS_TOKEN, {
+  fetchInstance: true,
+  onInstanceFetchSuccess: () => console.log('Instance fetched'),
+});
+
+// Create a status
+await client.statuses.createStatus({
+  status: 'Hello, world!',
+  language: 'en',
+});
+
+// Get account information
+const account = await client.accounts.getAccount('123456');
+
+// Fetch home timeline with pagination
+const timeline = await client.timelines.homeTimeline({ limit: 20 });
+```
+
+## API structure
+
+The PlApiClient is organized into the namespaces basing on the Mastodon API docs, extended with namespaces for non-Mastodon backends.
+
+## Feature detection
+
+pl-api uses the `Features` class to detect backend capabilities:
+
+```typescript
+// Access detected features
+console.log(client.features.version.software); // 'mastodon', 'pleroma', etc.
+console.log(client.features.bookmarkFolders); // true/false
+console.log(client.features.federating); // true/false
+```
+
+pl-api has compatibility definitions for 22 backends, including original projects and popular forks. Documentation for specific methods and params include reference to required features.
+
+## Type safety
+
+All API methods are fully typed with TypeScript:
+
+```typescript
+import type { CreateStatusParams, Account, Status } from 'pl-api';
+
+const params: CreateStatusParams = {
+  status: 'Hello!',
+  visibility: 'public',
+  language: 'en',
+};
+
+const status: Status = await client.statuses.createStatus(params);
+```
+
+## Pagination
+
+List endpoints return paginated results:
+
+```typescript
+// Get first page
+const response = await client.accounts.getAccountFollowers('123');
+
+// Get next page using returned link header
+if (response.next) {
+  const page2 = await response.next();
+}
+
+// Access the data
+page1.items.forEach(account => console.log(account.username));
+```
+
+## Projects using pl-api
+
+- **pl-fe** - Web client for Mastodon-compatible servers (https://codeberg.org/mkljczk/pl-fe)
+- **pl-hooks** - React hooks library for Mastodon APIs (https://codeberg.org/mkljczk/pl-fe/src/branch/develop/packages/pl-hooks)
+
+## Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Build the library
+pnpm -F pl-api build
+
+# Watch mode for development
+pnpm -F pl-api watch
+
+# Run linter
+pnpm -F pl-api lint
+```
+
+## Important notes
+
+- This project is in release candidate status (pre-1.0.0) and may have breaking changes
+- All API methods return promises
+- The client automatically handles request/response validation using Valibot
+- Instance information is fetched on initialization when `fetchInstance: true` (required for feature detection)
+- Access tokens are optional for public API endpoints
+
+## Common patterns
+
+### Error handling
+
+```typescript
+try {
+  await client.statuses.createStatus({ status: 'Hello!' });
+} catch (error) {
+  console.error('API error:', error);
+}
+```
+
+### Using request metadata
+
+```typescript
+const result = await client.accounts.lookupAccount('user@domain.com', {
+  signal: abortController.signal, // For cancellation
+});
+```
+
+### Streaming
+
+```typescript
+const stream = client.streaming.connect();
+
+stream.subscribe('public');
+
+stream.listen((event) => {
+  if (event.event === 'update' || event.event === 'status.update') {
+    const status = event.payload;
+    console.log('New status:', status.content);
+  }
+});
+```
+
+## Links
+
+- Repository: https://codeberg.org/mkljczk/pl-fe
+- Issues: https://codeberg.org/mkljczk/pl-fe/issues
+- NPM package: https://www.npmjs.com/package/pl-api
+- API documentation: https://pl.mkljczk.pl/pl-api-docs
+- Mastodon API docs: https://docs.joinmastodon.org
