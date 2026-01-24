@@ -336,6 +336,7 @@ class PlApiClient {
   }: PlApiClientConstructorOpts = {}) {
     this.baseURL = baseURL;
     this.#accessToken = accessToken;
+    this.#customAuthorizationToken = customAuthorizationToken;
 
     if (instance) {
       this.#setInstance(instance);
