@@ -133,6 +133,14 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         });
       }
 
+      if (features.antennas) {
+        menu.push({
+          to: '/antennas',
+          text: intl.formatMessage({ id: 'column.antennas', defaultMessage: 'Antennas' }),
+          icon: require('@phosphor-icons/core/regular/broadcast.svg'),
+        });
+      }
+
       if (features.events) {
         menu.push({
           to: '/events',

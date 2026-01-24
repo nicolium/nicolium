@@ -266,6 +266,15 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 />
               )}
 
+              {features.antennas && (
+                <DropdownNavigationLink
+                  to='/antennas'
+                  icon={require('@phosphor-icons/core/regular/broadcast.svg')}
+                  text={<FormattedMessage id='column.antennas' defaultMessage='Antennas' />}
+                  onClick={closeSidebar}
+                />
+              )}
+
               {features.drive && (
                 <DropdownNavigationLink
                   to='/drive/{-$folderId}'
