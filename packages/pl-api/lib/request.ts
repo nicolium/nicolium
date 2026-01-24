@@ -99,7 +99,7 @@ function request<T = any>(this: Pick<PlApiClient, 'accessToken' | 'customAuthori
   else if (this.accessToken) headers.set('Authorization', `Bearer ${this.accessToken}`);
   else if (this.customAuthorizationToken) headers.set('Authorization', this.customAuthorizationToken);
   if (contentType !== '' && body) headers.set('Content-Type', contentType);
-  if (idempotencyKey) headers.set('Idempotency-Key', contentType);
+  if (idempotencyKey) headers.set('Idempotency-Key', idempotencyKey);
 
   body = body && contentType === '' ? serialize(body, { indices: true }) : JSON.stringify(body);
 
