@@ -292,6 +292,8 @@ interface PlApiClientConstructorOpts {
   onInstanceFetchSuccess?: (instance: Instance) => void;
   /** Executed when the initial instance fetch failed */
   onInstanceFetchError?: (error?: any) => void;
+  /** Custom authorization token to use for requests */
+  customAuthorizationToken?: string;
 }
 
 /**
@@ -303,6 +305,7 @@ class PlApiClient {
   baseURL: string;
   #accessToken?: string;
   #iceshrimpAccessToken?: string;
+  #customAuthorizationToken?: string;
   #instance: Instance = v.parse(instanceSchema, {});
   public request = request.bind(this) as typeof request;
   public features: Features = getFeatures(this.#instance);
@@ -329,6 +332,7 @@ class PlApiClient {
     fetchInstanceSignal,
     onInstanceFetchSuccess,
     onInstanceFetchError,
+    customAuthorizationToken,
   }: PlApiClientConstructorOpts = {}) {
     this.baseURL = baseURL;
     this.#accessToken = accessToken;
@@ -6386,6 +6390,14 @@ class PlApiClient {
 
   get iceshrimpAccessToken(): string | undefined {
     return this.#iceshrimpAccessToken;
+  }
+
+  get customAuthorizationToken(): string | undefined {
+    return this.#customAuthorizationToken;
+  }
+
+  set customAuthorizationToken(token: string | undefined)  {
+    this.#customAuthorizationToken = token;
   }
 
   get instanceInformation() {

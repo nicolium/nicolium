@@ -82,7 +82,7 @@ interface RequestBody<Params = Record<string, any>> {
 
 type RequestMeta = Pick<RequestBody, 'idempotencyKey' | 'onUploadProgress' | 'signal'>;
 
-function request<T = any>(this: Pick<PlApiClient, 'accessToken' | 'iceshrimpAccessToken' | 'baseURL'>, input: URL | RequestInfo, {
+function request<T = any>(this: Pick<PlApiClient, 'accessToken' | 'customAuthorizationToken' | 'iceshrimpAccessToken' | 'baseURL'>, input: URL | RequestInfo, {
   body,
   method = body ? 'POST' : 'GET',
   params,
@@ -97,6 +97,7 @@ function request<T = any>(this: Pick<PlApiClient, 'accessToken' | 'iceshrimpAcce
 
   if (input.startsWith('/api/iceshrimp/') && this.iceshrimpAccessToken) headers.set('Authorization', `Bearer ${this.iceshrimpAccessToken}`);
   else if (this.accessToken) headers.set('Authorization', `Bearer ${this.accessToken}`);
+  else if (this.customAuthorizationToken) headers.set('Authorization', this.customAuthorizationToken);
   if (contentType !== '' && body) headers.set('Content-Type', contentType);
   if (idempotencyKey) headers.set('Idempotency-Key', contentType);
 
