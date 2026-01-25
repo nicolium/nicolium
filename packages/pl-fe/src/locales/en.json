@@ -1214,6 +1214,8 @@
   "lists.search": "Search among people you follow",
   "lists.subheading": "Your lists",
   "loading_indicator.label": "Loading…",
+  "location_button.hide_location_picker": "Hide location picker",
+  "location_button.show_location_picker": "Show location picker",
   "location_search.placeholder": "Find an address",
   "login.fields.email_label": "E-mail address",
   "login.fields.instance_label": "Instance",
