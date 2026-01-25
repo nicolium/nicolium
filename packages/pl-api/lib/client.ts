@@ -3759,6 +3759,8 @@ class PlApiClient {
      * View profile directory
      * List accounts visible in the directory.
      * @see {@link https://docs.joinmastodon.org/methods/directory/#get}
+     *
+     * Requires features{@link Features.profileDirectory}.
      */
     profileDirectory: async (params?: ProfileDirectoryParams) => {
       const response = await this.request('/api/v1/directory', { params });
