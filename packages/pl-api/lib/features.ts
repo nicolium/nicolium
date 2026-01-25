@@ -1715,6 +1715,8 @@ const getFeatures = (instance: Instance) => {
      */
     statusDislikes: v.software === FRIENDICA && gte(v.version, '2023.3.0'),
 
+    statusLocation: instance.api_versions['status_location.pleroma.pl-api'] >= 1,
+
     /**
      * @see GET /api/web/stories/v1/recent
      * @see GET /api/web/stories/v1/viewers

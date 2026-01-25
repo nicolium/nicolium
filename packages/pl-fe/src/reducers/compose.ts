@@ -60,10 +60,12 @@ import {
   COMPOSE_PREVIEW_CANCEL,
   COMPOSE_HASHTAG_CASING_SUGGESTION_SET,
   COMPOSE_HASHTAG_CASING_SUGGESTION_IGNORE,
-  type ComposeAction,
-  type ComposeSuggestionSelectAction,
   COMPOSE_REDACTING_OVERWRITE_CHANGE,
   COMPOSE_QUOTE_POLICY_OPTION_CHANGE,
+  COMPOSE_SET_LOCATION,
+  COMPOSE_SET_SHOW_LOCATION_PICKER,
+  type ComposeAction,
+  type ComposeSuggestionSelectAction,
 } from '../actions/compose';
 import { EVENT_COMPOSE_CANCEL, EVENT_FORM_SET, type EventsAction } from '../actions/events';
 import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS, type MeAction } from '../actions/me';
@@ -71,7 +73,7 @@ import { FE_NAME } from '../actions/settings';
 import { TIMELINE_DELETE, type TimelineAction } from '../actions/timelines';
 import { unescapeHTML } from '../utils/html';
 
-import type { Account, CredentialAccount, Instance, InteractionPolicy, MediaAttachment, Status as BaseStatus, Tag, CreateStatusParams } from 'pl-api';
+import type { Account, CredentialAccount, Instance, InteractionPolicy, Location, MediaAttachment, Status as BaseStatus, Tag, CreateStatusParams } from 'pl-api';
 import type { Emoji } from 'pl-fe/features/emoji';
 import type { Language } from 'pl-fe/features/preferences';
 import type { Status } from 'pl-fe/normalizers/status';
@@ -113,6 +115,7 @@ interface Compose {
   // Non-text content
   mediaAttachments: Array<MediaAttachment>;
   poll: ComposePoll | null;
+  location: Location | null;
 
   // Post settings
   contentType: string;
@@ -157,6 +160,7 @@ interface Compose {
   preview: Partial<BaseStatus> | null;
   suggestedLanguage: string | null;
   suggestions: Array<string> | Array<Emoji>;
+  showLocationPicker: boolean;
 
   // Moderation features
   redacting: boolean;
@@ -173,6 +177,7 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
 
   mediaAttachments: [],
   poll: null,
+  location: null,
 
   contentType: 'text/plain',
   interactionPolicy: null,
@@ -211,6 +216,7 @@ const newCompose = (params: Partial<Compose> = {}): Compose => ({
   preview: null,
   suggestedLanguage: null,
   suggestions: [],
+  showLocationPicker: false,
 
   redacting: false,
   redactingOverwrite: false,
@@ -752,6 +758,17 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
     case COMPOSE_REDACTING_OVERWRITE_CHANGE:
       return updateCompose(state, action.composeId, compose => {
         compose.redactingOverwrite = action.value;
+      });
+    case COMPOSE_SET_LOCATION:
+      return updateCompose(state, action.composeId, compose => {
+        compose.location = action.location;
+      });
+    case COMPOSE_SET_SHOW_LOCATION_PICKER:
+      return updateCompose(state, action.composeId, compose => {
+        compose.showLocationPicker = action.showLocation;
+        if (!action.showLocation) {
+          compose.location = null;
+        }
       });
     default:
       return state;

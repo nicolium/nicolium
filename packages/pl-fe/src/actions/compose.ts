@@ -20,7 +20,7 @@ import { createStatus } from './statuses';
 
 import type { LinkOptions } from '@tanstack/react-router';
 import type { EditorState } from 'lexical';
-import type { Account, CreateStatusParams, CustomEmoji, Group, MediaAttachment, Status as BaseStatus, Tag, Poll, ScheduledStatus, InteractionPolicy, UpdateMediaParams } from 'pl-api';
+import type { Account, CreateStatusParams, CustomEmoji, Group, MediaAttachment, Status as BaseStatus, Tag, Poll, ScheduledStatus, InteractionPolicy, UpdateMediaParams, Location } from 'pl-api';
 import type { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
 import type { Emoji } from 'pl-fe/features/emoji';
 import type { Status } from 'pl-fe/normalizers/status';
@@ -103,6 +103,9 @@ const COMPOSE_HASHTAG_CASING_SUGGESTION_SET = 'COMPOSE_HASHTAG_CASING_SUGGESTION
 const COMPOSE_HASHTAG_CASING_SUGGESTION_IGNORE = 'COMPOSE_HASHTAG_CASING_SUGGESTION_IGNORE' as const;
 
 const COMPOSE_REDACTING_OVERWRITE_CHANGE = 'COMPOSE_REDACTING_OVERWRITE_CHANGE' as const;
+
+const COMPOSE_SET_LOCATION = 'COMPOSE_SET_LOCATION' as const;
+const COMPOSE_SET_SHOW_LOCATION_PICKER = 'COMPOSE_SET_SHOW_LOCATION_PICKER' as const;
 
 const messages = defineMessages({
   scheduleError: { id: 'compose.invalid_schedule', defaultMessage: 'You must schedule a post at least 5 minutes out.' },
@@ -419,6 +422,7 @@ const submitCompose = (composeId: string, opts: SubmitComposeOpts = {}, preview 
       local_only: compose.localOnly,
       interaction_policy: ['public', 'unlisted', 'private'].includes(compose.visibility) && compose.interactionPolicy || undefined,
       quote_approval_policy: compose.quoteApprovalPolicy || undefined,
+      location_id: compose.location?.origin_id || undefined,
       preview,
     };
 
@@ -989,6 +993,18 @@ const changeComposeRedactingOverwrite = (composeId: string, value: boolean) => (
   value,
 });
 
+const setComposeLocation = (composeId: string, location: Location | null) => ({
+  type: COMPOSE_SET_LOCATION,
+  composeId,
+  location,
+});
+
+const setComposeShowLocationPicker = (composeId: string, showLocation: boolean) => ({
+  type: COMPOSE_SET_SHOW_LOCATION_PICKER,
+  composeId,
+  showLocation,
+});
+
 type ComposeAction =
   ComposeSetStatusAction
   | ReturnType<typeof changeCompose>
@@ -1048,7 +1064,9 @@ type ComposeAction =
   | ReturnType<typeof ignoreClearLinkSuggestion>
   | ReturnType<typeof suggestHashtagCasing>
   | ReturnType<typeof ignoreHashtagCasingSuggestion>
-  | ReturnType<typeof changeComposeRedactingOverwrite>;
+  | ReturnType<typeof changeComposeRedactingOverwrite>
+  | ReturnType<typeof setComposeLocation>
+  | ReturnType<typeof setComposeShowLocationPicker>;
 
 export {
   COMPOSE_CHANGE,
@@ -1110,6 +1128,8 @@ export {
   COMPOSE_HASHTAG_CASING_SUGGESTION_SET,
   COMPOSE_HASHTAG_CASING_SUGGESTION_IGNORE,
   COMPOSE_REDACTING_OVERWRITE_CHANGE,
+  COMPOSE_SET_LOCATION,
+  COMPOSE_SET_SHOW_LOCATION_PICKER,
   setComposeToStatus,
   replyCompose,
   cancelReplyCompose,
@@ -1163,6 +1183,8 @@ export {
   suggestHashtagCasing,
   ignoreHashtagCasingSuggestion,
   changeComposeRedactingOverwrite,
+  setComposeLocation,
+  setComposeShowLocationPicker,
   type ComposeReplyAction,
   type ComposeSuggestionSelectAction,
   type ComposeAction,

@@ -45,6 +45,8 @@ import DriveButton from './drive-button';
 import HashtagCasingSuggestion from './hashtag-casing-suggestion';
 import InteractionPolicyButton from './interaction-policy-button';
 import LanguageDropdown from './language-dropdown';
+import LocationButton from './location-button';
+import LocationForm from './location-form';
 import PollButton from './poll-button';
 import PollForm from './polls/poll-form';
 import PrivacyDropdown from './privacy-dropdown';
@@ -288,16 +290,18 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
       {features.scheduledStatuses && <ScheduleButton composeId={id} />}
       {anyMedia && features.spoilers && <SensitiveMediaButton composeId={id} />}
       {(features.interactionRequests || features.quoteApprovalPolicies) && <InteractionPolicyButton composeId={id} />}
+      {features.statusLocation && <LocationButton composeId={id} />}
     </div>
   ), [features, id, anyMedia]);
 
-  const showModifiers = !condensed && (compose.mediaAttachments.length || compose.isUploading || compose.poll?.options.length || compose.scheduledAt);
+  const showModifiers = !condensed && (compose.mediaAttachments.length || compose.isUploading || compose.poll?.options.length || compose.scheduledAt || compose.showLocationPicker);
 
   const composeModifiers = showModifiers && (
     <div className='⁂-compose-form__modifiers'>
       <UploadForm composeId={id} onSubmit={handleSubmit} />
       <PollForm composeId={id} />
       <ScheduleForm composeId={id} />
+      <LocationForm composeId={id} />
     </div>
   );
 

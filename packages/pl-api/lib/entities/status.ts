@@ -18,23 +18,25 @@ import { tagSchema } from './tag';
 import { translationSchema } from './translation';
 import { datetimeSchema, filteredArray } from './utils';
 
+const locationSchema = v.object({
+  name: v.fallback(v.string(), ''),
+  url: v.fallback(v.pipe(v.string(), v.url()), ''),
+  latitude: v.fallback(v.nullable(v.number()), null),
+  longitude: v.fallback(v.nullable(v.number()), null),
+  street: v.fallback(v.string(), ''),
+  postal_code: v.fallback(v.string(), ''),
+  locality: v.fallback(v.string(), ''),
+  region: v.fallback(v.string(), ''),
+  country: v.fallback(v.string(), ''),
+});
+
 const statusEventSchema = v.object({
   name: v.fallback(v.string(), ''),
   start_time: v.fallback(v.nullable(datetimeSchema), null),
   end_time: v.fallback(v.nullable(datetimeSchema), null),
   join_mode: v.fallback(v.nullable(v.picklist(['free', 'restricted', 'invite', 'external'])), null),
   participants_count: v.fallback(v.number(), 0),
-  location: v.fallback(v.nullable(v.object({
-    name: v.fallback(v.string(), ''),
-    url: v.fallback(v.pipe(v.string(), v.url()), ''),
-    latitude: v.fallback(v.nullable(v.number()), null),
-    longitude: v.fallback(v.nullable(v.number()), null),
-    street: v.fallback(v.string(), ''),
-    postal_code: v.fallback(v.string(), ''),
-    locality: v.fallback(v.string(), ''),
-    region: v.fallback(v.string(), ''),
-    country: v.fallback(v.string(), ''),
-  })), null),
+  location: v.fallback(v.nullable(locationSchema), null),
   join_state: v.fallback(v.nullable(v.picklist(['pending', 'reject', 'accept'])), null),
 });
 
@@ -112,6 +114,7 @@ const baseStatusSchema = v.object({
   interaction_policy: interactionPolicySchema,
 
   content_type: v.fallback(v.nullable(v.string()), null),
+  location: v.fallback(v.nullable(locationSchema), null),
 });
 
 const preprocess = (status: any) => {
@@ -166,6 +169,7 @@ const preprocess = (status: any) => {
       'event',
       'translation',
       'rss_feed',
+      'location',
     ])),
     ...(pick(status.friendica || {}, [
       'dislikes_count',

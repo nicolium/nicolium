@@ -97,6 +97,8 @@ interface CreateStatusOptionalParams {
    */
   quote_approval_policy?: 'public' | 'followers' | 'nobody';
 
+  location_id?: string;
+
   /**
    * If set to true, this status will be "local only" and will NOT be federated beyond the local timeline(s). If set to false (default), this status will be federated to your followers beyond the local timeline(s).
    */
