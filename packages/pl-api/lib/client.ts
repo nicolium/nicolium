@@ -6376,6 +6376,10 @@ class PlApiClient {
     }
   };
 
+  public readonly utils = {
+    paginatedGet: this.#paginatedGet.bind(this),
+  };
+
   get accessToken(): string | undefined {
     return this.#accessToken;
   }
