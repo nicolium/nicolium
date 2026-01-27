@@ -1,7 +1,6 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import HStack from 'pl-fe/components/ui/hstack';
 import Icon from 'pl-fe/components/ui/icon';
 import Text from 'pl-fe/components/ui/text';
 import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
@@ -21,7 +20,7 @@ const ChatSearchHeader = () => {
     <ChatPaneHeader
       data-testid='pane-header'
       title={
-        <HStack alignItems='center' space={2}>
+        <div className='⁂-chat-widget__search-header'>
           <button
             onClick={() => {
               changeScreen(ChatWidgetScreens.INBOX);
@@ -36,7 +35,7 @@ const ChatSearchHeader = () => {
           <Text size='sm' weight='bold' truncate>
             {intl.formatMessage(messages.title)}
           </Text>
-        </HStack>
+        </div>
       }
       isOpen={isOpen}
       isToggleable={false}

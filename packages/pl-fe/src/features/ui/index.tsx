@@ -176,8 +176,8 @@ const UI: React.FC = React.memo(() => {
           </Suspense>
 
           {me && features.chats && (
-            <div className='hidden xl:block'>
-              <Suspense fallback={<div className='fixed bottom-0 z-[99] flex h-16 w-96 animate-pulse flex-col rounded-t-lg bg-white shadow-3xl dark:bg-gray-900 ltr:right-5 rtl:left-5' />}>
+            <div className='⁂-chat-widget__container'>
+              <Suspense fallback={<div className='⁂-chat-widget--placeholder' />}>
                 <ChatWidget />
               </Suspense>
             </div>

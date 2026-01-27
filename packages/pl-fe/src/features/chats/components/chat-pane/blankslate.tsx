@@ -1,10 +1,6 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-
 const messages = defineMessages({
   title: { id: 'chat_pane.blankslate.title', defaultMessage: 'No messages yet' },
   body: { id: 'chat_pane.blankslate.body', defaultMessage: 'Search for someone to chat with.' },
@@ -19,30 +15,21 @@ const Blankslate = ({ onSearch }: IBlankslate) => {
   const intl = useIntl();
 
   return (
-    <Stack
-      alignItems='center'
-      justifyContent='center'
-      className='h-full grow'
-      data-testid='chat-pane-blankslate'
-    >
-      <Stack space={4}>
-        <Stack space={1} className='mx-auto max-w-[80%]'>
-          <Text size='lg' weight='bold' align='center'>
-            {intl.formatMessage(messages.title)}
-          </Text>
+    <div className='⁂-chat-widget__blankslate' data-testid='chat-pane-blankslate'>
+      <div className='⁂-chat-widget__blankslate__text'>
+        <p className='⁂-chat-widget__blankslate__text__title'>
+          {intl.formatMessage(messages.title)}
+        </p>
 
-          <Text theme='muted' align='center'>
-            {intl.formatMessage(messages.body)}
-          </Text>
-        </Stack>
+        <p className='⁂-chat-widget__blankslate__text__body'>
+          {intl.formatMessage(messages.body)}
+        </p>
+      </div>
 
-        <div className='mx-auto'>
-          <Button theme='primary' onClick={onSearch}>
-            {intl.formatMessage(messages.action)}
-          </Button>
-        </div>
-      </Stack>
-    </Stack>
+      <button onClick={onSearch}>
+        {intl.formatMessage(messages.action)}
+      </button>
+    </div>
   );
 };
 

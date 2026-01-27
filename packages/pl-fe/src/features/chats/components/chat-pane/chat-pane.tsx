@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Stack from 'pl-fe/components/ui/stack';
 import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
 import { useStatContext } from 'pl-fe/contexts/stat-context';
 import { useChats } from 'pl-fe/queries/chats';
@@ -37,9 +36,9 @@ const ChatPane = () => {
   const renderBody = () => {
     if (Number(chats?.length) > 0 || showShoutbox || isLoading) {
       return (
-        <Stack space={4} className='h-full grow'>
+        <div className='⁂-chat-widget__list'>
           <ChatList onClickChat={handleClickChat} />
-        </Stack>
+        </div>
       );
     } else if (chats?.length === 0) {
       return (

@@ -1,9 +1,6 @@
-import clsx from 'clsx';
 import React, { HTMLAttributes } from 'react';
 
-import HStack from 'pl-fe/components/ui/hstack';
 import IconButton from 'pl-fe/components/ui/icon-button';
-import Text from 'pl-fe/components/ui/text';
 import { useSettings } from 'pl-fe/stores/settings';
 
 interface IChatPaneHeader {
@@ -37,45 +34,40 @@ const ChatPaneHeader = (props: IChatPaneHeader) => {
   }
 
   return (
-    <HStack {...rest} alignItems='center' justifyContent='between' className='h-16 rounded-t-xl px-4 py-3'>
+    <div {...rest} className='⁂-chat-widget__header'>
       <ButtonComp
-        className='flex h-16 grow flex-row items-center space-x-1'
+        className='⁂-chat-widget__header__title'
         data-testid='title'
         {...buttonProps}
       >
-        <Text weight='semibold' tag='div'>
-          {title}
-        </Text>
+        <div>{title}</div>
 
-        {(!demetricator && typeof unreadCount !== 'undefined' && unreadCount > 0) && (
-          <HStack alignItems='center' space={2}>
-            <Text weight='semibold' data-testid='unread-count'>
+        {(!demetricator && unreadCount !== undefined && unreadCount > 0) && (
+          <div className='⁂-chat-widget__header__count'>
+            <p data-testid='unread-count'>
               ({unreadCount})
-            </Text>
+            </p>
 
-            <div className='size-2.5 rounded-full bg-accent-300' />
-          </HStack>
+            <div className='⁂-chat-widget__header__count__dot' />
+          </div>
         )}
       </ButtonComp>
 
-      <HStack space={2} alignItems='center'>
+      <div className='⁂-chat-widget__header__actions'>
         {secondaryAction ? (
           <IconButton
             onClick={secondaryAction}
             src={secondaryActionIcon as string}
-            iconClassName='h-5 w-5 text-gray-600'
           />
         ) : null}
 
         <IconButton
           onClick={onToggle}
           src={require('@phosphor-icons/core/regular/caret-up.svg')}
-          iconClassName={clsx('size-5 text-gray-600 transition-transform', {
-            'rotate-180': isOpen,
-          })}
+          className='⁂-chat-widget__header__open-button'
         />
-      </HStack>
-    </HStack>
+      </div>
+    </div>
   );
 };
 
