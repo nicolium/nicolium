@@ -39,6 +39,7 @@ import StatusLayout from 'pl-fe/layouts/status-layout';
 import { instanceInitialState } from 'pl-fe/reducers/instance';
 import { isStandalone } from 'pl-fe/utils/state';
 
+import ChatPageChat from '../../chats/components/chat-page/components/chat-page-chat';
 import ChatPageMain from '../../chats/components/chat-page/components/chat-page-main';
 import ChatPageNew from '../../chats/components/chat-page/components/chat-page-new';
 import ChatPageSettings from '../../chats/components/chat-page/components/chat-page-settings';
@@ -583,7 +584,13 @@ export const shoutboxRoute = createRoute({
 
 export const chatRoute = createRoute({
   getParentRoute: () => chatsRoute,
-  path: '/{-$chatId}',
+  path: '/$chatId',
+  component: ChatPageChat,
+});
+
+export const chatsEmptyRoute = createRoute({
+  getParentRoute: () => chatsRoute,
+  path: '/',
   component: ChatPageMain,
 });
 
@@ -1311,6 +1318,7 @@ const routeTree = rootRoute.addChildren([
       chatsSettingsRoute,
       shoutboxRoute,
       chatRoute,
+      chatsEmptyRoute,
     ]),
   ]),
   layouts.default.addChildren([

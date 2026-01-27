@@ -171,7 +171,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
   const handleChatClick = () => {
     getOrCreateChatByAccountId(account.id)
-      .then((chat) => navigate({ to: '/chats/{-$chatId}', params: { chatId: chat.id } }))
+      .then((chat) => navigate({ to: '/chats/$chatId', params: { chatId: chat.id } }))
       .catch(() => {});
   };
 

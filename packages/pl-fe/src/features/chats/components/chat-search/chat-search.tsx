@@ -53,7 +53,7 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
     },
     onSuccess: (response) => {
       if (isMainPage) {
-        navigate({ to: '/chats/{-$chatId}', params: { chatId: response.id } });
+        navigate({ to: '/chats/$chatId', params: { chatId: response.id } });
       } else {
         changeScreen(ChatWidgetScreens.CHAT, response.id);
       }

@@ -59,7 +59,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
           deleteChat.mutate(undefined, {
             onSuccess() {
               if (isUsingMainChatPage) {
-                navigate({ to: '/chats/{-$chatId}' });
+                navigate({ to: '/chats' });
               }
             },
           });

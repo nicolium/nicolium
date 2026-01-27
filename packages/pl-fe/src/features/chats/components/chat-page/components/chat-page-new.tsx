@@ -28,7 +28,7 @@ const ChatPageNew: React.FC<IChatPageNew> = () => {
           <IconButton
             src={require('@phosphor-icons/core/regular/arrow-left.svg')}
             className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
-            onClick={() => navigate({ to: '/chats/{-$chatId}' })}
+            onClick={() => navigate({ to: '/chats' })}
           />
 
           <CardTitle title={intl.formatMessage(messages.title)} />

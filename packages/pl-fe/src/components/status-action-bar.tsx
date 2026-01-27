@@ -675,7 +675,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       const account = status.account;
 
       getOrCreateChatByAccountId(account.id)
-        .then((chat) => navigate({ to: '/chats/{-$chatId}', params: { chatId: chat.id } }))
+        .then((chat) => navigate({ to: '/chats/$chatId', params: { chatId: chat.id } }))
         .catch(() => {});
     };
 

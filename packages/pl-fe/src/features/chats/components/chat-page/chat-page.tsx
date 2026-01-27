@@ -1,17 +1,17 @@
-import { Outlet, useMatches } from '@tanstack/react-router';
+import { Outlet, useMatch } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import Stack from 'pl-fe/components/ui/stack';
+import { chatsEmptyRoute } from 'pl-fe/features/ui/router';
+import { useChats } from 'pl-fe/queries/chats';
 
 import ChatPageSidebar from './components/chat-page-sidebar';
 
-const SIDEBAR_HIDDEN_PATHS = ['/chats/settings', '/chats/new', '/chats/:chatId', '/chats/shoutbox'];
-
 const ChatPage: React.FC = () => {
-  const isSidebarHidden = useMatches({
-    select: (matches) => SIDEBAR_HIDDEN_PATHS.some((path) => matches.some(match => match.pathname === path)),
-  });
+  const { chatsQuery: { data: chats } } = useChats();
+
+  const isSidebarHidden = !useMatch({ from: chatsEmptyRoute.id, shouldThrow: false }) || chats?.length === 0;
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState<string | number>('100%');
