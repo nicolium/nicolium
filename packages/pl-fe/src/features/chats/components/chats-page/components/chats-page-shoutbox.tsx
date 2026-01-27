@@ -12,7 +12,7 @@ import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 
 import Shoutbox from '../../shoutbox';
 
-const ChatPageShoutbox = () => {
+const ChatsPageShoutbox = () => {
   const navigate = useNavigate();
   const instance = useInstance();
   const { logo } = usePlFeConfig();
@@ -48,4 +48,4 @@ const ChatPageShoutbox = () => {
   );
 };
 
-export { ChatPageShoutbox as default };
+export { ChatsPageShoutbox as default };

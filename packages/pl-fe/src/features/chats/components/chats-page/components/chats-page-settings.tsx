@@ -30,7 +30,7 @@ const messages = defineMessages({
   submit: { id: 'chat.page_settings.submit', defaultMessage: 'Save' },
 });
 
-const ChatPageSettings = () => {
+const ChatsPageSettings = () => {
   const { account } = useOwnAccount();
   const intl = useIntl();
   const navigate = useNavigate();
@@ -98,4 +98,4 @@ const ChatPageSettings = () => {
   );
 };
 
-export { ChatPageSettings as default };
+export { ChatsPageSettings as default };

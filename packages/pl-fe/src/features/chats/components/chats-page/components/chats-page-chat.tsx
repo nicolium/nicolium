@@ -32,7 +32,7 @@ const messages = defineMessages({
   leaveChat: { id: 'chat_settings.options.leave_chat', defaultMessage: 'Leave chat' },
 });
 
-const ChatPageMain = () => {
+const ChatsPageChat = () => {
   const intl = useIntl();
   const features = useFeatures();
   const navigate = useNavigate();
@@ -153,4 +153,4 @@ const ChatPageMain = () => {
   );
 };
 
-export { ChatPageMain as default };
+export { ChatsPageChat as default };

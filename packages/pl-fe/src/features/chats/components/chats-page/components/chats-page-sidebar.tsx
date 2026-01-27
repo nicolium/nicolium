@@ -15,7 +15,7 @@ const messages = defineMessages({
   title: { id: 'column.chats', defaultMessage: 'Chats' },
 });
 
-const ChatPageSidebar = () => {
+const ChatsPageSidebar = () => {
   const intl = useIntl();
   const navigate = useNavigate();
 
@@ -64,4 +64,4 @@ const ChatPageSidebar = () => {
   );
 };
 
-export { ChatPageSidebar as default };
+export { ChatsPageSidebar as default };

@@ -39,11 +39,11 @@ import StatusLayout from 'pl-fe/layouts/status-layout';
 import { instanceInitialState } from 'pl-fe/reducers/instance';
 import { isStandalone } from 'pl-fe/utils/state';
 
-import ChatPageChat from '../../chats/components/chat-page/components/chat-page-chat';
-import ChatPageMain from '../../chats/components/chat-page/components/chat-page-main';
-import ChatPageNew from '../../chats/components/chat-page/components/chat-page-new';
-import ChatPageSettings from '../../chats/components/chat-page/components/chat-page-settings';
-import ChatPageShoutbox from '../../chats/components/chat-page/components/chat-page-shoutbox';
+import ChatsPageChat from '../../chats/components/chats-page/components/chats-page-chat';
+import ChatsPageEmpty from '../../chats/components/chats-page/components/chats-page-empty';
+import ChatsPageNew from '../../chats/components/chats-page/components/chats-page-new';
+import ChatsPageSettings from '../../chats/components/chats-page/components/chats-page-settings';
+import ChatsPageShoutbox from '../../chats/components/chats-page/components/chats-page-shoutbox';
 import ColumnLoading from '../components/column-loading';
 import {
   AboutPage,
@@ -567,31 +567,31 @@ export const chatsRoute = createRoute({
 export const chatsNewRoute = createRoute({
   getParentRoute: () => chatsRoute,
   path: '/new',
-  component: ChatPageNew,
+  component: ChatsPageNew,
 });
 
 export const chatsSettingsRoute = createRoute({
   getParentRoute: () => chatsRoute,
   path: '/settings',
-  component: ChatPageSettings,
+  component: ChatsPageSettings,
 });
 
 export const shoutboxRoute = createRoute({
   getParentRoute: () => chatsRoute,
   path: '/shoutbox',
-  component: ChatPageShoutbox,
+  component: ChatsPageShoutbox,
 });
 
 export const chatRoute = createRoute({
   getParentRoute: () => chatsRoute,
   path: '/$chatId',
-  component: ChatPageChat,
+  component: ChatsPageChat,
 });
 
 export const chatsEmptyRoute = createRoute({
   getParentRoute: () => chatsRoute,
   path: '/',
-  component: ChatPageMain,
+  component: ChatsPageEmpty,
 });
 
 // Follow requests and blocks

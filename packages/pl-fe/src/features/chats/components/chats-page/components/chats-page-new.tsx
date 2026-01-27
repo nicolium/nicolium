@@ -13,11 +13,8 @@ const messages = defineMessages({
   title: { id: 'chat.new_message.title', defaultMessage: 'New Message' },
 });
 
-interface IChatPageNew {
-}
-
 /** New message form to create a chat. */
-const ChatPageNew: React.FC<IChatPageNew> = () => {
+const ChatsPageNew: React.FC = () => {
   const intl = useIntl();
   const navigate = useNavigate();
 
@@ -40,4 +37,4 @@ const ChatPageNew: React.FC<IChatPageNew> = () => {
   );
 };
 
-export { ChatPageNew as default };
+export { ChatsPageNew as default };

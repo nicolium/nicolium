@@ -6,9 +6,9 @@ import Stack from 'pl-fe/components/ui/stack';
 import { chatsEmptyRoute } from 'pl-fe/features/ui/router';
 import { useChats } from 'pl-fe/queries/chats';
 
-import ChatPageSidebar from './components/chat-page-sidebar';
+import ChatsPageSidebar from './components/chats-page-sidebar';
 
-const ChatPage: React.FC = () => {
+const ChatsPage: React.FC = () => {
   const { chatsQuery: { data: chats } } = useChats();
 
   const isSidebarHidden = !useMatch({ from: chatsEmptyRoute.id, shouldThrow: false }) || chats?.length === 0;
@@ -57,7 +57,7 @@ const ChatPage: React.FC = () => {
             'hidden sm:block': isSidebarHidden,
           })}
         >
-          <ChatPageSidebar />
+          <ChatsPageSidebar />
         </Stack>
 
         <Stack
@@ -72,4 +72,4 @@ const ChatPage: React.FC = () => {
   );
 };
 
-export { ChatPage as default };
+export { ChatsPage as default };

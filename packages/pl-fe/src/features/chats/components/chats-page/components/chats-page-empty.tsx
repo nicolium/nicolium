@@ -5,7 +5,7 @@ import { useChats } from 'pl-fe/queries/chats';
 import BlankslateEmpty from './blankslate-empty';
 import BlankslateWithChats from './blankslate-with-chats';
 
-const ChatPageMain = () => {
+const ChatsPageEmpty = () => {
   const { chatsQuery: { data: chats, isLoading } } = useChats();
 
   if (isLoading) {
@@ -19,4 +19,4 @@ const ChatPageMain = () => {
   return <BlankslateEmpty />;
 };
 
-export { ChatPageMain as default };
+export { ChatsPageEmpty as default };
