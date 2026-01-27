@@ -107,7 +107,7 @@ const ChatPageMain = () => {
             <IconButton
               src={require('@phosphor-icons/core/regular/arrow-left.svg')}
               className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
-              onClick={() => navigate({ to: '/chats/$chatId' })}
+              onClick={() => navigate({ to: '/chats' })}
             />
 
             <Link to='/@{$username}' params={{ username: chat.account.acct }}>
