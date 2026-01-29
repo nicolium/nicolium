@@ -1,6 +1,6 @@
 import fuzzysort from 'fuzzysort';
 import { BookmarkFolder } from 'pl-api';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useDeferredValue, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { ListItem } from 'pl-fe/components/list';
@@ -38,6 +38,7 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
 
   const [selectedFolder, setSelectedFolder] = useState(status.bookmark_folder);
   const [searchTerm, setSearchTerm] = useState('');
+  const deferredSearchTerm = useDeferredValue(searchTerm);
 
   const handleSearchChange: React.ChangeEventHandler<HTMLInputElement> = e => {
     setSearchTerm(e.target.value);
@@ -73,10 +74,10 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
   const filteredFolders = useMemo(() => {
     if (!bookmarkFolders) return [];
 
-    const filtered = search(bookmarkFolders, searchTerm);
+    const filtered = search(bookmarkFolders, deferredSearchTerm);
 
     return filtered;
-  }, [bookmarkFolders, searchTerm]);
+  }, [bookmarkFolders, deferredSearchTerm]);
 
   let items;
 
