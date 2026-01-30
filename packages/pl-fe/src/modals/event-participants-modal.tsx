@@ -36,7 +36,7 @@ const EventParticipantsModal: React.FC<BaseModalProps & EventParticipantsModalPr
           itemClassName='pb-3'
           style={{ height: 'calc(80vh - 88px)' }}
           hasMore={hasNextPage}
-          isLoading={typeof isLoading === 'boolean' ? isLoading : true}
+          isLoading={isLoading}
           onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
           useWindowScroll={false}
         >

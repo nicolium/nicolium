@@ -82,7 +82,7 @@ const ManagePendingParticipants: React.FC<IManagePendingParticipants> = ({ statu
         scrollKey={`eventPendingParticipants:${statusId}`}
         emptyMessageText={<FormattedMessage id='empty_column.event_participant_requests' defaultMessage='There are no pending event participation requests.' />}
         hasMore={hasNextPage}
-        isLoading={typeof isLoading === 'boolean' ? isLoading : true}
+        isLoading={isLoading}
         onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
       >
         {accounts.map(({ account_id, participation_message }) =>

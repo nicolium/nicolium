@@ -22,7 +22,7 @@ const ScheduledStatusesPage = () => {
     <Column label={intl.formatMessage(messages.heading)}>
       <ScrollableList
         hasMore={hasNextPage}
-        isLoading={typeof isLoading === 'boolean' ? isLoading : true}
+        isLoading={isLoading}
         onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
         emptyMessageText={emptyMessage}
         listClassName='divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800'

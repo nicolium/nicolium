@@ -81,7 +81,7 @@ const FollowRequestsPage: React.FC = () => {
     <ScrollableList
       scrollKey='followRequests'
       hasMore={hasNextPage}
-      isLoading={typeof isLoading === 'boolean' ? isLoading : true}
+      isLoading={isLoading}
       onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
       emptyMessageText={<FormattedMessage id='empty_column.follow_requests' defaultMessage="You don't have any follow requests yet. When you receive one, it will show up here." />}
     >
