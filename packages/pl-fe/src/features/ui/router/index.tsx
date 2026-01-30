@@ -743,8 +743,8 @@ export const eventInformationRoute = createRoute({
 });
 
 export const eventEditRoute = createRoute({
-  getParentRoute: () => layouts.event,
-  path: '/edit',
+  getParentRoute: () => layouts.events,
+  path: '/@{$username}/events/$statusId/edit',
   component: EditEvent,
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.events) throw notFound();
