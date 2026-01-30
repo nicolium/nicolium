@@ -36,6 +36,7 @@ const statusEventSchema = v.object({
   end_time: v.fallback(v.nullable(datetimeSchema), null),
   join_mode: v.fallback(v.nullable(v.picklist(['free', 'restricted', 'invite', 'external'])), null),
   participants_count: v.fallback(v.number(), 0),
+  participation_request_count: v.fallback(v.number(), 0),
   location: v.fallback(v.nullable(locationSchema), null),
   join_state: v.fallback(v.nullable(v.picklist(['pending', 'reject', 'accept'])), null),
 });
