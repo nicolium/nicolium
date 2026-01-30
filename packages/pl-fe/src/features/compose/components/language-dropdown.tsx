@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import fuzzysort from 'fuzzysort';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { addComposeLanguage, changeComposeLanguage, changeComposeModifiedLanguage, deleteComposeLanguage } from 'pl-fe/actions/compose';
@@ -96,8 +96,8 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
     setSearchValue('');
   };
 
-  const search = () => {
-    if (searchValue === '') {
+  const search = (value: string) => {
+    if (value === '') {
       return [...languages].sort((a, b) => {
         // Push current selection to the top of the list
 
@@ -124,7 +124,7 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
       });
     }
 
-    return fuzzysort.go(searchValue, languages, {
+    return fuzzysort.go(value, languages, {
       keys: ['0', '1'],
       limit: 5,
       threshold: -10000,
@@ -143,7 +143,9 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
   }, [node.current]);
 
   const isSearching = searchValue !== '';
-  const results = useMemo(search, [searchValue]);
+
+  const deferredSearchValue = useDeferredValue(searchValue);
+  const results = useMemo(() => search(deferredSearchValue), [deferredSearchValue]);
 
   return (
     <>
