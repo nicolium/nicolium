@@ -200,12 +200,7 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
             </div>
           }
           placeholder={(
-            <div
-              className={clsx(
-                'pointer-events-none absolute top-0 select-none text-[1rem] text-gray-600 dark:placeholder:text-gray-600',
-                placeholderClassName,
-              )}
-            >
+            <div className={placeholderClassName}>
               {textareaPlaceholder}
             </div>
           )}
