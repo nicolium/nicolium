@@ -21,7 +21,7 @@ const SharePage: React.FC = () => {
     if (text) {
       dispatch(openComposeWithText('compose-modal', text));
     }
-  });
+  }, []);
 
   return null;
 };
