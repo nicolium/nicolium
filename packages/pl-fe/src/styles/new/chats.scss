@@ -97,8 +97,25 @@
     flex-grow: 1;
 
     > div {
-      position: relative;
-      height: 100%;
+      &::before,
+      &::after {
+        @apply pointer-events-none absolute inset-x-0 flex justify-center from-white to-transparent pb-12 pt-8 transition-opacity duration-500 black:from-black dark:from-gray-900 opacity-100 black:opacity-50;
+        content: '';
+        z-index: 2;
+      }
+
+      &::before {
+        @apply top-0 rounded-t-lg bg-gradient-to-b;
+      }
+
+      &::after {
+        @apply bottom-0 rounded-b-lg bg-gradient-to-t;
+      }
+
+      &.⁂-chat-widget__list--near-top::before,
+      &.⁂-chat-widget__list--near-bottom::after {
+        @apply opacity-0 black:opacity-0;
+      }
     }
   }
 
