@@ -4,9 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
 import Avatar from 'pl-fe/components/ui/avatar';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { useShoutboxMessages } from 'pl-fe/stores/shoutbox';
@@ -37,43 +34,34 @@ const ChatListShoutbox: React.FC<IChatListShoutboxInterface> = ({ onClick }) => 
       key='shoutbox'
       onClick={() => onClick('shoutbox')}
       onKeyDown={handleKeyDown}
-      className='⁂-chat-list-item'
+      className='⁂-chat-list-item ⁂-chat-list-item--shoutbox'
       data-testid='chat-list-item'
       tabIndex={0}
     >
-      <HStack alignItems='center' justifyContent='between' space={2} className='w-full'>
-        <HStack alignItems='center' space={2} className='overflow-hidden'>
-          <Avatar src={logo} alt='' size={40} className='flex-none' />
-          <Stack alignItems='start' className='overflow-hidden'>
-            <div className='flex w-full grow items-center space-x-1'>
-              <Text weight='bold' size='sm' align='left' truncate>
-                <FormattedMessage id='chat_list_item_shoutbox' defaultMessage='{instance} shoutbox' values={{ instance: instance.title }} />
-              </Text>
-            </div>
+      <div>
+        <Avatar src={logo} alt='' size={40} className='flex-none' />
+        <div className='⁂-chat-list-item__content'>
+          <div className='⁂-chat-list-item__name'>
+            <p>
+              <FormattedMessage id='chat_list_item_shoutbox' defaultMessage='{instance} shoutbox' values={{ instance: instance.title }} />
+            </p>
+          </div>
 
-            {lastMessage && (
-              <>
-                <Text
-                  align='left'
-                  size='sm'
-                  weight='medium'
-                  theme='muted'
-                  truncate
-                  className='truncate-child pointer-events-none h-5 w-full'
-                >
-                  {lastMessageAuthor && (
-                    <Text weight='bold' size='sm' align='left' theme='muted' truncate tag='span'>
-                      {lastMessageAuthor.display_name || `@${lastMessageAuthor.username}`}:
-                      {' '}
-                    </Text>
-                  )}
-                  <ParsedContent html={lastMessage.text} />
-                </Text>
-              </>
-            )}
-          </Stack>
-        </HStack>
-      </HStack>
+          {lastMessage && (
+            <>
+              <p className='⁂-chat-list-item__message'>
+                {lastMessageAuthor && (
+                  <span className='⁂-chat-list-item__message__author'>
+                    {lastMessageAuthor.display_name || `@${lastMessageAuthor.username}`}:
+                    {' '}
+                  </span>
+                )}
+                <ParsedContent html={lastMessage.text} />
+              </p>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

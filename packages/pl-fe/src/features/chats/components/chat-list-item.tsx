@@ -1,4 +1,5 @@
 import { useNavigate } from '@tanstack/react-router';
+import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -6,10 +7,7 @@ import DropdownMenu from 'pl-fe/components/dropdown-menu';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
 import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
 import Avatar from 'pl-fe/components/ui/avatar';
-import HStack from 'pl-fe/components/ui/hstack';
 import IconButton from 'pl-fe/components/ui/icon-button';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
 import { useFeatures } from 'pl-fe/hooks/use-features';
@@ -85,58 +83,46 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
       data-testid='chat-list-item'
       tabIndex={0}
     >
-      <HStack alignItems='center' justifyContent='between' space={2} className='w-full'>
-        <HStack alignItems='center' space={2} className='overflow-hidden'>
+      <div>
+        <div className='⁂-chat-list-item__info'>
           <Avatar
             src={chat.account.avatar}
             alt={chat.account.avatar_description}
             size={40}
-            className='flex-none'
+            className='⁂-chat-list-item__avatar'
             isCat={chat.account.is_cat}
             username={chat.account.username}
           />
 
-          <Stack alignItems='start' className='overflow-hidden'>
-            <div className='flex w-full grow items-center space-x-1'>
-              <Text weight='bold' size='sm' align='left' truncate>{chat.account?.display_name || `@${chat.account.username}`}</Text>
+          <div className='⁂-chat-list-item__content'>
+            <div className='⁂-chat-list-item__name'>
+              <p>{chat.account?.display_name || `@${chat.account.username}`}</p>
               {chat.account?.verified && <VerificationBadge />}
             </div>
 
-            {(isBlocked || isBlocking) ? (
-              <Text
-                align='left'
-                size='sm'
-                weight='medium'
-                theme='muted'
-                truncate
-                className='pointer-events-none h-5 w-full italic'
-                data-testid='chat-last-message'
-              >
-                {isBlocked
-                  ? <FormattedMessage id='chat_list_item.blocked_you' defaultMessage='This user has blocked you' />
-                  : <FormattedMessage id='chat_list_item.blocking' defaultMessage='You have blocked this user' />}
-              </Text>
-            ) : (
-              <>
-                {chat.last_message?.content && (
-                  <Text
-                    align='left'
-                    size='sm'
-                    weight='medium'
-                    theme={chat.last_message.unread ? 'default' : 'muted'}
-                    truncate
-                    className='truncate-child pointer-events-none h-5 w-full'
-                    data-testid='chat-last-message'
-                  >
-                    <ParsedContent html={chat.last_message?.content} emojis={chat.last_message.emojis} />
-                  </Text>
-                )}
-              </>
-            )}
-          </Stack>
-        </HStack>
+            <p
+              className={clsx('⁂-chat-list-item__message', {
+                '⁂-chat-list-item__message--unread': !(isBlocked || isBlocking) && chat.last_message?.unread,
+                '⁂-chat-list-item__message--blocking': isBlocked || isBlocking,
+              })}
+            >
+              {isBlocked ? (
+                <FormattedMessage id='chat_list_item.blocked_you' defaultMessage='This user has blocked you' />
+              ) : isBlocking ? (
+                <FormattedMessage id='chat_list_item.blocking' defaultMessage='You have blocked this user' />
+              ) : (
+                chat.last_message?.content && (
+                  <ParsedContent
+                    html={chat.last_message?.content}
+                    emojis={chat.last_message.emojis}
+                  />
+                )
+              )}
+            </p>
+          </div>
+        </div>
 
-        <HStack alignItems='center' space={2}>
+        <div className='⁂-chat-list-item__actions'>
           {features.chatsDelete && (
             <div className='⁂-chat-list-item__menu'>
               <DropdownMenu items={menu}>
@@ -152,7 +138,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
             <>
               {chat.last_message.unread && (
                 <div
-                  className='size-2 rounded-full bg-secondary-500'
+                  className='⁂-chat-list-item__unread'
                   data-testid='chat-unread-indicator'
                 />
               )}
@@ -166,8 +152,8 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
               />
             </>
           )}
-        </HStack>
-      </HStack>
+        </div>
+      </div>
     </div>
   );
 };
