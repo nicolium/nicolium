@@ -207,7 +207,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
           <ComposeEditor
             key={String(isDisabled)}
             className='block w-full rounded-md border border-gray-400 bg-white px-3 py-2 text-base text-gray-900 ring-1 placeholder:text-gray-600 focus-within:border-primary-500 focus-within:ring-primary-500 black:bg-black dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:ring-gray-800 dark:placeholder:text-gray-600 dark:focus-within:border-primary-500 dark:focus-within:ring-primary-500 sm:text-sm'
-            placeholderClassName='pt-2'
+            placeholderClassName='⁂-compose-form__editor__placeholder pt-2'
             composeId={composeId}
             placeholder={intl.formatMessage(messages.eventDescriptionPlaceholder)}
             handleSubmit={handleSubmit}
