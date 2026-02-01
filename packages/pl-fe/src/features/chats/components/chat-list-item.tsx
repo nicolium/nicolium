@@ -81,7 +81,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
       key={chat.id}
       onClick={() => onClick(chat)}
       onKeyDown={handleKeyDown}
-      className='group flex w-full flex-col rounded-lg px-2 py-3 hover:bg-gray-100 focus:shadow-inset-ring dark:hover:bg-gray-800'
+      className='⁂-chat-list-item'
       data-testid='chat-list-item'
       tabIndex={0}
     >
@@ -138,13 +138,11 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
 
         <HStack alignItems='center' space={2}>
           {features.chatsDelete && (
-            <div className='max-w-0 overflow-hidden text-gray-600 hover:text-gray-100 group-hover:max-w-full'>
+            <div className='⁂-chat-list-item__menu'>
               <DropdownMenu items={menu}>
                 <IconButton
                   src={require('@phosphor-icons/core/regular/dots-three.svg')}
                   title={intl.formatMessage(messages.settings)}
-                  className='text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500'
-                  iconClassName='h-4 w-4'
                 />
               </DropdownMenu>
             </div>

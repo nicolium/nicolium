@@ -127,3 +127,23 @@
     }
   }
 }
+
+.⁂-chat-list-item {
+  @apply flex w-full flex-col rounded-lg px-2 py-3 hover:bg-gray-100 focus:shadow-inset-ring dark:hover:bg-gray-800;
+
+  &__menu {
+    @apply max-w-0 overflow-hidden text-gray-600 hover:text-gray-100;
+
+    .⁂-icon-button {
+      @apply text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500;
+
+      svg {
+        @apply h-4 w-4;
+      }
+    }
+  }
+
+  &:hover .⁂-chat-list-item__menu {
+    @apply max-w-full;
+  }
+}
