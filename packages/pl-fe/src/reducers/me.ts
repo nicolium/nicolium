@@ -1,3 +1,5 @@
+import { router } from 'pl-fe/features/ui/router';
+
 import {
   AUTH_LOGGED_OUT,
   AUTH_ACCOUNT_REMEMBER_SUCCESS,
@@ -19,6 +21,7 @@ const initialState: Me = null;
 
 const handleForbidden = (state: Me, error: { response: PlfeResponse }) => {
   if (([401, 403] as any[]).includes(error.response?.status)) {
+    router.invalidate();
     return false;
   } else {
     return state;
@@ -29,12 +32,15 @@ const me = (state: Me = initialState, action: AuthAction | MeAction): Me => {
   switch (action.type) {
     case ME_FETCH_SUCCESS:
     case ME_PATCH_SUCCESS:
+      router.invalidate();
       return action.me.id;
     case VERIFY_CREDENTIALS_SUCCESS:
     case AUTH_ACCOUNT_REMEMBER_SUCCESS:
+      router.invalidate();
       return state || action.account.id;
     case ME_FETCH_SKIP:
     case AUTH_LOGGED_OUT:
+      router.invalidate();
       return false;
     case ME_FETCH_FAIL:
       return handleForbidden(state, action.error as any);
