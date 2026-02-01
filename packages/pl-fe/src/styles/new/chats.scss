@@ -95,6 +95,11 @@
     gap: 1rem;
     height: 100%;
     flex-grow: 1;
+
+    > div {
+      position: relative;
+      height: 100%;
+    }
   }
 
   &__blankslate {

@@ -52,7 +52,7 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
   };
 
   return (
-    <div className='relative h-full'>
+    <div>
       <PullToRefresh onRefresh={handleRefresh}>
         <Virtuoso
           atTopStateChange={(atTop) => setNearTop(atTop)}
@@ -75,7 +75,7 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
 
       <>
         <div
-          className={clsx('pointer-events-none absolute inset-x-0 flex justify-center rounded-t-lg bg-gradient-to-b from-white to-transparent pb-12 pt-8 transition-opacity duration-500 black:from-black dark:from-gray-900', {
+          className={clsx('pointer-events-none absolute inset-x-0 top-0 flex justify-center rounded-t-lg bg-gradient-to-b from-white to-transparent pb-12 pt-8 transition-opacity duration-500 black:from-black dark:from-gray-900', {
             'opacity-0': isNearTop,
             'opacity-100 black:opacity-50': !isNearTop,
           })}
