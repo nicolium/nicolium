@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
 import { ParsedContent } from 'pl-fe/components/parsed-content';
 import Avatar from 'pl-fe/components/ui/avatar';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import { useInstance } from 'pl-fe/hooks/use-instance';
 import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
 import { useShoutboxMessages } from 'pl-fe/stores/shoutbox';
@@ -52,8 +53,7 @@ const ChatListShoutbox: React.FC<IChatListShoutboxInterface> = ({ onClick }) => 
               <p className='⁂-chat-list-item__message'>
                 {lastMessageAuthor && (
                   <span className='⁂-chat-list-item__message__author'>
-                    {lastMessageAuthor.display_name || `@${lastMessageAuthor.username}`}:
-                    {' '}
+                    <Emojify text={lastMessageAuthor.display_name} emojis={lastMessageAuthor.emojis} />{': '}
                   </span>
                 )}
                 <ParsedContent html={lastMessage.text} />

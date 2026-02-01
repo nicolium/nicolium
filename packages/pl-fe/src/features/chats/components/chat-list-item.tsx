@@ -10,6 +10,7 @@ import Avatar from 'pl-fe/components/ui/avatar';
 import IconButton from 'pl-fe/components/ui/icon-button';
 import VerificationBadge from 'pl-fe/components/verification-badge';
 import { useChatContext } from 'pl-fe/contexts/chat-context';
+import Emojify from 'pl-fe/features/emoji/emojify';
 import { useFeatures } from 'pl-fe/hooks/use-features';
 import { useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
 import { useChatActions } from 'pl-fe/queries/chats';
@@ -96,7 +97,9 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
 
           <div className='⁂-chat-list-item__content'>
             <div className='⁂-chat-list-item__name'>
-              <p>{chat.account?.display_name || `@${chat.account.username}`}</p>
+              <p>
+                <Emojify text={chat.account.display_name} emojis={chat.account.emojis} />
+              </p>
               {chat.account?.verified && <VerificationBadge />}
             </div>
 
