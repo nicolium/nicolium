@@ -966,7 +966,10 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v2/notifications/:group_key/accounts
      * @see GET /api/v2/notifications/unread_count
      */
-    groupedNotifications: instance.api_versions.mastodon >= 2,
+    groupedNotifications: any([
+      instance.api_versions.mastodon >= 2,
+      v.software === HOLLO && gte(v.version, '0.7.0'),
+    ]),
 
     /**
      * Groups.
