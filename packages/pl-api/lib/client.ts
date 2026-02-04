@@ -5267,7 +5267,7 @@ class PlApiClient {
   public readonly events = {
     /**
      * Creates an event
-     * @see {@link https://github.com/mkljczk/pl/blob/fork/docs/development/API/pleroma_api.md#apiv1pleromaevents}
+     * @see {@link https://codeberg.org/mkljczk/nicolex/src/branch/develop/docs/development/API/pleroma_api.md#api-v1-pleroma-events}
      */
     createEvent: async (params: CreateEventParams) => {
       const response = await this.request('/api/v1/pleroma/events', { method: 'POST', body: params });
@@ -5277,7 +5277,7 @@ class PlApiClient {
 
     /**
      * Edits an event
-     * @see {@link https://github.com/mkljczk/pl/blob/fork/docs/development/API/pleroma_api.md#apiv1pleromaeventsid}
+     * @see {@link https://codeberg.org/mkljczk/nicolex/src/branch/develop/docs/development/API/pleroma_api.md#api-v1-pleroma-events-id}
      */
     editEvent: async (statusId: string, params: EditEventParams) => {
       const response = await this.request(`/api/v1/pleroma/events/${statusId}`, { method: 'PUT', body: params });
@@ -5287,21 +5287,21 @@ class PlApiClient {
 
     /**
      * Gets user's joined events
-     * @see {@link https://github.com/mkljczk/pl/blob/fork/docs/development/API/pleroma_api.md#apiv1pleromaeventsjoined_events}
+     * @see {@link https://codeberg.org/mkljczk/nicolex/src/branch/develop/docs/development/API/pleroma_api.md#api-v1-pleroma-events-joined_events}
      */
     getJoinedEvents: async (state?: 'pending' | 'reject' | 'accept', params?: GetJoinedEventsParams) =>
       this.#paginatedGet('/api/v1/pleroma/events/joined_events', { params: { ...params, state } }, statusSchema),
 
     /**
      * Gets event participants
-     * @see {@link https://github.com/mkljczk/pl/blob/fork/docs/development/API/pleroma_api.md#apiv1pleromaeventsidparticipations}
+     * @see {@link https://codeberg.org/mkljczk/nicolex/src/branch/develop/docs/development/API/pleroma_api.md#api-v1-pleroma-events-id-participations}
      */
     getEventParticipations: async (statusId: string, params?: GetEventParticipationsParams) =>
       this.#paginatedGet(`/api/v1/pleroma/events/${statusId}/participations`, { params }, accountSchema),
 
     /**
      * Gets event participation requests
-     * @see {@link https://github.com/mkljczk/pl/blob/fork/docs/development/API/pleroma_api.md#apiv1pleromaeventsidparticipation_requests}
+     * @see {@link https://codeberg.org/mkljczk/nicolex/src/branch/develop/docs/development/API/pleroma_api.md#api-v1-pleroma-events-id-participation_requests}
      */
     getEventParticipationRequests: async (statusId: string, params?: GetEventParticipationRequestsParams) =>
       this.#paginatedGet(`/api/v1/pleroma/events/${statusId}/participation_requests`, { params }, v.object({
@@ -5311,7 +5311,7 @@ class PlApiClient {
 
     /**
      * Accepts user to the event
-     * @see {@link https://github.com/mkljczk/pl/blob/fork/docs/development/API/pleroma_api.md#apiv1pleromaeventsidparticipation_requestsparticipant_idauthorize}
+     * @see {@link https://codeberg.org/mkljczk/nicolex/src/branch/develop/docs/development/API/pleroma_api.md#api-v1-pleroma-events-id-participation_requests-participant_id-authorize}
      */
     acceptEventParticipationRequest: async (statusId: string, accountId: string) => {
       const response = await this.request(`/api/v1/pleroma/events/${statusId}/participation_requests/${accountId}/authorize`, { method: 'POST' });
@@ -5321,7 +5321,7 @@ class PlApiClient {
 
     /**
      * Rejects user from the event
-     * @see {@link https://github.com/mkljczk/pl/blob/fork/docs/development/API/pleroma_api.md#rejects-user-from-the-event}
+     * @see {@link https://codeberg.org/mkljczk/nicolex/src/branch/develop/docs/development/API/pleroma_api.md#api-v1-pleroma-events-id-participation_requests-participant_id-reject}
      */
     rejectEventParticipationRequest: async (statusId: string, accountId: string) => {
       const response = await this.request(`/api/v1/pleroma/events/${statusId}/participation_requests/${accountId}/reject`, { method: 'POST' });
@@ -5331,7 +5331,7 @@ class PlApiClient {
 
     /**
      * Joins the event
-     * @see {@link https://github.com/mkljczk/pl/blob/fork/docs/development/API/pleroma_api.md#joins-the-event}
+     * @see {@link https://codeberg.org/mkljczk/nicolex/src/branch/develop/docs/development/API/pleroma_api.md#api-v1-pleroma-events-id-join}
      */
     joinEvent: async (statusId: string, participation_message?: string) => {
       const response = await this.request(`/api/v1/pleroma/events/${statusId}/join`, { method: 'POST', body: { participation_message } });
@@ -5341,7 +5341,7 @@ class PlApiClient {
 
     /**
      * Leaves the event
-     * @see {@link https://github.com/mkljczk/pl/blob/fork/docs/development/API/pleroma_api.md#leaves-the-event}
+     * @see {@link https://codeberg.org/mkljczk/nicolex/src/branch/develop/docs/development/API/pleroma_api.md#api-v1-pleroma-events-id-leave}
      */
     leaveEvent: async (statusId: string) => {
       const response = await this.request(`/api/v1/pleroma/events/${statusId}/leave`, { method: 'POST' });
@@ -5351,7 +5351,7 @@ class PlApiClient {
 
     /**
      * Event ICS file
-     * @see {@link https://github.com/mkljczk/pl/blob/fork/docs/development/API/pleroma_api.md#event-ics-file}
+     * @see {@link https://codeberg.org/mkljczk/nicolex/src/branch/develop/docs/development/API/pleroma_api.md#event-ics-file}
      */
     getEventIcs: async (statusId: string) => {
       const response = await this.request(`/api/v1/pleroma/events/${statusId}/ics`, { contentType: '' });
