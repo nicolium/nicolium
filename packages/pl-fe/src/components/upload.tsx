@@ -159,6 +159,9 @@ const Upload: React.FC<IUpload> = ({
     />
   );
 
+  const backgroundImage = (mediaType === 'image' || ['.png', '.jpg', '.jpeg'].some(ext => media.preview_url.endsWith(ext))) ? `url(${media.preview_url})` : undefined;
+  const hasBackgroundImage = !!(backgroundImage);
+
   return (
     <div
       className='relative m-[5px] min-w-[40%] flex-1 overflow-hidden rounded'
@@ -174,7 +177,7 @@ const Upload: React.FC<IUpload> = ({
         className={clsx('compose-form__upload-thumbnail relative h-40 w-full overflow-hidden bg-contain bg-center bg-no-repeat', mediaType)}
         style={{
           scale: styles.scale,
-          backgroundImage: mediaType === 'image' ? `url(${media.preview_url})` : undefined,
+          backgroundImage,
           backgroundPosition: typeof x === 'number' && typeof y === 'number' ? `${x}% ${y}%` : undefined,
         }}
       >
@@ -226,7 +229,7 @@ const Upload: React.FC<IUpload> = ({
           )}
         </HStack>
 
-        <div className='absolute inset-0 z-[-1] size-full'>
+        <div className={clsx('absolute inset-0 size-full', { 'z-[-1]': hasBackgroundImage })}>
           {mediaType === 'video' && (
             <video className='size-full object-cover' autoPlay playsInline muted loop>
               <source src={media.preview_url} />
