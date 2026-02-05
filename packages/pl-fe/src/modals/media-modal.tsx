@@ -353,7 +353,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
             className='relative h-[calc(100vh-120px)] w-full grow'
           >
             {hasMultipleImages && (
-              <div className={clsx('absolute inset-y-0 left-5 z-10 flex items-center transition-opacity', navigationHiddenClassName)}>
+              <div className={clsx('absolute left-5 top-[calc(50%-0.625rem)] z-10 flex h-fit items-center transition-opacity', navigationHiddenClassName)}>
                 <button
                   tabIndex={0}
                   className='flex size-10 items-center justify-center rounded-full bg-gray-900 text-white'
@@ -375,7 +375,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
             </animated.div>
 
             {hasMultipleImages && (
-              <div className={clsx('absolute inset-y-0 right-5 z-10 flex items-center transition-opacity', navigationHiddenClassName)}>
+              <div className={clsx('absolute right-5 top-[calc(50%-0.625rem)] z-10 flex h-fit items-center transition-opacity', navigationHiddenClassName)}>
                 <button
                   tabIndex={0}
                   className='flex size-10 items-center justify-center rounded-full bg-gray-900 text-white'
