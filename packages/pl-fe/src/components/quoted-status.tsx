@@ -3,16 +3,13 @@ import clsx from 'clsx';
 import React, { MouseEventHandler } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import StatusMedia from 'pl-fe/components/status-media';
 import Stack from 'pl-fe/components/ui/stack';
 import AccountContainer from 'pl-fe/containers/account-container';
 
 import EventPreview from './event-preview';
 import OutlineBox from './outline-box';
-import QuotedStatusIndicator from './quoted-status-indicator';
 import StatusContent from './status-content';
 import StatusReplyMentions from './status-reply-mentions';
-import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
 
 import type { SelectedStatus } from 'pl-fe/selectors';
 
@@ -108,16 +105,9 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
                 status={status}
                 collapsable
                 isQuote
+                withMedia
+                compose={compose}
               />
-
-              {status.quote_id && <QuotedStatusIndicator statusId={status.quote_id} statusUrl={status.quote_url} />}
-
-              {status.media_attachments.length > 0 && (
-                <div className='relative'>
-                  <SensitiveContentOverlay status={status} />
-                  <StatusMedia status={status} muted={compose} />
-                </div>
-              )}
             </Stack>
           </Stack>
         )}
