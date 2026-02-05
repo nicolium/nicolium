@@ -127,10 +127,20 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   };
 
   const bind = useDrag(
-    ({ active, movement: [mx], direction: [xDir], cancel }) => {
+    ({ active, movement: [mx], direction: [xDir], cancel, event }) => {
       // Disable swipe when zoomed in.
       if (zoomedIn) {
         return;
+      }
+
+      // Disable swipe when interacting with video/audio controls or other interactive elements
+      const target = event?.target as HTMLElement | null;
+      if (target) {
+        const interactiveParent = target.closest('.video-player__controls');
+        if (interactiveParent) {
+          cancel();
+          return;
+        }
       }
 
       // If dragging and swipe distance is enough, change the index.
