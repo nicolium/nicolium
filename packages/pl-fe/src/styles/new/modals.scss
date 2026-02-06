@@ -20,7 +20,19 @@
   @apply bg-gray-900/90;
 
   &__content {
-    @apply flex flex-col justify-between fixed inset-0 h-full grow touch-pan-y transition-all xl:pr-96;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-grow: 1;
+    inset: 0;
+    height: 100%;
+    position: fixed;
+    touch-action: pan-y;
+
+    @media (min-width: variables.$breakpoint-xl) {
+      padding-right: 24rem;
+    }
+    @apply transition-all;
   }
 
   &__closer  {
@@ -30,10 +42,6 @@
     inset-inline-start: 0;
     inset-inline-end: 0;
     bottom: 0;
-
-    @media (min-width: variables.$breakpoint-xl) {
-      inset-inline-end: 24rem;
-    }
 
     > div {
       flex-shrink: 0;
@@ -63,12 +71,18 @@
     }
   }
 
+  &__closer, &__navigation {
+    @media (min-width: variables.$breakpoint-xl) {
+      inset-inline-end: 24rem;
+    }
+  }
+
   &--fullscreen {
     .⁂-media-modal__content {
       @apply xl:pr-0;
     }
 
-    .⁂-media-modal__closer  {
+    .⁂-media-modal__closer, .⁂-media-modal__navigation  {
       inset-inline-end: 0;
     }
   }
@@ -84,11 +98,6 @@
   scrollbar-width: none;
   overflow: hidden;
   user-select: none;
-
-  &--zoomed-in {
-    z-index: 9999;
-    cursor: grab;
-  }
 
   &--error img {
     display: none;
@@ -107,11 +116,23 @@
   }
 
   img {
-    @apply shadow-2xl;
+    max-width: 100%;
     max-height: 80%;
     width: auto;
     height: auto;
+    outline: 1px solid rgba(var(--color-gray-400) / 0.15);
+    outline-offset: -1px;
     touch-action: none;
     user-select: none;
+  }
+
+  &--zoomed-in {
+    // z-index: 9999;
+    cursor: grab;
+
+    img {
+      outline: none;
+      border-radius: 0;
+    }
   }
 }
