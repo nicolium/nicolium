@@ -2,7 +2,7 @@ import { animated, useSpring } from '@react-spring/web';
 import { Link } from '@tanstack/react-router';
 import { useDrag } from '@use-gesture/react';
 import clsx from 'clsx';
-import React, { type RefCallback, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
@@ -68,23 +68,20 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
   const [wrapperStyles, api] = useSpring(() => ({
     x: `-${index * 100}%`,
-  }));
+  }), [index]);
 
-  const handleChangeIndex = useCallback(
-    (newIndex: number, animate = false) => {
-      if (newIndex < 0) {
-        newIndex = media.length + newIndex;
-      } else if (newIndex >= media.length) {
-        newIndex = newIndex % media.length;
-      }
-      setIndex(newIndex);
-      setZoomedIn(false);
-      if (animate) {
-        void api.start({ x: `calc(-${newIndex * 100}% + 0px)` });
-      }
-    },
-    [api, media.length],
-  );
+  const handleChangeIndex = useCallback((newIndex: number, animate = false) => {
+    if (newIndex < 0) {
+      newIndex = media.length + newIndex;
+    } else if (newIndex >= media.length) {
+      newIndex = newIndex % media.length;
+    }
+    setIndex(newIndex);
+    setZoomedIn(false);
+    if (animate) {
+      void api.start({ x: `calc(-${newIndex * 100}% + 0px)` });
+    }
+  }, [api, media.length]);
   const handlePrevClick = useCallback(() => {
     handleChangeIndex(index - 1, true);
   }, [handleChangeIndex, index]);
@@ -92,19 +89,19 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     handleChangeIndex(index + 1, true);
   }, [handleChangeIndex, index]);
 
-  const [viewportDimensions, setViewportDimensions] = useState<{
-      width: number;
-      height: number;
-    }>({ width: 0, height: 0 });
+  // const [viewportDimensions, setViewportDimensions] = useState<{
+  //     width: number;
+  //     height: number;
+  //   }>({ width: 0, height: 0 });
 
-  const handleRef: RefCallback<HTMLDivElement> = useCallback((ele) => {
-    if (ele?.clientWidth && ele.clientHeight) {
-      setViewportDimensions({
-        width: ele.clientWidth,
-        height: ele.clientHeight,
-      });
-    }
-  }, []);
+  // const handleRef: RefCallback<HTMLDivElement> = useCallback((ele) => {
+  //   if (ele?.clientWidth && ele.clientHeight) {
+  //     setViewportDimensions({
+  //       width: ele.clientWidth,
+  //       height: ele.clientHeight,
+  //     });
+  //   }
+  // }, []);
 
   const hasMultipleImages = media.length > 1;
 
@@ -135,7 +132,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
       // Disable swipe when interacting with video/audio controls or other interactive elements
       const target = event?.target as HTMLElement | null;
       if (target) {
-        const interactiveParent = target.closest('.video-player__controls');
+        const interactiveParent = target.closest('.video-player__controls, button');
         if (interactiveParent) {
           cancel();
           return;
@@ -152,9 +149,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
       }
       // Set the x position via calc to ensure proper centering regardless of screen size.
       const x = active ? mx : 0;
-      void api.start({
-        x: `calc(-${index * 100}% + ${x}px)`,
-      });
+      void api.start({ x: `calc(-${index * 100}% + ${x}px)` });
     },
     { pointer: { capture: false } },
   );
@@ -168,11 +163,11 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     setNavigationHidden(value => !value && userTouching.matches);
   };
 
-  const currentMedia = media[index];
+  // const currentMedia = media[index];
 
-  const zoomable =
-      currentMedia.type === 'image' && currentMedia.meta.original &&
-      (currentMedia.meta.original.width > viewportDimensions.width || currentMedia.meta.original.height > viewportDimensions.height);
+  // const zoomable =
+  //     currentMedia.type === 'image' && currentMedia.meta.original &&
+  //     (currentMedia.meta.original.width > viewportDimensions.width || currentMedia.meta.original.height > viewportDimensions.height);
 
   const handleZoomClick = useCallback(() => {
     setZoomedIn((prev) => !prev);
@@ -297,7 +292,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
         {...bind()}
         onClick={handleClickOutside}
         className='⁂-media-modal__content'
-        ref={handleRef}
+        // ref={handleRef}
       >
         <animated.div
           style={wrapperStyles}
@@ -324,7 +319,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
             />
 
             <HStack alignItems='center' space={2}>
-              {zoomable && (
+              {/* {zoomable && (
                 <IconButton
                   title={intl.formatMessage(zoomedIn ? messages.zoomOut : messages.zoomIn)}
                   src={zoomedIn ? require('@phosphor-icons/core/regular/magnifying-glass-minus.svg') : require('@phosphor-icons/core/regular/magnifying-glass-plus.svg')}
@@ -333,7 +328,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                   iconClassName='h-5 w-5'
                   onClick={handleZoomClick}
                 />
-              )}
+              )} */}
 
               <IconButton
                 title={intl.formatMessage(messages.download)}
