@@ -85,7 +85,7 @@ const ModalRoot: React.FC = () => {
     <Base onClose={onClickClose} type={type} modalIndex={index}>
       {(Component && !!type) && (
         <Suspense fallback={renderLoading(type)}>
-          <Component {...props} onClose={onClickClose} />
+          <Component key={index} {...props} onClose={onClickClose} />
         </Suspense>
       )}
     </Base>

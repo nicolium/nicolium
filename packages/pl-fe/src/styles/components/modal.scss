@@ -1,6 +1,4 @@
-.media-modal {
-  touch-action: pan-y;
-
+.⁂-media-modal {
   .audio-player.detailed,
   .extended-video-player {
     @apply flex items-center justify-center;
@@ -17,23 +15,4 @@
       @apply max-w-full max-h-[80%];
     }
   }
-
-  &__closer {
-    display: flex;
-    position: absolute;
-    top: 0;
-    inset-inline-start: 0;
-    inset-inline-end: 0;
-    bottom: 0;
-
-    > div {
-      flex-shrink: 0;
-      overflow: auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-    }
-  }
 }
-

@@ -1,9 +1,77 @@
+@use 'variables';
+
 .⁂-crypto-donate-modal {
   @apply max-w-sm;
 }
 
 .⁂-hotkey-modal {
   @apply max-w-4xl;
+}
+
+.⁂-media-modal {
+  pointer-events: auto;
+  user-select: text;
+  display: flex;
+  max-width: 100vw;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  touch-action: pan-y;
+  @apply bg-gray-900/90;
+
+  &__content {
+    @apply flex flex-col justify-between fixed inset-0 h-full grow touch-pan-y transition-all xl:pr-96;
+  }
+
+  &__closer  {
+    display: flex;
+    position: absolute;
+    top: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    bottom: 0;
+
+    @media (min-width: variables.$breakpoint-xl) {
+      inset-inline-end: 24rem;
+    }
+
+    > div {
+      flex-shrink: 0;
+      overflow: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
+  }
+
+  &__navigation {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: absolute;
+    top: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    bottom: 0;
+    pointer-events: none;
+    transition: opacity .3s linear;
+    will-change: opacity;
+
+    &--hidden {
+      opacity: 0;
+    }
+  }
+
+  &--fullscreen {
+    .⁂-media-modal__content {
+      @apply xl:pr-0;
+    }
+
+    .⁂-media-modal__closer  {
+      inset-inline-end: 0;
+    }
+  }
 }
 
 .⁂-zoomable-image {
