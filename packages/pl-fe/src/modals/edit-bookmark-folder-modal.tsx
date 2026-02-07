@@ -3,21 +3,21 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import Emoji from 'pl-fe/components/ui/emoji';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Input from 'pl-fe/components/ui/input';
-import Modal from 'pl-fe/components/ui/modal';
-import EmojiPickerDropdown from 'pl-fe/features/emoji/components/emoji-picker-dropdown';
-import { messages as emojiMessages } from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
-import { useTextField } from 'pl-fe/hooks/forms/use-text-field';
-import { useClickOutside } from 'pl-fe/hooks/use-click-outside';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useBookmarkFolder, useUpdateBookmarkFolder } from 'pl-fe/queries/statuses/use-bookmark-folders';
-import toast from 'pl-fe/toast';
+import Emoji from '@/components/ui/emoji';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Input from '@/components/ui/input';
+import Modal from '@/components/ui/modal';
+import EmojiPickerDropdown from '@/features/emoji/components/emoji-picker-dropdown';
+import { messages as emojiMessages } from '@/features/emoji/containers/emoji-picker-dropdown-container';
+import { useTextField } from '@/hooks/forms/use-text-field';
+import { useClickOutside } from '@/hooks/use-click-outside';
+import { useFeatures } from '@/hooks/use-features';
+import { useBookmarkFolder, useUpdateBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
+import toast from '@/toast';
 
-import type { Emoji as EmojiType } from 'pl-fe/features/emoji';
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { Emoji as EmojiType } from '@/features/emoji';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
   label: { id: 'bookmark_folders.new.title_placeholder', defaultMessage: 'New folder title' },

@@ -1,7 +1,7 @@
-import { Entities } from 'pl-fe/entity-store/entities';
-import { useEntities } from 'pl-fe/entity-store/hooks/use-entities';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useFeatures } from 'pl-fe/hooks/use-features';
+import { Entities } from '@/entity-store/entities';
+import { useEntities } from '@/entity-store/hooks/use-entities';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
 
 import { useGroupRelationships } from './use-group-relationships';
 

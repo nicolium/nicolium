@@ -5,14 +5,14 @@ import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import * as v from 'valibot';
 
-import Blurhash from 'pl-fe/components/blurhash';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import { addAutoPlay } from 'pl-fe/utils/media';
-import { getTextDirection } from 'pl-fe/utils/rtl';
+import Blurhash from '@/components/blurhash';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Emojify from '@/features/emoji/emojify';
+import { addAutoPlay } from '@/utils/media';
+import { getTextDirection } from '@/utils/rtl';
 
 import HoverAccountWrapper from './hover-account-wrapper';
 import Avatar from './ui/avatar';

@@ -2,14 +2,14 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useGroups } from 'pl-fe/api/hooks/groups/use-groups';
-import GroupCard from 'pl-fe/components/group-card';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Button from 'pl-fe/components/ui/button';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import PlaceholderGroupCard from 'pl-fe/features/placeholder/components/placeholder-group-card';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import { useGroups } from '@/api/hooks/groups/use-groups';
+import GroupCard from '@/components/group-card';
+import ScrollableList from '@/components/scrollable-list';
+import Button from '@/components/ui/button';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import PlaceholderGroupCard from '@/features/placeholder/components/placeholder-group-card';
+import { useModalsActions } from '@/stores/modals';
 
 const Groups: React.FC = () => {
   const { openModal } = useModalsActions();

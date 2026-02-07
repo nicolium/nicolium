@@ -28,11 +28,11 @@ import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import { useSettings } from 'pl-fe/stores/settings';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import IconButton from '@/components/ui/icon-button';
+import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 
 import { $isImageNode } from './image-node';
 

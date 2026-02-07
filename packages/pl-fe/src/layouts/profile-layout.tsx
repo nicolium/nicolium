@@ -3,13 +3,13 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { FormattedMessage } from 'react-intl';
 
-import { useAccountLookup } from 'pl-fe/api/hooks/accounts/use-account-lookup';
-import Column from 'pl-fe/components/ui/column';
-import Layout from 'pl-fe/components/ui/layout';
-import Tabs, { type Item } from 'pl-fe/components/ui/tabs';
-import Header from 'pl-fe/features/account/components/header';
-import LinkFooter from 'pl-fe/features/ui/components/link-footer';
-import { layouts } from 'pl-fe/features/ui/router';
+import { useAccountLookup } from '@/api/hooks/accounts/use-account-lookup';
+import Column from '@/components/ui/column';
+import Layout from '@/components/ui/layout';
+import Tabs, { type Item } from '@/components/ui/tabs';
+import Header from '@/features/account/components/header';
+import LinkFooter from '@/features/ui/components/link-footer';
+import { layouts } from '@/features/ui/router';
 import {
   WhoToFollowPanel,
   ProfileInfoPanel,
@@ -18,10 +18,10 @@ import {
   SignUpPanel,
   PinnedAccountsPanel,
   AccountNotePanel,
-} from 'pl-fe/features/ui/util/async-components';
-import { useAcct } from 'pl-fe/hooks/use-acct';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
+} from '@/features/ui/util/async-components';
+import { useAcct } from '@/hooks/use-acct';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFeatures } from '@/hooks/use-features';
 
 /** Layout to display a user's profile. */
 const ProfileLayout: React.FC = () => {

@@ -2,13 +2,13 @@ import { useNavigate } from '@tanstack/react-router';
 import React, { useState, useEffect } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useClient } from 'pl-fe/hooks/use-client';
-import toast from 'pl-fe/toast';
+import Button from '@/components/ui/button';
+import FormActions from '@/components/ui/form-actions';
+import Spinner from '@/components/ui/spinner';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useClient } from '@/hooks/use-client';
+import toast from '@/toast';
 
 const messages = defineMessages({
   mfaCancelButton: { id: 'column.mfa_cancel', defaultMessage: 'Cancel' },

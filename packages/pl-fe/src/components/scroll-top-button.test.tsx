@@ -1,7 +1,7 @@
 import React from 'react';
 import { defineMessages } from 'react-intl';
 
-import { render, screen } from 'pl-fe/jest/test-helpers';
+import { render, screen } from '@/jest/test-helpers';
 
 import ScrollTopButton from './scroll-top-button';
 

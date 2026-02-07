@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
 
-import { hexToHsl } from 'pl-fe/utils/theme';
+import { hexToHsl } from '@/utils/theme';
 
 interface IBadge {
   title: React.ReactNode | string;

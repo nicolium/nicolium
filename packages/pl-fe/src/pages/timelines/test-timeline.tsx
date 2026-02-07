@@ -1,11 +1,11 @@
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { importEntities } from 'pl-fe/actions/importer';
-import { expandTimelineSuccess } from 'pl-fe/actions/timelines';
-import Column from 'pl-fe/components/ui/column';
-import Timeline from 'pl-fe/features/ui/components/timeline';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { importEntities } from '@/actions/importer';
+import { expandTimelineSuccess } from '@/actions/timelines';
+import Column from '@/components/ui/column';
+import Timeline from '@/features/ui/components/timeline';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
 
 const messages = defineMessages({
   title: { id: 'column.test', defaultMessage: 'Test timeline' },
@@ -16,11 +16,11 @@ const messages = defineMessages({
  * These get embedded into the build, but only in this chunk, so it's okay.
  */
 const MOCK_STATUSES: any[] = [
-  require('pl-fe/__fixtures__/pleroma-status.json'),
-  require('pl-fe/__fixtures__/pleroma-status-with-poll.json'),
-  require('pl-fe/__fixtures__/pleroma-status-vertical-video-without-metadata.json'),
-  require('pl-fe/__fixtures__/pleroma-status-with-poll-with-emojis.json'),
-  require('pl-fe/__fixtures__/pleroma-quote-of-quote-post.json'),
+  require('@/__fixtures__/pleroma-status.json'),
+  require('@/__fixtures__/pleroma-status-with-poll.json'),
+  require('@/__fixtures__/pleroma-status-vertical-video-without-metadata.json'),
+  require('@/__fixtures__/pleroma-status-with-poll-with-emojis.json'),
+  require('@/__fixtures__/pleroma-quote-of-quote-post.json'),
 ];
 
 const timelineId = 'test';

@@ -1,10 +1,10 @@
 import split from 'graphemesplit';
 import React from 'react';
 
-import Emoji from 'pl-fe/components/ui/emoji';
-import { useSettings } from 'pl-fe/stores/settings';
-import { makeEmojiMap } from 'pl-fe/utils/normalizers';
-import { joinPublicPath } from 'pl-fe/utils/static';
+import Emoji from '@/components/ui/emoji';
+import { useSettings } from '@/stores/settings';
+import { makeEmojiMap } from '@/utils/normalizers';
+import { joinPublicPath } from '@/utils/static';
 
 import unicodeMapping from './mapping';
 

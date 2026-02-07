@@ -3,15 +3,15 @@ import fuzzysort from 'fuzzysort';
 import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { addComposeLanguage, changeComposeLanguage, changeComposeModifiedLanguage, deleteComposeLanguage } from 'pl-fe/actions/compose';
-import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import Icon from 'pl-fe/components/ui/icon';
-import Input from 'pl-fe/components/ui/input';
-import { type Language, languages as languagesObject } from 'pl-fe/features/preferences';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useCompose } from 'pl-fe/hooks/use-compose';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useSettings } from 'pl-fe/stores/settings';
+import { addComposeLanguage, changeComposeLanguage, changeComposeModifiedLanguage, deleteComposeLanguage } from '@/actions/compose';
+import DropdownMenu from '@/components/dropdown-menu';
+import Icon from '@/components/ui/icon';
+import Input from '@/components/ui/input';
+import { type Language, languages as languagesObject } from '@/features/preferences';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useCompose } from '@/hooks/use-compose';
+import { useFeatures } from '@/hooks/use-features';
+import { useSettings } from '@/stores/settings';
 
 const getFrequentlyUsedLanguages = (languageCounters: Record<string, number>) => (
   Object.keys(languageCounters)

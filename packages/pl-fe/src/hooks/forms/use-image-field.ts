@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-import { useSettings } from 'pl-fe/stores/settings';
-import resizeImage from 'pl-fe/utils/resize-image';
+import { useSettings } from '@/stores/settings';
+import resizeImage from '@/utils/resize-image';
 
 import { usePreview } from './use-preview';
 

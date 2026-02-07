@@ -2,17 +2,17 @@ import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { fetchAntennaTimeline } from 'pl-fe/actions/timelines';
-import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import MissingIndicator from 'pl-fe/components/missing-indicator';
-// import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Timeline from 'pl-fe/features/ui/components/timeline';
-import { antennaTimelineRoute } from 'pl-fe/features/ui/router';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAntenna, useDeleteAntenna } from 'pl-fe/queries/accounts/use-antennas';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import { fetchAntennaTimeline } from '@/actions/timelines';
+import DropdownMenu from '@/components/dropdown-menu';
+import MissingIndicator from '@/components/missing-indicator';
+// import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import Spinner from '@/components/ui/spinner';
+import Timeline from '@/features/ui/components/timeline';
+import { antennaTimelineRoute } from '@/features/ui/router';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAntenna, useDeleteAntenna } from '@/queries/accounts/use-antennas';
+import { useModalsActions } from '@/stores/modals';
 
 const messages = defineMessages({
   deleteHeading: { id: 'confirmations.delete_antenna.heading', defaultMessage: 'Delete antenna' },

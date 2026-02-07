@@ -1,9 +1,9 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import HStack from 'pl-fe/components/ui/hstack';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import AccountContainer from 'pl-fe/containers/account-container';
+import HStack from '@/components/ui/hstack';
+import IconButton from '@/components/ui/icon-button';
+import AccountContainer from '@/containers/account-container';
 
 const messages = defineMessages({
   remove: { id: 'lists.account.remove', defaultMessage: 'Remove from list' },

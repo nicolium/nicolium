@@ -1,12 +1,12 @@
 
 import { type InfiniteData, useMutation } from '@tanstack/react-query';
 
-import { importEntities } from 'pl-fe/actions/importer';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { queryClient } from 'pl-fe/queries/client';
-import { makePaginatedResponseQuery } from 'pl-fe/queries/utils/make-paginated-response-query';
-import { minifyList } from 'pl-fe/queries/utils/minify-list';
-import { store } from 'pl-fe/store';
+import { importEntities } from '@/actions/importer';
+import { useClient } from '@/hooks/use-client';
+import { queryClient } from '@/queries/client';
+import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
+import { minifyList } from '@/queries/utils/minify-list';
+import { store } from '@/store';
 
 import type { PlApiClient } from 'pl-api';
 

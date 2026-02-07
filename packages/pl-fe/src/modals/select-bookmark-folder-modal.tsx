@@ -3,23 +3,23 @@ import { BookmarkFolder } from 'pl-api';
 import React, { useCallback, useDeferredValue, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { ListItem } from 'pl-fe/components/list';
-import { RadioGroup, RadioItem } from 'pl-fe/components/radio';
-import Emoji from 'pl-fe/components/ui/emoji';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Modal from 'pl-fe/components/ui/modal';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Stack from 'pl-fe/components/ui/stack';
-import Toggle from 'pl-fe/components/ui/toggle';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { NewFolderForm } from 'pl-fe/pages/status-lists/bookmark-folders';
-import { useAddBookmarkToFolder, useBookmarkFolders, useRemoveBookmarkFromFolder, useStatusBookmarkFolders } from 'pl-fe/queries/statuses/use-bookmark-folders';
-import { useBookmarkStatus } from 'pl-fe/queries/statuses/use-status-interactions';
-import { makeGetStatus } from 'pl-fe/selectors';
+import { ListItem } from '@/components/list';
+import { RadioGroup, RadioItem } from '@/components/radio';
+import Emoji from '@/components/ui/emoji';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Modal from '@/components/ui/modal';
+import Spinner from '@/components/ui/spinner';
+import Stack from '@/components/ui/stack';
+import Toggle from '@/components/ui/toggle';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFeatures } from '@/hooks/use-features';
+import { NewFolderForm } from '@/pages/status-lists/bookmark-folders';
+import { useAddBookmarkToFolder, useBookmarkFolders, useRemoveBookmarkFromFolder, useStatusBookmarkFolders } from '@/queries/statuses/use-bookmark-folders';
+import { useBookmarkStatus } from '@/queries/statuses/use-status-interactions';
+import { makeGetStatus } from '@/selectors';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 interface SelectBookmarkFolderModalProps {
   statusId: string;

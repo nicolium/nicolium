@@ -18,27 +18,27 @@ import {
 import { defineMessages } from 'react-intl';
 import * as v from 'valibot';
 
-import { createAccount } from 'pl-fe/actions/accounts';
-import { createApp } from 'pl-fe/actions/apps';
-import { fetchMeSuccess, fetchMeFail } from 'pl-fe/actions/me';
-import { obtainOAuthToken, revokeOAuthToken } from 'pl-fe/actions/oauth';
-import * as BuildConfig from 'pl-fe/build-config';
-import { queryClient } from 'pl-fe/queries/client';
-import { selectAccount } from 'pl-fe/selectors';
-import { unsetSentryAccount } from 'pl-fe/sentry';
-import KVStore from 'pl-fe/storage/kv-store';
-import toast from 'pl-fe/toast';
-import { getLoggedInAccount, parseBaseURL } from 'pl-fe/utils/auth';
-import sourceCode from 'pl-fe/utils/code';
-import { normalizeUsername } from 'pl-fe/utils/input';
-import { getScopes } from 'pl-fe/utils/scopes';
-import { isStandalone } from 'pl-fe/utils/state';
+import { createAccount } from '@/actions/accounts';
+import { createApp } from '@/actions/apps';
+import { fetchMeSuccess, fetchMeFail } from '@/actions/me';
+import { obtainOAuthToken, revokeOAuthToken } from '@/actions/oauth';
+import * as BuildConfig from '@/build-config';
+import { queryClient } from '@/queries/client';
+import { selectAccount } from '@/selectors';
+import { unsetSentryAccount } from '@/sentry';
+import KVStore from '@/storage/kv-store';
+import toast from '@/toast';
+import { getLoggedInAccount, parseBaseURL } from '@/utils/auth';
+import sourceCode from '@/utils/code';
+import { normalizeUsername } from '@/utils/input';
+import { getScopes } from '@/utils/scopes';
+import { isStandalone } from '@/utils/state';
 
 import { type PlfeResponse, getClient } from '../api';
 
 import { importEntities } from './importer';
 
-import type { AppDispatch, RootState } from 'pl-fe/store';
+import type { AppDispatch, RootState } from '@/store';
 
 const SWITCH_ACCOUNT = 'SWITCH_ACCOUNT' as const;
 

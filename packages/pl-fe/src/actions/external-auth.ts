@@ -9,14 +9,14 @@
 import { instanceSchema, PlApiClient, type Instance } from 'pl-api';
 import * as v from 'valibot';
 
-import { createApp } from 'pl-fe/actions/apps';
-import { authLoggedIn, verifyCredentials, switchAccount } from 'pl-fe/actions/auth';
-import { obtainOAuthToken } from 'pl-fe/actions/oauth';
-import { parseBaseURL } from 'pl-fe/utils/auth';
-import sourceCode from 'pl-fe/utils/code';
-import { getInstanceScopes } from 'pl-fe/utils/scopes';
+import { createApp } from '@/actions/apps';
+import { authLoggedIn, verifyCredentials, switchAccount } from '@/actions/auth';
+import { obtainOAuthToken } from '@/actions/oauth';
+import { parseBaseURL } from '@/utils/auth';
+import sourceCode from '@/utils/code';
+import { getInstanceScopes } from '@/utils/scopes';
 
-import type { AppDispatch } from 'pl-fe/store';
+import type { AppDispatch } from '@/store';
 
 const fetchExternalInstance = (baseURL: string) =>
   (new PlApiClient(baseURL)).instance.getInstance()

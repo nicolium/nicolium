@@ -2,34 +2,34 @@ import { useNavigate } from '@tanstack/react-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { resetCompose } from 'pl-fe/actions/compose';
+import { resetCompose } from '@/actions/compose';
 import {
   cancelEventCompose,
   initEventEdit,
   submitEvent,
-} from 'pl-fe/actions/events';
-import { uploadFile } from 'pl-fe/actions/media';
-import { fetchStatus } from 'pl-fe/actions/statuses';
-import { ADDRESS_ICONS } from 'pl-fe/components/autosuggest-location';
-import LocationSearch from 'pl-fe/components/location-search';
-import Button from 'pl-fe/components/ui/button';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Input from 'pl-fe/components/ui/input';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Toggle from 'pl-fe/components/ui/toggle';
-import ContentTypeButton from 'pl-fe/features/compose/components/content-type-button';
-import { isCurrentOrFutureDate } from 'pl-fe/features/compose/components/schedule-form';
-import { ComposeEditor, DatePicker } from 'pl-fe/features/ui/util/async-components';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { makeGetStatus } from 'pl-fe/selectors';
-import toast from 'pl-fe/toast';
+} from '@/actions/events';
+import { uploadFile } from '@/actions/media';
+import { fetchStatus } from '@/actions/statuses';
+import { ADDRESS_ICONS } from '@/components/autosuggest-location';
+import LocationSearch from '@/components/location-search';
+import Button from '@/components/ui/button';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import IconButton from '@/components/ui/icon-button';
+import Input from '@/components/ui/input';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Toggle from '@/components/ui/toggle';
+import ContentTypeButton from '@/features/compose/components/content-type-button';
+import { isCurrentOrFutureDate } from '@/features/compose/components/schedule-form';
+import { ComposeEditor, DatePicker } from '@/features/ui/util/async-components';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { makeGetStatus } from '@/selectors';
+import toast from '@/toast';
 
 import UploadButton from '../components/upload-button';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Text from 'pl-fe/components/ui/text';
-import { Hotkeys } from 'pl-fe/features/ui/components/hotkeys';
+import Text from '@/components/ui/text';
+import { Hotkeys } from '@/features/ui/components/hotkeys';
 
 interface ITombstone {
   id: string;

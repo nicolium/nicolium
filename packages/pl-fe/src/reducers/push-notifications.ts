@@ -2,7 +2,7 @@ import { create } from 'mutative';
 
 import { SET_BROWSER_SUPPORT, SET_SUBSCRIPTION, CLEAR_SUBSCRIPTION } from '../actions/push-notifications/setter';
 
-import type { SetterAction } from 'pl-fe/actions/push-notifications/setter';
+import type { SetterAction } from '@/actions/push-notifications/setter';
 
 interface Subscription {
   id: string;

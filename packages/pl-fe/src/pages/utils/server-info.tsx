@@ -1,13 +1,13 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Column from 'pl-fe/components/ui/column';
-import Divider from 'pl-fe/components/ui/divider';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import LinkFooter from 'pl-fe/features/ui/components/link-footer';
-import PromoPanel from 'pl-fe/features/ui/components/panels/promo-panel';
-import { useInstance } from 'pl-fe/hooks/use-instance';
+import Column from '@/components/ui/column';
+import Divider from '@/components/ui/divider';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import LinkFooter from '@/features/ui/components/link-footer';
+import PromoPanel from '@/features/ui/components/panels/promo-panel';
+import { useInstance } from '@/hooks/use-instance';
 
 const messages = defineMessages({
   heading: { id: 'column.info', defaultMessage: 'Server information' },

@@ -2,14 +2,14 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl, type FormatDateOptions } from 'react-intl';
 
-import AccountLocalTime from 'pl-fe/components/account-local-time';
-import { ParsedContent } from 'pl-fe/components/parsed-content';
-import Icon from 'pl-fe/components/ui/icon';
-import CryptoAddress from 'pl-fe/features/crypto-donate/components/crypto-address';
-import LightningAddress from 'pl-fe/features/crypto-donate/components/lightning-address';
-import coinDB from 'pl-fe/features/crypto-donate/utils/manifest-map';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import { unescapeHTML } from 'pl-fe/utils/html';
+import AccountLocalTime from '@/components/account-local-time';
+import { ParsedContent } from '@/components/parsed-content';
+import Icon from '@/components/ui/icon';
+import CryptoAddress from '@/features/crypto-donate/components/crypto-address';
+import LightningAddress from '@/features/crypto-donate/components/lightning-address';
+import coinDB from '@/features/crypto-donate/utils/manifest-map';
+import Emojify from '@/features/emoji/emojify';
+import { unescapeHTML } from '@/utils/html';
 
 import type { Account } from 'pl-api';
 

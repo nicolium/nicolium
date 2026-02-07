@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-import { isIOS } from 'pl-fe/is-mobile';
+import { isIOS } from '@/is-mobile';
 
 interface IExtendedVideoPlayer {
   src: string;

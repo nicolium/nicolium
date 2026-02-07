@@ -1,16 +1,16 @@
 import { type CreateAccountParams, type Relationship } from 'pl-api';
 
-import { batcher } from 'pl-fe/api/batcher';
-import { queryClient } from 'pl-fe/queries/client';
-import { selectAccount } from 'pl-fe/selectors';
-import { isLoggedIn } from 'pl-fe/utils/auth';
+import { batcher } from '@/api/batcher';
+import { queryClient } from '@/queries/client';
+import { selectAccount } from '@/selectors';
+import { isLoggedIn } from '@/utils/auth';
 
 import { getClient } from '../api';
 
 import { importEntities } from './importer';
 
-import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
-import type { AppDispatch, RootState } from 'pl-fe/store';
+import type { MinifiedStatus } from '@/reducers/statuses';
+import type { AppDispatch, RootState } from '@/store';
 
 const ACCOUNT_BLOCK_SUCCESS = 'ACCOUNT_BLOCK_SUCCESS' as const;
 const ACCOUNT_MUTE_SUCCESS = 'ACCOUNT_MUTE_SUCCESS' as const;

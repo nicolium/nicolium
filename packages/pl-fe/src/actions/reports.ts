@@ -1,10 +1,10 @@
-import { useModalsStore } from 'pl-fe/stores/modals';
+import { useModalsStore } from '@/stores/modals';
 
 import { getClient } from '../api';
 
+import type { Status } from '@/normalizers/status';
+import type { AppDispatch, RootState } from '@/store';
 import type { Account } from 'pl-api';
-import type { Status } from 'pl-fe/normalizers/status';
-import type { AppDispatch, RootState } from 'pl-fe/store';
 
 enum ReportableEntities {
   ACCOUNT = 'ACCOUNT',

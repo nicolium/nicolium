@@ -1,22 +1,22 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { eventDiscussionCompose } from 'pl-fe/actions/compose';
-import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
-import MissingIndicator from 'pl-fe/components/missing-indicator';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Tombstone from 'pl-fe/components/tombstone';
-import Stack from 'pl-fe/components/ui/stack';
-import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
-import { makeGetDescendantsIds } from 'pl-fe/features/status/components/thread';
-import ThreadStatus from 'pl-fe/features/status/components/thread-status';
-import PendingStatus from 'pl-fe/features/ui/components/pending-status';
-import { eventDiscussionRoute } from 'pl-fe/features/ui/router';
-import { ComposeForm } from 'pl-fe/features/ui/util/async-components';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { makeGetStatus } from 'pl-fe/selectors';
-import { selectChild } from 'pl-fe/utils/scroll-utils';
+import { eventDiscussionCompose } from '@/actions/compose';
+import { fetchStatusWithContext } from '@/actions/statuses';
+import MissingIndicator from '@/components/missing-indicator';
+import ScrollableList from '@/components/scrollable-list';
+import Tombstone from '@/components/tombstone';
+import Stack from '@/components/ui/stack';
+import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
+import { makeGetDescendantsIds } from '@/features/status/components/thread';
+import ThreadStatus from '@/features/status/components/thread-status';
+import PendingStatus from '@/features/ui/components/pending-status';
+import { eventDiscussionRoute } from '@/features/ui/router';
+import { ComposeForm } from '@/features/ui/util/async-components';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { makeGetStatus } from '@/selectors';
+import { selectChild } from '@/utils/scroll-utils';
 
 import type { VirtuosoHandle } from 'react-virtuoso';
 

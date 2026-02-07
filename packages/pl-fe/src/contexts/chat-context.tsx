@@ -1,11 +1,11 @@
 import { useMatch } from '@tanstack/react-router';
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 
-import { toggleChatPane } from 'pl-fe/actions/chats';
-import { chatRoute, layouts } from 'pl-fe/features/ui/router';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useChat } from 'pl-fe/queries/chats';
-import { useSettings } from 'pl-fe/stores/settings';
+import { toggleChatPane } from '@/actions/chats';
+import { chatRoute, layouts } from '@/features/ui/router';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useChat } from '@/queries/chats';
+import { useSettings } from '@/stores/settings';
 
 import type { Chat } from 'pl-api';
 

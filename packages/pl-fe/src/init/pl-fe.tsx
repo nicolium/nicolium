@@ -3,8 +3,8 @@ import React from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
 
-import { StatProvider } from 'pl-fe/contexts/stat-context';
-import { queryClient } from 'pl-fe/queries/client';
+import { StatProvider } from '@/contexts/stat-context';
+import { queryClient } from '@/queries/client';
 
 import { preload } from '../actions/preload';
 import { store } from '../store';

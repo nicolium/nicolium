@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 
-import Status, { IStatus } from 'pl-fe/components/status';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { makeGetStatus } from 'pl-fe/selectors';
+import Status, { IStatus } from '@/components/status';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { makeGetStatus } from '@/selectors';
 
 interface IStatusContainer extends Omit<IStatus, 'status'> {
   id: string;

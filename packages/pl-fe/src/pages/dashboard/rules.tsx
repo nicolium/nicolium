@@ -1,15 +1,15 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useRules } from 'pl-fe/queries/admin/use-rules';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import toast from 'pl-fe/toast';
+import ScrollableList from '@/components/scrollable-list';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useRules } from '@/queries/admin/use-rules';
+import { useModalsActions } from '@/stores/modals';
+import toast from '@/toast';
 
 import type { AdminRule } from 'pl-api';
 

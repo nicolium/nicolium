@@ -1,7 +1,7 @@
 import { QRCodeCanvas as QRCode } from 'qrcode.react';
 import React from 'react';
 
-import CopyableInput from 'pl-fe/components/copyable-input';
+import CopyableInput from '@/components/copyable-input';
 
 import { getTitle } from '../utils/coin-db';
 

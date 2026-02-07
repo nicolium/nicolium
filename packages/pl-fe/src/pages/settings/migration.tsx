@@ -2,17 +2,17 @@ import { Link } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { moveAccount } from 'pl-fe/actions/security';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Input from 'pl-fe/components/ui/input';
-import Text from 'pl-fe/components/ui/text';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import toast from 'pl-fe/toast';
+import { moveAccount } from '@/actions/security';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import Input from '@/components/ui/input';
+import Text from '@/components/ui/text';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useInstance } from '@/hooks/use-instance';
+import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.migration', defaultMessage: 'Move account' },

@@ -14,8 +14,8 @@
 // I hope I got this relicensing stuff right xD
 import { mappings, URLPurify, type SerializedRules, type SerializedServices } from '@mkljczk/url-purify';
 
-import KVStore from 'pl-fe/storage/kv-store';
-import { Me } from 'pl-fe/types/pl-fe';
+import KVStore from '@/storage/kv-store';
+import { Me } from '@/types/pl-fe';
 
 interface KVStoreRulesItem {
   hashUrl?: string;

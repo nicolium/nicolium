@@ -3,9 +3,9 @@ import debounce from 'lodash/debounce';
 import React, { useEffect, useRef, useMemo, useCallback } from 'react';
 import { Virtuoso, Components, VirtuosoProps, VirtuosoHandle, ListRange, IndexLocationWithAlign } from 'react-virtuoso';
 
-import LoadMore from 'pl-fe/components/load-more';
-import Spinner from 'pl-fe/components/ui/spinner';
-import { useSettings } from 'pl-fe/stores/settings';
+import LoadMore from '@/components/load-more';
+import Spinner from '@/components/ui/spinner';
+import { useSettings } from '@/stores/settings';
 
 import { EmptyMessage } from './empty-message';
 

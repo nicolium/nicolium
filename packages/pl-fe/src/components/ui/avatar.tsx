@@ -3,8 +3,8 @@ import { FastAverageColor } from 'fast-average-color';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import StillImage, { IStillImage } from 'pl-fe/components/still-image';
-import { useSettings } from 'pl-fe/stores/settings';
+import StillImage, { IStillImage } from '@/components/still-image';
+import { useSettings } from '@/stores/settings';
 
 import AltIndicator from '../alt-indicator';
 
@@ -122,7 +122,7 @@ const Avatar = (props: IAvatar) => {
     <StillImage
       className={clsx('⁂-avatar', isCat && '⁂-avatar--cat', className)}
       style={style}
-      src={src || require('pl-fe/assets/images/avatar-missing.png')}
+      src={src || require('@/assets/images/avatar-missing.png')}
       alt={altText}
       onError={handleLoadFailure}
     />

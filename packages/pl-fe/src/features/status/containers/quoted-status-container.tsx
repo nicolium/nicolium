@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 
-import QuotedStatus from 'pl-fe/components/quoted-status';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { makeGetStatus } from 'pl-fe/selectors';
+import QuotedStatus from '@/components/quoted-status';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { makeGetStatus } from '@/selectors';
 
 interface IQuotedStatusContainer {
   /** Status ID to the quoted status. */

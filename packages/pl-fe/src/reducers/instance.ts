@@ -2,11 +2,11 @@ import { create } from 'mutative';
 import { type Instance, instanceSchema, PleromaConfig } from 'pl-api';
 import * as v from 'valibot';
 
-import { ADMIN_CONFIG_UPDATE_REQUEST, ADMIN_CONFIG_UPDATE_SUCCESS, type AdminActions } from 'pl-fe/actions/admin';
-import { INSTANCE_FETCH_FAIL, INSTANCE_FETCH_SUCCESS, type InstanceAction } from 'pl-fe/actions/instance';
-import { PLEROMA_PRELOAD_IMPORT, type PreloadAction } from 'pl-fe/actions/preload';
-import KVStore from 'pl-fe/storage/kv-store';
-import ConfigDB from 'pl-fe/utils/config-db';
+import { ADMIN_CONFIG_UPDATE_REQUEST, ADMIN_CONFIG_UPDATE_SUCCESS, type AdminActions } from '@/actions/admin';
+import { INSTANCE_FETCH_FAIL, INSTANCE_FETCH_SUCCESS, type InstanceAction } from '@/actions/instance';
+import { PLEROMA_PRELOAD_IMPORT, type PreloadAction } from '@/actions/preload';
+import KVStore from '@/storage/kv-store';
+import ConfigDB from '@/utils/config-db';
 
 const initialState: State = { fetched: false, ...v.parse(instanceSchema, {}) };
 

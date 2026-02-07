@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 import { translationSchema, type Translation } from 'pl-api';
 import * as v from 'valibot';
 
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useLanguageModelAvailabilityActions } from 'pl-fe/stores/language-model-availability';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useLanguageModelAvailabilityActions } from '@/stores/language-model-availability';
 
 const useLocalStatusTranslation = (statusId: string, targetLanguage?: string) => {
   const status = useAppSelector((state) => state.statuses[statusId]);

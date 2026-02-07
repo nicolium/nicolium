@@ -3,17 +3,17 @@ import clsx from 'clsx';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Virtuoso, VirtuosoHandle } from 'react-virtuoso';
 
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
-import { ParsedContent } from 'pl-fe/components/parsed-content';
-import Avatar from 'pl-fe/components/ui/avatar';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import PlaceholderChatMessage from 'pl-fe/features/placeholder/components/placeholder-chat-message';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useShoutboxIsLoading, useShoutboxMessages, type ShoutMessage } from 'pl-fe/stores/shoutbox';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import HoverAccountWrapper from '@/components/hover-account-wrapper';
+import { ParsedContent } from '@/components/parsed-content';
+import Avatar from '@/components/ui/avatar';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Emojify from '@/features/emoji/emojify';
+import PlaceholderChatMessage from '@/features/placeholder/components/placeholder-chat-message';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useShoutboxIsLoading, useShoutboxMessages, type ShoutMessage } from '@/stores/shoutbox';
 
 import { ChatMessageListList, ChatMessageListScroller } from './chat-message-list';
 

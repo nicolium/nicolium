@@ -1,9 +1,9 @@
 import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 
-import Layout from 'pl-fe/components/ui/layout';
-import LinkFooter from 'pl-fe/features/ui/components/link-footer';
-import { MyGroupsPanel, NewGroupPanel } from 'pl-fe/features/ui/util/async-components';
+import Layout from '@/components/ui/layout';
+import LinkFooter from '@/features/ui/components/link-footer';
+import { MyGroupsPanel, NewGroupPanel } from '@/features/ui/util/async-components';
 
 /** Layout to display groups. */
 const ManageGroupsLayout = () => (

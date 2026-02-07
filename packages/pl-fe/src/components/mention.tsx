@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import React from 'react';
 
-import Tooltip from 'pl-fe/components/ui/tooltip';
+import Tooltip from '@/components/ui/tooltip';
 
 import type { Mention as MentionEntity } from 'pl-api';
 

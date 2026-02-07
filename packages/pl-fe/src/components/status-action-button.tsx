@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import Icon from 'pl-fe/components/ui/icon';
-import Text from 'pl-fe/components/ui/text';
-import { useLongPress } from 'pl-fe/hooks/use-long-press';
-import { useSettings } from 'pl-fe/stores/settings';
+import Icon from '@/components/ui/icon';
+import Text from '@/components/ui/text';
+import { useLongPress } from '@/hooks/use-long-press';
+import { useSettings } from '@/stores/settings';
 
 import AnimatedNumber from './animated-number';
 

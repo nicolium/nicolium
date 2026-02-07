@@ -2,12 +2,12 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Text from 'pl-fe/components/ui/text';
-import Widget from 'pl-fe/components/ui/widget';
-import AccountContainer from 'pl-fe/containers/account-container';
-import PlaceholderSidebarSuggestions from 'pl-fe/features/placeholder/components/placeholder-sidebar-suggestions';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useDismissSuggestion, useSuggestions } from 'pl-fe/queries/suggestions';
+import Text from '@/components/ui/text';
+import Widget from '@/components/ui/widget';
+import AccountContainer from '@/containers/account-container';
+import PlaceholderSidebarSuggestions from '@/features/placeholder/components/placeholder-sidebar-suggestions';
+import { useFeatures } from '@/hooks/use-features';
+import { useDismissSuggestion, useSuggestions } from '@/queries/suggestions';
 
 import type { Account as AccountEntity } from 'pl-api';
 

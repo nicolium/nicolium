@@ -1,9 +1,9 @@
 import { useLocation, useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 
-import { Entities } from 'pl-fe/entity-store/entities';
-import { useEntity } from 'pl-fe/entity-store/hooks/use-entity';
-import { useClient } from 'pl-fe/hooks/use-client';
+import { Entities } from '@/entity-store/entities';
+import { useEntity } from '@/entity-store/hooks/use-entity';
+import { useClient } from '@/hooks/use-client';
 
 import { useGroupRelationship } from './use-group-relationship';
 

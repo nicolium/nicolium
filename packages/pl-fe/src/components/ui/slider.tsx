@@ -1,7 +1,7 @@
 import throttle from 'lodash/throttle';
 import React, { useCallback, useRef } from 'react';
 
-import { getPointerPosition } from 'pl-fe/features/video';
+import { getPointerPosition } from '@/features/video';
 
 interface ISlider {
   /** Value between 0 and 1. */

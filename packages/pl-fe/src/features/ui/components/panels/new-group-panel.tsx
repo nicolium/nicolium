@@ -1,10 +1,10 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import Button from '@/components/ui/button';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useModalsActions } from '@/stores/modals';
 
 const NewGroupPanel = () => {
   const { openModal } = useModalsActions();

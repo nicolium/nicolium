@@ -1,9 +1,9 @@
 import { useMutation, type InfiniteData } from '@tanstack/react-query';
 
-import { useClient } from 'pl-fe/hooks/use-client';
-import { queryClient } from 'pl-fe/queries/client';
-import { makePaginatedResponseQuery } from 'pl-fe/queries/utils/make-paginated-response-query';
-import { minifyAccountList } from 'pl-fe/queries/utils/minify-list';
+import { useClient } from '@/hooks/use-client';
+import { queryClient } from '@/queries/client';
+import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
+import { minifyAccountList } from '@/queries/utils/minify-list';
 
 import { filterById } from '../utils/filter-id';
 

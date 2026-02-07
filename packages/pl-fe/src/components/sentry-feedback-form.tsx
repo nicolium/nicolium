@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Text from 'pl-fe/components/ui/text';
-import Textarea from 'pl-fe/components/ui/textarea';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { captureSentryFeedback } from 'pl-fe/sentry';
+import Button from '@/components/ui/button';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import Text from '@/components/ui/text';
+import Textarea from '@/components/ui/textarea';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { captureSentryFeedback } from '@/sentry';
 
 interface ISentryFeedbackForm {
   eventId: string;

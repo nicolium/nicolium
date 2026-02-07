@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl, type MessageDescriptor } from 'react-intl';
 
-import List, { ListItem } from 'pl-fe/components/list';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import FileInput from 'pl-fe/components/ui/file-input';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Text from 'pl-fe/components/ui/text';
-import Toggle from 'pl-fe/components/ui/toggle';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import toast from 'pl-fe/toast';
+import List, { ListItem } from '@/components/list';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import FileInput from '@/components/ui/file-input';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import Text from '@/components/ui/text';
+import Toggle from '@/components/ui/toggle';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
+import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.import_data', defaultMessage: 'Import data' },

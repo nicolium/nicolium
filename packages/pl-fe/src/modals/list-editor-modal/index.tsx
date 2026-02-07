@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Modal from 'pl-fe/components/ui/modal';
-import Spinner from 'pl-fe/components/ui/spinner';
-import { useList } from 'pl-fe/queries/accounts/use-lists';
+import Modal from '@/components/ui/modal';
+import Spinner from '@/components/ui/spinner';
+import { useList } from '@/queries/accounts/use-lists';
 
 import EditListForm from './components/edit-list-form';
 import ListMembersForm from './components/list-members-form';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 interface ListEditorModalProps {
   listId: string;

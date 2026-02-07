@@ -1,11 +1,11 @@
 import { statusSchema } from 'pl-api';
 import * as v from 'valibot';
 
-import { normalizeStatus } from 'pl-fe/normalizers/status';
-import { selectOwnAccount } from 'pl-fe/selectors';
+import { normalizeStatus } from '@/normalizers/status';
+import { selectOwnAccount } from '@/selectors';
 
-import type { DraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
-import type { RootState } from 'pl-fe/store';
+import type { DraftStatus } from '@/queries/statuses/use-draft-statuses';
+import type { RootState } from '@/store';
 
 const buildPoll = (draftStatus: DraftStatus) => {
   if (draftStatus.poll?.options) {

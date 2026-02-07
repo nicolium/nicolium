@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedDate, useIntl } from 'react-intl';
 
-import IconButton from 'pl-fe/components/ui/icon-button';
-import { DatePicker } from 'pl-fe/features/ui/util/async-components';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useInstance } from 'pl-fe/hooks/use-instance';
+import IconButton from '@/components/ui/icon-button';
+import { DatePicker } from '@/features/ui/util/async-components';
+import { useFeatures } from '@/hooks/use-features';
+import { useInstance } from '@/hooks/use-instance';
 
 const messages = defineMessages({
   birthdayPlaceholder: { id: 'edit_profile.fields.birthday_placeholder', defaultMessage: 'Your birthday' },

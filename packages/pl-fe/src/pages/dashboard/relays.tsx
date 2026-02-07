@@ -1,17 +1,17 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import Form from 'pl-fe/components/ui/form';
-import HStack from 'pl-fe/components/ui/hstack';
-import Input from 'pl-fe/components/ui/input';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useTextField } from 'pl-fe/hooks/forms/use-text-field';
-import { useRelays } from 'pl-fe/queries/admin/use-relays';
-import toast from 'pl-fe/toast';
+import ScrollableList from '@/components/scrollable-list';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import Form from '@/components/ui/form';
+import HStack from '@/components/ui/hstack';
+import Input from '@/components/ui/input';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useTextField } from '@/hooks/forms/use-text-field';
+import { useRelays } from '@/queries/admin/use-relays';
+import toast from '@/toast';
 
 import type { AdminRelay as RelayEntity } from 'pl-api';
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import { defineMessages, MessageDescriptor, useIntl } from 'react-intl';
 
-import Icon from 'pl-fe/components/ui/icon';
+import Icon from '@/components/ui/icon';
 
-import type { Status } from 'pl-fe/normalizers/status';
+import type { Status } from '@/normalizers/status';
 
 interface IStatusTypeIcon {
   visibility: Status['visibility'];

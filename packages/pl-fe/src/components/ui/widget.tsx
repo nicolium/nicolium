@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import IconButton from 'pl-fe/components/ui/icon-button';
+import IconButton from '@/components/ui/icon-button';
 
 interface IWidget {
   /** Widget title text. */

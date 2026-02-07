@@ -1,9 +1,9 @@
 import { Link } from '@tanstack/react-router';
 import React from 'react';
 
-import Text from 'pl-fe/components/ui/text';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
-import { useSettings } from 'pl-fe/stores/settings';
+import Text from '@/components/ui/text';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useSettings } from '@/stores/settings';
 
 interface INavlinks {
   type: string;

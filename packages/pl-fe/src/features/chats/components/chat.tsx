@@ -2,17 +2,17 @@ import clsx from 'clsx';
 import React, { MutableRefObject, useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { uploadMedia } from 'pl-fe/actions/media';
-import Stack from 'pl-fe/components/ui/stack';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useChatActions } from 'pl-fe/queries/chats';
-import toast from 'pl-fe/toast';
+import { uploadMedia } from '@/actions/media';
+import Stack from '@/components/ui/stack';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useChatActions } from '@/queries/chats';
+import toast from '@/toast';
 
 import ChatComposer from './chat-composer';
 import ChatMessageList from './chat-message-list';
 
+import type { PlfeResponse } from '@/api';
 import type { Chat as ChatEntity, MediaAttachment } from 'pl-api';
-import type { PlfeResponse } from 'pl-fe/api';
 
 const fileKeyGen = (): number => Math.floor((Math.random() * 0x10000));
 

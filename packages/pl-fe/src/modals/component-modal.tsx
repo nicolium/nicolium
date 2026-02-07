@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Modal from 'pl-fe/components/ui/modal';
+import Modal from '@/components/ui/modal';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 interface ComponentModalProps {
   component: React.ComponentType<BaseModalProps>;

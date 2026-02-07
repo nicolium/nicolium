@@ -3,21 +3,21 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { FormattedMessage } from 'react-intl';
 
-import Column from 'pl-fe/components/ui/column';
-import Layout from 'pl-fe/components/ui/layout';
-import Tabs, { type Item } from 'pl-fe/components/ui/tabs';
-import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
-import LinkFooter from 'pl-fe/features/ui/components/link-footer';
-import { layouts } from 'pl-fe/features/ui/router';
+import Column from '@/components/ui/column';
+import Layout from '@/components/ui/layout';
+import Tabs, { type Item } from '@/components/ui/tabs';
+import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
+import LinkFooter from '@/features/ui/components/link-footer';
+import { layouts } from '@/features/ui/router';
 import {
   EventHeader,
   SignUpPanel,
   TrendsPanel,
   WhoToFollowPanel,
-} from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { makeGetStatus } from 'pl-fe/selectors';
+} from '@/features/ui/util/async-components';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFeatures } from '@/hooks/use-features';
+import { makeGetStatus } from '@/selectors';
 
 const getStatus = makeGetStatus();
 

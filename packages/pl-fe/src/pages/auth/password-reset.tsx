@@ -2,16 +2,16 @@ import { Navigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { resetPassword } from 'pl-fe/actions/security';
-import { BigCard } from 'pl-fe/components/big-card';
-import Button from 'pl-fe/components/ui/button';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Input from 'pl-fe/components/ui/input';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import toast from 'pl-fe/toast';
+import { resetPassword } from '@/actions/security';
+import { BigCard } from '@/components/big-card';
+import Button from '@/components/ui/button';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import Input from '@/components/ui/input';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useFeatures } from '@/hooks/use-features';
+import toast from '@/toast';
 
 const messages = defineMessages({
   nicknameOrEmail: { id: 'password_reset.fields.username_placeholder', defaultMessage: 'Email or username' },

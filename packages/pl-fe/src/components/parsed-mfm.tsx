@@ -5,9 +5,9 @@ import * as mfm from '@transfem-org/sfm-js';
 import clamp from 'lodash/clamp';
 import React, { CSSProperties } from 'react';
 
-import { useSettings } from 'pl-fe/stores/settings';
-import { makeEmojiMap } from 'pl-fe/utils/normalizers';
-import nyaize from 'pl-fe/utils/nyaize';
+import { useSettings } from '@/stores/settings';
+import { makeEmojiMap } from '@/utils/normalizers';
+import nyaize from '@/utils/nyaize';
 
 import HashtagLink from './hashtag-link';
 import HoverAccountWrapper from './hover-account-wrapper';

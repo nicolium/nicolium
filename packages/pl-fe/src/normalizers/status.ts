@@ -6,7 +6,7 @@
 import { type Account as BaseAccount, type Status as BaseStatus, type MediaAttachment, mentionSchema } from 'pl-api';
 import * as v from 'valibot';
 
-import { unescapeHTML } from 'pl-fe/utils/html';
+import { unescapeHTML } from '@/utils/html';
 
 const domParser = new DOMParser();
 

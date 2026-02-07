@@ -1,13 +1,13 @@
 import { defineMessages } from 'react-intl';
 
-import { getClient } from 'pl-fe/api';
-import toast from 'pl-fe/toast';
+import { getClient } from '@/api';
+import toast from '@/toast';
 
 import { importEntities } from './importer';
 import { STATUS_FETCH_SOURCE_FAIL, STATUS_FETCH_SOURCE_REQUEST, STATUS_FETCH_SOURCE_SUCCESS } from './statuses';
 
+import type { AppDispatch, RootState } from '@/store';
 import type { CreateEventParams, Location, MediaAttachment, Status } from 'pl-api';
-import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const EVENT_JOIN_REQUEST = 'EVENT_JOIN_REQUEST' as const;
 const EVENT_JOIN_FAIL = 'EVENT_JOIN_FAIL' as const;

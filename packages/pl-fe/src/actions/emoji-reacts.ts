@@ -1,15 +1,15 @@
 import { defineMessages, IntlShape } from 'react-intl';
 
-import { useSettingsStore } from 'pl-fe/stores/settings';
-import toast from 'pl-fe/toast';
-import { isLoggedIn } from 'pl-fe/utils/auth';
-import { supportsEmojiReacts } from 'pl-fe/utils/check-instance-capability';
+import { useSettingsStore } from '@/stores/settings';
+import toast from '@/toast';
+import { isLoggedIn } from '@/utils/auth';
+import { supportsEmojiReacts } from '@/utils/check-instance-capability';
 
 import { getClient } from '../api';
 
 import { importEntities } from './importer';
 
-import type { AppDispatch, RootState } from 'pl-fe/store';
+import type { AppDispatch, RootState } from '@/store';
 
 const EMOJI_REACT_REQUEST = 'EMOJI_REACT_REQUEST' as const;
 const EMOJI_REACT_FAIL = 'EMOJI_REACT_FAIL' as const;

@@ -1,15 +1,15 @@
 import React, { useCallback, useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Modal from 'pl-fe/components/ui/modal';
-import AccountContainer from 'pl-fe/containers/account-container';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { makeGetStatus } from 'pl-fe/selectors';
+import { fetchStatusWithContext } from '@/actions/statuses';
+import ScrollableList from '@/components/scrollable-list';
+import Modal from '@/components/ui/modal';
+import AccountContainer from '@/containers/account-container';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { makeGetStatus } from '@/selectors';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 interface MentionsModalProps {
   statusId: string;

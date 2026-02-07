@@ -1,7 +1,7 @@
 import { animated, useSpring } from '@react-spring/web';
 import React from 'react';
 
-import { useSettings } from 'pl-fe/stores/settings';
+import { useSettings } from '@/stores/settings';
 
 interface IWarning {
   message: React.ReactNode;

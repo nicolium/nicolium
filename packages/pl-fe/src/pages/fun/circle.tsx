@@ -2,27 +2,27 @@ import { Link } from '@tanstack/react-router';
 import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { processCircle } from 'pl-fe/actions/circle';
-import { resetCompose, uploadComposeSuccess, uploadFile } from 'pl-fe/actions/compose';
-import Account from 'pl-fe/components/account';
-import Accordion from 'pl-fe/components/ui/accordion';
-import Avatar from 'pl-fe/components/ui/avatar';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import HStack from 'pl-fe/components/ui/hstack';
-import ProgressBar from 'pl-fe/components/ui/progress-bar';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import toast from 'pl-fe/toast';
+import { processCircle } from '@/actions/circle';
+import { resetCompose, uploadComposeSuccess, uploadFile } from '@/actions/compose';
+import Account from '@/components/account';
+import Accordion from '@/components/ui/accordion';
+import Avatar from '@/components/ui/avatar';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import HStack from '@/components/ui/hstack';
+import ProgressBar from '@/components/ui/progress-bar';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { useModalsActions } from '@/stores/modals';
+import toast from '@/toast';
 
 const toRad = (x: number) => x * (Math.PI / 180);
 
-const avatarMissing: string = require('pl-fe/assets/images/avatar-missing.png');
+const avatarMissing: string = require('@/assets/images/avatar-missing.png');
 
 const HEIGHT = 1000;
 const WIDTH = 1000;

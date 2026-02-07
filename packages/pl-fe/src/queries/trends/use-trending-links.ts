@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useFeatures } from 'pl-fe/hooks/use-features';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
 
 const useTrendingLinks = () => {
   const client = useClient();

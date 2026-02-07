@@ -1,7 +1,7 @@
-import tintify from 'pl-fe/utils/colors';
-import { generateAccent, generateNeutral } from 'pl-fe/utils/theme';
+import tintify from '@/utils/colors';
+import { generateAccent, generateNeutral } from '@/utils/theme';
 
-import type { TailwindColorPalette } from 'pl-fe/types/colors';
+import type { TailwindColorPalette } from '@/types/colors';
 
 type PlFeColors = Record<string, Record<string, string>>;
 

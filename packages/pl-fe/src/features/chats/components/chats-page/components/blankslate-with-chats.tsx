@@ -2,9 +2,9 @@ import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
+import Button from '@/components/ui/button';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
 
 /** To display on the chats main page when no message is selected, but chats are present. */
 const BlankslateWithChats = () => {

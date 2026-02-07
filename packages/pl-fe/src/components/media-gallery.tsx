@@ -2,17 +2,17 @@ import clsx from 'clsx';
 import React, { useState, useRef, useLayoutEffect, CSSProperties } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import AltIndicator from 'pl-fe/components/alt-indicator';
-import Blurhash from 'pl-fe/components/blurhash';
-import Icon from 'pl-fe/components/icon';
-import StillImage from 'pl-fe/components/still-image';
-import Popover from 'pl-fe/components/ui/popover';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { MIMETYPE_ICONS } from 'pl-fe/components/upload';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
-import { useSettings } from 'pl-fe/stores/settings';
-import { truncateFilename } from 'pl-fe/utils/media';
+import AltIndicator from '@/components/alt-indicator';
+import Blurhash from '@/components/blurhash';
+import Icon from '@/components/icon';
+import StillImage from '@/components/still-image';
+import Popover from '@/components/ui/popover';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { MIMETYPE_ICONS } from '@/components/upload';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useSettings } from '@/stores/settings';
+import { truncateFilename } from '@/utils/media';
 
 import { isIOS } from '../is-mobile';
 import { isPanoramic, isPortrait, isNonConformingRatio, minimumAspectRatio, maximumAspectRatio } from '../utils/media-aspect-ratio';

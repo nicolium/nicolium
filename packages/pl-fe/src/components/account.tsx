@@ -3,27 +3,27 @@ import clsx from 'clsx';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
-import Avatar from 'pl-fe/components/ui/avatar';
-import Emoji from 'pl-fe/components/ui/emoji';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import VerificationBadge from 'pl-fe/components/verification-badge';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import ActionButton from 'pl-fe/features/ui/components/action-button';
-import { useAcct } from 'pl-fe/hooks/use-acct';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useSettings } from 'pl-fe/stores/settings';
+import HoverAccountWrapper from '@/components/hover-account-wrapper';
+import Avatar from '@/components/ui/avatar';
+import Emoji from '@/components/ui/emoji';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import IconButton from '@/components/ui/icon-button';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import VerificationBadge from '@/components/verification-badge';
+import Emojify from '@/features/emoji/emojify';
+import ActionButton from '@/features/ui/components/action-button';
+import { useAcct } from '@/hooks/use-acct';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useSettings } from '@/stores/settings';
 
 import Badge from './badge';
 import { ParsedContent } from './parsed-content';
 import RelativeTimestamp from './relative-timestamp';
 
+import type { StatusApprovalStatus } from '@/normalizers/status';
 import type { Account as AccountSchema } from 'pl-api';
-import type { StatusApprovalStatus } from 'pl-fe/normalizers/status';
 
 interface IInstanceFavicon {
   account: Pick<AccountSchema, 'domain' | 'favicon'>;

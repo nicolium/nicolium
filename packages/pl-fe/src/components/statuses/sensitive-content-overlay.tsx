@@ -2,14 +2,14 @@ import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import HStack from 'pl-fe/components/ui/hstack';
-import Text from 'pl-fe/components/ui/text';
-import { useSettings } from 'pl-fe/stores/settings';
-import { useStatusMeta, useStatusMetaActions } from 'pl-fe/stores/status-meta';
+import Button from '@/components/ui/button';
+import HStack from '@/components/ui/hstack';
+import Text from '@/components/ui/text';
+import { useSettings } from '@/stores/settings';
+import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
+import type { Status } from '@/normalizers/status';
 import type { FilterResult } from 'pl-api';
-import type { Status } from 'pl-fe/normalizers/status';
 
 const useMediaVisible = (status: Pick<Status, 'media_attachments' | 'sensitive'> & Partial<Pick<Status, 'filtered' | 'id'>>, displayMedia: 'default' | 'show_all' | 'hide_all'): [boolean, Array<FilterResult>] => {
   const { mediaVisible } = useStatusMeta(status.id as string);

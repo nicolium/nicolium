@@ -1,18 +1,18 @@
 import React from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
-import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
-import { ParsedContent } from 'pl-fe/components/parsed-content';
-import HStack from 'pl-fe/components/ui/hstack';
-import Modal from 'pl-fe/components/ui/modal';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useStatusHistory } from 'pl-fe/queries/statuses/use-status-history';
+import AttachmentThumbs from '@/components/attachment-thumbs';
+import { ParsedContent } from '@/components/parsed-content';
+import HStack from '@/components/ui/hstack';
+import Modal from '@/components/ui/modal';
+import Spinner from '@/components/ui/spinner';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Emojify from '@/features/emoji/emojify';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useStatusHistory } from '@/queries/statuses/use-status-history';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 interface CompareHistoryModalProps {
   statusId: string;

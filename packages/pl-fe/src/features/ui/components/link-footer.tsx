@@ -1,9 +1,9 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Emojify from 'pl-fe/features/emoji/emojify';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
-import sourceCode from 'pl-fe/utils/code';
+import Emojify from '@/features/emoji/emojify';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import sourceCode from '@/utils/code';
 
 const messages = defineMessages({
   meow: { id: 'footer.meow', defaultMessage: 'meow :3 {emoji}' },

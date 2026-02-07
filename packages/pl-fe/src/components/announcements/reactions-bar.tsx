@@ -1,14 +1,14 @@
 import { useTransition } from '@react-spring/web';
 import React from 'react';
 
-import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
-import { useAnnouncements } from 'pl-fe/queries/announcements/use-announcements';
-import { useSettings } from 'pl-fe/stores/settings';
+import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
+import { useAnnouncements } from '@/queries/announcements/use-announcements';
+import { useSettings } from '@/stores/settings';
 
 import Reaction from './reaction';
 
+import type { Emoji, NativeEmoji } from '@/features/emoji';
 import type { AnnouncementReaction, CustomEmoji } from 'pl-api';
-import type { Emoji, NativeEmoji } from 'pl-fe/features/emoji';
 
 interface IReactionsBar {
   announcementId: string;

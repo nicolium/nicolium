@@ -2,9 +2,9 @@ import userEvent from '@testing-library/user-event';
 import { GroupRoles } from 'pl-api';
 import React from 'react';
 
-import { __stub } from 'pl-fe/api';
-import { buildGroup, buildGroupMember, buildGroupRelationship } from 'pl-fe/jest/factory';
-import { render, screen, waitFor } from 'pl-fe/jest/test-helpers';
+import { __stub } from '@/api';
+import { buildGroup, buildGroupMember, buildGroupRelationship } from '@/jest/factory';
+import { render, screen, waitFor } from '@/jest/test-helpers';
 
 import GroupMemberListItem from './group-member-list-item';
 

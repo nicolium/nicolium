@@ -2,7 +2,7 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { length } from 'stringz';
 
-import ProgressCircle from 'pl-fe/components/progress-circle';
+import ProgressCircle from '@/components/progress-circle';
 
 const messages = defineMessages({
   title: { id: 'compose.character_counter.title', defaultMessage: 'Used {chars} out of {maxChars} {maxChars, plural, one {character} other {characters}}' },

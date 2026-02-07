@@ -1,6 +1,6 @@
 import { queryOptions } from '@tanstack/react-query';
 
-import { getClient } from 'pl-fe/api';
+import { getClient } from '@/api';
 
 const accountScrobbleQueryOptions = (accountId?: string) => queryOptions({
   queryKey: ['scrobbles', accountId!],

@@ -174,8 +174,8 @@ const config = defineConfig(({ command }) => ({
   resolve: {
     alias: [
       {
-        find: 'pl-fe',
-        replacement: fileURLToPath(new URL('./src', import.meta.url)),
+        find: '@/',
+        replacement: fileURLToPath(new URL('./src/', import.meta.url)),
       },
     ],
     dedupe: ['@floating-ui/react', 'tabbable', 'query-string', 'valibot'],

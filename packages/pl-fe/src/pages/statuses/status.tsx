@@ -2,20 +2,20 @@ import { Navigate } from '@tanstack/react-router';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeSetting } from 'pl-fe/actions/settings';
-import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
-import DropdownMenu, { type Menu } from 'pl-fe/components/dropdown-menu';
-import MissingIndicator from 'pl-fe/components/missing-indicator';
-import PullToRefresh from 'pl-fe/components/pull-to-refresh';
-import Column from 'pl-fe/components/ui/column';
-import Stack from 'pl-fe/components/ui/stack';
-import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
-import Thread from 'pl-fe/features/status/components/thread';
-import { statusRoute } from 'pl-fe/features/ui/router';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { makeGetStatus } from 'pl-fe/selectors';
-import { useSettings } from 'pl-fe/stores/settings';
+import { changeSetting } from '@/actions/settings';
+import { fetchStatusWithContext } from '@/actions/statuses';
+import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
+import MissingIndicator from '@/components/missing-indicator';
+import PullToRefresh from '@/components/pull-to-refresh';
+import Column from '@/components/ui/column';
+import Stack from '@/components/ui/stack';
+import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
+import Thread from '@/features/status/components/thread';
+import { statusRoute } from '@/features/ui/router';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { makeGetStatus } from '@/selectors';
+import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
   title: { id: 'status.title', defaultMessage: 'Post details' },

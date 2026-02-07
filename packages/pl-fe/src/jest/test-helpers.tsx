@@ -10,13 +10,13 @@ import { MemoryRouter } from 'react-router-dom';
 import { applyMiddleware, createStore } from 'redux';
 import { thunk } from 'redux-thunk';
 
-import { ChatProvider } from 'pl-fe/contexts/chat-context';
-import { StatProvider } from 'pl-fe/contexts/stat-context';
-import { queryClient } from 'pl-fe/queries/client';
+import { ChatProvider } from '@/contexts/chat-context';
+import { StatProvider } from '@/contexts/stat-context';
+import { queryClient } from '@/queries/client';
 
 import { default as rootReducer } from '../reducers';
 
-import type { AppDispatch } from 'pl-fe/store';
+import type { AppDispatch } from '@/store';
 import type { Action, AnyAction } from 'redux';
 
 // Mock Redux

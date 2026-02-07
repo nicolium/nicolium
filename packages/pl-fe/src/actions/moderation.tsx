@@ -1,17 +1,17 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, IntlShape } from 'react-intl';
 
-import { fetchAccountByUsername } from 'pl-fe/actions/accounts';
-import { deactivateUser, deleteUser, deleteStatus, toggleStatusSensitivity } from 'pl-fe/actions/admin';
-import OutlineBox from 'pl-fe/components/outline-box';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import AccountContainer from 'pl-fe/containers/account-container';
-import { selectAccount } from 'pl-fe/selectors';
-import { useModalsStore } from 'pl-fe/stores/modals';
-import toast from 'pl-fe/toast';
+import { fetchAccountByUsername } from '@/actions/accounts';
+import { deactivateUser, deleteUser, deleteStatus, toggleStatusSensitivity } from '@/actions/admin';
+import OutlineBox from '@/components/outline-box';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import AccountContainer from '@/containers/account-container';
+import { selectAccount } from '@/selectors';
+import { useModalsStore } from '@/stores/modals';
+import toast from '@/toast';
 
-import type { AppDispatch, RootState } from 'pl-fe/store';
+import type { AppDispatch, RootState } from '@/store';
 
 const messages = defineMessages({
   deactivateUserHeading: { id: 'confirmations.admin.deactivate_user.heading', defaultMessage: 'Deactivate @{acct}' },

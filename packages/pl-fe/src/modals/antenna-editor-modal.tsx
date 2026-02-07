@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Input from 'pl-fe/components/ui/input';
-import Modal from 'pl-fe/components/ui/modal';
-import Spinner from 'pl-fe/components/ui/spinner';
-import { useAntenna, useCreateAntenna, useUpdateAntenna } from 'pl-fe/queries/accounts/use-antennas';
-import toast from 'pl-fe/toast';
+import Button from '@/components/ui/button';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import Input from '@/components/ui/input';
+import Modal from '@/components/ui/modal';
+import Spinner from '@/components/ui/spinner';
+import { useAntenna, useCreateAntenna, useUpdateAntenna } from '@/queries/accounts/use-antennas';
+import toast from '@/toast';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 type Tab = 'info' | 'accounts' | 'excludedAccounts';
 

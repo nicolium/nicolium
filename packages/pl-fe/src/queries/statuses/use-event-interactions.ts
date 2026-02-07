@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { defineMessages } from 'react-intl';
 
-import { EventsAction } from 'pl-fe/actions/events';
-import { importEntities } from 'pl-fe/actions/importer';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useClient } from 'pl-fe/hooks/use-client';
-import toast from 'pl-fe/toast';
+import { EventsAction } from '@/actions/events';
+import { importEntities } from '@/actions/importer';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
+import toast from '@/toast';
 
 import type { Status } from 'pl-api';
 

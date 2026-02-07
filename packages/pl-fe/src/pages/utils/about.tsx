@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Navlinks } from 'pl-fe/components/navlinks';
-import Card from 'pl-fe/components/ui/card';
-import { languages } from 'pl-fe/features/preferences';
-import { aboutRoute } from 'pl-fe/features/ui/router';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
-import { useAboutPage } from 'pl-fe/queries/pl-fe/use-about-page';
-import { useSettings } from 'pl-fe/stores/settings';
+import { Navlinks } from '@/components/navlinks';
+import Card from '@/components/ui/card';
+import { languages } from '@/features/preferences';
+import { aboutRoute } from '@/features/ui/router';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useAboutPage } from '@/queries/pl-fe/use-about-page';
+import { useSettings } from '@/stores/settings';
 
 interface IAbout {
   slug: string;

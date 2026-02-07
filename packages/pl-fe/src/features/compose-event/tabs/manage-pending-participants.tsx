@@ -1,13 +1,13 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Button from 'pl-fe/components/ui/button';
-import HStack from 'pl-fe/components/ui/hstack';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Stack from 'pl-fe/components/ui/stack';
-import AccountContainer from 'pl-fe/containers/account-container';
-import { useAcceptEventParticipationRequestMutation, useEventParticipationRequests, useRejectEventParticipationRequestMutation } from 'pl-fe/queries/events/use-event-participation-requests';
+import ScrollableList from '@/components/scrollable-list';
+import Button from '@/components/ui/button';
+import HStack from '@/components/ui/hstack';
+import Spinner from '@/components/ui/spinner';
+import Stack from '@/components/ui/stack';
+import AccountContainer from '@/containers/account-container';
+import { useAcceptEventParticipationRequestMutation, useEventParticipationRequests, useRejectEventParticipationRequestMutation } from '@/queries/events/use-event-participation-requests';
 
 const messages = defineMessages({
   authorize: { id: 'compose_event.participation_requests.authorize', defaultMessage: 'Authorize' },

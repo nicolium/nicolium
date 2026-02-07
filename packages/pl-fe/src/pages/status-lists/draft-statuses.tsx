@@ -1,10 +1,10 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Column from 'pl-fe/components/ui/column';
-import DraftStatus from 'pl-fe/features/draft-statuses/components/draft-status';
-import { useDraftStatusesQuery } from 'pl-fe/queries/statuses/use-draft-statuses';
+import ScrollableList from '@/components/scrollable-list';
+import Column from '@/components/ui/column';
+import DraftStatus from '@/features/draft-statuses/components/draft-status';
+import { useDraftStatusesQuery } from '@/queries/statuses/use-draft-statuses';
 
 const messages = defineMessages({
   heading: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },

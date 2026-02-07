@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 import ReactSwipeableViews from 'react-swipeable-views';
 
-import Card from 'pl-fe/components/ui/card';
-import HStack from 'pl-fe/components/ui/hstack';
-import Widget from 'pl-fe/components/ui/widget';
-import { useAnnouncements } from 'pl-fe/queries/announcements/use-announcements';
-import { useCustomEmojis } from 'pl-fe/queries/instance/use-custom-emojis';
+import Card from '@/components/ui/card';
+import HStack from '@/components/ui/hstack';
+import Widget from '@/components/ui/widget';
+import { useAnnouncements } from '@/queries/announcements/use-announcements';
+import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
 
 import Announcement from './announcement';
 

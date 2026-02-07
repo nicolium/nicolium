@@ -1,8 +1,8 @@
 import { OrderedSet as ImmutableOrderedSet } from 'immutable';
 
-import { buildInstance } from 'pl-fe/jest/factory';
-import { mockStore, rootState } from 'pl-fe/jest/test-helpers';
-import { ReducerCompose } from 'pl-fe/reducers/compose';
+import { buildInstance } from '@/jest/factory';
+import { mockStore, rootState } from '@/jest/test-helpers';
+import { ReducerCompose } from '@/reducers/compose';
 
 import { uploadCompose, submitCompose } from './compose';
 import { STATUS_CREATE_REQUEST } from './statuses';

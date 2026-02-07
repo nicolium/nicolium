@@ -3,8 +3,8 @@ import { createUseGesture, dragAction, pinchAction } from '@use-gesture/react';
 import clsx from 'clsx';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 
-import Blurhash from 'pl-fe/components/blurhash';
-import Spinner from 'pl-fe/components/ui/spinner';
+import Blurhash from '@/components/blurhash';
+import Spinner from '@/components/ui/spinner';
 
 const MIN_SCALE = 1;
 const MAX_SCALE = 4;

@@ -4,8 +4,8 @@
  */
 import { create, type Immutable } from 'mutative';
 
-import { VERIFY_CREDENTIALS_SUCCESS, AUTH_ACCOUNT_REMEMBER_SUCCESS, type AuthAction } from 'pl-fe/actions/auth';
-import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS, type MeAction } from 'pl-fe/actions/me';
+import { VERIFY_CREDENTIALS_SUCCESS, AUTH_ACCOUNT_REMEMBER_SUCCESS, type AuthAction } from '@/actions/auth';
+import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS, type MeAction } from '@/actions/me';
 
 import type { Account, CredentialAccount } from 'pl-api';
 

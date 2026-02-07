@@ -1,4 +1,4 @@
-import { buildAccount } from 'pl-fe/jest/factory';
+import { buildAccount } from '@/jest/factory';
 
 import {
   tagToBadge,

@@ -1,6 +1,6 @@
-import { __stub } from 'pl-fe/api';
-import { buildGroup } from 'pl-fe/jest/factory';
-import { renderHook, waitFor } from 'pl-fe/jest/test-helpers';
+import { __stub } from '@/api';
+import { buildGroup } from '@/jest/factory';
+import { renderHook, waitFor } from '@/jest/test-helpers';
 
 import { useGroup } from './use-group';
 

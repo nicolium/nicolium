@@ -1,6 +1,6 @@
 import { useAppSelector } from './use-app-selector';
 
-import type { Compose } from 'pl-fe/reducers/compose';
+import type { Compose } from '@/reducers/compose';
 
 /** Get compose for given key with fallback to 'default' */
 const useCompose = <ID extends string>(composeId: ID extends 'default' ? never : ID): Compose =>

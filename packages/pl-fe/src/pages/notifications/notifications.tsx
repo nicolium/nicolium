@@ -1,8 +1,8 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import NotificationsColumn from 'pl-fe/columns/notifications';
-import Column from 'pl-fe/components/ui/column';
+import NotificationsColumn from '@/columns/notifications';
+import Column from '@/components/ui/column';
 
 const messages = defineMessages({
   title: { id: 'column.notifications', defaultMessage: 'Notifications' },

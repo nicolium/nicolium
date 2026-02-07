@@ -21,9 +21,9 @@ import { $createParagraphNode, $createTextNode, $getRoot, type EditorState, type
 import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useCompose } from 'pl-fe/hooks/use-compose';
-import { usePrevious } from 'pl-fe/hooks/use-previous';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useCompose } from '@/hooks/use-compose';
+import { usePrevious } from '@/hooks/use-previous';
 
 import { useNodes } from './nodes';
 import AutosuggestPlugin from './plugins/autosuggest-plugin';

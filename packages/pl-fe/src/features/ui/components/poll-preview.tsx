@@ -1,8 +1,8 @@
 import noop from 'lodash/noop';
 import React from 'react';
 
-import PollOption from 'pl-fe/components/polls/poll-option';
-import Stack from 'pl-fe/components/ui/stack';
+import PollOption from '@/components/polls/poll-option';
+import Stack from '@/components/ui/stack';
 
 import type { Poll } from 'pl-api';
 

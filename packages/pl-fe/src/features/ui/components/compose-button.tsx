@@ -2,13 +2,13 @@ import { useMatch } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { groupComposeModal } from 'pl-fe/actions/compose';
-import { useGroup } from 'pl-fe/api/hooks/groups/use-group';
-import Avatar from 'pl-fe/components/ui/avatar';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import { groupComposeModal } from '@/actions/compose';
+import { useGroup } from '@/api/hooks/groups/use-group';
+import Avatar from '@/components/ui/avatar';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useModalsActions } from '@/stores/modals';
 
 import { layouts } from '../router';
 

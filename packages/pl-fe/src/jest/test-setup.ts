@@ -9,13 +9,13 @@ import 'fake-indexeddb/auto';
 import { __clear as clearApiMocks } from '../api/__mocks__';
 
 // API mocking
-vi.mock('pl-fe/api');
+vi.mock('@/api');
 afterEach(() => {
   clearApiMocks();
 });
 
 // Query mocking
-vi.mock('pl-fe/queries/client');
+vi.mock('@/queries/client');
 
 // Clear toasts after each test.
 afterEach(() => {

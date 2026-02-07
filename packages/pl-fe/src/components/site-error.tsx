@@ -1,18 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { NODE_ENV } from 'pl-fe/build-config';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Textarea from 'pl-fe/components/ui/textarea';
-import { useLogo } from 'pl-fe/hooks/use-logo';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
-import { captureSentryException } from 'pl-fe/sentry';
-import KVStore from 'pl-fe/storage/kv-store';
-import sourceCode from 'pl-fe/utils/code';
-import { isNetworkError } from 'pl-fe/utils/errors';
-import { unregisterSW } from 'pl-fe/utils/sw';
+import { NODE_ENV } from '@/build-config';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Textarea from '@/components/ui/textarea';
+import { useLogo } from '@/hooks/use-logo';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { captureSentryException } from '@/sentry';
+import KVStore from '@/storage/kv-store';
+import sourceCode from '@/utils/code';
+import { isNetworkError } from '@/utils/errors';
+import { unregisterSW } from '@/utils/sw';
 
 import SentryFeedbackForm from './sentry-feedback-form';
 import SiteLogo from './site-logo';

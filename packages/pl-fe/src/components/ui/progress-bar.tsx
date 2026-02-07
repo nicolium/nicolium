@@ -2,7 +2,7 @@ import { animated, useSpring } from '@react-spring/web';
 import clsx from 'clsx';
 import React from 'react';
 
-import { useSettings } from 'pl-fe/stores/settings';
+import { useSettings } from '@/stores/settings';
 
 interface IProgressBar {
   /** Number between 0 and 1 to represent the percentage complete. */

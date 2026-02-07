@@ -2,20 +2,20 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { useIntl, defineMessages } from 'react-intl';
 import { Components, Virtuoso, VirtuosoHandle } from 'react-virtuoso';
 
-import Avatar from 'pl-fe/components/ui/avatar';
-import Button from 'pl-fe/components/ui/button';
-import Divider from 'pl-fe/components/ui/divider';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import PlaceholderChatMessage from 'pl-fe/features/placeholder/components/placeholder-chat-message';
-import { useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
-import { useChatActions, useChatMessages } from 'pl-fe/queries/chats';
+import Avatar from '@/components/ui/avatar';
+import Button from '@/components/ui/button';
+import Divider from '@/components/ui/divider';
+import Spinner from '@/components/ui/spinner';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import PlaceholderChatMessage from '@/features/placeholder/components/placeholder-chat-message';
+import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
+import { useChatActions, useChatMessages } from '@/queries/chats';
 
 import ChatMessage from './chat-message';
 
+import type { ChatMessage as ChatMessageEntity } from '@/normalizers/chat-message';
 import type { Chat } from 'pl-api';
-import type { ChatMessage as ChatMessageEntity } from 'pl-fe/normalizers/chat-message';
 
 const messages = defineMessages({
   today: { id: 'chats.dividers.today', defaultMessage: 'Today' },

@@ -3,20 +3,20 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import { useAccountLookup } from 'pl-fe/api/hooks/accounts/use-account-lookup';
-import Blurhash from 'pl-fe/components/blurhash';
-import Icon from 'pl-fe/components/icon';
-import LoadMore from 'pl-fe/components/load-more';
-import MissingIndicator from 'pl-fe/components/missing-indicator';
-import StillImage from 'pl-fe/components/still-image';
-import Column from 'pl-fe/components/ui/column';
-import Spinner from 'pl-fe/components/ui/spinner';
-import { profileMediaRoute } from 'pl-fe/features/ui/router';
-import { type AccountGalleryAttachment, useAccountGallery } from 'pl-fe/hooks/use-account-gallery';
-import { isIOS } from 'pl-fe/is-mobile';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import { useSettings } from 'pl-fe/stores/settings';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import { useAccountLookup } from '@/api/hooks/accounts/use-account-lookup';
+import Blurhash from '@/components/blurhash';
+import Icon from '@/components/icon';
+import LoadMore from '@/components/load-more';
+import MissingIndicator from '@/components/missing-indicator';
+import StillImage from '@/components/still-image';
+import Column from '@/components/ui/column';
+import Spinner from '@/components/ui/spinner';
+import { profileMediaRoute } from '@/features/ui/router';
+import { type AccountGalleryAttachment, useAccountGallery } from '@/hooks/use-account-gallery';
+import { isIOS } from '@/is-mobile';
+import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 
 interface IMediaItem {
   attachment: AccountGalleryAttachment;

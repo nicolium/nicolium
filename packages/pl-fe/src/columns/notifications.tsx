@@ -4,30 +4,30 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { createSelector } from 'reselect';
 
-import 'pl-fe/styles/new/notifications.scss';
+import '@/styles/new/notifications.scss';
 import {
   type FilterType,
   expandNotifications,
   markReadNotifications,
   scrollTopNotifications,
   setFilter,
-} from 'pl-fe/actions/notifications';
-import PullToRefresh from 'pl-fe/components/pull-to-refresh';
-import ScrollTopButton from 'pl-fe/components/scroll-top-button';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Icon from 'pl-fe/components/ui/icon';
-import Portal from 'pl-fe/components/ui/portal';
-import Tabs from 'pl-fe/components/ui/tabs';
-import Notification from 'pl-fe/features/notifications/components/notification';
-import PlaceholderNotification from 'pl-fe/features/placeholder/components/placeholder-notification';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useSettings } from 'pl-fe/stores/settings';
-import { selectChild } from 'pl-fe/utils/scroll-utils';
+} from '@/actions/notifications';
+import PullToRefresh from '@/components/pull-to-refresh';
+import ScrollTopButton from '@/components/scroll-top-button';
+import ScrollableList from '@/components/scrollable-list';
+import Icon from '@/components/ui/icon';
+import Portal from '@/components/ui/portal';
+import Tabs from '@/components/ui/tabs';
+import Notification from '@/features/notifications/components/notification';
+import PlaceholderNotification from '@/features/placeholder/components/placeholder-notification';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFeatures } from '@/hooks/use-features';
+import { useSettings } from '@/stores/settings';
+import { selectChild } from '@/utils/scroll-utils';
 
-import type { Item } from 'pl-fe/components/ui/tabs';
-import type { RootState } from 'pl-fe/store';
+import type { Item } from '@/components/ui/tabs';
+import type { RootState } from '@/store';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
 const messages = defineMessages({

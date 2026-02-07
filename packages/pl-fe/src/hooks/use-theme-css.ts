@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 
-import { useSettings } from 'pl-fe/stores/settings';
-import { toTailwind } from 'pl-fe/utils/tailwind';
-import { generateAccent, generateThemeCss } from 'pl-fe/utils/theme';
+import { useSettings } from '@/stores/settings';
+import { toTailwind } from '@/utils/tailwind';
+import { generateAccent, generateThemeCss } from '@/utils/theme';
 
 import { usePlFeConfig } from './use-pl-fe-config';
 
-import type { PlFeConfig } from 'pl-fe/normalizers/pl-fe/pl-fe-config';
+import type { PlFeConfig } from '@/normalizers/pl-fe/pl-fe-config';
 
 const DEFAULT_COLORS = {
   success: {

@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Link from 'pl-fe/components/link';
-import Text from 'pl-fe/components/ui/text';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { makeGetStatus } from 'pl-fe/selectors';
+import Link from '@/components/link';
+import Text from '@/components/ui/text';
+import Emojify from '@/features/emoji/emojify';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { makeGetStatus } from '@/selectors';
 
 interface IReplyGroupIndicator {
   composeId: string;

@@ -1,18 +1,18 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import { useGroup } from 'pl-fe/api/hooks/groups/use-group';
-import Account from 'pl-fe/components/account';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
-import Spinner from 'pl-fe/components/ui/spinner';
-import ColumnForbidden from 'pl-fe/features/ui/components/column-forbidden';
-import { groupBlocksRoute } from 'pl-fe/features/ui/router';
-import { useGroupBlocks, useUnblockGroupUserMutation } from 'pl-fe/queries/groups/use-group-blocks';
-import toast from 'pl-fe/toast';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import { useGroup } from '@/api/hooks/groups/use-group';
+import Account from '@/components/account';
+import ScrollableList from '@/components/scrollable-list';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import HStack from '@/components/ui/hstack';
+import Spinner from '@/components/ui/spinner';
+import ColumnForbidden from '@/features/ui/components/column-forbidden';
+import { groupBlocksRoute } from '@/features/ui/router';
+import { useGroupBlocks, useUnblockGroupUserMutation } from '@/queries/groups/use-group-blocks';
+import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.group_blocked_members', defaultMessage: 'Banned members' },

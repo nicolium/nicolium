@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Icon from 'pl-fe/components/ui/icon';
+import Icon from '@/components/ui/icon';
 
 interface IAltIndicator extends Pick<React.HTMLAttributes<HTMLSpanElement>, 'title' | 'className'> {
   warning?: boolean;

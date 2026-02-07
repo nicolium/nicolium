@@ -2,16 +2,16 @@ import { useMatch } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import Account from 'pl-fe/components/account';
-import { AuthorizeRejectButtons } from 'pl-fe/components/authorize-reject-buttons';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Column from 'pl-fe/components/ui/column';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Tabs, { type Item } from 'pl-fe/components/ui/tabs';
-import { followRequestsRoute } from 'pl-fe/features/ui/router';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useAcceptFollowRequestMutation, useFollowRequests, useRejectFollowRequestMutation } from 'pl-fe/queries/accounts/use-follow-requests';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import Account from '@/components/account';
+import { AuthorizeRejectButtons } from '@/components/authorize-reject-buttons';
+import ScrollableList from '@/components/scrollable-list';
+import Column from '@/components/ui/column';
+import Spinner from '@/components/ui/spinner';
+import Tabs, { type Item } from '@/components/ui/tabs';
+import { followRequestsRoute } from '@/features/ui/router';
+import { useFeatures } from '@/hooks/use-features';
+import { useAcceptFollowRequestMutation, useFollowRequests, useRejectFollowRequestMutation } from '@/queries/accounts/use-follow-requests';
 
 const messages = defineMessages({
   heading: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },

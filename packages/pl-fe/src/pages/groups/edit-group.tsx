@@ -1,26 +1,26 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useGroup } from 'pl-fe/api/hooks/groups/use-group';
-import { useUpdateGroup } from 'pl-fe/api/hooks/groups/use-update-group';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Icon from 'pl-fe/components/ui/icon';
-import Input from 'pl-fe/components/ui/input';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Textarea from 'pl-fe/components/ui/textarea';
-import AvatarPicker from 'pl-fe/features/edit-profile/components/avatar-picker';
-import HeaderPicker from 'pl-fe/features/edit-profile/components/header-picker';
-import { editGroupRoute } from 'pl-fe/features/ui/router';
-import { useImageField } from 'pl-fe/hooks/forms/use-image-field';
-import { useTextField } from 'pl-fe/hooks/forms/use-text-field';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import toast from 'pl-fe/toast';
-import { unescapeHTML } from 'pl-fe/utils/html';
+import { useGroup } from '@/api/hooks/groups/use-group';
+import { useUpdateGroup } from '@/api/hooks/groups/use-update-group';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import Icon from '@/components/ui/icon';
+import Input from '@/components/ui/input';
+import Spinner from '@/components/ui/spinner';
+import Textarea from '@/components/ui/textarea';
+import AvatarPicker from '@/features/edit-profile/components/avatar-picker';
+import HeaderPicker from '@/features/edit-profile/components/header-picker';
+import { editGroupRoute } from '@/features/ui/router';
+import { useImageField } from '@/hooks/forms/use-image-field';
+import { useTextField } from '@/hooks/forms/use-text-field';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useInstance } from '@/hooks/use-instance';
+import toast from '@/toast';
+import { unescapeHTML } from '@/utils/html';
 
 const messages = defineMessages({
   heading: { id: 'navigation_bar.edit_group', defaultMessage: 'Edit Group' },

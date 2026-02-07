@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { useClient } from 'pl-fe/hooks/use-client';
+import { useClient } from '@/hooks/use-client';
 
 const useHashtag = (tag: string) => {
   const client = useClient();

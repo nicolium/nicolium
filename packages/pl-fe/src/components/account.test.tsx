@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { buildAccount } from 'pl-fe/jest/factory';
-import { render, screen } from 'pl-fe/jest/test-helpers';
+import { buildAccount } from '@/jest/factory';
+import { render, screen } from '@/jest/test-helpers';
 
 import Account from './account';
 

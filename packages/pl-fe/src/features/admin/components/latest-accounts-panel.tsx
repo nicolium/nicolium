@@ -2,9 +2,9 @@ import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Widget from 'pl-fe/components/ui/widget';
-import AccountContainer from 'pl-fe/containers/account-container';
-import { useAdminAccounts } from 'pl-fe/queries/admin/use-accounts';
+import Widget from '@/components/ui/widget';
+import AccountContainer from '@/containers/account-container';
+import { useAdminAccounts } from '@/queries/admin/use-accounts';
 
 const messages = defineMessages({
   expand: { id: 'admin.latest_accounts_panel.more', defaultMessage: 'Click to see {count, plural, one {# account} other {# accounts}}' },

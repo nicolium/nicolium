@@ -1,8 +1,8 @@
 import { GroupRoles } from 'pl-api';
 import React from 'react';
 
-import { buildGroup, buildGroupRelationship } from 'pl-fe/jest/factory';
-import { render, screen } from 'pl-fe/jest/test-helpers';
+import { buildGroup, buildGroupRelationship } from '@/jest/factory';
+import { render, screen } from '@/jest/test-helpers';
 
 import GroupRelationship from './group-relationship';
 

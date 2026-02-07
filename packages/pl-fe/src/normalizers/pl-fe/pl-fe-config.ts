@@ -1,8 +1,8 @@
 import trimStart from 'lodash/trimStart';
 import * as v from 'valibot';
 
-import { settingsSchema } from 'pl-fe/schemas/pl-fe/settings';
-import { coerceObject, filteredArray } from 'pl-fe/schemas/utils';
+import { settingsSchema } from '@/schemas/pl-fe/settings';
+import { coerceObject, filteredArray } from '@/schemas/utils';
 
 const promoPanelItemSchema = coerceObject({
   icon: v.fallback(v.string(), ''),

@@ -2,10 +2,10 @@ import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import Text from 'pl-fe/components/ui/text';
-import Widget from 'pl-fe/components/ui/widget';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
+import Text from '@/components/ui/text';
+import Widget from '@/components/ui/widget';
+import { useInstance } from '@/hooks/use-instance';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
 
 import SiteWallet from './site-wallet';
 

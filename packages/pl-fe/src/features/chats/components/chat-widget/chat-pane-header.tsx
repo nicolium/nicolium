@@ -1,7 +1,7 @@
 import React, { HTMLAttributes } from 'react';
 
-import IconButton from 'pl-fe/components/ui/icon-button';
-import { useSettings } from 'pl-fe/stores/settings';
+import IconButton from '@/components/ui/icon-button';
+import { useSettings } from '@/stores/settings';
 
 interface IChatPaneHeader {
   isOpen: boolean;

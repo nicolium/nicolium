@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 
-import { cancelReplyCompose } from 'pl-fe/actions/compose';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useCompose } from 'pl-fe/hooks/use-compose';
-import { makeGetStatus } from 'pl-fe/selectors';
+import { cancelReplyCompose } from '@/actions/compose';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useCompose } from '@/hooks/use-compose';
+import { makeGetStatus } from '@/selectors';
 
 import ReplyIndicator from '../components/reply-indicator';
 

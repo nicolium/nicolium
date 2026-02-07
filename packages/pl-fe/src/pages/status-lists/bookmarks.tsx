@@ -2,15 +2,15 @@ import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import PullToRefresh from 'pl-fe/components/pull-to-refresh';
-import StatusList from 'pl-fe/components/status-list';
-import Column from 'pl-fe/components/ui/column';
-import { bookmarksRoute } from 'pl-fe/features/ui/router';
-import { useBookmarks } from 'pl-fe/queries/status-lists/use-bookmarks';
-import { useBookmarkFolder, useDeleteBookmarkFolder } from 'pl-fe/queries/statuses/use-bookmark-folders';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import toast from 'pl-fe/toast';
+import DropdownMenu from '@/components/dropdown-menu';
+import PullToRefresh from '@/components/pull-to-refresh';
+import StatusList from '@/components/status-list';
+import Column from '@/components/ui/column';
+import { bookmarksRoute } from '@/features/ui/router';
+import { useBookmarks } from '@/queries/status-lists/use-bookmarks';
+import { useBookmarkFolder, useDeleteBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
+import { useModalsActions } from '@/stores/modals';
+import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },

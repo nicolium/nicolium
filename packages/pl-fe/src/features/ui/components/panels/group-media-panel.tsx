@@ -1,11 +1,11 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Spinner from 'pl-fe/components/ui/spinner';
-import Widget from 'pl-fe/components/ui/widget';
-import { type AccountGalleryAttachment, useGroupGallery } from 'pl-fe/hooks/use-account-gallery';
-import { MediaItem } from 'pl-fe/pages/accounts/account-gallery';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import Spinner from '@/components/ui/spinner';
+import Widget from '@/components/ui/widget';
+import { type AccountGalleryAttachment, useGroupGallery } from '@/hooks/use-account-gallery';
+import { MediaItem } from '@/pages/accounts/account-gallery';
+import { useModalsActions } from '@/stores/modals';
 
 import type { Group } from 'pl-api';
 

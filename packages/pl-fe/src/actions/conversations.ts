@@ -1,11 +1,11 @@
-import { isLoggedIn } from 'pl-fe/utils/auth';
+import { isLoggedIn } from '@/utils/auth';
 
 import { getClient } from '../api';
 
 import { importEntities } from './importer';
 
+import type { AppDispatch, RootState } from '@/store';
 import type { Account, Conversation, PaginatedResponse } from 'pl-api';
-import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const CONVERSATIONS_MOUNT = 'CONVERSATIONS_MOUNT' as const;
 const CONVERSATIONS_UNMOUNT = 'CONVERSATIONS_UNMOUNT' as const;

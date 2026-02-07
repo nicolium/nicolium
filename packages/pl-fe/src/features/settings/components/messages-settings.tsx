@@ -1,10 +1,10 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import List, { ListItem } from 'pl-fe/components/list';
-import Toggle from 'pl-fe/components/ui/toggle';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { useUpdateCredentials } from 'pl-fe/queries/accounts';
+import List, { ListItem } from '@/components/list';
+import Toggle from '@/components/ui/toggle';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { useUpdateCredentials } from '@/queries/accounts';
 
 const messages = defineMessages({
   label: { id: 'settings.messages.label', defaultMessage: 'Allow users to start a new chat with you' },

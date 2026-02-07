@@ -14,22 +14,22 @@ import {
   suggestClearLink,
   resetCompose,
   changeComposeRedactingOverwrite,
-} from 'pl-fe/actions/compose';
-import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import List, { ListItem } from 'pl-fe/components/list';
-import Icon from 'pl-fe/components/ui/icon';
-import SvgIcon from 'pl-fe/components/ui/svg-icon';
-import Toggle from 'pl-fe/components/ui/toggle';
-import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
-import { ComposeEditor } from 'pl-fe/features/ui/util/async-components';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useCompose } from 'pl-fe/hooks/use-compose';
-import { useDraggedFiles } from 'pl-fe/hooks/use-dragged-files';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { usePersistDraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import toast from 'pl-fe/toast';
+} from '@/actions/compose';
+import DropdownMenu from '@/components/dropdown-menu';
+import List, { ListItem } from '@/components/list';
+import Icon from '@/components/ui/icon';
+import SvgIcon from '@/components/ui/svg-icon';
+import Toggle from '@/components/ui/toggle';
+import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
+import { ComposeEditor } from '@/features/ui/util/async-components';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useCompose } from '@/hooks/use-compose';
+import { useDraggedFiles } from '@/hooks/use-dragged-files';
+import { useFeatures } from '@/hooks/use-features';
+import { useInstance } from '@/hooks/use-instance';
+import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
+import { useModalsActions } from '@/stores/modals';
+import toast from '@/toast';
 
 import PreviewComposeContainer from '../containers/preview-compose-container';
 import QuotedStatusContainer from '../containers/quoted-status-container';
@@ -61,10 +61,10 @@ import UploadForm from './upload-form';
 import VisualCharacterCounter from './visual-character-counter';
 import Warning from './warning';
 
+import type { AutoSuggestion } from '@/components/autosuggest-input';
+import type { Menu } from '@/components/dropdown-menu';
+import type { Emoji } from '@/features/emoji';
 import type { LinkNode } from '@lexical/link';
-import type { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
-import type { Menu } from 'pl-fe/components/dropdown-menu';
-import type { Emoji } from 'pl-fe/features/emoji';
 
 const messages = defineMessages({
   placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What\'s on your mind?' },

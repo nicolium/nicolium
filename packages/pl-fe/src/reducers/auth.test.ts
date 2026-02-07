@@ -7,10 +7,10 @@ import {
   VERIFY_CREDENTIALS_SUCCESS,
   VERIFY_CREDENTIALS_FAIL,
   SWITCH_ACCOUNT,
-} from 'pl-fe/actions/auth';
-import { ME_FETCH_SKIP } from 'pl-fe/actions/me';
-import { MASTODON_PRELOAD_IMPORT } from 'pl-fe/actions/preload';
-import { buildAccount } from 'pl-fe/jest/factory';
+} from '@/actions/auth';
+import { ME_FETCH_SKIP } from '@/actions/me';
+import { MASTODON_PRELOAD_IMPORT } from '@/actions/preload';
+import { buildAccount } from '@/jest/factory';
 
 import reducer, { AuthAppRecord, AuthTokenRecord, AuthUserRecord, ReducerRecord } from './auth';
 
@@ -318,7 +318,7 @@ describe('auth reducer', () => {
 
   describe('MASTODON_PRELOAD_IMPORT', () => {
     it('imports the user and token', async () => {
-      const data = await import('pl-fe/__fixtures__/mastodon_initial_state.json');
+      const data = await import('@/__fixtures__/mastodon_initial_state.json');
 
       const action = {
         type: MASTODON_PRELOAD_IMPORT,

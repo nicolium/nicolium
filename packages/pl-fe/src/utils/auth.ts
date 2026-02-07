@@ -1,6 +1,6 @@
-import { selectAccount, selectOwnAccount } from 'pl-fe/selectors';
+import { selectAccount, selectOwnAccount } from '@/selectors';
 
-import type { RootState } from 'pl-fe/store';
+import type { RootState } from '@/store';
 
 const validId = (id: any) => typeof id === 'string' && id !== 'null' && id !== 'undefined';
 

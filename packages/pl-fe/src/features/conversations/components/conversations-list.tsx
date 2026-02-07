@@ -2,11 +2,11 @@ import { debounce } from '@tanstack/react-pacer/debouncer';
 import React, { useCallback, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { expandConversations } from 'pl-fe/actions/conversations';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { selectChild } from 'pl-fe/utils/scroll-utils';
+import { expandConversations } from '@/actions/conversations';
+import ScrollableList from '@/components/scrollable-list';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { selectChild } from '@/utils/scroll-utils';
 
 import Conversation from './conversation';
 

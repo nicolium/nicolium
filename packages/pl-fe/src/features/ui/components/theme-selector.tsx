@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Icon from 'pl-fe/components/ui/icon';
-import Select from 'pl-fe/components/ui/select';
+import Icon from '@/components/ui/icon';
+import Select from '@/components/ui/select';
 
 interface IThemeSelector {
   value: string;

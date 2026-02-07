@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormattedNumber } from 'react-intl';
 
-import Text from 'pl-fe/components/ui/text';
-import { useDimensions } from 'pl-fe/queries/admin/use-metrics';
+import Text from '@/components/ui/text';
+import { useDimensions } from '@/queries/admin/use-metrics';
 
 import type { AdminDimensionKey, AdminGetDimensionsParams } from 'pl-api';
 

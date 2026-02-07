@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { staticFetch } from 'pl-fe/api';
+import { staticFetch } from '@/api';
 
 const fetchAboutPage = async (slug: string, locale?: string) => {
   const filename = `${slug}${locale ? `.${locale}` : ''}.html`;

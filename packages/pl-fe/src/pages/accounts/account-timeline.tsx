@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { fetchAccountByUsername } from 'pl-fe/actions/accounts';
-import { fetchAccountTimeline } from 'pl-fe/actions/timelines';
-import { useAccountLookup } from 'pl-fe/api/hooks/accounts/use-account-lookup';
-import MissingIndicator from 'pl-fe/components/missing-indicator';
-import StatusList from 'pl-fe/components/status-list';
-import Card, { CardBody } from 'pl-fe/components/ui/card';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Text from 'pl-fe/components/ui/text';
-import { profileRoute } from 'pl-fe/features/ui/router';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { makeGetStatusIds } from 'pl-fe/selectors';
-import { useSettings } from 'pl-fe/stores/settings';
+import { fetchAccountByUsername } from '@/actions/accounts';
+import { fetchAccountTimeline } from '@/actions/timelines';
+import { useAccountLookup } from '@/api/hooks/accounts/use-account-lookup';
+import MissingIndicator from '@/components/missing-indicator';
+import StatusList from '@/components/status-list';
+import Card, { CardBody } from '@/components/ui/card';
+import Spinner from '@/components/ui/spinner';
+import Text from '@/components/ui/text';
+import { profileRoute } from '@/features/ui/router';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFeatures } from '@/hooks/use-features';
+import { makeGetStatusIds } from '@/selectors';
+import { useSettings } from '@/stores/settings';
 
 const getStatusIds = makeGetStatusIds();
 

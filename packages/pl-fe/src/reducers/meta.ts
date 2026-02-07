@@ -1,4 +1,4 @@
-import { STANDALONE_CHECK_SUCCESS, type InstanceAction } from 'pl-fe/actions/instance';
+import { STANDALONE_CHECK_SUCCESS, type InstanceAction } from '@/actions/instance';
 
 const initialState = {
   /** Whether /api/v1/instance 404'd (and we should display the external auth form). */

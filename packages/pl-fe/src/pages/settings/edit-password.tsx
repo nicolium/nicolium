@@ -1,15 +1,15 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changePassword } from 'pl-fe/actions/security';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Input from 'pl-fe/components/ui/input';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import toast from 'pl-fe/toast';
+import { changePassword } from '@/actions/security';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import Input from '@/components/ui/input';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import toast from '@/toast';
 
 const messages = defineMessages({
   updatePasswordSuccess: { id: 'security.update_password.success', defaultMessage: 'Password successfully updated.' },

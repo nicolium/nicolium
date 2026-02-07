@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-import HStack from 'pl-fe/components/ui/hstack';
-import Slider from 'pl-fe/components/ui/slider';
-import Stack from 'pl-fe/components/ui/stack';
-import { usePrevious } from 'pl-fe/hooks/use-previous';
-import { compareId } from 'pl-fe/utils/comparators';
-import { hueShift } from 'pl-fe/utils/theme';
+import HStack from '@/components/ui/hstack';
+import Slider from '@/components/ui/slider';
+import Stack from '@/components/ui/stack';
+import { usePrevious } from '@/hooks/use-previous';
+import { compareId } from '@/utils/comparators';
+import { hueShift } from '@/utils/theme';
 
 import Color from './color';
 

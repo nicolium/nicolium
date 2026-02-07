@@ -3,23 +3,23 @@ import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
 import { useMutative } from 'use-mutative';
 
-import { changeSetting, saveSettings } from 'pl-fe/actions/settings';
-import List, { ListItem } from 'pl-fe/components/list';
-import Button from 'pl-fe/components/ui/button';
-import Card, { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card';
-import Column from 'pl-fe/components/ui/column';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Input from 'pl-fe/components/ui/input';
-import Toggle from 'pl-fe/components/ui/toggle';
-import { SelectDropdown } from 'pl-fe/features/forms';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import KVStore from 'pl-fe/storage/kv-store';
-import { useSettings } from 'pl-fe/stores/settings';
-import { hasCanvasExtractPermission } from 'pl-fe/utils/favicon-service';
-import { KVStoreRedirectServicesItem } from 'pl-fe/utils/url-purify';
+import { changeSetting, saveSettings } from '@/actions/settings';
+import List, { ListItem } from '@/components/list';
+import Button from '@/components/ui/button';
+import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
+import Column from '@/components/ui/column';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import Input from '@/components/ui/input';
+import Toggle from '@/components/ui/toggle';
+import { SelectDropdown } from '@/features/forms';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import KVStore from '@/storage/kv-store';
+import { useSettings } from '@/stores/settings';
+import { hasCanvasExtractPermission } from '@/utils/favicon-service';
+import { KVStoreRedirectServicesItem } from '@/utils/url-purify';
 
 const messages = defineMessages({
   heading: { id: 'column.privacy', defaultMessage: 'Privacy' },

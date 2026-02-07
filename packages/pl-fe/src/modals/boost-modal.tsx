@@ -1,15 +1,15 @@
 import React, { useCallback } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Icon from 'pl-fe/components/icon';
-import Modal from 'pl-fe/components/ui/modal';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import ReplyIndicator from 'pl-fe/features/compose/components/reply-indicator';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { makeGetStatus } from 'pl-fe/selectors';
+import Icon from '@/components/icon';
+import Modal from '@/components/ui/modal';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import ReplyIndicator from '@/features/compose/components/reply-indicator';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { makeGetStatus } from '@/selectors';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
   cancel_reblog: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },

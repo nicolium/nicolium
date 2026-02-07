@@ -2,22 +2,22 @@ import { Outlet, useLocation } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { useGroup } from 'pl-fe/api/hooks/groups/use-group';
-import { useGroupMembershipRequests } from 'pl-fe/api/hooks/groups/use-group-membership-requests';
-import Column from 'pl-fe/components/ui/column';
-import Icon from 'pl-fe/components/ui/icon';
-import Layout from 'pl-fe/components/ui/layout';
-import Stack from 'pl-fe/components/ui/stack';
-import Tabs, { type Item } from 'pl-fe/components/ui/tabs';
-import Text from 'pl-fe/components/ui/text';
-import GroupHeader from 'pl-fe/features/group/components/group-header';
-import LinkFooter from 'pl-fe/features/ui/components/link-footer';
-import { layouts } from 'pl-fe/features/ui/router';
+import { useGroup } from '@/api/hooks/groups/use-group';
+import { useGroupMembershipRequests } from '@/api/hooks/groups/use-group-membership-requests';
+import Column from '@/components/ui/column';
+import Icon from '@/components/ui/icon';
+import Layout from '@/components/ui/layout';
+import Stack from '@/components/ui/stack';
+import Tabs, { type Item } from '@/components/ui/tabs';
+import Text from '@/components/ui/text';
+import GroupHeader from '@/features/group/components/group-header';
+import LinkFooter from '@/features/ui/components/link-footer';
+import { layouts } from '@/features/ui/router';
 import {
   GroupMediaPanel,
   SignUpPanel,
-} from 'pl-fe/features/ui/util/async-components';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
+} from '@/features/ui/util/async-components';
+import { useOwnAccount } from '@/hooks/use-own-account';
 
 const messages = defineMessages({
   all: { id: 'group.tabs.all', defaultMessage: 'All' },

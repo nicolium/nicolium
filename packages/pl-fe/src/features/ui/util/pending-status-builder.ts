@@ -2,11 +2,11 @@ import { create } from 'mutative';
 import { statusSchema } from 'pl-api';
 import * as v from 'valibot';
 
-import { normalizeStatus } from 'pl-fe/normalizers/status';
-import { selectOwnAccount } from 'pl-fe/selectors';
+import { normalizeStatus } from '@/normalizers/status';
+import { selectOwnAccount } from '@/selectors';
 
-import type { PendingStatus } from 'pl-fe/reducers/pending-statuses';
-import type { RootState } from 'pl-fe/store';
+import type { PendingStatus } from '@/reducers/pending-statuses';
+import type { RootState } from '@/store';
 
 const buildMentions = (pendingStatus: PendingStatus) => {
   if (pendingStatus.in_reply_to_id) {

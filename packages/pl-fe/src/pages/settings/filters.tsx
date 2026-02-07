@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchFilters, deleteFilter } from 'pl-fe/actions/filters';
-import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import toast from 'pl-fe/toast';
+import { fetchFilters, deleteFilter } from '@/actions/filters';
+import RelativeTimestamp from '@/components/relative-timestamp';
+import ScrollableList from '@/components/scrollable-list';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFeatures } from '@/hooks/use-features';
+import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.filters', defaultMessage: 'Muted words' },

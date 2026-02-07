@@ -1,9 +1,9 @@
 import React from 'react';
 
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
 
 import type { Location } from 'pl-api';
 

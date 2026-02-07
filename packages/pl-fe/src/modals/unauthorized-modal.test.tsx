@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { storeOpen } from 'pl-fe/jest/mock-stores';
-import { render, screen } from 'pl-fe/jest/test-helpers';
+import { storeOpen } from '@/jest/mock-stores';
+import { render, screen } from '@/jest/test-helpers';
 
 import UnauthorizedModal from './unauthorized-modal';
 

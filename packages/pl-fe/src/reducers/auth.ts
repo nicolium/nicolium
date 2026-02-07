@@ -3,11 +3,11 @@ import { create, Draft } from 'mutative';
 import { type Account as AccountEntity, applicationSchema, instanceSchema, PlApiClient, tokenSchema, type CredentialAccount, type CredentialApplication, type Token } from 'pl-api';
 import * as v from 'valibot';
 
-import { decodeFromMarkup, MASTODON_PRELOAD_IMPORT, pleromaDecoder, type PreloadAction } from 'pl-fe/actions/preload';
-import * as BuildConfig from 'pl-fe/build-config';
-import { coerceObject } from 'pl-fe/schemas/utils';
-import KVStore from 'pl-fe/storage/kv-store';
-import { validId, isURL, parseBaseURL } from 'pl-fe/utils/auth';
+import { decodeFromMarkup, MASTODON_PRELOAD_IMPORT, pleromaDecoder, type PreloadAction } from '@/actions/preload';
+import * as BuildConfig from '@/build-config';
+import { coerceObject } from '@/schemas/utils';
+import KVStore from '@/storage/kv-store';
+import { validId, isURL, parseBaseURL } from '@/utils/auth';
 
 import {
   AUTH_APP_CREATED,
@@ -21,7 +21,7 @@ import {
 } from '../actions/auth';
 import { ME_FETCH_SKIP, type MeAction } from '../actions/me';
 
-import type { PlfeResponse } from 'pl-fe/api';
+import type { PlfeResponse } from '@/api';
 
 const instance = (() => {
   try {

@@ -1,22 +1,22 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import Account from 'pl-fe/components/account';
-import StatusContent from 'pl-fe/components/status-content';
-import StatusReplyMentions from 'pl-fe/components/status-reply-mentions';
-import Card from 'pl-fe/components/ui/card';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import PlaceholderCard from 'pl-fe/features/placeholder/components/placeholder-card';
-import PlaceholderMediaGallery from 'pl-fe/features/placeholder/components/placeholder-media-gallery';
-import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import Account from '@/components/account';
+import StatusContent from '@/components/status-content';
+import StatusReplyMentions from '@/components/status-reply-mentions';
+import Card from '@/components/ui/card';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import PlaceholderCard from '@/features/placeholder/components/placeholder-card';
+import PlaceholderMediaGallery from '@/features/placeholder/components/placeholder-media-gallery';
+import QuotedStatus from '@/features/status/containers/quoted-status-container';
+import { useAppSelector } from '@/hooks/use-app-selector';
 
 import { buildStatus } from '../util/pending-status-builder';
 
 import PollPreview from './poll-preview';
 
-import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
+import type { Status as StatusEntity } from '@/normalizers/status';
 
 const shouldHaveCard = (pendingStatus: StatusEntity) => Boolean(pendingStatus.content.match(/https?:\/\/\S*/));
 

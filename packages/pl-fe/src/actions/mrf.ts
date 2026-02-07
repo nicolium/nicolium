@@ -1,9 +1,9 @@
-import { mrfSimpleSchema, type MRFSimple } from 'pl-fe/schemas/pleroma';
-import ConfigDB from 'pl-fe/utils/config-db';
+import { mrfSimpleSchema, type MRFSimple } from '@/schemas/pleroma';
+import ConfigDB from '@/utils/config-db';
 
 import { fetchConfig, updateConfig } from './admin';
 
-import type { AppDispatch, RootState } from 'pl-fe/store';
+import type { AppDispatch, RootState } from '@/store';
 
 const simplePolicyMerge = (simplePolicy: Partial<MRFSimple>, host: string, restrictions: Record<string, any>): MRFSimple => {
   const entries = Object.entries(simplePolicy).map(([key, hosts]) => {

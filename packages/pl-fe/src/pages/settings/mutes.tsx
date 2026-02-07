@@ -2,11 +2,11 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Column from 'pl-fe/components/ui/column';
-import Stack from 'pl-fe/components/ui/stack';
-import AccountContainer from 'pl-fe/containers/account-container';
-import { useMutes } from 'pl-fe/queries/account-lists/use-blocks';
+import ScrollableList from '@/components/scrollable-list';
+import Column from '@/components/ui/column';
+import Stack from '@/components/ui/stack';
+import AccountContainer from '@/containers/account-container';
+import { useMutes } from '@/queries/account-lists/use-blocks';
 
 const messages = defineMessages({
   heading: { id: 'column.mutes', defaultMessage: 'Mutes' },

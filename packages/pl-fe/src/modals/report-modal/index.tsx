@@ -1,26 +1,26 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { submitReport, ReportableEntities } from 'pl-fe/actions/reports';
-import { fetchAccountTimeline } from 'pl-fe/actions/timelines';
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
-import StatusContent from 'pl-fe/components/status-content';
-import Modal from 'pl-fe/components/ui/modal';
-import ProgressBar from 'pl-fe/components/ui/progress-bar';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import AccountContainer from 'pl-fe/containers/account-container';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useBlockAccountMutation } from 'pl-fe/queries/accounts/use-relationship';
+import { submitReport, ReportableEntities } from '@/actions/reports';
+import { fetchAccountTimeline } from '@/actions/timelines';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import AttachmentThumbs from '@/components/attachment-thumbs';
+import StatusContent from '@/components/status-content';
+import Modal from '@/components/ui/modal';
+import ProgressBar from '@/components/ui/progress-bar';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import AccountContainer from '@/containers/account-container';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useInstance } from '@/hooks/use-instance';
+import { useBlockAccountMutation } from '@/queries/accounts/use-relationship';
 
 import ConfirmationStep from './steps/confirmation-step';
 import OtherActionsStep from './steps/other-actions-step';
 import ReasonStep from './steps/reason-step';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
   blankslate: { id: 'report.reason.blankslate', defaultMessage: 'You have removed all statuses from being selected.' },

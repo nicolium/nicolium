@@ -1,12 +1,12 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Column from 'pl-fe/components/ui/column';
-import Stack from 'pl-fe/components/ui/stack';
-import AccountContainer from 'pl-fe/containers/account-container';
-import { adminUsersRoute } from 'pl-fe/features/ui/router';
-import { useAdminAccounts } from 'pl-fe/queries/admin/use-accounts';
+import ScrollableList from '@/components/scrollable-list';
+import Column from '@/components/ui/column';
+import Stack from '@/components/ui/stack';
+import AccountContainer from '@/containers/account-container';
+import { adminUsersRoute } from '@/features/ui/router';
+import { useAdminAccounts } from '@/queries/admin/use-accounts';
 
 import { SearchInput } from '../search/search';
 

@@ -2,10 +2,10 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Column from 'pl-fe/components/ui/column';
-import ScheduledStatus from 'pl-fe/features/scheduled-statuses/components/scheduled-status';
-import { scheduledStatusesQueryOptions } from 'pl-fe/queries/statuses/scheduled-statuses';
+import ScrollableList from '@/components/scrollable-list';
+import Column from '@/components/ui/column';
+import ScheduledStatus from '@/features/scheduled-statuses/components/scheduled-status';
+import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
 
 const messages = defineMessages({
   heading: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },

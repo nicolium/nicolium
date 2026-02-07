@@ -2,14 +2,14 @@ import clsx from 'clsx';
 import { GroupRoles } from 'pl-api';
 import React, { useMemo } from 'react';
 
-import { useGroup } from 'pl-fe/api/hooks/groups/use-group';
-import { useGroupMembershipRequests } from 'pl-fe/api/hooks/groups/use-group-membership-requests';
-import { PendingItemsRow } from 'pl-fe/components/pending-items-row';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import GroupMemberListItem from 'pl-fe/features/group/components/group-member-list-item';
-import PlaceholderAccount from 'pl-fe/features/placeholder/components/placeholder-account';
-import { groupMembersRoute } from 'pl-fe/features/ui/router';
-import { useGroupMembers } from 'pl-fe/queries/groups/use-group-members';
+import { useGroup } from '@/api/hooks/groups/use-group';
+import { useGroupMembershipRequests } from '@/api/hooks/groups/use-group-membership-requests';
+import { PendingItemsRow } from '@/components/pending-items-row';
+import ScrollableList from '@/components/scrollable-list';
+import GroupMemberListItem from '@/features/group/components/group-member-list-item';
+import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
+import { groupMembersRoute } from '@/features/ui/router';
+import { useGroupMembers } from '@/queries/groups/use-group-members';
 
 const GroupMembers: React.FC = () => {
   const { groupId } = groupMembersRoute.useParams();

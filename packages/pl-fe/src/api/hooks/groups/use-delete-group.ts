@@ -1,6 +1,6 @@
-import { Entities } from 'pl-fe/entity-store/entities';
-import { useDeleteEntity } from 'pl-fe/entity-store/hooks/use-delete-entity';
-import { useClient } from 'pl-fe/hooks/use-client';
+import { Entities } from '@/entity-store/entities';
+import { useDeleteEntity } from '@/entity-store/hooks/use-delete-entity';
+import { useClient } from '@/hooks/use-client';
 
 const useDeleteGroup = () => {
   const client = useClient();

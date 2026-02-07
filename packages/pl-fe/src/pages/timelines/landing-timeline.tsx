@@ -2,21 +2,21 @@ import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
-import { useCommunityStream } from 'pl-fe/api/hooks/streaming/use-community-stream';
-import Markup from 'pl-fe/components/markup';
-import { ParsedContent } from 'pl-fe/components/parsed-content';
-import PullToRefresh from 'pl-fe/components/pull-to-refresh';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Timeline from 'pl-fe/features/ui/components/timeline';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useRegistrationStatus } from 'pl-fe/hooks/use-registration-status';
-import { About } from 'pl-fe/pages/utils/about';
-import { getTextDirection } from 'pl-fe/utils/rtl';
+import { fetchPublicTimeline } from '@/actions/timelines';
+import { useCommunityStream } from '@/api/hooks/streaming/use-community-stream';
+import Markup from '@/components/markup';
+import { ParsedContent } from '@/components/parsed-content';
+import PullToRefresh from '@/components/pull-to-refresh';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Timeline from '@/features/ui/components/timeline';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useInstance } from '@/hooks/use-instance';
+import { useRegistrationStatus } from '@/hooks/use-registration-status';
+import { About } from '@/pages/utils/about';
+import { getTextDirection } from '@/utils/rtl';
 
 interface ILogoText extends Pick<React.HTMLAttributes<HTMLHeadingElement>, 'className' | 'dir'> {
   children: React.ReactNode;

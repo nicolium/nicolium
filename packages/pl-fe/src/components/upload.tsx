@@ -25,13 +25,13 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import AltIndicator from 'pl-fe/components/alt-indicator';
-import Blurhash from 'pl-fe/components/blurhash';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import { useSettings } from 'pl-fe/stores/settings';
+import AltIndicator from '@/components/alt-indicator';
+import Blurhash from '@/components/blurhash';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import IconButton from '@/components/ui/icon-button';
+import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 
 import type { MediaAttachment } from 'pl-api';
 

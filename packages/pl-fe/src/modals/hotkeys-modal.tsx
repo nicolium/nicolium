@@ -2,11 +2,11 @@ import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Modal from 'pl-fe/components/ui/modal';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
+import Modal from '@/components/ui/modal';
+import { useFeatures } from '@/hooks/use-features';
+import { useLoggedIn } from '@/hooks/use-logged-in';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const Hotkey: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   <kbd className='rounded-md border border-solid border-primary-200 bg-primary-50 px-1.5 py-1 font-sans text-xs dark:border-gray-700 dark:bg-gray-800'>

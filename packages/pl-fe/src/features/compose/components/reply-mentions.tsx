@@ -1,10 +1,10 @@
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 
-import { useCompose } from 'pl-fe/hooks/use-compose';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import { useSettings } from 'pl-fe/stores/settings';
+import { useCompose } from '@/hooks/use-compose';
+import { useFeatures } from '@/hooks/use-features';
+import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 
 interface IReplyMentions {
   composeId: string;

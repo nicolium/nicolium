@@ -2,15 +2,15 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Hashtag from 'pl-fe/components/hashtag';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import AccountContainer from 'pl-fe/containers/account-container';
-import StatusContainer from 'pl-fe/containers/status-container';
-import PlaceholderAccount from 'pl-fe/features/placeholder/components/placeholder-account';
-import PlaceholderHashtag from 'pl-fe/features/placeholder/components/placeholder-hashtag';
-import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
-import { useSearchAccounts, useSearchHashtags, useSearchStatuses } from 'pl-fe/queries/search/use-search';
-import { selectChild } from 'pl-fe/utils/scroll-utils';
+import Hashtag from '@/components/hashtag';
+import ScrollableList from '@/components/scrollable-list';
+import AccountContainer from '@/containers/account-container';
+import StatusContainer from '@/containers/status-container';
+import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
+import PlaceholderHashtag from '@/features/placeholder/components/placeholder-hashtag';
+import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
+import { useSearchAccounts, useSearchHashtags, useSearchStatuses } from '@/queries/search/use-search';
+import { selectChild } from '@/utils/scroll-utils';
 
 import TrendsColumn from './trends';
 

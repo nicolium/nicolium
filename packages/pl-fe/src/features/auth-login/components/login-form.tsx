@@ -2,12 +2,12 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Input from 'pl-fe/components/ui/input';
-import { useFeatures } from 'pl-fe/hooks/use-features';
+import Button from '@/components/ui/button';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import Input from '@/components/ui/input';
+import { useFeatures } from '@/hooks/use-features';
 
 const messages = defineMessages({
   username: {

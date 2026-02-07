@@ -1,7 +1,7 @@
-import { Entities } from 'pl-fe/entity-store/entities';
-import { useBatchedEntities } from 'pl-fe/entity-store/hooks/use-batched-entities';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
+import { Entities } from '@/entity-store/entities';
+import { useBatchedEntities } from '@/entity-store/hooks/use-batched-entities';
+import { useClient } from '@/hooks/use-client';
+import { useLoggedIn } from '@/hooks/use-logged-in';
 
 import type { GroupRelationship } from 'pl-api';
 

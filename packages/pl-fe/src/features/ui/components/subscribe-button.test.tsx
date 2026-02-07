@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { buildAccount, buildRelationship } from 'pl-fe/jest/factory';
-import { render, screen } from 'pl-fe/jest/test-helpers';
+import { buildAccount, buildRelationship } from '@/jest/factory';
+import { render, screen } from '@/jest/test-helpers';
 
 import SubscribeButton from './subscription-button';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import ForkAwesomeIcon from 'pl-fe/components/fork-awesome-icon';
-import Popover from 'pl-fe/components/ui/popover';
+import ForkAwesomeIcon from '@/components/fork-awesome-icon';
+import Popover from '@/components/ui/popover';
 
 import IconPickerMenu from './icon-picker-menu';
 

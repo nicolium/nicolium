@@ -2,16 +2,16 @@ import { Link, useMatch } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import Divider from 'pl-fe/components/ui/divider';
-import HStack from 'pl-fe/components/ui/hstack';
-import Popover from 'pl-fe/components/ui/popover';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import GroupMemberCount from 'pl-fe/features/group/components/group-member-count';
-import GroupPrivacy from 'pl-fe/features/group/components/group-privacy';
-import { groupTimelineRoute } from 'pl-fe/features/ui/router';
+import Button from '@/components/ui/button';
+import Divider from '@/components/ui/divider';
+import HStack from '@/components/ui/hstack';
+import Popover from '@/components/ui/popover';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Emojify from '@/features/emoji/emojify';
+import GroupMemberCount from '@/features/group/components/group-member-count';
+import GroupPrivacy from '@/features/group/components/group-privacy';
+import { groupTimelineRoute } from '@/features/ui/router';
 
 import GroupAvatar from '../group-avatar';
 

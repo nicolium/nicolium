@@ -1,13 +1,13 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Icon from 'pl-fe/components/icon';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useInstance } from 'pl-fe/hooks/use-instance';
+import Icon from '@/components/icon';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useInstance } from '@/hooks/use-instance';
 
-import type { RemoteInstance } from 'pl-fe/selectors';
+import type { RemoteInstance } from '@/selectors';
 
 const hasRestrictions = (remoteInstance: RemoteInstance): boolean => {
   const { accept, reject_deletes, report_removal, ...federation } = remoteInstance.federation;

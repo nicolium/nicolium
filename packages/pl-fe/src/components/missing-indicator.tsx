@@ -1,9 +1,9 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Card, { CardBody } from 'pl-fe/components/ui/card';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
+import Card, { CardBody } from '@/components/ui/card';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
 
 interface MissingIndicatorProps {
   nested?: boolean;

@@ -3,13 +3,13 @@ import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import AnimatedNumber from 'pl-fe/components/animated-number';
-import HStack from 'pl-fe/components/ui/hstack';
-import Text from 'pl-fe/components/ui/text';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import AnimatedNumber from '@/components/animated-number';
+import HStack from '@/components/ui/hstack';
+import Text from '@/components/ui/text';
+import { useFeatures } from '@/hooks/use-features';
+import { useModalsActions } from '@/stores/modals';
 
-import type { Status } from 'pl-fe/normalizers/status';
+import type { Status } from '@/normalizers/status';
 
 interface IStatusInteractionBar {
   status: Pick<Status, 'id' | 'account' | 'dislikes_count' | 'favourited' | 'favourites_count' | 'reblogs_count' | 'quotes_count'>;

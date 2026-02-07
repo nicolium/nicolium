@@ -1,10 +1,10 @@
 import React from 'react';
 import { FormattedDate } from 'react-intl';
 
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { getTextDirection } from 'pl-fe/utils/rtl';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useFeatures } from '@/hooks/use-features';
+import { getTextDirection } from '@/utils/rtl';
 
 import AnnouncementContent from './announcement-content';
 import ReactionsBar from './reactions-bar';

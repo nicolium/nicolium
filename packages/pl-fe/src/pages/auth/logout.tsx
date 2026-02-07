@@ -2,8 +2,8 @@ import { Navigate } from '@tanstack/react-router';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 
-import { logOut } from 'pl-fe/actions/auth';
-import Spinner from 'pl-fe/components/ui/spinner';
+import { logOut } from '@/actions/auth';
+import Spinner from '@/components/ui/spinner';
 
 /** Component that logs the user out when rendered */
 const LogoutPage: React.FC = () => {

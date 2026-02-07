@@ -2,18 +2,18 @@ import { Link } from '@tanstack/react-router';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { changeComposeInteractionPolicyOption, changeComposeQuotePolicyOption } from 'pl-fe/actions/compose';
-import Modal from 'pl-fe/components/ui/modal';
-import Stack from 'pl-fe/components/ui/stack';
-import Warning from 'pl-fe/features/compose/components/warning';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useCompose } from 'pl-fe/hooks/use-compose';
-import { InteractionPolicyConfig, type Policy, type Rule, type Scope } from 'pl-fe/pages/settings/interaction-policies';
-import { useInteractionPolicies } from 'pl-fe/queries/settings/use-interaction-policies';
+import { changeComposeInteractionPolicyOption, changeComposeQuotePolicyOption } from '@/actions/compose';
+import Modal from '@/components/ui/modal';
+import Stack from '@/components/ui/stack';
+import Warning from '@/features/compose/components/warning';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
+import { useCompose } from '@/hooks/use-compose';
+import { InteractionPolicyConfig, type Policy, type Rule, type Scope } from '@/pages/settings/interaction-policies';
+import { useInteractionPolicies } from '@/queries/settings/use-interaction-policies';
 
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 import type { CreateStatusParams } from 'pl-api';
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
 const MANAGABLE_VISIBILITIES = ['public', 'unlisted', 'private'];
 

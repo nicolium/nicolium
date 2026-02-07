@@ -4,17 +4,17 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import SearchColumn from 'pl-fe/columns/search';
-import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Input from 'pl-fe/components/ui/input';
-import SvgIcon from 'pl-fe/components/ui/svg-icon';
-import Tabs from 'pl-fe/components/ui/tabs';
-import Text from 'pl-fe/components/ui/text';
-import { searchRoute } from 'pl-fe/features/ui/router';
-import { useFeatures } from 'pl-fe/hooks/use-features';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import SearchColumn from '@/columns/search';
+import Column from '@/components/ui/column';
+import HStack from '@/components/ui/hstack';
+import IconButton from '@/components/ui/icon-button';
+import Input from '@/components/ui/input';
+import SvgIcon from '@/components/ui/svg-icon';
+import Tabs from '@/components/ui/tabs';
+import Text from '@/components/ui/text';
+import { searchRoute } from '@/features/ui/router';
+import { useFeatures } from '@/hooks/use-features';
 
 type SearchFilter = 'accounts' | 'hashtags' | 'statuses' | 'links';
 

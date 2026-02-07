@@ -1,7 +1,7 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Icon from 'pl-fe/components/icon';
+import Icon from '@/components/icon';
 
 const messages = defineMessages({
   load_more: { id: 'status.load_more', defaultMessage: 'Load more' },

@@ -2,17 +2,17 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { cancelReplyCompose, uploadCompose } from 'pl-fe/actions/compose';
-import { checkComposeContent } from 'pl-fe/components/modal-root';
-import Modal from 'pl-fe/components/ui/modal';
-import { ComposeForm } from 'pl-fe/features/ui/util/async-components';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useCompose } from 'pl-fe/hooks/use-compose';
-import { useDraggedFiles } from 'pl-fe/hooks/use-dragged-files';
-import { usePersistDraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import { cancelReplyCompose, uploadCompose } from '@/actions/compose';
+import { checkComposeContent } from '@/components/modal-root';
+import Modal from '@/components/ui/modal';
+import { ComposeForm } from '@/features/ui/util/async-components';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useCompose } from '@/hooks/use-compose';
+import { useDraggedFiles } from '@/hooks/use-dragged-files';
+import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
+import { useModalsActions } from '@/stores/modals';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
   confirm: { id: 'confirmations.cancel.confirm', defaultMessage: 'Discard' },

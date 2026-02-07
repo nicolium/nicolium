@@ -2,18 +2,18 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import DropdownMenu, { type Menu } from 'pl-fe/components/dropdown-menu';
-import Avatar from 'pl-fe/components/ui/avatar';
-import HStack from 'pl-fe/components/ui/hstack';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import VerificationBadge from 'pl-fe/components/verification-badge';
-import { chatRoute } from 'pl-fe/features/ui/router';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useUnblockAccountMutation, useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
-import { useChat, useChatActions } from 'pl-fe/queries/chats';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
+import Avatar from '@/components/ui/avatar';
+import HStack from '@/components/ui/hstack';
+import IconButton from '@/components/ui/icon-button';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import VerificationBadge from '@/components/verification-badge';
+import { chatRoute } from '@/features/ui/router';
+import { useFeatures } from '@/hooks/use-features';
+import { useUnblockAccountMutation, useRelationshipQuery } from '@/queries/accounts/use-relationship';
+import { useChat, useChatActions } from '@/queries/chats';
+import { useModalsActions } from '@/stores/modals';
 
 import Chat from '../../chat';
 

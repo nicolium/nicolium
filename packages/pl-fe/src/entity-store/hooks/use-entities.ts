@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import * as v from 'valibot';
 
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useGetState } from 'pl-fe/hooks/use-get-state';
-import { filteredArray } from 'pl-fe/schemas/utils';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useGetState } from '@/hooks/use-get-state';
+import { filteredArray } from '@/schemas/utils';
 
 import { entitiesFetchFail, entitiesFetchRequest, entitiesFetchSuccess, invalidateEntityList } from '../actions';
 import { selectEntities, selectListState, useListState } from '../selectors';

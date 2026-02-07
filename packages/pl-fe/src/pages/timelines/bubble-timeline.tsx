@@ -1,14 +1,14 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchBubbleTimeline } from 'pl-fe/actions/timelines';
-import { useBubbleStream } from 'pl-fe/api/hooks/streaming/use-bubble-stream';
-import PullToRefresh from 'pl-fe/components/pull-to-refresh';
-import Column from 'pl-fe/components/ui/column';
-import Timeline from 'pl-fe/features/ui/components/timeline';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useSettings } from 'pl-fe/stores/settings';
+import { fetchBubbleTimeline } from '@/actions/timelines';
+import { useBubbleStream } from '@/api/hooks/streaming/use-bubble-stream';
+import PullToRefresh from '@/components/pull-to-refresh';
+import Column from '@/components/ui/column';
+import Timeline from '@/features/ui/components/timeline';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useFeatures } from '@/hooks/use-features';
+import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
   title: { id: 'column.bubble', defaultMessage: 'Bubble timeline' },

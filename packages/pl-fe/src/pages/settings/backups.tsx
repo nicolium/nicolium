@@ -1,15 +1,15 @@
 import React from 'react';
 import { FormattedDate, defineMessages, useIntl } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import Card from 'pl-fe/components/ui/card';
-import Column from 'pl-fe/components/ui/column';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import HStack from 'pl-fe/components/ui/hstack';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useBackups, useCreateBackupMutation } from 'pl-fe/queries/settings/use-backups';
+import Button from '@/components/ui/button';
+import Card from '@/components/ui/card';
+import Column from '@/components/ui/column';
+import FormActions from '@/components/ui/form-actions';
+import HStack from '@/components/ui/hstack';
+import Spinner from '@/components/ui/spinner';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useBackups, useCreateBackupMutation } from '@/queries/settings/use-backups';
 
 import type { Backup as BackupEntity } from 'pl-api';
 

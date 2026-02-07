@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import List, { ListItem } from 'pl-fe/components/list';
-import Button from 'pl-fe/components/ui/button';
-import Card from 'pl-fe/components/ui/card';
-import Column from 'pl-fe/components/ui/column';
-import Form from 'pl-fe/components/ui/form';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Input from 'pl-fe/components/ui/input';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Stack from 'pl-fe/components/ui/stack';
-import { useCreateList, useLists } from 'pl-fe/queries/accounts/use-lists';
+import List, { ListItem } from '@/components/list';
+import Button from '@/components/ui/button';
+import Card from '@/components/ui/card';
+import Column from '@/components/ui/column';
+import Form from '@/components/ui/form';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Input from '@/components/ui/input';
+import Spinner from '@/components/ui/spinner';
+import Stack from '@/components/ui/stack';
+import { useCreateList, useLists } from '@/queries/accounts/use-lists';
 
 import type { List as ListEntity } from 'pl-api';
 

@@ -1,11 +1,11 @@
 import { useNavigate, useRouter } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 
-import { resetCompose } from 'pl-fe/actions/compose';
-import { FOCUS_EDITOR_COMMAND } from 'pl-fe/features/compose/editor/plugins/focus-plugin';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import { resetCompose } from '@/actions/compose';
+import { FOCUS_EDITOR_COMMAND } from '@/features/compose/editor/plugins/focus-plugin';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { useModalsActions } from '@/stores/modals';
 
 import { Hotkeys } from '../components/hotkeys';
 

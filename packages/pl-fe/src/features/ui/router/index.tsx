@@ -11,33 +11,33 @@ import {
 import React, { useMemo } from 'react';
 import * as v from 'valibot';
 
-import { FE_SUBDIRECTORY, WITH_LANDING_PAGE } from 'pl-fe/build-config';
-import SiteError from 'pl-fe/components/site-error';
-import Layout from 'pl-fe/components/ui/layout';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
-import AdminLayout from 'pl-fe/layouts/admin-layout';
-import ChatsLayout from 'pl-fe/layouts/chats-layout';
-import DefaultLayout from 'pl-fe/layouts/default-layout';
-import EmptyLayout from 'pl-fe/layouts/empty-layout';
-import EventLayout from 'pl-fe/layouts/event-layout';
-import EventsLayout from 'pl-fe/layouts/events-layout';
-import ExternalLoginLayout from 'pl-fe/layouts/external-login-layout';
-import GroupLayout from 'pl-fe/layouts/group-layout';
-import GroupsLayout from 'pl-fe/layouts/groups-layout';
-import HomeLayout from 'pl-fe/layouts/home-layout';
-import LandingLayout from 'pl-fe/layouts/landing-layout';
-import ManageGroupsLayout from 'pl-fe/layouts/manage-groups-layout';
-import ProfileLayout from 'pl-fe/layouts/profile-layout';
-import RemoteInstanceLayout from 'pl-fe/layouts/remote-instance-layout';
-import SearchLayout from 'pl-fe/layouts/search-layout';
-import StatusLayout from 'pl-fe/layouts/status-layout';
-import { instanceInitialState } from 'pl-fe/reducers/instance';
-import { isStandalone } from 'pl-fe/utils/state';
+import { FE_SUBDIRECTORY, WITH_LANDING_PAGE } from '@/build-config';
+import SiteError from '@/components/site-error';
+import Layout from '@/components/ui/layout';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFeatures } from '@/hooks/use-features';
+import { useInstance } from '@/hooks/use-instance';
+import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import AdminLayout from '@/layouts/admin-layout';
+import ChatsLayout from '@/layouts/chats-layout';
+import DefaultLayout from '@/layouts/default-layout';
+import EmptyLayout from '@/layouts/empty-layout';
+import EventLayout from '@/layouts/event-layout';
+import EventsLayout from '@/layouts/events-layout';
+import ExternalLoginLayout from '@/layouts/external-login-layout';
+import GroupLayout from '@/layouts/group-layout';
+import GroupsLayout from '@/layouts/groups-layout';
+import HomeLayout from '@/layouts/home-layout';
+import LandingLayout from '@/layouts/landing-layout';
+import ManageGroupsLayout from '@/layouts/manage-groups-layout';
+import ProfileLayout from '@/layouts/profile-layout';
+import RemoteInstanceLayout from '@/layouts/remote-instance-layout';
+import SearchLayout from '@/layouts/search-layout';
+import StatusLayout from '@/layouts/status-layout';
+import { instanceInitialState } from '@/reducers/instance';
+import { isStandalone } from '@/utils/state';
 
 import ChatsPageChat from '../../chats/components/chats-page/components/chats-page-chat';
 import ChatsPageEmpty from '../../chats/components/chats-page/components/chats-page-empty';
@@ -162,7 +162,7 @@ interface RouterContext {
 }
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
-  component: React.lazy(() => import('pl-fe/features/ui')),
+  component: React.lazy(() => import('@/features/ui')),
 });
 
 const requireAuth = ({ context: { isLoggedIn }, location }: { context: RouterContext; location: ParsedLocation }) => {

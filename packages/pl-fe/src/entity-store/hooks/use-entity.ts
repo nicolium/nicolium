@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import * as v from 'valibot';
 
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useLoading } from 'pl-fe/hooks/use-loading';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useLoading } from '@/hooks/use-loading';
 
 import { importEntities } from '../actions';
 import { selectEntity } from '../selectors';
 
 import type { EntitySchema, EntityPath, EntityFn } from './types';
 import type { Entity } from '../types';
-import type { PlfeResponse } from 'pl-fe/api';
+import type { PlfeResponse } from '@/api';
 
 /** Additional options for the hook. */
 interface UseEntityOpts<TEntity extends Entity, TTransformedEntity extends Entity> {

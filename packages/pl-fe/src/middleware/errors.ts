@@ -1,4 +1,4 @@
-import toast from 'pl-fe/toast';
+import toast from '@/toast';
 
 import type { AnyAction, Middleware } from 'redux';
 

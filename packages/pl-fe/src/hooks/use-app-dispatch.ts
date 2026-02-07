@@ -1,6 +1,6 @@
 import { useDispatch } from 'react-redux';
 
-import type { AppDispatch } from 'pl-fe/store';
+import type { AppDispatch } from '@/store';
 
 const useAppDispatch = () => useDispatch<AppDispatch>();
 

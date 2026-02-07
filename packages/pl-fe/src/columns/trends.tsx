@@ -1,18 +1,18 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import Hashtag from 'pl-fe/components/hashtag';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import TrendingLink from 'pl-fe/components/trending-link';
-import AccountContainer from 'pl-fe/containers/account-container';
-import StatusContainer from 'pl-fe/containers/status-container';
-import PlaceholderAccount from 'pl-fe/features/placeholder/components/placeholder-account';
-import PlaceholderHashtag from 'pl-fe/features/placeholder/components/placeholder-hashtag';
-import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
-import useTrends from 'pl-fe/queries/trends';
-import { useSuggestedAccounts } from 'pl-fe/queries/trends/use-suggested-accounts';
-import { useTrendingLinks } from 'pl-fe/queries/trends/use-trending-links';
-import { useTrendingStatuses } from 'pl-fe/queries/trends/use-trending-statuses';
+import Hashtag from '@/components/hashtag';
+import ScrollableList from '@/components/scrollable-list';
+import TrendingLink from '@/components/trending-link';
+import AccountContainer from '@/containers/account-container';
+import StatusContainer from '@/containers/status-container';
+import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
+import PlaceholderHashtag from '@/features/placeholder/components/placeholder-hashtag';
+import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
+import useTrends from '@/queries/trends';
+import { useSuggestedAccounts } from '@/queries/trends/use-suggested-accounts';
+import { useTrendingLinks } from '@/queries/trends/use-trending-links';
+import { useTrendingStatuses } from '@/queries/trends/use-trending-statuses';
 
 interface ITrendsColumn {
   type: 'accounts' | 'hashtags' | 'statuses' | 'links';

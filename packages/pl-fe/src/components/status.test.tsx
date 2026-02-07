@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { buildAccount } from 'pl-fe/jest/factory';
-import { render, screen, rootState } from 'pl-fe/jest/test-helpers';
-import { normalizeStatus } from 'pl-fe/normalizers/status';
+import { buildAccount } from '@/jest/factory';
+import { render, screen, rootState } from '@/jest/test-helpers';
+import { normalizeStatus } from '@/normalizers/status';
 
 import Status from './status';
 
-import type { ReducerStatus } from 'pl-fe/reducers/statuses';
+import type { ReducerStatus } from '@/reducers/statuses';
 
 const account = buildAccount({
   id: '1',

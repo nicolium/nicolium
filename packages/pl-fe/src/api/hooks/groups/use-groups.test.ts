@@ -1,9 +1,9 @@
 import { instanceSchema } from 'pl-api';
 import * as v from 'valibot';
 
-import { __stub } from 'pl-fe/api';
-import { buildGroup } from 'pl-fe/jest/factory';
-import { renderHook, waitFor } from 'pl-fe/jest/test-helpers';
+import { __stub } from '@/api';
+import { buildGroup } from '@/jest/factory';
+import { renderHook, waitFor } from '@/jest/test-helpers';
 
 import { useGroups } from './use-groups';
 

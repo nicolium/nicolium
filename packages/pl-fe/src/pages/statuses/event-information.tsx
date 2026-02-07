@@ -1,19 +1,19 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchStatus } from 'pl-fe/actions/statuses';
-import MissingIndicator from 'pl-fe/components/missing-indicator';
-import StatusContent from 'pl-fe/components/status-content';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { eventInformationRoute } from 'pl-fe/features/ui/router';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
-import { makeGetStatus } from 'pl-fe/selectors';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import { fetchStatus } from '@/actions/statuses';
+import MissingIndicator from '@/components/missing-indicator';
+import StatusContent from '@/components/status-content';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { eventInformationRoute } from '@/features/ui/router';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { makeGetStatus } from '@/selectors';
+import { useModalsActions } from '@/stores/modals';
 
 const EventInformationPage: React.FC = () => {
   const { statusId } = eventInformationRoute.useParams();

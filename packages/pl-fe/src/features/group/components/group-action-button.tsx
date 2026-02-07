@@ -2,14 +2,14 @@ import { GroupRoles } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useJoinGroup } from 'pl-fe/api/hooks/groups/use-join-group';
-import { useLeaveGroup } from 'pl-fe/api/hooks/groups/use-leave-group';
-import Button from 'pl-fe/components/ui/button';
-import { importEntities } from 'pl-fe/entity-store/actions';
-import { Entities } from 'pl-fe/entity-store/entities';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import toast from 'pl-fe/toast';
+import { useJoinGroup } from '@/api/hooks/groups/use-join-group';
+import { useLeaveGroup } from '@/api/hooks/groups/use-leave-group';
+import Button from '@/components/ui/button';
+import { importEntities } from '@/entity-store/actions';
+import { Entities } from '@/entity-store/entities';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useModalsActions } from '@/stores/modals';
+import toast from '@/toast';
 
 import type { Group, GroupRelationship } from 'pl-api';
 

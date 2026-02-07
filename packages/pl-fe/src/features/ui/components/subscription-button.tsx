@@ -1,10 +1,10 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import IconButton from 'pl-fe/components/ui/icon-button';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useFollowAccountMutation } from 'pl-fe/queries/accounts/use-relationship';
-import toast from 'pl-fe/toast';
+import IconButton from '@/components/ui/icon-button';
+import { useFeatures } from '@/hooks/use-features';
+import { useFollowAccountMutation } from '@/queries/accounts/use-relationship';
+import toast from '@/toast';
 
 import type { Account as AccountEntity } from 'pl-api';
 

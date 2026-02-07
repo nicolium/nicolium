@@ -1,6 +1,6 @@
-import { Entities } from 'pl-fe/entity-store/entities';
-import { useCreateEntity } from 'pl-fe/entity-store/hooks/use-create-entity';
-import { useClient } from 'pl-fe/hooks/use-client';
+import { Entities } from '@/entity-store/entities';
+import { useCreateEntity } from '@/entity-store/hooks/use-create-entity';
+import { useClient } from '@/hooks/use-client';
 
 interface UpdateGroupParams {
   display_name?: string;

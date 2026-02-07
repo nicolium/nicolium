@@ -2,13 +2,13 @@ import debounce from 'lodash/debounce';
 import React, { useCallback, useMemo } from 'react';
 import { defineMessages } from 'react-intl';
 
-import { dequeueTimeline, scrollTopTimeline } from 'pl-fe/actions/timelines';
-import ScrollTopButton from 'pl-fe/components/scroll-top-button';
-import StatusList, { IStatusList } from 'pl-fe/components/status-list';
-import Portal from 'pl-fe/components/ui/portal';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { makeGetStatusIds } from 'pl-fe/selectors';
+import { dequeueTimeline, scrollTopTimeline } from '@/actions/timelines';
+import ScrollTopButton from '@/components/scroll-top-button';
+import StatusList, { IStatusList } from '@/components/status-list';
+import Portal from '@/components/ui/portal';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { makeGetStatusIds } from '@/selectors';
 
 const messages = defineMessages({
   queue: { id: 'status_list.queue_label', defaultMessage: 'Click to see {count} new {count, plural, one {post} other {posts}}' },

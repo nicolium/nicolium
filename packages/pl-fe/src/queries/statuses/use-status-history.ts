@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { StatusEdit } from 'pl-api';
 
-import { importEntities } from 'pl-fe/actions/importer';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useClient } from 'pl-fe/hooks/use-client';
+import { importEntities } from '@/actions/importer';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
 
 const minifyStatusEdit = ({ account, ...statusEdit }: StatusEdit) => ({
   account_id: account.id,

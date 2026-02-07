@@ -1,18 +1,18 @@
 import { createSelector } from 'reselect';
 
-import { Entities } from 'pl-fe/entity-store/entities';
-import { useSettingsStore } from 'pl-fe/stores/settings';
-import { getDomain } from 'pl-fe/utils/accounts';
-import { validId } from 'pl-fe/utils/auth';
-import ConfigDB from 'pl-fe/utils/config-db';
-import { shouldFilter } from 'pl-fe/utils/timelines';
+import { Entities } from '@/entity-store/entities';
+import { useSettingsStore } from '@/stores/settings';
+import { getDomain } from '@/utils/accounts';
+import { validId } from '@/utils/auth';
+import ConfigDB from '@/utils/config-db';
+import { shouldFilter } from '@/utils/timelines';
 
+import type { EntityStore } from '@/entity-store/types';
+import type { minifyAdminReport } from '@/queries/utils/minify-list';
+import type { MinifiedStatus } from '@/reducers/statuses';
+import type { MRFSimple } from '@/schemas/pleroma';
+import type { RootState } from '@/store';
 import type { Account, Filter, FilterResult, Group, NotificationGroup } from 'pl-api';
-import type { EntityStore } from 'pl-fe/entity-store/types';
-import type { minifyAdminReport } from 'pl-fe/queries/utils/minify-list';
-import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
-import type { MRFSimple } from 'pl-fe/schemas/pleroma';
-import type { RootState } from 'pl-fe/store';
 
 const selectAccount = (state: RootState, accountId: string) =>
   state.entities[Entities.ACCOUNTS]?.store[accountId] as Account | undefined;

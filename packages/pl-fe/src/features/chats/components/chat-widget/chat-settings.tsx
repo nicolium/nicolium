@@ -1,16 +1,16 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Avatar from 'pl-fe/components/ui/avatar';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useUnblockAccountMutation, useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
-import { useChatActions } from 'pl-fe/queries/chats';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import Avatar from '@/components/ui/avatar';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
+import { useFeatures } from '@/hooks/use-features';
+import { useUnblockAccountMutation, useRelationshipQuery } from '@/queries/accounts/use-relationship';
+import { useChatActions } from '@/queries/chats';
+import { useModalsActions } from '@/stores/modals';
 
 import ChatPaneHeader from './chat-pane-header';
 

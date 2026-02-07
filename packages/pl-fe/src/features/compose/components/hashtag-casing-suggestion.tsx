@@ -1,14 +1,14 @@
 import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import { ignoreHashtagCasingSuggestion } from 'pl-fe/actions/compose';
-import { changeSetting } from 'pl-fe/actions/settings';
-import Button from 'pl-fe/components/ui/button';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useCompose } from 'pl-fe/hooks/use-compose';
-import toast from 'pl-fe/toast';
+import { ignoreHashtagCasingSuggestion } from '@/actions/compose';
+import { changeSetting } from '@/actions/settings';
+import Button from '@/components/ui/button';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useCompose } from '@/hooks/use-compose';
+import toast from '@/toast';
 
 import Warning from './warning';
 

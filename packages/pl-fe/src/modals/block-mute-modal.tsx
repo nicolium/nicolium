@@ -1,23 +1,23 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import HStack from 'pl-fe/components/ui/hstack';
-import Modal from 'pl-fe/components/ui/modal';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Textarea from 'pl-fe/components/ui/textarea';
-import Toggle from 'pl-fe/components/ui/toggle';
-import DurationSelector from 'pl-fe/features/compose/components/polls/duration-selector';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useBlockAccountMutation, useMuteAccountMutation, useUpdateAccountNoteMutation } from 'pl-fe/queries/accounts/use-relationship';
-import toast from 'pl-fe/toast';
+import { initReport, ReportableEntities } from '@/actions/reports';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import FormGroup from '@/components/ui/form-group';
+import HStack from '@/components/ui/hstack';
+import Modal from '@/components/ui/modal';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Textarea from '@/components/ui/textarea';
+import Toggle from '@/components/ui/toggle';
+import DurationSelector from '@/features/compose/components/polls/duration-selector';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useFeatures } from '@/hooks/use-features';
+import { useBlockAccountMutation, useMuteAccountMutation, useUpdateAccountNoteMutation } from '@/queries/accounts/use-relationship';
+import toast from '@/toast';
 
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 import type { BlockAccountParams, MuteAccountParams } from 'pl-api';
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
 const messages = defineMessages({
   notePlaceholder: { id: 'account_note.placeholder', defaultMessage: 'Add a note' },

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Input from 'pl-fe/components/ui/input';
-import Modal from 'pl-fe/components/ui/modal';
-import Stack from 'pl-fe/components/ui/stack';
-import Textarea from 'pl-fe/components/ui/textarea';
+import Input from '@/components/ui/input';
+import Modal from '@/components/ui/modal';
+import Stack from '@/components/ui/stack';
+import Textarea from '@/components/ui/textarea';
 
-import type { ButtonThemes } from 'pl-fe/components/ui/button/useButtonStyles';
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { ButtonThemes } from '@/components/ui/button/useButtonStyles';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 interface TextFieldModalProps {
   heading: React.ReactNode;

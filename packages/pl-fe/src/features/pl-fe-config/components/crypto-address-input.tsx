@@ -1,11 +1,11 @@
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import HStack from 'pl-fe/components/ui/hstack';
-import Input from 'pl-fe/components/ui/input';
+import HStack from '@/components/ui/hstack';
+import Input from '@/components/ui/input';
 
-import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield';
-import type { CryptoAddress } from 'pl-fe/normalizers/pl-fe/pl-fe-config';
+import type { StreamfieldComponent } from '@/components/ui/streamfield';
+import type { CryptoAddress } from '@/normalizers/pl-fe/pl-fe-config';
 
 const messages = defineMessages({
   ticker: { id: 'plfe_config.crypto_address.meta_fields.ticker_placeholder', defaultMessage: 'Ticker' },

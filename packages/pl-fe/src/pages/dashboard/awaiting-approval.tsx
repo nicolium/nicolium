@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Column from 'pl-fe/components/ui/column';
-import UnapprovedAccount from 'pl-fe/features/admin/components/unapproved-account';
-import { useAdminAccounts } from 'pl-fe/queries/admin/use-accounts';
+import ScrollableList from '@/components/scrollable-list';
+import Column from '@/components/ui/column';
+import UnapprovedAccount from '@/features/admin/components/unapproved-account';
+import { useAdminAccounts } from '@/queries/admin/use-accounts';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.awaiting_approval', defaultMessage: 'Awaiting approval' },

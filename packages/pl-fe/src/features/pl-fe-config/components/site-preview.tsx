@@ -2,12 +2,12 @@ import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import InlineStyle from 'pl-fe/components/inline-style';
-import BackgroundShapes from 'pl-fe/features/ui/components/background-shapes';
-import { useSystemTheme } from 'pl-fe/hooks/use-system-theme';
-import { useThemeCss } from 'pl-fe/hooks/use-theme-css';
+import InlineStyle from '@/components/inline-style';
+import BackgroundShapes from '@/features/ui/components/background-shapes';
+import { useSystemTheme } from '@/hooks/use-system-theme';
+import { useThemeCss } from '@/hooks/use-theme-css';
 
-import type { PlFeConfig } from 'pl-fe/normalizers/pl-fe/pl-fe-config';
+import type { PlFeConfig } from '@/normalizers/pl-fe/pl-fe-config';
 
 interface ISitePreview {
   /** Raw pl-fe configuration. */

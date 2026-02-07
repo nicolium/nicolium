@@ -2,13 +2,13 @@ import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Avatar from 'pl-fe/components/ui/avatar';
-import HStack from 'pl-fe/components/ui/hstack';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
+import Avatar from '@/components/ui/avatar';
+import HStack from '@/components/ui/hstack';
+import IconButton from '@/components/ui/icon-button';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useInstance } from '@/hooks/use-instance';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
 
 import Shoutbox from '../../shoutbox';
 

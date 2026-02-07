@@ -2,16 +2,16 @@ import { Link } from '@tanstack/react-router';
 import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
-import Avatar from 'pl-fe/components/ui/avatar';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useReport } from 'pl-fe/queries/admin/use-reports';
-import { makeGetReport } from 'pl-fe/selectors';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import HoverAccountWrapper from '@/components/hover-account-wrapper';
+import Avatar from '@/components/ui/avatar';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Emojify from '@/features/emoji/emojify';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useReport } from '@/queries/admin/use-reports';
+import { makeGetReport } from '@/selectors';
 
 interface IReport {
   id: string;

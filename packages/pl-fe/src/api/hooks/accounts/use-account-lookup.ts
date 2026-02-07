@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 
-import { Entities } from 'pl-fe/entity-store/entities';
-import { useEntityLookup } from 'pl-fe/entity-store/hooks/use-entity-lookup';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
-import { useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
+import { Entities } from '@/entity-store/entities';
+import { useEntityLookup } from '@/entity-store/hooks/use-entity-lookup';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
+import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
 
 import type { Account } from 'pl-api';
 

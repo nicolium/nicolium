@@ -2,8 +2,8 @@ import { useMemo } from 'react';
 
 import { useAppSelector } from './use-app-selector';
 
+import type { MinifiedStatus } from '@/reducers/statuses';
 import type { InteractionPolicy, InteractionPolicyEntry } from 'pl-api';
-import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
 
 const useCanInteract = (status: Pick<MinifiedStatus, 'account_id' | 'id' | 'interaction_policy' | 'mentions'>, type: keyof InteractionPolicy): {
   canInteract: boolean;

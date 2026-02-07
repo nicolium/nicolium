@@ -3,9 +3,9 @@ import clsx from 'clsx';
 import React, { KeyboardEvent, useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Portal from 'pl-fe/components/ui/portal';
-import { useClickOutside } from 'pl-fe/hooks/use-click-outside';
+import IconButton from '@/components/ui/icon-button';
+import Portal from '@/components/ui/portal';
+import { useClickOutside } from '@/hooks/use-click-outside';
 
 import EmojiPickerDropdown, { IEmojiPickerDropdown } from '../components/emoji-picker-dropdown';
 

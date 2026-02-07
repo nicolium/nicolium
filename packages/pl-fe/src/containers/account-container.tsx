@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import Account, { IAccount } from 'pl-fe/components/account';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import Account, { IAccount } from '@/components/account';
 
 interface IAccountContainer extends Omit<IAccount, 'account'> {
   id: string;

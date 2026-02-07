@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { ACCOUNT_BLOCK_SUCCESS, ACCOUNT_MUTE_SUCCESS, type AccountsAction } from 'pl-fe/actions/accounts';
-import { batcher } from 'pl-fe/api/batcher';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
+import { ACCOUNT_BLOCK_SUCCESS, ACCOUNT_MUTE_SUCCESS, type AccountsAction } from '@/actions/accounts';
+import { batcher } from '@/api/batcher';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
+import { useLoggedIn } from '@/hooks/use-logged-in';
 
 import type { MinifiedSuggestion } from '../trends/use-suggested-accounts';
 import type { BlockAccountParams, FollowAccountParams, MuteAccountParams, Relationship } from 'pl-api';

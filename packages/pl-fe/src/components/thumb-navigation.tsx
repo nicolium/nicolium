@@ -2,19 +2,19 @@ import { useMatch } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { groupComposeModal } from 'pl-fe/actions/compose';
-import ThumbNavigationLink from 'pl-fe/components/thumb-navigation-link';
-import Icon from 'pl-fe/components/ui/icon';
-import { useStatContext } from 'pl-fe/contexts/stat-context';
-import { Entities } from 'pl-fe/entity-store/entities';
-import { layouts } from 'pl-fe/features/ui/router';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import { useIsSidebarOpen, useUiStoreActions } from 'pl-fe/stores/ui';
-import { isStandalone } from 'pl-fe/utils/state';
+import { groupComposeModal } from '@/actions/compose';
+import ThumbNavigationLink from '@/components/thumb-navigation-link';
+import Icon from '@/components/ui/icon';
+import { useStatContext } from '@/contexts/stat-context';
+import { Entities } from '@/entity-store/entities';
+import { layouts } from '@/features/ui/router';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFeatures } from '@/hooks/use-features';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { useModalsActions } from '@/stores/modals';
+import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
+import { isStandalone } from '@/utils/state';
 
 const messages = defineMessages({
   home: { id: 'column.home', defaultMessage: 'Home' },

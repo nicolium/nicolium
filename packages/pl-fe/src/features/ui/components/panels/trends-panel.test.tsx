@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { __stub } from 'pl-fe/api';
-import { queryClient, render, screen, waitFor } from 'pl-fe/jest/test-helpers';
+import { __stub } from '@/api';
+import { queryClient, render, screen, waitFor } from '@/jest/test-helpers';
 
 import TrendsPanel from './trends-panel';
 

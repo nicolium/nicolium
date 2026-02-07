@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { fireEvent, render, screen } from 'pl-fe/jest/test-helpers';
+import { fireEvent, render, screen } from '@/jest/test-helpers';
 
 import Form from './form';
 

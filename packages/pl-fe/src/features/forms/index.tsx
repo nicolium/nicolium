@@ -1,8 +1,8 @@
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { Multiselect as Ms } from 'pl-fe/components/ui/multiselect';
-import Select from 'pl-fe/components/ui/select';
+import { Multiselect as Ms } from '@/components/ui/multiselect';
+import Select from '@/components/ui/select';
 
 const messages = defineMessages({
   selectPlaceholder: { id: 'select.placeholder', defaultMessage: 'Select' },

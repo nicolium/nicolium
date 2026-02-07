@@ -3,17 +3,17 @@ import { QRCodeCanvas as QRCode } from 'qrcode.react';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Input from 'pl-fe/components/ui/input';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useConfirmMfa } from 'pl-fe/queries/security/use-mfa';
-import toast from 'pl-fe/toast';
+import Button from '@/components/ui/button';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import Input from '@/components/ui/input';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
+import { useConfirmMfa } from '@/queries/security/use-mfa';
+import toast from '@/toast';
 
 const messages = defineMessages({
   mfaCancelButton: { id: 'column.mfa_cancel', defaultMessage: 'Cancel' },

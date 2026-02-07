@@ -2,12 +2,12 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 
-import PullToRefresh from 'pl-fe/components/pull-to-refresh';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Stack from 'pl-fe/components/ui/stack';
-import PlaceholderChat from 'pl-fe/features/placeholder/components/placeholder-chat';
-import { useChats } from 'pl-fe/queries/chats';
-import { useShoutboxIsLoading } from 'pl-fe/stores/shoutbox';
+import PullToRefresh from '@/components/pull-to-refresh';
+import Spinner from '@/components/ui/spinner';
+import Stack from '@/components/ui/stack';
+import PlaceholderChat from '@/features/placeholder/components/placeholder-chat';
+import { useChats } from '@/queries/chats';
+import { useShoutboxIsLoading } from '@/stores/shoutbox';
 
 import ChatListItem from './chat-list-item';
 import ChatListShoutbox from './chat-list-shoutbox';

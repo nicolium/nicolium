@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Widget from 'pl-fe/components/ui/widget';
+import Widget from '@/components/ui/widget';
 
 import { ProfileField } from '../../util/async-components';
 

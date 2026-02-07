@@ -1,8 +1,8 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { PaginatedResponse } from 'pl-api';
 
-import { useClient } from 'pl-fe/hooks/use-client';
-import { flattenPages } from 'pl-fe/utils/queries';
+import { useClient } from '@/hooks/use-client';
+import { flattenPages } from '@/utils/queries';
 
 import type { AdminModerationLogEntry } from 'pl-api';
 

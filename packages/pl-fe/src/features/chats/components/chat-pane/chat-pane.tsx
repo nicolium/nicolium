@@ -1,10 +1,10 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
-import { useStatContext } from 'pl-fe/contexts/stat-context';
-import { useChats } from 'pl-fe/queries/chats';
-import { useShoutboxIsLoading } from 'pl-fe/stores/shoutbox';
+import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
+import { useStatContext } from '@/contexts/stat-context';
+import { useChats } from '@/queries/chats';
+import { useShoutboxIsLoading } from '@/stores/shoutbox';
 
 import ChatList from '../chat-list';
 import ChatSearch from '../chat-search/chat-search';

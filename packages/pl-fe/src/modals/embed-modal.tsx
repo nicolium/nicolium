@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import CopyableInput from 'pl-fe/components/copyable-input';
-import SafeEmbed from 'pl-fe/components/safe-embed';
-import Divider from 'pl-fe/components/ui/divider';
-import Modal from 'pl-fe/components/ui/modal';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import useEmbed from 'pl-fe/queries/embed';
+import CopyableInput from '@/components/copyable-input';
+import SafeEmbed from '@/components/safe-embed';
+import Divider from '@/components/ui/divider';
+import Modal from '@/components/ui/modal';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import useEmbed from '@/queries/embed';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 interface EmbedModalProps {
   url: string;

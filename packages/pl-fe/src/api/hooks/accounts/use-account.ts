@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
 
-import { Entities } from 'pl-fe/entity-store/entities';
-import { useEntity } from 'pl-fe/entity-store/hooks/use-entity';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
-import { useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
+import { Entities } from '@/entity-store/entities';
+import { useEntity } from '@/entity-store/hooks/use-entity';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
+import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
 
 import type { Account } from 'pl-api';
 

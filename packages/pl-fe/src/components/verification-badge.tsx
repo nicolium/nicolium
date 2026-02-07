@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import Icon from 'pl-fe/components/ui/icon';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
+import Icon from '@/components/ui/icon';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
 
 const messages = defineMessages({
   verified: { id: 'account.verified', defaultMessage: 'Verified Account' },

@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import SvgIcon from 'pl-fe/components/ui/svg-icon';
+import SvgIcon from '@/components/ui/svg-icon';
 
 const sizes = {
   md: 'p-4 sm:rounded-xl',

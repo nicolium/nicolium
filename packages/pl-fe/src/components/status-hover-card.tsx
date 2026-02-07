@@ -4,12 +4,12 @@ import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
-import { fetchStatus } from 'pl-fe/actions/statuses';
-import { showStatusHoverCard } from 'pl-fe/components/hover-status-wrapper';
-import StatusContainer from 'pl-fe/containers/status-container';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useStatusHoverCardActions, useStatusHoverCardStore } from 'pl-fe/stores/status-hover-card';
+import { fetchStatus } from '@/actions/statuses';
+import { showStatusHoverCard } from '@/components/hover-status-wrapper';
+import StatusContainer from '@/containers/status-container';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useStatusHoverCardActions, useStatusHoverCardStore } from '@/stores/status-hover-card';
 
 interface IStatusHoverCard {
   visible?: boolean;

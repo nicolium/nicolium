@@ -1,11 +1,11 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import PullToRefresh from 'pl-fe/components/pull-to-refresh';
-import StatusList from 'pl-fe/components/status-list';
-import Column from 'pl-fe/components/ui/column';
-import { statusQuotesRoute } from 'pl-fe/features/ui/router';
-import { useStatusQuotes } from 'pl-fe/queries/statuses/use-status-quotes';
+import PullToRefresh from '@/components/pull-to-refresh';
+import StatusList from '@/components/status-list';
+import Column from '@/components/ui/column';
+import { statusQuotesRoute } from '@/features/ui/router';
+import { useStatusQuotes } from '@/queries/statuses/use-status-quotes';
 
 const messages = defineMessages({
   heading: { id: 'column.quotes', defaultMessage: 'Post quotes' },

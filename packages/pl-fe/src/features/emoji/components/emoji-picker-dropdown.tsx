@@ -1,17 +1,17 @@
 import React, { useEffect, useLayoutEffect, useMemo, useState, Suspense } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeSetting, saveSettings } from 'pl-fe/actions/settings';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useTheme } from 'pl-fe/hooks/use-theme';
-import { useCustomEmojis } from 'pl-fe/queries/instance/use-custom-emojis';
-import { useSettings, useSettingsStoreActions } from 'pl-fe/stores/settings';
+import { changeSetting, saveSettings } from '@/actions/settings';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useTheme } from '@/hooks/use-theme';
+import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
+import { useSettings, useSettingsStoreActions } from '@/stores/settings';
 
 import { buildCustomEmojiCategories } from '../../emoji';
 import { EmojiPicker } from '../../ui/util/async-components';
 
+import type { Emoji, CustomEmoji, NativeEmoji } from '@/features/emoji';
 import type { CustomEmoji as BaseCustomEmoji } from 'pl-api';
-import type { Emoji, CustomEmoji, NativeEmoji } from 'pl-fe/features/emoji';
 
 const messages = defineMessages({
   emoji: { id: 'emoji_button.label', defaultMessage: 'Insert emoji' },

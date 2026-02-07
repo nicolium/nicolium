@@ -3,27 +3,27 @@ import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import Account from 'pl-fe/components/account';
-import Badge from 'pl-fe/components/badge';
-import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
-import LoadMore from 'pl-fe/components/load-more';
-import { ParsedContent } from 'pl-fe/components/parsed-content';
-import { RadioGroup, RadioItem } from 'pl-fe/components/radio';
-import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
-import StillImage from 'pl-fe/components/still-image';
-import Avatar from 'pl-fe/components/ui/avatar';
-import { CardTitle } from 'pl-fe/components/ui/card';
-import Column from 'pl-fe/components/ui/column';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import ActionButton from 'pl-fe/features/ui/components/action-button';
-import { directoryRoute } from 'pl-fe/features/ui/router';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useDirectory } from 'pl-fe/queries/accounts/use-directory';
-import { shortNumberFormat } from 'pl-fe/utils/numbers';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import Account from '@/components/account';
+import Badge from '@/components/badge';
+import HoverAccountWrapper from '@/components/hover-account-wrapper';
+import LoadMore from '@/components/load-more';
+import { ParsedContent } from '@/components/parsed-content';
+import { RadioGroup, RadioItem } from '@/components/radio';
+import RelativeTimestamp from '@/components/relative-timestamp';
+import StillImage from '@/components/still-image';
+import Avatar from '@/components/ui/avatar';
+import { CardTitle } from '@/components/ui/card';
+import Column from '@/components/ui/column';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import ActionButton from '@/features/ui/components/action-button';
+import { directoryRoute } from '@/features/ui/router';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFeatures } from '@/hooks/use-features';
+import { useInstance } from '@/hooks/use-instance';
+import { useDirectory } from '@/queries/accounts/use-directory';
+import { shortNumberFormat } from '@/utils/numbers';
 
 const messages = defineMessages({
   title: { id: 'column.directory', defaultMessage: 'Profile directory' },

@@ -1,5 +1,5 @@
-import { makePaginatedResponseQuery } from 'pl-fe/queries/utils/make-paginated-response-query';
-import { minifyStatusList } from 'pl-fe/queries/utils/minify-list';
+import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
+import { minifyStatusList } from '@/queries/utils/minify-list';
 
 const usePinnedStatuses = makePaginatedResponseQuery(
   (accountId: string) => ['statusLists', 'pins', accountId],

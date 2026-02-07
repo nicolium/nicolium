@@ -32,20 +32,20 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom';
 
-import { clearComposeSuggestions, fetchComposeSuggestions } from 'pl-fe/actions/compose';
-import { saveSettings } from 'pl-fe/actions/settings';
-import AutosuggestEmoji from 'pl-fe/components/autosuggest-emoji';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useCompose } from 'pl-fe/hooks/use-compose';
-import { selectAccount } from 'pl-fe/selectors';
-import { useSettingsStoreActions } from 'pl-fe/stores/settings';
-import { textAtCursorMatchesToken } from 'pl-fe/utils/suggestions';
+import { clearComposeSuggestions, fetchComposeSuggestions } from '@/actions/compose';
+import { saveSettings } from '@/actions/settings';
+import AutosuggestEmoji from '@/components/autosuggest-emoji';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useCompose } from '@/hooks/use-compose';
+import { selectAccount } from '@/selectors';
+import { useSettingsStoreActions } from '@/stores/settings';
+import { textAtCursorMatchesToken } from '@/utils/suggestions';
 
 import AutosuggestAccount from '../../components/autosuggest-account';
 import { $createEmojiNode } from '../nodes/emoji-node';
 import { $createMentionNode } from '../nodes/mention-node';
 
-import type { Emoji } from 'pl-fe/features/emoji';
+import type { Emoji } from '@/features/emoji';
 
 type AutoSuggestion = string | Emoji;
 

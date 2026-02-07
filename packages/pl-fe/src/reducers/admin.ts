@@ -5,9 +5,9 @@ import {
   ADMIN_CONFIG_UPDATE_SUCCESS,
   // ADMIN_USER_DELETE_SUCCESS,
   type AdminActions,
-} from 'pl-fe/actions/admin';
+} from '@/actions/admin';
 
-import type { Config } from 'pl-fe/utils/config-db';
+import type { Config } from '@/utils/config-db';
 
 interface State {
   configs: Array<Config>;

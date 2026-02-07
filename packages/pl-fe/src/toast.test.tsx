@@ -4,7 +4,7 @@ import React from 'react';
 import { Toaster } from 'react-hot-toast';
 import { IntlProvider } from 'react-intl';
 
-import { act, screen } from 'pl-fe/jest/test-helpers';
+import { act, screen } from '@/jest/test-helpers';
 
 import toast from './toast';
 

@@ -2,20 +2,20 @@ import { Navigate } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import List, { ListItem } from 'pl-fe/components/list';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import Emoji from 'pl-fe/components/ui/emoji';
-import Form from 'pl-fe/components/ui/form';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Input from 'pl-fe/components/ui/input';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Stack from 'pl-fe/components/ui/stack';
-import { useTextField } from 'pl-fe/hooks/forms/use-text-field';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useBookmarkFolders, useCreateBookmarkFolder } from 'pl-fe/queries/statuses/use-bookmark-folders';
-import toast from 'pl-fe/toast';
+import List, { ListItem } from '@/components/list';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import Emoji from '@/components/ui/emoji';
+import Form from '@/components/ui/form';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Input from '@/components/ui/input';
+import Spinner from '@/components/ui/spinner';
+import Stack from '@/components/ui/stack';
+import { useTextField } from '@/hooks/forms/use-text-field';
+import { useFeatures } from '@/hooks/use-features';
+import { useBookmarkFolders, useCreateBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
+import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },

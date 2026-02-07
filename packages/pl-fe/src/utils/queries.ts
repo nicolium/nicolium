@@ -1,4 +1,4 @@
-import { queryClient } from 'pl-fe/queries/client';
+import { queryClient } from '@/queries/client';
 
 import type { InfiniteData, QueryKey } from '@tanstack/react-query';
 import type { PaginatedResponse } from 'pl-api';

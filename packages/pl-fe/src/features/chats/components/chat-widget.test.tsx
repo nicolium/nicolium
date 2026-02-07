@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import { buildAccount } from 'pl-fe/jest/factory';
-import { render, rootState } from 'pl-fe/jest/test-helpers';
+import { buildAccount } from '@/jest/factory';
+import { render, rootState } from '@/jest/test-helpers';
 
 import ChatWidget from './chat-widget/chat-widget';
 

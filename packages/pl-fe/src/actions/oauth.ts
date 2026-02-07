@@ -8,10 +8,10 @@
 
 import { PlApiClient, type GetTokenParams, type RevokeTokenParams } from 'pl-api';
 
-import * as BuildConfig from 'pl-fe/build-config';
-import { getBaseURL } from 'pl-fe/utils/state';
+import * as BuildConfig from '@/build-config';
+import { getBaseURL } from '@/utils/state';
 
-import type { AppDispatch, RootState } from 'pl-fe/store';
+import type { AppDispatch, RootState } from '@/store';
 
 const obtainOAuthToken = async (params: GetTokenParams, baseURL?: string) =>{
   const client = new PlApiClient(baseURL || BuildConfig.BACKEND_URL || '');

@@ -1,8 +1,8 @@
-import { useTransaction } from 'pl-fe/entity-store/hooks/use-transaction';
-import { useClient } from 'pl-fe/hooks/use-client';
+import { useTransaction } from '@/entity-store/hooks/use-transaction';
+import { useClient } from '@/hooks/use-client';
 
+import type { EntityCallbacks } from '@/entity-store/hooks/types';
 import type { Account } from 'pl-api';
-import type { EntityCallbacks } from 'pl-fe/entity-store/hooks/types';
 
 const useVerify = () => {
   const client = useClient();

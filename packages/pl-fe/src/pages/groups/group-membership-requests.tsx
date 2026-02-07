@@ -1,20 +1,20 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { useGroup } from 'pl-fe/api/hooks/groups/use-group';
-import { useGroupMembershipRequests } from 'pl-fe/api/hooks/groups/use-group-membership-requests';
-import Account from 'pl-fe/components/account';
-import { AuthorizeRejectButtons } from 'pl-fe/components/authorize-reject-buttons';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
-import Spinner from 'pl-fe/components/ui/spinner';
-import ColumnForbidden from 'pl-fe/features/ui/components/column-forbidden';
-import { groupMembershipRequestsRoute } from 'pl-fe/features/ui/router';
-import toast from 'pl-fe/toast';
+import { useGroup } from '@/api/hooks/groups/use-group';
+import { useGroupMembershipRequests } from '@/api/hooks/groups/use-group-membership-requests';
+import Account from '@/components/account';
+import { AuthorizeRejectButtons } from '@/components/authorize-reject-buttons';
+import ScrollableList from '@/components/scrollable-list';
+import Column from '@/components/ui/column';
+import HStack from '@/components/ui/hstack';
+import Spinner from '@/components/ui/spinner';
+import ColumnForbidden from '@/features/ui/components/column-forbidden';
+import { groupMembershipRequestsRoute } from '@/features/ui/router';
+import toast from '@/toast';
 
+import type { PlfeResponse } from '@/api';
 import type { Account as AccountEntity } from 'pl-api';
-import type { PlfeResponse } from 'pl-fe/api';
 
 const messages = defineMessages({
   heading: { id: 'column.group_pending_requests', defaultMessage: 'Pending requests' },

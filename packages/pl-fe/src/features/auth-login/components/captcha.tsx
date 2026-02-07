@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
-import { fetchCaptcha } from 'pl-fe/actions/auth';
-import Input from 'pl-fe/components/ui/input';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { fetchCaptcha } from '@/actions/auth';
+import Input from '@/components/ui/input';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
 
 const noOp = () => {};
 

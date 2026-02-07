@@ -3,14 +3,14 @@ import debounce from 'lodash/debounce';
 import React, { useRef, useCallback, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import LoadGap from 'pl-fe/components/load-gap';
-import ScrollableList, { type IScrollableList } from 'pl-fe/components/scrollable-list';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import StatusContainer from 'pl-fe/containers/status-container';
-import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
-import PendingStatus from 'pl-fe/features/ui/components/pending-status';
-import { selectChild } from 'pl-fe/utils/scroll-utils';
+import LoadGap from '@/components/load-gap';
+import ScrollableList, { type IScrollableList } from '@/components/scrollable-list';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import StatusContainer from '@/containers/status-container';
+import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
+import PendingStatus from '@/features/ui/components/pending-status';
+import { selectChild } from '@/utils/scroll-utils';
 
 import Icon from './ui/icon';
 

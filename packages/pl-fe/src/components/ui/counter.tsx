@@ -1,6 +1,6 @@
 import React from 'react';
 
-import AnimatedNumber from 'pl-fe/components/animated-number';
+import AnimatedNumber from '@/components/animated-number';
 
 interface ICounter {
   /** Number this counter should display. */

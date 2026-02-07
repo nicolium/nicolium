@@ -2,13 +2,13 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import AltIndicator from 'pl-fe/components/alt-indicator';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Text from 'pl-fe/components/ui/text';
-import { useDraggedFiles } from 'pl-fe/hooks/use-dragged-files';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import AltIndicator from '@/components/alt-indicator';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import IconButton from '@/components/ui/icon-button';
+import Text from '@/components/ui/text';
+import { useDraggedFiles } from '@/hooks/use-dragged-files';
+import { useModalsActions } from '@/stores/modals';
 
 const messages = defineMessages({
   title: { id: 'group.upload_banner.title', defaultMessage: 'Upload background picture' },

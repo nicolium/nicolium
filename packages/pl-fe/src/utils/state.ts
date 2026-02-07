@@ -3,13 +3,13 @@
  * @module pl-fe/utils/state
  */
 
-import { getPlFeConfig } from 'pl-fe/actions/pl-fe';
-import * as BuildConfig from 'pl-fe/build-config';
-import { isPrerendered } from 'pl-fe/precheck';
-import { selectOwnAccount } from 'pl-fe/selectors';
-import { isURL } from 'pl-fe/utils/auth';
+import { getPlFeConfig } from '@/actions/pl-fe';
+import * as BuildConfig from '@/build-config';
+import { isPrerendered } from '@/precheck';
+import { selectOwnAccount } from '@/selectors';
+import { isURL } from '@/utils/auth';
 
-import type { RootState } from 'pl-fe/store';
+import type { RootState } from '@/store';
 
 /** Whether to display the fqn instead of the acct. */
 const displayFqn = (state: RootState): boolean => getPlFeConfig(state).displayFqn;

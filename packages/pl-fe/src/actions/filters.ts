@@ -1,12 +1,12 @@
 import { defineMessages } from 'react-intl';
 
-import toast from 'pl-fe/toast';
-import { isLoggedIn } from 'pl-fe/utils/auth';
+import toast from '@/toast';
+import { isLoggedIn } from '@/utils/auth';
 
 import { getClient } from '../api';
 
+import type { AppDispatch, RootState } from '@/store';
 import type { Filter, FilterContext } from 'pl-api';
-import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const FILTERS_FETCH_SUCCESS = 'FILTERS_FETCH_SUCCESS' as const;
 

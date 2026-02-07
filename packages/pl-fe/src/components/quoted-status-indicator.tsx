@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Text from 'pl-fe/components/ui/text';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { makeGetStatus } from 'pl-fe/selectors';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Text from '@/components/ui/text';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { makeGetStatus } from '@/selectors';
 
 interface IQuotedStatusIndicator {
   /** The quoted status id. */

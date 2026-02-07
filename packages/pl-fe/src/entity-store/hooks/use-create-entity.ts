@@ -1,7 +1,7 @@
 import * as v from 'valibot';
 
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useLoading } from 'pl-fe/hooks/use-loading';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useLoading } from '@/hooks/use-loading';
 
 import { importEntities } from '../actions';
 
@@ -9,7 +9,7 @@ import { parseEntitiesPath } from './utils';
 
 import type { EntityCallbacks, EntityFn, EntitySchema, ExpandedEntitiesPath } from './types';
 import type { Entity } from '../types';
-import type { PlfeResponse } from 'pl-fe/api';
+import type { PlfeResponse } from '@/api';
 
 interface UseCreateEntityOpts<TEntity extends Entity = Entity, TTransformedEntity extends Entity = TEntity> {
   schema?: EntitySchema<TEntity>;

@@ -1,9 +1,9 @@
-import { getAuthUserUrl, getMeUrl } from 'pl-fe/utils/auth';
+import { getAuthUserUrl, getMeUrl } from '@/utils/auth';
 
 import { getClient, staticFetch } from '../api';
 
+import type { AppDispatch, RootState } from '@/store';
 import type { Instance } from 'pl-api';
-import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const INSTANCE_FETCH_SUCCESS = 'INSTANCE_FETCH_SUCCESS' as const;
 const INSTANCE_FETCH_FAIL = 'INSTANCE_FETCH_FAIL' as const;

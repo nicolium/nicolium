@@ -13,7 +13,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "paths": {
-      "pl-fe/*": ["./src/*"],
+      "@/*": ["./src/*"],
     },
     "typeRoots": [
       "./src/types",

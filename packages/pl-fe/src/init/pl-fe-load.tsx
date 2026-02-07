@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { checkIfStandalone, fetchInstance } from 'pl-fe/actions/instance';
-import { fetchMe } from 'pl-fe/actions/me';
-import { loadPlFeConfig } from 'pl-fe/actions/pl-fe';
-import LoadingScreen from 'pl-fe/components/loading-screen';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useLocale } from 'pl-fe/hooks/use-locale';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import MESSAGES from 'pl-fe/messages';
+import { checkIfStandalone, fetchInstance } from '@/actions/instance';
+import { fetchMe } from '@/actions/me';
+import { loadPlFeConfig } from '@/actions/pl-fe';
+import LoadingScreen from '@/components/loading-screen';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useLocale } from '@/hooks/use-locale';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import MESSAGES from '@/messages';
 
-import type { AppDispatch } from 'pl-fe/store';
+import type { AppDispatch } from '@/store';
 
 /** Load initial data from the backend */
 const loadInitial = () => async(dispatch: AppDispatch) => {

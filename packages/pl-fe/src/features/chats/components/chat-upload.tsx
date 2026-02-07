@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import Blurhash from 'pl-fe/components/blurhash';
-import Icon from 'pl-fe/components/ui/icon';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import Blurhash from '@/components/blurhash';
+import Icon from '@/components/ui/icon';
+import { useModalsActions } from '@/stores/modals';
 
 import ChatUploadPreview from './chat-upload-preview';
 

@@ -3,32 +3,32 @@ import clsx from 'clsx';
 import React, { Suspense, useEffect, useRef } from 'react';
 import { Toaster } from 'react-hot-toast';
 
-import { fetchConfig } from 'pl-fe/actions/admin';
-import { fetchFilters } from 'pl-fe/actions/filters';
-import { fetchMarker } from 'pl-fe/actions/markers';
-import { expandNotifications } from 'pl-fe/actions/notifications';
-import { register as registerPushNotifications } from 'pl-fe/actions/push-notifications/registerer';
-import { fetchHomeTimeline } from 'pl-fe/actions/timelines';
-import { useUserStream } from 'pl-fe/api/hooks/streaming/use-user-stream';
-import SidebarNavigation from 'pl-fe/components/sidebar-navigation';
-import ThumbNavigation from 'pl-fe/components/thumb-navigation';
-import Layout from 'pl-fe/components/ui/layout';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useDraggedFiles } from 'pl-fe/hooks/use-dragged-files';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { prefetchFollowRequests } from 'pl-fe/queries/accounts/use-follow-requests';
-import { queryClient } from 'pl-fe/queries/client';
-import { prefetchCustomEmojis } from 'pl-fe/queries/instance/use-custom-emojis';
-import { scheduledStatusesQueryOptions } from 'pl-fe/queries/statuses/scheduled-statuses';
-import { useSettings } from 'pl-fe/stores/settings';
-import { useShoutboxSubscription } from 'pl-fe/stores/shoutbox';
-import { useIsDropdownMenuOpen } from 'pl-fe/stores/ui';
-import { getVapidKey } from 'pl-fe/utils/auth';
-import { isStandalone } from 'pl-fe/utils/state';
+import { fetchConfig } from '@/actions/admin';
+import { fetchFilters } from '@/actions/filters';
+import { fetchMarker } from '@/actions/markers';
+import { expandNotifications } from '@/actions/notifications';
+import { register as registerPushNotifications } from '@/actions/push-notifications/registerer';
+import { fetchHomeTimeline } from '@/actions/timelines';
+import { useUserStream } from '@/api/hooks/streaming/use-user-stream';
+import SidebarNavigation from '@/components/sidebar-navigation';
+import ThumbNavigation from '@/components/thumb-navigation';
+import Layout from '@/components/ui/layout';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useClient } from '@/hooks/use-client';
+import { useDraggedFiles } from '@/hooks/use-dragged-files';
+import { useFeatures } from '@/hooks/use-features';
+import { useInstance } from '@/hooks/use-instance';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { prefetchFollowRequests } from '@/queries/accounts/use-follow-requests';
+import { queryClient } from '@/queries/client';
+import { prefetchCustomEmojis } from '@/queries/instance/use-custom-emojis';
+import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
+import { useSettings } from '@/stores/settings';
+import { useShoutboxSubscription } from '@/stores/shoutbox';
+import { useIsDropdownMenuOpen } from '@/stores/ui';
+import { getVapidKey } from '@/utils/auth';
+import { isStandalone } from '@/utils/state';
 
 import BackgroundShapes from './components/background-shapes';
 import {
@@ -42,7 +42,7 @@ import GlobalHotkeys from './util/global-hotkeys';
 
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
-import 'pl-fe/components/status';
+import '@/components/status';
 
 const UI: React.FC = React.memo(() => {
   const navigate = useNavigate();

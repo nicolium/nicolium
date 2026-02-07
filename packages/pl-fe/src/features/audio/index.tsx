@@ -4,8 +4,8 @@ import throttle from 'lodash/throttle';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Icon from 'pl-fe/components/icon';
-import { formatTime, getPointerPosition } from 'pl-fe/features/video';
+import Icon from '@/components/icon';
+import { formatTime, getPointerPosition } from '@/features/video';
 
 import Visualizer from './visualizer';
 

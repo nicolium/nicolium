@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { __stub } from 'pl-fe/api';
-import { ChatContext } from 'pl-fe/contexts/chat-context';
-import { StatProvider } from 'pl-fe/contexts/stat-context';
-import chats from 'pl-fe/jest/fixtures/chats.json';
-import { render, screen, waitFor } from 'pl-fe/jest/test-helpers';
+import { __stub } from '@/api';
+import { ChatContext } from '@/contexts/chat-context';
+import { StatProvider } from '@/contexts/stat-context';
+import chats from '@/jest/fixtures/chats.json';
+import { render, screen, waitFor } from '@/jest/test-helpers';
 
 import ChatPane from './chat-pane';
 

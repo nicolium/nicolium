@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { batcher } from 'pl-fe/api/batcher';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useFeatures } from 'pl-fe/hooks/use-features';
+import { batcher } from '@/api/batcher';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
 
 import type { Translation } from 'pl-api';
 

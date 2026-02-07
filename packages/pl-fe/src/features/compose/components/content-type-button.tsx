@@ -1,12 +1,12 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeComposeContentType } from 'pl-fe/actions/compose';
-import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import Icon from 'pl-fe/components/ui/icon';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useCompose } from 'pl-fe/hooks/use-compose';
-import { useInstance } from 'pl-fe/hooks/use-instance';
+import { changeComposeContentType } from '@/actions/compose';
+import DropdownMenu from '@/components/dropdown-menu';
+import Icon from '@/components/ui/icon';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useCompose } from '@/hooks/use-compose';
+import { useInstance } from '@/hooks/use-instance';
 
 const messages = defineMessages({
   content_type_plaintext: { id: 'preferences.options.content_type_plaintext', defaultMessage: 'Plain text' },

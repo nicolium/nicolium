@@ -7,7 +7,7 @@
 import { $applyNodeReplacement, DecoratorNode } from 'lexical';
 import React from 'react';
 
-import Mention from 'pl-fe/components/mention';
+import Mention from '@/components/mention';
 
 import type {
   EditorConfig,

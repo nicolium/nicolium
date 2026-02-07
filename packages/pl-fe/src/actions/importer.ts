@@ -1,10 +1,10 @@
-import { importEntities as importEntityStoreEntities } from 'pl-fe/entity-store/actions';
-import { Entities } from 'pl-fe/entity-store/entities';
-import { queryClient } from 'pl-fe/queries/client';
-import { selectAccount } from 'pl-fe/selectors';
+import { importEntities as importEntityStoreEntities } from '@/entity-store/actions';
+import { Entities } from '@/entity-store/entities';
+import { queryClient } from '@/queries/client';
+import { selectAccount } from '@/selectors';
 
+import type { AppDispatch, RootState } from '@/store';
 import type { Account as BaseAccount, Group as BaseGroup, Poll as BasePoll, Relationship as BaseRelationship, Status as BaseStatus } from 'pl-api';
-import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const STATUS_IMPORT = 'STATUS_IMPORT' as const;
 const STATUSES_IMPORT = 'STATUSES_IMPORT' as const;

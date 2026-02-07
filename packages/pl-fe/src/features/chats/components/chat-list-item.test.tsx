@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { render, screen } from 'pl-fe/jest/test-helpers';
-import { IChat } from 'pl-fe/queries/chats';
+import { render, screen } from '@/jest/test-helpers';
+import { IChat } from '@/queries/chats';
 
 import ChatListItem from './chat-list-item';
 

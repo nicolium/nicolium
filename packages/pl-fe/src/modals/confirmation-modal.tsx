@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import List, { ListItem } from 'pl-fe/components/list';
-import Modal from 'pl-fe/components/ui/modal';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Toggle from 'pl-fe/components/ui/toggle';
+import List, { ListItem } from '@/components/list';
+import Modal from '@/components/ui/modal';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Toggle from '@/components/ui/toggle';
 
-import type { ButtonThemes } from 'pl-fe/components/ui/button/useButtonStyles';
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { ButtonThemes } from '@/components/ui/button/useButtonStyles';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 interface ConfirmationModalProps {
   heading?: React.ReactNode;

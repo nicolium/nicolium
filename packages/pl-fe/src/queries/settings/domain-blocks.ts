@@ -1,17 +1,17 @@
-import { getClient } from 'pl-fe/api';
-import { Entities } from 'pl-fe/entity-store/entities';
+import { getClient } from '@/api';
+import { Entities } from '@/entity-store/entities';
 
 import { queryClient } from '../client';
 import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';
 import { mutationOptions } from '../utils/mutation-options';
 
 import type { MinifiedSuggestion } from '../trends/use-suggested-accounts';
+import type { EntityStore } from '@/entity-store/types';
+import type { RootState, Store } from '@/store';
 import type { Account } from 'pl-api';
-import type { EntityStore } from 'pl-fe/entity-store/types';
-import type { RootState, Store } from 'pl-fe/store';
 
 let store: Store;
-import('pl-fe/store').then((value) => store = value.store).catch(() => {});
+import('@/store').then((value) => store = value.store).catch(() => {});
 
 const domainBlocksQueryOptions = makePaginatedResponseQueryOptions(
   ['settings', 'domainBlocks'],

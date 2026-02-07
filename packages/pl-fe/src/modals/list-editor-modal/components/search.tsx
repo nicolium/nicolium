@@ -2,11 +2,11 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Icon from 'pl-fe/components/icon';
-import Button from 'pl-fe/components/ui/button';
-import Form from 'pl-fe/components/ui/form';
-import HStack from 'pl-fe/components/ui/hstack';
-import Input from 'pl-fe/components/ui/input';
+import Icon from '@/components/icon';
+import Button from '@/components/ui/button';
+import Form from '@/components/ui/form';
+import HStack from '@/components/ui/hstack';
+import Input from '@/components/ui/input';
 
 const messages = defineMessages({
   search: { id: 'lists.search', defaultMessage: 'Search among people you follow' },

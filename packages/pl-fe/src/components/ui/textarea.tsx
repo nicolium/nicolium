@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useLocale, useLocaleDirection } from 'pl-fe/hooks/use-locale';
-import { getTextDirection } from 'pl-fe/utils/rtl';
+import { useLocale, useLocaleDirection } from '@/hooks/use-locale';
+import { getTextDirection } from '@/utils/rtl';
 
 import Stack from './stack';
 import Text from './text';

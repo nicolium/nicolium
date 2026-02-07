@@ -2,37 +2,37 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { directCompose, mentionCompose, quoteCompose } from 'pl-fe/actions/compose';
-import { fetchEventIcs } from 'pl-fe/actions/events';
-import { deleteStatusModal, toggleStatusSensitivityModal } from 'pl-fe/actions/moderation';
-import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
-import { deleteStatus } from 'pl-fe/actions/statuses';
-import DropdownMenu, { type Menu as MenuType } from 'pl-fe/components/dropdown-menu';
-import Icon from 'pl-fe/components/icon';
-import StillImage from 'pl-fe/components/still-image';
-import Button from 'pl-fe/components/ui/button';
-import HStack from 'pl-fe/components/ui/hstack';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import VerificationBadge from 'pl-fe/components/verification-badge';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { useChats } from 'pl-fe/queries/chats';
-import { useBookmarkStatus, usePinStatus, useReblogStatus, useUnbookmarkStatus, useUnpinStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import { useSettings } from 'pl-fe/stores/settings';
-import copy from 'pl-fe/utils/copy';
-import { download } from 'pl-fe/utils/download';
-import { shortNumberFormat } from 'pl-fe/utils/numbers';
+import { directCompose, mentionCompose, quoteCompose } from '@/actions/compose';
+import { fetchEventIcs } from '@/actions/events';
+import { deleteStatusModal, toggleStatusSensitivityModal } from '@/actions/moderation';
+import { initReport, ReportableEntities } from '@/actions/reports';
+import { deleteStatus } from '@/actions/statuses';
+import DropdownMenu, { type Menu as MenuType } from '@/components/dropdown-menu';
+import Icon from '@/components/icon';
+import StillImage from '@/components/still-image';
+import Button from '@/components/ui/button';
+import HStack from '@/components/ui/hstack';
+import IconButton from '@/components/ui/icon-button';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import VerificationBadge from '@/components/verification-badge';
+import Emojify from '@/features/emoji/emojify';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useFeatures } from '@/hooks/use-features';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { useChats } from '@/queries/chats';
+import { useBookmarkStatus, usePinStatus, useReblogStatus, useUnbookmarkStatus, useUnpinStatus, useUnreblogStatus } from '@/queries/statuses/use-status-interactions';
+import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
+import copy from '@/utils/copy';
+import { download } from '@/utils/download';
+import { shortNumberFormat } from '@/utils/numbers';
 
 import PlaceholderEventHeader from '../../placeholder/components/placeholder-event-header';
 import EventActionButton from '../components/event-action-button';
 import EventDate from '../components/event-date';
 
-import type { Status } from 'pl-fe/normalizers/status';
+import type { Status } from '@/normalizers/status';
 
 const messages = defineMessages({
   bannerHeader: { id: 'event.banner', defaultMessage: 'Event banner' },

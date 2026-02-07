@@ -3,9 +3,9 @@ import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Text from 'pl-fe/components/ui/text';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Text from '@/components/ui/text';
 
 interface IPendingItemsRow extends LinkOptions {
   /** Number of pending items. */

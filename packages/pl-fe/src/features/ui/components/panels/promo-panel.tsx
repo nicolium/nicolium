@@ -1,12 +1,12 @@
 import React from 'react';
 
-import ForkAwesomeIcon from 'pl-fe/components/fork-awesome-icon';
-import List, { ListItem } from 'pl-fe/components/list';
-import HStack from 'pl-fe/components/ui/hstack';
-import Widget from 'pl-fe/components/ui/widget';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
-import { useSettings } from 'pl-fe/stores/settings';
+import ForkAwesomeIcon from '@/components/fork-awesome-icon';
+import List, { ListItem } from '@/components/list';
+import HStack from '@/components/ui/hstack';
+import Widget from '@/components/ui/widget';
+import { useInstance } from '@/hooks/use-instance';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useSettings } from '@/stores/settings';
 
 const PromoPanel: React.FC = () => {
   const instance = useInstance();

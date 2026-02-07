@@ -2,20 +2,20 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import AccountComponent from 'pl-fe/components/account';
-import Icon from 'pl-fe/components/icon';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Button from 'pl-fe/components/ui/button';
-import { CardHeader, CardTitle } from 'pl-fe/components/ui/card';
-import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Text from 'pl-fe/components/ui/text';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useSearchAccounts } from 'pl-fe/queries/search/use-search';
-import { useAccountAliases, useAddAccountAlias, useDeleteAccountAlias } from 'pl-fe/queries/settings/use-account-aliases';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import AccountComponent from '@/components/account';
+import Icon from '@/components/icon';
+import ScrollableList from '@/components/scrollable-list';
+import Button from '@/components/ui/button';
+import { CardHeader, CardTitle } from '@/components/ui/card';
+import Column from '@/components/ui/column';
+import HStack from '@/components/ui/hstack';
+import IconButton from '@/components/ui/icon-button';
+import Text from '@/components/ui/text';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFeatures } from '@/hooks/use-features';
+import { useSearchAccounts } from '@/queries/search/use-search';
+import { useAccountAliases, useAddAccountAlias, useDeleteAccountAlias } from '@/queries/settings/use-account-aliases';
 
 const messages = defineMessages({
   heading: { id: 'column.aliases', defaultMessage: 'Account aliases' },

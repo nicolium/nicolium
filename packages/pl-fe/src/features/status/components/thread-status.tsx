@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import Tombstone from 'pl-fe/components/tombstone';
-import StatusContainer from 'pl-fe/containers/status-container';
-import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import Tombstone from '@/components/tombstone';
+import StatusContainer from '@/containers/status-container';
+import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
+import { useAppSelector } from '@/hooks/use-app-selector';
 
 interface IThreadStatus {
   id: string;

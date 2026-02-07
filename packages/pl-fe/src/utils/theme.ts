@@ -1,6 +1,6 @@
 import { hexToRgb } from './colors';
 
-import type { Rgb, Hsl, TailwindColorPalette, TailwindColorObject } from 'pl-fe/types/colors';
+import type { Rgb, Hsl, TailwindColorPalette, TailwindColorObject } from '@/types/colors';
 
 // Taken from chromatism.js
 // https://github.com/graypegg/chromatism/blob/master/src/conversions/rgb.js

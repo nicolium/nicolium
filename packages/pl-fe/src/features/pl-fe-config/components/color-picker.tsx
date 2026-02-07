@@ -1,7 +1,7 @@
 import React from 'react';
 import { SketchPicker, type ColorChangeHandler } from 'react-color';
 
-import Popover from 'pl-fe/components/ui/popover';
+import Popover from '@/components/ui/popover';
 
 interface IColorPicker {
   value: string;

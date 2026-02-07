@@ -2,11 +2,11 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Column from 'pl-fe/components/ui/column';
-import Spinner from 'pl-fe/components/ui/spinner';
-import AccountContainer from 'pl-fe/containers/account-container';
-import { useBlocks } from 'pl-fe/queries/account-lists/use-blocks';
+import ScrollableList from '@/components/scrollable-list';
+import Column from '@/components/ui/column';
+import Spinner from '@/components/ui/spinner';
+import AccountContainer from '@/containers/account-container';
+import { useBlocks } from '@/queries/account-lists/use-blocks';
 
 const messages = defineMessages({
   heading: { id: 'column.blocks', defaultMessage: 'Blocks' },

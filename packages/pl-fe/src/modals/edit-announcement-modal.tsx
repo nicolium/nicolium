@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import Form from 'pl-fe/components/ui/form';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import HStack from 'pl-fe/components/ui/hstack';
-import Modal from 'pl-fe/components/ui/modal';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Textarea from 'pl-fe/components/ui/textarea';
-import Toggle from 'pl-fe/components/ui/toggle';
-import { DatePicker } from 'pl-fe/features/ui/util/async-components';
-import { useCreateAnnouncementMutation, useUpdateAnnouncementMutation } from 'pl-fe/queries/admin/use-announcements';
-import toast from 'pl-fe/toast';
+import Form from '@/components/ui/form';
+import FormGroup from '@/components/ui/form-group';
+import HStack from '@/components/ui/hstack';
+import Modal from '@/components/ui/modal';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Textarea from '@/components/ui/textarea';
+import Toggle from '@/components/ui/toggle';
+import { DatePicker } from '@/features/ui/util/async-components';
+import { useCreateAnnouncementMutation, useUpdateAnnouncementMutation } from '@/queries/admin/use-announcements';
+import toast from '@/toast';
 
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 import type { AdminAnnouncement } from 'pl-api';
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_announcement.save', defaultMessage: 'Save' },

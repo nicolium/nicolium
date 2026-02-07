@@ -1,15 +1,15 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Modal from 'pl-fe/components/ui/modal';
-import Spinner from 'pl-fe/components/ui/spinner';
-import AccountContainer from 'pl-fe/containers/account-container';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import { useFamiliarFollowers } from 'pl-fe/queries/accounts/use-familiar-followers';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import ScrollableList from '@/components/scrollable-list';
+import Modal from '@/components/ui/modal';
+import Spinner from '@/components/ui/spinner';
+import AccountContainer from '@/containers/account-container';
+import Emojify from '@/features/emoji/emojify';
+import { useFamiliarFollowers } from '@/queries/accounts/use-familiar-followers';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 interface FamiliarFollowersModalProps {
   accountId: string;

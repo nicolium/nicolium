@@ -1,17 +1,17 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { setComposeToStatus } from 'pl-fe/actions/compose';
-import { fetchStatus } from 'pl-fe/actions/statuses';
-import Button from 'pl-fe/components/ui/button';
-import HStack from 'pl-fe/components/ui/hstack';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useCancelDraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import { useSettings } from 'pl-fe/stores/settings';
+import { setComposeToStatus } from '@/actions/compose';
+import { fetchStatus } from '@/actions/statuses';
+import Button from '@/components/ui/button';
+import HStack from '@/components/ui/hstack';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useCancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
+import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 
-import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
-import type { DraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
+import type { Status as StatusEntity } from '@/normalizers/status';
+import type { DraftStatus } from '@/queries/statuses/use-draft-statuses';
 
 const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.draft_status_delete.confirm', defaultMessage: 'Discard' },

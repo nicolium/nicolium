@@ -2,11 +2,11 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import Domain from 'pl-fe/components/domain';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Column from 'pl-fe/components/ui/column';
-import Spinner from 'pl-fe/components/ui/spinner';
-import { domainBlocksQueryOptions } from 'pl-fe/queries/settings/domain-blocks';
+import Domain from '@/components/domain';
+import ScrollableList from '@/components/scrollable-list';
+import Column from '@/components/ui/column';
+import Spinner from '@/components/ui/spinner';
+import { domainBlocksQueryOptions } from '@/queries/settings/domain-blocks';
 
 const messages = defineMessages({
   heading: { id: 'column.domain_blocks', defaultMessage: 'Domain blocks' },

@@ -1,6 +1,6 @@
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useGetState } from 'pl-fe/hooks/use-get-state';
-import { useLoading } from 'pl-fe/hooks/use-loading';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useGetState } from '@/hooks/use-get-state';
+import { useLoading } from '@/hooks/use-loading';
 
 import { deleteEntities, importEntities } from '../actions';
 

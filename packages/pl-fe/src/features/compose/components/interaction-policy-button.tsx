@@ -1,8 +1,8 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useCompose } from 'pl-fe/hooks/use-compose';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import { useCompose } from '@/hooks/use-compose';
+import { useModalsActions } from '@/stores/modals';
 
 import ComposeFormButton from './compose-form-button';
 

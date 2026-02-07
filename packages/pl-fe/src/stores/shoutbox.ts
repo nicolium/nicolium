@@ -2,16 +2,16 @@ import { useEffect } from 'react';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
-import { importEntities } from 'pl-fe/actions/importer';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
+import { importEntities } from '@/actions/importer';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
+import { useLoggedIn } from '@/hooks/use-logged-in';
 
+import type { store } from '@/store';
 import type { PlApiClient, ShoutMessage as BaseShoutMessage } from 'pl-api';
-import type { store } from 'pl-fe/store';
 
 let lazyStore: typeof store;
-import('pl-fe/store').then(({ store }) => lazyStore = store).catch(() => {});
+import('@/store').then(({ store }) => lazyStore = store).catch(() => {});
 
 const minifyMessage = ({ author, ...message }: BaseShoutMessage) => ({
   author_id: author.id,

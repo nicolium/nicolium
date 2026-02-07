@@ -2,20 +2,20 @@ import { useNavigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeSetting } from 'pl-fe/actions/settings';
-import List, { ListItem } from 'pl-fe/components/list';
-import Button from 'pl-fe/components/ui/button';
-import { CardBody, CardTitle } from 'pl-fe/components/ui/card';
-import Form from 'pl-fe/components/ui/form';
-import HStack from 'pl-fe/components/ui/hstack';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Stack from 'pl-fe/components/ui/stack';
-import Toggle from 'pl-fe/components/ui/toggle';
-import SettingToggle from 'pl-fe/features/settings/components/setting-toggle';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { useUpdateCredentials } from 'pl-fe/queries/accounts';
-import { useSettings } from 'pl-fe/stores/settings';
+import { changeSetting } from '@/actions/settings';
+import List, { ListItem } from '@/components/list';
+import Button from '@/components/ui/button';
+import { CardBody, CardTitle } from '@/components/ui/card';
+import Form from '@/components/ui/form';
+import HStack from '@/components/ui/hstack';
+import IconButton from '@/components/ui/icon-button';
+import Stack from '@/components/ui/stack';
+import Toggle from '@/components/ui/toggle';
+import SettingToggle from '@/features/settings/components/setting-toggle';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { useUpdateCredentials } from '@/queries/accounts';
+import { useSettings } from '@/stores/settings';
 
 type FormData = {
   accepts_chat_messages?: boolean;

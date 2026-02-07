@@ -2,16 +2,16 @@ import { useNavigate } from '@tanstack/react-router';
 import React, { useState, useCallback } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Input from 'pl-fe/components/ui/input';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useDisableMfa } from 'pl-fe/queries/security/use-mfa';
-import toast from 'pl-fe/toast';
+import Button from '@/components/ui/button';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import Input from '@/components/ui/input';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useDisableMfa } from '@/queries/security/use-mfa';
+import toast from '@/toast';
 
 const messages = defineMessages({
   mfa_setup_disable_button: { id: 'column.mfa_disable_button', defaultMessage: 'Disable' },

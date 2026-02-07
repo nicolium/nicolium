@@ -1,7 +1,7 @@
 import React from 'react';
 
-import MissingIndicator from 'pl-fe/components/missing-indicator';
-import Layout from 'pl-fe/components/ui/layout';
+import MissingIndicator from '@/components/missing-indicator';
+import Layout from '@/components/ui/layout';
 
 const GenericNotFoundPage = () => (
   <Layout.Main>

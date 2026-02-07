@@ -1,16 +1,16 @@
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import List, { ListItem } from 'pl-fe/components/list';
-import Card from 'pl-fe/components/ui/card';
-import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Stack from 'pl-fe/components/ui/stack';
-import { useAntennas } from 'pl-fe/queries/accounts/use-antennas';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import DropdownMenu from '@/components/dropdown-menu';
+import List, { ListItem } from '@/components/list';
+import Card from '@/components/ui/card';
+import Column from '@/components/ui/column';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Spinner from '@/components/ui/spinner';
+import Stack from '@/components/ui/stack';
+import { useAntennas } from '@/queries/accounts/use-antennas';
+import { useModalsActions } from '@/stores/modals';
 
 import { getOrderedLists } from './lists';
 

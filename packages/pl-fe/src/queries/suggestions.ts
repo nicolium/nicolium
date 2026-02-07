@@ -1,10 +1,10 @@
 import { useMutation, keepPreviousData, useQuery } from '@tanstack/react-query';
 
-import { fetchRelationships } from 'pl-fe/actions/accounts';
-import { importEntities } from 'pl-fe/actions/importer';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
+import { fetchRelationships } from '@/actions/accounts';
+import { importEntities } from '@/actions/importer';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
+import { useLoggedIn } from '@/hooks/use-logged-in';
 
 import { removePageItem } from '../utils/queries';
 

@@ -1,7 +1,7 @@
 import { getClient } from '../api';
 
+import type { AppDispatch, RootState } from '@/store';
 import type { Markers, SaveMarkersParams } from 'pl-api';
-import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const MARKER_FETCH_SUCCESS = 'MARKER_FETCH_SUCCESS' as const;
 

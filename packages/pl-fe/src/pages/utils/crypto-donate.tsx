@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import Accordion from 'pl-fe/components/ui/accordion';
-import Column from 'pl-fe/components/ui/column';
-import Stack from 'pl-fe/components/ui/stack';
-import SiteWallet from 'pl-fe/features/crypto-donate/components/site-wallet';
-import { useInstance } from 'pl-fe/hooks/use-instance';
+import Accordion from '@/components/ui/accordion';
+import Column from '@/components/ui/column';
+import Stack from '@/components/ui/stack';
+import SiteWallet from '@/features/crypto-donate/components/site-wallet';
+import { useInstance } from '@/hooks/use-instance';
 
 const messages = defineMessages({
   heading: { id: 'column.crypto_donate', defaultMessage: 'Donate cryptocurrency' },

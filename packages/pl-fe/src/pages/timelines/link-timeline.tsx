@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { clearTimeline, fetchLinkTimeline } from 'pl-fe/actions/timelines';
-import Column from 'pl-fe/components/ui/column';
-import Timeline from 'pl-fe/features/ui/components/timeline';
-import { linkTimelineRoute } from 'pl-fe/features/ui/router';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { clearTimeline, fetchLinkTimeline } from '@/actions/timelines';
+import Column from '@/components/ui/column';
+import Timeline from '@/features/ui/components/timeline';
+import { linkTimelineRoute } from '@/features/ui/router';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
 
 const messages = defineMessages({
   header: { id: 'column.link_timeline', defaultMessage: 'Posts linking to {url}' },

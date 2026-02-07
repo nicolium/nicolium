@@ -1,10 +1,10 @@
 import { InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { importEntities } from 'pl-fe/actions/importer';
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
+import { importEntities } from '@/actions/importer';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
+import { useOwnAccount } from '@/hooks/use-own-account';
 
 import { filterById } from '../utils/filter-id';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';

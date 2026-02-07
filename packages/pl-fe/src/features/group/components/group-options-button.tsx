@@ -2,11 +2,11 @@ import { GroupRoles, type Group } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useLeaveGroup } from 'pl-fe/api/hooks/groups/use-leave-group';
-import DropdownMenu, { Menu } from 'pl-fe/components/dropdown-menu';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import toast from 'pl-fe/toast';
+import { useLeaveGroup } from '@/api/hooks/groups/use-leave-group';
+import DropdownMenu, { Menu } from '@/components/dropdown-menu';
+import IconButton from '@/components/ui/icon-button';
+import { useModalsActions } from '@/stores/modals';
+import toast from '@/toast';
 
 const messages = defineMessages({
   confirmationConfirm: { id: 'confirmations.leave_group.confirm', defaultMessage: 'Leave' },

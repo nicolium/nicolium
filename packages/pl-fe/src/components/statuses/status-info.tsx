@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import HStack from 'pl-fe/components/ui/hstack';
-import Text from 'pl-fe/components/ui/text';
+import HStack from '@/components/ui/hstack';
+import Text from '@/components/ui/text';
 
 interface IStatusInfo {
   avatarSize: number;

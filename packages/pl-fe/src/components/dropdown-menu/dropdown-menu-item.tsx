@@ -2,10 +2,10 @@ import { useNavigate, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 
-import Counter from 'pl-fe/components/ui/counter';
-import Icon from 'pl-fe/components/ui/icon';
-import Toggle from 'pl-fe/components/ui/toggle';
-import { userTouching } from 'pl-fe/is-mobile';
+import Counter from '@/components/ui/counter';
+import Icon from '@/components/ui/icon';
+import Toggle from '@/components/ui/toggle';
+import { userTouching } from '@/is-mobile';
 
 type Menu = Array<MenuItem | null>;
 

@@ -1,8 +1,8 @@
 import get from 'lodash/get';
 import React from 'react';
 
-import Toggle from 'pl-fe/components/ui/toggle';
-import { Settings } from 'pl-fe/schemas/pl-fe/settings';
+import Toggle from '@/components/ui/toggle';
+import { Settings } from '@/schemas/pl-fe/settings';
 
 interface ISettingToggle {
   /** Unique identifier for the Toggle. */

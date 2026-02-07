@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import Column from 'pl-fe/components/ui/column';
-import Stack from 'pl-fe/components/ui/stack';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useMfaConfig } from 'pl-fe/queries/security/use-mfa';
+import Column from '@/components/ui/column';
+import Stack from '@/components/ui/stack';
+import { useFeatures } from '@/hooks/use-features';
+import { useMfaConfig } from '@/queries/security/use-mfa';
 
 import DisableOtpForm from './mfa/disable-otp-form';
 import EnableOtpForm from './mfa/enable-otp-form';

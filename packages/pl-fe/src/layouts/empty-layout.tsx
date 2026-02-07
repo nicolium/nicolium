@@ -1,7 +1,7 @@
 import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 
-import Layout from 'pl-fe/components/ui/layout';
+import Layout from '@/components/ui/layout';
 
 const EmptyLayout = () => (
   <>

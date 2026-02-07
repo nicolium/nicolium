@@ -1,6 +1,6 @@
 import * as v from 'valibot';
 
-import { locales } from 'pl-fe/messages';
+import { locales } from '@/messages';
 
 import { coerceObject } from '../utils';
 

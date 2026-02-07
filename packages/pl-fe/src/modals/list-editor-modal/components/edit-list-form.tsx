@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import List, { ListItem } from 'pl-fe/components/list';
-import Button from 'pl-fe/components/ui/button';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Input from 'pl-fe/components/ui/input';
-import Toggle from 'pl-fe/components/ui/toggle';
-import { SelectDropdown } from 'pl-fe/features/forms';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useList, useUpdateList } from 'pl-fe/queries/accounts/use-lists';
-import toast from 'pl-fe/toast';
+import List, { ListItem } from '@/components/list';
+import Button from '@/components/ui/button';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import Input from '@/components/ui/input';
+import Toggle from '@/components/ui/toggle';
+import { SelectDropdown } from '@/features/forms';
+import { useFeatures } from '@/hooks/use-features';
+import { useList, useUpdateList } from '@/queries/accounts/use-lists';
+import toast from '@/toast';
 
 const messages = defineMessages({
   repliesPolicyNone: { id: 'lists.replies_policy.none', defaultMessage: 'No one' },

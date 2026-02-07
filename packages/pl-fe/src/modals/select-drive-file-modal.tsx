@@ -3,15 +3,15 @@ import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Icon from 'pl-fe/components/ui/icon';
-import Modal from 'pl-fe/components/ui/modal';
-import { MIMETYPE_ICONS } from 'pl-fe/components/upload';
-import { Breadcrumbs } from 'pl-fe/pages/drive/drive';
-import { useDriveFolderQuery } from 'pl-fe/queries/drive/use-drive-folder';
+import ScrollableList from '@/components/scrollable-list';
+import Icon from '@/components/ui/icon';
+import Modal from '@/components/ui/modal';
+import { MIMETYPE_ICONS } from '@/components/upload';
+import { Breadcrumbs } from '@/pages/drive/drive';
+import { useDriveFolderQuery } from '@/queries/drive/use-drive-folder';
 
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 import type { DriveFile, DriveFolder } from 'pl-api';
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
 type SelectDriveFileModalProps = {
   disabled?: Array<string | null>;

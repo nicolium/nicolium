@@ -1,15 +1,15 @@
 import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 
-import Layout from 'pl-fe/components/ui/layout';
-import LinkFooter from 'pl-fe/features/ui/components/link-footer';
+import Layout from '@/components/ui/layout';
+import LinkFooter from '@/features/ui/components/link-footer';
 import {
   WhoToFollowPanel,
   TrendsPanel,
   SignUpPanel,
-} from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
+} from '@/features/ui/util/async-components';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFeatures } from '@/hooks/use-features';
 
 const SearchLayout = () => {
   const me = useAppSelector(state => state.me);

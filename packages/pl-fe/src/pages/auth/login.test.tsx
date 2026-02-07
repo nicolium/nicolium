@@ -2,7 +2,7 @@ import { instanceSchema } from 'pl-api';
 import React from 'react';
 import * as v from 'valibot';
 
-import { render, screen } from 'pl-fe/jest/test-helpers';
+import { render, screen } from '@/jest/test-helpers';
 
 import LoginPage from './login';
 

@@ -3,21 +3,21 @@ import { useNavigate } from '@tanstack/react-router';
 import React, { useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Icon from 'pl-fe/components/ui/icon';
-import Input from 'pl-fe/components/ui/input';
-import Stack from 'pl-fe/components/ui/stack';
-import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
-import { useDebounce } from 'pl-fe/hooks/use-debounce';
-import { useChats } from 'pl-fe/queries/chats';
-import { queryClient } from 'pl-fe/queries/client';
-import { useAccountSearch } from 'pl-fe/queries/search/use-search-accounts';
-import toast from 'pl-fe/toast';
+import Icon from '@/components/ui/icon';
+import Input from '@/components/ui/input';
+import Stack from '@/components/ui/stack';
+import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
+import { useDebounce } from '@/hooks/use-debounce';
+import { useChats } from '@/queries/chats';
+import { queryClient } from '@/queries/client';
+import { useAccountSearch } from '@/queries/search/use-search-accounts';
+import toast from '@/toast';
 
 import Blankslate from './blankslate';
 import EmptyResultsBlankslate from './empty-results-blankslate';
 import Results from './results';
 
-import type { PlfeResponse } from 'pl-fe/api';
+import type { PlfeResponse } from '@/api';
 
 const messages = defineMessages({
   placeholder: { id: 'chat_search.placeholder', defaultMessage: 'Type a name' },

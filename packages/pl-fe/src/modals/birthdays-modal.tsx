@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Modal from 'pl-fe/components/ui/modal';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Account from 'pl-fe/features/birthdays/account';
-import { getCurrentDate } from 'pl-fe/features/ui/components/panels/birthday-panel';
-import { useBirthdayReminders } from 'pl-fe/queries/accounts/use-birthday-reminders';
+import ScrollableList from '@/components/scrollable-list';
+import Modal from '@/components/ui/modal';
+import Spinner from '@/components/ui/spinner';
+import Account from '@/features/birthdays/account';
+import { getCurrentDate } from '@/features/ui/components/panels/birthday-panel';
+import { useBirthdayReminders } from '@/queries/accounts/use-birthday-reminders';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const BirthdaysModal = ({ onClose }: BaseModalProps) => {
   const [[day, month]] = useState(getCurrentDate);

@@ -1,8 +1,8 @@
 import omit from 'lodash/omit';
 import { create } from 'mutative';
 
-import { normalizeStatus, Status as StatusRecord } from 'pl-fe/normalizers/status';
-import { simulateEmojiReact, simulateUnEmojiReact } from 'pl-fe/utils/emoji-reacts';
+import { normalizeStatus, Status as StatusRecord } from '@/normalizers/status';
+import { simulateEmojiReact, simulateUnEmojiReact } from '@/utils/emoji-reacts';
 
 import {
   EMOJI_REACT_FAIL,

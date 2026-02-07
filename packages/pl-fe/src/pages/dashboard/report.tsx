@@ -3,25 +3,25 @@ import React, { useCallback, useState } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import ReactSwipeableViews from 'react-swipeable-views';
 
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import Account from 'pl-fe/components/account';
-import List, { ListItem } from 'pl-fe/components/list';
-import Card from 'pl-fe/components/ui/card';
-import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import StatusContainer from 'pl-fe/containers/status-container';
-import ColumnLoading from 'pl-fe/features/ui/components/column-loading';
-import { adminReportRoute } from 'pl-fe/features/ui/router';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useReopenReport, useReport, useResolveReport, useSelfAssignReport, useUnassignReport } from 'pl-fe/queries/admin/use-reports';
-import { makeGetReport } from 'pl-fe/selectors';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import toast from 'pl-fe/toast';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import Account from '@/components/account';
+import List, { ListItem } from '@/components/list';
+import Card from '@/components/ui/card';
+import Column from '@/components/ui/column';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import IconButton from '@/components/ui/icon-button';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import StatusContainer from '@/containers/status-container';
+import ColumnLoading from '@/features/ui/components/column-loading';
+import { adminReportRoute } from '@/features/ui/router';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFeatures } from '@/hooks/use-features';
+import { useReopenReport, useReport, useResolveReport, useSelfAssignReport, useUnassignReport } from '@/queries/admin/use-reports';
+import { makeGetReport } from '@/selectors';
+import { useModalsActions } from '@/stores/modals';
+import toast from '@/toast';
 
 const messages = defineMessages({
   columnHeading: { id: 'column.report', defaultMessage: 'Report #{id}' },

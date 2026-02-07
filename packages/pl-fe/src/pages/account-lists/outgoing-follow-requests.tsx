@@ -1,11 +1,11 @@
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Column from 'pl-fe/components/ui/column';
-import Spinner from 'pl-fe/components/ui/spinner';
-import AccountContainer from 'pl-fe/containers/account-container';
-import { useOutgoingFollowRequests } from 'pl-fe/queries/accounts/use-follow-requests';
+import ScrollableList from '@/components/scrollable-list';
+import Column from '@/components/ui/column';
+import Spinner from '@/components/ui/spinner';
+import AccountContainer from '@/containers/account-container';
+import { useOutgoingFollowRequests } from '@/queries/accounts/use-follow-requests';
 
 import { FollowRequestsTabs } from './follow-requests';
 

@@ -2,9 +2,9 @@ import { animated, type AnimatedProps } from '@react-spring/web';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
-import AnimatedNumber from 'pl-fe/components/animated-number';
-import unicodeMapping from 'pl-fe/features/emoji/mapping';
-import { useAnnouncements } from 'pl-fe/queries/announcements/use-announcements';
+import AnimatedNumber from '@/components/animated-number';
+import unicodeMapping from '@/features/emoji/mapping';
+import { useAnnouncements } from '@/queries/announcements/use-announcements';
 
 import Emoji from './emoji';
 

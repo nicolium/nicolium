@@ -1,6 +1,6 @@
 import { create } from 'mutative';
 
-import { getClient } from 'pl-fe/api';
+import { getClient } from '@/api';
 
 import { queryClient } from '../client';
 import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';

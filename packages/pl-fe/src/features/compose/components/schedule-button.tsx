@@ -1,9 +1,9 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { addSchedule, removeSchedule } from 'pl-fe/actions/compose';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useCompose } from 'pl-fe/hooks/use-compose';
+import { addSchedule, removeSchedule } from '@/actions/compose';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useCompose } from '@/hooks/use-compose';
 
 import ComposeFormButton from './compose-form-button';
 

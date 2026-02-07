@@ -1,8 +1,8 @@
 import { combineReducers } from '@reduxjs/toolkit';
 
-import { AUTH_LOGGED_OUT } from 'pl-fe/actions/auth';
-import * as BuildConfig from 'pl-fe/build-config';
-import entities from 'pl-fe/entity-store/reducer';
+import { AUTH_LOGGED_OUT } from '@/actions/auth';
+import * as BuildConfig from '@/build-config';
+import entities from '@/entity-store/reducer';
 
 import accounts_meta from './accounts-meta';
 import admin from './admin';

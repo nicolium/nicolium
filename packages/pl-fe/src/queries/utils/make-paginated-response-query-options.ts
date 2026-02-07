@@ -1,6 +1,6 @@
 import { type InfiniteData, infiniteQueryOptions, type QueryKey } from '@tanstack/react-query';
 
-import { store } from 'pl-fe/store';
+import { store } from '@/store';
 
 import { PaginatedResponseArray } from './make-paginated-response-query';
 

@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
+import { useOwnAccount } from '@/hooks/use-own-account';
 
 import Button from './button';
 import { ButtonThemes } from './button/useButtonStyles';

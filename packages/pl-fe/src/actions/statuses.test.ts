@@ -1,15 +1,15 @@
 import { fromJS, Map as ImmutableMap } from 'immutable';
 
-import { STATUSES_IMPORT } from 'pl-fe/actions/importer';
-import { __stub } from 'pl-fe/api';
-import { mockStore, rootState } from 'pl-fe/jest/test-helpers';
-import { normalizeStatus } from 'pl-fe/normalizers/status';
+import { STATUSES_IMPORT } from '@/actions/importer';
+import { __stub } from '@/api';
+import { mockStore, rootState } from '@/jest/test-helpers';
+import { normalizeStatus } from '@/normalizers/status';
 
 import { deleteStatus, fetchContext } from './statuses';
 
 describe('fetchContext()', () => {
   it('handles Mitra context', async () => {
-    const statuses = await import('pl-fe/__fixtures__/mitra-context.json');
+    const statuses = await import('@/__fixtures__/mitra-context.json');
 
     __stub(mock => {
       mock.onGet('/api/v1/statuses/017ed505-5926-392f-256a-f86d5075df70/context')
@@ -64,7 +64,7 @@ describe('deleteStatus()', () => {
       let status: any;
 
       beforeEach(async () => {
-        status = await import('pl-fe/__fixtures__/pleroma-status-deleted.json');
+        status = await import('@/__fixtures__/pleroma-status-deleted.json');
 
         __stub((mock) => {
           mock.onDelete(`/api/v1/statuses/${statusId}`).reply(200, status);

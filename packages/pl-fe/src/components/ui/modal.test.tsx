@@ -1,7 +1,7 @@
 import userEvent from '@testing-library/user-event';
 import React from 'react';
 
-import { render, screen } from 'pl-fe/jest/test-helpers';
+import { render, screen } from '@/jest/test-helpers';
 
 import Modal from './modal';
 

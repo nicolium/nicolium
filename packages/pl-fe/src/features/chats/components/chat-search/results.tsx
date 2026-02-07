@@ -2,14 +2,14 @@ import clsx from 'clsx';
 import React, { useCallback, useState } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 
-import Avatar from 'pl-fe/components/ui/avatar';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import VerificationBadge from 'pl-fe/components/verification-badge';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useAccountSearch } from 'pl-fe/queries/search/use-search-accounts';
-import { selectAccounts } from 'pl-fe/selectors';
+import Avatar from '@/components/ui/avatar';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import VerificationBadge from '@/components/verification-badge';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useAccountSearch } from '@/queries/search/use-search-accounts';
+import { selectAccounts } from '@/selectors';
 
 import type { Account } from 'pl-api';
 

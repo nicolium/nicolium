@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Icon from 'pl-fe/components/ui/icon';
+import Icon from '@/components/ui/icon';
 
 import type { Group } from 'pl-api';
 

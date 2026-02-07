@@ -1,6 +1,6 @@
 import { useAppDispatch } from './use-app-dispatch';
 
-import type { RootState } from 'pl-fe/store';
+import type { RootState } from '@/store';
 
 /**
  * Provides a `getState()` function to hooks.

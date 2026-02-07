@@ -4,15 +4,15 @@
  * @see module:pl-fe/actions/auth
  */
 
-import { getClient } from 'pl-fe/api';
-import toast from 'pl-fe/toast';
-import { getLoggedInAccount } from 'pl-fe/utils/auth';
-import { normalizeUsername } from 'pl-fe/utils/input';
+import { getClient } from '@/api';
+import toast from '@/toast';
+import { getLoggedInAccount } from '@/utils/auth';
+import { normalizeUsername } from '@/utils/input';
 
 import { AUTH_LOGGED_OUT, messages } from './auth';
 
+import type { AppDispatch, RootState } from '@/store';
 import type { Account } from 'pl-api';
-import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const changePassword = (oldPassword: string, newPassword: string) =>
   (dispatch: AppDispatch, getState: () => RootState) =>

@@ -1,15 +1,15 @@
 import React, { useMemo } from 'react';
 import { useIntl, defineMessages, IntlShape } from 'react-intl';
 
-import { changeComposeFederated, changeComposeVisibility } from 'pl-fe/actions/compose';
-import DropdownMenu, { MenuItem } from 'pl-fe/components/dropdown-menu';
-import Icon from 'pl-fe/components/ui/icon';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useCompose } from 'pl-fe/hooks/use-compose';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { getOrderedLists } from 'pl-fe/pages/account-lists/lists';
-import { useCircles } from 'pl-fe/queries/accounts/use-circles';
-import { useLists } from 'pl-fe/queries/accounts/use-lists';
+import { changeComposeFederated, changeComposeVisibility } from '@/actions/compose';
+import DropdownMenu, { MenuItem } from '@/components/dropdown-menu';
+import Icon from '@/components/ui/icon';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useCompose } from '@/hooks/use-compose';
+import { useFeatures } from '@/hooks/use-features';
+import { getOrderedLists } from '@/pages/account-lists/lists';
+import { useCircles } from '@/queries/accounts/use-circles';
+import { useLists } from '@/queries/accounts/use-lists';
 
 import type { Circle, Features } from 'pl-api';
 

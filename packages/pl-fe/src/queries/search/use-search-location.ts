@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { useClient } from 'pl-fe/hooks/use-client';
+import { useClient } from '@/hooks/use-client';
 
 const useSearchLocation = (query: string) => {
   const client = useClient();

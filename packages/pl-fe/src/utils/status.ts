@@ -1,6 +1,6 @@
-import { isIntegerId } from 'pl-fe/utils/numbers';
+import { isIntegerId } from '@/utils/numbers';
 
-import type { Status } from 'pl-fe/normalizers/status';
+import type { Status } from '@/normalizers/status';
 import type { IntlShape } from 'react-intl';
 
 /** Get the initial visibility of media attachments from user settings. */

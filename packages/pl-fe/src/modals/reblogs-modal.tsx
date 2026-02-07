@@ -1,14 +1,14 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import PullToRefresh from 'pl-fe/components/pull-to-refresh';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Modal from 'pl-fe/components/ui/modal';
-import Spinner from 'pl-fe/components/ui/spinner';
-import AccountContainer from 'pl-fe/containers/account-container';
-import { useStatusReblogs } from 'pl-fe/queries/statuses/use-status-interactions';
+import PullToRefresh from '@/components/pull-to-refresh';
+import ScrollableList from '@/components/scrollable-list';
+import Modal from '@/components/ui/modal';
+import Spinner from '@/components/ui/spinner';
+import AccountContainer from '@/containers/account-container';
+import { useStatusReblogs } from '@/queries/statuses/use-status-interactions';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 interface ReblogsModalProps {
   statusId: string;

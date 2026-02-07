@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { CardHeader, CardTitle } from 'pl-fe/components/ui/card';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useAddAccountsToList, useListAccounts, useRemoveAccountsFromList } from 'pl-fe/queries/accounts/use-lists';
-import { useAccountSearch } from 'pl-fe/queries/search/use-search-accounts';
+import { CardHeader, CardTitle } from '@/components/ui/card';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useAddAccountsToList, useListAccounts, useRemoveAccountsFromList } from '@/queries/accounts/use-lists';
+import { useAccountSearch } from '@/queries/search/use-search-accounts';
 
 import Account from './account';
 import Search from './search';

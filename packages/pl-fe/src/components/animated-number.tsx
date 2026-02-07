@@ -2,8 +2,8 @@ import { animated, config, useTransition } from '@react-spring/web';
 import React, { useEffect, useState } from 'react';
 import { useIntl, type IntlShape } from 'react-intl';
 
-import { useSettings } from 'pl-fe/stores/settings';
-import { isNumber, roundDown } from 'pl-fe/utils/numbers';
+import { useSettings } from '@/stores/settings';
+import { isNumber, roundDown } from '@/utils/numbers';
 
 const obfuscatedCount = (count: number): string => {
   if (count < 0) {

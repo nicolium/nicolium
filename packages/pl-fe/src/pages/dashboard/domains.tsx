@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { dateFormatOptions } from 'pl-fe/components/relative-timestamp';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Indicator from 'pl-fe/features/developers/components/indicator';
-import { useDomains } from 'pl-fe/queries/admin/use-domains';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import toast from 'pl-fe/toast';
+import { dateFormatOptions } from '@/components/relative-timestamp';
+import ScrollableList from '@/components/scrollable-list';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Indicator from '@/features/developers/components/indicator';
+import { useDomains } from '@/queries/admin/use-domains';
+import { useModalsActions } from '@/stores/modals';
+import toast from '@/toast';
 
 import type { AdminDomain as DomainEntity } from 'pl-api';
 

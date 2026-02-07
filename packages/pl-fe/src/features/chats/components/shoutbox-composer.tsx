@@ -1,12 +1,12 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Combobox, { ComboboxInput } from 'pl-fe/components/ui/combobox';
-import HStack from 'pl-fe/components/ui/hstack';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useInstance } from 'pl-fe/hooks/use-instance';
+import Combobox, { ComboboxInput } from '@/components/ui/combobox';
+import HStack from '@/components/ui/hstack';
+import IconButton from '@/components/ui/icon-button';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useInstance } from '@/hooks/use-instance';
 
 import ChatTextarea from './chat-textarea';
 

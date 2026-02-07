@@ -2,18 +2,18 @@ import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
-import Badge from 'pl-fe/components/badge';
-import Button from 'pl-fe/components/ui/button';
-import Card, { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card';
-import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { oauthTokensQueryOptions, revokeOauthTokenMutationOptions } from 'pl-fe/queries/security/oauth-tokens';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import Badge from '@/components/badge';
+import Button from '@/components/ui/button';
+import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
+import Column from '@/components/ui/column';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Spinner from '@/components/ui/spinner';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { oauthTokensQueryOptions, revokeOauthTokenMutationOptions } from '@/queries/security/oauth-tokens';
+import { useModalsActions } from '@/stores/modals';
 
 import type { OauthToken } from 'pl-api';
 

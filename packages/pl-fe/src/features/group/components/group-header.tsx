@@ -3,15 +3,15 @@ import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import GroupAvatar from 'pl-fe/components/groups/group-avatar';
-import { ParsedContent } from 'pl-fe/components/parsed-content';
-import StillImage from 'pl-fe/components/still-image';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import GroupAvatar from '@/components/groups/group-avatar';
+import { ParsedContent } from '@/components/parsed-content';
+import StillImage from '@/components/still-image';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Emojify from '@/features/emoji/emojify';
+import { useModalsActions } from '@/stores/modals';
 
 import GroupActionButton from './group-action-button';
 import GroupMemberCount from './group-member-count';

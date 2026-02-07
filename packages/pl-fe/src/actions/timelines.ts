@@ -1,11 +1,12 @@
-import { getLocale } from 'pl-fe/actions/settings';
-import { useSettingsStore } from 'pl-fe/stores/settings';
-import { shouldFilter } from 'pl-fe/utils/timelines';
+import { getLocale } from '@/actions/settings';
+import { useSettingsStore } from '@/stores/settings';
+import { shouldFilter } from '@/utils/timelines';
 
 import { getClient } from '../api';
 
 import { importEntities } from './importer';
 
+import type { AppDispatch, RootState } from '@/store';
 import type {
   Account as BaseAccount,
   AntennaTimelineParams,
@@ -20,7 +21,6 @@ import type {
   Status as BaseStatus,
   LinkTimelineParams,
 } from 'pl-api';
-import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const TIMELINE_UPDATE = 'TIMELINE_UPDATE' as const;
 const TIMELINE_DELETE = 'TIMELINE_DELETE' as const;

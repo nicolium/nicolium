@@ -1,4 +1,4 @@
-import { getPlFeConfig } from 'pl-fe/actions/pl-fe';
+import { getPlFeConfig } from '@/actions/pl-fe';
 
 import { useAppSelector } from './use-app-selector';
 

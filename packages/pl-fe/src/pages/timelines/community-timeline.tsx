@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
-import { useCommunityStream } from 'pl-fe/api/hooks/streaming/use-community-stream';
-import PullToRefresh from 'pl-fe/components/pull-to-refresh';
-import Column from 'pl-fe/components/ui/column';
-import Timeline from 'pl-fe/features/ui/components/timeline';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useSettings } from 'pl-fe/stores/settings';
+import { fetchPublicTimeline } from '@/actions/timelines';
+import { useCommunityStream } from '@/api/hooks/streaming/use-community-stream';
+import PullToRefresh from '@/components/pull-to-refresh';
+import Column from '@/components/ui/column';
+import Timeline from '@/features/ui/components/timeline';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
   title: { id: 'column.community', defaultMessage: 'Local timeline' },

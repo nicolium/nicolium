@@ -1,10 +1,10 @@
 import { defineMessages } from 'react-intl';
 
-import { getClient } from 'pl-fe/api';
-import toast from 'pl-fe/toast';
+import { getClient } from '@/api';
+import toast from '@/toast';
 
+import type { AppDispatch, RootState } from '@/store';
 import type { Account, PaginatedResponse } from 'pl-api';
-import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const messages = defineMessages({
   blocksSuccess: { id: 'export_data.success.blocks', defaultMessage: 'Blocks exported successfully' },

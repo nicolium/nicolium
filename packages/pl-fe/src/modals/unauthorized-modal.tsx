@@ -2,21 +2,21 @@ import { useNavigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import Form from 'pl-fe/components/ui/form';
-import Input from 'pl-fe/components/ui/input';
-import Modal from 'pl-fe/components/ui/modal';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useRegistrationStatus } from 'pl-fe/hooks/use-registration-status';
-import { selectAccount } from 'pl-fe/selectors';
-import toast from 'pl-fe/toast';
+import Button from '@/components/ui/button';
+import Form from '@/components/ui/form';
+import Input from '@/components/ui/input';
+import Modal from '@/components/ui/modal';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
+import { useInstance } from '@/hooks/use-instance';
+import { useRegistrationStatus } from '@/hooks/use-registration-status';
+import { selectAccount } from '@/selectors';
+import toast from '@/toast';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
   accountPlaceholder: { id: 'remote_interaction.account_placeholder', defaultMessage: 'Enter your username@domain you want to act from' },

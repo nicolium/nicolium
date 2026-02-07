@@ -1,14 +1,14 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useAccountLookup } from 'pl-fe/api/hooks/accounts/use-account-lookup';
-import MissingIndicator from 'pl-fe/components/missing-indicator';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Column from 'pl-fe/components/ui/column';
-import Spinner from 'pl-fe/components/ui/spinner';
-import AccountContainer from 'pl-fe/containers/account-container';
-import { profileFollowingRoute } from 'pl-fe/features/ui/router';
-import { useFollowing } from 'pl-fe/queries/account-lists/use-follows';
+import { useAccountLookup } from '@/api/hooks/accounts/use-account-lookup';
+import MissingIndicator from '@/components/missing-indicator';
+import ScrollableList from '@/components/scrollable-list';
+import Column from '@/components/ui/column';
+import Spinner from '@/components/ui/spinner';
+import AccountContainer from '@/containers/account-container';
+import { profileFollowingRoute } from '@/features/ui/router';
+import { useFollowing } from '@/queries/account-lists/use-follows';
 
 const messages = defineMessages({
   heading: { id: 'column.following', defaultMessage: 'Following' },

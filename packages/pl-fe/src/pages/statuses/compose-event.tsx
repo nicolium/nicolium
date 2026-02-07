@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { cancelEventCompose } from 'pl-fe/actions/events';
-import Column from 'pl-fe/components/ui/column';
-import Stack from 'pl-fe/components/ui/stack';
-import Tabs from 'pl-fe/components/ui/tabs';
-import { EditEvent } from 'pl-fe/features/compose-event/tabs/edit-event';
-import { ManagePendingParticipants } from 'pl-fe/features/compose-event/tabs/manage-pending-participants';
-import { eventEditRoute } from 'pl-fe/features/ui/router';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { cancelEventCompose } from '@/actions/events';
+import Column from '@/components/ui/column';
+import Stack from '@/components/ui/stack';
+import Tabs from '@/components/ui/tabs';
+import { EditEvent } from '@/features/compose-event/tabs/edit-event';
+import { ManagePendingParticipants } from '@/features/compose-event/tabs/manage-pending-participants';
+import { eventEditRoute } from '@/features/ui/router';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
 
 const messages = defineMessages({
   manageEvent: { id: 'navigation_bar.manage_event', defaultMessage: 'Manage event' },

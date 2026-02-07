@@ -25,7 +25,7 @@ SOFTWARE.
 // Adapted from:
 // https://github.com/javisperez/tailwindcolorshades/blob/master/src/composables/colors.ts
 
-import type { Rgb, TailwindColorObject } from 'pl-fe/types/colors';
+import type { Rgb, TailwindColorObject } from '@/types/colors';
 
 const hexToRgb = (hex: string): Rgb | null => {
   const sanitizedHex = hex.replace(/##/g, '#');

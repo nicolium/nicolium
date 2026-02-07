@@ -1,13 +1,13 @@
 import { Link, type LinkProps } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 
-import Avatar from 'pl-fe/components/ui/avatar';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import VerificationBadge from 'pl-fe/components/verification-badge';
-import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
+import Avatar from '@/components/ui/avatar';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import VerificationBadge from '@/components/verification-badge';
+import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 
 import Chat from '../chat';
 

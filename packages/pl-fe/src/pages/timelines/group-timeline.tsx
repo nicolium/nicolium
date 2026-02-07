@@ -3,21 +3,21 @@ import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { groupCompose, uploadCompose } from 'pl-fe/actions/compose';
-import { fetchGroupTimeline } from 'pl-fe/actions/timelines';
-import { useGroup } from 'pl-fe/api/hooks/groups/use-group';
-import { useGroupStream } from 'pl-fe/api/hooks/streaming/use-group-stream';
-import Avatar from 'pl-fe/components/ui/avatar';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Timeline from 'pl-fe/features/ui/components/timeline';
-import { groupTimelineRoute } from 'pl-fe/features/ui/router';
-import { ComposeForm } from 'pl-fe/features/ui/util/async-components';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useDraggedFiles } from 'pl-fe/hooks/use-dragged-files';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { makeGetStatusIds } from 'pl-fe/selectors';
+import { groupCompose, uploadCompose } from '@/actions/compose';
+import { fetchGroupTimeline } from '@/actions/timelines';
+import { useGroup } from '@/api/hooks/groups/use-group';
+import { useGroupStream } from '@/api/hooks/streaming/use-group-stream';
+import Avatar from '@/components/ui/avatar';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Timeline from '@/features/ui/components/timeline';
+import { groupTimelineRoute } from '@/features/ui/router';
+import { ComposeForm } from '@/features/ui/util/async-components';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useDraggedFiles } from '@/hooks/use-dragged-files';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { makeGetStatusIds } from '@/selectors';
 
 const getStatusIds = makeGetStatusIds();
 

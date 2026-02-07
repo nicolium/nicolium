@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ProgressBar from 'pl-fe/components/ui/progress-bar';
+import ProgressBar from '@/components/ui/progress-bar';
 
 interface IChatPendingUpload {
   progress: number;

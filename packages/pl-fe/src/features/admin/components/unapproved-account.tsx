@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { AuthorizeRejectButtons } from 'pl-fe/components/authorize-reject-buttons';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useAdminAccount, useAdminApproveAccountMutation, useAdminRejectAccountMutation } from 'pl-fe/queries/admin/use-accounts';
+import { AuthorizeRejectButtons } from '@/components/authorize-reject-buttons';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useAdminAccount, useAdminApproveAccountMutation, useAdminRejectAccountMutation } from '@/queries/admin/use-accounts';
 
 interface IUnapprovedAccount {
   accountId: string;

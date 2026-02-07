@@ -1,13 +1,13 @@
 import React from 'react';
 
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import GroupHeaderImage from 'pl-fe/features/group/components/group-header-image';
-import GroupMemberCount from 'pl-fe/features/group/components/group-member-count';
-import GroupPrivacy from 'pl-fe/features/group/components/group-privacy';
-import GroupRelationship from 'pl-fe/features/group/components/group-relationship';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Emojify from '@/features/emoji/emojify';
+import GroupHeaderImage from '@/features/group/components/group-header-image';
+import GroupMemberCount from '@/features/group/components/group-member-count';
+import GroupPrivacy from '@/features/group/components/group-privacy';
+import GroupRelationship from '@/features/group/components/group-relationship';
 
 import GroupAvatar from './groups/group-avatar';
 

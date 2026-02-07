@@ -1,8 +1,8 @@
 import { OrderedMap as ImmutableOrderedMap } from 'immutable';
 
-import { __stub } from 'pl-fe/api';
-import { mockStore, rootState } from 'pl-fe/jest/test-helpers';
-import { normalizeNotification } from 'pl-fe/normalizers/notification';
+import { __stub } from '@/api';
+import { mockStore, rootState } from '@/jest/test-helpers';
+import { normalizeNotification } from '@/normalizers/notification';
 
 import { markReadNotifications } from './notifications';
 

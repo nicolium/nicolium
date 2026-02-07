@@ -2,17 +2,17 @@ import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
-import { useRemoteStream } from 'pl-fe/api/hooks/streaming/use-remote-stream';
-import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Text from 'pl-fe/components/ui/text';
-import PinnedHostsPicker from 'pl-fe/features/remote-timeline/components/pinned-hosts-picker';
-import Timeline from 'pl-fe/features/ui/components/timeline';
-import { remoteTimelineRoute } from 'pl-fe/features/ui/router';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useSettings } from 'pl-fe/stores/settings';
+import { fetchPublicTimeline } from '@/actions/timelines';
+import { useRemoteStream } from '@/api/hooks/streaming/use-remote-stream';
+import Column from '@/components/ui/column';
+import HStack from '@/components/ui/hstack';
+import IconButton from '@/components/ui/icon-button';
+import Text from '@/components/ui/text';
+import PinnedHostsPicker from '@/features/remote-timeline/components/pinned-hosts-picker';
+import Timeline from '@/features/ui/components/timeline';
+import { remoteTimelineRoute } from '@/features/ui/router';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useSettings } from '@/stores/settings';
 
 /** View statuses from a remote instance. */
 const RemoteTimelinePage: React.FC = () => {

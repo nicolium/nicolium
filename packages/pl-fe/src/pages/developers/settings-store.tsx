@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
-import { changeSetting, updateSettingsStore } from 'pl-fe/actions/settings';
-import List, { ListItem } from 'pl-fe/components/list';
-import Button from 'pl-fe/components/ui/button';
-import { CardHeader, CardTitle } from 'pl-fe/components/ui/card';
-import Column from 'pl-fe/components/ui/column';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Textarea from 'pl-fe/components/ui/textarea';
-import SettingToggle from 'pl-fe/features/settings/components/setting-toggle';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useSettingsStore, useSettingsStoreActions } from 'pl-fe/stores/settings';
-import toast from 'pl-fe/toast';
+import { changeSetting, updateSettingsStore } from '@/actions/settings';
+import List, { ListItem } from '@/components/list';
+import Button from '@/components/ui/button';
+import { CardHeader, CardTitle } from '@/components/ui/card';
+import Column from '@/components/ui/column';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import Textarea from '@/components/ui/textarea';
+import SettingToggle from '@/features/settings/components/setting-toggle';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useSettingsStore, useSettingsStoreActions } from '@/stores/settings';
+import toast from '@/toast';
 
 const isJSONValid = (text: any): boolean => {
   try {

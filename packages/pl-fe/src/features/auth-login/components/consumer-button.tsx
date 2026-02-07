@@ -1,11 +1,11 @@
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import { prepareRequest } from 'pl-fe/actions/consumer-auth';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Tooltip from 'pl-fe/components/ui/tooltip';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { capitalize } from 'pl-fe/utils/strings';
+import { prepareRequest } from '@/actions/consumer-auth';
+import IconButton from '@/components/ui/icon-button';
+import Tooltip from '@/components/ui/tooltip';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { capitalize } from '@/utils/strings';
 
 const messages = defineMessages({
   tooltip: { id: 'oauth_consumer.tooltip', defaultMessage: 'Sign in with {provider}' },

@@ -1,15 +1,15 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import List, { ListItem } from 'pl-fe/components/list';
-import Card, { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card';
-import Column from 'pl-fe/components/ui/column';
-import Text from 'pl-fe/components/ui/text';
-import Preferences from 'pl-fe/features/preferences';
-import MessagesSettings from 'pl-fe/features/settings/components/messages-settings';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { useMfaConfig } from 'pl-fe/queries/security/use-mfa';
+import List, { ListItem } from '@/components/list';
+import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
+import Column from '@/components/ui/column';
+import Text from '@/components/ui/text';
+import Preferences from '@/features/preferences';
+import MessagesSettings from '@/features/settings/components/messages-settings';
+import { useFeatures } from '@/hooks/use-features';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { useMfaConfig } from '@/queries/security/use-mfa';
 
 const messages = defineMessages({
   accountAliases: { id: 'column.aliases', defaultMessage: 'Account aliases' },

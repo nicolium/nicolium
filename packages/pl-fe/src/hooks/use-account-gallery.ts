@@ -1,11 +1,11 @@
 import { createSelector } from 'reselect';
 
-import { useAccountMediaTimeline, useGroupMediaTimeline } from 'pl-fe/queries/timelines/use-account-media-timeline';
+import { useAccountMediaTimeline, useGroupMediaTimeline } from '@/queries/timelines/use-account-media-timeline';
 
 import { useAppSelector } from './use-app-selector';
 
+import type { RootState } from '@/store';
 import type { MediaAttachment } from 'pl-api';
-import type { RootState } from 'pl-fe/store';
 
 type AccountGalleryAttachment = MediaAttachment & {
   index: number;

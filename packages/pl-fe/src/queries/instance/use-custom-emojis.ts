@@ -1,8 +1,8 @@
 import { queryOptions, useQuery } from '@tanstack/react-query';
 
-import { buildCustomEmojis } from 'pl-fe/features/emoji';
-import { addCustomToPool } from 'pl-fe/features/emoji/search';
-import { useClient } from 'pl-fe/hooks/use-client';
+import { buildCustomEmojis } from '@/features/emoji';
+import { addCustomToPool } from '@/features/emoji/search';
+import { useClient } from '@/hooks/use-client';
 
 import { queryClient } from '../client';
 

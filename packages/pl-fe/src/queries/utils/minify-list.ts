@@ -1,5 +1,5 @@
-import { importEntities } from 'pl-fe/actions/importer';
-import { store } from 'pl-fe/store';
+import { importEntities } from '@/actions/importer';
+import { store } from '@/store';
 
 import { queryClient } from '../client';
 

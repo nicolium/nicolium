@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Modal from 'pl-fe/components/ui/modal';
-import Textarea from 'pl-fe/components/ui/textarea';
-import { useJoinEventMutation } from 'pl-fe/queries/statuses/use-event-interactions';
+import FormGroup from '@/components/ui/form-group';
+import Modal from '@/components/ui/modal';
+import Textarea from '@/components/ui/textarea';
+import { useJoinEventMutation } from '@/queries/statuses/use-event-interactions';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
   hint: { id: 'join_event.hint', defaultMessage: 'You can tell the organizer why do you want to participate in this event:' },

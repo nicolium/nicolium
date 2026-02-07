@@ -3,18 +3,18 @@ import { GroupRoles } from 'pl-api';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useDeleteGroup } from 'pl-fe/api/hooks/groups/use-delete-group';
-import { useGroup } from 'pl-fe/api/hooks/groups/use-group';
-import List, { ListItem } from 'pl-fe/components/list';
-import { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card';
-import Column from 'pl-fe/components/ui/column';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Text from 'pl-fe/components/ui/text';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import ColumnForbidden from 'pl-fe/features/ui/components/column-forbidden';
-import { manageGroupRoute } from 'pl-fe/features/ui/router';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import toast from 'pl-fe/toast';
+import { useDeleteGroup } from '@/api/hooks/groups/use-delete-group';
+import { useGroup } from '@/api/hooks/groups/use-group';
+import List, { ListItem } from '@/components/list';
+import { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
+import Column from '@/components/ui/column';
+import Spinner from '@/components/ui/spinner';
+import Text from '@/components/ui/text';
+import Emojify from '@/features/emoji/emojify';
+import ColumnForbidden from '@/features/ui/components/column-forbidden';
+import { manageGroupRoute } from '@/features/ui/router';
+import { useModalsActions } from '@/stores/modals';
+import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.manage_group', defaultMessage: 'Manage group' },

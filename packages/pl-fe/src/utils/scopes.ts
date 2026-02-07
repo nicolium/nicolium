@@ -1,6 +1,6 @@
 import { getFeatures, HOLLO, ICESHRIMP_NET, PLEROMA, TOKI, type Instance } from 'pl-api';
 
-import type { RootState } from 'pl-fe/store';
+import type { RootState } from '@/store';
 
 /**
  * Get the OAuth scopes to use for login & signup.

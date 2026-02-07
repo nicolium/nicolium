@@ -1,10 +1,10 @@
 import React from 'react';
 import { FormattedDate } from 'react-intl';
 
-import Icon from 'pl-fe/components/icon';
-import HStack from 'pl-fe/components/ui/hstack';
+import Icon from '@/components/icon';
+import HStack from '@/components/ui/hstack';
 
-import type { Status } from 'pl-fe/normalizers/status';
+import type { Status } from '@/normalizers/status';
 
 interface IEventDate {
   status: Pick<Status, 'event'>;

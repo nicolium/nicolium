@@ -2,15 +2,15 @@ import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Text from 'pl-fe/components/ui/text';
-import Report from 'pl-fe/features/admin/components/report';
-import { adminReportsRoute } from 'pl-fe/features/ui/router';
-import { useReports } from 'pl-fe/queries/admin/use-reports';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import ScrollableList from '@/components/scrollable-list';
+import Column from '@/components/ui/column';
+import HStack from '@/components/ui/hstack';
+import IconButton from '@/components/ui/icon-button';
+import Text from '@/components/ui/text';
+import Report from '@/features/admin/components/report';
+import { adminReportsRoute } from '@/features/ui/router';
+import { useReports } from '@/queries/admin/use-reports';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.reports', defaultMessage: 'Reports' },

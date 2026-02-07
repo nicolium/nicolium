@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
+import { useInstance } from '@/hooks/use-instance';
+import { useLoggedIn } from '@/hooks/use-logged-in';
 
 const useTranslationLanguages = () => {
   const client = useClient();

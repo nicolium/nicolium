@@ -1,27 +1,27 @@
 import { useCallback } from 'react';
 
-import { updateConversations } from 'pl-fe/actions/conversations';
-import { fetchFilters } from 'pl-fe/actions/filters';
-import { MARKER_FETCH_SUCCESS } from 'pl-fe/actions/markers';
-import { updateNotificationsQueue } from 'pl-fe/actions/notifications';
-import { getLocale } from 'pl-fe/actions/settings';
-import { updateStatus } from 'pl-fe/actions/statuses';
-import { deleteFromTimelines, processTimelineUpdate } from 'pl-fe/actions/timelines';
-import { useStatContext } from 'pl-fe/contexts/stat-context';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
-import messages from 'pl-fe/messages';
-import { queryClient } from 'pl-fe/queries/client';
-import { useSettings } from 'pl-fe/stores/settings';
-import { getUnreadChatsCount, updateChatListItem } from 'pl-fe/utils/chats';
-import { play, soundCache } from 'pl-fe/utils/sounds';
+import { updateConversations } from '@/actions/conversations';
+import { fetchFilters } from '@/actions/filters';
+import { MARKER_FETCH_SUCCESS } from '@/actions/markers';
+import { updateNotificationsQueue } from '@/actions/notifications';
+import { getLocale } from '@/actions/settings';
+import { updateStatus } from '@/actions/statuses';
+import { deleteFromTimelines, processTimelineUpdate } from '@/actions/timelines';
+import { useStatContext } from '@/contexts/stat-context';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useLoggedIn } from '@/hooks/use-logged-in';
+import messages from '@/messages';
+import { queryClient } from '@/queries/client';
+import { useSettings } from '@/stores/settings';
+import { getUnreadChatsCount, updateChatListItem } from '@/utils/chats';
+import { play, soundCache } from '@/utils/sounds';
 
 import { updateReactions } from '../../../queries/announcements/use-announcements';
 
 import { useTimelineStream } from './use-timeline-stream';
 
+import type { AppDispatch, RootState } from '@/store';
 import type { Announcement, AnnouncementReaction, FollowRelationshipUpdate, Relationship, StreamingEvent } from 'pl-api';
-import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const updateAnnouncementReactions = (reaction: AnnouncementReaction) => {
   queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>

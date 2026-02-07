@@ -2,23 +2,23 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { emojiReact, unEmojiReact } from 'pl-fe/actions/emoji-reacts';
-import Emoji from 'pl-fe/components/ui/emoji';
-import Icon from 'pl-fe/components/ui/icon';
-import EmojiPickerDropdown from 'pl-fe/features/emoji/containers/emoji-picker-dropdown-container';
-import unicodeMapping from 'pl-fe/features/emoji/mapping';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
-import { useLongPress } from 'pl-fe/hooks/use-long-press';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import { useSettings } from 'pl-fe/stores/settings';
+import { emojiReact, unEmojiReact } from '@/actions/emoji-reacts';
+import Emoji from '@/components/ui/emoji';
+import Icon from '@/components/ui/icon';
+import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
+import unicodeMapping from '@/features/emoji/mapping';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useFeatures } from '@/hooks/use-features';
+import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useLongPress } from '@/hooks/use-long-press';
+import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 
 import AnimatedNumber from './animated-number';
 
+import type { Emoji as EmojiType } from '@/features/emoji';
+import type { SelectedStatus } from '@/selectors';
 import type { EmojiReaction } from 'pl-api';
-import type { Emoji as EmojiType } from 'pl-fe/features/emoji';
-import type { SelectedStatus } from 'pl-fe/selectors';
 
 const messages = defineMessages({
   emojiCount: { id: 'status.reactions.label', defaultMessage: '{count} {count, plural, one {person} other {people}} reacted with {emoji}' },

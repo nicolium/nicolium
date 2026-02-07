@@ -1,4 +1,4 @@
-import KVStore from 'pl-fe/storage/kv-store';
+import KVStore from '@/storage/kv-store';
 
 type DomainCapabilities = {
   lastChecked: number;

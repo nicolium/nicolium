@@ -1,15 +1,15 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import { ParsedContent } from 'pl-fe/components/parsed-content';
-import Avatar from 'pl-fe/components/ui/avatar';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
-import { useShoutboxMessages } from 'pl-fe/stores/shoutbox';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import { ParsedContent } from '@/components/parsed-content';
+import Avatar from '@/components/ui/avatar';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useInstance } from '@/hooks/use-instance';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useShoutboxMessages } from '@/stores/shoutbox';
 
 import type { Chat } from 'pl-api';
 

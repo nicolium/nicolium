@@ -2,12 +2,12 @@ import { debounce } from '@tanstack/react-pacer/debouncer';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import HStack from 'pl-fe/components/ui/hstack';
-import Text from 'pl-fe/components/ui/text';
-import Textarea from 'pl-fe/components/ui/textarea';
-import Widget from 'pl-fe/components/ui/widget';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useUpdateAccountNoteMutation } from 'pl-fe/queries/accounts/use-relationship';
+import HStack from '@/components/ui/hstack';
+import Text from '@/components/ui/text';
+import Textarea from '@/components/ui/textarea';
+import Widget from '@/components/ui/widget';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useUpdateAccountNoteMutation } from '@/queries/accounts/use-relationship';
 
 import type { Account as AccountEntity } from 'pl-api';
 

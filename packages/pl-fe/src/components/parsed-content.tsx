@@ -7,11 +7,11 @@ import minBy from 'lodash/minBy';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Emojify from 'pl-fe/features/emoji/emojify';
-import { useSettings } from 'pl-fe/stores/settings';
-import { makeEmojiMap } from 'pl-fe/utils/normalizers';
-import nyaize from 'pl-fe/utils/nyaize';
-import Purify from 'pl-fe/utils/url-purify';
+import Emojify from '@/features/emoji/emojify';
+import { useSettings } from '@/stores/settings';
+import { makeEmojiMap } from '@/utils/normalizers';
+import nyaize from '@/utils/nyaize';
+import Purify from '@/utils/url-purify';
 
 import HashtagLink from './hashtag-link';
 import HoverAccountWrapper from './hover-account-wrapper';

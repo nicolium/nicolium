@@ -2,25 +2,25 @@ import IntlMessageFormat from 'intl-messageformat';
 import 'intl-pluralrules';
 import { defineMessages } from 'react-intl';
 
-import { getClient } from 'pl-fe/api';
-import { getNotificationStatus } from 'pl-fe/features/notifications/components/notification';
-import { normalizeNotification } from 'pl-fe/normalizers/notification';
-import { appendFollowRequest } from 'pl-fe/queries/accounts/use-follow-requests';
-import { getFilters, regexFromFilters } from 'pl-fe/selectors';
-import { useSettingsStore } from 'pl-fe/stores/settings';
-import { isLoggedIn } from 'pl-fe/utils/auth';
-import { compareId } from 'pl-fe/utils/comparators';
-import { unescapeHTML } from 'pl-fe/utils/html';
-import { EXCLUDE_TYPES, NOTIFICATION_TYPES } from 'pl-fe/utils/notification';
-import { joinPublicPath } from 'pl-fe/utils/static';
+import { getClient } from '@/api';
+import { getNotificationStatus } from '@/features/notifications/components/notification';
+import { normalizeNotification } from '@/normalizers/notification';
+import { appendFollowRequest } from '@/queries/accounts/use-follow-requests';
+import { getFilters, regexFromFilters } from '@/selectors';
+import { useSettingsStore } from '@/stores/settings';
+import { isLoggedIn } from '@/utils/auth';
+import { compareId } from '@/utils/comparators';
+import { unescapeHTML } from '@/utils/html';
+import { EXCLUDE_TYPES, NOTIFICATION_TYPES } from '@/utils/notification';
+import { joinPublicPath } from '@/utils/static';
 
 import { fetchRelationships } from './accounts';
 import { importEntities } from './importer';
 import { saveMarker } from './markers';
 import { saveSettings } from './settings';
 
+import type { AppDispatch, RootState } from '@/store';
 import type { Notification as BaseNotification, GetGroupedNotificationsParams, GroupedNotificationsResults, NotificationGroup, PaginatedResponse } from 'pl-api';
-import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const NOTIFICATIONS_UPDATE = 'NOTIFICATIONS_UPDATE' as const;
 const NOTIFICATIONS_UPDATE_NOOP = 'NOTIFICATIONS_UPDATE_NOOP' as const;

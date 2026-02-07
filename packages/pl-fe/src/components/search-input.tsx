@@ -3,10 +3,10 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import AutosuggestAccountInput from 'pl-fe/components/autosuggest-account-input';
-import SvgIcon from 'pl-fe/components/ui/svg-icon';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { selectAccount } from 'pl-fe/selectors';
+import AutosuggestAccountInput from '@/components/autosuggest-account-input';
+import SvgIcon from '@/components/ui/svg-icon';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { selectAccount } from '@/selectors';
 
 const messages = defineMessages({
   placeholder: { id: 'search.placeholder', defaultMessage: 'Search' },

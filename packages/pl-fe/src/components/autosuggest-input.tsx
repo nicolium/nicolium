@@ -1,19 +1,19 @@
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 
-import AutosuggestEmoji from 'pl-fe/components/autosuggest-emoji';
-import Icon from 'pl-fe/components/icon';
-import Input from 'pl-fe/components/ui/input';
-import Portal from 'pl-fe/components/ui/portal';
-import AutosuggestAccount from 'pl-fe/features/compose/components/autosuggest-account';
-import { textAtCursorMatchesToken } from 'pl-fe/utils/suggestions';
+import AutosuggestEmoji from '@/components/autosuggest-emoji';
+import Icon from '@/components/icon';
+import Input from '@/components/ui/input';
+import Portal from '@/components/ui/portal';
+import AutosuggestAccount from '@/features/compose/components/autosuggest-account';
+import { textAtCursorMatchesToken } from '@/utils/suggestions';
 
 import AutosuggestLocation from './autosuggest-location';
 
+import type { Menu, MenuItem } from '@/components/dropdown-menu';
+import type { InputThemes } from '@/components/ui/input';
+import type { Emoji } from '@/features/emoji';
 import type { Location } from 'pl-api';
-import type { Menu, MenuItem } from 'pl-fe/components/dropdown-menu';
-import type { InputThemes } from 'pl-fe/components/ui/input';
-import type { Emoji } from 'pl-fe/features/emoji';
 
 type AutoSuggestion = string | Emoji | Location;
 

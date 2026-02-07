@@ -3,23 +3,23 @@ import { GroupRoles } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import { useDemoteGroupMember } from 'pl-fe/api/hooks/groups/use-demote-group-member';
-import { usePromoteGroupMember } from 'pl-fe/api/hooks/groups/use-promote-group-member';
-import Account from 'pl-fe/components/account';
-import DropdownMenu from 'pl-fe/components/dropdown-menu/dropdown-menu';
-import HStack from 'pl-fe/components/ui/hstack';
-import { deleteEntities } from 'pl-fe/entity-store/actions';
-import { Entities } from 'pl-fe/entity-store/entities';
-import PlaceholderAccount from 'pl-fe/features/placeholder/components/placeholder-account';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useBlockGroupUserMutation } from 'pl-fe/queries/groups/use-group-blocks';
-import { useKickGroupMemberMutation, type MinifiedGroupMember } from 'pl-fe/queries/groups/use-group-members';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import toast from 'pl-fe/toast';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import { useDemoteGroupMember } from '@/api/hooks/groups/use-demote-group-member';
+import { usePromoteGroupMember } from '@/api/hooks/groups/use-promote-group-member';
+import Account from '@/components/account';
+import DropdownMenu from '@/components/dropdown-menu/dropdown-menu';
+import HStack from '@/components/ui/hstack';
+import { deleteEntities } from '@/entity-store/actions';
+import { Entities } from '@/entity-store/entities';
+import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useBlockGroupUserMutation } from '@/queries/groups/use-group-blocks';
+import { useKickGroupMemberMutation, type MinifiedGroupMember } from '@/queries/groups/use-group-members';
+import { useModalsActions } from '@/stores/modals';
+import toast from '@/toast';
 
+import type { Menu as IMenu } from '@/components/dropdown-menu';
 import type { Group } from 'pl-api';
-import type { Menu as IMenu } from 'pl-fe/components/dropdown-menu';
 
 const messages = defineMessages({
   adminLimitTitle: { id: 'group.member.admin.limit.title', defaultMessage: 'Admin limit reached' },

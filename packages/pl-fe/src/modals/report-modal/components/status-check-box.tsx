@@ -1,11 +1,11 @@
 import noop from 'lodash/noop';
 import React, { Suspense } from 'react';
 
-import StatusContent from 'pl-fe/components/status-content';
-import Stack from 'pl-fe/components/ui/stack';
-import Toggle from 'pl-fe/components/ui/toggle';
-import { MediaGallery, Video, Audio } from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import StatusContent from '@/components/status-content';
+import Stack from '@/components/ui/stack';
+import Toggle from '@/components/ui/toggle';
+import { MediaGallery, Video, Audio } from '@/features/ui/util/async-components';
+import { useAppSelector } from '@/hooks/use-app-selector';
 
 interface IStatusCheckBox {
   id: string;

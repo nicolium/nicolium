@@ -2,11 +2,11 @@ import { Link, type LinkOptions } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import Column from 'pl-fe/components/ui/column';
-import SvgIcon from 'pl-fe/components/ui/svg-icon';
-import Text from 'pl-fe/components/ui/text';
-import toast from 'pl-fe/toast';
-import sourceCode from 'pl-fe/utils/code';
+import Column from '@/components/ui/column';
+import SvgIcon from '@/components/ui/svg-icon';
+import Text from '@/components/ui/text';
+import toast from '@/toast';
+import sourceCode from '@/utils/code';
 
 const messages = defineMessages({
   heading: { id: 'column.developers', defaultMessage: 'Developers' },

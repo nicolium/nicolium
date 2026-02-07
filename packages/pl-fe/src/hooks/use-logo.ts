@@ -1,4 +1,4 @@
-import { useSettings } from 'pl-fe/stores/settings';
+import { useSettings } from '@/stores/settings';
 
 import { usePlFeConfig } from './use-pl-fe-config';
 import { useTheme } from './use-theme';

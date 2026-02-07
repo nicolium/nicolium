@@ -2,11 +2,11 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 
-import HoverAccountWrapper from 'pl-fe/components/hover-account-wrapper';
-import HoverStatusWrapper from 'pl-fe/components/hover-status-wrapper';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import HoverAccountWrapper from '@/components/hover-account-wrapper';
+import HoverStatusWrapper from '@/components/hover-status-wrapper';
+import { useModalsActions } from '@/stores/modals';
 
-import type { Status } from 'pl-fe/normalizers/status';
+import type { Status } from '@/normalizers/status';
 
 interface IStatusReplyMentions {
   status: Pick<Status, 'in_reply_to_id' | 'id' | 'mentions'>;

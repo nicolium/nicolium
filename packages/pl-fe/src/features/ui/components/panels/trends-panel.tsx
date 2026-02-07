@@ -2,11 +2,11 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Hashtag from 'pl-fe/components/hashtag';
-import Text from 'pl-fe/components/ui/text';
-import Widget from 'pl-fe/components/ui/widget';
-import PlaceholderSidebarTrends from 'pl-fe/features/placeholder/components/placeholder-sidebar-trends';
-import useTrends from 'pl-fe/queries/trends';
+import Hashtag from '@/components/hashtag';
+import Text from '@/components/ui/text';
+import Widget from '@/components/ui/widget';
+import PlaceholderSidebarTrends from '@/features/placeholder/components/placeholder-sidebar-trends';
+import useTrends from '@/queries/trends';
 
 interface ITrendsPanel {
   limit: number;

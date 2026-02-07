@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import React, { useCallback, useRef } from 'react';
 
-import { changeMediaOrder } from 'pl-fe/actions/compose';
-import HStack from 'pl-fe/components/ui/hstack';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useCompose } from 'pl-fe/hooks/use-compose';
+import { changeMediaOrder } from '@/actions/compose';
+import HStack from '@/components/ui/hstack';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useCompose } from '@/hooks/use-compose';
 
 import Upload from './upload';
 import UploadProgress from './upload-progress';

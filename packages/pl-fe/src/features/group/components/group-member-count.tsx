@@ -2,8 +2,8 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Text from 'pl-fe/components/ui/text';
-import { shortNumberFormat } from 'pl-fe/utils/numbers';
+import Text from '@/components/ui/text';
+import { shortNumberFormat } from '@/utils/numbers';
 
 import type { Group } from 'pl-api';
 

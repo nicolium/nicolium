@@ -9,8 +9,8 @@ import {
 } from 'pl-api';
 import * as v from 'valibot';
 
-import { useClient } from 'pl-fe/hooks/use-client';
-import { queryClient } from 'pl-fe/queries/client';
+import { useClient } from '@/hooks/use-client';
+import { queryClient } from '@/queries/client';
 
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 

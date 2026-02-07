@@ -1,11 +1,11 @@
 import React from 'react';
 
-import CopyableInput from 'pl-fe/components/copyable-input';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import CopyableInput from '@/components/copyable-input';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useModalsActions } from '@/stores/modals';
 
 import { getTitle } from '../utils/coin-db';
 

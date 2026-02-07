@@ -1,32 +1,32 @@
 import throttle from 'lodash/throttle';
 import { defineMessages, IntlShape } from 'react-intl';
 
-import { getClient } from 'pl-fe/api';
-import { isNativeEmoji } from 'pl-fe/features/emoji';
-import emojiSearch from 'pl-fe/features/emoji/search';
-import { Language } from 'pl-fe/features/preferences';
-import { queryClient } from 'pl-fe/queries/client';
-import { cancelDraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
-import { selectAccount, selectOwnAccount } from 'pl-fe/selectors';
-import { useModalsStore } from 'pl-fe/stores/modals';
-import { useSettingsStore } from 'pl-fe/stores/settings';
-import toast from 'pl-fe/toast';
-import { isLoggedIn } from 'pl-fe/utils/auth';
+import { getClient } from '@/api';
+import { isNativeEmoji } from '@/features/emoji';
+import emojiSearch from '@/features/emoji/search';
+import { Language } from '@/features/preferences';
+import { queryClient } from '@/queries/client';
+import { cancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
+import { selectAccount, selectOwnAccount } from '@/selectors';
+import { useModalsStore } from '@/stores/modals';
+import { useSettingsStore } from '@/stores/settings';
+import toast from '@/toast';
+import { isLoggedIn } from '@/utils/auth';
 
 import { importEntities } from './importer';
 import { uploadFile, updateMedia } from './media';
 import { saveSettings } from './settings';
 import { createStatus } from './statuses';
 
+import type { AutoSuggestion } from '@/components/autosuggest-input';
+import type { Emoji } from '@/features/emoji';
+import type { Status } from '@/normalizers/status';
+import type { Policy, Rule, Scope } from '@/pages/settings/interaction-policies';
+import type { ClearLinkSuggestion } from '@/reducers/compose';
+import type { AppDispatch, RootState } from '@/store';
 import type { LinkOptions } from '@tanstack/react-router';
 import type { EditorState } from 'lexical';
 import type { Account, CreateStatusParams, CustomEmoji, Group, MediaAttachment, Status as BaseStatus, Tag, Poll, ScheduledStatus, InteractionPolicy, UpdateMediaParams, Location } from 'pl-api';
-import type { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
-import type { Emoji } from 'pl-fe/features/emoji';
-import type { Status } from 'pl-fe/normalizers/status';
-import type { Policy, Rule, Scope } from 'pl-fe/pages/settings/interaction-policies';
-import type { ClearLinkSuggestion } from 'pl-fe/reducers/compose';
-import type { AppDispatch, RootState } from 'pl-fe/store';
 
 let cancelFetchComposeSuggestions = new AbortController();
 

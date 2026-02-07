@@ -2,13 +2,13 @@
  * API: HTTP client and utilities.
  * @module pl-fe/api
  */
-import * as BuildConfig from 'pl-fe/build-config';
-import { buildFullPath } from 'pl-fe/utils/url';
+import * as BuildConfig from '@/build-config';
+import { buildFullPath } from '@/utils/url';
 
-import type { RootState, Store } from 'pl-fe/store';
+import type { RootState, Store } from '@/store';
 
 let store: Store;
-import('pl-fe/store').then((value) => store = value.store).catch(() => {});
+import('@/store').then((value) => store = value.store).catch(() => {});
 
 type PlfeResponse<T = any> = Response & { data: string; json: T };
 

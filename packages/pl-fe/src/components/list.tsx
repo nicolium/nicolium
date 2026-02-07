@@ -2,10 +2,10 @@ import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Select from 'pl-fe/components/ui/select';
-import { SelectDropdown } from 'pl-fe/features/forms';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Select from '@/components/ui/select';
+import { SelectDropdown } from '@/features/forms';
 
 interface IList {
   children: React.ReactNode;

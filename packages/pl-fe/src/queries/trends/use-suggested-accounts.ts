@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { importEntities } from 'pl-fe/actions/importer';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useFeatures } from 'pl-fe/hooks/use-features';
+import { importEntities } from '@/actions/importer';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
 
 import type { Suggestion } from 'pl-api';
 

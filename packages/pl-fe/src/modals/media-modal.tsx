@@ -5,26 +5,26 @@ import clsx from 'clsx';
 import React, { type RefCallback, useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { fetchStatusWithContext } from 'pl-fe/actions/statuses';
-import ExtendedVideoPlayer from 'pl-fe/components/extended-video-player';
-import MissingIndicator from 'pl-fe/components/missing-indicator';
-import StatusActionBar from 'pl-fe/components/status-action-bar';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Stack from 'pl-fe/components/ui/stack';
-import Audio from 'pl-fe/features/audio';
-import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
-import Thread from 'pl-fe/features/status/components/thread';
-import ZoomableImage from 'pl-fe/features/ui/components/zoomable-image';
-import Video from 'pl-fe/features/video';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { userTouching } from 'pl-fe/is-mobile';
-import { makeGetStatus } from 'pl-fe/selectors';
+import { fetchStatusWithContext } from '@/actions/statuses';
+import ExtendedVideoPlayer from '@/components/extended-video-player';
+import MissingIndicator from '@/components/missing-indicator';
+import StatusActionBar from '@/components/status-action-bar';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import IconButton from '@/components/ui/icon-button';
+import Stack from '@/components/ui/stack';
+import Audio from '@/features/audio';
+import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
+import Thread from '@/features/status/components/thread';
+import ZoomableImage from '@/features/ui/components/zoomable-image';
+import Video from '@/features/video';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { userTouching } from '@/is-mobile';
+import { makeGetStatus } from '@/selectors';
 
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 import type { MediaAttachment } from 'pl-api';
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
 const MIN_SWIPE_DISTANCE = 400;
 

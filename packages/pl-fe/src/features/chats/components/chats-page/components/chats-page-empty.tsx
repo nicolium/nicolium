@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useChats } from 'pl-fe/queries/chats';
+import { useChats } from '@/queries/chats';
 
 import BlankslateEmpty from './blankslate-empty';
 import BlankslateWithChats from './blankslate-with-chats';

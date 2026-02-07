@@ -1,14 +1,14 @@
 import { GroupRoles } from 'pl-api';
 
-import { Entities } from 'pl-fe/entity-store/entities';
-import { useDismissEntity  } from 'pl-fe/entity-store/hooks/use-dismiss-entity';
-import { useEntities } from 'pl-fe/entity-store/hooks/use-entities';
-import { useClient } from 'pl-fe/hooks/use-client';
+import { Entities } from '@/entity-store/entities';
+import { useDismissEntity  } from '@/entity-store/hooks/use-dismiss-entity';
+import { useEntities } from '@/entity-store/hooks/use-entities';
+import { useClient } from '@/hooks/use-client';
 
 import { useGroupRelationship } from './use-group-relationship';
 
+import type { ExpandedEntitiesPath } from '@/entity-store/hooks/types';
 import type { Account } from 'pl-api';
-import type { ExpandedEntitiesPath } from 'pl-fe/entity-store/hooks/types';
 
 const useGroupMembershipRequests = (groupId: string) => {
   const client = useClient();

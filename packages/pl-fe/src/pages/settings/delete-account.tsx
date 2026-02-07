@@ -1,18 +1,18 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { deleteAccount } from 'pl-fe/actions/security';
-import Button from 'pl-fe/components/ui/button';
-import Card, { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Input from 'pl-fe/components/ui/input';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import toast from 'pl-fe/toast';
+import { deleteAccount } from '@/actions/security';
+import Button from '@/components/ui/button';
+import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import Input from '@/components/ui/input';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useFeatures } from '@/hooks/use-features';
+import toast from '@/toast';
 
 const messages = defineMessages({
   passwordFieldLabel: { id: 'security.fields.password.label', defaultMessage: 'Password' },

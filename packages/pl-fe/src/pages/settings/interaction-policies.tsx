@@ -2,22 +2,22 @@ import { create } from 'mutative';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { patchMe } from 'pl-fe/actions/me';
-import List, { ListItem } from 'pl-fe/components/list';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import { InlineMultiselect } from 'pl-fe/components/ui/inline-multiselect';
-import Tabs from 'pl-fe/components/ui/tabs';
-import Text from 'pl-fe/components/ui/text';
-import Warning from 'pl-fe/features/compose/components/warning';
-import { SelectDropdown } from 'pl-fe/features/forms';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useInteractionPolicies } from 'pl-fe/queries/settings/use-interaction-policies';
-import toast from 'pl-fe/toast';
+import { patchMe } from '@/actions/me';
+import List, { ListItem } from '@/components/list';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import { InlineMultiselect } from '@/components/ui/inline-multiselect';
+import Tabs from '@/components/ui/tabs';
+import Text from '@/components/ui/text';
+import Warning from '@/features/compose/components/warning';
+import { SelectDropdown } from '@/features/forms';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
+import { useInteractionPolicies } from '@/queries/settings/use-interaction-policies';
+import toast from '@/toast';
 
 import type { CreateStatusParams, InteractionPolicy } from 'pl-api';
 

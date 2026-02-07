@@ -2,28 +2,28 @@ import debounce from 'lodash/debounce';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeSetting, saveSettings } from 'pl-fe/actions/settings';
-import List, { ListItem } from 'pl-fe/components/list';
-import Button from 'pl-fe/components/ui/button';
-import Form from 'pl-fe/components/ui/form';
-import HStack from 'pl-fe/components/ui/hstack';
-import StepSlider from 'pl-fe/components/ui/step-slider';
-import { Multiselect, SelectDropdown } from 'pl-fe/features/forms';
-import SettingToggle from 'pl-fe/features/settings/components/setting-toggle';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
-import { PaletteListItem } from 'pl-fe/pages/dashboard/theme-editor';
-import { useSettings } from 'pl-fe/stores/settings';
-import sourceCode from 'pl-fe/utils/code';
-import colors from 'pl-fe/utils/colors';
-import { isStandalone } from 'pl-fe/utils/state';
+import { changeSetting, saveSettings } from '@/actions/settings';
+import List, { ListItem } from '@/components/list';
+import Button from '@/components/ui/button';
+import Form from '@/components/ui/form';
+import HStack from '@/components/ui/hstack';
+import StepSlider from '@/components/ui/step-slider';
+import { Multiselect, SelectDropdown } from '@/features/forms';
+import SettingToggle from '@/features/settings/components/setting-toggle';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFeatures } from '@/hooks/use-features';
+import { useInstance } from '@/hooks/use-instance';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { PaletteListItem } from '@/pages/dashboard/theme-editor';
+import { useSettings } from '@/stores/settings';
+import sourceCode from '@/utils/code';
+import colors from '@/utils/colors';
+import { isStandalone } from '@/utils/state';
 
 import ThemeToggle from '../ui/components/theme-toggle';
 
-import type { AppDispatch } from 'pl-fe/store';
+import type { AppDispatch } from '@/store';
 
 const languages = {
   en: 'English',

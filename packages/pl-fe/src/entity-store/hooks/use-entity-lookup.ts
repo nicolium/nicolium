@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import * as v from 'valibot';
 
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useLoading } from 'pl-fe/hooks/use-loading';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useLoading } from '@/hooks/use-loading';
 
 import { importEntities } from '../actions';
 import { findEntity } from '../selectors';
@@ -11,7 +11,7 @@ import { findEntity } from '../selectors';
 import type { EntityFn } from './types';
 import type { UseEntityOpts } from './use-entity';
 import type { Entity } from '../types';
-import type { PlfeResponse } from 'pl-fe/api';
+import type { PlfeResponse } from '@/api';
 
 /** Entities will be filtered through this function until it returns true. */
 type LookupFn<TEntity extends Entity> = (entity: TEntity) => boolean

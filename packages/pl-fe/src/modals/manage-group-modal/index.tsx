@@ -2,17 +2,17 @@ import React, { useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import { useCreateGroup } from 'pl-fe/api/hooks/groups/use-create-group';
-import Modal from 'pl-fe/components/ui/modal';
-import Stack from 'pl-fe/components/ui/stack';
-import toast from 'pl-fe/toast';
+import { useCreateGroup } from '@/api/hooks/groups/use-create-group';
+import Modal from '@/components/ui/modal';
+import Stack from '@/components/ui/stack';
+import toast from '@/toast';
 
 import ConfirmationStep from './steps/confirmation-step';
 import DetailsStep from './steps/details-step';
 
+import type { PlfeResponse } from '@/api';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 import type { CreateGroupParams, Group } from 'pl-api';
-import type { PlfeResponse } from 'pl-fe/api';
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
 const messages = defineMessages({
   create: { id: 'manage_group.create', defaultMessage: 'Create group' },

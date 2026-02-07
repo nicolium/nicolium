@@ -2,11 +2,11 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import DropdownMenu from 'pl-fe/components/dropdown-menu';
+import DropdownMenu from '@/components/dropdown-menu';
 
 import Icon from './icon';
 
-import type { Menu } from 'pl-fe/components/dropdown-menu';
+import type { Menu } from '@/components/dropdown-menu';
 
 const messages = defineMessages({
   collapse: { id: 'accordion.collapse', defaultMessage: 'Collapse' },

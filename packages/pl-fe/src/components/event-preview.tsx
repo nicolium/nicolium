@@ -2,18 +2,18 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Icon from 'pl-fe/components/icon';
-import Button from 'pl-fe/components/ui/button';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import VerificationBadge from 'pl-fe/components/verification-badge';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import EventActionButton from 'pl-fe/features/event/components/event-action-button';
-import EventDate from 'pl-fe/features/event/components/event-date';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import Icon from '@/components/icon';
+import Button from '@/components/ui/button';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import VerificationBadge from '@/components/verification-badge';
+import Emojify from '@/features/emoji/emojify';
+import EventActionButton from '@/features/event/components/event-action-button';
+import EventDate from '@/features/event/components/event-date';
+import { useAppSelector } from '@/hooks/use-app-selector';
 
-import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
+import type { Status as StatusEntity } from '@/normalizers/status';
 
 const messages = defineMessages({
   eventBanner: { id: 'event.banner', defaultMessage: 'Event banner' },

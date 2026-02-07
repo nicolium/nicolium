@@ -1,11 +1,11 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Widget from 'pl-fe/components/ui/widget';
-import AccountContainer from 'pl-fe/containers/account-container';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import { WhoToFollowPanel } from 'pl-fe/features/ui/util/async-components';
-import { useEndorsedAccounts } from 'pl-fe/queries/accounts/use-endorsed-accounts';
+import Widget from '@/components/ui/widget';
+import AccountContainer from '@/containers/account-container';
+import Emojify from '@/features/emoji/emojify';
+import { WhoToFollowPanel } from '@/features/ui/util/async-components';
+import { useEndorsedAccounts } from '@/queries/accounts/use-endorsed-accounts';
 
 import type { Account } from 'pl-api';
 

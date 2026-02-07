@@ -1,15 +1,15 @@
 import { createSelector } from 'reselect';
 import * as v from 'valibot';
 
-import { getHost } from 'pl-fe/actions/instance';
-import { plFeConfigSchema } from 'pl-fe/normalizers/pl-fe/pl-fe-config';
-import KVStore from 'pl-fe/storage/kv-store';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { getHost } from '@/actions/instance';
+import { plFeConfigSchema } from '@/normalizers/pl-fe/pl-fe-config';
+import KVStore from '@/storage/kv-store';
+import { useSettingsStore } from '@/stores/settings';
 
 import { getClient, staticFetch } from '../api';
 
-import type { AppDispatch, RootState } from 'pl-fe/store';
-import type { APIEntity } from 'pl-fe/types/entities';
+import type { AppDispatch, RootState } from '@/store';
+import type { APIEntity } from '@/types/entities';
 
 const PLFE_CONFIG_REQUEST_SUCCESS = 'PLFE_CONFIG_REQUEST_SUCCESS' as const;
 const PLFE_CONFIG_REQUEST_FAIL = 'PLFE_CONFIG_REQUEST_FAIL' as const;

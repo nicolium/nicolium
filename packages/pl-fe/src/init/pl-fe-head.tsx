@@ -1,16 +1,16 @@
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 
-import InlineStyle from 'pl-fe/components/inline-style';
-import { useLocale, useLocaleDirection } from 'pl-fe/hooks/use-locale';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
-import { useTheme } from 'pl-fe/hooks/use-theme';
-import { useThemeCss } from 'pl-fe/hooks/use-theme-css';
-import { startSentry } from 'pl-fe/sentry';
-import { useHasModals } from 'pl-fe/stores/modals';
-import { useSettings } from 'pl-fe/stores/settings';
+import InlineStyle from '@/components/inline-style';
+import { useLocale, useLocaleDirection } from '@/hooks/use-locale';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useTheme } from '@/hooks/use-theme';
+import { useThemeCss } from '@/hooks/use-theme-css';
+import { startSentry } from '@/sentry';
+import { useHasModals } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 
-const Helmet = React.lazy(() => import('pl-fe/components/helmet'));
+const Helmet = React.lazy(() => import('@/components/helmet'));
 
 /** Injects metadata into site head with Helmet. */
 const PlFeHead = () => {

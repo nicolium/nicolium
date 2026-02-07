@@ -1,17 +1,17 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import Form from 'pl-fe/components/ui/form';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Input from 'pl-fe/components/ui/input';
-import Modal from 'pl-fe/components/ui/modal';
-import { useTextField } from 'pl-fe/hooks/forms/use-text-field';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useRules } from 'pl-fe/queries/admin/use-rules';
-import toast from 'pl-fe/toast';
+import Form from '@/components/ui/form';
+import FormGroup from '@/components/ui/form-group';
+import Input from '@/components/ui/input';
+import Modal from '@/components/ui/modal';
+import { useTextField } from '@/hooks/forms/use-text-field';
+import { useFeatures } from '@/hooks/use-features';
+import { useRules } from '@/queries/admin/use-rules';
+import toast from '@/toast';
 
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 import type { AdminRule } from 'pl-api';
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_rule.save', defaultMessage: 'Save' },

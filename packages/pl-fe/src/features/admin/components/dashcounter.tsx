@@ -2,8 +2,8 @@ import { Link, type LinkOptions } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedNumber } from 'react-intl';
 
-import Text from 'pl-fe/components/ui/text';
-import { isNumber } from 'pl-fe/utils/numbers';
+import Text from '@/components/ui/text';
+import { isNumber } from '@/utils/numbers';
 
 type IDashCounter = {
   count: number | undefined;

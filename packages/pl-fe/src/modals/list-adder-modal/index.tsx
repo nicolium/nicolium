@@ -1,15 +1,15 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { CardHeader, CardTitle } from 'pl-fe/components/ui/card';
-import Modal from 'pl-fe/components/ui/modal';
-import AccountContainer from 'pl-fe/containers/account-container';
-import { NewListForm, getOrderedLists } from 'pl-fe/pages/account-lists/lists';
-import { useLists, useListsForAccount } from 'pl-fe/queries/accounts/use-lists';
+import { CardHeader, CardTitle } from '@/components/ui/card';
+import Modal from '@/components/ui/modal';
+import AccountContainer from '@/containers/account-container';
+import { NewListForm, getOrderedLists } from '@/pages/account-lists/lists';
+import { useLists, useListsForAccount } from '@/queries/accounts/use-lists';
 
 import List from './components/list';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
   subheading: { id: 'lists.subheading', defaultMessage: 'Your lists' },

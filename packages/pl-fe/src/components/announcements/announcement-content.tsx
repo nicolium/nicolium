@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect, useRef } from 'react';
 
-import { getTextDirection } from 'pl-fe/utils/rtl';
+import { getTextDirection } from '@/utils/rtl';
 
 import { ParsedContent } from '../parsed-content';
 

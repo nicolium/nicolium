@@ -1,4 +1,4 @@
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
+import { useAccount } from '@/api/hooks/accounts/use-account';
 
 import { useLoggedIn } from './use-logged-in';
 

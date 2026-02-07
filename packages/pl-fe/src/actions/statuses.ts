@@ -1,9 +1,9 @@
-import { queryClient } from 'pl-fe/queries/client';
-import { scheduledStatusesQueryOptions } from 'pl-fe/queries/statuses/scheduled-statuses';
-import { useModalsStore } from 'pl-fe/stores/modals';
-import { useSettingsStore } from 'pl-fe/stores/settings';
-import { isLoggedIn } from 'pl-fe/utils/auth';
-import { shouldHaveCard } from 'pl-fe/utils/status';
+import { queryClient } from '@/queries/client';
+import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
+import { useModalsStore } from '@/stores/modals';
+import { useSettingsStore } from '@/stores/settings';
+import { isLoggedIn } from '@/utils/auth';
+import { shouldHaveCard } from '@/utils/status';
 
 import { getClient } from '../api';
 
@@ -11,9 +11,9 @@ import { setComposeToStatus } from './compose';
 import { importEntities } from './importer';
 import { deleteFromTimelines } from './timelines';
 
+import type { Status } from '@/normalizers/status';
+import type { AppDispatch, RootState } from '@/store';
 import type { CreateStatusParams, Status as BaseStatus, ScheduledStatus, StatusSource, Poll } from 'pl-api';
-import type { Status } from 'pl-fe/normalizers/status';
-import type { AppDispatch, RootState } from 'pl-fe/store';
 import type { IntlShape } from 'react-intl';
 
 const STATUS_CREATE_REQUEST = 'STATUS_CREATE_REQUEST' as const;

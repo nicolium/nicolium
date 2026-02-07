@@ -1,14 +1,14 @@
 import React, { useState, useCallback } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Accordion from 'pl-fe/components/ui/accordion';
-import Column from 'pl-fe/components/ui/column';
-import RestrictedInstance from 'pl-fe/features/federation-restrictions/components/restricted-instance';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { makeGetHosts } from 'pl-fe/selectors';
-import { federationRestrictionsDisclosed } from 'pl-fe/utils/state';
+import ScrollableList from '@/components/scrollable-list';
+import Accordion from '@/components/ui/accordion';
+import Column from '@/components/ui/column';
+import RestrictedInstance from '@/features/federation-restrictions/components/restricted-instance';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useInstance } from '@/hooks/use-instance';
+import { makeGetHosts } from '@/selectors';
+import { federationRestrictionsDisclosed } from '@/utils/state';
 
 const messages = defineMessages({
   heading: { id: 'column.federation_restrictions', defaultMessage: 'Federation restrictions' },

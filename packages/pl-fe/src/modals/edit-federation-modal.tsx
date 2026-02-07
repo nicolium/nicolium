@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { updateMrf } from 'pl-fe/actions/mrf';
-import List, { ListItem } from 'pl-fe/components/list';
-import Modal from 'pl-fe/components/ui/modal';
-import Toggle from 'pl-fe/components/ui/toggle';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { makeGetRemoteInstance } from 'pl-fe/selectors';
-import toast from 'pl-fe/toast';
+import { updateMrf } from '@/actions/mrf';
+import List, { ListItem } from '@/components/list';
+import Modal from '@/components/ui/modal';
+import Toggle from '@/components/ui/toggle';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { makeGetRemoteInstance } from '@/selectors';
+import toast from '@/toast';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
   mediaRemoval: { id: 'edit_federation.media_removal', defaultMessage: 'Strip media' },

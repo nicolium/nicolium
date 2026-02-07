@@ -1,5 +1,5 @@
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useLoading } from 'pl-fe/hooks/use-loading';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useLoading } from '@/hooks/use-loading';
 
 import { dismissEntities } from '../actions';
 

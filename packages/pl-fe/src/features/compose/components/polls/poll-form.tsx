@@ -1,21 +1,21 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { addPollOption, changePollOption, changePollSettings, clearComposeSuggestions, fetchComposeSuggestions, removePoll, removePollOption, selectComposeSuggestion } from 'pl-fe/actions/compose';
-import AutosuggestInput from 'pl-fe/components/autosuggest-input';
-import Button from 'pl-fe/components/ui/button';
-import Divider from 'pl-fe/components/ui/divider';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Toggle from 'pl-fe/components/ui/toggle';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useCompose } from 'pl-fe/hooks/use-compose';
-import { useInstance } from 'pl-fe/hooks/use-instance';
+import { addPollOption, changePollOption, changePollSettings, clearComposeSuggestions, fetchComposeSuggestions, removePoll, removePollOption, selectComposeSuggestion } from '@/actions/compose';
+import AutosuggestInput from '@/components/autosuggest-input';
+import Button from '@/components/ui/button';
+import Divider from '@/components/ui/divider';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Toggle from '@/components/ui/toggle';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useCompose } from '@/hooks/use-compose';
+import { useInstance } from '@/hooks/use-instance';
 
 import DurationSelector from './duration-selector';
 
-import type { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
+import type { AutoSuggestion } from '@/components/autosuggest-input';
 
 const messages = defineMessages({
   option_placeholder: { id: 'compose_form.poll.option_placeholder', defaultMessage: 'Answer #{number}' },

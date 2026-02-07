@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { render, screen, rootState } from 'pl-fe/jest/test-helpers';
-import { normalizeStatus } from 'pl-fe/normalizers/status';
+import { render, screen, rootState } from '@/jest/test-helpers';
+import { normalizeStatus } from '@/normalizers/status';
 
 import QuotedStatus from './quoted-status';
 
-import type { ReducerStatus } from 'pl-fe/reducers/statuses';
+import type { ReducerStatus } from '@/reducers/statuses';
 
 describe('<QuotedStatus />', () => {
   it('renders content', () => {

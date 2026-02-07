@@ -3,21 +3,21 @@ import clsx from 'clsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Blurhash from 'pl-fe/components/blurhash';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Icon from 'pl-fe/components/ui/icon';
-import Modal from 'pl-fe/components/ui/modal';
-import Stack from 'pl-fe/components/ui/stack';
-import Textarea from 'pl-fe/components/ui/textarea';
-import { MIMETYPE_ICONS } from 'pl-fe/components/upload';
-import { getPointerPosition } from 'pl-fe/features/video';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useCompose } from 'pl-fe/hooks/use-compose';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import toast from 'pl-fe/toast';
+import Blurhash from '@/components/blurhash';
+import FormGroup from '@/components/ui/form-group';
+import Icon from '@/components/ui/icon';
+import Modal from '@/components/ui/modal';
+import Stack from '@/components/ui/stack';
+import Textarea from '@/components/ui/textarea';
+import { MIMETYPE_ICONS } from '@/components/upload';
+import { getPointerPosition } from '@/features/video';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useCompose } from '@/hooks/use-compose';
+import { useFeatures } from '@/hooks/use-features';
+import toast from '@/toast';
 
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 import type { MediaAttachment } from 'pl-api';
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
 type FocalPoint = [number, number];
 

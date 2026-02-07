@@ -3,8 +3,8 @@ import clsx from 'clsx';
 import throttle from 'lodash/throttle';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import Helmet from 'pl-fe/components/helmet';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
+import Helmet from '@/components/helmet';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
 
 import { Card, CardBody, CardHeader, CardTitle, type CardSizes } from './card';
 

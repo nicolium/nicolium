@@ -4,7 +4,7 @@ import {
   TIMELINE_EXPAND_REQUEST,
   TIMELINE_EXPAND_FAIL,
   TIMELINE_EXPAND_SUCCESS,
-} from 'pl-fe/actions/timelines';
+} from '@/actions/timelines';
 
 import reducer from './timelines';
 

@@ -2,12 +2,12 @@ import { Map as ImmutableMap } from 'immutable';
 import sumBy from 'lodash/sumBy';
 import { useEffect } from 'react';
 
-import { __stub } from 'pl-fe/api';
-import { buildAccount, buildRelationship } from 'pl-fe/jest/factory';
-import { createTestStore, mockStore, queryClient, renderHook, rootState, waitFor } from 'pl-fe/jest/test-helpers';
-import { normalizeChatMessage } from 'pl-fe/normalizers/chat-message';
-import { Store } from 'pl-fe/store';
-import { flattenPages } from 'pl-fe/utils/queries';
+import { __stub } from '@/api';
+import { buildAccount, buildRelationship } from '@/jest/factory';
+import { createTestStore, mockStore, queryClient, renderHook, rootState, waitFor } from '@/jest/test-helpers';
+import { normalizeChatMessage } from '@/normalizers/chat-message';
+import { Store } from '@/store';
+import { flattenPages } from '@/utils/queries';
 
 import { ChatKeys, IChat, useChat, useChatActions, useChatMessages, useChats } from './chats';
 

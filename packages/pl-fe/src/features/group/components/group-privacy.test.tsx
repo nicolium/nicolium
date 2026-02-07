@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { buildGroup } from 'pl-fe/jest/factory';
-import { render, screen } from 'pl-fe/jest/test-helpers';
+import { buildGroup } from '@/jest/factory';
+import { render, screen } from '@/jest/test-helpers';
 
 import GroupPrivacy from './group-privacy';
 

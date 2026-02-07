@@ -1,6 +1,6 @@
-import { PLEROMA_PRELOAD_IMPORT } from 'pl-fe/actions/preload';
-import KVStore from 'pl-fe/storage/kv-store';
-import ConfigDB from 'pl-fe/utils/config-db';
+import { PLEROMA_PRELOAD_IMPORT } from '@/actions/preload';
+import KVStore from '@/storage/kv-store';
+import ConfigDB from '@/utils/config-db';
 
 import { ADMIN_CONFIG_UPDATE_SUCCESS } from '../actions/admin';
 import {
@@ -9,8 +9,8 @@ import {
   PLFE_CONFIG_REQUEST_FAIL,
 } from '../actions/pl-fe';
 
+import type { PlFeConfig } from '@/normalizers/pl-fe/pl-fe-config';
 import type { PleromaConfig } from 'pl-api';
-import type { PlFeConfig } from 'pl-fe/normalizers/pl-fe/pl-fe-config';
 
 const initialState: Partial<PlFeConfig> = {};
 

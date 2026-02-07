@@ -2,22 +2,22 @@ import { Link } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
-import Account from 'pl-fe/components/account';
-import StatusContent from 'pl-fe/components/status-content';
-import StatusLanguagePicker from 'pl-fe/components/status-language-picker';
-import StatusReactionsBar from 'pl-fe/components/status-reactions-bar';
-import StatusReplyMentions from 'pl-fe/components/status-reply-mentions';
-import StatusInfo from 'pl-fe/components/statuses/status-info';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Emojify from 'pl-fe/features/emoji/emojify';
+import Account from '@/components/account';
+import StatusContent from '@/components/status-content';
+import StatusLanguagePicker from '@/components/status-language-picker';
+import StatusReactionsBar from '@/components/status-reactions-bar';
+import StatusReplyMentions from '@/components/status-reply-mentions';
+import StatusInfo from '@/components/statuses/status-info';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Emojify from '@/features/emoji/emojify';
 
 import StatusInteractionBar from './status-interaction-bar';
 import StatusTypeIcon from './status-type-icon';
 
-import type { SelectedStatus } from 'pl-fe/selectors';
+import type { SelectedStatus } from '@/selectors';
 
 const messages = defineMessages({
   applicationName: { id: 'status.application_name', defaultMessage: 'Sent from {name}' },

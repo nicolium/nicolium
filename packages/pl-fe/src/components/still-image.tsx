@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React, { useRef } from 'react';
 
-import { useSettings } from 'pl-fe/stores/settings';
+import { useSettings } from '@/stores/settings';
 
 interface IStillImage {
   /** Image alt text. */

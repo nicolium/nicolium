@@ -2,16 +2,16 @@ import L from 'leaflet';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import Modal from 'pl-fe/components/ui/modal';
-import Stack from 'pl-fe/components/ui/stack';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
-import { makeGetStatus } from 'pl-fe/selectors';
+import Button from '@/components/ui/button';
+import Modal from '@/components/ui/modal';
+import Stack from '@/components/ui/stack';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { makeGetStatus } from '@/selectors';
 
 import 'leaflet/dist/leaflet.css';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),

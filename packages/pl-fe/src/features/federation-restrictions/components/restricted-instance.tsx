@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
-import Icon from 'pl-fe/components/icon';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { makeGetRemoteInstance } from 'pl-fe/selectors';
+import Icon from '@/components/icon';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { makeGetRemoteInstance } from '@/selectors';
 
 import InstanceRestrictions from './instance-restrictions';
 

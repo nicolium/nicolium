@@ -1,13 +1,13 @@
 import React, { Suspense } from 'react';
 
-import { MediaGallery } from 'pl-fe/features/ui/util/async-components';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import { useSettings } from 'pl-fe/stores/settings';
+import { MediaGallery } from '@/features/ui/util/async-components';
+import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 
 import { useMediaVisible } from './statuses/sensitive-content-overlay';
 
+import type { Status } from '@/normalizers/status';
 import type { MediaAttachment } from 'pl-api';
-import type { Status } from 'pl-fe/normalizers/status';
 
 interface IAttachmentThumbs {
   status: Pick<Status, 'media_attachments' | 'sensitive'> & Partial<Pick<Status, 'filtered' | 'id'>>;

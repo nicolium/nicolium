@@ -1,6 +1,6 @@
-import { EntityCallbacks } from 'pl-fe/entity-store/hooks/types';
-import { useTransaction } from 'pl-fe/entity-store/hooks/use-transaction';
-import { useClient } from 'pl-fe/hooks/use-client';
+import { EntityCallbacks } from '@/entity-store/hooks/types';
+import { useTransaction } from '@/entity-store/hooks/use-transaction';
+import { useClient } from '@/hooks/use-client';
 
 import type { Account } from 'pl-api';
 

@@ -1,4 +1,4 @@
-import { getClient } from 'pl-fe/api';
+import { getClient } from '@/api';
 
 import { useAppSelector } from './use-app-selector';
 

@@ -2,10 +2,10 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import HStack from 'pl-fe/components/ui/hstack';
-import Text from 'pl-fe/components/ui/text';
-import { useSettings } from 'pl-fe/stores/settings';
-import { shortNumberFormat } from 'pl-fe/utils/numbers';
+import HStack from '@/components/ui/hstack';
+import Text from '@/components/ui/text';
+import { useSettings } from '@/stores/settings';
+import { shortNumberFormat } from '@/utils/numbers';
 
 import type { Account } from 'pl-api';
 

@@ -3,33 +3,33 @@ import { type CredentialAccount, GOTOSOCIAL, type UpdateCredentialsParams } from
 import React, { useState, useEffect } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { patchMe } from 'pl-fe/actions/me';
-import BirthdayInput from 'pl-fe/components/birthday-input';
-import List, { ListItem } from 'pl-fe/components/list';
-import Accordion from 'pl-fe/components/ui/accordion';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import HStack from 'pl-fe/components/ui/hstack';
-import Input from 'pl-fe/components/ui/input';
-import Streamfield from 'pl-fe/components/ui/streamfield';
-import Textarea from 'pl-fe/components/ui/textarea';
-import Toggle from 'pl-fe/components/ui/toggle';
-import AvatarPicker from 'pl-fe/features/edit-profile/components/avatar-picker';
-import HeaderPicker from 'pl-fe/features/edit-profile/components/header-picker';
-import { SelectDropdown } from 'pl-fe/features/forms';
-import { useImageField } from 'pl-fe/hooks/forms/use-image-field';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import toast from 'pl-fe/toast';
+import { patchMe } from '@/actions/me';
+import BirthdayInput from '@/components/birthday-input';
+import List, { ListItem } from '@/components/list';
+import Accordion from '@/components/ui/accordion';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import HStack from '@/components/ui/hstack';
+import Input from '@/components/ui/input';
+import Streamfield from '@/components/ui/streamfield';
+import Textarea from '@/components/ui/textarea';
+import Toggle from '@/components/ui/toggle';
+import AvatarPicker from '@/features/edit-profile/components/avatar-picker';
+import HeaderPicker from '@/features/edit-profile/components/header-picker';
+import { SelectDropdown } from '@/features/forms';
+import { useImageField } from '@/hooks/forms/use-image-field';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
+import { useInstance } from '@/hooks/use-instance';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import toast from '@/toast';
 
-import type { StreamfieldComponent } from 'pl-fe/components/ui/streamfield';
+import type { StreamfieldComponent } from '@/components/ui/streamfield';
 
 /**
  * Whether the user is hiding their follows and/or followers.

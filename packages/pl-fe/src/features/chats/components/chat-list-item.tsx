@@ -2,23 +2,23 @@ import { useNavigate } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import { ParsedContent } from 'pl-fe/components/parsed-content';
-import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
-import Avatar from 'pl-fe/components/ui/avatar';
-import HStack from 'pl-fe/components/ui/hstack';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import VerificationBadge from 'pl-fe/components/verification-badge';
-import { useChatContext } from 'pl-fe/contexts/chat-context';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useRelationshipQuery } from 'pl-fe/queries/accounts/use-relationship';
-import { useChatActions } from 'pl-fe/queries/chats';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import DropdownMenu from '@/components/dropdown-menu';
+import { ParsedContent } from '@/components/parsed-content';
+import RelativeTimestamp from '@/components/relative-timestamp';
+import Avatar from '@/components/ui/avatar';
+import HStack from '@/components/ui/hstack';
+import IconButton from '@/components/ui/icon-button';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import VerificationBadge from '@/components/verification-badge';
+import { useChatContext } from '@/contexts/chat-context';
+import { useFeatures } from '@/hooks/use-features';
+import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
+import { useChatActions } from '@/queries/chats';
+import { useModalsActions } from '@/stores/modals';
 
+import type { Menu } from '@/components/dropdown-menu';
 import type { Chat } from 'pl-api';
-import type { Menu } from 'pl-fe/components/dropdown-menu';
 
 const messages = defineMessages({
   leaveMessage: { id: 'chat_settings.leave.message', defaultMessage: 'Are you sure you want to leave this chat? Messages will be deleted for you and this chat will be removed from your inbox.' },

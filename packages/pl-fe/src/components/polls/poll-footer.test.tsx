@@ -3,8 +3,8 @@ import React from 'react';
 import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 
-import { __stub } from 'pl-fe/api';
-import { mockStore, render, screen, rootState } from 'pl-fe/jest/test-helpers';
+import { __stub } from '@/api';
+import { mockStore, render, screen, rootState } from '@/jest/test-helpers';
 
 import PollFooter from './poll-footer';
 

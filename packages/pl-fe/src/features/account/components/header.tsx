@@ -6,28 +6,28 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import { mentionCompose, directCompose } from 'pl-fe/actions/compose';
-import { initReport, ReportableEntities } from 'pl-fe/actions/reports';
-import Account from 'pl-fe/components/account';
-import AltIndicator from 'pl-fe/components/alt-indicator';
-import Badge from 'pl-fe/components/badge';
-import DropdownMenu, { Menu } from 'pl-fe/components/dropdown-menu';
-import Icon from 'pl-fe/components/icon';
-import StillImage from 'pl-fe/components/still-image';
-import Avatar from 'pl-fe/components/ui/avatar';
-import HStack from 'pl-fe/components/ui/hstack';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Popover from 'pl-fe/components/ui/popover';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import VerificationBadge from 'pl-fe/components/verification-badge';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import ActionButton from 'pl-fe/features/ui/components/action-button';
-import SubscriptionButton from 'pl-fe/features/ui/components/subscription-button';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
+import { mentionCompose, directCompose } from '@/actions/compose';
+import { initReport, ReportableEntities } from '@/actions/reports';
+import Account from '@/components/account';
+import AltIndicator from '@/components/alt-indicator';
+import Badge from '@/components/badge';
+import DropdownMenu, { Menu } from '@/components/dropdown-menu';
+import Icon from '@/components/icon';
+import StillImage from '@/components/still-image';
+import Avatar from '@/components/ui/avatar';
+import HStack from '@/components/ui/hstack';
+import IconButton from '@/components/ui/icon-button';
+import Popover from '@/components/ui/popover';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import VerificationBadge from '@/components/verification-badge';
+import Emojify from '@/features/emoji/emojify';
+import ActionButton from '@/features/ui/components/action-button';
+import SubscriptionButton from '@/features/ui/components/subscription-button';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
+import { useOwnAccount } from '@/hooks/use-own-account';
 import {
   useFollowAccountMutation,
   usePinAccountMutation,
@@ -36,17 +36,17 @@ import {
   useUnmuteAccountMutation,
   useUnpinAccountMutation,
   useUpdateAccountNoteMutation,
-} from 'pl-fe/queries/accounts/use-relationship';
-import { useChats } from 'pl-fe/queries/chats';
-import { queryClient } from 'pl-fe/queries/client';
-import { blockDomainMutationOptions, unblockDomainMutationOptions } from 'pl-fe/queries/settings/domain-blocks';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import { useSettings } from 'pl-fe/stores/settings';
-import toast from 'pl-fe/toast';
-import copy from 'pl-fe/utils/copy';
+} from '@/queries/accounts/use-relationship';
+import { useChats } from '@/queries/chats';
+import { queryClient } from '@/queries/client';
+import { blockDomainMutationOptions, unblockDomainMutationOptions } from '@/queries/settings/domain-blocks';
+import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
+import toast from '@/toast';
+import copy from '@/utils/copy';
 
+import type { PlfeResponse } from '@/api';
 import type { Account as AccountEntity } from 'pl-api';
-import type { PlfeResponse } from 'pl-fe/api';
 
 const messages = defineMessages({
   edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },

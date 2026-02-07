@@ -1,12 +1,12 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import MissingIndicator from 'pl-fe/components/missing-indicator';
-import StatusList from 'pl-fe/components/status-list';
-import Column from 'pl-fe/components/ui/column';
-import { profilePinsRoute } from 'pl-fe/features/ui/router';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { usePinnedStatuses } from 'pl-fe/queries/status-lists/use-pinned-statuses';
+import MissingIndicator from '@/components/missing-indicator';
+import StatusList from '@/components/status-list';
+import Column from '@/components/ui/column';
+import { profilePinsRoute } from '@/features/ui/router';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { usePinnedStatuses } from '@/queries/status-lists/use-pinned-statuses';
 
 const messages = defineMessages({
   heading: { id: 'column.pins', defaultMessage: 'Pinned posts' },

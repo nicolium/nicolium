@@ -1,13 +1,13 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useAccountLookup } from 'pl-fe/api/hooks/accounts/use-account-lookup';
-import MissingIndicator from 'pl-fe/components/missing-indicator';
-import StatusList from 'pl-fe/components/status-list';
-import Column from 'pl-fe/components/ui/column';
-import { profileFavoritesRoute } from 'pl-fe/features/ui/router';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { useFavourites } from 'pl-fe/queries/status-lists/use-favourites';
+import { useAccountLookup } from '@/api/hooks/accounts/use-account-lookup';
+import MissingIndicator from '@/components/missing-indicator';
+import StatusList from '@/components/status-list';
+import Column from '@/components/ui/column';
+import { profileFavoritesRoute } from '@/features/ui/router';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { useFavourites } from '@/queries/status-lists/use-favourites';
 
 const messages = defineMessages({
   heading: { id: 'column.favourited_statuses', defaultMessage: 'Liked posts' },

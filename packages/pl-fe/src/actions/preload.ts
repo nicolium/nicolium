@@ -3,7 +3,7 @@ import mapValues from 'lodash/mapValues';
 import { verifyCredentials } from './auth';
 import { importEntities } from './importer';
 
-import type { AppDispatch } from 'pl-fe/store';
+import type { AppDispatch } from '@/store';
 
 const PLEROMA_PRELOAD_IMPORT = 'PLEROMA_PRELOAD_IMPORT' as const;
 const MASTODON_PRELOAD_IMPORT = 'MASTODON_PRELOAD_IMPORT' as const;

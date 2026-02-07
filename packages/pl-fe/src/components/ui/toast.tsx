@@ -4,7 +4,7 @@ import React from 'react';
 import toast, { Toast as RHToast } from 'react-hot-toast';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { ToastText, ToastType } from 'pl-fe/toast';
+import { ToastText, ToastType } from '@/toast';
 
 import HStack from './hstack';
 import Icon from './icon';

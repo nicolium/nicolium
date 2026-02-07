@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Card, { CardBody } from 'pl-fe/components/ui/card';
-import Spinner from 'pl-fe/components/ui/spinner';
+import Card, { CardBody } from '@/components/ui/card';
+import Spinner from '@/components/ui/spinner';
 
 const ColumnLoading = () => (
   <Card variant='rounded'>

@@ -3,16 +3,16 @@ import React, { useCallback, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import ReactSwipeableViews from 'react-swipeable-views';
 
-import EventPreview from 'pl-fe/components/event-preview';
-import Button from 'pl-fe/components/ui/button';
-import Card, { CardBody, CardHeader, CardTitle } from 'pl-fe/components/ui/card';
-import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import PlaceholderEventPreview from 'pl-fe/features/placeholder/components/placeholder-event-preview';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useJoinedEventsTimeline, useRecentEventsTimeline } from 'pl-fe/queries/timelines/use-events-lists';
-import { makeGetStatus } from 'pl-fe/selectors';
+import EventPreview from '@/components/event-preview';
+import Button from '@/components/ui/button';
+import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
+import Column from '@/components/ui/column';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import PlaceholderEventPreview from '@/features/placeholder/components/placeholder-event-preview';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useJoinedEventsTimeline, useRecentEventsTimeline } from '@/queries/timelines/use-events-lists';
+import { makeGetStatus } from '@/selectors';
 
 const messages = defineMessages({
   title: { id: 'column.events', defaultMessage: 'Events' },

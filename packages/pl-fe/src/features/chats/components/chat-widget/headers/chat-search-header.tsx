@@ -1,9 +1,9 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Icon from 'pl-fe/components/ui/icon';
-import Text from 'pl-fe/components/ui/text';
-import { ChatWidgetScreens, useChatContext } from 'pl-fe/contexts/chat-context';
+import Icon from '@/components/ui/icon';
+import Text from '@/components/ui/text';
+import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 
 import ChatPaneHeader from '../chat-pane-header';
 

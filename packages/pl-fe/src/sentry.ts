@@ -1,5 +1,5 @@
-import { NODE_ENV } from 'pl-fe/build-config';
-import sourceCode from 'pl-fe/utils/code';
+import { NODE_ENV } from '@/build-config';
+import sourceCode from '@/utils/code';
 
 import type { CaptureContext, UserFeedback } from '@sentry/types';
 import type { Account } from 'pl-api';

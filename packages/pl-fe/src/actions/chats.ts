@@ -1,7 +1,7 @@
-import { changeSetting } from 'pl-fe/actions/settings';
-import { useSettingsStore } from 'pl-fe/stores/settings';
+import { changeSetting } from '@/actions/settings';
+import { useSettingsStore } from '@/stores/settings';
 
-import type { AppDispatch, RootState } from 'pl-fe/store';
+import type { AppDispatch, RootState } from '@/store';
 
 const toggleChatPane = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {

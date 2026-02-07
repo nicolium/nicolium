@@ -1,21 +1,21 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import Icon from 'pl-fe/components/ui/icon';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useTranslationLanguages } from 'pl-fe/queries/instance/use-translation-languages';
-import { useLocalStatusTranslation } from 'pl-fe/queries/statuses/use-local-status-translation';
-import { useStatusTranslation } from 'pl-fe/queries/statuses/use-status-translation';
-import { useLanguageModelAvailability, useLanguageModelAvailabilityActions } from 'pl-fe/stores/language-model-availability';
-import { useSettings } from 'pl-fe/stores/settings';
-import { useStatusMeta, useStatusMetaActions } from 'pl-fe/stores/status-meta';
+import Icon from '@/components/ui/icon';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFeatures } from '@/hooks/use-features';
+import { useInstance } from '@/hooks/use-instance';
+import { useTranslationLanguages } from '@/queries/instance/use-translation-languages';
+import { useLocalStatusTranslation } from '@/queries/statuses/use-local-status-translation';
+import { useStatusTranslation } from '@/queries/statuses/use-status-translation';
+import { useLanguageModelAvailability, useLanguageModelAvailabilityActions } from '@/stores/language-model-availability';
+import { useSettings } from '@/stores/settings';
+import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
+import type { Status } from '@/normalizers/status';
 import type { Instance } from 'pl-api';
-import type { Status } from 'pl-fe/normalizers/status';
 
 const canRemoteTranslate = (status: ITranslateButton['status'], instance: Instance, supportedLanguages: Record<string, Array<string>>, locale: string, isLoggedIn?: boolean) => {
   const {

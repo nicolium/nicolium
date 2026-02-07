@@ -1,10 +1,10 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { BigCard } from 'pl-fe/components/big-card';
-import RegistrationForm from 'pl-fe/features/auth-login/components/registration-form';
-import { inviteRoute } from 'pl-fe/features/ui/router';
-import { useInstance } from 'pl-fe/hooks/use-instance';
+import { BigCard } from '@/components/big-card';
+import RegistrationForm from '@/features/auth-login/components/registration-form';
+import { inviteRoute } from '@/features/ui/router';
+import { useInstance } from '@/hooks/use-instance';
 
 /** Page to register with an invitation. */
 const RegisterWithInvitePage: React.FC = () => {

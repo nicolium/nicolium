@@ -1,16 +1,16 @@
 import { InfiniteData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { defineMessages } from 'react-intl';
 
-import { importEntities } from 'pl-fe/actions/importer';
-import { PIN_SUCCESS, UNPIN_SUCCESS, type InteractionsAction } from 'pl-fe/actions/interactions';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
-import { makePaginatedResponseQuery } from 'pl-fe/queries/utils/make-paginated-response-query';
-import { minifyAccountList } from 'pl-fe/queries/utils/minify-list';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import toast, { IToastOptions } from 'pl-fe/toast';
+import { importEntities } from '@/actions/importer';
+import { PIN_SUCCESS, UNPIN_SUCCESS, type InteractionsAction } from '@/actions/interactions';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
+import { useLoggedIn } from '@/hooks/use-logged-in';
+import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
+import { minifyAccountList } from '@/queries/utils/minify-list';
+import { useModalsActions } from '@/stores/modals';
+import toast, { IToastOptions } from '@/toast';
 
 import { filterById } from '../utils/filter-id';
 

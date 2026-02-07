@@ -2,13 +2,13 @@ import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import HStack from 'pl-fe/components/ui/hstack';
-import { cancelScheduledStatusMutationOptions } from 'pl-fe/queries/statuses/scheduled-statuses';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import { useSettings } from 'pl-fe/stores/settings';
+import Button from '@/components/ui/button';
+import HStack from '@/components/ui/hstack';
+import { cancelScheduledStatusMutationOptions } from '@/queries/statuses/scheduled-statuses';
+import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 
-import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
+import type { Status as StatusEntity } from '@/normalizers/status';
 
 const messages = defineMessages({
   cancel: { id: 'scheduled_status.cancel', defaultMessage: 'Cancel' },

@@ -1,7 +1,7 @@
-import { importEntities } from 'pl-fe/actions/importer';
-import { queryClient } from 'pl-fe/queries/client';
-import { useModalsStore } from 'pl-fe/stores/modals';
-import { filterBadges, getTagDiff } from 'pl-fe/utils/badges';
+import { importEntities } from '@/actions/importer';
+import { queryClient } from '@/queries/client';
+import { useModalsStore } from '@/stores/modals';
+import { filterBadges, getTagDiff } from '@/utils/badges';
 
 import { getClient } from '../api';
 
@@ -9,8 +9,8 @@ import { setComposeToStatus } from './compose';
 import { STATUS_FETCH_SOURCE_FAIL, type StatusesAction } from './statuses';
 import { deleteFromTimelines } from './timelines';
 
+import type { AppDispatch, RootState } from '@/store';
 import type { PleromaConfig, Poll } from 'pl-api';
-import type { AppDispatch, RootState } from 'pl-fe/store';
 
 const ADMIN_CONFIG_FETCH_SUCCESS = 'ADMIN_CONFIG_FETCH_SUCCESS' as const;
 

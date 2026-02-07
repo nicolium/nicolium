@@ -1,9 +1,9 @@
 import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect } from 'react';
 
-import { openComposeWithText } from 'pl-fe/actions/compose';
-import { shareRoute } from 'pl-fe/features/ui/router';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { openComposeWithText } from '@/actions/compose';
+import { shareRoute } from '@/features/ui/router';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
 
 const SharePage: React.FC = () => {
   const dispatch = useAppDispatch();

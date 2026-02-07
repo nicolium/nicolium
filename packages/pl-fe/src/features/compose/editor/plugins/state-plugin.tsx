@@ -7,13 +7,13 @@ import debounce from 'lodash/debounce';
 import { useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
-import { addSuggestedLanguage, addSuggestedQuote, setEditorState, suggestClearLink, suggestHashtagCasing } from 'pl-fe/actions/compose';
-import { fetchStatus } from 'pl-fe/actions/statuses';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useSettings } from 'pl-fe/stores/settings';
-import { getStatusIdsFromLinksInContent } from 'pl-fe/utils/status';
-import Purify from 'pl-fe/utils/url-purify';
+import { addSuggestedLanguage, addSuggestedQuote, setEditorState, suggestClearLink, suggestHashtagCasing } from '@/actions/compose';
+import { fetchStatus } from '@/actions/statuses';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useFeatures } from '@/hooks/use-features';
+import { useSettings } from '@/stores/settings';
+import { getStatusIdsFromLinksInContent } from '@/utils/status';
+import Purify from '@/utils/url-purify';
 
 import { TRANSFORMERS } from '../transformers';
 

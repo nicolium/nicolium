@@ -1,8 +1,8 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
+import { useClient } from '@/hooks/use-client';
+import { useInstance } from '@/hooks/use-instance';
+import { useOwnAccount } from '@/hooks/use-own-account';
 
 import { filterById } from '../utils/filter-id';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';

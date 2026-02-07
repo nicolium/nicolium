@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Widget from 'pl-fe/components/ui/widget';
-import AccountContainer from 'pl-fe/containers/account-container';
-import { useBirthdayReminders } from 'pl-fe/queries/accounts/use-birthday-reminders';
+import Widget from '@/components/ui/widget';
+import AccountContainer from '@/containers/account-container';
+import { useBirthdayReminders } from '@/queries/accounts/use-birthday-reminders';
 
 const timeToMidnight = () => {
   const now = new Date();

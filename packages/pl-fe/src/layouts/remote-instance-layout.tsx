@@ -1,17 +1,17 @@
 import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 
-import Layout from 'pl-fe/components/ui/layout';
-import LinkFooter from 'pl-fe/features/ui/components/link-footer';
-import { layouts } from 'pl-fe/features/ui/router';
+import Layout from '@/components/ui/layout';
+import LinkFooter from '@/features/ui/components/link-footer';
+import { layouts } from '@/features/ui/router';
 import {
   PromoPanel,
   InstanceInfoPanel,
   InstanceModerationPanel,
-} from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { federationRestrictionsDisclosed } from 'pl-fe/utils/state';
+} from '@/features/ui/util/async-components';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { federationRestrictionsDisclosed } from '@/utils/state';
 
 /** Layout for viewing a remote instance timeline. */
 const RemoteInstanceLayout = () => {

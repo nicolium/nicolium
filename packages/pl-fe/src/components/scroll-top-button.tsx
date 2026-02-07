@@ -3,8 +3,8 @@ import throttle from 'lodash/throttle';
 import React, { useState, useEffect, useCallback } from 'react';
 import { useIntl, MessageDescriptor } from 'react-intl';
 
-import Icon from 'pl-fe/components/ui/icon';
-import { useSettings } from 'pl-fe/stores/settings';
+import Icon from '@/components/ui/icon';
+import { useSettings } from '@/stores/settings';
 
 interface IScrollTopButton {
   /** Callback when clicked, and also when scrolled to the top. */

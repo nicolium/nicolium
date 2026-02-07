@@ -1,8 +1,8 @@
 import { Map as ImmutableMap } from 'immutable';
 
-import { __stub } from 'pl-fe/api';
-import { buildInstance, buildRelationship } from 'pl-fe/jest/factory';
-import { mockStore, rootState } from 'pl-fe/jest/test-helpers';
+import { __stub } from '@/api';
+import { buildInstance, buildRelationship } from '@/jest/factory';
+import { mockStore, rootState } from '@/jest/test-helpers';
 
 import {
   createAccount,
@@ -85,7 +85,7 @@ describe('fetchAccount()', () => {
   });
 
   describe('with a successful API request', async () => {
-    const account = await import('pl-fe/__fixtures__/pleroma-account.json');
+    const account = await import('@/__fixtures__/pleroma-account.json');
 
     beforeEach(() => {
       const state = rootState;

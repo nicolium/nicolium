@@ -1,6 +1,6 @@
 import { List as ImmutableList, fromJS } from 'immutable';
 
-import config_db from 'pl-fe/__fixtures__/config_db.json';
+import config_db from '@/__fixtures__/config_db.json';
 
 import { ConfigDB } from './config-db';
 

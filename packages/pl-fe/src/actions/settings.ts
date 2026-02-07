@@ -1,16 +1,16 @@
 import { defineMessage } from 'react-intl';
 
-import { patchMe } from 'pl-fe/actions/me';
-import { getClient } from 'pl-fe/api';
-import { NODE_ENV } from 'pl-fe/build-config';
-import messages from 'pl-fe/messages';
-import { selectOwnAccount } from 'pl-fe/selectors';
-import KVStore from 'pl-fe/storage/kv-store';
-import { useSettingsStore } from 'pl-fe/stores/settings';
-import toast from 'pl-fe/toast';
-import { isLoggedIn } from 'pl-fe/utils/auth';
+import { patchMe } from '@/actions/me';
+import { getClient } from '@/api';
+import { NODE_ENV } from '@/build-config';
+import messages from '@/messages';
+import { selectOwnAccount } from '@/selectors';
+import KVStore from '@/storage/kv-store';
+import { useSettingsStore } from '@/stores/settings';
+import toast from '@/toast';
+import { isLoggedIn } from '@/utils/auth';
 
-import type { AppDispatch, RootState } from 'pl-fe/store';
+import type { AppDispatch, RootState } from '@/store';
 
 const FE_NAME = NODE_ENV === 'production' ? 'pl_fe' : 'pl_fe_dev';
 

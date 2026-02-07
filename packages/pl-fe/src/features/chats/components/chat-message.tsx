@@ -4,23 +4,23 @@ import escape from 'lodash/escape';
 import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import { ParsedContent } from 'pl-fe/components/parsed-content';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { MediaGallery } from 'pl-fe/features/ui/util/async-components';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { ChatKeys, useChatActions } from 'pl-fe/queries/chats';
-import { queryClient } from 'pl-fe/queries/client';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import { stripHTML } from 'pl-fe/utils/html';
-import { onlyEmoji } from 'pl-fe/utils/rich-content';
+import DropdownMenu from '@/components/dropdown-menu';
+import { ParsedContent } from '@/components/parsed-content';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { MediaGallery } from '@/features/ui/util/async-components';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { ChatKeys, useChatActions } from '@/queries/chats';
+import { queryClient } from '@/queries/client';
+import { useModalsActions } from '@/stores/modals';
+import { stripHTML } from '@/utils/html';
+import { onlyEmoji } from '@/utils/rich-content';
 
+import type { Menu as IMenu } from '@/components/dropdown-menu';
+import type { ChatMessage as ChatMessageEntity } from '@/normalizers/chat-message';
 import type { Chat } from 'pl-api';
-import type { Menu as IMenu } from 'pl-fe/components/dropdown-menu';
-import type { ChatMessage as ChatMessageEntity } from 'pl-fe/normalizers/chat-message';
 
 const messages = defineMessages({
   copy: { id: 'chats.actions.copy', defaultMessage: 'Copy' },

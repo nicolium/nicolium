@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { CardHeader, CardTitle } from 'pl-fe/components/ui/card';
-import Modal from 'pl-fe/components/ui/modal';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useAddAccountsToCircle, useCircle, useCircleAccounts, useRemoveAccountsFromCircle } from 'pl-fe/queries/accounts/use-circles';
-import { useAccountSearch } from 'pl-fe/queries/search/use-search-accounts';
+import { CardHeader, CardTitle } from '@/components/ui/card';
+import Modal from '@/components/ui/modal';
+import Spinner from '@/components/ui/spinner';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useAddAccountsToCircle, useCircle, useCircleAccounts, useRemoveAccountsFromCircle } from '@/queries/accounts/use-circles';
+import { useAccountSearch } from '@/queries/search/use-search-accounts';
 
 import Account from './list-editor-modal/components/account';
 import Search from './list-editor-modal/components/search';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 interface CircleEditorModalProps {
   circleId: string;

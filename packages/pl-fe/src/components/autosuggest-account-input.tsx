@@ -1,11 +1,11 @@
 import React from 'react';
 
-import AutosuggestInput, { AutoSuggestion } from 'pl-fe/components/autosuggest-input';
-import { useDebounce } from 'pl-fe/hooks/use-debounce';
-import { useAccountSearch } from 'pl-fe/queries/search/use-search-accounts';
+import AutosuggestInput, { AutoSuggestion } from '@/components/autosuggest-input';
+import { useDebounce } from '@/hooks/use-debounce';
+import { useAccountSearch } from '@/queries/search/use-search-accounts';
 
-import type { Menu } from 'pl-fe/components/dropdown-menu';
-import type { InputThemes } from 'pl-fe/components/ui/input';
+import type { Menu } from '@/components/dropdown-menu';
+import type { InputThemes } from '@/components/ui/input';
 
 const SEARCH_PARAMS = {
   limit: 5,

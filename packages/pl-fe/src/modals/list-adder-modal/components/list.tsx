@@ -1,9 +1,9 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Icon from 'pl-fe/components/icon';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import { useAddAccountsToList, useList, useRemoveAccountsFromList } from 'pl-fe/queries/accounts/use-lists';
+import Icon from '@/components/icon';
+import IconButton from '@/components/ui/icon-button';
+import { useAddAccountsToList, useList, useRemoveAccountsFromList } from '@/queries/accounts/use-lists';
 
 const messages = defineMessages({
   remove: { id: 'lists.account.remove', defaultMessage: 'Remove from list' },

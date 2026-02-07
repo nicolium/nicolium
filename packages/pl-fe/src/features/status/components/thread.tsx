@@ -5,30 +5,30 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useIntl } from 'react-intl';
 
-import { type ComposeReplyAction, mentionCompose, replyCompose } from 'pl-fe/actions/compose';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import StatusActionBar from 'pl-fe/components/status-action-bar';
-import Tombstone from 'pl-fe/components/tombstone';
-import Stack from 'pl-fe/components/ui/stack';
-import PlaceholderStatus from 'pl-fe/features/placeholder/components/placeholder-status';
-import { Hotkeys } from 'pl-fe/features/ui/components/hotkeys';
-import PendingStatus from 'pl-fe/features/ui/components/pending-status';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFavouriteStatus, useReblogStatus, useUnfavouriteStatus, useUnreblogStatus } from 'pl-fe/queries/statuses/use-status-interactions';
-import { RootState } from 'pl-fe/store';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import { useSettings } from 'pl-fe/stores/settings';
-import { useStatusMetaActions } from 'pl-fe/stores/status-meta';
-import { selectChild } from 'pl-fe/utils/scroll-utils';
-import { textForScreenReader } from 'pl-fe/utils/status';
+import { type ComposeReplyAction, mentionCompose, replyCompose } from '@/actions/compose';
+import ScrollableList from '@/components/scrollable-list';
+import StatusActionBar from '@/components/status-action-bar';
+import Tombstone from '@/components/tombstone';
+import Stack from '@/components/ui/stack';
+import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
+import { Hotkeys } from '@/features/ui/components/hotkeys';
+import PendingStatus from '@/features/ui/components/pending-status';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFavouriteStatus, useReblogStatus, useUnfavouriteStatus, useUnreblogStatus } from '@/queries/statuses/use-status-interactions';
+import { RootState } from '@/store';
+import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
+import { useStatusMetaActions } from '@/stores/status-meta';
+import { selectChild } from '@/utils/scroll-utils';
+import { textForScreenReader } from '@/utils/status';
 
 import DetailedStatus from './detailed-status';
 import ThreadStatus from './thread-status';
 
+import type { Status } from '@/normalizers/status';
+import type { SelectedStatus } from '@/selectors';
 import type { Account } from 'pl-api';
-import type { Status } from 'pl-fe/normalizers/status';
-import type { SelectedStatus } from 'pl-fe/selectors';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
 const makeGetAncestorsIds = () => createSelector([

@@ -1,10 +1,10 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import { useCompose } from 'pl-fe/hooks/use-compose';
+import Button from '@/components/ui/button';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import { useCompose } from '@/hooks/use-compose';
 
 import Warning from './warning';
 

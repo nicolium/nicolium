@@ -2,12 +2,12 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import AltIndicator from 'pl-fe/components/alt-indicator';
-import Avatar from 'pl-fe/components/ui/avatar';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import { useDraggedFiles } from 'pl-fe/hooks/use-dragged-files';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import AltIndicator from '@/components/alt-indicator';
+import Avatar from '@/components/ui/avatar';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import { useDraggedFiles } from '@/hooks/use-dragged-files';
+import { useModalsActions } from '@/stores/modals';
 
 const messages = defineMessages({
   changeDescriptionHeading: { id: 'group.upload_avatar.alt.heading', defaultMessage: 'Change avatar description' },

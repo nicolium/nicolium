@@ -1,14 +1,14 @@
 import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 
-import Layout from 'pl-fe/components/ui/layout';
-import LinkFooter from 'pl-fe/features/ui/components/link-footer';
+import Layout from '@/components/ui/layout';
+import LinkFooter from '@/features/ui/components/link-footer';
 import {
   WhoToFollowPanel,
   TrendsPanel,
   NewEventPanel,
-} from 'pl-fe/features/ui/util/async-components';
-import { useFeatures } from 'pl-fe/hooks/use-features';
+} from '@/features/ui/util/async-components';
+import { useFeatures } from '@/hooks/use-features';
 
 /** Layout to display events list. */
 const EventsLayout = () => {

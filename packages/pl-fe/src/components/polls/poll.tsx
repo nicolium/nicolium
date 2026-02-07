@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { usePollQuery, usePollVoteMutation } from 'pl-fe/queries/statuses/use-poll';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import { useStatusMeta } from 'pl-fe/stores/status-meta';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { usePollQuery, usePollVoteMutation } from '@/queries/statuses/use-poll';
+import { useModalsActions } from '@/stores/modals';
+import { useStatusMeta } from '@/stores/status-meta';
 
 import PollFooter from './poll-footer';
 import PollOption from './poll-option';
 
-import type { Status } from 'pl-fe/normalizers/status';
+import type { Status } from '@/normalizers/status';
 
 type Selected = Record<number, boolean>;
 

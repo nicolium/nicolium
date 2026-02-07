@@ -2,17 +2,17 @@ import { Link } from '@tanstack/react-router';
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeSetting } from 'pl-fe/actions/settings';
-import { fetchPublicTimeline } from 'pl-fe/actions/timelines';
-import { usePublicStream } from 'pl-fe/api/hooks/streaming/use-public-stream';
-import PullToRefresh from 'pl-fe/components/pull-to-refresh';
-import Accordion from 'pl-fe/components/ui/accordion';
-import Column from 'pl-fe/components/ui/column';
-import PinnedHostsPicker from 'pl-fe/features/remote-timeline/components/pinned-hosts-picker';
-import Timeline from 'pl-fe/features/ui/components/timeline';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useSettings } from 'pl-fe/stores/settings';
+import { changeSetting } from '@/actions/settings';
+import { fetchPublicTimeline } from '@/actions/timelines';
+import { usePublicStream } from '@/api/hooks/streaming/use-public-stream';
+import PullToRefresh from '@/components/pull-to-refresh';
+import Accordion from '@/components/ui/accordion';
+import Column from '@/components/ui/column';
+import PinnedHostsPicker from '@/features/remote-timeline/components/pinned-hosts-picker';
+import Timeline from '@/features/ui/components/timeline';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useInstance } from '@/hooks/use-instance';
+import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
   title: { id: 'column.public', defaultMessage: 'Fediverse timeline' },

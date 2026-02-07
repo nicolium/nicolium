@@ -1,7 +1,7 @@
 import trimStart from 'lodash/trimStart';
 import * as v from 'valibot';
 
-import { mrfSimpleSchema, type MRFSimple } from 'pl-fe/schemas/pleroma';
+import { mrfSimpleSchema, type MRFSimple } from '@/schemas/pleroma';
 
 import type { PleromaConfig } from 'pl-api';
 

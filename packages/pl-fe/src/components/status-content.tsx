@@ -2,18 +2,18 @@ import clsx from 'clsx';
 import React, { useState, useRef, useLayoutEffect, useMemo, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Icon from 'pl-fe/components/icon';
-import Button from 'pl-fe/components/ui/button';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import QuotedStatus from 'pl-fe/features/status/containers/quoted-status-container';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
-import { useLocalStatusTranslation } from 'pl-fe/queries/statuses/use-local-status-translation';
-import { useStatusTranslation } from 'pl-fe/queries/statuses/use-status-translation';
-import { useSettings } from 'pl-fe/stores/settings';
-import { useStatusMeta, useStatusMetaActions } from 'pl-fe/stores/status-meta';
-import { onlyEmoji as isOnlyEmoji } from 'pl-fe/utils/rich-content';
+import Icon from '@/components/icon';
+import Button from '@/components/ui/button';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Emojify from '@/features/emoji/emojify';
+import QuotedStatus from '@/features/status/containers/quoted-status-container';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useLocalStatusTranslation } from '@/queries/statuses/use-local-status-translation';
+import { useStatusTranslation } from '@/queries/statuses/use-status-translation';
+import { useSettings } from '@/stores/settings';
+import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
+import { onlyEmoji as isOnlyEmoji } from '@/utils/rich-content';
 
 import { getTextDirection } from '../utils/rtl';
 
@@ -27,8 +27,8 @@ import StatusMedia from './status-media';
 import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
 import TranslateButton from './translate-button';
 
-import type { Sizes } from 'pl-fe/components/ui/text';
-import type { MinifiedStatus } from 'pl-fe/reducers/statuses';
+import type { Sizes } from '@/components/ui/text';
+import type { MinifiedStatus } from '@/reducers/statuses';
 
 const BIG_EMOJI_LIMIT = 10;
 

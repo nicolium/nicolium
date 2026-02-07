@@ -1,16 +1,16 @@
 import React, { Suspense } from 'react';
 
-import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
-import PreviewCard from 'pl-fe/components/preview-card';
-import PlaceholderCard from 'pl-fe/features/placeholder/components/placeholder-card';
-import { MediaGallery, Video, Audio } from 'pl-fe/features/ui/util/async-components';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import { useSettings } from 'pl-fe/stores/settings';
+import AttachmentThumbs from '@/components/attachment-thumbs';
+import PreviewCard from '@/components/preview-card';
+import PlaceholderCard from '@/features/placeholder/components/placeholder-card';
+import { MediaGallery, Video, Audio } from '@/features/ui/util/async-components';
+import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 
 import { useMediaVisible } from './statuses/sensitive-content-overlay';
 
+import type { Status } from '@/normalizers/status';
 import type { MediaAttachment } from 'pl-api';
-import type { Status } from 'pl-fe/normalizers/status';
 
 interface IStatusMedia {
   /** Status entity to render media for. */

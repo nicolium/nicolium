@@ -1,6 +1,6 @@
 import { create } from 'mutative';
 
-import { STATUS_IMPORT, STATUSES_IMPORT, type ImporterAction } from 'pl-fe/actions/importer';
+import { STATUS_IMPORT, STATUSES_IMPORT, type ImporterAction } from '@/actions/importer';
 
 import { ACCOUNT_BLOCK_SUCCESS, ACCOUNT_MUTE_SUCCESS, type AccountsAction } from '../actions/accounts';
 import {

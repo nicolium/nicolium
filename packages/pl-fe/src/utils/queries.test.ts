@@ -1,6 +1,6 @@
 import { InfiniteData } from '@tanstack/react-query';
 
-import { queryClient } from 'pl-fe/queries/client';
+import { queryClient } from '@/queries/client';
 
 import { PaginatedResult, sortQueryData, updatePageItem } from './queries';
 

@@ -1,7 +1,7 @@
-import boopMp3 from 'pl-fe/assets/sounds/boop.mp3';
-import boopOgg from 'pl-fe/assets/sounds/boop.ogg';
-import chatMp3 from 'pl-fe/assets/sounds/chat.mp3';
-import chatOgg from 'pl-fe/assets/sounds/chat.ogg';
+import boopMp3 from '@/assets/sounds/boop.mp3';
+import boopOgg from '@/assets/sounds/boop.ogg';
+import chatMp3 from '@/assets/sounds/chat.mp3';
+import chatOgg from '@/assets/sounds/chat.ogg';
 
 /** pl-fe audio clip. */
 interface Sound {

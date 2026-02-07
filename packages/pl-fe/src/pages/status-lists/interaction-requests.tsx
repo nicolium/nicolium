@@ -3,25 +3,25 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
-import Icon from 'pl-fe/components/icon';
-import PullToRefresh from 'pl-fe/components/pull-to-refresh';
-import RelativeTimestamp from 'pl-fe/components/relative-timestamp';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import StatusContent from 'pl-fe/components/status-content';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import AccountContainer from 'pl-fe/containers/account-container';
-import { buildLink } from 'pl-fe/features/notifications/components/notification';
-import { Hotkeys } from 'pl-fe/features/ui/components/hotkeys';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { type MinifiedInteractionRequest, useAuthorizeInteractionRequestMutation, useFlatInteractionRequests, useRejectInteractionRequestMutation } from 'pl-fe/queries/statuses/use-interaction-requests';
-import toast from 'pl-fe/toast';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import AttachmentThumbs from '@/components/attachment-thumbs';
+import Icon from '@/components/icon';
+import PullToRefresh from '@/components/pull-to-refresh';
+import RelativeTimestamp from '@/components/relative-timestamp';
+import ScrollableList from '@/components/scrollable-list';
+import StatusContent from '@/components/status-content';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import AccountContainer from '@/containers/account-container';
+import { buildLink } from '@/features/notifications/components/notification';
+import { Hotkeys } from '@/features/ui/components/hotkeys';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { type MinifiedInteractionRequest, useAuthorizeInteractionRequestMutation, useFlatInteractionRequests, useRejectInteractionRequestMutation } from '@/queries/statuses/use-interaction-requests';
+import toast from '@/toast';
 
 const messages = defineMessages({
   title: { id: 'column.interaction_requests', defaultMessage: 'Interaction requests' },

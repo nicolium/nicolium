@@ -3,11 +3,11 @@ import { create } from 'mutative';
 import { mediaAttachmentSchema } from 'pl-api';
 import * as v from 'valibot';
 
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { filteredArray } from 'pl-fe/schemas/utils';
-import KVStore from 'pl-fe/storage/kv-store';
-import { APIEntity } from 'pl-fe/types/entities';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { filteredArray } from '@/schemas/utils';
+import KVStore from '@/storage/kv-store';
+import { APIEntity } from '@/types/entities';
 
 const draftStatusSchema = v.pipe(v.any(), v.transform((draft) => ({
   content_type: draft.contentType,

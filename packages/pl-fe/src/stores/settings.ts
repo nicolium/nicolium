@@ -4,17 +4,17 @@ import * as v from 'valibot';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
-import { settingsSchema, type Settings } from 'pl-fe/schemas/pl-fe/settings';
-import KVStore from 'pl-fe/storage/kv-store';
-import toast from 'pl-fe/toast';
-import { KVStoreRedirectServicesItem, resetRules, setManualRedirectServices, updateRedirectServicesFromUrl, updateRulesFromUrl } from 'pl-fe/utils/url-purify';
+import { settingsSchema, type Settings } from '@/schemas/pl-fe/settings';
+import KVStore from '@/storage/kv-store';
+import toast from '@/toast';
+import { KVStoreRedirectServicesItem, resetRules, setManualRedirectServices, updateRedirectServicesFromUrl, updateRulesFromUrl } from '@/utils/url-purify';
 
-import type { Emoji } from 'pl-fe/features/emoji';
-import type { store } from 'pl-fe/store';
-import type { APIEntity } from 'pl-fe/types/entities';
+import type { Emoji } from '@/features/emoji';
+import type { store } from '@/store';
+import type { APIEntity } from '@/types/entities';
 
 let lazyStore: typeof store;
-import('pl-fe/store').then(({ store }) => lazyStore = store).catch(() => {});
+import('@/store').then(({ store }) => lazyStore = store).catch(() => {});
 
 const messages = defineMessages({
   rulesUpdateSuccess: { id: 'url_privacy.update.success', defaultMessage: 'Successfully updated rules database' },

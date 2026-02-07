@@ -3,10 +3,10 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import { uploadComposeSuccess } from 'pl-fe/actions/compose';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import { uploadComposeSuccess } from '@/actions/compose';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useInstance } from '@/hooks/use-instance';
+import { useModalsActions } from '@/stores/modals';
 
 import ComposeFormButton from './compose-form-button';
 

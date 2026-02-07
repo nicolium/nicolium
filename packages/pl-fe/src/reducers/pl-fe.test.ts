@@ -1,9 +1,9 @@
 import { Map as ImmutableMap } from 'immutable';
 
-import plFeConfig from 'pl-fe/__fixtures__/admin_api_frontend_config.json';
-import plfe from 'pl-fe/__fixtures__/pl-fe.json';
-import { ADMIN_CONFIG_UPDATE_SUCCESS } from 'pl-fe/actions/admin';
-import * as actions from 'pl-fe/actions/pl-fe';
+import plFeConfig from '@/__fixtures__/admin_api_frontend_config.json';
+import plfe from '@/__fixtures__/pl-fe.json';
+import { ADMIN_CONFIG_UPDATE_SUCCESS } from '@/actions/admin';
+import * as actions from '@/actions/pl-fe';
 
 import reducer from './pl-fe';
 

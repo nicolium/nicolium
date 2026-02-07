@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
-import { externalLogin, loginWithCode } from 'pl-fe/actions/external-auth';
-import Button from 'pl-fe/components/ui/button';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Input from 'pl-fe/components/ui/input';
-import Spinner from 'pl-fe/components/ui/spinner';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import toast from 'pl-fe/toast';
+import { externalLogin, loginWithCode } from '@/actions/external-auth';
+import Button from '@/components/ui/button';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import Input from '@/components/ui/input';
+import Spinner from '@/components/ui/spinner';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import toast from '@/toast';
 
 const messages = defineMessages({
   instanceLabel: { id: 'login.fields.instance_label', defaultMessage: 'Instance' },

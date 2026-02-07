@@ -6,9 +6,9 @@ import './polyfills';
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
-import * as BuildConfig from 'pl-fe/build-config';
-import PlFe from 'pl-fe/init/pl-fe';
-import { printConsoleWarning } from 'pl-fe/utils/console';
+import * as BuildConfig from '@/build-config';
+import PlFe from '@/init/pl-fe';
+import { printConsoleWarning } from '@/utils/console';
 
 import '@fontsource/inter/200.css';
 import '@fontsource/inter/300.css';

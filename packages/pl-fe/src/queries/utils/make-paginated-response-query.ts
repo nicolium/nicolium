@@ -1,7 +1,7 @@
 import { type InfiniteData, type QueryKey, useInfiniteQuery } from '@tanstack/react-query';
 
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
+import { useClient } from '@/hooks/use-client';
+import { useOwnAccount } from '@/hooks/use-own-account';
 
 import type { PaginatedResponse, PlApiClient } from 'pl-api';
 

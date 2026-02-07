@@ -1,6 +1,6 @@
 import { create } from 'mutative';
 
-import { INSTANCE_FETCH_SUCCESS, type InstanceAction } from 'pl-fe/actions/instance';
+import { INSTANCE_FETCH_SUCCESS, type InstanceAction } from '@/actions/instance';
 
 import {
   COMPOSE_CHANGE,
@@ -73,10 +73,10 @@ import { FE_NAME } from '../actions/settings';
 import { TIMELINE_DELETE, type TimelineAction } from '../actions/timelines';
 import { unescapeHTML } from '../utils/html';
 
+import type { Emoji } from '@/features/emoji';
+import type { Language } from '@/features/preferences';
+import type { Status } from '@/normalizers/status';
 import type { Account, CredentialAccount, Instance, InteractionPolicy, Location, MediaAttachment, Status as BaseStatus, Tag, CreateStatusParams } from 'pl-api';
-import type { Emoji } from 'pl-fe/features/emoji';
-import type { Language } from 'pl-fe/features/preferences';
-import type { Status } from 'pl-fe/normalizers/status';
 
 const getResetFileKey = () => Math.floor((Math.random() * 0x10000));
 

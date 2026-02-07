@@ -4,14 +4,14 @@ import range from 'lodash/range';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { cancelReplyCompose } from 'pl-fe/actions/compose';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { usePrevious } from 'pl-fe/hooks/use-previous';
-import { usePersistDraftStatus } from 'pl-fe/queries/statuses/use-draft-statuses';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import { cancelReplyCompose } from '@/actions/compose';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { usePrevious } from '@/hooks/use-previous';
+import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
+import { useModalsActions } from '@/stores/modals';
 
-import type { ModalType } from 'pl-fe/features/ui/components/modal-root';
-import type { Compose } from 'pl-fe/reducers/compose';
+import type { ModalType } from '@/features/ui/components/modal-root';
+import type { Compose } from '@/reducers/compose';
 
 const messages = defineMessages({
   confirm: { id: 'confirmations.cancel.confirm', defaultMessage: 'Discard' },

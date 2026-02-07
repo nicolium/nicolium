@@ -4,7 +4,7 @@ import { IntlProvider } from 'react-intl';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 
-import { mockStore, rootState } from 'pl-fe/jest/test-helpers';
+import { mockStore, rootState } from '@/jest/test-helpers';
 
 import ComposeButton from './compose-button';
 

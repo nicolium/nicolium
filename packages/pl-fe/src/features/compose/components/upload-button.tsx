@@ -1,8 +1,8 @@
 import React, { useRef } from 'react';
 import { defineMessages, IntlShape, useIntl } from 'react-intl';
 
-import IconButton from 'pl-fe/components/ui/icon-button';
-import { useInstance } from 'pl-fe/hooks/use-instance';
+import IconButton from '@/components/ui/icon-button';
+import { useInstance } from '@/hooks/use-instance';
 
 const messages = defineMessages({
   upload: { id: 'upload_button.label', defaultMessage: 'Add media attachment' },

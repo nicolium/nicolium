@@ -1,12 +1,12 @@
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import { pinHost, unpinHost } from 'pl-fe/actions/remote-timeline';
-import Widget from 'pl-fe/components/ui/widget';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { makeGetRemoteInstance } from 'pl-fe/selectors';
-import { useSettings } from 'pl-fe/stores/settings';
+import { pinHost, unpinHost } from '@/actions/remote-timeline';
+import Widget from '@/components/ui/widget';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { makeGetRemoteInstance } from '@/selectors';
+import { useSettings } from '@/stores/settings';
 
 const getRemoteInstance = makeGetRemoteInstance();
 

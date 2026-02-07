@@ -3,10 +3,10 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { useIntl } from 'react-intl';
 
-import { uploadCompose } from 'pl-fe/actions/compose';
-import Avatar from 'pl-fe/components/ui/avatar';
-import Layout from 'pl-fe/components/ui/layout';
-import LinkFooter from 'pl-fe/features/ui/components/link-footer';
+import { uploadCompose } from '@/actions/compose';
+import Avatar from '@/components/ui/avatar';
+import Layout from '@/components/ui/layout';
+import LinkFooter from '@/features/ui/components/link-footer';
 import {
   WhoToFollowPanel,
   TrendsPanel,
@@ -16,14 +16,14 @@ import {
   BirthdayPanel,
   AnnouncementsPanel,
   ComposeForm,
-} from 'pl-fe/features/ui/util/async-components';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useDraggedFiles } from 'pl-fe/hooks/use-dragged-files';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { usePlFeConfig } from 'pl-fe/hooks/use-pl-fe-config';
-import { useSettings } from 'pl-fe/stores/settings';
+} from '@/features/ui/util/async-components';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useDraggedFiles } from '@/hooks/use-dragged-files';
+import { useFeatures } from '@/hooks/use-features';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useSettings } from '@/stores/settings';
 
 const HomeLayout = () => {
   const intl = useIntl();

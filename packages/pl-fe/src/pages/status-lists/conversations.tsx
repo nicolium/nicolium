@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { mountConversations, unmountConversations, expandConversations } from 'pl-fe/actions/conversations';
-import { useDirectStream } from 'pl-fe/api/hooks/streaming/use-direct-stream';
-import Column from 'pl-fe/components/ui/column';
-import ConversationsList from 'pl-fe/features/conversations/components/conversations-list';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
+import { mountConversations, unmountConversations, expandConversations } from '@/actions/conversations';
+import { useDirectStream } from '@/api/hooks/streaming/use-direct-stream';
+import Column from '@/components/ui/column';
+import ConversationsList from '@/features/conversations/components/conversations-list';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
 
 const messages = defineMessages({
   title: { id: 'column.direct', defaultMessage: 'Direct messages' },

@@ -1,13 +1,13 @@
 import queryString from 'query-string';
 
-import * as BuildConfig from 'pl-fe/build-config';
-import { isURL } from 'pl-fe/utils/auth';
-import sourceCode from 'pl-fe/utils/code';
-import { getScopes } from 'pl-fe/utils/scopes';
+import * as BuildConfig from '@/build-config';
+import { isURL } from '@/utils/auth';
+import sourceCode from '@/utils/code';
+import { getScopes } from '@/utils/scopes';
 
 import { createApp } from './apps';
 
-import type { AppDispatch, RootState } from 'pl-fe/store';
+import type { AppDispatch, RootState } from '@/store';
 
 const createProviderApp = () =>
   async (dispatch: AppDispatch, getState: () => RootState) => {

@@ -1,13 +1,13 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useJoinEventMutation, useLeaveEventMutation } from 'pl-fe/queries/statuses/use-event-interactions';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import Button from '@/components/ui/button';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useJoinEventMutation, useLeaveEventMutation } from '@/queries/statuses/use-event-interactions';
+import { useModalsActions } from '@/stores/modals';
 
-import type { ButtonThemes } from 'pl-fe/components/ui/button/useButtonStyles';
-import type { Status as StatusEntity } from 'pl-fe/normalizers/status';
+import type { ButtonThemes } from '@/components/ui/button/useButtonStyles';
+import type { Status as StatusEntity } from '@/normalizers/status';
 
 const messages = defineMessages({
   leaveHeading: { id: 'confirmations.leave_event.heading', defaultMessage: 'Leave event' },

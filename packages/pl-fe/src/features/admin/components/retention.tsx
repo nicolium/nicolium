@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormattedDate, FormattedMessage, FormattedNumber } from 'react-intl';
 
-import Text from 'pl-fe/components/ui/text';
-import { useRetention } from 'pl-fe/queries/admin/use-metrics';
+import Text from '@/components/ui/text';
+import { useRetention } from '@/queries/admin/use-metrics';
 
 import type { AdminCohort } from 'pl-api';
 

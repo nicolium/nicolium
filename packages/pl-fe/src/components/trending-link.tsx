@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { TrendsLink } from 'pl-api';
 import React from 'react';
 
-import { getTextDirection } from 'pl-fe/utils/rtl';
+import { getTextDirection } from '@/utils/rtl';
 
 import Blurhash from './blurhash';
 import { accountsCountRenderer } from './hashtag';

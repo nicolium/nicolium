@@ -2,10 +2,10 @@ import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import HStack from 'pl-fe/components/ui/hstack';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Text from 'pl-fe/components/ui/text';
-import { unblockDomainMutationOptions } from 'pl-fe/queries/settings/domain-blocks';
+import HStack from '@/components/ui/hstack';
+import IconButton from '@/components/ui/icon-button';
+import Text from '@/components/ui/text';
+import { unblockDomainMutationOptions } from '@/queries/settings/domain-blocks';
 
 const messages = defineMessages({
   blockDomainConfirm: { id: 'confirmations.domain_block.confirm', defaultMessage: 'Hide entire domain' },

@@ -1,10 +1,10 @@
 import { List as ImmutableList, Record as ImmutableRecord, fromJS } from 'immutable';
 
-import * as actions from 'pl-fe/actions/compose';
-import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS } from 'pl-fe/actions/me';
-import { SETTING_CHANGE } from 'pl-fe/actions/settings';
-import { TIMELINE_DELETE } from 'pl-fe/actions/timelines';
-import { normalizeStatus } from 'pl-fe/normalizers/status';
+import * as actions from '@/actions/compose';
+import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS } from '@/actions/me';
+import { SETTING_CHANGE } from '@/actions/settings';
+import { TIMELINE_DELETE } from '@/actions/timelines';
+import { normalizeStatus } from '@/normalizers/status';
 
 import reducer, { initialState, ReducerCompose } from './compose';
 
@@ -37,7 +37,7 @@ describe('compose reducer', () => {
 
   describe('COMPOSE_SET_STATUS', () => {
     it('strips Pleroma integer attachments', async () => {
-      const status = await import('pl-fe/__fixtures__/pleroma-status-deleted.json');
+      const status = await import('@/__fixtures__/pleroma-status-deleted.json');
 
       const action = {
         type: actions.COMPOSE_SET_STATUS,
@@ -52,7 +52,7 @@ describe('compose reducer', () => {
     });
 
     it('leaves non-Pleroma integer attachments alone', async () => {
-      const status = await import('pl-fe/__fixtures__/pleroma-status-deleted.json');
+      const status = await import('@/__fixtures__/pleroma-status-deleted.json');
 
       const action = {
         type: actions.COMPOSE_SET_STATUS,
@@ -65,7 +65,7 @@ describe('compose reducer', () => {
     });
 
     it('sets the id when editing a post', async () => {
-      const status = await import('pl-fe/__fixtures__/pleroma-status-deleted.json');
+      const status = await import('@/__fixtures__/pleroma-status-deleted.json');
 
       const action = {
         id: 'compose-modal',
@@ -79,7 +79,7 @@ describe('compose reducer', () => {
     });
 
     it('does not set the id when redrafting a post', async () => {
-      const status = await import('pl-fe/__fixtures__/pleroma-status-deleted.json');
+      const status = await import('@/__fixtures__/pleroma-status-deleted.json');
 
       const action = {
         id: 'compose-modal',

@@ -1,15 +1,15 @@
 import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Modal from 'pl-fe/components/ui/modal';
-import Account from 'pl-fe/features/reply-mentions/account';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useCompose } from 'pl-fe/hooks/use-compose';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { statusToMentionsAccountIdsArray } from 'pl-fe/reducers/compose';
-import { makeGetStatus } from 'pl-fe/selectors';
+import Modal from '@/components/ui/modal';
+import Account from '@/features/reply-mentions/account';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useCompose } from '@/hooks/use-compose';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { statusToMentionsAccountIdsArray } from '@/reducers/compose';
+import { makeGetStatus } from '@/selectors';
 
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 interface ReplyMentionsModalProps {
   composeId: string;

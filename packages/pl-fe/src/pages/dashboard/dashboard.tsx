@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, FormattedNumber, useIntl } from 'react-intl';
 
-import List, { ListItem } from 'pl-fe/components/list';
-import { CardTitle } from 'pl-fe/components/ui/card';
-import Column from 'pl-fe/components/ui/column';
-import Icon from 'pl-fe/components/ui/icon';
-import Stack from 'pl-fe/components/ui/stack';
-import { Counter } from 'pl-fe/features/admin/components/counter';
-import { DashCounter, DashCounters } from 'pl-fe/features/admin/components/dashcounter';
-import { Dimension } from 'pl-fe/features/admin/components/dimension';
-import RegistrationModePicker from 'pl-fe/features/admin/components/registration-mode-picker';
-import { Retention } from 'pl-fe/features/admin/components/retention';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { usePendingUsersCount } from 'pl-fe/queries/admin/use-accounts';
-import { usePendingReportsCount } from 'pl-fe/queries/admin/use-reports';
-import sourceCode from 'pl-fe/utils/code';
+import List, { ListItem } from '@/components/list';
+import { CardTitle } from '@/components/ui/card';
+import Column from '@/components/ui/column';
+import Icon from '@/components/ui/icon';
+import Stack from '@/components/ui/stack';
+import { Counter } from '@/features/admin/components/counter';
+import { DashCounter, DashCounters } from '@/features/admin/components/dashcounter';
+import { Dimension } from '@/features/admin/components/dimension';
+import RegistrationModePicker from '@/features/admin/components/registration-mode-picker';
+import { Retention } from '@/features/admin/components/retention';
+import { useFeatures } from '@/hooks/use-features';
+import { useInstance } from '@/hooks/use-instance';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { usePendingUsersCount } from '@/queries/admin/use-accounts';
+import { usePendingReportsCount } from '@/queries/admin/use-reports';
+import sourceCode from '@/utils/code';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.dashboard', defaultMessage: 'Dashboard' },

@@ -1,5 +1,5 @@
-import messages from 'pl-fe/messages';
-import { useSettings } from 'pl-fe/stores/settings';
+import messages from '@/messages';
+import { useSettings } from '@/stores/settings';
 
 /** Locales which should be presented in right-to-left. */
 const RTL_LOCALES = ['ar', 'ckb', 'fa', 'he'];

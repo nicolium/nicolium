@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { changeSetting } from 'pl-fe/actions/settings';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useSettings } from 'pl-fe/stores/settings';
+import { changeSetting } from '@/actions/settings';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useSettings } from '@/stores/settings';
 
 import ThemeSelector from './theme-selector';
 

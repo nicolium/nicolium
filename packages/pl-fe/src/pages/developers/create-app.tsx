@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
-import { createApp } from 'pl-fe/actions/apps';
-import { obtainOAuthToken } from 'pl-fe/actions/oauth';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import Form from 'pl-fe/components/ui/form';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Input from 'pl-fe/components/ui/input';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Textarea from 'pl-fe/components/ui/textarea';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { getBaseURL } from 'pl-fe/utils/accounts';
+import { createApp } from '@/actions/apps';
+import { obtainOAuthToken } from '@/actions/oauth';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import Input from '@/components/ui/input';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Textarea from '@/components/ui/textarea';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { getBaseURL } from '@/utils/accounts';
 
 import type { CredentialApplication, Token } from 'pl-api';
 

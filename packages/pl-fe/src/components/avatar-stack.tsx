@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import Avatar from 'pl-fe/components/ui/avatar';
-import HStack from 'pl-fe/components/ui/hstack';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { selectAccounts } from 'pl-fe/selectors';
+import Avatar from '@/components/ui/avatar';
+import HStack from '@/components/ui/hstack';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { selectAccounts } from '@/selectors';
 
 interface IAvatarStack {
   accountIds: Array<string>;

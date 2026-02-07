@@ -2,16 +2,16 @@ import { Link } from '@tanstack/react-router';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { fetchHomeTimeline } from 'pl-fe/actions/timelines';
-import PullToRefresh from 'pl-fe/components/pull-to-refresh';
-import Column from 'pl-fe/components/ui/column';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Timeline from 'pl-fe/features/ui/components/timeline';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useInstance } from 'pl-fe/hooks/use-instance';
+import { fetchHomeTimeline } from '@/actions/timelines';
+import PullToRefresh from '@/components/pull-to-refresh';
+import Column from '@/components/ui/column';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Timeline from '@/features/ui/components/timeline';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFeatures } from '@/hooks/use-features';
+import { useInstance } from '@/hooks/use-instance';
 
 const messages = defineMessages({
   title: { id: 'column.home', defaultMessage: 'Home' },

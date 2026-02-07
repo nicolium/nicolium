@@ -1,9 +1,9 @@
 import React from 'react';
 
-import StillImage from 'pl-fe/components/still-image';
-import { useSettings } from 'pl-fe/stores/settings';
-import { removeVS16s, toCodePoints } from 'pl-fe/utils/emoji';
-import { joinPublicPath } from 'pl-fe/utils/static';
+import StillImage from '@/components/still-image';
+import { useSettings } from '@/stores/settings';
+import { removeVS16s, toCodePoints } from '@/utils/emoji';
+import { joinPublicPath } from '@/utils/static';
 
 interface IEmoji extends Pick<React.ImgHTMLAttributes<HTMLImageElement>, 'alt' | 'className' | 'src' | 'title'> {
   /** Unicode emoji character. */

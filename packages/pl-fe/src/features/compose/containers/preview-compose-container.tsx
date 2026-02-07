@@ -1,25 +1,25 @@
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { cancelPreviewCompose } from 'pl-fe/actions/compose';
-import EventPreview from 'pl-fe/components/event-preview';
-import OutlineBox from 'pl-fe/components/outline-box';
-import QuotedStatusIndicator from 'pl-fe/components/quoted-status-indicator';
-import StatusContent from 'pl-fe/components/status-content';
-import StatusMedia from 'pl-fe/components/status-media';
-import StatusReplyMentions from 'pl-fe/components/status-reply-mentions';
-import SensitiveContentOverlay from 'pl-fe/components/statuses/sensitive-content-overlay';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import AccountContainer from 'pl-fe/containers/account-container';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useCompose } from 'pl-fe/hooks/use-compose';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
+import { cancelPreviewCompose } from '@/actions/compose';
+import EventPreview from '@/components/event-preview';
+import OutlineBox from '@/components/outline-box';
+import QuotedStatusIndicator from '@/components/quoted-status-indicator';
+import StatusContent from '@/components/status-content';
+import StatusMedia from '@/components/status-media';
+import StatusReplyMentions from '@/components/status-reply-mentions';
+import SensitiveContentOverlay from '@/components/statuses/sensitive-content-overlay';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import IconButton from '@/components/ui/icon-button';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import AccountContainer from '@/containers/account-container';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useCompose } from '@/hooks/use-compose';
+import { useOwnAccount } from '@/hooks/use-own-account';
 
-import type { Status } from 'pl-fe/normalizers/status';
+import type { Status } from '@/normalizers/status';
 
 const messages = defineMessages({
   close: {

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { displayFqn } from 'pl-fe/utils/state';
+import { displayFqn } from '@/utils/state';
 
 import { useAppSelector } from './use-app-selector';
 import { useInstance } from './use-instance';

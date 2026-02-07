@@ -1,13 +1,13 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import HStack from 'pl-fe/components/ui/hstack';
-import Spinner from 'pl-fe/components/ui/spinner';
-import { useClient } from 'pl-fe/hooks/use-client';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
-import { useAcceptFollowRequestMutation, useRejectFollowRequestMutation } from 'pl-fe/queries/accounts/use-follow-requests';
+import Button from '@/components/ui/button';
+import HStack from '@/components/ui/hstack';
+import Spinner from '@/components/ui/spinner';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
+import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useAcceptFollowRequestMutation, useRejectFollowRequestMutation } from '@/queries/accounts/use-follow-requests';
 import {
   useRelationshipQuery,
   useUnblockAccountMutation,
@@ -15,9 +15,9 @@ import {
   useUnmuteAccountMutation,
   useFollowAccountMutation,
   useUnfollowAccountMutation,
-} from 'pl-fe/queries/accounts/use-relationship';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import toast from 'pl-fe/toast';
+} from '@/queries/accounts/use-relationship';
+import { useModalsActions } from '@/stores/modals';
+import toast from '@/toast';
 
 import type { Account } from 'pl-api';
 

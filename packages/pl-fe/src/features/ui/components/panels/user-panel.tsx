@@ -2,18 +2,18 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useAccount } from 'pl-fe/api/hooks/accounts/use-account';
-import StillImage from 'pl-fe/components/still-image';
-import Avatar from 'pl-fe/components/ui/avatar';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import VerificationBadge from 'pl-fe/components/verification-badge';
-import Emojify from 'pl-fe/features/emoji/emojify';
-import { useAcct } from 'pl-fe/hooks/use-acct';
-import { useSettings } from 'pl-fe/stores/settings';
-import { shortNumberFormat } from 'pl-fe/utils/numbers';
+import { useAccount } from '@/api/hooks/accounts/use-account';
+import StillImage from '@/components/still-image';
+import Avatar from '@/components/ui/avatar';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import VerificationBadge from '@/components/verification-badge';
+import Emojify from '@/features/emoji/emojify';
+import { useAcct } from '@/hooks/use-acct';
+import { useSettings } from '@/stores/settings';
+import { shortNumberFormat } from '@/utils/numbers';
 
 const messages = defineMessages({
   account_locked: { id: 'account.locked_info', defaultMessage: 'This account privacy status is set to locked. The owner manually reviews who can follow them.' },

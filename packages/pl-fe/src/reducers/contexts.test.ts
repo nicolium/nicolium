@@ -5,10 +5,10 @@ import {
   is,
 } from 'immutable';
 
-import { STATUS_IMPORT } from 'pl-fe/actions/importer';
-import { CONTEXT_FETCH_SUCCESS } from 'pl-fe/actions/statuses';
-import { TIMELINE_DELETE } from 'pl-fe/actions/timelines';
-import { applyActions } from 'pl-fe/jest/test-helpers';
+import { STATUS_IMPORT } from '@/actions/importer';
+import { CONTEXT_FETCH_SUCCESS } from '@/actions/statuses';
+import { TIMELINE_DELETE } from '@/actions/timelines';
+import { applyActions } from '@/jest/test-helpers';
 
 import reducer, { ReducerRecord } from './contexts';
 

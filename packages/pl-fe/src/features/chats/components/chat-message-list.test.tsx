@@ -2,13 +2,13 @@ import userEvent from '@testing-library/user-event';
 import React from 'react';
 import { VirtuosoMockContext } from 'react-virtuoso';
 
-import { __stub } from 'pl-fe/api';
-import { ChatContext } from 'pl-fe/contexts/chat-context';
-import { buildAccount, buildInstance } from 'pl-fe/jest/factory';
-import { queryClient, render, rootState, screen, waitFor } from 'pl-fe/jest/test-helpers';
-import { normalizeChatMessage } from 'pl-fe/normalizers/chat-message';
-import { IChat } from 'pl-fe/queries/chats';
-import { ChatMessage } from 'pl-fe/types/entities';
+import { __stub } from '@/api';
+import { ChatContext } from '@/contexts/chat-context';
+import { buildAccount, buildInstance } from '@/jest/factory';
+import { queryClient, render, rootState, screen, waitFor } from '@/jest/test-helpers';
+import { normalizeChatMessage } from '@/normalizers/chat-message';
+import { IChat } from '@/queries/chats';
+import { ChatMessage } from '@/types/entities';
 
 import ChatMessageList from './chat-message-list';
 

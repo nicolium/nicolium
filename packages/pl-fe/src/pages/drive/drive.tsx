@@ -6,19 +6,19 @@ import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import DropdownMenu, { Menu } from 'pl-fe/components/dropdown-menu';
-import { EmptyMessage } from 'pl-fe/components/empty-message';
-import Column from 'pl-fe/components/ui/column';
-import Icon from 'pl-fe/components/ui/icon';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import { MIMETYPE_ICONS } from 'pl-fe/components/upload';
-import ColumnLoading from 'pl-fe/features/ui/components/column-loading';
-import { driveRoute } from 'pl-fe/features/ui/router';
-import { useCreateDriveFileMutation, useDeleteDriveFileMutation, useMoveDriveFileMutation, useUpdateDriveFileMutation } from 'pl-fe/queries/drive/use-drive-file';
-import { useCreateDriveFolderMutation, useDeleteDriveFolderMutation, useDriveFolderQuery, useMoveDriveFolderMutation, useUpdateDriveFolderMutation } from 'pl-fe/queries/drive/use-drive-folder';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import toast from 'pl-fe/toast';
-import { download } from 'pl-fe/utils/download';
+import DropdownMenu, { Menu } from '@/components/dropdown-menu';
+import { EmptyMessage } from '@/components/empty-message';
+import Column from '@/components/ui/column';
+import Icon from '@/components/ui/icon';
+import IconButton from '@/components/ui/icon-button';
+import { MIMETYPE_ICONS } from '@/components/upload';
+import ColumnLoading from '@/features/ui/components/column-loading';
+import { driveRoute } from '@/features/ui/router';
+import { useCreateDriveFileMutation, useDeleteDriveFileMutation, useMoveDriveFileMutation, useUpdateDriveFileMutation } from '@/queries/drive/use-drive-file';
+import { useCreateDriveFolderMutation, useDeleteDriveFolderMutation, useDriveFolderQuery, useMoveDriveFolderMutation, useUpdateDriveFolderMutation } from '@/queries/drive/use-drive-folder';
+import { useModalsActions } from '@/stores/modals';
+import toast from '@/toast';
+import { download } from '@/utils/download';
 
 const messages = defineMessages({
   heading: { id: 'column.drive', defaultMessage: 'Drive' },

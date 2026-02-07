@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { fetchHashtagTimeline, clearTimeline } from 'pl-fe/actions/timelines';
-import { useHashtagStream } from 'pl-fe/api/hooks/streaming/use-hashtag-stream';
-import List, { ListItem } from 'pl-fe/components/list';
-import Column from 'pl-fe/components/ui/column';
-import Toggle from 'pl-fe/components/ui/toggle';
-import Timeline from 'pl-fe/features/ui/components/timeline';
-import { hashtagTimelineRoute } from 'pl-fe/features/ui/router';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { useLoggedIn } from 'pl-fe/hooks/use-logged-in';
-import { useFollowHashtagMutation, useUnfollowHashtagMutation } from 'pl-fe/queries/hashtags/use-followed-tags';
-import { useHashtag } from 'pl-fe/queries/hashtags/use-hashtag';
+import { fetchHashtagTimeline, clearTimeline } from '@/actions/timelines';
+import { useHashtagStream } from '@/api/hooks/streaming/use-hashtag-stream';
+import List, { ListItem } from '@/components/list';
+import Column from '@/components/ui/column';
+import Toggle from '@/components/ui/toggle';
+import Timeline from '@/features/ui/components/timeline';
+import { hashtagTimelineRoute } from '@/features/ui/router';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useFeatures } from '@/hooks/use-features';
+import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useFollowHashtagMutation, useUnfollowHashtagMutation } from '@/queries/hashtags/use-followed-tags';
+import { useHashtag } from '@/queries/hashtags/use-hashtag';
 
 const HashtagTimelinePage: React.FC = () => {
   const { id: tagId } = hashtagTimelineRoute.useParams();

@@ -3,9 +3,9 @@ import clsx from 'clsx';
 import React, { MouseEventHandler } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import StatusMedia from 'pl-fe/components/status-media';
-import Stack from 'pl-fe/components/ui/stack';
-import AccountContainer from 'pl-fe/containers/account-container';
+import StatusMedia from '@/components/status-media';
+import Stack from '@/components/ui/stack';
+import AccountContainer from '@/containers/account-container';
 
 import EventPreview from './event-preview';
 import OutlineBox from './outline-box';
@@ -14,7 +14,7 @@ import StatusContent from './status-content';
 import StatusReplyMentions from './status-reply-mentions';
 import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
 
-import type { SelectedStatus } from 'pl-fe/selectors';
+import type { SelectedStatus } from '@/selectors';
 
 const messages = defineMessages({
   cancel: { id: 'reply_indicator.cancel', defaultMessage: 'Cancel' },

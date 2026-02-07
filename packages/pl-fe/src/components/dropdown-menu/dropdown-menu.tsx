@@ -5,12 +5,12 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import ReactSwipeableViews from 'react-swipeable-views';
 
-import HStack from 'pl-fe/components/ui/hstack';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Portal from 'pl-fe/components/ui/portal';
-import { userTouching } from 'pl-fe/is-mobile';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import { useUiStoreActions } from 'pl-fe/stores/ui';
+import HStack from '@/components/ui/hstack';
+import IconButton from '@/components/ui/icon-button';
+import Portal from '@/components/ui/portal';
+import { userTouching } from '@/is-mobile';
+import { useModalsActions } from '@/stores/modals';
+import { useUiStoreActions } from '@/stores/ui';
 
 import DropdownMenuItem, { Menu } from './dropdown-menu-item';
 

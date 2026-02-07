@@ -4,14 +4,14 @@ import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { createSelector } from 'reselect';
 
-import { logOut, switchAccount } from 'pl-fe/actions/auth';
-import Account from 'pl-fe/components/account';
-import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import { Entities } from 'pl-fe/entity-store/entities';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import { RootState } from 'pl-fe/store';
+import { logOut, switchAccount } from '@/actions/auth';
+import Account from '@/components/account';
+import DropdownMenu from '@/components/dropdown-menu';
+import { Entities } from '@/entity-store/entities';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFeatures } from '@/hooks/use-features';
+import { RootState } from '@/store';
 
 import ThemeToggle from './theme-toggle';
 

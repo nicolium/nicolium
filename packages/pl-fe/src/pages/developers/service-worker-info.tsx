@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import List, { ListItem } from 'pl-fe/components/list';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import FormActions from 'pl-fe/components/ui/form-actions';
-import HStack from 'pl-fe/components/ui/hstack';
-import Icon from 'pl-fe/components/ui/icon';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Indicator from 'pl-fe/features/developers/components/indicator';
-import { unregisterSW } from 'pl-fe/utils/sw';
+import List, { ListItem } from '@/components/list';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import FormActions from '@/components/ui/form-actions';
+import HStack from '@/components/ui/hstack';
+import Icon from '@/components/ui/icon';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Indicator from '@/features/developers/components/indicator';
+import { unregisterSW } from '@/utils/sw';
 
 const messages = defineMessages({
   heading: { id: 'column.developers.service_worker', defaultMessage: 'Service Worker' },

@@ -2,17 +2,17 @@ import clsx from 'clsx';
 import React, { useMemo, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import PullToRefresh from 'pl-fe/components/pull-to-refresh';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Emoji from 'pl-fe/components/ui/emoji';
-import Modal from 'pl-fe/components/ui/modal';
-import Spinner from 'pl-fe/components/ui/spinner';
-import Tabs from 'pl-fe/components/ui/tabs';
-import AccountContainer from 'pl-fe/containers/account-container';
-import { useStatusReactions } from 'pl-fe/queries/statuses/use-status-interactions';
+import PullToRefresh from '@/components/pull-to-refresh';
+import ScrollableList from '@/components/scrollable-list';
+import Emoji from '@/components/ui/emoji';
+import Modal from '@/components/ui/modal';
+import Spinner from '@/components/ui/spinner';
+import Tabs from '@/components/ui/tabs';
+import AccountContainer from '@/containers/account-container';
+import { useStatusReactions } from '@/queries/statuses/use-status-interactions';
 
-import type { Item } from 'pl-fe/components/ui/tabs';
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
+import type { Item } from '@/components/ui/tabs';
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
   all: { id: 'reactions.all', defaultMessage: 'All' },

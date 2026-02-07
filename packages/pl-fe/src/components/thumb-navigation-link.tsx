@@ -1,9 +1,9 @@
 import { Link, useMatchRoute, type LinkOptions } from '@tanstack/react-router';
 import React from 'react';
 
-import IconWithCounter from 'pl-fe/components/icon-with-counter';
-import Icon from 'pl-fe/components/ui/icon';
-import { useSettings } from 'pl-fe/stores/settings';
+import IconWithCounter from '@/components/icon-with-counter';
+import Icon from '@/components/ui/icon';
+import { useSettings } from '@/stores/settings';
 
 interface IThumbNavigationLink extends LinkOptions {
   count?: number;

@@ -2,22 +2,22 @@ import { Navigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { logIn, switchAccount, verifyCredentials } from 'pl-fe/actions/auth';
-import { fetchInstance } from 'pl-fe/actions/instance';
-import Button from 'pl-fe/components/ui/button';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import LoginForm from 'pl-fe/features/auth-login/components/login-form';
-import OtpAuthForm from 'pl-fe/features/auth-login/components/otp-auth-form';
-import ExternalLoginForm from 'pl-fe/features/external-login/components/external-login-form';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useRegistrationStatus } from 'pl-fe/hooks/use-registration-status';
-import { getRedirectUrl } from 'pl-fe/utils/redirect';
-import { isStandalone } from 'pl-fe/utils/state';
+import { logIn, switchAccount, verifyCredentials } from '@/actions/auth';
+import { fetchInstance } from '@/actions/instance';
+import Button from '@/components/ui/button';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import LoginForm from '@/features/auth-login/components/login-form';
+import OtpAuthForm from '@/features/auth-login/components/otp-auth-form';
+import ExternalLoginForm from '@/features/external-login/components/external-login-form';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useInstance } from '@/hooks/use-instance';
+import { useRegistrationStatus } from '@/hooks/use-registration-status';
+import { getRedirectUrl } from '@/utils/redirect';
+import { isStandalone } from '@/utils/state';
 
-import type { PlfeResponse } from 'pl-fe/api';
+import type { PlfeResponse } from '@/api';
 
 const SignUpPanel = () => {
   const dispatch = useAppDispatch();

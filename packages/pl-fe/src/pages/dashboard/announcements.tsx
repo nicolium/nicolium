@@ -1,16 +1,16 @@
 import React from 'react';
 import { FormattedDate, FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { ParsedContent } from 'pl-fe/components/parsed-content';
-import ScrollableList from 'pl-fe/components/scrollable-list';
-import Button from 'pl-fe/components/ui/button';
-import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useAnnouncements, useDeleteAnnouncementMutation } from 'pl-fe/queries/admin/use-announcements';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import toast from 'pl-fe/toast';
+import { ParsedContent } from '@/components/parsed-content';
+import ScrollableList from '@/components/scrollable-list';
+import Button from '@/components/ui/button';
+import Column from '@/components/ui/column';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useAnnouncements, useDeleteAnnouncementMutation } from '@/queries/admin/use-announcements';
+import { useModalsActions } from '@/stores/modals';
+import toast from '@/toast';
 
 import type { AdminAnnouncement } from 'pl-api';
 

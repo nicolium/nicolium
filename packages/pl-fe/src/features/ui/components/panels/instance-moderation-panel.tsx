@@ -1,13 +1,13 @@
 import React from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
-import DropdownMenu from 'pl-fe/components/dropdown-menu';
-import Widget from 'pl-fe/components/ui/widget';
-import InstanceRestrictions from 'pl-fe/features/federation-restrictions/components/instance-restrictions';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useOwnAccount } from 'pl-fe/hooks/use-own-account';
-import { makeGetRemoteInstance } from 'pl-fe/selectors';
-import { useModalsActions } from 'pl-fe/stores/modals';
+import DropdownMenu from '@/components/dropdown-menu';
+import Widget from '@/components/ui/widget';
+import InstanceRestrictions from '@/features/federation-restrictions/components/instance-restrictions';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { makeGetRemoteInstance } from '@/selectors';
+import { useModalsActions } from '@/stores/modals';
 
 const getRemoteInstance = makeGetRemoteInstance();
 

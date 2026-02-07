@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { useClient } from 'pl-fe/hooks/use-client';
+import { useClient } from '@/hooks/use-client';
 
 import type { Poll } from 'pl-api';
 

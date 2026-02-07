@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Modal from 'pl-fe/components/ui/modal';
-import Spinner from 'pl-fe/components/ui/spinner';
+import Modal from '@/components/ui/modal';
+import Spinner from '@/components/ui/spinner';
 
 const ModalLoading = () => (
   <Modal>

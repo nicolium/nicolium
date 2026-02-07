@@ -1,13 +1,13 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Tooltip from 'pl-fe/components/ui/tooltip';
-import { usePollQuery, usePollVoteMutation } from 'pl-fe/queries/statuses/use-poll';
-import { useStatusMetaActions } from 'pl-fe/stores/status-meta';
+import Button from '@/components/ui/button';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Tooltip from '@/components/ui/tooltip';
+import { usePollQuery, usePollVoteMutation } from '@/queries/statuses/use-poll';
+import { useStatusMetaActions } from '@/stores/status-meta';
 
 import RelativeTimestamp from '../relative-timestamp';
 

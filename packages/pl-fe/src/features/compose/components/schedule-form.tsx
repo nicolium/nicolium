@@ -2,13 +2,13 @@ import clsx from 'clsx';
 import React, { Suspense, useCallback } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { setSchedule, removeSchedule } from 'pl-fe/actions/compose';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Input from 'pl-fe/components/ui/input';
-import { DatePicker } from 'pl-fe/features/ui/util/async-components';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useCompose } from 'pl-fe/hooks/use-compose';
-import { useFeatures } from 'pl-fe/hooks/use-features';
+import { setSchedule, removeSchedule } from '@/actions/compose';
+import IconButton from '@/components/ui/icon-button';
+import Input from '@/components/ui/input';
+import { DatePicker } from '@/features/ui/util/async-components';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useCompose } from '@/hooks/use-compose';
+import { useFeatures } from '@/hooks/use-features';
 
 const isCurrentOrFutureDate = (date: Date) => (date && new Date().setHours(0, 0, 0, 0) <= new Date(date).setHours(0, 0, 0, 0));
 

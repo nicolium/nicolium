@@ -1,11 +1,11 @@
 import React from 'react';
 
-import { isCustomEmoji } from 'pl-fe/features/emoji';
-import unicodeMapping from 'pl-fe/features/emoji/mapping';
-import { useSettings } from 'pl-fe/stores/settings';
-import { joinPublicPath } from 'pl-fe/utils/static';
+import { isCustomEmoji } from '@/features/emoji';
+import unicodeMapping from '@/features/emoji/mapping';
+import { useSettings } from '@/stores/settings';
+import { joinPublicPath } from '@/utils/static';
 
-import type { Emoji } from 'pl-fe/features/emoji';
+import type { Emoji } from '@/features/emoji';
 
 interface IAutosuggestEmoji {
   emoji: Emoji;

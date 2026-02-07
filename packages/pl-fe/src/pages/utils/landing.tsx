@@ -1,14 +1,14 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import Card, { CardTitle } from 'pl-fe/components/ui/card';
-import Column from 'pl-fe/components/ui/column';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import LinkFooter from 'pl-fe/features/ui/components/link-footer';
-import sourceCode from 'pl-fe/utils/code';
+import Button from '@/components/ui/button';
+import Card, { CardTitle } from '@/components/ui/card';
+import Column from '@/components/ui/column';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import LinkFooter from '@/features/ui/components/link-footer';
+import sourceCode from '@/utils/code';
 
 import { LogoText } from '../timelines/landing-timeline';
 

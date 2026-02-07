@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Toggle from 'pl-fe/components/ui/toggle';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useFeatures } from 'pl-fe/hooks/use-features';
-import StatusCheckBox from 'pl-fe/modals/report-modal/components/status-check-box';
-import { getDomain } from 'pl-fe/utils/accounts';
+import Button from '@/components/ui/button';
+import FormGroup from '@/components/ui/form-group';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Toggle from '@/components/ui/toggle';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFeatures } from '@/hooks/use-features';
+import StatusCheckBox from '@/modals/report-modal/components/status-check-box';
+import { getDomain } from '@/utils/accounts';
 
 import type { Account } from 'pl-api';
 

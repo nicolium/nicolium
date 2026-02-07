@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { ChatProvider } from 'pl-fe/contexts/chat-context';
-import ChatsPage from 'pl-fe/features/chats/components/chats-page/chats-page';
+import { ChatProvider } from '@/contexts/chat-context';
+import ChatsPage from '@/features/chats/components/chats-page/chats-page';
 
 const ChatIndex: React.FC = () => (
   <ChatProvider>

@@ -6,9 +6,9 @@ import {
   STATUS_CREATE_REQUEST,
   STATUS_CREATE_SUCCESS,
   type StatusesAction,
-} from 'pl-fe/actions/statuses';
+} from '@/actions/statuses';
 
-import type { StatusVisibility } from 'pl-fe/normalizers/status';
+import type { StatusVisibility } from '@/normalizers/status';
 
 interface PendingStatus {
   content_type: string;

@@ -1,14 +1,14 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import Account from 'pl-fe/components/account';
-import AttachmentThumbs from 'pl-fe/components/attachment-thumbs';
-import StatusContent from 'pl-fe/components/status-content';
-import StatusReplyMentions from 'pl-fe/components/status-reply-mentions';
-import HStack from 'pl-fe/components/ui/hstack';
-import Stack from 'pl-fe/components/ui/stack';
-import PollPreview from 'pl-fe/features/ui/components/poll-preview';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
+import Account from '@/components/account';
+import AttachmentThumbs from '@/components/attachment-thumbs';
+import StatusContent from '@/components/status-content';
+import StatusReplyMentions from '@/components/status-reply-mentions';
+import HStack from '@/components/ui/hstack';
+import Stack from '@/components/ui/stack';
+import PollPreview from '@/features/ui/components/poll-preview';
+import { useAppSelector } from '@/hooks/use-app-selector';
 
 import { buildStatus } from '../builder';
 

@@ -1,7 +1,7 @@
 import { Link, useMatchRoute, type LinkOptions } from '@tanstack/react-router';
 import React from 'react';
 
-import { useSettings } from 'pl-fe/stores/settings';
+import { useSettings } from '@/stores/settings';
 
 import Icon from './ui/icon';
 

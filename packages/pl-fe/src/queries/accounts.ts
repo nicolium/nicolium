@@ -1,9 +1,9 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { patchMeSuccess } from 'pl-fe/actions/me';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useClient } from 'pl-fe/hooks/use-client';
-import toast from 'pl-fe/toast';
+import { patchMeSuccess } from '@/actions/me';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
+import toast from '@/toast';
 
 type UpdateCredentialsData = {
   accepts_chat_messages?: boolean;

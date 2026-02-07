@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import Form from 'pl-fe/components/ui/form';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import HStack from 'pl-fe/components/ui/hstack';
-import Input from 'pl-fe/components/ui/input';
-import Modal from 'pl-fe/components/ui/modal';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import Toggle from 'pl-fe/components/ui/toggle';
-import { useDomains } from 'pl-fe/queries/admin/use-domains';
-import toast from 'pl-fe/toast';
+import Form from '@/components/ui/form';
+import FormGroup from '@/components/ui/form-group';
+import HStack from '@/components/ui/hstack';
+import Input from '@/components/ui/input';
+import Modal from '@/components/ui/modal';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import Toggle from '@/components/ui/toggle';
+import { useDomains } from '@/queries/admin/use-domains';
+import toast from '@/toast';
 
+import type { BaseModalProps } from '@/features/ui/components/modal-root';
 import type { AdminDomain } from 'pl-api';
-import type { BaseModalProps } from 'pl-fe/features/ui/components/modal-root';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_domain.save', defaultMessage: 'Save' },

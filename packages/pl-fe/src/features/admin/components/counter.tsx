@@ -4,8 +4,8 @@ import React from 'react';
 import { FormattedNumber } from 'react-intl';
 import { Sparklines, SparklinesCurve } from 'react-sparklines';
 
-import Text from 'pl-fe/components/ui/text';
-import { useMeasures } from 'pl-fe/queries/admin/use-metrics';
+import Text from '@/components/ui/text';
+import { useMeasures } from '@/queries/admin/use-metrics';
 
 import type { AdminGetMeasuresParams, AdminMeasureKey } from 'pl-api';
 

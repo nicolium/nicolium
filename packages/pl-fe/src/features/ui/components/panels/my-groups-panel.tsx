@@ -1,10 +1,10 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useGroups } from 'pl-fe/api/hooks/groups/use-groups';
-import Widget from 'pl-fe/components/ui/widget';
-import GroupListItem from 'pl-fe/features/groups/components/discover/group-list-item';
-import PlaceholderGroupSearch from 'pl-fe/features/placeholder/components/placeholder-group-search';
+import { useGroups } from '@/api/hooks/groups/use-groups';
+import Widget from '@/components/ui/widget';
+import GroupListItem from '@/features/groups/components/discover/group-list-item';
+import PlaceholderGroupSearch from '@/features/placeholder/components/placeholder-group-search';
 
 const MyGroupsPanel = () => {
   const { groups, isFetching, isFetched, isError } = useGroups();

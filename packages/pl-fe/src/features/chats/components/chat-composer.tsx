@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, IntlShape, useIntl } from 'react-intl';
 
-import Button from 'pl-fe/components/ui/button';
-import Combobox, { ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover } from 'pl-fe/components/ui/combobox';
-import HStack from 'pl-fe/components/ui/hstack';
-import IconButton from 'pl-fe/components/ui/icon-button';
-import Stack from 'pl-fe/components/ui/stack';
-import Text from 'pl-fe/components/ui/text';
-import { useChatContext } from 'pl-fe/contexts/chat-context';
-import UploadButton from 'pl-fe/features/compose/components/upload-button';
-import emojiSearch from 'pl-fe/features/emoji/search';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useRelationshipQuery, useUnblockAccountMutation } from 'pl-fe/queries/accounts/use-relationship';
-import { useModalsActions } from 'pl-fe/stores/modals';
-import { textAtCursorMatchesToken } from 'pl-fe/utils/suggestions';
+import Button from '@/components/ui/button';
+import Combobox, { ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover } from '@/components/ui/combobox';
+import HStack from '@/components/ui/hstack';
+import IconButton from '@/components/ui/icon-button';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
+import { useChatContext } from '@/contexts/chat-context';
+import UploadButton from '@/features/compose/components/upload-button';
+import emojiSearch from '@/features/emoji/search';
+import { useInstance } from '@/hooks/use-instance';
+import { useRelationshipQuery, useUnblockAccountMutation } from '@/queries/accounts/use-relationship';
+import { useModalsActions } from '@/stores/modals';
+import { textAtCursorMatchesToken } from '@/utils/suggestions';
 
 import ChatTextarea from './chat-textarea';
 
+import type { Emoji, NativeEmoji } from '@/features/emoji';
 import type { MediaAttachment } from 'pl-api';
-import type { Emoji, NativeEmoji } from 'pl-fe/features/emoji';
 
 const messages = defineMessages({
   placeholder: { id: 'chat.input.placeholder', defaultMessage: 'Type a message' },

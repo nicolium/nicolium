@@ -1,17 +1,17 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Form from 'pl-fe/components/ui/form';
-import FormGroup from 'pl-fe/components/ui/form-group';
-import Input from 'pl-fe/components/ui/input';
-import Textarea from 'pl-fe/components/ui/textarea';
-import AvatarPicker from 'pl-fe/features/edit-profile/components/avatar-picker';
-import HeaderPicker from 'pl-fe/features/edit-profile/components/header-picker';
-import { usePreview } from 'pl-fe/hooks/forms/use-preview';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { useInstance } from 'pl-fe/hooks/use-instance';
-import { useSettings } from 'pl-fe/stores/settings';
-import resizeImage from 'pl-fe/utils/resize-image';
+import Form from '@/components/ui/form';
+import FormGroup from '@/components/ui/form-group';
+import Input from '@/components/ui/input';
+import Textarea from '@/components/ui/textarea';
+import AvatarPicker from '@/features/edit-profile/components/avatar-picker';
+import HeaderPicker from '@/features/edit-profile/components/header-picker';
+import { usePreview } from '@/hooks/forms/use-preview';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { useInstance } from '@/hooks/use-instance';
+import { useSettings } from '@/stores/settings';
+import resizeImage from '@/utils/resize-image';
 
 import type { CreateGroupParams } from 'pl-api';
 

@@ -1,11 +1,11 @@
 import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 
-import { markConversationRead } from 'pl-fe/actions/conversations';
-import StatusContainer from 'pl-fe/containers/status-container';
-import { useAppDispatch } from 'pl-fe/hooks/use-app-dispatch';
-import { useAppSelector } from 'pl-fe/hooks/use-app-selector';
-import { selectAccount } from 'pl-fe/selectors';
+import { markConversationRead } from '@/actions/conversations';
+import StatusContainer from '@/containers/status-container';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAppSelector } from '@/hooks/use-app-selector';
+import { selectAccount } from '@/selectors';
 
 interface IConversation {
   conversationId: string;

@@ -3,14 +3,14 @@ import {
   Record as ImmutableRecord,
 } from 'immutable';
 
-import { STATUS_IMPORT } from 'pl-fe/actions/importer';
+import { STATUS_IMPORT } from '@/actions/importer';
 import {
   STATUS_CREATE_REQUEST,
   STATUS_CREATE_FAIL,
   STATUS_DELETE_REQUEST,
   STATUS_DELETE_FAIL,
-} from 'pl-fe/actions/statuses';
-import { normalizeStatus } from 'pl-fe/normalizers/status';
+} from '@/actions/statuses';
+import { normalizeStatus } from '@/normalizers/status';
 
 import reducer, { ReducerStatus } from './statuses';
 
@@ -21,7 +21,7 @@ describe('statuses reducer', () => {
 
   describe('STATUS_IMPORT', () => {
     it('parses the status as a Record', async () => {
-      const status = await import('pl-fe/__fixtures__/pleroma-quote-post.json');
+      const status = await import('@/__fixtures__/pleroma-quote-post.json');
       const action = { type: STATUS_IMPORT, status };
       const result = reducer(undefined, action).get('AFmFMSpITT9xcOJKcK');
 
@@ -29,7 +29,7 @@ describe('statuses reducer', () => {
     });
 
     it('fixes the order of mentions', async () => {
-      const status = await import('pl-fe/__fixtures__/status-unordered-mentions.json');
+      const status = await import('@/__fixtures__/status-unordered-mentions.json');
       const action = { type: STATUS_IMPORT, status };
 
       const expected = ['NEETzsche', 'alex', 'Lumeinshin', 'sneeden'];
@@ -43,8 +43,8 @@ describe('statuses reducer', () => {
     });
 
     it('preserves the quote', async () => {
-      const quotePost = await import('pl-fe/__fixtures__/pleroma-quote-post.json');
-      const quotedQuotePost = await import('pl-fe/__fixtures__/pleroma-quote-of-quote-post.json');
+      const quotePost = await import('@/__fixtures__/pleroma-quote-post.json');
+      const quotedQuotePost = await import('@/__fixtures__/pleroma-quote-of-quote-post.json');
 
       let state = undefined;
       state = reducer(state, { type: STATUS_IMPORT, status: quotePost });
@@ -54,7 +54,7 @@ describe('statuses reducer', () => {
     });
 
     it('normalizes Mitra attachments', async () => {
-      const status = await import('pl-fe/__fixtures__/mitra-status-with-attachments.json');
+      const status = await import('@/__fixtures__/mitra-status-with-attachments.json');
 
       const state = reducer(undefined, { type: STATUS_IMPORT, status });
 
@@ -88,7 +88,7 @@ describe('statuses reducer', () => {
     });
 
     it('fixes Pleroma attachments', async () => {
-      const status = await import('pl-fe/__fixtures__/pleroma-status-with-attachments.json');
+      const status = await import('@/__fixtures__/pleroma-status-with-attachments.json');
       const action = { type: STATUS_IMPORT, status };
       const state = reducer(undefined, action);
       const result = state.get('AGNkA21auFR5lnEAHw')?.media_attachments;
@@ -99,7 +99,7 @@ describe('statuses reducer', () => {
     });
 
     it('hides CWs', async () => {
-      const status = await import('pl-fe/__fixtures__/status-cw.json');
+      const status = await import('@/__fixtures__/status-cw.json');
       const action = { type: STATUS_IMPORT, status };
 
       const hidden = reducer(undefined, action).getIn(['107831528995252317', 'hidden']);
@@ -107,7 +107,7 @@ describe('statuses reducer', () => {
     });
 
     it('parses custom emojis', async () => {
-      const status = await import('pl-fe/__fixtures__/status-custom-emoji.json');
+      const status = await import('@/__fixtures__/status-custom-emoji.json');
       const action = { type: STATUS_IMPORT, status };
 
       const expected = 'Hello <img draggable="false" class="emojione" alt=":ablobcathyper:" title=":ablobcathyper:" src="https://gleasonator.com/emoji/blobcat/ablobcathyper.png"> <img draggable="false" class="emojione" alt=":ageblobcat:" title=":ageblobcat:" src="https://gleasonator.com/emoji/blobcat/ageblobcat.png"> <img draggable="false" class="emojione" alt="😂" title=":joy:" src="/packs/emoji/1f602.svg"> world <img draggable="false" class="emojione" alt="😋" title=":yum:" src="/packs/emoji/1f60b.svg"> test <img draggable="false" class="emojione" alt=":blobcatphoto:" title=":blobcatphoto:" src="https://gleasonator.com/emoji/blobcat/blobcatphoto.png">';
@@ -117,7 +117,7 @@ describe('statuses reducer', () => {
     });
 
     it('builds search_index', async () => {
-      const status = await import('pl-fe/__fixtures__/status-with-poll.json');
+      const status = await import('@/__fixtures__/status-with-poll.json');
       const action = { type: STATUS_IMPORT, status };
 
       const expected = `What is tolerance?
@@ -131,7 +131,7 @@ Promoting free speech, even for people and ideas you dislike`;
     });
 
     it('builds search_index with mentions', async () => {
-      const status = await import('pl-fe/__fixtures__/pleroma-status-reply-with-mentions.json');
+      const status = await import('@/__fixtures__/pleroma-status-reply-with-mentions.json');
       const action = { type: STATUS_IMPORT, status };
 
       const expected = `DMs are definitely only federated to the servers of the recipients tho. So if I DM a kfcc user, the kfcc admins can see it, but no other instance admins can.

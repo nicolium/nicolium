@@ -12,8 +12,8 @@ import {
   type MeAction,
 } from '../actions/me';
 
-import type { PlfeResponse } from 'pl-fe/api';
-import type { Me } from 'pl-fe/types/pl-fe';
+import type { PlfeResponse } from '@/api';
+import type { Me } from '@/types/pl-fe';
 
 const initialState: Me = null;
 

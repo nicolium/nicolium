@@ -1,12 +1,12 @@
-import { createPushSubscription } from 'pl-fe/actions/push-subscriptions';
-import { pushNotificationsSetting } from 'pl-fe/settings';
-import { getVapidKey } from 'pl-fe/utils/auth';
-import { decode as decodeBase64 } from 'pl-fe/utils/base64';
+import { createPushSubscription } from '@/actions/push-subscriptions';
+import { pushNotificationsSetting } from '@/settings';
+import { getVapidKey } from '@/utils/auth';
+import { decode as decodeBase64 } from '@/utils/base64';
 
 import { setBrowserSupport, setSubscription, clearSubscription } from './setter';
 
-import type { AppDispatch, RootState } from 'pl-fe/store';
-import type { Me } from 'pl-fe/types/pl-fe';
+import type { AppDispatch, RootState } from '@/store';
+import type { Me } from '@/types/pl-fe';
 
 // Taken from https://www.npmjs.com/package/web-push
 const urlBase64ToUint8Array = (base64String: string) => {

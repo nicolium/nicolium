@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import React, { MutableRefObject, useEffect, useState } from 'react';
 
-import Stack from 'pl-fe/components/ui/stack';
-import { useCreateShoutboxMessage } from 'pl-fe/stores/shoutbox';
+import Stack from '@/components/ui/stack';
+import { useCreateShoutboxMessage } from '@/stores/shoutbox';
 
 import { clearNativeInputValue } from './chat';
 import ShoutboxComposer from './shoutbox-composer';
