@@ -185,7 +185,7 @@ const Item: React.FC<IItem> = ({
           target='_blank'
         >
           <StillImage
-            className='size-full'
+            className='block size-full'
             src={mediaPreview ? attachment.preview_url : attachment.url}
             alt={attachment.description}
             letterboxed={letterboxed}

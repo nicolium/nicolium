@@ -66,7 +66,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
             src={account.header}
             staticSrc={account.header_static}
             alt={account.header_description}
-            className='h-32 w-full rounded-t-lg object-cover'
+            className='block h-32 w-full rounded-t-lg object-cover'
           />
         ) : (
           <div className='h-32 w-full rounded-t-lg bg-gray-200 dark:bg-gray-700' />

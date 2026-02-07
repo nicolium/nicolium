@@ -64,7 +64,7 @@ const StillImage: React.FC<IStillImage> = ({
   });
 
   return (
-    <div
+    <span
       data-testid='still-image-container'
       className={clsx(className, 'relative isolate', { 'group': !noGroup })}
       style={style}
@@ -98,7 +98,7 @@ const StillImage: React.FC<IStillImage> = ({
           <ExtensionBadge ext='GIF' />
         </div>
       )}
-    </div>
+    </span>
   );
 };
 
