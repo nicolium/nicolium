@@ -217,7 +217,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
 
           <div
             role='dialog'
-            className='⁂-modal-root__modal'
+            className='⁂-modal-root__container'
           >
             {children}
           </div>

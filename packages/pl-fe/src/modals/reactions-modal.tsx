@@ -91,7 +91,7 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
           })}
           itemClassName='pb-3'
           style={{ height: reactions.length > 0 ? 'calc(80vh - 159px)' : 'calc(80vh - 88px)' }}
-          isLoading={typeof isLoading === 'boolean' ? isLoading : true}
+          isLoading={isLoading}
           useWindowScroll={false}
         >
           {accounts.map((account) =>

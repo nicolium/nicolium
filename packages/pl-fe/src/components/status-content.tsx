@@ -23,6 +23,7 @@ import OutlineBox from './outline-box';
 import { parseContent } from './parsed-content';
 import { ParsedMfm } from './parsed-mfm';
 import Poll from './polls/poll';
+import QuotedStatusIndicator from './quoted-status-indicator';
 import StatusMedia from './status-media';
 import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
 import TranslateButton from './translate-button';
@@ -72,6 +73,7 @@ interface IStatusContent {
   isQuote?: boolean;
   preview?: boolean;
   withMedia?: boolean;
+  compose?: boolean;
 }
 
 /** Renders the text content of a status */
@@ -84,6 +86,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   isQuote = false,
   preview,
   withMedia,
+  compose = false,
 }) => {
   const { urlPrivacy, displaySpoilers, renderMfm } = useSettings();
   const { greentext } = useFrontendConfig();
@@ -234,7 +237,11 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     let quote;
 
     if (withMedia && status.quote_id) {
-      if ((status.quote_visible ?? true) === false) {
+      if (isQuote) {
+        quote = (
+          <QuotedStatusIndicator statusId={status.quote_id} statusUrl={status.quote_url} />
+        );
+      } else if ((status.quote_visible ?? true) === false) {
         quote = (
           <OutlineBox>
             <p><FormattedMessage id='statuses.quote_tombstone' defaultMessage='Post is unavailable.' /></p>
@@ -250,7 +257,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
         {((withMedia && status.media_attachments.length > 0) || (status.card && !quote)) && (
           <div className='relative has-[div[data-testid="sensitive-overlay"]]:min-h-24'>
             <SensitiveContentOverlay status={status} />
-            {withMedia && <StatusMedia status={status} />}
+            {withMedia && <StatusMedia status={status} muted={compose} />}
           </div>
         )}
 

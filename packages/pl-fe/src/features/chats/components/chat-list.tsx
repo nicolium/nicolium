@@ -52,42 +52,31 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
   };
 
   return (
-    <div className='relative h-full'>
-      <PullToRefresh onRefresh={handleRefresh}>
-        <Virtuoso
-          atTopStateChange={(atTop) => setNearTop(atTop)}
-          atBottomStateChange={(atBottom) => setNearBottom(atBottom)}
-          useWindowScroll={useWindowScroll}
-          data={allChats}
-          endReached={handleLoadMore}
-          itemContent={(_index, chat) => (
-            <div className='px-2'>
-              {chat === 'shoutbox' ? <ChatListShoutbox onClick={onClickChat} /> : <ChatListItem chat={chat} onClick={onClickChat} />}
-            </div>
-          )}
-          components={{
-            ScrollSeekPlaceholder: () => <PlaceholderChat />,
-            Footer: () => hasNextPage ? <Spinner withText={false} /> : null,
-            EmptyPlaceholder: renderEmpty,
-          }}
-        />
-      </PullToRefresh>
-
-      <>
-        <div
-          className={clsx('pointer-events-none absolute inset-x-0 flex justify-center rounded-t-lg bg-gradient-to-b from-white to-transparent pb-12 pt-8 transition-opacity duration-500 black:from-black dark:from-gray-900', {
-            'opacity-0': isNearTop,
-            'opacity-100 black:opacity-50': !isNearTop,
-          })}
-        />
-        <div
-          className={clsx('pointer-events-none absolute inset-x-0 bottom-0 flex justify-center rounded-b-lg bg-gradient-to-t from-white to-transparent pb-8 pt-12 transition-opacity duration-500 black:from-black dark:from-gray-900', {
-            'opacity-0': isNearBottom,
-            'opacity-100 black:opacity-50': !isNearBottom,
-          })}
-        />
-      </>
-    </div>
+    <PullToRefresh
+      onRefresh={handleRefresh}
+      className={clsx({
+        '⁂-chat-widget__list--near-top': isNearTop,
+        '⁂-chat-widget__list--near-bottom': isNearBottom,
+      })}
+    >
+      <Virtuoso
+        atTopStateChange={(atTop) => setNearTop(atTop)}
+        atBottomStateChange={(atBottom) => setNearBottom(atBottom)}
+        useWindowScroll={useWindowScroll}
+        data={allChats}
+        endReached={handleLoadMore}
+        itemContent={(_index, chat) => (
+          <div className='px-2'>
+            {chat === 'shoutbox' ? <ChatListShoutbox onClick={onClickChat} /> : <ChatListItem chat={chat} onClick={onClickChat} />}
+          </div>
+        )}
+        components={{
+          ScrollSeekPlaceholder: () => <PlaceholderChat />,
+          Footer: () => hasNextPage ? <Spinner withText={false} /> : null,
+          EmptyPlaceholder: renderEmpty,
+        }}
+      />
+    </PullToRefresh>
   );
 };
 

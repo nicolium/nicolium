@@ -83,6 +83,42 @@
     }
   }
 
+  &__search-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    height: 100%;
+    flex-grow: 1;
+
+    > div {
+      &::before,
+      &::after {
+        @apply pointer-events-none absolute inset-x-0 flex justify-center from-white to-transparent pb-12 pt-8 transition-opacity duration-500 black:from-black dark:from-gray-900 opacity-100 black:opacity-50;
+        content: '';
+        z-index: 2;
+      }
+
+      &::before {
+        @apply top-0 rounded-t-lg bg-gradient-to-b;
+      }
+
+      &::after {
+        @apply bottom-0 rounded-b-lg bg-gradient-to-t;
+      }
+
+      &.⁂-chat-widget__list--near-top::before,
+      &.⁂-chat-widget__list--near-bottom::after {
+        @apply opacity-0 black:opacity-0;
+      }
+    }
+  }
+
   &__blankslate {
     display: flex;
     flex-direction: column;
@@ -111,5 +147,86 @@
     button {
       @include mixins.button($theme: primary);
     }
+  }
+}
+
+.⁂-chat-list-item {
+  @apply flex w-full flex-col rounded-lg px-2 py-3 hover:bg-gray-100 focus:shadow-inset-ring dark:hover:bg-gray-800;
+
+  > div {
+    @apply flex items-center justify-between gap-2 w-full;
+  }
+
+  &--shoutbox > div {
+    @apply justify-normal;
+  }
+
+  &__info {
+    @apply flex items-center gap-2 overflow-hidden;
+  }
+
+  &__avatar {
+    @apply flex-none;
+  }
+
+  &__content {
+    @apply flex flex-col items-start overflow-hidden;
+  }
+
+  &__name {
+    @apply flex w-full grow items-center space-x-1;
+  
+    p {
+      @include mixins.text($weight: bold, $size: sm, $align: left, $truncate: true);
+    }
+  }
+
+  &__message {
+    @include mixins.text($theme: muted, $size: sm, $align: left, $truncate: true);
+    @apply truncate-child pointer-events-none h-5 w-full;
+
+    &--unread {
+      @apply text-gray-900 dark:text-gray-100;
+    }
+
+    &:not(&--blocking) > * {
+      @apply truncate;
+    }
+
+    &__author {
+      @include mixins.text($weight: bold, $size: sm, $align: left, $theme: muted, $truncate: true);
+    }
+  }
+
+  &__actions {
+    @apply flex items-center gap-2;
+  }
+
+  &__menu {
+    @apply max-w-0 overflow-hidden text-gray-600 hover:text-gray-100;
+
+    .⁂-icon-button {
+      @apply text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500;
+
+      svg {
+        @apply h-4 w-4;
+      }
+    }
+  }
+
+  &:hover .⁂-chat-list-item__menu {
+    @apply max-w-full;
+  }
+
+  &__unread {
+    @apply size-2 rounded-full bg-secondary-500;
+  }
+
+  &__timestamp {
+    @include mixins.text($theme: muted, $size: xs, $align: right, $truncate: true);
+  }
+
+  &__unread + &__timestamp {
+    @apply text-gray-900 dark:text-gray-100;
   }
 }

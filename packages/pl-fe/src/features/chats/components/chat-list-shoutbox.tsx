@@ -4,9 +4,7 @@ import { FormattedMessage } from 'react-intl';
 import { useAccount } from '@/api/hooks/accounts/use-account';
 import { ParsedContent } from '@/components/parsed-content';
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
-import Text from '@/components/ui/text';
+import Emojify from '@/features/emoji/emojify';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/hooks/use-instance';
 import { useShoutboxMessages } from '@/stores/shoutbox';
@@ -37,43 +35,33 @@ const ChatListShoutbox: React.FC<IChatListShoutboxInterface> = ({ onClick }) => 
       key='shoutbox'
       onClick={() => onClick('shoutbox')}
       onKeyDown={handleKeyDown}
-      className='group flex w-full flex-col rounded-lg px-2 py-3 hover:bg-gray-100 focus:shadow-inset-ring dark:hover:bg-gray-800'
+      className='⁂-chat-list-item ⁂-chat-list-item--shoutbox'
       data-testid='chat-list-item'
       tabIndex={0}
     >
-      <HStack alignItems='center' justifyContent='between' space={2} className='w-full'>
-        <HStack alignItems='center' space={2} className='overflow-hidden'>
-          <Avatar src={logo} alt='' size={40} className='flex-none' />
-          <Stack alignItems='start' className='overflow-hidden'>
-            <div className='flex w-full grow items-center space-x-1'>
-              <Text weight='bold' size='sm' align='left' truncate>
-                <FormattedMessage id='chat_list_item_shoutbox' defaultMessage='{instance} shoutbox' values={{ instance: instance.title }} />
-              </Text>
-            </div>
+      <div>
+        <Avatar src={logo} alt='' size={40} className='flex-none' />
+        <div className='⁂-chat-list-item__content'>
+          <div className='⁂-chat-list-item__name'>
+            <p>
+              <FormattedMessage id='chat_list_item_shoutbox' defaultMessage='{instance} shoutbox' values={{ instance: instance.title }} />
+            </p>
+          </div>
 
-            {lastMessage && (
-              <>
-                <Text
-                  align='left'
-                  size='sm'
-                  weight='medium'
-                  theme='muted'
-                  truncate
-                  className='truncate-child pointer-events-none h-5 w-full'
-                >
-                  {lastMessageAuthor && (
-                    <Text weight='bold' size='sm' align='left' theme='muted' truncate tag='span'>
-                      {lastMessageAuthor.display_name || `@${lastMessageAuthor.username}`}:
-                      {' '}
-                    </Text>
-                  )}
-                  <ParsedContent html={lastMessage.text} />
-                </Text>
-              </>
-            )}
-          </Stack>
-        </HStack>
-      </HStack>
+          {lastMessage && (
+            <>
+              <p className='⁂-chat-list-item__message'>
+                {lastMessageAuthor && (
+                  <span className='⁂-chat-list-item__message__author'>
+                    <Emojify text={lastMessageAuthor.display_name} emojis={lastMessageAuthor.emojis} />{': '}
+                  </span>
+                )}
+                <ParsedContent html={lastMessage.text} />
+              </p>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 };

@@ -15,6 +15,51 @@
       height: 1rem;
     }
   }
+
+  &__banner__container {
+    @apply dark:sm:shadow-inset relative flex h-24 items-center justify-center overflow-hidden rounded-lg bg-primary-100 text-primary-500 dark:bg-gray-800 dark:text-white sm:h-32 sm:shadow;
+    
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+
+    .⁂-icon-button {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+    }
+  }
+
+  .lexical {
+    display: block;
+    width: 100%;
+    border-radius: 0.375rem;
+    border: 1px solid rgb(var(--color-gray-400));
+    background-color: rgb(var(--color-white));
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9375rem;
+    color: rgb(var(--color-gray-900));
+    outline: 1px solid transparent;
+    @apply placeholder:text-gray-600 focus-within:border-primary-500 black:bg-black dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-600 dark:focus-within:border-primary-500 sm:text-sm;
+
+    &:focus-within {
+      outline-color: rgb(var(--color-primary-500));
+    }
+
+    &:is(.dark *) {
+      outline-color: rgb(var(--color-gray-800));
+
+      &:focus-within {
+        outline-color: rgb(var(--color-primary-500));
+      }
+    }
+  }
+
+  .⁂-compose-form__editor__placeholder {
+    @apply pt-2;
+  }
 }
 
 .⁂-event-map-modal {

@@ -773,7 +773,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
           <div className='mt-6 flex w-full justify-end sm:pb-1'>
             <HStack space={2} className='mt-10' justifyContent='end' wrap>
-              <SubscriptionButton account={account} />
+              {(ownAccount && account.id !== ownAccount.id) && <SubscriptionButton account={account} />}
               {renderMessageButton()}
               {renderShareButton()}
 

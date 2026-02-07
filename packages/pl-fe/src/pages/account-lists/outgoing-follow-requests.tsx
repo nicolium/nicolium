@@ -22,7 +22,7 @@ const OutgoingFollowRequestsPage: React.FC = () => {
     <ScrollableList
       scrollKey='outgoingFollowRequests'
       hasMore={hasNextPage}
-      isLoading={typeof isLoading === 'boolean' ? isLoading : true}
+      isLoading={isLoading}
       onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
       emptyMessageText={<FormattedMessage id='empty_column.outgoing_follow_requests' defaultMessage="You don't have any outgoing follow requests yet. When you try to follow a user, it will show up here." />}
       itemClassName='p-2.5'

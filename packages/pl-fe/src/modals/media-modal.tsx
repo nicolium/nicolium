@@ -2,7 +2,7 @@ import { animated, useSpring } from '@react-spring/web';
 import { Link } from '@tanstack/react-router';
 import { useDrag } from '@use-gesture/react';
 import clsx from 'clsx';
-import React, { type RefCallback, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { fetchStatusWithContext } from '@/actions/statuses';
@@ -12,7 +12,6 @@ import StatusActionBar from '@/components/status-action-bar';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Stack from '@/components/ui/stack';
 import Audio from '@/features/audio';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import Thread from '@/features/status/components/thread';
@@ -69,23 +68,20 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
   const [wrapperStyles, api] = useSpring(() => ({
     x: `-${index * 100}%`,
-  }));
+  }), [index]);
 
-  const handleChangeIndex = useCallback(
-    (newIndex: number, animate = false) => {
-      if (newIndex < 0) {
-        newIndex = media.length + newIndex;
-      } else if (newIndex >= media.length) {
-        newIndex = newIndex % media.length;
-      }
-      setIndex(newIndex);
-      setZoomedIn(false);
-      if (animate) {
-        void api.start({ x: `calc(-${newIndex * 100}% + 0px)` });
-      }
-    },
-    [api, media.length],
-  );
+  const handleChangeIndex = useCallback((newIndex: number, animate = false) => {
+    if (newIndex < 0) {
+      newIndex = media.length + newIndex;
+    } else if (newIndex >= media.length) {
+      newIndex = newIndex % media.length;
+    }
+    setIndex(newIndex);
+    setZoomedIn(false);
+    if (animate) {
+      void api.start({ x: `calc(-${newIndex * 100}% + 0px)` });
+    }
+  }, [api, media.length]);
   const handlePrevClick = useCallback(() => {
     handleChangeIndex(index - 1, true);
   }, [handleChangeIndex, index]);
@@ -93,19 +89,19 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     handleChangeIndex(index + 1, true);
   }, [handleChangeIndex, index]);
 
-  const [viewportDimensions, setViewportDimensions] = useState<{
-      width: number;
-      height: number;
-    }>({ width: 0, height: 0 });
+  // const [viewportDimensions, setViewportDimensions] = useState<{
+  //     width: number;
+  //     height: number;
+  //   }>({ width: 0, height: 0 });
 
-  const handleRef: RefCallback<HTMLDivElement> = useCallback((ele) => {
-    if (ele?.clientWidth && ele.clientHeight) {
-      setViewportDimensions({
-        width: ele.clientWidth,
-        height: ele.clientHeight,
-      });
-    }
-  }, []);
+  // const handleRef: RefCallback<HTMLDivElement> = useCallback((ele) => {
+  //   if (ele?.clientWidth && ele.clientHeight) {
+  //     setViewportDimensions({
+  //       width: ele.clientWidth,
+  //       height: ele.clientHeight,
+  //     });
+  //   }
+  // }, []);
 
   const hasMultipleImages = media.length > 1;
 
@@ -127,10 +123,20 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   };
 
   const bind = useDrag(
-    ({ active, movement: [mx], direction: [xDir], cancel }) => {
+    ({ active, movement: [mx], direction: [xDir], cancel, event }) => {
       // Disable swipe when zoomed in.
       if (zoomedIn) {
         return;
+      }
+
+      // Disable swipe when interacting with video/audio controls or other interactive elements
+      const target = event?.target as HTMLElement | null;
+      if (target) {
+        const interactiveParent = target.closest('.video-player__controls, button');
+        if (interactiveParent) {
+          cancel();
+          return;
+        }
       }
 
       // If dragging and swipe distance is enough, change the index.
@@ -143,9 +149,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
       }
       // Set the x position via calc to ensure proper centering regardless of screen size.
       const x = active ? mx : 0;
-      void api.start({
-        x: `calc(-${index * 100}% + ${x}px)`,
-      });
+      void api.start({ x: `calc(-${index * 100}% + ${x}px)` });
     },
     { pointer: { capture: false } },
   );
@@ -159,17 +163,17 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     setNavigationHidden(value => !value && userTouching.matches);
   };
 
-  const currentMedia = media[index];
+  // const currentMedia = media[index];
 
-  const zoomable =
-      currentMedia.type === 'image' && currentMedia.meta.original &&
-      (currentMedia.meta.original.width > viewportDimensions.width || currentMedia.meta.original.height > viewportDimensions.height);
+  // const zoomable =
+  //     currentMedia.type === 'image' && currentMedia.meta.original &&
+  //     (currentMedia.meta.original.width > viewportDimensions.width || currentMedia.meta.original.height > viewportDimensions.height);
 
   const handleZoomClick = useCallback(() => {
     setZoomedIn((prev) => !prev);
   }, []);
 
-  const content = useMemo(() => media.map((attachment, i) => {
+  const content = useMemo(() => media.map((attachment, idx) => {
     let width: number | undefined, height: number | undefined;
     if (attachment.type === 'image' || attachment.type === 'gifv' || attachment.type === 'video') {
       width = (attachment.meta?.original?.width);
@@ -185,18 +189,18 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     if (attachment.type === 'image') {
       return (
         <ZoomableImage
-          blurhash={attachment.blurhash || undefined}
           src={attachment.url}
+          blurhash={attachment.blurhash || undefined}
           width={width!}
           height={height!}
           alt={attachment.description}
-          key={attachment.url}
           lang={props.lang}
+          key={attachment.url}
           onClick={toggleNavigation}
           onDoubleClick={handleZoomClick}
           onClose={onClose}
           onZoomChange={setZoomedIn}
-          zoomedIn={zoomedIn && i === index}
+          zoomedIn={zoomedIn && idx === index}
         />
       );
     } else if (attachment.type === 'video') {
@@ -209,7 +213,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
           height={height}
           startTime={time}
           detailed
-          autoFocus={i === index}
+          autoFocus={idx === index}
           link={link}
           alt={attachment.description}
           key={attachment.url}
@@ -283,27 +287,27 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   };
 
   return (
-    <div className='⁂-media-modal media-modal pointer-events-auto fixed inset-0 z-[9999] h-full bg-gray-900/90'>
+    <div className={clsx('⁂-media-modal', { '⁂-media-modal--fullscreen': isFullScreen })} role='presentation'>
       <div
-        className='absolute inset-0'
-        role='presentation'
+        {...bind()}
+        onClick={handleClickOutside}
+        className='⁂-media-modal__content'
+        // ref={handleRef}
       >
-        <Stack
-          {...bind()}
-          onClick={handleClickOutside}
-          className={
-            clsx('⁂-media-modal__content fixed inset-0 h-full grow touch-pan-y transition-all', {
-              'xl:pr-96': !isFullScreen,
-              'xl:pr-0': isFullScreen,
-            })
-          }
-          justifyContent='between'
-          ref={handleRef}
+        <animated.div
+          style={wrapperStyles}
+          className='⁂-media-modal__closer'
+          role='presentation'
+          onClick={() => onClose()}
         >
+          {content}
+        </animated.div>
+
+        <div className='⁂-media-modal__navigation'>
           <HStack
             alignItems='center'
             justifyContent='between'
-            className={clsx('flex-[0_0_60px] p-4 transition-opacity', navigationHiddenClassName)}
+            className={clsx('pointer-events-auto z-10 flex-[0_0_60px] p-4 transition-opacity', navigationHiddenClassName)}
           >
             <IconButton
               title={intl.formatMessage(messages.close)}
@@ -315,7 +319,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
             />
 
             <HStack alignItems='center' space={2}>
-              {zoomable && (
+              {/* {zoomable && (
                 <IconButton
                   title={intl.formatMessage(zoomedIn ? messages.zoomOut : messages.zoomIn)}
                   src={zoomedIn ? require('@phosphor-icons/core/regular/magnifying-glass-minus.svg') : require('@phosphor-icons/core/regular/magnifying-glass-plus.svg')}
@@ -324,7 +328,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                   iconClassName='h-5 w-5'
                   onClick={handleZoomClick}
                 />
-              )}
+              )} */}
 
               <IconButton
                 title={intl.formatMessage(messages.download)}
@@ -347,13 +351,9 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
               )}
             </HStack>
           </HStack>
-
-          {/* Height based on height of top/bottom bars */}
-          <div
-            className='relative h-[calc(100vh-120px)] w-full grow'
-          >
-            {hasMultipleImages && (
-              <div className={clsx('absolute inset-y-0 left-5 z-10 flex items-center transition-opacity', navigationHiddenClassName)}>
+          {hasMultipleImages && (
+            <HStack className='z-10 mx-5' justifyContent='between'>
+              <div className={clsx('pointer-events-auto z-10 flex h-fit items-center transition-opacity', navigationHiddenClassName)}>
                 <button
                   tabIndex={0}
                   className='flex size-10 items-center justify-center rounded-full bg-gray-900 text-white'
@@ -363,19 +363,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                   <Icon src={require('@phosphor-icons/core/regular/arrow-left.svg')} className='size-5' />
                 </button>
               </div>
-            )}
-
-            <animated.div
-              style={wrapperStyles}
-              className='media-modal__closer'
-              role='presentation'
-              onClick={() => onClose()}
-            >
-              {content}
-            </animated.div>
-
-            {hasMultipleImages && (
-              <div className={clsx('absolute inset-y-0 right-5 z-10 flex items-center transition-opacity', navigationHiddenClassName)}>
+              <div className={clsx('pointer-events-auto z-10 flex h-fit items-center transition-opacity', navigationHiddenClassName)}>
                 <button
                   tabIndex={0}
                   className='flex size-10 items-center justify-center rounded-full bg-gray-900 text-white'
@@ -385,13 +373,12 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                   <Icon src={require('@phosphor-icons/core/regular/arrow-right.svg')} className='size-5' />
                 </button>
               </div>
-            )}
-          </div>
-
-          {status && (
+            </HStack>
+          )}
+          {status ? (
             <HStack
               justifyContent='center'
-              className={clsx('flex-[0_0_60px] transition-opacity', navigationHiddenClassName)}
+              className={clsx('pointer-events-auto flex-[0_0_60px] transition-opacity', navigationHiddenClassName)}
             >
               <StatusActionBar
                 status={status}
@@ -399,26 +386,26 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                 expandable
               />
             </HStack>
-          )}
-        </Stack>
-
-        {status && (
-          <div
-            className={
-              clsx('-right-96 hidden bg-white transition-all xl:fixed xl:inset-y-0 xl:right-0 xl:flex xl:w-96 xl:flex-col', {
-                'xl:!-right-96': isFullScreen,
-              })
-            }
-          >
-            <Thread
-              status={status}
-              withMedia={false}
-              itemClassName='px-4'
-              isModal
-            />
-          </div>
-        )}
+          ) : <span />}
+        </div>
       </div>
+
+      {status && (
+        <div
+          className={
+            clsx('-right-96 hidden bg-white transition-all xl:fixed xl:inset-y-0 xl:right-0 xl:flex xl:w-96 xl:flex-col', {
+              'xl:!-right-96': isFullScreen,
+            })
+          }
+        >
+          <Thread
+            status={status}
+            withMedia={false}
+            itemClassName='px-4'
+            isModal
+          />
+        </div>
+      )}
     </div>
   );
 };

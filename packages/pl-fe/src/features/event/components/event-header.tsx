@@ -443,7 +443,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
             </span>
           </HStack>
 
-          {event.join_mode !== 'external' || event.participants_count > 0 && (
+          {(event.join_mode !== 'external' || event.participants_count > 0) && (
             <HStack alignItems='center' space={2}>
               <Icon src={require('@phosphor-icons/core/regular/users.svg')} />
               <a href='#' className='hover:underline' onClick={handleParticipantsClick}>

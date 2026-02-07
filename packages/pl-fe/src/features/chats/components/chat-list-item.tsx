@@ -1,4 +1,5 @@
 import { useNavigate } from '@tanstack/react-router';
+import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -6,12 +7,10 @@ import DropdownMenu from '@/components/dropdown-menu';
 import { ParsedContent } from '@/components/parsed-content';
 import RelativeTimestamp from '@/components/relative-timestamp';
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
-import Stack from '@/components/ui/stack';
-import Text from '@/components/ui/text';
 import VerificationBadge from '@/components/verification-badge';
 import { useChatContext } from '@/contexts/chat-context';
+import Emojify from '@/features/emoji/emojify';
 import { useFeatures } from '@/hooks/use-features';
 import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
 import { useChatActions } from '@/queries/chats';
@@ -30,7 +29,7 @@ const messages = defineMessages({
 
 interface IChatListItemInterface {
   chat: Chat;
-  onClick: (chat: any) => void;
+  onClick: (chat: Chat) => void;
 }
 
 const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
@@ -81,70 +80,58 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
       key={chat.id}
       onClick={() => onClick(chat)}
       onKeyDown={handleKeyDown}
-      className='group flex w-full flex-col rounded-lg px-2 py-3 hover:bg-gray-100 focus:shadow-inset-ring dark:hover:bg-gray-800'
+      className='⁂-chat-list-item'
       data-testid='chat-list-item'
       tabIndex={0}
     >
-      <HStack alignItems='center' justifyContent='between' space={2} className='w-full'>
-        <HStack alignItems='center' space={2} className='overflow-hidden'>
+      <div>
+        <div className='⁂-chat-list-item__info'>
           <Avatar
             src={chat.account.avatar}
             alt={chat.account.avatar_description}
             size={40}
-            className='flex-none'
+            className='⁂-chat-list-item__avatar'
             isCat={chat.account.is_cat}
             username={chat.account.username}
           />
 
-          <Stack alignItems='start' className='overflow-hidden'>
-            <div className='flex w-full grow items-center space-x-1'>
-              <Text weight='bold' size='sm' align='left' truncate>{chat.account?.display_name || `@${chat.account.username}`}</Text>
+          <div className='⁂-chat-list-item__content'>
+            <div className='⁂-chat-list-item__name'>
+              <p>
+                <Emojify text={chat.account.display_name} emojis={chat.account.emojis} />
+              </p>
               {chat.account?.verified && <VerificationBadge />}
             </div>
 
-            {(isBlocked || isBlocking) ? (
-              <Text
-                align='left'
-                size='sm'
-                weight='medium'
-                theme='muted'
-                truncate
-                className='pointer-events-none h-5 w-full italic'
-                data-testid='chat-last-message'
-              >
-                {isBlocked
-                  ? <FormattedMessage id='chat_list_item.blocked_you' defaultMessage='This user has blocked you' />
-                  : <FormattedMessage id='chat_list_item.blocking' defaultMessage='You have blocked this user' />}
-              </Text>
-            ) : (
-              <>
-                {chat.last_message?.content && (
-                  <Text
-                    align='left'
-                    size='sm'
-                    weight='medium'
-                    theme={chat.last_message.unread ? 'default' : 'muted'}
-                    truncate
-                    className='truncate-child pointer-events-none h-5 w-full'
-                    data-testid='chat-last-message'
-                  >
-                    <ParsedContent html={chat.last_message?.content} emojis={chat.last_message.emojis} />
-                  </Text>
-                )}
-              </>
-            )}
-          </Stack>
-        </HStack>
+            <p
+              className={clsx('⁂-chat-list-item__message', {
+                '⁂-chat-list-item__message--unread': !(isBlocked || isBlocking) && chat.last_message?.unread,
+                '⁂-chat-list-item__message--blocking': isBlocked || isBlocking,
+              })}
+            >
+              {isBlocked ? (
+                <FormattedMessage id='chat_list_item.blocked_you' defaultMessage='This user has blocked you' />
+              ) : isBlocking ? (
+                <FormattedMessage id='chat_list_item.blocking' defaultMessage='You have blocked this user' />
+              ) : (
+                chat.last_message?.content && (
+                  <ParsedContent
+                    html={chat.last_message?.content}
+                    emojis={chat.last_message.emojis}
+                  />
+                )
+              )}
+            </p>
+          </div>
+        </div>
 
-        <HStack alignItems='center' space={2}>
+        <div className='⁂-chat-list-item__actions'>
           {features.chatsDelete && (
-            <div className='max-w-0 overflow-hidden text-gray-600 hover:text-gray-100 group-hover:max-w-full'>
+            <div className='⁂-chat-list-item__menu'>
               <DropdownMenu items={menu}>
                 <IconButton
                   src={require('@phosphor-icons/core/regular/dots-three.svg')}
                   title={intl.formatMessage(messages.settings)}
-                  className='text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500'
-                  iconClassName='h-4 w-4'
                 />
               </DropdownMenu>
             </div>
@@ -154,7 +141,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
             <>
               {chat.last_message.unread && (
                 <div
-                  className='size-2 rounded-full bg-secondary-500'
+                  className='⁂-chat-list-item__unread'
                   data-testid='chat-unread-indicator'
                 />
               )}
@@ -168,8 +155,8 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
               />
             </>
           )}
-        </HStack>
-      </HStack>
+        </div>
+      </div>
     </div>
   );
 };

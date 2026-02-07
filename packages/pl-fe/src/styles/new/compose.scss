@@ -30,6 +30,11 @@
     background-color: transparent !important;
   }
 
+  &__editor__placeholder {
+    @apply pointer-events-none absolute top-0 select-none text-[1rem] text-gray-600 dark:placeholder:text-gray-600;
+    visibility: visible !important;
+  }
+
   &:not(&--transparent) &__editor {
     @apply rounded-md border-gray-400 px-3 py-2 ring-2 focus-within:border-primary-500 focus-within:ring-primary-500 dark:border-gray-800 dark:ring-gray-800 dark:focus-within:border-primary-500 dark:focus-within:ring-primary-500;
 
@@ -147,7 +152,7 @@
   }
 }
 
-.⁂-modal-root__modal .⁂-compose-form__select-buttons {
+.⁂-modal-root__container .⁂-compose-form__select-buttons {
   padding-top: 0.25rem;
 }
 

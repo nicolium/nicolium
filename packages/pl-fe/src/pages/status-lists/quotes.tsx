@@ -35,7 +35,7 @@ const QuotesPage: React.FC = () => {
           statusIds={statusIds}
           scrollKey={`quotes:${statusId}`}
           hasMore={hasNextPage}
-          isLoading={typeof isLoading === 'boolean' ? isLoading : true}
+          isLoading={isLoading}
           onLoadMore={handleLoadMore}
           emptyMessageText={emptyMessage}
         />

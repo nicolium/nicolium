@@ -8,10 +8,15 @@ import Spinner from '@/components/ui/spinner';
 import Stack from '@/components/ui/stack';
 import AccountContainer from '@/containers/account-container';
 import { useAcceptEventParticipationRequestMutation, useEventParticipationRequests, useRejectEventParticipationRequestMutation } from '@/queries/events/use-event-participation-requests';
+import toast from '@/toast';
 
 const messages = defineMessages({
   authorize: { id: 'compose_event.participation_requests.authorize', defaultMessage: 'Authorize' },
+  authorizeSuccess: { id: 'compose_event.participation_requests.authorize.success', defaultMessage: 'Event participation request authorized successfully' },
+  authorizeFail: { id: 'compose_event.participation_requests.authorize.fail', defaultMessage: 'Failed to authorize event participation request' },
   reject: { id: 'compose_event.participation_requests.reject', defaultMessage: 'Reject' },
+  rejectSuccess: { id: 'compose_event.participation_requests.reject.success', defaultMessage: 'Event participation request rejected successfully' },
+  rejectFail: { id: 'compose_event.participation_requests.reject.fail', defaultMessage: 'Failed to reject event participation request' },
 });
 
 interface IAccount {
@@ -36,13 +41,27 @@ const Account: React.FC<IAccount> = ({ eventId, id, participationMessage }) => {
             theme='secondary'
             size='sm'
             text={intl.formatMessage(messages.authorize)}
-            onClick={() => acceptEventParticipationRequest()}
+            onClick={() => acceptEventParticipationRequest(undefined, {
+              onSuccess: () => {
+                toast.success(messages.authorizeSuccess);
+              },
+              onError: () => {
+                toast.error(messages.authorizeFail);
+              },
+            })}
           />
           <Button
             theme='danger'
             size='sm'
             text={intl.formatMessage(messages.reject)}
-            onClick={() => rejectEventParticipationRequest()}
+            onClick={() => rejectEventParticipationRequest(undefined, {
+              onSuccess: () => {
+                toast.success(messages.rejectSuccess);
+              },
+              onError: () => {
+                toast.error(messages.rejectFail);
+              },
+            })}
           />
         </HStack>
       }
@@ -63,7 +82,7 @@ const ManagePendingParticipants: React.FC<IManagePendingParticipants> = ({ statu
         scrollKey={`eventPendingParticipants:${statusId}`}
         emptyMessageText={<FormattedMessage id='empty_column.event_participant_requests' defaultMessage='There are no pending event participation requests.' />}
         hasMore={hasNextPage}
-        isLoading={typeof isLoading === 'boolean' ? isLoading : true}
+        isLoading={isLoading}
         onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
       >
         {accounts.map(({ account_id, participation_message }) =>
