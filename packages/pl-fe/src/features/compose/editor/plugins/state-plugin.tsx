@@ -177,6 +177,14 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
         checkHashtagCasingSuggestions(editorState);
         getQuoteSuggestions(plainText);
         detectLanguage(plainText);
+        if (isEmpty) {
+          window.onbeforeunload = null;
+        } else {
+          window.onbeforeunload = (event) => {
+            event.preventDefault();
+            event.returnValue = true;
+          };
+        }
       });
     });
   }, [editor]);

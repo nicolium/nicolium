@@ -278,6 +278,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
 
     return () => {
       document.removeEventListener('click', handleClick, true);
+      window.onbeforeunload = null;
     };
   }, []);
 
