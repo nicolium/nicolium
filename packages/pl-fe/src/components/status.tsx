@@ -407,7 +407,7 @@ const Status: React.FC<IStatus> = (props) => {
     };
 
     return (
-      <Hotkeys handlers={minHandlers} focusable={focusable}>
+      <Hotkeys handlers={minHandlers} focusable={focusable} element='article'>
         {body}
       </Hotkeys>
     );
@@ -526,7 +526,7 @@ const Status: React.FC<IStatus> = (props) => {
   };
 
   return (
-    <Hotkeys handlers={handlers} focusable={focusable} data-testid='status'>
+    <Hotkeys handlers={handlers} focusable={focusable} element='article' data-testid='status'>
       {body}
     </Hotkeys>
   );

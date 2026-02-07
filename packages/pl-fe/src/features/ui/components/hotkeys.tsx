@@ -283,6 +283,7 @@ interface IHotkeys extends React.HTMLAttributes<HTMLDivElement> {
    */
   focusable?: boolean;
   children: React.ReactNode;
+  element?: React.ComponentType | keyof JSX.IntrinsicElements;
 }
 
 /**
@@ -304,10 +305,12 @@ interface IHotkeys extends React.HTMLAttributes<HTMLDivElement> {
  *
  * Now this function will be called when the 'open' hotkey is pressed by the user.
  */
-export const Hotkeys: React.FC<IHotkeys> = ({ handlers, global, focusable = true, ...props }) => {
+export const Hotkeys: React.FC<IHotkeys> = ({ handlers, global, focusable = true, element: Element = 'div', ...props }) => {
   const ref = useHotkeys<HTMLDivElement>(handlers);
 
+  Element = Element as 'div';
+
   return (
-    <div ref={global ? undefined : ref} tabIndex={focusable ? -1 : undefined} {...props} className={clsx(props.className, focusable && 'focusable')} />
+    <Element ref={global ? undefined : ref} tabIndex={focusable ? -1 : undefined} {...props} className={clsx(props.className, focusable && 'focusable')} />
   );
 };

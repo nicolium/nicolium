@@ -112,7 +112,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
   }, [itemRef.current, index]);
 
   if (item === null) {
-    return <li className='mx-2 my-1 block h-[2px] bg-gray-100 dark:bg-gray-800' />;
+    return <hr className='mx-2 my-1 block h-[2px] border-none bg-gray-100 dark:bg-gray-800' />;
   }
 
   return (

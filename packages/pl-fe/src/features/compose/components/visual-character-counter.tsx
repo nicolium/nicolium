@@ -28,6 +28,7 @@ const VisualCharacterCounter: React.FC<IVisualCharacterCounter> = ({ text, max }
       progress={progress}
       radius={10}
       stroke={3}
+      aria-hidden
     />
   );
 };

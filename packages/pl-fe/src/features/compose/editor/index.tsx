@@ -196,6 +196,9 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
                 )}
                 lang={language || undefined}
                 data-compose-id={composeId}
+                aria-label={textareaPlaceholder}
+                placeholder={<></>}
+                aria-placeholder={textareaPlaceholder}
               />
             </div>
           }
@@ -205,6 +208,7 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
                 'pointer-events-none absolute top-0 select-none text-[1rem] text-gray-600 dark:placeholder:text-gray-600',
                 placeholderClassName,
               )}
+              aria-hidden
             >
               {textareaPlaceholder}
             </div>

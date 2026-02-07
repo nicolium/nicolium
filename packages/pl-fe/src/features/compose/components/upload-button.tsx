@@ -71,8 +71,7 @@ const UploadButton: React.FC<IUploadButton> = ({
         onClick={handleClick}
       />
 
-      <label className='sr-only'>
-        <span>{intl.formatMessage(messages.upload)}</span>
+      <label aria-hidden>
         <input
           key={resetFileKey}
           ref={fileElement}

@@ -40,7 +40,7 @@ const IconButton = React.forwardRef((props: IIconButton, ref: React.ForwardedRef
       data-testid={filteredProps['data-testid'] || 'icon-button'}
       {...(props.href ? { target: '_blank' } as any : {})}
     >
-      <SvgIcon src={src} className={iconClassName} />
+      <SvgIcon src={src} className={iconClassName} aria-hidden />
 
       {text ? (
         <Text tag='span' theme='inherit' size='sm'>
