@@ -94,6 +94,7 @@ interface IStatus {
   hoverable?: boolean;
   variant?: 'default' | 'rounded' | 'slim';
   showGroup?: boolean;
+  showInfo?: boolean;
   fromBookmarks?: boolean;
   fromHomeTimeline?: boolean;
   className?: string;
@@ -114,6 +115,7 @@ const Status: React.FC<IStatus> = (props) => {
     hideActionBar,
     variant = 'rounded',
     showGroup = true,
+    showInfo = true,
     fromBookmarks = false,
     fromHomeTimeline = false,
     className,
@@ -253,6 +255,8 @@ const Status: React.FC<IStatus> = (props) => {
   };
 
   const statusInfo = useMemo(() => {
+    if (!showInfo) return null;
+
     if (isReblog && showGroup && group) {
       return (
         <StatusInfo
