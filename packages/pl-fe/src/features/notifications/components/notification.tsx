@@ -191,7 +191,7 @@ const buildMessage = (
     instance: instanceTitle,
     count: accounts.length,
     hasStatus: +hasStatus,
-    isReblog: type === 'reblog' ? 1 : 0,
+    isReblog: isReblog ? 1 : 0,
   });
 };
 
@@ -471,6 +471,7 @@ const Notification: React.FC<INotification> = (props) => {
       intl.formatMessage(messages[displayedType], {
         name: accounts.length ? intl.formatList(accounts.map(account => account.acct), { type: 'conjunction' }) : '',
         targetName,
+        isReblog: status?.reblog ? 1 : 0,
       }),
       notification.latest_page_notification_at!,
     )
