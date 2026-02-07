@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { IntlProvider } from 'react-intl';
 
+import { loadFrontendConfig } from '@/actions/frontend-config';
 import { checkIfStandalone, fetchInstance } from '@/actions/instance';
 import { fetchMe } from '@/actions/me';
-import { loadPlFeConfig } from '@/actions/pl-fe';
 import LoadingScreen from '@/components/loading-screen';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
@@ -21,7 +21,7 @@ const loadInitial = () => async(dispatch: AppDispatch) => {
   // Await for feature detection
   await dispatch(fetchInstance());
   // Await for configuration
-  await dispatch(loadPlFeConfig());
+  await dispatch(loadFrontendConfig());
 };
 
 interface IPlFeLoad {

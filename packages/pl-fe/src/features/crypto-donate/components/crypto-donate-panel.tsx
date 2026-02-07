@@ -4,8 +4,8 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import Text from '@/components/ui/text';
 import Widget from '@/components/ui/widget';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/hooks/use-instance';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
 
 import SiteWallet from './site-wallet';
 
@@ -22,7 +22,7 @@ const CryptoDonatePanel: React.FC<ICryptoDonatePanel> = ({ limit = 3 }): JSX.Ele
   const navigate = useNavigate();
   const instance = useInstance();
 
-  const addresses = usePlFeConfig().cryptoAddresses;
+  const addresses = useFrontendConfig().cryptoAddresses;
 
   if (limit === 0 || addresses.length === 0) {
     return null;

@@ -2,9 +2,9 @@ import React, { useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import { updatePlFeConfig } from '@/actions/admin';
+import { updateFrontendConfig } from '@/actions/admin';
+import { fetchFrontendConfig } from '@/actions/frontend-config';
 import { getHost } from '@/actions/instance';
-import { fetchPlFeConfig } from '@/actions/pl-fe';
 import DropdownMenu from '@/components/dropdown-menu';
 import List, { ListItem } from '@/components/list';
 import Button from '@/components/ui/button';
@@ -15,9 +15,9 @@ import ColorPicker from '@/features/pl-fe-config/components/color-picker';
 import Palette, { ColorGroup } from '@/features/theme-editor/components/palette';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { normalizeColors } from '@/hooks/use-theme-css';
-import { plFeConfigSchema } from '@/normalizers/pl-fe/pl-fe-config';
+import { frontendConfigSchema } from '@/normalizers/frontend-config';
 import toast from '@/toast';
 import { download } from '@/utils/download';
 
@@ -47,11 +47,11 @@ const ThemeEditorPage: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const plFeConfig = usePlFeConfig();
+  const frontendConfig = useFrontendConfig();
   const host = useAppSelector(state => getHost(state));
-  const rawConfig = useAppSelector(state => state.plfe);
+  const rawConfig = useAppSelector(state => state.frontendConfig);
 
-  const [colors, setColors] = useState(normalizeColors(plFeConfig));
+  const [colors, setColors] = useState(normalizeColors(frontendConfig));
   const [isDefault, setIsDefault] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [resetKey, setResetKey] = useState(crypto.randomUUID());
@@ -86,7 +86,7 @@ const ThemeEditorPage: React.FC = () => {
   };
 
   const resetTheme = () => {
-    setTheme(normalizeColors(plFeConfig));
+    setTheme(normalizeColors(frontendConfig));
   };
 
   const updateTheme = async () => {
@@ -96,11 +96,11 @@ const ThemeEditorPage: React.FC = () => {
     } else {
       params = { ...rawConfig, colors };
     }
-    await dispatch(updatePlFeConfig(params));
+    await dispatch(updateFrontendConfig(params));
   };
 
   const restoreDefaultTheme = () => {
-    const config = v.parse(plFeConfigSchema, { brandColor: '#d80482' });
+    const config = v.parse(frontendConfigSchema, { brandColor: '#d80482' });
     setTheme(normalizeColors(config));
     setIsDefault(true);
   };
@@ -120,7 +120,7 @@ const ThemeEditorPage: React.FC = () => {
     if (file) {
       const text = await file.text();
       const json = JSON.parse(text);
-      const colors = v.parse(plFeConfigSchema, { colors: json }).colors;
+      const colors = v.parse(frontendConfigSchema, { colors: json }).colors;
 
       setTheme(colors);
       toast.success(intl.formatMessage(messages.importSuccess));
@@ -131,7 +131,7 @@ const ThemeEditorPage: React.FC = () => {
     setSubmitting(true);
 
     try {
-      await dispatch(fetchPlFeConfig(host));
+      await dispatch(fetchFrontendConfig(host));
       await updateTheme();
       toast.success(intl.formatMessage(messages.saved));
       setSubmitting(false);

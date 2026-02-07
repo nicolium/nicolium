@@ -5,7 +5,7 @@ import HStack from '@/components/ui/hstack';
 import Input from '@/components/ui/input';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
-import type { CryptoAddress } from '@/normalizers/pl-fe/pl-fe-config';
+import type { CryptoAddress } from '@/normalizers/frontend-config';
 
 const messages = defineMessages({
   ticker: { id: 'plfe_config.crypto_address.meta_fields.ticker_placeholder', defaultMessage: 'Ticker' },

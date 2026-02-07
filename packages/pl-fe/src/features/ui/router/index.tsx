@@ -16,10 +16,10 @@ import SiteError from '@/components/site-error';
 import Layout from '@/components/ui/layout';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/hooks/use-instance';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
 import AdminLayout from '@/layouts/admin-layout';
 import ChatsLayout from '@/layouts/chats-layout';
 import DefaultLayout from '@/layouts/default-layout';
@@ -124,7 +124,7 @@ import {
   OutgoingFollowRequests,
   PasswordReset,
   PinnedStatuses,
-  PlFeConfig,
+  FrontendConfig,
   PublicTimeline,
   Quotes,
   RegisterInvite,
@@ -269,7 +269,7 @@ const layouts = {
 
 // Root routes
 const HomeRoute = () => {
-  const { redirectRootNoLogin } = usePlFeConfig();
+  const { redirectRootNoLogin } = useFrontendConfig();
   const standalone = useAppSelector(isStandalone);
   const { isLoggedIn } = useLoggedIn();
 
@@ -991,11 +991,11 @@ export const settingsPrivacyRoute = createRoute({
   beforeLoad: requireAuth,
 });
 
-// PlFe config
-export const plFeConfigRoute = createRoute({
+// Frontend config
+export const frontendConfigRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/pl-fe/config',
-  component: PlFeConfig,
+  component: FrontendConfig,
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   }),
@@ -1363,7 +1363,7 @@ const routeTree = rootRoute.addChildren([
     settingsTokensRoute,
     settingsInteractionPoliciesRoute,
     settingsPrivacyRoute,
-    plFeConfigRoute,
+    frontendConfigRoute,
     aboutRoute,
     shareRoute,
     developersRoute,
@@ -1486,7 +1486,7 @@ declare module '@tanstack/react-router' {
 const RouterWithContext = () => {
   const instance = useInstance();
   const features = useFeatures();
-  const { cryptoAddresses } = usePlFeConfig();
+  const { cryptoAddresses } = useFrontendConfig();
   const hasCrypto = cryptoAddresses.length > 0;
   const { account } = useOwnAccount();
 

@@ -4,14 +4,14 @@ import { toTailwind, fromBasicColors, expandPalette } from './tailwind';
 
 describe('toTailwind()', () => {
   it('handles empty pl-fe config', () => {
-    const plFeConfig = ImmutableMap<string, any>();
-    const result = toTailwind(plFeConfig);
+    const frontendConfig = ImmutableMap<string, any>();
+    const result = toTailwind(frontendConfig);
     const expected = ImmutableMap({ colors: ImmutableMap() });
     expect(result).toEqual(expected);
   });
 
   it('converts brandColor into a Tailwind color palette', () => {
-    const plFeConfig = ImmutableMap({ brandColor: '#0482d8' });
+    const frontendConfig = ImmutableMap({ brandColor: '#0482d8' });
 
     const expected = {
       brandColor: '#0482d8',
@@ -31,12 +31,12 @@ describe('toTailwind()', () => {
       },
     };
 
-    const result = toTailwind(plFeConfig);
+    const result = toTailwind(frontendConfig);
     expect(result.toJS()).toMatchObject(expected);
   });
 
   it('prefers Tailwind colors object over legacy colors', () => {
-    const plFeConfig = ImmutableMap({
+    const frontendConfig = ImmutableMap({
       brandColor: '#0482d8',
       colors: ImmutableMap({
         primary: ImmutableMap({
@@ -63,14 +63,14 @@ describe('toTailwind()', () => {
       },
     };
 
-    const result = toTailwind(plFeConfig);
+    const result = toTailwind(frontendConfig);
     expect(result.toJS()).toMatchObject(expected);
   });
 });
 
 describe('fromBasicColors()', () => {
   it('converts only brandColor', () => {
-    const plFeConfig = ImmutableMap({ brandColor: '#0482d8' });
+    const frontendConfig = ImmutableMap({ brandColor: '#0482d8' });
 
     const expected = {
       primary: {
@@ -124,12 +124,12 @@ describe('fromBasicColors()', () => {
       },
     };
 
-    const result = fromBasicColors(plFeConfig);
+    const result = fromBasicColors(frontendConfig);
     expect(result).toEqual(expected);
   });
 
   it('converts both legacy colors', () => {
-    const plFeConfig = ImmutableMap({
+    const frontendConfig = ImmutableMap({
       brandColor: '#0482d8',
       accentColor: '#2bd110',
     });
@@ -185,7 +185,7 @@ describe('fromBasicColors()', () => {
       },
     };
 
-    const result = fromBasicColors(plFeConfig);
+    const result = fromBasicColors(frontendConfig);
     expect(result).toEqual(expected);
   });
 });

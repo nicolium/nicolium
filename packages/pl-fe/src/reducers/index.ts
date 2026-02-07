@@ -11,12 +11,12 @@ import compose from './compose';
 import contexts from './contexts';
 import conversations from './conversations';
 import filters from './filters';
+import frontendConfig from './frontend-config';
 import instance from './instance';
 import me from './me';
 import meta from './meta';
 import notifications from './notifications';
 import pending_statuses from './pending-statuses';
-import plfe from './pl-fe';
 import push_notifications from './push-notifications';
 import statuses from './statuses';
 import timelines from './timelines';
@@ -30,12 +30,12 @@ const reducers = {
   conversations,
   entities,
   filters,
+  frontendConfig,
   instance,
   me,
   meta,
   notifications,
   pending_statuses,
-  plfe,
   push_notifications,
   statuses,
   timelines,
@@ -53,8 +53,8 @@ const logOut = (state: AppState): ReturnType<typeof appReducer> => {
 
   const newState = rootReducer(undefined, { type: '' });
 
-  const { instance, plfe, auth } = state;
-  return { ...newState, instance, plfe, auth };
+  const { instance, frontendConfig, auth } = state;
+  return { ...newState, instance, frontendConfig, auth };
 };
 
 const rootReducer: typeof appReducer = (state, action) => {

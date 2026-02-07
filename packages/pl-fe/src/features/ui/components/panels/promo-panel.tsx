@@ -4,13 +4,13 @@ import ForkAwesomeIcon from '@/components/fork-awesome-icon';
 import List, { ListItem } from '@/components/list';
 import HStack from '@/components/ui/hstack';
 import Widget from '@/components/ui/widget';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/hooks/use-instance';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
 import { useSettings } from '@/stores/settings';
 
 const PromoPanel: React.FC = () => {
   const instance = useInstance();
-  const { promoPanel } = usePlFeConfig();
+  const { promoPanel } = useFrontendConfig();
   const { locale } = useSettings();
 
   const promoItems = promoPanel.items;

@@ -7,8 +7,8 @@ import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/hooks/use-instance';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
 
 import Shoutbox from '../shoutbox';
 
@@ -17,7 +17,7 @@ import ChatPaneHeader from './chat-pane-header';
 const ShoutboxWindow = () => {
   const { changeScreen, isOpen, toggleChatPane } = useChatContext();
   const instance = useInstance();
-  const { logo } = usePlFeConfig();
+  const { logo } = useFrontendConfig();
 
   const closeChat = () => {
     changeScreen(ChatWidgetScreens.INBOX);

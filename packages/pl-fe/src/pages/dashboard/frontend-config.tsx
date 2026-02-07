@@ -3,7 +3,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import * as v from 'valibot';
 
-import { updatePlFeConfig } from '@/actions/admin';
+import { updateFrontendConfig } from '@/actions/admin';
 import { uploadMedia } from '@/actions/media';
 import List, { ListItem } from '@/components/list';
 import Accordion from '@/components/ui/accordion';
@@ -27,7 +27,7 @@ import ThemeSelector from '@/features/ui/components/theme-selector';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
-import { cryptoAddressSchema, footerItemSchema, plFeConfigSchema, promoPanelItemSchema, type PlFeConfig } from '@/normalizers/pl-fe/pl-fe-config';
+import { cryptoAddressSchema, footerItemSchema, frontendConfigSchema, promoPanelItemSchema, type FrontendConfig } from '@/normalizers/frontend-config';
 import toast from '@/toast';
 
 const messages = defineMessages({
@@ -54,34 +54,34 @@ type ValueGetter<T1 = Element, T2 = any> = (e: React.ChangeEvent<T1>) => T2;
 type StreamItemConfigPath = ['promoPanel', 'items'] | ['navlinks', 'homeFooter'] | ['cryptoAddresses'];
 type ThemeChangeHandler = (theme: 'system' | 'light' | 'dark' | 'black') => void;
 
-const PlFeConfigEditor: React.FC = () => {
+const FrontendConfigEditor: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
   const features = useFeatures();
 
-  const initialData = useAppSelector(state => state.plfe);
+  const initialData = useAppSelector(state => state.frontendConfig);
 
   const [isLoading, setLoading] = useState(false);
-  const [data, setData] = useState(v.parse(plFeConfigSchema, initialData));
+  const [data, setData] = useState(v.parse(frontendConfigSchema, initialData));
   const [jsonEditorExpanded, setJsonEditorExpanded] = useState(false);
   const [rawJSON, setRawJSON] = useState<string>(JSON.stringify(initialData, null, 2));
   const [jsonValid, setJsonValid] = useState(true);
 
-  const plFe = useMemo(() => v.parse(plFeConfigSchema, data), [data]);
+  const frontendConfig = useMemo(() => v.parse(frontendConfigSchema, data), [data]);
 
-  const setConfig = (newData: PlFeConfig) => {
+  const setConfig = (newData: FrontendConfig) => {
     setData(newData);
     setJsonValid(true);
   };
 
-  const putConfig = (newData: PlFeConfig) => {
+  const putConfig = (newData: FrontendConfig) => {
     setData(newData);
     setJsonValid(true);
   };
 
   const handleSubmit: React.FormEventHandler = (e) => {
-    dispatch(updatePlFeConfig(data)).then(() => {
+    dispatch(updateFrontendConfig(data)).then(() => {
       setLoading(false);
       toast.success(intl.formatMessage(messages.saved));
     }).catch(() => {
@@ -91,8 +91,8 @@ const PlFeConfigEditor: React.FC = () => {
     e.preventDefault();
   };
 
-  const handleChange = (path: keyof PlFeConfig, getValue: ValueGetter<any, PlFeConfig[typeof path]>): React.ChangeEventHandler => e => {
-    const newData: PlFeConfig = { ...data, [path]: getValue(e) };
+  const handleChange = (path: keyof FrontendConfig, getValue: ValueGetter<any, FrontendConfig[typeof path]>): React.ChangeEventHandler => e => {
+    const newData: FrontendConfig = { ...data, [path]: getValue(e) };
     setConfig(newData);
   };
 
@@ -104,7 +104,7 @@ const PlFeConfigEditor: React.FC = () => {
     setConfig(newData);
   };
 
-  const handleFileChange = (path: keyof PlFeConfig): React.ChangeEventHandler<HTMLInputElement> => e => {
+  const handleFileChange = (path: keyof FrontendConfig): React.ChangeEventHandler<HTMLInputElement> => e => {
     const file = e.target.files?.item(0);
 
     if (file) {
@@ -157,7 +157,7 @@ const PlFeConfigEditor: React.FC = () => {
   const toggleJSONEditor = (expanded: boolean) => setJsonEditorExpanded(expanded);
 
   useEffect(() => {
-    putConfig(v.parse(plFeConfigSchema, initialData));
+    putConfig(v.parse(frontendConfigSchema, initialData));
   }, [initialData]);
 
   useEffect(() => {
@@ -166,7 +166,7 @@ const PlFeConfigEditor: React.FC = () => {
 
   useEffect(() => {
     try {
-      const data = v.parse(plFeConfigSchema, JSON.parse(rawJSON));
+      const data = v.parse(frontendConfigSchema, JSON.parse(rawJSON));
       putConfig(data);
     } catch {
       setJsonValid(false);
@@ -177,7 +177,7 @@ const PlFeConfigEditor: React.FC = () => {
     <Column label={intl.formatMessage(messages.heading)}>
       <Form onSubmit={handleSubmit}>
         <fieldset className='space-y-6' disabled={isLoading}>
-          <SitePreview plFe={plFe} />
+          <SitePreview frontendConfig={frontendConfig} />
 
           <CardHeader>
             <CardTitle title={<FormattedMessage id='plfe_config.headings.theme' defaultMessage='Theme' />} />
@@ -186,7 +186,7 @@ const PlFeConfigEditor: React.FC = () => {
           <List>
             <ListItem label={<FormattedMessage id='plfe_config.fields.theme_label' defaultMessage='Default theme' />}>
               <ThemeSelector
-                value={plFe.defaultSettings?.themeMode || 'system'}
+                value={frontendConfig.defaultSettings?.themeMode || 'system'}
                 onChange={handleThemeChange}
               />
             </ListItem>
@@ -243,14 +243,14 @@ const PlFeConfigEditor: React.FC = () => {
           <List>
             <ListItem label={intl.formatMessage(messages.displayFqnLabel)}>
               <Toggle
-                checked={plFe.displayFqn === true}
+                checked={frontendConfig.displayFqn === true}
                 onChange={handleChange('displayFqn', (e) => e.target.checked)}
               />
             </ListItem>
 
             <ListItem label={intl.formatMessage(messages.greentextLabel)}>
               <Toggle
-                checked={plFe.greentext === true}
+                checked={frontendConfig.greentext === true}
                 onChange={handleChange('greentext', (e) => e.target.checked)}
               />
             </ListItem>
@@ -260,7 +260,7 @@ const PlFeConfigEditor: React.FC = () => {
               hint={intl.formatMessage(messages.mediaPreviewHint)}
             >
               <Toggle
-                checked={plFe.mediaPreview === true}
+                checked={frontendConfig.mediaPreview === true}
                 onChange={handleChange('mediaPreview', (e) => e.target.checked)}
               />
             </ListItem>
@@ -298,7 +298,7 @@ const PlFeConfigEditor: React.FC = () => {
             label={<FormattedMessage id='plfe_config.fields.promo_panel_fields_label' defaultMessage='Promo panel items' />}
             hint={<FormattedMessage id='plfe_config.hints.promo_panel_fields' defaultMessage='You can have custom defined links displayed on the right panel of the timelines page.' />}
             component={PromoPanelInput}
-            values={plFe.promoPanel.items}
+            values={frontendConfig.promoPanel.items}
             onChange={handleStreamItemChange(['promoPanel', 'items'])}
             onAddItem={addStreamItem(['promoPanel', 'items'], promoPanelItemSchema)}
             onRemoveItem={deleteStreamItem(['promoPanel', 'items'])}
@@ -309,7 +309,7 @@ const PlFeConfigEditor: React.FC = () => {
             label={<FormattedMessage id='plfe_config.fields.home_footer_fields_label' defaultMessage='Home footer items' />}
             hint={<FormattedMessage id='plfe_config.hints.home_footer_fields' defaultMessage='You can have custom defined links displayed on the footer of your static pages' />}
             component={FooterLinkInput}
-            values={plFe.navlinks.homeFooter || []}
+            values={frontendConfig.navlinks.homeFooter || []}
             onChange={handleStreamItemChange(['navlinks', 'homeFooter'])}
             onAddItem={addStreamItem(['navlinks', 'homeFooter'], footerItemSchema)}
             onRemoveItem={deleteStreamItem(['navlinks', 'homeFooter'])}
@@ -320,7 +320,7 @@ const PlFeConfigEditor: React.FC = () => {
             <Input
               type='text'
               placeholder={intl.formatMessage(messages.copyrightFooterLabel)}
-              value={plFe.copyright}
+              value={frontendConfig.copyright}
               onChange={handleChange('copyright', (e) => e.target.value)}
             />
           </FormGroup>
@@ -335,7 +335,7 @@ const PlFeConfigEditor: React.FC = () => {
                 <Input
                   type='text'
                   placeholder={intl.formatMessage(messages.tileServerLabel)}
-                  value={plFe.tileServer}
+                  value={frontendConfig.tileServer}
                   onChange={handleChange('tileServer', (e) => e.target.value)}
                 />
               </FormGroup>
@@ -344,7 +344,7 @@ const PlFeConfigEditor: React.FC = () => {
                 <Input
                   type='text'
                   placeholder={intl.formatMessage(messages.tileServerAttributionLabel)}
-                  value={plFe.tileServerAttribution}
+                  value={frontendConfig.tileServerAttribution}
                   onChange={handleChange('tileServerAttribution', (e) => e.target.value)}
                 />
               </FormGroup>
@@ -359,7 +359,7 @@ const PlFeConfigEditor: React.FC = () => {
             label={<FormattedMessage id='plfe_config.fields.crypto_addresses_label' defaultMessage='Cryptocurrency addresses' />}
             hint={<FormattedMessage id='plfe_config.hints.crypto_addresses' defaultMessage='Add cryptocurrency addresses so users of your site can donate to you. Order matters, and you must use lowercase ticker values.' />}
             component={CryptoAddressInput}
-            values={plFe.cryptoAddresses}
+            values={frontendConfig.cryptoAddresses}
             onChange={handleStreamItemChange(['cryptoAddresses'])}
             onAddItem={addStreamItem(['cryptoAddresses'], cryptoAddressSchema)}
             onRemoveItem={deleteStreamItem(['cryptoAddresses'])}
@@ -372,7 +372,7 @@ const PlFeConfigEditor: React.FC = () => {
               min={0}
               pattern='[0-9]+'
               placeholder={intl.formatMessage(messages.cryptoDonatePanelLimitLabel)}
-              value={plFe.cryptoDonatePanel.limit}
+              value={frontendConfig.cryptoDonatePanel.limit}
               onChange={handleChange('cryptoDonatePanel', (e) => ({ limit: Number(e.target.value) }))}
             />
           </FormGroup>
@@ -410,4 +410,4 @@ const PlFeConfigEditor: React.FC = () => {
   );
 };
 
-export { PlFeConfigEditor as default };
+export { FrontendConfigEditor as default };

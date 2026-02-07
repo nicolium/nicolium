@@ -4,9 +4,9 @@ import { useSettings } from '@/stores/settings';
 import { toTailwind } from '@/utils/tailwind';
 import { generateAccent, generateThemeCss } from '@/utils/theme';
 
-import { usePlFeConfig } from './use-pl-fe-config';
+import { useFrontendConfig } from './use-frontend-config';
 
-import type { PlFeConfig } from '@/normalizers/pl-fe/pl-fe-config';
+import type { FrontendConfig } from '@/normalizers/frontend-config';
 
 const DEFAULT_COLORS = {
   success: {
@@ -36,7 +36,7 @@ const DEFAULT_COLORS = {
   'greentext': '#789922',
 };
 
-const normalizeColors = (theme: Partial<Pick<PlFeConfig, 'brandColor' | 'accentColor' | 'colors'>>) => {
+const normalizeColors = (theme: Partial<Pick<FrontendConfig, 'brandColor' | 'accentColor' | 'colors'>>) => {
   const brandColor: string = theme.brandColor || theme.colors?.primary?.['500'] || '#d80482';
   const accentColor: string = theme.accentColor || theme.colors?.accent?.['500'] || generateAccent(brandColor) || '';
 
@@ -61,16 +61,16 @@ const normalizeColors = (theme: Partial<Pick<PlFeConfig, 'brandColor' | 'accentC
   } as typeof normalizedColors;
 };
 
-const useThemeCss = (overwriteConfig?: PlFeConfig) => {
+const useThemeCss = (overwriteConfig?: FrontendConfig) => {
   const { demo, theme } = useSettings();
-  const plFeConfig = usePlFeConfig();
+  const frontendConfig = useFrontendConfig();
 
   return useMemo(() => {
     try {
-      let baseTheme: Partial<PlFeConfig>;
+      let baseTheme: Partial<FrontendConfig>;
       if (overwriteConfig) baseTheme = overwriteConfig;
       else if (demo) baseTheme = {};
-      else baseTheme = theme || plFeConfig;
+      else baseTheme = theme || frontendConfig;
 
       const colors = normalizeColors(baseTheme);
 
@@ -78,7 +78,7 @@ const useThemeCss = (overwriteConfig?: PlFeConfig) => {
     } catch (_) {
       return generateThemeCss({});
     }
-  }, [overwriteConfig, demo, plFeConfig, theme]);
+  }, [overwriteConfig, demo, frontendConfig, theme]);
 };
 
 export { normalizeColors, useThemeCss };

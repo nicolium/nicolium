@@ -1,7 +1,7 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { getPlFeConfig } from '@/actions/pl-fe';
+import { getFrontendConfig } from '@/actions/frontend-config';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useAppSelector } from '@/hooks/use-app-selector';
@@ -29,7 +29,7 @@ const renderTermsOfServiceLink = (href: string) => (
 
 const ConfirmationStep: React.FC = () => {
   const intl = useIntl();
-  const links = useAppSelector((state) => getPlFeConfig(state).links);
+  const links = useAppSelector((state) => getFrontendConfig(state).links);
 
   const entity = intl.formatMessage(messages.accountEntity);
 

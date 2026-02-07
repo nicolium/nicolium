@@ -7,8 +7,8 @@ import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/hooks/use-instance';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
 import { useShoutboxMessages } from '@/stores/shoutbox';
 
 import type { Chat } from 'pl-api';
@@ -19,7 +19,7 @@ interface IChatListShoutboxInterface {
 
 const ChatListShoutbox: React.FC<IChatListShoutboxInterface> = ({ onClick }) => {
   const instance = useInstance();
-  const { logo } = usePlFeConfig();
+  const { logo } = useFrontendConfig();
   const messages = useShoutboxMessages();
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (event) => {

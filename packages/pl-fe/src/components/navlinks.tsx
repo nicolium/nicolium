@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 
 import Text from '@/components/ui/text';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useSettings } from '@/stores/settings';
 
 interface INavlinks {
@@ -11,7 +11,7 @@ interface INavlinks {
 
 const Navlinks: React.FC<INavlinks> = ({ type }) => {
   const { locale } = useSettings();
-  const { copyright, navlinks } = usePlFeConfig();
+  const { copyright, navlinks } = useFrontendConfig();
 
   return (
     <footer className='relative mx-auto mt-auto max-w-7xl py-8'>

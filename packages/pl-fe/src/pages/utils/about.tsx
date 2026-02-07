@@ -5,7 +5,7 @@ import { Navlinks } from '@/components/navlinks';
 import Card from '@/components/ui/card';
 import { languages } from '@/features/preferences';
 import { aboutRoute } from '@/features/ui/router';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useAboutPage } from '@/queries/pl-fe/use-about-page';
 import { useSettings } from '@/stores/settings';
 
@@ -15,11 +15,11 @@ interface IAbout {
 
 const About: React.FC<IAbout> = ({ slug }) => {
   const settings = useSettings();
-  const plFeConfig = usePlFeConfig();
+  const frontendConfig = useFrontendConfig();
 
   const [locale, setLocale] = useState<string>(settings.locale);
 
-  const { aboutPages } = plFeConfig;
+  const { aboutPages } = frontendConfig;
 
   const page = aboutPages[slug];
   const defaultLocale = page?.defaultLocale;

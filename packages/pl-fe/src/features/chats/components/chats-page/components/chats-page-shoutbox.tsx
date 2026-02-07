@@ -7,15 +7,15 @@ import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/hooks/use-instance';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
 
 import Shoutbox from '../../shoutbox';
 
 const ChatsPageShoutbox = () => {
   const navigate = useNavigate();
   const instance = useInstance();
-  const { logo } = usePlFeConfig();
+  const { logo } = useFrontendConfig();
 
   return (
     <Stack className='h-full overflow-hidden'>

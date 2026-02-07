@@ -2,7 +2,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Emojify from '@/features/emoji/emojify';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import sourceCode from '@/utils/code';
 
 const messages = defineMessages({
@@ -11,13 +11,13 @@ const messages = defineMessages({
 
 const LinkFooter: React.FC = (): JSX.Element => {
   const intl = useIntl();
-  const plFeConfig = usePlFeConfig();
+  const frontendConfig = useFrontendConfig();
 
   return (
     <>
       <p className='⁂-footer-text'>
-        {plFeConfig.linkFooterMessage ? (
-          <Emojify text={plFeConfig.linkFooterMessage} />
+        {frontendConfig.linkFooterMessage ? (
+          <Emojify text={frontendConfig.linkFooterMessage} />
         ) : (
           <FormattedMessage
             id='getting_started.open_source_notice'

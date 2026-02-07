@@ -33,7 +33,7 @@ const updateConfig = (configs: PleromaConfig['configs']) =>
       });
   };
 
-const updatePlFeConfig = (data: Record<string, any>) =>
+const updateFrontendConfig = (data: Record<string, any>) =>
   (dispatch: AppDispatch) => {
     const params = [{
       group: ':pleroma',
@@ -147,7 +147,7 @@ export {
   ADMIN_CONFIG_UPDATE_SUCCESS,
   fetchConfig,
   updateConfig,
-  updatePlFeConfig,
+  updateFrontendConfig,
   deactivateUser,
   deleteUser,
   deleteStatus,

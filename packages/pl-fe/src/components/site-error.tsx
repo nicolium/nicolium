@@ -6,8 +6,8 @@ import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Textarea from '@/components/ui/textarea';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useLogo } from '@/hooks/use-logo';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
 import { captureSentryException } from '@/sentry';
 import KVStore from '@/storage/kv-store';
 import sourceCode from '@/utils/code';
@@ -28,7 +28,7 @@ const messages = defineMessages({
 /** Application-level error boundary. Fills the whole screen. */
 const SiteError: ErrorRouteComponent = ({ error, info }) => {
   const intl = useIntl();
-  const { links, sentryDsn } = usePlFeConfig();
+  const { links, sentryDsn } = useFrontendConfig();
   const { src: logoSrc } = useLogo();
   const textarea = useRef<HTMLTextAreaElement>(null);
 

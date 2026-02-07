@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import React, { useEffect } from 'react';
 
 import InlineStyle from '@/components/inline-style';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useLocale, useLocaleDirection } from '@/hooks/use-locale';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
 import { useTheme } from '@/hooks/use-theme';
 import { useThemeCss } from '@/hooks/use-theme-css';
 import { startSentry } from '@/sentry';
@@ -17,13 +17,13 @@ const PlFeHead = () => {
   const locale = useLocale();
   const direction = useLocaleDirection(locale);
   const { reduceMotion, underlineLinks, demetricator, systemFont, theme: themeSettings } = useSettings();
-  const plFeConfig = usePlFeConfig();
+  const frontendConfig = useFrontendConfig();
   const theme = useTheme();
 
   const withModals = useHasModals();
 
   const themeCss = useThemeCss();
-  const dsn = plFeConfig.sentryDsn;
+  const dsn = frontendConfig.sentryDsn;
 
   const bodyClass = clsx({
     'no-reduce-motion': !reduceMotion,
@@ -50,7 +50,7 @@ const PlFeHead = () => {
           })}
         />
         <body className={bodyClass} dir={direction} />
-        <meta name='theme-color' content={plFeConfig.brandColor} />
+        <meta name='theme-color' content={frontendConfig.brandColor} />
       </Helmet>
       <InlineStyle>{`:root { ${themeCss} }`}</InlineStyle>
       {['dark', 'black'].includes(theme) && (

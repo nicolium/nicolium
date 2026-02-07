@@ -3,7 +3,7 @@
  * @module pl-fe/utils/state
  */
 
-import { getPlFeConfig } from '@/actions/pl-fe';
+import { getFrontendConfig } from '@/actions/frontend-config';
 import * as BuildConfig from '@/build-config';
 import { isPrerendered } from '@/precheck';
 import { selectOwnAccount } from '@/selectors';
@@ -12,7 +12,7 @@ import { isURL } from '@/utils/auth';
 import type { RootState } from '@/store';
 
 /** Whether to display the fqn instead of the acct. */
-const displayFqn = (state: RootState): boolean => getPlFeConfig(state).displayFqn;
+const displayFqn = (state: RootState): boolean => getFrontendConfig(state).displayFqn;
 
 /** Whether the instance exposes instance blocks through the API. */
 const federationRestrictionsDisclosed = (state: RootState): boolean =>

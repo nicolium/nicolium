@@ -13,8 +13,8 @@ import SettingToggle from '@/features/settings/components/setting-toggle';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/hooks/use-instance';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
 import { PaletteListItem } from '@/pages/dashboard/theme-editor';
 import { useSettings } from '@/stores/settings';
 import sourceCode from '@/utils/code';
@@ -120,11 +120,11 @@ const Preferences = () => {
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const settings = useSettings();
-  const plFeConfig = usePlFeConfig();
+  const frontendConfig = useFrontendConfig();
   const instance = useInstance();
   const standalone = useAppSelector(isStandalone);
 
-  const brandColor = settings.theme?.brandColor || plFeConfig.brandColor || '#d80482';
+  const brandColor = settings.theme?.brandColor || frontendConfig.brandColor || '#d80482';
 
   const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, path: string[]) => {
     dispatch(changeSetting(path, event.target.value, { showAlert: true }));
@@ -151,8 +151,8 @@ const Preferences = () => {
   };
 
   const onThemeReset = () => {
-    dispatch(changeSetting(['themeMode'], plFeConfig.defaultSettings.themeMode, { save: false }));
-    dispatch(changeSetting(['theme'], plFeConfig.defaultSettings.theme, { showAlert: true }));
+    dispatch(changeSetting(['themeMode'], frontendConfig.defaultSettings.themeMode, { save: false }));
+    dispatch(changeSetting(['theme'], frontendConfig.defaultSettings.theme, { showAlert: true }));
   };
 
   const displayMediaOptions = React.useMemo(() => ({

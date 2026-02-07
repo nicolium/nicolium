@@ -8,7 +8,7 @@ import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useLocalStatusTranslation } from '@/queries/statuses/use-local-status-translation';
 import { useStatusTranslation } from '@/queries/statuses/use-status-translation';
 import { useSettings } from '@/stores/settings';
@@ -86,7 +86,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   withMedia,
 }) => {
   const { urlPrivacy, displaySpoilers, renderMfm } = useSettings();
-  const { greentext } = usePlFeConfig();
+  const { greentext } = useFrontendConfig();
 
   const [collapsed, setCollapsed] = useState<boolean | null>(null);
   const [onlyEmoji, setOnlyEmoji] = useState(false);

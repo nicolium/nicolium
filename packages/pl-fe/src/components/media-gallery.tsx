@@ -10,7 +10,7 @@ import Popover from '@/components/ui/popover';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { MIMETYPE_ICONS } from '@/components/upload';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useSettings } from '@/stores/settings';
 import { truncateFilename } from '@/utils/media';
 
@@ -82,7 +82,7 @@ const Item: React.FC<IItem> = ({
   visible,
 }) => {
   const { autoPlayGif } = useSettings();
-  const { mediaPreview } = usePlFeConfig();
+  const { mediaPreview } = useFrontendConfig();
 
   const handleMouseEnter: React.MouseEventHandler<HTMLVideoElement> = ({ currentTarget: video }) => {
     if (hoverToPlay()) {

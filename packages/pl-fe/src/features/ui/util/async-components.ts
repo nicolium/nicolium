@@ -81,7 +81,7 @@ export const Notifications = lazy(() => import('@/pages/notifications/notificati
 export const OutgoingFollowRequests = lazy(() => import('@/pages/account-lists/outgoing-follow-requests'));
 export const PasswordReset = lazy(() => import('@/pages/auth/password-reset'));
 export const PinnedStatuses = lazy(() => import('@/pages/status-lists/pinned-statuses'));
-export const PlFeConfig = lazy(() => import('@/pages/dashboard/pl-fe-config'));
+export const FrontendConfig = lazy(() => import('@/pages/dashboard/frontend-config'));
 export const PublicTimeline = lazy(() => import('@/pages/timelines/public-timeline'));
 export const Quotes = lazy(() => import('@/pages/status-lists/quotes'));
 export const Report = lazy(() => import('@/pages/dashboard/report'));

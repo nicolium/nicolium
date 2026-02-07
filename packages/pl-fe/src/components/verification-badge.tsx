@@ -3,7 +3,7 @@ import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 
 const messages = defineMessages({
   verified: { id: 'account.verified', defaultMessage: 'Verified Account' },
@@ -15,10 +15,10 @@ interface IVerificationBadge {
 
 const VerificationBadge: React.FC<IVerificationBadge> = ({ className }) => {
   const intl = useIntl();
-  const plFeConfig = usePlFeConfig();
+  const frontendConfig = useFrontendConfig();
 
   // Prefer a custom icon if found
-  const icon = plFeConfig.verifiedIcon || require('@phosphor-icons/core/regular/check.svg');
+  const icon = frontendConfig.verifiedIcon || require('@phosphor-icons/core/regular/check.svg');
 
   // Render component based on file extension
   const Element = icon.endsWith('.svg') ? Icon : 'img';

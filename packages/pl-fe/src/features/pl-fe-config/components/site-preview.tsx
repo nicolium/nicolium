@@ -7,21 +7,21 @@ import BackgroundShapes from '@/features/ui/components/background-shapes';
 import { useSystemTheme } from '@/hooks/use-system-theme';
 import { useThemeCss } from '@/hooks/use-theme-css';
 
-import type { PlFeConfig } from '@/normalizers/pl-fe/pl-fe-config';
+import type { FrontendConfig } from '@/normalizers/frontend-config';
 
 interface ISitePreview {
   /** Raw pl-fe configuration. */
-  plFe: PlFeConfig;
+  frontendConfig: FrontendConfig;
 }
 
 /** Renders a preview of the website's style with the configuration applied. */
-const SitePreview: React.FC<ISitePreview> = ({ plFe }) => {
-  const userTheme = plFe.defaultSettings.themeMode;
+const SitePreview: React.FC<ISitePreview> = ({ frontendConfig }) => {
+  const userTheme = frontendConfig.defaultSettings.themeMode;
   const systemTheme = useSystemTheme();
 
   const dark = ['dark', 'black'].includes(userTheme as string) || (userTheme === 'system' && systemTheme === 'black');
 
-  const themeCss = useThemeCss(plFe);
+  const themeCss = useThemeCss(frontendConfig);
 
   const bodyClass = clsx(
     'site-preview',

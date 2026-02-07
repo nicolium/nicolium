@@ -7,7 +7,7 @@ import Input from '@/components/ui/input';
 import IconPicker from './icon-picker';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
-import type { PromoPanelItem } from '@/normalizers/pl-fe/pl-fe-config';
+import type { PromoPanelItem } from '@/normalizers/frontend-config';
 
 const messages = defineMessages({
   icon: { id: 'plfe_config.promo_panel.meta_fields.icon_placeholder', defaultMessage: 'Icon' },

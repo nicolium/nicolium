@@ -4,7 +4,7 @@ import throttle from 'lodash/throttle';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import Helmet from '@/components/helmet';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 
 import { Card, CardBody, CardHeader, CardTitle, type CardSizes } from './card';
 
@@ -67,7 +67,7 @@ interface IColumn {
 /** A backdrop for the main section of the UI. */
 const Column: React.FC<IColumn> = (props): JSX.Element => {
   const { backHref, children, label, transparent = false, withHeader = true, className, bodyClassName, action, size } = props;
-  const plFeConfig = usePlFeConfig();
+  const frontendConfig = useFrontendConfig();
   const [isScrolled, setIsScrolled] = useState(false);
 
   const handleScroll = useCallback(throttle(() => {
@@ -87,11 +87,11 @@ const Column: React.FC<IColumn> = (props): JSX.Element => {
       <Helmet>
         <title>{label}</title>
 
-        {plFeConfig.appleAppId && (
+        {frontendConfig.appleAppId && (
           <meta
             data-react-helmet='true'
             name='apple-itunes-app'
-            content={`app-id=${plFeConfig.appleAppId}, app-argument=${location.href}`}
+            content={`app-id=${frontendConfig.appleAppId}, app-argument=${location.href}`}
           />
         )}
       </Helmet>

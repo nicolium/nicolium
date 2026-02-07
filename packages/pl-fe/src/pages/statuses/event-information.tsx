@@ -11,7 +11,7 @@ import Text from '@/components/ui/text';
 import { eventInformationRoute } from '@/features/ui/router';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { makeGetStatus } from '@/selectors';
 import { useModalsActions } from '@/stores/modals';
 
@@ -25,7 +25,7 @@ const EventInformationPage: React.FC = () => {
   const status = useAppSelector(state => getStatus(state, { id: statusId }))!;
 
   const { openModal } = useModalsActions();
-  const { tileServer } = usePlFeConfig();
+  const { tileServer } = useFrontendConfig();
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
 

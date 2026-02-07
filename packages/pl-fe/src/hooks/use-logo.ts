@@ -1,10 +1,10 @@
 import { useSettings } from '@/stores/settings';
 
-import { usePlFeConfig } from './use-pl-fe-config';
+import { useFrontendConfig } from './use-frontend-config';
 import { useTheme } from './use-theme';
 
 const useLogo = () => {
-  const { logo, logoDarkMode, logoAlignment } = usePlFeConfig();
+  const { logo, logoDarkMode, logoAlignment } = useFrontendConfig();
   const { demo } = useSettings();
 
   const darkMode = ['dark', 'black'].includes(useTheme());

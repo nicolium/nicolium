@@ -6,7 +6,7 @@ import Button from '@/components/ui/button';
 import Modal from '@/components/ui/modal';
 import Stack from '@/components/ui/stack';
 import { useAppSelector } from '@/hooks/use-app-selector';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { makeGetStatus } from '@/selectors';
 
 import 'leaflet/dist/leaflet.css';
@@ -24,7 +24,7 @@ interface EventMapModalProps {
 }
 
 const EventMapModal: React.FC<BaseModalProps & EventMapModalProps> = ({ onClose, statusId }) => {
-  const { tileServer, tileServerAttribution } = usePlFeConfig();
+  const { tileServer, tileServerAttribution } = useFrontendConfig();
 
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector(state => getStatus(state, { id: statusId }))!;

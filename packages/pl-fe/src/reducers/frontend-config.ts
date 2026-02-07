@@ -4,17 +4,17 @@ import ConfigDB from '@/utils/config-db';
 
 import { ADMIN_CONFIG_UPDATE_SUCCESS } from '../actions/admin';
 import {
-  PLFE_CONFIG_REMEMBER_SUCCESS,
-  PLFE_CONFIG_REQUEST_SUCCESS,
-  PLFE_CONFIG_REQUEST_FAIL,
-} from '../actions/pl-fe';
+  FRONTEND_CONFIG_REMEMBER_SUCCESS,
+  FRONTEND_CONFIG_REQUEST_SUCCESS,
+  FRONTEND_CONFIG_REQUEST_FAIL,
+} from '../actions/frontend-config';
 
-import type { PlFeConfig } from '@/normalizers/pl-fe/pl-fe-config';
+import type { FrontendConfig } from '@/normalizers/frontend-config';
 import type { PleromaConfig } from 'pl-api';
 
-const initialState: Partial<PlFeConfig> = {};
+const initialState: Partial<FrontendConfig> = {};
 
-const fallbackState: Partial<PlFeConfig> = {
+const fallbackState: Partial<FrontendConfig> = {
   brandColor: '#d80482',
 };
 
@@ -41,26 +41,26 @@ const preloadImport = (state: Record<string, any>, action: Record<string, any>) 
   }
 };
 
-const persistPlFeConfig = (plFeConfig: Record<string, any>, host: string) => {
+const persistFrontendConfig = (frontendConfig: Record<string, any>, host: string) => {
   if (host) {
-    KVStore.setItem(`plfe_config:${host}`, plFeConfig).catch(console.error);
+    KVStore.setItem(`plfe_config:${host}`, frontendConfig).catch(console.error);
   }
 };
 
-const importPlFeConfig = (plFeConfig: PlFeConfig, host: string) => {
-  persistPlFeConfig(plFeConfig, host);
-  return plFeConfig;
+const importFrontendConfig = (frontendConfig: FrontendConfig, host: string) => {
+  persistFrontendConfig(frontendConfig, host);
+  return frontendConfig;
 };
 
-const plfe = (state = initialState, action: Record<string, any>): Partial<PlFeConfig> => {
+const frontendConfig = (state = initialState, action: Record<string, any>): Partial<FrontendConfig> => {
   switch (action.type) {
     case PLEROMA_PRELOAD_IMPORT:
       return preloadImport(state, action);
-    case PLFE_CONFIG_REMEMBER_SUCCESS:
-      return action.plFeConfig;
-    case PLFE_CONFIG_REQUEST_SUCCESS:
-      return importPlFeConfig(action.plFeConfig || {}, action.host);
-    case PLFE_CONFIG_REQUEST_FAIL:
+    case FRONTEND_CONFIG_REMEMBER_SUCCESS:
+      return action.frontendConfig;
+    case FRONTEND_CONFIG_REQUEST_SUCCESS:
+      return importFrontendConfig(action.frontendConfig || {}, action.host);
+    case FRONTEND_CONFIG_REQUEST_FAIL:
       return { ...fallbackState, ...state };
     case ADMIN_CONFIG_UPDATE_SUCCESS:
       return updateFromAdmin(state, action.configs || []);
@@ -69,4 +69,4 @@ const plfe = (state = initialState, action: Record<string, any>): Partial<PlFeCo
   }
 };
 
-export { plfe as default };
+export { frontendConfig as default };

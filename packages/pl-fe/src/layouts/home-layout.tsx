@@ -21,8 +21,8 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useFeatures } from '@/hooks/use-features';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { usePlFeConfig } from '@/hooks/use-pl-fe-config';
 import { useSettings } from '@/stores/settings';
 
 const HomeLayout = () => {
@@ -32,14 +32,14 @@ const HomeLayout = () => {
   const me = useAppSelector(state => state.me);
   const { account } = useOwnAccount();
   const features = useFeatures();
-  const plFeConfig = usePlFeConfig();
+  const frontendConfig = useFrontendConfig();
   const { disableUserProvidedMedia } = useSettings();
 
   const composeId = 'home';
   const composeBlock = useRef<HTMLDivElement>(null);
 
-  const hasCrypto = typeof plFeConfig.cryptoAddresses[0]?.ticker === 'string';
-  const cryptoLimit = plFeConfig.cryptoDonatePanel.limit;
+  const hasCrypto = typeof frontendConfig.cryptoAddresses[0]?.ticker === 'string';
+  const cryptoLimit = frontendConfig.cryptoDonatePanel.limit;
 
   const { isDragging, isDraggedOver } = useDraggedFiles(composeBlock, (files) => {
     dispatch(uploadCompose(composeId, files, intl));
