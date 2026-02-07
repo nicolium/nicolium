@@ -46,7 +46,7 @@ const toServerSideType = (columnType: string): Filter['context'][0] => {
 
 type FilterContext = { contextType?: string };
 
-const getFilters = (state: RootState, query: FilterContext) =>
+const getFilters = (state: Pick<RootState, 'filters'>, query: FilterContext) =>
   state.filters.filter((filter) =>
     (!query?.contextType || filter.context.includes(toServerSideType(query.contextType)))
       && (filter.expires_at === null || Date.parse(filter.expires_at) > new Date().getTime()),
@@ -111,14 +111,13 @@ const makeGetStatus = () => createSelector(
       return undefined;
     },
     (_state: RootState, { username }: APIStatus) => username,
-    getFilters,
+    (state: RootState) => state.filters,
+    (_state: RootState, { contextType }: FilterContext) => contextType,
     (state: RootState) => state.me,
     (state: RootState) => state.auth.client.features,
   ],
 
-  (statusBase, statusReblog, statusQuote, statusGroup, username, filters, me, features) => {
-    // const locale = getLocale('en');
-
+  (statusBase, statusReblog, statusQuote, statusGroup, username, filters, contextType, me, features) => {
     if (!statusBase) return null;
     const { account } = statusBase;
     const accountUsername = account.acct;
@@ -127,6 +126,8 @@ const makeGetStatus = () => createSelector(
     if (accountUsername !== username && username !== undefined) {
       return null;
     }
+
+    filters = getFilters({ filters }, { contextType });
 
     const filtered = features.filtersV2
       ? statusBase.filtered
