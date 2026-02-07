@@ -57,7 +57,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
           </div>
         )}
 
-        <div className='absolute bottom-0 right-3 translate-y-1/2'>
+        <div className='absolute bottom-0 right-3 z-[1] translate-y-1/2'>
           <ActionButton account={account} small />
         </div>
 
