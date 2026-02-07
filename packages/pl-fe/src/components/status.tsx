@@ -33,9 +33,32 @@ import StatusReplyMentions from './status-reply-mentions';
 import StatusInfo from './statuses/status-info';
 import Tombstone from './tombstone';
 
+
+
 const messages = defineMessages({
   reblogged_by: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
 });
+
+interface IAccountInfo {
+  status: SelectedStatus;
+}
+
+const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => (
+  <div className='flex flex-row-reverse items-center gap-1 self-baseline'>
+    <Link to='/@{$username}/posts/$statusId' params={{ username: status.account.acct, statusId: status.id }} className='hover:underline' onClick={(event) => event.stopPropagation()}>
+      <RelativeTimestamp timestamp={status.created_at} theme='muted' size='sm' className='whitespace-nowrap' />
+    </Link>
+    <StatusTypeIcon visibility={status.visibility} />
+    <StatusLanguagePicker status={status} />
+    {!!status.edited_at && (
+      <>
+        <span className='⁂-separator' />
+
+        <Icon className='size-4 text-gray-700 dark:text-gray-600' src={require('@phosphor-icons/core/regular/pencil-simple.svg')} />
+      </>
+    )}
+  </div>
+));
 
 interface IStatusFollowedTagInfo {
   status: SelectedStatus;
@@ -453,22 +476,7 @@ const Status: React.FC<IStatus> = (props) => {
             <AccountContainer
               key={actualStatus.account_id}
               id={actualStatus.account_id}
-              action={
-                <div className='flex flex-row-reverse items-center gap-1 self-baseline'>
-                  <Link to='/@{$username}/posts/$statusId' params={{ username: actualStatus.account.acct, statusId: actualStatus.id }} className='hover:underline' onClick={(event) => event.stopPropagation()}>
-                    <RelativeTimestamp timestamp={actualStatus.created_at} theme='muted' size='sm' className='whitespace-nowrap' />
-                  </Link>
-                  <StatusTypeIcon visibility={actualStatus.visibility} />
-                  <StatusLanguagePicker status={actualStatus} />
-                  {!!actualStatus.edited_at && (
-                    <>
-                      <span className='⁂-separator' />
-
-                      <Icon className='size-4 text-gray-700 dark:text-gray-600' src={require('@phosphor-icons/core/regular/pencil-simple.svg')} />
-                    </>
-                  )}
-                </div>
-              }
+              action={<AccountInfo status={actualStatus} />}
               showAccountHoverCard={hoverable}
               withLinkToProfile={hoverable}
               approvalStatus={actualStatus.approval_status}

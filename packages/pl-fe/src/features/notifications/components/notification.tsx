@@ -1,5 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage, IntlShape, MessageDescriptor } from 'react-intl';
 
 import { mentionCompose, replyCompose } from '@/actions/compose';
@@ -359,7 +359,7 @@ const Notification: React.FC<INotification> = (props) => {
 
   const displayedType = notification.type === 'mention' && (notification.subtype === 'reply' || status?.in_reply_to_account_id === me) ? 'reply' : notification.type;
 
-  const renderIcon = (): React.ReactNode => {
+  const icon = useMemo(() => {
     if (type === 'emoji_reaction' && notification.emoji) {
       return (
         <Emoji
@@ -378,7 +378,7 @@ const Notification: React.FC<INotification> = (props) => {
     } else {
       return null;
     }
-  };
+  }, [type, (notification as any).emoji]);
 
   const renderContent = () => {
     if (type === 'bite' && status) {
@@ -478,7 +478,7 @@ const Notification: React.FC<INotification> = (props) => {
     )
   );
 
-  const statusInfo = <StatusInfo avatarSize={compact ? 0 : avatarSize} icon={renderIcon()} text={message} title={ariaLabel} />;
+  const statusInfo = <StatusInfo avatarSize={compact ? 0 : avatarSize} icon={icon} text={message} title={ariaLabel} />;
 
   return (
     <Hotkeys handlers={handlers} data-testid='notification'>
