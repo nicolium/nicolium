@@ -3636,7 +3636,21 @@ class PlApiClient {
     search: async (q: string, params?: SearchParams, meta?: RequestMeta) => {
       const response = await this.request('/api/v2/search', { ...meta, params: { ...params, q } });
 
-      return v.parse(searchSchema, response.json);
+      const parsedSearch = v.parse(searchSchema, response.json);
+
+      // A workaround for Pleroma/Akkoma getting into a loop of returning the same account/status when resolve === true.
+      if (params && params.resolve && params.offset && params.offset > 0) {
+        const firstAccount = parsedSearch.accounts[0];
+        if (firstAccount && [firstAccount.url, firstAccount.acct].includes(q)) {
+          parsedSearch.accounts = parsedSearch.accounts.slice(1);
+        }
+        const firstStatus = parsedSearch.statuses[0];
+        if (firstStatus && [firstStatus.uri, firstStatus.url].includes(q)) {
+          parsedSearch.statuses = parsedSearch.statuses.slice(1);
+        }
+      }
+
+      return parsedSearch;
     },
 
     /**
