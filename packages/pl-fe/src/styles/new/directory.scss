@@ -1,0 +1,123 @@
+@use 'mixins';
+@use 'variables';
+
+.⁂-directory {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  &__filters {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 0.5rem;
+    
+    @media (min-width: variables.$breakpoint-md) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    > div {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+    gap: 0.625rem;
+
+    @media (min-width: variables.$breakpoint-sm) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    &--loading {
+      @apply animate-pulse;
+    }
+  }
+}
+
+.⁂-directory-card {
+  overflow: clip;
+  @apply flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow dark:divide-primary-700 dark:bg-primary-800;
+
+  &__header {
+    position: relative;
+
+    &__image {
+      @apply block h-32 w-full rounded-t-lg object-cover;
+
+      &--empty {
+        @apply bg-gray-200 dark:bg-primary-700;
+      }
+    }
+  }
+
+  &__badge {
+    position: absolute;
+    left: 0.625rem;
+    top: 0.625rem;
+  }
+
+  &__action {
+    position: absolute;
+    bottom: 0;
+    right: 0.75rem;
+    z-index: 1;
+    transform: translateY(50%);
+  }
+
+  &__avatar {
+    position: absolute !important;
+    bottom: 0;
+    left: 0.75rem;
+    @apply translate-y-1/2 bg-white ring-2 ring-white dark:bg-primary-900 dark:ring-primary-900;
+  }
+
+  &__account {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2.5rem 0.75rem 0.75rem;
+  }
+
+  &__bio {
+    @apply line-clamp-2 inline text-ellipsis;
+    @include mixins.text($truncate: true);
+
+    br {
+      display: none;
+    }
+
+    p {
+      display: none;
+    }
+
+    p:first-child {
+      display: inline;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  &__details {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.25rem;
+    padding: 1rem 0;
+
+    > div {
+      display: flex;
+      flex-direction: column;
+
+      p:first-child {
+        @include mixins.text($theme: primary, $size: sm, $weight: medium);
+      }
+
+      p:last-child {
+        @include mixins.text($theme: muted, $size: sm);
+      }
+    }
+  }
+}

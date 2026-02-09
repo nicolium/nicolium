@@ -15,8 +15,6 @@ import StillImage from '@/components/still-image';
 import Avatar from '@/components/ui/avatar';
 import { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
-import Stack from '@/components/ui/stack';
-import Text from '@/components/ui/text';
 import ActionButton from '@/features/ui/components/action-button';
 import { directoryRoute } from '@/features/ui/router';
 import { useAppSelector } from '@/hooks/use-app-selector';
@@ -46,10 +44,10 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
   const followedBy = me !== account.id && account.relationship?.followed_by;
 
   return (
-    <div className='flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow dark:divide-primary-700 dark:bg-primary-800'>
-      <div className='relative'>
+    <div className='⁂-directory-card'>
+      <div className='⁂-directory-card__header'>
         {followedBy && (
-          <div className='absolute left-2.5 top-2.5'>
+          <div className='⁂-directory-card__badge'>
             <Badge
               slug='opaque'
               title={<FormattedMessage id='account.follows_you' defaultMessage='Follows you' />}
@@ -57,7 +55,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
           </div>
         )}
 
-        <div className='absolute bottom-0 right-3 z-[1] translate-y-1/2'>
+        <div className='⁂-directory-card__action'>
           <ActionButton account={account} small />
         </div>
 
@@ -66,10 +64,10 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
             src={account.header}
             staticSrc={account.header_static}
             alt={account.header_description}
-            className='block h-32 w-full rounded-t-lg object-cover'
+            className='⁂-directory-card__header__image'
           />
         ) : (
-          <div className='h-32 w-full rounded-t-lg bg-gray-200 dark:bg-gray-700' />
+          <div className='⁂-directory-card__header__image--empty' />
         )}
 
         <Link to='/@{$username}' params={{ username: account.acct }} title={account.acct}>
@@ -77,7 +75,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
             <Avatar
               src={account.avatar}
               alt={account.avatar_description}
-              className='!absolute bottom-0 left-3 translate-y-1/2 bg-white ring-2 ring-white dark:bg-primary-900 dark:ring-primary-900'
+              className='⁂-directory-card__avatar'
               size={64}
               isCat={account.is_cat}
               username={account.username}
@@ -86,7 +84,7 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
         </Link>
       </div>
 
-      <Stack space={4} className='p-3 pt-10'>
+      <div className='⁂-directory-card__account'>
         <Account
           account={account}
           withAvatar={false}
@@ -94,50 +92,42 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
         />
 
         {!!account.note && (
-          <Text
-            truncate
-            align='left'
-            className='line-clamp-2 inline text-ellipsis [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
-          >
+          <p className='⁂-directory-card__bio'>
             <ParsedContent html={account.note} emojis={account.emojis} speakAsCat={account.speak_as_cat} />
-          </Text>
+          </p>
         )}
-      </Stack>
+      </div>
 
-      <div className='grid grid-cols-3 gap-1 py-4'>
-        <Stack>
-          <Text theme='primary' size='md' weight='medium'>
-            {shortNumberFormat(account.statuses_count)}
-          </Text>
+      <div className='⁂-directory-card__details'>
+        <div>
+          <p>{shortNumberFormat(account.statuses_count)}</p>
 
-          <Text theme='muted' size='sm'>
+          <p>
             <FormattedMessage id='account.posts' defaultMessage='Posts' />
-          </Text>
-        </Stack>
+          </p>
+        </div>
 
-        <Stack>
-          <Text theme='primary' size='md' weight='medium'>
-            {shortNumberFormat(account.followers_count)}
-          </Text>
+        <div>
+          <p>{shortNumberFormat(account.followers_count)}</p>
 
-          <Text theme='muted' size='sm'>
+          <p>
             <FormattedMessage id='account.followers' defaultMessage='Followers' />
-          </Text>
-        </Stack>
+          </p>
+        </div>
 
-        <Stack>
-          <Text theme='primary' size='md' weight='medium'>
+        <div>
+          <p>
             {account.last_status_at ? (
               <RelativeTimestamp theme='inherit' timestamp={account.last_status_at} />
             ) : (
               <FormattedMessage id='account.never_active' defaultMessage='Never' />
             )}
-          </Text>
+          </p>
 
-          <Text theme='muted' size='sm'>
+          <p>
             <FormattedMessage id='account.last_status' defaultMessage='Last active' />
-          </Text>
-        </Stack>
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -166,9 +156,9 @@ const DirectoryPage = () => {
 
   return (
     <Column label={intl.formatMessage(messages.title)}>
-      <Stack space={4}>
-        <div className='grid grid-cols-1 gap-2 md:grid-cols-2'>
-          <Stack space={2}>
+      <div className='⁂-directory'>
+        <div className='⁂-directory__filters'>
+          <div>
             <CardTitle title={<FormattedMessage id='directory.display_filter' defaultMessage='Display filter' />} />
 
             <RadioGroup onChange={handleChangeOrder}>
@@ -183,10 +173,10 @@ const DirectoryPage = () => {
                 value='new'
               />
             </RadioGroup>
-          </Stack>
+          </div>
 
           {features.federating && (
-            <Stack space={2}>
+            <div>
               <CardTitle title={<FormattedMessage id='directory.fediverse_filter' defaultMessage='Fediverse filter' />} />
 
               <RadioGroup onChange={handleChangeLocal}>
@@ -201,15 +191,15 @@ const DirectoryPage = () => {
                   value='0'
                 />
               </RadioGroup>
-            </Stack>
+            </div>
           )}
         </div>
 
         <div
           className={
             clsx({
-              'grid grid-cols-1 sm:grid-cols-2 gap-2.5': true,
-              'opacity-30': isLoading,
+              '⁂-directory__cards': true,
+              '⁂-directory__cards--loading': isLoading,
             })
           }
         >
@@ -219,7 +209,7 @@ const DirectoryPage = () => {
         </div>
 
         {hasNextPage && <LoadMore onClick={handleLoadMore} disabled={isLoading} />}
-      </Stack>
+      </div>
     </Column>
   );
 };
