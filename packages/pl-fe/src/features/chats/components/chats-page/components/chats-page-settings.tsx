@@ -22,7 +22,7 @@ type FormData = {
 }
 
 const messages = defineMessages({
-  title: { id: 'chat.page_settings.title', defaultMessage: 'Message Settings' },
+  title: { id: 'chat.page_settings.title', defaultMessage: 'Message settings' },
   preferences: { id: 'chat.page_settings.preferences', defaultMessage: 'Preferences' },
   privacy: { id: 'chat.page_settings.privacy', defaultMessage: 'Privacy' },
   acceptingMessageLabel: { id: 'chat.page_settings.accepting_messages.label', defaultMessage: 'Allow users to start a new chat with you' },

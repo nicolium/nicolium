@@ -1,7 +1,8 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Avatar from '@/components/ui/avatar';
+import Account from '@/components/account';
+import List, { ListItem } from '@/components/list';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';
@@ -95,34 +96,25 @@ const ChatSettings = () => {
         }
       />
 
-      <Stack space={4} className='mx-auto w-5/6'>
-        <HStack alignItems='center' space={3}>
-          <Avatar src={chat.account.avatar} staticSrc={chat.account.avatar_static} alt={chat.account.avatar_description} size={50} isCat={chat.account.is_cat} username={chat.account.username} />
-          <Stack>
-            <Text weight='semibold'>{chat.account.display_name}</Text>
-            <Text size='sm' theme='primary'>@{chat.account.acct}</Text>
-          </Stack>
-        </HStack>
+      <Stack space={4} className='px-4'>
+        <Account account={chat.account} hideActions />
 
-        <Stack space={5}>
-          <button onClick={isBlocked ? handleUnblockUser : handleBlockUser} className='flex w-full items-center space-x-2 text-sm font-bold text-primary-600 dark:text-primary-400'>
-            <Icon src={require('@phosphor-icons/core/regular/prohibit.svg')} className='size-5' aria-hidden />
-            <span>
-              {isBlocked
-                ? <FormattedMessage id='chat_settings.options.unblock_user' defaultMessage='Unblock @{acct}' values={{ acct: chat.account.acct }} />
-                : <FormattedMessage id='chat_settings.options.block_user' defaultMessage='Block @{acct}' values={{ acct: chat.account.acct }} />
-              }
-
-            </span>
-          </button>
-
+        <List>
+          <ListItem
+            label={isBlocked
+              ? <FormattedMessage id='chat_settings.options.unblock_user' defaultMessage='Unblock @{acct}' values={{ acct: chat.account.acct }} />
+              : <FormattedMessage id='chat_settings.options.block_user' defaultMessage='Block @{acct}' values={{ acct: chat.account.acct }} />}
+            onClick={isBlocked ? handleUnblockUser : handleBlockUser}
+            size='sm'
+          />
           {features.chatsDelete && (
-            <button onClick={handleLeaveChat} className='flex w-full items-center space-x-2 text-sm font-bold text-danger-600'>
-              <Icon src={require('@phosphor-icons/core/regular/sign-out.svg')} className='size-5' aria-hidden />
-              <span><FormattedMessage id='chat_settings.options.leave_chat' defaultMessage='Leave chat' /></span>
-            </button>
+            <ListItem
+              label={<FormattedMessage id='chat_settings.options.leave_chat' defaultMessage='Leave chat' />}
+              onClick={handleLeaveChat}
+              size='sm'
+            />
           )}
-        </Stack>
+        </List>
       </Stack>
     </>
   );
