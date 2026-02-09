@@ -173,7 +173,7 @@ const configurationSchema = coerceObject({
       coerceObject(
         v.entriesFromList(
           ['local', 'remote'],
-          v.fallback(v.picklist(['public', 'authenticated', 'disabled']), 'public'),
+          v.fallback(v.picklist(['public', 'authenticated', 'disabled', 'restricted']), 'public'),
         ),
       ),
     ),
