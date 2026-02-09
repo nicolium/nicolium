@@ -5,7 +5,6 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import ReactSwipeableViews from 'react-swipeable-views';
 
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
 import Portal from '@/components/ui/portal';
 import { userTouching } from '@/is-mobile';
@@ -136,7 +135,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
   };
 
   const renderItems = (items: Menu | undefined) => (
-    <ul className='overflow-hidden'>
+    <ul className='⁂-dropdown-menu__items'>
       {items?.map((item, idx) => (
         <DropdownMenuItem
           key={idx}
@@ -151,27 +150,26 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
   );
 
   return (
-    <div className={clsx('max-h-full overflow-auto', className)} ref={ref}>
+    <div className={clsx('⁂-dropdown-menu__content', className)} ref={ref}>
       {items?.some(item => item?.items?.length) ? (
         <ReactSwipeableViews animateHeight index={tab === undefined ? 0 : 1} style={{ width }}>
-          <div className={clsx('max-w-full', { 'w-full': touchscreen })} style={{ width }}>
+          <div className='⁂-dropdown-menu__page' style={{ width }}>
             {Component && <Component handleClose={handleClose} />}
             {(items?.length || touchscreen) && renderItems(items)}
           </div>
-          <div className={clsx({ 'w-full': touchscreen, 'fit-content mr-auto': !touchscreen })} style={{ width }}>
+          <div className='⁂-dropdown-menu__expanded-page' style={{ width }}>
             {tab !== undefined && (
               <>
-                <HStack className='mx-2 my-1 text-gray-700 dark:text-gray-300' space={3} alignItems='center'>
+                <div className='⁂-dropdown-menu__header'>
                   <IconButton
                     theme='transparent'
                     src={require('@phosphor-icons/core/regular/arrow-left.svg')}
-                    iconClassName='h-5 w-5'
                     onClick={handleExitSubmenu}
                     autoFocus
                     title={intl.formatMessage(messages.back)}
                   />
                   {items![tab]?.text}
-                </HStack>
+                </div>
                 {renderItems(items![tab]?.items)}
               </>
             )}

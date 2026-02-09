@@ -112,11 +112,11 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
   }, [itemRef.current, index]);
 
   if (item === null) {
-    return <hr className='mx-2 my-1 block h-[2px] border-none bg-gray-100 dark:bg-gray-800' />;
+    return <hr />;
   }
 
   return (
-    <li className='truncate focus-visible:ring-2 focus-visible:ring-primary-500'>
+    <li>
       <a
         href={item.href || item.to || '#'}
         role='button'
