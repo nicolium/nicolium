@@ -1,6 +1,7 @@
 import { InfiniteData, keepPreviousData, useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 import sumBy from 'lodash/sumBy';
 import { type Chat, type ChatMessage as BaseChatMessage, type PaginatedResponse, chatMessageSchema } from 'pl-api';
+import { useCallback, useMemo } from 'react';
 import * as v from 'valibot';
 
 import { importEntities } from '@/actions/importer';
@@ -211,8 +212,7 @@ const useChatActions = (chatId: string) => {
       reOrderChatListItems();
     },
   });
-  const deleteChatMessage = (chatMessageId: string) =>
-    client.chats.deleteChatMessage(chatId, chatMessageId);
+  const deleteChatMessage = useCallback((chatMessageId: string) => client.chats.deleteChatMessage(chatId, chatMessageId), [chatId]);
 
   const deleteChat = useMutation({
     mutationFn: () => client.chats.deleteChat(chatId),
@@ -223,12 +223,12 @@ const useChatActions = (chatId: string) => {
     },
   });
 
-  return {
+  return useMemo(() => ({
     createChatMessage,
     deleteChat,
     deleteChatMessage,
     markChatAsRead,
-  };
+  }), [createChatMessage, deleteChat, deleteChatMessage, markChatAsRead]);
 };
 
 export { ChatKeys, useChat, useChatActions, useChats, useChatMessages };

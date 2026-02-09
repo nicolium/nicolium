@@ -2,6 +2,7 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
+import Account from '@/components/account';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
@@ -129,15 +130,7 @@ const ChatsPageChat = () => {
 
         <DropdownMenu
           src={require('@phosphor-icons/core/regular/info.svg')}
-          component={() => (
-            <HStack className='px-4 py-2' alignItems='center' space={3}>
-              <Avatar src={chat.account.avatar} staticSrc={chat.account.avatar_static} alt={chat.account.avatar_description} size={50} isCat={chat.account.is_cat} username={chat.account.username} />
-              <Stack>
-                <Text weight='semibold'>{chat.account.display_name}</Text>
-                <Text size='sm' theme='primary'>@{chat.account.acct}</Text>
-              </Stack>
-            </HStack>
-          )}
+          component={() => <div className='px-4 py-2'><Account account={chat.account} disabled hideActions /></div>}
           items={menuItems}
         />
       </HStack>

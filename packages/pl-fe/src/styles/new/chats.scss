@@ -30,6 +30,7 @@
     align-items: center;
     justify-content: space-between;
     height: 4rem;
+    min-height: 4rem;
     border-top-left-radius: 0.75rem;
     border-top-right-radius: 0.75rem;
     padding: 0.75rem 1rem;
@@ -43,6 +44,12 @@
       flex-direction: row;
       align-items: center;
       gap: 0.25rem;
+      overflow: hidden;
+
+      p {
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
 
     &__title div:first-child,

@@ -101,6 +101,7 @@ const ChatMessage = (props: IChatMessage) => {
       navigator.clipboard.writeText(text);
     }
   };
+
   const setBubbleRef = (c: HTMLDivElement) => {
     if (!c) return;
     const links = c.querySelectorAll('a[rel="ugc"]');
