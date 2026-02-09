@@ -13,6 +13,7 @@ const Pane: React.FC<IPane> = ({ isOpen = false, children }) => (
   <div
     className={clsx('⁂-chat-widget', { '⁂-chat-widget--open': isOpen })}
     data-testid='pane'
+    aria-expanded={isOpen}
   >
     {children}
   </div>

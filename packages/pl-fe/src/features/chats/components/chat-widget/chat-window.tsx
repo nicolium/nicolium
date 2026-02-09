@@ -1,5 +1,6 @@
 import { Link, type LinkProps } from '@tanstack/react-router';
 import React, { useRef } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
@@ -13,6 +14,12 @@ import Chat from '../chat';
 
 import ChatPaneHeader from './chat-pane-header';
 import ChatSettings from './chat-settings';
+
+const messages = defineMessages({
+  back: { id: 'card.back.label', defaultMessage: 'Back' },
+  chatInfo: { id: 'chat_pane.header.chat_info', defaultMessage: 'Chat info' },
+  newChat: { id: 'chat_pane.header.new_chat', defaultMessage: 'New chat' },
+});
 
 const LinkWrapper = ({ enabled, children, ...rest }: LinkProps & { enabled: boolean; children: React.ReactNode }): JSX.Element => {
   if (!enabled) {
@@ -29,6 +36,7 @@ const LinkWrapper = ({ enabled, children, ...rest }: LinkProps & { enabled: bool
 /** Floating desktop chat window. */
 const ChatWindow = () => {
   const { chat, currentChatId, screen, changeScreen, isOpen, toggleChatPane } = useChatContext();
+  const intl = useIntl();
 
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -45,8 +53,6 @@ const ChatWindow = () => {
     changeScreen(ChatWidgetScreens.CHAT_SETTINGS, currentChatId);
   };
 
-  const secondaryAction = () => isOpen ? openChatSettings : openSearch;
-
   if (!chat) return null;
 
   if (screen === ChatWidgetScreens.CHAT_SETTINGS) {
@@ -59,7 +65,7 @@ const ChatWindow = () => {
         title={
           <HStack alignItems='center' space={2}>
             {isOpen && (
-              <button onClick={closeChat}>
+              <button onClick={closeChat} title={intl.formatMessage(messages.back)}>
                 <Icon
                   src={require('@phosphor-icons/core/regular/arrow-left.svg')}
                   className='size-6 text-gray-600 dark:text-gray-400 rtl:rotate-180'
@@ -85,8 +91,9 @@ const ChatWindow = () => {
             </HStack>
           </HStack>
         }
-        secondaryAction={secondaryAction()}
+        secondaryAction={isOpen ? openChatSettings : openSearch}
         secondaryActionIcon={isOpen ? require('@phosphor-icons/core/regular/info.svg') : require('@phosphor-icons/core/regular/pencil-simple.svg')}
+        secondaryActionTitle={isOpen ? intl.formatMessage(messages.chatInfo) : intl.formatMessage(messages.newChat)}
         isToggleable={!isOpen}
         isOpen={isOpen}
         onToggle={toggleChatPane}

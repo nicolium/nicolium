@@ -1,7 +1,13 @@
 import React, { HTMLAttributes } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 
 import IconButton from '@/components/ui/icon-button';
 import { useSettings } from '@/stores/settings';
+
+const messages = defineMessages({
+  expand: { id: 'chat_pane.header.expand', defaultMessage: 'Expand chats' },
+  collapse: { id: 'chat_pane.header.collapse', defaultMessage: 'Collapse chats' },
+});
 
 interface IChatPaneHeader {
   isOpen: boolean;
@@ -11,6 +17,7 @@ interface IChatPaneHeader {
   unreadCount?: number;
   secondaryAction?(): void;
   secondaryActionIcon?: string;
+  secondaryActionTitle?: string;
 }
 
 const ChatPaneHeader = (props: IChatPaneHeader) => {
@@ -20,11 +27,13 @@ const ChatPaneHeader = (props: IChatPaneHeader) => {
     onToggle,
     secondaryAction,
     secondaryActionIcon,
+    secondaryActionTitle,
     title,
     unreadCount,
     ...rest
   } = props;
 
+  const intl = useIntl();
   const { demetricator } = useSettings();
 
   const ButtonComp = isToggleable ? 'button' : 'div';
@@ -54,10 +63,11 @@ const ChatPaneHeader = (props: IChatPaneHeader) => {
       </ButtonComp>
 
       <div className='⁂-chat-widget__header__actions'>
-        {secondaryAction ? (
+        {secondaryAction && secondaryActionIcon ? (
           <IconButton
             onClick={secondaryAction}
-            src={secondaryActionIcon as string}
+            src={secondaryActionIcon}
+            title={secondaryActionTitle}
           />
         ) : null}
 
@@ -65,6 +75,7 @@ const ChatPaneHeader = (props: IChatPaneHeader) => {
           onClick={onToggle}
           src={require('@phosphor-icons/core/regular/caret-up.svg')}
           className='⁂-chat-widget__header__open-button'
+          title={isOpen ? intl.formatMessage(messages.collapse) : intl.formatMessage(messages.expand)}
         />
       </div>
     </div>

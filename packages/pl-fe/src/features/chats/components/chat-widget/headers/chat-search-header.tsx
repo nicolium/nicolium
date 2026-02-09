@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
@@ -8,7 +8,7 @@ import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 import ChatPaneHeader from '../chat-pane-header';
 
 const messages = defineMessages({
-  title: { id: 'chat_search.title', defaultMessage: 'Messages' },
+  back: { id: 'card.back.label', defaultMessage: 'Back' },
 });
 
 const ChatSearchHeader = () => {
@@ -25,6 +25,7 @@ const ChatSearchHeader = () => {
             onClick={() => {
               changeScreen(ChatWidgetScreens.INBOX);
             }}
+            title={intl.formatMessage(messages.back)}
           >
             <Icon
               src={require('@phosphor-icons/core/regular/arrow-left.svg')}
@@ -33,7 +34,7 @@ const ChatSearchHeader = () => {
           </button>
 
           <Text size='sm' weight='bold' truncate>
-            {intl.formatMessage(messages.title)}
+            <FormattedMessage id='chat_search.title' defaultMessage='Messages' />
           </Text>
         </div>
       }
