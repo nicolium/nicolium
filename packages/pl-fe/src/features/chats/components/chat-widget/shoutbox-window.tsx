@@ -1,5 +1,5 @@
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
@@ -14,9 +14,14 @@ import Shoutbox from '../shoutbox';
 
 import ChatPaneHeader from './chat-pane-header';
 
+const messages = defineMessages({
+  back: { id: 'card.back.label', defaultMessage: 'Back' },
+});
+
 const ShoutboxWindow = () => {
   const { changeScreen, isOpen, toggleChatPane } = useChatContext();
   const instance = useInstance();
+  const intl = useIntl();
   const { logo } = useFrontendConfig();
 
   const closeChat = () => {
@@ -29,7 +34,7 @@ const ShoutboxWindow = () => {
         title={
           <HStack alignItems='center' space={2}>
             {isOpen && (
-              <button onClick={closeChat}>
+              <button onClick={closeChat} title={intl.formatMessage(messages.back)}>
                 <Icon
                   src={require('@phosphor-icons/core/regular/arrow-left.svg')}
                   className='size-6 text-gray-600 dark:text-gray-400 rtl:rotate-180'
