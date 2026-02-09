@@ -2,7 +2,6 @@ import { Link, type LinkOptions } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedNumber } from 'react-intl';
 
-import Text from '@/components/ui/text';
 import { isNumber } from '@/utils/numbers';
 
 type IDashCounter = {
@@ -18,30 +17,28 @@ const DashCounter: React.FC<IDashCounter> = ({ count, label, percent = false, ..
     return null;
   }
 
-  const className = 'flex cursor-pointer flex-col items-center space-y-2 rounded bg-gray-200 p-4 transition-transform hover:-translate-y-1 dark:bg-gray-800';
-
   const body = (
     <>
-      <Text align='center' size='2xl' weight='medium'>
+      <p className='⁂-dashcounter__number'>
         <FormattedNumber
           value={count}
           style={percent ? 'unit' : undefined}
           unit={percent ? 'percent' : undefined}
           numberingSystem='latn'
         />
-      </Text>
-      <Text align='center'>
+      </p>
+      <p className='⁂-dashcounter__label'>
         {label}
-      </Text>
+      </p>
     </>
   );
 
   if (!('to' in rest)) {
-    return <span className={className}>{body}</span>;
+    return <span className='⁂-dashcounter'>{body}</span>;
   }
 
   return (
-    <Link className={className} {...rest}>
+    <Link className='⁂-dashcounter' {...rest}>
       {body}
     </Link>
   );
@@ -53,7 +50,7 @@ interface IDashCounters {
 
 /** Wrapper container for dash counters. */
 const DashCounters: React.FC<IDashCounters> = ({ children }) => (
-  <div className='grid grid-cols-1 gap-2 sm:grid-cols-2'>
+  <div className='⁂-dashboard__counters'>
     {children}
   </div>
 );

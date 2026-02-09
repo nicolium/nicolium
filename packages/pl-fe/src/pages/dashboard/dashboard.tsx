@@ -5,7 +5,6 @@ import List, { ListItem } from '@/components/list';
 import { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import { Counter } from '@/features/admin/components/counter';
 import { DashCounter, DashCounters } from '@/features/admin/components/dashcounter';
 import { Dimension } from '@/features/admin/components/dimension';
@@ -50,7 +49,7 @@ const Dashboard: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <Stack space={6} className='mt-4'>
+      <div className='⁂-dashboard'>
         <DashCounters>
           {features.mastodonAdminMetrics ? (
             <Counter
@@ -224,15 +223,12 @@ const Dashboard: React.FC = () => {
           <ListItem label={<FormattedMessage id='admin.software.frontend' defaultMessage='Frontend' />}>
             <a
               href={sourceCode.ref ? `${sourceCode.url}/tree/${sourceCode.ref}` : sourceCode.url}
-              className='flex items-center space-x-1 truncate'
+              className='⁂-dashboard__source-code'
               target='_blank'
             >
               <span>{sourceCode.displayName} {sourceCode.version}</span>
 
-              <Icon
-                className='size-4'
-                src={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
-              />
+              <Icon src={require('@phosphor-icons/core/regular/arrow-square-out.svg')} />
             </a>
           </ListItem>
 
@@ -242,7 +238,7 @@ const Dashboard: React.FC = () => {
             </ListItem>
           )}
         </List>
-      </Stack>
+      </div>
     </Column>
   );
 };

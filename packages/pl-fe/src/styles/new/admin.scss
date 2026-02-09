@@ -1,0 +1,32 @@
+@use 'mixins';
+
+.⁂-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  &__counters {
+    @apply grid grid-cols-1 gap-2 sm:grid-cols-2;
+  }
+
+  &__source-code {
+    @apply flex items-center space-x-1 truncate;
+
+    svg {
+      height: 1rem;
+      width: 1rem;
+    }
+  }
+}
+
+.⁂-dashcounter {
+  @apply flex cursor-pointer flex-col items-center space-y-2 rounded bg-gray-200 p-4 transition-transform hover:-translate-y-1 dark:bg-gray-800;
+
+  &__number {
+    @include mixins.text($align: center, $size: 2xl, $weight: medium);
+  }
+
+  &__label {
+    @include mixins.text($align: center);
+  }
+}
