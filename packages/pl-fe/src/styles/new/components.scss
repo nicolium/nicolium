@@ -208,6 +208,7 @@
     @apply py-1.5 pr-4 rtl:pl-4 rtl:pr-0;
 
     > :first-child {
+      word-break: break-word;
       @apply text-gray-900 dark:text-gray-100;
     }
   }

@@ -10,7 +10,7 @@ import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import PlaceholderChatMessage from '@/features/placeholder/components/placeholder-chat-message';
 import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
-import { useChatActions, useChatMessages } from '@/queries/chats';
+import { useChatMessages, useMarkChatAsRead } from '@/queries/chats';
 
 import ChatMessage from './chat-message';
 
@@ -67,13 +67,13 @@ interface IChatMessageList {
 }
 
 /** Scrollable list of chat messages. */
-const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
+const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
   const intl = useIntl();
 
   const node = useRef<VirtuosoHandle>(null);
   const [firstItemIndex, setFirstItemIndex] = useState(START_INDEX - 20);
 
-  const { markChatAsRead } = useChatActions(chat.id);
+  const markChatAsRead = useMarkChatAsRead(chat.id);
   const {
     data: chatMessages,
     fetchNextPage,
@@ -140,7 +140,7 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
       return acc;
     }, []);
   };
-  const cachedChatMessages = buildCachedMessages();
+  const cachedChatMessages = useMemo(() => buildCachedMessages(), [chatMessages]);
 
   const initialScrollPositionProps = useMemo(() => {
     if (process.env.NODE_ENV === 'test') {
@@ -160,7 +160,13 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
     return false;
   }, [firstItemIndex, hasNextPage, isFetching]);
 
-  const renderDivider = (key: React.Key, text: string) => <Divider key={key} text={text} textSize='xs' />;
+  const renderChatMessage = useCallback((index: number, chatMessage: ChatMessageEntity | { type: 'divider'; text: string }) => {
+    if ('type' in chatMessage && chatMessage.type === 'divider') {
+      return <Divider key={index} text={chatMessage.text} textSize='xs' />;
+    }
+
+    return <ChatMessage key={chatMessage.id} chat={chat} chatMessage={chatMessage} />;
+  }, [chat]);
 
   useEffect(() => {
     const lastMessage = formattedChatMessages[formattedChatMessages.length - 1];
@@ -177,7 +183,7 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
      * 2) it has not already been read
     */
     if (!isMessagePending) {
-      markChatAsRead(lastMessageId);
+      markChatAsRead.mutate(lastMessageId);
     }
   }, [formattedChatMessages.length]);
 
@@ -245,13 +251,7 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
           data={cachedChatMessages}
           startReached={handleStartReached}
           followOutput='auto'
-          itemContent={(index, chatMessage) => {
-            if (chatMessage.type === 'divider') {
-              return renderDivider(index, (chatMessage as any).text);
-            } else {
-              return <ChatMessage chat={chat} chatMessage={chatMessage} />;
-            }
-          }}
+          itemContent={(index, chatMessage) => renderChatMessage(index, chatMessage)}
           components={{
             List,
             Scroller,
@@ -267,6 +267,6 @@ const ChatMessageList: React.FC<IChatMessageList> = ({ chat }) => {
       </div>
     </div>
   );
-};
+});
 
 export { ChatMessageList as default, List as ChatMessageListList, Scroller as ChatMessageListScroller };

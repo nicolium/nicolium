@@ -1,7 +1,6 @@
 import { InfiniteData, keepPreviousData, useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
 import sumBy from 'lodash/sumBy';
 import { type Chat, type ChatMessage as BaseChatMessage, type PaginatedResponse, chatMessageSchema } from 'pl-api';
-import { useCallback, useMemo } from 'react';
 import * as v from 'valibot';
 
 import { importEntities } from '@/actions/importer';
@@ -121,36 +120,38 @@ const useChat = (chatId?: string) => {
   });
 };
 
-const useChatActions = (chatId: string) => {
-  const { account } = useOwnAccount();
+const useMarkChatAsRead = (chatId: string) => {
   const client = useClient();
 
   const { setUnreadChatsCount } = useStatContext();
 
-  const { chat, changeScreen } = useChatContext();
+  return useMutation({
+    mutationFn: (lastReadId: string) => client.chats.markChatAsRead(chatId, lastReadId),
+    onSuccess: (data) => {
+      updatePageItem(['chats', 'search'], data, (o, n) => o.id === n.id);
+      const queryData = queryClient.getQueryData<InfiniteData<PaginatedResponse<unknown>>>(['chats', 'search']);
 
-  const markChatAsRead = async (lastReadId: string) =>
-    client.chats.markChatAsRead(chatId, lastReadId)
-      .then((data) => {
-        updatePageItem(['chats', 'search'], data, (o, n) => o.id === n.id);
-        const queryData = queryClient.getQueryData<InfiniteData<PaginatedResponse<unknown>>>(['chats', 'search']);
+      if (queryData) {
+        const flattenedQueryData: any = flattenPages(queryData)?.map((chat: any) => {
+          if (chat.id === data.id) {
+            return data;
+          } else {
+            return chat;
+          }
+        });
+        setUnreadChatsCount(sumBy(flattenedQueryData, (chat: Chat) => chat.unread));
+      }
+    },
+  });
+};
 
-        if (queryData) {
-          const flattenedQueryData: any = flattenPages(queryData)?.map((chat: any) => {
-            if (chat.id === data.id) {
-              return data;
-            } else {
-              return chat;
-            }
-          });
-          setUnreadChatsCount(sumBy(flattenedQueryData, (chat: Chat) => chat.unread));
-        }
+const useCreateChatMessage = (chatId: string) => {
+  const { account } = useOwnAccount();
+  const client = useClient();
 
-        return data;
-      })
-      .catch(() => null);
+  const { chat } = useChatContext();
 
-  const createChatMessage = useMutation({
+  return useMutation({
     mutationFn: ({ chatId, content, mediaId }: { chatId: string; content: string; mediaId?: string }) =>
       client.chats.createChatMessage(chatId, { content, media_id: mediaId }),
     retry: false,
@@ -212,9 +213,14 @@ const useChatActions = (chatId: string) => {
       reOrderChatListItems();
     },
   });
-  const deleteChatMessage = useCallback((chatMessageId: string) => client.chats.deleteChatMessage(chatId, chatMessageId), [chatId]);
+};
 
-  const deleteChat = useMutation({
+const useDeleteChat = (chatId: string) => {
+  const client = useClient();
+
+  const { changeScreen } = useChatContext();
+
+  return useMutation({
     mutationFn: () => client.chats.deleteChat(chatId),
     onSuccess() {
       changeScreen(ChatWidgetScreens.INBOX);
@@ -222,13 +228,19 @@ const useChatActions = (chatId: string) => {
       queryClient.invalidateQueries({ queryKey: ['chats', 'search'] });
     },
   });
-
-  return useMemo(() => ({
-    createChatMessage,
-    deleteChat,
-    deleteChatMessage,
-    markChatAsRead,
-  }), [createChatMessage, deleteChat, deleteChatMessage, markChatAsRead]);
 };
 
-export { ChatKeys, useChat, useChatActions, useChats, useChatMessages };
+const useDeleteChatMessage = (chatId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationFn: (chatMessageId: string) => client.chats.deleteChatMessage(chatId, chatMessageId),
+    onSettled: () => {
+      queryClient.invalidateQueries({
+        queryKey: ChatKeys.chatMessages(chatId),
+      });
+    },
+  });
+};
+
+export { ChatKeys, useChat, useMarkChatAsRead, useCreateChatMessage, useDeleteChat, useDeleteChatMessage, useChats, useChatMessages };

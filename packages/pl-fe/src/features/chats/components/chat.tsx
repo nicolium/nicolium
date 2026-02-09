@@ -5,7 +5,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { uploadMedia } from '@/actions/media';
 import Stack from '@/components/ui/stack';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useChatActions } from '@/queries/chats';
+import { useCreateChatMessage } from '@/queries/chats';
 import toast from '@/toast';
 
 import ChatComposer from './chat-composer';
@@ -51,7 +51,7 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const { createChatMessage } = useChatActions(chat.id);
+  const createChatMessage = useCreateChatMessage(chat.id);
 
   const [content, setContent] = useState<string>('');
   const [attachment, setAttachment] = useState<MediaAttachment | null>(null);
@@ -99,8 +99,6 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
   const insertLine = () => setContent(content + '\n');
 
   const handleKeyDown: React.KeyboardEventHandler = (event) => {
-    markRead();
-
     if (event.key === 'Enter' && event.shiftKey) {
       event.preventDefault();
       insertLine();
@@ -119,13 +117,6 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
       handleFiles(e.clipboardData.files);
     }
   };
-
-  const markRead = () => {
-    // markAsRead.mutate();
-    // dispatch(markChatRead(chatId));
-  };
-
-  const handleMouseOver = () => markRead();
 
   const handleRemoveFile = () => {
     setAttachment(null);
@@ -159,7 +150,7 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
   }, [chat.id, inputRef?.current]);
 
   return (
-    <Stack className={clsx('flex grow overflow-hidden', className)} onMouseOver={handleMouseOver}>
+    <Stack className={clsx('flex grow overflow-hidden', className)}>
       <div className='flex h-full grow justify-center overflow-hidden'>
         <ChatMessageList key={chat.id} chat={chat} />
       </div>

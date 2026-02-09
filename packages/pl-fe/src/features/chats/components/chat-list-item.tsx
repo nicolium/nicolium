@@ -13,7 +13,7 @@ import { useChatContext } from '@/contexts/chat-context';
 import Emojify from '@/features/emoji/emojify';
 import { useFeatures } from '@/hooks/use-features';
 import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
-import { useChatActions } from '@/queries/chats';
+import { useDeleteChat } from '@/queries/chats';
 import { useModalsActions } from '@/stores/modals';
 
 import type { Menu } from '@/components/dropdown-menu';
@@ -32,14 +32,14 @@ interface IChatListItemInterface {
   onClick: (chat: Chat) => void;
 }
 
-const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
+const ChatListItem: React.FC<IChatListItemInterface> = React.memo(({ chat, onClick }) => {
   const { openModal } = useModalsActions();
   const intl = useIntl();
   const features = useFeatures();
   const navigate = useNavigate();
 
   const { isUsingMainChatPage } = useChatContext();
-  const { deleteChat } = useChatActions(chat?.id as string);
+  const deleteChat = useDeleteChat(chat?.id as string);
   const { data: relationship } = useRelationshipQuery(chat?.account.id);
 
   const isBlocked = relationship?.blocked_by && false;
@@ -159,6 +159,6 @@ const ChatListItem: React.FC<IChatListItemInterface> = ({ chat, onClick }) => {
       </div>
     </div>
   );
-};
+});
 
 export { ChatListItem as default };

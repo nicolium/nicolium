@@ -1,4 +1,3 @@
-import { useMutation } from '@tanstack/react-query';
 import clsx from 'clsx';
 import escape from 'lodash/escape';
 import React, { useMemo, useState } from 'react';
@@ -12,8 +11,7 @@ import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { MediaGallery } from '@/features/ui/util/async-components';
 import { useAppSelector } from '@/hooks/use-app-selector';
-import { ChatKeys, useChatActions } from '@/queries/chats';
-import { queryClient } from '@/queries/client';
+import { useDeleteChatMessage } from '@/queries/chats';
 import { useModalsActions } from '@/stores/modals';
 import { stripHTML } from '@/utils/html';
 import { onlyEmoji } from '@/utils/rich-content';
@@ -46,25 +44,16 @@ interface IChatMessage {
   chatMessage: ChatMessageEntity;
 }
 
-const ChatMessage = (props: IChatMessage) => {
+const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
   const { chat, chatMessage } = props;
 
   const { openModal } = useModalsActions();
   const intl = useIntl();
 
   const me = useAppSelector((state) => state.me);
-  const { deleteChatMessage } = useChatActions(chat.id);
+  const deleteChatMessage = useDeleteChatMessage(chat.id);
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
-
-  const handleDeleteMessage = useMutation({
-    mutationFn: (chatMessageId: string) => deleteChatMessage(chatMessageId),
-    onSettled: () => {
-      queryClient.invalidateQueries({
-        queryKey: ChatKeys.chatMessages(chat.id),
-      });
-    },
-  });
 
   const content = parseContent(chatMessage);
   const isMyMessage = chatMessage.account_id === me;
@@ -137,14 +126,14 @@ const ChatMessage = (props: IChatMessage) => {
     if (isMyMessage) {
       menu.push({
         text: intl.formatMessage(messages.delete),
-        action: () => handleDeleteMessage.mutate(chatMessage.id),
+        action: () => deleteChatMessage.mutate(chatMessage.id),
         icon: require('@phosphor-icons/core/regular/trash.svg'),
         destructive: true,
       });
     } else {
       menu.push({
         text: intl.formatMessage(messages.deleteForMe),
-        action: () => handleDeleteMessage.mutate(chatMessage.id),
+        action: () => deleteChatMessage.mutate(chatMessage.id),
         icon: require('@phosphor-icons/core/regular/trash.svg'),
         destructive: true,
       });
@@ -273,6 +262,6 @@ const ChatMessage = (props: IChatMessage) => {
       </Stack>
     </div>
   );
-};
+});
 
 export { ChatMessage as default };

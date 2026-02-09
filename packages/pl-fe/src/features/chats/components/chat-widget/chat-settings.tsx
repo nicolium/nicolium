@@ -10,7 +10,7 @@ import Text from '@/components/ui/text';
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 import { useFeatures } from '@/hooks/use-features';
 import { useUnblockAccountMutation, useRelationshipQuery } from '@/queries/accounts/use-relationship';
-import { useChatActions } from '@/queries/chats';
+import { useDeleteChat } from '@/queries/chats';
 import { useModalsActions } from '@/stores/modals';
 
 import ChatPaneHeader from './chat-pane-header';
@@ -30,7 +30,7 @@ const ChatSettings = () => {
 
   const { openModal } = useModalsActions();
   const { chat, changeScreen, toggleChatPane } = useChatContext();
-  const { deleteChat } = useChatActions(chat?.id as string);
+  const deleteChat = useDeleteChat(chat?.id as string);
 
   const { mutate: unblockAccount } = useUnblockAccountMutation(chat?.account.id!);
 

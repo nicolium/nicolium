@@ -13,7 +13,7 @@ import VerificationBadge from '@/components/verification-badge';
 import { chatRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
 import { useUnblockAccountMutation, useRelationshipQuery } from '@/queries/accounts/use-relationship';
-import { useChat, useChatActions } from '@/queries/chats';
+import { useChat, useDeleteChat } from '@/queries/chats';
 import { useModalsActions } from '@/stores/modals';
 
 import Chat from '../../chat';
@@ -47,7 +47,7 @@ const ChatsPageChat = () => {
 
   const inputRef = useRef<HTMLTextAreaElement | null>(null);
 
-  const { deleteChat } = useChatActions(chat?.id as string);
+  const deleteChat = useDeleteChat(chat?.id as string);
 
   const isBlocked = !!useRelationshipQuery(chat?.account.id).data?.blocked_by;
 

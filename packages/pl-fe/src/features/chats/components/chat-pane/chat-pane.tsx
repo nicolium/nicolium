@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
@@ -25,13 +25,13 @@ const ChatPane = () => {
   const { screen, changeScreen, isOpen, toggleChatPane } = useChatContext();
   const { chatsQuery: { data: chats, isLoading } } = useChats();
 
-  const handleClickChat = (nextChat: Chat | 'shoutbox') => {
+  const handleClickChat = useCallback((nextChat: Chat | 'shoutbox') => {
     if (nextChat === 'shoutbox') {
       changeScreen(ChatWidgetScreens.SHOUTBOX);
     } else {
       changeScreen(ChatWidgetScreens.CHAT, nextChat.id);
     }
-  };
+  }, [changeScreen]);
 
   const renderBody = () => {
     if (Number(chats?.length) > 0 || showShoutbox || isLoading) {

@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { CardTitle } from '@/components/ui/card';
@@ -19,13 +19,13 @@ const ChatsPageSidebar = () => {
   const intl = useIntl();
   const navigate = useNavigate();
 
-  const handleClickChat = (chat: Chat | 'shoutbox') => {
+  const handleClickChat = useCallback((chat: Chat | 'shoutbox') => {
     if (chat === 'shoutbox') {
       navigate({ to: '/chats/shoutbox' });
     } else {
       navigate({ to: '/chats/$chatId', params: { chatId: chat.id } });
     }
-  };
+  }, [navigate]);
 
   const handleChatCreate = () => {
     navigate({ to: '/chats/new' });

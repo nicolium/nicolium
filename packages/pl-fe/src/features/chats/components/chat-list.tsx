@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 
 import PullToRefresh from '@/components/pull-to-refresh';
@@ -37,6 +37,14 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
 
   const handleRefresh = () => refetch();
 
+  const renderChatListItem = useCallback((_index: number, chat: Chat | 'shoutbox') => {
+    if (chat === 'shoutbox') {
+      return <div key='shoutbox' className='px-2'><ChatListShoutbox onClick={onClickChat} /></div>;
+    }
+
+    return <div key={chat.id} className='px-2'><ChatListItem chat={chat} onClick={onClickChat} /></div>;
+  }, [onClickChat]);
+
   const renderEmpty = () => {
     if (isFetching) {
       return (
@@ -65,11 +73,7 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
         useWindowScroll={useWindowScroll}
         data={allChats}
         endReached={handleLoadMore}
-        itemContent={(_index, chat) => (
-          <div className='px-2'>
-            {chat === 'shoutbox' ? <ChatListShoutbox onClick={onClickChat} /> : <ChatListItem chat={chat} onClick={onClickChat} />}
-          </div>
-        )}
+        itemContent={renderChatListItem}
         components={{
           ScrollSeekPlaceholder: PlaceholderChat,
           Footer: () => hasNextPage ? <Spinner withText={false} /> : null,
