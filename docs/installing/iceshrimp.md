@@ -1,8 +1,8 @@
-# Installing pl-fe as Iceshrimp.NET frontend
+# Installing Nicolium as Iceshrimp.NET frontend
 
-Iceshrimp.NET does not have built-in support for alternative frontends. However, there are ways to use `pl-fe` as the frontend for Iceshrimp.NET by rerouting specific requests using a reverse proxy like Nginx.
+Iceshrimp.NET does not have built-in support for alternative frontends. However, there are ways to use Nicolium as the frontend for Iceshrimp.NET by rerouting specific requests using a reverse proxy like Nginx.
 
-While this is the only way to use some of Iceshrimp.NET-specific features with `pl-fe`, because of Iceshrimp.NET CORS configuration, remember that it doesn't have full feature parity with the default Iceshrimp.NET frontend. You might prefer using `pl-fe` [in standalone mode](./standalone.md) instead.
+While this is the only way to use some of Iceshrimp.NET-specific features with Nicolium, because of Iceshrimp.NET CORS configuration, remember that it doesn't have full feature parity with the default Iceshrimp.NET frontend. You might prefer using Nicolium [in standalone mode](./standalone.md) instead.
 
 ## Example Nginx configuration
 
@@ -13,7 +13,7 @@ map $http_upgrade $connection_upgrade {
 }
 
 map "$http_accept,$http_content_type" $maybe_activitypub {
-  default @plfe;
+  default @nicolium;
 
   "~application/json" @shrimp;
   "~application/activity\+json" @shrimp;
@@ -37,7 +37,7 @@ server {
     try_files /dev/null $maybe_activitypub;
   }
 
-  location @plfe {
+  location @nicolium {
     try_files /index.html /dev/null;
   }
 

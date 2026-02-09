@@ -63,8 +63,8 @@ const config = defineConfig(({ command }) => ({
       },
       manifestFilename: 'manifest.json',
       manifest: {
-        name: 'pl-fe',
-        short_name: 'pl-fe',
+        name: 'Nicolium',
+        short_name: 'Nicolium',
         description: 'Mastodon-compatible social media front-end',
         icons: [
           {

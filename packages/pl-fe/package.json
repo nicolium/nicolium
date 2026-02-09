@@ -1,20 +1,20 @@
 {
   "name": "pl-fe",
-  "displayName": "pl-fe",
+  "displayName": "Nicolium",
   "version": "0.0.1",
   "type": "module",
   "description": "Mastodon-compatible social media front-end",
-  "homepage": "https://codeberg.org/mkljczk/pl-fe",
+  "homepage": "https://codeberg.org/mkljczk/nicolium",
   "repository": {
     "type": "git",
-    "url": "https://codeberg.org/mkljczk/pl-fe"
+    "url": "https://codeberg.org/mkljczk/nicolium"
   },
   "keywords": [
     "fediverse",
     "pleroma"
   ],
   "bugs": {
-    "url": "https://codeberg.org/mkljczk/pl-fe/issues"
+    "url": "https://codeberg.org/mkljczk/nicolium/issues"
   },
   "scripts": {
     "start": "npx vite serve",

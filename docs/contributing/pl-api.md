@@ -4,24 +4,23 @@
 
 It uses a minimal set of dependencies, most importantly [Valibot](https://valibot.dev/) for remote data validation and guaranteeing type safety. Fetch API is used for making HTTP requests.
 
-The development of `pl-api` happens inside the `pl-fe` monorepo. You can find the source code in the `packages/pl-api` directory of the `pl-fe` repository.
+The development of `pl-api` happens inside the Nicolium monorepo. You can find the source code in the `packages/pl-api` directory of the Nicolium repository.
 
 ## Setting up development environment
 
-Setting up `pl-fe` requires [Node.js](https://nodejs.org/) and [pnpm](https://pnpm.io/) package manager to be installed. Since Node v16.13, Node.js comes with `corepack` pre-installed, which can be used to manage package managers like `pnpm`.
-
+Setting up Nicolium requires [Node.js](https://nodejs.org/) and [pnpm](https://pnpm.io/) package manager to be installed. Since Node v16.13, Node.js comes with `corepack` pre-installed, which can be used to manage package managers like `pnpm`.
 To enable `pnpm` using `corepack`, run the following command:
 
 ```bash
 corepack enable pnpm
 ```
 
-You can now proceed to fetching pl-fe Git repository, installing dependencies, and running the development server:
+You can now proceed to fetching Nicolium Git repository, installing dependencies, and running the development server:
 
 ```bash
-# Clone the pl-fe repository
-git clone https://codeberg.org/mkljczk/pl-fe.git
-cd pl-fe
+# Clone the Nicolium repository
+git clone https://codeberg.org/mkljczk/nicolium.git
+cd nicolium
 # Install dependencies
 pnpm install
 # Build the pl-api dependency
@@ -32,7 +31,7 @@ This will start a Vite development server where you can use `pl-api` client insi
 
 ## Contributing guidelines
 
-`pl-fe` monorepo is hosted on [Codeberg](https://codeberg.org/mkljczk/pl-fe) and [GitHub](https://github.com/mkljczk/pl-fe). While issues are only tracked on Codeberg, you can submit pull requests on both platforms. Remember to follow the [Code of Conduct](../code-of-conduct.md) when interacting with the community.
+Nicolium monorepo is hosted on [Codeberg](https://codeberg.org/mkljczk/nicolium) and [GitHub](https://github.com/mkljczk/nicolium). While issues are only tracked on Codeberg, you can submit pull requests on both platforms. Remember to follow the [Code of Conduct](../code-of-conduct.md) when interacting with the community.
 
 The project uses [ESLint](https://eslint.org/) for code style checking. You can run the linter using the following command:
 

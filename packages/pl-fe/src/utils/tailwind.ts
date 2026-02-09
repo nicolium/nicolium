@@ -43,7 +43,7 @@ const fromBasicColors = ({ brandColor, accentColor }: {
   });
 };
 
-/** Convert pl-fe Config into Tailwind colors */
+/** Convert Nicolium Config into Tailwind colors */
 const toTailwind = (config: {
   brandColor: string;
   accentColor: string | null;

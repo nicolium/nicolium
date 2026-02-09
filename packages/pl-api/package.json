@@ -2,13 +2,13 @@
   "name": "pl-api",
   "version": "1.0.0-rc.97",
   "type": "module",
-  "homepage": "https://codeberg.org/mkljczk/pl-fe/src/branch/develop/packages/pl-api",
+  "homepage": "https://codeberg.org/mkljczk/nicolium/src/branch/develop/packages/pl-api",
   "repository": {
     "type": "git",
-    "url": "git+https://codeberg.org/mkljczk/pl-fe.git"
+    "url": "git+https://codeberg.org/mkljczk/nicolium.git"
   },
   "bugs": {
-    "url": "https://codeberg.org/mkljczk/pl-fe/issues"
+    "url": "https://codeberg.org/mkljczk/nicolium/issues"
   },
   "scripts": {
     "dev": "vite",

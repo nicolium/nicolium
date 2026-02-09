@@ -3,7 +3,7 @@ import boopOgg from '@/assets/sounds/boop.ogg';
 import chatMp3 from '@/assets/sounds/chat.mp3';
 import chatOgg from '@/assets/sounds/chat.ogg';
 
-/** pl-fe audio clip. */
+/** Nicolium audio clip. */
 interface Sound {
   src: string;
   type: string;

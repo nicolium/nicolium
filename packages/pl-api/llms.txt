@@ -8,7 +8,7 @@ pl-api is a TypeScript/JavaScript library that provides a type-safe client for i
 
 - Version: 1.0.0-rc.94
 - License: AGPL-3.0-or-later
-- Homepage: https://codeberg.org/mkljczk/pl-fe/src/branch/develop/packages/pl-api
+- Homepage: https://codeberg.org/mkljczk/nicolium/src/branch/develop/packages/pl-api
 - Documentation: https://pl.mkljczk.pl/pl-api-docs
 - NPM package: https://www.npmjs.com/package/pl-api
 
@@ -95,8 +95,8 @@ page1.items.forEach(account => console.log(account.username));
 
 ## Projects using pl-api
 
-- **pl-fe** - Web client for Mastodon-compatible servers (https://codeberg.org/mkljczk/pl-fe)
-- **pl-hooks** - React hooks library for Mastodon APIs (https://codeberg.org/mkljczk/pl-fe/src/branch/develop/packages/pl-hooks)
+- Nicolium - Web client for Mastodon-compatible servers (https://codeberg.org/mkljczk/nicolium)
+- **pl-hooks** - React hooks library for Mastodon APIs (https://codeberg.org/mkljczk/nicolium/src/branch/develop/packages/pl-hooks)
 
 ## Development
 
@@ -159,8 +159,8 @@ stream.listen((event) => {
 
 ## Links
 
-- Repository: https://codeberg.org/mkljczk/pl-fe
-- Issues: https://codeberg.org/mkljczk/pl-fe/issues
+- Repository: https://codeberg.org/mkljczk/nicolium
+- Issues: https://codeberg.org/mkljczk/nicolium/issues
 - NPM package: https://www.npmjs.com/package/pl-api
 - API documentation: https://pl.mkljczk.pl/pl-api-docs
 - Mastodon API docs: https://docs.joinmastodon.org

@@ -2,13 +2,13 @@
   "name": "pl-hooks",
   "version": "0.0.14",
   "type": "module",
-  "homepage": "https://codeberg.org/mkljczk/pl-fe/src/branch/develop/packages/pl-hooks",
+  "homepage": "https://codeberg.org/mkljczk/nicolium/src/branch/develop/packages/pl-hooks",
   "repository": {
     "type": "git",
-    "url": "https://codeberg.org/mkljczk/pl-fe"
+    "url": "https://codeberg.org/mkljczk/nicolium"
   },
   "bugs": {
-    "url": "https://codeberg.org/mkljczk/pl-fe/issues"
+    "url": "https://codeberg.org/mkljczk/nicolium/issues"
   },
   "scripts": {
     "dev": "vite",
