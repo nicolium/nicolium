@@ -40,7 +40,7 @@ You can find more information about setting up the development environment in [t
 
 ~~I named the project after my now-deprecated personal fork of Pleroma, called simply `pl`. They were meant to be recommended together. However, `pl-fe` evolved into something more serious than a little fork. This is a bad and confusing name, but I don't really care about branding.~~
 
-> For a maintained fork of Pleroma focused on Nicolex compatibility, check out my new project, [Nicolex](https://codeberg.org/mkljczk/nicolex).
+> For a maintained fork of Pleroma focused on Nicolium compatibility, check out my new project, [Nicolex](https://codeberg.org/mkljczk/nicolex).
 
 ~~I will bite people calling `pl-fe` *Polish front-end* or *Polish Soapbox*. And I don't mean sending them the [`Bite` activity](https://ns.mia.jetzt/as/) (which works in pl-fe on supported backends btw).~~
 
