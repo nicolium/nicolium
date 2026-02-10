@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
 import { externalLogin, loginWithCode } from '@/actions/external-auth';
-import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
-import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Spinner from '@/components/ui/spinner';
@@ -76,7 +74,7 @@ const ExternalLoginForm: React.FC = () => {
   }
 
   return (
-    <Form onSubmit={handleSubmit} data-testid='external-login'>
+    <Form className='⁂-external-login' onSubmit={handleSubmit} data-testid='external-login'>
       <FormGroup labelText={intl.formatMessage(messages.instanceLabel)}>
         <Input
           aria-label={intl.formatMessage(messages.instancePlaceholder)}
@@ -90,11 +88,11 @@ const ExternalLoginForm: React.FC = () => {
         />
       </FormGroup>
 
-      <FormActions>
-        <Button theme='primary' type='submit' disabled={isLoading}>
+      <div className='⁂-form__actions'>
+        <button type='submit' disabled={isLoading}>
           <FormattedMessage id='login.log_in' defaultMessage='Log in' />
-        </Button>
-      </FormActions>
+        </button>
+      </div>
     </Form>
   );
 };

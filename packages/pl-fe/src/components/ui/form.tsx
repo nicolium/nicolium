@@ -20,7 +20,7 @@ const Form: React.FC<IForm> = ({ onSubmit, children, ...filteredProps }) => {
   }, [onSubmit]);
 
   return (
-    <form data-testid='form' onSubmit={handleSubmit} className='space-y-4' {...filteredProps}>
+    <form data-testid='form' onSubmit={handleSubmit} className='⁂-form' {...filteredProps}>
       {children}
     </form>
   );

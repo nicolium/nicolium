@@ -1,10 +1,12 @@
 @use 'components';
+@use 'forms';
 @use 'layout';
 @use 'modals';
 @use 'accounts';
 @use 'statuses';
 @use 'timelines';
 @use 'compose';
+@use 'authentication';
 @use 'admin';
 @use 'drive';
 @use 'chats';
