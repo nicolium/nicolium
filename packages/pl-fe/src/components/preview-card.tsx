@@ -191,7 +191,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
           <div className='absolute inset-0 flex items-center justify-center'>
             <div className='flex items-center justify-center rounded-full bg-gray-500/90 px-4 py-3 shadow-md dark:bg-gray-700/90'>
               <HStack space={3} alignItems='center'>
-                <button onClick={handleEmbedClick} className='appearance-none text-gray-700 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-100'>
+                <button onClick={handleEmbedClick} className='appearance-none text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-100'>
                   <Icon
                     src={iconVariant}
                     className='size-6 text-inherit'
