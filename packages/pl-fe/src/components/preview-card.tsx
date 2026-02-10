@@ -166,6 +166,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
         backgroundImage: `url(${card.image})`,
         width: horizontal ? width : undefined,
         height: horizontal ? height : undefined,
+        aspectRatio: ratio,
       }}
       className='status-card__image-image'
       title={card.image_description || undefined}
