@@ -5,9 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import { useLocale, useLocaleDirection } from '@/hooks/use-locale';
 import { getTextDirection } from '@/utils/rtl';
 
-import Stack from './stack';
-import Text from './text';
-
 interface ITextarea extends Pick<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'className' | 'id' | 'lang' | 'maxLength' | 'onChange' | 'onClick' | 'onKeyDown' | 'onKeyUp' | 'onPaste' | 'required' | 'disabled' | 'rows' | 'readOnly'> {
   /** Put the cursor into the input on mount. */
   autoFocus?: boolean;
@@ -31,12 +28,10 @@ interface ITextarea extends Pick<React.TextareaHTMLAttributes<HTMLTextAreaElemen
   autoComplete?: string;
   /** Whether to display the textarea in red. */
   hasError?: boolean;
-  /** Whether or not you can resize the teztarea */
+  /** Whether or not you can resize the textarea */
   isResizeable?: boolean;
   /** Textarea theme. */
   theme?: 'default' | 'transparent';
-  /** Whether to display a character counter below the textarea. */
-  withCounter?: boolean;
 }
 
 /** Textarea with custom styles. */
@@ -84,37 +79,41 @@ const Textarea = React.forwardRef(({
     }
   };
 
+  const textarea = (
+    <textarea
+      {...props}
+      value={value}
+      ref={ref}
+      rows={rows}
+      onChange={handleChange}
+      className={clsx('⁂-textarea', {
+        '⁂-textarea--transparent': theme === 'transparent',
+        '⁂-textarea--mono': isCodeEditor,
+        '⁂-textarea--has-error': hasError,
+        '⁂-textarea--resizable': isResizeable,
+      }, className)}
+      dir={value?.length ? getTextDirection(value, { fallback: direction }) : undefined}
+    />
+  );
+
+  if (!maxLength) {
+    return textarea;
+  }
+
   return (
-    <Stack space={1.5}>
-      <textarea
-        {...props}
-        value={value}
-        ref={ref}
-        rows={rows}
-        onChange={handleChange}
-        className={clsx('block w-full rounded-md text-gray-900 placeholder:text-gray-600 dark:text-gray-100 dark:placeholder:text-gray-600 sm:text-sm', {
-          'bg-white dark:bg-transparent shadow-sm border-gray-400 dark:border-gray-800 dark:ring-1 dark:ring-gray-800 focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500':
-            theme === 'default',
-          'bg-transparent border-0 focus:border-0 focus:ring-0': theme === 'transparent',
-          'font-mono': isCodeEditor,
-          'text-red-600 border-red-600': hasError,
-          'resize-none': !isResizeable,
-        }, className)}
-        dir={value?.length ? getTextDirection(value, { fallback: direction }) : undefined}
-      />
+    <div className='⁂-textarea__container'>
+      {textarea}
 
       {maxLength && (
-        <div className='text-right rtl:text-left'>
-          <Text size='xs' theme={maxLength - length < 0 ? 'danger' : 'muted'}>
-            <FormattedMessage
-              id='textarea.counter.label'
-              defaultMessage='{count} characters remaining'
-              values={{ count: maxLength - length }}
-            />
-          </Text>
-        </div>
+        <p className={clsx('⁂-textarea__max-length', { '⁂-textarea__max-length--exceeded': maxLength - length < 0 })}>
+          <FormattedMessage
+            id='textarea.counter.label'
+            defaultMessage='{count} characters remaining'
+            values={{ count: maxLength - length }}
+          />
+        </p>
       )}
-    </Stack>
+    </div>
   );
 },
 );

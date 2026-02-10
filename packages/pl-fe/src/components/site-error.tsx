@@ -2,9 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { NODE_ENV } from '@/build-config';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
-import Text from '@/components/ui/text';
 import Textarea from '@/components/ui/textarea';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useLogo } from '@/hooks/use-logo';
@@ -81,18 +78,11 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
   if (isNetworkError(error)) {
     return (
       <Column label={intl.formatMessage(messages.networkErrorTitle)}>
-        <Stack space={4} alignItems='center' justifyContent='center' className='min-h-[160px] rounded-lg p-10'>
-          {/* <IconButton
-            iconClassName='h-10 w-10'
-            title={intl.formatMessage(messages.networkErrorRetry)}
-            src={require('@phosphor-icons/core/regular/arrows-clockwise.svg')}
-            onClick={handleRetry}
-          /> */}
-
-          <Text align='center' theme='muted'>
+        <div className='⁂-network-error'>
+          <p>
             <FormattedMessage id='bundle_column_error.body' defaultMessage='Something went wrong while loading this page.' />
-          </Text>
-        </Stack>
+          </p>
+        </div>
       </Column>
     );
   }
@@ -101,25 +91,23 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
     <div className='⁂-site-error'>
       <main>
         {logoSrc && (
-          <div className='flex shrink-0 justify-center'>
-            <a href='/' className='inline-flex'>
-              <SiteLogo className='h-12 w-auto cursor-pointer' />
-            </a>
-          </div>
+          <a href='/' className='⁂-site-error__logo'>
+            <SiteLogo />
+          </a>
         )}
 
-        <div className='py-8'>
-          <div className='mx-auto max-w-xl space-y-2 text-center'>
-            <h1 className='text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-500 sm:text-4xl'>
+        <div className='⁂-site-error__body'>
+          <div className='⁂-site-error__message'>
+            <h1>
               <FormattedMessage id='alert.unexpected.message' defaultMessage='Something went wrong.' />
             </h1>
-            <p className='text-lg text-gray-700 dark:text-gray-600'>
+            <p className='⁂-site-error__message__body'>
               <FormattedMessage
                 id='alert.unexpected.body'
                 defaultMessage="We're sorry for the interruption. If the problem persists, please report it in our {issueTracker}. You may also try to {clearCookies} (this will log you out)."
                 values={{
                   issueTracker: (
-                    <a href={sourceCode.url + '/issues'} target='_blank' rel='noopener noreferrer' className='text-primary-600 hover:underline dark:text-primary-400'>
+                    <a href={sourceCode.url + '/issues'} target='_blank' rel='noopener noreferrer'>
                       <FormattedMessage
                         id='alert.unexpected.issue_tracker'
                         defaultMessage='issue tracker'
@@ -127,7 +115,7 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
                     </a>
                   ),
                   clearCookies: (
-                    <a href='/' onClick={clearCookies} className='text-primary-600 hover:underline dark:text-primary-400'>
+                    <a href='/' onClick={clearCookies}>
                       <FormattedMessage
                         id='alert.unexpected.clear_cookies'
                         defaultMessage='clear cookies and browser data'
@@ -138,64 +126,60 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
               />
             </p>
 
-            <Text theme='muted'>
-              <Text weight='medium' tag='span' theme='muted'>{sourceCode.displayName}:</Text>
+            <p className='⁂-site-error__message__version'>
+              <span>{sourceCode.displayName}:</span>
 
               {' '}{sourceCode.version}
-            </Text>
+            </p>
           </div>
 
-          <div className='mx-auto max-w-lg space-y-4 py-16'>
-            {(isProduction) ? (
-              (sentryEnabled && sentryEventId) && (
-                <SentryFeedbackForm eventId={sentryEventId} />
-              )
-            ) : (
-              <>
-                {errorText && (
-                  <Textarea
-                    ref={textarea}
-                    value={errorText}
-                    onClick={handleCopy}
-                    isCodeEditor
-                    rows={12}
-                    readOnly
-                  />
-                )}
+          <div className='⁂-site-error__form'>
+            {isProduction && sentryEnabled && sentryEventId && (
+              <SentryFeedbackForm eventId={sentryEventId} />
+            )}
+            {errorText && (
+              <Textarea
+                ref={textarea}
+                value={errorText}
+                onClick={handleCopy}
+                isCodeEditor
+                rows={12}
+                readOnly
+              />
+            )}
 
-                {browser && (
-                  <Stack>
-                    <Text weight='semibold'><FormattedMessage id='alert.unexpected.browser' defaultMessage='Browser' /></Text>
-                    <Text theme='muted'>{browser.getBrowserName()} {browser.getBrowserVersion()}</Text>
-                  </Stack>
-                )}
-              </>
+            {browser && (
+              <p className='⁂-site-error__browser'>
+                <span><FormattedMessage id='alert.unexpected.browser' defaultMessage='Browser' />{': '}</span>{browser.getBrowserName()} {browser.getBrowserVersion()}
+              </p>
             )}
           </div>
         </div>
       </main>
 
-      <footer>
-        <HStack justifyContent='center' space={4} element='nav'>
-          {links.status && (
-            <SiteErrorBoundaryLink href={links.status}>
-              <FormattedMessage id='alert.unexpected.links.status' defaultMessage='Status' />
-            </SiteErrorBoundaryLink>
-          )}
+      {[links.status, links.help, links.support].some(Boolean) && (
+        <footer>
+          <nav>
+            {links.status && (
+              <SiteErrorBoundaryLink href={links.status}>
+                <FormattedMessage id='alert.unexpected.links.status' defaultMessage='Status' />
+              </SiteErrorBoundaryLink>
+            )}
 
-          {links.help && (
-            <SiteErrorBoundaryLink href={links.help}>
-              <FormattedMessage id='alert.unexpected.links.help' defaultMessage='Help Center' />
-            </SiteErrorBoundaryLink>
-          )}
+            {links.help && (
+              <SiteErrorBoundaryLink href={links.help}>
+                <FormattedMessage id='alert.unexpected.links.help' defaultMessage='Help Center' />
+              </SiteErrorBoundaryLink>
+            )}
 
-          {links.support && (
-            <SiteErrorBoundaryLink href={links.support}>
-              <FormattedMessage id='alert.unexpected.links.support' defaultMessage='Support' />
-            </SiteErrorBoundaryLink>
-          )}
-        </HStack>
-      </footer>
+            {links.support && (
+              <SiteErrorBoundaryLink href={links.support}>
+                <FormattedMessage id='alert.unexpected.links.support' defaultMessage='Support' />
+              </SiteErrorBoundaryLink>
+            )}
+          </nav>
+        </footer>
+      )}
     </div>
   );
 };
@@ -207,10 +191,8 @@ interface ISiteErrorBoundaryLink {
 
 const SiteErrorBoundaryLink = ({ href, children }: ISiteErrorBoundaryLink) => (
   <>
-    <span className='inline-block border-l border-gray-300' aria-hidden='true' />
-    <a href={href} className='text-sm font-medium text-gray-700 hover:underline dark:text-gray-600'>
-      {children}
-    </a>
+    <span aria-hidden='true' />
+    <a href={href}>{children}</a>
   </>
 );
 

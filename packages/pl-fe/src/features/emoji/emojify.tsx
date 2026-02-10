@@ -24,8 +24,7 @@ const MaybeEmoji: React.FC<IMaybeEmoji> = ({ text, emojis }) => {
     const filename = emoji.static_url;
 
     if (filename?.length > 0) {
-      return <Emoji className='emojione transition-transform hover:scale-125' emoji={text} src={filename} />;
-      // return <img draggable={false} className='emojione transition-transform hover:scale-125' alt={text} title={text} src={filename} />;
+      return <Emoji className='emojione ⁂-emoji' emoji={text} src={filename} />;
     }
   }
 
@@ -72,7 +71,7 @@ const Emojify: React.FC<IEmojify> = React.memo(({ text, emojis = {} }) => {
       const { unified, shortcode } = unicodeMapping[c];
 
       nodes.push(
-        <img key={index} draggable={false} className='emojione transition-transform hover:scale-125' alt={c} title={`:${shortcode}:`} src={joinPublicPath(`packs/emoji/${unified}.svg`)} />,
+        <img key={index} draggable={false} className='emojione ⁂-emoji' alt={c} title={`:${shortcode}:`} src={joinPublicPath(`packs/emoji/${unified}.svg`)} />,
       );
     } else if (!systemEmojiFont && unqualified in unicodeMapping) {
       clearStack();
@@ -80,7 +79,7 @@ const Emojify: React.FC<IEmojify> = React.memo(({ text, emojis = {} }) => {
       const { unified, shortcode } = unicodeMapping[unqualified];
 
       nodes.push(
-        <img key={index} draggable={false} className='emojione transition-transform hover:scale-125' alt={unqualified} title={`:${shortcode}:`} src={joinPublicPath(`packs/emoji/${unified}.svg`)} />,
+        <img key={index} draggable={false} className='emojione ⁂-emoji' alt={unqualified} title={`:${shortcode}:`} src={joinPublicPath(`packs/emoji/${unified}.svg`)} />,
       );
     } else if (!disableUserProvidedMedia && c === ':') {
       if (!open) {

@@ -523,3 +523,44 @@ div[data-viewport-type="window"]:has(.⁂-empty-message) {
     @apply mx-auto sm:w-2/3 sm:pt-10;
   }
 }
+
+.⁂-emoji {
+  @apply transition-transform hover:scale-125;
+}
+
+.⁂-textarea {
+  @apply block w-full rounded-md text-gray-900 placeholder:text-gray-600 dark:text-gray-100 dark:placeholder:text-gray-600 sm:text-sm resize-none;
+
+  &--transparent {
+    @apply bg-transparent border-0 p-0 focus:ring-0;
+  }
+
+  &:not(&--transparent) {
+    @apply bg-white border border-gray-300 p-2 focus:border-primary-500 focus:ring-1 focus:ring-primary-500 disabled:opacity-50 black:bg-black dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:ring-1 dark:ring-gray-800 dark:focus:border-primary-500 dark:focus:ring-primary-500;
+  }
+
+  &--mono {
+    @apply font-mono;
+  }
+
+  &--has-error {
+    @apply text-red-600 border-red-600;
+  }
+
+  &--resizable {
+    @apply resize;
+  }
+
+  &__container {
+    @apply flex flex-col gap-1.5;
+  }
+
+  &__max-length {
+    @include mixins.text($size: xs, $theme: muted);
+    @apply text-right rtl:text-left;
+
+    &--exceeded {
+      @apply text-danger-700 dark:text-danger-500;
+    }
+  }
+}

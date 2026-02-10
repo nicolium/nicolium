@@ -452,8 +452,74 @@ div:has(.⁂-background-shapes), .dark {
     @apply mx-auto flex w-full max-w-7xl grow flex-col justify-center px-4 sm:px-6 lg:px-8;
   }
 
+  &__body {
+    @apply py-8;
+  }
+
+  &__message {
+    @apply mx-auto max-w-xl space-y-2 text-center;
+
+    h1 {
+      @apply text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-500 sm:text-4xl;
+    }
+
+    &__body {
+      @apply text-lg text-gray-700 dark:text-gray-600;
+
+      a {
+        @apply text-primary-600 hover:underline dark:text-primary-400;
+      }
+    }
+  }
+
+  &__form {
+    @apply mx-auto max-w-lg space-y-4 py-16;
+
+    &:last-child {
+      @apply pb-0;
+    }
+  }
+
+  &__message__version, &__browser {
+    @include mixins.text($theme: muted);
+
+    span {
+      @apply font-semibold;
+    }
+  }
+
   footer {
     @apply mx-auto w-full max-w-7xl shrink-0 px-4 sm:px-6 lg:px-8;
+  }
+
+  nav {
+    @apply flex justify-center gap-4;
+
+    span {
+      @apply inline-block border-l border-gray-300;
+    }
+
+    a {
+      @apply text-sm font-medium text-gray-700 hover:underline dark:text-gray-600;
+    }
+  }
+
+  &__logo {
+    @apply flex shrink-0 justify-center;
+
+    img {
+      @apply h-12 w-auto;
+    }
+  }
+
+  
+}
+
+.⁂-network-error {
+  @apply flex gap-4 items-center justify-center min-h-[160px] rounded-lg p-10;
+
+  p {
+    @include mixins.text($align: center, $theme: muted);
   }
 }
 

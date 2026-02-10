@@ -480,14 +480,14 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
         const filename = emoji.static_url;
 
         if (filename?.length > 0) {
-          return <img draggable={false} className='emojione !h-[2em] !w-[2em] transition-transform hover:scale-125' alt={token.props.name} title={token.props.name} src={filename} />;
+          return <img draggable={false} className='emojione ⁂-emoji !h-[2em] !w-[2em]' alt={token.props.name} title={token.props.name} src={filename} />;
         }
 
         return <bdi>{token.props.name}</bdi>;
       }
 
       case 'unicodeEmoji': {
-        return <Emoji emoji={token.props.emoji} className='emojione !h-[2em] !w-[2em]' />;
+        return <Emoji emoji={token.props.emoji} className='emojione ⁂-emoji !h-[2em] !w-[2em]' />;
       }
 
       // TODO
