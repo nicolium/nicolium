@@ -5,17 +5,11 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import SvgIcon from '@/components/ui/svg-icon';
 
-const sizes = {
-  md: 'p-4 sm:rounded-xl',
-  lg: 'p-4 sm:p-6 sm:rounded-xl',
-  xl: 'p-4 sm:p-10 sm:rounded-3xl',
-};
-
 const messages = defineMessages({
   back: { id: 'card.back.label', defaultMessage: 'Back' },
 });
 
-type CardSizes = keyof typeof sizes
+type CardSizes = 'md' | 'lg' | 'xl';
 
 interface ICard extends Pick<React.HTMLAttributes<HTMLDivElement>, 'role' | 'aria-label'> {
   /** The type of card. */
@@ -35,10 +29,8 @@ const Card = React.forwardRef<HTMLDivElement, ICard>(({ children, variant = 'def
     ref={ref}
     {...filteredProps}
     className={clsx({
-      'bg-white dark:bg-primary-900 black:bg-black text-gray-900 dark:text-gray-100 shadow-lg dark:shadow-none': variant === 'rounded',
-      [sizes[size]]: variant === 'rounded',
-      'py-4': variant === 'slim',
-      'black:rounded-none': size !== 'xl',
+      [`⁂-card--rounded ⁂-card--${size}`]: variant === 'rounded',
+      '⁂-card--slim': variant === 'slim',
     }, className)}
   >
     {children}
