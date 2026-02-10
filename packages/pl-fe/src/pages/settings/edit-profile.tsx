@@ -133,6 +133,7 @@ interface AccountCredentials {
   speak_as_cat?: boolean;
   /** Mention policy */
   mention_policy?: UpdateCredentialsParams['mention_policy'];
+  web_include_boosts?: boolean;
   web_layout?: UpdateCredentialsParams['web_layout'];
   web_visibility?: UpdateCredentialsParams['web_visibility'];
   custom_css?: string;
@@ -144,7 +145,7 @@ const accountToCredentials = (account: CredentialAccount): AccountCredentials =>
 
   return {
     ...(pick(account, ['birthday', 'bot', 'custom_css', 'discoverable', 'display_name', 'locked', 'location', 'avatar_description', 'header_description', 'enable_rss', 'hide_collections', 'is_cat', 'speak_as_cat', 'mention_policy'])),
-    ...(pick(account.source, ['note', 'web_layout', 'web_visibility'])),
+    ...(pick(account.source, ['note', 'web_include_boosts', 'web_layout', 'web_visibility'])),
     fields_attributes: [...account.__meta.source?.fields ?? []],
     stranger_notifications: account.__meta.pleroma?.notification_settings?.block_from_strangers === true,
     hide_followers: hideNetwork,
@@ -523,6 +524,18 @@ const EditProfilePage: React.FC = () => {
                 }}
                 defaultValue={data.web_visibility}
                 onChange={(event: React.ChangeEvent<HTMLSelectElement>) => handleFieldChange('web_visibility')(event.target.value)}
+              />
+            </ListItem>
+          )}
+
+          {features.accountWebIncludeBoosts && (
+            <ListItem
+              label={<FormattedMessage id='preferences.fields.web_include_boosts_label' defaultMessage='Include reposts in web view' />}
+              hint={<FormattedMessage id='preferences.hints.web_include_boosts' defaultMessage='Show reposts created by the account on the web view of your profile' />}
+            >
+              <Toggle
+                checked={data.web_include_boosts}
+                onChange={handleCheckboxChange('web_include_boosts')}
               />
             </ListItem>
           )}

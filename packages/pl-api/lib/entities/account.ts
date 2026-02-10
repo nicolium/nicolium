@@ -251,6 +251,7 @@ const untypedCredentialAccountSchema = v.pipe(v.any(), preprocessAccount, v.obje
 
     also_known_as_uris: v.fallback(v.optional(v.array(v.string())), undefined),
     status_content_type: v.fallback(v.optional(v.string()), undefined),
+    web_include_boosts: v.fallback(v.optional(v.boolean()), undefined),
     web_layout: v.fallback(v.optional(v.picklist(['microblog', 'gallery'])), undefined),
     web_visibility: v.fallback(v.optional(v.picklist(['public', 'unlisted', 'none'])), undefined),
   })), null),

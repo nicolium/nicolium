@@ -327,6 +327,11 @@ const getFeatures = (instance: Instance) => {
     /**
      * @see PATCH /api/v1/accounts/update_credentials
      */
+    accountWebIncludeBoosts: v.software === GOTOSOCIAL && gte(v.version, '0.21.0'),
+
+    /**
+     * @see PATCH /api/v1/accounts/update_credentials
+     */
     accountWebLayout: any([
       v.software === GOTOSOCIAL && gte(v.version, '0.19.0'),
     ]),

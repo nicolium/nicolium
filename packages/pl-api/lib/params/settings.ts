@@ -143,6 +143,11 @@ interface UpdateCredentialsParams {
   */
   enable_rss?: boolean;
   /**
+   * Include boosts created by the account on the web view of the account.
+   * Requires features{@link Features.accountWebIncludeBoosts}.
+   */
+  web_include_boosts?: boolean;
+  /**
    * Layout to use for the web view of the account.
    * - `microblog`: default, classic microblog layout.
    * - `gallery`: gallery layout with media only.
