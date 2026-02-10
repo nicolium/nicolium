@@ -1,3 +1,5 @@
+$vertical-lr-langs: mn-mong, mnmong;
+
 [data-markup], [data-lexical-editor] {
   @apply whitespace-pre-wrap;
 
@@ -140,6 +142,21 @@
    }
   }
 
+  @each $lang in $vertical-lr-langs {
+    &[lang="#{$lang}"] {
+      writing-mode: vertical-lr;
+      width: 100%; // detecting overflow
+      max-width: calc(100% - mod(100%, 22px)); // avoid cut-offs
+      max-height: 209px; // roughly above 500 characters, readable
+      overflow-x: hidden; // read more
+
+      &.⁂-status-content__expanded {
+        max-width: unset;
+        max-height: 50vh;
+        overflow-x: auto;
+      }
+    }
+  }
 }
 
 /* User setting to underline links */

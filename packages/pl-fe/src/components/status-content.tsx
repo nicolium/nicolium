@@ -95,7 +95,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   const [onlyEmoji, setOnlyEmoji] = useState(false);
   const [lineClamp, setLineClamp] = useState(true);
 
-  const node = useRef<HTMLDivElement>(null);
+  const contentNode = useRef<HTMLDivElement>(null);
   const spoilerNode = useRef<HTMLSpanElement>(null);
 
   const { collapseStatuses, expandStatuses } = useStatusMetaActions();
@@ -107,17 +107,17 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   const expanded = !withSpoiler || statusMeta.expanded || false;
 
   const maybeSetCollapsed = (): void => {
-    if (!node.current) return;
+    if (!contentNode.current) return;
 
     if (collapsable || preview) {
       // 20px * x lines (+ 2px padding at the top)
-      setCollapsed(node.current.clientHeight >= (preview ? 82 : isQuote ? 202 : 282));
+      setCollapsed(contentNode.current.clientHeight >= (preview ? 82 : isQuote ? 202 : 282) || contentNode.current.scrollWidth > contentNode.current.clientWidth);
     }
   };
 
   const maybeSetOnlyEmoji = (): void => {
-    if (!node.current) return;
-    const only = isOnlyEmoji(node.current, BIG_EMOJI_LIMIT, true);
+    if (!contentNode.current) return;
+    const only = isOnlyEmoji(contentNode.current, BIG_EMOJI_LIMIT, true);
 
     if (only !== onlyEmoji) {
       setOnlyEmoji(only);
@@ -190,6 +190,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     'max-h-[202px]': collapsable && collapsed === null && isQuote,
     'max-h-[82px]': collapsed === null && preview,
     'leading-normal big-emoji': onlyEmoji,
+    '⁂-status-content__expanded': !collapsable,
   }), [collapsed, onlyEmoji]);
 
   const expandable = !displaySpoilers;
@@ -268,7 +269,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     if (status.content) {
       output.push(
         <Markup
-          ref={node}
+          ref={contentNode}
           tabIndex={0}
           key='content'
           className={className}
