@@ -204,7 +204,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
                     href={card.url}
                     target='_blank'
                     rel='noopener'
-                    className='text-gray-700 hover:text-gray-900 dark:text-gray-500 dark:hover:text-gray-100'
+                    className='text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-100'
                   >
                     <Icon
                       src={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
