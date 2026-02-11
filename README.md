@@ -46,7 +46,7 @@ You can find more information about setting up the development environment in [t
 
 ## License
 
-Nicolex is a fork of [Soapbox](https://gitlab.com/soapbox-pub/soapbox/) and inherits a lot of code from [Mastodon](https://github.com/mastodon/mastodon/).
+Nicolium is a fork of [Soapbox](https://gitlab.com/soapbox-pub/soapbox/) and inherits a lot of code from [Mastodon](https://github.com/mastodon/mastodon/).
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
