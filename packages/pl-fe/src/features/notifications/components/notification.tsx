@@ -452,6 +452,7 @@ const Notification: React.FC<INotification> = (props) => {
               avatarSize={avatarSize}
               contextType='notifications'
               showGroup={false}
+              showInfo={false}
               variant='slim'
             />
           )) : null;
