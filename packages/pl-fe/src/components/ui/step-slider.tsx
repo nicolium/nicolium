@@ -72,7 +72,7 @@ const StepSlider: React.FC<IStepSlider> = ({ value, steps, onChange }) => {
       <span
         className='absolute top-1/2 z-10 -ml-1.5 size-3 -translate-y-1/2 rounded-full bg-accent-500 shadow'
         tabIndex={0}
-        style={{ left: `${value / (steps - 1) * 100}%` }}
+        style={{ left: `calc(${value / (steps - 1) * 100}% + 0.125rem)` }}
       />
     </div>
   );
