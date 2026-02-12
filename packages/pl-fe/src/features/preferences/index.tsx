@@ -141,12 +141,23 @@ const Preferences = () => {
   const onBrandColorChange = (newBrandColor: string) => {
     if (newBrandColor === brandColor) return;
 
-    dispatch(changeSetting(['theme', 'brandColor'], newBrandColor, { showAlert: true, save: false }));
+    const theme = settings.theme || frontendConfig.defaultSettings.theme;
+
+    dispatch(changeSetting(['theme'], {
+      ...theme,
+      brandColor: newBrandColor,
+    }, { showAlert: true, save: false }));
+
     debouncedSave(dispatch);
   };
 
   const onInterfaceSizeChange = (value: number) => {
-    dispatch(changeSetting(['theme', 'interfaceSize'], INTERFACE_SIZES[value], { showAlert: true, save: false }));
+    const theme = settings.theme || frontendConfig.defaultSettings.theme;
+
+    dispatch(changeSetting(['theme'], {
+      ...theme,
+      interfaceSize: INTERFACE_SIZES[value],
+    }, { showAlert: true, save: false }));
     debouncedSave(dispatch);
   };
 
