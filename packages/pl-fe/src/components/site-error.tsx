@@ -88,7 +88,7 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
   }
 
   return (
-    <div className='⁂-site-error'>
+    <div className='⁂-site-error ⁂-card ⁂-card--rounded ⁂-card--md'>
       <main>
         {logoSrc && (
           <a href='/' className='⁂-site-error__logo'>
