@@ -391,8 +391,13 @@ const Thread = ({
     react: handleHotkeyReact,
   };
 
-  const children = useMemo(() => renderChildren(thread), [thread, linear, status]);
-  if (isModal) children.unshift(<div key='padding' className='h-4' />);
+  const children = useMemo(() => {
+    const children = renderChildren(thread);
+
+    if (isModal) children.unshift(<div key='padding' className='h-4' />);
+
+    return children;
+  }, [thread, linear, status, isModal]);
 
   useEffect(() => {
     setExpandAllStatuses?.(() => {
