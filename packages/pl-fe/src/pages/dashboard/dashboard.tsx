@@ -234,7 +234,7 @@ const Dashboard: React.FC = () => {
 
           {!features.mastodonAdminMetrics && (
             <ListItem label={<FormattedMessage id='admin.software.backend' defaultMessage='Backend' />}>
-              <span>{v.software + (v.build ? `+${v.build}` : '')} {v.version}</span>
+              <span>{v.software} ({instance.version})</span>
             </ListItem>
           )}
         </List>
