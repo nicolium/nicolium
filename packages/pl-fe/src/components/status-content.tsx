@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useState, useRef, useLayoutEffect, useMemo, useEffect } from 'react';
+import React, { useState, useRef, useLayoutEffect, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Icon from '@/components/icon';
@@ -171,13 +171,13 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     }, true);
   }, [content, renderMfm]);
 
-  useEffect(() => {
-    setLineClamp(!spoilerNode.current || spoilerNode.current.clientHeight >= 96);
-  }, [spoilerNode.current]);
-
   const spoilerText = status.spoiler_text_map && statusMeta.currentLanguage
     ? status.spoiler_text_map[statusMeta.currentLanguage] || status.spoiler_text
     : status.spoiler_text;
+
+  useLayoutEffect(() => {
+    setLineClamp(!spoilerNode.current || spoilerNode.current.clientHeight >= 96);
+  }, [spoilerText]);
 
   const direction = getTextDirection(status.search_index);
   const className = useMemo(() => clsx('relative text-ellipsis break-words text-gray-900 focus:outline-none dark:text-gray-100', {
