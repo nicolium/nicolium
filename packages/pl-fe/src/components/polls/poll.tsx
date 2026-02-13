@@ -68,7 +68,7 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): JSX.Element 
 
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <div onClick={e => e.stopPropagation()}>
+    <div className='⁂-poll' onClick={e => e.stopPropagation()}>
       {!showResults && poll.multiple && (
         <Text className='mb-4' theme='muted' size='sm'>
           <FormattedMessage id='poll.choose_multiple' defaultMessage="Choose as many as you'd like." />

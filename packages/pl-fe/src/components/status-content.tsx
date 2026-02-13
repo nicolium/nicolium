@@ -2,10 +2,8 @@ import clsx from 'clsx';
 import React, { useState, useRef, useLayoutEffect, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Icon from '@/components/icon';
-import Button from '@/components/ui/button';
+import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';
-import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
@@ -35,28 +33,15 @@ const BIG_EMOJI_LIMIT = 10;
 
 interface IReadMoreButton {
   onClick?: React.MouseEventHandler;
-  quote?: boolean;
-  poll?: boolean;
   preview?: boolean;
 }
 
 /** Button to expand a truncated status (due to too much content) */
-const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick, quote, poll, preview }) => (
-  <div
-    className={clsx('relative', {
-      '-mt-4': !preview,
-      '-mt-2': preview,
-    })}
-  >
-    <div
-      className={clsx('pointer-events-none absolute -top-16 h-16 w-full bg-gradient-to-b from-transparent', {
-        'to-white black:to-black dark:to-primary-900': !poll,
-        'to-gray-100 dark:to-primary-800': poll,
-        'group-hover:to-gray-100 black:group-hover:to-gray-800 dark:group-hover:to-gray-800': quote,
-      })}
-    />
+const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick, preview }) => (
+  <div className='⁂-read-more-button__container'>
+    <div className='⁂-read-more-button__gradient' />
     {!preview && (
-      <button className='flex items-center border-0 bg-transparent p-0 pt-2 text-gray-900 hover:underline active:underline dark:text-gray-300' onClick={onClick}>
+      <button className='⁂-read-more-button' onClick={onClick}>
         <FormattedMessage id='status.read_more' defaultMessage='Read more' />
         <Icon className='inline-block size-5' src={require('@phosphor-icons/core/regular/caret-right.svg')} />
       </button>
@@ -180,8 +165,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   }, [spoilerText]);
 
   const direction = getTextDirection(status.search_index);
-  const className = useMemo(() => clsx('relative text-ellipsis break-words text-gray-900 focus:outline-none dark:text-gray-100', {
-    'cursor-pointer': onClick,
+  const className = useMemo(() => clsx('⁂-status-content', {
     'overflow-hidden': collapsed,
     'max-h-[200px]': collapsed && !isQuote && !preview,
     'max-h-[120px]': collapsed && isQuote,
@@ -190,7 +174,10 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     'max-h-[202px]': collapsable && collapsed === null && isQuote,
     'max-h-[82px]': collapsed === null && preview,
     'leading-normal big-emoji': onlyEmoji,
-    '⁂-status-content__expanded': !collapsable,
+    '⁂-status-content--expanded': !collapsable,
+    '⁂-status-content--quote': isQuote,
+    '⁂-status-content--preview': preview,
+    '⁂-status-content--poll': !!status.poll_id,
   }), [collapsed, onlyEmoji]);
 
   const expandable = !displaySpoilers;
@@ -199,40 +186,30 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
 
   if (spoilerText) {
     output.push(
-      <Text
+      <p
+        className={clsx('⁂-status-title', {
+          '⁂-status-title--clamp': !expanded && lineClamp,
+        })}
         key='spoiler'
-        size='2xl'
-        weight='medium'
         aria-expanded={expanded}
         {...(expandable ? { onClick: toggleExpanded, role: 'button' } : {})}
       >
-        <span className={clsx({ 'line-clamp-3': !expanded && lineClamp })} ref={spoilerNode}>
+        <span ref={spoilerNode}>
           <Emojify text={spoilerText} emojis={status.emojis} />
         </span>
         {expandable && (
-          <Button
-            className='ml-2 align-middle'
-            type='button'
-            theme='muted'
-            size='xs'
-            onClick={toggleExpanded}
-            icon={require('@phosphor-icons/core/regular/caret-down.svg')}
-            iconClassName={clsx(
-              'transition-transform', {
-                'rotate-180': expanded,
-              },
-            )}
-          >
-            {expanded
-              ? <FormattedMessage id='status.spoiler.collapse' defaultMessage='Collapse' />
-              : <FormattedMessage id='status.spoiler.expand' defaultMessage='Expand' />}
-          </Button>
+          <button onClick={toggleExpanded}>
+            <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} />
+            <span>
+              {expanded
+                ? <FormattedMessage id='status.spoiler.collapse' defaultMessage='Collapse' />
+                : <FormattedMessage id='status.spoiler.expand' defaultMessage='Expand' />}
+            </span>
+          </button>
         )}
-      </Text>,
+      </p>,
     );
   }
-
-  const hasPoll = !!status.poll_id;
 
   if (!expandable || expanded) {
     let quote;
@@ -283,7 +260,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
     }
 
     if (collapsed) {
-      output.push(<ReadMoreButton onClick={onClick} key='read-more' quote={isQuote} poll={hasPoll} preview={preview} />);
+      output.push(<ReadMoreButton onClick={onClick} key='read-more' preview={preview} />);
     }
 
     if (status.poll_id) {
@@ -304,7 +281,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   }
 
   if (onClick) {
-    return <Stack space={4} className={clsx({ 'bg-gray-100 dark:bg-primary-800 rounded-md p-4': hasPoll })}>{output}</Stack>;
+    return <div className='⁂-status-content__container'>{output}</div>;
   } else {
     return <>{output}</>;
   }

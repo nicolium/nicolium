@@ -229,3 +229,68 @@
     }
   }
 }
+
+.⁂-read-more-button {
+  @apply flex items-center border-0 bg-transparent p-0 pt-2 text-gray-900 hover:underline active:underline dark:text-gray-300;
+
+  &__gradient {
+    @apply pointer-events-none absolute -top-16 h-16 w-full bg-gradient-to-b from-transparent to-white black:to-black dark:to-primary-900;
+  }
+
+  &__container {
+    position: relative;
+    margin-top: -1rem;
+  }
+}
+
+.⁂-status-content {
+  @apply relative text-ellipsis break-words text-gray-900 focus:outline-none dark:text-gray-100;
+
+  &:has(button) {
+    cursor: pointer;
+  }
+
+  &--preview + .⁂-read-more-button__container {
+    margin-top: -0.5rem;
+  }
+
+  &--poll + .⁂-read-more-button__container .⁂-read-more-button__gradient {
+    @apply to-gray-100 dark:to-primary-800;
+  }
+
+  &--quote + .⁂-read-more-button__container .⁂-read-more-button__gradient {
+    @apply group-hover:to-gray-100 black:group-hover:to-gray-800 dark:group-hover:to-gray-800;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    &:has(.⁂-poll) {
+      @apply bg-gray-100 dark:bg-primary-800 rounded-md p-4;
+    }
+  }
+}
+
+.⁂-status-title {
+  @include mixins.text($size: 2xl, $weight: medium);
+
+  &--clamp span:first-child {
+    @apply line-clamp-3
+  }
+
+  button {
+    @include mixins.button($theme: muted, $size: xs);
+    margin-left: 0.5rem;
+    vertical-align: middle;
+
+    svg {
+      @apply size-4 transition-transform;
+    }
+  }
+
+  &[aria-expanded='true'] button svg {
+    transform: rotate(180deg);
+  }
+}

@@ -150,7 +150,7 @@ $vertical-lr-langs: mn-mong, mnmong;
       max-height: 209px; // roughly above 500 characters, readable
       overflow-x: hidden; // read more
 
-      &.⁂-status-content__expanded {
+      &.⁂-status-content--expanded {
         max-width: unset;
         max-height: 50vh;
         overflow-x: auto;
