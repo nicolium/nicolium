@@ -36,7 +36,7 @@
     "typedoc-material-theme": "^1.4.0",
     "typedoc-plugin-valibot": "^1.0.0",
     "typescript": "^5.8.3",
-    "vite": "^5.4.21",
+    "vite": "^8.0.0-beta.14",
     "vite-plugin-dts": "^4.5.4",
     "ws": "^8.18.3"
   },
