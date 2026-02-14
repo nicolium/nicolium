@@ -12,7 +12,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 import vitePluginRequire from 'vite-plugin-require';
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
-const config = defineConfig(({ command }) => ({
+const config = defineConfig(() => ({
   build: {
     assetsDir: 'packs',
     assetsInlineLimit: 0,
@@ -175,6 +175,10 @@ const config = defineConfig(({ command }) => ({
       {
         find: '@/',
         replacement: fileURLToPath(new URL('./src/', import.meta.url)),
+      },
+      {
+        find: 'lodash',
+        replacement: 'lodash-es',
       },
     ],
     dedupe: ['@floating-ui/react', 'tabbable', 'query-string', 'valibot'],

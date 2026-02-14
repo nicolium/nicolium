@@ -50,10 +50,7 @@
       "ResizeObserver",
       "URL",
       "URLSearchParams"
-    ],
-    "tailwindcss": {
-      "config": "tailwind.config.ts"
-    }
+    ]
   },
   "rules": {
     "brace-style": "error",

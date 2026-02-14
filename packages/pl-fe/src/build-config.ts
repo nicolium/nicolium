@@ -3,11 +3,6 @@
  * @module pl-fe/build-config
  */
 
-// eslint-disable-next-line import/extensions
-import trim from 'lodash/trim.js';
-// eslint-disable-next-line import/extensions
-import trimEnd from 'lodash/trimEnd.js';
-
 const env = compileTime(() => {
   const {
     NODE_ENV,
@@ -18,13 +13,13 @@ const env = compileTime(() => {
 
   const sanitizeURL = (url: string | undefined = ''): string => {
     try {
-      return trimEnd(new URL(url).toString(), '/');
+      return new URL(url).toString().replace(/\/+$/, '');
     } catch {
       return '';
     }
   };
 
-  const sanitizeBasename = (path: string | undefined = ''): string => `/${trim(path, '/')}`;
+  const sanitizeBasename = (path: string | undefined = ''): string => `/${path.replace(/^\/+|\/+$/g, '')}`;
 
   return {
     NODE_ENV: NODE_ENV || 'development',
