@@ -5,8 +5,6 @@ import { FormattedMessage } from 'react-intl';
 
 import LoadGap from '@/components/load-gap';
 import ScrollableList, { type IScrollableList } from '@/components/scrollable-list';
-import Stack from '@/components/ui/stack';
-import Text from '@/components/ui/text';
 import StatusContainer from '@/containers/status-container';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import PendingStatus from '@/features/ui/components/pending-status';
@@ -18,18 +16,12 @@ import type { VirtuosoHandle } from 'react-virtuoso';
 
 const SkipPinned: React.FC<React.ComponentProps<'button'>> = ({ onClick }) => {
   return (
-    <button
-      className='absolute right-6 z-10 flex w-fit max-w-full items-center gap-2 rounded-full border border-gray-200 bg-gray-100 px-3 py-1 hover:bg-gray-200 black:border-gray-800 black:bg-gray-900 black:hover:bg-gray-800 dark:border-transparent dark:bg-primary-800 dark:hover:bg-primary-700 rtl:space-x-reverse'
-      onClick={onClick}
-    >
-      <Icon
-        className='size-4 text-gray-600 dark:text-gray-400'
-        src={require('@phosphor-icons/core/regular/arrow-line-down.svg')}
-      />
+    <button className='⁂-skip-pinned' onClick={onClick}>
+      <Icon src={require('@phosphor-icons/core/regular/arrow-line-down.svg')} />
 
-      <Text size='xs' theme='muted' weight='medium' truncate>
+      <p>
         <FormattedMessage id='status.skip_pinned' defaultMessage='Skip pinned posts' />
-      </Text>
+      </p>
     </button>
   );
 };
@@ -203,15 +195,15 @@ const StatusList: React.FC<IStatusList> = ({
 
   if (isPartial) {
     return (
-      <Stack className='py-2' space={2}>
-        <Text size='2xl' weight='bold' tag='h2' align='center'>
+      <div className='⁂-status-list__empty'>
+        <h2>
           <FormattedMessage id='regeneration_indicator.label' tagName='strong' defaultMessage='Loading…' />
-        </Text>
+        </h2>
 
-        <Text size='sm' theme='muted' align='center'>
+        <p>
           <FormattedMessage id='regeneration_indicator.sublabel' defaultMessage='Your home feed is being prepared!' />
-        </Text>
-      </Stack>
+        </p>
+      </div>
     );
   }
 
@@ -229,7 +221,7 @@ const StatusList: React.FC<IStatusList> = ({
         placeholderComponent={() => <PlaceholderStatus variant='slim' />}
         placeholderCount={20}
         ref={node}
-        listClassName={clsx('divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800', className)}
+        listClassName={clsx('⁂-status-list', className)}
         {...other}
       >
         {scrollableContent}

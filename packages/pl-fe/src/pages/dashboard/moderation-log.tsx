@@ -38,7 +38,7 @@ const ModerationLogPage = () => {
         emptyMessageText={<FormattedMessage id='admin.moderation_log.empty_message' defaultMessage='You have not performed any moderation actions yet. When you do, a history will be shown here.' />}
         hasMore={hasNextPage}
         onLoadMore={handleLoadMore}
-        listClassName='divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800'
+        listClassName='⁂-status-list'
       >
         {data.map(item => item && (
           <LogItem key={item.id} log={item} />

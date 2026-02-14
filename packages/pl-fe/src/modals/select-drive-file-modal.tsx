@@ -175,7 +175,7 @@ const SelectDriveFileModal: React.FC<SelectDriveFileModalProps & BaseModalProps>
         <Breadcrumbs folderId={currentFolder} onClick={(folderId) => setCurrentFolder(folderId)} />
       </div>
       <ScrollableList
-        listClassName='⁂-drive-file-list divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800'
+        listClassName='⁂-drive-file-list ⁂-status-list'
         style={{ minHeight: 'calc(80vh - 192px)' }}
         isLoading={!folder}
         showLoading={!folder}

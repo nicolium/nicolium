@@ -8,6 +8,14 @@
   }
 }
 
+.⁂-status-info {
+  @apply flex gap-2 items-center w-fit max-w-full cursor-default rounded-full border border-gray-200 bg-gray-100 px-3 py-1 black:border-gray-800 black:bg-gray-900 dark:border-transparent dark:bg-primary-800 rtl:space-x-reverse;
+
+  p {
+    @include mixins.text($theme: muted, $size: xs, $weight: medium, $truncate: true);
+  }
+}
+
 .⁂-status-reply-mentions {
   @apply mb-1 block text-sm text-gray-700 dark:text-gray-600;
 }

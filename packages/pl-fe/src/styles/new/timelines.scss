@@ -25,6 +25,34 @@
   }
 }
 
+.⁂-status-list {
+  @apply divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800;
+
+  &__empty {
+    @apply flex flex-col gap-2 py-2;
+
+    h2 {
+      @include mixins.text($size: 2xl, $weight: bold, $align: center);
+    }
+
+    p {
+      @include mixins.text($size: sm, $theme: muted, $align: center);
+    }
+  }
+}
+
+.⁂-skip-pinned {
+  @apply absolute right-6 z-10 flex w-fit max-w-full items-center gap-2 rounded-full border border-gray-200 bg-gray-100 px-3 py-1 hover:bg-gray-200 black:border-gray-800 black:bg-gray-900 black:hover:bg-gray-800 dark:border-transparent dark:hover:border-primary-800 dark:bg-primary-800 dark:hover:bg-primary-900 rtl:space-x-reverse text-gray-700 dark:text-gray-600;
+
+  svg {
+    @apply size-4;
+  }
+
+  p {
+    @include mixins.text($size: xs, $theme: muted, $weight: medium, $truncate: true);
+  }
+}
+
 .⁂-load-more {
   @include mixins.button($theme: primary, $block: true);
 }

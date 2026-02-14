@@ -22,7 +22,7 @@ const DraftStatusesPage = () => {
       <ScrollableList
         scrollKey='draftStatuses'
         emptyMessageText={emptyMessage}
-        listClassName='divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800'
+        listClassName='⁂-status-list'
       >
         {drafts.toReversed().map((draft) => <DraftStatus key={draft.draft_id} draftStatus={draft} />)}
       </ScrollableList>

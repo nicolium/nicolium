@@ -260,7 +260,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
       onLoadMore={handleLoadOlder}
       onScrollToTop={handleScrollToTop}
       onScroll={handleScroll}
-      listClassName={clsx('divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800', {
+      listClassName={clsx('⁂-status-list', {
         'animate-pulse': displayedNotifications.length === 0,
       })}
       useWindowScroll={!multiColumn}

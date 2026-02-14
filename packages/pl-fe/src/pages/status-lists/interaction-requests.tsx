@@ -246,7 +246,7 @@ const InteractionRequestsPage = () => {
           hasMore={hasNextPage}
           emptyMessageText={emptyMessage}
           onLoadMore={() => fetchNextPage()}
-          listClassName={clsx('divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800', {
+          listClassName={clsx('⁂-status-list', {
             'animate-pulse': data?.length === 0,
           })}
         >

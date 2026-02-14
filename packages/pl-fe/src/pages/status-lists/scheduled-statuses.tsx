@@ -25,7 +25,7 @@ const ScheduledStatusesPage = () => {
         isLoading={isLoading}
         onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
         emptyMessageText={emptyMessage}
-        listClassName='divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800'
+        listClassName='⁂-status-list'
       >
         {scheduledStatuses.map((status) => <ScheduledStatus key={status.id} scheduledStatus={status} />)}
       </ScrollableList>
