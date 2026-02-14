@@ -280,9 +280,6 @@ importers:
       html-react-parser:
         specifier: ^5.2.11
         version: 5.2.11(@types/react@18.3.27)(react@19.2.3)
-      immutable:
-        specifier: ^5.0.3
-        version: 5.1.3
       intersection-observer:
         specifier: ^0.12.2
         version: 0.12.2
@@ -349,9 +346,6 @@ importers:
       react-dom:
         specifier: ^19.2.3
         version: 19.2.3(react@19.2.3)
-      react-error-boundary:
-        specifier: ^4.1.2
-        version: 4.1.2(react@19.2.3)
       react-helmet-async:
         specifier: ^2.0.5
         version: 2.0.5(react@19.2.3)
@@ -400,9 +394,6 @@ importers:
       tabbable:
         specifier: ^6.4.0
         version: 6.4.0
-      tiny-queue:
-        specifier: ^0.2.1
-        version: 0.2.1
       use-mutative:
         specifier: ^1.3.1
         version: 1.3.1(@types/react@18.3.27)(mutative@1.3.0)(react@19.2.3)
@@ -422,9 +413,6 @@ importers:
       '@formatjs/cli':
         specifier: ^6.9.0
         version: 6.9.0(@vue/compiler-core@3.5.18)
-      '@jedmao/redux-mock-store':
-        specifier: ^3.0.5
-        version: 3.0.5(redux@5.0.1)
       '@sentry/types':
         specifier: ^8.47.0
         version: 8.55.0
@@ -461,9 +449,6 @@ importers:
       '@types/react-swipeable-views':
         specifier: ^0.13.6
         version: 0.13.6
-      '@types/redux-mock-store':
-        specifier: ^1.5.0
-        version: 1.5.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.24.1
         version: 8.38.0(@typescript-eslint/parser@8.38.0(eslint@8.57.1)(typescript@5.7.3))(eslint@8.57.1)(typescript@5.7.3)
@@ -537,8 +522,8 @@ importers:
         specifier: ^0.12.0
         version: 0.12.0(eslint@8.57.1)(meow@13.2.0)(optionator@0.9.4)(stylelint@16.23.0(typescript@5.7.3))(typescript@5.7.3)(vite@7.3.1(@types/node@25.0.3)(jiti@1.21.7)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.46.0)(yaml@2.8.0))
       vite-plugin-compile-time:
-        specifier: ^0.3.2
-        version: 0.3.2(vite@7.3.1(@types/node@25.0.3)(jiti@1.21.7)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.46.0)(yaml@2.8.0))
+        specifier: ^0.4.6
+        version: 0.4.6(vite@7.3.1(@types/node@25.0.3)(jiti@1.21.7)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.46.0)(yaml@2.8.0))
       vite-plugin-html:
         specifier: ^3.2.2
         version: 3.2.2(vite@7.3.1(@types/node@25.0.3)(jiti@1.21.7)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.46.0)(yaml@2.8.0))
@@ -1891,11 +1876,6 @@ packages:
     resolution: {integrity: sha512-O8jcjabXaleOG9DQ0+ARXWZBTfnP4WNAqzuiJK7ll44AmxGKv/J2M4TPjxjY3znBCfvBXFzucm1twdyFybFqEA==}
     engines: {node: '>=12'}
 
-  '@jedmao/redux-mock-store@3.0.5':
-    resolution: {integrity: sha512-zNcVCd5/ekSMdQWk64CqTPM24D9Lo59st9KvS+fljGpQXV4SliB7Vo0NFQIgvQJWPYeeobdngnrGy0XbCaARNw==}
-    peerDependencies:
-      redux: ^4
-
   '@jridgewell/gen-mapping@0.3.12':
     resolution: {integrity: sha512-OuLGC46TjB5BbN1dH8JULVVZY4WTdkF7tV9Ys6wLL1rubZnCMstOhNHueU5bLCrnRuDhKPDM4g6sw4Bel5Gzqg==}
 
@@ -2837,9 +2817,6 @@ packages:
     peerDependencies:
       '@types/react': ^18.3.18
 
-  '@types/redux-mock-store@1.5.0':
-    resolution: {integrity: sha512-jcscBazm6j05Hs6xYCca6psTUBbFT2wqMxT7wZEHAYFxHB/I8jYk7d5msrHUlDiSL02HdTqTmkK2oIV8i3C8DA==}
-
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
 
@@ -3372,6 +3349,9 @@ packages:
   axobject-query@4.1.0:
     resolution: {integrity: sha512-qIj0G9wZbMGNLjLmg1PT6v2mE9AH2zlnADJD/2tC6E00hgmhUOfEB6greHPAfLRSufHqROIUTkw6E+M3lH0PTQ==}
     engines: {node: '>= 0.4'}
+
+  babel-dead-code-elimination@1.0.12:
+    resolution: {integrity: sha512-GERT7L2TiYcYDtYk1IpD+ASAYXjKbLTDPhBtYj7X1NuRMDTMtAx9kyBenub1Ev41lo91OHCKdmP+egTDmfQ7Ig==}
 
   babel-plugin-polyfill-corejs2@0.4.15:
     resolution: {integrity: sha512-hR3GwrRwHUfYwGfrisXPIDP3JcYfBrW7wKE7+Au6wDYl7fm/ka1NEII6kORzxNU556JjfidZeBsO10kYvtV1aw==}
@@ -5609,11 +5589,6 @@ packages:
     peerDependencies:
       react: ^19.2.3
 
-  react-error-boundary@4.1.2:
-    resolution: {integrity: sha512-GQDxZ5Jd+Aq/qUxbCm1UtzmL/s++V7zKgE8yMktJiCQXCCFZnMZh9ng+6/Ne6PjNSXH0L9CjeOEREfRnq6Duag==}
-    peerDependencies:
-      react: '>=16.13.1'
-
   react-error-boundary@6.0.0:
     resolution: {integrity: sha512-gdlJjD7NWr0IfkPlaREN2d9uUZUlksrfOx7SX62VRerwXbMY6ftGCIZua1VG1aXFNOimhISsTq+Owp725b9SiA==}
     peerDependencies:
@@ -5740,9 +5715,6 @@ packages:
     resolution: {integrity: sha512-NW2r5T6ksUKXCabzhL9z+h206HQw/NJkcLm1GPImRQ8IzfXwRGqjVhKJGauHirT0DAuyy6hjdnMZaRoAcy0Klw==}
     peerDependencies:
       redux: ^5.0.0
-
-  redux@4.2.1:
-    resolution: {integrity: sha512-LAUYz4lc+Do8/g7aeRa8JkyDErK6ekstQaqWQrNRW//MY1TvCEpMtpTWvlQ+FPbWCx+Xixu/6SHt5N0HR+SB4w==}
 
   redux@5.0.1:
     resolution: {integrity: sha512-M9/ELqF6fy8FwmkpnF0S3YKOqMyoWJ4+CS5Efg2ct3oY9daQvd/Pc71FpGZsVsbl3Cpb+IIcjBDUnnyBdQbq4w==}
@@ -6427,9 +6399,6 @@ packages:
   tiny-invariant@1.3.3:
     resolution: {integrity: sha512-+FbBPE1o9QAYvviau/qC5SE3caw21q3xkvWKBtja5vgqOWIHHJ3ioaq1VPfn/Szqctz2bU/oYeKd9/z5BL+PVg==}
 
-  tiny-queue@0.2.1:
-    resolution: {integrity: sha512-EijGsv7kzd9I9g0ByCl6h42BWNGUZrlCSejfrb3AKeHC33SGbASu1VDf5O3rRiiUOhAC9CHdZxFPbZu0HmR70A==}
-
   tiny-warning@1.0.3:
     resolution: {integrity: sha512-lBN9zLN/oAf68o3zNXYrdCt1kP8WsiGW8Oo2ka41b2IM5JL/S1CTyX1rW0mb/zSuJun0ZUrDxx4sqvYS2FWzPA==}
 
@@ -6689,8 +6658,8 @@ packages:
       vue-tsc:
         optional: true
 
-  vite-plugin-compile-time@0.3.2:
-    resolution: {integrity: sha512-obNDktew663JQlriX5MJV/l2e8ofPzr1yfZBq0erjIxMuwmmnEfT7SYBGfcb/Y35u17nzQqsAvCvqbsxpbmvwQ==}
+  vite-plugin-compile-time@0.4.6:
+    resolution: {integrity: sha512-0aHRCd3AtDekc5pMq5+cyrVqBPVjT8bISD1/EU3ebJDovZsv3Wom6uDF4+Uf1zxUTfn27gHFSFQ11R3ciqPg7g==}
     peerDependencies:
       vite: '>=2'
 
@@ -8276,10 +8245,6 @@ snapshots:
       wrap-ansi: 8.1.0
       wrap-ansi-cjs: wrap-ansi@7.0.0
 
-  '@jedmao/redux-mock-store@3.0.5(redux@5.0.1)':
-    dependencies:
-      redux: 5.0.1
-
   '@jridgewell/gen-mapping@0.3.12':
     dependencies:
       '@jridgewell/sourcemap-codec': 1.5.4
@@ -9356,10 +9321,6 @@ snapshots:
     dependencies:
       '@types/react': 18.3.27
 
-  '@types/redux-mock-store@1.5.0':
-    dependencies:
-      redux: 4.2.1
-
   '@types/resolve@1.20.2': {}
 
   '@types/semver@7.7.0': {}
@@ -10058,6 +10019,15 @@ snapshots:
   axe-core@4.10.3: {}
 
   axobject-query@4.1.0: {}
+
+  babel-dead-code-elimination@1.0.12:
+    dependencies:
+      '@babel/core': 7.29.0
+      '@babel/parser': 7.29.0
+      '@babel/traverse': 7.29.0
+      '@babel/types': 7.29.0
+    transitivePeerDependencies:
+      - supports-color
 
   babel-plugin-polyfill-corejs2@0.4.15(@babel/core@7.29.0):
     dependencies:
@@ -12573,11 +12543,6 @@ snapshots:
       react: 19.2.3
       scheduler: 0.27.0
 
-  react-error-boundary@4.1.2(react@19.2.3):
-    dependencies:
-      '@babel/runtime': 7.28.2
-      react: 19.2.3
-
   react-error-boundary@6.0.0(react@19.2.3):
     dependencies:
       '@babel/runtime': 7.28.6
@@ -12708,10 +12673,6 @@ snapshots:
   redux-thunk@3.1.0(redux@5.0.1):
     dependencies:
       redux: 5.0.1
-
-  redux@4.2.1:
-    dependencies:
-      '@babel/runtime': 7.28.2
 
   redux@5.0.1: {}
 
@@ -13503,8 +13464,6 @@ snapshots:
 
   tiny-invariant@1.3.3: {}
 
-  tiny-queue@0.2.1: {}
-
   tiny-warning@1.0.3: {}
 
   tinycolor2@1.6.0: {}
@@ -13762,13 +13721,20 @@ snapshots:
       stylelint: 16.23.0(typescript@5.7.3)
       typescript: 5.7.3
 
-  vite-plugin-compile-time@0.3.2(vite@7.3.1(@types/node@25.0.3)(jiti@1.21.7)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.46.0)(yaml@2.8.0)):
+  vite-plugin-compile-time@0.4.6(vite@7.3.1(@types/node@25.0.3)(jiti@1.21.7)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.46.0)(yaml@2.8.0)):
     dependencies:
+      '@babel/generator': 7.29.1
+      '@babel/parser': 7.29.0
+      '@babel/traverse': 7.29.0
+      '@babel/types': 7.29.0
+      babel-dead-code-elimination: 1.0.12
       bundle-require: 5.1.0(esbuild@0.24.2)
       devalue: 5.1.1
       esbuild: 0.24.2
       magic-string: 0.30.17
       vite: 7.3.1(@types/node@25.0.3)(jiti@1.21.7)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.46.0)(yaml@2.8.0)
+    transitivePeerDependencies:
+      - supports-color
 
   vite-plugin-dts@4.5.4(@types/node@20.19.9)(rollup@4.57.1)(typescript@5.9.2)(vite@5.4.21(@types/node@20.19.9)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.46.0)):
     dependencies:
