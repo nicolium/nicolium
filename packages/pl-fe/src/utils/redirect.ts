@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 const LOCAL_STORAGE_REDIRECT_KEY = 'plfe:redirect_uri';
 
 const getRedirectUrl = () => {
@@ -12,18 +10,4 @@ const getRedirectUrl = () => {
   return redirectUri || '/';
 };
 
-const useCachedLocationHandler = () => {
-  const removeCachedRedirectUri = () => localStorage.removeItem(LOCAL_STORAGE_REDIRECT_KEY);
-
-  useEffect(() => {
-    window.addEventListener('beforeunload', removeCachedRedirectUri);
-
-    return () => {
-      window.removeEventListener('beforeunload', removeCachedRedirectUri);
-    };
-  }, []);
-
-  return null;
-};
-
-export { getRedirectUrl, useCachedLocationHandler };
+export { getRedirectUrl };

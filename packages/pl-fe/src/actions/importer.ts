@@ -8,7 +8,6 @@ import type { Account as BaseAccount, Group as BaseGroup, Poll as BasePoll, Rela
 
 const STATUS_IMPORT = 'STATUS_IMPORT' as const;
 const STATUSES_IMPORT = 'STATUSES_IMPORT' as const;
-const POLLS_IMPORT = 'POLLS_IMPORT' as const;
 
 const isEmpty = (object: Record<string, any>) => !Object.values(object).some(value => value);
 
@@ -21,11 +20,6 @@ interface ImportStatusAction {
 interface ImportStatusesAction {
   type: typeof STATUSES_IMPORT;
   statuses: Array<BaseStatus>;
-}
-
-interface ImportPollAction {
-  type: typeof POLLS_IMPORT;
-  polls: Array<BasePoll>;
 }
 
 const importEntities = (entities: {
@@ -110,12 +104,11 @@ const importEntities = (entities: {
   if (!isEmpty(statuses)) dispatch<ImportStatusesAction>({ type: STATUSES_IMPORT, statuses: Object.values(statuses) });
 };
 
-type ImporterAction = ImportStatusAction | ImportStatusesAction | ImportPollAction;
+type ImporterAction = ImportStatusAction | ImportStatusesAction;
 
 export {
   STATUS_IMPORT,
   STATUSES_IMPORT,
-  POLLS_IMPORT,
   importEntities,
   type ImporterAction,
 };

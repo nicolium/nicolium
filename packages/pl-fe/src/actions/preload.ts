@@ -70,6 +70,5 @@ export {
   pleromaDecoder,
   decodeFromMarkup,
   preload,
-  preloadMastodon,
   type PreloadAction,
 };

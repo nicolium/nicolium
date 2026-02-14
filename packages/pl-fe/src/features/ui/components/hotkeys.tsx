@@ -173,11 +173,11 @@ const hotkeyMatcherMap = {
 
 type HotkeyName = keyof typeof hotkeyMatcherMap;
 
-export type HandlerMap = Partial<
+type HandlerMap = Partial<
   Record<HotkeyName, (event: KeyboardEvent) => void>
 >;
 
-export function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
+function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
   const ref = useRef<T>(null);
   const bufferedKeys = useRef<string[]>([]);
   const sequenceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);

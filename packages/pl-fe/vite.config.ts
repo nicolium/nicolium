@@ -1,4 +1,3 @@
-/// <reference types="vitest" />
 import fs from 'node:fs';
 import { fileURLToPath, URL } from 'node:url';
 
@@ -179,11 +178,6 @@ const config = defineConfig(({ command }) => ({
       },
     ],
     dedupe: ['@floating-ui/react', 'tabbable', 'query-string', 'valibot'],
-  },
-  test: {
-    globals: true,
-    environment: 'jsdom',
-    setupFiles: 'src/jest/test-setup.ts',
   },
 }));
 

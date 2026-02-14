@@ -22,7 +22,6 @@
     ],
     "types": [
       "vite/client",
-      "vitest/globals",
       "vite-plugin-compile-time/client"
     ],
   },
