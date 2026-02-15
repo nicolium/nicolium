@@ -14,7 +14,10 @@ const useGroupRelationship = (groupId: string | undefined) => {
     () => client.experimental.groups.getGroupRelationships([groupId!]),
     {
       enabled: !!groupId,
-      schema: v.pipe(v.any(), v.transform(arr => arr[0])),
+      schema: v.pipe(
+        v.any(),
+        v.transform((arr) => arr[0]),
+      ),
     },
   );
 

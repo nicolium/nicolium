@@ -16,7 +16,10 @@ import { useModalsActions } from '@/stores/modals';
 
 const messages = defineMessages({
   deleteHeading: { id: 'confirmations.delete_antenna.heading', defaultMessage: 'Delete antenna' },
-  deleteMessage: { id: 'confirmations.delete_antenna.message', defaultMessage: 'Are you sure you want to permanently delete this antenna?' },
+  deleteMessage: {
+    id: 'confirmations.delete_antenna.message',
+    defaultMessage: 'Are you sure you want to permanently delete this antenna?',
+  },
   deleteConfirm: { id: 'confirmations.delete_antenna.confirm', defaultMessage: 'Delete' },
   editAntenna: { id: 'antennas.edit', defaultMessage: 'Edit antenna' },
   deleteAntenna: { id: 'antennas.delete', defaultMessage: 'Delete antenna' },
@@ -73,14 +76,15 @@ const AntennaTimelinePage: React.FC = () => {
       </Column>
     );
   } else if (!antenna) {
-    return (
-      <MissingIndicator />
-    );
+    return <MissingIndicator />;
   }
 
   const emptyMessage = (
     <div>
-      <FormattedMessage id='empty_column.antenna' defaultMessage='There is nothing in this antenna yet. When posts matching the criteria will be created, they will appear here.' />
+      <FormattedMessage
+        id='empty_column.antenna'
+        defaultMessage='There is nothing in this antenna yet. When posts matching the criteria will be created, they will appear here.'
+      />
       {/* <br /><br />
       <Button onClick={handleEditClick}><FormattedMessage id='circle.click_to_add' defaultMessage='Click here to add people' /></Button> */}
     </div>
@@ -102,7 +106,12 @@ const AntennaTimelinePage: React.FC = () => {
   return (
     <Column
       label={title}
-      action={<DropdownMenu items={items} src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')} />}
+      action={
+        <DropdownMenu
+          items={items}
+          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
+        />
+      }
     >
       <Timeline
         loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'

@@ -359,8 +359,5 @@
     "fa fa-neuter",
     "fa fa-genderless"
   ],
-  "Transportation Icons": [
-    "fa fa-train",
-    "fa fa-subway"
-  ]
+  "Transportation Icons": ["fa fa-train", "fa fa-subway"]
 }

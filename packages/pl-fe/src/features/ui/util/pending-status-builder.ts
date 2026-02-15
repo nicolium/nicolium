@@ -10,7 +10,7 @@ import type { RootState } from '@/store';
 
 const buildMentions = (pendingStatus: PendingStatus) => {
   if (pendingStatus.in_reply_to_id) {
-    return (pendingStatus.to ?? []).map(acct => ({ acct }));
+    return (pendingStatus.to ?? []).map((acct) => ({ acct }));
   } else {
     return [];
   }
@@ -33,7 +33,10 @@ const buildStatus = (state: RootState, pendingStatus: PendingStatus, idempotency
 
   const status = {
     account,
-    content: pendingStatus.status.replace(new RegExp('\n', 'g'), '<br>'), /* eslint-disable-line no-control-regex */
+    content: pendingStatus.status.replace(
+      new RegExp('\n', 'g'),
+      '<br>',
+    ) /* eslint-disable-line no-control-regex */,
     id: `末pending-${idempotencyKey}`,
     in_reply_to_account_id: state.statuses[inReplyToId ?? '']?.account_id || null,
     in_reply_to_id: inReplyToId,

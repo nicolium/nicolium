@@ -45,7 +45,12 @@ const BubbleTimelinePage = () => {
           timelineId={`${timelineId}${onlyMedia ? ':media' : ''}`}
           prefix='home'
           onLoadMore={handleLoadMore}
-          emptyMessageText={<FormattedMessage id='empty_column.bubble' defaultMessage='There is nothing here! Write something publicly to fill it up' />}
+          emptyMessageText={
+            <FormattedMessage
+              id='empty_column.bubble'
+              defaultMessage='There is nothing here! Write something publicly to fill it up'
+            />
+          }
           emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
         />
       </PullToRefresh>

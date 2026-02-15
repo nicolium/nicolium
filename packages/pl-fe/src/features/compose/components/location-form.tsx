@@ -39,21 +39,29 @@ const LocationForm: React.FC<ILocationForm> = ({ composeId }) => {
     <div className='⁂-compose-form__schedule'>
       {location ? (
         <HStack className='h-[38px] text-gray-700 dark:text-gray-500' alignItems='center' space={2}>
-          <Icon src={ADDRESS_ICONS[location.type] || require('@phosphor-icons/core/regular/map-pin.svg')} />
+          <Icon
+            src={
+              ADDRESS_ICONS[location.type] || require('@phosphor-icons/core/regular/map-pin.svg')
+            }
+          />
           <Stack className='grow'>
             <Text>{location.description}</Text>
-            <Text theme='muted' size='xs'>{[location.street, location.locality, location.country].filter(val => val?.trim()).join(' · ')}</Text>
+            <Text theme='muted' size='xs'>
+              {[location.street, location.locality, location.country]
+                .filter((val) => val?.trim())
+                .join(' · ')}
+            </Text>
           </Stack>
           <IconButton
-            title={intl.formatMessage(messages.resetLocation)} src={require('@phosphor-icons/core/regular/x.svg')} onClick={() =>{
+            title={intl.formatMessage(messages.resetLocation)}
+            src={require('@phosphor-icons/core/regular/x.svg')}
+            onClick={() => {
               onChangeLocation(null);
             }}
           />
         </HStack>
       ) : (
-        <LocationSearch
-          onSelected={onChangeLocation}
-        />
+        <LocationSearch onSelected={onChangeLocation} />
       )}
     </div>
   );

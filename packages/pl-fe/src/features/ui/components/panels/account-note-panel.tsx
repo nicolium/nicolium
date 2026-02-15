@@ -32,13 +32,13 @@ const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
   const [value, setValue] = useState<string | undefined>(account.relationship?.note);
   const [saved, setSaved] = useState(false);
 
-  const handleChange: React.ChangeEventHandler<HTMLTextAreaElement> = e => {
+  const handleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setValue(e.target.value);
 
     debouncedUpdateAccountNote(e.target.value, {
       onSuccess: () => {
         setSaved(true);
-        setTimeout(() =>{
+        setTimeout(() => {
           setSaved(false);
         }, 2000);
       },
@@ -55,16 +55,18 @@ const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
 
   return (
     <Widget
-      title={<HStack space={2} alignItems='center'>
-        <label htmlFor={`account-note-${account.id}`}>
-          <FormattedMessage id='account_note.header' defaultMessage='Note' />
-        </label>
-        {saved && (
-          <Text theme='success' tag='span' className='leading-none'>
-            <FormattedMessage id='generic.saved' defaultMessage='Saved' />
-          </Text>
-        )}
-      </HStack>}
+      title={
+        <HStack space={2} alignItems='center'>
+          <label htmlFor={`account-note-${account.id}`}>
+            <FormattedMessage id='account_note.header' defaultMessage='Note' />
+          </label>
+          {saved && (
+            <Text theme='success' tag='span' className='leading-none'>
+              <FormattedMessage id='generic.saved' defaultMessage='Saved' />
+            </Text>
+          )}
+        </HStack>
+      }
     >
       <Textarea
         id={`account-note-${account.id}`}

@@ -64,10 +64,7 @@ type KeyMatcher = (
 function just(keyName: string): KeyMatcher {
   return (event) => ({
     isMatch:
-      normalizeKey(event.key) === keyName &&
-      !event.altKey &&
-      !event.ctrlKey &&
-      !event.metaKey,
+      normalizeKey(event.key) === keyName && !event.altKey && !event.ctrlKey && !event.metaKey,
     priority: hotkeyPriority.singleKey,
   });
 }
@@ -104,13 +101,10 @@ function sequence(...sequence: string[]): KeyMatcher {
     const relevantBufferedKeys = bufferedKeys?.slice(-startOfSequence.length);
 
     const bufferMatchesStartOfSequence =
-      !!relevantBufferedKeys &&
-      startOfSequence.join('') === relevantBufferedKeys.join('');
+      !!relevantBufferedKeys && startOfSequence.join('') === relevantBufferedKeys.join('');
 
     return {
-      isMatch:
-        bufferMatchesStartOfSequence &&
-        normalizeKey(event.key) === lastKeyInSequence,
+      isMatch: bufferMatchesStartOfSequence && normalizeKey(event.key) === lastKeyInSequence,
       priority: hotkeyPriority.sequence,
     };
   };
@@ -173,9 +167,7 @@ const hotkeyMatcherMap = {
 
 type HotkeyName = keyof typeof hotkeyMatcherMap;
 
-type HandlerMap = Partial<
-  Record<HotkeyName, (event: KeyboardEvent) => void>
->;
+type HandlerMap = Partial<Record<HotkeyName, (event: KeyboardEvent) => void>>;
 
 function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
   const ref = useRef<T>(null);
@@ -202,10 +194,7 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
         !event.defaultPrevented &&
         !['input', 'textarea', 'select', 'em-emoji-picker'].includes(tagName) &&
         !(event.target as HTMLElement).closest('[contenteditable]') &&
-        !(
-          ['a', 'button'].includes(tagName) &&
-          normalizeKey(event.key) === 'enter'
-        );
+        !(['a', 'button'].includes(tagName) && normalizeKey(event.key) === 'enter');
 
       if (shouldHandleEvent) {
         const matchCandidates: {
@@ -213,24 +202,19 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
           priority: number;
         }[] = [];
 
-        (Object.keys(hotkeyMatcherMap) as HotkeyName[]).forEach(
-          (handlerName) => {
-            const handler = handlersRef.current[handlerName];
+        (Object.keys(hotkeyMatcherMap) as HotkeyName[]).forEach((handlerName) => {
+          const handler = handlersRef.current[handlerName];
 
-            if (handler) {
-              const hotkeyMatcher = hotkeyMatcherMap[handlerName];
+          if (handler) {
+            const hotkeyMatcher = hotkeyMatcherMap[handlerName];
 
-              const { isMatch, priority } = hotkeyMatcher(
-                event,
-                bufferedKeys.current,
-              );
+            const { isMatch, priority } = hotkeyMatcher(event, bufferedKeys.current);
 
-              if (isMatch) {
-                matchCandidates.push({ handler, priority });
-              }
+            if (isMatch) {
+              matchCandidates.push({ handler, priority });
             }
-          },
-        );
+          }
+        });
 
         // Sort all matches by priority
         matchCandidates.sort((a, b) => b.priority - a.priority);
@@ -305,12 +289,23 @@ interface IHotkeys extends React.HTMLAttributes<HTMLDivElement> {
  *
  * Now this function will be called when the 'open' hotkey is pressed by the user.
  */
-export const Hotkeys: React.FC<IHotkeys> = ({ handlers, global, focusable = true, element: Element = 'div', ...props }) => {
+export const Hotkeys: React.FC<IHotkeys> = ({
+  handlers,
+  global,
+  focusable = true,
+  element: Element = 'div',
+  ...props
+}) => {
   const ref = useHotkeys<HTMLDivElement>(handlers);
 
   Element = Element as 'div';
 
   return (
-    <Element ref={global ? undefined : ref} tabIndex={focusable ? -1 : undefined} {...props} className={clsx(props.className, focusable && 'focusable')} />
+    <Element
+      ref={global ? undefined : ref}
+      tabIndex={focusable ? -1 : undefined}
+      {...props}
+      className={clsx(props.className, focusable && 'focusable')}
+    />
   );
 };

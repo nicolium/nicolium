@@ -45,14 +45,35 @@ const messages = defineMessages({
   conversations: { id: 'column.filters.conversations', defaultMessage: 'Conversations' },
   accounts: { id: 'column.filters.accounts', defaultMessage: 'Accounts' },
   drop_header: { id: 'column.filters.drop_header', defaultMessage: 'Drop instead of hide' },
-  drop_hint: { id: 'column.filters.drop_hint', defaultMessage: 'Filtered posts will disappear irreversibly, even if filter is later removed' },
+  drop_hint: {
+    id: 'column.filters.drop_hint',
+    defaultMessage: 'Filtered posts will disappear irreversibly, even if filter is later removed',
+  },
   hide_header: { id: 'column.filters.hide_header', defaultMessage: 'Hide completely' },
-  hide_hint: { id: 'column.filters.hide_hint', defaultMessage: 'Completely hide the filtered content, instead of showing a warning' },
-  filter_action_header: { id: 'column.filters.filter_action_header', defaultMessage: 'Filter action' },
-  filter_action_hint: { id: 'column.filters.filter_action_hint', defaultMessage: 'Choose which action to perform when a post matches the filter' },
-  filter_action_warn: { id: 'column.filters.filter_action_warn', defaultMessage: 'Hide with a warning' },
-  filter_action_blur: { id: 'column.filters.filter_action_blur', defaultMessage: 'Hide media with a warning' },
-  filter_action_hide: { id: 'column.filters.filter_action_hide', defaultMessage: 'Hide completely' },
+  hide_hint: {
+    id: 'column.filters.hide_hint',
+    defaultMessage: 'Completely hide the filtered content, instead of showing a warning',
+  },
+  filter_action_header: {
+    id: 'column.filters.filter_action_header',
+    defaultMessage: 'Filter action',
+  },
+  filter_action_hint: {
+    id: 'column.filters.filter_action_hint',
+    defaultMessage: 'Choose which action to perform when a post matches the filter',
+  },
+  filter_action_warn: {
+    id: 'column.filters.filter_action_warn',
+    defaultMessage: 'Hide with a warning',
+  },
+  filter_action_blur: {
+    id: 'column.filters.filter_action_blur',
+    defaultMessage: 'Hide media with a warning',
+  },
+  filter_action_hide: {
+    id: 'column.filters.filter_action_hide',
+    defaultMessage: 'Hide completely',
+  },
   add_new: { id: 'column.filters.add_new', defaultMessage: 'Add new filter' },
   edit: { id: 'column.filters.edit', defaultMessage: 'Edit filter' },
   create_error: { id: 'column.filters.create_error', defaultMessage: 'Error adding filter' },
@@ -68,9 +89,13 @@ const messages = defineMessages({
 const FilterField: StreamfieldComponent<IFilterField> = ({ value, onChange }) => {
   const intl = useIntl();
 
-  const handleChange = (key: string): React.ChangeEventHandler<HTMLInputElement> =>
-    e =>{
-      onChange({ ...value, [key]: e.currentTarget[e.currentTarget.type === 'checkbox' ? 'checked' : 'value'] });
+  const handleChange =
+    (key: string): React.ChangeEventHandler<HTMLInputElement> =>
+    (e) => {
+      onChange({
+        ...value,
+        [key]: e.currentTarget[e.currentTarget.type === 'checkbox' ? 'checked' : 'value'],
+      });
     };
 
   return (
@@ -83,10 +108,7 @@ const FilterField: StreamfieldComponent<IFilterField> = ({ value, onChange }) =>
         placeholder={intl.formatMessage(messages.keyword)}
       />
       <HStack alignItems='center' space={2}>
-        <Toggle
-          checked={value.whole_word}
-          onChange={handleChange('whole_word')}
-        />
+        <Toggle checked={value.whole_word} onChange={handleChange('whole_word')} />
 
         <Text tag='span' theme='muted'>
           <FormattedMessage id='column.filters.whole_word' defaultMessage='Whole word' />
@@ -117,21 +139,24 @@ const EditFilterPage: React.FC = () => {
   const [filterAction, setFilterAction] = useState<Filter['filter_action']>('warn');
   const [keywords, setKeywords] = useState<IFilterField[]>([{ keyword: '', whole_word: false }]);
 
-  const expirations = useMemo(() => ({
-    '': intl.formatMessage(messages.expiration_never),
-    1800: intl.formatMessage(messages.expiration_1800),
-    3600: intl.formatMessage(messages.expiration_3600),
-    21600: intl.formatMessage(messages.expiration_21600),
-    43200: intl.formatMessage(messages.expiration_43200),
-    86400: intl.formatMessage(messages.expiration_86400),
-    604800: intl.formatMessage(messages.expiration_604800),
-  }), []);
+  const expirations = useMemo(
+    () => ({
+      '': intl.formatMessage(messages.expiration_never),
+      1800: intl.formatMessage(messages.expiration_1800),
+      3600: intl.formatMessage(messages.expiration_3600),
+      21600: intl.formatMessage(messages.expiration_21600),
+      43200: intl.formatMessage(messages.expiration_43200),
+      86400: intl.formatMessage(messages.expiration_86400),
+      604800: intl.formatMessage(messages.expiration_604800),
+    }),
+    [],
+  );
 
-  const handleSelectChange: React.ChangeEventHandler<HTMLSelectElement> = e => {
+  const handleSelectChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
     setExpiresIn(+e.target.value || undefined);
   };
 
-  const handleAddNew: React.FormEventHandler = e => {
+  const handleAddNew: React.FormEventHandler = (e) => {
     e.preventDefault();
     const context: Array<FilterContext> = [];
 
@@ -151,27 +176,33 @@ const EditFilterPage: React.FC = () => {
       context.push('account');
     }
 
-    dispatch(filterId !== 'new'
-      ? updateFilter(filterId, title, expiresIn, context, filterAction, keywords)
-      : createFilter(title, expiresIn, context, filterAction, keywords)).then(() => {
-      navigate({ to: '/filters' });
-    }).catch(() => {
-      toast.error(intl.formatMessage(messages.create_error));
-    });
+    dispatch(
+      filterId !== 'new'
+        ? updateFilter(filterId, title, expiresIn, context, filterAction, keywords)
+        : createFilter(title, expiresIn, context, filterAction, keywords),
+    )
+      .then(() => {
+        navigate({ to: '/filters' });
+      })
+      .catch(() => {
+        toast.error(intl.formatMessage(messages.create_error));
+      });
   };
 
-  const handleChangeKeyword = (keywords: { keyword: string; whole_word: boolean }[]) =>{
+  const handleChangeKeyword = (keywords: { keyword: string; whole_word: boolean }[]) => {
     setKeywords(keywords);
   };
 
-  const handleAddKeyword = () =>{
-    setKeywords(keywords => [...keywords, { keyword: '', whole_word: false }]);
+  const handleAddKeyword = () => {
+    setKeywords((keywords) => [...keywords, { keyword: '', whole_word: false }]);
   };
 
-  const handleRemoveKeyword = (i: number) =>{
-    setKeywords(keywords => keywords[i].id
-      ? keywords.map((keyword, index) => index === i ? { ...keyword, _destroy: true } : keyword)
-      : keywords.filter((_, index) => index !== i));
+  const handleRemoveKeyword = (i: number) => {
+    setKeywords((keywords) =>
+      keywords[i].id
+        ? keywords.map((keyword, index) => (index === i ? { ...keyword, _destroy: true } : keyword))
+        : keywords.filter((_, index) => index !== i),
+    );
   };
 
   useEffect(() => {
@@ -211,7 +242,10 @@ const EditFilterPage: React.FC = () => {
   );
 
   return (
-    <Column className='filter-settings-panel' label={intl.formatMessage(messages.subheading_add_new)}>
+    <Column
+      className='filter-settings-panel'
+      label={intl.formatMessage(messages.subheading_add_new)}
+    >
       <Form onSubmit={handleAddNew}>
         {features.filtersV2 ? (
           <FormGroup labelText={intl.formatMessage(messages.title)}>
@@ -220,19 +254,17 @@ const EditFilterPage: React.FC = () => {
               type='text'
               name='title'
               value={title}
-              onChange={({ target }) =>{
+              onChange={({ target }) => {
                 setTitle(target.value);
               }}
             />
           </FormGroup>
-        ) : keywordsField}
+        ) : (
+          keywordsField
+        )}
 
         <FormGroup labelText={intl.formatMessage(messages.expires)}>
-          <SelectDropdown
-            items={expirations}
-            defaultValue=''
-            onChange={handleSelectChange}
-          />
+          <SelectDropdown items={expirations} defaultValue='' onChange={handleSelectChange} />
         </FormGroup>
 
         <Stack>
@@ -240,7 +272,10 @@ const EditFilterPage: React.FC = () => {
             <FormattedMessage id='filters.context_header' defaultMessage='Filter contexts' />
           </Text>
           <Text size='xs' theme='muted'>
-            <FormattedMessage id='filters.context_hint' defaultMessage='One or multiple contexts where the filter should apply' />
+            <FormattedMessage
+              id='filters.context_hint'
+              defaultMessage='One or multiple contexts where the filter should apply'
+            />
           </Text>
         </Stack>
 
@@ -248,7 +283,7 @@ const EditFilterPage: React.FC = () => {
           <ListItem label={intl.formatMessage(messages.home_timeline)}>
             <Toggle
               checked={homeTimeline}
-              onChange={({ target }) =>{
+              onChange={({ target }) => {
                 setHomeTimeline(target.checked);
               }}
             />
@@ -256,7 +291,7 @@ const EditFilterPage: React.FC = () => {
           <ListItem label={intl.formatMessage(messages.public_timeline)}>
             <Toggle
               checked={publicTimeline}
-              onChange={({ target }) =>{
+              onChange={({ target }) => {
                 setPublicTimeline(target.checked);
               }}
             />
@@ -264,7 +299,7 @@ const EditFilterPage: React.FC = () => {
           <ListItem label={intl.formatMessage(messages.notifications)}>
             <Toggle
               checked={notifications}
-              onChange={({ target }) =>{
+              onChange={({ target }) => {
                 setNotifications(target.checked);
               }}
             />
@@ -272,7 +307,7 @@ const EditFilterPage: React.FC = () => {
           <ListItem label={intl.formatMessage(messages.conversations)}>
             <Toggle
               checked={conversations}
-              onChange={({ target }) =>{
+              onChange={({ target }) => {
                 setConversations(target.checked);
               }}
             />
@@ -281,7 +316,7 @@ const EditFilterPage: React.FC = () => {
             <ListItem label={intl.formatMessage(messages.accounts)}>
               <Toggle
                 checked={accounts}
-                onChange={({ target }) =>{
+                onChange={({ target }) => {
                   setAccounts(target.checked);
                 }}
               />
@@ -296,7 +331,8 @@ const EditFilterPage: React.FC = () => {
               hint={intl.formatMessage(messages.filter_action_hint)}
             >
               <Select
-                value={filterAction} onChange={({ target }) =>{
+                value={filterAction}
+                onChange={({ target }) => {
                   setFilterAction(target.value as Filter['filter_action']);
                 }}
               >
@@ -307,12 +343,16 @@ const EditFilterPage: React.FC = () => {
             </ListItem>
           ) : (
             <ListItem
-              label={intl.formatMessage(features.filtersV2 ? messages.hide_header : messages.drop_header)}
-              hint={intl.formatMessage(features.filtersV2 ? messages.hide_hint : messages.drop_hint)}
+              label={intl.formatMessage(
+                features.filtersV2 ? messages.hide_header : messages.drop_header,
+              )}
+              hint={intl.formatMessage(
+                features.filtersV2 ? messages.hide_hint : messages.drop_hint,
+              )}
             >
               <Toggle
                 checked={filterAction === 'hide'}
-                onChange={({ target }) =>{
+                onChange={({ target }) => {
                   setFilterAction(target.checked ? 'hide' : 'warn');
                 }}
               />

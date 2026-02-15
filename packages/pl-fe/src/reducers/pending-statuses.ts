@@ -53,12 +53,12 @@ const pending_statuses = (state = initialState, action: StatusesAction): State =
   switch (action.type) {
     case STATUS_CREATE_REQUEST:
       if (action.editing) return state;
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         importStatus(draft, action.params, action.idempotencyKey);
       });
     case STATUS_CREATE_FAIL:
     case STATUS_CREATE_SUCCESS:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         deleteStatus(draft, action.idempotencyKey);
       });
     default:
@@ -66,7 +66,4 @@ const pending_statuses = (state = initialState, action: StatusesAction): State =
   }
 };
 
-export {
-  type PendingStatus,
-  pending_statuses as default,
-};
+export { type PendingStatus, pending_statuses as default };

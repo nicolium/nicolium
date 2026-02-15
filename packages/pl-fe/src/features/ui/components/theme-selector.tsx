@@ -11,7 +11,6 @@ interface IThemeSelector {
 
 /** Pure theme selector. */
 const ThemeSelector: React.FC<IThemeSelector> = ({ value, onChange }) => {
-
   const themeIconSrc = useMemo(() => {
     switch (value) {
       case 'system':
@@ -27,7 +26,7 @@ const ThemeSelector: React.FC<IThemeSelector> = ({ value, onChange }) => {
     }
   }, [value]);
 
-  const handleChange: React.ChangeEventHandler<HTMLSelectElement> = e => {
+  const handleChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
     onChange(e.target.value as any);
   };
 
@@ -38,19 +37,26 @@ const ThemeSelector: React.FC<IThemeSelector> = ({ value, onChange }) => {
           <Icon src={themeIconSrc} className='size-4 text-gray-600 dark:text-gray-700' />
         </div>
 
-        <Select
-          onChange={handleChange}
-          defaultValue={value}
-          className='!pl-10'
-        >
-          <option value='system'><FormattedMessage id='theme_toggle.system' defaultMessage='System' /></option>
-          <option value='light'><FormattedMessage id='theme_toggle.light' defaultMessage='Light' /></option>
-          <option value='dark'><FormattedMessage id='theme_toggle.dark' defaultMessage='Dark' /></option>
-          <option value='black'><FormattedMessage id='theme_toggle.black' defaultMessage='Black' /></option>
+        <Select onChange={handleChange} defaultValue={value} className='!pl-10'>
+          <option value='system'>
+            <FormattedMessage id='theme_toggle.system' defaultMessage='System' />
+          </option>
+          <option value='light'>
+            <FormattedMessage id='theme_toggle.light' defaultMessage='Light' />
+          </option>
+          <option value='dark'>
+            <FormattedMessage id='theme_toggle.dark' defaultMessage='Dark' />
+          </option>
+          <option value='black'>
+            <FormattedMessage id='theme_toggle.black' defaultMessage='Black' />
+          </option>
         </Select>
 
         <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3'>
-          <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} className='size-4 text-gray-600 dark:text-gray-700' />
+          <Icon
+            src={require('@phosphor-icons/core/regular/caret-down.svg')}
+            className='size-4 text-gray-600 dark:text-gray-700'
+          />
         </div>
       </div>
     </label>

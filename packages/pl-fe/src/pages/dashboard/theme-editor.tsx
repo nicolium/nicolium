@@ -29,7 +29,10 @@ const messages = defineMessages({
   restore: { id: 'theme_editor.restore', defaultMessage: 'Restore default theme' },
   export: { id: 'theme_editor.export', defaultMessage: 'Export theme' },
   import: { id: 'theme_editor.import', defaultMessage: 'Import theme' },
-  importSuccess: { id: 'theme_editor.import_success', defaultMessage: 'Theme was successfully imported!' },
+  importSuccess: {
+    id: 'theme_editor.import_success',
+    defaultMessage: 'Theme was successfully imported!',
+  },
   colorPrimary: { id: 'theme_editor.colors.primary', defaultMessage: 'Primary' },
   colorSecondary: { id: 'theme_editor.colors.secondary', defaultMessage: 'Secondary' },
   colorAccent: { id: 'theme_editor.colors.accent', defaultMessage: 'Accent' },
@@ -38,7 +41,10 @@ const messages = defineMessages({
   colorDanger: { id: 'theme_editor.colors.danger', defaultMessage: 'Danger' },
   colorGreentext: { id: 'theme_editor.colors.greentext', defaultMessage: 'Greentext' },
   colorAccentBlue: { id: 'theme_editor.colors.accent_blue', defaultMessage: 'Accent Blue' },
-  colorGradientStart: { id: 'theme_editor.colors.gradient_start', defaultMessage: 'Gradient Start' },
+  colorGradientStart: {
+    id: 'theme_editor.colors.gradient_start',
+    defaultMessage: 'Gradient Start',
+  },
   colorGradientEnd: { id: 'theme_editor.colors.gradient_end', defaultMessage: 'Gradient End' },
 });
 
@@ -48,8 +54,8 @@ const ThemeEditorPage: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const frontendConfig = useFrontendConfig();
-  const host = useAppSelector(state => getHost(state));
-  const rawConfig = useAppSelector(state => state.frontendConfig);
+  const host = useAppSelector((state) => getHost(state));
+  const rawConfig = useAppSelector((state) => state.frontendConfig);
 
   const [colors, setColors] = useState(normalizeColors(frontendConfig));
   const [isDefault, setIsDefault] = useState(false);
@@ -82,7 +88,7 @@ const ThemeEditorPage: React.FC = () => {
   const setTheme = (theme: any) => {
     setResetKey(crypto.randomUUID());
     setIsDefault(false);
-    setTimeout(() =>{
+    setTimeout(() => {
       setColors(theme);
     });
   };
@@ -129,7 +135,7 @@ const ThemeEditorPage: React.FC = () => {
     }
   };
 
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
     setSubmitting(true);
 
     try {
@@ -211,19 +217,23 @@ const ThemeEditorPage: React.FC = () => {
 
         <FormActions>
           <DropdownMenu
-            items={[{
-              text: intl.formatMessage(messages.restore),
-              action: restoreDefaultTheme,
-              icon: require('@phosphor-icons/core/regular/arrows-clockwise.svg'),
-            }, {
-              text: intl.formatMessage(messages.import),
-              action: importTheme,
-              icon: require('@phosphor-icons/core/regular/export.svg'),
-            }, {
-              text: intl.formatMessage(messages.export),
-              action: exportTheme,
-              icon: require('@phosphor-icons/core/regular/download-simple.svg'),
-            }]}
+            items={[
+              {
+                text: intl.formatMessage(messages.restore),
+                action: restoreDefaultTheme,
+                icon: require('@phosphor-icons/core/regular/arrows-clockwise.svg'),
+              },
+              {
+                text: intl.formatMessage(messages.import),
+                action: importTheme,
+                icon: require('@phosphor-icons/core/regular/export.svg'),
+              },
+              {
+                text: intl.formatMessage(messages.export),
+                action: exportTheme,
+                icon: require('@phosphor-icons/core/regular/download-simple.svg'),
+              },
+            ]}
           />
           <Button theme='secondary' onClick={resetTheme}>
             <FormattedMessage id='theme_editor.reset' defaultMessage='Reset' />
@@ -256,11 +266,23 @@ interface IPaletteListItem {
 }
 
 /** Palette editor inside a ListItem. */
-const PaletteListItem: React.FC<IPaletteListItem> = ({ label, palette, onChange, resetKey, allowTintChange }) => typeof palette === 'string' ? null : (
-  <ListItem label={<div className='whitespace-nowrap'>{label}</div>}>
-    <Palette palette={palette} onChange={onChange} resetKey={resetKey} allowTintChange={allowTintChange} />
-  </ListItem>
-);
+const PaletteListItem: React.FC<IPaletteListItem> = ({
+  label,
+  palette,
+  onChange,
+  resetKey,
+  allowTintChange,
+}) =>
+  typeof palette === 'string' ? null : (
+    <ListItem label={<div className='whitespace-nowrap'>{label}</div>}>
+      <Palette
+        palette={palette}
+        onChange={onChange}
+        resetKey={resetKey}
+        allowTintChange={allowTintChange}
+      />
+    </ListItem>
+  );
 
 interface IColorListItem {
   label: React.ReactNode;

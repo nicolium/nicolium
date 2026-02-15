@@ -3,7 +3,10 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Button from '@/components/ui/button';
 import { useAppSelector } from '@/hooks/use-app-selector';
-import { useJoinEventMutation, useLeaveEventMutation } from '@/queries/statuses/use-event-interactions';
+import {
+  useJoinEventMutation,
+  useLeaveEventMutation,
+} from '@/queries/statuses/use-event-interactions';
 import { useModalsActions } from '@/stores/modals';
 
 import type { ButtonThemes } from '@/components/ui/button/useButtonStyles';
@@ -11,7 +14,11 @@ import type { Status as StatusEntity } from '@/normalizers/status';
 
 const messages = defineMessages({
   leaveHeading: { id: 'confirmations.leave_event.heading', defaultMessage: 'Leave event' },
-  leaveMessage: { id: 'confirmations.leave_event.message', defaultMessage: 'If you want to rejoin the event, the request will be manually reviewed again. Are you sure you want to proceed?' },
+  leaveMessage: {
+    id: 'confirmations.leave_event.message',
+    defaultMessage:
+      'If you want to rejoin the event, the request will be manually reviewed again. Are you sure you want to proceed?',
+  },
   leaveConfirm: { id: 'confirmations.leave_event.confirm', defaultMessage: 'Leave event' },
 });
 
@@ -66,7 +73,7 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
         heading: intl.formatMessage(messages.leaveHeading),
         message: intl.formatMessage(messages.leaveMessage),
         confirm: intl.formatMessage(messages.leaveConfirm),
-        onConfirm: () =>{
+        onConfirm: () => {
           leaveEvent();
         },
       });

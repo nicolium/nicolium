@@ -38,11 +38,13 @@
       }
     }
 
-    img, svg {
+    img,
+    svg {
       @apply h-5 max-w-48 transition-transform;
     }
 
-    &:hover img, &:hover svg {
+    &:hover img,
+    &:hover svg {
       @apply scale-125;
     }
 
@@ -106,7 +108,8 @@
   }
 }
 
-.thread__status, [column-type='filled'] {
+.thread__status,
+[column-type='filled'] {
   .⁂-status__wrapper {
     box-shadow: none;
   }
@@ -228,7 +231,8 @@
 
 .⁂-media-modal__content {
   .⁂-status-action-bar {
-    .⁂-status-action-bar__button, .⁂-icon-button {
+    .⁂-status-action-bar__button,
+    .⁂-icon-button {
       @apply text-white/80 hover:text-white bg-transparent dark:bg-transparent;
 
       &--active.⁂-status-action-bar__button--reblog {
@@ -285,7 +289,7 @@
   @include mixins.text($size: 2xl, $weight: medium);
 
   &--clamp span:first-child {
-    @apply line-clamp-3
+    @apply line-clamp-3;
   }
 
   button {

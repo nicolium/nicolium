@@ -24,7 +24,10 @@ const Navlinks: React.FC<INavlinks> = ({ type }) => {
 
           return (
             <div key={idx} className='px-5 py-2'>
-              <Comp {...compProps} className='text-primary-600 hover:underline dark:text-primary-400'>
+              <Comp
+                {...compProps}
+                className='text-primary-600 hover:underline dark:text-primary-400'
+              >
                 <Text tag='span' theme='inherit' size='sm'>
                   {link.titleLocales[locale] || link.title}
                 </Text>
@@ -35,7 +38,9 @@ const Navlinks: React.FC<INavlinks> = ({ type }) => {
       </div>
 
       <div className='mt-6'>
-        <Text theme='muted' align='center' size='sm'>{copyright}</Text>
+        <Text theme='muted' align='center' size='sm'>
+          {copyright}
+        </Text>
       </div>
     </footer>
   );

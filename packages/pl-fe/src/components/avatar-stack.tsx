@@ -12,7 +12,7 @@ interface IAvatarStack {
 }
 
 const AvatarStack: React.FC<IAvatarStack> = ({ accountIds, limit = 3 }) => {
-  const accounts = useAppSelector(state => selectAccounts(state, accountIds.slice(0, limit)));
+  const accounts = useAppSelector((state) => selectAccounts(state, accountIds.slice(0, limit)));
 
   return (
     <HStack className='relative' aria-hidden>

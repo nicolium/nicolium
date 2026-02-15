@@ -36,31 +36,35 @@ interface IDropdownNavigationLink extends Partial<LinkOptions> {
   onClick: React.EventHandler<React.MouseEvent>;
 }
 
-const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(({ href, to, icon, text, onClick, ...rest }) => {
-  const body = (
-    <>
-      <div className='⁂-dropdown-navigation__link__icon'>
-        <Icon src={icon} />
-      </div>
+const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(
+  ({ href, to, icon, text, onClick, ...rest }) => {
+    const body = (
+      <>
+        <div className='⁂-dropdown-navigation__link__icon'>
+          <Icon src={icon} />
+        </div>
 
-      <Text tag='span' weight='medium' theme='inherit'>{text}</Text>
-    </>
-  );
-
-  if (to) {
-    return (
-      <Link className='⁂-dropdown-navigation__link' to={to} {...rest} onClick={onClick}>
-        {body}
-      </Link>
+        <Text tag='span' weight='medium' theme='inherit'>
+          {text}
+        </Text>
+      </>
     );
-  }
 
-  return (
-    <a className='⁂-dropdown-navigation__link' href={href} target='_blank' onClick={onClick}>
-      {body}
-    </a>
-  );
-});
+    if (to) {
+      return (
+        <Link className='⁂-dropdown-navigation__link' to={to} {...rest} onClick={onClick}>
+          {body}
+        </Link>
+      );
+    }
+
+    return (
+      <a className='⁂-dropdown-navigation__link' href={href} target='_blank' onClick={onClick}>
+        {body}
+      </a>
+    );
+  },
+);
 
 const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
   const dispatch = useAppDispatch();
@@ -71,10 +75,13 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
   const me = useAppSelector((state) => state.me);
   const features = useFeatures();
 
-  const authenticatedScheduledStatusesCountQueryOptions = useMemo(() => ({
-    ...scheduledStatusesCountQueryOptions,
-    enabled: !!me && features.scheduledStatuses,
-  }), [me, features]);
+  const authenticatedScheduledStatusesCountQueryOptions = useMemo(
+    () => ({
+      ...scheduledStatusesCountQueryOptions,
+      enabled: !!me && features.scheduledStatuses,
+    }),
+    [me, features],
+  );
 
   const getOtherAccounts = useCallback(makeGetOtherAccounts(), []);
   const { account } = useAccount(me ?? undefined);
@@ -82,7 +89,8 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
   const settings = useSettings();
   const followRequestsCount = useFollowRequestsCount().data ?? 0;
   const interactionRequestsCount = useInteractionRequestsCount().data ?? 0;
-  const scheduledStatusCount = useInfiniteQuery(authenticatedScheduledStatusesCountQueryOptions).data ?? 0;
+  const scheduledStatusCount =
+    useInfiniteQuery(authenticatedScheduledStatusesCountQueryOptions).data ?? 0;
   const { data: draftCount = 0 } = useDraftStatusesCountQuery();
   // const dashboardCount = useAppSelector((state) => state.admin.openReports.count() + state.admin.awaitingApproval.count());
   const [sidebarVisible, setSidebarVisible] = useState(isSidebarOpen);
@@ -102,12 +110,14 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
     closeSidebar();
   };
 
-  const handleSwitchAccount = (account: AccountEntity): React.MouseEventHandler => (e) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleSwitchAccount =
+    (account: AccountEntity): React.MouseEventHandler =>
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
 
-    dispatch(switchAccount(account.id));
-  };
+      dispatch(switchAccount(account.id));
+    };
 
   const onClickLogOut: React.MouseEventHandler = (e) => {
     e.preventDefault();
@@ -120,13 +130,23 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
     e.preventDefault();
     e.stopPropagation();
 
-    setSwitcher((prevState) => (!prevState));
+    setSwitcher((prevState) => !prevState);
   };
 
   const renderAccount = (account: AccountEntity) => (
-    <a className='⁂-dropdown-navigation__account-switcher__account' href='#' onClick={handleSwitchAccount(account)} key={account.id}>
+    <a
+      className='⁂-dropdown-navigation__account-switcher__account'
+      href='#'
+      onClick={handleSwitchAccount(account)}
+      key={account.id}
+    >
       <div>
-        <Account account={account} showAccountHoverCard={false} withRelationship={false} withLinkToProfile={false} />
+        <Account
+          account={account}
+          showAccountHoverCard={false}
+          withRelationship={false}
+          withLinkToProfile={false}
+        />
       </div>
     </a>
   );
@@ -135,8 +155,10 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
     if (e.key === 'Escape') handleClose();
   };
 
-  const handleTouchStart: React.TouchEventHandler<HTMLDivElement> = (e) => touchStart.current = e.targetTouches[0].clientX;
-  const handleTouchMove: React.TouchEventHandler<HTMLDivElement> = (e) => touchEnd.current = e.targetTouches[0].clientX;
+  const handleTouchStart: React.TouchEventHandler<HTMLDivElement> = (e) =>
+    (touchStart.current = e.targetTouches[0].clientX);
+  const handleTouchMove: React.TouchEventHandler<HTMLDivElement> = (e) =>
+    (touchEnd.current = e.targetTouches[0].clientX);
 
   const handleTouchEnd: React.TouchEventHandler<HTMLDivElement> = (e) => {
     if (touchEnd.current !== null && touchStart.current - touchEnd.current > 100) {
@@ -151,36 +173,31 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
 
   useEffect(() => {
     if (isSidebarOpen) containerRef.current?.querySelector('a')?.focus();
-    setTimeout(() =>{
-      setSidebarVisible(isSidebarOpen);
-    }, isSidebarOpen ? 0 : 150);
+    setTimeout(
+      () => {
+        setSidebarVisible(isSidebarOpen);
+      },
+      isSidebarOpen ? 0 : 150,
+    );
   }, [isSidebarOpen]);
 
   return (
     <div
       aria-expanded={isSidebarOpen}
-      className={
-        clsx({
-          '⁂-dropdown-navigation__container': true,
-          '⁂-dropdown-navigation__container--partially-visible': isSidebarOpen || sidebarVisible,
-          '⁂-dropdown-navigation__container--visible': isSidebarOpen && sidebarVisible,
-        })
-      }
+      className={clsx({
+        '⁂-dropdown-navigation__container': true,
+        '⁂-dropdown-navigation__container--partially-visible': isSidebarOpen || sidebarVisible,
+        '⁂-dropdown-navigation__container--visible': isSidebarOpen && sidebarVisible,
+      })}
       ref={containerRef}
       onKeyDown={handleKeyDown}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >
-      <div
-        className='⁂-dropdown-navigation__overlay'
-        role='button'
-        onClick={handleClose}
-      />
+      <div className='⁂-dropdown-navigation__overlay' role='button' onClick={handleClose} />
 
-      <div
-        className='⁂-dropdown-navigation'
-      >
+      <div className='⁂-dropdown-navigation'>
         {account ? (
           <div>
             <Link to='/@{$username}' params={{ username: account.acct }} onClick={closeSidebar}>
@@ -188,10 +205,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
             </Link>
 
             {!settings.demetricator && (
-              <ProfileStats
-                account={account}
-                onClickHandler={handleClose}
-              />
+              <ProfileStats account={account} onClickHandler={handleClose} />
             )}
 
             <Stack space={4}>
@@ -209,16 +223,26 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 <DropdownNavigationLink
                   to='/follow_requests'
                   icon={require('@phosphor-icons/core/regular/user-plus.svg')}
-                  text={<FormattedMessage id='column.follow_requests' defaultMessage='Follow requests' />}
+                  text={
+                    <FormattedMessage
+                      id='column.follow_requests'
+                      defaultMessage='Follow requests'
+                    />
+                  }
                   onClick={closeSidebar}
                 />
               )}
 
-              {(interactionRequestsCount > 0) && (
+              {interactionRequestsCount > 0 && (
                 <DropdownNavigationLink
                   to='/interaction_requests'
                   icon={require('@phosphor-icons/core/regular/heart-half.svg')}
-                  text={<FormattedMessage id='column.interaction_requests' defaultMessage='Interaction requests' />}
+                  text={
+                    <FormattedMessage
+                      id='column.interaction_requests'
+                      defaultMessage='Interaction requests'
+                    />
+                  }
                   onClick={closeSidebar}
                 />
               )}
@@ -299,7 +323,9 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 <DropdownNavigationLink
                   to='/directory'
                   icon={require('@phosphor-icons/core/regular/address-book.svg')}
-                  text={<FormattedMessage id='column.directory' defaultMessage='Profile directory' />}
+                  text={
+                    <FormattedMessage id='column.directory' defaultMessage='Profile directory' />
+                  }
                   onClick={closeSidebar}
                 />
               )}
@@ -308,7 +334,12 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 <DropdownNavigationLink
                   to='/scheduled_statuses'
                   icon={require('@phosphor-icons/core/regular/hourglass.svg')}
-                  text={<FormattedMessage id='column.scheduled_statuses' defaultMessage='Scheduled posts' />}
+                  text={
+                    <FormattedMessage
+                      id='column.scheduled_statuses'
+                      defaultMessage='Scheduled posts'
+                    />
+                  }
                   onClick={closeSidebar}
                 />
               )}
@@ -322,43 +353,51 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 />
               )}
 
-              {features.publicTimeline && <>
-                <Divider />
+              {features.publicTimeline && (
+                <>
+                  <Divider />
 
-                <DropdownNavigationLink
-                  to='/timeline/local'
-                  icon={require('@phosphor-icons/core/regular/planet.svg')}
-                  text={features.federating ? <FormattedMessage id='tabs_bar.local' defaultMessage='Local' /> : <FormattedMessage id='tabs_bar.all' defaultMessage='All' />}
-                  onClick={closeSidebar}
-                />
-
-                {features.bubbleTimeline && (
                   <DropdownNavigationLink
-                    to='/timeline/bubble'
-                    icon={require('@phosphor-icons/core/regular/graph.svg')}
-                    text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
+                    to='/timeline/local'
+                    icon={require('@phosphor-icons/core/regular/planet.svg')}
+                    text={
+                      features.federating ? (
+                        <FormattedMessage id='tabs_bar.local' defaultMessage='Local' />
+                      ) : (
+                        <FormattedMessage id='tabs_bar.all' defaultMessage='All' />
+                      )
+                    }
                     onClick={closeSidebar}
                   />
-                )}
 
-                {features.federating && (
-                  <DropdownNavigationLink
-                    to='/timeline/fediverse'
-                    icon={require('@phosphor-icons/core/regular/fediverse-logo.svg')}
-                    text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
-                    onClick={closeSidebar}
-                  />
-                )}
+                  {features.bubbleTimeline && (
+                    <DropdownNavigationLink
+                      to='/timeline/bubble'
+                      icon={require('@phosphor-icons/core/regular/graph.svg')}
+                      text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
+                      onClick={closeSidebar}
+                    />
+                  )}
 
-                {features.wrenchedTimeline && (
-                  <DropdownNavigationLink
-                    to='/timeline/wrenched'
-                    icon={require('@phosphor-icons/core/regular/wrench.svg')}
-                    text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
-                    onClick={closeSidebar}
-                  />
-                )}
-              </>}
+                  {features.federating && (
+                    <DropdownNavigationLink
+                      to='/timeline/fediverse'
+                      icon={require('@phosphor-icons/core/regular/fediverse-logo.svg')}
+                      text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
+                      onClick={closeSidebar}
+                    />
+                  )}
+
+                  {features.wrenchedTimeline && (
+                    <DropdownNavigationLink
+                      to='/timeline/wrenched'
+                      icon={require('@phosphor-icons/core/regular/wrench.svg')}
+                      text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
+                      onClick={closeSidebar}
+                    />
+                  )}
+                </>
+              )}
 
               <Divider />
 
@@ -373,7 +412,12 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 <DropdownNavigationLink
                   to='/followed_tags'
                   icon={require('@phosphor-icons/core/regular/hash.svg')}
-                  text={<FormattedMessage id='column.followed_tags' defaultMessage='Followed hashtags' />}
+                  text={
+                    <FormattedMessage
+                      id='column.followed_tags'
+                      defaultMessage='Followed hashtags'
+                    />
+                  }
                   onClick={closeSidebar}
                 />
               )}
@@ -415,21 +459,31 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
               >
                 <button type='button' onClick={handleSwitcherClick}>
                   <Text tag='span'>
-                    <FormattedMessage id='profile_dropdown.switch_account' defaultMessage='Switch accounts' />
+                    <FormattedMessage
+                      id='profile_dropdown.switch_account'
+                      defaultMessage='Switch accounts'
+                    />
                   </Text>
 
-                  <Icon
-                    src={require('@phosphor-icons/core/regular/caret-down.svg')}
-                  />
+                  <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} />
                 </button>
 
                 {switcher && (
                   <div className='⁂-dropdown-navigation__account-switcher__accounts'>
-                    {otherAccounts.map(account => renderAccount(account))}
+                    {otherAccounts.map((account) => renderAccount(account))}
 
-                    <Link className='⁂-dropdown-navigation__account-switcher__add' to='/login/add' onClick={handleClose}>
+                    <Link
+                      className='⁂-dropdown-navigation__account-switcher__add'
+                      to='/login/add'
+                      onClick={handleClose}
+                    >
                       <Icon src={require('@phosphor-icons/core/regular/plus.svg')} />
-                      <Text size='sm' weight='medium'><FormattedMessage id='profile_dropdown.add_account' defaultMessage='Add an existing account' /></Text>
+                      <Text size='sm' weight='medium'>
+                        <FormattedMessage
+                          id='profile_dropdown.add_account'
+                          defaultMessage='Add an existing account'
+                        />
+                      </Text>
                     </Link>
                   </div>
                 )}
@@ -438,43 +492,51 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
           </div>
         ) : (
           <div>
-            {features.publicTimeline && !restrictUnauth.timelines.local && <>
-              <DropdownNavigationLink
-                to='/timeline/local'
-                icon={require('@phosphor-icons/core/regular/planet.svg')}
-                text={features.federating ? <FormattedMessage id='tabs_bar.local' defaultMessage='Local' /> : <FormattedMessage id='tabs_bar.all' defaultMessage='All' />}
-                onClick={closeSidebar}
-              />
-
-              {features.bubbleTimeline && !restrictUnauth.timelines.bubble && (
+            {features.publicTimeline && !restrictUnauth.timelines.local && (
+              <>
                 <DropdownNavigationLink
-                  to='/timeline/bubble'
-                  icon={require('@phosphor-icons/core/regular/graph.svg')}
-                  text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
+                  to='/timeline/local'
+                  icon={require('@phosphor-icons/core/regular/planet.svg')}
+                  text={
+                    features.federating ? (
+                      <FormattedMessage id='tabs_bar.local' defaultMessage='Local' />
+                    ) : (
+                      <FormattedMessage id='tabs_bar.all' defaultMessage='All' />
+                    )
+                  }
                   onClick={closeSidebar}
                 />
-              )}
 
-              {features.federating && !restrictUnauth.timelines.federated && (
-                <DropdownNavigationLink
-                  to='/timeline/fediverse'
-                  icon={require('@phosphor-icons/core/regular/fediverse-logo.svg')}
-                  text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
-                  onClick={closeSidebar}
-                />
-              )}
+                {features.bubbleTimeline && !restrictUnauth.timelines.bubble && (
+                  <DropdownNavigationLink
+                    to='/timeline/bubble'
+                    icon={require('@phosphor-icons/core/regular/graph.svg')}
+                    text={<FormattedMessage id='tabs_bar.bubble' defaultMessage='Bubble' />}
+                    onClick={closeSidebar}
+                  />
+                )}
 
-              {features.wrenchedTimeline && !restrictUnauth.timelines.wrenched && (
-                <DropdownNavigationLink
-                  to='/timeline/wrenched'
-                  icon={require('@phosphor-icons/core/regular/wrench.svg')}
-                  text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
-                  onClick={closeSidebar}
-                />
-              )}
+                {features.federating && !restrictUnauth.timelines.federated && (
+                  <DropdownNavigationLink
+                    to='/timeline/fediverse'
+                    icon={require('@phosphor-icons/core/regular/fediverse-logo.svg')}
+                    text={<FormattedMessage id='tabs_bar.fediverse' defaultMessage='Fediverse' />}
+                    onClick={closeSidebar}
+                  />
+                )}
 
-              <Divider />
-            </>}
+                {features.wrenchedTimeline && !restrictUnauth.timelines.wrenched && (
+                  <DropdownNavigationLink
+                    to='/timeline/wrenched'
+                    icon={require('@phosphor-icons/core/regular/wrench.svg')}
+                    text={<FormattedMessage id='tabs_bar.wrenched' defaultMessage='Wrenched' />}
+                    onClick={closeSidebar}
+                  />
+                )}
+
+                <Divider />
+              </>
+            )}
 
             <DropdownNavigationLink
               to='/login'

@@ -19,8 +19,14 @@ const AVATAR_SIZE = 42;
 
 const messages = defineMessages({
   avatar: { id: 'account.avatar.alt', defaultMessage: 'Avatar' },
-  avatar_with_username: { id: 'account.avatar.with_username', defaultMessage: 'Avatar for {username}' },
-  avatar_with_content: { id: 'account.avatar.with_content', defaultMessage: 'Avatar for {username}: {alt}' },
+  avatar_with_username: {
+    id: 'account.avatar.with_username',
+    defaultMessage: 'Avatar for {username}',
+  },
+  avatar_with_content: {
+    id: 'account.avatar.with_content',
+    defaultMessage: 'Avatar for {username}: {alt}',
+  },
 });
 
 interface IAvatar extends Pick<IStillImage, 'alt' | 'src' | 'staticSrc' | 'onError' | 'className'> {
@@ -45,7 +51,7 @@ const Avatar = (props: IAvatar) => {
   const [color, setColor] = useState<string | undefined>(undefined);
   const [isAvatarMissing, setIsAvatarMissing] = useState(false);
 
-  const handleLoadFailure = () =>{
+  const handleLoadFailure = () => {
     setIsAvatarMissing(true);
   };
 
@@ -57,14 +63,17 @@ const Avatar = (props: IAvatar) => {
       return;
     }
 
-    fac.getColorAsync(src).then(color => {
-      if (!color.error) {
-        COLOR_CACHE.set(src, color.hex);
-        setColor(color.hex);
-      }
-    }).catch(() =>{
-      setColor(undefined);
-    });
+    fac
+      .getColorAsync(src)
+      .then((color) => {
+        if (!color.error) {
+          COLOR_CACHE.set(src, color.hex);
+          setColor(color.hex);
+        }
+      })
+      .catch(() => {
+        setColor(undefined);
+      });
   }, [src, isCat]);
 
   const style: React.CSSProperties = React.useMemo(() => {
@@ -86,16 +95,19 @@ const Avatar = (props: IAvatar) => {
         content={
           <Stack space={1} className='max-h-[32rem] max-w-96 overflow-auto p-4'>
             <Text weight='semibold'>
-              <FormattedMessage id='account.avatar.description' defaultMessage='Avatar description' />
+              <FormattedMessage
+                id='account.avatar.description'
+                defaultMessage='Avatar description'
+              />
             </Text>
-            <Text className='whitespace-pre-wrap'>
-              {alt}
-            </Text>
+            <Text className='whitespace-pre-wrap'>{alt}</Text>
           </Stack>
         }
         isFlush
       >
-        <AltIndicator message={<FormattedMessage id='account.avatar.alt' defaultMessage='Avatar' />} />
+        <AltIndicator
+          message={<FormattedMessage id='account.avatar.alt' defaultMessage='Avatar' />}
+        />
       </Popover>
     );
   }
@@ -104,7 +116,11 @@ const Avatar = (props: IAvatar) => {
     return (
       <div
         style={style}
-        className={clsx('relative rounded-lg bg-gray-200 dark:bg-gray-900', isCat && 'avatar__cat', className)}
+        className={clsx(
+          'relative rounded-lg bg-gray-200 dark:bg-gray-900',
+          isCat && 'avatar__cat',
+          className,
+        )}
       >
         <div className='absolute inset-0 z-[1] flex items-center justify-center rounded-[inherit] bg-gray-200 dark:bg-gray-900'>
           <Icon
@@ -116,11 +132,12 @@ const Avatar = (props: IAvatar) => {
     );
   }
 
-  const altText = props.showAlt && alt
-    ? intl.formatMessage(messages.avatar_with_content, { username: props.username, alt })
-    : props.username
-      ? intl.formatMessage(messages.avatar_with_username, { username: props.username })
-      : intl.formatMessage(messages.avatar);
+  const altText =
+    props.showAlt && alt
+      ? intl.formatMessage(messages.avatar_with_content, { username: props.username, alt })
+      : props.username
+        ? intl.formatMessage(messages.avatar_with_username, { username: props.username })
+        : intl.formatMessage(messages.avatar);
 
   return (
     <StillImage

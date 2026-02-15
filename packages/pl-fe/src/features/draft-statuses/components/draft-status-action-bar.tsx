@@ -15,8 +15,14 @@ import type { DraftStatus } from '@/queries/statuses/use-draft-statuses';
 
 const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.draft_status_delete.confirm', defaultMessage: 'Discard' },
-  deleteHeading: { id: 'confirmations.draft_status_delete.heading', defaultMessage: 'Cancel draft post' },
-  deleteMessage: { id: 'confirmations.draft_status_delete.message', defaultMessage: 'Are you sure you want to discard this draft post?' },
+  deleteHeading: {
+    id: 'confirmations.draft_status_delete.heading',
+    defaultMessage: 'Cancel draft post',
+  },
+  deleteMessage: {
+    id: 'confirmations.draft_status_delete.message',
+    defaultMessage: 'Are you sure you want to discard this draft post?',
+  },
 });
 
 interface IDraftStatusActionBar {
@@ -48,7 +54,18 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
 
   const handleEditClick = () => {
     if (status.in_reply_to_id) dispatch(fetchStatus(status.in_reply_to_id));
-    dispatch(setComposeToStatus(status, status.poll, source.text, source.spoiler_text, source.content_type, false, source.draft_id, source.editorState));
+    dispatch(
+      setComposeToStatus(
+        status,
+        status.poll,
+        source.text,
+        source.spoiler_text,
+        source.content_type,
+        false,
+        source.draft_id,
+        source.editorState,
+      ),
+    );
     openModal('COMPOSE');
   };
 

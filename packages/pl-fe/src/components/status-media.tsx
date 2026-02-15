@@ -14,7 +14,18 @@ import type { MediaAttachment } from 'pl-api';
 
 interface IStatusMedia {
   /** Status entity to render media for. */
-  status: Pick<Status, 'id' | 'account' | 'card' | 'expectsCard' | 'filtered' | 'media_attachments' | 'quote_id' | 'sensitive' | 'visibility'>;
+  status: Pick<
+    Status,
+    | 'id'
+    | 'account'
+    | 'card'
+    | 'expectsCard'
+    | 'filtered'
+    | 'media_attachments'
+    | 'quote_id'
+    | 'sensitive'
+    | 'visibility'
+  >;
   /** Whether to display compact media. */
   muted?: boolean;
   /** Callback when compact media is clicked. */
@@ -22,11 +33,7 @@ interface IStatusMedia {
 }
 
 /** Render media attachments for a status. */
-const StatusMedia: React.FC<IStatusMedia> = ({
-  status,
-  muted = false,
-  onClick,
-}) => {
+const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick }) => {
   const { openModal } = useModalsActions();
   const { displayMedia } = useSettings();
 
@@ -37,14 +44,22 @@ const StatusMedia: React.FC<IStatusMedia> = ({
 
   let media: JSX.Element | null = null;
 
-  const renderLoadingMediaGallery = (): JSX.Element => <div className='media_gallery' style={{ height: '285px' }} />;
+  const renderLoadingMediaGallery = (): JSX.Element => (
+    <div className='media_gallery' style={{ height: '285px' }} />
+  );
 
   const renderLoadingVideoPlayer = (): JSX.Element => (
-    <div className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat' style={{ height: '285px' }} />
+    <div
+      className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat'
+      style={{ height: '285px' }}
+    />
   );
 
   const renderLoadingAudioPlayer = (): JSX.Element => (
-    <div className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat' style={{ height: '285px' }} />
+    <div
+      className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat'
+      style={{ height: '285px' }}
+    />
   );
 
   const openMedia = (media: Array<MediaAttachment>, index: number) => {
@@ -53,12 +68,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
 
   if (size > 0 && firstAttachment) {
     if (muted) {
-      media = (
-        <AttachmentThumbs
-          status={status}
-          onClick={onClick}
-        />
-      );
+      media = <AttachmentThumbs status={status} onClick={onClick} />;
     } else if (size === 1 && firstAttachment.type === 'video') {
       const video = firstAttachment;
 
@@ -84,7 +94,11 @@ const StatusMedia: React.FC<IStatusMedia> = ({
           <Audio
             src={attachment.url}
             alt={attachment.description}
-            poster={attachment.preview_url !== attachment.url ? attachment.preview_url : status.account.avatar_static}
+            poster={
+              attachment.preview_url !== attachment.url
+                ? attachment.preview_url
+                : status.account.avatar_static
+            }
             backgroundColor={attachment.meta.colors?.background}
             foregroundColor={attachment.meta.colors?.foreground}
             accentColor={attachment.meta.colors?.accent}
@@ -106,25 +120,18 @@ const StatusMedia: React.FC<IStatusMedia> = ({
       );
     }
   } else if (!status.quote_id && status.card) {
-    media = (
-      <PreviewCard
-        onOpenMedia={openMedia}
-        card={status.card}
-        compact
-      />
-    );
+    media = <PreviewCard onOpenMedia={openMedia} card={status.card} compact />;
   } else if (status.expectsCard) {
-    media = (
-      <PlaceholderCard />
-    );
+    media = <PlaceholderCard />;
   }
 
   if (media) {
     return (
       // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-      <div onClick={e =>{
-        e.stopPropagation();
-      }}
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
       >
         {media}
       </div>

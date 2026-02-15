@@ -20,7 +20,7 @@ const ConversationsList: React.FC = () => {
   const isLoading = useAppSelector((state) => state.conversations.isLoading);
   const hasMore = useAppSelector((state) => state.conversations.hasMore);
 
-  const getCurrentIndex = (id: string) => conversations.findIndex(x => x.id === id);
+  const getCurrentIndex = (id: string) => conversations.findIndex((x) => x.id === id);
 
   const handleMoveUp = (id: string) => {
     const elementIndex = getCurrentIndex(id) - 1;
@@ -29,12 +29,23 @@ const ConversationsList: React.FC = () => {
 
   const handleMoveDown = (id: string) => {
     const elementIndex = getCurrentIndex(id) + 1;
-    selectChild(elementIndex, ref, document.getElementById('direct-list') ?? undefined, conversations.length);
+    selectChild(
+      elementIndex,
+      ref,
+      document.getElementById('direct-list') ?? undefined,
+      conversations.length,
+    );
   };
 
-  const handleLoadOlder = useCallback(debounce(() => {
-    if (hasMore) dispatch(expandConversations());
-  }, { wait: 300, leading: true }), [hasMore]);
+  const handleLoadOlder = useCallback(
+    debounce(
+      () => {
+        if (hasMore) dispatch(expandConversations());
+      },
+      { wait: 300, leading: true },
+    ),
+    [hasMore],
+  );
 
   return (
     <ScrollableList
@@ -45,7 +56,12 @@ const ConversationsList: React.FC = () => {
       id='direct-list'
       isLoading={isLoading}
       showLoading={isLoading && conversations.length === 0}
-      emptyMessageText={<FormattedMessage id='empty_column.direct' defaultMessage="You don't have any direct messages yet. When you send or receive one, it will show up here." />}
+      emptyMessageText={
+        <FormattedMessage
+          id='empty_column.direct'
+          defaultMessage="You don't have any direct messages yet. When you send or receive one, it will show up here."
+        />
+      }
       listClassName='⁂-status-list'
     >
       {conversations.map((item: any) => (

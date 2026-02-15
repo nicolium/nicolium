@@ -16,10 +16,16 @@ const useSuggestedAccounts = () => {
 
   return useQuery({
     queryKey: ['suggestions'],
-    queryFn: () => client.myAccount.getSuggestions().then((suggestions) => {
-      dispatch(importEntities({ accounts: suggestions.map(({ account }) => account) }));
-      return suggestions.map(({ account, ...suggestion }): MinifiedSuggestion => ({ account_id: account.id, ...suggestion }));
-    }),
+    queryFn: () =>
+      client.myAccount.getSuggestions().then((suggestions) => {
+        dispatch(importEntities({ accounts: suggestions.map(({ account }) => account) }));
+        return suggestions.map(
+          ({ account, ...suggestion }): MinifiedSuggestion => ({
+            account_id: account.id,
+            ...suggestion,
+          }),
+        );
+      }),
     enabled: features.suggestions || features.suggestionsV2,
   });
 };

@@ -23,12 +23,23 @@ const EventDate: React.FC<IEventDate> = ({ status }) => {
     const endDate = new Date(event.end_time);
 
     const sameYear = startDate.getFullYear() === endDate.getFullYear();
-    const sameDay = startDate.getDate() === endDate.getDate() && startDate.getMonth() === endDate.getMonth() && sameYear;
+    const sameDay =
+      startDate.getDate() === endDate.getDate() &&
+      startDate.getMonth() === endDate.getMonth() &&
+      sameYear;
 
     if (sameDay) {
       date = (
         <>
-          <FormattedDate value={event.start_time} year={sameYear ? undefined : '2-digit'} month='short' day='2-digit' weekday='short' hour='2-digit' minute='2-digit' />
+          <FormattedDate
+            value={event.start_time}
+            year={sameYear ? undefined : '2-digit'}
+            month='short'
+            day='2-digit'
+            weekday='short'
+            hour='2-digit'
+            minute='2-digit'
+          />
           {' - '}
           <FormattedDate value={event.end_time} hour='2-digit' minute='2-digit' />
         </>
@@ -36,15 +47,35 @@ const EventDate: React.FC<IEventDate> = ({ status }) => {
     } else {
       date = (
         <>
-          <FormattedDate value={event.start_time} year='2-digit' month='short' day='2-digit' weekday='short' />
+          <FormattedDate
+            value={event.start_time}
+            year='2-digit'
+            month='short'
+            day='2-digit'
+            weekday='short'
+          />
           {' - '}
-          <FormattedDate value={event.end_time} year='2-digit' month='short' day='2-digit' weekday='short' />
+          <FormattedDate
+            value={event.end_time}
+            year='2-digit'
+            month='short'
+            day='2-digit'
+            weekday='short'
+          />
         </>
       );
     }
   } else {
     date = (
-      <FormattedDate value={event.start_time} year='2-digit' month='short' day='2-digit' weekday='short' hour='2-digit' minute='2-digit' />
+      <FormattedDate
+        value={event.start_time}
+        year='2-digit'
+        month='short'
+        day='2-digit'
+        weekday='short'
+        hour='2-digit'
+        minute='2-digit'
+      />
     );
   }
 

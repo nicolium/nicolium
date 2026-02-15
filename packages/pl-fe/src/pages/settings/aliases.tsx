@@ -15,14 +15,21 @@ import Text from '@/components/ui/text';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useSearchAccounts } from '@/queries/search/use-search';
-import { useAccountAliases, useAddAccountAlias, useDeleteAccountAlias } from '@/queries/settings/use-account-aliases';
+import {
+  useAccountAliases,
+  useAddAccountAlias,
+  useDeleteAccountAlias,
+} from '@/queries/settings/use-account-aliases';
 
 const messages = defineMessages({
   heading: { id: 'column.aliases', defaultMessage: 'Account aliases' },
   subheading_add_new: { id: 'column.aliases.subheading_add_new', defaultMessage: 'Add new alias' },
   create_error: { id: 'column.aliases.create_error', defaultMessage: 'Error creating alias' },
   delete_error: { id: 'column.aliases.delete_error', defaultMessage: 'Error deleting alias' },
-  subheading_aliases: { id: 'column.aliases.subheading_aliases', defaultMessage: 'Current aliases' },
+  subheading_aliases: {
+    id: 'column.aliases.subheading_aliases',
+    defaultMessage: 'Current aliases',
+  },
   delete: { id: 'column.aliases.delete', defaultMessage: 'Delete' },
   add: { id: 'aliases.account.add', defaultMessage: 'Create alias' },
   search: { id: 'aliases.search', defaultMessage: 'Search your old account' },
@@ -48,7 +55,7 @@ const Account: React.FC<IAccount> = ({ accountId, aliases }) => {
   const name = features.accountMoving ? account?.acct : apId;
   const added = name ? aliases.includes(name) : false;
 
-  const handleOnAdd = () =>{
+  const handleOnAdd = () => {
     addAccountAlias(name!);
   };
 
@@ -58,7 +65,13 @@ const Account: React.FC<IAccount> = ({ accountId, aliases }) => {
 
   if (!added && accountId !== me) {
     button = (
-      <IconButton src={require('@phosphor-icons/core/regular/plus.svg')} className='text-gray-400 hover:text-gray-600' iconClassName='h-5 w-5' title={intl.formatMessage(messages.add)} onClick={handleOnAdd} />
+      <IconButton
+        src={require('@phosphor-icons/core/regular/plus.svg')}
+        className='text-gray-400 hover:text-gray-600'
+        iconClassName='h-5 w-5'
+        title={intl.formatMessage(messages.add)}
+        onClick={handleOnAdd}
+      />
     );
   }
 
@@ -120,7 +133,11 @@ const Search: React.FC<IAliasesSearch> = ({ onSubmit }) => {
           onClick={handleClear}
           title={intl.formatMessage(messages.clear)}
         >
-          <Icon src={require('@phosphor-icons/core/regular/backspace.svg')} className={clsx('size-5 text-gray-600', { 'hidden': !hasValue })} aria-hidden />
+          <Icon
+            src={require('@phosphor-icons/core/regular/backspace.svg')}
+            className={clsx('size-5 text-gray-600', { hidden: !hasValue })}
+            aria-hidden
+          />
         </button>
       </label>
       <Button onClick={handleSubmit}>{intl.formatMessage(messages.searchTitle)}</Button>
@@ -137,11 +154,16 @@ const AliasesPage = () => {
   const { data: searchAccountIds = [], isFetched } = useSearchAccounts(query);
   const { mutate: deleteAccountAlias } = useDeleteAccountAlias();
 
-  const handleAliasDelete: React.MouseEventHandler<HTMLButtonElement> = e => {
+  const handleAliasDelete: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     deleteAccountAlias(e.currentTarget.dataset.value as string);
   };
 
-  const emptyMessage = <FormattedMessage id='empty_column.aliases' defaultMessage="You haven't created any account alias yet." />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.aliases'
+      defaultMessage="You haven't created any account alias yet."
+    />
+  );
 
   return (
     <Column className='flex-1' label={intl.formatMessage(messages.heading)}>
@@ -149,36 +171,44 @@ const AliasesPage = () => {
         <CardTitle title={intl.formatMessage(messages.subheading_add_new)} />
       </CardHeader>
       <Search onSubmit={setQuery} />
-      {
-        isFetched && searchAccountIds.length === 0 ? (
-          <div className='empty-column-indicator'>
-            <FormattedMessage id='empty_column.aliases.suggestions' defaultMessage='There are no account suggestions available for the provided term.' />
-          </div>
-        ) : (
-          <div className='mb-4 max-h-72 overflow-y-auto'>
-            {searchAccountIds.map(accountId => <Account key={accountId} accountId={accountId} aliases={aliases} />)}
-          </div>
-        )
-      }
+      {isFetched && searchAccountIds.length === 0 ? (
+        <div className='empty-column-indicator'>
+          <FormattedMessage
+            id='empty_column.aliases.suggestions'
+            defaultMessage='There are no account suggestions available for the provided term.'
+          />
+        </div>
+      ) : (
+        <div className='mb-4 max-h-72 overflow-y-auto'>
+          {searchAccountIds.map((accountId) => (
+            <Account key={accountId} accountId={accountId} aliases={aliases} />
+          ))}
+        </div>
+      )}
       <CardHeader>
         <CardTitle title={intl.formatMessage(messages.subheading_aliases)} />
       </CardHeader>
       <div className='flex-1'>
-        <ScrollableList
-          scrollKey='aliases'
-          emptyMessageText={emptyMessage}
-        >
+        <ScrollableList scrollKey='aliases' emptyMessageText={emptyMessage}>
           {aliases.map((alias, i) => (
             <HStack alignItems='center' justifyContent='between' space={1} key={i} className='p-2'>
               <div>
-                <Text tag='span' theme='muted'><FormattedMessage id='aliases.account_label' defaultMessage='Old account:' /></Text>
-                {' '}
+                <Text tag='span' theme='muted'>
+                  <FormattedMessage id='aliases.account_label' defaultMessage='Old account:' />
+                </Text>{' '}
                 <Text tag='span'>{alias}</Text>
               </div>
-              <button onClick={handleAliasDelete} data-value={alias} aria-label={intl.formatMessage(messages.delete)}>
+              <button
+                onClick={handleAliasDelete}
+                data-value={alias}
+                aria-label={intl.formatMessage(messages.delete)}
+              >
                 <Text theme='muted' className='flex items-center gap-1'>
                   <Icon src={require('@phosphor-icons/core/regular/x.svg')} />
-                  <FormattedMessage id='aliases.aliases_list_delete' defaultMessage='Unlink alias' />
+                  <FormattedMessage
+                    id='aliases.aliases_list_delete'
+                    defaultMessage='Unlink alias'
+                  />
                 </Text>
               </button>
             </HStack>

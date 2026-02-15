@@ -10,7 +10,10 @@ import { useInstance } from '@/hooks/use-instance';
 import SiteWallet from './site-wallet';
 
 const messages = defineMessages({
-  actionTitle: { id: 'crypto_donate_panel.actions.view', defaultMessage: 'Click to see {count, plural, one {# wallet} other {# wallets}}' },
+  actionTitle: {
+    id: 'crypto_donate_panel.actions.view',
+    defaultMessage: 'Click to see {count, plural, one {# wallet} other {# wallets}}',
+  },
 });
 
 interface ICryptoDonatePanel {
@@ -34,7 +37,9 @@ const CryptoDonatePanel: React.FC<ICryptoDonatePanel> = ({ limit = 3 }): JSX.Ele
 
   return (
     <Widget
-      title={<FormattedMessage id='crypto_donate_panel.heading' defaultMessage='Donate cryptocurrency' />}
+      title={
+        <FormattedMessage id='crypto_donate_panel.heading' defaultMessage='Donate cryptocurrency' />
+      }
       onActionClick={handleAction}
       actionTitle={intl.formatMessage(messages.actionTitle, { count: addresses.length })}
     >

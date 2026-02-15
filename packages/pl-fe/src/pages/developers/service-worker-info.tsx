@@ -27,12 +27,13 @@ const useRegistration = () => {
 
   useEffect(() => {
     if (isSupported) {
-      navigator.serviceWorker.getRegistration()
-        .then(r => {
+      navigator.serviceWorker
+        .getRegistration()
+        .then((r) => {
           setRegistration(r);
           setLoading(false);
         })
-        .catch(() =>{
+        .catch(() => {
           setLoading(false);
         });
     } else {
@@ -65,44 +66,19 @@ const ServiceWorkerInfo: React.FC = () => {
 
   const getMessage = () => {
     if (isLoading) {
-      return (
-        <FormattedMessage
-          id='sw.state.loading'
-          defaultMessage='Loading…'
-        />
-      );
+      return <FormattedMessage id='sw.state.loading' defaultMessage='Loading…' />;
     } else if (!isLoading && !registration) {
-      return (
-        <FormattedMessage
-          id='sw.state.unavailable'
-          defaultMessage='Unavailable'
-        />
-      );
+      return <FormattedMessage id='sw.state.unavailable' defaultMessage='Unavailable' />;
     } else if (registration?.waiting) {
-      return (
-        <FormattedMessage
-          id='sw.state.waiting'
-          defaultMessage='Waiting'
-        />
-      );
+      return <FormattedMessage id='sw.state.waiting' defaultMessage='Waiting' />;
     } else if (registration?.active) {
-      return (
-        <FormattedMessage
-          id='sw.state.active'
-          defaultMessage='Active'
-        />
-      );
+      return <FormattedMessage id='sw.state.active' defaultMessage='Active' />;
     } else {
-      return (
-        <FormattedMessage
-          id='sw.state.unknown'
-          defaultMessage='Unknown'
-        />
-      );
+      return <FormattedMessage id='sw.state.unknown' defaultMessage='Unknown' />;
     }
   };
 
-  const handleRestart = async() => {
+  const handleRestart = async () => {
     await unregisterSW();
     window.location.reload();
   };
@@ -114,7 +90,9 @@ const ServiceWorkerInfo: React.FC = () => {
           <ListItem label={intl.formatMessage(messages.status)}>
             <HStack alignItems='center' space={2}>
               <Indicator state={getState()} />
-              <Text size='md' theme='muted'>{getMessage()}</Text>
+              <Text size='md' theme='muted'>
+                {getMessage()}
+              </Text>
             </HStack>
           </ListItem>
 

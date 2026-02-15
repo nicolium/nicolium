@@ -30,22 +30,46 @@ const WIDTH = 1000;
 const messages = defineMessages({
   heading: { id: 'column.circle', defaultMessage: 'Interactions circle' },
   pending: { id: 'interactions_circle.state.pending', defaultMessage: 'Fetching interactions' },
-  fetchingStatuses: { id: 'interactions_circle.state.fetching_statuses', defaultMessage: 'Fetching posts' },
-  fetchingFavourites: { id: 'interactions_circle.state.fetching_favourites', defaultMessage: 'Fetching likes' },
-  fetchingAvatars: { id: 'interactions_circle.state.fetching_avatars', defaultMessage: 'Fetching avatars' },
+  fetchingStatuses: {
+    id: 'interactions_circle.state.fetching_statuses',
+    defaultMessage: 'Fetching posts',
+  },
+  fetchingFavourites: {
+    id: 'interactions_circle.state.fetching_favourites',
+    defaultMessage: 'Fetching likes',
+  },
+  fetchingAvatars: {
+    id: 'interactions_circle.state.fetching_avatars',
+    defaultMessage: 'Fetching avatars',
+  },
   drawing: { id: 'interactions_circle.state.drawing', defaultMessage: 'Drawing circle' },
   done: { id: 'interactions_circle.state.done', defaultMessage: 'Finalizing…' },
-  imageLoadingError: { id: 'interactions_circle.error.image_loading', defaultMessage: 'Failed to load one of the avatars' },
-  imageLoadingMultipleError: { id: 'interactions_circle.error.image_loading.multiple', defaultMessage: 'Failed to load some of the avatars' },
+  imageLoadingError: {
+    id: 'interactions_circle.error.image_loading',
+    defaultMessage: 'Failed to load one of the avatars',
+  },
+  imageLoadingMultipleError: {
+    id: 'interactions_circle.error.image_loading.multiple',
+    defaultMessage: 'Failed to load some of the avatars',
+  },
 });
 
 const CirclePage: React.FC = () => {
   const [{ state, progress }, setProgress] = useState<{
-    state: 'unrequested' | 'pending' | 'fetchingStatuses' | 'fetchingFavourites' | 'fetchingAvatars' | 'drawing' | 'done';
+    state:
+      | 'unrequested'
+      | 'pending'
+      | 'fetchingStatuses'
+      | 'fetchingFavourites'
+      | 'fetchingAvatars'
+      | 'drawing'
+      | 'done';
     progress: number;
   }>({ state: 'unrequested', progress: 0 });
   const [expanded, setExpanded] = useState(false);
-  const [users, setUsers] = useState<Array<{ id: string; avatar?: string; avatar_description?: string; acct: string }>>();
+  const [users, setUsers] = useState<
+    Array<{ id: string; avatar?: string; avatar_description?: string; acct: string }>
+  >();
 
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -54,8 +78,7 @@ const CirclePage: React.FC = () => {
   const { openModal } = useModalsActions();
   const { account } = useOwnAccount();
 
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   const onSave: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
@@ -74,89 +97,97 @@ const CirclePage: React.FC = () => {
     canvasRef.current!.toBlob((blob) => {
       const file = new File([blob!], 'interactions_circle.png', { type: 'image/png' });
 
-      dispatch(uploadFile(file, intl, (data) => {
-        dispatch(uploadComposeSuccess('compose-modal', data));
-        openModal('COMPOSE');
-      }));
+      dispatch(
+        uploadFile(file, intl, (data) => {
+          dispatch(uploadComposeSuccess('compose-modal', data));
+          openModal('COMPOSE');
+        }),
+      );
     }, 'image/png');
   };
 
   const handleRequest = () => {
     setProgress({ state: 'pending', progress: 0 });
 
-    dispatch(processCircle(setProgress)).then(async (users) => {
-      setUsers(users);
+    dispatch(processCircle(setProgress))
+      .then(async (users) => {
+        setUsers(users);
 
-      // Adapted from twitter-interaction-circles, licensed under MIT License
-      // https://github.com/duiker101/twitter-interaction-circles
-      const ctx = canvasRef.current?.getContext('2d')!;
+        // Adapted from twitter-interaction-circles, licensed under MIT License
+        // https://github.com/duiker101/twitter-interaction-circles
+        const ctx = canvasRef.current?.getContext('2d')!;
 
-      const ownAvatar = account?.avatar ?? avatarMissing;
+        const ownAvatar = account?.avatar ?? avatarMissing;
 
-      let imageLoadingErorrs = 0;
+        let imageLoadingErorrs = 0;
 
-      for (const layer of [
-        { index: 0, off: 0, distance: 0, count: 1, radius: 110, users: [{ avatar: ownAvatar }] },
-        { index: 1, off: 1, distance: 200, count: 8, radius: 64, users: users.slice(0, 8) },
-        { index: 2, off: 9, distance: 330, count: 15, radius: 58, users: users.slice(8, 23) },
-        { index: 3, off: 24, distance: 450, count: 26, radius: 50, users: users.slice(23, 49) },
-      ]) {
-        const { index, off, count, radius, distance, users } = layer;
+        for (const layer of [
+          { index: 0, off: 0, distance: 0, count: 1, radius: 110, users: [{ avatar: ownAvatar }] },
+          { index: 1, off: 1, distance: 200, count: 8, radius: 64, users: users.slice(0, 8) },
+          { index: 2, off: 9, distance: 330, count: 15, radius: 58, users: users.slice(8, 23) },
+          { index: 3, off: 24, distance: 450, count: 26, radius: 50, users: users.slice(23, 49) },
+        ]) {
+          const { index, off, count, radius, distance, users } = layer;
 
-        const angleSize = 360 / count;
+          const angleSize = 360 / count;
 
-        for (let i = 0; i < count; i++) {
-          setProgress({ state: 'drawing', progress: 90 + (i + off) / users.length * 10 });
+          for (let i = 0; i < count; i++) {
+            setProgress({ state: 'drawing', progress: 90 + ((i + off) / users.length) * 10 });
 
-          const offset = index * 30;
+            const offset = index * 30;
 
-          const r = toRad(i * angleSize + offset);
+            const r = toRad(i * angleSize + offset);
 
-          const centerX = Math.cos(r) * distance + WIDTH / 2;
-          const centerY = Math.sin(r) * distance + HEIGHT / 2;
+            const centerX = Math.cos(r) * distance + WIDTH / 2;
+            const centerY = Math.sin(r) * distance + HEIGHT / 2;
 
-          if (!users[i]) break;
+            if (!users[i]) break;
 
-          const avatarUrl = users[i].avatar ?? avatarMissing;
+            const avatarUrl = users[i].avatar ?? avatarMissing;
 
-          try {
-            // eslint-disable-next-line no-loop-func
-            await new Promise(resolve => {
-              const img = new Image();
+            try {
+              // eslint-disable-next-line no-loop-func
+              await new Promise((resolve) => {
+                const img = new Image();
 
-              img.onload = () => {
-                ctx.save();
-                ctx.beginPath();
-                ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
-                ctx.closePath();
-                ctx.clip();
+                img.onload = () => {
+                  ctx.save();
+                  ctx.beginPath();
+                  ctx.arc(centerX, centerY, radius, 0, 2 * Math.PI);
+                  ctx.closePath();
+                  ctx.clip();
 
-                ctx.drawImage(img, centerX - radius, centerY - radius, radius * 2, radius * 2);
-                ctx.restore();
+                  ctx.drawImage(img, centerX - radius, centerY - radius, radius * 2, radius * 2);
+                  ctx.restore();
 
-                resolve(null);
-              };
+                  resolve(null);
+                };
 
-              img.onerror = () => {
-                imageLoadingErorrs++;
-                resolve(null);
-              };
+                img.onerror = () => {
+                  imageLoadingErorrs++;
+                  resolve(null);
+                };
 
-              img.setAttribute('crossorigin', 'anonymous');
-              img.src = avatarUrl;
-            });
-          } catch (_) {
-            //
+                img.setAttribute('crossorigin', 'anonymous');
+                img.src = avatarUrl;
+              });
+            } catch (_) {
+              //
+            }
           }
         }
-      }
 
-      if (imageLoadingErorrs) {
-        toast.info(imageLoadingErorrs > 1 ? messages.imageLoadingMultipleError : messages.imageLoadingError);
-      }
+        if (imageLoadingErorrs) {
+          toast.info(
+            imageLoadingErorrs > 1
+              ? messages.imageLoadingMultipleError
+              : messages.imageLoadingError,
+          );
+        }
 
-      setProgress({ state: 'done', progress: 100 });
-    }).catch(() => {});
+        setProgress({ state: 'done', progress: 100 });
+      })
+      .catch(() => {});
   };
 
   if (state === 'unrequested') {
@@ -164,7 +195,11 @@ const CirclePage: React.FC = () => {
       <Column label={intl.formatMessage(messages.heading)}>
         <Form onSubmit={handleRequest}>
           <Text size='xl' weight='semibold'>
-            <FormattedMessage id='interactions_circle.confirmation_heading' defaultMessage='Do you want to generate an interaction circle for the user @{username}?' values={{ username: account?.acct }} />
+            <FormattedMessage
+              id='interactions_circle.confirmation_heading'
+              defaultMessage='Do you want to generate an interaction circle for the user @{username}?'
+              values={{ username: account?.acct }}
+            />
           </Text>
 
           <div className='mx-auto max-w-md rounded-lg p-2 black:border black:border-gray-800'>
@@ -202,15 +237,22 @@ const CirclePage: React.FC = () => {
 
         <div className='w-full'>
           <Accordion
-            headline={<FormattedMessage id='interactions_circle.user_list' defaultMessage='User list' />}
+            headline={
+              <FormattedMessage id='interactions_circle.user_list' defaultMessage='User list' />
+            }
             expanded={expanded}
             onToggle={setExpanded}
           >
             <Stack space={2}>
-              {users?.map(user => (
+              {users?.map((user) => (
                 <Link key={user.id} to='/@{$username}' params={{ username: user.acct }}>
                   <HStack space={2} alignItems='center'>
-                    <Avatar size={20} src={user.avatar!} alt={user.avatar_description} username={user.acct} />
+                    <Avatar
+                      size={20}
+                      src={user.avatar!}
+                      alt={user.avatar_description}
+                      username={user.acct}
+                    />
                     <Text size='sm' weight='semibold' truncate>
                       {user.acct}
                     </Text>
@@ -222,10 +264,16 @@ const CirclePage: React.FC = () => {
         </div>
 
         <HStack space={2}>
-          <Button onClick={onSave} icon={require('@phosphor-icons/core/regular/download-simple.svg')}>
+          <Button
+            onClick={onSave}
+            icon={require('@phosphor-icons/core/regular/download-simple.svg')}
+          >
             <FormattedMessage id='interactions_circle.download' defaultMessage='Download' />
           </Button>
-          <Button onClick={onCompose} icon={require('@phosphor-icons/core/regular/note-pencil.svg')}>
+          <Button
+            onClick={onCompose}
+            icon={require('@phosphor-icons/core/regular/note-pencil.svg')}
+          >
             <FormattedMessage id='interactions_circle.compose' defaultMessage='Share' />
           </Button>
         </HStack>

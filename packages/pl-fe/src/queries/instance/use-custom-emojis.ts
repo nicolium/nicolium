@@ -8,13 +8,15 @@ import { queryClient } from '../client';
 
 import type { CustomEmoji, PlApiClient } from 'pl-api';
 
-const customEmojisQueryOptions = (client: PlApiClient) => queryOptions({
-  queryKey: ['instance', 'customEmojis'],
-  queryFn: () => client.instance.getCustomEmojis().then((emojis) => {
-    addCustomToPool(buildCustomEmojis(emojis));
-    return emojis;
-  }),
-});
+const customEmojisQueryOptions = (client: PlApiClient) =>
+  queryOptions({
+    queryKey: ['instance', 'customEmojis'],
+    queryFn: () =>
+      client.instance.getCustomEmojis().then((emojis) => {
+        addCustomToPool(buildCustomEmojis(emojis));
+        return emojis;
+      }),
+  });
 
 const useCustomEmojis = <T>(select?: (data: Array<CustomEmoji>) => T) => {
   const client = useClient();
@@ -25,6 +27,7 @@ const useCustomEmojis = <T>(select?: (data: Array<CustomEmoji>) => T) => {
   });
 };
 
-const prefetchCustomEmojis = (client: PlApiClient) => queryClient.prefetchQuery(customEmojisQueryOptions(client));
+const prefetchCustomEmojis = (client: PlApiClient) =>
+  queryClient.prefetchQuery(customEmojisQueryOptions(client));
 
 export { useCustomEmojis, prefetchCustomEmojis };

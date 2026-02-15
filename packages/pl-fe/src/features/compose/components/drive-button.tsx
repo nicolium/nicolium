@@ -26,11 +26,14 @@ const DriveButton: React.FC<IDriveButton> = ({ composeId }) => {
 
   const attachmentTypes = configuration.media_attachments.supported_mime_types;
 
-  const onClick = () =>{
+  const onClick = () => {
     openModal('SELECT_DRIVE_FILE', {
       title: intl.formatMessage(messages.button),
       type: 'file',
-      accepted: (attachmentTypes?.length === 0 && attachmentTypes[0] === 'application/octet-stream') ? undefined : attachmentTypes,
+      accepted:
+        attachmentTypes?.length === 0 && attachmentTypes[0] === 'application/octet-stream'
+          ? undefined
+          : attachmentTypes,
       onSelect: (file) => {
         let type = file.content_type.split('/')[0] as 'image' | 'video' | 'audio' | 'unknown';
         if (!['image', 'video', 'audio', 'unknown'].includes(type)) {

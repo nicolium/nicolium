@@ -17,13 +17,15 @@ const PinnedStatusesPage = () => {
   const { username } = profilePinsRoute.useParams();
 
   const { account } = useOwnAccount();
-  const { data: statusIds = [], isFetching: isLoading, hasNextPage: hasMore } = usePinnedStatuses(account?.id ?? '');
+  const {
+    data: statusIds = [],
+    isFetching: isLoading,
+    hasNextPage: hasMore,
+  } = usePinnedStatuses(account?.id ?? '');
   const isMyAccount = username.toLowerCase() === account?.username.toLowerCase();
 
   if (!isMyAccount) {
-    return (
-      <MissingIndicator />
-    );
+    return <MissingIndicator />;
   }
 
   return (
@@ -33,7 +35,9 @@ const PinnedStatusesPage = () => {
         scrollKey='pinned_statuses'
         hasMore={hasMore}
         isLoading={isLoading}
-        emptyMessageText={<FormattedMessage id='pinned_statuses.none' defaultMessage='No pins to show.' />}
+        emptyMessageText={
+          <FormattedMessage id='pinned_statuses.none' defaultMessage='No pins to show.' />
+        }
       />
     </Column>
   );

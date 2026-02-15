@@ -20,10 +20,9 @@ const fallbackState: Partial<FrontendConfig> = {
 
 const updateFromAdmin = (state: Record<string, any>, configs: PleromaConfig['configs']) => {
   try {
-    return ConfigDB.find(configs, ':pleroma', ':frontend_configurations')!
-      .value
-      .find((value: Record<string, any>) => value.tuple?.[0] === ':pl_fe')
-      .tuple?.[1];
+    return ConfigDB.find(configs, ':pleroma', ':frontend_configurations')!.value.find(
+      (value: Record<string, any>) => value.tuple?.[0] === ':pl_fe',
+    ).tuple?.[1];
   } catch {
     return state;
   }
@@ -52,7 +51,10 @@ const importFrontendConfig = (frontendConfig: FrontendConfig, host: string) => {
   return frontendConfig;
 };
 
-const frontendConfig = (state = initialState, action: Record<string, any>): Partial<FrontendConfig> => {
+const frontendConfig = (
+  state = initialState,
+  action: Record<string, any>,
+): Partial<FrontendConfig> => {
   switch (action.type) {
     case PLEROMA_PRELOAD_IMPORT:
       return preloadImport(state, action);

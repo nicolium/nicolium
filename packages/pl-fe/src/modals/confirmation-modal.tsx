@@ -51,7 +51,7 @@ const ConfirmationModal: React.FC<BaseModalProps & ConfirmationModalProps> = ({
     if (onCancel) onCancel();
   };
 
-  const handleCheckboxChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const handleCheckboxChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setChecked(e.target.checked);
   };
 
@@ -68,18 +68,12 @@ const ConfirmationModal: React.FC<BaseModalProps & ConfirmationModalProps> = ({
       secondaryAction={onSecondary && handleSecondary}
     >
       <Stack space={4}>
-        <Text>
-          {message}
-        </Text>
+        <Text>{message}</Text>
 
         {checkbox && (
           <List>
             <ListItem label={checkbox}>
-              <Toggle
-                checked={checked}
-                onChange={handleCheckboxChange}
-                required
-              />
+              <Toggle checked={checked} onChange={handleCheckboxChange} required />
             </ListItem>
           </List>
         )}

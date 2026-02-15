@@ -55,9 +55,7 @@ const Tooltip: React.FC<ITooltip> = (props) => {
     },
   });
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    hover,
-  ]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([hover]);
 
   if (disabled) {
     return children;
@@ -70,7 +68,7 @@ const Tooltip: React.FC<ITooltip> = (props) => {
         ...getReferenceProps(),
       })}
 
-      {(isMounted) && (
+      {isMounted && (
         <FloatingPortal>
           <div
             ref={refs.setFloating}
@@ -85,7 +83,11 @@ const Tooltip: React.FC<ITooltip> = (props) => {
           >
             {text}
 
-            <FloatingArrow ref={arrowRef} context={context} className='fill-gray-800 dark:fill-gray-100' />
+            <FloatingArrow
+              ref={arrowRef}
+              context={context}
+              className='fill-gray-800 dark:fill-gray-100'
+            />
           </div>
         </FloatingPortal>
       )}

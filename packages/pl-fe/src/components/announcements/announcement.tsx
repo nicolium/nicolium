@@ -23,8 +23,15 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement, emojiMap }) => {
   const endsAt = announcement.ends_at && new Date(announcement.ends_at);
   const now = new Date();
   const hasTimeRange = startsAt && endsAt;
-  const skipYear = hasTimeRange && startsAt.getFullYear() === endsAt.getFullYear() && endsAt.getFullYear() === now.getFullYear();
-  const skipEndDate = hasTimeRange && startsAt.getDate() === endsAt.getDate() && startsAt.getMonth() === endsAt.getMonth() && startsAt.getFullYear() === endsAt.getFullYear();
+  const skipYear =
+    hasTimeRange &&
+    startsAt.getFullYear() === endsAt.getFullYear() &&
+    endsAt.getFullYear() === now.getFullYear();
+  const skipEndDate =
+    hasTimeRange &&
+    startsAt.getDate() === endsAt.getDate() &&
+    startsAt.getMonth() === endsAt.getMonth() &&
+    startsAt.getFullYear() === endsAt.getFullYear();
   const skipTime = announcement.all_day;
   const direction = getTextDirection(announcement.content);
 
@@ -35,19 +42,17 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement, emojiMap }) => {
           <FormattedDate
             value={startsAt}
             hour12
-            year={(skipYear || startsAt.getFullYear() === now.getFullYear()) ? undefined : 'numeric'}
+            year={skipYear || startsAt.getFullYear() === now.getFullYear() ? undefined : 'numeric'}
             month='short'
             day='2-digit'
             hour={skipTime ? undefined : 'numeric'}
             minute={skipTime ? undefined : '2-digit'}
-          />
-          {' '}
-          -
-          {' '}
+          />{' '}
+          -{' '}
           <FormattedDate
             value={endsAt}
             hour12
-            year={(skipYear || endsAt.getFullYear() === now.getFullYear()) ? undefined : 'numeric'}
+            year={skipYear || endsAt.getFullYear() === now.getFullYear() ? undefined : 'numeric'}
             month={skipEndDate ? undefined : 'short'}
             day={skipEndDate ? undefined : '2-digit'}
             hour={skipTime ? undefined : 'numeric'}

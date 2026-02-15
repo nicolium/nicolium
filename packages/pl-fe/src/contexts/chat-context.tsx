@@ -45,19 +45,22 @@ const ChatProvider: React.FC<IChatProvider> = ({ children }) => {
     setScreen(screen);
   };
 
-  const handleChatPaneToggle = () =>{
+  const handleChatPaneToggle = () => {
     dispatch(toggleChatPane());
   };
 
-  const value = useMemo(() => ({
-    chat,
-    isOpen,
-    isUsingMainChatPage,
-    toggleChatPane: handleChatPaneToggle,
-    screen,
-    changeScreen,
-    currentChatId,
-  }), [chat, currentChatId, isUsingMainChatPage, isOpen, screen, changeScreen]);
+  const value = useMemo(
+    () => ({
+      chat,
+      isOpen,
+      isUsingMainChatPage,
+      toggleChatPane: handleChatPaneToggle,
+      screen,
+      changeScreen,
+      currentChatId,
+    }),
+    [chat, currentChatId, isUsingMainChatPage, isOpen, screen, changeScreen],
+  );
 
   useEffect(() => {
     if (chatId) {
@@ -67,11 +70,7 @@ const ChatProvider: React.FC<IChatProvider> = ({ children }) => {
     }
   }, [chatId]);
 
-  return (
-    <ChatContext.Provider value={value}>
-      {children}
-    </ChatContext.Provider>
-  );
+  return <ChatContext.Provider value={value}>{children}</ChatContext.Provider>;
 };
 
 interface IChatContext {

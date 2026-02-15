@@ -9,7 +9,10 @@ import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 import { useFeatures } from '@/hooks/use-features';
-import { useUnblockAccountMutation, useRelationshipQuery } from '@/queries/accounts/use-relationship';
+import {
+  useUnblockAccountMutation,
+  useRelationshipQuery,
+} from '@/queries/accounts/use-relationship';
 import { useDeleteChat } from '@/queries/chats';
 import { useModalsActions } from '@/stores/modals';
 
@@ -19,7 +22,11 @@ const messages = defineMessages({
   back: { id: 'card.back.label', defaultMessage: 'Back' },
   unblockHeading: { id: 'chat_settings.unblock.heading', defaultMessage: 'Unblock @{acct}' },
   unblockConfirm: { id: 'chat_settings.unblock.confirm', defaultMessage: 'Unblock' },
-  leaveMessage: { id: 'chat_settings.leave.message', defaultMessage: 'Are you sure you want to leave this chat? Messages will be deleted for you and this chat will be removed from your inbox.' },
+  leaveMessage: {
+    id: 'chat_settings.leave.message',
+    defaultMessage:
+      'Are you sure you want to leave this chat? Messages will be deleted for you and this chat will be removed from your inbox.',
+  },
   leaveHeading: { id: 'chat_settings.leave.heading', defaultMessage: 'Leave chat' },
   leaveConfirm: { id: 'chat_settings.leave.confirm', defaultMessage: 'Leave chat' },
 });
@@ -55,9 +62,14 @@ const ChatSettings = () => {
   const handleUnblockUser = () => {
     openModal('CONFIRM', {
       heading: intl.formatMessage(messages.unblockHeading, { acct: chat?.account.acct }),
-      message: <FormattedMessage id='chat_settings.unblock.message' defaultMessage='Unblocking will allow this profile to direct message you and view your content.' />,
+      message: (
+        <FormattedMessage
+          id='chat_settings.unblock.message'
+          defaultMessage='Unblocking will allow this profile to direct message you and view your content.'
+        />
+      ),
       confirm: intl.formatMessage(messages.unblockConfirm),
-      onConfirm: () =>{
+      onConfirm: () => {
         unblockAccount();
       },
     });
@@ -66,9 +78,14 @@ const ChatSettings = () => {
   const handleLeaveChat = () => {
     openModal('CONFIRM', {
       heading: intl.formatMessage(messages.leaveHeading),
-      message: <FormattedMessage id='chat_settings.leave.message' defaultMessage='Are you sure you want to leave this chat? Messages will be deleted for you and this chat will be removed from your inbox.' />,
+      message: (
+        <FormattedMessage
+          id='chat_settings.leave.message'
+          defaultMessage='Are you sure you want to leave this chat? Messages will be deleted for you and this chat will be removed from your inbox.'
+        />
+      ),
       confirm: intl.formatMessage(messages.leaveConfirm),
-      onConfirm: () =>{
+      onConfirm: () => {
         deleteChat.mutate();
       },
     });
@@ -105,15 +122,32 @@ const ChatSettings = () => {
 
         <List>
           <ListItem
-            label={isBlocked
-              ? <FormattedMessage id='chat_settings.options.unblock_user' defaultMessage='Unblock @{acct}' values={{ acct: chat.account.acct }} />
-              : <FormattedMessage id='chat_settings.options.block_user' defaultMessage='Block @{acct}' values={{ acct: chat.account.acct }} />}
+            label={
+              isBlocked ? (
+                <FormattedMessage
+                  id='chat_settings.options.unblock_user'
+                  defaultMessage='Unblock @{acct}'
+                  values={{ acct: chat.account.acct }}
+                />
+              ) : (
+                <FormattedMessage
+                  id='chat_settings.options.block_user'
+                  defaultMessage='Block @{acct}'
+                  values={{ acct: chat.account.acct }}
+                />
+              )
+            }
             onClick={isBlocked ? handleUnblockUser : handleBlockUser}
             size='sm'
           />
           {features.chatsDelete && (
             <ListItem
-              label={<FormattedMessage id='chat_settings.options.leave_chat' defaultMessage='Leave chat' />}
+              label={
+                <FormattedMessage
+                  id='chat_settings.options.leave_chat'
+                  defaultMessage='Leave chat'
+                />
+              }
               onClick={handleLeaveChat}
               size='sm'
             />

@@ -11,8 +11,14 @@ const useDemoteGroupMember = (group: Pick<Group, 'id'>, groupMember: Pick<GroupM
 
   const { createEntity } = useCreateEntity(
     [Entities.GROUP_MEMBERSHIPS, groupMember.id],
-    ({ account_ids, role }: { account_ids: string[]; role: GroupRole }) => client.experimental.groups.demoteGroupUsers(group.id, account_ids, role),
-    { schema: v.pipe(v.any(), v.transform(arr => arr[0])) },
+    ({ account_ids, role }: { account_ids: string[]; role: GroupRole }) =>
+      client.experimental.groups.demoteGroupUsers(group.id, account_ids, role),
+    {
+      schema: v.pipe(
+        v.any(),
+        v.transform((arr) => arr[0]),
+      ),
+    },
   );
 
   return createEntity;

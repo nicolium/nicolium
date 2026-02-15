@@ -12,7 +12,16 @@ import { useModalsActions } from '@/stores/modals';
 import type { Status } from '@/normalizers/status';
 
 interface IStatusInteractionBar {
-  status: Pick<Status, 'id' | 'account' | 'dislikes_count' | 'favourited' | 'favourites_count' | 'reblogs_count' | 'quotes_count'>;
+  status: Pick<
+    Status,
+    | 'id'
+    | 'account'
+    | 'dislikes_count'
+    | 'favourited'
+    | 'favourites_count'
+    | 'reblogs_count'
+    | 'quotes_count'
+  >;
 }
 
 const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.Element | null => {
@@ -60,7 +69,11 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
   const getQuotes = () => {
     if (status.quotes_count) {
       return (
-        <InteractionCounter count={status.quotes_count} to='/@{$username}/posts/$statusId/quotes' params={{ username: status.account.acct, id: status.id }}>
+        <InteractionCounter
+          count={status.quotes_count}
+          to='/@{$username}/posts/$statusId/quotes'
+          params={{ username: status.account.acct, id: status.id }}
+        >
           <FormattedMessage
             id='status.interactions.quotes'
             defaultMessage='{count, plural, one {Quote} other {Quotes}}'
@@ -73,7 +86,9 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
     return null;
   };
 
-  const handleOpenFavouritesModal: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
+  const handleOpenFavouritesModal: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (
+    e,
+  ) => {
     e.preventDefault();
 
     // if (!me) onOpenUnauthorizedModal();
@@ -90,7 +105,10 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
   const getFavourites = () => {
     if (status.favourites_count) {
       return (
-        <InteractionCounter count={status.favourites_count} onClick={features.exposableReactions ? handleOpenFavouritesModal : undefined}>
+        <InteractionCounter
+          count={status.favourites_count}
+          onClick={features.exposableReactions ? handleOpenFavouritesModal : undefined}
+        >
           <FormattedMessage
             id='status.interactions.favourites'
             defaultMessage='{count, plural, one {Like} other {Likes}}'
@@ -108,7 +126,10 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
 
     if (dislikesCount) {
       return (
-        <InteractionCounter count={status.dislikes_count} onClick={features.exposableReactions ? handleOpenDislikesModal : undefined}>
+        <InteractionCounter
+          count={status.dislikes_count}
+          onClick={features.exposableReactions ? handleOpenDislikesModal : undefined}
+        >
           <FormattedMessage
             id='status.interactions.dislikes'
             defaultMessage='{count, plural, one {Dislike} other {Dislikes}}'
@@ -137,7 +158,12 @@ type IInteractionCounter = {
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
 } & (LinkOptions | {});
 
-const InteractionCounter: React.FC<IInteractionCounter> = ({ count, children, onClick, ...rest }) => {
+const InteractionCounter: React.FC<IInteractionCounter> = ({
+  count,
+  children,
+  onClick,
+  ...rest
+}) => {
   const features = useFeatures();
 
   const className = clsx({
@@ -167,11 +193,7 @@ const InteractionCounter: React.FC<IInteractionCounter> = ({ count, children, on
   }
 
   return (
-    <button
-      type='button'
-      onClick={onClick}
-      className={className}
-    >
+    <button type='button' onClick={onClick} className={className}>
       {body}
     </button>
   );

@@ -16,7 +16,7 @@ interface IStepSlider {
 const StepSlider: React.FC<IStepSlider> = ({ value, steps, onChange }) => {
   const node = useRef<HTMLDivElement>(null);
 
-  const handleMouseDown: React.MouseEventHandler = e => {
+  const handleMouseDown: React.MouseEventHandler = (e) => {
     document.addEventListener('mousemove', handleMouseSlide, true);
     document.addEventListener('mouseup', handleMouseUp, true);
     document.addEventListener('touchmove', handleMouseSlide, true);
@@ -35,24 +35,27 @@ const StepSlider: React.FC<IStepSlider> = ({ value, steps, onChange }) => {
     document.removeEventListener('touchend', handleMouseUp, true);
   };
 
-  const handleMouseSlide = useCallback(throttle(e => {
-    if (node.current) {
-      const { x } = getPointerPosition(node.current, e);
+  const handleMouseSlide = useCallback(
+    throttle((e) => {
+      if (node.current) {
+        const { x } = getPointerPosition(node.current, e);
 
-      if (!isNaN(x)) {
-        let slideamt = x;
+        if (!isNaN(x)) {
+          let slideamt = x;
 
-        if (x > 1) {
-          slideamt = 1;
-        } else if (x < 0) {
-          slideamt = 0;
+          if (x > 1) {
+            slideamt = 1;
+          } else if (x < 0) {
+            slideamt = 0;
+          }
+
+          slideamt = Math.floor((slideamt + 0.5 / steps) * (steps - 1));
+          onChange(slideamt);
         }
-
-        slideamt = Math.floor((slideamt + 0.5 / steps) * (steps - 1));
-        onChange(slideamt);
       }
-    }
-  }, 60), [node.current]);
+    }, 60),
+    [node.current],
+  );
 
   return (
     <div
@@ -61,18 +64,21 @@ const StepSlider: React.FC<IStepSlider> = ({ value, steps, onChange }) => {
       ref={node}
     >
       <div className='absolute top-1/2 h-1 w-full -translate-y-1/2 rounded-full bg-primary-200 dark:bg-primary-700' />
-      <div className='absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-accent-500' style={{ width: `${value / (steps - 1) * 100}%` }} />
+      <div
+        className='absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-accent-500'
+        style={{ width: `${(value / (steps - 1)) * 100}%` }}
+      />
       {[...Array(steps).fill(undefined)].map((_, step) => (
         <span
           key={step}
           className='absolute top-1/2 z-10 h-3 w-1 -translate-y-1/2 bg-accent-300'
-          style={{ left: `${(step) / (steps - 1) * 100}%` }}
+          style={{ left: `${(step / (steps - 1)) * 100}%` }}
         />
       ))}
       <span
         className='absolute top-1/2 z-10 -ml-1.5 size-3 -translate-y-1/2 rounded-full bg-accent-500 shadow'
         tabIndex={0}
-        style={{ left: `calc(${value / (steps - 1) * 100}% + 0.125rem)` }}
+        style={{ left: `calc(${(value / (steps - 1)) * 100}% + 0.125rem)` }}
       />
     </div>
   );

@@ -16,6 +16,4 @@ const createApp = (params: CreateApplicationParams, baseURL?: string) => {
   return client.apps.createApplication(params);
 };
 
-export {
-  createApp,
-};
+export { createApp };

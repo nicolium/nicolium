@@ -16,10 +16,4 @@ const isNonConformingRatio = (ar: number | null) => {
   return !isPanoramic(ar) && !isPortrait(ar);
 };
 
-export {
-  minimumAspectRatio,
-  maximumAspectRatio,
-  isPanoramic,
-  isPortrait,
-  isNonConformingRatio,
-};
+export { minimumAspectRatio, maximumAspectRatio, isPanoramic, isPortrait, isNonConformingRatio };

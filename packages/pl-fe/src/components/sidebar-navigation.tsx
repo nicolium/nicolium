@@ -40,7 +40,10 @@ const messages = defineMessages({
   scheduledStatuses: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
   drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
   conversations: { id: 'column.direct', defaultMessage: 'Direct messages' },
-  interactionRequests: { id: 'column.interaction_requests', defaultMessage: 'Interaction requests' },
+  interactionRequests: {
+    id: 'column.interaction_requests',
+    defaultMessage: 'Interaction requests',
+  },
   help: { id: 'navigation.help', defaultMessage: 'Help' },
   keyboardShortcuts: { id: 'navigation.keyboard_shortcuts', defaultMessage: 'Keyboard shortcuts' },
   docs: { id: 'navigation.docs', defaultMessage: 'Documentation' },
@@ -63,10 +66,13 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   const { account } = useOwnAccount();
   const { isOpen } = useRegistrationStatus();
 
-  const authenticatedScheduledStatusesCountQueryOptions = useMemo(() => ({
-    ...scheduledStatusesCountQueryOptions,
-    enabled: !!account && features.scheduledStatuses,
-  }), [!!account, features]);
+  const authenticatedScheduledStatusesCountQueryOptions = useMemo(
+    () => ({
+      ...scheduledStatusesCountQueryOptions,
+      enabled: !!account && features.scheduledStatuses,
+    }),
+    [!!account, features],
+  );
 
   const notificationCount = useAppSelector((state) => state.notifications.unread);
   const followRequestsCount = useFollowRequestsCount().data ?? 0;
@@ -74,7 +80,9 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
   const { data: pendingReportsCount = 0 } = usePendingReportsCount();
   const dashboardCount = pendingReportsCount + awaitingApprovalCount;
-  const { data: scheduledStatusCount = 0 } = useInfiniteQuery(authenticatedScheduledStatusesCountQueryOptions);
+  const { data: scheduledStatusCount = 0 } = useInfiniteQuery(
+    authenticatedScheduledStatusesCountQueryOptions,
+  );
   const { data: draftCount = 0 } = useDraftStatusesCountQuery();
 
   const restrictUnauth = instance.pleroma.metadata.restrict_unauthenticated;
@@ -190,7 +198,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         text: intl.formatMessage(messages.help),
         items: [
           {
-            action: () =>{
+            action: () => {
               openModal('HOTKEYS');
             },
             icon: require('@phosphor-icons/core/regular/keyboard.svg'),
@@ -213,7 +221,14 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
     }
 
     return menu;
-  }, [!!account, features, followRequestsCount, interactionRequestsCount, scheduledStatusCount, draftCount]);
+  }, [
+    !!account,
+    features,
+    followRequestsCount,
+    interactionRequestsCount,
+    scheduledStatusCount,
+    draftCount,
+  ]);
 
   return (
     <div className={clsx('⁂-sidebar-navigation', { '⁂-sidebar-navigation--narrow': shrink })}>
@@ -234,16 +249,19 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               ) : (
                 <Account
                   account={account}
-                  action={<Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} className='⁂-sidebar-navigation__header__account__expand' />}
+                  action={
+                    <Icon
+                      src={require('@phosphor-icons/core/regular/caret-down.svg')}
+                      className='⁂-sidebar-navigation__header__account__expand'
+                    />
+                  }
                   disabled
                   withLinkToProfile={false}
                 />
               )}
             </ProfileDropdown>
           </div>
-          {!shrink && (
-            <SearchInput />
-          )}
+          {!shrink && <SearchInput />}
         </div>
       )}
 
@@ -337,9 +355,9 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
           </>
         )}
 
-        {(features.publicTimeline) && (
+        {features.publicTimeline && (
           <>
-            {(features.wrenchedTimeline && (account ?? !restrictUnauth.timelines.wrenched)) && (
+            {features.wrenchedTimeline && (account ?? !restrictUnauth.timelines.wrenched) && (
               <SidebarNavigationLink
                 to='/timeline/wrenched'
                 icon={require('@phosphor-icons/core/regular/wrench.svg')}
@@ -353,11 +371,17 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                 to='/timeline/local'
                 icon={require('@phosphor-icons/core/regular/planet.svg')}
                 activeIcon={require('@phosphor-icons/core/fill/planet-fill.svg')}
-                text={features.federating ? <FormattedMessage id='tabs_bar.local' defaultMessage='Local' /> : <FormattedMessage id='tabs_bar.all' defaultMessage='All' />}
+                text={
+                  features.federating ? (
+                    <FormattedMessage id='tabs_bar.local' defaultMessage='Local' />
+                  ) : (
+                    <FormattedMessage id='tabs_bar.all' defaultMessage='All' />
+                  )
+                }
               />
             )}
 
-            {(features.bubbleTimeline && (account ?? !restrictUnauth.timelines.bubble)) && (
+            {features.bubbleTimeline && (account ?? !restrictUnauth.timelines.bubble) && (
               <SidebarNavigationLink
                 to='/timeline/bubble'
                 icon={require('@phosphor-icons/core/regular/graph.svg')}
@@ -366,7 +390,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               />
             )}
 
-            {(features.federating && (account ?? !restrictUnauth.timelines.federated)) && (
+            {features.federating && (account ?? !restrictUnauth.timelines.federated) && (
               <SidebarNavigationLink
                 to='/timeline/fediverse'
                 icon={require('@phosphor-icons/core/regular/fediverse-logo.svg')}
@@ -395,19 +419,19 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               text={<FormattedMessage id='account.login' defaultMessage='Log in' />}
             />
 
-            {isOpen && <SidebarNavigationLink
-              to='/signup'
-              icon={require('@phosphor-icons/core/regular/user-plus.svg')}
-              activeIcon={require('@phosphor-icons/core/fill/user-plus-fill.svg')}
-              text={<FormattedMessage id='account.register' defaultMessage='Sign up' />}
-            />}
+            {isOpen && (
+              <SidebarNavigationLink
+                to='/signup'
+                icon={require('@phosphor-icons/core/regular/user-plus.svg')}
+                activeIcon={require('@phosphor-icons/core/fill/user-plus-fill.svg')}
+                text={<FormattedMessage id='account.register' defaultMessage='Sign up' />}
+              />
+            )}
           </Stack>
         )}
       </ul>
 
-      {account && (
-        <ComposeButton shrink={shrink} />
-      )}
+      {account && <ComposeButton shrink={shrink} />}
     </div>
   );
 });

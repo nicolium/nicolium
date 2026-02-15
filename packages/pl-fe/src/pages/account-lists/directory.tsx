@@ -85,15 +85,15 @@ const AccountCard: React.FC<IAccountCard> = ({ id }) => {
       </div>
 
       <div className='⁂-directory-card__account'>
-        <Account
-          account={account}
-          withAvatar={false}
-          withRelationship={false}
-        />
+        <Account account={account} withAvatar={false} withRelationship={false} />
 
         {!!account.note && (
           <p className='⁂-directory-card__bio'>
-            <ParsedContent html={account.note} emojis={account.emojis} speakAsCat={account.speak_as_cat} />
+            <ParsedContent
+              html={account.note}
+              emojis={account.emojis}
+              speakAsCat={account.speak_as_cat}
+            />
           </p>
         )}
       </div>
@@ -140,13 +140,18 @@ const DirectoryPage = () => {
   const instance = useInstance();
   const features = useFeatures();
 
-  const { data: accountIds = [], isLoading, hasNextPage, fetchNextPage } = useDirectory(order, local);
+  const {
+    data: accountIds = [],
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+  } = useDirectory(order, local);
 
-  const handleChangeOrder: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const handleChangeOrder: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     navigate({ search: ({ local }) => ({ local, order: e.target.value as 'active' | 'new' }) });
   };
 
-  const handleChangeLocal: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const handleChangeLocal: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     navigate({ search: ({ order }) => ({ local: e.target.checked, order }) });
   };
 
@@ -159,7 +164,11 @@ const DirectoryPage = () => {
       <div className='⁂-directory'>
         <div className='⁂-directory__filters'>
           <div>
-            <CardTitle title={<FormattedMessage id='directory.display_filter' defaultMessage='Display filter' />} />
+            <CardTitle
+              title={
+                <FormattedMessage id='directory.display_filter' defaultMessage='Display filter' />
+              }
+            />
 
             <RadioGroup onChange={handleChangeOrder}>
               <RadioItem
@@ -177,7 +186,14 @@ const DirectoryPage = () => {
 
           {features.federating && (
             <div>
-              <CardTitle title={<FormattedMessage id='directory.fediverse_filter' defaultMessage='Fediverse filter' />} />
+              <CardTitle
+                title={
+                  <FormattedMessage
+                    id='directory.fediverse_filter'
+                    defaultMessage='Fediverse filter'
+                  />
+                }
+              />
 
               <RadioGroup onChange={handleChangeLocal}>
                 <RadioItem
@@ -196,16 +212,14 @@ const DirectoryPage = () => {
         </div>
 
         <div
-          className={
-            clsx({
-              '⁂-directory__cards': true,
-              '⁂-directory__cards--loading': isLoading,
-            })
-          }
+          className={clsx({
+            '⁂-directory__cards': true,
+            '⁂-directory__cards--loading': isLoading,
+          })}
         >
           {accountIds.map((accountId) => (
-            <AccountCard id={accountId} key={accountId} />),
-          )}
+            <AccountCard id={accountId} key={accountId} />
+          ))}
         </div>
 
         {hasNextPage && <LoadMore onClick={handleLoadMore} disabled={isLoading} />}

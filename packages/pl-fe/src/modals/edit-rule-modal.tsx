@@ -15,8 +15,14 @@ import type { AdminRule } from 'pl-api';
 
 const messages = defineMessages({
   save: { id: 'admin.edit_rule.save', defaultMessage: 'Save' },
-  ruleTextPlaceholder: { id: 'admin.edit_rule.fields.text_placeholder', defaultMessage: 'Instance rule text' },
-  rulePriorityPlaceholder: { id: 'admin.edit_rule.fields.priority_placeholder', defaultMessage: 'Instance rule display priority' },
+  ruleTextPlaceholder: {
+    id: 'admin.edit_rule.fields.text_placeholder',
+    defaultMessage: 'Instance rule text',
+  },
+  rulePriorityPlaceholder: {
+    id: 'admin.edit_rule.fields.priority_placeholder',
+    defaultMessage: 'Instance rule display priority',
+  },
   ruleCreateSuccess: { id: 'admin.edit_rule.created', defaultMessage: 'Rule created' },
   ruleUpdateSuccess: { id: 'admin.edit_rule.updated', defaultMessage: 'Rule edited' },
 });
@@ -40,50 +46,64 @@ const EditRuleModal: React.FC<BaseModalProps & EditRuleModalProps> = ({ onClose,
 
   const handleSubmit = () => {
     if (rule) {
-      updateRule({
-        id: rule.id,
-        text: text.value,
-        priority: isNaN(Number(priority.value)) ? undefined : Number(priority.value),
-      }, {
-        onSuccess: () => {
-          toast.success(messages.ruleUpdateSuccess);
-          onClickClose();
+      updateRule(
+        {
+          id: rule.id,
+          text: text.value,
+          priority: isNaN(Number(priority.value)) ? undefined : Number(priority.value),
         },
-      });
+        {
+          onSuccess: () => {
+            toast.success(messages.ruleUpdateSuccess);
+            onClickClose();
+          },
+        },
+      );
     } else {
-      createRule({
-        text: text.value,
-        priority: isNaN(Number(priority.value)) ? undefined : Number(priority.value),
-      }, {
-        onSuccess: () => {
-          toast.success(messages.ruleUpdateSuccess);
-          onClickClose();
+      createRule(
+        {
+          text: text.value,
+          priority: isNaN(Number(priority.value)) ? undefined : Number(priority.value),
         },
-      });
+        {
+          onSuccess: () => {
+            toast.success(messages.ruleUpdateSuccess);
+            onClickClose();
+          },
+        },
+      );
     }
   };
 
   return (
     <Modal
       onClose={onClickClose}
-      title={rule
-        ? <FormattedMessage id='column.admin.edit_rule' defaultMessage='Edit rule' />
-        : <FormattedMessage id='column.admin.create_rule' defaultMessage='Create rule' />}
+      title={
+        rule ? (
+          <FormattedMessage id='column.admin.edit_rule' defaultMessage='Edit rule' />
+        ) : (
+          <FormattedMessage id='column.admin.create_rule' defaultMessage='Create rule' />
+        )
+      }
       confirmationAction={handleSubmit}
       confirmationText={intl.formatMessage(messages.save)}
     >
       <Form>
         <FormGroup
-          labelText={<FormattedMessage id='admin.edit_rule.fields.text_label' defaultMessage='Rule text' />}
+          labelText={
+            <FormattedMessage id='admin.edit_rule.fields.text_label' defaultMessage='Rule text' />
+          }
         >
-          <Input
-            placeholder={intl.formatMessage(messages.ruleTextPlaceholder)}
-            {...text}
-          />
+          <Input placeholder={intl.formatMessage(messages.ruleTextPlaceholder)} {...text} />
         </FormGroup>
         {features.adminRulesPriority && (
           <FormGroup
-            labelText={<FormattedMessage id='admin.edit_rule.fields.priority_label' defaultMessage='Rule priority' />}
+            labelText={
+              <FormattedMessage
+                id='admin.edit_rule.fields.priority_label'
+                defaultMessage='Rule priority'
+              />
+            }
           >
             <Input
               placeholder={intl.formatMessage(messages.rulePriorityPlaceholder)}

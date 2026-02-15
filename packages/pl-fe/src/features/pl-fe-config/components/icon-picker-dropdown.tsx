@@ -25,12 +25,7 @@ const IconPickerDropdown: React.FC<IIconPickerDropdown> = ({ value, onPickIcon }
     <div>
       <Popover
         interaction='click'
-        content={
-          <IconPickerMenu
-            icons={forkAwesomeIcons}
-            onPick={onPickIcon}
-          />
-        }
+        content={<IconPickerMenu icons={forkAwesomeIcons} onPick={onPickIcon} />}
         isFlush
       >
         <div
@@ -42,7 +37,6 @@ const IconPickerDropdown: React.FC<IIconPickerDropdown> = ({ value, onPickIcon }
         >
           <ForkAwesomeIcon id={value} />
         </div>
-
       </Popover>
     </div>
   );

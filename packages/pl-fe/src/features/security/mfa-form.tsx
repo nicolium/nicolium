@@ -32,7 +32,12 @@ const MfaForm: React.FC = () => {
         <DisableOtpForm />
       ) : (
         <Stack space={4}>
-          {features.manageMfaBackupCodes && <EnableOtpForm displayOtpForm={displayOtpForm} handleSetupProceedClick={handleSetupProceedClick} />}
+          {features.manageMfaBackupCodes && (
+            <EnableOtpForm
+              displayOtpForm={displayOtpForm}
+              handleSetupProceedClick={handleSetupProceedClick}
+            />
+          )}
           {(displayOtpForm || !features.manageMfaBackupCodes) && <OtpConfirmForm />}
         </Stack>
       )}

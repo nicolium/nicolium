@@ -11,18 +11,28 @@ const FOCUS_EDITOR_COMMAND: LexicalCommand<void> = createCommand();
 const FocusPlugin: React.FC<IFocusPlugin> = ({ autoFocus }) => {
   const [editor] = useLexicalComposerContext();
 
-  useEffect(() => editor.registerCommand(FOCUS_EDITOR_COMMAND, () => {
-    editor.focus(
+  useEffect(() =>
+    editor.registerCommand(
+      FOCUS_EDITOR_COMMAND,
       () => {
-        const activeElement = document.activeElement;
-        const rootElement = editor.getRootElement();
-        if (rootElement !== null && (activeElement === null || !rootElement.contains(activeElement))) {
-          rootElement.focus({ preventScroll: true });
-        }
-      }, { defaultSelection: 'rootEnd' },
-    );
-    return true;
-  }, COMMAND_PRIORITY_NORMAL));
+        editor.focus(
+          () => {
+            const activeElement = document.activeElement;
+            const rootElement = editor.getRootElement();
+            if (
+              rootElement !== null &&
+              (activeElement === null || !rootElement.contains(activeElement))
+            ) {
+              rootElement.focus({ preventScroll: true });
+            }
+          },
+          { defaultSelection: 'rootEnd' },
+        );
+        return true;
+      },
+      COMMAND_PRIORITY_NORMAL,
+    ),
+  );
 
   useEffect(() => {
     if (autoFocus) {
@@ -33,7 +43,4 @@ const FocusPlugin: React.FC<IFocusPlugin> = ({ autoFocus }) => {
   return null;
 };
 
-export {
-  FOCUS_EDITOR_COMMAND,
-  FocusPlugin as default,
-};
+export { FOCUS_EDITOR_COMMAND, FocusPlugin as default };

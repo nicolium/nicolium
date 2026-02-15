@@ -12,12 +12,30 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import toast from '@/toast';
 
 const messages = defineMessages({
-  updatePasswordSuccess: { id: 'security.update_password.success', defaultMessage: 'Password successfully updated.' },
-  updatePasswordFail: { id: 'security.update_password.fail', defaultMessage: 'Update password failed.' },
-  passwordsNoMatch: { id: 'security.update_password.password_confirmation_no_match', defaultMessage: 'Passwords do not match.' },
-  oldPasswordFieldLabel: { id: 'security.fields.old_password.label', defaultMessage: 'Current password' },
-  newPasswordFieldLabel: { id: 'security.fields.new_password.label', defaultMessage: 'New password' },
-  confirmationFieldLabel: { id: 'security.fields.password_confirmation.label', defaultMessage: 'New password (again)' },
+  updatePasswordSuccess: {
+    id: 'security.update_password.success',
+    defaultMessage: 'Password successfully updated.',
+  },
+  updatePasswordFail: {
+    id: 'security.update_password.fail',
+    defaultMessage: 'Update password failed.',
+  },
+  passwordsNoMatch: {
+    id: 'security.update_password.password_confirmation_no_match',
+    defaultMessage: 'Passwords do not match.',
+  },
+  oldPasswordFieldLabel: {
+    id: 'security.fields.old_password.label',
+    defaultMessage: 'Current password',
+  },
+  newPasswordFieldLabel: {
+    id: 'security.fields.new_password.label',
+    defaultMessage: 'New password',
+  },
+  confirmationFieldLabel: {
+    id: 'security.fields.password_confirmation.label',
+    defaultMessage: 'New password (again)',
+  },
   header: { id: 'edit_password.header', defaultMessage: 'Change password' },
   submit: { id: 'security.submit', defaultMessage: 'Save changes' },
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
@@ -34,32 +52,38 @@ const EditPasswordPage = () => {
 
   const { currentPassword, newPassword, newPasswordConfirmation } = state;
 
-  const resetState = () =>{
+  const resetState = () => {
     setState(initialState);
   };
 
-  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = React.useCallback((event) => {
-    event.persist();
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = React.useCallback(
+    (event) => {
+      event.persist();
 
-    setState((prevState) => ({ ...prevState, [event.target.name]: event.target.value }));
-  }, []);
+      setState((prevState) => ({ ...prevState, [event.target.name]: event.target.value }));
+    },
+    [],
+  );
 
   const handleSubmit = React.useCallback(() => {
     if (newPassword !== newPasswordConfirmation) {
-      toast.error(intl.formatMessage(messages.passwordsNoMatch)); return;
+      toast.error(intl.formatMessage(messages.passwordsNoMatch));
+      return;
     }
 
     setLoading(true);
-    dispatch(changePassword(currentPassword, newPassword)).then(() => {
-      resetState();
-      toast.success(intl.formatMessage(messages.updatePasswordSuccess));
-
-    }).finally(() => {
-      setLoading(false);
-    }).catch(() => {
-      resetState();
-      toast.error(intl.formatMessage(messages.updatePasswordFail));
-    });
+    dispatch(changePassword(currentPassword, newPassword))
+      .then(() => {
+        resetState();
+        toast.success(intl.formatMessage(messages.updatePasswordSuccess));
+      })
+      .finally(() => {
+        setLoading(false);
+      })
+      .catch(() => {
+        resetState();
+        toast.error(intl.formatMessage(messages.updatePasswordFail));
+      });
   }, [currentPassword, newPassword, newPasswordConfirmation, dispatch, intl]);
 
   return (
@@ -97,7 +121,11 @@ const EditPasswordPage = () => {
             {intl.formatMessage(messages.cancel)}
           </Button>
 
-          <Button type='submit' theme='primary' disabled={isLoading || newPassword !== newPasswordConfirmation}>
+          <Button
+            type='submit'
+            theme='primary'
+            disabled={isLoading || newPassword !== newPasswordConfirmation}
+          >
             {intl.formatMessage(messages.submit)}
           </Button>
         </FormActions>

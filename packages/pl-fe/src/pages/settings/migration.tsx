@@ -17,12 +17,30 @@ import toast from '@/toast';
 const messages = defineMessages({
   heading: { id: 'column.migration', defaultMessage: 'Move account' },
   submit: { id: 'migration.submit', defaultMessage: 'Move followers' },
-  moveAccountSuccess: { id: 'migration.move_account.success', defaultMessage: 'Account successfully moved.' },
-  moveAccountFail: { id: 'migration.move_account.fail', defaultMessage: 'Account migration failed.' },
-  moveAccountFailCooldownPeriod: { id: 'migration.move_account.fail.cooldown_period', defaultMessage: 'You have moved your account too recently. Please try again later.' },
-  acctFieldLabel: { id: 'migration.fields.acct.label', defaultMessage: 'Handle of the new account' },
-  acctFieldPlaceholder: { id: 'migration.fields.acct.placeholder', defaultMessage: 'username@domain' },
-  currentPasswordFieldLabel: { id: 'migration.fields.confirm_password.label', defaultMessage: 'Current password' },
+  moveAccountSuccess: {
+    id: 'migration.move_account.success',
+    defaultMessage: 'Account successfully moved.',
+  },
+  moveAccountFail: {
+    id: 'migration.move_account.fail',
+    defaultMessage: 'Account migration failed.',
+  },
+  moveAccountFailCooldownPeriod: {
+    id: 'migration.move_account.fail.cooldown_period',
+    defaultMessage: 'You have moved your account too recently. Please try again later.',
+  },
+  acctFieldLabel: {
+    id: 'migration.fields.acct.label',
+    defaultMessage: 'Handle of the new account',
+  },
+  acctFieldPlaceholder: {
+    id: 'migration.fields.acct.placeholder',
+    defaultMessage: 'username@domain',
+  },
+  currentPasswordFieldLabel: {
+    id: 'migration.fields.confirm_password.label',
+    defaultMessage: 'Current password',
+  },
 });
 
 const MigrationPage = () => {
@@ -36,7 +54,7 @@ const MigrationPage = () => {
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     if (e.target.name === 'password') setPassword(e.target.value);
     else setTargetAccount(e.target.value);
   };
@@ -46,23 +64,26 @@ const MigrationPage = () => {
     setPassword('');
   };
 
-  const handleSubmit: React.FormEventHandler = e => {
+  const handleSubmit: React.FormEventHandler = (e) => {
     setIsLoading(true);
-    return dispatch(moveAccount(targetAccount, password)).then(() => {
-      clearForm();
-      toast.success(intl.formatMessage(messages.moveAccountSuccess));
-    }).catch(error => {
-      let message = intl.formatMessage(messages.moveAccountFail);
+    return dispatch(moveAccount(targetAccount, password))
+      .then(() => {
+        clearForm();
+        toast.success(intl.formatMessage(messages.moveAccountSuccess));
+      })
+      .catch((error) => {
+        let message = intl.formatMessage(messages.moveAccountFail);
 
-      const errorMessage = (error.response?.data)?.error;
-      if (errorMessage === 'You are within cooldown period.') {
-        message = intl.formatMessage(messages.moveAccountFailCooldownPeriod);
-      }
+        const errorMessage = error.response?.data?.error;
+        if (errorMessage === 'You are within cooldown period.') {
+          message = intl.formatMessage(messages.moveAccountFailCooldownPeriod);
+        }
 
-      toast.error(message);
-    }).then(() => {
-      setIsLoading(false);
-    });
+        toast.error(message);
+      })
+      .then(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -86,18 +107,18 @@ const MigrationPage = () => {
               ),
             }}
           />
-          {!!cooldownPeriod && (<>
-            {' '}
-            <FormattedMessage
-              id='migration.hint.cooldown_period'
-              defaultMessage='If you migrate your account, you will not be able to migrate your account for {cooldownPeriod, plural, one {one day} other {the next # days}}.'
-              values={{ cooldownPeriod }}
-            />
-          </>)}
+          {!!cooldownPeriod && (
+            <>
+              {' '}
+              <FormattedMessage
+                id='migration.hint.cooldown_period'
+                defaultMessage='If you migrate your account, you will not be able to migrate your account for {cooldownPeriod, plural, one {one day} other {the next # days}}.'
+                values={{ cooldownPeriod }}
+              />
+            </>
+          )}
         </Text>
-        <FormGroup
-          labelText={intl.formatMessage(messages.acctFieldLabel)}
-        >
+        <FormGroup labelText={intl.formatMessage(messages.acctFieldLabel)}>
           <Input
             name='targetAccount'
             placeholder={intl.formatMessage(messages.acctFieldPlaceholder)}
@@ -106,9 +127,7 @@ const MigrationPage = () => {
             required
           />
         </FormGroup>
-        <FormGroup
-          labelText={intl.formatMessage(messages.currentPasswordFieldLabel)}
-        >
+        <FormGroup labelText={intl.formatMessage(messages.currentPasswordFieldLabel)}>
           <Input
             type='password'
             name='password'

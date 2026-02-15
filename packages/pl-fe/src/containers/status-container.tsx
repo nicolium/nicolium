@@ -19,7 +19,7 @@ const StatusContainer: React.FC<IStatusContainer> = (props) => {
   const { id, contextType } = props;
 
   const getStatus = useMemo(makeGetStatus, []);
-  const status = useAppSelector(state => getStatus(state, { id, contextType }));
+  const status = useAppSelector((state) => getStatus(state, { id, contextType }));
 
   if (status) {
     return <Status {...props} status={status} />;

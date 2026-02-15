@@ -11,13 +11,16 @@ interface IForm {
 
 /** Form element with custom styles. */
 const Form: React.FC<IForm> = ({ onSubmit, children, ...filteredProps }) => {
-  const handleSubmit: React.FormEventHandler = React.useCallback((event) => {
-    event.preventDefault();
+  const handleSubmit: React.FormEventHandler = React.useCallback(
+    (event) => {
+      event.preventDefault();
 
-    if (onSubmit) {
-      onSubmit(event);
-    }
-  }, [onSubmit]);
+      if (onSubmit) {
+        onSubmit(event);
+      }
+    },
+    [onSubmit],
+  );
 
   return (
     <form data-testid='form' onSubmit={handleSubmit} className='⁂-form' {...filteredProps}>

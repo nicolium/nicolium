@@ -9,7 +9,11 @@ import StatusContainer from '@/containers/status-container';
 import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
 import PlaceholderHashtag from '@/features/placeholder/components/placeholder-hashtag';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
-import { useSearchAccounts, useSearchHashtags, useSearchStatuses } from '@/queries/search/use-search';
+import {
+  useSearchAccounts,
+  useSearchHashtags,
+  useSearchStatuses,
+} from '@/queries/search/use-search';
 import { selectChild } from '@/utils/scroll-utils';
 
 import TrendsColumn from './trends';
@@ -28,20 +32,20 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
 
   const node = useRef<VirtuosoHandle>(null);
 
-  const searchAccountsQuery = useSearchAccounts(type === 'accounts' && query || '');
-  const searchStatusesQuery = useSearchStatuses(type === 'statuses' && query || '', {
+  const searchAccountsQuery = useSearchAccounts((type === 'accounts' && query) || '');
+  const searchStatusesQuery = useSearchStatuses((type === 'statuses' && query) || '', {
     account_id: accountId,
   });
-  const searchHashtagsQuery = useSearchHashtags(type === 'hashtags' && query || '');
+  const searchHashtagsQuery = useSearchHashtags((type === 'hashtags' && query) || '');
 
-  const activeQuery = ({
+  const activeQuery = {
     accounts: searchAccountsQuery,
     statuses: searchStatusesQuery,
     hashtags: searchHashtagsQuery,
     links: searchStatusesQuery,
-  })[type];
+  }[type];
 
-  const getCurrentIndex = (id: string): number => resultsIds?.findIndex(key => key === id);
+  const getCurrentIndex = (id: string): number => resultsIds?.findIndex((key) => key === id);
 
   const handleMoveUp = (id: string) => {
     if (!resultsIds) return;
@@ -54,7 +58,12 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
     if (!resultsIds) return;
 
     const elementIndex = getCurrentIndex(id) + 1;
-    selectChild(elementIndex, node, document.getElementById('search-results') ?? undefined, resultsIds.length);
+    selectChild(
+      elementIndex,
+      node,
+      document.getElementById('search-results') ?? undefined,
+      resultsIds.length,
+    );
   };
 
   const handleLoadMore = () => activeQuery.fetchNextPage({ cancelRefetch: false });
@@ -70,7 +79,9 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
       if (!query) return <TrendsColumn type='accounts' />;
       if (searchAccountsQuery.data && searchAccountsQuery.data.length > 0) {
         resultsIds = searchAccountsQuery.data;
-        searchResults = searchAccountsQuery.data.map(accountId => <AccountContainer key={accountId} id={accountId} />);
+        searchResults = searchAccountsQuery.data.map((accountId) => (
+          <AccountContainer key={accountId} id={accountId} />
+        ));
       } else if (!isFetching) {
         return (
           <div className='empty-column-indicator'>
@@ -89,7 +100,14 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
       if (!query) return <TrendsColumn type='statuses' />;
       if (searchStatusesQuery.data && searchStatusesQuery.data.length > 0) {
         resultsIds = searchStatusesQuery.data;
-        searchResults = searchStatusesQuery.data.map(statusId => <StatusContainer key={statusId} id={statusId} onMoveUp={handleMoveUp} onMoveDown={handleMoveDown} />);
+        searchResults = searchStatusesQuery.data.map((statusId) => (
+          <StatusContainer
+            key={statusId}
+            id={statusId}
+            onMoveUp={handleMoveUp}
+            onMoveDown={handleMoveDown}
+          />
+        ));
       } else if (!isFetching) {
         return (
           <div className='empty-column-indicator'>
@@ -107,8 +125,10 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
       placeholderComponent = PlaceholderHashtag;
       if (!query) return <TrendsColumn type='hashtags' />;
       if (searchHashtagsQuery.data && searchHashtagsQuery.data.length > 0) {
-        resultsIds = searchHashtagsQuery.data.map(hashtag => hashtag.name);
-        searchResults = searchHashtagsQuery.data.map(hashtag => <Hashtag key={hashtag.name} hashtag={hashtag} />);
+        resultsIds = searchHashtagsQuery.data.map((hashtag) => hashtag.name);
+        searchResults = searchHashtagsQuery.data.map((hashtag) => (
+          <Hashtag key={hashtag.name} hashtag={hashtag} />
+        ));
       } else if (!isFetching) {
         return (
           <div className='empty-column-indicator'>

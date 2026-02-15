@@ -25,7 +25,14 @@ const VerificationBadge: React.FC<IVerificationBadge> = ({ className }) => {
 
   return (
     <span className='rounded-full bg-accent-500' data-testid='verified-badge'>
-      <Element className={clsx('size-[16px] rounded-full bg-accent-500 stroke-[4] p-px text-white', className)} src={icon} alt={intl.formatMessage(messages.verified)} />
+      <Element
+        className={clsx(
+          'size-[16px] rounded-full bg-accent-500 stroke-[4] p-px text-white',
+          className,
+        )}
+        src={icon}
+        alt={intl.formatMessage(messages.verified)}
+      />
     </span>
   );
 };

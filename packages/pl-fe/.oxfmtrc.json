@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": [],
+  "printWidth": null,
+  "singleQuote": true,
+  "arrowParens": null,
+  "experimentalSortImports": {
+    "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"]
+  },
+  "tabWidth": 2,
+  "jsxSingleQuote": true,
+  "overrides": [
+    {
+      "files": ["**/*.tsx"],
+      "options": {
+        "experimentalTailwindcss": {
+          "tailwindConfig": "./tailwind.config.ts",
+          "attributes": ["className", "iconClassName", "itemClassName", "listClassName"],
+          "functions": ["clsx"]
+        }
+      }
+    }
+  ]
+}

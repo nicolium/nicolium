@@ -39,7 +39,9 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
     if (!(status.quote_visible ?? true)) {
       quote = (
         <OutlineBox>
-          <p><FormattedMessage id='statuses.quote_tombstone' defaultMessage='Post is unavailable.' /></p>
+          <p>
+            <FormattedMessage id='statuses.quote_tombstone' defaultMessage='Post is unavailable.' />
+          </p>
         </OutlineBox>
       );
     } else {
@@ -48,8 +50,18 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
   }
 
   return (
-    <div className={clsx('status__wrapper py-4', `status__wrapper-${status.visibility}`, { 'status__wrapper-reply': !!status.in_reply_to_id })} tabIndex={0}>
-      <div className={clsx('status', `status-${status.visibility}`, { 'status-reply': !!status.in_reply_to_id })} data-id={status.id}>
+    <div
+      className={clsx('status__wrapper py-4', `status__wrapper-${status.visibility}`, {
+        'status__wrapper-reply': !!status.in_reply_to_id,
+      })}
+      tabIndex={0}
+    >
+      <div
+        className={clsx('status', `status-${status.visibility}`, {
+          'status-reply': !!status.in_reply_to_id,
+        })}
+        data-id={status.id}
+      >
         <div className='mb-4'>
           <HStack justifyContent='between' alignItems='start'>
             <Account
@@ -63,16 +75,9 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
         <StatusReplyMentions status={status} />
 
         <Stack space={4}>
-          <StatusContent
-            status={status}
-            collapsable
-          />
+          <StatusContent status={status} collapsable />
 
-          {status.media_attachments.length > 0 && (
-            <AttachmentThumbs
-              status={status}
-            />
-          )}
+          {status.media_attachments.length > 0 && <AttachmentThumbs status={status} />}
 
           {quote}
 

@@ -39,7 +39,15 @@ interface IPopover {
  * Similar to tooltip, but requires a click and is used for larger blocks
  * of information.
  */
-const Popover: React.FC<IPopover> = ({ children, content, referenceElementClassName, interaction = 'hover', isFlush = false, offsetOptions = 10, placements = ['top', 'bottom'] }) => {
+const Popover: React.FC<IPopover> = ({
+  children,
+  content,
+  referenceElementClassName,
+  interaction = 'hover',
+  isFlush = false,
+  offsetOptions = 10,
+  placements = ['top', 'bottom'],
+}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const arrowRef = useRef<SVGSVGElement>(null);
@@ -79,11 +87,7 @@ const Popover: React.FC<IPopover> = ({ children, content, referenceElementClassN
   const hover = useHover(context, { enabled: interaction === 'hover' });
   const dismiss = useDismiss(context);
 
-  const { getReferenceProps, getFloatingProps } = useInteractions([
-    click,
-    hover,
-    dismiss,
-  ]);
+  const { getReferenceProps, getFloatingProps } = useInteractions([click, hover, dismiss]);
 
   return (
     <>
@@ -107,16 +111,13 @@ const Popover: React.FC<IPopover> = ({ children, content, referenceElementClassN
             }}
           >
             <div
-              className={
-                clsx(
-                  'overflow-hidden rounded-lg bg-white shadow-2xl dark:bg-gray-900 dark:ring-2 dark:ring-primary-700',
-                  { 'p-4': !isFlush },
-                )
-              }
+              className={clsx(
+                'overflow-hidden rounded-lg bg-white shadow-2xl dark:bg-gray-900 dark:ring-2 dark:ring-primary-700',
+                { 'p-4': !isFlush },
+              )}
               {...getFloatingProps()}
             >
               {content}
-
             </div>
             <FloatingArrow
               ref={arrowRef}

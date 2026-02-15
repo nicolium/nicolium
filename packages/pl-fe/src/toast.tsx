@@ -8,8 +8,8 @@ import { httpErrorMessages } from './utils/errors';
 import type { PlfeResponse } from './api';
 import type { LinkOptions } from '@tanstack/react-router';
 
-type ToastText = string | MessageDescriptor
-type ToastType = 'success' | 'error' | 'info'
+type ToastText = string | MessageDescriptor;
+type ToastType = 'success' | 'error' | 'info';
 
 interface IToastOptions {
   action?(): void;
@@ -50,7 +50,8 @@ const showAlertForError = (networkError: { response: PlfeResponse }) => {
     const { json, status, statusText } = networkError.response;
 
     if (status === 502) {
-      error('The server is down'); return;
+      error('The server is down');
+      return;
     }
 
     if (status === 404 || status === 410) {
@@ -67,19 +68,17 @@ const showAlertForError = (networkError: { response: PlfeResponse }) => {
     message ??= httpErrorMessages.find((httpError) => httpError.code === status)?.description;
 
     if (message) {
-      error(message); return;
+      error(message);
+      return;
     }
   } else {
     console.error(networkError);
-    error(messages.unexpectedMessage); return;
+    error(messages.unexpectedMessage);
+    return;
   }
 };
 
-export {
-  type ToastText,
-  type IToastOptions,
-  type ToastType,
-};
+export { type ToastText, type IToastOptions, type ToastType };
 
 export default {
   info,

@@ -35,7 +35,7 @@
     @apply transition-all;
   }
 
-  &__closer  {
+  &__closer {
     display: flex;
     position: absolute;
     top: 0;
@@ -63,7 +63,7 @@
     inset-inline-end: 0;
     bottom: 0;
     pointer-events: none;
-    transition: opacity .3s linear;
+    transition: opacity 0.3s linear;
     will-change: opacity;
 
     &--hidden {
@@ -71,7 +71,8 @@
     }
   }
 
-  &__closer, &__navigation {
+  &__closer,
+  &__navigation {
     @media (min-width: variables.$breakpoint-xl) {
       inset-inline-end: 24rem;
     }
@@ -82,7 +83,8 @@
       @apply xl:pr-0;
     }
 
-    .⁂-media-modal__closer, .⁂-media-modal__navigation  {
+    .⁂-media-modal__closer,
+    .⁂-media-modal__navigation {
       inset-inline-end: 0;
     }
   }

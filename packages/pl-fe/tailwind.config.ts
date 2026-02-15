@@ -7,8 +7,12 @@ import { parseColorMatrix } from './tailwind/colors';
 
 import type { Config } from 'tailwindcss';
 
-const blackVariantPlugin = plugin(({ addVariant }) =>{  addVariant('black', '&:is(.dark.black *)'); });
-const reducedMotionPlugin = plugin(({ addVariant }) =>{  addVariant('no-reduce-motion', '.no-reduce-motion &'); });
+const blackVariantPlugin = plugin(({ addVariant }) => {
+  addVariant('black', '&:is(.dark.black *)');
+});
+const reducedMotionPlugin = plugin(({ addVariant }) => {
+  addVariant('no-reduce-motion', '.no-reduce-motion &');
+});
 
 const config: Config = {
   content: ['./src/**/*.{html,js,ts,tsx}', './custom/instance/**/*.html', './index.html'],
@@ -29,7 +33,7 @@ const config: Config = {
         base: '0.9375rem',
       },
       fontFamily: {
-        'sans': [
+        sans: [
           'pl-fe i18n',
           'Inter',
           'ui-sans-serif',
@@ -47,11 +51,7 @@ const config: Config = {
           'Segoe UI Symbol',
           'Noto Color Emoji',
         ],
-        'mono': [
-          'Roboto Mono',
-          'ui-monospace',
-          'monospace',
-        ],
+        mono: ['Roboto Mono', 'ui-monospace', 'monospace'],
       },
       spacing: {
         '4.5': '1.125rem',
@@ -67,15 +67,15 @@ const config: Config = {
         accent: [300, 500],
         'gradient-start': true,
         'gradient-end': true,
-        'greentext': true,
+        greentext: true,
       }),
       animation: {
         'sonar-scale-4': 'sonar-scale-4 3s linear infinite',
         'sonar-scale-3': 'sonar-scale-3 3s 0.5s linear infinite',
         'sonar-scale-2': 'sonar-scale-2 3s 1s linear infinite',
         'sonar-scale-1': 'sonar-scale-1 3s 1.5s linear infinite',
-        'enter': 'enter 200ms ease-out',
-        'leave': 'leave 150ms ease-in forwards',
+        enter: 'enter 200ms ease-out',
+        leave: 'leave 150ms ease-in forwards',
         'text-overflow': 'text-overflow 8s linear infinite',
       },
       keyframes: {

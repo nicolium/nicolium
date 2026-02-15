@@ -19,7 +19,9 @@ const SitePreview: React.FC<ISitePreview> = ({ frontendConfig }) => {
   const userTheme = frontendConfig.defaultSettings.themeMode;
   const systemTheme = useSystemTheme();
 
-  const dark = ['dark', 'black'].includes(userTheme as string) || (userTheme === 'system' && systemTheme === 'black');
+  const dark =
+    ['dark', 'black'].includes(userTheme as string) ||
+    (userTheme === 'system' && systemTheme === 'black');
 
   const themeCss = useThemeCss(frontendConfig);
 
@@ -32,7 +34,8 @@ const SitePreview: React.FC<ISitePreview> = ({ frontendConfig }) => {
       'bg-white': !dark,
       'bg-gray-900': dark && userTheme !== 'black',
       'bg-black': userTheme === 'black',
-    });
+    },
+  );
 
   return (
     <div className={bodyClass}>
@@ -51,7 +54,6 @@ const SitePreview: React.FC<ISitePreview> = ({ frontendConfig }) => {
       />
     </div>
   );
-
 };
 
 export { SitePreview as default };

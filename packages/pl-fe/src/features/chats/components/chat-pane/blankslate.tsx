@@ -21,14 +21,10 @@ const Blankslate = ({ onSearch }: IBlankslate) => {
           {intl.formatMessage(messages.title)}
         </p>
 
-        <p className='⁂-chat-widget__blankslate__text__body'>
-          {intl.formatMessage(messages.body)}
-        </p>
+        <p className='⁂-chat-widget__blankslate__text__body'>{intl.formatMessage(messages.body)}</p>
       </div>
 
-      <button onClick={onSearch}>
-        {intl.formatMessage(messages.action)}
-      </button>
+      <button onClick={onSearch}>{intl.formatMessage(messages.action)}</button>
     </div>
   );
 };

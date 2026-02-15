@@ -96,7 +96,7 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
           autoFocus
           placeholder={intl.formatMessage(messages.placeholder)}
           value={value || ''}
-          onChange={(event) =>{
+          onChange={(event) => {
             setValue(event.target.value);
           }}
           outerClassName='mt-0'
@@ -104,7 +104,11 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
           append={
             <button onClick={clearValue}>
               <Icon
-                src={hasSearchValue ? require('@phosphor-icons/core/regular/x.svg') : require('@phosphor-icons/core/regular/magnifying-glass.svg')}
+                src={
+                  hasSearchValue
+                    ? require('@phosphor-icons/core/regular/x.svg')
+                    : require('@phosphor-icons/core/regular/magnifying-glass.svg')
+                }
                 className='size-4 text-gray-700 dark:text-gray-600'
                 aria-hidden='true'
               />

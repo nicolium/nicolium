@@ -16,7 +16,10 @@ import { useModalsActions } from '@/stores/modals';
 
 const messages = defineMessages({
   deleteHeading: { id: 'confirmations.delete_circle.heading', defaultMessage: 'Delete circle' },
-  deleteMessage: { id: 'confirmations.delete_circle.message', defaultMessage: 'Are you sure you want to permanently delete this circle?' },
+  deleteMessage: {
+    id: 'confirmations.delete_circle.message',
+    defaultMessage: 'Are you sure you want to permanently delete this circle?',
+  },
   deleteConfirm: { id: 'confirmations.delete_circle.confirm', defaultMessage: 'Delete' },
   editCircle: { id: 'circles.edit', defaultMessage: 'Edit circle' },
   deleteCircle: { id: 'circles.delete', defaultMessage: 'Delete circle' },
@@ -73,16 +76,20 @@ const CircleTimelinePage: React.FC = () => {
       </Column>
     );
   } else if (!circle) {
-    return (
-      <MissingIndicator />
-    );
+    return <MissingIndicator />;
   }
 
   const emptyMessage = (
     <div>
-      <FormattedMessage id='empty_column.circle' defaultMessage='There is nothing in this circle yet. When members of this circle create new posts, they will appear here.' />
-      <br /><br />
-      <Button onClick={handleEditClick}><FormattedMessage id='circle.click_to_add' defaultMessage='Click here to add people' /></Button>
+      <FormattedMessage
+        id='empty_column.circle'
+        defaultMessage='There is nothing in this circle yet. When members of this circle create new posts, they will appear here.'
+      />
+      <br />
+      <br />
+      <Button onClick={handleEditClick}>
+        <FormattedMessage id='circle.click_to_add' defaultMessage='Click here to add people' />
+      </Button>
     </div>
   );
 
@@ -102,7 +109,12 @@ const CircleTimelinePage: React.FC = () => {
   return (
     <Column
       label={title}
-      action={<DropdownMenu items={items} src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')} />}
+      action={
+        <DropdownMenu
+          items={items}
+          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
+        />
+      }
     >
       <Timeline
         loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'

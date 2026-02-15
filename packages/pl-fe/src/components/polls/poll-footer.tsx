@@ -16,7 +16,10 @@ import type { Poll } from 'pl-api';
 
 const messages = defineMessages({
   closed: { id: 'poll.closed', defaultMessage: 'Closed' },
-  nonAnonymous: { id: 'poll.non_anonymous.label', defaultMessage: 'Other instances may display the options you voted for' },
+  nonAnonymous: {
+    id: 'poll.non_anonymous.label',
+    defaultMessage: 'Other instances may display the options you voted for',
+  },
 });
 
 interface IPollFooter {
@@ -26,7 +29,12 @@ interface IPollFooter {
   statusId: string;
 }
 
-const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, statusId }): JSX.Element => {
+const PollFooter: React.FC<IPollFooter> = ({
+  poll,
+  showResults,
+  selected,
+  statusId,
+}): JSX.Element => {
   const intl = useIntl();
 
   const { refetch } = usePollQuery(poll.id);
@@ -34,7 +42,7 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
 
   const { toggleShowPollResults } = useStatusMetaActions();
 
-  const handleVote = () =>{
+  const handleVote = () => {
     vote(Object.keys(selected) as any as number[]);
   };
 
@@ -44,23 +52,37 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
     e.preventDefault();
   };
 
-  const timeRemaining = poll.expires_at && (
-    poll.expired ?
-      intl.formatMessage(messages.closed) :
+  const timeRemaining =
+    poll.expires_at &&
+    (poll.expired ? (
+      intl.formatMessage(messages.closed)
+    ) : (
       <RelativeTimestamp weight='medium' timestamp={poll.expires_at} futureDate />
-  );
+    ));
 
   let votesCount = null;
 
   if (poll.multiple && poll.voters_count !== null) {
-    votesCount = <FormattedMessage id='poll.total_people' defaultMessage='{count, plural, one {# person} other {# people}}' values={{ count: poll.voters_count }} />;
+    votesCount = (
+      <FormattedMessage
+        id='poll.total_people'
+        defaultMessage='{count, plural, one {# person} other {# people}}'
+        values={{ count: poll.voters_count }}
+      />
+    );
   } else {
-    votesCount = <FormattedMessage id='poll.total_votes' defaultMessage='{count, plural, one {# vote} other {# votes}}' values={{ count: poll.votes_count }} />;
+    votesCount = (
+      <FormattedMessage
+        id='poll.total_votes'
+        defaultMessage='{count, plural, one {# vote} other {# votes}}'
+        values={{ count: poll.votes_count }}
+      />
+    );
   }
 
   return (
     <Stack space={4} data-testid='poll-footer'>
-      {(!showResults && poll.multiple) && (
+      {!showResults && poll.multiple && (
         <Button onClick={handleVote} theme='primary' block>
           <FormattedMessage id='poll.vote' defaultMessage='Submit Vote' />
         </Button>
@@ -81,7 +103,11 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
 
         {showResults && (
           <>
-            <button className='text-gray-600 underline' onClick={handleRefresh} data-testid='poll-refresh'>
+            <button
+              className='text-gray-600 underline'
+              onClick={handleRefresh}
+              data-testid='poll-refresh'
+            >
               <Text theme='muted' weight='medium'>
                 <FormattedMessage id='poll.refresh' defaultMessage='Refresh' />
               </Text>
@@ -91,12 +117,14 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
           </>
         )}
 
-        {(!poll.voted && !poll.expired) && (
+        {!poll.voted && !poll.expired && (
           <>
             <button
-              className='text-gray-600 underline' onClick={() =>{
+              className='text-gray-600 underline'
+              onClick={() => {
                 toggleShowPollResults(statusId);
-              }} data-testid='poll-refresh'
+              }}
+              data-testid='poll-refresh'
             >
               <Text theme='muted' weight='medium'>
                 {showResults ? (
@@ -118,7 +146,9 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
         {poll.expires_at !== null && (
           <>
             <span className='⁂-separator' />
-            <Text weight='medium' theme='muted' data-testid='poll-expiration'>{timeRemaining}</Text>
+            <Text weight='medium' theme='muted' data-testid='poll-expiration'>
+              {timeRemaining}
+            </Text>
           </>
         )}
       </HStack>

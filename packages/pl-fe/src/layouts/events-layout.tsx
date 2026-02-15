@@ -3,11 +3,7 @@ import React from 'react';
 
 import Layout from '@/components/ui/layout';
 import LinkFooter from '@/features/ui/components/link-footer';
-import {
-  WhoToFollowPanel,
-  TrendsPanel,
-  NewEventPanel,
-} from '@/features/ui/util/async-components';
+import { WhoToFollowPanel, TrendsPanel, NewEventPanel } from '@/features/ui/util/async-components';
 import { useFeatures } from '@/hooks/use-features';
 
 /** Layout to display events list. */
@@ -22,12 +18,8 @@ const EventsLayout = () => {
 
       <Layout.Aside>
         <NewEventPanel />
-        {features.trends && (
-          <TrendsPanel limit={5} />
-        )}
-        {features.suggestions && (
-          <WhoToFollowPanel limit={3} />
-        )}
+        {features.trends && <TrendsPanel limit={5} />}
+        {features.suggestions && <WhoToFollowPanel limit={3} />}
         <LinkFooter key='link-footer' />
       </Layout.Aside>
     </>

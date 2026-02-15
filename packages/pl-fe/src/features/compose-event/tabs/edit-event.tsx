@@ -3,11 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { resetCompose } from '@/actions/compose';
-import {
-  cancelEventCompose,
-  initEventEdit,
-  submitEvent,
-} from '@/actions/events';
+import { cancelEventCompose, initEventEdit, submitEvent } from '@/actions/events';
 import { uploadFile } from '@/actions/media';
 import { fetchStatus } from '@/actions/statuses';
 import { ADDRESS_ICONS } from '@/components/autosuggest-location';
@@ -37,11 +33,23 @@ import type { Location } from 'pl-api';
 
 const messages = defineMessages({
   eventNamePlaceholder: { id: 'compose_event.fields.name_placeholder', defaultMessage: 'Name' },
-  eventDescriptionPlaceholder: { id: 'compose_event.fields.description_placeholder', defaultMessage: 'Description' },
-  eventStartTimePlaceholder: { id: 'compose_event.fields.start_time_placeholder', defaultMessage: 'Event begins on…' },
-  eventEndTimePlaceholder: { id: 'compose_event.fields.end_time_placeholder', defaultMessage: 'Event ends on…' },
+  eventDescriptionPlaceholder: {
+    id: 'compose_event.fields.description_placeholder',
+    defaultMessage: 'Description',
+  },
+  eventStartTimePlaceholder: {
+    id: 'compose_event.fields.start_time_placeholder',
+    defaultMessage: 'Event begins on…',
+  },
+  eventEndTimePlaceholder: {
+    id: 'compose_event.fields.end_time_placeholder',
+    defaultMessage: 'Event ends on…',
+  },
   resetLocation: { id: 'compose_event.reset_location', defaultMessage: 'Reset location' },
-  eventFetchFail: { id: 'compose_event.fetch_fail', defaultMessage: 'Failed to fetch edited event information' },
+  eventFetchFail: {
+    id: 'compose_event.fetch_fail',
+    defaultMessage: 'Failed to fetch edited event information',
+  },
 });
 
 interface IEditEvent {
@@ -54,12 +62,18 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const navigate = useNavigate();
 
   const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector((state) => statusId ? getStatus(state, { id: statusId }) : undefined);
+  const status = useAppSelector((state) =>
+    statusId ? getStatus(state, { id: statusId }) : undefined,
+  );
 
   const [name, setName] = useState(status?.event?.name ?? '');
   const [text, setText] = useState('');
-  const [startTime, setStartTime] = useState(status?.event?.start_time ? new Date(status.event.start_time) : new Date());
-  const [endTime, setEndTime] = useState(status?.event?.end_time ? new Date(status.event.end_time) : null);
+  const [startTime, setStartTime] = useState(
+    status?.event?.start_time ? new Date(status.event.start_time) : new Date(),
+  );
+  const [endTime, setEndTime] = useState(
+    status?.event?.end_time ? new Date(status.event.end_time) : null,
+  );
   const [approvalRequired, setApprovalRequired] = useState(status?.event?.join_mode !== 'free');
   const [banner, setBanner] = useState(status?.event?.banner ?? null);
   const [location, setLocation] = useState<Location | null>(null);
@@ -74,7 +88,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   };
 
   const onChangeStartTime = (date: Date | null) => {
-    setStartTime(date ?? new Date);
+    setStartTime(date ?? new Date());
   };
 
   const onChangeEndTime = (date: Date | null) => {
@@ -101,17 +115,19 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const handleFiles = (files: FileList) => {
     setIsUploading(true);
 
-    dispatch(uploadFile(
-      files[0],
-      intl,
-      (data) => {
-        setBanner(data);
-        setIsUploading(false);
-      },
-      () =>{
-        setIsUploading(false);
-      },
-    ));
+    dispatch(
+      uploadFile(
+        files[0],
+        intl,
+        (data) => {
+          setBanner(data);
+          setIsUploading(false);
+        },
+        () => {
+          setIsUploading(false);
+        },
+      ),
+    );
   };
 
   const handleClearBanner = () => {
@@ -121,20 +137,27 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const handleSubmit = () => {
     setIsDisabled(true);
 
-    dispatch(submitEvent({
-      statusId,
-      name,
-      status: text,
-      banner,
-      startTime,
-      endTime,
-      joinMode: approvalRequired ? 'restricted' : 'free',
-      location,
-    })).then((status) => {
-      if (status) navigate({ to: '/@{$username}/events/$statusId', params: { username: status.account.acct, statusId: status.id } });
-      dispatch(resetCompose(composeId));
-    }).catch(() => {
-    });
+    dispatch(
+      submitEvent({
+        statusId,
+        name,
+        status: text,
+        banner,
+        startTime,
+        endTime,
+        joinMode: approvalRequired ? 'restricted' : 'free',
+        location,
+      }),
+    )
+      .then((status) => {
+        if (status)
+          navigate({
+            to: '/@{$username}/events/$statusId',
+            params: { username: status.account.acct, statusId: status.id },
+          });
+        dispatch(resetCompose(composeId));
+      })
+      .catch(() => {});
   };
 
   useEffect(() => {
@@ -153,7 +176,8 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
           setBanner(status?.media_attachments[0] || null);
 
           setIsDisabled(false);
-        }).catch(() => {
+        })
+        .catch(() => {
           toast.error(messages.eventFetchFail);
         });
     }
@@ -163,32 +187,51 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
     };
   }, [statusId]);
 
-  const renderLocation = () => location && (
-    <HStack className='h-[38px] text-gray-700 dark:text-gray-500' alignItems='center' space={2}>
-      <Icon src={ADDRESS_ICONS[location.type] || require('@phosphor-icons/core/regular/map-pin.svg')} />
-      <Stack className='grow'>
-        <Text>{location.description}</Text>
-        <Text theme='muted' size='xs'>{[location.street, location.locality, location.country].filter(val => val?.trim()).join(' · ')}</Text>
-      </Stack>
-      <IconButton
-        title={intl.formatMessage(messages.resetLocation)} src={require('@phosphor-icons/core/regular/x.svg')} onClick={() =>{
-          onChangeLocation(null);
-        }}
-      />
-    </HStack>
-  );
+  const renderLocation = () =>
+    location && (
+      <HStack className='h-[38px] text-gray-700 dark:text-gray-500' alignItems='center' space={2}>
+        <Icon
+          src={ADDRESS_ICONS[location.type] || require('@phosphor-icons/core/regular/map-pin.svg')}
+        />
+        <Stack className='grow'>
+          <Text>{location.description}</Text>
+          <Text theme='muted' size='xs'>
+            {[location.street, location.locality, location.country]
+              .filter((val) => val?.trim())
+              .join(' · ')}
+          </Text>
+        </Stack>
+        <IconButton
+          title={intl.formatMessage(messages.resetLocation)}
+          src={require('@phosphor-icons/core/regular/x.svg')}
+          onClick={() => {
+            onChangeLocation(null);
+          }}
+        />
+      </HStack>
+    );
 
   return (
     <Form className='⁂-edit-event' onSubmit={handleSubmit}>
       <FormGroup
-        labelText={<FormattedMessage id='compose_event.fields.banner_label' defaultMessage='Event banner' />}
-        hintText={<FormattedMessage id='compose_event.fields.banner_hint' defaultMessage='PNG, GIF or JPG. Landscape format is preferred.' />}
+        labelText={
+          <FormattedMessage id='compose_event.fields.banner_label' defaultMessage='Event banner' />
+        }
+        hintText={
+          <FormattedMessage
+            id='compose_event.fields.banner_hint'
+            defaultMessage='PNG, GIF or JPG. Landscape format is preferred.'
+          />
+        }
       >
         <div className='⁂-edit-event__banner__container'>
           {banner ? (
             <>
               <img src={banner.url} alt='' />
-              <IconButton src={require('@phosphor-icons/core/regular/x.svg')} onClick={handleClearBanner} />
+              <IconButton
+                src={require('@phosphor-icons/core/regular/x.svg')}
+                onClick={handleClearBanner}
+              />
             </>
           ) : (
             <UploadButton disabled={isUploading} onSelectFile={handleFiles} />
@@ -196,7 +239,9 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
         </div>
       </FormGroup>
       <FormGroup
-        labelText={<FormattedMessage id='compose_event.fields.name_label' defaultMessage='Event name' />}
+        labelText={
+          <FormattedMessage id='compose_event.fields.name_label' defaultMessage='Event name' />
+        }
       >
         <Input
           type='text'
@@ -206,7 +251,12 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
         />
       </FormGroup>
       <FormGroup
-        labelText={<FormattedMessage id='compose_event.fields.description_label' defaultMessage='Event description' />}
+        labelText={
+          <FormattedMessage
+            id='compose_event.fields.description_label'
+            defaultMessage='Event description'
+          />
+        }
       >
         <div className='relative'>
           <ContentTypeButton composeId={composeId} />
@@ -221,16 +271,22 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
         </div>
       </FormGroup>
       <FormGroup
-        labelText={<FormattedMessage id='compose_event.fields.location_label' defaultMessage='Event location' />}
-      >
-        {location ? renderLocation() : (
-          <LocationSearch
-            onSelected={onChangeLocation}
+        labelText={
+          <FormattedMessage
+            id='compose_event.fields.location_label'
+            defaultMessage='Event location'
           />
-        )}
+        }
+      >
+        {location ? renderLocation() : <LocationSearch onSelected={onChangeLocation} />}
       </FormGroup>
       <FormGroup
-        labelText={<FormattedMessage id='compose_event.fields.start_time_label' defaultMessage='Event start date' />}
+        labelText={
+          <FormattedMessage
+            id='compose_event.fields.start_time_label'
+            defaultMessage='Event start date'
+          />
+        }
       >
         <DatePicker
           showTimeSelect
@@ -244,17 +300,22 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
         />
       </FormGroup>
       <HStack alignItems='center' space={2}>
-        <Toggle
-          checked={!!endTime}
-          onChange={onChangeHasEndTime}
-        />
+        <Toggle checked={!!endTime} onChange={onChangeHasEndTime} />
         <Text tag='span' theme='muted'>
-          <FormattedMessage id='compose_event.fields.has_end_time' defaultMessage='The event has an end date' />
+          <FormattedMessage
+            id='compose_event.fields.has_end_time'
+            defaultMessage='The event has an end date'
+          />
         </Text>
       </HStack>
       {endTime && (
         <FormGroup
-          labelText={<FormattedMessage id='compose_event.fields.end_time_label' defaultMessage='Event end date' />}
+          labelText={
+            <FormattedMessage
+              id='compose_event.fields.end_time_label'
+              defaultMessage='Event end date'
+            />
+          }
         >
           <DatePicker
             showTimeSelect
@@ -270,20 +331,22 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
       )}
       {!statusId && (
         <HStack alignItems='center' space={2}>
-          <Toggle
-            checked={approvalRequired}
-            onChange={onChangeApprovalRequired}
-          />
+          <Toggle checked={approvalRequired} onChange={onChangeApprovalRequired} />
           <Text tag='span' theme='muted'>
-            <FormattedMessage id='compose_event.fields.approval_required' defaultMessage='I want to approve participation requests manually' />
+            <FormattedMessage
+              id='compose_event.fields.approval_required'
+              defaultMessage='I want to approve participation requests manually'
+            />
           </Text>
         </HStack>
       )}
       <FormActions>
         <Button disabled={isDisabled} theme='primary' type='submit'>
-          {statusId
-            ? <FormattedMessage id='compose_event.update' defaultMessage='Update' />
-            : <FormattedMessage id='compose_event.create' defaultMessage='Create' />}
+          {statusId ? (
+            <FormattedMessage id='compose_event.update' defaultMessage='Update' />
+          ) : (
+            <FormattedMessage id='compose_event.create' defaultMessage='Create' />
+          )}
         </Button>
       </FormActions>
     </Form>

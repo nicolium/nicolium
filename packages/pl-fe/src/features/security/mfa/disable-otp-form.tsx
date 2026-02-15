@@ -53,13 +53,21 @@ const DisableOtpForm: React.FC = () => {
         </Text>
 
         <Text theme='muted'>
-          <FormattedMessage id='mfa.otp_enabled_description' defaultMessage='You have enabled two-factor authentication via OTP.' />
+          <FormattedMessage
+            id='mfa.otp_enabled_description'
+            defaultMessage='You have enabled two-factor authentication via OTP.'
+          />
         </Text>
       </Stack>
 
       <FormGroup
         labelText={intl.formatMessage(messages.passwordPlaceholder)}
-        hintText={<FormattedMessage id='mfa.mfa_disable_enter_password' defaultMessage='Enter your current password to disable two-factor auth.' />}
+        hintText={
+          <FormattedMessage
+            id='mfa.mfa_disable_enter_password'
+            defaultMessage='Enter your current password to disable two-factor auth.'
+          />
+        }
       >
         <Input
           type='password'

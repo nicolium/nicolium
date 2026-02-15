@@ -33,9 +33,7 @@ const TrendsPanel = ({ limit }: ITrendsPanel) => {
       {isFetching ? (
         <PlaceholderSidebarTrends limit={limit} />
       ) : (
-        trends?.slice(0, limit).map((hashtag) => (
-          <Hashtag key={hashtag.name} hashtag={hashtag} />
-        ))
+        trends?.slice(0, limit).map((hashtag) => <Hashtag key={hashtag.name} hashtag={hashtag} />)
       )}
     </Widget>
   );

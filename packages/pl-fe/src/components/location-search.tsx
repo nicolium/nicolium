@@ -33,13 +33,17 @@ const LocationSearch: React.FC<ILocationSearch> = ({ onSelected }) => {
     setValue(target.value);
   };
 
-  const handleSelected = (_tokenStart: number, _lastToken: string | null, suggestion: AutoSuggestion) => {
+  const handleSelected = (
+    _tokenStart: number,
+    _lastToken: string | null,
+    suggestion: AutoSuggestion,
+  ) => {
     if (typeof suggestion === 'object' && 'origin_id' in suggestion) {
       onSelected(suggestion);
     }
   };
 
-  const handleClear: React.MouseEventHandler = e => {
+  const handleClear: React.MouseEventHandler = (e) => {
     e.preventDefault();
 
     if (!empty) {
@@ -47,7 +51,7 @@ const LocationSearch: React.FC<ILocationSearch> = ({ onSelected }) => {
     }
   };
 
-  const handleKeyDown: React.KeyboardEventHandler = e => {
+  const handleKeyDown: React.KeyboardEventHandler = (e) => {
     if (e.key === 'Escape') {
       document.querySelector('.ui')?.parentElement?.focus();
     }
@@ -74,8 +78,14 @@ const LocationSearch: React.FC<ILocationSearch> = ({ onSelected }) => {
         onClick={handleClear}
         title={intl.formatMessage(messages.clear)}
       >
-        <Icon src={require('@phosphor-icons/core/regular/magnifying-glass.svg')} className={clsx('size-5 text-gray-600', { 'hidden': !empty })} />
-        <Icon src={require('@phosphor-icons/core/regular/backspace.svg')} className={clsx('size-5 text-gray-600', { 'hidden': empty })} />
+        <Icon
+          src={require('@phosphor-icons/core/regular/magnifying-glass.svg')}
+          className={clsx('size-5 text-gray-600', { hidden: !empty })}
+        />
+        <Icon
+          src={require('@phosphor-icons/core/regular/backspace.svg')}
+          className={clsx('size-5 text-gray-600', { hidden: empty })}
+        />
       </button>
     </div>
   );

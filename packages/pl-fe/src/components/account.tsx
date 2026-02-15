@@ -33,7 +33,11 @@ interface IInstanceFavicon {
 const messages = defineMessages({
   bot: { id: 'account.badges.bot', defaultMessage: 'Bot' },
   timeline: { id: 'account.instance_favicon', defaultMessage: 'Visit {domain} timeline' },
-  account_locked: { id: 'account.locked_info', defaultMessage: 'This account privacy status is set to locked. The owner manually reviews who can follow them.' },
+  account_locked: {
+    id: 'account.locked_info',
+    defaultMessage:
+      'This account privacy status is set to locked. The owner manually reviews who can follow them.',
+  },
 });
 
 const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
@@ -61,9 +65,7 @@ const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
   const className = 'size-4 flex-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2';
 
   if (disabled) {
-    return (
-      <img src={account.favicon} alt='' title={account.domain} className={className} />
-    );
+    return <img src={account.favicon} alt='' title={account.domain} className={className} />;
   }
 
   return (
@@ -85,9 +87,7 @@ interface IProfilePopper {
 }
 
 const ProfilePopper: React.FC<IProfilePopper> = ({ condition, wrapper, children }) => (
-  <>
-    {condition ? wrapper(children) : children}
-  </>
+  <>{condition ? wrapper(children) : children}</>
 );
 
 interface IAccount {
@@ -200,7 +200,12 @@ const Account = ({
       const actionWidth = actionRef.current?.clientWidth ?? 0;
 
       if (overflowRef.current) {
-        style.maxWidth = Math.max(0, overflowRef.current.clientWidth - (withAvatar ? avatarSize + 12 : 0) - (actionWidth ? actionWidth + 12 : 0));
+        style.maxWidth = Math.max(
+          0,
+          overflowRef.current.clientWidth -
+            (withAvatar ? avatarSize + 12 : 0) -
+            (actionWidth ? actionWidth + 12 : 0),
+        );
       }
 
       setStyle(style);
@@ -226,93 +231,43 @@ const Account = ({
   if (withDate) timestamp = account.created_at;
 
   const LinkEl: any = withLinkToProfile ? Link : 'div';
-  const linkProps = withLinkToProfile ? {
-    to: '/@{$username}',
-    params: { username: account.acct },
-    title: account.acct,
-    onClick: (event: React.MouseEvent) =>{
-      event.stopPropagation();
-    },
-  } : {};
+  const linkProps = withLinkToProfile
+    ? {
+        to: '/@{$username}',
+        params: { username: account.acct },
+        title: account.acct,
+        onClick: (event: React.MouseEvent) => {
+          event.stopPropagation();
+        },
+      }
+    : {};
 
-  if (disabled) return (
-    <div data-testid='account' className={clsx('⁂-account-card', { '⁂-account-card--action-top': actionAlignment === 'top' })} ref={overflowRef}>
-      <div>
-        <HStack alignItems='center' space={3} className='max-w-full'>
-          {disableUserProvidedMedia ? (
-            <Avatar src={account.avatar} alt={account.avatar_description} username={account.username} />
-          ) : (
-            <div className='rounded-lg'>
-              <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} isCat={account.is_cat} username={account.username} />
-              {emoji && (
-                <Emoji
-                  className='!absolute -right-1.5 bottom-0 size-5'
-                  emoji={emoji}
-                  src={emojiUrl}
+  if (disabled)
+    return (
+      <div
+        data-testid='account'
+        className={clsx('⁂-account-card', {
+          '⁂-account-card--action-top': actionAlignment === 'top',
+        })}
+        ref={overflowRef}
+      >
+        <div>
+          <HStack alignItems='center' space={3} className='max-w-full'>
+            {disableUserProvidedMedia ? (
+              <Avatar
+                src={account.avatar}
+                alt={account.avatar_description}
+                username={account.username}
+              />
+            ) : (
+              <div className='rounded-lg'>
+                <Avatar
+                  src={account.avatar}
+                  size={avatarSize}
+                  alt={account.avatar_description}
+                  isCat={account.is_cat}
+                  username={account.username}
                 />
-              )}
-            </div>
-          )}
-
-          <div className='grow overflow-hidden'>
-            <HStack space={1} alignItems='center' grow>
-              <Text size='sm' weight='semibold' truncate>
-                <Emojify text={account.display_name} emojis={account.emojis} />
-              </Text>
-
-              {account.verified && <VerificationBadge />}
-
-              {account.bot && <Badge slug='bot' title={<FormattedMessage id='account.badges.bot' defaultMessage='Bot' />} />}
-            </HStack>
-
-            <Stack space={withAccountNote || note ? 1 : 0}>
-              <HStack alignItems='center' space={1}>
-                <Text theme='muted' size='sm' direction='ltr' truncate>@{username}</Text>
-
-                {!timestamp && account.locked && (
-                  <>
-                    <Icon
-                      src={require('@phosphor-icons/core/regular/lock.svg')}
-                      alt={intl.formatMessage(messages.account_locked)}
-                      className='size-4 text-gray-600'
-                    />
-
-                    {account.favicon && !disableUserProvidedMedia && (
-                      <span className='⁂-separator' />
-                    )}
-                  </>
-                )}
-
-                {account.favicon && !disableUserProvidedMedia && (
-                  <InstanceFavicon account={account} disabled />
-                )}
-
-                {items}
-              </HStack>
-            </Stack>
-          </div>
-        </HStack>
-
-        <div ref={actionRef}>
-          {renderAction()}
-        </div>
-      </div>
-    </div>
-  );
-
-  return (
-    <div data-testid='account' className={clsx('⁂-account-card', { '⁂-account-card--action-top': actionAlignment === 'top' })} ref={overflowRef}>
-      <div>
-        <HStack alignItems={withAccountNote || note ? 'top' : 'center'} space={3} className='max-w-full'>
-          {withAvatar && (disableUserProvidedMedia ? (
-            <Avatar src={account.avatar} alt={account.avatar_description} username={account.username} />
-          ) : (
-            <ProfilePopper
-              condition={showAccountHoverCard}
-              wrapper={(children) => <HoverAccountWrapper className='relative' accountId={account.id} element='span'>{children}</HoverAccountWrapper>}
-            >
-              <LinkEl className='rounded-lg' {...linkProps}>
-                <Avatar src={account.avatar} size={avatarSize} alt={account.avatar_description} isCat={account.is_cat} username={account.username} />
                 {emoji && (
                   <Emoji
                     className='!absolute -right-1.5 bottom-0 size-5'
@@ -320,14 +275,117 @@ const Account = ({
                     src={emojiUrl}
                   />
                 )}
-              </LinkEl>
-            </ProfilePopper>
-          ))}
+              </div>
+            )}
+
+            <div className='grow overflow-hidden'>
+              <HStack space={1} alignItems='center' grow>
+                <Text size='sm' weight='semibold' truncate>
+                  <Emojify text={account.display_name} emojis={account.emojis} />
+                </Text>
+
+                {account.verified && <VerificationBadge />}
+
+                {account.bot && (
+                  <Badge
+                    slug='bot'
+                    title={<FormattedMessage id='account.badges.bot' defaultMessage='Bot' />}
+                  />
+                )}
+              </HStack>
+
+              <Stack space={withAccountNote || note ? 1 : 0}>
+                <HStack alignItems='center' space={1}>
+                  <Text theme='muted' size='sm' direction='ltr' truncate>
+                    @{username}
+                  </Text>
+
+                  {!timestamp && account.locked && (
+                    <>
+                      <Icon
+                        src={require('@phosphor-icons/core/regular/lock.svg')}
+                        alt={intl.formatMessage(messages.account_locked)}
+                        className='size-4 text-gray-600'
+                      />
+
+                      {account.favicon && !disableUserProvidedMedia && (
+                        <span className='⁂-separator' />
+                      )}
+                    </>
+                  )}
+
+                  {account.favicon && !disableUserProvidedMedia && (
+                    <InstanceFavicon account={account} disabled />
+                  )}
+
+                  {items}
+                </HStack>
+              </Stack>
+            </div>
+          </HStack>
+
+          <div ref={actionRef}>{renderAction()}</div>
+        </div>
+      </div>
+    );
+
+  return (
+    <div
+      data-testid='account'
+      className={clsx('⁂-account-card', {
+        '⁂-account-card--action-top': actionAlignment === 'top',
+      })}
+      ref={overflowRef}
+    >
+      <div>
+        <HStack
+          alignItems={withAccountNote || note ? 'top' : 'center'}
+          space={3}
+          className='max-w-full'
+        >
+          {withAvatar &&
+            (disableUserProvidedMedia ? (
+              <Avatar
+                src={account.avatar}
+                alt={account.avatar_description}
+                username={account.username}
+              />
+            ) : (
+              <ProfilePopper
+                condition={showAccountHoverCard}
+                wrapper={(children) => (
+                  <HoverAccountWrapper className='relative' accountId={account.id} element='span'>
+                    {children}
+                  </HoverAccountWrapper>
+                )}
+              >
+                <LinkEl className='rounded-lg' {...linkProps}>
+                  <Avatar
+                    src={account.avatar}
+                    size={avatarSize}
+                    alt={account.avatar_description}
+                    isCat={account.is_cat}
+                    username={account.username}
+                  />
+                  {emoji && (
+                    <Emoji
+                      className='!absolute -right-1.5 bottom-0 size-5'
+                      emoji={emoji}
+                      src={emojiUrl}
+                    />
+                  )}
+                </LinkEl>
+              </ProfilePopper>
+            ))}
 
           <div className='grow overflow-hidden' style={style}>
             <ProfilePopper
               condition={showAccountHoverCard}
-              wrapper={(children) => <HoverAccountWrapper accountId={account.id} element='span'>{children}</HoverAccountWrapper>}
+              wrapper={(children) => (
+                <HoverAccountWrapper accountId={account.id} element='span'>
+                  {children}
+                </HoverAccountWrapper>
+              )}
             >
               <LinkEl {...linkProps}>
                 <HStack space={1} alignItems='center' grow>
@@ -337,14 +395,21 @@ const Account = ({
 
                   {account.verified && <VerificationBadge />}
 
-                  {account.bot && <Badge slug='bot' title={<FormattedMessage id='account.badges.bot' defaultMessage='Bot' />} />}
+                  {account.bot && (
+                    <Badge
+                      slug='bot'
+                      title={<FormattedMessage id='account.badges.bot' defaultMessage='Bot' />}
+                    />
+                  )}
                 </HStack>
               </LinkEl>
             </ProfilePopper>
 
             <Stack space={withAccountNote || note ? 1 : 0}>
               <HStack alignItems='center' space={1}>
-                <Text theme='muted' size='sm' direction='ltr' truncate>@{username}</Text>
+                <Text theme='muted' size='sm' direction='ltr' truncate>
+                  @{username}
+                </Text>
 
                 {!timestamp && account.locked && (
                   <>
@@ -363,20 +428,34 @@ const Account = ({
                   <InstanceFavicon account={account} disabled={!withLinkToProfile} />
                 )}
 
-                {(timestamp) ? (
+                {timestamp ? (
                   <>
                     <span className='⁂-separator' />
 
                     {timestampUrl ? (
                       <Link
-                        to={timestampUrl} className='hover:underline' onClick={(event) =>{
+                        to={timestampUrl}
+                        className='hover:underline'
+                        onClick={(event) => {
                           event.stopPropagation();
                         }}
                       >
-                        <RelativeTimestamp timestamp={timestamp} theme='muted' size='sm' className='whitespace-nowrap' futureDate={futureTimestamp} />
+                        <RelativeTimestamp
+                          timestamp={timestamp}
+                          theme='muted'
+                          size='sm'
+                          className='whitespace-nowrap'
+                          futureDate={futureTimestamp}
+                        />
                       </Link>
                     ) : (
-                      <RelativeTimestamp timestamp={timestamp} theme='muted' size='sm' className='whitespace-nowrap' futureDate={futureTimestamp} />
+                      <RelativeTimestamp
+                        timestamp={timestamp}
+                        theme='muted'
+                        size='sm'
+                        className='whitespace-nowrap'
+                        futureDate={futureTimestamp}
+                      />
                     )}
                   </>
                 ) : null}
@@ -386,9 +465,14 @@ const Account = ({
                     <span className='⁂-separator' />
 
                     <Text tag='span' theme='muted' size='sm'>
-                      {approvalStatus === 'pending'
-                        ? <FormattedMessage id='status.approval.pending' defaultMessage='Pending approval' />
-                        : <FormattedMessage id='status.approval.rejected' defaultMessage='Rejected' />}
+                      {approvalStatus === 'pending' ? (
+                        <FormattedMessage
+                          id='status.approval.pending'
+                          defaultMessage='Pending approval'
+                        />
+                      ) : (
+                        <FormattedMessage id='status.approval.rejected' defaultMessage='Rejected' />
+                      )}
                     </Text>
                   </>
                 )}
@@ -397,7 +481,9 @@ const Account = ({
                   <>
                     <span className='⁂-separator' />
 
-                    <Text theme='muted' size='sm'><RelativeTimestamp timestamp={blockExpiresAt} futureDate /></Text>
+                    <Text theme='muted' size='sm'>
+                      <RelativeTimestamp timestamp={blockExpiresAt} futureDate />
+                    </Text>
                   </>
                 ) : null}
 
@@ -405,7 +491,9 @@ const Account = ({
                   <>
                     <span className='⁂-separator' />
 
-                    <Text theme='muted' size='sm'><RelativeTimestamp timestamp={muteExpiresAt} futureDate /></Text>
+                    <Text theme='muted' size='sm'>
+                      <RelativeTimestamp timestamp={muteExpiresAt} futureDate />
+                    </Text>
                   </>
                 ) : null}
 
@@ -413,28 +501,29 @@ const Account = ({
               </HStack>
 
               {note ? (
-                <Text
-                  size='sm'
-                  className='mr-2'
-                >
+                <Text size='sm' className='mr-2'>
                   {note}
                 </Text>
-              ) : withAccountNote && (
-                <Text
-                  truncate
-                  size='sm'
-                  className='line-clamp-2 inline text-ellipsis [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
-                >
-                  <ParsedContent html={account.note} emojis={account.emojis} speakAsCat={account.speak_as_cat} />
-                </Text>
+              ) : (
+                withAccountNote && (
+                  <Text
+                    truncate
+                    size='sm'
+                    className='line-clamp-2 inline text-ellipsis [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
+                  >
+                    <ParsedContent
+                      html={account.note}
+                      emojis={account.emojis}
+                      speakAsCat={account.speak_as_cat}
+                    />
+                  </Text>
+                )
               )}
             </Stack>
           </div>
         </HStack>
 
-        <div ref={actionRef}>
-          {renderAction()}
-        </div>
+        <div ref={actionRef}>{renderAction()}</div>
       </div>
     </div>
   );

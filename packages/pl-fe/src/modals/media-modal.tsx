@@ -47,18 +47,16 @@ interface MediaModalProps {
 }
 
 const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
-  const {
-    statusId,
-    onClose,
-    time = 0,
-  } = props;
+  const { statusId, onClose, time = 0 } = props;
 
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector((state) => statusId ? getStatus(state, { id: statusId }) : undefined);
-  const media = (status?.media_attachments ?? props.media) ?? [];
+  const status = useAppSelector((state) =>
+    statusId ? getStatus(state, { id: statusId }) : undefined,
+  );
+  const media = status?.media_attachments ?? props.media ?? [];
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
   const [index, setIndex] = useState<number>(props.index || 0);
@@ -66,22 +64,28 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   const [navigationHidden, setNavigationHidden] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(!status);
 
-  const [wrapperStyles, api] = useSpring(() => ({
-    x: `-${index * 100}%`,
-  }), [index]);
+  const [wrapperStyles, api] = useSpring(
+    () => ({
+      x: `-${index * 100}%`,
+    }),
+    [index],
+  );
 
-  const handleChangeIndex = useCallback((newIndex: number, animate = false) => {
-    if (newIndex < 0) {
-      newIndex = media.length + newIndex;
-    } else if (newIndex >= media.length) {
-      newIndex = newIndex % media.length;
-    }
-    setIndex(newIndex);
-    setZoomedIn(false);
-    if (animate) {
-      void api.start({ x: `calc(-${newIndex * 100}% + 0px)` });
-    }
-  }, [api, media.length]);
+  const handleChangeIndex = useCallback(
+    (newIndex: number, animate = false) => {
+      if (newIndex < 0) {
+        newIndex = media.length + newIndex;
+      } else if (newIndex >= media.length) {
+        newIndex = newIndex % media.length;
+      }
+      setIndex(newIndex);
+      setZoomedIn(false);
+      if (animate) {
+        void api.start({ x: `calc(-${newIndex * 100}% + 0px)` });
+      }
+    },
+    [api, media.length],
+  );
   const handlePrevClick = useCallback(() => {
     handleChangeIndex(index - 1, true);
   }, [handleChangeIndex, index]);
@@ -140,10 +144,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
       }
 
       // If dragging and swipe distance is enough, change the index.
-      if (
-        active &&
-          Math.abs(mx) > Math.min(window.innerWidth / 4, MIN_SWIPE_DISTANCE)
-      ) {
+      if (active && Math.abs(mx) > Math.min(window.innerWidth / 4, MIN_SWIPE_DISTANCE)) {
         handleChangeIndex(index - xDir);
         cancel();
       }
@@ -160,7 +161,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   };
 
   const toggleNavigation = () => {
-    setNavigationHidden(value => !value && userTouching.matches);
+    setNavigationHidden((value) => !value && userTouching.matches);
   };
 
   // const currentMedia = media[index];
@@ -173,92 +174,109 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     setZoomedIn((prev) => !prev);
   }, []);
 
-  const content = useMemo(() => media.map((attachment, idx) => {
-    let width: number | undefined, height: number | undefined;
-    if (attachment.type === 'image' || attachment.type === 'gifv' || attachment.type === 'video') {
-      width = (attachment.meta?.original?.width);
-      height = (attachment.meta?.original?.height);
-    }
+  const content = useMemo(
+    () =>
+      media.map((attachment, idx) => {
+        let width: number | undefined, height: number | undefined;
+        if (
+          attachment.type === 'image' ||
+          attachment.type === 'gifv' ||
+          attachment.type === 'video'
+        ) {
+          width = attachment.meta?.original?.width;
+          height = attachment.meta?.original?.height;
+        }
 
-    const link = (status && (
-      <Link to='/@{$username}/posts/$statusId' params={{ username: status.account.acct, statusId: status.id }}>
-        <FormattedMessage id='lightbox.view_context' defaultMessage='View context' />
-      </Link>
-    ));
+        const link = status && (
+          <Link
+            to='/@{$username}/posts/$statusId'
+            params={{ username: status.account.acct, statusId: status.id }}
+          >
+            <FormattedMessage id='lightbox.view_context' defaultMessage='View context' />
+          </Link>
+        );
 
-    if (attachment.type === 'image') {
-      return (
-        <ZoomableImage
-          src={attachment.url}
-          blurhash={attachment.blurhash ?? undefined}
-          width={width!}
-          height={height!}
-          alt={attachment.description}
-          lang={props.lang}
-          key={attachment.url}
-          onClick={toggleNavigation}
-          onDoubleClick={handleZoomClick}
-          onClose={onClose}
-          onZoomChange={setZoomedIn}
-          zoomedIn={zoomedIn && idx === index}
-        />
-      );
-    } else if (attachment.type === 'video') {
-      return (
-        <Video
-          preview={attachment.preview_url}
-          blurhash={attachment.blurhash}
-          src={attachment.url}
-          width={width}
-          height={height}
-          startTime={time}
-          detailed
-          autoFocus={idx === index}
-          link={link}
-          alt={attachment.description}
-          key={attachment.url}
-          visible
-        />
-      );
-    } else if (attachment.type === 'audio') {
-      return (
-        <Audio
-          src={attachment.url}
-          alt={attachment.description}
-          poster={attachment.preview_url !== attachment.url ? attachment.preview_url : (status?.account.avatar_static)}
-          backgroundColor={attachment.meta.colors?.background}
-          foregroundColor={attachment.meta.colors?.foreground}
-          accentColor={attachment.meta.colors?.accent}
-          duration={attachment.meta.original?.duration ?? 0}
-          key={attachment.url}
-        />
-      );
-    } else if (attachment.type === 'gifv') {
-      return (
-        <ExtendedVideoPlayer
-          src={attachment.url}
-          muted
-          controls={false}
-          width={width}
-          height={height}
-          key={attachment.preview_url}
-          alt={attachment.description}
-          onClick={toggleNavigation}
-        />
-      );
-    }
+        if (attachment.type === 'image') {
+          return (
+            <ZoomableImage
+              src={attachment.url}
+              blurhash={attachment.blurhash ?? undefined}
+              width={width!}
+              height={height!}
+              alt={attachment.description}
+              lang={props.lang}
+              key={attachment.url}
+              onClick={toggleNavigation}
+              onDoubleClick={handleZoomClick}
+              onClose={onClose}
+              onZoomChange={setZoomedIn}
+              zoomedIn={zoomedIn && idx === index}
+            />
+          );
+        } else if (attachment.type === 'video') {
+          return (
+            <Video
+              preview={attachment.preview_url}
+              blurhash={attachment.blurhash}
+              src={attachment.url}
+              width={width}
+              height={height}
+              startTime={time}
+              detailed
+              autoFocus={idx === index}
+              link={link}
+              alt={attachment.description}
+              key={attachment.url}
+              visible
+            />
+          );
+        } else if (attachment.type === 'audio') {
+          return (
+            <Audio
+              src={attachment.url}
+              alt={attachment.description}
+              poster={
+                attachment.preview_url !== attachment.url
+                  ? attachment.preview_url
+                  : status?.account.avatar_static
+              }
+              backgroundColor={attachment.meta.colors?.background}
+              foregroundColor={attachment.meta.colors?.foreground}
+              accentColor={attachment.meta.colors?.accent}
+              duration={attachment.meta.original?.duration ?? 0}
+              key={attachment.url}
+            />
+          );
+        } else if (attachment.type === 'gifv') {
+          return (
+            <ExtendedVideoPlayer
+              src={attachment.url}
+              muted
+              controls={false}
+              width={width}
+              height={height}
+              key={attachment.preview_url}
+              alt={attachment.description}
+              onClick={toggleNavigation}
+            />
+          );
+        }
 
-    return null;
-  }), [media.length, index, zoomedIn, handleZoomClick]);
+        return null;
+      }),
+    [media.length, index, zoomedIn, handleZoomClick],
+  );
 
   // Load data.
   useEffect(() => {
     if (status?.id) {
-      dispatch(fetchStatusWithContext(status.id, intl)).then(() => {
-        setIsLoaded(true);
-      }).catch(() => {
-        setIsLoaded(true);
-      });
+      dispatch(fetchStatusWithContext(status.id, intl))
+        .then(() => {
+          setIsLoaded(true);
+        })
+        .catch(() => {
+          setIsLoaded(true);
+        });
     }
   }, [status?.id]);
 
@@ -272,9 +290,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
   if (statusId) {
     if (!isLoaded) {
-      return (
-        <MissingIndicator />
-      );
+      return <MissingIndicator />;
     } else if (!status) {
       return <PlaceholderStatus />;
     }
@@ -287,7 +303,10 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   };
 
   return (
-    <div className={clsx('⁂-media-modal', { '⁂-media-modal--fullscreen': isFullScreen })} role='presentation'>
+    <div
+      className={clsx('⁂-media-modal', { '⁂-media-modal--fullscreen': isFullScreen })}
+      role='presentation'
+    >
       <div
         {...bind()}
         onClick={handleClickOutside}
@@ -298,7 +317,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
           style={wrapperStyles}
           className='⁂-media-modal__closer'
           role='presentation'
-          onClick={() =>{
+          onClick={() => {
             onClose();
           }}
         >
@@ -309,12 +328,15 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
           <HStack
             alignItems='center'
             justifyContent='between'
-            className={clsx('pointer-events-auto z-10 flex-[0_0_60px] p-4 transition-opacity', navigationHiddenClassName)}
+            className={clsx(
+              'pointer-events-auto z-10 flex-[0_0_60px] p-4 transition-opacity',
+              navigationHiddenClassName,
+            )}
           >
             <IconButton
               title={intl.formatMessage(messages.close)}
               src={require('@phosphor-icons/core/regular/x.svg')}
-              onClick={() =>{
+              onClick={() => {
                 onClose('MEDIA');
               }}
               theme='dark'
@@ -345,12 +367,16 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
               {status && (
                 <IconButton
-                  src={isFullScreen ? require('@phosphor-icons/core/regular/arrows-in-simple.svg') : require('@phosphor-icons/core/regular/arrows-out-simple.svg')}
+                  src={
+                    isFullScreen
+                      ? require('@phosphor-icons/core/regular/arrows-in-simple.svg')
+                      : require('@phosphor-icons/core/regular/arrows-out-simple.svg')
+                  }
                   title={intl.formatMessage(isFullScreen ? messages.minimize : messages.expand)}
                   theme='dark'
                   className='hidden !p-1.5 hover:scale-105 hover:bg-gray-900 xl:block'
                   iconClassName='h-5 w-5'
-                  onClick={() =>{
+                  onClick={() => {
                     setIsFullScreen(!isFullScreen);
                   }}
                 />
@@ -359,24 +385,40 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
           </HStack>
           {hasMultipleImages && (
             <HStack className='z-10 mx-5' justifyContent='between'>
-              <div className={clsx('pointer-events-auto z-10 flex h-fit items-center transition-opacity', navigationHiddenClassName)}>
+              <div
+                className={clsx(
+                  'pointer-events-auto z-10 flex h-fit items-center transition-opacity',
+                  navigationHiddenClassName,
+                )}
+              >
                 <button
                   tabIndex={0}
                   className='flex size-10 items-center justify-center rounded-full bg-gray-900 text-white'
                   onClick={handlePrevClick}
                   aria-label={intl.formatMessage(messages.previous)}
                 >
-                  <Icon src={require('@phosphor-icons/core/regular/arrow-left.svg')} className='size-5' />
+                  <Icon
+                    src={require('@phosphor-icons/core/regular/arrow-left.svg')}
+                    className='size-5'
+                  />
                 </button>
               </div>
-              <div className={clsx('pointer-events-auto z-10 flex h-fit items-center transition-opacity', navigationHiddenClassName)}>
+              <div
+                className={clsx(
+                  'pointer-events-auto z-10 flex h-fit items-center transition-opacity',
+                  navigationHiddenClassName,
+                )}
+              >
                 <button
                   tabIndex={0}
                   className='flex size-10 items-center justify-center rounded-full bg-gray-900 text-white'
                   onClick={handleNextClick}
                   aria-label={intl.formatMessage(messages.next)}
                 >
-                  <Icon src={require('@phosphor-icons/core/regular/arrow-right.svg')} className='size-5' />
+                  <Icon
+                    src={require('@phosphor-icons/core/regular/arrow-right.svg')}
+                    className='size-5'
+                  />
                 </button>
               </div>
             </HStack>
@@ -384,32 +426,29 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
           {status ? (
             <HStack
               justifyContent='center'
-              className={clsx('pointer-events-auto flex-[0_0_60px] transition-opacity', navigationHiddenClassName)}
+              className={clsx(
+                'pointer-events-auto flex-[0_0_60px] transition-opacity',
+                navigationHiddenClassName,
+              )}
             >
-              <StatusActionBar
-                status={status}
-                space='md'
-                expandable
-              />
+              <StatusActionBar status={status} space='md' expandable />
             </HStack>
-          ) : <span />}
+          ) : (
+            <span />
+          )}
         </div>
       </div>
 
       {status && (
         <div
-          className={
-            clsx('-right-96 hidden bg-white transition-all xl:fixed xl:inset-y-0 xl:right-0 xl:flex xl:w-96 xl:flex-col', {
+          className={clsx(
+            '-right-96 hidden bg-white transition-all xl:fixed xl:inset-y-0 xl:right-0 xl:flex xl:w-96 xl:flex-col',
+            {
               'xl:!-right-96': isFullScreen,
-            })
-          }
+            },
+          )}
         >
-          <Thread
-            status={status}
-            withMedia={false}
-            itemClassName='px-4'
-            isModal
-          />
+          <Thread status={status} withMedia={false} itemClassName='px-4' isModal />
         </div>
       )}
     </div>

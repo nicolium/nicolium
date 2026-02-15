@@ -13,6 +13,7 @@ Changes made since the project forked from Soapbox in April 2024.
 - Cat ears
 
 **Behavior:**
+
 - Notifications of the same type and reposts of the same post are grouped client-side.
 - Date is displayed for notifications that are not about new posts.
 - Replies to your posts are displayed differently to other mentions in notification list.
@@ -23,6 +24,7 @@ Changes made since the project forked from Soapbox in April 2024.
 - Poll results can be displayed before voting.
 
 **Settings:**
+
 - You can add image description to your avatar/backend, if supported by backend.
 - GoToSocial users can manage post interaction policies.
 - Users can set interface theme color.
@@ -30,6 +32,7 @@ Changes made since the project forked from Soapbox in April 2024.
 - Users can use system font for emoji rendering.
 
 **Composing posts:**
+
 - WYSIWYG text formatting, available if Markdown is supported.
 - When writing posts, links to statuses are added as quotes, when supported by backend.
 - You can select post language manually, when composing.
@@ -44,11 +47,13 @@ Changes made since the project forked from Soapbox in April 2024.
 - When entering a long, all-lowercase hashtag, a suggestion about hashtag accessibility is displayed.
 
 **Dashboard:**
+
 - Dashboard main page displays metrics included in Mastodon admin dashboard, if supported by backend.
 
 **Features:**
+
 - The most recent scrobble is displayed on user profile/card.
-- Users can generate *interaction circles* for their profiles.
+- Users can generate _interaction circles_ for their profiles.
 - You can bite users, if supported by backend.
 - You can browse Bubble timeline, if supported by backend.
 - Mastodon displays trending articles on Search page.
@@ -73,6 +78,7 @@ Changes made since the project forked from Soapbox in April 2024.
 ### Changed
 
 **Behavior:**
+
 - Separated favourites from reaction emojis. Limit for one reaction per post is removed. Facebook-like emoji reaction bar is removed.
 - Simplified sensitive text/media logic.
 - Reposting user is mentioned, when replying to a reposted status.
@@ -85,17 +91,20 @@ Changes made since the project forked from Soapbox in April 2024.
 - Various accessibility changes, focused on screen reader compatibility.
 
 **Settings:**
+
 - Moved missing description confirmation option back to Settings page.
 - Profile fields can be reordered on the Edit profile page.
 - Explicit addressing can be disabled on supported backends.
 - Developers options are no longer hidden behind a challenge.
 
 **Composing posts:**
+
 - Custom emojis are now split into categories.
 - GoToSocial users can post with date in the past.
 - Post scopes were renamed to match wording used by Mastodon.
 
 **UI changes:**
+
 - Removed header. Search bar and profile dropdown are moved to the sidebar. Mobile sidebar button is moved to the thumb navigation.
 - Floating action button for creating new posts is moved to the thumb navigation.
 - Mobile sidebar UI is changed to look like a popover.
@@ -116,6 +125,7 @@ Changes made since the project forked from Soapbox in April 2024.
 - Redesigned audio/video player controls.
 
 **Internal:**
+
 - Migrated some local stores from Redux to Zustand. Other stores have been migrated away from `immutable`, before moving them either to Zustand or TanStack Query.
 - Posts are now emojified during render, instead of when inserting posts to the state.
 - Barrel exports are no longer used.
@@ -126,6 +136,7 @@ Changes made since the project forked from Soapbox in April 2024.
 - Default max image size is increased to match Mastodon limits.
 
 **Dependencies:**
+
 - Replaced `react-popper` and `react-overlays` with `@floating-ui/react`.
 - `uuid` package is replaced by the `randomUUID()` method.
 

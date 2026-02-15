@@ -8,7 +8,13 @@ interface IProgressCircle extends React.HTMLAttributes<HTMLDivElement> {
   title?: string;
 }
 
-const ProgressCircle: React.FC<IProgressCircle> = ({ progress, radius = 12, stroke = 4, title, ...props }) => {
+const ProgressCircle: React.FC<IProgressCircle> = ({
+  progress,
+  radius = 12,
+  stroke = 4,
+  title,
+  ...props
+}) => {
   const progressStroke = stroke + 0.5;
   const actualRadius = radius + progressStroke;
   const circumference = 2 * Math.PI * radius;

@@ -16,29 +16,32 @@ const FRONTEND_CONFIG_REQUEST_FAIL = 'FRONTEND_CONFIG_REQUEST_FAIL' as const;
 
 const FRONTEND_CONFIG_REMEMBER_SUCCESS = 'FRONTEND_CONFIG_REMEMBER_SUCCESS' as const;
 
-const getFrontendConfig = createSelector([
-  (state: RootState) => state.frontendConfig,
-// Do some additional normalization with the state
-], (frontendConfig) => v.parse(frontendConfigSchema, frontendConfig));
+const getFrontendConfig = createSelector(
+  [
+    (state: RootState) => state.frontendConfig,
+    // Do some additional normalization with the state
+  ],
+  (frontendConfig) => v.parse(frontendConfigSchema, frontendConfig),
+);
 
-const rememberFrontendConfig = (host: string | null) =>
-  (dispatch: AppDispatch) =>
-    KVStore.getItemOrError(`plfe_config:${host}`).then(frontendConfig => {
+const rememberFrontendConfig = (host: string | null) => (dispatch: AppDispatch) =>
+  KVStore.getItemOrError(`plfe_config:${host}`)
+    .then((frontendConfig) => {
       dispatch({ type: FRONTEND_CONFIG_REMEMBER_SUCCESS, host, frontendConfig });
       return true;
-    }).catch(() => false);
+    })
+    .catch(() => false);
 
-const fetchFrontendConfigurations = () =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).instance.getFrontendConfigurations();
+const fetchFrontendConfigurations = () => (dispatch: AppDispatch, getState: () => RootState) =>
+  getClient(getState).instance.getFrontendConfigurations();
 
 /** Conditionally fetches pl-fe config depending on backend features */
-const fetchFrontendConfig = (host: string | null) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const fetchFrontendConfig =
+  (host: string | null) => (dispatch: AppDispatch, getState: () => RootState) => {
     const features = getState().auth.client.features;
 
     if (features.frontendConfigurations) {
-      return dispatch(fetchFrontendConfigurations()).then(data => {
+      return dispatch(fetchFrontendConfigurations()).then((data) => {
         const key = 'pl_fe';
         if (data[key]) {
           dispatch(importFrontendConfig(data[key], host));
@@ -53,27 +56,27 @@ const fetchFrontendConfig = (host: string | null) =>
   };
 
 /** Tries to remember the config from browser storage before fetching it */
-const loadFrontendConfig = () =>
-  async (dispatch: AppDispatch, getState: () => RootState) => {
-    const host = getHost(getState());
+const loadFrontendConfig = () => async (dispatch: AppDispatch, getState: () => RootState) => {
+  const host = getHost(getState());
 
-    const result = await dispatch(rememberFrontendConfig(host));
+  const result = await dispatch(rememberFrontendConfig(host));
 
-    if (result) {
-      dispatch(fetchFrontendConfig(host));
-      return;
-    } else {
-      return dispatch(fetchFrontendConfig(host));
-    }
-  };
+  if (result) {
+    dispatch(fetchFrontendConfig(host));
+    return;
+  } else {
+    return dispatch(fetchFrontendConfig(host));
+  }
+};
 
-const fetchPlFeJson = (host: string | null) =>
-  (dispatch: AppDispatch) =>
-    staticFetch('/instance/pl-fe.json').then(({ json: data }) => {
+const fetchPlFeJson = (host: string | null) => (dispatch: AppDispatch) =>
+  staticFetch('/instance/pl-fe.json')
+    .then(({ json: data }) => {
       if (!isObject(data)) throw 'pl-fe.json failed';
       dispatch(importFrontendConfig(data, host));
       return data;
-    }).catch(error => {
+    })
+    .catch((error) => {
       dispatch(frontendConfigFail(error, host));
     });
 

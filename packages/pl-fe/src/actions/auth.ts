@@ -5,7 +5,7 @@
  * @see module:pl-fe/actions/apps
  * @see module:pl-fe/actions/oauth
  * @see module:pl-fe/actions/security
-*/
+ */
 import {
   credentialAccountSchema,
   PlApiClient,
@@ -55,38 +55,41 @@ const AUTH_ACCOUNT_REMEMBER_SUCCESS = 'AUTH_ACCOUNT_REMEMBER_SUCCESS' as const;
 
 const messages = defineMessages({
   loggedOut: { id: 'auth.logged_out', defaultMessage: 'Logged out.' },
-  awaitingApproval: { id: 'auth.awaiting_approval', defaultMessage: 'Your account is awaiting approval' },
-  invalidCredentials: { id: 'auth.invalid_credentials', defaultMessage: 'Wrong username or password' },
+  awaitingApproval: {
+    id: 'auth.awaiting_approval',
+    defaultMessage: 'Your account is awaiting approval',
+  },
+  invalidCredentials: {
+    id: 'auth.invalid_credentials',
+    defaultMessage: 'Wrong username or password',
+  },
 });
 
-const noOp = () => new Promise(f =>{
-  f(undefined);
-});
+const noOp = () =>
+  new Promise((f) => {
+    f(undefined);
+  });
 
-const createAppAndToken = () =>
-  (dispatch: AppDispatch) =>
-    dispatch(createAuthApp()).then(() =>
-      dispatch(createAppToken()),
-    );
+const createAppAndToken = () => (dispatch: AppDispatch) =>
+  dispatch(createAuthApp()).then(() => dispatch(createAppToken()));
 
 interface AuthAppCreatedAction {
   type: typeof AUTH_APP_CREATED;
   app: CredentialApplication;
 }
 
-const createAuthApp = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const params = {
-      client_name: `${sourceCode.displayName} (${new URL(window.origin).host})`,
-      redirect_uris: 'urn:ietf:wg:oauth:2.0:oob',
-      scopes: getScopes(getState()),
-      website: sourceCode.homepage,
-    };
-
-    return createApp(params).then((app) =>
-      dispatch<AuthAppCreatedAction>({ type: AUTH_APP_CREATED, app }),
-    );
+const createAuthApp = () => (dispatch: AppDispatch, getState: () => RootState) => {
+  const params = {
+    client_name: `${sourceCode.displayName} (${new URL(window.origin).host})`,
+    redirect_uris: 'urn:ietf:wg:oauth:2.0:oob',
+    scopes: getScopes(getState()),
+    website: sourceCode.homepage,
   };
+
+  return createApp(params).then((app) =>
+    dispatch<AuthAppCreatedAction>({ type: AUTH_APP_CREATED, app }),
+  );
+};
 
 interface AuthAppAuthorizedAction {
   type: typeof AUTH_APP_AUTHORIZED;
@@ -94,25 +97,24 @@ interface AuthAppAuthorizedAction {
   token: Token;
 }
 
-const createAppToken = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const app = getState().auth.app!;
+const createAppToken = () => (dispatch: AppDispatch, getState: () => RootState) => {
+  const app = getState().auth.app!;
 
-    const params = {
-      client_id: app.client_id,
-      client_secret: app.client_secret,
-      redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
-      grant_type: 'client_credentials',
-      scope: getScopes(getState()),
-    };
-
-    return obtainOAuthToken(params).then((token) =>
-      dispatch<AuthAppAuthorizedAction>({ type: AUTH_APP_AUTHORIZED, app, token }),
-    );
+  const params = {
+    client_id: app.client_id,
+    client_secret: app.client_secret,
+    redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
+    grant_type: 'client_credentials',
+    scope: getScopes(getState()),
   };
 
-const createUserToken = (username: string, password: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+  return obtainOAuthToken(params).then((token) =>
+    dispatch<AuthAppAuthorizedAction>({ type: AUTH_APP_AUTHORIZED, app, token }),
+  );
+};
+
+const createUserToken =
+  (username: string, password: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     const app = getState().auth.app;
 
     const params = {
@@ -125,25 +127,26 @@ const createUserToken = (username: string, password: string) =>
       scope: getScopes(getState()),
     };
 
-    return obtainOAuthToken(params)
-      .then((token) => dispatch(authLoggedIn(token, app)));
+    return obtainOAuthToken(params).then((token) => dispatch(authLoggedIn(token, app)));
   };
 
-const otpVerify = (code: string, mfa_token: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const otpVerify =
+  (code: string, mfa_token: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const app = state.auth.app;
     const baseUrl = parseBaseURL(state.me) || BuildConfig.BACKEND_URL;
     const client = new PlApiClient(baseUrl);
-    return client.oauth.mfaChallenge({
-      client_id: app?.client_id!,
-      client_secret: app?.client_secret!,
-      mfa_token: mfa_token,
-      code: code,
-      challenge_type: 'totp',
-      // redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
-      // scope: getScopes(getState()),
-    }).then((token) => dispatch(authLoggedIn(token, app)));
+    return client.oauth
+      .mfaChallenge({
+        client_id: app?.client_id!,
+        client_secret: app?.client_secret!,
+        mfa_token: mfa_token,
+        code: code,
+        challenge_type: 'totp',
+        // redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
+        // scope: getScopes(getState()),
+      })
+      .then((token) => dispatch(authLoggedIn(token, app)));
   };
 
 interface VerifyCredentialsRequestAction {
@@ -163,7 +166,8 @@ interface VerifyCredentialsFailAction {
   error: unknown;
 }
 
-const verifyCredentials = (token: string, accountUrl?: string) =>
+const verifyCredentials =
+  (token: string, accountUrl?: string) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     const baseURL = parseBaseURL(accountUrl) || BuildConfig.BACKEND_URL;
 
@@ -173,26 +177,37 @@ const verifyCredentials = (token: string, accountUrl?: string) =>
 
     await client.instance.getInstance();
 
-    return client.settings.verifyCredentials().then((account) => {
-      dispatch(importEntities({ accounts: [account] }));
-      dispatch<VerifyCredentialsSuccessAction>({ type: VERIFY_CREDENTIALS_SUCCESS, token, account });
-      if (account.id === getState().me) dispatch(fetchMeSuccess(account));
-      return account;
-    }).catch(error => {
-      if (error?.response?.status === 403 && error?.response?.json?.id) {
-        // The user is waitlisted
-        const account = error.response.json;
-        const parsedAccount = v.parse(credentialAccountSchema, error.response.json);
-        dispatch(importEntities({ accounts: [parsedAccount] }));
-        dispatch<VerifyCredentialsSuccessAction>({ type: VERIFY_CREDENTIALS_SUCCESS, token, account: parsedAccount });
-        if (account.id === getState().me) dispatch(fetchMeSuccess(parsedAccount));
-        return parsedAccount;
-      } else {
-        if (getState().me === null) dispatch(fetchMeFail(error));
-        dispatch<VerifyCredentialsFailAction>({ type: VERIFY_CREDENTIALS_FAIL, token, error });
-        throw error;
-      }
-    });
+    return client.settings
+      .verifyCredentials()
+      .then((account) => {
+        dispatch(importEntities({ accounts: [account] }));
+        dispatch<VerifyCredentialsSuccessAction>({
+          type: VERIFY_CREDENTIALS_SUCCESS,
+          token,
+          account,
+        });
+        if (account.id === getState().me) dispatch(fetchMeSuccess(account));
+        return account;
+      })
+      .catch((error) => {
+        if (error?.response?.status === 403 && error?.response?.json?.id) {
+          // The user is waitlisted
+          const account = error.response.json;
+          const parsedAccount = v.parse(credentialAccountSchema, error.response.json);
+          dispatch(importEntities({ accounts: [parsedAccount] }));
+          dispatch<VerifyCredentialsSuccessAction>({
+            type: VERIFY_CREDENTIALS_SUCCESS,
+            token,
+            account: parsedAccount,
+          });
+          if (account.id === getState().me) dispatch(fetchMeSuccess(parsedAccount));
+          return parsedAccount;
+        } else {
+          if (getState().me === null) dispatch(fetchMeFail(error));
+          dispatch<VerifyCredentialsFailAction>({ type: VERIFY_CREDENTIALS_FAIL, token, error });
+          throw error;
+        }
+      });
   };
 
 interface AuthAccountRememberSuccessAction {
@@ -201,34 +216,39 @@ interface AuthAccountRememberSuccessAction {
   account: CredentialAccount;
 }
 
-const rememberAuthAccount = (accountUrl: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    KVStore.getItemOrError(`authAccount:${accountUrl}`).then(account => {
+const rememberAuthAccount =
+  (accountUrl: string) => (dispatch: AppDispatch, getState: () => RootState) =>
+    KVStore.getItemOrError(`authAccount:${accountUrl}`).then((account) => {
       dispatch(importEntities({ accounts: [account] }));
-      dispatch<AuthAccountRememberSuccessAction>({ type: AUTH_ACCOUNT_REMEMBER_SUCCESS, account, accountUrl });
+      dispatch<AuthAccountRememberSuccessAction>({
+        type: AUTH_ACCOUNT_REMEMBER_SUCCESS,
+        account,
+        accountUrl,
+      });
       if (account.id === getState().me) dispatch(fetchMeSuccess(account));
       return account;
     });
 
-const loadCredentials = (token: string, accountUrl: string) =>
-  (dispatch: AppDispatch) => dispatch(rememberAuthAccount(accountUrl))
-    .finally(() => dispatch(verifyCredentials(token, accountUrl)));
+const loadCredentials = (token: string, accountUrl: string) => (dispatch: AppDispatch) =>
+  dispatch(rememberAuthAccount(accountUrl)).finally(() =>
+    dispatch(verifyCredentials(token, accountUrl)),
+  );
 
-const logIn = (username: string, password: string) =>
-  (dispatch: AppDispatch) => dispatch(createAuthApp()).then(() =>
-    dispatch(createUserToken(normalizeUsername(username), password)),
-  ).catch((error: { response: PlfeResponse }) => {
-    if ((error.response?.json)?.error === 'mfa_required') {
-      // If MFA is required, throw the error and handle it in the component.
+const logIn = (username: string, password: string) => (dispatch: AppDispatch) =>
+  dispatch(createAuthApp())
+    .then(() => dispatch(createUserToken(normalizeUsername(username), password)))
+    .catch((error: { response: PlfeResponse }) => {
+      if (error.response?.json?.error === 'mfa_required') {
+        // If MFA is required, throw the error and handle it in the component.
+        throw error;
+      } else if (error.response?.json?.identifier === 'awaiting_approval') {
+        toast.error(messages.awaitingApproval);
+      } else {
+        // Return "wrong password" message.
+        toast.error(messages.invalidCredentials);
+      }
       throw error;
-    } else if ((error.response?.json)?.identifier === 'awaiting_approval') {
-      toast.error(messages.awaitingApproval);
-    } else {
-      // Return "wrong password" message.
-      toast.error(messages.invalidCredentials);
-    }
-    throw error;
-  });
+    });
 
 interface AuthLoggedOutAction {
   type: typeof AUTH_LOGGED_OUT;
@@ -236,86 +256,79 @@ interface AuthLoggedOutAction {
   standalone: boolean;
 }
 
-const logOut = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const account = getLoggedInAccount(state);
-    const standalone = isStandalone(state);
+const logOut = () => (dispatch: AppDispatch, getState: () => RootState) => {
+  const state = getState();
+  const account = getLoggedInAccount(state);
+  const standalone = isStandalone(state);
 
-    if (!account) return dispatch(noOp);
+  if (!account) return dispatch(noOp);
 
-    const token = state.auth.users[account.url].access_token;
+  const token = state.auth.users[account.url].access_token;
 
-    const params = {
-      client_id: state.auth.tokens[token]?.client_id ?? state.auth.app?.client_id!,
-      client_secret: state.auth.tokens[token]?.client_secret ?? state.auth.app?.client_secret!,
-      token,
-    };
-
-    return dispatch(revokeOAuthToken(params))
-      .finally(() => {
-        // Clear all stored cache from React Query
-        queryClient.invalidateQueries();
-        queryClient.clear();
-
-        // Clear the account from Sentry.
-        unsetSentryAccount();
-
-        dispatch<AuthLoggedOutAction>({ type: AUTH_LOGGED_OUT, account, standalone });
-
-        toast.success(messages.loggedOut);
-      });
+  const params = {
+    client_id: state.auth.tokens[token]?.client_id ?? state.auth.app?.client_id!,
+    client_secret: state.auth.tokens[token]?.client_secret ?? state.auth.app?.client_secret!,
+    token,
   };
+
+  return dispatch(revokeOAuthToken(params)).finally(() => {
+    // Clear all stored cache from React Query
+    queryClient.invalidateQueries();
+    queryClient.clear();
+
+    // Clear the account from Sentry.
+    unsetSentryAccount();
+
+    dispatch<AuthLoggedOutAction>({ type: AUTH_LOGGED_OUT, account, standalone });
+
+    toast.success(messages.loggedOut);
+  });
+};
 
 interface SwitchAccountAction {
   type: typeof SWITCH_ACCOUNT;
   account: Account;
 }
 
-const switchAccount = (accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const account = selectAccount(getState(), accountId);
-    if (!account) return;
+const switchAccount = (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+  const account = selectAccount(getState(), accountId);
+  if (!account) return;
 
-    // Clear all stored cache from React Query
-    queryClient.invalidateQueries();
-    queryClient.clear();
+  // Clear all stored cache from React Query
+  queryClient.invalidateQueries();
+  queryClient.clear();
 
-    return dispatch<SwitchAccountAction>({ type: SWITCH_ACCOUNT, account });
-  };
+  return dispatch<SwitchAccountAction>({ type: SWITCH_ACCOUNT, account });
+};
 
-const fetchOwnAccounts = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    Object.values(state.auth.users).forEach((user) => {
-      const account = selectAccount(state, user.id);
-      if (!account) {
-        dispatch(verifyCredentials(user.access_token, user.url))
-          .catch(() =>{
-            console.warn(`Failed to load account: ${user.url}`);
-          });
-      }
-    });
-  };
-
-const register = (params: CreateAccountParams) =>
-  async (dispatch: AppDispatch) => {
-    params.fullname = params.username;
-
-    const { app } = await dispatch(createAppAndToken());
-
-    return dispatch(createAccount(params))
-      .then(({ response }) => {
-        if ('identifier' in response) {
-          toast.info(response.message);
-        } else {
-          return dispatch(authLoggedIn(response, app));
-        }
+const fetchOwnAccounts = () => (dispatch: AppDispatch, getState: () => RootState) => {
+  const state = getState();
+  Object.values(state.auth.users).forEach((user) => {
+    const account = selectAccount(state, user.id);
+    if (!account) {
+      dispatch(verifyCredentials(user.access_token, user.url)).catch(() => {
+        console.warn(`Failed to load account: ${user.url}`);
       });
-  };
+    }
+  });
+};
 
-const fetchCaptcha = () =>
-  (_dispatch: AppDispatch, getState: () => RootState) => getClient(getState).oauth.getCaptcha();
+const register = (params: CreateAccountParams) => async (dispatch: AppDispatch) => {
+  params.fullname = params.username;
+
+  const { app } = await dispatch(createAppAndToken());
+
+  return dispatch(createAccount(params)).then(({ response }) => {
+    if ('identifier' in response) {
+      toast.info(response.message);
+    } else {
+      return dispatch(authLoggedIn(response, app));
+    }
+  });
+};
+
+const fetchCaptcha = () => (_dispatch: AppDispatch, getState: () => RootState) =>
+  getClient(getState).oauth.getCaptcha();
 
 interface AuthLoggedInAction {
   type: typeof AUTH_LOGGED_IN;
@@ -323,8 +336,8 @@ interface AuthLoggedInAction {
   app?: CredentialApplication;
 }
 
-const authLoggedIn = (token: Token, app?: CredentialApplication | null) =>
-  (dispatch: AppDispatch) => {
+const authLoggedIn =
+  (token: Token, app?: CredentialApplication | null) => (dispatch: AppDispatch) => {
     dispatch<AuthLoggedInAction>({ type: AUTH_LOGGED_IN, token, app: app ?? undefined });
     return token;
   };

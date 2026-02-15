@@ -12,28 +12,41 @@ import { filterById } from '../utils/filter-id';
 import type { PaginatedResponse, PlApiClient } from 'pl-api';
 
 const appendFollowRequest = (accountId: string) =>
-  queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(['accountsLists', 'followRequests'], (data) => {
-    if (!data || data.pages.some(page => page.items.includes(accountId))) return data;
+  queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
+    ['accountsLists', 'followRequests'],
+    (data) => {
+      if (!data || data.pages.some((page) => page.items.includes(accountId))) return data;
 
-    return {
-      ...data,
-      pages: data.pages.map((page, index) => index === 0 ? ({ ...page, items: [accountId, ...page.items] }) : page),
-    };
-  });
+      return {
+        ...data,
+        pages: data.pages.map((page, index) =>
+          index === 0 ? { ...page, items: [accountId, ...page.items] } : page,
+        ),
+      };
+    },
+  );
 
 const removeFollowRequest = (accountId: string) =>
-  queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(['accountsLists', 'followRequests'], filterById(accountId));
+  queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
+    ['accountsLists', 'followRequests'],
+    filterById(accountId),
+  );
 
-const makeUseFollowRequests = <T>(select: ((data: InfiniteData<PaginatedResponse<string>>) => T)) => makePaginatedResponseQuery(
-  () => ['accountsLists', 'followRequests'],
-  (client) => client.myAccount.getFollowRequests().then(minifyAccountList),
-  select,
-  'isLoggedIn',
+const makeUseFollowRequests = <T>(select: (data: InfiniteData<PaginatedResponse<string>>) => T) =>
+  makePaginatedResponseQuery(
+    () => ['accountsLists', 'followRequests'],
+    (client) => client.myAccount.getFollowRequests().then(minifyAccountList),
+    select,
+    'isLoggedIn',
+  );
+
+const useFollowRequests = makeUseFollowRequests((data) =>
+  data.pages.map((page) => page.items).flat(),
 );
 
-const useFollowRequests = makeUseFollowRequests((data) => data.pages.map(page => page.items).flat());
-
-const useFollowRequestsCount = makeUseFollowRequests((data) => data.pages.map(page => page.items).flat().length);
+const useFollowRequestsCount = makeUseFollowRequests(
+  (data) => data.pages.map((page) => page.items).flat().length,
+);
 
 const useOutgoingFollowRequests = makePaginatedResponseQuery(
   ['accountsLists', 'outgoingFollowRequests'],
@@ -47,10 +60,10 @@ const useAcceptFollowRequestMutation = (accountId: string) => {
   return useMutation({
     mutationKey: ['accountsLists', 'followRequests', accountId],
     mutationFn: () => client.myAccount.acceptFollowRequest(accountId),
-    onSettled: ((relationship) => {
+    onSettled: (relationship) => {
       removeFollowRequest(accountId);
       dispatch(importEntities({ relationships: [relationship] }));
-    }),
+    },
   });
 };
 
@@ -61,18 +74,25 @@ const useRejectFollowRequestMutation = (accountId: string) => {
   return useMutation({
     mutationKey: ['accountsLists', 'followRequests', accountId],
     mutationFn: () => client.myAccount.rejectFollowRequest(accountId),
-    onSettled: ((relationship) => {
+    onSettled: (relationship) => {
       removeFollowRequest(accountId);
       dispatch(importEntities({ relationships: [relationship] }));
-    }),
+    },
   });
 };
 
-const prefetchFollowRequests = (client: PlApiClient) => queryClient.prefetchInfiniteQuery({
-  queryKey: ['accountsLists', 'followRequests'],
-  queryFn: ({ pageParam }) => pageParam.next?.() ?? client.myAccount.getFollowRequests().then(minifyAccountList),
-  initialPageParam: { previous: null, next: null, items: [], partial: false } as PaginatedResponse<string>,
-});
+const prefetchFollowRequests = (client: PlApiClient) =>
+  queryClient.prefetchInfiniteQuery({
+    queryKey: ['accountsLists', 'followRequests'],
+    queryFn: ({ pageParam }) =>
+      pageParam.next?.() ?? client.myAccount.getFollowRequests().then(minifyAccountList),
+    initialPageParam: {
+      previous: null,
+      next: null,
+      items: [],
+      partial: false,
+    } as PaginatedResponse<string>,
+  });
 
 export {
   appendFollowRequest,

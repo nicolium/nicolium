@@ -21,8 +21,10 @@ interface ISelectDropdown {
 const SelectDropdown: React.FC<ISelectDropdown> = (props) => {
   const { label, hint, items, ...rest } = props;
 
-  const optionElems = Object.keys(items).map(item => (
-    <option key={item} value={item}>{items[item]}</option>
+  const optionElems = Object.keys(items).map((item) => (
+    <option key={item} value={item}>
+      {items[item]}
+    </option>
   ));
 
   return <Select {...rest}>{optionElems}</Select>;
@@ -32,7 +34,7 @@ interface IMultiselect {
   className?: string;
   items: Record<string, string>;
   value?: string[];
-  onChange?: ((values: string[]) => void);
+  onChange?: (values: string[]) => void;
   disabled?: boolean;
 }
 
@@ -40,8 +42,13 @@ const Multiselect: React.FC<IMultiselect> = (props) => {
   const intl = useIntl();
   const { items, value, onChange, disabled } = props;
 
-  const options = useMemo(() => Object.entries(items).map(([key, value]) => ({ key, value })), [items]);
-  const selectedValues = value?.map(key => options.find(option => option.key === key)).filter(value => value);
+  const options = useMemo(
+    () => Object.entries(items).map(([key, value]) => ({ key, value })),
+    [items],
+  );
+  const selectedValues = value
+    ?.map((key) => options.find((option) => option.key === key))
+    .filter((value) => value);
 
   const handleChange = (values: Record<'key' | 'value', string>[]) => {
     onChange?.(values.map(({ key }) => key));
@@ -62,7 +69,4 @@ const Multiselect: React.FC<IMultiselect> = (props) => {
   );
 };
 
-export {
-  Multiselect,
-  SelectDropdown,
-};
+export { Multiselect, SelectDropdown };

@@ -32,7 +32,12 @@ const DomainBlocksPage: React.FC = () => {
     );
   }
 
-  const emptyMessage = <FormattedMessage id='empty_column.domain_blocks' defaultMessage='There are no hidden domains yet.' />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.domain_blocks'
+      defaultMessage='There are no hidden domains yet.'
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -43,9 +48,9 @@ const DomainBlocksPage: React.FC = () => {
         emptyMessageText={emptyMessage}
         listClassName='divide-y divide-gray-200 black:divide-gray-800 dark:divide-primary-800'
       >
-        {domains.map((domain) =>
-          <Domain key={domain} domain={domain} />,
-        )}
+        {domains.map((domain) => (
+          <Domain key={domain} domain={domain} />
+        ))}
       </ScrollableList>
     </Column>
   );

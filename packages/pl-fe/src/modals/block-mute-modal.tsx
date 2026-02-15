@@ -13,7 +13,11 @@ import Toggle from '@/components/ui/toggle';
 import DurationSelector from '@/features/compose/components/polls/duration-selector';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
-import { useBlockAccountMutation, useMuteAccountMutation, useUpdateAccountNoteMutation } from '@/queries/accounts/use-relationship';
+import {
+  useBlockAccountMutation,
+  useMuteAccountMutation,
+  useUpdateAccountNoteMutation,
+} from '@/queries/accounts/use-relationship';
 import toast from '@/toast';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
@@ -30,7 +34,12 @@ interface BlockMuteModalProps {
   statusId?: string;
 }
 
-const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accountId, statusId, onClose, action }) => {
+const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
+  accountId,
+  statusId,
+  onClose,
+  action,
+}) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
@@ -65,7 +74,7 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accoun
     });
     if (notes && note !== undefined && note !== currentNote) {
       updateAccountNote(note, {
-        onError: () =>{
+        onError: () => {
           toast.error(messages.noteSaveFailed);
         },
       });
@@ -73,7 +82,7 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accoun
   };
 
   const handleBlockAndReport = () => {
-    handleClick(() =>{
+    handleClick(() => {
       dispatch(initReport(ReportableEntities.STATUS, account, { statusId }));
     });
   };
@@ -83,36 +92,53 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accoun
   };
 
   const toggleNotifications = () => {
-    setNotifications(notifications => !notifications);
+    setNotifications((notifications) => !notifications);
   };
 
   const handleChangeMuteDuration = (expiresIn: number): void => {
     setDuration(expiresIn);
   };
 
-  const toggleAutoExpire = () =>{
+  const toggleAutoExpire = () => {
     setDuration(duration ? 0 : 2 * 60 * 60 * 24);
   };
 
   return (
     <Modal
-      title={action === 'MUTE' ? (
-        <FormattedMessage id='confirmations.mute.heading' defaultMessage='Mute @{name}' values={{ name: account.acct }} />
-      ) : (
-        <FormattedMessage id='confirmations.block.heading' defaultMessage='Block @{name}' values={{ name: account.acct }} />
-      )}
+      title={
+        action === 'MUTE' ? (
+          <FormattedMessage
+            id='confirmations.mute.heading'
+            defaultMessage='Mute @{name}'
+            values={{ name: account.acct }}
+          />
+        ) : (
+          <FormattedMessage
+            id='confirmations.block.heading'
+            defaultMessage='Block @{name}'
+            values={{ name: account.acct }}
+          />
+        )
+      }
       onClose={handleCancel}
-      confirmationAction={() =>{
+      confirmationAction={() => {
         handleClick();
       }}
-      confirmationText={action === 'MUTE' ? (
-        <FormattedMessage id='confirmations.mute.confirm' defaultMessage='Mute' />
-      ) : (
-        <FormattedMessage id='confirmations.block.confirm' defaultMessage='Block' />
-      )}
+      confirmationText={
+        action === 'MUTE' ? (
+          <FormattedMessage id='confirmations.mute.confirm' defaultMessage='Mute' />
+        ) : (
+          <FormattedMessage id='confirmations.block.confirm' defaultMessage='Block' />
+        )
+      }
       confirmationDisabled={isSubmitting}
       secondaryAction={action === 'BLOCK' ? handleBlockAndReport : undefined}
-      secondaryText={<FormattedMessage id='confirmations.block.block_and_report' defaultMessage='Block and report' />}
+      secondaryText={
+        <FormattedMessage
+          id='confirmations.block.block_and_report'
+          defaultMessage='Block and report'
+        />
+      }
       secondaryDisabled={isSubmitting}
       cancelText={<FormattedMessage id='confirmation_modal.cancel' defaultMessage='Cancel' />}
       cancelAction={handleCancel}
@@ -138,26 +164,32 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accoun
           <label>
             <HStack alignItems='center' space={2}>
               <Text tag='span' theme='muted'>
-                <FormattedMessage id='mute_modal.hide_notifications' defaultMessage='Hide notifications from this user?' />
+                <FormattedMessage
+                  id='mute_modal.hide_notifications'
+                  defaultMessage='Hide notifications from this user?'
+                />
               </Text>
 
-              <Toggle
-                checked={notifications}
-                onChange={toggleNotifications}
-              />
+              <Toggle checked={notifications} onChange={toggleNotifications} />
             </HStack>
           </label>
         )}
 
         {notes && (
           <FormGroup
-            labelText={(
+            labelText={
               currentNote ? (
-                <FormattedMessage id='mute_modal.note.label.edit' defaultMessage='Edit account note' />
+                <FormattedMessage
+                  id='mute_modal.note.label.edit'
+                  defaultMessage='Edit account note'
+                />
               ) : (
-                <FormattedMessage id='mute_modal.note.label.add' defaultMessage='Add account note' />
+                <FormattedMessage
+                  id='mute_modal.note.label.add'
+                  defaultMessage='Add account note'
+                />
               )
-            )}
+            }
             hintText={
               action === 'MUTE' ? (
                 <FormattedMessage
@@ -174,8 +206,8 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accoun
           >
             <Textarea
               className='mt-1'
-              value={note ?? (currentNote ?? '')}
-              onChange={({ target }) =>{
+              value={note ?? currentNote ?? ''}
+              onChange={({ target }) => {
                 setNote(target.value);
               }}
               autoComplete='off'
@@ -190,22 +222,27 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accoun
               <HStack alignItems='center' space={2}>
                 <Text tag='span'>
                   {action === 'MUTE' ? (
-                    <FormattedMessage id='mute_modal.auto_expire' defaultMessage='Automatically expire mute?' />
+                    <FormattedMessage
+                      id='mute_modal.auto_expire'
+                      defaultMessage='Automatically expire mute?'
+                    />
                   ) : (
-                    <FormattedMessage id='block_modal.auto_expire' defaultMessage='Automatically expire block?' />
+                    <FormattedMessage
+                      id='block_modal.auto_expire'
+                      defaultMessage='Automatically expire block?'
+                    />
                   )}
                 </Text>
 
-                <Toggle
-                  checked={duration !== 0}
-                  onChange={toggleAutoExpire}
-                />
+                <Toggle checked={duration !== 0} onChange={toggleAutoExpire} />
               </HStack>
             </label>
 
             {duration !== 0 && (
               <Stack space={2}>
-                <Text weight='medium'><FormattedMessage id='mute_modal.duration' defaultMessage='Duration' />: </Text>
+                <Text weight='medium'>
+                  <FormattedMessage id='mute_modal.duration' defaultMessage='Duration' />:{' '}
+                </Text>
 
                 <DurationSelector onDurationChange={handleChangeMuteDuration} value={duration} />
               </Stack>

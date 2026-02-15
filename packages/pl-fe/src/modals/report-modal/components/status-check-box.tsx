@@ -14,10 +14,15 @@ interface IStatusCheckBox {
   checked: boolean;
 }
 
-const StatusCheckBox: React.FC<IStatusCheckBox> = ({ id, disabled, checked, toggleStatusReport }) => {
+const StatusCheckBox: React.FC<IStatusCheckBox> = ({
+  id,
+  disabled,
+  checked,
+  toggleStatusReport,
+}) => {
   const status = useAppSelector((state) => state.statuses[id]);
 
-  const onToggle: React.ChangeEventHandler<HTMLInputElement> = (e) =>{
+  const onToggle: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     toggleStatusReport(e.target.checked);
   };
 
@@ -28,7 +33,7 @@ const StatusCheckBox: React.FC<IStatusCheckBox> = ({ id, disabled, checked, togg
   let media;
 
   if (status.media_attachments.length > 0) {
-    if (status.media_attachments.some(item => item.type === 'unknown')) {
+    if (status.media_attachments.some((item) => item.type === 'unknown')) {
       // Do nothing
     } else if (status.media_attachments[0]?.type === 'video') {
       const video = status.media_attachments[0];
@@ -51,21 +56,10 @@ const StatusCheckBox: React.FC<IStatusCheckBox> = ({ id, disabled, checked, togg
       const audio = status.media_attachments[0];
 
       if (audio) {
-        media = (
-          <Audio
-            src={audio.url}
-            alt={audio.description}
-          />
-        );
+        media = <Audio src={audio.url} alt={audio.description} />;
       }
     } else {
-      media = (
-        <MediaGallery
-          media={status.media_attachments}
-          height={110}
-          onOpenMedia={noop}
-        />
-      );
+      media = <MediaGallery media={status.media_attachments} height={110} onOpenMedia={noop} />;
     }
   }
 

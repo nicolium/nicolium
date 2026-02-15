@@ -13,21 +13,18 @@ import { getBaseURL } from '@/utils/state';
 
 import type { AppDispatch, RootState } from '@/store';
 
-const obtainOAuthToken = async (params: GetTokenParams, baseURL?: string) =>{
+const obtainOAuthToken = async (params: GetTokenParams, baseURL?: string) => {
   const client = new PlApiClient((baseURL ?? BuildConfig.BACKEND_URL) || '');
   await client.instance.getInstance();
 
   return client.oauth.getToken(params);
 };
 
-const revokeOAuthToken = (params: RevokeTokenParams) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const revokeOAuthToken =
+  (params: RevokeTokenParams) => (dispatch: AppDispatch, getState: () => RootState) => {
     const baseURL = getBaseURL(getState());
     const client = new PlApiClient(baseURL || '');
     return client.oauth.revokeToken(params);
   };
 
-export {
-  obtainOAuthToken,
-  revokeOAuthToken,
-};
+export { obtainOAuthToken, revokeOAuthToken };

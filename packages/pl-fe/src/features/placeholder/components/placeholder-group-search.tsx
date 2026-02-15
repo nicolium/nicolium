@@ -10,11 +10,7 @@ const PlaceholderGroupSearch = ({ withJoinAction = true }: { withJoinAction?: bo
   const groupNameLength = randomIntFromInterval(12, 20);
 
   return (
-    <HStack
-      alignItems='center'
-      justifyContent='between'
-      className='animate-pulse'
-    >
+    <HStack alignItems='center' justifyContent='between' className='animate-pulse'>
       <HStack alignItems='center' space={2} className='overflow-hidden'>
         {/* Group Avatar */}
         <div className='size-11 rounded-lg bg-gray-500 dark:bg-gray-700 dark:ring-primary-900' />
@@ -39,9 +35,7 @@ const PlaceholderGroupSearch = ({ withJoinAction = true }: { withJoinAction?: bo
       </HStack>
 
       {/* Join Group Button */}
-      {withJoinAction && (
-        <div className='h-10 w-36 rounded-full bg-gray-300 dark:bg-gray-800' />
-      )}
+      {withJoinAction && <div className='h-10 w-36 rounded-full bg-gray-300 dark:bg-gray-800' />}
     </HStack>
   );
 };

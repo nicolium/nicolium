@@ -15,7 +15,13 @@ import { useSettings } from '@/stores/settings';
 import { truncateFilename } from '@/utils/media';
 
 import { isIOS } from '../is-mobile';
-import { isPanoramic, isPortrait, isNonConformingRatio, minimumAspectRatio, maximumAspectRatio } from '../utils/media-aspect-ratio';
+import {
+  isPanoramic,
+  isPortrait,
+  isNonConformingRatio,
+  minimumAspectRatio,
+  maximumAspectRatio,
+} from '../utils/media-aspect-ratio';
 
 import HStack from './ui/hstack';
 
@@ -41,7 +47,10 @@ interface SizeData {
 }
 
 const getAspectRatio = (attachment: MediaAttachment) => {
-  if ((attachment.type === 'gifv' || attachment.type === 'image' || attachment.type === 'video') && attachment.meta.original) {
+  if (
+    (attachment.type === 'gifv' || attachment.type === 'image' || attachment.type === 'video') &&
+    attachment.meta.original
+  ) {
     if (attachment.meta.original.aspect) {
       return attachment.meta.original.aspect;
     }
@@ -84,13 +93,17 @@ const Item: React.FC<IItem> = ({
   const { autoPlayGif } = useSettings();
   const { mediaPreview } = useFrontendConfig();
 
-  const handleMouseEnter: React.MouseEventHandler<HTMLVideoElement> = ({ currentTarget: video }) => {
+  const handleMouseEnter: React.MouseEventHandler<HTMLVideoElement> = ({
+    currentTarget: video,
+  }) => {
     if (hoverToPlay()) {
       video.play();
     }
   };
 
-  const handleMouseLeave: React.MouseEventHandler<HTMLVideoElement> = ({ currentTarget: video }) => {
+  const handleMouseLeave: React.MouseEventHandler<HTMLVideoElement> = ({
+    currentTarget: video,
+  }) => {
     if (hoverToPlay()) {
       video.pause();
       video.currentTime = 0;
@@ -116,12 +129,16 @@ const Item: React.FC<IItem> = ({
     e.stopPropagation();
   };
 
-  const handleVideoHover: React.MouseEventHandler<HTMLVideoElement> = ({ currentTarget: video }) => {
+  const handleVideoHover: React.MouseEventHandler<HTMLVideoElement> = ({
+    currentTarget: video,
+  }) => {
     video.playbackRate = 3.0;
     video.play();
   };
 
-  const handleVideoLeave: React.MouseEventHandler<HTMLVideoElement> = ({ currentTarget: video }) => {
+  const handleVideoLeave: React.MouseEventHandler<HTMLVideoElement> = ({
+    currentTarget: video,
+  }) => {
     video.pause();
     video.currentTime = 0;
   };
@@ -154,7 +171,10 @@ const Item: React.FC<IItem> = ({
     const attachmentIcon = (
       <Icon
         className='size-16 text-gray-800 dark:text-gray-200'
-        src={MIMETYPE_ICONS[attachment.mime_type as string] || require('@phosphor-icons/core/regular/paperclip.svg')}
+        src={
+          MIMETYPE_ICONS[attachment.mime_type as string] ||
+          require('@phosphor-icons/core/regular/paperclip.svg')
+        }
       />
     );
 
@@ -164,7 +184,12 @@ const Item: React.FC<IItem> = ({
         key={attachment.id}
         style={{ position, float, left, top, right, bottom, height, width: `${width}%` }}
       >
-        <a className='⁂-media-gallery__item-thumbnail' href={attachment.url} target='_blank' style={{ cursor: 'pointer' }}>
+        <a
+          className='⁂-media-gallery__item-thumbnail'
+          href={attachment.url}
+          target='_blank'
+          style={{ cursor: 'pointer' }}
+        >
           <Blurhash hash={attachment.blurhash} className='⁂-media-gallery__preview' />
           <span className='⁂-media-gallery__item__icons'>{attachmentIcon}</span>
           <span className='⁂-media-gallery__filename__label'>{filename}</span>
@@ -197,11 +222,12 @@ const Item: React.FC<IItem> = ({
             content={
               <Stack space={1} className='max-h-[32rem] max-w-96 overflow-auto p-4'>
                 <Text weight='semibold'>
-                  <FormattedMessage id='media-gallery.description' defaultMessage='Image description' />
+                  <FormattedMessage
+                    id='media-gallery.description'
+                    defaultMessage='Image description'
+                  />
                 </Text>
-                <Text className='whitespace-pre-wrap'>
-                  {attachment.description}
-                </Text>
+                <Text className='whitespace-pre-wrap'>{attachment.description}</Text>
               </Stack>
             }
             isFlush
@@ -248,7 +274,9 @@ const Item: React.FC<IItem> = ({
         target='_blank'
         title={attachment.description}
       >
-        <span className='⁂-media-gallery__item__icons'><Icon src={require('@phosphor-icons/core/regular/speaker-high.svg')} /></span>
+        <span className='⁂-media-gallery__item__icons'>
+          <Icon src={require('@phosphor-icons/core/regular/speaker-high.svg')} />
+        </span>
         <span className='⁂-media-gallery__file-extension__label uppercase'>{ext}</span>
       </a>
     );
@@ -261,12 +289,7 @@ const Item: React.FC<IItem> = ({
         target='_blank'
         title={attachment.description}
       >
-        <video
-          muted
-          loop
-          onMouseOver={handleVideoHover}
-          onMouseOut={handleVideoLeave}
-        >
+        <video muted loop onMouseOver={handleVideoHover} onMouseOut={handleVideoLeave}>
           <source src={attachment.url} />
         </video>
         <span className='⁂-media-gallery__file-extension__label uppercase'>{ext}</span>
@@ -276,14 +299,16 @@ const Item: React.FC<IItem> = ({
 
   return (
     <div
-      className={clsx('⁂-media-gallery__item', `⁂-media-gallery__item--${attachment.type}`, standalone)}
+      className={clsx(
+        '⁂-media-gallery__item',
+        `⁂-media-gallery__item--${attachment.type}`,
+        standalone,
+      )}
       key={attachment.id}
       style={{ position, float, left, top, right, bottom, height, width: `${width}%` }}
     >
       {last && total > ATTACHMENT_LIMIT && (
-        <div className='⁂-media-gallery__item-overflow'>
-          +{total - ATTACHMENT_LIMIT + 1}
-        </div>
+        <div className='⁂-media-gallery__item-overflow'>+{total - ATTACHMENT_LIMIT + 1}</div>
       )}
       <Blurhash
         hash={attachment.blurhash}
@@ -347,22 +372,44 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
       <Stack space={2}>
         {media.map((attachment, index) => (
           <HStack
-            element='button' alignItems='center' space={2} key={attachment.id} onClick={() =>{
+            element='button'
+            alignItems='center'
+            space={2}
+            key={attachment.id}
+            onClick={() => {
               handleClick(index);
             }}
           >
             <Icon
               className='size-4 min-w-fit text-gray-800 dark:text-gray-200'
-              src={MIMETYPE_ICONS[(attachment.type === 'unknown' && attachment.mime_type) ?? attachment.type] ?? require('@phosphor-icons/core/regular/paperclip.svg')}
+              src={
+                MIMETYPE_ICONS[
+                  (attachment.type === 'unknown' && attachment.mime_type) ?? attachment.type
+                ] ?? require('@phosphor-icons/core/regular/paperclip.svg')
+              }
             />
             <Text align='left'>
-              {attachment.description || {
-                image: <FormattedMessage id='media.default_description.image' defaultMessage='Image' />,
-                video: <FormattedMessage id='media.default_description.video' defaultMessage='Video' />,
-                gifv: <FormattedMessage id='media.default_description.gifv' defaultMessage='GIFV' />,
-                audio: <FormattedMessage id='media.default_description.audio' defaultMessage='Audio' />,
-                unknown: <FormattedMessage id='media.default_description.attachment' defaultMessage='Attachment' />,
-              }[attachment.type]}
+              {attachment.description ||
+                {
+                  image: (
+                    <FormattedMessage id='media.default_description.image' defaultMessage='Image' />
+                  ),
+                  video: (
+                    <FormattedMessage id='media.default_description.video' defaultMessage='Video' />
+                  ),
+                  gifv: (
+                    <FormattedMessage id='media.default_description.gifv' defaultMessage='GIFV' />
+                  ),
+                  audio: (
+                    <FormattedMessage id='media.default_description.audio' defaultMessage='Audio' />
+                  ),
+                  unknown: (
+                    <FormattedMessage
+                      id='media.default_description.attachment'
+                      defaultMessage='Attachment'
+                    />
+                  ),
+                }[attachment.type]}
             </Text>
           </HStack>
           // <MediaItem key={index} item={item} />
@@ -376,7 +423,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
     const aspectRatio = getAspectRatio(media[0]);
 
     const getHeight = () => {
-      if (!aspectRatio) return w * 9 / 16;
+      if (!aspectRatio) return (w * 9) / 16;
       if (isPanoramic(aspectRatio)) return Math.floor(w / maximumAspectRatio);
       if (isPortrait(aspectRatio)) return Math.floor(w / minimumAspectRatio);
       return Math.floor(w / aspectRatio);
@@ -396,13 +443,15 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
     const style: CSSProperties = {};
     let itemsDimensions: Dimensions[] = [];
 
-    const ratios = Array(size).fill(null).map((_, i) => getAspectRatio(media[i]));
+    const ratios = Array(size)
+      .fill(null)
+      .map((_, i) => getAspectRatio(media[i]));
 
     const [ar1, ar2, ar3, ar4] = ratios;
 
     if (size === 2) {
       if (isPortrait(ar1) && isPortrait(ar2)) {
-        style.height = w - (w / maximumAspectRatio);
+        style.height = w - w / maximumAspectRatio;
       } else if (isPanoramic(ar1) && isPanoramic(ar2)) {
         style.height = panoSize * 2;
       } else if (
@@ -411,7 +460,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
         (isPanoramic(ar1) && isNonConformingRatio(ar2)) ||
         (isNonConformingRatio(ar1) && isPanoramic(ar2))
       ) {
-        style.height = (w * 0.6) + (w / maximumAspectRatio);
+        style.height = w * 0.6 + w / maximumAspectRatio;
       } else {
         style.height = w / 2;
       }
@@ -431,16 +480,16 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
         (isPanoramic(ar1) && isNonConformingRatio(ar2))
       ) {
         itemsDimensions = [
-          { w: 100, h: `${(w / maximumAspectRatio)}px`, b: '1px' },
-          { w: 100, h: `${(w * 0.6)}px`, t: '1px' },
+          { w: 100, h: `${w / maximumAspectRatio}px`, b: '1px' },
+          { w: 100, h: `${w * 0.6}px`, t: '1px' },
         ];
       } else if (
         (isPortrait(ar1) && isPanoramic(ar2)) ||
         (isNonConformingRatio(ar1) && isPanoramic(ar2))
       ) {
         itemsDimensions = [
-          { w: 100, h: `${(w * 0.6)}px`, b: '1px' },
-          { w: 100, h: `${(w / maximumAspectRatio)}px`, t: '1px' },
+          { w: 100, h: `${w * 0.6}px`, b: '1px' },
+          { w: 100, h: `${w / maximumAspectRatio}px`, t: '1px' },
         ];
       } else {
         itemsDimensions = [
@@ -527,30 +576,49 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
       } else if (isPanoramic(ar1) && isPanoramic(ar2) && isPanoramic(ar3) && isPanoramic(ar4)) {
         style.height = panoSize * 2;
       } else if (
-        (isPanoramic(ar1) && isPanoramic(ar2) && isNonConformingRatio(ar3) && isNonConformingRatio(ar4)) ||
-        (isNonConformingRatio(ar1) && isNonConformingRatio(ar2) && isPanoramic(ar3) && isPanoramic(ar4))
+        (isPanoramic(ar1) &&
+          isPanoramic(ar2) &&
+          isNonConformingRatio(ar3) &&
+          isNonConformingRatio(ar4)) ||
+        (isNonConformingRatio(ar1) &&
+          isNonConformingRatio(ar2) &&
+          isPanoramic(ar3) &&
+          isPanoramic(ar4))
       ) {
-        style.height = panoSize + (w / 2);
+        style.height = panoSize + w / 2;
       } else {
         style.height = w;
       }
 
-      if (isPanoramic(ar1) && isPanoramic(ar2) && isNonConformingRatio(ar3) && isNonConformingRatio(ar4)) {
+      if (
+        isPanoramic(ar1) &&
+        isPanoramic(ar2) &&
+        isNonConformingRatio(ar3) &&
+        isNonConformingRatio(ar4)
+      ) {
         itemsDimensions = [
           { w: 50, h: panoSize_px, b: '1px', r: '1px' },
           { w: 50, h: panoSize_px, b: '1px', l: '1px' },
-          { w: 50, h: `${(w / 2)}px`, t: '1px', r: '1px' },
-          { w: 50, h: `${(w / 2)}px`, t: '1px', l: '1px' },
+          { w: 50, h: `${w / 2}px`, t: '1px', r: '1px' },
+          { w: 50, h: `${w / 2}px`, t: '1px', l: '1px' },
         ];
-      } else if (isNonConformingRatio(ar1) && isNonConformingRatio(ar2) && isPanoramic(ar3) && isPanoramic(ar4)) {
+      } else if (
+        isNonConformingRatio(ar1) &&
+        isNonConformingRatio(ar2) &&
+        isPanoramic(ar3) &&
+        isPanoramic(ar4)
+      ) {
         itemsDimensions = [
-          { w: 50, h: `${(w / 2)}px`, b: '1px', r: '1px' },
-          { w: 50, h: `${(w / 2)}px`, b: '1px', l: '1px' },
+          { w: 50, h: `${w / 2}px`, b: '1px', r: '1px' },
+          { w: 50, h: `${w / 2}px`, b: '1px', l: '1px' },
           { w: 50, h: panoSize_px, t: '1px', r: '1px' },
           { w: 50, h: panoSize_px, t: '1px', l: '1px' },
         ];
       } else if (
-        (isPortrait(ar1) && isNonConformingRatio(ar2) && isNonConformingRatio(ar3) && isNonConformingRatio(ar4)) ||
+        (isPortrait(ar1) &&
+          isNonConformingRatio(ar2) &&
+          isNonConformingRatio(ar3) &&
+          isNonConformingRatio(ar4)) ||
         (isPortrait(ar1) && isPanoramic(ar2) && isPanoramic(ar3) && isPanoramic(ar4))
       ) {
         itemsDimensions = [
@@ -614,18 +682,20 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
 
   const sizeData: SizeData = getSizeData(media.length);
 
-  const children = media.slice(0, ATTACHMENT_LIMIT).map((attachment, i) => (
-    <Item
-      key={attachment.id}
-      onClick={handleClick}
-      attachment={attachment}
-      index={i}
-      dimensions={sizeData.itemsDimensions[i]}
-      last={i === ATTACHMENT_LIMIT - 1}
-      total={media.length}
-      visible={visible}
-    />
-  ));
+  const children = media
+    .slice(0, ATTACHMENT_LIMIT)
+    .map((attachment, i) => (
+      <Item
+        key={attachment.id}
+        onClick={handleClick}
+        attachment={attachment}
+        index={i}
+        dimensions={sizeData.itemsDimensions[i]}
+        last={i === ATTACHMENT_LIMIT - 1}
+        total={media.length}
+        visible={visible}
+      />
+    ));
 
   return (
     <div

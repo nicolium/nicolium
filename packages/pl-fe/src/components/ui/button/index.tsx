@@ -10,94 +10,115 @@ import type { ButtonSizes, ButtonThemes } from './useButtonStyles';
 
 type IButton = Pick<
   React.ComponentProps<'button'>,
-  'children' | 'className' | 'disabled' | 'onClick' | 'onMouseDown' | 'onKeyDown' | 'onKeyPress' | 'title' | 'type'
-> & (LinkOptions | { to?: undefined }) & {
-  /** Whether this button expands the width of its container. */
-  block?: boolean;
-  /** URL to an SVG icon to render inside the button. */
-  icon?: string;
-  /** Class name to apply to the icon element inside the button. */
-  iconClassName?: string;
-  /** URL to an SVG icon to render inside the button next to the text. */
-  secondaryIcon?: string;
-  /** A predefined button size. */
-  size?: ButtonSizes;
-  /** Text inside the button. Takes precedence over `children`. */
-  text?: React.ReactNode;
-  /** Makes the button into an anchor, if provided. */
-  href?: string;
-  /** Styles the button visually with a predefined theme. */
-  theme?: ButtonThemes;
-}
+  | 'children'
+  | 'className'
+  | 'disabled'
+  | 'onClick'
+  | 'onMouseDown'
+  | 'onKeyDown'
+  | 'onKeyPress'
+  | 'title'
+  | 'type'
+> &
+  (LinkOptions | { to?: undefined }) & {
+    /** Whether this button expands the width of its container. */
+    block?: boolean;
+    /** URL to an SVG icon to render inside the button. */
+    icon?: string;
+    /** Class name to apply to the icon element inside the button. */
+    iconClassName?: string;
+    /** URL to an SVG icon to render inside the button next to the text. */
+    secondaryIcon?: string;
+    /** A predefined button size. */
+    size?: ButtonSizes;
+    /** Text inside the button. Takes precedence over `children`. */
+    text?: React.ReactNode;
+    /** Makes the button into an anchor, if provided. */
+    href?: string;
+    /** Styles the button visually with a predefined theme. */
+    theme?: ButtonThemes;
+  };
 
 /** Customizable button element with various themes. */
-const Button = React.forwardRef<HTMLButtonElement, IButton>(({
-  block = false,
-  children,
-  disabled = false,
-  icon,
-  iconClassName,
-  secondaryIcon,
-  onClick,
-  size = 'md',
-  text,
-  theme = 'secondary',
-  href,
-  type = 'button',
-  className,
-  ...props
-}, ref): JSX.Element => {
-  const body = text ?? children;
+const Button = React.forwardRef<HTMLButtonElement, IButton>(
+  (
+    {
+      block = false,
+      children,
+      disabled = false,
+      icon,
+      iconClassName,
+      secondaryIcon,
+      onClick,
+      size = 'md',
+      text,
+      theme = 'secondary',
+      href,
+      type = 'button',
+      className,
+      ...props
+    },
+    ref,
+  ): JSX.Element => {
+    const body = text ?? children;
 
-  const themeClass = useButtonStyles({
-    theme,
-    block,
-    size,
-  });
+    const themeClass = useButtonStyles({
+      theme,
+      block,
+      size,
+    });
 
-  const handleClick: React.MouseEventHandler<HTMLButtonElement> = React.useCallback((event) => {
-    if (onClick && !disabled) {
-      onClick(event);
+    const handleClick: React.MouseEventHandler<HTMLButtonElement> = React.useCallback(
+      (event) => {
+        if (onClick && !disabled) {
+          onClick(event);
+        }
+      },
+      [onClick, disabled],
+    );
+
+    const renderButton = () => (
+      <button
+        {...props}
+        className={clsx(themeClass, className)}
+        disabled={disabled}
+        onClick={handleClick}
+        ref={ref}
+        type={type}
+        data-testid='button'
+      >
+        {icon ? <Icon src={icon} className={clsx('size-4', iconClassName)} /> : null}
+
+        {body && <span>{body}</span>}
+
+        {secondaryIcon ? <Icon src={secondaryIcon} className='size-4' /> : null}
+      </button>
+    );
+
+    if (props.to) {
+      return (
+        <Link
+          to={props.to}
+          params={props.params}
+          search={props.search}
+          tabIndex={-1}
+          className='inline-flex'
+        >
+          {renderButton()}
+        </Link>
+      );
     }
-  }, [onClick, disabled]);
 
-  const renderButton = () => (
-    <button
-      {...props}
-      className={clsx(themeClass, className)}
-      disabled={disabled}
-      onClick={handleClick}
-      ref={ref}
-      type={type}
-      data-testid='button'
-    >
-      {icon ? <Icon src={icon} className={clsx('size-4', iconClassName)} /> : null}
+    if (href) {
+      return (
+        <a href={href} target='_blank' rel='noopener' tabIndex={-1} className='inline-flex'>
+          {renderButton()}
+        </a>
+      );
+    }
 
-      {body && (
-        <span>{body}</span>
-      )}
-
-      {secondaryIcon ? <Icon src={secondaryIcon} className='size-4' /> : null}
-    </button>
-  );
-
-  if (props.to) {
-    return (
-      <Link to={props.to} params={props.params} search={props.search} tabIndex={-1} className='inline-flex'>
-        {renderButton()}
-      </Link>
-    );
-  }
-
-  if (href) {
-    return (
-      <a href={href} target='_blank' rel='noopener' tabIndex={-1} className='inline-flex'>
-        {renderButton()}
-      </a>
-    );
-  }
-
-  return renderButton();
-});
+    return renderButton();
+  },
+);
 
 export { Button as default };

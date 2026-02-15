@@ -30,7 +30,7 @@ const useImageField = (opts: UseImageFieldOpts = {}) => {
     }
   };
 
-  const onClear = () =>{
+  const onClear = () => {
     setFile(null);
   };
 

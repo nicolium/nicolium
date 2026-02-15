@@ -14,8 +14,7 @@ interface IGroupMemberCount {
 const GroupMemberCount = ({ group }: IGroupMemberCount) => (
   <Link to='/groups/$groupId/members' params={{ groupId: group.id }} className='hover:underline'>
     <Text theme='inherit' tag='span' size='sm' weight='medium' data-testid='group-member-count'>
-      {shortNumberFormat(group.members_count)}
-      {' '}
+      {shortNumberFormat(group.members_count)}{' '}
       <FormattedMessage
         id='groups.discover.search.results.member_count'
         defaultMessage='{members, plural, one {member} other {members}}'

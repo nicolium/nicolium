@@ -17,26 +17,36 @@ interface IWarningWrapper {
 const WarningWrapper: React.FC<IWarningWrapper> = ({ composeId }) => {
   const compose = useCompose(composeId);
 
-  const needsLockWarning = useAppSelector((state) => (compose.visibility === 'private' || compose.visibility === 'mutuals_only') && !selectOwnAccount(state)!.locked);
-  const hashtagWarning = (compose.visibility !== 'public' && compose.visibility !== 'group') && APPROX_HASHTAG_RE.test(compose.text);
+  const needsLockWarning = useAppSelector(
+    (state) =>
+      (compose.visibility === 'private' || compose.visibility === 'mutuals_only') &&
+      !selectOwnAccount(state)!.locked,
+  );
+  const hashtagWarning =
+    compose.visibility !== 'public' &&
+    compose.visibility !== 'group' &&
+    APPROX_HASHTAG_RE.test(compose.text);
   const directMessageWarning = compose.visibility === 'direct';
 
   if (needsLockWarning) {
     return (
       <Warning
-        message={(
+        message={
           <FormattedMessage
             id='compose_form.lock_disclaimer'
             defaultMessage='Your account is not {locked}. Anyone can follow you to view your follower-only posts.'
             values={{
               locked: (
                 <Link className='underline' to='/settings/profile'>
-                  <FormattedMessage id='compose_form.lock_disclaimer.lock' defaultMessage='locked' />
+                  <FormattedMessage
+                    id='compose_form.lock_disclaimer.lock'
+                    defaultMessage='locked'
+                  />
                 </Link>
               ),
             }}
           />
-        )}
+        }
         animated
       />
     );
@@ -45,12 +55,12 @@ const WarningWrapper: React.FC<IWarningWrapper> = ({ composeId }) => {
   if (hashtagWarning) {
     return (
       <Warning
-        message={(
+        message={
           <FormattedMessage
             id='compose_form.hashtag_warning'
             defaultMessage="This post won't be listed under any hashtag as it is unlisted. Only public posts can be searched by hashtag."
           />
-        )}
+        }
         animated
       />
     );

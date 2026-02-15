@@ -65,7 +65,10 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
           )}
 
           {hintText && (
-            <p data-testid='form-group-hint' className='mt-0.5 text-xs text-gray-700 dark:text-gray-600'>
+            <p
+              data-testid='form-group-hint'
+              className='mt-0.5 text-xs text-gray-700 dark:text-gray-600'
+            >
               {hintText}
             </p>
           )}
@@ -89,7 +92,10 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
 
       <div className='mt-1 dark:text-white'>
         {hintText && (
-          <p data-testid='form-group-hint' className='mb-0.5 text-xs text-gray-700 dark:text-gray-600'>
+          <p
+            data-testid='form-group-hint'
+            className='mb-0.5 text-xs text-gray-700 dark:text-gray-600'
+          >
             {hintText}
           </p>
         )}

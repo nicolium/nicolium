@@ -7,7 +7,10 @@ import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/hooks/use-instance';
 
 const messages = defineMessages({
-  birthdayPlaceholder: { id: 'edit_profile.fields.birthday_placeholder', defaultMessage: 'Your birthday' },
+  birthdayPlaceholder: {
+    id: 'edit_profile.fields.birthday_placeholder',
+    defaultMessage: 'Your birthday',
+  },
   previousMonth: { id: 'datepicker.previous_month', defaultMessage: 'Previous month' },
   nextMonth: { id: 'datepicker.next_month', defaultMessage: 'Next month' },
   previousYear: { id: 'datepicker.previous_year', defaultMessage: 'Previous year' },
@@ -32,7 +35,9 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
     if (!supportsBirthdays) return undefined;
 
     let maxDate = new Date();
-    maxDate = new Date(maxDate.getTime() - minAge * 1000 * 60 * 60 * 24 + maxDate.getTimezoneOffset() * 1000 * 60);
+    maxDate = new Date(
+      maxDate.getTime() - minAge * 1000 * 60 * 60 * 24 + maxDate.getTimezoneOffset() * 1000 * 60,
+    );
     return maxDate;
   }, [minAge]);
 
@@ -40,7 +45,7 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
     if (!supportsBirthdays || !value) return null;
 
     const date = new Date(value);
-    return new Date(date.getTime() + (date.getTimezoneOffset() * 60000));
+    return new Date(date.getTime() + date.getTimezoneOffset() * 60000);
   }, [value]);
 
   if (!supportsBirthdays) return null;
@@ -112,8 +117,12 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
     </div>
   );
 
-  const handleChange = (date: Date | null) =>{
-    onChange(date ? new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 10) : '');
+  const handleChange = (date: Date | null) => {
+    onChange(
+      date
+        ? new Date(date.getTime() - date.getTimezoneOffset() * 60000).toISOString().slice(0, 10)
+        : '',
+    );
   };
 
   return (

@@ -67,7 +67,7 @@ import type { Emoji } from '@/features/emoji';
 import type { LinkNode } from '@lexical/link';
 
 const messages = defineMessages({
-  placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What\'s on your mind?' },
+  placeholder: { id: 'compose_form.placeholder', defaultMessage: "What's on your mind?" },
   pollPlaceholder: { id: 'compose_form.poll_placeholder', defaultMessage: 'Add a poll topic…' },
   eventPlaceholder: { id: 'compose_form.event_placeholder', defaultMessage: 'Post to this event' },
   publish: { id: 'compose_form.publish', defaultMessage: 'Post' },
@@ -84,7 +84,14 @@ const messages = defineMessages({
 
 interface IComposeButton extends Pick<
   React.ComponentProps<'button'>,
-  'children' | 'disabled' | 'onClick' | 'onMouseDown' | 'onKeyDown' | 'onKeyPress' | 'title' | 'type'
+  | 'children'
+  | 'disabled'
+  | 'onClick'
+  | 'onMouseDown'
+  | 'onKeyDown'
+  | 'onKeyPress'
+  | 'title'
+  | 'type'
 > {
   /** URL to an SVG icon to render inside the button. */
   icon?: string;
@@ -94,7 +101,13 @@ interface IComposeButton extends Pick<
   actionsMenu?: Menu;
 }
 
-const ComposeButton: React.FC<IComposeButton> = ({ actionsMenu, disabled, icon, text, ...props }) => {
+const ComposeButton: React.FC<IComposeButton> = ({
+  actionsMenu,
+  disabled,
+  icon,
+  text,
+  ...props
+}) => {
   const intl = useIntl();
 
   return (
@@ -104,7 +117,10 @@ const ComposeButton: React.FC<IComposeButton> = ({ actionsMenu, disabled, icon, 
         <span>{text}</span>
       </button>
       <DropdownMenu items={actionsMenu} placement='bottom' disabled={disabled}>
-        <button className='⁂-compose-form__button__actions' title={intl.formatMessage(messages.more)}>
+        <button
+          className='⁂-compose-form__button__actions'
+          title={intl.formatMessage(messages.more)}
+        >
           <SvgIcon src={require('@phosphor-icons/core/regular/caret-down.svg')} />
         </button>
       </DropdownMenu>
@@ -124,7 +140,17 @@ interface IComposeForm<ID extends string> {
   compact?: boolean;
 }
 
-const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickableAreaRef, event, group, withAvatar, transparent, compact }: IComposeForm<ID>) => {
+const ComposeForm = <ID extends string>({
+  id,
+  shouldCondense,
+  autoFocus,
+  clickableAreaRef,
+  event,
+  group,
+  withAvatar,
+  transparent,
+  compact,
+}: IComposeForm<ID>) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { configuration } = useInstance();
@@ -163,24 +189,34 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
   const isEmpty = !(fulltext.trim() || anyMedia);
   const condensed = shouldCondense && !isDraggedOver && !composeFocused && isEmpty && !isUploading;
   const shouldAutoFocus = autoFocus;
-  const canSubmit = !!editorRef.current && !isSubmitting && !isUploading && !isChangingUpload && !isEmpty && length(fulltext) <= maxTootChars;
+  const canSubmit =
+    !!editorRef.current &&
+    !isSubmitting &&
+    !isUploading &&
+    !isChangingUpload &&
+    !isEmpty &&
+    length(fulltext) <= maxTootChars;
 
-  const getClickableArea = () => clickableAreaRef ? clickableAreaRef.current : formRef.current;
+  const getClickableArea = () => (clickableAreaRef ? clickableAreaRef.current : formRef.current);
 
-  const isClickOutside = (e: MouseEvent | React.MouseEvent) => ![
-    // List of elements that shouldn't collapse the composer when clicked
-    // FIXME: Make this less brittle
-    getClickableArea(),
-    document.getElementById('privacy-dropdown'),
-    document.querySelector('em-emoji-picker'),
-    document.getElementById('modal-overlay'),
-  ].some(element => element?.contains(e.target as any));
+  const isClickOutside = (e: MouseEvent | React.MouseEvent) =>
+    ![
+      // List of elements that shouldn't collapse the composer when clicked
+      // FIXME: Make this less brittle
+      getClickableArea(),
+      document.getElementById('privacy-dropdown'),
+      document.querySelector('em-emoji-picker'),
+      document.getElementById('modal-overlay'),
+    ].some((element) => element?.contains(e.target as any));
 
-  const handleClick = useCallback((e: MouseEvent | React.MouseEvent) => {
-    if (isEmpty && isClickOutside(e)) {
-      handleClickOutside();
-    }
-  }, [isEmpty]);
+  const handleClick = useCallback(
+    (e: MouseEvent | React.MouseEvent) => {
+      if (isEmpty && isClickOutside(e)) {
+        handleClickOutside();
+      }
+    },
+    [isEmpty],
+  );
 
   const handleClickOutside = () => {
     setComposeFocused(false);
@@ -194,11 +230,13 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     if (!canSubmit) return;
     e?.preventDefault();
 
-    dispatch(submitCompose(id, {
-      onSuccess: () => {
-        editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
-      },
-    }));
+    dispatch(
+      submitCompose(id, {
+        onSuccess: () => {
+          editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+        },
+      }),
+    );
   };
 
   const handlePreview = (e?: React.FormEvent) => {
@@ -229,7 +267,11 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     dispatch(fetchComposeSuggestions(id, token as string));
   };
 
-  const onSpoilerSuggestionSelected = (tokenStart: number, token: string | null, value: AutoSuggestion) => {
+  const onSpoilerSuggestionSelected = (
+    tokenStart: number,
+    token: string | null,
+    value: AutoSuggestion,
+  ) => {
     dispatch(selectComposeSuggestion(id, tokenStart, token, value, ['spoiler_text']));
   };
 
@@ -257,7 +299,11 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
         node.setURL(suggestion.cleanUrl);
         const children = node.getChildren();
         const textNode = children[0] as TextNode;
-        if (children.length === 1 && textNode.getType() === 'text' && textNode.getTextContent() === suggestion.originalUrl) {
+        if (
+          children.length === 1 &&
+          textNode.getType() === 'text' &&
+          textNode.getTextContent() === suggestion.originalUrl
+        ) {
           textNode.setTextContent(suggestion.cleanUrl);
         }
       }
@@ -282,20 +328,31 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     };
   }, []);
 
-  const renderButtons = useCallback(() => (
-    <div className='⁂-compose-form__buttons'>
-      <UploadButtonContainer composeId={id} />
-      {features.drive && <DriveButton composeId={id} />}
-      <EmojiPickerDropdown onPickEmoji={handleEmojiPick} condensed={shouldCondense} />
-      {features.polls && <PollButton composeId={id} />}
-      {features.scheduledStatuses && <ScheduleButton composeId={id} />}
-      {anyMedia && features.spoilers && <SensitiveMediaButton composeId={id} />}
-      {(features.interactionRequests || features.quoteApprovalPolicies) && <InteractionPolicyButton composeId={id} />}
-      {features.statusLocation && <LocationButton composeId={id} />}
-    </div>
-  ), [features, id, anyMedia]);
+  const renderButtons = useCallback(
+    () => (
+      <div className='⁂-compose-form__buttons'>
+        <UploadButtonContainer composeId={id} />
+        {features.drive && <DriveButton composeId={id} />}
+        <EmojiPickerDropdown onPickEmoji={handleEmojiPick} condensed={shouldCondense} />
+        {features.polls && <PollButton composeId={id} />}
+        {features.scheduledStatuses && <ScheduleButton composeId={id} />}
+        {anyMedia && features.spoilers && <SensitiveMediaButton composeId={id} />}
+        {(features.interactionRequests || features.quoteApprovalPolicies) && (
+          <InteractionPolicyButton composeId={id} />
+        )}
+        {features.statusLocation && <LocationButton composeId={id} />}
+      </div>
+    ),
+    [features, id, anyMedia],
+  );
 
-  const showModifiers = !condensed && (compose.mediaAttachments.length || compose.isUploading || (compose.poll && compose.poll.options.length) || compose.scheduledAt || compose.showLocationPicker);
+  const showModifiers =
+    !condensed &&
+    (compose.mediaAttachments.length ||
+      compose.isUploading ||
+      (compose.poll && compose.poll.options.length) ||
+      compose.scheduledAt ||
+      compose.showLocationPicker);
 
   const composeModifiers = showModifiers && (
     <div className='⁂-compose-form__modifiers'>
@@ -318,7 +375,12 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     publishIcon = require('@phosphor-icons/core/regular/lock.svg');
     publishText = intl.formatMessage(messages.publish);
   } else {
-    publishText = visibility !== 'unlisted' ? intl.formatMessage(messages.publishLoud, { publish: intl.formatMessage(messages.publish) }) : intl.formatMessage(messages.publish);
+    publishText =
+      visibility !== 'unlisted'
+        ? intl.formatMessage(messages.publishLoud, {
+            publish: intl.formatMessage(messages.publish),
+          })
+        : intl.formatMessage(messages.publish);
   }
 
   if (scheduledAt) {
@@ -327,9 +389,16 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
 
   const selectButtons = [];
 
-  if (features.privacyScopes && !group && !groupId) selectButtons.push(<PrivacyDropdown key='privacy-dropdown' composeId={id} compact={compact} />);
-  if (features.richText) selectButtons.push(<ContentTypeButton key='compose-type-button' composeId={id} compact={compact} />);
-  if (features.postLanguages) selectButtons.push(<LanguageDropdown key='language-dropdown' composeId={id} compact={compact} />);
+  if (features.privacyScopes && !group && !groupId)
+    selectButtons.push(<PrivacyDropdown key='privacy-dropdown' composeId={id} compact={compact} />);
+  if (features.richText)
+    selectButtons.push(
+      <ContentTypeButton key='compose-type-button' composeId={id} compact={compact} />,
+    );
+  if (features.postLanguages)
+    selectButtons.push(
+      <LanguageDropdown key='language-dropdown' composeId={id} compact={compact} />,
+    );
 
   const actionsMenu: Menu = [];
 
@@ -359,9 +428,12 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     >
       {!!compose.inReplyToId && compose.approvalRequired && (
         <Warning
-          message={(
-            <FormattedMessage id='compose_form.approval_required' defaultMessage='The reply needs to be approved by the post author.' />
-          )}
+          message={
+            <FormattedMessage
+              id='compose_form.approval_required'
+              defaultMessage='The reply needs to be approved by the post author.'
+            />
+          }
         />
       )}
 
@@ -374,9 +446,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
       {!shouldCondense && !event && !group && <ReplyMentions composeId={id} />}
 
       {selectButtons.length > 0 && (
-        <div className='⁂-compose-form__select-buttons'>
-          {selectButtons}
-        </div>
+        <div className='⁂-compose-form__select-buttons'>{selectButtons}</div>
       )}
 
       {features.spoilers && (
@@ -408,7 +478,11 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
         </Suspense>
       </div>
 
-      <ClearLinkSuggestion composeId={id} handleAccept={onAcceptClearLinkSuggestion} handleReject={onRejectClearLinkSuggestion} />
+      <ClearLinkSuggestion
+        composeId={id}
+        handleAccept={onAcceptClearLinkSuggestion}
+        handleReject={onRejectClearLinkSuggestion}
+      />
 
       <HashtagCasingSuggestion composeId={id} />
 
@@ -433,15 +507,31 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
             </div>
           )}
 
-          <ComposeButton type='submit' icon={publishIcon} text={publishText} disabled={!canSubmit} actionsMenu={actionsMenu} />
+          <ComposeButton
+            type='submit'
+            icon={publishIcon}
+            text={publishText}
+            disabled={!canSubmit}
+            actionsMenu={actionsMenu}
+          />
         </div>
 
         {compose.redacting && (
           <List>
             <ListItem
               className='mt-2'
-              label={<FormattedMessage id='compose.redact.overwrite_label' defaultMessage='Overwrite existing status' />}
-              hint={<FormattedMessage id='compose.redact.overwrite_hint' defaultMessage='This will replace the status with a new one, without keeping edit history. The update will not federate.' />}
+              label={
+                <FormattedMessage
+                  id='compose.redact.overwrite_label'
+                  defaultMessage='Overwrite existing status'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='compose.redact.overwrite_hint'
+                  defaultMessage='This will replace the status with a new one, without keeping edit history. The update will not federate.'
+                />
+              }
             >
               <Toggle
                 checked={compose.redactingOverwrite}

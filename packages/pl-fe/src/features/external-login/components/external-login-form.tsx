@@ -12,8 +12,14 @@ import toast from '@/toast';
 const messages = defineMessages({
   instanceLabel: { id: 'login.fields.instance_label', defaultMessage: 'Instance' },
   instancePlaceholder: { id: 'login.fields.instance_placeholder', defaultMessage: 'example.com' },
-  instanceFailed: { id: 'login_external.errors.instance_fail', defaultMessage: 'The instance returned an error.' },
-  networkFailed: { id: 'login_external.errors.network_fail', defaultMessage: 'Connection failed. Is a browser extension blocking it?' },
+  instanceFailed: {
+    id: 'login_external.errors.instance_fail',
+    defaultMessage: 'The instance returned an error.',
+  },
+  networkFailed: {
+    id: 'login_external.errors.network_fail',
+    defaultMessage: 'Connection failed. Is a browser extension blocking it?',
+  },
 });
 
 /** Form for logging into a remote instance */
@@ -36,7 +42,7 @@ const ExternalLoginForm: React.FC = () => {
     setLoading(true);
 
     externalLogin(host)
-      .then(() =>{
+      .then(() => {
         setLoading(false);
       })
       .catch((error) => {

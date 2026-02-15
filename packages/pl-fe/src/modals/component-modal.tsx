@@ -9,7 +9,11 @@ interface ComponentModalProps {
   componentProps: Record<any, any>;
 }
 
-const ComponentModal: React.FC<BaseModalProps & ComponentModalProps> = ({ onClose, component: Component, componentProps = {} }) => (
+const ComponentModal: React.FC<BaseModalProps & ComponentModalProps> = ({
+  onClose,
+  component: Component,
+  componentProps = {},
+}) => (
   <Modal onClose={onClose} title=''>
     <Component onClose={onClose} {...componentProps} />
   </Modal>

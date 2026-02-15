@@ -8,7 +8,10 @@ import Text from '@/components/ui/text';
 import { unblockDomainMutationOptions } from '@/queries/settings/domain-blocks';
 
 const messages = defineMessages({
-  blockDomainConfirm: { id: 'confirmations.domain_block.confirm', defaultMessage: 'Hide entire domain' },
+  blockDomainConfirm: {
+    id: 'confirmations.domain_block.confirm',
+    defaultMessage: 'Hide entire domain',
+  },
   unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
 });
 
@@ -36,10 +39,13 @@ const Domain: React.FC<IDomain> = ({ domain }) => {
 
   return (
     <HStack alignItems='center' justifyContent='between' space={1} className='p-2'>
-      <Text tag='span'>
-        {domain}
-      </Text>
-      <IconButton iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/lock-open.svg')} title={intl.formatMessage(messages.unblockDomain, { domain })} onClick={handleDomainUnblock} />
+      <Text tag='span'>{domain}</Text>
+      <IconButton
+        iconClassName='h-5 w-5'
+        src={require('@phosphor-icons/core/regular/lock-open.svg')}
+        title={intl.formatMessage(messages.unblockDomain, { domain })}
+        onClick={handleDomainUnblock}
+      />
     </HStack>
   );
 };

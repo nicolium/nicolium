@@ -21,7 +21,10 @@ import type { SelectedStatus } from '@/selectors';
 import type { EmojiReaction } from 'pl-api';
 
 const messages = defineMessages({
-  emojiCount: { id: 'status.reactions.label', defaultMessage: '{count} {count, plural, one {person} other {people}} reacted with {emoji}' },
+  emojiCount: {
+    id: 'status.reactions.label',
+    defaultMessage: '{count} {count, plural, one {person} other {people}} reacted with {emoji}',
+  },
   addEmoji: { id: 'emoji_button.label', defaultMessage: 'Insert emoji' },
 });
 
@@ -37,7 +40,12 @@ interface IStatusReaction {
   unauthenticated?: boolean;
 }
 
-const StatusReaction: React.FC<IStatusReaction> = ({ reaction, statusId, obfuscate, unauthenticated }) => {
+const StatusReaction: React.FC<IStatusReaction> = ({
+  reaction,
+  statusId,
+  obfuscate,
+  unauthenticated,
+}) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const features = useFeatures();
@@ -106,25 +114,36 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
   const features = useFeatures();
 
   const handlePickEmoji = (emoji: EmojiType) => {
-    dispatch(emojiReact(status.id, emoji.custom ? emoji.id : emoji.native, emoji.custom ? emoji.imageUrl : undefined, intl));
+    dispatch(
+      emojiReact(
+        status.id,
+        emoji.custom ? emoji.id : emoji.native,
+        emoji.custom ? emoji.imageUrl : undefined,
+        intl,
+      ),
+    );
   };
 
   if ((demetricator || status.emoji_reactions.length === 0) && collapsed) return null;
   if (status.emoji_reactions.length === 0 && !features.emojiReacts) return null;
 
-  const sortedReactions = status.emoji_reactions.toSorted((a, b) => (b.count ?? 0) - (a.count ?? 0));
+  const sortedReactions = status.emoji_reactions.toSorted(
+    (a, b) => (b.count ?? 0) - (a.count ?? 0),
+  );
 
   return (
     <div className='⁂-status-reactions-bar'>
-      {sortedReactions.map((reaction) => reaction.count ? (
-        <StatusReaction
-          key={reaction.name}
-          statusId={status.id}
-          reaction={reaction}
-          obfuscate={demetricator}
-          unauthenticated={!me}
-        />
-      ) : null)}
+      {sortedReactions.map((reaction) =>
+        reaction.count ? (
+          <StatusReaction
+            key={reaction.name}
+            statusId={status.id}
+            reaction={reaction}
+            obfuscate={demetricator}
+            unauthenticated={!me}
+          />
+        ) : null,
+      )}
       {me && (
         <EmojiPickerDropdown onPickEmoji={handlePickEmoji}>
           <button

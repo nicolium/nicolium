@@ -15,7 +15,13 @@ const QuotesPage: React.FC = () => {
   const intl = useIntl();
   const { statusId } = statusQuotesRoute.useParams();
 
-  const { data: statusIds = [], isLoading, hasNextPage, fetchNextPage, refetch } = useStatusQuotes(statusId);
+  const {
+    data: statusIds = [],
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useStatusQuotes(statusId);
 
   const handleRefresh = async () => {
     await refetch();
@@ -25,7 +31,12 @@ const QuotesPage: React.FC = () => {
     fetchNextPage({ cancelRefetch: false });
   };
 
-  const emptyMessage = <FormattedMessage id='empty_column.quotes' defaultMessage='This post has not been quoted yet.' />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.quotes'
+      defaultMessage='This post has not been quoted yet.'
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>

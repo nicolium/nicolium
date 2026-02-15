@@ -61,10 +61,17 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                 defaultMessage='Posted in {group}'
                 values={{
                   group: (
-                    <Link to='/groups/$groupId' params={{ groupId: status.group.id }} className='hover:underline'>
+                    <Link
+                      to='/groups/$groupId'
+                      params={{ groupId: status.group.id }}
+                      className='hover:underline'
+                    >
                       <bdi className='truncate'>
                         <strong className='text-gray-800 dark:text-gray-200'>
-                          <Emojify text={status.account.display_name} emojis={status.account.emojis} />
+                          <Emojify
+                            text={status.account.display_name}
+                            emojis={status.account.emojis}
+                          />
                         </strong>
                       </bdi>
                     </Link>
@@ -104,12 +111,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
         <Stack className='relative z-0'>
           <Stack space={4}>
-            <StatusContent
-              status={actualStatus}
-              textSize='lg'
-              translatable
-              withMedia={withMedia}
-            />
+            <StatusContent status={actualStatus} textSize='lg' translatable withMedia={withMedia} />
           </Stack>
         </Stack>
 
@@ -122,8 +124,21 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
             <span>
               <Text tag='span' theme='muted' size='sm'>
                 <HStack space={1} alignItems='center' wrap>
-                  <a href={actualStatus.url} target='_blank' rel='noopener' className='hover:underline'>
-                    <FormattedDate value={new Date(actualStatus.created_at)} hour12 year='numeric' month='short' day='2-digit' hour='numeric' minute='2-digit' />
+                  <a
+                    href={actualStatus.url}
+                    target='_blank'
+                    rel='noopener'
+                    className='hover:underline'
+                  >
+                    <FormattedDate
+                      value={new Date(actualStatus.created_at)}
+                      hour12
+                      year='numeric'
+                      month='short'
+                      day='2-digit'
+                      hour='numeric'
+                      minute='2-digit'
+                    />
                   </a>
 
                   {actualStatus.application && (
@@ -134,7 +149,9 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                         target='_blank'
                         rel='noopener'
                         className='hover:underline'
-                        title={intl.formatMessage(messages.applicationName, { name: actualStatus.application.name })}
+                        title={intl.formatMessage(messages.applicationName, {
+                          name: actualStatus.application.name,
+                        })}
                       >
                         {actualStatus.application.name}
                       </a>
@@ -150,7 +167,19 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                         role='button'
                         tabIndex={0}
                       >
-                        <FormattedMessage id='status.edited' defaultMessage='Edited {date}' values={{ date: intl.formatDate(new Date(actualStatus.edited_at), { hour12: true, month: 'short', day: '2-digit', hour: 'numeric', minute: '2-digit' }) }} />
+                        <FormattedMessage
+                          id='status.edited'
+                          defaultMessage='Edited {date}'
+                          values={{
+                            date: intl.formatDate(new Date(actualStatus.edited_at), {
+                              hour12: true,
+                              month: 'short',
+                              day: '2-digit',
+                              hour: 'numeric',
+                              minute: '2-digit',
+                            }),
+                          }}
+                        />
                       </div>
                     </>
                   )}

@@ -1,47 +1,68 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 /** Controls the state of files being dragged over a node. */
-const useDraggedFiles = <R extends HTMLElement>(node: React.RefObject<R>, onDrop?: (files: FileList) => void) => {
+const useDraggedFiles = <R extends HTMLElement>(
+  node: React.RefObject<R>,
+  onDrop?: (files: FileList) => void,
+) => {
   const [isDragging, setIsDragging] = useState(false);
   const [isDraggedOver, setIsDraggedOver] = useState(false);
 
-  const handleDocumentDragEnter = useCallback((e: DragEvent) => {
-    if (isDraggingFiles(e)) {
-      setIsDragging(true);
-    }
-  }, [setIsDragging]);
+  const handleDocumentDragEnter = useCallback(
+    (e: DragEvent) => {
+      if (isDraggingFiles(e)) {
+        setIsDragging(true);
+      }
+    },
+    [setIsDragging],
+  );
 
-  const handleDocumentDragLeave = useCallback((e: DragEvent) => {
-    if (isDraggedOffscreen(e)) {
+  const handleDocumentDragLeave = useCallback(
+    (e: DragEvent) => {
+      if (isDraggedOffscreen(e)) {
+        setIsDragging(false);
+      }
+    },
+    [setIsDragging],
+  );
+
+  const handleDocumentDrop = useCallback(
+    (e: DragEvent) => {
       setIsDragging(false);
-    }
-  }, [setIsDragging]);
-
-  const handleDocumentDrop = useCallback((e: DragEvent) => {
-    setIsDragging(false);
-    setIsDraggedOver(false);
-  }, [setIsDragging]);
-
-  const handleDragEnter = useCallback((e: DragEvent) => {
-    if (isDraggingFiles(e)) {
-      setIsDraggedOver(true);
-    }
-  }, [setIsDraggedOver]);
-
-  const handleDragLeave = useCallback((e: DragEvent) => {
-    if (!node.current || isDraggedOutOfNode(e, node.current)) {
       setIsDraggedOver(false);
-    }
-  }, [setIsDraggedOver]);
+    },
+    [setIsDragging],
+  );
 
-  const handleDrop = useCallback((e: DragEvent) => {
-    if (isDraggingFiles(e) && onDrop) {
-      onDrop(e.dataTransfer.files);
-    }
-    setIsDragging(false);
-    setIsDraggedOver(false);
-    e.preventDefault();
-  }, [onDrop]);
+  const handleDragEnter = useCallback(
+    (e: DragEvent) => {
+      if (isDraggingFiles(e)) {
+        setIsDraggedOver(true);
+      }
+    },
+    [setIsDraggedOver],
+  );
+
+  const handleDragLeave = useCallback(
+    (e: DragEvent) => {
+      if (!node.current || isDraggedOutOfNode(e, node.current)) {
+        setIsDraggedOver(false);
+      }
+    },
+    [setIsDraggedOver],
+  );
+
+  const handleDrop = useCallback(
+    (e: DragEvent) => {
+      if (isDraggingFiles(e) && onDrop) {
+        onDrop(e.dataTransfer.files);
+      }
+      setIsDragging(false);
+      setIsDraggedOver(false);
+      e.preventDefault();
+    },
+    [onDrop],
+  );
 
   useEffect(() => {
     document.addEventListener('dragenter', handleDocumentDragEnter);

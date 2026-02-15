@@ -11,7 +11,10 @@ import type { Status } from 'pl-api';
 
 const messages = defineMessages({
   joinSuccess: { id: 'join_event.success', defaultMessage: 'Joined the event' },
-  joinRequestSuccess: { id: 'join_event.request_success', defaultMessage: 'Requested to join the event' },
+  joinRequestSuccess: {
+    id: 'join_event.request_success',
+    defaultMessage: 'Requested to join the event',
+  },
   view: { id: 'toast.view', defaultMessage: 'View' },
 });
 
@@ -31,7 +34,8 @@ const useJoinEventMutation = (statusId: string, withToast = true) => {
       return client.events.joinEvent(statusId, participationMessage);
     },
     onMutate: () => dispatch<EventsAction>({ type: 'EVENT_JOIN_REQUEST', statusId }),
-    onError: (error) => dispatch<EventsAction>({ type: 'EVENT_JOIN_FAIL', statusId, error, previousState }),
+    onError: (error) =>
+      dispatch<EventsAction>({ type: 'EVENT_JOIN_FAIL', statusId, error, previousState }),
     onSettled: (status) => {
       if (!status) return;
       dispatch(importEntities({ statuses: [status] }));
@@ -39,7 +43,9 @@ const useJoinEventMutation = (statusId: string, withToast = true) => {
 
       if (withToast) {
         toast.success(
-          status.event?.join_state === 'pending' ? messages.joinRequestSuccess : messages.joinSuccess,
+          status.event?.join_state === 'pending'
+            ? messages.joinRequestSuccess
+            : messages.joinSuccess,
           {
             actionLabel: messages.view,
             actionLinkOptions: {
@@ -69,7 +75,8 @@ const useLeaveEventMutation = (statusId: string) => {
       return client.events.leaveEvent(statusId);
     },
     onMutate: () => dispatch<EventsAction>({ type: 'EVENT_LEAVE_REQUEST', statusId }),
-    onError: (error) => dispatch<EventsAction>({ type: 'EVENT_LEAVE_FAIL', statusId, error, previousState }),
+    onError: (error) =>
+      dispatch<EventsAction>({ type: 'EVENT_LEAVE_FAIL', statusId, error, previousState }),
     onSettled: (status) => {
       if (!status) return;
       dispatch(importEntities({ statuses: [status] }));

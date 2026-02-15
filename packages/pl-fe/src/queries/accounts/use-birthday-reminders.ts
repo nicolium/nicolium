@@ -1,4 +1,3 @@
-
 import { useQuery } from '@tanstack/react-query';
 
 import { importEntities } from '@/actions/importer';
@@ -13,11 +12,12 @@ const useBirthdayReminders = (month: number, day: number) => {
 
   return useQuery({
     queryKey: ['accountsLists', 'birthdayReminders', month, day],
-    queryFn: () => client.accounts.getBirthdays(day, month).then((accounts) => {
-      dispatch(importEntities({ accounts }));
+    queryFn: () =>
+      client.accounts.getBirthdays(day, month).then((accounts) => {
+        dispatch(importEntities({ accounts }));
 
-      return accounts.map(({ id }) => id);
-    }),
+        return accounts.map(({ id }) => id);
+      }),
     enabled: isLoggedIn,
   });
 };

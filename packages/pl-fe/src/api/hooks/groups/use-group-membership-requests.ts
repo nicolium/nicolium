@@ -1,7 +1,7 @@
 import { GroupRoles } from 'pl-api';
 
 import { Entities } from '@/entity-store/entities';
-import { useDismissEntity  } from '@/entity-store/hooks/use-dismiss-entity';
+import { useDismissEntity } from '@/entity-store/hooks/use-dismiss-entity';
 import { useEntities } from '@/entity-store/hooks/use-entities';
 import { useClient } from '@/hooks/use-client';
 
@@ -25,13 +25,19 @@ const useGroupMembershipRequests = (groupId: string) => {
   );
 
   const { dismissEntity: authorize } = useDismissEntity(path, async (accountId: string) => {
-    const response = await client.experimental.groups.acceptGroupMembershipRequest(groupId, accountId);
+    const response = await client.experimental.groups.acceptGroupMembershipRequest(
+      groupId,
+      accountId,
+    );
     invalidate();
     return response;
   });
 
   const { dismissEntity: reject } = useDismissEntity(path, async (accountId: string) => {
-    const response = await client.experimental.groups.rejectGroupMembershipRequest(groupId, accountId);
+    const response = await client.experimental.groups.rejectGroupMembershipRequest(
+      groupId,
+      accountId,
+    );
     invalidate();
     return response;
   });

@@ -13,16 +13,17 @@ import toast from '@/toast';
 import Warning from './warning';
 
 const messages = defineMessages({
-  hashtagCasingSuggestionsDisabled: { id: 'compose.hashtag_casing_suggestion.disabled', defaultMessage: 'You will no longer receive suggestions about hashtag capitalization.' },
+  hashtagCasingSuggestionsDisabled: {
+    id: 'compose.hashtag_casing_suggestion.disabled',
+    defaultMessage: 'You will no longer receive suggestions about hashtag capitalization.',
+  },
 });
 
 interface IHashtagCasingSuggestion {
   composeId: string;
 }
 
-const HashtagCasingSuggestion = ({
-  composeId,
-}: IHashtagCasingSuggestion) => {
+const HashtagCasingSuggestion = ({ composeId }: IHashtagCasingSuggestion) => {
   const dispatch = useAppDispatch();
 
   const compose = useCompose(composeId);
@@ -33,7 +34,9 @@ const HashtagCasingSuggestion = ({
   };
 
   const onDontAskAgain = () => {
-    dispatch(changeSetting(['ignoreHashtagCasingSuggestions'], true, { showAlert: false, save: true }));
+    dispatch(
+      changeSetting(['ignoreHashtagCasingSuggestions'], true, { showAlert: false, save: true }),
+    );
     toast.info(messages.hashtagCasingSuggestionsDisabled);
     dispatch(ignoreHashtagCasingSuggestion(composeId));
   };
@@ -53,19 +56,17 @@ const HashtagCasingSuggestion = ({
             />
           </span>
           <HStack space={2} justifyContent='end'>
-            <Button
-              theme='muted'
-              size='xs'
-              onClick={onIgnore}
-            >
-              <FormattedMessage id='compose.hashtag_casing_suggestion.ignore' defaultMessage='Ignore' />
+            <Button theme='muted' size='xs' onClick={onIgnore}>
+              <FormattedMessage
+                id='compose.hashtag_casing_suggestion.ignore'
+                defaultMessage='Ignore'
+              />
             </Button>
-            <Button
-              theme='muted'
-              size='xs'
-              onClick={onDontAskAgain}
-            >
-              <FormattedMessage id='compose.hashtag_casing_suggestion.dont_ask_again' defaultMessage='Don’t ask again' />
+            <Button theme='muted' size='xs' onClick={onDontAskAgain}>
+              <FormattedMessage
+                id='compose.hashtag_casing_suggestion.dont_ask_again'
+                defaultMessage='Don’t ask again'
+              />
             </Button>
           </HStack>
         </Stack>

@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { defineMessages, useIntl, type MessageDescriptor } from 'react-intl';
 
-import {
-  exportFollows,
-  exportBlocks,
-  exportMutes,
-} from '@/actions/export-data';
+import { exportFollows, exportBlocks, exportMutes } from '@/actions/export-data';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
@@ -32,16 +28,20 @@ const CSVExporter: React.FC<ICSVExporter> = ({ messages, action }) => {
 
   const handleClick: React.MouseEventHandler = (event) => {
     setIsLoading(true);
-    dispatch(action()).then(() => {
-      setIsLoading(false);
-    }).catch(() => {
-      setIsLoading(false);
-    });
+    dispatch(action())
+      .then(() => {
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
 
   return (
     <Form>
-      <Text size='xl' weight='bold'>{intl.formatMessage(messages.input_label)}</Text>
+      <Text size='xl' weight='bold'>
+        {intl.formatMessage(messages.input_label)}
+      </Text>
       <Text theme='muted'>{intl.formatMessage(messages.input_hint)}</Text>
 
       <FormActions>
@@ -60,19 +60,28 @@ const messages = defineMessages({
 
 const followMessages = defineMessages({
   input_label: { id: 'export_data.follows_label', defaultMessage: 'Follows' },
-  input_hint: { id: 'export_data.hints.follows', defaultMessage: 'Get a CSV file containing a list of followed accounts' },
+  input_hint: {
+    id: 'export_data.hints.follows',
+    defaultMessage: 'Get a CSV file containing a list of followed accounts',
+  },
   submit: { id: 'export_data.actions.export_follows', defaultMessage: 'Export follows' },
 });
 
 const blockMessages = defineMessages({
   input_label: { id: 'export_data.blocks_label', defaultMessage: 'Blocks' },
-  input_hint: { id: 'export_data.hints.blocks', defaultMessage: 'Get a CSV file containing a list of blocked accounts' },
+  input_hint: {
+    id: 'export_data.hints.blocks',
+    defaultMessage: 'Get a CSV file containing a list of blocked accounts',
+  },
   submit: { id: 'export_data.actions.export_blocks', defaultMessage: 'Export blocks' },
 });
 
 const muteMessages = defineMessages({
   input_label: { id: 'export_data.mutes_label', defaultMessage: 'Mutes' },
-  input_hint: { id: 'export_data.hints.mutes', defaultMessage: 'Get a CSV file containing a list of muted accounts' },
+  input_hint: {
+    id: 'export_data.hints.mutes',
+    defaultMessage: 'Get a CSV file containing a list of muted accounts',
+  },
   submit: { id: 'export_data.actions.export_mutes', defaultMessage: 'Export mutes' },
 });
 

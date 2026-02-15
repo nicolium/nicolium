@@ -34,12 +34,18 @@ type IMenuItem = {
   toggle?: JSX.Element;
   icon?: string;
   action?: (event: React.MouseEvent) => void;
-}
+};
 
-const getOtherAccounts = createSelector([
-  (state: RootState) => state.auth.users,
-  (state: RootState) => state.entities[Entities.ACCOUNTS]?.store,
-], (signedAccounts, accountEntities) => Object.values(signedAccounts).map(({ id }) => accountEntities?.[id] as AccountEntity).filter(account => account));
+const getOtherAccounts = createSelector(
+  [
+    (state: RootState) => state.auth.users,
+    (state: RootState) => state.entities[Entities.ACCOUNTS]?.store,
+  ],
+  (signedAccounts, accountEntities) =>
+    Object.values(signedAccounts)
+      .map(({ id }) => accountEntities?.[id] as AccountEntity)
+      .filter((account) => account),
+);
 
 const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   const dispatch = useAppDispatch();
@@ -63,7 +69,10 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   const ProfileDropdownMenu = useMemo(() => {
     const menu: IMenuItem[] = [];
 
-    menu.push({ text: renderAccount(account), linkOptions: { to: '/@{$username}', params: { username: account.acct } } });
+    menu.push({
+      text: renderAccount(account),
+      linkOptions: { to: '/@{$username}', params: { username: account.acct } },
+    });
 
     otherAccounts.forEach((otherAccount?: AccountEntity) => {
       if (otherAccount && otherAccount.id !== account.id) {
@@ -101,9 +110,7 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   }, [account, otherAccounts.length, features]);
 
   return (
-    <DropdownMenu
-      component={ProfileDropdownMenu}
-    >
+    <DropdownMenu component={ProfileDropdownMenu}>
       <button
         className='w-full rounded-lg focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:ring-gray-800 dark:ring-offset-0 dark:focus:ring-primary-500'
         type='button'
@@ -120,7 +127,10 @@ interface MenuItemProps {
 }
 
 const MenuItem: React.FC<MenuItemProps> = ({ className, menuItem }) => {
-  const baseClassName = clsx(className, 'block w-full cursor-pointer truncate px-4 py-2.5 text-left text-sm text-gray-700 outline-none hover:bg-gray-100 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:text-gray-500 dark:hover:bg-gray-800 dark:focus:ring-offset-0 rtl:text-right');
+  const baseClassName = clsx(
+    className,
+    'block w-full cursor-pointer truncate px-4 py-2.5 text-left text-sm text-gray-700 outline-none hover:bg-gray-100 focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:text-gray-500 dark:hover:bg-gray-800 dark:focus:ring-offset-0 rtl:text-right',
+  );
 
   if (menuItem.toggle) {
     return (
@@ -131,23 +141,18 @@ const MenuItem: React.FC<MenuItemProps> = ({ className, menuItem }) => {
       </div>
     );
   } else if (!menuItem.text) {
-    return <hr className='mx-2 my-1 border-t-2 border-gray-100 black:border-t dark:border-gray-800' />;
+    return (
+      <hr className='mx-2 my-1 border-t-2 border-gray-100 black:border-t dark:border-gray-800' />
+    );
   } else if (menuItem.action) {
     return (
-      <button
-        type='button'
-        onClick={menuItem.action}
-        className={baseClassName}
-      >
+      <button type='button' onClick={menuItem.action} className={baseClassName}>
         {menuItem.text}
       </button>
     );
   } else if (menuItem.linkOptions) {
     return (
-      <Link
-        {...menuItem.linkOptions}
-        className={baseClassName}
-      >
+      <Link {...menuItem.linkOptions} className={baseClassName}>
         {menuItem.text}
       </Link>
     );

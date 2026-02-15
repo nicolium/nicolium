@@ -42,7 +42,7 @@ const ReasonStep: React.FC<IReasonStep> = ({ comment, setComment, ruleIds, setRu
 
   const handleRuleChange = (ruleId: string) => {
     let newRuleIds;
-    if (ruleIds.includes(ruleId)) newRuleIds = ruleIds.filter(id => id !== ruleId);
+    if (ruleIds.includes(ruleId)) newRuleIds = ruleIds.filter((id) => id !== ruleId);
     else newRuleIds = [...ruleIds, ruleId];
     setRuleIds(newRuleIds);
   };
@@ -97,11 +97,11 @@ const ReasonStep: React.FC<IReasonStep> = ({ comment, setComment, ruleIds, setRu
                   <button
                     key={idx}
                     data-testid={`rule-${rule.id}`}
-                    onClick={() =>{
+                    onClick={() => {
                       handleRuleChange(rule.id);
                     }}
                     className={clsx({
-                      'relative border border-solid border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-primary-800/30 text-start w-full p-4 flex justify-between items-center cursor-pointer': true,
+                      'relative flex w-full cursor-pointer items-center justify-between border border-solid border-gray-200 p-4 text-start hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-primary-800/30': true,
                       'rounded-tl-lg rounded-tr-lg': idx === 0,
                       'rounded-bl-lg rounded-br-lg': idx === rules.length - 1,
                       'bg-gray-200 hover:bg-gray-200 dark:bg-primary-800/50': isSelected,
@@ -116,7 +116,9 @@ const ReasonStep: React.FC<IReasonStep> = ({ comment, setComment, ruleIds, setRu
                       >
                         {rule.text}
                       </Text>
-                      <Text tag='span' theme='muted' size='sm'>{rule.hint}</Text>
+                      <Text tag='span' theme='muted' size='sm'>
+                        {rule.hint}
+                      </Text>
                     </Stack>
 
                     <input
@@ -133,16 +135,22 @@ const ReasonStep: React.FC<IReasonStep> = ({ comment, setComment, ruleIds, setRu
             </div>
 
             <div
-              className={clsx('pointer-events-none absolute inset-x-0 top-0 flex justify-center rounded-t-lg bg-gradient-to-b from-white pb-12 pt-8 transition-opacity duration-500 dark:from-gray-900', {
-                'opacity-0': isNearTop,
-                'opacity-100': !isNearTop,
-              })}
+              className={clsx(
+                'pointer-events-none absolute inset-x-0 top-0 flex justify-center rounded-t-lg bg-gradient-to-b from-white pb-12 pt-8 transition-opacity duration-500 dark:from-gray-900',
+                {
+                  'opacity-0': isNearTop,
+                  'opacity-100': !isNearTop,
+                },
+              )}
             />
             <div
-              className={clsx('pointer-events-none absolute inset-x-0 bottom-0 flex justify-center rounded-b-lg bg-gradient-to-t from-white pb-8 pt-12 transition-opacity duration-500 dark:from-gray-900', {
-                'opacity-0': isNearBottom,
-                'opacity-100': !isNearBottom,
-              })}
+              className={clsx(
+                'pointer-events-none absolute inset-x-0 bottom-0 flex justify-center rounded-b-lg bg-gradient-to-t from-white pb-8 pt-12 transition-opacity duration-500 dark:from-gray-900',
+                {
+                  'opacity-0': isNearBottom,
+                  'opacity-100': !isNearBottom,
+                },
+              )}
             />
           </div>
         </Stack>

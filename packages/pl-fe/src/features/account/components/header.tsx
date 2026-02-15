@@ -39,7 +39,10 @@ import {
 } from '@/queries/accounts/use-relationship';
 import { useChats } from '@/queries/chats';
 import { queryClient } from '@/queries/client';
-import { blockDomainMutationOptions, unblockDomainMutationOptions } from '@/queries/settings/domain-blocks';
+import {
+  blockDomainMutationOptions,
+  unblockDomainMutationOptions,
+} from '@/queries/settings/domain-blocks';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
@@ -50,8 +53,15 @@ import type { Account as AccountEntity } from 'pl-api';
 
 const messages = defineMessages({
   edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },
-  linkVerifiedOn: { id: 'account.link_verified_on', defaultMessage: 'Ownership of this link was checked on {date}' },
-  account_locked: { id: 'account.locked_info', defaultMessage: 'This account privacy status is set to locked. The owner manually reviews who can follow them.' },
+  linkVerifiedOn: {
+    id: 'account.link_verified_on',
+    defaultMessage: 'Ownership of this link was checked on {date}',
+  },
+  account_locked: {
+    id: 'account.locked_info',
+    defaultMessage:
+      'This account privacy status is set to locked. The owner manually reviews who can follow them.',
+  },
   mention: { id: 'account.mention', defaultMessage: 'Mention' },
   chat: { id: 'account.chat', defaultMessage: 'Chat with @{name}' },
   direct: { id: 'account.direct', defaultMessage: 'Direct message @{name}' },
@@ -61,7 +71,7 @@ const messages = defineMessages({
   mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
   report: { id: 'account.report', defaultMessage: 'Report @{name}' },
   copy: { id: 'account.copy', defaultMessage: 'Copy link to profile' },
-  share: { id: 'account.share', defaultMessage: 'Share @{name}\'s profile' },
+  share: { id: 'account.share', defaultMessage: "Share @{name}'s profile" },
   media: { id: 'account.media', defaultMessage: 'Media' },
   blockDomain: { id: 'account.block_domain', defaultMessage: 'Hide everything from {domain}' },
   unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
@@ -73,26 +83,50 @@ const messages = defineMessages({
   domain_blocks: { id: 'column.domain_blocks', defaultMessage: 'Domain blocks' },
   mutes: { id: 'column.mutes', defaultMessage: 'Mutes' },
   endorse: { id: 'account.endorse', defaultMessage: 'Feature on profile' },
-  unendorse: { id: 'account.unendorse', defaultMessage: 'Don\'t feature on profile' },
+  unendorse: { id: 'account.unendorse', defaultMessage: "Don't feature on profile" },
   bite: { id: 'account.bite', defaultMessage: 'Bite @{name}' },
-  removeFromFollowers: { id: 'account.remove_from_followers', defaultMessage: 'Remove this follower' },
+  removeFromFollowers: {
+    id: 'account.remove_from_followers',
+    defaultMessage: 'Remove this follower',
+  },
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
-  add_or_remove_from_list: { id: 'account.add_or_remove_from_list', defaultMessage: 'Add or remove from lists' },
+  add_or_remove_from_list: {
+    id: 'account.add_or_remove_from_list',
+    defaultMessage: 'Add or remove from lists',
+  },
   search: { id: 'account.search', defaultMessage: 'Search from @{name}' },
   searchSelf: { id: 'account.search_self', defaultMessage: 'Search your posts' },
   unfollowConfirm: { id: 'confirmations.unfollow.confirm', defaultMessage: 'Unfollow' },
-  blockDomainConfirm: { id: 'confirmations.domain_block.confirm', defaultMessage: 'Hide entire domain' },
-  removeFromFollowersConfirm: { id: 'confirmations.remove_from_followers.confirm', defaultMessage: 'Remove' },
-  userEndorsed: { id: 'account.endorse.success', defaultMessage: 'You are now featuring @{acct} on your profile' },
-  userUnendorsed: { id: 'account.unendorse.success', defaultMessage: 'You are no longer featuring @{acct}' },
+  blockDomainConfirm: {
+    id: 'confirmations.domain_block.confirm',
+    defaultMessage: 'Hide entire domain',
+  },
+  removeFromFollowersConfirm: {
+    id: 'confirmations.remove_from_followers.confirm',
+    defaultMessage: 'Remove',
+  },
+  userEndorsed: {
+    id: 'account.endorse.success',
+    defaultMessage: 'You are now featuring @{acct} on your profile',
+  },
+  userUnendorsed: {
+    id: 'account.unendorse.success',
+    defaultMessage: 'You are no longer featuring @{acct}',
+  },
   userBit: { id: 'account.bite.success', defaultMessage: 'You have bit @{acct}' },
   userBiteFail: { id: 'account.bite.fail', defaultMessage: 'Failed to bite @{acct}' },
   profileExternal: { id: 'account.profile_external', defaultMessage: 'View profile on {domain}' },
   header: { id: 'account.header.alt', defaultMessage: 'Profile header' },
   subscribeFeed: { id: 'account.rss_feed', defaultMessage: 'Subscribe to RSS feed' },
   loadActivities: { id: 'account.load_activities', defaultMessage: 'Fetch latest posts' },
-  loadActivitiesSuccess: { id: 'account.load_activities.success', defaultMessage: 'Scheduled fetching latest posts' },
-  loadActivitiesFail: { id: 'account.load_activities.fail', defaultMessage: 'Failed to fetch latest posts' },
+  loadActivitiesSuccess: {
+    id: 'account.load_activities.success',
+    defaultMessage: 'Scheduled fetching latest posts',
+  },
+  loadActivitiesFail: {
+    id: 'account.load_activities.fail',
+    defaultMessage: 'Failed to fetch latest posts',
+  },
   note: { id: 'account_note.modal_header', defaultMessage: 'Edit note for @{name}' },
   notePlaceholder: { id: 'account_note.placeholder', defaultMessage: 'Add a note' },
   noteSaved: { id: 'account_note.success', defaultMessage: 'Note saved' },
@@ -118,7 +152,11 @@ const MovedNote: React.FC<IMovedNote> = ({ from, to }) => (
             id='notification.move'
             defaultMessage='{name} moved to {targetName}'
             values={{
-              name: <span><Emojify text={from.display_name} emojis={from.emojis} /></span>,
+              name: (
+                <span>
+                  <Emojify text={from.display_name} emojis={from.emojis} />
+                </span>
+              ),
               targetName: to.acct,
             }}
           />
@@ -183,9 +221,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
         <div className='px-4 sm:px-6'>
           <HStack alignItems='bottom' space={5} className='-mt-12'>
             <div className='relative flex'>
-              <div
-                className='size-24 rounded-lg bg-gray-400 ring-4 ring-white dark:ring-gray-800'
-              />
+              <div className='size-24 rounded-lg bg-gray-400 ring-4 ring-white dark:ring-gray-800' />
             </div>
           </HStack>
         </div>
@@ -220,13 +256,13 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const onEndorseToggle = () => {
     if (account.relationship?.endorsed) {
       unpinAccount(undefined, {
-        onSuccess: () =>{
+        onSuccess: () => {
           toast.success(intl.formatMessage(messages.userUnendorsed, { acct: account.acct }));
         },
       });
     } else {
       pinAccount(undefined, {
-        onSuccess: () =>{
+        onSuccess: () => {
           toast.success(intl.formatMessage(messages.userEndorsed, { acct: account.acct }));
         },
       });
@@ -234,36 +270,44 @@ const Header: React.FC<IHeader> = ({ account }) => {
   };
 
   const onBite = () => {
-    client.accounts.biteAccount(account.id)
-      .then(() =>{
+    client.accounts
+      .biteAccount(account.id)
+      .then(() => {
         toast.success(intl.formatMessage(messages.userBit, { acct: account.acct }));
       })
-      .catch(() =>{
+      .catch(() => {
         toast.error(intl.formatMessage(messages.userBiteFail, { acct: account.acct }));
       });
   };
 
   const onLoadActivities = () => {
-    client.accounts.loadActivities(account.id)
-      .then(() =>{
+    client.accounts
+      .loadActivities(account.id)
+      .then(() => {
         toast.success(intl.formatMessage(messages.loadActivitiesSuccess));
       })
-      .catch(() =>{
+      .catch(() => {
         toast.error(intl.formatMessage(messages.loadActivitiesFail));
       });
   };
 
   const onEditNote = () => {
     openModal('TEXT_FIELD', {
-      heading: <FormattedMessage id='account_note.modal_header' defaultMessage='Edit note for @{name}' values={{ name: account.acct }} />,
+      heading: (
+        <FormattedMessage
+          id='account_note.modal_header'
+          defaultMessage='Edit note for @{name}'
+          values={{ name: account.acct }}
+        />
+      ),
       placeholder: intl.formatMessage(messages.notePlaceholder),
       confirm: <FormattedMessage id='account_note.save' defaultMessage='Save note' />,
-      onConfirm: (value) =>{
+      onConfirm: (value) => {
         updateAccountNote(value, {
-          onSuccess: () =>{
+          onSuccess: () => {
             toast.success(messages.noteSaved);
           },
-          onError: () =>{
+          onError: () => {
             toast.error(messages.noteSaveFailed);
           },
         });
@@ -286,10 +330,22 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
   const onBlockDomain = (domain: string) => {
     openModal('CONFIRM', {
-      heading: <FormattedMessage id='confirmations.domain_block.heading' defaultMessage='Block {domain}' values={{ domain }} />,
-      message: <FormattedMessage id='confirmations.domain_block.message' defaultMessage='Are you really, really sure you want to block the entire {domain}? In most cases a few targeted blocks or mutes are sufficient and preferable. You will not see content from that domain in any public timelines or your notifications.' values={{ domain: <strong>{domain}</strong> }} />,
+      heading: (
+        <FormattedMessage
+          id='confirmations.domain_block.heading'
+          defaultMessage='Block {domain}'
+          values={{ domain }}
+        />
+      ),
+      message: (
+        <FormattedMessage
+          id='confirmations.domain_block.message'
+          defaultMessage='Are you really, really sure you want to block the entire {domain}? In most cases a few targeted blocks or mutes are sufficient and preferable. You will not see content from that domain in any public timelines or your notifications.'
+          values={{ domain: <strong>{domain}</strong> }}
+        />
+      ),
       confirm: intl.formatMessage(messages.blockDomainConfirm),
-      onConfirm: () =>{
+      onConfirm: () => {
         blockDomain(domain);
       },
     });
@@ -309,10 +365,22 @@ const Header: React.FC<IHeader> = ({ account }) => {
     const unfollowModal = settings.unfollowModal;
     if (unfollowModal) {
       openModal('CONFIRM', {
-        heading: <FormattedMessage id='confirmations.remove_from_followers.heading' defaultMessage='Remove {name} from followers' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
-        message: <FormattedMessage id='confirmations.remove_from_followers.message' defaultMessage='Are you sure you want to remove {name} from your followers?' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
+        heading: (
+          <FormattedMessage
+            id='confirmations.remove_from_followers.heading'
+            defaultMessage='Remove {name} from followers'
+            values={{ name: <strong className='break-words'>@{account.acct}</strong> }}
+          />
+        ),
+        message: (
+          <FormattedMessage
+            id='confirmations.remove_from_followers.message'
+            defaultMessage='Are you sure you want to remove {name} from your followers?'
+            values={{ name: <strong className='break-words'>@{account.acct}</strong> }}
+          />
+        ),
         confirm: intl.formatMessage(messages.removeFromFollowersConfirm),
-        onConfirm: () =>{
+        onConfirm: () => {
           removeFromFollowers();
         },
       });
@@ -353,12 +421,14 @@ const Header: React.FC<IHeader> = ({ account }) => {
   };
 
   const handleShare = () => {
-    navigator.share({
-      text: `@${account.acct}`,
-      url: account.url,
-    }).catch((e) => {
-      if (e.name !== 'AbortError') console.error(e);
-    });
+    navigator
+      .share({
+        text: `@${account.acct}`,
+        url: account.url,
+      })
+      .catch((e) => {
+        if (e.name !== 'AbortError') console.error(e);
+      });
   };
 
   const handleCopy: React.EventHandler<React.MouseEvent> = (e) => {
@@ -409,7 +479,10 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
     if (features.searchFromAccount) {
       menu.push({
-        text: intl.formatMessage(account.id === ownAccount.id ? messages.searchSelf : messages.search, { name: account.username }),
+        text: intl.formatMessage(
+          account.id === ownAccount.id ? messages.searchSelf : messages.search,
+          { name: account.username },
+        ),
         to: '/search',
         search: { type: 'statuses', accountId: account.id },
         icon: require('@phosphor-icons/core/regular/magnifying-glass.svg'),
@@ -482,9 +555,13 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
         if (features.accountEndorsements) {
           menu.push({
-            text: intl.formatMessage(account.relationship?.endorsed ? messages.unendorse : messages.endorse),
+            text: intl.formatMessage(
+              account.relationship?.endorsed ? messages.unendorse : messages.endorse,
+            ),
             action: onEndorseToggle,
-            icon: account.relationship?.endorsed ? require('@phosphor-icons/core/regular/user-minus.svg') : require('@phosphor-icons/core/regular/user-check.svg'),
+            icon: account.relationship?.endorsed
+              ? require('@phosphor-icons/core/regular/user-minus.svg')
+              : require('@phosphor-icons/core/regular/user-check.svg'),
           });
         }
       } else if (features.lists && features.unrestrictedLists) {
@@ -572,7 +649,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       if (account.relationship?.domain_blocking) {
         menu.push({
           text: intl.formatMessage(messages.unblockDomain, { domain }),
-          action: () =>{
+          action: () => {
             onUnblockDomain(domain);
           },
           icon: require('@phosphor-icons/core/regular/prohibit.svg'),
@@ -580,7 +657,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       } else {
         menu.push({
           text: intl.formatMessage(messages.blockDomain, { domain }),
-          action: () =>{
+          action: () => {
             onBlockDomain(domain);
           },
           icon: require('@phosphor-icons/core/regular/prohibit.svg'),
@@ -651,25 +728,30 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
     if (settings.disableUserProvidedMedia) {
       if (!account.header_description || account.header_default) return null;
-      else return (
-        <Popover
-          interaction='hover'
-          referenceElementClassName='cursor-pointer'
-          content={
-            <Stack space={1} className='max-h-[32rem] max-w-96 overflow-auto p-4'>
-              <Text weight='semibold'>
-                <FormattedMessage id='account.header.description' defaultMessage='Header description' />
-              </Text>
-              <Text className='whitespace-pre-wrap'>
-                {account.header_description}
-              </Text>
-            </Stack>
-          }
-          isFlush
-        >
-          <AltIndicator className='ml-6 mt-6 w-fit' message={<FormattedMessage id='account.header.alt' defaultMessage='Profile header' />} />
-        </Popover>
-      );
+      else
+        return (
+          <Popover
+            interaction='hover'
+            referenceElementClassName='cursor-pointer'
+            content={
+              <Stack space={1} className='max-h-[32rem] max-w-96 overflow-auto p-4'>
+                <Text weight='semibold'>
+                  <FormattedMessage
+                    id='account.header.description'
+                    defaultMessage='Header description'
+                  />
+                </Text>
+                <Text className='whitespace-pre-wrap'>{account.header_description}</Text>
+              </Stack>
+            }
+            isFlush
+          >
+            <AltIndicator
+              className='ml-6 mt-6 w-fit'
+              message={<FormattedMessage id='account.header.alt' defaultMessage='Profile header' />}
+            />
+          </Popover>
+        );
     }
 
     if (account.header) {
@@ -701,7 +783,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       return (
         <IconButton
           src={require('@phosphor-icons/core/regular/chats-teardrop.svg')}
-          onClick={() =>{
+          onClick={() => {
             createAndNavigateToChat.mutate(account.id);
           }}
           title={intl.formatMessage(messages.chat, { name: account.username })}
@@ -735,7 +817,12 @@ const Header: React.FC<IHeader> = ({ account }) => {
   };
 
   const renderRssButton = () => {
-    if (ownAccount || !features.rssFeeds || !account.local || (software === GOTOSOCIAL && !account.enable_rss)) {
+    if (
+      ownAccount ||
+      !features.rssFeeds ||
+      !account.local ||
+      (software === GOTOSOCIAL && !account.enable_rss)
+    ) {
       return null;
     }
 
@@ -758,15 +845,18 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
   return (
     <div className='-mx-4 -mt-4 sm:-mx-6 sm:-mt-6'>
-      {(account.moved && typeof account.moved === 'object') && (
+      {account.moved && typeof account.moved === 'object' && (
         <MovedNote from={account} to={account.moved as AccountEntity} />
       )}
 
       <div>
         <div
-          className={clsx('relative isolate flex w-full flex-col justify-center overflow-hidden black:rounded-t-none md:rounded-t-xl', {
-            'h-32 bg-gray-200 dark:bg-gray-900/50 lg:h-48': !settings.disableUserProvidedMedia,
-          })}
+          className={clsx(
+            'relative isolate flex w-full flex-col justify-center overflow-hidden black:rounded-t-none md:rounded-t-xl',
+            {
+              'h-32 bg-gray-200 dark:bg-gray-900/50 lg:h-48': !settings.disableUserProvidedMedia,
+            },
+          )}
         >
           {renderHeader()}
 
@@ -801,7 +891,9 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
           <div className='mt-6 flex w-full justify-end sm:pb-1'>
             <HStack space={2} className='mt-10' justifyContent='end' wrap>
-              {(ownAccount && account.id !== ownAccount.id) && <SubscriptionButton account={account} />}
+              {ownAccount && account.id !== ownAccount.id && (
+                <SubscriptionButton account={account} />
+              )}
               {renderMessageButton()}
               {renderShareButton()}
 

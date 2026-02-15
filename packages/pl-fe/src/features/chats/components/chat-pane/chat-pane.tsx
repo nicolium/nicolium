@@ -23,15 +23,20 @@ const ChatPane = () => {
   const showShoutbox = !useShoutboxIsLoading();
 
   const { screen, changeScreen, isOpen, toggleChatPane } = useChatContext();
-  const { chatsQuery: { data: chats, isLoading } } = useChats();
+  const {
+    chatsQuery: { data: chats, isLoading },
+  } = useChats();
 
-  const handleClickChat = useCallback((nextChat: Chat | 'shoutbox') => {
-    if (nextChat === 'shoutbox') {
-      changeScreen(ChatWidgetScreens.SHOUTBOX);
-    } else {
-      changeScreen(ChatWidgetScreens.CHAT, nextChat.id);
-    }
-  }, [changeScreen]);
+  const handleClickChat = useCallback(
+    (nextChat: Chat | 'shoutbox') => {
+      if (nextChat === 'shoutbox') {
+        changeScreen(ChatWidgetScreens.SHOUTBOX);
+      } else {
+        changeScreen(ChatWidgetScreens.CHAT, nextChat.id);
+      }
+    },
+    [changeScreen],
+  );
 
   const renderBody = () => {
     if (Number(chats?.length) > 0 || showShoutbox || isLoading) {

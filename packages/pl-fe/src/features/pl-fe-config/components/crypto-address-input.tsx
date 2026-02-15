@@ -8,17 +8,28 @@ import type { StreamfieldComponent } from '@/components/ui/streamfield';
 import type { CryptoAddress } from '@/normalizers/frontend-config';
 
 const messages = defineMessages({
-  ticker: { id: 'plfe_config.crypto_address.meta_fields.ticker_placeholder', defaultMessage: 'Ticker' },
-  address: { id: 'plfe_config.crypto_address.meta_fields.address_placeholder', defaultMessage: 'Address' },
-  note: { id: 'plfe_config.crypto_address.meta_fields.note_placeholder', defaultMessage: 'Note (optional)' },
+  ticker: {
+    id: 'plfe_config.crypto_address.meta_fields.ticker_placeholder',
+    defaultMessage: 'Ticker',
+  },
+  address: {
+    id: 'plfe_config.crypto_address.meta_fields.address_placeholder',
+    defaultMessage: 'Address',
+  },
+  note: {
+    id: 'plfe_config.crypto_address.meta_fields.note_placeholder',
+    defaultMessage: 'Note (optional)',
+  },
 });
 
 const CryptoAddressInput: StreamfieldComponent<CryptoAddress> = ({ value, onChange }) => {
   const intl = useIntl();
 
-  const handleChange = (key: 'ticker' | 'address' | 'note'): React.ChangeEventHandler<HTMLInputElement> => e => {
-    onChange({ ...value, [key]: e.currentTarget.value });
-  };
+  const handleChange =
+    (key: 'ticker' | 'address' | 'note'): React.ChangeEventHandler<HTMLInputElement> =>
+    (e) => {
+      onChange({ ...value, [key]: e.currentTarget.value });
+    };
 
   return (
     <HStack space={2} grow>

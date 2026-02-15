@@ -28,7 +28,9 @@ const getOrderedLists = (lists: Array<Pick<ListEntity, 'title'>>) => {
     return lists;
   }
 
-  return Object.values(lists).filter((item): item is ListEntity => !!item).sort((a, b) => a.title.localeCompare(b.title));
+  return Object.values(lists)
+    .filter((item): item is ListEntity => !!item)
+    .sort((a, b) => a.title.localeCompare(b.title));
 };
 
 const NewListForm: React.FC = () => {
@@ -65,11 +67,7 @@ const NewListForm: React.FC = () => {
           />
         </label>
 
-        <Button
-          disabled={isPending}
-          onClick={handleSubmit}
-          theme='primary'
-        >
+        <Button disabled={isPending} onClick={handleSubmit} theme='primary'>
           {create}
         </Button>
       </HStack>
@@ -90,7 +88,12 @@ const ListsPage: React.FC = () => {
     );
   }
 
-  const emptyMessage = <FormattedMessage id='empty_column.lists' defaultMessage="You don't have any lists yet. When you create one, it will show up here." />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.lists'
+      defaultMessage="You don't have any lists yet. When you create one, it will show up here."
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -110,7 +113,10 @@ const ListsPage: React.FC = () => {
                 params={{ listId: list.id }}
                 label={
                   <HStack alignItems='center' space={2}>
-                    <Icon src={require('@phosphor-icons/core/regular/list-bullets.svg')} size={20} />
+                    <Icon
+                      src={require('@phosphor-icons/core/regular/list-bullets.svg')}
+                      size={20}
+                    />
                     <span>{list.title}</span>
                   </HStack>
                 }

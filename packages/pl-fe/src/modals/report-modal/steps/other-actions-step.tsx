@@ -15,11 +15,23 @@ import { getDomain } from '@/utils/accounts';
 import type { Account } from 'pl-api';
 
 const messages = defineMessages({
-  addAdditionalStatuses: { id: 'report.other_actions.add_additional', defaultMessage: 'Would you like to add additional statuses to this report?' },
+  addAdditionalStatuses: {
+    id: 'report.other_actions.add_additional',
+    defaultMessage: 'Would you like to add additional statuses to this report?',
+  },
   addMore: { id: 'report.other_actions.add_more', defaultMessage: 'Add more' },
-  furtherActions: { id: 'report.other_actions.further_actions', defaultMessage: 'Further actions:' },
-  hideAdditionalStatuses: { id: 'report.other_actions.hide_additional', defaultMessage: 'Hide additional statuses' },
-  otherStatuses: { id: 'report.other_actions.other_statuses', defaultMessage: 'Include other statuses?' },
+  furtherActions: {
+    id: 'report.other_actions.further_actions',
+    defaultMessage: 'Further actions:',
+  },
+  hideAdditionalStatuses: {
+    id: 'report.other_actions.hide_additional',
+    defaultMessage: 'Hide additional statuses',
+  },
+  otherStatuses: {
+    id: 'report.other_actions.other_statuses',
+    defaultMessage: 'Include other statuses?',
+  },
 });
 
 interface IOtherActionsStep {
@@ -46,7 +58,12 @@ const OtherActionsStep = ({
   const features = useFeatures();
   const intl = useIntl();
 
-  const statusIds = useAppSelector((state) => [...new Set([...state.timelines[`account:${account.id}:with_replies`].items, ...selectedStatusIds])]);
+  const statusIds = useAppSelector((state) => [
+    ...new Set([
+      ...state.timelines[`account:${account.id}:with_replies`].items,
+      ...selectedStatusIds,
+    ]),
+  ]);
   const isBlocked = block;
   const isForward = forward;
   const canForward = !account.local && features.federating;
@@ -63,8 +80,9 @@ const OtherActionsStep = ({
 
   const toggleStatusReport = (statusId: string) => (value: boolean) => {
     let newStatusIds = selectedStatusIds;
-    if (value && !selectedStatusIds.includes(statusId)) newStatusIds = [...selectedStatusIds, statusId];
-    if (!value) newStatusIds = selectedStatusIds.filter(id => id !== statusId);
+    if (value && !selectedStatusIds.includes(statusId))
+      newStatusIds = [...selectedStatusIds, statusId];
+    if (!value) newStatusIds = selectedStatusIds.filter((id) => id !== statusId);
 
     setSelectedStatusIds(newStatusIds);
   };
@@ -95,7 +113,7 @@ const OtherActionsStep = ({
                   icon={require('@phosphor-icons/core/regular/arrows-in-simple.svg')}
                   theme='tertiary'
                   size='sm'
-                  onClick={() =>{
+                  onClick={() => {
                     setShowAdditionalStatuses(false);
                   }}
                 >
@@ -108,7 +126,7 @@ const OtherActionsStep = ({
               icon={require('@phosphor-icons/core/regular/plus.svg')}
               theme='tertiary'
               size='sm'
-              onClick={() =>{
+              onClick={() => {
                 setShowAdditionalStatuses(true);
               }}
             >
@@ -124,24 +142,34 @@ const OtherActionsStep = ({
         </Text>
 
         <FormGroup
-          labelText={<FormattedMessage id='report.block_hint' defaultMessage='Do you also want to block this account?' />}
+          labelText={
+            <FormattedMessage
+              id='report.block_hint'
+              defaultMessage='Do you also want to block this account?'
+            />
+          }
         >
           <HStack space={2} alignItems='center'>
-            <Toggle
-              checked={isBlocked}
-              onChange={handleBlockChange}
-              id='report-block'
-            />
+            <Toggle checked={isBlocked} onChange={handleBlockChange} id='report-block' />
 
             <Text theme='muted' tag='label' size='sm' htmlFor='report-block'>
-              <FormattedMessage id='report.block' defaultMessage='Block {target}' values={{ target: `@${account.acct}` }} />
+              <FormattedMessage
+                id='report.block'
+                defaultMessage='Block {target}'
+                values={{ target: `@${account.acct}` }}
+              />
             </Text>
           </HStack>
         </FormGroup>
 
         {canForward && (
           <FormGroup
-            labelText={<FormattedMessage id='report.forward_hint' defaultMessage='The account is from another server. Send a copy of the report there as well?' />}
+            labelText={
+              <FormattedMessage
+                id='report.forward_hint'
+                defaultMessage='The account is from another server. Send a copy of the report there as well?'
+              />
+            }
           >
             <HStack space={2} alignItems='center'>
               <Toggle
@@ -152,7 +180,11 @@ const OtherActionsStep = ({
               />
 
               <Text theme='muted' tag='label' size='sm' htmlFor='report-forward'>
-                <FormattedMessage id='report.forward' defaultMessage='Forward to {target}' values={{ target: getDomain(account) }} />
+                <FormattedMessage
+                  id='report.forward'
+                  defaultMessage='Forward to {target}'
+                  values={{ target: getDomain(account) }}
+                />
               </Text>
             </HStack>
           </FormGroup>

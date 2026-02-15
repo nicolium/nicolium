@@ -22,7 +22,7 @@ const Groups: React.FC = () => {
     }
   };
 
-  const createGroup = () =>{
+  const createGroup = () => {
     openModal('CREATE_GROUP');
   };
 
@@ -30,10 +30,7 @@ const Groups: React.FC = () => {
     <Stack space={4} alignItems='center' justifyContent='center' className='py-6'>
       <Stack space={2} className='max-w-sm'>
         <Text size='2xl' weight='bold' tag='h2' align='center'>
-          <FormattedMessage
-            id='groups.empty.title'
-            defaultMessage='No groups yet'
-          />
+          <FormattedMessage id='groups.empty.title' defaultMessage='No groups yet' />
         </Text>
 
         <Text size='sm' theme='muted' align='center'>
@@ -44,11 +41,7 @@ const Groups: React.FC = () => {
         </Text>
       </Stack>
 
-      <Button
-        className='self-center'
-        onClick={createGroup}
-        theme='secondary'
-      >
+      <Button className='self-center' onClick={createGroup} theme='secondary'>
         <FormattedMessage id='new_group_panel.action' defaultMessage='Create group' />
       </Button>
     </Stack>

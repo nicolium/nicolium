@@ -26,37 +26,45 @@ interface ConversationsReadAction {
   conversationId: string;
 }
 
-const markConversationRead = (conversationId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
+const markConversationRead =
+  (conversationId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+    if (!isLoggedIn(getState)) return;
 
-  dispatch<ConversationsReadAction>({
-    type: CONVERSATIONS_READ,
-    conversationId,
-  });
+    dispatch<ConversationsReadAction>({
+      type: CONVERSATIONS_READ,
+      conversationId,
+    });
 
-  return getClient(getState).timelines.markConversationRead(conversationId);
-};
+    return getClient(getState).timelines.markConversationRead(conversationId);
+  };
 
-const expandConversations = (expand = true) => (dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
-  const state = getState();
-  if (state.conversations.isLoading) return;
+const expandConversations =
+  (expand = true) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
+    if (!isLoggedIn(getState)) return;
+    const state = getState();
+    if (state.conversations.isLoading) return;
 
-  const hasMore = state.conversations.hasMore;
-  if (expand && !hasMore) return;
+    const hasMore = state.conversations.hasMore;
+    if (expand && !hasMore) return;
 
-  dispatch(expandConversationsRequest());
+    dispatch(expandConversationsRequest());
 
-  return (state.conversations.next?.() ?? getClient(state).timelines.getConversations())
-    .then(response => {
-      dispatch(importEntities({
-        accounts: response.items.reduce((aggr: Array<Account>, item) => aggr.concat(item.accounts), []),
-        statuses: response.items.map((item) => item.last_status),
-      }));
-      dispatch(expandConversationsSuccess(response.items, response.next, expand));
-    })
-    .catch(err => dispatch(expandConversationsFail(err)));
-};
+    return (state.conversations.next?.() ?? getClient(state).timelines.getConversations())
+      .then((response) => {
+        dispatch(
+          importEntities({
+            accounts: response.items.reduce(
+              (aggr: Array<Account>, item) => aggr.concat(item.accounts),
+              [],
+            ),
+            statuses: response.items.map((item) => item.last_status),
+          }),
+        );
+        dispatch(expandConversationsSuccess(response.items, response.next, expand));
+      })
+      .catch((err) => dispatch(expandConversationsFail(err)));
+  };
 
 const expandConversationsRequest = () => ({ type: CONVERSATIONS_FETCH_REQUEST });
 
@@ -82,10 +90,12 @@ interface ConversataionsUpdateAction {
 }
 
 const updateConversations = (conversation: Conversation) => (dispatch: AppDispatch) => {
-  dispatch(importEntities({
-    accounts: conversation.accounts,
-    statuses: [conversation.last_status],
-  }));
+  dispatch(
+    importEntities({
+      accounts: conversation.accounts,
+      statuses: [conversation.last_status],
+    }),
+  );
 
   return dispatch<ConversataionsUpdateAction>({
     type: CONVERSATIONS_UPDATE,
@@ -100,7 +110,7 @@ type ConversationsAction =
   | ReturnType<typeof expandConversationsRequest>
   | ReturnType<typeof expandConversationsSuccess>
   | ReturnType<typeof expandConversationsFail>
-  | ConversataionsUpdateAction
+  | ConversataionsUpdateAction;
 
 export {
   CONVERSATIONS_MOUNT,

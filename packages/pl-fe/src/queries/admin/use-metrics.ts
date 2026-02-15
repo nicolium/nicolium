@@ -2,7 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 
-import type { AdminDimensionKey, AdminGetDimensionsParams, AdminGetMeasuresParams, AdminMeasureKey } from 'pl-api';
+import type {
+  AdminDimensionKey,
+  AdminGetDimensionsParams,
+  AdminGetMeasuresParams,
+  AdminMeasureKey,
+} from 'pl-api';
 
 const useDimensions = (keys: AdminDimensionKey[], params?: AdminGetDimensionsParams) => {
   const client = useClient();
@@ -14,7 +19,12 @@ const useDimensions = (keys: AdminDimensionKey[], params?: AdminGetDimensionsPar
   });
 };
 
-const useMeasures = (keys: AdminMeasureKey[], startAt: string, endAt: string, params?: AdminGetMeasuresParams) => {
+const useMeasures = (
+  keys: AdminMeasureKey[],
+  startAt: string,
+  endAt: string,
+  params?: AdminGetMeasuresParams,
+) => {
   const client = useClient();
 
   return useQuery({

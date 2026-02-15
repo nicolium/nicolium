@@ -4,13 +4,7 @@
  * LICENSE file in the /src/features/compose/editor directory.
  */
 
-const SUPPORTED_URL_PROTOCOLS = new Set([
-  'http:',
-  'https:',
-  'mailto:',
-  'sms:',
-  'tel:',
-]);
+const SUPPORTED_URL_PROTOCOLS = new Set(['http:', 'https:', 'mailto:', 'sms:', 'tel:']);
 
 export const sanitizeUrl = (url: string): string => {
   try {

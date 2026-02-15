@@ -43,14 +43,16 @@ const ShoutboxWindow = () => {
             )}
 
             <HStack alignItems='center' space={3}>
-              {isOpen && (
-                <Avatar src={logo} alt='' size={40} className='flex-none' />
-              )}
+              {isOpen && <Avatar src={logo} alt='' size={40} className='flex-none' />}
 
               <Stack alignItems='start'>
                 <div className='flex grow items-center space-x-1'>
                   <Text size='sm' weight='bold' truncate>
-                    <FormattedMessage id='chat_list_item_shoutbox' defaultMessage='{instance} shoutbox' values={{ instance: instance.title }} />
+                    <FormattedMessage
+                      id='chat_list_item_shoutbox'
+                      defaultMessage='{instance} shoutbox'
+                      values={{ instance: instance.title }}
+                    />
                   </Text>
                 </div>
               </Stack>

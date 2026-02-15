@@ -4,12 +4,14 @@ import * as v from 'valibot';
 const filteredArray = <T>(schema: v.BaseSchema<any, T, v.BaseIssue<unknown>>) =>
   v.pipe(
     v.fallback(v.array(v.any()), []),
-    v.transform((arr) => (
-      arr.map((item) => {
-        const parsed = v.safeParse(schema, item);
-        return parsed.success ? parsed.output : undefined;
-      }).filter((item): item is T => Boolean(item))
-    )),
+    v.transform((arr) =>
+      arr
+        .map((item) => {
+          const parsed = v.safeParse(schema, item);
+          return parsed.success ? parsed.output : undefined;
+        })
+        .filter((item): item is T => Boolean(item)),
+    ),
   );
 
 /** valibot schema to force the value into an object, if it isn't already. */
@@ -17,7 +19,7 @@ const coerceObject = <T extends v.ObjectEntries>(shape: T): v.ObjectSchema<T, un
   v.optional(
     v.pipe(
       v.any(),
-      v.transform((input) => typeof input === 'object' && input !== null ? input : {}),
+      v.transform((input) => (typeof input === 'object' && input !== null ? input : {})),
       v.object(shape),
     ),
     {},

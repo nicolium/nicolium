@@ -44,7 +44,6 @@ type SerializedImageNode = Spread<
 >;
 
 class ImageNode extends DecoratorNode<JSX.Element> {
-
   __src: string;
   __altText: string;
 
@@ -53,16 +52,11 @@ class ImageNode extends DecoratorNode<JSX.Element> {
   }
 
   static clone(node: ImageNode): ImageNode {
-    return new ImageNode(
-      node.__src,
-      node.__altText,
-      node.__key,
-    );
+    return new ImageNode(node.__src, node.__altText, node.__key);
   }
 
   static importJSON(serializedNode: SerializedImageNode): ImageNode {
-    const { altText, src } =
-      serializedNode;
+    const { altText, src } = serializedNode;
     const node = $createImageNode({
       altText,
       src,
@@ -86,11 +80,7 @@ class ImageNode extends DecoratorNode<JSX.Element> {
     };
   }
 
-  constructor(
-    src: string,
-    altText: string,
-    key?: NodeKey,
-  ) {
+  constructor(src: string, altText: string, key?: NodeKey) {
     super(key);
     this.__src = src;
     this.__altText = altText;
@@ -140,37 +130,17 @@ class ImageNode extends DecoratorNode<JSX.Element> {
   decorate(): JSX.Element {
     return (
       // <Suspense fallback={null}>
-      <ImageComponent
-        src={this.__src}
-        altText={this.__altText}
-        nodeKey={this.getKey()}
-      />
+      <ImageComponent src={this.__src} altText={this.__altText} nodeKey={this.getKey()} />
       // </Suspense>
     );
   }
-
 }
 
-const $createImageNode = ({
-  altText = '',
-  src,
-  key,
-}: ImagePayload): ImageNode => {
-  return $applyNodeReplacement(
-    new ImageNode(
-      src,
-      altText,
-      key,
-    ),
-  );
+const $createImageNode = ({ altText = '', src, key }: ImagePayload): ImageNode => {
+  return $applyNodeReplacement(new ImageNode(src, altText, key));
 };
 
-const $isImageNode = (
-  node: LexicalNode | null | undefined,
-): node is ImageNode => node instanceof ImageNode;
+const $isImageNode = (node: LexicalNode | null | undefined): node is ImageNode =>
+  node instanceof ImageNode;
 
-export {
-  ImageNode,
-  $createImageNode,
-  $isImageNode,
-};
+export { ImageNode, $createImageNode, $isImageNode };

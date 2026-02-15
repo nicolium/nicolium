@@ -80,7 +80,9 @@ const CreateGroupModal: React.FC<BaseModalProps> = ({ onClose }) => {
     }
   };
 
-  const renderModalTitle = () => <FormattedMessage id='navigation_bar.create_group' defaultMessage='Create group' />;
+  const renderModalTitle = () => (
+    <FormattedMessage id='navigation_bar.create_group' defaultMessage='Create group' />
+  );
 
   return (
     <Modal
@@ -90,9 +92,7 @@ const CreateGroupModal: React.FC<BaseModalProps> = ({ onClose }) => {
       confirmationDisabled={isSubmitting}
       onClose={handleClose}
     >
-      <Stack space={2}>
-        {renderStep()}
-      </Stack>
+      <Stack space={2}>{renderStep()}</Stack>
     </Modal>
   );
 };

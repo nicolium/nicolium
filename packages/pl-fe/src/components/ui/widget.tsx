@@ -28,17 +28,18 @@ const Widget: React.FC<IWidget> = ({
   className,
 }): JSX.Element => (
   <div className={clsx('⁂-widget', className)}>
-    {((title ?? action) ?? onActionClick) && (
+    {(title ?? action ?? onActionClick) && (
       <div className='⁂-widget__header'>
         {title && <h1>{title}</h1>}
-        {action ?? (onActionClick && (
-          <IconButton
-            className='⁂-widget__icon'
-            src={actionIcon}
-            onClick={onActionClick}
-            title={actionTitle}
-          />
-        ))}
+        {action ??
+          (onActionClick && (
+            <IconButton
+              className='⁂-widget__icon'
+              src={actionIcon}
+              onClick={onActionClick}
+              title={actionTitle}
+            />
+          ))}
       </div>
     )}
     <div className='⁂-widget__body'>{children}</div>

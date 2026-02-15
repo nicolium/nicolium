@@ -33,7 +33,9 @@ const LoginForm: React.FC<ILoginForm> = ({ isLoading, handleSubmit }) => {
   const intl = useIntl();
   const features = useFeatures();
 
-  const usernameLabel = intl.formatMessage(features.logInWithUsername ? messages.username : messages.email);
+  const usernameLabel = intl.formatMessage(
+    features.logInWithUsername ? messages.username : messages.email,
+  );
   const passwordLabel = intl.formatMessage(messages.password);
 
   return (
@@ -54,10 +56,7 @@ const LoginForm: React.FC<ILoginForm> = ({ isLoading, handleSubmit }) => {
         labelText={passwordLabel}
         hintText={
           <Link to='/reset-password' className='hover:underline' tabIndex={-1}>
-            <FormattedMessage
-              id='login.reset_password_hint'
-              defaultMessage='Trouble logging in?'
-            />
+            <FormattedMessage id='login.reset_password_hint' defaultMessage='Trouble logging in?' />
           </Link>
         }
       >
@@ -74,11 +73,7 @@ const LoginForm: React.FC<ILoginForm> = ({ isLoading, handleSubmit }) => {
       </FormGroup>
 
       <FormActions>
-        <Button
-          theme='primary'
-          type='submit'
-          disabled={isLoading}
-        >
+        <Button theme='primary' type='submit' disabled={isLoading}>
           <FormattedMessage id='login.sign_in' defaultMessage='Sign in' />
         </Button>
       </FormActions>

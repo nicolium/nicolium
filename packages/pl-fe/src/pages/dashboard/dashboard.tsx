@@ -39,11 +39,15 @@ const Dashboard: React.FC = () => {
   } = instance.stats;
 
   const mau = instance.usage.users.active_month ?? instance.pleroma.stats.mau;
-  const retention = (userCount && mau) ? Math.round(mau / userCount * 100) : undefined;
+  const retention = userCount && mau ? Math.round((mau / userCount) * 100) : undefined;
 
   const [today] = useState<string>(new Date().toISOString().slice(0, 10));
-  const [monthAgo] = useState<string>(new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10));
-  const [sixMonthsAgo] = useState<string>(new Date(new Date().getTime() - 30 * 6 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10));
+  const [monthAgo] = useState<string>(
+    new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+  );
+  const [sixMonthsAgo] = useState<string>(
+    new Date(new Date().getTime() - 30 * 6 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+  );
 
   if (!account) return null;
 
@@ -63,7 +67,12 @@ const Dashboard: React.FC = () => {
             <DashCounter
               to='/pl-fe/admin/users'
               count={userCount}
-              label={<FormattedMessage id='admin.dashcounters.user_count_label' defaultMessage='total users' />}
+              label={
+                <FormattedMessage
+                  id='admin.dashcounters.user_count_label'
+                  defaultMessage='total users'
+                />
+              }
             />
           )}
           {features.mastodonAdminMetrics ? (
@@ -71,18 +80,30 @@ const Dashboard: React.FC = () => {
               measure='active_users'
               startAt={monthAgo}
               endAt={today}
-              label={<FormattedMessage id='admin.counters.active_users' defaultMessage='active users' />}
+              label={
+                <FormattedMessage id='admin.counters.active_users' defaultMessage='active users' />
+              }
             />
           ) : (
             <DashCounter
               count={mau}
-              label={<FormattedMessage id='admin.dashcounters.mau_label' defaultMessage='monthly active users' />}
+              label={
+                <FormattedMessage
+                  id='admin.dashcounters.mau_label'
+                  defaultMessage='monthly active users'
+                />
+              }
             />
           )}
           {!features.mastodonAdminMetrics && (
             <DashCounter
               count={retention}
-              label={<FormattedMessage id='admin.dashcounters.retention_label' defaultMessage='user retention' />}
+              label={
+                <FormattedMessage
+                  id='admin.dashcounters.retention_label'
+                  defaultMessage='user retention'
+                />
+              }
               percent
             />
           )}
@@ -92,14 +113,24 @@ const Dashboard: React.FC = () => {
                 measure='interactions'
                 startAt={monthAgo}
                 endAt={today}
-                label={<FormattedMessage id='admin.counters.interactions' defaultMessage='interactions' />}
+                label={
+                  <FormattedMessage
+                    id='admin.counters.interactions'
+                    defaultMessage='interactions'
+                  />
+                }
               />
               <Counter
                 measure='opened_reports'
                 startAt={monthAgo}
                 endAt={today}
                 to='/pl-fe/admin/reports'
-                label={<FormattedMessage id='admin.counters.opened_reports' defaultMessage='reports opened' />}
+                label={
+                  <FormattedMessage
+                    id='admin.counters.opened_reports'
+                    defaultMessage='reports opened'
+                  />
+                }
               />
               <Counter
                 measure='resolved_reports'
@@ -107,22 +138,66 @@ const Dashboard: React.FC = () => {
                 endAt={today}
                 to='/pl-fe/admin/reports'
                 search={{ resolved: true }}
-                label={<FormattedMessage id='admin.counters.resolved_reports' defaultMessage='reports resolved' />}
+                label={
+                  <FormattedMessage
+                    id='admin.counters.resolved_reports'
+                    defaultMessage='reports resolved'
+                  />
+                }
               />
             </>
           )}
           <DashCounter
             to='/timeline/local'
             count={statusCount}
-            label={<FormattedMessage id='admin.dashcounters.status_count_label' defaultMessage='posts' />}
+            label={
+              <FormattedMessage id='admin.dashcounters.status_count_label' defaultMessage='posts' />
+            }
           />
           <DashCounter
             count={domainCount}
-            label={<FormattedMessage id='admin.dashcounters.domain_count_label' defaultMessage='peers' />}
+            label={
+              <FormattedMessage id='admin.dashcounters.domain_count_label' defaultMessage='peers' />
+            }
           />
           <List>
-            <ListItem size='sm' to='/pl-fe/admin/reports' search={{ resolved: false }} label={<FormattedMessage id='admin.links.pending_reports' defaultMessage='{count, plural, one {{formattedCount} pending report} other {{formattedCount} pending reports}}' values={{ count: pendingReportsCount, formattedCount: <strong><FormattedNumber value={pendingReportsCount} /></strong> }} />} />
-            <ListItem size='sm' to='/pl-fe/admin/approval' label={<FormattedMessage id='admin.links.pending_users' defaultMessage='{count, plural, one {{formattedCount} pending user} other {{formattedCount} pending users}}' values={{ count: awaitingApprovalCount, formattedCount: <strong><FormattedNumber value={awaitingApprovalCount} /></strong> }} />} />
+            <ListItem
+              size='sm'
+              to='/pl-fe/admin/reports'
+              search={{ resolved: false }}
+              label={
+                <FormattedMessage
+                  id='admin.links.pending_reports'
+                  defaultMessage='{count, plural, one {{formattedCount} pending report} other {{formattedCount} pending reports}}'
+                  values={{
+                    count: pendingReportsCount,
+                    formattedCount: (
+                      <strong>
+                        <FormattedNumber value={pendingReportsCount} />
+                      </strong>
+                    ),
+                  }}
+                />
+              }
+            />
+            <ListItem
+              size='sm'
+              to='/pl-fe/admin/approval'
+              label={
+                <FormattedMessage
+                  id='admin.links.pending_users'
+                  defaultMessage='{count, plural, one {{formattedCount} pending user} other {{formattedCount} pending users}}'
+                  values={{
+                    count: awaitingApprovalCount,
+                    formattedCount: (
+                      <strong>
+                        <FormattedNumber value={awaitingApprovalCount} />
+                      </strong>
+                    ),
+                  }}
+                />
+              }
+            />
             {/* <ListItem size='sm' to='/pl-fe/admin' label={<FormattedMessage id='admin.links.pending_tags' defaultMessage='{count} pending tags' values={{ count: <strong>0</strong> }} />} />
             <ListItem size='sm' to='/pl-fe/admin' label={<FormattedMessage id='admin.links.pending_appeals' defaultMessage='{count} pending appeals' values={{ count: <strong>0</strong> }} />} /> */}
           </List>
@@ -133,21 +208,36 @@ const Dashboard: React.FC = () => {
                 startAt={monthAgo}
                 endAt={today}
                 params={{ limit: 8 }}
-                label={<FormattedMessage id='admin.dimensions.sources' defaultMessage='Sign-up sources' />}
+                label={
+                  <FormattedMessage
+                    id='admin.dimensions.sources'
+                    defaultMessage='Sign-up sources'
+                  />
+                }
               />
               <Dimension
                 dimension='languages'
                 startAt={monthAgo}
                 endAt={today}
                 params={{ limit: 8 }}
-                label={<FormattedMessage id='admin.dimensions.top_languages' defaultMessage='Top active languages' />}
+                label={
+                  <FormattedMessage
+                    id='admin.dimensions.top_languages'
+                    defaultMessage='Top active languages'
+                  />
+                }
               />
               <Dimension
                 dimension='servers'
                 startAt={monthAgo}
                 endAt={today}
                 params={{ limit: 8 }}
-                label={<FormattedMessage id='admin.dimensions.top_servers' defaultMessage='Top active servers' />}
+                label={
+                  <FormattedMessage
+                    id='admin.dimensions.top_servers'
+                    defaultMessage='Top active servers'
+                  />
+                }
               />
               <Retention startAt={sixMonthsAgo} endAt={today} frequency='month' />
               <Dimension
@@ -155,14 +245,21 @@ const Dashboard: React.FC = () => {
                 startAt={monthAgo}
                 endAt={today}
                 params={{ limit: 4 }}
-                label={<FormattedMessage id='admin.dimensions.software' defaultMessage='Software' />}
+                label={
+                  <FormattedMessage id='admin.dimensions.software' defaultMessage='Software' />
+                }
               />
               <Dimension
                 dimension='space_usage'
                 startAt={monthAgo}
                 endAt={today}
                 params={{ limit: 3 }}
-                label={<FormattedMessage id='admin.dimensions.media_storage' defaultMessage='Media storage' />}
+                label={
+                  <FormattedMessage
+                    id='admin.dimensions.media_storage'
+                    defaultMessage='Media storage'
+                  />
+                }
               />
             </>
           )}
@@ -172,21 +269,33 @@ const Dashboard: React.FC = () => {
           {features.pleromaAdminAccounts && account.is_admin && (
             <ListItem
               to='/pl-fe/config'
-              label={<FormattedMessage id='column.plfe_config' defaultMessage='Front-end configuration' />}
+              label={
+                <FormattedMessage
+                  id='column.plfe_config'
+                  defaultMessage='Front-end configuration'
+                />
+              }
             />
           )}
 
           {features.pleromaAdminModerationLog && (
             <ListItem
               to='/pl-fe/admin/log'
-              label={<FormattedMessage id='column.admin.moderation_log' defaultMessage='Moderation log' />}
+              label={
+                <FormattedMessage
+                  id='column.admin.moderation_log'
+                  defaultMessage='Moderation log'
+                />
+              }
             />
           )}
 
           {features.pleromaAdminAnnouncements && (
             <ListItem
               to='/pl-fe/admin/announcements'
-              label={<FormattedMessage id='column.admin.announcements' defaultMessage='Announcements' />}
+              label={
+                <FormattedMessage id='column.admin.announcements' defaultMessage='Announcements' />
+              }
             />
           )}
 
@@ -208,7 +317,12 @@ const Dashboard: React.FC = () => {
         {features.pleromaAdminAccounts && account.is_admin && (
           <>
             <CardTitle
-              title={<FormattedMessage id='admin.dashboard.registration_mode_label' defaultMessage='Registrations' />}
+              title={
+                <FormattedMessage
+                  id='admin.dashboard.registration_mode_label'
+                  defaultMessage='Registrations'
+                />
+              }
             />
 
             <RegistrationModePicker />
@@ -216,25 +330,35 @@ const Dashboard: React.FC = () => {
         )}
 
         <CardTitle
-          title={<FormattedMessage id='admin.dashwidgets.software_header' defaultMessage='Software' />}
+          title={
+            <FormattedMessage id='admin.dashwidgets.software_header' defaultMessage='Software' />
+          }
         />
 
         <List>
-          <ListItem label={<FormattedMessage id='admin.software.frontend' defaultMessage='Frontend' />}>
+          <ListItem
+            label={<FormattedMessage id='admin.software.frontend' defaultMessage='Frontend' />}
+          >
             <a
               href={sourceCode.ref ? `${sourceCode.url}/tree/${sourceCode.ref}` : sourceCode.url}
               className='⁂-dashboard__source-code'
               target='_blank'
             >
-              <span>{sourceCode.displayName} {sourceCode.version}</span>
+              <span>
+                {sourceCode.displayName} {sourceCode.version}
+              </span>
 
               <Icon src={require('@phosphor-icons/core/regular/arrow-square-out.svg')} />
             </a>
           </ListItem>
 
           {!features.mastodonAdminMetrics && (
-            <ListItem label={<FormattedMessage id='admin.software.backend' defaultMessage='Backend' />}>
-              <span>{v.software} ({instance.version})</span>
+            <ListItem
+              label={<FormattedMessage id='admin.software.backend' defaultMessage='Backend' />}
+            >
+              <span>
+                {v.software} ({instance.version})
+              </span>
             </ListItem>
           )}
         </List>

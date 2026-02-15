@@ -16,12 +16,12 @@ interface TagDiff {
 
 /** Returns the differences between two sets of tags. */
 const getTagDiff = (oldTags: string[], newTags: string[]): TagDiff => ({
-  added: newTags.filter(tag => !oldTags.includes(tag)),
-  removed: oldTags.filter(tag => !newTags.includes(tag)),
+  added: newTags.filter((tag) => !oldTags.includes(tag)),
+  removed: oldTags.filter((tag) => !newTags.includes(tag)),
 });
 
 /** Returns only tags which are badges. */
-const filterBadges = (tags: string[]): string[] => tags.filter(tag => tag.startsWith('badge:'));
+const filterBadges = (tags: string[]): string[] => tags.filter((tag) => tag.startsWith('badge:'));
 
 /** Get badges from an account. */
 const getBadges = (account: Pick<Account, '__meta'>) => {
@@ -29,10 +29,4 @@ const getBadges = (account: Pick<Account, '__meta'>) => {
   return filterBadges(tags);
 };
 
-export {
-  tagToBadge,
-  badgeToTag,
-  filterBadges,
-  getTagDiff,
-  getBadges,
-};
+export { tagToBadge, badgeToTag, filterBadges, getTagDiff, getBadges };

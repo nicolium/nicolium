@@ -78,25 +78,28 @@ const getFrequentlyUsedEmojis = (emojiCounters: Record<string, number>) => {
     .slice(0, perLine * lines);
 
   if (emojis.length < DEFAULTS.length) {
-    const uniqueDefaults = DEFAULTS.filter(emoji => !emojis.includes(emoji));
+    const uniqueDefaults = DEFAULTS.filter((emoji) => !emojis.includes(emoji));
     emojis = emojis.concat(uniqueDefaults.slice(0, DEFAULTS.length - emojis.length));
   }
 
   return emojis;
 };
 
-const getCustomEmojis = (emojis: Array<BaseCustomEmoji>) => emojis.filter(e => e.visible_in_picker).toSorted((a, b) => {
-  const aShort = a.shortcode.toLowerCase();
-  const bShort = b.shortcode.toLowerCase();
+const getCustomEmojis = (emojis: Array<BaseCustomEmoji>) =>
+  emojis
+    .filter((e) => e.visible_in_picker)
+    .toSorted((a, b) => {
+      const aShort = a.shortcode.toLowerCase();
+      const bShort = b.shortcode.toLowerCase();
 
-  if (aShort < bShort) {
-    return -1;
-  } else if (aShort > bShort) {
-    return 1;
-  } else {
-    return 0;
-  }
-});
+      if (aShort < bShort) {
+        return -1;
+      } else if (aShort > bShort) {
+        return 1;
+      } else {
+        return 0;
+      }
+    });
 
 // Fixes render bug where popover has a delayed position update
 const RenderAfter = ({ children, update }: any) => {
@@ -118,7 +121,11 @@ const RenderAfter = ({ children, update }: any) => {
 };
 
 const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
-  onPickEmoji, visible, setVisible, update, withCustom = true,
+  onPickEmoji,
+  visible,
+  setVisible,
+  update,
+  withCustom = true,
 }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -129,7 +136,10 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
   const { data: customEmojis } = useCustomEmojis(getCustomEmojis);
 
   const settings = useSettings();
-  const frequentlyUsedEmojis = useMemo(() => getFrequentlyUsedEmojis(settings.frequentlyUsedEmojis), [settings.frequentlyUsedEmojis]);
+  const frequentlyUsedEmojis = useMemo(
+    () => getFrequentlyUsedEmojis(settings.frequentlyUsedEmojis),
+    [settings.frequentlyUsedEmojis],
+  );
 
   const handlePick = (emoji: any) => {
     setVisible(false);
@@ -204,40 +214,38 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
     }
   }, [visible]);
 
-  useEffect(() => () => {
-    document.body.style.overflow = '';
-  }, []);
+  useEffect(
+    () => () => {
+      document.body.style.overflow = '';
+    },
+    [],
+  );
 
   const customEmojiCategories = useMemo(() => {
     return withCustom ? buildCustomEmojiCategories(customEmojis ?? [], intl) : undefined;
   }, [withCustom, customEmojis]);
 
-  return (
-    visible ? (
-      <RenderAfter update={update}>
-        <Suspense>
-          <EmojiPicker
-            custom={customEmojiCategories}
-            title={title}
-            onEmojiSelect={handlePick}
-            recent={frequentlyUsedEmojis}
-            perLine={8}
-            skin={handleSkinTone}
-            emojiSize={22}
-            emojiButtonSize={34}
-            set='twitter'
-            theme={theme === 'light' ? 'light' : 'dark'}
-            i18n={getI18n()}
-            skinTonePosition='search'
-            previewPosition='none'
-          />
-        </Suspense>
-      </RenderAfter>
-    ) : null
-  );
+  return visible ? (
+    <RenderAfter update={update}>
+      <Suspense>
+        <EmojiPicker
+          custom={customEmojiCategories}
+          title={title}
+          onEmojiSelect={handlePick}
+          recent={frequentlyUsedEmojis}
+          perLine={8}
+          skin={handleSkinTone}
+          emojiSize={22}
+          emojiButtonSize={34}
+          set='twitter'
+          theme={theme === 'light' ? 'light' : 'dark'}
+          i18n={getI18n()}
+          skinTonePosition='search'
+          previewPosition='none'
+        />
+      </Suspense>
+    </RenderAfter>
+  ) : null;
 };
 
-export {
-  EmojiPickerDropdown as default,
-  type IEmojiPickerDropdown,
-};
+export { EmojiPickerDropdown as default, type IEmojiPickerDropdown };

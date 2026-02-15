@@ -10,16 +10,20 @@ const useDirectory = (order: 'active' | 'new', local: boolean = false) => {
 
   return useInfiniteQuery({
     queryKey: ['accountsLists', 'directory', order, local],
-    queryFn: ({ pageParam: offset }) => client.instance.profileDirectory({
-      order,
-      local,
-      offset,
-    }).then((accounts) => {
-      dispatch(importEntities({ accounts }));
-      return accounts.map(({ id }) => id);
-    }),
+    queryFn: ({ pageParam: offset }) =>
+      client.instance
+        .profileDirectory({
+          order,
+          local,
+          offset,
+        })
+        .then((accounts) => {
+          dispatch(importEntities({ accounts }));
+          return accounts.map(({ id }) => id);
+        }),
     initialPageParam: 0,
-    getNextPageParam: (_, allPages) => allPages.at(-1)?.length === 0 ? undefined : allPages.flat().length,
+    getNextPageParam: (_, allPages) =>
+      allPages.at(-1)?.length === 0 ? undefined : allPages.flat().length,
     select: (data) => data?.pages.flat(),
   });
 };

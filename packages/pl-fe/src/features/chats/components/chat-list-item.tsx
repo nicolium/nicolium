@@ -20,7 +20,11 @@ import type { Menu } from '@/components/dropdown-menu';
 import type { Chat } from 'pl-api';
 
 const messages = defineMessages({
-  leaveMessage: { id: 'chat_settings.leave.message', defaultMessage: 'Are you sure you want to leave this chat? Messages will be deleted for you and this chat will be removed from your inbox.' },
+  leaveMessage: {
+    id: 'chat_settings.leave.message',
+    defaultMessage:
+      'Are you sure you want to leave this chat? Messages will be deleted for you and this chat will be removed from your inbox.',
+  },
   leaveHeading: { id: 'chat_settings.leave.heading', defaultMessage: 'Leave chat' },
   leaveConfirm: { id: 'chat_settings.leave.confirm', defaultMessage: 'Leave chat' },
   leaveChat: { id: 'chat_settings.options.leave_chat', defaultMessage: 'Leave chat' },
@@ -45,28 +49,33 @@ const ChatListItem: React.FC<IChatListItemInterface> = React.memo(({ chat, onCli
   const isBlocked = relationship?.blocked_by && false;
   const isBlocking = relationship?.blocking && false;
 
-  const menu = useMemo((): Menu => [{
-    text: intl.formatMessage(messages.leaveChat),
-    action: (event) => {
-      event.stopPropagation();
+  const menu = useMemo(
+    (): Menu => [
+      {
+        text: intl.formatMessage(messages.leaveChat),
+        action: (event) => {
+          event.stopPropagation();
 
-      openModal('CONFIRM', {
-        heading: intl.formatMessage(messages.leaveHeading),
-        message: intl.formatMessage(messages.leaveMessage),
-        confirm: intl.formatMessage(messages.leaveConfirm),
-        onConfirm: () => {
-          deleteChat.mutate(undefined, {
-            onSuccess() {
-              if (isUsingMainChatPage) {
-                navigate({ to: '/chats' });
-              }
+          openModal('CONFIRM', {
+            heading: intl.formatMessage(messages.leaveHeading),
+            message: intl.formatMessage(messages.leaveMessage),
+            confirm: intl.formatMessage(messages.leaveConfirm),
+            onConfirm: () => {
+              deleteChat.mutate(undefined, {
+                onSuccess() {
+                  if (isUsingMainChatPage) {
+                    navigate({ to: '/chats' });
+                  }
+                },
+              });
             },
           });
         },
-      });
-    },
-    icon: require('@phosphor-icons/core/regular/sign-out.svg'),
-  }], []);
+        icon: require('@phosphor-icons/core/regular/sign-out.svg'),
+      },
+    ],
+    [],
+  );
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (event) => {
     if (event.key === 'Enter' || event.key === ' ') {
@@ -78,7 +87,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = React.memo(({ chat, onCli
     <div
       role='button'
       key={chat.id}
-      onClick={() =>{
+      onClick={() => {
         onClick(chat);
       }}
       onKeyDown={handleKeyDown}
@@ -107,14 +116,21 @@ const ChatListItem: React.FC<IChatListItemInterface> = React.memo(({ chat, onCli
 
             <p
               className={clsx('⁂-chat-list-item__message', {
-                '⁂-chat-list-item__message--unread': !(isBlocked ?? isBlocking) && chat.last_message?.unread,
+                '⁂-chat-list-item__message--unread':
+                  !(isBlocked ?? isBlocking) && chat.last_message?.unread,
                 '⁂-chat-list-item__message--blocking': isBlocked ?? isBlocking,
               })}
             >
               {isBlocked ? (
-                <FormattedMessage id='chat_list_item.blocked_you' defaultMessage='This user has blocked you' />
+                <FormattedMessage
+                  id='chat_list_item.blocked_you'
+                  defaultMessage='This user has blocked you'
+                />
               ) : isBlocking ? (
-                <FormattedMessage id='chat_list_item.blocking' defaultMessage='You have blocked this user' />
+                <FormattedMessage
+                  id='chat_list_item.blocking'
+                  defaultMessage='You have blocked this user'
+                />
               ) : (
                 chat.last_message?.content && (
                   <ParsedContent
@@ -142,10 +158,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = React.memo(({ chat, onCli
           {chat.last_message && (
             <>
               {chat.last_message.unread && (
-                <div
-                  className='⁂-chat-list-item__unread'
-                  data-testid='chat-unread-indicator'
-                />
+                <div className='⁂-chat-list-item__unread' data-testid='chat-unread-indicator' />
               )}
 
               <RelativeTimestamp

@@ -33,10 +33,7 @@ const BlankslateWithChats = () => {
       </Stack>
 
       <Button theme='primary' onClick={handleNewChat}>
-        <FormattedMessage
-          id='chats.main.blankslate.new_chat'
-          defaultMessage='Message someone'
-        />
+        <FormattedMessage id='chats.main.blankslate.new_chat' defaultMessage='Message someone' />
       </Button>
     </Stack>
   );

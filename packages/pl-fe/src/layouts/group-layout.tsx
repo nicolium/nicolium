@@ -13,10 +13,7 @@ import Text from '@/components/ui/text';
 import GroupHeader from '@/features/group/components/group-header';
 import LinkFooter from '@/features/ui/components/link-footer';
 import { layouts } from '@/features/ui/router';
-import {
-  GroupMediaPanel,
-  SignUpPanel,
-} from '@/features/ui/util/async-components';
+import { GroupMediaPanel, SignUpPanel } from '@/features/ui/util/async-components';
 import { useOwnAccount } from '@/hooks/use-own-account';
 
 const messages = defineMessages({
@@ -100,20 +97,14 @@ const GroupLayout = () => {
         <Column size='lg' label={group ? group.display_name : ''} withHeader={false}>
           <GroupHeader key={`group-header-${groupId}`} group={group} />
 
-          <Tabs
-            key={`group-tabs-${groupId}`}
-            items={tabItems}
-            activeItem={location.pathname}
-          />
+          <Tabs key={`group-tabs-${groupId}`} items={tabItems} activeItem={location.pathname} />
 
           {renderChildren()}
         </Column>
       </Layout.Main>
 
       <Layout.Aside>
-        {!me && (
-          <SignUpPanel />
-        )}
+        {!me && <SignUpPanel />}
         {group && (group.relationship?.member ?? !group.locked) && (
           <GroupMediaPanel group={group} />
         )}

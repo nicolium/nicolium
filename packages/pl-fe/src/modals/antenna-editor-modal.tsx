@@ -43,20 +43,23 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
 
   const [title, setTitle] = useState(antenna ? antenna.title : '');
 
-  const handleSubmit: React.FormEventHandler = e => {
+  const handleSubmit: React.FormEventHandler = (e) => {
     e.preventDefault();
     handleUpdate();
   };
 
   const handleUpdate = () => {
-    (antennaId ? updateAntenna : createAntenna)({ title }, {
-      onSuccess: () => {
-        toast.success(intl.formatMessage(messages.success));
+    (antennaId ? updateAntenna : createAntenna)(
+      { title },
+      {
+        onSuccess: () => {
+          toast.success(intl.formatMessage(messages.success));
+        },
+        onError: () => {
+          toast.error(intl.formatMessage(messages.error));
+        },
       },
-      onError: () => {
-        toast.error(intl.formatMessage(messages.error));
-      },
-    });
+    );
   };
 
   return (
@@ -68,16 +71,18 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
           outerClassName='grow'
           type='text'
           value={title}
-          onChange={(e) =>{
+          onChange={(e) => {
             setTitle(e.target.value);
           }}
         />
       </FormGroup>
       <FormActions>
         <Button onClick={handleUpdate} disabled={disabled}>
-          {antennaId
-            ? <FormattedMessage id='antennas.edit.save' defaultMessage='Save antenna' />
-            : <FormattedMessage id='antennas.create.save' defaultMessage='Create antenna' />}
+          {antennaId ? (
+            <FormattedMessage id='antennas.edit.save' defaultMessage='Save antenna' />
+          ) : (
+            <FormattedMessage id='antennas.create.save' defaultMessage='Create antenna' />
+          )}
         </Button>
       </FormActions>
     </Form>
@@ -88,7 +93,10 @@ interface AntennaEditorModalProps {
   antennaId?: string;
 }
 
-const AntennaEditorModal: React.FC<BaseModalProps & AntennaEditorModalProps> = ({ antennaId: initialAntennaId, onClose }) => {
+const AntennaEditorModal: React.FC<BaseModalProps & AntennaEditorModalProps> = ({
+  antennaId: initialAntennaId,
+  onClose,
+}) => {
   const [antennaId, setAntennaId] = useState<string | undefined>(initialAntennaId);
   const [tab, setTab] = useState<Tab>('info');
 
@@ -100,18 +108,31 @@ const AntennaEditorModal: React.FC<BaseModalProps & AntennaEditorModalProps> = (
 
   return (
     <Modal
-      title={antennaId
-        ? <FormattedMessage id='antennas.edit' defaultMessage='Edit antenna' />
-        : <FormattedMessage id='antennas.create' defaultMessage='Create antenna' />}
+      title={
+        antennaId ? (
+          <FormattedMessage id='antennas.edit' defaultMessage='Edit antenna' />
+        ) : (
+          <FormattedMessage id='antennas.create' defaultMessage='Create antenna' />
+        )
+      }
       onClose={onClickClose}
-      onBack={tab === 'info' ? undefined : () =>{
-        setTab('info');
-      }}
+      onBack={
+        tab === 'info'
+          ? undefined
+          : () => {
+              setTab('info');
+            }
+      }
     >
-      {isFetched ? (tab === 'info'
-        ? <EditAntennaForm antennaId={antennaId} setAntennaId={setAntennaId} onTabChange={setTab} />
-        : <AntennaMembersForm antennaId={antennaId} />
-      ) : <Spinner />}
+      {isFetched ? (
+        tab === 'info' ? (
+          <EditAntennaForm antennaId={antennaId} setAntennaId={setAntennaId} onTabChange={setTab} />
+        ) : (
+          <AntennaMembersForm antennaId={antennaId} />
+        )
+      ) : (
+        <Spinner />
+      )}
     </Modal>
   );
 };

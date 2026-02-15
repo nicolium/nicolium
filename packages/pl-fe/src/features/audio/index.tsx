@@ -90,7 +90,7 @@ const Audio: React.FC<IAudio> = (props) => {
   const _setDimensions = () => {
     if (player.current) {
       const width = player.current.offsetWidth;
-      const height = fullscreen ? player.current.offsetHeight : (width / (16 / 9));
+      const height = fullscreen ? player.current.offsetHeight : width / (16 / 9);
 
       if (cacheWidth) {
         cacheWidth(width);
@@ -115,13 +115,17 @@ const Audio: React.FC<IAudio> = (props) => {
     setPaused(!paused);
   };
 
-  const handleResize = debounce(() => {
-    if (player.current) {
-      _setDimensions();
-    }
-  }, 250, {
-    trailing: true,
-  });
+  const handleResize = debounce(
+    () => {
+      if (player.current) {
+        _setDimensions();
+      }
+    },
+    250,
+    {
+      trailing: true,
+    },
+  );
 
   const handlePlay = () => {
     setPaused(false);
@@ -143,7 +147,9 @@ const Audio: React.FC<IAudio> = (props) => {
       const lastTimeRange = audio.current.buffered.length - 1;
 
       if (lastTimeRange > -1) {
-        setBuffer(Math.ceil(audio.current.buffered.end(lastTimeRange) / audio.current.duration * 100));
+        setBuffer(
+          Math.ceil((audio.current.buffered.end(lastTimeRange) / audio.current.duration) * 100),
+        );
       }
     }
   };
@@ -168,7 +174,7 @@ const Audio: React.FC<IAudio> = (props) => {
     }
   };
 
-  const handleVolumeMouseDown: React.MouseEventHandler = e => {
+  const handleVolumeMouseDown: React.MouseEventHandler = (e) => {
     document.addEventListener('mousemove', handleMouseVolSlide, true);
     document.addEventListener('mouseup', handleVolumeMouseUp, true);
     document.addEventListener('touchmove', handleMouseVolSlide, true);
@@ -187,7 +193,7 @@ const Audio: React.FC<IAudio> = (props) => {
     document.removeEventListener('touchend', handleVolumeMouseUp, true);
   };
 
-  const handleMouseDown: React.MouseEventHandler = e => {
+  const handleMouseDown: React.MouseEventHandler = (e) => {
     document.addEventListener('mousemove', handleMouseMove, true);
     document.addEventListener('mouseup', handleMouseUp, true);
     document.addEventListener('touchmove', handleMouseMove, true);
@@ -211,17 +217,20 @@ const Audio: React.FC<IAudio> = (props) => {
     audio.current?.play();
   };
 
-  const handleMouseMove = useCallback(throttle((e) => {
-    if (audio.current && seek.current) {
-      const { x } = getPointerPosition(seek.current, e);
-      const currentTime = audio.current.duration * x;
+  const handleMouseMove = useCallback(
+    throttle((e) => {
+      if (audio.current && seek.current) {
+        const { x } = getPointerPosition(seek.current, e);
+        const currentTime = audio.current.duration * x;
 
-      if (!isNaN(currentTime)) {
-        setCurrentTime(currentTime);
-        audio.current.currentTime = currentTime;
+        if (!isNaN(currentTime)) {
+          setCurrentTime(currentTime);
+          audio.current.currentTime = currentTime;
+        }
       }
-    }
-  }, 15), [audio.current, seek.current]);
+    }, 15),
+    [audio.current, seek.current],
+  );
 
   const handleTimeUpdate = () => {
     if (audio.current) {
@@ -230,39 +239,50 @@ const Audio: React.FC<IAudio> = (props) => {
     }
   };
 
-  const handleMouseVolSlide = useCallback(throttle(e => {
-    if (audio.current && slider.current) {
-      const { x } = getPointerPosition(slider.current, e);
+  const handleMouseVolSlide = useCallback(
+    throttle((e) => {
+      if (audio.current && slider.current) {
+        const { x } = getPointerPosition(slider.current, e);
 
-      if (!isNaN(x)) {
-        const volume = Math.max(0, Math.min(1, x));
+        if (!isNaN(x)) {
+          const volume = Math.max(0, Math.min(1, x));
 
-        setVolume(volume);
-        setMuted(volume === 0);
-        audio.current.volume = volume;
-        audio.current.muted = volume === 0;
+          setVolume(volume);
+          setMuted(volume === 0);
+          audio.current.volume = volume;
+          audio.current.muted = volume === 0;
+        }
       }
-    }
-  }, 60), [audio.current, slider.current]);
+    }, 60),
+    [audio.current, slider.current],
+  );
 
-  const handleScroll = useCallback(throttle(() => {
-    if (!canvas.current || !audio.current) {
-      return;
-    }
+  const handleScroll = useCallback(
+    throttle(
+      () => {
+        if (!canvas.current || !audio.current) {
+          return;
+        }
 
-    const { top, height } = canvas.current.getBoundingClientRect();
-    const inView = (top <= (window.innerHeight || document.documentElement.clientHeight)) && (top + height >= 0);
+        const { top, height } = canvas.current.getBoundingClientRect();
+        const inView =
+          top <= (window.innerHeight || document.documentElement.clientHeight) && top + height >= 0;
 
-    if (!paused && !inView) {
-      audio.current.pause();
+        if (!paused && !inView) {
+          audio.current.pause();
 
-      if (deployPictureInPicture) {
-        deployPictureInPicture('audio', _pack());
-      }
+          if (deployPictureInPicture) {
+            deployPictureInPicture('audio', _pack());
+          }
 
-      setPaused(true);
-    }
-  }, 150, { trailing: true }), [canvas.current, audio.current, paused]);
+          setPaused(true);
+        }
+      },
+      150,
+      { trailing: true },
+    ),
+    [canvas.current, audio.current, paused],
+  );
 
   const handleLoadedData = () => {
     if (audio.current) {
@@ -321,16 +341,23 @@ const Audio: React.FC<IAudio> = (props) => {
   };
 
   const _draw = () => {
-    visualizer.current?.draw(_getCX(), _getCY(), _getAccentColor() ?? '#ffffff', _getRadius(), _getScaleCoefficient());
+    visualizer.current?.draw(
+      _getCX(),
+      _getCY(),
+      _getAccentColor() ?? '#ffffff',
+      _getRadius(),
+      _getScaleCoefficient(),
+    );
   };
 
-  const _getRadius = (): number => (((height ?? props.height) ?? 0) - (PADDING * _getScaleCoefficient()) * 2) / 2;
+  const _getRadius = (): number =>
+    ((height ?? props.height ?? 0) - PADDING * _getScaleCoefficient() * 2) / 2;
 
-  const _getScaleCoefficient = (): number => ((height ?? props.height) ?? 0) / 982;
+  const _getScaleCoefficient = (): number => (height ?? props.height ?? 0) / 982;
 
   const _getCX = (): number => Math.floor((width ?? 0) / 2);
 
-  const _getCY = (): number => Math.floor(_getRadius() + (PADDING * _getScaleCoefficient()));
+  const _getCY = (): number => Math.floor(_getRadius() + PADDING * _getScaleCoefficient());
 
   const _getAccentColor = () => accentColor ?? undefined;
 
@@ -349,7 +376,7 @@ const Audio: React.FC<IAudio> = (props) => {
     }
   };
 
-  const handleAudioKeyDown: React.KeyboardEventHandler = e => {
+  const handleAudioKeyDown: React.KeyboardEventHandler = (e) => {
     // On the audio element or the seek bar, we can safely use the space bar
     // for playback control because there are no buttons to press
 
@@ -360,7 +387,7 @@ const Audio: React.FC<IAudio> = (props) => {
     }
   };
 
-  const handleKeyDown: React.KeyboardEventHandler = e => {
+  const handleKeyDown: React.KeyboardEventHandler = (e) => {
     switch (e.key) {
       case 'k':
         e.preventDefault();
@@ -385,7 +412,7 @@ const Audio: React.FC<IAudio> = (props) => {
     }
   };
 
-  const getDuration = () => (duration ?? props.duration) ?? 0;
+  const getDuration = () => duration ?? props.duration ?? 0;
 
   const progress = Math.min((currentTime / getDuration()) * 100, 100);
 
@@ -429,7 +456,10 @@ const Audio: React.FC<IAudio> = (props) => {
 
   return (
     <div
-      className={clsx('relative box-border overflow-hidden rounded-[10px] bg-black pb-11 [direction:ltr]', { 'rounded-none h-full': editable })}
+      className={clsx(
+        'relative box-border overflow-hidden rounded-[10px] bg-black pb-11 [direction:ltr]',
+        { 'h-full rounded-none': editable },
+      )}
       ref={player}
       style={{
         backgroundColor: _getBackgroundColor(),
@@ -439,7 +469,7 @@ const Audio: React.FC<IAudio> = (props) => {
       }}
       tabIndex={0}
       onKeyDown={handleKeyDown}
-      onClick={e =>{
+      onClick={(e) => {
         e.stopPropagation();
       }}
     >
@@ -482,9 +512,15 @@ const Audio: React.FC<IAudio> = (props) => {
         />
       )}
 
-      <div className='video-player__seek before:top-0 before:bg-white/10' onMouseDown={handleMouseDown} ref={seek}>
-
-        <div className='absolute top-0 block h-1 rounded bg-white/20' style={{ width: `${buffer}%` }} />
+      <div
+        className='video-player__seek before:top-0 before:bg-white/10'
+        onMouseDown={handleMouseDown}
+        ref={seek}
+      >
+        <div
+          className='absolute top-0 block h-1 rounded bg-white/20'
+          style={{ width: `${buffer}%` }}
+        />
 
         <div
           className='absolute top-0 block h-1 rounded bg-accent-500'
@@ -502,7 +538,6 @@ const Audio: React.FC<IAudio> = (props) => {
       <div className='video-player__controls video-player__controls--visible'>
         <div className='mx-[-5px] my-0 flex justify-between'>
           <div className='video-player__buttons left'>
-
             <button
               type='button'
               title={intl.formatMessage(paused ? messages.play : messages.pause)}
@@ -510,7 +545,13 @@ const Audio: React.FC<IAudio> = (props) => {
               className={clsx('player-button', fullscreen && 'py-2.5')}
               onClick={togglePlay}
             >
-              <Icon src={paused ? require('@phosphor-icons/core/regular/play.svg') : require('@phosphor-icons/core/regular/pause.svg')} />
+              <Icon
+                src={
+                  paused
+                    ? require('@phosphor-icons/core/regular/play.svg')
+                    : require('@phosphor-icons/core/regular/pause.svg')
+                }
+              />
             </button>
 
             <button
@@ -520,11 +561,20 @@ const Audio: React.FC<IAudio> = (props) => {
               className={clsx('player-button', fullscreen && 'py-2.5')}
               onClick={toggleMute}
             >
-              <Icon src={muted ? require('@phosphor-icons/core/regular/speaker-x.svg') : require('@phosphor-icons/core/regular/speaker-high.svg')} />
+              <Icon
+                src={
+                  muted
+                    ? require('@phosphor-icons/core/regular/speaker-x.svg')
+                    : require('@phosphor-icons/core/regular/speaker-high.svg')
+                }
+              />
             </button>
 
             <div className='video-player__volume' onMouseDown={handleVolumeMouseDown} ref={slider}>
-              <div className='video-player__volume__current' style={{ width: `${volume * 100}%`, backgroundColor: _getAccentColor() }} />
+              <div
+                className='video-player__volume__current'
+                style={{ width: `${volume * 100}%`, backgroundColor: _getAccentColor() }}
+              />
               <span
                 className='video-player__volume__handle'
                 tabIndex={0}
@@ -533,11 +583,19 @@ const Audio: React.FC<IAudio> = (props) => {
             </div>
 
             <span className='my-0 inline flex-initial overflow-hidden text-ellipsis text-black dark:text-white'>
-              <span className='text-sm font-medium text-current'>{formatTime(Math.floor(currentTime))}</span>
-              {getDuration() && (<>
-                <span className='mx-1.5 my-0 inline-block text-sm font-medium text-current'>/</span>
-                <span className='text-sm font-medium text-current'>{formatTime(Math.floor(getDuration()))}</span>
-              </>)}
+              <span className='text-sm font-medium text-current'>
+                {formatTime(Math.floor(currentTime))}
+              </span>
+              {getDuration() && (
+                <>
+                  <span className='mx-1.5 my-0 inline-block text-sm font-medium text-current'>
+                    /
+                  </span>
+                  <span className='text-sm font-medium text-current'>
+                    {formatTime(Math.floor(getDuration()))}
+                  </span>
+                </>
+              )}
             </span>
           </div>
 

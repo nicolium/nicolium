@@ -26,7 +26,10 @@ const messages = defineMessages({
   exportData: { id: 'column.export_data', defaultMessage: 'Export data' },
   filters: { id: 'column.filters', defaultMessage: 'Muted words' },
   importData: { id: 'column.import_data', defaultMessage: 'Import data' },
-  interactionPolicies: { id: 'column.interaction_policies', defaultMessage: 'Interaction policies' },
+  interactionPolicies: {
+    id: 'column.interaction_policies',
+    defaultMessage: 'Interaction policies',
+  },
   mfaDisabled: { id: 'mfa.disabled', defaultMessage: 'Disabled' },
   mfaEnabled: { id: 'mfa.enabled', defaultMessage: 'Enabled' },
   mutes: { id: 'column.mutes', defaultMessage: 'Mutes' },
@@ -77,9 +80,18 @@ const SettingsPage = () => {
           <List>
             <ListItem label={intl.formatMessage(messages.mutes)} to='/mutes' />
             <ListItem label={intl.formatMessage(messages.blocks)} to='/blocks' />
-            {(features.filters || features.filtersV2) && <ListItem label={intl.formatMessage(messages.filters)} to='/filters' />}
-            {features.federating && <ListItem label={intl.formatMessage(messages.domainBlocks)} to='/domain_blocks' />}
-            {(features.interactionRequests || features.quoteApprovalPolicies) && <ListItem label={intl.formatMessage(messages.interactionPolicies)} to='/settings/interaction_policies' />}
+            {(features.filters || features.filtersV2) && (
+              <ListItem label={intl.formatMessage(messages.filters)} to='/filters' />
+            )}
+            {features.federating && (
+              <ListItem label={intl.formatMessage(messages.domainBlocks)} to='/domain_blocks' />
+            )}
+            {(features.interactionRequests || features.quoteApprovalPolicies) && (
+              <ListItem
+                label={intl.formatMessage(messages.interactionPolicies)}
+                to='/settings/interaction_policies'
+              />
+            )}
           </List>
         </CardBody>
 
@@ -89,15 +101,22 @@ const SettingsPage = () => {
 
         <CardBody>
           <List>
-            {features.changeEmail && <ListItem label={intl.formatMessage(messages.changeEmail)} to='/settings/email' />}
-            {features.changePassword && <ListItem label={intl.formatMessage(messages.changePassword)} to='/settings/password' />}
+            {features.changeEmail && (
+              <ListItem label={intl.formatMessage(messages.changeEmail)} to='/settings/email' />
+            )}
+            {features.changePassword && (
+              <ListItem
+                label={intl.formatMessage(messages.changePassword)}
+                to='/settings/password'
+              />
+            )}
             {features.manageMfa && (
               <>
                 <ListItem label={intl.formatMessage(messages.configureMfa)} to='/settings/mfa'>
                   <span>
-                    {isMfaEnabled ?
-                      intl.formatMessage(messages.mfaEnabled) :
-                      intl.formatMessage(messages.mfaDisabled)}
+                    {isMfaEnabled
+                      ? intl.formatMessage(messages.mfaEnabled)
+                      : intl.formatMessage(messages.mfaDisabled)}
                   </span>
                 </ListItem>
               </>
@@ -105,7 +124,10 @@ const SettingsPage = () => {
             {features.sessions && (
               <ListItem label={intl.formatMessage(messages.sessions)} to='/settings/tokens' />
             )}
-            <ListItem label={<FormattedMessage id='settings.privacy' defaultMessage='Privacy' />} to='/settings/privacy' />
+            <ListItem
+              label={<FormattedMessage id='settings.privacy' defaultMessage='Privacy' />}
+              to='/settings/privacy'
+            />
           </List>
         </CardBody>
 
@@ -147,14 +169,26 @@ const SettingsPage = () => {
 
             <ListItem label={intl.formatMessage(messages.developers)} to='/developers' />
 
-            {features.federating && (features.accountMoving ? (
-              <ListItem label={intl.formatMessage(messages.accountMigration)} to='/settings/migration' />
-            ) : features.manageAccountAliases && (
-              <ListItem label={intl.formatMessage(messages.accountAliases)} to='/settings/aliases' />
-            ))}
+            {features.federating &&
+              (features.accountMoving ? (
+                <ListItem
+                  label={intl.formatMessage(messages.accountMigration)}
+                  to='/settings/migration'
+                />
+              ) : (
+                features.manageAccountAliases && (
+                  <ListItem
+                    label={intl.formatMessage(messages.accountAliases)}
+                    to='/settings/aliases'
+                  />
+                )
+              ))}
 
             {(features.deleteAccount || features.deleteAccountWithoutPassword) && (
-              <ListItem label={<Text theme='danger'>{intl.formatMessage(messages.deleteAccount)}</Text>} to='/settings/account' />
+              <ListItem
+                label={<Text theme='danger'>{intl.formatMessage(messages.deleteAccount)}</Text>}
+                to='/settings/account'
+              />
             )}
           </List>
         </CardBody>

@@ -26,7 +26,7 @@ const InstanceInfoPanel: React.FC<IInstanceInfoPanel> = ({ host }) => {
   const dispatch = useAppDispatch();
 
   const settings = useSettings();
-  const remoteInstance: any = useAppSelector(state => getRemoteInstance(state, host));
+  const remoteInstance: any = useAppSelector((state) => getRemoteInstance(state, host));
   const pinned = settings.remote_timeline.pinnedHosts.includes(host);
 
   const handlePinHost = () => {
@@ -43,7 +43,11 @@ const InstanceInfoPanel: React.FC<IInstanceInfoPanel> = ({ host }) => {
     <Widget
       title={remoteInstance.host}
       onActionClick={handlePinHost}
-      actionIcon={pinned ? require('@phosphor-icons/core/regular/push-pin-slash.svg') : require('@phosphor-icons/core/regular/push-pin.svg')}
+      actionIcon={
+        pinned
+          ? require('@phosphor-icons/core/regular/push-pin-slash.svg')
+          : require('@phosphor-icons/core/regular/push-pin.svg')
+      }
       actionTitle={intl.formatMessage(pinned ? messages.unpinHost : messages.pinHost, { host })}
     />
   );

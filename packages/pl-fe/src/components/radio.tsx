@@ -8,7 +8,7 @@ interface IRadioGroup {
 }
 
 const RadioGroup = ({ onChange, children }: IRadioGroup) => {
-  const childrenWithProps = React.Children.map(children, child =>
+  const childrenWithProps = React.Children.map(children, (child) =>
     React.cloneElement(child, { onChange }),
   );
 
@@ -23,7 +23,14 @@ type IRadioItem = IListItem & {
   onChange?: React.ChangeEventHandler;
 };
 
-const RadioItem: React.FC<IRadioItem> = ({ label, hint, checked = false, onChange, value, ...props }) => (
+const RadioItem: React.FC<IRadioItem> = ({
+  label,
+  hint,
+  checked = false,
+  onChange,
+  value,
+  ...props
+}) => (
   <ListItem label={label} hint={hint} {...props}>
     <input
       type='radio'
@@ -35,7 +42,4 @@ const RadioItem: React.FC<IRadioItem> = ({ label, hint, checked = false, onChang
   </ListItem>
 );
 
-export {
-  RadioGroup,
-  RadioItem,
-};
+export { RadioGroup, RadioItem };

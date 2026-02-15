@@ -1,7 +1,16 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { addPollOption, changePollOption, changePollSettings, clearComposeSuggestions, fetchComposeSuggestions, removePoll, removePollOption, selectComposeSuggestion } from '@/actions/compose';
+import {
+  addPollOption,
+  changePollOption,
+  changePollSettings,
+  clearComposeSuggestions,
+  fetchComposeSuggestions,
+  removePoll,
+  removePollOption,
+  selectComposeSuggestion,
+} from '@/actions/compose';
 import AutosuggestInput from '@/components/autosuggest-input';
 import Button from '@/components/ui/button';
 import Divider from '@/components/ui/divider';
@@ -18,17 +27,38 @@ import DurationSelector from './duration-selector';
 import type { AutoSuggestion } from '@/components/autosuggest-input';
 
 const messages = defineMessages({
-  option_placeholder: { id: 'compose_form.poll.option_placeholder', defaultMessage: 'Answer #{number}' },
+  option_placeholder: {
+    id: 'compose_form.poll.option_placeholder',
+    defaultMessage: 'Answer #{number}',
+  },
   add_option: { id: 'compose_form.poll.add_option', defaultMessage: 'Add an answer' },
   pollDuration: { id: 'compose_form.poll.duration', defaultMessage: 'Poll duration' },
   removePoll: { id: 'compose_form.poll.remove', defaultMessage: 'Remove poll' },
-  switchToMultiple: { id: 'compose_form.poll.switch_to_multiple', defaultMessage: 'Change poll to allow multiple answers' },
-  switchToSingle: { id: 'compose_form.poll.switch_to_single', defaultMessage: 'Change poll to allow for a single answer' },
-  minutes: { id: 'intervals.full.minutes', defaultMessage: '{number, plural, one {# minute} other {# minutes}}' },
-  hours: { id: 'intervals.full.hours', defaultMessage: '{number, plural, one {# hour} other {# hours}}' },
-  days: { id: 'intervals.full.days', defaultMessage: '{number, plural, one {# day} other {# days}}' },
+  switchToMultiple: {
+    id: 'compose_form.poll.switch_to_multiple',
+    defaultMessage: 'Change poll to allow multiple answers',
+  },
+  switchToSingle: {
+    id: 'compose_form.poll.switch_to_single',
+    defaultMessage: 'Change poll to allow for a single answer',
+  },
+  minutes: {
+    id: 'intervals.full.minutes',
+    defaultMessage: '{number, plural, one {# minute} other {# minutes}}',
+  },
+  hours: {
+    id: 'intervals.full.hours',
+    defaultMessage: '{number, plural, one {# hour} other {# hours}}',
+  },
+  days: {
+    id: 'intervals.full.days',
+    defaultMessage: '{number, plural, one {# day} other {# days}}',
+  },
   multiSelect: { id: 'compose_form.poll.multiselect', defaultMessage: 'Multi-Select' },
-  multiSelectDetail: { id: 'compose_form.poll.multiselect_detail', defaultMessage: 'Allow users to select multiple answers' },
+  multiSelectDetail: {
+    id: 'compose_form.poll.multiselect_detail',
+    defaultMessage: 'Allow users to select multiple answers',
+  },
 });
 
 interface IOption {
@@ -57,7 +87,7 @@ const Option: React.FC<IOption> = ({
 
   const { suggestions, modifiedLanguage: language } = useCompose(composeId);
 
-  const handleOptionTitleChange = (event: React.ChangeEvent<HTMLInputElement>) =>{
+  const handleOptionTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(index, event.target.value);
   };
 
@@ -71,13 +101,19 @@ const Option: React.FC<IOption> = ({
 
   const onSuggestionsClearRequested = () => dispatch(clearComposeSuggestions(composeId));
 
-  const onSuggestionsFetchRequested = (token: string) =>{
+  const onSuggestionsFetchRequested = (token: string) => {
     dispatch(fetchComposeSuggestions(composeId, token));
   };
 
-  const onSuggestionSelected = (tokenStart: number, token: string | null, value: AutoSuggestion) => {
+  const onSuggestionSelected = (
+    tokenStart: number,
+    token: string | null,
+    value: AutoSuggestion,
+  ) => {
     if (token && typeof token === 'string') {
-      dispatch(selectComposeSuggestion(composeId, tokenStart, token, value, ['poll', 'options', index]));
+      dispatch(
+        selectComposeSuggestion(composeId, tokenStart, token, value, ['poll', 'options', index]),
+      );
     }
   };
 
@@ -107,7 +143,10 @@ const Option: React.FC<IOption> = ({
       {index > 1 && (
         <div>
           <Button theme='danger' size='sm' onClick={handleOptionRemove}>
-            <FormattedMessage id='compose_form.poll.remove_option' defaultMessage='Remove this answer' />
+            <FormattedMessage
+              id='compose_form.poll.remove_option'
+              defaultMessage='Remove this answer'
+            />
           </Button>
         </div>
       )}
@@ -126,17 +165,19 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
 
   const { poll, language, modifiedLanguage } = useCompose(composeId);
 
-  const options = !modifiedLanguage || modifiedLanguage === language ? poll?.options : poll?.options_map.map((option, key) => option[modifiedLanguage] || poll.options[key]);
+  const options =
+    !modifiedLanguage || modifiedLanguage === language
+      ? poll?.options
+      : poll?.options_map.map((option, key) => option[modifiedLanguage] || poll.options[key]);
   const expiresIn = poll?.expires_in;
   const isMultiple = poll?.multiple;
 
-  const {
-    max_options: maxOptions,
-    max_characters_per_option: maxOptionChars,
-  } = configuration.polls;
+  const { max_options: maxOptions, max_characters_per_option: maxOptionChars } =
+    configuration.polls;
 
   const onRemoveOption = (index: number) => dispatch(removePollOption(composeId, index));
-  const onChangeOption = (index: number, title: string) => dispatch(changePollOption(composeId, index, title));
+  const onChangeOption = (index: number, title: string) =>
+    dispatch(changePollOption(composeId, index, title));
   const handleAddOption = () => dispatch(addPollOption(composeId, ''));
   const onChangeSettings = (expiresIn: number, isMultiple?: boolean) =>
     dispatch(changePollSettings(composeId, expiresIn, isMultiple));
@@ -169,12 +210,7 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
           <div className='w-6' />
 
           {options.length < maxOptions && (
-            <Button
-              theme='secondary'
-              onClick={handleAddOption}
-              size='sm'
-              block
-            >
+            <Button theme='secondary' onClick={handleAddOption} size='sm' block>
               <FormattedMessage {...messages.add_option} />
             </Button>
           )}
@@ -186,9 +222,7 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
       <button type='button' onClick={handleToggleMultiple} className='text-start'>
         <HStack alignItems='center' justifyContent='between'>
           <Stack>
-            <Text weight='medium'>
-              {intl.formatMessage(messages.multiSelect)}
-            </Text>
+            <Text weight='medium'>{intl.formatMessage(messages.multiSelect)}</Text>
 
             <Text theme='muted' size='sm'>
               {intl.formatMessage(messages.multiSelectDetail)}
@@ -203,11 +237,12 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
 
       {/* Duration */}
       <Stack space={2}>
-        <Text weight='medium'>
-          {intl.formatMessage(messages.pollDuration)}
-        </Text>
+        <Text weight='medium'>{intl.formatMessage(messages.pollDuration)}</Text>
 
-        <DurationSelector onDurationChange={handleSelectDuration} value={expiresIn ?? (2 * 24 * 60 * 60)} />
+        <DurationSelector
+          onDurationChange={handleSelectDuration}
+          value={expiresIn ?? 2 * 24 * 60 * 60}
+        />
       </Stack>
 
       {/* Remove Poll */}

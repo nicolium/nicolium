@@ -41,19 +41,13 @@ const getAccessToken = (state: RootState) => {
 const getAuthUserId = (state: RootState) => {
   const me = state.auth.me;
 
-  return [
-    state.auth.users[me!]?.id,
-    me,
-  ].filter(id => id).find(validId);
+  return [state.auth.users[me!]?.id, me].filter((id) => id).find(validId);
 };
 
 const getAuthUserUrl = (state: RootState) => {
   const me = state.auth.me;
 
-  return [
-    state.auth.users[me!]?.url,
-    me,
-  ].filter(url => url).find(isURL);
+  return [state.auth.users[me!]?.url, me].filter((url) => url).find(isURL);
 };
 
 /** Get the VAPID public key. */

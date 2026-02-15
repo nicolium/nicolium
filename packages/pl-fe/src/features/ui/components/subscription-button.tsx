@@ -10,11 +10,26 @@ import type { Account as AccountEntity } from 'pl-api';
 
 const messages = defineMessages({
   subscribe: { id: 'account.subscribe', defaultMessage: 'Subscribe to notifications from @{name}' },
-  unsubscribe: { id: 'account.unsubscribe', defaultMessage: 'Unsubscribe to notifications from @{name}' },
-  subscribeSuccess: { id: 'account.subscribe.success', defaultMessage: 'You have subscribed to this account.' },
-  unsubscribeSuccess: { id: 'account.unsubscribe.success', defaultMessage: 'You have unsubscribed from this account.' },
-  subscribeFailure: { id: 'account.subscribe.failure', defaultMessage: 'An error occurred trying to subscribe to this account.' },
-  unsubscribeFailure: { id: 'account.unsubscribe.failure', defaultMessage: 'An error occurred trying to unsubscribe to this account.' },
+  unsubscribe: {
+    id: 'account.unsubscribe',
+    defaultMessage: 'Unsubscribe to notifications from @{name}',
+  },
+  subscribeSuccess: {
+    id: 'account.subscribe.success',
+    defaultMessage: 'You have subscribed to this account.',
+  },
+  unsubscribeSuccess: {
+    id: 'account.unsubscribe.success',
+    defaultMessage: 'You have unsubscribed from this account.',
+  },
+  subscribeFailure: {
+    id: 'account.subscribe.failure',
+    defaultMessage: 'An error occurred trying to subscribe to this account.',
+  },
+  unsubscribeFailure: {
+    id: 'account.unsubscribe.failure',
+    defaultMessage: 'An error occurred trying to unsubscribe to this account.',
+  },
 });
 
 interface ISubscriptionButton {
@@ -35,23 +50,29 @@ const SubscriptionButton = ({ account }: ISubscriptionButton) => {
 
   const onNotifyToggle = () => {
     if (account.relationship?.notifying) {
-      follow({ notify: false }, {
-        onSuccess: () =>{
-          toast.success(intl.formatMessage(messages.unsubscribeSuccess));
+      follow(
+        { notify: false },
+        {
+          onSuccess: () => {
+            toast.success(intl.formatMessage(messages.unsubscribeSuccess));
+          },
+          onError: () => {
+            toast.error(intl.formatMessage(messages.unsubscribeFailure));
+          },
         },
-        onError: () =>{
-          toast.error(intl.formatMessage(messages.unsubscribeFailure));
-        },
-      });
+      );
     } else {
-      follow({ notify: true }, {
-        onSuccess: () =>{
-          toast.success(intl.formatMessage(messages.subscribeSuccess));
+      follow(
+        { notify: true },
+        {
+          onSuccess: () => {
+            toast.success(intl.formatMessage(messages.subscribeSuccess));
+          },
+          onError: () => {
+            toast.error(intl.formatMessage(messages.subscribeFailure));
+          },
         },
-        onError: () =>{
-          toast.error(intl.formatMessage(messages.subscribeFailure));
-        },
-      });
+      );
     }
   };
 
@@ -66,7 +87,11 @@ const SubscriptionButton = ({ account }: ISubscriptionButton) => {
   if (isRequested || isFollowing) {
     return (
       <IconButton
-        src={isSubscribed ? require('@phosphor-icons/core/regular/bell-simple-ringing.svg') : require('@phosphor-icons/core/regular/bell-simple.svg')}
+        src={
+          isSubscribed
+            ? require('@phosphor-icons/core/regular/bell-simple-ringing.svg')
+            : require('@phosphor-icons/core/regular/bell-simple.svg')
+        }
         onClick={handleToggle}
         disabled={isPending}
         title={title}

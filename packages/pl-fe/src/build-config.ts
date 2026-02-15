@@ -4,12 +4,7 @@
  */
 
 const env = compileTime(() => {
-  const {
-    NODE_ENV,
-    BACKEND_URL,
-    FE_SUBDIRECTORY,
-    WITH_LANDING_PAGE,
-  } = process.env;
+  const { NODE_ENV, BACKEND_URL, FE_SUBDIRECTORY, WITH_LANDING_PAGE } = process.env;
 
   const sanitizeURL = (url: string | undefined = ''): string => {
     try {
@@ -19,7 +14,8 @@ const env = compileTime(() => {
     }
   };
 
-  const sanitizeBasename = (path: string | undefined = ''): string => `/${path.replace(/^\/+|\/+$/g, '')}`;
+  const sanitizeBasename = (path: string | undefined = ''): string =>
+    `/${path.replace(/^\/+|\/+$/g, '')}`;
 
   return {
     NODE_ENV: NODE_ENV ?? 'development',
@@ -29,18 +25,8 @@ const env = compileTime(() => {
   };
 });
 
-const {
-  NODE_ENV,
-  BACKEND_URL,
-  FE_SUBDIRECTORY,
-  WITH_LANDING_PAGE,
-} = env;
+const { NODE_ENV, BACKEND_URL, FE_SUBDIRECTORY, WITH_LANDING_PAGE } = env;
 
 export type PlFeEnv = typeof env;
 
-export {
-  NODE_ENV,
-  BACKEND_URL,
-  FE_SUBDIRECTORY,
-  WITH_LANDING_PAGE,
-};
+export { NODE_ENV, BACKEND_URL, FE_SUBDIRECTORY, WITH_LANDING_PAGE };

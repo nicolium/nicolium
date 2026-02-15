@@ -40,9 +40,15 @@ const GroupPrivacy = ({ group }: IGroupPolicy) => (
 
           <Text theme='muted' align='center'>
             {group.locked ? (
-              <FormattedMessage id='group.privacy.locked.info' defaultMessage='Discoverable. Users can join after their request is approved.' />
+              <FormattedMessage
+                id='group.privacy.locked.info'
+                defaultMessage='Discoverable. Users can join after their request is approved.'
+              />
             ) : (
-              <FormattedMessage id='group.privacy.public.info' defaultMessage='Discoverable. Anyone can join.' />
+              <FormattedMessage
+                id='group.privacy.public.info'
+                defaultMessage='Discoverable. Anyone can join.'
+              />
             )}
           </Text>
         </Stack>

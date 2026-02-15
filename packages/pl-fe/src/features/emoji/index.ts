@@ -43,17 +43,19 @@ const isNativeEmoji = (emoji: Emoji): emoji is NativeEmoji =>
 const isAlphaNumeric = (c: string) => {
   const code = c.charCodeAt(0);
 
-  if (!(code > 47 && code < 58) &&  // numeric (0-9)
-      !(code > 64 && code < 91) &&  // upper alpha (A-Z)
-      !(code > 96 && code < 123)) { // lower alpha (a-z)
+  if (
+    !(code > 47 && code < 58) && // numeric (0-9)
+    !(code > 64 && code < 91) && // upper alpha (A-Z)
+    !(code > 96 && code < 123)
+  ) {
+    // lower alpha (a-z)
     return false;
   } else {
     return true;
   }
 };
 
-const validEmojiChar = (c: string) =>
-  isAlphaNumeric(c) || ['_', '-', '.'].includes(c);
+const validEmojiChar = (c: string) => isAlphaNumeric(c) || ['_', '-', '.'].includes(c);
 
 const buildCustomEmojis = (customEmojis: Array<BaseCustomEmoji>) => {
   const emojis: EmojiMart<EmojiMartCustom>[] = [];
@@ -100,9 +102,13 @@ const buildCustomEmojiCategories = (customEmojis: Array<BaseCustomEmoji>, intl?:
     .toSorted((a, b) => a[0].localeCompare(b[0]))
     .map(([categoryName, emojis]) => ({
       id: categoryName,
-      name: categoryName === 'uncategorized' && intl
-        ? intl.formatMessage({ id: 'emoji_button.uncategorized', defaultMessage: 'Uncategorized' })
-        : categoryName.replace(/^pack:/, ''),
+      name:
+        categoryName === 'uncategorized' && intl
+          ? intl.formatMessage({
+              id: 'emoji_button.uncategorized',
+              defaultMessage: 'Uncategorized',
+            })
+          : categoryName.replace(/^pack:/, ''),
       emojis,
     }));
 };

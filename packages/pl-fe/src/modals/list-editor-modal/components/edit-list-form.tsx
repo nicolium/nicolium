@@ -16,7 +16,10 @@ import toast from '@/toast';
 const messages = defineMessages({
   repliesPolicyNone: { id: 'lists.replies_policy.none', defaultMessage: 'No one' },
   repliesPolicyList: { id: 'lists.replies_policy.list', defaultMessage: 'Members of the list' },
-  repliesPolicyFollowed: { id: 'lists.replies_policy.followed', defaultMessage: 'Any followed user' },
+  repliesPolicyFollowed: {
+    id: 'lists.replies_policy.followed',
+    defaultMessage: 'Any followed user',
+  },
   success: { id: 'lists.edit.success', defaultMessage: 'List updated successfully' },
   error: { id: 'lists.edit.error', defaultMessage: 'Error updating list' },
 });
@@ -26,10 +29,7 @@ interface IListForm {
   onTabChange: (tab: 'members') => void;
 }
 
-const ListForm: React.FC<IListForm> = ({
-  listId,
-  onTabChange,
-}) => {
+const ListForm: React.FC<IListForm> = ({ listId, onTabChange }) => {
   const intl = useIntl();
   const features = useFeatures();
 
@@ -41,32 +41,33 @@ const ListForm: React.FC<IListForm> = ({
   const [exclusive, setExclusive] = useState(list!.exclusive);
   const [notify, setNotify] = useState(list!.notify);
 
-  const handleSubmit: React.FormEventHandler = e => {
+  const handleSubmit: React.FormEventHandler = (e) => {
     e.preventDefault();
     handleUpdate();
   };
 
   const handleUpdate = () => {
-    updateList({ title, replies_policy: repliesPolicy, exclusive, notify }, {
-      onSuccess: () => {
-        toast.success(intl.formatMessage(messages.success));
+    updateList(
+      { title, replies_policy: repliesPolicy, exclusive, notify },
+      {
+        onSuccess: () => {
+          toast.success(intl.formatMessage(messages.success));
+        },
+        onError: () => {
+          toast.error(intl.formatMessage(messages.error));
+        },
       },
-      onError: () => {
-        toast.error(intl.formatMessage(messages.error));
-      },
-    });
+    );
   };
 
   return (
     <Form onSubmit={handleSubmit}>
-      <FormGroup
-        labelText={<FormattedMessage id='lists.edit.title' defaultMessage='List title' />}
-      >
+      <FormGroup labelText={<FormattedMessage id='lists.edit.title' defaultMessage='List title' />}>
         <Input
           outerClassName='grow'
           type='text'
           value={title}
-          onChange={(e) =>{
+          onChange={(e) => {
             setTitle(e.target.value);
           }}
         />
@@ -75,7 +76,12 @@ const ListForm: React.FC<IListForm> = ({
       <List>
         {features.listsRepliesPolicy && (
           <ListItem
-            label={<FormattedMessage id='lists.edit.show_replies_to' defaultMessage='Include replies from list members to' />}
+            label={
+              <FormattedMessage
+                id='lists.edit.show_replies_to'
+                defaultMessage='Include replies from list members to'
+              />
+            }
           >
             <SelectDropdown
               key={repliesPolicy}
@@ -86,7 +92,7 @@ const ListForm: React.FC<IListForm> = ({
                 followed: intl.formatMessage(messages.repliesPolicyFollowed),
               }}
               defaultValue={repliesPolicy ?? 'list'}
-              onChange={(e) =>{
+              onChange={(e) => {
                 setRepliesPolicy(e.target.value as 'none');
               }}
             />
@@ -96,11 +102,16 @@ const ListForm: React.FC<IListForm> = ({
         {features.listsExclusive && (
           <ListItem
             label={<FormattedMessage id='lists.exclusive' defaultMessage='Hide members in Home' />}
-            hint={<FormattedMessage id='lists.exclusive_hint' defaultMessage='If someone is on this list, hide them in your Home feed to avoid seeing their posts twice.' />}
+            hint={
+              <FormattedMessage
+                id='lists.exclusive_hint'
+                defaultMessage='If someone is on this list, hide them in your Home feed to avoid seeing their posts twice.'
+              />
+            }
           >
             <Toggle
               checked={exclusive}
-              onChange={(e) =>{
+              onChange={(e) => {
                 setExclusive(e.target.checked);
               }}
             />
@@ -110,11 +121,16 @@ const ListForm: React.FC<IListForm> = ({
         {features.listsNotifications && (
           <ListItem
             label={<FormattedMessage id='lists.notifications' defaultMessage='Subscribe' />}
-            hint={<FormattedMessage id='lists.notifications_hint' defaultMessage='Receive notifications for new posts in the list.' />}
+            hint={
+              <FormattedMessage
+                id='lists.notifications_hint'
+                defaultMessage='Receive notifications for new posts in the list.'
+              />
+            }
           >
             <Toggle
               checked={notify}
-              onChange={(e) =>{
+              onChange={(e) => {
                 setNotify(e.target.checked);
               }}
             />
@@ -122,8 +138,10 @@ const ListForm: React.FC<IListForm> = ({
         )}
 
         <ListItem
-          label={<FormattedMessage id='lists.manage_members' defaultMessage='Manage list members' />}
-          onClick={() =>{
+          label={
+            <FormattedMessage id='lists.manage_members' defaultMessage='Manage list members' />
+          }
+          onClick={() => {
             onTabChange('members');
           }}
         />

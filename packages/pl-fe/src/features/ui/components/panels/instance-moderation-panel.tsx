@@ -26,26 +26,38 @@ const InstanceModerationPanel: React.FC<IInstanceModerationPanel> = ({ host }) =
   const { openModal } = useModalsActions();
 
   const { account } = useOwnAccount();
-  const remoteInstance = useAppSelector(state => getRemoteInstance(state, host));
+  const remoteInstance = useAppSelector((state) => getRemoteInstance(state, host));
 
   const handleEditFederation = () => {
     openModal('EDIT_FEDERATION', { host });
   };
 
-  const makeMenu = () => [{
-    text: intl.formatMessage(messages.editFederation),
-    action: handleEditFederation,
-    icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
-  }];
+  const makeMenu = () => [
+    {
+      text: intl.formatMessage(messages.editFederation),
+      action: handleEditFederation,
+      icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
+    },
+  ];
 
   const menu = makeMenu();
 
   return (
     <Widget
-      title={<FormattedMessage id='remote_instance.federation_panel.heading' defaultMessage='Federation restrictions' />}
-      action={account?.is_admin ? (
-        <DropdownMenu items={menu} src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')} />
-      ) : undefined}
+      title={
+        <FormattedMessage
+          id='remote_instance.federation_panel.heading'
+          defaultMessage='Federation restrictions'
+        />
+      }
+      action={
+        account?.is_admin ? (
+          <DropdownMenu
+            items={menu}
+            src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
+          />
+        ) : undefined
+      }
     >
       <InstanceRestrictions remoteInstance={remoteInstance} />
     </Widget>

@@ -133,7 +133,7 @@
     justify-content: center;
     height: 100%;
     flex-grow: 1;
-    gap: 1rem; 
+    gap: 1rem;
 
     &__text {
       display: flex;
@@ -182,7 +182,7 @@
 
   &__name {
     @apply flex w-full grow items-center space-x-1;
-  
+
     p {
       @include mixins.text($weight: bold, $size: sm, $align: left, $truncate: true);
     }

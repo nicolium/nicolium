@@ -29,9 +29,11 @@ const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupPr
   const [backupCodes, setBackupCodes] = useState<Array<string>>([]);
 
   useEffect(() => {
-    client.settings.mfa.getMfaBackupCodes().then(({ codes: backupCodes }) => {
-      setBackupCodes(backupCodes);
-    })
+    client.settings.mfa
+      .getMfaBackupCodes()
+      .then(({ codes: backupCodes }) => {
+        setBackupCodes(backupCodes);
+      })
       .catch(() => {
         toast.error(intl.formatMessage(messages.codesFail));
       });
@@ -41,7 +43,10 @@ const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupPr
     <Stack space={4}>
       <Stack space={4}>
         <Text theme='muted'>
-          <FormattedMessage id='mfa.setup_warning' defaultMessage="Write these codes down or save them somewhere secure - otherwise you won't see them again. If you lose access to your 2FA app and recovery codes you'll be locked out of your account." />
+          <FormattedMessage
+            id='mfa.setup_warning'
+            defaultMessage="Write these codes down or save them somewhere secure - otherwise you won't see them again. If you lose access to your 2FA app and recovery codes you'll be locked out of your account."
+          />
         </Text>
 
         <div className='rounded-lg border-2 border-solid border-gray-200 p-4 dark:border-gray-800'>

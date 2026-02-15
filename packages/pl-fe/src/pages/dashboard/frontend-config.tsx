@@ -27,31 +27,75 @@ import ThemeSelector from '@/features/ui/components/theme-selector';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
-import { cryptoAddressSchema, footerItemSchema, frontendConfigSchema, promoPanelItemSchema, type FrontendConfig } from '@/normalizers/frontend-config';
+import {
+  cryptoAddressSchema,
+  footerItemSchema,
+  frontendConfigSchema,
+  promoPanelItemSchema,
+  type FrontendConfig,
+} from '@/normalizers/frontend-config';
 import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.plfe_config', defaultMessage: 'Front-end configuration' },
   saved: { id: 'plfe_config.saved', defaultMessage: 'pl-fe config saved!' },
-  copyrightFooterLabel: { id: 'plfe_config.copyright_footer.meta_fields.label_placeholder', defaultMessage: 'Copyright footer' },
-  cryptoDonatePanelLimitLabel: { id: 'plfe_config.crypto_donate_panel_limit.meta_fields.limit_placeholder', defaultMessage: 'Number of items to display in the crypto homepage widget' },
-  rawJSONLabel: { id: 'plfe_config.raw_json_label', defaultMessage: 'Advanced: Edit raw JSON data' },
-  rawJSONHint: { id: 'plfe_config.raw_json_hint', defaultMessage: 'Edit the settings data directly. Changes made directly to the JSON file will override the form fields above. Click "Save" to apply your changes.' },
+  copyrightFooterLabel: {
+    id: 'plfe_config.copyright_footer.meta_fields.label_placeholder',
+    defaultMessage: 'Copyright footer',
+  },
+  cryptoDonatePanelLimitLabel: {
+    id: 'plfe_config.crypto_donate_panel_limit.meta_fields.limit_placeholder',
+    defaultMessage: 'Number of items to display in the crypto homepage widget',
+  },
+  rawJSONLabel: {
+    id: 'plfe_config.raw_json_label',
+    defaultMessage: 'Advanced: Edit raw JSON data',
+  },
+  rawJSONHint: {
+    id: 'plfe_config.raw_json_hint',
+    defaultMessage:
+      'Edit the settings data directly. Changes made directly to the JSON file will override the form fields above. Click "Save" to apply your changes.',
+  },
   rawJSONInvalid: { id: 'plfe_config.raw_json_invalid', defaultMessage: 'is invalid' },
-  displayFqnLabel: { id: 'plfe_config.display_fqn_label', defaultMessage: 'Display domain (eg @user@domain) for local accounts.' },
+  displayFqnLabel: {
+    id: 'plfe_config.display_fqn_label',
+    defaultMessage: 'Display domain (eg @user@domain) for local accounts.',
+  },
   greentextLabel: { id: 'plfe_config.greentext_label', defaultMessage: 'Enable greentext support' },
-  mediaPreviewLabel: { id: 'plfe_config.media_preview_label', defaultMessage: 'Prefer preview media for thumbnails' },
-  mediaPreviewHint: { id: 'plfe_config.media_preview_hint', defaultMessage: 'Some backends provide an optimized version of media for display in timelines. However, these preview images may be too small without additional configuration.' },
+  mediaPreviewLabel: {
+    id: 'plfe_config.media_preview_label',
+    defaultMessage: 'Prefer preview media for thumbnails',
+  },
+  mediaPreviewHint: {
+    id: 'plfe_config.media_preview_hint',
+    defaultMessage:
+      'Some backends provide an optimized version of media for display in timelines. However, these preview images may be too small without additional configuration.',
+  },
   tileServerLabel: { id: 'plfe_config.tile_server_label', defaultMessage: 'Map tile server' },
-  tileServerAttributionLabel: { id: 'plfe_config.tile_server_attribution_label', defaultMessage: 'Map tiles attribution' },
-  redirectRootNoLoginLabel: { id: 'plfe_config.redirect_root_no_login_label', defaultMessage: 'Redirect homepage' },
-  redirectRootNoLoginHint: { id: 'plfe_config.redirect_root_no_login_hint', defaultMessage: 'Path to redirect the homepage when a user is not logged in.' },
+  tileServerAttributionLabel: {
+    id: 'plfe_config.tile_server_attribution_label',
+    defaultMessage: 'Map tiles attribution',
+  },
+  redirectRootNoLoginLabel: {
+    id: 'plfe_config.redirect_root_no_login_label',
+    defaultMessage: 'Redirect homepage',
+  },
+  redirectRootNoLoginHint: {
+    id: 'plfe_config.redirect_root_no_login_hint',
+    defaultMessage: 'Path to redirect the homepage when a user is not logged in.',
+  },
   sentryDsnLabel: { id: 'plfe_config.sentry_dsn_label', defaultMessage: 'Sentry DSN' },
-  sentryDsnHint: { id: 'plfe_config.sentry_dsn_hint', defaultMessage: 'DSN URL for error reporting. Works with Sentry and GlitchTip.' },
+  sentryDsnHint: {
+    id: 'plfe_config.sentry_dsn_hint',
+    defaultMessage: 'DSN URL for error reporting. Works with Sentry and GlitchTip.',
+  },
 });
 
 type ValueGetter<T1 = Element, T2 = any> = (e: React.ChangeEvent<T1>) => T2;
-type StreamItemConfigPath = ['promoPanel', 'items'] | ['navlinks', 'homeFooter'] | ['cryptoAddresses'];
+type StreamItemConfigPath =
+  | ['promoPanel', 'items']
+  | ['navlinks', 'homeFooter']
+  | ['cryptoAddresses'];
 type ThemeChangeHandler = (theme: 'system' | 'light' | 'dark' | 'black') => void;
 
 const FrontendConfigEditor: React.FC = () => {
@@ -60,7 +104,7 @@ const FrontendConfigEditor: React.FC = () => {
 
   const features = useFeatures();
 
-  const initialData = useAppSelector(state => state.frontendConfig);
+  const initialData = useAppSelector((state) => state.frontendConfig);
 
   const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState(v.parse(frontendConfigSchema, initialData));
@@ -81,20 +125,27 @@ const FrontendConfigEditor: React.FC = () => {
   };
 
   const handleSubmit: React.FormEventHandler = (e) => {
-    dispatch(updateFrontendConfig(data)).then(() => {
-      setLoading(false);
-      toast.success(intl.formatMessage(messages.saved));
-    }).catch(() => {
-      setLoading(false);
-    });
+    dispatch(updateFrontendConfig(data))
+      .then(() => {
+        setLoading(false);
+        toast.success(intl.formatMessage(messages.saved));
+      })
+      .catch(() => {
+        setLoading(false);
+      });
     setLoading(true);
     e.preventDefault();
   };
 
-  const handleChange = (path: keyof FrontendConfig, getValue: ValueGetter<any, FrontendConfig[typeof path]>): React.ChangeEventHandler => e => {
-    const newData: FrontendConfig = { ...data, [path]: getValue(e) };
-    setConfig(newData);
-  };
+  const handleChange =
+    (
+      path: keyof FrontendConfig,
+      getValue: ValueGetter<any, FrontendConfig[typeof path]>,
+    ): React.ChangeEventHandler =>
+    (e) => {
+      const newData: FrontendConfig = { ...data, [path]: getValue(e) };
+      setConfig(newData);
+    };
 
   const handleThemeChange: ThemeChangeHandler = (theme) => {
     const newData = create(data, (draft) => {
@@ -104,15 +155,19 @@ const FrontendConfigEditor: React.FC = () => {
     setConfig(newData);
   };
 
-  const handleFileChange = (path: keyof FrontendConfig): React.ChangeEventHandler<HTMLInputElement> => e => {
-    const file = e.target.files?.item(0);
+  const handleFileChange =
+    (path: keyof FrontendConfig): React.ChangeEventHandler<HTMLInputElement> =>
+    (e) => {
+      const file = e.target.files?.item(0);
 
-    if (file) {
-      dispatch(uploadMedia({ file })).then((data: any) => {
-        handleChange(path, () => data.url)(e);
-      }).catch(console.error);
-    }
-  };
+      if (file) {
+        dispatch(uploadMedia({ file }))
+          .then((data: any) => {
+            handleChange(path, () => data.url)(e);
+          })
+          .catch(console.error);
+      }
+    };
 
   const handleStreamItemChange = (path: StreamItemConfigPath) => (values: any[]) => {
     const newData = create(data, (draft) => {
@@ -126,17 +181,19 @@ const FrontendConfigEditor: React.FC = () => {
     setConfig(newData);
   };
 
-  const addStreamItem = <T, >(path: StreamItemConfigPath, schema: v.BaseSchema<any, T, v.BaseIssue<unknown>>) => () => {
-    const newData = create(data, (draft) => {
-      if (path[0] === 'cryptoAddresses') {
-        draft.cryptoAddresses.push(v.parse(cryptoAddressSchema, {}));
-      } else {
-        // @ts-ignore
-        draft[path[0]][path[1]].push(v.parse(schema, {}));
-      }
-    });
-    setConfig(newData);
-  };
+  const addStreamItem =
+    <T,>(path: StreamItemConfigPath, schema: v.BaseSchema<any, T, v.BaseIssue<unknown>>) =>
+    () => {
+      const newData = create(data, (draft) => {
+        if (path[0] === 'cryptoAddresses') {
+          draft.cryptoAddresses.push(v.parse(cryptoAddressSchema, {}));
+        } else {
+          // @ts-ignore
+          draft[path[0]][path[1]].push(v.parse(schema, {}));
+        }
+      });
+      setConfig(newData);
+    };
 
   const deleteStreamItem = (path: StreamItemConfigPath) => (i: number) => {
     const newData = create(data, (draft) => {
@@ -150,11 +207,11 @@ const FrontendConfigEditor: React.FC = () => {
     setConfig(newData);
   };
 
-  const handleEditJSON: React.ChangeEventHandler<HTMLTextAreaElement> = e => {
+  const handleEditJSON: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setRawJSON(e.target.value);
   };
 
-  const toggleJSONEditor = (expanded: boolean) =>{
+  const toggleJSONEditor = (expanded: boolean) => {
     setJsonEditorExpanded(expanded);
   };
 
@@ -182,11 +239,20 @@ const FrontendConfigEditor: React.FC = () => {
           <SitePreview frontendConfig={frontendConfig} />
 
           <CardHeader>
-            <CardTitle title={<FormattedMessage id='plfe_config.headings.theme' defaultMessage='Theme' />} />
+            <CardTitle
+              title={<FormattedMessage id='plfe_config.headings.theme' defaultMessage='Theme' />}
+            />
           </CardHeader>
 
           <List>
-            <ListItem label={<FormattedMessage id='plfe_config.fields.theme_label' defaultMessage='Default theme' />}>
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='plfe_config.fields.theme_label'
+                  defaultMessage='Default theme'
+                />
+              }
+            >
               <ThemeSelector
                 value={frontendConfig.defaultSettings?.themeMode ?? 'system'}
                 onChange={handleThemeChange}
@@ -194,24 +260,43 @@ const FrontendConfigEditor: React.FC = () => {
             </ListItem>
 
             <ListItem
-              label={<FormattedMessage id='plfe_config.fields.edit_theme_label' defaultMessage='Edit theme' />}
+              label={
+                <FormattedMessage
+                  id='plfe_config.fields.edit_theme_label'
+                  defaultMessage='Edit theme'
+                />
+              }
               to='/pl-fe/admin/theme'
             />
           </List>
 
           <FormGroup
-            labelText={<FormattedMessage id='plfe_config.fields.logo_label' defaultMessage='Logo' />}
-            hintText={<FormattedMessage id='plfe_config.hints.logo' defaultMessage='SVG or PNG. At most 2 MB. Will be displayed to 50px height, maintaining aspect ratio' />}
+            labelText={
+              <FormattedMessage id='plfe_config.fields.logo_label' defaultMessage='Logo' />
+            }
+            hintText={
+              <FormattedMessage
+                id='plfe_config.hints.logo'
+                defaultMessage='SVG or PNG. At most 2 MB. Will be displayed to 50px height, maintaining aspect ratio'
+              />
+            }
           >
-            <FileInput
-              onChange={handleFileChange('logo')}
-              accept='image/svg+xml,image/png'
-            />
+            <FileInput onChange={handleFileChange('logo')} accept='image/svg+xml,image/png' />
           </FormGroup>
 
           <FormGroup
-            labelText={<FormattedMessage id='plfe_config.fields.logo_dark_label' defaultMessage='Logo (dark)' />}
-            hintText={<FormattedMessage id='plfe_config.hints.logo_dark' defaultMessage='SVG or PNG. At most 2 MB. Will be displayed when in dark mode' />}
+            labelText={
+              <FormattedMessage
+                id='plfe_config.fields.logo_dark_label'
+                defaultMessage='Logo (dark)'
+              />
+            }
+            hintText={
+              <FormattedMessage
+                id='plfe_config.hints.logo_dark'
+                defaultMessage='SVG or PNG. At most 2 MB. Will be displayed when in dark mode'
+              />
+            }
           >
             <FileInput
               onChange={handleFileChange('logoDarkMode')}
@@ -221,17 +306,30 @@ const FrontendConfigEditor: React.FC = () => {
 
           {(data.logo || data.logoDarkMode) && (
             <List>
-              <ListItem label={<FormattedMessage id='plfe_config.fields.logo_alignment' defaultMessage='Logo alignment' />}>
+              <ListItem
+                label={
+                  <FormattedMessage
+                    id='plfe_config.fields.logo_alignment'
+                    defaultMessage='Logo alignment'
+                  />
+                }
+              >
                 <Select
                   className='w-fit'
                   onChange={handleChange('logoAlignment', (e) => e.target.value)}
                   defaultValue={data.logoAlignment}
                 >
                   <option value='center'>
-                    <FormattedMessage id='plfe_config.fields.logo_alignment.center' defaultMessage='Center' />
+                    <FormattedMessage
+                      id='plfe_config.fields.logo_alignment.center'
+                      defaultMessage='Center'
+                    />
                   </option>
                   <option value='left'>
-                    <FormattedMessage id='plfe_config.fields.logo_alignment.left' defaultMessage='Left' />
+                    <FormattedMessage
+                      id='plfe_config.fields.logo_alignment.left'
+                      defaultMessage='Left'
+                    />
                   </option>
                 </Select>
               </ListItem>
@@ -239,7 +337,11 @@ const FrontendConfigEditor: React.FC = () => {
           )}
 
           <CardHeader>
-            <CardTitle title={<FormattedMessage id='plfe_config.headings.options' defaultMessage='Options' />} />
+            <CardTitle
+              title={
+                <FormattedMessage id='plfe_config.headings.options' defaultMessage='Options' />
+              }
+            />
           </CardHeader>
 
           <List>
@@ -286,19 +388,36 @@ const FrontendConfigEditor: React.FC = () => {
               <Input
                 type='text'
                 placeholder='https://01234abcdef@glitch.tip.tld/5678'
-                value={String(data.sentryDsn ??  '')}
+                value={String(data.sentryDsn ?? '')}
                 onChange={handleChange('sentryDsn', (e) => e.target.value)}
               />
             </ListItem>
           </List>
 
           <CardHeader>
-            <CardTitle title={<FormattedMessage id='plfe_config.headings.navigation' defaultMessage='Navigation' />} />
+            <CardTitle
+              title={
+                <FormattedMessage
+                  id='plfe_config.headings.navigation'
+                  defaultMessage='Navigation'
+                />
+              }
+            />
           </CardHeader>
 
           <Streamfield
-            label={<FormattedMessage id='plfe_config.fields.promo_panel_fields_label' defaultMessage='Promo panel items' />}
-            hint={<FormattedMessage id='plfe_config.hints.promo_panel_fields' defaultMessage='You can have custom defined links displayed on the right panel of the timelines page.' />}
+            label={
+              <FormattedMessage
+                id='plfe_config.fields.promo_panel_fields_label'
+                defaultMessage='Promo panel items'
+              />
+            }
+            hint={
+              <FormattedMessage
+                id='plfe_config.hints.promo_panel_fields'
+                defaultMessage='You can have custom defined links displayed on the right panel of the timelines page.'
+              />
+            }
             component={PromoPanelInput}
             values={frontendConfig.promoPanel.items}
             onChange={handleStreamItemChange(['promoPanel', 'items'])}
@@ -308,8 +427,18 @@ const FrontendConfigEditor: React.FC = () => {
           />
 
           <Streamfield
-            label={<FormattedMessage id='plfe_config.fields.home_footer_fields_label' defaultMessage='Home footer items' />}
-            hint={<FormattedMessage id='plfe_config.hints.home_footer_fields' defaultMessage='You can have custom defined links displayed on the footer of your static pages' />}
+            label={
+              <FormattedMessage
+                id='plfe_config.fields.home_footer_fields_label'
+                defaultMessage='Home footer items'
+              />
+            }
+            hint={
+              <FormattedMessage
+                id='plfe_config.hints.home_footer_fields'
+                defaultMessage='You can have custom defined links displayed on the footer of your static pages'
+              />
+            }
             component={FooterLinkInput}
             values={frontendConfig.navlinks.homeFooter || []}
             onChange={handleStreamItemChange(['navlinks', 'homeFooter'])}
@@ -330,7 +459,11 @@ const FrontendConfigEditor: React.FC = () => {
           {features.events && (
             <>
               <CardHeader>
-                <CardTitle title={<FormattedMessage id='plfe_config.headings.events' defaultMessage='Events' />} />
+                <CardTitle
+                  title={
+                    <FormattedMessage id='plfe_config.headings.events' defaultMessage='Events' />
+                  }
+                />
               </CardHeader>
 
               <FormGroup labelText={intl.formatMessage(messages.tileServerLabel)}>
@@ -354,12 +487,29 @@ const FrontendConfigEditor: React.FC = () => {
           )}
 
           <CardHeader>
-            <CardTitle title={<FormattedMessage id='plfe_config.headings.cryptocurrency' defaultMessage='Cryptocurrency' />} />
+            <CardTitle
+              title={
+                <FormattedMessage
+                  id='plfe_config.headings.cryptocurrency'
+                  defaultMessage='Cryptocurrency'
+                />
+              }
+            />
           </CardHeader>
 
           <Streamfield
-            label={<FormattedMessage id='plfe_config.fields.crypto_addresses_label' defaultMessage='Cryptocurrency addresses' />}
-            hint={<FormattedMessage id='plfe_config.hints.crypto_addresses' defaultMessage='Add cryptocurrency addresses so users of your site can donate to you. Order matters, and you must use lowercase ticker values.' />}
+            label={
+              <FormattedMessage
+                id='plfe_config.fields.crypto_addresses_label'
+                defaultMessage='Cryptocurrency addresses'
+              />
+            }
+            hint={
+              <FormattedMessage
+                id='plfe_config.hints.crypto_addresses'
+                defaultMessage='Add cryptocurrency addresses so users of your site can donate to you. Order matters, and you must use lowercase ticker values.'
+              />
+            }
             component={CryptoAddressInput}
             values={frontendConfig.cryptoAddresses}
             onChange={handleStreamItemChange(['cryptoAddresses'])}
@@ -375,12 +525,18 @@ const FrontendConfigEditor: React.FC = () => {
               pattern='[0-9]+'
               placeholder={intl.formatMessage(messages.cryptoDonatePanelLimitLabel)}
               value={frontendConfig.cryptoDonatePanel.limit}
-              onChange={handleChange('cryptoDonatePanel', (e) => ({ limit: Number(e.target.value) }))}
+              onChange={handleChange('cryptoDonatePanel', (e) => ({
+                limit: Number(e.target.value),
+              }))}
             />
           </FormGroup>
 
           <CardHeader>
-            <CardTitle title={<FormattedMessage id='plfe_config.headings.advanced' defaultMessage='Advanced' />} />
+            <CardTitle
+              title={
+                <FormattedMessage id='plfe_config.headings.advanced' defaultMessage='Advanced' />
+              }
+            />
           </CardHeader>
 
           <Accordion
@@ -392,12 +548,7 @@ const FrontendConfigEditor: React.FC = () => {
               hintText={intl.formatMessage(messages.rawJSONHint)}
               errors={jsonValid ? undefined : [intl.formatMessage(messages.rawJSONInvalid)]}
             >
-              <Textarea
-                value={rawJSON}
-                onChange={handleEditJSON}
-                isCodeEditor
-                rows={12}
-              />
+              <Textarea value={rawJSON} onChange={handleEditJSON} isCodeEditor rows={12} />
             </FormGroup>
           </Accordion>
         </fieldset>

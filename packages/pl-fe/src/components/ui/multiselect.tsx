@@ -46,8 +46,8 @@ function useOutsideAlerter(ref, clickEvent) {
 }
 
 /**
-* Component that alerts if you click outside of it
-*/
+ * Component that alerts if you click outside of it
+ */
 const OutsideAlerter = (props) => {
   const wrapperRef = useRef(null);
   useOutsideAlerter(wrapperRef, props.outsideClick);
@@ -61,10 +61,10 @@ interface IMultiselectProps {
   placeholder?: string;
   loading?: boolean;
   emptyRecordMsg?: string;
-  onSelect?: (selectedList:any, selectedItem: any) => void;
-  onRemove?: (selectedList:any, selectedItem: any) => void;
-  onSearch?: (value:string) => void;
-  onKeyPressFn?: (event:any, value:string) => void;
+  onSelect?: (selectedList: any, selectedItem: any) => void;
+  onRemove?: (selectedList: any, selectedItem: any) => void;
+  onSearch?: (value: string) => void;
+  onKeyPressFn?: (event: any, value: string) => void;
   id?: string;
   name?: string;
   disabled?: boolean;
@@ -72,7 +72,6 @@ interface IMultiselectProps {
 }
 
 export class Multiselect extends React.Component<IMultiselectProps, any> {
-
   static defaultProps: IMultiselectProps;
 
   constructor(props) {
@@ -124,7 +123,10 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
     const { options, selectedValues } = this.props;
     const { options: prevOptions, selectedValues: prevSelectedvalues } = prevProps;
     if (JSON.stringify(prevOptions) !== JSON.stringify(options)) {
-      this.setState({ options, filteredOptions: options, unfilteredOptions: options }, this.initialSetValue);
+      this.setState(
+        { options, filteredOptions: options, unfilteredOptions: options },
+        this.initialSetValue,
+      );
     }
     if (JSON.stringify(prevSelectedvalues) !== JSON.stringify(selectedValues)) {
       this.setState({ selectedValues: Object.assign([], selectedValues) }, this.initialSetValue);
@@ -153,23 +155,15 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
     if (!selectedValues.length && !skipCheck) {
       return;
     }
-    const optionList = unfilteredOptions.filter(item => {
-      return selectedValues.findIndex(
-        v => v[displayValue] === item[displayValue],
-      ) === -1;
+    const optionList = unfilteredOptions.filter((item) => {
+      return selectedValues.findIndex((v) => v[displayValue] === item[displayValue]) === -1;
     });
-    this.setState(
-      { options: optionList, filteredOptions: optionList },
-      this.filterOptionsByInput,
-    );
+    this.setState({ options: optionList, filteredOptions: optionList }, this.filterOptionsByInput);
   }
 
   onChange(event) {
     const { onSearch } = this.props;
-    this.setState(
-      { inputValue: event.target.value },
-      this.filterOptionsByInput,
-    );
+    this.setState({ inputValue: event.target.value }, this.filterOptionsByInput);
     if (onSearch) {
       onSearch(event.target.value);
     }
@@ -186,7 +180,7 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
     let { options } = this.state;
     const { filteredOptions, inputValue } = this.state;
     const { displayValue } = this.props;
-    options = filteredOptions.filter(i => this.matchValues(i[displayValue], inputValue));
+    options = filteredOptions.filter((i) => this.matchValues(i[displayValue], inputValue));
     this.setState({ options });
   }
 
@@ -198,13 +192,7 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
   }
 
   onArrowKeyNavigation(e) {
-    const {
-      options,
-      highlightOption,
-      toggleOptionsList,
-      inputValue,
-      selectedValues,
-    } = this.state;
+    const { options, highlightOption, toggleOptionsList, inputValue, selectedValues } = this.state;
     if (e.keyCode === 8 && !inputValue && selectedValues.length) {
       this.onRemoveSelectedItem(selectedValues.length - 1);
     }
@@ -213,7 +201,7 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
     }
     if (e.keyCode === 38) {
       if (highlightOption > 0) {
-        this.setState(previousState => ({
+        this.setState((previousState) => ({
           highlightOption: previousState.highlightOption - 1,
         }));
       } else {
@@ -221,7 +209,7 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
       }
     } else if (e.keyCode === 40) {
       if (highlightOption < options.length - 1) {
-        this.setState(previousState => ({
+        this.setState((previousState) => ({
           highlightOption: previousState.highlightOption + 1,
         }));
       } else {
@@ -246,9 +234,7 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
     const { selectedValues } = this.state;
     let { index = 0 } = this.state;
     const { onRemove, displayValue } = this.props;
-    index = selectedValues.findIndex(
-      i => i[displayValue] === item[displayValue],
-    );
+    index = selectedValues.findIndex((i) => i[displayValue] === item[displayValue]);
     selectedValues.splice(index, 1);
     onRemove(selectedValues, item);
     this.setState({ selectedValues }, () => {
@@ -276,10 +262,7 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
   isSelectedValue(item) {
     const { displayValue } = this.props;
     const { selectedValues } = this.state;
-    return (
-      selectedValues.filter(i => i[displayValue] === item[displayValue])
-        .length > 0
-    );
+    return selectedValues.filter((i) => i[displayValue] === item[displayValue]).length > 0;
   }
 
   renderOptionList() {
@@ -310,7 +293,7 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
         <li
           key={`option${i}`}
           className={`option ${isSelected ? 'selected' : ''} ${highlightOption === i ? 'highlightOption highlight' : ''}`}
-          onClick={() =>{
+          onClick={() => {
             this.onSelectItem(option);
           }}
         >
@@ -326,11 +309,15 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
     return selectedValues.map((value, index) => (
       <span className='chip' key={index}>
         {value[displayValue]}
-        <button onClick={() =>{
-          this.onRemoveSelectedItem(value);
-        }}
+        <button
+          onClick={() => {
+            this.onRemoveSelectedItem(value);
+          }}
         >
-          <Icon className='ml-1 size-4 hover:cursor-pointer' src={require('@phosphor-icons/core/regular/x-circle.svg')} />
+          <Icon
+            className='ml-1 size-4 hover:cursor-pointer'
+            src={require('@phosphor-icons/core/regular/x-circle.svg')}
+          />
         </button>
       </span>
     ));
@@ -351,7 +338,7 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
     });
   }
 
-  onFocus(){
+  onFocus() {
     if (this.state.toggleOptionsList) {
       // @ts-ignore
       clearTimeout(this.optionTimeout);
@@ -360,7 +347,7 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
     }
   }
 
-  onBlur(){
+  onBlur() {
     this.setState({ inputValue: '' }, this.filterOptionsByInput);
     // @ts-ignore
     this.optionTimeout = setTimeout(this.onCloseOptionList, 250);
@@ -370,11 +357,15 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
     const { inputValue, toggleOptionsList } = this.state;
     const { placeholder, id, name, disabled, className } = this.props;
     return (
-      <div className={clsx('multiselect-container', { 'multiselect-container--disabled': disabled }, className)} id={id}>
-        <div
-          className='searchWrapper'
-          ref={this.searchWrapper}
-        >
+      <div
+        className={clsx(
+          'multiselect-container',
+          { 'multiselect-container--disabled': disabled },
+          className,
+        )}
+        id={id}
+      >
+        <div className='searchWrapper' ref={this.searchWrapper}>
           {this.renderSelectedList()}
           <input
             type='text'
@@ -393,9 +384,7 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
           />
         </div>
         <div
-          className={`optionListContainer ${
-            toggleOptionsList ? 'displayBlock' : 'displayNone'
-          }`}
+          className={`optionListContainer ${toggleOptionsList ? 'displayBlock' : 'displayNone'}`}
           onMouseDown={(e) => {
             e.preventDefault();
           }}
@@ -413,7 +402,6 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
       </OutsideAlerter>
     );
   }
-
 }
 
 Multiselect.defaultProps = {

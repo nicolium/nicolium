@@ -118,7 +118,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
   return (
     <li>
       <a
-        href={(item.href ?? item.to) ?? '#'}
+        href={item.href ?? item.to ?? '#'}
         role='button'
         tabIndex={0}
         ref={itemRef}
@@ -128,21 +128,31 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
         onKeyPress={handleItemKeyPress}
         target={typeof item.target === 'string' ? item.target : '_blank'}
         title={item.text}
-        className={
-          clsx('mx-2 my-1 flex cursor-pointer items-center rounded-md px-2 py-1.5 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-800 focus:bg-gray-100 focus:text-gray-800 focus:outline-none black:hover:bg-gray-900 black:focus:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200 dark:focus:bg-gray-800 dark:focus:text-gray-200', {
+        className={clsx(
+          'mx-2 my-1 flex cursor-pointer items-center rounded-md px-2 py-1.5 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-800 focus:bg-gray-100 focus:text-gray-800 focus:outline-none black:hover:bg-gray-900 black:focus:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200 dark:focus:bg-gray-800 dark:focus:text-gray-200',
+          {
             'text-danger-600 dark:text-danger-400': item.destructive,
-          })
-        }
+          },
+        )}
       >
         {item.icon && <Icon src={item.icon} className='mr-3 size-5 flex-none rtl:ml-3 rtl:mr-0' />}
 
-        <div className={clsx('truncate', { 'text-xs': item.meta, 'text-base': !item.meta, 'mr-2': (item.count ?? item.type === 'toggle') || item.type === 'radio' || item.items?.length })}>
+        <div
+          className={clsx('truncate', {
+            'text-xs': item.meta,
+            'text-base': !item.meta,
+            'mr-2':
+              (item.count ?? item.type === 'toggle') || item.type === 'radio' || item.items?.length,
+          })}
+        >
           {item.meta ? (
             <>
               <div className='truncate text-base'>{item.text}</div>
               <div className='mt-0.5'>{item.meta}</div>
             </>
-          ) : item.text}
+          ) : (
+            item.text
+          )}
         </div>
 
         {item.count ? (
@@ -158,7 +168,11 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
         )}
 
         {!!item.items?.length && (
-          <Icon src={require('@phosphor-icons/core/regular/caret-right.svg')} containerClassName='ml-auto' className='size-5 flex-none' />
+          <Icon
+            src={require('@phosphor-icons/core/regular/caret-right.svg')}
+            containerClassName='ml-auto'
+            className='size-5 flex-none'
+          />
         )}
       </a>
 

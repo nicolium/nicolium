@@ -16,7 +16,10 @@ const useDeleteEntity = (entityType: string, entityFn: EntityFn<string>) => {
   const getState = useGetState();
   const [isSubmitting, setPromise] = useLoading();
 
-  const deleteEntity = async (entityId: string, callbacks: EntityCallbacks<string> = {}): Promise<void> => {
+  const deleteEntity = async (
+    entityId: string,
+    callbacks: EntityCallbacks<string> = {},
+  ): Promise<void> => {
     // Get the entity before deleting, so we can reverse the action if the API request fails.
     const entity = getState().entities[entityType]?.store[entityId];
 

@@ -26,24 +26,26 @@ const useAccount = (accountId?: string, opts: UseAccountOpts = {}) => {
     { enabled: !!accountId },
   );
 
-  const meta = useAppSelector((state) => accountId ? state.accounts_meta[accountId] : undefined);
+  const meta = useAppSelector((state) => (accountId ? state.accounts_meta[accountId] : undefined));
 
-  const {
-    data: relationship,
-    isLoading: isRelationshipLoading,
-  } = useRelationshipQuery(withRelationship ? entity?.id : undefined);
+  const { data: relationship, isLoading: isRelationshipLoading } = useRelationshipQuery(
+    withRelationship ? entity?.id : undefined,
+  );
 
   const isBlocked = entity?.relationship?.blocked_by === true;
-  const isUnavailable = (me === entity?.id) ? false : (isBlocked && !features.blockersVisible);
+  const isUnavailable = me === entity?.id ? false : isBlocked && !features.blockersVisible;
 
   const account = useMemo(
-    () => entity ? {
-      ...entity,
-      relationship,
-      __meta: { meta, ...entity.__meta },
-      // @ts-ignore
-      is_admin: meta?.role ? (meta.role.permissions & 0x1) === 0x1 : entity.is_admin,
-    } : undefined,
+    () =>
+      entity
+        ? {
+            ...entity,
+            relationship,
+            __meta: { meta, ...entity.__meta },
+            // @ts-ignore
+            is_admin: meta?.role ? (meta.role.permissions & 0x1) === 0x1 : entity.is_admin,
+          }
+        : undefined,
     [entity, relationship],
   );
 

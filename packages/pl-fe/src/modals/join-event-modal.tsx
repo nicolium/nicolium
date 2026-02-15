@@ -9,7 +9,10 @@ import { useJoinEventMutation } from '@/queries/statuses/use-event-interactions'
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
-  hint: { id: 'join_event.hint', defaultMessage: 'You can tell the organizer why do you want to participate in this event:' },
+  hint: {
+    id: 'join_event.hint',
+    defaultMessage: 'You can tell the organizer why do you want to participate in this event:',
+  },
   placeholder: { id: 'join_event.placeholder', defaultMessage: 'Message to organizer' },
   join: { id: 'join_event.join', defaultMessage: 'Request join' },
 });
@@ -30,23 +33,23 @@ const JoinEventModal: React.FC<BaseModalProps & JoinEventModalProps> = ({ onClos
     onClose('JOIN_EVENT');
   };
 
-  const handleChange: React.ChangeEventHandler<HTMLTextAreaElement> = e => {
+  const handleChange: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     setParticipationMessage(e.target.value);
   };
 
   const handleSubmit = () => {
     setIsSubmitting(true);
     joinEvent(participationMessage, {
-      onSuccess: () =>{
+      onSuccess: () => {
         handleClose();
       },
-      onError: () =>{
+      onError: () => {
         setIsSubmitting(false);
       },
     });
   };
 
-  const handleKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = e => {
+  const handleKeyDown: React.KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
     if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
       handleSubmit();
     }

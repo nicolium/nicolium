@@ -19,13 +19,16 @@ const ChatsPageSidebar = () => {
   const intl = useIntl();
   const navigate = useNavigate();
 
-  const handleClickChat = useCallback((chat: Chat | 'shoutbox') => {
-    if (chat === 'shoutbox') {
-      navigate({ to: '/chats/shoutbox' });
-    } else {
-      navigate({ to: '/chats/$chatId', params: { chatId: chat.id } });
-    }
-  }, [navigate]);
+  const handleClickChat = useCallback(
+    (chat: Chat | 'shoutbox') => {
+      if (chat === 'shoutbox') {
+        navigate({ to: '/chats/shoutbox' });
+      } else {
+        navigate({ to: '/chats/$chatId', params: { chatId: chat.id } });
+      }
+    },
+    [navigate],
+  );
 
   const handleChatCreate = () => {
     navigate({ to: '/chats/new' });

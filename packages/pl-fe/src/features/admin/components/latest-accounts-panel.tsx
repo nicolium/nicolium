@@ -7,7 +7,10 @@ import AccountContainer from '@/containers/account-container';
 import { useAdminAccounts } from '@/queries/admin/use-accounts';
 
 const messages = defineMessages({
-  expand: { id: 'admin.latest_accounts_panel.more', defaultMessage: 'Click to see {count, plural, one {# account} other {# accounts}}' },
+  expand: {
+    id: 'admin.latest_accounts_panel.more',
+    defaultMessage: 'Click to see {count, plural, one {# account} other {# accounts}}',
+  },
 });
 
 interface ILatestAccountsPanel {
@@ -32,7 +35,9 @@ const LatestAccountsPanel: React.FC<ILatestAccountsPanel> = ({ limit = 5 }) => {
 
   return (
     <Widget
-      title={<FormattedMessage id='admin.latest_accounts_panel.title' defaultMessage='Latest accounts' />}
+      title={
+        <FormattedMessage id='admin.latest_accounts_panel.title' defaultMessage='Latest accounts' />
+      }
       onActionClick={handleAction}
       actionTitle={intl.formatMessage(messages.expand, { count: total })}
     >

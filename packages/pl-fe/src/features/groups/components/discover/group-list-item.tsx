@@ -14,7 +14,17 @@ import { shortNumberFormat } from '@/utils/numbers';
 import type { Group } from 'pl-api';
 
 interface IGroupListItem {
-  group: Pick<Group, 'id' | 'avatar' | 'avatar_description' | 'display_name' | 'emojis' | 'locked' | 'members_count' | 'relationship'>;
+  group: Pick<
+    Group,
+    | 'id'
+    | 'avatar'
+    | 'avatar_description'
+    | 'display_name'
+    | 'emojis'
+    | 'locked'
+    | 'members_count'
+    | 'relationship'
+  >;
   withJoinAction?: boolean;
 }
 
@@ -22,17 +32,15 @@ const GroupListItem = (props: IGroupListItem) => {
   const { group, withJoinAction = true } = props;
 
   return (
-    <HStack
-      alignItems='center'
-      justifyContent='between'
-      data-testid='group-list-item'
-    >
-      <Link key={group.id} to='/groups/$groupId' params={{ groupId: group.id }} className='overflow-hidden'>
+    <HStack alignItems='center' justifyContent='between' data-testid='group-list-item'>
+      <Link
+        key={group.id}
+        to='/groups/$groupId'
+        params={{ groupId: group.id }}
+        className='overflow-hidden'
+      >
         <HStack alignItems='center' space={2}>
-          <GroupAvatar
-            group={group}
-            size={44}
-          />
+          <GroupAvatar group={group} size={44} />
 
           <Stack className='overflow-hidden'>
             <Text weight='bold' truncate>
@@ -42,7 +50,11 @@ const GroupListItem = (props: IGroupListItem) => {
             <HStack className='text-gray-700 dark:text-gray-600' space={1} alignItems='center'>
               <Icon
                 className='size-4.5'
-                src={group.locked ? require('@phosphor-icons/core/regular/lock.svg') : require('@phosphor-icons/core/regular/globe.svg')}
+                src={
+                  group.locked
+                    ? require('@phosphor-icons/core/regular/lock.svg')
+                    : require('@phosphor-icons/core/regular/globe.svg')
+                }
               />
 
               <Text theme='inherit' tag='span' size='sm' weight='medium'>
@@ -57,8 +69,7 @@ const GroupListItem = (props: IGroupListItem) => {
                 <>
                   <span>&bull;</span>
                   <Text theme='inherit' tag='span' size='sm' weight='medium'>
-                    {shortNumberFormat(group.members_count)}
-                    {' '}
+                    {shortNumberFormat(group.members_count)}{' '}
                     <FormattedMessage
                       id='groups.discover.search.results.member_count'
                       defaultMessage='{members, plural, one {member} other {members}}'
@@ -74,9 +85,7 @@ const GroupListItem = (props: IGroupListItem) => {
         </HStack>
       </Link>
 
-      {withJoinAction && (
-        <GroupActionButton group={group} />
-      )}
+      {withJoinAction && <GroupActionButton group={group} />}
     </HStack>
   );
 };

@@ -13,7 +13,14 @@ interface IExtendedVideoPlayer {
   onClick?: () => void;
 }
 
-const ExtendedVideoPlayer: React.FC<IExtendedVideoPlayer> = ({ src, alt, time, controls, muted, onClick }) => {
+const ExtendedVideoPlayer: React.FC<IExtendedVideoPlayer> = ({
+  src,
+  alt,
+  time,
+  controls,
+  muted,
+  onClick,
+}) => {
   const video = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -30,7 +37,7 @@ const ExtendedVideoPlayer: React.FC<IExtendedVideoPlayer> = ({ src, alt, time, c
     };
   }, [video.current]);
 
-  const handleClick: React.MouseEventHandler<HTMLVideoElement> = e => {
+  const handleClick: React.MouseEventHandler<HTMLVideoElement> = (e) => {
     e.stopPropagation();
     const handler = onClick;
     if (handler) handler();

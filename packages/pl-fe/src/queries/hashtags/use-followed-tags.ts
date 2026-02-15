@@ -5,9 +5,8 @@ import { useClient } from '@/hooks/use-client';
 import { queryClient } from '../client';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 
-const useFollowedTags = makePaginatedResponseQuery(
-  ['followedTags'],
-  (client) => client.myAccount.getFollowedTags(),
+const useFollowedTags = makePaginatedResponseQuery(['followedTags'], (client) =>
+  client.myAccount.getFollowedTags(),
 );
 
 const useFollowHashtagMutation = (tag: string) => {

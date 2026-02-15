@@ -1,4 +1,4 @@
-import { Outlet , Link } from '@tanstack/react-router';
+import { Outlet, Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { useIntl } from 'react-intl';
@@ -29,7 +29,7 @@ const HomeLayout = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const me = useAppSelector(state => state.me);
+  const me = useAppSelector((state) => state.me);
   const { account } = useOwnAccount();
   const features = useFeatures();
   const frontendConfig = useFrontendConfig();
@@ -61,8 +61,18 @@ const HomeLayout = () => {
           >
             <div className='⁂-compose-block__body'>
               {!disableUserProvidedMedia && (
-                <Link className='⁂-compose-block__avatar' to='/@{$username}' params={{ username: acct }}>
-                  <Avatar src={avatar} alt={account?.avatar_description} isCat={account?.is_cat} size={42} username={account?.username} />
+                <Link
+                  className='⁂-compose-block__avatar'
+                  to='/@{$username}'
+                  params={{ username: acct }}
+                >
+                  <Avatar
+                    src={avatar}
+                    alt={account?.avatar_description}
+                    isCat={account?.is_cat}
+                    size={42}
+                    username={account?.username}
+                  />
                 </Link>
               )}
 
@@ -81,28 +91,16 @@ const HomeLayout = () => {
         )}
 
         <Outlet />
-      </Layout.Main >
+      </Layout.Main>
 
       <Layout.Aside>
-        {!me && (
-          <SignUpPanel />
-        )}
-        {me && features.announcements && (
-          <AnnouncementsPanel />
-        )}
-        {features.trends && (
-          <TrendsPanel limit={5} />
-        )}
-        {(hasCrypto && cryptoLimit > 0 && me) && (
-          <CryptoDonatePanel limit={cryptoLimit} />
-        )}
+        {!me && <SignUpPanel />}
+        {me && features.announcements && <AnnouncementsPanel />}
+        {features.trends && <TrendsPanel limit={5} />}
+        {hasCrypto && cryptoLimit > 0 && me && <CryptoDonatePanel limit={cryptoLimit} />}
         <PromoPanel />
-        {features.birthdays && (
-          <BirthdayPanel limit={10} />
-        )}
-        {me && features.suggestions && (
-          <WhoToFollowPanel limit={3} />
-        )}
+        {features.birthdays && <BirthdayPanel limit={10} />}
+        {me && features.suggestions && <WhoToFollowPanel limit={3} />}
         <LinkFooter />
       </Layout.Aside>
     </>

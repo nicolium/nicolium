@@ -28,7 +28,8 @@
   border-radius: 0.5rem;
   line-height: 0;
 
-  img, canvas {
+  img,
+  canvas {
     border-radius: inherit;
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -54,7 +55,7 @@
       background: #ebbcba;
       border: solid 0.05em currentcolor;
       box-sizing: border-box;
-      content: "";
+      content: '';
       display: inline-block;
       height: 50%;
       width: 50%;
@@ -83,19 +84,47 @@
 }
 
 @keyframes earwiggleleft {
-	0% { transform: rotate(37.6deg) skew(30deg); }
-	25% { transform: rotate(10deg) skew(30deg); }
-	50% { transform: rotate(20deg) skew(30deg); }
-	75% { transform: rotate(0deg) skew(30deg); }
-	100% { transform: rotate(37.6deg) skew(30deg); }
+  0% {
+    transform: rotate(37.6deg) skew(30deg);
+  }
+
+  25% {
+    transform: rotate(10deg) skew(30deg);
+  }
+
+  50% {
+    transform: rotate(20deg) skew(30deg);
+  }
+
+  75% {
+    transform: rotate(0deg) skew(30deg);
+  }
+
+  100% {
+    transform: rotate(37.6deg) skew(30deg);
+  }
 }
 
 @keyframes earwiggleright {
-	0% { transform: rotate(-37.6deg) skew(-30deg); }
-	30% { transform: rotate(-10deg) skew(-30deg); }
-	55% { transform: rotate(-20deg) skew(-30deg); }
-	75% { transform: rotate(0deg) skew(-30deg); }
-	100% { transform: rotate(-37.6deg) skew(-30deg); }
+  0% {
+    transform: rotate(-37.6deg) skew(-30deg);
+  }
+
+  30% {
+    transform: rotate(-10deg) skew(-30deg);
+  }
+
+  55% {
+    transform: rotate(-20deg) skew(-30deg);
+  }
+
+  75% {
+    transform: rotate(0deg) skew(-30deg);
+  }
+
+  100% {
+    transform: rotate(-37.6deg) skew(-30deg);
+  }
 }
 
 .⁂-media-panel {

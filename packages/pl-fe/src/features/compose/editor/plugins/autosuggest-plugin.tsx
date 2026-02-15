@@ -86,10 +86,7 @@ const tryToPositionRange = (leadOffset: number, range: Range): boolean => {
   return true;
 };
 
-const isSelectionOnEntityBoundary = (
-  editor: LexicalEditor,
-  offset: number,
-): boolean => {
+const isSelectionOnEntityBoundary = (editor: LexicalEditor, offset: number): boolean => {
   if (offset !== 0) {
     return false;
   }
@@ -120,13 +117,11 @@ const getScrollParent = (
 ): HTMLElement | HTMLBodyElement => {
   let style = getComputedStyle(element);
   const excludeStaticParent = style.position === 'absolute';
-  const overflowRegex = includeHidden
-    ? /(auto|scroll|hidden)/
-    : /(auto|scroll)/;
+  const overflowRegex = includeHidden ? /(auto|scroll|hidden)/ : /(auto|scroll)/;
   if (style.position === 'fixed') {
     return document.body;
   }
-  for (let parent: HTMLElement | null = element; (parent = parent.parentElement);) {
+  for (let parent: HTMLElement | null = element; (parent = parent.parentElement); ) {
     style = getComputedStyle(parent);
     if (excludeStaticParent && style.position === 'static') {
       continue;
@@ -158,10 +153,7 @@ const useDynamicPositioning = (
   useEffect(() => {
     if (targetElement && resolution) {
       const rootElement = editor.getRootElement();
-      const rootScrollParent =
-        rootElement
-          ? getScrollParent(rootElement, false)
-          : document.body;
+      const rootScrollParent = rootElement ? getScrollParent(rootElement, false) : document.body;
       let ticking = false;
       let previousIsInView = isTriggerVisibleInNearestScrollContainer(
         targetElement,
@@ -175,10 +167,7 @@ const useDynamicPositioning = (
           });
           ticking = true;
         }
-        const isInView = isTriggerVisibleInNearestScrollContainer(
-          targetElement,
-          rootScrollParent,
-        );
+        const isInView = isTriggerVisibleInNearestScrollContainer(targetElement, rootScrollParent);
         if (isInView !== previousIsInView) {
           previousIsInView = isInView;
           if (onVisibilityChange) {
@@ -202,7 +191,10 @@ const useDynamicPositioning = (
   }, [targetElement, editor, onVisibilityChange, onReposition, resolution]);
 };
 
-const LexicalPopoverMenu = ({ anchorElementRef, menuRenderFn }: {
+const LexicalPopoverMenu = ({
+  anchorElementRef,
+  menuRenderFn,
+}: {
   anchorElementRef: MutableRefObject<HTMLElement>;
   menuRenderFn: MenuRenderFn;
 }): JSX.Element | null => menuRenderFn(anchorElementRef);
@@ -265,12 +257,7 @@ const useMenuAnchorRef = (
     [resolution, setResolution],
   );
 
-  useDynamicPositioning(
-    resolution,
-    anchorElementRef.current,
-    positionMenu,
-    onVisibilityChange,
-  );
+  useDynamicPositioning(resolution, anchorElementRef.current, positionMenu, onVisibilityChange);
 
   return anchorElementRef;
 };
@@ -293,10 +280,7 @@ const AutosuggestPlugin = ({
   const [editor] = useLexicalComposerContext();
   const [resolution, setResolution] = useState<Resolution | null>(null);
   const [selectedSuggestion, setSelectedSuggestion] = useState(0);
-  const anchorElementRef = useMenuAnchorRef(
-    resolution,
-    setResolution,
-  );
+  const anchorElementRef = useMenuAnchorRef(resolution, setResolution);
 
   const handleSelectSuggestion: React.MouseEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
@@ -386,9 +370,10 @@ const AutosuggestPlugin = ({
         key={key}
         data-index={i}
         className={clsx({
-          'snap-start snap-always px-4 py-2.5 text-sm text-gray-700 dark:text-gray-500 focus:bg-gray-100 dark:focus:bg-primary-800 group': true,
+          'group snap-start snap-always px-4 py-2.5 text-sm text-gray-700 focus:bg-gray-100 dark:text-gray-500 dark:focus:bg-primary-800': true,
           'hover:bg-gray-100 dark:hover:bg-gray-800': i !== selectedSuggestion,
-          'bg-gray-100 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-800': i === selectedSuggestion,
+          'bg-gray-100 hover:bg-gray-100 dark:bg-gray-800 dark:hover:bg-gray-800':
+            i === selectedSuggestion,
         })}
         onMouseDown={handleSelectSuggestion}
       >
@@ -425,13 +410,12 @@ const AutosuggestPlugin = ({
         if (!isSelectionOnEntityBoundary(editor, match.leadOffset)) {
           const isRangePositioned = tryToPositionRange(match.leadOffset, range);
           if (isRangePositioned !== null) {
-            startTransition(() =>{
+            startTransition(() => {
               openTypeahead({
                 getRect: () => range.getBoundingClientRect(),
                 match,
               });
-            },
-            );
+            });
             return;
           }
         }
@@ -444,12 +428,7 @@ const AutosuggestPlugin = ({
     return () => {
       removeUpdateListener();
     };
-  }, [
-    editor,
-    resolution,
-    closeTypeahead,
-    openTypeahead,
-  ]);
+  }, [editor, resolution, closeTypeahead, openTypeahead]);
 
   useEffect(() => {
     if (suggestions && suggestions.length > 0) setSuggestionsHidden(false);
@@ -466,7 +445,7 @@ const AutosuggestPlugin = ({
       };
       document.addEventListener('click', handleClick);
 
-      return () =>{
+      return () => {
         document.removeEventListener('click', handleClick);
       };
     }
@@ -481,7 +460,8 @@ const AutosuggestPlugin = ({
         (payload) => {
           const event = payload;
           if (suggestions !== null && suggestions.length && selectedSuggestion !== null) {
-            const newSelectedSuggestion = selectedSuggestion !== 0 ? selectedSuggestion - 1 : suggestions.length - 1;
+            const newSelectedSuggestion =
+              selectedSuggestion !== 0 ? selectedSuggestion - 1 : suggestions.length - 1;
             setSelectedSuggestion(newSelectedSuggestion);
             event.preventDefault();
             event.stopImmediatePropagation();
@@ -495,7 +475,8 @@ const AutosuggestPlugin = ({
         (payload) => {
           const event = payload;
           if (suggestions !== null && suggestions.length && selectedSuggestion !== null) {
-            const newSelectedSuggestion = selectedSuggestion !== suggestions.length - 1 ? selectedSuggestion + 1 : 0;
+            const newSelectedSuggestion =
+              selectedSuggestion !== suggestions.length - 1 ? selectedSuggestion + 1 : 0;
             setSelectedSuggestion(newSelectedSuggestion);
             event.preventDefault();
             event.stopImmediatePropagation();
@@ -548,17 +529,17 @@ const AutosuggestPlugin = ({
       menuRenderFn={(anchorElementRef) =>
         anchorElementRef.current
           ? ReactDOM.createPortal(
-            <div
-              className={clsx({
-                'scroll-smooth snap-y snap-always will-change-scroll mt-6 overflow-y-auto max-h-56 relative w-max z-[1000] shadow bg-white dark:bg-gray-900 rounded-lg py-1 space-y-0 dark:ring-2 dark:ring-primary-700 focus:outline-none': true,
-                hidden: suggestionsHidden || !suggestions.length,
-                block: !suggestionsHidden && suggestions.length,
-              })}
-            >
-              {suggestions.map(renderSuggestion)}
-            </div>,
-            anchorElementRef.current,
-          )
+              <div
+                className={clsx({
+                  'relative z-[1000] mt-6 max-h-56 w-max snap-y snap-always space-y-0 overflow-y-auto scroll-smooth rounded-lg bg-white py-1 shadow will-change-scroll focus:outline-none dark:bg-gray-900 dark:ring-2 dark:ring-primary-700': true,
+                  hidden: suggestionsHidden || !suggestions.length,
+                  block: !suggestionsHidden && suggestions.length,
+                })}
+              >
+                {suggestions.map(renderSuggestion)}
+              </div>,
+              anchorElementRef.current,
+            )
           : null
       }
     />

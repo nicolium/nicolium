@@ -9,12 +9,11 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 */
 
 const hex2rgba = (hex: string, alpha = 1) => {
-  const [r, g, b] = hex.match(/\w\w/g)!.map(x => parseInt(x, 16));
+  const [r, g, b] = hex.match(/\w\w/g)!.map((x) => parseInt(x, 16));
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
 };
 
 class Visualizer {
-
   tickSize: number;
   canvas?: HTMLCanvasElement;
   context?: CanvasRenderingContext2D;
@@ -46,14 +45,22 @@ class Visualizer {
     const coords = [];
 
     for (let i = 0; i < count; i++) {
-      const rad = Math.PI * 2 * i / count;
+      const rad = (Math.PI * 2 * i) / count;
       coords.push({ x: Math.cos(rad), y: -Math.sin(rad) });
     }
 
     return coords;
   }
 
-  drawTick(cx: number, cy: number, mainColor: string, x1: number, y1: number, x2: number, y2: number) {
+  drawTick(
+    cx: number,
+    cy: number,
+    mainColor: string,
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+  ) {
     const dx1 = Math.ceil(cx + x1);
     const dy1 = Math.ceil(cy + y1);
     const dx2 = Math.ceil(cx + x2);
@@ -129,15 +136,19 @@ class Visualizer {
   draw(cx: number, cy: number, color: string, radius: number, coefficient: number) {
     this.context!.save();
 
-    const ticks = this.getTicks(parseInt(String(360 * coefficient), 10), this.tickSize, radius, coefficient);
+    const ticks = this.getTicks(
+      parseInt(String(360 * coefficient), 10),
+      this.tickSize,
+      radius,
+      coefficient,
+    );
 
-    ticks.forEach(tick => {
+    ticks.forEach((tick) => {
       this.drawTick(cx, cy, color, tick.x1, tick.y1, tick.x2, tick.y2);
     });
 
     this.context!.restore();
   }
-
 }
 
 export { Visualizer as default };

@@ -33,7 +33,11 @@ const AutosuggestLocation: React.FC<IAutosuggestLocation> = ({ location }) => {
       <Icon src={ADDRESS_ICONS[location.type] || mapPinIcon} />
       <Stack>
         <Text>{location.description}</Text>
-        <Text size='xs' theme='muted'>{[location.street, location.locality, location.country].filter(val => val?.trim()).join(' · ')}</Text>
+        <Text size='xs' theme='muted'>
+          {[location.street, location.locality, location.country]
+            .filter((val) => val?.trim())
+            .join(' · ')}
+        </Text>
       </Stack>
     </HStack>
   );

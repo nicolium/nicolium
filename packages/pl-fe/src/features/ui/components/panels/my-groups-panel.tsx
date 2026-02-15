@@ -16,15 +16,13 @@ const MyGroupsPanel = () => {
 
   return (
     <Widget title={<FormattedMessage id='my_groups_panel.title' defaultMessage='My groups' />}>
-      {isFetching ? (
-        new Array(3).fill(0).map((_, idx) => (
-          <PlaceholderGroupSearch key={idx} withJoinAction={false} />
-        ))
-      ) : (
-        groups.slice(0, 3).map((group) => (
-          <GroupListItem group={group} withJoinAction={false} key={group.id} />
-        ))
-      )}
+      {isFetching
+        ? new Array(3)
+            .fill(0)
+            .map((_, idx) => <PlaceholderGroupSearch key={idx} withJoinAction={false} />)
+        : groups
+            .slice(0, 3)
+            .map((group) => <GroupListItem group={group} withJoinAction={false} key={group.id} />)}
     </Widget>
   );
 };

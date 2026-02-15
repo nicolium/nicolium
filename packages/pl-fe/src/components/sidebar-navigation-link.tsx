@@ -21,50 +21,52 @@ interface ISidebarNavigationLink extends Partial<LinkOptions> {
 }
 
 /** Desktop sidebar navigation link. */
-const SidebarNavigationLink = React.memo(React.forwardRef((props: ISidebarNavigationLink, ref: React.ForwardedRef<HTMLAnchorElement>): JSX.Element => {
-  const { icon, activeIcon, text, to, count, countMax, onClick, ...rest } = props;
+const SidebarNavigationLink = React.memo(
+  React.forwardRef(
+    (props: ISidebarNavigationLink, ref: React.ForwardedRef<HTMLAnchorElement>): JSX.Element => {
+      const { icon, activeIcon, text, to, count, countMax, onClick, ...rest } = props;
 
-  const matchRoute = useMatchRoute();
-  const { demetricator } = useSettings();
+      const matchRoute = useMatchRoute();
+      const { demetricator } = useSettings();
 
-  const LinkComponent = (to === undefined ? 'button' : Link) as typeof Link;
+      const LinkComponent = (to === undefined ? 'button' : Link) as typeof Link;
 
-  const isActive = matchRoute({ to }) !== false;
+      const isActive = matchRoute({ to }) !== false;
 
-  const handleClick: React.EventHandler<React.MouseEvent> = (e) => {
-    if (onClick) {
-      onClick(e);
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  };
+      const handleClick: React.EventHandler<React.MouseEvent> = (e) => {
+        if (onClick) {
+          onClick(e);
+          e.preventDefault();
+          e.stopPropagation();
+        }
+      };
 
-  return (
-    <li>
-      <LinkComponent
-        activeOptions={{ exact: true }}
-        activeProps={{ className: '⁂-sidebar-navigation-link--active' }}
-        to={to}
-        ref={ref}
-        onClick={handleClick}
-        className='⁂-sidebar-navigation-link'
-        {...rest}
-      >
-        <span
-          className='⁂-sidebar-navigation-link__icon'
-          aria-hidden
-        >
-          <Icon
-            src={(isActive && activeIcon) ?? icon}
-            count={demetricator ? undefined : count}
-            countMax={countMax}
-          />
-        </span>
+      return (
+        <li>
+          <LinkComponent
+            activeOptions={{ exact: true }}
+            activeProps={{ className: '⁂-sidebar-navigation-link--active' }}
+            to={to}
+            ref={ref}
+            onClick={handleClick}
+            className='⁂-sidebar-navigation-link'
+            {...rest}
+          >
+            <span className='⁂-sidebar-navigation-link__icon' aria-hidden>
+              <Icon
+                src={(isActive && activeIcon) ?? icon}
+                count={demetricator ? undefined : count}
+                countMax={countMax}
+              />
+            </span>
 
-        <p>{text}</p>
-      </LinkComponent>
-    </li>
-  );
-}), (prevProps, nextProps) => prevProps.count === nextProps.count);
+            <p>{text}</p>
+          </LinkComponent>
+        </li>
+      );
+    },
+  ),
+  (prevProps, nextProps) => prevProps.count === nextProps.count,
+);
 
 export { SidebarNavigationLink as default };

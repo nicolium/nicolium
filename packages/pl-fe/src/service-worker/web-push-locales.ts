@@ -5,7 +5,7 @@ const filtered = compileTime(() => {
   const filtered: Record<string, Record<string, string>> = {};
   const filenames = fs.readdirSync(path.resolve(__dirname, '../locales'));
 
-  filenames.forEach(filename => {
+  filenames.forEach((filename) => {
     if (!filename.match(/\.json$/) || filename.match(/defaultMessages|whitelist/)) return;
 
     const content = fs.readFileSync(path.resolve(__dirname, `../locales/${filename}`), 'utf-8');

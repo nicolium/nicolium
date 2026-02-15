@@ -22,7 +22,9 @@ export const Circles = lazy(() => import('@/pages/account-lists/circles'));
 export const CircleTimeline = lazy(() => import('@/pages/timelines/circle-timeline'));
 export const CommunityTimeline = lazy(() => import('@/pages/timelines/community-timeline'));
 export const ComposeEvent = lazy(() => import('@/pages/statuses/compose-event'));
-export const EditEvent = lazy(() => import('@/pages/statuses/compose-event').then(m => ({ default: m.EditEventPage })));
+export const EditEvent = lazy(() =>
+  import('@/pages/statuses/compose-event').then((m) => ({ default: m.EditEventPage })),
+);
 export const Conversations = lazy(() => import('@/pages/status-lists/conversations'));
 export const CreateApp = lazy(() => import('@/pages/developers/create-app'));
 export const CryptoDonate = lazy(() => import('@/pages/utils/crypto-donate'));
@@ -55,7 +57,9 @@ export const GenericNotFound = lazy(() => import('@/pages/utils/generic-not-foun
 export const GroupBlockedMembers = lazy(() => import('@/pages/groups/group-blocked-members'));
 export const GroupGallery = lazy(() => import('@/pages/groups/group-gallery'));
 export const GroupMembers = lazy(() => import('@/pages/groups/group-members'));
-export const GroupMembershipRequests = lazy(() => import('@/pages/groups/group-membership-requests'));
+export const GroupMembershipRequests = lazy(
+  () => import('@/pages/groups/group-membership-requests'),
+);
 export const GroupTimeline = lazy(() => import('@/pages/timelines/group-timeline'));
 export const Groups = lazy(() => import('@/pages/groups/groups'));
 export const HashtagTimeline = lazy(() => import('@/pages/timelines/hashtag-timeline'));
@@ -78,7 +82,9 @@ export const ModerationLog = lazy(() => import('@/pages/dashboard/moderation-log
 export const Mutes = lazy(() => import('@/pages/settings/mutes'));
 export const NewStatus = lazy(() => import('@/pages/utils/new-status'));
 export const Notifications = lazy(() => import('@/pages/notifications/notifications'));
-export const OutgoingFollowRequests = lazy(() => import('@/pages/account-lists/outgoing-follow-requests'));
+export const OutgoingFollowRequests = lazy(
+  () => import('@/pages/account-lists/outgoing-follow-requests'),
+);
 export const PasswordReset = lazy(() => import('@/pages/auth/password-reset'));
 export const PinnedStatuses = lazy(() => import('@/pages/status-lists/pinned-statuses'));
 export const FrontendConfig = lazy(() => import('@/pages/dashboard/frontend-config'));
@@ -106,26 +112,50 @@ export const UserIndex = lazy(() => import('@/pages/dashboard/user-index'));
 export const WrenchedTimeline = lazy(() => import('@/pages/timelines/wrenched-timeline'));
 
 // Panels
-export const AccountNotePanel = lazy(() => import('@/features/ui/components/panels/account-note-panel'));
-export const AnnouncementsPanel = lazy(() => import('@/components/announcements/announcements-panel'));
+export const AccountNotePanel = lazy(
+  () => import('@/features/ui/components/panels/account-note-panel'),
+);
+export const AnnouncementsPanel = lazy(
+  () => import('@/components/announcements/announcements-panel'),
+);
 export const BirthdayPanel = lazy(() => import('@/features/ui/components/panels/birthday-panel'));
-export const CryptoDonatePanel = lazy(() => import('@/features/crypto-donate/components/crypto-donate-panel'));
-export const GroupMediaPanel = lazy(() => import('@/features/ui/components/panels/group-media-panel'));
-export const InstanceInfoPanel = lazy(() => import('@/features/ui/components/panels/instance-info-panel'));
-export const InstanceModerationPanel = lazy(() => import('@/features/ui/components/panels/instance-moderation-panel'));
-export const LatestAccountsPanel = lazy(() => import('@/features/admin/components/latest-accounts-panel'));
+export const CryptoDonatePanel = lazy(
+  () => import('@/features/crypto-donate/components/crypto-donate-panel'),
+);
+export const GroupMediaPanel = lazy(
+  () => import('@/features/ui/components/panels/group-media-panel'),
+);
+export const InstanceInfoPanel = lazy(
+  () => import('@/features/ui/components/panels/instance-info-panel'),
+);
+export const InstanceModerationPanel = lazy(
+  () => import('@/features/ui/components/panels/instance-moderation-panel'),
+);
+export const LatestAccountsPanel = lazy(
+  () => import('@/features/admin/components/latest-accounts-panel'),
+);
 export const MyGroupsPanel = lazy(() => import('@/features/ui/components/panels/my-groups-panel'));
 export const NewEventPanel = lazy(() => import('@/features/ui/components/panels/new-event-panel'));
 export const NewGroupPanel = lazy(() => import('@/features/ui/components/panels/new-group-panel'));
-export const PinnedAccountsPanel = lazy(() => import('@/features/ui/components/panels/pinned-accounts-panel'));
-export const ProfileFieldsPanel = lazy(() => import('@/features/ui/components/panels/profile-fields-panel'));
-export const ProfileInfoPanel = lazy(() => import('@/features/ui/components/panels/profile-info-panel'));
-export const ProfileMediaPanel = lazy(() => import('@/features/ui/components/panels/profile-media-panel'));
+export const PinnedAccountsPanel = lazy(
+  () => import('@/features/ui/components/panels/pinned-accounts-panel'),
+);
+export const ProfileFieldsPanel = lazy(
+  () => import('@/features/ui/components/panels/profile-fields-panel'),
+);
+export const ProfileInfoPanel = lazy(
+  () => import('@/features/ui/components/panels/profile-info-panel'),
+);
+export const ProfileMediaPanel = lazy(
+  () => import('@/features/ui/components/panels/profile-media-panel'),
+);
 export const PromoPanel = lazy(() => import('@/features/ui/components/panels/promo-panel'));
 export const SignUpPanel = lazy(() => import('@/features/ui/components/panels/sign-up-panel'));
 export const TrendsPanel = lazy(() => import('@/features/ui/components/panels/trends-panel'));
 export const UserPanel = lazy(() => import('@/features/ui/components/panels/user-panel'));
-export const WhoToFollowPanel = lazy(() => import('@/features/ui/components/panels/who-to-follow-panel'));
+export const WhoToFollowPanel = lazy(
+  () => import('@/features/ui/components/panels/who-to-follow-panel'),
+);
 
 export const Audio = lazy(() => import('@/features/audio'));
 export const ChatWidget = lazy(() => import('@/features/chats/components/chat-widget/chat-widget'));

@@ -24,14 +24,21 @@ const OutgoingFollowRequestsPage: React.FC = () => {
       hasMore={hasNextPage}
       isLoading={isLoading}
       onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
-      emptyMessageText={<FormattedMessage id='empty_column.outgoing_follow_requests' defaultMessage="You don't have any outgoing follow requests yet. When you try to follow a user, it will show up here." />}
+      emptyMessageText={
+        <FormattedMessage
+          id='empty_column.outgoing_follow_requests'
+          defaultMessage="You don't have any outgoing follow requests yet. When you try to follow a user, it will show up here."
+        />
+      }
       itemClassName='p-2.5'
     >
-      {accountIds.map(id =>
-        <AccountContainer key={id} id={id} />,
-      )}
+      {accountIds.map((id) => (
+        <AccountContainer key={id} id={id} />
+      ))}
     </ScrollableList>
-  ) : <Spinner />;
+  ) : (
+    <Spinner />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>

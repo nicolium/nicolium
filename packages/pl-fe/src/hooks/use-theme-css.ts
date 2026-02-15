@@ -33,16 +33,24 @@ const DEFAULT_COLORS = {
     800: '#991b1b',
     900: '#7f1d1d',
   },
-  'greentext': '#789922',
+  greentext: '#789922',
 };
 
-const normalizeColors = (theme: Partial<Pick<FrontendConfig, 'brandColor' | 'accentColor' | 'colors'>>) => {
-  const brandColor: string = (theme.brandColor ?? theme.colors?.primary?.['500']) ?? '#d80482';
-  const accentColor: string = ((theme.accentColor ?? theme.colors?.accent?.['500']) ?? generateAccent(brandColor)) ?? '';
+const normalizeColors = (
+  theme: Partial<Pick<FrontendConfig, 'brandColor' | 'accentColor' | 'colors'>>,
+) => {
+  const brandColor: string = theme.brandColor ?? theme.colors?.primary?.['500'] ?? '#d80482';
+  const accentColor: string =
+    theme.accentColor ?? theme.colors?.accent?.['500'] ?? generateAccent(brandColor) ?? '';
 
   const colors = {
     ...theme.colors,
-    ...Object.fromEntries(Object.entries(DEFAULT_COLORS).map(([key, value]) => [key, typeof value === 'string' ? value : { ...value, ...theme.colors?.[key] }])),
+    ...Object.fromEntries(
+      Object.entries(DEFAULT_COLORS).map(([key, value]) => [
+        key,
+        typeof value === 'string' ? value : { ...value, ...theme.colors?.[key] },
+      ]),
+    ),
   };
 
   const normalizedColors = toTailwind({

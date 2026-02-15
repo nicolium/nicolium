@@ -1,7 +1,11 @@
 import React, { useEffect } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { mountConversations, unmountConversations, expandConversations } from '@/actions/conversations';
+import {
+  mountConversations,
+  unmountConversations,
+  expandConversations,
+} from '@/actions/conversations';
 import { useDirectStream } from '@/api/hooks/streaming/use-direct-stream';
 import Column from '@/components/ui/column';
 import ConversationsList from '@/features/conversations/components/conversations-list';

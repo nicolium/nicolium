@@ -4,7 +4,10 @@ import { defineMessages, useIntl } from 'react-intl';
 import { length } from 'stringz';
 
 const messages = defineMessages({
-  characterCount: { id: 'compose_form.remaining_character_count', defaultMessage: 'Remaining characters: {value} of {max}' },
+  characterCount: {
+    id: 'compose_form.remaining_character_count',
+    defaultMessage: 'Remaining characters: {value} of {max}',
+  },
 });
 
 interface ITextCharacterCounter {

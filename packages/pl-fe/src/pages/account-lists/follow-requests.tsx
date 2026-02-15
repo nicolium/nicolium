@@ -11,12 +11,19 @@ import Spinner from '@/components/ui/spinner';
 import Tabs, { type Item } from '@/components/ui/tabs';
 import { followRequestsRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
-import { useAcceptFollowRequestMutation, useFollowRequests, useRejectFollowRequestMutation } from '@/queries/accounts/use-follow-requests';
+import {
+  useAcceptFollowRequestMutation,
+  useFollowRequests,
+  useRejectFollowRequestMutation,
+} from '@/queries/accounts/use-follow-requests';
 
 const messages = defineMessages({
   heading: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
   followRequests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
-  outgoingFollowRequests: { id: 'column.outgoing_follow_requests', defaultMessage: 'Outgoing follow requests' },
+  outgoingFollowRequests: {
+    id: 'column.outgoing_follow_requests',
+    defaultMessage: 'Outgoing follow requests',
+  },
 });
 
 interface IAccountAuthorize {
@@ -29,10 +36,10 @@ const AccountAuthorize: React.FC<IAccountAuthorize> = ({ id }) => {
   const { mutate: authorizeFollowRequest } = useAcceptFollowRequestMutation(id);
   const { mutate: rejectFollowRequest } = useRejectFollowRequestMutation(id);
 
-  const onAuthorize = () =>{
+  const onAuthorize = () => {
     authorizeFollowRequest();
   };
-  const onReject = () =>{
+  const onReject = () => {
     rejectFollowRequest();
   };
 
@@ -43,11 +50,7 @@ const AccountAuthorize: React.FC<IAccountAuthorize> = ({ id }) => {
       <Account
         account={account}
         action={
-          <AuthorizeRejectButtons
-            onAuthorize={onAuthorize}
-            onReject={onReject}
-            countdown={3000}
-          />
+          <AuthorizeRejectButtons onAuthorize={onAuthorize} onReject={onReject} countdown={3000} />
         }
       />
     </div>
@@ -63,17 +66,22 @@ const FollowRequestsTabs = () => {
     return null;
   }
 
-  const tabs: Array<Item> = [{
-    name: '/follow_requests',
-    text: intl.formatMessage(messages.followRequests),
-    to: '/follow_requests',
-  }, {
-    name: '/outgoing_follow_requests',
-    text: intl.formatMessage(messages.outgoingFollowRequests),
-    to: '/outgoing_follow_requests',
-  }];
+  const tabs: Array<Item> = [
+    {
+      name: '/follow_requests',
+      text: intl.formatMessage(messages.followRequests),
+      to: '/follow_requests',
+    },
+    {
+      name: '/outgoing_follow_requests',
+      text: intl.formatMessage(messages.outgoingFollowRequests),
+      to: '/outgoing_follow_requests',
+    },
+  ];
 
-  return <Tabs items={tabs} activeItem={match ? '/follow_requests' : '/outgoing_follow_requests'} />;
+  return (
+    <Tabs items={tabs} activeItem={match ? '/follow_requests' : '/outgoing_follow_requests'} />
+  );
 };
 
 const FollowRequestsPage: React.FC = () => {
@@ -87,13 +95,20 @@ const FollowRequestsPage: React.FC = () => {
       hasMore={hasNextPage}
       isLoading={isLoading}
       onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
-      emptyMessageText={<FormattedMessage id='empty_column.follow_requests' defaultMessage="You don't have any follow requests yet. When you receive one, it will show up here." />}
+      emptyMessageText={
+        <FormattedMessage
+          id='empty_column.follow_requests'
+          defaultMessage="You don't have any follow requests yet. When you receive one, it will show up here."
+        />
+      }
     >
-      {accountIds.map(id =>
-        <AccountAuthorize key={id} id={id} />,
-      )}
+      {accountIds.map((id) => (
+        <AccountAuthorize key={id} id={id} />
+      ))}
     </ScrollableList>
-  ) : <Spinner />;
+  ) : (
+    <Spinner />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>

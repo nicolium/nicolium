@@ -32,13 +32,15 @@ const shortNumberFormat = (number: any, intl: IntlShape, max?: number) => {
     return `${max}+`;
   }
 
-  return intl.formatNumber(value, {
-    maximumFractionDigits: 0,
-    minimumFractionDigits: 0,
-    maximumSignificantDigits: 3,
-    numberingSystem: 'latn',
-    style: 'decimal',
-  }) + factor;
+  return (
+    intl.formatNumber(value, {
+      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+      maximumSignificantDigits: 3,
+      numberingSystem: 'latn',
+      style: 'decimal',
+    }) + factor
+  );
 };
 
 interface IAnimatedNumber {
@@ -54,7 +56,9 @@ const AnimatedNumber: React.FC<IAnimatedNumber> = ({ value, obfuscate, short, ma
 
   const [direction, setDirection] = useState(0);
   const [displayedValue, setDisplayedValue] = useState<number>(value);
-  const [formattedValue, setFormattedValue] = useState<string>(intl.formatNumber(value, { numberingSystem: 'latn' }));
+  const [formattedValue, setFormattedValue] = useState<string>(
+    intl.formatNumber(value, { numberingSystem: 'latn' }),
+  );
 
   useEffect(() => {
     if (displayedValue !== undefined) {
@@ -63,11 +67,13 @@ const AnimatedNumber: React.FC<IAnimatedNumber> = ({ value, obfuscate, short, ma
     }
 
     setDisplayedValue(value);
-    setFormattedValue(obfuscate
-      ? obfuscatedCount(value)
-      : short
-        ? shortNumberFormat(value, intl, max)
-        : intl.formatNumber(value, { numberingSystem: 'latn' }));
+    setFormattedValue(
+      obfuscate
+        ? obfuscatedCount(value)
+        : short
+          ? shortNumberFormat(value, intl, max)
+          : intl.formatNumber(value, { numberingSystem: 'latn' }),
+    );
   }, [value, intl, max, obfuscate, short]);
 
   const transitions = useTransition(formattedValue, {
@@ -89,7 +95,7 @@ const AnimatedNumber: React.FC<IAnimatedNumber> = ({ value, obfuscate, short, ma
           key={item}
           style={{
             position: item === formattedValue ? 'static' : 'absolute',
-            transform: style.y.to(y => `translateY(${y * 100}%)`),
+            transform: style.y.to((y) => `translateY(${y * 100}%)`),
           }}
         >
           {item}

@@ -61,7 +61,10 @@ const SentryFeedbackForm: React.FC<ISentryFeedbackForm> = ({ eventId }) => {
 
       <FormActions>
         <Button type='submit' className='mx-auto' disabled={!feedback || isSubmitting}>
-          <FormattedMessage id='alert.unexpected.submit_feedback' defaultMessage='Submit Feedback' />
+          <FormattedMessage
+            id='alert.unexpected.submit_feedback'
+            defaultMessage='Submit Feedback'
+          />
         </Button>
       </FormActions>
     </Form>

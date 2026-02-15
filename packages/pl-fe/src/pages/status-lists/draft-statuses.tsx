@@ -13,9 +13,14 @@ const messages = defineMessages({
 const DraftStatusesPage = () => {
   const intl = useIntl();
 
-  const { data: drafts = [] } = useDraftStatusesQuery(data => Object.values(data));
+  const { data: drafts = [] } = useDraftStatusesQuery((data) => Object.values(data));
 
-  const emptyMessage = <FormattedMessage id='empty_column.draft_statuses' defaultMessage="You don't have any draft statuses yet. When you add one, it will show up here." />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.draft_statuses'
+      defaultMessage="You don't have any draft statuses yet. When you add one, it will show up here."
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -24,7 +29,9 @@ const DraftStatusesPage = () => {
         emptyMessageText={emptyMessage}
         listClassName='⁂-status-list'
       >
-        {drafts.toReversed().map((draft) => <DraftStatus key={draft.draft_id} draftStatus={draft} />)}
+        {drafts.toReversed().map((draft) => (
+          <DraftStatus key={draft.draft_id} draftStatus={draft} />
+        ))}
       </ScrollableList>
     </Column>
   );

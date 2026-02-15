@@ -13,15 +13,17 @@ interface IStatusActionCounter {
 }
 
 /** Action button numerical counter, eg "5" likes. */
-const StatusActionCounter: React.FC<IStatusActionCounter> = React.memo(({ count = 0 }): JSX.Element => {
-  const { demetricator } = useSettings();
+const StatusActionCounter: React.FC<IStatusActionCounter> = React.memo(
+  ({ count = 0 }): JSX.Element => {
+    const { demetricator } = useSettings();
 
-  return (
-    <Text size='xs' weight='semibold' theme='inherit'>
-      <AnimatedNumber value={count} obfuscate={demetricator} short />
-    </Text>
-  );
-});
+    return (
+      <Text size='xs' weight='semibold' theme='inherit'>
+        <AnimatedNumber value={count} obfuscate={demetricator} short />
+      </Text>
+    );
+  },
+);
 
 interface IStatusActionButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   iconClassName?: string;
@@ -33,60 +35,66 @@ interface IStatusActionButton extends React.ButtonHTMLAttributes<HTMLButtonEleme
   onLongPress?: (event: React.MouseEvent | React.TouchEvent) => void;
 }
 
-const StatusActionButton = React.forwardRef<HTMLButtonElement, IStatusActionButton>((props, ref): JSX.Element => {
-  const { icon, filledIcon, className, iconClassName, active, count = 0, text, onLongPress, ...filteredProps } = props;
+const StatusActionButton = React.forwardRef<HTMLButtonElement, IStatusActionButton>(
+  (props, ref): JSX.Element => {
+    const {
+      icon,
+      filledIcon,
+      className,
+      iconClassName,
+      active,
+      count = 0,
+      text,
+      onLongPress,
+      ...filteredProps
+    } = props;
 
-  const longPressBind = useLongPress((e) => {
-    if (!onLongPress || e.type !== 'touchstart') return;
+    const longPressBind = useLongPress((e) => {
+      if (!onLongPress || e.type !== 'touchstart') return;
 
-    e.stopPropagation();
+      e.stopPropagation();
 
-    if ('vibrate' in navigator) navigator.vibrate(1);
-    onLongPress(e);
-  });
+      if ('vibrate' in navigator) navigator.vibrate(1);
+      onLongPress(e);
+    });
 
-  const renderIcon = () => {
+    const renderIcon = () => {
+      return (
+        <Icon
+          src={active && filledIcon ? filledIcon : icon}
+          className={iconClassName}
+          aria-hidden
+        />
+      );
+    };
+
+    const renderText = () => {
+      if (text) {
+        return <span className='⁂-status-action-bar__button__text'>{text}</span>;
+      } else if (count) {
+        return <StatusActionCounter count={count} />;
+      }
+    };
+
     return (
-      <Icon
-        src={active && filledIcon ? filledIcon : icon}
-        className={iconClassName}
-        aria-hidden
-      />
+      <button
+        ref={ref}
+        type='button'
+        className={clsx(
+          '⁂-status-action-bar__button',
+          {
+            '⁂-status-action-bar__button--active': active,
+          },
+          className,
+        )}
+        {...longPressBind}
+        {...filteredProps}
+      >
+        {renderIcon()}
+        {renderText()}
+      </button>
     );
-  };
-
-  const renderText = () => {
-    if (text) {
-      return (
-        <span className='⁂-status-action-bar__button__text'>
-          {text}
-        </span>
-      );
-    } else if (count) {
-      return (
-        <StatusActionCounter count={count} />
-      );
-    }
-  };
-
-  return (
-    <button
-      ref={ref}
-      type='button'
-      className={clsx(
-        '⁂-status-action-bar__button',
-        {
-          '⁂-status-action-bar__button--active': active,
-        },
-        className,
-      )}
-      {...longPressBind}
-      {...filteredProps}
-    >
-      {renderIcon()}
-      {renderText()}
-    </button>
-  );
-});
+  },
+);
 
 export { StatusActionButton as default };

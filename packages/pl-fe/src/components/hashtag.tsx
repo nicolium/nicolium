@@ -11,18 +11,19 @@ import { shortNumberFormat } from '../utils/numbers';
 
 import type { Tag } from 'pl-api';
 
-const accountsCountRenderer = (count: number) => !!count && (
-  <Text theme='muted' size='sm'>
-    <FormattedMessage
-      id='trends.count_by_accounts'
-      defaultMessage='{count} {rawCount, plural, one {person} other {people}} talking'
-      values={{
-        rawCount: count,
-        count: <strong>{shortNumberFormat(count)}</strong>,
-      }}
-    />
-  </Text>
-);
+const accountsCountRenderer = (count: number) =>
+  !!count && (
+    <Text theme='muted' size='sm'>
+      <FormattedMessage
+        id='trends.count_by_accounts'
+        defaultMessage='{count} {rawCount, plural, one {person} other {people}} talking'
+        values={{
+          rawCount: count,
+          count: <strong>{shortNumberFormat(count)}</strong>,
+        }}
+      />
+    </Text>
+  );
 
 interface IHashtag {
   hashtag: Tag;
@@ -35,7 +36,9 @@ const Hashtag: React.FC<IHashtag> = ({ hashtag }) => {
     <HStack alignItems='center' justifyContent='between' data-testid='hashtag'>
       <Stack>
         <Link to='/tags/$id' params={{ id: hashtag.name }} className='hover:underline'>
-          <Text tag='span' size='sm' weight='semibold'>#{hashtag.name}</Text>
+          <Text tag='span' size='sm' weight='semibold'>
+            #{hashtag.name}
+          </Text>
         </Link>
 
         {accountsCountRenderer(count)}

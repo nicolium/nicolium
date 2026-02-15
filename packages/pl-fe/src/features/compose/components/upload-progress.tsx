@@ -15,9 +15,7 @@ const ComposeUploadProgress: React.FC<IComposeUploadProgress> = ({ composeId }) 
     return null;
   }
 
-  return (
-    <UploadProgress progress={progress} />
-  );
+  return <UploadProgress progress={progress} />;
 };
 
 export { ComposeUploadProgress as default };

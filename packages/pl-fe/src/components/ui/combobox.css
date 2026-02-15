@@ -1,5 +1,5 @@
 :root {
-	--reach-combobox: 1;
+  --reach-combobox: 1;
 }
 
 [data-reach-combobox-popover] {
@@ -14,7 +14,7 @@
   @apply block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-500 cursor-pointer;
 }
 
-[data-reach-combobox-option][aria-selected="true"] {
+[data-reach-combobox-option][aria-selected='true'] {
   @apply bg-gray-100 dark:bg-gray-800;
 }
 
@@ -22,7 +22,7 @@
   @apply bg-gray-100 dark:bg-gray-800;
 }
 
-[data-reach-combobox-option][aria-selected="true"]:hover {
+[data-reach-combobox-option][aria-selected='true']:hover {
   @apply bg-gray-100 dark:bg-gray-800;
 }
 

@@ -38,10 +38,7 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
   if (to.length === 0) {
     return (
       <a href='#' className='mb-1 text-sm text-gray-700 dark:text-gray-600' onClick={handleClick}>
-        <FormattedMessage
-          id='reply_mentions.reply_empty'
-          defaultMessage='Replying to post'
-        />
+        <FormattedMessage id='reply_mentions.reply_empty' defaultMessage='Replying to post' />
       </a>
     );
   }
@@ -60,7 +57,11 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
 
   if (to.length > 2) {
     accounts.push(
-      <FormattedMessage id='reply_mentions.more' defaultMessage='{count} more' values={{ count: to.length - 2 }} />,
+      <FormattedMessage
+        id='reply_mentions.more'
+        defaultMessage='{count} more'
+        values={{ count: to.length - 2 }}
+      />,
     );
   }
 

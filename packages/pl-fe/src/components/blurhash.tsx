@@ -1,7 +1,10 @@
 import { decode } from 'blurhash';
 import React, { useRef, useEffect } from 'react';
 
-interface IBlurhash extends Pick<React.CanvasHTMLAttributes<HTMLCanvasElement>, 'className' | 'aria-label' | 'aria-hidden'> {
+interface IBlurhash extends Pick<
+  React.CanvasHTMLAttributes<HTMLCanvasElement>,
+  'className' | 'aria-label' | 'aria-hidden'
+> {
   /** Hash to render */
   hash: string | null | undefined;
   /** Width of the blurred region in pixels. Defaults to 32. */
@@ -19,41 +22,35 @@ interface IBlurhash extends Pick<React.CanvasHTMLAttributes<HTMLCanvasElement>, 
  * Renders a blurhash in a canvas element.
  * @see {@link https://blurha.sh/}
  */
-const Blurhash: React.FC<IBlurhash> = React.memo(({
-  hash,
-  width = 32,
-  height = width,
-  dummy = false,
-  ...canvasProps
-}) => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
+const Blurhash: React.FC<IBlurhash> = React.memo(
+  ({ hash, width = 32, height = width, dummy = false, ...canvasProps }) => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  useEffect(() => {
-    const { current: canvas } = canvasRef;
-    if (!canvas) return;
+    useEffect(() => {
+      const { current: canvas } = canvasRef;
+      if (!canvas) return;
 
-    // resets canvas
-    canvas.width = canvas.width; // eslint-disable-line no-self-assign
+      // resets canvas
+      canvas.width = canvas.width; // eslint-disable-line no-self-assign
 
-    if (dummy || !hash) return;
+      if (dummy || !hash) return;
 
-    try {
-      const pixels = decode(hash, width, height);
-      const ctx = canvas.getContext('2d');
-      const imageData = ctx?.createImageData(width, height);
-      imageData?.data.set(pixels);
+      try {
+        const pixels = decode(hash, width, height);
+        const ctx = canvas.getContext('2d');
+        const imageData = ctx?.createImageData(width, height);
+        imageData?.data.set(pixels);
 
-      if (imageData) {
-        ctx?.putImageData(imageData, 0, 0);
+        if (imageData) {
+          ctx?.putImageData(imageData, 0, 0);
+        }
+      } catch (err) {
+        console.error('Blurhash decoding failure', { err, hash });
       }
-    } catch (err) {
-      console.error('Blurhash decoding failure', { err, hash });
-    }
-  }, [dummy, hash, width, height]);
+    }, [dummy, hash, width, height]);
 
-  return (
-    <canvas {...canvasProps} ref={canvasRef} width={width} height={height} />
-  );
-});
+    return <canvas {...canvasProps} ref={canvasRef} width={width} height={height} />;
+  },
+);
 
 export { Blurhash as default };

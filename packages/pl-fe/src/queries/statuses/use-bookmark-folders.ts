@@ -7,9 +7,7 @@ import { queryClient } from '../client';
 
 import type { BookmarkFolder } from 'pl-api';
 
-const useBookmarkFolders = <T>(
-  select?: ((data: Array<BookmarkFolder>) => T),
-) => {
+const useBookmarkFolders = <T>(select?: (data: Array<BookmarkFolder>) => T) => {
   const client = useClient();
   const features = useFeatures();
 
@@ -21,7 +19,10 @@ const useBookmarkFolders = <T>(
   });
 };
 
-const useBookmarkFolder = (folderId?: string) => useBookmarkFolders((data) => folderId ? data.find(folder => folder.id === folderId) : undefined);
+const useBookmarkFolder = (folderId?: string) =>
+  useBookmarkFolders((data) =>
+    folderId ? data.find((folder) => folder.id === folderId) : undefined,
+  );
 
 interface CreateBookmarkFolderParams {
   name: string;
@@ -33,7 +34,8 @@ const useCreateBookmarkFolder = () => {
 
   return useMutation({
     mutationKey: ['bookmarkFolders', 'create'],
-    mutationFn: (params: CreateBookmarkFolderParams) => client.myAccount.createBookmarkFolder(params),
+    mutationFn: (params: CreateBookmarkFolderParams) =>
+      client.myAccount.createBookmarkFolder(params),
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['bookmarkFolders'] }),
   });
 };
@@ -58,7 +60,8 @@ const useUpdateBookmarkFolder = (folderId: string) => {
 
   return useMutation({
     mutationKey: ['bookmarkFolders', 'update', folderId],
-    mutationFn: (params: UpdateBookmarkFolderParams) => client.myAccount.updateBookmarkFolder(folderId, params),
+    mutationFn: (params: UpdateBookmarkFolderParams) =>
+      client.myAccount.updateBookmarkFolder(folderId, params),
     onSettled: () => queryClient.invalidateQueries({ queryKey: ['bookmarkFolders'] }),
   });
 };
@@ -69,7 +72,10 @@ const useStatusBookmarkFolders = (statusId: string) => {
 
   return useQuery({
     queryKey: ['bookmarkFolders', 'status', statusId],
-    queryFn: () => client.statuses.getStatusBookmarkFolders(statusId).then(response => response.map((folder) => folder.id)),
+    queryFn: () =>
+      client.statuses
+        .getStatusBookmarkFolders(statusId)
+        .then((response) => response.map((folder) => folder.id)),
     enabled: features.bookmarkFoldersMultiple,
   });
 };
@@ -80,7 +86,8 @@ const useAddBookmarkToFolder = (statusId: string) => {
   return useMutation({
     mutationKey: ['bookmarkFolders', 'add', statusId],
     mutationFn: (folderId: string) => client.myAccount.addBookmarkToFolder(statusId, folderId),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['bookmarkFolders', 'status', statusId] }),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ['bookmarkFolders', 'status', statusId] }),
   });
 };
 
@@ -90,7 +97,8 @@ const useRemoveBookmarkFromFolder = (statusId: string) => {
   return useMutation({
     mutationKey: ['bookmarkFolders', 'remove', statusId],
     mutationFn: (folderId: string) => client.myAccount.removeBookmarkFromFolder(statusId, folderId),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['bookmarkFolders', 'status', statusId] }),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ['bookmarkFolders', 'status', statusId] }),
   });
 };
 

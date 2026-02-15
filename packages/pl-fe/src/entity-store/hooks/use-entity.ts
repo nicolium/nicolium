@@ -8,8 +8,8 @@ import { useLoading } from '@/hooks/use-loading';
 import { importEntities } from '../actions';
 import { selectEntity } from '../selectors';
 
-import type { EntitySchema, EntityPath, EntityFn } from './types';
 import type { Entity } from '../types';
+import type { EntitySchema, EntityPath, EntityFn } from './types';
 import type { PlfeResponse } from '@/api';
 
 /** Additional options for the hook. */
@@ -38,7 +38,9 @@ const useEntity = <TEntity extends Entity, TTransformedEntity extends Entity = T
   const defaultSchema = v.custom<TEntity>(() => true);
   const schema = opts.schema ?? defaultSchema;
 
-  const entity = useAppSelector(state => selectEntity<TTransformedEntity>(state, entityType, entityId));
+  const entity = useAppSelector((state) =>
+    selectEntity<TTransformedEntity>(state, entityType, entityId),
+  );
 
   const isEnabled = opts.enabled ?? true;
   const isLoading = isFetching && !entity;
@@ -74,7 +76,4 @@ const useEntity = <TEntity extends Entity, TTransformedEntity extends Entity = T
   };
 };
 
-export {
-  useEntity,
-  type UseEntityOpts,
-};
+export { useEntity, type UseEntityOpts };

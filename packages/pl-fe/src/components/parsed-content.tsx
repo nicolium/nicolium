@@ -1,6 +1,11 @@
 /* eslint-disable no-redeclare */
 import { Link } from '@tanstack/react-router';
-import parse, { Element, type HTMLReactParserOptions, domToReact, type DOMNode } from 'html-react-parser';
+import parse, {
+  Element,
+  type HTMLReactParserOptions,
+  domToReact,
+  type DOMNode,
+} from 'html-react-parser';
 import DOMPurify from 'isomorphic-dompurify';
 import groupBy from 'lodash/groupBy';
 import minBy from 'lodash/minBy';
@@ -31,7 +36,15 @@ const checkSuspiciousUrl = (url: string): boolean => {
 };
 
 const nodesToText = (nodes: Array<DOMNode>): string =>
-  nodes.map(node => node.type === 'text' ? node.data : node.type === 'tag' ? nodesToText(node.children as Array<DOMNode>) : '').join('');
+  nodes
+    .map((node) =>
+      node.type === 'text'
+        ? node.data
+        : node.type === 'tag'
+          ? nodesToText(node.children as Array<DOMNode>)
+          : '',
+    )
+    .join('');
 
 const isHostNotVisible = (href: string, text?: string): false | string => {
   try {
@@ -86,7 +99,7 @@ const ParsedUrl: React.FC<IParsedUrl> = React.memo((props) => {
     <a
       {...anchorProps}
       href={href}
-      onClick={(e) =>{
+      onClick={(e) => {
         e.stopPropagation();
       }}
       rel='nofollow noopener noreferrer'
@@ -94,9 +107,7 @@ const ParsedUrl: React.FC<IParsedUrl> = React.memo((props) => {
       title={props.href}
     >
       {props.children}
-      {host && (
-        <span className='text-xs lowercase'>{' '}[{host}]</span>
-      )}
+      {host && <span className='text-xs lowercase'> [{host}]</span>}
     </a>
   );
 });
@@ -121,14 +132,11 @@ interface IParsedContent {
 }
 
 // Adapted from Mastodon https://github.com/mastodon/mastodon/blob/main/app/javascript/mastodon/components/hashtag_bar.tsx
-const normalizeHashtag = (hashtag: string) =>(
-  !!hashtag && hashtag.startsWith('#') ? hashtag.slice(1) : hashtag
-).normalize('NFKC');
+const normalizeHashtag = (hashtag: string) =>
+  (!!hashtag && hashtag.startsWith('#') ? hashtag.slice(1) : hashtag).normalize('NFKC');
 
 const uniqueHashtagsWithCaseHandling = (hashtags: string[]) => {
-  const groups = groupBy(hashtags, (tag) =>
-    tag.normalize('NFKD').toLowerCase(),
-  );
+  const groups = groupBy(hashtags, (tag) => tag.normalize('NFKD').toLowerCase());
 
   return Object.values(groups).map((tags) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- we know that the array has at least one element
@@ -152,23 +160,32 @@ const uniqueHashtagsWithCaseHandling = (hashtags: string[]) => {
   });
 };
 
-function parseContent(props: IParsedContent, extractHashtags?: false): ReturnType<typeof domToReact>;
-function parseContent(props: IParsedContent, extractHashtags: true): {
+function parseContent(
+  props: IParsedContent,
+  extractHashtags?: false,
+): ReturnType<typeof domToReact>;
+function parseContent(
+  props: IParsedContent,
+  extractHashtags: true,
+): {
   hashtags: Array<string>;
   content: ReturnType<typeof domToReact>;
 };
 
-function parseContent({
-  html,
-  mentions,
-  hasQuote,
-  emojis,
-  cleanUrls = false,
-  redirectUrls = false,
-  displayTargetHost = true,
-  greentext = false,
-  speakAsCat = false,
-}: IParsedContent, extractHashtags = false) {
+function parseContent(
+  {
+    html,
+    mentions,
+    hasQuote,
+    emojis,
+    cleanUrls = false,
+    redirectUrls = false,
+    displayTargetHost = true,
+    greentext = false,
+    speakAsCat = false,
+  }: IParsedContent,
+  extractHashtags = false,
+) {
   if (html.length === 0) {
     return extractHashtags ? { content: null, hashtags: [] } : null;
   }
@@ -197,7 +214,8 @@ function parseContent({
     replace(domNode) {
       if (!(domNode instanceof Element)) {
         // @ts-ignore
-        domNode.preGreentext = (!domNode.prev || domNode.prev.preGreentext) && !domNode.data.trim().length;
+        domNode.preGreentext =
+          (!domNode.prev || domNode.prev.preGreentext) && !domNode.data.trim().length;
 
         // @ts-ignore
         const data = domNode.prev?.preGreentext ? domNode.data.trim() : domNode.data;
@@ -215,7 +233,7 @@ function parseContent({
         return <></>;
       }
 
-      if (domNode.attribs.class?.split(' ').some(className => selectors.includes(className))) {
+      if (domNode.attribs.class?.split(' ').some((className) => selectors.includes(className))) {
         return <></>;
       }
 
@@ -242,7 +260,10 @@ function parseContent({
         }
 
         const fallback = (
-          <ParsedUrl {...domNode.attribs as any} childrenPlain={nodesToText(domNode.children as Array<DOMNode>).trim()}>
+          <ParsedUrl
+            {...(domNode.attribs as any)}
+            childrenPlain={nodesToText(domNode.children as Array<DOMNode>).trim()}
+          >
             {domToReact(domNode.children as Array<DOMNode>, options)}
           </ParsedUrl>
         );
@@ -257,7 +278,7 @@ function parseContent({
                   params={{ username: mention.acct }}
                   className='text-primary-600 hover:underline dark:text-primary-400'
                   dir='ltr'
-                  onClick={(e) =>{
+                  onClick={(e) => {
                     e.stopPropagation();
                   }}
                 >
@@ -268,9 +289,7 @@ function parseContent({
               );
             }
           } else if (domNode.attribs['data-user']) {
-            return (
-              <StatusMention accountId={domNode.attribs['data-user']} fallback={fallback} />
-            );
+            return <StatusMention accountId={domNode.attribs['data-user']} fallback={fallback} />;
           }
         }
 
@@ -288,7 +307,12 @@ function parseContent({
         return fallback;
       }
 
-      if (extractHashtags && domNode.type === 'tag' && domNode.parent === null && domNode.next === null) {
+      if (
+        extractHashtags &&
+        domNode.type === 'tag' &&
+        domNode.parent === null &&
+        domNode.next === null
+      ) {
         for (const child of domNode.children) {
           switch (child.type) {
             case 'text':
@@ -311,7 +335,6 @@ function parseContent({
             default:
               hashtags = [];
               return;
-
           }
         }
 
@@ -328,7 +351,10 @@ function parseContent({
     },
   };
 
-  let content = parse(DOMPurify.sanitize(html, { ADD_ATTR: ['target'], USE_PROFILES: { html: true } }), options);
+  let content = parse(
+    DOMPurify.sanitize(html, { ADD_ATTR: ['target'], USE_PROFILES: { html: true } }),
+    options,
+  );
 
   if (hasSuspiciousUrl) {
     content = (
@@ -344,24 +370,28 @@ function parseContent({
     );
   }
 
-  if (extractHashtags) return {
-    content,
-    hashtags: uniqueHashtagsWithCaseHandling(hashtags),
-  };
+  if (extractHashtags)
+    return {
+      content,
+      hashtags: uniqueHashtagsWithCaseHandling(hashtags),
+    };
 
   return content;
 }
 
-const ParsedContent: React.FC<IParsedContent> = React.memo((props) => {
-  const { urlPrivacy } = useSettings();
+const ParsedContent: React.FC<IParsedContent> = React.memo(
+  (props) => {
+    const { urlPrivacy } = useSettings();
 
-  props = { ...props };
+    props = { ...props };
 
-  props.cleanUrls ??= urlPrivacy.clearLinksInContent;
-  props.redirectUrls ??= urlPrivacy.redirectLinksMode !== 'off';
-  props.displayTargetHost ??= urlPrivacy.displayTargetHost;
+    props.cleanUrls ??= urlPrivacy.clearLinksInContent;
+    props.redirectUrls ??= urlPrivacy.redirectLinksMode !== 'off';
+    props.displayTargetHost ??= urlPrivacy.displayTargetHost;
 
-  return parseContent(props, false);
-}, (prevProps, nextProps) => prevProps.html === nextProps.html);
+    return parseContent(props, false);
+  },
+  (prevProps, nextProps) => prevProps.html === nextProps.html,
+);
 
 export { ParsedContent, ParsedUrl, parseContent };

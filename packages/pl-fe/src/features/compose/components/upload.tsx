@@ -15,17 +15,32 @@ interface IUploadCompose {
   onDragEnd: () => void;
 }
 
-const UploadCompose: React.FC<IUploadCompose> = ({ composeId, id, onSubmit, onDragStart, onDragEnter, onDragEnd }) => {
+const UploadCompose: React.FC<IUploadCompose> = ({
+  composeId,
+  id,
+  onSubmit,
+  onDragStart,
+  onDragEnter,
+  onDragEnd,
+}) => {
   const dispatch = useAppDispatch();
-  const { pleroma: { metadata: { description_limit: descriptionLimit } } } = useInstance();
+  const {
+    pleroma: {
+      metadata: { description_limit: descriptionLimit },
+    },
+  } = useInstance();
 
-  const media = useCompose(composeId).mediaAttachments.find(item => item.id === id)!;
+  const media = useCompose(composeId).mediaAttachments.find((item) => item.id === id)!;
 
   const handleDescriptionChange = (description: string, position?: [number, number]) => {
-    return dispatch(changeUploadCompose(composeId, media.id, {
-      description,
-      focus: position ? `${((position[0] - 0.5) * 2).toFixed(2)},${((position[1] - 0.5) * -2).toFixed(2)}` : undefined,
-    }));
+    return dispatch(
+      changeUploadCompose(composeId, media.id, {
+        description,
+        focus: position
+          ? `${((position[0] - 0.5) * 2).toFixed(2)},${((position[1] - 0.5) * -2).toFixed(2)}`
+          : undefined,
+      }),
+    );
   };
 
   const handleDelete = () => {

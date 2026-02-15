@@ -15,12 +15,7 @@ const messages = defineMessages({
 const MutesPage: React.FC = () => {
   const intl = useIntl();
 
-  const {
-    data = [],
-    hasNextPage,
-    fetchNextPage,
-    isFetching,
-  } = useMutes();
+  const { data = [], hasNextPage, fetchNextPage, isFetching } = useMutes();
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -32,12 +27,20 @@ const MutesPage: React.FC = () => {
           onLoadMore={fetchNextPage}
           hasMore={hasNextPage}
           emptyMessageText={
-            <FormattedMessage id='empty_column.mutes' defaultMessage="You haven't muted any users yet." />
+            <FormattedMessage
+              id='empty_column.mutes'
+              defaultMessage="You haven't muted any users yet."
+            />
           }
         >
-          {data.map(([accountId, muteExpiresAt]) =>
-            <AccountContainer key={accountId} id={accountId} actionType='muting' muteExpiresAt={muteExpiresAt} />,
-          )}
+          {data.map(([accountId, muteExpiresAt]) => (
+            <AccountContainer
+              key={accountId}
+              id={accountId}
+              actionType='muting'
+              muteExpiresAt={muteExpiresAt}
+            />
+          ))}
         </ScrollableList>
       </Stack>
     </Column>

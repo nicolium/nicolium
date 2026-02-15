@@ -14,8 +14,17 @@ interface EventParticipantsModalProps {
   statusId: string;
 }
 
-const EventParticipantsModal: React.FC<BaseModalProps & EventParticipantsModalProps> = ({ onClose, statusId }) => {
-  const { data: accountIds, isLoading, hasNextPage, fetchNextPage, refetch } = useEventParticipations(statusId);
+const EventParticipantsModal: React.FC<BaseModalProps & EventParticipantsModalProps> = ({
+  onClose,
+  statusId,
+}) => {
+  const {
+    data: accountIds,
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useEventParticipations(statusId);
 
   const onClickClose = () => {
     onClose('EVENT_PARTICIPANTS');
@@ -26,7 +35,12 @@ const EventParticipantsModal: React.FC<BaseModalProps & EventParticipantsModalPr
   if (!accountIds) {
     body = <Spinner />;
   } else {
-    const emptyMessage = <FormattedMessage id='empty_column.event_participants' defaultMessage='No one joined this event yet. When someone does, they will show up here.' />;
+    const emptyMessage = (
+      <FormattedMessage
+        id='empty_column.event_participants'
+        defaultMessage='No one joined this event yet. When someone does, they will show up here.'
+      />
+    );
 
     body = (
       <PullToRefresh onRefresh={refetch}>
@@ -40,7 +54,9 @@ const EventParticipantsModal: React.FC<BaseModalProps & EventParticipantsModalPr
           onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
           useWindowScroll={false}
         >
-          {accountIds.map(id => <AccountContainer key={id} id={id} />)}
+          {accountIds.map((id) => (
+            <AccountContainer key={id} id={id} />
+          ))}
         </ScrollableList>
       </PullToRefresh>
     );
@@ -48,7 +64,9 @@ const EventParticipantsModal: React.FC<BaseModalProps & EventParticipantsModalPr
 
   return (
     <Modal
-      title={<FormattedMessage id='column.event_participants' defaultMessage='Event participants' />}
+      title={
+        <FormattedMessage id='column.event_participants' defaultMessage='Event participants' />
+      }
       onClose={onClickClose}
     >
       {body}

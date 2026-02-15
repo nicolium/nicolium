@@ -20,7 +20,13 @@ import { saveMarker } from './markers';
 import { saveSettings } from './settings';
 
 import type { AppDispatch, RootState } from '@/store';
-import type { Notification as BaseNotification, GetGroupedNotificationsParams, GroupedNotificationsResults, NotificationGroup, PaginatedResponse } from 'pl-api';
+import type {
+  Notification as BaseNotification,
+  GetGroupedNotificationsParams,
+  GroupedNotificationsResults,
+  NotificationGroup,
+  PaginatedResponse,
+} from 'pl-api';
 
 const NOTIFICATIONS_UPDATE = 'NOTIFICATIONS_UPDATE' as const;
 const NOTIFICATIONS_UPDATE_NOOP = 'NOTIFICATIONS_UPDATE_NOOP' as const;
@@ -50,8 +56,14 @@ defineMessages({
   mention: { id: 'notification.mention', defaultMessage: '{name} mentioned you' },
 });
 
-const fetchRelatedRelationships = (dispatch: AppDispatch, notifications: Array<NotificationGroup>) => {
-  const accountIds = notifications.filter(item => item.type === 'follow').map(item => item.sample_account_ids).flat();
+const fetchRelatedRelationships = (
+  dispatch: AppDispatch,
+  notifications: Array<NotificationGroup>,
+) => {
+  const accountIds = notifications
+    .filter((item) => item.type === 'follow')
+    .map((item) => item.sample_account_ids)
+    .flat();
 
   if (accountIds.length > 0) {
     dispatch(fetchRelationships(accountIds));
@@ -63,38 +75,48 @@ interface NotificationsUpdateAction {
   notification: NotificationGroup;
 }
 
-const updateNotifications = (notification: BaseNotification) =>
-  (dispatch: AppDispatch) => {
-    const selectedFilter = useSettingsStore.getState().settings.notifications.quickFilter.active;
-    const showInColumn = selectedFilter === 'all' ? true : (FILTER_TYPES[selectedFilter as FilterType] ?? [notification.type]).includes(notification.type);
+const updateNotifications = (notification: BaseNotification) => (dispatch: AppDispatch) => {
+  const selectedFilter = useSettingsStore.getState().settings.notifications.quickFilter.active;
+  const showInColumn =
+    selectedFilter === 'all'
+      ? true
+      : (FILTER_TYPES[selectedFilter as FilterType] ?? [notification.type]).includes(
+          notification.type,
+        );
 
-    dispatch(importEntities({
-      accounts: [notification.account, notification.type === 'move' ? notification.target : undefined],
+  dispatch(
+    importEntities({
+      accounts: [
+        notification.account,
+        notification.type === 'move' ? notification.target : undefined,
+      ],
       statuses: [getNotificationStatus(notification) as any],
-    }));
+    }),
+  );
 
-    if (showInColumn) {
-      const normalizedNotification = normalizeNotification(notification);
+  if (showInColumn) {
+    const normalizedNotification = normalizeNotification(notification);
 
-      if (normalizedNotification.type === 'follow_request') {
-        normalizedNotification.sample_account_ids.forEach(appendFollowRequest);
-      }
-
-      dispatch<NotificationsUpdateAction>({
-        type: NOTIFICATIONS_UPDATE,
-        notification: normalizedNotification,
-      });
-
-      fetchRelatedRelationships(dispatch, [normalizedNotification]);
+    if (normalizedNotification.type === 'follow_request') {
+      normalizedNotification.sample_account_ids.forEach(appendFollowRequest);
     }
-  };
+
+    dispatch<NotificationsUpdateAction>({
+      type: NOTIFICATIONS_UPDATE,
+      notification: normalizedNotification,
+    });
+
+    fetchRelatedRelationships(dispatch, [normalizedNotification]);
+  }
+};
 
 interface NotificationsUpdateNoopAction {
   type: typeof NOTIFICATIONS_UPDATE_NOOP;
   meta: { sound: 'boop' };
 }
 
-const updateNotificationsQueue = (notification: BaseNotification, intlMessages: Record<string, string>, intlLocale: string) =>
+const updateNotificationsQueue =
+  (notification: BaseNotification, intlMessages: Record<string, string>, intlLocale: string) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!notification.type) return; // drop invalid notifications
     if (notification.type === 'chat_mention') return; // Drop chat notifications, handle them per-chat
@@ -108,29 +130,44 @@ const updateNotificationsQueue = (notification: BaseNotification, intlMessages: 
 
     if (notification.type === 'mention' || notification.type === 'status') {
       const regex = regexFromFilters(filters);
-      const searchIndex = notification.status.spoiler_text + '\n' + unescapeHTML(notification.status.content);
+      const searchIndex =
+        notification.status.spoiler_text + '\n' + unescapeHTML(notification.status.content);
       filtered = regex && regex.test(searchIndex);
     }
 
     // Desktop notifications
     try {
-      // eslint-disable-next-line compat/compat
       const isNotificationsEnabled = window.Notification?.permission === 'granted';
 
       if (!filtered && isNotificationsEnabled) {
-        const title = new IntlMessageFormat(intlMessages[`notification.${notification.type}`], intlLocale).format({ name: notification.account.display_name.length > 0 ? notification.account.display_name : notification.account.username }) as string;
-        const body = (status && status.spoiler_text.length > 0) ? status.spoiler_text : unescapeHTML(status ? status.content : '');
+        const title = new IntlMessageFormat(
+          intlMessages[`notification.${notification.type}`],
+          intlLocale,
+        ).format({
+          name:
+            notification.account.display_name.length > 0
+              ? notification.account.display_name
+              : notification.account.username,
+        }) as string;
+        const body =
+          status && status.spoiler_text.length > 0
+            ? status.spoiler_text
+            : unescapeHTML(status ? status.content : '');
 
-        navigator.serviceWorker.ready.then(serviceWorkerRegistration => {
-          serviceWorkerRegistration.showNotification(title, {
-            body,
-            icon: notification.account.avatar,
-            tag: notification.id,
-            data: {
-              url: joinPublicPath('/notifications'),
-            },
-          }).catch(console.error);
-        }).catch(console.error);
+        navigator.serviceWorker.ready
+          .then((serviceWorkerRegistration) => {
+            serviceWorkerRegistration
+              .showNotification(title, {
+                body,
+                icon: notification.account.avatar,
+                tag: notification.id,
+                data: {
+                  url: joinPublicPath('/notifications'),
+                },
+              })
+              .catch(console.error);
+          })
+          .catch(console.error);
       }
     } catch (e) {
       console.warn(e);
@@ -146,21 +183,25 @@ const updateNotificationsQueue = (notification: BaseNotification, intlMessages: 
     dispatch(updateNotifications(notification));
   };
 
-const excludeTypesFromFilter = (filters: string[]) => NOTIFICATION_TYPES.filter(item => !filters.includes(item));
+const excludeTypesFromFilter = (filters: string[]) =>
+  NOTIFICATION_TYPES.filter((item) => !filters.includes(item));
 
-const noOp = () => new Promise(f =>{
-  f(undefined);
-});
+const noOp = () =>
+  new Promise((f) => {
+    f(undefined);
+  });
 
 let abortExpandNotifications = new AbortController();
 
-const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => any = noOp, abort?: boolean) =>
+const expandNotifications =
+  ({ maxId }: Record<string, any> = {}, done: () => any = noOp, abort?: boolean) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return dispatch(noOp);
     const state = getState();
 
     const features = state.auth.client.features;
-    const activeFilter = useSettingsStore.getState().settings.notifications.quickFilter.active as FilterType;
+    const activeFilter = useSettingsStore.getState().settings.notifications.quickFilter
+      .active as FilterType;
     const notifications = state.notifications;
 
     if (notifications.isLoading) {
@@ -179,7 +220,7 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
 
     if (activeFilter === 'all') {
       if (features.notificationsIncludeTypes) {
-        params.types = NOTIFICATION_TYPES.filter(type => !EXCLUDE_TYPES.includes(type as any));
+        params.types = NOTIFICATION_TYPES.filter((type) => !EXCLUDE_TYPES.includes(type as any));
       } else {
         params.exclude_types = [...EXCLUDE_TYPES];
       }
@@ -195,12 +236,19 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
     dispatch(expandNotificationsRequest());
 
     try {
-      const { items: { accounts, statuses, notification_groups }, next } = await getClient(state).groupedNotifications.getGroupedNotifications(params, { signal: abortExpandNotifications.signal });
+      const {
+        items: { accounts, statuses, notification_groups },
+        next,
+      } = await getClient(state).groupedNotifications.getGroupedNotifications(params, {
+        signal: abortExpandNotifications.signal,
+      });
 
-      dispatch(importEntities({
-        accounts,
-        statuses,
-      }));
+      dispatch(
+        importEntities({
+          accounts,
+          statuses,
+        }),
+      );
 
       dispatch(expandNotificationsSuccess(notification_groups, next));
       fetchRelatedRelationships(dispatch, notification_groups);
@@ -213,7 +261,10 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
 
 const expandNotificationsRequest = () => ({ type: NOTIFICATIONS_EXPAND_REQUEST });
 
-const expandNotificationsSuccess = (notifications: Array<NotificationGroup>, next: (() => Promise<PaginatedResponse<GroupedNotificationsResults, false>>) | null) => ({
+const expandNotificationsSuccess = (
+  notifications: Array<NotificationGroup>,
+  next: (() => Promise<PaginatedResponse<GroupedNotificationsResults, false>>) | null,
+) => ({
   type: NOTIFICATIONS_EXPAND_SUCCESS,
   notifications,
   next,
@@ -229,50 +280,47 @@ interface NotificationsScrollTopAction {
   top: boolean;
 }
 
-const scrollTopNotifications = (top: boolean) =>
-  (dispatch: AppDispatch) => {
-    dispatch(markReadNotifications());
-    return dispatch<NotificationsScrollTopAction>({
-      type: NOTIFICATIONS_SCROLL_TOP,
-      top,
-    });
-  };
+const scrollTopNotifications = (top: boolean) => (dispatch: AppDispatch) => {
+  dispatch(markReadNotifications());
+  return dispatch<NotificationsScrollTopAction>({
+    type: NOTIFICATIONS_SCROLL_TOP,
+    top,
+  });
+};
 
 interface SetFilterAction {
   type: typeof NOTIFICATIONS_FILTER_SET;
 }
 
-const setFilter = (filterType: FilterType, abort?: boolean) =>
-  (dispatch: AppDispatch) => {
-    const settingsStore = useSettingsStore.getState();
-    const activeFilter = settingsStore.settings.notifications.quickFilter.active as FilterType;
+const setFilter = (filterType: FilterType, abort?: boolean) => (dispatch: AppDispatch) => {
+  const settingsStore = useSettingsStore.getState();
+  const activeFilter = settingsStore.settings.notifications.quickFilter.active as FilterType;
 
-    settingsStore.actions.changeSetting(['notifications', 'quickFilter', 'active'], filterType);
+  settingsStore.actions.changeSetting(['notifications', 'quickFilter', 'active'], filterType);
 
-    dispatch(expandNotifications(undefined, undefined, abort));
-    if (activeFilter !== filterType) dispatch(saveSettings());
+  dispatch(expandNotifications(undefined, undefined, abort));
+  if (activeFilter !== filterType) dispatch(saveSettings());
 
-    return dispatch<SetFilterAction>({ type: NOTIFICATIONS_FILTER_SET });
-  };
+  return dispatch<SetFilterAction>({ type: NOTIFICATIONS_FILTER_SET });
+};
 
-const markReadNotifications = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
+const markReadNotifications = () => (dispatch: AppDispatch, getState: () => RootState) => {
+  if (!isLoggedIn(getState)) return;
 
-    const state = getState();
-    const topNotificationId = state.notifications.items[0]?.page_max_id;
-    const lastReadId = state.notifications.lastRead;
+  const state = getState();
+  const topNotificationId = state.notifications.items[0]?.page_max_id;
+  const lastReadId = state.notifications.lastRead;
 
-    if (topNotificationId && (lastReadId === -1 || compareId(topNotificationId, lastReadId) > 0)) {
-      const marker = {
-        notifications: {
-          last_read_id: topNotificationId,
-        },
-      };
+  if (topNotificationId && (lastReadId === -1 || compareId(topNotificationId, lastReadId) > 0)) {
+    const marker = {
+      notifications: {
+        last_read_id: topNotificationId,
+      },
+    };
 
-      dispatch(saveMarker(marker));
-    }
-  };
+    dispatch(saveMarker(marker));
+  }
+};
 
 type NotificationsAction =
   | NotificationsUpdateAction

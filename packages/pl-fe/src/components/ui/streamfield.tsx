@@ -85,51 +85,57 @@ const Streamfield: React.FC<IStreamfield> = ({
   return (
     <Stack space={4}>
       <Stack>
-        {label && <Text size='sm' weight='medium'>{label}</Text>}
-        {hint && <Text size='xs' theme='muted'>{hint}</Text>}
+        {label && (
+          <Text size='sm' weight='medium'>
+            {label}
+          </Text>
+        )}
+        {hint && (
+          <Text size='xs' theme='muted'>
+            {hint}
+          </Text>
+        )}
       </Stack>
 
-      {(values.length > 0) && (
+      {values.length > 0 && (
         <Stack space={1}>
-          {values.map((value, i) => value?._destroy ? null : (
-            <HStack
-              key={i}
-              space={2}
-              alignItems='center'
-              draggable={draggable}
-              onDragStart={handleDragStart(i)}
-              onDragEnter={handleDragEnter(i)}
-              onDragEnd={handleDragEnd}
-            >
-              <Component
+          {values.map((value, i) =>
+            value?._destroy ? null : (
+              <HStack
                 key={i}
-                index={i}
-                onChange={handleChange(i)}
-                value={value}
-                autoFocus={i > 0}
-              />
-              {values.length > minItems && onRemoveItem && (
-                <IconButton
-                  iconClassName='h-4 w-4'
-                  className='bg-transparent text-gray-600 hover:text-gray-600'
-                  src={require('@phosphor-icons/core/regular/x.svg')}
-                  onClick={() =>{
-                    onRemoveItem(i);
-                  }}
-                  title={intl.formatMessage(messages.remove)}
+                space={2}
+                alignItems='center'
+                draggable={draggable}
+                onDragStart={handleDragStart(i)}
+                onDragEnter={handleDragEnter(i)}
+                onDragEnd={handleDragEnd}
+              >
+                <Component
+                  key={i}
+                  index={i}
+                  onChange={handleChange(i)}
+                  value={value}
+                  autoFocus={i > 0}
                 />
-              )}
-            </HStack>
-          ))}
+                {values.length > minItems && onRemoveItem && (
+                  <IconButton
+                    iconClassName='h-4 w-4'
+                    className='bg-transparent text-gray-600 hover:text-gray-600'
+                    src={require('@phosphor-icons/core/regular/x.svg')}
+                    onClick={() => {
+                      onRemoveItem(i);
+                    }}
+                    title={intl.formatMessage(messages.remove)}
+                  />
+                )}
+              </HStack>
+            ),
+          )}
         </Stack>
       )}
 
-      {(onAddItem && (values.length < maxItems)) && (
-        <Button
-          onClick={onAddItem}
-          theme='secondary'
-          block
-        >
+      {onAddItem && values.length < maxItems && (
+        <Button onClick={onAddItem} theme='secondary' block>
           <FormattedMessage id='streamfield.add' defaultMessage='Add' />
         </Button>
       )}

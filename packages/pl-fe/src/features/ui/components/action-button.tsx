@@ -7,7 +7,10 @@ import Spinner from '@/components/ui/spinner';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
-import { useAcceptFollowRequestMutation, useRejectFollowRequestMutation } from '@/queries/accounts/use-follow-requests';
+import {
+  useAcceptFollowRequestMutation,
+  useRejectFollowRequestMutation,
+} from '@/queries/accounts/use-follow-requests';
 import {
   useRelationshipQuery,
   useUnblockAccountMutation,
@@ -62,8 +65,12 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
   const { openModal } = useModalsActions();
   const { isLoggedIn, me } = useLoggedIn();
 
-  const { mutate: followAccount, isPending: isPendingFollow } = useFollowAccountMutation(account.id);
-  const { mutate: unfollowAccount, isPending: isPendingUnfollow } = useUnfollowAccountMutation(account.id);
+  const { mutate: followAccount, isPending: isPendingFollow } = useFollowAccountMutation(
+    account.id,
+  );
+  const { mutate: unfollowAccount, isPending: isPendingUnfollow } = useUnfollowAccountMutation(
+    account.id,
+  );
   const { mutate: unblockAccount } = useUnblockAccountMutation(account.id);
   const { mutate: muteAccount } = useMuteAccountMutation(account.id);
   const { mutate: unmuteAccount } = useUnmuteAccountMutation(account.id);
@@ -106,11 +113,12 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
   };
 
   const handleBite = () => {
-    client.accounts.biteAccount(account.id)
-      .then(() =>{
+    client.accounts
+      .biteAccount(account.id)
+      .then(() => {
         toast.success(intl.formatMessage(messages.userBit, { acct: account.acct }));
       })
-      .catch(() =>{
+      .catch(() => {
         toast.error(intl.formatMessage(messages.userBiteFail, { acct: account.acct }));
       });
   };
@@ -130,12 +138,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
     const text = intl.formatMessage(messageKey, { name: account.username });
 
     return (
-      <Button
-        theme={isMuted ? 'danger' : 'secondary'}
-        size='sm'
-        text={text}
-        onClick={handleMute}
-      />
+      <Button theme={isMuted ? 'danger' : 'secondary'} size='sm' text={text} onClick={handleMute} />
     );
   };
 
@@ -207,11 +210,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
         <form method='POST' action='/main/ostatus'>
           <input type='hidden' name='nickname' value={account.acct} />
           <input type='hidden' name='profile' value='' />
-          <Button
-            text={intl.formatMessage(messages.remote_follow)}
-            type='submit'
-            size='sm'
-          />
+          <Button text={intl.formatMessage(messages.remote_follow)} type='submit' size='sm' />
         </form>
       );
     }
@@ -266,7 +265,11 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
         <Button
           size='sm'
           theme='tertiary'
-          text={small ? intl.formatMessage(messages.requested_small) : intl.formatMessage(messages.requested)}
+          text={
+            small
+              ? intl.formatMessage(messages.requested_small)
+              : intl.formatMessage(messages.requested)
+          }
           onClick={handleFollow}
         />
       );
@@ -277,14 +280,16 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
           size='sm'
           disabled={blockedBy || isPendingFollow || isPendingUnfollow}
           theme={isFollowing ? 'secondary' : 'primary'}
-          icon={blockedBy ? require('@phosphor-icons/core/regular/prohibit.svg') : (!isFollowing && require('@phosphor-icons/core/regular/plus.svg'))}
+          icon={
+            blockedBy
+              ? require('@phosphor-icons/core/regular/prohibit.svg')
+              : !isFollowing && require('@phosphor-icons/core/regular/plus.svg')
+          }
           onClick={handleFollow}
         >
-          {isFollowing ? (
-            intl.formatMessage(messages.unfollow)
-          ) : (
-            intl.formatMessage(blockedBy ? messages.blocked : messages.follow)
-          )}
+          {isFollowing
+            ? intl.formatMessage(messages.unfollow)
+            : intl.formatMessage(blockedBy ? messages.blocked : messages.follow)}
         </Button>
       );
     } else if (relationship?.blocking) {

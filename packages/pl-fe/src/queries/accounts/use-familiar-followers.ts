@@ -14,13 +14,14 @@ const useFamiliarFollowers = (accountId: string) => {
 
   return useQuery({
     queryKey: ['accountsLists', 'familiarFollowers', accountId],
-    queryFn: () => client.accounts.getFamiliarFollowers([accountId]).then((response) => {
-      const result = response.find(({ id }) => id === accountId);
-      if (!result) return [];
+    queryFn: () =>
+      client.accounts.getFamiliarFollowers([accountId]).then((response) => {
+        const result = response.find(({ id }) => id === accountId);
+        if (!result) return [];
 
-      dispatch(importEntities({ accounts: result.accounts }));
-      return result.accounts.map(({ id }) => id);
-    }),
+        dispatch(importEntities({ accounts: result.accounts }));
+        return result.accounts.map(({ id }) => id);
+      }),
     enabled: isLoggedIn && features.familiarFollowers,
   });
 };

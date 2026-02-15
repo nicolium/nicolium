@@ -11,7 +11,7 @@ const STANDALONE_CHECK_SUCCESS = 'STANDALONE_CHECK_SUCCESS' as const;
 
 /** Figure out the appropriate instance to fetch depending on the state */
 const getHost = (state: RootState) => {
-  const accountUrl = getMeUrl(state) ?? getAuthUserUrl(state) as string;
+  const accountUrl = getMeUrl(state) ?? (getAuthUserUrl(state) as string);
 
   try {
     return new URL(accountUrl).host;
@@ -47,13 +47,23 @@ interface StandaloneCheckSuccessAction {
 
 const checkIfStandalone = () => (dispatch: AppDispatch) =>
   staticFetch('/api/v1/instance', { method: 'GET' })
-    .then(({ ok, headers }) => dispatch<StandaloneCheckSuccessAction>({ type: STANDALONE_CHECK_SUCCESS, ok: ok && !!headers.get('content-type')?.includes('application/json') }))
-    .catch((err) => dispatch<StandaloneCheckSuccessAction>({ type: STANDALONE_CHECK_SUCCESS, ok: err.response?.ok }));
+    .then(({ ok, headers }) =>
+      dispatch<StandaloneCheckSuccessAction>({
+        type: STANDALONE_CHECK_SUCCESS,
+        ok: ok && !!headers.get('content-type')?.includes('application/json'),
+      }),
+    )
+    .catch((err) =>
+      dispatch<StandaloneCheckSuccessAction>({
+        type: STANDALONE_CHECK_SUCCESS,
+        ok: err.response?.ok,
+      }),
+    );
 
 type InstanceAction =
-  InstanceFetchSuccessAction
+  | InstanceFetchSuccessAction
   | InstanceFetchFailAction
-  | StandaloneCheckSuccessAction
+  | StandaloneCheckSuccessAction;
 
 export {
   INSTANCE_FETCH_SUCCESS,

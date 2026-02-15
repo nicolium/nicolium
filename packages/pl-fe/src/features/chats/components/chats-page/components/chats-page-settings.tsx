@@ -19,14 +19,20 @@ import { useSettings } from '@/stores/settings';
 
 type FormData = {
   accepts_chat_messages?: boolean;
-}
+};
 
 const messages = defineMessages({
   title: { id: 'chat.page_settings.title', defaultMessage: 'Message settings' },
   preferences: { id: 'chat.page_settings.preferences', defaultMessage: 'Preferences' },
   privacy: { id: 'chat.page_settings.privacy', defaultMessage: 'Privacy' },
-  acceptingMessageLabel: { id: 'chat.page_settings.accepting_messages.label', defaultMessage: 'Allow users to start a new chat with you' },
-  playSoundsLabel: { id: 'chat.page_settings.play_sounds.label', defaultMessage: 'Play a sound when you receive a message' },
+  acceptingMessageLabel: {
+    id: 'chat.page_settings.accepting_messages.label',
+    defaultMessage: 'Allow users to start a new chat with you',
+  },
+  playSoundsLabel: {
+    id: 'chat.page_settings.play_sounds.label',
+    defaultMessage: 'Play a sound when you receive a message',
+  },
   submit: { id: 'chat.page_settings.submit', defaultMessage: 'Save' },
 });
 
@@ -68,10 +74,12 @@ const ChatsPageSettings = () => {
         <CardTitle title={intl.formatMessage(messages.preferences)} />
 
         <List>
-          <ListItem
-            label={intl.formatMessage(messages.playSoundsLabel)}
-          >
-            <SettingToggle settings={settings} settingPath={['chats', 'sound']} onChange={onToggleChange} />
+          <ListItem label={intl.formatMessage(messages.playSoundsLabel)}>
+            <SettingToggle
+              settings={settings}
+              settingPath={['chats', 'sound']}
+              onChange={onToggleChange}
+            />
           </ListItem>
         </List>
 
@@ -79,13 +87,14 @@ const ChatsPageSettings = () => {
 
         <CardBody>
           <List>
-            <ListItem
-              label={intl.formatMessage(messages.acceptingMessageLabel)}
-            >
+            <ListItem label={intl.formatMessage(messages.acceptingMessageLabel)}>
               <Toggle
                 checked={data.accepts_chat_messages}
-                onChange={(event) =>{
-                  setData((prevData) => ({ ...prevData, accepts_chat_messages: event.target.checked }));
+                onChange={(event) => {
+                  setData((prevData) => ({
+                    ...prevData,
+                    accepts_chat_messages: event.target.checked,
+                  }));
                 }}
               />
             </ListItem>

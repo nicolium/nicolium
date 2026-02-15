@@ -27,12 +27,9 @@ interface LayoutComponent extends React.FC<ILayout> {
 const Layout: LayoutComponent = ({ children, fullWidth }) => (
   <div className='⁂-layout'>
     <div
-      className={clsx(
-        '⁂-layout__content',
-        {
-          '⁂-layout__content--full-width': fullWidth,
-        },
-      )}
+      className={clsx('⁂-layout__content', {
+        '⁂-layout__content--full-width': fullWidth,
+      })}
     >
       {children}
     </div>
@@ -54,10 +51,13 @@ const Main: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, classN
 
   return (
     <main
-      className={clsx({
-        '⁂-layout__main': true,
-        '⁂-layout__main--chats': features.chats,
-      }, className)}
+      className={clsx(
+        {
+          '⁂-layout__main': true,
+          '⁂-layout__main--chats': features.chats,
+        },
+        className,
+      )}
     >
       {children}
     </main>
@@ -68,9 +68,7 @@ const Main: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, classN
 const Aside: React.FC<IAside> = ({ children }) => (
   <aside className='⁂-layout__aside'>
     <StickyBox offsetTop={16} className='⁂-layout__aside__content'>
-      <Suspense>
-        {children}
-      </Suspense>
+      <Suspense>{children}</Suspense>
     </StickyBox>
   </aside>
 );

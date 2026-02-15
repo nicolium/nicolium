@@ -13,7 +13,10 @@ const NewEventPanel = () => (
       </Text>
 
       <Text theme='muted' size='sm'>
-        <FormattedMessage id='new_event_panel.subtitle' defaultMessage="Can't find what you're looking for? Schedule your own event." />
+        <FormattedMessage
+          id='new_event_panel.subtitle'
+          defaultMessage="Can't find what you're looking for? Schedule your own event."
+        />
       </Text>
     </Stack>
 

@@ -16,7 +16,10 @@ const messages = defineMessages({
   votes: { id: 'poll.votes', defaultMessage: '{votes, plural, one {# vote} other {# votes}}' },
 });
 
-const PollPercentageBar: React.FC<{ percent: number; leading: boolean }> = ({ percent, leading }): JSX.Element => {
+const PollPercentageBar: React.FC<{ percent: number; leading: boolean }> = ({
+  percent,
+  leading,
+}): JSX.Element => {
   const styles = useSpring({
     from: { width: '0%' },
     to: { width: `${percent}%` },
@@ -35,12 +38,19 @@ interface IPollOptionText extends IPollOption {
   percent: number;
 }
 
-const PollOptionText: React.FC<IPollOptionText> = ({ poll, option, index, active, onToggle, truncate }) => {
-  const handleOptionChange: React.EventHandler<React.ChangeEvent> = () =>{
+const PollOptionText: React.FC<IPollOptionText> = ({
+  poll,
+  option,
+  index,
+  active,
+  onToggle,
+  truncate,
+}) => {
+  const handleOptionChange: React.EventHandler<React.ChangeEvent> = () => {
     onToggle(index);
   };
 
-  const handleOptionKeyPress: React.EventHandler<React.KeyboardEvent> = e => {
+  const handleOptionKeyPress: React.EventHandler<React.KeyboardEvent> = (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       onToggle(index);
       e.stopPropagation();
@@ -50,12 +60,14 @@ const PollOptionText: React.FC<IPollOptionText> = ({ poll, option, index, active
 
   return (
     <label
-      className={
-        clsx('relative flex cursor-pointer rounded-3xl border border-solid bg-white p-2 hover:bg-primary-50 dark:bg-primary-900 dark:hover:bg-primary-800/50', {
-          'border-primary-600 ring-1 ring-primary-600 bg-primary-50 dark:bg-primary-800/50 dark:border-primary-300 dark:ring-primary-300': active,
+      className={clsx(
+        'relative flex cursor-pointer rounded-3xl border border-solid bg-white p-2 hover:bg-primary-50 dark:bg-primary-900 dark:hover:bg-primary-800/50',
+        {
+          'border-primary-600 bg-primary-50 ring-1 ring-primary-600 dark:border-primary-300 dark:bg-primary-800/50 dark:ring-primary-300':
+            active,
           'border-primary-300 dark:border-primary-500': !active,
-        })
-      }
+        },
+      )}
     >
       <input
         className='hidden'
@@ -82,10 +94,14 @@ const PollOptionText: React.FC<IPollOptionText> = ({ poll, option, index, active
 
         <div className='col-start-1 row-start-1 flex items-center justify-self-end'>
           <span
-            className={clsx('flex size-6 flex-none items-center justify-center rounded-full border border-solid', {
-              'bg-primary-600 border-primary-600 dark:bg-primary-300 dark:border-primary-300': active,
-              'border-primary-300 bg-white dark:bg-primary-900 dark:border-primary-500': !active,
-            })}
+            className={clsx(
+              'flex size-6 flex-none items-center justify-center rounded-full border border-solid',
+              {
+                'border-primary-600 bg-primary-600 dark:border-primary-300 dark:bg-primary-300':
+                  active,
+                'border-primary-300 bg-white dark:border-primary-500 dark:bg-primary-900': !active,
+              },
+            )}
             tabIndex={0}
             role={poll.multiple ? 'checkbox' : 'radio'}
             onKeyPress={handleOptionKeyPress}
@@ -93,7 +109,10 @@ const PollOptionText: React.FC<IPollOptionText> = ({ poll, option, index, active
             aria-label={option.title}
           >
             {active && (
-              <Icon src={require('@phosphor-icons/core/regular/check.svg')} className='size-4 text-white dark:text-primary-900' />
+              <Icon
+                src={require('@phosphor-icons/core/regular/check.svg')}
+                className='size-4 text-white dark:text-primary-900'
+              />
             )}
           </span>
         </div>
@@ -126,8 +145,8 @@ const PollOption: React.FC<IPollOption> = (props): JSX.Element | null => {
   const message = intl.formatMessage(messages.votes, { votes: option.votes_count });
 
   const leading = poll.options
-    .filter(other => other.title !== option.title)
-    .every(other => option.votes_count >= other.votes_count);
+    .filter((other) => other.title !== option.title)
+    .every((other) => option.votes_count >= other.votes_count);
 
   return (
     <div key={option.title}>
@@ -146,7 +165,12 @@ const PollOption: React.FC<IPollOption> = (props): JSX.Element | null => {
                 weight='medium'
                 className={clsx('relative break-words', { truncate })}
               >
-                <ParsedContent html={(language && option.title_map) && option.title_map[language] ?? option.title} emojis={poll.emojis} />
+                <ParsedContent
+                  html={
+                    (language && option.title_map && option.title_map[language]) ?? option.title
+                  }
+                  emojis={poll.emojis}
+                />
               </Text>
             </div>
 
@@ -162,7 +186,9 @@ const PollOption: React.FC<IPollOption> = (props): JSX.Element | null => {
               )}
 
               <div className='text-primary-600 dark:text-white'>
-                <Text weight='medium' theme='inherit'>{Math.round(percent)}%</Text>
+                <Text weight='medium' theme='inherit'>
+                  {Math.round(percent)}%
+                </Text>
               </div>
             </HStack>
           </HStack>

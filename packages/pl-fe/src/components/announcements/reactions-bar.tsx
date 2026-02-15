@@ -24,7 +24,7 @@ const ReactionsBar: React.FC<IReactionsBar> = ({ announcementId, reactions, emoj
     addReaction({ announcementId, name: (data as NativeEmoji).native.replace(/:/g, '') });
   };
 
-  const visibleReactions = reactions.filter(x => x.count > 0);
+  const visibleReactions = reactions.filter((x) => x.count > 0);
 
   const transitions = useTransition(visibleReactions, {
     from: {
@@ -37,7 +37,7 @@ const ReactionsBar: React.FC<IReactionsBar> = ({ announcementId, reactions, emoj
       scale: 0,
     },
     immediate: reduceMotion,
-    keys: visibleReactions.map(x => x.name),
+    keys: visibleReactions.map((x) => x.name),
   });
 
   return (

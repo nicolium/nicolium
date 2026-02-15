@@ -38,19 +38,29 @@ const AntennasPage: React.FC = () => {
   const items = [
     {
       text: intl.formatMessage(messages.createAntenna),
-      action: () =>{
+      action: () => {
         openModal('ANTENNA_EDITOR', {});
       },
       icon: require('@phosphor-icons/core/regular/plus.svg'),
     },
   ];
 
-  const emptyMessage = <FormattedMessage id='empty_column.antennas' defaultMessage="You don't have any antennas yet. When you create one, it will show up here." />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.antennas'
+      defaultMessage="You don't have any antennas yet. When you create one, it will show up here."
+    />
+  );
 
   return (
     <Column
       label={intl.formatMessage(messages.heading)}
-      action={<DropdownMenu items={items} src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')} />}
+      action={
+        <DropdownMenu
+          items={items}
+          src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')}
+        />
+      }
     >
       <Stack space={4}>
         {/* <NewListForm /> */}
@@ -68,7 +78,10 @@ const AntennasPage: React.FC = () => {
                 params={{ antennaId: antenna.id }}
                 label={
                   <HStack alignItems='center' space={2}>
-                    <Icon src={require('@phosphor-icons/core/regular/list-bullets.svg')} size={20} />
+                    <Icon
+                      src={require('@phosphor-icons/core/regular/list-bullets.svg')}
+                      size={20}
+                    />
                     <span>{antenna.title}</span>
                   </HStack>
                 }

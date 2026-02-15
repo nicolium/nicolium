@@ -24,7 +24,12 @@ const FamiliarFollowerLink: React.FC<IFamiliarFollowerLink> = ({ id }) => {
   if (!account) return null;
 
   return (
-    <Link className='mention inline-block' to='/@{$username}' params={{ username: account.acct }} key={account.id}>
+    <Link
+      className='mention inline-block'
+      to='/@{$username}'
+      params={{ username: account.acct }}
+      key={account.id}
+    >
       <HoverAccountWrapper accountId={account.id} element='span'>
         <HStack space={1} alignItems='center' grow>
           <Text size='sm' theme='primary' truncate>
@@ -57,13 +62,18 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
     return null;
   }
 
-  const accounts: Array<React.ReactNode> = displayedFamiliarFollowerIds.map(accountId => (
+  const accounts: Array<React.ReactNode> = displayedFamiliarFollowerIds.map((accountId) => (
     <FamiliarFollowerLink id={accountId} key={accountId} />
   ));
 
   if (familiarFollowerIds.length > 2) {
     accounts.push(
-      <span key='_' className='cursor-pointer hover:underline' role='presentation' onClick={openFamiliarFollowersModal}>
+      <span
+        key='_'
+        className='cursor-pointer hover:underline'
+        role='presentation'
+        onClick={openFamiliarFollowersModal}
+      >
         <FormattedMessage
           id='account.familiar_followers.more'
           defaultMessage='{count, plural, one {# other} other {# others}} you follow'

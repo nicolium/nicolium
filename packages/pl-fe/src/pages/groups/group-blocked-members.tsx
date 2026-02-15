@@ -17,7 +17,10 @@ import toast from '@/toast';
 const messages = defineMessages({
   heading: { id: 'column.group_blocked_members', defaultMessage: 'Banned members' },
   unblock: { id: 'group.group_mod_unblock', defaultMessage: 'Unban' },
-  unblocked: { id: 'group.group_mod_unblock.success', defaultMessage: 'Unbanned @{name} from group' },
+  unblocked: {
+    id: 'group.group_mod_unblock.success',
+    defaultMessage: 'Unbanned @{name} from group',
+  },
 });
 
 interface IBlockedMember {
@@ -33,9 +36,9 @@ const BlockedMember: React.FC<IBlockedMember> = ({ accountId, groupId }) => {
 
   if (!account) return null;
 
-  const handleUnblock = () =>{
+  const handleUnblock = () => {
     unblockGroupUser(undefined, {
-      onSuccess: () =>{
+      onSuccess: () => {
         toast.success(intl.formatMessage(messages.unblocked, { name: account.acct }));
       },
     });
@@ -72,21 +75,30 @@ const GroupBlockedMembers: React.FC = () => {
     );
   }
 
-  if (!group.relationship.role || !['owner', 'admin', 'moderator'].includes(group.relationship.role)) {
-    return (<ColumnForbidden />);
+  if (
+    !group.relationship.role ||
+    !['owner', 'admin', 'moderator'].includes(group.relationship.role)
+  ) {
+    return <ColumnForbidden />;
   }
 
-  const emptyMessage = <FormattedMessage id='empty_column.group_blocks' defaultMessage="The group hasn't banned any users yet." />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.group_blocks'
+      defaultMessage="The group hasn't banned any users yet."
+    />
+  );
 
   return (
-    <Column label={intl.formatMessage(messages.heading)} backHref='/groups/$groupId/manage' backParams={{ groupId: group.id }}>
-      <ScrollableList
-        scrollKey={`groupBlockedMembers:${groupId}`}
-        emptyMessageText={emptyMessage}
-      >
-        {accountIds.map((accountId) =>
-          <BlockedMember key={accountId} accountId={accountId} groupId={groupId} />,
-        )}
+    <Column
+      label={intl.formatMessage(messages.heading)}
+      backHref='/groups/$groupId/manage'
+      backParams={{ groupId: group.id }}
+    >
+      <ScrollableList scrollKey={`groupBlockedMembers:${groupId}`} emptyMessageText={emptyMessage}>
+        {accountIds.map((accountId) => (
+          <BlockedMember key={accountId} accountId={accountId} groupId={groupId} />
+        ))}
       </ScrollableList>
     </Column>
   );

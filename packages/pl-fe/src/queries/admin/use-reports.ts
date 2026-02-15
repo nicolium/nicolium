@@ -38,7 +38,8 @@ const usePendingReportsCount = () => {
 
   return useInfiniteQuery({
     ...pendingReportsQuery,
-    select: (data) => (data.pages.at(-1)?.total ?? data.pages.map(page => page.items).flat().length) || 0,
+    select: (data) =>
+      (data.pages.at(-1)?.total ?? data.pages.map((page) => page.items).flat().length) || 0,
     enabled: !!instance.fetched && !!(account?.is_admin ?? account?.is_moderator),
   });
 };
@@ -49,7 +50,8 @@ const useUpdateReport = (reportId: string) => {
 
   return useMutation({
     mutationKey: ['admin', 'reports', reportId],
-    mutationFn: (params: AdminUpdateReportParams) => client.admin.reports.updateReport(reportId, params),
+    mutationFn: (params: AdminUpdateReportParams) =>
+      client.admin.reports.updateReport(reportId, params),
     onSuccess: (report) => {
       queryClient.setQueryData(['admin', 'reports', reportId], minifyAdminReport(report));
     },
@@ -88,19 +90,31 @@ const useResolveReport = (reportId: string) => {
 
   return useMutation({
     mutationKey: ['admin', 'reports', reportId],
-    mutationFn: (actionTakenComment?: string) => client.admin.reports.resolveReport(reportId, actionTakenComment),
+    mutationFn: (actionTakenComment?: string) =>
+      client.admin.reports.resolveReport(reportId, actionTakenComment),
     onSuccess: (report) => {
       queryClient.setQueryData(['admin', 'reports', reportId], minifyAdminReport(report));
-      queryClient.setQueriesData({
-        queryKey: ['admin', 'reportLists', {
-          resolved: undefined,
-        }],
-        exact: false,
-      }, filterById(reportId));
+      queryClient.setQueriesData(
+        {
+          queryKey: [
+            'admin',
+            'reportLists',
+            {
+              resolved: undefined,
+            },
+          ],
+          exact: false,
+        },
+        filterById(reportId),
+      );
       queryClient.invalidateQueries({
-        queryKey: ['admin', 'reportLists', {
-          resolved: true,
-        }],
+        queryKey: [
+          'admin',
+          'reportLists',
+          {
+            resolved: true,
+          },
+        ],
         exact: false,
       });
     },
@@ -116,20 +130,40 @@ const useReopenReport = (reportId: string) => {
     mutationFn: () => client.admin.reports.reopenReport(reportId),
     onSuccess: (report) => {
       queryClient.setQueryData(['admin', 'reports', reportId], minifyAdminReport(report));
-      queryClient.setQueriesData({
-        queryKey: ['admin', 'reportLists', {
-          resolved: true,
-        }],
-        exact: false,
-      }, filterById(reportId));
+      queryClient.setQueriesData(
+        {
+          queryKey: [
+            'admin',
+            'reportLists',
+            {
+              resolved: true,
+            },
+          ],
+          exact: false,
+        },
+        filterById(reportId),
+      );
       queryClient.invalidateQueries({
-        queryKey: ['admin', 'reportLists', {
-          resolved: undefined,
-        }],
+        queryKey: [
+          'admin',
+          'reportLists',
+          {
+            resolved: undefined,
+          },
+        ],
         exact: false,
       });
     },
   });
 };
 
-export { useReports, useReport, usePendingReportsCount, useUpdateReport, useSelfAssignReport, useUnassignReport, useResolveReport, useReopenReport };
+export {
+  useReports,
+  useReport,
+  usePendingReportsCount,
+  useUpdateReport,
+  useSelfAssignReport,
+  useUnassignReport,
+  useResolveReport,
+  useReopenReport,
+};

@@ -19,9 +19,10 @@ import { getInstanceScopes } from '@/utils/scopes';
 import type { AppDispatch } from '@/store';
 
 const fetchExternalInstance = (baseURL: string) =>
-  (new PlApiClient(baseURL)).instance.getInstance()
-    .then(instance => instance)
-    .catch(error => {
+  new PlApiClient(baseURL).instance
+    .getInstance()
+    .then((instance) => instance)
+    .catch((error) => {
       if (error.response?.status === 401) {
         // Authenticated fetch is enabled.
         // Continue with a limited featureset.
@@ -71,30 +72,26 @@ const externalLogin = (host: string) => {
   });
 };
 
-const loginWithCode = (code: string) =>
-  (dispatch: AppDispatch) => {
-    const app = JSON.parse(localStorage.getItem('plfe:external:app')!);
-    const { client_id, client_secret, redirect_uri } = app;
-    const baseURL = localStorage.getItem('plfe:external:baseurl')!;
-    const scope = localStorage.getItem('plfe:external:scopes')!;
+const loginWithCode = (code: string) => (dispatch: AppDispatch) => {
+  const app = JSON.parse(localStorage.getItem('plfe:external:app')!);
+  const { client_id, client_secret, redirect_uri } = app;
+  const baseURL = localStorage.getItem('plfe:external:baseurl')!;
+  const scope = localStorage.getItem('plfe:external:scopes')!;
 
-    const params = {
-      client_id,
-      client_secret,
-      redirect_uri,
-      grant_type: 'authorization_code',
-      scope,
-      code,
-    };
-
-    return obtainOAuthToken(params, baseURL)
-      .then((token) => dispatch(authLoggedIn(token, app)))
-      .then(({ access_token }) => dispatch(verifyCredentials(access_token, baseURL)))
-      .then((account) => dispatch(switchAccount(account.id)))
-      .then(() => window.location.href = '/');
+  const params = {
+    client_id,
+    client_secret,
+    redirect_uri,
+    grant_type: 'authorization_code',
+    scope,
+    code,
   };
 
-export {
-  externalLogin,
-  loginWithCode,
+  return obtainOAuthToken(params, baseURL)
+    .then((token) => dispatch(authLoggedIn(token, app)))
+    .then(({ access_token }) => dispatch(verifyCredentials(access_token, baseURL)))
+    .then((account) => dispatch(switchAccount(account.id)))
+    .then(() => (window.location.href = '/'));
 };
+
+export { externalLogin, loginWithCode };

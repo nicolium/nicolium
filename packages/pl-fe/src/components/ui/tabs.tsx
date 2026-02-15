@@ -47,13 +47,10 @@ const AnimatedTabs: React.FC<IAnimatedInterface> = ({ children, ...rest }) => {
         // @ts-ignore
         ref={ref}
       >
-        <div
-          className='absolute h-[3px] w-full bg-primary-200 dark:bg-gray-800'
-          style={{ top }}
-        />
+        <div className='absolute h-[3px] w-full bg-primary-200 dark:bg-gray-800' style={{ top }} />
         <div
           className={clsx('absolute h-[3px] bg-primary-500 transition-all duration-200', {
-            'hidden': top <= 0,
+            hidden: top <= 0,
           })}
           style={{ left, top, width }}
         />
@@ -169,14 +166,9 @@ const Tabs = ({ items, activeItem }: ITabs) => {
 
   return (
     <AnimatedTabs onChange={onChange} defaultIndex={defaultIndex}>
-      <ReachTabList>
-        {items.map((item, i) => renderItem(item, i))}
-      </ReachTabList>
+      <ReachTabList>{items.map((item, i) => renderItem(item, i))}</ReachTabList>
     </AnimatedTabs>
   );
 };
 
-export {
-  type Item,
-  Tabs as default,
-};
+export { type Item, Tabs as default };

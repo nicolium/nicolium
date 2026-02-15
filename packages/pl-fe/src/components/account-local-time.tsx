@@ -12,13 +12,17 @@ const supportedTimeZones = Intl.supportedValuesOf('timeZone');
 const UTC_REGEX = /(GMT|UTC)([+-])([0-9]{1,2})/i;
 
 const getSupportedTimezone = (value: string): string | false => {
-  let foundTimezone = supportedTimeZones.find((tz) => value.toLowerCase().startsWith(tz.toLowerCase()));
+  let foundTimezone = supportedTimeZones.find((tz) =>
+    value.toLowerCase().startsWith(tz.toLowerCase()),
+  );
   if (!foundTimezone) {
     const match = value.match(UTC_REGEX);
     if (match) {
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const [_, __, sign, hours] = match;
-      foundTimezone = supportedTimeZones.find((tz) => tz.toLowerCase() === `etc/gmt${sign === '+' ? '-' : '+'}${+hours}`);
+      foundTimezone = supportedTimeZones.find(
+        (tz) => tz.toLowerCase() === `etc/gmt${sign === '+' ? '-' : '+'}${+hours}`,
+      );
     }
   }
   return foundTimezone ?? false;
@@ -76,7 +80,12 @@ const AccountLocalTime: React.FC<IAccountLocalTime> = ({ accountId, field }) => 
   if (!localTime) return null;
 
   return (
-    <HStack className='mt-1' alignItems='center' space={0.5} title={intl.formatMessage(messages.timezone, { timezone: field.value })}>
+    <HStack
+      className='mt-1'
+      alignItems='center'
+      space={0.5}
+      title={intl.formatMessage(messages.timezone, { timezone: field.value })}
+    >
       <Icon
         src={require('@phosphor-icons/core/regular/clock.svg')}
         className='size-4 text-gray-800 dark:text-gray-200'
@@ -84,7 +93,10 @@ const AccountLocalTime: React.FC<IAccountLocalTime> = ({ accountId, field }) => 
       <Text size='sm'>
         {localTime}
         {me !== accountId && isTimezoneEqual && (
-          <span className='text-green-500'> <FormattedMessage id='account.timezone.equal' defaultMessage='(same as you)' /></span>
+          <span className='text-green-500'>
+            {' '}
+            <FormattedMessage id='account.timezone.equal' defaultMessage='(same as you)' />
+          </span>
         )}
       </Text>
     </HStack>

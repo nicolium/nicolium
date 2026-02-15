@@ -9,42 +9,49 @@ import { filteredArray } from '@/schemas/utils';
 import KVStore from '@/storage/kv-store';
 import { APIEntity } from '@/types/entities';
 
-const draftStatusSchema = v.pipe(v.any(), v.transform((draft) => ({
-  content_type: draft.contentType,
-  draft_id: draft.draftId,
-  group_id: draft.groupId,
-  in_reply_to: draft.inReplyTo,
-  media_attachments: draft.mediaAttachments,
-  spoiler_text: draft.spoilerText,
-  ...draft,
-})), v.object({
-  content_type: v.fallback(v.string(), 'text/plain'),
-  draft_id: v.string(),
-  editorState: v.fallback(v.nullable(v.string()), null),
-  group_id: v.fallback(v.nullable(v.string()), null),
-  in_reply_to: v.fallback(v.nullable(v.string()), null),
-  media_attachments: filteredArray(mediaAttachmentSchema),
-  poll: v.fallback(v.nullable(v.record(v.string(), v.any())), null),
-  privacy: v.fallback(v.string(), 'public'),
-  quote: v.fallback(v.nullable(v.string()), null),
-  schedule: v.fallback(v.nullable(v.string()), null),
-  sensitive: v.fallback(v.boolean(), false),
-  spoiler_text: v.fallback(v.string(), ''),
-  text: v.fallback(v.string(), ''),
-}));
+const draftStatusSchema = v.pipe(
+  v.any(),
+  v.transform((draft) => ({
+    content_type: draft.contentType,
+    draft_id: draft.draftId,
+    group_id: draft.groupId,
+    in_reply_to: draft.inReplyTo,
+    media_attachments: draft.mediaAttachments,
+    spoiler_text: draft.spoilerText,
+    ...draft,
+  })),
+  v.object({
+    content_type: v.fallback(v.string(), 'text/plain'),
+    draft_id: v.string(),
+    editorState: v.fallback(v.nullable(v.string()), null),
+    group_id: v.fallback(v.nullable(v.string()), null),
+    in_reply_to: v.fallback(v.nullable(v.string()), null),
+    media_attachments: filteredArray(mediaAttachmentSchema),
+    poll: v.fallback(v.nullable(v.record(v.string(), v.any())), null),
+    privacy: v.fallback(v.string(), 'public'),
+    quote: v.fallback(v.nullable(v.string()), null),
+    schedule: v.fallback(v.nullable(v.string()), null),
+    sensitive: v.fallback(v.boolean(), false),
+    spoiler_text: v.fallback(v.string(), ''),
+    text: v.fallback(v.string(), ''),
+  }),
+);
 
 type DraftStatus = v.InferOutput<typeof draftStatusSchema>;
 
 const getDrafts = async (accountUrl: string) => {
-  const drafts = await KVStore.getItem<Array<APIEntity>>(`drafts:${accountUrl}`) ?? [];
+  const drafts = (await KVStore.getItem<Array<APIEntity>>(`drafts:${accountUrl}`)) ?? [];
 
-  return Object.fromEntries(Object.values(drafts)
-    .map((draft) => v.safeParse(draftStatusSchema, draft).output as DraftStatus)
-    .filter((draft) => draft)
-    .map((draft) => [draft.draft_id, draft]));
+  return Object.fromEntries(
+    Object.values(drafts)
+      .map((draft) => v.safeParse(draftStatusSchema, draft).output as DraftStatus)
+      .filter((draft) => draft)
+      .map((draft) => [draft.draft_id, draft]),
+  );
 };
 
-const persistDrafts = (accountUrl: string, drafts: Record<string, APIEntity>) => KVStore.setItem(`drafts:${accountUrl}`, Object.values(drafts));
+const persistDrafts = (accountUrl: string, drafts: Record<string, APIEntity>) =>
+  KVStore.setItem(`drafts:${accountUrl}`, Object.values(drafts));
 
 const useDraftStatusesQuery = <T>(select?: (data: Record<string, DraftStatus>) => T) => {
   const { account } = useOwnAccount();
@@ -57,9 +64,11 @@ const useDraftStatusesQuery = <T>(select?: (data: Record<string, DraftStatus>) =
   });
 };
 
-const useDraftStatusQuery = (draftStatusId: string) => useDraftStatusesQuery(data => data[draftStatusId]);
+const useDraftStatusQuery = (draftStatusId: string) =>
+  useDraftStatusesQuery((data) => data[draftStatusId]);
 
-const useDraftStatusesCountQuery = () => useDraftStatusesQuery(data => Object.values(data).length);
+const useDraftStatusesCountQuery = () =>
+  useDraftStatusesQuery((data) => Object.values(data).length);
 
 const usePersistDraftStatus = () => {
   const { account } = useOwnAccount();
@@ -80,7 +89,9 @@ const usePersistDraftStatus = () => {
       const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
         oldDrafts[draft.draft_id] = v.parse(draftStatusSchema, draft);
       });
-      return persistDrafts(account!.url, newDrafts).then(() => queryClient.invalidateQueries({ queryKey: ['draftStatuses'] }));
+      return persistDrafts(account!.url, newDrafts).then(() =>
+        queryClient.invalidateQueries({ queryKey: ['draftStatuses'] }),
+      );
     });
   };
 };
@@ -91,7 +102,9 @@ const cancelDraftStatus = (queryClient: QueryClient, accountUrl: string, draftId
   const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
     delete oldDrafts[draftId];
   });
-  return persistDrafts(accountUrl, newDrafts).then((drafts) => queryClient.invalidateQueries({ queryKey: ['draftStatuses'] }));
+  return persistDrafts(accountUrl, newDrafts).then((drafts) =>
+    queryClient.invalidateQueries({ queryKey: ['draftStatuses'] }),
+  );
 };
 
 const useCancelDraftStatus = () => {
@@ -101,4 +114,13 @@ const useCancelDraftStatus = () => {
   return (draftId: string) => cancelDraftStatus(queryClient, account!.url, draftId);
 };
 
-export { draftStatusSchema, useDraftStatusesQuery, useDraftStatusQuery, useDraftStatusesCountQuery, usePersistDraftStatus, cancelDraftStatus, useCancelDraftStatus, type DraftStatus };
+export {
+  draftStatusSchema,
+  useDraftStatusesQuery,
+  useDraftStatusQuery,
+  useDraftStatusesCountQuery,
+  usePersistDraftStatus,
+  cancelDraftStatus,
+  useCancelDraftStatus,
+  type DraftStatus,
+};

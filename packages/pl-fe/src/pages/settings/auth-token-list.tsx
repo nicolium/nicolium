@@ -12,7 +12,10 @@ import Spinner from '@/components/ui/spinner';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useAppSelector } from '@/hooks/use-app-selector';
-import { oauthTokensQueryOptions, revokeOauthTokenMutationOptions } from '@/queries/security/oauth-tokens';
+import {
+  oauthTokensQueryOptions,
+  revokeOauthTokenMutationOptions,
+} from '@/queries/security/oauth-tokens';
 import { useModalsActions } from '@/stores/modals';
 
 import type { OauthToken } from 'pl-api';
@@ -20,8 +23,14 @@ import type { OauthToken } from 'pl-api';
 const messages = defineMessages({
   header: { id: 'column.tokens', defaultMessage: 'Active sessions' },
   revoke: { id: 'security.tokens.revoke', defaultMessage: 'Revoke' },
-  revokeSessionHeading: { id: 'confirmations.revoke_session.heading', defaultMessage: 'Revoke current session' },
-  revokeSessionMessage: { id: 'confirmations.revoke_session.message', defaultMessage: 'You are about to revoke your current session. You will be signed out.' },
+  revokeSessionHeading: {
+    id: 'confirmations.revoke_session.heading',
+    defaultMessage: 'Revoke current session',
+  },
+  revokeSessionMessage: {
+    id: 'confirmations.revoke_session.message',
+    defaultMessage: 'You are about to revoke your current session. You will be signed out.',
+  },
   revokeSessionConfirm: { id: 'confirmations.revoke_session.confirm', defaultMessage: 'Revoke' },
 });
 
@@ -72,10 +81,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
           {token.scopes?.length > 0 && (
             <HStack space={2} alignItems='center' wrap>
               <Text size='sm' theme='muted'>
-                <FormattedMessage
-                  id='security.tokens.scopes'
-                  defaultMessage='Scopes:'
-                />
+                <FormattedMessage id='security.tokens.scopes' defaultMessage='Scopes:' />
               </Text>
               {token.scopes.map((scope, index) => (
                 <Badge title={scope} slug='opaque' key={scope} />
@@ -87,15 +93,19 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
               <FormattedMessage
                 id='security.tokens.created_at'
                 defaultMessage='Created on {date}'
-                values={{ date: <FormattedDate
-                  value={token.created_at}
-                  hour12
-                  year='numeric'
-                  month='short'
-                  day='2-digit'
-                  hour='numeric'
-                  minute='2-digit'
-                /> }}
+                values={{
+                  date: (
+                    <FormattedDate
+                      value={token.created_at}
+                      hour12
+                      year='numeric'
+                      month='short'
+                      day='2-digit'
+                      hour='numeric'
+                      minute='2-digit'
+                    />
+                  ),
+                }}
               />
             </Text>
           )}
@@ -104,15 +114,19 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
               <FormattedMessage
                 id='security.tokens.last_used'
                 defaultMessage='Last used on {date}'
-                values={{ date: <FormattedDate
-                  value={token.last_used}
-                  hour12
-                  year='numeric'
-                  month='short'
-                  day='2-digit'
-                  hour='numeric'
-                  minute='2-digit'
-                /> }}
+                values={{
+                  date: (
+                    <FormattedDate
+                      value={token.last_used}
+                      hour12
+                      year='numeric'
+                      month='short'
+                      day='2-digit'
+                      hour='numeric'
+                      minute='2-digit'
+                    />
+                  ),
+                }}
               />
             </Text>
           )}
@@ -121,15 +135,19 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
               <FormattedMessage
                 id='security.tokens.valid_until'
                 defaultMessage='Expires on {date}'
-                values={{ date: <FormattedDate
-                  value={token.valid_until}
-                  hour12
-                  year='numeric'
-                  month='short'
-                  day='2-digit'
-                  hour='numeric'
-                  minute='2-digit'
-                /> }}
+                values={{
+                  date: (
+                    <FormattedDate
+                      value={token.valid_until}
+                      hour12
+                      year='numeric'
+                      month='short'
+                      day='2-digit'
+                      hour='numeric'
+                      minute='2-digit'
+                    />
+                  ),
+                }}
               />
             </Text>
           )}
@@ -149,8 +167,10 @@ const AuthTokenListPage: React.FC = () => {
 
   const { data: tokens } = useInfiniteQuery(oauthTokensQueryOptions);
 
-  const currentTokenId = useAppSelector(state => {
-    const currentToken = Object.values(state.auth.tokens).find((token) => token.me === state.auth.me);
+  const currentTokenId = useAppSelector((state) => {
+    const currentToken = Object.values(state.auth.tokens).find(
+      (token) => token.me === state.auth.me,
+    );
 
     return currentToken?.id;
   });
@@ -158,10 +178,16 @@ const AuthTokenListPage: React.FC = () => {
   const body = tokens ? (
     <div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
       {tokens.map((token) => (
-        <AuthToken key={token.id} token={token} isCurrent={token.is_current ?? String(token.id) === currentTokenId} />
+        <AuthToken
+          key={token.id}
+          token={token}
+          isCurrent={token.is_current ?? String(token.id) === currentTokenId}
+        />
       ))}
     </div>
-  ) : <Spinner />;
+  ) : (
+    <Spinner />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.header)} transparent withHeader={false}>
@@ -170,9 +196,7 @@ const AuthTokenListPage: React.FC = () => {
           <CardTitle title={intl.formatMessage(messages.header)} />
         </CardHeader>
 
-        <CardBody>
-          {body}
-        </CardBody>
+        <CardBody>{body}</CardBody>
       </Card>
     </Column>
   );

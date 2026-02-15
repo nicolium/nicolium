@@ -56,11 +56,7 @@ const NewCircleForm: React.FC = () => {
           />
         </label>
 
-        <Button
-          disabled={isPending}
-          onClick={handleSubmit}
-          theme='primary'
-        >
+        <Button disabled={isPending} onClick={handleSubmit} theme='primary'>
           {create}
         </Button>
       </HStack>
@@ -81,7 +77,12 @@ const CirclesPage: React.FC = () => {
     );
   }
 
-  const emptyMessage = <FormattedMessage id='empty_column.circles' defaultMessage="You don't have any circles yet. When you create one, it will show up here." />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.circles'
+      defaultMessage="You don't have any circles yet. When you create one, it will show up here."
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -101,7 +102,10 @@ const CirclesPage: React.FC = () => {
                 params={{ circleId: circle.id }}
                 label={
                   <HStack alignItems='center' space={2}>
-                    <Icon src={require('@phosphor-icons/core/regular/list-bullets.svg')} size={20} />
+                    <Icon
+                      src={require('@phosphor-icons/core/regular/list-bullets.svg')}
+                      size={20}
+                    />
                     <span>{circle.title}</span>
                   </HStack>
                 }

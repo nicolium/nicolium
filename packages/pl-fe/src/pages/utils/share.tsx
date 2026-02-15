@@ -12,9 +12,7 @@ const SharePage: React.FC = () => {
   const params = shareRoute.useSearch();
 
   useEffect(() => {
-    const text = [params.title, params.text, params.url]
-      .filter(v => v)
-      .join('\n\n');
+    const text = [params.title, params.text, params.url].filter((v) => v).join('\n\n');
 
     navigate({ to: '/', replace: true });
 

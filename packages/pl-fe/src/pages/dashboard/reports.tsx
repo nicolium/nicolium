@@ -19,13 +19,22 @@ const messages = defineMessages({
 const Reports: React.FC = () => {
   const intl = useIntl();
 
-  const { resolved, account_id: accountId, target_account_id: targetAccountId } = adminReportsRoute.useSearch();
+  const {
+    resolved,
+    account_id: accountId,
+    target_account_id: targetAccountId,
+  } = adminReportsRoute.useSearch();
   const navigate = useNavigate({ from: adminReportsRoute.fullPath });
 
   const { account } = useAccount(accountId);
   const { account: targetAccount } = useAccount(targetAccountId);
 
-  const { data: reportIds = [], isPending, hasNextPage, fetchNextPage } = useReports({
+  const {
+    data: reportIds = [],
+    isPending,
+    hasNextPage,
+    fetchNextPage,
+  } = useReports({
     resolved,
     account_id: accountId,
     target_account_id: targetAccountId,
@@ -36,25 +45,46 @@ const Reports: React.FC = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       {(accountId ?? targetAccountId) && (
-        <HStack className='border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800' alignItems='center' space={2}>
-          <IconButton iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/x.svg')} onClick={handleUnsetAccounts} />
+        <HStack
+          className='border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800'
+          alignItems='center'
+          space={2}
+        >
+          <IconButton
+            iconClassName='h-5 w-5'
+            src={require('@phosphor-icons/core/regular/x.svg')}
+            onClick={handleUnsetAccounts}
+          />
           <Text>
             <FormattedMessage
               id='column.admin.reports.filter_message'
               defaultMessage='You are displaying reports {query}.'
-              values={{ query: <FormattedList value={[
-                account && <FormattedMessage
-                  id='column.admin.reports.filter_message.account'
-                  defaultMessage='from @{acct}'
-                  values={{ acct: <strong className='break-words'>{account?.acct}</strong> }}
-                />,
-                targetAccount && <FormattedMessage
-                  id='column.admin.reports.filter_message.target_account'
-                  defaultMessage='targeting @{acct}'
-                  values={{ acct: <strong className='break-words'>{targetAccount?.acct}</strong> }}
-                />,
-              ]}
-              /> }}
+              values={{
+                query: (
+                  <FormattedList
+                    value={[
+                      account && (
+                        <FormattedMessage
+                          id='column.admin.reports.filter_message.account'
+                          defaultMessage='from @{acct}'
+                          values={{
+                            acct: <strong className='break-words'>{account?.acct}</strong>,
+                          }}
+                        />
+                      ),
+                      targetAccount && (
+                        <FormattedMessage
+                          id='column.admin.reports.filter_message.target_account'
+                          defaultMessage='targeting @{acct}'
+                          values={{
+                            acct: <strong className='break-words'>{targetAccount?.acct}</strong>,
+                          }}
+                        />
+                      ),
+                    ]}
+                  />
+                ),
+              }}
             />
           </Text>
         </HStack>
@@ -63,12 +93,17 @@ const Reports: React.FC = () => {
         scrollKey='adminReports'
         isLoading={isPending}
         showLoading={isPending}
-        emptyMessageText={<FormattedMessage id='admin.reports.empty_message' defaultMessage='There are no open reports. If a user gets reported, they will show up here.' />}
+        emptyMessageText={
+          <FormattedMessage
+            id='admin.reports.empty_message'
+            defaultMessage='There are no open reports. If a user gets reported, they will show up here.'
+          />
+        }
         hasMore={hasNextPage}
         onLoadMore={fetchNextPage}
         itemClassName='pt-4'
       >
-        {reportIds.map(report => report && <Report id={report} key={report} />)}
+        {reportIds.map((report) => report && <Report id={report} key={report} />)}
       </ScrollableList>
     </Column>
   );

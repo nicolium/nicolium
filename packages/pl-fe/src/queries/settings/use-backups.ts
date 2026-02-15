@@ -20,9 +20,10 @@ const useCreateBackupMutation = () => {
   return useMutation({
     mutationKey: ['settings', 'backups'],
     mutationFn: () => client.settings.createBackup(),
-    onSuccess: () => queryClient.invalidateQueries({
-      queryKey: ['settings', 'backups'],
-    }),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: ['settings', 'backups'],
+      }),
   });
 };
 

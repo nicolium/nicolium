@@ -11,9 +11,7 @@ interface IAccountContainer extends Omit<IAccount, 'account'> {
 const AccountContainer: React.FC<IAccountContainer> = ({ id, withRelationship, ...props }) => {
   const { account } = useAccount(id, { withRelationship });
 
-  return (
-    <Account account={account!} withRelationship={withRelationship} {...props} />
-  );
+  return <Account account={account!} withRelationship={withRelationship} {...props} />;
 };
 
 export { AccountContainer as default };

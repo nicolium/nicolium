@@ -13,18 +13,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "paths": {
-      "@/*": ["./src/*"],
+      "@/*": ["./src/*"]
     },
-    "typeRoots": [
-      "./src/types",
-      "./node_modules/@types",
-      "./node_modules"
-    ],
-    "types": [
-      "vite/client",
-      "vite-plugin-compile-time/client",
-      "dom-chromium-ai"
-    ],
+    "typeRoots": ["./src/types", "./node_modules/@types", "./node_modules"],
+    "types": ["vite/client", "vite-plugin-compile-time/client", "dom-chromium-ai"]
   },
   "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]
 }

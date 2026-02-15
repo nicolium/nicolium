@@ -11,7 +11,7 @@ import type { store } from '@/store';
 import type { PlApiClient, ShoutMessage as BaseShoutMessage } from 'pl-api';
 
 let lazyStore: typeof store;
-import('@/store').then(({ store }) => lazyStore = store).catch(() => {});
+import('@/store').then(({ store }) => (lazyStore = store)).catch(() => {});
 
 const minifyMessage = ({ author, ...message }: BaseShoutMessage) => ({
   author_id: author.id,
@@ -21,7 +21,7 @@ const minifyMessage = ({ author, ...message }: BaseShoutMessage) => ({
 type ShoutMessage = ReturnType<typeof minifyMessage>;
 
 type State = {
-  socket: ReturnType<(InstanceType<typeof PlApiClient>)['shoutbox']['connect']> | null;
+  socket: ReturnType<InstanceType<typeof PlApiClient>['shoutbox']['connect']> | null;
   messages: Array<ShoutMessage>;
   isLoading: boolean;
   actions: {
@@ -31,33 +31,43 @@ type State = {
   };
 };
 
-const useShoutboxStore = create<State>()(mutative((set) => ({
-  socket: null,
-  messages: [],
-  isLoading: true,
-  actions: {
-    setMessages: (messages) =>{
-      set((state: State) => {
-        lazyStore?.dispatch(importEntities({ accounts: messages.map((msg) => msg.author) }, { override: false }) as any);
-        state.messages = messages.map(minifyMessage);
-        state.isLoading = false;
-      });
+const useShoutboxStore = create<State>()(
+  mutative(
+    (set) => ({
+      socket: null,
+      messages: [],
+      isLoading: true,
+      actions: {
+        setMessages: (messages) => {
+          set((state: State) => {
+            lazyStore?.dispatch(
+              importEntities(
+                { accounts: messages.map((msg) => msg.author) },
+                { override: false },
+              ) as any,
+            );
+            state.messages = messages.map(minifyMessage);
+            state.isLoading = false;
+          });
+        },
+        pushMessage: (message) => {
+          set((state: State) => {
+            lazyStore?.dispatch(importEntities({ accounts: [message.author] }) as any);
+            state.messages.push(minifyMessage(message));
+          });
+        },
+        setSocket: (socket) => {
+          set((state: State) => {
+            state.socket = socket;
+          });
+        },
+      },
+    }),
+    {
+      enableAutoFreeze: false,
     },
-    pushMessage: (message) =>{
-      set((state: State) => {
-        lazyStore?.dispatch(importEntities({ accounts: [message.author] }) as any);
-        state.messages.push(minifyMessage(message));
-      });
-    },
-    setSocket: (socket) =>{
-      set((state: State) => {
-        state.socket = socket;
-      });
-    },
-  },
-}), {
-  enableAutoFreeze: false,
-}));
+  ),
+);
 
 const useShoutboxMessages = () => useShoutboxStore((state) => state.messages);
 const useShoutboxIsLoading = () => useShoutboxStore((state) => state.isLoading);
@@ -73,21 +83,24 @@ const useShoutboxSubscription = () => {
   useEffect(() => {
     if (!(shoutboxAvailable && isLoggedIn)) return;
 
-    let socket: ReturnType<(InstanceType<typeof PlApiClient>)['shoutbox']['connect']>;
+    let socket: ReturnType<InstanceType<typeof PlApiClient>['shoutbox']['connect']>;
 
-    client.settings.verifyCredentials().then((account) => {
-      if (account.__meta.pleroma?.chat_token) {
-        socket = client.shoutbox.connect(account.__meta.pleroma?.chat_token, {
-          onMessage: (message) =>{
-            shoutboxStore.pushMessage(message);
-          },
-          onMessages: (messages) =>{
-            shoutboxStore.setMessages(messages);
-          },
-        });
-        shoutboxStore.setSocket(socket);
-      }
-    }).catch(() => {});
+    client.settings
+      .verifyCredentials()
+      .then((account) => {
+        if (account.__meta.pleroma?.chat_token) {
+          socket = client.shoutbox.connect(account.__meta.pleroma?.chat_token, {
+            onMessage: (message) => {
+              shoutboxStore.pushMessage(message);
+            },
+            onMessages: (messages) => {
+              shoutboxStore.setMessages(messages);
+            },
+          });
+          shoutboxStore.setSocket(socket);
+        }
+      })
+      .catch(() => {});
 
     return () => {
       socket?.close();
@@ -101,4 +114,11 @@ const useCreateShoutboxMessage = () => {
   return { mutate: socket?.message };
 };
 
-export { useShoutboxStore, useShoutboxMessages, useShoutboxIsLoading, useShoutboxSubscription, useCreateShoutboxMessage, type ShoutMessage };
+export {
+  useShoutboxStore,
+  useShoutboxMessages,
+  useShoutboxIsLoading,
+  useShoutboxSubscription,
+  useCreateShoutboxMessage,
+  type ShoutMessage,
+};

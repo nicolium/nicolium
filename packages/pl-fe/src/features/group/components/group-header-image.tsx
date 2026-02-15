@@ -27,7 +27,10 @@ const GroupHeaderImage: React.FC<IGroupHeaderImage> = ({ className, group }) => 
   if (isHeaderMissing) {
     return (
       <div
-        className={clsx(className, 'flex items-center justify-center bg-gray-200 dark:bg-gray-800/30')}
+        className={clsx(
+          className,
+          'flex items-center justify-center bg-gray-200 dark:bg-gray-800/30',
+        )}
       >
         <Icon
           src={require('@phosphor-icons/core/regular/image-square.svg')}
@@ -42,7 +45,7 @@ const GroupHeaderImage: React.FC<IGroupHeaderImage> = ({ className, group }) => 
       className={className}
       src={group.header}
       alt={group.header_description || intl.formatMessage(messages.header)}
-      onError={() =>{
+      onError={() => {
         setIsHeaderMissing(true);
       }}
     />

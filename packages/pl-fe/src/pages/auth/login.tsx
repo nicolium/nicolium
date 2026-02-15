@@ -34,9 +34,7 @@ const LoginPage = () => {
   const [shouldRedirect, setShouldRedirect] = useState(false);
 
   const getFormData = (form: HTMLFormElement) =>
-    Object.fromEntries(
-      Array.from(form).map((i: any) => [i.name, i.value]),
-    );
+    Object.fromEntries(Array.from(form).map((i: any) => [i.name, i.value]));
 
   const handleSubmit: React.FormEventHandler = (event) => {
     const { username, password } = getFormData(event.target as HTMLFormElement);
@@ -54,7 +52,8 @@ const LoginPage = () => {
         } else {
           setShouldRedirect(true);
         }
-      }).catch((error: { response: PlfeResponse }) => {
+      })
+      .catch((error: { response: PlfeResponse }) => {
         const data: any = error.response?.json;
         if (data?.error === 'mfa_required') {
           setMfaAuthNeeded(true);
@@ -81,14 +80,21 @@ const LoginPage = () => {
         <LoginForm handleSubmit={handleSubmit} isLoading={isLoading} />
         <ConsumersList />
 
-        <div className={'flex items-center gap-2.5 before:flex-1 before:border-b before:border-gray-300 before:content-[\'\'] after:flex-1 after:border-b after:border-gray-300 after:content-[\'\'] before:dark:border-gray-800 after:dark:border-gray-800'}>
+        <div
+          className={
+            "flex items-center gap-2.5 before:flex-1 before:border-b before:border-gray-300 before:content-[''] after:flex-1 after:border-b after:border-gray-300 after:content-[''] before:dark:border-gray-800 after:dark:border-gray-800"
+          }
+        >
           <Text align='center'>
             <FormattedMessage id='login_form.divider' defaultMessage='or' />
           </Text>
         </div>
 
         <Button className='w-full' theme='secondary' to='/login/external'>
-          <FormattedMessage id='login_form.external' defaultMessage='Sign in from remote instance' />
+          <FormattedMessage
+            id='login_form.external'
+            defaultMessage='Sign in from remote instance'
+          />
         </Button>
       </Stack>
     </BigCard>

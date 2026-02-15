@@ -44,10 +44,16 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
     dispatch(cancelPreviewCompose(composeId));
   };
 
-  const status = useMemo(() => previewedStatus ? ({
-    ...previewedStatus,
-    account: previewedStatus.account || ownAccount,
-  }) : null, [previewedStatus, ownAccount]);
+  const status = useMemo(
+    () =>
+      previewedStatus
+        ? {
+            ...previewedStatus,
+            account: previewedStatus.account || ownAccount,
+          }
+        : null,
+    [previewedStatus, ownAccount],
+  );
 
   if (!status) {
     return null;
@@ -57,7 +63,10 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
     <OutlineBox>
       <Stack space={2}>
         <HStack space={1} alignItems='center'>
-          <Icon className='size-4 text-gray-700 dark:text-gray-600' src={require('@phosphor-icons/core/regular/eye.svg')} />
+          <Icon
+            className='size-4 text-gray-700 dark:text-gray-600'
+            src={require('@phosphor-icons/core/regular/eye.svg')}
+          />
           <Text theme='muted' size='sm' className='grow'>
             <FormattedMessage id='compose_form.preview_label' defaultMessage='Preview' />
           </Text>
@@ -80,7 +89,9 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
 
         <StatusReplyMentions status={status} hoverable={false} />
 
-        {status.event ? <EventPreview status={status} hideAction /> : (
+        {status.event ? (
+          <EventPreview status={status} hideAction />
+        ) : (
           <Stack className='relative z-0'>
             <Stack space={4}>
               <StatusContent status={status} isQuote />

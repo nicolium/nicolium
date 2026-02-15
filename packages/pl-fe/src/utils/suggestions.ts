@@ -1,7 +1,4 @@
-type CursorMatch = [
-  tokenStart: number | null,
-  token: string | null,
-];
+type CursorMatch = [tokenStart: number | null, token: string | null];
 
 const textAtCursorMatchesToken = (
   str: string,

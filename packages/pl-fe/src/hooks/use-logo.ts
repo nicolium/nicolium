@@ -10,9 +10,7 @@ const useLogo = () => {
   const darkMode = ['dark', 'black'].includes(useTheme());
 
   // Use the right logo if provided, otherwise return null;
-  const src = (darkMode && logoDarkMode)
-    ? logoDarkMode
-    : logo || logoDarkMode;
+  const src = darkMode && logoDarkMode ? logoDarkMode : logo || logoDarkMode;
 
   return { src: demo ? null : src, alignment: logoAlignment };
 };

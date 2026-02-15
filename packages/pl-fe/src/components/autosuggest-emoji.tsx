@@ -18,16 +18,13 @@ const AutosuggestEmoji: React.FC<IAutosuggestEmoji> = ({ emoji }) => {
 
   if (isCustomEmoji(emoji)) {
     emojiElement = (
-      <img
-        className='emojione mr-2 block size-4'
-        src={emoji.imageUrl}
-        alt={emoji.colons}
-      />
+      <img className='emojione mr-2 block size-4' src={emoji.imageUrl} alt={emoji.colons} />
     );
   } else {
     if (systemEmojiFont) emojiElement = <>{emoji.native}</>;
 
-    const mapping = unicodeMapping[emoji.native] || unicodeMapping[emoji.native.replace(/\uFE0F$/, '')];
+    const mapping =
+      unicodeMapping[emoji.native] || unicodeMapping[emoji.native.replace(/\uFE0F$/, '')];
 
     if (!mapping) {
       return null;
@@ -43,7 +40,10 @@ const AutosuggestEmoji: React.FC<IAutosuggestEmoji> = ({ emoji }) => {
   }
 
   return (
-    <div className='flex flex-row items-center justify-start text-sm leading-[18px]' data-testid='emoji'>
+    <div
+      className='flex flex-row items-center justify-start text-sm leading-[18px]'
+      data-testid='emoji'
+    >
       {emojiElement}
 
       {emoji.colons}

@@ -15,7 +15,12 @@ import Toggle from '@/components/ui/toggle';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { NewFolderForm } from '@/pages/status-lists/bookmark-folders';
-import { useAddBookmarkToFolder, useBookmarkFolders, useRemoveBookmarkFromFolder, useStatusBookmarkFolders } from '@/queries/statuses/use-bookmark-folders';
+import {
+  useAddBookmarkToFolder,
+  useBookmarkFolders,
+  useRemoveBookmarkFromFolder,
+  useStatusBookmarkFolders,
+} from '@/queries/statuses/use-bookmark-folders';
 import { useBookmarkStatus } from '@/queries/statuses/use-status-interactions';
 import { makeGetStatus } from '@/selectors';
 
@@ -28,34 +33,40 @@ interface SelectBookmarkFolderModalProps {
 const search = (bookmarkFolders: Array<BookmarkFolder>, term: string) => {
   if (!term) return bookmarkFolders;
 
-  return fuzzysort.go(term, bookmarkFolders, { key: 'name' }).map(result => result.obj);
+  return fuzzysort.go(term, bookmarkFolders, { key: 'name' }).map((result) => result.obj);
 };
 
-const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseModalProps> = ({ statusId, onClose }) => {
+const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseModalProps> = ({
+  statusId,
+  onClose,
+}) => {
   const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector(state => getStatus(state, { id: statusId }))!;
+  const status = useAppSelector((state) => getStatus(state, { id: statusId }))!;
   const features = useFeatures();
 
   const [selectedFolder, setSelectedFolder] = useState(status.bookmark_folder);
   const [searchTerm, setSearchTerm] = useState('');
   const deferredSearchTerm = useDeferredValue(searchTerm);
 
-  const handleSearchChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const handleSearchChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setSearchTerm(e.target.value);
   };
 
-  const { isFetching, data: bookmarkFolders } = useBookmarkFolders(data => data);
-  const { data: selectedBookmarkFolders, isPending: fetchingSelectedBookmarkFolders } = useStatusBookmarkFolders(statusId);
-  const { mutate: addBookmarkToFolder, isPending: addingBookmarkToFolder } = useAddBookmarkToFolder(statusId);
-  const { mutate: removeBookmarkFromFolder, isPending: removingBookmarkFromFolder } = useRemoveBookmarkFromFolder(statusId);
+  const { isFetching, data: bookmarkFolders } = useBookmarkFolders((data) => data);
+  const { data: selectedBookmarkFolders, isPending: fetchingSelectedBookmarkFolders } =
+    useStatusBookmarkFolders(statusId);
+  const { mutate: addBookmarkToFolder, isPending: addingBookmarkToFolder } =
+    useAddBookmarkToFolder(statusId);
+  const { mutate: removeBookmarkFromFolder, isPending: removingBookmarkFromFolder } =
+    useRemoveBookmarkFromFolder(statusId);
   const { mutate: bookmarkStatus } = useBookmarkStatus(status.id);
 
-  const onChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const folderId = e.target.value;
     setSelectedFolder(folderId);
 
     bookmarkStatus(folderId, {
-      onSuccess: () =>{
+      onSuccess: () => {
         onClose('SELECT_BOOKMARK_FOLDER');
       },
     });
@@ -84,7 +95,7 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
   let items;
 
   if (features.bookmarkFoldersMultiple) {
-    items = (filteredFolders).map((folder) => (
+    items = filteredFolders.map((folder) => (
       <ListItem
         key={folder.id}
         label={
@@ -95,17 +106,21 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
                 src={folder.emoji_url ?? undefined}
                 className='size-5 flex-none'
               />
-            ) : <Icon src={require('@phosphor-icons/core/regular/folder-simple.svg')} size={20} />}
+            ) : (
+              <Icon src={require('@phosphor-icons/core/regular/folder-simple.svg')} size={20} />
+            )}
             <span>{folder.name}</span>
           </HStack>
         }
       >
         <Toggle
           checked={selectedBookmarkFolders?.includes(folder.id)}
-          onChange={() =>{
+          onChange={() => {
             toggleBookmarkFolder(folder.id);
           }}
-          disabled={fetchingSelectedBookmarkFolders || addingBookmarkToFolder || removingBookmarkFromFolder}
+          disabled={
+            fetchingSelectedBookmarkFolders || addingBookmarkToFolder || removingBookmarkFromFolder
+          }
         />
       </ListItem>
     ));
@@ -116,7 +131,12 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
         label={
           <HStack alignItems='center' space={2}>
             <Icon src={require('@phosphor-icons/core/regular/bookmarks.svg')} size={20} />
-            <span><FormattedMessage id='bookmark_folders.all_bookmarks' defaultMessage='All bookmarks' /></span>
+            <span>
+              <FormattedMessage
+                id='bookmark_folders.all_bookmarks'
+                defaultMessage='All bookmarks'
+              />
+            </span>
           </HStack>
         }
         checked={selectedFolder === null}
@@ -125,41 +145,50 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
     ];
 
     if (!isFetching) {
-      items.push(...((filteredFolders).map((folder) => (
-        <RadioItem
-          key={folder.id}
-          label={
-            <HStack alignItems='center' space={2}>
-              {folder.emoji ? (
-                <Emoji
-                  emoji={folder.emoji}
-                  src={folder.emoji_url ?? undefined}
-                  className='size-5 flex-none'
-                />
-              ) : <Icon src={require('@phosphor-icons/core/regular/folder-simple.svg')} size={20} />}
-              <span>{folder.name}</span>
-            </HStack>
-          }
-          checked={selectedFolder === folder.id}
-          value={folder.id}
-        />
-      ))));
+      items.push(
+        ...filteredFolders.map((folder) => (
+          <RadioItem
+            key={folder.id}
+            label={
+              <HStack alignItems='center' space={2}>
+                {folder.emoji ? (
+                  <Emoji
+                    emoji={folder.emoji}
+                    src={folder.emoji_url ?? undefined}
+                    className='size-5 flex-none'
+                  />
+                ) : (
+                  <Icon src={require('@phosphor-icons/core/regular/folder-simple.svg')} size={20} />
+                )}
+                <span>{folder.name}</span>
+              </HStack>
+            }
+            checked={selectedFolder === folder.id}
+            value={folder.id}
+          />
+        )),
+      );
     }
   }
 
-  const body = isFetching ? <Spinner /> : (
+  const body = isFetching ? (
+    <Spinner />
+  ) : (
     <Stack space={4}>
       <NewFolderForm search onChange={handleSearchChange} />
 
-      <RadioGroup onChange={onChange}>
-        {items}
-      </RadioGroup>
+      <RadioGroup onChange={onChange}>{items}</RadioGroup>
     </Stack>
   );
 
   return (
     <Modal
-      title={<FormattedMessage id='select_bookmark_folder_modal.header_title' defaultMessage='Select folder' />}
+      title={
+        <FormattedMessage
+          id='select_bookmark_folder_modal.header_title'
+          defaultMessage='Select folder'
+        />
+      }
       onClose={onClickClose}
     >
       {body}

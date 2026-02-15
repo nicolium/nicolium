@@ -8,23 +8,23 @@ const getPinnedHosts = (state: RootState) => {
   return settings.remote_timeline.pinnedHosts;
 };
 
-const pinHost = (host: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const pinnedHosts = getPinnedHosts(state);
+const pinHost = (host: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+  const state = getState();
+  const pinnedHosts = getPinnedHosts(state);
 
-    dispatch(changeSetting(['remote_timeline', 'pinnedHosts'], [...pinnedHosts, host]));
-  };
-
-const unpinHost = (host: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const pinnedHosts = getPinnedHosts(state);
-
-    dispatch(changeSetting(['remote_timeline', 'pinnedHosts'], pinnedHosts.filter(value => value !== host)));
-  };
-
-export {
-  pinHost,
-  unpinHost,
+  dispatch(changeSetting(['remote_timeline', 'pinnedHosts'], [...pinnedHosts, host]));
 };
+
+const unpinHost = (host: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+  const state = getState();
+  const pinnedHosts = getPinnedHosts(state);
+
+  dispatch(
+    changeSetting(
+      ['remote_timeline', 'pinnedHosts'],
+      pinnedHosts.filter((value) => value !== host),
+    ),
+  );
+};
+
+export { pinHost, unpinHost };

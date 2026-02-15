@@ -9,12 +9,24 @@ import { useCompose } from '@/hooks/use-compose';
 import { useInstance } from '@/hooks/use-instance';
 
 const messages = defineMessages({
-  content_type_plaintext: { id: 'preferences.options.content_type_plaintext', defaultMessage: 'Plain text' },
-  content_type_markdown: { id: 'preferences.options.content_type_markdown', defaultMessage: 'Markdown' },
+  content_type_plaintext: {
+    id: 'preferences.options.content_type_plaintext',
+    defaultMessage: 'Plain text',
+  },
+  content_type_markdown: {
+    id: 'preferences.options.content_type_markdown',
+    defaultMessage: 'Markdown',
+  },
   content_type_mfm: { id: 'preferences.options.content_type_mfm', defaultMessage: 'MFM' },
   content_type_html: { id: 'preferences.options.content_type_html', defaultMessage: 'HTML' },
-  content_type_wysiwyg: { id: 'preferences.options.content_type_wysiwyg', defaultMessage: 'WYSIWYG' },
-  change_content_type: { id: 'compose_form.content_type.change', defaultMessage: 'Change content type' },
+  content_type_wysiwyg: {
+    id: 'preferences.options.content_type_wysiwyg',
+    defaultMessage: 'WYSIWYG',
+  },
+  change_content_type: {
+    id: 'compose_form.content_type.change',
+    defaultMessage: 'Change content type',
+  },
 });
 
 interface IContentTypeButton {
@@ -29,7 +41,8 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
 
   const { contentType } = useCompose(composeId);
 
-  const handleChange = (contentType: string) => () => dispatch(changeComposeContentType(composeId, contentType));
+  const handleChange = (contentType: string) => () =>
+    dispatch(changeComposeContentType(composeId, contentType));
 
   const postFormats = instance.pleroma.metadata.post_formats;
 
@@ -86,7 +99,10 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
         active: contentType === value,
       }))}
     >
-      <button className='⁂-content-type-button' title={compact ? option?.text : intl.formatMessage(messages.change_content_type)}>
+      <button
+        className='⁂-content-type-button'
+        title={compact ? option?.text : intl.formatMessage(messages.change_content_type)}
+      >
         {option?.icon && <Icon src={option.icon} aria-hidden />}
         {compact ? undefined : option?.text}
         <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} aria-hidden />

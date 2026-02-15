@@ -14,7 +14,7 @@ import MESSAGES from '@/messages';
 import type { AppDispatch } from '@/store';
 
 /** Load initial data from the backend */
-const loadInitial = () => async(dispatch: AppDispatch) => {
+const loadInitial = () => async (dispatch: AppDispatch) => {
   dispatch(checkIfStandalone());
   // Await for authenticated fetch
   await dispatch(fetchMe());
@@ -32,7 +32,7 @@ interface IPlFeLoad {
 const PlFeLoad: React.FC<IPlFeLoad> = ({ children }) => {
   const dispatch = useAppDispatch();
 
-  const me = useAppSelector(state => state.me);
+  const me = useAppSelector((state) => state.me);
   const { account } = useOwnAccount();
   const locale = useLocale();
 
@@ -41,28 +41,27 @@ const PlFeLoad: React.FC<IPlFeLoad> = ({ children }) => {
   const [isLoaded, setIsLoaded] = useState(false);
 
   /** Whether to display a loading indicator. */
-  const showLoading = [
-    me === null,
-    me && !account,
-    !isLoaded,
-    localeLoading,
-  ].some(Boolean);
+  const showLoading = [me === null, me && !account, !isLoaded, localeLoading].some(Boolean);
 
   // Load the user's locale
   useEffect(() => {
-    MESSAGES[locale]().then(messages => {
-      setMessages(messages);
-      setLocaleLoading(false);
-    }).catch(() => { });
+    MESSAGES[locale]()
+      .then((messages) => {
+        setMessages(messages);
+        setLocaleLoading(false);
+      })
+      .catch(() => {});
   }, [locale]);
 
   // Load initial data from the API
   useEffect(() => {
-    dispatch(loadInitial()).then(() => {
-      setIsLoaded(true);
-    }).catch(() => {
-      setIsLoaded(true);
-    });
+    dispatch(loadInitial())
+      .then(() => {
+        setIsLoaded(true);
+      })
+      .catch(() => {
+        setIsLoaded(true);
+      });
   }, []);
 
   // intl is part of loading.

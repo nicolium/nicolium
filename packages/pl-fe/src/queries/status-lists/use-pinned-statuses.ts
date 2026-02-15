@@ -3,7 +3,8 @@ import { minifyStatusList } from '@/queries/utils/minify-list';
 
 const usePinnedStatuses = makePaginatedResponseQuery(
   (accountId: string) => ['statusLists', 'pins', accountId],
-  (client, [accountId]) => client.accounts.getAccountStatuses(accountId, { pinned: true }).then(minifyStatusList),
+  (client, [accountId]) =>
+    client.accounts.getAccountStatuses(accountId, { pinned: true }).then(minifyStatusList),
   undefined,
   (accountId: string) => !!accountId,
 );

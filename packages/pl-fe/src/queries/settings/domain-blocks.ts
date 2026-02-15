@@ -11,7 +11,7 @@ import type { RootState, Store } from '@/store';
 import type { Account } from 'pl-api';
 
 let store: Store;
-import('@/store').then((value) => store = value.store).catch(() => {});
+import('@/store').then((value) => (store = value.store)).catch(() => {});
 
 const domainBlocksQueryOptions = makePaginatedResponseQueryOptions(
   ['settings', 'domainBlocks'],
@@ -27,9 +27,11 @@ const blockDomainMutationOptions = mutationOptions({
     const accounts = selectAccountsByDomain(store.getState(), domain);
     if (!accounts) return;
 
-    queryClient.setQueryData<Array<MinifiedSuggestion>>(['suggestions'], suggestions => suggestions
-      ? suggestions.filter((suggestion) => !accounts.includes(suggestion.account_id))
-      : undefined);
+    queryClient.setQueryData<Array<MinifiedSuggestion>>(['suggestions'], (suggestions) =>
+      suggestions
+        ? suggestions.filter((suggestion) => !accounts.includes(suggestion.account_id))
+        : undefined,
+    );
   },
 });
 
@@ -50,8 +52,4 @@ const selectAccountsByDomain = (state: RootState, domain: string): string[] => {
   return accounts ?? [];
 };
 
-export {
-  domainBlocksQueryOptions,
-  blockDomainMutationOptions,
-  unblockDomainMutationOptions,
-};
+export { domainBlocksQueryOptions, blockDomainMutationOptions, unblockDomainMutationOptions };

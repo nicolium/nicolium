@@ -31,8 +31,15 @@ const textForScreenReader = (
 
   const values = [
     displayName.length === 0 ? account.acct.split('@')[0] : displayName,
-    status.spoiler_text ? status.spoiler_text : status.search_index?.slice(status.spoiler_text.length) || '',
-    intl.formatDate(status.created_at, { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' }),
+    status.spoiler_text
+      ? status.spoiler_text
+      : status.search_index?.slice(status.spoiler_text.length) || '',
+    intl.formatDate(status.created_at, {
+      hour: '2-digit',
+      minute: '2-digit',
+      month: 'short',
+      day: 'numeric',
+    }),
     account.acct,
   ];
 
@@ -44,17 +51,15 @@ const textForScreenReader = (
 };
 
 const getStatusIdsFromLinksInContent = (content: string): string[] => {
-  const urls = content.match(RegExp(`${window.location.origin}/@([a-z\\d_-]+(?:@[^@\\s]+)?)/posts/[a-z0-9]+(?!\\S)`, 'gi'));
+  const urls = content.match(
+    RegExp(`${window.location.origin}/@([a-z\\d_-]+(?:@[^@\\s]+)?)/posts/[a-z0-9]+(?!\\S)`, 'gi'),
+  );
 
   if (!urls) return [];
 
-  return Array.from(new Set(urls
-    .map(url => url.split('/').at(-1) as string)
-    .filter(url => url)));
+  return Array.from(
+    new Set(urls.map((url) => url.split('/').at(-1) as string).filter((url) => url)),
+  );
 };
 
-export {
-  shouldHaveCard,
-  textForScreenReader,
-  getStatusIdsFromLinksInContent,
-};
+export { shouldHaveCard, textForScreenReader, getStatusIdsFromLinksInContent };

@@ -23,9 +23,7 @@ const Restriction: React.FC<IRestriction> = ({ icon, children }) => (
   <HStack space={3}>
     <Icon className='size-5 flex-none' src={icon} />
 
-    <Text theme='muted'>
-      {children}
-    </Text>
+    <Text theme='muted'>{children}</Text>
   </HStack>
 );
 
@@ -52,54 +50,63 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
     const partialMediaRemoval = media_removal || avatar_removal || banner_removal;
 
     if (followers_only) {
-      items.push((
+      items.push(
         <Restriction key='followersOnly' icon={require('@phosphor-icons/core/regular/lock.svg')}>
           <FormattedMessage
             id='federation_restriction.followers_only'
             defaultMessage='Hidden except to followers'
           />
-        </Restriction>
-      ));
+        </Restriction>,
+      );
     } else if (federated_timeline_removal) {
-      items.push((
-        <Restriction key='federatedTimelineRemoval' icon={require('@phosphor-icons/core/regular/lock-open.svg')}>
+      items.push(
+        <Restriction
+          key='federatedTimelineRemoval'
+          icon={require('@phosphor-icons/core/regular/lock-open.svg')}
+        >
           <FormattedMessage
             id='federation_restriction.federated_timeline_removal'
             defaultMessage='Fediverse timeline removal'
           />
-        </Restriction>
-      ));
+        </Restriction>,
+      );
     }
 
     if (fullMediaRemoval) {
-      items.push((
-        <Restriction key='fullMediaRemoval' icon={require('@phosphor-icons/core/regular/image-broken.svg')}>
+      items.push(
+        <Restriction
+          key='fullMediaRemoval'
+          icon={require('@phosphor-icons/core/regular/image-broken.svg')}
+        >
           <FormattedMessage
             id='federation_restriction.full_media_removal'
             defaultMessage='Full media removal'
           />
-        </Restriction>
-      ));
+        </Restriction>,
+      );
     } else if (partialMediaRemoval) {
-      items.push((
-        <Restriction key='partialMediaRemoval' icon={require('@phosphor-icons/core/regular/image-broken.svg')}>
+      items.push(
+        <Restriction
+          key='partialMediaRemoval'
+          icon={require('@phosphor-icons/core/regular/image-broken.svg')}
+        >
           <FormattedMessage
             id='federation_restriction.partial_media_removal'
             defaultMessage='Partial media removal'
           />
-        </Restriction>
-      ));
+        </Restriction>,
+      );
     }
 
     if (!fullMediaRemoval && media_nsfw) {
-      items.push((
+      items.push(
         <Restriction key='mediaNsfw' icon={require('@phosphor-icons/core/regular/eye-slash.svg')}>
           <FormattedMessage
             id='federation_restriction.media_nsfw'
             defaultMessage='Attachments marked NSFW'
           />
-        </Restriction>
-      ));
+        </Restriction>,
+      );
     }
 
     return items;
@@ -148,11 +155,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
     }
   };
 
-  return (
-    <Stack space={3}>
-      {renderContent()}
-    </Stack>
-  );
+  return <Stack space={3}>{renderContent()}</Stack>;
 };
 
 export { InstanceRestrictions as default };

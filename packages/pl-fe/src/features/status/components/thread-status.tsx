@@ -19,10 +19,10 @@ interface IThreadStatus {
 const ThreadStatus: React.FC<IThreadStatus> = (props): JSX.Element => {
   const { id, focusedStatusId } = props;
 
-  const replyToId = useAppSelector(state => state.contexts.inReplyTos[id]);
-  const replyCount = useAppSelector(state => (state.contexts.replies[id] || []).length);
-  const isLoaded = useAppSelector(state => Boolean(state.statuses[id]));
-  const isDeleted = useAppSelector(state => Boolean(state.statuses[id]?.deleted));
+  const replyToId = useAppSelector((state) => state.contexts.inReplyTos[id]);
+  const replyCount = useAppSelector((state) => (state.contexts.replies[id] || []).length);
+  const isLoaded = useAppSelector((state) => Boolean(state.statuses[id]));
+  const isDeleted = useAppSelector((state) => Boolean(state.statuses[id]?.deleted));
 
   if (isDeleted) {
     return (
@@ -43,15 +43,20 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): JSX.Element => {
 
     return (
       <div
-        className={clsx('absolute left-5 z-[1] hidden w-0.5 bg-gray-200 black:bg-gray-800 dark:bg-primary-800 rtl:left-auto rtl:right-5', {
-          '!block top-[calc(12px+42px)] h-[calc(100%-42px-8px-1rem)]': isConnectedBottom,
-        })}
+        className={clsx(
+          'absolute left-5 z-[1] hidden w-0.5 bg-gray-200 black:bg-gray-800 dark:bg-primary-800 rtl:left-auto rtl:right-5',
+          {
+            'top-[calc(12px+42px)] !block h-[calc(100%-42px-8px-1rem)]': isConnectedBottom,
+          },
+        )}
       />
     );
   };
 
   return (
-    <div className={clsx('thread__status relative pb-4', { 'thread__status--linear': props.linear })}>
+    <div
+      className={clsx('thread__status relative pb-4', { 'thread__status--linear': props.linear })}
+    >
       {renderConnector()}
       {isLoaded ? (
         // @ts-ignore FIXME
@@ -59,7 +64,9 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): JSX.Element => {
       ) : (
         <PlaceholderStatus variant='default' />
       )}
-      {props.linear && <hr className='-mx-4 mt-2 max-w-[100vw] border-t-2 black:border-t dark:border-gray-800' />}
+      {props.linear && (
+        <hr className='-mx-4 mt-2 max-w-[100vw] border-t-2 black:border-t dark:border-gray-800' />
+      )}
     </div>
   );
 };

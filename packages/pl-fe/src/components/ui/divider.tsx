@@ -19,7 +19,9 @@ const Divider = ({ text, textSize = 'md' }: IDivider) => (
     {text && (
       <div className='⁂-divider__text'>
         <span data-testid='divider-text'>
-          <Text size={textSize} tag='span' theme='inherit'>{text}</Text>
+          <Text size={textSize} tag='span' theme='inherit'>
+            {text}
+          </Text>
         </span>
       </div>
     )}

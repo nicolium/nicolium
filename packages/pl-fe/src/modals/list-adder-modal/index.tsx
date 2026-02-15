@@ -25,7 +25,7 @@ const ListAdderModal: React.FC<BaseModalProps & ListAdderModalProps> = ({ accoun
 
   const { data: accountListIds = [] } = useListsForAccount(accountId);
 
-  const { data: listIds = [] } = useLists((lists) => getOrderedLists(lists).map(list => list.id));
+  const { data: listIds = [] } = useLists((lists) => getOrderedLists(lists).map((list) => list.id));
 
   const onClickClose = () => {
     onClose('LIST_ADDER');
@@ -33,7 +33,9 @@ const ListAdderModal: React.FC<BaseModalProps & ListAdderModalProps> = ({ accoun
 
   return (
     <Modal
-      title={<FormattedMessage id='list_adder.header_title' defaultMessage='Add or remove from lists' />}
+      title={
+        <FormattedMessage id='list_adder.header_title' defaultMessage='Add or remove from lists' />
+      }
       onClose={onClickClose}
     >
       <AccountContainer id={accountId} withRelationship={false} />
@@ -51,7 +53,14 @@ const ListAdderModal: React.FC<BaseModalProps & ListAdderModalProps> = ({ accoun
         <CardTitle title={intl.formatMessage(messages.subheading)} />
       </CardHeader>
       <div>
-        {listIds.map(listId => <List key={listId} accountId={accountId} listId={listId} added={accountListIds.includes(listId)} />)}
+        {listIds.map((listId) => (
+          <List
+            key={listId}
+            accountId={accountId}
+            listId={listId}
+            added={accountListIds.includes(listId)}
+          />
+        ))}
       </div>
     </Modal>
   );

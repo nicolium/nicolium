@@ -17,72 +17,86 @@ const ADMIN_CONFIG_FETCH_SUCCESS = 'ADMIN_CONFIG_FETCH_SUCCESS' as const;
 const ADMIN_CONFIG_UPDATE_REQUEST = 'ADMIN_CONFIG_UPDATE_REQUEST' as const;
 const ADMIN_CONFIG_UPDATE_SUCCESS = 'ADMIN_CONFIG_UPDATE_SUCCESS' as const;
 
-const fetchConfig = () =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).admin.config.getPleromaConfig()
-      .then((data) => {
-        dispatch<AdminActions>({ type: ADMIN_CONFIG_FETCH_SUCCESS, configs: data.configs, needsReboot: data.need_reboot });
+const fetchConfig = () => (dispatch: AppDispatch, getState: () => RootState) =>
+  getClient(getState)
+    .admin.config.getPleromaConfig()
+    .then((data) => {
+      dispatch<AdminActions>({
+        type: ADMIN_CONFIG_FETCH_SUCCESS,
+        configs: data.configs,
+        needsReboot: data.need_reboot,
       });
+    });
 
-const updateConfig = (configs: PleromaConfig['configs']) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const updateConfig =
+  (configs: PleromaConfig['configs']) => (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch<AdminActions>({ type: ADMIN_CONFIG_UPDATE_REQUEST, configs });
-    return getClient(getState).admin.config.updatePleromaConfig(configs)
+    return getClient(getState)
+      .admin.config.updatePleromaConfig(configs)
       .then((data) => {
-        dispatch<AdminActions>({ type: ADMIN_CONFIG_UPDATE_SUCCESS, configs: data.configs, needsReboot: data.need_reboot });
+        dispatch<AdminActions>({
+          type: ADMIN_CONFIG_UPDATE_SUCCESS,
+          configs: data.configs,
+          needsReboot: data.need_reboot,
+        });
       });
   };
 
-const updateFrontendConfig = (data: Record<string, any>) =>
-  (dispatch: AppDispatch) => {
-    const params = [{
+const updateFrontendConfig = (data: Record<string, any>) => (dispatch: AppDispatch) => {
+  const params = [
+    {
       group: ':pleroma',
       key: ':frontend_configurations',
-      value: [{
-        tuple: [':pl_fe', data],
-      }],
-    }];
+      value: [
+        {
+          tuple: [':pl_fe', data],
+        },
+      ],
+    },
+  ];
 
-    return dispatch(updateConfig(params));
-  };
+  return dispatch(updateConfig(params));
+};
 
-const deactivateUser = (accountId: string, report_id?: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const deactivateUser =
+  (accountId: string, report_id?: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
 
-    return getClient(state).admin.accounts.performAccountAction(accountId, 'suspend', { report_id });
+    return getClient(state).admin.accounts.performAccountAction(accountId, 'suspend', {
+      report_id,
+    });
   };
 
-const deleteUser = (accountId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).admin.accounts.deleteAccount(accountId);
+const deleteUser = (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) =>
+  getClient(getState).admin.accounts.deleteAccount(accountId);
 
-const deleteStatus = (statusId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).admin.statuses.deleteStatus(statusId)
-      .then(() => {
-        dispatch(deleteFromTimelines(statusId));
-        return ({ statusId });
-      });
+const deleteStatus = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) =>
+  getClient(getState)
+    .admin.statuses.deleteStatus(statusId)
+    .then(() => {
+      dispatch(deleteFromTimelines(statusId));
+      return { statusId };
+    });
 
-const toggleStatusSensitivity = (statusId: string, sensitive: boolean) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).admin.statuses.updateStatus(statusId, { sensitive: !sensitive })
+const toggleStatusSensitivity =
+  (statusId: string, sensitive: boolean) => (dispatch: AppDispatch, getState: () => RootState) =>
+    getClient(getState)
+      .admin.statuses.updateStatus(statusId, { sensitive: !sensitive })
       .then((status) => {
         dispatch(importEntities({ statuses: [status] }));
       });
 
-const tagUser = (accountId: string, tags: string[]) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
+const tagUser =
+  (accountId: string, tags: string[]) => (dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState).admin.accounts.tagUser(accountId, tags);
 
-const untagUser = (accountId: string, tags: string[]) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
+const untagUser =
+  (accountId: string, tags: string[]) => (dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState).admin.accounts.untagUser(accountId, tags);
 
 /** Synchronizes user tags to the backend. */
-const setTags = (accountId: string, oldTags: string[], newTags: string[]) =>
-  async(dispatch: AppDispatch) => {
+const setTags =
+  (accountId: string, oldTags: string[], newTags: string[]) => async (dispatch: AppDispatch) => {
     const diff = getTagDiff(oldTags, newTags);
 
     if (diff.added.length) await dispatch(tagUser(accountId, diff.added));
@@ -90,28 +104,26 @@ const setTags = (accountId: string, oldTags: string[], newTags: string[]) =>
   };
 
 /** Synchronizes badges to the backend. */
-const setBadges = (accountId: string, oldTags: string[], newTags: string[]) =>
-  (dispatch: AppDispatch) => {
+const setBadges =
+  (accountId: string, oldTags: string[], newTags: string[]) => (dispatch: AppDispatch) => {
     const oldBadges = filterBadges(oldTags);
     const newBadges = filterBadges(newTags);
 
     return dispatch(setTags(accountId, oldBadges, newBadges));
   };
 
-const promoteToAdmin = (accountId: string) =>
-  (_dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).admin.accounts.promoteToAdmin(accountId);
+const promoteToAdmin = (accountId: string) => (_dispatch: AppDispatch, getState: () => RootState) =>
+  getClient(getState).admin.accounts.promoteToAdmin(accountId);
 
-const promoteToModerator = (accountId: string) =>
-  (_dispatch: AppDispatch, getState: () => RootState) =>
+const promoteToModerator =
+  (accountId: string) => (_dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState).admin.accounts.promoteToModerator(accountId);
 
-const demoteToUser = (accountId: string) =>
-  (_dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).admin.accounts.demoteToUser(accountId);
+const demoteToUser = (accountId: string) => (_dispatch: AppDispatch, getState: () => RootState) =>
+  getClient(getState).admin.accounts.demoteToUser(accountId);
 
-const setRole = (accountId: string, role: 'user' | 'moderator' | 'admin') =>
-  (dispatch: AppDispatch) => {
+const setRole =
+  (accountId: string, role: 'user' | 'moderator' | 'admin') => (dispatch: AppDispatch) => {
     switch (role) {
       case 'user':
         return dispatch(demoteToUser(accountId));
@@ -126,20 +138,45 @@ const redactStatus = (statusId: string) => (dispatch: AppDispatch, getState: () 
   const state = getState();
 
   const status = state.statuses[statusId];
-  const poll = status.poll_id ? queryClient.getQueryData<Poll>(['statuses', 'polls', status.poll_id]) : undefined;
+  const poll = status.poll_id
+    ? queryClient.getQueryData<Poll>(['statuses', 'polls', status.poll_id])
+    : undefined;
 
-  return getClient(state).statuses.getStatusSource(statusId).then(response => {
-    dispatch(setComposeToStatus(status, poll, response.text, response.spoiler_text, response.content_type, false, undefined, undefined, true));
-    useModalsStore.getState().actions.openModal('COMPOSE');
-  }).catch(error => {
-    dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_FAIL, error });
-  });
+  return getClient(state)
+    .statuses.getStatusSource(statusId)
+    .then((response) => {
+      dispatch(
+        setComposeToStatus(
+          status,
+          poll,
+          response.text,
+          response.spoiler_text,
+          response.content_type,
+          false,
+          undefined,
+          undefined,
+          true,
+        ),
+      );
+      useModalsStore.getState().actions.openModal('COMPOSE');
+    })
+    .catch((error) => {
+      dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_FAIL, error });
+    });
 };
 
 type AdminActions =
-  | { type: typeof ADMIN_CONFIG_FETCH_SUCCESS; configs: PleromaConfig['configs']; needsReboot: boolean }
+  | {
+      type: typeof ADMIN_CONFIG_FETCH_SUCCESS;
+      configs: PleromaConfig['configs'];
+      needsReboot: boolean;
+    }
   | { type: typeof ADMIN_CONFIG_UPDATE_REQUEST; configs: PleromaConfig['configs'] }
-  | { type: typeof ADMIN_CONFIG_UPDATE_SUCCESS; configs: PleromaConfig['configs']; needsReboot: boolean };
+  | {
+      type: typeof ADMIN_CONFIG_UPDATE_SUCCESS;
+      configs: PleromaConfig['configs'];
+      needsReboot: boolean;
+    };
 
 export {
   ADMIN_CONFIG_FETCH_SUCCESS,

@@ -16,7 +16,12 @@ const FollowedTagsPage = () => {
 
   const { data: tags = [], isLoading, hasNextPage, fetchNextPage } = useFollowedTags();
 
-  const emptyMessage = <FormattedMessage id='empty_column.followed_tags' defaultMessage="You haven't followed any hashtag yet." />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.followed_tags'
+      defaultMessage="You haven't followed any hashtag yet."
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -30,7 +35,9 @@ const FollowedTagsPage = () => {
         placeholderCount={5}
         itemClassName='pb-3'
       >
-        {tags.map(tag => <Hashtag key={tag.name} hashtag={tag} />)}
+        {tags.map((tag) => (
+          <Hashtag key={tag.name} hashtag={tag} />
+        ))}
       </ScrollableList>
     </Column>
   );

@@ -33,21 +33,14 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
   if (to.length === 0) {
     const body = (
       <div className='mb-1 block text-sm text-gray-700 dark:text-gray-600'>
-        <FormattedMessage
-          id='reply_mentions.reply_empty'
-          defaultMessage='Replying to post'
-        />
+        <FormattedMessage id='reply_mentions.reply_empty' defaultMessage='Replying to post' />
       </div>
     );
 
     if (hoverable) {
       return (
         <HoverStatusWrapper statusId={status.in_reply_to_id} inline>
-          <span
-            key='hoverstatus'
-            className='cursor-pointer hover:underline'
-            role='presentation'
-          >
+          <span key='hoverstatus' className='cursor-pointer hover:underline' role='presentation'>
             {body}
           </span>
         </HoverStatusWrapper>
@@ -58,14 +51,14 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
   }
 
   // The typical case with a reply-to and a list of mentions.
-  const accounts = to.slice(0, 2).map(account => {
+  const accounts = to.slice(0, 2).map((account) => {
     const link = (
       <Link
         key={account.id}
         to='/@{$username}'
         params={{ username: account.acct }}
         className='inline-block max-w-[200px] truncate align-bottom text-primary-600 no-underline [direction:ltr] hover:text-primary-700 hover:underline dark:text-primary-400 dark:hover:text-primary-400'
-        onClick={(e) =>{
+        onClick={(e) => {
           e.stopPropagation();
         }}
       >
@@ -86,8 +79,18 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
 
   if (to.length > 2) {
     accounts.push(
-      <span key='more' className='cursor-pointer hover:underline' role='button' onClick={handleOpenMentionsModal} tabIndex={0}>
-        <FormattedMessage id='reply_mentions.more' defaultMessage='{count} more' values={{ count: to.length - 2 }} />
+      <span
+        key='more'
+        className='cursor-pointer hover:underline'
+        role='button'
+        onClick={handleOpenMentionsModal}
+        tabIndex={0}
+      >
+        <FormattedMessage
+          id='reply_mentions.more'
+          defaultMessage='{count} more'
+          values={{ count: to.length - 2 }}
+        />
       </span>,
     );
   }

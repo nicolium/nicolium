@@ -5,7 +5,10 @@ import Column from '@/components/ui/column';
 
 const messages = defineMessages({
   title: { id: 'column_forbidden.title', defaultMessage: 'Forbidden' },
-  body: { id: 'column_forbidden.body', defaultMessage: 'You do not have permission to access this page.' },
+  body: {
+    id: 'column_forbidden.body',
+    defaultMessage: 'You do not have permission to access this page.',
+  },
 });
 
 const ColumnForbidden = () => {

@@ -29,7 +29,11 @@ interface ReactionsModalProps {
   reaction?: string;
 }
 
-const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClose, statusId, reaction: initialReaction }) => {
+const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({
+  onClose,
+  statusId,
+  reaction: initialReaction,
+}) => {
   const intl = useIntl();
   const [reaction, setReaction] = useState(initialReaction);
 
@@ -43,25 +47,27 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
     const items: Array<Item> = [
       {
         text: intl.formatMessage(messages.all),
-        action: () =>{
+        action: () => {
           setReaction('');
         },
         name: 'all',
       },
     ];
 
-    reactions!.forEach(reaction => items.push(
-      {
-        text: <div className='flex items-center gap-1'>
-          <Emoji className='size-4' emoji={reaction.name} src={reaction.url ?? undefined} />
-          {reaction.count}
-        </div>,
-        action: () =>{
+    reactions!.forEach((reaction) =>
+      items.push({
+        text: (
+          <div className='flex items-center gap-1'>
+            <Emoji className='size-4' emoji={reaction.name} src={reaction.url ?? undefined} />
+            {reaction.count}
+          </div>
+        ),
+        action: () => {
           setReaction(reaction.name);
         },
         name: reaction.name,
-      },
-    ));
+      }),
+    );
 
     return <Tabs items={items} activeItem={reaction ?? 'all'} />;
   };
@@ -72,9 +78,22 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
     if (reaction) {
       const reactionRecord = reactions.find(({ name }) => name === reaction);
 
-      if (reactionRecord) return reactionRecord.account_ids.map(account => ({ id: account, reaction: reaction, reactionUrl: reactionRecord.url ?? undefined }));
+      if (reactionRecord)
+        return reactionRecord.account_ids.map((account) => ({
+          id: account,
+          reaction: reaction,
+          reactionUrl: reactionRecord.url ?? undefined,
+        }));
     } else {
-      return reactions.map(({ account_ids, name, url }) => account_ids.map(account => ({ id: account, reaction: name, reactionUrl: url ?? undefined }))).flat();
+      return reactions
+        .map(({ account_ids, name, url }) =>
+          account_ids.map((account) => ({
+            id: account,
+            reaction: name,
+            reactionUrl: url ?? undefined,
+          })),
+        )
+        .flat();
     }
   }, [reactions, reaction]);
 
@@ -83,27 +102,39 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
   if (!accounts || !reactions) {
     body = <Spinner />;
   } else {
-    const emptyMessage = <FormattedMessage id='status.reactions.empty' defaultMessage='No one has reacted to this post yet. When someone does, they will show up here.' />;
+    const emptyMessage = (
+      <FormattedMessage
+        id='status.reactions.empty'
+        defaultMessage='No one has reacted to this post yet. When someone does, they will show up here.'
+      />
+    );
 
-    body = (<>
-      {reactions.length > 0 && renderFilterBar()}
-      <PullToRefresh onRefresh={refetch}>
-        <ScrollableList
-          emptyMessageText={emptyMessage}
-          listClassName={clsx('max-w-full', {
-            '!mt-4': reactions.length > 0,
-          })}
-          itemClassName='pb-3'
-          style={{ height: reactions.length > 0 ? 'calc(80vh - 159px)' : 'calc(80vh - 88px)' }}
-          isLoading={isLoading}
-          useWindowScroll={false}
-        >
-          {accounts.map((account) =>
-            <AccountContainer key={`${account.id}-${account.reaction}`} id={account.id} emoji={account.reaction} emojiUrl={account.reactionUrl} />,
-          )}
-        </ScrollableList>
-      </PullToRefresh>
-    </>);
+    body = (
+      <>
+        {reactions.length > 0 && renderFilterBar()}
+        <PullToRefresh onRefresh={refetch}>
+          <ScrollableList
+            emptyMessageText={emptyMessage}
+            listClassName={clsx('max-w-full', {
+              '!mt-4': reactions.length > 0,
+            })}
+            itemClassName='pb-3'
+            style={{ height: reactions.length > 0 ? 'calc(80vh - 159px)' : 'calc(80vh - 88px)' }}
+            isLoading={isLoading}
+            useWindowScroll={false}
+          >
+            {accounts.map((account) => (
+              <AccountContainer
+                key={`${account.id}-${account.reaction}`}
+                id={account.id}
+                emoji={account.reaction}
+                emojiUrl={account.reactionUrl}
+              />
+            ))}
+          </ScrollableList>
+        </PullToRefresh>
+      </>
+    );
   }
 
   return (

@@ -10,7 +10,7 @@ const roundDown = (num: number) => {
   }
 
   const n = Number(num.toFixed(2));
-  return (n > num) ? n - (1 / (Math.pow(10, 2))) : n;
+  return n > num ? n - 1 / Math.pow(10, 2) : n;
 };
 
 /** Display a number nicely for the UI, eg 1000 becomes 1K. */
@@ -46,8 +46,4 @@ const shortNumberFormat = (number: any, max?: number): React.ReactNode => {
   );
 };
 
-export {
-  isNumber,
-  roundDown,
-  shortNumberFormat,
-};
+export { isNumber, roundDown, shortNumberFormat };

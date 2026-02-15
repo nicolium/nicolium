@@ -18,28 +18,29 @@ const PinnedAccountsPanel: React.FC<IPinnedAccountsPanel> = ({ account, limit })
   const { data: pinned = [] } = useEndorsedAccounts(account.id);
 
   if (!pinned.length) {
-    return (
-      <WhoToFollowPanel limit={limit} />
-    );
+    return <WhoToFollowPanel limit={limit} />;
   }
 
   return (
     <Widget
-      title={<FormattedMessage
-        id='pinned_accounts.title'
-        defaultMessage='{name}’s choices'
-        values={{
-          name: <span><Emojify text={account.display_name} emojis={account.emojis} /></span>,
-        }}
-      />}
-    >
-      {pinned && pinned.map((suggestion) => (
-        <AccountContainer
-          key={suggestion}
-          id={suggestion}
-          withRelationship={false}
+      title={
+        <FormattedMessage
+          id='pinned_accounts.title'
+          defaultMessage='{name}’s choices'
+          values={{
+            name: (
+              <span>
+                <Emojify text={account.display_name} emojis={account.emojis} />
+              </span>
+            ),
+          }}
         />
-      ))}
+      }
+    >
+      {pinned &&
+        pinned.map((suggestion) => (
+          <AccountContainer key={suggestion} id={suggestion} withRelationship={false} />
+        ))}
     </Widget>
   );
 };

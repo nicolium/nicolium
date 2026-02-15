@@ -6,7 +6,9 @@ import BlankslateEmpty from './blankslate-empty';
 import BlankslateWithChats from './blankslate-with-chats';
 
 const ChatsPageEmpty = () => {
-  const { chatsQuery: { data: chats, isLoading } } = useChats();
+  const {
+    chatsQuery: { data: chats, isLoading },
+  } = useChats();
 
   if (isLoading) {
     return null;

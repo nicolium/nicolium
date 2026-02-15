@@ -15,10 +15,12 @@ const useTranslationLanguages = () => {
     const metadata = instance.pleroma.metadata;
 
     if (metadata.translation.source_languages?.length) {
-      return Object.fromEntries(metadata.translation.source_languages.map(source => [
-        source,
-        metadata.translation.target_languages!.filter(lang => lang !== source),
-      ]));
+      return Object.fromEntries(
+        metadata.translation.source_languages.map((source) => [
+          source,
+          metadata.translation.target_languages!.filter((lang) => lang !== source),
+        ]),
+      );
     }
 
     return client.instance.getInstanceTranslationLanguages();

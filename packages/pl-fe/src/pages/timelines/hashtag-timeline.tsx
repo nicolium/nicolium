@@ -11,7 +11,10 @@ import { hashtagTimelineRoute } from '@/features/ui/router';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
-import { useFollowHashtagMutation, useUnfollowHashtagMutation } from '@/queries/hashtags/use-followed-tags';
+import {
+  useFollowHashtagMutation,
+  useUnfollowHashtagMutation,
+} from '@/queries/hashtags/use-followed-tags';
 import { useHashtag } from '@/queries/hashtags/use-hashtag';
 
 const HashtagTimelinePage: React.FC = () => {
@@ -26,7 +29,7 @@ const HashtagTimelinePage: React.FC = () => {
   const { mutate: unfollowHashtag } = useUnfollowHashtagMutation(tagId);
 
   const handleLoadMore = () => {
-    dispatch(fetchHashtagTimeline(tagId, { }, true));
+    dispatch(fetchHashtagTimeline(tagId, {}, true));
   };
 
   const handleFollow = () => {
@@ -52,10 +55,7 @@ const HashtagTimelinePage: React.FC = () => {
             className='mb-3 black:mx-4 black:mb-0'
             label={<FormattedMessage id='hashtag.follow' defaultMessage='Follow hashtag' />}
           >
-            <Toggle
-              checked={tag?.following}
-              onChange={handleFollow}
-            />
+            <Toggle checked={tag?.following} onChange={handleFollow} />
           </ListItem>
         </List>
       )}
@@ -64,7 +64,12 @@ const HashtagTimelinePage: React.FC = () => {
         scrollKey='hashtag_timeline'
         timelineId={`hashtag:${tagId}`}
         onLoadMore={handleLoadMore}
-        emptyMessageText={<FormattedMessage id='empty_column.hashtag' defaultMessage='There is nothing in this hashtag yet.' />}
+        emptyMessageText={
+          <FormattedMessage
+            id='empty_column.hashtag'
+            defaultMessage='There is nothing in this hashtag yet.'
+          />
+        }
       />
     </Column>
   );

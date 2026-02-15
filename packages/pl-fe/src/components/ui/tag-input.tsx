@@ -15,7 +15,7 @@ const TagInput: React.FC<ITagInput> = ({ tags, onChange, placeholder }) => {
   const [input, setInput] = useState('');
 
   const handleTagDelete = (tag: string) => {
-    onChange(tags.filter(item => item !== tag));
+    onChange(tags.filter((item) => item !== tag));
   };
 
   const handleKeyDown: React.KeyboardEventHandler = (e) => {
@@ -26,7 +26,11 @@ const TagInput: React.FC<ITagInput> = ({ tags, onChange, placeholder }) => {
       e.preventDefault();
     }
 
-    if ([',', 'Tab', 'Enter'].includes(key) && trimmedInput.length && !tags.includes(trimmedInput)) {
+    if (
+      [',', 'Tab', 'Enter'].includes(key) &&
+      trimmedInput.length &&
+      !tags.includes(trimmedInput)
+    ) {
       e.preventDefault();
       onChange([...tags, trimmedInput]);
       setInput('');
@@ -58,7 +62,7 @@ const TagInput: React.FC<ITagInput> = ({ tags, onChange, placeholder }) => {
           className='mb-2 h-8 w-32 grow bg-transparent p-1 outline-none'
           value={input}
           placeholder={placeholder}
-          onChange={e =>{
+          onChange={(e) => {
             setInput(e.target.value);
           }}
           onKeyDown={handleKeyDown}

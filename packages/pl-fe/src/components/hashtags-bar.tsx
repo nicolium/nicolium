@@ -25,9 +25,7 @@ const HashtagsBar: React.FC<IHashtagsBar> = ({ hashtags }) => {
     return null;
   }
 
-  const revealedHashtags = expanded
-    ? hashtags
-    : hashtags.slice(0, VISIBLE_HASHTAGS);
+  const revealedHashtags = expanded ? hashtags : hashtags.slice(0, VISIBLE_HASHTAGS);
 
   return (
     <HStack space={2} wrap>
@@ -36,7 +34,7 @@ const HashtagsBar: React.FC<IHashtagsBar> = ({ hashtags }) => {
           key={hashtag}
           to='/tags/$id'
           params={{ id: hashtag }}
-          onClick={(e) =>{
+          onClick={(e) => {
             e.stopPropagation();
           }}
           className='flex items-center rounded-sm bg-gray-100 px-1.5 py-1 text-xs font-medium text-primary-600 black:bg-primary-900 dark:bg-primary-700 dark:text-white'

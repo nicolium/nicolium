@@ -56,12 +56,8 @@ const BirthdayPanel = ({ limit }: IBirthdayPanel) => {
 
   return (
     <Widget title={<FormattedMessage id='birthday_panel.title' defaultMessage='Birthdays' />}>
-      {birthdaysToRender.map(accountId => (
-        <AccountContainer
-          key={accountId}
-          id={accountId}
-          withRelationship={false}
-        />
+      {birthdaysToRender.map((accountId) => (
+        <AccountContainer key={accountId} id={accountId} withRelationship={false} />
       ))}
     </Widget>
   );

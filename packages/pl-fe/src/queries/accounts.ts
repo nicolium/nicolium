@@ -7,7 +7,7 @@ import toast from '@/toast';
 
 type UpdateCredentialsData = {
   accepts_chat_messages?: boolean;
-}
+};
 
 const useUpdateCredentials = () => {
   // const { account } = useOwnAccount();

@@ -30,7 +30,7 @@ const ProfileLayout: React.FC = () => {
 
   const { account, isUnauthorized } = useAccountLookup(username, { withRelationship: true });
 
-  const me = useAppSelector(state => state.me);
+  const me = useAppSelector((state) => state.me);
   const features = useFeatures();
   const acct = useAcct(account);
 
@@ -90,7 +90,7 @@ const ProfileLayout: React.FC = () => {
     activeItem = 'profile';
   }
 
-  const showTabs = !['/following', '/followers', '/pins'].some(path => pathname.endsWith(path));
+  const showTabs = !['/following', '/followers', '/pins'].some((path) => pathname.endsWith(path));
 
   return (
     <>
@@ -115,21 +115,15 @@ const ProfileLayout: React.FC = () => {
       </Layout.Main>
 
       <Layout.Aside>
-        {!me && (
-          <SignUpPanel />
-        )}
+        {!me && <SignUpPanel />}
 
-        {features.notes && account && account?.id !== me && (
-          <AccountNotePanel account={account} />
-        )}
+        {features.notes && account && account?.id !== me && <AccountNotePanel account={account} />}
         <ProfileMediaPanel account={account} />
-        {(account && account.fields.length > 0) && (
-          <ProfileFieldsPanel account={account} />
-        )}
-        {(features.accountEndorsements && account && account.local) ? (
+        {account && account.fields.length > 0 && <ProfileFieldsPanel account={account} />}
+        {features.accountEndorsements && account && account.local ? (
           <PinnedAccountsPanel account={account} limit={5} />
-        ) : me && features.suggestions && (
-          <WhoToFollowPanel limit={3} />
+        ) : (
+          me && features.suggestions && <WhoToFollowPanel limit={3} />
         )}
         <LinkFooter key='link-footer' />
       </Layout.Aside>

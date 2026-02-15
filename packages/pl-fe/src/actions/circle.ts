@@ -14,10 +14,19 @@ interface Interaction {
   favourites: number;
 }
 
-const processCircle = (setProgress: (progress: {
-  state: 'pending' | 'fetchingStatuses' | 'fetchingFavourites' | 'fetchingAvatars' | 'drawing' | 'done';
-  progress: number;
-}) => void) =>
+const processCircle =
+  (
+    setProgress: (progress: {
+      state:
+        | 'pending'
+        | 'fetchingStatuses'
+        | 'fetchingFavourites'
+        | 'fetchingAvatars'
+        | 'drawing'
+        | 'done';
+      progress: number;
+    }) => void,
+  ) =>
   async (dispatch: AppDispatch, getState: () => RootState) => {
     setProgress({ state: 'pending', progress: 0 });
 
@@ -63,7 +72,8 @@ const processCircle = (setProgress: (progress: {
       return response.next;
     };
 
-    const fetchFavourites = async (next: (() => Promise<PaginatedResponse<Status>>) | null) => { // limit 40
+    const fetchFavourites = async (next: (() => Promise<PaginatedResponse<Status>>) | null) => {
+      // limit 40
       const response = await (next?.() ?? client.myAccount.getFavourites({ limit: 40 }));
 
       response.items.forEach((status) => {
@@ -93,26 +103,30 @@ const processCircle = (setProgress: (progress: {
       if (!next) break;
     }
 
-    const result = await Promise.all(Object.entries(interactions).map(([id, { acct, avatar, avatar_description, favourites, reblogs, replies }]) => {
-      const score = favourites + replies * 1.1 + reblogs * 1.3;
-      return { id, acct, avatar, avatar_description, score };
-    }).toSorted((a, b) => b.score - a.score).slice(0, 49).map(async (interaction, index, array) => {
-      setProgress({ state: 'fetchingAvatars', progress: 80 + (index / array.length) * 10 });
+    const result = await Promise.all(
+      Object.entries(interactions)
+        .map(([id, { acct, avatar, avatar_description, favourites, reblogs, replies }]) => {
+          const score = favourites + replies * 1.1 + reblogs * 1.3;
+          return { id, acct, avatar, avatar_description, score };
+        })
+        .toSorted((a, b) => b.score - a.score)
+        .slice(0, 49)
+        .map(async (interaction, index, array) => {
+          setProgress({ state: 'fetchingAvatars', progress: 80 + (index / array.length) * 10 });
 
-      if (interaction.acct) return interaction;
+          if (interaction.acct) return interaction;
 
-      const account = await client.accounts.getAccount(interaction.id);
+          const account = await client.accounts.getAccount(interaction.id);
 
-      interaction.acct = account.acct;
-      interaction.avatar = account.avatar_static || account.avatar;
-      interaction.avatar_description = account.avatar_description;
+          interaction.acct = account.acct;
+          interaction.avatar = account.avatar_static || account.avatar;
+          interaction.avatar_description = account.avatar_description;
 
-      return interaction;
-    }));
+          return interaction;
+        }),
+    );
 
     return result;
   };
 
-export {
-  processCircle,
-};
+export { processCircle };

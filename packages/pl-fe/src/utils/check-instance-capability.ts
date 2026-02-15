@@ -2,12 +2,15 @@ import KVStore from '@/storage/kv-store';
 
 type DomainCapabilities = {
   lastChecked: number;
-} & ({
-  failed: true;
-} | {
-  failed: false;
-  emojiReacts: boolean;
-});
+} & (
+  | {
+      failed: true;
+    }
+  | {
+      failed: false;
+      emojiReacts: boolean;
+    }
+);
 
 interface Capabilities {
   _version: number;
@@ -20,13 +23,17 @@ let capabilities: Capabilities = {
 };
 
 const getCapabilitiesFromMemory = () =>
-  KVStore.getItem<Capabilities>('instanceCapabilities').then((capabilitiesFromMemory) => {
-    if (capabilitiesFromMemory) {
-      capabilities = capabilitiesFromMemory;
-    }
-  }).catch(() => { });
+  KVStore.getItem<Capabilities>('instanceCapabilities')
+    .then((capabilitiesFromMemory) => {
+      if (capabilitiesFromMemory) {
+        capabilities = capabilitiesFromMemory;
+      }
+    })
+    .catch(() => {});
 
-const checkEmojiReactsSupport = (instance: Record<string, any>) => instance.configuration?.reactions?.max_reactions > 0 || instance.pleroma?.metadata?.features?.includes('pleroma_emoji_reactions');
+const checkEmojiReactsSupport = (instance: Record<string, any>) =>
+  instance.configuration?.reactions?.max_reactions > 0 ||
+  instance.pleroma?.metadata?.features?.includes('pleroma_emoji_reactions');
 
 const setDomainCapabilities = async (domain: string, domainCapabilities: DomainCapabilities) => {
   await getCapabilitiesFromMemory();
@@ -65,7 +72,11 @@ const supportsEmojiReacts = async (accountUrl: string): Promise<'true' | 'false'
   const domain = new URL(accountUrl).hostname;
   let domainCapabilities = capabilities.domains[domain];
 
-  if (!domainCapabilities || domainCapabilities.lastChecked < Date.now() - 1000 * 60 * 60 * 24 * (domainCapabilities.failed ? 1 : 7)) {
+  if (
+    !domainCapabilities ||
+    domainCapabilities.lastChecked <
+      Date.now() - 1000 * 60 * 60 * 24 * (domainCapabilities.failed ? 1 : 7)
+  ) {
     domainCapabilities = await fetchCapabilities(domain);
   }
 

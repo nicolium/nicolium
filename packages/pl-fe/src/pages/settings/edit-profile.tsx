@@ -35,29 +35,75 @@ import type { StreamfieldComponent } from '@/components/ui/streamfield';
  * Whether the user is hiding their follows and/or followers.
  * Pleroma's config is granular, but we simplify it into one setting.
  */
-const hidesNetwork = ({ __meta }: Pick<CredentialAccount, '__meta'>): boolean => Boolean(
-  __meta.pleroma?.hide_followers && __meta.pleroma?.hide_follows && __meta.pleroma?.hide_followers_count && __meta.pleroma?.hide_follows_count,
-);
+const hidesNetwork = ({ __meta }: Pick<CredentialAccount, '__meta'>): boolean =>
+  Boolean(
+    __meta.pleroma?.hide_followers &&
+    __meta.pleroma?.hide_follows &&
+    __meta.pleroma?.hide_followers_count &&
+    __meta.pleroma?.hide_follows_count,
+  );
 
 const messages = defineMessages({
   heading: { id: 'column.edit_profile', defaultMessage: 'Edit profile' },
-  metaFieldLabel: { id: 'edit_profile.fields.meta_fields.label_placeholder', defaultMessage: 'Label' },
-  metaFieldContent: { id: 'edit_profile.fields.meta_fields.content_placeholder', defaultMessage: 'Content' },
-  firstMetaFieldLabel: { id: 'edit_profile.fields.meta_fields.label_placeholder.first', defaultMessage: 'Label (e.g. pronouns)' },
-  success: { id: 'edit_profile.success', defaultMessage: 'Your profile has been successfully saved!' },
+  metaFieldLabel: {
+    id: 'edit_profile.fields.meta_fields.label_placeholder',
+    defaultMessage: 'Label',
+  },
+  metaFieldContent: {
+    id: 'edit_profile.fields.meta_fields.content_placeholder',
+    defaultMessage: 'Content',
+  },
+  firstMetaFieldLabel: {
+    id: 'edit_profile.fields.meta_fields.label_placeholder.first',
+    defaultMessage: 'Label (e.g. pronouns)',
+  },
+  success: {
+    id: 'edit_profile.success',
+    defaultMessage: 'Your profile has been successfully saved!',
+  },
   error: { id: 'edit_profile.error', defaultMessage: 'Profile update failed' },
-  bioPlaceholder: { id: 'edit_profile.fields.bio_placeholder', defaultMessage: 'Tell us about yourself.' },
-  displayNamePlaceholder: { id: 'edit_profile.fields.display_name_placeholder', defaultMessage: 'Name' },
-  locationPlaceholder: { id: 'edit_profile.fields.location_placeholder', defaultMessage: 'Location' },
+  bioPlaceholder: {
+    id: 'edit_profile.fields.bio_placeholder',
+    defaultMessage: 'Tell us about yourself.',
+  },
+  displayNamePlaceholder: {
+    id: 'edit_profile.fields.display_name_placeholder',
+    defaultMessage: 'Name',
+  },
+  locationPlaceholder: {
+    id: 'edit_profile.fields.location_placeholder',
+    defaultMessage: 'Location',
+  },
   cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
   mentionPolicyNone: { id: 'edit_profile.fields.mention_policy.none', defaultMessage: 'Everybody' },
-  mentionPolicyOnlyKnown: { id: 'edit_profile.fields.mention_policy.only_known', defaultMessage: 'Everybody except new accounts' },
-  mentionPolicyOnlyContacts: { id: 'edit_profile.fields.mention_policy.only_contacts', defaultMessage: 'People I follow and my followers' },
-  webLayoutMicroblog: { id: 'edit_profile.fields.web_layout.microblog', defaultMessage: 'Classic microblog layout' },
-  webLayoutGallery: { id: 'edit_profile.fields.web_layout.gallery', defaultMessage: 'Media-only gallery layout' },
-  webVisibilityPublic: { id: 'edit_profile.fields.web_visibility.public', defaultMessage: 'Show public posts only' },
-  webVisibilityUnlisted: { id: 'edit_profile.fields.web_visibility.unlisted', defaultMessage: 'Show public and unlisted posts' },
-  webVisibilityNone: { id: 'edit_profile.fields.web_visibility.none', defaultMessage: 'Show no posts' },
+  mentionPolicyOnlyKnown: {
+    id: 'edit_profile.fields.mention_policy.only_known',
+    defaultMessage: 'Everybody except new accounts',
+  },
+  mentionPolicyOnlyContacts: {
+    id: 'edit_profile.fields.mention_policy.only_contacts',
+    defaultMessage: 'People I follow and my followers',
+  },
+  webLayoutMicroblog: {
+    id: 'edit_profile.fields.web_layout.microblog',
+    defaultMessage: 'Classic microblog layout',
+  },
+  webLayoutGallery: {
+    id: 'edit_profile.fields.web_layout.gallery',
+    defaultMessage: 'Media-only gallery layout',
+  },
+  webVisibilityPublic: {
+    id: 'edit_profile.fields.web_visibility.public',
+    defaultMessage: 'Show public posts only',
+  },
+  webVisibilityUnlisted: {
+    id: 'edit_profile.fields.web_visibility.unlisted',
+    defaultMessage: 'Show public and unlisted posts',
+  },
+  webVisibilityNone: {
+    id: 'edit_profile.fields.web_visibility.none',
+    defaultMessage: 'Show no posts',
+  },
   customCSSLabel: { id: 'edit_profile.fields.custom_css_label', defaultMessage: 'Custom CSS' },
 });
 
@@ -144,10 +190,26 @@ const accountToCredentials = (account: CredentialAccount): AccountCredentials =>
   const hideNetwork = hidesNetwork(account);
 
   return {
-    ...(pick(account, ['birthday', 'bot', 'custom_css', 'discoverable', 'display_name', 'locked', 'location', 'avatar_description', 'header_description', 'enable_rss', 'hide_collections', 'is_cat', 'speak_as_cat', 'mention_policy'])),
-    ...(pick(account.source, ['note', 'web_include_boosts', 'web_layout', 'web_visibility'])),
-    fields_attributes: [...account.__meta.source?.fields ?? []],
-    stranger_notifications: account.__meta.pleroma?.notification_settings?.block_from_strangers === true,
+    ...pick(account, [
+      'birthday',
+      'bot',
+      'custom_css',
+      'discoverable',
+      'display_name',
+      'locked',
+      'location',
+      'avatar_description',
+      'header_description',
+      'enable_rss',
+      'hide_collections',
+      'is_cat',
+      'speak_as_cat',
+      'mention_policy',
+    ]),
+    ...pick(account.source, ['note', 'web_include_boosts', 'web_layout', 'web_visibility']),
+    fields_attributes: [...(account.__meta.source?.fields ?? [])],
+    stranger_notifications:
+      account.__meta.pleroma?.notification_settings?.block_from_strangers === true,
     hide_followers: hideNetwork,
     hide_follows: hideNetwork,
     hide_followers_count: hideNetwork,
@@ -155,12 +217,18 @@ const accountToCredentials = (account: CredentialAccount): AccountCredentials =>
   };
 };
 
-const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({ index, value, onChange }) => {
+const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
+  index,
+  value,
+  onChange,
+}) => {
   const intl = useIntl();
 
-  const handleChange = (key: string): React.ChangeEventHandler<HTMLInputElement> => e => {
-    onChange({ ...value, [key]: e.currentTarget.value });
-  };
+  const handleChange =
+    (key: string): React.ChangeEventHandler<HTMLInputElement> =>
+    (e) => {
+      onChange({ ...value, [key]: e.currentTarget.value });
+    };
 
   return (
     <HStack space={2} grow>
@@ -169,7 +237,11 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({ index, va
         outerClassName='w-2/5 grow'
         value={value.name}
         onChange={handleChange('name')}
-        placeholder={index === 0 ? intl.formatMessage(messages.firstMetaFieldLabel) : intl.formatMessage(messages.metaFieldLabel)}
+        placeholder={
+          index === 0
+            ? intl.formatMessage(messages.firstMetaFieldLabel)
+            : intl.formatMessage(messages.metaFieldLabel)
+        }
         onFocus={(e) => {
           const field: HTMLElement | null = e.target.closest('[draggable=true]');
           if (field) field.draggable = false;
@@ -212,8 +284,9 @@ const EditProfilePage: React.FC = () => {
     : instance.pleroma.metadata.fields_limits.max_fields;
 
   const attachmentTypes = useAppSelector(
-    state => state.instance.configuration.media_attachments.supported_mime_types)
-    ?.filter(type => type.startsWith('image/'))
+    (state) => state.instance.configuration.media_attachments.supported_mime_types,
+  )
+    ?.filter((type) => type.startsWith('image/'))
     .join(',');
 
   const [isLoading, setLoading] = useState(true);
@@ -221,24 +294,34 @@ const EditProfilePage: React.FC = () => {
   const [muteStrangers, setMuteStrangers] = useState(false);
   const [customCSSEditorExpanded, setCustomCSSEditorExpanded] = useState(false);
 
-  const avatar = useImageField({ maxPixels: 400 * 400, preview: account?.avatar_default === false ? account.avatar : undefined });
-  const header = useImageField({ maxPixels: 1920 * 1080, preview: account?.header_default === false ? account.header : undefined });
+  const avatar = useImageField({
+    maxPixels: 400 * 400,
+    preview: account?.avatar_default === false ? account.avatar : undefined,
+  });
+  const header = useImageField({
+    maxPixels: 1920 * 1080,
+    preview: account?.header_default === false ? account.header : undefined,
+  });
 
   useEffect(() => {
-    client.settings.verifyCredentials().then((credentialAccount) => {
-      const credentials = accountToCredentials(credentialAccount);
-      const strangerNotifications = credentialAccount.__meta.pleroma?.notification_settings?.block_from_strangers === true;
-      setData(credentials);
-      setMuteStrangers(strangerNotifications);
-      setLoading(false);
-    }).catch(() => {
-      setLoading(false);
-    });
+    client.settings
+      .verifyCredentials()
+      .then((credentialAccount) => {
+        const credentials = accountToCredentials(credentialAccount);
+        const strangerNotifications =
+          credentialAccount.__meta.pleroma?.notification_settings?.block_from_strangers === true;
+        setData(credentials);
+        setMuteStrangers(strangerNotifications);
+        setLoading(false);
+      })
+      .catch(() => {
+        setLoading(false);
+      });
   }, [account?.id]);
 
   /** Set a single key in the request data. */
   const updateData = (key: string, value: any) => {
-    setData(prevData => ({ ...prevData, [key]: value }));
+    setData((prevData) => ({ ...prevData, [key]: value }));
   };
 
   const handleSubmit: React.FormEventHandler = (event) => {
@@ -249,10 +332,12 @@ const EditProfilePage: React.FC = () => {
       ...rest,
     };
 
-    if (fields_attributes?.length === 0) params.fields_attributes = { '0': { name: '', value: '' } };
-    else if (fields_attributes) params.fields_attributes = Object.fromEntries(
-      fields_attributes.map(({ name, value }, i) => [i.toString(), { name, value }]),
-    );
+    if (fields_attributes?.length === 0)
+      params.fields_attributes = { '0': { name: '', value: '' } };
+    else if (fields_attributes)
+      params.fields_attributes = Object.fromEntries(
+        fields_attributes.map(({ name, value }, i) => [i.toString(), { name, value }]),
+      );
     if (header.file !== undefined) params.header = header.file ?? '';
     if (avatar.file !== undefined) params.avatar = avatar.file ?? '';
 
@@ -262,51 +347,65 @@ const EditProfilePage: React.FC = () => {
 
     if (features.muteStrangers) {
       promises.push(
-        client.settings.updateNotificationSettings({
-          block_from_strangers: muteStrangers,
-        }).catch(console.error),
+        client.settings
+          .updateNotificationSettings({
+            block_from_strangers: muteStrangers,
+          })
+          .catch(console.error),
       );
     }
 
     setLoading(true);
 
-    Promise.all(promises).then(() => {
-      setLoading(false);
-      toast.success(intl.formatMessage(messages.success));
-    }).catch(() => {
-      setLoading(false);
-      toast.error(intl.formatMessage(messages.error));
-    });
+    Promise.all(promises)
+      .then(() => {
+        setLoading(false);
+        toast.success(intl.formatMessage(messages.success));
+      })
+      .catch(() => {
+        setLoading(false);
+        toast.error(intl.formatMessage(messages.error));
+      });
 
     event.preventDefault();
   };
 
-  const handleFieldChange = <T = any>(key: keyof AccountCredentials) => (value: T) => {
-    updateData(key, value);
-  };
+  const handleFieldChange =
+    <T = any>(key: keyof AccountCredentials) =>
+    (value: T) => {
+      updateData(key, value);
+    };
 
-  const handleCheckboxChange = (key: keyof AccountCredentials): React.ChangeEventHandler<HTMLInputElement> => e => {
-    updateData(key, e.target.checked);
-  };
+  const handleCheckboxChange =
+    (key: keyof AccountCredentials): React.ChangeEventHandler<HTMLInputElement> =>
+    (e) => {
+      updateData(key, e.target.checked);
+    };
 
-  const handleTextChange = (key: keyof AccountCredentials): React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> => e => {
-    updateData(key, e.target.value);
-  };
+  const handleTextChange =
+    (
+      key: keyof AccountCredentials,
+    ): React.ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> =>
+    (e) => {
+      updateData(key, e.target.value);
+    };
 
   const handleBirthdayChange = (date: string) => {
     updateData('birthday', date);
   };
 
-  const handleHideNetworkChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const handleHideNetworkChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const hide = e.target.checked;
-    setData(prevData => ({
+    setData((prevData) => ({
       ...prevData,
-      ...(features.version.software === GOTOSOCIAL ? { hide_collections: hide } : {
-        hide_followers: hide,
-        hide_follows: hide,
-        hide_followers_count: hide,
-        hide_follows_count: hide,
-      }),
+      ...(features.version.software === GOTOSOCIAL
+        ? { hide_collections: hide }
+        : {
+            hide_followers: hide,
+            hide_follows: hide,
+            hide_followers_count: hide,
+            hide_follows_count: hide,
+          }),
     }));
   };
 
@@ -328,9 +427,11 @@ const EditProfilePage: React.FC = () => {
   };
 
   const handleAvatarChangeDescription = features.accountAvatarDescription
-    ? handleFieldChange<string>('avatar_description') : undefined;
+    ? handleFieldChange<string>('avatar_description')
+    : undefined;
   const handleHeaderChangeDescription = features.accountAvatarDescription
-    ? handleFieldChange<string>('header_description') : undefined;
+    ? handleFieldChange<string>('header_description')
+    : undefined;
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -354,7 +455,12 @@ const EditProfilePage: React.FC = () => {
         </div>
 
         <FormGroup
-          labelText={<FormattedMessage id='edit_profile.fields.display_name_label' defaultMessage='Display name' />}
+          labelText={
+            <FormattedMessage
+              id='edit_profile.fields.display_name_label'
+              defaultMessage='Display name'
+            />
+          }
         >
           <Input
             type='text'
@@ -366,18 +472,19 @@ const EditProfilePage: React.FC = () => {
 
         {features.birthdays && (
           <FormGroup
-            labelText={<FormattedMessage id='edit_profile.fields.birthday_label' defaultMessage='Birthday' />}
+            labelText={
+              <FormattedMessage id='edit_profile.fields.birthday_label' defaultMessage='Birthday' />
+            }
           >
-            <BirthdayInput
-              value={data.birthday}
-              onChange={handleBirthdayChange}
-            />
+            <BirthdayInput value={data.birthday} onChange={handleBirthdayChange} />
           </FormGroup>
         )}
 
         {features.accountLocation && (
           <FormGroup
-            labelText={<FormattedMessage id='edit_profile.fields.location_label' defaultMessage='Location' />}
+            labelText={
+              <FormattedMessage id='edit_profile.fields.location_label' defaultMessage='Location' />
+            }
           >
             <Input
               type='text'
@@ -402,23 +509,49 @@ const EditProfilePage: React.FC = () => {
         <List>
           {features.followRequests && (
             <ListItem
-              label={<FormattedMessage id='edit_profile.fields.locked_label' defaultMessage='Lock account' />}
-              hint={<FormattedMessage id='edit_profile.hints.locked' defaultMessage='Requires you to manually approve followers' />}
+              label={
+                <FormattedMessage
+                  id='edit_profile.fields.locked_label'
+                  defaultMessage='Lock account'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='edit_profile.hints.locked'
+                  defaultMessage='Requires you to manually approve followers'
+                />
+              }
             >
-              <Toggle
-                checked={data.locked}
-                onChange={handleCheckboxChange('locked')}
-              />
+              <Toggle checked={data.locked} onChange={handleCheckboxChange('locked')} />
             </ListItem>
           )}
 
           {features.hideNetwork && (
             <ListItem
-              label={<FormattedMessage id='edit_profile.fields.hide_network_label' defaultMessage='Hide network' />}
-              hint={<FormattedMessage id='edit_profile.hints.hide_network' defaultMessage='Who you follow and who follows you will not be shown on your profile' />}
+              label={
+                <FormattedMessage
+                  id='edit_profile.fields.hide_network_label'
+                  defaultMessage='Hide network'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='edit_profile.hints.hide_network'
+                  defaultMessage='Who you follow and who follows you will not be shown on your profile'
+                />
+              }
             >
               <Toggle
-                checked={account ? (features.version.software === GOTOSOCIAL ? data.hide_collections : (data.hide_followers && data.hide_follows && data.hide_followers_count && data.hide_follows_count)) : false}
+                checked={
+                  account
+                    ? features.version.software === GOTOSOCIAL
+                      ? data.hide_collections
+                      : data.hide_followers &&
+                        data.hide_follows &&
+                        data.hide_followers_count &&
+                        data.hide_follows_count
+                    : false
+                }
                 onChange={handleHideNetworkChange}
               />
             </ListItem>
@@ -426,24 +559,41 @@ const EditProfilePage: React.FC = () => {
 
           {features.bots && (
             <ListItem
-              label={<FormattedMessage id='edit_profile.fields.bot_label' defaultMessage='This is a bot account' />}
-              hint={<FormattedMessage id='edit_profile.hints.bot' defaultMessage='This account mainly performs automated actions and might not be monitored' />}
+              label={
+                <FormattedMessage
+                  id='edit_profile.fields.bot_label'
+                  defaultMessage='This is a bot account'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='edit_profile.hints.bot'
+                  defaultMessage='This account mainly performs automated actions and might not be monitored'
+                />
+              }
             >
-              <Toggle
-                checked={data.bot}
-                onChange={handleCheckboxChange('bot')}
-              />
+              <Toggle checked={data.bot} onChange={handleCheckboxChange('bot')} />
             </ListItem>
           )}
 
           {features.muteStrangers && (
             <ListItem
-              label={<FormattedMessage id='edit_profile.fields.stranger_notifications_label' defaultMessage='Block notifications from strangers' />}
-              hint={<FormattedMessage id='edit_profile.hints.stranger_notifications' defaultMessage='Only show notifications from people you follow' />}
+              label={
+                <FormattedMessage
+                  id='edit_profile.fields.stranger_notifications_label'
+                  defaultMessage='Block notifications from strangers'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='edit_profile.hints.stranger_notifications'
+                  defaultMessage='Only show notifications from people you follow'
+                />
+              }
             >
               <Toggle
                 checked={muteStrangers}
-                onChange={(e) =>{
+                onChange={(e) => {
                   setMuteStrangers(e.target.checked);
                 }}
               />
@@ -452,42 +602,68 @@ const EditProfilePage: React.FC = () => {
 
           {features.accountDiscoverability && (
             <ListItem
-              label={<FormattedMessage id='edit_profile.fields.discoverable_label' defaultMessage='Allow account discovery' />}
-              hint={<FormattedMessage id='edit_profile.hints.discoverable' defaultMessage='Display account in profile directory and allow indexing by external services' />}
+              label={
+                <FormattedMessage
+                  id='edit_profile.fields.discoverable_label'
+                  defaultMessage='Allow account discovery'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='edit_profile.hints.discoverable'
+                  defaultMessage='Display account in profile directory and allow indexing by external services'
+                />
+              }
             >
-              <Toggle
-                checked={data.discoverable}
-                onChange={handleCheckboxChange('discoverable')}
-              />
+              <Toggle checked={data.discoverable} onChange={handleCheckboxChange('discoverable')} />
             </ListItem>
           )}
 
           {features.rssFeeds && features.version.software === GOTOSOCIAL && (
             <ListItem
-              label={<FormattedMessage id='edit_profile.fields.rss_label' defaultMessage='Enable RSS feed for public posts' />}
+              label={
+                <FormattedMessage
+                  id='edit_profile.fields.rss_label'
+                  defaultMessage='Enable RSS feed for public posts'
+                />
+              }
             >
-              <Toggle
-                checked={data.enable_rss}
-                onChange={handleCheckboxChange('enable_rss')}
-              />
+              <Toggle checked={data.enable_rss} onChange={handleCheckboxChange('enable_rss')} />
             </ListItem>
           )}
 
           {features.accountIsCat && (
             <>
               <ListItem
-                label={<FormattedMessage id='edit_profile.fields.is_cat_label' defaultMessage='The user is a cat' />}
-                hint={<FormattedMessage id='edit_profile.hints.is_cat' defaultMessage='Mark this account as a cat.' />}
+                label={
+                  <FormattedMessage
+                    id='edit_profile.fields.is_cat_label'
+                    defaultMessage='The user is a cat'
+                  />
+                }
+                hint={
+                  <FormattedMessage
+                    id='edit_profile.hints.is_cat'
+                    defaultMessage='Mark this account as a cat.'
+                  />
+                }
               >
-                <Toggle
-                  checked={data.is_cat}
-                  onChange={handleCheckboxChange('is_cat')}
-                />
+                <Toggle checked={data.is_cat} onChange={handleCheckboxChange('is_cat')} />
               </ListItem>
 
               <ListItem
-                label={<FormattedMessage id='edit_profile.fields.speak_as_cat_label' defaultMessage='The user speaks as a cat' />}
-                hint={<FormattedMessage id='edit_profile.hints.speak_as_cat' defaultMessage='Your posts will get nyanified.' />}
+                label={
+                  <FormattedMessage
+                    id='edit_profile.fields.speak_as_cat_label'
+                    defaultMessage='The user speaks as a cat'
+                  />
+                }
+                hint={
+                  <FormattedMessage
+                    id='edit_profile.hints.speak_as_cat'
+                    defaultMessage='Your posts will get nyanified.'
+                  />
+                }
               >
                 <Toggle
                   checked={data.speak_as_cat}
@@ -499,7 +675,12 @@ const EditProfilePage: React.FC = () => {
 
           {features.accountWebLayout && (
             <ListItem
-              label={<FormattedMessage id='preferences.fields.web_layout_label' defaultMessage='Layout of the web view of your profile' />}
+              label={
+                <FormattedMessage
+                  id='preferences.fields.web_layout_label'
+                  defaultMessage='Layout of the web view of your profile'
+                />
+              }
             >
               <SelectDropdown
                 className='max-w-fit'
@@ -508,7 +689,7 @@ const EditProfilePage: React.FC = () => {
                   gallery: intl.formatMessage(messages.webLayoutGallery),
                 }}
                 defaultValue={data.web_layout}
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>{
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                   handleFieldChange('web_layout')(event.target.value);
                 }}
               />
@@ -517,7 +698,12 @@ const EditProfilePage: React.FC = () => {
 
           {features.accountWebVisibility && (
             <ListItem
-              label={<FormattedMessage id='preferences.fields.web_visibility_label' defaultMessage='Visibility level of posts displayed on your profile' />}
+              label={
+                <FormattedMessage
+                  id='preferences.fields.web_visibility_label'
+                  defaultMessage='Visibility level of posts displayed on your profile'
+                />
+              }
             >
               <SelectDropdown
                 className='max-w-fit'
@@ -527,7 +713,7 @@ const EditProfilePage: React.FC = () => {
                   none: intl.formatMessage(messages.webVisibilityNone),
                 }}
                 defaultValue={data.web_visibility}
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>{
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                   handleFieldChange('web_visibility')(event.target.value);
                 }}
               />
@@ -536,8 +722,18 @@ const EditProfilePage: React.FC = () => {
 
           {features.accountWebIncludeBoosts && (
             <ListItem
-              label={<FormattedMessage id='preferences.fields.web_include_boosts_label' defaultMessage='Include reposts in web view' />}
-              hint={<FormattedMessage id='preferences.hints.web_include_boosts' defaultMessage='Show reposts created by the account on the web view of your profile' />}
+              label={
+                <FormattedMessage
+                  id='preferences.fields.web_include_boosts_label'
+                  defaultMessage='Include reposts in web view'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='preferences.hints.web_include_boosts'
+                  defaultMessage='Show reposts created by the account on the web view of your profile'
+                />
+              }
             >
               <Toggle
                 checked={data.web_include_boosts}
@@ -548,8 +744,18 @@ const EditProfilePage: React.FC = () => {
 
           {features.accountMentionPolicy && (
             <ListItem
-              label={<FormattedMessage id='preferences.fields.mention_policy_label' defaultMessage='Accept mentions from' />}
-              hint={<FormattedMessage id='preferences.hints.mention_policy' defaultMessage='Applies to direct messages and public posts' />}
+              label={
+                <FormattedMessage
+                  id='preferences.fields.mention_policy_label'
+                  defaultMessage='Accept mentions from'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='preferences.hints.mention_policy'
+                  defaultMessage='Applies to direct messages and public posts'
+                />
+              }
             >
               <SelectDropdown
                 key={data.mention_policy ? 'true' : 'false'}
@@ -560,7 +766,7 @@ const EditProfilePage: React.FC = () => {
                   only_contacts: intl.formatMessage(messages.mentionPolicyOnlyContacts),
                 }}
                 defaultValue={data.mention_policy}
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>{
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
                   handleFieldChange('mention_policy')(event.target.value);
                 }}
               />
@@ -570,8 +776,19 @@ const EditProfilePage: React.FC = () => {
 
         {features.profileFields && (
           <Streamfield
-            label={<FormattedMessage id='edit_profile.fields.meta_fields_label' defaultMessage='Profile fields' />}
-            hint={<FormattedMessage id='edit_profile.hints.meta_fields' defaultMessage='You can have up to {count, plural, one {# custom field} other {# custom fields}} displayed on your profile.' values={{ count: maxFields }} />}
+            label={
+              <FormattedMessage
+                id='edit_profile.fields.meta_fields_label'
+                defaultMessage='Profile fields'
+              />
+            }
+            hint={
+              <FormattedMessage
+                id='edit_profile.hints.meta_fields'
+                defaultMessage='You can have up to {count, plural, one {# custom field} other {# custom fields}} displayed on your profile.'
+                values={{ count: maxFields }}
+              />
+            }
             values={data.fields_attributes ?? []}
             onChange={handleFieldsChange}
             onAddItem={handleAddField}

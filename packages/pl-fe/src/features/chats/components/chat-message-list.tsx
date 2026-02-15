@@ -21,13 +21,22 @@ const messages = defineMessages({
   today: { id: 'chats.dividers.today', defaultMessage: 'Today' },
   blockedBy: { id: 'chat_message_list.blocked_by', defaultMessage: 'You are blocked by' },
   networkFailureTitle: { id: 'chat_message_list.network_failure.title', defaultMessage: 'Whoops!' },
-  networkFailureSubtitle: { id: 'chat_message_list.network_failure.subtitle', defaultMessage: 'We encountered a network failure.' },
-  networkFailureAction: { id: 'chat_message_list.network_failure.action', defaultMessage: 'Try again' },
+  networkFailureSubtitle: {
+    id: 'chat_message_list.network_failure.subtitle',
+    defaultMessage: 'We encountered a network failure.',
+  },
+  networkFailureAction: {
+    id: 'chat_message_list.network_failure.action',
+    defaultMessage: 'Try again',
+  },
 });
 
 type TimeFormat = 'today' | 'date';
 
-const timeChange = (prev: Pick<ChatMessageEntity, 'created_at'>, curr: Pick<ChatMessageEntity, 'created_at'>): TimeFormat | null => {
+const timeChange = (
+  prev: Pick<ChatMessageEntity, 'created_at'>,
+  curr: Pick<ChatMessageEntity, 'created_at'>,
+): TimeFormat | null => {
   const prevDate = new Date(prev.created_at).getDate();
   const currDate = new Date(curr.created_at).getDate();
   const nowDate = new Date().getDate();
@@ -160,13 +169,16 @@ const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
     return false;
   }, [firstItemIndex, hasNextPage, isFetching]);
 
-  const renderChatMessage = useCallback((index: number, chatMessage: ChatMessageEntity | { type: 'divider'; text: string }) => {
-    if ('type' in chatMessage && chatMessage.type === 'divider') {
-      return <Divider key={index} text={chatMessage.text} textSize='xs' />;
-    }
+  const renderChatMessage = useCallback(
+    (index: number, chatMessage: ChatMessageEntity | { type: 'divider'; text: string }) => {
+      if ('type' in chatMessage && chatMessage.type === 'divider') {
+        return <Divider key={index} text={chatMessage.text} textSize='xs' />;
+      }
 
-    return <ChatMessage key={chatMessage.id} chat={chat} chatMessage={chatMessage} />;
-  }, [chat]);
+      return <ChatMessage key={chatMessage.id} chat={chat} chatMessage={chatMessage} />;
+    },
+    [chat],
+  );
 
   useEffect(() => {
     const lastMessage = formattedChatMessages[formattedChatMessages.length - 1];
@@ -181,7 +193,7 @@ const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
      * Only "mark the message as read" if..
      * 1) it is not pending and
      * 2) it has not already been read
-    */
+     */
     if (!isMessagePending) {
       markChatAsRead.mutate(lastMessageId);
     }
@@ -191,12 +203,19 @@ const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
     return (
       <Stack alignItems='center' justifyContent='center' className='h-full grow'>
         <Stack alignItems='center' space={2}>
-          <Avatar src={chat.account.avatar} alt={chat.account.avatar_description} size={75} isCat={chat.account.is_cat} username={chat.account.username} />
+          <Avatar
+            src={chat.account.avatar}
+            alt={chat.account.avatar_description}
+            size={75}
+            isCat={chat.account.is_cat}
+            username={chat.account.username}
+          />
           <Text align='center'>
             <>
-              <Text tag='span'>{intl.formatMessage(messages.blockedBy)}</Text>
-              {' '}
-              <Text tag='span' theme='primary'>@{chat.account.acct}</Text>
+              <Text tag='span'>{intl.formatMessage(messages.blockedBy)}</Text>{' '}
+              <Text tag='span' theme='primary'>
+                @{chat.account.acct}
+              </Text>
             </>
           </Text>
         </Stack>
@@ -269,4 +288,8 @@ const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
   );
 });
 
-export { ChatMessageList as default, List as ChatMessageListList, Scroller as ChatMessageListScroller };
+export {
+  ChatMessageList as default,
+  List as ChatMessageListList,
+  Scroller as ChatMessageListScroller,
+};

@@ -14,7 +14,10 @@ import { Entities } from '@/entity-store/entities';
 import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useBlockGroupUserMutation } from '@/queries/groups/use-group-blocks';
-import { useKickGroupMemberMutation, type MinifiedGroupMember } from '@/queries/groups/use-group-members';
+import {
+  useKickGroupMemberMutation,
+  type MinifiedGroupMember,
+} from '@/queries/groups/use-group-members';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
@@ -23,22 +26,44 @@ import type { Group } from 'pl-api';
 
 const messages = defineMessages({
   adminLimitTitle: { id: 'group.member.admin.limit.title', defaultMessage: 'Admin limit reached' },
-  adminLimitSummary: { id: 'group.member.admin.limit.summary', defaultMessage: 'You can assign up to {count, plural, one {admin} other {admins}} for the group at this time.' },
+  adminLimitSummary: {
+    id: 'group.member.admin.limit.summary',
+    defaultMessage:
+      'You can assign up to {count, plural, one {admin} other {admins}} for the group at this time.',
+  },
   blockConfirm: { id: 'confirmations.block_from_group.confirm', defaultMessage: 'Ban user' },
-  blockFromGroupHeading: { id: 'confirmations.block_from_group.heading', defaultMessage: 'Ban from group' },
-  blockFromGroupMessage: { id: 'confirmations.block_from_group.message', defaultMessage: 'Are you sure you want to ban @{name} from the group?' },
+  blockFromGroupHeading: {
+    id: 'confirmations.block_from_group.heading',
+    defaultMessage: 'Ban from group',
+  },
+  blockFromGroupMessage: {
+    id: 'confirmations.block_from_group.message',
+    defaultMessage: 'Are you sure you want to ban @{name} from the group?',
+  },
   blocked: { id: 'group.group_mod_block.success', defaultMessage: '@{name} is banned' },
   demotedToUser: { id: 'group.demote.user.success', defaultMessage: '@{name} is now a member' },
   groupModBlock: { id: 'group.group_mod_block', defaultMessage: 'Ban from group' },
   groupModDemote: { id: 'group.group_mod_demote', defaultMessage: 'Remove {role} role' },
   groupModKick: { id: 'group.group_mod_kick', defaultMessage: 'Kick @{name} from group' },
   groupModPromoteMod: { id: 'group.group_mod_promote_mod', defaultMessage: 'Assign {role} role' },
-  kickFromGroupHeading: { id: 'confirmations.kick_from_group.heading', defaultMessage: 'Kick @{name}' },
-  kickFromGroupMessage: { id: 'confirmations.kick_from_group.message', defaultMessage: 'Are you sure you want to kick @{name} from this group?' },
+  kickFromGroupHeading: {
+    id: 'confirmations.kick_from_group.heading',
+    defaultMessage: 'Kick @{name}',
+  },
+  kickFromGroupMessage: {
+    id: 'confirmations.kick_from_group.message',
+    defaultMessage: 'Are you sure you want to kick @{name} from this group?',
+  },
   kickConfirm: { id: 'confirmations.kick_from_group.confirm', defaultMessage: 'Kick' },
   kicked: { id: 'group.group_mod_kick.success', defaultMessage: 'Kicked @{name} from group' },
-  promoteConfirm: { id: 'group.promote.admin.confirmation.title', defaultMessage: 'Assign admin role' },
-  promoteConfirmMessage: { id: 'group.promote.admin.confirmation.message', defaultMessage: 'Are you sure you want to assign the admin role to @{name}?' },
+  promoteConfirm: {
+    id: 'group.promote.admin.confirmation.title',
+    defaultMessage: 'Assign admin role',
+  },
+  promoteConfirmMessage: {
+    id: 'group.promote.admin.confirmation.message',
+    defaultMessage: 'Are you sure you want to assign the admin role to @{name}?',
+  },
   promotedToAdmin: { id: 'group.promote.admin.success', defaultMessage: '@{name} is now an admin' },
 });
 
@@ -73,9 +98,9 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
       heading: intl.formatMessage(messages.kickFromGroupHeading, { name: account?.username }),
       message: intl.formatMessage(messages.kickFromGroupMessage, { name: account?.username }),
       confirm: intl.formatMessage(messages.kickConfirm),
-      onConfirm: () =>{
+      onConfirm: () => {
         kickGroupMember(undefined, {
-          onSuccess: () =>{
+          onSuccess: () => {
             toast.success(intl.formatMessage(messages.kicked, { name: account?.acct }));
           },
         });
@@ -105,23 +130,27 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
       message: intl.formatMessage(messages.promoteConfirmMessage, { name: account?.username }),
       confirm: intl.formatMessage(messages.promoteConfirm),
       onConfirm: () => {
-        promoteGroupMember({ role: GroupRoles.ADMIN, account_ids: [member.account_id] }, {
-          onSuccess() {
-            toast.success(
-              intl.formatMessage(messages.promotedToAdmin, { name: account?.acct }),
-            );
+        promoteGroupMember(
+          { role: GroupRoles.ADMIN, account_ids: [member.account_id] },
+          {
+            onSuccess() {
+              toast.success(intl.formatMessage(messages.promotedToAdmin, { name: account?.acct }));
+            },
           },
-        });
+        );
       },
     });
   };
 
   const handleUserAssignment = () => {
-    demoteGroupMember({ role: GroupRoles.USER, account_ids: [member.account_id] }, {
-      onSuccess() {
-        toast.success(intl.formatMessage(messages.demotedToUser, { name: account?.acct }));
+    demoteGroupMember(
+      { role: GroupRoles.USER, account_ids: [member.account_id] },
+      {
+        onSuccess() {
+          toast.success(intl.formatMessage(messages.demotedToUser, { name: account?.acct }));
+        },
       },
-    });
+    );
   };
 
   const menu: IMenu = useMemo(() => {
@@ -140,7 +169,10 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
         });
       } else if (isMemberAdmin) {
         items.push({
-          text: intl.formatMessage(messages.groupModDemote, { role: GroupRoles.ADMIN, name: account.username }),
+          text: intl.formatMessage(messages.groupModDemote, {
+            role: GroupRoles.ADMIN,
+            name: account.username,
+          }),
           icon: require('@phosphor-icons/core/regular/suitcase.svg'),
           action: handleUserAssignment,
           destructive: true,
@@ -175,25 +207,23 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
   }
 
   return (
-    <HStack
-      alignItems='center'
-      justifyContent='between'
-      data-testid='group-member-list-item'
-    >
+    <HStack alignItems='center' justifyContent='between' data-testid='group-member-list-item'>
       <div className='w-full'>
         <Account account={account} withRelationship={false} />
       </div>
 
       <HStack alignItems='center' space={2}>
-        {(isMemberOwner || isMemberAdmin) ? (
+        {isMemberOwner || isMemberAdmin ? (
           <span
             data-testid='role-badge'
-            className={
-              clsx('inline-flex items-center rounded px-2 py-1 text-xs font-medium capitalize', {
-                'bg-primary-200 text-primary-500 dark:bg-primary-800 dark:text-primary-200': isMemberOwner,
+            className={clsx(
+              'inline-flex items-center rounded px-2 py-1 text-xs font-medium capitalize',
+              {
+                'bg-primary-200 text-primary-500 dark:bg-primary-800 dark:text-primary-200':
+                  isMemberOwner,
                 'bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-gray-100': isMemberAdmin,
-              })
-            }
+              },
+            )}
           >
             {member.role}
           </span>

@@ -1,7 +1,13 @@
 import type React from 'react';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
-const selectChild = (index: number, handle: React.RefObject<VirtuosoHandle>, node: ParentNode = document, count?: number, align?: 'start' | 'center' | 'end') => {
+const selectChild = (
+  index: number,
+  handle: React.RefObject<VirtuosoHandle>,
+  node: ParentNode = document,
+  count?: number,
+  align?: 'start' | 'center' | 'end',
+) => {
   if (count !== undefined && index === count) {
     const loadMoreButton = node.querySelector<HTMLButtonElement>('.⁂-load-more');
     if (loadMoreButton) {

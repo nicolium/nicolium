@@ -10,10 +10,11 @@ const useEndorsedAccounts = (accountId: string) => {
 
   return useQuery({
     queryKey: ['accountsLists', 'endorsedAccounts', accountId],
-    queryFn: () => client.accounts.getAccountEndorsements(accountId).then(({ items: accounts }) => {
-      dispatch(importEntities({ accounts }));
-      return accounts.map(({ id }) => id);
-    }),
+    queryFn: () =>
+      client.accounts.getAccountEndorsements(accountId).then(({ items: accounts }) => {
+        dispatch(importEntities({ accounts }));
+        return accounts.map(({ id }) => id);
+      }),
   });
 };
 

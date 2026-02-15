@@ -1,6 +1,7 @@
 $vertical-lr-langs: mn-mong, mnmong;
 
-[data-markup], [data-lexical-editor] {
+[data-markup],
+[data-lexical-editor] {
   @apply whitespace-pre-wrap;
 
   h1 {
@@ -70,7 +71,8 @@ $vertical-lr-langs: mn-mong, mnmong;
     @apply table-auto w-full bg-gray-200 dark:bg-gray-900 my-4 rounded-md;
   }
 
-  table th, table td {
+  table th,
+  table td {
     @apply text-center px-2;
   }
 
@@ -139,11 +141,11 @@ $vertical-lr-langs: mn-mong, mnmong;
       padding: 0 !important;
       width: 0 !important;
       height: 0 !important;
-   }
+    }
   }
 
   @each $lang in $vertical-lr-langs {
-    &[lang="#{$lang}"] {
+    &[lang='#{$lang}'] {
       writing-mode: vertical-lr;
       width: 100%; // detecting overflow
       max-width: calc(100% - mod(100%, 22px)); // avoid cut-offs
@@ -161,7 +163,8 @@ $vertical-lr-langs: mn-mong, mnmong;
 
 /* User setting to underline links */
 body.underline-links {
-  [data-markup], [data-lexical-editor] {
+  [data-markup],
+  [data-lexical-editor] {
     a {
       @apply underline;
     }

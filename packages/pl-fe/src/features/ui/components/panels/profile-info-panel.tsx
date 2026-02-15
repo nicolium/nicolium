@@ -24,8 +24,15 @@ import ProfileStats from '../profile-stats';
 import type { Account } from 'pl-api';
 
 const messages = defineMessages({
-  linkVerifiedOn: { id: 'account.link_verified_on', defaultMessage: 'Ownership of this link was checked on {date}' },
-  account_locked: { id: 'account.locked_info', defaultMessage: 'This account privacy status is set to locked. The owner manually reviews who can follow them.' },
+  linkVerifiedOn: {
+    id: 'account.link_verified_on',
+    defaultMessage: 'Ownership of this link was checked on {date}',
+  },
+  account_locked: {
+    id: 'account.locked_info',
+    defaultMessage:
+      'This account privacy status is set to locked. The owner manually reviews who can follow them.',
+  },
   deactivated: { id: 'account.deactivated', defaultMessage: 'Deactivated' },
   bot: { id: 'account.badges.bot', defaultMessage: 'Bot' },
   pronouns: { id: 'account.pronouns.with_label', defaultMessage: 'Pronouns: {pronouns}' },
@@ -41,16 +48,35 @@ interface IProfileInfoPanel {
 const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) => {
   const intl = useIntl();
   const acct = useAcct(account);
-  const me = useAppSelector(state => state.me);
+  const me = useAppSelector((state) => state.me);
   const ownAccount = account?.id === me;
 
   const { data: scrobble } = useQuery(accountScrobbleQueryOptions(account?.id));
 
   const getStaffBadge = (): React.ReactNode => {
     if (account?.is_admin) {
-      return <Badge slug='admin' title={<FormattedMessage id='account_moderation_modal.roles.admin' defaultMessage='Admin' />} key='staff' />;
+      return (
+        <Badge
+          slug='admin'
+          title={
+            <FormattedMessage id='account_moderation_modal.roles.admin' defaultMessage='Admin' />
+          }
+          key='staff'
+        />
+      );
     } else if (account?.is_moderator) {
-      return <Badge slug='moderator' title={<FormattedMessage id='account_moderation_modal.roles.moderator' defaultMessage='Moderator' />} key='staff' />;
+      return (
+        <Badge
+          slug='moderator'
+          title={
+            <FormattedMessage
+              id='account_moderation_modal.roles.moderator'
+              defaultMessage='Moderator'
+            />
+          }
+          key='staff'
+        />
+      );
     } else {
       return null;
     }
@@ -59,14 +85,16 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   const getCustomBadges = (): React.ReactNode[] => {
     const badges = account?.roles ?? [];
 
-    return badges.filter(badge => badge.highlighted).map(badge => (
-      <Badge
-        key={badge.id || badge.name}
-        slug={badge.name}
-        title={capitalize(badge.name)}
-        color={badge.color}
-      />
-    ));
+    return badges
+      .filter((badge) => badge.highlighted)
+      .map((badge) => (
+        <Badge
+          key={badge.id || badge.name}
+          slug={badge.name}
+          title={capitalize(badge.name)}
+          color={badge.color}
+        />
+      ));
   };
 
   const getBadges = (): React.ReactNode[] => {
@@ -86,7 +114,12 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
     const birthday = account?.birthday;
     if (!birthday) return null;
 
-    const formattedBirthday = intl.formatDate(birthday, { timeZone: 'UTC', day: 'numeric', month: 'long', year: 'numeric' });
+    const formattedBirthday = intl.formatDate(birthday, {
+      timeZone: 'UTC',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
 
     const date = new Date(birthday);
     const today = new Date();
@@ -96,7 +129,11 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
     return (
       <HStack alignItems='center' space={0.5}>
         <Icon
-          src={hasBirthday ? require('@phosphor-icons/core/regular/cake.svg') : require('@phosphor-icons/core/regular/balloon.svg')}
+          src={
+            hasBirthday
+              ? require('@phosphor-icons/core/regular/cake.svg')
+              : require('@phosphor-icons/core/regular/balloon.svg')
+          }
           className='size-4 text-gray-800 dark:text-gray-200'
         />
 
@@ -104,7 +141,11 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
           {hasBirthday ? (
             <FormattedMessage id='account.birthday_today' defaultMessage='Birthday is today!' />
           ) : (
-            <FormattedMessage id='account.birthday' defaultMessage='Born {date}' values={{ date: formattedBirthday }} />
+            <FormattedMessage
+              id='account.birthday'
+              defaultMessage='Born {date}'
+              values={{ date: formattedBirthday }}
+            />
           )}
         </Text>
       </HStack>
@@ -136,9 +177,11 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
         <Stack>
           <HStack space={1} alignItems='center'>
             <Text size='lg' weight='bold' truncate>
-              {account.deactivated
-                ? <FormattedMessage id='account.deactivated' defaultMessage='Deactivated' />
-                : <Emojify text={account.display_name} emojis={account.emojis} />}
+              {account.deactivated ? (
+                <FormattedMessage id='account.deactivated' defaultMessage='Deactivated' />
+              ) : (
+                <Emojify text={account.display_name} emojis={account.emojis} />
+              )}
             </Text>
 
             {account.bot && <Badge slug='bot' title={intl.formatMessage(messages.bot)} />}
@@ -169,7 +212,11 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
         {!!account.note && (
           <Markup className='break-words' size='sm'>
-            <ParsedContent html={account.note} emojis={account.emojis} speakAsCat={account.speak_as_cat} />
+            <ParsedContent
+              html={account.note}
+              emojis={account.emojis}
+              speakAsCat={account.speak_as_cat}
+            />
           </Markup>
         )}
 
@@ -183,7 +230,9 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
               <Text size='sm' title={intl.formatDate(account.created_at, dateFormatOptions)}>
                 <FormattedMessage
-                  id='account.member_since' defaultMessage='Joined {date}' values={{
+                  id='account.member_since'
+                  defaultMessage='Joined {date}'
+                  values={{
                     date: memberSinceDate,
                   }}
                 />
@@ -198,9 +247,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
                 className='size-4 text-gray-800 dark:text-gray-200'
               />
 
-              <Text size='sm'>
-                {account.location}
-              </Text>
+              <Text size='sm'>{account.location}</Text>
             </HStack>
           ) : null}
 
@@ -208,17 +255,18 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
           {account.pronouns.length > 0 ? (
             <HStack
-              alignItems='center' space={0.5}
-              title={intl.formatMessage(messages.pronouns, { pronouns: account.pronouns.join('/') })}
+              alignItems='center'
+              space={0.5}
+              title={intl.formatMessage(messages.pronouns, {
+                pronouns: account.pronouns.join('/'),
+              })}
             >
               <Icon
                 src={require('@phosphor-icons/core/regular/tag.svg')}
                 className='size-4 text-gray-800 dark:text-gray-200'
               />
 
-              <Text size='sm'>
-                {account.pronouns.join('/')}
-              </Text>
+              <Text size='sm'>{account.pronouns.join('/')}</Text>
             </HStack>
           ) : null}
         </div>

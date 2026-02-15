@@ -48,7 +48,12 @@ const SearchInput = React.memo(() => {
 
   const handleSelected = (accountId: string) => {
     setValue('');
-    dispatch((_, getState) => navigate({ to: '/@{$username}', params: { username: selectAccount(getState(), accountId)!.acct } }));
+    dispatch((_, getState) =>
+      navigate({
+        to: '/@{$username}',
+        params: { username: selectAccount(getState(), accountId)!.acct },
+      }),
+    );
   };
 
   const makeMenu = () => [
@@ -82,7 +87,9 @@ const SearchInput = React.memo(() => {
           tabIndex={0}
           className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto'
           onClick={handleClear}
-          title={hasValue ? intl.formatMessage(messages.clear) : intl.formatMessage(messages.placeholder)}
+          title={
+            hasValue ? intl.formatMessage(messages.clear) : intl.formatMessage(messages.placeholder)
+          }
         >
           <SvgIcon
             src={require('@phosphor-icons/core/regular/magnifying-glass.svg')}

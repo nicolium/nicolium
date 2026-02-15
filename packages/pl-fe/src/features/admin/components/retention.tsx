@@ -12,7 +12,9 @@ const dateForCohort = (cohort: AdminCohort) => {
     case 'day':
       return <FormattedDate value={cohort.period} month='long' day='2-digit' timeZone={timeZone} />;
     default:
-      return <FormattedDate value={cohort.period} month='long' year='numeric' timeZone={timeZone} />;
+      return (
+        <FormattedDate value={cohort.period} month='long' year='numeric' timeZone={timeZone} />
+      );
   }
 };
 
@@ -36,21 +38,25 @@ const Retention: React.FC<IRetention> = ({ startAt, endAt, frequency }) => {
           <tr>
             <th>
               <div className='p-2.5 pl-0 font-bold'>
-                <FormattedMessage id='admin.dashboard.retention.cohort' defaultMessage='Sign-up month' />
+                <FormattedMessage
+                  id='admin.dashboard.retention.cohort'
+                  defaultMessage='Sign-up month'
+                />
               </div>
             </th>
 
             <th>
               <div className='p-2.5 font-bold'>
-                <FormattedMessage id='admin.dashboard.retention.cohort_size' defaultMessage='New users' />
+                <FormattedMessage
+                  id='admin.dashboard.retention.cohort_size'
+                  defaultMessage='New users'
+                />
               </div>
             </th>
 
             {data[0].data.slice(1).map((retention, i) => (
               <th key={retention.date} className='w-14'>
-                <div className='p-2.5 font-bold'>
-                  {i + 1}
-                </div>
+                <div className='p-2.5 font-bold'>{i + 1}</div>
               </th>
             ))}
           </tr>
@@ -64,16 +70,29 @@ const Retention: React.FC<IRetention> = ({ startAt, endAt, frequency }) => {
 
             <td>
               <div className='p-2.5 text-center'>
-                <FormattedNumber value={data.reduce((sum, cohort, i) => sum + ((cohort.data[0].value * 1) - sum) / (i + 1), 0)} maximumFractionDigits={0} />
+                <FormattedNumber
+                  value={data.reduce(
+                    (sum, cohort, i) => sum + (cohort.data[0].value * 1 - sum) / (i + 1),
+                    0,
+                  )}
+                  maximumFractionDigits={0}
+                />
               </div>
             </td>
 
             {data[0].data.slice(1).map((retention, i) => {
-              const average = data.reduce((sum, cohort, k) => cohort.data[i + 1] ? sum + (cohort.data[i + 1].rate - sum) / (k + 1) : sum, 0);
+              const average = data.reduce(
+                (sum, cohort, k) =>
+                  cohort.data[i + 1] ? sum + (cohort.data[i + 1].rate - sum) / (k + 1) : sum,
+                0,
+              );
 
               return (
                 <td key={retention.date}>
-                  <div className='bg-primary-200 p-2.5 font-medium dark:bg-gray-800' style={{ ['--tw-bg-opacity' as any]: 0.5 + average / 2 }}>
+                  <div
+                    className='bg-primary-200 p-2.5 font-medium dark:bg-gray-800'
+                    style={{ ['--tw-bg-opacity' as any]: 0.5 + average / 2 }}
+                  >
                     <FormattedNumber value={average} style='percent' />
                   </div>
                 </td>
@@ -83,12 +102,10 @@ const Retention: React.FC<IRetention> = ({ startAt, endAt, frequency }) => {
         </thead>
 
         <tbody>
-          {data.slice(0, -1).map(cohort => (
+          {data.slice(0, -1).map((cohort) => (
             <tr key={cohort.period}>
               <td>
-                <div className='p-2.5 pl-0'>
-                  {dateForCohort(cohort)}
-                </div>
+                <div className='p-2.5 pl-0'>{dateForCohort(cohort)}</div>
               </td>
 
               <td>
@@ -97,9 +114,12 @@ const Retention: React.FC<IRetention> = ({ startAt, endAt, frequency }) => {
                 </div>
               </td>
 
-              {cohort.data.slice(1).map(retention => (
+              {cohort.data.slice(1).map((retention) => (
                 <td key={retention.date}>
-                  <div className='bg-primary-200 p-2.5 font-medium dark:bg-gray-800' style={{ ['--tw-bg-opacity' as any]: 0.5 + retention.rate / 2 }}>
+                  <div
+                    className='bg-primary-200 p-2.5 font-medium dark:bg-gray-800'
+                    style={{ ['--tw-bg-opacity' as any]: 0.5 + retention.rate / 2 }}
+                  >
                     <FormattedNumber value={retention.rate} style='percent' />
                   </div>
                 </td>
@@ -114,15 +134,31 @@ const Retention: React.FC<IRetention> = ({ startAt, endAt, frequency }) => {
   let title = null;
   switch (frequency) {
     case 'day':
-      title = <FormattedMessage id='admin.dashboard.daily_retention' defaultMessage='User retention rate by day after sign-up' />;
+      title = (
+        <FormattedMessage
+          id='admin.dashboard.daily_retention'
+          defaultMessage='User retention rate by day after sign-up'
+        />
+      );
       break;
     default:
-      title = <FormattedMessage id='admin.dashboard.monthly_retention' defaultMessage='User retention rate by month after sign-up' />;
+      title = (
+        <FormattedMessage
+          id='admin.dashboard.monthly_retention'
+          defaultMessage='User retention rate by month after sign-up'
+        />
+      );
   }
 
   return (
     <div className='col-span-2'>
-      <Text className='border-b border-primary-200 pb-1 dark:border-gray-800' weight='medium' size='sm'>{title}</Text>
+      <Text
+        className='border-b border-primary-200 pb-1 dark:border-gray-800'
+        weight='medium'
+        size='sm'
+      >
+        {title}
+      </Text>
 
       {content}
     </div>

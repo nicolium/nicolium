@@ -8,7 +8,7 @@ import { clearNativeInputValue } from './chat';
 import ShoutboxComposer from './shoutbox-composer';
 import ShoutboxMessageList from './shoutbox-message-list';
 
-const fileKeyGen = (): number => Math.floor((Math.random() * 0x10000));
+const fileKeyGen = (): number => Math.floor(Math.random() * 0x10000);
 
 interface ChatInterface {
   inputRef?: MutableRefObject<HTMLTextAreaElement | null>;
@@ -44,7 +44,7 @@ const Shoutbox: React.FC<ChatInterface> = ({ inputRef, className }) => {
     }
   };
 
-  const insertLine = () =>{
+  const insertLine = () => {
     setContent(content + '\n');
   };
 

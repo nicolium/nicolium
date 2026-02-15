@@ -22,9 +22,13 @@ interface IChatList {
 const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false }) => {
   const showShoutbox = !useShoutboxIsLoading();
 
-  const { chatsQuery: { data: chats, isFetching, hasNextPage, fetchNextPage, refetch } } = useChats();
+  const {
+    chatsQuery: { data: chats, isFetching, hasNextPage, fetchNextPage, refetch },
+  } = useChats();
 
-  const allChats: Array<Chat | 'shoutbox'> | undefined = showShoutbox ? ['shoutbox', ...(chats ?? [])] : chats;
+  const allChats: Array<Chat | 'shoutbox'> | undefined = showShoutbox
+    ? ['shoutbox', ...(chats ?? [])]
+    : chats;
 
   const [isNearBottom, setNearBottom] = useState<boolean>(false);
   const [isNearTop, setNearTop] = useState<boolean>(true);
@@ -37,13 +41,24 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
 
   const handleRefresh = () => refetch();
 
-  const renderChatListItem = useCallback((_index: number, chat: Chat | 'shoutbox') => {
-    if (chat === 'shoutbox') {
-      return <div key='shoutbox' className='px-2'><ChatListShoutbox onClick={onClickChat} /></div>;
-    }
+  const renderChatListItem = useCallback(
+    (_index: number, chat: Chat | 'shoutbox') => {
+      if (chat === 'shoutbox') {
+        return (
+          <div key='shoutbox' className='px-2'>
+            <ChatListShoutbox onClick={onClickChat} />
+          </div>
+        );
+      }
 
-    return <div key={chat.id} className='px-2'><ChatListItem chat={chat} onClick={onClickChat} /></div>;
-  }, [onClickChat]);
+      return (
+        <div key={chat.id} className='px-2'>
+          <ChatListItem chat={chat} onClick={onClickChat} />
+        </div>
+      );
+    },
+    [onClickChat],
+  );
 
   const renderEmpty = () => {
     if (isFetching) {
@@ -68,10 +83,10 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
       })}
     >
       <Virtuoso
-        atTopStateChange={(atTop) =>{
+        atTopStateChange={(atTop) => {
           setNearTop(atTop);
         }}
-        atBottomStateChange={(atBottom) =>{
+        atBottomStateChange={(atBottom) => {
           setNearBottom(atBottom);
         }}
         useWindowScroll={useWindowScroll}
@@ -80,7 +95,7 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
         itemContent={renderChatListItem}
         components={{
           ScrollSeekPlaceholder: PlaceholderChat,
-          Footer: () => hasNextPage ? <Spinner withText={false} /> : null,
+          Footer: () => (hasNextPage ? <Spinner withText={false} /> : null),
           EmptyPlaceholder: renderEmpty,
         }}
       />

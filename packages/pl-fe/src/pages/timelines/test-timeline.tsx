@@ -40,7 +40,9 @@ const TestTimelinePage: React.FC = () => {
       <Timeline
         scrollKey={`${timelineId}_timeline`}
         timelineId={`${timelineId}${onlyMedia ? ':media' : ''}`}
-        emptyMessageText={<FormattedMessage id='empty_column.test' defaultMessage='The test timeline is empty.' />}
+        emptyMessageText={
+          <FormattedMessage id='empty_column.test' defaultMessage='The test timeline is empty.' />
+        }
         emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
       />
     </Column>

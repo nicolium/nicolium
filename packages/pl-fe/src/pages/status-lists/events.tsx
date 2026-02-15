@@ -11,7 +11,10 @@ import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import PlaceholderEventPreview from '@/features/placeholder/components/placeholder-event-preview';
 import { useAppSelector } from '@/hooks/use-app-selector';
-import { useJoinedEventsTimeline, useRecentEventsTimeline } from '@/queries/timelines/use-events-lists';
+import {
+  useJoinedEventsTimeline,
+  useRecentEventsTimeline,
+} from '@/queries/timelines/use-events-lists';
 import { makeGetStatus } from '@/selectors';
 
 const messages = defineMessages({
@@ -20,7 +23,7 @@ const messages = defineMessages({
 
 const Event = ({ id }: { id: string }) => {
   const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector(state => getStatus(state, { id }));
+  const status = useAppSelector((state) => getStatus(state, { id }));
 
   if (!status) return null;
 
@@ -64,27 +67,35 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
       {index !== 0 && (
         <div className='absolute left-3 top-1/2 z-10 -mt-4'>
           <button
-            onClick={() =>{
+            onClick={() => {
               handleChangeIndex(index - 1);
             }}
             className='flex size-8 items-center justify-center rounded-full bg-white/50 backdrop-blur dark:bg-gray-900/50'
           >
-            <Icon src={require('@phosphor-icons/core/regular/caret-left.svg')} className='size-6 text-black dark:text-white' />
+            <Icon
+              src={require('@phosphor-icons/core/regular/caret-left.svg')}
+              className='size-6 text-black dark:text-white'
+            />
           </button>
         </div>
       )}
       <ReactSwipeableViews animateHeight index={index} onChangeIndex={handleChangeIndex}>
-        {statusIds.map(statusId => <Event key={statusId} id={statusId} />)}
+        {statusIds.map((statusId) => (
+          <Event key={statusId} id={statusId} />
+        ))}
       </ReactSwipeableViews>
       {index !== statusIds.length - 1 && (
         <div className='absolute right-3 top-1/2 z-10 -mt-4'>
           <button
-            onClick={() =>{
+            onClick={() => {
               handleChangeIndex(index + 1);
             }}
             className='flex size-8 items-center justify-center rounded-full bg-white/50 backdrop-blur dark:bg-gray-900/50'
           >
-            <Icon src={require('@phosphor-icons/core/regular/caret-right.svg')} className='size-6 text-black dark:text-white' />
+            <Icon
+              src={require('@phosphor-icons/core/regular/caret-right.svg')}
+              className='size-6 text-black dark:text-white'
+            />
           </button>
         </div>
       )}
@@ -101,7 +112,9 @@ const EventsPage = () => {
   return (
     <Column label={intl.formatMessage(messages.title)}>
       <HStack className='mb-2' space={2} justifyContent='between'>
-        <CardTitle title={<FormattedMessage id='events.recent_events' defaultMessage='Recent events' />} />
+        <CardTitle
+          title={<FormattedMessage id='events.recent_events' defaultMessage='Recent events' />}
+        />
         <Button className='ml-auto xl:hidden' theme='primary' size='sm' to='/events/new'>
           <FormattedMessage id='events.create_event' defaultMessage='Create event' />
         </Button>
@@ -110,17 +123,29 @@ const EventsPage = () => {
         <EventCarousel
           statusIds={recentEvents}
           isLoading={recentEventsLoading}
-          emptyMessage={<FormattedMessage id='events.recent_events.empty' defaultMessage='There are no public events yet.' />}
+          emptyMessage={
+            <FormattedMessage
+              id='events.recent_events.empty'
+              defaultMessage='There are no public events yet.'
+            />
+          }
         />
       </CardBody>
       <CardHeader className='mb-2'>
-        <CardTitle title={<FormattedMessage id='events.joined_events' defaultMessage='Joined events' />} />
+        <CardTitle
+          title={<FormattedMessage id='events.joined_events' defaultMessage='Joined events' />}
+        />
       </CardHeader>
       <CardBody>
         <EventCarousel
           statusIds={joinedEvents}
           isLoading={joinedEventsLoading}
-          emptyMessage={<FormattedMessage id='events.joined_events.empty' defaultMessage="You haven't joined any event yet." />}
+          emptyMessage={
+            <FormattedMessage
+              id='events.joined_events.empty'
+              defaultMessage="You haven't joined any event yet."
+            />
+          }
         />
       </CardBody>
     </Column>

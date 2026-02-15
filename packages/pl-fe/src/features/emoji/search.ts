@@ -6,14 +6,16 @@ import type { CustomEmoji } from 'pl-api';
 
 let emojis: EmojiData['emojis'] = {};
 
-import('./data').then(data => {
-  emojis = data.emojis;
+import('./data')
+  .then((data) => {
+    emojis = data.emojis;
 
-  const sortedEmojis = Object.entries(emojis).sort((a, b) => a[0].localeCompare(b[0]));
-  for (const [key, emoji] of sortedEmojis) {
-    index.add('n' + key, `${emoji.id} ${emoji.name} ${emoji.keywords.join(' ')}`);
-  }
-}).catch(() => { });
+    const sortedEmojis = Object.entries(emojis).sort((a, b) => a[0].localeCompare(b[0]));
+    for (const [key, emoji] of sortedEmojis) {
+      index.add('n' + key, `${emoji.id} ${emoji.name} ${emoji.keywords.join(' ')}`);
+    }
+  })
+  .catch(() => {});
 
 const index = new FlexSearch.Index({
   tokenize: 'full',
@@ -43,36 +45,40 @@ const addCustomToPool = (customEmojis: any[]) => {
 
 // we can share an index by prefixing custom emojis with 'c' and native with 'n'
 const search = (
-  str: string, { maxResults = 5 }: searchOptions = {},
+  str: string,
+  { maxResults = 5 }: searchOptions = {},
   custom_emojis?: Array<CustomEmoji>,
-): Emoji[] => index.search(str, maxResults)
-  .flatMap((id) => {
-    if (typeof id !== 'string') return;
+): Emoji[] =>
+  index
+    .search(str, maxResults)
+    .flatMap((id) => {
+      if (typeof id !== 'string') return;
 
-    if (id[0] === 'c' && custom_emojis) {
-      const index = Number(id.slice(1));
-      const custom = custom_emojis[index];
+      if (id[0] === 'c' && custom_emojis) {
+        const index = Number(id.slice(1));
+        const custom = custom_emojis[index];
 
-      if (custom) {
+        if (custom) {
+          return {
+            id: custom.shortcode,
+            colons: ':' + custom.shortcode + ':',
+            custom: true,
+            imageUrl: custom.static_url,
+          };
+        }
+      }
+
+      const skins = emojis[id.slice(1)]?.skins;
+
+      if (skins) {
         return {
-          id: custom.shortcode,
-          colons: ':' + custom.shortcode + ':',
-          custom: true,
-          imageUrl: custom.static_url,
+          id: id.slice(1),
+          colons: ':' + id.slice(1) + ':',
+          unified: skins[0].unified,
+          native: skins[0].native,
         };
       }
-    }
-
-    const skins = emojis[id.slice(1)]?.skins;
-
-    if (skins) {
-      return {
-        id: id.slice(1),
-        colons: ':' + id.slice(1) + ':',
-        unified: skins[0].unified,
-        native: skins[0].native,
-      };
-    }
-  }).filter(Boolean) as Emoji[];
+    })
+    .filter(Boolean) as Emoji[];
 
 export { search as default, addCustomToPool };

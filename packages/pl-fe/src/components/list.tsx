@@ -11,9 +11,7 @@ interface IList {
   children: React.ReactNode;
 }
 
-const List: React.FC<IList> = ({ children }) => (
-  <div className='⁂-list'>{children}</div>
-);
+const List: React.FC<IList> = ({ children }) => <div className='⁂-list'>{children}</div>;
 
 type IListItem = {
   className?: string;
@@ -26,7 +24,17 @@ type IListItem = {
   size?: 'sm' | 'md';
 } & (LinkOptions | {});
 
-const ListItem: React.FC<IListItem> = ({ className, label, hint, children, href, onClick, isSelected, size = 'md', ...rest }) => {
+const ListItem: React.FC<IListItem> = ({
+  className,
+  label,
+  hint,
+  children,
+  href,
+  onClick,
+  isSelected,
+  size = 'md',
+  ...rest
+}) => {
   const [domId] = useState(`list-group-${crypto.randomUUID()}`);
 
   const onKeyDown = (e: React.KeyboardEvent) => {
@@ -37,41 +45,43 @@ const ListItem: React.FC<IListItem> = ({ className, label, hint, children, href,
 
   const LabelComp = 'to' in rest || href || onClick ? 'span' : 'label';
 
-  const renderChildren = React.useCallback(() => React.Children.map(children, (child) => {
-    if (React.isValidElement(child)) {
-      const isSelect = child.type === SelectDropdown || child.type === Select;
+  const renderChildren = React.useCallback(
+    () =>
+      React.Children.map(children, (child) => {
+        if (React.isValidElement(child)) {
+          const isSelect = child.type === SelectDropdown || child.type === Select;
 
-      return React.cloneElement(child, {
-        // @ts-ignore
-        id: domId,
-        className: clsx({
-          'w-auto': isSelect,
-        }, child.props.className),
-      });
-    }
+          return React.cloneElement(child, {
+            // @ts-ignore
+            id: domId,
+            className: clsx(
+              {
+                'w-auto': isSelect,
+              },
+              child.props.className,
+            ),
+          });
+        }
 
-    return null;
-  }), [children, domId]);
-
-  const classNames = clsx('⁂-list-item',
-    className,
-    {
-      '⁂-list-item--md': size === 'md',
-      '⁂-list-item--sm': size === 'sm',
-    },
+        return null;
+      }),
+    [children, domId],
   );
+
+  const classNames = clsx('⁂-list-item', className, {
+    '⁂-list-item--md': size === 'md',
+    '⁂-list-item--sm': size === 'sm',
+  });
 
   const body = (
     <>
       <div className='⁂-list-item__label'>
         <LabelComp htmlFor={domId}>{label}</LabelComp>
 
-        {hint ? (
-          <span className='⁂-list-item__hint'>{hint}</span>
-        ) : null}
+        {hint ? <span className='⁂-list-item__hint'>{hint}</span> : null}
       </div>
 
-      {('to' in rest || href || onClick) ? (
+      {'to' in rest || href || onClick ? (
         <HStack space={1} alignItems='center' className='⁂-list-item__body'>
           {children}
 
@@ -83,20 +93,21 @@ const ListItem: React.FC<IListItem> = ({ className, label, hint, children, href,
     </>
   );
 
-  if ('to' in rest) return (
-    <Link className={classNames} {...rest}>
-      {body}
-    </Link>
-  );
+  if ('to' in rest)
+    return (
+      <Link className={classNames} {...rest}>
+        {body}
+      </Link>
+    );
 
   const Comp = onClick || href ? 'a' : 'div';
-  const linkProps = onClick || href ? { onClick, onKeyDown, tabIndex: 0, role: 'link', ...(href && { href, target: '_blank' }) } : {};
+  const linkProps =
+    onClick || href
+      ? { onClick, onKeyDown, tabIndex: 0, role: 'link', ...(href && { href, target: '_blank' }) }
+      : {};
 
   return (
-    <Comp
-      className={classNames}
-      {...linkProps}
-    >
+    <Comp className={classNames} {...linkProps}>
       {body}
     </Comp>
   );

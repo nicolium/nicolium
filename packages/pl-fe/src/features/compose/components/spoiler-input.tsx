@@ -10,7 +10,10 @@ const messages = defineMessages({
   placeholder: { id: 'compose_form.spoiler_placeholder', defaultMessage: 'Subject (optional)' },
 });
 
-interface ISpoilerInput extends Pick<IAutosuggestInput, 'onSuggestionsFetchRequested' | 'onSuggestionsClearRequested' | 'onSuggestionSelected' | 'theme'> {
+interface ISpoilerInput extends Pick<
+  IAutosuggestInput,
+  'onSuggestionsFetchRequested' | 'onSuggestionsClearRequested' | 'onSuggestionSelected' | 'theme'
+> {
   composeId: string extends 'default' ? never : string;
 }
 
@@ -24,13 +27,17 @@ const SpoilerInput: React.FC<ISpoilerInput> = ({
 }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const { language, modifiedLanguage, spoilerText, spoilerTextMap, suggestions } = useCompose(composeId);
+  const { language, modifiedLanguage, spoilerText, spoilerTextMap, suggestions } =
+    useCompose(composeId);
 
   const handleChangeSpoilerText: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     dispatch(changeComposeSpoilerText(composeId, e.target.value));
   };
 
-  const value = !modifiedLanguage || modifiedLanguage === language ? spoilerText : spoilerTextMap[modifiedLanguage] || '';
+  const value =
+    !modifiedLanguage || modifiedLanguage === language
+      ? spoilerText
+      : spoilerTextMap[modifiedLanguage] || '';
 
   return (
     <AutosuggestInput

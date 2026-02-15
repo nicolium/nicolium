@@ -10,7 +10,8 @@ import type { Status } from '@/normalizers/status';
 import type { MediaAttachment } from 'pl-api';
 
 interface IAttachmentThumbs {
-  status: Pick<Status, 'media_attachments' | 'sensitive'> & Partial<Pick<Status, 'filtered' | 'id'>>;
+  status: Pick<Status, 'media_attachments' | 'sensitive'> &
+    Partial<Pick<Status, 'filtered' | 'id'>>;
   onClick?(): void;
 }
 
@@ -19,7 +20,7 @@ const AttachmentThumbs = ({ status, onClick }: IAttachmentThumbs) => {
   const { openModal } = useModalsActions();
 
   const fallback = <div className='⁂-media-gallery--compact' />;
-  const onOpenMedia = (media: Array<MediaAttachment>, index: number) =>{
+  const onOpenMedia = (media: Array<MediaAttachment>, index: number) => {
     openModal('MEDIA', { statusId: status.id, media, index });
   };
 
@@ -37,9 +38,7 @@ const AttachmentThumbs = ({ status, onClick }: IAttachmentThumbs) => {
         />
       </Suspense>
 
-      {onClick && (
-        <div className='absolute inset-0 size-full cursor-pointer' onClick={onClick} />
-      )}
+      {onClick && <div className='absolute inset-0 size-full cursor-pointer' onClick={onClick} />}
     </div>
   );
 };

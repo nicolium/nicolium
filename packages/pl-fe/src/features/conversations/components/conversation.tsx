@@ -18,7 +18,7 @@ const Conversation: React.FC<IConversation> = ({ conversationId, onMoveUp, onMov
   const navigate = useNavigate();
 
   const { accounts, unread, lastStatusId } = useAppSelector((state) => {
-    const conversation = state.conversations.items.find(x => x.id === conversationId)!;
+    const conversation = state.conversations.items.find((x) => x.id === conversationId)!;
 
     return {
       accounts: conversation.accounts.map((accountId: string) => selectAccount(state, accountId)!),
@@ -32,7 +32,11 @@ const Conversation: React.FC<IConversation> = ({ conversationId, onMoveUp, onMov
       dispatch(markConversationRead(conversationId));
     }
 
-    if (lastStatusId) navigate({ to: '/@{$username}/posts/$statusId', params: { username: accounts[0].acct, statusId: lastStatusId } });
+    if (lastStatusId)
+      navigate({
+        to: '/@{$username}/posts/$statusId',
+        params: { username: accounts[0].acct, statusId: lastStatusId },
+      });
   };
 
   const handleHotkeyMoveUp = () => {

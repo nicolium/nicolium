@@ -24,18 +24,26 @@ interface ICard extends Pick<React.HTMLAttributes<HTMLDivElement>, 'role' | 'ari
 }
 
 /** An opaque backdrop to hold a collection of related elements. */
-const Card = React.forwardRef<HTMLDivElement, ICard>(({ children, variant = 'default', size = 'md', className, ...filteredProps }, ref): JSX.Element => (
-  <div
-    ref={ref}
-    {...filteredProps}
-    className={clsx({
-      [`⁂-card--rounded ⁂-card--${size}`]: variant === 'rounded',
-      '⁂-card--slim': variant === 'slim',
-    }, className)}
-  >
-    {children}
-  </div>
-));
+const Card = React.forwardRef<HTMLDivElement, ICard>(
+  (
+    { children, variant = 'default', size = 'md', className, ...filteredProps },
+    ref,
+  ): JSX.Element => (
+    <div
+      ref={ref}
+      {...filteredProps}
+      className={clsx(
+        {
+          [`⁂-card--rounded ⁂-card--${size}`]: variant === 'rounded',
+          '⁂-card--slim': variant === 'slim',
+        },
+        className,
+      )}
+    >
+      {children}
+    </div>
+  ),
+);
 
 interface ICardHeader {
   backHref?: string;
@@ -48,7 +56,12 @@ interface ICardHeader {
  * Card header container with back button.
  * Typically holds a CardTitle.
  */
-const CardHeader: React.FC<ICardHeader> = ({ className, children, backHref, onBackClick }): JSX.Element => {
+const CardHeader: React.FC<ICardHeader> = ({
+  className,
+  children,
+  backHref,
+  onBackClick,
+}): JSX.Element => {
   const intl = useIntl();
 
   const renderBackButton = () => {
@@ -60,7 +73,12 @@ const CardHeader: React.FC<ICardHeader> = ({ className, children, backHref, onBa
     const backAttributes = backHref ? { to: backHref } : { onClick: onBackClick };
 
     return (
-      <Comp {...backAttributes} className='⁂-card-header__button' aria-label={intl.formatMessage(messages.back)} title={intl.formatMessage(messages.back)}>
+      <Comp
+        {...backAttributes}
+        className='⁂-card-header__button'
+        aria-label={intl.formatMessage(messages.back)}
+        title={intl.formatMessage(messages.back)}
+      >
         <SvgIcon src={require('@phosphor-icons/core/regular/arrow-left.svg')} aria-hidden />
       </Comp>
     );
@@ -82,7 +100,9 @@ interface ICardTitle {
 
 /** A card's title. */
 const CardTitle: React.FC<ICardTitle> = ({ title, truncate = true }): JSX.Element => (
-  <h1 className='⁂-card-title' data-testid='card-title'>{title}</h1>
+  <h1 className='⁂-card-title' data-testid='card-title'>
+    {title}
+  </h1>
 );
 
 interface ICardBody {
@@ -94,14 +114,9 @@ interface ICardBody {
 
 /** A card's body. */
 const CardBody: React.FC<ICardBody> = ({ className, children }): JSX.Element => (
-  <div data-testid='card-body' className={className}>{children}</div>
+  <div data-testid='card-body' className={className}>
+    {children}
+  </div>
 );
 
-export {
-  type CardSizes,
-  Card as default,
-  Card,
-  CardHeader,
-  CardTitle,
-  CardBody,
-};
+export { type CardSizes, Card as default, Card, CardHeader, CardTitle, CardBody };

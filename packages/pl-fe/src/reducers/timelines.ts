@@ -1,8 +1,16 @@
 import { create } from 'mutative';
 
-import { ACCOUNT_BLOCK_SUCCESS, ACCOUNT_MUTE_SUCCESS, type AccountsAction } from '../actions/accounts';
+import {
+  ACCOUNT_BLOCK_SUCCESS,
+  ACCOUNT_MUTE_SUCCESS,
+  type AccountsAction,
+} from '../actions/accounts';
 import { PIN_SUCCESS, UNPIN_SUCCESS, type InteractionsAction } from '../actions/interactions';
-import { STATUS_CREATE_REQUEST, STATUS_CREATE_SUCCESS, type StatusesAction } from '../actions/statuses';
+import {
+  STATUS_CREATE_REQUEST,
+  STATUS_CREATE_SUCCESS,
+  type StatusesAction,
+} from '../actions/statuses';
 import {
   TIMELINE_UPDATE,
   TIMELINE_DELETE,
@@ -19,7 +27,12 @@ import {
 
 import type { ImportPosition } from '@/entity-store/types';
 import type { Status } from '@/normalizers/status';
-import type { PaginatedResponse, Status as BaseStatus, Relationship, CreateStatusParams } from 'pl-api';
+import type {
+  PaginatedResponse,
+  Status as BaseStatus,
+  Relationship,
+  CreateStatusParams,
+} from 'pl-api';
 
 const TRUNCATE_LIMIT = 40;
 const TRUNCATE_SIZE = 20;
@@ -58,34 +71,38 @@ const initialState: State = {};
 
 type State = Record<string, Timeline>;
 
-const getStatusIds = (statuses: Array<Pick<BaseStatus, 'id'>> = []) => statuses.map(status => status.id);
+const getStatusIds = (statuses: Array<Pick<BaseStatus, 'id'>> = []) =>
+  statuses.map((status) => status.id);
 
-const mergeStatusIds = (oldIds: Array<string>, newIds: Array<string>) => [...new Set([...newIds, ...oldIds])];
+const mergeStatusIds = (oldIds: Array<string>, newIds: Array<string>) => [
+  ...new Set([...newIds, ...oldIds]),
+];
 
-const addStatusId = (oldIds = Array<string>(), newId: string) => (
-  mergeStatusIds(oldIds, [newId])
-);
+const addStatusId = (oldIds = Array<string>(), newId: string) => mergeStatusIds(oldIds, [newId]);
 
 // Like `take`, but only if the collection's size exceeds truncateLimit
-const truncate = (items: Array<string>, truncateLimit: number, newSize: number) => (
-  items.length > truncateLimit ? items.slice(0, newSize) : items
-);
+const truncate = (items: Array<string>, truncateLimit: number, newSize: number) =>
+  items.length > truncateLimit ? items.slice(0, newSize) : items;
 
 const truncateIds = (items: Array<string>) => truncate(items, TRUNCATE_LIMIT, TRUNCATE_SIZE);
 
-const updateTimeline = (state: State, timelineId: string, updater: (timeline: Timeline) => void) => {
+const updateTimeline = (
+  state: State,
+  timelineId: string,
+  updater: (timeline: Timeline) => void,
+) => {
   state[timelineId] = state[timelineId] || newTimeline();
   updater(state[timelineId]);
 };
 
-const setLoading = (state: State, timelineId: string, loading: boolean) =>{
+const setLoading = (state: State, timelineId: string, loading: boolean) => {
   updateTimeline(state, timelineId, (timeline) => {
     timeline.isLoading = loading;
   });
 };
 
 // Keep track of when a timeline failed to load
-const setFailed = (state: State, timelineId: string, failed: boolean) =>{
+const setFailed = (state: State, timelineId: string, failed: boolean) => {
   updateTimeline(state, timelineId, (timeline) => {
     timeline.loadingFailed = failed;
   });
@@ -150,7 +167,11 @@ const appendStatus = (state: State, timelineId: string, statusId: string) => {
 
 const updateTimelineQueue = (state: State, timelineId: string, statusId: string) => {
   updateTimeline(state, timelineId, (timeline) => {
-    const { queuedItems: queuedIds, items: listedIds, totalQueuedItemsCount: queuedCount } = timeline;
+    const {
+      queuedItems: queuedIds,
+      items: listedIds,
+      totalQueuedItemsCount: queuedCount,
+    } = timeline;
 
     if (queuedIds.includes(statusId)) return;
     if (listedIds.includes(statusId)) return;
@@ -167,16 +188,21 @@ const shouldDelete = (timelineId: string, excludeAccount: string | null) => {
   return true;
 };
 
-const deleteStatus = (state: State, statusId: string, references: Array<[string]> | Array<[string, string]>, excludeAccount: string | null) => {
+const deleteStatus = (
+  state: State,
+  statusId: string,
+  references: Array<[string]> | Array<[string, string]>,
+  excludeAccount: string | null,
+) => {
   for (const timelineId in state) {
     if (shouldDelete(timelineId, excludeAccount)) {
-      state[timelineId].items = state[timelineId].items.filter(id => id !== statusId);
-      state[timelineId].queuedItems = state[timelineId].queuedItems.filter(id => id !== statusId);
+      state[timelineId].items = state[timelineId].items.filter((id) => id !== statusId);
+      state[timelineId].queuedItems = state[timelineId].queuedItems.filter((id) => id !== statusId);
     }
   }
 
   // Remove reblogs of deleted status
-  references.forEach(ref => {
+  references.forEach((ref) => {
     deleteStatus(state, ref[0], [], excludeAccount);
   });
 };
@@ -185,23 +211,23 @@ const clearTimeline = (state: State, timelineId: string) => {
   state[timelineId] = newTimeline();
 };
 
-const updateTop = (state: State, timelineId: string, top: boolean) =>{
+const updateTop = (state: State, timelineId: string, top: boolean) => {
   updateTimeline(state, timelineId, (timeline) => {
     if (top) timeline.unread = 0;
     timeline.top = top;
   });
 };
 
-const isReblogOf = (reblog: Pick<Status, 'reblog_id'>, status: Pick<Status, 'id'>) => reblog.reblog_id === status.id;
+const isReblogOf = (reblog: Pick<Status, 'reblog_id'>, status: Pick<Status, 'id'>) =>
+  reblog.reblog_id === status.id;
 
 const buildReferencesTo = (
   statuses: Record<string, Pick<Status, 'id' | 'account' | 'reblog_id'>>,
   status: Pick<Status, 'id'>,
-): Array<[string]> => (
+): Array<[string]> =>
   Object.values(statuses)
-    .filter(reblog => isReblogOf(reblog, status))
-    .map(status => [status.id])
-);
+    .filter((reblog) => isReblogOf(reblog, status))
+    .map((status) => [status.id]);
 
 // const filterTimeline = (state: State, timelineId: string, relationship: APIEntity, statuses: ImmutableList<ImmutableMap<string, any>>) =>
 //   state.updateIn([timelineId, 'items'], ImmutableOrderedSet(), (ids) =>
@@ -209,7 +235,11 @@ const buildReferencesTo = (
 //       statuses.getIn([statusId, 'account']) === relationship.id,
 //     ));
 
-const filterTimelines = (state: State, relationship: Relationship, statuses: Record<string, Pick<Status, 'id' | 'account' | 'account_id' | 'reblog_id'>>) => {
+const filterTimelines = (
+  state: State,
+  relationship: Relationship,
+  statuses: Record<string, Pick<Status, 'id' | 'account' | 'account_id' | 'reblog_id'>>,
+) => {
   for (const statusId in statuses) {
     const status = statuses[statusId];
 
@@ -240,7 +270,9 @@ const timelineDequeue = (state: State, timelineId: string) => {
 //     timeline.set('items', addStatusId(items, null));
 // }));
 
-const getTimelinesForStatus = (status: Pick<BaseStatus, 'visibility' | 'group'> | Pick<CreateStatusParams, 'visibility'>) => {
+const getTimelinesForStatus = (
+  status: Pick<BaseStatus, 'visibility' | 'group'> | Pick<CreateStatusParams, 'visibility'>,
+) => {
   switch (status.visibility) {
     case 'group':
       return [`group:${'group' in status && status.group?.id}`];
@@ -273,7 +305,7 @@ const importPendingStatus = (state: State, params: CreateStatusParams, idempoten
 
   const timelineIds = getTimelinesForStatus(params);
 
-  timelineIds.forEach(timelineId => {
+  timelineIds.forEach((timelineId) => {
     updateTimelineQueue(state, timelineId, statusId);
   });
 };
@@ -285,19 +317,19 @@ const replacePendingStatus = (state: State, idempotencyKey: string, newId: strin
   for (const timelineId in state) {
     const found = replaceId(state[timelineId].items, oldId, newId);
     if (found) {
-      state[timelineId].queuedItems = state[timelineId].queuedItems.filter(id => id !== oldId);
+      state[timelineId].queuedItems = state[timelineId].queuedItems.filter((id) => id !== oldId);
     } else {
       replaceId(state[timelineId].queuedItems, oldId, newId);
     }
   }
 };
 
-const importStatus = (state: State, status: BaseStatus, idempotencyKey: string) =>{
+const importStatus = (state: State, status: BaseStatus, idempotencyKey: string) => {
   replacePendingStatus(state, idempotencyKey, status.id);
 
   const timelineIds = getTimelinesForStatus(status);
 
-  timelineIds.forEach(timelineId => {
+  timelineIds.forEach((timelineId) => {
     appendStatus(state, timelineId, status.id);
   });
 };
@@ -307,28 +339,31 @@ const handleExpandFail = (state: State, timelineId: string) => {
   setFailed(state, timelineId, true);
 };
 
-const timelines = (state: State = initialState, action: AccountsAction | InteractionsAction | StatusesAction | TimelineAction): State => {
+const timelines = (
+  state: State = initialState,
+  action: AccountsAction | InteractionsAction | StatusesAction | TimelineAction,
+): State => {
   switch (action.type) {
     case STATUS_CREATE_REQUEST:
       if (action.params.scheduled_at) return state;
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         importPendingStatus(draft, action.params, action.idempotencyKey);
       });
     case STATUS_CREATE_SUCCESS:
       if ('params' in action.status || action.editing) return state;
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         importStatus(draft, action.status as BaseStatus, action.idempotencyKey);
       });
     case TIMELINE_EXPAND_REQUEST:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         setLoading(draft, action.timeline, true);
       });
     case TIMELINE_EXPAND_FAIL:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         handleExpandFail(draft, action.timeline);
       });
     case TIMELINE_EXPAND_SUCCESS:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         expandNormalizedTimeline(
           draft,
           action.timeline,
@@ -341,40 +376,40 @@ const timelines = (state: State = initialState, action: AccountsAction | Interac
     case TIMELINE_UPDATE:
       return create(state, (draft) => appendStatus(draft, action.timeline, action.statusId));
     case TIMELINE_UPDATE_QUEUE:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         updateTimelineQueue(draft, action.timeline, action.statusId);
       });
     case TIMELINE_DEQUEUE:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         timelineDequeue(draft, action.timeline);
       });
     case TIMELINE_DELETE:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         deleteStatus(draft, action.statusId, action.references, action.reblogOf);
       });
     case TIMELINE_CLEAR:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         clearTimeline(draft, action.timeline);
       });
     case ACCOUNT_BLOCK_SUCCESS:
     case ACCOUNT_MUTE_SUCCESS:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         filterTimelines(draft, action.relationship, action.statuses);
       });
     // case ACCOUNT_UNFOLLOW_SUCCESS:
     //   return filterTimeline(state, 'home', action.relationship, action.statuses);
     case TIMELINE_SCROLL_TOP:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         updateTop(state, action.timeline, action.top);
       });
     case PIN_SUCCESS:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         updateTimeline(draft, `account:${action.accountId}:with_replies:pinned`, (timeline) => {
           timeline.items = [...new Set([action.statusId, ...timeline.items])];
         });
       });
     case UNPIN_SUCCESS:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         updateTimeline(draft, `account:${action.accountId}:with_replies:pinned`, (timeline) => {
           timeline.items = timeline.items.filter((id) => id !== action.statusId);
         });

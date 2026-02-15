@@ -24,13 +24,19 @@ const UploadForm: React.FC<IUploadForm> = ({ composeId, onSubmit }) => {
   const dragItem = useRef<string | null>();
   const dragOverItem = useRef<string | null>();
 
-  const handleDragStart = useCallback((id: string) => {
-    dragItem.current = id;
-  }, [dragItem]);
+  const handleDragStart = useCallback(
+    (id: string) => {
+      dragItem.current = id;
+    },
+    [dragItem],
+  );
 
-  const handleDragEnter = useCallback((id: string) => {
-    dragOverItem.current = id;
-  }, [dragOverItem]);
+  const handleDragEnter = useCallback(
+    (id: string) => {
+      dragOverItem.current = id;
+    },
+    [dragOverItem],
+  );
 
   const handleDragEnd = useCallback(() => {
     dispatch(changeMediaOrder(composeId, dragItem.current!, dragOverItem.current!));

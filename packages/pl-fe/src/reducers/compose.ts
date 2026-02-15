@@ -76,9 +76,19 @@ import { unescapeHTML } from '../utils/html';
 import type { Emoji } from '@/features/emoji';
 import type { Language } from '@/features/preferences';
 import type { Status } from '@/normalizers/status';
-import type { Account, CredentialAccount, Instance, InteractionPolicy, Location, MediaAttachment, Status as BaseStatus, Tag, CreateStatusParams } from 'pl-api';
+import type {
+  Account,
+  CredentialAccount,
+  Instance,
+  InteractionPolicy,
+  Location,
+  MediaAttachment,
+  Status as BaseStatus,
+  Tag,
+  CreateStatusParams,
+} from 'pl-api';
 
-const getResetFileKey = () => Math.floor((Math.random() * 0x10000));
+const getResetFileKey = () => Math.floor(Math.random() * 0x10000);
 
 interface ComposePoll {
   options: Array<string>;
@@ -229,24 +239,49 @@ type State = {
   [key: string]: Compose;
 };
 
-const statusToTextMentions = (status: Pick<Status, 'account' | 'mentions'>, account: Pick<Account, 'acct'>) => {
+const statusToTextMentions = (
+  status: Pick<Status, 'account' | 'mentions'>,
+  account: Pick<Account, 'acct'>,
+) => {
   const author = status.account.acct;
   const mentions = status.mentions.map((m) => m.acct) || [];
 
-  return [...new Set([author, ...mentions].filter(acct => acct !== account.acct))].map(m => `@${m} `).join('');
+  return [...new Set([author, ...mentions].filter((acct) => acct !== account.acct))]
+    .map((m) => `@${m} `)
+    .join('');
 };
 
-const statusToMentionsArray = (status: Pick<Status, 'account' | 'mentions'>, account: Pick<Account, 'acct'>, rebloggedBy?: Pick<Account, 'acct'>) => {
+const statusToMentionsArray = (
+  status: Pick<Status, 'account' | 'mentions'>,
+  account: Pick<Account, 'acct'>,
+  rebloggedBy?: Pick<Account, 'acct'>,
+) => {
   const author = status.account.acct;
   const mentions = status.mentions.map((m) => m.acct) || [];
 
-  return [...new Set([author, ...(rebloggedBy ? [rebloggedBy.acct] : []), ...mentions].filter(acct => acct !== account.acct))];
+  return [
+    ...new Set(
+      [author, ...(rebloggedBy ? [rebloggedBy.acct] : []), ...mentions].filter(
+        (acct) => acct !== account.acct,
+      ),
+    ),
+  ];
 };
 
-const statusToMentionsAccountIdsArray = (status: Pick<Status, 'mentions' | 'account'>, account: Pick<Account, 'id'>, parentRebloggedBy?: string | null) => {
+const statusToMentionsAccountIdsArray = (
+  status: Pick<Status, 'mentions' | 'account'>,
+  account: Pick<Account, 'id'>,
+  parentRebloggedBy?: string | null,
+) => {
   const mentions = status.mentions.map((m) => m.id);
 
-  return [...new Set([status.account.id, ...(parentRebloggedBy ? [parentRebloggedBy] : []), ...mentions].filter((id) => id !== account.id))];
+  return [
+    ...new Set(
+      [status.account.id, ...(parentRebloggedBy ? [parentRebloggedBy] : []), ...mentions].filter(
+        (id) => id !== account.id,
+      ),
+    ),
+  ];
 };
 
 const appendMedia = (compose: Compose, media: MediaAttachment, defaultSensitive?: boolean) => {
@@ -254,7 +289,7 @@ const appendMedia = (compose: Compose, media: MediaAttachment, defaultSensitive?
 
   compose.mediaAttachments.push(media);
   compose.isUploading = false;
-  compose.resetFileKey = Math.floor((Math.random() * 0x10000));
+  compose.resetFileKey = Math.floor(Math.random() * 0x10000);
 
   if (prevSize === 0 && (defaultSensitive || compose.sensitive)) {
     compose.sensitive = true;
@@ -264,15 +299,22 @@ const appendMedia = (compose: Compose, media: MediaAttachment, defaultSensitive?
 const removeMedia = (compose: Compose, mediaId: string) => {
   const prevSize = compose.mediaAttachments.length;
 
-  compose.mediaAttachments = compose.mediaAttachments.filter(item => item.id !== mediaId);
+  compose.mediaAttachments = compose.mediaAttachments.filter((item) => item.id !== mediaId);
 
   if (prevSize === 1) {
     compose.sensitive = false;
   }
 };
 
-const insertSuggestion = (compose: Compose, position: number, token: string | null, completion: string, path: ComposeSuggestionSelectAction['path']) => {
-  const updateText = (oldText?: string) => `${oldText?.slice(0, position)}${completion} ${oldText?.slice(position + (token?.length ?? 0))}`;
+const insertSuggestion = (
+  compose: Compose,
+  position: number,
+  token: string | null,
+  completion: string,
+  path: ComposeSuggestionSelectAction['path'],
+) => {
+  const updateText = (oldText?: string) =>
+    `${oldText?.slice(0, position)}${completion} ${oldText?.slice(position + (token?.length ?? 0))}`;
   if (path[0] === 'spoiler_text') {
     compose.spoilerText = updateText(compose.spoilerText);
   } else if (compose.poll) {
@@ -290,7 +332,12 @@ const updateSuggestionTags = (compose: Compose, token: string, tags: Tag[]) => {
     .map((tag) => '#' + tag.name);
 };
 
-const privacyPreference = (a: string, b: string, list_id: number | null, conversationScope = false) => {
+const privacyPreference = (
+  a: string,
+  b: string,
+  list_id: number | null,
+  conversationScope = false,
+) => {
   if (['private', 'subscribers'].includes(a) && conversationScope) return 'conversation';
 
   const order = ['public', 'unlisted', 'mutuals_only', 'private', 'direct', 'local'];
@@ -317,8 +364,7 @@ const expandMentions = (status: Pick<Status, 'content' | 'mentions'>) => {
 const getExplicitMentions = (me: string, status: Pick<Status, 'content' | 'mentions'>) => {
   const fragment = domParser.parseFromString(status.content, 'text/html').documentElement;
 
-  const mentions = status
-    .mentions
+  const mentions = status.mentions
     .filter((mention) => !(fragment.querySelector(`a[href="${mention.url}"]`) ?? mention.id === me))
     .map((m) => m.acct);
 
@@ -349,38 +395,45 @@ const importAccount = (compose: Compose, account: CredentialAccount) => {
 const updateDefaultContentType = (compose: Compose, instance: Instance) => {
   const postFormats = instance.pleroma.metadata.post_formats;
 
-  compose.contentType = postFormats.includes(compose.contentType) || (postFormats.includes('text/markdown') && compose.contentType === 'wysiwyg')
-    ? compose.contentType
-    : postFormats.includes('text/markdown')
-      ? 'text/markdown'
-      : postFormats[0];
+  compose.contentType =
+    postFormats.includes(compose.contentType) ||
+    (postFormats.includes('text/markdown') && compose.contentType === 'wysiwyg')
+      ? compose.contentType
+      : postFormats.includes('text/markdown')
+        ? 'text/markdown'
+        : postFormats[0];
 };
 
 const updateCompose = (state: State, key: string, updater: (compose: Compose) => void) =>
-  create(state, draft => {
-    draft[key] = draft[key] || create(draft.default, (draft) => {
-      draft.idempotencyKey = crypto.randomUUID();
-    });
+  create(state, (draft) => {
+    draft[key] =
+      draft[key] ||
+      create(draft.default, (draft) => {
+        draft.idempotencyKey = crypto.randomUUID();
+      });
     updater(draft[key]);
   });
-  // state.update(key, state.get('default')!, updater);
+// state.update(key, state.get('default')!, updater);
 
 const initialState: State = {
   default: newCompose({ idempotencyKey: crypto.randomUUID(), resetFileKey: getResetFileKey() }),
 };
 
-const compose = (state = initialState, action: ComposeAction | EventsAction | InstanceAction | MeAction | TimelineAction): State => {
+const compose = (
+  state = initialState,
+  action: ComposeAction | EventsAction | InstanceAction | MeAction | TimelineAction,
+): State => {
   switch (action.type) {
     case COMPOSE_TYPE_CHANGE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.contentType = action.value;
       });
     case COMPOSE_SPOILERNESS_CHANGE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.sensitive = !compose.sensitive;
       });
     case COMPOSE_SPOILER_TEXT_CHANGE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         if (!compose.modifiedLanguage || compose.modifiedLanguage === compose.language) {
           compose.spoilerText = action.text;
         } else if (compose.modifiedLanguage) {
@@ -388,24 +441,24 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         }
       });
     case COMPOSE_VISIBILITY_CHANGE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.visibility = action.value;
       });
     case COMPOSE_LANGUAGE_CHANGE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.language = action.value;
         compose.modifiedLanguage = action.value;
       });
     case COMPOSE_MODIFIED_LANGUAGE_CHANGE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.modifiedLanguage = action.value;
       });
     case COMPOSE_CHANGE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.text = action.text;
       });
     case COMPOSE_REPLY:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         const defaultCompose = state.default;
 
         const mentions = action.explicitAddressing
@@ -416,8 +469,15 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.inReplyToId = action.status.id;
         compose.to = mentions;
         compose.parentRebloggedById = action.rebloggedBy?.id ?? null;
-        compose.text = !action.explicitAddressing ? statusToTextMentions(action.status, action.account) : '';
-        compose.visibility = privacyPreference(action.status.visibility, defaultCompose.visibility, action.status.list_id, action.conversationScope);
+        compose.text = !action.explicitAddressing
+          ? statusToTextMentions(action.status, action.account)
+          : '';
+        compose.visibility = privacyPreference(
+          action.status.visibility,
+          defaultCompose.visibility,
+          action.status.list_id,
+          action.conversationScope,
+        );
         compose.localOnly = action.status.local_only === true;
         compose.caretPosition = null;
         compose.contentType = defaultCompose.contentType;
@@ -428,12 +488,12 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         }
       });
     case COMPOSE_EVENT_REPLY:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.inReplyToId = action.status.id;
         compose.to = statusToMentionsArray(action.status, action.account);
       });
     case COMPOSE_QUOTE:
-      return updateCompose(state, 'compose-modal', compose => {
+      return updateCompose(state, 'compose-modal', (compose) => {
         const author = action.status.account.acct;
         const defaultCompose = state.default;
 
@@ -441,7 +501,11 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.to = [author];
         compose.parentRebloggedById = null;
         compose.text = '';
-        compose.visibility = privacyPreference(action.status.visibility, defaultCompose.visibility, action.status.list_id);
+        compose.visibility = privacyPreference(
+          action.status.visibility,
+          defaultCompose.visibility,
+          action.status.list_id,
+        );
         compose.caretPosition = null;
         compose.contentType = defaultCompose.contentType;
         compose.spoilerText = '';
@@ -452,11 +516,11 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         }
       });
     case COMPOSE_SUBMIT_REQUEST:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.isSubmitting = true;
       });
     case COMPOSE_UPLOAD_CHANGE_REQUEST:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.isChangingUpload = true;
       });
     case COMPOSE_REPLY_CANCEL:
@@ -467,86 +531,95 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
           ...draft,
           idempotencyKey: crypto.randomUUID(),
           in_reply_to_id: action.composeId.startsWith('reply:') ? action.composeId.slice(6) : null,
-          ...(action.composeId.startsWith('group:') ? {
-            visibility: 'group',
-            group_id: action.composeId.slice(6),
-          } : undefined),
+          ...(action.composeId.startsWith('group:')
+            ? {
+                visibility: 'group',
+                group_id: action.composeId.slice(6),
+              }
+            : undefined),
         }));
       });
     case COMPOSE_SUBMIT_FAIL:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.isSubmitting = false;
       });
     case COMPOSE_UPLOAD_CHANGE_FAIL:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.isChangingUpload = false;
       });
     case COMPOSE_UPLOAD_REQUEST:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.isUploading = true;
       });
     case COMPOSE_UPLOAD_SUCCESS:
-      return updateCompose(state, action.composeId, compose =>{
+      return updateCompose(state, action.composeId, (compose) => {
         appendMedia(compose, action.media, state.default.sensitive);
       });
     case COMPOSE_UPLOAD_FAIL:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.isUploading = false;
       });
     case COMPOSE_UPLOAD_UNDO:
-      return updateCompose(state, action.composeId, compose =>{
+      return updateCompose(state, action.composeId, (compose) => {
         removeMedia(compose, action.mediaId);
       });
     case COMPOSE_UPLOAD_PROGRESS:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.progress = Math.round((action.loaded / action.total) * 100);
       });
     case COMPOSE_MENTION:
-      return updateCompose(state, 'compose-modal', compose => {
-        compose.text = [compose.text.trim(), `@${action.account.acct} `].filter((str) => str.length !== 0).join(' ');
+      return updateCompose(state, 'compose-modal', (compose) => {
+        compose.text = [compose.text.trim(), `@${action.account.acct} `]
+          .filter((str) => str.length !== 0)
+          .join(' ');
         compose.caretPosition = null;
       });
     case COMPOSE_DIRECT:
-      return updateCompose(state, 'compose-modal', compose => {
-        compose.text = [compose.text.trim(), `@${action.account.acct} `].filter((str) => str.length !== 0).join(' ');
+      return updateCompose(state, 'compose-modal', (compose) => {
+        compose.text = [compose.text.trim(), `@${action.account.acct} `]
+          .filter((str) => str.length !== 0)
+          .join(' ');
         compose.visibility = 'direct';
         compose.caretPosition = null;
       });
     case COMPOSE_GROUP_POST:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.visibility = 'group';
         compose.groupId = action.groupId;
         compose.caretPosition = null;
       });
     case COMPOSE_SUGGESTIONS_CLEAR:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.suggestions = [];
       });
     case COMPOSE_SUGGESTIONS_READY:
-      return updateCompose(state, action.composeId, compose => {
-        compose.suggestions = action.accounts ? action.accounts.map((item) => item.id) : action.emojis ?? [];
+      return updateCompose(state, action.composeId, (compose) => {
+        compose.suggestions = action.accounts
+          ? action.accounts.map((item) => item.id)
+          : (action.emojis ?? []);
       });
     case COMPOSE_SUGGESTION_SELECT:
-      return updateCompose(state, action.composeId, compose =>{
+      return updateCompose(state, action.composeId, (compose) => {
         insertSuggestion(compose, action.position, action.token, action.completion, action.path);
       });
     case COMPOSE_SUGGESTION_TAGS_UPDATE:
-      return updateCompose(state, action.composeId, compose =>{
+      return updateCompose(state, action.composeId, (compose) => {
         updateSuggestionTags(compose, action.token, action.tags);
       });
     case TIMELINE_DELETE:
-      return updateCompose(state, 'compose-modal', compose => {
+      return updateCompose(state, 'compose-modal', (compose) => {
         if (action.statusId === compose.inReplyToId) {
           compose.inReplyToId = null;
-        } if (action.statusId === compose.quoteId) {
+        }
+        if (action.statusId === compose.quoteId) {
           compose.quoteId = null;
         }
       });
     case COMPOSE_UPLOAD_CHANGE_SUCCESS:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.isChangingUpload = false;
 
-        compose.mediaAttachments = compose.mediaAttachments.map(item => {
+        compose.mediaAttachments = compose.mediaAttachments.map((item) => {
           if (item.id === action.media.id) {
             return action.media;
           }
@@ -555,8 +628,10 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         });
       });
     case COMPOSE_SET_STATUS:
-      return updateCompose(state, 'compose-modal', compose => {
-        const mentions = action.explicitAddressing ? getExplicitMentions(action.status.account.id, action.status) : [];
+      return updateCompose(state, 'compose-modal', (compose) => {
+        const mentions = action.explicitAddressing
+          ? getExplicitMentions(action.status.account.id, action.status)
+          : [];
         if (!action.withRedraft && !action.draftId) {
           compose.editedId = action.status.id;
         }
@@ -566,9 +641,10 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.inReplyToId = action.status.in_reply_to_id;
         compose.visibility = action.status.visibility;
         compose.caretPosition = null;
-        const contentType = action.contentType === 'text/markdown' && state.default.contentType === 'wysiwyg'
-          ? 'wysiwyg'
-          : action.contentType ?? 'text/plain';
+        const contentType =
+          action.contentType === 'text/markdown' && state.default.contentType === 'wysiwyg'
+            ? 'wysiwyg'
+            : (action.contentType ?? 'text/plain');
         compose.contentType = contentType;
         compose.quoteId = action.status.quote_id;
         compose.groupId = action.status.group_id;
@@ -602,47 +678,52 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         }
       });
     case COMPOSE_POLL_ADD:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.poll = newPoll();
       });
     case COMPOSE_POLL_REMOVE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.poll = null;
       });
     case COMPOSE_SCHEDULE_ADD:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.scheduledAt = new Date(Date.now() + 10 * 60 * 1000);
       });
     case COMPOSE_SCHEDULE_SET:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.scheduledAt = action.date;
       });
     case COMPOSE_SCHEDULE_REMOVE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.scheduledAt = null;
       });
     case COMPOSE_POLL_OPTION_ADD:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         if (!compose.poll) return;
         compose.poll.options.push(action.title);
-        compose.poll.options_map.push(Object.fromEntries(Object.entries(compose.textMap).map((key) => [key, action.title])));
+        compose.poll.options_map.push(
+          Object.fromEntries(Object.entries(compose.textMap).map((key) => [key, action.title])),
+        );
       });
     case COMPOSE_POLL_OPTION_CHANGE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         if (!compose.poll) return;
         if (!compose.modifiedLanguage || compose.modifiedLanguage === compose.language) {
           compose.poll.options[action.index] = action.title;
-          if (compose.modifiedLanguage) compose.poll.options_map[action.index][compose.modifiedLanguage] = action.title;
+          if (compose.modifiedLanguage)
+            compose.poll.options_map[action.index][compose.modifiedLanguage] = action.title;
         }
       });
     case COMPOSE_POLL_OPTION_REMOVE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         if (!compose.poll) return;
         compose.poll.options = compose.poll.options.filter((_, index) => index !== action.index);
-        compose.poll.options_map = compose.poll.options_map.filter((_, index) => index !== action.index);
+        compose.poll.options_map = compose.poll.options_map.filter(
+          (_, index) => index !== action.index,
+        );
       });
     case COMPOSE_POLL_SETTINGS_CHANGE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         if (!compose.poll) return null;
         if (action.expiresIn) {
           compose.poll.expires_in = action.expiresIn;
@@ -652,22 +733,22 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         }
       });
     case COMPOSE_ADD_TO_MENTIONS:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.to = [...new Set([...compose.to, action.account])];
       });
     case COMPOSE_REMOVE_FROM_MENTIONS:
-      return updateCompose(state, action.composeId, compose => {
-        compose.to = compose.to.filter(acct => acct !== action.account);
+      return updateCompose(state, action.composeId, (compose) => {
+        compose.to = compose.to.filter((acct) => acct !== action.account);
       });
     case ME_FETCH_SUCCESS:
     case ME_PATCH_SUCCESS:
-      return updateCompose(state, 'default', compose =>{
+      return updateCompose(state, 'default', (compose) => {
         importAccount(compose, action.me);
       });
-      // case SETTING_CHANGE:
-      //   return updateCompose(state, 'default', compose => updateSetting(compose, action.path, action.value));
+    // case SETTING_CHANGE:
+    //   return updateCompose(state, 'default', compose => updateSetting(compose, action.path, action.value));
     case COMPOSE_EDITOR_STATE_SET:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         if (!compose.modifiedLanguage || compose.modifiedLanguage === compose.language) {
           compose.editorState = action.editorState as string;
           compose.text = action.text as string;
@@ -677,38 +758,41 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         }
       });
     case EVENT_COMPOSE_CANCEL:
-      return updateCompose(state, 'event-compose-modal', compose => {
+      return updateCompose(state, 'event-compose-modal', (compose) => {
         compose.text = '';
       });
     case EVENT_FORM_SET:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.text = action.text;
       });
     case COMPOSE_CHANGE_MEDIA_ORDER:
-      return updateCompose(state, action.composeId, compose => {
-        const indexA = compose.mediaAttachments.findIndex(x => x.id === action.a);
-        const indexB = compose.mediaAttachments.findIndex(x => x.id === action.b);
+      return updateCompose(state, action.composeId, (compose) => {
+        const indexA = compose.mediaAttachments.findIndex((x) => x.id === action.a);
+        const indexB = compose.mediaAttachments.findIndex((x) => x.id === action.b);
 
         const item = compose.mediaAttachments.splice(indexA, 1)[0];
         compose.mediaAttachments.splice(indexB, 0, item);
       });
     case COMPOSE_ADD_SUGGESTED_QUOTE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.quoteId = action.quoteId;
       });
     case COMPOSE_ADD_SUGGESTED_LANGUAGE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.suggestedLanguage = action.language;
       });
     case COMPOSE_LANGUAGE_ADD:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.editorStateMap[action.value] = compose.editorState;
         compose.textMap[action.value] = compose.text;
         compose.spoilerTextMap[action.value] = compose.spoilerText;
-        if (compose.poll) compose.poll.options_map.forEach((option, key) => option[action.value] = compose.poll!.options[key]);
+        if (compose.poll)
+          compose.poll.options_map.forEach(
+            (option, key) => (option[action.value] = compose.poll!.options[key]),
+          );
       });
     case COMPOSE_LANGUAGE_DELETE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         delete compose.editorStateMap[action.value];
         delete compose.textMap[action.value];
         delete compose.spoilerTextMap[action.value];
@@ -719,64 +803,71 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.quoteId = null;
       });
     case COMPOSE_FEDERATED_CHANGE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.localOnly = !compose.localOnly;
       });
     case COMPOSE_INTERACTION_POLICY_OPTION_CHANGE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.interactionPolicy ??= JSON.parse(JSON.stringify(action.initial))!;
 
-        compose.interactionPolicy = create(compose.interactionPolicy ?? action.initial, (interactionPolicy) => {
-          interactionPolicy[action.policy][action.rule] = action.value;
-          interactionPolicy[action.policy][action.rule === 'always' ? 'with_approval' : 'always'] = interactionPolicy[action.policy][action.rule === 'always' ? 'with_approval' : 'always'].filter(rule => !action.value.includes(rule as any));
-        });
+        compose.interactionPolicy = create(
+          compose.interactionPolicy ?? action.initial,
+          (interactionPolicy) => {
+            interactionPolicy[action.policy][action.rule] = action.value;
+            interactionPolicy[action.policy][
+              action.rule === 'always' ? 'with_approval' : 'always'
+            ] = interactionPolicy[action.policy][
+              action.rule === 'always' ? 'with_approval' : 'always'
+            ].filter((rule) => !action.value.includes(rule as any));
+          },
+        );
       });
     case COMPOSE_QUOTE_POLICY_OPTION_CHANGE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.quoteApprovalPolicy = action.value;
       });
     case INSTANCE_FETCH_SUCCESS:
-      return updateCompose(state, 'default', (compose) =>{
+      return updateCompose(state, 'default', (compose) => {
         updateDefaultContentType(compose, action.instance);
       });
     case COMPOSE_CLEAR_LINK_SUGGESTION_CREATE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.clearLinkSuggestion = action.suggestion;
       });
     case COMPOSE_CLEAR_LINK_SUGGESTION_IGNORE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         if (compose.clearLinkSuggestion?.key === action.key) {
           compose.clearLinkSuggestion = null;
         }
         compose.dismissedClearLinksSuggestions.push(action.key);
       });
     case COMPOSE_PREVIEW_SUCCESS:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.preview = action.status;
       });
     case COMPOSE_PREVIEW_CANCEL:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.preview = null;
       });
     case COMPOSE_HASHTAG_CASING_SUGGESTION_SET:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.hashtagCasingSuggestion = action.suggestion;
       });
     case COMPOSE_HASHTAG_CASING_SUGGESTION_IGNORE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.hashtagCasingSuggestion = null;
         compose.hashtagCasingSuggestionIgnored = true;
       });
     case COMPOSE_REDACTING_OVERWRITE_CHANGE:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.redactingOverwrite = action.value;
       });
     case COMPOSE_SET_LOCATION:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.location = action.location;
       });
     case COMPOSE_SET_SHOW_LOCATION_PICKER:
-      return updateCompose(state, action.composeId, compose => {
+      return updateCompose(state, action.composeId, (compose) => {
         compose.showLocationPicker = action.showLocation;
         if (!action.showLocation) {
           compose.location = null;

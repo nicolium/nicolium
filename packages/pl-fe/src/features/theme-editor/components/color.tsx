@@ -11,7 +11,6 @@ interface IColor {
 
 /** Color input. */
 const Color: React.FC<IColor> = ({ color, onChange }) => {
-
   const handleChange: ColorChangeHandler = (result) => {
     onChange?.(result.hex);
   };

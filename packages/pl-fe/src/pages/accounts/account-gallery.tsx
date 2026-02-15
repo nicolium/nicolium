@@ -27,16 +27,18 @@ interface IMediaItem {
 const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) => {
   const { autoPlayGif, displayMedia } = useSettings();
   const { account } = useAccount(attachment.account_id);
-  const [visible, setVisible] = useState<boolean>(displayMedia !== 'hide_all' && !attachment.sensitive || displayMedia === 'show_all');
+  const [visible, setVisible] = useState<boolean>(
+    (displayMedia !== 'hide_all' && !attachment.sensitive) || displayMedia === 'show_all',
+  );
 
-  const handleMouseEnter: React.MouseEventHandler<HTMLVideoElement> = e => {
+  const handleMouseEnter: React.MouseEventHandler<HTMLVideoElement> = (e) => {
     const video = e.target as HTMLVideoElement;
     if (hoverToPlay()) {
       video.play();
     }
   };
 
-  const handleMouseLeave: React.MouseEventHandler<HTMLVideoElement> = e => {
+  const handleMouseLeave: React.MouseEventHandler<HTMLVideoElement> = (e) => {
     const video = e.target as HTMLVideoElement;
     if (hoverToPlay()) {
       video.pause();
@@ -46,7 +48,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
 
   const hoverToPlay = () => !autoPlayGif && ['gifv', 'video'].includes(attachment.type);
 
-  const handleClick: React.MouseEventHandler = e => {
+  const handleClick: React.MouseEventHandler = (e) => {
     if (e.button === 0 && !(e.ctrlKey || e.metaKey)) {
       e.preventDefault();
 
@@ -68,8 +70,8 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
   } else if (attachment.type === 'image') {
     const focusX = Number(attachment.meta?.focus?.x) || 0;
     const focusY = Number(attachment.meta?.focus?.y) || 0;
-    const x = ((focusX /  2) + .5) * 100;
-    const y = ((focusY / -2) + .5) * 100;
+    const x = (focusX / 2 + 0.5) * 100;
+    const y = (focusY / -2 + 0.5) * 100;
 
     thumbnail = (
       <StillImage
@@ -90,7 +92,9 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
     thumbnail = (
       <div className={clsx('⁂-media-gallery__gifv', { autoplay: autoPlayGif })}>
         <video
-          className={clsx('⁂-media-gallery__item-gifv-thumbnail overflow-hidden', { 'rounded-br-md': isLast })}
+          className={clsx('⁂-media-gallery__item-gifv-thumbnail overflow-hidden', {
+            'rounded-br-md': isLast,
+          })}
           aria-label={attachment.description}
           title={attachment.description}
           role='application'
@@ -111,7 +115,9 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
     const fileExtension = remoteURL.slice(fileExtensionLastIndex + 1).toUpperCase();
     thumbnail = (
       <div className={clsx('⁂-media-gallery__item-thumbnail', { 'rounded-br-md': isLast })}>
-        <span className='⁂-media-gallery__item__icons'><Icon src={require('@phosphor-icons/core/regular/speaker-high.svg')} /></span>
+        <span className='⁂-media-gallery__item__icons'>
+          <Icon src={require('@phosphor-icons/core/regular/speaker-high.svg')} />
+        </span>
         <span className='⁂-media-gallery__file-extension__label'>{fileExtension}</span>
       </div>
     );
@@ -127,11 +133,17 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
 
   return (
     <div className='col-span-1'>
-      <Link className='⁂-media-gallery__item-thumbnail aspect-1' to='/@{$username}/posts/$statusId' params={{ username: account?.acct ?? 'undefined', statusId: attachment.status_id }} onClick={handleClick} title={title}>
+      <Link
+        className='⁂-media-gallery__item-thumbnail aspect-1'
+        to='/@{$username}/posts/$statusId'
+        params={{ username: account?.acct ?? 'undefined', statusId: attachment.status_id }}
+        onClick={handleClick}
+        title={title}
+      >
         <Blurhash
           hash={attachment.blurhash}
           className={clsx('⁂-media-gallery__preview', {
-            'hidden': visible,
+            hidden: visible,
             'rounded-br-md': isLast,
           })}
           aria-label={!visible ? attachment.description : undefined}
@@ -154,7 +166,13 @@ const AccountGalleryPage = () => {
     isUnavailable,
   } = useAccountLookup(username, { withRelationship: true });
 
-  const { data: attachments, isFetching, isLoading, hasNextPage: hasMore, fetchNextPage } = useAccountGallery(account?.id!);
+  const {
+    data: attachments,
+    isFetching,
+    isLoading,
+    hasNextPage: hasMore,
+    fetchNextPage,
+  } = useAccountGallery(account?.id!);
 
   const handleScrollToBottom = () => {
     if (hasMore) {
@@ -166,7 +184,7 @@ const AccountGalleryPage = () => {
     fetchNextPage({ cancelRefetch: false });
   };
 
-  const handleLoadOlder: React.MouseEventHandler = e => {
+  const handleLoadOlder: React.MouseEventHandler = (e) => {
     e.preventDefault();
     handleScrollToBottom();
   };
@@ -184,22 +202,25 @@ const AccountGalleryPage = () => {
   }
 
   if (!account) {
-    return (
-      <MissingIndicator />
-    );
+    return <MissingIndicator />;
   }
 
   let loadOlder = null;
 
   if (hasMore && !(isFetching && attachments.length === 0)) {
-    loadOlder = <LoadMore className='my-auto mt-4' visible={!isFetching} onClick={handleLoadOlder} />;
+    loadOlder = (
+      <LoadMore className='my-auto mt-4' visible={!isFetching} onClick={handleLoadOlder} />
+    );
   }
 
   if (isUnavailable) {
     return (
       <Column>
         <div className='empty-column-indicator'>
-          <FormattedMessage id='empty_column.account_unavailable' defaultMessage='Profile unavailable' />
+          <FormattedMessage
+            id='empty_column.account_unavailable'
+            defaultMessage='Profile unavailable'
+          />
         </div>
       </Column>
     );

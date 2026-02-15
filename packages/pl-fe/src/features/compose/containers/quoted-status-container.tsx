@@ -15,7 +15,9 @@ const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({ composeId }) 
   const dispatch = useAppDispatch();
   const getStatus = useCallback(makeGetStatus(), []);
 
-  const status = useAppSelector(state => getStatus(state, { id: state.compose[composeId]?.quoteId! }));
+  const status = useAppSelector((state) =>
+    getStatus(state, { id: state.compose[composeId]?.quoteId! }),
+  );
 
   const onCancel = () => {
     dispatch(cancelQuoteCompose(composeId));
@@ -27,11 +29,7 @@ const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({ composeId }) 
 
   return (
     <div className='mb-2'>
-      <QuotedStatus
-        status={status}
-        onCancel={onCancel}
-        compose
-      />
+      <QuotedStatus status={status} onCancel={onCancel} compose />
     </div>
   );
 };

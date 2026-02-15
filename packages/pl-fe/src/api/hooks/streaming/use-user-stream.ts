@@ -21,11 +21,17 @@ import { updateReactions } from '../../../queries/announcements/use-announcement
 import { useTimelineStream } from './use-timeline-stream';
 
 import type { AppDispatch, RootState } from '@/store';
-import type { Announcement, AnnouncementReaction, FollowRelationshipUpdate, Relationship, StreamingEvent } from 'pl-api';
+import type {
+  Announcement,
+  AnnouncementReaction,
+  FollowRelationshipUpdate,
+  Relationship,
+  StreamingEvent,
+} from 'pl-api';
 
 const updateAnnouncementReactions = (reaction: AnnouncementReaction) => {
   queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-    prevResult.map(value => {
+    prevResult.map((value) => {
       if (value.id !== reaction.announcement_id) return value;
 
       return {
@@ -40,16 +46,16 @@ const updateAnnouncement = (announcement: Announcement) =>
   queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) => {
     let updated = false;
 
-    const result = prevResult.map(value => value.id === announcement.id
-      ? (updated = true, announcement)
-      : value);
+    const result = prevResult.map((value) =>
+      value.id === announcement.id ? ((updated = true), announcement) : value,
+    );
 
     if (!updated) return [announcement, ...result];
   });
 
 const deleteAnnouncement = (announcementId: string) =>
   queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-    prevResult.filter(value => value.id !== announcementId),
+    prevResult.filter((value) => value.id !== announcementId),
   );
 
 const followStateToRelationship = (followState: FollowRelationshipUpdate['state']) => {
@@ -65,17 +71,23 @@ const followStateToRelationship = (followState: FollowRelationshipUpdate['state'
   }
 };
 
-const updateFollowRelationships = (update: FollowRelationshipUpdate) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const updateFollowRelationships =
+  (update: FollowRelationshipUpdate) => (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
 
     const me = state.me;
 
     if (update.follower.id === me) {
-      queryClient.setQueryData<Relationship>(['accountRelationships', update.following.id], (relationship) => relationship ? ({
-        ...relationship,
-        ...followStateToRelationship(update.state),
-      }) : undefined);
+      queryClient.setQueryData<Relationship>(
+        ['accountRelationships', update.following.id],
+        (relationship) =>
+          relationship
+            ? {
+                ...relationship,
+                ...followStateToRelationship(update.state),
+              }
+            : undefined,
+      );
     }
   };
 
@@ -110,11 +122,13 @@ const useUserStream = () => {
         dispatch(deleteFromTimelines(event.payload));
         break;
       case 'notification':
-        messages[getLocale()]().then(messages => {
-          dispatch(updateNotificationsQueue(event.payload, messages, getLocale()));
-        }).catch(error => {
-          console.error(error);
-        });
+        messages[getLocale()]()
+          .then((messages) => {
+            dispatch(updateNotificationsQueue(event.payload, messages, getLocale()));
+          })
+          .catch((error) => {
+            console.error(error);
+          });
         break;
       case 'conversation':
         dispatch(updateConversations(event.payload));

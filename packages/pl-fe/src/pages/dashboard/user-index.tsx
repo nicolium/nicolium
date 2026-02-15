@@ -19,7 +19,13 @@ const UserIndexPage: React.FC = () => {
 
   const intl = useIntl();
 
-  const { data: accountIds, isPending, isFetching, hasNextPage, fetchNextPage } = useAdminAccounts({
+  const {
+    data: accountIds,
+    isPending,
+    isFetching,
+    hasNextPage,
+    fetchNextPage,
+  } = useAdminAccounts({
     origin: 'local',
     status: 'active',
     username: query,
@@ -35,12 +41,14 @@ const UserIndexPage: React.FC = () => {
           isLoading={isFetching}
           showLoading={isPending}
           onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
-          emptyMessageText={<FormattedMessage id='admin.user_index.empty' defaultMessage='No users found.' />}
+          emptyMessageText={
+            <FormattedMessage id='admin.user_index.empty' defaultMessage='No users found.' />
+          }
           itemClassName='pb-4'
         >
-          {(accountIds ?? []).map(id =>
-            <AccountContainer key={id} id={id} withDate />,
-          )}
+          {(accountIds ?? []).map((id) => (
+            <AccountContainer key={id} id={id} withDate />
+          ))}
         </ScrollableList>
       </Stack>
     </Column>

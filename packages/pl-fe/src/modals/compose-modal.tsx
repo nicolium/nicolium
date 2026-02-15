@@ -24,7 +24,10 @@ interface ComposeModalProps {
   composeId?: string;
 }
 
-const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({ onClose, composeId = 'compose-modal' }) => {
+const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
+  onClose,
+  composeId = 'compose-modal',
+}) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const node = useRef<HTMLDivElement>(null);
@@ -41,27 +44,48 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({ onClose, c
   const onClickClose = () => {
     if (checkComposeContent(compose)) {
       openModal('CONFIRM', {
-        heading: editedId
-          ? <FormattedMessage id='confirmations.cancel_editing.heading' defaultMessage='Cancel post editing' />
-          : compose.draftId
-            ? <FormattedMessage id='confirmations.cancel_draft.heading' defaultMessage='Discard draft changes' />
-            : <FormattedMessage id='confirmations.cancel.heading' defaultMessage='Discard post' />,
-        message: editedId
-          ? <FormattedMessage id='confirmations.cancel_editing.message' defaultMessage='Are you sure you want to discard the changes to this post? All changes will be lost.' />
-          : compose.draftId
-            ? <FormattedMessage id='confirmations.cancel_draft_editing.message' defaultMessage='Are you sure you want to discard the changes to this draft post? All changes will be lost.' />
-            : <FormattedMessage id='confirmations.cancel.message' defaultMessage='Are you sure you want to discard the currently composed post?' />,
+        heading: editedId ? (
+          <FormattedMessage
+            id='confirmations.cancel_editing.heading'
+            defaultMessage='Cancel post editing'
+          />
+        ) : compose.draftId ? (
+          <FormattedMessage
+            id='confirmations.cancel_draft.heading'
+            defaultMessage='Discard draft changes'
+          />
+        ) : (
+          <FormattedMessage id='confirmations.cancel.heading' defaultMessage='Discard post' />
+        ),
+        message: editedId ? (
+          <FormattedMessage
+            id='confirmations.cancel_editing.message'
+            defaultMessage='Are you sure you want to discard the changes to this post? All changes will be lost.'
+          />
+        ) : compose.draftId ? (
+          <FormattedMessage
+            id='confirmations.cancel_draft_editing.message'
+            defaultMessage='Are you sure you want to discard the changes to this draft post? All changes will be lost.'
+          />
+        ) : (
+          <FormattedMessage
+            id='confirmations.cancel.message'
+            defaultMessage='Are you sure you want to discard the currently composed post?'
+          />
+        ),
         confirm: intl.formatMessage(editedId ? messages.cancelEditing : messages.confirm),
         onConfirm: () => {
           onClose('COMPOSE');
           dispatch(cancelReplyCompose());
         },
         secondary: intl.formatMessage(messages.saveDraft),
-        onSecondary: editedId ? undefined : () => {
-          persistDraftStatus(composeId);
-          onClose('COMPOSE');
-          dispatch(cancelReplyCompose());
-        },
+        onSecondary: editedId
+          ? undefined
+          : () => {
+              persistDraftStatus(composeId);
+              onClose('COMPOSE');
+              dispatch(cancelReplyCompose());
+            },
       });
     } else {
       onClose('COMPOSE');
@@ -70,17 +94,28 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({ onClose, c
 
   const renderTitle = () => {
     if (compose.draftId) {
-      return <FormattedMessage id='navigation_bar.compose_draft' defaultMessage='Edit draft post' />;
+      return (
+        <FormattedMessage id='navigation_bar.compose_draft' defaultMessage='Edit draft post' />
+      );
     } else if (compose.redacting) {
       return <FormattedMessage id='navigation_bar.compose_redact' defaultMessage='Redact post' />;
     } else if (editedId) {
       return <FormattedMessage id='navigation_bar.compose_edit' defaultMessage='Edit post' />;
     } else if (visibility === 'direct') {
-      return <FormattedMessage id='navigation_bar.compose_direct' defaultMessage='Direct message' />;
+      return (
+        <FormattedMessage id='navigation_bar.compose_direct' defaultMessage='Direct message' />
+      );
     } else if (inReplyToId && groupId) {
-      return <FormattedMessage id='navigation_bar.compose_group_reply' defaultMessage='Reply to group post' />;
+      return (
+        <FormattedMessage
+          id='navigation_bar.compose_group_reply'
+          defaultMessage='Reply to group post'
+        />
+      );
     } else if (groupId) {
-      return <FormattedMessage id='navigation_bar.compose_group' defaultMessage='Compose to group' />;
+      return (
+        <FormattedMessage id='navigation_bar.compose_group' defaultMessage='Compose to group' />
+      );
     } else if (inReplyToId) {
       return <FormattedMessage id='navigation_bar.compose_reply' defaultMessage='Reply to post' />;
     } else if (quoteId) {
@@ -96,8 +131,8 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({ onClose, c
       title={renderTitle()}
       onClose={onClickClose}
       className={clsx({
-        'border-2 border-primary-600 border-dashed !z-[99]': isDragging,
-        'ring-2 ring-offset-2 ring-primary-600': isDraggedOver,
+        '!z-[99] border-2 border-dashed border-primary-600': isDragging,
+        'ring-2 ring-primary-600 ring-offset-2': isDraggedOver,
       })}
     >
       <ComposeForm id={composeId} autoFocus />

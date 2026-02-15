@@ -10,9 +10,7 @@ const NewStatusPage = () => {
     openModal('COMPOSE');
   }, []);
 
-  return (
-    <Navigate to='/' replace />
-  );
+  return <Navigate to='/' replace />;
 };
 
 export { NewStatusPage as default };

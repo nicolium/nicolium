@@ -9,7 +9,12 @@ import { useLoggedIn } from '@/hooks/use-logged-in';
 import type { AppDispatch } from '@/store';
 import type { InteractionRequest, PaginatedResponse } from 'pl-api';
 
-const minifyInteractionRequest = ({ account, status, reply, ...interactionRequest }: InteractionRequest) => ({
+const minifyInteractionRequest = ({
+  account,
+  status,
+  reply,
+  ...interactionRequest
+}: InteractionRequest) => ({
   account_id: account.id,
   status_id: status?.id ?? null,
   reply_id: reply?.id ?? null,
@@ -18,21 +23,30 @@ const minifyInteractionRequest = ({ account, status, reply, ...interactionReques
 
 type MinifiedInteractionRequest = ReturnType<typeof minifyInteractionRequest>;
 
-const minifyInteractionRequestsList = (dispatch: AppDispatch, { previous, next, items, ...response }: PaginatedResponse<InteractionRequest>): PaginatedResponse<MinifiedInteractionRequest> => {
-  dispatch(importEntities({
-    statuses: items.map(item => [item.status, item.reply]).flat(),
-  }));
+const minifyInteractionRequestsList = (
+  dispatch: AppDispatch,
+  { previous, next, items, ...response }: PaginatedResponse<InteractionRequest>,
+): PaginatedResponse<MinifiedInteractionRequest> => {
+  dispatch(
+    importEntities({
+      statuses: items.map((item) => [item.status, item.reply]).flat(),
+    }),
+  );
 
   return {
     ...response,
-    previous: previous ? () => previous().then(response => minifyInteractionRequestsList(dispatch, response)) : null,
-    next: next ? () => next().then(response => minifyInteractionRequestsList(dispatch, response)) : null,
+    previous: previous
+      ? () => previous().then((response) => minifyInteractionRequestsList(dispatch, response))
+      : null,
+    next: next
+      ? () => next().then((response) => minifyInteractionRequestsList(dispatch, response))
+      : null,
     items: items.map(minifyInteractionRequest),
   };
 };
 
 const useInteractionRequests = <T>(
-  select?: ((data: InfiniteData<PaginatedResponse<MinifiedInteractionRequest>>) => T),
+  select?: (data: InfiniteData<PaginatedResponse<MinifiedInteractionRequest>>) => T,
 ) => {
   const client = useClient();
   const features = useFeatures();
@@ -41,19 +55,30 @@ const useInteractionRequests = <T>(
 
   return useInfiniteQuery({
     queryKey: ['interactionRequests'],
-    queryFn: ({ pageParam }) => pageParam.next?.() ?? client.interactionRequests.getInteractionRequests().then(response => minifyInteractionRequestsList(dispatch, response)),
-    initialPageParam: { previous: null, next: null, items: [], partial: false } as PaginatedResponse<MinifiedInteractionRequest>,
-    getNextPageParam: (page) => page.next ? page : undefined,
+    queryFn: ({ pageParam }) =>
+      pageParam.next?.() ??
+      client.interactionRequests
+        .getInteractionRequests()
+        .then((response) => minifyInteractionRequestsList(dispatch, response)),
+    initialPageParam: {
+      previous: null,
+      next: null,
+      items: [],
+      partial: false,
+    } as PaginatedResponse<MinifiedInteractionRequest>,
+    getNextPageParam: (page) => (page.next ? page : undefined),
     enabled: isLoggedIn && features.interactionRequests,
     select,
   });
 };
 
-const useFlatInteractionRequests = () => useInteractionRequests(
-  (data: InfiniteData<PaginatedResponse<MinifiedInteractionRequest>>) => data.pages.map(page => page.items).flat(),
-);
+const useFlatInteractionRequests = () =>
+  useInteractionRequests((data: InfiniteData<PaginatedResponse<MinifiedInteractionRequest>>) =>
+    data.pages.map((page) => page.items).flat(),
+  );
 
-const useInteractionRequestsCount = () => useInteractionRequests(data => data.pages.map(({ items }) => items).flat().length);
+const useInteractionRequestsCount = () =>
+  useInteractionRequests((data) => data.pages.map(({ items }) => items).flat().length);
 
 const useAuthorizeInteractionRequestMutation = (requestId: string) => {
   const client = useClient();

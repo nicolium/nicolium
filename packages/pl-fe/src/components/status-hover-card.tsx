@@ -24,7 +24,7 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
   const { statusId, ref } = useStatusHoverCardStore();
   const { closeStatusHoverCard, updateStatusHoverCard } = useStatusHoverCardActions();
 
-  const status = useAppSelector(state => state.statuses[statusId!]);
+  const status = useAppSelector((state) => state.statuses[statusId!]);
 
   useEffect(() => {
     if (statusId && !status) {
@@ -85,9 +85,9 @@ const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
   return (
     <div
       className={clsx({
-        'absolute transition-opacity w-[500px] z-50 top-0 left-0': true,
+        'absolute left-0 top-0 z-50 w-[500px] transition-opacity': true,
         'opacity-100': visible,
-        'opacity-0 pointer-events-none': !visible,
+        'pointer-events-none opacity-0': !visible,
       })}
       ref={refs.setFloating}
       style={{

@@ -3,7 +3,12 @@
  * Converts API statuses into our internal format.
  * @see {@link https://docs.joinmastodon.org/entities/status/}
  */
-import { type Account as BaseAccount, type Status as BaseStatus, type MediaAttachment, mentionSchema } from 'pl-api';
+import {
+  type Account as BaseAccount,
+  type Status as BaseStatus,
+  type MediaAttachment,
+  mentionSchema,
+} from 'pl-api';
 import * as v from 'valibot';
 
 import { unescapeHTML } from '@/utils/html';
@@ -11,7 +16,14 @@ import { unescapeHTML } from '@/utils/html';
 const domParser = new DOMParser();
 
 type StatusApprovalStatus = Exclude<BaseStatus['approval_status'], null>;
-type StatusVisibility = 'public' | 'unlisted' | 'private' | 'direct' | 'group' | 'mutuals_only' | 'local';
+type StatusVisibility =
+  | 'public'
+  | 'unlisted'
+  | 'private'
+  | 'direct'
+  | 'group'
+  | 'mutuals_only'
+  | 'local';
 
 type OldStatus = Pick<BaseStatus, 'content' | 'spoiler_text'> & { search_index: string };
 
@@ -29,22 +41,23 @@ const getMentionedUsernames = (status: Pick<BaseStatus, 'mentions'>): Array<stri
   status.mentions.map(({ acct }) => `@${acct}`);
 
 // Creates search text from the status
-const buildSearchContent = (status: Pick<BaseStatus, 'poll' | 'mentions' | 'spoiler_text' | 'content'>): string => {
+const buildSearchContent = (
+  status: Pick<BaseStatus, 'poll' | 'mentions' | 'spoiler_text' | 'content'>,
+): string => {
   const pollOptionTitles = getPollOptionTitles(status);
   const mentionedUsernames = getMentionedUsernames(status);
 
-  const fields = [
-    status.spoiler_text,
-    status.content,
-    ...pollOptionTitles,
-    ...mentionedUsernames,
-  ];
+  const fields = [status.spoiler_text, status.content, ...pollOptionTitles, ...mentionedUsernames];
 
   return unescapeHTML(fields.join('\n\n')) || '';
 };
 
 const getSearchIndex = (status: BaseStatus, oldStatus?: OldStatus) => {
-  if (oldStatus && oldStatus.content === status.content && oldStatus.spoiler_text === status.spoiler_text) {
+  if (
+    oldStatus &&
+    oldStatus.content === status.content &&
+    oldStatus.spoiler_text === status.spoiler_text
+  ) {
     return oldStatus.search_index;
   } else {
     const searchContent = buildSearchContent(status);
@@ -53,9 +66,12 @@ const getSearchIndex = (status: BaseStatus, oldStatus?: OldStatus) => {
   }
 };
 
-const normalizeStatus = (status: BaseStatus & {
-  accounts?: Array<BaseAccount>;
-}, oldStatus?: OldStatus) => {
+const normalizeStatus = (
+  status: BaseStatus & {
+    accounts?: Array<BaseAccount>;
+  },
+  oldStatus?: OldStatus,
+) => {
   const searchIndex = getSearchIndex(status, oldStatus);
 
   // Sort the replied-to mention to the top
@@ -69,7 +85,7 @@ const normalizeStatus = (status: BaseStatus & {
 
   // Add self to mentions if it's a reply to self
   const isSelfReply = status.account.id === status.in_reply_to_account_id;
-  const hasSelfMention = status.mentions.some(mention => status.account.id === mention.id);
+  const hasSelfMention = status.mentions.some((mention) => status.account.id === mention.id);
 
   if (isSelfReply && !hasSelfMention) {
     const selfMention = v.parse(mentionSchema, status.account);
@@ -77,10 +93,11 @@ const normalizeStatus = (status: BaseStatus & {
   }
 
   // Normalize event
-  let event: BaseStatus['event'] & ({
-    banner: MediaAttachment | null;
-    links: Array<MediaAttachment>;
-  } | null) = null;
+  let event: BaseStatus['event'] &
+    ({
+      banner: MediaAttachment | null;
+      links: Array<MediaAttachment>;
+    } | null) = null;
   let media_attachments = status.media_attachments;
 
   if (status.event) {
@@ -92,8 +109,10 @@ const normalizeStatus = (status: BaseStatus & {
       media_attachments = media_attachments.slice(1);
     }
 
-    const links = media_attachments.filter(attachment => attachment.mime_type === 'text/html');
-    media_attachments = media_attachments.filter(attachment => attachment.mime_type !== 'text/html');
+    const links = media_attachments.filter((attachment) => attachment.mime_type === 'text/html');
+    media_attachments = media_attachments.filter(
+      (attachment) => attachment.mime_type !== 'text/html',
+    );
 
     event = {
       ...status.event,
@@ -125,9 +144,4 @@ const normalizeStatus = (status: BaseStatus & {
 
 type Status = ReturnType<typeof normalizeStatus>;
 
-export {
-  type StatusApprovalStatus,
-  type StatusVisibility,
-  normalizeStatus,
-  type Status,
-};
+export { type StatusApprovalStatus, type StatusVisibility, normalizeStatus, type Status };

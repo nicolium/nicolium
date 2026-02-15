@@ -81,10 +81,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
         'group hover:bg-gray-100 dark:hover:bg-gray-800': !compose,
       })}
     >
-      <Stack
-        space={2}
-        onClick={handleExpandClick}
-      >
+      <Stack space={2} onClick={handleExpandClick}>
         {account.id && (
           <AccountContainer
             {...actions}
@@ -98,16 +95,12 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
 
         <StatusReplyMentions status={status} hoverable={false} />
 
-        {status.event ? <EventPreview status={status} hideAction /> : (
+        {status.event ? (
+          <EventPreview status={status} hideAction />
+        ) : (
           <Stack className='relative z-0'>
             <Stack space={4}>
-              <StatusContent
-                status={status}
-                collapsable
-                isQuote
-                withMedia
-                compose={compose}
-              />
+              <StatusContent status={status} collapsable isQuote withMedia compose={compose} />
             </Stack>
           </Stack>
         )}

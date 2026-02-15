@@ -30,11 +30,11 @@ const Reaction: React.FC<IReaction> = ({ announcementId, reaction, emojiMap, sty
     }
   };
 
-  const handleMouseEnter = () =>{
+  const handleMouseEnter = () => {
     setHovered(true);
   };
 
-  const handleMouseLeave = () =>{
+  const handleMouseLeave = () => {
     setHovered(false);
   };
 
@@ -48,10 +48,13 @@ const Reaction: React.FC<IReaction> = ({ announcementId, reaction, emojiMap, sty
 
   return (
     <animated.button
-      className={clsx('flex shrink-0 items-center gap-1.5 rounded-sm bg-gray-100 px-1.5 py-1 transition-colors dark:bg-primary-900', {
-        'bg-gray-200 dark:bg-primary-800': hovered,
-        'bg-primary-200 dark:bg-primary-500': reaction.me,
-      })}
+      className={clsx(
+        'flex shrink-0 items-center gap-1.5 rounded-sm bg-gray-100 px-1.5 py-1 transition-colors dark:bg-primary-900',
+        {
+          'bg-gray-200 dark:bg-primary-800': hovered,
+          'bg-primary-200 dark:bg-primary-500': reaction.me,
+        },
+      )}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}

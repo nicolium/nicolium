@@ -28,14 +28,14 @@ const About: React.FC<IAbout> = ({ slug }) => {
 
   const { data: pageHtml } = useAboutPage(slug, fetchLocale ? locale : undefined);
 
-  const alsoAvailable = (defaultLocale) && (
+  const alsoAvailable = defaultLocale && (
     <div>
-      <FormattedMessage id='about.also_available' defaultMessage='Available in:' />
-      {' '}
+      <FormattedMessage id='about.also_available' defaultMessage='Available in:' />{' '}
       <ul className='inline list-none p-0'>
         <li className="inline after:content-['_·_']">
           <a
-            href='#' onClick={() =>{
+            href='#'
+            onClick={() => {
               setLocale(defaultLocale);
             }}
           >
@@ -43,20 +43,19 @@ const About: React.FC<IAbout> = ({ slug }) => {
             {languages[defaultLocale] ?? defaultLocale}
           </a>
         </li>
-        {
-          pageLocales?.map(locale => (
-            <li className="inline after:content-['_·_'] last:after:content-none" key={locale}>
-              <a
-                href='#' onClick={() =>{
-                  setLocale(locale);
-                }}
-              >
-                {/* @ts-ignore */}
-                {languages[locale] ?? locale}
-              </a>
-            </li>
-          ))
-        }
+        {pageLocales?.map((locale) => (
+          <li className="inline after:content-['_·_'] last:after:content-none" key={locale}>
+            <a
+              href='#'
+              onClick={() => {
+                setLocale(locale);
+              }}
+            >
+              {/* @ts-ignore */}
+              {languages[locale] ?? locale}
+            </a>
+          </li>
+        ))}
       </ul>
     </div>
   );

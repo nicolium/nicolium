@@ -10,9 +10,7 @@ import { minifyAccountList } from '../utils/minify-list';
 
 import type { Circle, PaginatedResponse } from 'pl-api';
 
-const useCircles = <T>(
-  select?: ((data: Array<Circle>) => T),
-) => {
+const useCircles = <T>(select?: (data: Array<Circle>) => T) => {
   const client = useClient();
   const features = useFeatures();
 
@@ -24,7 +22,8 @@ const useCircles = <T>(
   });
 };
 
-const useCircle = (circleId?: string) => useCircles((data) => circleId ? data.find(circle => circle.id === circleId) : undefined);
+const useCircle = (circleId?: string) =>
+  useCircles((data) => (circleId ? data.find((circle) => circle.id === circleId) : undefined));
 
 const useCreateCircle = () => {
   const client = useClient();
@@ -43,9 +42,8 @@ const useDeleteCircle = () => {
     mutationKey: ['circles', 'delete'],
     mutationFn: (circleId: string) => client.circles.deleteCircle(circleId),
     onSuccess: (_, deletedCircleId) => {
-      queryClient.setQueryData<Array<Circle>>(
-        ['circles'],
-        (prevData) => prevData?.filter(({ id }) => id !== deletedCircleId),
+      queryClient.setQueryData<Array<Circle>>(['circles'], (prevData) =>
+        prevData?.filter(({ id }) => id !== deletedCircleId),
       );
     },
   });
@@ -71,7 +69,8 @@ const useAddAccountsToCircle = (circleId: string) => {
 
   return useMutation({
     mutationKey: ['accountsLists', 'circles', circleId, 'add'],
-    mutationFn: (accountIds: Array<string>) => client.circles.addCircleAccounts(circleId, accountIds),
+    mutationFn: (accountIds: Array<string>) =>
+      client.circles.addCircleAccounts(circleId, accountIds),
     onSettled: (_, __, accountIds) => {
       queryClient.invalidateQueries({ queryKey: ['accountsLists', 'circles', circleId] });
     },
@@ -83,11 +82,24 @@ const useRemoveAccountsFromCircle = (circleId: string) => {
 
   return useMutation({
     mutationKey: ['accountsLists', 'circles', circleId, 'remove'],
-    mutationFn: (accountIds: Array<string>) => client.circles.deleteCircleAccounts(circleId, accountIds),
+    mutationFn: (accountIds: Array<string>) =>
+      client.circles.deleteCircleAccounts(circleId, accountIds),
     onSettled: (_, __, accountIds) => {
-      queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(['accountsLists', 'circles', circleId], filterById(accountIds));
+      queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
+        ['accountsLists', 'circles', circleId],
+        filterById(accountIds),
+      );
     },
   });
 };
 
-export { useCircles, useCircle, useCreateCircle, useDeleteCircle, useUpdateCircle, useCircleAccounts, useAddAccountsToCircle, useRemoveAccountsFromCircle };
+export {
+  useCircles,
+  useCircle,
+  useCreateCircle,
+  useDeleteCircle,
+  useUpdateCircle,
+  useCircleAccounts,
+  useAddAccountsToCircle,
+  useRemoveAccountsFromCircle,
+};

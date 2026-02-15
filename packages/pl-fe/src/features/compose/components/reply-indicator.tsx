@@ -12,12 +12,30 @@ import type { Status } from '@/normalizers/status';
 
 interface IReplyIndicator {
   className?: string;
-  status?: Pick<Status, 'account_id' | 'content' | 'created_at' | 'emojis' | 'filtered' | 'media_attachments' | 'mentions' | 'search_index' | 'sensitive' | 'spoiler_text' | 'quote_id'>;
+  status?: Pick<
+    Status,
+    | 'account_id'
+    | 'content'
+    | 'created_at'
+    | 'emojis'
+    | 'filtered'
+    | 'media_attachments'
+    | 'mentions'
+    | 'search_index'
+    | 'sensitive'
+    | 'spoiler_text'
+    | 'quote_id'
+  >;
   onCancel?: () => void;
   hideActions: boolean;
 }
 
-const ReplyIndicator: React.FC<IReplyIndicator> = ({ className, status, hideActions, onCancel }) => {
+const ReplyIndicator: React.FC<IReplyIndicator> = ({
+  className,
+  status,
+  hideActions,
+  onCancel,
+}) => {
   const handleClick = () => {
     onCancel!();
   };
@@ -37,7 +55,13 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({ className, status, hideActi
   }
 
   return (
-    <Stack space={2} className={clsx('max-h-72 overflow-y-auto rounded-lg bg-gray-100 p-4 black:bg-gray-900 dark:bg-gray-800', className)}>
+    <Stack
+      space={2}
+      className={clsx(
+        'max-h-72 overflow-y-auto rounded-lg bg-gray-100 p-4 black:bg-gray-900 dark:bg-gray-800',
+        className,
+      )}
+    >
       <AccountContainer
         {...actions}
         id={status.account_id}
@@ -47,19 +71,16 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({ className, status, hideActi
         hideActions={hideActions}
       />
 
-      <Markup
-        className='break-words'
-        size='sm'
-        direction={getTextDirection(status.search_index)}
-      >
-        <ParsedContent html={status.content} mentions={status.mentions} hasQuote={!!status.quote_id} emojis={status.emojis} />
+      <Markup className='break-words' size='sm' direction={getTextDirection(status.search_index)}>
+        <ParsedContent
+          html={status.content}
+          mentions={status.mentions}
+          hasQuote={!!status.quote_id}
+          emojis={status.emojis}
+        />
       </Markup>
 
-      {status.media_attachments.length > 0 && (
-        <AttachmentThumbs
-          status={status}
-        />
-      )}
+      {status.media_attachments.length > 0 && <AttachmentThumbs status={status} />}
     </Stack>
   );
 };

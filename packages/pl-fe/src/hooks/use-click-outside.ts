@@ -6,18 +6,21 @@ const useClickOutside = <T extends HTMLElement>(
   refs: ExtendedRefs<T>,
   callback: (e: MouseEvent) => void,
 ) => {
-  const handleWindowClick = useCallback((e: MouseEvent) => {
-    if (e.target) {
-      const target = e.target as Node;
+  const handleWindowClick = useCallback(
+    (e: MouseEvent) => {
+      if (e.target) {
+        const target = e.target as Node;
 
-      const floating = refs.floating.current;
-      const reference = refs.reference.current as T | undefined;
+        const floating = refs.floating.current;
+        const reference = refs.reference.current as T | undefined;
 
-      if (!(floating?.contains(target) || reference?.contains(target))) {
-        callback(e);
+        if (!(floating?.contains(target) || reference?.contains(target))) {
+          callback(e);
+        }
       }
-    }
-  }, [refs.floating.current, refs.reference.current]);
+    },
+    [refs.floating.current, refs.reference.current],
+  );
 
   useEffect(() => {
     window.addEventListener('click', handleWindowClick);

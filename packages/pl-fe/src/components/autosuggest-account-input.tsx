@@ -12,7 +12,7 @@ const SEARCH_PARAMS = {
   resolve: false,
 };
 
-const noOp = () => { };
+const noOp = () => {};
 
 interface IAutosuggestAccountInput {
   id?: string;
@@ -38,11 +38,15 @@ const AutosuggestAccountInput: React.FC<IAutosuggestAccountInput> = ({
   const debouncedValue = useDebounce(value, 900);
   const { data: accountIds = [] } = useAccountSearch(debouncedValue, SEARCH_PARAMS);
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     onChange(e);
   };
 
-  const handleSelected = (_tokenStart: number, _lastToken: string | null, suggestion: AutoSuggestion) => {
+  const handleSelected = (
+    _tokenStart: number,
+    _lastToken: string | null,
+    suggestion: AutoSuggestion,
+  ) => {
     if (typeof suggestion === 'string' && suggestion[0] !== '#') {
       onSelected(suggestion);
     }

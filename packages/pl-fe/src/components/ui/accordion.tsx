@@ -28,7 +28,16 @@ interface IAccordion {
  * Accordion
  * An accordion is a vertically stacked group of collapsible sections.
  */
-const Accordion: React.FC<IAccordion> = ({ headline, children, menu, expanded = false, onToggle = () => {}, action, actionIcon, actionLabel }) => {
+const Accordion: React.FC<IAccordion> = ({
+  headline,
+  children,
+  menu,
+  expanded = false,
+  onToggle = () => {},
+  action,
+  actionIcon,
+  actionLabel,
+}) => {
   const intl = useIntl();
 
   const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -44,9 +53,10 @@ const Accordion: React.FC<IAccordion> = ({ headline, children, menu, expanded = 
   };
 
   return (
-    <div className={clsx('⁂-accordion', {
-      '⁂-accordion--expanded': expanded,
-    })}
+    <div
+      className={clsx('⁂-accordion', {
+        '⁂-accordion--expanded': expanded,
+      })}
     >
       <button
         type='button'
@@ -65,7 +75,11 @@ const Accordion: React.FC<IAccordion> = ({ headline, children, menu, expanded = 
             />
           )}
           {action && actionIcon && (
-            <button className='⁂-accordion__header__action' onClick={handleAction} title={actionLabel}>
+            <button
+              className='⁂-accordion__header__action'
+              onClick={handleAction}
+              title={actionLabel}
+            >
               <Icon src={actionIcon} aria-hidden />
             </button>
           )}
@@ -77,9 +91,7 @@ const Accordion: React.FC<IAccordion> = ({ headline, children, menu, expanded = 
         </div>
       </button>
 
-      <div
-        className='⁂-accordion__body'
-      >
+      <div className='⁂-accordion__body'>
         <p>{children}</p>
       </div>
     </div>

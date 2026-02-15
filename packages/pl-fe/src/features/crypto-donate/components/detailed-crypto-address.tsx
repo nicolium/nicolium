@@ -13,7 +13,11 @@ interface IDetailedCryptoAddress {
   note?: string;
 }
 
-const DetailedCryptoAddress: React.FC<IDetailedCryptoAddress> = ({ address, ticker, note }): JSX.Element => {
+const DetailedCryptoAddress: React.FC<IDetailedCryptoAddress> = ({
+  address,
+  ticker,
+  note,
+}): JSX.Element => {
   const title = getTitle(ticker);
 
   return (

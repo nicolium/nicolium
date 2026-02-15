@@ -116,13 +116,7 @@ const PullToRefresh: React.FC<PullToRefreshProps> = ({
       childrenEl.removeEventListener('mouseup', onEnd);
       document.body.removeEventListener('mouseleave', onEnd);
     };
-  }, [
-    children,
-    isPullable,
-    onRefresh,
-    pullDownThreshold,
-    maxPullDownDistance,
-  ]);
+  }, [children, isPullable, onRefresh, pullDownThreshold, maxPullDownDistance]);
 
   const initContainer = (): void => {
     requestAnimationFrame(() => {
@@ -201,7 +195,7 @@ const PullToRefresh: React.FC<PullToRefreshProps> = ({
     if (yDistanceMoved >= maxPullDownDistance) {
       return;
     }
-    pullDownRef.current!.style.opacity = ((yDistanceMoved) / 65).toString();
+    pullDownRef.current!.style.opacity = (yDistanceMoved / 65).toString();
     childrenRef.current!.style.overflow = 'visible';
     childrenRef.current!.style.transform = `translate(0px, ${yDistanceMoved}px)`;
     pullDownRef.current!.style.visibility = 'visible';

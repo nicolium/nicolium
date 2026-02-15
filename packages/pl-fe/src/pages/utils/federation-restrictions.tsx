@@ -12,8 +12,15 @@ import { federationRestrictionsDisclosed } from '@/utils/state';
 
 const messages = defineMessages({
   heading: { id: 'column.federation_restrictions', defaultMessage: 'Federation restrictions' },
-  boxTitle: { id: 'federation_restrictions.explanation_box.title', defaultMessage: 'Instance-specific policies' },
-  boxMessage: { id: 'federation_restrictions.explanation_box.message', defaultMessage: 'Normally servers on the Fediverse can communicate freely. {siteTitle} has imposed restrictions on the following servers.' },
+  boxTitle: {
+    id: 'federation_restrictions.explanation_box.title',
+    defaultMessage: 'Instance-specific policies',
+  },
+  boxMessage: {
+    id: 'federation_restrictions.explanation_box.message',
+    defaultMessage:
+      'Normally servers on the Fediverse can communicate freely. {siteTitle} has imposed restrictions on the following servers.',
+  },
 });
 
 const FederationRestrictionsPage = () => {
@@ -31,9 +38,19 @@ const FederationRestrictionsPage = () => {
     setExplanationBoxExpanded(setting);
   };
 
-  const emptyMessage = disclosed
-    ? <FormattedMessage id='federation_restrictions.empty_message' defaultMessage='{siteTitle} has not restricted any instances.' values={{ siteTitle: instance.title }} />
-    : <FormattedMessage id='federation_restrictions.not_disclosed_message' defaultMessage='{siteTitle} does not disclose federation restrictions through the API.' values={{ siteTitle: instance.title }} />;
+  const emptyMessage = disclosed ? (
+    <FormattedMessage
+      id='federation_restrictions.empty_message'
+      defaultMessage='{siteTitle} has not restricted any instances.'
+      values={{ siteTitle: instance.title }}
+    />
+  ) : (
+    <FormattedMessage
+      id='federation_restrictions.not_disclosed_message'
+      defaultMessage='{siteTitle} does not disclose federation restrictions through the API.'
+      values={{ siteTitle: instance.title }}
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -47,7 +64,9 @@ const FederationRestrictionsPage = () => {
 
       <div className='pt-4'>
         <ScrollableList emptyMessageText={emptyMessage}>
-          {hosts.map(([host]) => <RestrictedInstance key={host} host={host} />)}
+          {hosts.map(([host]) => (
+            <RestrictedInstance key={host} host={host} />
+          ))}
         </ScrollableList>
       </div>
     </Column>

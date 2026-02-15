@@ -22,20 +22,18 @@ const PlaceholderChatMessage = ({ isMyMessage = false }: { isMyMessage?: boolean
         'ml-auto': isMyMessage,
       })}
     >
-      <HStack
-        alignItems='center'
-        justifyContent={isMyMessage ? 'end' : 'start'}
-      >
+      <HStack alignItems='center' justifyContent={isMyMessage ? 'end' : 'start'}>
         <div
-          className={
-            clsx({
-              'text-ellipsis break-words relative rounded-md p-2': true,
-              'mr-2': isMyMessage,
-              'order-2 ml-2': !isMyMessage,
-            })
-          }
+          className={clsx({
+            'relative text-ellipsis break-words rounded-md p-2': true,
+            'mr-2': isMyMessage,
+            'order-2 ml-2': !isMyMessage,
+          })}
         >
-          <div style={{ width: messageLength, height: 20 }} className='rounded-full bg-primary-50 dark:bg-primary-800' />
+          <div
+            style={{ width: messageLength, height: 20 }}
+            className='rounded-full bg-primary-50 dark:bg-primary-800'
+          />
         </div>
 
         <div className={clsx({ 'order-1': !isMyMessage })}>
@@ -58,7 +56,10 @@ const PlaceholderChatMessage = ({ isMyMessage = false }: { isMyMessage?: boolean
             'order-2': !isMyMessage,
           })}
         >
-          <span style={{ width: 50, height: 12 }} className='block rounded-full bg-primary-50 dark:bg-primary-800' />
+          <span
+            style={{ width: 50, height: 12 }}
+            className='block rounded-full bg-primary-50 dark:bg-primary-800'
+          />
         </Text>
 
         <div className={clsx({ 'order-1': !isMyMessage })}>

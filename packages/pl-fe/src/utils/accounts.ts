@@ -22,7 +22,4 @@ const getBaseURL = (account: Pick<Account, 'url'>): string => {
   }
 };
 
-export {
-  getDomain,
-  getBaseURL,
-};
+export { getDomain, getBaseURL };

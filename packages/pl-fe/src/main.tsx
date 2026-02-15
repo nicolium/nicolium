@@ -1,7 +1,6 @@
 (window as any).__PL_API_FALLBACK_ACCOUNT = { id: '', acct: 'undefined', url: location.origin };
 
 import './polyfills';
-
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 
@@ -19,11 +18,9 @@ import '@fontsource/inter/900.css';
 import '@fontsource/roboto-mono/400.css';
 import 'line-awesome/dist/font-awesome-line-awesome/css/all.css';
 import 'react-datepicker/dist/react-datepicker.css';
-
 import './styles/i18n.css';
 import './styles/application.scss';
 import './styles/tailwind.css';
-
 import './precheck';
 import ready from './ready';
 import { registerSW, lockSW } from './utils/sw';

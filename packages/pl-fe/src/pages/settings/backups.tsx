@@ -52,7 +52,13 @@ const Backup: React.FC<IBackup> = ({ backup }) => {
           </Text>
         </Stack>
         <HStack justifyContent='end'>
-          {backup.processed ? <a href={backup.url} target='_blank'>{button}</a> : button}
+          {backup.processed ? (
+            <a href={backup.url} target='_blank'>
+              {button}
+            </a>
+          ) : (
+            button
+          )}
         </HStack>
       </Stack>
     </div>
@@ -65,7 +71,7 @@ const BackupsPage = () => {
   const { data: backups = [], isLoading } = useBackups();
   const { mutate: createBackup } = useCreateBackupMutation();
 
-  const handleCreateBackup: React.MouseEventHandler = e => {
+  const handleCreateBackup: React.MouseEventHandler = (e) => {
     createBackup();
     e.preventDefault();
   };
@@ -86,11 +92,17 @@ const BackupsPage = () => {
     </Card>
   );
 
-  const body = showLoading ? <Spinner /> : backups.length ? (
+  const body = showLoading ? (
+    <Spinner />
+  ) : backups.length ? (
     <div className='mb-4 grid grid-cols-1 gap-4 sm:grid-cols-2'>
-      {backups.map((backup) => <Backup key={backup.id} backup={backup} />)}
+      {backups.map((backup) => (
+        <Backup key={backup.id} backup={backup} />
+      ))}
     </div>
-  ) : emptyMessage;
+  ) : (
+    emptyMessage
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>

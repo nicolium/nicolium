@@ -6,7 +6,9 @@ interface IInlineStyle {
 
 const InlineStyle: React.FC<IInlineStyle> = ({ children }) => {
   // eslint-disable-next-line compat/compat
-  const sheet = useRef(document.adoptedStyleSheets ? new CSSStyleSheet() : document.createElement('style'));
+  const sheet = useRef(
+    document.adoptedStyleSheets ? new CSSStyleSheet() : document.createElement('style'),
+  );
 
   useEffect(() => {
     const stylesheet = sheet.current;
@@ -32,7 +34,7 @@ const InlineStyle: React.FC<IInlineStyle> = ({ children }) => {
     return () => {
       if (stylesheet) {
         if (stylesheet instanceof CSSStyleSheet) {
-          document.adoptedStyleSheets = document.adoptedStyleSheets.filter(s => s !== stylesheet);
+          document.adoptedStyleSheets = document.adoptedStyleSheets.filter((s) => s !== stylesheet);
         } else {
           document.head.removeChild(stylesheet);
         }

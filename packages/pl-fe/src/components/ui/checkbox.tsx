@@ -1,6 +1,9 @@
 import React from 'react';
 
-interface ICheckbox extends Pick<React.InputHTMLAttributes<HTMLInputElement>, 'disabled' | 'id' | 'name' | 'onChange' | 'checked' | 'required'> { }
+interface ICheckbox extends Pick<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  'disabled' | 'id' | 'name' | 'onChange' | 'checked' | 'required'
+> {}
 
 /** A pretty checkbox input. */
 const Checkbox = React.forwardRef<HTMLInputElement, ICheckbox>((props, ref) => (

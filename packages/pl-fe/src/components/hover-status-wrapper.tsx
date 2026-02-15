@@ -17,7 +17,12 @@ interface IHoverStatusWrapper {
 }
 
 /** Makes a status hover card appear when the wrapped element is hovered. */
-const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({ statusId, children, inline = false, className }) => {
+const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({
+  statusId,
+  children,
+  inline = false,
+  className,
+}) => {
   const { openStatusHoverCard, closeStatusHoverCard } = useStatusHoverCardActions();
 
   const ref = useRef<HTMLDivElement>(null);
@@ -31,7 +36,7 @@ const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({ statusId, children,
 
   const handleMouseLeave = () => {
     showStatusHoverCard.cancel();
-    setTimeout(() =>{
+    setTimeout(() => {
       closeStatusHoverCard();
     }, 200);
   };

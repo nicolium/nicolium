@@ -16,13 +16,13 @@ const unicodeMapping = compileTime(() => {
   const stripLeadingZeros = /^0+/;
 
   /*
- * Twemoji strips their hex codes from unicode codepoints to make it look "pretty"
- * - leading 0s are removed
- * - fe0f is removed unless it has 200d
- * - fe0f is NOT removed for 1f441-fe0f-200d-1f5e8-fe0f even though it has a 200d
- *
- * this is all wrong
- */
+   * Twemoji strips their hex codes from unicode codepoints to make it look "pretty"
+   * - leading 0s are removed
+   * - fe0f is removed unless it has 200d
+   * - fe0f is NOT removed for 1f441-fe0f-200d-1f5e8-fe0f even though it has a 200d
+   *
+   * this is all wrong
+   */
   const blacklist = {
     '1f441-fe0f-200d-1f5e8-fe0f': true,
   };

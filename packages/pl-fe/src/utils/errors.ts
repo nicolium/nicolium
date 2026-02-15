@@ -2,7 +2,8 @@ const httpErrorMessages: { code: number; name: string; description: string }[] =
   {
     code: 100,
     name: 'Continue',
-    description: 'The server has received the request headers, and the client should proceed to send the request body',
+    description:
+      'The server has received the request headers, and the client should proceed to send the request body',
   },
   {
     code: 101,
@@ -47,7 +48,8 @@ const httpErrorMessages: { code: number; name: string; description: string }[] =
   {
     code: 206,
     name: 'Partial Content',
-    description: 'The server is delivering only part of the resource due to a range header sent by the client',
+    description:
+      'The server is delivering only part of the resource due to a range header sent by the client',
   },
   {
     code: 400,
@@ -107,7 +109,8 @@ const httpErrorMessages: { code: number; name: string; description: string }[] =
   {
     code: 411,
     name: 'Length Required',
-    description: 'The "Content-Length" is not defined. The server will not accept the request without it',
+    description:
+      'The "Content-Length" is not defined. The server will not accept the request without it',
   },
   {
     code: 412,
@@ -152,7 +155,8 @@ const httpErrorMessages: { code: number; name: string; description: string }[] =
   {
     code: 502,
     name: 'Bad Gateway',
-    description: 'The server was acting as a gateway or proxy and received an invalid response from the upstream server',
+    description:
+      'The server was acting as a gateway or proxy and received an invalid response from the upstream server',
   },
   {
     code: 503,
@@ -162,7 +166,8 @@ const httpErrorMessages: { code: number; name: string; description: string }[] =
   {
     code: 504,
     name: 'Gateway Timeout',
-    description: 'The server was acting as a gateway or proxy and did not receive a timely response from the upstream server',
+    description:
+      'The server was acting as a gateway or proxy and did not receive a timely response from the upstream server',
   },
   {
     code: 505,
@@ -178,8 +183,8 @@ const httpErrorMessages: { code: number; name: string; description: string }[] =
 
 /** Whether the error is caused by a JS chunk failing to load. */
 const isNetworkError = (error: unknown): boolean =>
-  error instanceof Error
-    && error.name === 'TypeError'
-    && error.message.startsWith('Failed to fetch dynamically imported module: ');
+  error instanceof Error &&
+  error.name === 'TypeError' &&
+  error.message.startsWith('Failed to fetch dynamically imported module: ');
 
 export { httpErrorMessages, isNetworkError };

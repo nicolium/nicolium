@@ -22,7 +22,7 @@ const ConsumersList: React.FC = () => {
             <FormattedMessage id='oauth_consumers.title' defaultMessage='Other ways to sign in' />
           </Text>
           <HStack space={2}>
-            {providers.map(provider => (
+            {providers.map((provider) => (
               <ConsumerButton provider={provider} />
             ))}
           </HStack>

@@ -1,6 +1,10 @@
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
-import { type MediaAttachment, type PreviewCard as CardEntity, mediaAttachmentSchema } from 'pl-api';
+import {
+  type MediaAttachment,
+  type PreviewCard as CardEntity,
+  mediaAttachmentSchema,
+} from 'pl-api';
 import React, { useState, useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 import * as v from 'valibot';
@@ -78,7 +82,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
     }
   };
 
-  const setRef: React.RefCallback<HTMLElement> = c => {
+  const setRef: React.RefCallback<HTMLElement> = (c) => {
     if (c) {
       if (cacheWidth) {
         cacheWidth(c.offsetWidth);
@@ -104,7 +108,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   };
 
   const getRatio = (card: CardEntity): number => {
-    const ratio = (card.width / card.height) || 16 / 9;
+    const ratio = card.width / card.height || 16 / 9;
 
     // Constrain to a sane limit
     // https://en.wikipedia.org/wiki/Aspect_ratio_(image)
@@ -113,13 +117,17 @@ const PreviewCard: React.FC<IPreviewCard> = ({
 
   const interactive = card.type !== 'link';
   const horizontal = interactive || embedded;
-  const className = clsx('status-card relative z-[1] flex-col bg-white black:bg-black dark:bg-primary-900 md:flex-row', { horizontal, compact, interactive }, `status-card--${card.type}`);
+  const className = clsx(
+    'status-card relative z-[1] flex-col bg-white black:bg-black dark:bg-primary-900 md:flex-row',
+    { horizontal, compact, interactive },
+    `status-card--${card.type}`,
+  );
   const ratio = getRatio(card);
-  const height = (compact && !embedded) ? (width / (16 / 9)) : (width / ratio);
+  const height = compact && !embedded ? width / (16 / 9) : width / ratio;
 
   const title = interactive ? (
     <a
-      onClick={(e) =>{
+      onClick={(e) => {
         e.stopPropagation();
       }}
       href={card.url}
@@ -131,17 +139,19 @@ const PreviewCard: React.FC<IPreviewCard> = ({
       <span dir={direction}>{trimmedTitle}</span>
     </a>
   ) : (
-    <span title={trimmedTitle} dir={direction}>{trimmedTitle}</span>
+    <span title={trimmedTitle} dir={direction}>
+      {trimmedTitle}
+    </span>
   );
 
   const description = (
     <Stack space={2} className='flex-1 overflow-hidden p-4'>
       {trimmedTitle && (
-        <Text weight='bold' direction={direction}>{title}</Text>
+        <Text weight='bold' direction={direction}>
+          {title}
+        </Text>
       )}
-      {trimmedDescription && (
-        <Text direction={direction}>{trimmedDescription}</Text>
-      )}
+      {trimmedDescription && <Text direction={direction}>{trimmedDescription}</Text>}
       <HStack space={1} alignItems='center'>
         <Text tag='span' theme='muted'>
           <Icon src={require('@phosphor-icons/core/regular/link-simple.svg')} />
@@ -155,12 +165,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
 
   let embed: React.ReactNode = null;
 
-  const canvas = (
-    <Blurhash
-      className='absolute inset-0 -z-10 size-full'
-      hash={card.blurhash}
-    />
-  );
+  const canvas = <Blurhash className='absolute inset-0 -z-10 size-full' hash={card.blurhash} />;
 
   const thumbnail = (
     <div
@@ -193,16 +198,16 @@ const PreviewCard: React.FC<IPreviewCard> = ({
           <div className='absolute inset-0 flex items-center justify-center'>
             <div className='flex items-center justify-center rounded-full bg-gray-500/90 px-4 py-3 shadow-md dark:bg-gray-700/90'>
               <HStack space={3} alignItems='center'>
-                <button onClick={handleEmbedClick} className='appearance-none text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-100'>
-                  <Icon
-                    src={iconVariant}
-                    className='size-6 text-inherit'
-                  />
+                <button
+                  onClick={handleEmbedClick}
+                  className='appearance-none text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-100'
+                >
+                  <Icon src={iconVariant} className='size-6 text-inherit' />
                 </button>
 
                 {horizontal && (
                   <a
-                    onClick={(e) =>{
+                    onClick={(e) => {
                       e.stopPropagation();
                     }}
                     href={card.url}
@@ -231,14 +236,15 @@ const PreviewCard: React.FC<IPreviewCard> = ({
     );
   } else if (card.image) {
     embed = (
-      <div className={clsx(
-        'status-card__image',
-        'w-full flex-none rounded-l md:size-auto md:flex-auto',
-        {
-          'h-auto': horizontal,
-          'h-[200px]': !horizontal,
-        },
-      )}
+      <div
+        className={clsx(
+          'status-card__image',
+          'w-full flex-none rounded-l md:size-auto md:flex-auto',
+          {
+            'h-auto': horizontal,
+            'h-[200px]': !horizontal,
+          },
+        )}
       >
         {canvas}
         {thumbnail}
@@ -253,7 +259,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
       target='_blank'
       rel='noopener'
       ref={setRef}
-      onClick={e =>{
+      onClick={(e) => {
         e.stopPropagation();
       }}
     >
@@ -272,15 +278,26 @@ const PreviewCard: React.FC<IPreviewCard> = ({
               id='link_preview.more_from_author'
               defaultMessage='More from {name}'
               values={{
-                name: card.authors.map(author => (
-                  <HoverAccountWrapper key={author.url} accountId={author.account?.id} element='bdi'>
+                name: card.authors.map((author) => (
+                  <HoverAccountWrapper
+                    key={author.url}
+                    accountId={author.account?.id}
+                    element='bdi'
+                  >
                     <Link to='/@{$username}' params={{ username: author.account?.acct ?? '' }}>
                       <HStack space={1} alignItems='center'>
                         {author.account && (
-                          <Avatar src={author.account?.avatar} size={16} username={author.account.username} />
+                          <Avatar
+                            src={author.account?.avatar}
+                            size={16}
+                            username={author.account.username}
+                          />
                         )}
                         <Text weight='medium'>
-                          <Emojify text={author.account?.display_name ?? author.name} emojis={author.account?.emojis} />
+                          <Emojify
+                            text={author.account?.display_name ?? author.name}
+                            emojis={author.account?.emojis}
+                          />
                         </Text>
                       </HStack>
                     </Link>

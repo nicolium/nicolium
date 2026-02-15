@@ -16,7 +16,11 @@ import { useSettings } from '@/stores/settings';
 import { shortNumberFormat } from '@/utils/numbers';
 
 const messages = defineMessages({
-  account_locked: { id: 'account.locked_info', defaultMessage: 'This account privacy status is set to locked. The owner manually reviews who can follow them.' },
+  account_locked: {
+    id: 'account.locked_info',
+    defaultMessage:
+      'This account privacy status is set to locked. The owner manually reviews who can follow them.',
+  },
 });
 
 interface IUserPanel {
@@ -43,9 +47,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
         <Stack>
           {!disableUserProvidedMedia && (
             <div className='relative -mx-4 -mt-4 h-24 overflow-hidden bg-gray-200'>
-              {header && (
-                <StillImage src={account.header} alt={account.header_description} />
-              )}
+              {header && <StillImage src={account.header} alt={account.header_description} />}
             </div>
           )}
 
@@ -69,9 +71,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
               </Link>
             )}
 
-            {action && (
-              <div className='mt-2'>{action}</div>
-            )}
+            {action && <div className='mt-2'>{action}</div>}
           </HStack>
         </Stack>
 
@@ -110,7 +110,11 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
         {!demetricator && (
           <HStack alignItems='center' space={3}>
             {account.followers_count >= 0 && (
-              <Link to='/@{$username}/followers' params={{ username: account.acct }} title={intl.formatNumber(account.followers_count)}>
+              <Link
+                to='/@{$username}/followers'
+                params={{ username: account.acct }}
+                title={intl.formatNumber(account.followers_count)}
+              >
                 <HStack alignItems='center' space={1}>
                   <Text theme='primary' weight='bold' size='sm'>
                     {shortNumberFormat(account.followers_count)}
@@ -123,7 +127,11 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
             )}
 
             {account.following_count >= 0 && (
-              <Link to='/@{$username}/following' params={{ username: account.acct }} title={intl.formatNumber(account.following_count)}>
+              <Link
+                to='/@{$username}/following'
+                params={{ username: account.acct }}
+                title={intl.formatNumber(account.following_count)}
+              >
                 <HStack alignItems='center' space={1}>
                   <Text theme='primary' weight='bold' size='sm'>
                     {shortNumberFormat(account.following_count)}

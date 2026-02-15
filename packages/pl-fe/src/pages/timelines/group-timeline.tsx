@@ -33,7 +33,9 @@ const GroupTimelinePage: React.FC = () => {
 
   const composeId = `group:${groupId}`;
   const canComposeGroupStatus = !!account && group?.relationship?.member;
-  const featuredStatusIds = useAppSelector((state) => getStatusIds(state, { type: `group:${group?.id}:pinned` }));
+  const featuredStatusIds = useAppSelector((state) =>
+    getStatusIds(state, { type: `group:${group?.id}:pinned` }),
+  );
 
   const { isDragging, isDraggedOver } = useDraggedFiles(composer, (files) => {
     dispatch(uploadCompose(composeId, files, intl));
@@ -64,12 +66,17 @@ const GroupTimelinePage: React.FC = () => {
             alignItems='start'
             space={2}
             className={clsx('relative rounded-xl transition', {
-              'border-2 border-primary-600 border-dashed z-[99] p-4': isDragging,
-              'ring-2 ring-offset-2 ring-primary-600': isDraggedOver,
+              'z-[99] border-2 border-dashed border-primary-600 p-4': isDragging,
+              'ring-2 ring-primary-600 ring-offset-2': isDraggedOver,
             })}
           >
             <Link to='/@{$username}' params={{ username: account.acct }}>
-              <Avatar src={account.avatar} alt={account.avatar_description} size={42} isCat={account.is_cat} />
+              <Avatar
+                src={account.avatar}
+                alt={account.avatar_description}
+                size={42}
+                isCat={account.is_cat}
+              />
             </Link>
 
             <ComposeForm
@@ -88,7 +95,12 @@ const GroupTimelinePage: React.FC = () => {
         scrollKey='group_timeline'
         timelineId={composeId}
         onLoadMore={handleLoadMore}
-        emptyMessageText={<FormattedMessage id='empty_column.group' defaultMessage='There are no posts in this group yet.' />}
+        emptyMessageText={
+          <FormattedMessage
+            id='empty_column.group'
+            defaultMessage='There are no posts in this group yet.'
+          />
+        }
         emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
         showGroup={false}
         featuredStatusIds={featuredStatusIds}

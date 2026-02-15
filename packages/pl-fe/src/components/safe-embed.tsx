@@ -12,12 +12,7 @@ interface ISafeEmbed {
 }
 
 /** Safely embeds arbitrary HTML content on the page (by putting it in an iframe). */
-const SafeEmbed: React.FC<ISafeEmbed> = ({
-  className,
-  sandbox,
-  title,
-  html,
-}) => {
+const SafeEmbed: React.FC<ISafeEmbed> = ({ className, sandbox, title, html }) => {
   const iframe = useRef<HTMLIFrameElement>(null);
   const [height, setHeight] = useState<number | undefined>(undefined);
 
@@ -50,13 +45,7 @@ const SafeEmbed: React.FC<ISafeEmbed> = ({
   }, [iframe.current, html]);
 
   return (
-    <iframe
-      ref={iframe}
-      className={className}
-      sandbox={sandbox}
-      height={height}
-      title={title}
-    />
+    <iframe ref={iframe} className={className} sandbox={sandbox} height={height} title={title} />
   );
 };
 

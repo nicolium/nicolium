@@ -16,12 +16,7 @@ const messages = defineMessages({
 const ModerationLogPage = () => {
   const intl = useIntl();
 
-  const {
-    data,
-    hasNextPage,
-    isLoading,
-    fetchNextPage,
-  } = useModerationLog();
+  const { data, hasNextPage, isLoading, fetchNextPage } = useModerationLog();
 
   const showLoading = isLoading && data.length === 0;
 
@@ -35,14 +30,17 @@ const ModerationLogPage = () => {
         scrollKey='moderationLog'
         isLoading={isLoading}
         showLoading={showLoading}
-        emptyMessageText={<FormattedMessage id='admin.moderation_log.empty_message' defaultMessage='You have not performed any moderation actions yet. When you do, a history will be shown here.' />}
+        emptyMessageText={
+          <FormattedMessage
+            id='admin.moderation_log.empty_message'
+            defaultMessage='You have not performed any moderation actions yet. When you do, a history will be shown here.'
+          />
+        }
         hasMore={hasNextPage}
         onLoadMore={handleLoadMore}
         listClassName='⁂-status-list'
       >
-        {data.map(item => item && (
-          <LogItem key={item.id} log={item} />
-        ))}
+        {data.map((item) => item && <LogItem key={item.id} log={item} />)}
       </ScrollableList>
     </Column>
   );

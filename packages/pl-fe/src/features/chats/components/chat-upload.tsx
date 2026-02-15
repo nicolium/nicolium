@@ -52,10 +52,7 @@ const RemoveButton: React.FC<IRemoveButton> = ({ onClick }) => (
     onClick={onClick}
     className='flex size-5 items-center justify-center rounded-full bg-secondary-500 p-1'
   >
-    <Icon
-      className='size-3 text-white'
-      src={require('@phosphor-icons/core/regular/x.svg')}
-    />
+    <Icon className='size-3 text-white' src={require('@phosphor-icons/core/regular/x.svg')} />
   </button>
 );
 

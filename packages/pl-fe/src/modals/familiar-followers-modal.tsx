@@ -15,7 +15,10 @@ interface FamiliarFollowersModalProps {
   accountId: string;
 }
 
-const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalProps> = ({ accountId, onClose }) => {
+const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalProps> = ({
+  accountId,
+  onClose,
+}) => {
   const { account } = useAccount(accountId);
   const { data: familiarFollowerIds } = useFamiliarFollowers(accountId);
 
@@ -32,7 +35,13 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
       <FormattedMessage
         id='account.familiar_followers.empty'
         defaultMessage='No one you know follows {name}.'
-        values={{ name: <span><Emojify text={account.display_name} emojis={account.emojis} /></span> }}
+        values={{
+          name: (
+            <span>
+              <Emojify text={account.display_name} emojis={account.emojis} />
+            </span>
+          ),
+        }}
       />
     );
 
@@ -43,9 +52,9 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
         style={{ height: 'calc(80vh - 88px)' }}
         useWindowScroll={false}
       >
-        {familiarFollowerIds.map(id =>
-          <AccountContainer key={id} id={id} />,
-        )}
+        {familiarFollowerIds.map((id) => (
+          <AccountContainer key={id} id={id} />
+        ))}
       </ScrollableList>
     );
   }
@@ -56,7 +65,13 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
         <FormattedMessage
           id='column.familiar_followers'
           defaultMessage='People you know following {name}'
-          values={{ name: !!account && <span><Emojify text={account.display_name} emojis={account.emojis} /></span> }}
+          values={{
+            name: !!account && (
+              <span>
+                <Emojify text={account.display_name} emojis={account.emojis} />
+              </span>
+            ),
+          }}
         />
       }
       onClose={onClickClose}

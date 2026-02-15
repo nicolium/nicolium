@@ -59,12 +59,16 @@ type BaseModalProps = {
 };
 
 const ModalRoot: React.FC = () => {
-  const renderLoading = (modalId: string) => !['MEDIA', 'BOOST', 'CONFIRM'].includes(modalId) ? <ModalLoading /> : null;
+  const renderLoading = (modalId: string) =>
+    !['MEDIA', 'BOOST', 'CONFIRM'].includes(modalId) ? <ModalLoading /> : null;
 
   const dispatch = useAppDispatch();
   const modals = useModals();
   const { closeModal } = useModalsActions();
-  const { modalType: type, modalProps: props } = modals.at(-1) ?? { modalProps: {}, modalType: null };
+  const { modalType: type, modalProps: props } = modals.at(-1) ?? {
+    modalProps: {},
+    modalType: null,
+  };
   const index = modals.length - 1;
 
   const onClickClose = (type?: ModalType, all?: boolean) => {
@@ -79,11 +83,16 @@ const ModalRoot: React.FC = () => {
     closeModal(type, all);
   };
 
-  const Component = type !== null ? (MODAL_COMPONENTS as Record<keyof typeof MODAL_COMPONENTS, React.ExoticComponent<any>>)[type] : null;
+  const Component =
+    type !== null
+      ? (MODAL_COMPONENTS as Record<keyof typeof MODAL_COMPONENTS, React.ExoticComponent<any>>)[
+          type
+        ]
+      : null;
 
   return (
     <Base onClose={onClickClose} type={type} modalIndex={index}>
-      {(Component && !!type) && (
+      {Component && !!type && (
         <Suspense fallback={renderLoading(type)}>
           <Component key={index} {...props} onClose={onClickClose} />
         </Suspense>

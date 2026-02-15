@@ -30,10 +30,13 @@ const queryKey = {
   getRebloggedBy: 'statusReblogs',
 };
 
-const makeUseStatusInteractions = (method: 'getDislikedBy' | 'getFavouritedBy' | 'getRebloggedBy') => makePaginatedResponseQuery(
-  (statusId: string) => ['accountsLists', queryKey[method], statusId],
-  (client, params) => client.statuses[method](...params).then(minifyAccountList),
-);
+const makeUseStatusInteractions = (
+  method: 'getDislikedBy' | 'getFavouritedBy' | 'getRebloggedBy',
+) =>
+  makePaginatedResponseQuery(
+    (statusId: string) => ['accountsLists', queryKey[method], statusId],
+    (client, params) => client.statuses[method](...params).then(minifyAccountList),
+  );
 
 const useStatusDislikes = makeUseStatusInteractions('getDislikedBy');
 const useStatusFavourites = makeUseStatusInteractions('getFavouritedBy');
@@ -45,11 +48,12 @@ const useStatusReactions = (statusId: string, emoji?: string) => {
 
   return useQuery({
     queryKey: ['accountsLists', 'statusReactions', statusId, emoji],
-    queryFn: () => client.statuses.getStatusReactions(statusId, emoji).then((reactions) => {
-      dispatch(importEntities({ accounts: reactions.map(({ accounts }) => accounts).flat() }));
+    queryFn: () =>
+      client.statuses.getStatusReactions(statusId, emoji).then((reactions) => {
+        dispatch(importEntities({ accounts: reactions.map(({ accounts }) => accounts).flat() }));
 
-      return reactions.map(({ accounts, ...reactions }) => reactions);
-    }),
+        return reactions.map(({ accounts, ...reactions }) => reactions);
+      }),
     placeholderData: (previousData) => previousData?.filter(({ name }) => name === emoji),
   });
 };
@@ -206,7 +210,7 @@ const useBookmarkStatus = (statusId: string) => {
       if (features.bookmarkFolders && typeof folderId !== 'string') {
         opts = {
           actionLabel: messages.selectFolder,
-          action: () =>{
+          action: () => {
             openModal('SELECT_BOOKMARK_FOLDER', {
               statusId,
             });
@@ -214,7 +218,10 @@ const useBookmarkStatus = (statusId: string) => {
         };
       }
 
-      toast.success(typeof folderId === 'string' ? messages.folderChanged : messages.bookmarkAdded, opts);
+      toast.success(
+        typeof folderId === 'string' ? messages.folderChanged : messages.bookmarkAdded,
+        opts,
+      );
     },
   });
 };
@@ -230,10 +237,13 @@ const useUnbookmarkStatus = (statusId: string) => {
     onSettled: (status) => {
       dispatch(importEntities({ statuses: [status] }));
 
-      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>({
-        queryKey: ['statusLists', 'bookmarks'],
-        exact: false,
-      }, filterById(statusId));
+      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
+        {
+          queryKey: ['statusLists', 'bookmarks'],
+          exact: false,
+        },
+        filterById(statusId),
+      );
 
       toast.success(messages.bookmarkRemoved);
     },
@@ -252,7 +262,11 @@ const usePinStatus = (statusId: string) => {
     onSuccess: (status) => {
       dispatch(importEntities({ statuses: [status] }));
       queryClient.invalidateQueries({ queryKey: ['statusLists', 'pins', me] });
-      dispatch<InteractionsAction>({ type: PIN_SUCCESS, statusId: status.id, accountId: status.account.id });
+      dispatch<InteractionsAction>({
+        type: PIN_SUCCESS,
+        statusId: status.id,
+        accountId: status.account.id,
+      });
     },
   });
 };
@@ -269,7 +283,11 @@ const useUnpinStatus = (statusId: string) => {
     onSuccess: (status) => {
       dispatch(importEntities({ statuses: [status] }));
       queryClient.setQueryData(['statusLists', 'pins', me], filterById(statusId));
-      dispatch<InteractionsAction>({ type: UNPIN_SUCCESS, statusId: status.id, accountId: status.account.id });
+      dispatch<InteractionsAction>({
+        type: UNPIN_SUCCESS,
+        statusId: status.id,
+        accountId: status.account.id,
+      });
     },
   });
 };

@@ -15,13 +15,7 @@ const messages = defineMessages({
 const BlocksPage: React.FC = () => {
   const intl = useIntl();
 
-  const {
-    data = [],
-    hasNextPage,
-    fetchNextPage,
-    isLoading,
-    isFetching,
-  } = useBlocks();
+  const { data = [], hasNextPage, fetchNextPage, isLoading, isFetching } = useBlocks();
 
   if (isLoading) {
     return (
@@ -31,7 +25,12 @@ const BlocksPage: React.FC = () => {
     );
   }
 
-  const emptyMessage = <FormattedMessage id='empty_column.blocks' defaultMessage="You haven't blocked any users yet." />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.blocks'
+      defaultMessage="You haven't blocked any users yet."
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -44,7 +43,12 @@ const BlocksPage: React.FC = () => {
         isLoading={isFetching}
       >
         {data.map(([accountId, blockExpiresAt]) => (
-          <AccountContainer key={accountId} id={accountId} actionType='blocking' blockExpiresAt={blockExpiresAt} />
+          <AccountContainer
+            key={accountId}
+            id={accountId}
+            actionType='blocking'
+            blockExpiresAt={blockExpiresAt}
+          />
         ))}
       </ScrollableList>
     </Column>

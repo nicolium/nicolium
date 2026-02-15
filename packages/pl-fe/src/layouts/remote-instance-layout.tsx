@@ -29,9 +29,7 @@ const RemoteInstanceLayout = () => {
       <Layout.Aside>
         <PromoPanel />
         <InstanceInfoPanel host={instance} />
-        {(disclosed || account?.is_admin) && (
-          <InstanceModerationPanel host={instance} />
-        )}
+        {(disclosed || account?.is_admin) && <InstanceModerationPanel host={instance} />}
         <LinkFooter />
       </Layout.Aside>
     </>

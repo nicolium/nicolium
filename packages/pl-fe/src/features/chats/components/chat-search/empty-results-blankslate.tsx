@@ -6,7 +6,10 @@ import Text from '@/components/ui/text';
 
 const messages = defineMessages({
   title: { id: 'chat_search.empty_results_blankslate.title', defaultMessage: 'No matches found' },
-  body: { id: 'chat_search.empty_results_blankslate.body', defaultMessage: 'Try searching for another name.' },
+  body: {
+    id: 'chat_search.empty_results_blankslate.body',
+    defaultMessage: 'Try searching for another name.',
+  },
 });
 
 const EmptyResultsBlankslate = () => {

@@ -32,18 +32,39 @@ import type { Account as AccountEntity } from 'pl-api';
 const messages = defineMessages({
   columnHeading: { id: 'column.admin.account', defaultMessage: 'Moderate @{acct}' },
   userVerified: { id: 'admin.users.user_verified_message', defaultMessage: '@{acct} was verified' },
-  userUnverified: { id: 'admin.users.user_unverified_message', defaultMessage: '@{acct} was unverified' },
-  userSuggested: { id: 'admin.users.user_suggested_message', defaultMessage: '@{acct} was suggested' },
-  userUnsuggested: { id: 'admin.users.user_unsuggested_message', defaultMessage: '@{acct} was unsuggested' },
+  userUnverified: {
+    id: 'admin.users.user_unverified_message',
+    defaultMessage: '@{acct} was unverified',
+  },
+  userSuggested: {
+    id: 'admin.users.user_suggested_message',
+    defaultMessage: '@{acct} was suggested',
+  },
+  userUnsuggested: {
+    id: 'admin.users.user_unsuggested_message',
+    defaultMessage: '@{acct} was unsuggested',
+  },
   badgesSaved: { id: 'admin.users.badges_saved_message', defaultMessage: 'Custom badges updated.' },
   badgePlaceholder: { id: 'badge_input.placeholder', defaultMessage: 'Enter a badge…' },
   roleUser: { id: 'account_moderation_modal.roles.user', defaultMessage: 'User' },
   roleModerator: { id: 'account_moderation_modal.roles.moderator', defaultMessage: 'Moderator' },
   roleAdmin: { id: 'account_moderation_modal.roles.admin', defaultMessage: 'Admin' },
-  promotedToAdmin: { id: 'admin.users.actions.promote_to_admin_message', defaultMessage: '@{acct} was promoted to an admin' },
-  promotedToModerator: { id: 'admin.users.actions.promote_to_moderator_message', defaultMessage: '@{acct} was promoted to a moderator' },
-  demotedToModerator: { id: 'admin.users.actions.demote_to_moderator_message', defaultMessage: '@{acct} was demoted to a moderator' },
-  demotedToUser: { id: 'admin.users.actions.demote_to_user_message', defaultMessage: '@{acct} was demoted to a regular user' },
+  promotedToAdmin: {
+    id: 'admin.users.actions.promote_to_admin_message',
+    defaultMessage: '@{acct} was promoted to an admin',
+  },
+  promotedToModerator: {
+    id: 'admin.users.actions.promote_to_moderator_message',
+    defaultMessage: '@{acct} was promoted to a moderator',
+  },
+  demotedToModerator: {
+    id: 'admin.users.actions.demote_to_moderator_message',
+    defaultMessage: '@{acct} was demoted to a moderator',
+  },
+  demotedToUser: {
+    id: 'admin.users.actions.demote_to_user_message',
+    defaultMessage: '@{acct} was demoted to a regular user',
+  },
 });
 
 /** Staff role. */
@@ -70,11 +91,14 @@ const StaffRolePicker: React.FC<IStaffRolePicker> = ({ account }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const roles: Record<AccountRole, string> = useMemo(() => ({
-    user: intl.formatMessage(messages.roleUser),
-    moderator: intl.formatMessage(messages.roleModerator),
-    admin: intl.formatMessage(messages.roleAdmin),
-  }), []);
+  const roles: Record<AccountRole, string> = useMemo(
+    () => ({
+      user: intl.formatMessage(messages.roleUser),
+      moderator: intl.formatMessage(messages.roleModerator),
+      admin: intl.formatMessage(messages.roleAdmin),
+    }),
+    [],
+  );
 
   const handleRoleChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
     const role = e.target.value as AccountRole;
@@ -102,13 +126,7 @@ const StaffRolePicker: React.FC<IStaffRolePicker> = ({ account }) => {
 
   const accountRole = getRole(account);
 
-  return (
-    <SelectDropdown
-      items={roles}
-      defaultValue={accountRole}
-      onChange={handleRoleChange}
-    />
-  );
+  return <SelectDropdown items={roles} defaultValue={accountRole} onChange={handleRoleChange} />;
 };
 
 interface IBadgeInput {
@@ -175,7 +193,7 @@ const AdminAccountPage: React.FC = () => {
     const action = checked ? verify : unverify;
 
     action(account.id, {
-      onSuccess: () =>{
+      onSuccess: () => {
         toast.success(intl.formatMessage(message, { acct: account.acct }));
       },
     });
@@ -188,7 +206,7 @@ const AdminAccountPage: React.FC = () => {
     const action = checked ? suggest : unsuggest;
 
     action(account.id, {
-      onSuccess: () =>{
+      onSuccess: () => {
         toast.success(intl.formatMessage(message, { acct: account.acct }));
       },
     });
@@ -204,7 +222,7 @@ const AdminAccountPage: React.FC = () => {
 
   const handleSaveBadges = () => {
     dispatch(saveBadges(account.id, accountBadges, badges))
-      .then(() =>{
+      .then(() => {
         toast.success(intl.formatMessage(messages.badgesSaved));
       })
       .catch(() => {});
@@ -223,8 +241,15 @@ const AdminAccountPage: React.FC = () => {
         </OutlineBox>
 
         <List>
-          {(ownAccount.is_admin && account.local) && (
-            <ListItem label={<FormattedMessage id='account_moderation_modal.fields.account_role' defaultMessage='Staff level' />}>
+          {ownAccount.is_admin && account.local && (
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='account_moderation_modal.fields.account_role'
+                  defaultMessage='Staff level'
+                />
+              }
+            >
               <div className='w-auto'>
                 <StaffRolePicker account={account} />
               </div>
@@ -232,25 +257,40 @@ const AdminAccountPage: React.FC = () => {
           )}
 
           {features.pleromaAdminAccounts && (
-            <ListItem label={<FormattedMessage id='account_moderation_modal.fields.verified' defaultMessage='Verified account' />}>
-              <Toggle
-                checked={account.verified}
-                onChange={handleVerifiedChange}
-              />
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='account_moderation_modal.fields.verified'
+                  defaultMessage='Verified account'
+                />
+              }
+            >
+              <Toggle checked={account.verified} onChange={handleVerifiedChange} />
             </ListItem>
           )}
 
           {features.suggestionsV2 && (
-            <ListItem label={<FormattedMessage id='account_moderation_modal.fields.suggested' defaultMessage='Suggested in people to follow' />}>
-              <Toggle
-                checked={account.is_suggested === true}
-                onChange={handleSuggestedChange}
-              />
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='account_moderation_modal.fields.suggested'
+                  defaultMessage='Suggested in people to follow'
+                />
+              }
+            >
+              <Toggle checked={account.is_suggested === true} onChange={handleSuggestedChange} />
             </ListItem>
           )}
 
           {features.pleromaAdminAccounts && (
-            <ListItem label={<FormattedMessage id='account_moderation_modal.fields.badges' defaultMessage='Custom badges' />}>
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='account_moderation_modal.fields.badges'
+                  defaultMessage='Custom badges'
+                />
+              }
+            >
               <div className='grow'>
                 <HStack className='w-full' alignItems='center' space={2}>
                   <BadgeInput badges={badges} onChange={setBadges} />
@@ -265,12 +305,22 @@ const AdminAccountPage: React.FC = () => {
 
         <List>
           <ListItem
-            label={<FormattedMessage id='account_moderation_modal.fields.deactivate' defaultMessage='Deactivate account' />}
+            label={
+              <FormattedMessage
+                id='account_moderation_modal.fields.deactivate'
+                defaultMessage='Deactivate account'
+              />
+            }
             onClick={handleDeactivate}
           />
 
           <ListItem
-            label={<FormattedMessage id='account_moderation_modal.fields.delete' defaultMessage='Delete account' />}
+            label={
+              <FormattedMessage
+                id='account_moderation_modal.fields.delete'
+                defaultMessage='Delete account'
+              />
+            }
             onClick={handleDelete}
           />
         </List>
@@ -285,8 +335,16 @@ const AdminAccountPage: React.FC = () => {
 
         {features.version.software === PLEROMA && (
           <HStack justifyContent='center'>
-            <Button icon={require('@phosphor-icons/core/regular/arrow-square-out.svg')} size='sm' theme='secondary' onClick={handleAdminFE}>
-              <FormattedMessage id='account_moderation_modal.admin_fe' defaultMessage='Open in AdminFE' />
+            <Button
+              icon={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
+              size='sm'
+              theme='secondary'
+              onClick={handleAdminFE}
+            >
+              <FormattedMessage
+                id='account_moderation_modal.admin_fe'
+                defaultMessage='Open in AdminFE'
+              />
             </Button>
           </HStack>
         )}

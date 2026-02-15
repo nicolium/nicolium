@@ -14,7 +14,11 @@ const useGroup = (groupId: string, refetch = true) => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { entity: group, isUnauthorized, ...result } = useEntity<Group, Group>(
+  const {
+    entity: group,
+    isUnauthorized,
+    ...result
+  } = useEntity<Group, Group>(
     [Entities.GROUPS, groupId],
     () => client.experimental.groups.getGroup(groupId),
     {

@@ -31,12 +31,14 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
   };
 
   const handleShare = () => {
-    navigator.share({
-      text: group?.display_name,
-      url: group?.uri,
-    }).catch((e) => {
-      if (e.name !== 'AbortError') console.error(e);
-    });
+    navigator
+      .share({
+        text: group?.display_name,
+        url: group?.uri,
+      })
+      .catch((e) => {
+        if (e.name !== 'AbortError') console.error(e);
+      });
   };
 
   if (!group) {
@@ -47,10 +49,14 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
     <Stack space={9}>
       <Stack space={3}>
         <Stack>
-          <label
-            className='dark:sm:shadow-inset relative h-24 w-full cursor-pointer overflow-hidden rounded-lg bg-primary-100 text-primary-500 dark:bg-gray-800 dark:text-primary-400 sm:h-36 sm:shadow'
-          >
-            {group.header && <img className='size-full object-cover' src={group.header} alt={group.header_description} />}
+          <label className='dark:sm:shadow-inset relative h-24 w-full cursor-pointer overflow-hidden rounded-lg bg-primary-100 text-primary-500 dark:bg-gray-800 dark:text-primary-400 sm:h-36 sm:shadow'>
+            {group.header && (
+              <img
+                className='size-full object-cover'
+                src={group.header}
+                alt={group.header_description}
+              />
+            )}
           </label>
 
           <label className='z-[1] mx-auto -mt-10 cursor-pointer rounded-lg bg-primary-500 ring-2 ring-white dark:ring-primary-900'>
@@ -59,7 +65,9 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
         </Stack>
 
         <Stack>
-          <Text size='2xl' weight='bold' align='center'>{group.display_name}</Text>
+          <Text size='2xl' weight='bold' align='center'>
+            {group.display_name}
+          </Text>
           <Text
             size='md'
             className='mx-auto max-w-sm [&_a]:text-primary-600 [&_a]:hover:underline [&_a]:dark:text-primary-400'
@@ -107,13 +115,26 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
       </Stack>
 
       <HStack space={2} justifyContent='center'>
-        {('share' in navigator) && (
-          <Button onClick={handleShare} theme='transparent' icon={require('@phosphor-icons/core/regular/export.svg')} className='text-primary-600'>
-            <FormattedMessage id='manage_group.confirmation.share' defaultMessage='Share this group' />
+        {'share' in navigator && (
+          <Button
+            onClick={handleShare}
+            theme='transparent'
+            icon={require('@phosphor-icons/core/regular/export.svg')}
+            className='text-primary-600'
+          >
+            <FormattedMessage
+              id='manage_group.confirmation.share'
+              defaultMessage='Share this group'
+            />
           </Button>
         )}
 
-        <Button onClick={handleCopyLink} theme='transparent' icon={require('@phosphor-icons/core/regular/link-simple.svg')} className='text-primary-600'>
+        <Button
+          onClick={handleCopyLink}
+          theme='transparent'
+          icon={require('@phosphor-icons/core/regular/link-simple.svg')}
+          className='text-primary-600'
+        >
           <FormattedMessage id='manage_group.confirmation.copy' defaultMessage='Copy link' />
         </Button>
       </HStack>
@@ -127,7 +148,9 @@ interface IInfoListNumber {
 
 const InfoListNumber: React.FC<IInfoListNumber> = ({ number }) => (
   <div className='flex size-7 shrink-0 items-center justify-center rounded-full border border-gray-200 dark:border-gray-800'>
-    <Text theme='primary' size='sm' weight='bold'>{number}</Text>
+    <Text theme='primary' size='sm' weight='bold'>
+      {number}
+    </Text>
   </div>
 );
 
@@ -139,9 +162,7 @@ interface IInfoListItem {
 const InfoListItem: React.FC<IInfoListItem> = ({ number, children }) => (
   <HStack alignItems='top' space={3}>
     <InfoListNumber number={number} />
-    <div className='mt-0.5'>
-      {children}
-    </div>
+    <div className='mt-0.5'>{children}</div>
   </HStack>
 );
 

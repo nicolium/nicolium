@@ -14,21 +14,35 @@ interface IThumbNavigationLink extends LinkOptions {
   exact?: boolean;
 }
 
-const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({ count, countMax, src, activeSrc, text, exact, ...props }): JSX.Element => {
+const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({
+  count,
+  countMax,
+  src,
+  activeSrc,
+  text,
+  exact,
+  ...props
+}): JSX.Element => {
   const { demetricator } = useSettings();
 
   const matchRoute = useMatchRoute();
 
-  const icon = (activeSrc && matchRoute({ to: props.to, params: props.params, search: props.search }) !== false && activeSrc) ?? src;
+  const icon =
+    (activeSrc &&
+      matchRoute({ to: props.to, params: props.params, search: props.search }) !== false &&
+      activeSrc) ??
+    src;
 
   return (
-    <Link {...props} activeOptions={{ exact }} className='⁂-thumb-navigation__item' activeProps={{ className: '⁂-thumb-navigation__item--active' }} title={text}>
+    <Link
+      {...props}
+      activeOptions={{ exact }}
+      className='⁂-thumb-navigation__item'
+      activeProps={{ className: '⁂-thumb-navigation__item--active' }}
+      title={text}
+    >
       {!demetricator && count !== undefined ? (
-        <IconWithCounter
-          src={icon}
-          count={count}
-          countMax={countMax}
-        />
+        <IconWithCounter src={icon} count={count} countMax={countMax} />
       ) : (
         <Icon src={icon} />
       )}

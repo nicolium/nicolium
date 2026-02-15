@@ -32,8 +32,8 @@ const initialState: State = {
 };
 
 const minifyConversation = (conversation: Conversation) => ({
-  ...(pick(conversation, ['id', 'unread'])),
-  accounts: conversation.accounts.map(a => a.id),
+  ...pick(conversation, ['id', 'unread']),
+  accounts: conversation.accounts.map((a) => a.id),
   last_status: conversation.last_status?.id ?? null,
   last_status_created_at: conversation.last_status?.created_at ?? null,
 });
@@ -41,7 +41,7 @@ const minifyConversation = (conversation: Conversation) => ({
 type MinifiedConversation = ReturnType<typeof minifyConversation>;
 
 const updateConversation = (state: State, item: Conversation) => {
-  const index = state.items.findIndex(x => x.id === item.id);
+  const index = state.items.findIndex((x) => x.id === item.id);
   const newItem = minifyConversation(item);
 
   if (index === -1) {
@@ -51,12 +51,17 @@ const updateConversation = (state: State, item: Conversation) => {
   }
 };
 
-const expandNormalizedConversations = (state: State, conversations: Conversation[], next: (() => Promise<PaginatedResponse<Conversation>>) | null, isLoadingRecent?: boolean) => {
+const expandNormalizedConversations = (
+  state: State,
+  conversations: Conversation[],
+  next: (() => Promise<PaginatedResponse<Conversation>>) | null,
+  isLoadingRecent?: boolean,
+) => {
   let items = conversations.map(minifyConversation);
 
   if (items.length) {
-    let list = state.items.map(oldItem => {
-      const newItemIndex = items.findIndex(x => x.id === oldItem.id);
+    let list = state.items.map((oldItem) => {
+      const newItemIndex = items.findIndex((x) => x.id === oldItem.id);
 
       if (newItemIndex === -1) {
         return oldItem;
@@ -95,11 +100,16 @@ const conversations = (state = initialState, action: ConversationsAction): State
         draft.isLoading = false;
       });
     case CONVERSATIONS_FETCH_SUCCESS:
-      return create(state, (draft) =>{
-        expandNormalizedConversations(draft, action.conversations, action.next, action.isLoadingRecent);
+      return create(state, (draft) => {
+        expandNormalizedConversations(
+          draft,
+          action.conversations,
+          action.next,
+          action.isLoadingRecent,
+        );
       });
     case CONVERSATIONS_UPDATE:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         updateConversation(state, action.conversation);
       });
     case CONVERSATIONS_MOUNT:
@@ -112,7 +122,7 @@ const conversations = (state = initialState, action: ConversationsAction): State
       });
     case CONVERSATIONS_READ:
       return create(state, (draft) => {
-        state.items = state.items.map(item => {
+        state.items = state.items.map((item) => {
           if (item.id === action.conversationId) {
             return { ...item, unread: false };
           }

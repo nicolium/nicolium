@@ -5,7 +5,10 @@ import { useSettings } from '@/stores/settings';
 import { removeVS16s, toCodePoints } from '@/utils/emoji';
 import { joinPublicPath } from '@/utils/static';
 
-interface IEmoji extends Pick<React.ImgHTMLAttributes<HTMLImageElement>, 'alt' | 'className' | 'src' | 'title'> {
+interface IEmoji extends Pick<
+  React.ImgHTMLAttributes<HTMLImageElement>,
+  'alt' | 'className' | 'src' | 'title'
+> {
   /** Unicode emoji character. */
   emoji?: string;
   noGroup?: boolean;
@@ -27,11 +30,8 @@ const Emoji: React.FC<IEmoji> = (props): JSX.Element | null => {
   if (!filename && !src) return null;
 
   if (src) {
-    if (disableUserProvidedMedia) return (
-      <>
-        {alt ?? <span className={rest.className}>{emoji}</span>}
-      </>
-    );
+    if (disableUserProvidedMedia)
+      return <>{alt ?? <span className={rest.className}>{emoji}</span>}</>;
     return (
       <StillImage
         alt={alt ?? emoji}

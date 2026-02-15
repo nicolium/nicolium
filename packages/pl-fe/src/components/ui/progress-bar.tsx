@@ -29,10 +29,7 @@ const ProgressBar: React.FC<IProgressBar> = ({ progress, size = 'md' }) => {
         'h-[6px]': size === 'sm',
       })}
     >
-      <animated.div
-        className='h-full bg-secondary-500'
-        style={styles}
-      />
+      <animated.div className='h-full bg-secondary-500' style={styles} />
     </div>
   );
 };

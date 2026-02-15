@@ -1,6 +1,13 @@
 import { Link, useNavigate } from '@tanstack/react-router';
 import React, { useCallback, useMemo, useRef } from 'react';
-import { defineMessages, useIntl, FormattedList, FormattedMessage, IntlShape, MessageDescriptor } from 'react-intl';
+import {
+  defineMessages,
+  useIntl,
+  FormattedList,
+  FormattedMessage,
+  IntlShape,
+  MessageDescriptor,
+} from 'react-intl';
 
 import { mentionCompose, replyCompose } from '@/actions/compose';
 import AttachmentThumbs from '@/components/attachment-thumbs';
@@ -19,7 +26,12 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useInstance } from '@/hooks/use-instance';
 import { useLoggedIn } from '@/hooks/use-logged-in';
-import { useFavouriteStatus, useUnfavouriteStatus, useReblogStatus, useUnreblogStatus } from '@/queries/statuses/use-status-interactions';
+import {
+  useFavouriteStatus,
+  useUnfavouriteStatus,
+  useReblogStatus,
+  useUnreblogStatus,
+} from '@/queries/statuses/use-status-interactions';
 import { makeGetNotification } from '@/selectors';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
@@ -32,12 +44,21 @@ import type { Account, NotificationGroup } from 'pl-api';
 const notificationForScreenReader = (intl: IntlShape, message: string, timestamp: string) => {
   const output = [message];
 
-  output.push(intl.formatDate(timestamp, { hour: '2-digit', minute: '2-digit', month: 'short', day: 'numeric' }));
+  output.push(
+    intl.formatDate(timestamp, {
+      hour: '2-digit',
+      minute: '2-digit',
+      month: 'short',
+      day: 'numeric',
+    }),
+  );
 
   return output.join(', ');
 };
 
-const buildLink = (account: Pick<Account, 'acct' | 'display_name' | 'emojis' | 'id'>): JSX.Element => (
+const buildLink = (
+  account: Pick<Account, 'acct' | 'display_name' | 'emojis' | 'id'>,
+): JSX.Element => (
   <Link
     className='font-bold text-gray-800 hover:underline dark:text-gray-200'
     title={account.acct}
@@ -172,7 +193,10 @@ const buildMessage = (
   hasStatus: boolean,
   isReblog: boolean,
 ): React.ReactNode => {
-  const renderedAccounts = accounts.slice(0, 2).map(account => buildLink(account)).filter(Boolean);
+  const renderedAccounts = accounts
+    .slice(0, 2)
+    .map((account) => buildLink(account))
+    .filter(Boolean);
 
   if (accounts.length > 2) {
     renderedAccounts.push(
@@ -211,7 +235,13 @@ const StatusPreview: React.FC<IStatusPreview> = ({ status }) => {
         className='line-clamp-2 inline text-ellipsis [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
         size='sm'
       >
-        <ParsedContent key='content' html={status.content} mentions={status.mentions} hasQuote={!!status.quote_id} emojis={status.emojis} />
+        <ParsedContent
+          key='content'
+          html={status.content}
+          mentions={status.mentions}
+          hasQuote={!!status.quote_id}
+          emojis={status.emojis}
+        />
       </Markup>,
     );
   }
@@ -230,8 +260,26 @@ interface INotification {
   compact?: boolean;
 }
 
-const getNotificationStatus = (n: Pick<NotificationGroup, 'type'> & ({ status: StatusEntity } | { })): StatusEntity | null => {
-  if (['mention', 'status', 'reblog', 'favourite', 'poll', 'update', 'emoji_reaction', 'event_reminder', 'participation_accepted', 'participation_request', 'bite', 'quote', 'quoted_update'].includes(n.type))
+const getNotificationStatus = (
+  n: Pick<NotificationGroup, 'type'> & ({ status: StatusEntity } | {}),
+): StatusEntity | null => {
+  if (
+    [
+      'mention',
+      'status',
+      'reblog',
+      'favourite',
+      'poll',
+      'update',
+      'emoji_reaction',
+      'event_reminder',
+      'participation_accepted',
+      'participation_request',
+      'bite',
+      'quote',
+      'quoted_update',
+    ].includes(n.type)
+  )
     // @ts-ignore
     return n.status;
   return null;
@@ -269,7 +317,10 @@ const Notification: React.FC<INotification> = (props) => {
 
   const handleOpen = () => {
     if (status && typeof status === 'object' && account && typeof account === 'object') {
-      navigate({ to: '/@{$username}/posts/$statusId', params: { username: account.acct, statusId: status.id } });
+      navigate({
+        to: '/@{$username}/posts/$statusId',
+        params: { username: account.acct, statusId: status.id },
+      });
     } else {
       handleOpenProfile();
     }
@@ -281,49 +332,61 @@ const Notification: React.FC<INotification> = (props) => {
     }
   };
 
-  const handleMention = useCallback((e?: KeyboardEvent) => {
-    e?.preventDefault();
+  const handleMention = useCallback(
+    (e?: KeyboardEvent) => {
+      e?.preventDefault();
 
-    dispatch(mentionCompose(account));
-  }, [account]);
-
-  const handleReply = useCallback((e?: KeyboardEvent) => {
-    e?.preventDefault();
-
-    if (status) {
-      dispatch(replyCompose(status, account));
-    } else {
       dispatch(mentionCompose(account));
-    }
-  }, [account]);
+    },
+    [account],
+  );
 
-  const handleHotkeyFavourite = useCallback((e?: KeyboardEvent) => {
-    if (status && typeof status === 'object') {
-      if (status.favourited) {
-        unfavouriteStatus();
-      } else {
-        favouriteStatus();
-      }
-    }
-  }, [status]);
+  const handleReply = useCallback(
+    (e?: KeyboardEvent) => {
+      e?.preventDefault();
 
-  const handleHotkeyBoost = useCallback((e?: KeyboardEvent) => {
-    if (status && typeof status === 'object') {
-      const boostModal = settings.boostModal;
-      if (status.reblogged) {
-        unreblogStatus();
-      } else if (e?.shiftKey || !boostModal) {
-        reblogStatus(undefined);
+      if (status) {
+        dispatch(replyCompose(status, account));
       } else {
-        openModal('BOOST', {
-          statusId: status.id,
-          onReblog: () => {
-            reblogStatus(undefined);
-          },
-        });
+        dispatch(mentionCompose(account));
       }
-    }
-  }, [status]);
+    },
+    [account],
+  );
+
+  const handleHotkeyFavourite = useCallback(
+    (e?: KeyboardEvent) => {
+      if (status && typeof status === 'object') {
+        if (status.favourited) {
+          unfavouriteStatus();
+        } else {
+          favouriteStatus();
+        }
+      }
+    },
+    [status],
+  );
+
+  const handleHotkeyBoost = useCallback(
+    (e?: KeyboardEvent) => {
+      if (status && typeof status === 'object') {
+        const boostModal = settings.boostModal;
+        if (status.reblogged) {
+          unreblogStatus();
+        } else if (e?.shiftKey || !boostModal) {
+          reblogStatus(undefined);
+        } else {
+          openModal('BOOST', {
+            statusId: status.id,
+            onReblog: () => {
+              reblogStatus(undefined);
+            },
+          });
+        }
+      }
+    },
+    [status],
+  );
 
   const handleHotkeyToggleSensitive = useCallback(() => {
     if (status && typeof status === 'object') {
@@ -355,7 +418,11 @@ const Notification: React.FC<INotification> = (props) => {
     toggleSensitive: handleHotkeyToggleSensitive,
   };
 
-  const displayedType = notification.type === 'mention' && (notification.subtype === 'reply' || status?.in_reply_to_account_id === me) ? 'reply' : notification.type;
+  const displayedType =
+    notification.type === 'mention' &&
+    (notification.subtype === 'reply' || status?.in_reply_to_account_id === me)
+      ? 'reply'
+      : notification.type;
 
   const icon = useMemo(() => {
     if (type === 'emoji_reaction' && notification.emoji) {
@@ -367,12 +434,7 @@ const Notification: React.FC<INotification> = (props) => {
         />
       );
     } else if (icons[displayedType]) {
-      return (
-        <Icon
-          src={icons[displayedType]}
-          className='⁂-notification__icon'
-        />
-      );
+      return <Icon src={icons[displayedType]} className='⁂-notification__icon' />;
     } else {
       return null;
     }
@@ -380,7 +442,9 @@ const Notification: React.FC<INotification> = (props) => {
 
   const renderContent = () => {
     if (type === 'bite' && status) {
-      return compact ? <StatusPreview status={status} /> : (
+      return compact ? (
+        <StatusPreview status={status} />
+      ) : (
         <StatusContainer
           id={status.id}
           onMoveDown={handleMoveDown}
@@ -396,13 +460,7 @@ const Notification: React.FC<INotification> = (props) => {
 
     switch (type) {
       case 'follow':
-        return (
-          <AccountContainer
-            id={account.id}
-            avatarSize={avatarSize}
-            withRelationship
-          />
-        );
+        return <AccountContainer id={account.id} avatarSize={avatarSize} withRelationship />;
       case 'follow_request':
         return (
           <AccountContainer
@@ -423,11 +481,7 @@ const Notification: React.FC<INotification> = (props) => {
         );
       case 'move':
         return notification.target ? (
-          <AccountContainer
-            id={notification.target_id}
-            avatarSize={avatarSize}
-            withRelationship
-          />
+          <AccountContainer id={notification.target_id} avatarSize={avatarSize} withRelationship />
         ) : null;
       case 'favourite':
       case 'mention':
@@ -442,7 +496,9 @@ const Notification: React.FC<INotification> = (props) => {
       case 'quote':
       case 'quoted_update':
         return status ? (
-          compact ? <StatusPreview status={status} /> : (
+          compact ? (
+            <StatusPreview status={status} />
+          ) : (
             <StatusContainer
               id={status.id}
               onMoveDown={handleMoveDown}
@@ -453,7 +509,8 @@ const Notification: React.FC<INotification> = (props) => {
               showInfo={false}
               variant='slim'
             />
-          )) : null;
+          )
+        ) : null;
       default:
         return null;
     }
@@ -462,42 +519,60 @@ const Notification: React.FC<INotification> = (props) => {
   const targetName = notification.type === 'move' ? notification.target.acct : '';
 
   const message: React.ReactNode = accounts.length
-    ? buildMessage(intl, displayedType, accounts, targetName, instance.title, !!status, !!status?.reblog_id)
+    ? buildMessage(
+        intl,
+        displayedType,
+        accounts,
+        targetName,
+        instance.title,
+        !!status,
+        !!status?.reblog_id,
+      )
     : null;
 
-  const ariaLabel = (
-    notificationForScreenReader(
-      intl,
-      intl.formatMessage(messages[displayedType], {
-        name: accounts.length ? intl.formatList(accounts.map(account => account.acct), { type: 'conjunction' }) : '',
-        targetName,
-        isReblog: status?.reblog_id ? 1 : 0,
-      }),
-      notification.latest_page_notification_at!,
-    )
+  const ariaLabel = notificationForScreenReader(
+    intl,
+    intl.formatMessage(messages[displayedType], {
+      name: accounts.length
+        ? intl.formatList(
+            accounts.map((account) => account.acct),
+            { type: 'conjunction' },
+          )
+        : '',
+      targetName,
+      isReblog: status?.reblog_id ? 1 : 0,
+    }),
+    notification.latest_page_notification_at!,
   );
 
-  const statusInfo = <StatusInfo avatarSize={compact ? 0 : avatarSize} icon={icon} text={message} title={ariaLabel} />;
+  const statusInfo = (
+    <StatusInfo
+      avatarSize={compact ? 0 : avatarSize}
+      icon={icon}
+      text={message}
+      title={ariaLabel}
+    />
+  );
 
   return (
     <Hotkeys handlers={handlers} data-testid='notification'>
-      <div
-        className='⁂-notification'
-        tabIndex={0}
-        aria-label={ariaLabel}
-        ref={node}
-      >
+      <div className='⁂-notification' tabIndex={0} aria-label={ariaLabel} ref={node}>
         {compact || !['mention', 'status'].includes(notification.type) ? (
           <div className='⁂-notification__header'>
-            <div className='⁂-notification__info'>
-              {statusInfo}
-            </div>
+            <div className='⁂-notification__info'>{statusInfo}</div>
 
             <p className='⁂-notification__timestamp'>
-              <RelativeTimestamp timestamp={notification.latest_page_notification_at!} theme='muted' size='sm' className='whitespace-nowrap' />
+              <RelativeTimestamp
+                timestamp={notification.latest_page_notification_at!}
+                theme='muted'
+                size='sm'
+                className='whitespace-nowrap'
+              />
             </p>
           </div>
-        ) : statusInfo}
+        ) : (
+          statusInfo
+        )}
 
         {renderContent()}
       </div>

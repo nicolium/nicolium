@@ -15,7 +15,13 @@ interface DislikesModalProps {
 }
 
 const DislikesModal: React.FC<BaseModalProps & DislikesModalProps> = ({ onClose, statusId }) => {
-  const { data: accountIds, isLoading, hasNextPage, fetchNextPage, refetch } = useStatusDislikes(statusId);
+  const {
+    data: accountIds,
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useStatusDislikes(statusId);
 
   const onClickClose = () => {
     onClose('DISLIKES');
@@ -26,7 +32,12 @@ const DislikesModal: React.FC<BaseModalProps & DislikesModalProps> = ({ onClose,
   if (!accountIds) {
     body = <Spinner />;
   } else {
-    const emptyMessage = <FormattedMessage id='empty_column.dislikes' defaultMessage='No one has disliked this post yet. When someone does, they will show up here.' />;
+    const emptyMessage = (
+      <FormattedMessage
+        id='empty_column.dislikes'
+        defaultMessage='No one has disliked this post yet. When someone does, they will show up here.'
+      />
+    );
 
     body = (
       <PullToRefresh onRefresh={refetch}>
@@ -40,9 +51,9 @@ const DislikesModal: React.FC<BaseModalProps & DislikesModalProps> = ({ onClose,
           onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
           useWindowScroll={false}
         >
-          {accountIds.map(id =>
-            <AccountContainer key={id} id={id} />,
-          )}
+          {accountIds.map((id) => (
+            <AccountContainer key={id} id={id} />
+          ))}
         </ScrollableList>
       </PullToRefresh>
     );

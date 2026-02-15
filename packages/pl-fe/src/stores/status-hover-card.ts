@@ -9,30 +9,34 @@ type State = {
     updateStatusHoverCard: () => void;
     closeStatusHoverCard: (force?: boolean) => void;
   };
-}
+};
 
 const useStatusHoverCardStore = create<State>((set) => ({
   ref: null,
   statusId: null,
   hovered: false,
   actions: {
-    openStatusHoverCard: (ref, statusId) =>{
+    openStatusHoverCard: (ref, statusId) => {
       set({
         ref,
         statusId,
       });
     },
-    updateStatusHoverCard: () =>{
+    updateStatusHoverCard: () => {
       set({
         hovered: true,
       });
     },
-    closeStatusHoverCard: (force = false) =>{
-      set((state) => state.hovered && !force ? {} : {
-        ref: null,
-        statusId: null,
-        hovered: false,
-      });
+    closeStatusHoverCard: (force = false) => {
+      set((state) =>
+        state.hovered && !force
+          ? {}
+          : {
+              ref: null,
+              statusId: null,
+              hovered: false,
+            },
+      );
     },
   },
 }));
@@ -40,4 +44,3 @@ const useStatusHoverCardStore = create<State>((set) => ({
 const useStatusHoverCardActions = () => useStatusHoverCardStore((state) => state.actions);
 
 export { useStatusHoverCardStore, useStatusHoverCardActions };
-

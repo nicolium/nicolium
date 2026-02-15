@@ -27,8 +27,7 @@ const createZoomMatrix = (
   const { clientWidth, clientHeight } = container;
   const { offsetWidth, offsetHeight } = image;
 
-  const type =
-    fullWidth / fullHeight < clientWidth / clientHeight ? 'width' : 'height';
+  const type = fullWidth / fullHeight < clientWidth / clientHeight ? 'width' : 'height';
 
   const initialScale =
     type === 'width'
@@ -56,8 +55,7 @@ const getBounds = (zoomMatrix: ZoomMatrix | null, scale: number) => {
     };
   }
 
-  const { containerWidth, containerHeight, imageWidth, imageHeight } =
-    zoomMatrix;
+  const { containerWidth, containerHeight, imageWidth, imageHeight } = zoomMatrix;
 
   const bounds = {
     left: -Math.max(imageWidth * scale - containerWidth, 0) / 2,
@@ -204,8 +202,7 @@ const ZoomableImage: React.FC<IZoomableImage> = ({
         }
 
         if (first) {
-          const { width, height, x, y } =
-            imageRef.current.getBoundingClientRect();
+          const { width, height, x, y } = imageRef.current.getBoundingClientRect();
           const tx = ox - (x + width / 2);
           const ty = oy - (y + height / 2);
 
@@ -243,12 +240,7 @@ const ZoomableImage: React.FC<IZoomableImage> = ({
       return;
     }
 
-    zoomMatrixRef.current = createZoomMatrix(
-      containerRef.current,
-      imageRef.current,
-      width,
-      height,
-    );
+    zoomMatrixRef.current = createZoomMatrix(containerRef.current, imageRef.current, width, height);
 
     if (!zoomedIn) {
       // void api.start({ scale: MIN_SCALE, x: 0, y: 0 });

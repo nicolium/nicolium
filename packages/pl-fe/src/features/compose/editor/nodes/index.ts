@@ -22,12 +22,7 @@ import type { Klass, LexicalNode } from 'lexical';
 const useNodes = (isWysiwyg?: boolean) => {
   const { composeAllowHeadings, composeAllowInlineImages } = useFeatures();
 
-  const nodes: Array<Klass<LexicalNode>> = [
-    AutoLinkNode,
-    HashtagNode,
-    EmojiNode,
-    MentionNode,
-  ];
+  const nodes: Array<Klass<LexicalNode>> = [AutoLinkNode, HashtagNode, EmojiNode, MentionNode];
 
   if (isWysiwyg) {
     nodes.push(

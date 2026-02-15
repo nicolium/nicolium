@@ -29,34 +29,26 @@ const useRules = () => {
     placeholderData: [],
   });
 
-  const {
-    mutate: createRule,
-    isPending: isCreating,
-  } = useMutation({
+  const { mutate: createRule, isPending: isCreating } = useMutation({
     mutationFn: (params: CreateRuleParams) => client.admin.rules.createRule(params),
     retry: false,
     onSuccess: (data) =>
-      queryClient.setQueryData(['admin', 'rules'], (prevResult: ReadonlyArray<AdminRule>) =>
-        [...prevResult, data],
-      ),
+      queryClient.setQueryData(['admin', 'rules'], (prevResult: ReadonlyArray<AdminRule>) => [
+        ...prevResult,
+        data,
+      ]),
   });
 
-  const {
-    mutate: updateRule,
-    isPending: isUpdating,
-  } = useMutation({
+  const { mutate: updateRule, isPending: isUpdating } = useMutation({
     mutationFn: ({ id, ...params }: UpdateRuleParams) => client.admin.rules.updateRule(id, params),
     retry: false,
     onSuccess: (data) =>
       queryClient.setQueryData(['admin', 'rules'], (prevResult: ReadonlyArray<AdminRule>) =>
-        prevResult.map((rule) => rule.id === data.id ? data : rule),
+        prevResult.map((rule) => (rule.id === data.id ? data : rule)),
       ),
   });
 
-  const {
-    mutate: deleteRule,
-    isPending: isDeleting,
-  } = useMutation({
+  const { mutate: deleteRule, isPending: isDeleting } = useMutation({
     mutationFn: (id: string) => client.admin.rules.deleteRule(id),
     retry: false,
     onSuccess: (_, id) =>

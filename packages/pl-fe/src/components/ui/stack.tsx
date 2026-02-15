@@ -43,26 +43,40 @@ interface IStack extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 /** Vertical stack of child elements. */
-const Stack = React.forwardRef<HTMLDivElement, IStack>((props, ref: React.LegacyRef<HTMLDivElement> | undefined) => {
-  const { space, alignItems, justifyContent, className, grow, element = 'div', ...filteredProps } = props;
+const Stack = React.forwardRef<HTMLDivElement, IStack>(
+  (props, ref: React.LegacyRef<HTMLDivElement> | undefined) => {
+    const {
+      space,
+      alignItems,
+      justifyContent,
+      className,
+      grow,
+      element = 'div',
+      ...filteredProps
+    } = props;
 
-  const Elem = element as 'div';
+    const Elem = element as 'div';
 
-  return (
-    <Elem
-      {...filteredProps}
-      ref={ref}
-      className={clsx('flex flex-col', {
-        // @ts-ignore
-        [spaces[space]]: typeof space !== 'undefined',
-        // @ts-ignore
-        [alignItemsOptions[alignItems]]: typeof alignItems !== 'undefined',
-        // @ts-ignore
-        [justifyContentOptions[justifyContent]]: typeof justifyContent !== 'undefined',
-        'grow': grow,
-      }, className)}
-    />
-  );
-});
+    return (
+      <Elem
+        {...filteredProps}
+        ref={ref}
+        className={clsx(
+          'flex flex-col',
+          {
+            // @ts-ignore
+            [spaces[space]]: typeof space !== 'undefined',
+            // @ts-ignore
+            [alignItemsOptions[alignItems]]: typeof alignItems !== 'undefined',
+            // @ts-ignore
+            [justifyContentOptions[justifyContent]]: typeof justifyContent !== 'undefined',
+            grow: grow,
+          },
+          className,
+        )}
+      />
+    );
+  },
+);
 
 export { Stack as default };

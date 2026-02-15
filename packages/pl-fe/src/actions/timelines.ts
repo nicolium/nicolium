@@ -35,18 +35,21 @@ const TIMELINE_EXPAND_FAIL = 'TIMELINE_EXPAND_FAIL' as const;
 
 const MAX_QUEUED_ITEMS = 40;
 
-const processTimelineUpdate = (timeline: string, status: BaseStatus) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const processTimelineUpdate =
+  (timeline: string, status: BaseStatus) => (dispatch: AppDispatch, getState: () => RootState) => {
     const me = getState().me;
     const ownStatus = status.account?.id === me;
     const hasPendingStatuses = !!getState().pending_statuses.length;
 
     const columnSettings = useSettingsStore.getState().settings.timelines[timeline];
-    const shouldSkipQueue = shouldFilter({
-      in_reply_to_id: status.in_reply_to_id,
-      visibility: status.visibility,
-      reblog_id: status.reblog?.id ?? null,
-    }, columnSettings);
+    const shouldSkipQueue = shouldFilter(
+      {
+        in_reply_to_id: status.in_reply_to_id,
+        visibility: status.visibility,
+        reblog_id: status.reblog?.id ?? null,
+      },
+      columnSettings,
+    );
 
     if (ownStatus && hasPendingStatuses) {
       // WebSockets push statuses without the Idempotency-Key,
@@ -71,9 +74,9 @@ const updateTimeline = (timeline: string, statusId: string) => ({
 });
 
 const updateTimelineQueue = (timeline: string, statusId: string) => ({
-// if (typeof accept === 'function' && !accept(status)) {
-//   return;
-// }
+  // if (typeof accept === 'function' && !accept(status)) {
+  //   return;
+  // }
   type: TIMELINE_UPDATE_QUEUE,
   timeline,
   statusId,
@@ -84,7 +87,8 @@ interface TimelineDequeueAction {
   timeline: string;
 }
 
-const dequeueTimeline = (timelineId: string, expandFunc?: (lastStatusId: string) => void) =>
+const dequeueTimeline =
+  (timelineId: string, expandFunc?: (lastStatusId: string) => void) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const queuedCount = state.timelines[timelineId]?.totalQueuedItemsCount || 0;
@@ -117,8 +121,8 @@ interface TimelineDeleteAction {
   reblogOf: string | null;
 }
 
-const deleteFromTimelines = (statusId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const deleteFromTimelines =
+  (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     const accountId = getState().statuses[statusId]?.account?.id;
     const references: Array<[string, string]> = Object.entries(getState().statuses)
       .filter(([key, status]) => [key, status.reblog_id === statusId])
@@ -136,7 +140,7 @@ const deleteFromTimelines = (statusId: string) =>
 
 const clearTimeline = (timeline: string) => ({ type: TIMELINE_CLEAR, timeline });
 
-const noOp = () => { };
+const noOp = () => {};
 
 const parseTags = (tags: Record<string, any[]> = {}, mode: 'any' | 'all' | 'none') =>
   (tags[mode] || []).map((tag) => tag.value);
@@ -145,12 +149,20 @@ const deduplicateStatuses = (statuses: Array<BaseStatus>) => {
   const deduplicatedStatuses: Array<BaseStatus & { accounts: Array<BaseAccount> }> = [];
 
   for (const status of statuses) {
-    const reblogged = status.reblog && deduplicatedStatuses.find((deduplicatedStatus) => deduplicatedStatus.reblog?.id === status.reblog?.id);
+    const reblogged =
+      status.reblog &&
+      deduplicatedStatuses.find(
+        (deduplicatedStatus) => deduplicatedStatus.reblog?.id === status.reblog?.id,
+      );
 
     if (reblogged) {
       reblogged.accounts.push(status.account);
       reblogged.id += ':' + status.id;
-    } else if (!deduplicatedStatuses.find((deduplicatedStatus) => deduplicatedStatus.reblog?.id === status.id)) {
+    } else if (
+      !deduplicatedStatuses.find(
+        (deduplicatedStatus) => deduplicatedStatus.reblog?.id === status.id,
+      )
+    ) {
       deduplicatedStatuses.push({ accounts: [status.account], ...status });
     }
   }
@@ -158,7 +170,13 @@ const deduplicateStatuses = (statuses: Array<BaseStatus>) => {
   return deduplicatedStatuses;
 };
 
-const handleTimelineExpand = (timelineId: string, fn: Promise<PaginatedResponse<BaseStatus>>, done = noOp, onError?: (error: any) => void) =>
+const handleTimelineExpand =
+  (
+    timelineId: string,
+    fn: Promise<PaginatedResponse<BaseStatus>>,
+    done = noOp,
+    onError?: (error: any) => void,
+  ) =>
   async (dispatch: AppDispatch) => {
     dispatch(expandTimelineRequest(timelineId));
 
@@ -168,15 +186,17 @@ const handleTimelineExpand = (timelineId: string, fn: Promise<PaginatedResponse<
       dispatch(importEntities({ statuses: response.items }));
 
       const statuses = deduplicateStatuses(response.items);
-      dispatch(importEntities({ statuses: statuses.filter(status => status.accounts) }));
+      dispatch(importEntities({ statuses: statuses.filter((status) => status.accounts) }));
 
-      dispatch(expandTimelineSuccess(
-        timelineId,
-        statuses,
-        response.next,
-        response.previous,
-        response.partial,
-      ));
+      dispatch(
+        expandTimelineSuccess(
+          timelineId,
+          statuses,
+          response.next,
+          response.previous,
+          response.partial,
+        ),
+      );
       done();
     } catch (error) {
       dispatch(expandTimelineFail(timelineId, error));
@@ -185,7 +205,8 @@ const handleTimelineExpand = (timelineId: string, fn: Promise<PaginatedResponse<
     }
   };
 
-const fetchHomeTimeline = (expand = false, done = noOp) =>
+const fetchHomeTimeline =
+  (expand = false, done = noOp) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
 
@@ -194,27 +215,41 @@ const fetchHomeTimeline = (expand = false, done = noOp) =>
 
     if (expand && state.timelines.home?.isLoading) return;
 
-    const fn = (expand && state.timelines.home?.next?.()) ?? getClient(state).timelines.homeTimeline(params);
+    const fn =
+      (expand && state.timelines.home?.next?.()) ?? getClient(state).timelines.homeTimeline(params);
 
     return dispatch(handleTimelineExpand('home', fn, done));
   };
 
-const fetchPublicTimeline = ({ onlyMedia, local, instance }: Record<string, any> = {}, expand = false, done = noOp, onError = noOp) =>
+const fetchPublicTimeline =
+  (
+    { onlyMedia, local, instance }: Record<string, any> = {},
+    expand = false,
+    done = noOp,
+    onError = noOp,
+  ) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const timelineId = `${instance ? 'remote' : 'public'}${local ? ':local' : ''}${onlyMedia ? ':media' : ''}${instance ? `:${instance}` : ''}`;
 
-    const params: PublicTimelineParams = { only_media: onlyMedia, local: instance ? false : local, instance };
+    const params: PublicTimelineParams = {
+      only_media: onlyMedia,
+      local: instance ? false : local,
+      instance,
+    };
     if (useSettingsStore.getState().settings.autoTranslate) params.language = getLocale();
 
     if (expand && state.timelines[timelineId]?.isLoading) return;
 
-    const fn = (expand && state.timelines[timelineId]?.next?.()) ?? getClient(state).timelines.publicTimeline(params);
+    const fn =
+      (expand && state.timelines[timelineId]?.next?.()) ??
+      getClient(state).timelines.publicTimeline(params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done, onError));
   };
 
-const fetchBubbleTimeline = ({ onlyMedia }: Record<string, any> = {}, expand = false, done = noOp) =>
+const fetchBubbleTimeline =
+  ({ onlyMedia }: Record<string, any> = {}, expand = false, done = noOp) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const timelineId = `bubble${onlyMedia ? ':media' : ''}`;
@@ -224,12 +259,15 @@ const fetchBubbleTimeline = ({ onlyMedia }: Record<string, any> = {}, expand = f
 
     if (expand && state.timelines[timelineId]?.isLoading) return;
 
-    const fn = (expand && state.timelines[timelineId]?.next?.()) ?? getClient(state).timelines.bubbleTimeline(params);
+    const fn =
+      (expand && state.timelines[timelineId]?.next?.()) ??
+      getClient(state).timelines.bubbleTimeline(params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));
   };
 
-const fetchWrenchedTimeline = ({ onlyMedia }: Record<string, any> = {}, expand = false, done = noOp) =>
+const fetchWrenchedTimeline =
+  ({ onlyMedia }: Record<string, any> = {}, expand = false, done = noOp) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const timelineId = `wrenched${onlyMedia ? ':media' : ''}`;
@@ -239,12 +277,20 @@ const fetchWrenchedTimeline = ({ onlyMedia }: Record<string, any> = {}, expand =
 
     if (expand && state.timelines[timelineId]?.isLoading) return;
 
-    const fn = (expand && state.timelines[timelineId]?.next?.()) ?? getClient(state).timelines.wrenchedTimeline(params);
+    const fn =
+      (expand && state.timelines[timelineId]?.next?.()) ??
+      getClient(state).timelines.wrenchedTimeline(params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));
   };
 
-const fetchAccountTimeline = (accountId: string, { exclude_replies, pinned, only_media, limit }: Record<string, any> = {}, expand = false, done = noOp) =>
+const fetchAccountTimeline =
+  (
+    accountId: string,
+    { exclude_replies, pinned, only_media, limit }: Record<string, any> = {},
+    expand = false,
+    done = noOp,
+  ) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const timelineId = `account:${accountId}${!exclude_replies ? ':with_replies' : ''}${pinned ? ':pinned' : only_media ? ':media' : ''}`;
@@ -256,12 +302,15 @@ const fetchAccountTimeline = (accountId: string, { exclude_replies, pinned, only
     if (!expand && state.timelines[timelineId]?.loaded) return;
     if (expand && state.timelines[timelineId]?.isLoading) return;
 
-    const fn = (expand && state.timelines[timelineId]?.next?.()) ?? getClient(state).accounts.getAccountStatuses(accountId, params);
+    const fn =
+      (expand && state.timelines[timelineId]?.next?.()) ??
+      getClient(state).accounts.getAccountStatuses(accountId, params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));
   };
 
-const fetchListTimeline = (listId: string, expand = false, done = noOp) =>
+const fetchListTimeline =
+  (listId: string, expand = false, done = noOp) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const timelineId = `list:${listId}`;
@@ -271,12 +320,15 @@ const fetchListTimeline = (listId: string, expand = false, done = noOp) =>
 
     if (expand && state.timelines[timelineId]?.isLoading) return;
 
-    const fn = (expand && state.timelines[timelineId]?.next?.()) ?? getClient(state).timelines.listTimeline(listId, params);
+    const fn =
+      (expand && state.timelines[timelineId]?.next?.()) ??
+      getClient(state).timelines.listTimeline(listId, params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));
   };
 
-const fetchCircleTimeline = (circleId: string, expand = false, done = noOp) =>
+const fetchCircleTimeline =
+  (circleId: string, expand = false, done = noOp) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const timelineId = `circle:${circleId}`;
@@ -286,12 +338,15 @@ const fetchCircleTimeline = (circleId: string, expand = false, done = noOp) =>
 
     if (expand && state.timelines[timelineId]?.isLoading) return;
 
-    const fn = (expand && state.timelines[timelineId]?.next?.()) ?? getClient(state).circles.getCircleStatuses(circleId, params);
+    const fn =
+      (expand && state.timelines[timelineId]?.next?.()) ??
+      getClient(state).circles.getCircleStatuses(circleId, params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));
   };
 
-const fetchAntennaTimeline = (antennaId: string, expand = false, done = noOp) =>
+const fetchAntennaTimeline =
+  (antennaId: string, expand = false, done = noOp) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const timelineId = `antenna:${antennaId}`;
@@ -301,12 +356,15 @@ const fetchAntennaTimeline = (antennaId: string, expand = false, done = noOp) =>
 
     if (expand && state.timelines[timelineId]?.isLoading) return;
 
-    const fn = (expand && state.timelines[timelineId]?.next?.()) ?? getClient(state).timelines.antennaTimeline(antennaId, params);
+    const fn =
+      (expand && state.timelines[timelineId]?.next?.()) ??
+      getClient(state).timelines.antennaTimeline(antennaId, params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));
   };
 
-const fetchGroupTimeline = (groupId: string, { only_media, limit }: Record<string, any> = {}, expand = false, done = noOp) =>
+const fetchGroupTimeline =
+  (groupId: string, { only_media, limit }: Record<string, any> = {}, expand = false, done = noOp) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const timelineId = `group:${groupId}${only_media ? ':media' : ''}`;
@@ -317,12 +375,15 @@ const fetchGroupTimeline = (groupId: string, { only_media, limit }: Record<strin
 
     if (expand && state.timelines[timelineId]?.isLoading) return;
 
-    const fn = (expand && state.timelines[timelineId]?.next?.()) ?? getClient(state).timelines.groupTimeline(groupId, params);
+    const fn =
+      (expand && state.timelines[timelineId]?.next?.()) ??
+      getClient(state).timelines.groupTimeline(groupId, params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));
   };
 
-const fetchHashtagTimeline = (hashtag: string, { tags }: Record<string, any> = {}, expand = false, done = noOp) =>
+const fetchHashtagTimeline =
+  (hashtag: string, { tags }: Record<string, any> = {}, expand = false, done = noOp) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const timelineId = `hashtag:${hashtag}`;
@@ -337,12 +398,15 @@ const fetchHashtagTimeline = (hashtag: string, { tags }: Record<string, any> = {
 
     if (useSettingsStore.getState().settings.autoTranslate) params.language = getLocale();
 
-    const fn = (expand && state.timelines[timelineId]?.next?.()) ?? getClient(state).timelines.hashtagTimeline(hashtag, params);
+    const fn =
+      (expand && state.timelines[timelineId]?.next?.()) ??
+      getClient(state).timelines.hashtagTimeline(hashtag, params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));
   };
 
-const fetchLinkTimeline = (url: string, expand = false, done = noOp) =>
+const fetchLinkTimeline =
+  (url: string, expand = false, done = noOp) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const timelineId = `link:${url}`;
@@ -353,7 +417,9 @@ const fetchLinkTimeline = (url: string, expand = false, done = noOp) =>
 
     if (useSettingsStore.getState().settings.autoTranslate) params.language = getLocale();
 
-    const fn = (expand && state.timelines[timelineId]?.next?.()) ?? getClient(state).timelines.linkTimeline(url, params);
+    const fn =
+      (expand && state.timelines[timelineId]?.next?.()) ??
+      getClient(state).timelines.linkTimeline(url, params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));
   };

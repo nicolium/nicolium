@@ -11,8 +11,8 @@ import { selectCache, selectListState, useListState } from '../selectors';
 
 import { parseEntitiesPath } from './utils';
 
-import type { EntitiesPath, EntityFn, EntitySchema, ExpandedEntitiesPath } from './types';
 import type { Entity } from '../types';
+import type { EntitiesPath, EntityFn, EntitySchema, ExpandedEntitiesPath } from './types';
 import type { RootState } from '@/store';
 
 interface UseBatchedEntitiesOpts<TEntity extends Entity> {
@@ -55,16 +55,18 @@ const useBatchedEntities = <TEntity extends Entity>(
     try {
       const response = await entityFn(filteredIds);
       const entities = v.parse(filteredArray(schema), response);
-      dispatch(entitiesFetchSuccess(entities, entityType, listKey, 'end', {
-        next: null,
-        prev: null,
-        totalCount: undefined,
-        fetching: false,
-        fetched: true,
-        error: null,
-        lastFetchedAt: new Date(),
-        invalid: false,
-      }));
+      dispatch(
+        entitiesFetchSuccess(entities, entityType, listKey, 'end', {
+          next: null,
+          prev: null,
+          totalCount: undefined,
+          fetching: false,
+          fetched: true,
+          error: null,
+          lastFetchedAt: new Date(),
+          invalid: false,
+        }),
+      );
     } catch (e) {
       dispatch(entitiesFetchFail(entityType, listKey, e));
     }
@@ -86,7 +88,11 @@ const useBatchedEntities = <TEntity extends Entity>(
   };
 };
 
-const selectEntityMap = <TEntity extends Entity>(state: RootState, path: EntitiesPath, entityIds: string[]): Record<string, TEntity> => {
+const selectEntityMap = <TEntity extends Entity>(
+  state: RootState,
+  path: EntitiesPath,
+  entityIds: string[],
+): Record<string, TEntity> => {
   const cache = selectCache(state, path);
 
   return entityIds.reduce<Record<string, TEntity>>((result, id) => {

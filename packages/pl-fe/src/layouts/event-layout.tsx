@@ -24,42 +24,47 @@ const getStatus = makeGetStatus();
 const EventLayout = () => {
   const { statusId } = layouts.event.useParams();
 
-  const me = useAppSelector(state => state.me);
+  const me = useAppSelector((state) => state.me);
   const features = useFeatures();
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  const status = useAppSelector(state => getStatus(state, { id: statusId }) ?? undefined);
+  const status = useAppSelector((state) => getStatus(state, { id: statusId }) ?? undefined);
 
   const event = status?.event;
 
   if (status && !event) {
-    navigate({ to: '/@{$username}/posts/$statusId', params: { username: status.account.acct, statusId: status.id } });
-    return (
-      <PlaceholderStatus />
-    );
+    navigate({
+      to: '/@{$username}/posts/$statusId',
+      params: { username: status.account.acct, statusId: status.id },
+    });
+    return <PlaceholderStatus />;
   }
 
   const pathname = location.pathname;
   const activeItem = pathname.endsWith('/discussion') ? 'discussion' : 'info';
 
-  const tabs: Array<Item> = status ? [
-    {
-      text: <FormattedMessage id='event.information' defaultMessage='Information' />,
-      to: '/@{$username}/events/$statusId',
-      params: { username: status.account.acct, statusId: status.id },
-      name: 'info',
-    },
-    {
-      text: <FormattedMessage id='event.discussion' defaultMessage='Discussion' />,
-      to: '/@{$username}/events/$statusId/discussion',
-      params: { username: status.account.acct, statusId: status.id },
-      name: 'discussion',
-    },
-  ] : [];
+  const tabs: Array<Item> = status
+    ? [
+        {
+          text: <FormattedMessage id='event.information' defaultMessage='Information' />,
+          to: '/@{$username}/events/$statusId',
+          params: { username: status.account.acct, statusId: status.id },
+          name: 'info',
+        },
+        {
+          text: <FormattedMessage id='event.discussion' defaultMessage='Discussion' />,
+          to: '/@{$username}/events/$statusId/discussion',
+          params: { username: status.account.acct, statusId: status.id },
+          name: 'discussion',
+        },
+      ]
+    : [];
 
-  const showTabs = !['/participations', 'participation_requests'].some(path => pathname.endsWith(path));
+  const showTabs = !['/participations', 'participation_requests'].some((path) =>
+    pathname.endsWith(path),
+  );
 
   return (
     <>
@@ -83,15 +88,9 @@ const EventLayout = () => {
       </Layout.Main>
 
       <Layout.Aside>
-        {!me && (
-          <SignUpPanel />
-        )}
-        {features.trends && (
-          <TrendsPanel limit={5} />
-        )}
-        {features.suggestions && (
-          <WhoToFollowPanel limit={3} />
-        )}
+        {!me && <SignUpPanel />}
+        {features.trends && <TrendsPanel limit={5} />}
+        {features.suggestions && <WhoToFollowPanel limit={3} />}
         <LinkFooter key='link-footer' />
       </Layout.Aside>
     </>

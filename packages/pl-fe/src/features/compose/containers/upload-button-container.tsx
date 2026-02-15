@@ -20,7 +20,9 @@ const UploadButtonContainer: React.FC<IUploadButtonContainer> = ({ composeId }) 
     dispatch(uploadCompose(composeId, files, intl));
   };
 
-  return <UploadButton disabled={isUploading} resetFileKey={resetFileKey} onSelectFile={onSelectFile} />;
+  return (
+    <UploadButton disabled={isUploading} resetFileKey={resetFileKey} onSelectFile={onSelectFile} />
+  );
 };
 
 export { UploadButtonContainer as default };

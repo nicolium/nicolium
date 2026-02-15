@@ -29,7 +29,4 @@ const toCodePoints = (unicodeSurrogates: string): string[] => {
   return points;
 };
 
-export {
-  removeVS16s,
-  toCodePoints,
-};
+export { removeVS16s, toCodePoints };

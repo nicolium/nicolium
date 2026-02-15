@@ -35,9 +35,11 @@ const GroupRelationship = ({ group }: IGroupRelationship) => {
       />
 
       <Text tag='span' weight='medium' size='sm' theme='inherit'>
-        {isOwner
-          ? <FormattedMessage id='group.role.owner' defaultMessage='Owner' />
-          : <FormattedMessage id='group.role.admin' defaultMessage='Admin' />}
+        {isOwner ? (
+          <FormattedMessage id='group.role.owner' defaultMessage='Owner' />
+        ) : (
+          <FormattedMessage id='group.role.admin' defaultMessage='Admin' />
+        )}
       </Text>
     </HStack>
   );

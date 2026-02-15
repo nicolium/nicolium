@@ -43,20 +43,23 @@ interface PreviewProps {
   withPosition: boolean;
 }
 
-const Preview: React.FC<PreviewProps> = ({ media, position: [x, y], onPositionChange, withPosition }) => {
+const Preview: React.FC<PreviewProps> = ({
+  media,
+  position: [x, y],
+  onPositionChange,
+  withPosition,
+}) => {
   const { focalPoint } = useFeatures();
-  const withFocalPoint = withPosition && focalPoint && (media.type === 'image' || media.type === 'gifv');
+  const withFocalPoint =
+    withPosition && focalPoint && (media.type === 'image' || media.type === 'gifv');
 
   // const [dragging, setDragging] = useState(false);
   const nodeRef = useRef<HTMLDivElement | null>(null);
   const draggingRef = useRef<boolean>(false);
 
-  const setRef = useCallback(
-    (e: HTMLDivElement | null) => {
-      nodeRef.current = e;
-    },
-    [],
-  );
+  const setRef = useCallback((e: HTMLDivElement | null) => {
+    nodeRef.current = e;
+  }, []);
 
   const handleMouseDown = useCallback(
     (e: React.MouseEvent) => {
@@ -138,8 +141,14 @@ const Preview: React.FC<PreviewProps> = ({ media, position: [x, y], onPositionCh
           { 'cursor-grab': withFocalPoint },
         )}
         style={{
-          backgroundImage: media.type === 'image' || media.type === 'gifv' ? `url(${media.preview_url})` : undefined,
-          height: media.type === 'image' || media.type === 'video' ? media.meta.original?.height : undefined,
+          backgroundImage:
+            media.type === 'image' || media.type === 'gifv'
+              ? `url(${media.preview_url})`
+              : undefined,
+          height:
+            media.type === 'image' || media.type === 'video'
+              ? media.meta.original?.height
+              : undefined,
         }}
       >
         <div
@@ -222,22 +231,27 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
   const handleSubmit = useCallback(() => {
     setIsSaving(true);
 
-    onSubmit(description, position).then(() => {
-      setIsSaving(false);
-      dirtyRef.current = false;
-      onClose();
-      return '';
-    }).catch(() => {
-      setIsSaving(false);
-      toast.error(messages.savingFailed);
-    });
+    onSubmit(description, position)
+      .then(() => {
+        setIsSaving(false);
+        dirtyRef.current = false;
+        onClose();
+        return '';
+      })
+      .catch(() => {
+        setIsSaving(false);
+        toast.error(messages.savingFailed);
+      });
   }, [dispatch, setIsSaving, media.id, onClose, description, position]);
 
-  const handleKeyUp = useCallback((e: React.KeyboardEvent) => {
-    if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-      e.preventDefault();
-    }
-  }, [handleSubmit]);
+  const handleKeyUp = useCallback(
+    (e: React.KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+        e.preventDefault();
+      }
+    },
+    [handleSubmit],
+  );
 
   const handleSave = () => {
     handleSubmit();
@@ -249,19 +263,22 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
       confirmationAction={handleSave}
       confirmationText={<FormattedMessage id='alt_text_modal.confirmation' defaultMessage='Save' />}
       confirmationDisabled={isSaving}
-      secondaryAction={() =>{
+      secondaryAction={() => {
         onClose('ALT_TEXT');
       }}
       secondaryText={<FormattedMessage id='alt_text_modal.cancel' defaultMessage='Cancel' />}
     >
       <Stack space={2}>
-        <Preview media={media} withPosition={withPosition} position={position} onPositionChange={handlePositionChange} />
+        <Preview
+          media={media}
+          withPosition={withPosition}
+          position={position}
+          onPositionChange={handlePositionChange}
+        />
         <form>
           <FormGroup
             labelText={intl.formatMessage(
-              media.type === 'audio'
-                ? messages.placeholderHearing
-                : messages.placeholderVisual,
+              media.type === 'audio' ? messages.placeholderHearing : messages.placeholderVisual,
             )}
           >
             <Textarea
@@ -272,9 +289,7 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
               lang={language ?? undefined}
               minRows={3}
               placeholder={intl.formatMessage(
-                media.type === 'audio'
-                  ? messages.placeholderHearing
-                  : messages.placeholderVisual,
+                media.type === 'audio' ? messages.placeholderHearing : messages.placeholderVisual,
               )}
               disabled={isSaving}
             />

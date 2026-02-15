@@ -12,7 +12,10 @@ import DropdownMenu from './dropdown-menu';
 import type { Status } from '@/normalizers/status';
 
 const messages = defineMessages({
-  languageVersions: { id: 'status.language_versions', defaultMessage: 'The post has multiple language versions.' },
+  languageVersions: {
+    id: 'status.language_versions',
+    defaultMessage: 'The post has multiple language versions.',
+  },
 });
 
 interface IStatusLanguagePicker {
@@ -20,44 +23,51 @@ interface IStatusLanguagePicker {
   showLabel?: boolean;
 }
 
-const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = React.memo(({ status, showLabel }) => {
-  const intl = useIntl();
+const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = React.memo(
+  ({ status, showLabel }) => {
+    const intl = useIntl();
 
-  const { currentLanguage } = useStatusMeta(status.id);
-  const { setStatusLanguage } = useStatusMetaActions();
+    const { currentLanguage } = useStatusMeta(status.id);
+    const { setStatusLanguage } = useStatusMetaActions();
 
-  if (!status.content_map || Object.keys(status.content_map).length < 2) return null;
+    if (!status.content_map || Object.keys(status.content_map).length < 2) return null;
 
-  const icon = <Icon className='size-4 text-gray-700 dark:text-gray-600' src={require('@phosphor-icons/core/regular/translate.svg')} />;
+    const icon = (
+      <Icon
+        className='size-4 text-gray-700 dark:text-gray-600'
+        src={require('@phosphor-icons/core/regular/translate.svg')}
+      />
+    );
 
-  return (
-    <>
-      <span className='⁂-separator' />
+    return (
+      <>
+        <span className='⁂-separator' />
 
-      <DropdownMenu
-        items={Object.keys(status.content_map).map((language) => ({
-          text: languages[language as Language] || language,
-          action: () =>{
-            setStatusLanguage(status.id, language);
-          },
-          active: language === currentLanguage,
-        }))}
-      >
-        <button title={intl.formatMessage(messages.languageVersions)} className='hover:underline'>
-          {showLabel ? (
-            <HStack space={1} alignItems='center'>
-              {icon}
-              <Text tag='span' theme='muted' size='sm'>
-                {languages[currentLanguage as Language] || currentLanguage}
-              </Text>
-            </HStack>
-          ) : icon}
-        </button>
-      </DropdownMenu>
-    </>
-  );
-});
+        <DropdownMenu
+          items={Object.keys(status.content_map).map((language) => ({
+            text: languages[language as Language] || language,
+            action: () => {
+              setStatusLanguage(status.id, language);
+            },
+            active: language === currentLanguage,
+          }))}
+        >
+          <button title={intl.formatMessage(messages.languageVersions)} className='hover:underline'>
+            {showLabel ? (
+              <HStack space={1} alignItems='center'>
+                {icon}
+                <Text tag='span' theme='muted' size='sm'>
+                  {languages[currentLanguage as Language] || currentLanguage}
+                </Text>
+              </HStack>
+            ) : (
+              icon
+            )}
+          </button>
+        </DropdownMenu>
+      </>
+    );
+  },
+);
 
-export {
-  StatusLanguagePicker as default,
-};
+export { StatusLanguagePicker as default };

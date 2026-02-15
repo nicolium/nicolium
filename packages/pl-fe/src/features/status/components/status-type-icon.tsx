@@ -10,13 +10,34 @@ interface IStatusTypeIcon {
 }
 
 const messages: Record<string, MessageDescriptor> = defineMessages({
-  direct: { id: 'status.visibility.direct', defaultMessage: 'The post is only visible to mentioned users' },
-  private: { id: 'status.visibility.private', defaultMessage: 'The post is only visible to followers of the author' },
-  mutuals_only: { id: 'status.visibility.mutuals_only', defaultMessage: 'The post is only visible to people who mutually follow the author' },
-  local: { id: 'status.visibility.local', defaultMessage: 'The post is only visible to users on your instance' },
-  list: { id: 'status.visibility.list', defaultMessage: 'The post is only visible to the members of a list' },
-  list_named: { id: 'status.visibility.list.named', defaultMessage: 'The post is only visible to the members of a {name} list' },
-  subscribers: { id: 'status.visibility.subscribers', defaultMessage: 'The post is only visible to users subscribing the author' },
+  direct: {
+    id: 'status.visibility.direct',
+    defaultMessage: 'The post is only visible to mentioned users',
+  },
+  private: {
+    id: 'status.visibility.private',
+    defaultMessage: 'The post is only visible to followers of the author',
+  },
+  mutuals_only: {
+    id: 'status.visibility.mutuals_only',
+    defaultMessage: 'The post is only visible to people who mutually follow the author',
+  },
+  local: {
+    id: 'status.visibility.local',
+    defaultMessage: 'The post is only visible to users on your instance',
+  },
+  list: {
+    id: 'status.visibility.list',
+    defaultMessage: 'The post is only visible to the members of a list',
+  },
+  list_named: {
+    id: 'status.visibility.list.named',
+    defaultMessage: 'The post is only visible to the members of a {name} list',
+  },
+  subscribers: {
+    id: 'status.visibility.subscribers',
+    defaultMessage: 'The post is only visible to users subscribing the author',
+  },
 });
 
 const STATUS_TYPE_ICONS: Record<string, string> = {
@@ -40,7 +61,11 @@ const StatusTypeIcon: React.FC<IStatusTypeIcon> = React.memo(({ visibility }) =>
     <>
       <span className='⁂-separator' />
 
-      <Icon title={message ? intl.formatMessage(message) : undefined} className='size-4 text-gray-700 dark:text-gray-600' src={icon} />
+      <Icon
+        title={message ? intl.formatMessage(message) : undefined}
+        className='size-4 text-gray-700 dark:text-gray-600'
+        src={icon}
+      />
     </>
   );
 });

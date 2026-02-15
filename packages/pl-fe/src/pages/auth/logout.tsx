@@ -12,7 +12,7 @@ const LogoutPage: React.FC = () => {
 
   useEffect(() => {
     dispatch(logOut() as any)
-      .then(() =>{
+      .then(() => {
         setDone(true);
       })
       .catch(console.warn);

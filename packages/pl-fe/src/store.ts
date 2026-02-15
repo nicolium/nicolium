@@ -7,11 +7,7 @@ import appReducer from './reducers';
 
 const store = configureStore({
   reducer: appReducer,
-  middleware: () => new Tuple(
-    thunk,
-    errorsMiddleware(),
-    soundsMiddleware(),
-  ),
+  middleware: () => new Tuple(thunk, errorsMiddleware(), soundsMiddleware()),
   devTools: true,
 });
 
@@ -22,9 +18,4 @@ type Store = typeof store;
 type RootState = ReturnType<typeof store.getState>;
 type AppDispatch = ThunkDispatch<RootState, {}, AnyAction>;
 
-export {
-  store,
-  type Store,
-  type RootState,
-  type AppDispatch,
-};
+export { store, type Store, type RootState, type AppDispatch };

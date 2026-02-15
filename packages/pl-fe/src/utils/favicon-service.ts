@@ -38,7 +38,7 @@ const createFaviconService = () => {
     if (!hasCanvasExtractPermission) return;
 
     const nodes: NodeListOf<HTMLLinkElement> = document.querySelectorAll('link[rel="icon"]');
-    nodes.forEach(favicon => {
+    nodes.forEach((favicon) => {
       if (favicon) {
         const favcanvas = document.createElement('canvas');
         favcanvas.width = faviconWidth;
@@ -62,7 +62,17 @@ const createFaviconService = () => {
       if (!favimg || !favcontext || !favicon) return;
       favcontext.clearRect(0, 0, faviconWidth, faviconHeight);
       if (isImageLoaded(favimg)) {
-        favcontext.drawImage(favimg, 0, 0, favimg.width, favimg.height, 0, 0, faviconWidth, faviconHeight);
+        favcontext.drawImage(
+          favimg,
+          0,
+          0,
+          favimg.width,
+          favimg.height,
+          0,
+          0,
+          faviconWidth,
+          faviconHeight,
+        );
       }
       favicon.href = favcanvas.toDataURL('image/png');
     });
@@ -79,7 +89,17 @@ const createFaviconService = () => {
       const badgeColor = style.getPropertyValue('--badge-notification') || 'rgb(255, 0, 0)';
 
       if (isImageLoaded(favimg)) {
-        favcontext.drawImage(favimg, 0, 0, favimg.width, favimg.height, 0, 0, faviconWidth, faviconHeight);
+        favcontext.drawImage(
+          favimg,
+          0,
+          0,
+          favimg.width,
+          favimg.height,
+          0,
+          0,
+          faviconWidth,
+          faviconHeight,
+        );
       }
       favcontext.fillStyle = badgeColor;
       favcontext.beginPath();

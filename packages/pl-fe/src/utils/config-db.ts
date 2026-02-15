@@ -8,13 +8,8 @@ import type { PleromaConfig } from 'pl-api';
 type Policy = Record<string, any>;
 type Config = PleromaConfig['configs'][0];
 
-const find = (
-  configs: PleromaConfig['configs'],
-  group: string,
-  key: string,
-): Config | undefined => configs.find(config =>
-  config.group === group && config.key === key,
-);
+const find = (configs: PleromaConfig['configs'], group: string, key: string): Config | undefined =>
+  configs.find((config) => config.group === group && config.key === key);
 
 const toSimplePolicy = (configs: PleromaConfig['configs']): Partial<MRFSimple> => {
   const config = find(configs, ':pleroma', ':mrf_simple');
@@ -36,7 +31,9 @@ const toSimplePolicy = (configs: PleromaConfig['configs']): Partial<MRFSimple> =
 };
 
 const fromSimplePolicy = (simplePolicy: Policy) => {
-  const mapper = ([key, hosts]: [key: string, hosts: Array<[string, string]>]) => ({ tuple: [`:${key}`, hosts.map(host => ({ tuple: host }))] });
+  const mapper = ([key, hosts]: [key: string, hosts: Array<[string, string]>]) => ({
+    tuple: [`:${key}`, hosts.map((host) => ({ tuple: host }))],
+  });
 
   const value = Object.entries(simplePolicy).map(mapper);
 

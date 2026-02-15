@@ -21,7 +21,7 @@ const IconPickerMenu: React.FC<IIconPickerMenu> = ({ icons, onPick, style }) => 
     if (!c) return;
 
     // Nice and dirty hack to display the icons
-    c.querySelectorAll('button.emoji-mart-emoji > img').forEach(elem => {
+    c.querySelectorAll('button.emoji-mart-emoji > img').forEach((elem) => {
       const newIcon = document.createElement('span');
       newIcon.innerHTML = `<i class="fa fa-${(elem.parentNode as any).getAttribute('title')} fa-hack"></i>`;
       (elem.parentNode as any).replaceChild(newIcon, elem);
@@ -41,7 +41,7 @@ const IconPickerMenu: React.FC<IIconPickerMenu> = ({ icons, onPick, style }) => 
           className='flex items-center justify-center rounded-full p-1.5 hover:bg-gray-50 dark:hover:bg-primary-800'
           aria-label={name}
           title={name}
-          onClick={() =>{
+          onClick={() => {
             handleClick(name);
           }}
         >
@@ -59,9 +59,13 @@ const IconPickerMenu: React.FC<IIconPickerMenu> = ({ icons, onPick, style }) => 
       aria-label={title}
       ref={setRef}
     >
-      <Text className='px-1.5 py-1'><FormattedMessage id='icon_button.icons' defaultMessage='Icons' /></Text>
+      <Text className='px-1.5 py-1'>
+        <FormattedMessage id='icon_button.icons' defaultMessage='Icons' />
+      </Text>
       <ul className='grid grid-cols-8'>
-        {Object.values(icons).flat().map(icon => renderIcon(icon))}
+        {Object.values(icons)
+          .flat()
+          .map((icon) => renderIcon(icon))}
       </ul>
     </div>
   );

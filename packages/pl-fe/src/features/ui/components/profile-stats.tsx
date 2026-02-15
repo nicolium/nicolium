@@ -10,7 +10,12 @@ import { shortNumberFormat } from '@/utils/numbers';
 import type { Account } from 'pl-api';
 
 interface IProfileStats {
-  account: Pick<Account, 'acct' | 'followers_count' | 'following_count' | 'statuses_count' | 'subscribers_count'> | undefined;
+  account:
+    | Pick<
+        Account,
+        'acct' | 'followers_count' | 'following_count' | 'statuses_count' | 'subscribers_count'
+      >
+    | undefined;
   onClickHandler?: React.MouseEventHandler;
 }
 
@@ -36,7 +41,13 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
         </HStack>
       )}
 
-      <Link to='/@{$username}/followers' params={{ username: account.acct }} onClick={onClickHandler} title={intl.formatNumber(account.followers_count)} className='hover:underline'>
+      <Link
+        to='/@{$username}/followers'
+        params={{ username: account.acct }}
+        onClick={onClickHandler}
+        title={intl.formatNumber(account.followers_count)}
+        className='hover:underline'
+      >
         <HStack alignItems='center' space={1}>
           {!demetricator && (
             <Text theme='primary' weight='bold' size='sm'>
@@ -49,7 +60,13 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
         </HStack>
       </Link>
 
-      <Link to='/@{$username}/following' params={{ username: account.acct }} onClick={onClickHandler} title={intl.formatNumber(account.following_count)} className='hover:underline'>
+      <Link
+        to='/@{$username}/following'
+        params={{ username: account.acct }}
+        onClick={onClickHandler}
+        title={intl.formatNumber(account.following_count)}
+        className='hover:underline'
+      >
         <HStack alignItems='center' space={1}>
           {!demetricator && (
             <Text theme='primary' weight='bold' size='sm'>

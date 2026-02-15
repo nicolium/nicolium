@@ -7,10 +7,10 @@ const useLoading = (initialState: boolean = false) => {
     setIsLoading(true);
 
     promise
-      .then(() =>{
+      .then(() => {
         setIsLoading(false);
       })
-      .catch(() =>{
+      .catch(() => {
         setIsLoading(false);
       });
 

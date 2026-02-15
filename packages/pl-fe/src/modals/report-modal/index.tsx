@@ -23,7 +23,10 @@ import ReasonStep from './steps/reason-step';
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
-  blankslate: { id: 'report.reason.blankslate', defaultMessage: 'You have removed all statuses from being selected.' },
+  blankslate: {
+    id: 'report.reason.blankslate',
+    defaultMessage: 'You have removed all statuses from being selected.',
+  },
   done: { id: 'report.done', defaultMessage: 'Done' },
   next: { id: 'report.next', defaultMessage: 'Next' },
   submit: { id: 'report.submit', defaultMessage: 'Submit' },
@@ -62,9 +65,7 @@ const SelectedStatus = ({ statusId }: { statusId: string }) => {
 
       <StatusContent status={status} />
 
-      {status.media_attachments.length > 0 && (
-        <AttachmentThumbs status={status} />
-      )}
+      {status.media_attachments.length > 0 && <AttachmentThumbs status={status} />}
     </Stack>
   );
 };
@@ -75,7 +76,12 @@ interface ReportModalProps {
   statusIds: Array<string>;
 }
 
-const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({ onClose, accountId, entityType, statusIds }) => {
+const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
+  onClose,
+  accountId,
+  entityType,
+  statusIds,
+}) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
@@ -185,7 +191,11 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({ onClose, acc
   };
 
   const renderTitle = () => (
-    <FormattedMessage id='report.target' defaultMessage='Reporting {target}' values={{ target: <strong>@{account?.acct}</strong> }} />
+    <FormattedMessage
+      id='report.target'
+      defaultMessage='Reporting {target}'
+      values={{ target: <strong>@{account?.acct}</strong> }}
+    />
   );
 
   const isConfirmationButtonDisabled = useMemo(() => {
@@ -193,8 +203,19 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({ onClose, acc
       return false;
     }
 
-    return isSubmitting || (shouldRequireRule && ruleIds.length === 0) || (isReportingStatus && selectedStatusIds.length === 0);
-  }, [currentStep, isSubmitting, shouldRequireRule, ruleIds.length, selectedStatusIds.length, isReportingStatus]);
+    return (
+      isSubmitting ||
+      (shouldRequireRule && ruleIds.length === 0) ||
+      (isReportingStatus && selectedStatusIds.length === 0)
+    );
+  }, [
+    currentStep,
+    isSubmitting,
+    shouldRequireRule,
+    ruleIds.length,
+    selectedStatusIds.length,
+    isReportingStatus,
+  ]);
 
   const calculateProgress = useCallback(() => {
     switch (currentStep) {
@@ -235,7 +256,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({ onClose, acc
       <Stack space={4}>
         <ProgressBar progress={calculateProgress()} />
 
-        {(currentStep !== Steps.THREE && !isReportingAccount) && renderSelectedEntity()}
+        {currentStep !== Steps.THREE && !isReportingAccount && renderSelectedEntity()}
 
         {StepToRender && (
           <StepToRender

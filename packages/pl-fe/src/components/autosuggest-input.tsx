@@ -17,12 +17,19 @@ import type { Location } from 'pl-api';
 
 type AutoSuggestion = string | Emoji | Location;
 
-interface IAutosuggestInput extends Pick<React.HTMLAttributes<HTMLInputElement>, 'lang' | 'onChange' | 'onKeyUp' | 'onKeyDown'> {
+interface IAutosuggestInput extends Pick<
+  React.HTMLAttributes<HTMLInputElement>,
+  'lang' | 'onChange' | 'onKeyUp' | 'onKeyDown'
+> {
   value: string;
   suggestions: Array<AutoSuggestion>;
   disabled?: boolean;
   placeholder?: string;
-  onSuggestionSelected: (tokenStart: number, lastToken: string | null, suggestion: AutoSuggestion) => void;
+  onSuggestionSelected: (
+    tokenStart: number,
+    lastToken: string | null,
+    suggestion: AutoSuggestion,
+  ) => void;
   onSuggestionsClearRequested: () => void;
   onSuggestionsFetchRequested: (token: string) => void;
   autoFocus?: boolean;
@@ -42,7 +49,7 @@ const AutosuggestInput: React.FC<IAutosuggestInput> = ({
   searchTokens = ['@', ':', '#'],
   ...props
 }) => {
-  const getFirstIndex = () => autoSelect ? 0 : -1;
+  const getFirstIndex = () => (autoSelect ? 0 : -1);
 
   const [suggestionsHidden, setSuggestionsHidden] = useState(true);
   const [focused, setFocused] = useState(false);
@@ -104,7 +111,9 @@ const AutosuggestInput: React.FC<IAutosuggestInput> = ({
       case 'ArrowDown':
         if (!suggestionsHidden && (suggestions.length > 0 || menu)) {
           e.preventDefault();
-          setSelectedSuggestion((selectedSuggestion) => Math.min(selectedSuggestion + 1, lastIndex));
+          setSelectedSuggestion((selectedSuggestion) =>
+            Math.min(selectedSuggestion + 1, lastIndex),
+          );
         }
 
         break;
@@ -196,17 +205,22 @@ const AutosuggestInput: React.FC<IAutosuggestInput> = ({
     );
   };
 
-  const handleMenuItemAction = (item: MenuItem | null, e: React.MouseEvent | React.KeyboardEvent) => {
+  const handleMenuItemAction = (
+    item: MenuItem | null,
+    e: React.MouseEvent | React.KeyboardEvent,
+  ) => {
     onBlur();
     if (item?.action) {
       item.action(e);
     }
   };
 
-  const handleMenuItemClick = (item: MenuItem | null): React.MouseEventHandler => e => {
-    e.preventDefault();
-    handleMenuItemAction(item, e);
-  };
+  const handleMenuItemClick =
+    (item: MenuItem | null): React.MouseEventHandler =>
+    (e) => {
+      e.preventDefault();
+      handleMenuItemAction(item, e);
+    };
 
   const renderMenu = () => {
     const { menu } = props;
@@ -224,9 +238,7 @@ const AutosuggestInput: React.FC<IAutosuggestInput> = ({
         onMouseDown={handleMenuItemClick(item)}
         key={i}
       >
-        {item?.icon && (
-          <Icon src={item.icon} />
-        )}
+        {item?.icon && <Icon src={item.icon} />}
 
         <span>{item?.text}</span>
       </a>

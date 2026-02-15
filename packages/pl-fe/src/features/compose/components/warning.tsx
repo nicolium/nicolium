@@ -24,21 +24,19 @@ const Warning: React.FC<IWarning> = ({ message, animated: animate }) => {
     immediate: !animate || reduceMotion,
   });
 
-  const className = 'rounded border border-solid border-gray-400 bg-transparent px-2.5 py-2 text-xs text-gray-900 dark:border-gray-800 dark:text-white';
+  const className =
+    'rounded border border-solid border-gray-400 bg-transparent px-2.5 py-2 text-xs text-gray-900 dark:border-gray-800 dark:text-white';
 
   if (!message) return null;
 
-  if (animate) return (
-    <animated.div className={className} style={styles}>
-      {message}
-    </animated.div>
-  );
+  if (animate)
+    return (
+      <animated.div className={className} style={styles}>
+        {message}
+      </animated.div>
+    );
 
-  return (
-    <div className={className}>
-      {message}
-    </div>
-  );
+  return <div className={className}>{message}</div>;
 };
 
 export { Warning as default };

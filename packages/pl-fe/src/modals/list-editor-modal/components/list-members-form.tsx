@@ -4,7 +4,11 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import { useAddAccountsToList, useListAccounts, useRemoveAccountsFromList } from '@/queries/accounts/use-lists';
+import {
+  useAddAccountsToList,
+  useListAccounts,
+  useRemoveAccountsFromList,
+} from '@/queries/accounts/use-lists';
 import { useAccountSearch } from '@/queries/search/use-search-accounts';
 
 import Account from './account';
@@ -25,15 +29,18 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
   const [searchValue, setSearchValue] = useState('');
 
   const { data: accountIds = [] } = useListAccounts(listId);
-  const { data: searchAccountIds = [] } = useAccountSearch(searchValue, { following: true, limit: 5 });
+  const { data: searchAccountIds = [] } = useAccountSearch(searchValue, {
+    following: true,
+    limit: 5,
+  });
 
   const { mutate: addToList } = useAddAccountsToList(listId);
   const { mutate: removeFromList } = useRemoveAccountsFromList(listId);
 
-  const onAdd = (accountId: string) =>{
+  const onAdd = (accountId: string) => {
     addToList([accountId]);
   };
-  const onRemove = (accountId: string) =>{
+  const onRemove = (accountId: string) => {
     removeFromList([accountId]);
   };
 
@@ -45,12 +52,23 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
             <CardTitle title={intl.formatMessage(messages.removeFromList)} />
           </CardHeader>
           <div className='max-h-48 overflow-y-auto'>
-            {accountIds.map(accountId => <Account key={accountId} accountId={accountId} added={accountIds.includes(accountId)} onAdd={onAdd} onRemove={onRemove} />)}
+            {accountIds.map((accountId) => (
+              <Account
+                key={accountId}
+                accountId={accountId}
+                added={accountIds.includes(accountId)}
+                onAdd={onAdd}
+                onRemove={onRemove}
+              />
+            ))}
           </div>
         </div>
       ) : (
         <Text theme='muted' size='sm'>
-          <FormattedMessage id='empty_column.list_members' defaultMessage='There are no members in this list. Use search to find users to add.' />
+          <FormattedMessage
+            id='empty_column.list_members'
+            defaultMessage='There are no members in this list. Use search to find users to add.'
+          />
         </Text>
       )}
 
@@ -60,7 +78,15 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
         </CardHeader>
         <Search value={searchValue} onSubmit={setSearchValue} />
         <div className='max-h-48 overflow-y-auto'>
-          {searchAccountIds.map(accountId => <Account key={accountId} accountId={accountId} added={accountIds.includes(accountId)} onAdd={onAdd} onRemove={onRemove} />)}
+          {searchAccountIds.map((accountId) => (
+            <Account
+              key={accountId}
+              accountId={accountId}
+              added={accountIds.includes(accountId)}
+              onAdd={onAdd}
+              onRemove={onRemove}
+            />
+          ))}
         </div>
       </div>
     </Stack>

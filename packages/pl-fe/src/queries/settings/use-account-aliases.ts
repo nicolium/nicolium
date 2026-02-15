@@ -7,8 +7,14 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import toast from '@/toast';
 
 const messages = defineMessages({
-  createSuccess: { id: 'aliases.success.add', defaultMessage: 'Account alias created successfully' },
-  removeSuccess: { id: 'aliases.success.remove', defaultMessage: 'Account alias removed successfully' },
+  createSuccess: {
+    id: 'aliases.success.add',
+    defaultMessage: 'Account alias created successfully',
+  },
+  removeSuccess: {
+    id: 'aliases.success.remove',
+    defaultMessage: 'Account alias removed successfully',
+  },
 });
 
 const useAccountAliases = () => {
@@ -32,12 +38,13 @@ const useAddAccountAlias = () => {
   return useMutation({
     mutationKey: ['settings', 'accountAliases'],
     mutationFn: (acct: string) => client.settings.addAccountAlias(acct),
-    onSuccess: () =>{
+    onSuccess: () => {
       toast.success(messages.createSuccess);
     },
-    onSettled: () => queryClient.invalidateQueries({
-      queryKey: ['settings', 'accountAliases'],
-    }),
+    onSettled: () =>
+      queryClient.invalidateQueries({
+        queryKey: ['settings', 'accountAliases'],
+      }),
   });
 };
 
@@ -48,12 +55,13 @@ const useDeleteAccountAlias = () => {
   return useMutation({
     mutationKey: ['settings', 'accountAliases'],
     mutationFn: (acct: string) => client.settings.deleteAccountAlias(acct),
-    onSuccess: () =>{
+    onSuccess: () => {
       toast.success(messages.removeSuccess);
     },
-    onSettled: () => queryClient.invalidateQueries({
-      queryKey: ['settings', 'accountAliases'],
-    }),
+    onSettled: () =>
+      queryClient.invalidateQueries({
+        queryKey: ['settings', 'accountAliases'],
+      }),
   });
 };
 

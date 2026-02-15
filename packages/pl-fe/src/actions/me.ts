@@ -19,9 +19,10 @@ const ME_FETCH_SKIP = 'ME_FETCH_SKIP' as const;
 
 const ME_PATCH_SUCCESS = 'ME_PATCH_SUCCESS' as const;
 
-const noOp = () => new Promise(f =>{
-  f(undefined);
-});
+const noOp = () =>
+  new Promise((f) => {
+    f(undefined);
+  });
 
 const getMeId = (state: RootState) => state.me ?? getAuthUserId(state);
 
@@ -42,30 +43,31 @@ interface MeFetchSkipAction {
   type: typeof ME_FETCH_SKIP;
 }
 
-const fetchMe = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const token = getMeToken(state);
-    const accountUrl = getMeUrl(state);
+const fetchMe = () => (dispatch: AppDispatch, getState: () => RootState) => {
+  const state = getState();
+  const token = getMeToken(state);
+  const accountUrl = getMeUrl(state);
 
-    if (!token) {
-      dispatch<MeFetchSkipAction>({ type: ME_FETCH_SKIP });
-      return noOp();
-    }
+  if (!token) {
+    dispatch<MeFetchSkipAction>({ type: ME_FETCH_SKIP });
+    return noOp();
+  }
 
-    return dispatch(loadCredentials(token, accountUrl!))
-      .catch(error => dispatch(fetchMeFail(error)));
-  };
+  return dispatch(loadCredentials(token, accountUrl!)).catch((error) =>
+    dispatch(fetchMeFail(error)),
+  );
+};
 
 /** Update the auth account in IndexedDB for Mastodon, etc. */
 const persistAuthAccount = (account: CredentialAccount, params: Record<string, any>) => {
   if (account && account.url) {
     const key = `authAccount:${account.url}`;
-    KVStore.getItem(key).then((oldAccount: any) => {
-      const settings = oldAccount?.settings_store ?? {};
-      account.settings_store ??= settings;
-      KVStore.setItem(key, account);
-    })
+    KVStore.getItem(key)
+      .then((oldAccount: any) => {
+        const settings = oldAccount?.settings_store ?? {};
+        account.settings_store ??= settings;
+        KVStore.setItem(key, account);
+      })
       .catch(console.error);
   }
   if (account && account.url) {
@@ -74,10 +76,11 @@ const persistAuthAccount = (account: CredentialAccount, params: Record<string, a
   }
 };
 
-const patchMe = (params: UpdateCredentialsParams) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).settings.updateCredentials(params)
-      .then(response => {
+const patchMe =
+  (params: UpdateCredentialsParams) => (dispatch: AppDispatch, getState: () => RootState) =>
+    getClient(getState)
+      .settings.updateCredentials(params)
+      .then((response) => {
         persistAuthAccount(response, params);
         dispatch(patchMeSuccess(response));
       });
@@ -104,20 +107,19 @@ interface MePatchSuccessAction {
   me: CredentialAccount;
 }
 
-const patchMeSuccess = (me: CredentialAccount) =>
-  (dispatch: AppDispatch) => {
-    dispatch(importEntities({ accounts: [me] }));
-    dispatch<MePatchSuccessAction>({
-      type: ME_PATCH_SUCCESS,
-      me,
-    });
-  };
+const patchMeSuccess = (me: CredentialAccount) => (dispatch: AppDispatch) => {
+  dispatch(importEntities({ accounts: [me] }));
+  dispatch<MePatchSuccessAction>({
+    type: ME_PATCH_SUCCESS,
+    me,
+  });
+};
 
 type MeAction =
   | ReturnType<typeof fetchMeSuccess>
   | ReturnType<typeof fetchMeFail>
   | MeFetchSkipAction
-  | MePatchSuccessAction
+  | MePatchSuccessAction;
 
 export {
   ME_FETCH_SUCCESS,

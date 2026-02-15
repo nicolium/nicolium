@@ -9,14 +9,18 @@ import type { AdminModerationLogEntry } from 'pl-api';
 const useModerationLog = () => {
   const client = useClient();
 
-  const getModerationLog = (pageParam?: Pick<PaginatedResponse<AdminModerationLogEntry>, 'next'>): Promise<PaginatedResponse<AdminModerationLogEntry>> =>
+  const getModerationLog = (
+    pageParam?: Pick<PaginatedResponse<AdminModerationLogEntry>, 'next'>,
+  ): Promise<PaginatedResponse<AdminModerationLogEntry>> =>
     (pageParam?.next ?? client.admin.moderationLog.getModerationLog)();
 
   const queryInfo = useInfiniteQuery({
     queryKey: ['admin', 'moderation_log'],
     queryFn: ({ pageParam }) => getModerationLog(pageParam),
-    initialPageParam: { next: null as (() => Promise<PaginatedResponse<AdminModerationLogEntry>>) | null },
-    getNextPageParam: (config) => config.next ? config : undefined,
+    initialPageParam: {
+      next: null as (() => Promise<PaginatedResponse<AdminModerationLogEntry>>) | null,
+    },
+    getNextPageParam: (config) => (config.next ? config : undefined),
   });
 
   const data = flattenPages(queryInfo.data) ?? [];

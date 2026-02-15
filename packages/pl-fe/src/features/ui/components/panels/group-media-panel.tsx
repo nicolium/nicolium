@@ -48,12 +48,11 @@ const GroupMediaPanel: React.FC<IGroupMediaPanel> = ({ group }) => {
   };
 
   return (
-    <Widget className='⁂-media-panel' title={<FormattedMessage id='media_panel.title' defaultMessage='Media' />}>
-      {isLoading ? (
-        <Spinner />
-      ) : (
-        renderAttachments()
-      )}
+    <Widget
+      className='⁂-media-panel'
+      title={<FormattedMessage id='media_panel.title' defaultMessage='Media' />}
+    >
+      {isLoading ? <Spinner /> : renderAttachments()}
     </Widget>
   );
 };

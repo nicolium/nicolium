@@ -14,8 +14,9 @@ interface IUploadButton {
 const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
   const fileElement = useRef<HTMLInputElement>(null);
 
-  const attachmentTypes = useAppSelector(state => state.instance.configuration.media_attachments.supported_mime_types)
-    ?.filter((type) => type.startsWith('image/'));
+  const attachmentTypes = useAppSelector(
+    (state) => state.instance.configuration.media_attachments.supported_mime_types,
+  )?.filter((type) => type.startsWith('image/'));
 
   let accept = attachmentTypes?.join(',');
   if (accept === 'application/octet-stream') accept = undefined;
@@ -31,7 +32,13 @@ const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
   };
 
   return (
-    <HStack className='size-full cursor-pointer text-primary-500 dark:text-primary-400' space={3} alignItems='center' justifyContent='center' element='label'>
+    <HStack
+      className='size-full cursor-pointer text-primary-500 dark:text-primary-400'
+      space={3}
+      alignItems='center'
+      justifyContent='center'
+      element='label'
+    >
       <Icon
         src={require('@phosphor-icons/core/regular/upload.svg')}
         className='size-7'

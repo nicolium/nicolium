@@ -13,13 +13,9 @@ const Select = React.forwardRef<HTMLSelectElement, ISelect>((props, ref) => {
   return (
     <select
       ref={ref}
-      className={clsx(
-        '⁂-select',
-        className,
-        {
-          'w-full': full,
-        },
-      )}
+      className={clsx('⁂-select', className, {
+        'w-full': full,
+      })}
       {...filteredProps}
     >
       {children}

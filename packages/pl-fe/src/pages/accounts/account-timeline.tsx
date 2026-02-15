@@ -31,22 +31,29 @@ const AccountTimelinePage: React.FC = () => {
 
   const path = withReplies ? `${account?.id}:with_replies` : account?.id;
   const showPins = settings.account_timeline.shows.pinned && !withReplies;
-  const statusIds = useAppSelector(state => getStatusIds(state, { type: `account:${path}`, prefix: 'account_timeline' }));
-  const featuredStatusIds = useAppSelector(state => getStatusIds(state, { type: `account:${account?.id}:with_replies:pinned`, prefix: 'account_timeline' }));
+  const statusIds = useAppSelector((state) =>
+    getStatusIds(state, { type: `account:${path}`, prefix: 'account_timeline' }),
+  );
+  const featuredStatusIds = useAppSelector((state) =>
+    getStatusIds(state, {
+      type: `account:${account?.id}:with_replies:pinned`,
+      prefix: 'account_timeline',
+    }),
+  );
 
   const isBlocked = account?.relationship?.blocked_by;
   const unavailable = isBlocked && !features.blockersVisible;
-  const isLoading = useAppSelector(state =>  state.timelines[`account:${path}`]?.isLoading);
-  const hasMore = useAppSelector(state =>  state.timelines[`account:${path}`]?.hasMore);
+  const isLoading = useAppSelector((state) => state.timelines[`account:${path}`]?.isLoading);
+  const hasMore = useAppSelector((state) => state.timelines[`account:${path}`]?.hasMore);
 
   const accountUsername = account?.username ?? username;
 
   useEffect(() => {
     dispatch(fetchAccountByUsername(username))
-      .then(() =>{
+      .then(() => {
         setAccountLoading(false);
       })
-      .catch(() =>{
+      .catch(() => {
         setAccountLoading(false);
       });
   }, [username]);
@@ -79,9 +86,16 @@ const AccountTimelinePage: React.FC = () => {
         <CardBody>
           <Text align='center'>
             {isBlocked ? (
-              <FormattedMessage id='empty_column.account_blocked' defaultMessage='You are blocked by @{accountUsername}.' values={{ accountUsername }} />
+              <FormattedMessage
+                id='empty_column.account_blocked'
+                defaultMessage='You are blocked by @{accountUsername}.'
+                values={{ accountUsername }}
+              />
             ) : (
-              <FormattedMessage id='empty_column.account_unavailable' defaultMessage='Profile unavailable' />
+              <FormattedMessage
+                id='empty_column.account_unavailable'
+                defaultMessage='Profile unavailable'
+              />
             )}
           </Text>
         </CardBody>
@@ -97,7 +111,9 @@ const AccountTimelinePage: React.FC = () => {
       isLoading={isLoading}
       hasMore={hasMore}
       onLoadMore={handleLoadMore}
-      emptyMessageText={<FormattedMessage id='empty_column.account_timeline' defaultMessage='No posts here!' />}
+      emptyMessageText={
+        <FormattedMessage id='empty_column.account_timeline' defaultMessage='No posts here!' />
+      }
     />
   );
 };

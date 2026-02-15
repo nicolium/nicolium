@@ -1,6 +1,17 @@
-import { InfiniteData, keepPreviousData, useInfiniteQuery, useMutation, useQuery } from '@tanstack/react-query';
+import {
+  InfiniteData,
+  keepPreviousData,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+} from '@tanstack/react-query';
 import sumBy from 'lodash/sumBy';
-import { type Chat, type ChatMessage as BaseChatMessage, type PaginatedResponse, chatMessageSchema } from 'pl-api';
+import {
+  type Chat,
+  type ChatMessage as BaseChatMessage,
+  type PaginatedResponse,
+  chatMessageSchema,
+} from 'pl-api';
 import * as v from 'valibot';
 
 import { importEntities } from '@/actions/importer';
@@ -28,8 +39,13 @@ const useChatMessages = (chat: Chat) => {
   const client = useClient();
   const isBlocked = !!useRelationshipQuery(chat?.account.id).data?.blocked_by;
 
-  const getChatMessages = async (chatId: string, pageParam?: Pick<PaginatedResponse<BaseChatMessage>, 'next'>) => {
-    const response = await (pageParam?.next ? pageParam.next() : client.chats.getChatMessages(chatId));
+  const getChatMessages = async (
+    chatId: string,
+    pageParam?: Pick<PaginatedResponse<BaseChatMessage>, 'next'>,
+  ) => {
+    const response = await (pageParam?.next
+      ? pageParam.next()
+      : client.chats.getChatMessages(chatId));
 
     return {
       ...response,
@@ -44,7 +60,7 @@ const useChatMessages = (chat: Chat) => {
     gcTime: 0,
     staleTime: 0,
     initialPageParam: { next: null as (() => Promise<PaginatedResponse<BaseChatMessage>>) | null },
-    getNextPageParam: (config) => config.next ? config : undefined,
+    getNextPageParam: (config) => (config.next ? config : undefined),
   });
 
   const data = flattenPages<ChatMessage>(queryInfo.data as any)?.toReversed();
@@ -62,7 +78,9 @@ const useChats = () => {
   const { setUnreadChatsCount } = useStatContext();
   const { me } = useLoggedIn();
 
-  const getChats = async (pageParam?: Pick<PaginatedResponse<Chat>, 'next'>): Promise<PaginatedResponse<Chat>> => {
+  const getChats = async (
+    pageParam?: Pick<PaginatedResponse<Chat>, 'next'>,
+  ): Promise<PaginatedResponse<Chat>> => {
     const response = await (pageParam?.next ?? client.chats.getChats)();
     const { items } = response;
 
@@ -82,7 +100,7 @@ const useChats = () => {
     placeholderData: keepPreviousData,
     enabled: features.chats && !!me,
     initialPageParam: { next: null as (() => Promise<PaginatedResponse<Chat>>) | null },
-    getNextPageParam: (config) => config.next ? config : undefined,
+    getNextPageParam: (config) => (config.next ? config : undefined),
   });
 
   const data = flattenPages(queryInfo.data);
@@ -92,8 +110,7 @@ const useChats = () => {
     data,
   };
 
-  const getOrCreateChatByAccountId = (accountId: string) =>
-    client.chats.createChat(accountId);
+  const getOrCreateChatByAccountId = (accountId: string) => client.chats.createChat(accountId);
 
   return { chatsQuery, getOrCreateChatByAccountId };
 };
@@ -129,7 +146,10 @@ const useMarkChatAsRead = (chatId: string) => {
     mutationFn: (lastReadId: string) => client.chats.markChatAsRead(chatId, lastReadId),
     onSuccess: (data) => {
       updatePageItem(['chats', 'search'], data, (o, n) => o.id === n.id);
-      const queryData = queryClient.getQueryData<InfiniteData<PaginatedResponse<unknown>>>(['chats', 'search']);
+      const queryData = queryClient.getQueryData<InfiniteData<PaginatedResponse<unknown>>>([
+        'chats',
+        'search',
+      ]);
 
       if (queryData) {
         const flattenedQueryData: any = flattenPages(queryData)?.map((chat: any) => {
@@ -151,8 +171,15 @@ const useCreateChatMessage = (chatId: string) => {
   const { chat } = useChatContext();
 
   return useMutation({
-    mutationFn: ({ chatId, content, mediaId }: { chatId: string; content: string; mediaId?: string }) =>
-      client.chats.createChatMessage(chatId, { content, media_id: mediaId }),
+    mutationFn: ({
+      chatId,
+      content,
+      mediaId,
+    }: {
+      chatId: string;
+      content: string;
+      mediaId?: string;
+    }) => client.chats.createChatMessage(chatId, { content, media_id: mediaId }),
     retry: false,
     onMutate: async (variables) => {
       // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
@@ -242,4 +269,13 @@ const useDeleteChatMessage = (chatId: string) => {
   });
 };
 
-export { ChatKeys, useChat, useMarkChatAsRead, useCreateChatMessage, useDeleteChat, useDeleteChatMessage, useChats, useChatMessages };
+export {
+  ChatKeys,
+  useChat,
+  useMarkChatAsRead,
+  useCreateChatMessage,
+  useDeleteChat,
+  useDeleteChatMessage,
+  useChats,
+  useChatMessages,
+};

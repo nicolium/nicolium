@@ -16,7 +16,13 @@ const Helmet = React.lazy(() => import('@/components/helmet'));
 const PlFeHead = () => {
   const locale = useLocale();
   const direction = useLocaleDirection(locale);
-  const { reduceMotion, underlineLinks, demetricator, systemFont, theme: themeSettings } = useSettings();
+  const {
+    reduceMotion,
+    underlineLinks,
+    demetricator,
+    systemFont,
+    theme: themeSettings,
+  } = useSettings();
   const frontendConfig = useFrontendConfig();
   const theme = useTheme();
 
@@ -28,7 +34,7 @@ const PlFeHead = () => {
   const bodyClass = clsx({
     'no-reduce-motion': !reduceMotion,
     'underline-links': underlineLinks,
-    'demetricator': demetricator,
+    demetricator: demetricator,
     'system-font': systemFont,
     'with-modals': withModals,
   });
@@ -45,8 +51,8 @@ const PlFeHead = () => {
         <html
           lang={locale}
           className={clsx(`text-${themeSettings?.interfaceSize ?? 'md'}`, {
-            'dark': theme === 'dark',
-            'dark black': theme === 'black',
+            dark: theme === 'dark',
+            'black dark': theme === 'black',
           })}
         />
         <body className={bodyClass} dir={direction} />

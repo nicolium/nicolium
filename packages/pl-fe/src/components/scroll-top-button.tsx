@@ -38,7 +38,8 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   const visible = count > 0 && (!autoloadTimelines || scrolled);
 
   /** Number of pixels scrolled down from the top of the page. */
-  const getScrollTop = (): number => (document.scrollingElement ?? document.documentElement).scrollTop;
+  const getScrollTop = (): number =>
+    (document.scrollingElement ?? document.documentElement).scrollTop;
 
   /** Unload feed items if scrolled to the top. */
   const maybeUnload = useCallback(() => {
@@ -48,12 +49,19 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   }, [autoloadTimelines, scrolledTop, count, onClick]);
 
   /** Set state while scrolling. */
-  const handleScroll = useCallback(throttle(() => {
-    const scrollTop = getScrollTop();
+  const handleScroll = useCallback(
+    throttle(
+      () => {
+        const scrollTop = getScrollTop();
 
-    setScrolled(scrollTop > threshold);
-    setScrolledTop(scrollTop <= autoloadThreshold);
-  }, 40, { trailing: true }), [threshold, autoloadThreshold]);
+        setScrolled(scrollTop > threshold);
+        setScrolledTop(scrollTop <= autoloadThreshold);
+      },
+      40,
+      { trailing: true },
+    ),
+    [threshold, autoloadThreshold],
+  );
 
   /** Scroll to top and trigger `onClick`. */
   const handleClick: React.MouseEventHandler = useCallback(() => {
@@ -86,9 +94,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
       <button onClick={handleClick} tabIndex={visible ? 0 : -1}>
         <Icon src={require('@phosphor-icons/core/regular/arrow-line-up.svg')} />
 
-        <p>
-          {intl.formatMessage(message, { count })}
-        </p>
+        <p>{intl.formatMessage(message, { count })}</p>
       </button>
     </div>
   );

@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -41,7 +40,12 @@ const WrenchedTimelinePage = () => {
           timelineId={`${timelineId}${onlyMedia ? ':media' : ''}`}
           prefix='home'
           onLoadMore={handleLoadMore}
-          emptyMessageText={<FormattedMessage id='empty_column.wrenched' defaultMessage='There is nothing here! 🔧 a public post to fill it up' />}
+          emptyMessageText={
+            <FormattedMessage
+              id='empty_column.wrenched'
+              defaultMessage='There is nothing here! 🔧 a public post to fill it up'
+            />
+          }
           emptyMessageIcon={require('@phosphor-icons/core/regular/wrench.svg')}
         />
       </PullToRefresh>

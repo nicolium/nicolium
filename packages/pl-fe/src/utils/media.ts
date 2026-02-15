@@ -7,10 +7,9 @@ const truncateFilename = (url: string, maxLength: number) => {
 
   if (filename.length <= maxLength) return filename;
 
-  return [
-    filename.substr(0, maxLength / 2),
-    filename.substr(filename.length - maxLength / 2),
-  ].join('…');
+  return [filename.substr(0, maxLength / 2), filename.substr(filename.length - maxLength / 2)].join(
+    '…',
+  );
 };
 
 const formatBytes = (bytes: number, decimals: number = 2) => {
@@ -43,7 +42,7 @@ const getVideoDuration = (file: File): Promise<number> => {
       }
     });
 
-    video.onerror = (event: any) =>{
+    video.onerror = (event: any) => {
       reject(event.target.error);
     };
   });

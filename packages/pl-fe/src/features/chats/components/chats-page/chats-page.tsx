@@ -9,9 +9,12 @@ import { useChats } from '@/queries/chats';
 import ChatsPageSidebar from './components/chats-page-sidebar';
 
 const ChatsPage: React.FC = () => {
-  const { chatsQuery: { data: chats } } = useChats();
+  const {
+    chatsQuery: { data: chats },
+  } = useChats();
 
-  const isSidebarHidden = !useMatch({ from: chatsEmptyRoute.id, shouldThrow: false }) || chats?.length === 0;
+  const isSidebarHidden =
+    !useMatch({ from: chatsEmptyRoute.id, shouldThrow: false }) || chats?.length === 0;
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState<string | number>('100%');
@@ -53,9 +56,12 @@ const ChatsPage: React.FC = () => {
         data-testid='chat-page'
       >
         <Stack
-          className={clsx('dark:inset col-span-9 overflow-hidden bg-gradient-to-r from-white to-gray-100 black:bg-black dark:bg-gray-900 dark:bg-none sm:col-span-3', {
-            'hidden sm:block': isSidebarHidden,
-          })}
+          className={clsx(
+            'dark:inset col-span-9 overflow-hidden bg-gradient-to-r from-white to-gray-100 black:bg-black dark:bg-gray-900 dark:bg-none sm:col-span-3',
+            {
+              'hidden sm:block': isSidebarHidden,
+            },
+          )}
         >
           <ChatsPageSidebar />
         </Stack>

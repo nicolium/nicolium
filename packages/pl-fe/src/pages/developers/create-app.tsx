@@ -19,8 +19,11 @@ import type { CredentialApplication, Token } from 'pl-api';
 
 const messages = defineMessages({
   heading: { id: 'column.app_create', defaultMessage: 'Create app' },
-  namePlaceholder: { id: 'app_create.name_placeholder', defaultMessage: 'e.g. \'pl-fe\'' },
-  scopesPlaceholder: { id: 'app_create.scopes_placeholder', defaultMessage: 'e.g. \'read write follow\'' },
+  namePlaceholder: { id: 'app_create.name_placeholder', defaultMessage: "e.g. 'pl-fe'" },
+  scopesPlaceholder: {
+    id: 'app_create.scopes_placeholder',
+    defaultMessage: "e.g. 'read write follow'",
+  },
 });
 
 const BLANK_PARAMS = {
@@ -44,11 +47,10 @@ const CreateAppPage: React.FC = () => {
   const handleCreateApp = () => {
     const baseURL = getBaseURL(account!);
 
-    return createApp(params, baseURL)
-      .then(app => {
-        setApp(app);
-        return app;
-      });
+    return createApp(params, baseURL).then((app) => {
+      setApp(app);
+      return app;
+    });
   };
 
   const handleCreateToken = (app: CredentialApplication) => {
@@ -62,8 +64,7 @@ const CreateAppPage: React.FC = () => {
       scope: params.scopes,
     };
 
-    return obtainOAuthToken(tokenParams, baseURL)
-      .then(setToken);
+    return obtainOAuthToken(tokenParams, baseURL).then(setToken);
   };
 
   const handleSubmit = () => {
@@ -74,7 +75,8 @@ const CreateAppPage: React.FC = () => {
       .then(() => {
         scrollToTop();
         setLoading(false);
-      }).catch(error => {
+      })
+      .catch((error) => {
         console.error(error);
         setLoading(false);
       });
@@ -84,9 +86,11 @@ const CreateAppPage: React.FC = () => {
     setParams({ ...params, [key]: value });
   };
 
-  const handleParamChange = (key: string): React.ChangeEventHandler<HTMLInputElement> => e => {
-    setParam(key, e.target.value);
-  };
+  const handleParamChange =
+    (key: string): React.ChangeEventHandler<HTMLInputElement> =>
+    (e) => {
+      setParam(key, e.target.value);
+    };
 
   const resetState = () => {
     setApp(null);
@@ -109,7 +113,10 @@ const CreateAppPage: React.FC = () => {
       <Form>
         <Stack>
           <Text size='lg' weight='medium'>
-            <FormattedMessage id='app_create.results.explanation_title' defaultMessage='App created successfully' />
+            <FormattedMessage
+              id='app_create.results.explanation_title'
+              defaultMessage='App created successfully'
+            />
           </Text>
           <Text theme='muted'>
             <FormattedMessage
@@ -119,22 +126,18 @@ const CreateAppPage: React.FC = () => {
           </Text>
         </Stack>
 
-        <FormGroup labelText={<FormattedMessage id='app_create.results.app_label' defaultMessage='App' />}>
-          <Textarea
-            value={JSON.stringify(app, null, 2)}
-            rows={10}
-            readOnly
-            isCodeEditor
-          />
+        <FormGroup
+          labelText={<FormattedMessage id='app_create.results.app_label' defaultMessage='App' />}
+        >
+          <Textarea value={JSON.stringify(app, null, 2)} rows={10} readOnly isCodeEditor />
         </FormGroup>
 
-        <FormGroup labelText={<FormattedMessage id='app_create.results.token_label' defaultMessage='OAuth token' />}>
-          <Textarea
-            value={JSON.stringify(token, null, 2)}
-            rows={10}
-            readOnly
-            isCodeEditor
-          />
+        <FormGroup
+          labelText={
+            <FormattedMessage id='app_create.results.token_label' defaultMessage='OAuth token' />
+          }
+        >
+          <Textarea value={JSON.stringify(token, null, 2)} rows={10} readOnly isCodeEditor />
         </FormGroup>
 
         <FormActions>
@@ -153,7 +156,9 @@ const CreateAppPage: React.FC = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)} backHref='/developers'>
       <Form onSubmit={handleSubmit}>
-        <FormGroup labelText={<FormattedMessage id='app_create.name_label' defaultMessage='App name' />}>
+        <FormGroup
+          labelText={<FormattedMessage id='app_create.name_label' defaultMessage='App name' />}
+        >
           <Input
             type='text'
             placeholder={intl.formatMessage(messages.namePlaceholder)}
@@ -163,7 +168,9 @@ const CreateAppPage: React.FC = () => {
           />
         </FormGroup>
 
-        <FormGroup labelText={<FormattedMessage id='app_create.website_label' defaultMessage='Website' />}>
+        <FormGroup
+          labelText={<FormattedMessage id='app_create.website_label' defaultMessage='Website' />}
+        >
           <Input
             type='text'
             placeholder='https://codeberg.org/mkljczk/nicolium'
@@ -172,7 +179,11 @@ const CreateAppPage: React.FC = () => {
           />
         </FormGroup>
 
-        <FormGroup labelText={<FormattedMessage id='app_create.redirect_uri_label' defaultMessage='Redirect URIs' />}>
+        <FormGroup
+          labelText={
+            <FormattedMessage id='app_create.redirect_uri_label' defaultMessage='Redirect URIs' />
+          }
+        >
           <Input
             type='text'
             placeholder='https://codeberg.org/mkljczk/nicolium'
@@ -182,7 +193,9 @@ const CreateAppPage: React.FC = () => {
           />
         </FormGroup>
 
-        <FormGroup labelText={<FormattedMessage id='app_create.scopes_label' defaultMessage='Scopes' />}>
+        <FormGroup
+          labelText={<FormattedMessage id='app_create.scopes_label' defaultMessage='Scopes' />}
+        >
           <Input
             type='text'
             placeholder={intl.formatMessage(messages.scopesPlaceholder)}

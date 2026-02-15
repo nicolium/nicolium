@@ -18,10 +18,7 @@ const BlankslateEmpty: React.FC = () => {
     <Stack space={6} alignItems='center' justifyContent='center' className='h-full p-6'>
       <Stack space={2} className='max-w-sm'>
         <Text size='2xl' weight='bold' tag='h2' align='center'>
-          <FormattedMessage
-            id='chats.main.blankslate.title'
-            defaultMessage='No messages yet'
-          />
+          <FormattedMessage id='chats.main.blankslate.title' defaultMessage='No messages yet' />
         </Text>
 
         <Text size='sm' theme='muted' align='center'>
@@ -33,10 +30,7 @@ const BlankslateEmpty: React.FC = () => {
       </Stack>
 
       <Button theme='primary' onClick={handleNewChat}>
-        <FormattedMessage
-          id='chats.main.blankslate.new_chat'
-          defaultMessage='Message someone'
-        />
+        <FormattedMessage id='chats.main.blankslate.new_chat' defaultMessage='Message someone' />
       </Button>
     </Stack>
   );

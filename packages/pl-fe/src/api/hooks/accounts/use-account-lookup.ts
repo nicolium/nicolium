@@ -26,15 +26,17 @@ const useAccountLookup = (acct: string | undefined, opts: UseAccountLookupOpts =
     { enabled: !!acct },
   );
 
-  const {
-    data: relationship,
-    isLoading: isRelationshipLoading,
-  } = useRelationshipQuery(withRelationship ? entity?.id : undefined);
+  const { data: relationship, isLoading: isRelationshipLoading } = useRelationshipQuery(
+    withRelationship ? entity?.id : undefined,
+  );
 
   const isBlocked = entity?.relationship?.blocked_by === true;
-  const isUnavailable = (me === entity?.id) ? false : (isBlocked && !features.blockersVisible);
+  const isUnavailable = me === entity?.id ? false : isBlocked && !features.blockersVisible;
 
-  const account = useMemo(() => entity ? { ...entity, relationship } : undefined, [entity, relationship]);
+  const account = useMemo(
+    () => (entity ? { ...entity, relationship } : undefined),
+    [entity, relationship],
+  );
 
   return {
     ...result,

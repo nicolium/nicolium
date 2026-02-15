@@ -7,7 +7,7 @@
     position: absolute;
     top: 0.5rem;
     right: 0.5rem;
-    z-index: 11!important;
+    z-index: 11 !important;
     @include mixins.button($theme: muted, $size: xs);
 
     .⁂-icon svg {
@@ -18,7 +18,7 @@
 
   &__banner__container {
     @apply dark:sm:shadow-inset relative flex h-24 items-center justify-center overflow-hidden rounded-lg bg-primary-100 text-primary-500 dark:bg-gray-800 dark:text-white sm:h-32 sm:shadow;
-    
+
     img {
       height: 100%;
       width: 100%;

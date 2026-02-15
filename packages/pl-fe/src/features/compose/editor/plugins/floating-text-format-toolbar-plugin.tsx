@@ -49,9 +49,18 @@ import { setFloatingElemPosition } from '../utils/set-floating-elem-position';
 const messages = defineMessages({
   formatBold: { id: 'compose_form.lexical.format_bold', defaultMessage: 'Format bold' },
   formatItalic: { id: 'compose_form.lexical.format_italic', defaultMessage: 'Format italic' },
-  formatUnderline: { id: 'compose_form.lexical.format_underline', defaultMessage: 'Format underline' },
-  formatStrikethrough: { id: 'compose_form.lexical.format_strikethrough', defaultMessage: 'Format strikethrough' },
-  insertCodeBlock: { id: 'compose_form.lexical.insert_code_block', defaultMessage: 'Insert code block' },
+  formatUnderline: {
+    id: 'compose_form.lexical.format_underline',
+    defaultMessage: 'Format underline',
+  },
+  formatStrikethrough: {
+    id: 'compose_form.lexical.format_strikethrough',
+    defaultMessage: 'Format strikethrough',
+  },
+  insertCodeBlock: {
+    id: 'compose_form.lexical.insert_code_block',
+    defaultMessage: 'Insert code block',
+  },
   insertLink: { id: 'compose_form.lexical.insert_link', defaultMessage: 'Insert link' },
 });
 
@@ -103,7 +112,12 @@ export const ToolbarButton: React.FC<IToolbarButton> = ({ active, icon, ...props
   </button>
 );
 
-const BlockTypeDropdown = ({ editor, anchorElem, blockType, icon }: {
+const BlockTypeDropdown = ({
+  editor,
+  anchorElem,
+  blockType,
+  icon,
+}: {
   editor: LexicalEditor;
   anchorElem: HTMLElement;
   blockType: keyof typeof blockTypeToBlockName;
@@ -173,8 +187,7 @@ const BlockTypeDropdown = ({ editor, anchorElem, blockType, icon }: {
             const codeNode = $createCodeNode();
             selection.insertNodes([codeNode]);
             selection = $getSelection();
-            if ($isRangeSelection(selection))
-              selection.insertRawText(textContent);
+            if ($isRangeSelection(selection)) selection.insertRawText(textContent);
           }
         }
       });
@@ -184,7 +197,7 @@ const BlockTypeDropdown = ({ editor, anchorElem, blockType, icon }: {
   return (
     <>
       <button
-        onClick={() =>{
+        onClick={() => {
           setShowDropDown(!showDropDown);
         }}
         className='relative flex cursor-pointer rounded-lg border-0 bg-none p-1 align-middle hover:bg-gray-100 disabled:cursor-not-allowed disabled:hover:bg-none dark:hover:bg-primary-700'
@@ -192,11 +205,12 @@ const BlockTypeDropdown = ({ editor, anchorElem, blockType, icon }: {
         type='button'
       >
         <Icon src={icon} />
-        <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} className='-bottom-2 size-4' />
+        <Icon
+          src={require('@phosphor-icons/core/regular/caret-down.svg')}
+          className='-bottom-2 size-4'
+        />
         {showDropDown && (
-          <div
-            className='absolute left-0 top-9 z-10 flex h-[38px] gap-0.5 rounded-lg bg-white p-1 shadow-lg transition-opacity dark:bg-gray-900'
-          >
+          <div className='absolute left-0 top-9 z-10 flex h-[38px] gap-0.5 rounded-lg bg-white p-1 shadow-lg transition-opacity dark:bg-gray-900'>
             <ToolbarButton
               onClick={formatParagraph}
               active={blockType === 'paragraph'}
@@ -205,21 +219,21 @@ const BlockTypeDropdown = ({ editor, anchorElem, blockType, icon }: {
             {composeAllowHeadings && (
               <>
                 <ToolbarButton
-                  onClick={() =>{
+                  onClick={() => {
                     formatHeading('h1');
                   }}
                   active={blockType === 'h1'}
                   icon={blockTypeToIcon.h1}
                 />
                 <ToolbarButton
-                  onClick={() =>{
+                  onClick={() => {
                     formatHeading('h2');
                   }}
                   active={blockType === 'h2'}
                   icon={blockTypeToIcon.h2}
                 />
                 <ToolbarButton
-                  onClick={() =>{
+                  onClick={() => {
                     formatHeading('h3');
                   }}
                   active={blockType === 'h3'}
@@ -265,16 +279,16 @@ const TextFormatFloatingToolbar = ({
   isCode,
   isStrikethrough,
 }: {
-   editor: LexicalEditor;
-   anchorElem: HTMLElement;
-   blockType: keyof typeof blockTypeToBlockName;
-   isBold: boolean;
-   isCode: boolean;
-   isItalic: boolean;
-   isLink: boolean;
-   isStrikethrough: boolean;
-   isUnderline: boolean;
- }): JSX.Element => {
+  editor: LexicalEditor;
+  anchorElem: HTMLElement;
+  blockType: keyof typeof blockTypeToBlockName;
+  isBold: boolean;
+  isCode: boolean;
+  isItalic: boolean;
+  isLink: boolean;
+  isStrikethrough: boolean;
+  isUnderline: boolean;
+}): JSX.Element => {
   const intl = useIntl();
   const popupCharStylesEditorRef = useRef<HTMLDivElement | null>(null);
 
@@ -424,8 +438,7 @@ const useFloatingTextFormatToolbar = (
   editor: LexicalEditor,
   anchorElem: HTMLElement,
 ): JSX.Element | null => {
-  const [blockType, setBlockType] =
-    useState<keyof typeof blockTypeToBlockName>('paragraph');
+  const [blockType, setBlockType] = useState<keyof typeof blockTypeToBlockName>('paragraph');
   const [isText, setIsText] = useState(false);
   const [isLink, setIsLink] = useState(false);
   const [isBold, setIsBold] = useState(false);
@@ -463,9 +476,9 @@ const useFloatingTextFormatToolbar = (
         anchorNode.getKey() === 'root'
           ? anchorNode
           : $findMatchingParent(anchorNode, (e) => {
-            const parent = e.getParent();
-            return parent !== null && $isRootOrShadowRoot(parent);
-          });
+              const parent = e.getParent();
+              return parent !== null && $isRootOrShadowRoot(parent);
+            });
 
       element ??= anchorNode.getTopLevelElementOrThrow();
 
@@ -483,18 +496,11 @@ const useFloatingTextFormatToolbar = (
 
       if (elementDOM !== null) {
         if ($isListNode(element)) {
-          const parentList = $getNearestNodeOfType<ListNode>(
-            anchorNode,
-            ListNode,
-          );
-          const type = parentList
-            ? parentList.getListType()
-            : element.getListType();
+          const parentList = $getNearestNodeOfType<ListNode>(anchorNode, ListNode);
+          const type = parentList ? parentList.getListType() : element.getListType();
           setBlockType(type);
         } else {
-          const type = $isHeadingNode(element)
-            ? element.getTag()
-            : element.getType();
+          const type = $isHeadingNode(element) ? element.getTag() : element.getType();
           if (type in blockTypeToBlockName) {
             setBlockType(type as keyof typeof blockTypeToBlockName);
           }
@@ -560,8 +566,8 @@ const useFloatingTextFormatToolbar = (
 const FloatingTextFormatToolbarPlugin = ({
   anchorElem = document.body,
 }: {
-   anchorElem?: HTMLElement;
- }): JSX.Element | null => {
+  anchorElem?: HTMLElement;
+}): JSX.Element | null => {
   const [editor] = useLexicalComposerContext();
   return useFloatingTextFormatToolbar(editor, anchorElem);
 };

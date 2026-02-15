@@ -23,14 +23,8 @@ const NOTIFICATION_TYPES = [
 ] as const;
 
 /** Notification types to exclude from the "All" filter by default. */
-const EXCLUDE_TYPES = [
-  'chat_mention',
-] as const;
+const EXCLUDE_TYPES = ['chat_mention'] as const;
 
 type NotificationType = Notification['type'];
 
-export {
-  NOTIFICATION_TYPES,
-  EXCLUDE_TYPES,
-  NotificationType,
-};
+export { NOTIFICATION_TYPES, EXCLUDE_TYPES, NotificationType };

@@ -25,7 +25,10 @@ interface ILogoText extends Pick<React.HTMLAttributes<HTMLHeadingElement>, 'clas
 /** Big text in site colors, for displaying the site name. Resizes itself according to the screen size. */
 const LogoText: React.FC<ILogoText> = ({ children, className, dir }) => (
   <h1
-    className={clsx('overflow-hidden text-ellipsis bg-gradient-to-br from-accent-500 via-primary-500 to-gradient-end bg-clip-text text-5xl font-extrabold !leading-tight text-transparent lg:text-6xl xl:text-7xl', className)}
+    className={clsx(
+      'overflow-hidden text-ellipsis bg-gradient-to-br from-accent-500 via-primary-500 to-gradient-end bg-clip-text text-5xl font-extrabold !leading-tight text-transparent lg:text-6xl xl:text-7xl',
+      className,
+    )}
     dir={dir}
   >
     {children}
@@ -42,10 +45,7 @@ const SiteBanner: React.FC = () => {
       </LogoText>
 
       {instance.description.trim().length > 0 && (
-        <Markup
-          size='lg'
-          direction={getTextDirection(instance.description)}
-        >
+        <Markup size='lg' direction={getTextDirection(instance.description)}>
           <ParsedContent html={instance.description} />
         </Markup>
       )}
@@ -74,9 +74,11 @@ const LandingTimelinePage = () => {
 
   useEffect(() => {
     if (timelineEnabled) {
-      dispatch(fetchPublicTimeline({ local: true }, false, undefined, () => {
-        setTimelineFailed(true);
-      }));
+      dispatch(
+        fetchPublicTimeline({ local: true }, false, undefined, () => {
+          setTimelineFailed(true);
+        }),
+      );
     }
   }, []);
 
@@ -105,7 +107,12 @@ const LandingTimelinePage = () => {
             timelineId={timelineId}
             prefix='home'
             onLoadMore={handleLoadMore}
-            emptyMessageText={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />}
+            emptyMessageText={
+              <FormattedMessage
+                id='empty_column.community'
+                defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!'
+              />
+            }
             emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
           />
         </PullToRefresh>

@@ -48,7 +48,12 @@ const RemoteTimelinePage: React.FC = () => {
 
       {!pinned && (
         <HStack className='mb-4 px-2' space={2}>
-          <IconButton className='text-gray-400 hover:text-gray-600' iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/x.svg')} onClick={handleCloseClick} />
+          <IconButton
+            className='text-gray-400 hover:text-gray-600'
+            iconClassName='h-5 w-5'
+            src={require('@phosphor-icons/core/regular/x.svg')}
+            onClick={handleCloseClick}
+          />
           <Text>
             <FormattedMessage
               id='remote_timeline.filter_message'

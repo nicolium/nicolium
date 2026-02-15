@@ -8,7 +8,7 @@ import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 
 const StatusLayout = () => {
-  const me = useAppSelector(state => state.me);
+  const me = useAppSelector((state) => state.me);
   const features = useFeatures();
 
   return (
@@ -18,15 +18,9 @@ const StatusLayout = () => {
       </Layout.Main>
 
       <Layout.Aside>
-        {!me && (
-          <SignUpPanel />
-        )}
-        {features.trends && (
-          <TrendsPanel limit={5} />
-        )}
-        {me && features.suggestions && (
-          <WhoToFollowPanel limit={3} />
-        )}
+        {!me && <SignUpPanel />}
+        {features.trends && <TrendsPanel limit={5} />}
+        {me && features.suggestions && <WhoToFollowPanel limit={3} />}
         <LinkFooter />
       </Layout.Aside>
     </>

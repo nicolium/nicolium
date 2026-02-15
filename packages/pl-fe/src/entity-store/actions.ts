@@ -27,7 +27,11 @@ interface DeleteEntitiesOpts {
   preserveLists?: boolean;
 }
 
-const deleteEntities = (ids: Iterable<string>, entityType: string, opts: DeleteEntitiesOpts = {}) => ({
+const deleteEntities = (
+  ids: Iterable<string>,
+  entityType: string,
+  opts: DeleteEntitiesOpts = {},
+) => ({
   type: ENTITIES_DELETE,
   ids,
   entityType,
@@ -84,7 +88,7 @@ const entitiesTransaction = (transaction: EntitiesTransaction) => ({
 
 /** Any action pertaining to entities. */
 type EntityAction =
-  ReturnType<typeof importEntities>
+  | ReturnType<typeof importEntities>
   | ReturnType<typeof deleteEntities>
   | ReturnType<typeof dismissEntities>
   | ReturnType<typeof entitiesFetchRequest>

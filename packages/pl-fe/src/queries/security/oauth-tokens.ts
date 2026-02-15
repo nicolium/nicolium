@@ -11,14 +11,19 @@ const oauthTokensQueryOptions = makePaginatedResponseQueryOptions(
   (client) => client.settings.getOauthTokens(),
 )();
 
-const revokeOauthTokenMutationOptions = (oauthTokenId: string) => mutationOptions({
-  mutationKey: ['security', 'oauthTokens', oauthTokenId],
-  mutationFn: () => getClient().settings.deleteOauthToken(oauthTokenId),
-  onSettled: () => {
-    queryClient.setQueryData(oauthTokensQueryOptions.queryKey, (data) => create(data, (draft) => {
-      draft?.pages.forEach(page => page.items = page.items.filter(({ id }) => id !== oauthTokenId));
-    }));
-  },
-});
+const revokeOauthTokenMutationOptions = (oauthTokenId: string) =>
+  mutationOptions({
+    mutationKey: ['security', 'oauthTokens', oauthTokenId],
+    mutationFn: () => getClient().settings.deleteOauthToken(oauthTokenId),
+    onSettled: () => {
+      queryClient.setQueryData(oauthTokensQueryOptions.queryKey, (data) =>
+        create(data, (draft) => {
+          draft?.pages.forEach(
+            (page) => (page.items = page.items.filter(({ id }) => id !== oauthTokenId)),
+          );
+        }),
+      );
+    },
+  });
 
 export { oauthTokensQueryOptions, revokeOauthTokenMutationOptions };

@@ -32,14 +32,30 @@ interface IStillImage {
 
 /** Renders images on a canvas, only playing GIFs if autoPlayGif is enabled. */
 const StillImage: React.FC<IStillImage> = ({
-  alt, className, innerClassName, src, staticSrc, style, letterboxed = false, showExt = false, onError, onLoad, isGif, noGroup,
+  alt,
+  className,
+  innerClassName,
+  src,
+  staticSrc,
+  style,
+  letterboxed = false,
+  showExt = false,
+  onError,
+  onLoad,
+  isGif,
+  noGroup,
 }) => {
   const { autoPlayGif } = useSettings();
 
   const canvas = useRef<HTMLCanvasElement>(null);
   const img = useRef<HTMLImageElement>(null);
 
-  const hoverToPlay = src && !autoPlayGif && ((isGif ?? src.endsWith('.gif')) || src.startsWith('blob:') || (src && staticSrc && src !== staticSrc));
+  const hoverToPlay =
+    src &&
+    !autoPlayGif &&
+    ((isGif ?? src.endsWith('.gif')) ||
+      src.startsWith('blob:') ||
+      (src && staticSrc && src !== staticSrc));
 
   const handleImageLoad: React.ReactEventHandler<HTMLImageElement> = (e) => {
     if (hoverToPlay && !staticSrc && canvas.current && img.current) {
@@ -66,7 +82,7 @@ const StillImage: React.FC<IStillImage> = ({
   return (
     <span
       data-testid='still-image-container'
-      className={clsx(className, 'relative isolate', { 'group': !noGroup })}
+      className={clsx(className, 'relative isolate', { group: !noGroup })}
       style={style}
     >
       <img
@@ -80,20 +96,21 @@ const StillImage: React.FC<IStillImage> = ({
         })}
       />
 
-      {hoverToPlay && (staticSrc ? (
-        <img
-          src={staticSrc}
-          alt={alt}
-          className={clsx(baseClassName, 'absolute top-0 group-hover:invisible')}
-        />
-      ) : (
-        <canvas
-          ref={canvas}
-          className={clsx(baseClassName, 'absolute top-0 group-hover:invisible')}
-        />
-      ))}
+      {hoverToPlay &&
+        (staticSrc ? (
+          <img
+            src={staticSrc}
+            alt={alt}
+            className={clsx(baseClassName, 'absolute top-0 group-hover:invisible')}
+          />
+        ) : (
+          <canvas
+            ref={canvas}
+            className={clsx(baseClassName, 'absolute top-0 group-hover:invisible')}
+          />
+        ))}
 
-      {(hoverToPlay && showExt) && (
+      {hoverToPlay && showExt && (
         <div className='pointer-events-none absolute bottom-2 left-2 opacity-90 group-hover:hidden'>
           <ExtensionBadge ext='GIF' />
         </div>
@@ -114,7 +131,4 @@ const ExtensionBadge: React.FC<IExtensionBadge> = ({ ext }) => (
   </div>
 );
 
-export {
-  type IStillImage,
-  StillImage as default,
-};
+export { type IStillImage, StillImage as default };

@@ -35,7 +35,7 @@ const parseContent = (chatMessage: ChatMessageEntity) => {
   const content = chatMessage.content || '';
   const pending = chatMessage.pending;
   const deleting = chatMessage.deleting;
-  const formatted = (pending && !deleting) ? parsePendingContent(content) : content;
+  const formatted = pending && !deleting ? parsePendingContent(content) : content;
   return formatted;
 };
 
@@ -95,7 +95,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
     if (!c) return;
     const links = c.querySelectorAll('a[rel="ugc"]');
 
-    links.forEach(link => {
+    links.forEach((link) => {
       link.classList.add('chat-link');
       link.setAttribute('rel', 'ugc nofollow noopener');
       link.setAttribute('target', '_blank');
@@ -118,7 +118,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
     if (navigator.clipboard && chatMessage.content) {
       menu.push({
         text: intl.formatMessage(messages.copy),
-        action: () =>{
+        action: () => {
           handleCopyText(chatMessage);
         },
         icon: require('@phosphor-icons/core/regular/clipboard.svg'),
@@ -128,7 +128,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
     if (isMyMessage) {
       menu.push({
         text: intl.formatMessage(messages.delete),
-        action: () =>{
+        action: () => {
           deleteChatMessage.mutate(chatMessage.id);
         },
         icon: require('@phosphor-icons/core/regular/trash.svg'),
@@ -137,7 +137,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
     } else {
       menu.push({
         text: intl.formatMessage(messages.deleteForMe),
-        action: () =>{
+        action: () => {
           deleteChatMessage.mutate(chatMessage.id);
         },
         icon: require('@phosphor-icons/core/regular/trash.svg'),
@@ -150,39 +150,34 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
 
   return (
     <div
-      className={
-        clsx({
-          'group relative px-4 py-2 hover:bg-gray-200/40 dark:hover:bg-gray-800/40': true,
-          'bg-gray-200/40 dark:bg-gray-800/40': isMenuOpen,
-        })
-      }
+      className={clsx({
+        'group relative px-4 py-2 hover:bg-gray-200/40 dark:hover:bg-gray-800/40': true,
+        'bg-gray-200/40 dark:bg-gray-800/40': isMenuOpen,
+      })}
       data-testid='chat-message'
     >
       <div
-        className={
-          clsx({
-            'p-1 flex items-center space-x-0.5 z-10 absolute opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100 rounded-md shadow-lg bg-white dark:bg-gray-900 dark:ring-2 dark:ring-primary-700': true,
-            'top-2 right-2': !isMyMessage,
-            'top-2 left-2': isMyMessage,
-            '!opacity-100': isMenuOpen,
-          })
-        }
+        className={clsx({
+          'absolute z-10 flex items-center space-x-0.5 rounded-md bg-white p-1 opacity-0 shadow-lg transition-opacity focus:opacity-100 group-hover:opacity-100 dark:bg-gray-900 dark:ring-2 dark:ring-primary-700': true,
+          'right-2 top-2': !isMyMessage,
+          'left-2 top-2': isMyMessage,
+          '!opacity-100': isMenuOpen,
+        })}
       >
-
         {menu.length > 0 && (
           <DropdownMenu
             items={menu}
-            onOpen={() =>{
+            onOpen={() => {
               setIsMenuOpen(true);
             }}
-            onClose={() =>{
+            onClose={() => {
               setIsMenuOpen(false);
             }}
           >
             <button
               title={intl.formatMessage(messages.more)}
               className={clsx({
-                'p-1.5 hover:bg-gray-200 dark:hover:bg-gray-800 rounded-md text-gray-600 dark:text-gray-600 hover:text-gray-700 dark:hover:text-gray-500 focus:text-gray-700 dark:focus:text-gray-500 focus:ring-0': true,
+                'rounded-md p-1.5 text-gray-600 hover:bg-gray-200 hover:text-gray-700 focus:text-gray-700 focus:ring-0 dark:text-gray-600 dark:hover:bg-gray-800 dark:hover:text-gray-500 dark:focus:text-gray-500': true,
                 '!text-gray-700 dark:!text-gray-500': isMenuOpen,
               })}
               data-testid='chat-message-menu'
@@ -225,18 +220,17 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
               <HStack alignItems='bottom' className='max-w-full'>
                 <div
                   title={getFormattedTimestamp(chatMessage)}
-                  className={
-                    clsx({
-                      'text-ellipsis break-words relative rounded-md py-2 px-3 max-w-full space-y-2 [&_.mention]:underline': true,
-                      'rounded-tr-sm': (!!chatMessage.attachment) && isMyMessage,
-                      'rounded-tl-sm': (!!chatMessage.attachment) && !isMyMessage,
-                      '[&_.mention]:text-primary-600 dark:[&_.mention]:text-primary-400': !isMyMessage,
-                      '[&_.mention]:text-white dark:[&_.mention]:white': isMyMessage,
-                      'bg-primary-500 text-white': isMyMessage,
-                      'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100': !isMyMessage,
-                      '!bg-transparent !p-0 emoji-lg': isOnlyEmoji,
-                    })
-                  }
+                  className={clsx({
+                    'relative max-w-full space-y-2 text-ellipsis break-words rounded-md px-3 py-2 [&_.mention]:underline': true,
+                    'rounded-tr-sm': !!chatMessage.attachment && isMyMessage,
+                    'rounded-tl-sm': !!chatMessage.attachment && !isMyMessage,
+                    '[&_.mention]:text-primary-600 dark:[&_.mention]:text-primary-400':
+                      !isMyMessage,
+                    'dark:[&_.mention]:white [&_.mention]:text-white': isMyMessage,
+                    'bg-primary-500 text-white': isMyMessage,
+                    'bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-gray-100': !isMyMessage,
+                    'emoji-lg !bg-transparent !p-0': isOnlyEmoji,
+                  })}
                   ref={setBubbleRef}
                   tabIndex={0}
                 >

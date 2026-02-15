@@ -21,7 +21,12 @@ const CryptoDonatePage: React.FC = (): JSX.Element => {
     <Column label={intl.formatMessage(messages.heading)} withHeader>
       <Stack space={5}>
         <Accordion
-          headline={<FormattedMessage id='crypto_donate.explanation_box.title' defaultMessage='Sending cryptocurrency donations' />}
+          headline={
+            <FormattedMessage
+              id='crypto_donate.explanation_box.title'
+              defaultMessage='Sending cryptocurrency donations'
+            />
+          }
           expanded={explanationBoxExpanded}
           onToggle={toggleExplanationBox}
         >

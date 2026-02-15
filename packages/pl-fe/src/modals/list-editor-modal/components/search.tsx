@@ -23,7 +23,7 @@ const Search: React.FC<ISearch> = ({ value, onSubmit }) => {
 
   const [searchValue, setSearchValue] = React.useState(value);
 
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setSearchValue(e.target.value);
   };
 
@@ -52,7 +52,11 @@ const Search: React.FC<ISearch> = ({ value, onSubmit }) => {
               onSubmit('');
             }}
           >
-            <Icon src={require('@phosphor-icons/core/regular/backspace.svg')} className={clsx('size-5 text-gray-600', { hidden: !hasValue })} aria-hidden />
+            <Icon
+              src={require('@phosphor-icons/core/regular/backspace.svg')}
+              className={clsx('size-5 text-gray-600', { hidden: !hasValue })}
+              aria-hidden
+            />
           </div>
         </label>
 

@@ -19,37 +19,109 @@ const LandingPage = () => (
         <LogoText>
           <FormattedMessage id='landing.logo' defaultMessage='Nicolium (formerly pl-fe)' />
         </LogoText>
-        <Text><FormattedMessage id='landing.description' defaultMessage='Nicolium is a feature-rich Fediverse web client.' /></Text>
+        <Text>
+          <FormattedMessage
+            id='landing.description'
+            defaultMessage='Nicolium is a feature-rich Fediverse web client.'
+          />
+        </Text>
         <HStack justifyContent='end' space={4}>
-          <Button href={sourceCode.url}><FormattedMessage id='landing.source_code' defaultMessage='Source code' /></Button>
-          <Button to='/login/external' theme='primary'><FormattedMessage id='landing.sign_in' defaultMessage='Sign in' /></Button>
+          <Button href={sourceCode.url}>
+            <FormattedMessage id='landing.source_code' defaultMessage='Source code' />
+          </Button>
+          <Button to='/login/external' theme='primary'>
+            <FormattedMessage id='landing.sign_in' defaultMessage='Sign in' />
+          </Button>
         </HStack>
         <Card variant='rounded'>
-          <CardTitle title={<FormattedMessage id='landing.use_with_platform.title' defaultMessage='Use with your favorite Fediverse platform.' />} truncate={false} />
-          <Text><FormattedMessage id='landing.use_with_platform.description' defaultMessage='Nicolium works with any backend implementing Mastodon API.' /></Text>
+          <CardTitle
+            title={
+              <FormattedMessage
+                id='landing.use_with_platform.title'
+                defaultMessage='Use with your favorite Fediverse platform.'
+              />
+            }
+            truncate={false}
+          />
+          <Text>
+            <FormattedMessage
+              id='landing.use_with_platform.description'
+              defaultMessage='Nicolium works with any backend implementing Mastodon API.'
+            />
+          </Text>
         </Card>
         <Card variant='rounded'>
-          <CardTitle title={<FormattedMessage id='landing.feature_rich.title' defaultMessage='Feature-rich.' />} truncate={false} />
-          <Text><FormattedMessage id='landing.feature_rich.description' defaultMessage='Nicolium includes a lot features to improve your experience, like WYSIWYG text editor, draft posts and language detection.' /></Text>
+          <CardTitle
+            title={
+              <FormattedMessage id='landing.feature_rich.title' defaultMessage='Feature-rich.' />
+            }
+            truncate={false}
+          />
+          <Text>
+            <FormattedMessage
+              id='landing.feature_rich.description'
+              defaultMessage='Nicolium includes a lot features to improve your experience, like WYSIWYG text editor, draft posts and language detection.'
+            />
+          </Text>
         </Card>
         <Card variant='rounded'>
-          <CardTitle title={<FormattedMessage id='landing.pl_api.title' defaultMessage='Get the most out of your Fediverse instance.' />} truncate={false} />
-          <Text><FormattedMessage id='landing.pl_api.description' defaultMessage='Nicolium implements features not present in standard Mastodon API, like emoji reactions, chats or interaction policies.' /></Text>
+          <CardTitle
+            title={
+              <FormattedMessage
+                id='landing.pl_api.title'
+                defaultMessage='Get the most out of your Fediverse instance.'
+              />
+            }
+            truncate={false}
+          />
+          <Text>
+            <FormattedMessage
+              id='landing.pl_api.description'
+              defaultMessage='Nicolium implements features not present in standard Mastodon API, like emoji reactions, chats or interaction policies.'
+            />
+          </Text>
         </Card>
         <Card variant='rounded'>
-          <CardTitle title={<FormattedMessage id='landing.customizable.title' defaultMessage='Customizable.' />} truncate={false} />
-          <Text><FormattedMessage id='landing.customizable.description' defaultMessage='Nicolium lets you choose between three themes and adjust accent color to your liking.' /></Text>
+          <CardTitle
+            title={
+              <FormattedMessage id='landing.customizable.title' defaultMessage='Customizable.' />
+            }
+            truncate={false}
+          />
+          <Text>
+            <FormattedMessage
+              id='landing.customizable.description'
+              defaultMessage='Nicolium lets you choose between three themes and adjust accent color to your liking.'
+            />
+          </Text>
         </Card>
         <Card variant='rounded'>
-          <CardTitle title={<FormattedMessage id='landing.private.title' defaultMessage='Stay private.' />} truncate={false} />
-          <Text><FormattedMessage id='landing.private.description' defaultMessage='Nicolium includes features which help you maintain online privacy. This includes URL cleaning, which helps you remove unwanted parts of URLs used to mark your online activity.' /></Text>
+          <CardTitle
+            title={<FormattedMessage id='landing.private.title' defaultMessage='Stay private.' />}
+            truncate={false}
+          />
+          <Text>
+            <FormattedMessage
+              id='landing.private.description'
+              defaultMessage='Nicolium includes features which help you maintain online privacy. This includes URL cleaning, which helps you remove unwanted parts of URLs used to mark your online activity.'
+            />
+          </Text>
         </Card>
         <Card variant='rounded'>
-          <CardTitle title={<FormattedMessage id='landing.open_source.title' defaultMessage='Open source.' />} truncate={false} />
-          <Text><FormattedMessage id='landing.open_source.description' defaultMessage='Nicolium is free and open source software. You can participate in development, contribute to the project or report bugs.' /></Text>
+          <CardTitle
+            title={
+              <FormattedMessage id='landing.open_source.title' defaultMessage='Open source.' />
+            }
+            truncate={false}
+          />
+          <Text>
+            <FormattedMessage
+              id='landing.open_source.description'
+              defaultMessage='Nicolium is free and open source software. You can participate in development, contribute to the project or report bugs.'
+            />
+          </Text>
         </Card>
       </Stack>
-
     </Column>
     <Stack space={4} className='mt-4 px-4 xl:hidden'>
       <LinkFooter />

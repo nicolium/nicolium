@@ -2,15 +2,18 @@
   "logo": "/instance/images/soapbox-logo.svg",
   "brandColor": "#d80482",
   "promoPanel": {
-    "items": [{
-      "icon": "area-chart",
-      "text": "Our Site stats",
-      "url": "https://fediverse.network/example.com"
-    }, {
-      "icon": "comment-o",
-      "text": "Our Site blog",
-      "url": "https://blog.example.com"
-    }]
+    "items": [
+      {
+        "icon": "area-chart",
+        "text": "Our Site stats",
+        "url": "https://fediverse.network/example.com"
+      },
+      {
+        "icon": "comment-o",
+        "text": "Our Site blog",
+        "url": "https://blog.example.com"
+      }
+    ]
   },
   "defaultSettings": {
     "autoPlayGif": false,

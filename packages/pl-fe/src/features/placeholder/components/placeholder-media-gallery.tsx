@@ -27,11 +27,9 @@ const PlaceholderMediaGallery: React.FC<IPlaceholderMediaGallery> = ({ media, de
     let itemsDimensions: Record<string, string>[] = [];
 
     if (size === 1) {
-      style.height = width! * 9 / 16;
+      style.height = (width! * 9) / 16;
 
-      itemsDimensions = [
-        { w: '100%', h: '100%' },
-      ];
+      itemsDimensions = [{ w: '100%', h: '100%' }];
     } else if (size === 2) {
       style.height = width! / 2;
 
@@ -73,16 +71,26 @@ const PlaceholderMediaGallery: React.FC<IPlaceholderMediaGallery> = ({ media, de
     const right = dimensions.r || 'auto';
     const bottom = dimensions.b || 'auto';
     const left = dimensions.l || 'auto';
-    const float = dimensions.float as any ?? 'left';
-    const position = dimensions.pos as any ?? 'relative';
+    const float = (dimensions.float as any) ?? 'left';
+    const position = (dimensions.pos as any) ?? 'relative';
 
-    return <div key={i} className='⁂-media-gallery__item animate-pulse bg-primary-200' style={{ position, float, left, top, right, bottom, height, width }} />;
+    return (
+      <div
+        key={i}
+        className='⁂-media-gallery__item animate-pulse bg-primary-200'
+        style={{ position, float, left, top, right, bottom, height, width }}
+      />
+    );
   };
 
   const sizeData = getSizeData(media.length);
 
   return (
-    <div className='⁂-media-gallery media-gallery--placeholder' style={sizeData.style} ref={handleRef}>
+    <div
+      className='⁂-media-gallery media-gallery--placeholder'
+      style={sizeData.style}
+      ref={handleRef}
+    >
       {media.slice(0, 4).map((_, i) => renderItem(sizeData.itemsDimensions[i], i))}
     </div>
   );

@@ -10,10 +10,22 @@ const messages = defineMessages({
   hours: { id: 'relative_time.hours', defaultMessage: '{number}h' },
   days: { id: 'relative_time.days', defaultMessage: '{number}d' },
   moments_remaining: { id: 'time_remaining.moments', defaultMessage: 'Moments remaining' },
-  seconds_remaining: { id: 'time_remaining.seconds', defaultMessage: '{number, plural, one {# second} other {# seconds}} left' },
-  minutes_remaining: { id: 'time_remaining.minutes', defaultMessage: '{number, plural, one {# minute} other {# minutes}} left' },
-  hours_remaining: { id: 'time_remaining.hours', defaultMessage: '{number, plural, one {# hour} other {# hours}} left' },
-  days_remaining: { id: 'time_remaining.days', defaultMessage: '{number, plural, one {# day} other {# days}} left' },
+  seconds_remaining: {
+    id: 'time_remaining.seconds',
+    defaultMessage: '{number, plural, one {# second} other {# seconds}} left',
+  },
+  minutes_remaining: {
+    id: 'time_remaining.minutes',
+    defaultMessage: '{number, plural, one {# minute} other {# minutes}} left',
+  },
+  hours_remaining: {
+    id: 'time_remaining.hours',
+    defaultMessage: '{number, plural, one {# hour} other {# hours}} left',
+  },
+  days_remaining: {
+    id: 'time_remaining.days',
+    defaultMessage: '{number, plural, one {# day} other {# days}} left',
+  },
 });
 
 const dateFormatOptions: FormatDateOptions = {
@@ -100,11 +112,17 @@ const timeRemainingString = (intl: IntlShape, date: Date, now: number) => {
   if (delta < 10 * SECOND) {
     relativeTime = intl.formatMessage(messages.moments_remaining);
   } else if (delta < MINUTE) {
-    relativeTime = intl.formatMessage(messages.seconds_remaining, { number: Math.floor(delta / SECOND) });
+    relativeTime = intl.formatMessage(messages.seconds_remaining, {
+      number: Math.floor(delta / SECOND),
+    });
   } else if (delta < HOUR) {
-    relativeTime = intl.formatMessage(messages.minutes_remaining, { number: Math.floor(delta / MINUTE) });
+    relativeTime = intl.formatMessage(messages.minutes_remaining, {
+      number: Math.floor(delta / MINUTE),
+    });
   } else if (delta < DAY) {
-    relativeTime = intl.formatMessage(messages.hours_remaining, { number: Math.floor(delta / HOUR) });
+    relativeTime = intl.formatMessage(messages.hours_remaining, {
+      number: Math.floor(delta / HOUR),
+    });
   } else {
     relativeTime = intl.formatMessage(messages.days_remaining, { number: Math.floor(delta / DAY) });
   }
@@ -124,80 +142,89 @@ interface RelativeTimestampState {
 }
 
 /** Displays a timestamp compared to the current time, eg "1m" for one minute ago. */
-const RelativeTimestamp = injectIntl(class RelativeTimestamp extends React.Component<RelativeTimestampProps, RelativeTimestampState> {
+const RelativeTimestamp = injectIntl(
+  class RelativeTimestamp extends React.Component<RelativeTimestampProps, RelativeTimestampState> {
+    _timer: NodeJS.Timeout | undefined;
 
-  _timer: NodeJS.Timeout | undefined;
+    state = {
+      now: Date.now(),
+    };
 
-  state = {
-    now: Date.now(),
-  };
+    static defaultProps = {
+      year: new Date().getFullYear(),
+      theme: 'inherit' as const,
+    };
 
-  static defaultProps = {
-    year: (new Date()).getFullYear(),
-    theme: 'inherit' as const,
-  };
-
-  shouldComponentUpdate(nextProps: RelativeTimestampProps, nextState: RelativeTimestampState) {
-    // As of right now the locale doesn't change without a new page load,
-    // but we might as well check in case that ever changes.
-    return this.props.timestamp !== nextProps.timestamp ||
-      this.props.intl.locale !== nextProps.intl.locale ||
-      this.state.now !== nextState.now;
-  }
-
-  UNSAFE_componentWillReceiveProps(prevProps: RelativeTimestampProps) {
-    if (this.props.timestamp !== prevProps.timestamp) {
-      this.setState({ now: Date.now() });
-    }
-  }
-
-  componentDidMount() {
-    this._scheduleNextUpdate();
-  }
-
-  UNSAFE_componentWillUpdate() {
-    this._scheduleNextUpdate();
-  }
-
-  componentWillUnmount() {
-    if (this._timer) {
-      clearTimeout(this._timer);
-    }
-  }
-
-  _scheduleNextUpdate() {
-    if (this._timer) {
-      clearTimeout(this._timer);
+    shouldComponentUpdate(nextProps: RelativeTimestampProps, nextState: RelativeTimestampState) {
+      // As of right now the locale doesn't change without a new page load,
+      // but we might as well check in case that ever changes.
+      return (
+        this.props.timestamp !== nextProps.timestamp ||
+        this.props.intl.locale !== nextProps.intl.locale ||
+        this.state.now !== nextState.now
+      );
     }
 
-    const { timestamp } = this.props;
-    const delta = (new Date(timestamp)).getTime() - this.state.now;
-    const unitDelay = getUnitDelay(selectUnits(delta));
-    const unitRemainder = Math.abs(delta % unitDelay);
-    const updateInterval = 1000 * 10;
-    const delay = delta < 0 ? Math.max(updateInterval, unitDelay - unitRemainder) : Math.max(updateInterval, unitRemainder);
+    UNSAFE_componentWillReceiveProps(prevProps: RelativeTimestampProps) {
+      if (this.props.timestamp !== prevProps.timestamp) {
+        this.setState({ now: Date.now() });
+      }
+    }
 
-    this._timer = setTimeout(() => {
-      this.setState({ now: Date.now() });
-    }, delay);
-  }
+    componentDidMount() {
+      this._scheduleNextUpdate();
+    }
 
-  render() {
-    const { timestamp, intl, year, futureDate, theme, ...textProps } = this.props;
+    UNSAFE_componentWillUpdate() {
+      this._scheduleNextUpdate();
+    }
 
-    const date = new Date(timestamp);
-    const relativeTime = futureDate ? timeRemainingString(intl, date, this.state.now) : timeAgoString(intl, date, this.state.now, year!);
+    componentWillUnmount() {
+      if (this._timer) {
+        clearTimeout(this._timer);
+      }
+    }
 
-    return (
-      <Text {...textProps} theme={theme} tag='time' title={intl.formatDate(date, dateFormatOptions)}>
-        {relativeTime}
-      </Text>
-    );
-  }
+    _scheduleNextUpdate() {
+      if (this._timer) {
+        clearTimeout(this._timer);
+      }
 
-});
+      const { timestamp } = this.props;
+      const delta = new Date(timestamp).getTime() - this.state.now;
+      const unitDelay = getUnitDelay(selectUnits(delta));
+      const unitRemainder = Math.abs(delta % unitDelay);
+      const updateInterval = 1000 * 10;
+      const delay =
+        delta < 0
+          ? Math.max(updateInterval, unitDelay - unitRemainder)
+          : Math.max(updateInterval, unitRemainder);
 
-export {
-  dateFormatOptions,
-  RelativeTimestamp as default,
-};
+      this._timer = setTimeout(() => {
+        this.setState({ now: Date.now() });
+      }, delay);
+    }
+
+    render() {
+      const { timestamp, intl, year, futureDate, theme, ...textProps } = this.props;
+
+      const date = new Date(timestamp);
+      const relativeTime = futureDate
+        ? timeRemainingString(intl, date, this.state.now)
+        : timeAgoString(intl, date, this.state.now, year!);
+
+      return (
+        <Text
+          {...textProps}
+          theme={theme}
+          tag='time'
+          title={intl.formatDate(date, dateFormatOptions)}
+        >
+          {relativeTime}
+        </Text>
+      );
+    }
+  },
+);
+
+export { dateFormatOptions, RelativeTimestamp as default };

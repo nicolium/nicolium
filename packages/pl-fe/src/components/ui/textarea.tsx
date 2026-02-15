@@ -5,7 +5,22 @@ import { FormattedMessage } from 'react-intl';
 import { useLocale, useLocaleDirection } from '@/hooks/use-locale';
 import { getTextDirection } from '@/utils/rtl';
 
-interface ITextarea extends Pick<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'className' | 'id' | 'lang' | 'maxLength' | 'onChange' | 'onClick' | 'onKeyDown' | 'onKeyUp' | 'onPaste' | 'required' | 'disabled' | 'rows' | 'readOnly'> {
+interface ITextarea extends Pick<
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+  | 'className'
+  | 'id'
+  | 'lang'
+  | 'maxLength'
+  | 'onChange'
+  | 'onClick'
+  | 'onKeyDown'
+  | 'onKeyUp'
+  | 'onPaste'
+  | 'required'
+  | 'disabled'
+  | 'rows'
+  | 'readOnly'
+> {
   /** Put the cursor into the input on mount. */
   autoFocus?: boolean;
   /** Allows the textarea height to grow while typing */
@@ -35,87 +50,99 @@ interface ITextarea extends Pick<React.TextareaHTMLAttributes<HTMLTextAreaElemen
 }
 
 /** Textarea with custom styles. */
-const Textarea = React.forwardRef(({
-  isCodeEditor = false,
-  hasError = false,
-  isResizeable = true,
-  onChange,
-  autoGrow = false,
-  maxRows = 10,
-  minRows = 1,
-  rows: initialRows = 4,
-  theme = 'default',
-  maxLength,
-  value,
-  className,
-  ...props
-}: ITextarea, ref: React.ForwardedRef<HTMLTextAreaElement>) => {
-  const length = value?.length ?? 0;
-  const [rows, setRows] = useState<number>(autoGrow ? minRows : initialRows);
-  const direction = useLocaleDirection(useLocale());
+const Textarea = React.forwardRef(
+  (
+    {
+      isCodeEditor = false,
+      hasError = false,
+      isResizeable = true,
+      onChange,
+      autoGrow = false,
+      maxRows = 10,
+      minRows = 1,
+      rows: initialRows = 4,
+      theme = 'default',
+      maxLength,
+      value,
+      className,
+      ...props
+    }: ITextarea,
+    ref: React.ForwardedRef<HTMLTextAreaElement>,
+  ) => {
+    const length = value?.length ?? 0;
+    const [rows, setRows] = useState<number>(autoGrow ? minRows : initialRows);
+    const direction = useLocaleDirection(useLocale());
 
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (autoGrow) {
-      const textareaLineHeight = 20;
-      const previousRows = event.target.rows;
-      event.target.rows = minRows;
+    const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      if (autoGrow) {
+        const textareaLineHeight = 20;
+        const previousRows = event.target.rows;
+        event.target.rows = minRows;
 
-      const currentRows = ~~(event.target.scrollHeight / textareaLineHeight);
+        const currentRows = ~~(event.target.scrollHeight / textareaLineHeight);
 
-      if (currentRows === previousRows) {
-        event.target.rows = currentRows;
+        if (currentRows === previousRows) {
+          event.target.rows = currentRows;
+        }
+
+        if (currentRows >= maxRows) {
+          event.target.rows = maxRows;
+          event.target.scrollTop = event.target.scrollHeight;
+        }
+
+        setRows(currentRows < maxRows ? currentRows : maxRows);
       }
 
-      if (currentRows >= maxRows) {
-        event.target.rows = maxRows;
-        event.target.scrollTop = event.target.scrollHeight;
+      if (onChange) {
+        onChange(event);
       }
+    };
 
-      setRows(currentRows < maxRows ? currentRows : maxRows);
+    const textarea = (
+      <textarea
+        {...props}
+        value={value}
+        ref={ref}
+        rows={rows}
+        onChange={handleChange}
+        className={clsx(
+          '⁂-textarea',
+          {
+            '⁂-textarea--transparent': theme === 'transparent',
+            '⁂-textarea--mono': isCodeEditor,
+            '⁂-textarea--has-error': hasError,
+            '⁂-textarea--resizable': isResizeable,
+          },
+          className,
+        )}
+        dir={value?.length ? getTextDirection(value, { fallback: direction }) : undefined}
+      />
+    );
+
+    if (!maxLength) {
+      return textarea;
     }
 
-    if (onChange) {
-      onChange(event);
-    }
-  };
+    return (
+      <div className='⁂-textarea__container'>
+        {textarea}
 
-  const textarea = (
-    <textarea
-      {...props}
-      value={value}
-      ref={ref}
-      rows={rows}
-      onChange={handleChange}
-      className={clsx('⁂-textarea', {
-        '⁂-textarea--transparent': theme === 'transparent',
-        '⁂-textarea--mono': isCodeEditor,
-        '⁂-textarea--has-error': hasError,
-        '⁂-textarea--resizable': isResizeable,
-      }, className)}
-      dir={value?.length ? getTextDirection(value, { fallback: direction }) : undefined}
-    />
-  );
-
-  if (!maxLength) {
-    return textarea;
-  }
-
-  return (
-    <div className='⁂-textarea__container'>
-      {textarea}
-
-      {maxLength && (
-        <p className={clsx('⁂-textarea__max-length', { '⁂-textarea__max-length--exceeded': maxLength - length < 0 })}>
-          <FormattedMessage
-            id='textarea.counter.label'
-            defaultMessage='{count} characters remaining'
-            values={{ count: maxLength - length }}
-          />
-        </p>
-      )}
-    </div>
-  );
-},
+        {maxLength && (
+          <p
+            className={clsx('⁂-textarea__max-length', {
+              '⁂-textarea__max-length--exceeded': maxLength - length < 0,
+            })}
+          >
+            <FormattedMessage
+              id='textarea.counter.label'
+              defaultMessage='{count} characters remaining'
+              values={{ count: maxLength - length }}
+            />
+          </p>
+        )}
+      </div>
+    );
+  },
 );
 
 export { Textarea as default };

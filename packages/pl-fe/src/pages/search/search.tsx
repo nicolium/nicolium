@@ -75,7 +75,10 @@ const SearchInput: React.FC<ISearchInput> = ({ className, placeholder, query }) 
 
   return (
     <div
-      className={clsx('z-10 w-full bg-white/90 backdrop-blur backdrop-saturate-200 black:bg-black/75 dark:bg-primary-900/90', className)}
+      className={clsx(
+        'z-10 w-full bg-white/90 backdrop-blur backdrop-saturate-200 black:bg-black/75 dark:bg-primary-900/90',
+        className,
+      )}
     >
       <div className='relative'>
         <Input
@@ -95,7 +98,11 @@ const SearchInput: React.FC<ISearchInput> = ({ className, placeholder, query }) 
           tabIndex={0}
           className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto'
           onClick={handleClick}
-          title={query === value ? intl.formatMessage(messages.clear) : intl.formatMessage(messages.placeholder)}
+          title={
+            query === value
+              ? intl.formatMessage(messages.clear)
+              : intl.formatMessage(messages.placeholder)
+          }
         >
           {query === value ? (
             <SvgIcon
@@ -127,7 +134,12 @@ const SearchResults = () => {
   const selectFilter = (newActiveFilter: SearchFilter) => {
     if (newActiveFilter === selectedFilter) {
       queryClient.refetchQueries({
-        queryKey: ['search', newActiveFilter, value, newActiveFilter === 'statuses' ? { account_id: accountId } : undefined],
+        queryKey: [
+          'search',
+          newActiveFilter,
+          value,
+          newActiveFilter === 'statuses' ? { account_id: accountId } : undefined,
+        ],
         exact: true,
       });
     } else navigate({ search: (prev) => ({ ...prev, type: newActiveFilter }) });
@@ -144,34 +156,35 @@ const SearchResults = () => {
     items.push(
       {
         text: intl.formatMessage(messages.accounts),
-        action: () =>{
+        action: () => {
           selectFilter('accounts');
         },
         name: 'accounts',
       },
       {
         text: intl.formatMessage(messages.statuses),
-        action: () =>{
+        action: () => {
           selectFilter('statuses');
         },
         name: 'statuses',
       },
       {
         text: intl.formatMessage(messages.hashtags),
-        action: () =>{
+        action: () => {
           selectFilter('hashtags');
         },
         name: 'hashtags',
       },
     );
 
-    if (!submitted && features.trendingLinks) items.push({
-      text: intl.formatMessage(messages.links),
-      action: () =>{
-        selectFilter('links');
-      },
-      name: 'links',
-    });
+    if (!submitted && features.trendingLinks)
+      items.push({
+        text: intl.formatMessage(messages.links),
+        action: () => {
+          selectFilter('links');
+        },
+        name: 'links',
+      });
 
     return <Tabs items={items} activeItem={selectedFilter} />;
   };
@@ -179,8 +192,17 @@ const SearchResults = () => {
   return (
     <>
       {accountId ? (
-        <HStack className='border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800' alignItems='center' space={2}>
-          <IconButton className='text-gray-400 hover:text-gray-600' iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/x.svg')} onClick={handleUnsetAccount} />
+        <HStack
+          className='border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800'
+          alignItems='center'
+          space={2}
+        >
+          <IconButton
+            className='text-gray-400 hover:text-gray-600'
+            iconClassName='h-5 w-5'
+            src={require('@phosphor-icons/core/regular/x.svg')}
+            onClick={handleUnsetAccount}
+          />
           <Text truncate>
             <FormattedMessage
               id='search_results.filter_message'
@@ -189,7 +211,9 @@ const SearchResults = () => {
             />
           </Text>
         </HStack>
-      ) : renderFilterBar()}
+      ) : (
+        renderFilterBar()
+      )}
 
       <SearchColumn query={value} type={selectedFilter} accountId={accountId} />
     </>

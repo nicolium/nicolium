@@ -50,7 +50,7 @@ interface EntityCache<TEntity extends Entity = Entity> {
 }
 
 /** Whether to import items at the start or end of the list. */
-type ImportPosition = 'start' | 'end'
+type ImportPosition = 'start' | 'end';
 
 /** Map of entity mutation functions to perform at once on the store. */
 interface EntitiesTransaction {

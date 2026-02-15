@@ -22,16 +22,15 @@ const PromoPanelInput: StreamfieldComponent<PromoPanelItem> = ({ value, onChange
     onChange({ ...value, icon });
   };
 
-  const handleChange = (key: 'text' | 'url'): React.ChangeEventHandler<HTMLInputElement> => e => {
-    onChange({ ...value, [key]: e.currentTarget.value });
-  };
+  const handleChange =
+    (key: 'text' | 'url'): React.ChangeEventHandler<HTMLInputElement> =>
+    (e) => {
+      onChange({ ...value, [key]: e.currentTarget.value });
+    };
 
   return (
     <HStack space={2} alignItems='center' grow>
-      <IconPicker
-        value={value.icon}
-        onChange={handleIconChange}
-      />
+      <IconPicker value={value.icon} onChange={handleIconChange} />
 
       <Input
         type='text'

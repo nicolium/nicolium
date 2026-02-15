@@ -56,9 +56,7 @@
     "note": "I create Fediverse software that empowers people online.<br/><br/>I&#39;m vegan btw<br/><br/>Note: If you have a question for me, please tag me publicly. This gives the opportunity for others to chime in, and bystanders to learn.",
     "pleroma": {
       "accepts_chat_messages": true,
-      "also_known_as": [
-        "https://mitra.social/users/alex"
-      ],
+      "also_known_as": ["https://mitra.social/users/alex"],
       "ap_id": "https://gleasonator.com/users/alex",
       "background_image": null,
       "birthday": "1993-07-03",

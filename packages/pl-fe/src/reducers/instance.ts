@@ -2,8 +2,16 @@ import { create } from 'mutative';
 import { type Instance, instanceSchema, PleromaConfig } from 'pl-api';
 import * as v from 'valibot';
 
-import { ADMIN_CONFIG_UPDATE_REQUEST, ADMIN_CONFIG_UPDATE_SUCCESS, type AdminActions } from '@/actions/admin';
-import { INSTANCE_FETCH_FAIL, INSTANCE_FETCH_SUCCESS, type InstanceAction } from '@/actions/instance';
+import {
+  ADMIN_CONFIG_UPDATE_REQUEST,
+  ADMIN_CONFIG_UPDATE_SUCCESS,
+  type AdminActions,
+} from '@/actions/admin';
+import {
+  INSTANCE_FETCH_FAIL,
+  INSTANCE_FETCH_SUCCESS,
+  type InstanceAction,
+} from '@/actions/instance';
 import { PLEROMA_PRELOAD_IMPORT, type PreloadAction } from '@/actions/preload';
 import KVStore from '@/storage/kv-store';
 import ConfigDB from '@/utils/config-db';
@@ -23,8 +31,7 @@ const preloadImport = (state: State, action: PreloadAction, path: string): State
 };
 
 const getConfigValue = (instanceConfig: Array<any>, key: string) => {
-  const v = instanceConfig
-    .find(value => value?.tuple?.[0] === key);
+  const v = instanceConfig.find((value) => value?.tuple?.[0] === key);
 
   return v ? v?.tuple?.[1] : undefined;
 };
@@ -38,7 +45,9 @@ const importConfigs = (state: State, configs: PleromaConfig['configs']) => {
   if (config) {
     const value = config.value ?? [];
     const registrationsOpen = getConfigValue(value, ':registrations_open') as boolean | undefined;
-    const approvalRequired = getConfigValue(value, ':account_approval_required') as boolean | undefined;
+    const approvalRequired = getConfigValue(value, ':account_approval_required') as
+      | boolean
+      | undefined;
 
     state.registrations = {
       ...state.registrations,
@@ -84,7 +93,10 @@ const handleInstanceFetchFail = (state: State, error: any) => {
   }
 };
 
-const instance = (state = initialState, action: AdminActions | InstanceAction | PreloadAction): State => {
+const instance = (
+  state = initialState,
+  action: AdminActions | InstanceAction | PreloadAction,
+): State => {
   switch (action.type) {
     case PLEROMA_PRELOAD_IMPORT:
       return preloadImport(state, action, '/api/v1/instance');

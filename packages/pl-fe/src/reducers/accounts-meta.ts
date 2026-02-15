@@ -4,7 +4,11 @@
  */
 import { create, type Immutable } from 'mutative';
 
-import { VERIFY_CREDENTIALS_SUCCESS, AUTH_ACCOUNT_REMEMBER_SUCCESS, type AuthAction } from '@/actions/auth';
+import {
+  VERIFY_CREDENTIALS_SUCCESS,
+  AUTH_ACCOUNT_REMEMBER_SUCCESS,
+  type AuthAction,
+} from '@/actions/auth';
 import { ME_FETCH_SUCCESS, ME_PATCH_SUCCESS, type MeAction } from '@/actions/me';
 
 import type { Account, CredentialAccount } from 'pl-api';
@@ -19,16 +23,20 @@ interface AccountMeta {
 type State = Immutable<Record<string, AccountMeta | undefined>>;
 
 const importAccount = (state: State, account: CredentialAccount): State =>
-  create(state, draft => {
-    const existing = draft[account.id];
+  create(
+    state,
+    (draft) => {
+      const existing = draft[account.id];
 
-    draft[account.id] = {
-      pleroma: account.__meta.pleroma ?? existing?.pleroma,
-      pleromaSource: account.__meta.source ?? existing?.pleromaSource,
-      source: account.source ?? existing?.source,
-      role: account.role ?? existing?.role,
-    };
-  }, { enableAutoFreeze: true });
+      draft[account.id] = {
+        pleroma: account.__meta.pleroma ?? existing?.pleroma,
+        pleromaSource: account.__meta.source ?? existing?.pleromaSource,
+        source: account.source ?? existing?.source,
+        role: account.role ?? existing?.role,
+      };
+    },
+    { enableAutoFreeze: true },
+  );
 
 const accounts_meta = (state: Readonly<State> = {}, action: AuthAction | MeAction): State => {
   switch (action.type) {

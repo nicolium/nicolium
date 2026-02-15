@@ -70,9 +70,9 @@ const StatusList: React.FC<IStatusList> = ({
 
   const getCurrentStatusIndex = (id: string, featured: boolean): number => {
     if (featured) {
-      return featuredStatusIds?.findIndex(key => key === id) ?? 0;
+      return featuredStatusIds?.findIndex((key) => key === id) ?? 0;
     } else {
-      return statusIds.findIndex(key => key === id) + getFeaturedStatusCount();
+      return statusIds.findIndex((key) => key === id) + getFeaturedStatusCount();
     }
   };
 
@@ -83,19 +83,37 @@ const StatusList: React.FC<IStatusList> = ({
 
   const handleMoveDown = (id: string, featured: boolean = false) => {
     const elementIndex = getCurrentStatusIndex(id, featured) + 1;
-    selectChild(elementIndex, node, document.getElementById('status-list') ?? undefined, scrollableContent.length);
+    selectChild(
+      elementIndex,
+      node,
+      document.getElementById('status-list') ?? undefined,
+      scrollableContent.length,
+    );
   };
 
-  const handleLoadOlder = useCallback(debounce(() => {
-    const maxId = lastStatusId ?? statusIds.at(-1);
-    if (onLoadMore && maxId) {
-      onLoadMore(maxId);
-    }
-  }, 300, { leading: true }), [onLoadMore, lastStatusId, statusIds.at(-1)]);
+  const handleLoadOlder = useCallback(
+    debounce(
+      () => {
+        const maxId = lastStatusId ?? statusIds.at(-1);
+        if (onLoadMore && maxId) {
+          onLoadMore(maxId);
+        }
+      },
+      300,
+      { leading: true },
+    ),
+    [onLoadMore, lastStatusId, statusIds.at(-1)],
+  );
 
   const handleSkipPinned = () => {
-    const skipPinned = () =>{
-      selectChild(getFeaturedStatusCount(), node, document.getElementById('status-list') ?? undefined, scrollableContent.length, 'start');
+    const skipPinned = () => {
+      selectChild(
+        getFeaturedStatusCount(),
+        node,
+        document.getElementById('status-list') ?? undefined,
+        scrollableContent.length,
+        'start',
+      );
     };
 
     skipPinned();
@@ -111,12 +129,7 @@ const StatusList: React.FC<IStatusList> = ({
     if (index < 1 || !nextId || !prevId || !onLoadMore) return null;
 
     return (
-      <LoadGap
-        key={'gap:' + nextId}
-        disabled={isLoading}
-        maxId={prevId}
-        onClick={onLoadMore}
-      />
+      <LoadGap key={'gap:' + nextId} disabled={isLoading} maxId={prevId} onClick={onLoadMore} />
     );
   };
 
@@ -137,20 +150,14 @@ const StatusList: React.FC<IStatusList> = ({
   const renderPendingStatus = (statusId: string) => {
     const idempotencyKey = statusId.replace(/^末pending-/, '');
 
-    return (
-      <PendingStatus
-        key={statusId}
-        idempotencyKey={idempotencyKey}
-        variant='slim'
-      />
-    );
+    return <PendingStatus key={statusId} idempotencyKey={idempotencyKey} variant='slim' />;
   };
 
   const scrollableContent = useMemo(() => {
     const renderFeaturedStatuses = (): React.ReactNode[] => {
       if (!featuredStatusIds) return [];
 
-      return featuredStatusIds.map(statusId => (
+      return featuredStatusIds.map((statusId) => (
         <StatusContainer
           key={`f-${statusId}`}
           id={statusId}
@@ -199,11 +206,18 @@ const StatusList: React.FC<IStatusList> = ({
     return (
       <div className='⁂-status-list__empty'>
         <h2>
-          <FormattedMessage id='regeneration_indicator.label' tagName='strong' defaultMessage='Loading…' />
+          <FormattedMessage
+            id='regeneration_indicator.label'
+            tagName='strong'
+            defaultMessage='Loading…'
+          />
         </h2>
 
         <p>
-          <FormattedMessage id='regeneration_indicator.sublabel' defaultMessage='Your home feed is being prepared!' />
+          <FormattedMessage
+            id='regeneration_indicator.sublabel'
+            defaultMessage='Your home feed is being prepared!'
+          />
         </p>
       </div>
     );

@@ -21,7 +21,14 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useChats } from '@/queries/chats';
-import { useBookmarkStatus, usePinStatus, useReblogStatus, useUnbookmarkStatus, useUnpinStatus, useUnreblogStatus } from '@/queries/statuses/use-status-interactions';
+import {
+  useBookmarkStatus,
+  usePinStatus,
+  useReblogStatus,
+  useUnbookmarkStatus,
+  useUnpinStatus,
+  useUnreblogStatus,
+} from '@/queries/statuses/use-status-interactions';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import copy from '@/utils/copy';
@@ -45,9 +52,18 @@ const messages = defineMessages({
   reblog: { id: 'event.reblog', defaultMessage: 'Repost event' },
   reblog_private: { id: 'status.reblog_private', defaultMessage: 'Repost to original audience' },
   cancel_reblog_private: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },
-  reblog_visibility_public: { id: 'status.reblog_visibility_public', defaultMessage: 'Public repost' },
-  reblog_visibility_unlisted: { id: 'status.reblog_visibility_unlisted', defaultMessage: 'Quiet public repost' },
-  reblog_visibility_private: { id: 'status.reblog_visibility_private', defaultMessage: 'Followers-only repost' },
+  reblog_visibility_public: {
+    id: 'status.reblog_visibility_public',
+    defaultMessage: 'Public repost',
+  },
+  reblog_visibility_unlisted: {
+    id: 'status.reblog_visibility_unlisted',
+    defaultMessage: 'Quiet public repost',
+  },
+  reblog_visibility_private: {
+    id: 'status.reblog_visibility_private',
+    defaultMessage: 'Followers-only repost',
+  },
   unreblog: { id: 'event.unreblog', defaultMessage: 'Un-repost event' },
   pin: { id: 'status.pin', defaultMessage: 'Pin on profile' },
   unpin: { id: 'status.unpin', defaultMessage: 'Unpin from profile' },
@@ -59,17 +75,44 @@ const messages = defineMessages({
   block: { id: 'account.block', defaultMessage: 'Block @{name}' },
   report: { id: 'account.report', defaultMessage: 'Report @{name}' },
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
-  adminStatus: { id: 'status.admin_status', defaultMessage: 'Open this post in the moderation interface' },
-  markStatusSensitive: { id: 'admin.statuses.actions.mark_status_sensitive', defaultMessage: 'Mark post sensitive' },
-  markStatusNotSensitive: { id: 'admin.statuses.actions.mark_status_not_sensitive', defaultMessage: 'Mark post not sensitive' },
+  adminStatus: {
+    id: 'status.admin_status',
+    defaultMessage: 'Open this post in the moderation interface',
+  },
+  markStatusSensitive: {
+    id: 'admin.statuses.actions.mark_status_sensitive',
+    defaultMessage: 'Mark post sensitive',
+  },
+  markStatusNotSensitive: {
+    id: 'admin.statuses.actions.mark_status_not_sensitive',
+    defaultMessage: 'Mark post not sensitive',
+  },
   deleteStatus: { id: 'admin.statuses.actions.delete_status', defaultMessage: 'Delete post' },
   deleteConfirm: { id: 'confirmations.delete_event.confirm', defaultMessage: 'Delete' },
   deleteHeading: { id: 'confirmations.delete_event.heading', defaultMessage: 'Delete event' },
-  deleteMessage: { id: 'confirmations.delete_event.message', defaultMessage: 'Are you sure you want to delete this event?' },
+  deleteMessage: {
+    id: 'confirmations.delete_event.message',
+    defaultMessage: 'Are you sure you want to delete this event?',
+  },
 });
 
 interface IEventHeader {
-  status?: Pick<Status, 'id' | 'account' | 'bookmarked' | 'event' | 'group_id' | 'pinned' | 'reblog_id' | 'reblogged' | 'sensitive' | 'uri' | 'url' | 'visibility' | 'list_id'>;
+  status?: Pick<
+    Status,
+    | 'id'
+    | 'account'
+    | 'bookmarked'
+    | 'event'
+    | 'group_id'
+    | 'pinned'
+    | 'reblog_id'
+    | 'reblogged'
+    | 'sensitive'
+    | 'uri'
+    | 'url'
+    | 'visibility'
+    | 'list_id'
+  >;
 }
 
 const EventHeader: React.FC<IEventHeader> = ({ status }) => {
@@ -83,7 +126,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const features = useFeatures();
   const { boostModal } = useSettings();
   const { account: ownAccount } = useOwnAccount();
-  const isStaff = ownAccount ? ownAccount.is_admin ?? ownAccount.is_moderator : false;
+  const isStaff = ownAccount ? (ownAccount.is_admin ?? ownAccount.is_moderator) : false;
   const isAdmin = ownAccount ? ownAccount.is_admin : false;
 
   const { mutate: reblogStatus } = useReblogStatus(status?.id!);
@@ -119,9 +162,11 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleExportClick = () => {
-    dispatch(fetchEventIcs(status.id)).then((data) => {
-      download(data, 'calendar.ics');
-    }).catch(() => {});
+    dispatch(fetchEventIcs(status.id))
+      .then((data) => {
+        download(data, 'calendar.ics');
+      })
+      .catch(() => {});
   };
 
   const handleCopy = () => {
@@ -230,42 +275,46 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       menu.push({
         text: intl.formatMessage(status.bookmarked ? messages.unbookmark : messages.bookmark),
         action: handleBookmarkClick,
-        icon: status.bookmarked ? require('@phosphor-icons/core/regular/bookmark.svg') : require('@phosphor-icons/core/regular/bookmark-simple.svg'),
+        icon: status.bookmarked
+          ? require('@phosphor-icons/core/regular/bookmark.svg')
+          : require('@phosphor-icons/core/regular/bookmark-simple.svg'),
       });
     }
 
     if (ownAccount.id === account.id && ['public', 'unlisted'].includes(status.visibility)) {
       menu.push({
         text: intl.formatMessage(status.reblogged ? messages.unreblog : messages.reblog),
-        ...(features.reblogVisibility && !status.reblogged ? {
-          items: [
-            {
-              text: intl.formatMessage(messages.reblog_visibility_public),
-              action: () =>{
-                handleReblogClick('public');
+        ...(features.reblogVisibility && !status.reblogged
+          ? {
+              items: [
+                {
+                  text: intl.formatMessage(messages.reblog_visibility_public),
+                  action: () => {
+                    handleReblogClick('public');
+                  },
+                  icon: require('@phosphor-icons/core/regular/globe.svg'),
+                },
+                {
+                  text: intl.formatMessage(messages.reblog_visibility_unlisted),
+                  action: () => {
+                    handleReblogClick('unlisted');
+                  },
+                  icon: require('@phosphor-icons/core/regular/moon.svg'),
+                },
+                {
+                  text: intl.formatMessage(messages.reblog_visibility_private),
+                  action: () => {
+                    handleReblogClick('private');
+                  },
+                  icon: require('@phosphor-icons/core/regular/lock.svg'),
+                },
+              ],
+            }
+          : {
+              action: () => {
+                handleReblogClick();
               },
-              icon: require('@phosphor-icons/core/regular/globe.svg'),
-            },
-            {
-              text: intl.formatMessage(messages.reblog_visibility_unlisted),
-              action: () =>{
-                handleReblogClick('unlisted');
-              },
-              icon: require('@phosphor-icons/core/regular/moon.svg'),
-            },
-            {
-              text: intl.formatMessage(messages.reblog_visibility_private),
-              action: () =>{
-                handleReblogClick('private');
-              },
-              icon: require('@phosphor-icons/core/regular/lock.svg'),
-            },
-          ],
-        } : {
-          action: () =>{
-            handleReblogClick();
-          },
-        }),
+            }),
         icon: require('@phosphor-icons/core/regular/repeat.svg'),
       });
 
@@ -278,8 +327,10 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       }
     } else if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
       menu.push({
-        text: intl.formatMessage(status.reblogged ? messages.cancel_reblog_private : messages.reblog_private),
-        action: () =>{
+        text: intl.formatMessage(
+          status.reblogged ? messages.cancel_reblog_private : messages.reblog_private,
+        ),
+        action: () => {
           handleReblogClick();
         },
         icon: require('@phosphor-icons/core/regular/repeat.svg'),
@@ -293,7 +344,9 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         menu.push({
           text: intl.formatMessage(status.pinned ? messages.unpin : messages.pin),
           action: handlePinClick,
-          icon: status.pinned ? require('@phosphor-icons/core/regular/push-pin-slash.svg') : require('@phosphor-icons/core/regular/push-pin.svg'),
+          icon: status.pinned
+            ? require('@phosphor-icons/core/regular/push-pin-slash.svg')
+            : require('@phosphor-icons/core/regular/push-pin.svg'),
         });
       }
 
@@ -362,7 +415,9 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
       if (features.pleromaAdminStatuses) {
         menu.push({
-          text: intl.formatMessage(!status.sensitive ? messages.markStatusSensitive : messages.markStatusNotSensitive),
+          text: intl.formatMessage(
+            !status.sensitive ? messages.markStatusSensitive : messages.markStatusNotSensitive,
+          ),
           action: handleToggleStatusSensitivity,
           icon: require('@phosphor-icons/core/regular/warning.svg'),
         });
@@ -381,7 +436,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
     return menu;
   };
 
-  const handleParticipantsClick: React.MouseEventHandler = e => {
+  const handleParticipantsClick: React.MouseEventHandler = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -409,7 +464,9 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       </div>
       <Stack space={2}>
         <HStack className='w-full' alignItems='start' space={2}>
-          <Text className='grow' size='lg' weight='bold'>{event.name}</Text>
+          <Text className='grow' size='lg' weight='bold'>
+            {event.name}
+          </Text>
 
           <DropdownMenu items={makeMenu()} placement='bottom-end'>
             <IconButton
@@ -429,7 +486,9 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
             >
               <FormattedMessage id='event.manage' defaultMessage='Manage' />
             </Button>
-          ) : <EventActionButton status={status} />}
+          ) : (
+            <EventActionButton status={status} />
+          )}
         </HStack>
 
         <Stack space={1}>
@@ -441,9 +500,15 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
                 defaultMessage='Organized by {name}'
                 values={{
                   name: (
-                    <Link className='mention inline-block' to='/@{$username}' params={{ username: account.acct }}>
+                    <Link
+                      className='mention inline-block'
+                      to='/@{$username}'
+                      params={{ username: account.acct }}
+                    >
                       <HStack space={1} alignItems='center' grow>
-                        <span><Emojify text={account.display_name} emojis={account.emojis} /></span>
+                        <span>
+                          <Emojify text={account.display_name} emojis={account.emojis} />
+                        </span>
                         {account.verified && <VerificationBadge />}
                       </HStack>
                     </Link>
@@ -476,9 +541,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
           {event.location && (
             <HStack alignItems='center' space={2}>
               <Icon src={require('@phosphor-icons/core/regular/map-pin.svg')} />
-              <span>
-                {event.location.name}
-              </span>
+              <span>{event.location.name}</span>
             </HStack>
           )}
         </Stack>

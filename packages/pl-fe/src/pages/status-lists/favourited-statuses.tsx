@@ -30,21 +30,30 @@ const FavouritedStatusesPage: React.FC = () => {
     return (
       <Column>
         <div className='empty-column-indicator'>
-          <FormattedMessage id='empty_column.account_unavailable' defaultMessage='Profile unavailable' />
+          <FormattedMessage
+            id='empty_column.account_unavailable'
+            defaultMessage='Profile unavailable'
+          />
         </div>
       </Column>
     );
   }
 
   if (!account) {
-    return (
-      <MissingIndicator />
-    );
+    return <MissingIndicator />;
   }
 
-  const emptyMessage = isOwnAccount
-    ? <FormattedMessage id='empty_column.favourited_statuses' defaultMessage="You don't have any liked posts yet. When you like one, it will show up here." />
-    : <FormattedMessage id='empty_column.account_favourited_statuses' defaultMessage="This user doesn't have any liked posts yet." />;
+  const emptyMessage = isOwnAccount ? (
+    <FormattedMessage
+      id='empty_column.favourited_statuses'
+      defaultMessage="You don't have any liked posts yet. When you like one, it will show up here."
+    />
+  ) : (
+    <FormattedMessage
+      id='empty_column.account_favourited_statuses'
+      defaultMessage="This user doesn't have any liked posts yet."
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)} withHeader={false} transparent>

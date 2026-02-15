@@ -53,10 +53,15 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
     const handleHotkeyNew = (e?: KeyboardEvent) => {
       e?.preventDefault();
 
-      const element = node.current?.querySelector('div[data-lexical-editor="true"]') as HTMLTextAreaElement;
+      const element = node.current?.querySelector(
+        'div[data-lexical-editor="true"]',
+      ) as HTMLTextAreaElement;
 
       if (element) {
-        ((element as any).__lexicalEditor as LexicalEditor).dispatchCommand(FOCUS_EDITOR_COMMAND, undefined);
+        ((element as any).__lexicalEditor as LexicalEditor).dispatchCommand(
+          FOCUS_EDITOR_COMMAND,
+          undefined,
+        );
         return element.getAttribute('data-compose-id');
       } else {
         openModal('COMPOSE');

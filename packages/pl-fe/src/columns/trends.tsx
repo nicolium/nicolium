@@ -21,10 +21,22 @@ interface ITrendsColumn {
 }
 
 const TrendsColumn: React.FC<ITrendsColumn> = ({ type, multiColumn }) => {
-  const { data: accounts, isFetching: isFetchingAccounts, isLoading: isLoadingAccounts } = useSuggestedAccounts();
+  const {
+    data: accounts,
+    isFetching: isFetchingAccounts,
+    isLoading: isLoadingAccounts,
+  } = useSuggestedAccounts();
   const { data: trendingTags, isFetching: isFetchingTags, isLoading: isLoadingTags } = useTrends();
-  const { data: trendingStatuses, isFetching: isFetchingStatuses, isLoading: isLoadingStatuses } = useTrendingStatuses();
-  const { data: trendingLinks, isFetching: isFetchingLinks, isLoading: isLoadingLinks } = useTrendingLinks();
+  const {
+    data: trendingStatuses,
+    isFetching: isFetchingStatuses,
+    isLoading: isLoadingStatuses,
+  } = useTrendingStatuses();
+  const {
+    data: trendingLinks,
+    isFetching: isFetchingLinks,
+    isLoading: isLoadingLinks,
+  } = useTrendingLinks();
 
   let placeholderComponent = PlaceholderStatus;
 
@@ -34,27 +46,31 @@ const TrendsColumn: React.FC<ITrendsColumn> = ({ type, multiColumn }) => {
 
   switch (type) {
     case 'accounts': {
-      children = accounts?.map(account => <AccountContainer key={account.account_id} id={account.account_id} />);
+      children = accounts?.map((account) => (
+        <AccountContainer key={account.account_id} id={account.account_id} />
+      ));
       isFetching = isFetchingAccounts;
       isLoading = isLoadingAccounts;
       placeholderComponent = PlaceholderAccount;
       break;
     }
     case 'hashtags': {
-      children = trendingTags?.map(tag => <Hashtag key={tag.name} hashtag={tag} />);
+      children = trendingTags?.map((tag) => <Hashtag key={tag.name} hashtag={tag} />);
       isFetching = isFetchingTags;
       isLoading = isLoadingTags;
       placeholderComponent = PlaceholderHashtag;
       break;
     }
     case 'statuses': {
-      children = trendingStatuses?.map(statusId => <StatusContainer key={statusId} id={statusId} />);
+      children = trendingStatuses?.map((statusId) => (
+        <StatusContainer key={statusId} id={statusId} />
+      ));
       isFetching = isFetchingStatuses;
       isLoading = isLoadingStatuses;
       break;
     }
     case 'links': {
-      children = trendingLinks?.map(link => <TrendingLink key={link.id} trendingLink={link} />);
+      children = trendingLinks?.map((link) => <TrendingLink key={link.id} trendingLink={link} />);
       isFetching = isFetchingLinks;
       isLoading = isLoadingLinks;
       break;

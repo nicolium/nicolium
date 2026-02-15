@@ -18,7 +18,8 @@ import PollPreview from './poll-preview';
 
 import type { Status as StatusEntity } from '@/normalizers/status';
 
-const shouldHaveCard = (pendingStatus: StatusEntity) => Boolean(pendingStatus.content.match(/https?:\/\/\S*/));
+const shouldHaveCard = (pendingStatus: StatusEntity) =>
+  Boolean(pendingStatus.content.match(/https?:\/\/\S*/));
 
 interface IPendingStatus {
   className?: string;
@@ -33,11 +34,7 @@ interface IPendingStatusMedia {
 
 const PendingStatusMedia: React.FC<IPendingStatusMedia> = ({ status }) => {
   if (status.media_attachments && status.media_attachments.length) {
-    return (
-      <PlaceholderMediaGallery
-        media={status.media_attachments}
-      />
-    );
+    return <PlaceholderMediaGallery media={status.media_attachments} />;
   } else if (!status.quote && shouldHaveCard(status)) {
     return <PlaceholderCard />;
   } else {
@@ -45,7 +42,12 @@ const PendingStatusMedia: React.FC<IPendingStatusMedia> = ({ status }) => {
   }
 };
 
-const PendingStatus: React.FC<IPendingStatus> = ({ idempotencyKey, className, muted, variant = 'rounded' }) => {
+const PendingStatus: React.FC<IPendingStatus> = ({
+  idempotencyKey,
+  className,
+  muted,
+  variant = 'rounded',
+}) => {
   const status = useAppSelector((state) => {
     const pendingStatus = state.pending_statuses[idempotencyKey];
     return pendingStatus ? buildStatus(state, pendingStatus, idempotencyKey) : null;
@@ -82,10 +84,7 @@ const PendingStatus: React.FC<IPendingStatus> = ({ idempotencyKey, className, mu
             <StatusReplyMentions status={status} />
 
             <Stack space={4}>
-              <StatusContent
-                status={status}
-                collapsable
-              />
+              <StatusContent status={status} collapsable />
 
               <PendingStatusMedia status={status} />
 

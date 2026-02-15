@@ -10,9 +10,7 @@ import { minifyAccountList } from '../utils/minify-list';
 
 import type { CreateListParams, List, PaginatedResponse, UpdateListParams } from 'pl-api';
 
-const useLists = <T>(
-  select?: ((data: Array<List>) => T),
-) => {
+const useLists = <T>(select?: (data: Array<List>) => T) => {
   const client = useClient();
   const features = useFeatures();
 
@@ -24,7 +22,8 @@ const useLists = <T>(
   });
 };
 
-const useList = (listId?: string) => useLists((data) => listId ? data.find(list => list.id === listId) : undefined);
+const useList = (listId?: string) =>
+  useLists((data) => (listId ? data.find((list) => list.id === listId) : undefined));
 
 const useCreateList = () => {
   const client = useClient();
@@ -43,9 +42,8 @@ const useDeleteList = () => {
     mutationKey: ['lists', 'delete'],
     mutationFn: (listId: string) => client.lists.deleteList(listId),
     onSuccess: (_, deletedListId) => {
-      queryClient.setQueryData<Array<List>>(
-        ['lists'],
-        (prevData) => prevData?.filter(({ id }) => id !== deletedListId),
+      queryClient.setQueryData<Array<List>>(['lists'], (prevData) =>
+        prevData?.filter(({ id }) => id !== deletedListId),
       );
     },
   });
@@ -75,7 +73,9 @@ const useAddAccountsToList = (listId: string) => {
     onSettled: (_, __, accountIds) => {
       queryClient.invalidateQueries({ queryKey: ['accountsLists', 'lists', listId] });
       accountIds.forEach((accountId) =>
-        queryClient.setQueryData<Array<string>>(['lists', 'forAccount', accountId], (listIds) => listIds ? [...listIds, listId] : undefined),
+        queryClient.setQueryData<Array<string>>(['lists', 'forAccount', accountId], (listIds) =>
+          listIds ? [...listIds, listId] : undefined,
+        ),
       );
     },
   });
@@ -88,9 +88,14 @@ const useRemoveAccountsFromList = (listId: string) => {
     mutationKey: ['accountsLists', 'lists', listId, 'remove'],
     mutationFn: (accountIds: Array<string>) => client.lists.deleteListAccounts(listId, accountIds),
     onSettled: (_, __, accountIds) => {
-      queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(['accountsLists', 'lists', listId], filterById(accountIds));
+      queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
+        ['accountsLists', 'lists', listId],
+        filterById(accountIds),
+      );
       accountIds.forEach((accountId) =>
-        queryClient.setQueryData<Array<string>>(['lists', 'forAccount', accountId], listIds => listIds?.filter(id => id !== listId)),
+        queryClient.setQueryData<Array<string>>(['lists', 'forAccount', accountId], (listIds) =>
+          listIds?.filter((id) => id !== listId),
+        ),
       );
     },
   });
@@ -101,8 +106,19 @@ const useListsForAccount = (accountId: string) => {
 
   return useQuery({
     queryKey: ['lists', 'forAccount', accountId],
-    queryFn: () => client.accounts.getAccountLists(accountId).then((lists) => lists.map((list) => list.id)),
+    queryFn: () =>
+      client.accounts.getAccountLists(accountId).then((lists) => lists.map((list) => list.id)),
   });
 };
 
-export { useLists, useList, useCreateList, useDeleteList, useUpdateList, useListAccounts, useAddAccountsToList, useRemoveAccountsFromList, useListsForAccount };
+export {
+  useLists,
+  useList,
+  useCreateList,
+  useDeleteList,
+  useUpdateList,
+  useListAccounts,
+  useAddAccountsToList,
+  useRemoveAccountsFromList,
+  useListsForAccount,
+};

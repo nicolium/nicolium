@@ -5,7 +5,6 @@ import { RouterWithContext } from '@/features/ui/router';
 
 /** Highest level node with the Redux store. */
 const PlFeMount = () => {
-
   return (
     <Suspense fallback={<LoadingScreen />}>
       <RouterWithContext />

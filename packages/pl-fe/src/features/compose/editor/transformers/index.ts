@@ -4,8 +4,16 @@
  * LICENSE file in the /src/features/compose/editor directory.
  */
 
-import { TRANSFORMERS as DEFAULT_TRANSFORMERS, type ElementTransformer, type TextMatchTransformer } from '@lexical/markdown';
-import { $createHorizontalRuleNode, $isHorizontalRuleNode, HorizontalRuleNode } from '@lexical/react/LexicalHorizontalRuleNode';
+import {
+  TRANSFORMERS as DEFAULT_TRANSFORMERS,
+  type ElementTransformer,
+  type TextMatchTransformer,
+} from '@lexical/markdown';
+import {
+  $createHorizontalRuleNode,
+  $isHorizontalRuleNode,
+  HorizontalRuleNode,
+} from '@lexical/react/LexicalHorizontalRuleNode';
 import { LexicalNode } from 'lexical';
 
 import { $createImageNode, $isImageNode, ImageNode } from '../nodes/image-node';
@@ -54,10 +62,6 @@ const HORIZONTAL_RULE_TRANSFORMER: ElementTransformer = {
   type: 'element',
 };
 
-const TRANSFORMERS = [
-  ...DEFAULT_TRANSFORMERS,
-  HORIZONTAL_RULE_TRANSFORMER,
-  IMAGE_TRANSFORMER,
-];
+const TRANSFORMERS = [...DEFAULT_TRANSFORMERS, HORIZONTAL_RULE_TRANSFORMER, IMAGE_TRANSFORMER];
 
 export { TRANSFORMERS };

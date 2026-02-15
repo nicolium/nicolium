@@ -18,18 +18,27 @@ const PIN_SUCCESS = 'PIN_SUCCESS' as const;
 
 const UNPIN_SUCCESS = 'UNPIN_SUCCESS' as const;
 
-type InteractionsAction = {
-  type: typeof REBLOG_REQUEST | typeof UNREBLOG_REQUEST | typeof FAVOURITE_REQUEST | typeof UNFAVOURITE_REQUEST | typeof DISLIKE_REQUEST | typeof UNDISLIKE_REQUEST;
-  statusId: string;
-} | {
-  type: typeof REBLOG_FAIL | typeof UNREBLOG_FAIL | typeof FAVOURITE_FAIL | typeof DISLIKE_FAIL;
-  statusId: string;
-  error: unknown;
-} | {
-  type: typeof PIN_SUCCESS | typeof UNPIN_SUCCESS;
-  statusId: string;
-  accountId: string;
-};
+type InteractionsAction =
+  | {
+      type:
+        | typeof REBLOG_REQUEST
+        | typeof UNREBLOG_REQUEST
+        | typeof FAVOURITE_REQUEST
+        | typeof UNFAVOURITE_REQUEST
+        | typeof DISLIKE_REQUEST
+        | typeof UNDISLIKE_REQUEST;
+      statusId: string;
+    }
+  | {
+      type: typeof REBLOG_FAIL | typeof UNREBLOG_FAIL | typeof FAVOURITE_FAIL | typeof DISLIKE_FAIL;
+      statusId: string;
+      error: unknown;
+    }
+  | {
+      type: typeof PIN_SUCCESS | typeof UNPIN_SUCCESS;
+      statusId: string;
+      accountId: string;
+    };
 
 export {
   REBLOG_REQUEST,

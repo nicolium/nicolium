@@ -19,11 +19,24 @@ import toast from '@/toast';
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 const messages = defineMessages({
-  accountPlaceholder: { id: 'remote_interaction.account_placeholder', defaultMessage: 'Enter your username@domain you want to act from' },
-  userNotFoundError: { id: 'remote_interaction.user_not_found_error', defaultMessage: 'Couldn\'t find given user' },
+  accountPlaceholder: {
+    id: 'remote_interaction.account_placeholder',
+    defaultMessage: 'Enter your username@domain you want to act from',
+  },
+  userNotFoundError: {
+    id: 'remote_interaction.user_not_found_error',
+    defaultMessage: "Couldn't find given user",
+  },
 });
 
-type UnauthorizedModalAction = 'FOLLOW' | 'REPLY' | 'REBLOG' | 'FAVOURITE' | 'DISLIKE' | 'POLL_VOTE' | 'JOIN';
+type UnauthorizedModalAction =
+  | 'FOLLOW'
+  | 'REPLY'
+  | 'REBLOG'
+  | 'FAVOURITE'
+  | 'DISLIKE'
+  | 'POLL_VOTE'
+  | 'JOIN';
 
 interface UnauthorizedModalProps {
   /** Unauthorized action type. */
@@ -35,19 +48,24 @@ interface UnauthorizedModalProps {
 }
 
 /** Modal to display when a logged-out user tries to do something that requires login. */
-const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({ action, onClose, account: accountId, ap_id: apId }) => {
+const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
+  action,
+  onClose,
+  account: accountId,
+  ap_id: apId,
+}) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const instance = useInstance();
   const { isOpen } = useRegistrationStatus();
   const client = useClient();
 
-  const username = useAppSelector(state => selectAccount(state, accountId!)?.display_name);
+  const username = useAppSelector((state) => selectAccount(state, accountId!)?.display_name);
   const features = useFeatures();
 
   const [account, setAccount] = useState('');
 
-  const onAccountChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+  const onAccountChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setAccount(e.target.value);
   };
 
@@ -55,16 +73,17 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({ 
     onClose('UNAUTHORIZED');
   };
 
-  const onSubmit: React.FormEventHandler = e => {
+  const onSubmit: React.FormEventHandler = (e) => {
     e.preventDefault();
 
-    client.accounts.remoteInteraction(apId!, account)
+    client.accounts
+      .remoteInteraction(apId!, account)
       .then(({ url }) => {
         window.open(url, '_new', 'noopener,noreferrer');
         onClose('UNAUTHORIZED');
       })
-      .catch(error => {
-        if (error.message === 'Couldn\'t find user') {
+      .catch((error) => {
+        if (error.message === "Couldn't find user") {
           toast.error(intl.formatMessage(messages.userNotFoundError));
         }
       });
@@ -85,26 +104,74 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({ 
     let button;
 
     if (action === 'FOLLOW') {
-      header = <FormattedMessage id='remote_interaction.follow_title' defaultMessage='Follow {user} remotely' values={{ user: username }} />;
-      button = <FormattedMessage id='remote_interaction.follow' defaultMessage='Proceed to follow' />;
+      header = (
+        <FormattedMessage
+          id='remote_interaction.follow_title'
+          defaultMessage='Follow {user} remotely'
+          values={{ user: username }}
+        />
+      );
+      button = (
+        <FormattedMessage id='remote_interaction.follow' defaultMessage='Proceed to follow' />
+      );
     } else if (action === 'REPLY') {
-      header = <FormattedMessage id='remote_interaction.reply_title' defaultMessage='Reply to a post remotely' />;
+      header = (
+        <FormattedMessage
+          id='remote_interaction.reply_title'
+          defaultMessage='Reply to a post remotely'
+        />
+      );
       button = <FormattedMessage id='remote_interaction.reply' defaultMessage='Proceed to reply' />;
     } else if (action === 'REBLOG') {
-      header = <FormattedMessage id='remote_interaction.reblog_title' defaultMessage='Reblog a post remotely' />;
-      button = <FormattedMessage id='remote_interaction.reblog' defaultMessage='Proceed to repost' />;
+      header = (
+        <FormattedMessage
+          id='remote_interaction.reblog_title'
+          defaultMessage='Reblog a post remotely'
+        />
+      );
+      button = (
+        <FormattedMessage id='remote_interaction.reblog' defaultMessage='Proceed to repost' />
+      );
     } else if (action === 'FAVOURITE') {
-      header = <FormattedMessage id='remote_interaction.favourite_title' defaultMessage='Like a post remotely' />;
-      button = <FormattedMessage id='remote_interaction.favourite' defaultMessage='Proceed to like' />;
+      header = (
+        <FormattedMessage
+          id='remote_interaction.favourite_title'
+          defaultMessage='Like a post remotely'
+        />
+      );
+      button = (
+        <FormattedMessage id='remote_interaction.favourite' defaultMessage='Proceed to like' />
+      );
     } else if (action === 'DISLIKE') {
-      header = <FormattedMessage id='remote_interaction.dislike_title' defaultMessage='Dislike a post remotely' />;
-      button = <FormattedMessage id='remote_interaction.dislike' defaultMessage='Proceed to dislike' />;
+      header = (
+        <FormattedMessage
+          id='remote_interaction.dislike_title'
+          defaultMessage='Dislike a post remotely'
+        />
+      );
+      button = (
+        <FormattedMessage id='remote_interaction.dislike' defaultMessage='Proceed to dislike' />
+      );
     } else if (action === 'POLL_VOTE') {
-      header = <FormattedMessage id='remote_interaction.poll_vote_title' defaultMessage='Vote in a poll remotely' />;
-      button = <FormattedMessage id='remote_interaction.poll_vote' defaultMessage='Proceed to vote' />;
+      header = (
+        <FormattedMessage
+          id='remote_interaction.poll_vote_title'
+          defaultMessage='Vote in a poll remotely'
+        />
+      );
+      button = (
+        <FormattedMessage id='remote_interaction.poll_vote' defaultMessage='Proceed to vote' />
+      );
     } else if (action === 'JOIN') {
-      header = <FormattedMessage id='remote_interaction.event_join_title' defaultMessage='Join an event remotely' />;
-      button = <FormattedMessage id='remote_interaction.event_join' defaultMessage='Proceed to join' />;
+      header = (
+        <FormattedMessage
+          id='remote_interaction.event_join_title'
+          defaultMessage='Join an event remotely'
+        />
+      );
+      button = (
+        <FormattedMessage id='remote_interaction.event_join' defaultMessage='Proceed to join' />
+      );
     }
 
     return (
@@ -114,7 +181,9 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({ 
         confirmationAction={onLogin}
         confirmationText={<FormattedMessage id='account.login' defaultMessage='Log in' />}
         secondaryAction={isOpen ? onRegister : undefined}
-        secondaryText={isOpen ? <FormattedMessage id='account.register' defaultMessage='Sign up' /> : undefined}
+        secondaryText={
+          isOpen ? <FormattedMessage id='account.register' defaultMessage='Sign up' /> : undefined
+        }
       >
         <div className='flex flex-col gap-2.5'>
           <Form className='flex w-full flex-col gap-2.5' onSubmit={onSubmit}>
@@ -127,16 +196,26 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({ 
               onChange={onAccountChange}
               required
             />
-            <Button className='self-end' type='submit' theme='primary'>{button}</Button>
+            <Button className='self-end' type='submit' theme='primary'>
+              {button}
+            </Button>
           </Form>
-          <div className={'-mx-2.5 my-0 flex items-center gap-2.5 before:flex-1 before:border-b before:border-gray-300 before:content-[\'\'] after:flex-1 after:border-b after:border-gray-300 after:content-[\'\'] before:dark:border-gray-600 after:dark:border-gray-600'}>
+          <div
+            className={
+              "-mx-2.5 my-0 flex items-center gap-2.5 before:flex-1 before:border-b before:border-gray-300 before:content-[''] after:flex-1 after:border-b after:border-gray-300 after:content-[''] before:dark:border-gray-600 after:dark:border-gray-600"
+            }
+          >
             <Text align='center'>
               <FormattedMessage id='remote_interaction.divider' defaultMessage='or' />
             </Text>
           </div>
           {isOpen && (
             <Text size='lg' weight='medium'>
-              <FormattedMessage id='unauthorized_modal.title' defaultMessage='Sign up for {site_title}' values={{ site_title: instance.title }} />
+              <FormattedMessage
+                id='unauthorized_modal.title'
+                defaultMessage='Sign up for {site_title}'
+                values={{ site_title: instance.title }}
+              />
             </Text>
           )}
         </div>
@@ -150,16 +229,27 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({ 
 
   return (
     <Modal
-      title={<FormattedMessage id='unauthorized_modal.title' defaultMessage='Sign up for {site_title}' values={{ site_title: instance.title }} />}
+      title={
+        <FormattedMessage
+          id='unauthorized_modal.title'
+          defaultMessage='Sign up for {site_title}'
+          values={{ site_title: instance.title }}
+        />
+      }
       onClose={onClickClose}
       confirmationAction={onLogin}
       confirmationText={<FormattedMessage id='account.login' defaultMessage='Log in' />}
       secondaryAction={isOpen ? onRegister : undefined}
-      secondaryText={isOpen ? <FormattedMessage id='account.register' defaultMessage='Sign up' /> : undefined}
+      secondaryText={
+        isOpen ? <FormattedMessage id='account.register' defaultMessage='Sign up' /> : undefined
+      }
     >
       <Stack>
         <Text>
-          <FormattedMessage id='unauthorized_modal.text' defaultMessage='You need to be logged in to do that.' />
+          <FormattedMessage
+            id='unauthorized_modal.text'
+            defaultMessage='You need to be logged in to do that.'
+          />
         </Text>
       </Stack>
     </Modal>

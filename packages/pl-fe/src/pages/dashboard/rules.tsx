@@ -17,7 +17,10 @@ const messages = defineMessages({
   heading: { id: 'column.admin.rules', defaultMessage: 'Instance rules' },
   deleteConfirm: { id: 'confirmations.admin.delete_rule.confirm', defaultMessage: 'Delete' },
   deleteHeading: { id: 'confirmations.admin.delete_rule.heading', defaultMessage: 'Delete rule' },
-  deleteMessage: { id: 'confirmations.admin.delete_rule.message', defaultMessage: 'Are you sure you want to delete the rule?' },
+  deleteMessage: {
+    id: 'confirmations.admin.delete_rule.message',
+    defaultMessage: 'Are you sure you want to delete the rule?',
+  },
   ruleDeleteSuccess: { id: 'admin.edit_rule.deleted', defaultMessage: 'Rule deleted' },
 });
 
@@ -39,9 +42,9 @@ const Rule: React.FC<IRule> = ({ rule }) => {
       heading: intl.formatMessage(messages.deleteHeading),
       message: intl.formatMessage(messages.deleteMessage),
       confirm: intl.formatMessage(messages.deleteConfirm),
-      onConfirm: () =>{
+      onConfirm: () => {
         deleteRule(id, {
-          onSuccess: () =>{
+          onSuccess: () => {
             toast.success(messages.ruleDeleteSuccess);
           },
         });
@@ -53,13 +56,14 @@ const Rule: React.FC<IRule> = ({ rule }) => {
     <div key={rule.id} className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
       <Stack space={2}>
         <Text>{rule.text}</Text>
-        <Text tag='span' theme='muted' size='sm'>{rule.hint}</Text>
+        <Text tag='span' theme='muted' size='sm'>
+          {rule.hint}
+        </Text>
         {rule.priority !== null && (
           <Text size='sm'>
             <Text tag='span' size='sm' weight='medium'>
               <FormattedMessage id='admin.rule.priority' defaultMessage='Priority:' />
-            </Text>
-            {' '}
+            </Text>{' '}
             {rule.priority}
           </Text>
         )}
@@ -86,7 +90,12 @@ const RulesPage: React.FC = () => {
     openModal('EDIT_RULE');
   };
 
-  const emptyMessage = <FormattedMessage id='empty_column.admin.rules' defaultMessage='There are no instance rules yet.' />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.admin.rules'
+      defaultMessage='There are no instance rules yet.'
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>

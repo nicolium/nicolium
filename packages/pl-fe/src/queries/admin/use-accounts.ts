@@ -1,4 +1,10 @@
-import { InfiniteData, useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  InfiniteData,
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import { importEntities } from '@/actions/importer';
 import { useAccount } from '@/api/hooks/accounts/use-account';
@@ -11,10 +17,21 @@ import { makePaginatedResponseQuery } from '../utils/make-paginated-response-que
 import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';
 import { minifyAdminAccount, minifyAdminAccountList } from '../utils/minify-list';
 
-import type { AdminPerformAccountActionParams, PaginatedResponse, AdminAccount, AdminGetAccountsParams, PaginationParams, AdminAccountAction } from 'pl-api';
+import type {
+  AdminPerformAccountActionParams,
+  PaginatedResponse,
+  AdminAccount,
+  AdminGetAccountsParams,
+  PaginationParams,
+  AdminAccountAction,
+} from 'pl-api';
 
 const useAdminAccounts = makePaginatedResponseQuery(
-  (params: Omit<AdminGetAccountsParams, keyof PaginationParams>) => ['admin', 'accountLists', params],
+  (params: Omit<AdminGetAccountsParams, keyof PaginationParams>) => [
+    'admin',
+    'accountLists',
+    params,
+  ],
   (client, [params]) => client.admin.accounts.getAccounts(params).then(minifyAdminAccountList),
   undefined,
   'isAdmin',
@@ -26,10 +43,11 @@ const useAdminAccount = (accountId?: string) => {
 
   const query = useQuery<AdminAccount>({
     queryKey: ['admin', 'accounts', accountId],
-    queryFn: () => client.admin.accounts.getAccount(accountId!).then(({ account, ...adminAccount }) => {
-      dispatch(importEntities({ accounts: [account] }));
-      return adminAccount as AdminAccount;
-    }),
+    queryFn: () =>
+      client.admin.accounts.getAccount(accountId!).then(({ account, ...adminAccount }) => {
+        dispatch(importEntities({ accounts: [account] }));
+        return adminAccount as AdminAccount;
+      }),
     enabled: !!accountId,
   });
 
@@ -42,7 +60,10 @@ const useAdminAccount = (accountId?: string) => {
 
 const pendingUsersQuery = makePaginatedResponseQueryOptions(
   ['admin', 'accountLists', { origin: 'local', status: 'pending' }],
-  (client) => client.admin.accounts.getAccounts({ origin: 'local', status: 'pending' }).then(minifyAdminAccountList),
+  (client) =>
+    client.admin.accounts
+      .getAccounts({ origin: 'local', status: 'pending' })
+      .then(minifyAdminAccountList),
 )();
 
 const usePendingUsersCount = () => {
@@ -50,7 +71,8 @@ const usePendingUsersCount = () => {
 
   return useInfiniteQuery({
     ...pendingUsersQuery,
-    select: (data) => (data.pages.at(-1)?.total ?? data.pages.map(page => page.items).flat().length) || 0,
+    select: (data) =>
+      (data.pages.at(-1)?.total ?? data.pages.map((page) => page.items).flat().length) || 0,
     enabled: !!(account?.is_admin ?? account?.is_moderator),
   });
 };
@@ -66,12 +88,19 @@ const useAdminApproveAccountMutation = (accountId: string) => {
     onSuccess: ({ account, ...adminAccount }) => {
       dispatch(importEntities({ accounts: [account] }));
       queryClient.setQueryData(['admin', 'accounts', adminAccount.id], adminAccount);
-      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>({
-        queryKey: ['admin', 'accountLists', {
-          status: 'pending',
-        }],
-        exact: false,
-      }, filterById(accountId));
+      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
+        {
+          queryKey: [
+            'admin',
+            'accountLists',
+            {
+              status: 'pending',
+            },
+          ],
+          exact: false,
+        },
+        filterById(accountId),
+      );
     },
   });
 };
@@ -84,12 +113,19 @@ const useAdminRejectAccountMutation = (accountId: string) => {
     mutationKey: ['admin', 'acounts', accountId],
     mutationFn: () => client.admin.accounts.rejectAccount(accountId),
     onSuccess: () => {
-      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>({
-        queryKey: ['admin', 'accountLists', {
-          status: 'pending',
-        }],
-        exact: false,
-      }, filterById(accountId));
+      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
+        {
+          queryKey: [
+            'admin',
+            'accountLists',
+            {
+              status: 'pending',
+            },
+          ],
+          exact: false,
+        },
+        filterById(accountId),
+      );
     },
   });
 };
@@ -102,10 +138,13 @@ const useAdminDeleteAccountMutation = (accountId: string) => {
     mutationKey: ['admin', 'acounts', accountId],
     mutationFn: () => client.admin.accounts.deleteAccount(accountId),
     onSuccess: () => {
-      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>({
-        queryKey: ['admin', 'accountLists'],
-        exact: false,
-      }, filterById(accountId));
+      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
+        {
+          queryKey: ['admin', 'accountLists'],
+          exact: false,
+        },
+        filterById(accountId),
+      );
     },
   });
 };
@@ -116,7 +155,8 @@ const useAdminPerformAccountActionMutation = (accountId: string, type: AdminAcco
 
   return useMutation({
     mutationKey: ['admin', 'acounts', accountId],
-    mutationFn: (params?: AdminPerformAccountActionParams) => client.admin.accounts.performAccountAction(accountId, type, params),
+    mutationFn: (params?: AdminPerformAccountActionParams) =>
+      client.admin.accounts.performAccountAction(accountId, type, params),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'accountLists'], exact: false });
     },
@@ -131,10 +171,13 @@ const useAdminEnableAccountMutation = (accountId: string) => {
     mutationKey: ['admin', 'acounts', accountId],
     mutationFn: () => client.admin.accounts.enableAccount(accountId),
     onSuccess: (account) => {
-      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>({
-        queryKey: ['admin', 'accountLists', { status: 'disabled' }],
-        exact: false,
-      }, filterById(accountId));
+      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
+        {
+          queryKey: ['admin', 'accountLists', { status: 'disabled' }],
+          exact: false,
+        },
+        filterById(accountId),
+      );
       minifyAdminAccount(account);
     },
   });
@@ -148,10 +191,13 @@ const useAdminUnsilenceAccountMutation = (accountId: string) => {
     mutationKey: ['admin', 'acounts', accountId],
     mutationFn: () => client.admin.accounts.unsilenceAccount(accountId),
     onSuccess: (account) => {
-      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>({
-        queryKey: ['admin', 'accountLists', { status: 'silenced' }],
-        exact: false,
-      }, filterById(accountId));
+      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
+        {
+          queryKey: ['admin', 'accountLists', { status: 'silenced' }],
+          exact: false,
+        },
+        filterById(accountId),
+      );
       minifyAdminAccount(account);
     },
   });
@@ -165,10 +211,13 @@ const useAdminUnsuspendAccountMutation = (accountId: string) => {
     mutationKey: ['admin', 'acounts', accountId],
     mutationFn: () => client.admin.accounts.unsuspendAccount(accountId),
     onSuccess: (account) => {
-      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>({
-        queryKey: ['admin', 'accountLists', { status: 'suspended' }],
-        exact: false,
-      }, filterById(accountId));
+      queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
+        {
+          queryKey: ['admin', 'accountLists', { status: 'suspended' }],
+          exact: false,
+        },
+        filterById(accountId),
+      );
       minifyAdminAccount(account);
     },
   });

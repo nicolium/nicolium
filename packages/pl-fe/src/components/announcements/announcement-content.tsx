@@ -42,7 +42,10 @@ const AnnouncementContent: React.FC<IAnnouncementContent> = ({ announcement }) =
   const onStatusClick = (statusId: string, e: MouseEvent) => {
     if (e.button === 0 && !(e.ctrlKey || e.metaKey)) {
       e.preventDefault();
-      navigate({ to: '/@{$username}/posts/$statusId', params: { username: 'undefined', statusId } });
+      navigate({
+        to: '/@{$username}/posts/$statusId',
+        params: { username: 'undefined', statusId },
+      });
     }
   };
 
@@ -51,7 +54,7 @@ const AnnouncementContent: React.FC<IAnnouncementContent> = ({ announcement }) =
 
     const links = node.current.querySelectorAll('a');
 
-    links.forEach(link => {
+    links.forEach((link) => {
       // Skip already processed
       if (link.classList.contains('status-link')) return;
 
@@ -60,13 +63,17 @@ const AnnouncementContent: React.FC<IAnnouncementContent> = ({ announcement }) =
       link.setAttribute('rel', 'nofollow noopener');
       link.setAttribute('target', '_blank');
 
-      const mention = announcement.mentions.find(mention => link.href === mention.url);
+      const mention = announcement.mentions.find((mention) => link.href === mention.url);
 
       // Add event listeners on mentions, hashtags and statuses
       if (mention) {
         link.addEventListener('click', onMentionClick.bind(link, mention), false);
         link.setAttribute('title', mention.acct);
-      } else if (link.textContent?.charAt(0) === '#' || (link.previousSibling?.textContent?.charAt(link.previousSibling.textContent.length - 1) === '#')) {
+      } else if (
+        link.textContent?.charAt(0) === '#' ||
+        link.previousSibling?.textContent?.charAt(link.previousSibling.textContent.length - 1) ===
+          '#'
+      ) {
         link.addEventListener('click', onHashtagClick.bind(link, link.text), false);
       } else {
         const status = announcement.statuses[link.href];
@@ -80,12 +87,7 @@ const AnnouncementContent: React.FC<IAnnouncementContent> = ({ announcement }) =
   };
 
   return (
-    <div
-      dir={direction}
-      className='text-sm ltr:ml-0 rtl:mr-0'
-      data-markup
-      ref={node}
-    >
+    <div dir={direction} className='text-sm ltr:ml-0 rtl:mr-0' data-markup ref={node}>
       <ParsedContent html={announcement.content} emojis={announcement.emojis} />
     </div>
   );

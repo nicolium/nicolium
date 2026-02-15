@@ -18,8 +18,14 @@ const messages = defineMessages({
   passwordFieldLabel: { id: 'security.fields.password.label', defaultMessage: 'Password' },
   deleteHeader: { id: 'column.delete_account', defaultMessage: 'Delete account' },
   deleteSubmit: { id: 'security.submit.delete', defaultMessage: 'Delete account' },
-  deleteAccountSuccess: { id: 'security.delete_account.success', defaultMessage: 'Account successfully deleted.' },
-  deleteAccountFail: { id: 'security.delete_account.fail', defaultMessage: 'Account deletion failed.' },
+  deleteAccountSuccess: {
+    id: 'security.delete_account.success',
+    defaultMessage: 'Account successfully deleted.',
+  },
+  deleteAccountFail: {
+    id: 'security.delete_account.fail',
+    defaultMessage: 'Account deletion failed.',
+  },
 });
 
 const DeleteAccountPage = () => {
@@ -38,15 +44,18 @@ const DeleteAccountPage = () => {
 
   const handleSubmit = React.useCallback(() => {
     setLoading(true);
-    dispatch(deleteAccount(password)).then(() => {
-      setPassword('');
-      toast.success(intl.formatMessage(messages.deleteAccountSuccess));
-    }).finally(() => {
-      setLoading(false);
-    }).catch(() => {
-      setPassword('');
-      toast.error(intl.formatMessage(messages.deleteAccountFail));
-    });
+    dispatch(deleteAccount(password))
+      .then(() => {
+        setPassword('');
+        toast.success(intl.formatMessage(messages.deleteAccountSuccess));
+      })
+      .finally(() => {
+        setLoading(false);
+      })
+      .catch(() => {
+        setPassword('');
+        toast.error(intl.formatMessage(messages.deleteAccountFail));
+      });
   }, [password, dispatch, intl]);
 
   return (
@@ -58,14 +67,29 @@ const DeleteAccountPage = () => {
       <CardBody>
         <Stack space={4}>
           <Text theme='muted'>
-
-            {features.deleteAccountWithoutPassword
-              ? (features.federating
-                ? <FormattedMessage id='security.text.delete.without_password' defaultMessage='To delete your account, click Delete account. This is a permanent action that cannot be undone. Your account will be destroyed from this server, and a deletion request will be sent to other servers. It’s not guaranteed that all servers will purge your account.' />
-                : <FormattedMessage id='security.text.delete.local.without_password' defaultMessage='To delete your account, click Delete account. This is a permanent action that cannot be undone.' />)
-              : features.federating
-                ? <FormattedMessage id='security.text.delete' defaultMessage='To delete your account, enter your password and then click Delete account. This is a permanent action that cannot be undone. Your account will be destroyed from this server, and a deletion request will be sent to other servers. It’s not guaranteed that all servers will purge your account.' />
-                : <FormattedMessage id='security.text.delete.local' defaultMessage='To delete your account, enter your password and then click Delete account. This is a permanent action that cannot be undone.' />}
+            {features.deleteAccountWithoutPassword ? (
+              features.federating ? (
+                <FormattedMessage
+                  id='security.text.delete.without_password'
+                  defaultMessage='To delete your account, click Delete account. This is a permanent action that cannot be undone. Your account will be destroyed from this server, and a deletion request will be sent to other servers. It’s not guaranteed that all servers will purge your account.'
+                />
+              ) : (
+                <FormattedMessage
+                  id='security.text.delete.local.without_password'
+                  defaultMessage='To delete your account, click Delete account. This is a permanent action that cannot be undone.'
+                />
+              )
+            ) : features.federating ? (
+              <FormattedMessage
+                id='security.text.delete'
+                defaultMessage='To delete your account, enter your password and then click Delete account. This is a permanent action that cannot be undone. Your account will be destroyed from this server, and a deletion request will be sent to other servers. It’s not guaranteed that all servers will purge your account.'
+              />
+            ) : (
+              <FormattedMessage
+                id='security.text.delete.local'
+                defaultMessage='To delete your account, enter your password and then click Delete account. This is a permanent action that cannot be undone.'
+              />
+            )}
           </Text>
 
           <Form onSubmit={handleSubmit}>

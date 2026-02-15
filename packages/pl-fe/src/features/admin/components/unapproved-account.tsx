@@ -4,7 +4,11 @@ import { AuthorizeRejectButtons } from '@/components/authorize-reject-buttons';
 import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import { useAdminAccount, useAdminApproveAccountMutation, useAdminRejectAccountMutation } from '@/queries/admin/use-accounts';
+import {
+  useAdminAccount,
+  useAdminApproveAccountMutation,
+  useAdminRejectAccountMutation,
+} from '@/queries/admin/use-accounts';
 
 interface IUnapprovedAccount {
   accountId: string;
@@ -24,9 +28,7 @@ const UnapprovedAccount: React.FC<IUnapprovedAccount> = ({ accountId }) => {
   return (
     <HStack space={4} justifyContent='between'>
       <Stack space={1}>
-        <Text weight='semibold'>
-          @{account.acct}
-        </Text>
+        <Text weight='semibold'>@{account.acct}</Text>
         <Text tag='blockquote' size='sm'>
           {adminAccount?.invite_request ?? ''}
         </Text>
@@ -34,10 +36,10 @@ const UnapprovedAccount: React.FC<IUnapprovedAccount> = ({ accountId }) => {
 
       <Stack justifyContent='center'>
         <AuthorizeRejectButtons
-          onAuthorize={() =>{
+          onAuthorize={() => {
             approveAccount();
           }}
-          onReject={() =>{
+          onReject={() => {
             rejectAccount();
           }}
           countdown={3000}

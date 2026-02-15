@@ -17,7 +17,7 @@ const decodeUTF8Base64 = (data: string) => {
 };
 
 const decodePleromaData = (data: Record<string, any>) =>
-  mapValues(data, base64string => JSON.parse(decodeUTF8Base64(base64string)));
+  mapValues(data, (base64string) => JSON.parse(decodeUTF8Base64(base64string)));
 
 const pleromaDecoder = (json: string) => decodePleromaData(JSON.parse(json));
 
@@ -28,7 +28,12 @@ const decodeFromMarkup = (elementId: string, decoder: (json: string) => Record<s
   return decoder(textContent);
 };
 
-const preloadFromMarkup = (elementId: string, decoder: (json: string) => Record<string, any>, action: (data: Record<string, any>) => any) =>
+const preloadFromMarkup =
+  (
+    elementId: string,
+    decoder: (json: string) => Record<string, any>,
+    action: (data: Record<string, any>) => any,
+  ) =>
   (dispatch: AppDispatch) => {
     try {
       const data = decodeFromMarkup(elementId, decoder);
@@ -38,26 +43,24 @@ const preloadFromMarkup = (elementId: string, decoder: (json: string) => Record<
     }
   };
 
-const preload = () =>
-  (dispatch: AppDispatch) => {
-    dispatch(preloadFromMarkup('initial-results', pleromaDecoder, preloadPleroma));
-    dispatch(preloadFromMarkup('initial-state', JSON.parse, preloadMastodon));
-  };
+const preload = () => (dispatch: AppDispatch) => {
+  dispatch(preloadFromMarkup('initial-results', pleromaDecoder, preloadPleroma));
+  dispatch(preloadFromMarkup('initial-state', JSON.parse, preloadMastodon));
+};
 
 const preloadPleroma = (data: Record<string, any>): PreloadAction => ({
   type: PLEROMA_PRELOAD_IMPORT,
   data,
 });
 
-const preloadMastodon = (data: Record<string, any>) =>
-  (dispatch: AppDispatch) => {
-    const { me, access_token } = data.meta;
-    const { url } = data.accounts[me];
+const preloadMastodon = (data: Record<string, any>) => (dispatch: AppDispatch) => {
+  const { me, access_token } = data.meta;
+  const { url } = data.accounts[me];
 
-    dispatch(importEntities({ accounts: Object.values(data.accounts) }));
-    dispatch(verifyCredentials(access_token, url));
-    dispatch({ type: MASTODON_PRELOAD_IMPORT, data });
-  };
+  dispatch(importEntities({ accounts: Object.values(data.accounts) }));
+  dispatch(verifyCredentials(access_token, url));
+  dispatch({ type: MASTODON_PRELOAD_IMPORT, data });
+};
 
 interface PreloadAction {
   type: typeof PLEROMA_PRELOAD_IMPORT | typeof MASTODON_PRELOAD_IMPORT;

@@ -14,11 +14,7 @@ interface IClearLinkSuggestion {
   handleReject: (key: string) => void;
 }
 
-const ClearLinkSuggestion = ({
-  composeId,
-  handleAccept,
-  handleReject,
-}: IClearLinkSuggestion) => {
+const ClearLinkSuggestion = ({ composeId, handleAccept, handleReject }: IClearLinkSuggestion) => {
   const compose = useCompose(composeId);
   const suggestion = compose.clearLinkSuggestion;
 
@@ -33,14 +29,22 @@ const ClearLinkSuggestion = ({
             <FormattedMessage
               id='compose.clear_link_suggestion.body'
               defaultMessage='The link {url} likely includes tracking elements used to mark your online activity. They are not required for the URL to work. Do you want to remove them?'
-              values={{ url: <span className='underline'>{suggestion.originalUrl.length > 20 ? suggestion.originalUrl.slice(0, 20) + '…' : suggestion.originalUrl}</span> }}
+              values={{
+                url: (
+                  <span className='underline'>
+                    {suggestion.originalUrl.length > 20
+                      ? suggestion.originalUrl.slice(0, 20) + '…'
+                      : suggestion.originalUrl}
+                  </span>
+                ),
+              }}
             />
           </span>
           <HStack space={2} justifyContent='end'>
             <Button
               theme='muted'
               size='xs'
-              onClick={() =>{
+              onClick={() => {
                 handleReject(suggestion.key);
               }}
             >
@@ -49,7 +53,7 @@ const ClearLinkSuggestion = ({
             <Button
               theme='muted'
               size='xs'
-              onClick={() =>{
+              onClick={() => {
                 handleAccept(suggestion.key);
               }}
             >

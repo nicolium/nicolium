@@ -17,7 +17,10 @@ const messages = defineMessages({
 const useDefaultCloseIcon = (): string => {
   const { account } = useOwnAccount();
 
-  if (account?.url === 'https://donotsta.re/users/pmysl' || account?.url === 'https://to.juz.sie.federu.je/@pmysl') {
+  if (
+    account?.url === 'https://donotsta.re/users/pmysl' ||
+    account?.url === 'https://to.juz.sie.federu.je/@pmysl'
+  ) {
     return require('@phosphor-icons/core/regular/twitter-logo.svg');
   }
 
@@ -58,119 +61,123 @@ interface IModal {
 }
 
 /** Displays a modal dialog box. */
-const Modal = React.forwardRef<HTMLDivElement, IModal>(({
-  cancelAction,
-  cancelText,
-  children,
-  closeIcon,
-  closePosition = 'right',
-  confirmationAction,
-  confirmationDisabled,
-  confirmationText,
-  confirmationTheme,
-  onClose,
-  secondaryAction,
-  secondaryDisabled = false,
-  secondaryText,
-  skipFocus = false,
-  title,
-  className,
-  onBack,
-}, ref) => {
-  const intl = useIntl();
-  const buttonRef = React.useRef<HTMLButtonElement>(null);
-  const [firstRender, setFirstRender] = React.useState(true);
+const Modal = React.forwardRef<HTMLDivElement, IModal>(
+  (
+    {
+      cancelAction,
+      cancelText,
+      children,
+      closeIcon,
+      closePosition = 'right',
+      confirmationAction,
+      confirmationDisabled,
+      confirmationText,
+      confirmationTheme,
+      onClose,
+      secondaryAction,
+      secondaryDisabled = false,
+      secondaryText,
+      skipFocus = false,
+      title,
+      className,
+      onBack,
+    },
+    ref,
+  ) => {
+    const intl = useIntl();
+    const buttonRef = React.useRef<HTMLButtonElement>(null);
+    const [firstRender, setFirstRender] = React.useState(true);
 
-  const defaultCloseIcon = useDefaultCloseIcon();
+    const defaultCloseIcon = useDefaultCloseIcon();
 
-  closeIcon = closeIcon ?? defaultCloseIcon;
+    closeIcon = closeIcon ?? defaultCloseIcon;
 
-  React.useEffect(() => {
-    setFirstRender(false);
-  }, []);
+    React.useEffect(() => {
+      setFirstRender(false);
+    }, []);
 
-  React.useEffect(() => {
-    if (buttonRef?.current && !skipFocus) {
-      buttonRef.current.focus();
-    }
-  }, [skipFocus, buttonRef]);
+    React.useEffect(() => {
+      if (buttonRef?.current && !skipFocus) {
+        buttonRef.current.focus();
+      }
+    }, [skipFocus, buttonRef]);
 
-  return (
-    <div
-      ref={ref}
-      data-testid='modal'
-      className={clsx('⁂-modal', {
-        '⁂-modal--first-render': firstRender,
-        '⁂-modal--close-position-left': closePosition === 'left',
-      }, className)}
-    >
-      {title && (
-        <div className='⁂-modal__title'>
-          <div>
-            {onBack && (
-              <IconButton
-                src={require('@phosphor-icons/core/regular/arrow-left.svg')}
-                title={intl.formatMessage(messages.back)}
-                onClick={onBack}
-              />
-            )}
-
-            <h3>{title}</h3>
-
-            {onClose && (
-              <IconButton
-                src={closeIcon}
-                title={intl.formatMessage(messages.close)}
-                onClick={onClose}
-              />
-            )}
-          </div>
-        </div>
-      )}
-
-      <div className='⁂-modal__body'>
-        <div className='⁂-modal__children'>
-          {children}
-        </div>
-
-        {confirmationAction && (
-          <div className='⁂-modal__actions' data-testid='modal-actions'>
-            <div className='⁂-modal__actions__cancel'>
-              {cancelAction && (
-                <button
-                  className='⁂-modal__action-cancel'
-                  onClick={cancelAction}
-                >
-                  {cancelText ?? <FormattedMessage id='common.cancel' defaultMessage='Cancel' />}
-                </button>
-              )}
-            </div>
-
-            <div className='⁂-modal__actions__other'>
-              {secondaryAction && (
-                <button
-                  className='⁂-modal__action-secondary'
-                  onClick={secondaryAction}
-                  disabled={secondaryDisabled}
-                >
-                  {secondaryText}
-                </button>
+    return (
+      <div
+        ref={ref}
+        data-testid='modal'
+        className={clsx(
+          '⁂-modal',
+          {
+            '⁂-modal--first-render': firstRender,
+            '⁂-modal--close-position-left': closePosition === 'left',
+          },
+          className,
+        )}
+      >
+        {title && (
+          <div className='⁂-modal__title'>
+            <div>
+              {onBack && (
+                <IconButton
+                  src={require('@phosphor-icons/core/regular/arrow-left.svg')}
+                  title={intl.formatMessage(messages.back)}
+                  onClick={onBack}
+                />
               )}
 
-              <Button
-                theme={confirmationTheme ?? 'primary'}
-                onClick={confirmationAction}
-                disabled={confirmationDisabled}
-                ref={buttonRef}
-              >
-                {confirmationText}
-              </Button>
+              <h3>{title}</h3>
+
+              {onClose && (
+                <IconButton
+                  src={closeIcon}
+                  title={intl.formatMessage(messages.close)}
+                  onClick={onClose}
+                />
+              )}
             </div>
           </div>
         )}
+
+        <div className='⁂-modal__body'>
+          <div className='⁂-modal__children'>{children}</div>
+
+          {confirmationAction && (
+            <div className='⁂-modal__actions' data-testid='modal-actions'>
+              <div className='⁂-modal__actions__cancel'>
+                {cancelAction && (
+                  <button className='⁂-modal__action-cancel' onClick={cancelAction}>
+                    {cancelText ?? <FormattedMessage id='common.cancel' defaultMessage='Cancel' />}
+                  </button>
+                )}
+              </div>
+
+              <div className='⁂-modal__actions__other'>
+                {secondaryAction && (
+                  <button
+                    className='⁂-modal__action-secondary'
+                    onClick={secondaryAction}
+                    disabled={secondaryDisabled}
+                  >
+                    {secondaryText}
+                  </button>
+                )}
+
+                <Button
+                  theme={confirmationTheme ?? 'primary'}
+                  onClick={confirmationAction}
+                  disabled={confirmationDisabled}
+                  ref={buttonRef}
+                >
+                  {confirmationText}
+                </Button>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  },
+);
 
 export { Modal as default };

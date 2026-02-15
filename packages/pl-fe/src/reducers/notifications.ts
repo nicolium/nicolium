@@ -5,11 +5,7 @@ import {
   ACCOUNT_MUTE_SUCCESS,
   type AccountsAction,
 } from '../actions/accounts';
-import {
-  MARKER_FETCH_SUCCESS,
-  MARKER_SAVE_SUCCESS,
-  type MarkersAction,
-} from '../actions/markers';
+import { MARKER_FETCH_SUCCESS, MARKER_SAVE_SUCCESS, type MarkersAction } from '../actions/markers';
 import {
   NOTIFICATIONS_UPDATE,
   NOTIFICATIONS_EXPAND_SUCCESS,
@@ -21,7 +17,13 @@ import {
 } from '../actions/notifications';
 import { TIMELINE_DELETE, type TimelineAction } from '../actions/timelines';
 
-import type { GroupedNotificationsResults, Markers, NotificationGroup, PaginatedResponse, Relationship } from 'pl-api';
+import type {
+  GroupedNotificationsResults,
+  Markers,
+  NotificationGroup,
+  PaginatedResponse,
+  Relationship,
+} from 'pl-api';
 
 interface State {
   items: Array<NotificationGroup>;
@@ -41,20 +43,38 @@ const initialState: State = {
   lastRead: -1,
 };
 
-const filterUnique = (notification: NotificationGroup, index: number, notifications: Array<NotificationGroup>) =>
-  notifications.findIndex(({ group_key }) => group_key === notification.group_key) === index;
+const filterUnique = (
+  notification: NotificationGroup,
+  index: number,
+  notifications: Array<NotificationGroup>,
+) => notifications.findIndex(({ group_key }) => group_key === notification.group_key) === index;
 
 // For sorting the notifications
-const comparator = (a: Pick<NotificationGroup, 'most_recent_notification_id'>, b: Pick<NotificationGroup, 'most_recent_notification_id'>) => {
-  const length = Math.max(a.most_recent_notification_id.length, b.most_recent_notification_id.length);
-  return b.most_recent_notification_id.padStart(length, '0').localeCompare(a.most_recent_notification_id.padStart(length, '0'));
+const comparator = (
+  a: Pick<NotificationGroup, 'most_recent_notification_id'>,
+  b: Pick<NotificationGroup, 'most_recent_notification_id'>,
+) => {
+  const length = Math.max(
+    a.most_recent_notification_id.length,
+    b.most_recent_notification_id.length,
+  );
+  return b.most_recent_notification_id
+    .padStart(length, '0')
+    .localeCompare(a.most_recent_notification_id.padStart(length, '0'));
 };
 
 // Count how many notifications appear after the given ID (for unread count)
 const countFuture = (notifications: Array<NotificationGroup>, lastId: string | number) =>
   notifications.reduce((acc, notification) => {
-    const length = Math.max(notification.most_recent_notification_id.length, lastId.toString().length);
-    if (notification.most_recent_notification_id.padStart(length, '0').localeCompare(lastId.toString().padStart(length, '0')) === 1) {
+    const length = Math.max(
+      notification.most_recent_notification_id.length,
+      lastId.toString().length,
+    );
+    if (
+      notification.most_recent_notification_id
+        .padStart(length, '0')
+        .localeCompare(lastId.toString().padStart(length, '0')) === 1
+    ) {
       return acc + 1;
     } else {
       return acc;
@@ -69,7 +89,11 @@ const importNotification = (state: State, notification: NotificationGroup) =>
     draft.items = [notification, ...draft.items].toSorted(comparator).filter(filterUnique);
   });
 
-const expandNormalizedNotifications = (state: State, notifications: NotificationGroup[], next: (() => Promise<PaginatedResponse<GroupedNotificationsResults, false>>) | null) =>
+const expandNormalizedNotifications = (
+  state: State,
+  notifications: NotificationGroup[],
+  next: (() => Promise<PaginatedResponse<GroupedNotificationsResults, false>>) | null,
+) =>
   create(state, (draft) => {
     draft.items = [...notifications, ...draft.items].toSorted(comparator).filter(filterUnique);
 
@@ -79,7 +103,7 @@ const expandNormalizedNotifications = (state: State, notifications: Notification
 
 const filterNotifications = (state: State, relationship: Relationship) =>
   create(state, (draft) => {
-    draft.items = draft.items.filter(item => !item.sample_account_ids.includes(relationship.id));
+    draft.items = draft.items.filter((item) => !item.sample_account_ids.includes(relationship.id));
   });
 
 // const filterNotificationIds = (state: State, accountIds: Array<string>, type?: string) =>
@@ -97,11 +121,11 @@ const updateTop = (state: State, top: boolean) =>
 const deleteByStatus = (state: State, statusId: string) =>
   create(state, (draft) => {
     // @ts-ignore
-    draft.items = draft.items.filterNot(item => item !== null && item.status_id === statusId);
+    draft.items = draft.items.filterNot((item) => item !== null && item.status_id === statusId);
   });
 
 const importMarker = (state: State, marker: Markers) => {
-  const lastReadId = marker.notifications?.last_read_id || -1 as string | -1;
+  const lastReadId = marker.notifications?.last_read_id || (-1 as string | -1);
 
   if (!lastReadId) {
     return state;
@@ -116,7 +140,10 @@ const importMarker = (state: State, marker: Markers) => {
   });
 };
 
-const notifications = (state: State = initialState, action: AccountsAction | MarkersAction | NotificationsAction | TimelineAction): State => {
+const notifications = (
+  state: State = initialState,
+  action: AccountsAction | MarkersAction | NotificationsAction | TimelineAction,
+): State => {
   switch (action.type) {
     case NOTIFICATIONS_EXPAND_REQUEST:
       return create(state, (draft) => {
@@ -141,7 +168,9 @@ const notifications = (state: State = initialState, action: AccountsAction | Mar
     case ACCOUNT_BLOCK_SUCCESS:
       return filterNotifications(state, action.relationship);
     case ACCOUNT_MUTE_SUCCESS:
-      return action.relationship.muting_notifications ? filterNotifications(state, action.relationship) : state;
+      return action.relationship.muting_notifications
+        ? filterNotifications(state, action.relationship)
+        : state;
     // case FOLLOW_REQUEST_AUTHORIZE_SUCCESS:
     // case FOLLOW_REQUEST_REJECT_SUCCESS:
     //   return filterNotificationIds(state, [action.accountId], 'follow_request');

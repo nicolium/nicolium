@@ -13,11 +13,12 @@ interface IStatusMention {
 const StatusMention: React.FC<IStatusMention> = ({ accountId, fallback }) => {
   const { account } = useAccount(accountId);
 
-  if (!account) return (
-    <HoverAccountWrapper accountId={accountId} element='span'>
-      {fallback}
-    </HoverAccountWrapper>
-  );
+  if (!account)
+    return (
+      <HoverAccountWrapper accountId={accountId} element='span'>
+        {fallback}
+      </HoverAccountWrapper>
+    );
 
   return (
     <Link
@@ -25,7 +26,7 @@ const StatusMention: React.FC<IStatusMention> = ({ accountId, fallback }) => {
       params={{ username: account.acct }}
       className='text-primary-600 hover:underline dark:text-primary-400'
       dir='ltr'
-      onClick={(e) =>{
+      onClick={(e) => {
         e.stopPropagation();
       }}
     >

@@ -9,6 +9,4 @@ const useOwnAccount = () => {
   return useAccount(typeof me === 'string' ? me : undefined);
 };
 
-export {
-  useOwnAccount,
-};
+export { useOwnAccount };

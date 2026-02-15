@@ -10,7 +10,7 @@ interface IIndicator {
 const Indicator: React.FC<IIndicator> = ({ state = 'inactive', size = 'sm' }) => (
   <div
     className={clsx('rounded-full outline-double', {
-      'w-1.5 h-1.5 shadow-sm': size === 'sm',
+      'h-1.5 w-1.5 shadow-sm': size === 'sm',
       'bg-green-500 outline-green-400': state === 'active',
       'bg-yellow-500 outline-yellow-400': state === 'pending',
       'bg-red-500 outline-red-400': state === 'error',

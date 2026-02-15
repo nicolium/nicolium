@@ -7,16 +7,32 @@ import HStack from '@/components/ui/hstack';
 import Spinner from '@/components/ui/spinner';
 import Stack from '@/components/ui/stack';
 import AccountContainer from '@/containers/account-container';
-import { useAcceptEventParticipationRequestMutation, useEventParticipationRequests, useRejectEventParticipationRequestMutation } from '@/queries/events/use-event-participation-requests';
+import {
+  useAcceptEventParticipationRequestMutation,
+  useEventParticipationRequests,
+  useRejectEventParticipationRequestMutation,
+} from '@/queries/events/use-event-participation-requests';
 import toast from '@/toast';
 
 const messages = defineMessages({
   authorize: { id: 'compose_event.participation_requests.authorize', defaultMessage: 'Authorize' },
-  authorizeSuccess: { id: 'compose_event.participation_requests.authorize.success', defaultMessage: 'Event participation request authorized successfully' },
-  authorizeFail: { id: 'compose_event.participation_requests.authorize.fail', defaultMessage: 'Failed to authorize event participation request' },
+  authorizeSuccess: {
+    id: 'compose_event.participation_requests.authorize.success',
+    defaultMessage: 'Event participation request authorized successfully',
+  },
+  authorizeFail: {
+    id: 'compose_event.participation_requests.authorize.fail',
+    defaultMessage: 'Failed to authorize event participation request',
+  },
   reject: { id: 'compose_event.participation_requests.reject', defaultMessage: 'Reject' },
-  rejectSuccess: { id: 'compose_event.participation_requests.reject.success', defaultMessage: 'Event participation request rejected successfully' },
-  rejectFail: { id: 'compose_event.participation_requests.reject.fail', defaultMessage: 'Failed to reject event participation request' },
+  rejectSuccess: {
+    id: 'compose_event.participation_requests.reject.success',
+    defaultMessage: 'Event participation request rejected successfully',
+  },
+  rejectFail: {
+    id: 'compose_event.participation_requests.reject.fail',
+    defaultMessage: 'Failed to reject event participation request',
+  },
 });
 
 interface IAccount {
@@ -28,8 +44,14 @@ interface IAccount {
 const Account: React.FC<IAccount> = ({ eventId, id, participationMessage }) => {
   const intl = useIntl();
 
-  const { mutate: acceptEventParticipationRequest } = useAcceptEventParticipationRequestMutation(eventId, id);
-  const { mutate: rejectEventParticipationRequest } = useRejectEventParticipationRequestMutation(eventId, id);
+  const { mutate: acceptEventParticipationRequest } = useAcceptEventParticipationRequestMutation(
+    eventId,
+    id,
+  );
+  const { mutate: rejectEventParticipationRequest } = useRejectEventParticipationRequestMutation(
+    eventId,
+    id,
+  );
 
   return (
     <AccountContainer
@@ -41,7 +63,7 @@ const Account: React.FC<IAccount> = ({ eventId, id, participationMessage }) => {
             theme='secondary'
             size='sm'
             text={intl.formatMessage(messages.authorize)}
-            onClick={() =>{
+            onClick={() => {
               acceptEventParticipationRequest(undefined, {
                 onSuccess: () => {
                   toast.success(messages.authorizeSuccess);
@@ -56,7 +78,7 @@ const Account: React.FC<IAccount> = ({ eventId, id, participationMessage }) => {
             theme='danger'
             size='sm'
             text={intl.formatMessage(messages.reject)}
-            onClick={() =>{
+            onClick={() => {
               rejectEventParticipationRequest(undefined, {
                 onSuccess: () => {
                   toast.success(messages.rejectSuccess);
@@ -78,23 +100,40 @@ interface IManagePendingParticipants {
 }
 
 const ManagePendingParticipants: React.FC<IManagePendingParticipants> = ({ statusId }) => {
-  const { data: accounts, isLoading, hasNextPage, fetchNextPage } = useEventParticipationRequests(statusId);
+  const {
+    data: accounts,
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+  } = useEventParticipationRequests(statusId);
 
   return accounts ? (
     <Stack space={3}>
       <ScrollableList
         scrollKey={`eventPendingParticipants:${statusId}`}
-        emptyMessageText={<FormattedMessage id='empty_column.event_participant_requests' defaultMessage='There are no pending event participation requests.' />}
+        emptyMessageText={
+          <FormattedMessage
+            id='empty_column.event_participant_requests'
+            defaultMessage='There are no pending event participation requests.'
+          />
+        }
         hasMore={hasNextPage}
         isLoading={isLoading}
         onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
       >
-        {accounts.map(({ account_id, participation_message }) =>
-          <Account key={account_id} eventId={statusId} id={account_id} participationMessage={participation_message} />,
-        )}
+        {accounts.map(({ account_id, participation_message }) => (
+          <Account
+            key={account_id}
+            eventId={statusId}
+            id={account_id}
+            participationMessage={participation_message}
+          />
+        ))}
       </ScrollableList>
     </Stack>
-  ) : <Spinner />;
+  ) : (
+    <Spinner />
+  );
 };
 
 export { ManagePendingParticipants };

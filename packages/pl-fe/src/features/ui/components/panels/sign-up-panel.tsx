@@ -34,9 +34,7 @@ const SignUpPanel = () => {
   const [shouldRedirect, setShouldRedirect] = useState(false);
 
   const getFormData = (form: HTMLFormElement) =>
-    Object.fromEntries(
-      Array.from(form).map((i: any) => [i.name, i.value]),
-    );
+    Object.fromEntries(Array.from(form).map((i: any) => [i.name, i.value]));
 
   const handleSubmit: React.FormEventHandler = (event) => {
     const { username, password } = getFormData(event.target as HTMLFormElement);
@@ -53,7 +51,8 @@ const SignUpPanel = () => {
         } else {
           setShouldRedirect(true);
         }
-      }).catch((error: { response: PlfeResponse }) => {
+      })
+      .catch((error: { response: PlfeResponse }) => {
         const data: any = error.response?.json;
         if (data?.error === 'mfa_required') {
           setMfaAuthNeeded(true);
@@ -80,19 +79,22 @@ const SignUpPanel = () => {
         <>
           <Stack>
             <Text size='lg' weight='bold'>
-              <FormattedMessage id='signup_panel.title' defaultMessage='New to {site_title}?' values={{ site_title: instance.title }} />
+              <FormattedMessage
+                id='signup_panel.title'
+                defaultMessage='New to {site_title}?'
+                values={{ site_title: instance.title }}
+              />
             </Text>
 
             <Text theme='muted' size='sm'>
-              <FormattedMessage id='signup_panel.subtitle' defaultMessage="Sign up now to discuss what's happening." />
+              <FormattedMessage
+                id='signup_panel.subtitle'
+                defaultMessage="Sign up now to discuss what's happening."
+              />
             </Text>
           </Stack>
 
-          <Button
-            theme='primary'
-            to='/signup'
-            block
-          >
+          <Button theme='primary' to='/signup' block>
             <FormattedMessage id='account.register' defaultMessage='Sign up' />
           </Button>
         </>
@@ -101,7 +103,10 @@ const SignUpPanel = () => {
       {standalone ? (
         <>
           <Text size='lg' weight='bold'>
-            <FormattedMessage id='signup_panel.sign_in.title.external' defaultMessage='Sign in to external instance' />
+            <FormattedMessage
+              id='signup_panel.sign_in.title.external'
+              defaultMessage='Sign in to external instance'
+            />
           </Text>
           <ExternalLoginForm />
         </>
@@ -109,7 +114,10 @@ const SignUpPanel = () => {
         <>
           <Text size='lg' weight='bold'>
             {isOpen ? (
-              <FormattedMessage id='signup_panel.sign_in.title.or' defaultMessage='Already have an account?' />
+              <FormattedMessage
+                id='signup_panel.sign_in.title.or'
+                defaultMessage='Already have an account?'
+              />
             ) : (
               <FormattedMessage id='signup_panel.sign_in.title' defaultMessage='Sign in' />
             )}

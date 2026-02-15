@@ -21,16 +21,16 @@ const messages = defineMessages({
   newChat: { id: 'chat_pane.header.new_chat', defaultMessage: 'New chat' },
 });
 
-const LinkWrapper = ({ enabled, children, ...rest }: LinkProps & { enabled: boolean; children: React.ReactNode }): JSX.Element => {
+const LinkWrapper = ({
+  enabled,
+  children,
+  ...rest
+}: LinkProps & { enabled: boolean; children: React.ReactNode }): JSX.Element => {
   if (!enabled) {
     return <>{children}</>;
   }
 
-  return (
-    <Link {...rest}>
-      {children}
-    </Link>
-  );
+  return <Link {...rest}>{children}</Link>;
 };
 
 /** Floating desktop chat window. */
@@ -76,14 +76,26 @@ const ChatWindow = () => {
             <HStack alignItems='center' space={3}>
               {isOpen && (
                 <Link to='/@{$username}' params={{ username: chat.account.acct }}>
-                  <Avatar src={chat.account.avatar} alt={chat.account.avatar_description} size={40} isCat={chat.account.is_cat} username={chat.account.username} />
+                  <Avatar
+                    src={chat.account.avatar}
+                    alt={chat.account.avatar_description}
+                    size={40}
+                    isCat={chat.account.is_cat}
+                    username={chat.account.username}
+                  />
                 </Link>
               )}
 
               <Stack alignItems='start'>
-                <LinkWrapper enabled={isOpen} to='/@{$username}' params={{ username: chat.account.acct }}>
+                <LinkWrapper
+                  enabled={isOpen}
+                  to='/@{$username}'
+                  params={{ username: chat.account.acct }}
+                >
                   <div className='flex grow items-center space-x-1'>
-                    <Text size='sm' weight='bold' truncate>{chat.account.display_name || `@${chat.account.acct}`}</Text>
+                    <Text size='sm' weight='bold' truncate>
+                      {chat.account.display_name || `@${chat.account.acct}`}
+                    </Text>
                     {chat.account.verified && <VerificationBadge />}
                   </div>
                 </LinkWrapper>
@@ -92,8 +104,14 @@ const ChatWindow = () => {
           </HStack>
         }
         secondaryAction={isOpen ? openChatSettings : openSearch}
-        secondaryActionIcon={isOpen ? require('@phosphor-icons/core/regular/info.svg') : require('@phosphor-icons/core/regular/pencil-simple.svg')}
-        secondaryActionTitle={isOpen ? intl.formatMessage(messages.chatInfo) : intl.formatMessage(messages.newChat)}
+        secondaryActionIcon={
+          isOpen
+            ? require('@phosphor-icons/core/regular/info.svg')
+            : require('@phosphor-icons/core/regular/pencil-simple.svg')
+        }
+        secondaryActionTitle={
+          isOpen ? intl.formatMessage(messages.chatInfo) : intl.formatMessage(messages.newChat)
+        }
         isToggleable={!isOpen}
         isOpen={isOpen}
         onToggle={toggleChatPane}

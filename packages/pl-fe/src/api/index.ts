@@ -8,15 +8,15 @@ import { buildFullPath } from '@/utils/url';
 import type { RootState, Store } from '@/store';
 
 let store: Store;
-import('@/store').then((value) => store = value.store).catch(() => {});
+import('@/store').then((value) => (store = value.store)).catch(() => {});
 
 type PlfeResponse<T = any> = Response & { data: string; json: T };
 
 /**
-  * Dumb client for grabbing static files.
-  * It uses FE_SUBDIRECTORY and parses JSON if possible.
-  * No authorization is needed.
-  */
+ * Dumb client for grabbing static files.
+ * It uses FE_SUBDIRECTORY and parses JSON if possible.
+ * No authorization is needed.
+ */
 const staticFetch = async (input: URL | RequestInfo, init?: RequestInit) => {
   const fullPath = buildFullPath(input.toString(), BuildConfig.BACKEND_URL);
 
@@ -34,7 +34,17 @@ const staticFetch = async (input: URL | RequestInfo, init?: RequestInit) => {
 
   const { headers, ok, redirected, status, statusText, type, url } = response;
 
-  return { headers, ok, redirected, status, statusText, type, url, data, json } as any as PlfeResponse;
+  return {
+    headers,
+    ok,
+    redirected,
+    status,
+    statusText,
+    type,
+    url,
+    data,
+    json,
+  } as any as PlfeResponse;
 };
 
 const getClient = (state: RootState | (() => RootState) = store?.getState()) => {
@@ -43,8 +53,4 @@ const getClient = (state: RootState | (() => RootState) = store?.getState()) => 
   return state.auth.client;
 };
 
-export {
-  type PlfeResponse,
-  staticFetch,
-  getClient,
-};
+export { type PlfeResponse, staticFetch, getClient };

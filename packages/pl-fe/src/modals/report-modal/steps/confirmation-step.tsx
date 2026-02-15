@@ -9,13 +9,14 @@ import { useAppSelector } from '@/hooks/use-app-selector';
 const messages = defineMessages({
   accountEntity: { id: 'report.confirmation.entity.account', defaultMessage: 'account' },
   title: { id: 'report.confirmation.title', defaultMessage: 'Thanks for submitting your report.' },
-  content: { id: 'report.confirmation.content', defaultMessage: 'If we find that this {entity} is violating the {link} we will take further action on the matter.' },
+  content: {
+    id: 'report.confirmation.content',
+    defaultMessage:
+      'If we find that this {entity} is violating the {link} we will take further action on the matter.',
+  },
 });
 
-const termsOfServiceText = (<FormattedMessage
-  id='shared.tos'
-  defaultMessage='Terms of Service'
-/>);
+const termsOfServiceText = <FormattedMessage id='shared.tos' defaultMessage='Terms of Service' />;
 
 const renderTermsOfServiceLink = (href: string) => (
   <a
@@ -42,9 +43,9 @@ const ConfirmationStep: React.FC = () => {
       <Text>
         {intl.formatMessage(messages.content, {
           entity,
-          link: links.termsOfService ?
-            renderTermsOfServiceLink(links.termsOfService) :
-            termsOfServiceText,
+          link: links.termsOfService
+            ? renderTermsOfServiceLink(links.termsOfService)
+            : termsOfServiceText,
         })}
       </Text>
     </Stack>

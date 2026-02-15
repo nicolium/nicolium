@@ -7,16 +7,23 @@ import { importEntities } from '../actions';
 
 import { parseEntitiesPath } from './utils';
 
-import type { EntityCallbacks, EntityFn, EntitySchema, ExpandedEntitiesPath } from './types';
 import type { Entity } from '../types';
+import type { EntityCallbacks, EntityFn, EntitySchema, ExpandedEntitiesPath } from './types';
 import type { PlfeResponse } from '@/api';
 
-interface UseCreateEntityOpts<TEntity extends Entity = Entity, TTransformedEntity extends Entity = TEntity> {
+interface UseCreateEntityOpts<
+  TEntity extends Entity = Entity,
+  TTransformedEntity extends Entity = TEntity,
+> {
   schema?: EntitySchema<TEntity>;
   transform?: (schema: TEntity) => TTransformedEntity;
 }
 
-const useCreateEntity = <TEntity extends Entity = Entity, TTransformedEntity extends Entity = TEntity, Data = unknown>(
+const useCreateEntity = <
+  TEntity extends Entity = Entity,
+  TTransformedEntity extends Entity = TEntity,
+  Data = unknown,
+>(
   expandedPath: ExpandedEntitiesPath,
   entityFn: EntityFn<Data>,
   opts: UseCreateEntityOpts<TEntity, TTransformedEntity> = {},

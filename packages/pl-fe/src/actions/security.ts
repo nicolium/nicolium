@@ -14,12 +14,13 @@ import { AUTH_LOGGED_OUT, messages } from './auth';
 import type { AppDispatch, RootState } from '@/store';
 import type { Account } from 'pl-api';
 
-const changePassword = (oldPassword: string, newPassword: string) =>
+const changePassword =
+  (oldPassword: string, newPassword: string) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState).settings.changePassword(oldPassword, newPassword);
 
-const resetPassword = (usernameOrEmail: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const resetPassword =
+  (usernameOrEmail: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     const input = normalizeUsername(usernameOrEmail);
 
     return getClient(getState).settings.resetPassword(
@@ -28,27 +29,30 @@ const resetPassword = (usernameOrEmail: string) =>
     );
   };
 
-const changeEmail = (email: string, password: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
+const changeEmail =
+  (email: string, password: string) => (dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState).settings.changeEmail(email, password);
 
-const deleteAccount = (password: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const account = getLoggedInAccount(getState())!;
+const deleteAccount = (password: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+  const account = getLoggedInAccount(getState())!;
 
-    const client = getClient(getState);
+  const client = getClient(getState);
 
-    return (client.features.deleteAccount ? client.settings.deleteAccount(password) : client.settings.deleteAccountWithoutPassword()).then(() => {
-      dispatch<SecurityAction>({ type: AUTH_LOGGED_OUT, account });
-      toast.success(messages.loggedOut);
-    });
-  };
+  return (
+    client.features.deleteAccount
+      ? client.settings.deleteAccount(password)
+      : client.settings.deleteAccountWithoutPassword()
+  ).then(() => {
+    dispatch<SecurityAction>({ type: AUTH_LOGGED_OUT, account });
+    toast.success(messages.loggedOut);
+  });
+};
 
-const moveAccount = (targetAccount: string, password: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
+const moveAccount =
+  (targetAccount: string, password: string) => (dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState).settings.moveAccount(targetAccount, password);
 
-type SecurityAction = { type: typeof AUTH_LOGGED_OUT; account: Account }
+type SecurityAction = { type: typeof AUTH_LOGGED_OUT; account: Account };
 
 export {
   changePassword,

@@ -24,7 +24,7 @@ const federationRestrictionsDisclosed = (state: RootState): boolean =>
  */
 const isStandalone = (state: RootState): boolean => {
   const instanceFetchFailed = state.meta.instance_fetch_failed;
-  return isURL(BuildConfig.BACKEND_URL) ? false : (!isPrerendered && instanceFetchFailed);
+  return isURL(BuildConfig.BACKEND_URL) ? false : !isPrerendered && instanceFetchFailed;
 };
 
 const getHost = (url: any): string => {
@@ -41,9 +41,4 @@ const getBaseURL = (state: RootState): string => {
   return isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : getHost(account?.url);
 };
 
-export {
-  displayFqn,
-  federationRestrictionsDisclosed,
-  isStandalone,
-  getBaseURL,
-};
+export { displayFqn, federationRestrictionsDisclosed, isStandalone, getBaseURL };

@@ -7,7 +7,10 @@ interface IEmptyMessage {
   icon?: string;
 }
 
-const EmptyMessage: React.FC<IEmptyMessage> = ({ text, icon = require('@phosphor-icons/core/regular/empty.svg') }) => (
+const EmptyMessage: React.FC<IEmptyMessage> = ({
+  text,
+  icon = require('@phosphor-icons/core/regular/empty.svg'),
+}) => (
   <div className='⁂-empty-message'>
     <Icon src={icon} aria-hidden />
 

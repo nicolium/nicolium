@@ -8,8 +8,14 @@ import { useCompose } from '@/hooks/use-compose';
 import ComposeFormButton from './compose-form-button';
 
 const messages = defineMessages({
-  show_location_picker: { id: 'location_button.show_location_picker', defaultMessage: 'Show location picker' },
-  hide_location_picker: { id: 'location_button.hide_location_picker', defaultMessage: 'Hide location picker' },
+  show_location_picker: {
+    id: 'location_button.show_location_picker',
+    defaultMessage: 'Show location picker',
+  },
+  hide_location_picker: {
+    id: 'location_button.hide_location_picker',
+    defaultMessage: 'Hide location picker',
+  },
 });
 
 interface ILocationButton {
@@ -40,7 +46,9 @@ const LocationButton: React.FC<ILocationButton> = ({ composeId }) => {
   return (
     <ComposeFormButton
       icon={require('@phosphor-icons/core/regular/map-pin.svg')}
-      title={intl.formatMessage(active ? messages.hide_location_picker : messages.show_location_picker)}
+      title={intl.formatMessage(
+        active ? messages.hide_location_picker : messages.show_location_picker,
+      )}
       active={active}
       onClick={onClick}
     />

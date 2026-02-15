@@ -30,7 +30,10 @@ const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) =
   if (!account) return null;
 
   return (
-    <div key={message.id} className='group relative px-4 py-2 hover:bg-gray-200/40 dark:hover:bg-gray-800/40'>
+    <div
+      key={message.id}
+      className='group relative px-4 py-2 hover:bg-gray-200/40 dark:hover:bg-gray-800/40'
+    >
       <HStack
         space={2}
         alignItems='bottom'
@@ -40,7 +43,12 @@ const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) =
         })}
       >
         {!isMyMessage && (
-          <Link className='mb-0.5' to='/@{$username}' params={{ username: account.acct }} title={account.acct}>
+          <Link
+            className='mb-0.5'
+            to='/@{$username}'
+            params={{ username: account.acct }}
+            title={account.acct}
+          >
             <HoverAccountWrapper accountId={account.id} element='span'>
               <Avatar
                 src={account.avatar}
@@ -64,16 +72,14 @@ const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) =
         >
           <HStack alignItems='bottom' className='max-w-full'>
             <div
-              className={
-                clsx({
-                  'text-ellipsis break-words relative rounded-md py-2 px-3 max-w-full space-y-2 [&_.mention]:underline': true,
-                  '[&_.mention]:text-primary-600 dark:[&_.mention]:text-primary-400': !isMyMessage,
-                  '[&_.mention]:text-white dark:[&_.mention]:white': isMyMessage,
-                  'bg-primary-500 text-white': isMyMessage,
-                  'bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100': !isMyMessage,
-                  // '!bg-transparent !p-0 emoji-lg': isOnlyEmoji,
-                })
-              }
+              className={clsx({
+                'relative max-w-full space-y-2 text-ellipsis break-words rounded-md px-3 py-2 [&_.mention]:underline': true,
+                '[&_.mention]:text-primary-600 dark:[&_.mention]:text-primary-400': !isMyMessage,
+                'dark:[&_.mention]:white [&_.mention]:text-white': isMyMessage,
+                'bg-primary-500 text-white': isMyMessage,
+                'bg-gray-200 text-gray-900 dark:bg-gray-800 dark:text-gray-100': !isMyMessage,
+                // '!bg-transparent !p-0 emoji-lg': isOnlyEmoji,
+              })}
               tabIndex={0}
             >
               <Text size='sm' theme='inherit' className='break-word-nested'>
@@ -97,7 +103,7 @@ const ShoutboxMessageList: React.FC = () => {
   const node = useRef<VirtuosoHandle>(null);
   const [firstItemIndex, setFirstItemIndex] = useState(START_INDEX - 20);
 
-  const me = useAppSelector(state => state.me);
+  const me = useAppSelector((state) => state.me);
   const shoutboxMessages = useShoutboxMessages() || [];
   const isLoading = useShoutboxIsLoading();
 

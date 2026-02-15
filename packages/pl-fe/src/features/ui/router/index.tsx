@@ -165,14 +165,22 @@ const rootRoute = createRootRouteWithContext<RouterContext>()({
   component: React.lazy(() => import('@/features/ui')),
 });
 
-const requireAuth = ({ context: { isLoggedIn }, location }: { context: RouterContext; location: ParsedLocation }) => {
+const requireAuth = ({
+  context: { isLoggedIn },
+  location,
+}: {
+  context: RouterContext;
+  location: ParsedLocation;
+}) => {
   localStorage.setItem('plfe:redirect_uri', location.href);
-  if (!isLoggedIn) throw redirect({
-    to: '/login',
-  });
+  if (!isLoggedIn)
+    throw redirect({
+      to: '/login',
+    });
 };
 
-const requireAuthMiddleware = (next: (options: { context: RouterContext; location: ParsedLocation }) => void) =>
+const requireAuthMiddleware =
+  (next: (options: { context: RouterContext; location: ParsedLocation }) => void) =>
   (options: { context: RouterContext; location: ParsedLocation }) => {
     requireAuth(options);
     next?.(options);
@@ -274,7 +282,8 @@ const HomeRoute = () => {
   const { isLoggedIn } = useLoggedIn();
 
   if (!isLoggedIn && redirectRootNoLogin) return <Navigate to={redirectRootNoLogin} replace />;
-  if (standalone && !isLoggedIn && !WITH_LANDING_PAGE) return <Navigate to='/login/external' replace />;
+  if (standalone && !isLoggedIn && !WITH_LANDING_PAGE)
+    return <Navigate to='/login/external' replace />;
 
   if (isLoggedIn) return <HomeTimeline />;
   if (standalone && WITH_LANDING_PAGE) return <LandingPage />;
@@ -339,7 +348,9 @@ export const localTimelineRoute = createRoute({
   path: '/timeline/local',
   component: CommunityTimeline,
   beforeLoad: (options) => {
-    const { context: { features, instance } } = options;
+    const {
+      context: { features, instance },
+    } = options;
     if (instance.configuration.timelines_access.live_feeds.local !== 'public') {
       requireAuth(options);
     }
@@ -352,7 +363,9 @@ export const federatedTimelineRoute = createRoute({
   path: '/timeline/fediverse',
   component: PublicTimeline,
   beforeLoad: (options) => {
-    const { context: { features, instance } } = options;
+    const {
+      context: { features, instance },
+    } = options;
     if (instance.configuration.timelines_access.live_feeds.remote !== 'public') {
       requireAuth(options);
     }
@@ -365,7 +378,9 @@ export const bubbleTimelineRoute = createRoute({
   path: '/timeline/bubble',
   component: BubbleTimeline,
   beforeLoad: (options) => {
-    const { context: { features, instance } } = options;
+    const {
+      context: { features, instance },
+    } = options;
     if (instance.configuration.timelines_access.live_feeds.bubble !== 'public') {
       requireAuth(options);
     }
@@ -378,7 +393,9 @@ export const wrenchedTimelineRoute = createRoute({
   path: '/timeline/wrenched',
   component: WrenchedTimeline,
   beforeLoad: (options) => {
-    const { context: { features, instance } } = options;
+    const {
+      context: { features, instance },
+    } = options;
     if (instance.configuration.timelines_access.live_feeds.wrenched !== 'public') {
       requireAuth(options);
     }
@@ -391,7 +408,9 @@ export const remoteTimelineRoute = createRoute({
   path: '/',
   component: RemoteTimeline,
   beforeLoad: (options) => {
-    const { context: { features, instance } } = options;
+    const {
+      context: { features, instance },
+    } = options;
     if (instance.configuration.timelines_access.live_feeds.remote !== 'public') {
       requireAuth(options);
     }
@@ -405,7 +424,9 @@ export const conversationsRoute = createRoute({
   path: '/conversations',
   component: Conversations,
   beforeLoad: (options) => {
-    const { context: { features } } = options;
+    const {
+      context: { features },
+    } = options;
     requireAuth(options);
     if (!features.conversations) throw notFound();
   },
@@ -417,7 +438,9 @@ export const hashtagTimelineRoute = createRoute({
   path: '/tags/$id',
   component: HashtagTimeline,
   beforeLoad: (options) => {
-    const { context: { instance } } = options;
+    const {
+      context: { instance },
+    } = options;
     if (instance.configuration.timelines_access.hashtag_feeds.local !== 'public') {
       requireAuth(options);
     }
@@ -492,7 +515,8 @@ export const bookmarkFoldersRoute = createRoute({
   component: BookmarkFolders,
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.bookmarks) throw notFound();
-    if (!features.bookmarkFolders) throw redirect({ to: '/bookmarks/$folderId', params: { folderId: 'all' } });
+    if (!features.bookmarkFolders)
+      throw redirect({ to: '/bookmarks/$folderId', params: { folderId: 'all' } });
   }),
 });
 
@@ -901,7 +925,8 @@ export const settingsImportRoute = createRoute({
   path: '/settings/import',
   component: ImportData,
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
-    if (!features.importBlocks && !features.importFollows && !features.importMutes) throw notFound();
+    if (!features.importBlocks && !features.importFollows && !features.importMutes)
+      throw notFound();
   }),
 });
 
@@ -1188,7 +1213,9 @@ export const errorRoute = createRoute({
 export const networkErrorRoute = createRoute({
   getParentRoute: () => layouts.empty,
   path: '/error/network',
-  component: React.lazy(() => Promise.reject(new TypeError('Failed to fetch dynamically imported module: TEST'))),
+  component: React.lazy(() =>
+    Promise.reject(new TypeError('Failed to fetch dynamically imported module: TEST')),
+  ),
 });
 
 // Crypto donate
@@ -1225,7 +1252,13 @@ const redirectNoticeStatusRoute = createRoute({
   path: '/notice/$statusId',
   component: () => {
     const { statusId } = redirectNoticeStatusRoute.useParams();
-    return <Navigate to='/@{$username}/posts/$statusId' params={{ username: 'undefined', statusId }} replace />;
+    return (
+      <Navigate
+        to='/@{$username}/posts/$statusId'
+        params={{ username: 'undefined', statusId }}
+        replace
+      />
+    );
   },
 });
 const redirectPleromaStatusRoute = createRoute({
@@ -1249,7 +1282,13 @@ const redirectIceshrimpStatusRoute = createRoute({
   path: '/notes/$statusId',
   component: () => {
     const { statusId } = redirectIceshrimpStatusRoute.useParams();
-    return <Navigate to='/@{$username}/posts/$statusId' params={{ username: 'undefined', statusId }} replace />;
+    return (
+      <Navigate
+        to='/@{$username}/posts/$statusId'
+        params={{ username: 'undefined', statusId }}
+        replace
+      />
+    );
   },
 });
 const redirectInviteRoute = createRoute({
@@ -1265,29 +1304,107 @@ const redirectWithRepliesRoute = createRoute({
   path: '/@{$username}/with_replies',
   component: () => {
     const { username } = redirectWithRepliesRoute.useParams();
-    return <Navigate to='/@{$username}' params={{ username }} search={{ with_replies: true }} replace />;
+    return (
+      <Navigate to='/@{$username}' params={{ username }} search={{ with_replies: true }} replace />
+    );
   },
 });
 const redirectRoutes = [
-  createRoute({ getParentRoute: () => rootRoute, path: '/timelines/home', component: () => <Navigate to='/' replace /> }),
-  createRoute({ getParentRoute: () => rootRoute, path: '/timelines/public/local', component: () => <Navigate to='/timeline/local' replace /> }),
-  createRoute({    getParentRoute: () => rootRoute, path: '/timelines/public', component: () => <Navigate to='/timeline/fediverse' replace />  }),
-  createRoute({ getParentRoute: () => rootRoute, path: '/timelines/direct', component: () => <Navigate to='/conversations' replace /> }),
-  createRoute({ getParentRoute: () => rootRoute, path: '/main/all', component: () => <Navigate to='/timeline/fediverse' replace /> }),
-  createRoute({ getParentRoute: () => rootRoute, path: '/main/public', component: () => <Navigate to='/timeline/local' replace />  }),
-  createRoute({ getParentRoute: () => rootRoute, path: '/main/friends', component: () => <Navigate to='/' replace /> }),
-  createRoute({ getParentRoute: () => rootRoute, path: '/user-settings', component: () => <Navigate to='/settings/profile' replace /> }),
-  createRoute({ getParentRoute: () => rootRoute, path: '/registration', component: () => <Navigate to='/' replace /> }),
-  createRoute({ getParentRoute: () => rootRoute, path: '/admin', component: () => <Navigate to='/pl-fe/admin' replace /> }),
-  createRoute({ getParentRoute: () => rootRoute, path: '/terms', component: () => <Navigate to='/about/{-$slug}' params={{ slug: undefined }} replace /> }),
-  createRoute({ getParentRoute: () => rootRoute, path: '/settings/preferences', component: () => <Navigate to='/settings' replace /> }),
-  createRoute({ getParentRoute: () => rootRoute, path: '/settings/two_factor_authentication_methods', component: () => <Navigate to='/settings/mfa' replace /> }),
-  createRoute({ getParentRoute: () => rootRoute, path: '/settings/applications', component: () => <Navigate to='/developers' replace /> }),
-  createRoute({ getParentRoute: () => rootRoute, path: '/auth/edit', component: () => <Navigate to='/settings' replace /> }),
-  createRoute({ getParentRoute: () => rootRoute, path: '/auth/reset_password', component: () => <Navigate to='/reset-password' replace /> }),
-  createRoute({ getParentRoute: () => rootRoute, path: '/auth/sign_in', component: () => <Navigate to='/login' replace /> }),
-  createRoute({ getParentRoute: () => rootRoute, path: '/auth/sign_out', component: () => <Navigate to='/logout' replace /> }),
-  createRoute({ getParentRoute: () => rootRoute, path: '/auth/password/new', component: () => <Navigate to='/reset-password' replace /> }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/timelines/home',
+    component: () => <Navigate to='/' replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/timelines/public/local',
+    component: () => <Navigate to='/timeline/local' replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/timelines/public',
+    component: () => <Navigate to='/timeline/fediverse' replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/timelines/direct',
+    component: () => <Navigate to='/conversations' replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/main/all',
+    component: () => <Navigate to='/timeline/fediverse' replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/main/public',
+    component: () => <Navigate to='/timeline/local' replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/main/friends',
+    component: () => <Navigate to='/' replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/user-settings',
+    component: () => <Navigate to='/settings/profile' replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/registration',
+    component: () => <Navigate to='/' replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/admin',
+    component: () => <Navigate to='/pl-fe/admin' replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/terms',
+    component: () => <Navigate to='/about/{-$slug}' params={{ slug: undefined }} replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/settings/preferences',
+    component: () => <Navigate to='/settings' replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/settings/two_factor_authentication_methods',
+    component: () => <Navigate to='/settings/mfa' replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/settings/applications',
+    component: () => <Navigate to='/developers' replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/auth/edit',
+    component: () => <Navigate to='/settings' replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/auth/reset_password',
+    component: () => <Navigate to='/reset-password' replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/auth/sign_in',
+    component: () => <Navigate to='/login' replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/auth/sign_out',
+    component: () => <Navigate to='/logout' replace />,
+  }),
+  createRoute({
+    getParentRoute: () => rootRoute,
+    path: '/auth/password/new',
+    component: () => <Navigate to='/reset-password' replace />,
+  }),
   redirectTagRoute,
   redirectNoticeStatusRoute,
   redirectPleromaStatusRoute,
@@ -1385,21 +1502,10 @@ const routeTree = rootRoute.addChildren([
     errorRoute,
     networkErrorRoute,
   ]),
-  layouts.event.addChildren([
-    eventInformationRoute,
-    eventDiscussionRoute,
-  ]),
-  layouts.events.addChildren([
-    eventsRoute,
-    newEventRoute,
-    eventEditRoute,
-  ]),
+  layouts.event.addChildren([eventInformationRoute, eventDiscussionRoute]),
+  layouts.events.addChildren([eventsRoute, newEventRoute, eventEditRoute]),
   layouts.externalLogin.addChildren([loginExternalRoute]),
-  layouts.group.addChildren([
-    groupTimelineRoute,
-    groupMembersRoute,
-    groupGalleryRoute,
-  ]),
+  layouts.group.addChildren([groupTimelineRoute, groupMembersRoute, groupGalleryRoute]),
   layouts.groups.addChildren([groupsRoute]),
   layouts.home.addChildren([
     homeRoute,
@@ -1408,7 +1514,9 @@ const routeTree = rootRoute.addChildren([
     bubbleTimelineRoute,
     wrenchedTimelineRoute,
   ]),
-  layouts.landing.addChildren([/*landingTimelineRoute*/]),
+  layouts.landing.addChildren([
+    /*landingTimelineRoute*/
+  ]),
   layouts.manageGroups.addChildren([
     manageGroupRoute,
     editGroupRoute,
@@ -1426,18 +1534,13 @@ const routeTree = rootRoute.addChildren([
   ]),
   layouts.remoteInstance.addChildren([remoteTimelineRoute]),
   layouts.search.addChildren([searchRoute]),
-  layouts.status.addChildren([
-    statusRoute,
-    statusQuotesRoute,
-  ]),
+  layouts.status.addChildren([statusRoute, statusQuotesRoute]),
   ...redirectRoutes,
 ]);
 
 const FallbackLayout: React.FC<{ children: JSX.Element }> = ({ children }) => (
   <>
-    <Layout.Main>
-      {children}
-    </Layout.Main>
+    <Layout.Main>{children}</Layout.Main>
 
     <Layout.Aside />
   </>
@@ -1490,17 +1593,18 @@ const RouterWithContext = () => {
   const hasCrypto = cryptoAddresses.length > 0;
   const { account } = useOwnAccount();
 
-  const context: RouterContext = useMemo(() => ({
-    instance,
-    features,
-    isLoggedIn: !!account,
-    isAdmin: !!(account?.is_admin ?? account?.is_moderator),
-    hasCrypto,
-  }), [features.version, hasCrypto, !!account, account?.is_admin, account?.is_moderator]);
-
-  return (
-    <RouterProvider router={router} context={context} />
+  const context: RouterContext = useMemo(
+    () => ({
+      instance,
+      features,
+      isLoggedIn: !!account,
+      isAdmin: !!(account?.is_admin ?? account?.is_moderator),
+      hasCrypto,
+    }),
+    [features.version, hasCrypto, !!account, account?.is_admin, account?.is_moderator],
   );
+
+  return <RouterProvider router={router} context={context} />;
 };
 
 export { layouts, rootRoute, router, RouterWithContext };

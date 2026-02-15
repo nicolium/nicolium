@@ -48,10 +48,10 @@ const UI: React.FC = React.memo(() => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const node = useRef<HTMLDivElement | null>(null);
-  const me = useAppSelector(state => state.me);
+  const me = useAppSelector((state) => state.me);
   const { account } = useOwnAccount();
   const features = useFeatures();
-  const vapidKey = useAppSelector(state => getVapidKey(state));
+  const vapidKey = useAppSelector((state) => getVapidKey(state));
   const client = useClient();
   const instance = useInstance();
   const { theme } = useSettings();
@@ -71,16 +71,16 @@ const UI: React.FC = React.memo(() => {
     }
   };
 
-  const handleDragEnter = (e: DragEvent) =>{
+  const handleDragEnter = (e: DragEvent) => {
     e.preventDefault();
   };
-  const handleDragLeave = (e: DragEvent) =>{
+  const handleDragLeave = (e: DragEvent) => {
     e.preventDefault();
   };
-  const handleDragOver = (e: DragEvent) =>{
+  const handleDragOver = (e: DragEvent) => {
     e.preventDefault();
   };
-  const handleDrop = (e: DragEvent) =>{
+  const handleDrop = (e: DragEvent) => {
     e.preventDefault();
   };
 
@@ -205,10 +205,7 @@ const UI: React.FC = React.memo(() => {
         <ModalRoot />
       </Suspense>
 
-      <Toaster
-        position='top-right'
-        containerClassName='top-4'
-      />
+      <Toaster position='top-right' containerClassName='top-4' />
     </GlobalHotkeys>
   );
 });

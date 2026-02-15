@@ -22,10 +22,9 @@ const updateChatInChatSearchQuery = (newChat: Chat) => {
  * Re-order the ChatSearch query by the last message timestamp.
  */
 const reOrderChatListItems = () => {
-  sortQueryData<Chat>(['chats', 'search'], (chatA, chatB) => compareDate(
-    chatA.last_message?.created_at as string,
-    chatB.last_message?.created_at as string,
-  ));
+  sortQueryData<Chat>(['chats', 'search'], (chatA, chatB) =>
+    compareDate(chatA.last_message?.created_at as string, chatB.last_message?.created_at as string),
+  );
 };
 
 /**
@@ -78,7 +77,7 @@ const getUnreadChatsCount = (): number => {
     queryClient.getQueryData<InfiniteData<PaginatedResponse<Chat>>>(['chats', 'search']),
   );
 
-  return sumBy(chats, chat => chat.unread);
+  return sumBy(chats, (chat) => chat.unread);
 };
 
 export { updateChatListItem, getUnreadChatsCount, reOrderChatListItems };

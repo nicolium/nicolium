@@ -15,7 +15,12 @@ import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
-import { useFavouriteStatus, useReblogStatus, useUnfavouriteStatus, useUnreblogStatus } from '@/queries/statuses/use-status-interactions';
+import {
+  useFavouriteStatus,
+  useReblogStatus,
+  useUnfavouriteStatus,
+  useUnreblogStatus,
+} from '@/queries/statuses/use-status-interactions';
 import { makeGetStatus, type SelectedStatus } from '@/selectors';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
@@ -33,8 +38,6 @@ import StatusReplyMentions from './status-reply-mentions';
 import StatusInfo from './statuses/status-info';
 import Tombstone from './tombstone';
 
-
-
 const messages = defineMessages({
   reblogged_by: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
 });
@@ -46,11 +49,19 @@ interface IAccountInfo {
 const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => (
   <div className='flex flex-row-reverse items-center gap-1 self-baseline'>
     <Link
-      to='/@{$username}/posts/$statusId' params={{ username: status.account.acct, statusId: status.id }} className='hover:underline' onClick={(event) =>{
+      to='/@{$username}/posts/$statusId'
+      params={{ username: status.account.acct, statusId: status.id }}
+      className='hover:underline'
+      onClick={(event) => {
         event.stopPropagation();
       }}
     >
-      <RelativeTimestamp timestamp={status.created_at} theme='muted' size='sm' className='whitespace-nowrap' />
+      <RelativeTimestamp
+        timestamp={status.created_at}
+        theme='muted'
+        size='sm'
+        className='whitespace-nowrap'
+      />
     </Link>
     <StatusTypeIcon visibility={status.visibility} />
     <StatusLanguagePicker status={status} />
@@ -58,7 +69,10 @@ const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => (
       <>
         <span className='⁂-separator' />
 
-        <Icon className='size-4 text-gray-700 dark:text-gray-600' src={require('@phosphor-icons/core/regular/pencil-simple.svg')} />
+        <Icon
+          className='size-4 text-gray-700 dark:text-gray-600'
+          src={require('@phosphor-icons/core/regular/pencil-simple.svg')}
+        />
       </>
     )}
   </div>
@@ -72,19 +86,26 @@ interface IStatusFollowedTagInfo {
 const StatusFollowedTagInfo: React.FC<IStatusFollowedTagInfo> = ({ status, avatarSize }) => {
   const { data: followedTags } = useFollowedTags();
 
-  const filteredTags = status.tags.filter(tag => followedTags?.some(followed => followed.name.toLowerCase() === tag.name.toLowerCase()));
+  const filteredTags = status.tags.filter((tag) =>
+    followedTags?.some((followed) => followed.name.toLowerCase() === tag.name.toLowerCase()),
+  );
 
   if (!filteredTags.length) {
     return null;
   }
 
-  const tagLinks = filteredTags.slice(0, 2).map(tag => (
-    <HashtagLink key={tag.name} hashtag={tag.name} />
-  ));
+  const tagLinks = filteredTags
+    .slice(0, 2)
+    .map((tag) => <HashtagLink key={tag.name} hashtag={tag.name} />);
 
   if (filteredTags.length > 2) {
     tagLinks.push(
-      <FormattedMessage key='more' id='reply_mentions.more' defaultMessage='{count} more' values={{ count: filteredTags.length - 2 }} />,
+      <FormattedMessage
+        key='more'
+        id='reply_mentions.more'
+        defaultMessage='{count} more'
+        values={{ count: filteredTags.length - 2 }}
+      />,
     );
   }
 
@@ -92,7 +113,12 @@ const StatusFollowedTagInfo: React.FC<IStatusFollowedTagInfo> = ({ status, avata
     <StatusInfo
       className='-mb-1'
       avatarSize={avatarSize}
-      icon={<Icon src={require('@phosphor-icons/core/regular/hash.svg')} className='size-4 text-primary-600 dark:text-primary-400' />}
+      icon={
+        <Icon
+          src={require('@phosphor-icons/core/regular/hash.svg')}
+          className='size-4 text-primary-600 dark:text-primary-400'
+        />
+      }
       text={
         <FormattedMessage
           id='status.followed_tag'
@@ -160,7 +186,9 @@ const Status: React.FC<IStatus> = (props) => {
   const node = useRef<HTMLDivElement>(null);
 
   const getStatus = useMemo(makeGetStatus, []);
-  const actualStatus = useAppSelector(state => (status.reblog_id && getStatus(state, { id: status.reblog_id })) ?? status);
+  const actualStatus = useAppSelector(
+    (state) => (status.reblog_id && getStatus(state, { id: status.reblog_id })) ?? status,
+  );
 
   const { mutate: favouriteStatus } = useFavouriteStatus(actualStatus.id);
   const { mutate: unfavouriteStatus } = useUnfavouriteStatus(actualStatus.id);
@@ -171,12 +199,19 @@ const Status: React.FC<IStatus> = (props) => {
   const group = actualStatus.group;
 
   const filterResults = useMemo(() => {
-    return [...status.filtered, ...actualStatus.filtered].filter(({ filter }) => filter.filter_action === 'warn').reduce((uniqueFilters, current) => {
-      if (!uniqueFilters.some(({ filter: uniqueFilter }) => uniqueFilter.id === current.filter.id)) {
-        uniqueFilters.push(current);
-      }
-      return uniqueFilters;
-    }, [] as typeof status.filtered);
+    return [...status.filtered, ...actualStatus.filtered]
+      .filter(({ filter }) => filter.filter_action === 'warn')
+      .reduce(
+        (uniqueFilters, current) => {
+          if (
+            !uniqueFilters.some(({ filter: uniqueFilter }) => uniqueFilter.id === current.filter.id)
+          ) {
+            uniqueFilters.push(current);
+          }
+          return uniqueFilters;
+        },
+        [] as typeof status.filtered,
+      );
   }, [status.filtered, actualStatus.filtered]);
   const filtered = filterResults.length > 0;
 
@@ -249,7 +284,10 @@ const Status: React.FC<IStatus> = (props) => {
   };
 
   const handleHotkeyOpen = () => {
-    navigate({ to: '/@{$username}/posts/$statusId', params: { username: actualStatus.account.acct, statusId: actualStatus.id } });
+    navigate({
+      to: '/@{$username}/posts/$statusId',
+      params: { username: actualStatus.account.acct, statusId: actualStatus.id },
+    });
   };
 
   const handleHotkeyOpenProfile = () => {
@@ -289,7 +327,12 @@ const Status: React.FC<IStatus> = (props) => {
         <StatusInfo
           className='-mb-1'
           avatarSize={avatarSize}
-          icon={<Icon src={require('@phosphor-icons/core/regular/repeat.svg')} className='size-4 text-green-600' />}
+          icon={
+            <Icon
+              src={require('@phosphor-icons/core/regular/repeat.svg')}
+              className='size-4 text-green-600'
+            />
+          }
           text={
             <FormattedMessage
               id='status.reblogged_by_with_group'
@@ -303,13 +346,20 @@ const Status: React.FC<IStatus> = (props) => {
                   >
                     <bdi className='truncate'>
                       <strong className='text-gray-800 dark:text-gray-200'>
-                        <Emojify text={status.account.display_name} emojis={status.account.emojis} />
+                        <Emojify
+                          text={status.account.display_name}
+                          emojis={status.account.emojis}
+                        />
                       </strong>
                     </bdi>
                   </Link>
                 ),
                 group: (
-                  <Link to='/groups/$groupId' params={{ groupId: group.id }} className='hover:underline'>
+                  <Link
+                    to='/groups/$groupId'
+                    params={{ groupId: group.id }}
+                    className='hover:underline'
+                  >
                     <strong className='text-gray-800 dark:text-gray-200'>
                       <Emojify text={group.display_name} emojis={group.emojis} />
                     </strong>
@@ -323,15 +373,23 @@ const Status: React.FC<IStatus> = (props) => {
     } else if (isReblog) {
       const accounts = status.accounts ?? [status.account];
 
-      const renderedAccounts = accounts.slice(0, 2).map(account => !!account && (
-        <Link key={account.acct} to='/@{$username}' params={{ username: account.acct }} className='hover:underline'>
-          <bdi className='truncate'>
-            <strong className='text-gray-800 dark:text-gray-200'>
-              <Emojify text={account.display_name} emojis={account.emojis} />
-            </strong>
-          </bdi>
-        </Link>
-      ));
+      const renderedAccounts = accounts.slice(0, 2).map(
+        (account) =>
+          !!account && (
+            <Link
+              key={account.acct}
+              to='/@{$username}'
+              params={{ username: account.acct }}
+              className='hover:underline'
+            >
+              <bdi className='truncate'>
+                <strong className='text-gray-800 dark:text-gray-200'>
+                  <Emojify text={account.display_name} emojis={account.emojis} />
+                </strong>
+              </bdi>
+            </Link>
+          ),
+      );
 
       if (accounts.length > 2) {
         renderedAccounts.push(
@@ -352,7 +410,12 @@ const Status: React.FC<IStatus> = (props) => {
         <StatusInfo
           className='-mb-1'
           avatarSize={avatarSize}
-          icon={<Icon src={require('@phosphor-icons/core/regular/repeat.svg')} className='size-4 text-green-600' />}
+          icon={
+            <Icon
+              src={require('@phosphor-icons/core/regular/repeat.svg')}
+              className='size-4 text-green-600'
+            />
+          }
           text={
             status.visibility === 'private' ? (
               <FormattedMessage
@@ -375,10 +438,13 @@ const Status: React.FC<IStatus> = (props) => {
         <StatusInfo
           className='-mb-1'
           avatarSize={avatarSize}
-          icon={<Icon src={require('@phosphor-icons/core/regular/push-pin.svg')} className='size-4 text-gray-600 dark:text-gray-400' />}
-          text={
-            <FormattedMessage id='status.pinned' defaultMessage='Pinned post' />
+          icon={
+            <Icon
+              src={require('@phosphor-icons/core/regular/push-pin.svg')}
+              className='size-4 text-gray-600 dark:text-gray-400'
+            />
           }
+          text={<FormattedMessage id='status.pinned' defaultMessage='Pinned post' />}
         />
       );
     } else if (showGroup && group) {
@@ -386,14 +452,23 @@ const Status: React.FC<IStatus> = (props) => {
         <StatusInfo
           className='-mb-1'
           avatarSize={avatarSize}
-          icon={<Icon src={require('@phosphor-icons/core/regular/users-three.svg')} className='size-4 text-primary-600 dark:text-primary-400' />}
+          icon={
+            <Icon
+              src={require('@phosphor-icons/core/regular/users-three.svg')}
+              className='size-4 text-primary-600 dark:text-primary-400'
+            />
+          }
           text={
             <FormattedMessage
               id='status.group'
               defaultMessage='Posted in {group}'
               values={{
                 group: (
-                  <Link to='/groups/$groupId' params={{ groupId: group.id }} className='hover:underline'>
+                  <Link
+                    to='/groups/$groupId'
+                    params={{ groupId: group.id }}
+                    className='hover:underline'
+                  >
                     <bdi className='truncate'>
                       <strong className='text-gray-800 dark:text-gray-200'>
                         <Emojify text={group.display_name} emojis={group.emojis} />
@@ -413,17 +488,19 @@ const Status: React.FC<IStatus> = (props) => {
 
   if (!status) return null;
 
-  if (status.deleted) return (
-    <Tombstone id={status.id} onMoveUp={onMoveUp} onMoveDown={onMoveDown} deleted />
-  );
+  if (status.deleted)
+    return <Tombstone id={status.id} onMoveUp={onMoveUp} onMoveDown={onMoveDown} deleted />;
 
   if (filtered && actualStatus.showFiltered !== true) {
     const body = (
       <div className={clsx('status__wrapper text-center')} ref={node}>
         <Text theme='muted'>
-          <FormattedMessage id='status.filtered' defaultMessage='Filtered' />: {filterResults.map(({ filter }) => filter.title).join(', ')}.
-          {' '}
-          <button className='text-primary-600 hover:underline dark:text-primary-400' onClick={handleUnfilter}>
+          <FormattedMessage id='status.filtered' defaultMessage='Filtered' />:{' '}
+          {filterResults.map(({ filter }) => filter.title).join(', ')}.{' '}
+          <button
+            className='text-primary-600 hover:underline dark:text-primary-400'
+            onClick={handleUnfilter}
+          >
             <FormattedMessage id='status.show_filter_reason' defaultMessage='Show anyway' />
           </button>
         </Text>
@@ -446,10 +523,7 @@ const Status: React.FC<IStatus> = (props) => {
 
   let rebloggedByText;
   if (status.reblog_id === 'object') {
-    rebloggedByText = intl.formatMessage(
-      messages.reblogged_by,
-      { name: status.account.acct },
-    );
+    rebloggedByText = intl.formatMessage(messages.reblogged_by, { name: status.account.acct });
   }
 
   const body = (
@@ -493,7 +567,9 @@ const Status: React.FC<IStatus> = (props) => {
         <div className='status__content-wrapper'>
           <StatusReplyMentions status={actualStatus} hoverable={hoverable} />
 
-          {actualStatus.event ? <EventPreview className='shadow-xl' status={actualStatus} /> : (
+          {actualStatus.event ? (
+            <EventPreview className='shadow-xl' status={actualStatus} />
+          ) : (
             <StatusContent
               status={actualStatus}
               onClick={handleClick}
@@ -522,7 +598,7 @@ const Status: React.FC<IStatus> = (props) => {
           )}
         </div>
       </Card>
-    </div >
+    </div>
   );
 
   if (muted) return body;
@@ -548,7 +624,4 @@ const Status: React.FC<IStatus> = (props) => {
   );
 };
 
-export {
-  type IStatus,
-  Status as default,
-};
+export { type IStatus, Status as default };

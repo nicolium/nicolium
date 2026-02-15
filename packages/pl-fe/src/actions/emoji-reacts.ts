@@ -17,45 +17,61 @@ const EMOJI_REACT_FAIL = 'EMOJI_REACT_FAIL' as const;
 const UNEMOJI_REACT_REQUEST = 'UNEMOJI_REACT_REQUEST' as const;
 
 const messages = defineMessages({
-  unsupported: { id: 'emoji_reactions.unsupported_by_remote', defaultMessage: '@{acct}’s instance most likely doesn’t understand emoji reactions. The user will not get notified of the reaction.' },
+  unsupported: {
+    id: 'emoji_reactions.unsupported_by_remote',
+    defaultMessage:
+      '@{acct}’s instance most likely doesn’t understand emoji reactions. The user will not get notified of the reaction.',
+  },
 });
 
-const noOp = () => () => new Promise(f =>{
-  f(undefined);
-});
+const noOp = () => () =>
+  new Promise((f) => {
+    f(undefined);
+  });
 
-const emojiReact = (statusId: string, emoji: string, custom: string | undefined = undefined, intl: IntlShape) =>
+const emojiReact =
+  (statusId: string, emoji: string, custom: string | undefined = undefined, intl: IntlShape) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return dispatch(noOp());
 
     dispatch(emojiReactRequest(statusId, emoji, custom));
 
-    return getClient(getState).statuses.createStatusReaction(statusId, emoji).then((response) => {
-      dispatch(importEntities({ statuses: [response] }));
+    return getClient(getState)
+      .statuses.createStatusReaction(statusId, emoji)
+      .then((response) => {
+        dispatch(importEntities({ statuses: [response] }));
 
-      const checkEmojiReactsSupport = !response.account.local && useSettingsStore.getState().settings.checkEmojiReactsSupport;
+        const checkEmojiReactsSupport =
+          !response.account.local && useSettingsStore.getState().settings.checkEmojiReactsSupport;
 
-      if (checkEmojiReactsSupport) {
-        supportsEmojiReacts(response.account.ap_id ?? response.account.url).then((result) => {
-          if (result === 'false') {
-            toast.info(intl.formatMessage(messages.unsupported, { acct: response.account.acct }));
-          }
-        }).catch((e) => {});
-      }
-    }).catch((error) => {
-      dispatch(emojiReactFail(statusId, emoji, error));
-    });
+        if (checkEmojiReactsSupport) {
+          supportsEmojiReacts(response.account.ap_id ?? response.account.url)
+            .then((result) => {
+              if (result === 'false') {
+                toast.info(
+                  intl.formatMessage(messages.unsupported, { acct: response.account.acct }),
+                );
+              }
+            })
+            .catch((e) => {});
+        }
+      })
+      .catch((error) => {
+        dispatch(emojiReactFail(statusId, emoji, error));
+      });
   };
 
-const unEmojiReact = (statusId: string, emoji: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+const unEmojiReact =
+  (statusId: string, emoji: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return dispatch(noOp());
 
     dispatch(unEmojiReactRequest(statusId, emoji));
 
-    return getClient(getState).statuses.deleteStatusReaction(statusId, emoji).then(response => {
-      dispatch(importEntities({ statuses: [response] }));
-    });
+    return getClient(getState)
+      .statuses.deleteStatusReaction(statusId, emoji)
+      .then((response) => {
+        dispatch(importEntities({ statuses: [response] }));
+      });
   };
 
 const emojiReactRequest = (statusId: string, emoji: string, custom?: string) => ({
@@ -81,7 +97,7 @@ const unEmojiReactRequest = (statusId: string, emoji: string) => ({
 type EmojiReactsAction =
   | ReturnType<typeof emojiReactRequest>
   | ReturnType<typeof emojiReactFail>
-  | ReturnType<typeof unEmojiReactRequest>
+  | ReturnType<typeof unEmojiReactRequest>;
 
 export {
   EMOJI_REACT_REQUEST,

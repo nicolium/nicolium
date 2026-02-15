@@ -45,9 +45,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
         <div className='px-4 sm:px-6'>
           <HStack alignItems='bottom' space={5} className='-mt-12'>
             <div className='relative flex'>
-              <div
-                className='size-24 rounded-lg bg-gray-400 ring-4 ring-white dark:ring-gray-800'
-              />
+              <div className='size-24 rounded-lg bg-gray-400 ring-4 ring-white dark:ring-gray-800' />
             </div>
           </HStack>
         </div>
@@ -96,7 +94,7 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
           src={group.header}
           alt={group.header_description || intl.formatMessage(messages.header)}
           className='relative h-32 w-full bg-gray-200 object-center black:rounded-t-none dark:bg-gray-900/50 md:rounded-t-xl lg:h-52'
-          onError={() =>{
+          onError={() => {
             setIsHeaderMissing(true);
           }}
         />
@@ -104,7 +102,12 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
 
       if (!group.header_default) {
         header = (
-          <a href={group.header} onClick={handleHeaderClick} target='_blank' className='relative w-full'>
+          <a
+            href={group.header}
+            onClick={handleHeaderClick}
+            target='_blank'
+            className='relative w-full'
+          >
             {header}
           </a>
         );
@@ -117,8 +120,13 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
         className='flex h-32 w-full items-center justify-center bg-gray-200 dark:bg-gray-800/30 md:rounded-t-xl lg:h-52'
       >
         {isHeaderMissing ? (
-          <Icon src={require('@phosphor-icons/core/regular/image-square.svg')} className='size-6 text-gray-500 dark:text-gray-700' />
-        ) : header}
+          <Icon
+            src={require('@phosphor-icons/core/regular/image-square.svg')}
+            className='size-6 text-gray-500 dark:text-gray-700'
+          />
+        ) : (
+          header
+        )}
       </div>
     );
   };
@@ -128,23 +136,18 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
       <div className='relative'>
         {renderHeader()}
 
-        <div className='absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2' data-testid='group-avatar'>
+        <div
+          className='absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1/2'
+          data-testid='group-avatar'
+        >
           <a href={group.avatar} onClick={handleAvatarClick} target='_blank'>
-            <GroupAvatar
-              group={group}
-              size={80}
-              withRing
-            />
+            <GroupAvatar group={group} size={80} withRing />
           </a>
         </div>
       </div>
 
       <Stack alignItems='center' space={3} className='mx-auto mt-10 w-5/6 py-4'>
-        <Text
-          size='xl'
-          weight='bold'
-          data-testid='group-name'
-        >
+        <Text size='xl' weight='bold' data-testid='group-name'>
           <Emojify text={group.display_name} emojis={group.emojis} />
         </Text>
 

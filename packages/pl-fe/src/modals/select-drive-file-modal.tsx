@@ -16,14 +16,17 @@ import type { DriveFile, DriveFolder } from 'pl-api';
 type SelectDriveFileModalProps = {
   disabled?: Array<string | null>;
   title?: React.ReactNode;
-} & ({
-  type: 'file';
-  onSelect: (file: DriveFile) => void;
-  accepted?: Array<string>;
-} | {
-  type: 'folder';
-  onSelect: (folder: DriveFolder) => void;
-});
+} & (
+  | {
+      type: 'file';
+      onSelect: (file: DriveFile) => void;
+      accepted?: Array<string>;
+    }
+  | {
+      type: 'folder';
+      onSelect: (folder: DriveFolder) => void;
+    }
+);
 
 interface IFolder {
   folder: DriveFolder;
@@ -36,7 +39,10 @@ interface IFolder {
 const Folder: React.FC<IFolder> = ({ folder, active, disabled, onSelect, onDoubleClick }) => {
   return (
     <button
-      className={clsx('⁂-drive-file ⁂-drive-folder', { '⁂-drive-file--active': active, '⁂-drive-file--disabled': disabled })}
+      className={clsx('⁂-drive-file ⁂-drive-folder', {
+        '⁂-drive-file--active': active,
+        '⁂-drive-file--disabled': disabled,
+      })}
       tabIndex={0}
       onDoubleClick={disabled ? undefined : () => onDoubleClick?.(folder)}
       onClick={disabled ? undefined : () => onSelect?.(folder)}
@@ -47,9 +53,7 @@ const Folder: React.FC<IFolder> = ({ folder, active, disabled, onSelect, onDoubl
         src={require('@phosphor-icons/core/regular/folder.svg')}
       />
 
-      <span className='⁂-drive-file__label'>
-        {folder.name}
-      </span>
+      <span className='⁂-drive-file__label'>{folder.name}</span>
     </button>
   );
 };
@@ -66,16 +70,16 @@ const File: React.FC<IFile> = ({ file, active, disabled, onSelect }) => {
 
   return (
     <button
-      className={clsx('⁂-drive-file', { '⁂-drive-file--active': active, '⁂-drive-file--disabled': disabled })}
+      className={clsx('⁂-drive-file', {
+        '⁂-drive-file--active': active,
+        '⁂-drive-file--disabled': disabled,
+      })}
       tabIndex={0}
       onClick={disabled ? undefined : () => onSelect?.(file)}
       disabled={disabled}
     >
       {file.thumbnail_url && isMedia ? (
-        <img
-          src={file.thumbnail_url}
-          alt={file.description ?? undefined}
-        />
+        <img src={file.thumbnail_url} alt={file.description ?? undefined} />
       ) : (
         <Icon
           className='⁂-drive-file__icon'
@@ -83,14 +87,19 @@ const File: React.FC<IFile> = ({ file, active, disabled, onSelect }) => {
         />
       )}
 
-      <span className='⁂-drive-file__label'>
-        {file.filename}
-      </span>
+      <span className='⁂-drive-file__label'>{file.filename}</span>
     </button>
   );
 };
 
-const SelectDriveFileModal: React.FC<SelectDriveFileModalProps & BaseModalProps> = ({ onClose, onSelect, type, disabled, title, ...props }) => {
+const SelectDriveFileModal: React.FC<SelectDriveFileModalProps & BaseModalProps> = ({
+  onClose,
+  onSelect,
+  type,
+  disabled,
+  title,
+  ...props
+}) => {
   const onClickClose = () => {
     onClose('SELECT_DRIVE_FILE');
   };
@@ -150,7 +159,13 @@ const SelectDriveFileModal: React.FC<SelectDriveFileModalProps & BaseModalProps>
           key={file.id}
           file={file}
           active={selectedFile === file.id}
-          disabled={type === 'folder' || (disabled?.includes(file.id) ?? ('accepted' in props && props.accepted && !props.accepted.includes(file.content_type)))}
+          disabled={
+            type === 'folder' ||
+            (disabled?.includes(file.id) ??
+              ('accepted' in props &&
+                props.accepted &&
+                !props.accepted.includes(file.content_type)))
+          }
           onSelect={({ id }) => {
             if (type === 'file') {
               setSelectedFile(id);
@@ -165,15 +180,29 @@ const SelectDriveFileModal: React.FC<SelectDriveFileModalProps & BaseModalProps>
 
   return (
     <Modal
-      title={title ?? (type === 'folder' ? <FormattedMessage id='drive.select_folder.heading' defaultMessage='Select folder' /> : <FormattedMessage id='drive.select_file.heading' defaultMessage='Select file' />)}
+      title={
+        title ??
+        (type === 'folder' ? (
+          <FormattedMessage id='drive.select_folder.heading' defaultMessage='Select folder' />
+        ) : (
+          <FormattedMessage id='drive.select_file.heading' defaultMessage='Select file' />
+        ))
+      }
       onClose={onClickClose}
       confirmationAction={handleConfirm}
-      confirmationText={type === 'folder' ? <FormattedMessage id='drive.select_folder.confirm' defaultMessage='Select folder' /> : <FormattedMessage id='drive.select_file.confirm' defaultMessage='Select file' />}
+      confirmationText={
+        type === 'folder' ? (
+          <FormattedMessage id='drive.select_folder.confirm' defaultMessage='Select folder' />
+        ) : (
+          <FormattedMessage id='drive.select_file.confirm' defaultMessage='Select file' />
+        )
+      }
       confirmationDisabled={!selectedFile && type !== 'folder'}
     >
       <div className='⁂-drive-breadcrumbs'>
         <Breadcrumbs
-          folderId={currentFolder} onClick={(folderId) =>{
+          folderId={currentFolder}
+          onClick={(folderId) => {
             setCurrentFolder(folderId);
           }}
         />

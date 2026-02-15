@@ -1,5 +1,4 @@
 class Settings {
-
   keyBase: string | null = null;
 
   constructor(keyBase: string | null = null) {
@@ -43,12 +42,9 @@ class Settings {
     }
     return data;
   }
-
 }
 
 /** Remember push notification settings. */
 const pushNotificationsSetting = new Settings('plfe_push_notification_data');
 
-export {
-  pushNotificationsSetting,
-};
+export { pushNotificationsSetting };

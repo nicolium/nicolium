@@ -6,7 +6,12 @@ import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import { useAddAccountsToCircle, useCircle, useCircleAccounts, useRemoveAccountsFromCircle } from '@/queries/accounts/use-circles';
+import {
+  useAddAccountsToCircle,
+  useCircle,
+  useCircleAccounts,
+  useRemoveAccountsFromCircle,
+} from '@/queries/accounts/use-circles';
 import { useAccountSearch } from '@/queries/search/use-search-accounts';
 
 import Account from './list-editor-modal/components/account';
@@ -18,20 +23,26 @@ interface CircleEditorModalProps {
   circleId: string;
 }
 
-const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({ circleId, onClose }) => {
+const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
+  circleId,
+  onClose,
+}) => {
   const [searchValue, setSearchValue] = useState('');
 
   const { data: circle } = useCircle(circleId);
   const { data: accountIds = [] } = useCircleAccounts(circleId);
-  const { data: searchAccountIds = [] } = useAccountSearch(searchValue, { following: true, limit: 5 });
+  const { data: searchAccountIds = [] } = useAccountSearch(searchValue, {
+    following: true,
+    limit: 5,
+  });
 
   const { mutate: addToCircle } = useAddAccountsToCircle(circleId);
   const { mutate: removeFromCircle } = useRemoveAccountsFromCircle(circleId);
 
-  const onAdd = (accountId: string) =>{
+  const onAdd = (accountId: string) => {
     addToCircle([accountId]);
   };
-  const onRemove = (accountId: string) =>{
+  const onRemove = (accountId: string) => {
     removeFromCircle([accountId]);
   };
 
@@ -49,29 +60,61 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({ 
           {accountIds.length > 0 ? (
             <div>
               <CardHeader>
-                <CardTitle title={<FormattedMessage id='circles.remove_from_circle' defaultMessage='Remove from circle' />} />
+                <CardTitle
+                  title={
+                    <FormattedMessage
+                      id='circles.remove_from_circle'
+                      defaultMessage='Remove from circle'
+                    />
+                  }
+                />
               </CardHeader>
               <div className='max-h-48 overflow-y-auto'>
-                {accountIds.map(accountId => <Account key={accountId} accountId={accountId} added={accountIds.includes(accountId)} onAdd={onAdd} onRemove={onRemove} />)}
+                {accountIds.map((accountId) => (
+                  <Account
+                    key={accountId}
+                    accountId={accountId}
+                    added={accountIds.includes(accountId)}
+                    onAdd={onAdd}
+                    onRemove={onRemove}
+                  />
+                ))}
               </div>
             </div>
           ) : (
             <Text theme='muted' size='sm'>
-              <FormattedMessage id='empty_column.circle_members' defaultMessage='There are no members in this circle. Use search to find users to add.' />
+              <FormattedMessage
+                id='empty_column.circle_members'
+                defaultMessage='There are no members in this circle. Use search to find users to add.'
+              />
             </Text>
           )}
 
           <div>
             <CardHeader>
-              <CardTitle title={<FormattedMessage id='circles.add_to_circle' defaultMessage='Add to circle' />} />
+              <CardTitle
+                title={
+                  <FormattedMessage id='circles.add_to_circle' defaultMessage='Add to circle' />
+                }
+              />
             </CardHeader>
             <Search value={searchValue} onSubmit={setSearchValue} />
             <div className='max-h-48 overflow-y-auto'>
-              {searchAccountIds.map(accountId => <Account key={accountId} accountId={accountId} added={accountIds.includes(accountId)} onAdd={onAdd} onRemove={onRemove} />)}
+              {searchAccountIds.map((accountId) => (
+                <Account
+                  key={accountId}
+                  accountId={accountId}
+                  added={accountIds.includes(accountId)}
+                  onAdd={onAdd}
+                  onRemove={onRemove}
+                />
+              ))}
             </div>
           </div>
         </Stack>
-      ) : <Spinner />}
+      ) : (
+        <Spinner />
+      )}
     </Modal>
   );
 };

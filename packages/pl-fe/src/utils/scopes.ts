@@ -6,7 +6,11 @@ import type { RootState } from '@/store';
  * Get the OAuth scopes to use for login & signup.
  * Mastodon will refuse scopes it doesn't know, so care is needed.
  */
-const getInstanceScopes = (instance: Instance, admin: boolean = true, external: boolean = false) => {
+const getInstanceScopes = (
+  instance: Instance,
+  admin: boolean = true,
+  external: boolean = false,
+) => {
   const v = getFeatures(instance).version;
 
   let scopes;
@@ -40,9 +44,7 @@ const getInstanceScopes = (instance: Instance, admin: boolean = true, external: 
 };
 
 /** Convenience function to get scopes from instance in store. */
-const getScopes = (state: RootState, admin?: boolean, external?: boolean) => getInstanceScopes(state.instance, admin, external);
+const getScopes = (state: RootState, admin?: boolean, external?: boolean) =>
+  getInstanceScopes(state.instance, admin, external);
 
-export {
-  getInstanceScopes,
-  getScopes,
-};
+export { getInstanceScopes, getScopes };

@@ -18,7 +18,7 @@ const RestrictedInstance: React.FC<IRestrictedInstance> = ({ host }) => {
 
   const [expanded, setExpanded] = useState(false);
 
-  const toggleExpanded: React.MouseEventHandler<HTMLAnchorElement> = e => {
+  const toggleExpanded: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     setExpanded((value) => !value);
     e.preventDefault();
   };
@@ -26,7 +26,13 @@ const RestrictedInstance: React.FC<IRestrictedInstance> = ({ host }) => {
   return (
     <div>
       <a href='#' className='flex items-center gap-1 py-2.5 no-underline' onClick={toggleExpanded}>
-        <Icon src={expanded ? require('@phosphor-icons/core/regular/caret-down.svg') : require('@phosphor-icons/core/regular/caret-right.svg')} />
+        <Icon
+          src={
+            expanded
+              ? require('@phosphor-icons/core/regular/caret-down.svg')
+              : require('@phosphor-icons/core/regular/caret-right.svg')
+          }
+        />
         <div className={clsx({ 'line-through': remoteInstance.federation.reject })}>
           {remoteInstance.host}
         </div>

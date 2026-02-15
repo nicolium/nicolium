@@ -19,45 +19,47 @@ interface IHoverAccountWrapper {
 }
 
 /** Makes a profile hover card appear when the wrapped element is hovered. */
-const HoverAccountWrapper: React.FC<IHoverAccountWrapper> = React.memo(({ accountId, children, element: Elem = 'div', className }) => {
-  const dispatch = useAppDispatch();
+const HoverAccountWrapper: React.FC<IHoverAccountWrapper> = React.memo(
+  ({ accountId, children, element: Elem = 'div', className }) => {
+    const dispatch = useAppDispatch();
 
-  const { openAccountHoverCard, closeAccountHoverCard } = useAccountHoverCardActions();
+    const { openAccountHoverCard, closeAccountHoverCard } = useAccountHoverCardActions();
 
-  const ref = useRef<HTMLDivElement>(null);
+    const ref = useRef<HTMLDivElement>(null);
 
-  const handleMouseEnter = () => {
-    if (!accountId) return;
+    const handleMouseEnter = () => {
+      if (!accountId) return;
 
-    if (!isMobile(window.innerWidth)) {
-      dispatch(fetchAccount(accountId));
-      showAccountHoverCard(openAccountHoverCard, ref, accountId);
-    }
-  };
+      if (!isMobile(window.innerWidth)) {
+        dispatch(fetchAccount(accountId));
+        showAccountHoverCard(openAccountHoverCard, ref, accountId);
+      }
+    };
 
-  const handleMouseLeave = () => {
-    showAccountHoverCard.cancel();
-    setTimeout(() =>{
-      closeAccountHoverCard();
-    }, 300);
-  };
+    const handleMouseLeave = () => {
+      showAccountHoverCard.cancel();
+      setTimeout(() => {
+        closeAccountHoverCard();
+      }, 300);
+    };
 
-  const handleClick = () => {
-    showAccountHoverCard.cancel();
-    closeAccountHoverCard(true);
-  };
+    const handleClick = () => {
+      showAccountHoverCard.cancel();
+      closeAccountHoverCard(true);
+    };
 
-  return (
-    <Elem
-      ref={ref}
-      className={clsx('hover-account-wrapper', className)}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onClick={handleClick}
-    >
-      {children}
-    </Elem>
-  );
-});
+    return (
+      <Elem
+        ref={ref}
+        className={clsx('hover-account-wrapper', className)}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        onClick={handleClick}
+      >
+        {children}
+      </Elem>
+    );
+  },
+);
 
 export { HoverAccountWrapper as default, showAccountHoverCard };

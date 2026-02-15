@@ -11,26 +11,21 @@ interface IColorPicker {
 
 const ColorPicker: React.FC<IColorPicker> = ({ value, onChange, className }) => {
   const colorPreview = (
-    <div
-      className='size-full'
-      role='presentation'
-      style={{ background: value }}
-      title={value}
-    />
+    <div className='size-full' role='presentation' style={{ background: value }} title={value} />
   );
   return (
     <div className={className}>
       {onChange ? (
         <Popover
           interaction='click'
-          content={
-            <SketchPicker color={value} disableAlpha onChange={onChange} />
-          }
+          content={<SketchPicker color={value} disableAlpha onChange={onChange} />}
           isFlush
         >
           {colorPreview}
         </Popover>
-      ) : colorPreview}
+      ) : (
+        colorPreview
+      )}
     </div>
   );
 };

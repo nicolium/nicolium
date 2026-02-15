@@ -25,22 +25,25 @@ const EditEventPage = () => {
 
   const [tab, setTab] = useState<'edit' | 'pending'>('edit');
 
-  useEffect(() => () => {
-    dispatch(cancelEventCompose());
-  }, [statusId]);
+  useEffect(
+    () => () => {
+      dispatch(cancelEventCompose());
+    },
+    [statusId],
+  );
 
   const renderTabs = () => {
     const items = [
       {
         text: intl.formatMessage(messages.edit),
-        action: () =>{
+        action: () => {
           setTab('edit');
         },
         name: 'edit',
       },
       {
         text: intl.formatMessage(messages.pending),
-        action: () =>{
+        action: () => {
           setTab('pending');
         },
         name: 'pending',
@@ -54,7 +57,11 @@ const EditEventPage = () => {
     <Column label={intl.formatMessage(messages.manageEvent)}>
       <Stack space={2}>
         {renderTabs()}
-        {tab === 'edit' ? <EditEvent statusId={statusId} /> : <ManagePendingParticipants statusId={statusId} />}
+        {tab === 'edit' ? (
+          <EditEvent statusId={statusId} />
+        ) : (
+          <ManagePendingParticipants statusId={statusId} />
+        )}
       </Stack>
     </Column>
   );
@@ -64,9 +71,12 @@ const ComposeEventPage = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  useEffect(() => () => {
-    dispatch(cancelEventCompose());
-  }, []);
+  useEffect(
+    () => () => {
+      dispatch(cancelEventCompose());
+    },
+    [],
+  );
 
   return (
     <Column label={intl.formatMessage(messages.createEvent)}>

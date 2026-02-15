@@ -18,10 +18,14 @@ const PendingItemsRow: React.FC<IPendingItemsRow> = ({ count, size = 'md', ...pr
   <Link {...props} className='group' data-testid='pending-items-row'>
     <HStack alignItems='center' justifyContent='between'>
       <HStack alignItems='center' space={2}>
-        <div className={clsx('rounded-full bg-primary-200 text-primary-500 dark:bg-primary-800 dark:text-primary-200', {
-          'p-3': size === 'lg',
-          'p-2.5': size === 'md',
-        })}
+        <div
+          className={clsx(
+            'rounded-full bg-primary-200 text-primary-500 dark:bg-primary-800 dark:text-primary-200',
+            {
+              'p-3': size === 'lg',
+              'p-2.5': size === 'md',
+            },
+          )}
         >
           <Icon
             src={require('@phosphor-icons/core/regular/warning-circle.svg')}

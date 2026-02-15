@@ -28,9 +28,8 @@ import React from 'react';
 type Event = React.MouseEvent | React.TouchEvent;
 
 // eslint-disable-next-line compat/compat
-const isTouchEvent = ({ nativeEvent }: Event) => window.TouchEvent
-  ? nativeEvent instanceof TouchEvent
-  : 'touches' in nativeEvent;
+const isTouchEvent = ({ nativeEvent }: Event) =>
+  window.TouchEvent ? nativeEvent instanceof TouchEvent : 'touches' in nativeEvent;
 
 const isMouseEvent = (event: Event) => event.nativeEvent instanceof MouseEvent;
 
@@ -44,7 +43,14 @@ type LongPressOptions = {
 };
 
 const useLongPress = (callback: (e: Event) => void, options: LongPressOptions = {}) => {
-  const { threshold = 400, onStart, onFinish, onCancel, allowScroll = false, scrollThreshold = 40 } = options;
+  const {
+    threshold = 400,
+    onStart,
+    onFinish,
+    onCancel,
+    allowScroll = false,
+    scrollThreshold = 40,
+  } = options;
   const isLongPressActive = React.useRef(false);
   const isPressed = React.useRef(false);
   const timerId = React.useRef<NodeJS.Timeout>();
@@ -95,7 +101,11 @@ const useLongPress = (callback: (e: Event) => void, options: LongPressOptions = 
     };
 
     const move = (event: Event) => {
-      if (!allowScroll && (!('touches' in event.nativeEvent) || Math.abs(event.nativeEvent.touches[0].clientY - startY) > scrollThreshold)) {
+      if (
+        !allowScroll &&
+        (!('touches' in event.nativeEvent) ||
+          Math.abs(event.nativeEvent.touches[0].clientY - startY) > scrollThreshold)
+      ) {
         cancel(event);
       }
     };

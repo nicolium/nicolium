@@ -18,10 +18,19 @@ import type { AdminDomain as DomainEntity } from 'pl-api';
 const messages = defineMessages({
   heading: { id: 'column.admin.domains', defaultMessage: 'Domains' },
   deleteConfirm: { id: 'confirmations.admin.delete_domain.confirm', defaultMessage: 'Delete' },
-  deleteHeading: { id: 'confirmations.admin.delete_domain.heading', defaultMessage: 'Delete domain' },
-  deleteMessage: { id: 'confirmations.admin.delete_domain.message', defaultMessage: 'Are you sure you want to delete the domain?' },
+  deleteHeading: {
+    id: 'confirmations.admin.delete_domain.heading',
+    defaultMessage: 'Delete domain',
+  },
+  deleteMessage: {
+    id: 'confirmations.admin.delete_domain.message',
+    defaultMessage: 'Are you sure you want to delete the domain?',
+  },
   domainDeleteSuccess: { id: 'admin.edit_domain.deleted', defaultMessage: 'Domain deleted' },
-  domainLastChecked: { id: 'admin.domains.resolve.last_checked', defaultMessage: 'Last checked: {date}' },
+  domainLastChecked: {
+    id: 'admin.domains.resolve.last_checked',
+    defaultMessage: 'Last checked: {date}',
+  },
 });
 
 interface IDomain {
@@ -55,13 +64,27 @@ const Domain: React.FC<IDomain> = ({ domain }) => {
 
   const domainState = domain.last_checked_at ? (domain.resolves ? 'active' : 'error') : 'pending';
   const domainStateLabel = {
-    active: <FormattedMessage id='admin.domains.resolve.success_label' defaultMessage='Resolves correctly' />,
-    error: <FormattedMessage id='admin.domains.resolve.fail_label' defaultMessage='Not resolving' />,
-    pending: <FormattedMessage id='admin.domains.resolve.pending_label' defaultMessage='Pending resolve check' />,
+    active: (
+      <FormattedMessage
+        id='admin.domains.resolve.success_label'
+        defaultMessage='Resolves correctly'
+      />
+    ),
+    error: (
+      <FormattedMessage id='admin.domains.resolve.fail_label' defaultMessage='Not resolving' />
+    ),
+    pending: (
+      <FormattedMessage
+        id='admin.domains.resolve.pending_label'
+        defaultMessage='Pending resolve check'
+      />
+    ),
   }[domainState];
-  const domainStateTitle = domain.last_checked_at ? intl.formatMessage(messages.domainLastChecked, {
-    date: intl.formatDate(domain.last_checked_at, dateFormatOptions),
-  }) : undefined;
+  const domainStateTitle = domain.last_checked_at
+    ? intl.formatMessage(messages.domainLastChecked, {
+        date: intl.formatDate(domain.last_checked_at, dateFormatOptions),
+      })
+    : undefined;
 
   return (
     <div key={domain.id} className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
@@ -70,8 +93,7 @@ const Domain: React.FC<IDomain> = ({ domain }) => {
           <Text size='sm'>
             <Text tag='span' size='sm' weight='medium'>
               <FormattedMessage id='admin.domains.name' defaultMessage='Domain:' />
-            </Text>
-            {' '}
+            </Text>{' '}
             {domain.domain}
           </Text>
           <Text tag='span' size='sm' weight='medium'>
@@ -115,7 +137,9 @@ const AdminDomainsPage: React.FC = () => {
     if (!isFetching) refetch();
   }, []);
 
-  const emptyMessage = <FormattedMessage id='empty_column.admin.domains' defaultMessage='There are no domains yet.' />;
+  const emptyMessage = (
+    <FormattedMessage id='empty_column.admin.domains' defaultMessage='There are no domains yet.' />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>

@@ -23,6 +23,4 @@ const useAcct = (account?: Pick<Account, 'fqn' | 'acct' | 'local' | 'url'>): str
   }, [account?.acct, fqn, instance.domain, localUrl]);
 };
 
-export {
-  useAcct,
-};
+export { useAcct };

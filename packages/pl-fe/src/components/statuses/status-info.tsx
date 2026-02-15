@@ -20,7 +20,10 @@ const StatusInfo = (props: IStatusInfo) => {
     <div
       className={clsx('⁂-status-info', className)}
       onClick={onClick}
-      style={{ marginLeft: Math.max(0, avatarSize - 25), maxWidth: `calc(100% - ${Math.max(0, avatarSize - 25)}px)` }}
+      style={{
+        marginLeft: Math.max(0, avatarSize - 25),
+        maxWidth: `calc(100% - ${Math.max(0, avatarSize - 25)}px)`,
+      }}
       title={title}
     >
       {icon}

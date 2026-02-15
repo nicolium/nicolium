@@ -22,7 +22,9 @@ const PlaceholderGroupCard = () => {
 
         {/* Group Info */}
         <Stack alignItems='center' justifyContent='end' grow className='basis-1/2 py-4' space={0.5}>
-          <Text size='lg' theme='subtle' weight='bold'>{generateText(groupNameLength)}</Text>
+          <Text size='lg' theme='subtle' weight='bold'>
+            {generateText(groupNameLength)}
+          </Text>
 
           <HStack className='text-gray-400 dark:text-gray-600' space={3} wrap>
             <span>{generateText(6)}</span>

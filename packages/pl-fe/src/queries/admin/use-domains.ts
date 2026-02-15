@@ -26,34 +26,27 @@ const useDomains = () => {
     placeholderData: [],
   });
 
-  const {
-    mutate: createDomain,
-    isPending: isCreating,
-  } = useMutation({
+  const { mutate: createDomain, isPending: isCreating } = useMutation({
     mutationFn: (params: CreateDomainParams) => client.admin.domains.createDomain(params),
     retry: false,
     onSuccess: (data) =>
-      queryClient.setQueryData(['admin', 'domains'], (prevResult: ReadonlyArray<AdminDomain>) =>
-        [...prevResult, data],
-      ),
+      queryClient.setQueryData(['admin', 'domains'], (prevResult: ReadonlyArray<AdminDomain>) => [
+        ...prevResult,
+        data,
+      ]),
   });
 
-  const {
-    mutate: updateDomain,
-    isPending: isUpdating,
-  } = useMutation({
-    mutationFn: ({ id, ...params }: UpdateDomainParams) => client.admin.domains.updateDomain(id, params.public),
+  const { mutate: updateDomain, isPending: isUpdating } = useMutation({
+    mutationFn: ({ id, ...params }: UpdateDomainParams) =>
+      client.admin.domains.updateDomain(id, params.public),
     retry: false,
     onSuccess: (data) =>
       queryClient.setQueryData(['admin', 'domains'], (prevResult: ReadonlyArray<AdminDomain>) =>
-        prevResult.map((domain) => domain.id === data.id ? data : domain),
+        prevResult.map((domain) => (domain.id === data.id ? data : domain)),
       ),
   });
 
-  const {
-    mutate: deleteDomain,
-    isPending: isDeleting,
-  } = useMutation({
+  const { mutate: deleteDomain, isPending: isDeleting } = useMutation({
     mutationFn: (id: string) => client.admin.domains.deleteDomain(id),
     retry: false,
     onSuccess: (_, id) =>

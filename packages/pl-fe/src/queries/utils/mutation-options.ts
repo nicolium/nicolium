@@ -6,6 +6,8 @@ const mutationOptions = <
   TError = DefaultError,
   TVariables = void,
   TContext = unknown,
->(options: UseMutationOptions<TData, TError, TVariables, TContext>): UseMutationOptions<TData, TError, TVariables, TContext> => options;
+>(
+  options: UseMutationOptions<TData, TError, TVariables, TContext>,
+): UseMutationOptions<TData, TError, TVariables, TContext> => options;
 
 export { mutationOptions };

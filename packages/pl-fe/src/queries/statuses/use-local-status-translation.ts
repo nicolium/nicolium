@@ -7,7 +7,8 @@ import { useLanguageModelAvailabilityActions } from '@/stores/language-model-ava
 
 const useLocalStatusTranslation = (statusId: string, targetLanguage?: string) => {
   const status = useAppSelector((state) => state.statuses[statusId]);
-  const { setLanguageModelAvailability, setLanguageModelDownloadProgress } = useLanguageModelAvailabilityActions();
+  const { setLanguageModelAvailability, setLanguageModelDownloadProgress } =
+    useLanguageModelAvailabilityActions();
 
   const sourceLanguage = status?.language;
 
@@ -34,11 +35,13 @@ const useLocalStatusTranslation = (statusId: string, targetLanguage?: string) =>
           signal,
         });
 
-        return translator.translate(status.content, { signal }).then((translatedText) => v.parse(translationSchema, {
-          id: statusId,
-          content: translatedText,
-          detected_source_language: sourceLanguage,
-        }));
+        return translator.translate(status.content, { signal }).then((translatedText) =>
+          v.parse(translationSchema, {
+            id: statusId,
+            content: translatedText,
+            detected_source_language: sourceLanguage,
+          }),
+        );
       } catch (e) {
         return false;
       }

@@ -33,7 +33,7 @@ const ChatListShoutbox: React.FC<IChatListShoutboxInterface> = ({ onClick }) => 
     <div
       role='button'
       key='shoutbox'
-      onClick={() =>{
+      onClick={() => {
         onClick('shoutbox');
       }}
       onKeyDown={handleKeyDown}
@@ -46,7 +46,11 @@ const ChatListShoutbox: React.FC<IChatListShoutboxInterface> = ({ onClick }) => 
         <div className='⁂-chat-list-item__content'>
           <div className='⁂-chat-list-item__name'>
             <p>
-              <FormattedMessage id='chat_list_item_shoutbox' defaultMessage='{instance} shoutbox' values={{ instance: instance.title }} />
+              <FormattedMessage
+                id='chat_list_item_shoutbox'
+                defaultMessage='{instance} shoutbox'
+                values={{ instance: instance.title }}
+              />
             </p>
           </div>
 
@@ -55,7 +59,11 @@ const ChatListShoutbox: React.FC<IChatListShoutboxInterface> = ({ onClick }) => 
               <p className='⁂-chat-list-item__message'>
                 {lastMessageAuthor && (
                   <span className='⁂-chat-list-item__message__author'>
-                    <Emojify text={lastMessageAuthor.display_name} emojis={lastMessageAuthor.emojis} />{': '}
+                    <Emojify
+                      text={lastMessageAuthor.display_name}
+                      emojis={lastMessageAuthor.emojis}
+                    />
+                    {': '}
                   </span>
                 )}
                 <ParsedContent html={lastMessage.text} />

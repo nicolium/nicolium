@@ -18,7 +18,10 @@ import type { Account as AccountEntity } from 'pl-api';
 
 const messages = defineMessages({
   heading: { id: 'column.group_pending_requests', defaultMessage: 'Pending requests' },
-  authorizeFail: { id: 'group.group_mod_authorize.fail', defaultMessage: 'Failed to approve @{name}' },
+  authorizeFail: {
+    id: 'group.group_mod_authorize.fail',
+    defaultMessage: 'Failed to approve @{name}',
+  },
   rejectFail: { id: 'group.group_mod_reject.fail', defaultMessage: 'Failed to reject @{name}' },
 });
 
@@ -66,7 +69,10 @@ const GroupMembershipRequests: React.FC = () => {
     );
   }
 
-  if (!group.relationship.role || !['owner', 'admin', 'moderator'].includes(group.relationship.role)) {
+  if (
+    !group.relationship.role ||
+    !['owner', 'admin', 'moderator'].includes(group.relationship.role)
+  ) {
     return <ColumnForbidden />;
   }
 
@@ -108,7 +114,12 @@ const GroupMembershipRequests: React.FC = () => {
     <Column label={intl.formatMessage(messages.heading)}>
       <ScrollableList
         scrollKey={`groupMembershipRequests:${groupId}`}
-        emptyMessageText={<FormattedMessage id='empty_column.group_membership_requests' defaultMessage='There are no pending membership requests for this group.' />}
+        emptyMessageText={
+          <FormattedMessage
+            id='empty_column.group_membership_requests'
+            defaultMessage='There are no pending membership requests for this group.'
+          />
+        }
       >
         {accounts.map((account) => (
           <MembershipRequest

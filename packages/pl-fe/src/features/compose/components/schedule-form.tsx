@@ -10,7 +10,8 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useCompose } from '@/hooks/use-compose';
 import { useFeatures } from '@/hooks/use-features';
 
-const isCurrentOrFutureDate = (date: Date) => (date && new Date().setHours(0, 0, 0, 0) <= new Date(date).setHours(0, 0, 0, 0));
+const isCurrentOrFutureDate = (date: Date) =>
+  date && new Date().setHours(0, 0, 0, 0) <= new Date(date).setHours(0, 0, 0, 0);
 
 const isFiveMinutesFromNow = (selectedDate: Date) => {
   const fiveMinutesFromNow = new Date(new Date().getTime() + 1000 * 60 * 5);
@@ -46,7 +47,9 @@ const ScheduleForm: React.FC<IScheduleForm> = ({ composeId }) => {
   };
 
   const isValidTime = useCallback(
-    (date: Date) => isFiveMinutesFromNow(date) || features.scheduledStatusesBackwards && new Date().getTime() > date.getTime(),
+    (date: Date) =>
+      isFiveMinutesFromNow(date) ||
+      (features.scheduledStatusesBackwards && new Date().getTime() > date.getTime()),
     [features.scheduledStatusesBackwards],
   );
 

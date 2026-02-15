@@ -16,7 +16,7 @@ const PlaceholderStatus: React.FC<IPlaceholderStatus> = React.memo(({ variant = 
   <div
     className={clsx({
       'status-placeholder bg-white black:bg-black dark:bg-primary-900': true,
-      'shadow-xl dark:shadow-none sm:rounded-xl px-4 py-6 sm:p-5': variant === 'rounded',
+      'px-4 py-6 shadow-xl dark:shadow-none sm:rounded-xl sm:p-5': variant === 'rounded',
       'py-4': variant === 'slim',
     })}
   >

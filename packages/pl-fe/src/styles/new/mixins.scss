@@ -1,6 +1,15 @@
 @use 'variables';
 
-@mixin text($family: sans, $size: md, $theme: default, $tracking: normal, $transform: normal, $truncate: false, $weight: normal, $align: none) {
+@mixin text(
+  $family: sans,
+  $size: md,
+  $theme: default,
+  $tracking: normal,
+  $transform: normal,
+  $truncate: false,
+  $weight: normal,
+  $align: none
+) {
   @if $family == sans {
     font-family: var(--font-sans);
   } @else if $family == mono {
@@ -122,8 +131,8 @@
         border-radius: 1.5rem;
       }
     } @else {
-    @warn "Unknown card size `#{$size}`.";
-  }
+      @warn "Unknown card size `#{$size}`.";
+    }
   } @else if $variant == slim {
     padding-top: 1rem;
     padding-bottom: 1rem;

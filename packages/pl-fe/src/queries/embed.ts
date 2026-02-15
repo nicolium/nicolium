@@ -13,7 +13,7 @@ type Embed = {
   html: string;
   width: number | null;
   height: number | null;
-}
+};
 
 /** Fetch OEmbed information for a status by its URL. */
 // https://github.com/mastodon/mastodon/blob/main/app/controllers/api/oembed_controller.rb

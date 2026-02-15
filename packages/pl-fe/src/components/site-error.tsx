@@ -63,13 +63,13 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
         ErrorBoundary: 'yes',
       },
     })
-      .then((eventId) =>{
+      .then((eventId) => {
         setSentryEventId(eventId);
       })
       .catch(console.error);
 
     import('bowser')
-      .then(({ default: Bowser }) =>{
+      .then(({ default: Bowser }) => {
         setBrowser(Bowser.getParser(window.navigator.userAgent));
       })
       .catch(() => {});
@@ -84,7 +84,10 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
       <Column label={intl.formatMessage(messages.networkErrorTitle)}>
         <div className='⁂-network-error'>
           <p>
-            <FormattedMessage id='bundle_column_error.body' defaultMessage='Something went wrong while loading this page.' />
+            <FormattedMessage
+              id='bundle_column_error.body'
+              defaultMessage='Something went wrong while loading this page.'
+            />
           </p>
         </div>
       </Column>
@@ -103,7 +106,10 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
         <div className='⁂-site-error__body'>
           <div className='⁂-site-error__message'>
             <h1>
-              <FormattedMessage id='alert.unexpected.message' defaultMessage='Something went wrong.' />
+              <FormattedMessage
+                id='alert.unexpected.message'
+                defaultMessage='Something went wrong.'
+              />
             </h1>
             <p className='⁂-site-error__message__body'>
               <FormattedMessage
@@ -131,9 +137,7 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
             </p>
 
             <p className='⁂-site-error__message__version'>
-              <span>{sourceCode.displayName}:</span>
-
-              {' '}{sourceCode.version}
+              <span>{sourceCode.displayName}:</span> {sourceCode.version}
             </p>
           </div>
 
@@ -154,7 +158,11 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
 
             {browser && (
               <p className='⁂-site-error__browser'>
-                <span><FormattedMessage id='alert.unexpected.browser' defaultMessage='Browser' />{': '}</span>{browser.getBrowserName()} {browser.getBrowserVersion()}
+                <span>
+                  <FormattedMessage id='alert.unexpected.browser' defaultMessage='Browser' />
+                  {': '}
+                </span>
+                {browser.getBrowserName()} {browser.getBrowserVersion()}
               </p>
             )}
           </div>

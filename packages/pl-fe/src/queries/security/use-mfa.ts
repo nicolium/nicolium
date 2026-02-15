@@ -17,7 +17,8 @@ const useConfirmMfa = () => {
 
   return useMutation({
     mutationKey: ['settings', 'mfa'],
-    mutationFn: ({ code, password }: { code: string; password: string }) => client.settings.mfa.confirmMfaSetup('totp', code, password),
+    mutationFn: ({ code, password }: { code: string; password: string }) =>
+      client.settings.mfa.confirmMfaSetup('totp', code, password),
     onSuccess: () => {
       queryClient.setQueryData(['settings', 'mfa'], {
         settings: {

@@ -76,13 +76,22 @@ const MIMETYPE_ICONS: Record<string, string> = {
 };
 
 const messages = defineMessages({
-  description: { id: 'upload_form.description', defaultMessage: 'Describe for the visually impaired' },
+  description: {
+    id: 'upload_form.description',
+    defaultMessage: 'Describe for the visually impaired',
+  },
   delete: { id: 'upload_form.undo', defaultMessage: 'Delete' },
   preview: { id: 'upload_form.preview', defaultMessage: 'Preview' },
-  descriptionMissingTitle: { id: 'upload_form.description_missing.title', defaultMessage: 'This attachment doesn\'t have a description' },
+  descriptionMissingTitle: {
+    id: 'upload_form.description_missing.title',
+    defaultMessage: "This attachment doesn't have a description",
+  },
 });
 
-interface IUpload extends Pick<React.HTMLAttributes<HTMLDivElement>, 'onDragStart' | 'onDragEnter' | 'onDragEnd'> {
+interface IUpload extends Pick<
+  React.HTMLAttributes<HTMLDivElement>,
+  'onDragStart' | 'onDragEnter' | 'onDragEnd'
+> {
   media: MediaAttachment;
   onSubmit?(): void;
   onDelete?(): void;
@@ -105,7 +114,7 @@ const Upload: React.FC<IUpload> = ({
   const { openModal } = useModalsActions();
   const { reduceMotion } = useSettings();
 
-  const handleUndoClick: React.MouseEventHandler = e => {
+  const handleUndoClick: React.MouseEventHandler = (e) => {
     if (onDelete) {
       e.stopPropagation();
       onDelete();
@@ -122,8 +131,8 @@ const Upload: React.FC<IUpload> = ({
 
     if (!onDescriptionChange) return;
 
-    const focusX = (media.type === 'image' || media.type === 'gifv') ? (media.meta.focus?.x ?? 0) : 0;
-    const focusY = (media.type === 'image' || media.type === 'gifv') ? (media.meta.focus?.y ?? 0) : 0;
+    const focusX = media.type === 'image' || media.type === 'gifv' ? (media.meta.focus?.x ?? 0) : 0;
+    const focusY = media.type === 'image' || media.type === 'gifv' ? (media.meta.focus?.y ?? 0) : 0;
 
     openModal('ALT_TEXT', {
       media,
@@ -131,15 +140,16 @@ const Upload: React.FC<IUpload> = ({
       previousDescription: media.description,
       previousPosition: [focusX / 2 + 0.5, focusY / -2 + 0.5],
       descriptionLimit: descriptionLimit!,
-      onSubmit: (newDescription: string, newPosition: [number, number]) => onDescriptionChange(newDescription, newPosition),
+      onSubmit: (newDescription: string, newPosition: [number, number]) =>
+        onDescriptionChange(newDescription, newPosition),
     });
   };
 
   const description = media.description;
   const focusX = (media.type === 'image' && media.meta?.focus?.x) ?? undefined;
   const focusY = (media.type === 'image' && media.meta?.focus?.y) ?? undefined;
-  const x = focusX ? ((focusX / 2) + .5) * 100 : undefined;
-  const y = focusY ? ((focusY / -2) + .5) * 100 : undefined;
+  const x = focusX ? (focusX / 2 + 0.5) * 100 : undefined;
+  const y = focusY ? (focusY / -2 + 0.5) * 100 : undefined;
   const mediaType = media.type;
   const mimeType = media.mime_type as string | undefined;
 
@@ -159,8 +169,12 @@ const Upload: React.FC<IUpload> = ({
     />
   );
 
-  const backgroundImage = (mediaType === 'image' || ['.png', '.jpg', '.jpeg'].some(ext => media.preview_url.endsWith(ext))) ? `url(${media.preview_url})` : undefined;
-  const hasBackgroundImage = !!(backgroundImage);
+  const backgroundImage =
+    mediaType === 'image' ||
+    ['.png', '.jpg', '.jpeg'].some((ext) => media.preview_url.endsWith(ext))
+      ? `url(${media.preview_url})`
+      : undefined;
+  const hasBackgroundImage = !!backgroundImage;
 
   return (
     <div
@@ -174,11 +188,15 @@ const Upload: React.FC<IUpload> = ({
     >
       <Blurhash hash={media.blurhash} className='⁂-media-gallery__preview' />
       <animated.div
-        className={clsx('compose-form__upload-thumbnail relative h-40 w-full overflow-hidden bg-contain bg-center bg-no-repeat', mediaType)}
+        className={clsx(
+          'compose-form__upload-thumbnail relative h-40 w-full overflow-hidden bg-contain bg-center bg-no-repeat',
+          mediaType,
+        )}
         style={{
           scale: styles.scale,
           backgroundImage,
-          backgroundPosition: typeof x === 'number' && typeof y === 'number' ? `${x}% ${y}%` : undefined,
+          backgroundPosition:
+            typeof x === 'number' && typeof y === 'number' ? `${x}% ${y}%` : undefined,
         }}
       >
         <HStack className='absolute right-2 top-2 z-10' space={2}>
@@ -192,7 +210,7 @@ const Upload: React.FC<IUpload> = ({
               title={intl.formatMessage(messages.description)}
             />
           )}
-          {(withPreview && mediaType !== 'unknown' && Boolean(media.url)) && (
+          {withPreview && mediaType !== 'unknown' && Boolean(media.url) && (
             <IconButton
               onClick={handleOpenModal}
               src={zoomInIcon}
@@ -221,10 +239,7 @@ const Upload: React.FC<IUpload> = ({
 
           {onDescriptionChange && !description && (
             <button onClick={handleOpenAltTextModal}>
-              <AltIndicator
-                warning
-                title={intl.formatMessage(messages.descriptionMissingTitle)}
-              />
+              <AltIndicator warning title={intl.formatMessage(messages.descriptionMissingTitle)} />
             </button>
           )}
         </HStack>
@@ -242,7 +257,4 @@ const Upload: React.FC<IUpload> = ({
   );
 };
 
-export {
-  MIMETYPE_ICONS,
-  Upload as default,
-};
+export { MIMETYPE_ICONS, Upload as default };

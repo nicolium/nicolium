@@ -4,22 +4,18 @@ import React from 'react';
 import Component from '@/components/ui/emoji';
 import { isNativeEmoji, type Emoji } from '@/features/emoji';
 
-import type {
-  EditorConfig,
-  LexicalNode,
-  NodeKey,
-  SerializedLexicalNode,
-  Spread,
-} from 'lexical';
+import type { EditorConfig, LexicalNode, NodeKey, SerializedLexicalNode, Spread } from 'lexical';
 
-type SerializedEmojiNode = Spread<{
-  data: Emoji;
-  type: 'emoji';
-  version: 1;
-}, SerializedLexicalNode>;
+type SerializedEmojiNode = Spread<
+  {
+    data: Emoji;
+    type: 'emoji';
+    version: 1;
+  },
+  SerializedLexicalNode
+>;
 
 class EmojiNode extends DecoratorNode<JSX.Element> {
-
   __emoji: Emoji;
 
   static getType(): 'emoji' {
@@ -81,12 +77,18 @@ class EmojiNode extends DecoratorNode<JSX.Element> {
   decorate(): JSX.Element {
     const emoji = this.__emoji;
     if (isNativeEmoji(emoji)) {
-      return <Component emoji={emoji.native} alt={emoji.colons} title={emoji.colons} className='emojione size-4' />;
+      return (
+        <Component
+          emoji={emoji.native}
+          alt={emoji.colons}
+          title={emoji.colons}
+          className='emojione size-4'
+        />
+      );
     } else {
       return <Component src={emoji.imageUrl} alt={emoji.colons} className='emojione size-4' />;
     }
   }
-
 }
 
 function $createEmojiNode(emoji: Emoji): EmojiNode {
@@ -94,8 +96,7 @@ function $createEmojiNode(emoji: Emoji): EmojiNode {
   return $applyNodeReplacement(node);
 }
 
-const $isEmojiNode = (
-  node: LexicalNode | null | undefined,
-): node is EmojiNode => node instanceof EmojiNode;
+const $isEmojiNode = (node: LexicalNode | null | undefined): node is EmojiNode =>
+  node instanceof EmojiNode;
 
 export { EmojiNode, $createEmojiNode, $isEmojiNode };

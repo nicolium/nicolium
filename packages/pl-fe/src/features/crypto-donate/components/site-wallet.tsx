@@ -15,7 +15,7 @@ const SiteWallet: React.FC<ISiteWallet> = ({ limit }): JSX.Element => {
 
   return (
     <Stack space={4}>
-      {addresses.map(address => (
+      {addresses.map((address) => (
         <CryptoAddress
           key={address.ticker}
           address={address.address}

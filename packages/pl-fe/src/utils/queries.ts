@@ -12,7 +12,10 @@ const isEntity = <T = unknown>(object: T): object is T & Entity =>
 
 /** Deduplicate an array of entities by their ID. */
 const deduplicateById = <T extends Entity>(entities: T[]): T[] => {
-  const map = entities.reduce<Map<string, T>>((result, entity) => result.set(entity.id, entity), new Map());
+  const map = entities.reduce<Map<string, T>>(
+    (result, entity) => result.set(entity.id, entity),
+    new Map(),
+  );
 
   return Array.from(map.values());
 };
@@ -32,11 +35,15 @@ const flattenPages = <T>(queryData: InfiniteData<PaginatedResponse<T>> | undefin
 };
 
 /** Traverse pages and update the item inside if found. */
-const updatePageItem = <T>(queryKey: QueryKey, newItem: T, isItem: (item: T, newItem: T) => boolean) => {
+const updatePageItem = <T>(
+  queryKey: QueryKey,
+  newItem: T,
+  isItem: (item: T, newItem: T) => boolean,
+) => {
   queryClient.setQueriesData<InfiniteData<PaginatedResponse<T>>>({ queryKey }, (data) => {
     if (data) {
-      const pages = data.pages.map(page => {
-        const result = page.items.map(item => isItem(item, newItem) ? newItem : item);
+      const pages = data.pages.map((page) => {
+        const result = page.items.map((item) => (isItem(item, newItem) ? newItem : item));
         return { ...page, result };
       });
       return { ...data, pages };
@@ -56,11 +63,15 @@ const appendPageItem = <T>(queryKey: QueryKey, newItem: T) => {
 };
 
 /** Remove an item inside if found. */
-const removePageItem = <T>(queryKey: QueryKey, itemToRemove: T, isItem: (item: T, newItem: T) => boolean) => {
+const removePageItem = <T>(
+  queryKey: QueryKey,
+  itemToRemove: T,
+  isItem: (item: T, newItem: T) => boolean,
+) => {
   queryClient.setQueriesData<InfiniteData<PaginatedResponse<T>>>({ queryKey }, (data) => {
     if (data) {
-      const pages = data.pages.map(page => {
-        const items = page.items.filter(item => !isItem(item, itemToRemove));
+      const pages = data.pages.map((page) => {
+        const items = page.items.filter((item) => !isItem(item, itemToRemove));
         return { ...page, items };
       });
       return { ...data, pages };
@@ -97,10 +108,4 @@ const sortQueryData = <T>(queryKey: QueryKey, comparator: (a: T, b: T) => number
   });
 };
 
-export {
-  flattenPages,
-  updatePageItem,
-  appendPageItem,
-  removePageItem,
-  sortQueryData,
-};
+export { flattenPages, updatePageItem, appendPageItem, removePageItem, sortQueryData };

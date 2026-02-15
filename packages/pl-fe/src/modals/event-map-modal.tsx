@@ -10,7 +10,6 @@ import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { makeGetStatus } from '@/selectors';
 
 import 'leaflet/dist/leaflet.css';
-
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
 L.Icon.Default.mergeOptions({
@@ -27,7 +26,7 @@ const EventMapModal: React.FC<BaseModalProps & EventMapModalProps> = ({ onClose,
   const { tileServer, tileServerAttribution } = useFrontendConfig();
 
   const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector(state => getStatus(state, { id: statusId }))!;
+  const status = useAppSelector((state) => getStatus(state, { id: statusId }))!;
   const location = status.event!.location!;
 
   const map = useRef<L.Map>();
@@ -55,7 +54,10 @@ const EventMapModal: React.FC<BaseModalProps & EventMapModalProps> = ({ onClose,
   };
 
   const onClickNavigate = () => {
-    window.open(`https://www.openstreetmap.org/directions?from=&to=${location.latitude},${location.longitude}#map=14/${location.latitude}/${location.longitude}`, '_blank');
+    window.open(
+      `https://www.openstreetmap.org/directions?from=&to=${location.latitude},${location.longitude}#map=14/${location.latitude}/${location.longitude}`,
+      '_blank',
+    );
   };
 
   return (
@@ -66,7 +68,10 @@ const EventMapModal: React.FC<BaseModalProps & EventMapModalProps> = ({ onClose,
     >
       <Stack alignItems='center' space={6}>
         <div className='h-96 w-full' id='event-map' />
-        <Button onClick={onClickNavigate} icon={require('@phosphor-icons/core/regular/compass.svg')}>
+        <Button
+          onClick={onClickNavigate}
+          icon={require('@phosphor-icons/core/regular/compass.svg')}
+        >
           <FormattedMessage id='event_map.navigate' defaultMessage='Navigate' />
         </Button>
       </Stack>

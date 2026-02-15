@@ -21,7 +21,7 @@ const MentionsModal: React.FC<BaseModalProps & MentionsModalProps> = ({ onClose,
   const getStatus = useCallback(makeGetStatus(), []);
 
   const status = useAppSelector((state) => getStatus(state, { id: statusId }));
-  const accountIds = status ? status.mentions.map(m => m.id) : null;
+  const accountIds = status ? status.mentions.map((m) => m.id) : null;
 
   const fetchData = () => {
     dispatch(fetchStatusWithContext(statusId, intl));
@@ -47,9 +47,9 @@ const MentionsModal: React.FC<BaseModalProps & MentionsModalProps> = ({ onClose,
         isLoading={!accountIds}
         useWindowScroll={false}
       >
-        {(accountIds ?? []).map(id =>
-          <AccountContainer key={id} id={id} />,
-        )}
+        {(accountIds ?? []).map((id) => (
+          <AccountContainer key={id} id={id} />
+        ))}
       </ScrollableList>
     </Modal>
   );

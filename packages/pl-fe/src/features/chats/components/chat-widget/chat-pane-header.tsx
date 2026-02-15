@@ -44,18 +44,12 @@ const ChatPaneHeader = (props: IChatPaneHeader) => {
 
   return (
     <div {...rest} className='⁂-chat-widget__header'>
-      <ButtonComp
-        className='⁂-chat-widget__header__title'
-        data-testid='title'
-        {...buttonProps}
-      >
+      <ButtonComp className='⁂-chat-widget__header__title' data-testid='title' {...buttonProps}>
         <div>{title}</div>
 
-        {(!demetricator && unreadCount !== undefined && unreadCount > 0) && (
+        {!demetricator && unreadCount !== undefined && unreadCount > 0 && (
           <div className='⁂-chat-widget__header__count'>
-            <p data-testid='unread-count'>
-              ({unreadCount})
-            </p>
+            <p data-testid='unread-count'>({unreadCount})</p>
 
             <div className='⁂-chat-widget__header__count__dot' />
           </div>
@@ -75,7 +69,9 @@ const ChatPaneHeader = (props: IChatPaneHeader) => {
           onClick={onToggle}
           src={require('@phosphor-icons/core/regular/caret-up.svg')}
           className='⁂-chat-widget__header__open-button'
-          title={isOpen ? intl.formatMessage(messages.collapse) : intl.formatMessage(messages.expand)}
+          title={
+            isOpen ? intl.formatMessage(messages.collapse) : intl.formatMessage(messages.expand)
+          }
         />
       </div>
     </div>

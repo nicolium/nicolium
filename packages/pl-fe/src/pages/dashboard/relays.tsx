@@ -20,7 +20,10 @@ const messages = defineMessages({
   relayDeleteSuccess: { id: 'admin.relays.deleted', defaultMessage: 'Relay unfollowed' },
   label: { id: 'admin.relays.new.url_placeholder', defaultMessage: 'Instance relay URL' },
   createSuccess: { id: 'admin.relays.add.success', defaultMessage: 'Instance relay followed' },
-  createFail: { id: 'admin.relays.add.fail', defaultMessage: 'Failed to follow the instance relay' },
+  createFail: {
+    id: 'admin.relays.add.fail',
+    defaultMessage: 'Failed to follow the instance relay',
+  },
 });
 
 interface IRelay {
@@ -45,8 +48,7 @@ const Relay: React.FC<IRelay> = ({ relay }) => {
           <Text size='sm'>
             <Text tag='span' size='sm' weight='medium'>
               <FormattedMessage id='admin.relays.url' defaultMessage='Instance URL:' />
-            </Text>
-            {' '}
+            </Text>{' '}
             {relay.actor}
           </Text>
           {relay.followed_back && (
@@ -92,19 +94,10 @@ const NewRelayForm: React.FC = () => {
         <label className='grow'>
           <span style={{ display: 'none' }}>{label}</span>
 
-          <Input
-            type='text'
-            placeholder={label}
-            disabled={isPendingFollow}
-            {...name}
-          />
+          <Input type='text' placeholder={label} disabled={isPendingFollow} {...name} />
         </label>
 
-        <Button
-          disabled={isPendingFollow}
-          onClick={handleSubmit}
-          theme='primary'
-        >
+        <Button disabled={isPendingFollow} onClick={handleSubmit} theme='primary'>
           <FormattedMessage id='admin.relays.new.follow' defaultMessage='Follow' />
         </Button>
       </HStack>
@@ -117,7 +110,12 @@ const RelaysPage: React.FC = () => {
 
   const { data: relays, isFetching } = useRelays();
 
-  const emptyMessage = <FormattedMessage id='empty_column.admin.relays' defaultMessage='There are no relays followed yet.' />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.admin.relays'
+      defaultMessage='There are no relays followed yet.'
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>

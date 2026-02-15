@@ -14,8 +14,17 @@ interface FavouritesModalProps {
   statusId: string;
 }
 
-const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onClose, statusId }) => {
-  const { data: accountIds, isLoading, hasNextPage, fetchNextPage, refetch } = useStatusFavourites(statusId);
+const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({
+  onClose,
+  statusId,
+}) => {
+  const {
+    data: accountIds,
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useStatusFavourites(statusId);
 
   const onClickClose = () => {
     onClose('FAVOURITES');
@@ -26,7 +35,12 @@ const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onCl
   if (!accountIds) {
     body = <Spinner />;
   } else {
-    const emptyMessage = <FormattedMessage id='empty_column.favourites' defaultMessage='No one has liked this post yet. When someone does, they will show up here.' />;
+    const emptyMessage = (
+      <FormattedMessage
+        id='empty_column.favourites'
+        defaultMessage='No one has liked this post yet. When someone does, they will show up here.'
+      />
+    );
 
     body = (
       <PullToRefresh onRefresh={refetch}>
@@ -40,9 +54,9 @@ const FavouritesModal: React.FC<BaseModalProps & FavouritesModalProps> = ({ onCl
           onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
           useWindowScroll={false}
         >
-          {accountIds.map(id =>
-            <AccountContainer key={id} id={id} />,
-          )}
+          {accountIds.map((id) => (
+            <AccountContainer key={id} id={id} />
+          ))}
         </ScrollableList>
       </PullToRefresh>
     );

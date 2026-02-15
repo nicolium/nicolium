@@ -1,12 +1,13 @@
 // APIs for normalizing fullscreen operations. Note that Edge uses
 // the WebKit-prefixed APIs currently (as of Edge 16).
 
-const isFullscreen = (): boolean => Boolean(
-  // eslint-disable-next-line compat/compat
-  document.fullscreenElement ??
+const isFullscreen = (): boolean =>
+  Boolean(
+    // eslint-disable-next-line compat/compat
+    document.fullscreenElement ??
     // @ts-ignore
     document.webkitFullscreenElement,
-);
+  );
 
 const exitFullscreen = (): void => {
   if (document.exitFullscreen) {

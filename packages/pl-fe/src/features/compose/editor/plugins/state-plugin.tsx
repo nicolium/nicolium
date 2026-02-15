@@ -7,7 +7,13 @@ import debounce from 'lodash/debounce';
 import { useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
-import { addSuggestedLanguage, addSuggestedQuote, setEditorState, suggestClearLink, suggestHashtagCasing } from '@/actions/compose';
+import {
+  addSuggestedLanguage,
+  addSuggestedQuote,
+  setEditorState,
+  suggestClearLink,
+  suggestHashtagCasing,
+} from '@/actions/compose';
 import { fetchStatus } from '@/actions/statuses';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
@@ -33,134 +39,148 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
   const features = useFeatures();
   const { urlPrivacy, ignoreHashtagCasingSuggestions } = useSettings();
 
-  const checkUrls = useCallback(debounce((editorState: EditorState) => {
-    dispatch((_, getState) => {
-      if (!urlPrivacy.clearLinksInCompose) return;
+  const checkUrls = useCallback(
+    debounce((editorState: EditorState) => {
+      dispatch((_, getState) => {
+        if (!urlPrivacy.clearLinksInCompose) return;
 
-      const state = getState();
-      const compose = state.compose[composeId];
+        const state = getState();
+        const compose = state.compose[composeId];
 
-      editorState.read(() => {
-        const compareUrl = (url: string) => {
-          const cleanUrl = Purify.clearUrl(url, true, false);
-          return {
-            originalUrl: url,
-            cleanUrl,
-            isDirty: cleanUrl !== url,
+        editorState.read(() => {
+          const compareUrl = (url: string) => {
+            const cleanUrl = Purify.clearUrl(url, true, false);
+            return {
+              originalUrl: url,
+              cleanUrl,
+              isDirty: cleanUrl !== url,
+            };
           };
-        };
 
-        if (compose.clearLinkSuggestion?.key) {
-          const node = $getNodeByKey(compose.clearLinkSuggestion.key);
-          const url = (node as LinkNode | null)?.getURL?.();
-          if (!url || node === null || !compareUrl(url).isDirty) {
-            dispatch(suggestClearLink(composeId, null));
-          } else {
-            return;
+          if (compose.clearLinkSuggestion?.key) {
+            const node = $getNodeByKey(compose.clearLinkSuggestion.key);
+            const url = (node as LinkNode | null)?.getURL?.();
+            if (!url || node === null || !compareUrl(url).isDirty) {
+              dispatch(suggestClearLink(composeId, null));
+            } else {
+              return;
+            }
+          }
+
+          const links = [...$nodesOfType(AutoLinkNode), ...$nodesOfType(LinkNode)];
+
+          for (const link of links) {
+            if (compose.dismissedClearLinksSuggestions.includes(link.getKey())) {
+              continue;
+            }
+
+            const { originalUrl, cleanUrl, isDirty } = compareUrl(link.getURL());
+            if (!isDirty) {
+              continue;
+            }
+
+            if (isDirty) {
+              return dispatch(
+                suggestClearLink(composeId, { key: link.getKey(), originalUrl, cleanUrl }),
+              );
+            }
+          }
+        });
+      });
+    }, 2000),
+    [urlPrivacy.clearLinksInCompose],
+  );
+
+  const checkHashtagCasingSuggestions = useCallback(
+    debounce((editorState: EditorState) => {
+      dispatch((_, getState) => {
+        if (ignoreHashtagCasingSuggestions) return;
+
+        const state = getState();
+        const compose = state.compose[composeId];
+
+        if (compose.hashtagCasingSuggestionIgnored) return;
+
+        editorState.read(() => {
+          const hashtagNodes = $nodesOfType(HashtagNode);
+
+          for (const tag of hashtagNodes) {
+            const text = tag.getTextContent();
+
+            if (text.length > 10 && text.toLowerCase() === text && !text.match(/[0-9]/)) {
+              dispatch(suggestHashtagCasing(composeId, text));
+              return;
+            }
+          }
+
+          dispatch(suggestHashtagCasing(composeId, null));
+        });
+      });
+    }, 1000),
+    [ignoreHashtagCasingSuggestions],
+  );
+
+  const getQuoteSuggestions = useCallback(
+    debounce((text: string) => {
+      dispatch(async (_, getState) => {
+        const state = getState();
+        const compose = state.compose[composeId];
+
+        if (!features.quotePosts || compose?.quoteId) return;
+
+        const ids = getStatusIdsFromLinksInContent(text);
+
+        let quoteId: string | undefined;
+
+        for (const id of ids) {
+          if (compose?.dismissedQuotes.includes(id)) continue;
+
+          if (state.statuses[id]) {
+            quoteId = id;
+            break;
+          }
+
+          const status = await dispatch(fetchStatus(id, intl));
+
+          if (status) {
+            quoteId = status.id;
+            break;
           }
         }
 
-        const links = [...$nodesOfType(AutoLinkNode), ...$nodesOfType(LinkNode)];
+        if (quoteId) dispatch(addSuggestedQuote(composeId, quoteId));
+      });
+    }, 2000),
+    [],
+  );
 
-        for (const link of links) {
-          if (compose.dismissedClearLinksSuggestions.includes(link.getKey())) {
-            continue;
-          }
+  const detectLanguage = useCallback(
+    debounce((text: string) => {
+      dispatch(async (dispatch, getState) => {
+        const state = getState();
+        const compose = state.compose[composeId];
 
-          const { originalUrl, cleanUrl, isDirty } = compareUrl(link.getURL());
-          if (!isDirty) {
-            continue;
-          }
+        if (!features.postLanguages || features.languageDetection || compose?.language) return;
 
-          if (isDirty) {
-            return dispatch(suggestClearLink(composeId, { key: link.getKey(), originalUrl, cleanUrl }));
-          }
+        const wordsLength = text.split(/\s+/).length;
+
+        if (wordsLength < 4) return;
+
+        if (!lidModel) {
+          // eslint-disable-next-line import/extensions
+          const { getLIDModel } = await import('fasttext.wasm.js/common');
+          lidModel = await getLIDModel();
+        }
+        if (!lidModel.model) await lidModel.load();
+        const { alpha2, possibility } = await lidModel.identify(text.replace(/\s+/i, ' '));
+
+        if (alpha2 && possibility > 0.5) {
+          dispatch(addSuggestedLanguage(composeId, alpha2));
         }
       });
-    });
-  }, 2000), [urlPrivacy.clearLinksInCompose]);
-
-  const checkHashtagCasingSuggestions = useCallback(debounce((editorState: EditorState) => {
-    dispatch((_, getState) => {
-      if (ignoreHashtagCasingSuggestions) return;
-
-      const state = getState();
-      const compose = state.compose[composeId];
-
-      if (compose.hashtagCasingSuggestionIgnored) return;
-
-      editorState.read(() => {
-        const hashtagNodes = $nodesOfType(HashtagNode);
-
-        for (const tag of hashtagNodes) {
-          const text = tag.getTextContent();
-
-          if (text.length > 10 && text.toLowerCase() === text && !text.match(/[0-9]/)) {
-            dispatch(suggestHashtagCasing(composeId, text));
-            return;
-          }
-        }
-
-        dispatch(suggestHashtagCasing(composeId, null));
-      });
-    });
-  }, 1000), [ignoreHashtagCasingSuggestions]);
-
-  const getQuoteSuggestions = useCallback(debounce((text: string) => {
-    dispatch(async (_, getState) => {
-      const state = getState();
-      const compose = state.compose[composeId];
-
-      if (!features.quotePosts || compose?.quoteId) return;
-
-      const ids = getStatusIdsFromLinksInContent(text);
-
-      let quoteId: string | undefined;
-
-      for (const id of ids) {
-        if (compose?.dismissedQuotes.includes(id)) continue;
-
-        if (state.statuses[id]) {
-          quoteId = id;
-          break;
-        }
-
-        const status = await dispatch(fetchStatus(id, intl));
-
-        if (status) {
-          quoteId = status.id;
-          break;
-        }
-      }
-
-      if (quoteId) dispatch(addSuggestedQuote(composeId, quoteId));
-    });
-  }, 2000), []);
-
-  const detectLanguage = useCallback(debounce((text: string) => {
-    dispatch(async (dispatch, getState) => {
-      const state = getState();
-      const compose = state.compose[composeId];
-
-      if (!features.postLanguages || features.languageDetection || compose?.language) return;
-
-      const wordsLength = text.split(/\s+/).length;
-
-      if (wordsLength < 4) return;
-
-      if (!lidModel) {
-        // eslint-disable-next-line import/extensions
-        const { getLIDModel } = await import('fasttext.wasm.js/common');
-        lidModel = await getLIDModel();
-      }
-      if (!lidModel.model) await lidModel.load();
-      const { alpha2, possibility } = await lidModel.identify(text.replace(/\s+/i, ' '));
-
-      if (alpha2 && possibility > 0.5) {
-        dispatch(addSuggestedLanguage(composeId, alpha2));
-      }
-    });
-  }, 750), []);
+    }, 750),
+    [],
+  );
 
   useEffect(() => {
     return editor.registerUpdateListener(({ editorState }) => {

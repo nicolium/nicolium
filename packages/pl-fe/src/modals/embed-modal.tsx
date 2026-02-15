@@ -36,7 +36,10 @@ const EmbedModal: React.FC<BaseModalProps & EmbedModalProps> = ({ onClose, onErr
     >
       <Stack space={4}>
         <Text theme='muted'>
-          <FormattedMessage id='embed.instructions' defaultMessage='Embed this post on your website by copying the code below.' />
+          <FormattedMessage
+            id='embed.instructions'
+            defaultMessage='Embed this post on your website by copying the code below.'
+          />
         </Text>
 
         <CopyableInput value={embed?.html ?? ''} />

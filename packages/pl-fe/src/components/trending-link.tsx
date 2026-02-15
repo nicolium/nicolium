@@ -26,12 +26,13 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
     media = (
       <div className='relative size-32 overflow-hidden rounded-md'>
         {trendingLink.blurhash && (
-          <Blurhash
-            className='absolute inset-0 z-0 size-full'
-            hash={trendingLink.blurhash}
-          />
+          <Blurhash className='absolute inset-0 z-0 size-full' hash={trendingLink.blurhash} />
         )}
-        <img className='relative size-full object-cover' src={trendingLink.image} alt={trendingLink.image_description ?? undefined} />
+        <img
+          className='relative size-full object-cover'
+          src={trendingLink.image}
+          alt={trendingLink.image_description ?? undefined}
+        />
       </div>
     );
   }
@@ -45,8 +46,14 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
     >
       {media}
       <Stack space={2} className='flex-1 overflow-hidden'>
-        <Text className='line-clamp-2' weight='bold' direction={direction}>{trendingLink.title}</Text>
-        {trendingLink.description && <Text truncate direction={direction}>{trendingLink.description}</Text>}
+        <Text className='line-clamp-2' weight='bold' direction={direction}>
+          {trendingLink.title}
+        </Text>
+        {trendingLink.description && (
+          <Text truncate direction={direction}>
+            {trendingLink.description}
+          </Text>
+        )}
         <HStack alignItems='center' wrap className='divide-x-dot text-gray-700 dark:text-gray-600'>
           <HStack space={1} alignItems='center'>
             <Text tag='span' theme='muted'>
@@ -58,7 +65,11 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
           </HStack>
 
           {!!count && (
-            <Link to='/links/$url' params={{ url: encodeURIComponent(trendingLink.url) }} className='hover:underline'>
+            <Link
+              to='/links/$url'
+              params={{ url: encodeURIComponent(trendingLink.url) }}
+              className='hover:underline'
+            >
               {accountsCountRenderer(count)}
             </Link>
           )}

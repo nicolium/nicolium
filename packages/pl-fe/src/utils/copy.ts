@@ -17,7 +17,7 @@ const copy = (text: string, onSuccess?: () => void) => {
       textarea.select();
       document.execCommand('copy');
     } catch {
-    // Do nothing
+      // Do nothing
     } finally {
       document.body.removeChild(textarea);
 

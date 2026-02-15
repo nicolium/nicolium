@@ -1,9 +1,23 @@
 import trim from 'lodash/trim';
 import { create, Draft } from 'mutative';
-import { type Account as AccountEntity, applicationSchema, instanceSchema, PlApiClient, tokenSchema, type CredentialAccount, type CredentialApplication, type Token } from 'pl-api';
+import {
+  type Account as AccountEntity,
+  applicationSchema,
+  instanceSchema,
+  PlApiClient,
+  tokenSchema,
+  type CredentialAccount,
+  type CredentialApplication,
+  type Token,
+} from 'pl-api';
 import * as v from 'valibot';
 
-import { decodeFromMarkup, MASTODON_PRELOAD_IMPORT, pleromaDecoder, type PreloadAction } from '@/actions/preload';
+import {
+  decodeFromMarkup,
+  MASTODON_PRELOAD_IMPORT,
+  pleromaDecoder,
+  type PreloadAction,
+} from '@/actions/preload';
 import * as BuildConfig from '@/build-config';
 import { coerceObject } from '@/schemas/utils';
 import KVStore from '@/storage/kv-store';
@@ -25,7 +39,9 @@ import type { PlfeResponse } from '@/api';
 
 const instance = (() => {
   try {
-    const preloadedInstance = decodeFromMarkup('initial-results', pleromaDecoder)['/api/v1/instance'];
+    const preloadedInstance = decodeFromMarkup('initial-results', pleromaDecoder)[
+      '/api/v1/instance'
+    ];
     const parsedInstance = v.safeParse(instanceSchema, preloadedInstance);
     return parsedInstance.success ? parsedInstance.output : undefined;
   } catch (e) {
@@ -35,16 +51,19 @@ const instance = (() => {
 
 type Action = AuthAction | MeAction | PreloadAction;
 
-const backendUrl = (isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : '');
+const backendUrl = isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : '';
 
 const mastodonPreloadSchema = coerceObject({
   meta: coerceObject({
     access_token: v.string(),
     me: v.string(),
   }),
-  accounts: v.record(v.string(), v.object({
-    url: v.string(),
-  })),
+  accounts: v.record(
+    v.string(),
+    v.object({
+      url: v.string(),
+    }),
+  ),
 });
 
 const authUserSchema = v.object({
@@ -78,7 +97,9 @@ interface State {
 const buildKey = (parts: string[]) => parts.join(':');
 
 // For subdirectory support
-const NAMESPACE = trim(BuildConfig.FE_SUBDIRECTORY, '/') ? `pl-fe@${BuildConfig.FE_SUBDIRECTORY}` : 'pl-fe';
+const NAMESPACE = trim(BuildConfig.FE_SUBDIRECTORY, '/')
+  ? `pl-fe@${BuildConfig.FE_SUBDIRECTORY}`
+  : 'pl-fe';
 
 const STORAGE_KEY = buildKey([NAMESPACE, 'auth']);
 
@@ -87,15 +108,23 @@ const getLocalState = (): State | undefined => {
 
   if (!state) return undefined;
 
-  return ({
+  return {
     app: state.app && v.parse(applicationSchema, state.app),
-    tokens: Object.fromEntries(Object.entries(state.tokens).map(([key, value]) => [key, v.parse(tokenWithAppSchema, value)])),
-    users: Object.fromEntries(Object.entries(state.users).map(([key, value]) => [key, v.parse(authUserSchema, value)])),
+    tokens: Object.fromEntries(
+      Object.entries(state.tokens).map(([key, value]) => [key, v.parse(tokenWithAppSchema, value)]),
+    ),
+    users: Object.fromEntries(
+      Object.entries(state.users).map(([key, value]) => [key, v.parse(authUserSchema, value)]),
+    ),
     me: state.me,
-    client: new PlApiClient(parseBaseURL(state.me) || backendUrl, state.users[state.me]?.access_token, {
-      instance,
-    }),
-  });
+    client: new PlApiClient(
+      parseBaseURL(state.me) || backendUrl,
+      state.users[state.me]?.access_token,
+      {
+        instance,
+      },
+    ),
+  };
 };
 
 const localState = getLocalState();
@@ -117,7 +146,7 @@ const getUrlOrId = (user?: AuthUser): string | null => {
   try {
     if (!user) return null;
     const { id, url } = user;
-    return (url || id);
+    return url || id;
   } catch {
     return null;
   }
@@ -155,13 +184,13 @@ const sanitizeState = (state: State) => {
   // Skip sanitation during ID to URL upgrade
   if (isUpgradingUrlId(state)) return state;
 
-  state.users = Object.fromEntries(Object.entries(state.users).filter(([url, user]) => (
-    validUser(user) && user.url === url
-  )));
+  state.users = Object.fromEntries(
+    Object.entries(state.users).filter(([url, user]) => validUser(user) && user.url === url),
+  );
   // Remove mismatched tokens
-  state.tokens = Object.fromEntries(Object.entries(state.tokens).filter(([id, token]) => (
-    validId(id) && token.access_token === id
-  )));
+  state.tokens = Object.fromEntries(
+    Object.entries(state.tokens).filter(([id, token]) => validId(id) && token.access_token === id),
+  );
 };
 
 const persistAuth = (state: State) => {
@@ -210,8 +239,8 @@ const upgradeNonUrlId = (state: State | Draft<State>, account: CredentialAccount
 };
 
 // Returns a predicate function for filtering a mismatched user/token
-const userMismatch = (token: string, account: CredentialAccount) =>
-  (user: AuthUser, url: string) => {
+const userMismatch =
+  (token: string, account: CredentialAccount) => (user: AuthUser, url: string) => {
     const sameToken = user.access_token === token;
     const differentUrl = url !== account.url || user.url !== account.url;
     const differentId = user.id !== account.id;
@@ -219,7 +248,11 @@ const userMismatch = (token: string, account: CredentialAccount) =>
     return sameToken && (differentUrl || differentId);
   };
 
-const importCredentials = (state: State | Draft<State>, token: string, account: CredentialAccount) => {
+const importCredentials = (
+  state: State | Draft<State>,
+  token: string,
+  account: CredentialAccount,
+) => {
   state.users[account.url] = v.parse(authUserSchema, {
     id: account.id,
     access_token: token,
@@ -227,14 +260,18 @@ const importCredentials = (state: State | Draft<State>, token: string, account: 
   });
   // state.tokens[token].account = account.id;
   state.tokens[token].me = account.url;
-  state.users = Object.fromEntries(Object.entries(state.users).filter(([url, user]) => !userMismatch(token, account)(user, url)));
+  state.users = Object.fromEntries(
+    Object.entries(state.users).filter(([url, user]) => !userMismatch(token, account)(user, url)),
+  );
   state.me = state.me ?? account.url;
   upgradeNonUrlId(state, account);
 };
 
 const deleteToken = (state: State | Draft<State>, token: string) => {
   delete state.tokens[token];
-  state.users = Object.fromEntries(Object.entries(state.users).filter(([_, user]) => user.access_token !== token));
+  state.users = Object.fromEntries(
+    Object.entries(state.users).filter(([_, user]) => user.access_token !== token),
+  );
   maybeShiftMe(state);
 };
 
@@ -242,7 +279,9 @@ const deleteUser = (state: State | Draft<State>, account: Pick<AccountEntity, 'u
   const accountUrl = account.url;
 
   delete state.users[accountUrl];
-  state.tokens = Object.fromEntries(Object.entries(state.tokens).filter(([_, token]) => token.me !== accountUrl));
+  state.tokens = Object.fromEntries(
+    Object.entries(state.tokens).filter(([_, token]) => token.me !== accountUrl),
+  );
   maybeShiftMe(state);
 };
 
@@ -275,25 +314,35 @@ const persistAuthAccount = (account: CredentialAccount) => {
   const persistedAccount = { ...account };
   const key = `authAccount:${account.url}`;
 
-  KVStore.getItem(key).then((oldAccount: any) => {
-    const settings = oldAccount?.settings_store ?? {};
-    persistedAccount.settings_store ??= settings;
-    KVStore.setItem(key, persistedAccount);
-  })
+  KVStore.getItem(key)
+    .then((oldAccount: any) => {
+      const settings = oldAccount?.settings_store ?? {};
+      persistedAccount.settings_store ??= settings;
+      KVStore.setItem(key, persistedAccount);
+    })
     .catch(console.error);
 
   return persistedAccount;
 };
 
-const deleteForbiddenToken = (state: State | Draft<State>, error: { response: PlfeResponse }, token: string) => {
+const deleteForbiddenToken = (
+  state: State | Draft<State>,
+  error: { response: PlfeResponse },
+  token: string,
+) => {
   if (error.response && [401, 403].includes(error.response.status)) {
-    deleteToken(state, token); return;
+    deleteToken(state, token);
+    return;
   }
 
   return state;
 };
 
-const updateState = (state: State, updater: (state: Draft<State>) => void, clientUpdater?: (state: State) => InstanceType<typeof PlApiClient>) => {
+const updateState = (
+  state: State,
+  updater: (state: Draft<State>) => void,
+  clientUpdater?: (state: State) => InstanceType<typeof PlApiClient>,
+) => {
   const oldClient = state.client;
 
   const newState = create(state, updater);
@@ -309,7 +358,7 @@ const reducer = (state: State, action: Action): State => {
       });
     case AUTH_APP_AUTHORIZED:
       return updateState(state, (draft) => {
-        if (draft.app) draft.app = ({ ...draft.app, ...action.token });
+        if (draft.app) draft.app = { ...draft.app, ...action.token };
       });
     case AUTH_LOGGED_IN:
       return updateState(state, (draft) => {
@@ -320,36 +369,44 @@ const reducer = (state: State, action: Action): State => {
         deleteUser(draft, action.account);
       });
     case VERIFY_CREDENTIALS_SUCCESS:
-      return updateState(state, (draft) => {
-        importCredentials(draft, action.token, persistAuthAccount(action.account));
-      }, () => {
-        if (!state.me) {
-          if (state.client.baseURL === parseBaseURL(action.account.url)) {
-            state.client.accessToken = action.token;
-            return state.client;
-          }
+      return updateState(
+        state,
+        (draft) => {
+          importCredentials(draft, action.token, persistAuthAccount(action.account));
+        },
+        () => {
+          if (!state.me) {
+            if (state.client.baseURL === parseBaseURL(action.account.url)) {
+              state.client.accessToken = action.token;
+              return state.client;
+            }
 
-          return new PlApiClient(parseBaseURL(action.account.url) || backendUrl, action.token);
-        }
-        return state.client;
-      });
+            return new PlApiClient(parseBaseURL(action.account.url) || backendUrl, action.token);
+          }
+          return state.client;
+        },
+      );
     case VERIFY_CREDENTIALS_FAIL:
       return updateState(state, (draft) => {
         deleteForbiddenToken(draft, action.error as any, action.token);
       });
     case SWITCH_ACCOUNT:
-      return updateState(state, (draft) => {
-        draft.me = action.account.url;
-      }, () => {
-        const accessToken = state.users[action.account.url]?.access_token;
+      return updateState(
+        state,
+        (draft) => {
+          draft.me = action.account.url;
+        },
+        () => {
+          const accessToken = state.users[action.account.url]?.access_token;
 
-        if (state.client.baseURL === parseBaseURL(action.account.url)) {
-          state.client.accessToken = accessToken;
-          return state.client;
-        }
+          if (state.client.baseURL === parseBaseURL(action.account.url)) {
+            state.client.accessToken = accessToken;
+            return state.client;
+          }
 
-        return new PlApiClient(parseBaseURL(action.account.url) || backendUrl, accessToken);
-      });
+          return new PlApiClient(parseBaseURL(action.account.url) || backendUrl, accessToken);
+        },
+      );
     case ME_FETCH_SKIP:
       return updateState(state, (draft) => {
         draft.me = null;
@@ -363,7 +420,7 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-const reload = () =>{
+const reload = () => {
   location.replace('/');
 };
 

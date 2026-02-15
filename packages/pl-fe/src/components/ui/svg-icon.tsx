@@ -13,7 +13,13 @@ interface ISvgIcon extends InlineSVGProps {
 }
 
 /** Renders an inline SVG with an empty frame loading state */
-const SvgIcon: React.FC<ISvgIcon> = ({ src, alt, size = 24, className, ...filteredProps }): JSX.Element => {
+const SvgIcon: React.FC<ISvgIcon> = ({
+  src,
+  alt,
+  size = 24,
+  className,
+  ...filteredProps
+}): JSX.Element => {
   const loader = (
     <svg
       className={className}

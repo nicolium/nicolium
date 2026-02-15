@@ -29,9 +29,7 @@ import type { Rgb, TailwindColorObject } from '@/types/colors';
 
 const hexToRgb = (hex: string): Rgb | null => {
   const sanitizedHex = hex.replace(/##/g, '#');
-  const colorParts = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(
-    sanitizedHex,
-  );
+  const colorParts = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(sanitizedHex);
 
   if (!colorParts) {
     return null;
@@ -98,18 +96,15 @@ const colors = (baseColor: string): TailwindColorObject => {
     900: 0.19,
   };
 
-  [50, 100, 200, 300, 400].forEach(level => {
+  [50, 100, 200, 300, 400].forEach((level) => {
     response[level] = lighten(baseColor, intensityMap[level]);
   });
 
-  [600, 700, 800, 900].forEach(level => {
+  [600, 700, 800, 900].forEach((level) => {
     response[level] = darken(baseColor, intensityMap[level]);
   });
 
   return response;
 };
 
-export {
-  hexToRgb,
-  colors as default,
-};
+export { hexToRgb, colors as default };

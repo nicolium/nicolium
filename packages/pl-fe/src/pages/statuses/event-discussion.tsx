@@ -28,11 +28,13 @@ const EventDiscussionPage: React.FC = () => {
 
   const getStatus = useCallback(makeGetStatus(), []);
   const getDescendantsIds = useCallback(makeGetDescendantsIds(), []);
-  const status = useAppSelector(state => getStatus(state, { id: statusId }));
+  const status = useAppSelector((state) => getStatus(state, { id: statusId }));
 
   const me = useAppSelector((state) => state.me);
 
-  const descendantsIds = useAppSelector(state => getDescendantsIds(state, statusId).filter(id => id !== statusId));
+  const descendantsIds = useAppSelector((state) =>
+    getDescendantsIds(state, statusId).filter((id) => id !== statusId),
+  );
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
 
@@ -42,11 +44,13 @@ const EventDiscussionPage: React.FC = () => {
   const fetchData = () => dispatch(fetchStatusWithContext(statusId, intl));
 
   useEffect(() => {
-    fetchData().then(() => {
-      setIsLoaded(true);
-    }).catch(() => {
-      setIsLoaded(true);
-    });
+    fetchData()
+      .then(() => {
+        setIsLoaded(true);
+      })
+      .catch(() => {
+        setIsLoaded(true);
+      });
   }, [statusId]);
 
   useEffect(() => {
@@ -65,12 +69,7 @@ const EventDiscussionPage: React.FC = () => {
 
   const renderTombstone = (id: string) => (
     <div className='py-4 pb-8'>
-      <Tombstone
-        key={id}
-        id={id}
-        onMoveUp={handleMoveUp}
-        onMoveDown={handleMoveDown}
-      />
+      <Tombstone key={id} id={id} onMoveUp={handleMoveUp} onMoveDown={handleMoveDown} />
     </div>
   );
 
@@ -87,35 +86,26 @@ const EventDiscussionPage: React.FC = () => {
   const renderPendingStatus = (id: string) => {
     const idempotencyKey = id.replace(/^末pending-/, '');
 
-    return (
-      <PendingStatus
-        key={id}
-        idempotencyKey={idempotencyKey}
-        variant='default'
-      />
-    );
+    return <PendingStatus key={id} idempotencyKey={idempotencyKey} variant='default' />;
   };
 
-  const renderChildren = (list: Array<string>) => list.map(id => {
-    if (id.endsWith('-tombstone')) {
-      return renderTombstone(id);
-    } else if (id.startsWith('末pending-')) {
-      return renderPendingStatus(id);
-    } else {
-      return renderStatus(id);
-    }
-  });
+  const renderChildren = (list: Array<string>) =>
+    list.map((id) => {
+      if (id.endsWith('-tombstone')) {
+        return renderTombstone(id);
+      } else if (id.startsWith('末pending-')) {
+        return renderPendingStatus(id);
+      } else {
+        return renderStatus(id);
+      }
+    });
 
   const hasDescendants = descendantsIds.length > 0;
 
   if (!status && isLoaded) {
-    return (
-      <MissingIndicator />
-    );
+    return <MissingIndicator />;
   } else if (!status) {
-    return (
-      <PlaceholderStatus />
-    );
+    return <PlaceholderStatus />;
   }
 
   const children: JSX.Element[] = [];
@@ -126,16 +116,23 @@ const EventDiscussionPage: React.FC = () => {
 
   return (
     <Stack space={2}>
-      {me && <div className='border-b border-solid border-gray-200 p-2 pt-0 dark:border-gray-800'>
-        <ComposeForm id={`reply:${status.id}`} autoFocus={false} event={status.id} transparent />
-      </div>}
+      {me && (
+        <div className='border-b border-solid border-gray-200 p-2 pt-0 dark:border-gray-800'>
+          <ComposeForm id={`reply:${status.id}`} autoFocus={false} event={status.id} transparent />
+        </div>
+      )}
       <div ref={node} className='thread p-0 shadow-none sm:p-2'>
         <ScrollableList
           scrollKey={`eventDiscussion:${status.id}`}
           id='thread'
           placeholderComponent={() => <PlaceholderStatus variant='slim' />}
           initialTopMostItemIndex={0}
-          emptyMessageText={<FormattedMessage id='event.discussion.empty' defaultMessage='No one has commented this event yet. When someone does, they will appear here.' />}
+          emptyMessageText={
+            <FormattedMessage
+              id='event.discussion.empty'
+              defaultMessage='No one has commented this event yet. When someone does, they will appear here.'
+            />
+          }
         >
           {children}
         </ScrollableList>

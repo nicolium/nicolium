@@ -20,12 +20,13 @@ const messages = defineMessages({
 });
 
 const checkComposeContent = (compose?: Compose) =>
-  !!compose && [
+  !!compose &&
+  [
     compose.editorState && compose.editorState.length > 0,
     compose.spoilerText.length > 0,
     compose.mediaAttachments.length > 0,
     compose.poll !== null,
-  ].some(check => check === true);
+  ].some((check) => check === true);
 
 interface IModalRoot {
   onCancel?: () => void;
@@ -47,7 +48,9 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
   const [revealed, setRevealed] = useState(!!children);
 
   const ref = useRef<HTMLDivElement>(null);
-  const activeElement = useRef<HTMLDivElement | null>(revealed ? document.activeElement as HTMLDivElement | null : null);
+  const activeElement = useRef<HTMLDivElement | null>(
+    revealed ? (document.activeElement as HTMLDivElement | null) : null,
+  );
   const unlistenHistory = useRef<() => void>();
 
   const prevChildren = usePrevious(children);
@@ -68,16 +71,35 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
       if (hasComposeContent && type === 'COMPOSE') {
         const isEditing = compose.editedId !== null;
         openModal('CONFIRM', {
-          heading: isEditing
-            ? <FormattedMessage id='confirmations.cancel_editing.heading' defaultMessage='Cancel post editing' />
-            : compose.draftId
-              ? <FormattedMessage id='confirmations.cancel_draft.heading' defaultMessage='Discard draft changes' />
-              : <FormattedMessage id='confirmations.cancel.heading' defaultMessage='Discard post' />,
-          message: isEditing
-            ? <FormattedMessage id='confirmations.cancel_editing.message' defaultMessage='Are you sure you want to discard the changes to this post? All changes will be lost.' />
-            : compose.draftId
-              ? <FormattedMessage id='confirmations.cancel_draft_editing.message' defaultMessage='Are you sure you want to discard the changes to this draft post? All changes will be lost.' />
-              : <FormattedMessage id='confirmations.cancel.message' defaultMessage='Are you sure you want to discard the currently composed post?' />,
+          heading: isEditing ? (
+            <FormattedMessage
+              id='confirmations.cancel_editing.heading'
+              defaultMessage='Cancel post editing'
+            />
+          ) : compose.draftId ? (
+            <FormattedMessage
+              id='confirmations.cancel_draft.heading'
+              defaultMessage='Discard draft changes'
+            />
+          ) : (
+            <FormattedMessage id='confirmations.cancel.heading' defaultMessage='Discard post' />
+          ),
+          message: isEditing ? (
+            <FormattedMessage
+              id='confirmations.cancel_editing.message'
+              defaultMessage='Are you sure you want to discard the changes to this post? All changes will be lost.'
+            />
+          ) : compose.draftId ? (
+            <FormattedMessage
+              id='confirmations.cancel_draft_editing.message'
+              defaultMessage='Are you sure you want to discard the changes to this draft post? All changes will be lost.'
+            />
+          ) : (
+            <FormattedMessage
+              id='confirmations.cancel.message'
+              defaultMessage='Are you sure you want to discard the currently composed post?'
+            />
+          ),
           confirm: intl.formatMessage(messages.confirm),
           onConfirm: () => {
             onClose('COMPOSE');
@@ -87,11 +109,13 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
             onClose('CONFIRM');
           },
           secondary: intl.formatMessage(messages.saveDraft),
-          onSecondary: isEditing ? undefined : () => {
-            persistDraftStatus('compose-modal');
-            onClose('COMPOSE');
-            dispatch(cancelReplyCompose());
-          },
+          onSecondary: isEditing
+            ? undefined
+            : () => {
+                persistDraftStatus('compose-modal');
+                onClose('COMPOSE');
+                dispatch(cancelReplyCompose());
+              },
         });
       } else if (hasComposeContent && type === 'CONFIRM') {
         onClose('CONFIRM');
@@ -103,7 +127,11 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     if (e.key === 'Tab') {
-      const focusable = Array.from(ref.current!.querySelectorAll('button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])')).filter((x) => window.getComputedStyle(x).display !== 'none');
+      const focusable = Array.from(
+        ref.current!.querySelectorAll(
+          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        ),
+      ).filter((x) => window.getComputedStyle(x).display !== 'none');
       const index = focusable.indexOf(e.target as Element);
 
       let element;
@@ -124,7 +152,10 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
 
   const handleModalOpen = () => {
     unlistenHistory.current = router.history.subscribe(({ action, location }) => {
-      if ((action.type === 'REPLACE' || action.type === 'PUSH') && location.state.modalIndex === undefined) {
+      if (
+        (action.type === 'REPLACE' || action.type === 'PUSH') &&
+        location.state.modalIndex === undefined
+      ) {
         onClose(undefined, true);
       }
       if (action.type === 'BACK') {
@@ -145,18 +176,27 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
   };
 
   const ensureHistoryBuffer = () => {
-    if (router.state.location.state.modalIndex === undefined || (router.state.location.state.modalIndex < modalIndex)) {
-      range((router.state.location.state.modalIndex ?? -1), modalIndex).forEach((index) => {
-        navigate({ to: router.history.location.pathname, params: (prev) => prev, search: (prev) => prev, state: (prev) => ({ ...prev, modalIndex: index + 1 }) });
+    if (
+      router.state.location.state.modalIndex === undefined ||
+      router.state.location.state.modalIndex < modalIndex
+    ) {
+      range(router.state.location.state.modalIndex ?? -1, modalIndex).forEach((index) => {
+        navigate({
+          to: router.history.location.pathname,
+          params: (prev) => prev,
+          search: (prev) => prev,
+          state: (prev) => ({ ...prev, modalIndex: index + 1 }),
+        });
       });
     } else if (router.state.location.state.modalIndex > modalIndex) {
       router.history.go(-1);
     }
   };
 
-  const getSiblings = () => [...(ref.current!.parentElement!.childNodes as any as ChildNode[])]
-    .filter(node => (node as HTMLDivElement).id !== '_rht_toaster')
-    .filter(node => node !== ref.current);
+  const getSiblings = () =>
+    [...(ref.current!.parentElement!.childNodes as any as ChildNode[])]
+      .filter((node) => (node as HTMLDivElement).id !== '_rht_toaster')
+      .filter((node) => node !== ref.current);
 
   useEffect(() => {
     if (!visible) return;
@@ -173,7 +213,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
   useEffect(() => {
     if (!!children && !prevChildren) {
       activeElement.current = document.activeElement as HTMLDivElement;
-      getSiblings().forEach(sibling =>{
+      getSiblings().forEach((sibling) => {
         (sibling as HTMLDivElement).setAttribute('inert', 'true');
       });
 
@@ -185,7 +225,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
     if (!children && !!prevChildren) {
       activeElement.current?.focus();
       activeElement.current = null;
-      getSiblings().forEach(sibling =>{
+      getSiblings().forEach((sibling) => {
         (sibling as HTMLDivElement).removeAttribute('inert');
       });
 
@@ -219,10 +259,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
             onClick={handleOnClose}
           />
 
-          <div
-            role='dialog'
-            className='⁂-modal-root__container'
-          >
+          <div role='dialog' className='⁂-modal-root__container'>
             {children}
           </div>
         </>
@@ -231,7 +268,4 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
   );
 };
 
-export {
-  checkComposeContent,
-  ModalRoot as default,
-};
+export { checkComposeContent, ModalRoot as default };

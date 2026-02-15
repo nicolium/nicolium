@@ -1,7 +1,14 @@
 import { useLocation } from '@tanstack/react-router';
 import debounce from 'lodash/debounce';
 import React, { useEffect, useRef, useMemo, useCallback } from 'react';
-import { Virtuoso, Components, VirtuosoProps, VirtuosoHandle, ListRange, IndexLocationWithAlign } from 'react-virtuoso';
+import {
+  Virtuoso,
+  Components,
+  VirtuosoProps,
+  VirtuosoHandle,
+  ListRange,
+  IndexLocationWithAlign,
+} from 'react-virtuoso';
 
 import LoadMore from '@/components/load-more';
 import Spinner from '@/components/ui/spinner';
@@ -13,13 +20,13 @@ import { EmptyMessage } from './empty-message';
 type Context = {
   itemClassName?: string;
   listClassName?: string;
-}
+};
 
 /** Scroll position saved in sessionStorage. */
 type SavedScrollPosition = {
   index: number;
   offset: number;
-}
+};
 
 /** Custom Virtuoso Item component representing a single scrollable item. */
 // NOTE: It's crucial to space lists with **padding** instead of margin!
@@ -81,178 +88,194 @@ interface IScrollableList extends VirtuosoProps<any, any> {
   useWindowScroll?: boolean;
 }
 
-const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(({
-  scrollKey,
-  prepend = null,
-  children,
-  isLoading,
-  emptyMessage,
-  emptyMessageText,
-  emptyMessageIcon,
-  showLoading,
-  onScroll,
-  onScrollToTop,
-  onLoadMore,
-  className,
-  listClassName,
-  itemClassName,
-  loadMoreClassName,
-  hasMore,
-  placeholderComponent: Placeholder,
-  placeholderCount = 0,
-  initialTopMostItemIndex = 0,
-  useWindowScroll = true,
-  ...params
-}, ref) => {
-  const { autoloadMore } = useSettings();
-  const { state: locationState } = useLocation();
+const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
+  (
+    {
+      scrollKey,
+      prepend = null,
+      children,
+      isLoading,
+      emptyMessage,
+      emptyMessageText,
+      emptyMessageIcon,
+      showLoading,
+      onScroll,
+      onScrollToTop,
+      onLoadMore,
+      className,
+      listClassName,
+      itemClassName,
+      loadMoreClassName,
+      hasMore,
+      placeholderComponent: Placeholder,
+      placeholderCount = 0,
+      initialTopMostItemIndex = 0,
+      useWindowScroll = true,
+      ...params
+    },
+    ref,
+  ) => {
+    const { autoloadMore } = useSettings();
+    const { state: locationState } = useLocation();
 
-  // Preserve scroll position
-  const scrollDataKey = `plfe:scrollData:${scrollKey}:${locationState.key}`;
-  const scrollData: SavedScrollPosition | null = useMemo(() => JSON.parse(sessionStorage.getItem(scrollDataKey)!), [scrollDataKey]);
-  const topIndex = useRef<number>(scrollData ? scrollData.index : 0);
-  const topOffset = useRef<number>(scrollData ? scrollData.offset : 0);
+    // Preserve scroll position
+    const scrollDataKey = `plfe:scrollData:${scrollKey}:${locationState.key}`;
+    const scrollData: SavedScrollPosition | null = useMemo(
+      () => JSON.parse(sessionStorage.getItem(scrollDataKey)!),
+      [scrollDataKey],
+    );
+    const topIndex = useRef<number>(scrollData ? scrollData.index : 0);
+    const topOffset = useRef<number>(scrollData ? scrollData.offset : 0);
 
-  /** Normalized children. */
-  const elements = Array.from(children || []);
+    /** Normalized children. */
+    const elements = Array.from(children || []);
 
-  const showPlaceholder = showLoading && Placeholder && placeholderCount > 0;
+    const showPlaceholder = showLoading && Placeholder && placeholderCount > 0;
 
-  // NOTE: We are doing some trickery to load a feed of placeholders
-  // Virtuoso's `EmptyPlaceholder` unfortunately doesn't work for our use-case
-  const data = showPlaceholder ? Array(placeholderCount).fill('') : elements;
+    // NOTE: We are doing some trickery to load a feed of placeholders
+    // Virtuoso's `EmptyPlaceholder` unfortunately doesn't work for our use-case
+    const data = showPlaceholder ? Array(placeholderCount).fill('') : elements;
 
-  // Add a placeholder at the bottom for loading
-  // (Don't use Virtuoso's `Footer` component because it doesn't preserve its height)
-  if (hasMore && (autoloadMore || isLoading) && Placeholder) {
-    data.push(<Placeholder />);
-  } else if (hasMore && (autoloadMore || isLoading)) {
-    data.push(<Spinner />);
-  }
-
-  const handleScroll = useCallback(debounce(() => {
-    // HACK: Virtuoso has no better way to get this...
-    const node = document.querySelector(`[data-virtuoso-scroller] [data-item-index="${topIndex.current}"]`);
-    if (node) {
-      topOffset.current = node.getBoundingClientRect().top * -1;
-    } else {
-      topOffset.current = 0;
+    // Add a placeholder at the bottom for loading
+    // (Don't use Virtuoso's `Footer` component because it doesn't preserve its height)
+    if (hasMore && (autoloadMore || isLoading) && Placeholder) {
+      data.push(<Placeholder />);
+    } else if (hasMore && (autoloadMore || isLoading)) {
+      data.push(<Spinner />);
     }
-  }, 150, { trailing: true }), []);
 
-  useEffect(() => {
-    document.addEventListener('scroll', handleScroll);
-    sessionStorage.removeItem(scrollDataKey);
+    const handleScroll = useCallback(
+      debounce(
+        () => {
+          // HACK: Virtuoso has no better way to get this...
+          const node = document.querySelector(
+            `[data-virtuoso-scroller] [data-item-index="${topIndex.current}"]`,
+          );
+          if (node) {
+            topOffset.current = node.getBoundingClientRect().top * -1;
+          } else {
+            topOffset.current = 0;
+          }
+        },
+        150,
+        { trailing: true },
+      ),
+      [],
+    );
 
-    return () => {
-      if (scrollKey) {
-        const data: SavedScrollPosition = { index: topIndex.current, offset: topOffset.current };
-        sessionStorage.setItem(scrollDataKey, JSON.stringify(data));
-      }
-      document.removeEventListener('scroll', handleScroll);
+    useEffect(() => {
+      document.addEventListener('scroll', handleScroll);
+      sessionStorage.removeItem(scrollDataKey);
+
+      return () => {
+        if (scrollKey) {
+          const data: SavedScrollPosition = { index: topIndex.current, offset: topOffset.current };
+          sessionStorage.setItem(scrollDataKey, JSON.stringify(data));
+        }
+        document.removeEventListener('scroll', handleScroll);
+      };
+    }, []);
+
+    /* Render an empty state instead of the scrollable list. */
+    const renderEmpty = (): JSX.Element => {
+      return isLoading ? (
+        <Spinner />
+      ) : emptyMessageText ? (
+        <EmptyMessage text={emptyMessageText} icon={emptyMessageIcon} />
+      ) : (
+        <>{emptyMessage}</>
+      );
     };
-  }, []);
 
-  /* Render an empty state instead of the scrollable list. */
-  const renderEmpty = (): JSX.Element => {
-    return isLoading ? (
-      <Spinner />
-    ) : emptyMessageText ? (
-      <EmptyMessage text={emptyMessageText} icon={emptyMessageIcon} />
-    ) : <>{emptyMessage}</>;
-  };
+    /** Render a single item. */
+    const renderItem = (_i: number, element: JSX.Element): JSX.Element => {
+      if (showPlaceholder) {
+        return <Placeholder />;
+      } else {
+        return element;
+      }
+    };
 
-  /** Render a single item. */
-  const renderItem = (_i: number, element: JSX.Element): JSX.Element => {
-    if (showPlaceholder) {
-      return <Placeholder />;
-    } else {
-      return element;
-    }
-  };
+    const handleEndReached = () => {
+      if (autoloadMore && hasMore && onLoadMore) {
+        onLoadMore();
+      }
+    };
 
-  const handleEndReached = () => {
-    if (autoloadMore && hasMore && onLoadMore) {
-      onLoadMore();
-    }
-  };
+    const loadMore = () => {
+      if (autoloadMore || !hasMore || !onLoadMore) {
+        return null;
+      } else {
+        const button = <LoadMore visible={!isLoading} onClick={onLoadMore} />;
 
-  const loadMore = () => {
-    if (autoloadMore || !hasMore || !onLoadMore) {
-      return null;
-    } else {
-      const button = <LoadMore visible={!isLoading} onClick={onLoadMore} />;
+        if (loadMoreClassName) return <div className={loadMoreClassName}>{button}</div>;
 
-      if (loadMoreClassName) return <div className={loadMoreClassName}>{button}</div>;
+        return button;
+      }
+    };
 
-      return button;
-    }
-  };
+    const handleRangeChange = (range: ListRange) => {
+      // HACK: using the first index can be buggy.
+      // Track the second item instead, unless the endIndex comes before it (eg one 1 item in view).
+      topIndex.current = Math.min(range.startIndex + 1, range.endIndex);
+      handleScroll();
+    };
 
-  const handleRangeChange = (range: ListRange) => {
-    // HACK: using the first index can be buggy.
-    // Track the second item instead, unless the endIndex comes before it (eg one 1 item in view).
-    topIndex.current = Math.min(range.startIndex + 1, range.endIndex);
-    handleScroll();
-  };
+    /** Figure out the initial index to scroll to. */
+    const initialIndex = useMemo<number | IndexLocationWithAlign>(() => {
+      if (showLoading) return 0;
 
-  /** Figure out the initial index to scroll to. */
-  const initialIndex = useMemo<number | IndexLocationWithAlign>(() => {
-    if (showLoading) return 0;
+      if (initialTopMostItemIndex) {
+        if (typeof initialTopMostItemIndex === 'number') {
+          return {
+            align: 'start',
+            index: initialTopMostItemIndex,
+            offset: 60,
+          };
+        }
+        return initialTopMostItemIndex;
+      }
 
-    if (initialTopMostItemIndex) {
-      if (typeof initialTopMostItemIndex === 'number') {
+      if (scrollData) {
         return {
           align: 'start',
-          index: initialTopMostItemIndex,
-          offset: 60,
+          index: scrollData.index,
+          offset: scrollData.offset,
         };
       }
-      return initialTopMostItemIndex;
-    }
 
-    if (scrollData) {
-      return {
-        align: 'start',
-        index: scrollData.index,
-        offset: scrollData.offset,
-      };
-    }
+      return 0;
+    }, [showLoading, initialTopMostItemIndex]);
 
-    return 0;
-  }, [showLoading, initialTopMostItemIndex]);
+    return (
+      <Virtuoso
+        useWindowScroll={useWindowScroll}
+        {...params}
+        overscan={window.innerHeight * 1.5}
+        ref={ref}
+        data={data}
+        totalCount={data.length}
+        startReached={onScrollToTop}
+        endReached={handleEndReached}
+        isScrolling={(isScrolling) => isScrolling && onScroll && onScroll()}
+        itemContent={renderItem}
+        initialTopMostItemIndex={initialIndex}
+        rangeChanged={handleRangeChange}
+        context={{
+          listClassName,
+          itemClassName,
+        }}
+        components={{
+          Header: prepend ? () => <>{prepend}</> : undefined,
+          ScrollSeekPlaceholder: Placeholder as any,
+          EmptyPlaceholder: renderEmpty,
+          List,
+          Item,
+          Footer: loadMore,
+        }}
+      />
+    );
+  },
+);
 
-  return (
-    <Virtuoso
-      useWindowScroll={useWindowScroll}
-      {...params}
-      overscan={window.innerHeight * 1.5}
-      ref={ref}
-      data={data}
-      totalCount={data.length}
-      startReached={onScrollToTop}
-      endReached={handleEndReached}
-      isScrolling={isScrolling => isScrolling && onScroll && onScroll()}
-      itemContent={renderItem}
-      initialTopMostItemIndex={initialIndex}
-      rangeChanged={handleRangeChange}
-      context={{
-        listClassName,
-        itemClassName,
-      }}
-      components={{
-        Header: prepend ? () => <>{prepend}</> : undefined,
-        ScrollSeekPlaceholder: Placeholder as any,
-        EmptyPlaceholder: renderEmpty,
-        List,
-        Item,
-        Footer: loadMore,
-      }}
-    />
-  );
-});
-
-export {
-  type IScrollableList,
-  ScrollableList as default,
-};
+export { type IScrollableList, ScrollableList as default };

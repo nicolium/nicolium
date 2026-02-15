@@ -7,25 +7,36 @@ import { getAccessToken } from '@/utils/auth';
 
 import type { StreamingEvent } from 'pl-api';
 
-const useTimelineStream = (stream: string, params: { list?: string; tag?: string } = {}, enabled = true, listener?: (event: StreamingEvent) => any) => {
+const useTimelineStream = (
+  stream: string,
+  params: { list?: string; tag?: string } = {},
+  enabled = true,
+  listener?: (event: StreamingEvent) => any,
+) => {
   const firstUpdate = useRef(true);
 
   const client = useClient();
 
   const instance = useInstance();
-  const socket = useRef<({
+  const socket = useRef<{
     listen: (listener: any, stream?: string) => number;
     unlisten: (listener: any) => void;
-    subscribe: (stream: string, params?: {
+    subscribe: (
+      stream: string,
+      params?: {
         list?: string;
         tag?: string;
-    }) => void;
-    unsubscribe: (stream: string, params?: {
+      },
+    ) => void;
+    unsubscribe: (
+      stream: string,
+      params?: {
         list?: string;
         tag?: string;
-    }) => void;
+      },
+    ) => void;
     close: () => void;
-  }) | null>(null);
+  } | null>(null);
 
   const accessToken = useAppSelector(getAccessToken);
   const streamingUrl = instance.configuration.urls.streaming;

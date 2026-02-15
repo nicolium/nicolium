@@ -34,7 +34,11 @@ const ChatsPageShoutbox = () => {
           <Stack alignItems='start' className='h-11 overflow-hidden'>
             <div className='flex w-full grow items-center space-x-1'>
               <Text weight='bold' size='sm' align='left' truncate>
-                <FormattedMessage id='chat_list_item_shoutbox' defaultMessage='{instance} shoutbox' values={{ instance: instance.title }} />
+                <FormattedMessage
+                  id='chat_list_item_shoutbox'
+                  defaultMessage='{instance} shoutbox'
+                  values={{ instance: instance.title }}
+                />
               </Text>
             </div>
           </Stack>

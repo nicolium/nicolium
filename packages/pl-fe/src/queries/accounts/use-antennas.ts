@@ -10,9 +10,7 @@ import { minifyAccountList } from '../utils/minify-list';
 
 import type { Antenna, PaginatedResponse, CreateAntennaParams, UpdateAntennaParams } from 'pl-api';
 
-const useAntennas = <T>(
-  select?: ((data: Array<Antenna>) => T),
-) => {
+const useAntennas = <T>(select?: (data: Array<Antenna>) => T) => {
   const client = useClient();
   const features = useFeatures();
 
@@ -24,7 +22,8 @@ const useAntennas = <T>(
   });
 };
 
-const useAntenna = (antennaId?: string) => useAntennas((data) => antennaId ? data.find(antenna => antenna.id === antennaId) : undefined);
+const useAntenna = (antennaId?: string) =>
+  useAntennas((data) => (antennaId ? data.find((antenna) => antenna.id === antennaId) : undefined));
 
 const useCreateAntenna = () => {
   const client = useClient();
@@ -43,9 +42,8 @@ const useDeleteAntenna = () => {
     mutationKey: ['antennas', 'delete'],
     mutationFn: (antennaId: string) => client.antennas.deleteAntenna(antennaId),
     onSuccess: (_, deletedAntennaId) => {
-      queryClient.setQueryData<Array<Antenna>>(
-        ['antennas'],
-        (prevData) => prevData?.filter(({ id }) => id !== deletedAntennaId),
+      queryClient.setQueryData<Array<Antenna>>(['antennas'], (prevData) =>
+        prevData?.filter(({ id }) => id !== deletedAntennaId),
       );
     },
   });
@@ -71,7 +69,8 @@ const useAddAccountsToAntenna = (antennaId: string) => {
 
   return useMutation({
     mutationKey: ['accountsLists', 'antennas', antennaId, 'add'],
-    mutationFn: (accountIds: Array<string>) => client.antennas.addAntennaAccounts(antennaId, accountIds),
+    mutationFn: (accountIds: Array<string>) =>
+      client.antennas.addAntennaAccounts(antennaId, accountIds),
     onSettled: (_, __, accountIds) => {
       queryClient.invalidateQueries({ queryKey: ['accountsLists', 'antennas', antennaId] });
     },
@@ -83,16 +82,21 @@ const useRemoveAccountsFromAntenna = (antennaId: string) => {
 
   return useMutation({
     mutationKey: ['accountsLists', 'antennas', antennaId, 'remove'],
-    mutationFn: (accountIds: Array<string>) => client.antennas.removeAntennaAccounts(antennaId, accountIds),
+    mutationFn: (accountIds: Array<string>) =>
+      client.antennas.removeAntennaAccounts(antennaId, accountIds),
     onSettled: (_, __, accountIds) => {
-      queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(['accountsLists', 'antennas', antennaId], filterById(accountIds));
+      queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
+        ['accountsLists', 'antennas', antennaId],
+        filterById(accountIds),
+      );
     },
   });
 };
 
 const useAntennaExcludedAccounts = makePaginatedResponseQuery(
   (antennaId: string) => ['accountsLists', 'antennas', antennaId, 'excluded'],
-  (client, [antennaId]) => client.antennas.getAntennaExcludedAccounts(antennaId).then(minifyAccountList),
+  (client, [antennaId]) =>
+    client.antennas.getAntennaExcludedAccounts(antennaId).then(minifyAccountList),
 );
 
 const useAddExcludedAccountsToAntenna = (antennaId: string) => {
@@ -100,7 +104,8 @@ const useAddExcludedAccountsToAntenna = (antennaId: string) => {
 
   return useMutation({
     mutationKey: ['accountsLists', 'antennas', antennaId, 'addExcluded'],
-    mutationFn: (accountIds: Array<string>) => client.antennas.addAntennaExcludedAccounts(antennaId, accountIds),
+    mutationFn: (accountIds: Array<string>) =>
+      client.antennas.addAntennaExcludedAccounts(antennaId, accountIds),
     onSettled: (_, __, accountIds) => {
       queryClient.invalidateQueries({ queryKey: ['accountsLists', 'antennas', antennaId] });
     },
@@ -112,9 +117,13 @@ const useRemoveExcludedAccountsFromAntenna = (antennaId: string) => {
 
   return useMutation({
     mutationKey: ['accountsLists', 'antennas', antennaId, 'removeExcluded'],
-    mutationFn: (accountIds: Array<string>) => client.antennas.removeAntennaExcludedAccounts(antennaId, accountIds),
+    mutationFn: (accountIds: Array<string>) =>
+      client.antennas.removeAntennaExcludedAccounts(antennaId, accountIds),
     onSettled: (_, __, accountIds) => {
-      queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(['accountsLists', 'antennas', antennaId], filterById(accountIds));
+      queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
+        ['accountsLists', 'antennas', antennaId],
+        filterById(accountIds),
+      );
     },
   });
 };

@@ -58,12 +58,27 @@ const Counter: React.FC<ICounter> = ({
     );
   } else {
     const measure = data[0];
-    const percentChange = measure.previous_total !== undefined && percIncrease(measure.previous_total * 1, measure.total * 1) || 0;
+    const percentChange =
+      (measure.previous_total !== undefined &&
+        percIncrease(measure.previous_total * 1, measure.total * 1)) ||
+      0;
 
     content = (
       <>
-        <Text tag='span' align='center' size='2xl' weight='medium'>{measure.human_value ?? <FormattedNumber value={measure.total} />}</Text>
-        {measure.previous_total !== undefined && (<span className={clsx('text-lg', { 'text-green-600': percentChange > 0, 'text-danger-600': percentChange < 0 })}>{percentChange > 0 && '+'}<FormattedNumber value={percentChange} style='percent' /></span>)}
+        <Text tag='span' align='center' size='2xl' weight='medium'>
+          {measure.human_value ?? <FormattedNumber value={measure.total} />}
+        </Text>
+        {measure.previous_total !== undefined && (
+          <span
+            className={clsx('text-lg', {
+              'text-green-600': percentChange > 0,
+              'text-danger-600': percentChange < 0,
+            })}
+          >
+            {percentChange > 0 && '+'}
+            <FormattedNumber value={percentChange} style='percent' />
+          </span>
+        )}
       </>
     );
   }
@@ -74,12 +89,10 @@ const Counter: React.FC<ICounter> = ({
         {content}
       </div>
 
-      <Text align='center'>
-        {label}
-      </Text>
+      <Text align='center'>{label}</Text>
 
       <div className='mt-auto'>
-        <Sparklines width={259} height={55} data={data?.[0].data.map(x => x.value * 1) ?? []}>
+        <Sparklines width={259} height={55} data={data?.[0].data.map((x) => x.value * 1) ?? []}>
           <SparklinesCurve />
         </Sparklines>
       </div>
@@ -90,16 +103,16 @@ const Counter: React.FC<ICounter> = ({
 
   if ('to' in rest) {
     return (
-      <Link {...rest} className={clsx(className, 'transition-transform hover:-translate-y-1')} target={target}>
+      <Link
+        {...rest}
+        className={clsx(className, 'transition-transform hover:-translate-y-1')}
+        target={target}
+      >
         {inner}
       </Link>
     );
   } else {
-    return (
-      <div className={className}>
-        {inner}
-      </div>
-    );
+    return <div className={className}>{inner}</div>;
   }
 };
 

@@ -42,14 +42,35 @@ const Account: React.FC<IAccount> = ({ composeId, accountId, author }) => {
   let button;
 
   if (added) {
-    button = <IconButton src={require('@phosphor-icons/core/regular/x.svg')} className='text-gray-400 hover:text-gray-600' iconClassName='h-5 w-5' title={intl.formatMessage(messages.remove)} onClick={onRemove} />;
+    button = (
+      <IconButton
+        src={require('@phosphor-icons/core/regular/x.svg')}
+        className='text-gray-400 hover:text-gray-600'
+        iconClassName='h-5 w-5'
+        title={intl.formatMessage(messages.remove)}
+        onClick={onRemove}
+      />
+    );
   } else {
-    button = <IconButton src={require('@phosphor-icons/core/regular/plus.svg')} className='text-gray-400 hover:text-gray-600' iconClassName='h-5 w-5' title={intl.formatMessage(messages.add)} onClick={onAdd} />;
+    button = (
+      <IconButton
+        src={require('@phosphor-icons/core/regular/plus.svg')}
+        className='text-gray-400 hover:text-gray-600'
+        iconClassName='h-5 w-5'
+        title={intl.formatMessage(messages.add)}
+        onClick={onAdd}
+      />
+    );
   }
 
   return (
     <div className='p-2'>
-      <AccountComponent account={account} withRelationship={false} withLinkToProfile={false} action={author ? undefined : button} />
+      <AccountComponent
+        account={account}
+        withRelationship={false}
+        withLinkToProfile={false}
+        action={author ? undefined : button}
+      />
     </div>
   );
 };

@@ -33,15 +33,32 @@ const messages = {
   pronouns: { id: 'account.pronouns.with_label', defaultMessage: 'Pronouns: {pronouns}' },
 };
 
-const getBadges = (
-  account?: Pick<Account, 'is_admin' | 'is_moderator'>,
-): JSX.Element[] => {
+const getBadges = (account?: Pick<Account, 'is_admin' | 'is_moderator'>): JSX.Element[] => {
   const badges = [];
 
   if (account?.is_admin) {
-    badges.push(<Badge key='admin' slug='admin' title={<FormattedMessage id='account_moderation_modal.roles.admin' defaultMessage='Admin' />} />);
+    badges.push(
+      <Badge
+        key='admin'
+        slug='admin'
+        title={
+          <FormattedMessage id='account_moderation_modal.roles.admin' defaultMessage='Admin' />
+        }
+      />,
+    );
   } else if (account?.is_moderator) {
-    badges.push(<Badge key='moderator' slug='moderator' title={<FormattedMessage id='account_moderation_modal.roles.moderator' defaultMessage='Moderator' />} />);
+    badges.push(
+      <Badge
+        key='moderator'
+        slug='moderator'
+        title={
+          <FormattedMessage
+            id='account_moderation_modal.roles.moderator'
+            defaultMessage='Moderator'
+          />
+        }
+      />,
+    );
   }
 
   return badges;
@@ -60,7 +77,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
   const { accountId, ref } = useAccountHoverCardStore();
   const { updateAccountHoverCard, closeAccountHoverCard } = useAccountHoverCardActions();
 
-  const me = useAppSelector(state => state.me);
+  const me = useAppSelector((state) => state.me);
   const { account } = useAccount(accountId ?? undefined, { withRelationship: true });
   const { data: scrobble } = useQuery(accountScrobbleQueryOptions(account?.id));
   const badges = getBadges(account);
@@ -120,14 +137,14 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
   const memberSinceDate = intl.formatDate(account.created_at, { month: 'long', year: 'numeric' });
   const followedBy = me !== account.id && account.relationship?.followed_by === true;
 
-  const timezoneField = account.fields.find(field => isTimezoneLabel(field.name));
+  const timezoneField = account.fields.find((field) => isTimezoneLabel(field.name));
 
   return (
     <div
       className={clsx({
-        'absolute transition-opacity w-[320px] z-[101] top-0 left-0': true,
+        'absolute left-0 top-0 z-[101] w-[320px] transition-opacity': true,
         'opacity-100': visible && context.open,
-        'opacity-0 pointer-events-none': !visible || !context.open,
+        'pointer-events-none opacity-0': !visible || !context.open,
       })}
       ref={refs.setFloating}
       style={{
@@ -139,7 +156,10 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
-      <Card variant='rounded' className='relative isolate overflow-hidden black:rounded-xl black:border black:border-gray-800'>
+      <Card
+        variant='rounded'
+        className='relative isolate overflow-hidden black:rounded-xl black:border black:border-gray-800'
+      >
         <CardBody>
           <Stack space={2}>
             <UserPanel
@@ -157,7 +177,9 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
 
                 <Text size='sm' title={intl.formatDate(account.created_at, dateFormatOptions)}>
                   <FormattedMessage
-                    id='account.member_since' defaultMessage='Joined {date}' values={{
+                    id='account.member_since'
+                    defaultMessage='Joined {date}'
+                    values={{
                       date: memberSinceDate,
                     }}
                   />
@@ -165,9 +187,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
               </HStack>
             ) : null}
 
-            {timezoneField && (
-              <AccountLocalTime accountId={account.id} field={timezoneField} />
-            )}
+            {timezoneField && <AccountLocalTime accountId={account.id} field={timezoneField} />}
 
             {account.pronouns.length > 0 && (
               <HStack alignItems='center' space={0.5}>
@@ -178,7 +198,9 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
 
                 <Text
                   size='sm'
-                  title={intl.formatMessage(messages.pronouns, { pronouns: account.pronouns.join('/') })}
+                  title={intl.formatMessage(messages.pronouns, {
+                    pronouns: account.pronouns.join('/'),
+                  })}
                 >
                   {account.pronouns.join('/')}
                 </Text>

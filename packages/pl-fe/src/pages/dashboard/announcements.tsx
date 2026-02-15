@@ -16,9 +16,18 @@ import type { AdminAnnouncement } from 'pl-api';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.announcements', defaultMessage: 'Announcements' },
-  deleteConfirm: { id: 'confirmations.admin.delete_announcement.confirm', defaultMessage: 'Delete' },
-  deleteHeading: { id: 'confirmations.admin.delete_announcement.heading', defaultMessage: 'Delete announcement' },
-  deleteMessage: { id: 'confirmations.admin.delete_announcement.message', defaultMessage: 'Are you sure you want to delete the announcement?' },
+  deleteConfirm: {
+    id: 'confirmations.admin.delete_announcement.confirm',
+    defaultMessage: 'Delete',
+  },
+  deleteHeading: {
+    id: 'confirmations.admin.delete_announcement.heading',
+    defaultMessage: 'Delete announcement',
+  },
+  deleteMessage: {
+    id: 'confirmations.admin.delete_announcement.message',
+    defaultMessage: 'Are you sure you want to delete the announcement?',
+  },
   deleteSuccess: { id: 'admin.edit_announcement.deleted', defaultMessage: 'Announcement deleted' },
 });
 
@@ -40,9 +49,9 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement }) => {
       heading: intl.formatMessage(messages.deleteHeading),
       message: intl.formatMessage(messages.deleteMessage),
       confirm: intl.formatMessage(messages.deleteConfirm),
-      onConfirm: () =>{
+      onConfirm: () => {
         deleteAnnouncement(announcement.id, {
-          onSuccess: () =>{
+          onSuccess: () => {
             toast.success(messages.deleteSuccess);
           },
         });
@@ -52,28 +61,42 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement }) => {
 
   return (
     <div key={announcement.id} className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
-      <Stack space={2}>n
+      <Stack space={2}>
+        n
         <Text>
           <ParsedContent html={announcement.content} emojis={announcement.emojis} />
         </Text>
-        {((announcement.starts_at ?? announcement.ends_at) ?? announcement.all_day) && (
+        {(announcement.starts_at ?? announcement.ends_at ?? announcement.all_day) && (
           <HStack space={2} wrap>
             {announcement.starts_at && (
               <Text size='sm'>
                 <Text tag='span' size='sm' weight='medium'>
-                  <FormattedMessage id='admin.announcements.starts_at' defaultMessage='Starts at:' />
-                </Text>
-                {' '}
-                <FormattedDate value={announcement.starts_at} year='2-digit' month='short' day='2-digit' weekday='short' />
+                  <FormattedMessage
+                    id='admin.announcements.starts_at'
+                    defaultMessage='Starts at:'
+                  />
+                </Text>{' '}
+                <FormattedDate
+                  value={announcement.starts_at}
+                  year='2-digit'
+                  month='short'
+                  day='2-digit'
+                  weekday='short'
+                />
               </Text>
             )}
             {announcement.ends_at && (
               <Text size='sm'>
                 <Text tag='span' size='sm' weight='medium'>
                   <FormattedMessage id='admin.announcements.ends_at' defaultMessage='Ends at:' />
-                </Text>
-                {' '}
-                <FormattedDate value={announcement.ends_at} year='2-digit' month='short' day='2-digit' weekday='short' />
+                </Text>{' '}
+                <FormattedDate
+                  value={announcement.ends_at}
+                  year='2-digit'
+                  month='short'
+                  day='2-digit'
+                  weekday='short'
+                />
               </Text>
             )}
             {announcement.all_day && (
@@ -106,7 +129,12 @@ const AdminAnnouncementsPage: React.FC = () => {
     openModal('EDIT_ANNOUNCEMENT');
   };
 
-  const emptyMessage = <FormattedMessage id='empty_column.admin.announcements' defaultMessage='There are no announcements yet.' />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.admin.announcements'
+      defaultMessage='There are no announcements yet.'
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>

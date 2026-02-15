@@ -23,7 +23,10 @@ const isZapEmoji = (value: string) => /^\u26A1[\uFE00-\uFE0F]?$/.test(value);
 const isTimezoneLabel = (value: string) => /^time( |)zone$/i.test(value);
 
 const messages = defineMessages({
-  linkVerifiedOn: { id: 'account.link_verified_on', defaultMessage: 'Ownership of this link was checked on {date}' },
+  linkVerifiedOn: {
+    id: 'account.link_verified_on',
+    defaultMessage: 'Ownership of this link was checked on {date}',
+  },
 });
 
 const dateFormatOptions: FormatDateOptions = {
@@ -67,7 +70,12 @@ const ProfileField: React.FC<IProfileField> = ({ accountId, field, emojis }) => 
       <dd title={unescapeHTML(field.value)}>
         <div className='⁂-profile-field__content'>
           {field.verified_at && (
-            <span className='flex-none' title={intl.formatMessage(messages.linkVerifiedOn, { date: intl.formatDate(field.verified_at, dateFormatOptions) })}>
+            <span
+              className='flex-none'
+              title={intl.formatMessage(messages.linkVerifiedOn, {
+                date: intl.formatDate(field.verified_at, dateFormatOptions),
+              })}
+            >
               <Icon src={require('@phosphor-icons/core/regular/check.svg')} />
             </span>
           )}
@@ -77,9 +85,7 @@ const ProfileField: React.FC<IProfileField> = ({ accountId, field, emojis }) => 
           </span>
         </div>
 
-        {isTimezoneLabel(field.name) && (
-          <AccountLocalTime accountId={accountId} field={field} />
-        )}
+        {isTimezoneLabel(field.name) && <AccountLocalTime accountId={accountId} field={field} />}
       </dd>
     </dl>
   );

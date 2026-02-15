@@ -9,7 +9,10 @@ import ComposeFormButton from './compose-form-button';
 
 const messages = defineMessages({
   marked: { id: 'compose_form.sensitive.marked', defaultMessage: 'Media is marked as sensitive' },
-  unmarked: { id: 'compose_form.sensitive.unmarked', defaultMessage: 'Media is not marked as sensitive' },
+  unmarked: {
+    id: 'compose_form.sensitive.unmarked',
+    defaultMessage: 'Media is not marked as sensitive',
+  },
 });
 
 interface ISensitiveMediaButton {
@@ -22,8 +25,7 @@ const SensitiveMediaButton: React.FC<ISensitiveMediaButton> = ({ composeId }) =>
 
   const active = useCompose(composeId).sensitive;
 
-  const onClick = () =>
-    dispatch(changeComposeSpoilerness(composeId));
+  const onClick = () => dispatch(changeComposeSpoilerness(composeId));
 
   return (
     <ComposeFormButton

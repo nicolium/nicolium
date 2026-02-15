@@ -14,15 +14,27 @@ import Spinner from '@/components/ui/spinner';
 import Stack from '@/components/ui/stack';
 import { useTextField } from '@/hooks/forms/use-text-field';
 import { useFeatures } from '@/hooks/use-features';
-import { useBookmarkFolders, useCreateBookmarkFolder } from '@/queries/statuses/use-bookmark-folders';
+import {
+  useBookmarkFolders,
+  useCreateBookmarkFolder,
+} from '@/queries/statuses/use-bookmark-folders';
 import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.bookmarks', defaultMessage: 'Bookmarks' },
   label: { id: 'bookmark_folders.new.title_placeholder', defaultMessage: 'New folder title' },
-  labelWithSearch: { id: 'bookmark_folders.new.title_with_search_placeholder', defaultMessage: 'Search or create new folder' },
-  createSuccess: { id: 'bookmark_folders.add.success', defaultMessage: 'Bookmark folder created successfully' },
-  createFail: { id: 'bookmark_folders.add.fail', defaultMessage: 'Failed to create bookmark folder' },
+  labelWithSearch: {
+    id: 'bookmark_folders.new.title_with_search_placeholder',
+    defaultMessage: 'Search or create new folder',
+  },
+  createSuccess: {
+    id: 'bookmark_folders.add.success',
+    defaultMessage: 'Bookmark folder created successfully',
+  },
+  createFail: {
+    id: 'bookmark_folders.add.fail',
+    defaultMessage: 'Failed to create bookmark folder',
+  },
 });
 
 interface INewFolderForm {
@@ -44,16 +56,19 @@ const NewFolderForm: React.FC<INewFolderForm> = ({ search, onChange }) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    createBookmarkFolder({
-      name: name.value,
-    }, {
-      onSuccess() {
-        toast.success(messages.createSuccess);
+    createBookmarkFolder(
+      {
+        name: name.value,
       },
-      onError() {
-        toast.success(messages.createFail);
+      {
+        onSuccess() {
+          toast.success(messages.createSuccess);
+        },
+        onError() {
+          toast.success(messages.createFail);
+        },
       },
-    });
+    );
   };
 
   const label = intl.formatMessage(search ? messages.labelWithSearch : messages.label);
@@ -71,11 +86,7 @@ const NewFolderForm: React.FC<INewFolderForm> = ({ search, onChange }) => {
           onChange={handleChange}
         />
 
-        <Button
-          disabled={isPending}
-          onClick={handleSubmit}
-          theme='primary'
-        >
+        <Button disabled={isPending} onClick={handleSubmit} theme='primary'>
           <FormattedMessage id='bookmark_folders.new.create_title' defaultMessage='Add folder' />
         </Button>
       </HStack>
@@ -87,9 +98,10 @@ const BookmarkFoldersPage: React.FC = () => {
   const intl = useIntl();
   const features = useFeatures();
 
-  const { data: bookmarkFolders, isFetching } = useBookmarkFolders(data => data);
+  const { data: bookmarkFolders, isFetching } = useBookmarkFolders((data) => data);
 
-  if (!features.bookmarkFolders) return <Navigate to='/bookmarks/$folderId' params={{ folderId: 'all' }} replace />;
+  if (!features.bookmarkFolders)
+    return <Navigate to='/bookmarks/$folderId' params={{ folderId: 'all' }} replace />;
 
   if (isFetching) {
     return (
@@ -111,7 +123,12 @@ const BookmarkFoldersPage: React.FC = () => {
             label={
               <HStack alignItems='center' space={2}>
                 <Icon src={require('@phosphor-icons/core/regular/bookmarks.svg')} size={20} />
-                <span><FormattedMessage id='bookmark_folders.all_bookmarks' defaultMessage='All bookmarks' /></span>
+                <span>
+                  <FormattedMessage
+                    id='bookmark_folders.all_bookmarks'
+                    defaultMessage='All bookmarks'
+                  />
+                </span>
               </HStack>
             }
           />
@@ -128,7 +145,12 @@ const BookmarkFoldersPage: React.FC = () => {
                       src={folder.emoji_url ?? undefined}
                       className='size-5 flex-none'
                     />
-                  ) : <Icon src={require('@phosphor-icons/core/regular/folder-simple.svg')} size={20} />}
+                  ) : (
+                    <Icon
+                      src={require('@phosphor-icons/core/regular/folder-simple.svg')}
+                      size={20}
+                    />
+                  )}
                   <span>{folder.name}</span>
                 </HStack>
               }

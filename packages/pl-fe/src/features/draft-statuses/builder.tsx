@@ -25,7 +25,10 @@ const buildStatus = (state: RootState, draftStatus: DraftStatus) => {
   const status = v.parse(statusSchema, {
     id: 'draft',
     account,
-    content: draftStatus.text.replace(new RegExp('\n', 'g'), '<br>'), /* eslint-disable-line no-control-regex */
+    content: draftStatus.text.replace(
+      new RegExp('\n', 'g'),
+      '<br>',
+    ) /* eslint-disable-line no-control-regex */,
     created_at: draftStatus.schedule,
     group: draftStatus.group_id,
     in_reply_to_id: draftStatus.in_reply_to,

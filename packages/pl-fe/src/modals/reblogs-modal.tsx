@@ -15,7 +15,13 @@ interface ReblogsModalProps {
 }
 
 const ReblogsModal: React.FC<BaseModalProps & ReblogsModalProps> = ({ onClose, statusId }) => {
-  const { data: accountIds, isLoading, hasNextPage, fetchNextPage, refetch } = useStatusReblogs(statusId);
+  const {
+    data: accountIds,
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useStatusReblogs(statusId);
 
   const onClickClose = () => {
     onClose('REBLOGS');
@@ -26,7 +32,12 @@ const ReblogsModal: React.FC<BaseModalProps & ReblogsModalProps> = ({ onClose, s
   if (!accountIds) {
     body = <Spinner />;
   } else {
-    const emptyMessage = <FormattedMessage id='status.reblogs.empty' defaultMessage='No one has reposted this post yet. When someone does, they will show up here.' />;
+    const emptyMessage = (
+      <FormattedMessage
+        id='status.reblogs.empty'
+        defaultMessage='No one has reposted this post yet. When someone does, they will show up here.'
+      />
+    );
 
     body = (
       <PullToRefresh onRefresh={refetch}>
@@ -40,9 +51,9 @@ const ReblogsModal: React.FC<BaseModalProps & ReblogsModalProps> = ({ onClose, s
           onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
           useWindowScroll={false}
         >
-          {accountIds.map((id) =>
-            <AccountContainer key={id} id={id} />,
-          )}
+          {accountIds.map((id) => (
+            <AccountContainer key={id} id={id} />
+          ))}
         </ScrollableList>
       </PullToRefresh>
     );

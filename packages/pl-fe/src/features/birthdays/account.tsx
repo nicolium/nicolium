@@ -23,7 +23,11 @@ const Account: React.FC<IAccount> = ({ accountId }) => {
   const birthday = account.birthday;
   if (!birthday) return null;
 
-  const formattedBirthday = intl.formatDate(birthday, { day: 'numeric', month: 'short', year: 'numeric' });
+  const formattedBirthday = intl.formatDate(birthday, {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+  });
 
   return (
     <HStack space={1} alignItems='center' justifyContent='between' className='p-2.5'>

@@ -22,7 +22,7 @@ const useVerify = () => {
     };
 
     transaction({
-      Accounts: ({ [accountId]: updater }),
+      Accounts: { [accountId]: updater },
     });
   };
 

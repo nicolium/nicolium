@@ -14,9 +14,19 @@ const messages = defineMessages({
 const ScheduledStatusesPage = () => {
   const intl = useIntl();
 
-  const { data: scheduledStatuses = [], isLoading, hasNextPage, fetchNextPage } = useInfiniteQuery(scheduledStatusesQueryOptions);
+  const {
+    data: scheduledStatuses = [],
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+  } = useInfiniteQuery(scheduledStatusesQueryOptions);
 
-  const emptyMessage = <FormattedMessage id='empty_column.scheduled_statuses' defaultMessage="You don't have any scheduled statuses yet. When you add one, it will show up here." />;
+  const emptyMessage = (
+    <FormattedMessage
+      id='empty_column.scheduled_statuses'
+      defaultMessage="You don't have any scheduled statuses yet. When you add one, it will show up here."
+    />
+  );
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -27,7 +37,9 @@ const ScheduledStatusesPage = () => {
         emptyMessageText={emptyMessage}
         listClassName='⁂-status-list'
       >
-        {scheduledStatuses.map((status) => <ScheduledStatus key={status.id} scheduledStatus={status} />)}
+        {scheduledStatuses.map((status) => (
+          <ScheduledStatus key={status.id} scheduledStatus={status} />
+        ))}
       </ScrollableList>
     </Column>
   );

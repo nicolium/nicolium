@@ -15,19 +15,26 @@ interface IScrobble {
 const Scrobble: React.FC<IScrobble> = ({ scrobble }) => {
   const textRef = useRef<HTMLParagraphElement>(null);
 
-  const isRecent = (new Date().getTime() - new Date(scrobble.created_at).getTime()) <= 60 * 60 * 1000;
+  const isRecent = new Date().getTime() - new Date(scrobble.created_at).getTime() <= 60 * 60 * 1000;
 
   const song = scrobble.artist ? (
     <FormattedMessage
-      id='account.scrobbling.title' defaultMessage='{title} by {artist}' values={{
+      id='account.scrobbling.title'
+      defaultMessage='{title} by {artist}'
+      values={{
         title: scrobble.title,
         artist: scrobble.artist,
       }}
     />
-  ) : scrobble.title;
+  ) : (
+    scrobble.title
+  );
 
   const animate = useMemo(
-    () => textRef.current && textRef.current.parentElement && textRef.current.clientWidth > textRef.current.parentElement.clientWidth,
+    () =>
+      textRef.current &&
+      textRef.current.parentElement &&
+      textRef.current.clientWidth > textRef.current.parentElement.clientWidth,
     [textRef.current],
   );
 
@@ -49,12 +56,14 @@ const Scrobble: React.FC<IScrobble> = ({ scrobble }) => {
           ref={textRef}
         >
           <FormattedMessage
-            id='account.scrobbling' defaultMessage='Playing {song}' values={{
+            id='account.scrobbling'
+            defaultMessage='Playing {song}'
+            values={{
               song: scrobble.external_link ? (
                 <a
                   href={scrobble.external_link}
                   className='underline'
-                  onClick={(e) =>{
+                  onClick={(e) => {
                     e.stopPropagation();
                   }}
                   rel='nofollow noopener'
@@ -62,7 +71,9 @@ const Scrobble: React.FC<IScrobble> = ({ scrobble }) => {
                 >
                   {song}
                 </a>
-              ) : song,
+              ) : (
+                song
+              ),
             }}
           />
         </Text>

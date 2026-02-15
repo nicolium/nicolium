@@ -11,7 +11,10 @@ import { useAppSelector } from '@/hooks/use-app-selector';
 import { makeGetStatusIds } from '@/selectors';
 
 const messages = defineMessages({
-  queue: { id: 'status_list.queue_label', defaultMessage: 'Click to see {count} new {count, plural, one {post} other {posts}}' },
+  queue: {
+    id: 'status_list.queue_label',
+    defaultMessage: 'Click to see {count} new {count, plural, one {post} other {posts}}',
+  },
 });
 
 interface ITimeline extends Omit<IStatusList, 'statusIds' | 'isLoading' | 'hasMore'> {
@@ -24,29 +27,29 @@ interface ITimeline extends Omit<IStatusList, 'statusIds' | 'isLoading' | 'hasMo
 }
 
 /** Scrollable list of statuses from a timeline in the Redux store. */
-const Timeline: React.FC<ITimeline> = ({
-  timelineId,
-  onLoadMore,
-  prefix,
-  ...rest
-}) => {
+const Timeline: React.FC<ITimeline> = ({ timelineId, onLoadMore, prefix, ...rest }) => {
   const dispatch = useAppDispatch();
   const getStatusIds = useMemo(makeGetStatusIds, []);
 
-  const statusIds = useAppSelector(state => getStatusIds(state, { type: timelineId, prefix }));
+  const statusIds = useAppSelector((state) => getStatusIds(state, { type: timelineId, prefix }));
   const lastStatusId = statusIds.at(-1);
-  const isLoading = useAppSelector(state =>  state.timelines[timelineId]?.isLoading);
-  const isPartial = useAppSelector(state =>  (state.timelines[timelineId]?.isPartial || false));
-  const hasMore = useAppSelector(state =>  state.timelines[timelineId]?.hasMore);
-  const totalQueuedItemsCount = useAppSelector(state => state.timelines[timelineId]?.totalQueuedItemsCount || 0);
+  const isLoading = useAppSelector((state) => state.timelines[timelineId]?.isLoading);
+  const isPartial = useAppSelector((state) => state.timelines[timelineId]?.isPartial || false);
+  const hasMore = useAppSelector((state) => state.timelines[timelineId]?.hasMore);
+  const totalQueuedItemsCount = useAppSelector(
+    (state) => state.timelines[timelineId]?.totalQueuedItemsCount || 0,
+  );
 
   const handleDequeueTimeline = useCallback(() => {
     dispatch(dequeueTimeline(timelineId, onLoadMore));
   }, []);
 
-  const handleScroll = useCallback(debounce((startIndex?: number) => {
-    dispatch(scrollTopTimeline(timelineId, startIndex === 0));
-  }, 100), [timelineId]);
+  const handleScroll = useCallback(
+    debounce((startIndex?: number) => {
+      dispatch(scrollTopTimeline(timelineId, startIndex === 0));
+    }, 100),
+    [timelineId],
+  );
 
   return (
     <>

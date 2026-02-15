@@ -14,7 +14,7 @@ import ChatMessageList from './chat-message-list';
 import type { PlfeResponse } from '@/api';
 import type { Chat as ChatEntity, MediaAttachment } from 'pl-api';
 
-const fileKeyGen = (): number => Math.floor((Math.random() * 0x10000));
+const fileKeyGen = (): number => Math.floor(Math.random() * 0x10000);
 
 const messages = defineMessages({
   failedToSend: { id: 'chat.failed_to_send', defaultMessage: 'Message failed to send.' },
@@ -34,7 +34,10 @@ interface ChatInterface {
  * beyond one line
  */
 const clearNativeInputValue = (element: HTMLTextAreaElement) => {
-  const nativeInputValueSetter = Object.getOwnPropertyDescriptor(window.HTMLTextAreaElement.prototype, 'value')?.set;
+  const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
+    window.HTMLTextAreaElement.prototype,
+    'value',
+  )?.set;
   if (nativeInputValueSetter) {
     nativeInputValueSetter.call(element, '');
 
@@ -64,16 +67,19 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
   const isSubmitDisabled = content.length === 0 && !attachment;
 
   const submitMessage = () => {
-    createChatMessage.mutate({ chatId: chat.id, content, mediaId: attachment?.id }, {
-      onSuccess: () => {
-        setErrorMessage(undefined);
+    createChatMessage.mutate(
+      { chatId: chat.id, content, mediaId: attachment?.id },
+      {
+        onSuccess: () => {
+          setErrorMessage(undefined);
+        },
+        onError: (error: { response: PlfeResponse }, _variables, context) => {
+          const message = error.response?.json?.error;
+          setErrorMessage(message ?? intl.formatMessage(messages.failedToSend));
+          setContent(context.prevContent as string);
+        },
       },
-      onError: (error: { response: PlfeResponse }, _variables, context) => {
-        const message = error.response?.json?.error;
-        setErrorMessage(message ?? intl.formatMessage(messages.failedToSend));
-        setContent(context.prevContent as string);
-      },
-    });
+    );
 
     clearState();
   };
@@ -96,7 +102,7 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
     }
   };
 
-  const insertLine = () =>{
+  const insertLine = () => {
     setContent(content + '\n');
   };
 
@@ -138,11 +144,12 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
 
     setUploading(true);
 
-    dispatch(uploadMedia({ file: files[0] }, onUploadProgress)).then(response => {
-      setAttachment(response);
-      setUploading(false);
-    })
-      .catch(() =>{
+    dispatch(uploadMedia({ file: files[0] }, onUploadProgress))
+      .then((response) => {
+        setAttachment(response);
+        setUploading(false);
+      })
+      .catch(() => {
         setUploading(false);
       });
   };

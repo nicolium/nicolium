@@ -27,14 +27,17 @@ const footerItemSchema = coerceObject({
 
 type FooterItem = v.InferOutput<typeof footerItemSchema>;
 
-const cryptoAddressSchema = v.pipe(coerceObject({
-  address: v.fallback(v.string(), ''),
-  note: v.fallback(v.string(), ''),
-  ticker: v.fallback(v.string(), ''),
-}), v.transform((address) => {
-  address.ticker = trimStart(address.ticker, '$').toLowerCase();
-  return address;
-}));
+const cryptoAddressSchema = v.pipe(
+  coerceObject({
+    address: v.fallback(v.string(), ''),
+    note: v.fallback(v.string(), ''),
+    ticker: v.fallback(v.string(), ''),
+  }),
+  v.transform((address) => {
+    address.ticker = trimStart(address.ticker, '$').toLowerCase();
+    return address;
+  }),
+);
 
 type CryptoAddress = v.InferOutput<typeof cryptoAddressSchema>;
 
@@ -45,14 +48,19 @@ const frontendConfigSchema = coerceObject({
   logoAlignment: v.fallback(v.picklist(['left', 'center']), 'center'),
   brandColor: v.fallback(v.string(), ''),
   accentColor: v.fallback(v.string(), ''),
-  colors: v.fallback(v.nullable(v.objectWithRest(
-    {
-      'gradient-end': v.string(),
-      'gradient-start': v.string(),
-      greentext: v.string(),
-    },
-    v.record(v.string(), v.string()),
-  )), null),
+  colors: v.fallback(
+    v.nullable(
+      v.objectWithRest(
+        {
+          'gradient-end': v.string(),
+          'gradient-start': v.string(),
+          greentext: v.string(),
+        },
+        v.record(v.string(), v.string()),
+      ),
+    ),
+    null,
+  ),
   copyright: v.fallback(v.string(), 'skibidi dop dop dop yes yes'),
   defaultSettings: v.fallback(v.partial(settingsSchema), {}),
   greentext: v.fallback(v.boolean(), false),
@@ -64,33 +72,45 @@ const frontendConfigSchema = coerceObject({
   cryptoDonatePanel: coerceObject({
     limit: v.fallback(v.number(), 1),
   }),
-  aboutPages: v.fallback(v.record(v.string(), coerceObject({
-    defaultLocale: v.fallback(v.string(), ''), // v.fallback(v.optional(v.string()), undefined),
-    locales: filteredArray(v.string()),
-  })), {}),
+  aboutPages: v.fallback(
+    v.record(
+      v.string(),
+      coerceObject({
+        defaultLocale: v.fallback(v.string(), ''), // v.fallback(v.optional(v.string()), undefined),
+        locales: filteredArray(v.string()),
+      }),
+    ),
+    {},
+  ),
   linkFooterMessage: v.fallback(v.string(), ''),
   links: v.fallback(v.record(v.string(), v.string()), {}),
   tileServer: v.fallback(v.string(), ''),
   tileServerAttribution: v.fallback(v.string(), ''),
-  redirectRootNoLogin: v.fallback(v.pipe(v.string(), v.transform((url: string) => {
-    if (!url) return '';
+  redirectRootNoLogin: v.fallback(
+    v.pipe(
+      v.string(),
+      v.transform((url: string) => {
+        if (!url) return '';
 
-    try {
-      // Basically just get the pathname with a leading slash.
-      const normalized = new URL(url, 'http://a').pathname;
+        try {
+          // Basically just get the pathname with a leading slash.
+          const normalized = new URL(url, 'http://a').pathname;
 
-      if (normalized !== '/') {
-        return normalized;
-      } else {
-        // Prevent infinite redirect(?)
-        return '';
-      }
-    } catch (e) {
-      console.error('You have configured an invalid redirect in pl-fe Config.');
-      console.error(e);
-      return '';
-    }
-  })), ''),
+          if (normalized !== '/') {
+            return normalized;
+          } else {
+            // Prevent infinite redirect(?)
+            return '';
+          }
+        } catch (e) {
+          console.error('You have configured an invalid redirect in pl-fe Config.');
+          console.error(e);
+          return '';
+        }
+      }),
+    ),
+    '',
+  ),
   /**
    * Whether to use the preview URL for media thumbnails.
    * On some platforms this can be too blurry without additional configuration.

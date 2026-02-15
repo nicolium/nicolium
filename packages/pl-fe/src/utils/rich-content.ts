@@ -6,7 +6,7 @@ const onlyEmoji = (node: HTMLElement, limit = 1, ignoreMentions = true): boolean
     // Remove mentions before checking content
     if (ignoreMentions) {
       node = node.cloneNode(true) as HTMLElement;
-      node.querySelectorAll('a.mention').forEach(m => m.parentNode?.removeChild(m));
+      node.querySelectorAll('a.mention').forEach((m) => m.parentNode?.removeChild(m));
     }
 
     if (node.textContent?.replace(new RegExp(' ', 'g'), '') !== '') return false;

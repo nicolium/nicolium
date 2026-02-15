@@ -9,30 +9,34 @@ type State = {
     updateAccountHoverCard: () => void;
     closeAccountHoverCard: (force?: boolean) => void;
   };
-}
+};
 
 const useAccountHoverCardStore = create<State>((set) => ({
   ref: null,
   accountId: null,
   hovered: false,
   actions: {
-    openAccountHoverCard: (ref, accountId) =>{
+    openAccountHoverCard: (ref, accountId) => {
       set({
         ref,
         accountId,
       });
     },
-    updateAccountHoverCard: () =>{
+    updateAccountHoverCard: () => {
       set({
         hovered: true,
       });
     },
-    closeAccountHoverCard: (force = false) =>{
-      set((state) => state.hovered && !force ? {} : {
-        ref: null,
-        accountId: null,
-        hovered: false,
-      });
+    closeAccountHoverCard: (force = false) => {
+      set((state) =>
+        state.hovered && !force
+          ? {}
+          : {
+              ref: null,
+              accountId: null,
+              hovered: false,
+            },
+      );
     },
   },
 }));
@@ -40,4 +44,3 @@ const useAccountHoverCardStore = create<State>((set) => ({
 const useAccountHoverCardActions = () => useAccountHoverCardStore((state) => state.actions);
 
 export { useAccountHoverCardStore, useAccountHoverCardActions };
-

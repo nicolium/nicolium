@@ -8,13 +8,13 @@ import { useLoading } from '@/hooks/use-loading';
 import { importEntities } from '../actions';
 import { findEntity } from '../selectors';
 
+import type { Entity } from '../types';
 import type { EntityFn } from './types';
 import type { UseEntityOpts } from './use-entity';
-import type { Entity } from '../types';
 import type { PlfeResponse } from '@/api';
 
 /** Entities will be filtered through this function until it returns true. */
-type LookupFn<TEntity extends Entity> = (entity: TEntity) => boolean
+type LookupFn<TEntity extends Entity> = (entity: TEntity) => boolean;
 
 const useEntityLookup = <TEntity extends Entity, TTransformedEntity extends Entity = TEntity>(
   entityType: string,
@@ -29,7 +29,9 @@ const useEntityLookup = <TEntity extends Entity, TTransformedEntity extends Enti
   const [isFetching, setPromise] = useLoading(true);
   const [error, setError] = useState<unknown>();
 
-  const entity = useAppSelector(state => findEntity(state, entityType, lookupFn) ?? fetchedEntity);
+  const entity = useAppSelector(
+    (state) => findEntity(state, entityType, lookupFn) ?? fetchedEntity,
+  );
   const isEnabled = opts.enabled ?? true;
   const isLoading = isFetching && !entity;
 

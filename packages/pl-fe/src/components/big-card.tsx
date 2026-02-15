@@ -15,9 +15,7 @@ const BigCard: React.FC<IBigCard> = ({ title, subtitle, children }) => (
       {subtitle && <p>{subtitle}</p>}
     </div>
 
-    <div className='⁂-big-card__body'>
-      {children}
-    </div>
+    <div className='⁂-big-card__body'>{children}</div>
   </Card>
 );
 

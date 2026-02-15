@@ -14,9 +14,15 @@ import { useFeatures } from '@/hooks/use-features';
 import toast from '@/toast';
 
 const messages = defineMessages({
-  nicknameOrEmail: { id: 'password_reset.fields.username_placeholder', defaultMessage: 'Email or username' },
+  nicknameOrEmail: {
+    id: 'password_reset.fields.username_placeholder',
+    defaultMessage: 'Email or username',
+  },
   email: { id: 'password_reset.fields.email_placeholder', defaultMessage: 'E-mail address' },
-  confirmation: { id: 'password_reset.confirmation', defaultMessage: 'Check your email for confirmation.' },
+  confirmation: {
+    id: 'password_reset.confirmation',
+    defaultMessage: 'Check your email for confirmation.',
+  },
 });
 
 const PasswordResetPage = () => {
@@ -30,27 +36,30 @@ const PasswordResetPage = () => {
   const handleSubmit = (e: React.FormEvent) => {
     const nicknameOrEmail = (e.target as any).nickname_or_email.value;
     setIsLoading(true);
-    dispatch(resetPassword(nicknameOrEmail)).then(() => {
-      setIsLoading(false);
-      setSuccess(true);
-      toast.info(intl.formatMessage(messages.confirmation));
-    }).catch(() => {
-      setIsLoading(false);
-    });
+    dispatch(resetPassword(nicknameOrEmail))
+      .then(() => {
+        setIsLoading(false);
+        setSuccess(true);
+        toast.info(intl.formatMessage(messages.confirmation));
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   };
 
   if (success) return <Navigate to='/' replace />;
 
   return (
-    <BigCard title={<FormattedMessage id='password_reset.header' defaultMessage='Reset password' />}>
+    <BigCard
+      title={<FormattedMessage id='password_reset.header' defaultMessage='Reset password' />}
+    >
       <Form onSubmit={handleSubmit}>
-        <FormGroup labelText={intl.formatMessage(features.logInWithUsername ? messages.nicknameOrEmail : messages.email)}>
-          <Input
-            type='text'
-            name='nickname_or_email'
-            placeholder='me@example.com'
-            required
-          />
+        <FormGroup
+          labelText={intl.formatMessage(
+            features.logInWithUsername ? messages.nicknameOrEmail : messages.email,
+          )}
+        >
+          <Input type='text' name='nickname_or_email' placeholder='me@example.com' required />
         </FormGroup>
 
         <FormActions>

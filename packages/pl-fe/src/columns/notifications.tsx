@@ -32,10 +32,17 @@ import type { VirtuosoHandle } from 'react-virtuoso';
 
 const messages = defineMessages({
   title: { id: 'column.notifications', defaultMessage: 'Notifications' },
-  queue: { id: 'notifications.queue_label', defaultMessage: 'Click to see {count} new {count, plural, one {notification} other {notifications}}' },
+  queue: {
+    id: 'notifications.queue_label',
+    defaultMessage:
+      'Click to see {count} new {count, plural, one {notification} other {notifications}}',
+  },
   all: { id: 'notifications.filter.all', defaultMessage: 'All' },
   mentions: { id: 'notifications.filter.mentions', defaultMessage: 'Mentions' },
-  statuses: { id: 'notifications.filter.statuses', defaultMessage: 'Updates from people you follow' },
+  statuses: {
+    id: 'notifications.filter.statuses',
+    defaultMessage: 'Updates from people you follow',
+  },
   favourites: { id: 'notifications.filter.favourites', defaultMessage: 'Likes' },
   boosts: { id: 'notifications.filter.boosts', defaultMessage: 'Reposts' },
   polls: { id: 'notifications.filter.polls', defaultMessage: 'Poll results' },
@@ -81,12 +88,18 @@ const FilterBar = () => {
       action: onClick('mention'),
       name: 'mention',
     });
-    if (features.accountNotifies) items.push({
-      text: <Icon className='size-4' src={require('@phosphor-icons/core/regular/bell-simple-ringing.svg')} />,
-      title: intl.formatMessage(messages.statuses),
-      action: onClick('status'),
-      name: 'status',
-    });
+    if (features.accountNotifies)
+      items.push({
+        text: (
+          <Icon
+            className='size-4'
+            src={require('@phosphor-icons/core/regular/bell-simple-ringing.svg')}
+          />
+        ),
+        title: intl.formatMessage(messages.statuses),
+        action: onClick('status'),
+        name: 'status',
+      });
     items.push({
       text: <Icon className='size-4' src={require('@phosphor-icons/core/regular/star.svg')} />,
       title: intl.formatMessage(messages.favourites),
@@ -99,18 +112,27 @@ const FilterBar = () => {
       action: onClick('reblog'),
       name: 'reblog',
     });
-    if (features.polls) items.push({
-      text: <Icon className='size-4' src={require('@phosphor-icons/core/regular/chart-bar.svg')} />,
-      title: intl.formatMessage(messages.polls),
-      action: onClick('poll'),
-      name: 'poll',
-    });
-    if (features.events) items.push({
-      text: <Icon className='size-4' src={require('@phosphor-icons/core/regular/calendar-dots.svg')} />,
-      title: intl.formatMessage(messages.events),
-      action: onClick('events'),
-      name: 'events',
-    });
+    if (features.polls)
+      items.push({
+        text: (
+          <Icon className='size-4' src={require('@phosphor-icons/core/regular/chart-bar.svg')} />
+        ),
+        title: intl.formatMessage(messages.polls),
+        action: onClick('poll'),
+        name: 'poll',
+      });
+    if (features.events)
+      items.push({
+        text: (
+          <Icon
+            className='size-4'
+            src={require('@phosphor-icons/core/regular/calendar-dots.svg')}
+          />
+        ),
+        title: intl.formatMessage(messages.events),
+        action: onClick('events'),
+        name: 'events',
+      });
     items.push({
       text: <Icon className='size-4' src={require('@phosphor-icons/core/regular/user-plus.svg')} />,
       title: intl.formatMessage(messages.follows),
@@ -122,27 +144,30 @@ const FilterBar = () => {
   return <Tabs items={items} activeItem={selectedFilter} />;
 };
 
-const getNotifications = createSelector([
-  (state: RootState) => state.notifications.items,
-  (_, topNotification?: string) => topNotification,
-], (notifications, topNotificationId) => {
-  if (topNotificationId) {
-    const queuedNotificationCount = notifications.findIndex((notification) =>
-      notification.most_recent_notification_id <= topNotificationId,
-    );
-    const displayedNotifications = notifications.slice(queuedNotificationCount);
+const getNotifications = createSelector(
+  [
+    (state: RootState) => state.notifications.items,
+    (_, topNotification?: string) => topNotification,
+  ],
+  (notifications, topNotificationId) => {
+    if (topNotificationId) {
+      const queuedNotificationCount = notifications.findIndex(
+        (notification) => notification.most_recent_notification_id <= topNotificationId,
+      );
+      const displayedNotifications = notifications.slice(queuedNotificationCount);
+
+      return {
+        queuedNotificationCount,
+        displayedNotifications,
+      };
+    }
 
     return {
-      queuedNotificationCount,
-      displayedNotifications,
+      queuedNotificationCount: 0,
+      displayedNotifications: notifications,
     };
-  }
-
-  return {
-    queuedNotificationCount: 0,
-    displayedNotifications: notifications,
-  };
-});
+  },
+);
 
 interface INotificationsColumn {
   multiColumn?: boolean;
@@ -153,13 +178,17 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
   const features = useFeatures();
   const settings = useSettings();
 
-  const showFilterBar = (features.notificationsExcludeTypes || features.notificationsIncludeTypes) && settings.notifications.quickFilter.show;
+  const showFilterBar =
+    (features.notificationsExcludeTypes || features.notificationsIncludeTypes) &&
+    settings.notifications.quickFilter.show;
   const activeFilter = settings.notifications.quickFilter.active;
   const [topNotification, setTopNotification] = useState<string>();
-  const { queuedNotificationCount, displayedNotifications } = useAppSelector(state => getNotifications(state, topNotification));
-  const isLoading = useAppSelector(state => state.notifications.isLoading);
+  const { queuedNotificationCount, displayedNotifications } = useAppSelector((state) =>
+    getNotifications(state, topNotification),
+  );
+  const isLoading = useAppSelector((state) => state.notifications.isLoading);
   // const isUnread = useAppSelector(state => state.notifications.unread > 0);
-  const hasMore = useAppSelector(state => state.notifications.hasMore);
+  const hasMore = useAppSelector((state) => state.notifications.hasMore);
 
   const node = useRef<VirtuosoHandle>(null);
   const scrollableContentRef = useRef<Array<JSX.Element> | null>(null);
@@ -168,31 +197,47 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
   //   dispatch(expandNotifications({ maxId }));
   // };
 
-  const handleLoadOlder = useCallback(debounce(() => {
-    const minId = displayedNotifications.reduce<string | undefined>(
-      (minId, notification) => minId && notification.page_min_id && notification.page_min_id > minId
-        ? minId
-        : notification.page_min_id,
-      undefined,
-    );
-    dispatch(expandNotifications({ maxId: minId }));
-  }, 300, { leading: true }), [displayedNotifications]);
+  const handleLoadOlder = useCallback(
+    debounce(
+      () => {
+        const minId = displayedNotifications.reduce<string | undefined>(
+          (minId, notification) =>
+            minId && notification.page_min_id && notification.page_min_id > minId
+              ? minId
+              : notification.page_min_id,
+          undefined,
+        );
+        dispatch(expandNotifications({ maxId: minId }));
+      },
+      300,
+      { leading: true },
+    ),
+    [displayedNotifications],
+  );
 
-  const handleScrollToTop = useCallback(debounce(() => {
-    dispatch(scrollTopNotifications(true));
-  }, 100), []);
+  const handleScrollToTop = useCallback(
+    debounce(() => {
+      dispatch(scrollTopNotifications(true));
+    }, 100),
+    [],
+  );
 
-  const handleScroll = useCallback(debounce(() => {
-    dispatch(scrollTopNotifications(false));
-  }, 100), []);
+  const handleScroll = useCallback(
+    debounce(() => {
+      dispatch(scrollTopNotifications(false));
+    }, 100),
+    [],
+  );
 
   const handleMoveUp = (id: string) => {
-    const elementIndex = displayedNotifications.findIndex(item => item !== null && item.group_key === id) - 1;
+    const elementIndex =
+      displayedNotifications.findIndex((item) => item !== null && item.group_key === id) - 1;
     selectChild(elementIndex, node);
   };
 
   const handleMoveDown = (id: string) => {
-    const elementIndex = displayedNotifications.findIndex(item => item !== null && item.group_key === id) + 1;
+    const elementIndex =
+      displayedNotifications.findIndex((item) => item !== null && item.group_key === id) + 1;
     selectChild(elementIndex, node, undefined, displayedNotifications.length);
   };
 
@@ -220,15 +265,22 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
     setTopNotification(displayedNotifications[0].most_recent_notification_id);
   }, [displayedNotifications.length]);
 
-  const emptyMessage = activeFilter === 'all'
-    ? <FormattedMessage id='empty_column.notifications' defaultMessage="You don't have any notifications yet. Interact with others to start the conversation." />
-    : <FormattedMessage id='empty_column.notifications_filtered' defaultMessage="You don't have any notifications of this type yet." />;
+  const emptyMessage =
+    activeFilter === 'all' ? (
+      <FormattedMessage
+        id='empty_column.notifications'
+        defaultMessage="You don't have any notifications yet. Interact with others to start the conversation."
+      />
+    ) : (
+      <FormattedMessage
+        id='empty_column.notifications_filtered'
+        defaultMessage="You don't have any notifications of this type yet."
+      />
+    );
 
   let scrollableContent: Array<JSX.Element> | null = null;
 
-  const filterBarContainer = showFilterBar
-    ? (<FilterBar />)
-    : null;
+  const filterBarContainer = showFilterBar ? <FilterBar /> : null;
 
   if (isLoading && scrollableContentRef.current) {
     scrollableContent = scrollableContentRef.current;
@@ -281,9 +333,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
         />
       </Portal>
 
-      <PullToRefresh onRefresh={handleRefresh}>
-        {scrollContainer}
-      </PullToRefresh>
+      <PullToRefresh onRefresh={handleRefresh}>{scrollContainer}</PullToRefresh>
     </>
   );
 };

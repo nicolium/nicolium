@@ -59,7 +59,13 @@ const GroupPopover = (props: IGroupPopoverContainer) => {
             </div>
 
             {/* Group Info */}
-            <Stack alignItems='center' justifyContent='end' grow className='basis-1/2 py-4' space={0.5}>
+            <Stack
+              alignItems='center'
+              justifyContent='end'
+              grow
+              className='basis-1/2 py-4'
+              space={0.5}
+            >
               <Text size='lg' weight='bold'>
                 <Emojify text={group.display_name} emojis={group.emojis} />
               </Text>
@@ -78,7 +84,10 @@ const GroupPopover = (props: IGroupPopoverContainer) => {
               <FormattedMessage id='group.popover.title' defaultMessage='Membership required' />
             </Text>
             <Text theme='muted'>
-              <FormattedMessage id='group.popover.summary' defaultMessage='You must be a member of the group in order to reply to this status.' />
+              <FormattedMessage
+                id='group.popover.summary'
+                defaultMessage='You must be a member of the group in order to reply to this status.'
+              />
             </Text>
           </Stack>
 

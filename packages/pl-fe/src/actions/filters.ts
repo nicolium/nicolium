@@ -18,55 +18,76 @@ const messages = defineMessages({
 
 type FilterKeywords = { keyword: string; whole_word: boolean }[];
 
-const fetchFilters = () =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
+const fetchFilters = () => (dispatch: AppDispatch, getState: () => RootState) => {
+  if (!isLoggedIn(getState)) return;
 
-    return getClient(getState).filtering.getFilters()
-      .then((data) => dispatch<FiltersAction>({
+  return getClient(getState)
+    .filtering.getFilters()
+    .then((data) =>
+      dispatch<FiltersAction>({
         type: FILTERS_FETCH_SUCCESS,
         filters: data,
-      }))
-      .catch(error => ({
-        error,
-      }));
-  };
+      }),
+    )
+    .catch((error) => ({
+      error,
+    }));
+};
 
-const fetchFilter = (filterId: string) =>
+const fetchFilter = (filterId: string) => (dispatch: AppDispatch, getState: () => RootState) =>
+  getClient(getState).filtering.getFilter(filterId);
+
+const createFilter =
+  (
+    title: string,
+    expires_in: number | undefined,
+    context: Array<FilterContext>,
+    filter_action: Filter['filter_action'],
+    keywords_attributes: FilterKeywords,
+  ) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).filtering.getFilter(filterId);
+    getClient(getState)
+      .filtering.createFilter({
+        title,
+        context,
+        filter_action,
+        expires_in,
+        keywords_attributes,
+      })
+      .then((response) => {
+        toast.success(messages.added);
 
-const createFilter = (title: string, expires_in: number | undefined, context: Array<FilterContext>, filter_action: Filter['filter_action'], keywords_attributes: FilterKeywords) =>
+        return response;
+      });
+
+const updateFilter =
+  (
+    filterId: string,
+    title: string,
+    expires_in: number | undefined,
+    context: Array<FilterContext>,
+    filter_action: Filter['filter_action'],
+    keywords_attributes: FilterKeywords,
+  ) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).filtering.createFilter({
-      title,
-      context,
-      filter_action,
-      expires_in,
-      keywords_attributes,
-    }).then(response => {
-      toast.success(messages.added);
+    getClient(getState)
+      .filtering.updateFilter(filterId, {
+        title,
+        context,
+        filter_action,
+        expires_in,
+        keywords_attributes,
+      })
+      .then((response) => {
+        toast.success(messages.updated);
 
-      return response;
-    });
+        return response;
+      });
 
-const updateFilter = (filterId: string, title: string, expires_in: number | undefined, context: Array<FilterContext>, filter_action: Filter['filter_action'], keywords_attributes: FilterKeywords) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).filtering.updateFilter(filterId, {
-      title,
-      context,
-      filter_action,
-      expires_in,
-      keywords_attributes,
-    }).then(response => {
-      toast.success(messages.updated);
-
-      return response;
-    });
-
-const deleteFilter = (filterId: string) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).filtering.deleteFilter(filterId).then(response => {
+const deleteFilter = (filterId: string) => (dispatch: AppDispatch, getState: () => RootState) =>
+  getClient(getState)
+    .filtering.deleteFilter(filterId)
+    .then((response) => {
       toast.success(messages.removed);
 
       return response;

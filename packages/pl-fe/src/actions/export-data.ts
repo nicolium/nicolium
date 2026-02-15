@@ -7,8 +7,14 @@ import type { AppDispatch, RootState } from '@/store';
 import type { Account, PaginatedResponse } from 'pl-api';
 
 const messages = defineMessages({
-  blocksSuccess: { id: 'export_data.success.blocks', defaultMessage: 'Blocks exported successfully' },
-  followersSuccess: { id: 'export_data.success.followers', defaultMessage: 'Followers exported successfully' },
+  blocksSuccess: {
+    id: 'export_data.success.blocks',
+    defaultMessage: 'Blocks exported successfully',
+  },
+  followersSuccess: {
+    id: 'export_data.success.followers',
+    defaultMessage: 'Followers exported successfully',
+  },
   mutesSuccess: { id: 'export_data.success.mutes', defaultMessage: 'Mutes exported successfully' },
 });
 
@@ -41,7 +47,7 @@ const exportFollows = () => async (_dispatch: AppDispatch, getState: () => RootS
 
   const response = await getClient(getState()).accounts.getAccountFollowing(me, { limit: 40 });
   const followings = await listAccounts(response);
-  const followingsCsv = followings.map(fqn => fqn + ',true');
+  const followingsCsv = followings.map((fqn) => fqn + ',true');
   followingsCsv.unshift('Account address,Show boosts');
   fileExport(followingsCsv.join('\n'), 'export_followings.csv');
 
@@ -64,8 +70,4 @@ const exportMutes = () => async (_dispatch: AppDispatch, getState: () => RootSta
   toast.success(messages.mutesSuccess);
 };
 
-export {
-  exportFollows,
-  exportBlocks,
-  exportMutes,
-};
+export { exportFollows, exportBlocks, exportMutes };

@@ -57,7 +57,7 @@ const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
           <Input
             type='text'
             value={value}
-            onChange={({ target }) =>{
+            onChange={({ target }) => {
               setValue(target.value);
             }}
             autoComplete='off'
@@ -66,7 +66,7 @@ const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
         ) : (
           <Textarea
             value={value}
-            onChange={({ target }) =>{
+            onChange={({ target }) => {
               setValue(target.value);
             }}
             autoComplete='off'

@@ -35,7 +35,11 @@ const Report: React.FC<IReport> = ({ id }) => {
   const reporterAcct = account?.acct;
 
   return (
-    <Link to='/pl-fe/admin/reports/$reportId' params={{ reportId: id }} className='block rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
+    <Link
+      to='/pl-fe/admin/reports/$reportId'
+      params={{ reportId: id }}
+      className='block rounded-lg bg-gray-100 p-4 dark:bg-primary-800'
+    >
       <Stack space={2} className='h-full justify-between'>
         {targetAccount && (
           <HoverAccountWrapper accountId={targetAccount.id} element='span'>
@@ -62,10 +66,7 @@ const Report: React.FC<IReport> = ({ id }) => {
         {!!account && (
           <HStack space={1} alignItems='center' wrap>
             <Text size='sm' theme='muted'>
-              <FormattedMessage
-                id='admin.reports.account'
-                defaultMessage='Reported by:'
-              />
+              <FormattedMessage id='admin.reports.account' defaultMessage='Reported by:' />
             </Text>
             <HoverAccountWrapper accountId={account.id} element='span'>
               <Link to='/pl-fe/admin/accounts/$accountId' params={{ accountId: account.id }}>
@@ -78,10 +79,7 @@ const Report: React.FC<IReport> = ({ id }) => {
         {!!report.comment && report.comment.length > 0 && (
           <HStack space={1} alignItems='center' wrap>
             <Text size='sm' theme='muted'>
-              <FormattedMessage
-                id='admin.reports.comment'
-                defaultMessage='Comment:'
-              />
+              <FormattedMessage id='admin.reports.comment' defaultMessage='Comment:' />
             </Text>
             {report.comment}
           </HStack>
@@ -90,10 +88,7 @@ const Report: React.FC<IReport> = ({ id }) => {
         {statusCount > 0 && (
           <HStack space={1} alignItems='center' wrap>
             <Text size='sm' theme='muted'>
-              <FormattedMessage
-                id='admin.reports.statuses'
-                defaultMessage='Reported posts:'
-              />
+              <FormattedMessage id='admin.reports.statuses' defaultMessage='Reported posts:' />
             </Text>
             {statusCount}
           </HStack>

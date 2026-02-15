@@ -74,28 +74,35 @@ const fixStatus = (state: State, status: BaseStatus): MinifiedStatus => {
   return minifyStatus(fixQuote(normalizeStatus(status, oldStatus)));
 };
 
-const importStatus = (state: State, status: BaseStatus) =>{
+const importStatus = (state: State, status: BaseStatus) => {
   state[status.id] = fixStatus(state, status);
 };
 
-const importStatuses = (state: State, statuses: Array<BaseStatus>) =>{
-  statuses.forEach(status =>{
+const importStatuses = (state: State, statuses: Array<BaseStatus>) => {
+  statuses.forEach((status) => {
     importStatus(state, status);
   });
 };
 
 const deleteStatus = (state: State, statusId: string, references: Array<[string, string]>) => {
-  references.forEach(ref => {
+  references.forEach((ref) => {
     deleteStatus(state, ref[0], []);
   });
 
   delete state[statusId];
 };
 
-const incrementReplyCount = (state: State, { in_reply_to_id, quote_id }: Pick<BaseStatus | CreateStatusParams, 'in_reply_to_id' | 'quote_id'>) => {
+const incrementReplyCount = (
+  state: State,
+  {
+    in_reply_to_id,
+    quote_id,
+  }: Pick<BaseStatus | CreateStatusParams, 'in_reply_to_id' | 'quote_id'>,
+) => {
   if (in_reply_to_id && state[in_reply_to_id]) {
     const parent = state[in_reply_to_id];
-    parent.replies_count = (typeof parent.replies_count === 'number' ? parent.replies_count : 0) + 1;
+    parent.replies_count =
+      (typeof parent.replies_count === 'number' ? parent.replies_count : 0) + 1;
   }
 
   if (quote_id && state[quote_id]) {
@@ -106,7 +113,13 @@ const incrementReplyCount = (state: State, { in_reply_to_id, quote_id }: Pick<Ba
   return state;
 };
 
-const decrementReplyCount = (state: State, { in_reply_to_id, quote_id }: Pick<BaseStatus | CreateStatusParams, 'in_reply_to_id' | 'quote_id'>) => {
+const decrementReplyCount = (
+  state: State,
+  {
+    in_reply_to_id,
+    quote_id,
+  }: Pick<BaseStatus | CreateStatusParams, 'in_reply_to_id' | 'quote_id'>,
+) => {
   if (in_reply_to_id && state[in_reply_to_id]) {
     const parent = state[in_reply_to_id];
     parent.replies_count = Math.max(0, parent.replies_count - 1);
@@ -137,41 +150,50 @@ const simulateFavourite = (state: State, statusId: string, favourited: boolean) 
 };
 
 /** Simulate dislike/undislike of status for optimistic interactions */
-const simulateDislike = (
-  state: State,
-  statusId: string,
-  disliked: boolean,
-) => {
+const simulateDislike = (state: State, statusId: string, disliked: boolean) => {
   const status = state[statusId];
   if (!status) return state;
 
   const delta = disliked ? +1 : -1;
 
-  const updatedStatus = ({
+  const updatedStatus = {
     ...status,
     disliked,
     dislikes_count: Math.max(0, status.dislikes_count + delta),
-  });
+  };
 
   state[statusId] = updatedStatus;
 };
 
 const initialState: State = {};
 
-const statuses = (state = initialState, action: EmojiReactsAction | EventsAction | ImporterAction | InteractionsAction | StatusesAction | TimelineAction): State => {
+const statuses = (
+  state = initialState,
+  action:
+    | EmojiReactsAction
+    | EventsAction
+    | ImporterAction
+    | InteractionsAction
+    | StatusesAction
+    | TimelineAction,
+): State => {
   switch (action.type) {
     case STATUS_IMPORT:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         importStatus(draft, action.status);
       });
     case STATUSES_IMPORT:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         importStatuses(draft, action.statuses);
       });
     case STATUS_CREATE_REQUEST:
-      return action.editing ? state : create(state, (draft) => incrementReplyCount(draft, action.params));
+      return action.editing
+        ? state
+        : create(state, (draft) => incrementReplyCount(draft, action.params));
     case STATUS_CREATE_FAIL:
-      return action.editing ? state : create(state, (draft) => decrementReplyCount(draft, action.params));
+      return action.editing
+        ? state
+        : create(state, (draft) => decrementReplyCount(draft, action.params));
     case FAVOURITE_REQUEST:
       return create(state, (draft) => simulateFavourite(draft, action.statusId, true));
     case UNFAVOURITE_REQUEST:
@@ -184,7 +206,11 @@ const statuses = (state = initialState, action: EmojiReactsAction | EventsAction
       return create(state, (draft) => {
         const status = draft[action.statusId];
         if (status) {
-          status.emoji_reactions = simulateEmojiReact(status.emoji_reactions, action.emoji, action.custom);
+          status.emoji_reactions = simulateEmojiReact(
+            status.emoji_reactions,
+            action.emoji,
+            action.custom,
+          );
         }
       });
     case UNEMOJI_REACT_REQUEST:
@@ -265,7 +291,7 @@ const statuses = (state = initialState, action: EmojiReactsAction | EventsAction
         }
       });
     case TIMELINE_DELETE:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         deleteStatus(draft, action.statusId, action.references);
       });
     case EVENT_JOIN_REQUEST:
@@ -302,7 +328,4 @@ const statuses = (state = initialState, action: EmojiReactsAction | EventsAction
   }
 };
 
-export {
-  type MinifiedStatus,
-  statuses as default,
-};
+export { type MinifiedStatus, statuses as default };

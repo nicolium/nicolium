@@ -5,7 +5,11 @@ import { fetchConfig, updateConfig } from './admin';
 
 import type { AppDispatch, RootState } from '@/store';
 
-const simplePolicyMerge = (simplePolicy: Partial<MRFSimple>, host: string, restrictions: Record<string, any>): MRFSimple => {
+const simplePolicyMerge = (
+  simplePolicy: Partial<MRFSimple>,
+  host: string,
+  restrictions: Record<string, any>,
+): MRFSimple => {
   const entries = Object.entries(simplePolicy).map(([key, hosts]) => {
     const isRestricted = restrictions[key];
 
@@ -30,7 +34,8 @@ const simplePolicyMerge = (simplePolicy: Partial<MRFSimple>, host: string, restr
   ]);
 };
 
-const updateMrf = (host: string, restrictions: Record<string, any>) =>
+const updateMrf =
+  (host: string, restrictions: Record<string, any>) =>
   (dispatch: AppDispatch, getState: () => RootState) =>
     dispatch(fetchConfig()).then(() => {
       const configs = getState().admin.configs;

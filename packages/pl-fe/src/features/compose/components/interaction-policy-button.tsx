@@ -7,7 +7,10 @@ import { useModalsActions } from '@/stores/modals';
 import ComposeFormButton from './compose-form-button';
 
 const messages = defineMessages({
-  label: { id: 'compose_form.interaction_policy.label', defaultMessage: 'Manage interaction policy' },
+  label: {
+    id: 'compose_form.interaction_policy.label',
+    defaultMessage: 'Manage interaction policy',
+  },
 });
 
 interface IInteractionPolicyButton {

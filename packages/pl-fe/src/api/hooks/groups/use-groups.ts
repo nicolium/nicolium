@@ -18,7 +18,7 @@ const useGroups = () => {
   );
   const { relationships } = useGroupRelationships(
     ['search', ''],
-    entities.map(entity => entity.id),
+    entities.map((entity) => entity.id),
   );
 
   const groups = entities.map((group) => ({

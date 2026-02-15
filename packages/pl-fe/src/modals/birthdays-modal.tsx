@@ -23,7 +23,12 @@ const BirthdaysModal = ({ onClose }: BaseModalProps) => {
   if (!accountIds) {
     body = <Spinner />;
   } else {
-    const emptyMessage = <FormattedMessage id='birthdays_modal.empty' defaultMessage='None of your friends have birthday today.' />;
+    const emptyMessage = (
+      <FormattedMessage
+        id='birthdays_modal.empty'
+        defaultMessage='None of your friends have birthday today.'
+      />
+    );
 
     body = (
       <ScrollableList
@@ -32,9 +37,9 @@ const BirthdaysModal = ({ onClose }: BaseModalProps) => {
         itemClassName='pb-3'
         useWindowScroll={false}
       >
-        {accountIds.map(id =>
-          <Account key={id} accountId={id} />,
-        )}
+        {accountIds.map((id) => (
+          <Account key={id} accountId={id} />
+        ))}
       </ScrollableList>
     );
   }

@@ -14,23 +14,28 @@ import { queryClient } from '@/queries/client';
 
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 
-const useAnnouncements = makePaginatedResponseQuery(
-  ['admin', 'announcements'],
-  (client) => client.admin.announcements.getAnnouncements(),
+const useAnnouncements = makePaginatedResponseQuery(['admin', 'announcements'], (client) =>
+  client.admin.announcements.getAnnouncements(),
 );
 
 const useCreateAnnouncementMutation = () => {
   const client = useClient();
 
   return useMutation({
-    mutationFn: (params: AdminCreateAnnouncementParams) => client.admin.announcements.createAnnouncement(params),
+    mutationFn: (params: AdminCreateAnnouncementParams) =>
+      client.admin.announcements.createAnnouncement(params),
     retry: false,
     onSuccess: (data) => {
       queryClient.setQueryData<InfiniteData<PaginatedResponse<AdminAnnouncement>>>(
         ['admin', 'announcements'],
-        (prevData) => create(prevData, (draft) => {
-          if (draft?.pages.length) draft.pages[0].items = [v.parse(adminAnnouncementSchema, data), ...draft.pages[0].items];
-        }),
+        (prevData) =>
+          create(prevData, (draft) => {
+            if (draft?.pages.length)
+              draft.pages[0].items = [
+                v.parse(adminAnnouncementSchema, data),
+                ...draft.pages[0].items,
+              ];
+          }),
       );
       queryClient.invalidateQueries({ queryKey: ['announcements'] });
     },
@@ -41,17 +46,19 @@ const useUpdateAnnouncementMutation = () => {
   const client = useClient();
 
   return useMutation({
-    mutationFn: ({ id, ...params }: AdminUpdateAnnouncementParams & { id: string }) => client.admin.announcements.updateAnnouncement(id, params),
+    mutationFn: ({ id, ...params }: AdminUpdateAnnouncementParams & { id: string }) =>
+      client.admin.announcements.updateAnnouncement(id, params),
     retry: false,
     onSuccess: (data) => {
       queryClient.setQueryData<InfiniteData<PaginatedResponse<AdminAnnouncement>>>(
         ['admin', 'announcements'],
-        (prevData) => create(prevData, (draft) => {
-          draft?.pages.forEach(({ items }) => {
-            const index = items.findIndex(({ id }) => id === data.id);
-            if (index !== -1) items[index] = v.parse(adminAnnouncementSchema, data);
-          });
-        }),
+        (prevData) =>
+          create(prevData, (draft) => {
+            draft?.pages.forEach(({ items }) => {
+              const index = items.findIndex(({ id }) => id === data.id);
+              if (index !== -1) items[index] = v.parse(adminAnnouncementSchema, data);
+            });
+          }),
       );
       queryClient.invalidateQueries({ queryKey: ['announcements'] });
     },
@@ -67,13 +74,21 @@ const useDeleteAnnouncementMutation = () => {
     onSuccess: (_, deletedAnnouncementId) => {
       queryClient.setQueryData<InfiniteData<PaginatedResponse<AdminAnnouncement>>>(
         ['admin', 'announcements'],
-        (prevData) => create(prevData, (draft) => {
-          draft?.pages.forEach((page) => page.items = page.items.filter(({ id }) => id !== deletedAnnouncementId));
-        }),
+        (prevData) =>
+          create(prevData, (draft) => {
+            draft?.pages.forEach(
+              (page) => (page.items = page.items.filter(({ id }) => id !== deletedAnnouncementId)),
+            );
+          }),
       );
       queryClient.invalidateQueries({ queryKey: ['announcements'] });
     },
   });
 };
 
-export { useAnnouncements, useCreateAnnouncementMutation, useUpdateAnnouncementMutation, useDeleteAnnouncementMutation };
+export {
+  useAnnouncements,
+  useCreateAnnouncementMutation,
+  useUpdateAnnouncementMutation,
+  useDeleteAnnouncementMutation,
+};

@@ -11,7 +11,13 @@ import { Card, CardBody, CardHeader, CardTitle, type CardSizes } from './card';
 type IColumnHeader = Pick<IColumn, 'label' | 'backHref' | 'backParams' | 'className' | 'action'>;
 
 /** Contains the column title with optional back button. */
-const ColumnHeader: React.FC<IColumnHeader> = ({ label, backHref, backParams, className, action }) => {
+const ColumnHeader: React.FC<IColumnHeader> = ({
+  label,
+  backHref,
+  backParams,
+  className,
+  action,
+}) => {
   const navigate = useNavigate();
   const { history } = useRouter();
 
@@ -32,11 +38,7 @@ const ColumnHeader: React.FC<IColumnHeader> = ({ label, backHref, backParams, cl
     <CardHeader className={className} onBackClick={handleBackClick}>
       <CardTitle title={label} />
 
-      {action && (
-        <div className='⁂-column__header__action'>
-          {action}
-        </div>
-      )}
+      {action && <div className='⁂-column__header__action'>{action}</div>}
     </CardHeader>
   );
 };
@@ -66,13 +68,26 @@ interface IColumn {
 
 /** A backdrop for the main section of the UI. */
 const Column: React.FC<IColumn> = (props): JSX.Element => {
-  const { backHref, children, label, transparent = false, withHeader = true, className, bodyClassName, action, size } = props;
+  const {
+    backHref,
+    children,
+    label,
+    transparent = false,
+    withHeader = true,
+    className,
+    bodyClassName,
+    action,
+    size,
+  } = props;
   const frontendConfig = useFrontendConfig();
   const [isScrolled, setIsScrolled] = useState(false);
 
-  const handleScroll = useCallback(throttle(() => {
-    setIsScrolled(window.pageYOffset > 32);
-  }, 50), []);
+  const handleScroll = useCallback(
+    throttle(() => {
+      setIsScrolled(window.pageYOffset > 32);
+    }, 50),
+    [],
+  );
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
@@ -83,7 +98,14 @@ const Column: React.FC<IColumn> = (props): JSX.Element => {
   }, []);
 
   return (
-    <Card role='region' aria-label={label} column-type={transparent ? 'transparent' : 'filled'} size={size} variant={transparent ? undefined : 'rounded'} className={clsx('⁂-column', className)}>
+    <Card
+      role='region'
+      aria-label={label}
+      column-type={transparent ? 'transparent' : 'filled'}
+      size={size}
+      variant={transparent ? undefined : 'rounded'}
+      className={clsx('⁂-column', className)}
+    >
       <Helmet>
         <title>{label}</title>
 
@@ -107,14 +129,9 @@ const Column: React.FC<IColumn> = (props): JSX.Element => {
         />
       )}
 
-      <CardBody className={bodyClassName}>
-        {children}
-      </CardBody>
+      <CardBody className={bodyClassName}>{children}</CardBody>
     </Card>
   );
 };
 
-export {
-  Column as default,
-  Column,
-};
+export { Column as default, Column };

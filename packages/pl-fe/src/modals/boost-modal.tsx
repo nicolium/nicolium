@@ -22,11 +22,16 @@ interface BoostModalProps {
   visibility?: string;
 }
 
-const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({ statusId, onReblog, visibility, onClose }) => {
+const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
+  statusId,
+  onReblog,
+  visibility,
+  onClose,
+}) => {
   const getStatus = useCallback(makeGetStatus(), []);
 
   const intl = useIntl();
-  const status = useAppSelector(state => getStatus(state, { id: statusId }))!;
+  const status = useAppSelector((state) => getStatus(state, { id: statusId }))!;
 
   const handleReblog = () => {
     onReblog();
@@ -37,11 +42,15 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({ statusId, onRe
 
   return (
     <Modal
-      title={visibility === 'unlisted'
-        ? <FormattedMessage id='boost_modal.title.unlisted' defaultMessage='Repost unlisted?' />
-        : visibility === 'private'
-          ? <FormattedMessage id='boost_modal.title.private' defaultMessage='Repost privately?' />
-          : <FormattedMessage id='boost_modal.title' defaultMessage='Repost?' />}
+      title={
+        visibility === 'unlisted' ? (
+          <FormattedMessage id='boost_modal.title.unlisted' defaultMessage='Repost unlisted?' />
+        ) : visibility === 'private' ? (
+          <FormattedMessage id='boost_modal.title.private' defaultMessage='Repost privately?' />
+        ) : (
+          <FormattedMessage id='boost_modal.title' defaultMessage='Repost?' />
+        )
+      }
       confirmationAction={handleReblog}
       confirmationText={intl.formatMessage(buttonText)}
     >
@@ -49,7 +58,21 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({ statusId, onRe
         <ReplyIndicator status={status} hideActions />
 
         <Text>
-          <FormattedMessage id='boost_modal.combo' defaultMessage='You can press {combo} to skip this next time' values={{ combo: <span>Shift + <Icon className='inline-block align-middle' src={require('@phosphor-icons/core/regular/repeat.svg')} /></span> }} />
+          <FormattedMessage
+            id='boost_modal.combo'
+            defaultMessage='You can press {combo} to skip this next time'
+            values={{
+              combo: (
+                <span>
+                  Shift +{' '}
+                  <Icon
+                    className='inline-block align-middle'
+                    src={require('@phosphor-icons/core/regular/repeat.svg')}
+                  />
+                </span>
+              ),
+            }}
+          />
         </Text>
       </Stack>
     </Modal>

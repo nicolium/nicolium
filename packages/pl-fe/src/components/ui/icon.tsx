@@ -25,21 +25,26 @@ interface IIcon extends Pick<React.SVGAttributes<SVGAElement>, 'strokeWidth'> {
 }
 
 /** Renders and SVG icon with optional counter. */
-const Icon: React.FC<IIcon> = React.forwardRef<HTMLDivElement, IIcon>(({ src, alt, count, size, countMax, containerClassName, title, ...filteredProps }, ref): JSX.Element => (
-  <div
-    className={clsx('⁂-icon', containerClassName)}
-    data-testid={filteredProps['data-testid'] ?? 'icon'}
-    title={title}
-    ref={ref}
-  >
-    {count ? (
-      <span className='⁂-icon__counter'>
-        <Counter count={count} countMax={countMax} />
-      </span>
-    ) : null}
+const Icon: React.FC<IIcon> = React.forwardRef<HTMLDivElement, IIcon>(
+  (
+    { src, alt, count, size, countMax, containerClassName, title, ...filteredProps },
+    ref,
+  ): JSX.Element => (
+    <div
+      className={clsx('⁂-icon', containerClassName)}
+      data-testid={filteredProps['data-testid'] ?? 'icon'}
+      title={title}
+      ref={ref}
+    >
+      {count ? (
+        <span className='⁂-icon__counter'>
+          <Counter count={count} countMax={countMax} />
+        </span>
+      ) : null}
 
-    <SvgIcon src={src} size={size} alt={alt} {...filteredProps} />
-  </div>
-));
+      <SvgIcon src={src} size={size} alt={alt} {...filteredProps} />
+    </div>
+  ),
+);
 
 export { Icon as default };

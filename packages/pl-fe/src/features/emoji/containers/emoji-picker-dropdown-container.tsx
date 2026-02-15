@@ -13,12 +13,19 @@ const messages = defineMessages({
   emoji: { id: 'emoji_button.label', defaultMessage: 'Insert emoji' },
 });
 
-interface IEmojiPickerDropdownContainer extends Pick<IEmojiPickerDropdown, 'onPickEmoji' | 'condensed' | 'withCustom'> {
+interface IEmojiPickerDropdownContainer extends Pick<
+  IEmojiPickerDropdown,
+  'onPickEmoji' | 'condensed' | 'withCustom'
+> {
   children?: JSX.Element;
   theme?: 'default' | 'inverse';
 }
 
-const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({ theme = 'default', children, ...props }) => {
+const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
+  theme = 'default',
+  children,
+  ...props
+}) => {
   const intl = useIntl();
   const title = intl.formatMessage(messages.emoji);
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -59,13 +66,17 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
     }
   };
 
-  const clonedChildren = useMemo(() => children ? (
-    React.cloneElement(children, {
-      onClick: handleClick,
-      onKeyDown: handleKeyDown,
-      ref: refs.setReference,
-    })
-  ) : null, [children]);
+  const clonedChildren = useMemo(
+    () =>
+      children
+        ? React.cloneElement(children, {
+            onClick: handleClick,
+            onKeyDown: handleKeyDown,
+            ref: refs.setReference,
+          })
+        : null,
+    [children],
+  );
 
   return (
     <div className='relative'>
@@ -73,8 +84,10 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
         <IconButton
           theme='transparent'
           className={clsx('emoji-picker-dropdown -m-1 p-2', {
-            'text-gray-600 hover:text-gray-800 dark:hover:text-white bg-transparent hover:bg-primary-100 dark:hover:bg-primary-800 black:hover:bg-gray-800': theme === 'default',
-            'text-white/80 hover:text-white bg-transparent dark:bg-transparent': theme === 'inverse',
+            'bg-transparent text-gray-600 hover:bg-primary-100 hover:text-gray-800 black:hover:bg-gray-800 dark:hover:bg-primary-800 dark:hover:text-white':
+              theme === 'default',
+            'bg-transparent text-white/80 hover:text-white dark:bg-transparent':
+              theme === 'inverse',
           })}
           ref={refs.setReference}
           src={require('@phosphor-icons/core/regular/smiley.svg')}
@@ -85,7 +98,8 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
           onClick={handleClick as any}
           onKeyDown={handleKeyDown as React.KeyboardEventHandler<HTMLButtonElement>}
           tabIndex={0}
-        />)}
+        />
+      )}
 
       {isMounted && (
         <Portal>
@@ -100,12 +114,7 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
               ...styles,
             }}
           >
-            <EmojiPickerDropdown
-              visible
-              setVisible={setIsOpen}
-              update={update}
-              {...props}
-            />
+            <EmojiPickerDropdown visible setVisible={setIsOpen} update={update} {...props} />
           </div>
         </Portal>
       )}
@@ -113,7 +122,4 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
   );
 };
 
-export {
-  messages,
-  EmojiPickerDropdownContainer as default,
-};
+export { messages, EmojiPickerDropdownContainer as default };

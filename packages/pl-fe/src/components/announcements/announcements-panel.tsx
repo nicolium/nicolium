@@ -13,7 +13,11 @@ import Announcement from './announcement';
 
 import type { CustomEmoji } from 'pl-api';
 
-const makeCustomEmojiMap = (items: Array<CustomEmoji>) => items.reduce<Record<string, CustomEmoji>>((map, emoji) => (map[emoji.shortcode] = emoji, map), {});
+const makeCustomEmojiMap = (items: Array<CustomEmoji>) =>
+  items.reduce<Record<string, CustomEmoji>>(
+    (map, emoji) => ((map[emoji.shortcode] = emoji), map),
+    {},
+  );
 
 const AnnouncementsPanel = () => {
   const { data: emojiMap = {} } = useCustomEmojis(makeCustomEmojiMap);
@@ -29,15 +33,17 @@ const AnnouncementsPanel = () => {
 
   return (
     <Widget title={<FormattedMessage id='announcements.title' defaultMessage='Announcements' />}>
-      <Card className='relative black:rounded-xl black:border black:border-gray-800' size='md' variant='rounded'>
+      <Card
+        className='relative black:rounded-xl black:border black:border-gray-800'
+        size='md'
+        variant='rounded'
+      >
         <ReactSwipeableViews animateHeight index={index} onChangeIndex={handleChangeIndex}>
-          {announcements.map((announcement) => (
-            <Announcement
-              key={announcement.id}
-              announcement={announcement}
-              emojiMap={emojiMap}
-            />
-          )).toReversed()}
+          {announcements
+            .map((announcement) => (
+              <Announcement key={announcement.id} announcement={announcement} emojiMap={emojiMap} />
+            ))
+            .toReversed()}
         </ReactSwipeableViews>
         {announcements.length > 1 && (
           <HStack space={2} alignItems='center' justifyContent='center' className='relative'>
@@ -45,11 +51,11 @@ const AnnouncementsPanel = () => {
               <button
                 key={i}
                 tabIndex={0}
-                onClick={() =>{
+                onClick={() => {
                   setIndex(i);
                 }}
                 className={clsx({
-                  'w-2 h-2 rounded-full focus:ring-primary-600 focus:ring-2 focus:ring-offset-2': true,
+                  'h-2 w-2 rounded-full focus:ring-2 focus:ring-primary-600 focus:ring-offset-2': true,
                   'bg-gray-200 hover:bg-gray-300': i !== index,
                   'bg-primary-600': i === index,
                 })}

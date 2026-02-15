@@ -21,15 +21,14 @@ const NewGroupPanel = () => {
         </Text>
 
         <Text theme='muted' size='sm'>
-          <FormattedMessage id='new_group_panel.subtitle' defaultMessage="Can't find what you're looking for? Start your own private or public group." />
+          <FormattedMessage
+            id='new_group_panel.subtitle'
+            defaultMessage="Can't find what you're looking for? Start your own private or public group."
+          />
         </Text>
       </Stack>
 
-      <Button
-        onClick={createGroup}
-        theme='secondary'
-        block
-      >
+      <Button onClick={createGroup} theme='secondary' block>
         <FormattedMessage id='new_group_panel.action' defaultMessage='Create group' />
       </Button>
     </Stack>

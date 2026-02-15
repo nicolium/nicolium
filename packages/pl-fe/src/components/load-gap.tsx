@@ -16,12 +16,17 @@ interface ILoadGap {
 const LoadGap: React.FC<ILoadGap> = ({ disabled, maxId, onClick }) => {
   const intl = useIntl();
 
-  const handleClick = () =>{
+  const handleClick = () => {
     onClick(maxId);
   };
 
   return (
-    <button className='m-0 box-border block w-full border-0 bg-transparent p-4 text-gray-900' disabled={disabled} onClick={handleClick} aria-label={intl.formatMessage(messages.load_more)}>
+    <button
+      className='m-0 box-border block w-full border-0 bg-transparent p-4 text-gray-900'
+      disabled={disabled}
+      onClick={handleClick}
+      aria-label={intl.formatMessage(messages.load_more)}
+    >
       <Icon className='mx-auto' src={require('@phosphor-icons/core/regular/dots-three.svg')} />
     </button>
   );

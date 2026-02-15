@@ -30,10 +30,15 @@ const AwaitingApproval: React.FC = () => {
         scrollKey='awaitingApproval'
         isLoading={isFetching}
         showLoading={isPending}
-        emptyMessageText={<FormattedMessage id='admin.awaiting_approval.empty_message' defaultMessage='There is nobody waiting for approval. When a new user signs up, you can review them here.' />}
+        emptyMessageText={
+          <FormattedMessage
+            id='admin.awaiting_approval.empty_message'
+            defaultMessage='There is nobody waiting for approval. When a new user signs up, you can review them here.'
+          />
+        }
         listClassName='⁂-status-list'
       >
-        {accountIds.map(id => (
+        {accountIds.map((id) => (
           <div key={id} className='px-5 py-4'>
             <UnapprovedAccount accountId={id} />
           </div>

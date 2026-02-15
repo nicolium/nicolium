@@ -16,9 +16,15 @@ const useStatusHistory = (statusId: string) => {
 
   return useQuery({
     queryKey: ['statuses', 'history', statusId],
-    queryFn: () => client.statuses.getStatusHistory(statusId)
-      .then(history => (dispatch(importEntities({ accounts: history.map(({ account }) => account) })), history))
-      .then(history => history.map(minifyStatusEdit)),
+    queryFn: () =>
+      client.statuses
+        .getStatusHistory(statusId)
+        .then(
+          (history) => (
+            dispatch(importEntities({ accounts: history.map(({ account }) => account) })), history
+          ),
+        )
+        .then((history) => history.map(minifyStatusEdit)),
   });
 };
 

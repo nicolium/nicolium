@@ -25,16 +25,31 @@ const ListEditorModal: React.FC<BaseModalProps & ListEditorModalProps> = ({ list
 
   return (
     <Modal
-      title={tab === 'info' ? <FormattedMessage id='lists.edit' defaultMessage='Edit list' /> : <FormattedMessage id='lists.manage_members' defaultMessage='Manage list members' />}
+      title={
+        tab === 'info' ? (
+          <FormattedMessage id='lists.edit' defaultMessage='Edit list' />
+        ) : (
+          <FormattedMessage id='lists.manage_members' defaultMessage='Manage list members' />
+        )
+      }
       onClose={onClickClose}
-      onBack={tab === 'members' ? () =>{
-        setTab('info');
-      } : undefined}
+      onBack={
+        tab === 'members'
+          ? () => {
+              setTab('info');
+            }
+          : undefined
+      }
     >
-      {isFetched ? (tab === 'info'
-        ? <EditListForm listId={listId} onTabChange={setTab} />
-        : <ListMembersForm listId={listId} />
-      ) : <Spinner />}
+      {isFetched ? (
+        tab === 'info' ? (
+          <EditListForm listId={listId} onTabChange={setTab} />
+        ) : (
+          <ListMembersForm listId={listId} />
+        )
+      ) : (
+        <Spinner />
+      )}
     </Modal>
   );
 };

@@ -32,59 +32,74 @@ const Results = ({ accountSearchResult, onSelect, parentRef }: IResults) => {
     }
   };
 
-  const renderAccount = useCallback((account: Account) => (
-    <button
-      key={account.id}
-      type='button'
-      className='flex w-full flex-col rounded-lg px-2 py-3 hover:bg-gray-100 dark:hover:bg-gray-800'
-      onClick={() =>{
-        onSelect(account.id);
-      }}
-      data-testid='account'
-    >
-      <HStack alignItems='center' space={2}>
-        <Avatar src={account.avatar} alt={account.avatar_description} size={40} isCat={account.is_cat} username={account.username} />
+  const renderAccount = useCallback(
+    (account: Account) => (
+      <button
+        key={account.id}
+        type='button'
+        className='flex w-full flex-col rounded-lg px-2 py-3 hover:bg-gray-100 dark:hover:bg-gray-800'
+        onClick={() => {
+          onSelect(account.id);
+        }}
+        data-testid='account'
+      >
+        <HStack alignItems='center' space={2}>
+          <Avatar
+            src={account.avatar}
+            alt={account.avatar_description}
+            size={40}
+            isCat={account.is_cat}
+            username={account.username}
+          />
 
-        <Stack alignItems='start'>
-          <div className='flex grow items-center space-x-1'>
-            <Text weight='bold' size='sm' truncate>{account.display_name}</Text>
-            {account.verified && <VerificationBadge />}
-          </div>
-          <Text size='sm' weight='medium' theme='muted' direction='ltr' truncate>@{account.acct}</Text>
-        </Stack>
-      </HStack>
-    </button>
-  ), []);
+          <Stack alignItems='start'>
+            <div className='flex grow items-center space-x-1'>
+              <Text weight='bold' size='sm' truncate>
+                {account.display_name}
+              </Text>
+              {account.verified && <VerificationBadge />}
+            </div>
+            <Text size='sm' weight='medium' theme='muted' direction='ltr' truncate>
+              @{account.acct}
+            </Text>
+          </Stack>
+        </HStack>
+      </button>
+    ),
+    [],
+  );
 
   return (
     <div className='relative grow'>
       <Virtuoso
         data={accounts}
-        itemContent={(_index, chat) => (
-          <div className='px-2'>
-            {renderAccount(chat)}
-          </div>
-        )}
+        itemContent={(_index, chat) => <div className='px-2'>{renderAccount(chat)}</div>}
         endReached={handleLoadMore}
-        atTopStateChange={(atTop) =>{
+        atTopStateChange={(atTop) => {
           setNearTop(atTop);
         }}
-        atBottomStateChange={(atBottom) =>{
+        atBottomStateChange={(atBottom) => {
           setNearBottom(atBottom);
         }}
       />
 
       <div
-        className={clsx('pointer-events-none absolute inset-x-0 top-[58px] flex justify-center rounded-t-lg bg-gradient-to-b from-white to-transparent pb-12 pt-8 transition-opacity duration-500 black:from-black dark:from-gray-900', {
-          'opacity-0': isNearTop,
-          'opacity-100': !isNearTop,
-        })}
+        className={clsx(
+          'pointer-events-none absolute inset-x-0 top-[58px] flex justify-center rounded-t-lg bg-gradient-to-b from-white to-transparent pb-12 pt-8 transition-opacity duration-500 black:from-black dark:from-gray-900',
+          {
+            'opacity-0': isNearTop,
+            'opacity-100': !isNearTop,
+          },
+        )}
       />
       <div
-        className={clsx('pointer-events-none absolute inset-x-0 bottom-0 flex justify-center rounded-b-lg bg-gradient-to-t from-white to-transparent pb-8 pt-12 transition-opacity duration-500 black:from-black dark:from-gray-900', {
-          'opacity-0': isNearBottom,
-          'opacity-100': !isNearBottom,
-        })}
+        className={clsx(
+          'pointer-events-none absolute inset-x-0 bottom-0 flex justify-center rounded-b-lg bg-gradient-to-t from-white to-transparent pb-8 pt-12 transition-opacity duration-500 black:from-black dark:from-gray-900',
+          {
+            'opacity-0': isNearBottom,
+            'opacity-100': !isNearBottom,
+          },
+        )}
       />
     </div>
   );

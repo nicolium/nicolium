@@ -2,7 +2,10 @@
 // NB: This function can still return unsafe HTML
 const unescapeHTML = (html: string = ''): string => {
   const wrapper = document.createElement('div');
-  wrapper.innerHTML = html.replace(/<br\s*\/?>/g, '\n').replace(/<\/p><[^>]*>/g, '\n\n').replace(/<[^>]*>/g, '');
+  wrapper.innerHTML = html
+    .replace(/<br\s*\/?>/g, '\n')
+    .replace(/<\/p><[^>]*>/g, '\n\n')
+    .replace(/<[^>]*>/g, '');
   return wrapper.textContent || '';
 };
 
@@ -14,7 +17,4 @@ const stripHTML = (html: string) => {
   return div.textContent || div.innerText || '';
 };
 
-export {
-  unescapeHTML,
-  stripHTML,
-};
+export { unescapeHTML, stripHTML };

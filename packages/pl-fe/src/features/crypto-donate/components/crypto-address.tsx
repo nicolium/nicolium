@@ -47,16 +47,11 @@ const CryptoAddress: React.FC<ICryptoAddress> = (props): JSX.Element => {
         </HStack>
       </HStack>
 
-      {note && (
-        <Text>{note}</Text>
-      )}
+      {note && <Text>{note}</Text>}
 
       <CopyableInput value={address} />
     </Stack>
   );
 };
 
-export {
-  type ICryptoAddress,
-  CryptoAddress as default,
-};
+export { type ICryptoAddress, CryptoAddress as default };

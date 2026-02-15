@@ -25,7 +25,7 @@ const HomeTimelinePage: React.FC = () => {
 
   const polling = useRef<NodeJS.Timeout | null>(null);
 
-  const isPartial = useAppSelector(state =>  state.timelines.home?.isPartial);
+  const isPartial = useAppSelector((state) => state.timelines.home?.isPartial);
 
   // Mastodon generates the feed in Redis, and can return a partial timeline
   // (HTTP 206) for new users. Poll until we get a full page of results.
@@ -85,8 +85,14 @@ const HomeTimelinePage: React.FC = () => {
                     defaultMessage='Or you can visit {public} to get started and meet other users.'
                     values={{
                       public: (
-                        <Link to='/timeline/local' className='text-primary-600 hover:underline dark:text-primary-400'>
-                          <FormattedMessage id='empty_column.home.local_tab' defaultMessage='the Local tab' />
+                        <Link
+                          to='/timeline/local'
+                          className='text-primary-600 hover:underline dark:text-primary-400'
+                        >
+                          <FormattedMessage
+                            id='empty_column.home.local_tab'
+                            defaultMessage='the Local tab'
+                          />
                         </Link>
                       ),
                     }}

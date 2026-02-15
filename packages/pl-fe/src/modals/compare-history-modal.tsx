@@ -18,10 +18,13 @@ interface CompareHistoryModalProps {
   statusId: string;
 }
 
-const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> = ({ onClose, statusId }) => {
+const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> = ({
+  onClose,
+  statusId,
+}) => {
   const { data: versions, isLoading } = useStatusHistory(statusId);
 
-  const status = useAppSelector(state => state.statuses[statusId]);
+  const status = useAppSelector((state) => state.statuses[statusId]);
 
   const onClickClose = () => {
     onClose('COMPARE_HISTORY');
@@ -35,7 +38,15 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
     body = (
       <div className='⁂-status-list'>
         {versions?.map((version) => {
-          const content = <ParsedContent html={version.content} mentions={status?.mentions} hasQuote={!!status?.quote_id} emojis={version.emojis} speakAsCat={status.account.speak_as_cat} />;
+          const content = (
+            <ParsedContent
+              html={version.content}
+              mentions={status?.mentions}
+              hasQuote={!!status?.quote_id}
+              emojis={version.emojis}
+              speakAsCat={status.account.speak_as_cat}
+            />
+          );
 
           const poll = typeof version.poll !== 'string' && version.poll;
 
@@ -50,9 +61,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
                 </>
               )}
 
-              <div className='status__content'>
-                {content}
-              </div>
+              <div className='status__content'>{content}</div>
 
               {poll && (
                 <div className='poll'>
@@ -66,7 +75,11 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
                         />
 
                         <span>
-                          <ParsedContent html={option.title} emojis={version.emojis} speakAsCat={status.account.speak_as_cat} />
+                          <ParsedContent
+                            html={option.title}
+                            emojis={version.emojis}
+                            speakAsCat={status.account.speak_as_cat}
+                          />
                         </span>
                       </HStack>
                     ))}
@@ -74,12 +87,18 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
                 </div>
               )}
 
-              {version.media_attachments.length > 0 && (
-                <AttachmentThumbs status={version} />
-              )}
+              {version.media_attachments.length > 0 && <AttachmentThumbs status={version} />}
 
               <Text align='right' tag='span' theme='muted' size='sm'>
-                <FormattedDate value={new Date(version.created_at)} hour12 year='numeric' month='short' day='2-digit' hour='numeric' minute='2-digit' />
+                <FormattedDate
+                  value={new Date(version.created_at)}
+                  hour12
+                  year='numeric'
+                  month='short'
+                  day='2-digit'
+                  hour='numeric'
+                  minute='2-digit'
+                />
               </Text>
             </Stack>
           );

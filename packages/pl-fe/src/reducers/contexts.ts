@@ -2,7 +2,11 @@ import { create } from 'mutative';
 
 import { STATUS_IMPORT, STATUSES_IMPORT, type ImporterAction } from '@/actions/importer';
 
-import { ACCOUNT_BLOCK_SUCCESS, ACCOUNT_MUTE_SUCCESS, type AccountsAction } from '../actions/accounts';
+import {
+  ACCOUNT_BLOCK_SUCCESS,
+  ACCOUNT_MUTE_SUCCESS,
+  type AccountsAction,
+} from '../actions/accounts';
 import {
   CONTEXT_FETCH_SUCCESS,
   STATUS_CREATE_REQUEST,
@@ -24,7 +28,11 @@ const initialState: State = {
 };
 
 /** Import a single status into the reducer, setting replies and replyTos. */
-const importStatus = (state: State, status: Pick<Status, 'id' | 'in_reply_to_id'>, idempotencyKey?: string) => {
+const importStatus = (
+  state: State,
+  status: Pick<Status, 'id' | 'in_reply_to_id'>,
+  idempotencyKey?: string,
+) => {
   const { id, in_reply_to_id: inReplyToId } = status;
   if (!inReplyToId) return;
 
@@ -40,8 +48,8 @@ const importStatus = (state: State, status: Pick<Status, 'id' | 'in_reply_to_id'
 };
 
 /** Import multiple statuses into the state. */
-const importStatuses = (state: State, statuses: Array<Pick<Status, 'id' | 'in_reply_to_id'>>) =>{
-  statuses.forEach(status =>{
+const importStatuses = (state: State, statuses: Array<Pick<Status, 'id' | 'in_reply_to_id'>>) => {
+  statuses.forEach((status) => {
     importStatus(state, status);
   });
 };
@@ -74,14 +82,19 @@ const connectNodes = (state: State, fromId: string, toId: string) => {
   const toRoot = getRootNode(state, toId);
 
   if (fromRoot !== toRoot) {
-    insertTombstone(state, toId, fromId); return;
+    insertTombstone(state, toId, fromId);
+    return;
   } else {
     return state;
   }
 };
 
 /** Import a branch of ancestors or descendants, in relation to statusId. */
-const importBranch = (state: State, statuses: Array<Pick<Status, 'id' | 'in_reply_to_id'>>, statusId?: string) =>{
+const importBranch = (
+  state: State,
+  statuses: Array<Pick<Status, 'id' | 'in_reply_to_id'>>,
+  statusId?: string,
+) => {
   statuses.forEach((status, i) => {
     const prevId = statusId && i === 0 ? statusId : (statuses[i - 1] || {}).id;
 
@@ -122,21 +135,21 @@ const deleteStatus = (state: State, statusId: string) => {
   const parentId = state.inReplyTos[statusId];
   if (parentId) {
     const parentReplies = state.replies[parentId] || [];
-    const newParentReplies = parentReplies.filter(id => id !== statusId);
+    const newParentReplies = parentReplies.filter((id) => id !== statusId);
     state.replies[parentId] = newParentReplies;
   }
 
   // Dereference children
-  const replies = state.replies[statusId] = [];
-  replies.forEach(reply => delete state.inReplyTos[reply]);
+  const replies = (state.replies[statusId] = []);
+  replies.forEach((reply) => delete state.inReplyTos[reply]);
 
   delete state.inReplyTos[statusId];
   delete state.replies[statusId];
 };
 
 /** Delete multiple statuses from the reducer. */
-const deleteStatuses = (state: State, statusIds: string[]) =>{
-  statusIds.forEach(statusId =>{
+const deleteStatuses = (state: State, statusIds: string[]) => {
+  statusIds.forEach((statusId) => {
     deleteStatus(state, statusId);
   });
 };
@@ -149,61 +162,76 @@ const filterContexts = (
   statuses: Record<string, Pick<Status, 'account' | 'id'>>,
 ) => {
   const ownedStatusIds = Object.values(statuses)
-    .filter(status => status.account.id === relationship.id)
-    .map(status => status.id);
+    .filter((status) => status.account.id === relationship.id)
+    .map((status) => status.id);
 
   deleteStatuses(state, ownedStatusIds);
 };
 
 /** Add a fake status ID for a pending status. */
-const importPendingStatus = (state: State, inReplyToId: string | null | undefined, idempotencyKey: string) => {
+const importPendingStatus = (
+  state: State,
+  inReplyToId: string | null | undefined,
+  idempotencyKey: string,
+) => {
   const id = `末pending-${idempotencyKey}`;
   importStatus(state, { id, in_reply_to_id: inReplyToId ?? null });
 };
 
 /** Delete a pending status from the reducer. */
-const deletePendingStatus = (state: State, inReplyToId: string | null | undefined, idempotencyKey: string) => {
+const deletePendingStatus = (
+  state: State,
+  inReplyToId: string | null | undefined,
+  idempotencyKey: string,
+) => {
   const id = `末pending-${idempotencyKey}`;
 
   delete state.inReplyTos[id];
 
   if (inReplyToId) {
     const replies = state.replies[inReplyToId] || [];
-    const newReplies = replies.filter(replyId => replyId !== id).toSorted();
+    const newReplies = replies.filter((replyId) => replyId !== id).toSorted();
     state.replies[inReplyToId] = newReplies;
   }
 };
 
 /** Contexts reducer. Used for building a nested tree structure for threads. */
-const replies = (state = initialState, action: AccountsAction | ImporterAction | StatusesAction | TimelineAction): State => {
+const replies = (
+  state = initialState,
+  action: AccountsAction | ImporterAction | StatusesAction | TimelineAction,
+): State => {
   switch (action.type) {
     case ACCOUNT_BLOCK_SUCCESS:
     case ACCOUNT_MUTE_SUCCESS:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         filterContexts(draft, action.relationship, action.statuses);
       });
     case CONTEXT_FETCH_SUCCESS:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         normalizeContext(draft, action.statusId, action.ancestors, action.descendants);
       });
     case TIMELINE_DELETE:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         deleteStatuses(draft, [action.statusId]);
       });
     case STATUS_CREATE_REQUEST:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         importPendingStatus(draft, action.params.in_reply_to_id, action.idempotencyKey);
       });
     case STATUS_CREATE_SUCCESS:
-      return create(state, (draft) =>{
-        deletePendingStatus(draft, 'in_reply_to_id' in action.status ? action.status.in_reply_to_id : null, action.idempotencyKey);
+      return create(state, (draft) => {
+        deletePendingStatus(
+          draft,
+          'in_reply_to_id' in action.status ? action.status.in_reply_to_id : null,
+          action.idempotencyKey,
+        );
       });
     case STATUS_IMPORT:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         importStatus(draft, action.status, action.idempotencyKey);
       });
     case STATUSES_IMPORT:
-      return create(state, (draft) =>{
+      return create(state, (draft) => {
         importStatuses(draft, action.statuses);
       });
     default:
@@ -211,6 +239,4 @@ const replies = (state = initialState, action: AccountsAction | ImporterAction |
   }
 };
 
-export {
-  replies as default,
-};
+export { replies as default };

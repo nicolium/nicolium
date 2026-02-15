@@ -10,7 +10,10 @@ interface DropdownMenuModalProps {
   content?: JSX.Element;
 }
 
-const DropdownMenuModal: React.FC<BaseModalProps & DropdownMenuModalProps> = ({ content, onClose }) => {
+const DropdownMenuModal: React.FC<BaseModalProps & DropdownMenuModalProps> = ({
+  content,
+  onClose,
+}) => {
   const handleClick: React.MouseEventHandler<HTMLElement> = (e) => {
     onClose('DROPDOWN_MENU');
     e.stopPropagation();

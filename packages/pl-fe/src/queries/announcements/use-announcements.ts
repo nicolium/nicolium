@@ -5,20 +5,37 @@ import * as v from 'valibot';
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
 
-const updateReaction = (reaction: AnnouncementReaction, count: number, me?: boolean, overwrite?: boolean) => v.parse(announcementReactionSchema, {
-  ...reaction,
-  me: typeof me === 'boolean' ? me : reaction.me,
-  count: overwrite ? count : (reaction.count + count),
-});
+const updateReaction = (
+  reaction: AnnouncementReaction,
+  count: number,
+  me?: boolean,
+  overwrite?: boolean,
+) =>
+  v.parse(announcementReactionSchema, {
+    ...reaction,
+    me: typeof me === 'boolean' ? me : reaction.me,
+    count: overwrite ? count : reaction.count + count,
+  });
 
-const updateReactions = (reactions: AnnouncementReaction[], name: string, count: number, me?: boolean, overwrite?: boolean) => {
-  const idx = reactions.findIndex(reaction => reaction.name === name);
+const updateReactions = (
+  reactions: AnnouncementReaction[],
+  name: string,
+  count: number,
+  me?: boolean,
+  overwrite?: boolean,
+) => {
+  const idx = reactions.findIndex((reaction) => reaction.name === name);
 
   if (idx > -1) {
-    return reactions.map(reaction => reaction.name === name ? updateReaction(reaction, count, me, overwrite) : reaction);
+    return reactions.map((reaction) =>
+      reaction.name === name ? updateReaction(reaction, count, me, overwrite) : reaction,
+    );
   }
 
-  return [...reactions, updateReaction(v.parse(announcementReactionSchema, { name }), count, me, overwrite)];
+  return [
+    ...reactions,
+    updateReaction(v.parse(announcementReactionSchema, { name }), count, me, overwrite),
+  ];
 };
 
 const useAnnouncements = () => {
@@ -30,50 +47,62 @@ const useAnnouncements = () => {
     placeholderData: [],
   });
 
-  const {
-    mutate: addReaction,
-  } = useMutation({
+  const { mutate: addReaction } = useMutation({
     mutationFn: ({ announcementId, name }: { announcementId: string; name: string }) =>
       client.announcements.addAnnouncementReaction(announcementId, name),
     retry: false,
     onMutate: ({ announcementId: id, name }) => {
       queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-        prevResult.map(value => value.id !== id ? value : {
-          ...value,
-          reactions: updateReactions(value.reactions, name, 1, true),
-        }),
+        prevResult.map((value) =>
+          value.id !== id
+            ? value
+            : {
+                ...value,
+                reactions: updateReactions(value.reactions, name, 1, true),
+              },
+        ),
       );
     },
     onError: (_, { announcementId: id, name }) => {
       queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-        prevResult.map(value => value.id !== id ? value : {
-          ...value,
-          reactions: updateReactions(value.reactions, name, -1, false),
-        }),
+        prevResult.map((value) =>
+          value.id !== id
+            ? value
+            : {
+                ...value,
+                reactions: updateReactions(value.reactions, name, -1, false),
+              },
+        ),
       );
     },
   });
 
-  const {
-    mutate: removeReaction,
-  } = useMutation({
+  const { mutate: removeReaction } = useMutation({
     mutationFn: ({ announcementId, name }: { announcementId: string; name: string }) =>
       client.announcements.deleteAnnouncementReaction(announcementId, name),
     retry: false,
     onMutate: ({ announcementId: id, name }) => {
       queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-        prevResult.map(value => value.id !== id ? value : {
-          ...value,
-          reactions: updateReactions(value.reactions, name, -1, false),
-        }),
+        prevResult.map((value) =>
+          value.id !== id
+            ? value
+            : {
+                ...value,
+                reactions: updateReactions(value.reactions, name, -1, false),
+              },
+        ),
       );
     },
     onError: (_, { announcementId: id, name }) => {
       queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-        prevResult.map(value => value.id !== id ? value : {
-          ...value,
-          reactions: updateReactions(value.reactions, name, 1, true),
-        }),
+        prevResult.map((value) =>
+          value.id !== id
+            ? value
+            : {
+                ...value,
+                reactions: updateReactions(value.reactions, name, 1, true),
+              },
+        ),
       );
     },
   });
@@ -87,6 +116,7 @@ const useAnnouncements = () => {
 };
 
 const compareAnnouncements = (a: Announcement, b: Announcement): number =>
-  new Date(a.starts_at ?? a.published_at).getTime() - new Date(b.starts_at ?? b.published_at).getTime();
+  new Date(a.starts_at ?? a.published_at).getTime() -
+  new Date(b.starts_at ?? b.published_at).getTime();
 
 export { updateReactions, useAnnouncements };

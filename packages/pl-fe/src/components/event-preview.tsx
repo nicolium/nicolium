@@ -18,7 +18,11 @@ import type { Status as StatusEntity } from '@/normalizers/status';
 const messages = defineMessages({
   eventBanner: { id: 'event.banner', defaultMessage: 'Event banner' },
   leaveConfirm: { id: 'confirmations.leave_event.confirm', defaultMessage: 'Leave event' },
-  leaveMessage: { id: 'confirmations.leave_event.message', defaultMessage: 'If you want to rejoin the event, the request will be manually reviewed again. Are you sure you want to proceed?' },
+  leaveMessage: {
+    id: 'confirmations.leave_event.message',
+    defaultMessage:
+      'If you want to rejoin the event, the request will be manually reviewed again. Are you sure you want to proceed?',
+  },
 });
 
 interface IEventPreview {
@@ -28,7 +32,12 @@ interface IEventPreview {
   floatingAction?: boolean;
 }
 
-const EventPreview: React.FC<IEventPreview> = ({ status, className, hideAction, floatingAction = true }) => {
+const EventPreview: React.FC<IEventPreview> = ({
+  status,
+  className,
+  hideAction,
+  floatingAction = true,
+}) => {
   const intl = useIntl();
 
   const me = useAppSelector((state) => state.me);
@@ -38,33 +47,43 @@ const EventPreview: React.FC<IEventPreview> = ({ status, className, hideAction, 
 
   const banner = event.banner;
 
-  const action = !hideAction && (account.id === me ? (
-    <Button
-      size='sm'
-      theme={floatingAction ? 'secondary' : 'primary'}
-      to='/@{$username}/events/$statusId/edit'
-      params={{ username: account.acct, statusId: status.id }}
-    >
-      <FormattedMessage id='event.manage' defaultMessage='Manage' />
-    </Button>
-  ) : (
-    <EventActionButton
-      status={status}
-      theme={floatingAction ? 'secondary' : 'primary'}
-    />
-  ));
+  const action =
+    !hideAction &&
+    (account.id === me ? (
+      <Button
+        size='sm'
+        theme={floatingAction ? 'secondary' : 'primary'}
+        to='/@{$username}/events/$statusId/edit'
+        params={{ username: account.acct, statusId: status.id }}
+      >
+        <FormattedMessage id='event.manage' defaultMessage='Manage' />
+      </Button>
+    ) : (
+      <EventActionButton status={status} theme={floatingAction ? 'secondary' : 'primary'} />
+    ));
 
   return (
-    <div className={clsx('relative w-full overflow-hidden rounded-lg bg-gray-100 black:border black:border-gray-800 black:bg-black dark:bg-primary-800', className)}>
-      <div className='absolute right-3 top-28'>
-        {floatingAction && action}
-      </div>
+    <div
+      className={clsx(
+        'relative w-full overflow-hidden rounded-lg bg-gray-100 black:border black:border-gray-800 black:bg-black dark:bg-primary-800',
+        className,
+      )}
+    >
+      <div className='absolute right-3 top-28'>{floatingAction && action}</div>
       <div className='h-40 bg-primary-200 dark:bg-gray-600'>
-        {banner && <img className='size-full object-cover' src={banner.url} alt={intl.formatMessage(messages.eventBanner)} />}
+        {banner && (
+          <img
+            className='size-full object-cover'
+            src={banner.url}
+            alt={intl.formatMessage(messages.eventBanner)}
+          />
+        )}
       </div>
       <Stack className='p-2.5' space={2}>
         <HStack space={2} alignItems='center' justifyContent='between'>
-          <Text weight='semibold' truncate>{event.name}</Text>
+          <Text weight='semibold' truncate>
+            {event.name}
+          </Text>
 
           {!floatingAction && action}
         </HStack>
@@ -85,9 +104,7 @@ const EventPreview: React.FC<IEventPreview> = ({ status, className, hideAction, 
           {event.location && (
             <HStack alignItems='center' space={2}>
               <Icon src={require('@phosphor-icons/core/regular/map-pin.svg')} />
-              <span>
-                {event.location.name}
-              </span>
+              <span>{event.location.name}</span>
             </HStack>
           )}
         </div>

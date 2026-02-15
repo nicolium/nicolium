@@ -14,11 +14,10 @@ const Hotkey: React.FC<{ children: React.ReactNode }> = ({ children }) => (
   </kbd>
 );
 
-const TableCell: React.FC<{ className?: string; children: React.ReactNode }> = ({ className, children }) => (
-  <td className={clsx(className, 'px-2 pb-3')}>
-    {children}
-  </td>
-);
+const TableCell: React.FC<{ className?: string; children: React.ReactNode }> = ({
+  className,
+  children,
+}) => <td className={clsx(className, 'px-2 pb-3')}>{children}</td>;
 
 const getColumnSizes = (n: number) => {
   let part1 = Math.ceil(n / 3);
@@ -47,26 +46,38 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
     },
     isLoggedIn && {
       key: <Hotkey>m</Hotkey>,
-      label: <FormattedMessage id='keyboard_shortcuts.mention' defaultMessage='to mention author' />,
+      label: (
+        <FormattedMessage id='keyboard_shortcuts.mention' defaultMessage='to mention author' />
+      ),
     },
     {
       key: <Hotkey>p</Hotkey>,
-      label: <FormattedMessage id='keyboard_shortcuts.profile' defaultMessage="to open author's profile" />,
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.profile'
+          defaultMessage="to open author's profile"
+        />
+      ),
     },
     isLoggedIn && {
       key: <Hotkey>f</Hotkey>,
       label: <FormattedMessage id='keyboard_shortcuts.favourite' defaultMessage='to like' />,
     },
-    isLoggedIn && features.emojiReacts && {
-      key: <Hotkey>e</Hotkey>,
-      label: <FormattedMessage id='keyboard_shortcuts.react' defaultMessage='to react' />,
-    },
+    isLoggedIn &&
+      features.emojiReacts && {
+        key: <Hotkey>e</Hotkey>,
+        label: <FormattedMessage id='keyboard_shortcuts.react' defaultMessage='to react' />,
+      },
     isLoggedIn && {
       key: <Hotkey>b</Hotkey>,
       label: <FormattedMessage id='keyboard_shortcuts.boost' defaultMessage='to repost' />,
     },
     {
-      key: <><Hotkey>enter</Hotkey>, <Hotkey>o</Hotkey></>,
+      key: (
+        <>
+          <Hotkey>enter</Hotkey>, <Hotkey>o</Hotkey>
+        </>
+      ),
       label: <FormattedMessage id='keyboard_shortcuts.enter' defaultMessage='to open post' />,
     },
     {
@@ -75,26 +86,57 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
     },
     features.spoilers && {
       key: <Hotkey>x</Hotkey>,
-      label: <FormattedMessage id='keyboard_shortcuts.toggle_hidden' defaultMessage='to show/hide text behind CW' />,
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.toggle_hidden'
+          defaultMessage='to show/hide text behind CW'
+        />
+      ),
     },
     features.spoilers && {
       key: <Hotkey>h</Hotkey>,
-      label: <FormattedMessage id='keyboard_shortcuts.toggle_sensitivity' defaultMessage='to show/hide media' />,
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.toggle_sensitivity'
+          defaultMessage='to show/hide media'
+        />
+      ),
     },
     {
-      key: <><Hotkey>up</Hotkey>, <Hotkey>k</Hotkey></>,
-      label: <FormattedMessage id='keyboard_shortcuts.up' defaultMessage='to move up in the list' />,
+      key: (
+        <>
+          <Hotkey>up</Hotkey>, <Hotkey>k</Hotkey>
+        </>
+      ),
+      label: (
+        <FormattedMessage id='keyboard_shortcuts.up' defaultMessage='to move up in the list' />
+      ),
     },
     {
-      key: <><Hotkey>down</Hotkey>, <Hotkey>j</Hotkey></>,
-      label: <FormattedMessage id='keyboard_shortcuts.down' defaultMessage='to move down in the list' />,
+      key: (
+        <>
+          <Hotkey>down</Hotkey>, <Hotkey>j</Hotkey>
+        </>
+      ),
+      label: (
+        <FormattedMessage id='keyboard_shortcuts.down' defaultMessage='to move down in the list' />
+      ),
     },
     isLoggedIn && {
       key: <Hotkey>n</Hotkey>,
-      label: <FormattedMessage id='keyboard_shortcuts.compose' defaultMessage='to open the compose textarea' />,
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.compose'
+          defaultMessage='to open the compose textarea'
+        />
+      ),
     },
     isLoggedIn && {
-      key: <><Hotkey>alt</Hotkey> + <Hotkey>n</Hotkey></>,
+      key: (
+        <>
+          <Hotkey>alt</Hotkey> + <Hotkey>n</Hotkey>
+        </>
+      ),
       label: <FormattedMessage id='keyboard_shortcuts.toot' defaultMessage='to start a new post' />,
     },
     {
@@ -102,53 +144,123 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
       label: <FormattedMessage id='keyboard_shortcuts.back' defaultMessage='to navigate back' />,
     },
     isLoggedIn && {
-      key: <><Hotkey>s</Hotkey>, <Hotkey>/</Hotkey></>,
+      key: (
+        <>
+          <Hotkey>s</Hotkey>, <Hotkey>/</Hotkey>
+        </>
+      ),
       label: <FormattedMessage id='keyboard_shortcuts.search' defaultMessage='to focus search' />,
     },
     {
       key: <Hotkey>esc</Hotkey>,
-      label: <FormattedMessage id='keyboard_shortcuts.unfocus' defaultMessage='to un-focus compose textarea/search' />,
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.unfocus'
+          defaultMessage='to un-focus compose textarea/search'
+        />
+      ),
     },
     isLoggedIn && {
-      key: <><Hotkey>g</Hotkey> + <Hotkey>h</Hotkey></>,
-      label: <FormattedMessage id='keyboard_shortcuts.home' defaultMessage='to open home timeline' />,
+      key: (
+        <>
+          <Hotkey>g</Hotkey> + <Hotkey>h</Hotkey>
+        </>
+      ),
+      label: (
+        <FormattedMessage id='keyboard_shortcuts.home' defaultMessage='to open home timeline' />
+      ),
     },
     isLoggedIn && {
-      key: <><Hotkey>g</Hotkey> + <Hotkey>n</Hotkey></>,
-      label: <FormattedMessage id='keyboard_shortcuts.notifications' defaultMessage='to open notifications list' />,
+      key: (
+        <>
+          <Hotkey>g</Hotkey> + <Hotkey>n</Hotkey>
+        </>
+      ),
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.notifications'
+          defaultMessage='to open notifications list'
+        />
+      ),
     },
     isLoggedIn && {
-      key: <><Hotkey>g</Hotkey> + <Hotkey>f</Hotkey></>,
-      label: <FormattedMessage id='keyboard_shortcuts.favourites' defaultMessage='to open likes list' />,
+      key: (
+        <>
+          <Hotkey>g</Hotkey> + <Hotkey>f</Hotkey>
+        </>
+      ),
+      label: (
+        <FormattedMessage id='keyboard_shortcuts.favourites' defaultMessage='to open likes list' />
+      ),
     },
     isLoggedIn && {
-      key: <><Hotkey>g</Hotkey> + <Hotkey>u</Hotkey></>,
-      label: <FormattedMessage id='keyboard_shortcuts.my_profile' defaultMessage='to open your profile' />,
+      key: (
+        <>
+          <Hotkey>g</Hotkey> + <Hotkey>u</Hotkey>
+        </>
+      ),
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.my_profile'
+          defaultMessage='to open your profile'
+        />
+      ),
     },
     isLoggedIn && {
-      key: <><Hotkey>g</Hotkey> + <Hotkey>b</Hotkey></>,
-      label: <FormattedMessage id='keyboard_shortcuts.blocked' defaultMessage='to open blocked users list' />,
+      key: (
+        <>
+          <Hotkey>g</Hotkey> + <Hotkey>b</Hotkey>
+        </>
+      ),
+      label: (
+        <FormattedMessage
+          id='keyboard_shortcuts.blocked'
+          defaultMessage='to open blocked users list'
+        />
+      ),
     },
     isLoggedIn && {
-      key: <><Hotkey>g</Hotkey> + <Hotkey>m</Hotkey></>,
-      label: <FormattedMessage id='keyboard_shortcuts.muted' defaultMessage='to open muted users list' />,
+      key: (
+        <>
+          <Hotkey>g</Hotkey> + <Hotkey>m</Hotkey>
+        </>
+      ),
+      label: (
+        <FormattedMessage id='keyboard_shortcuts.muted' defaultMessage='to open muted users list' />
+      ),
     },
-    isLoggedIn && features.followRequests && {
-      key: <><Hotkey>g</Hotkey> + <Hotkey>r</Hotkey></>,
-      label: <FormattedMessage id='keyboard_shortcuts.requests' defaultMessage='to open follow requests list' />,
-    },
+    isLoggedIn &&
+      features.followRequests && {
+        key: (
+          <>
+            <Hotkey>g</Hotkey> + <Hotkey>r</Hotkey>
+          </>
+        ),
+        label: (
+          <FormattedMessage
+            id='keyboard_shortcuts.requests'
+            defaultMessage='to open follow requests list'
+          />
+        ),
+      },
     {
       key: <Hotkey>?</Hotkey>,
-      label: <FormattedMessage id='keyboard_shortcuts.legend' defaultMessage='to display this legend' />,
+      label: (
+        <FormattedMessage id='keyboard_shortcuts.legend' defaultMessage='to display this legend' />
+      ),
     },
-  ].filter(hotkey => hotkey !== false);
+  ].filter((hotkey) => hotkey !== false);
 
   const columnSizes = getColumnSizes(hotkeys.length);
 
-  const columns = columnSizes.reduce<Array<Array<{
-    key: JSX.Element;
-    label: JSX.Element;
-  }>>>((prev, cur) => {
+  const columns = columnSizes.reduce<
+    Array<
+      Array<{
+        key: JSX.Element;
+        label: JSX.Element;
+      }>
+    >
+  >((prev, cur) => {
     const addedItems = prev.flat().length;
     prev.push(hotkeys.slice(addedItems, addedItems + cur));
     return prev;
@@ -156,8 +268,10 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
 
   return (
     <Modal
-      title={<FormattedMessage id='keyboard_shortcuts.heading' defaultMessage='Keyboard shortcuts' />}
-      onClose={() =>{
+      title={
+        <FormattedMessage id='keyboard_shortcuts.heading' defaultMessage='Keyboard shortcuts' />
+      }
+      onClose={() => {
         onClose('HOTKEYS');
       }}
       className='⁂-hotkey-modal'
@@ -167,7 +281,9 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
           <table key={i}>
             <thead>
               <tr>
-                <th className='pb-2 font-bold'><FormattedMessage id='keyboard_shortcuts.hotkey' defaultMessage='Hotkey' /></th>
+                <th className='pb-2 font-bold'>
+                  <FormattedMessage id='keyboard_shortcuts.hotkey' defaultMessage='Hotkey' />
+                </th>
               </tr>
             </thead>
             <tbody>

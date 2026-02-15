@@ -18,7 +18,13 @@ const GroupGallery: React.FC = () => {
 
   const { group, isLoading: groupIsLoading } = useGroup(groupId);
 
-  const { data: attachments, isFetching, isLoading, hasNextPage, fetchNextPage } = useGroupGallery(groupId);
+  const {
+    data: attachments,
+    isFetching,
+    isLoading,
+    hasNextPage,
+    fetchNextPage,
+  } = useGroupGallery(groupId);
 
   const handleOpenMedia = (attachment: AccountGalleryAttachment) => {
     openModal('MEDIA', { index: attachment.index, statusId: attachment.status_id });
@@ -44,7 +50,10 @@ const GroupGallery: React.FC = () => {
 
   return (
     <Column label={group.display_name} transparent withHeader={false}>
-      <div role='feed' className='mt-4 grid grid-cols-2 gap-1 overflow-hidden rounded-md sm:grid-cols-3'>
+      <div
+        role='feed'
+        className='mt-4 grid grid-cols-2 gap-1 overflow-hidden rounded-md sm:grid-cols-3'
+      >
         {attachments.map((attachment, index) => (
           <MediaItem
             key={`${attachment.status_id}+${attachment.id}`}
@@ -54,7 +63,7 @@ const GroupGallery: React.FC = () => {
           />
         ))}
 
-        {(!isLoading && attachments.length === 0) && (
+        {!isLoading && attachments.length === 0 && (
           <div className='empty-column-indicator col-span-2 sm:col-span-3'>
             <FormattedMessage id='account_gallery.none' defaultMessage='No media to show.' />
           </div>
@@ -62,7 +71,11 @@ const GroupGallery: React.FC = () => {
       </div>
 
       {hasNextPage && (
-        <LoadMore className='mt-4' disabled={isFetching} onClick={() => fetchNextPage({ cancelRefetch: false })} />
+        <LoadMore
+          className='mt-4'
+          disabled={isFetching}
+          onClick={() => fetchNextPage({ cancelRefetch: false })}
+        />
       )}
     </Column>
   );

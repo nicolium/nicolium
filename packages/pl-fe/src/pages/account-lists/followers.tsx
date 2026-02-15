@@ -31,21 +31,20 @@ const FollowersPage: React.FC = () => {
   } = useFollowers(account?.id);
 
   if (isLoading) {
-    return (
-      <Spinner />
-    );
+    return <Spinner />;
   }
 
   if (!account) {
-    return (
-      <MissingIndicator />
-    );
+    return <MissingIndicator />;
   }
 
   if (isUnavailable) {
     return (
       <div className='empty-column-indicator'>
-        <FormattedMessage id='empty_column.account_unavailable' defaultMessage='Profile unavailable' />
+        <FormattedMessage
+          id='empty_column.account_unavailable'
+          defaultMessage='Profile unavailable'
+        />
       </div>
     );
   }
@@ -56,15 +55,17 @@ const FollowersPage: React.FC = () => {
         scrollKey='followers'
         hasMore={hasNextPage}
         onLoadMore={fetchNextPage}
-        emptyMessageText={<FormattedMessage id='account.followers.empty' defaultMessage='No one follows this user yet.' />}
+        emptyMessageText={
+          <FormattedMessage
+            id='account.followers.empty'
+            defaultMessage='No one follows this user yet.'
+          />
+        }
         itemClassName='pb-4'
         isLoading={isFetching}
       >
         {data.map((accountId) => (
-          <AccountContainer
-            key={accountId}
-            id={accountId}
-          />
+          <AccountContainer key={accountId} id={accountId} />
         ))}
       </ScrollableList>
     </Column>

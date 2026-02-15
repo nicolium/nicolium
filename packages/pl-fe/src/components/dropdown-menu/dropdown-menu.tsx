@@ -1,4 +1,13 @@
-import { arrow, autoUpdate, flip, offset, Placement, shift, size, useFloating } from '@floating-ui/react';
+import {
+  arrow,
+  autoUpdate,
+  flip,
+  offset,
+  Placement,
+  shift,
+  size,
+  useFloating,
+} from '@floating-ui/react';
 import clsx from 'clsx';
 import { supportsPassiveEvents } from 'detect-passive-events';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
@@ -43,7 +52,14 @@ interface IDropdownMenu {
 
 const listenerOptions = supportsPassiveEvents ? { passive: true } : false;
 
-const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, items, component: Component, touchscreen, width, className }) => {
+const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
+  handleClose,
+  items,
+  component: Component,
+  touchscreen,
+  width,
+  className,
+}) => {
   if (touchscreen) width = undefined;
 
   const intl = useIntl();
@@ -53,67 +69,73 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
 
   const autoFocus = items && !items.some((item) => item?.active);
 
-  const handleKeyDown = useMemo(() => (e: KeyboardEvent) => {
-    if (!ref.current) return;
+  const handleKeyDown = useMemo(
+    () => (e: KeyboardEvent) => {
+      if (!ref.current) return;
 
-    const elements = Array.from(ref.current.querySelectorAll('a, button'));
-    const index = elements.indexOf(document.activeElement as any);
+      const elements = Array.from(ref.current.querySelectorAll('a, button'));
+      const index = elements.indexOf(document.activeElement as any);
 
-    let element = null;
+      let element = null;
 
-    switch (e.key) {
-      case 'ArrowLeft':
-        setTab(tab => {
-          if (tab !== undefined) {
-            (elements[tab] as HTMLElement)?.focus();
-            return undefined;
-          }
-          return tab;
-        });
-        break;
-      case 'ArrowRight':
-        // eslint-disable-next-line no-case-declarations
-        const itemIndex = +(elements[index]?.getAttribute('data-index') ?? '');
+      switch (e.key) {
+        case 'ArrowLeft':
+          setTab((tab) => {
+            if (tab !== undefined) {
+              (elements[tab] as HTMLElement)?.focus();
+              return undefined;
+            }
+            return tab;
+          });
+          break;
+        case 'ArrowRight':
+          // eslint-disable-next-line no-case-declarations
+          const itemIndex = +(elements[index]?.getAttribute('data-index') ?? '');
 
-        if (items?.[itemIndex]?.items) setTab(itemIndex);
-        break;
-      case 'ArrowDown':
-        element = elements[index + 1] || elements[0];
-        break;
-      case 'ArrowUp':
-        element = elements[index - 1] || elements[elements.length - 1];
-        break;
-      case 'Tab':
-        if (e.shiftKey) {
-          element = elements[index - 1] || elements[elements.length - 1];
-        } else {
+          if (items?.[itemIndex]?.items) setTab(itemIndex);
+          break;
+        case 'ArrowDown':
           element = elements[index + 1] || elements[0];
-        }
-        break;
-      case 'Home':
-        element = elements[0];
-        break;
-      case 'End':
-        element = elements[elements.length - 1];
-        break;
-      case 'Escape':
+          break;
+        case 'ArrowUp':
+          element = elements[index - 1] || elements[elements.length - 1];
+          break;
+        case 'Tab':
+          if (e.shiftKey) {
+            element = elements[index - 1] || elements[elements.length - 1];
+          } else {
+            element = elements[index + 1] || elements[0];
+          }
+          break;
+        case 'Home':
+          element = elements[0];
+          break;
+        case 'End':
+          element = elements[elements.length - 1];
+          break;
+        case 'Escape':
+          handleClose();
+          break;
+      }
+
+      if (element) {
+        (element as HTMLAnchorElement).focus();
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    },
+    [ref.current],
+  );
+
+  const handleDocumentClick = useMemo(
+    () => (event: Event) => {
+      if (ref.current && !ref.current.contains(event.target as Node)) {
         handleClose();
-        break;
-    }
-
-    if (element) {
-      (element as HTMLAnchorElement).focus();
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  }, [ref.current]);
-
-  const handleDocumentClick = useMemo(() => (event: Event) => {
-    if (ref.current && !ref.current.contains(event.target as Node)) {
-      handleClose();
-      event.stopPropagation();
-    }
-  }, [ref.current]);
+        event.stopPropagation();
+      }
+    },
+    [ref.current],
+  );
 
   useEffect(() => {
     if (!touchscreen) {
@@ -151,7 +173,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
 
   return (
     <div className={clsx('⁂-dropdown-menu__content', className)} ref={ref}>
-      {items?.some(item => item?.items?.length) ? (
+      {items?.some((item) => item?.items?.length) ? (
         <ReactSwipeableViews animateHeight index={tab === undefined ? 0 : 1} style={{ width }}>
           <div className='⁂-dropdown-menu__page' style={{ width }}>
             {Component && <Component handleClose={handleClose} />}
@@ -254,7 +276,15 @@ const DropdownMenu = (props: IDropdownMenu) => {
       };
       openModal('DROPDOWN_MENU', {
         element: refs.reference.current as HTMLButtonElement,
-        content: <DropdownMenuContent handleClose={handleClose} items={items} component={component} touchscreen className={className} />,
+        content: (
+          <DropdownMenuContent
+            handleClose={handleClose}
+            items={items}
+            component={component}
+            touchscreen
+            className={className}
+          />
+        ),
       });
     } else {
       openDropdownMenu();
@@ -306,7 +336,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
         // flipping to other placements' axes.
         right: '',
         bottom: '',
-        [staticPlacement as string]: `${(-(arrowRef.current?.offsetWidth ?? 0)) / 2}px`,
+        [staticPlacement as string]: `${-(arrowRef.current?.offsetWidth ?? 0) / 2}px`,
         transform: 'rotate(45deg)',
       };
     }
@@ -314,16 +344,21 @@ const DropdownMenu = (props: IDropdownMenu) => {
     return {};
   }, [middlewareData.arrow, placement]);
 
-  useEffect(() => () => {
-    closeDropdownMenu();
-  }, []);
+  useEffect(
+    () => () => {
+      closeDropdownMenu();
+    },
+    [],
+  );
 
   useEffect(() => {
     (refs.reference.current as HTMLButtonElement)?.setAttribute('aria-expanded', String(isOpen));
-    setTimeout(() =>{
-      setIsDisplayed(isOpen);
-    }, isOpen ? 0 : 150);
-
+    setTimeout(
+      () => {
+        setIsDisplayed(isOpen);
+      },
+      isOpen ? 0 : 150,
+    );
   }, [isOpen]);
 
   const clonedChildren = useMemo(() => {
@@ -391,14 +426,15 @@ const DropdownMenu = (props: IDropdownMenu) => {
             }}
           >
             <div className={getClassName()}>
-              <DropdownMenuContent handleClose={handleClose} items={items} component={component} width={width} />
+              <DropdownMenuContent
+                handleClose={handleClose}
+                items={items}
+                component={component}
+                width={width}
+              />
 
               {/* Arrow */}
-              <div
-                ref={arrowRef}
-                style={arrowProps}
-                className='⁂-dropdown-menu__arrow'
-              />
+              <div ref={arrowRef} style={arrowProps} className='⁂-dropdown-menu__arrow' />
             </div>
           </div>
         </Portal>

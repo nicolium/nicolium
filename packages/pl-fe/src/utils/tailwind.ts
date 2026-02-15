@@ -29,17 +29,23 @@ const maybeGenerateAccentColor = (brandColor: string): string | null =>
   isHex(brandColor) ? generateAccent(brandColor) : null;
 
 /** Build a color object from legacy colors */
-const fromBasicColors = ({ brandColor, accentColor }: {
+const fromBasicColors = ({
+  brandColor,
+  accentColor,
+}: {
   brandColor: string;
   accentColor: string | null;
 }): TailwindColorPalette => {
-  const accent = typeof accentColor === 'string' && isHex(accentColor) ? accentColor : maybeGenerateAccentColor(brandColor);
+  const accent =
+    typeof accentColor === 'string' && isHex(accentColor)
+      ? accentColor
+      : maybeGenerateAccentColor(brandColor);
 
   return expandPalette({
     primary: isHex(brandColor) ? brandColor : null,
     secondary: accent,
     accent,
-    gray: (isHex(brandColor) ? generateNeutral(brandColor) : null),
+    gray: isHex(brandColor) ? generateNeutral(brandColor) : null,
   });
 };
 
@@ -54,10 +60,13 @@ const toTailwind = (config: {
 
   return {
     ...colors,
-    ...Object.fromEntries(Object.entries(basicColors).map(([key, value]) => [key, typeof value === 'string' ? colors[key] || value : { ...value, ...colors[key] }])),
+    ...Object.fromEntries(
+      Object.entries(basicColors).map(([key, value]) => [
+        key,
+        typeof value === 'string' ? colors[key] || value : { ...value, ...colors[key] },
+      ]),
+    ),
   };
 };
 
-export {
-  toTailwind,
-};
+export { toTailwind };

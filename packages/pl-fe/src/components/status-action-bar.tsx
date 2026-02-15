@@ -29,7 +29,18 @@ import { useChats } from '@/queries/chats';
 import { useBlockGroupUserMutation } from '@/queries/groups/use-group-blocks';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
 import { useTranslationLanguages } from '@/queries/instance/use-translation-languages';
-import { useBookmarkStatus, useDislikeStatus, useFavouriteStatus, usePinStatus, useReblogStatus, useUnbookmarkStatus, useUndislikeStatus, useUnfavouriteStatus, useUnpinStatus, useUnreblogStatus } from '@/queries/statuses/use-status-interactions';
+import {
+  useBookmarkStatus,
+  useDislikeStatus,
+  useFavouriteStatus,
+  usePinStatus,
+  useReblogStatus,
+  useUnbookmarkStatus,
+  useUndislikeStatus,
+  useUnfavouriteStatus,
+  useUnpinStatus,
+  useUnreblogStatus,
+} from '@/queries/statuses/use-status-interactions';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
@@ -47,23 +58,38 @@ import type { Me } from '@/types/pl-fe';
 
 const messages = defineMessages({
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
-  admin_status: { id: 'status.admin_status', defaultMessage: 'Open this post in the moderation interface' },
+  admin_status: {
+    id: 'status.admin_status',
+    defaultMessage: 'Open this post in the moderation interface',
+  },
   block: { id: 'account.block', defaultMessage: 'Block @{name}' },
   unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
   blocked: { id: 'group.group_mod_block.success', defaultMessage: '@{name} is banned' },
   bookmark: { id: 'status.bookmark', defaultMessage: 'Bookmark' },
   bookmarkSetFolder: { id: 'status.bookmark_folder', defaultMessage: 'Set bookmark folder' },
-  bookmarkChangeFolder: { id: 'status.bookmark_folder_change', defaultMessage: 'Change bookmark folder' },
+  bookmarkChangeFolder: {
+    id: 'status.bookmark_folder_change',
+    defaultMessage: 'Change bookmark folder',
+  },
   cancel_reblog_private: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },
   cannot_reblog: { id: 'status.cannot_reblog', defaultMessage: 'This post cannot be reposted' },
   chat: { id: 'status.chat', defaultMessage: 'Chat with @{name}' },
   copy: { id: 'status.copy', defaultMessage: 'Copy link to post' },
-  deactivateUser: { id: 'admin.users.actions.deactivate_user', defaultMessage: 'Deactivate @{name}' },
+  deactivateUser: {
+    id: 'admin.users.actions.deactivate_user',
+    defaultMessage: 'Deactivate @{name}',
+  },
   delete: { id: 'status.delete', defaultMessage: 'Delete' },
   deleteConfirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
-  deleteFromGroupMessage: { id: 'confirmations.delete_from_group.message', defaultMessage: 'Are you sure you want to delete @{name}\'s post?' },
+  deleteFromGroupMessage: {
+    id: 'confirmations.delete_from_group.message',
+    defaultMessage: "Are you sure you want to delete @{name}'s post?",
+  },
   deleteHeading: { id: 'confirmations.delete.heading', defaultMessage: 'Delete post' },
-  deleteMessage: { id: 'confirmations.delete.message', defaultMessage: 'Are you sure you want to delete this post?' },
+  deleteMessage: {
+    id: 'confirmations.delete.message',
+    defaultMessage: 'Are you sure you want to delete this post?',
+  },
   deleteStatus: { id: 'admin.statuses.actions.delete_status', defaultMessage: 'Delete post' },
   deleteUser: { id: 'admin.users.actions.delete_user', defaultMessage: 'Delete @{name}' },
   direct: { id: 'status.direct', defaultMessage: 'Direct message @{name}' },
@@ -73,16 +99,43 @@ const messages = defineMessages({
   external: { id: 'status.external', defaultMessage: 'View post on {domain}' },
   favourite: { id: 'status.favourite', defaultMessage: 'Like' },
   groupBlockConfirm: { id: 'confirmations.block_from_group.confirm', defaultMessage: 'Ban user' },
-  groupBlockFromGroupHeading: { id: 'confirmations.block_from_group.heading', defaultMessage: 'Ban from group' },
-  groupBlockFromGroupMessage: { id: 'confirmations.block_from_group.message', defaultMessage: 'Are you sure you want to ban @{name} from the group?' },
+  groupBlockFromGroupHeading: {
+    id: 'confirmations.block_from_group.heading',
+    defaultMessage: 'Ban from group',
+  },
+  groupBlockFromGroupMessage: {
+    id: 'confirmations.block_from_group.message',
+    defaultMessage: 'Are you sure you want to ban @{name} from the group?',
+  },
   groupModDelete: { id: 'status.group_mod_delete', defaultMessage: 'Delete post from group' },
-  group_remove_account: { id: 'status.remove_account_from_group', defaultMessage: 'Remove account from group' },
-  group_remove_post: { id: 'status.remove_post_from_group', defaultMessage: 'Remove post from group' },
-  loadConversation: { id: 'status.load_conversation', defaultMessage: 'Load conversation from remote server' },
-  loadConversationError: { id: 'status.load_conversation.error', defaultMessage: 'Failed to load conversation from a remote server' },
-  loadConversationSuccess: { id: 'status.load_conversation.success', defaultMessage: 'Scheduled loading conversation from a remote server' },
-  markStatusNotSensitive: { id: 'admin.statuses.actions.mark_status_not_sensitive', defaultMessage: 'Mark post not sensitive' },
-  markStatusSensitive: { id: 'admin.statuses.actions.mark_status_sensitive', defaultMessage: 'Mark post sensitive' },
+  group_remove_account: {
+    id: 'status.remove_account_from_group',
+    defaultMessage: 'Remove account from group',
+  },
+  group_remove_post: {
+    id: 'status.remove_post_from_group',
+    defaultMessage: 'Remove post from group',
+  },
+  loadConversation: {
+    id: 'status.load_conversation',
+    defaultMessage: 'Load conversation from remote server',
+  },
+  loadConversationError: {
+    id: 'status.load_conversation.error',
+    defaultMessage: 'Failed to load conversation from a remote server',
+  },
+  loadConversationSuccess: {
+    id: 'status.load_conversation.success',
+    defaultMessage: 'Scheduled loading conversation from a remote server',
+  },
+  markStatusNotSensitive: {
+    id: 'admin.statuses.actions.mark_status_not_sensitive',
+    defaultMessage: 'Mark post not sensitive',
+  },
+  markStatusSensitive: {
+    id: 'admin.statuses.actions.mark_status_sensitive',
+    defaultMessage: 'Mark post sensitive',
+  },
   mention: { id: 'status.mention', defaultMessage: 'Mention @{name}' },
   more: { id: 'status.more', defaultMessage: 'More' },
   mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
@@ -92,20 +145,43 @@ const messages = defineMessages({
   quotePost: { id: 'status.quote', defaultMessage: 'Quote post' },
   reblog: { id: 'status.reblog', defaultMessage: 'Repost' },
   reblog_private: { id: 'status.reblog_private', defaultMessage: 'Repost to original audience' },
-  reblog_visibility: { id: 'status.reblog_visibility', defaultMessage: 'Repost to specific audience' },
-  reblog_visibility_public: { id: 'status.reblog_visibility_public', defaultMessage: 'Public repost' },
-  reblog_visibility_unlisted: { id: 'status.reblog_visibility_unlisted', defaultMessage: 'Quiet public repost' },
-  reblog_visibility_private: { id: 'status.reblog_visibility_private', defaultMessage: 'Followers-only repost' },
+  reblog_visibility: {
+    id: 'status.reblog_visibility',
+    defaultMessage: 'Repost to specific audience',
+  },
+  reblog_visibility_public: {
+    id: 'status.reblog_visibility_public',
+    defaultMessage: 'Public repost',
+  },
+  reblog_visibility_unlisted: {
+    id: 'status.reblog_visibility_unlisted',
+    defaultMessage: 'Quiet public repost',
+  },
+  reblog_visibility_private: {
+    id: 'status.reblog_visibility_private',
+    defaultMessage: 'Followers-only repost',
+  },
   redact: { id: 'status.redact', defaultMessage: 'Redact' },
   redraft: { id: 'status.redraft', defaultMessage: 'Delete & re-draft' },
   redraftConfirm: { id: 'confirmations.redraft.confirm', defaultMessage: 'Delete & redraft' },
   redraftHeading: { id: 'confirmations.redraft.heading', defaultMessage: 'Delete & redraft' },
-  redraftMessage: { id: 'confirmations.redraft.message', defaultMessage: 'Are you sure you want to delete this post and re-draft it? Favorites and reposts will be lost, and replies to the original post will be orphaned.' },
-  replies_disabled_group: { id: 'status.disabled_replies.group_membership', defaultMessage: 'Only group members can reply' },
+  redraftMessage: {
+    id: 'confirmations.redraft.message',
+    defaultMessage:
+      'Are you sure you want to delete this post and re-draft it? Favorites and reposts will be lost, and replies to the original post will be orphaned.',
+  },
+  replies_disabled_group: {
+    id: 'status.disabled_replies.group_membership',
+    defaultMessage: 'Only group members can reply',
+  },
   reply: { id: 'status.reply', defaultMessage: 'Reply' },
   replyAll: { id: 'status.reply_all', defaultMessage: 'Reply to thread' },
   replyConfirm: { id: 'confirmations.reply.confirm', defaultMessage: 'Reply' },
-  replyMessage: { id: 'confirmations.reply.message', defaultMessage: 'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?' },
+  replyMessage: {
+    id: 'confirmations.reply.message',
+    defaultMessage:
+      'Replying now will overwrite the message you are currently composing. Are you sure you want to proceed?',
+  },
   report: { id: 'account.report', defaultMessage: 'Report @{name}' },
   share: { id: 'status.share', defaultMessage: 'Share' },
   unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
@@ -113,31 +189,85 @@ const messages = defineMessages({
   unpin: { id: 'status.unpin', defaultMessage: 'Unpin from profile' },
   viewReactions: { id: 'status.view_reactions', defaultMessage: 'View reactions' },
   wrench: { id: 'status.wrench', defaultMessage: 'Wrench reaction' },
-  addKnownLanguage: { id: 'status.add_known_language', defaultMessage: 'Do not auto-translate posts in {language}.' },
+  addKnownLanguage: {
+    id: 'status.add_known_language',
+    defaultMessage: 'Do not auto-translate posts in {language}.',
+  },
   translate: { id: 'status.translate', defaultMessage: 'Translate' },
   hideTranslation: { id: 'status.hide_translation', defaultMessage: 'Hide translation' },
 
-  favouriteInteractionPolicyHeader: { id: 'status.interaction_policy.favourite.header', defaultMessage: 'The author limits who can like this post.' },
-  reblogInteractionPolicyHeader: { id: 'status.interaction_policy.reblog.header', defaultMessage: 'The author limits who can repost this post.' },
-  replyInteractionPolicyHeader: { id: 'status.interaction_policy.reply.header', defaultMessage: 'The author limits who can reply to this post.' },
+  favouriteInteractionPolicyHeader: {
+    id: 'status.interaction_policy.favourite.header',
+    defaultMessage: 'The author limits who can like this post.',
+  },
+  reblogInteractionPolicyHeader: {
+    id: 'status.interaction_policy.reblog.header',
+    defaultMessage: 'The author limits who can repost this post.',
+  },
+  replyInteractionPolicyHeader: {
+    id: 'status.interaction_policy.reply.header',
+    defaultMessage: 'The author limits who can reply to this post.',
+  },
 
-  favouriteInteractionPolicyFollowers: { id: 'status.interaction_policy.favourite.followers_only', defaultMessage: 'Only users following the author can like.' },
-  favouriteInteractionPolicyFollowing: { id: 'status.interaction_policy.favourite.following_only', defaultMessage: 'Only users followed by the author can like.' },
-  favouriteInteractionPolicyMutuals: { id: 'status.interaction_policy.favourite.mutuals_only', defaultMessage: 'Only users mutually following the author can like.' },
-  favouriteInteractionPolicyMentioned: { id: 'status.interaction_policy.favourite.mentioned_only', defaultMessage: 'Only users mentioned by the author can like.' },
+  favouriteInteractionPolicyFollowers: {
+    id: 'status.interaction_policy.favourite.followers_only',
+    defaultMessage: 'Only users following the author can like.',
+  },
+  favouriteInteractionPolicyFollowing: {
+    id: 'status.interaction_policy.favourite.following_only',
+    defaultMessage: 'Only users followed by the author can like.',
+  },
+  favouriteInteractionPolicyMutuals: {
+    id: 'status.interaction_policy.favourite.mutuals_only',
+    defaultMessage: 'Only users mutually following the author can like.',
+  },
+  favouriteInteractionPolicyMentioned: {
+    id: 'status.interaction_policy.favourite.mentioned_only',
+    defaultMessage: 'Only users mentioned by the author can like.',
+  },
 
-  reblogInteractionPolicyFollowers: { id: 'status.interaction_policy.reblog.followers_only', defaultMessage: 'Only users following the author can repost.' },
-  reblogInteractionPolicyFollowing: { id: 'status.interaction_policy.reblog.following_only', defaultMessage: 'Only users followed by the author can repost.' },
-  reblogInteractionPolicyMutuals: { id: 'status.interaction_policy.reblog.mutuals_only', defaultMessage: 'Only users mutually following the author can repost.' },
-  reblogInteractionPolicyMentioned: { id: 'status.interaction_policy.reblog.mentioned_only', defaultMessage: 'Only users mentioned by the author can repost.' },
+  reblogInteractionPolicyFollowers: {
+    id: 'status.interaction_policy.reblog.followers_only',
+    defaultMessage: 'Only users following the author can repost.',
+  },
+  reblogInteractionPolicyFollowing: {
+    id: 'status.interaction_policy.reblog.following_only',
+    defaultMessage: 'Only users followed by the author can repost.',
+  },
+  reblogInteractionPolicyMutuals: {
+    id: 'status.interaction_policy.reblog.mutuals_only',
+    defaultMessage: 'Only users mutually following the author can repost.',
+  },
+  reblogInteractionPolicyMentioned: {
+    id: 'status.interaction_policy.reblog.mentioned_only',
+    defaultMessage: 'Only users mentioned by the author can repost.',
+  },
 
-  replyInteractionPolicyFollowers: { id: 'status.interaction_policy.reply.followers_only', defaultMessage: 'Only users following the author can reply.' },
-  replyInteractionPolicyFollowing: { id: 'status.interaction_policy.reply.following_only', defaultMessage: 'Only users followed by the author can reply.' },
-  replyInteractionPolicyMutuals: { id: 'status.interaction_policy.reply.mutuals_only', defaultMessage: 'Only users mutually following the author can reply.' },
-  replyInteractionPolicyMentioned: { id: 'status.interaction_policy.reply.mentioned_only', defaultMessage: 'Only users mentioned by the author can reply.' },
+  replyInteractionPolicyFollowers: {
+    id: 'status.interaction_policy.reply.followers_only',
+    defaultMessage: 'Only users following the author can reply.',
+  },
+  replyInteractionPolicyFollowing: {
+    id: 'status.interaction_policy.reply.following_only',
+    defaultMessage: 'Only users followed by the author can reply.',
+  },
+  replyInteractionPolicyMutuals: {
+    id: 'status.interaction_policy.reply.mutuals_only',
+    defaultMessage: 'Only users mutually following the author can reply.',
+  },
+  replyInteractionPolicyMentioned: {
+    id: 'status.interaction_policy.reply.mentioned_only',
+    defaultMessage: 'Only users mentioned by the author can reply.',
+  },
 
-  favouriteApprovalRequired: { id: 'status.interaction_policy.favourite.approval_required', defaultMessage: 'The author needs to approve your like.' },
-  reblogApprovalRequired: { id: 'status.interaction_policy.reblog.approval_required', defaultMessage: 'The author needs to approve your repost.' },
+  favouriteApprovalRequired: {
+    id: 'status.interaction_policy.favourite.approval_required',
+    defaultMessage: 'The author needs to approve your like.',
+  },
+  reblogApprovalRequired: {
+    id: 'status.interaction_policy.reblog.approval_required',
+    defaultMessage: 'The author needs to approve your repost.',
+  },
 });
 
 interface IInteractionPopover {
@@ -175,7 +305,13 @@ const INTERACTION_POLICY_DESCRIPTIONS = {
 const InteractionPopover: React.FC<IInteractionPopover> = ({ type, allowed }) => {
   const intl = useIntl();
 
-  const allowedType = allowed?.includes('followers') ? 'followers' : allowed?.includes('following') ? 'following' : allowed?.includes('mutuals') ? 'mutuals' : 'mentioned';
+  const allowedType = allowed?.includes('followers')
+    ? 'followers'
+    : allowed?.includes('following')
+      ? 'following'
+      : allowed?.includes('mutuals')
+        ? 'mutuals'
+        : 'mentioned';
 
   return (
     <div className='⁂-interaction-popover'>
@@ -236,7 +372,11 @@ const ReplyButton: React.FC<IReplyButton> = ({
   const replyButton = (
     <StatusActionButton
       title={replyTitle}
-      icon={status.in_reply_to_id ? require('@phosphor-icons/core/regular/arrow-bend-double-up-left.svg') : require('@phosphor-icons/core/regular/arrow-bend-up-left.svg')}
+      icon={
+        status.in_reply_to_id
+          ? require('@phosphor-icons/core/regular/arrow-bend-double-up-left.svg')
+          : require('@phosphor-icons/core/regular/arrow-bend-up-left.svg')
+      }
       onClick={handleReplyClick}
       count={status.replies_count}
       text={withLabels ? intl.formatMessage(messages.reply) : undefined}
@@ -244,23 +384,23 @@ const ReplyButton: React.FC<IReplyButton> = ({
     />
   );
 
-  if (me && !canReply.canInteract) return (
-    <Popover
-      interaction='click'
-      content={<InteractionPopover allowed={canReply.allowed} type='reply' />}
-    >
-      {replyButton}
-    </Popover>
-  );
+  if (me && !canReply.canInteract)
+    return (
+      <Popover
+        interaction='click'
+        content={<InteractionPopover allowed={canReply.allowed} type='reply' />}
+      >
+        {replyButton}
+      </Popover>
+    );
 
   return status.group ? (
-    <GroupPopover
-      group={status.group}
-      isEnabled={replyDisabled}
-    >
+    <GroupPopover group={status.group} isEnabled={replyDisabled}>
       {replyButton}
     </GroupPopover>
-  ) : replyButton;
+  ) : (
+    replyButton
+  );
 };
 
 interface IReblogButton extends IActionButton {
@@ -293,7 +433,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
     reblogIcon = require('@phosphor-icons/core/regular/lock.svg');
   }
 
-  const handleReblogClick: React.EventHandler<React.MouseEvent> = e => {
+  const handleReblogClick: React.EventHandler<React.MouseEvent> = (e) => {
     if (me) {
       const modalReblog = () => {
         if (status.reblogged) {
@@ -316,16 +456,22 @@ const ReblogButton: React.FC<IReblogButton> = ({
     }
   };
 
-  const handleReblogLongPress = status.reblogs_count ? () => {
-    openModal('REBLOGS', { statusId: status.id });
-  } : undefined;
+  const handleReblogLongPress = status.reblogs_count
+    ? () => {
+        openModal('REBLOGS', { statusId: status.id });
+      }
+    : undefined;
 
   const reblogButton = (
     <StatusActionButton
       className='⁂-status-action-bar__button--reblog'
       icon={reblogIcon}
       disabled={!publicStatus}
-      title={!publicStatus ? intl.formatMessage(messages.cannot_reblog) : intl.formatMessage(messages.reblog)}
+      title={
+        !publicStatus
+          ? intl.formatMessage(messages.cannot_reblog)
+          : intl.formatMessage(messages.reblog)
+      }
       active={status.reblogged}
       onClick={handleReblogClick}
       onLongPress={handleReblogLongPress}
@@ -334,14 +480,15 @@ const ReblogButton: React.FC<IReblogButton> = ({
     />
   );
 
-  if (me && !canReblog.canInteract) return (
-    <Popover
-      interaction='click'
-      content={<InteractionPopover allowed={canReblog.allowed} type='reblog' />}
-    >
-      {reblogButton}
-    </Popover>
-  );
+  if (me && !canReblog.canInteract)
+    return (
+      <Popover
+        interaction='click'
+        content={<InteractionPopover allowed={canReblog.allowed} type='reblog' />}
+      >
+        {reblogButton}
+      </Popover>
+    );
 
   if (!features.quotePosts || !me) return reblogButton;
 
@@ -353,22 +500,21 @@ const ReblogButton: React.FC<IReblogButton> = ({
     }
   };
 
-  const reblogMenu = [{
-    text: intl.formatMessage(status.reblogged ? messages.cancel_reblog_private : messages.reblog),
-    action: handleReblogClick,
-    icon: require('@phosphor-icons/core/regular/repeat.svg'),
-  }, {
-    text: intl.formatMessage(messages.quotePost),
-    action: handleQuoteClick,
-    icon: require('@phosphor-icons/core/regular/quotes.svg'),
-  }];
+  const reblogMenu = [
+    {
+      text: intl.formatMessage(status.reblogged ? messages.cancel_reblog_private : messages.reblog),
+      action: handleReblogClick,
+      icon: require('@phosphor-icons/core/regular/repeat.svg'),
+    },
+    {
+      text: intl.formatMessage(messages.quotePost),
+      action: handleQuoteClick,
+      icon: require('@phosphor-icons/core/regular/quotes.svg'),
+    },
+  ];
 
   return (
-    <DropdownMenu
-      items={reblogMenu}
-      disabled={!publicStatus}
-      onShiftClick={handleReblogClick}
-    >
+    <DropdownMenu items={reblogMenu} disabled={!publicStatus} onShiftClick={handleReblogClick}>
       {reblogButton}
     </DropdownMenu>
   );
@@ -405,15 +551,25 @@ const FavouriteButton: React.FC<IActionButton> = ({
     }
   };
 
-  const handleFavouriteLongPress = status.favourites_count ? () => {
-    openModal('FAVOURITES', { statusId: status.id });
-  } : undefined;
+  const handleFavouriteLongPress = status.favourites_count
+    ? () => {
+        openModal('FAVOURITES', { statusId: status.id });
+      }
+    : undefined;
 
   const favouriteButton = (
     <StatusActionButton
       title={intl.formatMessage(messages.favourite)}
-      icon={features.statusDislikes ? require('@phosphor-icons/core/regular/thumbs-up.svg') : require('@phosphor-icons/core/regular/star.svg')}
-      filledIcon={features.statusDislikes ? require('@phosphor-icons/core/fill/thumbs-up-fill.svg') : require('@phosphor-icons/core/fill/star-fill.svg')}
+      icon={
+        features.statusDislikes
+          ? require('@phosphor-icons/core/regular/thumbs-up.svg')
+          : require('@phosphor-icons/core/regular/star.svg')
+      }
+      filledIcon={
+        features.statusDislikes
+          ? require('@phosphor-icons/core/fill/thumbs-up-fill.svg')
+          : require('@phosphor-icons/core/fill/star-fill.svg')
+      }
       onClick={handleFavouriteClick}
       onLongPress={handleFavouriteLongPress}
       active={status.favourited}
@@ -422,14 +578,15 @@ const FavouriteButton: React.FC<IActionButton> = ({
     />
   );
 
-  if (me && !canFavourite.canInteract) return (
-    <Popover
-      interaction='click'
-      content={<InteractionPopover allowed={canFavourite.allowed} type='favourite' />}
-    >
-      {favouriteButton}
-    </Popover>
-  );
+  if (me && !canFavourite.canInteract)
+    return (
+      <Popover
+        interaction='click'
+        content={<InteractionPopover allowed={canFavourite.allowed} type='favourite' />}
+      >
+        {favouriteButton}
+      </Popover>
+    );
   return favouriteButton;
 };
 
@@ -461,9 +618,11 @@ const DislikeButton: React.FC<IActionButton> = ({
     }
   };
 
-  const handleDislikeLongPress = status.dislikes_count ? () => {
-    openModal('DISLIKES', { statusId: status.id });
-  } : undefined;
+  const handleDislikeLongPress = status.dislikes_count
+    ? () => {
+        openModal('DISLIKES', { statusId: status.id });
+      }
+    : undefined;
 
   return (
     <StatusActionButton
@@ -479,13 +638,11 @@ const DislikeButton: React.FC<IActionButton> = ({
   );
 };
 
-const getLongerWrench = (emojis: Array<CustomEmoji>) => emojis.find(({ shortcode }) => shortcode === 'longestest_wrench') ?? emojis.find(({ shortcode }) => shortcode === 'longest_wrench');
+const getLongerWrench = (emojis: Array<CustomEmoji>) =>
+  emojis.find(({ shortcode }) => shortcode === 'longestest_wrench') ??
+  emojis.find(({ shortcode }) => shortcode === 'longest_wrench');
 
-const WrenchButton: React.FC<IActionButton> = ({
-  status,
-  withLabels,
-  me,
-}) => {
+const WrenchButton: React.FC<IActionButton> = ({ status, withLabels, me }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
   const features = useFeatures();
@@ -497,7 +654,8 @@ const WrenchButton: React.FC<IActionButton> = ({
 
   if (!me || withLabels || !features.emojiReacts || !showWrenchButton) return;
 
-  const wrenches = showWrenchButton && (status.emoji_reactions.find(emoji => emoji.name === '🔧') ?? undefined);
+  const wrenches =
+    showWrenchButton && (status.emoji_reactions.find((emoji) => emoji.name === '🔧') ?? undefined);
 
   const handleWrenchClick: React.EventHandler<React.MouseEvent> = (e) => {
     if (wrenches?.me) {
@@ -539,11 +697,20 @@ const EmojiPickerButton: React.FC<Omit<IActionButton, 'onOpenUnauthorizedModal'>
   const features = useFeatures();
 
   const handlePickEmoji = (emoji: EmojiType) => {
-    dispatch(emojiReact(status.id, emoji.custom ? emoji.id : emoji.native, emoji.custom ? emoji.imageUrl : undefined, intl));
+    dispatch(
+      emojiReact(
+        status.id,
+        emoji.custom ? emoji.id : emoji.native,
+        emoji.custom ? emoji.imageUrl : undefined,
+        intl,
+      ),
+    );
   };
 
-  return me && !withLabels && features.emojiReacts && (
-    <EmojiPickerDropdown onPickEmoji={handlePickEmoji} />
+  return (
+    me &&
+    !withLabels &&
+    features.emojiReacts && <EmojiPickerDropdown onPickEmoji={handlePickEmoji} />
   );
 };
 
@@ -571,7 +738,10 @@ const MenuButton: React.FC<IMenuButton> = ({
   const { targetLanguage } = useStatusMeta(status.id);
   const { openModal } = useModalsActions();
   const { group } = useGroup((status.group as Group)?.id);
-  const { mutate: blockGroupMember } = useBlockGroupUserMutation(status.group?.id as string, status.account.id);
+  const { mutate: blockGroupMember } = useBlockGroupUserMutation(
+    status.group?.id as string,
+    status.account.id,
+  );
   const { getOrCreateChatByAccountId } = useChats();
   const { mutate: bookmarkStatus } = useBookmarkStatus(status.id);
   const { mutate: unbookmarkStatus } = useUnbookmarkStatus(status.id);
@@ -589,19 +759,23 @@ const MenuButton: React.FC<IMenuButton> = ({
   const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
 
   const autoTranslating = useMemo(() => {
-    const {
-      allow_remote: allowRemote,
-      allow_unauthenticated: allowUnauthenticated,
-    } = instance.pleroma.metadata.translation;
+    const { allow_remote: allowRemote, allow_unauthenticated: allowUnauthenticated } =
+      instance.pleroma.metadata.translation;
 
-    const renderTranslate = (me ?? allowUnauthenticated) && (allowRemote || status.account.local) && ['public', 'unlisted'].includes(status.visibility) && status.content.length > 0 && status.language !== null && !knownLanguages.includes(status.language);
-    const supportsLanguages = (translationLanguages[status.language!]?.includes(intl.locale));
+    const renderTranslate =
+      (me ?? allowUnauthenticated) &&
+      (allowRemote || status.account.local) &&
+      ['public', 'unlisted'].includes(status.visibility) &&
+      status.content.length > 0 &&
+      status.language !== null &&
+      !knownLanguages.includes(status.language);
+    const supportsLanguages = translationLanguages[status.language!]?.includes(intl.locale);
 
     return autoTranslate && features.translations && renderTranslate && supportsLanguages;
   }, [me, status, autoTranslate]);
 
   const { account } = useOwnAccount();
-  const isStaff = account ? account.is_admin ?? account.is_moderator : false;
+  const isStaff = account ? (account.is_admin ?? account.is_moderator) : false;
   const isAdmin = account ? account.is_admin : false;
 
   const menu = useMemo(() => {
@@ -625,9 +799,15 @@ const MenuButton: React.FC<IMenuButton> = ({
         dispatch(deleteStatus(status.id, undefined, withRedraft));
       } else {
         openModal('CONFIRM', {
-          heading: intl.formatMessage(withRedraft ? messages.redraftHeading : messages.deleteHeading),
-          message: intl.formatMessage(withRedraft ? messages.redraftMessage : messages.deleteMessage),
-          confirm: intl.formatMessage(withRedraft ? messages.redraftConfirm : messages.deleteConfirm),
+          heading: intl.formatMessage(
+            withRedraft ? messages.redraftHeading : messages.deleteHeading,
+          ),
+          message: intl.formatMessage(
+            withRedraft ? messages.redraftMessage : messages.deleteMessage,
+          ),
+          confirm: intl.formatMessage(
+            withRedraft ? messages.redraftConfirm : messages.deleteConfirm,
+          ),
           onConfirm: () => dispatch(deleteStatus(status.id, undefined, withRedraft)),
         });
       }
@@ -642,7 +822,11 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleEditClick: React.EventHandler<React.MouseEvent> = () => {
-      if (status.event) navigate({ to: '/@{$username}/events/$statusId/edit', params: { username: status.account.acct, statusId: status.id } });
+      if (status.event)
+        navigate({
+          to: '/@{$username}/events/$statusId/edit',
+          params: { username: status.account.acct, statusId: status.id },
+        });
       else dispatch(editStatus(status.id));
     };
 
@@ -684,7 +868,11 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleBlockClick: React.EventHandler<React.MouseEvent> = (e) => {
-      openModal('BLOCK_MUTE', { accountId: status.account.id, statusId: status.id, action: 'BLOCK' });
+      openModal('BLOCK_MUTE', {
+        accountId: status.account.id,
+        statusId: status.id,
+        action: 'BLOCK',
+      });
     };
 
     const handleUnblockClick: React.EventHandler<React.MouseEvent> = (e) => {
@@ -711,11 +899,12 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleLoadConversationClick = () => {
-      client.statuses.loadConversation(status.id)
-        .then(() =>{
+      client.statuses
+        .loadConversation(status.id)
+        .then(() => {
           toast.success(messages.loadConversationSuccess);
         })
-        .catch((error) =>{
+        .catch((error) => {
           toast.error(messages.loadConversationError);
         });
     };
@@ -727,12 +916,14 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleShare = () => {
-      navigator.share({
-        text: status.search_index,
-        url: status.uri,
-      }).catch((e) => {
-        if (e.name !== 'AbortError') console.error(e);
-      });
+      navigator
+        .share({
+          text: status.search_index,
+          url: status.uri,
+        })
+        .catch((e) => {
+          if (e.name !== 'AbortError') console.error(e);
+        });
     };
 
     const handleDeleteStatus: React.EventHandler<React.MouseEvent> = (e) => {
@@ -748,7 +939,9 @@ const MenuButton: React.FC<IMenuButton> = ({
 
       openModal('CONFIRM', {
         heading: intl.formatMessage(messages.deleteHeading),
-        message: intl.formatMessage(messages.deleteFromGroupMessage, { name: <strong className='break-words'>{account.username}</strong> }),
+        message: intl.formatMessage(messages.deleteFromGroupMessage, {
+          name: <strong className='break-words'>{account.username}</strong>,
+        }),
         confirm: intl.formatMessage(messages.deleteConfirm),
         onConfirm: () => {
           dispatch(deleteStatus(status.id, group?.id));
@@ -759,7 +952,9 @@ const MenuButton: React.FC<IMenuButton> = ({
     const handleBlockFromGroup = () => {
       openModal('CONFIRM', {
         heading: intl.formatMessage(messages.groupBlockFromGroupHeading),
-        message: intl.formatMessage(messages.groupBlockFromGroupMessage, { name: status.account.username }),
+        message: intl.formatMessage(messages.groupBlockFromGroupMessage, {
+          name: status.account.username,
+        }),
         confirm: intl.formatMessage(messages.groupBlockConfirm),
         onConfirm: () => {
           blockGroupMember(undefined, {
@@ -772,7 +967,9 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleIgnoreLanguage = () => {
-      dispatch(changeSetting(['autoTranslate'], [...knownLanguages, status.language], { showAlert: true }));
+      dispatch(
+        changeSetting(['autoTranslate'], [...knownLanguages, status.language], { showAlert: true }),
+      );
     };
 
     const handleTranslate = () => {
@@ -840,13 +1037,17 @@ const MenuButton: React.FC<IMenuButton> = ({
       menu.push({
         text: intl.formatMessage(status.bookmarked ? messages.unbookmark : messages.bookmark),
         action: handleBookmarkClick,
-        icon: status.bookmarked ? require('@phosphor-icons/core/regular/bookmark.svg') : require('@phosphor-icons/core/regular/bookmark-simple.svg'),
+        icon: status.bookmarked
+          ? require('@phosphor-icons/core/regular/bookmark.svg')
+          : require('@phosphor-icons/core/regular/bookmark-simple.svg'),
       });
     }
 
     if (features.bookmarkFolders && fromBookmarks) {
       menu.push({
-        text: intl.formatMessage(status.bookmark_folder ? messages.bookmarkChangeFolder : messages.bookmarkSetFolder),
+        text: intl.formatMessage(
+          status.bookmark_folder ? messages.bookmarkChangeFolder : messages.bookmarkSetFolder,
+        ),
         action: handleBookmarkFolderClick,
         icon: require('@phosphor-icons/core/regular/folders.svg'),
       });
@@ -865,9 +1066,13 @@ const MenuButton: React.FC<IMenuButton> = ({
     menu.push(null);
 
     menu.push({
-      text: intl.formatMessage(mutingConversation ? messages.unmuteConversation : messages.muteConversation),
+      text: intl.formatMessage(
+        mutingConversation ? messages.unmuteConversation : messages.muteConversation,
+      ),
       action: handleConversationMuteClick,
-      icon: mutingConversation ? require('@phosphor-icons/core/regular/bell-simple.svg') : require('@phosphor-icons/core/regular/bell-simple-slash.svg'),
+      icon: mutingConversation
+        ? require('@phosphor-icons/core/regular/bell-simple.svg')
+        : require('@phosphor-icons/core/regular/bell-simple-slash.svg'),
     });
 
     if (!status.in_reply_to_id && features.loadConversation) {
@@ -887,21 +1092,21 @@ const MenuButton: React.FC<IMenuButton> = ({
         items: [
           {
             text: intl.formatMessage(messages.reblog_visibility_public),
-            action: (e) =>{
+            action: (e) => {
               handleReblogClick(e, 'public');
             },
             icon: require('@phosphor-icons/core/regular/globe.svg'),
           },
           {
             text: intl.formatMessage(messages.reblog_visibility_unlisted),
-            action: (e) =>{
+            action: (e) => {
               handleReblogClick(e, 'unlisted');
             },
             icon: require('@phosphor-icons/core/regular/moon.svg'),
           },
           {
             text: intl.formatMessage(messages.reblog_visibility_private),
-            action: (e) =>{
+            action: (e) => {
               handleReblogClick(e, 'private');
             },
             icon: require('@phosphor-icons/core/regular/lock.svg'),
@@ -915,11 +1120,15 @@ const MenuButton: React.FC<IMenuButton> = ({
         menu.push({
           text: intl.formatMessage(status.pinned ? messages.unpin : messages.pin),
           action: handlePinClick,
-          icon: status.pinned ? require('@phosphor-icons/core/regular/push-pin-slash.svg') : require('@phosphor-icons/core/regular/push-pin.svg'),
+          icon: status.pinned
+            ? require('@phosphor-icons/core/regular/push-pin-slash.svg')
+            : require('@phosphor-icons/core/regular/push-pin.svg'),
         });
       } else if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
         menu.push({
-          text: intl.formatMessage(status.reblogged ? messages.cancel_reblog_private : messages.reblog_private),
+          text: intl.formatMessage(
+            status.reblogged ? messages.cancel_reblog_private : messages.reblog_private,
+          ),
           action: handleReblogClick,
           icon: require('@phosphor-icons/core/regular/repeat.svg'),
         });
@@ -1009,7 +1218,9 @@ const MenuButton: React.FC<IMenuButton> = ({
       }
 
       menu.push({
-        text: intl.formatMessage(messages.addKnownLanguage, { language: languages[status.language as 'en'] || status.language }),
+        text: intl.formatMessage(messages.addKnownLanguage, {
+          language: languages[status.language as 'en'] || status.language,
+        }),
         action: handleIgnoreLanguage,
         icon: require('@phosphor-icons/core/regular/flag.svg'),
       });
@@ -1066,7 +1277,9 @@ const MenuButton: React.FC<IMenuButton> = ({
 
       if (features.pleromaAdminStatuses) {
         menu.push({
-          text: intl.formatMessage(!status.sensitive ? messages.markStatusSensitive : messages.markStatusNotSensitive),
+          text: intl.formatMessage(
+            !status.sensitive ? messages.markStatusSensitive : messages.markStatusNotSensitive,
+          ),
           action: handleToggleStatusSensitivity,
           icon: require('@phosphor-icons/core/regular/warning.svg'),
         });
@@ -1092,16 +1305,28 @@ const MenuButton: React.FC<IMenuButton> = ({
     }
 
     return menu;
-  }, [me, targetLanguage, status.bookmarked, status.muted, status.emoji_reactions.length > 0, status.pinned, status.reblogged, status.account.relationship]);
+  }, [
+    me,
+    targetLanguage,
+    status.bookmarked,
+    status.muted,
+    status.emoji_reactions.length > 0,
+    status.pinned,
+    status.reblogged,
+    status.account.relationship,
+  ]);
 
-  return useMemo(() => (
-    <DropdownMenu items={menu}>
-      <StatusActionButton
-        title={intl.formatMessage(messages.more)}
-        icon={require('@phosphor-icons/core/regular/dots-three.svg')}
-      />
-    </DropdownMenu>
-  ), [menu]);
+  return useMemo(
+    () => (
+      <DropdownMenu items={menu}>
+        <StatusActionButton
+          title={intl.formatMessage(messages.more)}
+          icon={require('@phosphor-icons/core/regular/dots-three.svg')}
+        />
+      </DropdownMenu>
+    ),
+    [menu],
+  );
 };
 
 interface IStatusActionBar {
@@ -1121,14 +1346,16 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   fromBookmarks = false,
   rebloggedBy,
 }) => {
-
   const { openModal } = useModalsActions();
 
-  const me = useAppSelector(state => state.me);
+  const me = useAppSelector((state) => state.me);
 
-  const publicStatus = useMemo(() => status ? ['public', 'unlisted', 'group'].includes(status.visibility) : false, [status.visibility]);
+  const publicStatus = useMemo(
+    () => (status ? ['public', 'unlisted', 'group'].includes(status.visibility) : false),
+    [status.visibility],
+  );
 
-  const onContainerClick: React.MouseEventHandler<HTMLDivElement> = useCallback((e) =>{
+  const onContainerClick: React.MouseEventHandler<HTMLDivElement> = useCallback((e) => {
     e.stopPropagation();
   }, []);
 
@@ -1144,10 +1371,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
   }
 
   return (
-    <div
-      className={`⁂-status-action-bar ⁂-status-action-bar--${space}`}
-      onClick={onContainerClick}
-    >
+    <div className={`⁂-status-action-bar ⁂-status-action-bar--${space}`} onClick={onContainerClick}>
       <ReplyButton
         status={status}
         withLabels={withLabels}
@@ -1185,11 +1409,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
         onOpenUnauthorizedModal={onOpenUnauthorizedModal}
       />
 
-      <EmojiPickerButton
-        status={status}
-        withLabels={withLabels}
-        me={me}
-      />
+      <EmojiPickerButton status={status} withLabels={withLabels} me={me} />
 
       <MenuButton
         status={status}

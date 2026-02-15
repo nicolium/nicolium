@@ -27,7 +27,11 @@ const isJSONValid = (text: any): boolean => {
 const messages = defineMessages({
   heading: { id: 'column.settings_store', defaultMessage: 'Settings store' },
   advanced: { id: 'developers.settings_store.advanced', defaultMessage: 'Advanced settings' },
-  hint: { id: 'developers.settings_store.hint', defaultMessage: 'It is possible to directly edit your user settings here. BE CAREFUL! Editing this section can break your account, and you will only be able to recover through the API.' },
+  hint: {
+    id: 'developers.settings_store.hint',
+    defaultMessage:
+      'It is possible to directly edit your user settings here. BE CAREFUL! Editing this section can break your account, and you will only be able to recover through the API.',
+  },
 });
 
 const SettingsStore: React.FC = () => {
@@ -50,17 +54,19 @@ const SettingsStore: React.FC = () => {
     dispatch(changeSetting(key, checked, { showAlert: true }));
   };
 
-  const handleSubmit: React.FormEventHandler = e => {
+  const handleSubmit: React.FormEventHandler = (e) => {
     const settings = JSON.parse(rawJSON);
 
     setLoading(true);
-    dispatch(updateSettingsStore(settings)).then(() => {
-      loadUserSettings(settings);
-      setLoading(false);
-    }).catch(error => {
-      toast.showAlertForError(error);
-      setLoading(false);
-    });
+    dispatch(updateSettingsStore(settings))
+      .then(() => {
+        loadUserSettings(settings);
+        setLoading(false);
+      })
+      .catch((error) => {
+        toast.showAlertForError(error);
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -98,7 +104,12 @@ const SettingsStore: React.FC = () => {
       <List>
         <ListItem
           label={<FormattedMessage id='preferences.fields.demo_label' defaultMessage='Demo mode' />}
-          hint={<FormattedMessage id='preferences.fields.demo_hint' defaultMessage='Use the default pl-fe logo and color scheme. Useful for taking screenshots.' />}
+          hint={
+            <FormattedMessage
+              id='preferences.fields.demo_hint'
+              defaultMessage='Use the default pl-fe logo and color scheme. Useful for taking screenshots.'
+            />
+          }
         >
           <SettingToggle settings={settings} settingPath={['demo']} onChange={onToggleChange} />
         </ListItem>
