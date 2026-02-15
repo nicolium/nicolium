@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
+import DOMPurify from 'isomorphic-dompurify';
 import {
   type MediaAttachment,
   type PreviewCard as CardEntity,
@@ -19,18 +20,6 @@ import { getTextDirection } from '@/utils/rtl';
 
 import HoverAccountWrapper from './hover-account-wrapper';
 import Avatar from './ui/avatar';
-
-/** Props for `PreviewCard`. */
-interface IPreviewCard {
-  card: CardEntity;
-  maxTitle?: number;
-  maxDescription?: number;
-  onOpenMedia: (attachments: Array<MediaAttachment>, index: number) => void;
-  compact?: boolean;
-  defaultWidth?: number;
-  cacheWidth?: (width: number) => void;
-  horizontal?: boolean;
-}
 
 const domParser = new DOMParser();
 
@@ -59,6 +48,51 @@ const handleIframeUrl = (html: string, url: string, providerName: string) => {
 
   return '';
 };
+
+const getRatio = (card: CardEntity): number => {
+  const ratio = card.width / card.height || 16 / 9;
+
+  // Constrain to a sane limit
+  // https://en.wikipedia.org/wiki/Aspect_ratio_(image)
+  return Math.min(Math.max(9 / 16, ratio), 4);
+};
+
+interface IPreviewCardVideo {
+  card: CardEntity;
+}
+
+const PreviewCardVideo: React.FC<IPreviewCardVideo> = React.memo(
+  React.forwardRef<HTMLDivElement, IPreviewCardVideo>(({ card }, ref) => {
+    const html = DOMPurify.sanitize(handleIframeUrl(card.html, card.url, card.provider_name), {
+      ADD_TAGS: ['iframe'],
+      ADD_ATTR: ['allow', 'allowfullscreen', 'referrerpolicy'],
+    });
+    const content = { __html: html };
+
+    const ratio = getRatio(card);
+
+    return (
+      <div
+        ref={ref}
+        className='status-card__image status-card-video'
+        dangerouslySetInnerHTML={content}
+        style={{ aspectRatio: ratio }}
+      />
+    );
+  }),
+);
+
+/** Props for `PreviewCard`. */
+interface IPreviewCard {
+  card: CardEntity;
+  maxTitle?: number;
+  maxDescription?: number;
+  onOpenMedia: (attachments: Array<MediaAttachment>, index: number) => void;
+  compact?: boolean;
+  defaultWidth?: number;
+  cacheWidth?: (width: number) => void;
+  horizontal?: boolean;
+}
 
 /** Displays a Mastodon link preview. Similar to OEmbed. */
 const PreviewCard: React.FC<IPreviewCard> = ({
@@ -117,29 +151,6 @@ const PreviewCard: React.FC<IPreviewCard> = ({
 
       setWidth(c.offsetWidth);
     }
-  };
-
-  const renderVideo = () => {
-    const content = { __html: handleIframeUrl(card.html, card.url, card.provider_name) };
-    const ratio = getRatio(card);
-    const height = width / ratio;
-
-    return (
-      <div
-        ref={setRef}
-        className='status-card__image status-card-video'
-        dangerouslySetInnerHTML={content}
-        style={{ height }}
-      />
-    );
-  };
-
-  const getRatio = (card: CardEntity): number => {
-    const ratio = card.width / card.height || 16 / 9;
-
-    // Constrain to a sane limit
-    // https://en.wikipedia.org/wiki/Aspect_ratio_(image)
-    return Math.min(Math.max(9 / 16, ratio), 4);
   };
 
   const interactive = card.type !== 'link';
@@ -209,7 +220,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
 
   if (interactive) {
     if (embedded) {
-      embed = renderVideo();
+      embed = <PreviewCardVideo card={card} />;
     } else {
       let iconVariant = require('@phosphor-icons/core/regular/play.svg');
 
