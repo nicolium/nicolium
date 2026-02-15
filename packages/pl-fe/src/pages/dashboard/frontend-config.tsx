@@ -61,7 +61,10 @@ const messages = defineMessages({
     id: 'plfe_config.display_fqn_label',
     defaultMessage: 'Display domain (eg @user@domain) for local accounts.',
   },
-  greentextLabel: { id: 'plfe_config.greentext_label', defaultMessage: 'Enable greentext support' },
+  greentextLabel: {
+    id: 'plfe_config.greentext_label',
+    defaultMessage: '<span>>render greentext</span>',
+  },
   mediaPreviewLabel: {
     id: 'plfe_config.media_preview_label',
     defaultMessage: 'Prefer preview media for thumbnails',
@@ -352,7 +355,13 @@ const FrontendConfigEditor: React.FC = () => {
               />
             </ListItem>
 
-            <ListItem label={intl.formatMessage(messages.greentextLabel)}>
+            <ListItem
+              label={intl.formatMessage(messages.greentextLabel, {
+                span: (children) => (
+                  <span className='dark:text-accent-green text-lime-600'>{children}</span>
+                ),
+              })}
+            >
               <Toggle
                 checked={frontendConfig.greentext}
                 onChange={handleChange('greentext', (e) => e.target.checked)}

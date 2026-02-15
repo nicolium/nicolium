@@ -5,7 +5,7 @@
     "correctness": "error",
     "suspicious": "error",
     "pedantic": "warn",
-    "perf": "warn",
+    "perf": "warn"
   },
   "rules": {
     "max-dependencies": "off",

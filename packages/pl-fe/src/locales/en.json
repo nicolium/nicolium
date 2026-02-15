@@ -1408,7 +1408,7 @@
   "plfe_config.fields.logo_label": "Logo",
   "plfe_config.fields.promo_panel_fields_label": "Promo panel items",
   "plfe_config.fields.theme_label": "Default theme",
-  "plfe_config.greentext_label": "Enable greentext support",
+  "plfe_config.greentext_label": "<span>>render greentext</span>",
   "plfe_config.headings.advanced": "Advanced",
   "plfe_config.headings.cryptocurrency": "Cryptocurrency",
   "plfe_config.headings.events": "Events",

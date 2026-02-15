@@ -54,6 +54,9 @@
     "ws": "^8.18.3"
   },
   "lint-staged": {
-    "*.{js,cjs,mjs,ts}": ["oxlint", "oxfmt --check"]
+    "*.{js,cjs,mjs,ts}": [
+      "oxlint",
+      "oxfmt --check"
+    ]
   }
 }
