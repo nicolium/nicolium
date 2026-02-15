@@ -4,7 +4,8 @@
   "categories": {
     "correctness": "error",
     "suspicious": "error",
-    "pedantic": "warn"
+    "pedantic": "warn",
+    "perf": "warn",
   },
   "rules": {
     "max-dependencies": "off",

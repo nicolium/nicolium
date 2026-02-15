@@ -45,7 +45,7 @@ type CreateAccountParams = {
       /** EIP-4361 signature (required if message is present) */
       signature: string;
     }
-  | Record<string, never>
+  | {}
 );
 
 /**

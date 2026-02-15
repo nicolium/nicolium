@@ -948,14 +948,25 @@ class PlApiClient {
       let response: any;
 
       if (this.features.version.software === PIXELFED) {
-        response = [];
-        for (const accountId of accountIds) {
-          const accounts = (await this.request(`/api/v1.1/accounts/mutuals/${accountId}`)).json;
-          response.push({
-            id: accountId,
-            accounts,
-          });
-        }
+        const settledResponse = await Promise.allSettled(
+          accountIds.map(async (accountId) => {
+            const accounts = (await this.request(`/api/v1.1/accounts/mutuals/${accountId}`)).json;
+
+            return {
+              id: accountId,
+              accounts,
+            };
+          }),
+        );
+
+        response = settledResponse.map((result, index) =>
+          result.status === 'fulfilled'
+            ? result.value
+            : {
+                id: accountIds[index],
+                accounts: [],
+              },
+        );
       } else {
         response = (
           await this.request('/api/v1/accounts/familiar_followers', { params: { id: accountIds } })
