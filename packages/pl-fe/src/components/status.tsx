@@ -30,6 +30,7 @@ import { textForScreenReader } from '@/utils/status';
 import EventPreview from './event-preview';
 import HashtagLink from './hashtag-link';
 import RelativeTimestamp from './relative-timestamp';
+import RssFeedInfo from './rss-feed-info';
 import StatusActionBar from './status-action-bar';
 import StatusContent from './status-content';
 import StatusLanguagePicker from './status-language-picker';
@@ -549,19 +550,23 @@ const Status: React.FC<IStatus> = (props) => {
       >
         {statusInfo}
 
-        {actualStatus.account_id && (
-          <div className='flex'>
-            <AccountContainer
-              key={actualStatus.account_id}
-              id={actualStatus.account_id}
-              action={<AccountInfo status={actualStatus} />}
-              showAccountHoverCard={hoverable}
-              withLinkToProfile={hoverable}
-              approvalStatus={actualStatus.approval_status}
-              avatarSize={avatarSize}
-              actionAlignment='top'
-            />
-          </div>
+        {status.rss_feed ? (
+          <RssFeedInfo feed={status.rss_feed} timestamp={status.created_at} />
+        ) : (
+          actualStatus.account_id && (
+            <div className='flex'>
+              <AccountContainer
+                key={actualStatus.account_id}
+                id={actualStatus.account_id}
+                action={<AccountInfo status={actualStatus} />}
+                showAccountHoverCard={hoverable}
+                withLinkToProfile={hoverable}
+                approvalStatus={actualStatus.approval_status}
+                avatarSize={avatarSize}
+                actionAlignment='top'
+              />
+            </div>
+          )
         )}
 
         <div className='status__content-wrapper'>
@@ -579,22 +584,26 @@ const Status: React.FC<IStatus> = (props) => {
             />
           )}
 
-          <StatusReactionsBar status={actualStatus} collapsed />
+          {!status.rss_feed && (
+            <>
+              <StatusReactionsBar status={actualStatus} collapsed />
 
-          {!hideActionBar && (
-            <div
-              className={clsx({
-                'pt-2': actualStatus.emoji_reactions.length,
-                'pt-4': !actualStatus.emoji_reactions.length,
-              })}
-            >
-              <StatusActionBar
-                status={actualStatus}
-                rebloggedBy={isReblog ? status.account : undefined}
-                fromBookmarks={fromBookmarks}
-                expandable
-              />
-            </div>
+              {!hideActionBar && (
+                <div
+                  className={clsx({
+                    'pt-2': actualStatus.emoji_reactions.length,
+                    'pt-4': !actualStatus.emoji_reactions.length,
+                  })}
+                >
+                  <StatusActionBar
+                    status={actualStatus}
+                    rebloggedBy={isReblog ? status.account : undefined}
+                    fromBookmarks={fromBookmarks}
+                    expandable
+                  />
+                </div>
+              )}
+            </>
           )}
         </div>
       </Card>

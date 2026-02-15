@@ -3,6 +3,7 @@ import React, { useRef } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
 import Account from '@/components/account';
+import RssFeedInfo from '@/components/rss-feed-info';
 import StatusContent from '@/components/status-content';
 import StatusLanguagePicker from '@/components/status-language-picker';
 import StatusReactionsBar from '@/components/status-reactions-bar';
@@ -95,7 +96,9 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
       <div ref={node} className='detailed-actualStatus' tabIndex={-1}>
         {renderStatusInfo()}
 
-        {account.id && (
+        {actualStatus.rss_feed ? (
+          <RssFeedInfo feed={actualStatus.rss_feed} timestamp={actualStatus.created_at} />
+        ) : (
           <div className='mb-4'>
             <Account
               key={account.id}
@@ -115,83 +118,87 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
           </Stack>
         </Stack>
 
-        <StatusReactionsBar status={actualStatus} />
+        {!status.rss_feed && (
+          <>
+            <StatusReactionsBar status={actualStatus} />
 
-        <HStack space={2} justifyContent='between' alignItems='center' className='py-3' wrap>
-          <StatusInteractionBar status={actualStatus} />
+            <HStack space={2} justifyContent='between' alignItems='center' className='py-3' wrap>
+              <StatusInteractionBar status={actualStatus} />
 
-          <HStack space={1} alignItems='center'>
-            <span>
-              <Text tag='span' theme='muted' size='sm'>
-                <HStack space={1} alignItems='center' wrap>
-                  <a
-                    href={actualStatus.url}
-                    target='_blank'
-                    rel='noopener'
-                    className='hover:underline'
-                  >
-                    <FormattedDate
-                      value={new Date(actualStatus.created_at)}
-                      hour12
-                      year='numeric'
-                      month='short'
-                      day='2-digit'
-                      hour='numeric'
-                      minute='2-digit'
-                    />
-                  </a>
-
-                  {actualStatus.application && (
-                    <>
-                      <span className='⁂-separator' />
+              <HStack space={1} alignItems='center'>
+                <span>
+                  <Text tag='span' theme='muted' size='sm'>
+                    <HStack space={1} alignItems='center' wrap>
                       <a
-                        href={actualStatus.application.website ?? '#'}
+                        href={actualStatus.url}
                         target='_blank'
                         rel='noopener'
                         className='hover:underline'
-                        title={intl.formatMessage(messages.applicationName, {
-                          name: actualStatus.application.name,
-                        })}
                       >
-                        {actualStatus.application.name}
-                      </a>
-                    </>
-                  )}
-
-                  {actualStatus.edited_at && (
-                    <>
-                      <span className='⁂-separator' />
-                      <div
-                        className='inline hover:underline'
-                        onClick={handleOpenCompareHistoryModal}
-                        role='button'
-                        tabIndex={0}
-                      >
-                        <FormattedMessage
-                          id='status.edited'
-                          defaultMessage='Edited {date}'
-                          values={{
-                            date: intl.formatDate(new Date(actualStatus.edited_at), {
-                              hour12: true,
-                              month: 'short',
-                              day: '2-digit',
-                              hour: 'numeric',
-                              minute: '2-digit',
-                            }),
-                          }}
+                        <FormattedDate
+                          value={new Date(actualStatus.created_at)}
+                          hour12
+                          year='numeric'
+                          month='short'
+                          day='2-digit'
+                          hour='numeric'
+                          minute='2-digit'
                         />
-                      </div>
-                    </>
-                  )}
-                </HStack>
-              </Text>
-            </span>
+                      </a>
 
-            <StatusTypeIcon visibility={actualStatus.visibility} />
+                      {actualStatus.application && (
+                        <>
+                          <span className='⁂-separator' />
+                          <a
+                            href={actualStatus.application.website ?? '#'}
+                            target='_blank'
+                            rel='noopener'
+                            className='hover:underline'
+                            title={intl.formatMessage(messages.applicationName, {
+                              name: actualStatus.application.name,
+                            })}
+                          >
+                            {actualStatus.application.name}
+                          </a>
+                        </>
+                      )}
 
-            <StatusLanguagePicker status={actualStatus} showLabel />
-          </HStack>
-        </HStack>
+                      {actualStatus.edited_at && (
+                        <>
+                          <span className='⁂-separator' />
+                          <div
+                            className='inline hover:underline'
+                            onClick={handleOpenCompareHistoryModal}
+                            role='button'
+                            tabIndex={0}
+                          >
+                            <FormattedMessage
+                              id='status.edited'
+                              defaultMessage='Edited {date}'
+                              values={{
+                                date: intl.formatDate(new Date(actualStatus.edited_at), {
+                                  hour12: true,
+                                  month: 'short',
+                                  day: '2-digit',
+                                  hour: 'numeric',
+                                  minute: '2-digit',
+                                }),
+                              }}
+                            />
+                          </div>
+                        </>
+                      )}
+                    </HStack>
+                  </Text>
+                </span>
+
+                <StatusTypeIcon visibility={actualStatus.visibility} />
+
+                <StatusLanguagePicker status={actualStatus} showLabel />
+              </HStack>
+            </HStack>
+          </>
+        )}
       </div>
     </div>
   );

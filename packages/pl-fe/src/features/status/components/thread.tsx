@@ -356,9 +356,13 @@ const Thread = ({
                     withMedia={withMedia}
                   />
 
-                  <hr className='-mx-4 mb-2 max-w-[100vw] border-t-2 black:border-t dark:border-gray-800' />
+                  {!status.rss_feed && (
+                    <>
+                      <hr className='-mx-4 mb-2 max-w-[100vw] border-t-2 black:border-t dark:border-gray-800' />
 
-                  <StatusActionBar status={status} expandable={isModal} space='lg' withLabels />
+                      <StatusActionBar status={status} expandable={isModal} space='lg' withLabels />
+                    </>
+                  )}
                 </div>
               </Hotkeys>
             )}

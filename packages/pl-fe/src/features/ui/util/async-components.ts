@@ -96,6 +96,7 @@ export const RegisterInvite = lazy(() => import('@/pages/auth/register-with-invi
 export const RegistrationPage = lazy(() => import('@/pages/auth/registration'));
 export const Relays = lazy(() => import('@/pages/dashboard/relays'));
 export const RemoteTimeline = lazy(() => import('@/pages/timelines/remote-timeline'));
+export const RssFeedSubscriptions = lazy(() => import('@/pages/settings/rss-feed-subscriptions'));
 export const Rules = lazy(() => import('@/pages/dashboard/rules'));
 export const ScheduledStatuses = lazy(() => import('@/pages/status-lists/scheduled-statuses'));
 export const Search = lazy(() => import('@/pages/search/search'));

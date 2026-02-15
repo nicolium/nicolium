@@ -687,6 +687,15 @@ export const followedTagsRoute = createRoute({
   }),
 });
 
+export const rssFeedSubscriptionsRoute = createRoute({
+  getParentRoute: () => layouts.default,
+  path: '/rss_feed_subscriptions',
+  component: RssFeedSubscriptions,
+  beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
+    if (!features.rssFeedSubscriptions) throw notFound();
+  }),
+});
+
 // Interaction requests
 export const interactionRequestsRoute = createRoute({
   getParentRoute: () => layouts.default,
@@ -1460,6 +1469,7 @@ const routeTree = rootRoute.addChildren([
     filtersRoute,
     editFilterRoute,
     followedTagsRoute,
+    rssFeedSubscriptionsRoute,
     interactionRequestsRoute,
     newStatusRoute,
     scheduledStatusesRoute,
