@@ -149,7 +149,14 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
           <Hotkey>s</Hotkey>, <Hotkey>/</Hotkey>
         </>
       ),
-      label: <FormattedMessage id='keyboard_shortcuts.search' defaultMessage='to focus search' />,
+      label: document.querySelector('#search') ? (
+        <FormattedMessage id='keyboard_shortcuts.search' defaultMessage='to focus search' />
+      ) : (
+        <FormattedMessage
+          id='keyboard_shortcuts.navigate_search'
+          defaultMessage='to open search page'
+        />
+      ),
     },
     {
       key: <Hotkey>esc</Hotkey>,

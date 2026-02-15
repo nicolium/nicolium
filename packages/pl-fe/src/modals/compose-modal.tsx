@@ -121,7 +121,7 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
     } else if (quoteId) {
       return <FormattedMessage id='navigation_bar.compose_quote' defaultMessage='Quote post' />;
     } else {
-      return <FormattedMessage id='navigation_bar.compose' defaultMessage='Compose a post' />;
+      return <FormattedMessage id='navigation_bar.compose' defaultMessage='Compose new post' />;
     }
   };
 
