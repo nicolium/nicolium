@@ -15,7 +15,6 @@ import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
-import { addAutoPlay } from '@/utils/media';
 import { getTextDirection } from '@/utils/rtl';
 
 import HoverAccountWrapper from './hover-account-wrapper';
@@ -32,6 +31,34 @@ interface IPreviewCard {
   cacheWidth?: (width: number) => void;
   horizontal?: boolean;
 }
+
+const domParser = new DOMParser();
+
+const handleIframeUrl = (html: string, url: string, providerName: string) => {
+  const document = domParser.parseFromString(html, 'text/html').documentElement;
+  const iframe = document.querySelector('iframe');
+  const startTime = new URL(url).searchParams.get('t');
+
+  if (iframe) {
+    const iframeUrl = new URL(iframe.src);
+
+    iframeUrl.searchParams.set('autoplay', '1');
+    iframeUrl.searchParams.set('auto_play', '1');
+
+    if (providerName === 'YouTube') {
+      iframeUrl.searchParams.set('start', startTime ?? '');
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+    }
+
+    iframe.allow = 'autoplay';
+
+    iframe.src = iframeUrl.href;
+
+    return iframe.outerHTML;
+  }
+
+  return '';
+};
 
 /** Displays a Mastodon link preview. Similar to OEmbed. */
 const PreviewCard: React.FC<IPreviewCard> = ({
@@ -93,7 +120,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   };
 
   const renderVideo = () => {
-    const content = { __html: addAutoPlay(card.html) };
+    const content = { __html: handleIframeUrl(card.html, card.url, card.provider_name) };
     const ratio = getRatio(card);
     const height = width / ratio;
 
