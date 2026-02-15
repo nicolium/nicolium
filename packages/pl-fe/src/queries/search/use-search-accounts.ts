@@ -11,11 +11,11 @@ const useAccountSearch = (query: string, params?: Omit<SearchAccountParams, 'off
   const dispatch = useAppDispatch();
 
   return useInfiniteQuery({
-    queryKey: ['search', 'accountSearch', query, params],
+    queryKey: ['search', 'accountSearch', query.trim(), params],
     queryFn: ({ pageParam: offset, signal }) =>
       client.accounts
         .searchAccounts(
-          query,
+          query.trim(),
           {
             ...params,
             offset,
