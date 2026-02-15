@@ -1,6 +1,5 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
 
 import RelativeTimestamp from './relative-timestamp';
 import Avatar from './ui/avatar';
@@ -14,10 +13,9 @@ import type { RssFeed } from 'pl-api';
 interface IRssFeedInfo {
   feed: RssFeed;
   timestamp: string;
-  timestampUrl?: string;
 }
 
-const RssFeedInfo: React.FC<IRssFeedInfo> = ({ feed, timestamp, timestampUrl }) => (
+const RssFeedInfo: React.FC<IRssFeedInfo> = ({ feed, timestamp }) => (
   <div className='group block w-full shrink-0'>
     <HStack alignItems='center' space={3} className='overflow-hidden'>
       <div className='rounded-lg'>
@@ -46,27 +44,12 @@ const RssFeedInfo: React.FC<IRssFeedInfo> = ({ feed, timestamp, timestampUrl }) 
               &middot;
             </Text>
 
-            {timestampUrl ? (
-              <Link
-                to={timestampUrl}
-                className='hover:underline'
-                onClick={(event) => event.stopPropagation()}
-              >
-                <RelativeTimestamp
-                  timestamp={timestamp}
-                  theme='muted'
-                  size='sm'
-                  className='whitespace-nowrap'
-                />
-              </Link>
-            ) : (
-              <RelativeTimestamp
-                timestamp={timestamp}
-                theme='muted'
-                size='sm'
-                className='whitespace-nowrap'
-              />
-            )}
+            <RelativeTimestamp
+              timestamp={timestamp}
+              theme='muted'
+              size='sm'
+              className='whitespace-nowrap'
+            />
           </HStack>
         </Stack>
       </div>

@@ -104,7 +104,6 @@ interface IAccount {
   onActionClick?: (account: AccountSchema) => void;
   showAccountHoverCard?: boolean;
   timestamp?: string;
-  timestampUrl?: string;
   futureTimestamp?: boolean;
   withAccountNote?: boolean;
   withAvatar?: boolean;
@@ -133,7 +132,6 @@ const Account = ({
   onActionClick,
   showAccountHoverCard = true,
   timestamp,
-  timestampUrl,
   futureTimestamp = false,
   withAccountNote = false,
   withAvatar = true,
@@ -432,31 +430,13 @@ const Account = ({
                   <>
                     <span className='⁂-separator' />
 
-                    {timestampUrl ? (
-                      <Link
-                        to={timestampUrl}
-                        className='hover:underline'
-                        onClick={(event) => {
-                          event.stopPropagation();
-                        }}
-                      >
-                        <RelativeTimestamp
-                          timestamp={timestamp}
-                          theme='muted'
-                          size='sm'
-                          className='whitespace-nowrap'
-                          futureDate={futureTimestamp}
-                        />
-                      </Link>
-                    ) : (
-                      <RelativeTimestamp
-                        timestamp={timestamp}
-                        theme='muted'
-                        size='sm'
-                        className='whitespace-nowrap'
-                        futureDate={futureTimestamp}
-                      />
-                    )}
+                    <RelativeTimestamp
+                      timestamp={timestamp}
+                      theme='muted'
+                      size='sm'
+                      className='whitespace-nowrap'
+                      futureDate={futureTimestamp}
+                    />
                   </>
                 ) : null}
 
