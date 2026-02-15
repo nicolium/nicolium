@@ -45,7 +45,7 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
       placeholder: intl.formatMessage(messages.changeDescriptionPlaceholder),
       confirm: intl.formatMessage(messages.changeDescriptionConfirm),
       onConfirm: (description?: string) => {
-        onChangeDescription?.(description || '');
+        onChangeDescription?.(description ?? '');
       },
       text: description,
     });
@@ -84,7 +84,9 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
         name='avatar'
         type='file'
         accept={accept}
-        onChange={({ target }) => onChange(target.files)}
+        onChange={({ target }) =>{
+          onChange(target.files);
+        }}
         disabled={disabled}
         className='hidden'
       />

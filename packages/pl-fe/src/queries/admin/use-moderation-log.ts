@@ -10,7 +10,7 @@ const useModerationLog = () => {
   const client = useClient();
 
   const getModerationLog = (pageParam?: Pick<PaginatedResponse<AdminModerationLogEntry>, 'next'>): Promise<PaginatedResponse<AdminModerationLogEntry>> =>
-    (pageParam?.next || client.admin.moderationLog.getModerationLog)();
+    (pageParam?.next ?? client.admin.moderationLog.getModerationLog)();
 
   const queryInfo = useInfiniteQuery({
     queryKey: ['admin', 'moderation_log'],
@@ -19,7 +19,7 @@ const useModerationLog = () => {
     getNextPageParam: (config) => config.next ? config : undefined,
   });
 
-  const data = flattenPages(queryInfo.data) || [];
+  const data = flattenPages(queryInfo.data) ?? [];
 
   return {
     ...queryInfo,

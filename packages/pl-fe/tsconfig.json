@@ -22,7 +22,8 @@
     ],
     "types": [
       "vite/client",
-      "vite-plugin-compile-time/client"
+      "vite-plugin-compile-time/client",
+      "dom-chromium-ai"
     ],
   },
   "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]

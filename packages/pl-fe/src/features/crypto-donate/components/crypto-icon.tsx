@@ -5,7 +5,7 @@ import React from 'react';
 const getIcon = (ticker: string): string => {
   const modules: Record<string, any> = import.meta.glob('../../../../node_modules/cryptocurrency-icons/svg/color/*.svg', { eager: true });
   const key = `../../../../node_modules/cryptocurrency-icons/svg/color/${ticker}.svg`;
-  return modules[key]?.default || genericIcon;
+  return modules[key]?.default ?? genericIcon;
 };
 
 interface ICryptoIcon {
@@ -20,7 +20,7 @@ const CryptoIcon: React.FC<ICryptoIcon> = ({ ticker, title, className, imgClassN
     <img
       className={imgClassName}
       src={getIcon(ticker)}
-      alt={title || ticker}
+      alt={title ?? ticker}
     />
   </div>
 );

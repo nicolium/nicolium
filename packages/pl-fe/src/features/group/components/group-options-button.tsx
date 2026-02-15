@@ -40,7 +40,7 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
     });
   };
 
-  const handleLeave = () =>
+  const handleLeave = () =>{
     openModal('CONFIRM', {
       heading: intl.formatMessage(messages.confirmationHeading),
       message: intl.formatMessage(messages.confirmationMessage),
@@ -52,6 +52,7 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
         },
       }),
     });
+  };
 
   const menu: Menu = useMemo(() => {
     const canShare = 'share' in navigator;

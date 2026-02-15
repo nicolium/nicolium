@@ -24,8 +24,12 @@ const List: React.FC<IList> = ({ listId, accountId, added }) => {
   const { mutate: addToList } = useAddAccountsToList(listId);
   const { mutate: removeFromList } = useRemoveAccountsFromList(listId);
 
-  const onAdd = () => addToList([accountId]);
-  const onRemove = () => removeFromList([accountId]);
+  const onAdd = () =>{
+    addToList([accountId]);
+  };
+  const onRemove = () =>{
+    removeFromList([accountId]);
+  };
 
   if (!list) return null;
 

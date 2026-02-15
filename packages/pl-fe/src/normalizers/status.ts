@@ -103,18 +103,18 @@ const normalizeStatus = (status: BaseStatus & {
   }
 
   // Normalize group
-  const group = status.group || null;
+  const group = status.group ?? null;
 
   return {
     account_id: status.account.id,
-    reblog_id: status.reblog?.id || null,
-    poll_id: status.poll?.id || null,
-    group_id: status.group?.id || null,
+    reblog_id: status.reblog?.id ?? null,
+    poll_id: status.poll?.id ?? null,
+    group_id: status.group?.id ?? null,
     expectsCard: false,
     showFiltered: null as null | boolean,
     deleted: false,
     ...status,
-    quote_id: status.quote_id || null,
+    quote_id: status.quote_id ?? null,
     mentions,
     event,
     group,

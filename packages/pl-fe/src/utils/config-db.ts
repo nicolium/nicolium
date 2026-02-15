@@ -27,12 +27,12 @@ const toSimplePolicy = (configs: PleromaConfig['configs']): Partial<MRFSimple> =
   };
 
   if (config) {
-    const value = config.value || [];
+    const value = config.value ?? [];
     const result = value.reduce(reducer, {});
     return v.parse(mrfSimpleSchema, result);
-  } else {
-    return {};
   }
+
+  return {};
 };
 
 const fromSimplePolicy = (simplePolicy: Policy) => {

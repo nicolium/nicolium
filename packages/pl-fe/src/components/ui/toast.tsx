@@ -41,7 +41,9 @@ const Toast = (props: IToast) => {
 
   const intl = useIntl();
 
-  const dismissToast = () => toast.dismiss(t.id);
+  const dismissToast = () =>{
+    toast.dismiss(t.id);
+  };
 
   const renderIcon = () => {
     switch (type) {

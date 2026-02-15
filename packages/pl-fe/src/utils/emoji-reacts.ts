@@ -8,7 +8,7 @@ const simulateEmojiReact = (emojiReacts: Array<EmojiReaction>, emoji: string, ur
   if (idx > -1 && emojiReact) {
     return emojiReacts.map((reaction, id) => id === idx ? v.parse(emojiReactionSchema, {
       ...emojiReact,
-      count: (emojiReact.count || 0) + 1,
+      count: (emojiReact.count ?? 0) + 1,
       me: true,
       url,
     }) : reaction);
@@ -24,16 +24,16 @@ const simulateEmojiReact = (emojiReacts: Array<EmojiReaction>, emoji: string, ur
 
 const simulateUnEmojiReact = (emojiReacts: Array<EmojiReaction>, emoji: string) => {
   const idx = emojiReacts.findIndex(e =>
-    e.name === emoji && e.me === true);
+    e.name === emoji &&  e.me);
 
   const emojiReact = emojiReacts[idx];
 
   if (emojiReact) {
-    const newCount = (emojiReact.count || 1) - 1;
+    const newCount = (emojiReact.count ?? 1) - 1;
     if (newCount < 1) return emojiReacts.filter((_, id) => id !== idx);
     return emojiReacts.map((reaction, id) => id === idx ? v.parse(emojiReactionSchema, {
       ...emojiReact,
-      count: (emojiReact.count || 1) - 1,
+      count: (emojiReact.count ?? 1) - 1,
       me: false,
     }) : reaction);
   } else {

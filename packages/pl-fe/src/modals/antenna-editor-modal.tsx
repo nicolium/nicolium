@@ -43,7 +43,7 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
 
   const [title, setTitle] = useState(antenna ? antenna.title : '');
 
-  const handleSubmit: React.FormEventHandler<Element> = e => {
+  const handleSubmit: React.FormEventHandler = e => {
     e.preventDefault();
     handleUpdate();
   };
@@ -68,7 +68,9 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
           outerClassName='grow'
           type='text'
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) =>{
+            setTitle(e.target.value);
+          }}
         />
       </FormGroup>
       <FormActions>
@@ -102,7 +104,9 @@ const AntennaEditorModal: React.FC<BaseModalProps & AntennaEditorModalProps> = (
         ? <FormattedMessage id='antennas.edit' defaultMessage='Edit antenna' />
         : <FormattedMessage id='antennas.create' defaultMessage='Create antenna' />}
       onClose={onClickClose}
-      onBack={tab === 'info' ? undefined : () => setTab('info')}
+      onBack={tab === 'info' ? undefined : () =>{
+        setTab('info');
+      }}
     >
       {isFetched ? (tab === 'info'
         ? <EditAntennaForm antennaId={antennaId} setAntennaId={setAntennaId} onTabChange={setTab} />

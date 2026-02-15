@@ -11,7 +11,7 @@ import { PlApiClient, type CreateApplicationParams } from 'pl-api';
 import * as BuildConfig from '@/build-config';
 
 const createApp = (params: CreateApplicationParams, baseURL?: string) => {
-  const client = new PlApiClient(baseURL || BuildConfig.BACKEND_URL || '');
+  const client = new PlApiClient((baseURL ?? BuildConfig.BACKEND_URL) || '');
 
   return client.apps.createApplication(params);
 };

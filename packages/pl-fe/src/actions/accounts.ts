@@ -16,7 +16,7 @@ const ACCOUNT_BLOCK_SUCCESS = 'ACCOUNT_BLOCK_SUCCESS' as const;
 const ACCOUNT_MUTE_SUCCESS = 'ACCOUNT_MUTE_SUCCESS' as const;
 
 const createAccount = (params: CreateAccountParams) =>
-  async (dispatch: AppDispatch, getState: () => RootState) =>
+  (dispatch: AppDispatch, getState: () => RootState) =>
     getClient(getState()).settings.createAccount(params).then((response) =>
       ({ params, response }),
     );
@@ -79,7 +79,9 @@ const fetchRelationships = (accountIds: string[]) =>
     const fetcher = batcher.relationships(getClient(getState())).fetch;
 
     return Promise.all(newAccountIds.map(fetcher))
-      .then(response => dispatch(importEntities({ relationships: response })));
+      .then(response =>{
+        dispatch(importEntities({ relationships: response }));
+      });
   };
 
 const accountLookup = (acct: string, signal?: AbortSignal) =>

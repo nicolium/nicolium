@@ -36,7 +36,7 @@ const draftStatusSchema = v.pipe(v.any(), v.transform((draft) => ({
 type DraftStatus = v.InferOutput<typeof draftStatusSchema>;
 
 const getDrafts = async (accountUrl: string) => {
-  const drafts = await KVStore.getItem<Array<APIEntity>>(`drafts:${accountUrl}`) || [];
+  const drafts = await KVStore.getItem<Array<APIEntity>>(`drafts:${accountUrl}`) ?? [];
 
   return Object.fromEntries(Object.values(drafts)
     .map((draft) => v.safeParse(draftStatusSchema, draft).output as DraftStatus)
@@ -44,7 +44,7 @@ const getDrafts = async (accountUrl: string) => {
     .map((draft) => [draft.draft_id, draft]));
 };
 
-const persistDrafts = async (accountUrl: string, drafts: Record<string, APIEntity>) => KVStore.setItem(`drafts:${accountUrl}`, Object.values(drafts));
+const persistDrafts = (accountUrl: string, drafts: Record<string, APIEntity>) => KVStore.setItem(`drafts:${accountUrl}`, Object.values(drafts));
 
 const useDraftStatusesQuery = <T>(select?: (data: Record<string, DraftStatus>) => T) => {
   const { account } = useOwnAccount();
@@ -68,14 +68,14 @@ const usePersistDraftStatus = () => {
 
   return (composeId: string) => {
     dispatch((_, getState) => {
-      const compose = getState().compose[composeId]!;
+      const compose = getState().compose[composeId];
 
       const draft = {
         ...compose,
-        draft_id: compose.draftId || crypto.randomUUID(),
+        draft_id: compose.draftId ?? crypto.randomUUID(),
       };
 
-      const drafts = queryClient.getQueryData<Record<string, DraftStatus>>(['draftStatuses']) || {};
+      const drafts = queryClient.getQueryData<Record<string, DraftStatus>>(['draftStatuses']) ?? {};
 
       const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
         oldDrafts[draft.draft_id] = v.parse(draftStatusSchema, draft);
@@ -86,7 +86,7 @@ const usePersistDraftStatus = () => {
 };
 
 const cancelDraftStatus = (queryClient: QueryClient, accountUrl: string, draftId: string) => {
-  const drafts = queryClient.getQueryData<Record<string, DraftStatus>>(['draftStatuses']) || {};
+  const drafts = queryClient.getQueryData<Record<string, DraftStatus>>(['draftStatuses']) ?? {};
 
   const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
     delete oldDrafts[draftId];

@@ -11,8 +11,8 @@ import type { InteractionRequest, PaginatedResponse } from 'pl-api';
 
 const minifyInteractionRequest = ({ account, status, reply, ...interactionRequest }: InteractionRequest) => ({
   account_id: account.id,
-  status_id: status?.id || null,
-  reply_id: reply?.id || null,
+  status_id: status?.id ?? null,
+  reply_id: reply?.id ?? null,
   ...interactionRequest,
 });
 
@@ -41,7 +41,7 @@ const useInteractionRequests = <T>(
 
   return useInfiniteQuery({
     queryKey: ['interactionRequests'],
-    queryFn: ({ pageParam }) => pageParam.next?.() || client.interactionRequests.getInteractionRequests().then(response => minifyInteractionRequestsList(dispatch, response)),
+    queryFn: ({ pageParam }) => pageParam.next?.() ?? client.interactionRequests.getInteractionRequests().then(response => minifyInteractionRequestsList(dispatch, response)),
     initialPageParam: { previous: null, next: null, items: [], partial: false } as PaginatedResponse<MinifiedInteractionRequest>,
     getNextPageParam: (page) => page.next ? page : undefined,
     enabled: isLoggedIn && features.interactionRequests,

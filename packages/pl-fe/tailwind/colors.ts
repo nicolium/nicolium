@@ -30,7 +30,7 @@ const parseColorMatrix = (colorMatrix: ColorMatrix): RecursiveKeyValuePair =>
     // Conditionally parse array or single-tint colors
     if (Array.isArray(tints)) {
       palette[colorName] = parseTints(colorName, tints);
-    } else if (tints === true) {
+    } else if (tints) {
       palette[colorName] = toColorVariable(colorName);
     }
 

@@ -21,7 +21,7 @@ const getSupportedTimezone = (value: string): string | false => {
       foundTimezone = supportedTimeZones.find((tz) => tz.toLowerCase() === `etc/gmt${sign === '+' ? '-' : '+'}${+hours}`);
     }
   }
-  return foundTimezone || false;
+  return foundTimezone ?? false;
 };
 
 const messages = defineMessages({

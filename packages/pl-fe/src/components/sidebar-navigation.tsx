@@ -69,8 +69,8 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   }), [!!account, features]);
 
   const notificationCount = useAppSelector((state) => state.notifications.unread);
-  const followRequestsCount = useFollowRequestsCount().data || 0;
-  const interactionRequestsCount = useInteractionRequestsCount().data || 0;
+  const followRequestsCount = useFollowRequestsCount().data ?? 0;
+  const interactionRequestsCount = useInteractionRequestsCount().data ?? 0;
   const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
   const { data: pendingReportsCount = 0 } = usePendingReportsCount();
   const dashboardCount = pendingReportsCount + awaitingApprovalCount;
@@ -190,7 +190,9 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         text: intl.formatMessage(messages.help),
         items: [
           {
-            action: () => openModal('HOTKEYS'),
+            action: () =>{
+              openModal('HOTKEYS');
+            },
             icon: require('@phosphor-icons/core/regular/keyboard.svg'),
             text: intl.formatMessage(messages.keyboardShortcuts),
           },
@@ -323,7 +325,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               text={<FormattedMessage id='tabs_bar.settings' defaultMessage='Settings' />}
             />
 
-            {(account.is_admin || account.is_moderator) && (
+            {(account.is_admin ?? account.is_moderator) && (
               <SidebarNavigationLink
                 to='/pl-fe/admin'
                 icon={require('@phosphor-icons/core/regular/gauge.svg')}
@@ -337,7 +339,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
 
         {(features.publicTimeline) && (
           <>
-            {(features.wrenchedTimeline && (account || !restrictUnauth.timelines.wrenched)) && (
+            {(features.wrenchedTimeline && (account ?? !restrictUnauth.timelines.wrenched)) && (
               <SidebarNavigationLink
                 to='/timeline/wrenched'
                 icon={require('@phosphor-icons/core/regular/wrench.svg')}
@@ -346,7 +348,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               />
             )}
 
-            {(account || !restrictUnauth.timelines.local) && (
+            {(account ?? !restrictUnauth.timelines.local) && (
               <SidebarNavigationLink
                 to='/timeline/local'
                 icon={require('@phosphor-icons/core/regular/planet.svg')}
@@ -355,7 +357,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               />
             )}
 
-            {(features.bubbleTimeline && (account || !restrictUnauth.timelines.bubble)) && (
+            {(features.bubbleTimeline && (account ?? !restrictUnauth.timelines.bubble)) && (
               <SidebarNavigationLink
                 to='/timeline/bubble'
                 icon={require('@phosphor-icons/core/regular/graph.svg')}
@@ -364,7 +366,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
               />
             )}
 
-            {(features.federating && (account || !restrictUnauth.timelines.federated)) && (
+            {(features.federating && (account ?? !restrictUnauth.timelines.federated)) && (
               <SidebarNavigationLink
                 to='/timeline/fediverse'
                 icon={require('@phosphor-icons/core/regular/fediverse-logo.svg')}

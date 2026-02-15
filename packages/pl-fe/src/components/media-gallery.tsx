@@ -104,15 +104,13 @@ const Item: React.FC<IItem> = ({
     if (isIOS() && !e.target.autoPlay) {
       e.target.autoPlay = true;
       e.preventDefault();
-    } else {
-      if (e.button === 0 && !(e.ctrlKey || e.metaKey)) {
-        if (hoverToPlay()) {
-          e.target.pause();
-          e.target.currentTime = 0;
-        }
-        e.preventDefault();
-        onClick(index);
+    } else if (e.button === 0 && !(e.ctrlKey || e.metaKey)) {
+      if (hoverToPlay()) {
+        e.target.pause();
+        e.target.currentTime = 0;
       }
+      e.preventDefault();
+      onClick(index);
     }
 
     e.stopPropagation();
@@ -140,12 +138,12 @@ const Item: React.FC<IItem> = ({
   if (dimensions) {
     width = dimensions.w;
     height = dimensions.h;
-    top = dimensions.t || 'auto';
-    right = dimensions.r || 'auto';
-    bottom = dimensions.b || 'auto';
-    left = dimensions.l || 'auto';
-    float = dimensions.float || 'left';
-    position = dimensions.pos || 'relative';
+    top = dimensions.t ?? 'auto';
+    right = dimensions.r ?? 'auto';
+    bottom = dimensions.b ?? 'auto';
+    left = dimensions.l ?? 'auto';
+    float = dimensions.float ?? 'left';
+    position = dimensions.pos ?? 'relative';
   }
 
   let thumbnail: React.ReactNode = '';
@@ -293,7 +291,7 @@ const Item: React.FC<IItem> = ({
         aria-label={!visible ? attachment.description : undefined}
         aria-hidden={visible}
       />
-      {(visible || !attachment.blurhash) && thumbnail}
+      {(visible ?? !attachment.blurhash) && thumbnail}
     </div>
   );
 };
@@ -348,10 +346,14 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
     return (
       <Stack space={2}>
         {media.map((attachment, index) => (
-          <HStack element='button' alignItems='center' space={2} key={attachment.id} onClick={() => handleClick(index)}>
+          <HStack
+            element='button' alignItems='center' space={2} key={attachment.id} onClick={() =>{
+              handleClick(index);
+            }}
+          >
             <Icon
               className='size-4 min-w-fit text-gray-800 dark:text-gray-200'
-              src={MIMETYPE_ICONS[(attachment.type === 'unknown' && attachment.mime_type) || attachment.type] || require('@phosphor-icons/core/regular/paperclip.svg')}
+              src={MIMETYPE_ICONS[(attachment.type === 'unknown' && attachment.mime_type) ?? attachment.type] ?? require('@phosphor-icons/core/regular/paperclip.svg')}
             />
             <Text align='left'>
               {attachment.description || {

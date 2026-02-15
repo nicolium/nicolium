@@ -40,9 +40,13 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement }) => {
       heading: intl.formatMessage(messages.deleteHeading),
       message: intl.formatMessage(messages.deleteMessage),
       confirm: intl.formatMessage(messages.deleteConfirm),
-      onConfirm: () => deleteAnnouncement(announcement.id, {
-        onSuccess: () => toast.success(messages.deleteSuccess),
-      }),
+      onConfirm: () =>{
+        deleteAnnouncement(announcement.id, {
+          onSuccess: () =>{
+            toast.success(messages.deleteSuccess);
+          },
+        });
+      },
     });
   };
 
@@ -52,7 +56,7 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement }) => {
         <Text>
           <ParsedContent html={announcement.content} emojis={announcement.emojis} />
         </Text>
-        {(announcement.starts_at || announcement.ends_at || announcement.all_day) && (
+        {((announcement.starts_at ?? announcement.ends_at) ?? announcement.all_day) && (
           <HStack space={2} wrap>
             {announcement.starts_at && (
               <Text size='sm'>

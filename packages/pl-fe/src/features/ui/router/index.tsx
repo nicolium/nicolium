@@ -1494,7 +1494,7 @@ const RouterWithContext = () => {
     instance,
     features,
     isLoggedIn: !!account,
-    isAdmin: !!(account?.is_admin || account?.is_moderator),
+    isAdmin: !!(account?.is_admin ?? account?.is_moderator),
     hasCrypto,
   }), [features.version, hasCrypto, !!account, account?.is_admin, account?.is_moderator]);
 

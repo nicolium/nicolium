@@ -35,7 +35,7 @@ const ChatTextarea = React.forwardRef<HTMLTextAreaElement, IChatTextarea>(({
       dark:focus-within:ring-primary-500 sm:text-sm
     `}
   >
-    {(attachment || uploading) && (
+    {(attachment ?? uploading) && (
       <HStack className='-ml-2 -mt-2 p-3 pb-0' wrap>
         {attachment && (
           <div className='ml-2 mt-2 flex'>

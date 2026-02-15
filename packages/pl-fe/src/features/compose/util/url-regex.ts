@@ -2,13 +2,13 @@ const regexen: { [x: string]: string | RegExp } = {};
 
 const regexSupplant = (regex: string | RegExp, flags = '') => {
   if (typeof regex !== 'string') {
-    if (regex.global && flags.indexOf('g') < 0) {
+    if (regex.global && !flags.includes('g')) {
       flags += 'g';
     }
-    if (regex.ignoreCase && flags.indexOf('i') < 0) {
+    if (regex.ignoreCase && !flags.includes('i')) {
       flags += 'i';
     }
-    if (regex.multiline && flags.indexOf('m') < 0) {
+    if (regex.multiline && !flags.includes('m')) {
       flags += 'm';
     }
 
@@ -24,7 +24,7 @@ const regexSupplant = (regex: string | RegExp, flags = '') => {
 };
 
 const stringSupplant = (str: string, values: { [x: string]: any }) =>
-  str.replace(/#\{(\w+)\}/g, (match, name) => values[name] || '');
+  str.replace(/#\{(\w+)\}/g, (match, name) => values[name] ?? '');
 
 const urlRegex = (() => {
   regexen.spaces_group = /\x09-\x0D\x20\x85\xA0\u1680\u180E\u2000-\u200A\u2028\u2029\u202F\u205F\u3000/; // eslint-disable-line no-control-regex

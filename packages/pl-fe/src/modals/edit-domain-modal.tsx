@@ -32,8 +32,8 @@ const EditDomainModal: React.FC<BaseModalProps & EditDomainModalProps> = ({ onCl
   const { data: domains, createDomain, isCreating, updateDomain, isUpdating } = useDomains();
 
   const [domain] = useState<AdminDomain | null>(domainId ? domains!.find(({ id }) => domainId === id)! : null);
-  const [domainName, setDomainName] = useState(domain?.domain || '');
-  const [isPublic, setPublic] = useState(domain?.public || false);
+  const [domainName, setDomainName] = useState(domain?.domain ?? '');
+  const [isPublic, setPublic] = useState(domain?.public ?? false);
 
   const onClickClose = () => {
     onClose('EDIT_DOMAIN');
@@ -81,14 +81,18 @@ const EditDomainModal: React.FC<BaseModalProps & EditDomainModalProps> = ({ onCl
             autoComplete='off'
             placeholder={intl.formatMessage(messages.domainPlaceholder)}
             value={domainName}
-            onChange={({ target }) => setDomainName(target.value)}
+            onChange={({ target }) =>{
+              setDomainName(target.value);
+            }}
             disabled={!!domainId}
           />
         </FormGroup>
         <HStack alignItems='center' space={2}>
           <Toggle
             checked={isPublic}
-            onChange={({ target }) => setPublic(target.checked)}
+            onChange={({ target }) =>{
+              setPublic(target.checked);
+            }}
           />
           <Stack>
             <Text tag='span' theme='muted'>

@@ -26,7 +26,7 @@ const useVerify = () => {
     });
   };
 
-  const verify = async (accountId: string, callbacks?: EntityCallbacks<void, unknown>) => {
+  const verify = async (accountId: string, callbacks?: EntityCallbacks<void>) => {
     verifyEffect(accountId, true);
     try {
       await client.admin.accounts.tagUser(accountId, ['verified']);
@@ -37,7 +37,7 @@ const useVerify = () => {
     }
   };
 
-  const unverify = async (accountId: string, callbacks?: EntityCallbacks<void, unknown>) => {
+  const unverify = async (accountId: string, callbacks?: EntityCallbacks<void>) => {
     verifyEffect(accountId, false);
     try {
       await client.admin.accounts.untagUser(accountId, ['verified']);

@@ -164,7 +164,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
 
   const postRegisterAction = ({ access_token }: any) => {
     if (needsConfirmation || needsApproval) {
-      return launchModal();
+      launchModal(); return;
     } else {
       return dispatch(verifyCredentials(access_token)).then(() => {
         navigate({ to: '/' });
@@ -319,7 +319,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
 
           {birthdayRequired && (
             <BirthdayInput
-              value={params.date_of_birth || ''}
+              value={params.date_of_birth ?? ''}
               onChange={onBirthdayChange}
               required
             />
@@ -334,7 +334,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
                 placeholder={intl.formatMessage(messages.reasonHint)}
                 maxLength={500}
                 onChange={onInputChange}
-                value={params.reason || ''}
+                value={params.reason ?? ''}
                 autoGrow
                 required
               />
@@ -348,7 +348,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
             onClick={onCaptchaClick}
             idempotencyKey={captchaIdempotencyKey}
             name='captcha_solution'
-            value={params.captcha_solution || ''}
+            value={params.captcha_solution ?? ''}
           />
 
           <FormGroup

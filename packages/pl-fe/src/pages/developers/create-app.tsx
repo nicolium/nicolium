@@ -55,8 +55,8 @@ const CreateAppPage: React.FC = () => {
     const baseURL = getBaseURL(account!);
 
     const tokenParams = {
-      client_id: app!.client_id,
-      client_secret: app!.client_secret,
+      client_id: app.client_id,
+      client_secret: app.client_secret,
       redirect_uri: params.redirect_uris,
       grant_type: 'client_credentials',
       scope: params.scopes,

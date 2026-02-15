@@ -35,11 +35,11 @@ const OtpAuthForm: React.FC<IOtpAuthForm> = ({ mfa_token, small }) => {
     Array.from(form).map((i: any) => [i.name, i.value]),
   );
 
-  const handleSubmit = (event: React.FormEvent<Element>) => {
+  const handleSubmit = (event: React.FormEvent) => {
     const { code } = getFormData(event.target);
     dispatch(otpVerify(code, mfa_token)).then(({ access_token }) => {
       setCodeError(false);
-      return dispatch(verifyCredentials(access_token as string));
+      return dispatch(verifyCredentials(access_token));
     }).then((account: Record<string, any>) => {
       setShouldRedirect(true);
       return dispatch(switchAccount(account.id));

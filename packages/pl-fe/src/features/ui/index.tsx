@@ -71,10 +71,18 @@ const UI: React.FC = React.memo(() => {
     }
   };
 
-  const handleDragEnter = (e: DragEvent) => e.preventDefault();
-  const handleDragLeave = (e: DragEvent) => e.preventDefault();
-  const handleDragOver = (e: DragEvent) => e.preventDefault();
-  const handleDrop = (e: DragEvent) => e.preventDefault();
+  const handleDragEnter = (e: DragEvent) =>{
+    e.preventDefault();
+  };
+  const handleDragLeave = (e: DragEvent) =>{
+    e.preventDefault();
+  };
+  const handleDragOver = (e: DragEvent) =>{
+    e.preventDefault();
+  };
+  const handleDrop = (e: DragEvent) =>{
+    e.preventDefault();
+  };
 
   /** Load initial data when a user is logged in */
   const loadAccountData = () => {
@@ -85,7 +93,6 @@ const UI: React.FC = React.memo(() => {
     dispatch(fetchHomeTimeline());
 
     dispatch(expandNotifications())
-      // @ts-ignore
       .then(() => dispatch(fetchMarker(['notifications'])))
       .catch(console.error);
 

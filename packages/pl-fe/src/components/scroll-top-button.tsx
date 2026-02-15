@@ -38,7 +38,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   const visible = count > 0 && (!autoloadTimelines || scrolled);
 
   /** Number of pixels scrolled down from the top of the page. */
-  const getScrollTop = (): number => (document.scrollingElement || document.documentElement).scrollTop;
+  const getScrollTop = (): number => (document.scrollingElement ?? document.documentElement).scrollTop;
 
   /** Unload feed items if scrolled to the top. */
   const maybeUnload = useCallback(() => {

@@ -60,7 +60,7 @@ const AnnouncementContent: React.FC<IAnnouncementContent> = ({ announcement }) =
       link.setAttribute('rel', 'nofollow noopener');
       link.setAttribute('target', '_blank');
 
-      const mention = announcement.mentions.find(mention => link.href === `${mention.url}`);
+      const mention = announcement.mentions.find(mention => link.href === mention.url);
 
       // Add event listeners on mentions, hashtags and statuses
       if (mention) {

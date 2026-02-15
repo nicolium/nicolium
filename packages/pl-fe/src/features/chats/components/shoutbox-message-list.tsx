@@ -101,7 +101,7 @@ const ShoutboxMessageList: React.FC = () => {
   const shoutboxMessages = useShoutboxMessages() || [];
   const isLoading = useShoutboxIsLoading();
 
-  const lastShoutboxMessage = shoutboxMessages?.at(-1) || null;
+  const lastShoutboxMessage = shoutboxMessages?.at(-1) ?? null;
 
   useEffect(() => {
     if (!shoutboxMessages) {

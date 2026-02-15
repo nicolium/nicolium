@@ -91,7 +91,7 @@ const CirclePage: React.FC = () => {
       // https://github.com/duiker101/twitter-interaction-circles
       const ctx = canvasRef.current?.getContext('2d')!;
 
-      const ownAvatar = account?.avatar || avatarMissing;
+      const ownAvatar = account?.avatar ?? avatarMissing;
 
       let imageLoadingErorrs = 0;
 
@@ -117,7 +117,7 @@ const CirclePage: React.FC = () => {
 
           if (!users[i]) break;
 
-          const avatarUrl = users[i].avatar || avatarMissing;
+          const avatarUrl = users[i].avatar ?? avatarMissing;
 
           try {
             // eslint-disable-next-line no-loop-func

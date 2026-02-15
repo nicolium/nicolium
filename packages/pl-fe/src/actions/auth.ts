@@ -59,7 +59,9 @@ const messages = defineMessages({
   invalidCredentials: { id: 'auth.invalid_credentials', defaultMessage: 'Wrong username or password' },
 });
 
-const noOp = () => new Promise(f => f(undefined));
+const noOp = () => new Promise(f =>{
+  f(undefined);
+});
 
 const createAppAndToken = () =>
   (dispatch: AppDispatch) =>
@@ -97,8 +99,8 @@ const createAppToken = () =>
     const app = getState().auth.app!;
 
     const params = {
-      client_id: app.client_id!,
-      client_secret: app.client_secret!,
+      client_id: app.client_id,
+      client_secret: app.client_secret,
       redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
       grant_type: 'client_credentials',
       scope: getScopes(getState()),
@@ -216,10 +218,10 @@ const logIn = (username: string, password: string) =>
   (dispatch: AppDispatch) => dispatch(createAuthApp()).then(() =>
     dispatch(createUserToken(normalizeUsername(username), password)),
   ).catch((error: { response: PlfeResponse }) => {
-    if ((error.response?.json as any)?.error === 'mfa_required') {
+    if ((error.response?.json)?.error === 'mfa_required') {
       // If MFA is required, throw the error and handle it in the component.
       throw error;
-    } else if ((error.response?.json as any)?.identifier === 'awaiting_approval') {
+    } else if ((error.response?.json)?.identifier === 'awaiting_approval') {
       toast.error(messages.awaitingApproval);
     } else {
       // Return "wrong password" message.
@@ -242,11 +244,11 @@ const logOut = () =>
 
     if (!account) return dispatch(noOp);
 
-    const token = state.auth.users[account.url]!.access_token;
+    const token = state.auth.users[account.url].access_token;
 
     const params = {
-      client_id: state.auth.tokens[token]?.client_id || state.auth.app?.client_id!,
-      client_secret: state.auth.tokens[token]?.client_secret || state.auth.app?.client_secret!,
+      client_id: state.auth.tokens[token]?.client_id ?? state.auth.app?.client_id!,
+      client_secret: state.auth.tokens[token]?.client_secret ?? state.auth.app?.client_secret!,
       token,
     };
 
@@ -285,11 +287,13 @@ const switchAccount = (accountId: string) =>
 const fetchOwnAccounts = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-    return Object.values(state.auth.users).forEach((user) => {
+    Object.values(state.auth.users).forEach((user) => {
       const account = selectAccount(state, user.id);
       if (!account) {
         dispatch(verifyCredentials(user.access_token, user.url))
-          .catch(() => console.warn(`Failed to load account: ${user.url}`));
+          .catch(() =>{
+            console.warn(`Failed to load account: ${user.url}`);
+          });
       }
     });
   };
@@ -321,7 +325,7 @@ interface AuthLoggedInAction {
 
 const authLoggedIn = (token: Token, app?: CredentialApplication | null) =>
   (dispatch: AppDispatch) => {
-    dispatch<AuthLoggedInAction>({ type: AUTH_LOGGED_IN, token, app: app || undefined });
+    dispatch<AuthLoggedInAction>({ type: AUTH_LOGGED_IN, token, app: app ?? undefined });
     return token;
   };
 

@@ -61,7 +61,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
   const { updateAccountHoverCard, closeAccountHoverCard } = useAccountHoverCardActions();
 
   const me = useAppSelector(state => state.me);
-  const { account } = useAccount(accountId || undefined, { withRelationship: true });
+  const { account } = useAccount(accountId ?? undefined, { withRelationship: true });
   const { data: scrobble } = useQuery(accountScrobbleQueryOptions(account?.id));
   const badges = getBadges(account);
 

@@ -24,7 +24,7 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
 
   const { chatsQuery: { data: chats, isFetching, hasNextPage, fetchNextPage, refetch } } = useChats();
 
-  const allChats: Array<Chat | 'shoutbox'> | undefined = showShoutbox ? ['shoutbox', ...(chats || [])] : chats;
+  const allChats: Array<Chat | 'shoutbox'> | undefined = showShoutbox ? ['shoutbox', ...(chats ?? [])] : chats;
 
   const [isNearBottom, setNearBottom] = useState<boolean>(false);
   const [isNearTop, setNearTop] = useState<boolean>(true);
@@ -68,8 +68,12 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
       })}
     >
       <Virtuoso
-        atTopStateChange={(atTop) => setNearTop(atTop)}
-        atBottomStateChange={(atBottom) => setNearBottom(atBottom)}
+        atTopStateChange={(atTop) =>{
+          setNearTop(atTop);
+        }}
+        atBottomStateChange={(atBottom) =>{
+          setNearBottom(atBottom);
+        }}
         useWindowScroll={useWindowScroll}
         data={allChats}
         endReached={handleLoadMore}

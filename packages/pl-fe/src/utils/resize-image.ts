@@ -60,8 +60,12 @@ const getImageUrl = (inputFile: File) => new Promise<string>((resolve, reject) =
   }
 
   const reader = new FileReader();
-  reader.onerror = (...args) => reject(...args);
-  reader.onload = ({ target }) => resolve((target?.result || '') as string);
+  reader.onerror = (...args) =>{
+    reject(...args);
+  };
+  reader.onload = ({ target }) =>{
+    resolve((target?.result ?? '') as string);
+  };
 
   reader.readAsDataURL(inputFile);
 });
@@ -71,8 +75,12 @@ const loadImage = (inputFile: File) => new Promise<HTMLImageElement>((resolve, r
   getImageUrl(inputFile).then(url => {
     const img = new Image();
 
-    img.onerror = (...args) => reject([...args]);
-    img.onload = () => resolve(img);
+    img.onerror = (...args) =>{
+      reject([...args]);
+    };
+    img.onload = () =>{
+      resolve(img);
+    };
 
     img.src = url;
   }).catch(reject);

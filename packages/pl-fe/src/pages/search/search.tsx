@@ -36,7 +36,7 @@ interface ISearchInput {
 
 const SearchInput: React.FC<ISearchInput> = ({ className, placeholder, query }) => {
   const navigate = useNavigate({ from: searchRoute.fullPath });
-  const [value, setValue] = useState(query || '');
+  const [value, setValue] = useState(query ?? '');
 
   const intl = useIntl();
 
@@ -81,8 +81,8 @@ const SearchInput: React.FC<ISearchInput> = ({ className, placeholder, query }) 
         <Input
           type='text'
           id='search'
-          placeholder={placeholder || intl.formatMessage(messages.placeholder)}
-          aria-label={placeholder || intl.formatMessage(messages.placeholder)}
+          placeholder={placeholder ?? intl.formatMessage(messages.placeholder)}
+          aria-label={placeholder ?? intl.formatMessage(messages.placeholder)}
           value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
@@ -144,24 +144,32 @@ const SearchResults = () => {
     items.push(
       {
         text: intl.formatMessage(messages.accounts),
-        action: () => selectFilter('accounts'),
+        action: () =>{
+          selectFilter('accounts');
+        },
         name: 'accounts',
       },
       {
         text: intl.formatMessage(messages.statuses),
-        action: () => selectFilter('statuses'),
+        action: () =>{
+          selectFilter('statuses');
+        },
         name: 'statuses',
       },
       {
         text: intl.formatMessage(messages.hashtags),
-        action: () => selectFilter('hashtags'),
+        action: () =>{
+          selectFilter('hashtags');
+        },
         name: 'hashtags',
       },
     );
 
     if (!submitted && features.trendingLinks) items.push({
       text: intl.formatMessage(messages.links),
-      action: () => selectFilter('links'),
+      action: () =>{
+        selectFilter('links');
+      },
       name: 'links',
     });
 

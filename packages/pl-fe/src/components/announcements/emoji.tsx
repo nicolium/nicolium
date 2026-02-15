@@ -42,7 +42,7 @@ const Emoji: React.FC<IEmoji> = ({ emoji, emojiMap, hovered }) => {
         className='emojione m-0 block'
         alt={shortCode}
         title={shortCode}
-        src={filename as string}
+        src={filename}
       />
     );
   } else {

@@ -60,7 +60,7 @@ const LocationSearch: React.FC<ILocationSearch> = ({ onSelected }) => {
         placeholder={intl.formatMessage(messages.placeholder)}
         value={value}
         onChange={handleChange}
-        suggestions={locationsQuery.data || []}
+        suggestions={locationsQuery.data ?? []}
         onSuggestionsFetchRequested={noOp}
         onSuggestionsClearRequested={noOp}
         onSuggestionSelected={handleSelected}

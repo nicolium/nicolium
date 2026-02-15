@@ -36,7 +36,7 @@ const ComposeInteractionPolicyModal: React.FC<BaseModalProps & ComposeInteractio
     }
 
     client.settings.verifyCredentials().then((credentialAccount) => {
-      setInitialQuotePolicy(credentialAccount.source?.quote_policy || 'public');
+      setInitialQuotePolicy(credentialAccount.source?.quote_policy ?? 'public');
     }).catch(() => {});
   }, []);
 
@@ -45,7 +45,7 @@ const ComposeInteractionPolicyModal: React.FC<BaseModalProps & ComposeInteractio
     return null;
   }
 
-  const interactionPolicy = (compose.interactionPolicy || initial[compose.visibility as 'public']);
+  const interactionPolicy = (compose.interactionPolicy ?? initial[compose.visibility as 'public']);
 
   const onClickClose = () => {
     onClose('COMPOSE_INTERACTION_POLICY');

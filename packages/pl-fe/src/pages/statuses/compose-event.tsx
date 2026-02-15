@@ -33,12 +33,16 @@ const EditEventPage = () => {
     const items = [
       {
         text: intl.formatMessage(messages.edit),
-        action: () => setTab('edit'),
+        action: () =>{
+          setTab('edit');
+        },
         name: 'edit',
       },
       {
         text: intl.formatMessage(messages.pending),
-        action: () => setTab('pending'),
+        action: () =>{
+          setTab('pending');
+        },
         name: 'pending',
       },
     ];

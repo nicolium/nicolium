@@ -85,12 +85,12 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
   const isSuggestionsAvailable = suggestions.list.length > 0;
 
   const isOverCharacterLimit = maxCharacterCount && value?.length > maxCharacterCount;
-  const isSubmitDisabled = disabled || uploading || isOverCharacterLimit || (value.length === 0 && !attachment);
+  const isSubmitDisabled = disabled || (uploading ?? isOverCharacterLimit) || (value.length === 0 && !attachment);
 
   const overLimitText = maxCharacterCount ? maxCharacterCount - value?.length : '';
 
   const renderSuggestionValue = (emoji: any) =>
-    `${(value).slice(0, suggestions.tokenStart)}${emoji.native} ${(value as string).slice(suggestions.tokenStart + suggestions.token.length)}`;
+    `${(value).slice(0, suggestions.tokenStart)}${emoji.native} ${(value).slice(suggestions.tokenStart + suggestions.token.length)}`;
 
   const onSelectComboboxOption = (selection: string) => {
     const event = { target: { value: selection } } as React.ChangeEvent<HTMLTextAreaElement>;
@@ -139,7 +139,9 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
       heading: intl.formatMessage(messages.unblockHeading, { acct: chat?.account.acct }),
       message: intl.formatMessage(messages.unblockMessage),
       confirm: intl.formatMessage(messages.unblockConfirm),
-      onConfirm: () => unblockAccount(),
+      onConfirm: () =>{
+        unblockAccount();
+      },
     });
   };
 
@@ -175,7 +177,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
             resetFileKey={resetFileKey}
             iconClassName='h-5 w-5'
             className='text-primary-500'
-            disabled={uploading || !!attachment}
+            disabled={uploading ?? !!attachment}
           />
         </Stack>
 

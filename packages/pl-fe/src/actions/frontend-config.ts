@@ -78,9 +78,7 @@ const fetchPlFeJson = (host: string | null) =>
     });
 
 const importFrontendConfig = (frontendConfig: APIEntity, host: string | null) => {
-  if (!frontendConfig.brandColor) {
-    frontendConfig.brandColor = '#d80482';
-  }
+  frontendConfig.brandColor ??= '#d80482';
 
   useSettingsStore.getState().actions.loadDefaultSettings(frontendConfig?.defaultSettings);
 

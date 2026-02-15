@@ -58,7 +58,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
 
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector((state) => statusId ? getStatus(state, { id: statusId }) : undefined);
-  const media = status?.media_attachments || props.media || [];
+  const media = (status?.media_attachments ?? props.media) ?? [];
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
   const [index, setIndex] = useState<number>(props.index || 0);
@@ -155,7 +155,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   );
 
   const handleDownload = () => {
-    const mediaItem = hasMultipleImages ? media[index as number] : media[0];
+    const mediaItem = hasMultipleImages ? media[index] : media[0];
     window.open(mediaItem?.url);
   };
 
@@ -190,7 +190,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
       return (
         <ZoomableImage
           src={attachment.url}
-          blurhash={attachment.blurhash || undefined}
+          blurhash={attachment.blurhash ?? undefined}
           width={width!}
           height={height!}
           alt={attachment.description}
@@ -225,11 +225,11 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
         <Audio
           src={attachment.url}
           alt={attachment.description}
-          poster={attachment.preview_url !== attachment.url ? attachment.preview_url : (status?.account.avatar_static) as string | undefined}
-          backgroundColor={attachment.meta.colors?.background as string | undefined}
-          foregroundColor={attachment.meta.colors?.foreground as string | undefined}
-          accentColor={attachment.meta.colors?.accent as string | undefined}
-          duration={attachment.meta.original?.duration || 0}
+          poster={attachment.preview_url !== attachment.url ? attachment.preview_url : (status?.account.avatar_static)}
+          backgroundColor={attachment.meta.colors?.background}
+          foregroundColor={attachment.meta.colors?.foreground}
+          accentColor={attachment.meta.colors?.accent}
+          duration={attachment.meta.original?.duration ?? 0}
           key={attachment.url}
         />
       );
@@ -298,7 +298,9 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
           style={wrapperStyles}
           className='⁂-media-modal__closer'
           role='presentation'
-          onClick={() => onClose()}
+          onClick={() =>{
+            onClose();
+          }}
         >
           {content}
         </animated.div>
@@ -312,7 +314,9 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
             <IconButton
               title={intl.formatMessage(messages.close)}
               src={require('@phosphor-icons/core/regular/x.svg')}
-              onClick={() => onClose('MEDIA')}
+              onClick={() =>{
+                onClose('MEDIA');
+              }}
               theme='dark'
               className='!p-1.5 hover:scale-105 hover:bg-gray-900'
               iconClassName='h-5 w-5'
@@ -346,7 +350,9 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                   theme='dark'
                   className='hidden !p-1.5 hover:scale-105 hover:bg-gray-900 xl:block'
                   iconClassName='h-5 w-5'
-                  onClick={() => setIsFullScreen(!isFullScreen)}
+                  onClick={() =>{
+                    setIsFullScreen(!isFullScreen);
+                  }}
                 />
               )}
             </HStack>

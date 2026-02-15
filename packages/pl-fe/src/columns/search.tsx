@@ -39,7 +39,7 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
     statuses: searchStatusesQuery,
     hashtags: searchHashtagsQuery,
     links: searchStatusesQuery,
-  })[type]!;
+  })[type];
 
   const getCurrentIndex = (id: string): number => resultsIds?.findIndex(key => key === id);
 
@@ -47,14 +47,14 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
     if (!resultsIds) return;
 
     const elementIndex = getCurrentIndex(id) - 1;
-    selectChild(elementIndex, node, document.getElementById('search-results') || undefined);
+    selectChild(elementIndex, node, document.getElementById('search-results') ?? undefined);
   };
 
   const handleMoveDown = (id: string) => {
     if (!resultsIds) return;
 
     const elementIndex = getCurrentIndex(id) + 1;
-    selectChild(elementIndex, node, document.getElementById('search-results') || undefined, resultsIds.length);
+    selectChild(elementIndex, node, document.getElementById('search-results') ?? undefined, resultsIds.length);
   };
 
   const handleLoadMore = () => activeQuery.fetchNextPage({ cancelRefetch: false });
@@ -143,7 +143,7 @@ const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiCo
       })}
       useWindowScroll={!multiColumn}
     >
-      {searchResults || []}
+      {searchResults ?? []}
     </ScrollableList>
   );
 };

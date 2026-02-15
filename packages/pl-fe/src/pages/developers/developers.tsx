@@ -34,7 +34,9 @@ const DevelopersPage: React.FC = () => {
     event.preventDefault();
 
     toast.success('Hello world!', {
-      action: () => alert('hi'),
+      action: () =>{
+        alert('hi');
+      },
       actionLabel: 'Click me',
     });
   };

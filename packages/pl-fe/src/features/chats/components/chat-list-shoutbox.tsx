@@ -33,7 +33,9 @@ const ChatListShoutbox: React.FC<IChatListShoutboxInterface> = ({ onClick }) => 
     <div
       role='button'
       key='shoutbox'
-      onClick={() => onClick('shoutbox')}
+      onClick={() =>{
+        onClick('shoutbox');
+      }}
       onKeyDown={handleKeyDown}
       className='⁂-chat-list-item ⁂-chat-list-item--shoutbox'
       data-testid='chat-list-item'

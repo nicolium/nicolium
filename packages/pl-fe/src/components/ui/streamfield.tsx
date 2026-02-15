@@ -113,7 +113,9 @@ const Streamfield: React.FC<IStreamfield> = ({
                   iconClassName='h-4 w-4'
                   className='bg-transparent text-gray-600 hover:text-gray-600'
                   src={require('@phosphor-icons/core/regular/x.svg')}
-                  onClick={() => onRemoveItem(i)}
+                  onClick={() =>{
+                    onRemoveItem(i);
+                  }}
                   title={intl.formatMessage(messages.remove)}
                 />
               )}

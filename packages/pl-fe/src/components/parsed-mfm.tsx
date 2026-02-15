@@ -26,7 +26,7 @@ const safeParseFloat = (str: unknown): number | null => {
 const validTime = (t: string | boolean | null | undefined) => {
   if (t === null || t === undefined) return null;
   if (typeof t === 'boolean') return null;
-  return t.match(/^\-?[0-9.]+s$/) ? t : null;
+  return t.match(/^-?[0-9.]+s$/) ? t : null;
 };
 
 const validColor = (c: unknown): string | null => {
@@ -414,7 +414,9 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
                   params={{ username: mention.acct }}
                   className='text-primary-600 hover:underline dark:text-primary-400'
                   dir='ltr'
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) =>{
+                    e.stopPropagation();
+                  }}
                 >
                   <HoverAccountWrapper accountId={mention.id} element='span'>
                     @{mention.username}
@@ -432,7 +434,9 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
               params={{ username: token.props.acct.slice(1) }}
               className='text-primary-600 hover:underline dark:text-primary-400'
               dir='ltr'
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) =>{
+                e.stopPropagation();
+              }}
             >
               @{token.props.username}
             </Link>
@@ -449,7 +453,7 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
       case 'blockCode': {
         return (
           <bdi className='block'>
-            <pre lang={token.props.lang || undefined}>
+            <pre lang={token.props.lang ?? undefined}>
               {token.props.code}
             </pre>
           </bdi>

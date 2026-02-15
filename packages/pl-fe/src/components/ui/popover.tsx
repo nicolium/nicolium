@@ -20,7 +20,7 @@ import React, { useRef, useState } from 'react';
 import Portal from './portal';
 
 interface IPopover {
-  children: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
+  children: React.ReactElement;
   /** The content of the popover */
   content: React.ReactNode;
   /** Should we remove padding on the Popover */

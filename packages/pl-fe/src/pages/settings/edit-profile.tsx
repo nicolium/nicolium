@@ -253,8 +253,8 @@ const EditProfilePage: React.FC = () => {
     else if (fields_attributes) params.fields_attributes = Object.fromEntries(
       fields_attributes.map(({ name, value }, i) => [i.toString(), { name, value }]),
     );
-    if (header.file !== undefined) params.header = header.file || '';
-    if (avatar.file !== undefined) params.avatar = avatar.file || '';
+    if (header.file !== undefined) params.header = header.file ?? '';
+    if (avatar.file !== undefined) params.avatar = avatar.file ?? '';
 
     if (!instance.configuration.accounts?.allow_custom_css) delete params.custom_css;
 
@@ -315,13 +315,13 @@ const EditProfilePage: React.FC = () => {
   };
 
   const handleAddField = () => {
-    const oldFields = data.fields_attributes || [];
+    const oldFields = data.fields_attributes ?? [];
     const fields = [...oldFields, { name: '', value: '' }];
     updateData('fields_attributes', fields);
   };
 
   const handleRemoveField = (i: number) => {
-    const oldFields = data.fields_attributes || [];
+    const oldFields = data.fields_attributes ?? [];
     const fields = [...oldFields];
     fields.splice(i, 1);
     updateData('fields_attributes', fields);
@@ -443,7 +443,9 @@ const EditProfilePage: React.FC = () => {
             >
               <Toggle
                 checked={muteStrangers}
-                onChange={(e) => setMuteStrangers(e.target.checked)}
+                onChange={(e) =>{
+                  setMuteStrangers(e.target.checked);
+                }}
               />
             </ListItem>
           )}
@@ -506,7 +508,9 @@ const EditProfilePage: React.FC = () => {
                   gallery: intl.formatMessage(messages.webLayoutGallery),
                 }}
                 defaultValue={data.web_layout}
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => handleFieldChange('web_layout')(event.target.value)}
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>{
+                  handleFieldChange('web_layout')(event.target.value);
+                }}
               />
             </ListItem>
           )}
@@ -523,7 +527,9 @@ const EditProfilePage: React.FC = () => {
                   none: intl.formatMessage(messages.webVisibilityNone),
                 }}
                 defaultValue={data.web_visibility}
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => handleFieldChange('web_visibility')(event.target.value)}
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>{
+                  handleFieldChange('web_visibility')(event.target.value);
+                }}
               />
             </ListItem>
           )}
@@ -554,7 +560,9 @@ const EditProfilePage: React.FC = () => {
                   only_contacts: intl.formatMessage(messages.mentionPolicyOnlyContacts),
                 }}
                 defaultValue={data.mention_policy}
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => handleFieldChange('mention_policy')(event.target.value)}
+                onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>{
+                  handleFieldChange('mention_policy')(event.target.value);
+                }}
               />
             </ListItem>
           )}
@@ -564,7 +572,7 @@ const EditProfilePage: React.FC = () => {
           <Streamfield
             label={<FormattedMessage id='edit_profile.fields.meta_fields_label' defaultMessage='Profile fields' />}
             hint={<FormattedMessage id='edit_profile.hints.meta_fields' defaultMessage='You can have up to {count, plural, one {# custom field} other {# custom fields}} displayed on your profile.' values={{ count: maxFields }} />}
-            values={data.fields_attributes || []}
+            values={data.fields_attributes ?? []}
             onChange={handleFieldsChange}
             onAddItem={handleAddField}
             onRemoveItem={handleRemoveField}
@@ -591,7 +599,7 @@ const EditProfilePage: React.FC = () => {
                 <FormattedMessage
                   id='edit_profile.custom_css.remaining_characters'
                   defaultMessage='{remaining, plural, one {# character} other {# characters}} remaining'
-                  values={{ remaining: 5000 - (data.custom_css || '').length }}
+                  values={{ remaining: 5000 - (data.custom_css ?? '').length }}
                 />
               </p>
             </FormGroup>

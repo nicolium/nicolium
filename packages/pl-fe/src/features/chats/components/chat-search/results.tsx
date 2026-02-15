@@ -37,7 +37,9 @@ const Results = ({ accountSearchResult, onSelect, parentRef }: IResults) => {
       key={account.id}
       type='button'
       className='flex w-full flex-col rounded-lg px-2 py-3 hover:bg-gray-100 dark:hover:bg-gray-800'
-      onClick={() => onSelect(account.id)}
+      onClick={() =>{
+        onSelect(account.id);
+      }}
       data-testid='account'
     >
       <HStack alignItems='center' space={2}>
@@ -64,8 +66,12 @@ const Results = ({ accountSearchResult, onSelect, parentRef }: IResults) => {
           </div>
         )}
         endReached={handleLoadMore}
-        atTopStateChange={(atTop) => setNearTop(atTop)}
-        atBottomStateChange={(atBottom) => setNearBottom(atBottom)}
+        atTopStateChange={(atTop) =>{
+          setNearTop(atTop);
+        }}
+        atBottomStateChange={(atBottom) =>{
+          setNearBottom(atBottom);
+        }}
       />
 
       <div

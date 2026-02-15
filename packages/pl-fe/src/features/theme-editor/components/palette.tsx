@@ -35,7 +35,7 @@ const Palette: React.FC<IPalette> = ({ palette, onChange, resetKey, allowTintCha
   };
 
   useEffect(() => {
-    const delta = hue - (lastHue || 0);
+    const delta = hue - (lastHue ?? 0);
 
     const adjusted = Object.entries(palette).reduce<ColorGroup>((result, [tint, hex]) => {
       result[tint] = hueShift(hex, delta * 360);

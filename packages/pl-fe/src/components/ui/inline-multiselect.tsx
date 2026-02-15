@@ -30,7 +30,9 @@ const InlineMultiselect = <T extends string>({ items, value, onChange, disabled 
             type='checkbox'
             className='sr-only'
             checked={checked}
-            onChange={({ target }) => onChange((target.checked ? [...(value || []), target.name] : value?.filter(key => key !== target.name) || []) as Array<T>)}
+            onChange={({ target }) =>{
+              onChange((target.checked ? [...(value ?? []), target.name] : value?.filter(key => key !== target.name) ?? []) as Array<T>);
+            }}
             disabled={disabled}
           />
           {label as string}

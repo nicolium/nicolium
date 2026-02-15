@@ -19,7 +19,7 @@ interface IComposeButton {
 
 const ComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
   const match = useMatch({ from: layouts.group.id, shouldThrow: false });
-  const { group } = useGroup(match?.params.groupId || '');
+  const { group } = useGroup(match?.params.groupId ?? '');
   const isGroupMember = !!group?.relationship?.member;
 
   if (match && isGroupMember) {
@@ -31,7 +31,9 @@ const ComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
 
 const HomeComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
   const { openModal } = useModalsActions();
-  const onOpenCompose = () => openModal('COMPOSE');
+  const onOpenCompose = () =>{
+    openModal('COMPOSE');
+  };
 
   return (
     <button
@@ -48,7 +50,7 @@ const HomeComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
 const GroupComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
   const dispatch = useAppDispatch();
   const match = useMatch({ from: layouts.group.id, shouldThrow: false });
-  const { group } = useGroup(match?.params.groupId || '');
+  const { group } = useGroup(match?.params.groupId ?? '');
 
   if (!group) return null;
 

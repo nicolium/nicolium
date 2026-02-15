@@ -63,7 +63,9 @@ const ChatsPageChat = () => {
       heading: intl.formatMessage(messages.unblockHeading, { acct: chat?.account.acct }),
       message: intl.formatMessage(messages.unblockMessage),
       confirm: intl.formatMessage(messages.unblockConfirm),
-      onConfirm: () => unblockAccount(),
+      onConfirm: () =>{
+        unblockAccount();
+      },
     });
   };
 

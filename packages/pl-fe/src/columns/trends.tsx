@@ -78,7 +78,7 @@ const TrendsColumn: React.FC<ITrendsColumn> = ({ type, multiColumn }) => {
       })}
       useWindowScroll={!multiColumn}
     >
-      {children || []}
+      {children ?? []}
     </ScrollableList>
   );
 };

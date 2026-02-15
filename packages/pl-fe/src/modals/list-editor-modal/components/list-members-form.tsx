@@ -30,8 +30,12 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
   const { mutate: addToList } = useAddAccountsToList(listId);
   const { mutate: removeFromList } = useRemoveAccountsFromList(listId);
 
-  const onAdd = (accountId: string) => addToList([accountId]);
-  const onRemove = (accountId: string) => removeFromList([accountId]);
+  const onAdd = (accountId: string) =>{
+    addToList([accountId]);
+  };
+  const onRemove = (accountId: string) =>{
+    removeFromList([accountId]);
+  };
 
   return (
     <Stack space={2}>

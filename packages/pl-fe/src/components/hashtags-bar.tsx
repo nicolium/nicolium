@@ -36,7 +36,9 @@ const HashtagsBar: React.FC<IHashtagsBar> = ({ hashtags }) => {
           key={hashtag}
           to='/tags/$id'
           params={{ id: hashtag }}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) =>{
+            e.stopPropagation();
+          }}
           className='flex items-center rounded-sm bg-gray-100 px-1.5 py-1 text-xs font-medium text-primary-600 black:bg-primary-900 dark:bg-primary-700 dark:text-white'
         >
           <Text size='xs' weight='semibold' theme='inherit'>

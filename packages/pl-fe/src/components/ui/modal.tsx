@@ -83,7 +83,7 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
 
   const defaultCloseIcon = useDefaultCloseIcon();
 
-  closeIcon = closeIcon || defaultCloseIcon;
+  closeIcon = closeIcon ?? defaultCloseIcon;
 
   React.useEffect(() => {
     setFirstRender(false);
@@ -141,7 +141,7 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
                   className='⁂-modal__action-cancel'
                   onClick={cancelAction}
                 >
-                  {cancelText || <FormattedMessage id='common.cancel' defaultMessage='Cancel' />}
+                  {cancelText ?? <FormattedMessage id='common.cancel' defaultMessage='Cancel' />}
                 </button>
               )}
             </div>
@@ -158,7 +158,7 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(({
               )}
 
               <Button
-                theme={confirmationTheme || 'primary'}
+                theme={confirmationTheme ?? 'primary'}
                 onClick={confirmationAction}
                 disabled={confirmationDisabled}
                 ref={buttonRef}

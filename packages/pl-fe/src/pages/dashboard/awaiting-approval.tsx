@@ -18,7 +18,7 @@ const AwaitingApproval: React.FC = () => {
     status: 'pending',
   });
 
-  const [accountIds, setAccountIds] = useState(data || []);
+  const [accountIds, setAccountIds] = useState(data ?? []);
 
   useEffect(() => {
     if (data && data.length > accountIds.length) setAccountIds(data);

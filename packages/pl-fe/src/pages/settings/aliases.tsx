@@ -48,7 +48,9 @@ const Account: React.FC<IAccount> = ({ accountId, aliases }) => {
   const name = features.accountMoving ? account?.acct : apId;
   const added = name ? aliases.includes(name) : false;
 
-  const handleOnAdd = () => addAccountAlias(name!);
+  const handleOnAdd = () =>{
+    addAccountAlias(name!);
+  };
 
   if (!account) return null;
 

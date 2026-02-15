@@ -79,7 +79,7 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
 
     const handleHotkeyForceNew = (e?: KeyboardEvent) => {
       const composeId = handleHotkeyNew(e);
-      dispatch(resetCompose(composeId || undefined));
+      dispatch(resetCompose(composeId ?? undefined));
     };
 
     const handleHotkeyBack = () => {

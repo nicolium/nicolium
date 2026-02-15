@@ -61,7 +61,7 @@ const fixQuote = (status: StatusRecord, oldStatus?: StatusRecord): StatusRecord 
     return {
       ...status,
       quote: oldStatus.quote,
-      quote_visible: status.quote_visible || oldStatus.quote_visible,
+      quote_visible: status.quote_visible ?? oldStatus.quote_visible,
     };
   } else {
     return status;
@@ -79,7 +79,9 @@ const importStatus = (state: State, status: BaseStatus) =>{
 };
 
 const importStatuses = (state: State, statuses: Array<BaseStatus>) =>{
-  statuses.forEach(status => importStatus(state, status));
+  statuses.forEach(status =>{
+    importStatus(state, status);
+  });
 };
 
 const deleteStatus = (state: State, statusId: string, references: Array<[string, string]>) => {
@@ -159,9 +161,13 @@ const initialState: State = {};
 const statuses = (state = initialState, action: EmojiReactsAction | EventsAction | ImporterAction | InteractionsAction | StatusesAction | TimelineAction): State => {
   switch (action.type) {
     case STATUS_IMPORT:
-      return create(state, (draft) => importStatus(draft, action.status));
+      return create(state, (draft) =>{
+        importStatus(draft, action.status);
+      });
     case STATUSES_IMPORT:
-      return create(state, (draft) => importStatuses(draft, action.statuses));
+      return create(state, (draft) =>{
+        importStatuses(draft, action.statuses);
+      });
     case STATUS_CREATE_REQUEST:
       return action.editing ? state : create(state, (draft) => incrementReplyCount(draft, action.params));
     case STATUS_CREATE_FAIL:
@@ -259,7 +265,9 @@ const statuses = (state = initialState, action: EmojiReactsAction | EventsAction
         }
       });
     case TIMELINE_DELETE:
-      return create(state, (draft) => deleteStatus(draft, action.statusId, action.references));
+      return create(state, (draft) =>{
+        deleteStatus(draft, action.statusId, action.references);
+      });
     case EVENT_JOIN_REQUEST:
       return create(state, (draft) => {
         const status = draft[action.statusId];

@@ -22,21 +22,24 @@ interface IToastOptions {
 const DEFAULT_DURATION = 4000;
 
 const createToast = (type: ToastType, message: ToastText, opts?: IToastOptions) => {
-  const duration = opts?.duration || DEFAULT_DURATION;
+  const duration = opts?.duration ?? DEFAULT_DURATION;
 
   toast.custom((t) => <Toast t={t} message={message} type={type} {...opts} />, {
     duration,
   });
 };
 
-const info = (message: ToastText, opts?: IToastOptions) =>
+const info = (message: ToastText, opts?: IToastOptions) => {
   createToast('info', message, opts);
+};
 
-const success = (message: ToastText, opts?: IToastOptions) =>
+const success = (message: ToastText, opts?: IToastOptions) => {
   createToast('success', message, opts);
+};
 
-const error = (message: ToastText, opts?: IToastOptions) =>
+const error = (message: ToastText, opts?: IToastOptions) => {
   createToast('error', message, opts);
+};
 
 const messages = defineMessages({
   unexpectedMessage: { id: 'alert.unexpected.message', defaultMessage: 'Something went wrong.' },
@@ -47,7 +50,7 @@ const showAlertForError = (networkError: { response: PlfeResponse }) => {
     const { json, status, statusText } = networkError.response;
 
     if (status === 502) {
-      return error('The server is down');
+      error('The server is down'); return;
     }
 
     if (status === 404 || status === 410) {
@@ -61,16 +64,14 @@ const showAlertForError = (networkError: { response: PlfeResponse }) => {
       message = json.error;
     }
 
-    if (!message) {
-      message = httpErrorMessages.find((httpError) => httpError.code === status)?.description;
-    }
+    message ??= httpErrorMessages.find((httpError) => httpError.code === status)?.description;
 
     if (message) {
-      return error(message);
+      error(message); return;
     }
   } else {
     console.error(networkError);
-    return error(messages.unexpectedMessage);
+    error(messages.unexpectedMessage); return;
   }
 };
 

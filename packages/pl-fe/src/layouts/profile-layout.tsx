@@ -68,7 +68,7 @@ const ProfileLayout: React.FC = () => {
 
   if (account) {
     const ownAccount = account.id === me;
-    if (ownAccount || account.hide_favorites === false) {
+    if (ownAccount || !account.hide_favorites) {
       tabItems.push({
         text: <FormattedMessage id='navigation_bar.favourites' defaultMessage='Likes' />,
         to: '/@{$username}/favorites',

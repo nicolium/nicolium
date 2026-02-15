@@ -56,7 +56,9 @@ const EditFederationModal: React.FC<BaseModalProps & EditFederationModalProps> =
 
   const handleSubmit = () => {
     dispatch(updateMrf(host, data))
-      .then(() => toast.success(intl.formatMessage(messages.success, { host })))
+      .then(() =>{
+        toast.success(intl.formatMessage(messages.success, { host }));
+      })
       .catch(() => {});
 
     onClose('EDIT_FEDERATION');
@@ -104,7 +106,7 @@ const EditFederationModal: React.FC<BaseModalProps & EditFederationModalProps> =
             checked={media_nsfw}
             onChange={handleDataChange('media_nsfw')}
             id='media_nsfw'
-            disabled={reject || media_removal}
+            disabled={reject ?? media_removal}
           />
         </ListItem>
 
@@ -122,7 +124,7 @@ const EditFederationModal: React.FC<BaseModalProps & EditFederationModalProps> =
             checked={federated_timeline_removal}
             onChange={handleDataChange('federated_timeline_removal')}
             id='federated_timeline_removal'
-            disabled={reject || followers_only}
+            disabled={reject ?? followers_only}
           />
         </ListItem>
       </List>

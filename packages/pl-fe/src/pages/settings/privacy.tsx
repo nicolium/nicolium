@@ -93,13 +93,13 @@ const Privacy = () => {
           Object.fromEntries(
             mappings.map(({ name, targets }) => ([
               name,
-              services.redirectServices.find((service) => targets.includes(service.type) && service.instances.length)?.instances[0].split('|')[0] || '',
+              services.redirectServices.find((service) => targets.includes(service.type) && service.instances.length)?.instances[0].split('|')[0] ?? '',
             ])),
           ),
         );
       }).catch(() => { });
     }
-    return setRedirectLinksMode(event.target.value as 'off');
+    setRedirectLinksMode(event.target.value as 'off');
   };
 
   useEffect(() => {
@@ -116,17 +116,29 @@ const Privacy = () => {
           <Form onSubmit={onSubmit}>
             <List>
               <ListItem label={<FormattedMessage id='url_privacy.display_target_host' defaultMessage='Always display the domain external links lead to' />}>
-                <Toggle checked={displayTargetHost} onChange={({ target }) => setDisplayTargetHost(target.checked)} />
+                <Toggle
+                  checked={displayTargetHost} onChange={({ target }) =>{
+                    setDisplayTargetHost(target.checked);
+                  }}
+                />
               </ListItem>
             </List>
 
             <List>
               <ListItem label={<FormattedMessage id='url_privacy.clear_links_in_compose' defaultMessage='Suggest removing tracking parameters when composing a post' />}>
-                <Toggle checked={clearLinksInCompose} onChange={({ target }) => setClearLinksInCompose(target.checked)} />
+                <Toggle
+                  checked={clearLinksInCompose} onChange={({ target }) =>{
+                    setClearLinksInCompose(target.checked);
+                  }}
+                />
               </ListItem>
 
               <ListItem label={<FormattedMessage id='url_privacy.clear_links_in_content' defaultMessage='Remove tracking parameters from displayed posts' />}>
-                <Toggle checked={clearLinksInContent} onChange={({ target }) => setClearLinksInContent(target.checked)} />
+                <Toggle
+                  checked={clearLinksInContent} onChange={({ target }) =>{
+                    setClearLinksInContent(target.checked);
+                  }}
+                />
               </ListItem>
             </List>
 
@@ -138,7 +150,9 @@ const Privacy = () => {
                 type='text'
                 placeholder={intl.formatMessage(messages.rulesUrlPlaceholder)}
                 value={rulesUrl}
-                onChange={({ target }) => setRulesUrl(target.value)}
+                onChange={({ target }) =>{
+                  setRulesUrl(target.value);
+                }}
               />
             </FormGroup>
 
@@ -150,7 +164,9 @@ const Privacy = () => {
                 type='text'
                 placeholder={intl.formatMessage(messages.hashUrlPlaceholder)}
                 value={hashUrl}
-                onChange={({ target }) => setHashUrl(target.value)}
+                onChange={({ target }) =>{
+                  setHashUrl(target.value);
+                }}
               />
             </FormGroup>
 
@@ -178,7 +194,9 @@ const Privacy = () => {
                   type='text'
                   placeholder={intl.formatMessage(messages.redirectServicesUrlPlaceholder)}
                   value={redirectServicesUrl}
-                  onChange={({ target }) => setRedirectServicesUrl(target.value)}
+                  onChange={({ target }) =>{
+                    setRedirectServicesUrl(target.value);
+                  }}
                 />
               </FormGroup>
             )}
@@ -194,9 +212,11 @@ const Privacy = () => {
                     outerClassName='grow'
                     type='text'
                     value={redirectServices[service.name]}
-                    onChange={(e) => setRedirectServices((services) => {
-                      services[service.name] = e.target.value;
-                    })}
+                    onChange={(e) =>{
+                      setRedirectServices((services) => {
+                        services[service.name] = e.target.value;
+                      });
+                    }}
                     placeholder={intl.formatMessage(messages.redirectServicePlaceholder)}
                   />
                 </FormGroup>
@@ -212,7 +232,11 @@ const Privacy = () => {
                     : <FormattedMessage id='url_privacy.strip_metadata.hint_no_permission' defaultMessage='This option requires additional permissions to function. Please enable canvas extraction permission in your browser settings.' />
                 }
               >
-                <Toggle checked={stripMetadata} onChange={({ target }) => setStripMetadata(target.checked)} disabled={!hasCanvasExtractPermission} />
+                <Toggle
+                  checked={stripMetadata} onChange={({ target }) =>{
+                    setStripMetadata(target.checked);
+                  }} disabled={!hasCanvasExtractPermission}
+                />
               </ListItem>
             </List>
 

@@ -59,11 +59,11 @@ const frontendConfig = (state = initialState, action: Record<string, any>): Part
     case FRONTEND_CONFIG_REMEMBER_SUCCESS:
       return action.frontendConfig;
     case FRONTEND_CONFIG_REQUEST_SUCCESS:
-      return importFrontendConfig(action.frontendConfig || {}, action.host);
+      return importFrontendConfig(action.frontendConfig ?? {}, action.host);
     case FRONTEND_CONFIG_REQUEST_FAIL:
       return { ...fallbackState, ...state };
     case ADMIN_CONFIG_UPDATE_SUCCESS:
-      return updateFromAdmin(state, action.configs || []);
+      return updateFromAdmin(state, action.configs ?? []);
     default:
       return state;
   }

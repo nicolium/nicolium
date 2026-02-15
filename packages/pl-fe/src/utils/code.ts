@@ -43,7 +43,7 @@ const code = compileTime(() => {
     repository: shortRepoName(pkg.repository.url),
     version: version(pkg),
     homepage: pkg.homepage,
-    ref: CI_COMMIT_TAG || CI_COMMIT_SHA || tryGit('git rev-parse HEAD'),
+    ref: (CI_COMMIT_TAG ?? CI_COMMIT_SHA) ?? tryGit('git rev-parse HEAD'),
   };
 
   return code;

@@ -21,7 +21,7 @@ interface IQuotedStatus {
   /** The quoted status entity. */
   status?: SelectedStatus;
   /** Callback when cancelled (during compose). */
-  onCancel?: Function;
+  onCancel?: () => void;
   /** Whether the status is shown in the post composer. */
   compose?: boolean;
 }

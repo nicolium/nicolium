@@ -43,7 +43,9 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
     const items: Array<Item> = [
       {
         text: intl.formatMessage(messages.all),
-        action: () => setReaction(''),
+        action: () =>{
+          setReaction('');
+        },
         name: 'all',
       },
     ];
@@ -51,15 +53,17 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
     reactions!.forEach(reaction => items.push(
       {
         text: <div className='flex items-center gap-1'>
-          <Emoji className='size-4' emoji={reaction.name} src={reaction.url || undefined} />
+          <Emoji className='size-4' emoji={reaction.name} src={reaction.url ?? undefined} />
           {reaction.count}
         </div>,
-        action: () => setReaction(reaction.name),
+        action: () =>{
+          setReaction(reaction.name);
+        },
         name: reaction.name,
       },
     ));
 
-    return <Tabs items={items} activeItem={reaction || 'all'} />;
+    return <Tabs items={items} activeItem={reaction ?? 'all'} />;
   };
 
   const accounts = useMemo((): Array<IAccountWithReaction> | undefined => {
@@ -68,9 +72,9 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({ onClos
     if (reaction) {
       const reactionRecord = reactions.find(({ name }) => name === reaction);
 
-      if (reactionRecord) return reactionRecord.account_ids.map(account => ({ id: account, reaction: reaction, reactionUrl: reactionRecord.url || undefined }));
+      if (reactionRecord) return reactionRecord.account_ids.map(account => ({ id: account, reaction: reaction, reactionUrl: reactionRecord.url ?? undefined }));
     } else {
-      return reactions.map(({ account_ids, name, url }) => account_ids.map(account => ({ id: account, reaction: name, reactionUrl: url || undefined }))).flat();
+      return reactions.map(({ account_ids, name, url }) => account_ids.map(account => ({ id: account, reaction: name, reactionUrl: url ?? undefined }))).flat();
     }
   }, [reactions, reaction]);
 

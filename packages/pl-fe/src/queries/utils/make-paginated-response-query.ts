@@ -23,7 +23,7 @@ const makePaginatedResponseQuery = <T1 extends Array<any>, T2, T3 = PaginatedRes
 
     return useInfiniteQuery({
       queryKey: typeof queryKey === 'object' ? queryKey : queryKey(...params),
-      queryFn: ({ pageParam }) => pageParam.next?.() || queryFn(client, params),
+      queryFn: ({ pageParam }) => pageParam.next?.() ?? queryFn(client, params),
       initialPageParam: { previous: null, next: null, items: [], partial: false } as Awaited<ReturnType<typeof queryFn>>,
       getNextPageParam: (page) => page.next ? page : undefined,
       select: select ?? ((data) => {
@@ -37,7 +37,7 @@ const makePaginatedResponseQuery = <T1 extends Array<any>, T2, T3 = PaginatedRes
 
         return items as T3;
       }),
-      enabled: enabled === 'isLoggedIn' ? !!account : enabled === 'isAdmin' ? !!(account?.is_admin || account?.is_moderator) : (enabled?.(...params) ?? true),
+      enabled: enabled === 'isLoggedIn' ? !!account : enabled === 'isAdmin' ? !!(account?.is_admin ?? account?.is_moderator) : (enabled?.(...params) ?? true),
     });
   };
 

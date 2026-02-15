@@ -39,7 +39,7 @@ const EmbedModal: React.FC<BaseModalProps & EmbedModalProps> = ({ onClose, onErr
           <FormattedMessage id='embed.instructions' defaultMessage='Embed this post on your website by copying the code below.' />
         </Text>
 
-        <CopyableInput value={embed?.html || ''} />
+        <CopyableInput value={embed?.html ?? ''} />
       </Stack>
 
       <div className='py-9'>

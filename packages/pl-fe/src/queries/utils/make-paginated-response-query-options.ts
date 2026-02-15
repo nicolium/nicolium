@@ -12,7 +12,7 @@ const makePaginatedResponseQueryOptions = <T1 extends Array<any>, T2, T3 = Pagin
   select?: (data: InfiniteData<PaginatedResponse<T2>>) => T3,
 ) => (...params: T1) => infiniteQueryOptions({
     queryKey: typeof queryKey === 'object' ? queryKey : queryKey(...params),
-    queryFn: ({ pageParam }) => pageParam.next?.() || queryFn(store.getState().auth.client, params),
+    queryFn: ({ pageParam }) => pageParam.next?.() ?? queryFn(store.getState().auth.client, params),
     initialPageParam: { previous: null, next: null, items: [], partial: false } as Awaited<ReturnType<typeof queryFn>>,
     getNextPageParam: (page) => page.next ? page : undefined,
     select: select ?? ((data) => {

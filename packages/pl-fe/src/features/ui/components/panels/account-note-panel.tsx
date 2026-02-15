@@ -38,7 +38,9 @@ const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
     debouncedUpdateAccountNote(e.target.value, {
       onSuccess: () => {
         setSaved(true);
-        setTimeout(() => setSaved(false), 2000);
+        setTimeout(() =>{
+          setSaved(false);
+        }, 2000);
       },
     });
   };
@@ -68,7 +70,7 @@ const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
         id={`account-note-${account.id}`}
         theme='transparent'
         placeholder={intl.formatMessage(messages.placeholder)}
-        value={value || ''}
+        value={value ?? ''}
         onChange={handleChange}
         ref={textarea}
         autoGrow

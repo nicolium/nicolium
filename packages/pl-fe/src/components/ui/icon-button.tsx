@@ -37,7 +37,7 @@ const IconButton = React.forwardRef((props: IIconButton, ref: React.ForwardedRef
         'opacity-50': filteredProps.disabled,
       }, className)}
       {...filteredProps}
-      data-testid={filteredProps['data-testid'] || 'icon-button'}
+      data-testid={filteredProps['data-testid'] ?? 'icon-button'}
       {...(props.href ? { target: '_blank' } as any : {})}
     >
       <SvgIcon src={src} className={iconClassName} aria-hidden />

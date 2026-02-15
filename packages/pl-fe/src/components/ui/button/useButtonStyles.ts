@@ -38,8 +38,8 @@ const useButtonStyles = ({
 }: IButtonStyles) => {
   const buttonStyle = clsx({
     'rtl:space-x-reverse inline-flex items-center place-content-center border font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 appearance-none transition-all disabled:select-none disabled:opacity-75 disabled:cursor-default': true,
-    [`${themes[theme]}`]: true,
-    [`${sizes[size]}`]: true,
+    [themes[theme]]: true,
+    [sizes[size]]: true,
     'flex w-full justify-center': block,
   });
 

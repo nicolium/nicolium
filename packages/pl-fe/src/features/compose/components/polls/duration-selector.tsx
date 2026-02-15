@@ -39,7 +39,9 @@ const DurationSelector = ({ onDurationChange, value }: IDurationSelector) => {
       <div className='sm:col-span-1'>
         <Select
           value={days}
-          onChange={(event) => setDays(Number(event.target.value))}
+          onChange={(event) =>{
+            setDays(Number(event.target.value));
+          }}
           data-testid='duration-selector-days'
         >
           {[...Array(8).fill(undefined)].map((_, number) => (
@@ -53,7 +55,9 @@ const DurationSelector = ({ onDurationChange, value }: IDurationSelector) => {
       <div className='sm:col-span-1'>
         <Select
           value={hours}
-          onChange={(event) => setHours(Number(event.target.value))}
+          onChange={(event) =>{
+            setHours(Number(event.target.value));
+          }}
           disabled={days === 7}
           data-testid='duration-selector-hours'
         >
@@ -68,7 +72,9 @@ const DurationSelector = ({ onDurationChange, value }: IDurationSelector) => {
       <div className='sm:col-span-1'>
         <Select
           value={minutes}
-          onChange={(event) => setMinutes(Number(event.target.value))}
+          onChange={(event) =>{
+            setMinutes(Number(event.target.value));
+          }}
           disabled={days === 7}
           data-testid='duration-selector-minutes'
         >

@@ -41,7 +41,7 @@ const useAccountGallery = (accountId: string) => {
 
   return {
     ...result,
-    data: useAppSelector((state) => getGallery(state, result.data || [])),
+    data: useAppSelector((state) => getGallery(state, result.data ?? [])),
   };
 };
 
@@ -50,7 +50,7 @@ const useGroupGallery = (groupId: string) => {
 
   return {
     ...result,
-    data: useAppSelector((state) => getGallery(state, result.data || [])),
+    data: useAppSelector((state) => getGallery(state, result.data ?? [])),
   };
 };
 

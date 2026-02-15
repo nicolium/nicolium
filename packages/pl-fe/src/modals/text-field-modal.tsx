@@ -31,7 +31,7 @@ const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
   text,
   singleLine,
 }) => {
-  const [value, setValue] = useState(text || '');
+  const [value, setValue] = useState(text ?? '');
 
   const handleClick = () => {
     onClose('TEXT_FIELD');
@@ -57,14 +57,18 @@ const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
           <Input
             type='text'
             value={value}
-            onChange={({ target }) => setValue(target.value)}
+            onChange={({ target }) =>{
+              setValue(target.value);
+            }}
             autoComplete='off'
             placeholder={placeholder}
           />
         ) : (
           <Textarea
             value={value}
-            onChange={({ target }) => setValue(target.value)}
+            onChange={({ target }) =>{
+              setValue(target.value);
+            }}
             autoComplete='off'
             placeholder={placeholder}
           />

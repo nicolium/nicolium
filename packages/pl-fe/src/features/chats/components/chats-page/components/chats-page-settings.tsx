@@ -84,7 +84,9 @@ const ChatsPageSettings = () => {
             >
               <Toggle
                 checked={data.accepts_chat_messages}
-                onChange={(event) => setData((prevData) => ({ ...prevData, accepts_chat_messages: event.target.checked }))}
+                onChange={(event) =>{
+                  setData((prevData) => ({ ...prevData, accepts_chat_messages: event.target.checked }));
+                }}
               />
             </ListItem>
           </List>

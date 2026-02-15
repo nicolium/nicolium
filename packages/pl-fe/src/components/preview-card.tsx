@@ -119,7 +119,9 @@ const PreviewCard: React.FC<IPreviewCard> = ({
 
   const title = interactive ? (
     <a
-      onClick={(e) => e.stopPropagation()}
+      onClick={(e) =>{
+        e.stopPropagation();
+      }}
       href={card.url}
       title={trimmedTitle}
       rel='noopener'
@@ -200,7 +202,9 @@ const PreviewCard: React.FC<IPreviewCard> = ({
 
                 {horizontal && (
                   <a
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) =>{
+                      e.stopPropagation();
+                    }}
                     href={card.url}
                     target='_blank'
                     rel='noopener'
@@ -249,7 +253,9 @@ const PreviewCard: React.FC<IPreviewCard> = ({
       target='_blank'
       rel='noopener'
       ref={setRef}
-      onClick={e => e.stopPropagation()}
+      onClick={e =>{
+        e.stopPropagation();
+      }}
     >
       {embed}
       {description}
@@ -268,13 +274,13 @@ const PreviewCard: React.FC<IPreviewCard> = ({
               values={{
                 name: card.authors.map(author => (
                   <HoverAccountWrapper key={author.url} accountId={author.account?.id} element='bdi'>
-                    <Link to='/@{$username}' params={{ username: author.account?.acct || '' }}>
+                    <Link to='/@{$username}' params={{ username: author.account?.acct ?? '' }}>
                       <HStack space={1} alignItems='center'>
                         {author.account && (
                           <Avatar src={author.account?.avatar} size={16} username={author.account.username} />
                         )}
                         <Text weight='medium'>
-                          <Emojify text={author.account?.display_name || author.name} emojis={author.account?.emojis} />
+                          <Emojify text={author.account?.display_name ?? author.name} emojis={author.account?.emojis} />
                         </Text>
                       </HStack>
                     </Link>

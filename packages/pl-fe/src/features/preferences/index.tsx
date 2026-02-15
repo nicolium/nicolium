@@ -124,7 +124,7 @@ const Preferences = () => {
   const instance = useInstance();
   const standalone = useAppSelector(isStandalone);
 
-  const brandColor = settings.theme?.brandColor || frontendConfig.brandColor || '#d80482';
+  const brandColor = (settings.theme?.brandColor ?? frontendConfig.brandColor) || '#d80482';
 
   const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, path: string[]) => {
     dispatch(changeSetting(path, event.target.value, { showAlert: true }));
@@ -141,7 +141,7 @@ const Preferences = () => {
   const onBrandColorChange = (newBrandColor: string) => {
     if (newBrandColor === brandColor) return;
 
-    const theme = settings.theme || frontendConfig.defaultSettings.theme;
+    const theme = settings.theme ?? frontendConfig.defaultSettings.theme;
 
     dispatch(changeSetting(['theme'], {
       ...theme,
@@ -152,7 +152,7 @@ const Preferences = () => {
   };
 
   const onInterfaceSizeChange = (value: number) => {
-    const theme = settings.theme || frontendConfig.defaultSettings.theme;
+    const theme = settings.theme ?? frontendConfig.defaultSettings.theme;
 
     dispatch(changeSetting(['theme'], {
       ...theme,
@@ -216,12 +216,14 @@ const Preferences = () => {
         <PaletteListItem
           label={intl.formatMessage(messages.brandColor)}
           palette={colors(brandColor)}
-          onChange={(palette) => onBrandColorChange(palette['500'])}
+          onChange={(palette) =>{
+            onBrandColorChange(palette['500']);
+          }}
           allowTintChange={false}
         />
         <ListItem label={<div className='whitespace-nowrap'><FormattedMessage id='preferences.fields.interface_size' defaultMessage='Interface size' /></div>}>
           <div className='flex w-full flex-col'>
-            <StepSlider value={INTERFACE_SIZES.indexOf(settings.theme?.interfaceSize || 'md')} steps={4} onChange={onInterfaceSizeChange} />
+            <StepSlider value={INTERFACE_SIZES.indexOf(settings.theme?.interfaceSize ?? 'md')} steps={4} onChange={onInterfaceSizeChange} />
           </div>
         </ListItem>
         <ListItem label={<FormattedMessage id='preferences.fields.theme.display_background_gradient' defaultMessage='Display background gradient' />}>
@@ -235,8 +237,10 @@ const Preferences = () => {
             <SelectDropdown
               className='max-w-[200px]'
               items={systemDarkThemePreferenceOptions}
-              defaultValue={settings.theme?.systemDarkThemePreference || 'black'}
-              onChange={(event: React.ChangeEvent<HTMLSelectElement>) => onSelectChange(event, ['theme', 'systemDarkThemePreference'])}
+              defaultValue={settings.theme?.systemDarkThemePreference ?? 'black'}
+              onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>{
+                onSelectChange(event, ['theme', 'systemDarkThemePreference']);
+              }}
             />
           </ListItem>
         )}
@@ -268,7 +272,9 @@ const Preferences = () => {
             className='max-w-[200px]'
             items={languages}
             defaultValue={settings.locale}
-            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => onSelectChange(event, ['locale'])}
+            onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>{
+              onSelectChange(event, ['locale']);
+            }}
           />
         </ListItem>
 
@@ -281,7 +287,9 @@ const Preferences = () => {
             className='max-w-[200px]'
             items={displayMediaOptions}
             defaultValue={settings.displayMedia}
-            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => onSelectChange(event, ['displayMedia'])}
+            onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>{
+              onSelectChange(event, ['displayMedia']);
+            }}
           />
         </ListItem>
 
@@ -291,7 +299,9 @@ const Preferences = () => {
               className='max-w-[200px]'
               items={defaultPrivacyOptions}
               defaultValue={settings.defaultPrivacy}
-              onChange={(event: React.ChangeEvent<HTMLSelectElement>) => onSelectChange(event, ['defaultPrivacy'])}
+              onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>{
+                onSelectChange(event, ['defaultPrivacy']);
+              }}
             />
           </ListItem>
         )}
@@ -302,7 +312,9 @@ const Preferences = () => {
               className='max-w-[200px]'
               items={defaultContentTypeOptions}
               defaultValue={settings.defaultContentType}
-              onChange={(event: React.ChangeEvent<HTMLSelectElement>) => onSelectChange(event, ['defaultContentType'])}
+              onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>{
+                onSelectChange(event, ['defaultContentType']);
+              }}
             />
           </ListItem>
         )}
@@ -435,7 +447,9 @@ const Preferences = () => {
               className='max-w-[200px]'
               items={languages}
               value={settings.knownLanguages as string[] | undefined}
-              onChange={(selectedList) => onSelectMultiple(selectedList, ['knownLanguages'])}
+              onChange={(selectedList) =>{
+                onSelectMultiple(selectedList, ['knownLanguages']);
+              }}
               disabled={!settings.autoTranslate}
             />
           </ListItem>

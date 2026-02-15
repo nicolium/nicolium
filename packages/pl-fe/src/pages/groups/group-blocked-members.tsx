@@ -33,10 +33,13 @@ const BlockedMember: React.FC<IBlockedMember> = ({ accountId, groupId }) => {
 
   if (!account) return null;
 
-  const handleUnblock = () =>
+  const handleUnblock = () =>{
     unblockGroupUser(undefined, {
-      onSuccess: () => toast.success(intl.formatMessage(messages.unblocked, { name: account.acct })),
+      onSuccess: () =>{
+        toast.success(intl.formatMessage(messages.unblocked, { name: account.acct }));
+      },
     });
+  };
 
   return (
     <HStack space={1} alignItems='center' justifyContent='between' className='p-2.5'>

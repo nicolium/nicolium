@@ -90,7 +90,7 @@ const createStatus = (params: CreateStatusParams, idempotencyKey: string, edited
 const editStatus = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   const state = getState();
 
-  const status = state.statuses[statusId]!;
+  const status = state.statuses[statusId];
   const poll = status.poll_id ? queryClient.getQueryData<Poll>(['statuses', 'polls', status.poll_id]) : undefined;
 
   dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_REQUEST });
@@ -122,7 +122,7 @@ const deleteStatus = (statusId: string, groupId?: string, withRedraft = false) =
 
     const state = getState();
 
-    const status = state.statuses[statusId]!;
+    const status = state.statuses[statusId];
     const poll = status.poll_id ? queryClient.getQueryData<Poll>(['statuses', 'polls', status.poll_id]) : undefined;
 
     dispatch<StatusesAction>({ type: STATUS_DELETE_REQUEST, params: status });
@@ -136,7 +136,7 @@ const deleteStatus = (statusId: string, groupId?: string, withRedraft = false) =
       dispatch(deleteFromTimelines(statusId));
 
       if (withRedraft) {
-        dispatch(setComposeToStatus(status, poll, response.text || '', response.spoiler_text, (response as StatusSource).content_type, withRedraft));
+        dispatch(setComposeToStatus(status, poll, response.text ?? '', response.spoiler_text, (response as StatusSource).content_type, withRedraft));
         useModalsStore.getState().actions.openModal('COMPOSE');
       }
     })
@@ -145,8 +145,9 @@ const deleteStatus = (statusId: string, groupId?: string, withRedraft = false) =
       });
   };
 
-const updateStatus = (status: BaseStatus) => (dispatch: AppDispatch) =>
+const updateStatus = (status: BaseStatus) => (dispatch: AppDispatch) =>{
   dispatch(importEntities({ statuses: [status] }));
+};
 
 const fetchContext = (statusId: string, intl?: IntlShape) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -168,7 +169,7 @@ const fetchContext = (statusId: string, intl?: IntlShape) =>
   };
 
 const fetchStatusWithContext = (statusId: string, intl?: IntlShape) =>
-  async (dispatch: AppDispatch) => Promise.all([
+  (dispatch: AppDispatch) => Promise.all([
     dispatch(fetchContext(statusId, intl)),
     dispatch(fetchStatus(statusId, intl)),
   ]);

@@ -47,7 +47,7 @@ const selectAccountsByDomain = (state: RootState, domain: string): string[] => {
   const accounts = entries
     ?.filter(([_, item]) => item && item.acct.endsWith(`@${domain}`))
     .map(([_, item]) => item!.id);
-  return accounts || [];
+  return accounts ?? [];
 };
 
 export {

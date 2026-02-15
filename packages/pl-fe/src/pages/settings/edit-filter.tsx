@@ -69,7 +69,9 @@ const FilterField: StreamfieldComponent<IFilterField> = ({ value, onChange }) =>
   const intl = useIntl();
 
   const handleChange = (key: string): React.ChangeEventHandler<HTMLInputElement> =>
-    e => onChange({ ...value, [key]: e.currentTarget[e.currentTarget.type === 'checkbox' ? 'checked' : 'value'] });
+    e =>{
+      onChange({ ...value, [key]: e.currentTarget[e.currentTarget.type === 'checkbox' ? 'checked' : 'value'] });
+    };
 
   return (
     <HStack space={2} grow>
@@ -158,13 +160,19 @@ const EditFilterPage: React.FC = () => {
     });
   };
 
-  const handleChangeKeyword = (keywords: { keyword: string; whole_word: boolean }[]) => setKeywords(keywords);
+  const handleChangeKeyword = (keywords: { keyword: string; whole_word: boolean }[]) =>{
+    setKeywords(keywords);
+  };
 
-  const handleAddKeyword = () => setKeywords(keywords => [...keywords, { keyword: '', whole_word: false }]);
+  const handleAddKeyword = () =>{
+    setKeywords(keywords => [...keywords, { keyword: '', whole_word: false }]);
+  };
 
-  const handleRemoveKeyword = (i: number) => setKeywords(keywords => keywords[i].id
-    ? keywords.map((keyword, index) => index === i ? { ...keyword, _destroy: true } : keyword)
-    : keywords.filter((_, index) => index !== i));
+  const handleRemoveKeyword = (i: number) =>{
+    setKeywords(keywords => keywords[i].id
+      ? keywords.map((keyword, index) => index === i ? { ...keyword, _destroy: true } : keyword)
+      : keywords.filter((_, index) => index !== i));
+  };
 
   useEffect(() => {
     if (filterId !== 'new') {
@@ -212,7 +220,9 @@ const EditFilterPage: React.FC = () => {
               type='text'
               name='title'
               value={title}
-              onChange={({ target }) => setTitle(target.value)}
+              onChange={({ target }) =>{
+                setTitle(target.value);
+              }}
             />
           </FormGroup>
         ) : keywordsField}
@@ -238,32 +248,42 @@ const EditFilterPage: React.FC = () => {
           <ListItem label={intl.formatMessage(messages.home_timeline)}>
             <Toggle
               checked={homeTimeline}
-              onChange={({ target }) => setHomeTimeline(target.checked)}
+              onChange={({ target }) =>{
+                setHomeTimeline(target.checked);
+              }}
             />
           </ListItem>
           <ListItem label={intl.formatMessage(messages.public_timeline)}>
             <Toggle
               checked={publicTimeline}
-              onChange={({ target }) => setPublicTimeline(target.checked)}
+              onChange={({ target }) =>{
+                setPublicTimeline(target.checked);
+              }}
             />
           </ListItem>
           <ListItem label={intl.formatMessage(messages.notifications)}>
             <Toggle
               checked={notifications}
-              onChange={({ target }) => setNotifications(target.checked)}
+              onChange={({ target }) =>{
+                setNotifications(target.checked);
+              }}
             />
           </ListItem>
           <ListItem label={intl.formatMessage(messages.conversations)}>
             <Toggle
               checked={conversations}
-              onChange={({ target }) => setConversations(target.checked)}
+              onChange={({ target }) =>{
+                setConversations(target.checked);
+              }}
             />
           </ListItem>
           {features.filtersV2 && (
             <ListItem label={intl.formatMessage(messages.accounts)}>
               <Toggle
                 checked={accounts}
-                onChange={({ target }) => setAccounts(target.checked)}
+                onChange={({ target }) =>{
+                  setAccounts(target.checked);
+                }}
               />
             </ListItem>
           )}
@@ -275,7 +295,11 @@ const EditFilterPage: React.FC = () => {
               label={intl.formatMessage(messages.filter_action_header)}
               hint={intl.formatMessage(messages.filter_action_hint)}
             >
-              <Select value={filterAction} onChange={({ target }) => setFilterAction(target.value as Filter['filter_action'])}>
+              <Select
+                value={filterAction} onChange={({ target }) =>{
+                  setFilterAction(target.value as Filter['filter_action']);
+                }}
+              >
                 <option value='warn'>{intl.formatMessage(messages.filter_action_warn)}</option>
                 <option value='hide'>{intl.formatMessage(messages.filter_action_hide)}</option>
                 <option value='blur'>{intl.formatMessage(messages.filter_action_blur)}</option>
@@ -288,7 +312,9 @@ const EditFilterPage: React.FC = () => {
             >
               <Toggle
                 checked={filterAction === 'hide'}
-                onChange={({ target }) => setFilterAction(target.checked ? 'hide' : 'warn')}
+                onChange={({ target }) =>{
+                  setFilterAction(target.checked ? 'hide' : 'warn');
+                }}
               />
             </ListItem>
           )}

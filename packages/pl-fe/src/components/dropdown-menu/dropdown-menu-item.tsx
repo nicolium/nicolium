@@ -118,7 +118,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
   return (
     <li>
       <a
-        href={item.href || item.to || '#'}
+        href={(item.href ?? item.to) ?? '#'}
         role='button'
         tabIndex={0}
         ref={itemRef}
@@ -136,7 +136,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
       >
         {item.icon && <Icon src={item.icon} className='mr-3 size-5 flex-none rtl:ml-3 rtl:mr-0' />}
 
-        <div className={clsx('truncate', { 'text-xs': item.meta, 'text-base': !item.meta, 'mr-2': item.count || item.type === 'toggle' || item.type === 'radio' || item.items?.length })}>
+        <div className={clsx('truncate', { 'text-xs': item.meta, 'text-base': !item.meta, 'mr-2': (item.count ?? item.type === 'toggle') || item.type === 'radio' || item.items?.length })}>
           {item.meta ? (
             <>
               <div className='truncate text-base'>{item.text}</div>

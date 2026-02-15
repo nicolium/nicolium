@@ -55,12 +55,12 @@ const EventDiscussionPage: React.FC = () => {
 
   const handleMoveUp = (id: string) => {
     const index = descendantsIds.indexOf(id);
-    selectChild(index - 1, scroller, node.current || undefined);
+    selectChild(index - 1, scroller, node.current ?? undefined);
   };
 
   const handleMoveDown = (id: string) => {
     const index = descendantsIds.indexOf(id);
-    selectChild(index + 1, scroller, node.current || undefined, descendantsIds.length);
+    selectChild(index + 1, scroller, node.current ?? undefined, descendantsIds.length);
   };
 
   const renderTombstone = (id: string) => (

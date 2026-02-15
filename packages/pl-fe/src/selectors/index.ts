@@ -38,9 +38,8 @@ const toServerSideType = (columnType: string): Filter['context'][0] => {
     default:
       if (columnType.includes('list:')) {
         return 'home';
-      } else {
-        return 'public'; // community, account, hashtag
       }
+      return 'public'; // community, account, hashtag
   }
 };
 
@@ -103,8 +102,8 @@ type APIStatus = { id: string; username?: string };
 const makeGetStatus = () => createSelector(
   [
     (state: RootState, { id }: APIStatus) => state.statuses[id],
-    (state: RootState, { id }: APIStatus) => state.statuses[state.statuses[id]?.reblog_id || ''] || null,
-    (state: RootState, { id }: APIStatus) => state.statuses[state.statuses[id]?.quote_id || ''] || null,
+    (state: RootState, { id }: APIStatus) => state.statuses[state.statuses[id]?.reblog_id ?? ''] || null,
+    (state: RootState, { id }: APIStatus) => state.statuses[state.statuses[id]?.quote_id ?? ''] || null,
     (state: RootState, { id }: APIStatus) => {
       const group = state.statuses[id]?.group_id;
       if (group) return state.entities[Entities.GROUPS]?.store[group] as Group;
@@ -137,7 +136,7 @@ const makeGetStatus = () => createSelector(
       ...statusBase,
       reblog: statusReblog || null,
       quote: statusQuote || null,
-      group: statusGroup || null,
+      group: statusGroup ?? null,
       filtered,
     };
   },
@@ -147,16 +146,16 @@ type SelectedStatus = Exclude<ReturnType<ReturnType<typeof makeGetStatus>>, null
 
 const makeGetNotification = () => createSelector([
   (_state: RootState, notification: NotificationGroup) => notification,
-  // @ts-ignore
+  // @ts-expect-error types will be fine valibot ensures that
   (state: RootState, notification: NotificationGroup) => selectAccount(state, notification.target_id),
-  // @ts-ignore
+  // @ts-expect-error types will be fine valibot ensures that
   (state: RootState, notification: NotificationGroup) => state.statuses[notification.status_id],
   (state: RootState, notification: NotificationGroup) => selectAccounts(state, notification.sample_account_ids),
 ], (notification, target, status, accounts): SelectedNotification => ({
   ...notification,
-  // @ts-ignore
+  // @ts-expect-error types will be fine valibot ensures that
   target,
-  // @ts-ignore
+  // @ts-expect-error types will be fine valibot ensures that
   status,
   accounts,
 }));
@@ -179,9 +178,9 @@ const makeGetReport = () => {
   return createSelector(
     [
       (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => report,
-      (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => selectAccount(state, report?.account_id || ''),
-      (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => selectAccount(state, report?.target_account_id || ''),
-      (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => selectAccount(state, report?.assigned_account_id || ''),
+      (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => selectAccount(state, report?.account_id ?? ''),
+      (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => selectAccount(state, report?.target_account_id ?? ''),
+      (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => selectAccount(state, report?.assigned_account_id ?? ''),
       (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => report?.status_ids
         .map((statusId) => getStatus(state, { id: statusId }))
         .filter((status): status is SelectedStatus => status !== null),
@@ -231,7 +230,7 @@ const getSimplePolicy = createSelector([
 const getRemoteInstanceFavicon = (state: RootState, host: string) => {
   const accounts = state.entities[Entities.ACCOUNTS]?.store as EntityStore<Account>;
   const account = Object.entries(accounts).find(([_, account]) => account && getDomain(account) === host)?.[1];
-  return account?.favicon || null;
+  return account?.favicon ?? null;
 };
 
 type HostFederation = {
@@ -273,7 +272,7 @@ const makeGetRemoteInstance = () =>
 type ColumnQuery = { type: string; prefix?: string };
 
 const makeGetStatusIds = () => createSelector([
-  (state: RootState, { type, prefix }: ColumnQuery) => useSettingsStore.getState().settings.timelines[prefix || type],
+  (state: RootState, { type, prefix }: ColumnQuery) => useSettingsStore.getState().settings.timelines[prefix ?? type],
   (state: RootState, { type }: ColumnQuery) => state.timelines[type]?.items || [],
   (state: RootState) => state.statuses,
 ], (columnSettings: any, statusIds: Array<string>, statuses) =>

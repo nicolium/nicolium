@@ -37,18 +37,18 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
   const { getOrCreateChatByAccountId } = useChats();
 
   const [value, setValue] = useState<string>('');
-  const debouncedValue = useDebounce(value as string, 300);
+  const debouncedValue = useDebounce(value, 300);
 
   const accountSearchResult = useAccountSearch(debouncedValue);
   const { data: accounts, isFetching } = accountSearchResult;
 
   const hasSearchValue = debouncedValue && debouncedValue.length > 0;
-  const hasSearchResults = (accounts || []).length > 0;
+  const hasSearchResults = (accounts ?? []).length > 0;
 
   const handleClickOnSearchResult = useMutation({
     mutationFn: (accountId: string) => getOrCreateChatByAccountId(accountId),
     onError: (error: { response: PlfeResponse }) => {
-      const data = error.response?.json as any;
+      const data = error.response?.json;
       toast.error(data?.error);
     },
     onSuccess: (response) => {
@@ -96,7 +96,9 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
           autoFocus
           placeholder={intl.formatMessage(messages.placeholder)}
           value={value || ''}
-          onChange={(event) => setValue(event.target.value)}
+          onChange={(event) =>{
+            setValue(event.target.value);
+          }}
           outerClassName='mt-0'
           theme='search'
           append={

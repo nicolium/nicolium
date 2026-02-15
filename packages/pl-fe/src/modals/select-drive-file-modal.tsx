@@ -74,7 +74,7 @@ const File: React.FC<IFile> = ({ file, active, disabled, onSelect }) => {
       {file.thumbnail_url && isMedia ? (
         <img
           src={file.thumbnail_url}
-          alt={file.description || undefined}
+          alt={file.description ?? undefined}
         />
       ) : (
         <Icon
@@ -112,7 +112,7 @@ const SelectDriveFileModal: React.FC<SelectDriveFileModalProps & BaseModalProps>
       const selectedFolder = folder.folders.find(({ id }) => id === selectedFile);
       if (selectedFolder) {
         onSelect(selectedFolder);
-      } else if (!disabled?.includes(folder?.id || null)) {
+      } else if (!disabled?.includes(folder?.id ?? null)) {
         onSelect(folder);
       }
     }
@@ -134,11 +134,11 @@ const SelectDriveFileModal: React.FC<SelectDriveFileModalProps & BaseModalProps>
           disabled={disabled?.includes(subfolder.id)}
           onSelect={({ id }) => {
             if (type === 'folder') {
-              setSelectedFile(id || undefined);
+              setSelectedFile(id ?? undefined);
             }
           }}
           onDoubleClick={({ id }) => {
-            setCurrentFolder(id || undefined);
+            setCurrentFolder(id ?? undefined);
           }}
         />,
       );
@@ -150,7 +150,7 @@ const SelectDriveFileModal: React.FC<SelectDriveFileModalProps & BaseModalProps>
           key={file.id}
           file={file}
           active={selectedFile === file.id}
-          disabled={type === 'folder' || disabled?.includes(file.id) || ('accepted' in props && props.accepted && !props.accepted.includes(file.content_type))}
+          disabled={type === 'folder' || (disabled?.includes(file.id) ?? ('accepted' in props && props.accepted && !props.accepted.includes(file.content_type)))}
           onSelect={({ id }) => {
             if (type === 'file') {
               setSelectedFile(id);
@@ -172,7 +172,11 @@ const SelectDriveFileModal: React.FC<SelectDriveFileModalProps & BaseModalProps>
       confirmationDisabled={!selectedFile && type !== 'folder'}
     >
       <div className='⁂-drive-breadcrumbs'>
-        <Breadcrumbs folderId={currentFolder} onClick={(folderId) => setCurrentFolder(folderId)} />
+        <Breadcrumbs
+          folderId={currentFolder} onClick={(folderId) =>{
+            setCurrentFolder(folderId);
+          }}
+        />
       </div>
       <ScrollableList
         listClassName='⁂-drive-file-list ⁂-status-list'

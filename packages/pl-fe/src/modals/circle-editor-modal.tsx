@@ -28,8 +28,12 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({ 
   const { mutate: addToCircle } = useAddAccountsToCircle(circleId);
   const { mutate: removeFromCircle } = useRemoveAccountsFromCircle(circleId);
 
-  const onAdd = (accountId: string) => addToCircle([accountId]);
-  const onRemove = (accountId: string) => removeFromCircle([accountId]);
+  const onAdd = (accountId: string) =>{
+    addToCircle([accountId]);
+  };
+  const onRemove = (accountId: string) =>{
+    removeFromCircle([accountId]);
+  };
 
   const onClickClose = () => {
     onClose('CIRCLE_EDITOR');

@@ -59,7 +59,7 @@ const unsetSentryAccount = async (): Promise<void> => {
 };
 
 /** Capture the exception and report it to Sentry. */
-const captureSentryException = async (exception: any, captureContext?: CaptureContext | undefined): Promise<string> => {
+const captureSentryException = async (exception: any, captureContext?: CaptureContext): Promise<string> => {
   const Sentry = await import('@sentry/react');
   return Sentry.captureException(exception, captureContext);
 };

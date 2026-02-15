@@ -130,7 +130,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                     <>
                       <span className='⁂-separator' />
                       <a
-                        href={(actualStatus.application.website) ? actualStatus.application.website : '#'}
+                        href={actualStatus.application.website ?? '#'}
                         target='_blank'
                         rel='noopener'
                         className='hover:underline'

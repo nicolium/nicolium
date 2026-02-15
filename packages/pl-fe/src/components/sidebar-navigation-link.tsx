@@ -55,7 +55,7 @@ const SidebarNavigationLink = React.memo(React.forwardRef((props: ISidebarNaviga
           aria-hidden
         >
           <Icon
-            src={(isActive && activeIcon) || icon}
+            src={(isActive && activeIcon) ?? icon}
             count={demetricator ? undefined : count}
             countMax={countMax}
           />

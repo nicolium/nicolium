@@ -44,7 +44,7 @@ const PlFeHead = () => {
       <Helmet>
         <html
           lang={locale}
-          className={clsx(`text-${themeSettings?.interfaceSize || 'md'}`, {
+          className={clsx(`text-${themeSettings?.interfaceSize ?? 'md'}`, {
             'dark': theme === 'dark',
             'dark black': theme === 'black',
           })}

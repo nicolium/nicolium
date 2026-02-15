@@ -96,7 +96,9 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
           src={group.header}
           alt={group.header_description || intl.formatMessage(messages.header)}
           className='relative h-32 w-full bg-gray-200 object-center black:rounded-t-none dark:bg-gray-900/50 md:rounded-t-xl lg:h-52'
-          onError={() => setIsHeaderMissing(true)}
+          onError={() =>{
+            setIsHeaderMissing(true);
+          }}
         />
       );
 

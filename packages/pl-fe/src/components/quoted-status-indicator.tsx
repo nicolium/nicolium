@@ -16,7 +16,7 @@ interface IQuotedStatusIndicator {
 const QuotedStatusIndicator: React.FC<IQuotedStatusIndicator> = ({ statusId, statusUrl }) => {
   const getStatus = useCallback(makeGetStatus(), []);
 
-  statusUrl = useAppSelector(state => statusUrl || statusId && getStatus(state, { id: statusId })?.url);
+  statusUrl = useAppSelector(state => statusUrl ?? (statusId && getStatus(state, { id: statusId })?.url));
 
   if (!statusUrl) return null;
 

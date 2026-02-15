@@ -22,7 +22,7 @@ const env = compileTime(() => {
   const sanitizeBasename = (path: string | undefined = ''): string => `/${path.replace(/^\/+|\/+$/g, '')}`;
 
   return {
-    NODE_ENV: NODE_ENV || 'development',
+    NODE_ENV: NODE_ENV ?? 'development',
     BACKEND_URL: sanitizeURL(BACKEND_URL),
     FE_SUBDIRECTORY: sanitizeBasename(FE_SUBDIRECTORY),
     WITH_LANDING_PAGE: WITH_LANDING_PAGE === 'true',

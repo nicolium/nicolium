@@ -188,7 +188,9 @@ const FloatingLinkEditor = ({
               className='absolute inset-y-0 right-0 flex w-9 cursor-pointer items-center justify-center'
               role='button'
               tabIndex={0}
-              onMouseDown={(event) => event.preventDefault()}
+              onMouseDown={(event) =>{
+                event.preventDefault();
+              }}
               onClick={() => {
                 editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
               }}
@@ -205,7 +207,9 @@ const FloatingLinkEditor = ({
               className='absolute inset-y-0 right-0 flex w-9 cursor-pointer items-center justify-center'
               role='button'
               tabIndex={0}
-              onMouseDown={(event) => event.preventDefault()}
+              onMouseDown={(event) =>{
+                event.preventDefault();
+              }}
               onClick={() => {
                 setEditMode(true);
               }}

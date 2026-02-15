@@ -78,7 +78,7 @@ const buildCustomEmojiCategories = (customEmojis: Array<BaseCustomEmoji>, intl?:
   const emojiCategories: Record<string, EmojiMart<EmojiMartCustom>[]> = {};
 
   for (const emoji of customEmojis) {
-    const categoryName = emoji.category || 'uncategorized';
+    const categoryName = emoji.category ?? 'uncategorized';
     if (!emojiCategories[categoryName]) {
       emojiCategories[categoryName] = [];
     }

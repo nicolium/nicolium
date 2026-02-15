@@ -44,7 +44,11 @@ const LocationForm: React.FC<ILocationForm> = ({ composeId }) => {
             <Text>{location.description}</Text>
             <Text theme='muted' size='xs'>{[location.street, location.locality, location.country].filter(val => val?.trim()).join(' · ')}</Text>
           </Stack>
-          <IconButton title={intl.formatMessage(messages.resetLocation)} src={require('@phosphor-icons/core/regular/x.svg')} onClick={() => onChangeLocation(null)} />
+          <IconButton
+            title={intl.formatMessage(messages.resetLocation)} src={require('@phosphor-icons/core/regular/x.svg')} onClick={() =>{
+              onChangeLocation(null);
+            }}
+          />
         </HStack>
       ) : (
         <LocationSearch

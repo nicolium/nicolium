@@ -40,7 +40,9 @@ const unsubscribe = ({ registration, subscription }: {
   registration: ServiceWorkerRegistration;
   subscription: PushSubscription | null;
 }) =>
-  subscription ? subscription.unsubscribe().then(() => registration) : new Promise<ServiceWorkerRegistration>(r => r(registration));
+  subscription ? subscription.unsubscribe().then(() => registration) : new Promise<ServiceWorkerRegistration>(r =>{
+    r(registration);
+  });
 
 const sendSubscriptionToBackend = (subscription: PushSubscription, me: Me) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -80,7 +82,6 @@ const register = () =>
 
     getRegistration()
       .then(getPushSubscription)
-      // @ts-ignore
       .then(async ({ registration, subscription }) => {
         if (subscription !== null) {
           // We have a subscription, check if it is still valid
@@ -94,9 +95,9 @@ const register = () =>
             return subscription;
           } else {
             // Something went wrong, try to subscribe again
-            return unsubscribe({ registration, subscription })
-              .then((registration) => subscribe(registration, getState))
-              .then((pushSubscription) => dispatch(sendSubscriptionToBackend(pushSubscription, me)));
+            const swRegistration = await unsubscribe({ registration, subscription });
+            const pushSubscription = await subscribe(swRegistration, getState);
+            await dispatch(sendSubscriptionToBackend(pushSubscription, me));
           }
         }
 

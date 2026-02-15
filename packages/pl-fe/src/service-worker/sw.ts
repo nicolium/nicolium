@@ -83,12 +83,14 @@ const notify = (options: ExtendedNotificationOptions): Promise<void> =>
         },
       };
 
-      notifications.forEach(notification => notification.close());
+      notifications.forEach(notification =>{
+        notification.close();
+      });
 
       return self.registration.showNotification(group.title, group);
     } else if (notifications.length === 1 && notifications[0].tag === GROUP_TAG) { // Already grouped, proceed with appending the notification to the group
       const group = cloneNotification(notifications[0]);
-      const count = (group.data.count || 0) + 1;
+      const count = (group.data.count ?? 0) + 1;
 
       group.title = formatMessage('notifications.group', options.data.preferred_locale, { count });
       group.body = `${options.title}\n${group.body}`;
@@ -217,7 +219,7 @@ const findBestClient = (clients: readonly WindowClient[]): WindowClient => {
   const focusedClient = clients.find(client => client.focused);
   const visibleClient = clients.find(client => client.visibilityState === 'visible');
 
-  return focusedClient || visibleClient || clients[0];
+  return (focusedClient ?? visibleClient) ?? clients[0];
 };
 
 /** Update a notification with CW to display the full status. */

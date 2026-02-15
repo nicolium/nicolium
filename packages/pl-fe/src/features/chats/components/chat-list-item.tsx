@@ -39,7 +39,7 @@ const ChatListItem: React.FC<IChatListItemInterface> = React.memo(({ chat, onCli
   const navigate = useNavigate();
 
   const { isUsingMainChatPage } = useChatContext();
-  const deleteChat = useDeleteChat(chat?.id as string);
+  const deleteChat = useDeleteChat(chat?.id);
   const { data: relationship } = useRelationshipQuery(chat?.account.id);
 
   const isBlocked = relationship?.blocked_by && false;
@@ -78,7 +78,9 @@ const ChatListItem: React.FC<IChatListItemInterface> = React.memo(({ chat, onCli
     <div
       role='button'
       key={chat.id}
-      onClick={() => onClick(chat)}
+      onClick={() =>{
+        onClick(chat);
+      }}
       onKeyDown={handleKeyDown}
       className='⁂-chat-list-item'
       data-testid='chat-list-item'
@@ -105,8 +107,8 @@ const ChatListItem: React.FC<IChatListItemInterface> = React.memo(({ chat, onCli
 
             <p
               className={clsx('⁂-chat-list-item__message', {
-                '⁂-chat-list-item__message--unread': !(isBlocked || isBlocking) && chat.last_message?.unread,
-                '⁂-chat-list-item__message--blocking': isBlocked || isBlocking,
+                '⁂-chat-list-item__message--unread': !(isBlocked ?? isBlocking) && chat.last_message?.unread,
+                '⁂-chat-list-item__message--blocking': isBlocked ?? isBlocking,
               })}
             >
               {isBlocked ? (

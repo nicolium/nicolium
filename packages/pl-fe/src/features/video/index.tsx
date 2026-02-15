@@ -163,7 +163,9 @@ const Video: React.FC<IVideo> = ({
     }
   }, [video.current]);
 
-  const handleClickRoot: React.MouseEventHandler = e => e.stopPropagation();
+  const handleClickRoot: React.MouseEventHandler = e =>{
+    e.stopPropagation();
+  };
 
   const handlePlay = () => {
     setPaused(false);
@@ -483,7 +485,7 @@ const Video: React.FC<IVideo> = ({
         aria-label={alt}
         title={alt}
         width={width}
-        height={height || DEFAULT_HEIGHT}
+        height={height ?? DEFAULT_HEIGHT}
         onClick={togglePlay}
         onKeyDown={handleVideoKeyDown}
         onPlay={handlePlay}

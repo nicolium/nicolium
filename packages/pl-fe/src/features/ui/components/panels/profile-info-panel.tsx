@@ -57,7 +57,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   };
 
   const getCustomBadges = (): React.ReactNode[] => {
-    const badges = account?.roles || [];
+    const badges = account?.roles ?? [];
 
     return badges.filter(badge => badge.highlighted).map(badge => (
       <Badge

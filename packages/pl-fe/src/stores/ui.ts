@@ -15,10 +15,18 @@ const useUiStore = create<State>((set) => ({
   isDropdownMenuOpen: false,
   isSidebarOpen: false,
   actions: {
-    openDropdownMenu: () => set({ isDropdownMenuOpen: true }),
-    closeDropdownMenu: () => set({ isDropdownMenuOpen: false }),
-    openSidebar: () => set({ isSidebarOpen: true }),
-    closeSidebar: () => set({ isSidebarOpen: false }),
+    openDropdownMenu: () =>{
+      set({ isDropdownMenuOpen: true });
+    },
+    closeDropdownMenu: () =>{
+      set({ isDropdownMenuOpen: false });
+    },
+    openSidebar: () =>{
+      set({ isSidebarOpen: true });
+    },
+    closeSidebar: () =>{
+      set({ isSidebarOpen: false });
+    },
   },
 }));
 

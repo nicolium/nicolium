@@ -312,17 +312,15 @@ const Notification: React.FC<INotification> = (props) => {
       const boostModal = settings.boostModal;
       if (status.reblogged) {
         unreblogStatus();
+      } else if (e?.shiftKey || !boostModal) {
+        reblogStatus(undefined);
       } else {
-        if (e?.shiftKey || !boostModal) {
-          reblogStatus(undefined);
-        } else {
-          openModal('BOOST', {
-            statusId: status.id,
-            onReblog: () => {
-              reblogStatus(undefined);
-            },
-          });
-        }
+        openModal('BOOST', {
+          statusId: status.id,
+          onReblog: () => {
+            reblogStatus(undefined);
+          },
+        });
       }
     }
   }, [status]);
@@ -364,14 +362,14 @@ const Notification: React.FC<INotification> = (props) => {
       return (
         <Emoji
           emoji={notification.emoji}
-          src={notification.emoji_url || undefined}
+          src={notification.emoji_url ?? undefined}
           className='⁂-notification__icon ⁂-notification__icon--emoji'
         />
       );
     } else if (icons[displayedType]) {
       return (
         <Icon
-          src={icons[displayedType]!}
+          src={icons[displayedType]}
           className='⁂-notification__icon'
         />
       );

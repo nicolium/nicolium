@@ -25,7 +25,7 @@ const ExternalLoginForm: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const [host, setHost] = useState(server || '');
+  const [host, setHost] = useState(server ?? '');
   const [isLoading, setLoading] = useState(false);
 
   const handleHostChange: React.ChangeEventHandler<HTMLInputElement> = ({ currentTarget }) => {
@@ -36,7 +36,9 @@ const ExternalLoginForm: React.FC = () => {
     setLoading(true);
 
     externalLogin(host)
-      .then(() => setLoading(false))
+      .then(() =>{
+        setLoading(false);
+      })
       .catch((error) => {
         console.error(error);
         const status = error.response?.status;

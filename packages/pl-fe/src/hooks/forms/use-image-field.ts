@@ -17,7 +17,7 @@ const useImageField = (opts: UseImageFieldOpts = {}) => {
   const { stripMetadata } = useSettings();
 
   const [file, setFile] = useState<File | null>();
-  const src = usePreview(file) || (file === null ? undefined : opts.preview);
+  const src = usePreview(file) ?? (file === null ? undefined : opts.preview);
 
   const onChange = async (files: FileList | null) => {
     const file = files?.item(0);
@@ -30,7 +30,9 @@ const useImageField = (opts: UseImageFieldOpts = {}) => {
     }
   };
 
-  const onClear = () => setFile(null);
+  const onClear = () =>{
+    setFile(null);
+  };
 
   return {
     src,

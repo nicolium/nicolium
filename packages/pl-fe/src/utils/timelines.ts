@@ -18,7 +18,7 @@ const shouldFilter = (
     direct: status.visibility === 'direct',
   };
 
-  return Object.entries(shows).some(([key, value]) => (columnSettings?.shows || fallback)[key as 'reblog' | 'reply' | 'direct'] === false && value);
+  return Object.entries(shows).some(([key, value]) => !(columnSettings?.shows || fallback)[key as 'reblog' | 'reply' | 'direct'] && value);
 };
 
 export { shouldFilter };

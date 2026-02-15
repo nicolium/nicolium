@@ -46,7 +46,7 @@ const OtherActionsStep = ({
   const features = useFeatures();
   const intl = useIntl();
 
-  const statusIds = useAppSelector((state) => [...new Set([...state.timelines[`account:${account.id}:with_replies`]!.items, ...selectedStatusIds])]);
+  const statusIds = useAppSelector((state) => [...new Set([...state.timelines[`account:${account.id}:with_replies`].items, ...selectedStatusIds])]);
   const isBlocked = block;
   const isForward = forward;
   const canForward = !account.local && features.federating;
@@ -95,7 +95,9 @@ const OtherActionsStep = ({
                   icon={require('@phosphor-icons/core/regular/arrows-in-simple.svg')}
                   theme='tertiary'
                   size='sm'
-                  onClick={() => setShowAdditionalStatuses(false)}
+                  onClick={() =>{
+                    setShowAdditionalStatuses(false);
+                  }}
                 >
                   {intl.formatMessage(messages.hideAdditionalStatuses)}
                 </Button>
@@ -106,7 +108,9 @@ const OtherActionsStep = ({
               icon={require('@phosphor-icons/core/regular/plus.svg')}
               theme='tertiary'
               size='sm'
-              onClick={() => setShowAdditionalStatuses(true)}
+              onClick={() =>{
+                setShowAdditionalStatuses(true);
+              }}
             >
               {intl.formatMessage(messages.addMore)}
             </Button>

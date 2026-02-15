@@ -76,7 +76,7 @@ const LazyImage = ({
   useSuspenseImage(src);
   return (
     <img
-      className={className || undefined}
+      className={className ?? undefined}
       src={src}
       alt={altText}
       ref={imageRef}
@@ -303,7 +303,7 @@ const ImageComponent = ({
   ]);
 
   const active = hovered || focused;
-  const description = dirtyDescription || (dirtyDescription !== '' && altText) || '';
+  const description = (dirtyDescription ?? (dirtyDescription !== '' && altText)) || '';
   const draggable = isSelected && $isNodeSelection(selection);
 
   return (

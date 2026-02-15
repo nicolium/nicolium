@@ -39,34 +39,30 @@ const exportFollows = () => async (_dispatch: AppDispatch, getState: () => RootS
   const me = getState().me;
   if (!me) return;
 
-  return getClient(getState()).accounts.getAccountFollowing(me, { limit: 40 })
-    .then(listAccounts)
-    .then((followings) => {
-      followings = followings.map(fqn => fqn + ',true');
-      followings.unshift('Account address,Show boosts');
-      fileExport(followings.join('\n'), 'export_followings.csv');
+  const response = await getClient(getState()).accounts.getAccountFollowing(me, { limit: 40 });
+  const followings = await listAccounts(response);
+  const followingsCsv = followings.map(fqn => fqn + ',true');
+  followingsCsv.unshift('Account address,Show boosts');
+  fileExport(followingsCsv.join('\n'), 'export_followings.csv');
 
-      toast.success(messages.followersSuccess);
-    });
+  toast.success(messages.followersSuccess);
 };
 
-const exportBlocks = () => (_dispatch: AppDispatch, getState: () => RootState) =>
-  getClient(getState()).filtering.getBlocks({ limit: 40 })
-    .then(listAccounts)
-    .then((blocks) => {
-      fileExport(blocks.join('\n'), 'export_block.csv');
+const exportBlocks = () => async (_dispatch: AppDispatch, getState: () => RootState) => {
+  const response = await getClient(getState()).filtering.getBlocks({ limit: 40 });
+  const blocks = await listAccounts(response);
+  fileExport(blocks.join('\n'), 'export_block.csv');
 
-      toast.success(messages.blocksSuccess);
-    });
+  toast.success(messages.blocksSuccess);
+};
 
-const exportMutes = () => (_dispatch: AppDispatch, getState: () => RootState) =>
-  getClient(getState()).filtering.getMutes({ limit: 40 })
-    .then(listAccounts)
-    .then((mutes) => {
-      fileExport(mutes.join('\n'), 'export_mutes.csv');
+const exportMutes = () => async (_dispatch: AppDispatch, getState: () => RootState) => {
+  const response = await getClient(getState()).filtering.getMutes({ limit: 40 });
+  const mutes = await listAccounts(response);
+  fileExport(mutes.join('\n'), 'export_mutes.csv');
 
-      toast.success(messages.mutesSuccess);
-    });
+  toast.success(messages.mutesSuccess);
+};
 
 export {
   exportFollows,

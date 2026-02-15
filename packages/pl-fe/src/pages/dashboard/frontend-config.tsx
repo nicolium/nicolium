@@ -154,7 +154,9 @@ const FrontendConfigEditor: React.FC = () => {
     setRawJSON(e.target.value);
   };
 
-  const toggleJSONEditor = (expanded: boolean) => setJsonEditorExpanded(expanded);
+  const toggleJSONEditor = (expanded: boolean) =>{
+    setJsonEditorExpanded(expanded);
+  };
 
   useEffect(() => {
     putConfig(v.parse(frontendConfigSchema, initialData));
@@ -186,7 +188,7 @@ const FrontendConfigEditor: React.FC = () => {
           <List>
             <ListItem label={<FormattedMessage id='plfe_config.fields.theme_label' defaultMessage='Default theme' />}>
               <ThemeSelector
-                value={frontendConfig.defaultSettings?.themeMode || 'system'}
+                value={frontendConfig.defaultSettings?.themeMode ?? 'system'}
                 onChange={handleThemeChange}
               />
             </ListItem>
@@ -243,14 +245,14 @@ const FrontendConfigEditor: React.FC = () => {
           <List>
             <ListItem label={intl.formatMessage(messages.displayFqnLabel)}>
               <Toggle
-                checked={frontendConfig.displayFqn === true}
+                checked={frontendConfig.displayFqn}
                 onChange={handleChange('displayFqn', (e) => e.target.checked)}
               />
             </ListItem>
 
             <ListItem label={intl.formatMessage(messages.greentextLabel)}>
               <Toggle
-                checked={frontendConfig.greentext === true}
+                checked={frontendConfig.greentext}
                 onChange={handleChange('greentext', (e) => e.target.checked)}
               />
             </ListItem>
@@ -260,7 +262,7 @@ const FrontendConfigEditor: React.FC = () => {
               hint={intl.formatMessage(messages.mediaPreviewHint)}
             >
               <Toggle
-                checked={frontendConfig.mediaPreview === true}
+                checked={frontendConfig.mediaPreview}
                 onChange={handleChange('mediaPreview', (e) => e.target.checked)}
               />
             </ListItem>
@@ -284,7 +286,7 @@ const FrontendConfigEditor: React.FC = () => {
               <Input
                 type='text'
                 placeholder='https://01234abcdef@glitch.tip.tld/5678'
-                value={String(data.sentryDsn ||  '')}
+                value={String(data.sentryDsn ??  '')}
                 onChange={handleChange('sentryDsn', (e) => e.target.value)}
               />
             </ListItem>

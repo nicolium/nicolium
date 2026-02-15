@@ -86,15 +86,21 @@ const uploadFile = (
               if (data.url) {
                 onSuccess(data);
               } else if (data.url === null) {
-                setTimeout(() => poll(), 1000);
+                setTimeout(() =>{
+                  poll();
+                }, 1000);
               }
-            }).catch(error => onFail(error));
+            }).catch(error =>{
+              onFail(error);
+            });
           };
 
           poll();
         }
       });
-  }).catch(error => onFail(error));
+  }).catch(error =>{
+    onFail(error);
+  });
 };
 
 export {

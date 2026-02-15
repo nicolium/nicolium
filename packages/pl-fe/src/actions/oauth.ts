@@ -14,7 +14,7 @@ import { getBaseURL } from '@/utils/state';
 import type { AppDispatch, RootState } from '@/store';
 
 const obtainOAuthToken = async (params: GetTokenParams, baseURL?: string) =>{
-  const client = new PlApiClient(baseURL || BuildConfig.BACKEND_URL || '');
+  const client = new PlApiClient((baseURL ?? BuildConfig.BACKEND_URL) || '');
   await client.instance.getInstance();
 
   return client.oauth.getToken(params);

@@ -36,7 +36,7 @@ const importConfigs = (state: State, configs: PleromaConfig['configs']) => {
   if (!config) return state;
 
   if (config) {
-    const value = config.value || [];
+    const value = config.value ?? [];
     const registrationsOpen = getConfigValue(value, ':registrations_open') as boolean | undefined;
     const approvalRequired = getConfigValue(value, ':account_approval_required') as boolean | undefined;
 

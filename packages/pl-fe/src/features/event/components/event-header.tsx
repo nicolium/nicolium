@@ -83,7 +83,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const features = useFeatures();
   const { boostModal } = useSettings();
   const { account: ownAccount } = useOwnAccount();
-  const isStaff = ownAccount ? ownAccount.is_admin || ownAccount.is_moderator : false;
+  const isStaff = ownAccount ? ownAccount.is_admin ?? ownAccount.is_moderator : false;
   const isAdmin = ownAccount ? ownAccount.is_admin : false;
 
   const { mutate: reblogStatus } = useReblogStatus(status?.id!);
@@ -241,22 +241,30 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
           items: [
             {
               text: intl.formatMessage(messages.reblog_visibility_public),
-              action: () => handleReblogClick('public'),
+              action: () =>{
+                handleReblogClick('public');
+              },
               icon: require('@phosphor-icons/core/regular/globe.svg'),
             },
             {
               text: intl.formatMessage(messages.reblog_visibility_unlisted),
-              action: () => handleReblogClick('unlisted'),
+              action: () =>{
+                handleReblogClick('unlisted');
+              },
               icon: require('@phosphor-icons/core/regular/moon.svg'),
             },
             {
               text: intl.formatMessage(messages.reblog_visibility_private),
-              action: () => handleReblogClick('private'),
+              action: () =>{
+                handleReblogClick('private');
+              },
               icon: require('@phosphor-icons/core/regular/lock.svg'),
             },
           ],
         } : {
-          action: () => handleReblogClick(),
+          action: () =>{
+            handleReblogClick();
+          },
         }),
         icon: require('@phosphor-icons/core/regular/repeat.svg'),
       });
@@ -271,7 +279,9 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
     } else if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
       menu.push({
         text: intl.formatMessage(status.reblogged ? messages.cancel_reblog_private : messages.reblog_private),
-        action: () => handleReblogClick(),
+        action: () =>{
+          handleReblogClick();
+        },
         icon: require('@phosphor-icons/core/regular/repeat.svg'),
       });
     }
@@ -352,7 +362,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
       if (features.pleromaAdminStatuses) {
         menu.push({
-          text: intl.formatMessage(status.sensitive === false ? messages.markStatusSensitive : messages.markStatusNotSensitive),
+          text: intl.formatMessage(!status.sensitive ? messages.markStatusSensitive : messages.markStatusNotSensitive),
           action: handleToggleStatusSensitivity,
           icon: require('@phosphor-icons/core/regular/warning.svg'),
         });

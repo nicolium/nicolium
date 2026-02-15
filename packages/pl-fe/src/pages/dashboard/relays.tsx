@@ -72,7 +72,7 @@ const NewRelayForm: React.FC = () => {
 
   const { followRelay, isPendingFollow } = useRelays();
 
-  const handleSubmit = (e: React.FormEvent<Element>) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     followRelay(name.value, {
       onSuccess() {

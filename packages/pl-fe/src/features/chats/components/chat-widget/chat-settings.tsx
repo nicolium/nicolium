@@ -57,7 +57,9 @@ const ChatSettings = () => {
       heading: intl.formatMessage(messages.unblockHeading, { acct: chat?.account.acct }),
       message: <FormattedMessage id='chat_settings.unblock.message' defaultMessage='Unblocking will allow this profile to direct message you and view your content.' />,
       confirm: intl.formatMessage(messages.unblockConfirm),
-      onConfirm: () => unblockAccount(),
+      onConfirm: () =>{
+        unblockAccount();
+      },
     });
   };
 
@@ -66,7 +68,9 @@ const ChatSettings = () => {
       heading: intl.formatMessage(messages.leaveHeading),
       message: <FormattedMessage id='chat_settings.leave.message' defaultMessage='Are you sure you want to leave this chat? Messages will be deleted for you and this chat will be removed from your inbox.' />,
       confirm: intl.formatMessage(messages.leaveConfirm),
-      onConfirm: () => deleteChat.mutate(),
+      onConfirm: () =>{
+        deleteChat.mutate();
+      },
     });
   };
 

@@ -111,7 +111,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
     const host = remoteInstance.host;
     const siteTitle = instance.title;
 
-    if (remoteInstance.federation.reject === true) {
+    if (remoteInstance.federation.reject) {
       return (
         <Restriction icon={require('@phosphor-icons/core/regular/x.svg')}>
           <FormattedMessage

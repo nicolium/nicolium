@@ -10,7 +10,7 @@ import { createApp } from './apps';
 import type { AppDispatch, RootState } from '@/store';
 
 const createProviderApp = () =>
-  async (dispatch: AppDispatch, getState: () => RootState) => {
+  (dispatch: AppDispatch, getState: () => RootState) => {
     const scopes = getScopes(getState(), undefined, true);
 
     const params = {

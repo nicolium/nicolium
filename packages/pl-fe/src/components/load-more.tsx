@@ -15,7 +15,7 @@ const LoadMore: React.FC<ILoadMore> = ({ onClick, disabled, visible = true, clas
   }
 
   return (
-    <button className={clsx('⁂-load-more', className)} disabled={disabled || !visible} onClick={onClick}>
+    <button className={clsx('⁂-load-more', className)} disabled={disabled ?? !visible} onClick={onClick}>
       <FormattedMessage id='status.load_more' defaultMessage='Load more' />
     </button>
   );

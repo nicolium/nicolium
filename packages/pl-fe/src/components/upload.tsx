@@ -122,8 +122,8 @@ const Upload: React.FC<IUpload> = ({
 
     if (!onDescriptionChange) return;
 
-    const focusX = (media.type === 'image' || media.type === 'gifv') && media.meta.focus?.x || 0;
-    const focusY = (media.type === 'image' || media.type === 'gifv') && media.meta.focus?.y || 0;
+    const focusX = (media.type === 'image' || media.type === 'gifv') ? (media.meta.focus?.x ?? 0) : 0;
+    const focusY = (media.type === 'image' || media.type === 'gifv') ? (media.meta.focus?.y ?? 0) : 0;
 
     openModal('ALT_TEXT', {
       media,
@@ -136,8 +136,8 @@ const Upload: React.FC<IUpload> = ({
   };
 
   const description = media.description;
-  const focusX = media.type === 'image' && media.meta?.focus?.x || undefined;
-  const focusY = media.type === 'image' && media.meta?.focus?.y || undefined;
+  const focusX = (media.type === 'image' && media.meta?.focus?.x) ?? undefined;
+  const focusY = (media.type === 'image' && media.meta?.focus?.y) ?? undefined;
   const x = focusX ? ((focusX / 2) + .5) * 100 : undefined;
   const y = focusY ? ((focusY / -2) + .5) * 100 : undefined;
   const mediaType = media.type;
@@ -155,7 +155,7 @@ const Upload: React.FC<IUpload> = ({
   const uploadIcon = mediaType === 'unknown' && (
     <Icon
       className='mx-auto my-12 size-16 text-gray-800 dark:text-gray-200'
-      src={MIMETYPE_ICONS[mimeType || ''] || defaultIcon}
+      src={MIMETYPE_ICONS[mimeType ?? ''] || defaultIcon}
     />
   );
 

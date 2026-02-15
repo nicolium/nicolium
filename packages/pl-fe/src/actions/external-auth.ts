@@ -50,7 +50,7 @@ const externalAuthorize = (instance: Instance, baseURL: string) => {
 
     const query = new URLSearchParams({
       client_id,
-      redirect_uri: redirect_uri || app.redirect_uris[0]!,
+      redirect_uri: redirect_uri ?? app.redirect_uris[0],
       response_type: 'code',
       scope: scopes,
     });

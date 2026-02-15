@@ -28,34 +28,42 @@ type State = {
 const useStatusMetaStore = create<State>()(mutative((set) => ({
   statuses: {},
   actions: {
-    expandStatuses: (statusIds) => set((state: State) => {
-      for (const statusId of statusIds) {
-        if (!state.statuses[statusId]) state.statuses[statusId] = {};
+    expandStatuses: (statusIds) =>{
+      set((state: State) => {
+        for (const statusId of statusIds) {
+          if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
-        state.statuses[statusId].expanded = true;
-      }
-    }),
-    collapseStatuses: (statusIds) => set((state: State) => {
-      for (const statusId of statusIds) {
-        if (!state.statuses[statusId]) state.statuses[statusId] = {};
+          state.statuses[statusId].expanded = true;
+        }
+      });
+    },
+    collapseStatuses: (statusIds) =>{
+      set((state: State) => {
+        for (const statusId of statusIds) {
+          if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
-        state.statuses[statusId].expanded = false;
-      }
-    }),
-    revealStatusesMedia: (statusIds) => set((state: State) => {
-      for (const statusId of statusIds) {
-        if (!state.statuses[statusId]) state.statuses[statusId] = {};
+          state.statuses[statusId].expanded = false;
+        }
+      });
+    },
+    revealStatusesMedia: (statusIds) =>{
+      set((state: State) => {
+        for (const statusId of statusIds) {
+          if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
-        state.statuses[statusId].mediaVisible = true;
-      }
-    }),
-    hideStatusesMedia: (statusIds) => set((state: State) => {
-      for (const statusId of statusIds) {
-        if (!state.statuses[statusId]) state.statuses[statusId] = {};
+          state.statuses[statusId].mediaVisible = true;
+        }
+      });
+    },
+    hideStatusesMedia: (statusIds) =>{
+      set((state: State) => {
+        for (const statusId of statusIds) {
+          if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
-        state.statuses[statusId].mediaVisible = false;
-      }
-    }),
+          state.statuses[statusId].mediaVisible = false;
+        }
+      });
+    },
     toggleStatusesMediaHidden: (statusIds) => (state: State) => {
       for (const statusId of statusIds) {
         if (!state.statuses[statusId]) state.statuses[statusId] = {};
@@ -63,36 +71,48 @@ const useStatusMetaStore = create<State>()(mutative((set) => ({
         state.statuses[statusId].mediaVisible = !state.statuses[statusId].mediaVisible;
       }
     },
-    fetchTranslation: (statusId, targetLanguage) => set((state: State) => {
-      if (!state.statuses[statusId]) state.statuses[statusId] = {};
+    fetchTranslation: (statusId, targetLanguage) =>{
+      set((state: State) => {
+        if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
-      state.statuses[statusId].targetLanguage = targetLanguage;
-    }),
-    hideTranslation: (statusId) => set((state: State) => {
-      if (!state.statuses[statusId]) state.statuses[statusId] = {};
+        state.statuses[statusId].targetLanguage = targetLanguage;
+      });
+    },
+    hideTranslation: (statusId) =>{
+      set((state: State) => {
+        if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
-      state.statuses[statusId].targetLanguage = undefined;
-    }),
-    fetchLocalTranslation: (statusId, targetLanguage) => set((state: State) => {
-      if (!state.statuses[statusId]) state.statuses[statusId] = {};
+        state.statuses[statusId].targetLanguage = undefined;
+      });
+    },
+    fetchLocalTranslation: (statusId, targetLanguage) =>{
+      set((state: State) => {
+        if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
-      state.statuses[statusId].localTargetLanguage = targetLanguage;
-    }),
-    hideLocalTranslation: (statusId) => set((state: State) => {
-      if (!state.statuses[statusId]) state.statuses[statusId] = {};
+        state.statuses[statusId].localTargetLanguage = targetLanguage;
+      });
+    },
+    hideLocalTranslation: (statusId) =>{
+      set((state: State) => {
+        if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
-      state.statuses[statusId].localTargetLanguage = undefined;
-    }),
-    setStatusLanguage: (statusId, language) => set((state: State) => {
-      if (!state.statuses[statusId]) state.statuses[statusId] = {};
+        state.statuses[statusId].localTargetLanguage = undefined;
+      });
+    },
+    setStatusLanguage: (statusId, language) =>{
+      set((state: State) => {
+        if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
-      state.statuses[statusId].currentLanguage = language;
-    }),
-    toggleShowPollResults: (statusId) => set((state: State) => {
-      if (!state.statuses[statusId]) state.statuses[statusId] = {};
+        state.statuses[statusId].currentLanguage = language;
+      });
+    },
+    toggleShowPollResults: (statusId) =>{
+      set((state: State) => {
+        if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
-      state.statuses[statusId].showPollResults = !state.statuses[statusId].showPollResults;
-    }),
+        state.statuses[statusId].showPollResults = !state.statuses[statusId].showPollResults;
+      });
+    },
   },
 })));
 

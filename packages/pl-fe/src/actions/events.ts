@@ -66,25 +66,25 @@ const submitEvent = ({
     if (banner) params.banner_id = banner.id;
     if (location) params.location_id = location.origin_id;
 
-    return (
+    const data = await (
       statusId === null
         ? getClient(state).events.createEvent(params)
         : getClient(state).events.editEvent(statusId, params)
-    ).then((data) => {
-      dispatch(importEntities({ statuses: [data] }));
-      toast.success(
-        statusId ? messages.editSuccess : messages.success,
-        {
-          actionLabel: messages.view,
-          actionLinkOptions: {
-            to: '/@{$username}/events/$statusId',
-            params: { username: data.account.acct, statusId: data.id },
-          },
-        },
-      );
+    );
 
-      return data;
-    });
+    dispatch(importEntities({ statuses: [data] }));
+    toast.success(
+      statusId ? messages.editSuccess : messages.success,
+      {
+        actionLabel: messages.view,
+        actionLinkOptions: {
+          to: '/@{$username}/events/$statusId',
+          params: { username: data.account.acct, statusId: data.id },
+        },
+      },
+    );
+
+    return data;
   };
 
 interface JoinEventRequest {

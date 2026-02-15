@@ -56,7 +56,7 @@ const updateAuthAccount = async (url: string, settings: any) => {
   const oldAccount: any = await KVStore.getItem(key);
   try {
     if (!oldAccount) return;
-    if (!oldAccount.settings_store) oldAccount.settings_store = {};
+    oldAccount.settings_store ??= {};
     oldAccount.settings_store[FE_NAME] = settings;
     await KVStore.setItem(key, oldAccount);
   } catch (error) {

@@ -55,7 +55,9 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
     setSelectedFolder(folderId);
 
     bookmarkStatus(folderId, {
-      onSuccess: () => onClose('SELECT_BOOKMARK_FOLDER'),
+      onSuccess: () =>{
+        onClose('SELECT_BOOKMARK_FOLDER');
+      },
     });
   };
 
@@ -90,7 +92,7 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
             {folder.emoji ? (
               <Emoji
                 emoji={folder.emoji}
-                src={folder.emoji_url || undefined}
+                src={folder.emoji_url ?? undefined}
                 className='size-5 flex-none'
               />
             ) : <Icon src={require('@phosphor-icons/core/regular/folder-simple.svg')} size={20} />}
@@ -100,7 +102,9 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
       >
         <Toggle
           checked={selectedBookmarkFolders?.includes(folder.id)}
-          onChange={() => toggleBookmarkFolder(folder.id)}
+          onChange={() =>{
+            toggleBookmarkFolder(folder.id);
+          }}
           disabled={fetchingSelectedBookmarkFolders || addingBookmarkToFolder || removingBookmarkFromFolder}
         />
       </ListItem>
@@ -129,7 +133,7 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
               {folder.emoji ? (
                 <Emoji
                   emoji={folder.emoji}
-                  src={folder.emoji_url || undefined}
+                  src={folder.emoji_url ?? undefined}
                   className='size-5 flex-none'
                 />
               ) : <Icon src={require('@phosphor-icons/core/regular/folder-simple.svg')} size={20} />}

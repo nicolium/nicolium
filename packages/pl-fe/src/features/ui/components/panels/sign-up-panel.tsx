@@ -30,7 +30,7 @@ const SignUpPanel = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [mfaAuthNeeded, setMfaAuthNeeded] = useState(!!token);
-  const [mfaToken, setMfaToken] = useState(token || '');
+  const [mfaToken, setMfaToken] = useState(token ?? '');
   const [shouldRedirect, setShouldRedirect] = useState(false);
 
   const getFormData = (form: HTMLFormElement) =>
@@ -41,7 +41,7 @@ const SignUpPanel = () => {
   const handleSubmit: React.FormEventHandler = (event) => {
     const { username, password } = getFormData(event.target as HTMLFormElement);
     dispatch(logIn(username, password))
-      .then(({ access_token }) => dispatch(verifyCredentials(access_token as string)))
+      .then(({ access_token }) => dispatch(verifyCredentials(access_token)))
       // Refetch the instance for authenticated fetch
       .then(async (account) => {
         await dispatch(fetchInstance());

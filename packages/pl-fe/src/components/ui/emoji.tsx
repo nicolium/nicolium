@@ -29,12 +29,12 @@ const Emoji: React.FC<IEmoji> = (props): JSX.Element | null => {
   if (src) {
     if (disableUserProvidedMedia) return (
       <>
-        {alt || <span className={rest.className}>{emoji}</span>}
+        {alt ?? <span className={rest.className}>{emoji}</span>}
       </>
     );
     return (
       <StillImage
-        alt={alt || emoji}
+        alt={alt ?? emoji}
         src={src}
         staticSrc={staticSrc}
         isGif
@@ -50,7 +50,7 @@ const Emoji: React.FC<IEmoji> = (props): JSX.Element | null => {
   return (
     <img
       draggable='false'
-      alt={alt || emoji}
+      alt={alt ?? emoji}
       src={joinPublicPath(`packs/emoji/${filename}.svg`)}
       {...rest}
     />

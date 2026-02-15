@@ -42,7 +42,7 @@ const NewListForm: React.FC = () => {
     setValue(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<Element>) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     createList({ title: value });
   };

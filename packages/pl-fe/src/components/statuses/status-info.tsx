@@ -12,7 +12,7 @@ interface IStatusInfo {
 const StatusInfo = (props: IStatusInfo) => {
   const { avatarSize, icon, text, className, title } = props;
 
-  const onClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+  const onClick = (event: React.MouseEvent<HTMLDivElement>) => {
     event.stopPropagation();
   };
 

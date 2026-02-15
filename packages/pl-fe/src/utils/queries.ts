@@ -20,7 +20,7 @@ const deduplicateById = <T extends Entity>(entities: T[]): T[] => {
 /** Flatten paginated results into a single array. */
 const flattenPages = <T>(queryData: InfiniteData<PaginatedResponse<T>> | undefined) => {
   const data = queryData?.pages.reduce<T[]>(
-    (prev: T[], curr) => [...prev, ...((curr as any).result || (curr as any).items)],
+    (prev: T[], curr) => [...prev, ...((curr as any).result ?? (curr as any).items)],
     [],
   );
 
@@ -72,9 +72,7 @@ const paginateQueryData = <T>(array: T[] | undefined) =>
   array?.reduce((resultArray: any, item: any, index: any) => {
     const chunkIndex = Math.floor(index / 20);
 
-    if (!resultArray[chunkIndex]) {
-      resultArray[chunkIndex] = []; // start a new chunk
-    }
+    resultArray[chunkIndex] ??= [];
 
     resultArray[chunkIndex].push(item);
 

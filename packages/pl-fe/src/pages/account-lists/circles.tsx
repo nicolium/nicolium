@@ -33,7 +33,7 @@ const NewCircleForm: React.FC = () => {
     setTitle(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent<Element>) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     createCircle(title);
   };

@@ -48,7 +48,7 @@ const StatusActionButton = React.forwardRef<HTMLButtonElement, IStatusActionButt
   const renderIcon = () => {
     return (
       <Icon
-        src={active && filledIcon || icon}
+        src={active && filledIcon ? filledIcon : icon}
         className={iconClassName}
         aria-hidden
       />

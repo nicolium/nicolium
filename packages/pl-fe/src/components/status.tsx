@@ -45,7 +45,11 @@ interface IAccountInfo {
 
 const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => (
   <div className='flex flex-row-reverse items-center gap-1 self-baseline'>
-    <Link to='/@{$username}/posts/$statusId' params={{ username: status.account.acct, statusId: status.id }} className='hover:underline' onClick={(event) => event.stopPropagation()}>
+    <Link
+      to='/@{$username}/posts/$statusId' params={{ username: status.account.acct, statusId: status.id }} className='hover:underline' onClick={(event) =>{
+        event.stopPropagation();
+      }}
+    >
       <RelativeTimestamp timestamp={status.created_at} theme='muted' size='sm' className='whitespace-nowrap' />
     </Link>
     <StatusTypeIcon visibility={status.visibility} />
@@ -156,7 +160,7 @@ const Status: React.FC<IStatus> = (props) => {
   const node = useRef<HTMLDivElement>(null);
 
   const getStatus = useMemo(makeGetStatus, []);
-  const actualStatus = useAppSelector(state => status.reblog_id && getStatus(state, { id: status.reblog_id }) || status)!;
+  const actualStatus = useAppSelector(state => (status.reblog_id && getStatus(state, { id: status.reblog_id })) ?? status);
 
   const { mutate: favouriteStatus } = useFavouriteStatus(actualStatus.id);
   const { mutate: unfavouriteStatus } = useUnfavouriteStatus(actualStatus.id);
@@ -317,7 +321,7 @@ const Status: React.FC<IStatus> = (props) => {
         />
       );
     } else if (isReblog) {
-      const accounts = status.accounts || [status.account];
+      const accounts = status.accounts ?? [status.account];
 
       const renderedAccounts = accounts.slice(0, 2).map(account => !!account && (
         <Link key={account.acct} to='/@{$username}' params={{ username: account.acct }} className='hover:underline'>

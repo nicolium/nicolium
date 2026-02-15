@@ -31,7 +31,9 @@ const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({ statusId, children,
 
   const handleMouseLeave = () => {
     showStatusHoverCard.cancel();
-    setTimeout(() => closeStatusHoverCard(), 200);
+    setTimeout(() =>{
+      closeStatusHoverCard();
+    }, 200);
   };
 
   const handleClick = () => {

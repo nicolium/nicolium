@@ -34,18 +34,26 @@ const EditAnnouncementModal: React.FC<BaseModalProps & EditAnnouncementModalProp
   const { mutate: updateAnnouncement } = useUpdateAnnouncementMutation();
   const intl = useIntl();
 
-  const [content, setContent] = useState(announcement?.raw_content || '');
+  const [content, setContent] = useState(announcement?.raw_content ?? '');
   const [startTime, setStartTime] = useState(announcement?.starts_at ? new Date(announcement.starts_at) : null);
   const [endTime, setEndTime] = useState(announcement?.ends_at ? new Date(announcement.ends_at) : null);
-  const [allDay, setAllDay] = useState(announcement?.all_day || false);
+  const [allDay, setAllDay] = useState(announcement?.all_day ?? false);
 
-  const onChangeContent: React.ChangeEventHandler<HTMLTextAreaElement> = ({ target }) => setContent(target.value);
+  const onChangeContent: React.ChangeEventHandler<HTMLTextAreaElement> = ({ target }) =>{
+    setContent(target.value);
+  };
 
-  const onChangeStartTime = (date: Date | null) => setStartTime(date);
+  const onChangeStartTime = (date: Date | null) =>{
+    setStartTime(date);
+  };
 
-  const onChangeEndTime = (date: Date | null) => setEndTime(date);
+  const onChangeEndTime = (date: Date | null) =>{
+    setEndTime(date);
+  };
 
-  const onChangeAllDay: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => setAllDay(target.checked);
+  const onChangeAllDay: React.ChangeEventHandler<HTMLInputElement> = ({ target }) =>{
+    setAllDay(target.checked);
+  };
 
   const onClickClose = () => {
     onClose('EDIT_ANNOUNCEMENT');
@@ -54,8 +62,8 @@ const EditAnnouncementModal: React.FC<BaseModalProps & EditAnnouncementModalProp
   const handleSubmit = () => {
     const form = {
       content,
-      starts_at: startTime?.toISOString() || undefined,
-      ends_at: endTime?.toISOString() || undefined,
+      starts_at: startTime?.toISOString() ?? undefined,
+      ends_at: endTime?.toISOString() ?? undefined,
       all_day: allDay,
     };
 

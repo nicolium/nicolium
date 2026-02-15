@@ -9,11 +9,8 @@ import { useInstance } from '@/hooks/use-instance';
 
 import ConsumerButton from './consumer-button';
 
-interface IConsumersList {
-}
-
 /** Displays OAuth consumers to log in with. */
-const ConsumersList: React.FC<IConsumersList> = () => {
+const ConsumersList: React.FC = () => {
   const instance = useInstance();
   const providers = instance.pleroma.oauth_consumer_strategies;
 

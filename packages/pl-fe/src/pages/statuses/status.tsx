@@ -69,14 +69,18 @@ const StatusPage: React.FC = () => {
     const menu: Menu = [
       {
         text: intl.formatMessage(messages.treeView),
-        action: () => dispatch(changeSetting(['threads', 'displayMode'], 'tree')),
+        action: () =>{
+          dispatch(changeSetting(['threads', 'displayMode'], 'tree'));
+        },
         icon: require('@phosphor-icons/core/regular/tree-view.svg'),
         type: 'radio',
         checked: displayMode === 'tree',
       },
       {
         text: intl.formatMessage(messages.linearView),
-        action: () => dispatch(changeSetting(['threads', 'displayMode'], 'linear')),
+        action: () =>{
+          dispatch(changeSetting(['threads', 'displayMode'], 'linear'));
+        },
         icon: require('@phosphor-icons/core/regular/list-bullets.svg'),
         type: 'radio',
         checked: displayMode === 'linear',
@@ -132,7 +136,11 @@ const StatusPage: React.FC = () => {
         action={<DropdownMenu items={items} src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')} />}
       >
         <PullToRefresh onRefresh={handleRefresh}>
-          <Thread key={status.id} status={status} setExpandAllStatuses={(fn) => setExpandAllStatuses(() => fn)} />
+          <Thread
+            key={status.id} status={status} setExpandAllStatuses={(fn) =>{
+              setExpandAllStatuses(() => fn);
+            }}
+          />
         </PullToRefresh>
       </Column>
     </Stack>

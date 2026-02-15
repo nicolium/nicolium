@@ -15,7 +15,7 @@ const useSearchAccounts = (
 
   return useInfiniteQuery({
     queryKey: ['search', 'accounts', query, params],
-    queryFn: ({ pageParam: offset, signal }) => client.search.search(query!, {
+    queryFn: ({ pageParam: offset, signal }) => client.search.search(query, {
       with_relationships: true,
       resolve: true,
       ...params,

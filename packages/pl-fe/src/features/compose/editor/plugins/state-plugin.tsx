@@ -34,7 +34,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
   const { urlPrivacy, ignoreHashtagCasingSuggestions } = useSettings();
 
   const checkUrls = useCallback(debounce((editorState: EditorState) => {
-    dispatch(async (_, getState) => {
+    dispatch((_, getState) => {
       if (!urlPrivacy.clearLinksInCompose) return;
 
       const state = getState();
@@ -81,7 +81,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
   }, 2000), [urlPrivacy.clearLinksInCompose]);
 
   const checkHashtagCasingSuggestions = useCallback(debounce((editorState: EditorState) => {
-    dispatch(async (_, getState) => {
+    dispatch((_, getState) => {
       if (ignoreHashtagCasingSuggestions) return;
 
       const state = getState();
@@ -137,7 +137,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
     });
   }, 2000), []);
 
-  const detectLanguage = useCallback(debounce(async (text: string) => {
+  const detectLanguage = useCallback(debounce((text: string) => {
     dispatch(async (dispatch, getState) => {
       const state = getState();
       const compose = state.compose[composeId];

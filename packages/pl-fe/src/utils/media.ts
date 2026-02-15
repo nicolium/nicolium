@@ -43,7 +43,9 @@ const getVideoDuration = (file: File): Promise<number> => {
       }
     });
 
-    video.onerror = (event: any) => reject(event.target.error);
+    video.onerror = (event: any) =>{
+      reject(event.target.error);
+    };
   });
 
   video.src = window.URL.createObjectURL(file);

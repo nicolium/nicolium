@@ -28,14 +28,18 @@ const UnapprovedAccount: React.FC<IUnapprovedAccount> = ({ accountId }) => {
           @{account.acct}
         </Text>
         <Text tag='blockquote' size='sm'>
-          {adminAccount?.invite_request || ''}
+          {adminAccount?.invite_request ?? ''}
         </Text>
       </Stack>
 
       <Stack justifyContent='center'>
         <AuthorizeRejectButtons
-          onAuthorize={() => approveAccount()}
-          onReject={() => rejectAccount()}
+          onAuthorize={() =>{
+            approveAccount();
+          }}
+          onReject={() =>{
+            rejectAccount();
+          }}
           countdown={3000}
         />
       </Stack>

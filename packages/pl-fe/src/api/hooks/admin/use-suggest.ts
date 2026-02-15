@@ -21,7 +21,7 @@ const useSuggest = () => {
     });
   };
 
-  const suggest = async (accountId: string, callbacks?: EntityCallbacks<void, unknown>) => {
+  const suggest = async (accountId: string, callbacks?: EntityCallbacks<void>) => {
     suggestEffect(accountId, true);
     try {
       await client.admin.accounts.suggestUser(accountId);
@@ -32,7 +32,7 @@ const useSuggest = () => {
     }
   };
 
-  const unsuggest = async (accountId: string, callbacks?: EntityCallbacks<void, unknown>) => {
+  const unsuggest = async (accountId: string, callbacks?: EntityCallbacks<void>) => {
     suggestEffect(accountId, false);
     try {
       await client.admin.accounts.unsuggestUser(accountId);

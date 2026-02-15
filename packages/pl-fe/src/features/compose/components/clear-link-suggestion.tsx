@@ -40,14 +40,18 @@ const ClearLinkSuggestion = ({
             <Button
               theme='muted'
               size='xs'
-              onClick={() => handleReject(suggestion.key)}
+              onClick={() =>{
+                handleReject(suggestion.key);
+              }}
             >
               <FormattedMessage id='compose.clear_link_suggestion.ignore' defaultMessage='Ignore' />
             </Button>
             <Button
               theme='muted'
               size='xs'
-              onClick={() => handleAccept(suggestion.key)}
+              onClick={() =>{
+                handleAccept(suggestion.key);
+              }}
             >
               <FormattedMessage id='compose.clear_link_suggestion.remove' defaultMessage='Remove' />
             </Button>

@@ -175,7 +175,9 @@ const AdminAccountPage: React.FC = () => {
     const action = checked ? verify : unverify;
 
     action(account.id, {
-      onSuccess: () => toast.success(intl.formatMessage(message, { acct: account.acct })),
+      onSuccess: () =>{
+        toast.success(intl.formatMessage(message, { acct: account.acct }));
+      },
     });
   };
 
@@ -186,7 +188,9 @@ const AdminAccountPage: React.FC = () => {
     const action = checked ? suggest : unsuggest;
 
     action(account.id, {
-      onSuccess: () => toast.success(intl.formatMessage(message, { acct: account.acct })),
+      onSuccess: () =>{
+        toast.success(intl.formatMessage(message, { acct: account.acct }));
+      },
     });
   };
 
@@ -200,7 +204,9 @@ const AdminAccountPage: React.FC = () => {
 
   const handleSaveBadges = () => {
     dispatch(saveBadges(account.id, accountBadges, badges))
-      .then(() => toast.success(intl.formatMessage(messages.badgesSaved)))
+      .then(() =>{
+        toast.success(intl.formatMessage(messages.badgesSaved));
+      })
       .catch(() => {});
   };
 

@@ -8,7 +8,7 @@ import PlaceholderGroupSearch from '@/features/placeholder/components/placeholde
 
 const MyGroupsPanel = () => {
   const { groups, isFetching, isFetched, isError } = useGroups();
-  const isEmpty = (isFetched && groups.length === 0) || isError;
+  const isEmpty = (isFetched && groups.length === 0) ?? isError;
 
   if (isEmpty) {
     return null;

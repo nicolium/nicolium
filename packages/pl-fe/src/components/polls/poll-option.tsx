@@ -36,7 +36,9 @@ interface IPollOptionText extends IPollOption {
 }
 
 const PollOptionText: React.FC<IPollOptionText> = ({ poll, option, index, active, onToggle, truncate }) => {
-  const handleOptionChange: React.EventHandler<React.ChangeEvent> = () => onToggle(index);
+  const handleOptionChange: React.EventHandler<React.ChangeEvent> = () =>{
+    onToggle(index);
+  };
 
   const handleOptionKeyPress: React.EventHandler<React.KeyboardEvent> = e => {
     if (e.key === 'Enter' || e.key === ' ') {
@@ -144,7 +146,7 @@ const PollOption: React.FC<IPollOption> = (props): JSX.Element | null => {
                 weight='medium'
                 className={clsx('relative break-words', { truncate })}
               >
-                <ParsedContent html={(language && option.title_map) && option.title_map[language] || option.title} emojis={poll.emojis} />
+                <ParsedContent html={(language && option.title_map) && option.title_map[language] ?? option.title} emojis={poll.emojis} />
               </Text>
             </div>
 

@@ -34,14 +34,14 @@ const ListForm: React.FC<IListForm> = ({
   const features = useFeatures();
 
   const { data: list } = useList(listId);
-  const { mutate: updateList, isPending: disabled } = useUpdateList(listId!);
+  const { mutate: updateList, isPending: disabled } = useUpdateList(listId);
 
   const [title, setTitle] = useState(list!.title);
   const [repliesPolicy, setRepliesPolicy] = useState(list!.replies_policy);
   const [exclusive, setExclusive] = useState(list!.exclusive);
   const [notify, setNotify] = useState(list!.notify);
 
-  const handleSubmit: React.FormEventHandler<Element> = e => {
+  const handleSubmit: React.FormEventHandler = e => {
     e.preventDefault();
     handleUpdate();
   };
@@ -66,7 +66,9 @@ const ListForm: React.FC<IListForm> = ({
           outerClassName='grow'
           type='text'
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) =>{
+            setTitle(e.target.value);
+          }}
         />
       </FormGroup>
 
@@ -83,8 +85,10 @@ const ListForm: React.FC<IListForm> = ({
                 list: intl.formatMessage(messages.repliesPolicyList),
                 followed: intl.formatMessage(messages.repliesPolicyFollowed),
               }}
-              defaultValue={repliesPolicy || 'list'}
-              onChange={(e) => setRepliesPolicy(e.target.value as 'none')}
+              defaultValue={repliesPolicy ?? 'list'}
+              onChange={(e) =>{
+                setRepliesPolicy(e.target.value as 'none');
+              }}
             />
           </ListItem>
         )}
@@ -96,7 +100,9 @@ const ListForm: React.FC<IListForm> = ({
           >
             <Toggle
               checked={exclusive}
-              onChange={(e) => setExclusive(e.target.checked)}
+              onChange={(e) =>{
+                setExclusive(e.target.checked);
+              }}
             />
           </ListItem>
         )}
@@ -108,14 +114,18 @@ const ListForm: React.FC<IListForm> = ({
           >
             <Toggle
               checked={notify}
-              onChange={(e) => setNotify(e.target.checked)}
+              onChange={(e) =>{
+                setNotify(e.target.checked);
+              }}
             />
           </ListItem>
         )}
 
         <ListItem
           label={<FormattedMessage id='lists.manage_members' defaultMessage='Manage list members' />}
-          onClick={() => onTabChange('members')}
+          onClick={() =>{
+            onTabChange('members');
+          }}
         />
       </List>
 

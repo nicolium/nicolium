@@ -16,18 +16,24 @@ const useAccountHoverCardStore = create<State>((set) => ({
   accountId: null,
   hovered: false,
   actions: {
-    openAccountHoverCard: (ref, accountId) => set({
-      ref,
-      accountId,
-    }),
-    updateAccountHoverCard: () => set({
-      hovered: true,
-    }),
-    closeAccountHoverCard: (force = false) => set((state) => state.hovered && !force ? {} : {
-      ref: null,
-      accountId: null,
-      hovered: false,
-    }),
+    openAccountHoverCard: (ref, accountId) =>{
+      set({
+        ref,
+        accountId,
+      });
+    },
+    updateAccountHoverCard: () =>{
+      set({
+        hovered: true,
+      });
+    },
+    closeAccountHoverCard: (force = false) =>{
+      set((state) => state.hovered && !force ? {} : {
+        ref: null,
+        accountId: null,
+        hovered: false,
+      });
+    },
   },
 }));
 

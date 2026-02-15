@@ -37,8 +37,8 @@ const DEFAULT_COLORS = {
 };
 
 const normalizeColors = (theme: Partial<Pick<FrontendConfig, 'brandColor' | 'accentColor' | 'colors'>>) => {
-  const brandColor: string = theme.brandColor || theme.colors?.primary?.['500'] || '#d80482';
-  const accentColor: string = theme.accentColor || theme.colors?.accent?.['500'] || generateAccent(brandColor) || '';
+  const brandColor: string = (theme.brandColor ?? theme.colors?.primary?.['500']) ?? '#d80482';
+  const accentColor: string = ((theme.accentColor ?? theme.colors?.accent?.['500']) ?? generateAccent(brandColor)) ?? '';
 
   const colors = {
     ...theme.colors,
@@ -70,7 +70,7 @@ const useThemeCss = (overwriteConfig?: FrontendConfig) => {
       let baseTheme: Partial<FrontendConfig>;
       if (overwriteConfig) baseTheme = overwriteConfig;
       else if (demo) baseTheme = {};
-      else baseTheme = theme || frontendConfig;
+      else baseTheme = theme ?? frontendConfig;
 
       const colors = normalizeColors(baseTheme);
 

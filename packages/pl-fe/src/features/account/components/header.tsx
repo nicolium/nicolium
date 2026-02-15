@@ -162,7 +162,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const createAndNavigateToChat = useMutation({
     mutationFn: (accountId: string) => getOrCreateChatByAccountId(accountId),
     onError: (error: { response: PlfeResponse }) => {
-      const data = error.response?.json as any;
+      const data = error.response.json;
       toast.error(data?.error);
     },
     onSuccess: (response) => {
@@ -220,25 +220,37 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const onEndorseToggle = () => {
     if (account.relationship?.endorsed) {
       unpinAccount(undefined, {
-        onSuccess: () => toast.success(intl.formatMessage(messages.userUnendorsed, { acct: account.acct })),
+        onSuccess: () =>{
+          toast.success(intl.formatMessage(messages.userUnendorsed, { acct: account.acct }));
+        },
       });
     } else {
       pinAccount(undefined, {
-        onSuccess: () => toast.success(intl.formatMessage(messages.userEndorsed, { acct: account.acct })),
+        onSuccess: () =>{
+          toast.success(intl.formatMessage(messages.userEndorsed, { acct: account.acct }));
+        },
       });
     }
   };
 
   const onBite = () => {
     client.accounts.biteAccount(account.id)
-      .then(() => toast.success(intl.formatMessage(messages.userBit, { acct: account.acct })))
-      .catch(() => toast.error(intl.formatMessage(messages.userBiteFail, { acct: account.acct })));
+      .then(() =>{
+        toast.success(intl.formatMessage(messages.userBit, { acct: account.acct }));
+      })
+      .catch(() =>{
+        toast.error(intl.formatMessage(messages.userBiteFail, { acct: account.acct }));
+      });
   };
 
   const onLoadActivities = () => {
     client.accounts.loadActivities(account.id)
-      .then(() => toast.success(intl.formatMessage(messages.loadActivitiesSuccess)))
-      .catch(() => toast.error(intl.formatMessage(messages.loadActivitiesFail)));
+      .then(() =>{
+        toast.success(intl.formatMessage(messages.loadActivitiesSuccess));
+      })
+      .catch(() =>{
+        toast.error(intl.formatMessage(messages.loadActivitiesFail));
+      });
   };
 
   const onEditNote = () => {
@@ -246,11 +258,17 @@ const Header: React.FC<IHeader> = ({ account }) => {
       heading: <FormattedMessage id='account_note.modal_header' defaultMessage='Edit note for @{name}' values={{ name: account.acct }} />,
       placeholder: intl.formatMessage(messages.notePlaceholder),
       confirm: <FormattedMessage id='account_note.save' defaultMessage='Save note' />,
-      onConfirm: (value) => updateAccountNote(value, {
-        onSuccess: () => toast.success(messages.noteSaved),
-        onError: () => toast.error(messages.noteSaveFailed),
-      }),
-      text: account.relationship?.note || '',
+      onConfirm: (value) =>{
+        updateAccountNote(value, {
+          onSuccess: () =>{
+            toast.success(messages.noteSaved);
+          },
+          onError: () =>{
+            toast.error(messages.noteSaveFailed);
+          },
+        });
+      },
+      text: account.relationship?.note ?? '',
     });
   };
 
@@ -271,7 +289,9 @@ const Header: React.FC<IHeader> = ({ account }) => {
       heading: <FormattedMessage id='confirmations.domain_block.heading' defaultMessage='Block {domain}' values={{ domain }} />,
       message: <FormattedMessage id='confirmations.domain_block.message' defaultMessage='Are you really, really sure you want to block the entire {domain}? In most cases a few targeted blocks or mutes are sufficient and preferable. You will not see content from that domain in any public timelines or your notifications.' values={{ domain: <strong>{domain}</strong> }} />,
       confirm: intl.formatMessage(messages.blockDomainConfirm),
-      onConfirm: () => blockDomain(domain),
+      onConfirm: () =>{
+        blockDomain(domain);
+      },
     });
   };
 
@@ -292,7 +312,9 @@ const Header: React.FC<IHeader> = ({ account }) => {
         heading: <FormattedMessage id='confirmations.remove_from_followers.heading' defaultMessage='Remove {name} from followers' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
         message: <FormattedMessage id='confirmations.remove_from_followers.message' defaultMessage='Are you sure you want to remove {name} from your followers?' values={{ name: <strong className='break-words'>@{account.acct}</strong> }} />,
         confirm: intl.formatMessage(messages.removeFromFollowersConfirm),
-        onConfirm: () => removeFromFollowers(),
+        onConfirm: () =>{
+          removeFromFollowers();
+        },
       });
     } else {
       removeFromFollowers();
@@ -550,13 +572,17 @@ const Header: React.FC<IHeader> = ({ account }) => {
       if (account.relationship?.domain_blocking) {
         menu.push({
           text: intl.formatMessage(messages.unblockDomain, { domain }),
-          action: () => onUnblockDomain(domain),
+          action: () =>{
+            onUnblockDomain(domain);
+          },
           icon: require('@phosphor-icons/core/regular/prohibit.svg'),
         });
       } else {
         menu.push({
           text: intl.formatMessage(messages.blockDomain, { domain }),
-          action: () => onBlockDomain(domain),
+          action: () =>{
+            onBlockDomain(domain);
+          },
           icon: require('@phosphor-icons/core/regular/prohibit.svg'),
         });
       }
@@ -675,7 +701,9 @@ const Header: React.FC<IHeader> = ({ account }) => {
       return (
         <IconButton
           src={require('@phosphor-icons/core/regular/chats-teardrop.svg')}
-          onClick={() => createAndNavigateToChat.mutate(account.id)}
+          onClick={() =>{
+            createAndNavigateToChat.mutate(account.id);
+          }}
           title={intl.formatMessage(messages.chat, { name: account.username })}
           theme='outlined'
           className='px-2'

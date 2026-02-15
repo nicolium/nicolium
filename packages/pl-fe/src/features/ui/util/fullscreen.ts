@@ -3,7 +3,7 @@
 
 const isFullscreen = (): boolean => Boolean(
   // eslint-disable-next-line compat/compat
-  document.fullscreenElement ||
+  document.fullscreenElement ??
     // @ts-ignore
     document.webkitFullscreenElement,
 );

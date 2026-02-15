@@ -44,7 +44,9 @@ const Shoutbox: React.FC<ChatInterface> = ({ inputRef, className }) => {
     }
   };
 
-  const insertLine = () => setContent(content + '\n');
+  const insertLine = () =>{
+    setContent(content + '\n');
+  };
 
   const handleKeyDown: React.KeyboardEventHandler = (event) => {
     if (event.key === 'Enter' && event.shiftKey) {

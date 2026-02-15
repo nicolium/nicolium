@@ -62,7 +62,9 @@ const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
           onSelectFile(url);
           setDisabled(false);
         },
-        () => setDisabled(false),
+        () =>{
+          setDisabled(false);
+        },
       ));
     }
   };

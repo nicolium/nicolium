@@ -37,7 +37,7 @@ const processCircle = (setProgress: (progress: {
     };
 
     const fetchStatuses = async (next: (() => Promise<PaginatedResponse<Status>>) | null) => {
-      const response = await (next?.() || client.accounts.getAccountStatuses(me, { limit: 40 }));
+      const response = await (next?.() ?? client.accounts.getAccountStatuses(me, { limit: 40 }));
 
       response.items.forEach((status) => {
         if (status.reblog) {
@@ -64,7 +64,7 @@ const processCircle = (setProgress: (progress: {
     };
 
     const fetchFavourites = async (next: (() => Promise<PaginatedResponse<Status>>) | null) => { // limit 40
-      const response = await (next?.() || client.myAccount.getFavourites({ limit: 40 }));
+      const response = await (next?.() ?? client.myAccount.getFavourites({ limit: 40 }));
 
       response.items.forEach((status) => {
         if (status.account.id === me) return;

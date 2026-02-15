@@ -31,7 +31,7 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
             hash={trendingLink.blurhash}
           />
         )}
-        <img className='relative size-full object-cover' src={trendingLink.image} alt={trendingLink.image_description || undefined} />
+        <img className='relative size-full object-cover' src={trendingLink.image} alt={trendingLink.image_description ?? undefined} />
       </div>
     );
   }

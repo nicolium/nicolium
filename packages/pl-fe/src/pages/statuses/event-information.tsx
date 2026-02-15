@@ -46,7 +46,7 @@ const EventInformationPage: React.FC = () => {
   };
 
   const renderEventLocation = useCallback(() => {
-    const event = status!.event!;
+    const event = status.event!;
 
     if (!event.location) return null;
 
@@ -100,7 +100,7 @@ const EventInformationPage: React.FC = () => {
   }, [status]);
 
   const renderEventDate = useCallback(() => {
-    const event = status!.event!;
+    const event = status.event!;
 
     if (!event.start_time) return null;
 
@@ -156,8 +156,8 @@ const EventInformationPage: React.FC = () => {
         {status.event.links.map(link => (
           <HStack space={2} alignItems='center'>
             <Icon src={require('@phosphor-icons/core/regular/link-simple.svg')} />
-            <a href={link.remote_url || link.url} className='text-primary-600 hover:underline dark:text-primary-400' target='_blank'>
-              {(link.remote_url || link.url).replace(/^https?:\/\//, '')}
+            <a href={link.remote_url ?? link.url} className='text-primary-600 hover:underline dark:text-primary-400' target='_blank'>
+              {(link.remote_url ?? link.url).replace(/^https?:\/\//, '')}
             </a>
           </HStack>
         ))}

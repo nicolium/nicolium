@@ -34,8 +34,8 @@ const initialState: State = {
 const minifyConversation = (conversation: Conversation) => ({
   ...(pick(conversation, ['id', 'unread'])),
   accounts: conversation.accounts.map(a => a.id),
-  last_status: conversation.last_status?.id || null,
-  last_status_created_at: conversation.last_status?.created_at || null,
+  last_status: conversation.last_status?.id ?? null,
+  last_status_created_at: conversation.last_status?.created_at ?? null,
 });
 
 type MinifiedConversation = ReturnType<typeof minifyConversation>;
@@ -65,7 +65,7 @@ const expandNormalizedConversations = (state: State, conversations: Conversation
       const newItem = items[newItemIndex];
       items = items.filter((_, index) => index !== newItemIndex);
 
-      return newItem!;
+      return newItem;
     });
 
     list = list.concat(items);
@@ -95,9 +95,13 @@ const conversations = (state = initialState, action: ConversationsAction): State
         draft.isLoading = false;
       });
     case CONVERSATIONS_FETCH_SUCCESS:
-      return create(state, (draft) => expandNormalizedConversations(draft, action.conversations, action.next, action.isLoadingRecent));
+      return create(state, (draft) =>{
+        expandNormalizedConversations(draft, action.conversations, action.next, action.isLoadingRecent);
+      });
     case CONVERSATIONS_UPDATE:
-      return create(state, (draft) => updateConversation(state, action.conversation));
+      return create(state, (draft) =>{
+        updateConversation(state, action.conversation);
+      });
     case CONVERSATIONS_MOUNT:
       return create(state, (draft) => {
         draft.mounted += 1;

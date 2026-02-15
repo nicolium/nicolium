@@ -47,7 +47,7 @@ const expandConversations = (expand = true) => (dispatch: AppDispatch, getState:
 
   dispatch(expandConversationsRequest());
 
-  return (state.conversations.next?.() || getClient(state).timelines.getConversations())
+  return (state.conversations.next?.() ?? getClient(state).timelines.getConversations())
     .then(response => {
       dispatch(importEntities({
         accounts: response.items.reduce((aggr: Array<Account>, item) => aggr.concat(item.accounts), []),

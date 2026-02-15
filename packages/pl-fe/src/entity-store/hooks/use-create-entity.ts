@@ -31,7 +31,7 @@ const useCreateEntity = <TEntity extends Entity = Entity, TTransformedEntity ext
     callbacks: EntityCallbacks<TTransformedEntity, { response?: PlfeResponse }> = {},
   ): Promise<void> => {
     const result = await setPromise(entityFn(data));
-    const schema = opts.schema || v.custom<TEntity>(() => true);
+    const schema = opts.schema ?? v.custom<TEntity>(() => true);
     let entity: TEntity | TTransformedEntity = v.parse(schema, result);
     if (opts.transform) entity = opts.transform(entity);
 

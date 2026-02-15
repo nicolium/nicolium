@@ -125,7 +125,7 @@ const setRole = (accountId: string, role: 'user' | 'moderator' | 'admin') =>
 const redactStatus = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   const state = getState();
 
-  const status = state.statuses[statusId]!;
+  const status = state.statuses[statusId];
   const poll = status.poll_id ? queryClient.getQueryData<Poll>(['statuses', 'polls', status.poll_id]) : undefined;
 
   return getClient(state).statuses.getStatusSource(statusId).then(response => {

@@ -37,7 +37,9 @@ const ScheduledStatusActionBar: React.FC<IScheduledStatusActionBar> = ({ status 
         heading: intl.formatMessage(messages.deleteHeading),
         message: intl.formatMessage(messages.deleteMessage),
         confirm: intl.formatMessage(messages.deleteConfirm),
-        onConfirm: () => cancelScheduledStatus(),
+        onConfirm: () =>{
+          cancelScheduledStatus();
+        },
       });
     }
   };

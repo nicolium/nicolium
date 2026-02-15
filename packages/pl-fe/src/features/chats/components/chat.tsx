@@ -70,7 +70,7 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
       },
       onError: (error: { response: PlfeResponse }, _variables, context) => {
         const message = error.response?.json?.error;
-        setErrorMessage(message || intl.formatMessage(messages.failedToSend));
+        setErrorMessage(message ?? intl.formatMessage(messages.failedToSend));
         setContent(context.prevContent as string);
       },
     });
@@ -96,7 +96,9 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
     }
   };
 
-  const insertLine = () => setContent(content + '\n');
+  const insertLine = () =>{
+    setContent(content + '\n');
+  };
 
   const handleKeyDown: React.KeyboardEventHandler = (event) => {
     if (event.key === 'Enter' && event.shiftKey) {
@@ -140,7 +142,9 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
       setAttachment(response);
       setUploading(false);
     })
-      .catch(() => setUploading(false));
+      .catch(() =>{
+        setUploading(false);
+      });
   };
 
   useEffect(() => {

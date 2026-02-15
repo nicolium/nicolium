@@ -56,12 +56,12 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector((state) => statusId ? getStatus(state, { id: statusId }) : undefined);
 
-  const [name, setName] = useState(status?.event?.name || '');
+  const [name, setName] = useState(status?.event?.name ?? '');
   const [text, setText] = useState('');
   const [startTime, setStartTime] = useState(status?.event?.start_time ? new Date(status.event.start_time) : new Date());
   const [endTime, setEndTime] = useState(status?.event?.end_time ? new Date(status.event.end_time) : null);
   const [approvalRequired, setApprovalRequired] = useState(status?.event?.join_mode !== 'free');
-  const [banner, setBanner] = useState(status?.event?.banner || null);
+  const [banner, setBanner] = useState(status?.event?.banner ?? null);
   const [location, setLocation] = useState<Location | null>(null);
 
   const [isDisabled, setIsDisabled] = useState(!!statusId);
@@ -74,7 +74,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   };
 
   const onChangeStartTime = (date: Date | null) => {
-    setStartTime(date === null ? new Date : date);
+    setStartTime(date ?? new Date);
   };
 
   const onChangeEndTime = (date: Date | null) => {
@@ -108,7 +108,9 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
         setBanner(data);
         setIsUploading(false);
       },
-      () => setIsUploading(false),
+      () =>{
+        setIsUploading(false);
+      },
     ));
   };
 
@@ -144,7 +146,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
           setText(source.text);
           setLocation(source.location);
 
-          setName(status?.event?.name || '');
+          setName(status?.event?.name ?? '');
           setStartTime(status?.event?.start_time ? new Date(status.event.start_time) : new Date());
           setEndTime(status?.event?.end_time ? new Date(status.event.end_time) : null);
           setApprovalRequired(status?.event?.join_mode !== 'free');
@@ -168,7 +170,11 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
         <Text>{location.description}</Text>
         <Text theme='muted' size='xs'>{[location.street, location.locality, location.country].filter(val => val?.trim()).join(' · ')}</Text>
       </Stack>
-      <IconButton title={intl.formatMessage(messages.resetLocation)} src={require('@phosphor-icons/core/regular/x.svg')} onClick={() => onChangeLocation(null)} />
+      <IconButton
+        title={intl.formatMessage(messages.resetLocation)} src={require('@phosphor-icons/core/regular/x.svg')} onClick={() =>{
+          onChangeLocation(null);
+        }}
+      />
     </HStack>
   );
 

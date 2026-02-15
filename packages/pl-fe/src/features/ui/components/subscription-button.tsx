@@ -36,13 +36,21 @@ const SubscriptionButton = ({ account }: ISubscriptionButton) => {
   const onNotifyToggle = () => {
     if (account.relationship?.notifying) {
       follow({ notify: false }, {
-        onSuccess: () => toast.success(intl.formatMessage(messages.unsubscribeSuccess)),
-        onError: () => toast.error(intl.formatMessage(messages.unsubscribeFailure)),
+        onSuccess: () =>{
+          toast.success(intl.formatMessage(messages.unsubscribeSuccess));
+        },
+        onError: () =>{
+          toast.error(intl.formatMessage(messages.unsubscribeFailure));
+        },
       });
     } else {
       follow({ notify: true }, {
-        onSuccess: () => toast.success(intl.formatMessage(messages.subscribeSuccess)),
-        onError: () => toast.error(intl.formatMessage(messages.subscribeFailure)),
+        onSuccess: () =>{
+          toast.success(intl.formatMessage(messages.subscribeSuccess));
+        },
+        onError: () =>{
+          toast.error(intl.formatMessage(messages.subscribeFailure));
+        },
       });
     }
   };

@@ -190,7 +190,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     setComposeFocused(true);
   };
 
-  const handleSubmit = (e?: React.FormEvent<Element>) => {
+  const handleSubmit = (e?: React.FormEvent) => {
     if (!canSubmit) return;
     e?.preventDefault();
 
@@ -201,13 +201,13 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     }));
   };
 
-  const handlePreview = (e?: React.FormEvent<Element>) => {
+  const handlePreview = (e?: React.FormEvent) => {
     e?.preventDefault();
 
     dispatch(submitCompose(id, {}, true));
   };
 
-  const handleSaveDraft = (e?: React.FormEvent<Element>) => {
+  const handleSaveDraft = (e?: React.FormEvent) => {
     e?.preventDefault();
 
     persistDraftStatus(id);
@@ -295,7 +295,7 @@ const ComposeForm = <ID extends string>({ id, shouldCondense, autoFocus, clickab
     </div>
   ), [features, id, anyMedia]);
 
-  const showModifiers = !condensed && (compose.mediaAttachments.length || compose.isUploading || compose.poll?.options.length || compose.scheduledAt || compose.showLocationPicker);
+  const showModifiers = !condensed && (compose.mediaAttachments.length || compose.isUploading || (compose.poll && compose.poll.options.length) || compose.scheduledAt || compose.showLocationPicker);
 
   const composeModifiers = showModifiers && (
     <div className='⁂-compose-form__modifiers'>

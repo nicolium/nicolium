@@ -25,7 +25,7 @@ const HomeTimelinePage: React.FC = () => {
 
   const polling = useRef<NodeJS.Timeout | null>(null);
 
-  const isPartial = useAppSelector(state => state.timelines.home?.isPartial === true);
+  const isPartial = useAppSelector(state =>  state.timelines.home?.isPartial);
 
   // Mastodon generates the feed in Redis, and can return a partial timeline
   // (HTTP 206) for new users. Poll until we get a full page of results.
@@ -34,11 +34,9 @@ const HomeTimelinePage: React.FC = () => {
       polling.current = setInterval(() => {
         dispatch(fetchHomeTimeline());
       }, 3000);
-    } else {
-      if (polling.current) {
-        clearInterval(polling.current);
-        polling.current = null;
-      }
+    } else if (polling.current) {
+      clearInterval(polling.current);
+      polling.current = null;
     }
 
     return () => {

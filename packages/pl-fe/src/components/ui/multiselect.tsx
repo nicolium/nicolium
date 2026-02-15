@@ -156,15 +156,12 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
     const optionList = unfilteredOptions.filter(item => {
       return selectedValues.findIndex(
         v => v[displayValue] === item[displayValue],
-      ) === -1
-        ? true
-        : false;
+      ) === -1;
     });
     this.setState(
       { options: optionList, filteredOptions: optionList },
       this.filterOptionsByInput,
     );
-    return;
   }
 
   onChange(event) {
@@ -313,7 +310,9 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
         <li
           key={`option${i}`}
           className={`option ${isSelected ? 'selected' : ''} ${highlightOption === i ? 'highlightOption highlight' : ''}`}
-          onClick={() => this.onSelectItem(option)}
+          onClick={() =>{
+            this.onSelectItem(option);
+          }}
         >
           {option[displayValue]}
         </li>
@@ -327,7 +326,10 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
     return selectedValues.map((value, index) => (
       <span className='chip' key={index}>
         {value[displayValue]}
-        <button onClick={() => this.onRemoveSelectedItem(value)}>
+        <button onClick={() =>{
+          this.onRemoveSelectedItem(value);
+        }}
+        >
           <Icon className='ml-1 size-4 hover:cursor-pointer' src={require('@phosphor-icons/core/regular/x-circle.svg')} />
         </button>
       </span>
@@ -378,7 +380,7 @@ export class Multiselect extends React.Component<IMultiselectProps, any> {
             type='text'
             ref={this.searchBox}
             className='searchBox'
-            name={`${name || 'search-name'}-input`}
+            name={`${name ?? 'search-name'}-input`}
             onChange={this.onChange}
             onKeyPress={this.onKeyPress}
             value={inputValue}

@@ -17,7 +17,7 @@ const PinnedStatusesPage = () => {
   const { username } = profilePinsRoute.useParams();
 
   const { account } = useOwnAccount();
-  const { data: statusIds = [], isFetching: isLoading, hasNextPage: hasMore } = usePinnedStatuses(account?.id || '');
+  const { data: statusIds = [], isFetching: isLoading, hasNextPage: hasMore } = usePinnedStatuses(account?.id ?? '');
   const isMyAccount = username.toLowerCase() === account?.username.toLowerCase();
 
   if (!isMyAccount) {

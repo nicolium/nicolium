@@ -319,7 +319,7 @@ const getExplicitMentions = (me: string, status: Pick<Status, 'content' | 'menti
 
   const mentions = status
     .mentions
-    .filter((mention) => !(fragment.querySelector(`a[href="${mention.url}"]`) || mention.id === me))
+    .filter((mention) => !(fragment.querySelector(`a[href="${mention.url}"]`) ?? mention.id === me))
     .map((m) => m.acct);
 
   return [...new Set(mentions)];
@@ -406,7 +406,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
       });
     case COMPOSE_REPLY:
       return updateCompose(state, action.composeId, compose => {
-        const defaultCompose = state.default!;
+        const defaultCompose = state.default;
 
         const mentions = action.explicitAddressing
           ? statusToMentionsArray(action.status, action.account, action.rebloggedBy)
@@ -415,13 +415,13 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.groupId = action.status.group_id;
         compose.inReplyToId = action.status.id;
         compose.to = mentions;
-        compose.parentRebloggedById = action.rebloggedBy?.id || null;
+        compose.parentRebloggedById = action.rebloggedBy?.id ?? null;
         compose.text = !action.explicitAddressing ? statusToTextMentions(action.status, action.account) : '';
         compose.visibility = privacyPreference(action.status.visibility, defaultCompose.visibility, action.status.list_id, action.conversationScope);
         compose.localOnly = action.status.local_only === true;
         compose.caretPosition = null;
         compose.contentType = defaultCompose.contentType;
-        compose.approvalRequired = action.approvalRequired || false;
+        compose.approvalRequired = action.approvalRequired ?? false;
         if (action.preserveSpoilers && action.status.spoiler_text) {
           compose.sensitive = true;
           compose.spoilerText = action.status.spoiler_text;
@@ -486,13 +486,17 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.isUploading = true;
       });
     case COMPOSE_UPLOAD_SUCCESS:
-      return updateCompose(state, action.composeId, compose => appendMedia(compose, action.media, state.default.sensitive));
+      return updateCompose(state, action.composeId, compose =>{
+        appendMedia(compose, action.media, state.default.sensitive);
+      });
     case COMPOSE_UPLOAD_FAIL:
       return updateCompose(state, action.composeId, compose => {
         compose.isUploading = false;
       });
     case COMPOSE_UPLOAD_UNDO:
-      return updateCompose(state, action.composeId, compose => removeMedia(compose, action.mediaId));
+      return updateCompose(state, action.composeId, compose =>{
+        removeMedia(compose, action.mediaId);
+      });
     case COMPOSE_UPLOAD_PROGRESS:
       return updateCompose(state, action.composeId, compose => {
         compose.progress = Math.round((action.loaded / action.total) * 100);
@@ -520,12 +524,16 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
       });
     case COMPOSE_SUGGESTIONS_READY:
       return updateCompose(state, action.composeId, compose => {
-        compose.suggestions = action.accounts ? action.accounts.map((item) => item.id) : action.emojis || [];
+        compose.suggestions = action.accounts ? action.accounts.map((item) => item.id) : action.emojis ?? [];
       });
     case COMPOSE_SUGGESTION_SELECT:
-      return updateCompose(state, action.composeId, compose => insertSuggestion(compose, action.position, action.token, action.completion, action.path));
+      return updateCompose(state, action.composeId, compose =>{
+        insertSuggestion(compose, action.position, action.token, action.completion, action.path);
+      });
     case COMPOSE_SUGGESTION_TAGS_UPDATE:
-      return updateCompose(state, action.composeId, compose => updateSuggestionTags(compose, action.token, action.tags));
+      return updateCompose(state, action.composeId, compose =>{
+        updateSuggestionTags(compose, action.token, action.tags);
+      });
     case TIMELINE_DELETE:
       return updateCompose(state, 'compose-modal', compose => {
         if (action.statusId === compose.inReplyToId) {
@@ -560,7 +568,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.caretPosition = null;
         const contentType = action.contentType === 'text/markdown' && state.default.contentType === 'wysiwyg'
           ? 'wysiwyg'
-          : action.contentType || 'text/plain';
+          : action.contentType ?? 'text/plain';
         compose.contentType = contentType;
         compose.quoteId = action.status.quote_id;
         compose.groupId = action.status.group_id;
@@ -569,7 +577,7 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.mediaAttachments = action.status.media_attachments;
         compose.sensitive = action.status.sensitive;
 
-        compose.redacting = action.redacting || false;
+        compose.redacting = action.redacting ?? false;
 
         if (action.status.spoiler_text.length > 0) {
           compose.spoilerText = action.status.spoiler_text;
@@ -653,7 +661,9 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
       });
     case ME_FETCH_SUCCESS:
     case ME_PATCH_SUCCESS:
-      return updateCompose(state, 'default', compose => importAccount(compose, action.me));
+      return updateCompose(state, 'default', compose =>{
+        importAccount(compose, action.me);
+      });
       // case SETTING_CHANGE:
       //   return updateCompose(state, 'default', compose => updateSetting(compose, action.path, action.value));
     case COMPOSE_EDITOR_STATE_SET:
@@ -714,9 +724,9 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
       });
     case COMPOSE_INTERACTION_POLICY_OPTION_CHANGE:
       return updateCompose(state, action.composeId, compose => {
-        if (compose.interactionPolicy === null) compose.interactionPolicy = JSON.parse(JSON.stringify(action.initial))!;
+        compose.interactionPolicy ??= JSON.parse(JSON.stringify(action.initial))!;
 
-        compose.interactionPolicy = create(compose.interactionPolicy || action.initial, (interactionPolicy) => {
+        compose.interactionPolicy = create(compose.interactionPolicy ?? action.initial, (interactionPolicy) => {
           interactionPolicy[action.policy][action.rule] = action.value;
           interactionPolicy[action.policy][action.rule === 'always' ? 'with_approval' : 'always'] = interactionPolicy[action.policy][action.rule === 'always' ? 'with_approval' : 'always'].filter(rule => !action.value.includes(rule as any));
         });
@@ -726,7 +736,9 @@ const compose = (state = initialState, action: ComposeAction | EventsAction | In
         compose.quoteApprovalPolicy = action.value;
       });
     case INSTANCE_FETCH_SUCCESS:
-      return updateCompose(state, 'default', (compose) => updateDefaultContentType(compose, action.instance));
+      return updateCompose(state, 'default', (compose) =>{
+        updateDefaultContentType(compose, action.instance);
+      });
     case COMPOSE_CLEAR_LINK_SUGGESTION_CREATE:
       return updateCompose(state, action.composeId, compose => {
         compose.clearLinkSuggestion = action.suggestion;

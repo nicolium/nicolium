@@ -70,7 +70,7 @@ const useRejectFollowRequestMutation = (accountId: string) => {
 
 const prefetchFollowRequests = (client: PlApiClient) => queryClient.prefetchInfiniteQuery({
   queryKey: ['accountsLists', 'followRequests'],
-  queryFn: ({ pageParam }) => pageParam.next?.() || client.myAccount.getFollowRequests().then(minifyAccountList),
+  queryFn: ({ pageParam }) => pageParam.next?.() ?? client.myAccount.getFollowRequests().then(minifyAccountList),
   initialPageParam: { previous: null, next: null, items: [], partial: false } as PaginatedResponse<string>,
 });
 

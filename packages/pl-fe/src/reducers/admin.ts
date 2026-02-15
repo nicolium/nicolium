@@ -38,7 +38,9 @@ const admin = (state = initialState, action: AdminActions): State => {
   switch (action.type) {
     case ADMIN_CONFIG_FETCH_SUCCESS:
     case ADMIN_CONFIG_UPDATE_SUCCESS:
-      return create(state, (draft) => importConfigs(draft, action.configs));
+      return create(state, (draft) =>{
+        importConfigs(draft, action.configs);
+      });
     // case ADMIN_USER_DELETE_SUCCESS:
     //   return create(state, (draft) => deleteUser(draft, action.accountId));
     default:

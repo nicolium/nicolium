@@ -107,8 +107,12 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
 
   const handleBite = () => {
     client.accounts.biteAccount(account.id)
-      .then(() => toast.success(intl.formatMessage(messages.userBit, { acct: account.acct })))
-      .catch(() => toast.error(intl.formatMessage(messages.userBiteFail, { acct: account.acct })));
+      .then(() =>{
+        toast.success(intl.formatMessage(messages.userBit, { acct: account.acct }));
+      })
+      .catch(() =>{
+        toast.error(intl.formatMessage(messages.userBiteFail, { acct: account.acct }));
+      });
   };
 
   const handleRemoteFollow = () => {

@@ -45,7 +45,9 @@ const Avatar = (props: IAvatar) => {
   const [color, setColor] = useState<string | undefined>(undefined);
   const [isAvatarMissing, setIsAvatarMissing] = useState(false);
 
-  const handleLoadFailure = () => setIsAvatarMissing(true);
+  const handleLoadFailure = () =>{
+    setIsAvatarMissing(true);
+  };
 
   useEffect(() => {
     if (!isCat) return;
@@ -60,7 +62,9 @@ const Avatar = (props: IAvatar) => {
         COLOR_CACHE.set(src, color.hex);
         setColor(color.hex);
       }
-    }).catch(() => setColor(undefined));
+    }).catch(() =>{
+      setColor(undefined);
+    });
   }, [src, isCat]);
 
   const style: React.CSSProperties = React.useMemo(() => {

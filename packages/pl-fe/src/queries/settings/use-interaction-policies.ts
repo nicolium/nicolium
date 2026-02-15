@@ -34,7 +34,7 @@ const useInteractionPolicies = () => {
   });
 
   return {
-    interactionPolicies: data || emptySchema,
+    interactionPolicies: data ?? emptySchema,
     updateInteractionPolicies,
     isUpdating,
     ...result,

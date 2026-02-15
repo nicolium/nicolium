@@ -7,7 +7,7 @@ const getRedirectUrl = () => {
   }
 
   localStorage.removeItem(LOCAL_STORAGE_REDIRECT_KEY);
-  return redirectUri || '/';
+  return redirectUri ?? '/';
 };
 
 export { getRedirectUrl };

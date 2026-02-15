@@ -88,7 +88,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({
             backgroundColor={attachment.meta.colors?.background}
             foregroundColor={attachment.meta.colors?.foreground}
             accentColor={attachment.meta.colors?.accent}
-            duration={attachment.meta.original?.duration || 0}
+            duration={attachment.meta.original?.duration ?? 0}
             height={263}
           />
         </Suspense>
@@ -122,7 +122,10 @@ const StatusMedia: React.FC<IStatusMedia> = ({
   if (media) {
     return (
       // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-      <div onClick={e => e.stopPropagation()}>
+      <div onClick={e =>{
+        e.stopPropagation();
+      }}
+      >
         {media}
       </div>
     );

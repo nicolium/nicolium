@@ -66,7 +66,7 @@ interface NotificationsUpdateAction {
 const updateNotifications = (notification: BaseNotification) =>
   (dispatch: AppDispatch) => {
     const selectedFilter = useSettingsStore.getState().settings.notifications.quickFilter.active;
-    const showInColumn = selectedFilter === 'all' ? true : (FILTER_TYPES[selectedFilter as FilterType] || [notification.type]).includes(notification.type);
+    const showInColumn = selectedFilter === 'all' ? true : (FILTER_TYPES[selectedFilter as FilterType] ?? [notification.type]).includes(notification.type);
 
     dispatch(importEntities({
       accounts: [notification.account, notification.type === 'move' ? notification.target : undefined],
@@ -148,12 +148,14 @@ const updateNotificationsQueue = (notification: BaseNotification, intlMessages: 
 
 const excludeTypesFromFilter = (filters: string[]) => NOTIFICATION_TYPES.filter(item => !filters.includes(item));
 
-const noOp = () => new Promise(f => f(undefined));
+const noOp = () => new Promise(f =>{
+  f(undefined);
+});
 
 let abortExpandNotifications = new AbortController();
 
 const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => any = noOp, abort?: boolean) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+  async (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return dispatch(noOp);
     const state = getState();
 
@@ -192,7 +194,9 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
 
     dispatch(expandNotificationsRequest());
 
-    return getClient(state).groupedNotifications.getGroupedNotifications(params, { signal: abortExpandNotifications.signal }).then(({ items: { accounts, statuses, notification_groups }, next }) => {
+    try {
+      const { items: { accounts, statuses, notification_groups }, next } = await getClient(state).groupedNotifications.getGroupedNotifications(params, { signal: abortExpandNotifications.signal });
+
       dispatch(importEntities({
         accounts,
         statuses,
@@ -201,10 +205,10 @@ const expandNotifications = ({ maxId }: Record<string, any> = {}, done: () => an
       dispatch(expandNotificationsSuccess(notification_groups, next));
       fetchRelatedRelationships(dispatch, notification_groups);
       done();
-    }).catch(error => {
+    } catch (error) {
       dispatch(expandNotificationsFail(error));
       done();
-    });
+    }
   };
 
 const expandNotificationsRequest = () => ({ type: NOTIFICATIONS_EXPAND_REQUEST });

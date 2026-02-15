@@ -38,7 +38,7 @@ const UserIndexPage: React.FC = () => {
           emptyMessageText={<FormattedMessage id='admin.user_index.empty' defaultMessage='No users found.' />}
           itemClassName='pb-4'
         >
-          {(accountIds || []).map(id =>
+          {(accountIds ?? []).map(id =>
             <AccountContainer key={id} id={id} withDate />,
           )}
         </ScrollableList>

@@ -26,7 +26,7 @@ const useCreateDriveFolderMutation = () => {
     mutationFn: ({ name, parentId }: { name: string; parentId?: string }) => client.drive.createFolder(name, parentId),
     onSuccess: (folder) => {
       queryClient.setQueryData(['drive', 'folders', folder.id], folder);
-      queryClient.invalidateQueries({ queryKey: ['drive', 'folders', folder.parent_id || undefined], exact: true });
+      queryClient.invalidateQueries({ queryKey: ['drive', 'folders', folder.parent_id ?? undefined], exact: true });
     },
   });
 };

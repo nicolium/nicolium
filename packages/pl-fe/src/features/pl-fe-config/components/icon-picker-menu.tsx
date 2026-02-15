@@ -41,7 +41,9 @@ const IconPickerMenu: React.FC<IIconPickerMenu> = ({ icons, onPick, style }) => 
           className='flex items-center justify-center rounded-full p-1.5 hover:bg-gray-50 dark:hover:bg-primary-800'
           aria-label={name}
           title={name}
-          onClick={() => handleClick(name)}
+          onClick={() =>{
+            handleClick(name);
+          }}
         >
           <i className={clsx(icon, 'size-[1.375rem] text-lg leading-[1.15]')} />
         </button>

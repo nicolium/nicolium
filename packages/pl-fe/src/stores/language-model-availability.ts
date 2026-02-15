@@ -14,12 +14,16 @@ const useLanguageModelAvailabilityStore = create<State>()(mutative((set) => ({
   languageModelAvailability: {},
   languageModelDownloadProgress: {},
   actions: {
-    setLanguageModelAvailability: (sourceLanguage, targetLanguage, availability) => set((state: State) => {
-      state.languageModelAvailability[`${sourceLanguage}-${targetLanguage}`] = availability;
-    }),
-    setLanguageModelDownloadProgress: (sourceLanguage, targetLanguage, event) => set((state: State) => {
-      state.languageModelDownloadProgress[`${sourceLanguage}-${targetLanguage}`] = event.loaded / event.total;
-    }),
+    setLanguageModelAvailability: (sourceLanguage, targetLanguage, availability) =>{
+      set((state: State) => {
+        state.languageModelAvailability[`${sourceLanguage}-${targetLanguage}`] = availability;
+      });
+    },
+    setLanguageModelDownloadProgress: (sourceLanguage, targetLanguage, event) =>{
+      set((state: State) => {
+        state.languageModelDownloadProgress[`${sourceLanguage}-${targetLanguage}`] = event.loaded / event.total;
+      });
+    },
   },
 }), {
   enableAutoFreeze: false,

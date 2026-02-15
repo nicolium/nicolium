@@ -156,7 +156,9 @@ const getLanguageDropdown = (composeId: string): React.FC<ILanguageDropdown> => 
           className='w-64'
           type='text'
           value={searchValue}
-          onChange={({ target }) => setSearchValue(target.value)}
+          onChange={({ target }) =>{
+            setSearchValue(target.value);
+          }}
           outerClassName='mt-0'
           placeholder={intl.formatMessage(messages.search)}
         />
@@ -235,7 +237,7 @@ const LanguageDropdownButton: React.FC<ILanguageDropdownButton> = ({ composeId, 
 
   let buttonLabel = compact ? undefined : intl.formatMessage(messages.languagePrompt);
   if (language) {
-    const list: string[] = [languagesObject[(modifiedLanguage || language) as Language]];
+    const list: string[] = [languagesObject[(modifiedLanguage ?? language) as Language]];
     if (languagesCount) list.push(intl.formatMessage(messages.multipleLanguages, {
       count: languagesCount,
     }));

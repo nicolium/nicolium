@@ -73,7 +73,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
         break;
       case 'ArrowRight':
         // eslint-disable-next-line no-case-declarations
-        const itemIndex = +(elements[index]?.getAttribute('data-index') || '');
+        const itemIndex = +(elements[index]?.getAttribute('data-index') ?? '');
 
         if (items?.[itemIndex]?.items) setTab(itemIndex);
         break;
@@ -168,9 +168,9 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
                     autoFocus
                     title={intl.formatMessage(messages.back)}
                   />
-                  {items![tab]?.text}
+                  {items[tab]?.text}
                 </div>
-                {renderItems(items![tab]?.items)}
+                {renderItems(items[tab]?.items)}
               </>
             )}
           </div>
@@ -178,7 +178,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({ handleClose, item
       ) : (
         <>
           {Component && <Component handleClose={handleClose} />}
-          {(items?.length || touchscreen) && renderItems(items)}
+          {(items?.length ?? touchscreen) && renderItems(items)}
         </>
       )}
     </div>
@@ -306,7 +306,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
         // flipping to other placements' axes.
         right: '',
         bottom: '',
-        [staticPlacement as string]: `${(-(arrowRef.current?.offsetWidth || 0)) / 2}px`,
+        [staticPlacement as string]: `${(-(arrowRef.current?.offsetWidth ?? 0)) / 2}px`,
         transform: 'rotate(45deg)',
       };
     }
@@ -320,7 +320,9 @@ const DropdownMenu = (props: IDropdownMenu) => {
 
   useEffect(() => {
     (refs.reference.current as HTMLButtonElement)?.setAttribute('aria-expanded', String(isOpen));
-    setTimeout(() => setIsDisplayed(isOpen), isOpen ? 0 : 150);
+    setTimeout(() =>{
+      setIsDisplayed(isOpen);
+    }, isOpen ? 0 : 150);
 
   }, [isOpen]);
 
@@ -361,7 +363,7 @@ const DropdownMenu = (props: IDropdownMenu) => {
 
   return (
     <>
-      {clonedChildren || (
+      {clonedChildren ?? (
         <IconButton
           disabled={disabled}
           className={clsx({

@@ -29,7 +29,7 @@ const MessagesSettings = () => {
         label={intl.formatMessage(messages.label)}
       >
         <Toggle
-          checked={account.accepts_chat_messages || false}
+          checked={account.accepts_chat_messages ?? false}
           onChange={handleChange}
         />
       </ListItem>

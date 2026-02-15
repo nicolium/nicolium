@@ -57,7 +57,9 @@ const Option: React.FC<IOption> = ({
 
   const { suggestions, modifiedLanguage: language } = useCompose(composeId);
 
-  const handleOptionTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => onChange(index, event.target.value);
+  const handleOptionTitleChange = (event: React.ChangeEvent<HTMLInputElement>) =>{
+    onChange(index, event.target.value);
+  };
 
   const handleOptionRemove = () => {
     if (numOptions > 2) {
@@ -69,7 +71,9 @@ const Option: React.FC<IOption> = ({
 
   const onSuggestionsClearRequested = () => dispatch(clearComposeSuggestions(composeId));
 
-  const onSuggestionsFetchRequested = (token: string) => dispatch(fetchComposeSuggestions(composeId, token));
+  const onSuggestionsFetchRequested = (token: string) =>{
+    dispatch(fetchComposeSuggestions(composeId, token));
+  };
 
   const onSuggestionSelected = (tokenStart: number, token: string | null, value: AutoSuggestion) => {
     if (token && typeof token === 'string') {
@@ -96,7 +100,7 @@ const Option: React.FC<IOption> = ({
           onSuggestionSelected={onSuggestionSelected}
           searchTokens={[':']}
           autoFocus={index === 0 || index >= 2}
-          lang={language || undefined}
+          lang={language ?? undefined}
         />
       </HStack>
 
@@ -203,7 +207,7 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
           {intl.formatMessage(messages.pollDuration)}
         </Text>
 
-        <DurationSelector onDurationChange={handleSelectDuration} value={expiresIn || (2 * 24 * 60 * 60)} />
+        <DurationSelector onDurationChange={handleSelectDuration} value={expiresIn ?? (2 * 24 * 60 * 60)} />
       </Stack>
 
       {/* Remove Poll */}

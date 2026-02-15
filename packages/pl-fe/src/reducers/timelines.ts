@@ -78,16 +78,18 @@ const updateTimeline = (state: State, timelineId: string, updater: (timeline: Ti
   updater(state[timelineId]);
 };
 
-const setLoading = (state: State, timelineId: string, loading: boolean) =>
+const setLoading = (state: State, timelineId: string, loading: boolean) =>{
   updateTimeline(state, timelineId, (timeline) => {
     timeline.isLoading = loading;
   });
+};
 
 // Keep track of when a timeline failed to load
-const setFailed = (state: State, timelineId: string, failed: boolean) =>
+const setFailed = (state: State, timelineId: string, failed: boolean) =>{
   updateTimeline(state, timelineId, (timeline) => {
     timeline.loadingFailed = failed;
   });
+};
 
 const expandNormalizedTimeline = (
   state: State,
@@ -183,11 +185,12 @@ const clearTimeline = (state: State, timelineId: string) => {
   state[timelineId] = newTimeline();
 };
 
-const updateTop = (state: State, timelineId: string, top: boolean) =>
+const updateTop = (state: State, timelineId: string, top: boolean) =>{
   updateTimeline(state, timelineId, (timeline) => {
     if (top) timeline.unread = 0;
     timeline.top = top;
   });
+};
 
 const isReblogOf = (reblog: Pick<Status, 'reblog_id'>, status: Pick<Status, 'id'>) => reblog.reblog_id === status.id;
 
@@ -308,48 +311,74 @@ const timelines = (state: State = initialState, action: AccountsAction | Interac
   switch (action.type) {
     case STATUS_CREATE_REQUEST:
       if (action.params.scheduled_at) return state;
-      return create(state, (draft) => importPendingStatus(draft, action.params, action.idempotencyKey));
+      return create(state, (draft) =>{
+        importPendingStatus(draft, action.params, action.idempotencyKey);
+      });
     case STATUS_CREATE_SUCCESS:
       if ('params' in action.status || action.editing) return state;
-      return create(state, (draft) => importStatus(draft, action.status as BaseStatus, action.idempotencyKey));
+      return create(state, (draft) =>{
+        importStatus(draft, action.status as BaseStatus, action.idempotencyKey);
+      });
     case TIMELINE_EXPAND_REQUEST:
-      return create(state, (draft) => setLoading(draft, action.timeline, true));
+      return create(state, (draft) =>{
+        setLoading(draft, action.timeline, true);
+      });
     case TIMELINE_EXPAND_FAIL:
-      return create(state, (draft) => handleExpandFail(draft, action.timeline));
+      return create(state, (draft) =>{
+        handleExpandFail(draft, action.timeline);
+      });
     case TIMELINE_EXPAND_SUCCESS:
-      return create(state, (draft) => expandNormalizedTimeline(
-        draft,
-        action.timeline,
-        action.statuses,
-        action.next,
-        action.prev,
-        action.partial,
-      ));
+      return create(state, (draft) =>{
+        expandNormalizedTimeline(
+          draft,
+          action.timeline,
+          action.statuses,
+          action.next,
+          action.prev,
+          action.partial,
+        );
+      });
     case TIMELINE_UPDATE:
       return create(state, (draft) => appendStatus(draft, action.timeline, action.statusId));
     case TIMELINE_UPDATE_QUEUE:
-      return create(state, (draft) => updateTimelineQueue(draft, action.timeline, action.statusId));
+      return create(state, (draft) =>{
+        updateTimelineQueue(draft, action.timeline, action.statusId);
+      });
     case TIMELINE_DEQUEUE:
-      return create(state, (draft) => timelineDequeue(draft, action.timeline));
+      return create(state, (draft) =>{
+        timelineDequeue(draft, action.timeline);
+      });
     case TIMELINE_DELETE:
-      return create(state, (draft) => deleteStatus(draft, action.statusId, action.references, action.reblogOf));
+      return create(state, (draft) =>{
+        deleteStatus(draft, action.statusId, action.references, action.reblogOf);
+      });
     case TIMELINE_CLEAR:
-      return create(state, (draft) => clearTimeline(draft, action.timeline));
+      return create(state, (draft) =>{
+        clearTimeline(draft, action.timeline);
+      });
     case ACCOUNT_BLOCK_SUCCESS:
     case ACCOUNT_MUTE_SUCCESS:
-      return create(state, (draft) => filterTimelines(draft, action.relationship, action.statuses));
+      return create(state, (draft) =>{
+        filterTimelines(draft, action.relationship, action.statuses);
+      });
     // case ACCOUNT_UNFOLLOW_SUCCESS:
     //   return filterTimeline(state, 'home', action.relationship, action.statuses);
     case TIMELINE_SCROLL_TOP:
-      return create(state, (draft) => updateTop(state, action.timeline, action.top));
+      return create(state, (draft) =>{
+        updateTop(state, action.timeline, action.top);
+      });
     case PIN_SUCCESS:
-      return create(state, (draft) => updateTimeline(draft, `account:${action.accountId}:with_replies:pinned`, (timeline) => {
-        timeline.items = [...new Set([action.statusId, ...timeline.items])];
-      }));
+      return create(state, (draft) =>{
+        updateTimeline(draft, `account:${action.accountId}:with_replies:pinned`, (timeline) => {
+          timeline.items = [...new Set([action.statusId, ...timeline.items])];
+        });
+      });
     case UNPIN_SUCCESS:
-      return create(state, (draft) => updateTimeline(draft, `account:${action.accountId}:with_replies:pinned`, (timeline) => {
-        timeline.items = timeline.items.filter((id) => id !== action.statusId);
-      }));
+      return create(state, (draft) =>{
+        updateTimeline(draft, `account:${action.accountId}:with_replies:pinned`, (timeline) => {
+          timeline.items = timeline.items.filter((id) => id !== action.statusId);
+        });
+      });
     default:
       return state;
   }

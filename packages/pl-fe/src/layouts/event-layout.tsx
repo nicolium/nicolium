@@ -30,7 +30,7 @@ const EventLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const status = useAppSelector(state => getStatus(state, { id: statusId }) || undefined);
+  const status = useAppSelector(state => getStatus(state, { id: statusId }) ?? undefined);
 
   const event = status?.event;
 

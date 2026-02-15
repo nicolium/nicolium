@@ -34,7 +34,7 @@ const useGroup = (groupId: string, refetch = true) => {
   return {
     ...result,
     isUnauthorized,
-    group: group ? { ...group, relationship: relationship || null } : undefined,
+    group: group ? { ...group, relationship: relationship ?? null } : undefined,
   };
 };
 

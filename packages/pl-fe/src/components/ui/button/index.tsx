@@ -47,7 +47,7 @@ const Button = React.forwardRef<HTMLButtonElement, IButton>(({
   className,
   ...props
 }, ref): JSX.Element => {
-  const body = text || children;
+  const body = text ?? children;
 
   const themeClass = useButtonStyles({
     theme,

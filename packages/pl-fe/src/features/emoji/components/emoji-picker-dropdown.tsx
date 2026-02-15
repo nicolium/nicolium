@@ -209,7 +209,7 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
   }, []);
 
   const customEmojiCategories = useMemo(() => {
-    return withCustom ? buildCustomEmojiCategories(customEmojis || [], intl) : undefined;
+    return withCustom ? buildCustomEmojiCategories(customEmojis ?? [], intl) : undefined;
   }, [withCustom, customEmojis]);
 
   return (

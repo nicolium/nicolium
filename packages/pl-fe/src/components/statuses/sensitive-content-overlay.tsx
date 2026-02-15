@@ -17,9 +17,9 @@ const useMediaVisible = (status: Pick<Status, 'media_attachments' | 'sensitive'>
   return useMemo(() => {
     let visible = !status.sensitive;
 
-    const filterResults = status.filtered?.filter(({ filter }) => filter.filter_action === 'blur') || [];
+    const filterResults = status.filtered?.filter(({ filter }) => filter.filter_action === 'blur') ?? [];
 
-    if (filterResults.length) return [mediaVisible !== undefined ? mediaVisible : false, filterResults];
+    if (filterResults.length) return [mediaVisible ?? false, filterResults];
 
     if (mediaVisible !== undefined) visible = mediaVisible;
     else if (displayMedia === 'show_all') visible = true;

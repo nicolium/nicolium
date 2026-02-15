@@ -41,11 +41,13 @@ const ChatProvider: React.FC<IChatProvider> = ({ children }) => {
   const isOpen = chats.mainWindow === 'open';
 
   const changeScreen = (screen: ChatWidgetScreens, currentChatId?: string | null) => {
-    setCurrentChatId(currentChatId || null);
+    setCurrentChatId(currentChatId ?? null);
     setScreen(screen);
   };
 
-  const handleChatPaneToggle = () => dispatch(toggleChatPane());
+  const handleChatPaneToggle = () =>{
+    dispatch(toggleChatPane());
+  };
 
   const value = useMemo(() => ({
     chat,

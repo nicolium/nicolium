@@ -37,7 +37,9 @@ const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = React.memo(({ stat
       <DropdownMenu
         items={Object.keys(status.content_map).map((language) => ({
           text: languages[language as Language] || language,
-          action: () => setStatusLanguage(status.id, language),
+          action: () =>{
+            setStatusLanguage(status.id, language);
+          },
           active: language === currentLanguage,
         }))}
       >

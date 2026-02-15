@@ -89,7 +89,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
   const { data: localTranslation } = useLocalStatusTranslation(status.id, statusMeta.localTargetLanguage);
 
   const withSpoiler = status.spoiler_text?.length > 0;
-  const expanded = !withSpoiler || statusMeta.expanded || false;
+  const expanded = !withSpoiler || (statusMeta.expanded ?? false);
 
   const maybeSetCollapsed = (): void => {
     if (!contentNode.current) return;
@@ -219,7 +219,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
         quote = (
           <QuotedStatusIndicator statusId={status.quote_id} statusUrl={status.quote_url} />
         );
-      } else if ((status.quote_visible ?? true) === false) {
+      } else if (!(status.quote_visible ?? true)) {
         quote = (
           <OutlineBox>
             <p><FormattedMessage id='statuses.quote_tombstone' defaultMessage='Post is unavailable.' /></p>
@@ -230,9 +230,9 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
       }
     }
 
-    const media = (quote || status.card || (withMedia && status.media_attachments.length > 0)) && (
+    const media = ((quote ?? status.card) ?? (withMedia && status.media_attachments.length > 0)) && (
       <Stack space={4} key='media'>
-        {((withMedia && status.media_attachments.length > 0) || (status.card && !quote)) && (
+        {((withMedia && status.media_attachments.length > 0) ?? (status.card && !quote)) && (
           <div className='relative has-[div[data-testid="sensitive-overlay"]]:min-h-24'>
             <SensitiveContentOverlay status={status} />
             {withMedia && <StatusMedia status={status} muted={compose} />}
@@ -251,7 +251,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(({
           key='content'
           className={className}
           direction={direction}
-          lang={status.language || undefined}
+          lang={status.language ?? undefined}
           size={textSize}
         >
           {parsedContent}

@@ -69,7 +69,7 @@ const InteractionRequestStatus: React.FC<IInteractionRequestStatus> = ({ id: sta
         showAccountHoverCard={false}
         withLinkToProfile={false}
         timestamp={status.created_at}
-        action={actions || <></>}
+        action={actions ?? <></>}
       />
 
       <Stack space={2} className={clsx(hasReply && 'pl-[54px]')}>
@@ -101,23 +101,31 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
 
   const handleAuthorize = () => {
     authorize(undefined, {
-      onSuccess: () => toast.success(intl.formatMessage(messages.authorized, {
-        acct: account?.acct,
-      })),
-      onError: () => toast.error(intl.formatMessage(messages.authorizeFail, {
-        acct: account?.acct,
-      })),
+      onSuccess: () =>{
+        toast.success(intl.formatMessage(messages.authorized, {
+          acct: account?.acct,
+        }));
+      },
+      onError: () =>{
+        toast.error(intl.formatMessage(messages.authorizeFail, {
+          acct: account?.acct,
+        }));
+      },
     });
   };
 
   const handleReject = () => {
     reject(undefined, {
-      onSuccess: () => toast.success(intl.formatMessage(messages.rejected, {
-        acct: account?.acct,
-      })),
-      onError: () => toast.error(intl.formatMessage(messages.rejectFail, {
-        acct: account?.acct,
-      })),
+      onSuccess: () =>{
+        toast.success(intl.formatMessage(messages.rejected, {
+          acct: account?.acct,
+        }));
+      },
+      onError: () =>{
+        toast.error(intl.formatMessage(messages.rejectFail, {
+          acct: account?.acct,
+        }));
+      },
     });
   };
 
@@ -128,7 +136,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
     link: (children: React.ReactNode) => {
       if (interactionRequest.status_id) {
         return (
-          <Link className='font-bold text-gray-800 hover:underline dark:text-gray-200' to='/@{$username}/posts/$statusId' params={{ username: ownAccount?.acct || '', statusId: interactionRequest.status_id }}>
+          <Link className='font-bold text-gray-800 hover:underline dark:text-gray-200' to='/@{$username}/posts/$statusId' params={{ username: ownAccount?.acct ?? '', statusId: interactionRequest.status_id }}>
             {children}
           </Link>
         );
@@ -144,13 +152,17 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
         theme='secondary'
         size='sm'
         text={intl.formatMessage(messages.authorize)}
-        onClick={() => handleAuthorize()}
+        onClick={() =>{
+          handleAuthorize();
+        }}
       />
       <Button
         theme='danger'
         size='sm'
         text={intl.formatMessage(messages.reject)}
-        onClick={() => handleReject()}
+        onClick={() =>{
+          handleReject();
+        }}
       />
     </HStack>
   );

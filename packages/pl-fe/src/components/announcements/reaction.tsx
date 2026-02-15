@@ -30,9 +30,13 @@ const Reaction: React.FC<IReaction> = ({ announcementId, reaction, emojiMap, sty
     }
   };
 
-  const handleMouseEnter = () => setHovered(true);
+  const handleMouseEnter = () =>{
+    setHovered(true);
+  };
 
-  const handleMouseLeave = () => setHovered(false);
+  const handleMouseLeave = () =>{
+    setHovered(false);
+  };
 
   let shortCode = reaction.name;
 

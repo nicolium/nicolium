@@ -128,17 +128,17 @@ const maybeShiftMe = (state: State | Draft<State>) => {
   const me = state.me!;
   const user = state.users[me];
 
-  if (!validUser(user)) {
-    const nextUser = firstValidUser(state);
-    state.me = getUrlOrId(nextUser);
-  } else {
+  if (validUser(user)) {
     return state;
   }
+
+  const nextUser = firstValidUser(state);
+  state.me = getUrlOrId(nextUser);
 };
 
 // Set the user from the session or localStorage, whichever is valid first
 const setSessionUser = (state: State) => {
-  const user = state.users[state.me!]!;
+  const user = state.users[state.me!];
   const me = getUrlOrId(validUser(user) ? user : undefined);
 
   state.me = me;
@@ -228,7 +228,7 @@ const importCredentials = (state: State | Draft<State>, token: string, account: 
   // state.tokens[token].account = account.id;
   state.tokens[token].me = account.url;
   state.users = Object.fromEntries(Object.entries(state.users).filter(([url, user]) => !userMismatch(token, account)(user, url)));
-  state.me = state.me || account.url;
+  state.me = state.me ?? account.url;
   upgradeNonUrlId(state, account);
 };
 
@@ -276,10 +276,8 @@ const persistAuthAccount = (account: CredentialAccount) => {
   const key = `authAccount:${account.url}`;
 
   KVStore.getItem(key).then((oldAccount: any) => {
-    const settings = oldAccount?.settings_store || {};
-    if (!persistedAccount.settings_store) {
-      persistedAccount.settings_store = settings;
-    }
+    const settings = oldAccount?.settings_store ?? {};
+    persistedAccount.settings_store ??= settings;
     KVStore.setItem(key, persistedAccount);
   })
     .catch(console.error);
@@ -288,18 +286,18 @@ const persistAuthAccount = (account: CredentialAccount) => {
 };
 
 const deleteForbiddenToken = (state: State | Draft<State>, error: { response: PlfeResponse }, token: string) => {
-  if ([401, 403].includes(error.response?.status!)) {
-    return deleteToken(state, token);
-  } else {
-    return state;
+  if (error.response && [401, 403].includes(error.response.status)) {
+    deleteToken(state, token); return;
   }
+
+  return state;
 };
 
 const updateState = (state: State, updater: (state: Draft<State>) => void, clientUpdater?: (state: State) => InstanceType<typeof PlApiClient>) => {
   const oldClient = state.client;
 
   const newState = create(state, updater);
-  const newClient = clientUpdater?.(state) || oldClient;
+  const newClient = clientUpdater?.(state) ?? oldClient;
   return { ...newState, client: newClient };
 };
 
@@ -329,7 +327,9 @@ const reducer = (state: State, action: Action): State => {
           if (state.client.baseURL === parseBaseURL(action.account.url)) {
             state.client.accessToken = action.token;
             return state.client;
-          } else return new PlApiClient(parseBaseURL(action.account.url) || backendUrl, action.token);
+          }
+
+          return new PlApiClient(parseBaseURL(action.account.url) || backendUrl, action.token);
         }
         return state.client;
       });
@@ -363,7 +363,9 @@ const reducer = (state: State, action: Action): State => {
   }
 };
 
-const reload = () => location.replace('/');
+const reload = () =>{
+  location.replace('/');
+};
 
 // `me` is a user ID string
 const validMe = (state: State) => {

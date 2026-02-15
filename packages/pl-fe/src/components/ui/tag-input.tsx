@@ -58,7 +58,9 @@ const TagInput: React.FC<ITagInput> = ({ tags, onChange, placeholder }) => {
           className='mb-2 h-8 w-32 grow bg-transparent p-1 outline-none'
           value={input}
           placeholder={placeholder}
-          onChange={e => setInput(e.target.value)}
+          onChange={e =>{
+            setInput(e.target.value);
+          }}
           onKeyDown={handleKeyDown}
         />
       </HStack>

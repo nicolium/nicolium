@@ -34,14 +34,14 @@ const canRemoteTranslate = (status: ITranslateButton['status'], instance: Instan
 
   if (!status.account.local && !allowRemote) return false;
 
-  if (!supportedLanguages[status.language!]?.includes(locale)) return false;
+  if (!supportedLanguages[status.language]?.includes(locale)) return false;
 
   return true;
 };
 
 type Availability = Awaited<ReturnType<typeof Translator.availability>>;
 
-const localTranslationAvailability = async (status: ITranslateButton['status'], locale: string): Promise<Availability | false> => {
+const localTranslationAvailability = (status: ITranslateButton['status'], locale: string): Promise<Availability | false> => {
   if (!('Translator' in window)) return 'unavailable';
 
   if (status.content.length < 0) return false;
@@ -94,7 +94,9 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   const handleTranslate: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
 
-    if (localTargetLanguage) return hideLocalTranslation(status.id);
+    if (localTargetLanguage) {
+      hideLocalTranslation(status.id); return;
+    }
 
     if (remoteTranslate) {
       if (targetLanguage) {

@@ -50,7 +50,7 @@ const Textarea = React.forwardRef(({
   className,
   ...props
 }: ITextarea, ref: React.ForwardedRef<HTMLTextAreaElement>) => {
-  const length = value?.length || 0;
+  const length = value?.length ?? 0;
   const [rows, setRows] = useState<number>(autoGrow ? minRows : initialRows);
   const direction = useLocaleDirection(useLocale());
 

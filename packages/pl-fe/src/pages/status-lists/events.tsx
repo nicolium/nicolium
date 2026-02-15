@@ -64,7 +64,9 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
       {index !== 0 && (
         <div className='absolute left-3 top-1/2 z-10 -mt-4'>
           <button
-            onClick={() => handleChangeIndex(index - 1)}
+            onClick={() =>{
+              handleChangeIndex(index - 1);
+            }}
             className='flex size-8 items-center justify-center rounded-full bg-white/50 backdrop-blur dark:bg-gray-900/50'
           >
             <Icon src={require('@phosphor-icons/core/regular/caret-left.svg')} className='size-6 text-black dark:text-white' />
@@ -77,7 +79,9 @@ const EventCarousel: React.FC<IEventCarousel> = ({ statusIds, isLoading, emptyMe
       {index !== statusIds.length - 1 && (
         <div className='absolute right-3 top-1/2 z-10 -mt-4'>
           <button
-            onClick={() => handleChangeIndex(index + 1)}
+            onClick={() =>{
+              handleChangeIndex(index + 1);
+            }}
             className='flex size-8 items-center justify-center rounded-full bg-white/50 backdrop-blur dark:bg-gray-900/50'
           >
             <Icon src={require('@phosphor-icons/core/regular/caret-right.svg')} className='size-6 text-black dark:text-white' />

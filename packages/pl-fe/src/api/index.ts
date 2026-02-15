@@ -17,7 +17,7 @@ type PlfeResponse<T = any> = Response & { data: string; json: T };
   * It uses FE_SUBDIRECTORY and parses JSON if possible.
   * No authorization is needed.
   */
-const staticFetch = async (input: URL | RequestInfo, init?: RequestInit | undefined) => {
+const staticFetch = async (input: URL | RequestInfo, init?: RequestInit) => {
   const fullPath = buildFullPath(input.toString(), BuildConfig.BACKEND_URL);
 
   const response = await fetch(fullPath, init);

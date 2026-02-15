@@ -193,7 +193,7 @@ const InteractionPoliciesPage = () => {
 
   useEffect(() => {
     client.settings.verifyCredentials().then((credentialAccount) => {
-      setQuotePolicy(credentialAccount.source?.quote_policy || 'public');
+      setQuotePolicy(credentialAccount.source?.quote_policy ?? 'public');
     }).catch(() => {
     });
   }, []);
@@ -211,8 +211,12 @@ const InteractionPoliciesPage = () => {
     if (features.interactionRequests) {
       promises.push(new Promise<void>((resolve, reject) => {
         updateInteractionPolicies(interactionPolicies, {
-          onSuccess: () => resolve(),
-          onError: () => reject(),
+          onSuccess: () =>{
+            resolve();
+          },
+          onError: () =>{
+            reject();
+          },
         });
       }));
     }
@@ -235,17 +239,23 @@ const InteractionPoliciesPage = () => {
           items={[
             {
               text: intl.formatMessage(messages.public),
-              action: () => setVisibility('public'),
+              action: () =>{
+                setVisibility('public');
+              },
               name: 'public',
             },
             {
               text: intl.formatMessage(messages.unlisted),
-              action: () => setVisibility('unlisted'),
+              action: () =>{
+                setVisibility('unlisted');
+              },
               name: 'unlisted',
             },
             {
               text: intl.formatMessage(messages.private),
-              action: () => setVisibility('private'),
+              action: () =>{
+                setVisibility('private');
+              },
               name: 'private',
             }]}
           activeItem={visibility}
@@ -253,7 +263,9 @@ const InteractionPoliciesPage = () => {
 
         <InteractionPolicyConfig
           interactionPolicy={interactionPolicies[visibility]}
-          onChange={(...props) => handleChange(visibility, ...props)}
+          onChange={(...props) =>{
+            handleChange(visibility, ...props);
+          }}
           quotePolicy={quotePolicy}
           onQuotePolicyChange={setQuotePolicy}
           visibility={visibility}

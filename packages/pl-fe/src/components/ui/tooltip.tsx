@@ -13,7 +13,7 @@ import React, { useRef, useState } from 'react';
 
 interface ITooltip {
   /** Element to display the tooltip around. */
-  children: React.ReactElement<any, string | React.JSXElementConstructor<any>>;
+  children: React.ReactElement;
   /** Text to display in the tooltip. */
   text: string;
   /** If disabled, it will render the children without wrapping them. */

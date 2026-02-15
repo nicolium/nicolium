@@ -64,7 +64,7 @@ const ModalRoot: React.FC = () => {
   const dispatch = useAppDispatch();
   const modals = useModals();
   const { closeModal } = useModalsActions();
-  const { modalType: type, modalProps: props } = modals.at(-1) || { modalProps: {}, modalType: null };
+  const { modalType: type, modalProps: props } = modals.at(-1) ?? { modalProps: {}, modalType: null };
   const index = modals.length - 1;
 
   const onClickClose = (type?: ModalType, all?: boolean) => {

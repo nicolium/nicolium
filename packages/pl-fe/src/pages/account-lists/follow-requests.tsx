@@ -29,8 +29,12 @@ const AccountAuthorize: React.FC<IAccountAuthorize> = ({ id }) => {
   const { mutate: authorizeFollowRequest } = useAcceptFollowRequestMutation(id);
   const { mutate: rejectFollowRequest } = useRejectFollowRequestMutation(id);
 
-  const onAuthorize = () => authorizeFollowRequest();
-  const onReject = () => rejectFollowRequest();
+  const onAuthorize = () =>{
+    authorizeFollowRequest();
+  };
+  const onReject = () =>{
+    rejectFollowRequest();
+  };
 
   if (!account) return null;
 

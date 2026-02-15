@@ -11,7 +11,7 @@ const useTranslationLanguages = () => {
   const features = useFeatures();
   const instance = useInstance();
 
-  const getTranslationLanguages = async () => {
+  const getTranslationLanguages = () => {
     const metadata = instance.pleroma.metadata;
 
     if (metadata.translation.source_languages?.length) {

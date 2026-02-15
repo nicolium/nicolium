@@ -34,7 +34,9 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
 
   const { toggleShowPollResults } = useStatusMetaActions();
 
-  const handleVote = () => vote(Object.keys(selected) as any as number[]);
+  const handleVote = () =>{
+    vote(Object.keys(selected) as any as number[]);
+  };
 
   const handleRefresh: React.EventHandler<React.MouseEvent> = (e) => {
     refetch();
@@ -91,7 +93,11 @@ const PollFooter: React.FC<IPollFooter> = ({ poll, showResults, selected, status
 
         {(!poll.voted && !poll.expired) && (
           <>
-            <button className='text-gray-600 underline' onClick={() => toggleShowPollResults(statusId)} data-testid='poll-refresh'>
+            <button
+              className='text-gray-600 underline' onClick={() =>{
+                toggleShowPollResults(statusId);
+              }} data-testid='poll-refresh'
+            >
               <Text theme='muted' weight='medium'>
                 {showResults ? (
                   <FormattedMessage id='poll.hide_results' defaultMessage='Hide results' />

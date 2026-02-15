@@ -112,7 +112,9 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
     </div>
   );
 
-  const handleChange = (date: Date | null) => onChange(date ? new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 10) : '');
+  const handleChange = (date: Date | null) =>{
+    onChange(date ? new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString().slice(0, 10) : '');
+  };
 
   return (
     <div className='relative mt-1 rounded-md shadow-sm'>

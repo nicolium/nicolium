@@ -87,7 +87,7 @@ const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
 
   const isBlocked = !!useRelationshipQuery(chat.account.id).data?.blocked_by;
 
-  const formattedChatMessages = chatMessages || [];
+  const formattedChatMessages = chatMessages ?? [];
 
   const lastChatMessage = chatMessages ? chatMessages[chatMessages.length - 1] : null;
 

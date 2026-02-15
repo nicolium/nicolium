@@ -317,26 +317,26 @@ const Audio: React.FC<IAudio> = (props) => {
   };
 
   const _clear = () => {
-    visualizer.current?.clear(width || 0, height || 0);
+    visualizer.current?.clear(width ?? 0, height ?? 0);
   };
 
   const _draw = () => {
-    visualizer.current?.draw(_getCX(), _getCY(), _getAccentColor() || '#ffffff', _getRadius(), _getScaleCoefficient());
+    visualizer.current?.draw(_getCX(), _getCY(), _getAccentColor() ?? '#ffffff', _getRadius(), _getScaleCoefficient());
   };
 
-  const _getRadius = (): number => ((height || props.height || 0) - (PADDING * _getScaleCoefficient()) * 2) / 2;
+  const _getRadius = (): number => (((height ?? props.height) ?? 0) - (PADDING * _getScaleCoefficient()) * 2) / 2;
 
-  const _getScaleCoefficient = (): number => (height || props.height || 0) / 982;
+  const _getScaleCoefficient = (): number => ((height ?? props.height) ?? 0) / 982;
 
-  const _getCX = (): number => Math.floor((width || 0) / 2);
+  const _getCX = (): number => Math.floor((width ?? 0) / 2);
 
   const _getCY = (): number => Math.floor(_getRadius() + (PADDING * _getScaleCoefficient()));
 
-  const _getAccentColor = () => accentColor || undefined;
+  const _getAccentColor = () => accentColor ?? undefined;
 
-  const _getBackgroundColor = (): string => backgroundColor || '#000000';
+  const _getBackgroundColor = (): string => backgroundColor ?? '#000000';
 
-  const _getForegroundColor = (): string => foregroundColor || '#ffffff';
+  const _getForegroundColor = (): string => foregroundColor ?? '#ffffff';
 
   const seekBy = (time: number) => {
     if (audio.current) {
@@ -385,7 +385,7 @@ const Audio: React.FC<IAudio> = (props) => {
     }
   };
 
-  const getDuration = () => duration || props.duration || 0;
+  const getDuration = () => (duration ?? props.duration) ?? 0;
 
   const progress = Math.min((currentTime / getDuration()) * 100, 100);
 
@@ -435,11 +435,13 @@ const Audio: React.FC<IAudio> = (props) => {
         backgroundColor: _getBackgroundColor(),
         color: _getForegroundColor(),
         width: '100%',
-        height: fullscreen ? '100%' : (height || props.height),
+        height: fullscreen ? '100%' : (height ?? props.height),
       }}
       tabIndex={0}
       onKeyDown={handleKeyDown}
-      onClick={e => e.stopPropagation()}
+      onClick={e =>{
+        e.stopPropagation();
+      }}
     >
       <audio
         src={src}

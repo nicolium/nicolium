@@ -47,7 +47,7 @@ const MentionsModal: React.FC<BaseModalProps & MentionsModalProps> = ({ onClose,
         isLoading={!accountIds}
         useWindowScroll={false}
       >
-        {(accountIds || []).map(id =>
+        {(accountIds ?? []).map(id =>
           <AccountContainer key={id} id={id} />,
         )}
       </ScrollableList>

@@ -54,7 +54,9 @@ const Scrobble: React.FC<IScrobble> = ({ scrobble }) => {
                 <a
                   href={scrobble.external_link}
                   className='underline'
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) =>{
+                    e.stopPropagation();
+                  }}
                   rel='nofollow noopener'
                   target='_blank'
                 >

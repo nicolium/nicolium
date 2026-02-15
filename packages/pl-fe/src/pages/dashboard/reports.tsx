@@ -35,7 +35,7 @@ const Reports: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      {(accountId || targetAccountId) && (
+      {(accountId ?? targetAccountId) && (
         <HStack className='border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800' alignItems='center' space={2}>
           <IconButton iconClassName='h-5 w-5' src={require('@phosphor-icons/core/regular/x.svg')} onClick={handleUnsetAccounts} />
           <Text>

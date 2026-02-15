@@ -10,7 +10,7 @@ const useAccountMediaTimeline = makePaginatedResponseQuery(
 
 const useGroupMediaTimeline = makePaginatedResponseQuery(
   (groupId: string) => ['timelineIds', `group:${groupId}:media`],
-  (client, [groupId]) => client.timelines.groupTimeline(groupId!, { only_media: true }).then(minifyStatusList),
+  (client, [groupId]) => client.timelines.groupTimeline(groupId, { only_media: true }).then(minifyStatusList),
   undefined,
   (groupId) => !!groupId,
 );

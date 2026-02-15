@@ -125,7 +125,7 @@ const Preview: React.FC<PreviewProps> = ({ media, position: [x, y], onPositionCh
   const uploadIcon = media.type === 'unknown' && (
     <Icon
       className='mx-auto my-12 size-16 text-gray-800 dark:text-gray-200'
-      src={MIMETYPE_ICONS[media.mime_type || ''] || defaultIcon}
+      src={MIMETYPE_ICONS[media.mime_type ?? ''] || defaultIcon}
     />
   );
 
@@ -196,12 +196,12 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const { language } = useCompose(composeId || 'default');
+  const { language } = useCompose(composeId ?? 'default');
 
   const [description, setDescription] = useState(previousDescription || '');
   const [position, setPosition] = useState(previousPosition || [0, 0]);
   const [isSaving, setIsSaving] = useState(false);
-  const dirtyRef = useRef(previousDescription ? true : false);
+  const dirtyRef = useRef(Boolean(previousDescription));
 
   const handleDescriptionChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -249,7 +249,9 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
       confirmationAction={handleSave}
       confirmationText={<FormattedMessage id='alt_text_modal.confirmation' defaultMessage='Save' />}
       confirmationDisabled={isSaving}
-      secondaryAction={() => onClose('ALT_TEXT')}
+      secondaryAction={() =>{
+        onClose('ALT_TEXT');
+      }}
       secondaryText={<FormattedMessage id='alt_text_modal.cancel' defaultMessage='Cancel' />}
     >
       <Stack space={2}>
@@ -267,7 +269,7 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
               maxLength={descriptionLimit}
               onChange={handleDescriptionChange}
               onKeyUp={handleKeyUp}
-              lang={language || undefined}
+              lang={language ?? undefined}
               minRows={3}
               placeholder={intl.formatMessage(
                 media.type === 'audio'

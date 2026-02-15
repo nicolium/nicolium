@@ -56,7 +56,7 @@ const AutosuggestInput: React.FC<IAutosuggestInput> = ({
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const [tokenStart, token] = textAtCursorMatchesToken(
       e.target.value,
-      e.target.selectionStart || 0,
+      e.target.selectionStart ?? 0,
       searchTokens,
     );
 
@@ -78,7 +78,7 @@ const AutosuggestInput: React.FC<IAutosuggestInput> = ({
   const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     const { suggestions, menu, disabled } = props;
     const firstIndex = getFirstIndex();
-    const lastIndex = suggestions.length + (menu || []).length - 1;
+    const lastIndex = suggestions.length + (menu ?? []).length - 1;
 
     if (disabled) {
       e.preventDefault();

@@ -37,7 +37,9 @@ const HoverAccountWrapper: React.FC<IHoverAccountWrapper> = React.memo(({ accoun
 
   const handleMouseLeave = () => {
     showAccountHoverCard.cancel();
-    setTimeout(() => closeAccountHoverCard(), 300);
+    setTimeout(() =>{
+      closeAccountHoverCard();
+    }, 300);
   };
 
   const handleClick = () => {

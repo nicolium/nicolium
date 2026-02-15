@@ -32,7 +32,9 @@ const useAddAccountAlias = () => {
   return useMutation({
     mutationKey: ['settings', 'accountAliases'],
     mutationFn: (acct: string) => client.settings.addAccountAlias(acct),
-    onSuccess: () => toast.success(messages.createSuccess),
+    onSuccess: () =>{
+      toast.success(messages.createSuccess);
+    },
     onSettled: () => queryClient.invalidateQueries({
       queryKey: ['settings', 'accountAliases'],
     }),
@@ -46,7 +48,9 @@ const useDeleteAccountAlias = () => {
   return useMutation({
     mutationKey: ['settings', 'accountAliases'],
     mutationFn: (acct: string) => client.settings.deleteAccountAlias(acct),
-    onSuccess: () => toast.success(messages.removeSuccess),
+    onSuccess: () =>{
+      toast.success(messages.removeSuccess);
+    },
     onSettled: () => queryClient.invalidateQueries({
       queryKey: ['settings', 'accountAliases'],
     }),

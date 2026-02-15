@@ -66,11 +66,11 @@ const StatusList: React.FC<IStatusList> = ({
 }) => {
   const node = useRef<VirtuosoHandle>(null);
 
-  const getFeaturedStatusCount = () => featuredStatusIds?.length || 0;
+  const getFeaturedStatusCount = () => featuredStatusIds?.length ?? 0;
 
   const getCurrentStatusIndex = (id: string, featured: boolean): number => {
     if (featured) {
-      return featuredStatusIds?.findIndex(key => key === id) || 0;
+      return featuredStatusIds?.findIndex(key => key === id) ?? 0;
     } else {
       return statusIds.findIndex(key => key === id) + getFeaturedStatusCount();
     }
@@ -78,23 +78,25 @@ const StatusList: React.FC<IStatusList> = ({
 
   const handleMoveUp = (id: string, featured: boolean = false) => {
     const elementIndex = getCurrentStatusIndex(id, featured) - 1;
-    selectChild(elementIndex, node, document.getElementById('status-list') || undefined);
+    selectChild(elementIndex, node, document.getElementById('status-list') ?? undefined);
   };
 
   const handleMoveDown = (id: string, featured: boolean = false) => {
     const elementIndex = getCurrentStatusIndex(id, featured) + 1;
-    selectChild(elementIndex, node, document.getElementById('status-list') || undefined, scrollableContent.length);
+    selectChild(elementIndex, node, document.getElementById('status-list') ?? undefined, scrollableContent.length);
   };
 
   const handleLoadOlder = useCallback(debounce(() => {
-    const maxId = lastStatusId || statusIds.at(-1);
+    const maxId = lastStatusId ?? statusIds.at(-1);
     if (onLoadMore && maxId) {
       onLoadMore(maxId);
     }
   }, 300, { leading: true }), [onLoadMore, lastStatusId, statusIds.at(-1)]);
 
   const handleSkipPinned = () => {
-    const skipPinned = () => selectChild(getFeaturedStatusCount(), node, document.getElementById('status-list') || undefined, scrollableContent.length, 'start');
+    const skipPinned = () =>{
+      selectChild(getFeaturedStatusCount(), node, document.getElementById('status-list') ?? undefined, scrollableContent.length, 'start');
+    };
 
     skipPinned();
 
@@ -112,7 +114,7 @@ const StatusList: React.FC<IStatusList> = ({
       <LoadGap
         key={'gap:' + nextId}
         disabled={isLoading}
-        maxId={prevId!}
+        maxId={prevId}
         onClick={onLoadMore}
       />
     );

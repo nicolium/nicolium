@@ -32,7 +32,7 @@ const useSystemTheme = (): Theme => {
     };
   }, []);
 
-  return dark ? (theme?.systemDarkThemePreference || 'black') : 'light';
+  return dark ? (theme?.systemDarkThemePreference ?? 'black') : 'light';
 };
 
 export { useSystemTheme };

@@ -76,7 +76,7 @@ const createFaviconService = () => {
       if (!favimg || !favcontext || !favcontext) return;
 
       const style = getComputedStyle(document.body);
-      const badgeColor = `${style.getPropertyValue('--badge-notification') || 'rgb(255, 0, 0)'}`;
+      const badgeColor = style.getPropertyValue('--badge-notification') || 'rgb(255, 0, 0)';
 
       if (isImageLoaded(favimg)) {
         favcontext.drawImage(favimg, 0, 0, favimg.width, favimg.height, 0, 0, faviconWidth, faviconHeight);

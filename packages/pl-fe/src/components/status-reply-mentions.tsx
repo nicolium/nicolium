@@ -42,7 +42,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
 
     if (hoverable) {
       return (
-        <HoverStatusWrapper statusId={status.in_reply_to_id!} inline>
+        <HoverStatusWrapper statusId={status.in_reply_to_id} inline>
           <span
             key='hoverstatus'
             className='cursor-pointer hover:underline'
@@ -65,7 +65,9 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
         to='/@{$username}'
         params={{ username: account.acct }}
         className='inline-block max-w-[200px] truncate align-bottom text-primary-600 no-underline [direction:ltr] hover:text-primary-700 hover:underline dark:text-primary-400 dark:hover:text-primary-400'
-        onClick={(e) => e.stopPropagation()}
+        onClick={(e) =>{
+          e.stopPropagation();
+        }}
       >
         @{account.username}
       </Link>
@@ -97,7 +99,6 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
         defaultMessage='<hover>Replying to</hover> {accounts}'
         values={{
           accounts: <FormattedList type='conjunction' value={accounts} />,
-          // @ts-ignore wtf?
           hover: (children: React.ReactNode) => {
             if (hoverable) {
               return (

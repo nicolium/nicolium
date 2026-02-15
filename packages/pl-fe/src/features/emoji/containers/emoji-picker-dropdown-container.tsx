@@ -69,7 +69,7 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
 
   return (
     <div className='relative'>
-      {clonedChildren || (
+      {clonedChildren ?? (
         <IconButton
           theme='transparent'
           className={clsx('emoji-picker-dropdown -m-1 p-2', {

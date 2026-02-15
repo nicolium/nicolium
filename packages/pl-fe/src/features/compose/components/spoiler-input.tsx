@@ -45,7 +45,7 @@ const SpoilerInput: React.FC<ISpoilerInput> = ({
       searchTokens={[':']}
       id='cw-spoiler-input'
       className='⁂-compose-form__spoiler-input'
-      lang={modifiedLanguage || undefined}
+      lang={modifiedLanguage ?? undefined}
     />
   );
 };

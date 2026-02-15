@@ -17,7 +17,6 @@ import { buildStatus } from '../builder';
 
 import DraftStatusActionBar from './draft-status-action-bar';
 
-import type { Status as StatusEntity } from '@/normalizers/status';
 import type { DraftStatus as DraftStatusType } from '@/queries/statuses/use-draft-statuses';
 
 interface IDraftStatus {
@@ -28,7 +27,7 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
   const status = useAppSelector((state) => {
     if (!draftStatus) return null;
     return buildStatus(state, draftStatus);
-  }) as StatusEntity | null;
+  });
 
   if (!status) return null;
 
@@ -37,7 +36,7 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
   let quote;
 
   if (status.quote_id) {
-    if ((status.quote_visible ?? true) === false) {
+    if (!(status.quote_visible ?? true)) {
       quote = (
         <OutlineBox>
           <p><FormattedMessage id='statuses.quote_tombstone' defaultMessage='Post is unavailable.' /></p>

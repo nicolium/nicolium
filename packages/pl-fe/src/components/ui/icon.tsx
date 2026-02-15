@@ -28,7 +28,7 @@ interface IIcon extends Pick<React.SVGAttributes<SVGAElement>, 'strokeWidth'> {
 const Icon: React.FC<IIcon> = React.forwardRef<HTMLDivElement, IIcon>(({ src, alt, count, size, countMax, containerClassName, title, ...filteredProps }, ref): JSX.Element => (
   <div
     className={clsx('⁂-icon', containerClassName)}
-    data-testid={filteredProps['data-testid'] || 'icon'}
+    data-testid={filteredProps['data-testid'] ?? 'icon'}
     title={title}
     ref={ref}
   >

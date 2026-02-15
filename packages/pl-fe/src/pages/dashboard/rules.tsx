@@ -39,9 +39,13 @@ const Rule: React.FC<IRule> = ({ rule }) => {
       heading: intl.formatMessage(messages.deleteHeading),
       message: intl.formatMessage(messages.deleteMessage),
       confirm: intl.formatMessage(messages.deleteConfirm),
-      onConfirm: () => deleteRule(id, {
-        onSuccess: () => toast.success(messages.ruleDeleteSuccess),
-      }),
+      onConfirm: () =>{
+        deleteRule(id, {
+          onSuccess: () =>{
+            toast.success(messages.ruleDeleteSuccess);
+          },
+        });
+      },
     });
   };
 

@@ -46,7 +46,7 @@ const ChatUploadPreview: React.FC<IChatUploadPreview> = ({ className, attachment
         <div className='pointer-events-none flex size-full items-center justify-center'>
           <Icon
             className='mx-auto my-12 size-16 text-gray-800 dark:text-gray-200'
-            src={MIMETYPE_ICONS[mimeType || ''] || defaultIcon}
+            src={MIMETYPE_ICONS[mimeType ?? ''] || defaultIcon}
           />
         </div>
       );

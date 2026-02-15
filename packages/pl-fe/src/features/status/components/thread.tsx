@@ -173,21 +173,25 @@ const Thread = ({
     else favouriteStatus();
   };
 
-  const handleReplyClick = (status: ComposeReplyAction['status']) => dispatch(replyCompose(status));
+  const handleReplyClick = (status: ComposeReplyAction['status']) =>{
+    dispatch(replyCompose(status));
+  };
 
   const handleReblogClick = (status: SelectedStatus, e?: React.MouseEvent) => {
     if (status.reblogged) {
       unreblogStatus();
+    } else if ((e && e.shiftKey) || !boostModal) {
+      reblogStatus(undefined);
     } else {
-      if ((e && e.shiftKey) || !boostModal) {
+      openModal('BOOST', { statusId: status.id, onReblog: () =>{
         reblogStatus(undefined);
-      } else {
-        openModal('BOOST', { statusId: status.id, onReblog: () => reblogStatus(undefined) });
-      }
+      } });
     }
   };
 
-  const handleMentionClick = (account: Pick<Account, 'acct'>) => dispatch(mentionCompose(account));
+  const handleMentionClick = (account: Pick<Account, 'acct'>) =>{
+    dispatch(mentionCompose(account));
+  };
 
   const handleHotkeyOpenMedia = (e?: KeyboardEvent) => {
     const media = status.media_attachments;
@@ -238,15 +242,15 @@ const Thread = ({
   const handleMoveUp = (id: string) => {
     const modalOffset = isModal ? 1 : 0;
     if (id === status.id) {
-      selectChild(statusIndex - 1 + modalOffset, scroller, node.current || undefined);
+      selectChild(statusIndex - 1 + modalOffset, scroller, node.current ?? undefined);
     } else {
       let index = thread.indexOf(id);
 
       if (index === -1) {
         index = thread.indexOf(id);
-        selectChild(index + modalOffset, scroller, node.current || undefined);
+        selectChild(index + modalOffset, scroller, node.current ?? undefined);
       } else {
-        selectChild(index - 1 + modalOffset, scroller, node.current || undefined);
+        selectChild(index - 1 + modalOffset, scroller, node.current ?? undefined);
       }
     }
   };
@@ -254,15 +258,15 @@ const Thread = ({
   const handleMoveDown = (id: string) => {
     const modalOffset = isModal ? 1 : 0;
     if (id === status.id) {
-      selectChild(statusIndex + 1 + modalOffset, scroller, node.current || undefined, thread.length + modalOffset);
+      selectChild(statusIndex + 1 + modalOffset, scroller, node.current ?? undefined, thread.length + modalOffset);
     } else {
       let index = thread.indexOf(id);
 
       if (index === -1) {
         index = thread.indexOf(id);
-        selectChild(index + modalOffset, scroller, node.current || undefined, thread.length + modalOffset);
+        selectChild(index + modalOffset, scroller, node.current ?? undefined, thread.length + modalOffset);
       } else {
-        selectChild(index + 1 + modalOffset, scroller, node.current || undefined, thread.length + modalOffset);
+        selectChild(index + 1 + modalOffset, scroller, node.current ?? undefined, thread.length + modalOffset);
       }
     }
   };
@@ -364,7 +368,9 @@ const Thread = ({
         offset: -146,
       });
 
-      setTimeout(() => (node.current?.querySelector('.detailed-actualStatus') as HTMLDivElement)?.focus(), 100);
+      setTimeout(() =>{
+        (node.current?.querySelector('.detailed-actualStatus') as HTMLDivElement)?.focus();
+      }, 100);
     }, 0);
   }, [status.id, statusIndex]);
 
@@ -442,7 +448,7 @@ const Thread = ({
             'h-full': isModal,
           })}
           useWindowScroll={!isModal}
-          customScrollParent={isModal && node.current || undefined}
+          customScrollParent={isModal ? (node.current ?? undefined) : undefined}
         >
           {children}
         </ScrollableList>

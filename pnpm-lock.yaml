@@ -72,7 +72,7 @@ importers:
         version: 0.32.0
       oxlint:
         specifier: ^1.47.0
-        version: 1.47.0
+        version: 1.47.0(oxlint-tsgolint@0.12.2)
       typedoc:
         specifier: ^0.28.7
         version: 0.28.9(typescript@5.9.2)
@@ -476,6 +476,15 @@ importers:
       globals:
         specifier: ^15.14.0
         version: 15.15.0
+      oxfmt:
+        specifier: ^0.32.0
+        version: 0.32.0
+      oxlint:
+        specifier: ^1.47.0
+        version: 1.47.0(oxlint-tsgolint@0.12.2)
+      oxlint-tsgolint:
+        specifier: ^0.12.2
+        version: 0.12.2
       rollup-plugin-bundle-stats:
         specifier: ^4.21.10
         version: 4.21.10(core-js@3.44.0)(rolldown@1.0.0-rc.4)(rollup@2.79.2)(vite@7.3.1(@types/node@25.0.3)(jiti@1.21.7)(lightningcss@1.31.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.46.0)(yaml@2.8.0))
@@ -502,7 +511,7 @@ importers:
         version: 7.3.1(@types/node@25.0.3)(jiti@1.21.7)(lightningcss@1.31.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.46.0)(yaml@2.8.0)
       vite-plugin-checker:
         specifier: ^0.12.0
-        version: 0.12.0(eslint@8.57.1)(meow@13.2.0)(optionator@0.9.4)(oxlint@1.47.0)(stylelint@16.23.0(typescript@5.7.3))(typescript@5.7.3)(vite@7.3.1(@types/node@25.0.3)(jiti@1.21.7)(lightningcss@1.31.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.46.0)(yaml@2.8.0))
+        version: 0.12.0(eslint@8.57.1)(meow@13.2.0)(optionator@0.9.4)(oxlint@1.47.0(oxlint-tsgolint@0.12.2))(stylelint@16.23.0(typescript@5.7.3))(typescript@5.7.3)(vite@7.3.1(@types/node@25.0.3)(jiti@1.21.7)(lightningcss@1.31.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.46.0)(yaml@2.8.0))
       vite-plugin-compile-time:
         specifier: ^0.4.6
         version: 0.4.6(vite@7.3.1(@types/node@25.0.3)(jiti@1.21.7)(lightningcss@1.31.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.46.0)(yaml@2.8.0))
@@ -1999,6 +2008,36 @@ packages:
   '@oxfmt/binding-win32-x64-msvc@0.32.0':
     resolution: {integrity: sha512-fF8VIOeligq+mA6KfKvWtFRXbf0EFy73TdR6ZnNejdJRM8VWN1e3QFhYgIwD7O8jBrQsd7EJbUpkAr/YlUOokg==}
     engines: {node: ^20.19.0 || >=22.12.0}
+    cpu: [x64]
+    os: [win32]
+
+  '@oxlint-tsgolint/darwin-arm64@0.12.2':
+    resolution: {integrity: sha512-XIfavTqkJPGYi/98z7ZCkZvXq2AccMAAB0iwvKDRTQqiweMXVUyeUdx46phCHHH1PgmIVJtVfysThkHq2xCyrw==}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@oxlint-tsgolint/darwin-x64@0.12.2':
+    resolution: {integrity: sha512-tytsvP6zmNShRNDo4GgQartOXmd4GPd+TylCUMdO/iWl9PZVOgRyswWbYVTNgn85Cib/aY2q3Uu+jOw+QlbxvQ==}
+    cpu: [x64]
+    os: [darwin]
+
+  '@oxlint-tsgolint/linux-arm64@0.12.2':
+    resolution: {integrity: sha512-3W38yJuF7taEquhEuD6mYQyCeWNAlc1pNPjFkspkhLKZVgbrhDA4V6fCxLDDRvrTHde0bXPmFvuPlUq5pSePgA==}
+    cpu: [arm64]
+    os: [linux]
+
+  '@oxlint-tsgolint/linux-x64@0.12.2':
+    resolution: {integrity: sha512-EjcEspeeV0NmaopEp4wcN5ntQP9VCJJDrTvzOjMP4W6ajz18M+pni9vkKvmcPIpRa/UmWobeFgKoVd/KGueeuQ==}
+    cpu: [x64]
+    os: [linux]
+
+  '@oxlint-tsgolint/win32-arm64@0.12.2':
+    resolution: {integrity: sha512-a9L7iA5K/Ht/i8d9+7RTp6hbPa4cyXP0MdySVXAO6vczpL/4ildfY9Hr2m2wqL12uK6xe/uVABpVTrqay/wV+g==}
+    cpu: [arm64]
+    os: [win32]
+
+  '@oxlint-tsgolint/win32-x64@0.12.2':
+    resolution: {integrity: sha512-Cvt40UbTf5ib12DjGN+mMGOnjWa4Bc6Y7KEaXXp9qzckvs3HpNk2wSwMV3gnuR8Ipx4hkzkzrgzD0BAUsySAfA==}
     cpu: [x64]
     os: [win32]
 
@@ -5300,6 +5339,10 @@ packages:
   oxfmt@0.32.0:
     resolution: {integrity: sha512-KArQhGzt/Y8M1eSAX98Y8DLtGYYDQhkR55THUPY5VNcpFQ+9nRZkL3ULXhagHMD2hIvjy8JSeEQEP5/yYJSrLA==}
     engines: {node: ^20.19.0 || >=22.12.0}
+    hasBin: true
+
+  oxlint-tsgolint@0.12.2:
+    resolution: {integrity: sha512-IFiOhYZfSgiHbBznTZOhFpEHpsZFSP0j7fVRake03HEkgH0YljnTFDNoRkGWsTrnrHr7nRIomSsF4TnCI/O+kQ==}
     hasBin: true
 
   oxlint@1.47.0:
@@ -8714,6 +8757,24 @@ snapshots:
     optional: true
 
   '@oxfmt/binding-win32-x64-msvc@0.32.0':
+    optional: true
+
+  '@oxlint-tsgolint/darwin-arm64@0.12.2':
+    optional: true
+
+  '@oxlint-tsgolint/darwin-x64@0.12.2':
+    optional: true
+
+  '@oxlint-tsgolint/linux-arm64@0.12.2':
+    optional: true
+
+  '@oxlint-tsgolint/linux-x64@0.12.2':
+    optional: true
+
+  '@oxlint-tsgolint/win32-arm64@0.12.2':
+    optional: true
+
+  '@oxlint-tsgolint/win32-x64@0.12.2':
     optional: true
 
   '@oxlint/binding-android-arm-eabi@1.47.0':
@@ -12295,7 +12356,16 @@ snapshots:
       '@oxfmt/binding-win32-ia32-msvc': 0.32.0
       '@oxfmt/binding-win32-x64-msvc': 0.32.0
 
-  oxlint@1.47.0:
+  oxlint-tsgolint@0.12.2:
+    optionalDependencies:
+      '@oxlint-tsgolint/darwin-arm64': 0.12.2
+      '@oxlint-tsgolint/darwin-x64': 0.12.2
+      '@oxlint-tsgolint/linux-arm64': 0.12.2
+      '@oxlint-tsgolint/linux-x64': 0.12.2
+      '@oxlint-tsgolint/win32-arm64': 0.12.2
+      '@oxlint-tsgolint/win32-x64': 0.12.2
+
+  oxlint@1.47.0(oxlint-tsgolint@0.12.2):
     optionalDependencies:
       '@oxlint/binding-android-arm-eabi': 1.47.0
       '@oxlint/binding-android-arm64': 1.47.0
@@ -12316,6 +12386,7 @@ snapshots:
       '@oxlint/binding-win32-arm64-msvc': 1.47.0
       '@oxlint/binding-win32-ia32-msvc': 1.47.0
       '@oxlint/binding-win32-x64-msvc': 1.47.0
+      oxlint-tsgolint: 0.12.2
 
   p-limit@2.3.0:
     dependencies:
@@ -13851,7 +13922,7 @@ snapshots:
 
   varint@6.0.0: {}
 
-  vite-plugin-checker@0.12.0(eslint@8.57.1)(meow@13.2.0)(optionator@0.9.4)(oxlint@1.47.0)(stylelint@16.23.0(typescript@5.7.3))(typescript@5.7.3)(vite@7.3.1(@types/node@25.0.3)(jiti@1.21.7)(lightningcss@1.31.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.46.0)(yaml@2.8.0)):
+  vite-plugin-checker@0.12.0(eslint@8.57.1)(meow@13.2.0)(optionator@0.9.4)(oxlint@1.47.0(oxlint-tsgolint@0.12.2))(stylelint@16.23.0(typescript@5.7.3))(typescript@5.7.3)(vite@7.3.1(@types/node@25.0.3)(jiti@1.21.7)(lightningcss@1.31.1)(sass-embedded@1.93.3)(sass@1.93.3)(terser@5.46.0)(yaml@2.8.0)):
     dependencies:
       '@babel/code-frame': 7.29.0
       chokidar: 4.0.3
@@ -13866,7 +13937,7 @@ snapshots:
       eslint: 8.57.1
       meow: 13.2.0
       optionator: 0.9.4
-      oxlint: 1.47.0
+      oxlint: 1.47.0(oxlint-tsgolint@0.12.2)
       stylelint: 16.23.0(typescript@5.7.3)
       typescript: 5.7.3
 

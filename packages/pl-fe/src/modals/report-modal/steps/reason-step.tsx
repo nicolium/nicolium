@@ -97,7 +97,9 @@ const ReasonStep: React.FC<IReasonStep> = ({ comment, setComment, ruleIds, setRu
                   <button
                     key={idx}
                     data-testid={`rule-${rule.id}`}
-                    onClick={() => handleRuleChange(rule.id)}
+                    onClick={() =>{
+                      handleRuleChange(rule.id);
+                    }}
                     className={clsx({
                       'relative border border-solid border-gray-200 dark:border-gray-800 hover:bg-gray-100 dark:hover:bg-primary-800/30 text-start w-full p-4 flex justify-between items-center cursor-pointer': true,
                       'rounded-tl-lg rounded-tr-lg': idx === 0,

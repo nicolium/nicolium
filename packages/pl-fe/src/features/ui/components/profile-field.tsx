@@ -13,7 +13,7 @@ import { unescapeHTML } from '@/utils/html';
 
 import type { Account } from 'pl-api';
 
-const getTicker = (value: string): string => (value.match(/\$([a-zA-Z]*)/i) || [])[1];
+const getTicker = (value: string): string => (value.match(/\$([a-zA-Z]*)/i) ?? [])[1];
 const isTicker = (value: string): boolean => {
   const ticker = getTicker(value);
   return Boolean(ticker) && Boolean(coinDB[ticker.toLowerCase()]);

@@ -20,9 +20,8 @@ const initialState: Me = null;
 const handleForbidden = (state: Me, error: { response: PlfeResponse }) => {
   if (([401, 403] as any[]).includes(error.response?.status)) {
     return false;
-  } else {
-    return state;
   }
+  return state;
 };
 
 const me = (state: Me = initialState, action: AuthAction | MeAction): Me => {
@@ -32,7 +31,7 @@ const me = (state: Me = initialState, action: AuthAction | MeAction): Me => {
       return action.me.id;
     case VERIFY_CREDENTIALS_SUCCESS:
     case AUTH_ACCOUNT_REMEMBER_SUCCESS:
-      return state || action.account.id;
+      return state ?? action.account.id;
     case ME_FETCH_SKIP:
     case AUTH_LOGGED_OUT:
       return false;

@@ -59,10 +59,12 @@ const DetailsStep: React.FC<IDetailsStep> = ({ params, onChange }) => {
       }
     };
 
-  const handleImageClear = (property: keyof CreateGroupParams) => () => onChange({
-    ...params,
-    [property]: undefined,
-  });
+  const handleImageClear = (property: keyof CreateGroupParams) => () =>{
+    onChange({
+      ...params,
+      [property]: undefined,
+    });
+  };
 
   return (
     <Form>

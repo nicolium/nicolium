@@ -35,11 +35,12 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): JSX.Element 
 
   const [selected, setSelected] = useState({} as Selected);
 
-  const openUnauthorizedModal = () =>
+  const openUnauthorizedModal = () =>{
     openModal('UNAUTHORIZED', {
       action: 'POLL_VOTE',
       ap_id: status?.url,
     });
+  };
 
   const toggleOption = (value: number) => {
     if (isLoggedIn) {
@@ -68,7 +69,11 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): JSX.Element 
 
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-    <div className='⁂-poll' onClick={e => e.stopPropagation()}>
+    <div
+      className='⁂-poll' onClick={e =>{
+        e.stopPropagation();
+      }}
+    >
       {!showResults && poll.multiple && (
         <Text className='mb-4' theme='muted' size='sm'>
           <FormattedMessage id='poll.choose_multiple' defaultMessage="Choose as many as you'd like." />

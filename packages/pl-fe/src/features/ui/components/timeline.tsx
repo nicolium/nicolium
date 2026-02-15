@@ -35,9 +35,9 @@ const Timeline: React.FC<ITimeline> = ({
 
   const statusIds = useAppSelector(state => getStatusIds(state, { type: timelineId, prefix }));
   const lastStatusId = statusIds.at(-1);
-  const isLoading = useAppSelector(state => state.timelines[timelineId]?.isLoading !== false);
-  const isPartial = useAppSelector(state => (state.timelines[timelineId]?.isPartial || false) === true);
-  const hasMore = useAppSelector(state => state.timelines[timelineId]?.hasMore === true);
+  const isLoading = useAppSelector(state =>  state.timelines[timelineId]?.isLoading);
+  const isPartial = useAppSelector(state =>  (state.timelines[timelineId]?.isPartial || false));
+  const hasMore = useAppSelector(state =>  state.timelines[timelineId]?.hasMore);
   const totalQueuedItemsCount = useAppSelector(state => state.timelines[timelineId]?.totalQueuedItemsCount || 0);
 
   const handleDequeueTimeline = useCallback(() => {

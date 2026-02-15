@@ -32,7 +32,9 @@ const useRegistration = () => {
           setRegistration(r);
           setLoading(false);
         })
-        .catch(() => setLoading(false));
+        .catch(() =>{
+          setLoading(false);
+        });
     } else {
       setLoading(false);
     }
@@ -44,11 +46,8 @@ const useRegistration = () => {
   };
 };
 
-interface IServiceWorkerInfo {
-}
-
 /** Mini ServiceWorker debugging component. */
-const ServiceWorkerInfo: React.FC<IServiceWorkerInfo> = () => {
+const ServiceWorkerInfo: React.FC = () => {
   const intl = useIntl();
   const { isLoading, registration } = useRegistration();
 

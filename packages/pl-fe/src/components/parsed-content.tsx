@@ -66,9 +66,9 @@ const ParsedUrl: React.FC<IParsedUrl> = React.memo((props) => {
   // eslint-disable-next-line prefer-const
   let { cleanUrls, redirectUrls, displayTargetHost, childrenPlain, ...anchorProps } = props;
 
-  if (cleanUrls === undefined) cleanUrls = urlPrivacy.clearLinksInContent;
-  if (redirectUrls === undefined) redirectUrls = urlPrivacy.redirectLinksMode !== 'off';
-  if (displayTargetHost === undefined) displayTargetHost = urlPrivacy.displayTargetHost;
+  cleanUrls ??= urlPrivacy.clearLinksInContent;
+  redirectUrls ??= urlPrivacy.redirectLinksMode !== 'off';
+  displayTargetHost ??= urlPrivacy.displayTargetHost;
 
   let href = props.href;
 
@@ -86,7 +86,9 @@ const ParsedUrl: React.FC<IParsedUrl> = React.memo((props) => {
     <a
       {...anchorProps}
       href={href}
-      onClick={(e) => e.stopPropagation()}
+      onClick={(e) =>{
+        e.stopPropagation();
+      }}
       rel='nofollow noopener noreferrer'
       target='_blank'
       title={props.href}
@@ -130,7 +132,7 @@ const uniqueHashtagsWithCaseHandling = (hashtags: string[]) => {
 
   return Object.values(groups).map((tags) => {
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion -- we know that the array has at least one element
-    const firstTag = tags[0]!;
+    const firstTag = tags[0];
 
     if (tags.length === 1) return firstTag;
 
@@ -255,7 +257,9 @@ function parseContent({
                   params={{ username: mention.acct }}
                   className='text-primary-600 hover:underline dark:text-primary-400'
                   dir='ltr'
-                  onClick={(e) => e.stopPropagation()}
+                  onClick={(e) =>{
+                    e.stopPropagation();
+                  }}
                 >
                   <HoverAccountWrapper accountId={mention.id} element='span'>
                     @{mention.username}
@@ -353,9 +357,9 @@ const ParsedContent: React.FC<IParsedContent> = React.memo((props) => {
 
   props = { ...props };
 
-  if (props.cleanUrls === undefined) props.cleanUrls = urlPrivacy.clearLinksInContent;
-  if (props.redirectUrls === undefined) props.redirectUrls = urlPrivacy.redirectLinksMode !== 'off';
-  if (props.displayTargetHost === undefined) props.displayTargetHost = urlPrivacy.displayTargetHost;
+  props.cleanUrls ??= urlPrivacy.clearLinksInContent;
+  props.redirectUrls ??= urlPrivacy.redirectLinksMode !== 'off';
+  props.displayTargetHost ??= urlPrivacy.displayTargetHost;
 
   return parseContent(props, false);
 }, (prevProps, nextProps) => prevProps.html === nextProps.html);

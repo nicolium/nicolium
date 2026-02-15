@@ -63,7 +63,7 @@ const useChats = () => {
   const { me } = useLoggedIn();
 
   const getChats = async (pageParam?: Pick<PaginatedResponse<Chat>, 'next'>): Promise<PaginatedResponse<Chat>> => {
-    const response = await (pageParam?.next || client.chats.getChats)();
+    const response = await (pageParam?.next ?? client.chats.getChats)();
     const { items } = response;
 
     setUnreadChatsCount(sumBy(data, (chat) => chat.unread));
@@ -135,9 +135,8 @@ const useMarkChatAsRead = (chatId: string) => {
         const flattenedQueryData: any = flattenPages(queryData)?.map((chat: any) => {
           if (chat.id === data.id) {
             return data;
-          } else {
-            return chat;
           }
+          return chat;
         });
         setUnreadChatsCount(sumBy(flattenedQueryData, (chat: Chat) => chat.unread));
       }

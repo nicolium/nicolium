@@ -20,7 +20,9 @@ const messages = defineMessages({
   unsupported: { id: 'emoji_reactions.unsupported_by_remote', defaultMessage: '@{acct}’s instance most likely doesn’t understand emoji reactions. The user will not get notified of the reaction.' },
 });
 
-const noOp = () => () => new Promise(f => f(undefined));
+const noOp = () => () => new Promise(f =>{
+  f(undefined);
+});
 
 const emojiReact = (statusId: string, emoji: string, custom: string | undefined = undefined, intl: IntlShape) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
@@ -34,7 +36,7 @@ const emojiReact = (statusId: string, emoji: string, custom: string | undefined 
       const checkEmojiReactsSupport = !response.account.local && useSettingsStore.getState().settings.checkEmojiReactsSupport;
 
       if (checkEmojiReactsSupport) {
-        supportsEmojiReacts(response.account.ap_id || response.account.url).then((result) => {
+        supportsEmojiReacts(response.account.ap_id ?? response.account.url).then((result) => {
           if (result === 'false') {
             toast.info(intl.formatMessage(messages.unsupported, { acct: response.account.acct }));
           }

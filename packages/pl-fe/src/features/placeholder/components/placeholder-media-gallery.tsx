@@ -62,7 +62,7 @@ const PlaceholderMediaGallery: React.FC<IPlaceholderMediaGallery> = ({ media, de
       style,
       itemsDimensions,
       size,
-      width: width || 0,
+      width: width ?? 0,
     };
   };
 
@@ -73,8 +73,8 @@ const PlaceholderMediaGallery: React.FC<IPlaceholderMediaGallery> = ({ media, de
     const right = dimensions.r || 'auto';
     const bottom = dimensions.b || 'auto';
     const left = dimensions.l || 'auto';
-    const float = dimensions.float as any || 'left';
-    const position = dimensions.pos as any || 'relative';
+    const float = dimensions.float as any ?? 'left';
+    const position = dimensions.pos as any ?? 'relative';
 
     return <div key={i} className='⁂-media-gallery__item animate-pulse bg-primary-200' style={{ position, float, left, top, right, bottom, height, width }} />;
   };

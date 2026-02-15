@@ -30,7 +30,7 @@ const LoginPage = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [mfaAuthNeeded, setMfaAuthNeeded] = useState(!!token);
-  const [mfaToken, setMfaToken] = useState(token || '');
+  const [mfaToken, setMfaToken] = useState(token ?? '');
   const [shouldRedirect, setShouldRedirect] = useState(false);
 
   const getFormData = (form: HTMLFormElement) =>

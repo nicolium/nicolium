@@ -66,7 +66,9 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
         heading: intl.formatMessage(messages.leaveHeading),
         message: intl.formatMessage(messages.leaveMessage),
         confirm: intl.formatMessage(messages.leaveConfirm),
-        onConfirm: () => leaveEvent(),
+        onConfirm: () =>{
+          leaveEvent();
+        },
       });
     } else {
       leaveEvent();

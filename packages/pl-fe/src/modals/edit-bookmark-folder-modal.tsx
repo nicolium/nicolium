@@ -102,8 +102,8 @@ const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModal
   const { data: bookmarkFolder } = useBookmarkFolder(folderId);
   const { mutate: updateBookmarkFolder, isPending } = useUpdateBookmarkFolder(folderId);
 
-  const [emoji, setEmoji] = useState(bookmarkFolder?.emoji || undefined);
-  const [emojiUrl, setEmojiUrl] = useState(bookmarkFolder?.emoji_url || undefined);
+  const [emoji, setEmoji] = useState(bookmarkFolder?.emoji ?? undefined);
+  const [emojiUrl, setEmojiUrl] = useState(bookmarkFolder?.emoji_url ?? undefined);
   const name = useTextField(bookmarkFolder?.name);
 
   const handleEmojiPick = (data: EmojiType) => {

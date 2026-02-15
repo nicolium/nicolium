@@ -73,9 +73,13 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
       heading: intl.formatMessage(messages.kickFromGroupHeading, { name: account?.username }),
       message: intl.formatMessage(messages.kickFromGroupMessage, { name: account?.username }),
       confirm: intl.formatMessage(messages.kickConfirm),
-      onConfirm: () => kickGroupMember(undefined, {
-        onSuccess: () => toast.success(intl.formatMessage(messages.kicked, { name: account?.acct })),
-      }),
+      onConfirm: () =>{
+        kickGroupMember(undefined, {
+          onSuccess: () =>{
+            toast.success(intl.formatMessage(messages.kicked, { name: account?.acct }));
+          },
+        });
+      },
     });
   };
 

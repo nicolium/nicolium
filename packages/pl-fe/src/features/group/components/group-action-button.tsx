@@ -57,7 +57,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
     },
   });
 
-  const onLeaveGroup = () =>
+  const onLeaveGroup = () =>{
     openModal('CONFIRM', {
       heading: intl.formatMessage(messages.confirmationHeading),
       message: intl.formatMessage(messages.confirmationMessage),
@@ -69,6 +69,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
         },
       }),
     });
+  };
 
   const onCancelRequest = () => leaveGroup.mutate(group.relationship?.id as string, {
     onSuccess() {

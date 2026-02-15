@@ -3,7 +3,7 @@ import { create } from 'mutative';
 import type { InfiniteData } from '@tanstack/react-query';
 import type { PaginatedResponse } from 'pl-api';
 
-const filterById = (filteredId: string | Array<string>) => (data: InfiniteData<PaginatedResponse<string, true>, unknown> | undefined) => {
+const filterById = (filteredId: string | Array<string>) => (data: InfiniteData<PaginatedResponse<string>> | undefined) => {
   if (data) {
     return create((data), data => {
       let found = 0;

@@ -17,7 +17,9 @@ interface IStatusCheckBox {
 const StatusCheckBox: React.FC<IStatusCheckBox> = ({ id, disabled, checked, toggleStatusReport }) => {
   const status = useAppSelector((state) => state.statuses[id]);
 
-  const onToggle: React.ChangeEventHandler<HTMLInputElement> = (e) => toggleStatusReport(e.target.checked);
+  const onToggle: React.ChangeEventHandler<HTMLInputElement> = (e) =>{
+    toggleStatusReport(e.target.checked);
+  };
 
   if (!status || status.reblog_id) {
     return null;

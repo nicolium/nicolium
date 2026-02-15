@@ -37,8 +37,12 @@ const JoinEventModal: React.FC<BaseModalProps & JoinEventModalProps> = ({ onClos
   const handleSubmit = () => {
     setIsSubmitting(true);
     joinEvent(participationMessage, {
-      onSuccess: () => handleClose(),
-      onError: () => setIsSubmitting(false),
+      onSuccess: () =>{
+        handleClose();
+      },
+      onError: () =>{
+        setIsSubmitting(false);
+      },
     });
   };
 

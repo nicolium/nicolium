@@ -25,7 +25,7 @@ type State = Immutable<{
 /** Import entities into the cache. */
 const importEntities = (
   draft: Draft<State>,
-  entityType: string,
+  entityType: Entities,
   entities: Entity[],
   listKey?: string,
   pos?: ImportPosition,
@@ -154,21 +154,37 @@ const doTransaction = (draft: Draft<State>, transaction: EntitiesTransaction) =>
 const reducer = (state: Readonly<State> = {}, action: EntityAction): State => {
   switch (action.type) {
     case ENTITIES_IMPORT:
-      return create(state, draft => importEntities(draft, action.entityType, action.entities, action.listKey, action.pos), { enableAutoFreeze: true });
+      return create(state, draft =>{
+        importEntities(draft, action.entityType, action.entities, action.listKey, action.pos);
+      }, { enableAutoFreeze: true });
     case ENTITIES_DELETE:
-      return create(state, draft => deleteEntities(draft, action.entityType, action.ids, action.opts));
+      return create(state, draft =>{
+        deleteEntities(draft, action.entityType, action.ids, action.opts);
+      });
     case ENTITIES_DISMISS:
-      return create(state, draft => dismissEntities(draft, action.entityType, action.ids, action.listKey));
+      return create(state, draft =>{
+        dismissEntities(draft, action.entityType, action.ids, action.listKey);
+      });
     case ENTITIES_FETCH_SUCCESS:
-      return create(state, draft => importEntities(draft, action.entityType, action.entities, action.listKey, action.pos, action.newState, action.overwrite), { enableAutoFreeze: true });
+      return create(state, draft =>{
+        importEntities(draft, action.entityType, action.entities, action.listKey, action.pos, action.newState, action.overwrite);
+      }, { enableAutoFreeze: true });
     case ENTITIES_FETCH_REQUEST:
-      return create(state, draft => setFetching(draft, action.entityType, action.listKey, true));
+      return create(state, draft =>{
+        setFetching(draft, action.entityType, action.listKey, true);
+      });
     case ENTITIES_FETCH_FAIL:
-      return create(state, draft => setFetching(draft, action.entityType, action.listKey, false, action.error));
+      return create(state, draft =>{
+        setFetching(draft, action.entityType, action.listKey, false, action.error);
+      });
     case ENTITIES_INVALIDATE_LIST:
-      return create(state, draft => invalidateEntityList(draft, action.entityType, action.listKey));
+      return create(state, draft =>{
+        invalidateEntityList(draft, action.entityType, action.listKey);
+      });
     case ENTITIES_TRANSACTION:
-      return create(state, draft => doTransaction(draft, action.transaction));
+      return create(state, draft =>{
+        doTransaction(draft, action.transaction);
+      });
     default:
       return state;
   }

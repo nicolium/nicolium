@@ -34,34 +34,38 @@ const Account: React.FC<IAccount> = ({ eventId, id, participationMessage }) => {
   return (
     <AccountContainer
       id={id}
-      note={participationMessage || undefined}
+      note={participationMessage ?? undefined}
       action={
         <HStack space={2}>
           <Button
             theme='secondary'
             size='sm'
             text={intl.formatMessage(messages.authorize)}
-            onClick={() => acceptEventParticipationRequest(undefined, {
-              onSuccess: () => {
-                toast.success(messages.authorizeSuccess);
-              },
-              onError: () => {
-                toast.error(messages.authorizeFail);
-              },
-            })}
+            onClick={() =>{
+              acceptEventParticipationRequest(undefined, {
+                onSuccess: () => {
+                  toast.success(messages.authorizeSuccess);
+                },
+                onError: () => {
+                  toast.error(messages.authorizeFail);
+                },
+              });
+            }}
           />
           <Button
             theme='danger'
             size='sm'
             text={intl.formatMessage(messages.reject)}
-            onClick={() => rejectEventParticipationRequest(undefined, {
-              onSuccess: () => {
-                toast.success(messages.rejectSuccess);
-              },
-              onError: () => {
-                toast.error(messages.rejectFail);
-              },
-            })}
+            onClick={() =>{
+              rejectEventParticipationRequest(undefined, {
+                onSuccess: () => {
+                  toast.success(messages.rejectSuccess);
+                },
+                onError: () => {
+                  toast.error(messages.rejectFail);
+                },
+              });
+            }}
           />
         </HStack>
       }
@@ -86,7 +90,7 @@ const ManagePendingParticipants: React.FC<IManagePendingParticipants> = ({ statu
         onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
       >
         {accounts.map(({ account_id, participation_message }) =>
-          <Account key={account_id} eventId={statusId!} id={account_id} participationMessage={participation_message} />,
+          <Account key={account_id} eventId={statusId} id={account_id} participationMessage={participation_message} />,
         )}
       </ScrollableList>
     </Stack>

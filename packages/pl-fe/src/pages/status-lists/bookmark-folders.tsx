@@ -42,7 +42,7 @@ const NewFolderForm: React.FC<INewFolderForm> = ({ search, onChange }) => {
     if (onChange) onChange(e);
   };
 
-  const handleSubmit = (e: React.FormEvent<Element>) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     createBookmarkFolder({
       name: name.value,
@@ -125,7 +125,7 @@ const BookmarkFoldersPage: React.FC = () => {
                   {folder.emoji ? (
                     <Emoji
                       emoji={folder.emoji}
-                      src={folder.emoji_url || undefined}
+                      src={folder.emoji_url ?? undefined}
                       className='size-5 flex-none'
                     />
                   ) : <Icon src={require('@phosphor-icons/core/regular/folder-simple.svg')} size={20} />}

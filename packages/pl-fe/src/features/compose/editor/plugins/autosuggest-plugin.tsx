@@ -301,7 +301,7 @@ const AutosuggestPlugin = ({
   const handleSelectSuggestion: React.MouseEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
     const index = Number(e.currentTarget.getAttribute('data-index'));
-    return onSelectSuggestion(index);
+    onSelectSuggestion(index);
   };
 
   const onSelectSuggestion = (index: number) => {
@@ -425,11 +425,12 @@ const AutosuggestPlugin = ({
         if (!isSelectionOnEntityBoundary(editor, match.leadOffset)) {
           const isRangePositioned = tryToPositionRange(match.leadOffset, range);
           if (isRangePositioned !== null) {
-            startTransition(() =>
+            startTransition(() =>{
               openTypeahead({
                 getRect: () => range.getBoundingClientRect(),
                 match,
-              }),
+              });
+            },
             );
             return;
           }
@@ -465,7 +466,9 @@ const AutosuggestPlugin = ({
       };
       document.addEventListener('click', handleClick);
 
-      return () => document.removeEventListener('click', handleClick);
+      return () =>{
+        document.removeEventListener('click', handleClick);
+      };
     }
   }, [resolution, suggestionsHidden, !suggestions.length]);
 

@@ -82,7 +82,9 @@ const ThemeEditorPage: React.FC = () => {
   const setTheme = (theme: any) => {
     setResetKey(crypto.randomUUID());
     setIsDefault(false);
-    setTimeout(() => setColors(theme));
+    setTimeout(() =>{
+      setColors(theme);
+    });
   };
 
   const resetTheme = () => {

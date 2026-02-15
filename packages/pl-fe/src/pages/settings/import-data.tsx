@@ -94,7 +94,9 @@ const DataImporter: React.FC<IDataImporter> = ({ messages, action, accept = '.cs
           >
             <Toggle
               checked={overwrite}
-              onChange={({ target }) => setOverwrite(target.checked)}
+              onChange={({ target }) =>{
+                setOverwrite(target.checked);
+              }}
             />
           </ListItem>
         </List>

@@ -6,7 +6,7 @@
 const removeVS16s = (rawEmoji: string): string => {
   const vs16RegExp = /\uFE0F/g;
   const zeroWidthJoiner = String.fromCharCode(0x200d);
-  return rawEmoji.indexOf(zeroWidthJoiner) < 0 ? rawEmoji.replace(vs16RegExp, '') : rawEmoji;
+  return !rawEmoji.includes(zeroWidthJoiner) ? rawEmoji.replace(vs16RegExp, '') : rawEmoji;
 };
 
 /** Convert emoji into an array of Unicode codepoints */

@@ -24,12 +24,12 @@ const ConversationsList: React.FC = () => {
 
   const handleMoveUp = (id: string) => {
     const elementIndex = getCurrentIndex(id) - 1;
-    selectChild(elementIndex, ref, document.getElementById('direct-list') || undefined);
+    selectChild(elementIndex, ref, document.getElementById('direct-list') ?? undefined);
   };
 
   const handleMoveDown = (id: string) => {
     const elementIndex = getCurrentIndex(id) + 1;
-    selectChild(elementIndex, ref, document.getElementById('direct-list') || undefined, conversations.length);
+    selectChild(elementIndex, ref, document.getElementById('direct-list') ?? undefined, conversations.length);
   };
 
   const handleLoadOlder = useCallback(debounce(() => {

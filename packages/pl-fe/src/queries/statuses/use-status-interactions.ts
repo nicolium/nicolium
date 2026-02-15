@@ -199,16 +199,18 @@ const useBookmarkStatus = (statusId: string) => {
         actionLabel: messages.view,
         actionLinkOptions: {
           to: '/bookmarks/$folderId',
-          params: { folderId: folderId || 'all' },
+          params: { folderId: folderId ?? 'all' },
         },
       };
 
       if (features.bookmarkFolders && typeof folderId !== 'string') {
         opts = {
           actionLabel: messages.selectFolder,
-          action: () => openModal('SELECT_BOOKMARK_FOLDER', {
-            statusId,
-          }),
+          action: () =>{
+            openModal('SELECT_BOOKMARK_FOLDER', {
+              statusId,
+            });
+          },
         };
       }
 

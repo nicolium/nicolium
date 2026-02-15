@@ -38,7 +38,9 @@ const AntennasPage: React.FC = () => {
   const items = [
     {
       text: intl.formatMessage(messages.createAntenna),
-      action: () => openModal('ANTENNA_EDITOR', {}),
+      action: () =>{
+        openModal('ANTENNA_EDITOR', {});
+      },
       icon: require('@phosphor-icons/core/regular/plus.svg'),
     },
   ];

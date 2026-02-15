@@ -55,7 +55,7 @@ const ManageGroup: React.FC = () => {
     return (<ColumnForbidden />);
   }
 
-  const onDeleteGroup = () =>
+  const onDeleteGroup = () =>{
     openModal('CONFIRM', {
       heading: intl.formatMessage(messages.deleteHeading),
       message: intl.formatMessage(messages.deleteMessage),
@@ -69,6 +69,7 @@ const ManageGroup: React.FC = () => {
         });
       },
     });
+  };
 
   return (
     <Column label={intl.formatMessage(messages.heading)} backHref='/groups/$groupId' backParams={{ groupId: group.id }}>

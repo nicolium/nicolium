@@ -89,7 +89,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({ reaction, statusId, obfusca
       disabled={unauthenticated}
       {...bind}
     >
-      <Emoji emoji={reaction.name} src={reaction.url || undefined} />
+      <Emoji emoji={reaction.name} src={reaction.url ?? undefined} />
 
       <p>
         <AnimatedNumber value={reaction.count} obfuscate={obfuscate} short />
@@ -112,7 +112,7 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
   if ((demetricator || status.emoji_reactions.length === 0) && collapsed) return null;
   if (status.emoji_reactions.length === 0 && !features.emojiReacts) return null;
 
-  const sortedReactions = status.emoji_reactions.toSorted((a, b) => (b.count || 0) - (a.count || 0));
+  const sortedReactions = status.emoji_reactions.toSorted((a, b) => (b.count ?? 0) - (a.count ?? 0));
 
   return (
     <div className='⁂-status-reactions-bar'>

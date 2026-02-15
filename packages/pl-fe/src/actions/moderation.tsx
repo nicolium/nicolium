@@ -110,15 +110,15 @@ const deleteUserModal = (intl: IntlShape, accountId: string, afterConfirm = () =
 const toggleStatusSensitivityModal = (intl: IntlShape, statusId: string, sensitive: boolean, afterConfirm = () => {}) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-    const acct = state.statuses[statusId]!.account.acct;
+    const acct = state.statuses[statusId].account.acct;
 
     useModalsStore.getState().actions.openModal('CONFIRM', {
-      heading: intl.formatMessage(sensitive === false ? messages.markStatusSensitiveHeading : messages.markStatusNotSensitiveHeading),
-      message: intl.formatMessage(sensitive === false ? messages.markStatusSensitivePrompt : messages.markStatusNotSensitivePrompt, { acct }),
-      confirm: intl.formatMessage(sensitive === false ? messages.markStatusSensitiveConfirm : messages.markStatusNotSensitiveConfirm),
+      heading: intl.formatMessage(!sensitive ? messages.markStatusSensitiveHeading : messages.markStatusNotSensitiveHeading),
+      message: intl.formatMessage(!sensitive ? messages.markStatusSensitivePrompt : messages.markStatusNotSensitivePrompt, { acct }),
+      confirm: intl.formatMessage(!sensitive ? messages.markStatusSensitiveConfirm : messages.markStatusNotSensitiveConfirm),
       onConfirm: () => {
         dispatch(toggleStatusSensitivity(statusId, sensitive)).then(() => {
-          const message = intl.formatMessage(sensitive === false ? messages.statusMarkedSensitive : messages.statusMarkedNotSensitive, { acct });
+          const message = intl.formatMessage(!sensitive ? messages.statusMarkedSensitive : messages.statusMarkedNotSensitive, { acct });
           toast.success(message);
         }).catch(() => {});
         afterConfirm();
@@ -129,7 +129,7 @@ const toggleStatusSensitivityModal = (intl: IntlShape, statusId: string, sensiti
 const deleteStatusModal = (intl: IntlShape, statusId: string, afterConfirm = () => {}) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-    const acct = state.statuses[statusId]!.account.acct;
+    const acct = state.statuses[statusId].account.acct;
 
     useModalsStore.getState().actions.openModal('CONFIRM', {
       heading: intl.formatMessage(messages.deleteStatusHeading),

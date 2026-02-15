@@ -36,7 +36,7 @@ const useEntity = <TEntity extends Entity, TTransformedEntity extends Entity = T
   const [entityType, entityId] = path;
 
   const defaultSchema = v.custom<TEntity>(() => true);
-  const schema = opts.schema || defaultSchema;
+  const schema = opts.schema ?? defaultSchema;
 
   const entity = useAppSelector(state => selectEntity<TTransformedEntity>(state, entityType, entityId));
 

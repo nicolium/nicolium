@@ -34,7 +34,9 @@ const EditPasswordPage = () => {
 
   const { currentPassword, newPassword, newPasswordConfirmation } = state;
 
-  const resetState = () => setState(initialState);
+  const resetState = () =>{
+    setState(initialState);
+  };
 
   const handleInputChange: React.ChangeEventHandler<HTMLInputElement> = React.useCallback((event) => {
     event.persist();
@@ -43,7 +45,9 @@ const EditPasswordPage = () => {
   }, []);
 
   const handleSubmit = React.useCallback(() => {
-    if (newPassword !== newPasswordConfirmation) return toast.error(intl.formatMessage(messages.passwordsNoMatch));
+    if (newPassword !== newPasswordConfirmation) {
+      toast.error(intl.formatMessage(messages.passwordsNoMatch)); return;
+    }
 
     setLoading(true);
     dispatch(changePassword(currentPassword, newPassword)).then(() => {

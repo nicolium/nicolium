@@ -42,7 +42,9 @@ const GroupHeaderImage: React.FC<IGroupHeaderImage> = ({ className, group }) => 
       className={className}
       src={group.header}
       alt={group.header_description || intl.formatMessage(messages.header)}
-      onError={() => setIsHeaderMissing(true)}
+      onError={() =>{
+        setIsHeaderMissing(true);
+      }}
     />
   );
 };

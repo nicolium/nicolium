@@ -16,18 +16,24 @@ const useStatusHoverCardStore = create<State>((set) => ({
   statusId: null,
   hovered: false,
   actions: {
-    openStatusHoverCard: (ref, statusId) => set({
-      ref,
-      statusId,
-    }),
-    updateStatusHoverCard: () => set({
-      hovered: true,
-    }),
-    closeStatusHoverCard: (force = false) => set((state) => state.hovered && !force ? {} : {
-      ref: null,
-      statusId: null,
-      hovered: false,
-    }),
+    openStatusHoverCard: (ref, statusId) =>{
+      set({
+        ref,
+        statusId,
+      });
+    },
+    updateStatusHoverCard: () =>{
+      set({
+        hovered: true,
+      });
+    },
+    closeStatusHoverCard: (force = false) =>{
+      set((state) => state.hovered && !force ? {} : {
+        ref: null,
+        statusId: null,
+        hovered: false,
+      });
+    },
   },
 }));
 

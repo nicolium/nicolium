@@ -45,7 +45,9 @@ const AnnouncementsPanel = () => {
               <button
                 key={i}
                 tabIndex={0}
-                onClick={() => setIndex(i)}
+                onClick={() =>{
+                  setIndex(i);
+                }}
                 className={clsx({
                   'w-2 h-2 rounded-full focus:ring-primary-600 focus:ring-2 focus:ring-offset-2': true,
                   'bg-gray-200 hover:bg-gray-300': i !== index,

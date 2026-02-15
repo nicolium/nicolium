@@ -34,7 +34,7 @@ const config = defineConfig(() => ({
   },
   plugins: [
     checker({ typescript: true }),
-    // @ts-ignore
+    // @ts-expect-error https://github.com/wangzongming/vite-plugin-require/issues/23
     vitePluginRequire.default(),
     compileTime(),
     createHtmlPlugin({
@@ -56,7 +56,7 @@ const config = defineConfig(() => ({
       injectManifest: {
         injectionPoint: undefined,
         plugins: [
-          // @ts-ignore
+          // @ts-expect-error incompatible declarations
           compileTime(),
         ],
       },

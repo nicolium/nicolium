@@ -121,7 +121,7 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
 
       const editorState = !compose.modifiedLanguage || compose.modifiedLanguage === compose.language
         ? compose.editorState
-        : compose.editorStateMap[compose.modifiedLanguage] || '';
+        : compose.editorStateMap[compose.modifiedLanguage] ?? '';
 
       if (editorState && !previouslyWasWysiwyg) {
         return editorState;
@@ -170,7 +170,7 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
     }
   };
 
-  let textareaPlaceholder = placeholder || intl.formatMessage(messages.placeholder);
+  let textareaPlaceholder = placeholder ?? intl.formatMessage(messages.placeholder);
 
   if (eventDiscussion) {
     textareaPlaceholder = intl.formatMessage(messages.eventPlaceholder);
@@ -194,7 +194,7 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(({
                     'min-h-[99px]': !condensed,
                   },
                 )}
-                lang={language || undefined}
+                lang={language ?? undefined}
                 data-compose-id={composeId}
                 aria-label={textareaPlaceholder}
                 placeholder={<></>}

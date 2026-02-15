@@ -17,9 +17,9 @@ type ReportedEntity = {
 }
 
 const initReport = (entityType: ReportableEntities, account: Pick<Account, 'id'>, entities?: ReportedEntity) => (dispatch: AppDispatch) => {
-  const { status, statusId } = entities || {};
+  const { status, statusId } = entities ?? {};
 
-  return useModalsStore.getState().actions.openModal('REPORT', {
+  useModalsStore.getState().actions.openModal('REPORT', {
     accountId: account.id,
     entityType,
     statusIds: [status?.id, statusId].filter((id): id is string => !!id),

@@ -70,35 +70,39 @@ const GroupMembershipRequests: React.FC = () => {
     return <ColumnForbidden />;
   }
 
-  const handleAuthorize = async (account: AccountEntity) =>
-    authorize(account.id)
-      .then(() => Promise.resolve())
-      .catch((error: { response: PlfeResponse }) => {
-        refetch();
+  const handleAuthorize = async (account: AccountEntity) => {
+    try {
+      await authorize(account.id);
+    } catch (error) {
+      const { response } = error as { response: PlfeResponse };
 
-        let message = intl.formatMessage(messages.authorizeFail, { name: account.username });
-        if (error.response?.status === 409) {
-          message = (error.response?.json as any).error;
-        }
-        toast.error(message);
+      refetch();
 
-        return Promise.reject();
-      });
+      let message = intl.formatMessage(messages.authorizeFail, { name: account.username });
+      if (response?.status === 409) {
+        message = response.json.error;
+      }
+      toast.error(message);
+    }
+  };
 
-  const handleReject = async (account: AccountEntity) =>
-    reject(account.id)
-      .then(() => Promise.resolve())
-      .catch((error: { response: PlfeResponse }) => {
-        refetch();
+  const handleReject = async (account: AccountEntity) => {
+    try {
+      await reject(account.id);
+    } catch (error) {
+      const { response } = error as { response: PlfeResponse };
 
-        let message = intl.formatMessage(messages.rejectFail, { name: account.username });
-        if (error.response?.status === 409) {
-          message = (error.response?.json as any).error;
-        }
-        toast.error(message);
+      refetch();
 
-        return Promise.reject();
-      });
+      let message = intl.formatMessage(messages.rejectFail, { name: account.username });
+      if (response?.status === 409) {
+        message = response.json.error;
+      }
+      toast.error(message);
+
+      return Promise.reject();
+    }
+  };
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>

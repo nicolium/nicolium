@@ -110,7 +110,9 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
   const button = onClick ? (
     <button
       className={clsx('⁂-drive-breadcrumbs__item', { '⁂-drive-breadcrumbs__item--current': depth === 0 })}
-      onClick={() => onClick?.(folderId)}
+      onClick={() =>{
+        onClick?.(folderId);
+      }}
     >
       {data.name}
     </button>
@@ -140,7 +142,7 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
 
   return (
     <>
-      <Breadcrumbs folderId={data.parent_id || undefined} depth={depth + 1} onClick={onClick} />
+      <Breadcrumbs folderId={data.parent_id ?? undefined} depth={depth + 1} onClick={onClick} />
       {spacer}
       {button}
     </>
@@ -177,7 +179,7 @@ const File: React.FC<IFile> = ({ file }) => {
       url: file.url,
       preview_url: file.thumbnail_url,
       remote_url: file.url,
-      description: file.description || '',
+      description: file.description ?? '',
       type,
       mime_type: file.content_type,
     });
@@ -199,11 +201,15 @@ const File: React.FC<IFile> = ({ file }) => {
         onConfirm: (value: string) => {
           updateFile({
             sensitive: file.sensitive,
-            description: file.description || undefined,
+            description: file.description ?? undefined,
             filename: value,
           }, {
-            onSuccess: () => toast.success(messages.fileRenameSuccess),
-            onError: () => toast.error(messages.fileRenameError),
+            onSuccess: () =>{
+              toast.success(messages.fileRenameSuccess);
+            },
+            onError: () =>{
+              toast.error(messages.fileRenameError);
+            },
           });
         },
       });
@@ -214,15 +220,19 @@ const File: React.FC<IFile> = ({ file }) => {
         heading: <FormattedMessage id='drive.file.update_description' defaultMessage='Edit description' />,
         placeholder: intl.formatMessage(messages.updateDescriptionPlaceholder),
         confirm: <FormattedMessage id='drive.file.update_description.confirm' defaultMessage='Save' />,
-        text: file.description || '',
+        text: file.description ?? '',
         onConfirm: (value: string) => {
           updateFile({
             sensitive: file.sensitive,
             filename: file.filename,
             description: value,
           }, {
-            onSuccess: () => toast.success(messages.updateDescriptionSuccess),
-            onError: () => toast.error(messages.updateDescriptionError),
+            onSuccess: () =>{
+              toast.success(messages.updateDescriptionSuccess);
+            },
+            onError: () =>{
+              toast.error(messages.updateDescriptionError);
+            },
           });
         },
       });
@@ -232,7 +242,7 @@ const File: React.FC<IFile> = ({ file }) => {
       updateFile({
         sensitive: !file.sensitive,
         filename: file.filename,
-        description: file.description || undefined,
+        description: file.description ?? undefined,
       }, {
         onSuccess: (file) => {
           if (file.sensitive) {
@@ -255,9 +265,13 @@ const File: React.FC<IFile> = ({ file }) => {
       openModal('SELECT_DRIVE_FILE', {
         type: 'folder',
         onSelect: (targetFolder) => {
-          moveFile(targetFolder.id || undefined, {
-            onSuccess: () => toast.success(messages.fileMoveSuccess),
-            onError: () => toast.error(messages.fileMoveError),
+          moveFile(targetFolder.id ?? undefined, {
+            onSuccess: () =>{
+              toast.success(messages.fileMoveSuccess);
+            },
+            onError: () =>{
+              toast.error(messages.fileMoveError);
+            },
           });
         },
         disabled: [file.id],
@@ -272,8 +286,12 @@ const File: React.FC<IFile> = ({ file }) => {
         message: <FormattedMessage id='drive.file.delete.text' defaultMessage='Are you sure you want to delete this file? This action cannot be undone.' />,
         onConfirm: () => {
           deleteFile(undefined, {
-            onSuccess: () => toast.success(messages.fileDeleteSuccess),
-            onError: () => toast.error(messages.fileDeleteError),
+            onSuccess: () =>{
+              toast.success(messages.fileDeleteSuccess);
+            },
+            onError: () =>{
+              toast.error(messages.fileDeleteError);
+            },
           });
         },
       });
@@ -338,7 +356,7 @@ const File: React.FC<IFile> = ({ file }) => {
       {file.thumbnail_url && isMedia ? (
         <img
           src={file.thumbnail_url}
-          alt={file.description || undefined}
+          alt={file.description ?? undefined}
         />
       ) : (
         <Icon
@@ -368,7 +386,7 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
   const { mutate: moveFolder } = useMoveDriveFolderMutation(folder.id!);
 
   const handleEnterFolder = () => {
-    navigate({ to: '/drive/{-$folderId}', params: { folderId: folder.id || undefined } });
+    navigate({ to: '/drive/{-$folderId}', params: { folderId: folder.id ?? undefined } });
   };
 
   const items: Menu = useMemo(() => {
@@ -377,12 +395,16 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
         heading: <FormattedMessage id='drive.folder.rename' defaultMessage='Rename folder' />,
         placeholder: intl.formatMessage(messages.folderRenamePlaceholder),
         confirm: <FormattedMessage id='drive.folder.rename.confirm' defaultMessage='Rename' />,
-        text: folder.name || '',
+        text: folder.name ?? '',
         singleLine: true,
         onConfirm: (value: string) => {
           updateFolder(value, {
-            onSuccess: () => toast.success(messages.folderRenameSuccess),
-            onError: () => toast.error(messages.folderRenameError),
+            onSuccess: () =>{
+              toast.success(messages.folderRenameSuccess);
+            },
+            onError: () =>{
+              toast.error(messages.folderRenameError);
+            },
           });
         },
       });
@@ -395,8 +417,12 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
         message: <FormattedMessage id='drive.folder.delete.text' defaultMessage='Are you sure you want to delete this folder? This action cannot be undone.' />,
         onConfirm: () => {
           deleteFolder(undefined, {
-            onSuccess: () => toast.success(messages.folderDeleteSuccess),
-            onError: () => toast.error(messages.folderDeleteError),
+            onSuccess: () =>{
+              toast.success(messages.folderDeleteSuccess);
+            },
+            onError: () =>{
+              toast.error(messages.folderDeleteError);
+            },
           });
         },
       });
@@ -406,9 +432,13 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
       openModal('SELECT_DRIVE_FILE', {
         type: 'folder',
         onSelect: (targetFolder) => {
-          moveFolder(targetFolder.id || undefined, {
-            onSuccess: () => toast.success(messages.folderMoveSuccess),
-            onError: () => toast.error(messages.folderMoveError),
+          moveFolder(targetFolder.id ?? undefined, {
+            onSuccess: () =>{
+              toast.success(messages.folderMoveSuccess);
+            },
+            onError: () =>{
+              toast.error(messages.folderMoveError);
+            },
           });
         },
         disabled: [folder.id],
@@ -421,7 +451,7 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
         text: intl.formatMessage(messages.folderView),
         icon: require('@phosphor-icons/core/regular/folder-open.svg'),
         to: '/drive/{-$folderId}',
-        params: { folderId: folder.id || undefined },
+        params: { folderId: folder.id ?? undefined },
       },
       {
         text: intl.formatMessage(messages.folderRename),
@@ -483,8 +513,12 @@ const DrivePage: React.FC = () => {
       icon: require('@phosphor-icons/core/regular/upload.svg'),
       onSelectFile: (files: FileList) => {
         uploadFile(files[0], {
-          onSuccess: () => toast.success(messages.fileUploadSuccess),
-          onError: (error) => toast.error(messages.fileUploadError),
+          onSuccess: () =>{
+            toast.success(messages.fileUploadSuccess);
+          },
+          onError: (error) =>{
+            toast.error(messages.fileUploadError);
+          },
         });
       },
     },
@@ -499,8 +533,12 @@ const DrivePage: React.FC = () => {
           singleLine: true,
           onConfirm: (value: string) => {
             createFolder({ name: value, parentId: folderId }, {
-              onSuccess: () => toast.success(messages.newFolderSuccess),
-              onError: () => toast.error(messages.newFolderError),
+              onSuccess: () =>{
+                toast.success(messages.newFolderSuccess);
+              },
+              onError: () =>{
+                toast.error(messages.newFolderError);
+              },
             });
           },
         });
@@ -517,9 +555,9 @@ const DrivePage: React.FC = () => {
   return (
     <Column
       className='⁂-drive-page'
-      label={data?.name || intl.formatMessage(messages.heading)}
+      label={data?.name ?? intl.formatMessage(messages.heading)}
       backHref={'/drive/{-$folderId}'}
-      backParams={{ folderId: data?.parent_id || undefined }}
+      backParams={{ folderId: data?.parent_id ?? undefined }}
       action={<DropdownMenu items={items} src={require('@phosphor-icons/core/regular/dots-three-vertical.svg')} />}
     >
       <div className='⁂-drive-breadcrumbs'>

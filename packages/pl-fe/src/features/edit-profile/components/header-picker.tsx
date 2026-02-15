@@ -53,7 +53,7 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
       placeholder: intl.formatMessage(messages.changeHeaderDescriptionPlaceholder),
       confirm: intl.formatMessage(messages.changeHeaderDescriptionConfirm),
       onConfirm: (description?: string) => {
-        onChangeDescription?.(description || '');
+        onChangeDescription?.(description ?? '');
       },
       text: description,
     });
@@ -95,7 +95,9 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(({
           name='header'
           type='file'
           accept={accept}
-          onChange={({ target }) => onChange(target.files)}
+          onChange={({ target }) =>{
+            onChange(target.files);
+          }}
           disabled={disabled}
           className='hidden'
         />

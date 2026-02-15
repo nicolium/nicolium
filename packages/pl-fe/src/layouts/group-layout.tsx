@@ -114,7 +114,7 @@ const GroupLayout = () => {
         {!me && (
           <SignUpPanel />
         )}
-        {group && (group.relationship?.member || !group.locked) && (
+        {group && (group.relationship?.member ?? !group.locked) && (
           <GroupMediaPanel group={group} />
         )}
         <LinkFooter />

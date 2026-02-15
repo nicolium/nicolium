@@ -34,7 +34,7 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
 
   const sentryEnabled = Boolean(sentryDsn);
   const isProduction = NODE_ENV === 'production';
-  const errorText = String(error) + (info?.componentStack || '');
+  const errorText = String(error) + (info?.componentStack ?? '');
 
   const clearCookies: React.MouseEventHandler = (e) => {
     localStorage.clear();
@@ -63,11 +63,15 @@ const SiteError: ErrorRouteComponent = ({ error, info }) => {
         ErrorBoundary: 'yes',
       },
     })
-      .then((eventId) => setSentryEventId(eventId))
+      .then((eventId) =>{
+        setSentryEventId(eventId);
+      })
       .catch(console.error);
 
     import('bowser')
-      .then(({ default: Bowser }) => setBrowser(Bowser.getParser(window.navigator.userAgent)))
+      .then(({ default: Bowser }) =>{
+        setBrowser(Bowser.getParser(window.navigator.userAgent));
+      })
       .catch(() => {});
   }, []);
 

@@ -22,7 +22,9 @@ const Groups: React.FC = () => {
     }
   };
 
-  const createGroup = () => openModal('CREATE_GROUP');
+  const createGroup = () =>{
+    openModal('CREATE_GROUP');
+  };
 
   const renderBlankslate = () => (
     <Stack space={4} alignItems='center' justifyContent='center' className='py-6'>

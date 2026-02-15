@@ -162,7 +162,7 @@ const setManualRedirectServices = async (user: Me, redirectServices: Record<stri
     fallback: service[1],
     instances: [service[1]],
     test_url: '',
-    type: mappings.find((mapping) => mapping.name === service[0])?.targets[0] || 'unknown',
+    type: mappings.find((mapping) => mapping.name === service[0])?.targets[0] ?? 'unknown',
   }));
   Purify.setRedirectServices(parsedRedirectServices);
 

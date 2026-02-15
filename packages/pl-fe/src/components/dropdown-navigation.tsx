@@ -77,12 +77,12 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
   }), [me, features]);
 
   const getOtherAccounts = useCallback(makeGetOtherAccounts(), []);
-  const { account } = useAccount(me || undefined);
+  const { account } = useAccount(me ?? undefined);
   const otherAccounts = useAppSelector((state) => getOtherAccounts(state));
   const settings = useSettings();
-  const followRequestsCount = useFollowRequestsCount().data || 0;
-  const interactionRequestsCount = useInteractionRequestsCount().data || 0;
-  const scheduledStatusCount = useInfiniteQuery(authenticatedScheduledStatusesCountQueryOptions).data || 0;
+  const followRequestsCount = useFollowRequestsCount().data ?? 0;
+  const interactionRequestsCount = useInteractionRequestsCount().data ?? 0;
+  const scheduledStatusCount = useInfiniteQuery(authenticatedScheduledStatusesCountQueryOptions).data ?? 0;
   const { data: draftCount = 0 } = useDraftStatusesCountQuery();
   // const dashboardCount = useAppSelector((state) => state.admin.openReports.count() + state.admin.awaitingApproval.count());
   const [sidebarVisible, setSidebarVisible] = useState(isSidebarOpen);
@@ -151,7 +151,9 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
 
   useEffect(() => {
     if (isSidebarOpen) containerRef.current?.querySelector('a')?.focus();
-    setTimeout(() => setSidebarVisible(isSidebarOpen), isSidebarOpen ? 0 : 150);
+    setTimeout(() =>{
+      setSidebarVisible(isSidebarOpen);
+    }, isSidebarOpen ? 0 : 150);
   }, [isSidebarOpen]);
 
   return (
@@ -376,7 +378,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 />
               )}
 
-              {(account.is_admin || account.is_moderator) && (
+              {(account.is_admin ?? account.is_moderator) && (
                 <DropdownNavigationLink
                   to='/pl-fe/admin'
                   icon={require('@phosphor-icons/core/regular/gauge.svg')}

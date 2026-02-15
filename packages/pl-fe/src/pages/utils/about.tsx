@@ -34,17 +34,25 @@ const About: React.FC<IAbout> = ({ slug }) => {
       {' '}
       <ul className='inline list-none p-0'>
         <li className="inline after:content-['_·_']">
-          <a href='#' onClick={() => setLocale(defaultLocale)}>
+          <a
+            href='#' onClick={() =>{
+              setLocale(defaultLocale);
+            }}
+          >
             {/* @ts-ignore */}
-            {languages[defaultLocale] || defaultLocale}
+            {languages[defaultLocale] ?? defaultLocale}
           </a>
         </li>
         {
           pageLocales?.map(locale => (
             <li className="inline after:content-['_·_'] last:after:content-none" key={locale}>
-              <a href='#' onClick={() => setLocale(locale)}>
+              <a
+                href='#' onClick={() =>{
+                  setLocale(locale);
+                }}
+              >
                 {/* @ts-ignore */}
-                {languages[locale] || locale}
+                {languages[locale] ?? locale}
               </a>
             </li>
           ))

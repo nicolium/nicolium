@@ -34,7 +34,7 @@ const useLocalStatusTranslation = (statusId: string, targetLanguage?: string) =>
           signal,
         });
 
-        return translator.translate(status!.content, { signal }).then((translatedText) => v.parse(translationSchema, {
+        return translator.translate(status.content, { signal }).then((translatedText) => v.parse(translationSchema, {
           id: statusId,
           content: translatedText,
           detected_source_language: sourceLanguage,

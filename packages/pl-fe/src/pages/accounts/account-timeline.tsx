@@ -36,15 +36,19 @@ const AccountTimelinePage: React.FC = () => {
 
   const isBlocked = account?.relationship?.blocked_by;
   const unavailable = isBlocked && !features.blockersVisible;
-  const isLoading = useAppSelector(state => state.timelines[`account:${path}`]?.isLoading === true);
-  const hasMore = useAppSelector(state => state.timelines[`account:${path}`]?.hasMore === true);
+  const isLoading = useAppSelector(state =>  state.timelines[`account:${path}`]?.isLoading);
+  const hasMore = useAppSelector(state =>  state.timelines[`account:${path}`]?.hasMore);
 
-  const accountUsername = account?.username || username;
+  const accountUsername = account?.username ?? username;
 
   useEffect(() => {
     dispatch(fetchAccountByUsername(username))
-      .then(() => setAccountLoading(false))
-      .catch(() => setAccountLoading(false));
+      .then(() =>{
+        setAccountLoading(false);
+      })
+      .catch(() =>{
+        setAccountLoading(false);
+      });
   }, [username]);
 
   useEffect(() => {

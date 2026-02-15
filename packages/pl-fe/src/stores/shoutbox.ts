@@ -36,18 +36,24 @@ const useShoutboxStore = create<State>()(mutative((set) => ({
   messages: [],
   isLoading: true,
   actions: {
-    setMessages: (messages) => set((state: State) => {
-      lazyStore?.dispatch(importEntities({ accounts: messages.map((msg) => msg.author) }, { override: false }) as any);
-      state.messages = messages.map(minifyMessage);
-      state.isLoading = false;
-    }),
-    pushMessage: (message) => set((state: State) => {
-      lazyStore?.dispatch(importEntities({ accounts: [message.author] }) as any);
-      state.messages.push(minifyMessage(message));
-    }),
-    setSocket: (socket) => set((state: State) => {
-      state.socket = socket;
-    }),
+    setMessages: (messages) =>{
+      set((state: State) => {
+        lazyStore?.dispatch(importEntities({ accounts: messages.map((msg) => msg.author) }, { override: false }) as any);
+        state.messages = messages.map(minifyMessage);
+        state.isLoading = false;
+      });
+    },
+    pushMessage: (message) =>{
+      set((state: State) => {
+        lazyStore?.dispatch(importEntities({ accounts: [message.author] }) as any);
+        state.messages.push(minifyMessage(message));
+      });
+    },
+    setSocket: (socket) =>{
+      set((state: State) => {
+        state.socket = socket;
+      });
+    },
   },
 }), {
   enableAutoFreeze: false,
@@ -72,8 +78,12 @@ const useShoutboxSubscription = () => {
     client.settings.verifyCredentials().then((account) => {
       if (account.__meta.pleroma?.chat_token) {
         socket = client.shoutbox.connect(account.__meta.pleroma?.chat_token, {
-          onMessage: (message) => shoutboxStore.pushMessage(message),
-          onMessages: (messages) => shoutboxStore.setMessages(messages),
+          onMessage: (message) =>{
+            shoutboxStore.pushMessage(message);
+          },
+          onMessages: (messages) =>{
+            shoutboxStore.setMessages(messages);
+          },
         });
         shoutboxStore.setSocket(socket);
       }

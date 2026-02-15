@@ -7,7 +7,7 @@ const toggleChatPane = () =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const main = useSettingsStore.getState().settings.chats.mainWindow;
     const state = main === 'minimized' ? 'open' : 'minimized';
-    return dispatch(changeSetting(['chats', 'mainWindow'], state));
+    dispatch(changeSetting(['chats', 'mainWindow'], state));
   };
 
 export {

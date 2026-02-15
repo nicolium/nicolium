@@ -29,7 +29,7 @@ const useBatchedEntities = <TEntity extends Entity>(
   const getState = useGetState();
   const dispatch = useAppDispatch();
   const { entityType, listKey, path } = parseEntitiesPath(expandedPath);
-  const schema = opts.schema || v.custom<TEntity>(() => true);
+  const schema = opts.schema ?? v.custom<TEntity>(() => true);
 
   const isEnabled = opts.enabled ?? true;
   const isFetching = useListState(path, 'fetching');

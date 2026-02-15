@@ -184,7 +184,9 @@ const BlockTypeDropdown = ({ editor, anchorElem, blockType, icon }: {
   return (
     <>
       <button
-        onClick={() => setShowDropDown(!showDropDown)}
+        onClick={() =>{
+          setShowDropDown(!showDropDown);
+        }}
         className='relative flex cursor-pointer rounded-lg border-0 bg-none p-1 align-middle hover:bg-gray-100 disabled:cursor-not-allowed disabled:hover:bg-none dark:hover:bg-primary-700'
         aria-label=''
         type='button'
@@ -203,17 +205,23 @@ const BlockTypeDropdown = ({ editor, anchorElem, blockType, icon }: {
             {composeAllowHeadings && (
               <>
                 <ToolbarButton
-                  onClick={() => formatHeading('h1')}
+                  onClick={() =>{
+                    formatHeading('h1');
+                  }}
                   active={blockType === 'h1'}
                   icon={blockTypeToIcon.h1}
                 />
                 <ToolbarButton
-                  onClick={() => formatHeading('h2')}
+                  onClick={() =>{
+                    formatHeading('h2');
+                  }}
                   active={blockType === 'h2'}
                   icon={blockTypeToIcon.h2}
                 />
                 <ToolbarButton
-                  onClick={() => formatHeading('h3')}
+                  onClick={() =>{
+                    formatHeading('h3');
+                  }}
                   active={blockType === 'h3'}
                   icon={blockTypeToIcon.h3}
                 />
@@ -459,9 +467,7 @@ const useFloatingTextFormatToolbar = (
             return parent !== null && $isRootOrShadowRoot(parent);
           });
 
-      if (element === null) {
-        element = anchorNode.getTopLevelElementOrThrow();
-      }
+      element ??= anchorNode.getTopLevelElementOrThrow();
 
       const elementKey = element.getKey();
       const elementDOM = editor.getElementByKey(elementKey);

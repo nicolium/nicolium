@@ -118,7 +118,9 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
     if (navigator.clipboard && chatMessage.content) {
       menu.push({
         text: intl.formatMessage(messages.copy),
-        action: () => handleCopyText(chatMessage),
+        action: () =>{
+          handleCopyText(chatMessage);
+        },
         icon: require('@phosphor-icons/core/regular/clipboard.svg'),
       });
     }
@@ -126,14 +128,18 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
     if (isMyMessage) {
       menu.push({
         text: intl.formatMessage(messages.delete),
-        action: () => deleteChatMessage.mutate(chatMessage.id),
+        action: () =>{
+          deleteChatMessage.mutate(chatMessage.id);
+        },
         icon: require('@phosphor-icons/core/regular/trash.svg'),
         destructive: true,
       });
     } else {
       menu.push({
         text: intl.formatMessage(messages.deleteForMe),
-        action: () => deleteChatMessage.mutate(chatMessage.id),
+        action: () =>{
+          deleteChatMessage.mutate(chatMessage.id);
+        },
         icon: require('@phosphor-icons/core/regular/trash.svg'),
         destructive: true,
       });
@@ -166,8 +172,12 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
         {menu.length > 0 && (
           <DropdownMenu
             items={menu}
-            onOpen={() => setIsMenuOpen(true)}
-            onClose={() => setIsMenuOpen(false)}
+            onOpen={() =>{
+              setIsMenuOpen(true);
+            }}
+            onClose={() =>{
+              setIsMenuOpen(false);
+            }}
           >
             <button
               title={intl.formatMessage(messages.more)}

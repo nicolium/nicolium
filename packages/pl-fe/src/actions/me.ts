@@ -19,20 +19,22 @@ const ME_FETCH_SKIP = 'ME_FETCH_SKIP' as const;
 
 const ME_PATCH_SUCCESS = 'ME_PATCH_SUCCESS' as const;
 
-const noOp = () => new Promise(f => f(undefined));
+const noOp = () => new Promise(f =>{
+  f(undefined);
+});
 
-const getMeId = (state: RootState) => state.me || getAuthUserId(state);
+const getMeId = (state: RootState) => state.me ?? getAuthUserId(state);
 
 const getMeUrl = (state: RootState) => {
   const accountId = getMeId(state);
   if (accountId) {
-    return selectAccount(state, accountId)?.url || getAuthUserUrl(state);
+    return selectAccount(state, accountId)?.url ?? getAuthUserUrl(state);
   }
 };
 
 const getMeToken = (state: RootState) => {
   // Fallback for upgrading IDs to URLs
-  const accountUrl = getMeUrl(state) || state.auth.me;
+  const accountUrl = getMeUrl(state) ?? state.auth.me;
   return state.auth.users[accountUrl!]?.access_token;
 };
 
@@ -60,18 +62,14 @@ const persistAuthAccount = (account: CredentialAccount, params: Record<string, a
   if (account && account.url) {
     const key = `authAccount:${account.url}`;
     KVStore.getItem(key).then((oldAccount: any) => {
-      const settings = oldAccount?.settings_store || {};
-      if (!account.settings_store) {
-        account.settings_store = settings;
-      }
+      const settings = oldAccount?.settings_store ?? {};
+      account.settings_store ??= settings;
       KVStore.setItem(key, account);
     })
       .catch(console.error);
   }
   if (account && account.url) {
-    if (!account.settings_store) {
-      account.settings_store = params.pleroma_settings_store || {};
-    }
+    account.settings_store ??= params.pleroma_settings_store ?? {};
     KVStore.setItem(`authAccount:${account.url}`, account).catch(console.error);
   }
 };

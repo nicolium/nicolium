@@ -209,7 +209,7 @@ const ReplyButton: React.FC<IReplyButton> = ({
   const intl = useIntl();
 
   const canReply = useCanInteract(status, 'can_reply');
-  const { groupRelationship } = useGroupRelationship(status.group_id || undefined);
+  const { groupRelationship } = useGroupRelationship(status.group_id ?? undefined);
 
   let replyTitle;
   let replyDisabled = false;
@@ -227,7 +227,7 @@ const ReplyButton: React.FC<IReplyButton> = ({
 
   const handleReplyClick: React.MouseEventHandler = (e) => {
     if (me) {
-      dispatch(replyCompose(status, rebloggedBy, canReply.approvalRequired || false));
+      dispatch(replyCompose(status, rebloggedBy, canReply.approvalRequired ?? false));
     } else {
       onOpenUnauthorizedModal('REPLY');
     }
@@ -479,7 +479,7 @@ const DislikeButton: React.FC<IActionButton> = ({
   );
 };
 
-const getLongerWrench = (emojis: Array<CustomEmoji>) => emojis.find(({ shortcode }) => shortcode === 'longestest_wrench') || emojis.find(({ shortcode }) => shortcode === 'longest_wrench');
+const getLongerWrench = (emojis: Array<CustomEmoji>) => emojis.find(({ shortcode }) => shortcode === 'longestest_wrench') ?? emojis.find(({ shortcode }) => shortcode === 'longest_wrench');
 
 const WrenchButton: React.FC<IActionButton> = ({
   status,
@@ -497,7 +497,7 @@ const WrenchButton: React.FC<IActionButton> = ({
 
   if (!me || withLabels || !features.emojiReacts || !showWrenchButton) return;
 
-  const wrenches = showWrenchButton && status.emoji_reactions.find(emoji => emoji.name === '🔧') || undefined;
+  const wrenches = showWrenchButton && (status.emoji_reactions.find(emoji => emoji.name === '🔧') ?? undefined);
 
   const handleWrenchClick: React.EventHandler<React.MouseEvent> = (e) => {
     if (wrenches?.me) {
@@ -523,7 +523,7 @@ const WrenchButton: React.FC<IActionButton> = ({
       onClick={handleWrenchClick}
       onLongPress={handleWrenchLongPress}
       active={wrenches?.me}
-      count={wrenches?.count || undefined}
+      count={wrenches?.count ?? undefined}
     />
   );
 };
@@ -570,16 +570,16 @@ const MenuButton: React.FC<IMenuButton> = ({
   const { fetchTranslation, hideTranslation } = useStatusMetaActions();
   const { targetLanguage } = useStatusMeta(status.id);
   const { openModal } = useModalsActions();
-  const { group } = useGroup((status.group as Group)?.id as string);
+  const { group } = useGroup((status.group as Group)?.id);
   const { mutate: blockGroupMember } = useBlockGroupUserMutation(status.group?.id as string, status.account.id);
   const { getOrCreateChatByAccountId } = useChats();
   const { mutate: bookmarkStatus } = useBookmarkStatus(status.id);
   const { mutate: unbookmarkStatus } = useUnbookmarkStatus(status.id);
-  const { mutate: pinStatus } = usePinStatus(status?.id!);
-  const { mutate: unpinStatus } = useUnpinStatus(status?.id!);
+  const { mutate: pinStatus } = usePinStatus(status?.id);
+  const { mutate: unpinStatus } = useUnpinStatus(status?.id);
   const { mutate: unblockAccount } = useUnblockAccountMutation(status.account_id);
 
-  const { groupRelationship } = useGroupRelationship(status.group_id || undefined);
+  const { groupRelationship } = useGroupRelationship(status.group_id ?? undefined);
   const features = useFeatures();
   const instance = useInstance();
   const { autoTranslate, deleteModal, knownLanguages } = useSettings();
@@ -594,14 +594,14 @@ const MenuButton: React.FC<IMenuButton> = ({
       allow_unauthenticated: allowUnauthenticated,
     } = instance.pleroma.metadata.translation;
 
-    const renderTranslate = (me || allowUnauthenticated) && (allowRemote || status.account.local) && ['public', 'unlisted'].includes(status.visibility) && status.content.length > 0 && status.language !== null && !knownLanguages.includes(status.language);
+    const renderTranslate = (me ?? allowUnauthenticated) && (allowRemote || status.account.local) && ['public', 'unlisted'].includes(status.visibility) && status.content.length > 0 && status.language !== null && !knownLanguages.includes(status.language);
     const supportsLanguages = (translationLanguages[status.language!]?.includes(intl.locale));
 
     return autoTranslate && features.translations && renderTranslate && supportsLanguages;
   }, [me, status, autoTranslate]);
 
   const { account } = useOwnAccount();
-  const isStaff = account ? account.is_admin || account.is_moderator : false;
+  const isStaff = account ? account.is_admin ?? account.is_moderator : false;
   const isAdmin = account ? account.is_admin : false;
 
   const menu = useMemo(() => {
@@ -712,8 +712,12 @@ const MenuButton: React.FC<IMenuButton> = ({
 
     const handleLoadConversationClick = () => {
       client.statuses.loadConversation(status.id)
-        .then(() => toast.success(messages.loadConversationSuccess))
-        .catch((error) => toast.error(messages.loadConversationError));
+        .then(() =>{
+          toast.success(messages.loadConversationSuccess);
+        })
+        .catch((error) =>{
+          toast.error(messages.loadConversationError);
+        });
     };
 
     const handleCopy: React.EventHandler<React.MouseEvent> = (e) => {
@@ -883,17 +887,23 @@ const MenuButton: React.FC<IMenuButton> = ({
         items: [
           {
             text: intl.formatMessage(messages.reblog_visibility_public),
-            action: (e) => handleReblogClick(e, 'public'),
+            action: (e) =>{
+              handleReblogClick(e, 'public');
+            },
             icon: require('@phosphor-icons/core/regular/globe.svg'),
           },
           {
             text: intl.formatMessage(messages.reblog_visibility_unlisted),
-            action: (e) => handleReblogClick(e, 'unlisted'),
+            action: (e) =>{
+              handleReblogClick(e, 'unlisted');
+            },
             icon: require('@phosphor-icons/core/regular/moon.svg'),
           },
           {
             text: intl.formatMessage(messages.reblog_visibility_private),
-            action: (e) => handleReblogClick(e, 'private'),
+            action: (e) =>{
+              handleReblogClick(e, 'private');
+            },
             icon: require('@phosphor-icons/core/regular/lock.svg'),
           },
         ],
@@ -907,14 +917,12 @@ const MenuButton: React.FC<IMenuButton> = ({
           action: handlePinClick,
           icon: status.pinned ? require('@phosphor-icons/core/regular/push-pin-slash.svg') : require('@phosphor-icons/core/regular/push-pin.svg'),
         });
-      } else {
-        if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
-          menu.push({
-            text: intl.formatMessage(status.reblogged ? messages.cancel_reblog_private : messages.reblog_private),
-            action: handleReblogClick,
-            icon: require('@phosphor-icons/core/regular/repeat.svg'),
-          });
-        }
+      } else if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
+        menu.push({
+          text: intl.formatMessage(status.reblogged ? messages.cancel_reblog_private : messages.reblog_private),
+          action: handleReblogClick,
+          icon: require('@phosphor-icons/core/regular/repeat.svg'),
+        });
       }
 
       menu.push({
@@ -1058,7 +1066,7 @@ const MenuButton: React.FC<IMenuButton> = ({
 
       if (features.pleromaAdminStatuses) {
         menu.push({
-          text: intl.formatMessage(status.sensitive === false ? messages.markStatusSensitive : messages.markStatusNotSensitive),
+          text: intl.formatMessage(!status.sensitive ? messages.markStatusSensitive : messages.markStatusNotSensitive),
           action: handleToggleStatusSensitivity,
           icon: require('@phosphor-icons/core/regular/warning.svg'),
         });
@@ -1120,7 +1128,9 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
 
   const publicStatus = useMemo(() => status ? ['public', 'unlisted', 'group'].includes(status.visibility) : false, [status.visibility]);
 
-  const onContainerClick: React.MouseEventHandler<HTMLDivElement> = useCallback((e) => e.stopPropagation(), []);
+  const onContainerClick: React.MouseEventHandler<HTMLDivElement> = useCallback((e) =>{
+    e.stopPropagation();
+  }, []);
 
   const onOpenUnauthorizedModal = useCallback((action?: UnauthorizedModalAction) => {
     openModal('UNAUTHORIZED', {

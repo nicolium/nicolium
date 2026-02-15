@@ -66,8 +66,12 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({ onAuthorize
     }
   };
 
-  const handleAuthorize = async () => handleAction('authorizing', 'authorized', onAuthorize);
-  const handleReject = async () => handleAction('rejecting', 'rejected', onReject);
+  const handleAuthorize = () =>{
+    handleAction('authorizing', 'authorized', onAuthorize);
+  };
+  const handleReject = () =>{
+    handleAction('rejecting', 'rejected', onReject);
+  };
 
   const renderStyle = (selectedState: typeof state) => {
     if (state === 'authorizing' && selectedState === 'authorizing') {

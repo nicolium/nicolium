@@ -55,7 +55,9 @@ const useFollowAccountMutation = (accountId: string) => {
         showing_reblogs: params?.reblogs ?? relationship.showing_reblogs,
       }), queryClient);
     },
-    onError: (_err, _variables, context) => restorePreviousRelationship(accountId, context, queryClient),
+    onError: (_err, _variables, context) =>{
+      restorePreviousRelationship(accountId, context, queryClient);
+    },
     onSuccess: (data) => {
       queryClient.setQueryData(['accountRelationships', accountId], data);
     },
@@ -75,7 +77,9 @@ const useUnfollowAccountMutation = (accountId: string) => {
       notifying: false,
       showing_reblogs: false,
     }, queryClient),
-    onError: (_err, _variables, context) => restorePreviousRelationship(accountId, context, queryClient),
+    onError: (_err, _variables, context) =>{
+      restorePreviousRelationship(accountId, context, queryClient);
+    },
     onSuccess: (data) => {
       queryClient.setQueryData(['accountRelationships', accountId], data);
     },
@@ -97,7 +101,9 @@ const useBlockAccountMutation = (accountId: string) => {
       notifying: false,
       requested: false,
     }, queryClient),
-    onError: (_err, _variables, context) => restorePreviousRelationship(accountId, context, queryClient),
+    onError: (_err, _variables, context) =>{
+      restorePreviousRelationship(accountId, context, queryClient);
+    },
     onSuccess: (data) => {
       queryClient.setQueryData(['accountRelationships', accountId], data);
 
@@ -129,7 +135,9 @@ const useUnblockAccountMutation = (accountId: string) => {
     onMutate: () => updateRelationship(accountId, {
       blocking: false,
     }, queryClient),
-    onError: (_err, _variables, context) => restorePreviousRelationship(accountId, context, queryClient),
+    onError: (_err, _variables, context) =>{
+      restorePreviousRelationship(accountId, context, queryClient);
+    },
     onSuccess: (data) => {
       queryClient.setQueryData(['accountRelationships', accountId], data);
     },
@@ -147,7 +155,9 @@ const useMuteAccountMutation = (accountId: string) => {
     onMutate: () => updateRelationship(accountId, {
       muting: true,
     }, queryClient),
-    onError: (_err, _variables, context) => restorePreviousRelationship(accountId, context, queryClient),
+    onError: (_err, _variables, context) =>{
+      restorePreviousRelationship(accountId, context, queryClient);
+    },
     onSuccess: (data) => {
       queryClient.setQueryData(['accountRelationships', accountId], data);
 
@@ -179,7 +189,9 @@ const useUnmuteAccountMutation = (accountId: string) => {
     onMutate: () => updateRelationship(accountId, {
       muting: false,
     }, queryClient),
-    onError: (_err, _variables, context) => restorePreviousRelationship(accountId, context, queryClient),
+    onError: (_err, _variables, context) =>{
+      restorePreviousRelationship(accountId, context, queryClient);
+    },
     onSuccess: (data) => {
       queryClient.setQueryData(['accountRelationships', accountId], data);
     },
@@ -197,7 +209,9 @@ const usePinAccountMutation = (accountId: string) => {
     onMutate: () => updateRelationship(accountId, {
       endorsed: true,
     }, queryClient),
-    onError: (_err, _variables, context) => restorePreviousRelationship(accountId, context, queryClient),
+    onError: (_err, _variables, context) =>{
+      restorePreviousRelationship(accountId, context, queryClient);
+    },
     onSuccess: (data) => {
       queryClient.setQueryData(['accountRelationships', accountId], data);
       queryClient.invalidateQueries({
@@ -218,7 +232,9 @@ const useUnpinAccountMutation = (accountId: string) => {
     onMutate: () => updateRelationship(accountId, {
       endorsed: false,
     }, queryClient),
-    onError: (_err, _variables, context) => restorePreviousRelationship(accountId, context, queryClient),
+    onError: (_err, _variables, context) =>{
+      restorePreviousRelationship(accountId, context, queryClient);
+    },
     onSuccess: (data) => {
       queryClient.setQueryData(['accountRelationships', accountId], data);
       queryClient.invalidateQueries({
@@ -238,7 +254,9 @@ const useRemoveAccountFromFollowersMutation = (accountId: string) => {
     onMutate: () => updateRelationship(accountId, {
       followed_by: false,
     }, queryClient),
-    onError: (_err, _variables, context) => restorePreviousRelationship(accountId, context, queryClient),
+    onError: (_err, _variables, context) =>{
+      restorePreviousRelationship(accountId, context, queryClient);
+    },
     onSuccess: (data) => {
       queryClient.setQueryData(['accountRelationships', accountId], data);
     },
@@ -255,7 +273,9 @@ const useUpdateAccountNoteMutation = (accountId: string) => {
     onMutate: (note) => updateRelationship(accountId, {
       note,
     }, queryClient),
-    onError: (_err, _variables, context) => restorePreviousRelationship(accountId, context, queryClient),
+    onError: (_err, _variables, context) =>{
+      restorePreviousRelationship(accountId, context, queryClient);
+    },
     onSuccess: (data) => {
       queryClient.setQueryData(['accountRelationships', accountId], data);
     },

@@ -66,7 +66,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
       const hasComposeContent = checkComposeContent(compose);
 
       if (hasComposeContent && type === 'COMPOSE') {
-        const isEditing = compose!.editedId !== null;
+        const isEditing = compose.editedId !== null;
         openModal('CONFIRM', {
           heading: isEditing
             ? <FormattedMessage id='confirmations.cancel_editing.heading' defaultMessage='Cancel post editing' />
@@ -154,7 +154,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
     }
   };
 
-  const getSiblings = () => Array(...(ref.current!.parentElement!.childNodes as any as ChildNode[]))
+  const getSiblings = () => [...(ref.current!.parentElement!.childNodes as any as ChildNode[])]
     .filter(node => (node as HTMLDivElement).id !== '_rht_toaster')
     .filter(node => node !== ref.current);
 
@@ -173,7 +173,9 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
   useEffect(() => {
     if (!!children && !prevChildren) {
       activeElement.current = document.activeElement as HTMLDivElement;
-      getSiblings().forEach(sibling => (sibling as HTMLDivElement).setAttribute('inert', 'true'));
+      getSiblings().forEach(sibling =>{
+        (sibling as HTMLDivElement).setAttribute('inert', 'true');
+      });
 
       handleModalOpen();
     } else if (!prevChildren) {
@@ -183,7 +185,9 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
     if (!children && !!prevChildren) {
       activeElement.current?.focus();
       activeElement.current = null;
-      getSiblings().forEach(sibling => (sibling as HTMLDivElement).removeAttribute('inert'));
+      getSiblings().forEach(sibling =>{
+        (sibling as HTMLDivElement).removeAttribute('inert');
+      });
 
       handleModalClose();
     }

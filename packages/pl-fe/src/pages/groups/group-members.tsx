@@ -23,9 +23,9 @@ const GroupMembers: React.FC = () => {
   const isLoading = isFetchingGroup || isFetchingOwners || isFetchingAdmins || isFetchingUsers || isFetchingPending;
 
   const members = useMemo(() => [
-    ...(owners || []),
-    ...(admins || []),
-    ...(users || []),
+    ...(owners ?? []),
+    ...(admins ?? []),
+    ...(users ?? []),
   ], [owners, admins, users]);
 
   return (
@@ -35,7 +35,7 @@ const GroupMembers: React.FC = () => {
         hasMore={hasNextPage}
         onLoadMore={fetchNextPage}
         isLoading={!group || isLoading}
-        showLoading={!group || isFetchingPending || isLoading && members.length === 0}
+        showLoading={!group || (isFetchingPending ?? isLoading) && members.length === 0}
         placeholderComponent={PlaceholderAccount}
         placeholderCount={3}
         className='⁂-status-list'

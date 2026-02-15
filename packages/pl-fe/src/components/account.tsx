@@ -197,7 +197,7 @@ const Account = ({
   useLayoutEffect(() => {
     const onResize = () => {
       const style: React.CSSProperties = {};
-      const actionWidth = actionRef.current?.clientWidth || 0;
+      const actionWidth = actionRef.current?.clientWidth ?? 0;
 
       if (overflowRef.current) {
         style.maxWidth = Math.max(0, overflowRef.current.clientWidth - (withAvatar ? avatarSize + 12 : 0) - (actionWidth ? actionWidth + 12 : 0));
@@ -230,7 +230,9 @@ const Account = ({
     to: '/@{$username}',
     params: { username: account.acct },
     title: account.acct,
-    onClick: (event: React.MouseEvent) => event.stopPropagation(),
+    onClick: (event: React.MouseEvent) =>{
+      event.stopPropagation();
+    },
   } : {};
 
   if (disabled) return (
@@ -366,7 +368,11 @@ const Account = ({
                     <span className='⁂-separator' />
 
                     {timestampUrl ? (
-                      <Link to={timestampUrl} className='hover:underline' onClick={(event) => event.stopPropagation()}>
+                      <Link
+                        to={timestampUrl} className='hover:underline' onClick={(event) =>{
+                          event.stopPropagation();
+                        }}
+                      >
                         <RelativeTimestamp timestamp={timestamp} theme='muted' size='sm' className='whitespace-nowrap' futureDate={futureTimestamp} />
                       </Link>
                     ) : (

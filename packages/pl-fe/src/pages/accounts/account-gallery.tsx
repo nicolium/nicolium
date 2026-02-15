@@ -79,7 +79,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
         className={clsx('size-full overflow-hidden', { 'rounded-br-md': isLast })}
       />
     );
-  } else if (['gifv', 'video'].indexOf(attachment.type) !== -1) {
+  } else if (['gifv', 'video'].includes(attachment.type)) {
     const conditionalAttributes: React.VideoHTMLAttributes<HTMLVideoElement> = {};
     if (isIOS()) {
       conditionalAttributes.playsInline = true;
@@ -106,7 +106,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
       </div>
     );
   } else if (attachment.type === 'audio') {
-    const remoteURL = attachment.remote_url || '';
+    const remoteURL = attachment.remote_url ?? '';
     const fileExtensionLastIndex = remoteURL.lastIndexOf('.');
     const fileExtension = remoteURL.slice(fileExtensionLastIndex + 1).toUpperCase();
     thumbnail = (
@@ -127,7 +127,7 @@ const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) =>
 
   return (
     <div className='col-span-1'>
-      <Link className='⁂-media-gallery__item-thumbnail aspect-1' to='/@{$username}/posts/$statusId' params={{ username: account?.acct || 'undefined', statusId: attachment.status_id }} onClick={handleClick} title={title}>
+      <Link className='⁂-media-gallery__item-thumbnail aspect-1' to='/@{$username}/posts/$statusId' params={{ username: account?.acct ?? 'undefined', statusId: attachment.status_id }} onClick={handleClick} title={title}>
         <Blurhash
           hash={attachment.blurhash}
           className={clsx('⁂-media-gallery__preview', {

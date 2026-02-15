@@ -65,13 +65,17 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accoun
     });
     if (notes && note !== undefined && note !== currentNote) {
       updateAccountNote(note, {
-        onError: () => toast.error(messages.noteSaveFailed),
+        onError: () =>{
+          toast.error(messages.noteSaveFailed);
+        },
       });
     }
   };
 
   const handleBlockAndReport = () => {
-    handleClick(() => dispatch(initReport(ReportableEntities.STATUS, account, { statusId })));
+    handleClick(() =>{
+      dispatch(initReport(ReportableEntities.STATUS, account, { statusId }));
+    });
   };
 
   const handleCancel = () => {
@@ -86,7 +90,9 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accoun
     setDuration(expiresIn);
   };
 
-  const toggleAutoExpire = () => setDuration(duration ? 0 : 2 * 60 * 60 * 24);
+  const toggleAutoExpire = () =>{
+    setDuration(duration ? 0 : 2 * 60 * 60 * 24);
+  };
 
   return (
     <Modal
@@ -96,7 +102,9 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accoun
         <FormattedMessage id='confirmations.block.heading' defaultMessage='Block @{name}' values={{ name: account.acct }} />
       )}
       onClose={handleCancel}
-      confirmationAction={() => handleClick()}
+      confirmationAction={() =>{
+        handleClick();
+      }}
       confirmationText={action === 'MUTE' ? (
         <FormattedMessage id='confirmations.mute.confirm' defaultMessage='Mute' />
       ) : (
@@ -166,8 +174,10 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({ accoun
           >
             <Textarea
               className='mt-1'
-              value={note === undefined ? currentNote || '' : note}
-              onChange={({ target }) => setNote(target.value)}
+              value={note ?? (currentNote ?? '')}
+              onChange={({ target }) =>{
+                setNote(target.value);
+              }}
               autoComplete='off'
               placeholder={intl.formatMessage(messages.notePlaceholder)}
             />

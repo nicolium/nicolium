@@ -18,7 +18,9 @@ const Tag: React.FC<ITag> = ({ tag, onDelete }) => (
     <IconButton
       iconClassName='h-4 w-4'
       src={require('@phosphor-icons/core/regular/x.svg')}
-      onClick={() => onDelete(tag)}
+      onClick={() =>{
+        onDelete(tag);
+      }}
     />
   </div>
 );

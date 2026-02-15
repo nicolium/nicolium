@@ -6,11 +6,8 @@ import Button from '@/components/ui/button';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 
-interface IBlankslate {
-}
-
 /** To display on the chats main page when no message is selected. */
-const BlankslateEmpty: React.FC<IBlankslate> = () => {
+const BlankslateEmpty: React.FC = () => {
   const navigate = useNavigate();
 
   const handleNewChat = () => {
