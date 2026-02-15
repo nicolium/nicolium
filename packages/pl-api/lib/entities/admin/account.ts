@@ -14,10 +14,10 @@ const adminAccountSchema = v.pipe(
   v.any(),
   v.transform((account: any) => {
     if (!account.account) {
-    /**
-     * Convert Pleroma account schema
-     * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminusers}
-     */
+      /**
+       * Convert Pleroma account schema
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminusers}
+       */
       return {
         id: account.id,
         account: null,
@@ -29,8 +29,8 @@ const adminAccountSchema = v.pipe(
         role: account.roles?.is_admin
           ? v.parse(roleSchema, { name: 'Admin' })
           : account.roles?.moderator
-            ? v.parse(roleSchema, { name: 'Moderator ' }) :
-            null,
+            ? v.parse(roleSchema, { name: 'Moderator ' })
+            : null,
         confirmed: account.is_confirmed,
         approved: account.is_approved,
         disabled: !account.is_active,
@@ -74,7 +74,4 @@ const adminAccountSchema = v.pipe(
  */
 type AdminAccount = v.InferOutput<typeof adminAccountSchema>;
 
-export {
-  adminAccountSchema,
-  type AdminAccount,
-};
+export { adminAccountSchema, type AdminAccount };

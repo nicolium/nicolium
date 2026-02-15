@@ -8,10 +8,14 @@ import { datetimeSchema } from './utils';
  */
 const scrobbleSchema = v.pipe(
   v.any(),
-  v.transform((scrobble: any) => scrobble ? {
-    external_link: scrobble.externalLink,
-    ...scrobble,
-  } : null),
+  v.transform((scrobble: any) =>
+    scrobble
+      ? {
+          external_link: scrobble.externalLink,
+          ...scrobble,
+        }
+      : null,
+  ),
   v.object({
     id: v.pipe(v.unknown(), v.transform(String)),
     account: accountSchema,

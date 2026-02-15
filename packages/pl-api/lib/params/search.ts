@@ -18,6 +18,4 @@ interface SearchParams extends Exclude<PaginationParams, 'since_id'>, WithRelati
   offset?: number;
 }
 
-export type {
-  SearchParams,
-};
+export type { SearchParams };

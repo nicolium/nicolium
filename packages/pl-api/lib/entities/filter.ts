@@ -42,11 +42,13 @@ const filterSchema = v.pipe(
       return {
         ...filter,
         title: filter.phrase,
-        keywords: [{
-          id: '1',
-          keyword: filter.phrase,
-          whole_word: filter.whole_word,
-        }],
+        keywords: [
+          {
+            id: '1',
+            keyword: filter.phrase,
+            whole_word: filter.whole_word,
+          },
+        ],
         filter_action: filter.irreversible ? 'hide' : 'warn',
       };
     }

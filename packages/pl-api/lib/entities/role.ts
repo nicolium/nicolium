@@ -18,7 +18,4 @@ const roleSchema = v.object({
  */
 type Role = v.InferOutput<typeof roleSchema>;
 
-export {
-  roleSchema,
-  type Role,
-};
+export { roleSchema, type Role };

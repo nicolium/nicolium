@@ -9,11 +9,13 @@ import { datetimeSchema } from '../utils';
 const adminCohortSchema = v.object({
   period: datetimeSchema,
   frequency: v.picklist(['day', 'month']),
-  data: v.array(v.object({
-    date: datetimeSchema,
-    rate: v.number(),
-    value: v.pipe(v.unknown(), v.transform(Number)),
-  })),
+  data: v.array(
+    v.object({
+      date: datetimeSchema,
+      rate: v.number(),
+      value: v.pipe(v.unknown(), v.transform(Number)),
+    }),
+  ),
 });
 
 /**
@@ -21,7 +23,4 @@ const adminCohortSchema = v.object({
  */
 type AdminCohort = v.InferOutput<typeof adminCohortSchema>;
 
-export {
-  adminCohortSchema,
-  type AdminCohort,
-};
+export { adminCohortSchema, type AdminCohort };

@@ -5,33 +5,38 @@ import { accountSchema } from './account';
 enum GroupRoles {
   OWNER = 'owner',
   ADMIN = 'admin',
-  USER = 'user'
+  USER = 'user',
 }
 
 /**
  * @category Entity types
  */
-type GroupRole =`${GroupRoles}`;
+type GroupRole = `${GroupRoles}`;
 
 /**
  * @category Schemas
  */
-const groupMemberSchema = v.pipe(v.any(), v.transform((groupMember: any) => {
-  if (!groupMember.account) {
-    return {
-      id: groupMember.id,
-      account: groupMember,
-      role: {
-        founder: 'owner',
-        admin: 'admin',
-      }[groupMember.role as string] || 'user',
-    };
-  }
-}), v.object({
-  id: v.string(),
-  account: accountSchema,
-  role: v.enum(GroupRoles),
-}));
+const groupMemberSchema = v.pipe(
+  v.any(),
+  v.transform((groupMember: any) => {
+    if (!groupMember.account) {
+      return {
+        id: groupMember.id,
+        account: groupMember,
+        role:
+          {
+            founder: 'owner',
+            admin: 'admin',
+          }[groupMember.role as string] || 'user',
+      };
+    }
+  }),
+  v.object({
+    id: v.string(),
+    account: accountSchema,
+    role: v.enum(GroupRoles),
+  }),
+);
 
 /**
  * @category Entity types

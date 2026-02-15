@@ -14,6 +14,4 @@ interface GetInteractionRequestsParams extends PaginationParams {
   reblogs?: boolean;
 }
 
-export type {
-  GetInteractionRequestsParams,
-};
+export type { GetInteractionRequestsParams };

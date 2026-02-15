@@ -19,7 +19,16 @@ const subscriptionInvoiceSchema = v.object({
   /** Requested payment amount (in atomic units). */
   amount: v.number(),
   /** Invoice status. */
-  status: v.picklist(['open', 'paid', 'forwarded', 'timeout', 'cancelled', 'underpaid', 'completed', 'failed']),
+  status: v.picklist([
+    'open',
+    'paid',
+    'forwarded',
+    'timeout',
+    'cancelled',
+    'underpaid',
+    'completed',
+    'failed',
+  ]),
   /** The date when invoice was created. */
   created_at: datetimeSchema,
   /** The date when invoice times out. */
@@ -31,7 +40,4 @@ const subscriptionInvoiceSchema = v.object({
  */
 type SubscriptionInvoice = v.InferOutput<typeof subscriptionInvoiceSchema>;
 
-export {
-  subscriptionInvoiceSchema,
-  type SubscriptionInvoice,
-};
+export { subscriptionInvoiceSchema, type SubscriptionInvoice };

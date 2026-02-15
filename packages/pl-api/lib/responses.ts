@@ -9,6 +9,4 @@ interface PaginatedResponse<T, IsArray extends boolean = true> {
   total?: number;
 }
 
-export type {
-  PaginatedResponse,
-};
+export type { PaginatedResponse };

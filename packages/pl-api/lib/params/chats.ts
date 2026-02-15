@@ -13,16 +13,14 @@ type GetChatMessagesParams = PaginationParams;
 /**
  * @category Request params
  */
-type CreateChatMessageParams = {
-  content?: string;
-  media_id: string;
-} | {
-  content: string;
-  media_id?: string;
-};
+type CreateChatMessageParams =
+  | {
+      content?: string;
+      media_id: string;
+    }
+  | {
+      content: string;
+      media_id?: string;
+    };
 
-export type {
-  GetChatsParams,
-  GetChatMessagesParams,
-  CreateChatMessageParams,
-};
+export type { GetChatsParams, GetChatMessagesParams, CreateChatMessageParams };

@@ -12,12 +12,17 @@ const scheduledStatusSchema = v.object({
   scheduled_at: datetimeSchema,
   params: v.object({
     text: v.fallback(v.nullable(v.string()), null),
-    poll: v.fallback(v.nullable(v.object({
-      options: v.array(v.string()),
-      expires_in: v.pipe(v.unknown(), v.transform(String)),
-      multiple: v.fallback(v.optional(v.boolean()), undefined),
-      hide_totals: v.fallback(v.optional(v.boolean()), undefined),
-    })), null),
+    poll: v.fallback(
+      v.nullable(
+        v.object({
+          options: v.array(v.string()),
+          expires_in: v.pipe(v.unknown(), v.transform(String)),
+          multiple: v.fallback(v.optional(v.boolean()), undefined),
+          hide_totals: v.fallback(v.optional(v.boolean()), undefined),
+        }),
+      ),
+      null,
+    ),
     media_ids: v.fallback(v.nullable(v.string()), null),
     sensitive: v.fallback(v.nullable(v.pipe(v.unknown(), v.transform(Boolean))), null),
     spoiler_text: v.fallback(v.nullable(v.string()), null),

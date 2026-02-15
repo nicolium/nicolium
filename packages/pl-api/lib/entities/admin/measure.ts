@@ -12,10 +12,12 @@ const adminMeasureSchema = v.object({
   total: v.pipe(v.unknown(), v.transform(Number)),
   human_value: v.fallback(v.optional(v.string()), undefined),
   previous_total: v.fallback(v.optional(v.pipe(v.unknown(), v.transform(Number))), undefined),
-  data: v.array(v.object({
-    date: dateSchema,
-    value: v.pipe(v.unknown(), v.transform(Number)),
-  })),
+  data: v.array(
+    v.object({
+      date: dateSchema,
+      value: v.pipe(v.unknown(), v.transform(Number)),
+    }),
+  ),
 });
 
 /**
@@ -23,7 +25,4 @@ const adminMeasureSchema = v.object({
  */
 type AdminMeasure = v.InferOutput<typeof adminMeasureSchema>;
 
-export {
-  adminMeasureSchema,
-  type AdminMeasure,
-};
+export { adminMeasureSchema, type AdminMeasure };

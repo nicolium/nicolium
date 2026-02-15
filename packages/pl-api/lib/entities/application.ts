@@ -6,21 +6,25 @@ import { filteredArray } from './utils';
  * @category Schemas
  * @see {@link https://docs.joinmastodon.org/entities/Application/}
  */
-const applicationSchema = v.pipe(v.any(), v.transform((application) => ({
-  redirect_uris: [application.redirect_uri],
-  ...application,
-})), v.object({
-  name: v.fallback(v.string(), ''),
-  website: v.fallback(v.optional(v.string()), undefined),
-  redirect_uris: filteredArray(v.string()),
+const applicationSchema = v.pipe(
+  v.any(),
+  v.transform((application) => ({
+    redirect_uris: [application.redirect_uri],
+    ...application,
+  })),
+  v.object({
+    name: v.fallback(v.string(), ''),
+    website: v.fallback(v.optional(v.string()), undefined),
+    redirect_uris: filteredArray(v.string()),
 
-  id: v.fallback(v.optional(v.string()), undefined),
+    id: v.fallback(v.optional(v.string()), undefined),
 
-  /** @deprecated */
-  redirect_uri: v.fallback(v.optional(v.string()), undefined),
-  /** @deprecated */
-  vapid_key: v.fallback(v.optional(v.string()), undefined),
-}));
+    /** @deprecated */
+    redirect_uri: v.fallback(v.optional(v.string()), undefined),
+    /** @deprecated */
+    vapid_key: v.fallback(v.optional(v.string()), undefined),
+  }),
+);
 
 type Application = v.InferOutput<typeof applicationSchema>;
 
@@ -35,7 +39,10 @@ const credentialApplicationSchema = v.pipe(
     ...applicationSchema.pipe[2].entries,
     client_id: v.string(),
     client_secret: v.string(),
-    client_secret_expires_at: v.fallback(v.nullable(v.pipe(v.unknown(), v.transform(Number))), null),
+    client_secret_expires_at: v.fallback(
+      v.nullable(v.pipe(v.unknown(), v.transform(Number))),
+      null,
+    ),
   }),
 );
 
@@ -44,4 +51,9 @@ const credentialApplicationSchema = v.pipe(
  */
 type CredentialApplication = v.InferOutput<typeof credentialApplicationSchema>;
 
-export { applicationSchema, credentialApplicationSchema, type Application, type CredentialApplication };
+export {
+  applicationSchema,
+  credentialApplicationSchema,
+  type Application,
+  type CredentialApplication,
+};

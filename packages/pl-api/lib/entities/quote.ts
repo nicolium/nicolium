@@ -2,7 +2,17 @@ import * as v from 'valibot';
 
 import { statusSchema } from './status';
 
-const quoteStateSchema = v.picklist(['pending', 'accepted', 'rejected', 'revoked', 'deleted', 'unauthorized', 'blocked_account', 'blocked_domain', 'muted-account']);
+const quoteStateSchema = v.picklist([
+  'pending',
+  'accepted',
+  'rejected',
+  'revoked',
+  'deleted',
+  'unauthorized',
+  'blocked_account',
+  'blocked_domain',
+  'muted-account',
+]);
 
 /**
  * @category Schemas

@@ -1,46 +1,30 @@
 {
   "name": "pl-api",
   "version": "1.0.0-rc.97",
-  "type": "module",
   "homepage": "https://codeberg.org/mkljczk/nicolium/src/branch/develop/packages/pl-api",
+  "bugs": {
+    "url": "https://codeberg.org/mkljczk/nicolium/issues"
+  },
+  "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
     "url": "git+https://codeberg.org/mkljczk/nicolium.git"
   },
-  "bugs": {
-    "url": "https://codeberg.org/mkljczk/nicolium/issues"
-  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "module": "./dist/main.es.js",
+  "types": "dist/main.d.ts",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "watch": "vite build --watch",
     "preview": "vite preview",
     "lint": "oxlint",
+    "fmt": "oxfmt",
+    "fmt:check": "oxfmt --check",
     "precommit": "lint-staged"
-  },
-  "license": "AGPL-3.0-or-later",
-  "devDependencies": {
-    "@stylistic/eslint-plugin": "^3.1.0",
-    "@types/http-link-header": "^1.0.7",
-    "@types/lodash.omit": "^4.5.9",
-    "@types/lodash.pick": "^4.4.9",
-    "@types/node": "^22.13.11",
-    "@types/semver": "^7.5.8",
-    "@typescript-eslint/eslint-plugin": "^8.24.1",
-    "@typescript-eslint/parser": "^8.24.0",
-    "eslint": "8.57.1",
-    "eslint-import-resolver-typescript": "^4.0.0",
-    "eslint-plugin-compat": "6.0.2",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-promise": "^7.2.1",
-    "oxlint": "^1.47.0",
-    "typedoc": "^0.28.7",
-    "typedoc-material-theme": "^1.4.0",
-    "typedoc-plugin-valibot": "^1.0.0",
-    "typescript": "^5.8.3",
-    "vite": "^7.0.0",
-    "vite-plugin-dts": "^4.5.4",
-    "ws": "^8.18.3"
   },
   "dependencies": {
     "blurhash": "^2.0.5",
@@ -53,12 +37,23 @@
     "semver": "^7.7.2",
     "valibot": "^1.2.0"
   },
-  "module": "./dist/main.es.js",
-  "types": "dist/main.d.ts",
-  "files": [
-    "dist"
-  ],
+  "devDependencies": {
+    "@types/http-link-header": "^1.0.7",
+    "@types/lodash.omit": "^4.5.9",
+    "@types/lodash.pick": "^4.4.9",
+    "@types/node": "^22.13.11",
+    "@types/semver": "^7.5.8",
+    "oxfmt": "^0.32.0",
+    "oxlint": "^1.47.0",
+    "typedoc": "^0.28.7",
+    "typedoc-material-theme": "^1.4.0",
+    "typedoc-plugin-valibot": "^1.0.0",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.0",
+    "vite-plugin-dts": "^4.5.4",
+    "ws": "^8.18.3"
+  },
   "lint-staged": {
-    "*.{js,cjs,mjs,ts,tsx}": "pnpm run lint"
+    "*.{js,cjs,mjs,ts}": ["oxlint", "oxfmt --check"]
   }
 }

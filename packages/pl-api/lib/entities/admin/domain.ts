@@ -16,6 +16,6 @@ const adminDomainSchema = v.object({
 /**
  * @category Admin entity types
  */
-type AdminDomain = v.InferOutput<typeof adminDomainSchema>
+type AdminDomain = v.InferOutput<typeof adminDomainSchema>;
 
 export { adminDomainSchema, type AdminDomain };

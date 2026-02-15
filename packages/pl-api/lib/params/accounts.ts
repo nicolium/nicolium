@@ -1,4 +1,11 @@
-import type { LanguageParam, OnlyEventsParam, OnlyMediaParam, PaginationParams, WithMutedParam, WithRelationshipsParam } from './common';
+import type {
+  LanguageParam,
+  OnlyEventsParam,
+  OnlyMediaParam,
+  PaginationParams,
+  WithMutedParam,
+  WithRelationshipsParam,
+} from './common';
 
 /**
  * @category Request params
@@ -8,7 +15,8 @@ type GetAccountParams = WithMutedParam;
 /**
  * @category Request params
  */
-interface GetAccountStatusesParams extends PaginationParams, WithMutedParam, OnlyEventsParam, OnlyMediaParam, LanguageParam {
+interface GetAccountStatusesParams
+  extends PaginationParams, WithMutedParam, OnlyEventsParam, OnlyMediaParam, LanguageParam {
   /** Boolean. Filter out statuses in reply to a different account. */
   exclude_replies?: boolean;
   /** Boolean. Filter out boosts from the response. */
@@ -48,7 +56,7 @@ interface FollowAccountParams {
   /**
    * Array of String (ISO 639-1 language two-letter code). Filter received statuses for these languages. If not provided, you will receive this account’s posts in all languages.
    * Requires features{@link Features['followAccountLanguages']}.
-  */
+   */
   languages?: string[];
 }
 

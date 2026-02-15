@@ -38,12 +38,15 @@ type CreateAccountParams = {
 
   /** Invite code */
   invite_code?: string;
-} & ({
-  /** EIP-4361 message */
-  message: string;
-  /** EIP-4361 signature (required if message is present) */
-  signature: string;
-} | {})
+} & (
+  | {
+      /** EIP-4361 message */
+      message: string;
+      /** EIP-4361 signature (required if message is present) */
+      signature: string;
+    }
+  | Record<string, never>
+);
 
 /**
  * @category Request params
@@ -71,12 +74,15 @@ interface UpdateCredentialsParams {
   /** Boolean. Whether public posts should be searchable to anyone. */
   indexable?: boolean;
   /** Hash. The profile fields to be set. Inside this hash, the key is an integer cast to a string (although the exact integer does not matter), and the value is another hash including name and value. By default, max 4 fields. */
-  fields_attributes?: Record<string, {
-    /** String. The name of the profile field. By default, max 255 characters. */
-    name: string;
-    /** String. The value of the profile field. By default, max 255 characters. */
-    value: string;
-  }>;
+  fields_attributes?: Record<
+    string,
+    {
+      /** String. The name of the profile field. By default, max 255 characters. */
+      name: string;
+      /** String. The value of the profile field. By default, max 255 characters. */
+      value: string;
+    }
+  >;
   source?: {
     /** String. Default post privacy for authored statuses. Can be `public`, `unlisted`, or `private`. */
     privacy?: string;
@@ -140,7 +146,7 @@ interface UpdateCredentialsParams {
   /**
    * Enable RSS feed for this account's Public posts at `/[username]/feed.rss`
    * Requires features{@link Features.accountEnableRss}.
-  */
+   */
   enable_rss?: boolean;
   /**
    * Include boosts created by the account on the web view of the account.
@@ -199,7 +205,9 @@ type UpdateInteractionPoliciesParams = Record<
     'can_favourite' | 'can_reblog' | 'can_reply',
     Record<
       'always' | 'with_approval',
-      Array<'public' | 'followers' | 'following' | 'mutuals' | 'mentioned' | 'author' | 'me' | string>
+      Array<
+        'public' | 'followers' | 'following' | 'mutuals' | 'mentioned' | 'author' | 'me' | string
+      >
     >
   >
 >;

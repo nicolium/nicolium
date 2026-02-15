@@ -15,11 +15,18 @@ const statusEditSchema = v.object({
   sensitive: v.pipe(v.unknown(), v.transform(Boolean)),
   created_at: v.fallback(datetimeSchema, new Date().toISOString()),
   account: accountSchema,
-  poll: v.fallback(v.nullable(v.object({
-    options: v.array(v.object({
-      title: v.string(),
-    })),
-  })), null),
+  poll: v.fallback(
+    v.nullable(
+      v.object({
+        options: v.array(
+          v.object({
+            title: v.string(),
+          }),
+        ),
+      }),
+    ),
+    null,
+  ),
   media_attachments: filteredArray(mediaAttachmentSchema),
   emojis: filteredArray(customEmojiSchema),
 });

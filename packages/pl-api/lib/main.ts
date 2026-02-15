@@ -1,4 +1,4 @@
-export { PlApiClient } from './client';
+export { default as PlApiClient } from './client';
 export { PlApiDirectoryClient } from './directory-client';
 export { type Response as PlApiResponse } from './request';
 export * from './entities';

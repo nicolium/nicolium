@@ -71,7 +71,7 @@ interface CreateStatusOptionalParams {
   /**
    * A list of nicknames (like `lain@soykaf.club` or `lain` on the local server) that will be used to determine who is going to be addressed by this post. Using this will disable the implicit addressing by mentioned names in the `status` body, only the people in the `to` list will be addressed. The normal rules for post visibility are not affected by this and will still apply.
    * Requires features{@link Features['createStatusExplicitAddressing']}.
-  */
+   */
   to?: string[];
   /**
    * The number of seconds the posted activity should expire in. When a posted activity expires it will be deleted from the server, and a delete request for it will be federated. This needs to be longer than an hour.
@@ -116,7 +116,8 @@ interface CreateStatusOptionalParams {
 /**
  * @category Request params
  */
-type CreateStatusParams = (CreateStatusWithContent | CreateStatusWithMedia) & CreateStatusOptionalParams;
+type CreateStatusParams = (CreateStatusWithContent | CreateStatusWithMedia) &
+  CreateStatusOptionalParams;
 
 /**
  * @category Request params
@@ -144,22 +145,26 @@ type GetStatusContextParams = LanguageParam;
 /**
  * @category Request params
  */
-type GetRebloggedByParams = Omit<PaginationParams, 'min_id'>
+type GetRebloggedByParams = Omit<PaginationParams, 'min_id'>;
 
 /**
  * @category Request params
  */
-type GetFavouritedByParams = Omit<PaginationParams, 'min_id'>
+type GetFavouritedByParams = Omit<PaginationParams, 'min_id'>;
 
 /**
  * @category Request params
  */
-type EditStatusOptionalParams = Pick<CreateStatusOptionalParams, 'content_type' | 'sensitive' | 'spoiler_text' | 'language' | 'quote_approval_policy'>;
+type EditStatusOptionalParams = Pick<
+  CreateStatusOptionalParams,
+  'content_type' | 'sensitive' | 'spoiler_text' | 'language' | 'quote_approval_policy'
+>;
 
 /**
  * @category Request params
  */
-type EditStatusParams = (CreateStatusWithContent | CreateStatusWithMedia) & EditStatusOptionalParams;
+type EditStatusParams = (CreateStatusWithContent | CreateStatusWithMedia) &
+  EditStatusOptionalParams;
 
 /**
  * @category Request params
@@ -199,4 +204,3 @@ export type {
   GetStatusReferencesParams,
   GetStatusMentionedUsersParams,
 };
-

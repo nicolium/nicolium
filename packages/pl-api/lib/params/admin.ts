@@ -130,7 +130,16 @@ type AdminGetCanonicalEmailBlocks = PaginationParams;
 /**
  * @category Request params
  */
-type AdminDimensionKey = 'languages' | 'sources' | 'servers' | 'space_usage' | 'software_versions' | 'tag_servers' | 'tag_languages' | 'instance_accounts' | 'instance_languages';
+type AdminDimensionKey =
+  | 'languages'
+  | 'sources'
+  | 'servers'
+  | 'space_usage'
+  | 'software_versions'
+  | 'tag_servers'
+  | 'tag_languages'
+  | 'instance_accounts'
+  | 'instance_languages';
 
 /**
  * @category Request params
@@ -197,7 +206,21 @@ type AdminUpdateIpBlockParams = Partial<AdminCreateIpBlockParams>;
 /**
  * @category Request params
  */
-type AdminMeasureKey = 'active_users' | 'new_users' | 'interactions' | 'opened_reports' | 'resolved_reports' | 'tag_accounts' | 'tag_uses' | 'tag_servers' | 'instance_accounts' | 'instance_media_attachments' | 'instance_reports' | 'instance_statuses' | 'instance_follows' | 'instance_followers';
+type AdminMeasureKey =
+  | 'active_users'
+  | 'new_users'
+  | 'interactions'
+  | 'opened_reports'
+  | 'resolved_reports'
+  | 'tag_accounts'
+  | 'tag_uses'
+  | 'tag_servers'
+  | 'instance_accounts'
+  | 'instance_media_attachments'
+  | 'instance_reports'
+  | 'instance_statuses'
+  | 'instance_follows'
+  | 'instance_followers';
 
 /**
  * @category Request params
@@ -333,8 +356,7 @@ interface AdminUpdateCustomEmojiParams {
 /**
  * @category Request params
  */
-interface AdminGetGroupsParams {
-}
+interface AdminGetGroupsParams {}
 
 export type {
   AdminGetAccountsParams,

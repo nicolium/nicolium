@@ -30,8 +30,4 @@ interface GetTrendingStatuses extends GetTrends {
  */
 type GetTrendingLinks = GetTrends;
 
-export type {
-  GetTrendingTags,
-  GetTrendingStatuses,
-  GetTrendingLinks,
-};
+export type { GetTrendingTags, GetTrendingStatuses, GetTrendingLinks };

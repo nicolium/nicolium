@@ -34,7 +34,16 @@ const mentionNotificationSchema = v.object({
 
 const statusNotificationSchema = v.object({
   ...baseNotificationSchema.entries,
-  type: v.picklist(['status', 'reblog', 'favourite', 'poll', 'update', 'quote', 'quoted_update', 'event_reminder']),
+  type: v.picklist([
+    'status',
+    'reblog',
+    'favourite',
+    'poll',
+    'update',
+    'quote',
+    'quoted_update',
+    'event_reminder',
+  ]),
   status: statusSchema,
 });
 
@@ -99,11 +108,12 @@ const notificationSchema: v.BaseSchema<any, Notification, v.BaseIssue<unknown>> 
     group_key: `ungrouped-${notification.id}`,
     ...pick(notification.pleroma || {}, ['is_muted', 'is_seen']),
     ...notification,
-    type: notification.type === 'pleroma:report'
-      ? 'admin.report'
-      : notification.type === 'reaction'
-        ? 'emoji_reaction'
-        : notification.type?.replace(/^pleroma:/, ''),
+    type:
+      notification.type === 'pleroma:report'
+        ? 'admin.report'
+        : notification.type === 'reaction'
+          ? 'emoji_reaction'
+          : notification.type?.replace(/^pleroma:/, ''),
   })),
   v.variant('type', [
     accountNotificationSchema,
@@ -117,23 +127,24 @@ const notificationSchema: v.BaseSchema<any, Notification, v.BaseIssue<unknown>> 
     chatMentionNotificationSchema,
     eventParticipationRequestNotificationSchema,
     biteNotificationSchema,
-  ])) as any;
+  ]),
+) as any;
 
 /**
  * @category Entity types
  */
 type Notification = v.InferOutput<
-| typeof accountNotificationSchema
-| typeof mentionNotificationSchema
-| typeof statusNotificationSchema
-| typeof reportNotificationSchema
-| typeof severedRelationshipNotificationSchema
-| typeof moderationWarningNotificationSchema
-| typeof moveNotificationSchema
-| typeof emojiReactionNotificationSchema
-| typeof chatMentionNotificationSchema
-| typeof eventParticipationRequestNotificationSchema
-| typeof biteNotificationSchema
+  | typeof accountNotificationSchema
+  | typeof mentionNotificationSchema
+  | typeof statusNotificationSchema
+  | typeof reportNotificationSchema
+  | typeof severedRelationshipNotificationSchema
+  | typeof moderationWarningNotificationSchema
+  | typeof moveNotificationSchema
+  | typeof emojiReactionNotificationSchema
+  | typeof chatMentionNotificationSchema
+  | typeof eventParticipationRequestNotificationSchema
+  | typeof biteNotificationSchema
 >;
 
 export { notificationSchema, type Notification };

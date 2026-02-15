@@ -10,7 +10,4 @@ type GetCircleStatusesParams = PaginationParams;
  */
 type GetCircleAccountsParams = PaginationParams;
 
-export type {
-  GetCircleStatusesParams,
-  GetCircleAccountsParams,
-};
+export type { GetCircleStatusesParams, GetCircleAccountsParams };

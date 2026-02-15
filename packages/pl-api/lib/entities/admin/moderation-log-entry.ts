@@ -14,6 +14,6 @@ const adminModerationLogEntrySchema = v.object({
 /**
  * @category Admin entity types
  */
-type AdminModerationLogEntry = v.InferOutput<typeof adminModerationLogEntrySchema>
+type AdminModerationLogEntry = v.InferOutput<typeof adminModerationLogEntrySchema>;
 
 export { adminModerationLogEntrySchema, type AdminModerationLogEntry };

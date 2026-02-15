@@ -14,7 +14,4 @@ const adminCanonicalEmailBlockSchema = v.object({
  */
 type AdminCanonicalEmailBlock = v.InferOutput<typeof adminCanonicalEmailBlockSchema>;
 
-export {
-  adminCanonicalEmailBlockSchema,
-  type AdminCanonicalEmailBlock,
-};
+export { adminCanonicalEmailBlockSchema, type AdminCanonicalEmailBlock };

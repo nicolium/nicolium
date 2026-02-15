@@ -212,20 +212,13 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/v1/pleroma/backups
      * @see POST /api/v1/pleroma/backups
      */
-    accountBackups: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    accountBackups: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     /**
      * The accounts API allows an acct instead of an ID.
      * @see GET /api/v1/accounts/:acct_or_id
      */
-    accountByUsername: any([
-      v.software === AKKOMA,
-      v.software === MITRA,
-      v.software === PLEROMA,
-    ]),
+    accountByUsername: any([v.software === AKKOMA, v.software === MITRA, v.software === PLEROMA]),
 
     /**
      * Ability to create accounts.
@@ -270,9 +263,7 @@ const getFeatures = (instance: Instance) => {
      * Ability to set one's location on their profile.
      * @see PATCH /api/v1/accounts/update_credentials
      */
-    accountLocation: any([
-      instance.api_versions['account_location.pleroma.pl-api'] >= 1,
-    ]),
+    accountLocation: any([instance.api_versions['account_location.pleroma.pl-api'] >= 1]),
 
     /**
      * Look up an account by the acct.
@@ -300,18 +291,13 @@ const getFeatures = (instance: Instance) => {
     /**
      * @see PATCH /api/v1/accounts/update_credentials
      */
-    accountMentionPolicy: any([
-      v.software === MITRA,
-    ]),
+    accountMentionPolicy: any([v.software === MITRA]),
 
     /**
      * Move followers to a different ActivityPub account.
      * @see POST /api/pleroma/move_account
      */
-    accountMoving: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA && gte(v.version, '2.5.0'),
-    ]),
+    accountMoving: any([v.software === AKKOMA, v.software === PLEROMA && gte(v.version, '2.5.0')]),
 
     /**
      * Ability to subscribe to notifications every time an account posts.
@@ -332,25 +318,18 @@ const getFeatures = (instance: Instance) => {
     /**
      * @see PATCH /api/v1/accounts/update_credentials
      */
-    accountWebLayout: any([
-      v.software === GOTOSOCIAL && gte(v.version, '0.19.0'),
-    ]),
+    accountWebLayout: any([v.software === GOTOSOCIAL && gte(v.version, '0.19.0')]),
 
     /**
-      * @see PATCH /api/v1/accounts/update_credentials
-      */
-    accountWebVisibility: any([
-      v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
-    ]),
+     * @see PATCH /api/v1/accounts/update_credentials
+     */
+    accountWebVisibility: any([v.software === GOTOSOCIAL && gte(v.version, '0.17.0')]),
 
     /**
      * Ability to address a status to a list of users.
      * @see POST /api/v1/statuses
      */
-    addressableLists: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    addressableLists: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     /**
      * @see GET /api/v1/admin/custom_emojis
@@ -373,14 +352,9 @@ const getFeatures = (instance: Instance) => {
      * @see PATCH /api/v1/admin/instance/rules/:id
      * @see DELETE /api/v1/admin/instance/rules/:id
      */
-    adminRules: any([
-      v.software === GOTOSOCIAL,
-      v.software === PLEROMA && gte(v.version, '2.7.0'),
-    ]),
+    adminRules: any([v.software === GOTOSOCIAL, v.software === PLEROMA && gte(v.version, '2.7.0')]),
 
-    adminRulesPriority: any([
-      v.software === PLEROMA && gte(v.version, '2.7.0'),
-    ]),
+    adminRulesPriority: any([v.software === PLEROMA && gte(v.version, '2.7.0')]),
 
     /**
      * Can display announcements set by admins.
@@ -452,7 +426,8 @@ const getFeatures = (instance: Instance) => {
       instance.api_versions['kmyblue_bookmark_category.fedibird.pl-api'] >= 1,
     ]),
 
-    bookmarkFoldersMultiple: instance.api_versions['kmyblue_bookmark_category.fedibird.pl-api'] >= 1,
+    bookmarkFoldersMultiple:
+      instance.api_versions['kmyblue_bookmark_category.fedibird.pl-api'] >= 1,
 
     /**
      * Can bookmark statuses.
@@ -541,9 +516,7 @@ const getFeatures = (instance: Instance) => {
      * Ability to delete a chat.
      * @see DELETE /api/v1/pleroma/chats/:id
      */
-    chatsDelete: any([
-      instance.api_versions['chat_delete.pleroma.pl-api'] >= 1,
-    ]),
+    chatsDelete: any([instance.api_versions['chat_delete.pleroma.pl-api'] >= 1]),
 
     circles: instance.api_versions['kmyblue_circle_history.fedibird.pl-api'] >= 1,
 
@@ -576,10 +549,7 @@ const getFeatures = (instance: Instance) => {
     /**
      * @see GET /api/v1/conversations
      */
-    conversationsByRecipients: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    conversationsByRecipients: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     /**
      * Ability to post statuses to the recipients of parent post.
@@ -590,10 +560,7 @@ const getFeatures = (instance: Instance) => {
     /**
      * @see POST /api/v1/statuses
      */
-    createStatusExpiration: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    createStatusExpiration: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     /**
      * Ability to address recipients of a status explicitly (with `to`).
@@ -607,19 +574,13 @@ const getFeatures = (instance: Instance) => {
     /**
      * @see POST /api/v1/statuses
      */
-    createStatusReplyToConversation: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    createStatusReplyToConversation: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     /**
      * Ability to address a status to a list of users.
      * @see POST /api/v1/statuses
      */
-    createStatusListScope: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    createStatusListScope: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     /**
      * @see POST /api/v1/statuses
@@ -646,11 +607,7 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v1/statuses
      * @see POST /api/v1/statuses/preview
      */
-    createStatusPreview: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-      v.software === MITRA,
-    ]),
+    createStatusPreview: any([v.software === AKKOMA, v.software === PLEROMA, v.software === MITRA]),
 
     /**
      * Ability to add non-standard reactions to a status.
@@ -666,11 +623,7 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v1/accounts/delete
      * @see POST /api/pleroma/delete_account
      */
-    deleteAccount: any([
-      v.software === AKKOMA,
-      v.software === GOTOSOCIAL,
-      v.software === PLEROMA,
-    ]),
+    deleteAccount: any([v.software === AKKOMA, v.software === GOTOSOCIAL, v.software === PLEROMA]),
 
     /**
      * @see POST /api/v1/settings/delete_account
@@ -782,9 +735,9 @@ const getFeatures = (instance: Instance) => {
     events: instance.api_versions['events.pleroma.pl-api'] >= 1,
 
     /**
-    * Export blocks to CSV file
-    * @see GET /api/v1/exports/blocks.csv
-    */
+     * Export blocks to CSV file
+     * @see GET /api/v1/exports/blocks.csv
+     */
     exportBlocks: v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
 
     /**
@@ -808,15 +761,15 @@ const getFeatures = (instance: Instance) => {
     ]),
 
     /**
-      * Export lists to CSV file
-      * @see GET /api/v1/exports/lists.csv
-      */
+     * Export lists to CSV file
+     * @see GET /api/v1/exports/lists.csv
+     */
     exportLists: v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
 
     /**
-      * Export mutes to CSV file
-      * @see GET /api/v1/exports/mutes.csv
-      */
+     * Export mutes to CSV file
+     * @see GET /api/v1/exports/mutes.csv
+     */
     exportMutes: v.software === GOTOSOCIAL && gte(v.version, '0.17.0'),
 
     /** Whether the accounts who favourited or emoji-reacted to a status can be viewed through the API. */
@@ -897,10 +850,7 @@ const getFeatures = (instance: Instance) => {
      * Allows setting the focal point of a media attachment.
      * @see {@link https://docs.joinmastodon.org/methods/media/}
      */
-    focalPoint: any([
-      v.software === GOTOSOCIAL,
-      v.software === MASTODON,
-    ]),
+    focalPoint: any([v.software === GOTOSOCIAL, v.software === MASTODON]),
 
     /**
      * TODO
@@ -1002,10 +952,7 @@ const getFeatures = (instance: Instance) => {
      * @see POST /api/v1/admin/groups/:group_id/unsuspend
      * @see DELETE /api/v1/admin/groups/:group_id
      */
-    groups: any([
-      v.software === PIXELFED,
-      instance.api_versions['groups.pleroma.pl-api'] >= 1,
-    ]),
+    groups: any([v.software === PIXELFED, instance.api_versions['groups.pleroma.pl-api'] >= 1]),
 
     groupsSlugs: instance.api_versions['groups.pleroma.pl-api'] >= 1,
 
@@ -1034,9 +981,7 @@ const getFeatures = (instance: Instance) => {
      * Move followers from remote alias.
      * @see POST /api/v1/settings/import_followers
      */
-    importFollowers: any([
-      v.software === MITRA && gte(v.version, '2.18.0'),
-    ]),
+    importFollowers: any([v.software === MITRA && gte(v.version, '2.18.0')]),
 
     /**
      * Import a .csv file with a list of followed users.
@@ -1081,7 +1026,7 @@ const getFeatures = (instance: Instance) => {
      * Mastodon server information API v2.
      * @see GET /api/v2/instance
      * @see {@link https://docs.joinmastodon.org/methods/instance/#v2}
-    */
+     */
     instanceV2: any([
       v.software === FIREFISH,
       v.software === GOTOSOCIAL,
@@ -1171,10 +1116,9 @@ const getFeatures = (instance: Instance) => {
      * Ability to post statuses that don't federate.
      * @see POST /api/v1/statuses
      */
-    localOnlyStatuses: federation && any([
-      v.software === GOTOSOCIAL,
-      v.software === MASTODON && v.build === HOMETOWN,
-    ]),
+    localOnlyStatuses:
+      federation &&
+      any([v.software === GOTOSOCIAL, v.software === MASTODON && v.build === HOMETOWN]),
 
     /**
      * Can sign in using username instead of e-mail address.
@@ -1192,10 +1136,7 @@ const getFeatures = (instance: Instance) => {
      * @see GET /api/pleroma/aliases
      * @see PATCH /api/v1/accounts/update_credentials
      */
-    manageAccountAliases: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    manageAccountAliases: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     /**
      * @see GET /api/pleroma/accounts/mfa
@@ -1212,18 +1153,12 @@ const getFeatures = (instance: Instance) => {
     /**
      * @see GET /api/pleroma/accounts/mfa/backup_codes
      */
-    manageMfaBackupCodes: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    manageMfaBackupCodes: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     /**
      * @see POST /api/v1/user/2fa/enable
      */
-    manageMfaRequiresPassword: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    manageMfaRequiresPassword: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     /**
      * Can perform moderation actions with account and reports.
@@ -1288,10 +1223,7 @@ const getFeatures = (instance: Instance) => {
      * Ability to hide notifications from people you don't follow.
      * @see PUT /api/pleroma/notification_settings
      */
-    muteStrangers: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    muteStrangers: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     /**
      * Ability to mute users.
@@ -1347,10 +1279,7 @@ const getFeatures = (instance: Instance) => {
     /**
      * @see DELETE /api/v1/notifications/destroy_multiple
      */
-    notificationsDismissMultiple: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    notificationsDismissMultiple: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     /**
      * @see GET /api/v1/notifications
@@ -1360,10 +1289,7 @@ const getFeatures = (instance: Instance) => {
     /**
      * @see GET /api/v1/notifications
      */
-    notificationsExcludeVisibilities: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    notificationsExcludeVisibilities: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     /**
      * @see GET /api/v1/notifications/unread_count
@@ -1409,10 +1335,7 @@ const getFeatures = (instance: Instance) => {
       instance.api_versions['outgoing_follow_requests.pleroma.pl-api'] >= 1,
     ]),
 
-    pleromaAdminAccounts: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    pleromaAdminAccounts: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     /**
      * Ability to manage announcements by admins.
@@ -1423,25 +1346,13 @@ const getFeatures = (instance: Instance) => {
      * @see DELETE /api/v1/pleroma/admin/announcements/:id
      * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminannouncements}
      */
-    pleromaAdminAnnouncements: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    pleromaAdminAnnouncements: any([v.software === AKKOMA, v.software === PLEROMA]),
 
-    pleromaAdminModerationLog: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    pleromaAdminModerationLog: any([v.software === AKKOMA, v.software === PLEROMA]),
 
-    pleromaAdminRelays: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    pleromaAdminRelays: any([v.software === AKKOMA, v.software === PLEROMA]),
 
-    pleromaAdminStatuses: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    pleromaAdminStatuses: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     pleromaAdminStatusesRedact: instance.api_versions['admin_statuses_redact.pleroma.pl-api'] >= 1,
 
@@ -1449,10 +1360,7 @@ const getFeatures = (instance: Instance) => {
      * Displays a form to follow a user when logged out.
      * @see POST /main/ostatus
      */
-    pleromaRemoteFollow: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    pleromaRemoteFollow: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     /**
      * Can add polls to statuses.
@@ -1531,10 +1439,7 @@ const getFeatures = (instance: Instance) => {
      * Returns favorites timeline of any user
      * @see GET /api/v1/pleroma/accounts/:id/favourites
      */
-    publicFavourites: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    publicFavourites: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     /**
      * Can display a timeline of all known public statuses.
@@ -1611,10 +1516,7 @@ const getFeatures = (instance: Instance) => {
      * Can request a password reset email through the API.
      * @see POST /auth/password
      */
-    resetPassword: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-    ]),
+    resetPassword: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     /**
      * Ability to post statuses in Markdown, BBCode, and HTML.
@@ -1772,9 +1674,7 @@ const getFeatures = (instance: Instance) => {
      * Remove an account from follow suggestions
      * @see DELETE /api/v1/suggestions/:account_id
      */
-    suggestionsDismiss: any([
-      v.software === MASTODON,
-    ]),
+    suggestionsDismiss: any([v.software === MASTODON]),
 
     /**
      * Supports V2 suggested accounts.
@@ -1844,11 +1744,7 @@ const getFeatures = (instance: Instance) => {
      * Whether the backend allows adding users you don't follow to lists.
      * @see POST /api/v1/lists/:id/accounts
      */
-    unrestrictedLists: any([
-      v.software === AKKOMA,
-      v.software === PLEROMA,
-      v.software === SNAC,
-    ]),
+    unrestrictedLists: any([v.software === AKKOMA, v.software === PLEROMA, v.software === SNAC]),
 
     /**
      * Can display a timeline of most recently wrenched statuses.
@@ -1879,9 +1775,12 @@ const parseVersion = (version: string): Backend => {
   const match = regex.exec(version.replace('/', ' '));
 
   const semverString = match && (match[3] || match[1]);
-  const semver = match ? semverParse(semverString) || semverCoerce(semverString, {
-    loose: true,
-  }) : null;
+  const semver = match
+    ? semverParse(semverString) ||
+      semverCoerce(semverString, {
+        loose: true,
+      })
+    : null;
   const compat = match ? semverParse(match[1]) || semverCoerce(match[1]) : null;
   if (match && semver && compat) {
     return {
@@ -1890,16 +1789,15 @@ const parseVersion = (version: string): Backend => {
       software: match[2] || MASTODON,
       version: semver.version.split('-')[0],
     };
-  } else {
-    // If we can't parse the version, this is a new and exotic backend.
-    // Fall back to minimal featureset.
-    return {
-      build: null,
-      compatVersion: '0.0.0',
-      software: null,
-      version: '0.0.0',
-    };
   }
+  // If we can't parse the version, this is a new and exotic backend.
+  // Fall back to minimal featureset.
+  return {
+    build: null,
+    compatVersion: '0.0.0',
+    software: null,
+    version: '0.0.0',
+  };
 };
 
 export {

@@ -1,9 +1,16 @@
-import type { LanguageParam, OnlyEventsParam, OnlyMediaParam, PaginationParams, WithMutedParam } from './common';
+import type {
+  LanguageParam,
+  OnlyEventsParam,
+  OnlyMediaParam,
+  PaginationParams,
+  WithMutedParam,
+} from './common';
 
 /**
  * @category Request params
  */
-interface PublicTimelineParams extends PaginationParams, WithMutedParam, OnlyEventsParam, OnlyMediaParam, LanguageParam {
+interface PublicTimelineParams
+  extends PaginationParams, WithMutedParam, OnlyEventsParam, OnlyMediaParam, LanguageParam {
   /** Boolean. Show only local statuses? Defaults to false. */
   local?: boolean;
   /** Boolean. Show only remote statuses? Defaults to false. */
@@ -19,7 +26,8 @@ interface PublicTimelineParams extends PaginationParams, WithMutedParam, OnlyEve
 /**
  * @category Request params
  */
-interface HashtagTimelineParams extends PaginationParams, WithMutedParam, OnlyEventsParam, OnlyMediaParam, LanguageParam {
+interface HashtagTimelineParams
+  extends PaginationParams, WithMutedParam, OnlyEventsParam, OnlyMediaParam, LanguageParam {
   /** Array of String. Return statuses that contain any of these additional tags. */
   any?: string[];
   /** Array of String. Return statuses that contain all of these additional tags. */
@@ -85,12 +93,20 @@ type GroupTimelineParams = PaginationParams & WithMutedParam & OnlyMediaParam & 
 /**
  * @category Request params
  */
-type BubbleTimelineParams = PaginationParams & WithMutedParam & OnlyEventsParam & OnlyMediaParam & LanguageParam;
+type BubbleTimelineParams = PaginationParams &
+  WithMutedParam &
+  OnlyEventsParam &
+  OnlyMediaParam &
+  LanguageParam;
 
 /**
  * @category Request params
  */
-type WrenchedTimelineParams = PaginationParams & WithMutedParam & OnlyEventsParam & OnlyMediaParam & LanguageParam;
+type WrenchedTimelineParams = PaginationParams &
+  WithMutedParam &
+  OnlyEventsParam &
+  OnlyMediaParam &
+  LanguageParam;
 
 export type {
   PublicTimelineParams,

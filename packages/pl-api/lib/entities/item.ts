@@ -11,20 +11,33 @@ const baseItemSchema = v.object({
   uuid: v.string(),
   url: v.string(),
   api_url: v.string(),
-  category: v.picklist(['book', 'movie', 'tv', 'music', 'game', 'podcast', 'performance', 'collection']),
+  category: v.picklist([
+    'book',
+    'movie',
+    'tv',
+    'music',
+    'game',
+    'podcast',
+    'performance',
+    'collection',
+  ]),
   parent_uuid: v.nullable(v.string()),
   display_title: v.string(),
   external_resources: v.nullable(filteredArray(externalResourceSchema)),
   title: v.string(),
   description: v.string(),
-  localized_title: filteredArray(v.object({
-    lang: v.string(),
-    text: v.string(),
-  })),
-  localized_description: filteredArray(v.object({
-    lang: v.string(),
-    text: v.string(),
-  })),
+  localized_title: filteredArray(
+    v.object({
+      lang: v.string(),
+      text: v.string(),
+    }),
+  ),
+  localized_description: filteredArray(
+    v.object({
+      lang: v.string(),
+      text: v.string(),
+    }),
+  ),
   conver_image_url: v.nullable(v.string()),
   rating: v.nullable(v.number()),
   rating_count: v.nullable(v.number()),
@@ -214,17 +227,17 @@ const itemSchema: v.BaseSchema<any, Item, v.BaseIssue<unknown>> = v.pipe(
  * @category Entity types
  */
 type Item = v.InferOutput<
-| typeof editionSchema
-| typeof tvShowSchema
-| typeof tvSeasonSchema
-| typeof movieSchema
-| typeof albumSchema
-| typeof podcastSchema
-| typeof gameSchema
-| typeof performanceSchema
-| typeof podcastEpisodeSchema
-| typeof performanceProductionSchema
-| typeof tvEpisodeSchema
+  | typeof editionSchema
+  | typeof tvShowSchema
+  | typeof tvSeasonSchema
+  | typeof movieSchema
+  | typeof albumSchema
+  | typeof podcastSchema
+  | typeof gameSchema
+  | typeof performanceSchema
+  | typeof podcastEpisodeSchema
+  | typeof performanceProductionSchema
+  | typeof tvEpisodeSchema
 >;
 
 export {

@@ -4,9 +4,11 @@ import { filteredArray } from './utils';
 
 const translationPollSchema = v.object({
   id: v.string(),
-  options: v.array(v.object({
-    title: v.string(),
-  })),
+  options: v.array(
+    v.object({
+      title: v.string(),
+    }),
+  ),
 });
 
 const translationMediaAttachment = v.object({
@@ -21,14 +23,15 @@ const translationMediaAttachment = v.object({
 const translationSchema = v.pipe(
   v.any(),
   v.transform((translation: any) => {
-  /**
-   * handle Akkoma
-   * @see {@link https://akkoma.dev/AkkomaGang/akkoma/src/branch/develop/lib/pleroma/web/mastodon_api/controllers/status_controller.ex#L504}
-   */
-    if (translation?.text) return {
-      content: translation.text,
-      detected_source_language: translation.detected_language,
-    };
+    /**
+     * handle Akkoma
+     * @see {@link https://akkoma.dev/AkkomaGang/akkoma/src/branch/develop/lib/pleroma/web/mastodon_api/controllers/status_controller.ex#L504}
+     */
+    if (translation?.text)
+      return {
+        content: translation.text,
+        detected_source_language: translation.detected_language,
+      };
 
     return translation;
   }),

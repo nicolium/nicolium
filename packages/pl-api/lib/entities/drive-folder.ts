@@ -19,18 +19,22 @@ const baseDriveFolderSchema = v.object({
 
 /**
  * @category Schemas
-*/
-const driveFolderSchema: v.BaseSchema<any, DriveFolder, v.BaseIssue<unknown>> = v.pipe(v.any(), v.transform((folder) => ({
-  ...folder,
-  parent_id: folder.parentId,
-  path: folder.path?.map((entry: any) => ({
-    ...entry,
-    parent_id: entry.parentId,
+ */
+const driveFolderSchema: v.BaseSchema<any, DriveFolder, v.BaseIssue<unknown>> = v.pipe(
+  v.any(),
+  v.transform((folder) => ({
+    ...folder,
+    parent_id: folder.parentId,
+    path: folder.path?.map((entry: any) => ({
+      ...entry,
+      parent_id: entry.parentId,
+    })),
   })),
-})), v.object({
-  ...baseDriveFolderSchema.entries,
-  folders: filteredArray(v.lazy(() => driveFolderSchema)),
-})) as any;
+  v.object({
+    ...baseDriveFolderSchema.entries,
+    folders: filteredArray(v.lazy(() => driveFolderSchema)),
+  }),
+) as any;
 
 /**
  * @category Entity types
@@ -41,6 +45,6 @@ type DriveFolder = {
   parent_id: string | null;
   files: Array<DriveFile>;
   folders: Array<DriveFolder>;
-}
+};
 
 export { driveFolderSchema, type DriveFolder };

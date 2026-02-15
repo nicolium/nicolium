@@ -21,7 +21,4 @@ const subscriptionOptionSchema = v.variant('type', [
  */
 type SubscriptionOption = v.InferOutput<typeof subscriptionOptionSchema>;
 
-export {
-  subscriptionOptionSchema,
-  type SubscriptionOption,
-};
+export { subscriptionOptionSchema, type SubscriptionOption };

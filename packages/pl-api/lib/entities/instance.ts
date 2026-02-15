@@ -8,14 +8,19 @@ const SNAC_REGEX = /^([0-9.]*) \(not true; really snac\/([\w.]*)\)/;
 const WORDPRESS_REGEX = /^WordPress\/[\w+.-]*, EMA\/([\w+.-]*)/;
 
 const getApiVersions = (instance: any): Record<string, number> => ({
-  ...Object.fromEntries(instance.pleroma?.metadata?.features?.map((feature: string) => {
-    let string = `${feature}.pleroma.pl-api`;
-    if (string.startsWith('pleroma:') || string.startsWith('pleroma_')) string = string.slice(8);
-    if (string.startsWith('akkoma:')) string = string.slice(7);
-    if (string.startsWith('pl:')) string = string.slice(3);
-    return [string, 1];
-  }) || []),
-  ...Object.fromEntries(instance.fedibird_capabilities?.map((feature: string) => [`${feature}.fedibird.pl-api`, 1]) || []),
+  ...Object.fromEntries(
+    instance.pleroma?.metadata?.features?.map((feature: string) => {
+      let string = `${feature}.pleroma.pl-api`;
+      if (string.startsWith('pleroma:') || string.startsWith('pleroma_')) string = string.slice(8);
+      if (string.startsWith('akkoma:')) string = string.slice(7);
+      if (string.startsWith('pl:')) string = string.slice(3);
+      return [string, 1];
+    }) || [],
+  ),
+  ...Object.fromEntries(
+    instance.fedibird_capabilities?.map((feature: string) => [`${feature}.fedibird.pl-api`, 1]) ||
+      [],
+  ),
   ...instance.api_versions,
 });
 
@@ -49,7 +54,7 @@ const instanceV1ToV2 = (data: any) => {
 
   return {
     ...instance,
-    account_domain: instance.account_domain	|| uri,
+    account_domain: instance.account_domain || uri,
     configuration: {
       ...configuration,
       media_attachments: {
@@ -59,7 +64,8 @@ const instanceV1ToV2 = (data: any) => {
       },
       polls: {
         ...configuration.polls,
-        max_characters_per_option: poll_limits.max_option_chars ?? configuration.polls.max_characters_per_option,
+        max_characters_per_option:
+          poll_limits.max_option_chars ?? configuration.polls.max_characters_per_option,
         max_expiration: poll_limits.max_expiration ?? configuration.polls.max_expiration,
         max_options: poll_limits.max_options ?? configuration.polls.max_options,
         min_expiration: poll_limits.min_expiration ?? configuration.polls.min_expiration,
@@ -67,7 +73,8 @@ const instanceV1ToV2 = (data: any) => {
       statuses: {
         ...configuration.statuses,
         max_characters: max_toot_chars ?? configuration.statuses.max_characters,
-        max_media_attachments: max_media_attachments ?? configuration.statuses.max_media_attachments,
+        max_media_attachments:
+          max_media_attachments ?? configuration.statuses.max_media_attachments,
       },
       urls: {
         streaming: urls.streaming_api,
@@ -97,7 +104,11 @@ const instanceV1ToV2 = (data: any) => {
   };
 };
 
-const software: Array<[string, string]> = [['takahe', 'Takahe'], ['neodb', 'NeoDB'], ['egregoros', 'Egregoros']];
+const software: Array<[string, string]> = [
+  ['takahe', 'Takahe'],
+  ['neodb', 'NeoDB'],
+  ['egregoros', 'Egregoros'],
+];
 
 const fixVersion = (version: string) => {
   // Handle Mastodon release candidates
@@ -128,11 +139,16 @@ const fixVersion = (version: string) => {
 };
 
 const configurationSchema = coerceObject({
-  accounts: v.fallback(v.nullable(v.object({
-    allow_custom_css: v.boolean(),
-    max_featured_tags: v.pipe(v.number(), v.integer()),
-    max_profile_fields: v.pipe(v.number(), v.integer()),
-  })), null),
+  accounts: v.fallback(
+    v.nullable(
+      v.object({
+        allow_custom_css: v.boolean(),
+        max_featured_tags: v.pipe(v.number(), v.integer()),
+        max_profile_fields: v.pipe(v.number(), v.integer()),
+      }),
+    ),
+    null,
+  ),
   chats: coerceObject({
     max_characters: v.fallback(v.number(), 5000),
   }),
@@ -162,7 +178,6 @@ const configurationSchema = coerceObject({
     characters_reserved_per_url: v.fallback(v.optional(v.number()), undefined),
     max_characters: v.fallback(v.number(), 500),
     max_media_attachments: v.fallback(v.number(), 4),
-
   }),
   translation: coerceObject({
     enabled: v.fallback(v.boolean(), false),
@@ -211,36 +226,40 @@ const pleromaSchema = coerceObject({
     federation: coerceObject({
       enabled: v.fallback(v.boolean(), true), // Assume true unless explicitly false
       mrf_policies: v.fallback(v.optional(v.array(v.string())), undefined),
-      mrf_simple: coerceObject(v.entriesFromList(
-        [
-          'accept',
-          'avatar_removal',
-          'banner_removal',
-          'federated_timeline_removal',
-          'followers_only',
-          'media_nsfw',
-          'media_removal',
-          'reject',
-          'reject_deletes',
-          'report_removal',
-        ],
-        v.fallback(v.array(v.string()), []),
-      )),
-      mrf_simple_info: coerceObject(v.entriesFromList(
-        [
-          'accept',
-          'avatar_removal',
-          'banner_removal',
-          'federated_timeline_removal',
-          'followers_only',
-          'media_nsfw',
-          'media_removal',
-          'reject',
-          'reject_deletes',
-          'report_removal',
-        ],
-        v.fallback(v.array(v.tuple([v.string(), v.string()])), []),
-      )),
+      mrf_simple: coerceObject(
+        v.entriesFromList(
+          [
+            'accept',
+            'avatar_removal',
+            'banner_removal',
+            'federated_timeline_removal',
+            'followers_only',
+            'media_nsfw',
+            'media_removal',
+            'reject',
+            'reject_deletes',
+            'report_removal',
+          ],
+          v.fallback(v.array(v.string()), []),
+        ),
+      ),
+      mrf_simple_info: coerceObject(
+        v.entriesFromList(
+          [
+            'accept',
+            'avatar_removal',
+            'banner_removal',
+            'federated_timeline_removal',
+            'followers_only',
+            'media_nsfw',
+            'media_removal',
+            'reject',
+            'reject_deletes',
+            'report_removal',
+          ],
+          v.fallback(v.array(v.tuple([v.string(), v.string()])), []),
+        ),
+      ),
     }),
     fields_limits: coerceObject({
       max_fields: v.fallback(v.pipe(v.number(), v.integer(), v.minValue(0)), 4),
@@ -253,13 +272,15 @@ const pleromaSchema = coerceObject({
     }),
     migration_cooldown_period: v.fallback(v.optional(v.number()), undefined),
     multitenancy: coerceObject({
-      domains: v.optional(v.array(
-        v.object({
-          domain: v.pipe(v.unknown(), v.transform(String)),
-          id: v.string(),
-          public: v.fallback(v.boolean(), false),
-        }),
-      )),
+      domains: v.optional(
+        v.array(
+          v.object({
+            domain: v.pipe(v.unknown(), v.transform(String)),
+            id: v.string(),
+            public: v.fallback(v.boolean(), false),
+          }),
+        ),
+      ),
       enabled: v.fallback(v.boolean(), false),
     }),
     post_formats: v.fallback(v.array(v.string()), ['text/plain']),
@@ -376,7 +397,11 @@ const instanceSchema = v.pipe(
     if (!data.pleroma) {
       data.pleroma = {
         metadata: {
-          post_formats: data.configuration?.statuses?.supported_mime_types || (apiVersions['kmyblue_markdown.fedibird.pl-api'] ? ['text/plain', 'text/markdown'] : []),
+          post_formats:
+            data.configuration?.statuses?.supported_mime_types ||
+            (apiVersions['kmyblue_markdown.fedibird.pl-api']
+              ? ['text/plain', 'text/markdown']
+              : []),
         },
       };
     }
@@ -390,10 +415,18 @@ const instanceSchema = v.pipe(
       data.configuration.timelines_access = {
         ...data.configuration.timelines_access,
         live_feeds: {
-          bubble: timelines.bubble ? 'authenticated' : features.includes('bubble_timeline') ? 'public' : 'disabled',
+          bubble: timelines.bubble
+            ? 'authenticated'
+            : features.includes('bubble_timeline')
+              ? 'public'
+              : 'disabled',
           local: timelines.local ? 'authenticated' : 'public',
           remote: timelines.federated ? 'authenticated' : 'public',
-          wrenched: timelines.wrenched ? 'authenticated' : features.includes('pleroma:wrenched_timeline') ? 'public' : 'disabled',
+          wrenched: timelines.wrenched
+            ? 'authenticated'
+            : features.includes('pleroma:wrenched_timeline')
+              ? 'public'
+              : 'disabled',
         },
       };
     }
@@ -410,10 +443,12 @@ const instanceSchema = v.pipe(
     description: v.fallback(v.string(), ''),
     domain: v.fallback(v.string(), ''),
     feature_quote: v.fallback(v.boolean(), false),
-    icons: filteredArray(v.object({
-      size: v.pipe(v.string(), v.regex(/^[0-9]+x[0-9]+$/)),
-      src: v.string(),
-    })),
+    icons: filteredArray(
+      v.object({
+        size: v.pipe(v.string(), v.regex(/^[0-9]+x[0-9]+$/)),
+        src: v.string(),
+      }),
+    ),
     languages: v.fallback(v.array(v.string()), []),
     pleroma: pleromaSchema,
     registrations,
@@ -423,17 +458,24 @@ const instanceSchema = v.pipe(
     title: v.fallback(v.string(), ''),
     usage: usageSchema,
     version: v.pipe(v.fallback(v.string(), '0.0.0'), v.transform(fixVersion)),
-    blockchains: v.fallback(v.optional(filteredArray(v.object({
-      chain_id: v.fallback(v.nullable(v.string()), null),
-      chain_metadata: coerceObject({
-        is_forwarding_required: v.fallback(v.boolean(), false),
-        description: v.fallback(v.string(), ''),
-        payment_amount_min: v.number(),
-      }),
-      features: coerceObject({
-        subscriptions: v.fallback(v.boolean(), false),
-      }),
-    }))), undefined),
+    blockchains: v.fallback(
+      v.optional(
+        filteredArray(
+          v.object({
+            chain_id: v.fallback(v.nullable(v.string()), null),
+            chain_metadata: coerceObject({
+              is_forwarding_required: v.fallback(v.boolean(), false),
+              description: v.fallback(v.string(), ''),
+              payment_amount_min: v.number(),
+            }),
+            features: coerceObject({
+              subscriptions: v.fallback(v.boolean(), false),
+            }),
+          }),
+        ),
+      ),
+      undefined,
+    ),
   }),
 );
 

@@ -15,17 +15,17 @@ const adminReportSchema = v.pipe(
   v.any(),
   v.transform((report: any) => {
     if (report.actor) {
-    /**
-     * Convert Pleroma report schema
-     * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminreports}
-     */
+      /**
+       * Convert Pleroma report schema
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminreports}
+       */
       return {
         action_taken: report.state !== 'open',
         comment: report.content,
         updated_at: report.created_at,
         account: report.actor,
         target_account: report.account,
-        ...(pick(report, ['id', 'assigned_account', 'created_at', 'rules', 'statuses'])),
+        ...pick(report, ['id', 'assigned_account', 'created_at', 'rules', 'statuses']),
       };
     }
     return report;

@@ -15,10 +15,15 @@ const locationSchema = v.object({
   origin_provider: v.fallback(v.string(), ''),
   type: v.fallback(v.string(), ''),
   timezone: v.fallback(v.string(), ''),
-  geom: v.fallback(v.nullable(v.object({
-    coordinates: v.fallback(v.nullable(v.tuple([v.number(), v.number()])), null),
-    srid: v.fallback(v.string(), ''),
-  })), null),
+  geom: v.fallback(
+    v.nullable(
+      v.object({
+        coordinates: v.fallback(v.nullable(v.tuple([v.number(), v.number()])), null),
+        srid: v.fallback(v.string(), ''),
+      }),
+    ),
+    null,
+  ),
 });
 
 /**

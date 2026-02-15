@@ -21,9 +21,13 @@ const announcementSchema = v.object({
   reactions: filteredArray(announcementReactionSchema),
   statuses: v.pipe(
     v.any(),
-    v.transform((statuses: any) => Array.isArray(statuses)
-      ? Object.fromEntries(statuses.map((status: any) => [status.url, status.account?.acct]) || [])
-      : statuses),
+    v.transform((statuses: any) =>
+      Array.isArray(statuses)
+        ? Object.fromEntries(
+            statuses.map((status: any) => [status.url, status.account?.acct]) || [],
+          )
+        : statuses,
+    ),
     v.record(v.string(), v.string()),
   ),
   mentions: filteredArray(mentionSchema),

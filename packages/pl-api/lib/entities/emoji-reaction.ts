@@ -25,15 +25,19 @@ const customEmojiReactionSchema = v.object({
  *
  * @category Schemas
  * @see {@link https://docs.pleroma.social/backend/development/API/differences_in_mastoapi_responses/#statuses}
-*/
+ */
 const emojiReactionSchema = v.pipe(
   v.any(),
-  v.transform((reaction: any) => reaction ? {
-    url: reaction.url,
-    static_url: reaction.url,
-    account_ids: reaction.accounts?.map((account: any) => account?.id),
-    ...reaction,
-  } : null),
+  v.transform((reaction: any) =>
+    reaction
+      ? {
+          url: reaction.url,
+          static_url: reaction.url,
+          account_ids: reaction.accounts?.map((account: any) => account?.id),
+          ...reaction,
+        }
+      : null,
+  ),
   v.union([baseEmojiReactionSchema, customEmojiReactionSchema]),
 );
 

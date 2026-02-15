@@ -13,12 +13,12 @@ interface CreateListParams {
   /**
    * Boolean. Whether to receive notifications for new posts in the list.
    * Requires features{@link Features['listsNotifications']}
-  */
+   */
   notify?: boolean;
   /**
    * Boolean. Whether the list should appear in the navigation bar.
    * Requires features{@link Features['listsFavourites']}
-  */
+   */
   favourite?: boolean;
 }
 
@@ -32,8 +32,4 @@ type UpdateListParams = Partial<CreateListParams>;
  */
 type GetListAccountsParams = PaginationParams;
 
-export type {
-  CreateListParams,
-  UpdateListParams,
-  GetListAccountsParams,
-};
+export type { CreateListParams, UpdateListParams, GetListAccountsParams };

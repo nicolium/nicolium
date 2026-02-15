@@ -46,7 +46,16 @@ const mentionNotificationGroupSchema = v.object({
 
 const statusNotificationGroupSchema = v.object({
   ...baseNotificationGroupSchema.entries,
-  type: v.picklist(['status', 'reblog', 'favourite', 'poll', 'update', 'event_reminder', 'quote', 'quoted_update']),
+  type: v.picklist([
+    'status',
+    'reblog',
+    'favourite',
+    'poll',
+    'update',
+    'event_reminder',
+    'quote',
+    'quoted_update',
+  ]),
   status_id: v.string(),
 });
 
@@ -105,11 +114,12 @@ const notificationGroupSchema: v.BaseSchema<any, NotificationGroup, v.BaseIssue<
     group_key: `ungrouped-${notification.id}`,
     ...pick(notification.pleroma || {}, ['is_muted', 'is_seen']),
     ...notification,
-    type: notification.type === 'pleroma:report'
-      ? 'admin.report'
-      : notification.type === 'reaction'
-        ? 'emoji_reaction'
-        : notification.type?.replace(/^pleroma:/, ''),
+    type:
+      notification.type === 'pleroma:report'
+        ? 'admin.report'
+        : notification.type === 'reaction'
+          ? 'emoji_reaction'
+          : notification.type?.replace(/^pleroma:/, ''),
   })),
   v.variant('type', [
     accountNotificationGroupSchema,
@@ -122,7 +132,8 @@ const notificationGroupSchema: v.BaseSchema<any, NotificationGroup, v.BaseIssue<
     emojiReactionNotificationGroupSchema,
     chatMentionNotificationGroupSchema,
     eventParticipationRequestNotificationGroupSchema,
-  ])) as any;
+  ]),
+) as any;
 
 /**
  * @category Entity types
@@ -138,7 +149,7 @@ type NotificationGroup = v.InferOutput<
   | typeof emojiReactionNotificationGroupSchema
   | typeof chatMentionNotificationGroupSchema
   | typeof eventParticipationRequestNotificationGroupSchema
-  >;
+>;
 
 /**
  * @category Schemas
@@ -156,4 +167,9 @@ const groupedNotificationsResultsSchema = v.object({
  */
 type GroupedNotificationsResults = v.InferOutput<typeof groupedNotificationsResultsSchema>;
 
-export { notificationGroupSchema, groupedNotificationsResultsSchema, type NotificationGroup, type GroupedNotificationsResults };
+export {
+  notificationGroupSchema,
+  groupedNotificationsResultsSchema,
+  type NotificationGroup,
+  type GroupedNotificationsResults,
+};

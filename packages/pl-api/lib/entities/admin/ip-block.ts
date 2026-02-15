@@ -20,7 +20,4 @@ const adminIpBlockSchema = v.object({
  */
 type AdminIpBlock = v.InferOutput<typeof adminIpBlockSchema>;
 
-export {
-  adminIpBlockSchema,
-  type AdminIpBlock,
-};
+export { adminIpBlockSchema, type AdminIpBlock };

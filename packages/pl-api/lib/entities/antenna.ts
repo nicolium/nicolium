@@ -30,6 +30,6 @@ const antennaSchema: v.BaseSchema<any, Antenna, v.BaseIssue<unknown>> = v.object
  */
 type Antenna = v.InferOutput<typeof baseAntennaSchema> & {
   list: List | null;
-}
+};
 
 export { antennaSchema, type Antenna };

@@ -16,7 +16,4 @@ const adminIpSchema = v.object({
  */
 type AdminIp = v.InferOutput<typeof adminIpSchema>;
 
-export {
-  adminIpSchema,
-  type AdminIp,
-};
+export { adminIpSchema, type AdminIp };

@@ -10,9 +10,15 @@ import { roleSchema } from './role';
 import { coerceObject, datetimeSchema, filteredArray } from './utils';
 
 const filterBadges = (tags?: string[]) =>
-  tags?.filter(tag => tag.startsWith('badge:')).map(tag => v.parse(roleSchema, { id: tag, name: tag.replace(/^badge:/, '') }));
+  tags
+    ?.filter((tag) => tag.startsWith('badge:'))
+    .map((tag) => v.parse(roleSchema, { id: tag, name: tag.replace(/^badge:/, '') }));
 
-const MKLJCZK_ACCOUNTS = ['https://pl.fediverse.pl/users/mkljczk', 'https://gts.mkljczk.pl/users/mkljczk', 'https://gts.mkljczk.pl/@mkljczk'];
+const MKLJCZK_ACCOUNTS = [
+  'https://pl.fediverse.pl/users/mkljczk',
+  'https://gts.mkljczk.pl/users/mkljczk',
+  'https://gts.mkljczk.pl/@mkljczk',
+];
 
 const paymentOptionSchema = v.variant('type', [
   v.object({
@@ -47,7 +53,9 @@ const preprocessAccount = v.transform((account: any) => {
   const fqn = account.fqn || guessFqn(account);
   const domain = fqn.split('@')[1] || '';
 
-  const isCat = (account.pleroma?.is_cat ?? account.is_cat) || MKLJCZK_ACCOUNTS.includes(account.uri ?? account.url);
+  const isCat =
+    (account.pleroma?.is_cat ?? account.is_cat) ||
+    MKLJCZK_ACCOUNTS.includes(account.uri ?? account.url);
   const speakAsCat = account.pleroma?.speak_as_cat ?? account.speak_as_cat ?? isCat;
 
   return {
@@ -58,14 +66,19 @@ const preprocessAccount = v.transform((account: any) => {
     header: account.header || account.header_static,
     avatar_default: isDefaultAvatar(account.avatar || account.avatar_static || ''),
     header_default: isDefaultHeader(account.header || account.header_static || ''),
-    local: typeof account.pleroma?.is_local === 'boolean' ? account.pleroma.is_local : account.acct.split('@')[1] === undefined,
+    local:
+      typeof account.pleroma?.is_local === 'boolean'
+        ? account.pleroma.is_local
+        : account.acct.split('@')[1] === undefined,
     discoverable: account.discoverable || account.pleroma?.source?.discoverable,
     verified: account.verified || account.pleroma?.tags?.includes('verified'),
-    ...(account.role?.permissions ? {
-      is_admin: (account.role?.permissions & 0x1) === 0x1,
-    } : {}),
+    ...(account.role?.permissions
+      ? {
+          is_admin: (account.role?.permissions & 0x1) === 0x1,
+        }
+      : {}),
     ap_id: account.pleroma?.ap_id ?? account.actor_id,
-    ...(pick(account.pleroma || {}, [
+    ...pick(account.pleroma || {}, [
       'background_image',
       'relationship',
       'is_moderator',
@@ -90,21 +103,32 @@ const preprocessAccount = v.transform((account: any) => {
       'notification_settings',
 
       'location',
-    ])),
-    ...(pick(account.akkoma || {}, [
-      'permit_followback',
-    ])),
+    ]),
+    ...pick(account.akkoma || {}, ['permit_followback']),
     is_cat: isCat,
     speak_as_cat: speakAsCat,
     ...(pick(account.other_settings || {}), ['birthday', 'location']),
     __meta: pick(account, ['pleroma', 'source']),
     ...account,
-    display_name: account.display_name?.replace(/^[\s\u180E\u200B-\u200D\u2060\uFEFF]+|[\s\u180E\u200B-\u200D\u2060\uFEFF]+$/g, '').trim() || username,
+    display_name:
+      account.display_name
+        ?.replace(
+          /^[\s\u180E\u200B-\u200D\u2060\uFEFF]+|[\s\u180E\u200B-\u200D\u2060\uFEFF]+$/g,
+          '',
+        )
+        .trim() || username,
     roles: account.roles?.length ? account.roles : filterBadges(account.pleroma?.tags),
     source: account.source
-      ? { ...(pick(account.pleroma?.source || {}, [
-        'show_role', 'no_rich_text', 'discoverable', 'actor_type', 'show_birthday',
-      ])), ...account.source }
+      ? {
+          ...pick(account.pleroma?.source || {}, [
+            'show_role',
+            'no_rich_text',
+            'discoverable',
+            'actor_type',
+            'show_birthday',
+          ]),
+          ...account.source,
+        }
       : undefined,
   };
 });
@@ -121,7 +145,13 @@ const baseAccountSchema = v.object({
   acct: v.fallback(v.string(), ''),
   url: v.pipe(v.string(), v.url()),
   display_name: v.fallback(v.string(), ''),
-  note: v.fallback(v.pipe(v.string(), v.transform(note => note === '<p></p>' ? '' : note)), ''),
+  note: v.fallback(
+    v.pipe(
+      v.string(),
+      v.transform((note) => (note === '<p></p>' ? '' : note)),
+    ),
+    '',
+  ),
   avatar: v.fallback(v.string(), ''),
   avatar_static: v.fallback(v.pipe(v.string(), v.url()), ''),
   header: v.fallback(v.pipe(v.string(), v.url()), ''),
@@ -182,14 +212,16 @@ const baseAccountSchema = v.object({
   /** The reported subscribers of this user */
   subscribers_count: v.fallback(v.number(), 0),
   /** Identity proofs */
-  identity_proofs: filteredArray(v.object({
-    /** The key of a given field's key-value pair */
-    name: v.fallback(v.string(), ''),
-    /** The value associated with the name key */
-    value: v.fallback(v.string(), ''),
-    /** Timestamp of when the server verified the field value */
-    verified_at: v.fallback(datetimeSchema, new Date().toISOString()),
-  })),
+  identity_proofs: filteredArray(
+    v.object({
+      /** The key of a given field's key-value pair */
+      name: v.fallback(v.string(), ''),
+      /** The value associated with the name key */
+      value: v.fallback(v.string(), ''),
+      /** Timestamp of when the server verified the field value */
+      verified_at: v.fallback(datetimeSchema, new Date().toISOString()),
+    }),
+  ),
   /** Payment options */
   payment_options: filteredArray(paymentOptionSchema),
 
@@ -209,7 +241,10 @@ const baseAccountSchema = v.object({
 
 const accountWithMovedAccountSchema = v.object({
   ...baseAccountSchema.entries,
-  moved: v.fallback(v.nullable(v.lazy((): typeof baseAccountSchema => accountWithMovedAccountSchema as any)), null),
+  moved: v.fallback(
+    v.nullable(v.lazy((): typeof baseAccountSchema => accountWithMovedAccountSchema as any)),
+    null,
+  ),
 });
 
 /** @see {@link https://docs.joinmastodon.org/entities/Account/} */
@@ -229,44 +264,67 @@ type Account = v.InferOutput<typeof accountWithMovedAccountSchema> & WithMoved;
  */
 const accountSchema: v.BaseSchema<any, Account, v.BaseIssue<unknown>> = untypedAccountSchema as any;
 
-const untypedCredentialAccountSchema = v.pipe(v.any(), preprocessAccount, v.object({
-  ...accountWithMovedAccountSchema.entries,
-  source: v.fallback(v.nullable(coerceObject({
-    attribution_domains: v.fallback(v.optional(v.nullable(v.array(v.string()))), null),
-    note: v.fallback(v.optional(v.string()), ''),
-    fields: v.fallback(v.optional(filteredArray(fieldSchema)), []),
-    privacy: v.fallback(v.optional(v.picklist(['public', 'unlisted', 'private', 'direct'])), 'public'),
-    sensitive: v.fallback(v.optional(v.boolean()), false),
-    language: v.fallback(v.optional(v.nullable(v.string())), null),
-    follow_requests_count: v.fallback(v.optional(v.pipe(v.number(), v.integer(), v.minValue(0))), 0),
-    hide_collections: v.fallback(v.optional(v.boolean()), undefined),
-    discoverable: v.fallback(v.optional(v.boolean()), undefined),
-    indexable: v.fallback(v.nullable(v.boolean()), null),
-    quote_policy: v.fallback(v.nullable(v.picklist(['public', 'followers', 'nobody'])), null),
+const untypedCredentialAccountSchema = v.pipe(
+  v.any(),
+  preprocessAccount,
+  v.object({
+    ...accountWithMovedAccountSchema.entries,
+    source: v.fallback(
+      v.nullable(
+        coerceObject({
+          attribution_domains: v.fallback(v.optional(v.nullable(v.array(v.string()))), null),
+          note: v.fallback(v.optional(v.string()), ''),
+          fields: v.fallback(v.optional(filteredArray(fieldSchema)), []),
+          privacy: v.fallback(
+            v.optional(v.picklist(['public', 'unlisted', 'private', 'direct'])),
+            'public',
+          ),
+          sensitive: v.fallback(v.optional(v.boolean()), false),
+          language: v.fallback(v.optional(v.nullable(v.string())), null),
+          follow_requests_count: v.fallback(
+            v.optional(v.pipe(v.number(), v.integer(), v.minValue(0))),
+            0,
+          ),
+          hide_collections: v.fallback(v.optional(v.boolean()), undefined),
+          discoverable: v.fallback(v.optional(v.boolean()), undefined),
+          indexable: v.fallback(v.nullable(v.boolean()), null),
+          quote_policy: v.fallback(v.nullable(v.picklist(['public', 'followers', 'nobody'])), null),
 
-    show_role: v.fallback(v.optional(v.nullable(v.boolean())), undefined),
-    no_rich_text: v.fallback(v.optional(v.nullable(v.boolean())), undefined),
-    actor_type: v.fallback(v.optional(v.string()), undefined),
-    show_birthday: v.fallback(v.optional(v.boolean()), undefined),
+          show_role: v.fallback(v.optional(v.nullable(v.boolean())), undefined),
+          no_rich_text: v.fallback(v.optional(v.nullable(v.boolean())), undefined),
+          actor_type: v.fallback(v.optional(v.string()), undefined),
+          show_birthday: v.fallback(v.optional(v.boolean()), undefined),
 
-    also_known_as_uris: v.fallback(v.optional(v.array(v.string())), undefined),
-    status_content_type: v.fallback(v.optional(v.string()), undefined),
-    web_include_boosts: v.fallback(v.optional(v.boolean()), undefined),
-    web_layout: v.fallback(v.optional(v.picklist(['microblog', 'gallery'])), undefined),
-    web_visibility: v.fallback(v.optional(v.picklist(['public', 'unlisted', 'none'])), undefined),
-  })), null),
-  role: v.fallback(v.nullable(roleSchema), null),
+          also_known_as_uris: v.fallback(v.optional(v.array(v.string())), undefined),
+          status_content_type: v.fallback(v.optional(v.string()), undefined),
+          web_include_boosts: v.fallback(v.optional(v.boolean()), undefined),
+          web_layout: v.fallback(v.optional(v.picklist(['microblog', 'gallery'])), undefined),
+          web_visibility: v.fallback(
+            v.optional(v.picklist(['public', 'unlisted', 'none'])),
+            undefined,
+          ),
+        }),
+      ),
+      null,
+    ),
+    role: v.fallback(v.nullable(roleSchema), null),
 
-  settings_store: v.fallback(v.optional(v.record(v.string(), v.any())), undefined),
-  chat_token: v.fallback(v.optional(v.string()), undefined),
-  allow_following_move: v.fallback(v.optional(v.boolean()), undefined),
-  unread_conversation_count: v.fallback(v.optional(v.number()), undefined),
-  unread_notifications_count: v.fallback(v.optional(v.number()), undefined),
-  notification_settings: v.fallback(v.optional(v.object({
-    block_from_strangers: v.fallback(v.boolean(), false),
-    hide_notification_contents: v.fallback(v.boolean(), false),
-  })), undefined),
-}));
+    settings_store: v.fallback(v.optional(v.record(v.string(), v.any())), undefined),
+    chat_token: v.fallback(v.optional(v.string()), undefined),
+    allow_following_move: v.fallback(v.optional(v.boolean()), undefined),
+    unread_conversation_count: v.fallback(v.optional(v.number()), undefined),
+    unread_notifications_count: v.fallback(v.optional(v.number()), undefined),
+    notification_settings: v.fallback(
+      v.optional(
+        v.object({
+          block_from_strangers: v.fallback(v.boolean(), false),
+          hide_notification_contents: v.fallback(v.boolean(), false),
+        }),
+      ),
+      undefined,
+    ),
+  }),
+);
 
 /**
  * @category Entity types
@@ -276,12 +334,20 @@ type CredentialAccount = v.InferOutput<typeof untypedCredentialAccountSchema> & 
 /**
  * @category Schemas
  */
-const credentialAccountSchema: v.BaseSchema<any, CredentialAccount, v.BaseIssue<unknown>> = untypedCredentialAccountSchema as any;
+const credentialAccountSchema: v.BaseSchema<
+  any,
+  CredentialAccount,
+  v.BaseIssue<unknown>
+> = untypedCredentialAccountSchema as any;
 
-const untypedBlockedAccountSchema = v.pipe(v.any(), preprocessAccount, v.object({
-  ...accountWithMovedAccountSchema.entries,
-  block_expires_at: v.fallback(v.nullable(datetimeSchema), null),
-}));
+const untypedBlockedAccountSchema = v.pipe(
+  v.any(),
+  preprocessAccount,
+  v.object({
+    ...accountWithMovedAccountSchema.entries,
+    block_expires_at: v.fallback(v.nullable(datetimeSchema), null),
+  }),
+);
 
 /**
  * @category Entity types
@@ -291,12 +357,20 @@ type BlockedAccount = v.InferOutput<typeof untypedBlockedAccountSchema> & WithMo
 /**
  * @category Schemas
  */
-const blockedAccountSchema: v.BaseSchema<any, BlockedAccount, v.BaseIssue<unknown>> = untypedBlockedAccountSchema as any;
+const blockedAccountSchema: v.BaseSchema<
+  any,
+  BlockedAccount,
+  v.BaseIssue<unknown>
+> = untypedBlockedAccountSchema as any;
 
-const untypedMutedAccountSchema = v.pipe(v.any(), preprocessAccount, v.object({
-  ...accountWithMovedAccountSchema.entries,
-  mute_expires_at: v.fallback(v.nullable(datetimeSchema), null),
-}));
+const untypedMutedAccountSchema = v.pipe(
+  v.any(),
+  preprocessAccount,
+  v.object({
+    ...accountWithMovedAccountSchema.entries,
+    mute_expires_at: v.fallback(v.nullable(datetimeSchema), null),
+  }),
+);
 
 /**
  * @category Entity types
@@ -306,7 +380,11 @@ type MutedAccount = v.InferOutput<typeof untypedMutedAccountSchema> & WithMoved;
 /**
  * @category Schemas
  */
-const mutedAccountSchema: v.BaseSchema<any, MutedAccount, v.BaseIssue<unknown>> = untypedMutedAccountSchema as any;
+const mutedAccountSchema: v.BaseSchema<
+  any,
+  MutedAccount,
+  v.BaseIssue<unknown>
+> = untypedMutedAccountSchema as any;
 
 export {
   accountSchema,

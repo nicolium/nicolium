@@ -30,7 +30,4 @@ interface UpdateMediaParams {
   focus?: string;
 }
 
-export type {
-  UploadMediaParams,
-  UpdateMediaParams,
-};
+export type { UploadMediaParams, UpdateMediaParams };

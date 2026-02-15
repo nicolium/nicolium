@@ -60,9 +60,4 @@ interface MfaChallengeParams {
   code: string;
 }
 
-export type {
-  OauthAuthorizeParams,
-  GetTokenParams,
-  RevokeTokenParams,
-  MfaChallengeParams,
-};
+export type { OauthAuthorizeParams, GetTokenParams, RevokeTokenParams, MfaChallengeParams };

@@ -7,7 +7,15 @@ interface CreateStoryPollParams {
   can_react: boolean;
 }
 
-type StoryReportType = 'spam' | 'sensitive' | 'abusive' | 'underage' | 'copyright' | 'impersonation' | 'scam' | 'terrorism';
+type StoryReportType =
+  | 'spam'
+  | 'sensitive'
+  | 'abusive'
+  | 'underage'
+  | 'copyright'
+  | 'impersonation'
+  | 'scam'
+  | 'terrorism';
 
 interface CropStoryPhotoParams {
   width: number;

@@ -25,7 +25,6 @@ interface Params {
  * @category Clients
  */
 class PlApiDirectoryClient {
-
   /** Unused. */
   accessToken: string | undefined = undefined;
   /** Unused. */
@@ -68,10 +67,6 @@ class PlApiDirectoryClient {
 
     return v.parse(filteredArray(directoryServerSchema), response.json);
   }
-
 }
 
-export {
-  PlApiDirectoryClient,
-  PlApiDirectoryClient as default,
-};
+export { PlApiDirectoryClient, PlApiDirectoryClient as default };

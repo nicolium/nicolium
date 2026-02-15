@@ -46,19 +46,35 @@ const baseStatusSchema = v.object({
   id: v.string(),
   uri: v.fallback(v.pipe(v.string(), v.url()), ''),
   created_at: v.fallback(datetimeSchema, new Date().toISOString()),
-  account: v.pipe(v.unknown(), v.transform((account) => {
-    if ((window as any).__PL_API_FALLBACK_ACCOUNT && JSON.stringify(account) === '{}') return (window as any).__PL_API_FALLBACK_ACCOUNT;
-    return account;
-  }), accountSchema),
-  content: v.fallback(v.pipe(v.string(), v.transform((note => note === '<p></p>' ? '' : note))), ''),
+  account: v.pipe(
+    v.unknown(),
+    v.transform((account) => {
+      if ((window as any).__PL_API_FALLBACK_ACCOUNT && JSON.stringify(account) === '{}')
+        return (window as any).__PL_API_FALLBACK_ACCOUNT;
+      return account;
+    }),
+    accountSchema,
+  ),
+  content: v.fallback(
+    v.pipe(
+      v.string(),
+      v.transform((note) => (note === '<p></p>' ? '' : note)),
+    ),
+    '',
+  ),
   visibility: v.fallback(v.string(), 'public'),
   sensitive: v.pipe(v.unknown(), v.transform(Boolean)),
   spoiler_text: v.fallback(v.string(), ''),
   media_attachments: filteredArray(mediaAttachmentSchema),
-  application: v.fallback(v.nullable(v.object({
-    name: v.string(),
-    website: v.fallback(v.nullable(v.pipe(v.string(), v.url())), null),
-  })), null),
+  application: v.fallback(
+    v.nullable(
+      v.object({
+        name: v.string(),
+        website: v.fallback(v.nullable(v.pipe(v.string(), v.url())), null),
+      }),
+    ),
+    null,
+  ),
   mentions: filteredArray(mentionSchema),
   tags: filteredArray(tagSchema),
   emojis: filteredArray(customEmojiSchema),
@@ -121,13 +137,16 @@ const baseStatusSchema = v.object({
 const preprocess = (status: any) => {
   if (!status) return null;
 
-  let quote: {
-    state: string;
-    quoted_status: any;
-  } | {
-    state: string;
-    quoted_status_id: string;
-  } | null = null;
+  let quote:
+    | {
+        state: string;
+        quoted_status: any;
+      }
+    | {
+        state: string;
+        quoted_status_id: string;
+      }
+    | null = null;
 
   const quotedStatus = status.quote ?? status.pleroma?.quote;
   let quotedStatusId = quotedStatus?.id ?? status.quote_id ?? status.pleroma?.quote_id;
@@ -149,9 +168,9 @@ const preprocess = (status: any) => {
   }
 
   status = {
-    // @ts-ignore
+    // @ts-expect-error only overrides if present in pleroma object
     emoji_reactions: status.reactions,
-    ...(pick(status.pleroma || {}, [
+    ...pick(status.pleroma || {}, [
       'local',
       'conversation_id',
       'direct_conversation_id',
@@ -171,11 +190,8 @@ const preprocess = (status: any) => {
       'translation',
       'rss_feed',
       'location',
-    ])),
-    ...(pick(status.friendica || {}, [
-      'dislikes_count',
-      'disliked',
-    ])),
+    ]),
+    ...pick(status.friendica || {}, ['dislikes_count', 'disliked']),
     ...status,
     quote,
     quote_id: quotedStatusId,
@@ -195,29 +211,39 @@ const preprocess = (status: any) => {
 /**
  * @category Schemas
  */
-const statusSchema: v.BaseSchema<any, Status, v.BaseIssue<unknown>> = v.pipe(v.any(), v.transform(preprocess), v.object({
-  ...baseStatusSchema.entries,
-  reblog: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
+const statusSchema: v.BaseSchema<any, Status, v.BaseIssue<unknown>> = v.pipe(
+  v.any(),
+  v.transform(preprocess),
+  v.object({
+    ...baseStatusSchema.entries,
+    reblog: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
 
-  quote: v.fallback(v.nullable(v.lazy(() => v.union([quoteSchema, shallowQuoteSchema]))), null),
-})) as any;
+    quote: v.fallback(v.nullable(v.lazy(() => v.union([quoteSchema, shallowQuoteSchema]))), null),
+  }),
+) as any;
 
 /**
  * @category Schemas
  */
-const statusWithoutAccountSchema = v.pipe(v.any(), v.transform(preprocess), v.object({
-  ...(v.omit(baseStatusSchema, ['account']).entries),
-  account: v.fallback(v.nullable(accountSchema), null),
-  reblog: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
+const statusWithoutAccountSchema = v.pipe(
+  v.any(),
+  v.transform(preprocess),
+  v.object({
+    ...v.omit(baseStatusSchema, ['account']).entries,
+    account: v.fallback(v.nullable(accountSchema), null),
+    reblog: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
 
-  quote: v.fallback(v.nullable(v.lazy(() => v.union([quoteSchema, shallowQuoteSchema]))), null),
-}));
+    quote: v.fallback(v.nullable(v.lazy(() => v.union([quoteSchema, shallowQuoteSchema]))), null),
+  }),
+);
 
-const partialStatusSchema = v.partial(v.object({
-  ...baseStatusSchema.entries,
-  reblog: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
-  quote: v.fallback(v.nullable(v.lazy(() => v.union([quoteSchema, shallowQuoteSchema]))), null),
-}));
+const partialStatusSchema = v.partial(
+  v.object({
+    ...baseStatusSchema.entries,
+    reblog: v.fallback(v.nullable(v.lazy(() => statusSchema)), null),
+    quote: v.fallback(v.nullable(v.lazy(() => v.union([quoteSchema, shallowQuoteSchema]))), null),
+  }),
+);
 
 /**
  * @category Entity types
@@ -226,7 +252,7 @@ type StatusWithoutAccount = Omit<v.InferOutput<typeof baseStatusSchema>, 'accoun
   account: Account | null;
   reblog: Status | null;
   quote: Quote | ShallowQuote | null;
-}
+};
 
 /**
  * @category Entity types
@@ -234,6 +260,12 @@ type StatusWithoutAccount = Omit<v.InferOutput<typeof baseStatusSchema>, 'accoun
 type Status = v.InferOutput<typeof baseStatusSchema> & {
   reblog: Status | null;
   quote: Quote | ShallowQuote | null;
-}
+};
 
-export { statusSchema, statusWithoutAccountSchema, partialStatusSchema, type Status, type StatusWithoutAccount };
+export {
+  statusSchema,
+  statusWithoutAccountSchema,
+  partialStatusSchema,
+  type Status,
+  type StatusWithoutAccount,
+};

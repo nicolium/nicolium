@@ -1,4 +1,5 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+cd packages/pl-api && pnpm precommit && cd -
 cd packages/pl-fe && pnpm precommit && cd -

@@ -3,15 +3,19 @@ import * as v from 'valibot';
 /**
  * @category Schemas
  */
-const bookmarkFolderSchema = v.pipe(v.any(), v.transform((data) => ({
-  name: data.title,
-  ...data,
-})), v.object({
-  id: v.pipe(v.unknown(), v.transform(String)),
-  name: v.fallback(v.string(), ''),
-  emoji: v.fallback(v.nullable(v.string()), null),
-  emoji_url: v.fallback(v.nullable(v.string()), null),
-}));
+const bookmarkFolderSchema = v.pipe(
+  v.any(),
+  v.transform((data) => ({
+    name: data.title,
+    ...data,
+  })),
+  v.object({
+    id: v.pipe(v.unknown(), v.transform(String)),
+    name: v.fallback(v.string(), ''),
+    emoji: v.fallback(v.nullable(v.string()), null),
+    emoji_url: v.fallback(v.nullable(v.string()), null),
+  }),
+);
 
 /**
  * @category Entity types

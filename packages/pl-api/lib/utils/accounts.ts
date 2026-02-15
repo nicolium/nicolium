@@ -10,7 +10,11 @@ const DEFAULT_HEADERS: Array<string | RegExp> = [
 ];
 
 /** Check if the avatar is a default avatar */
-const isDefaultHeader = (url: string = '') =>  url === '' || DEFAULT_HEADERS.some(header => typeof header === 'string' ? url.endsWith(header) : header.test(url));
+const isDefaultHeader = (url: string = '') =>
+  url === '' ||
+  DEFAULT_HEADERS.some((header) =>
+    typeof header === 'string' ? url.endsWith(header) : header.test(url),
+  );
 
 /** Default avatar filenames from various backends */
 const DEFAULT_AVATARS: Array<string | RegExp> = [
@@ -23,9 +27,10 @@ const DEFAULT_AVATARS: Array<string | RegExp> = [
 ];
 
 /** Check if the avatar is a default avatar */
-const isDefaultAvatar = (url: string = '') => url === '' || DEFAULT_AVATARS.some(avatar => typeof avatar === 'string' ? url.endsWith(avatar) : avatar.test(url));
+const isDefaultAvatar = (url: string = '') =>
+  url === '' ||
+  DEFAULT_AVATARS.some((avatar) =>
+    typeof avatar === 'string' ? url.endsWith(avatar) : avatar.test(url),
+  );
 
-export {
-  isDefaultHeader,
-  isDefaultAvatar,
-};
+export { isDefaultHeader, isDefaultAvatar };

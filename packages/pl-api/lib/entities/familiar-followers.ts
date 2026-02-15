@@ -15,6 +15,6 @@ const familiarFollowersSchema = v.object({
 /**
  * @category Entity types
  */
-type FamiliarFollowers = v.InferOutput<typeof familiarFollowersSchema>
+type FamiliarFollowers = v.InferOutput<typeof familiarFollowersSchema>;
 
 export { familiarFollowersSchema, type FamiliarFollowers };

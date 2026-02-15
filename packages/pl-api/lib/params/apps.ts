@@ -12,6 +12,4 @@ interface CreateApplicationParams {
   website?: string;
 }
 
-export type {
-  CreateApplicationParams,
-};
+export type { CreateApplicationParams };

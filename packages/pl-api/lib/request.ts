@@ -25,10 +25,10 @@ const getLinks = (response: Pick<Response, 'headers'>): LinkHeader =>
   new LinkHeader(response.headers?.get('link') || undefined);
 
 const getNextLink = (response: Pick<Response, 'headers'>): string | null =>
-  getLinks(response).refs.find(link => link.rel.toLocaleLowerCase() === 'next')?.uri || null;
+  getLinks(response).refs.find((link) => link.rel.toLocaleLowerCase() === 'next')?.uri || null;
 
 const getPrevLink = (response: Pick<Response, 'headers'>): string | null =>
-  getLinks(response).refs.find(link => link.rel.toLocaleLowerCase() === 'prev')?.uri || null;
+  getLinks(response).refs.find((link) => link.rel.toLocaleLowerCase() === 'prev')?.uri || null;
 
 interface AsyncRefreshHeader {
   id: string;
@@ -56,7 +56,7 @@ const getAsyncRefreshHeader = (response: Pick<Response, 'headers'>): AsyncRefres
       if (val.startsWith('"')) {
         typedValue = val.slice(1, -1);
       } else {
-        typedValue = parseInt(val);
+        typedValue = parseInt(val, 10);
       }
 
       asyncRefreshHeader[key] = typedValue;
@@ -82,22 +82,31 @@ interface RequestBody<Params = Record<string, any>> {
 
 type RequestMeta = Pick<RequestBody, 'idempotencyKey' | 'onUploadProgress' | 'signal'>;
 
-function request<T = any>(this: Pick<PlApiClient, 'accessToken' | 'customAuthorizationToken' | 'iceshrimpAccessToken' | 'baseURL'>, input: URL | RequestInfo, {
-  body,
-  method = body ? 'POST' : 'GET',
-  params,
-  onUploadProgress,
-  signal,
-  contentType = 'application/json',
-  idempotencyKey,
-}: RequestBody = {}) {
+function request<T = any>(
+  this: Pick<
+    PlApiClient,
+    'accessToken' | 'customAuthorizationToken' | 'iceshrimpAccessToken' | 'baseURL'
+  >,
+  input: URL | RequestInfo,
+  {
+    body,
+    method = body ? 'POST' : 'GET',
+    params,
+    onUploadProgress,
+    signal,
+    contentType = 'application/json',
+    idempotencyKey,
+  }: RequestBody = {},
+) {
   input = input.toString();
   const fullPath = buildFullPath(input, this.baseURL, params);
   const headers = new Headers();
 
-  if (input.startsWith('/api/iceshrimp/') && this.iceshrimpAccessToken) headers.set('Authorization', `Bearer ${this.iceshrimpAccessToken}`);
+  if (input.startsWith('/api/iceshrimp/') && this.iceshrimpAccessToken)
+    headers.set('Authorization', `Bearer ${this.iceshrimpAccessToken}`);
   else if (this.accessToken) headers.set('Authorization', `Bearer ${this.accessToken}`);
-  else if (this.customAuthorizationToken) headers.set('Authorization', this.customAuthorizationToken);
+  else if (this.customAuthorizationToken)
+    headers.set('Authorization', this.customAuthorizationToken);
   if (contentType !== '' && body) headers.set('Content-Type', contentType);
   if (idempotencyKey) headers.set('Idempotency-Key', idempotencyKey);
 
@@ -117,19 +126,21 @@ function request<T = any>(this: Pick<PlApiClient, 'accessToken' | 'customAuthori
           try {
             json = JSON.parse(data);
           } catch (e) {
-          //
+            //
           }
         }
 
-        if (xhr.status >= 400) reject({ response: {
-          status: xhr.status,
-          statusText: xhr.statusText,
-          url: xhr.responseURL,
-          data,
-          json,
-
-        } });
-        resolve({ status: xhr.status, data, json } as any as Response<T>);
+        if (xhr.status >= 400)
+          reject({
+            response: {
+              status: xhr.status,
+              statusText: xhr.statusText,
+              url: xhr.responseURL,
+              data,
+              json,
+            },
+          });
+        else resolve({ status: xhr.status, data, json } as any as Response<T>);
       });
 
       xhr.open(method, fullPath, true);
@@ -177,6 +188,5 @@ export {
   getNextLink,
   getPrevLink,
   getAsyncRefreshHeader,
-  request,
   request as default,
 };

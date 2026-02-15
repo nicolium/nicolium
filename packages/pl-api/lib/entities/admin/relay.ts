@@ -16,6 +16,6 @@ const adminRelaySchema = v.pipe(
 /**
  * @category Admin entity types
  */
-type AdminRelay = v.InferOutput<typeof adminRelaySchema>
+type AdminRelay = v.InferOutput<typeof adminRelaySchema>;
 
 export { adminRelaySchema, type AdminRelay };

@@ -17,7 +17,4 @@ const adminDomainAllowSchema = v.object({
  */
 type AdminDomainAllow = v.InferOutput<typeof adminDomainAllowSchema>;
 
-export {
-  adminDomainAllowSchema,
-  type AdminDomainAllow,
-};
+export { adminDomainAllowSchema, type AdminDomainAllow };

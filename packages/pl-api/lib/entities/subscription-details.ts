@@ -17,7 +17,4 @@ const subscriptionDetailsSchema = v.object({
  */
 type SubscriptionDetails = v.InferOutput<typeof subscriptionDetailsSchema>;
 
-export {
-  subscriptionDetailsSchema,
-  type SubscriptionDetails,
-};
+export { subscriptionDetailsSchema, type SubscriptionDetails };

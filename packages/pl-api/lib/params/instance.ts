@@ -12,6 +12,4 @@ interface ProfileDirectoryParams {
   local?: boolean;
 }
 
-export type {
-  ProfileDirectoryParams,
-};
+export type { ProfileDirectoryParams };

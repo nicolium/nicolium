@@ -2,7 +2,15 @@ import * as v from 'valibot';
 
 import { coerceObject } from './utils';
 
-const interactionPolicyEntrySchema = v.picklist(['public', 'followers', 'following', 'mutuals', 'mentioned', 'author', 'me']);
+const interactionPolicyEntrySchema = v.picklist([
+  'public',
+  'followers',
+  'following',
+  'mutuals',
+  'mentioned',
+  'author',
+  'me',
+]);
 
 /**
  * @category Entity types
@@ -44,5 +52,10 @@ const interactionPoliciesSchema = coerceObject({
  */
 type InteractionPolicies = v.InferOutput<typeof interactionPoliciesSchema>;
 
-export { interactionPolicySchema, interactionPoliciesSchema, type InteractionPolicyEntry, type InteractionPolicy, type InteractionPolicies };
-
+export {
+  interactionPolicySchema,
+  interactionPoliciesSchema,
+  type InteractionPolicyEntry,
+  type InteractionPolicy,
+  type InteractionPolicies,
+};

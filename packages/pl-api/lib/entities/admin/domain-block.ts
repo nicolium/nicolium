@@ -24,7 +24,4 @@ const adminDomainBlockSchema = v.object({
  */
 type AdminDomainBlock = v.InferOutput<typeof adminDomainBlockSchema>;
 
-export {
-  adminDomainBlockSchema,
-  type AdminDomainBlock,
-};
+export { adminDomainBlockSchema, type AdminDomainBlock };

@@ -19,7 +19,4 @@ const adminTagSchema = v.object({
  */
 type AdminTag = v.InferOutput<typeof adminTagSchema>;
 
-export {
-  adminTagSchema,
-  type AdminTag,
-};
+export { adminTagSchema, type AdminTag };

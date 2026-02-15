@@ -24,7 +24,4 @@ const reviewSchema = v.object({
  */
 type Review = v.InferOutput<typeof reviewSchema>;
 
-export {
-  reviewSchema,
-  type Review,
-};
+export { reviewSchema, type Review };

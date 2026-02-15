@@ -8,10 +8,14 @@ import { datetimeSchema } from './utils';
  */
 const markerSchema = v.pipe(
   v.any(),
-  v.transform((marker: any) => marker ? ({
-    unread_count: marker.pleroma?.unread_count,
-    ...marker,
-  }) : null),
+  v.transform((marker: any) =>
+    marker
+      ? {
+          unread_count: marker.pleroma?.unread_count,
+          ...marker,
+        }
+      : null,
+  ),
   v.object({
     last_read_id: v.string(),
     version: v.pipe(v.number(), v.integer()),
@@ -35,9 +39,4 @@ const markersSchema = v.record(v.string(), markerSchema);
  */
 type Markers = v.InferOutput<typeof markersSchema>;
 
-export {
-  markerSchema,
-  markersSchema,
-  type Marker,
-  type Markers,
-};
+export { markerSchema, markersSchema, type Marker, type Markers };

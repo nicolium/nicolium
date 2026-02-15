@@ -17,7 +17,4 @@ interface CreateAntennaParams {
  */
 type UpdateAntennaParams = Partial<CreateAntennaParams>;
 
-export {
-  type CreateAntennaParams,
-  type UpdateAntennaParams,
-};
+export { type CreateAntennaParams, type UpdateAntennaParams };

@@ -15,9 +15,8 @@ const guessFqn = (account: Pick<Account, 'acct' | 'url'>): string => {
 
   if (domain) {
     return acct;
-  } else {
-    return [user, getDomainFromURL(account)].join('@');
   }
+  return [user, getDomainFromURL(account)].join('@');
 };
 
 export { getDomainFromURL, guessFqn };

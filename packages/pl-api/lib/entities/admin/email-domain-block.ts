@@ -10,11 +10,13 @@ const adminEmailDomainBlockSchema = v.object({
   id: v.string(),
   domain: v.string(),
   created_at: datetimeSchema,
-  history: v.array(v.object({
-    day: v.pipe(v.unknown(), v.transform(String)),
-    accounts: v.pipe(v.unknown(), v.transform(String)),
-    uses: v.pipe(v.unknown(), v.transform(String)),
-  })),
+  history: v.array(
+    v.object({
+      day: v.pipe(v.unknown(), v.transform(String)),
+      accounts: v.pipe(v.unknown(), v.transform(String)),
+      uses: v.pipe(v.unknown(), v.transform(String)),
+    }),
+  ),
 });
 
 /**
@@ -22,7 +24,4 @@ const adminEmailDomainBlockSchema = v.object({
  */
 type AdminEmailDomainBlock = v.InferOutput<typeof adminEmailDomainBlockSchema>;
 
-export {
-  adminEmailDomainBlockSchema,
-  type AdminEmailDomainBlock,
-};
+export { adminEmailDomainBlockSchema, type AdminEmailDomainBlock };
