@@ -295,6 +295,9 @@ importers:
       mutative:
         specifier: ^1.3.0
         version: 1.3.0
+      object-to-formdata:
+        specifier: ^4.5.1
+        version: 4.5.1
       path-browserify:
         specifier: ^1.0.1
         version: 1.0.1

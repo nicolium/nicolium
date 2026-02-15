@@ -1,3 +1,4 @@
+import { serialize } from 'object-to-formdata';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl, type MessageDescriptor } from 'react-intl';
 
@@ -26,6 +27,10 @@ const messages = defineMessages({
     defaultMessage: 'Followers imported successfully',
   },
   mutesSuccess: { id: 'import_data.success.mutes', defaultMessage: 'Mutes imported successfully' },
+  archiveSuccess: {
+    id: 'import_data.success.archive',
+    defaultMessage: 'Archive imported successfully',
+  },
 });
 
 const followMessages = defineMessages({
@@ -53,6 +58,15 @@ const muteMessages = defineMessages({
     defaultMessage: 'CSV file containing a list of muted accounts',
   },
   submit: { id: 'import_data.actions.import_mutes', defaultMessage: 'Import mutes' },
+});
+
+const archiveMessages = defineMessages({
+  input_label: { id: 'import_data.archive_label', defaultMessage: 'Archive' },
+  input_hint: {
+    id: 'import_data.hints.archive',
+    defaultMessage: 'Archive containing an archive of statuses',
+  },
+  submit: { id: 'import_data.actions.import_archive', defaultMessage: 'Import archive' },
 });
 
 interface IDataImporter {
@@ -140,19 +154,33 @@ const ImportDataPage = () => {
   const features = useFeatures();
 
   const importFollows = (list: File | string, overwrite?: boolean) =>
-    client.settings.importFollows(list, overwrite ? 'overwrite' : 'merge').then((response) => {
+    client.settings.importFollows(list, overwrite ? 'overwrite' : 'merge').then(() => {
       toast.success(messages.followersSuccess);
     });
 
   const importBlocks = (list: File | string, overwrite?: boolean) =>
-    client.settings.importBlocks(list, overwrite ? 'overwrite' : 'merge').then((response) => {
+    client.settings.importBlocks(list, overwrite ? 'overwrite' : 'merge').then(() => {
       toast.success(messages.blocksSuccess);
     });
 
   const importMutes = (list: File | string) =>
-    client.settings.importMutes(list).then((response) => {
+    client.settings.importMutes(list).then(() => {
       toast.success(messages.mutesSuccess);
     });
+
+  const importArchive = (file: File) => {
+    const form = serialize({ file, keep_unlisted: true }, { indices: true });
+
+    return client
+      .request('/api/pleroma/archive_import', {
+        method: 'POST',
+        body: form,
+        contentType: '',
+      })
+      .then(() => {
+        toast.success(messages.archiveSuccess);
+      });
+  };
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -175,6 +203,13 @@ const ImportDataPage = () => {
           action={importMutes}
           messages={muteMessages}
           allowOverwrite={features.importOverwrite}
+        />
+      )}
+      {features.importArchive && (
+        <DataImporter
+          action={importArchive}
+          messages={archiveMessages}
+          accept='.tar,.tar.gz,.zip'
         />
       )}
     </Column>

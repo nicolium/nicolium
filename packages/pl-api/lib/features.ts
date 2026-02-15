@@ -966,6 +966,8 @@ const getFeatures = (instance: Instance) => {
       v.software === PLEROMA,
     ]),
 
+    importArchive: false,
+
     /**
      * Import a .csv file with a list of blocked users.
      * @see POST /api/pleroma/blocks_import
