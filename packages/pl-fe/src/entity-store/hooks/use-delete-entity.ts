@@ -4,6 +4,7 @@ import { useLoading } from '@/hooks/use-loading';
 
 import { deleteEntities, importEntities } from '../actions';
 
+import type { Entities } from '../entities';
 import type { EntityCallbacks, EntityFn } from './types';
 
 /**
@@ -11,7 +12,7 @@ import type { EntityCallbacks, EntityFn } from './types';
  * This hook should be used to globally delete an entity from all lists.
  * To remove an entity from a single list, see `useDismissEntity`.
  */
-const useDeleteEntity = (entityType: string, entityFn: EntityFn<string>) => {
+const useDeleteEntity = (entityType: Entities, entityFn: EntityFn<string>) => {
   const dispatch = useAppDispatch();
   const getState = useGetState();
   const [isSubmitting, setPromise] = useLoading();

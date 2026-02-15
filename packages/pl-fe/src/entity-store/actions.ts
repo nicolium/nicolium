@@ -1,3 +1,4 @@
+import type { Entities } from './entities';
 import type { EntitiesTransaction, Entity, EntityListState, ImportPosition } from './types';
 
 const ENTITIES_IMPORT = 'ENTITIES_IMPORT' as const;
@@ -12,7 +13,7 @@ const ENTITIES_TRANSACTION = 'ENTITIES_TRANSACTION' as const;
 /** Action to import entities into the cache. */
 const importEntities = (
   entities: Entity[],
-  entityType: string,
+  entityType: Entities,
   listKey?: string,
   pos?: ImportPosition,
 ) => ({
@@ -53,7 +54,7 @@ const entitiesFetchRequest = (entityType: string, listKey?: string) => ({
 
 const entitiesFetchSuccess = (
   entities: Entity[],
-  entityType: string,
+  entityType: Entities,
   listKey?: string,
   pos?: ImportPosition,
   newState?: EntityListState,
@@ -68,14 +69,14 @@ const entitiesFetchSuccess = (
   overwrite,
 });
 
-const entitiesFetchFail = (entityType: string, listKey: string | undefined, error: any) => ({
+const entitiesFetchFail = (entityType: Entities, listKey: string | undefined, error: any) => ({
   type: ENTITIES_FETCH_FAIL,
   entityType,
   listKey,
   error,
 });
 
-const invalidateEntityList = (entityType: string, listKey: string) => ({
+const invalidateEntityList = (entityType: Entities, listKey: string) => ({
   type: ENTITIES_INVALIDATE_LIST,
   entityType,
   listKey,

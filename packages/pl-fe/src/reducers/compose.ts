@@ -644,7 +644,7 @@ const compose = (
         const contentType =
           action.contentType === 'text/markdown' && state.default.contentType === 'wysiwyg'
             ? 'wysiwyg'
-            : (action.contentType ?? 'text/plain');
+            : action.contentType || 'text/plain';
         compose.contentType = contentType;
         compose.quoteId = action.status.quote_id;
         compose.groupId = action.status.group_id;

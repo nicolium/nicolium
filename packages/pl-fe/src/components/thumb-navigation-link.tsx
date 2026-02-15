@@ -30,7 +30,7 @@ const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({
   const icon =
     (activeSrc &&
       matchRoute({ to: props.to, params: props.params, search: props.search }) !== false &&
-      activeSrc) ??
+      activeSrc) ||
     src;
 
   return (

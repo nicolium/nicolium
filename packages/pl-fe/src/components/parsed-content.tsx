@@ -215,6 +215,7 @@ function parseContent(
       if (!(domNode instanceof Element)) {
         // @ts-ignore
         domNode.preGreentext =
+          // @ts-ignore
           (!domNode.prev || domNode.prev.preGreentext) && !domNode.data.trim().length;
 
         // @ts-ignore

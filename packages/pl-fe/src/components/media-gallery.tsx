@@ -384,7 +384,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
               className='size-4 min-w-fit text-gray-800 dark:text-gray-200'
               src={
                 MIMETYPE_ICONS[
-                  (attachment.type === 'unknown' && attachment.mime_type) ?? attachment.type
+                  (attachment.type === 'unknown' && attachment.mime_type) || attachment.type
                 ] ?? require('@phosphor-icons/core/regular/paperclip.svg')
               }
             />

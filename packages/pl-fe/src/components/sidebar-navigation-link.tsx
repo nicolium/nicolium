@@ -54,7 +54,7 @@ const SidebarNavigationLink = React.memo(
           >
             <span className='⁂-sidebar-navigation-link__icon' aria-hidden>
               <Icon
-                src={(isActive && activeIcon) ?? icon}
+                src={(isActive && activeIcon) || icon}
                 count={demetricator ? undefined : count}
                 countMax={countMax}
               />

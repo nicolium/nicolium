@@ -177,8 +177,8 @@ const makeGetNotification = () =>
   createSelector(
     [
       (_state: RootState, notification: NotificationGroup) => notification,
-      // @ts-expect-error types will be fine valibot ensures that
       (state: RootState, notification: NotificationGroup) =>
+        // @ts-expect-error types will be fine valibot ensures that
         selectAccount(state, notification.target_id),
       // @ts-expect-error types will be fine valibot ensures that
       (state: RootState, notification: NotificationGroup) => state.statuses[notification.status_id],

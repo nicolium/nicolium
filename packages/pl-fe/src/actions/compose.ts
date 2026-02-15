@@ -508,7 +508,7 @@ const submitCompose =
       local_only: compose.localOnly,
       interaction_policy:
         (['public', 'unlisted', 'private'].includes(compose.visibility) &&
-          compose.interactionPolicy) ??
+          compose.interactionPolicy) ||
         undefined,
       quote_approval_policy: compose.quoteApprovalPolicy ?? undefined,
       location_id: compose.location?.origin_id ?? undefined,

@@ -25,7 +25,7 @@ const pleromaDecoder = (json: string) => decodePleromaData(JSON.parse(json));
 // Should be called inside a try-catch.
 const decodeFromMarkup = (elementId: string, decoder: (json: string) => Record<string, any>) => {
   const { textContent } = document.getElementById(elementId)!;
-  return decoder(textContent);
+  return decoder(textContent as string);
 };
 
 const preloadFromMarkup =

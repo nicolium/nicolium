@@ -216,7 +216,7 @@ const fetchHomeTimeline =
     if (expand && state.timelines.home?.isLoading) return;
 
     const fn =
-      (expand && state.timelines.home?.next?.()) ?? getClient(state).timelines.homeTimeline(params);
+      (expand && state.timelines.home?.next?.()) || getClient(state).timelines.homeTimeline(params);
 
     return dispatch(handleTimelineExpand('home', fn, done));
   };
@@ -242,7 +242,7 @@ const fetchPublicTimeline =
     if (expand && state.timelines[timelineId]?.isLoading) return;
 
     const fn =
-      (expand && state.timelines[timelineId]?.next?.()) ??
+      (expand && state.timelines[timelineId]?.next?.()) ||
       getClient(state).timelines.publicTimeline(params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done, onError));
@@ -260,7 +260,7 @@ const fetchBubbleTimeline =
     if (expand && state.timelines[timelineId]?.isLoading) return;
 
     const fn =
-      (expand && state.timelines[timelineId]?.next?.()) ??
+      (expand && state.timelines[timelineId]?.next?.()) ||
       getClient(state).timelines.bubbleTimeline(params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));
@@ -278,7 +278,7 @@ const fetchWrenchedTimeline =
     if (expand && state.timelines[timelineId]?.isLoading) return;
 
     const fn =
-      (expand && state.timelines[timelineId]?.next?.()) ??
+      (expand && state.timelines[timelineId]?.next?.()) ||
       getClient(state).timelines.wrenchedTimeline(params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));
@@ -303,7 +303,7 @@ const fetchAccountTimeline =
     if (expand && state.timelines[timelineId]?.isLoading) return;
 
     const fn =
-      (expand && state.timelines[timelineId]?.next?.()) ??
+      (expand && state.timelines[timelineId]?.next?.()) ||
       getClient(state).accounts.getAccountStatuses(accountId, params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));
@@ -321,7 +321,7 @@ const fetchListTimeline =
     if (expand && state.timelines[timelineId]?.isLoading) return;
 
     const fn =
-      (expand && state.timelines[timelineId]?.next?.()) ??
+      (expand && state.timelines[timelineId]?.next?.()) ||
       getClient(state).timelines.listTimeline(listId, params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));
@@ -339,7 +339,7 @@ const fetchCircleTimeline =
     if (expand && state.timelines[timelineId]?.isLoading) return;
 
     const fn =
-      (expand && state.timelines[timelineId]?.next?.()) ??
+      (expand && state.timelines[timelineId]?.next?.()) ||
       getClient(state).circles.getCircleStatuses(circleId, params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));
@@ -357,7 +357,7 @@ const fetchAntennaTimeline =
     if (expand && state.timelines[timelineId]?.isLoading) return;
 
     const fn =
-      (expand && state.timelines[timelineId]?.next?.()) ??
+      (expand && state.timelines[timelineId]?.next?.()) ||
       getClient(state).timelines.antennaTimeline(antennaId, params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));
@@ -376,7 +376,7 @@ const fetchGroupTimeline =
     if (expand && state.timelines[timelineId]?.isLoading) return;
 
     const fn =
-      (expand && state.timelines[timelineId]?.next?.()) ??
+      (expand && state.timelines[timelineId]?.next?.()) ||
       getClient(state).timelines.groupTimeline(groupId, params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));
@@ -399,7 +399,7 @@ const fetchHashtagTimeline =
     if (useSettingsStore.getState().settings.autoTranslate) params.language = getLocale();
 
     const fn =
-      (expand && state.timelines[timelineId]?.next?.()) ??
+      (expand && state.timelines[timelineId]?.next?.()) ||
       getClient(state).timelines.hashtagTimeline(hashtag, params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));
@@ -418,7 +418,7 @@ const fetchLinkTimeline =
     if (useSettingsStore.getState().settings.autoTranslate) params.language = getLocale();
 
     const fn =
-      (expand && state.timelines[timelineId]?.next?.()) ??
+      (expand && state.timelines[timelineId]?.next?.()) ||
       getClient(state).timelines.linkTimeline(url, params);
 
     return dispatch(handleTimelineExpand(timelineId, fn, done));

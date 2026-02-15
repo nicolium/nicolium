@@ -84,7 +84,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
   );
 
   const getOtherAccounts = useCallback(makeGetOtherAccounts(), []);
-  const { account } = useAccount(me ?? undefined);
+  const { account } = useAccount(me || undefined);
   const otherAccounts = useAppSelector((state) => getOtherAccounts(state));
   const settings = useSettings();
   const followRequestsCount = useFollowRequestsCount().data ?? 0;

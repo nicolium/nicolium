@@ -8,6 +8,7 @@ import { useLoading } from '@/hooks/use-loading';
 import { importEntities } from '../actions';
 import { findEntity } from '../selectors';
 
+import type { Entities } from '../entities';
 import type { Entity } from '../types';
 import type { EntityFn } from './types';
 import type { UseEntityOpts } from './use-entity';
@@ -17,7 +18,7 @@ import type { PlfeResponse } from '@/api';
 type LookupFn<TEntity extends Entity> = (entity: TEntity) => boolean;
 
 const useEntityLookup = <TEntity extends Entity, TTransformedEntity extends Entity = TEntity>(
-  entityType: string,
+  entityType: Entities,
   lookupFn: LookupFn<TTransformedEntity>,
   entityFn: EntityFn<void>,
   opts: UseEntityOpts<TEntity, TTransformedEntity> = {},

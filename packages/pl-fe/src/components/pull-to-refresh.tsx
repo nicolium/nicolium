@@ -65,7 +65,7 @@ const isTreeScrollable = (element: HTMLElement, direction: DIRECTION): boolean =
 
 interface PullToRefreshProps {
   isPullable?: boolean;
-  onRefresh?: () => Promise<any>;
+  onRefresh?: () => Promise<any> | void;
   refreshingContent?: JSX.Element | string;
   pullingContent?: JSX.Element | string;
   children: JSX.Element;
@@ -217,7 +217,15 @@ const PullToRefresh: React.FC<PullToRefreshProps> = ({
       childrenRef.current.style.overflow = 'visible';
       childrenRef.current.style.transform = `translate(0px, ${pullDownThreshold}px)`;
     }
-    onRefresh?.().then(initContainer).catch(initContainer);
+
+    if (onRefresh) {
+      const result = onRefresh();
+      if (result instanceof Promise) {
+        result.then(initContainer).catch(initContainer);
+      } else {
+        initContainer();
+      }
+    }
   };
 
   return (

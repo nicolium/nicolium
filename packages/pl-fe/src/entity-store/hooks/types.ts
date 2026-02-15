@@ -1,3 +1,4 @@
+import type { Entities } from '../entities';
 import type { Entity } from '../types';
 import type { BaseSchema, BaseIssue } from 'valibot';
 
@@ -10,7 +11,7 @@ type EntitySchema<TEntity extends Entity = Entity> = BaseSchema<any, TEntity, Ba
  */
 type ExpandedEntitiesPath = [
   /** Name of the entity type for use in the global cache, eg `'Notification'`. */
-  entityType: string,
+  entityType: Entities,
   /**
    * Name of a particular index of this entity type.
    * Multiple params get combined into one string with a `:` separator.
@@ -19,10 +20,10 @@ type ExpandedEntitiesPath = [
 ];
 
 /** Used to look up an entity in a list. */
-type EntitiesPath = [entityType: string, listKey: string];
+type EntitiesPath = [entityType: Entities, listKey: string];
 
 /** Used to look up a single entity by its ID. */
-type EntityPath = [entityType: string, entityId: string];
+type EntityPath = [entityType: Entities, entityId: string];
 
 /** Callback functions for entity actions. */
 interface EntityCallbacks<Value, Error = unknown> {

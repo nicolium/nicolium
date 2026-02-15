@@ -49,7 +49,7 @@ const canRemoteTranslate = (
 
 type Availability = Awaited<ReturnType<typeof Translator.availability>>;
 
-const localTranslationAvailability = (
+const localTranslationAvailability = async (
   status: ITranslateButton['status'],
   locale: string,
 ): Promise<Availability | false> => {

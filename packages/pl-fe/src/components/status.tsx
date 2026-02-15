@@ -187,7 +187,7 @@ const Status: React.FC<IStatus> = (props) => {
 
   const getStatus = useMemo(makeGetStatus, []);
   const actualStatus = useAppSelector(
-    (state) => (status.reblog_id && getStatus(state, { id: status.reblog_id })) ?? status,
+    (state) => (status.reblog_id && getStatus(state, { id: status.reblog_id })!) || status,
   );
 
   const { mutate: favouriteStatus } = useFavouriteStatus(actualStatus.id);
