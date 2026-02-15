@@ -257,17 +257,23 @@ const Status: React.FC<IStatus> = (props) => {
   };
 
   const handleHotkeyReply = (e?: KeyboardEvent) => {
+    if (status.rss_feed) return;
+
     e?.preventDefault();
     dispatch(replyCompose(actualStatus, status.reblog_id ? status.account : undefined));
   };
 
   const handleHotkeyFavourite = (e?: KeyboardEvent) => {
+    if (status.rss_feed) return;
+
     e?.preventDefault();
     if (status.favourited) unfavouriteStatus();
     else favouriteStatus();
   };
 
   const handleHotkeyBoost = (e?: KeyboardEvent) => {
+    if (status.rss_feed) return;
+
     const modalReblog = () => {
       if (status.reblogged) unreblogStatus();
       else reblogStatus(undefined);
@@ -280,6 +286,8 @@ const Status: React.FC<IStatus> = (props) => {
   };
 
   const handleHotkeyMention = (e?: KeyboardEvent) => {
+    if (status.rss_feed) return;
+
     e?.preventDefault();
     dispatch(mentionCompose(actualStatus.account));
   };
@@ -312,6 +320,8 @@ const Status: React.FC<IStatus> = (props) => {
   };
 
   const handleHotkeyReact = () => {
+    if (status.rss_feed) return;
+
     (node.current?.querySelector('.emoji-picker-dropdown') as HTMLButtonElement)?.click();
   };
 

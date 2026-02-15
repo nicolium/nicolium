@@ -422,6 +422,20 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
                 />
               )}
 
+              {features.rssFeedSubscriptions && (
+                <DropdownNavigationLink
+                  to='/rss_feed_subscriptions'
+                  icon={require('@phosphor-icons/core/regular/rss.svg')}
+                  text={
+                    <FormattedMessage
+                      id='column.rss_feed_subscriptions'
+                      defaultMessage='Subscribed RSS feeds'
+                    />
+                  }
+                  onClick={closeSidebar}
+                />
+              )}
+
               {(account.is_admin ?? account.is_moderator) && (
                 <DropdownNavigationLink
                   to='/pl-fe/admin'

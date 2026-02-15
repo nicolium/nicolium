@@ -1339,6 +1339,7 @@
   "navigation_bar.interaction_policy": "Status interaction rules",
   "navigation_bar.logout": "Logout",
   "navigation_bar.manage_event": "Manage event",
+  "navigation_bar.rss_feed_subscriptions": "Subscribed RSS feeds",
   "new_event_panel.action": "Create event",
   "new_event_panel.subtitle": "Can't find what you're looking for? Schedule your own event.",
   "new_event_panel.title": "Create new event",

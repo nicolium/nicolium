@@ -178,12 +178,6 @@ const Thread = ({
   const statusRef = useRef<HTMLDivElement>(null);
   const scroller = useRef<VirtuosoHandle>(null);
 
-  const handleHotkeyReact = () => {
-    if (statusRef.current) {
-      (node.current?.querySelector('.emoji-picker-dropdown') as HTMLButtonElement)?.click();
-    }
-  };
-
   const handleFavouriteClick = (status: SelectedStatus) => {
     if (status.favourited) unfavouriteStatus();
     else favouriteStatus();
@@ -231,19 +225,27 @@ const Thread = ({
   };
 
   const handleHotkeyReply = (e?: KeyboardEvent) => {
+    if (status.rss_feed) return;
+
     e?.preventDefault();
     handleReplyClick(status);
   };
 
   const handleHotkeyFavourite = () => {
+    if (status.rss_feed) return;
+
     handleFavouriteClick(status);
   };
 
   const handleHotkeyBoost = () => {
+    if (status.rss_feed) return;
+
     handleReblogClick(status);
   };
 
   const handleHotkeyMention = (e?: KeyboardEvent) => {
+    if (status.rss_feed) return;
+
     e?.preventDefault();
     const { account } = status;
     if (!account || typeof account !== 'object') return;
@@ -256,6 +258,14 @@ const Thread = ({
 
   const handleHotkeyToggleSensitive = () => {
     toggleStatusesMediaHidden([status.id]);
+  };
+
+  const handleHotkeyReact = () => {
+    if (status.rss_feed) return;
+
+    if (statusRef.current) {
+      (node.current?.querySelector('.emoji-picker-dropdown') as HTMLButtonElement)?.click();
+    }
   };
 
   const handleMoveUp = (id: string) => {

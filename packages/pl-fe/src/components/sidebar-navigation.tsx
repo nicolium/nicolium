@@ -37,6 +37,10 @@ const messages = defineMessages({
   events: { id: 'column.events', defaultMessage: 'Events' },
   profileDirectory: { id: 'column.directory', defaultMessage: 'Profile directory' },
   followedTags: { id: 'column.followed_tags', defaultMessage: 'Followed hashtags' },
+  rssFeedSubscriptions: {
+    id: 'navigation_bar.rss_feed_subscriptions',
+    defaultMessage: 'Subscribed RSS feeds',
+  },
   scheduledStatuses: { id: 'column.scheduled_statuses', defaultMessage: 'Scheduled posts' },
   drafts: { id: 'column.draft_statuses', defaultMessage: 'Drafts' },
   conversations: { id: 'column.direct', defaultMessage: 'Direct messages' },
@@ -170,6 +174,14 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
           to: '/followed_tags',
           text: intl.formatMessage(messages.followedTags),
           icon: require('@phosphor-icons/core/regular/hash.svg'),
+        });
+      }
+
+      if (features.rssFeedSubscriptions) {
+        menu.push({
+          to: '/rss_feed_subscriptions',
+          text: intl.formatMessage(messages.rssFeedSubscriptions),
+          icon: require('@phosphor-icons/core/regular/rss.svg'),
         });
       }
 
