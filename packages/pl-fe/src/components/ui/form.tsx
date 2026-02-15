@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 
 interface IForm {
@@ -10,7 +11,7 @@ interface IForm {
 }
 
 /** Form element with custom styles. */
-const Form: React.FC<IForm> = ({ onSubmit, children, ...filteredProps }) => {
+const Form: React.FC<IForm> = ({ onSubmit, children, className, ...filteredProps }) => {
   const handleSubmit: React.FormEventHandler = React.useCallback(
     (event) => {
       event.preventDefault();
@@ -23,7 +24,12 @@ const Form: React.FC<IForm> = ({ onSubmit, children, ...filteredProps }) => {
   );
 
   return (
-    <form data-testid='form' onSubmit={handleSubmit} className='⁂-form' {...filteredProps}>
+    <form
+      data-testid='form'
+      onSubmit={handleSubmit}
+      className={clsx('⁂-form', className)}
+      {...filteredProps}
+    >
       {children}
     </form>
   );
