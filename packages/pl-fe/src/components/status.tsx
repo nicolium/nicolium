@@ -118,6 +118,7 @@ const StatusFollowedTagInfo: React.FC<IStatusFollowedTagInfo> = ({ status, avata
         <Icon
           src={require('@phosphor-icons/core/regular/hash.svg')}
           className='size-4 text-primary-600 dark:text-primary-400'
+          aria-hidden
         />
       }
       text={
@@ -342,6 +343,7 @@ const Status: React.FC<IStatus> = (props) => {
             <Icon
               src={require('@phosphor-icons/core/regular/repeat.svg')}
               className='size-4 text-green-600'
+              aria-hidden
             />
           }
           text={
@@ -425,6 +427,7 @@ const Status: React.FC<IStatus> = (props) => {
             <Icon
               src={require('@phosphor-icons/core/regular/repeat.svg')}
               className='size-4 text-green-600'
+              aria-hidden
             />
           }
           text={
@@ -453,6 +456,7 @@ const Status: React.FC<IStatus> = (props) => {
             <Icon
               src={require('@phosphor-icons/core/regular/push-pin.svg')}
               className='size-4 text-gray-600 dark:text-gray-400'
+              aria-hidden
             />
           }
           text={<FormattedMessage id='status.pinned' defaultMessage='Pinned post' />}
@@ -467,6 +471,7 @@ const Status: React.FC<IStatus> = (props) => {
             <Icon
               src={require('@phosphor-icons/core/regular/users-three.svg')}
               className='size-4 text-primary-600 dark:text-primary-400'
+              aria-hidden
             />
           }
           text={

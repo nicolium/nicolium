@@ -434,7 +434,7 @@ const Notification: React.FC<INotification> = (props) => {
         />
       );
     } else if (icons[displayedType]) {
-      return <Icon src={icons[displayedType]} className='⁂-notification__icon' />;
+      return <Icon src={icons[displayedType]} className='⁂-notification__icon' aria-hidden />;
     } else {
       return null;
     }
