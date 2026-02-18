@@ -51,6 +51,11 @@
       justify-content: center;
       width: 100%;
     }
+
+    .video-player,
+    .audio-player {
+      margin: 3rem 0;
+    }
   }
 
   &__navigation {
