@@ -10,15 +10,7 @@ import type { ButtonSizes, ButtonThemes } from './useButtonStyles';
 
 type IButton = Pick<
   React.ComponentProps<'button'>,
-  | 'children'
-  | 'className'
-  | 'disabled'
-  | 'onClick'
-  | 'onMouseDown'
-  | 'onKeyDown'
-  | 'onKeyPress'
-  | 'title'
-  | 'type'
+  'children' | 'className' | 'disabled' | 'title' | 'type'
 > &
   (LinkOptions | { to?: undefined }) & {
     /** Whether this button expands the width of its container. */
@@ -37,10 +29,18 @@ type IButton = Pick<
     href?: string;
     /** Styles the button visually with a predefined theme. */
     theme?: ButtonThemes;
+    /** Event handler for click events. */
+    onClick?: React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
+    /** Event handler for mouse down events. */
+    onMouseDown?: React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>;
+    /** Event handler for key down events. */
+    onKeyDown?: React.KeyboardEventHandler<HTMLButtonElement | HTMLAnchorElement>;
+    /** Event handler for key press events. */
+    onKeyPress?: React.KeyboardEventHandler<HTMLButtonElement | HTMLAnchorElement>;
   };
 
 /** Customizable button element with various themes. */
-const Button = React.forwardRef<HTMLButtonElement, IButton>(
+const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, IButton>(
   (
     {
       block = false,
@@ -58,7 +58,7 @@ const Button = React.forwardRef<HTMLButtonElement, IButton>(
       className,
       ...props
     },
-    ref,
+    ref: React.ForwardedRef<HTMLButtonElement | HTMLAnchorElement>,
   ): JSX.Element => {
     const body = text ?? children;
 
@@ -68,51 +68,68 @@ const Button = React.forwardRef<HTMLButtonElement, IButton>(
       size,
     });
 
-    const handleClick: React.MouseEventHandler<HTMLButtonElement> = React.useCallback(
-      (event) => {
-        if (onClick && !disabled) {
-          onClick(event);
-        }
-      },
-      [onClick, disabled],
+    const handleClick: React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement> =
+      React.useCallback(
+        (event) => {
+          if (onClick && !disabled) {
+            onClick(event);
+          }
+        },
+        [onClick, disabled],
+      );
+
+    const buttonChildren = (
+      <>
+        {icon ? <Icon src={icon} className={clsx('size-4', iconClassName)} aria-hidden /> : null}
+
+        {body && <span>{body}</span>}
+
+        {secondaryIcon ? <Icon src={secondaryIcon} className='size-4' aria-hidden /> : null}
+      </>
     );
 
     const renderButton = () => (
       <button
         {...props}
         className={clsx(themeClass, className)}
+        ref={ref as React.ForwardedRef<HTMLButtonElement>}
         disabled={disabled}
         onClick={handleClick}
-        ref={ref}
         type={type}
         data-testid='button'
       >
-        {icon ? <Icon src={icon} className={clsx('size-4', iconClassName)} /> : null}
-
-        {body && <span>{body}</span>}
-
-        {secondaryIcon ? <Icon src={secondaryIcon} className='size-4' /> : null}
+        {buttonChildren}
       </button>
     );
 
     if (props.to) {
       return (
         <Link
+          {...props}
+          className={clsx(themeClass, className)}
+          ref={ref as React.ForwardedRef<HTMLAnchorElement>}
           to={props.to}
           params={props.params}
           search={props.search}
           tabIndex={-1}
-          className='inline-flex'
         >
-          {renderButton()}
+          {buttonChildren}
         </Link>
       );
     }
 
     if (href) {
       return (
-        <a href={href} target='_blank' rel='noopener' tabIndex={-1} className='inline-flex'>
-          {renderButton()}
+        <a
+          {...props}
+          className={clsx(themeClass, className)}
+          ref={ref as React.ForwardedRef<HTMLAnchorElement>}
+          href={href}
+          target='_blank'
+          rel='noopener'
+          tabIndex={-1}
+        >
+          {buttonChildren}
         </a>
       );
     }
