@@ -70,7 +70,7 @@ type Directions = 'ltr' | 'rtl';
 
 interface IText extends Pick<
   React.HTMLAttributes<HTMLParagraphElement>,
-  'dangerouslySetInnerHTML' | 'tabIndex' | 'lang' | 'onClick' | 'role'
+  'dangerouslySetInnerHTML' | 'tabIndex' | 'lang' | 'onClick' | 'role' | 'id'
 > {
   /** Text content. */
   children?: React.ReactNode;

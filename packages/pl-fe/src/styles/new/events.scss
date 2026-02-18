@@ -1,8 +1,6 @@
 @use 'mixins';
 
 .⁂-edit-event {
-  @apply space-y-4;
-
   .⁂-content-type-button {
     position: absolute;
     top: 0.5rem;

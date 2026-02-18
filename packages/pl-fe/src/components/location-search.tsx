@@ -17,10 +17,11 @@ const messages = defineMessages({
 });
 
 interface ILocationSearch {
+  id?: string;
   onSelected: (location: Location) => void;
 }
 
-const LocationSearch: React.FC<ILocationSearch> = ({ onSelected }) => {
+const LocationSearch: React.FC<ILocationSearch> = ({ id, onSelected }) => {
   const intl = useIntl();
 
   const [value, setValue] = useState('');
@@ -60,6 +61,7 @@ const LocationSearch: React.FC<ILocationSearch> = ({ onSelected }) => {
   return (
     <div className='relative'>
       <AutosuggestInput
+        id={id}
         className='rounded-full'
         placeholder={intl.formatMessage(messages.placeholder)}
         value={value}

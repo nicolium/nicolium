@@ -338,8 +338,8 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
         />
       </FormGroup>
       <HStack alignItems='center' space={2}>
-        <Toggle checked={!!endTime} onChange={onChangeHasEndTime} />
-        <Text tag='span' theme='muted'>
+        <Toggle checked={!!endTime} onChange={onChangeHasEndTime} id='has-end-time-toggle' />
+        <Text htmlFor='has-end-time-toggle' tag='label' theme='muted'>
           <FormattedMessage
             id='compose_event.fields.has_end_time'
             defaultMessage='This event has an end date'
@@ -369,8 +369,12 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
       )}
       {!statusId && (
         <HStack alignItems='center' space={2}>
-          <Toggle checked={approvalRequired} onChange={onChangeApprovalRequired} />
-          <Text tag='span' theme='muted'>
+          <Toggle
+            checked={approvalRequired}
+            onChange={onChangeApprovalRequired}
+            id='approval-required-toggle'
+          />
+          <Text htmlFor='approval-required-toggle' tag='label' theme='muted'>
             <FormattedMessage
               id='compose_event.fields.approval_required'
               defaultMessage='I want to approve participation requests manually'
