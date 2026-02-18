@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 import { useStatContext } from '@/contexts/stat-context';
@@ -18,7 +18,12 @@ import Blankslate from './blankslate';
 
 import type { Chat } from 'pl-api';
 
+const messages = defineMessages({
+  newChat: { id: 'chat_pane.header.new_chat', defaultMessage: 'New chat' },
+});
+
 const ChatPane = () => {
+  const intl = useIntl();
   const { unreadChatsCount } = useStatContext();
   const showShoutbox = !useShoutboxIsLoading();
 
@@ -99,6 +104,7 @@ const ChatPane = () => {
           }
         }}
         secondaryActionIcon={require('@phosphor-icons/core/regular/note-pencil.svg')}
+        secondaryActionTitle={intl.formatMessage(messages.newChat)}
       />
 
       {isOpen ? renderBody() : null}

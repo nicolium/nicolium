@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import IconButton from '@/components/ui/icon-button';
 
@@ -26,24 +26,28 @@ const Widget: React.FC<IWidget> = ({
   actionTitle,
   action,
   className,
-}): JSX.Element => (
-  <div className={clsx('⁂-widget', className)}>
-    {(title ?? action ?? onActionClick) && (
-      <div className='⁂-widget__header'>
-        {title && <h1>{title}</h1>}
-        {action ??
-          (onActionClick && (
-            <IconButton
-              className='⁂-widget__icon'
-              src={actionIcon}
-              onClick={onActionClick}
-              title={actionTitle}
-            />
-          ))}
-      </div>
-    )}
-    <div className='⁂-widget__body'>{children}</div>
-  </div>
-);
+}): JSX.Element => {
+  const widgetId = useMemo(() => crypto.randomUUID(), []);
+
+  return (
+    <div className={clsx('⁂-widget', className)} aria-labelledby={`widget-header-${widgetId}`}>
+      {(title ?? action ?? onActionClick) && (
+        <div className='⁂-widget__header'>
+          {title && <h1 id={`widget-header-${widgetId}`}>{title}</h1>}
+          {action ??
+            (onActionClick && (
+              <IconButton
+                className='⁂-widget__icon'
+                src={actionIcon}
+                onClick={onActionClick}
+                title={actionTitle}
+              />
+            ))}
+        </div>
+      )}
+      <div className='⁂-widget__body'>{children}</div>
+    </div>
+  );
+};
 
 export { Widget as default };
