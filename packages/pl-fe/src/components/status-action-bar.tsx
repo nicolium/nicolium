@@ -421,6 +421,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
   const { boostModal } = useSettings();
   const { openModal } = useModalsActions();
   const canReblog = useCanInteract(status, 'can_reblog');
+  const canQuote = useCanInteract(status, 'can_quote');
 
   const { mutate: reblogStatus } = useReblogStatus(status.id);
   const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
@@ -494,7 +495,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
 
   const handleQuoteClick: React.EventHandler<React.MouseEvent> = (e) => {
     if (me) {
-      dispatch(quoteCompose(status));
+      dispatch(quoteCompose(status, canQuote.approvalRequired || false));
     } else {
       onOpenUnauthorizedModal('REBLOG');
     }
@@ -510,6 +511,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
       text: intl.formatMessage(messages.quotePost),
       action: handleQuoteClick,
       icon: require('@phosphor-icons/core/regular/quotes.svg'),
+      disabled: !canQuote.canInteract,
     },
   ];
 

@@ -26,6 +26,7 @@ type MenuItem = {
   items?: Menu;
   onSelectFile?: (files: FileList) => void;
   accept?: string;
+  disabled?: boolean;
 } & (LinkOptions | { to?: undefined });
 
 interface IDropdownMenuItem {
@@ -46,6 +47,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
     event.stopPropagation();
 
     if (!item) return;
+    if (item.disabled) return;
 
     if (item.items?.length) {
       event.preventDefault();
@@ -74,6 +76,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
 
   const handleAuxClick: React.EventHandler<React.MouseEvent> = (event) => {
     if (!item) return;
+    if (item.disabled) return;
     if (item.onSelectFile) fileElement.current?.click();
     if (onClick) onClick();
 
@@ -93,6 +96,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
     event.stopPropagation();
 
     if (!item) return;
+    if (item.disabled) return;
 
     if (item.onChange) item.onChange(event.target.checked);
   };
@@ -132,6 +136,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
           'mx-2 my-1 flex cursor-pointer items-center rounded-md px-2 py-1.5 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-800 focus:bg-gray-100 focus:text-gray-800 focus:outline-none black:hover:bg-gray-900 black:focus:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200 dark:focus:bg-gray-800 dark:focus:text-gray-200',
           {
             'text-danger-600 dark:text-danger-400': item.destructive,
+            'cursor-not-allowed opacity-50': item.disabled,
           },
         )}
       >
@@ -185,6 +190,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
             accept={item.accept}
             onChange={handleSelectFileChange}
             className='hidden'
+            disabled={item.disabled}
           />
         </label>
       )}

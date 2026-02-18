@@ -426,13 +426,20 @@ const ComposeForm = <ID extends string>({
       onClick={handleClick}
       onSubmit={handleSubmit}
     >
-      {!!compose.inReplyToId && compose.approvalRequired && (
+      {(compose.inReplyToId || compose.quoteId) && compose.approvalRequired && (
         <Warning
           message={
-            <FormattedMessage
-              id='compose_form.approval_required'
-              defaultMessage='The reply needs to be approved by the post author.'
-            />
+            compose.quoteId ? (
+              <FormattedMessage
+                id='compose_form.approval_required.quote'
+                defaultMessage='The quote needs to be approved by the post author.'
+              />
+            ) : (
+              <FormattedMessage
+                id='compose_form.approval_required'
+                defaultMessage='The reply needs to be approved by the post author.'
+              />
+            )
           }
         />
       )}

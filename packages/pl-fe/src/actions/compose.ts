@@ -277,10 +277,12 @@ interface ComposeQuoteAction {
   account: Pick<Account, 'acct'> | undefined;
   explicitAddressing: boolean;
   conversationScope: boolean;
+  approvalRequired?: boolean;
 }
 
 const quoteCompose =
-  (status: ComposeQuoteAction['status']) => (dispatch: AppDispatch, getState: () => RootState) => {
+  (status: ComposeQuoteAction['status'], approvalRequired?: boolean) =>
+  (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const { forceImplicitAddressing } = useSettingsStore.getState().settings;
     const { createStatusConversationScope, createStatusExplicitAddressing } =
@@ -294,6 +296,7 @@ const quoteCompose =
       account: selectOwnAccount(state),
       explicitAddressing,
       conversationScope: createStatusConversationScope,
+      approvalRequired,
     });
     useModalsStore.getState().actions.openModal('COMPOSE');
   };

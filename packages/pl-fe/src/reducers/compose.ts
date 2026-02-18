@@ -509,6 +509,7 @@ const compose = (
         compose.caretPosition = null;
         compose.contentType = defaultCompose.contentType;
         compose.spoilerText = '';
+        compose.approvalRequired = action.approvalRequired ?? false;
 
         if (action.status.visibility === 'group') {
           compose.groupId = action.status.group_id;

@@ -6,8 +6,11 @@ import type { MinifiedStatus } from '@/reducers/statuses';
 import type { InteractionPolicy, InteractionPolicyEntry } from 'pl-api';
 
 const useCanInteract = (
-  status: Pick<MinifiedStatus, 'account_id' | 'id' | 'interaction_policy' | 'mentions'>,
-  type: keyof InteractionPolicy,
+  status: Pick<
+    MinifiedStatus,
+    'account_id' | 'id' | 'interaction_policy' | 'mentions' | 'quote_approval'
+  >,
+  type: keyof InteractionPolicy | 'can_quote',
 ): {
   canInteract: boolean;
   approvalRequired: boolean | null;
@@ -16,6 +19,14 @@ const useCanInteract = (
   const me = useAppSelector((state) => state.me);
 
   return useMemo(() => {
+    if (type === 'can_quote') {
+      const quoteApproval = status.quote_approval;
+
+      return {
+        canInteract: !quoteApproval || quoteApproval.current_user !== 'denied',
+        approvalRequired: quoteApproval?.current_user === 'manual',
+      };
+    }
     const interactionPolicy = status.interaction_policy;
 
     if (me === status.account_id || interactionPolicy[type].always.includes('me'))
