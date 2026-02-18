@@ -40,18 +40,11 @@ interface PreviewProps {
   media: MediaAttachment;
   position: FocalPoint;
   onPositionChange: (position: FocalPoint) => void;
-  withPosition: boolean;
 }
 
-const Preview: React.FC<PreviewProps> = ({
-  media,
-  position: [x, y],
-  onPositionChange,
-  withPosition,
-}) => {
+const Preview: React.FC<PreviewProps> = ({ media, position: [x, y], onPositionChange }) => {
   const { focalPoint } = useFeatures();
-  const withFocalPoint =
-    withPosition && focalPoint && (media.type === 'image' || media.type === 'gifv');
+  const withFocalPoint = focalPoint && (media.type === 'image' || media.type === 'gifv');
 
   // const [dragging, setDragging] = useState(false);
   const nodeRef = useRef<HTMLDivElement | null>(null);
@@ -189,7 +182,6 @@ interface AltTextModalProps {
   onSubmit: (description: string, position: FocalPoint) => Promise<void>;
   previousDescription: string;
   previousPosition: FocalPoint;
-  withPosition: boolean;
 }
 
 const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
@@ -200,7 +192,6 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
   onSubmit,
   previousDescription,
   previousPosition,
-  withPosition,
 }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
@@ -269,12 +260,7 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
       secondaryText={<FormattedMessage id='alt_text_modal.cancel' defaultMessage='Cancel' />}
     >
       <Stack space={2}>
-        <Preview
-          media={media}
-          withPosition={withPosition}
-          position={position}
-          onPositionChange={handlePositionChange}
-        />
+        <Preview media={media} position={position} onPositionChange={handlePositionChange} />
         <form>
           <FormGroup
             labelText={intl.formatMessage(

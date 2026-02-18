@@ -2,10 +2,11 @@ import { useNavigate } from '@tanstack/react-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { resetCompose } from '@/actions/compose';
+import { changeUploadCompose, resetCompose } from '@/actions/compose';
 import { cancelEventCompose, initEventEdit, submitEvent } from '@/actions/events';
 import { uploadFile } from '@/actions/media';
 import { fetchStatus } from '@/actions/statuses';
+import AltIndicator from '@/components/alt-indicator';
 import { ADDRESS_ICONS } from '@/components/autosuggest-location';
 import LocationSearch from '@/components/location-search';
 import Button from '@/components/ui/button';
@@ -24,7 +25,9 @@ import { isCurrentOrFutureDate } from '@/features/compose/components/schedule-fo
 import { ComposeEditor, DatePicker } from '@/features/ui/util/async-components';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
+import { useInstance } from '@/hooks/use-instance';
 import { makeGetStatus } from '@/selectors';
+import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
 import UploadButton from '../components/upload-button';
@@ -60,11 +63,17 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { openModal } = useModalsActions();
 
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector((state) =>
     statusId ? getStatus(state, { id: statusId }) : undefined,
   );
+  const {
+    pleroma: {
+      metadata: { description_limit: descriptionLimit },
+    },
+  } = useInstance();
 
   const [name, setName] = useState(status?.event?.name ?? '');
   const [text, setText] = useState('');
@@ -81,7 +90,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const [isDisabled, setIsDisabled] = useState(!!statusId);
   const [isUploading, setIsUploading] = useState(false);
 
-  const composeId = statusId ? `compose-event-modal-${statusId}` : 'compose-event-modal';
+  const composeId = statusId ? `compose-event-${statusId}` : 'compose-event';
 
   const onChangeName: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
     setName(target.value);
@@ -132,6 +141,28 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
 
   const handleClearBanner = () => {
     setBanner(null);
+  };
+
+  const handleChangeDescriptionClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.stopPropagation();
+
+    if (!banner) return;
+
+    openModal('ALT_TEXT', {
+      media: banner,
+      previousDescription: banner.description,
+      previousPosition: [0, 0],
+      descriptionLimit: descriptionLimit,
+      onSubmit: (description: string, position: [number, number]) =>
+        dispatch(
+          changeUploadCompose(composeId, banner.id, {
+            description,
+            focus: position
+              ? `${((position[0] - 0.5) * 2).toFixed(2)},${((position[1] - 0.5) * -2).toFixed(2)}`
+              : undefined,
+          }),
+        ).then((media) => setBanner(media || null)),
+    });
   };
 
   const handleSubmit = () => {
@@ -232,6 +263,13 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
                 src={require('@phosphor-icons/core/regular/x.svg')}
                 onClick={handleClearBanner}
               />
+              <button
+                type='button'
+                className='absolute bottom-1 left-1'
+                onClick={handleChangeDescriptionClick}
+              >
+                <AltIndicator warning={!banner.description} />
+              </button>
             </>
           ) : (
             <UploadButton disabled={isUploading} onSelectFile={handleFiles} />

@@ -682,6 +682,7 @@ const changeUploadCompose =
     return dispatch(updateMedia(mediaId, params))
       .then((response) => {
         dispatch(changeUploadComposeSuccess(composeId, response));
+        return response;
       })
       .catch((error) => {
         dispatch(changeUploadComposeFail(composeId, mediaId, error));
