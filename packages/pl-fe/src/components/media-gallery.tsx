@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useState, useRef, useLayoutEffect, CSSProperties } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AltIndicator from '@/components/alt-indicator';
 import Blurhash from '@/components/blurhash';
@@ -29,6 +29,10 @@ import type { MediaAttachment } from 'pl-api';
 
 const ATTACHMENT_LIMIT = 4;
 const MAX_FILENAME_LENGTH = 45;
+
+const messages = defineMessages({
+  altText: { id: 'media_gallery.alt_indicator', defaultMessage: 'Show image description' },
+});
 
 interface Dimensions {
   w: CSSProperties['width'];
@@ -90,6 +94,7 @@ const Item: React.FC<IItem> = ({
   total,
   visible,
 }) => {
+  const intl = useIntl();
   const { autoPlayGif } = useSettings();
   const { mediaPreview } = useFrontendConfig();
 
@@ -231,6 +236,7 @@ const Item: React.FC<IItem> = ({
               </Stack>
             }
             isFlush
+            title={intl.formatMessage(messages.altText)}
           >
             <AltIndicator className='absolute bottom-2 left-2 z-10 opacity-80 transition-opacity hover:opacity-100' />
           </Popover>

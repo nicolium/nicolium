@@ -40,6 +40,7 @@ import StatusInfo from './statuses/status-info';
 import Tombstone from './tombstone';
 
 const messages = defineMessages({
+  edited: { id: 'status.edited', defaultMessage: 'Edited {date}' },
   reblogged_by: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
 });
 
@@ -47,37 +48,49 @@ interface IAccountInfo {
   status: SelectedStatus;
 }
 
-const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => (
-  <div className='flex flex-row-reverse items-center gap-1 self-baseline'>
-    <Link
-      to='/@{$username}/posts/$statusId'
-      params={{ username: status.account.acct, statusId: status.id }}
-      className='hover:underline'
-      onClick={(event) => {
-        event.stopPropagation();
-      }}
-    >
-      <RelativeTimestamp
-        timestamp={status.created_at}
-        theme='muted'
-        size='sm'
-        className='whitespace-nowrap'
-      />
-    </Link>
-    <StatusTypeIcon visibility={status.visibility} />
-    <StatusLanguagePicker status={status} />
-    {!!status.edited_at && (
-      <>
-        <span className='⁂-separator' />
-
-        <Icon
-          className='size-4 text-gray-700 dark:text-gray-600'
-          src={require('@phosphor-icons/core/regular/pencil-simple.svg')}
+const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => {
+  const intl = useIntl();
+  return (
+    <div className='flex flex-row-reverse items-center gap-1 self-baseline'>
+      <Link
+        to='/@{$username}/posts/$statusId'
+        params={{ username: status.account.acct, statusId: status.id }}
+        className='hover:underline'
+        onClick={(event) => {
+          event.stopPropagation();
+        }}
+      >
+        <RelativeTimestamp
+          timestamp={status.created_at}
+          theme='muted'
+          size='sm'
+          className='whitespace-nowrap'
         />
-      </>
-    )}
-  </div>
-));
+      </Link>
+      <StatusTypeIcon visibility={status.visibility} />
+      <StatusLanguagePicker status={status} />
+      {!!status.edited_at && (
+        <>
+          <span className='⁂-separator' />
+
+          <Icon
+            className='size-4 text-gray-700 dark:text-gray-600'
+            src={require('@phosphor-icons/core/regular/pencil-simple.svg')}
+            title={intl.formatMessage(messages.edited, {
+              date: intl.formatDate(new Date(status.edited_at), {
+                hour12: true,
+                month: 'short',
+                day: '2-digit',
+                hour: 'numeric',
+                minute: '2-digit',
+              }),
+            })}
+          />
+        </>
+      )}
+    </div>
+  );
+});
 
 interface IStatusFollowedTagInfo {
   status: SelectedStatus;

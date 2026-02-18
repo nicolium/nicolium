@@ -131,6 +131,7 @@ const messages = defineMessages({
   notePlaceholder: { id: 'account_note.placeholder', defaultMessage: 'Add a note' },
   noteSaved: { id: 'account_note.success', defaultMessage: 'Note saved' },
   noteSaveFailed: { id: 'account_note.fail', defaultMessage: 'Failed to save note' },
+  headerAlt: { id: 'account.header.alt.popover', defaultMessage: 'Show profile header alt text' },
 });
 
 interface IMovedNote {
@@ -745,6 +746,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
               </Stack>
             }
             isFlush
+            title={intl.formatMessage(messages.headerAlt)}
           >
             <AltIndicator
               className='ml-6 mt-6 w-fit'

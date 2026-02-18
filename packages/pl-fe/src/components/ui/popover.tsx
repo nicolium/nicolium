@@ -31,6 +31,7 @@ interface IPopover {
   referenceElementClassName?: string;
   offsetOptions?: OffsetOptions;
   placements?: Array<Placement>;
+  title?: string;
 }
 
 /**
@@ -47,6 +48,7 @@ const Popover: React.FC<IPopover> = ({
   isFlush = false,
   offsetOptions = 10,
   placements = ['top', 'bottom'],
+  title,
 }) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -95,7 +97,11 @@ const Popover: React.FC<IPopover> = ({
         ref: refs.setReference,
         ...getReferenceProps(),
         className: clsx(children.props.className, referenceElementClassName),
+        'aria-haspopup': interaction === 'click' ? 'dialog' : undefined,
         'aria-expanded': isOpen,
+        role: interaction === 'click' ? 'button' : undefined,
+        tabIndex: interaction === 'click' ? 0 : undefined,
+        title: title || children.props.title,
       })}
 
       {isMounted && (
@@ -109,6 +115,7 @@ const Popover: React.FC<IPopover> = ({
               left: x ?? 0,
               ...styles,
             }}
+            role='dialog'
           >
             <div
               className={clsx(

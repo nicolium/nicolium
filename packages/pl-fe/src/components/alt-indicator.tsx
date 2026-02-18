@@ -20,7 +20,11 @@ const AltIndicator: React.FC<IAltIndicator> = React.forwardRef<HTMLSpanElement, 
       ref={ref}
     >
       {warning && (
-        <Icon className='size-4' src={require('@phosphor-icons/core/regular/warning.svg')} />
+        <Icon
+          className='size-4'
+          src={require('@phosphor-icons/core/regular/warning.svg')}
+          aria-hidden
+        />
       )}
       {message ?? (
         <FormattedMessage id='upload_form.description_missing.indicator' defaultMessage='Alt' />

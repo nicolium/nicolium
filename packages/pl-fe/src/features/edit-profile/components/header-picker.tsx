@@ -21,6 +21,11 @@ const messages = defineMessages({
     defaultMessage: 'Image description',
   },
   changeHeaderDescriptionConfirm: { id: 'group.upload_banner.alt.confirm', defaultMessage: 'Save' },
+  clearHeader: { id: 'group.upload_banner.clear', defaultMessage: 'Clear header image' },
+  changeDescription: {
+    id: 'group.upload_banner.change_description',
+    defaultMessage: 'Change alt text',
+  },
 });
 
 interface IMediaInput {
@@ -111,6 +116,7 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
             theme='dark'
             className='absolute right-2 top-2 z-10 hover:scale-105 hover:bg-gray-900'
             iconClassName='h-5 w-5'
+            title={intl.formatMessage(messages.clearHeader)}
           />
         )}
         {onChangeDescription && src && (
@@ -118,6 +124,7 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
             type='button'
             className='absolute left-2 top-2'
             onClick={handleChangeDescriptionClick}
+            title={intl.formatMessage(messages.changeDescription)}
           >
             <AltIndicator warning={!description} />
           </button>

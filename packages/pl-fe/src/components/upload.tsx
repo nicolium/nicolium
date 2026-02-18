@@ -237,8 +237,11 @@ const Upload: React.FC<IUpload> = ({
           </span>
 
           {onDescriptionChange && !description && (
-            <button onClick={handleOpenAltTextModal}>
-              <AltIndicator warning title={intl.formatMessage(messages.descriptionMissingTitle)} />
+            <button
+              onClick={handleOpenAltTextModal}
+              title={intl.formatMessage(messages.descriptionMissingTitle)}
+            >
+              <AltIndicator warning />
             </button>
           )}
         </HStack>

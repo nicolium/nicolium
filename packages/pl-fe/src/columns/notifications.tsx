@@ -83,7 +83,9 @@ const FilterBar = () => {
     });
   } else {
     items.push({
-      text: <Icon className='size-4' src={require('@phosphor-icons/core/regular/at.svg')} />,
+      text: (
+        <Icon className='size-4' src={require('@phosphor-icons/core/regular/at.svg')} aria-hidden />
+      ),
       title: intl.formatMessage(messages.mentions),
       action: onClick('mention'),
       name: 'mention',
@@ -94,6 +96,7 @@ const FilterBar = () => {
           <Icon
             className='size-4'
             src={require('@phosphor-icons/core/regular/bell-simple-ringing.svg')}
+            aria-hidden
           />
         ),
         title: intl.formatMessage(messages.statuses),
@@ -101,13 +104,25 @@ const FilterBar = () => {
         name: 'status',
       });
     items.push({
-      text: <Icon className='size-4' src={require('@phosphor-icons/core/regular/star.svg')} />,
+      text: (
+        <Icon
+          className='size-4'
+          src={require('@phosphor-icons/core/regular/star.svg')}
+          aria-hidden
+        />
+      ),
       title: intl.formatMessage(messages.favourites),
       action: onClick('favourite'),
       name: 'favourite',
     });
     items.push({
-      text: <Icon className='size-4' src={require('@phosphor-icons/core/regular/repeat.svg')} />,
+      text: (
+        <Icon
+          className='size-4'
+          src={require('@phosphor-icons/core/regular/repeat.svg')}
+          aria-hidden
+        />
+      ),
       title: intl.formatMessage(messages.boosts),
       action: onClick('reblog'),
       name: 'reblog',
@@ -115,7 +130,11 @@ const FilterBar = () => {
     if (features.polls)
       items.push({
         text: (
-          <Icon className='size-4' src={require('@phosphor-icons/core/regular/chart-bar.svg')} />
+          <Icon
+            className='size-4'
+            src={require('@phosphor-icons/core/regular/chart-bar.svg')}
+            aria-hidden
+          />
         ),
         title: intl.formatMessage(messages.polls),
         action: onClick('poll'),
@@ -127,6 +146,7 @@ const FilterBar = () => {
           <Icon
             className='size-4'
             src={require('@phosphor-icons/core/regular/calendar-dots.svg')}
+            aria-hidden
           />
         ),
         title: intl.formatMessage(messages.events),
@@ -134,7 +154,13 @@ const FilterBar = () => {
         name: 'events',
       });
     items.push({
-      text: <Icon className='size-4' src={require('@phosphor-icons/core/regular/user-plus.svg')} />,
+      text: (
+        <Icon
+          className='size-4'
+          src={require('@phosphor-icons/core/regular/user-plus.svg')}
+          aria-hidden
+        />
+      ),
       title: intl.formatMessage(messages.follows),
       action: onClick('follow'),
       name: 'follow',

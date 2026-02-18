@@ -53,6 +53,10 @@ const messages = defineMessages({
     id: 'compose_event.fetch_fail',
     defaultMessage: 'Failed to fetch edited event information',
   },
+  eventHeaderDescription: {
+    id: 'compose_event.header_description',
+    defaultMessage: 'Add header alt text.',
+  },
 });
 
 interface IEditEvent {
@@ -262,11 +266,13 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
               <IconButton
                 src={require('@phosphor-icons/core/regular/x.svg')}
                 onClick={handleClearBanner}
+                title={intl.formatMessage(messages.resetLocation)}
               />
               <button
                 type='button'
                 className='absolute bottom-1 left-1'
                 onClick={handleChangeDescriptionClick}
+                title={intl.formatMessage(messages.eventHeaderDescription)}
               >
                 <AltIndicator warning={!banner.description} />
               </button>

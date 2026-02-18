@@ -150,7 +150,7 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
             className='⁂-status-reactions-bar__picker-button emoji-picker-dropdown'
             title={intl.formatMessage(messages.addEmoji)}
           >
-            <Icon src={require('@phosphor-icons/core/regular/smiley-sticker.svg')} />
+            <Icon src={require('@phosphor-icons/core/regular/smiley-sticker.svg')} aria-hidden />
           </button>
         </EmojiPickerDropdown>
       )}
