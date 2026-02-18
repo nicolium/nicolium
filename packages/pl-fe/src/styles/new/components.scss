@@ -392,6 +392,14 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
       @include mixins.button($theme: tertiary);
     }
 
+    button.⁂-modal__action {
+      @include mixins.button($theme: primary);
+
+      &--danger {
+        @include mixins.button($theme: danger);
+      }
+    }
+
     button.⁂-modal__action-secondary {
       @include mixins.button($theme: secondary);
     }

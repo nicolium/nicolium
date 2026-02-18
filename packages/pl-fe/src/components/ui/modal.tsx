@@ -4,7 +4,6 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { useOwnAccount } from '@/hooks/use-own-account';
 
-import Button from './button';
 import { ButtonThemes } from './button/useButtonStyles';
 import IconButton from './icon-button';
 
@@ -163,14 +162,16 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(
                   </button>
                 )}
 
-                <Button
-                  theme={confirmationTheme ?? 'primary'}
+                <button
+                  className={clsx('⁂-modal__action', {
+                    '⁂-modal__action--danger': confirmationTheme === 'danger',
+                  })}
                   onClick={confirmationAction}
                   disabled={confirmationDisabled}
                   ref={buttonRef}
                 >
                   {confirmationText}
-                </Button>
+                </button>
               </div>
             </div>
           )}
