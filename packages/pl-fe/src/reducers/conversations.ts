@@ -33,7 +33,7 @@ const initialState: State = {
 
 const minifyConversation = (conversation: Conversation) => ({
   ...pick(conversation, ['id', 'unread']),
-  accounts: conversation.accounts.map((a) => a.id),
+  account_ids: conversation.accounts.map((a) => a.id),
   last_status: conversation.last_status?.id ?? null,
   last_status_created_at: conversation.last_status?.created_at ?? null,
 });

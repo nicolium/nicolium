@@ -2,10 +2,10 @@ import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 
 import { markConversationRead } from '@/actions/conversations';
+import { useAccount } from '@/api/hooks/accounts/use-account';
 import StatusContainer from '@/containers/status-container';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
-import { selectAccount } from '@/selectors';
 
 interface IConversation {
   conversationId: string;
@@ -17,15 +17,12 @@ const Conversation: React.FC<IConversation> = ({ conversationId, onMoveUp, onMov
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const { accounts, unread, lastStatusId } = useAppSelector((state) => {
-    const conversation = state.conversations.items.find((x) => x.id === conversationId)!;
-
-    return {
-      accounts: conversation.accounts.map((accountId: string) => selectAccount(state, accountId)!),
-      unread: conversation.unread,
-      lastStatusId: conversation.last_status,
-    };
-  });
+  const {
+    account_ids,
+    unread,
+    last_status: lastStatusId,
+  } = useAppSelector((state) => state.conversations.items.find((x) => x.id === conversationId)!);
+  const { account: lastStatusAccount } = useAccount(account_ids[0]);
 
   const handleClick = () => {
     if (unread) {
@@ -35,7 +32,7 @@ const Conversation: React.FC<IConversation> = ({ conversationId, onMoveUp, onMov
     if (lastStatusId)
       navigate({
         to: '/@{$username}/posts/$statusId',
-        params: { username: accounts[0].acct, statusId: lastStatusId },
+        params: { username: lastStatusAccount?.acct || 'undefined', statusId: lastStatusId },
       });
   };
 
@@ -52,11 +49,10 @@ const Conversation: React.FC<IConversation> = ({ conversationId, onMoveUp, onMov
   }
 
   return (
-    // @ts-ignore
     <StatusContainer
       id={lastStatusId}
       unread={unread}
-      otherAccounts={accounts}
+      // otherAccounts={accounts}
       onMoveUp={handleHotkeyMoveUp}
       onMoveDown={handleHotkeyMoveDown}
       onClick={handleClick}
