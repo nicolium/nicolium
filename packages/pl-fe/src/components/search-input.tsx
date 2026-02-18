@@ -33,7 +33,10 @@ const SearchInput = React.memo(() => {
 
   const handleSubmit = () => {
     setValue('');
-    navigate({ to: '/search', search: { q: value } });
+    const guessedType = /^(?:\/statuses\/|\/notice\/|\/objects\/|\/@[\w.-]+\/\d+)/.test(value)
+      ? 'statuses'
+      : 'accounts';
+    navigate({ to: '/search', search: { q: value, type: guessedType } });
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
