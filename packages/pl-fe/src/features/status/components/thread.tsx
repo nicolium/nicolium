@@ -352,7 +352,7 @@ const Thread = ({
                 deleted
               />
             ) : (
-              <Hotkeys handlers={handlers}>
+              <Hotkeys handlers={handlers} element='article'>
                 <div
                   ref={statusRef}
                   className='relative'
