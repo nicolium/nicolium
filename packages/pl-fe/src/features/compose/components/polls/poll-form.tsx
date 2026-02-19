@@ -42,19 +42,7 @@ const messages = defineMessages({
     id: 'compose_form.poll.switch_to_single',
     defaultMessage: 'Change poll to allow for a single answer',
   },
-  minutes: {
-    id: 'intervals.full.minutes',
-    defaultMessage: '{number, plural, one {# minute} other {# minutes}}',
-  },
-  hours: {
-    id: 'intervals.full.hours',
-    defaultMessage: '{number, plural, one {# hour} other {# hours}}',
-  },
-  days: {
-    id: 'intervals.full.days',
-    defaultMessage: '{number, plural, one {# day} other {# days}}',
-  },
-  multiSelect: { id: 'compose_form.poll.multiselect', defaultMessage: 'Multi-Select' },
+  multiSelect: { id: 'compose_form.poll.multiselect', defaultMessage: 'Multi-select' },
   multiSelectDetail: {
     id: 'compose_form.poll.multiselect_detail',
     defaultMessage: 'Allow users to select multiple answers',
@@ -219,7 +207,7 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
 
       <Divider />
 
-      <button type='button' onClick={handleToggleMultiple} className='text-start'>
+      <label className='text-start'>
         <HStack alignItems='center' justifyContent='between'>
           <Stack>
             <Text weight='medium'>{intl.formatMessage(messages.multiSelect)}</Text>
@@ -231,7 +219,7 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
 
           <Toggle checked={isMultiple} onChange={handleToggleMultiple} />
         </HStack>
-      </button>
+      </label>
 
       <Divider />
 

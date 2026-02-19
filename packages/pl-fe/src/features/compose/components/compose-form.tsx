@@ -121,7 +121,7 @@ const ComposeButton: React.FC<IComposeButton> = ({
           className='⁂-compose-form__button__actions'
           title={intl.formatMessage(messages.more)}
         >
-          <SvgIcon src={require('@phosphor-icons/core/regular/caret-down.svg')} />
+          <SvgIcon src={require('@phosphor-icons/core/regular/caret-down.svg')} aria-hidden />
         </button>
       </DropdownMenu>
     </div>
