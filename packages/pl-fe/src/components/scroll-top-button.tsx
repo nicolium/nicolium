@@ -92,7 +92,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
       aria-hidden={!visible}
     >
       <button onClick={handleClick} tabIndex={visible ? 0 : -1}>
-        <Icon src={require('@phosphor-icons/core/regular/arrow-line-up.svg')} />
+        <Icon src={require('@phosphor-icons/core/regular/arrow-line-up.svg')} aria-hidden />
 
         <p>{intl.formatMessage(message, { count })}</p>
       </button>

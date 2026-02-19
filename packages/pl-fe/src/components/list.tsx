@@ -85,7 +85,7 @@ const ListItem: React.FC<IListItem> = ({
         <HStack space={1} alignItems='center' className='⁂-list-item__body'>
           {children}
 
-          <Icon src={require('@phosphor-icons/core/regular/caret-right.svg')} />
+          <Icon src={require('@phosphor-icons/core/regular/caret-right.svg')} aria-hidden />
         </HStack>
       ) : null}
 
