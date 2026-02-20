@@ -142,6 +142,7 @@ import {
   SettingsStore,
   Share,
   Status,
+  Subscribers,
   TestTimeline,
   ThemeEditor,
   Privacy,
@@ -727,6 +728,15 @@ export const profileFollowingRoute = createRoute({
   getParentRoute: () => layouts.profile,
   path: '/following',
   component: Following,
+});
+
+export const profileSubscribersRoute = createRoute({
+  getParentRoute: () => layouts.profile,
+  path: '/subscribers',
+  component: Subscribers,
+  validateSearch: v.object({
+    include_expired: v.optional(v.boolean(), false),
+  }),
 });
 
 export const profileMediaRoute = createRoute({
@@ -1538,6 +1548,7 @@ const routeTree = rootRoute.addChildren([
     profileRoute,
     profileFollowersRoute,
     profileFollowingRoute,
+    profileSubscribersRoute,
     profileMediaRoute,
     profileTaggedRoute,
     profileFavoritesRoute,
