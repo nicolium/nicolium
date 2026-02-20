@@ -54,10 +54,7 @@ const FiltersPage = () => {
   }, []);
 
   const emptyMessage = (
-    <FormattedMessage
-      id='empty_column.filters'
-      defaultMessage="You haven't created any muted words yet."
-    />
+    <FormattedMessage id='empty_column.filters' defaultMessage="You haven't muted any word yet." />
   );
 
   return (

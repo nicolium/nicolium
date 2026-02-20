@@ -911,7 +911,7 @@
   "empty_column.event_participants": "No one joined this event yet. When someone does, they will show up here.",
   "empty_column.favourited_statuses": "You don't have any liked posts yet. When you like one, it will show up here.",
   "empty_column.favourites": "No one has liked this post yet. When someone does, they will show up here.",
-  "empty_column.filters": "You haven't created any muted words yet.",
+  "empty_column.filters": "You haven't muted any word yet.",
   "empty_column.follow_requests": "You don't have any follow requests yet. When you receive one, it will show up here.",
   "empty_column.followed_tags": "You haven't followed any hashtag yet.",
   "empty_column.group": "There are no posts in this group yet.",
