@@ -8,6 +8,7 @@ interface ISlider {
   id?: string;
   'aria-labelledby'?: string;
   'aria-describedby'?: string;
+  'aria-valuetext'?: string;
   /** Value between 0 and 1. */
   value: number;
   /** Callback when the value changes. */
@@ -21,6 +22,7 @@ const Slider: React.FC<ISlider> = ({
   onChange,
   'aria-labelledby': ariaLabelledby,
   'aria-describedby': ariaDescribedby,
+  'aria-valuetext': ariaValueText,
 }) => {
   const node = useRef<HTMLDivElement>(null);
   const keyboardAnimationTimeout = useRef<number | null>(null);
@@ -161,6 +163,7 @@ const Slider: React.FC<ISlider> = ({
         aria-valuemin={0}
         aria-valuemax={1}
         aria-valuenow={value}
+        aria-valuetext={ariaValueText}
         aria-orientation='horizontal'
         aria-labelledby={ariaLabelledby}
         aria-describedby={ariaDescribedby}

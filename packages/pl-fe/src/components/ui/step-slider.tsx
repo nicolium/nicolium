@@ -7,6 +7,7 @@ interface IStepSlider {
   id?: string;
   'aria-labelledby'?: string;
   'aria-describedby'?: string;
+  'aria-valuetext'?: string;
   /** Value between 0 and the amount of steps minus one. */
   value: number;
   /** Steps available in the slider. */
@@ -23,6 +24,7 @@ const StepSlider: React.FC<IStepSlider> = ({
   onChange,
   'aria-labelledby': ariaLabelledby,
   'aria-describedby': ariaDescribedby,
+  'aria-valuetext': ariaValueText,
 }) => {
   const node = useRef<HTMLDivElement>(null);
 
@@ -129,6 +131,7 @@ const StepSlider: React.FC<IStepSlider> = ({
         aria-valuemin={0}
         aria-valuemax={steps - 1}
         aria-valuenow={value}
+        aria-valuetext={ariaValueText}
         aria-orientation='horizontal'
         aria-labelledby={ariaLabelledby}
         aria-describedby={ariaDescribedby}

@@ -128,6 +128,22 @@ const messages = defineMessages({
     defaultMessage: 'WYSIWYG',
   },
   brandColor: { id: 'preferences.options.brand_color', defaultMessage: 'Base color' },
+  interfaceSizeSmall: {
+    id: 'preferences.options.interface_size.sm',
+    defaultMessage: 'Small',
+  },
+  interfaceSizeMedium: {
+    id: 'preferences.options.interface_size.md',
+    defaultMessage: 'Medium',
+  },
+  interfaceSizeLarge: {
+    id: 'preferences.options.interface_size.lg',
+    defaultMessage: 'Large',
+  },
+  interfaceSizeExtraLarge: {
+    id: 'preferences.options.interface_size.xl',
+    defaultMessage: 'Extra large',
+  },
   dark: { id: 'theme_toggle.dark', defaultMessage: 'Dark' },
   black: { id: 'theme_toggle.black', defaultMessage: 'Black' },
 });
@@ -233,6 +249,21 @@ const Preferences = () => {
     [settings.locale],
   );
 
+  const interfaceSizeValueText = React.useMemo(() => {
+    const size = settings.theme?.interfaceSize ?? 'md';
+
+    switch (size) {
+      case 'sm':
+        return intl.formatMessage(messages.interfaceSizeSmall);
+      case 'lg':
+        return intl.formatMessage(messages.interfaceSizeLarge);
+      case 'xl':
+        return intl.formatMessage(messages.interfaceSizeExtraLarge);
+      default:
+        return intl.formatMessage(messages.interfaceSizeMedium);
+    }
+  }, [settings.theme?.interfaceSize, settings.locale]);
+
   const defaultContentTypeOptions = React.useMemo(() => {
     const postFormats = instance.pleroma.metadata.post_formats;
 
@@ -311,6 +342,7 @@ const Preferences = () => {
               value={INTERFACE_SIZES.indexOf(settings.theme?.interfaceSize ?? 'md')}
               steps={4}
               onChange={onInterfaceSizeChange}
+              aria-valuetext={interfaceSizeValueText}
             />
           </div>
         </ListItem>
