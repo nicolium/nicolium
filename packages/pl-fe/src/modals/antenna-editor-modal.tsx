@@ -42,6 +42,7 @@ import {
   useRemoveTagsFromAntenna,
   useUpdateAntenna,
 } from '@/queries/accounts/use-antennas';
+import { useLists } from '@/queries/accounts/use-lists';
 import { useAccountSearch } from '@/queries/search/use-search-accounts';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
@@ -201,6 +202,7 @@ interface IAntennaValuesForm {
 const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
   values,
   excludedValues,
+  isFetching,
   addTitle,
   listTitle,
   addExcludedTitle,
@@ -264,6 +266,8 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
             ))}
           </div>
         </div>
+      ) : isFetching ? (
+        <Spinner />
       ) : (
         <Text theme='muted' size='sm'>
           {emptyValues}
@@ -313,6 +317,8 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
             ))}
           </div>
         </div>
+      ) : isFetching ? (
+        <Spinner />
       ) : (
         <Text theme='muted' size='sm'>
           {emptyExcludedValues}
@@ -345,7 +351,7 @@ interface IAntennaStringForm {
 
 const AntennaDomainsForm: React.FC<IAntennaStringForm> = ({ antennaId }) => {
   const intl = useIntl();
-  const { data } = useAntennaDomains(antennaId);
+  const { data, isFetching } = useAntennaDomains(antennaId);
   const { mutate: addDomains } = useAddDomainsToAntenna(antennaId);
   const { mutate: removeDomains } = useRemoveDomainsFromAntenna(antennaId);
   const { mutate: addExcludedDomains } = useAddExcludedDomainsToAntenna(antennaId);
@@ -355,6 +361,7 @@ const AntennaDomainsForm: React.FC<IAntennaStringForm> = ({ antennaId }) => {
     <AntennaValuesForm
       values={data?.domains ?? []}
       excludedValues={data?.exclude_domains ?? []}
+      isFetching={isFetching}
       addTitle={<FormattedMessage id='antennas.domain.add' defaultMessage='Add domain' />}
       listTitle={<FormattedMessage id='antennas.domains' defaultMessage='Domains' />}
       addExcludedTitle={
@@ -386,7 +393,7 @@ const AntennaDomainsForm: React.FC<IAntennaStringForm> = ({ antennaId }) => {
 
 const AntennaKeywordsForm: React.FC<IAntennaStringForm> = ({ antennaId }) => {
   const intl = useIntl();
-  const { data } = useAntennaKeywords(antennaId);
+  const { data, isFetching } = useAntennaKeywords(antennaId);
   const { mutate: addKeywords } = useAddKeywordsToAntenna(antennaId);
   const { mutate: removeKeywords } = useRemoveKeywordsFromAntenna(antennaId);
   const { mutate: addExcludedKeywords } = useAddExcludedKeywordsToAntenna(antennaId);
@@ -396,6 +403,7 @@ const AntennaKeywordsForm: React.FC<IAntennaStringForm> = ({ antennaId }) => {
     <AntennaValuesForm
       values={data?.keywords ?? []}
       excludedValues={data?.exclude_keywords ?? []}
+      isFetching={isFetching}
       listTitle={<FormattedMessage id='antennas.keywords' defaultMessage='Keywords' />}
       addTitle={<FormattedMessage id='antennas.keyword.add' defaultMessage='Add keyword' />}
       listExcludedTitle={
@@ -430,7 +438,7 @@ const AntennaKeywordsForm: React.FC<IAntennaStringForm> = ({ antennaId }) => {
 
 const AntennaTagsForm: React.FC<IAntennaStringForm> = ({ antennaId }) => {
   const intl = useIntl();
-  const { data } = useAntennaTags(antennaId);
+  const { data, isFetching } = useAntennaTags(antennaId);
   const { mutate: addTags } = useAddTagsToAntenna(antennaId);
   const { mutate: removeTags } = useRemoveTagsFromAntenna(antennaId);
   const { mutate: addExcludedTags } = useAddExcludedTagsToAntenna(antennaId);
@@ -440,6 +448,7 @@ const AntennaTagsForm: React.FC<IAntennaStringForm> = ({ antennaId }) => {
     <AntennaValuesForm
       values={data?.tags ?? []}
       excludedValues={data?.exclude_tags ?? []}
+      isFetching={isFetching}
       listTitle={<FormattedMessage id='antennas.tags' defaultMessage='Tags' />}
       addTitle={<FormattedMessage id='antennas.tag.add' defaultMessage='Add tag' />}
       listExcludedTitle={
@@ -483,7 +492,7 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
   const { mutate: updateAntenna, isPending: updateDisabled } = useUpdateAntenna(antennaId!);
   const { mutate: createAntenna, isPending: createDisabled } = useCreateAntenna();
 
-  const disabled = antennaId ? updateDisabled : createDisabled;
+  const { data: lists } = useLists((lists) => lists);
 
   const [title, setTitle] = useState(antenna ? antenna.title : '');
   const [ltl, setLtl] = useState(antenna ? antenna.ltl : false);
@@ -493,6 +502,8 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
   const [ignoreReblog, setIgnoreReblog] = useState(antenna ? antenna.ignore_reblog : false);
   const [favourite, setFavourite] = useState(antenna ? antenna.favourite : false);
   const [listId, setListId] = useState(antenna?.list?.id || undefined);
+
+  const disabled = (antennaId ? updateDisabled : createDisabled) || listId === '';
 
   const handleSubmit: React.FormEventHandler = (e) => {
     e.preventDefault();
@@ -593,6 +604,32 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
           }}
         />
       </FormGroup>
+      {listId !== undefined && (
+        <FormGroup
+          labelText={<FormattedMessage id='antennas.edit.list' defaultMessage='Target list' />}
+        >
+          <SelectDropdown
+            items={
+              lists
+                ? lists.reduce(
+                    (acc, list) => {
+                      acc[list.id] = list.title;
+                      return acc;
+                    },
+                    {
+                      '': intl.formatMessage({
+                        id: 'antennas.edit.list.select',
+                        defaultMessage: 'Select list',
+                      }),
+                    } as Record<string, string>,
+                  )
+                : {}
+            }
+            defaultValue={listId}
+            onChange={(e) => setListId(e.target.value)}
+          />
+        </FormGroup>
+      )}
       <List>
         <ListItem
           label={
