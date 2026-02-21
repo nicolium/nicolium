@@ -3,17 +3,34 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import List, { ListItem } from '@/components/list';
 import Button from '@/components/ui/button';
+import { CardHeader, CardTitle } from '@/components/ui/card';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
+import Stack from '@/components/ui/stack';
+import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import { SelectDropdown } from '@/features/forms';
-import { useAntenna, useCreateAntenna, useUpdateAntenna } from '@/queries/accounts/use-antennas';
+import {
+  useAddAccountsToAntenna,
+  useAddExcludedAccountsToAntenna,
+  useAntenna,
+  useAntennaAccounts,
+  useAntennaExcludedAccounts,
+  useCreateAntenna,
+  useRemoveAccountsFromAntenna,
+  useRemoveExcludedAccountsFromAntenna,
+  useUpdateAntenna,
+} from '@/queries/accounts/use-antennas';
+import { useAccountSearch } from '@/queries/search/use-search-accounts';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
+
+import Account from './list-editor-modal/components/account';
+import Search from './list-editor-modal/components/search';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
@@ -24,6 +41,16 @@ const messages = defineMessages({
   editSuccess: { id: 'antennas.edit.success', defaultMessage: 'Antenna updated successfully' },
   createError: { id: 'antennas.create.error', defaultMessage: 'Error creating antenna' },
   editError: { id: 'antennas.edit.error', defaultMessage: 'Error updating antenna' },
+  addToAntenna: { id: 'antennas.account.add', defaultMessage: 'Add to antenna' },
+  removeFromAntenna: { id: 'antennas.account.remove', defaultMessage: 'Remove from antenna' },
+  addExcludedToAntenna: {
+    id: 'antennas.account.excluded.add',
+    defaultMessage: 'Add to excluded accounts',
+  },
+  removeExcludedFromAntenna: {
+    id: 'antennas.account.excluded.remove',
+    defaultMessage: 'Remove from excluded accounts',
+  },
 });
 
 interface IAntennaAccountsForm {
@@ -31,7 +58,104 @@ interface IAntennaAccountsForm {
   excluded?: boolean;
 }
 
-const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = () => null;
+const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, excluded = false }) => {
+  const intl = useIntl();
+
+  const [searchValue, setSearchValue] = useState('');
+
+  const { data: accountIds = [] } = useAntennaAccounts(antennaId);
+  const { data: excludedAccountIds = [] } = useAntennaExcludedAccounts(antennaId);
+  const { data: searchAccountIds = [] } = useAccountSearch(searchValue, {
+    following: true,
+    limit: 5,
+  });
+
+  const { mutate: addToAntenna } = useAddAccountsToAntenna(antennaId);
+  const { mutate: removeFromAntenna } = useRemoveAccountsFromAntenna(antennaId);
+  const { mutate: addToExcludedAntenna } = useAddExcludedAccountsToAntenna(antennaId);
+  const { mutate: removeFromExcludedAntenna } = useRemoveExcludedAccountsFromAntenna(antennaId);
+
+  const selectedAccountIds = excluded ? excludedAccountIds : accountIds;
+
+  const onAdd = (accountId: string) => {
+    if (excluded) {
+      addToExcludedAntenna([accountId]);
+    } else {
+      addToAntenna([accountId]);
+    }
+  };
+
+  const onRemove = (accountId: string) => {
+    if (excluded) {
+      removeFromExcludedAntenna([accountId]);
+    } else {
+      removeFromAntenna([accountId]);
+    }
+  };
+
+  return (
+    <Stack space={2}>
+      {selectedAccountIds.length > 0 ? (
+        <div>
+          <CardHeader>
+            <CardTitle
+              title={intl.formatMessage(
+                excluded ? messages.removeExcludedFromAntenna : messages.removeFromAntenna,
+              )}
+            />
+          </CardHeader>
+          <div className='max-h-48 overflow-y-auto'>
+            {selectedAccountIds.map((accountId) => (
+              <Account
+                key={accountId}
+                accountId={accountId}
+                added={selectedAccountIds.includes(accountId)}
+                onAdd={onAdd}
+                onRemove={onRemove}
+              />
+            ))}
+          </div>
+        </div>
+      ) : (
+        <Text theme='muted' size='sm'>
+          {excluded ? (
+            <FormattedMessage
+              id='empty_column.antenna_excluded_accounts'
+              defaultMessage='There are no excluded accounts in this antenna. Use search to find users to exclude.'
+            />
+          ) : (
+            <FormattedMessage
+              id='empty_column.antenna_accounts'
+              defaultMessage='There are no accounts in this antenna. Use search to find users to add.'
+            />
+          )}
+        </Text>
+      )}
+
+      <div>
+        <CardHeader>
+          <CardTitle
+            title={intl.formatMessage(
+              excluded ? messages.addExcludedToAntenna : messages.addToAntenna,
+            )}
+          />
+        </CardHeader>
+        <Search value={searchValue} onSubmit={setSearchValue} />
+        <div className='max-h-48 overflow-y-auto'>
+          {searchAccountIds.map((accountId) => (
+            <Account
+              key={accountId}
+              accountId={accountId}
+              added={selectedAccountIds.includes(accountId)}
+              onAdd={onAdd}
+              onRemove={onRemove}
+            />
+          ))}
+        </div>
+      </div>
+    </Stack>
+  );
+};
 
 interface IEditAntennaForm {
   antennaId?: string;
@@ -206,6 +330,17 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
               }
               onClick={() => {
                 onTabChange('accounts');
+              }}
+            />
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='antennas.manage_excluded_accounts'
+                  defaultMessage='Manage excluded accounts'
+                />
+              }
+              onClick={() => {
+                onTabChange('excludedAccounts');
               }}
             />
           </>
