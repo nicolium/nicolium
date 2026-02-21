@@ -36,6 +36,8 @@ const ListItem: React.FC<IListItem> = ({
   ...rest
 }) => {
   const [domId] = useState(`list-group-${crypto.randomUUID()}`);
+  const labelId = `${domId}-label`;
+  const hintId = `${domId}-hint`;
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -50,10 +52,22 @@ const ListItem: React.FC<IListItem> = ({
       React.Children.map(children, (child) => {
         if (React.isValidElement(child)) {
           const isSelect = child.type === SelectDropdown || child.type === Select;
+          const childLabelledBy = child.props['aria-labelledby'];
+          const childDescribedBy = child.props['aria-describedby'];
+          const ariaLabelledBy = childLabelledBy ? `${childLabelledBy} ${labelId}` : labelId;
+          const ariaDescribedBy = hint
+            ? childDescribedBy
+              ? `${childDescribedBy} ${hintId}`
+              : hintId
+            : childDescribedBy;
 
           return React.cloneElement(child, {
             // @ts-ignore
             id: domId,
+            // @ts-ignore
+            'aria-labelledby': ariaLabelledBy,
+            // @ts-ignore
+            'aria-describedby': ariaDescribedBy,
             className: clsx(
               {
                 'w-auto': isSelect,
@@ -65,7 +79,7 @@ const ListItem: React.FC<IListItem> = ({
 
         return null;
       }),
-    [children, domId],
+    [children, domId, labelId, hint, hintId],
   );
 
   const classNames = clsx('⁂-list-item', className, {
@@ -76,9 +90,15 @@ const ListItem: React.FC<IListItem> = ({
   const body = (
     <>
       <div className='⁂-list-item__label'>
-        <LabelComp htmlFor={domId}>{label}</LabelComp>
+        <LabelComp id={labelId} {...(LabelComp === 'label' ? { htmlFor: domId } : {})}>
+          {label}
+        </LabelComp>
 
-        {hint ? <span className='⁂-list-item__hint'>{hint}</span> : null}
+        {hint ? (
+          <span id={hintId} className='⁂-list-item__hint'>
+            {hint}
+          </span>
+        ) : null}
       </div>
 
       {'to' in rest || href || onClick ? (

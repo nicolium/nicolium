@@ -5,6 +5,8 @@ import { getPointerPosition } from '@/features/video';
 
 interface IStepSlider {
   id?: string;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
   /** Value between 0 and the amount of steps minus one. */
   value: number;
   /** Steps available in the slider. */
@@ -14,7 +16,14 @@ interface IStepSlider {
 }
 
 /** Slider allowing selecting integers in a given range. */
-const StepSlider: React.FC<IStepSlider> = ({ id, value, steps, onChange }) => {
+const StepSlider: React.FC<IStepSlider> = ({
+  id,
+  value,
+  steps,
+  onChange,
+  'aria-labelledby': ariaLabelledby,
+  'aria-describedby': ariaDescribedby,
+}) => {
   const node = useRef<HTMLDivElement>(null);
 
   const handleMouseDown: React.MouseEventHandler = (e) => {
@@ -121,6 +130,8 @@ const StepSlider: React.FC<IStepSlider> = ({ id, value, steps, onChange }) => {
         aria-valuemax={steps - 1}
         aria-valuenow={value}
         aria-orientation='horizontal'
+        aria-labelledby={ariaLabelledby}
+        aria-describedby={ariaDescribedby}
         onKeyDown={handleKeyDown}
         style={{ left: `calc(${(value / (steps - 1)) * 100}% + 0.125rem)` }}
       />

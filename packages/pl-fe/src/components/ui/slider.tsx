@@ -6,6 +6,8 @@ import { getPointerPosition } from '@/features/video';
 
 interface ISlider {
   id?: string;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
   /** Value between 0 and 1. */
   value: number;
   /** Callback when the value changes. */
@@ -13,7 +15,13 @@ interface ISlider {
 }
 
 /** Draggable slider component. */
-const Slider: React.FC<ISlider> = ({ id, value, onChange }) => {
+const Slider: React.FC<ISlider> = ({
+  id,
+  value,
+  onChange,
+  'aria-labelledby': ariaLabelledby,
+  'aria-describedby': ariaDescribedby,
+}) => {
   const node = useRef<HTMLDivElement>(null);
   const keyboardAnimationTimeout = useRef<number | null>(null);
   const [animateKeyboardInput, setAnimateKeyboardInput] = useState<boolean>(false);
@@ -154,6 +162,8 @@ const Slider: React.FC<ISlider> = ({ id, value, onChange }) => {
         aria-valuemax={1}
         aria-valuenow={value}
         aria-orientation='horizontal'
+        aria-labelledby={ariaLabelledby}
+        aria-describedby={ariaDescribedby}
         onKeyDown={handleKeyDown}
       />
     </div>
