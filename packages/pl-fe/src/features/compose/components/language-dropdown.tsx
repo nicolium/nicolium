@@ -61,7 +61,7 @@ const getLanguageDropdown =
     );
 
     const node = useRef<HTMLDivElement>(null);
-    const focusedItem = useRef<HTMLButtonElement>(null);
+    const input = useRef<HTMLInputElement>(null);
 
     const [searchValue, setSearchValue] = useState('');
 
@@ -157,8 +157,12 @@ const getLanguageDropdown =
     };
 
     useEffect(() => {
+      if (!language) input.current?.focus();
+    }, [input.current]);
+
+    useEffect(() => {
       if (node.current) {
-        (node.current?.querySelector('div[aria-selected=true]') as HTMLDivElement)?.focus();
+        (node.current?.querySelector('button[aria-selected=true]') as HTMLButtonElement)?.focus();
       }
     }, [node.current]);
 
@@ -173,6 +177,7 @@ const getLanguageDropdown =
           <span>{intl.formatMessage(messages.search)}</span>
 
           <Input
+            ref={input}
             className='w-64'
             type='text'
             value={searchValue}
@@ -199,7 +204,7 @@ const getLanguageDropdown =
             />
           </button>
         </label>
-        <div className='⁂-language-dropdown__options' ref={node} tabIndex={-1}>
+        <div className='⁂-language-dropdown__options' tabIndex={-1} ref={node} role='listbox'>
           {results.map(([code, name]) => {
             const active = code === language;
             const modified = code === modifiedLanguage;
@@ -218,7 +223,6 @@ const getLanguageDropdown =
                   '⁂-language-dropdown__option--active': active,
                 })}
                 aria-selected={active}
-                ref={active ? focusedItem : null}
               >
                 <div className='⁂-language-dropdown__option__name'>{name}</div>
                 {features.multiLanguage &&

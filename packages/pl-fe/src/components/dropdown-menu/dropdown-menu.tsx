@@ -73,7 +73,11 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
     () => (e: KeyboardEvent) => {
       if (!ref.current) return;
 
-      const elements = Array.from(ref.current.querySelectorAll('a, button'));
+      const elements = Array.from(
+        ref.current.querySelectorAll<HTMLElement>(
+          'a, button:not([disabled]), input:not([disabled])',
+        ),
+      ).filter((element) => !element.hasAttribute('aria-hidden'));
       const index = elements.indexOf(document.activeElement as any);
 
       let element = null;
@@ -119,7 +123,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
       }
 
       if (element) {
-        (element as HTMLAnchorElement).focus();
+        (element as HTMLElement).focus();
         e.preventDefault();
         e.stopPropagation();
       }
