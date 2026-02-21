@@ -186,6 +186,7 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
 interface IAntennaValuesForm {
   values: Array<string>;
   excludedValues: Array<string>;
+  isFetching: boolean;
   addTitle: React.ReactNode;
   listTitle: React.ReactNode;
   addExcludedTitle: React.ReactNode;
