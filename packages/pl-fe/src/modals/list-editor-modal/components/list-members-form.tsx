@@ -28,7 +28,7 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
 
   const [searchValue, setSearchValue] = useState('');
 
-  const { data: accountIds = [] } = useListAccounts(listId);
+  const { data: accountIds = [], isFetching } = useListAccounts(listId);
   const { data: searchAccountIds = [] } = useAccountSearch(searchValue, {
     following: true,
     limit: 5,
@@ -47,7 +47,7 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
   return (
     <Stack space={2}>
       {accountIds.length > 0 ? (
-        <div>
+        <div className='min-h-24'>
           <CardHeader>
             <CardTitle title={intl.formatMessage(messages.removeFromList)} />
           </CardHeader>
@@ -63,13 +63,19 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
             ))}
           </div>
         </div>
+      ) : isFetching ? (
+        <div className='flex min-h-24 items-center justify-center'>
+          <Spinner />
+        </div>
       ) : (
-        <Text theme='muted' size='sm'>
-          <FormattedMessage
-            id='empty_column.list_members'
-            defaultMessage='There are no members in this list. Use search to find users to add.'
-          />
-        </Text>
+        <div className='flex min-h-24 items-center justify-center'>
+          <Text theme='muted' size='sm' align='center'>
+            <FormattedMessage
+              id='empty_column.list_members'
+              defaultMessage='There are no members in this list. Use search to find users to add.'
+            />
+          </Text>
+        </div>
       )}
 
       <div>
