@@ -140,7 +140,7 @@ const DataImporter: React.FC<IDataImporter> = ({
       )}
 
       <FormActions>
-        <Button type='submit' theme='primary' disabled={isLoading}>
+        <Button type='submit' theme='primary' disabled={isLoading || !file}>
           {intl.formatMessage(messages.submit)}
         </Button>
       </FormActions>
