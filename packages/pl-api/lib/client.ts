@@ -6398,10 +6398,10 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    addAntennaTag: async (antennaId: string, tag: string) => {
+    addAntennaTags: async (antennaId: string, tags: Array<string>) => {
       const response = await this.request<EmptyObject>(`/api/v1/antennas/${antennaId}/tags`, {
         method: 'POST',
-        body: { tags: [tag] },
+        body: { tags },
       });
 
       return response.json;
@@ -6410,10 +6410,10 @@ class PlApiClient {
     /**
      * Requires features{@link Features.antennas}.
      */
-    removeAntennaTag: async (antennaId: string, tag: string) => {
+    removeAntennaTags: async (antennaId: string, tags: Array<string>) => {
       const response = await this.request<EmptyObject>(`/api/v1/antennas/${antennaId}/tags`, {
         method: 'DELETE',
-        body: { tags: [tag] },
+        body: { tags },
       });
 
       return response.json;
