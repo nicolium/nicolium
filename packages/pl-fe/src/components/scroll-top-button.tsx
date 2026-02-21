@@ -13,6 +13,8 @@ interface IScrollTopButton {
   count: number;
   /** Message to display in the button (should contain a `{count}` value). */
   message: MessageDescriptor;
+  /** Message to announce in the live region (should contain a `{count}` value). If not provided, `message` will be used. */
+  liveRegionMessage?: MessageDescriptor;
   /** Distance from the top of the screen (scrolling down) before the button appears. */
   threshold?: number;
   /** Distance from the top of the screen (scrolling up) before the action is triggered. */
@@ -26,6 +28,7 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   message,
   threshold = 240,
   autoloadThreshold = 50,
+  liveRegionMessage = message,
 }) => {
   const intl = useIntl();
   const { autoloadTimelines } = useSettings();
@@ -34,9 +37,9 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   const [scrolled, setScrolled] = useState<boolean>(false);
   // Whether we are scrolled above the `autoloadThreshold`.
   const [scrolledTop, setScrolledTop] = useState<boolean>(false);
-  console.log(scrolled, scrolledTop);
 
   const visible = count > 0 && (autoloadThreshold ? scrolled : scrolledTop);
+  const buttonMessage = intl.formatMessage(message, { count });
 
   /** Number of pixels scrolled down from the top of the page. */
   const getScrollTop = (): number =>
@@ -88,16 +91,22 @@ const ScrollTopButton: React.FC<IScrollTopButton> = ({
   }, [maybeUnload]);
 
   return (
-    <div
-      className={clsx('⁂-scroll-top-button', { '⁂-scroll-top-button--visible': visible })}
-      aria-hidden={!visible}
-    >
-      <button onClick={handleClick} tabIndex={visible ? 0 : -1}>
-        <Icon src={require('@phosphor-icons/core/regular/arrow-line-up.svg')} aria-hidden />
+    <>
+      <span className='sr-only' role='status' aria-live='polite' aria-atomic='true'>
+        {visible ? intl.formatMessage(liveRegionMessage, { count }) : ''}
+      </span>
 
-        <p>{intl.formatMessage(message, { count })}</p>
-      </button>
-    </div>
+      <div
+        className={clsx('⁂-scroll-top-button', { '⁂-scroll-top-button--visible': visible })}
+        aria-hidden={!visible}
+      >
+        <button onClick={handleClick} tabIndex={visible ? 0 : -1} aria-label={buttonMessage}>
+          <Icon src={require('@phosphor-icons/core/regular/arrow-line-up.svg')} aria-hidden />
+
+          <p>{buttonMessage}</p>
+        </button>
+      </div>
+    </>
   );
 };
 
