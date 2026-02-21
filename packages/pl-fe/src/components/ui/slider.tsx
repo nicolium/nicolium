@@ -1,5 +1,6 @@
+import clsx from 'clsx';
 import throttle from 'lodash/throttle';
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 
 import { getPointerPosition } from '@/features/video';
 
@@ -13,8 +14,34 @@ interface ISlider {
 /** Draggable slider component. */
 const Slider: React.FC<ISlider> = ({ value, onChange }) => {
   const node = useRef<HTMLDivElement>(null);
+  const keyboardAnimationTimeout = useRef<number | null>(null);
+  const [animateKeyboardInput, setAnimateKeyboardInput] = useState<boolean>(false);
+
+  const clearKeyboardAnimation = useCallback(() => {
+    if (keyboardAnimationTimeout.current !== null) {
+      window.clearTimeout(keyboardAnimationTimeout.current);
+      keyboardAnimationTimeout.current = null;
+    }
+
+    setAnimateKeyboardInput(false);
+  }, []);
+
+  const triggerKeyboardAnimation = useCallback(() => {
+    setAnimateKeyboardInput(true);
+
+    if (keyboardAnimationTimeout.current !== null) {
+      window.clearTimeout(keyboardAnimationTimeout.current);
+    }
+
+    keyboardAnimationTimeout.current = window.setTimeout(() => {
+      setAnimateKeyboardInput(false);
+      keyboardAnimationTimeout.current = null;
+    }, 120);
+  }, []);
 
   const handleMouseDown: React.MouseEventHandler = (e) => {
+    clearKeyboardAnimation();
+
     document.addEventListener('mousemove', handleMouseSlide, true);
     document.addEventListener('mouseup', handleMouseUp, true);
     document.addEventListener('touchmove', handleMouseSlide, true);
@@ -86,9 +113,18 @@ const Slider: React.FC<ISlider> = ({ value, onChange }) => {
         nextValue = 1;
       }
 
+      triggerKeyboardAnimation();
       onChange(nextValue);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (keyboardAnimationTimeout.current !== null) {
+        window.clearTimeout(keyboardAnimationTimeout.current);
+      }
+    };
+  }, []);
 
   return (
     <div
@@ -98,11 +134,17 @@ const Slider: React.FC<ISlider> = ({ value, onChange }) => {
     >
       <div className='absolute top-1/2 h-1 w-full -translate-y-1/2 rounded-full bg-primary-200 dark:bg-primary-700' />
       <div
-        className='absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-accent-500'
+        className={clsx(
+          'absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-accent-500 transition-[width] ease-in-out',
+          animateKeyboardInput ? 'duration-150' : 'duration-0',
+        )}
         style={{ width: `${value * 100}%` }}
       />
       <span
-        className='absolute top-1/2 z-10 -ml-1.5 size-3 -translate-y-1/2 rounded-full bg-accent-500 shadow'
+        className={clsx(
+          'absolute top-1/2 z-10 -ml-1.5 size-3 -translate-y-1/2 rounded-full bg-accent-500 shadow transition-[left] ease-in-out',
+          animateKeyboardInput ? 'duration-150' : 'duration-0',
+        )}
         tabIndex={0}
         style={{ left: `${value * 100}%` }}
         role='slider'

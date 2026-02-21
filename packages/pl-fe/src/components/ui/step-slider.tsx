@@ -112,7 +112,7 @@ const StepSlider: React.FC<IStepSlider> = ({ value, steps, onChange }) => {
         />
       ))}
       <span
-        className='absolute top-1/2 z-10 -ml-1.5 size-3 -translate-y-1/2 rounded-full bg-accent-500 shadow'
+        className='absolute top-1/2 z-10 -ml-1.5 size-3 -translate-y-1/2 rounded-full bg-accent-500 shadow transition-[left] duration-100 ease-in-out'
         tabIndex={0}
         role='slider'
         aria-valuemin={0}
