@@ -4,8 +4,11 @@ import React, { useRef } from 'react';
 import { useIntl } from 'react-intl';
 
 import { uploadCompose } from '@/actions/compose';
+import { BANNER_HTML } from '@/build-config';
 import Avatar from '@/components/ui/avatar';
 import Layout from '@/components/ui/layout';
+import Text from '@/components/ui/text';
+import Warning from '@/features/compose/components/warning';
 import LinkFooter from '@/features/ui/components/link-footer';
 import {
   WhoToFollowPanel,
@@ -88,6 +91,13 @@ const HomeLayout = () => {
               </div>
             </div>
           </div>
+        )}
+
+        {BANNER_HTML && BANNER_HTML.length > 0 && (
+          <Warning
+            message={<Text theme='muted' dangerouslySetInnerHTML={{ __html: BANNER_HTML }} />}
+            className='my-4 sm:mx-4'
+          />
         )}
 
         <Outlet />

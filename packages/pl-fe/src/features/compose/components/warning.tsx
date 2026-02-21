@@ -1,4 +1,5 @@
 import { animated, useSpring } from '@react-spring/web';
+import clsx from 'clsx';
 import React from 'react';
 
 import { useSettings } from '@/stores/settings';
@@ -6,10 +7,15 @@ import { useSettings } from '@/stores/settings';
 interface IWarning {
   message: React.ReactNode;
   animated?: boolean;
+  className?: string;
 }
 
 /** Warning message displayed in ComposeForm. */
-const Warning: React.FC<IWarning> = ({ message, animated: animate }) => {
+const Warning: React.FC<IWarning> = ({
+  message,
+  animated: animate,
+  className: customClassName,
+}) => {
   const { reduceMotion } = useSettings();
 
   const styles = useSpring({
@@ -24,8 +30,10 @@ const Warning: React.FC<IWarning> = ({ message, animated: animate }) => {
     immediate: !animate || reduceMotion,
   });
 
-  const className =
-    'rounded border border-solid border-gray-400 bg-transparent px-2.5 py-2 text-xs text-gray-900 dark:border-gray-800 dark:text-white';
+  const className = clsx(
+    'rounded border border-solid border-gray-400 bg-transparent px-2.5 py-2 text-xs text-gray-900 dark:border-gray-800 dark:text-white',
+    customClassName,
+  );
 
   if (!message) return null;
 
