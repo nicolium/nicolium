@@ -87,7 +87,7 @@ const SearchInput = React.memo(() => {
         />
 
         <button
-          tabIndex={0}
+          tabIndex={hasValue ? 0 : -1}
           className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto'
           onClick={handleClear}
           title={

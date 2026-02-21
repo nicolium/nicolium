@@ -95,7 +95,7 @@ const SearchInput: React.FC<ISearchInput> = ({ className, placeholder, query }) 
         />
 
         <button
-          tabIndex={0}
+          tabIndex={value ? 0 : -1}
           className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto'
           onClick={handleClick}
           title={
