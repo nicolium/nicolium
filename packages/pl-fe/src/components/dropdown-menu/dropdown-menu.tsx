@@ -75,7 +75,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
 
       const elements = Array.from(
         ref.current.querySelectorAll<HTMLElement>(
-          'a, button:not([disabled]), input:not([disabled])',
+          'a, button:not([disabled]), input:not([disabled]), select:not([disabled])',
         ),
       ).filter((element) => !element.hasAttribute('aria-hidden'));
       const index = elements.indexOf(document.activeElement as any);
