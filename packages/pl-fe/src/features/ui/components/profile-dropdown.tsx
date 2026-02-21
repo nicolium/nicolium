@@ -134,11 +134,11 @@ const MenuItem: React.FC<MenuItemProps> = ({ className, menuItem }) => {
 
   if (menuItem.toggle) {
     return (
-      <div className='flex flex-row items-center justify-between space-x-4 px-4 py-1 text-sm text-gray-700 dark:text-gray-400'>
+      <label className='flex flex-row items-center justify-between space-x-4 px-4 py-1 text-sm text-gray-700 dark:text-gray-400'>
         <span>{menuItem.text}</span>
 
         {menuItem.toggle}
-      </div>
+      </label>
     );
   } else if (!menuItem.text) {
     return (

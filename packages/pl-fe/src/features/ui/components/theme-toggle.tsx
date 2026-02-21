@@ -6,8 +6,12 @@ import { useSettings } from '@/stores/settings';
 
 import ThemeSelector from './theme-selector';
 
+interface IThemeToggle {
+  id?: string;
+}
+
 /** Stateful theme selector. */
-const ThemeToggle: React.FC = () => {
+const ThemeToggle: React.FC<IThemeToggle> = ({ id }) => {
   const dispatch = useAppDispatch();
   const { themeMode } = useSettings();
 
@@ -15,7 +19,7 @@ const ThemeToggle: React.FC = () => {
     dispatch(changeSetting(['themeMode'], themeMode));
   };
 
-  return <ThemeSelector value={themeMode} onChange={handleChange} />;
+  return <ThemeSelector id={id} value={themeMode} onChange={handleChange} />;
 };
 
 export { ThemeToggle as default };

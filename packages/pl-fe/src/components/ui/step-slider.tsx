@@ -4,6 +4,7 @@ import React, { useCallback, useRef } from 'react';
 import { getPointerPosition } from '@/features/video';
 
 interface IStepSlider {
+  id?: string;
   /** Value between 0 and the amount of steps minus one. */
   value: number;
   /** Steps available in the slider. */
@@ -13,7 +14,7 @@ interface IStepSlider {
 }
 
 /** Slider allowing selecting integers in a given range. */
-const StepSlider: React.FC<IStepSlider> = ({ value, steps, onChange }) => {
+const StepSlider: React.FC<IStepSlider> = ({ id, value, steps, onChange }) => {
   const node = useRef<HTMLDivElement>(null);
 
   const handleMouseDown: React.MouseEventHandler = (e) => {
@@ -112,6 +113,7 @@ const StepSlider: React.FC<IStepSlider> = ({ value, steps, onChange }) => {
         />
       ))}
       <span
+        id={id}
         className='absolute top-1/2 z-10 -ml-1.5 size-3 -translate-y-1/2 rounded-full bg-accent-500 shadow transition-[left] duration-100 ease-in-out'
         tabIndex={0}
         role='slider'
