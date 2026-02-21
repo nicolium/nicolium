@@ -37,6 +37,10 @@ const messages = defineMessages({
     defaultMessage:
       'Click to see {count} new {count, plural, one {notification} other {notifications}}',
   },
+  queueLiveRegion: {
+    id: 'notifications.queue_label.live_region',
+    defaultMessage: '{count} new {count, plural, one {notification} other {notifications}}.',
+  },
   all: { id: 'notifications.filter.all', defaultMessage: 'All' },
   mentions: { id: 'notifications.filter.mentions', defaultMessage: 'Mentions' },
   statuses: {
@@ -356,6 +360,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
           onClick={handleDequeueNotifications}
           count={queuedNotificationCount}
           message={messages.queue}
+          liveRegionMessage={messages.queueLiveRegion}
         />
       </Portal>
 

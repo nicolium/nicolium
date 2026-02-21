@@ -15,6 +15,10 @@ const messages = defineMessages({
     id: 'status_list.queue_label',
     defaultMessage: 'Click to see {count} new {count, plural, one {post} other {posts}}',
   },
+  queueLiveRegion: {
+    id: 'status_list.queue_label.live_region',
+    defaultMessage: '{count} new {count, plural, one {post} other {posts}}.',
+  },
 });
 
 interface ITimeline extends Omit<IStatusList, 'statusIds' | 'isLoading' | 'hasMore'> {
@@ -59,6 +63,7 @@ const Timeline: React.FC<ITimeline> = ({ timelineId, onLoadMore, prefix, ...rest
           onClick={handleDequeueTimeline}
           count={totalQueuedItemsCount}
           message={messages.queue}
+          liveRegionMessage={messages.queueLiveRegion}
         />
       </Portal>
 
