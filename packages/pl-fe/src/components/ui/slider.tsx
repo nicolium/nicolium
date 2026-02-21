@@ -54,6 +54,42 @@ const Slider: React.FC<ISlider> = ({ value, onChange }) => {
     [node.current],
   );
 
+  const handleKeyDown: React.KeyboardEventHandler<HTMLSpanElement> = (event) => {
+    let nextValue: number | null = null;
+
+    switch (event.key) {
+      case 'ArrowLeft':
+      case 'ArrowDown':
+        nextValue = value - 0.05;
+        break;
+      case 'ArrowRight':
+      case 'ArrowUp':
+        nextValue = value + 0.05;
+        break;
+      case 'PageDown':
+      case 'Home':
+        nextValue = 0;
+        break;
+      case 'PageUp':
+      case 'End':
+        nextValue = 1;
+        break;
+      default:
+        break;
+    }
+
+    if (nextValue !== null) {
+      event.preventDefault();
+      if (nextValue < 0) {
+        nextValue = 0;
+      } else if (nextValue > 1) {
+        nextValue = 1;
+      }
+
+      onChange(nextValue);
+    }
+  };
+
   return (
     <div
       className='relative inline-flex h-6 cursor-pointer transition'
@@ -69,6 +105,12 @@ const Slider: React.FC<ISlider> = ({ value, onChange }) => {
         className='absolute top-1/2 z-10 -ml-1.5 size-3 -translate-y-1/2 rounded-full bg-accent-500 shadow'
         tabIndex={0}
         style={{ left: `${value * 100}%` }}
+        role='slider'
+        aria-valuemin={0}
+        aria-valuemax={1}
+        aria-valuenow={value}
+        aria-orientation='horizontal'
+        onKeyDown={handleKeyDown}
       />
     </div>
   );
