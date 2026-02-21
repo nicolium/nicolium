@@ -73,15 +73,15 @@
   }
 
   &:not(&--expanded) {
-    .⁂-accordion {
-      &__header__chevron {
-        transform: rotate(180deg);
-      }
+    .⁂-accordion__body {
+      height: 0;
+      display: none;
+    }
+  }
 
-      &__body {
-        height: 0;
-        display: none;
-      }
+  &--expanded {
+    .⁂-accordion__header__chevron {
+      transform: rotate(180deg);
     }
   }
 }
