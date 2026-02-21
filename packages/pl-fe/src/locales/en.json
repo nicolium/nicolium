@@ -283,6 +283,8 @@
   "antennas.edit.favourite.hint": "The antenna will be marked as favourite (not used by Nicolium yet)",
   "antennas.edit.ignore_reblogs": "Ignore reblogs",
   "antennas.edit.ignore_reblogs.hint": "Reblogs will not be included in the antenna",
+  "antennas.edit.list": "Target list",
+  "antennas.edit.list.select": "Select list",
   "antennas.edit.mode": "Mode",
   "antennas.edit.mode.filtering": "Filtering",
   "antennas.edit.mode.ltl": "Local timeline mode",
