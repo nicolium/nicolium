@@ -82,7 +82,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
         case 'ArrowLeft':
           setTab((tab) => {
             if (tab !== undefined) {
-              (elements[tab] as HTMLElement)?.focus();
+              (ref.current?.querySelector(`[data-index="${tab}"]`) as HTMLElement)?.focus();
               return undefined;
             }
             return tab;
