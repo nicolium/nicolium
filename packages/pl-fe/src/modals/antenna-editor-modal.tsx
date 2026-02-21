@@ -7,6 +7,8 @@ import { CardHeader, CardTitle } from '@/components/ui/card';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
+import HStack from '@/components/ui/hstack';
+import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
@@ -16,13 +18,28 @@ import Toggle from '@/components/ui/toggle';
 import { SelectDropdown } from '@/features/forms';
 import {
   useAddAccountsToAntenna,
+  useAddDomainsToAntenna,
   useAddExcludedAccountsToAntenna,
+  useAddExcludedDomainsToAntenna,
+  useAddExcludedKeywordsToAntenna,
+  useAddExcludedTagsToAntenna,
+  useAddKeywordsToAntenna,
+  useAddTagsToAntenna,
   useAntenna,
   useAntennaAccounts,
+  useAntennaDomains,
   useAntennaExcludedAccounts,
+  useAntennaKeywords,
+  useAntennaTags,
   useCreateAntenna,
+  useRemoveDomainsFromAntenna,
   useRemoveAccountsFromAntenna,
+  useRemoveExcludedDomainsFromAntenna,
   useRemoveExcludedAccountsFromAntenna,
+  useRemoveExcludedKeywordsFromAntenna,
+  useRemoveExcludedTagsFromAntenna,
+  useRemoveKeywordsFromAntenna,
+  useRemoveTagsFromAntenna,
   useUpdateAntenna,
 } from '@/queries/accounts/use-antennas';
 import { useAccountSearch } from '@/queries/search/use-search-accounts';
@@ -34,24 +51,17 @@ import Search from './list-editor-modal/components/search';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
-type Tab = 'info' | 'accounts' | 'excludedAccounts';
-
 const messages = defineMessages({
   createSuccess: { id: 'antennas.create.success', defaultMessage: 'Antenna created successfully' },
   editSuccess: { id: 'antennas.edit.success', defaultMessage: 'Antenna updated successfully' },
   createError: { id: 'antennas.create.error', defaultMessage: 'Error creating antenna' },
   editError: { id: 'antennas.edit.error', defaultMessage: 'Error updating antenna' },
-  addToAntenna: { id: 'antennas.account.add', defaultMessage: 'Add to antenna' },
-  removeFromAntenna: { id: 'antennas.account.remove', defaultMessage: 'Remove from antenna' },
-  addExcludedToAntenna: {
-    id: 'antennas.account.excluded.add',
-    defaultMessage: 'Add to excluded accounts',
-  },
-  removeExcludedFromAntenna: {
-    id: 'antennas.account.excluded.remove',
-    defaultMessage: 'Remove from excluded accounts',
-  },
+  removeDomain: { id: 'antennas.domain.remove', defaultMessage: 'Remove domain' },
+  removeKeyword: { id: 'antennas.keyword.remove', defaultMessage: 'Remove keyword' },
+  removeTag: { id: 'antennas.tag.remove', defaultMessage: 'Remove tag' },
 });
+
+type Tab = 'info' | 'accounts' | 'excludedAccounts' | 'domains' | 'keywords' | 'tags';
 
 interface IAntennaAccountsForm {
   antennaId: string;
@@ -59,8 +69,6 @@ interface IAntennaAccountsForm {
 }
 
 const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, excluded = false }) => {
-  const intl = useIntl();
-
   const [searchValue, setSearchValue] = useState('');
 
   const { data: accountIds = [] } = useAntennaAccounts(antennaId);
@@ -99,9 +107,19 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
         <div>
           <CardHeader>
             <CardTitle
-              title={intl.formatMessage(
-                excluded ? messages.removeExcludedFromAntenna : messages.removeFromAntenna,
-              )}
+              title={
+                excluded ? (
+                  <FormattedMessage
+                    id='antennas.account.excluded.remove'
+                    defaultMessage='Remove from excluded accounts'
+                  />
+                ) : (
+                  <FormattedMessage
+                    id='antennas.account.remove'
+                    defaultMessage='Remove from antenna'
+                  />
+                )
+              }
             />
           </CardHeader>
           <div className='max-h-48 overflow-y-auto'>
@@ -135,9 +153,16 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
       <div>
         <CardHeader>
           <CardTitle
-            title={intl.formatMessage(
-              excluded ? messages.addExcludedToAntenna : messages.addToAntenna,
-            )}
+            title={
+              excluded ? (
+                <FormattedMessage
+                  id='antennas.account.excluded.add'
+                  defaultMessage='Add to excluded accounts'
+                />
+              ) : (
+                <FormattedMessage id='antennas.account.add' defaultMessage='Add to antenna' />
+              )
+            }
           />
         </CardHeader>
         <Search value={searchValue} onSubmit={setSearchValue} />
@@ -154,6 +179,293 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
         </div>
       </div>
     </Stack>
+  );
+};
+
+interface IAntennaValuesForm {
+  values: Array<string>;
+  excludedValues: Array<string>;
+  addTitle: React.ReactNode;
+  listTitle: React.ReactNode;
+  addExcludedTitle: React.ReactNode;
+  listExcludedTitle: React.ReactNode;
+  emptyValues: React.ReactNode;
+  emptyExcludedValues: React.ReactNode;
+  removeTitle?: string;
+  onAdd: (value: string) => void;
+  onRemove: (value: string) => void;
+  onAddExcluded: (value: string) => void;
+  onRemoveExcluded: (value: string) => void;
+}
+
+const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
+  values,
+  excludedValues,
+  addTitle,
+  listTitle,
+  addExcludedTitle,
+  listExcludedTitle,
+  emptyValues,
+  emptyExcludedValues,
+  removeTitle,
+  onAdd,
+  onRemove,
+  onAddExcluded,
+  onRemoveExcluded,
+}) => {
+  const [value, setValue] = useState('');
+  const [excludedValue, setExcludedValue] = useState('');
+
+  const handleAdd = () => {
+    const trimmed = value.trim();
+    if (!trimmed) {
+      return;
+    }
+
+    onAdd(trimmed);
+    setValue('');
+  };
+
+  const handleAddExcluded = () => {
+    const trimmed = excludedValue.trim();
+    if (!trimmed) {
+      return;
+    }
+
+    onAddExcluded(trimmed);
+    setExcludedValue('');
+  };
+
+  return (
+    <Stack space={2}>
+      {values.length > 0 ? (
+        <div>
+          <CardHeader>
+            <CardTitle title={listTitle} />
+          </CardHeader>
+          <div className='max-h-48 overflow-y-auto'>
+            {values.map((item) => (
+              <HStack
+                key={item}
+                space={2}
+                alignItems='center'
+                justifyContent='between'
+                className='p-2.5'
+              >
+                <Text>{item}</Text>
+                <IconButton
+                  src={require('@phosphor-icons/core/regular/x.svg')}
+                  className='text-gray-400 hover:text-gray-600'
+                  iconClassName='h-5 w-5'
+                  title={removeTitle}
+                  onClick={() => onRemove(item)}
+                />
+              </HStack>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <Text theme='muted' size='sm'>
+          {emptyValues}
+        </Text>
+      )}
+
+      <Form onSubmit={handleAdd}>
+        <CardHeader>
+          <CardTitle title={addTitle} />
+        </CardHeader>
+        <HStack space={2}>
+          <Input
+            type='text'
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            outerClassName='grow'
+          />
+          <Button onClick={handleAdd}>
+            <FormattedMessage id='common.add' defaultMessage='Add' />
+          </Button>
+        </HStack>
+      </Form>
+
+      {excludedValues.length > 0 ? (
+        <div>
+          <CardHeader>
+            <CardTitle title={listExcludedTitle} />
+          </CardHeader>
+          <div className='max-h-48 overflow-y-auto'>
+            {excludedValues.map((item) => (
+              <HStack
+                key={item}
+                space={2}
+                alignItems='center'
+                justifyContent='between'
+                className='p-2.5'
+              >
+                <Text>{item}</Text>
+                <IconButton
+                  src={require('@phosphor-icons/core/regular/x.svg')}
+                  className='text-gray-400 hover:text-gray-600'
+                  iconClassName='h-5 w-5'
+                  title={removeTitle}
+                  onClick={() => onRemoveExcluded(item)}
+                />
+              </HStack>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <Text theme='muted' size='sm'>
+          {emptyExcludedValues}
+        </Text>
+      )}
+
+      <Form onSubmit={handleAddExcluded}>
+        <CardHeader>
+          <CardTitle title={addExcludedTitle} />
+        </CardHeader>
+        <HStack space={2}>
+          <Input
+            type='text'
+            value={excludedValue}
+            onChange={(e) => setExcludedValue(e.target.value)}
+            outerClassName='grow'
+          />
+          <Button onClick={handleAddExcluded}>
+            <FormattedMessage id='common.add' defaultMessage='Add' />
+          </Button>
+        </HStack>
+      </Form>
+    </Stack>
+  );
+};
+
+interface IAntennaStringForm {
+  antennaId: string;
+}
+
+const AntennaDomainsForm: React.FC<IAntennaStringForm> = ({ antennaId }) => {
+  const intl = useIntl();
+  const { data } = useAntennaDomains(antennaId);
+  const { mutate: addDomains } = useAddDomainsToAntenna(antennaId);
+  const { mutate: removeDomains } = useRemoveDomainsFromAntenna(antennaId);
+  const { mutate: addExcludedDomains } = useAddExcludedDomainsToAntenna(antennaId);
+  const { mutate: removeExcludedDomains } = useRemoveExcludedDomainsFromAntenna(antennaId);
+
+  return (
+    <AntennaValuesForm
+      values={data?.domains ?? []}
+      excludedValues={data?.exclude_domains ?? []}
+      addTitle={<FormattedMessage id='antennas.domain.add' defaultMessage='Add domain' />}
+      listTitle={<FormattedMessage id='antennas.domains' defaultMessage='Domains' />}
+      addExcludedTitle={
+        <FormattedMessage id='antennas.domain.excluded.add' defaultMessage='Add excluded domain' />
+      }
+      listExcludedTitle={
+        <FormattedMessage id='antennas.domains.excluded' defaultMessage='Excluded domains' />
+      }
+      removeTitle={intl.formatMessage(messages.removeDomain)}
+      emptyValues={
+        <FormattedMessage
+          id='empty_column.antenna_domains'
+          defaultMessage='There are no domains in this antenna. Add one below.'
+        />
+      }
+      emptyExcludedValues={
+        <FormattedMessage
+          id='empty_column.antenna_excluded_domains'
+          defaultMessage='There are no excluded domains in this antenna. Add one below.'
+        />
+      }
+      onAdd={(value) => addDomains([value])}
+      onRemove={(value) => removeDomains([value])}
+      onAddExcluded={(value) => addExcludedDomains([value])}
+      onRemoveExcluded={(value) => removeExcludedDomains([value])}
+    />
+  );
+};
+
+const AntennaKeywordsForm: React.FC<IAntennaStringForm> = ({ antennaId }) => {
+  const intl = useIntl();
+  const { data } = useAntennaKeywords(antennaId);
+  const { mutate: addKeywords } = useAddKeywordsToAntenna(antennaId);
+  const { mutate: removeKeywords } = useRemoveKeywordsFromAntenna(antennaId);
+  const { mutate: addExcludedKeywords } = useAddExcludedKeywordsToAntenna(antennaId);
+  const { mutate: removeExcludedKeywords } = useRemoveExcludedKeywordsFromAntenna(antennaId);
+
+  return (
+    <AntennaValuesForm
+      values={data?.keywords ?? []}
+      excludedValues={data?.exclude_keywords ?? []}
+      listTitle={<FormattedMessage id='antennas.keywords' defaultMessage='Keywords' />}
+      addTitle={<FormattedMessage id='antennas.keyword.add' defaultMessage='Add keyword' />}
+      listExcludedTitle={
+        <FormattedMessage id='antennas.keywords.excluded' defaultMessage='Excluded keywords' />
+      }
+      addExcludedTitle={
+        <FormattedMessage
+          id='antennas.keyword.excluded.add'
+          defaultMessage='Add excluded keyword'
+        />
+      }
+      removeTitle={intl.formatMessage(messages.removeKeyword)}
+      emptyValues={
+        <FormattedMessage
+          id='empty_column.antenna_keywords'
+          defaultMessage='There are no keywords in this antenna. Add one below.'
+        />
+      }
+      emptyExcludedValues={
+        <FormattedMessage
+          id='empty_column.antenna_excluded_keywords'
+          defaultMessage='There are no excluded keywords in this antenna. Add one below.'
+        />
+      }
+      onAdd={(value) => addKeywords([value])}
+      onRemove={(value) => removeKeywords([value])}
+      onAddExcluded={(value) => addExcludedKeywords([value])}
+      onRemoveExcluded={(value) => removeExcludedKeywords([value])}
+    />
+  );
+};
+
+const AntennaTagsForm: React.FC<IAntennaStringForm> = ({ antennaId }) => {
+  const intl = useIntl();
+  const { data } = useAntennaTags(antennaId);
+  const { mutate: addTags } = useAddTagsToAntenna(antennaId);
+  const { mutate: removeTags } = useRemoveTagsFromAntenna(antennaId);
+  const { mutate: addExcludedTags } = useAddExcludedTagsToAntenna(antennaId);
+  const { mutate: removeExcludedTags } = useRemoveExcludedTagsFromAntenna(antennaId);
+
+  return (
+    <AntennaValuesForm
+      values={data?.tags ?? []}
+      excludedValues={data?.exclude_tags ?? []}
+      listTitle={<FormattedMessage id='antennas.tags' defaultMessage='Tags' />}
+      addTitle={<FormattedMessage id='antennas.tag.add' defaultMessage='Add tag' />}
+      listExcludedTitle={
+        <FormattedMessage id='antennas.tags.excluded' defaultMessage='Excluded tags' />
+      }
+      addExcludedTitle={
+        <FormattedMessage id='antennas.tag.excluded.add' defaultMessage='Add excluded tag' />
+      }
+      removeTitle={intl.formatMessage(messages.removeTag)}
+      emptyValues={
+        <FormattedMessage
+          id='empty_column.antenna_tags'
+          defaultMessage='There are no tags in this antenna. Add one below.'
+        />
+      }
+      emptyExcludedValues={
+        <FormattedMessage
+          id='empty_column.antenna_excluded_tags'
+          defaultMessage='There are no excluded tags in this antenna. Add one below.'
+        />
+      }
+      onAdd={(value) => addTags([value])}
+      onRemove={(value) => removeTags([value])}
+      onAddExcluded={(value) => addExcludedTags([value])}
+      onRemoveExcluded={(value) => removeExcludedTags([value])}
+    />
   );
 };
 
@@ -274,7 +586,7 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
             const value = e.target.value;
             setInsertFeeds(value === 'home');
             if (value === 'list') {
-              setListId(''); // TODO: add list selection
+              setListId('');
             } else {
               setListId(undefined);
             }
@@ -343,6 +655,28 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
                 onTabChange('excludedAccounts');
               }}
             />
+            <ListItem
+              label={
+                <FormattedMessage id='antennas.manage_domains' defaultMessage='Manage domains' />
+              }
+              onClick={() => {
+                onTabChange('domains');
+              }}
+            />
+            <ListItem
+              label={
+                <FormattedMessage id='antennas.manage_keywords' defaultMessage='Manage keywords' />
+              }
+              onClick={() => {
+                onTabChange('keywords');
+              }}
+            />
+            <ListItem
+              label={<FormattedMessage id='antennas.manage_tags' defaultMessage='Manage tags' />}
+              onClick={() => {
+                onTabChange('tags');
+              }}
+            />
           </>
         )}
       </List>
@@ -390,6 +724,12 @@ const AntennaEditorModal: React.FC<BaseModalProps & AntennaEditorModalProps> = (
         return <AntennaAccountsForm antennaId={antennaId!} />;
       case 'excludedAccounts':
         return <AntennaAccountsForm antennaId={antennaId!} excluded />;
+      case 'domains':
+        return <AntennaDomainsForm antennaId={antennaId!} />;
+      case 'keywords':
+        return <AntennaKeywordsForm antennaId={antennaId!} />;
+      case 'tags':
+        return <AntennaTagsForm antennaId={antennaId!} />;
       default:
         return null;
     }
