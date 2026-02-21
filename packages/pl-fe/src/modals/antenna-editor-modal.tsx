@@ -72,8 +72,9 @@ interface IAntennaAccountsForm {
 const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, excluded = false }) => {
   const [searchValue, setSearchValue] = useState('');
 
-  const { data: accountIds = [] } = useAntennaAccounts(antennaId);
-  const { data: excludedAccountIds = [] } = useAntennaExcludedAccounts(antennaId);
+  const { data: accountIds = [], isFetching: isFetchingAccounts } = useAntennaAccounts(antennaId);
+  const { data: excludedAccountIds = [], isFetching: isFetchingExcludedAccounts } =
+    useAntennaExcludedAccounts(antennaId);
   const { data: searchAccountIds = [] } = useAccountSearch(searchValue, {
     following: true,
     limit: 5,
@@ -105,7 +106,7 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
   return (
     <Stack space={2}>
       {selectedAccountIds.length > 0 ? (
-        <div>
+        <div className='min-h-24'>
           <CardHeader>
             <CardTitle
               title={
@@ -135,20 +136,26 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
             ))}
           </div>
         </div>
+      ) : (excluded ? isFetchingExcludedAccounts : isFetchingAccounts) ? (
+        <div className='flex min-h-24 items-center justify-center'>
+          <Spinner />
+        </div>
       ) : (
-        <Text theme='muted' size='sm'>
-          {excluded ? (
-            <FormattedMessage
-              id='empty_column.antenna_excluded_accounts'
-              defaultMessage='There are no excluded accounts in this antenna. Use search to find users to exclude.'
-            />
-          ) : (
-            <FormattedMessage
-              id='empty_column.antenna_accounts'
-              defaultMessage='There are no accounts in this antenna. Use search to find users to add.'
-            />
-          )}
-        </Text>
+        <div className='flex min-h-24 items-center justify-center'>
+          <Text theme='muted' size='sm' align='center'>
+            {excluded ? (
+              <FormattedMessage
+                id='empty_column.antenna_excluded_accounts'
+                defaultMessage='There are no excluded accounts in this antenna. Use search to find users to exclude.'
+              />
+            ) : (
+              <FormattedMessage
+                id='empty_column.antenna_accounts'
+                defaultMessage='There are no accounts in this antenna. Use search to find users to add.'
+              />
+            )}
+          </Text>
+        </div>
       )}
 
       <div>
@@ -268,11 +275,15 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
           </div>
         </div>
       ) : isFetching ? (
-        <Spinner />
+        <div className='flex min-h-24 items-center justify-center'>
+          <Spinner />
+        </div>
       ) : (
-        <Text theme='muted' size='sm'>
-          {emptyValues}
-        </Text>
+        <div className='flex min-h-24 items-center justify-center'>
+          <Text theme='muted' size='sm' align='center'>
+            {emptyValues}
+          </Text>
+        </div>
       )}
 
       <Form onSubmit={handleAdd}>
@@ -319,11 +330,15 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
           </div>
         </div>
       ) : isFetching ? (
-        <Spinner />
+        <div className='flex min-h-24 items-center justify-center'>
+          <Spinner />
+        </div>
       ) : (
-        <Text theme='muted' size='sm'>
-          {emptyExcludedValues}
-        </Text>
+        <div className='flex min-h-24 items-center justify-center'>
+          <Text theme='muted' size='sm' align='center'>
+            {emptyExcludedValues}
+          </Text>
+        </div>
       )}
 
       <Form onSubmit={handleAddExcluded}>
