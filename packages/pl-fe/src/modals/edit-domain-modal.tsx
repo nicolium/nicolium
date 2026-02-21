@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
+import List, { ListItem } from '@/components/list';
 import Form from '@/components/ui/form';
 import FormGroup from '@/components/ui/form-group';
-import HStack from '@/components/ui/hstack';
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
-import Stack from '@/components/ui/stack';
-import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import { useDomains } from '@/queries/admin/use-domains';
 import toast from '@/toast';
@@ -107,28 +105,29 @@ const EditDomainModal: React.FC<BaseModalProps & EditDomainModalProps> = ({
             disabled={!!domainId}
           />
         </FormGroup>
-        <HStack alignItems='center' space={2}>
-          <Toggle
-            checked={isPublic}
-            onChange={({ target }) => {
-              setPublic(target.checked);
-            }}
-          />
-          <Stack>
-            <Text tag='span' theme='muted'>
+        <List>
+          <ListItem
+            label={
               <FormattedMessage
                 id='admin.edit_domain.fields.public_label'
                 defaultMessage='Public'
               />
-            </Text>
-            <Text size='xs' tag='span' theme='muted'>
+            }
+            hint={
               <FormattedMessage
                 id='admin.edit_domain.fields.public_hint'
                 defaultMessage='When checked, everyone can sign up for an username with this domain'
               />
-            </Text>
-          </Stack>
-        </HStack>
+            }
+          >
+            <Toggle
+              checked={isPublic}
+              onChange={({ target }) => {
+                setPublic(target.checked);
+              }}
+            />
+          </ListItem>
+        </List>
       </Form>
     </Modal>
   );
