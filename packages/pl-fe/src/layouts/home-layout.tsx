@@ -96,7 +96,7 @@ const HomeLayout = () => {
         {BANNER_HTML && BANNER_HTML.length > 0 && (
           <Warning
             message={<Text theme='muted' dangerouslySetInnerHTML={{ __html: BANNER_HTML }} />}
-            className='my-4 sm:mx-4'
+            className='!m-4'
           />
         )}
 
