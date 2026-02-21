@@ -128,6 +128,168 @@ const useRemoveExcludedAccountsFromAntenna = (antennaId: string) => {
   });
 };
 
+const useAntennaDomains = (antennaId: string) => {
+  const client = useClient();
+
+  return useQuery({
+    queryKey: ['antennas', antennaId, 'domains'],
+    queryFn: () => client.antennas.getAntennaDomains(antennaId),
+  });
+};
+
+const useAddDomainsToAntenna = (antennaId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['antennas', antennaId, 'domains', 'add'],
+    mutationFn: (domains: Array<string>) => client.antennas.addAntennaDomains(antennaId, domains),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ['antennas', antennaId, 'domains'] }),
+  });
+};
+
+const useRemoveDomainsFromAntenna = (antennaId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['antennas', antennaId, 'domains', 'remove'],
+    mutationFn: (domains: Array<string>) =>
+      client.antennas.removeAntennaDomains(antennaId, domains),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ['antennas', antennaId, 'domains'] }),
+  });
+};
+
+const useAddExcludedDomainsToAntenna = (antennaId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['antennas', antennaId, 'domains', 'addExcluded'],
+    mutationFn: (domains: Array<string>) =>
+      client.antennas.addAntennaExcludedDomains(antennaId, domains),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ['antennas', antennaId, 'domains'] }),
+  });
+};
+
+const useRemoveExcludedDomainsFromAntenna = (antennaId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['antennas', antennaId, 'domains', 'removeExcluded'],
+    mutationFn: (domains: Array<string>) =>
+      client.antennas.removeAntennaExcludedDomains(antennaId, domains),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ['antennas', antennaId, 'domains'] }),
+  });
+};
+
+const useAntennaKeywords = (antennaId: string) => {
+  const client = useClient();
+
+  return useQuery({
+    queryKey: ['antennas', antennaId, 'keywords'],
+    queryFn: () => client.antennas.getAntennaKeywords(antennaId),
+  });
+};
+
+const useAddKeywordsToAntenna = (antennaId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['antennas', antennaId, 'keywords', 'add'],
+    mutationFn: (keywords: Array<string>) =>
+      client.antennas.addAntennaKeywords(antennaId, keywords),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ['antennas', antennaId, 'keywords'] }),
+  });
+};
+
+const useRemoveKeywordsFromAntenna = (antennaId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['antennas', antennaId, 'keywords', 'remove'],
+    mutationFn: (keywords: Array<string>) =>
+      client.antennas.removeAntennaKeywords(antennaId, keywords),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ['antennas', antennaId, 'keywords'] }),
+  });
+};
+
+const useAddExcludedKeywordsToAntenna = (antennaId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['antennas', antennaId, 'keywords', 'addExcluded'],
+    mutationFn: (keywords: Array<string>) =>
+      client.antennas.addAntennaExcludedKeywords(antennaId, keywords),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ['antennas', antennaId, 'keywords'] }),
+  });
+};
+
+const useRemoveExcludedKeywordsFromAntenna = (antennaId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['antennas', antennaId, 'keywords', 'removeExcluded'],
+    mutationFn: (keywords: Array<string>) =>
+      client.antennas.removeAntennaExcludedKeywords(antennaId, keywords),
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ['antennas', antennaId, 'keywords'] }),
+  });
+};
+
+const useAntennaTags = (antennaId: string) => {
+  const client = useClient();
+
+  return useQuery({
+    queryKey: ['antennas', antennaId, 'tags'],
+    queryFn: () => client.antennas.getAntennaTags(antennaId),
+  });
+};
+
+const useAddTagsToAntenna = (antennaId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['antennas', antennaId, 'tags', 'add'],
+    mutationFn: (tags: Array<string>) => client.antennas.addAntennaTags(antennaId, tags),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['antennas', antennaId, 'tags'] }),
+  });
+};
+
+const useRemoveTagsFromAntenna = (antennaId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['antennas', antennaId, 'tags', 'remove'],
+    mutationFn: (tags: Array<string>) => client.antennas.removeAntennaTags(antennaId, tags),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['antennas', antennaId, 'tags'] }),
+  });
+};
+
+const useAddExcludedTagsToAntenna = (antennaId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['antennas', antennaId, 'tags', 'addExcluded'],
+    mutationFn: (tags: Array<string>) => client.antennas.addAntennaExcludedTags(antennaId, tags),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['antennas', antennaId, 'tags'] }),
+  });
+};
+
+const useRemoveExcludedTagsFromAntenna = (antennaId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['antennas', antennaId, 'tags', 'removeExcluded'],
+    mutationFn: (tags: Array<string>) => client.antennas.removeAntennaExcludedTags(antennaId, tags),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ['antennas', antennaId, 'tags'] }),
+  });
+};
+
 export {
   useAntennas,
   useAntenna,
@@ -140,4 +302,19 @@ export {
   useAntennaExcludedAccounts,
   useAddExcludedAccountsToAntenna,
   useRemoveExcludedAccountsFromAntenna,
+  useAntennaDomains,
+  useAddDomainsToAntenna,
+  useRemoveDomainsFromAntenna,
+  useAddExcludedDomainsToAntenna,
+  useRemoveExcludedDomainsFromAntenna,
+  useAntennaKeywords,
+  useAddKeywordsToAntenna,
+  useRemoveKeywordsFromAntenna,
+  useAddExcludedKeywordsToAntenna,
+  useRemoveExcludedKeywordsFromAntenna,
+  useAntennaTags,
+  useAddTagsToAntenna,
+  useRemoveTagsFromAntenna,
+  useAddExcludedTagsToAntenna,
+  useRemoveExcludedTagsFromAntenna,
 };
