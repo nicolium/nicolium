@@ -185,7 +185,7 @@ const AuthorizeRejectButton: React.FC<IAuthorizeRejectButton> = ({
         src={isLoading ? require('@phosphor-icons/core/fill/stop-fill.svg') : icon}
         onClick={action}
         theme='seamless'
-        className='size-10 items-center justify-center bg-white focus:!ring-0 dark:!bg-gray-900'
+        className='size-10 items-center justify-center bg-white dark:!bg-gray-900'
         iconClassName={clsx('size-6', {
           'text-primary-500': theme === 'primary',
           'text-danger-600': theme === 'danger',
