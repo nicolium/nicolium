@@ -16,7 +16,9 @@ import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
+import { useSettings } from '@/stores/settings';
 import { getTextDirection } from '@/utils/rtl';
+import Purify from '@/utils/url-purify';
 
 import HoverAccountWrapper from './hover-account-wrapper';
 import Avatar from './ui/avatar';
@@ -104,6 +106,9 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   cacheWidth,
   onOpenMedia,
 }): JSX.Element => {
+  const {
+    urlPrivacy: { clearLinksInContent, redirectLinksMode },
+  } = useSettings();
   const [width, setWidth] = useState(defaultWidth);
   const [embedded, setEmbedded] = useState(false);
 
@@ -111,6 +116,15 @@ const PreviewCard: React.FC<IPreviewCard> = ({
     setEmbedded(false);
   }, [card.url]);
 
+  let href = card.url;
+
+  if (clearLinksInContent) {
+    try {
+      href = Purify.clearUrl(href, clearLinksInContent, redirectLinksMode !== 'off');
+    } catch (_) {
+      //
+    }
+  }
   const direction = getTextDirection(card.title + card.description);
 
   const trimmedTitle = trim(card.title, maxTitle);
@@ -168,7 +182,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
       onClick={(e) => {
         e.stopPropagation();
       }}
-      href={card.url}
+      href={href}
       title={trimmedTitle}
       rel='noopener'
       target='_blank'
@@ -248,7 +262,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
                     onClick={(e) => {
                       e.stopPropagation();
                     }}
-                    href={card.url}
+                    href={href}
                     target='_blank'
                     rel='noopener'
                     className='text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-100'
@@ -292,7 +306,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
 
   const link = (
     <a
-      href={card.url}
+      href={href}
       className={className}
       target='_blank'
       rel='noopener'
