@@ -3,6 +3,7 @@ import React from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
 
+import { DefaultCurrentAccountProvider } from '@/contexts/current-account-context';
 import { StatProvider } from '@/contexts/stat-context';
 import { queryClient } from '@/queries/client';
 
@@ -21,14 +22,16 @@ const PlFe: React.FC = () => (
   <>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
-        <StatProvider>
-          <HelmetProvider>
-            <PlFeHead />
-            <PlFeLoad>
-              <PlFeMount />
-            </PlFeLoad>
-          </HelmetProvider>
-        </StatProvider>
+        <DefaultCurrentAccountProvider>
+          <StatProvider>
+            <HelmetProvider>
+              <PlFeHead />
+              <PlFeLoad>
+                <PlFeMount />
+              </PlFeLoad>
+            </HelmetProvider>
+          </StatProvider>
+        </DefaultCurrentAccountProvider>
       </QueryClientProvider>
     </Provider>
   </>
