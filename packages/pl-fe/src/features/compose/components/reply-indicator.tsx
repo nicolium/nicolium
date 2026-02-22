@@ -4,6 +4,7 @@ import React from 'react';
 import AttachmentThumbs from '@/components/attachment-thumbs';
 import Markup from '@/components/markup';
 import { ParsedContent } from '@/components/parsed-content';
+import QuotedStatusIndicator from '@/components/quoted-status-indicator';
 import Stack from '@/components/ui/stack';
 import AccountContainer from '@/containers/account-container';
 import { getTextDirection } from '@/utils/rtl';
@@ -25,6 +26,7 @@ interface IReplyIndicator {
     | 'sensitive'
     | 'spoiler_text'
     | 'quote_id'
+    | 'quote_url'
   >;
   onCancel?: () => void;
   hideActions: boolean;
@@ -81,6 +83,10 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({
       </Markup>
 
       {status.media_attachments.length > 0 && <AttachmentThumbs status={status} />}
+
+      {status.quote_id && (
+        <QuotedStatusIndicator statusId={status.quote_id} statusUrl={status.quote_url} />
+      )}
     </Stack>
   );
 };
