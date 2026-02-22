@@ -1,5 +1,5 @@
 import { useMatch, useNavigate } from '@tanstack/react-router';
-import { type Account, type CustomEmoji, type Group, GroupRoles } from 'pl-api';
+import { type Account, type CustomEmoji, GroupRoles } from 'pl-api';
 import React, { useCallback, useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -26,7 +26,6 @@ import { useUnblockAccountMutation } from '@/queries/accounts/use-relationship';
 import { useChats } from '@/queries/chats';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useBlockGroupUserMutation } from '@/queries/groups/use-group-blocks';
-import { useGroupRelationshipQuery } from '@/queries/groups/use-group-relationship';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
 import { useTranslationLanguages } from '@/queries/instance/use-translation-languages';
 import {
@@ -345,12 +344,12 @@ const ReplyButton: React.FC<IReplyButton> = ({
   const intl = useIntl();
 
   const canReply = useCanInteract(status, 'can_reply');
-  const { data: groupRelationship } = useGroupRelationshipQuery(status.group_id ?? undefined);
+  const { data: group } = useGroupQuery(status.group_id ?? undefined, true);
 
   let replyTitle;
   let replyDisabled = false;
 
-  if ((status.group as Group)?.membership_required && !groupRelationship?.member) {
+  if (group?.membership_required && !group.relationship?.member) {
     replyDisabled = true;
     replyTitle = intl.formatMessage(messages.replies_disabled_group);
   }
@@ -394,8 +393,8 @@ const ReplyButton: React.FC<IReplyButton> = ({
       </Popover>
     );
 
-  return status.group ? (
-    <GroupPopover group={status.group} isEnabled={replyDisabled}>
+  return group ? (
+    <GroupPopover group={group} isEnabled={replyDisabled}>
       {replyButton}
     </GroupPopover>
   ) : (
@@ -741,8 +740,8 @@ const MenuButton: React.FC<IMenuButton> = ({
   const { openModal } = useModalsActions();
   const { data: group } = useGroupQuery(status.group_id || undefined, true);
   const { mutate: blockGroupMember } = useBlockGroupUserMutation(
-    status.group?.id as string,
-    status.account.id,
+    status.group_id as string,
+    status.account_id,
   );
   const { getOrCreateChatByAccountId } = useChats();
   const { mutate: bookmarkStatus } = useBookmarkStatus(status.id);
@@ -1032,7 +1031,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       });
     }
 
-    const isGroupStatus = typeof status.group === 'object';
+    const isGroupStatus = typeof status.group_id === 'string';
 
     if (features.bookmarks) {
       menu.push({
@@ -1227,7 +1226,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       });
     }
 
-    if (isGroupStatus && !!status.group) {
+    if (isGroupStatus && !!status.group_id) {
       const isGroupOwner = group?.relationship?.role === GroupRoles.OWNER;
       const isGroupAdmin = group?.relationship?.role === GroupRoles.ADMIN;
       // const isStatusFromOwner = group.owner.id === account.id;

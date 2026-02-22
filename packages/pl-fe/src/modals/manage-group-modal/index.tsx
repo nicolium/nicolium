@@ -2,9 +2,9 @@ import React, { useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import { useCreateGroup } from '@/api/hooks/groups/use-create-group';
 import Modal from '@/components/ui/modal';
 import Stack from '@/components/ui/stack';
+import { useCreateGroupMutation } from '@/queries/groups/use-group';
 import toast from '@/toast';
 
 import ConfirmationStep from './steps/confirmation-step';
@@ -32,7 +32,7 @@ const CreateGroupModal: React.FC<BaseModalProps> = ({ onClose }) => {
   });
   const [currentStep, setCurrentStep] = useState<Steps>(Steps.ONE);
 
-  const { createGroup, isSubmitting } = useCreateGroup();
+  const { mutate: createGroup, isPending } = useCreateGroupMutation();
 
   const handleClose = () => {
     onClose('CREATE_GROUP');
@@ -55,8 +55,11 @@ const CreateGroupModal: React.FC<BaseModalProps> = ({ onClose }) => {
             setCurrentStep(Steps.TWO);
             setGroup(group);
           },
-          onError(error: { response?: PlfeResponse }) {
-            const msg = v.safeParse(v.object({ error: v.string() }), error?.response?.json);
+          onError(error) {
+            const msg = v.safeParse(
+              v.object({ error: v.string() }),
+              (error as { response?: PlfeResponse })?.response?.json,
+            );
             if (msg.success) {
               toast.error(msg.output.error);
             }
@@ -89,7 +92,7 @@ const CreateGroupModal: React.FC<BaseModalProps> = ({ onClose }) => {
       title={renderModalTitle()}
       confirmationAction={handleNextStep}
       confirmationText={confirmationText}
-      confirmationDisabled={isSubmitting}
+      confirmationDisabled={isPending}
       onClose={handleClose}
     >
       <Stack space={2}>{renderStep()}</Stack>

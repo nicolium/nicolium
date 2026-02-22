@@ -7,10 +7,7 @@ import { useAccount } from '@/api/hooks/accounts/use-account';
 import Account from '@/components/account';
 import DropdownMenu from '@/components/dropdown-menu/dropdown-menu';
 import HStack from '@/components/ui/hstack';
-import { deleteEntities } from '@/entity-store/actions';
-import { Entities } from '@/entity-store/entities';
 import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useBlockGroupUserMutation } from '@/queries/groups/use-group-blocks';
 import {
   useDemoteGroupMemberMutation,
@@ -73,7 +70,6 @@ interface IGroupMemberListItem {
 }
 
 const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
   const { openModal } = useModalsActions();
 
@@ -117,7 +113,6 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
       onConfirm: () => {
         blockGroupMember(undefined, {
           onSuccess() {
-            dispatch(deleteEntities([member.id], Entities.GROUP_MEMBERSHIPS));
             toast.success(intl.formatMessage(messages.blocked, { name: account?.acct }));
           },
         });

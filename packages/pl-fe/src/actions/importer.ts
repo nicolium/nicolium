@@ -109,7 +109,12 @@ const importEntities =
     if (!isEmpty(accounts))
       dispatch(importEntityStoreEntities(Object.values(accounts), Entities.ACCOUNTS));
     if (!isEmpty(groups))
-      dispatch(importEntityStoreEntities(Object.values(groups), Entities.GROUPS));
+      for (const group of Object.values(groups)) {
+        queryClient.setQueryData<BaseGroup>(['groups', group.id], group);
+        if (group.relationship) {
+          queryClient.setQueryData<BaseGroup>(['groupRelationships', group.id], group.relationship);
+        }
+      }
     if (!isEmpty(polls)) {
       for (const poll of Object.values(polls)) {
         queryClient.setQueryData<BasePoll>(['statuses', 'polls', poll.id], poll);

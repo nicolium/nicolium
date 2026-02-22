@@ -205,13 +205,14 @@ const Status: React.FC<IStatus> = (props) => {
     (state) => (status.reblog_id && getStatus(state, { id: status.reblog_id })!) || status,
   );
 
+  const { data: group } = useGroupQuery(actualStatus.group_id ?? undefined);
+
   const { mutate: favouriteStatus } = useFavouriteStatus(actualStatus.id);
   const { mutate: unfavouriteStatus } = useUnfavouriteStatus(actualStatus.id);
   const { mutate: reblogStatus } = useReblogStatus(actualStatus.id);
   const { mutate: unreblogStatus } = useUnreblogStatus(actualStatus.id);
 
   const isReblog = status.reblog_id;
-  const group = actualStatus.group;
 
   const filterResults = useMemo(() => {
     return [...status.filtered, ...actualStatus.filtered]

@@ -1,7 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useUpdateGroup } from '@/api/hooks/groups/use-update-group';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
@@ -18,9 +17,12 @@ import { useImageField } from '@/hooks/forms/use-image-field';
 import { useTextField } from '@/hooks/forms/use-text-field';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useInstance } from '@/hooks/use-instance';
-import { useGroupQuery } from '@/queries/groups/use-group';
+import { useGroupQuery, useUpdateGroupMutation } from '@/queries/groups/use-group';
 import toast from '@/toast';
 import { unescapeHTML } from '@/utils/html';
+
+import type { PlfeResponse } from '@/api';
+
 const messages = defineMessages({
   heading: { id: 'navigation_bar.edit_group', defaultMessage: 'Edit Group' },
   groupNamePlaceholder: {
@@ -41,9 +43,7 @@ const EditGroup: React.FC = () => {
   const instance = useInstance();
 
   const { data: group, isLoading } = useGroupQuery(groupId);
-  const { updateGroup } = useUpdateGroup(groupId);
-
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutate: updateGroup, isPending: isUpdatePending } = useUpdateGroupMutation(groupId);
 
   const avatar = useImageField({
     maxPixels: 400 * 400,
@@ -67,8 +67,6 @@ const EditGroup: React.FC = () => {
     .join(',');
 
   const handleSubmit = async () => {
-    setIsSubmitting(true);
-
     await updateGroup(
       {
         display_name: displayName.value,
@@ -81,16 +79,15 @@ const EditGroup: React.FC = () => {
           toast.success(intl.formatMessage(messages.groupSaved));
         },
         onError(error) {
-          const message = error.response?.json?.error;
+          const response = (error as { response?: PlfeResponse })?.response;
+          const message = response?.json?.error;
 
-          if (error.response?.status === 422 && typeof message !== 'undefined') {
+          if (response?.status === 422 && typeof message !== 'undefined') {
             toast.error(message);
           }
         },
       },
     );
-
-    setIsSubmitting(false);
   };
 
   if (isLoading) {
@@ -101,8 +98,8 @@ const EditGroup: React.FC = () => {
     <Column label={intl.formatMessage(messages.heading)}>
       <Form onSubmit={handleSubmit}>
         <div className='relative mb-12 flex'>
-          <HeaderPicker accept={attachmentTypes} disabled={isSubmitting} {...header} />
-          <AvatarPicker accept={attachmentTypes} disabled={isSubmitting} {...avatar} />
+          <HeaderPicker accept={attachmentTypes} disabled={isUpdatePending} {...header} />
+          <AvatarPicker accept={attachmentTypes} disabled={isUpdatePending} {...avatar} />
         </div>
         <FormGroup
           labelText={
@@ -149,7 +146,7 @@ const EditGroup: React.FC = () => {
         </FormGroup>
 
         <FormActions>
-          <Button theme='primary' type='submit' disabled={isSubmitting} block>
+          <Button theme='primary' type='submit' disabled={isUpdatePending} block>
             <FormattedMessage id='edit_profile.save' defaultMessage='Save' />
           </Button>
         </FormActions>

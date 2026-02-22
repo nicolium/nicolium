@@ -121,9 +121,6 @@ const normalizeStatus = (
     };
   }
 
-  // Normalize group
-  const group = status.group ?? null;
-
   return {
     account_id: status.account.id,
     reblog_id: status.reblog?.id ?? null,
@@ -136,7 +133,6 @@ const normalizeStatus = (
     quote_id: status.quote_id ?? null,
     mentions,
     event,
-    group,
     media_attachments,
     search_index: searchIndex,
   };

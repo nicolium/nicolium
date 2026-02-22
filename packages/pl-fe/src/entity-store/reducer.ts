@@ -3,11 +3,6 @@ import { create, type Immutable, type Draft } from 'mutative';
 import {
   ENTITIES_IMPORT,
   ENTITIES_DELETE,
-  ENTITIES_DISMISS,
-  ENTITIES_FETCH_REQUEST,
-  ENTITIES_FETCH_SUCCESS,
-  ENTITIES_FETCH_FAIL,
-  ENTITIES_INVALIDATE_LIST,
   ENTITIES_TRANSACTION,
   type EntityAction,
   type DeleteEntitiesOpts,
@@ -58,18 +53,6 @@ const importEntities = (
   }
 
   draft[entityType] = cache;
-
-  if (entityType === Entities.GROUPS) {
-    importEntities(
-      draft,
-      Entities.GROUP_RELATIONSHIPS,
-      entities
-        .map((entity: any) => entity?.relationship)
-        .filter((relationship: any) => relationship),
-      listKey,
-      pos,
-    );
-  }
 };
 
 const deleteEntities = (
@@ -99,53 +82,6 @@ const deleteEntities = (
   draft[entityType] = cache;
 };
 
-const dismissEntities = (
-  draft: Draft<State>,
-  entityType: string,
-  ids: Iterable<string>,
-  listKey: string,
-) => {
-  const cache = draft[entityType] ?? createCache();
-  const list = cache.lists[listKey];
-
-  if (list) {
-    for (const id of ids) {
-      list.ids.delete(id);
-
-      if (typeof list.state.totalCount === 'number') {
-        list.state.totalCount--;
-      }
-    }
-
-    draft[entityType] = cache;
-  }
-};
-
-const setFetching = (
-  draft: Draft<State>,
-  entityType: string,
-  listKey: string | undefined,
-  isFetching: boolean,
-  error?: any,
-) => {
-  const cache = draft[entityType] ?? createCache();
-
-  if (typeof listKey === 'string') {
-    const list = cache.lists[listKey] ?? createList();
-    list.state.fetching = isFetching;
-    list.state.error = error;
-    cache.lists[listKey] = list;
-  }
-
-  draft[entityType] = cache;
-};
-
-const invalidateEntityList = (draft: Draft<State>, entityType: string, listKey: string) => {
-  const cache = draft[entityType] ?? createCache();
-  const list = cache.lists[listKey] ?? createList();
-  list.state.invalid = true;
-};
-
 const doTransaction = (draft: Draft<State>, transaction: EntitiesTransaction) => {
   for (const [entityType, changes] of Object.entries(transaction)) {
     const cache = draft[entityType] ?? createCache();
@@ -172,38 +108,6 @@ const reducer = (state: Readonly<State> = {}, action: EntityAction): State => {
     case ENTITIES_DELETE:
       return create(state, (draft) => {
         deleteEntities(draft, action.entityType, action.ids, action.opts);
-      });
-    case ENTITIES_DISMISS:
-      return create(state, (draft) => {
-        dismissEntities(draft, action.entityType, action.ids, action.listKey);
-      });
-    case ENTITIES_FETCH_SUCCESS:
-      return create(
-        state,
-        (draft) => {
-          importEntities(
-            draft,
-            action.entityType,
-            action.entities,
-            action.listKey,
-            action.pos,
-            action.newState,
-            action.overwrite,
-          );
-        },
-        { enableAutoFreeze: true },
-      );
-    case ENTITIES_FETCH_REQUEST:
-      return create(state, (draft) => {
-        setFetching(draft, action.entityType, action.listKey, true);
-      });
-    case ENTITIES_FETCH_FAIL:
-      return create(state, (draft) => {
-        setFetching(draft, action.entityType, action.listKey, false, action.error);
-      });
-    case ENTITIES_INVALIDATE_LIST:
-      return create(state, (draft) => {
-        invalidateEntityList(draft, action.entityType, action.listKey);
       });
     case ENTITIES_TRANSACTION:
       return create(state, (draft) => {

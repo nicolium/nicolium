@@ -3,7 +3,6 @@ import { GroupRoles } from 'pl-api';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useDeleteGroup } from '@/api/hooks/groups/use-delete-group';
 import List, { ListItem } from '@/components/list';
 import { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
@@ -12,7 +11,7 @@ import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import ColumnForbidden from '@/features/ui/components/column-forbidden';
 import { manageGroupRoute } from '@/features/ui/router';
-import { useGroupQuery } from '@/queries/groups/use-group';
+import { useDeleteGroupMutation, useGroupQuery } from '@/queries/groups/use-group';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
@@ -43,7 +42,7 @@ const ManageGroup: React.FC = () => {
 
   const { data: group } = useGroupQuery(groupId, true);
 
-  const deleteGroup = useDeleteGroup();
+  const { mutate: deleteGroup } = useDeleteGroupMutation(groupId);
 
   const isOwner = group?.relationship?.role === GroupRoles.OWNER;
 
@@ -68,7 +67,7 @@ const ManageGroup: React.FC = () => {
       message: intl.formatMessage(messages.deleteMessage),
       confirm: intl.formatMessage(messages.deleteConfirm),
       onConfirm: () => {
-        deleteGroup.mutate(groupId, {
+        deleteGroup(undefined, {
           onSuccess() {
             toast.success(intl.formatMessage(messages.deleteSuccess));
             navigate({ to: '/groups' });
