@@ -1,8 +1,7 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { useGroup } from '@/api/hooks/groups/use-group';
-import { useGroupMembershipRequests } from '@/api/hooks/groups/use-group-membership-requests';
+import { useAccount } from '@/api/hooks/accounts/use-account';
 import Account from '@/components/account';
 import { AuthorizeRejectButtons } from '@/components/authorize-reject-buttons';
 import ScrollableList from '@/components/scrollable-list';
@@ -11,6 +10,12 @@ import HStack from '@/components/ui/hstack';
 import Spinner from '@/components/ui/spinner';
 import ColumnForbidden from '@/features/ui/components/column-forbidden';
 import { groupMembershipRequestsRoute } from '@/features/ui/router';
+import { useGroupQuery } from '@/queries/groups/use-group';
+import {
+  useAcceptGroupMembershipRequestMutation,
+  useGroupMembershipRequestsQuery,
+  useRejectGroupMembershipRequestMutation,
+} from '@/queries/groups/use-group-members';
 import toast from '@/toast';
 
 import type { PlfeResponse } from '@/api';
@@ -26,12 +31,14 @@ const messages = defineMessages({
 });
 
 interface IMembershipRequest {
-  account: AccountEntity;
+  accountId: string;
   onAuthorize(account: AccountEntity): Promise<void>;
   onReject(account: AccountEntity): Promise<void>;
 }
 
-const MembershipRequest: React.FC<IMembershipRequest> = ({ account, onAuthorize, onReject }) => {
+const MembershipRequest: React.FC<IMembershipRequest> = ({ accountId, onAuthorize, onReject }) => {
+  const { account } = useAccount();
+
   if (!account) return null;
 
   const handleAuthorize = () => onAuthorize(account);
@@ -57,11 +64,13 @@ const GroupMembershipRequests: React.FC = () => {
 
   const intl = useIntl();
 
-  const { group } = useGroup(groupId);
+  const { data: group } = useGroupQuery(groupId, true);
 
-  const { accounts, authorize, reject, refetch, isLoading } = useGroupMembershipRequests(groupId);
+  const { data: accountIds = [], isFetching } = useGroupMembershipRequestsQuery(groupId);
+  const { mutate: acceptGroupMembershipRequest } = useAcceptGroupMembershipRequestMutation(groupId);
+  const { mutate: rejectGroupMembershipRequest } = useRejectGroupMembershipRequestMutation(groupId);
 
-  if (!group || !group.relationship || isLoading) {
+  if (!group || !group.relationship || isFetching) {
     return (
       <Column label={intl.formatMessage(messages.heading)}>
         <Spinner />
@@ -76,39 +85,41 @@ const GroupMembershipRequests: React.FC = () => {
     return <ColumnForbidden />;
   }
 
-  const handleAuthorize = async (account: AccountEntity) => {
-    try {
-      await authorize(account.id);
-    } catch (error) {
-      const { response } = error as { response: PlfeResponse };
+  const handleAuthorize = (account: AccountEntity) =>
+    new Promise<void>((resolve, reject) => {
+      acceptGroupMembershipRequest(account.id, {
+        onSuccess: () => resolve(),
+        onError: (error) => {
+          const { response } = error as unknown as { response: PlfeResponse };
 
-      refetch();
+          let message = intl.formatMessage(messages.authorizeFail, { name: account.username });
+          if (response?.status === 409) {
+            message = response.json.error;
+          }
+          toast.error(message);
 
-      let message = intl.formatMessage(messages.authorizeFail, { name: account.username });
-      if (response?.status === 409) {
-        message = response.json.error;
-      }
-      toast.error(message);
-    }
-  };
+          reject();
+        },
+      });
+    });
 
-  const handleReject = async (account: AccountEntity) => {
-    try {
-      await reject(account.id);
-    } catch (error) {
-      const { response } = error as { response: PlfeResponse };
+  const handleReject = (account: AccountEntity) =>
+    new Promise<void>((resolve, reject) => {
+      rejectGroupMembershipRequest(account.id, {
+        onSuccess: () => resolve(),
+        onError: (error) => {
+          const { response } = error as unknown as { response: PlfeResponse };
 
-      refetch();
+          let message = intl.formatMessage(messages.rejectFail, { name: account.username });
+          if (response?.status === 409) {
+            message = response.json.error;
+          }
+          toast.error(message);
 
-      let message = intl.formatMessage(messages.rejectFail, { name: account.username });
-      if (response?.status === 409) {
-        message = response.json.error;
-      }
-      toast.error(message);
-
-      return Promise.reject();
-    }
-  };
+          reject();
+        },
+      });
+    });
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
@@ -121,10 +132,10 @@ const GroupMembershipRequests: React.FC = () => {
           />
         }
       >
-        {accounts.map((account) => (
+        {accountIds.map((account) => (
           <MembershipRequest
-            key={account.id}
-            account={account}
+            key={account}
+            accountId={account}
             onAuthorize={handleAuthorize}
             onReject={handleReject}
           />

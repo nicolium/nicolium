@@ -2,9 +2,9 @@ import { GroupRoles, type Group } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useLeaveGroup } from '@/api/hooks/groups/use-leave-group';
 import DropdownMenu, { Menu } from '@/components/dropdown-menu';
 import IconButton from '@/components/ui/icon-button';
+import { useLeaveGroupMutation } from '@/queries/groups/use-group-relationship';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
@@ -28,7 +28,7 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
   const { openModal } = useModalsActions();
   const intl = useIntl();
 
-  const leaveGroup = useLeaveGroup(group);
+  const { mutate: leaveGroup } = useLeaveGroupMutation(group.id);
 
   const isMember = group.relationship?.role === GroupRoles.USER;
   const isAdmin = group.relationship?.role === GroupRoles.ADMIN;
@@ -51,9 +51,8 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
       message: intl.formatMessage(messages.confirmationMessage),
       confirm: intl.formatMessage(messages.confirmationConfirm),
       onConfirm: () =>
-        leaveGroup.mutate(group.relationship?.id as string, {
-          onSuccess() {
-            leaveGroup.invalidate();
+        leaveGroup(undefined, {
+          onSuccess: () => {
             toast.success(intl.formatMessage(messages.leaveSuccess));
           },
         }),

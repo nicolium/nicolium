@@ -8,6 +8,7 @@ import type {
   AdminAccount,
   AdminReport,
   BlockedAccount,
+  Group,
   MutedAccount,
   PaginatedResponse,
   Status,
@@ -67,6 +68,17 @@ const minifyMutedAccountList = (
     (account) => [account.id, account.mute_expires_at],
     (accounts) => {
       store.dispatch(importEntities({ accounts }) as any);
+    },
+  );
+
+const minifyGroupList = (response: PaginatedResponse<Group>): PaginatedResponse<string> =>
+  minifyList(
+    response,
+    (group) => group.id,
+    (groups) => {
+      for (const group of groups) {
+        queryClient.setQueryData(['groups', group.id], group);
+      }
     },
   );
 
@@ -146,6 +158,7 @@ export {
   minifyBlockedAccountList,
   minifyMutedAccountList,
   minifyStatusList,
+  minifyGroupList,
   minifyAdminAccount,
   minifyAdminAccountList,
   minifyAdminReport,

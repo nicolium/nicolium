@@ -3,11 +3,11 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { groupComposeModal } from '@/actions/compose';
-import { useGroup } from '@/api/hooks/groups/use-group';
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useGroupQuery } from '@/queries/groups/use-group';
 import { useModalsActions } from '@/stores/modals';
 
 import { layouts } from '../router';
@@ -19,7 +19,7 @@ interface IComposeButton {
 
 const ComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
   const match = useMatch({ from: layouts.group.id, shouldThrow: false });
-  const { group } = useGroup(match?.params.groupId ?? '');
+  const { data: group } = useGroupQuery(match?.params.groupId);
   const isGroupMember = !!group?.relationship?.member;
 
   if (match && isGroupMember) {
@@ -49,7 +49,7 @@ const HomeComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
 const GroupComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
   const dispatch = useAppDispatch();
   const match = useMatch({ from: layouts.group.id, shouldThrow: false });
-  const { group } = useGroup(match?.params.groupId ?? '');
+  const { data: group } = useGroupQuery(match?.params.groupId);
 
   if (!group) return null;
 

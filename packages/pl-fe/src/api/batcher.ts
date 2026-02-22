@@ -11,6 +11,14 @@ const relationships = memoize((client: PlApiClient) =>
   }),
 );
 
+const groupRelationships = memoize((client: PlApiClient) =>
+  create({
+    fetcher: (ids: string[]) => client.experimental.groups.getGroupRelationships(ids),
+    resolver: keyResolver('id'),
+    scheduler: bufferScheduler(200),
+  }),
+);
+
 // TODO: proper multi-client support
 const translations = memoize((lang: string, client: PlApiClient) =>
   create({
@@ -22,6 +30,7 @@ const translations = memoize((lang: string, client: PlApiClient) =>
 
 const batcher = {
   relationships,
+  groupRelationships,
   translations,
 };
 

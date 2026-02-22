@@ -2,16 +2,15 @@ import { GroupRoles } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useJoinGroup } from '@/api/hooks/groups/use-join-group';
-import { useLeaveGroup } from '@/api/hooks/groups/use-leave-group';
 import Button from '@/components/ui/button';
-import { importEntities } from '@/entity-store/actions';
-import { Entities } from '@/entity-store/entities';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import {
+  useJoinGroupMutation,
+  useLeaveGroupMutation,
+} from '@/queries/groups/use-group-relationship';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
-import type { Group, GroupRelationship } from 'pl-api';
+import type { Group } from 'pl-api';
 
 interface IGroupActionButton {
   group: Pick<Group, 'id' | 'locked' | 'relationship'>;
@@ -33,12 +32,11 @@ const messages = defineMessages({
 });
 
 const GroupActionButton = ({ group }: IGroupActionButton) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const { openModal } = useModalsActions();
-  const joinGroup = useJoinGroup(group);
-  const leaveGroup = useLeaveGroup(group);
+  const { mutate: joinGroup, isPending: isJoiningGroup } = useJoinGroupMutation(group.id);
+  const { mutate: leaveGroup, isPending: isLeavingGroup } = useLeaveGroupMutation(group.id);
 
   const isRequested = group.relationship?.requested;
   const isNonMember = !group.relationship?.member && !isRequested;
@@ -46,26 +44,21 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
   const isAdmin = group.relationship?.role === GroupRoles.ADMIN;
 
   const onJoinGroup = () =>
-    joinGroup.mutate(
-      {},
-      {
-        onSuccess() {
-          joinGroup.invalidate();
-
-          toast.success(
-            group.locked
-              ? intl.formatMessage(messages.joinRequestSuccess)
-              : intl.formatMessage(messages.joinSuccess),
-          );
-        },
-        onError(error) {
-          const message = error.response?.json?.error;
-          if (message) {
-            toast.error(message);
-          }
-        },
+    joinGroup(undefined, {
+      onSuccess: () => {
+        toast.success(
+          group.locked
+            ? intl.formatMessage(messages.joinRequestSuccess)
+            : intl.formatMessage(messages.joinSuccess),
+        );
       },
-    );
+      // onError: (error) => {
+      //   const message = error.response?.json?.error;
+      //   if (message) {
+      //     toast.error(message);
+      //   }
+      // },
+    });
 
   const onLeaveGroup = () => {
     openModal('CONFIRM', {
@@ -73,25 +66,15 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
       message: intl.formatMessage(messages.confirmationMessage),
       confirm: intl.formatMessage(messages.confirmationConfirm),
       onConfirm: () =>
-        leaveGroup.mutate(group.relationship?.id as string, {
-          onSuccess() {
-            leaveGroup.invalidate();
+        leaveGroup(undefined, {
+          onSuccess: () => {
             toast.success(intl.formatMessage(messages.leaveSuccess));
           },
         }),
     });
   };
 
-  const onCancelRequest = () =>
-    leaveGroup.mutate(group.relationship?.id as string, {
-      onSuccess() {
-        const entity = {
-          ...(group.relationship as GroupRelationship),
-          requested: false,
-        };
-        dispatch(importEntities([entity], Entities.GROUP_RELATIONSHIPS));
-      },
-    });
+  const onCancelRequest = () => leaveGroup();
 
   if (isOwner || isAdmin) {
     return (
@@ -103,7 +86,7 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
 
   if (isNonMember) {
     return (
-      <Button theme='primary' onClick={onJoinGroup} disabled={joinGroup.isSubmitting}>
+      <Button theme='primary' onClick={onJoinGroup} disabled={isJoiningGroup || isLeavingGroup}>
         {group.locked ? (
           <FormattedMessage id='group.join.private' defaultMessage='Request access' />
         ) : (
@@ -115,14 +98,18 @@ const GroupActionButton = ({ group }: IGroupActionButton) => {
 
   if (isRequested) {
     return (
-      <Button theme='secondary' onClick={onCancelRequest} disabled={leaveGroup.isSubmitting}>
+      <Button
+        theme='secondary'
+        onClick={onCancelRequest}
+        disabled={isJoiningGroup || isLeavingGroup}
+      >
         <FormattedMessage id='group.cancel_request' defaultMessage='Cancel request' />
       </Button>
     );
   }
 
   return (
-    <Button theme='secondary' onClick={onLeaveGroup} disabled={leaveGroup.isSubmitting}>
+    <Button theme='secondary' onClick={onLeaveGroup} disabled={isJoiningGroup || isLeavingGroup}>
       <FormattedMessage id='group.leave' defaultMessage='Leave group' />
     </Button>
   );

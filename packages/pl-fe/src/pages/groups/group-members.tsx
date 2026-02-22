@@ -2,19 +2,21 @@ import clsx from 'clsx';
 import { GroupRoles } from 'pl-api';
 import React, { useMemo } from 'react';
 
-import { useGroup } from '@/api/hooks/groups/use-group';
-import { useGroupMembershipRequests } from '@/api/hooks/groups/use-group-membership-requests';
 import { PendingItemsRow } from '@/components/pending-items-row';
 import ScrollableList from '@/components/scrollable-list';
 import GroupMemberListItem from '@/features/group/components/group-member-list-item';
 import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
 import { groupMembersRoute } from '@/features/ui/router';
-import { useGroupMembers } from '@/queries/groups/use-group-members';
+import { useGroupQuery } from '@/queries/groups/use-group';
+import {
+  useGroupMembers,
+  useGroupMembershipRequestsQuery,
+} from '@/queries/groups/use-group-members';
 
 const GroupMembers: React.FC = () => {
   const { groupId } = groupMembersRoute.useParams();
 
-  const { group, isFetching: isFetchingGroup } = useGroup(groupId);
+  const { data: group, isFetching: isFetchingGroup } = useGroupQuery(groupId, true);
   const { data: owners, isFetching: isFetchingOwners } = useGroupMembers(groupId, GroupRoles.OWNER);
   const { data: admins, isFetching: isFetchingAdmins } = useGroupMembers(groupId, GroupRoles.ADMIN);
   const {
@@ -23,8 +25,8 @@ const GroupMembers: React.FC = () => {
     fetchNextPage,
     hasNextPage,
   } = useGroupMembers(groupId, GroupRoles.USER);
-  const { isFetching: isFetchingPending, count: pendingCount } =
-    useGroupMembershipRequests(groupId);
+  const { isFetching: isFetchingPending, data: membershipRequests = [] } =
+    useGroupMembershipRequestsQuery(groupId);
 
   const isLoading =
     isFetchingGroup || isFetchingOwners || isFetchingAdmins || isFetchingUsers || isFetchingPending;
@@ -47,7 +49,7 @@ const GroupMembers: React.FC = () => {
         className='⁂-status-list'
         itemClassName='py-3 last:pb-0'
         prepend={
-          pendingCount > 0 && (
+          membershipRequests.length > 0 && (
             <div
               className={clsx('py-3', {
                 'border-b border-gray-200 dark:border-gray-800': members.length,
@@ -55,8 +57,8 @@ const GroupMembers: React.FC = () => {
             >
               <PendingItemsRow
                 to='/groups/$groupId/manage/requests'
-                params={{ groupId: group?.id! }}
-                count={pendingCount}
+                params={{ groupId }}
+                count={membershipRequests.length}
               />
             </div>
           )

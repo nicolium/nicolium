@@ -1,5 +1,4 @@
 import { type InfiniteData, useMutation } from '@tanstack/react-query';
-import { GroupMember, GroupRole, PaginatedResponse } from 'pl-api';
 
 import { importEntities } from '@/actions/importer';
 import { useClient } from '@/hooks/use-client';
@@ -7,7 +6,9 @@ import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-respo
 import { store } from '@/store';
 
 import { queryClient } from '../client';
-import { minifyList } from '../utils/minify-list';
+import { minifyAccountList, minifyList } from '../utils/minify-list';
+
+import type { GroupMember, GroupRole, PaginatedResponse } from 'pl-api';
 
 const removeGroupMember = (groupId: string, accountId: string) =>
   queryClient.setQueriesData<InfiniteData<PaginatedResponse<MinifiedGroupMember>>>(
@@ -53,6 +54,80 @@ const useKickGroupMemberMutation = (groupId: string, accountId: string) => {
   });
 };
 
+const useGroupMembershipRequestsQuery = makePaginatedResponseQuery(
+  (groupId: string) => ['accountsLists', 'groupMembershipRequests', groupId],
+  (client, [groupId]) =>
+    client.experimental.groups.getGroupMembershipRequests(groupId).then(minifyAccountList),
+);
+
+const useAcceptGroupMembershipRequestMutation = (groupId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['accountsLists', 'groupMembershipRequests', groupId],
+    mutationFn: (accountId: string) =>
+      client.experimental.groups.acceptGroupMembershipRequest(groupId, accountId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['accountsLists', 'groupMembershipRequests', groupId],
+      });
+      queryClient.invalidateQueries({ queryKey: ['accountsLists', 'groupMembers', groupId] });
+    },
+  });
+};
+
+const useRejectGroupMembershipRequestMutation = (groupId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['accountsLists', 'groupMembershipRequests', groupId],
+    mutationFn: (accountId: string) =>
+      client.experimental.groups.rejectGroupMembershipRequest(groupId, accountId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['accountsLists', 'groupMembershipRequests', groupId],
+      });
+      queryClient.invalidateQueries({ queryKey: ['accountsLists', 'groupMembers', groupId] });
+    },
+  });
+};
+
+const usePromoteGroupMemberMutation = (groupId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['accountsLists', 'groupMembers', groupId],
+    mutationFn: ({ accountId, role }: { accountId: string; role: GroupRole }) =>
+      client.experimental.groups.promoteGroupUsers(groupId, [accountId], role),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['accountsLists', 'groupMembers', groupId] });
+    },
+  });
+};
+
+const useDemoteGroupMemberMutation = (groupId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['accountsLists', 'groupMembers', groupId],
+    mutationFn: ({ accountId, role }: { accountId: string; role: GroupRole }) =>
+      client.experimental.groups.demoteGroupUsers(groupId, [accountId], role),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['accountsLists', 'groupMembers', groupId] });
+    },
+  });
+};
+
 type MinifiedGroupMember = ReturnType<typeof minifyGroupMembersList>['items'][0];
 
-export { useGroupMembers, useKickGroupMemberMutation, removeGroupMember, type MinifiedGroupMember };
+export {
+  useGroupMembers,
+  useKickGroupMemberMutation,
+  useGroupMembershipRequestsQuery,
+  useAcceptGroupMembershipRequestMutation,
+  useRejectGroupMembershipRequestMutation,
+  usePromoteGroupMemberMutation,
+  useDemoteGroupMemberMutation,
+  removeGroupMember,
+  type MinifiedGroupMember,
+};

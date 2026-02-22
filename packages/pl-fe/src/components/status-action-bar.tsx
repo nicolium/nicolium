@@ -10,8 +10,6 @@ import { deleteStatusModal, toggleStatusSensitivityModal } from '@/actions/moder
 import { initReport, ReportableEntities } from '@/actions/reports';
 import { changeSetting } from '@/actions/settings';
 import { deleteStatus, editStatus, toggleMuteStatus } from '@/actions/statuses';
-import { useGroup } from '@/api/hooks/groups/use-group';
-import { useGroupRelationship } from '@/api/hooks/groups/use-group-relationship';
 import DropdownMenu from '@/components/dropdown-menu';
 import StatusActionButton from '@/components/status-action-button';
 import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
@@ -26,7 +24,9 @@ import { useInstance } from '@/hooks/use-instance';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useUnblockAccountMutation } from '@/queries/accounts/use-relationship';
 import { useChats } from '@/queries/chats';
+import { useGroupQuery } from '@/queries/groups/use-group';
 import { useBlockGroupUserMutation } from '@/queries/groups/use-group-blocks';
+import { useGroupRelationshipQuery } from '@/queries/groups/use-group-relationship';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
 import { useTranslationLanguages } from '@/queries/instance/use-translation-languages';
 import {
@@ -345,7 +345,7 @@ const ReplyButton: React.FC<IReplyButton> = ({
   const intl = useIntl();
 
   const canReply = useCanInteract(status, 'can_reply');
-  const { groupRelationship } = useGroupRelationship(status.group_id ?? undefined);
+  const { data: groupRelationship } = useGroupRelationshipQuery(status.group_id ?? undefined);
 
   let replyTitle;
   let replyDisabled = false;
@@ -739,7 +739,7 @@ const MenuButton: React.FC<IMenuButton> = ({
   const { fetchTranslation, hideTranslation } = useStatusMetaActions();
   const { targetLanguage } = useStatusMeta(status.id);
   const { openModal } = useModalsActions();
-  const { group } = useGroup((status.group as Group)?.id);
+  const { data: group } = useGroupQuery(status.group_id || undefined, true);
   const { mutate: blockGroupMember } = useBlockGroupUserMutation(
     status.group?.id as string,
     status.account.id,
@@ -751,7 +751,6 @@ const MenuButton: React.FC<IMenuButton> = ({
   const { mutate: unpinStatus } = useUnpinStatus(status?.id);
   const { mutate: unblockAccount } = useUnblockAccountMutation(status.account_id);
 
-  const { groupRelationship } = useGroupRelationship(status.group_id ?? undefined);
   const features = useFeatures();
   const instance = useInstance();
   const { autoTranslate, deleteModal, knownLanguages } = useSettings();
@@ -1229,8 +1228,8 @@ const MenuButton: React.FC<IMenuButton> = ({
     }
 
     if (isGroupStatus && !!status.group) {
-      const isGroupOwner = groupRelationship?.role === GroupRoles.OWNER;
-      const isGroupAdmin = groupRelationship?.role === GroupRoles.ADMIN;
+      const isGroupOwner = group?.relationship?.role === GroupRoles.OWNER;
+      const isGroupAdmin = group?.relationship?.role === GroupRoles.ADMIN;
       // const isStatusFromOwner = group.owner.id === account.id;
 
       const canBanUser = match && (isGroupOwner || isGroupAdmin) && !ownAccount;

@@ -5,7 +5,6 @@ import { FormattedMessage, useIntl } from 'react-intl';
 
 import { groupCompose, uploadCompose } from '@/actions/compose';
 import { fetchGroupTimeline } from '@/actions/timelines';
-import { useGroup } from '@/api/hooks/groups/use-group';
 import { useGroupStream } from '@/api/hooks/streaming/use-group-stream';
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
@@ -17,6 +16,7 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useGroupQuery } from '@/queries/groups/use-group';
 import { makeGetStatusIds } from '@/selectors';
 
 const getStatusIds = makeGetStatusIds();
@@ -29,7 +29,7 @@ const GroupTimelinePage: React.FC = () => {
   const dispatch = useAppDispatch();
   const composer = useRef<HTMLDivElement>(null);
 
-  const { group } = useGroup(groupId);
+  const { data: group } = useGroupQuery(groupId);
 
   const composeId = `group:${groupId}`;
   const canComposeGroupStatus = !!account && group?.relationship?.member;

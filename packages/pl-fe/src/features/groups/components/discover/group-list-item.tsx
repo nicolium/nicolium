@@ -9,27 +9,18 @@ import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import GroupActionButton from '@/features/group/components/group-action-button';
+import { useGroupQuery } from '@/queries/groups/use-group';
 import { shortNumberFormat } from '@/utils/numbers';
 
-import type { Group } from 'pl-api';
-
 interface IGroupListItem {
-  group: Pick<
-    Group,
-    | 'id'
-    | 'avatar'
-    | 'avatar_description'
-    | 'display_name'
-    | 'emojis'
-    | 'locked'
-    | 'members_count'
-    | 'relationship'
-  >;
+  groupId: string;
   withJoinAction?: boolean;
 }
 
-const GroupListItem = (props: IGroupListItem) => {
-  const { group, withJoinAction = true } = props;
+const GroupListItem: React.FC<IGroupListItem> = ({ groupId, withJoinAction = true }) => {
+  const { data: group } = useGroupQuery(groupId, true);
+
+  if (!group) return null;
 
   return (
     <HStack alignItems='center' justifyContent='between' data-testid='group-list-item'>

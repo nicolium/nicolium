@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useGroup } from '@/api/hooks/groups/use-group';
 import LoadMore from '@/components/load-more';
 import MissingIndicator from '@/components/missing-indicator';
 import Column from '@/components/ui/column';
@@ -9,6 +8,7 @@ import Spinner from '@/components/ui/spinner';
 import { groupGalleryRoute } from '@/features/ui/router';
 import { type AccountGalleryAttachment, useGroupGallery } from '@/hooks/use-account-gallery';
 import { MediaItem } from '@/pages/accounts/account-gallery';
+import { useGroupQuery } from '@/queries/groups/use-group';
 import { useModalsActions } from '@/stores/modals';
 
 const GroupGallery: React.FC = () => {
@@ -16,7 +16,7 @@ const GroupGallery: React.FC = () => {
 
   const { openModal } = useModalsActions();
 
-  const { group, isLoading: groupIsLoading } = useGroup(groupId);
+  const { data: group, isLoading: groupIsLoading } = useGroupQuery(groupId, true);
 
   const {
     data: attachments,

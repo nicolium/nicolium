@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useGroup } from '@/api/hooks/groups/use-group';
 import { useUpdateGroup } from '@/api/hooks/groups/use-update-group';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
@@ -19,9 +18,9 @@ import { useImageField } from '@/hooks/forms/use-image-field';
 import { useTextField } from '@/hooks/forms/use-text-field';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useInstance } from '@/hooks/use-instance';
+import { useGroupQuery } from '@/queries/groups/use-group';
 import toast from '@/toast';
 import { unescapeHTML } from '@/utils/html';
-
 const messages = defineMessages({
   heading: { id: 'navigation_bar.edit_group', defaultMessage: 'Edit Group' },
   groupNamePlaceholder: {
@@ -41,7 +40,7 @@ const EditGroup: React.FC = () => {
   const intl = useIntl();
   const instance = useInstance();
 
-  const { group, isLoading } = useGroup(groupId);
+  const { data: group, isLoading } = useGroupQuery(groupId);
   const { updateGroup } = useUpdateGroup(groupId);
 
   const [isSubmitting, setIsSubmitting] = useState(false);

@@ -1,14 +1,14 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useGroups } from '@/api/hooks/groups/use-groups';
 import Widget from '@/components/ui/widget';
 import GroupListItem from '@/features/groups/components/discover/group-list-item';
 import PlaceholderGroupSearch from '@/features/placeholder/components/placeholder-group-search';
+import { useGroupsQuery } from '@/queries/groups/use-groups';
 
 const MyGroupsPanel = () => {
-  const { groups, isFetching, isFetched, isError } = useGroups();
-  const isEmpty = (isFetched && groups.length === 0) ?? isError;
+  const { data: groupIds = [], isFetching, isError } = useGroupsQuery();
+  const isEmpty = (!isFetching && groupIds.length === 0) ?? isError;
 
   if (isEmpty) {
     return null;
@@ -20,9 +20,11 @@ const MyGroupsPanel = () => {
         ? new Array(3)
             .fill(0)
             .map((_, idx) => <PlaceholderGroupSearch key={idx} withJoinAction={false} />)
-        : groups
+        : groupIds
             .slice(0, 3)
-            .map((group) => <GroupListItem group={group} withJoinAction={false} key={group.id} />)}
+            .map((groupId) => (
+              <GroupListItem groupId={groupId} withJoinAction={false} key={groupId} />
+            ))}
     </Widget>
   );
 };
