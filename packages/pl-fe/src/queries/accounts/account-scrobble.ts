@@ -1,15 +1,20 @@
-import { queryOptions } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 
-import { getClient } from '@/api';
+import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
 
-const accountScrobbleQueryOptions = (accountId?: string) =>
-  queryOptions({
+const useAccountScrobbleQuery = (accountId?: string) => {
+  const client = useClient();
+  const features = useFeatures();
+
+  return useQuery({
     queryKey: ['scrobbles', accountId!],
     queryFn: async () =>
-      (await getClient().accounts.getScrobbles(accountId!, { limit: 1 })).items[0] || null,
+      (await client.accounts.getScrobbles(accountId!, { limit: 1 })).items[0] || null,
     placeholderData: undefined,
-    enabled: () => !!accountId && getClient().features.scrobbles,
+    enabled: () => !!accountId && features.scrobbles,
     staleTime: 3 * 60 * 1000,
   });
+};
 
-export { accountScrobbleQueryOptions };
+export { useAccountScrobbleQuery };

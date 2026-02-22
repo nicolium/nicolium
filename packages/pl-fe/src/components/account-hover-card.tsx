@@ -1,5 +1,4 @@
 import { autoUpdate, flip, shift, useFloating, useTransitionStyles } from '@floating-ui/react';
-import { useQuery } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
@@ -18,7 +17,7 @@ import { isTimezoneLabel } from '@/features/ui/components/profile-field';
 import { UserPanel } from '@/features/ui/util/async-components';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
-import { accountScrobbleQueryOptions } from '@/queries/accounts/account-scrobble';
+import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
 import { useAccountHoverCardActions, useAccountHoverCardStore } from '@/stores/account-hover-card';
 
 import AccountLocalTime from './account-local-time';
@@ -79,7 +78,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
 
   const me = useAppSelector((state) => state.me);
   const { account } = useAccount(accountId ?? undefined, { withRelationship: true });
-  const { data: scrobble } = useQuery(accountScrobbleQueryOptions(account?.id));
+  const { data: scrobble } = useAccountScrobbleQuery(account?.id);
   const badges = getBadges(account);
 
   useEffect(() => {

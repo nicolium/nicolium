@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
@@ -14,7 +13,7 @@ import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAcct } from '@/hooks/use-acct';
 import { useAppSelector } from '@/hooks/use-app-selector';
-import { accountScrobbleQueryOptions } from '@/queries/accounts/account-scrobble';
+import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
 import { capitalize } from '@/utils/strings';
 
 import { ProfileField } from '../../util/async-components';
@@ -51,7 +50,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   const me = useAppSelector((state) => state.me);
   const ownAccount = account?.id === me;
 
-  const { data: scrobble } = useQuery(accountScrobbleQueryOptions(account?.id));
+  const { data: scrobble } = useAccountScrobbleQuery(account?.id);
 
   const getStaffBadge = (): React.ReactNode => {
     if (account?.is_admin) {
