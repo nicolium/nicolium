@@ -27,11 +27,6 @@ const updateList = (
   const oldIds = Array.from(list.ids);
   const ids = new Set(pos === 'start' ? [...newIds, ...oldIds] : [...oldIds, ...newIds]);
 
-  if (typeof list.state.totalCount === 'number') {
-    const sizeDiff = ids.size - list.ids.size;
-    list.state.totalCount += sizeDiff;
-  }
-
   return {
     ...list,
     ids,
@@ -54,12 +49,9 @@ const createList = (): EntityList => ({
 const createListState = (): EntityListState => ({
   next: null,
   prev: null,
-  totalCount: 0,
   error: null,
   fetched: false,
   fetching: false,
-  lastFetchedAt: undefined,
-  invalid: false,
 });
 
 export { updateStore, updateList, createCache, createList };

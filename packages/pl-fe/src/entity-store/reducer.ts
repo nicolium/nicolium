@@ -1,12 +1,6 @@
 import { create, type Immutable, type Draft } from 'mutative';
 
-import {
-  ENTITIES_IMPORT,
-  ENTITIES_DELETE,
-  ENTITIES_TRANSACTION,
-  type EntityAction,
-  type DeleteEntitiesOpts,
-} from './actions';
+import { ENTITIES_IMPORT, ENTITIES_TRANSACTION, type EntityAction } from './actions';
 import { Entities } from './entities';
 import { createCache, createList, updateStore, updateList } from './utils';
 
@@ -55,33 +49,6 @@ const importEntities = (
   draft[entityType] = cache;
 };
 
-const deleteEntities = (
-  draft: Draft<State>,
-  entityType: string,
-  ids: Iterable<string>,
-  opts: DeleteEntitiesOpts,
-) => {
-  const cache = draft[entityType] ?? createCache();
-
-  for (const id of ids) {
-    delete cache.store[id];
-
-    if (!opts?.preserveLists) {
-      for (const list of Object.values(cache.lists)) {
-        if (list) {
-          list.ids.delete(id);
-
-          if (typeof list.state.totalCount === 'number') {
-            list.state.totalCount--;
-          }
-        }
-      }
-    }
-  }
-
-  draft[entityType] = cache;
-};
-
 const doTransaction = (draft: Draft<State>, transaction: EntitiesTransaction) => {
   for (const [entityType, changes] of Object.entries(transaction)) {
     const cache = draft[entityType] ?? createCache();
@@ -101,14 +68,10 @@ const reducer = (state: Readonly<State> = {}, action: EntityAction): State => {
       return create(
         state,
         (draft) => {
-          importEntities(draft, action.entityType, action.entities, action.listKey, action.pos);
+          importEntities(draft, action.entityType, action.entities);
         },
         { enableAutoFreeze: true },
       );
-    case ENTITIES_DELETE:
-      return create(state, (draft) => {
-        deleteEntities(draft, action.entityType, action.ids, action.opts);
-      });
     case ENTITIES_TRANSACTION:
       return create(state, (draft) => {
         doTransaction(draft, action.transaction);

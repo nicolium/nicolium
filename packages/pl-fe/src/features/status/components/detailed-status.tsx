@@ -69,15 +69,12 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                     group: (
                       <Link
                         to='/groups/$groupId'
-                        params={{ groupId: status.group.id }}
+                        params={{ groupId: status.group_id }}
                         className='hover:underline'
                       >
                         <bdi className='truncate'>
                           <strong className='text-gray-800 dark:text-gray-200'>
-                            <Emojify
-                              text={status.account.display_name}
-                              emojis={status.account.emojis}
-                            />
+                            <Emojify text={group.display_name} emojis={group.emojis} />
                           </strong>
                         </bdi>
                       </Link>

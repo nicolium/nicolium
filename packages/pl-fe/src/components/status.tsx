@@ -14,6 +14,7 @@ import StatusTypeIcon from '@/features/status/components/status-type-icon';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
+import { useGroupQuery } from '@/queries/groups/use-group';
 import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
 import {
   useFavouriteStatus,

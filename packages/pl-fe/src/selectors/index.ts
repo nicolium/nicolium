@@ -12,7 +12,7 @@ import type { minifyAdminReport } from '@/queries/utils/minify-list';
 import type { MinifiedStatus } from '@/reducers/statuses';
 import type { MRFSimple } from '@/schemas/pleroma';
 import type { RootState } from '@/store';
-import type { Account, Filter, FilterResult, Group, NotificationGroup } from 'pl-api';
+import type { Account, Filter, FilterResult, NotificationGroup } from 'pl-api';
 
 const selectAccount = (state: RootState, accountId: string) =>
   state.entities[Entities.ACCOUNTS]?.store[accountId] as Account | undefined;
@@ -120,11 +120,6 @@ const makeGetStatus = () =>
         state.statuses[state.statuses[id]?.reblog_id ?? ''] || null,
       (state: RootState, { id }: APIStatus) =>
         state.statuses[state.statuses[id]?.quote_id ?? ''] || null,
-      (state: RootState, { id }: APIStatus) => {
-        const group = state.statuses[id]?.group_id;
-        if (group) return state.entities[Entities.GROUPS]?.store[group] as Group;
-        return undefined;
-      },
       (_state: RootState, { username }: APIStatus) => username,
       (state: RootState) => state.filters,
       (_state: RootState, { contextType }: FilterContext) => contextType,
@@ -132,17 +127,7 @@ const makeGetStatus = () =>
       (state: RootState) => state.auth.client.features,
     ],
 
-    (
-      statusBase,
-      statusReblog,
-      statusQuote,
-      statusGroup,
-      username,
-      filters,
-      contextType,
-      me,
-      features,
-    ) => {
+    (statusBase, statusReblog, statusQuote, username, filters, contextType, me, features) => {
       if (!statusBase) return null;
       const { account } = statusBase;
       const accountUsername = account.acct;
@@ -165,7 +150,6 @@ const makeGetStatus = () =>
         ...statusBase,
         reblog: statusReblog || null,
         quote: statusQuote || null,
-        group: statusGroup ?? null,
         filtered,
       };
     },

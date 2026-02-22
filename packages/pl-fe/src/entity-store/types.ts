@@ -25,18 +25,12 @@ interface EntityListState {
   next: (() => Promise<PaginatedResponse<any>>) | null;
   /** Previous URL for pagination, if any. */
   prev: (() => Promise<PaginatedResponse<any>>) | null;
-  /** Total number of items according to the API. */
-  totalCount: number | undefined;
   /** Error returned from the API, if any. */
   error: unknown;
   /** Whether data has already been fetched */
   fetched: boolean;
   /** Whether data for this list is currently being fetched. */
   fetching: boolean;
-  /** Date of the last API fetch for this list. */
-  lastFetchedAt: Date | undefined;
-  /** Whether the entities should be refetched on the next component mount. */
-  invalid: boolean;
 }
 
 /** Cache data pertaining to a paritcular entity type.. */
