@@ -2,15 +2,9 @@ import { create, type Immutable, type Draft } from 'mutative';
 
 import { ENTITIES_IMPORT, ENTITIES_TRANSACTION, type EntityAction } from './actions';
 import { Entities } from './entities';
-import { createCache, createList, updateStore, updateList } from './utils';
+import { createCache, updateStore } from './utils';
 
-import type {
-  EntitiesTransaction,
-  Entity,
-  EntityCache,
-  EntityListState,
-  ImportPosition,
-} from './types';
+import type { EntitiesTransaction, Entity, EntityCache } from './types';
 
 /** Entity reducer state. */
 type State = Immutable<{
@@ -18,33 +12,9 @@ type State = Immutable<{
 }>;
 
 /** Import entities into the cache. */
-const importEntities = (
-  draft: Draft<State>,
-  entityType: Entities,
-  entities: Entity[],
-  listKey?: string,
-  pos?: ImportPosition,
-  newState?: EntityListState,
-  overwrite = false,
-) => {
+const importEntities = (draft: Draft<State>, entityType: Entities, entities: Entity[]) => {
   const cache = draft[entityType] ?? createCache();
   cache.store = updateStore(cache.store, entities);
-
-  if (typeof listKey === 'string') {
-    let list = cache.lists[listKey] ?? createList();
-
-    if (overwrite) {
-      list.ids = new Set();
-    }
-
-    list = updateList(list, entities, pos);
-
-    if (newState) {
-      list.state = newState;
-    }
-
-    cache.lists[listKey] = list;
-  }
 
   draft[entityType] = cache;
 };
