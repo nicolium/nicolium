@@ -2,8 +2,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { defineMessages } from 'react-intl';
 
 import { useClient } from '@/hooks/use-client';
-import { useFeatures } from '@/hooks/use-features';
-import { useOwnAccount } from '@/hooks/use-own-account';
 import toast from '@/toast';
 
 const messages = defineMessages({
@@ -19,15 +17,11 @@ const messages = defineMessages({
 
 const useAccountAliases = () => {
   const client = useClient();
-  const features = useFeatures();
-  const { account } = useOwnAccount();
 
   return useQuery({
     queryKey: ['settings', 'accountAliases'],
-    queryFn: async (): Promise<Array<string>> => {
-      if (features.accountMoving) return (await client.settings.getAccountAliases()).aliases;
-      return account?.__meta.pleroma?.also_known_as ?? [];
-    },
+    queryFn: async (): Promise<Array<string>> =>
+      (await client.settings.getAccountAliases()).aliases,
   });
 };
 
