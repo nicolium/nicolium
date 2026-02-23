@@ -1,5 +1,6 @@
 import { queryClient } from '@/queries/client';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
+import { useContextStore } from '@/stores/contexts';
 import { useModalsStore } from '@/stores/modals';
 import { usePendingStatusesStore } from '@/stores/pending-statuses';
 import { useSettingsStore } from '@/stores/settings';
@@ -53,6 +54,7 @@ const createStatus =
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!params.preview) {
       usePendingStatusesStore.getState().actions.importStatus(params, idempotencyKey);
+      useContextStore.getState().actions.importPendingStatus(params.in_reply_to_id, idempotencyKey);
       dispatch<StatusesAction>({
         type: STATUS_CREATE_REQUEST,
         params,
@@ -96,6 +98,13 @@ const createStatus =
           editing: !!editedId,
         });
 
+        useContextStore
+          .getState()
+          .actions.deletePendingStatus(
+            'in_reply_to_id' in status ? status.in_reply_to_id : null,
+            idempotencyKey,
+          );
+
         // Poll the backend for the updated card
         if (expectsCard) {
           const delay = 1000;
@@ -120,6 +129,9 @@ const createStatus =
       })
       .catch((error) => {
         usePendingStatusesStore.getState().actions.deleteStatus(idempotencyKey);
+        useContextStore
+          .getState()
+          .actions.deletePendingStatus(params.in_reply_to_id, idempotencyKey);
         dispatch<StatusesAction>({
           type: STATUS_CREATE_FAIL,
           error,
@@ -241,6 +253,7 @@ const fetchContext =
         const { ancestors, descendants } = context;
         const statuses = ancestors.concat(descendants);
         dispatch(importEntities({ statuses }));
+        useContextStore.getState().actions.importContext(statusId, context);
         dispatch<StatusesAction>({ type: CONTEXT_FETCH_SUCCESS, statusId, ancestors, descendants });
         return context;
       })

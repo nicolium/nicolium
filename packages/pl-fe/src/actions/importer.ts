@@ -2,6 +2,7 @@ import { importEntities as importEntityStoreEntities } from '@/entity-store/acti
 import { Entities } from '@/entity-store/entities';
 import { queryClient } from '@/queries/client';
 import { selectAccount } from '@/selectors';
+import { useContextStore } from '@/stores/contexts';
 
 import type { AppDispatch, RootState } from '@/store';
 import type {
@@ -97,6 +98,7 @@ const importEntities =
     );
 
     if (entities.statuses?.length === 1 && entities.statuses[0] && options.idempotencyKey) {
+      useContextStore.getState().actions.importStatus(entities.statuses[0], options.idempotencyKey);
       dispatch<ImportStatusAction>({
         type: STATUS_IMPORT,
         status: entities.statuses[0],
@@ -132,6 +134,9 @@ const importEntities =
         );
       }
     }
+    if (!isEmpty(statuses))
+      useContextStore.getState().actions.importStatuses(Object.values(statuses));
+
     if (!isEmpty(statuses))
       dispatch<ImportStatusesAction>({ type: STATUSES_IMPORT, statuses: Object.values(statuses) });
   };

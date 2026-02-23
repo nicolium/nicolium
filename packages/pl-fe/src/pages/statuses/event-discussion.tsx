@@ -8,7 +8,6 @@ import ScrollableList from '@/components/scrollable-list';
 import Tombstone from '@/components/tombstone';
 import Stack from '@/components/ui/stack';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
-import { makeGetDescendantsIds } from '@/features/status/components/thread';
 import ThreadStatus from '@/features/status/components/thread-status';
 import PendingStatus from '@/features/ui/components/pending-status';
 import { eventDiscussionRoute } from '@/features/ui/router';
@@ -16,6 +15,7 @@ import { ComposeForm } from '@/features/ui/util/async-components';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { makeGetStatus } from '@/selectors';
+import { useDescendantsIds } from '@/stores/contexts';
 import { selectChild } from '@/utils/scroll-utils';
 
 import type { VirtuosoHandle } from 'react-virtuoso';
@@ -27,14 +27,11 @@ const EventDiscussionPage: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const getStatus = useCallback(makeGetStatus(), []);
-  const getDescendantsIds = useCallback(makeGetDescendantsIds(), []);
   const status = useAppSelector((state) => getStatus(state, { id: statusId }));
 
   const me = useAppSelector((state) => state.me);
 
-  const descendantsIds = useAppSelector((state) =>
-    getDescendantsIds(state, statusId).filter((id) => id !== statusId),
-  );
+  const descendantsIds = useDescendantsIds(statusId);
 
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
 

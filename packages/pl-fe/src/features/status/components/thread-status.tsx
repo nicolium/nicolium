@@ -5,6 +5,7 @@ import Tombstone from '@/components/tombstone';
 import StatusContainer from '@/containers/status-container';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import { useAppSelector } from '@/hooks/use-app-selector';
+import { useReplyCount, useReplyToId } from '@/stores/contexts';
 
 interface IThreadStatus {
   id: string;
@@ -19,8 +20,8 @@ interface IThreadStatus {
 const ThreadStatus: React.FC<IThreadStatus> = (props): JSX.Element => {
   const { id, focusedStatusId } = props;
 
-  const replyToId = useAppSelector((state) => state.contexts.inReplyTos[id]);
-  const replyCount = useAppSelector((state) => (state.contexts.replies[id] || []).length);
+  const replyToId = useReplyToId(id);
+  const replyCount = useReplyCount(id);
   const isLoaded = useAppSelector((state) => Boolean(state.statuses[id]));
   const isDeleted = useAppSelector((state) => Boolean(state.statuses[id]?.deleted));
 

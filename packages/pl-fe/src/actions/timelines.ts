@@ -1,4 +1,5 @@
 import { getLocale } from '@/actions/settings';
+import { useContextStore } from '@/stores/contexts';
 import { usePendingStatusesStore } from '@/stores/pending-statuses';
 import { useSettingsStore } from '@/stores/settings';
 import { shouldFilter } from '@/utils/timelines';
@@ -130,6 +131,8 @@ const deleteFromTimelines =
       .filter(([key, status]) => [key, status.reblog_id === statusId])
       .map(([key, status]) => [key, status.account_id]);
     const reblogOf = getState().statuses[statusId]?.reblog_id ?? null;
+
+    useContextStore.getState().actions.deleteStatuses([statusId]);
 
     dispatch<TimelineDeleteAction>({
       type: TIMELINE_DELETE,

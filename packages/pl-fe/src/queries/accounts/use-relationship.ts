@@ -9,6 +9,7 @@ import { batcher } from '@/api/batcher';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useContextsActions } from '@/stores/contexts';
 
 import type { MinifiedSuggestion } from '../trends/use-suggested-accounts';
 import type {
@@ -122,6 +123,7 @@ const useBlockAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
+  const { filterContexts } = useContextsActions();
 
   return useMutation({
     mutationKey: ['accountRelationships', accountId],
@@ -155,13 +157,15 @@ const useBlockAccountMutation = (accountId: string) => {
       });
 
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
-      return dispatch<AccountsAction>((dispatch, getState) =>
-        dispatch({
+      return dispatch<AccountsAction>((dispatch, getState) => {
+        filterContexts(data, getState().statuses);
+
+        return dispatch({
           type: ACCOUNT_BLOCK_SUCCESS,
           relationship: data,
           statuses: getState().statuses,
-        }),
-      );
+        });
+      });
     },
   });
 };
@@ -194,6 +198,7 @@ const useMuteAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
   const dispatch = useAppDispatch();
+  const { filterContexts } = useContextsActions();
 
   return useMutation({
     mutationKey: ['accountRelationships', accountId],
@@ -223,13 +228,15 @@ const useMuteAccountMutation = (accountId: string) => {
       });
 
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
-      return dispatch<AccountsAction>((dispatch, getState) =>
-        dispatch({
+      return dispatch<AccountsAction>((dispatch, getState) => {
+        filterContexts(data, getState().statuses);
+
+        return dispatch({
           type: ACCOUNT_MUTE_SUCCESS,
           relationship: data,
           statuses: getState().statuses,
-        }),
-      );
+        });
+      });
     },
   });
 };

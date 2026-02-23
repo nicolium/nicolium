@@ -1,4 +1,3 @@
-import { createSelector } from '@reduxjs/toolkit';
 import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
@@ -14,14 +13,13 @@ import PlaceholderStatus from '@/features/placeholder/components/placeholder-sta
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import PendingStatus from '@/features/ui/components/pending-status';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import {
   useFavouriteStatus,
   useReblogStatus,
   useUnfavouriteStatus,
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
-import { RootState } from '@/store';
+import { useContextStore, useThread } from '@/stores/contexts';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMetaActions } from '@/stores/status-meta';
@@ -36,102 +34,26 @@ import type { SelectedStatus } from '@/selectors';
 import type { Account } from 'pl-api';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
-const makeGetAncestorsIds = () =>
-  createSelector(
-    [(_: RootState, statusId: string) => statusId, (state: RootState) => state.contexts.inReplyTos],
-    (statusId, inReplyTos) => {
-      let ancestorsIds: Array<string> = [];
-      let id: string = statusId;
+const getLinearThreadStatusesIds = (
+  statusId: string,
+  inReplyTos: Record<string, string>,
+  replies: Record<string, string[]>,
+) => {
+  let parentStatus: string = statusId;
 
-      while (id && !ancestorsIds.includes(id)) {
-        ancestorsIds = [id, ...ancestorsIds];
-        id = inReplyTos[id];
-      }
-
-      return [...new Set(ancestorsIds)];
-    },
-  );
-
-const makeGetDescendantsIds = () =>
-  createSelector(
-    [(_: RootState, statusId: string) => statusId, (state: RootState) => state.contexts.replies],
-    (statusId, contextReplies) => {
-      let descendantsIds: Array<string> = [];
-      const ids = [statusId];
-
-      while (ids.length > 0) {
-        const id = ids.shift();
-        if (!id) break;
-
-        const replies = contextReplies[id];
-
-        if (descendantsIds.includes(id)) {
-          break;
-        }
-
-        if (statusId !== id) {
-          descendantsIds = [...descendantsIds, id];
-        }
-
-        if (replies) {
-          replies.toReversed().forEach((reply: string) => {
-            ids.unshift(reply);
-          });
-        }
-      }
-
-      return [...new Set(descendantsIds)];
-    },
-  );
-
-const makeGetThreadStatusesIds = () =>
-  createSelector(
-    [
-      (_: RootState, statusId: string) => statusId,
-      (state: RootState) => state.contexts.inReplyTos,
-      (state: RootState) => state.contexts.replies,
-    ],
-    (statusId, inReplyTos, replies) => {
-      let parentStatus: string = statusId;
-
-      while (inReplyTos[parentStatus]) {
-        parentStatus = inReplyTos[parentStatus];
-      }
-
-      const threadStatuses = [parentStatus];
-
-      for (let i = 0; i < threadStatuses.length; i++) {
-        for (const reply of replies[threadStatuses[i]] || []) {
-          if (!threadStatuses.includes(reply)) threadStatuses.push(reply);
-        }
-      }
-
-      return threadStatuses.toSorted();
-    },
-  );
-
-const makeGetThread = (linear = false) => {
-  if (linear) {
-    const getThreadStatusesIds = makeGetThreadStatusesIds();
-    return (state: RootState, statusId: string) => getThreadStatusesIds(state, statusId);
+  while (inReplyTos[parentStatus]) {
+    parentStatus = inReplyTos[parentStatus];
   }
 
-  const getAncestorsIds = makeGetAncestorsIds();
-  const getDescendantsIds = makeGetDescendantsIds();
+  const threadStatuses = [parentStatus];
 
-  return createSelector(
-    [
-      (state: RootState, statusId: string) => getAncestorsIds(state, statusId),
-      (state: RootState, statusId: string) => getDescendantsIds(state, statusId),
-      (_, statusId: string) => statusId,
-    ],
-    (ancestorsIds, descendantsIds, statusId) => {
-      ancestorsIds = ancestorsIds.filter((id) => id !== statusId && !descendantsIds.includes(id));
-      descendantsIds = descendantsIds.filter((id) => id !== statusId && !ancestorsIds.includes(id));
+  for (let i = 0; i < threadStatuses.length; i++) {
+    for (const reply of replies[threadStatuses[i]] || []) {
+      if (!threadStatuses.includes(reply)) threadStatuses.push(reply);
+    }
+  }
 
-      return [...ancestorsIds, statusId, ...descendantsIds];
-    },
-  );
+  return threadStatuses.toSorted();
 };
 
 interface IThread {
@@ -166,10 +88,14 @@ const Thread = ({
   const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
 
   const linear = displayMode === 'linear';
+  const inReplyTos = useContextStore((state) => state.inReplyTos);
+  const replies = useContextStore((state) => state.replies);
+  const nestedThread = useThread(status.id);
 
-  const getThread = useCallback(makeGetThread(linear), [linear]);
-
-  const thread = useAppSelector((state) => getThread(state, status.id));
+  const thread = useMemo(
+    () => (linear ? getLinearThreadStatusesIds(status.id, inReplyTos, replies) : nestedThread),
+    [linear, status.id, inReplyTos, replies, nestedThread],
+  );
 
   const statusIndex = thread.indexOf(status.id);
   const initialIndex = isModal && statusIndex !== 0 ? statusIndex + 1 : statusIndex;
@@ -494,4 +420,4 @@ const Thread = ({
   );
 };
 
-export { makeGetDescendantsIds, Thread as default };
+export { Thread as default };
