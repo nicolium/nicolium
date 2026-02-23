@@ -3,7 +3,6 @@ import { Filter, type FilterContext } from 'pl-api';
 import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { createFilter, fetchFilter, updateFilter } from '@/actions/filters';
 import List, { ListItem } from '@/components/list';
 import MissingIndicator from '@/components/missing-indicator';
 import Button from '@/components/ui/button';
@@ -20,8 +19,8 @@ import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import { SelectDropdown } from '@/features/forms';
 import { editFilterRoute } from '@/features/ui/router';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
+import { useCreateFilter, useFilter, useUpdateFilter } from '@/queries/settings/use-filters';
 import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
@@ -76,7 +75,7 @@ const messages = defineMessages({
   },
   add_new: { id: 'column.filters.add_new', defaultMessage: 'Add new filter' },
   edit: { id: 'column.filters.edit', defaultMessage: 'Edit filter' },
-  create_error: { id: 'column.filters.create_error', defaultMessage: 'Error adding filter' },
+  createError: { id: 'column.filters.create_error', defaultMessage: 'Error adding filter' },
   expiration_never: { id: 'column.filters.expiration.never', defaultMessage: 'Never' },
   expiration_1800: { id: 'column.filters.expiration.1800', defaultMessage: '30 minutes' },
   expiration_3600: { id: 'column.filters.expiration.3600', defaultMessage: '1 hour' },
@@ -123,11 +122,15 @@ const EditFilterPage: React.FC = () => {
 
   const intl = useIntl();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const features = useFeatures();
 
-  const [loading, setLoading] = useState(false);
-  const [notFound, setNotFound] = useState(false);
+  const {
+    data: filter,
+    isFetching: isFetchingFilter,
+    isError: notFound,
+  } = useFilter(filterId !== 'new' ? filterId : undefined);
+  const { mutate: createFilter, isPending: isCreating } = useCreateFilter();
+  const { mutate: updateFilter, isPending: isUpdating } = useUpdateFilter(filterId);
 
   const [title, setTitle] = useState('');
   const [expiresIn, setExpiresIn] = useState<number | undefined>();
@@ -176,17 +179,23 @@ const EditFilterPage: React.FC = () => {
       context.push('account');
     }
 
-    dispatch(
-      filterId !== 'new'
-        ? updateFilter(filterId, title, expiresIn, context, filterAction, keywords)
-        : createFilter(title, expiresIn, context, filterAction, keywords),
-    )
-      .then(() => {
-        navigate({ to: '/filters' });
-      })
-      .catch(() => {
-        toast.error(intl.formatMessage(messages.create_error));
-      });
+    (filterId !== 'new' ? updateFilter : createFilter)(
+      {
+        title,
+        expires_in: expiresIn,
+        context,
+        filter_action: filterAction,
+        keywords_attributes: keywords,
+      },
+      {
+        onSuccess: () => {
+          navigate({ to: '/filters' });
+        },
+        onError: () => {
+          toast.error(intl.formatMessage(messages.createError));
+        },
+      },
+    );
   };
 
   const handleChangeKeyword = (keywords: { keyword: string; whole_word: boolean }[]) => {
@@ -206,25 +215,17 @@ const EditFilterPage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (filterId !== 'new') {
-      setLoading(true);
-      dispatch(fetchFilter(filterId))?.then((filter) => {
-        if (filter) {
-          setTitle(filter.title);
-          setHomeTimeline(filter.context.includes('home'));
-          setPublicTimeline(filter.context.includes('public'));
-          setNotifications(filter.context.includes('notifications'));
-          setConversations(filter.context.includes('thread'));
-          setAccounts(filter.context.includes('account'));
-          setFilterAction(filter.filter_action);
-          setKeywords(filter.keywords);
-        } else {
-          setNotFound(true);
-        }
-        setLoading(false);
-      });
+    if (filter) {
+      setTitle(filter.title);
+      setHomeTimeline(filter.context.includes('home'));
+      setPublicTimeline(filter.context.includes('public'));
+      setNotifications(filter.context.includes('notifications'));
+      setConversations(filter.context.includes('thread'));
+      setAccounts(filter.context.includes('account'));
+      setFilterAction(filter.filter_action);
+      setKeywords(filter.keywords);
     }
-  }, [filterId]);
+  }, [isFetchingFilter]);
 
   if (notFound) return <MissingIndicator />;
 
@@ -363,7 +364,11 @@ const EditFilterPage: React.FC = () => {
         {features.filtersV2 && keywordsField}
 
         <FormActions>
-          <Button type='submit' theme='primary' disabled={loading}>
+          <Button
+            type='submit'
+            theme='primary'
+            disabled={isFetchingFilter || isUpdating || isCreating}
+          >
             {intl.formatMessage(filterId !== 'new' ? messages.edit : messages.add_new)}
           </Button>
         </FormActions>

@@ -4,7 +4,6 @@ import React, { Suspense, useEffect, useRef } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 import { fetchConfig } from '@/actions/admin';
-import { fetchFilters } from '@/actions/filters';
 import { fetchMarker } from '@/actions/markers';
 import { expandNotifications } from '@/actions/notifications';
 import { register as registerPushNotifications } from '@/actions/push-notifications/registerer';
@@ -23,6 +22,7 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { prefetchFollowRequests } from '@/queries/accounts/use-follow-requests';
 import { queryClient } from '@/queries/client';
 import { prefetchCustomEmojis } from '@/queries/instance/use-custom-emojis';
+import { useFilters } from '@/queries/settings/use-filters';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
 import { useSettings } from '@/stores/settings';
 import { useShoutboxSubscription } from '@/stores/shoutbox';
@@ -38,11 +38,11 @@ import {
   DropdownNavigation,
   StatusHoverCard,
 } from './util/async-components';
-import GlobalHotkeys from './util/global-hotkeys';
 
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
 import '@/components/status';
+import GlobalHotkeys from './util/global-hotkeys';
 
 const UI: React.FC = React.memo(() => {
   const navigate = useNavigate();
@@ -60,6 +60,7 @@ const UI: React.FC = React.memo(() => {
   const standalone = useAppSelector(isStandalone);
 
   useShoutboxSubscription();
+  useFilters();
 
   const { isDragging } = useDraggedFiles(node);
 
@@ -98,10 +99,6 @@ const UI: React.FC = React.memo(() => {
 
     if (account.is_admin && features.pleromaAdminAccounts) {
       dispatch(fetchConfig());
-    }
-
-    if (features.filters || features.filtersV2) {
-      setTimeout(() => dispatch(fetchFilters()), 500);
     }
 
     if (account.locked) {

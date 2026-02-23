@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 
-import { fetchFilters } from '@/actions/filters';
 import { MARKER_FETCH_SUCCESS } from '@/actions/markers';
 import { updateNotificationsQueue } from '@/actions/notifications';
 import { getLocale } from '@/actions/settings';
@@ -134,7 +133,7 @@ const useUserStream = () => {
         updateConversations(event.payload);
         break;
       case 'filters_changed':
-        dispatch(fetchFilters());
+        queryClient.invalidateQueries({ queryKey: ['filters'] });
         break;
       case 'chat_update':
         dispatch((_dispatch, getState) => {

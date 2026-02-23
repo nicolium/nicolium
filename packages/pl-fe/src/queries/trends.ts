@@ -15,7 +15,7 @@ const useTrends = () => {
     queryKey: ['trends', 'tags'],
     queryFn: () => client.trends.getTrendingTags(),
     placeholderData: [],
-    staleTime: 600000, // 10 minutes
+    staleTime: 10 * 60 * 1000, // 10 minutes
     enabled: isLoggedIn && features.trends,
   });
 };
