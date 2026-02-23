@@ -14,7 +14,7 @@ import Toggle from '@/components/ui/toggle';
 import SettingToggle from '@/features/settings/components/setting-toggle';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { useUpdateCredentials } from '@/queries/accounts';
+import { useUpdateCredentials } from '@/queries/accounts/use-account-credentials';
 import { useSettings } from '@/stores/settings';
 
 type FormData = {
@@ -34,6 +34,11 @@ const messages = defineMessages({
     defaultMessage: 'Play a sound when you receive a message',
   },
   submit: { id: 'chat.page_settings.submit', defaultMessage: 'Save' },
+  success: {
+    id: 'settings.messages.success',
+    defaultMessage: 'Chat settings updated successfully',
+  },
+  fail: { id: 'settings.messages.fail', defaultMessage: 'Failed to update chat settings' },
 });
 
 const ChatsPageSettings = () => {
@@ -55,7 +60,14 @@ const ChatsPageSettings = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    updateCredentials.mutate(data);
+    updateCredentials.mutate(data, {
+      onSuccess: () => {
+        toast.success(intl.formatMessage(messages.success));
+      },
+      onError: () => {
+        toast.error(intl.formatMessage(messages.fail));
+      },
+    });
   };
 
   return (

@@ -15,9 +15,7 @@ import type { Account, CredentialAccount } from 'pl-api';
 
 interface AccountMeta {
   pleroma: Account['__meta']['pleroma'];
-  pleromaSource: Account['__meta']['source'];
   source?: CredentialAccount['source'];
-  role?: CredentialAccount['role'];
 }
 
 type State = Immutable<Record<string, AccountMeta | undefined>>;
@@ -30,9 +28,7 @@ const importAccount = (state: State, account: CredentialAccount): State =>
 
       draft[account.id] = {
         pleroma: account.__meta.pleroma ?? existing?.pleroma,
-        pleromaSource: account.__meta.source ?? existing?.pleromaSource,
         source: account.source ?? existing?.source,
-        role: account.role ?? existing?.role,
       };
     },
     { enableAutoFreeze: true },
