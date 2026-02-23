@@ -75,7 +75,13 @@ const messages = defineMessages({
   },
   add_new: { id: 'column.filters.add_new', defaultMessage: 'Add new filter' },
   edit: { id: 'column.filters.edit', defaultMessage: 'Edit filter' },
-  createError: { id: 'column.filters.create_error', defaultMessage: 'Error adding filter' },
+  createError: { id: 'column.filters.create.error', defaultMessage: 'Error adding filter' },
+  editError: { id: 'column.filters.edit.error', defaultMessage: 'Error editing filter' },
+  createSuccess: {
+    id: 'column.filters.create.success',
+    defaultMessage: 'Filter added successfully',
+  },
+  editSuccess: { id: 'column.filters.edit.success', defaultMessage: 'Filter edited successfully' },
   expiration_never: { id: 'column.filters.expiration.never', defaultMessage: 'Never' },
   expiration_1800: { id: 'column.filters.expiration.1800', defaultMessage: '30 minutes' },
   expiration_3600: { id: 'column.filters.expiration.3600', defaultMessage: '1 hour' },
@@ -190,9 +196,14 @@ const EditFilterPage: React.FC = () => {
       {
         onSuccess: () => {
           navigate({ to: '/filters' });
+          toast.success(
+            intl.formatMessage(filterId !== 'new' ? messages.editSuccess : messages.createSuccess),
+          );
         },
         onError: () => {
-          toast.error(intl.formatMessage(messages.createError));
+          toast.error(
+            intl.formatMessage(filterId !== 'new' ? messages.editError : messages.createError),
+          );
         },
       },
     );

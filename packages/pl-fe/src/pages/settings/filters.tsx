@@ -19,7 +19,11 @@ const messages = defineMessages({
   notifications: { id: 'column.filters.notifications', defaultMessage: 'Notifications' },
   conversations: { id: 'column.filters.conversations', defaultMessage: 'Conversations' },
   accounts: { id: 'column.filters.accounts', defaultMessage: 'Accounts' },
-  deleteError: { id: 'column.filters.delete_error', defaultMessage: 'Error deleting filter' },
+  deleteSuccess: {
+    id: 'column.filters.delete.success',
+    defaultMessage: 'Filter deleted successfully',
+  },
+  deleteError: { id: 'column.filters.delete.error', defaultMessage: 'Error deleting filter' },
   edit: { id: 'column.filters.edit', defaultMessage: 'Edit filter' },
   delete: { id: 'column.filters.delete', defaultMessage: 'Delete' },
 });
@@ -41,6 +45,9 @@ const FiltersPage = () => {
 
   const handleFilterDelete = (id: string) => () => {
     deleteFilter(id, {
+      onSuccess: () => {
+        toast.success(intl.formatMessage(messages.deleteSuccess));
+      },
       onError: () => {
         toast.error(intl.formatMessage(messages.deleteError));
       },
