@@ -419,7 +419,7 @@
   "circles.delete": "Delete circle",
   "circles.edit": "Edit circle",
   "circles.edit.error": "Error updating circle",
-  "circles.edit.save": "Save circle",
+  "circles.edit.save": "Update title",
   "circles.edit.success": "Circle updated successfully",
   "circles.edit.title": "Circle title",
   "circles.new.create": "Add circle",
