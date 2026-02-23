@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Spinner from '@/components/ui/spinner';
@@ -15,18 +15,11 @@ import { useAccountSearch } from '@/queries/search/use-search-accounts';
 import Account from './account';
 import Search from './search';
 
-const messages = defineMessages({
-  addToList: { id: 'lists.account.add', defaultMessage: 'Add to list' },
-  removeFromList: { id: 'lists.account.remove', defaultMessage: 'Remove from list' },
-});
-
 interface IListMembersForm {
   listId: string;
 }
 
 const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
-  const intl = useIntl();
-
   const [searchValue, setSearchValue] = useState('');
 
   const { data: accountIds = [], isFetching } = useListAccounts(listId);
@@ -50,7 +43,11 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
       {accountIds.length > 0 ? (
         <div className='min-h-24'>
           <CardHeader>
-            <CardTitle title={intl.formatMessage(messages.removeFromList)} />
+            <CardTitle
+              title={
+                <FormattedMessage id='lists.account.remove' defaultMessage='Remove from list' />
+              }
+            />
           </CardHeader>
           <div className='max-h-48 overflow-y-auto'>
             {accountIds.map((accountId) => (
@@ -81,7 +78,9 @@ const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
 
       <div>
         <CardHeader>
-          <CardTitle title={intl.formatMessage(messages.addToList)} />
+          <CardTitle
+            title={<FormattedMessage id='lists.account.add' defaultMessage='Add to list' />}
+          />
         </CardHeader>
         <Search value={searchValue} onSubmit={setSearchValue} />
         <div className='max-h-48 overflow-y-auto'>
