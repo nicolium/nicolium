@@ -72,7 +72,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
         <InteractionCounter
           count={status.quotes_count}
           to='/@{$username}/posts/$statusId/quotes'
-          params={{ username: status.account.acct, id: status.id }}
+          params={{ username: status.account.acct, statusId: status.id }}
         >
           <FormattedMessage
             id='status.interactions.quotes'
