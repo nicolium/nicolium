@@ -45,7 +45,7 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
 
   const { data: circle } = useCircle(circleId);
   const { mutate: updateCircle, isPending: disabled } = useUpdateCircle(circleId);
-  const { data: accountIds = [] } = useCircleAccounts(circleId);
+  const { data: accountIds = [], isFetching: isFetchingAccounts } = useCircleAccounts(circleId);
   const { data: searchAccountIds = [] } = useAccountSearch(searchValue, {
     following: true,
     limit: 5,
@@ -106,12 +106,12 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
 
             <FormActions>
               <Button onClick={handleUpdate} disabled={disabled}>
-                <FormattedMessage id='circles.edit.save' defaultMessage='Save circle' />
+                <FormattedMessage id='circles.edit.save' defaultMessage='Update title' />
               </Button>
             </FormActions>
           </Form>
           {accountIds.length > 0 ? (
-            <div>
+            <div className='min-h-24'>
               <CardHeader>
                 <CardTitle
                   title={
@@ -134,13 +134,19 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
                 ))}
               </div>
             </div>
+          ) : isFetchingAccounts ? (
+            <div className='flex min-h-24 items-center justify-center'>
+              <Spinner />
+            </div>
           ) : (
-            <Text theme='muted' size='sm'>
-              <FormattedMessage
-                id='empty_column.circle_members'
-                defaultMessage='There are no members in this circle. Use search to find users to add.'
-              />
-            </Text>
+            <div className='flex min-h-24 items-center justify-center'>
+              <Text theme='muted' size='sm' align='center'>
+                <FormattedMessage
+                  id='empty_column.circle_members'
+                  defaultMessage='There are no members in this circle. Use search to find users to add.'
+                />
+              </Text>
+            </div>
           )}
 
           <div>
