@@ -1291,7 +1291,7 @@ const redirectPleromaStatusRoute = createRoute({
 });
 const redirectPleromaUsernameRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/users/@{$username}',
+  path: '/users/$username',
   component: () => {
     const { username } = redirectPleromaUsernameRoute.useParams();
     return <Navigate to='/@{$username}' params={{ username }} replace />;
