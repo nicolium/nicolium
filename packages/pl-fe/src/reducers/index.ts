@@ -4,7 +4,6 @@ import { AUTH_LOGGED_OUT } from '@/actions/auth';
 import * as BuildConfig from '@/build-config';
 import entities from '@/entity-store/reducer';
 
-import accounts_meta from './accounts-meta';
 import admin from './admin';
 import auth from './auth';
 import compose from './compose';
@@ -22,7 +21,6 @@ import statuses from './statuses';
 import timelines from './timelines';
 
 const reducers = {
-  accounts_meta,
   admin,
   auth,
   compose,

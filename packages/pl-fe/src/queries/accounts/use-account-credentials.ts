@@ -7,14 +7,14 @@ import { useClient } from '@/hooks/use-client';
 
 import type { UpdateCredentialsParams } from 'pl-api';
 
-const useCredentialAccount = () => {
+const useCredentialAccount = (enabled = true) => {
   const client = useClient();
   const currentAccount = useCurrentAccount();
 
   return useQuery({
     queryKey: [currentAccount, 'credentialAccount'],
     queryFn: () => client.settings.verifyCredentials(),
-    enabled: currentAccount !== 'unauthenticated',
+    enabled: currentAccount !== 'unauthenticated' && enabled,
   });
 };
 
