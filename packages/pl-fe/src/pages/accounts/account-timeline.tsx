@@ -41,8 +41,7 @@ const AccountTimelinePage: React.FC = () => {
     }),
   );
 
-  const isBlocked = account?.relationship?.blocked_by;
-  const unavailable = isBlocked && !features.blockersVisible;
+  const isBlocked = account?.relationship?.blocked_by && !features.blockersVisible;
   const isLoading = useAppSelector((state) => state.timelines[`account:${path}`]?.isLoading);
   const hasMore = useAppSelector((state) => state.timelines[`account:${path}`]?.hasMore);
 
@@ -80,23 +79,16 @@ const AccountTimelinePage: React.FC = () => {
     return <MissingIndicator nested />;
   }
 
-  if (unavailable) {
+  if (isBlocked) {
     return (
       <Card>
         <CardBody>
           <Text align='center'>
-            {isBlocked ? (
-              <FormattedMessage
-                id='empty_column.account_blocked'
-                defaultMessage='You are blocked by @{accountUsername}.'
-                values={{ accountUsername }}
-              />
-            ) : (
-              <FormattedMessage
-                id='empty_column.account_unavailable'
-                defaultMessage='Profile unavailable'
-              />
-            )}
+            <FormattedMessage
+              id='empty_column.account_blocked'
+              defaultMessage='You are blocked by @{accountUsername}.'
+              values={{ accountUsername }}
+            />
           </Text>
         </CardBody>
       </Card>
