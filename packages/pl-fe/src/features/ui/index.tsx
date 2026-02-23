@@ -4,8 +4,6 @@ import React, { Suspense, useEffect, useRef } from 'react';
 import { Toaster } from 'react-hot-toast';
 
 import { fetchConfig } from '@/actions/admin';
-import { fetchMarker } from '@/actions/markers';
-import { expandNotifications } from '@/actions/notifications';
 import { register as registerPushNotifications } from '@/actions/push-notifications/registerer';
 import { fetchHomeTimeline } from '@/actions/timelines';
 import { useUserStream } from '@/api/hooks/streaming/use-user-stream';
@@ -22,6 +20,10 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { prefetchFollowRequests } from '@/queries/accounts/use-follow-requests';
 import { queryClient } from '@/queries/client';
 import { prefetchCustomEmojis } from '@/queries/instance/use-custom-emojis';
+import {
+  usePrefetchNotifications,
+  usePrefetchNotificationsMarker,
+} from '@/queries/notifications/use-notifications';
 import { useFilters } from '@/queries/settings/use-filters';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
 import { useSettings } from '@/stores/settings';
@@ -61,6 +63,8 @@ const UI: React.FC = React.memo(() => {
 
   useShoutboxSubscription();
   useFilters();
+  usePrefetchNotifications();
+  usePrefetchNotificationsMarker();
 
   const { isDragging } = useDraggedFiles(node);
 
@@ -92,10 +96,6 @@ const UI: React.FC = React.memo(() => {
     prefetchCustomEmojis(client);
 
     dispatch(fetchHomeTimeline());
-
-    dispatch(expandNotifications())
-      .then(() => dispatch(fetchMarker(['notifications'])))
-      .catch(console.error);
 
     if (account.is_admin && features.pleromaAdminAccounts) {
       dispatch(fetchConfig());

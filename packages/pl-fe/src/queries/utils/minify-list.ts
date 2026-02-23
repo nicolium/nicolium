@@ -10,25 +10,35 @@ import type {
   BlockedAccount,
   Conversation,
   Group,
+  GroupedNotificationsResults,
   MutedAccount,
+  NotificationGroup,
   PaginatedResponse,
   Status,
 } from 'pl-api';
 
-const minifyList = <T1, T2>(
-  { previous, next, items, ...response }: PaginatedResponse<T1>,
+const minifyList = <T1, T2, IsArray extends boolean = true>(
+  { previous, next, items, ...response }: PaginatedResponse<T1, IsArray>,
   minifier: (value: T1) => T2,
-  importer?: (items: Array<T1>) => void,
-): PaginatedResponse<T2> => {
+  importer?: (items: PaginatedResponse<T1, IsArray>['items']) => void,
+  isArray: IsArray = true as IsArray,
+): PaginatedResponse<T2, IsArray> => {
   importer?.(items);
+
+  const minifiedItems = (
+    isArray ? (items as T1[]).map(minifier) : minifier(items as T1)
+  ) as PaginatedResponse<T2, IsArray>['items'];
 
   return {
     ...response,
     previous: previous
-      ? () => previous().then((list) => minifyList(list, minifier, importer))
+      ? () =>
+          previous().then((list) => minifyList<T1, T2, IsArray>(list, minifier, importer, isArray))
       : null,
-    next: next ? () => next().then((list) => minifyList(list, minifier, importer)) : null,
-    items: items.map(minifier),
+    next: next
+      ? () => next().then((list) => minifyList<T1, T2, IsArray>(list, minifier, importer, isArray))
+      : null,
+    items: minifiedItems,
   };
 };
 
@@ -102,6 +112,25 @@ const minifyConversationList = (response: PaginatedResponse<Conversation>) =>
       }) as any,
     );
   });
+
+const minifyGroupedNotifications = (
+  response: PaginatedResponse<GroupedNotificationsResults, false>,
+): PaginatedResponse<NotificationGroup[], false> =>
+  minifyList(
+    response,
+    (results) => results.notification_groups,
+    (results) => {
+      const { accounts, statuses } = results;
+
+      store.dispatch(
+        importEntities({
+          accounts,
+          statuses,
+        }) as any,
+      );
+    },
+    false,
+  );
 
 const minifyAdminAccount = ({ account, ...adminAccount }: AdminAccount) => {
   store.dispatch(importEntities({ accounts: [account] }) as any);
@@ -182,6 +211,7 @@ export {
   minifyGroupList,
   minifyConversation,
   minifyConversationList,
+  minifyGroupedNotifications,
   minifyAdminAccount,
   minifyAdminAccountList,
   minifyAdminReport,

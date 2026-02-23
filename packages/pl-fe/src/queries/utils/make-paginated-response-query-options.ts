@@ -2,37 +2,59 @@ import { type InfiniteData, infiniteQueryOptions, type QueryKey } from '@tanstac
 
 import { store } from '@/store';
 
-import { PaginatedResponseArray } from './make-paginated-response-query';
+import {
+  PaginatedResponseArray,
+  type PaginatedResponseQueryResult,
+} from './make-paginated-response-query';
 
 import type { PaginatedResponse, PlApiClient } from 'pl-api';
 
 const makePaginatedResponseQueryOptions =
-  <T1 extends Array<any>, T2, T3 = PaginatedResponseArray<T2>>(
+  <
+    T1 extends Array<any>,
+    T2,
+    IsArray extends boolean = true,
+    T3 = PaginatedResponseQueryResult<T2, IsArray>,
+  >(
     queryKey: QueryKey | ((...params: T1) => QueryKey),
-    queryFn: (client: PlApiClient, params: T1) => Promise<PaginatedResponse<T2>>,
-    select?: (data: InfiniteData<PaginatedResponse<T2>>) => T3,
+    queryFn: (client: PlApiClient, params: T1) => Promise<PaginatedResponse<T2, IsArray>>,
+    select?: (data: InfiniteData<PaginatedResponse<T2, IsArray>>) => T3,
   ) =>
   (...params: T1) =>
     infiniteQueryOptions({
       queryKey: typeof queryKey === 'object' ? queryKey : queryKey(...params),
       queryFn: ({ pageParam }) =>
         pageParam.next?.() ?? queryFn(store.getState().auth.client, params),
-      initialPageParam: { previous: null, next: null, items: [], partial: false } as Awaited<
-        ReturnType<typeof queryFn>
-      >,
+      initialPageParam: {
+        previous: null,
+        next: null,
+        items: [] as unknown as PaginatedResponse<T2, IsArray>['items'],
+        partial: false,
+      } as Awaited<ReturnType<typeof queryFn>>,
       getNextPageParam: (page) => (page.next ? page : undefined),
       select:
         select ??
         ((data) => {
-          const items = new PaginatedResponseArray(...data.pages.map((page) => page.items).flat());
-
           const lastPage = data.pages.at(-1);
-          if (lastPage) {
-            items.total = lastPage.total;
-            items.partial = lastPage.partial;
+
+          if (!lastPage) {
+            return new PaginatedResponseArray() as T3;
           }
 
-          return items as T3;
+          if (Array.isArray(lastPage.items)) {
+            const items = new PaginatedResponseArray(
+              ...data.pages.flatMap((page) =>
+                Array.isArray(page.items) ? page.items : [page.items],
+              ),
+            );
+
+            items.total = lastPage.total;
+            items.partial = lastPage.partial;
+
+            return items as T3;
+          }
+
+          return lastPage.items as T3;
         }),
     });
 

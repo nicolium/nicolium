@@ -12,6 +12,7 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
 import { useModalsActions } from '@/stores/modals';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 import { isStandalone } from '@/utils/state';
@@ -43,7 +44,7 @@ const ThumbNavigation: React.FC = React.memo((): JSX.Element => {
   const { unreadChatsCount } = useStatContext();
 
   const standalone = useAppSelector(isStandalone);
-  const notificationCount = useAppSelector((state) => state.notifications.unread);
+  const notificationCount = useNotificationsUnreadCount();
 
   const handleOpenComposeModal = () => {
     if (match?.params.groupId) {

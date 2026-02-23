@@ -1,17 +1,12 @@
+import { InfiniteData, useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import { createSelector } from 'reselect';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import '@/styles/new/notifications.scss';
-import {
-  type FilterType,
-  expandNotifications,
-  markReadNotifications,
-  scrollTopNotifications,
-  setFilter,
-} from '@/actions/notifications';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+
+import { saveSettings } from '@/actions/settings';
 import PullToRefresh from '@/components/pull-to-refresh';
 import ScrollTopButton from '@/components/scroll-top-button';
 import ScrollableList from '@/components/scrollable-list';
@@ -21,13 +16,16 @@ import Tabs from '@/components/ui/tabs';
 import Notification from '@/features/notifications/components/notification';
 import PlaceholderNotification from '@/features/placeholder/components/placeholder-notification';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
-import { useSettings } from '@/stores/settings';
+import {
+  type FilterType,
+  useMarkNotificationsReadMutation,
+  useNotifications,
+} from '@/queries/notifications/use-notifications';
+import { useSettings, useSettingsStoreActions } from '@/stores/settings';
 import { selectChild } from '@/utils/scroll-utils';
 
 import type { Item } from '@/components/ui/tabs';
-import type { RootState } from '@/store';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
 const messages = defineMessages({
@@ -58,17 +56,15 @@ const FilterBar = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const settings = useSettings();
+  const { changeSetting } = useSettingsStoreActions();
   const features = useFeatures();
 
   const selectedFilter = settings.notifications.quickFilter.active;
   const advancedMode = settings.notifications.quickFilter.advanced;
 
-  const onClick = (notificationType: FilterType) => () => {
-    try {
-      dispatch(setFilter(notificationType, true));
-    } catch (e) {
-      console.error(e);
-    }
+  const onClick = (filterType: FilterType) => () => {
+    changeSetting(['notifications', 'quickFilter', 'active'], filterType);
+    dispatch(saveSettings());
   };
 
   const items: Item[] = [
@@ -174,21 +170,47 @@ const FilterBar = () => {
   return <Tabs items={items} activeItem={selectedFilter} />;
 };
 
-const getNotifications = createSelector(
-  [
-    (state: RootState) => state.notifications.items,
-    (_, topNotification?: string) => topNotification,
-  ],
-  (notifications, topNotificationId) => {
-    if (topNotificationId) {
-      const queuedNotificationCount = notifications.findIndex(
-        (notification) => notification.most_recent_notification_id <= topNotificationId,
+interface INotificationsColumn {
+  multiColumn?: boolean;
+}
+
+const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) => {
+  const features = useFeatures();
+  const settings = useSettings();
+  const { mutate: markNotificationsRead } = useMarkNotificationsReadMutation();
+  const queryClient = useQueryClient();
+
+  const showFilterBar =
+    (features.notificationsExcludeTypes || features.notificationsIncludeTypes) &&
+    settings.notifications.quickFilter.show;
+  const activeFilter = settings.notifications.quickFilter.active;
+  const {
+    data: notifications = [],
+    isLoading,
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+    refetch,
+  } = useNotifications(activeFilter);
+
+  const [topNotification, setTopNotification] = useState<string>();
+  const { queuedNotificationCount, displayedNotifications } = useMemo(() => {
+    if (topNotification) {
+      const cutoffIndex = notifications.findIndex(
+        (notification) => notification.most_recent_notification_id <= topNotification,
       );
-      const displayedNotifications = notifications.slice(queuedNotificationCount);
+
+      if (cutoffIndex === -1) {
+        return {
+          queuedNotificationCount: 0,
+          displayedNotifications: notifications,
+        };
+      }
 
       return {
-        queuedNotificationCount,
-        displayedNotifications,
+        queuedNotificationCount: cutoffIndex,
+        displayedNotifications: notifications.slice(cutoffIndex),
       };
     }
 
@@ -196,67 +218,35 @@ const getNotifications = createSelector(
       queuedNotificationCount: 0,
       displayedNotifications: notifications,
     };
-  },
-);
-
-interface INotificationsColumn {
-  multiColumn?: boolean;
-}
-
-const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) => {
-  const dispatch = useAppDispatch();
-  const features = useFeatures();
-  const settings = useSettings();
-
-  const showFilterBar =
-    (features.notificationsExcludeTypes || features.notificationsIncludeTypes) &&
-    settings.notifications.quickFilter.show;
-  const activeFilter = settings.notifications.quickFilter.active;
-  const [topNotification, setTopNotification] = useState<string>();
-  const { queuedNotificationCount, displayedNotifications } = useAppSelector((state) =>
-    getNotifications(state, topNotification),
-  );
-  const isLoading = useAppSelector((state) => state.notifications.isLoading);
-  // const isUnread = useAppSelector(state => state.notifications.unread > 0);
-  const hasMore = useAppSelector((state) => state.notifications.hasMore);
+  }, [notifications, topNotification]);
+  const hasMore = hasNextPage ?? false;
 
   const node = useRef<VirtuosoHandle>(null);
   const scrollableContentRef = useRef<Array<JSX.Element> | null>(null);
 
-  // const handleLoadGap = (maxId) => {
-  //   dispatch(expandNotifications({ maxId }));
-  // };
-
   const handleLoadOlder = useCallback(
     debounce(
       () => {
-        const minId = displayedNotifications.reduce<string | undefined>(
-          (minId, notification) =>
-            minId && notification.page_min_id && notification.page_min_id > minId
-              ? minId
-              : notification.page_min_id,
-          undefined,
-        );
-        dispatch(expandNotifications({ maxId: minId }));
+        if (!hasMore || isFetchingNextPage) return;
+
+        fetchNextPage().catch((error) => {
+          console.error(error);
+        });
       },
       300,
       { leading: true },
     ),
-    [displayedNotifications],
+    [fetchNextPage, hasMore, isFetchingNextPage],
   );
 
   const handleScrollToTop = useCallback(
     debounce(() => {
-      dispatch(scrollTopNotifications(true));
+      const topNotificationId =
+        displayedNotifications[0]?.page_max_id ??
+        displayedNotifications[0]?.most_recent_notification_id;
+      markNotificationsRead(topNotificationId);
     }, 100),
-    [],
-  );
-
-  const handleScroll = useCallback(
-    debounce(() => {
-      dispatch(scrollTopNotifications(false));
-    }, 100),
-    [],
+    [fetchNextPage, hasMore, isFetchingNextPage, displayedNotifications],
   );
 
   const handleMoveUp = (id: string) => {
@@ -273,27 +263,36 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
 
   const handleDequeueNotifications = useCallback(() => {
     setTopNotification(undefined);
-    dispatch(markReadNotifications());
-  }, []);
 
-  const handleRefresh = useCallback(() => dispatch(expandNotifications()), []);
+    markNotificationsRead(notifications[0]?.most_recent_notification_id);
+  }, [notifications, markNotificationsRead]);
+
+  const handleRefresh = useCallback(() => {
+    queryClient.setQueryData<InfiniteData<any>>(['notifications', activeFilter], (data) => {
+      if (!data) return data;
+
+      return {
+        ...data,
+        pages: data.pages.slice(0, 1),
+        pageParams: data.pageParams.slice(0, 1),
+      };
+    });
+    refetch().catch(console.error);
+  }, [refetch]);
 
   useEffect(() => {
     handleDequeueNotifications();
-    dispatch(scrollTopNotifications(true));
 
     return () => {
       handleLoadOlder.cancel?.();
-      handleScrollToTop.cancel();
-      handleScroll.cancel?.();
-      dispatch(scrollTopNotifications(false));
+      handleScrollToTop.cancel?.();
     };
   }, []);
 
   useEffect(() => {
     if (topNotification || displayedNotifications.length === 0) return;
     setTopNotification(displayedNotifications[0].most_recent_notification_id);
-  }, [displayedNotifications.length]);
+  }, [displayedNotifications, topNotification]);
 
   const emptyMessage =
     activeFilter === 'all' ? (
@@ -333,18 +332,15 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
     <ScrollableList
       ref={node}
       scrollKey='notifications'
-      isLoading={isLoading}
-      showLoading={isLoading && displayedNotifications.length === 0}
+      isLoading={isFetching}
+      showLoading={isLoading}
       hasMore={hasMore}
       emptyMessageText={emptyMessage}
       placeholderComponent={PlaceholderNotification}
       placeholderCount={20}
       onLoadMore={handleLoadOlder}
       onScrollToTop={handleScrollToTop}
-      onScroll={handleScroll}
-      listClassName={clsx('⁂-status-list', {
-        'animate-pulse': displayedNotifications.length === 0,
-      })}
+      listClassName={clsx('⁂-status-list', { 'animate-pulse': isLoading })}
       useWindowScroll={!multiColumn}
     >
       {scrollableContent!}

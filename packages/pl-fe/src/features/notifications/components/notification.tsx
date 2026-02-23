@@ -580,4 +580,9 @@ const Notification: React.FC<INotification> = (props) => {
   );
 };
 
-export { Notification as default, buildLink, getNotificationStatus };
+export {
+  Notification as default,
+  buildLink,
+  getNotificationStatus,
+  messages as notificationMessages,
+};

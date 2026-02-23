@@ -107,7 +107,10 @@ const settingsSchema = v.object({
 
   notifications: coerceObject({
     quickFilter: coerceObject({
-      active: v.optional(v.string(), 'all'),
+      active: v.optional(
+        v.picklist(['all', 'mention', 'favourite', 'reblog', 'poll', 'status', 'follow', 'events']),
+        'all',
+      ),
       advanced: v.optional(v.boolean(), false),
       show: v.optional(v.boolean(), true),
     }),

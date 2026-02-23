@@ -1,7 +1,5 @@
 import { useCallback } from 'react';
 
-import { MARKER_FETCH_SUCCESS } from '@/actions/markers';
-import { updateNotificationsQueue } from '@/actions/notifications';
 import { getLocale } from '@/actions/settings';
 import { updateStatus } from '@/actions/statuses';
 import { deleteFromTimelines, processTimelineUpdate } from '@/actions/timelines';
@@ -11,6 +9,7 @@ import { useLoggedIn } from '@/hooks/use-logged-in';
 import messages from '@/messages';
 import { queryClient } from '@/queries/client';
 import { updateConversations } from '@/queries/conversations/use-conversations';
+import { useProcessStreamNotification } from '@/queries/notifications/use-notifications';
 import { useSettings } from '@/stores/settings';
 import { getUnreadChatsCount, updateChatListItem } from '@/utils/chats';
 import { play, soundCache } from '@/utils/sounds';
@@ -108,6 +107,7 @@ const useUserStream = () => {
   const dispatch = useAppDispatch();
   const statContext = useStatContext();
   const settings = useSettings();
+  const processStreamNotification = useProcessStreamNotification();
 
   const listener = useCallback((event: StreamingEvent) => {
     switch (event.event) {
@@ -123,7 +123,7 @@ const useUserStream = () => {
       case 'notification':
         messages[getLocale()]()
           .then((messages) => {
-            dispatch(updateNotificationsQueue(event.payload, messages, getLocale()));
+            processStreamNotification(event.payload, messages, getLocale());
           })
           .catch((error) => {
             console.error(error);
@@ -167,7 +167,7 @@ const useUserStream = () => {
         deleteAnnouncement(event.payload);
         break;
       case 'marker':
-        dispatch({ type: MARKER_FETCH_SUCCESS, marker: event.payload });
+        queryClient.setQueryData(['markers', 'notifications'], event.payload ?? null);
         break;
     }
   }, []);

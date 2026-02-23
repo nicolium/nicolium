@@ -8,7 +8,6 @@ import Stack from '@/components/ui/stack';
 import { useStatContext } from '@/contexts/stat-context';
 import ComposeButton from '@/features/ui/components/compose-button';
 import ProfileDropdown from '@/features/ui/components/profile-dropdown';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/hooks/use-instance';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -16,6 +15,7 @@ import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
 import { usePendingUsersCount } from '@/queries/admin/use-accounts';
 import { usePendingReportsCount } from '@/queries/admin/use-reports';
+import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
 import { scheduledStatusesCountQueryOptions } from '@/queries/statuses/scheduled-statuses';
 import { useDraftStatusesCountQuery } from '@/queries/statuses/use-draft-statuses';
 import { useInteractionRequestsCount } from '@/queries/statuses/use-interaction-requests';
@@ -78,7 +78,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
     [!!account, features],
   );
 
-  const notificationCount = useAppSelector((state) => state.notifications.unread);
+  const notificationCount = useNotificationsUnreadCount();
   const followRequestsCount = useFollowRequestsCount().data ?? 0;
   const interactionRequestsCount = useInteractionRequestsCount().data ?? 0;
   const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
