@@ -248,15 +248,6 @@ const getDescendantsIds = (statusId: string, contextReplies: Record<string, stri
   return [...new Set(descendantsIds)];
 };
 
-const useAncestorsIds = (statusId?: string) => {
-  const inReplyTos = useContextStore((state) => state.inReplyTos);
-
-  return useMemo(
-    () => (statusId ? getAncestorsIds(statusId, inReplyTos).filter((id) => id !== statusId) : []),
-    [inReplyTos, statusId],
-  );
-};
-
 const useDescendantsIds = (statusId?: string) => {
   const replies = useContextStore((state) => state.replies);
 
@@ -323,7 +314,6 @@ const useContextsActions = () => useContextStore((state) => state.actions);
 
 export {
   useContextStore,
-  useAncestorsIds,
   useDescendantsIds,
   useThread,
   useReplyToId,
