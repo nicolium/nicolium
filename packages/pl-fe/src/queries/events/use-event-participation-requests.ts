@@ -1,10 +1,10 @@
-import { type InfiniteData, useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 import { importEntities } from '@/actions/importer';
 import { useClient } from '@/hooks/use-client';
-import { queryClient } from '@/queries/client';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
 import { minifyList } from '@/queries/utils/minify-list';
+import { updatePaginatedResponse } from '@/queries/utils/update-paginated-response';
 import { store } from '@/store';
 
 import type { PlApiClient } from 'pl-api';
@@ -24,20 +24,12 @@ const minifyRequestList = (
   );
 
 type MinifiedRequestList = ReturnType<typeof minifyRequestList>;
+type MinifiedRequest = MinifiedRequestList['items'][0];
 
 const removeRequest = (statusId: string, accountId: string) =>
-  queryClient.setQueryData<InfiniteData<MinifiedRequestList>>(
+  updatePaginatedResponse<MinifiedRequest>(
     ['accountsLists', 'eventParticipationRequests', statusId],
-    (data) =>
-      data
-        ? {
-            ...data,
-            pages: data.pages.map(({ items, ...page }) => ({
-              ...page,
-              items: items.filter(({ account_id }) => account_id !== accountId),
-            })),
-          }
-        : undefined,
+    (items) => items.filter(({ account_id }) => account_id !== accountId),
   );
 
 const useEventParticipationRequests = makePaginatedResponseQuery(

@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 
-import { updateConversations } from '@/actions/conversations';
 import { fetchFilters } from '@/actions/filters';
 import { MARKER_FETCH_SUCCESS } from '@/actions/markers';
 import { updateNotificationsQueue } from '@/actions/notifications';
@@ -12,6 +11,7 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import messages from '@/messages';
 import { queryClient } from '@/queries/client';
+import { updateConversations } from '@/queries/conversations/use-conversations';
 import { useSettings } from '@/stores/settings';
 import { getUnreadChatsCount, updateChatListItem } from '@/utils/chats';
 import { play, soundCache } from '@/utils/sounds';
@@ -131,7 +131,7 @@ const useUserStream = () => {
           });
         break;
       case 'conversation':
-        dispatch(updateConversations(event.payload));
+        updateConversations(event.payload);
         break;
       case 'filters_changed':
         dispatch(fetchFilters());

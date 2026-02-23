@@ -2,10 +2,9 @@ import { debounce } from '@tanstack/react-pacer/debouncer';
 import React, { useCallback, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { expandConversations } from '@/actions/conversations';
 import ScrollableList from '@/components/scrollable-list';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
+import { useConversations } from '@/queries/conversations/use-conversations';
 import { selectChild } from '@/utils/scroll-utils';
 
 import Conversation from './conversation';
@@ -13,12 +12,9 @@ import Conversation from './conversation';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
 const ConversationsList: React.FC = () => {
-  const dispatch = useAppDispatch();
   const ref = useRef<VirtuosoHandle>(null);
 
-  const conversations = useAppSelector((state) => state.conversations.items);
-  const isLoading = useAppSelector((state) => state.conversations.isLoading);
-  const hasMore = useAppSelector((state) => state.conversations.hasMore);
+  const { conversations, isLoading, hasNextPage, isFetching, fetchNextPage } = useConversations();
 
   const getCurrentIndex = (id: string) => conversations.findIndex((x) => x.id === id);
 
@@ -40,22 +36,22 @@ const ConversationsList: React.FC = () => {
   const handleLoadOlder = useCallback(
     debounce(
       () => {
-        if (hasMore) dispatch(expandConversations());
+        if (hasNextPage) fetchNextPage();
       },
       { wait: 300, leading: true },
     ),
-    [hasMore],
+    [hasNextPage, fetchNextPage],
   );
 
   return (
     <ScrollableList
       scrollKey='direct'
       ref={ref}
-      hasMore={hasMore}
+      hasMore={hasNextPage}
       onLoadMore={handleLoadOlder}
       id='direct-list'
-      isLoading={isLoading}
-      showLoading={isLoading && conversations.length === 0}
+      isLoading={isFetching}
+      showLoading={isLoading}
       emptyMessageText={
         <FormattedMessage
           id='empty_column.direct'
@@ -63,11 +59,13 @@ const ConversationsList: React.FC = () => {
         />
       }
       listClassName='⁂-status-list'
+      placeholderComponent={PlaceholderStatus}
+      placeholderCount={20}
     >
-      {conversations.map((item: any) => (
+      {conversations.map((item) => (
         <Conversation
           key={item.id}
-          conversationId={item.id}
+          conversation={item}
           onMoveUp={handleMoveUp}
           onMoveDown={handleMoveDown}
         />

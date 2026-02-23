@@ -7,7 +7,6 @@ import entities from '@/entity-store/reducer';
 import admin from './admin';
 import auth from './auth';
 import compose from './compose';
-import conversations from './conversations';
 import filters from './filters';
 import frontendConfig from './frontend-config';
 import instance from './instance';
@@ -22,7 +21,6 @@ const reducers = {
   admin,
   auth,
   compose,
-  conversations,
   entities,
   filters,
   frontendConfig,
