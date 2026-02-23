@@ -14,27 +14,14 @@ import { store } from '@/store';
 import { compareDate } from '@/utils/comparators';
 
 import { queryClient } from '../client';
+import {
+  minifyConversation,
+  minifyConversationList,
+  type MinifiedConversation,
+} from '../utils/minify-list';
 import { updatePaginatedResponse } from '../utils/update-paginated-response';
 
 import type { Conversation, PaginatedResponse } from 'pl-api';
-
-type MinifiedConversation = {
-  id: string;
-  unread: boolean;
-  account_ids: string[];
-  last_status: string | null;
-  last_status_created_at: string | null;
-};
-
-type MinifiedConversationPage = PaginatedResponse<MinifiedConversation>;
-
-const minifyConversation = (conversation: Conversation): MinifiedConversation => ({
-  id: conversation.id,
-  unread: conversation.unread,
-  account_ids: conversation.accounts.map((account) => account.id),
-  last_status: conversation.last_status?.id ?? null,
-  last_status_created_at: conversation.last_status?.created_at ?? null,
-});
 
 const sortConversations = (items: MinifiedConversation[]) =>
   items.toSorted((a, b) => {
@@ -54,48 +41,34 @@ const importConversationEntities = (conversations: Conversation[]) => {
   );
 };
 
-const minifyConversationPage = (
-  response: PaginatedResponse<Conversation>,
-): MinifiedConversationPage => {
-  importConversationEntities(response.items);
-
-  return {
-    ...response,
-    previous: response.previous
-      ? () => response.previous!().then((page) => minifyConversationPage(page))
-      : null,
-    next: response.next
-      ? () => response.next!().then((page) => minifyConversationPage(page))
-      : null,
-    items: response.items.map(minifyConversation),
-  };
-};
-
 const updateConversations = (conversation: Conversation) => {
   importConversationEntities([conversation]);
 
-  queryClient.setQueryData<InfiniteData<MinifiedConversationPage>>(['conversations'], (data) => {
-    if (!data || !data.pages.length) return data;
+  queryClient.setQueryData<InfiniteData<PaginatedResponse<MinifiedConversation>>>(
+    ['conversations'],
+    (data) => {
+      if (!data || !data.pages.length) return data;
 
-    return create(data, (draft) => {
-      const updatedConversation = minifyConversation(conversation);
+      return create(data, (draft) => {
+        const updatedConversation = minifyConversation(conversation);
 
-      let found = false;
+        let found = false;
 
-      for (const page of draft.pages) {
-        const index = page.items.findIndex((item) => item.id === updatedConversation.id);
-        if (index !== -1) {
-          page.items[index] = updatedConversation;
-          found = true;
-          break;
+        for (const page of draft.pages) {
+          const index = page.items.findIndex((item) => item.id === updatedConversation.id);
+          if (index !== -1) {
+            page.items[index] = updatedConversation;
+            found = true;
+            break;
+          }
         }
-      }
 
-      if (!found) {
-        draft.pages[0].items.unshift(updatedConversation);
-      }
-    });
-  });
+        if (!found) {
+          draft.pages[0].items.unshift(updatedConversation);
+        }
+      });
+    },
+  );
 };
 
 const useConversations = () => {
@@ -110,14 +83,11 @@ const useConversations = () => {
       }
 
       const response = await client.timelines.getConversations();
-      return minifyConversationPage(response);
+      return minifyConversationList(response);
     },
     initialPageParam: {
-      previous: null,
-      next: null,
-      items: [],
-      partial: false,
-    } as MinifiedConversationPage,
+      next: null as (() => Promise<PaginatedResponse<MinifiedConversation>>) | null,
+    } as PaginatedResponse<MinifiedConversation>,
     getNextPageParam: (page) => (page.next ? page : undefined),
     enabled: isLoggedIn,
   });
@@ -140,9 +110,9 @@ const useMarkConversationRead = (conversationId: string) => {
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ['conversations'] });
 
-      const previous = queryClient.getQueryData<InfiniteData<MinifiedConversationPage>>([
-        'conversations',
-      ]);
+      const previous = queryClient.getQueryData<
+        InfiniteData<PaginatedResponse<MinifiedConversation>>
+      >(['conversations']);
 
       updatePaginatedResponse<MinifiedConversation>(['conversations'], (items) =>
         items.map((item) => (item.id === conversationId ? { ...item, unread: false } : item)),

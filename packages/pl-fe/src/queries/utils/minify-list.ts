@@ -8,6 +8,7 @@ import type {
   AdminAccount,
   AdminReport,
   BlockedAccount,
+  Conversation,
   Group,
   MutedAccount,
   PaginatedResponse,
@@ -81,6 +82,32 @@ const minifyGroupList = (response: PaginatedResponse<Group>): PaginatedResponse<
       }
     },
   );
+
+type MinifiedConversation = {
+  id: string;
+  unread: boolean;
+  account_ids: string[];
+  last_status: string | null;
+  last_status_created_at: string | null;
+};
+
+const minifyConversation = (conversation: Conversation): MinifiedConversation => ({
+  id: conversation.id,
+  unread: conversation.unread,
+  account_ids: conversation.accounts.map((account) => account.id),
+  last_status: conversation.last_status?.id ?? null,
+  last_status_created_at: conversation.last_status?.created_at ?? null,
+});
+
+const minifyConversationList = (response: PaginatedResponse<Conversation>) =>
+  minifyList(response, minifyConversation, (conversations) => {
+    store.dispatch(
+      importEntities({
+        accounts: conversations.flatMap((conversation) => conversation.accounts),
+        statuses: conversations.map((conversation) => conversation.last_status),
+      }) as any,
+    );
+  });
 
 const minifyAdminAccount = ({ account, ...adminAccount }: AdminAccount) => {
   store.dispatch(importEntities({ accounts: [account] }) as any);
@@ -159,8 +186,11 @@ export {
   minifyMutedAccountList,
   minifyStatusList,
   minifyGroupList,
+  minifyConversation,
+  minifyConversationList,
   minifyAdminAccount,
   minifyAdminAccountList,
   minifyAdminReport,
   minifyAdminReportList,
+  type MinifiedConversation,
 };
