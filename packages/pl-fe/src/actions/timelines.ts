@@ -1,4 +1,5 @@
 import { getLocale } from '@/actions/settings';
+import { usePendingStatusesStore } from '@/stores/pending-statuses';
 import { useSettingsStore } from '@/stores/settings';
 import { shouldFilter } from '@/utils/timelines';
 
@@ -39,7 +40,8 @@ const processTimelineUpdate =
   (timeline: string, status: BaseStatus) => (dispatch: AppDispatch, getState: () => RootState) => {
     const me = getState().me;
     const ownStatus = status.account?.id === me;
-    const hasPendingStatuses = !!getState().pending_statuses.length;
+
+    const hasPendingStatuses = Object.keys(usePendingStatusesStore.getState().statuses).length > 0;
 
     const columnSettings = useSettingsStore.getState().settings.timelines[timeline];
     const shouldSkipQueue = shouldFilter(

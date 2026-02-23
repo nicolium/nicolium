@@ -11,6 +11,7 @@ import PlaceholderCard from '@/features/placeholder/components/placeholder-card'
 import PlaceholderMediaGallery from '@/features/placeholder/components/placeholder-media-gallery';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import { useAppSelector } from '@/hooks/use-app-selector';
+import { usePendingStatus } from '@/stores/pending-statuses';
 
 import { buildStatus } from '../util/pending-status-builder';
 
@@ -48,8 +49,9 @@ const PendingStatus: React.FC<IPendingStatus> = ({
   muted,
   variant = 'rounded',
 }) => {
+  const pendingStatus = usePendingStatus(idempotencyKey);
+
   const status = useAppSelector((state) => {
-    const pendingStatus = state.pending_statuses[idempotencyKey];
     return pendingStatus ? buildStatus(state, pendingStatus, idempotencyKey) : null;
   });
 

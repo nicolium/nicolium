@@ -1,6 +1,7 @@
 import { queryClient } from '@/queries/client';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
 import { useModalsStore } from '@/stores/modals';
+import { usePendingStatusesStore } from '@/stores/pending-statuses';
 import { useSettingsStore } from '@/stores/settings';
 import { isLoggedIn } from '@/utils/auth';
 import { shouldHaveCard } from '@/utils/status';
@@ -50,7 +51,8 @@ const createStatus =
     redacting = false,
   ) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!params.preview)
+    if (!params.preview) {
+      usePendingStatusesStore.getState().actions.importStatus(params, idempotencyKey);
       dispatch<StatusesAction>({
         type: STATUS_CREATE_REQUEST,
         params,
@@ -58,6 +60,7 @@ const createStatus =
         editing: !!editedId,
         redacting,
       });
+    }
 
     const client = getClient(getState());
 
@@ -116,6 +119,7 @@ const createStatus =
         return status;
       })
       .catch((error) => {
+        usePendingStatusesStore.getState().actions.deleteStatus(idempotencyKey);
         dispatch<StatusesAction>({
           type: STATUS_CREATE_FAIL,
           error,
@@ -195,6 +199,7 @@ const deleteStatus =
         : getClient(state).statuses.deleteStatus(statusId)
     )
       .then((response) => {
+        usePendingStatusesStore.getState().actions.deleteStatus(statusId);
         dispatch<StatusesAction>({ type: STATUS_DELETE_SUCCESS, statusId });
         dispatch(deleteFromTimelines(statusId));
 
