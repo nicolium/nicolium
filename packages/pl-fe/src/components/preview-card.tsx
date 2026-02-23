@@ -328,33 +328,44 @@ const PreviewCard: React.FC<IPreviewCard> = ({
           <Text theme='muted' className='flex items-center gap-2'>
             <FormattedMessage
               id='link_preview.more_from_author'
-              defaultMessage='More from {name}'
+              defaultMessage='From {name}'
               values={{
-                name: card.authors.map((author) => (
-                  <HoverAccountWrapper
-                    key={author.url}
-                    accountId={author.account?.id}
-                    element='bdi'
-                  >
-                    <Link to='/@{$username}' params={{ username: author.account?.acct ?? '' }}>
-                      <HStack space={1} alignItems='center'>
-                        {author.account && (
-                          <Avatar
-                            src={author.account?.avatar}
-                            size={16}
-                            username={author.account.username}
-                          />
-                        )}
-                        <Text weight='medium'>
-                          <Emojify
-                            text={author.account?.display_name ?? author.name}
-                            emojis={author.account?.emojis}
-                          />
-                        </Text>
-                      </HStack>
-                    </Link>
-                  </HoverAccountWrapper>
-                )),
+                name: card.authors.map((author) => {
+                  const linkBody = (
+                    <HStack space={1} alignItems='center'>
+                      {author.account && (
+                        <Avatar
+                          src={author.account?.avatar}
+                          size={16}
+                          username={author.account.username}
+                        />
+                      )}
+                      <Text weight='medium'>
+                        <Emojify
+                          text={author.account?.display_name ?? author.name}
+                          emojis={author.account?.emojis}
+                        />
+                      </Text>
+                    </HStack>
+                  );
+                  return (
+                    <HoverAccountWrapper
+                      key={author.url}
+                      accountId={author.account?.id}
+                      element='bdi'
+                    >
+                      {author.account ? (
+                        <Link to='/@{$username}' params={{ username: author.account?.acct ?? '' }}>
+                          {linkBody}
+                        </Link>
+                      ) : (
+                        <a href={author.url} target='_blank' rel='noopener'>
+                          {linkBody}
+                        </a>
+                      )}
+                    </HoverAccountWrapper>
+                  );
+                }),
               }}
             />
           </Text>
