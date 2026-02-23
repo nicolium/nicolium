@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import Button from '@/components/ui/button';
 import { CardHeader, CardTitle } from '@/components/ui/card';
+import Form from '@/components/ui/form';
+import FormActions from '@/components/ui/form-actions';
+import FormGroup from '@/components/ui/form-group';
+import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
 import Stack from '@/components/ui/stack';
@@ -11,13 +16,20 @@ import {
   useCircle,
   useCircleAccounts,
   useRemoveAccountsFromCircle,
+  useUpdateCircle,
 } from '@/queries/accounts/use-circles';
 import { useAccountSearch } from '@/queries/search/use-search-accounts';
+import toast from '@/toast';
 
 import Account from './list-editor-modal/components/account';
 import Search from './list-editor-modal/components/search';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
+
+const messages = defineMessages({
+  success: { id: 'circles.edit.success', defaultMessage: 'Circle updated successfully' },
+  error: { id: 'circles.edit.error', defaultMessage: 'Error updating circle' },
+});
 
 interface CircleEditorModalProps {
   circleId: string;
@@ -27,17 +39,38 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
   circleId,
   onClose,
 }) => {
+  const intl = useIntl();
+
   const [searchValue, setSearchValue] = useState('');
 
   const { data: circle } = useCircle(circleId);
+  const { mutate: updateCircle, isPending: disabled } = useUpdateCircle(circleId);
   const { data: accountIds = [] } = useCircleAccounts(circleId);
   const { data: searchAccountIds = [] } = useAccountSearch(searchValue, {
     following: true,
     limit: 5,
   });
 
+  const [title, setTitle] = useState(circle?.title ?? '');
+
   const { mutate: addToCircle } = useAddAccountsToCircle(circleId);
   const { mutate: removeFromCircle } = useRemoveAccountsFromCircle(circleId);
+
+  const handleSubmit: React.FormEventHandler = (e) => {
+    e.preventDefault();
+    handleUpdate();
+  };
+
+  const handleUpdate = () => {
+    updateCircle(title, {
+      onSuccess: () => {
+        toast.success(intl.formatMessage(messages.success));
+      },
+      onError: () => {
+        toast.error(intl.formatMessage(messages.error));
+      },
+    });
+  };
 
   const onAdd = (accountId: string) => {
     addToCircle([accountId]);
@@ -57,6 +90,26 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
     >
       {circle ? (
         <Stack space={2}>
+          <Form onSubmit={handleSubmit}>
+            <FormGroup
+              labelText={<FormattedMessage id='circles.edit.title' defaultMessage='Circle title' />}
+            >
+              <Input
+                outerClassName='grow'
+                type='text'
+                value={title}
+                onChange={(e) => {
+                  setTitle(e.target.value);
+                }}
+              />
+            </FormGroup>
+
+            <FormActions>
+              <Button onClick={handleUpdate} disabled={disabled}>
+                <FormattedMessage id='circles.edit.save' defaultMessage='Save circle' />
+              </Button>
+            </FormActions>
+          </Form>
           {accountIds.length > 0 ? (
             <div>
               <CardHeader>
