@@ -19,7 +19,7 @@ import {
   useUnfavouriteStatus,
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
-import { useContextStore, useThread } from '@/stores/contexts';
+import { useThread } from '@/stores/contexts';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMetaActions } from '@/stores/status-meta';
@@ -33,28 +33,6 @@ import type { Status } from '@/normalizers/status';
 import type { SelectedStatus } from '@/selectors';
 import type { Account } from 'pl-api';
 import type { VirtuosoHandle } from 'react-virtuoso';
-
-const getLinearThreadStatusesIds = (
-  statusId: string,
-  inReplyTos: Record<string, string>,
-  replies: Record<string, string[]>,
-) => {
-  let parentStatus: string = statusId;
-
-  while (inReplyTos[parentStatus]) {
-    parentStatus = inReplyTos[parentStatus];
-  }
-
-  const threadStatuses = [parentStatus];
-
-  for (let i = 0; i < threadStatuses.length; i++) {
-    for (const reply of replies[threadStatuses[i]] || []) {
-      if (!threadStatuses.includes(reply)) threadStatuses.push(reply);
-    }
-  }
-
-  return threadStatuses.toSorted();
-};
 
 interface IThread {
   status: SelectedStatus;
@@ -88,14 +66,7 @@ const Thread = ({
   const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
 
   const linear = displayMode === 'linear';
-  const inReplyTos = useContextStore((state) => state.inReplyTos);
-  const replies = useContextStore((state) => state.replies);
-  const nestedThread = useThread(status.id);
-
-  const thread = useMemo(
-    () => (linear ? getLinearThreadStatusesIds(status.id, inReplyTos, replies) : nestedThread),
-    [linear, status.id, inReplyTos, replies, nestedThread],
-  );
+  const thread = useThread(status.id, linear);
 
   const statusIndex = thread.indexOf(status.id);
   const initialIndex = isModal && statusIndex !== 0 ? statusIndex + 1 : statusIndex;
