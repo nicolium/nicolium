@@ -83,21 +83,15 @@ const minifyGroupList = (response: PaginatedResponse<Group>): PaginatedResponse<
     },
   );
 
-type MinifiedConversation = {
-  id: string;
-  unread: boolean;
-  account_ids: string[];
-  last_status: string | null;
-  last_status_created_at: string | null;
-};
-
-const minifyConversation = (conversation: Conversation): MinifiedConversation => ({
+const minifyConversation = (conversation: Conversation) => ({
   id: conversation.id,
   unread: conversation.unread,
   account_ids: conversation.accounts.map((account) => account.id),
   last_status: conversation.last_status?.id ?? null,
   last_status_created_at: conversation.last_status?.created_at ?? null,
 });
+
+type MinifiedConversation = ReturnType<typeof minifyConversation>;
 
 const minifyConversationList = (response: PaginatedResponse<Conversation>) =>
   minifyList(response, minifyConversation, (conversations) => {
