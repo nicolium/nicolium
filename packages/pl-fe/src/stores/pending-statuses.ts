@@ -2,8 +2,6 @@ import { CreateStatusParams } from 'pl-api';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
-import type { StatusVisibility } from '@/normalizers/status';
-
 interface PendingStatus {
   content_type: string;
   in_reply_to_id: string | null;
@@ -14,7 +12,7 @@ interface PendingStatus {
   spoiler_text: string;
   status: string;
   to: Array<string> | null;
-  visibility: StatusVisibility;
+  visibility: string;
 }
 
 type State = {
@@ -58,4 +56,4 @@ const usePendingStatusesStore = create<State>()(
 const usePendingStatus = (id: string) => usePendingStatusesStore((state) => state.statuses[id]);
 const usePendingStatusesActions = () => usePendingStatusesStore((state) => state.actions);
 
-export { usePendingStatusesStore, usePendingStatus, usePendingStatusesActions };
+export { usePendingStatusesStore, usePendingStatus, usePendingStatusesActions, type PendingStatus };

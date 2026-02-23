@@ -16,6 +16,7 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useUpdateCredentials } from '@/queries/accounts/use-account-credentials';
 import { useSettings } from '@/stores/settings';
+import toast from '@/toast';
 
 type FormData = {
   accepts_chat_messages?: boolean;
