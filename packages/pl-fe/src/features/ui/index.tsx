@@ -40,7 +40,6 @@ import {
   DropdownNavigation,
   StatusHoverCard,
 } from './util/async-components';
-
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
 import '@/components/status';
