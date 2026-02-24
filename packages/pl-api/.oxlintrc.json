@@ -22,7 +22,8 @@
         "argsIgnorePattern": "^_",
         "varsIgnorePattern": "^_"
       }
-    ]
+    ],
+    "no-shadow": "off"
   },
   "settings": {
     "jsx-a11y": {

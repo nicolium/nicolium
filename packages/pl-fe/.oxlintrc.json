@@ -43,6 +43,7 @@
     "no-unsafe-type-assertion": "warn",
     "require-array-sort-compare": "off",
     "unbound-method": "warn",
+    "no-shadow": "off",
 
     "formatjs/enforce-default-message": "error",
     "formatjs/enforce-id": "error",

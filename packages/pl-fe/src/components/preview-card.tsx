@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
-import DOMPurify from 'isomorphic-dompurify';
+import { sanitize } from 'isomorphic-dompurify';
 import {
   type MediaAttachment,
   type PreviewCard as CardEntity,
@@ -65,7 +65,7 @@ interface IPreviewCardVideo {
 
 const PreviewCardVideo: React.FC<IPreviewCardVideo> = React.memo(
   React.forwardRef<HTMLDivElement, IPreviewCardVideo>(({ card }, ref) => {
-    const html = DOMPurify.sanitize(handleIframeUrl(card.html, card.url, card.provider_name), {
+    const html = sanitize(handleIframeUrl(card.html, card.url, card.provider_name), {
       ADD_TAGS: ['iframe'],
       ADD_ATTR: ['allow', 'allowfullscreen', 'referrerpolicy'],
     });
