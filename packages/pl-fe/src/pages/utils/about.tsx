@@ -6,7 +6,7 @@ import Card from '@/components/ui/card';
 import { languages } from '@/features/preferences';
 import { aboutRoute } from '@/features/ui/router';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
-import { useAboutPage } from '@/queries/pl-fe/use-about-page';
+import { useAboutPage } from '@/queries/frontend/use-about-page';
 import { useSettings } from '@/stores/settings';
 
 interface IAbout {
