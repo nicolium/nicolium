@@ -135,20 +135,20 @@ const messages = defineMessages({
   pin: { id: 'status.pin', defaultMessage: 'Pin on profile' },
   quotePost: { id: 'status.quote', defaultMessage: 'Quote post' },
   reblog: { id: 'status.reblog', defaultMessage: 'Repost' },
-  reblog_private: { id: 'status.reblog_private', defaultMessage: 'Repost to original audience' },
-  reblog_visibility: {
+  reblogPrivate: { id: 'status.reblog_private', defaultMessage: 'Repost to original audience' },
+  reblogVisibility: {
     id: 'status.reblog_visibility',
     defaultMessage: 'Repost to specific audience',
   },
-  reblog_visibility_public: {
+  reblogVisibilityPublic: {
     id: 'status.reblog_visibility_public',
     defaultMessage: 'Public repost',
   },
-  reblog_visibility_unlisted: {
+  reblogVisibilityUnlisted: {
     id: 'status.reblog_visibility_unlisted',
     defaultMessage: 'Quiet public repost',
   },
-  reblog_visibility_private: {
+  reblogVisibilityPrivate: {
     id: 'status.reblog_visibility_private',
     defaultMessage: 'Followers-only repost',
   },
@@ -161,7 +161,7 @@ const messages = defineMessages({
     defaultMessage:
       'Are you sure you want to delete this post and re-draft it? Favorites and reposts will be lost, and replies to the original post will be orphaned.',
   },
-  replies_disabled_group: {
+  repliesDisabledGroup: {
     id: 'status.disabled_replies.group_membership',
     defaultMessage: 'Only group members can reply',
   },

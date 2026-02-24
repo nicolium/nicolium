@@ -50,7 +50,7 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
         )
       }
       confirmationAction={handleReblog}
-      confirmationText={intl.formatMessage(buttonText)}
+      confirmationText={buttonText}
     >
       <Stack space={4}>
         <ReplyIndicator status={status} hideActions />

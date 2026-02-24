@@ -75,9 +75,9 @@ const DataImporter: React.FC<IDataImporter> = ({
   return (
     <Form onSubmit={handleSubmit}>
       <Text size='xl' weight='bold' tag='label'>
-        {messages.inputLabel}
+        {inputLabel}
       </Text>
-      <FormGroup hintText={<Text theme='muted'>{messages.inputHint}</Text>}>
+      <FormGroup hintText={<Text theme='muted'>{inputHint}</Text>}>
         <FileInput accept={accept} onChange={handleFileChange} required />
       </FormGroup>
 
@@ -103,7 +103,7 @@ const DataImporter: React.FC<IDataImporter> = ({
 
       <FormActions>
         <Button type='submit' theme='primary' disabled={isLoading || !file}>
-          {messages.submitText}
+          {submitText}
         </Button>
       </FormActions>
     </Form>
