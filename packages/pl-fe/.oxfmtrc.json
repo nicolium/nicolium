@@ -4,8 +4,8 @@
   "printWidth": null,
   "singleQuote": true,
   "arrowParens": null,
-  "experimentalSortImports": {
-    "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "object", "type"]
+  "sortImports": {
+    "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "type"]
   },
   "tabWidth": 2,
   "jsxSingleQuote": true,
