@@ -12,7 +12,7 @@ import frontendConfig from './frontend-config';
 import instance from './instance';
 import me from './me';
 import meta from './meta';
-import push_notifications from './push-notifications';
+import pushNotifications from './push-notifications';
 import statuses from './statuses';
 import timelines from './timelines';
 
@@ -26,7 +26,7 @@ const reducers = {
   instance,
   me,
   meta,
-  push_notifications,
+  pushNotifications,
   statuses,
   timelines,
 };

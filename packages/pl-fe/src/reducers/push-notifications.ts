@@ -35,7 +35,7 @@ const initialState: State = {
   browserSupport: false,
 };
 
-const push_subscriptions = (state = initialState, action: SetterAction): State => {
+const pushSubscriptions = (state = initialState, action: SetterAction): State => {
   switch (action.type) {
     case SET_SUBSCRIPTION:
       return create(state, (draft) => {
@@ -57,4 +57,4 @@ const push_subscriptions = (state = initialState, action: SetterAction): State =
   }
 };
 
-export { push_subscriptions as default };
+export { pushSubscriptions as default };
