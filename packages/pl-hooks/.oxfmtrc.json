@@ -1,0 +1,12 @@
+{
+  "$schema": "./node_modules/oxfmt/configuration_schema.json",
+  "ignorePatterns": [],
+  "printWidth": null,
+  "singleQuote": true,
+  "arrowParens": null,
+  "sortImports": {
+    "groups": ["builtin", "external", "internal", "parent", "sibling", "index", "type", "style"]
+  },
+  "tabWidth": 2,
+  "jsxSingleQuote": true
+}

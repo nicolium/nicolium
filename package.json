@@ -6,13 +6,11 @@
   },
   "devDependencies": {
     "husky": "^9.0.0",
-    "lint-staged": ">=10"
+    "lint-staged": "^16.2.7"
   },
   "resolutions": {
-    "@types/react": "^18.3.18",
-    "@types/react-dom": "^18.3.5",
-    "glob-parent": "^6.0.1",
-    "jsonwebtoken": "^9.0.0",
-    "loader-utils": "^2.0.3"
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "glob-parent": "^6.0.2"
   }
 }
