@@ -22,7 +22,7 @@ interface IPoll {
   truncate?: boolean;
 }
 
-const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): JSX.Element | null => {
+const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.Element | null => {
   const { openModal } = useModalsActions();
 
   const isLoggedIn = useAppSelector((state) => state.me);

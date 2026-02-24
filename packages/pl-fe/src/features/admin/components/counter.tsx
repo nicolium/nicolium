@@ -31,7 +31,7 @@ type ICounter = {
   measure: AdminMeasureKey;
   startAt: string;
   endAt: string;
-  label: JSX.Element | string;
+  label: React.JSX.Element | string;
   params?: AdminGetMeasuresParams;
   target?: string;
 } & (LinkOptions | {});

@@ -267,7 +267,7 @@ interface IHotkeys extends React.HTMLAttributes<HTMLDivElement> {
    */
   focusable?: boolean;
   children: React.ReactNode;
-  element?: React.ComponentType | keyof JSX.IntrinsicElements;
+  element?: React.ComponentType | keyof React.JSX.IntrinsicElements;
 }
 
 /**

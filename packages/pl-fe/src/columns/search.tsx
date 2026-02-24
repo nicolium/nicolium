@@ -30,7 +30,7 @@ interface ISearchColumn {
 const SearchColumn: React.FC<ISearchColumn> = ({ type, query, accountId, multiColumn }) => {
   query = query.trim();
 
-  const node = useRef<VirtuosoHandle>(null);
+  const node = useRef<VirtuosoHandle | null>(null);
 
   const searchAccountsQuery = useSearchAccounts((type === 'accounts' && query) || '');
   const searchStatusesQuery = useSearchStatuses((type === 'statuses' && query) || '', {

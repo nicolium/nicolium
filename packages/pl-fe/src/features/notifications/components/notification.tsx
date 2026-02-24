@@ -58,7 +58,7 @@ const notificationForScreenReader = (intl: IntlShape, message: string, timestamp
 
 const buildLink = (
   account: Pick<Account, 'acct' | 'display_name' | 'emojis' | 'id'>,
-): JSX.Element => (
+): React.JSX.Element => (
   <Link
     className='font-bold text-gray-800 hover:underline dark:text-gray-200'
     title={account.acct}

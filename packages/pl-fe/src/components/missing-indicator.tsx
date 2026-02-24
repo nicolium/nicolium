@@ -9,7 +9,7 @@ interface MissingIndicatorProps {
   nested?: boolean;
 }
 
-const MissingIndicator = ({ nested = false }: MissingIndicatorProps): JSX.Element => (
+const MissingIndicator = ({ nested = false }: MissingIndicatorProps): React.JSX.Element => (
   <Card variant={nested ? undefined : 'rounded'} size='lg'>
     <CardBody>
       <Stack space={2}>

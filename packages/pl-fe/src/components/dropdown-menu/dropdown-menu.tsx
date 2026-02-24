@@ -36,7 +36,7 @@ interface IDropdownMenuContent {
 }
 
 interface IDropdownMenu {
-  children?: React.ReactElement;
+  children?: React.ReactElement<any>;
   disabled?: boolean;
   items?: Menu;
   component?: React.FC<{ handleClose: () => any }>;
@@ -211,7 +211,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
   );
 };
 
-const DropdownMenu = (props: IDropdownMenu) => {
+const DropdownMenu: React.FC<IDropdownMenu> = (props) => {
   const {
     children,
     disabled,

@@ -16,10 +16,9 @@ import type { Account } from 'pl-api';
 interface IResults {
   accountSearchResult: ReturnType<typeof useAccountSearch>;
   onSelect(id: string): void;
-  parentRef: React.RefObject<HTMLElement>;
 }
 
-const Results = ({ accountSearchResult, onSelect, parentRef }: IResults) => {
+const Results = ({ accountSearchResult, onSelect }: IResults) => {
   const { data: accountIds = [], isFetching, hasNextPage, fetchNextPage } = accountSearchResult;
   const accounts = useAppSelector((state) => selectAccounts(state, accountIds));
 

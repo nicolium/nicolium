@@ -9,7 +9,7 @@ interface ISiteWallet {
   limit?: number;
 }
 
-const SiteWallet: React.FC<ISiteWallet> = ({ limit }): JSX.Element => {
+const SiteWallet: React.FC<ISiteWallet> = ({ limit }): React.JSX.Element => {
   const { cryptoAddresses } = useFrontendConfig();
   const addresses = typeof limit === 'number' ? cryptoAddresses.slice(0, limit) : cryptoAddresses;
 

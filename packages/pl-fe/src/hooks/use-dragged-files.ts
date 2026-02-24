@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 /** Controls the state of files being dragged over a node. */
 const useDraggedFiles = <R extends HTMLElement>(
-  node: React.RefObject<R>,
+  node: React.RefObject<R | null>,
   onDrop?: (files: FileList) => void,
 ) => {
   const [isDragging, setIsDragging] = useState(false);

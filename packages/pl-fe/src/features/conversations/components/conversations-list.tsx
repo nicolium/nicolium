@@ -12,7 +12,7 @@ import Conversation from './conversation';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
 const ConversationsList: React.FC = () => {
-  const ref = useRef<VirtuosoHandle>(null);
+  const ref = useRef<VirtuosoHandle | null>(null);
 
   const { conversations, isLoading, hasNextPage, isFetching, fetchNextPage } = useConversations();
 

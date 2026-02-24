@@ -19,7 +19,7 @@ const messages = defineMessages({
 const PollPercentageBar: React.FC<{ percent: number; leading: boolean }> = ({
   percent,
   leading,
-}): JSX.Element => {
+}): React.JSX.Element => {
   const styles = useSpring({
     from: { width: '0%' },
     to: { width: `${percent}%` },
@@ -132,7 +132,7 @@ interface IPollOption {
   truncate?: boolean;
 }
 
-const PollOption: React.FC<IPollOption> = (props): JSX.Element | null => {
+const PollOption: React.FC<IPollOption> = (props): React.JSX.Element | null => {
   const { index, poll, option, showResults, language, truncate } = props;
 
   const intl = useIntl();

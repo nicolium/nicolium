@@ -16,7 +16,7 @@ import { useTrendingStatuses } from '@/queries/trends/use-trending-statuses';
 
 interface ITrendsColumn {
   type: 'accounts' | 'hashtags' | 'statuses' | 'links';
-  emptyMessage?: JSX.Element;
+  emptyMessage?: React.JSX.Element;
   multiColumn?: boolean;
 }
 

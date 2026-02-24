@@ -26,7 +26,7 @@ const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({
   const { openStatusHoverCard, closeStatusHoverCard } = useStatusHoverCardActions();
 
   const ref = useRef<HTMLDivElement>(null);
-  const Elem: keyof JSX.IntrinsicElements = inline ? 'span' : 'div';
+  const Elem: keyof React.JSX.IntrinsicElements = inline ? 'span' : 'div';
 
   const handleMouseEnter = () => {
     if (!isMobile(window.innerWidth)) {

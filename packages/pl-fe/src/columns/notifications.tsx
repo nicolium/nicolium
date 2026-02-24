@@ -221,8 +221,8 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
   }, [notifications, topNotification]);
   const hasMore = hasNextPage ?? false;
 
-  const node = useRef<VirtuosoHandle>(null);
-  const scrollableContentRef = useRef<Array<JSX.Element> | null>(null);
+  const node = useRef<VirtuosoHandle | null>(null);
+  const scrollableContentRef = useRef<Array<React.JSX.Element> | null>(null);
 
   const handleLoadOlder = useCallback(
     debounce(
@@ -307,7 +307,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
       />
     );
 
-  let scrollableContent: Array<JSX.Element> | null = null;
+  let scrollableContent: Array<React.JSX.Element> | null = null;
 
   const filterBarContainer = showFilterBar ? <FilterBar /> : null;
 

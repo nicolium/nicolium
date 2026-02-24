@@ -67,7 +67,7 @@ interface IColumn {
 }
 
 /** A backdrop for the main section of the UI. */
-const Column: React.FC<IColumn> = (props): JSX.Element => {
+const Column: React.FC<IColumn> = (props): React.JSX.Element => {
   const {
     backHref,
     children,

@@ -29,7 +29,7 @@ const messages = defineMessages({
   closeSidebar: { id: 'navigation.sidebar.close', defaultMessage: 'Close sidebar' },
 });
 
-const ThumbNavigation: React.FC = React.memo((): JSX.Element => {
+const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const { account } = useOwnAccount();

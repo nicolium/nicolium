@@ -21,8 +21,8 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({
   const [state, setState] = useState<
     'authorizing' | 'rejecting' | 'authorized' | 'rejected' | 'pending'
   >('pending');
-  const timeout = useRef<NodeJS.Timeout>();
-  const interval = useRef<ReturnType<typeof setInterval>>();
+  const timeout = useRef<NodeJS.Timeout | null>(null);
+  const interval = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const [progress, setProgress] = useState<number>(0);
 

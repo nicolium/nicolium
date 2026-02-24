@@ -74,7 +74,7 @@ const LazyImage = ({
   className: string | null;
   imageRef: { current: null | HTMLImageElement };
   src: string;
-}): JSX.Element => {
+}): React.JSX.Element => {
   useSuspenseImage(src);
   return (
     <img
@@ -95,7 +95,7 @@ const ImageComponent = ({
   altText: string;
   nodeKey: NodeKey;
   src: string;
-}): JSX.Element => {
+}): React.JSX.Element => {
   const intl = useIntl();
   const { openModal } = useModalsActions();
   const { missingDescriptionModal } = useSettings();

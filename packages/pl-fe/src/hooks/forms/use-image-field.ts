@@ -16,7 +16,7 @@ interface UseImageFieldOpts {
 const useImageField = (opts: UseImageFieldOpts = {}) => {
   const { stripMetadata } = useSettings();
 
-  const [file, setFile] = useState<File | null>();
+  const [file, setFile] = useState<File | null>(null);
   const src = usePreview(file) ?? (file === null ? undefined : opts.preview);
 
   const onChange = async (files: FileList | null) => {

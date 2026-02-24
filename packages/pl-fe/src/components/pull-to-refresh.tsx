@@ -66,9 +66,9 @@ const isTreeScrollable = (element: HTMLElement, direction: DIRECTION): boolean =
 interface PullToRefreshProps {
   isPullable?: boolean;
   onRefresh?: () => Promise<any> | void;
-  refreshingContent?: JSX.Element | string;
-  pullingContent?: JSX.Element | string;
-  children: JSX.Element;
+  refreshingContent?: React.JSX.Element | string;
+  pullingContent?: React.JSX.Element | string;
+  children: React.JSX.Element;
   pullDownThreshold?: number;
   maxPullDownDistance?: number;
   resistance?: number;

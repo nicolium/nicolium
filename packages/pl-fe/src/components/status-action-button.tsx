@@ -14,7 +14,7 @@ interface IStatusActionCounter {
 
 /** Action button numerical counter, eg "5" likes. */
 const StatusActionCounter: React.FC<IStatusActionCounter> = React.memo(
-  ({ count = 0 }): JSX.Element => {
+  ({ count = 0 }): React.JSX.Element => {
     const { demetricator } = useSettings();
 
     return (
@@ -36,7 +36,7 @@ interface IStatusActionButton extends React.ButtonHTMLAttributes<HTMLButtonEleme
 }
 
 const StatusActionButton = React.forwardRef<HTMLButtonElement, IStatusActionButton>(
-  (props, ref): JSX.Element => {
+  (props, ref): React.JSX.Element => {
     const {
       icon,
       filledIcon,

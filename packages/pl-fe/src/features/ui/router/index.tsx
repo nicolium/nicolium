@@ -1560,7 +1560,7 @@ const routeTree = rootRoute.addChildren([
   ...redirectRoutes,
 ]);
 
-const FallbackLayout: React.FC<{ children: JSX.Element }> = ({ children }) => (
+const FallbackLayout: React.FC<{ children: React.JSX.Element }> = ({ children }) => (
   <>
     <Layout.Main>{children}</Layout.Main>
 

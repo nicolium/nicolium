@@ -15,7 +15,7 @@ type SerializedEmojiNode = Spread<
   SerializedLexicalNode
 >;
 
-class EmojiNode extends DecoratorNode<JSX.Element> {
+class EmojiNode extends DecoratorNode<React.JSX.Element> {
   __emoji: Emoji;
 
   static getType(): 'emoji' {
@@ -74,7 +74,7 @@ class EmojiNode extends DecoratorNode<JSX.Element> {
     }
   }
 
-  decorate(): JSX.Element {
+  decorate(): React.JSX.Element {
     const emoji = this.__emoji;
     if (isNativeEmoji(emoji)) {
       return (

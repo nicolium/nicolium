@@ -32,7 +32,7 @@ const FloatingLinkEditor = ({
 }: {
   editor: LexicalEditor;
   anchorElem: HTMLElement;
-}): JSX.Element => {
+}): React.JSX.Element => {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [linkUrl, setLinkUrl] = useState('');
@@ -231,7 +231,7 @@ const FloatingLinkEditor = ({
 const useFloatingLinkEditorToolbar = (
   editor: LexicalEditor,
   anchorElem: HTMLElement,
-): JSX.Element | null => {
+): React.JSX.Element | null => {
   const [activeEditor, setActiveEditor] = useState(editor);
   const [isLink, setIsLink] = useState(false);
 
@@ -272,7 +272,7 @@ const FloatingLinkEditorPlugin = ({
   anchorElem = document.body,
 }: {
   anchorElem?: HTMLElement;
-}): JSX.Element | null => {
+}): React.JSX.Element | null => {
   const [editor] = useLexicalComposerContext();
   return useFloatingLinkEditorToolbar(editor, anchorElem);
 };

@@ -28,7 +28,7 @@ const Card = React.forwardRef<HTMLDivElement, ICard>(
   (
     { children, variant = 'default', size = 'md', className, ...filteredProps },
     ref,
-  ): JSX.Element => (
+  ): React.JSX.Element => (
     <div
       ref={ref}
       {...filteredProps}
@@ -61,7 +61,7 @@ const CardHeader: React.FC<ICardHeader> = ({
   children,
   backHref,
   onBackClick,
-}): JSX.Element => {
+}): React.JSX.Element => {
   const intl = useIntl();
 
   const renderBackButton = () => {
@@ -99,7 +99,7 @@ interface ICardTitle {
 }
 
 /** A card's title. */
-const CardTitle: React.FC<ICardTitle> = ({ title, truncate = true }): JSX.Element => (
+const CardTitle: React.FC<ICardTitle> = ({ title, truncate = true }): React.JSX.Element => (
   <h1 className='⁂-card-title' data-testid='card-title'>
     {title}
   </h1>
@@ -113,7 +113,7 @@ interface ICardBody {
 }
 
 /** A card's body. */
-const CardBody: React.FC<ICardBody> = ({ className, children }): JSX.Element => (
+const CardBody: React.FC<ICardBody> = ({ className, children }): React.JSX.Element => (
   <div data-testid='card-body' className={className}>
     {children}
   </div>

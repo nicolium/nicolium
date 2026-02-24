@@ -19,7 +19,7 @@ const SvgIcon: React.FC<ISvgIcon> = ({
   size = 24,
   className,
   ...filteredProps
-}): JSX.Element => {
+}): React.JSX.Element => {
   const loader = (
     <svg
       className={className}

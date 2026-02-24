@@ -110,7 +110,7 @@ const BlockTypeFloatingToolbar = ({
 }: {
   editor: LexicalEditor;
   anchorElem: HTMLElement;
-}): JSX.Element => {
+}): React.JSX.Element => {
   const intl = useIntl();
   const popupCharStylesEditorRef = useRef<HTMLDivElement | null>(null);
   const { composeAllowInlineImages } = useFeatures();
@@ -231,7 +231,7 @@ const BlockTypeFloatingToolbar = ({
 const useFloatingBlockTypeToolbar = (
   editor: LexicalEditor,
   anchorElem: HTMLElement,
-): JSX.Element | null => {
+): React.JSX.Element | null => {
   const [isEmptyBlock, setIsEmptyBlock] = useState(false);
 
   const updatePopup = useCallback(() => {
@@ -300,7 +300,7 @@ const FloatingBlockTypeToolbarPlugin = ({
   anchorElem = document.body,
 }: {
   anchorElem?: HTMLElement;
-}): JSX.Element | null => {
+}): React.JSX.Element | null => {
   const [editor] = useLexicalComposerContext();
   return useFloatingBlockTypeToolbar(editor, anchorElem);
 };

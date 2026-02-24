@@ -32,7 +32,7 @@ const messages = {
   pronouns: { id: 'account.pronouns.with_label', defaultMessage: 'Pronouns: {pronouns}' },
 };
 
-const getBadges = (account?: Pick<Account, 'is_admin' | 'is_moderator'>): JSX.Element[] => {
+const getBadges = (account?: Pick<Account, 'is_admin' | 'is_moderator'>): React.JSX.Element[] => {
   const badges = [];
 
   if (account?.is_admin) {

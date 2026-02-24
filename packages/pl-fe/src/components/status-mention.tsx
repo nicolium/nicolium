@@ -7,7 +7,7 @@ import HoverAccountWrapper from './hover-account-wrapper';
 
 interface IStatusMention {
   accountId: string;
-  fallback?: JSX.Element;
+  fallback?: React.JSX.Element;
 }
 
 const StatusMention: React.FC<IStatusMention> = ({ accountId, fallback }) => {

@@ -57,8 +57,8 @@ const Streamfield: React.FC<IStreamfield> = ({
 }) => {
   const intl = useIntl();
 
-  const dragItem = useRef<number | null>();
-  const dragOverItem = useRef<number | null>();
+  const dragItem = useRef<number | null>(null);
+  const dragOverItem = useRef<number | null>(null);
 
   const handleDragStart = (i: number) => () => {
     dragItem.current = i;

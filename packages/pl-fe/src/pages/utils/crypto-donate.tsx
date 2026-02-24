@@ -11,7 +11,7 @@ const messages = defineMessages({
   heading: { id: 'column.crypto_donate', defaultMessage: 'Donate cryptocurrency' },
 });
 
-const CryptoDonatePage: React.FC = (): JSX.Element => {
+const CryptoDonatePage: React.FC = (): React.JSX.Element => {
   const intl = useIntl();
   const instance = useInstance();
 

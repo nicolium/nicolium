@@ -59,7 +59,7 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, IButton>(
       ...props
     },
     ref: React.ForwardedRef<HTMLButtonElement | HTMLAnchorElement>,
-  ): JSX.Element => {
+  ): React.JSX.Element => {
     const body = text ?? children;
 
     const themeClass = useButtonStyles({

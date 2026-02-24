@@ -105,7 +105,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   compact = false,
   cacheWidth,
   onOpenMedia,
-}): JSX.Element => {
+}): React.JSX.Element => {
   const {
     urlPrivacy: { clearLinksInContent, redirectLinksMode },
   } = useSettings();

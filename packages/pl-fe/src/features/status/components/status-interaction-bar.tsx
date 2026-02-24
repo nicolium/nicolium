@@ -24,7 +24,9 @@ interface IStatusInteractionBar {
   >;
 }
 
-const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.Element | null => {
+const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
+  status,
+}): React.JSX.Element | null => {
   const { openModal } = useModalsActions();
   const features = useFeatures();
   const { account } = status;

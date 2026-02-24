@@ -17,7 +17,7 @@ interface IEmojiPickerDropdownContainer extends Pick<
   IEmojiPickerDropdown,
   'onPickEmoji' | 'condensed' | 'withCustom'
 > {
-  children?: JSX.Element;
+  children?: React.JSX.Element;
   theme?: 'default' | 'inverse';
 }
 

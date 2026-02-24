@@ -348,7 +348,7 @@ function parseContent(
         return transformText(reactNode, index);
       }
 
-      return reactNode as JSX.Element;
+      return reactNode as React.JSX.Element;
     },
   };
 

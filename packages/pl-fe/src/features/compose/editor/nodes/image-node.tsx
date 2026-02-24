@@ -43,7 +43,7 @@ type SerializedImageNode = Spread<
   SerializedLexicalNode
 >;
 
-class ImageNode extends DecoratorNode<JSX.Element> {
+class ImageNode extends DecoratorNode<React.JSX.Element> {
   __src: string;
   __altText: string;
 
@@ -127,7 +127,7 @@ class ImageNode extends DecoratorNode<JSX.Element> {
     }
   }
 
-  decorate(): JSX.Element {
+  decorate(): React.JSX.Element {
     return (
       // <Suspense fallback={null}>
       <ImageComponent src={this.__src} altText={this.__altText} nodeKey={this.getKey()} />

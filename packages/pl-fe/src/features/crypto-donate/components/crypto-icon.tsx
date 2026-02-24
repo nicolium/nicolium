@@ -23,7 +23,7 @@ const CryptoIcon: React.FC<ICryptoIcon> = ({
   title,
   className,
   imgClassName,
-}): JSX.Element => (
+}): React.JSX.Element => (
   <div className={className}>
     <img className={imgClassName} src={getIcon(ticker)} alt={title ?? ticker} />
   </div>

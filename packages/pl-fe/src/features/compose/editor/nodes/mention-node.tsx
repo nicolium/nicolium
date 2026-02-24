@@ -21,7 +21,7 @@ type SerializedMentionNode = Spread<
   SerializedLexicalNode
 >;
 
-class MentionNode extends DecoratorNode<JSX.Element> {
+class MentionNode extends DecoratorNode<React.JSX.Element> {
   __mention: MentionEntity;
 
   static getType(): string {
@@ -70,7 +70,7 @@ class MentionNode extends DecoratorNode<JSX.Element> {
     return true;
   }
 
-  decorate(): JSX.Element {
+  decorate(): React.JSX.Element {
     return <Mention mention={this.__mention} disabled />;
   }
 }

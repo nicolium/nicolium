@@ -6,7 +6,7 @@ import Icon from '@/components/ui/icon';
 
 interface IAltIndicator extends Pick<React.HTMLAttributes<HTMLSpanElement>, 'title' | 'className'> {
   warning?: boolean;
-  message?: JSX.Element;
+  message?: React.JSX.Element;
 }
 
 const AltIndicator: React.FC<IAltIndicator> = React.forwardRef<HTMLSpanElement, IAltIndicator>(

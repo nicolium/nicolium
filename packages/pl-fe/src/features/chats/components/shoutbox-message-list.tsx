@@ -100,7 +100,7 @@ const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) =
 
 /** Scrollable list of shoutbox messages. */
 const ShoutboxMessageList: React.FC = () => {
-  const node = useRef<VirtuosoHandle>(null);
+  const node = useRef<VirtuosoHandle | null>(null);
   const [firstItemIndex, setFirstItemIndex] = useState(START_INDEX - 20);
 
   const me = useAppSelector((state) => state.me);

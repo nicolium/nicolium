@@ -52,7 +52,7 @@ interface IHStack extends Pick<
   /** Whether to let the flexbox grow. */
   grow?: boolean;
   /** HTML element to use for container. */
-  element?: React.ComponentType | keyof JSX.IntrinsicElements;
+  element?: React.ComponentType | keyof React.JSX.IntrinsicElements;
   /** Whether to let the flexbox wrap onto multiple lines. */
   wrap?: boolean;
 }

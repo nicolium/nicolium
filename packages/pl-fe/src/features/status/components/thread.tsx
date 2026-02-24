@@ -73,7 +73,7 @@ const Thread = ({
 
   const node = useRef<HTMLDivElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
-  const scroller = useRef<VirtuosoHandle>(null);
+  const scroller = useRef<VirtuosoHandle | null>(null);
 
   const handleFavouriteClick = (status: SelectedStatus) => {
     if (status.favourited) unfavouriteStatus();

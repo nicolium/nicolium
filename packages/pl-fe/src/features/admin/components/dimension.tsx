@@ -10,7 +10,7 @@ interface IDimension {
   dimension: AdminDimensionKey;
   startAt: string;
   endAt: string;
-  label?: JSX.Element;
+  label?: React.JSX.Element;
   params: AdminGetDimensionsParams;
 }
 

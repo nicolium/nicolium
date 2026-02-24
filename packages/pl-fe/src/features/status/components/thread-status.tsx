@@ -17,7 +17,7 @@ interface IThreadStatus {
 }
 
 /** Status with reply-connector in threads. */
-const ThreadStatus: React.FC<IThreadStatus> = (props): JSX.Element => {
+const ThreadStatus: React.FC<IThreadStatus> = (props): React.JSX.Element => {
   const { id, focusedStatusId } = props;
 
   const replyToId = useReplyToId(id);
@@ -33,7 +33,7 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): JSX.Element => {
     );
   }
 
-  const renderConnector = (): JSX.Element | null => {
+  const renderConnector = (): React.JSX.Element | null => {
     if (props.linear) return null;
 
     const isConnectedTop = replyToId && replyToId !== focusedStatusId;

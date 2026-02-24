@@ -9,7 +9,7 @@ const messages = defineMessages({
   meow: { id: 'footer.meow', defaultMessage: 'meow :3 {emoji}' },
 });
 
-const LinkFooter: React.FC = (): JSX.Element => {
+const LinkFooter: React.FC = (): React.JSX.Element => {
   const intl = useIntl();
   const frontendConfig = useFrontendConfig();
 

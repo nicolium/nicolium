@@ -79,7 +79,7 @@ interface IChatMessageList {
 const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
   const intl = useIntl();
 
-  const node = useRef<VirtuosoHandle>(null);
+  const node = useRef<VirtuosoHandle | null>(null);
   const [firstItemIndex, setFirstItemIndex] = useState(START_INDEX - 20);
 
   const markChatAsRead = useMarkChatAsRead(chat.id);

@@ -20,7 +20,7 @@ type IListItem = {
   href?: string;
   onClick?(): void;
   isSelected?: boolean;
-  children?: React.ReactNode;
+  children?: React.ReactElement<any> | Array<React.ReactElement<any>>;
   size?: 'sm' | 'md';
 } & (LinkOptions | {});
 
@@ -49,36 +49,37 @@ const ListItem: React.FC<IListItem> = ({
 
   const renderChildren = React.useCallback(
     () =>
-      React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          const isSelect = child.type === SelectDropdown || child.type === Select;
-          const childLabelledBy = child.props['aria-labelledby'];
-          const childDescribedBy = child.props['aria-describedby'];
-          const ariaLabelledBy = childLabelledBy ? `${childLabelledBy} ${labelId}` : labelId;
-          const ariaDescribedBy = hint
-            ? childDescribedBy
-              ? `${childDescribedBy} ${hintId}`
-              : hintId
-            : childDescribedBy;
+      children
+        ? React.Children.map(children, (child: React.ReactElement<any>) => {
+            if (React.isValidElement(child)) {
+              const props = child.props as any;
+              const isSelect = child.type === SelectDropdown || child.type === Select;
+              const childLabelledBy = props['aria-labelledby'];
+              const childDescribedBy = props['aria-describedby'];
+              const ariaLabelledBy = childLabelledBy ? `${childLabelledBy} ${labelId}` : labelId;
+              const ariaDescribedBy = hint
+                ? childDescribedBy
+                  ? `${childDescribedBy} ${hintId}`
+                  : hintId
+                : childDescribedBy;
 
-          return React.cloneElement(child, {
-            // @ts-ignore
-            id: domId,
-            // @ts-ignore
-            'aria-labelledby': ariaLabelledBy,
-            // @ts-ignore
-            'aria-describedby': ariaDescribedBy,
-            className: clsx(
-              {
-                'w-auto': isSelect,
-              },
-              child.props.className,
-            ),
-          });
-        }
+              return React.cloneElement(child, {
+                // @ts-ignore
+                id: domId,
+                'aria-labelledby': ariaLabelledBy,
+                'aria-describedby': ariaDescribedBy,
+                className: clsx(
+                  {
+                    'w-auto': isSelect,
+                  },
+                  props.className,
+                ),
+              });
+            }
 
-        return null;
-      }),
+            return null;
+          })
+        : null,
     [children, domId, labelId, hint, hintId],
   );
 

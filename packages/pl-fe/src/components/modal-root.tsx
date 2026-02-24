@@ -51,7 +51,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
   const activeElement = useRef<HTMLDivElement | null>(
     revealed ? (document.activeElement as HTMLDivElement | null) : null,
   );
-  const unlistenHistory = useRef<() => void>();
+  const unlistenHistory = useRef<(() => void) | null>(null);
 
   const prevChildren = usePrevious(children);
 

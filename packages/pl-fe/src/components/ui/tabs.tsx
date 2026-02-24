@@ -29,7 +29,7 @@ interface IAnimatedInterface {
 /** Tabs with a sliding active state. */
 const AnimatedTabs: React.FC<IAnimatedInterface> = ({ children, ...rest }) => {
   const [activeRect, setActiveRect] = React.useState(null);
-  const ref = React.useRef();
+  const ref = React.useRef<any>(null);
   const rect = useRect(ref);
 
   // @ts-ignore
@@ -80,7 +80,7 @@ const AnimatedTab: React.FC<IAnimatedTab> = ({ index, ...props }) => {
   const isSelected: boolean = selectedIndex === index;
 
   // measure the size of our element, only listen to rect if active
-  const ref = React.useRef();
+  const ref = React.useRef<any>(null);
   const rect = useRect(ref, { observe: isSelected });
 
   // get the style changing function from context

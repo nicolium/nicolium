@@ -17,7 +17,7 @@ interface ICryptoAddress {
   note?: string;
 }
 
-const CryptoAddress: React.FC<ICryptoAddress> = (props): JSX.Element => {
+const CryptoAddress: React.FC<ICryptoAddress> = (props): React.JSX.Element => {
   const { address, ticker, note } = props;
 
   const { openModal } = useModalsActions();

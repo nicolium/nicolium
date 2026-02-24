@@ -263,8 +263,8 @@ const HotkeysModal: React.FC<BaseModalProps> = ({ onClose }) => {
   const columns = columnSizes.reduce<
     Array<
       Array<{
-        key: JSX.Element;
-        label: JSX.Element;
+        key: React.JSX.Element;
+        label: React.JSX.Element;
       }>
     >
   >((prev, cur) => {

@@ -12,7 +12,7 @@ interface IWidget {
   actionIcon?: string;
   /** Text for the action. */
   actionTitle?: string;
-  action?: JSX.Element;
+  action?: React.JSX.Element;
   children?: React.ReactNode;
   className?: string;
 }
@@ -26,7 +26,7 @@ const Widget: React.FC<IWidget> = ({
   actionTitle,
   action,
   className,
-}): JSX.Element => {
+}): React.JSX.Element => {
   const widgetId = useMemo(() => crypto.randomUUID(), []);
 
   return (

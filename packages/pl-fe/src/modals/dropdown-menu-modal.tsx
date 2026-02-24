@@ -7,7 +7,7 @@ import type { BaseModalProps } from '@/features/ui/components/modal-root';
 interface DropdownMenuModalProps {
   /** The element initiating opening the modal. */
   element?: HTMLElement;
-  content?: JSX.Element;
+  content?: React.JSX.Element;
 }
 
 const DropdownMenuModal: React.FC<BaseModalProps & DropdownMenuModalProps> = ({

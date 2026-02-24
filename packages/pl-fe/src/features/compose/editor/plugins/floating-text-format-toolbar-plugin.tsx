@@ -288,7 +288,7 @@ const TextFormatFloatingToolbar = ({
   isLink: boolean;
   isStrikethrough: boolean;
   isUnderline: boolean;
-}): JSX.Element => {
+}): React.JSX.Element => {
   const intl = useIntl();
   const popupCharStylesEditorRef = useRef<HTMLDivElement | null>(null);
 
@@ -437,7 +437,7 @@ const TextFormatFloatingToolbar = ({
 const useFloatingTextFormatToolbar = (
   editor: LexicalEditor,
   anchorElem: HTMLElement,
-): JSX.Element | null => {
+): React.JSX.Element | null => {
   const [blockType, setBlockType] = useState<keyof typeof blockTypeToBlockName>('paragraph');
   const [isText, setIsText] = useState(false);
   const [isLink, setIsLink] = useState(false);
@@ -567,7 +567,7 @@ const FloatingTextFormatToolbarPlugin = ({
   anchorElem = document.body,
 }: {
   anchorElem?: HTMLElement;
-}): JSX.Element | null => {
+}): React.JSX.Element | null => {
   const [editor] = useLexicalComposerContext();
   return useFloatingTextFormatToolbar(editor, anchorElem);
 };

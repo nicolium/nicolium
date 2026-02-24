@@ -132,7 +132,7 @@ interface IComposeForm<ID extends string> {
   id: ID extends 'default' ? never : ID;
   shouldCondense?: boolean;
   autoFocus?: boolean;
-  clickableAreaRef?: React.RefObject<HTMLDivElement>;
+  clickableAreaRef?: React.RefObject<HTMLDivElement | null>;
   event?: string;
   group?: string;
   withAvatar?: boolean;
@@ -363,7 +363,7 @@ const ComposeForm = <ID extends string>({
     </div>
   );
 
-  let publishText: string | JSX.Element = '';
+  let publishText: string | React.JSX.Element = '';
   let publishIcon: string | undefined = undefined;
 
   if (isEditing) {

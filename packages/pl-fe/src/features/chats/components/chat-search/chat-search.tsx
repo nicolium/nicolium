@@ -71,7 +71,6 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
             handleClickOnSearchResult.mutate(id);
             clearValue();
           }}
-          parentRef={parentRef}
         />
       );
     } else if (hasSearchValue && !hasSearchResults && !isFetching) {

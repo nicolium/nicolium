@@ -25,7 +25,7 @@ const LinkWrapper = ({
   enabled,
   children,
   ...rest
-}: LinkProps & { enabled: boolean; children: React.ReactNode }): JSX.Element => {
+}: LinkProps & { enabled: boolean; children: React.ReactNode }): React.JSX.Element => {
   if (!enabled) {
     return <>{children}</>;
   }

@@ -32,7 +32,7 @@ import type { Account as AccountEntity } from 'pl-api';
 interface IDropdownNavigationLink extends Partial<LinkOptions> {
   href?: string;
   icon: string;
-  text: string | JSX.Element;
+  text: string | React.JSX.Element;
   onClick: React.EventHandler<React.MouseEvent>;
 }
 
@@ -66,7 +66,7 @@ const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(
   },
 );
 
-const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
+const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => {
   const dispatch = useAppDispatch();
 
   const isSidebarOpen = useIsSidebarOpen();

@@ -25,8 +25,8 @@ const messages = defineMessages({
 
 interface IUserPanel {
   accountId: string;
-  action?: JSX.Element;
-  badges?: JSX.Element[];
+  action?: React.JSX.Element;
+  badges?: React.JSX.Element[];
   domain?: string;
 }
 

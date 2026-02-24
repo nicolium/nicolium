@@ -21,7 +21,7 @@ interface IIconButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 /** A clickable icon. */
 const IconButton = React.forwardRef(
-  (props: IIconButton, ref: React.ForwardedRef<HTMLButtonElement>): JSX.Element => {
+  (props: IIconButton, ref: React.ForwardedRef<HTMLButtonElement>): React.JSX.Element => {
     const { src, className, iconClassName, text, theme = 'seamless', ...filteredProps } = props;
 
     const Component = (props.href ? 'a' : 'button') as 'button';

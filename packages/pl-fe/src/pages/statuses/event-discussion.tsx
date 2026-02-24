@@ -36,7 +36,7 @@ const EventDiscussionPage: React.FC = () => {
   const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
 
   const node = useRef<HTMLDivElement>(null);
-  const scroller = useRef<VirtuosoHandle>(null);
+  const scroller = useRef<VirtuosoHandle | null>(null);
 
   const fetchData = () => dispatch(fetchStatusWithContext(statusId, intl));
 
@@ -105,7 +105,7 @@ const EventDiscussionPage: React.FC = () => {
     return <PlaceholderStatus />;
   }
 
-  const children: JSX.Element[] = [];
+  const children: React.JSX.Element[] = [];
 
   if (hasDescendants) {
     children.push(...renderChildren(descendantsIds));

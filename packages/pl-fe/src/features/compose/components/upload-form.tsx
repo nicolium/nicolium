@@ -21,8 +21,8 @@ const UploadForm: React.FC<IUploadForm> = ({ composeId, onSubmit }) => {
 
   const mediaIds = mediaAttachments.map((item) => item.id);
 
-  const dragItem = useRef<string | null>();
-  const dragOverItem = useRef<string | null>();
+  const dragItem = useRef<string | null>(null);
+  const dragOverItem = useRef<string | null>(null);
 
   const handleDragStart = useCallback(
     (id: string) => {

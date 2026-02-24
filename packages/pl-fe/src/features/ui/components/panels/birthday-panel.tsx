@@ -31,7 +31,7 @@ const BirthdayPanel = ({ limit }: IBirthdayPanel) => {
   const { data: birthdays = [] } = useBirthdayReminders(month, day);
   const birthdaysToRender = birthdays.slice(0, limit);
 
-  const timeout = useRef<NodeJS.Timeout>();
+  const timeout = useRef<NodeJS.Timeout | null>(null);
 
   React.useEffect(() => {
     const updateTimeout = () => {

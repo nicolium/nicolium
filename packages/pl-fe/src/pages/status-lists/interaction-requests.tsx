@@ -74,7 +74,7 @@ interface IInteractionRequestStatus {
   id: string;
   hasReply?: boolean;
   isReply?: boolean;
-  actions?: JSX.Element;
+  actions?: React.JSX.Element;
 }
 
 const InteractionRequestStatus: React.FC<IInteractionRequestStatus> = ({

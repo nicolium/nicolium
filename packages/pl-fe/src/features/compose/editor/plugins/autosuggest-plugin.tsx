@@ -61,7 +61,7 @@ type Resolution = {
 
 type MenuRenderFn = (
   anchorElementRef: MutableRefObject<HTMLElement | null>,
-) => ReactPortal | JSX.Element | null;
+) => ReactPortal | React.JSX.Element | null;
 
 const tryToPositionRange = (leadOffset: number, range: Range): boolean => {
   const domSelection = window.getSelection();
@@ -197,7 +197,7 @@ const LexicalPopoverMenu = ({
 }: {
   anchorElementRef: MutableRefObject<HTMLElement>;
   menuRenderFn: MenuRenderFn;
-}): JSX.Element | null => menuRenderFn(anchorElementRef);
+}): React.JSX.Element | null => menuRenderFn(anchorElementRef);
 
 const useMenuAnchorRef = (
   resolution: Resolution | null,
@@ -272,7 +272,7 @@ const AutosuggestPlugin = ({
   composeId,
   suggestionsHidden,
   setSuggestionsHidden,
-}: AutosuggestPluginProps): JSX.Element | null => {
+}: AutosuggestPluginProps): React.JSX.Element | null => {
   const { rememberEmojiUse } = useSettingsStoreActions();
   const { suggestions } = useCompose(composeId);
   const dispatch = useAppDispatch();
@@ -349,7 +349,7 @@ const AutosuggestPlugin = ({
   };
 
   const renderSuggestion = (suggestion: AutoSuggestion, i: number) => {
-    let inner: string | JSX.Element;
+    let inner: string | React.JSX.Element;
     let key: React.Key;
 
     if (typeof suggestion === 'object') {

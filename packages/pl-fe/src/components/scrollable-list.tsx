@@ -32,13 +32,13 @@ type SavedScrollPosition = {
 // NOTE: It's crucial to space lists with **padding** instead of margin!
 // Pass an `itemClassName` like `pb-3`, NOT a `space-y-3` className
 // https://virtuoso.dev/troubleshooting#list-does-not-scroll-to-the-bottom--items-jump-around
-const Item: Components<JSX.Element, Context>['Item'] = ({ context, ...rest }) => (
+const Item: Components<React.JSX.Element, Context>['Item'] = ({ context, ...rest }) => (
   <div className={context?.itemClassName} {...rest} />
 );
 
 /** Custom Virtuoso List component for the outer container. */
 // Ensure the className winds up here
-const List: Components<JSX.Element, Context>['List'] = React.forwardRef((props, ref) => {
+const List: Components<React.JSX.Element, Context>['List'] = React.forwardRef((props, ref) => {
   const { context, ...rest } = props;
   return <div ref={ref} className={context?.listClassName} {...rest} />;
 });
@@ -177,7 +177,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
     }, []);
 
     /* Render an empty state instead of the scrollable list. */
-    const renderEmpty = (): JSX.Element => {
+    const renderEmpty = (): React.JSX.Element => {
       return isLoading ? (
         <Spinner />
       ) : emptyMessageText ? (
@@ -188,7 +188,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
     };
 
     /** Render a single item. */
-    const renderItem = (_i: number, element: JSX.Element): JSX.Element => {
+    const renderItem = (_i: number, element: React.JSX.Element): React.JSX.Element => {
       if (showPlaceholder) {
         return <Placeholder />;
       } else {

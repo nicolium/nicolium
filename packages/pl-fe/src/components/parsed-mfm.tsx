@@ -3,7 +3,7 @@
 import { Link } from '@tanstack/react-router';
 import * as mfm from '@transfem-org/sfm-js';
 import clamp from 'lodash/clamp';
-import React, { CSSProperties } from 'react';
+import React, { type CSSProperties } from 'react';
 
 import { useSettings } from '@/stores/settings';
 import { makeEmojiMap } from '@/utils/normalizers';
@@ -58,14 +58,14 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
 
   const genEl = (ast: mfm.MfmNode[], scale: number) =>
     ast
-      .map((token): JSX.Element | string | (JSX.Element | string)[] => {
+      .map((token): React.JSX.Element | string | (React.JSX.Element | string)[] => {
         switch (token.type) {
           case 'text': {
             let text = token.props.text.replace(/(\r\n|\n|\r)/g, '\n');
 
             if (speakAsCat) text = nyaize(text);
 
-            const res: (JSX.Element | string)[] = [];
+            const res: (React.JSX.Element | string)[] = [];
             for (const t of text.split('\n')) {
               res.push(<br />);
               res.push(t);

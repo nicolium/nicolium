@@ -23,7 +23,10 @@ interface ISidebarNavigationLink extends Partial<LinkOptions> {
 /** Desktop sidebar navigation link. */
 const SidebarNavigationLink = React.memo(
   React.forwardRef(
-    (props: ISidebarNavigationLink, ref: React.ForwardedRef<HTMLAnchorElement>): JSX.Element => {
+    (
+      props: ISidebarNavigationLink,
+      ref: React.ForwardedRef<HTMLAnchorElement>,
+    ): React.JSX.Element => {
       const { icon, activeIcon, text, to, count, countMax, onClick, ...rest } = props;
 
       const matchRoute = useMatchRoute();
