@@ -14,37 +14,37 @@ import { useLists } from '@/queries/accounts/use-lists';
 import type { Circle, Features } from 'pl-api';
 
 const messages = defineMessages({
-  public_short: { id: 'privacy.public.short', defaultMessage: 'Public' },
-  public_long: { id: 'privacy.public.long', defaultMessage: 'Post to public timelines' },
-  unlisted_short: { id: 'privacy.unlisted.short', defaultMessage: 'Quiet public' },
-  unlisted_long: { id: 'privacy.unlisted.long', defaultMessage: 'Not visible in public timelines' },
-  private_short: { id: 'privacy.private.short', defaultMessage: 'Followers-only' },
-  private_long: { id: 'privacy.private.long', defaultMessage: 'Post to followers only' },
-  conversation_short: { id: 'privacy.conversation.short', defaultMessage: 'Conversation' },
-  conversation_long: {
+  publicShort: { id: 'privacy.public.short', defaultMessage: 'Public' },
+  publicLong: { id: 'privacy.public.long', defaultMessage: 'Post to public timelines' },
+  unlistedShort: { id: 'privacy.unlisted.short', defaultMessage: 'Quiet public' },
+  unlistedLong: { id: 'privacy.unlisted.long', defaultMessage: 'Not visible in public timelines' },
+  privateShort: { id: 'privacy.private.short', defaultMessage: 'Followers-only' },
+  privateLong: { id: 'privacy.private.long', defaultMessage: 'Post to followers only' },
+  conversationShort: { id: 'privacy.conversation.short', defaultMessage: 'Conversation' },
+  conversationLong: {
     id: 'privacy.conversation.long',
     defaultMessage: 'Post to recipients of the parent post',
   },
-  mutuals_only_short: { id: 'privacy.mutuals_only.short', defaultMessage: 'Mutuals-only' },
-  mutuals_only_long: {
+  mutualsOnlyShort: { id: 'privacy.mutuals_only.short', defaultMessage: 'Mutuals-only' },
+  mutualsOnlyLong: {
     id: 'privacy.mutuals_only.long',
     defaultMessage: 'Post to mutually followed users only',
   },
-  direct_short: { id: 'privacy.direct.short', defaultMessage: 'Private mention' },
-  direct_long: { id: 'privacy.direct.long', defaultMessage: 'Visible to mentioned users only' },
-  local_short: { id: 'privacy.local.short', defaultMessage: 'Local-only' },
-  local_long: { id: 'privacy.local.long', defaultMessage: 'Only visible on your instance' },
-  list_short: { id: 'privacy.list.short', defaultMessage: 'List only' },
-  list_long: { id: 'privacy.list.long', defaultMessage: 'Visible to members of a list' },
-  circle_short: { id: 'privacy.circle.short', defaultMessage: 'Circle only' },
-  circle_long: { id: 'privacy.circle.long', defaultMessage: 'Visible to members of a circle' },
-  subscribers_short: { id: 'privacy.subscribers.short', defaultMessage: 'Subscribers-only' },
-  subscribers_long: {
+  directShort: { id: 'privacy.direct.short', defaultMessage: 'Private mention' },
+  directLong: { id: 'privacy.direct.long', defaultMessage: 'Visible to mentioned users only' },
+  localShort: { id: 'privacy.local.short', defaultMessage: 'Local-only' },
+  localLong: { id: 'privacy.local.long', defaultMessage: 'Only visible on your instance' },
+  listShort: { id: 'privacy.list.short', defaultMessage: 'List only' },
+  listLong: { id: 'privacy.list.long', defaultMessage: 'Visible to members of a list' },
+  circleShort: { id: 'privacy.circle.short', defaultMessage: 'Circle only' },
+  circleLong: { id: 'privacy.circle.long', defaultMessage: 'Visible to members of a circle' },
+  subscribersShort: { id: 'privacy.subscribers.short', defaultMessage: 'Subscribers-only' },
+  subscribersLong: {
     id: 'privacy.subscribers.long',
     defaultMessage: 'Post to users subscribing you only',
   },
 
-  change_privacy: { id: 'privacy.change', defaultMessage: 'Adjust post privacy' },
+  changePrivacy: { id: 'privacy.change', defaultMessage: 'Adjust post privacy' },
   local: { id: 'privacy.local', defaultMessage: '{privacy} (local-only)' },
 });
 
@@ -67,57 +67,57 @@ const getItems = (
     {
       icon: require('@phosphor-icons/core/regular/globe.svg'),
       value: 'public',
-      text: intl.formatMessage(messages.public_short),
-      meta: intl.formatMessage(messages.public_long),
+      text: intl.formatMessage(messages.publicShort),
+      meta: intl.formatMessage(messages.publicLong),
     },
     {
       icon: require('@phosphor-icons/core/regular/moon.svg'),
       value: 'unlisted',
-      text: intl.formatMessage(messages.unlisted_short),
-      meta: intl.formatMessage(messages.unlisted_long),
+      text: intl.formatMessage(messages.unlistedShort),
+      meta: intl.formatMessage(messages.unlistedLong),
     },
     {
       icon: require('@phosphor-icons/core/regular/lock.svg'),
       value: 'private',
-      text: intl.formatMessage(messages.private_short),
-      meta: intl.formatMessage(messages.private_long),
+      text: intl.formatMessage(messages.privateShort),
+      meta: intl.formatMessage(messages.privateLong),
     },
     isReply && features.createStatusConversationScope
       ? {
           icon: require('@phosphor-icons/core/regular/chats-circle.svg'),
           value: 'conversation',
-          text: intl.formatMessage(messages.conversation_short),
-          meta: intl.formatMessage(messages.conversation_long),
+          text: intl.formatMessage(messages.conversationShort),
+          meta: intl.formatMessage(messages.conversationLong),
         }
       : undefined,
     features.createStatusMutualsOnlyScope
       ? {
           icon: require('@phosphor-icons/core/regular/users-three.svg'),
           value: 'mutuals_only',
-          text: intl.formatMessage(messages.mutuals_only_short),
-          meta: intl.formatMessage(messages.mutuals_only_long),
+          text: intl.formatMessage(messages.mutualsOnlyShort),
+          meta: intl.formatMessage(messages.mutualsOnlyLong),
         }
       : undefined,
     features.createStatusSubscribersScope
       ? {
           icon: require('@phosphor-icons/core/regular/coins.svg'),
           value: 'subscribers',
-          text: intl.formatMessage(messages.subscribers_short),
-          meta: intl.formatMessage(messages.subscribers_long),
+          text: intl.formatMessage(messages.subscribersShort),
+          meta: intl.formatMessage(messages.subscribersLong),
         }
       : undefined,
     {
       icon: require('@phosphor-icons/core/regular/at.svg'),
       value: 'direct',
-      text: intl.formatMessage(messages.direct_short),
-      meta: intl.formatMessage(messages.direct_long),
+      text: intl.formatMessage(messages.directShort),
+      meta: intl.formatMessage(messages.directLong),
     },
     features.createStatusLocalScope
       ? {
           icon: require('@phosphor-icons/core/regular/planet.svg'),
           value: 'local',
-          text: intl.formatMessage(messages.local_short),
-          meta: intl.formatMessage(messages.local_long),
+          text: intl.formatMessage(messages.localShort),
+          meta: intl.formatMessage(messages.localLong),
         }
       : undefined,
     features.createStatusListScope && Object.keys(lists).length
@@ -129,8 +129,8 @@ const getItems = (
             value: `list:${list.id}`,
             text: list.title,
           })),
-          text: intl.formatMessage(messages.list_short),
-          meta: intl.formatMessage(messages.list_long),
+          text: intl.formatMessage(messages.listShort),
+          meta: intl.formatMessage(messages.listLong),
         } as Option)
       : undefined,
     features.circles && Object.keys(circles).length
@@ -142,8 +142,8 @@ const getItems = (
             value: `circle:${circle.id}`,
             text: circle.title,
           })),
-          text: intl.formatMessage(messages.circle_short),
-          meta: intl.formatMessage(messages.circle_long),
+          text: intl.formatMessage(messages.circleShort),
+          meta: intl.formatMessage(messages.circleLong),
         } as Option)
       : undefined,
   ].filter((option): option is Option => !!option);
@@ -187,8 +187,8 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({ composeId, compact }) => 
   if (features.localOnlyStatuses)
     items.push({
       icon: require('@phosphor-icons/core/regular/planet.svg'),
-      text: intl.formatMessage(messages.local_short),
-      meta: intl.formatMessage(messages.local_long),
+      text: intl.formatMessage(messages.localShort),
+      meta: intl.formatMessage(messages.localLong),
       type: 'toggle',
       checked: compose.localOnly,
       onChange: () => dispatch(changeComposeFederated(composeId)),
@@ -220,7 +220,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({ composeId, compact }) => 
 
   return (
     <DropdownMenu items={items} width='16rem'>
-      <button title={compact ? text : intl.formatMessage(messages.change_privacy)}>
+      <button title={compact ? text : intl.formatMessage(messages.changePrivacy)}>
         {valueOption?.icon && <Icon src={valueOption.icon} aria-hidden />}
         {compact ? undefined : text}
         <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} aria-hidden />
