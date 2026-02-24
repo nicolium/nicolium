@@ -4,25 +4,25 @@ import { injectIntl, defineMessages, IntlShape, FormatDateOptions } from 'react-
 import Text, { IText } from './ui/text';
 
 const messages = defineMessages({
-  just_now: { id: 'relative_time.just_now', defaultMessage: 'now' },
+  justNow: { id: 'relative_time.just_now', defaultMessage: 'now' },
   seconds: { id: 'relative_time.seconds', defaultMessage: '{number}s' },
   minutes: { id: 'relative_time.minutes', defaultMessage: '{number}m' },
   hours: { id: 'relative_time.hours', defaultMessage: '{number}h' },
   days: { id: 'relative_time.days', defaultMessage: '{number}d' },
-  moments_remaining: { id: 'time_remaining.moments', defaultMessage: 'Moments remaining' },
-  seconds_remaining: {
+  momentsRemaining: { id: 'time_remaining.moments', defaultMessage: 'Moments remaining' },
+  secondsRemaining: {
     id: 'time_remaining.seconds',
     defaultMessage: '{number, plural, one {# second} other {# seconds}} left',
   },
-  minutes_remaining: {
+  minutesRemaining: {
     id: 'time_remaining.minutes',
     defaultMessage: '{number, plural, one {# minute} other {# minutes}} left',
   },
-  hours_remaining: {
+  hoursRemaining: {
     id: 'time_remaining.hours',
     defaultMessage: '{number, plural, one {# hour} other {# hours}} left',
   },
-  days_remaining: {
+  daysRemaining: {
     id: 'time_remaining.days',
     defaultMessage: '{number, plural, one {# day} other {# days}} left',
   },
@@ -84,7 +84,7 @@ const timeAgoString = (intl: IntlShape, date: Date, now: number, year: number) =
   let relativeTime;
 
   if (delta < 10 * SECOND) {
-    relativeTime = intl.formatMessage(messages.just_now);
+    relativeTime = intl.formatMessage(messages.justNow);
   } else if (delta < 7 * DAY) {
     if (delta < MINUTE) {
       relativeTime = intl.formatMessage(messages.seconds, { number: Math.floor(delta / SECOND) });
@@ -110,21 +110,21 @@ const timeRemainingString = (intl: IntlShape, date: Date, now: number) => {
   let relativeTime;
 
   if (delta < 10 * SECOND) {
-    relativeTime = intl.formatMessage(messages.moments_remaining);
+    relativeTime = intl.formatMessage(messages.momentsRemaining);
   } else if (delta < MINUTE) {
-    relativeTime = intl.formatMessage(messages.seconds_remaining, {
+    relativeTime = intl.formatMessage(messages.secondsRemaining, {
       number: Math.floor(delta / SECOND),
     });
   } else if (delta < HOUR) {
-    relativeTime = intl.formatMessage(messages.minutes_remaining, {
+    relativeTime = intl.formatMessage(messages.minutesRemaining, {
       number: Math.floor(delta / MINUTE),
     });
   } else if (delta < DAY) {
-    relativeTime = intl.formatMessage(messages.hours_remaining, {
+    relativeTime = intl.formatMessage(messages.hoursRemaining, {
       number: Math.floor(delta / HOUR),
     });
   } else {
-    relativeTime = intl.formatMessage(messages.days_remaining, { number: Math.floor(delta / DAY) });
+    relativeTime = intl.formatMessage(messages.daysRemaining, { number: Math.floor(delta / DAY) });
   }
 
   return relativeTime;

@@ -42,7 +42,7 @@ import Tombstone from './tombstone';
 
 const messages = defineMessages({
   edited: { id: 'status.edited', defaultMessage: 'Edited {date}' },
-  reblogged_by: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
+  rebloggedBy: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
 });
 
 interface IAccountInfo {
@@ -554,7 +554,7 @@ const Status: React.FC<IStatus> = (props) => {
 
   let rebloggedByText;
   if (status.reblog_id === 'object') {
-    rebloggedByText = intl.formatMessage(messages.reblogged_by, { name: status.account.acct });
+    rebloggedByText = intl.formatMessage(messages.rebloggedBy, { name: status.account.acct });
   }
 
   const body = (

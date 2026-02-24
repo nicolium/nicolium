@@ -19,11 +19,11 @@ const AVATAR_SIZE = 42;
 
 const messages = defineMessages({
   avatar: { id: 'account.avatar.alt', defaultMessage: 'Avatar' },
-  avatar_with_username: {
+  avatarWithUsername: {
     id: 'account.avatar.with_username',
     defaultMessage: 'Avatar for {username}',
   },
-  avatar_with_content: {
+  avatarWithContent: {
     id: 'account.avatar.with_content',
     defaultMessage: 'Avatar for {username}: {alt}',
   },
@@ -134,9 +134,9 @@ const Avatar = (props: IAvatar) => {
 
   const altText =
     props.showAlt && alt
-      ? intl.formatMessage(messages.avatar_with_content, { username: props.username, alt })
+      ? intl.formatMessage(messages.avatarWithContent, { username: props.username, alt })
       : props.username
-        ? intl.formatMessage(messages.avatar_with_username, { username: props.username })
+        ? intl.formatMessage(messages.avatarWithUsername, { username: props.username })
         : intl.formatMessage(messages.avatar);
 
   return (

@@ -57,7 +57,7 @@ import type { Me } from '@/types/pl-fe';
 
 const messages = defineMessages({
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
-  admin_status: {
+  adminStatus: {
     id: 'status.admin_status',
     defaultMessage: 'Open this post in the moderation interface',
   },
@@ -70,8 +70,8 @@ const messages = defineMessages({
     id: 'status.bookmark_folder_change',
     defaultMessage: 'Change bookmark folder',
   },
-  cancel_reblog_private: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },
-  cannot_reblog: { id: 'status.cannot_reblog', defaultMessage: 'This post cannot be reposted' },
+  cancelReblogPrivate: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },
+  cannotReblog: { id: 'status.cannot_reblog', defaultMessage: 'This post cannot be reposted' },
   chat: { id: 'status.chat', defaultMessage: 'Chat with @{name}' },
   copy: { id: 'status.copy', defaultMessage: 'Copy link to post' },
   deactivateUser: {
@@ -107,14 +107,6 @@ const messages = defineMessages({
     defaultMessage: 'Are you sure you want to ban @{name} from the group?',
   },
   groupModDelete: { id: 'status.group_mod_delete', defaultMessage: 'Delete post from group' },
-  group_remove_account: {
-    id: 'status.remove_account_from_group',
-    defaultMessage: 'Remove account from group',
-  },
-  group_remove_post: {
-    id: 'status.remove_post_from_group',
-    defaultMessage: 'Remove post from group',
-  },
   loadConversation: {
     id: 'status.load_conversation',
     defaultMessage: 'Load conversation from remote server',
@@ -351,7 +343,7 @@ const ReplyButton: React.FC<IReplyButton> = ({
 
   if (group?.membership_required && !group.relationship?.member) {
     replyDisabled = true;
-    replyTitle = intl.formatMessage(messages.replies_disabled_group);
+    replyTitle = intl.formatMessage(messages.repliesDisabledGroup);
   }
 
   if (!status.in_reply_to_id) {
@@ -469,7 +461,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
       disabled={!publicStatus}
       title={
         !publicStatus
-          ? intl.formatMessage(messages.cannot_reblog)
+          ? intl.formatMessage(messages.cannotReblog)
           : intl.formatMessage(messages.reblog)
       }
       active={status.reblogged}
@@ -502,7 +494,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
 
   const reblogMenu = [
     {
-      text: intl.formatMessage(status.reblogged ? messages.cancel_reblog_private : messages.reblog),
+      text: intl.formatMessage(status.reblogged ? messages.cancelReblogPrivate : messages.reblog),
       action: handleReblogClick,
       icon: require('@phosphor-icons/core/regular/repeat.svg'),
     },
@@ -1087,25 +1079,25 @@ const MenuButton: React.FC<IMenuButton> = ({
 
     if (publicStatus && !status.reblogged && features.reblogVisibility) {
       menu.push({
-        text: intl.formatMessage(messages.reblog_visibility),
+        text: intl.formatMessage(messages.reblogVisibility),
         icon: require('@phosphor-icons/core/regular/repeat.svg'),
         items: [
           {
-            text: intl.formatMessage(messages.reblog_visibility_public),
+            text: intl.formatMessage(messages.reblogVisibilityPublic),
             action: (e) => {
               handleReblogClick(e, 'public');
             },
             icon: require('@phosphor-icons/core/regular/globe.svg'),
           },
           {
-            text: intl.formatMessage(messages.reblog_visibility_unlisted),
+            text: intl.formatMessage(messages.reblogVisibilityUnlisted),
             action: (e) => {
               handleReblogClick(e, 'unlisted');
             },
             icon: require('@phosphor-icons/core/regular/moon.svg'),
           },
           {
-            text: intl.formatMessage(messages.reblog_visibility_private),
+            text: intl.formatMessage(messages.reblogVisibilityPrivate),
             action: (e) => {
               handleReblogClick(e, 'private');
             },
@@ -1127,7 +1119,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       } else if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
         menu.push({
           text: intl.formatMessage(
-            status.reblogged ? messages.cancel_reblog_private : messages.reblog_private,
+            status.reblogged ? messages.cancelReblogPrivate : messages.reblogPrivate,
           ),
           action: handleReblogClick,
           icon: require('@phosphor-icons/core/regular/repeat.svg'),
@@ -1269,7 +1261,7 @@ const MenuButton: React.FC<IMenuButton> = ({
 
       if (isAdmin && features.pleromaAdminStatuses) {
         menu.push({
-          text: intl.formatMessage(messages.admin_status),
+          text: intl.formatMessage(messages.adminStatus),
           href: `/pleroma/admin/#/statuses/${status.id}/`,
           icon: require('@phosphor-icons/core/regular/pencil-simple.svg'),
         });

@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import Icon from '@/components/icon';
 import Modal from '@/components/ui/modal';
@@ -10,11 +10,6 @@ import { useAppSelector } from '@/hooks/use-app-selector';
 import { makeGetStatus } from '@/selectors';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
-
-const messages = defineMessages({
-  cancel_reblog: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },
-  reblog: { id: 'status.reblog', defaultMessage: 'Repost' },
-});
 
 interface BoostModalProps {
   statusId: string;
@@ -30,7 +25,6 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
 }) => {
   const getStatus = useCallback(makeGetStatus(), []);
 
-  const intl = useIntl();
   const status = useAppSelector((state) => getStatus(state, { id: statusId }))!;
 
   const handleReblog = () => {
@@ -38,7 +32,11 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
     onClose('BOOST');
   };
 
-  const buttonText = status.reblogged ? messages.cancel_reblog : messages.reblog;
+  const buttonText = status.reblogged ? (
+    <FormattedMessage id='status.cancel_reblog_private' defaultMessage='Un-repost' />
+  ) : (
+    <FormattedMessage id='status.reblog' defaultMessage='Repost' />
+  );
 
   return (
     <Modal

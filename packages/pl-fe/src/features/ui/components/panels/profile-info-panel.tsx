@@ -27,7 +27,7 @@ const messages = defineMessages({
     id: 'account.link_verified_on',
     defaultMessage: 'Ownership of this link was checked on {date}',
   },
-  account_locked: {
+  accountLocked: {
     id: 'account.locked_info',
     defaultMessage:
       'This account privacy status is set to locked. The owner manually reviews who can follow them.',
@@ -200,7 +200,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
             {account.locked && (
               <Icon
                 src={require('@phosphor-icons/core/regular/lock.svg')}
-                alt={intl.formatMessage(messages.account_locked)}
+                alt={intl.formatMessage(messages.accountLocked)}
                 className='size-4 text-gray-600'
               />
             )}

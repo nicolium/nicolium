@@ -16,7 +16,7 @@ import { useSettings } from '@/stores/settings';
 import { shortNumberFormat } from '@/utils/numbers';
 
 const messages = defineMessages({
-  account_locked: {
+  accountLocked: {
     id: 'account.locked_info',
     defaultMessage:
       'This account privacy status is set to locked. The owner manually reviews who can follow them.',
@@ -100,7 +100,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
             {account.locked && (
               <Icon
                 src={require('@phosphor-icons/core/regular/lock.svg')}
-                alt={intl.formatMessage(messages.account_locked)}
+                alt={intl.formatMessage(messages.accountLocked)}
                 className='size-4 text-gray-600'
               />
             )}

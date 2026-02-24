@@ -27,11 +27,10 @@ import DurationSelector from './duration-selector';
 import type { AutoSuggestion } from '@/components/autosuggest-input';
 
 const messages = defineMessages({
-  option_placeholder: {
+  optionPlaceholder: {
     id: 'compose_form.poll.option_placeholder',
     defaultMessage: 'Answer #{number}',
   },
-  add_option: { id: 'compose_form.poll.add_option', defaultMessage: 'Add an answer' },
   pollDuration: { id: 'compose_form.poll.duration', defaultMessage: 'Poll duration' },
   removePoll: { id: 'compose_form.poll.remove', defaultMessage: 'Remove poll' },
   switchToMultiple: {
@@ -114,7 +113,7 @@ const Option: React.FC<IOption> = ({
 
         <AutosuggestInput
           className='rounded-md !bg-transparent dark:!bg-transparent'
-          placeholder={intl.formatMessage(messages.option_placeholder, { number: index + 1 })}
+          placeholder={intl.formatMessage(messages.optionPlaceholder, { number: index + 1 })}
           maxLength={maxChars}
           value={title}
           onChange={handleOptionTitleChange}
@@ -199,7 +198,7 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
 
           {options.length < maxOptions && (
             <Button theme='secondary' onClick={handleAddOption} size='sm' block>
-              <FormattedMessage {...messages.add_option} />
+              <FormattedMessage id='compose_form.poll.add_option' defaultMessage='Add an answer' />
             </Button>
           )}
         </HStack>

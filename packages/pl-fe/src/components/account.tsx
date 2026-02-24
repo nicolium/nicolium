@@ -33,7 +33,7 @@ interface IInstanceFavicon {
 const messages = defineMessages({
   bot: { id: 'account.badges.bot', defaultMessage: 'Bot' },
   timeline: { id: 'account.instance_favicon', defaultMessage: 'Visit {domain} timeline' },
-  account_locked: {
+  accountLocked: {
     id: 'account.locked_info',
     defaultMessage:
       'This account privacy status is set to locked. The owner manually reviews who can follow them.',
@@ -302,7 +302,7 @@ const Account = ({
                     <>
                       <Icon
                         src={require('@phosphor-icons/core/regular/lock.svg')}
-                        alt={intl.formatMessage(messages.account_locked)}
+                        alt={intl.formatMessage(messages.accountLocked)}
                         className='size-4 text-gray-600'
                       />
 
@@ -413,7 +413,7 @@ const Account = ({
                   <>
                     <Icon
                       src={require('@phosphor-icons/core/regular/lock.svg')}
-                      alt={intl.formatMessage(messages.account_locked)}
+                      alt={intl.formatMessage(messages.accountLocked)}
                       className='size-4 text-gray-600'
                     />
                     {account.favicon && !disableUserProvidedMedia && (

@@ -108,22 +108,22 @@ const messages = defineMessages({
     id: 'preferences.fields.display_media.show_all',
     defaultMessage: 'Always show posts',
   },
-  privacy_public: { id: 'preferences.options.privacy_public', defaultMessage: 'Public' },
-  privacy_unlisted: { id: 'preferences.options.privacy_unlisted', defaultMessage: 'Unlisted' },
-  privacy_followers_only: {
+  privacyPublic: { id: 'preferences.options.privacy_public', defaultMessage: 'Public' },
+  privacyUnlisted: { id: 'preferences.options.privacy_unlisted', defaultMessage: 'Unlisted' },
+  privacyFollowersOnly: {
     id: 'preferences.options.privacy_followers_only',
     defaultMessage: 'Followers-only',
   },
-  content_type_plaintext: {
+  contentTypePlaintext: {
     id: 'preferences.options.content_type_plaintext',
     defaultMessage: 'Plain text',
   },
-  content_type_markdown: {
+  contentTypeMarkdown: {
     id: 'preferences.options.content_type_markdown',
     defaultMessage: 'Markdown',
   },
-  content_type_html: { id: 'preferences.options.content_type_html', defaultMessage: 'HTML' },
-  content_type_wysiwyg: {
+  contentTypeHtml: { id: 'preferences.options.content_type_html', defaultMessage: 'HTML' },
+  contentTypeWysiwyg: {
     id: 'preferences.options.content_type_wysiwyg',
     defaultMessage: 'WYSIWYG',
   },
@@ -234,9 +234,9 @@ const Preferences = () => {
 
   const defaultPrivacyOptions = React.useMemo(
     () => ({
-      public: intl.formatMessage(messages.privacy_public),
-      unlisted: intl.formatMessage(messages.privacy_unlisted),
-      private: intl.formatMessage(messages.privacy_followers_only),
+      public: intl.formatMessage(messages.privacyPublic),
+      unlisted: intl.formatMessage(messages.privacyUnlisted),
+      private: intl.formatMessage(messages.privacyFollowersOnly),
     }),
     [settings.locale],
   );
@@ -268,13 +268,13 @@ const Preferences = () => {
     const postFormats = instance.pleroma.metadata.post_formats;
 
     const options = Object.entries({
-      'text/plain': intl.formatMessage(messages.content_type_plaintext),
-      'text/markdown': intl.formatMessage(messages.content_type_markdown),
-      'text/html': intl.formatMessage(messages.content_type_html),
+      'text/plain': intl.formatMessage(messages.contentTypePlaintext),
+      'text/markdown': intl.formatMessage(messages.contentTypeMarkdown),
+      'text/html': intl.formatMessage(messages.contentTypeHtml),
     }).filter(([key]) => postFormats.includes(key));
 
     if (postFormats.includes('text/markdown'))
-      options.push(['wysiwyg', intl.formatMessage(messages.content_type_wysiwyg)]);
+      options.push(['wysiwyg', intl.formatMessage(messages.contentTypeWysiwyg)]);
 
     if (options.length > 1) return Object.fromEntries(options);
   }, [settings.locale]);

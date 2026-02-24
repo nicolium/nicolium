@@ -8,8 +8,8 @@ import { useCompose } from '@/hooks/use-compose';
 import ComposeFormButton from './compose-form-button';
 
 const messages = defineMessages({
-  add_poll: { id: 'poll_button.add_poll', defaultMessage: 'Add a poll' },
-  remove_poll: { id: 'poll_button.remove_poll', defaultMessage: 'Remove poll' },
+  addPoll: { id: 'poll_button.add_poll', defaultMessage: 'Add a poll' },
+  removePoll: { id: 'poll_button.remove_poll', defaultMessage: 'Remove poll' },
 });
 
 interface IPollButton {
@@ -41,7 +41,7 @@ const PollButton: React.FC<IPollButton> = ({ composeId, disabled }) => {
   return (
     <ComposeFormButton
       icon={require('@phosphor-icons/core/regular/chart-bar.svg')}
-      title={intl.formatMessage(active ? messages.remove_poll : messages.add_poll)}
+      title={intl.formatMessage(active ? messages.removePoll : messages.addPoll)}
       active={active}
       disabled={disabled}
       onClick={onClick}

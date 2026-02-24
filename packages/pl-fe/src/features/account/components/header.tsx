@@ -52,16 +52,7 @@ import type { PlfeResponse } from '@/api';
 import type { Account as AccountEntity } from 'pl-api';
 
 const messages = defineMessages({
-  edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },
-  linkVerifiedOn: {
-    id: 'account.link_verified_on',
-    defaultMessage: 'Ownership of this link was checked on {date}',
-  },
-  account_locked: {
-    id: 'account.locked_info',
-    defaultMessage:
-      'This account privacy status is set to locked. The owner manually reviews who can follow them.',
-  },
+  editProfile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },
   mention: { id: 'account.mention', defaultMessage: 'Mention' },
   chat: { id: 'account.chat', defaultMessage: 'Chat with @{name}' },
   direct: { id: 'account.direct', defaultMessage: 'Direct message @{name}' },
@@ -78,9 +69,7 @@ const messages = defineMessages({
   hideReblogs: { id: 'account.hide_reblogs', defaultMessage: 'Hide reposts from @{name}' },
   showReblogs: { id: 'account.show_reblogs', defaultMessage: 'Show reposts from @{name}' },
   preferences: { id: 'column.preferences', defaultMessage: 'Preferences' },
-  follow_requests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
   blocks: { id: 'column.blocks', defaultMessage: 'Blocks' },
-  domain_blocks: { id: 'column.domain_blocks', defaultMessage: 'Domain blocks' },
   mutes: { id: 'column.mutes', defaultMessage: 'Mutes' },
   endorse: { id: 'account.endorse', defaultMessage: 'Feature on profile' },
   unendorse: { id: 'account.unendorse', defaultMessage: "Don't feature on profile" },
@@ -90,7 +79,7 @@ const messages = defineMessages({
     defaultMessage: 'Remove this follower',
   },
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
-  add_or_remove_from_list: {
+  addOrRemoveFromList: {
     id: 'account.add_or_remove_from_list',
     defaultMessage: 'Add or remove from lists',
   },
@@ -496,7 +485,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
     if (account.id === ownAccount.id) {
       menu.push({
-        text: intl.formatMessage(messages.edit_profile),
+        text: intl.formatMessage(messages.editProfile),
         to: '/settings/profile',
         icon: require('@phosphor-icons/core/regular/user.svg'),
       });
@@ -548,7 +537,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
         if (features.lists) {
           menu.push({
-            text: intl.formatMessage(messages.add_or_remove_from_list),
+            text: intl.formatMessage(messages.addOrRemoveFromList),
             action: onAddToList,
             icon: require('@phosphor-icons/core/regular/list-bullets.svg'),
           });
@@ -567,7 +556,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
         }
       } else if (features.lists && features.unrestrictedLists) {
         menu.push({
-          text: intl.formatMessage(messages.add_or_remove_from_list),
+          text: intl.formatMessage(messages.addOrRemoveFromList),
           action: onAddToList,
           icon: require('@phosphor-icons/core/regular/list-bullets.svg'),
         });

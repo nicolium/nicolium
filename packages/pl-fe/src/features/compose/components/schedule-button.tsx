@@ -8,8 +8,8 @@ import { useCompose } from '@/hooks/use-compose';
 import ComposeFormButton from './compose-form-button';
 
 const messages = defineMessages({
-  add_schedule: { id: 'schedule_button.add_schedule', defaultMessage: 'Schedule post for later' },
-  remove_schedule: { id: 'schedule_button.remove_schedule', defaultMessage: 'Post immediately' },
+  addSchedule: { id: 'schedule_button.add_schedule', defaultMessage: 'Schedule post for later' },
+  removeSchedule: { id: 'schedule_button.remove_schedule', defaultMessage: 'Post immediately' },
 });
 
 interface IScheduleButton {
@@ -41,7 +41,7 @@ const ScheduleButton: React.FC<IScheduleButton> = ({ composeId, disabled }) => {
   return (
     <ComposeFormButton
       icon={require('@phosphor-icons/core/regular/calendar-plus.svg')}
-      title={intl.formatMessage(active ? messages.remove_schedule : messages.add_schedule)}
+      title={intl.formatMessage(active ? messages.removeSchedule : messages.addSchedule)}
       active={active}
       disabled={disabled}
       onClick={handleClick}

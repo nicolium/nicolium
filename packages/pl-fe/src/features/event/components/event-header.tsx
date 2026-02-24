@@ -50,17 +50,17 @@ const messages = defineMessages({
   unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
   quotePost: { id: 'event.quote', defaultMessage: 'Quote event' },
   reblog: { id: 'event.reblog', defaultMessage: 'Repost event' },
-  reblog_private: { id: 'status.reblog_private', defaultMessage: 'Repost to original audience' },
-  cancel_reblog_private: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },
-  reblog_visibility_public: {
+  reblogPrivate: { id: 'status.reblog_private', defaultMessage: 'Repost to original audience' },
+  cancelReblogPrivate: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },
+  reblogVisibilityPublic: {
     id: 'status.reblog_visibility_public',
     defaultMessage: 'Public repost',
   },
-  reblog_visibility_unlisted: {
+  reblogVisibilityUnlisted: {
     id: 'status.reblog_visibility_unlisted',
     defaultMessage: 'Quiet public repost',
   },
-  reblog_visibility_private: {
+  reblogVisibilityPrivate: {
     id: 'status.reblog_visibility_private',
     defaultMessage: 'Followers-only repost',
   },
@@ -88,12 +88,6 @@ const messages = defineMessages({
     defaultMessage: 'Mark post not sensitive',
   },
   deleteStatus: { id: 'admin.statuses.actions.delete_status', defaultMessage: 'Delete post' },
-  deleteConfirm: { id: 'confirmations.delete_event.confirm', defaultMessage: 'Delete' },
-  deleteHeading: { id: 'confirmations.delete_event.heading', defaultMessage: 'Delete event' },
-  deleteMessage: {
-    id: 'confirmations.delete_event.message',
-    defaultMessage: 'Are you sure you want to delete this event?',
-  },
 });
 
 interface IEventHeader {
@@ -203,9 +197,16 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
   const handleDeleteClick = () => {
     openModal('CONFIRM', {
-      heading: intl.formatMessage(messages.deleteHeading),
-      message: intl.formatMessage(messages.deleteMessage),
-      confirm: intl.formatMessage(messages.deleteConfirm),
+      heading: (
+        <FormattedMessage id='confirmations.delete_event.heading' defaultMessage='Delete event' />
+      ),
+      message: (
+        <FormattedMessage
+          id='confirmations.delete_event.message'
+          defaultMessage='Are you sure you want to delete this event?'
+        />
+      ),
+      confirm: <FormattedMessage id='confirmations.delete_event.confirm' defaultMessage='Delete' />,
       onConfirm: () => dispatch(deleteStatus(status.id)),
     });
   };
@@ -288,21 +289,21 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
           ? {
               items: [
                 {
-                  text: intl.formatMessage(messages.reblog_visibility_public),
+                  text: intl.formatMessage(messages.reblogVisibilityPublic),
                   action: () => {
                     handleReblogClick('public');
                   },
                   icon: require('@phosphor-icons/core/regular/globe.svg'),
                 },
                 {
-                  text: intl.formatMessage(messages.reblog_visibility_unlisted),
+                  text: intl.formatMessage(messages.reblogVisibilityUnlisted),
                   action: () => {
                     handleReblogClick('unlisted');
                   },
                   icon: require('@phosphor-icons/core/regular/moon.svg'),
                 },
                 {
-                  text: intl.formatMessage(messages.reblog_visibility_private),
+                  text: intl.formatMessage(messages.reblogVisibilityPrivate),
                   action: () => {
                     handleReblogClick('private');
                   },
@@ -328,7 +329,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
     } else if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
       menu.push({
         text: intl.formatMessage(
-          status.reblogged ? messages.cancel_reblog_private : messages.reblog_private,
+          status.reblogged ? messages.cancelReblogPrivate : messages.reblogPrivate,
         ),
         action: () => {
           handleReblogClick();

@@ -15,14 +15,14 @@ import type { CustomEmoji as BaseCustomEmoji } from 'pl-api';
 
 const messages = defineMessages({
   emoji: { id: 'emoji_button.label', defaultMessage: 'Insert emoji' },
-  emoji_pick: { id: 'emoji_button.pick', defaultMessage: 'Pick an emoji…' },
-  emoji_oh_no: { id: 'emoji_button.oh_no', defaultMessage: 'Oh no!' },
-  emoji_search: { id: 'emoji_button.search', defaultMessage: 'Search…' },
-  emoji_not_found: { id: 'emoji_button.not_found', defaultMessage: 'No emojis found.' },
-  emoji_add_custom: { id: 'emoji_button.add_custom', defaultMessage: 'Add custom emoji' },
+  emojiPick: { id: 'emoji_button.pick', defaultMessage: 'Pick an emoji…' },
+  emojiOhNo: { id: 'emoji_button.oh_no', defaultMessage: 'Oh no!' },
+  emojiSearch: { id: 'emoji_button.search', defaultMessage: 'Search…' },
+  emojiNotFound: { id: 'emoji_button.not_found', defaultMessage: 'No emojis found.' },
+  emojiAddCustom: { id: 'emoji_button.add_custom', defaultMessage: 'Add custom emoji' },
   custom: { id: 'emoji_button.custom', defaultMessage: 'Custom' },
   recent: { id: 'emoji_button.recent', defaultMessage: 'Frequently used' },
-  search_results: { id: 'emoji_button.search_results', defaultMessage: 'Search results' },
+  searchResults: { id: 'emoji_button.search_results', defaultMessage: 'Search results' },
   people: { id: 'emoji_button.people', defaultMessage: 'People' },
   nature: { id: 'emoji_button.nature', defaultMessage: 'Nature' },
   food: { id: 'emoji_button.food', defaultMessage: 'Food & Drink' },
@@ -31,13 +31,13 @@ const messages = defineMessages({
   objects: { id: 'emoji_button.objects', defaultMessage: 'Objects' },
   symbols: { id: 'emoji_button.symbols', defaultMessage: 'Symbols' },
   flags: { id: 'emoji_button.flags', defaultMessage: 'Flags' },
-  skins_choose: { id: 'emoji_button.skins_choose', defaultMessage: 'Choose default skin tone' },
-  skins_1: { id: 'emoji_button.skins_1', defaultMessage: 'Default' },
-  skins_2: { id: 'emoji_button.skins_2', defaultMessage: 'Light' },
-  skins_3: { id: 'emoji_button.skins_3', defaultMessage: 'Medium-Light' },
-  skins_4: { id: 'emoji_button.skins_4', defaultMessage: 'Medium' },
-  skins_5: { id: 'emoji_button.skins_5', defaultMessage: 'Medium-Dark' },
-  skins_6: { id: 'emoji_button.skins_6', defaultMessage: 'Dark' },
+  skinsChoose: { id: 'emoji_button.skins_choose', defaultMessage: 'Choose default skin tone' },
+  skins1: { id: 'emoji_button.skins_1', defaultMessage: 'Default' },
+  skins2: { id: 'emoji_button.skins_2', defaultMessage: 'Light' },
+  skins3: { id: 'emoji_button.skins_3', defaultMessage: 'Medium-Light' },
+  skins4: { id: 'emoji_button.skins_4', defaultMessage: 'Medium' },
+  skins5: { id: 'emoji_button.skins_5', defaultMessage: 'Medium-Dark' },
+  skins6: { id: 'emoji_button.skins_6', defaultMessage: 'Dark' },
 });
 
 interface IEmojiPickerDropdown {
@@ -176,13 +176,13 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
   };
 
   const getI18n = () => ({
-    search: intl.formatMessage(messages.emoji_search),
-    pick: intl.formatMessage(messages.emoji_pick),
-    search_no_results_1: intl.formatMessage(messages.emoji_oh_no),
-    search_no_results_2: intl.formatMessage(messages.emoji_not_found),
-    add_custom: intl.formatMessage(messages.emoji_add_custom),
+    search: intl.formatMessage(messages.emojiSearch),
+    pick: intl.formatMessage(messages.emojiPick),
+    search_no_results_1: intl.formatMessage(messages.emojiOhNo),
+    search_no_results_2: intl.formatMessage(messages.emojiNotFound),
+    add_custom: intl.formatMessage(messages.emojiAddCustom),
     categories: {
-      search: intl.formatMessage(messages.search_results),
+      search: intl.formatMessage(messages.searchResults),
       frequent: intl.formatMessage(messages.recent),
       people: intl.formatMessage(messages.people),
       nature: intl.formatMessage(messages.nature),
@@ -195,13 +195,13 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
       custom: intl.formatMessage(messages.custom),
     },
     skins: {
-      choose: intl.formatMessage(messages.skins_choose),
-      1: intl.formatMessage(messages.skins_1),
-      2: intl.formatMessage(messages.skins_2),
-      3: intl.formatMessage(messages.skins_3),
-      4: intl.formatMessage(messages.skins_4),
-      5: intl.formatMessage(messages.skins_5),
-      6: intl.formatMessage(messages.skins_6),
+      choose: intl.formatMessage(messages.skinsChoose),
+      1: intl.formatMessage(messages.skins1),
+      2: intl.formatMessage(messages.skins2),
+      3: intl.formatMessage(messages.skins3),
+      4: intl.formatMessage(messages.skins4),
+      5: intl.formatMessage(messages.skins5),
+      6: intl.formatMessage(messages.skins6),
     },
   });
 
