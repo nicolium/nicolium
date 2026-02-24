@@ -33,12 +33,6 @@ importers:
       isows:
         specifier: ^1.0.7
         version: 1.0.7(ws@8.19.0)
-      lodash.omit:
-        specifier: ^4.5.0
-        version: 4.5.0
-      lodash.pick:
-        specifier: ^4.4.0
-        version: 4.4.0
       object-to-formdata:
         specifier: ^4.5.1
         version: 4.5.1
@@ -55,12 +49,6 @@ importers:
       '@types/http-link-header':
         specifier: ^1.0.7
         version: 1.0.7
-      '@types/lodash.omit':
-        specifier: ^4.5.9
-        version: 4.5.9
-      '@types/lodash.pick':
-        specifier: ^4.4.9
-        version: 4.4.9
       '@types/node':
         specifier: ^25.3.0
         version: 25.3.0
@@ -2800,12 +2788,6 @@ packages:
   '@types/leaflet@1.9.21':
     resolution: {integrity: sha512-TbAd9DaPGSnzp6QvtYngntMZgcRk+igFELwR2N99XZn7RXUdKgsXMR+28bUO0rPsWp8MIu/f47luLIQuSLYv/w==}
 
-  '@types/lodash.omit@4.5.9':
-    resolution: {integrity: sha512-zuAVFLUPJMOzsw6yawshsYGgq2hWUHtsZgeXHZmSFhaQQFC6EQ021uDKHkSjOpNhSvtNSU9165/o3o/Q51GpTw==}
-
-  '@types/lodash.pick@4.4.9':
-    resolution: {integrity: sha512-hDpr96x9xHClwy1KX4/RXRejqjDFTEGbEMT3t6wYSYeFDzxmMnSKB/xHIbktRlPj8Nii2g8L5dtFDRaNFBEzUQ==}
-
   '@types/lodash@4.17.20':
     resolution: {integrity: sha512-H3MHACvFUEiujabxhaI/ImO6gUrd8oOurg7LQtS7mbwIXA/cUqWrvBsaeJ23aZEPk1TAYkurjfMbSELfoCXlGA==}
 
@@ -4827,14 +4809,6 @@ packages:
 
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
-
-  lodash.omit@4.5.0:
-    resolution: {integrity: sha512-XeqSp49hNGmlkj2EJlfrQFIzQ6lXdNro9sddtQzcJY8QaoC2GO0DT7xaIokHeyM+mIT0mPMlPvkYzg2xCuHdZg==}
-    deprecated: This package is deprecated. Use destructuring assignment syntax instead.
-
-  lodash.pick@4.4.0:
-    resolution: {integrity: sha512-hXt6Ul/5yWjfklSGvLQl8vM//l3FtyHZeuelpzK6mm99pNvN9yTDruNZPEJZD1oWrqo+izBmB7oUfWgcCX7s4Q==}
-    deprecated: This package is deprecated. Use destructuring assignment syntax instead.
 
   lodash.sortby@4.7.0:
     resolution: {integrity: sha512-HDWXG8isMntAyRF5vZ7xKuEvOhT4AhlRt/3czTSjvGUxjYCBVRQY48ViDHyfYz9VIoBkW4TMGQNapx+l3RUwdA==}
@@ -9176,14 +9150,6 @@ snapshots:
     dependencies:
       '@types/geojson': 7946.0.16
 
-  '@types/lodash.omit@4.5.9':
-    dependencies:
-      '@types/lodash': 4.17.20
-
-  '@types/lodash.pick@4.4.9':
-    dependencies:
-      '@types/lodash': 4.17.20
-
   '@types/lodash@4.17.20': {}
 
   '@types/lodash@4.17.24': {}
@@ -11418,10 +11384,6 @@ snapshots:
   lodash.memoize@4.1.2: {}
 
   lodash.merge@4.6.2: {}
-
-  lodash.omit@4.5.0: {}
-
-  lodash.pick@4.4.0: {}
 
   lodash.sortby@4.7.0: {}
 

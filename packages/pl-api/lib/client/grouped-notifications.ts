@@ -1,10 +1,9 @@
-import omit from 'lodash.omit';
-import pick from 'lodash.pick';
 import * as v from 'valibot';
 
 import { accountSchema, groupedNotificationsResultsSchema } from '../entities';
 import { filteredArray } from '../entities/utils';
 import { type RequestMeta } from '../request';
+import { pick, omit } from '../utils';
 
 import type { PlApiBaseClient } from '../client-base';
 import type {
@@ -69,7 +68,7 @@ const _groupNotifications = (
         status_id: notification.status?.id,
         // @ts-expect-error used optional chaining
         target_id: notification.target?.id,
-      });
+      } as NotificationGroup);
     }
   }
 
@@ -224,15 +223,7 @@ const groupedNotifications = (
       }
 
       return client.notifications.getUnreadNotificationCount(
-        pick(params || {}, [
-          'max_id',
-          'since_id',
-          'limit',
-          'min_id',
-          'types',
-          'exclude_types',
-          'account_id',
-        ]),
+        pick(params || {}, ['limit', 'types', 'exclude_types', 'account_id']),
       );
     },
   };

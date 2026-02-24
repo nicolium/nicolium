@@ -1,6 +1,6 @@
-import pick from 'lodash.pick';
 import * as v from 'valibot';
 
+import { pick } from '../../utils';
 import { ruleSchema } from '../rule';
 import { statusWithoutAccountSchema } from '../status';
 import { datetimeSchema, filteredArray } from '../utils';

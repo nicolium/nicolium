@@ -1,6 +1,6 @@
-import pick from 'lodash.pick';
 import * as v from 'valibot';
 
+import { pick } from '../utils';
 import { isDefaultAvatar, isDefaultHeader } from '../utils/accounts';
 import { guessFqn } from '../utils/domain';
 
@@ -107,7 +107,7 @@ const preprocessAccount = v.transform((account: any) => {
     ...pick(account.akkoma || {}, ['permit_followback']),
     is_cat: isCat,
     speak_as_cat: speakAsCat,
-    ...(pick(account.other_settings || {}), ['birthday', 'location']),
+    ...pick(account.other_settings || {}, ['birthday', 'location']),
     __meta: pick(account, ['pleroma', 'source']),
     ...account,
     display_name:
