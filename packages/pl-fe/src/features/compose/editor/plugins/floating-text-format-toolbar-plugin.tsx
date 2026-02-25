@@ -63,6 +63,14 @@ const messages = defineMessages({
   },
   insertLink: { id: 'compose_form.lexical.insert_link', defaultMessage: 'Insert link' },
   blockType: { id: 'compose_form.lexical.block_type', defaultMessage: 'Change block type' },
+  paragraph: { id: 'compose_form.lexical.block_type.paragraph', defaultMessage: 'Normal' },
+  h1: { id: 'compose_form.lexical.block_type.h1', defaultMessage: 'Heading 1' },
+  h2: { id: 'compose_form.lexical.block_type.h2', defaultMessage: 'Heading 2' },
+  h3: { id: 'compose_form.lexical.block_type.h3', defaultMessage: 'Heading 3' },
+  bulletList: { id: 'compose_form.lexical.block_type.bullet', defaultMessage: 'Bulleted list' },
+  numberedList: { id: 'compose_form.lexical.block_type.number', defaultMessage: 'Numbered list' },
+  quote: { id: 'compose_form.lexical.block_type.quote', defaultMessage: 'Quote' },
+  codeBlock: { id: 'compose_form.lexical.block_type.code', defaultMessage: 'Code block' },
 });
 
 const blockTypeToIcon = {
@@ -217,6 +225,7 @@ const BlockTypeDropdown = ({
               onClick={formatParagraph}
               active={blockType === 'paragraph'}
               icon={blockTypeToIcon.paragraph}
+              aria-label={intl.formatMessage(messages.paragraph)}
             />
             {composeAllowHeadings && (
               <>
@@ -226,6 +235,7 @@ const BlockTypeDropdown = ({
                   }}
                   active={blockType === 'h1'}
                   icon={blockTypeToIcon.h1}
+                  aria-label={intl.formatMessage(messages.h1)}
                 />
                 <ToolbarButton
                   onClick={() => {
@@ -233,6 +243,7 @@ const BlockTypeDropdown = ({
                   }}
                   active={blockType === 'h2'}
                   icon={blockTypeToIcon.h2}
+                  aria-label={intl.formatMessage(messages.h2)}
                 />
                 <ToolbarButton
                   onClick={() => {
@@ -240,6 +251,7 @@ const BlockTypeDropdown = ({
                   }}
                   active={blockType === 'h3'}
                   icon={blockTypeToIcon.h3}
+                  aria-label={intl.formatMessage(messages.h3)}
                 />
               </>
             )}
@@ -247,21 +259,25 @@ const BlockTypeDropdown = ({
               onClick={formatBulletList}
               active={blockType === 'bullet'}
               icon={blockTypeToIcon.bullet}
+              aria-label={intl.formatMessage(messages.bulletList)}
             />
             <ToolbarButton
               onClick={formatNumberedList}
               active={blockType === 'number'}
               icon={blockTypeToIcon.number}
+              aria-label={intl.formatMessage(messages.numberedList)}
             />
             <ToolbarButton
               onClick={formatQuote}
               active={blockType === 'quote'}
               icon={blockTypeToIcon.quote}
+              aria-label={intl.formatMessage(messages.quote)}
             />
             <ToolbarButton
               onClick={formatCode}
               active={blockType === 'code'}
               icon={blockTypeToIcon.code}
+              aria-label={intl.formatMessage(messages.codeBlock)}
             />
           </div>
         )}
@@ -390,6 +406,7 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isBold}
             aria-label={intl.formatMessage(messages.formatBold)}
+            aria-label={intl.formatMessage(messages.formatBold)}
             icon={require('@phosphor-icons/core/regular/text-b.svg')}
           />
           <ToolbarButton
@@ -397,6 +414,7 @@ const TextFormatFloatingToolbar = ({
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
             }}
             active={isItalic}
+            aria-label={intl.formatMessage(messages.formatItalic)}
             aria-label={intl.formatMessage(messages.formatItalic)}
             icon={require('@phosphor-icons/core/regular/text-italic.svg')}
           />
@@ -406,6 +424,7 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isUnderline}
             aria-label={intl.formatMessage(messages.formatUnderline)}
+            aria-label={intl.formatMessage(messages.formatUnderline)}
             icon={require('@phosphor-icons/core/regular/text-underline.svg')}
           />
           <ToolbarButton
@@ -413,6 +432,7 @@ const TextFormatFloatingToolbar = ({
               editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');
             }}
             active={isStrikethrough}
+            aria-label={intl.formatMessage(messages.formatStrikethrough)}
             aria-label={intl.formatMessage(messages.formatStrikethrough)}
             icon={require('@phosphor-icons/core/regular/text-strikethrough.svg')}
           />
@@ -422,11 +442,13 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isCode}
             aria-label={intl.formatMessage(messages.insertCodeBlock)}
+            aria-label={intl.formatMessage(messages.insertCodeBlock)}
             icon={require('@phosphor-icons/core/regular/code.svg')}
           />
           <ToolbarButton
             onClick={insertLink}
             active={isLink}
+            aria-label={intl.formatMessage(messages.insertLink)}
             aria-label={intl.formatMessage(messages.insertLink)}
             icon={require('@phosphor-icons/core/regular/link-simple-horizontal.svg')}
           />
