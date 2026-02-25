@@ -127,7 +127,6 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, IButton>(
           href={href}
           target='_blank'
           rel='noopener'
-          tabIndex={-1}
         >
           {buttonChildren}
         </a>
