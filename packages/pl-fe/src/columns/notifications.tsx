@@ -17,6 +17,7 @@ import Notification from '@/features/notifications/components/notification';
 import PlaceholderNotification from '@/features/placeholder/components/placeholder-notification';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
+import { queryClient } from '@/queries/client';
 import {
   type FilterType,
   useMarkNotificationsReadMutation,
@@ -65,6 +66,9 @@ const FilterBar = () => {
   const onClick = (filterType: FilterType) => () => {
     changeSetting(['notifications', 'quickFilter', 'active'], filterType);
     dispatch(saveSettings());
+    if (filterType === selectedFilter) {
+      queryClient.refetchQueries({ queryKey: ['notifications', filterType], exact: true });
+    }
   };
 
   const items: Item[] = [
