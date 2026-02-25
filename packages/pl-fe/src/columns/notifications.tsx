@@ -294,6 +294,10 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
   }, []);
 
   useEffect(() => {
+    setTopNotification(undefined);
+  }, [activeFilter]);
+
+  useEffect(() => {
     if (topNotification || displayedNotifications.length === 0) return;
     setTopNotification(displayedNotifications[0].most_recent_notification_id);
   }, [displayedNotifications, topNotification]);
