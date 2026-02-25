@@ -41,7 +41,7 @@ const ChatTextarea = React.forwardRef<HTMLTextAreaElement, IChatTextarea>(
         </HStack>
       )}
 
-      <Textarea ref={ref} theme='transparent' {...rest} />
+      <Textarea className='px-3 py-2' ref={ref} theme='transparent' {...rest} />
     </div>
   ),
 );
