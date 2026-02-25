@@ -1,16 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import {
-  addPollOption,
-  changePollOption,
-  changePollSettings,
-  clearComposeSuggestions,
-  fetchComposeSuggestions,
-  removePoll,
-  removePollOption,
-  selectComposeSuggestion,
-} from '@/actions/compose';
 import AutosuggestInput from '@/components/autosuggest-input';
 import Button from '@/components/ui/button';
 import Divider from '@/components/ui/divider';
@@ -18,9 +8,9 @@ import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
+import { useComposeSuggestions } from '@/hooks/use-compose-suggestions';
 import { useInstance } from '@/hooks/use-instance';
+import { useCompose, useComposeActions } from '@/stores/compose';
 
 import DurationSelector from './duration-selector';
 
@@ -69,10 +59,12 @@ const Option: React.FC<IOption> = ({
   onRemovePoll,
   title,
 }) => {
-  const dispatch = useAppDispatch();
+  const { selectComposeSuggestion } = useComposeActions();
   const intl = useIntl();
 
-  const { suggestions, modifiedLanguage: language } = useCompose(composeId);
+  const [token, setToken] = useState('');
+  const suggestions = useComposeSuggestions(token);
+  const { modifiedLanguage: language } = useCompose(composeId);
 
   const handleOptionTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange(index, event.target.value);
@@ -86,10 +78,10 @@ const Option: React.FC<IOption> = ({
     }
   };
 
-  const onSuggestionsClearRequested = () => dispatch(clearComposeSuggestions(composeId));
+  const onSuggestionsClearRequested = () => setToken('');
 
   const onSuggestionsFetchRequested = (token: string) => {
-    dispatch(fetchComposeSuggestions(composeId, token));
+    setToken(token);
   };
 
   const onSuggestionSelected = (
@@ -98,9 +90,7 @@ const Option: React.FC<IOption> = ({
     value: AutoSuggestion,
   ) => {
     if (token && typeof token === 'string') {
-      dispatch(
-        selectComposeSuggestion(composeId, tokenStart, token, value, ['poll', 'options', index]),
-      );
+      selectComposeSuggestion(composeId, tokenStart, token, value, ['poll', 'options', index]);
     }
   };
 
@@ -146,7 +136,7 @@ interface IPollForm {
 }
 
 const PollForm: React.FC<IPollForm> = ({ composeId }) => {
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
   const intl = useIntl();
   const { configuration } = useInstance();
 
@@ -162,15 +152,40 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
   const { max_options: maxOptions, max_characters_per_option: maxOptionChars } =
     configuration.polls;
 
-  const onRemoveOption = (index: number) => dispatch(removePollOption(composeId, index));
+  const onRemoveOption = (index: number) =>
+    updateCompose(composeId, (draft) => {
+      if (!draft.poll) return;
+      draft.poll.options = draft.poll.options.filter((_, i) => i !== index);
+      draft.poll.options_map = draft.poll.options_map.filter((_, i) => i !== index);
+    });
   const onChangeOption = (index: number, title: string) =>
-    dispatch(changePollOption(composeId, index, title));
-  const handleAddOption = () => dispatch(addPollOption(composeId, ''));
-  const onChangeSettings = (expiresIn: number, isMultiple?: boolean) =>
-    dispatch(changePollSettings(composeId, expiresIn, isMultiple));
-  const handleSelectDuration = (value: number) => onChangeSettings(value, isMultiple);
-  const handleToggleMultiple = () => onChangeSettings(Number(expiresIn), !isMultiple);
-  const onRemovePoll = () => dispatch(removePoll(composeId));
+    updateCompose(composeId, (draft) => {
+      if (!draft.poll) return;
+      if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
+        draft.poll.options[index] = title;
+        if (draft.modifiedLanguage) draft.poll.options_map[index][draft.modifiedLanguage] = title;
+      }
+    });
+  const handleAddOption = () =>
+    updateCompose(composeId, (draft) => {
+      if (!draft.poll) return;
+      draft.poll.options.push('');
+      draft.poll.options_map.push(
+        Object.fromEntries(Object.entries(draft.textMap).map((key) => [key, ''])),
+      );
+    });
+  const handleSelectDuration = (value: number) =>
+    updateCompose(composeId, (draft) => {
+      if (draft.poll) draft.poll.expires_in = value;
+    });
+  const handleToggleMultiple = () =>
+    updateCompose(composeId, (draft) => {
+      if (draft.poll) draft.poll.multiple = !draft.poll.multiple;
+    });
+  const onRemovePoll = () =>
+    updateCompose(composeId, (draft) => {
+      draft.poll = null;
+    });
 
   if (!options) {
     return null;

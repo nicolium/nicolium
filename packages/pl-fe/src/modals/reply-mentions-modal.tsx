@@ -6,8 +6,8 @@ import Account from '@/features/reply-mentions/account';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useCompose } from '@/hooks/use-compose';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { statusToMentionsAccountIdsArray } from '@/reducers/compose';
 import { makeGetStatus } from '@/selectors';
+import { statusToMentionsAccountIdsArray } from '@/stores/compose';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 

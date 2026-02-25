@@ -1,9 +1,8 @@
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
-import { groupCompose, uploadCompose } from '@/actions/compose';
 import { fetchGroupTimeline } from '@/actions/timelines';
 import { useGroupStream } from '@/api/hooks/streaming/use-group-stream';
 import Avatar from '@/components/ui/avatar';
@@ -18,27 +17,30 @@ import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { makeGetStatusIds } from '@/selectors';
+import { useComposeActions, useUploadCompose } from '@/stores/compose';
 
 const getStatusIds = makeGetStatusIds();
 
 const GroupTimelinePage: React.FC = () => {
   const { groupId } = groupTimelineRoute.useParams();
 
-  const intl = useIntl();
+  const composeId = `group:${groupId}`;
+
   const { data: account } = useOwnAccount();
   const dispatch = useAppDispatch();
+  const uploadCompose = useUploadCompose(composeId);
+  const { updateCompose } = useComposeActions();
   const composer = useRef<HTMLDivElement>(null);
 
   const { data: group } = useGroupQuery(groupId);
 
-  const composeId = `group:${groupId}`;
   const canComposeGroupStatus = !!account && group?.relationship?.member;
   const featuredStatusIds = useAppSelector((state) =>
     getStatusIds(state, { type: `group:${group?.id}:pinned` }),
   );
 
   const { isDragging, isDraggedOver } = useDraggedFiles(composer, (files) => {
-    dispatch(uploadCompose(composeId, files, intl));
+    uploadCompose(files);
   });
 
   const handleLoadMore = (maxId: string) => {
@@ -50,7 +52,11 @@ const GroupTimelinePage: React.FC = () => {
   useEffect(() => {
     dispatch(fetchGroupTimeline(groupId, {}));
     // dispatch(fetchGroupTimeline(groupId, { pinned: true }));
-    dispatch(groupCompose(composeId, groupId));
+    updateCompose(composeId, (draft) => {
+      draft.visibility = 'group';
+      draft.groupId = groupId;
+      draft.caretPosition = null;
+    });
   }, [groupId]);
 
   if (!group) {

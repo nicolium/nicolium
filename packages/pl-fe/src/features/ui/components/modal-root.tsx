@@ -1,8 +1,7 @@
 import React, { Suspense, lazy } from 'react';
 
-import { cancelReplyCompose } from '@/actions/compose';
 import Base from '@/components/modal-root';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useComposeStore } from '@/stores/compose';
 import { useModals, useModalsActions } from '@/stores/modals';
 
 import ModalLoading from './modal-loading';
@@ -62,7 +61,6 @@ const ModalRoot: React.FC = () => {
   const renderLoading = (modalId: string) =>
     !['MEDIA', 'BOOST', 'CONFIRM'].includes(modalId) ? <ModalLoading /> : null;
 
-  const dispatch = useAppDispatch();
   const modals = useModals();
   const { closeModal } = useModalsActions();
   const { modalType: type, modalProps: props } = modals.at(-1) ?? {
@@ -74,7 +72,7 @@ const ModalRoot: React.FC = () => {
   const onClickClose = (type?: ModalType, all?: boolean) => {
     switch (type) {
       case 'COMPOSE':
-        dispatch(cancelReplyCompose());
+        useComposeStore.getState().actions.resetCompose('compose-modal');
         break;
       default:
         break;

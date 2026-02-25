@@ -7,19 +7,18 @@ import debounce from 'lodash/debounce';
 import { useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
-import {
-  addSuggestedLanguage,
-  addSuggestedQuote,
-  setEditorState,
-  suggestClearLink,
-  suggestHashtagCasing,
-} from '@/actions/compose';
 import { fetchStatus } from '@/actions/statuses';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
+import { useComposeStore } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
 import { getStatusIdsFromLinksInContent } from '@/utils/status';
 import Purify from '@/utils/url-purify';
+
+import type { store } from '@/store';
+
+let lazyStore: typeof store;
+import('@/store').then(({ store }) => (lazyStore = store)).catch(() => {});
 
 import { TRANSFORMERS } from '../transformers';
 
@@ -38,54 +37,55 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
   const [editor] = useLexicalComposerContext();
   const features = useFeatures();
   const { urlPrivacy, ignoreHashtagCasingSuggestions } = useSettings();
+  const { actions } = useComposeStore.getState();
 
   const checkUrls = useCallback(
     debounce((editorState: EditorState) => {
-      dispatch((_, getState) => {
-        if (!urlPrivacy.clearLinksInCompose) return;
+      if (!urlPrivacy.clearLinksInCompose) return;
 
-        const state = getState();
-        const compose = state.compose[composeId];
+      const compose = actions.getCompose(composeId);
 
-        editorState.read(() => {
-          const compareUrl = (url: string) => {
-            const cleanUrl = Purify.clearUrl(url, true, false);
-            return {
-              originalUrl: url,
-              cleanUrl,
-              isDirty: cleanUrl !== url,
-            };
+      editorState.read(() => {
+        const compareUrl = (url: string) => {
+          const cleanUrl = Purify.clearUrl(url, true, false);
+          return {
+            originalUrl: url,
+            cleanUrl,
+            isDirty: cleanUrl !== url,
           };
+        };
 
-          if (compose.clearLinkSuggestion?.key) {
-            const node = $getNodeByKey(compose.clearLinkSuggestion.key);
-            const url = (node as LinkNode | null)?.getURL?.();
-            if (!url || node === null || !compareUrl(url).isDirty) {
-              dispatch(suggestClearLink(composeId, null));
-            } else {
-              return;
-            }
+        if (compose.clearLinkSuggestion?.key) {
+          const node = $getNodeByKey(compose.clearLinkSuggestion.key);
+          const url = (node as LinkNode | null)?.getURL?.();
+          if (!url || node === null || !compareUrl(url).isDirty) {
+            actions.updateCompose(composeId, (draft) => {
+              draft.clearLinkSuggestion = null;
+            });
+          } else {
+            return;
+          }
+        }
+
+        const links = [...$nodesOfType(AutoLinkNode), ...$nodesOfType(LinkNode)];
+
+        for (const link of links) {
+          if (compose.dismissedClearLinksSuggestions.includes(link.getKey())) {
+            continue;
           }
 
-          const links = [...$nodesOfType(AutoLinkNode), ...$nodesOfType(LinkNode)];
-
-          for (const link of links) {
-            if (compose.dismissedClearLinksSuggestions.includes(link.getKey())) {
-              continue;
-            }
-
-            const { originalUrl, cleanUrl, isDirty } = compareUrl(link.getURL());
-            if (!isDirty) {
-              continue;
-            }
-
-            if (isDirty) {
-              return dispatch(
-                suggestClearLink(composeId, { key: link.getKey(), originalUrl, cleanUrl }),
-              );
-            }
+          const { originalUrl, cleanUrl, isDirty } = compareUrl(link.getURL());
+          if (!isDirty) {
+            continue;
           }
-        });
+
+          if (isDirty) {
+            actions.updateCompose(composeId, (draft) => {
+              draft.clearLinkSuggestion = { key: link.getKey(), originalUrl, cleanUrl };
+            });
+            return;
+          }
+        }
       });
     }, 2000),
     [urlPrivacy.clearLinksInCompose],
@@ -93,27 +93,28 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
 
   const checkHashtagCasingSuggestions = useCallback(
     debounce((editorState: EditorState) => {
-      dispatch((_, getState) => {
-        if (ignoreHashtagCasingSuggestions) return;
+      if (ignoreHashtagCasingSuggestions) return;
 
-        const state = getState();
-        const compose = state.compose[composeId];
+      const compose = actions.getCompose(composeId);
 
-        if (compose.hashtagCasingSuggestionIgnored) return;
+      if (compose.hashtagCasingSuggestionIgnored) return;
 
-        editorState.read(() => {
-          const hashtagNodes = $nodesOfType(HashtagNode);
+      editorState.read(() => {
+        const hashtagNodes = $nodesOfType(HashtagNode);
 
-          for (const tag of hashtagNodes) {
-            const text = tag.getTextContent();
+        for (const tag of hashtagNodes) {
+          const text = tag.getTextContent();
 
-            if (text.length > 10 && text.toLowerCase() === text && !text.match(/[0-9]/)) {
-              dispatch(suggestHashtagCasing(composeId, text));
-              return;
-            }
+          if (text.length > 10 && text.toLowerCase() === text && !text.match(/[0-9]/)) {
+            actions.updateCompose(composeId, (draft) => {
+              draft.hashtagCasingSuggestion = text;
+            });
+            return;
           }
+        }
 
-          dispatch(suggestHashtagCasing(composeId, null));
+        actions.updateCompose(composeId, (draft) => {
+          draft.hashtagCasingSuggestion = null;
         });
       });
     }, 1000),
@@ -122,19 +123,19 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
 
   const getQuoteSuggestions = useCallback(
     debounce((text: string) => {
-      dispatch(async (_, getState) => {
-        const state = getState();
-        const compose = state.compose[composeId];
+      const compose = actions.getCompose(composeId);
 
-        if (!features.quotePosts || compose?.quoteId) return;
+      if (!features.quotePosts || compose?.quoteId) return;
 
-        const ids = getStatusIdsFromLinksInContent(text);
+      const ids = getStatusIdsFromLinksInContent(text);
 
+      (async () => {
         let quoteId: string | undefined;
 
         for (const id of ids) {
           if (compose?.dismissedQuotes.includes(id)) continue;
 
+          const state = lazyStore.getState();
           if (state.statuses[id]) {
             quoteId = id;
             break;
@@ -148,24 +149,26 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
           }
         }
 
-        if (quoteId) dispatch(addSuggestedQuote(composeId, quoteId));
-      });
+        if (quoteId)
+          actions.updateCompose(composeId, (draft) => {
+            draft.quoteId = quoteId!;
+          });
+      })();
     }, 2000),
     [],
   );
 
   const detectLanguage = useCallback(
     debounce((text: string) => {
-      dispatch(async (dispatch, getState) => {
-        const state = getState();
-        const compose = state.compose[composeId];
+      const compose = actions.getCompose(composeId);
 
-        if (!features.postLanguages || features.languageDetection || compose?.language) return;
+      if (!features.postLanguages || features.languageDetection || compose?.language) return;
 
-        const wordsLength = text.split(/\s+/).length;
+      const wordsLength = text.split(/\s+/).length;
 
-        if (wordsLength < 4) return;
+      if (wordsLength < 4) return;
 
+      (async () => {
         if (!lidModel) {
           // eslint-disable-next-line import/extensions
           const { getLIDModel } = await import('fasttext.wasm.js/common');
@@ -175,9 +178,11 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
         const { alpha2, possibility } = await lidModel.identify(text.replace(/\s+/i, ' '));
 
         if (alpha2 && possibility > 0.5) {
-          dispatch(addSuggestedLanguage(composeId, alpha2));
+          actions.updateCompose(composeId, (draft) => {
+            draft.suggestedLanguage = alpha2;
+          });
         }
-      });
+      })();
     }, 750),
     [],
   );
@@ -192,7 +197,15 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
         }
         const isEmpty = text === '';
         const data = isEmpty ? null : JSON.stringify(editorState.toJSON());
-        dispatch(setEditorState(composeId, data, text));
+        actions.updateCompose(composeId, (draft) => {
+          if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
+            draft.editorState = data as string;
+            draft.text = text;
+          } else if (draft.modifiedLanguage) {
+            draft.editorStateMap[draft.modifiedLanguage] = data as string;
+            draft.textMap[draft.modifiedLanguage] = text;
+          }
+        });
         checkUrls(editorState);
         checkHashtagCasingSuggestions(editorState);
         getQuoteSuggestions(plainText);

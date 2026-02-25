@@ -2,12 +2,11 @@ import { useMatch } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { groupComposeModal } from '@/actions/compose';
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useGroupQuery } from '@/queries/groups/use-group';
+import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 
 import { layouts } from '../router';
@@ -47,14 +46,14 @@ const HomeComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
 };
 
 const GroupComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
-  const dispatch = useAppDispatch();
+  const { groupComposeModal } = useComposeActions();
   const match = useMatch({ from: layouts.group.id, shouldThrow: false });
   const { data: group } = useGroupQuery(match?.params.groupId);
 
   if (!group) return null;
 
   const onOpenCompose = () => {
-    dispatch(groupComposeModal(group));
+    groupComposeModal(group);
   };
 
   return (

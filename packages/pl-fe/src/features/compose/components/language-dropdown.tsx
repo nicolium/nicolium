@@ -3,19 +3,12 @@ import fuzzysort from 'fuzzysort';
 import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import {
-  addComposeLanguage,
-  changeComposeLanguage,
-  changeComposeModifiedLanguage,
-  deleteComposeLanguage,
-} from '@/actions/compose';
 import DropdownMenu from '@/components/dropdown-menu';
 import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
 import { type Language, languages as languagesObject } from '@/features/preferences';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
 import { useFeatures } from '@/hooks/use-features';
+import { useCompose, useComposeActions } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
 
 const getFrequentlyUsedLanguages = (languageCounters: Record<string, number>) =>
@@ -53,7 +46,7 @@ const getLanguageDropdown =
   ({ handleClose: handleMenuClose }) => {
     const intl = useIntl();
     const features = useFeatures();
-    const dispatch = useAppDispatch();
+    const { updateCompose } = useComposeActions();
     const settings = useSettings();
     const frequentlyUsedLanguages = useMemo(
       () => getFrequentlyUsedLanguages(settings.frequentlyUsedLanguages),
@@ -75,9 +68,14 @@ const getLanguageDropdown =
       if (Object.keys(textMap).length) {
         if (!(value in textMap || language === value)) return;
 
-        dispatch(changeComposeModifiedLanguage(composeId, value));
+        updateCompose(composeId, (draft) => {
+          draft.modifiedLanguage = value;
+        });
       } else {
-        dispatch(changeComposeLanguage(composeId, value));
+        updateCompose(composeId, (draft) => {
+          draft.language = value;
+          draft.modifiedLanguage = value;
+        });
       }
 
       e.preventDefault();
@@ -93,7 +91,15 @@ const getLanguageDropdown =
       e.preventDefault();
       e.stopPropagation();
 
-      dispatch(addComposeLanguage(composeId, value));
+      updateCompose(composeId, (draft) => {
+        draft.editorStateMap[value] = draft.editorState;
+        draft.textMap[value] = draft.text;
+        draft.spoilerTextMap[value] = draft.spoilerText;
+        if (draft.poll)
+          draft.poll.options_map.forEach(
+            (option, key) => (option[value] = draft.poll!.options[key]),
+          );
+      });
     };
 
     const handleDeleteLanguageClick: React.EventHandler<any> = (e: MouseEvent | KeyboardEvent) => {
@@ -104,7 +110,11 @@ const getLanguageDropdown =
       e.preventDefault();
       e.stopPropagation();
 
-      dispatch(deleteComposeLanguage(composeId, value));
+      updateCompose(composeId, (draft) => {
+        delete draft.editorStateMap[value];
+        delete draft.textMap[value];
+        delete draft.spoilerTextMap[value];
+      });
     };
 
     const handleClear: React.MouseEventHandler = (e) => {

@@ -1,9 +1,7 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { setComposeShowLocationPicker } from '@/actions/compose';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
+import { useCompose, useComposeActions } from '@/stores/compose';
 
 import ComposeFormButton from './compose-form-button';
 
@@ -24,7 +22,7 @@ interface ILocationButton {
 
 const LocationButton: React.FC<ILocationButton> = ({ composeId }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
 
   const compose = useCompose(composeId);
 
@@ -32,11 +30,12 @@ const LocationButton: React.FC<ILocationButton> = ({ composeId }) => {
   const active = compose.showLocationPicker;
 
   const onClick = () => {
-    if (active) {
-      dispatch(setComposeShowLocationPicker(composeId, false));
-    } else {
-      dispatch(setComposeShowLocationPicker(composeId, true));
-    }
+    updateCompose(composeId, (draft) => {
+      draft.showLocationPicker = !draft.showLocationPicker;
+      if (!draft.showLocationPicker) {
+        draft.location = null;
+      }
+    });
   };
 
   if (unavailable) {

@@ -9,7 +9,6 @@ import {
   MessageDescriptor,
 } from 'react-intl';
 
-import { mentionCompose, replyCompose } from '@/actions/compose';
 import AttachmentThumbs from '@/components/attachment-thumbs';
 import HoverAccountWrapper from '@/components/hover-account-wrapper';
 import Icon from '@/components/icon';
@@ -22,7 +21,6 @@ import AccountContainer from '@/containers/account-container';
 import StatusContainer from '@/containers/status-container';
 import Emojify from '@/features/emoji/emojify';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useInstance } from '@/hooks/use-instance';
 import { useLoggedIn } from '@/hooks/use-logged-in';
@@ -33,6 +31,7 @@ import {
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { makeGetNotification } from '@/selectors';
+import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMetaActions } from '@/stores/status-meta';
@@ -288,7 +287,7 @@ const getNotificationStatus = (
 const Notification: React.FC<INotification> = (props) => {
   const { onMoveUp, onMoveDown, compact } = props;
 
-  const dispatch = useAppDispatch();
+  const { mentionCompose, replyCompose } = useComposeActions();
 
   const getNotification = useCallback(makeGetNotification(), []);
 
@@ -336,7 +335,7 @@ const Notification: React.FC<INotification> = (props) => {
     (e?: KeyboardEvent) => {
       e?.preventDefault();
 
-      dispatch(mentionCompose(account));
+      mentionCompose(account);
     },
     [account],
   );
@@ -346,9 +345,9 @@ const Notification: React.FC<INotification> = (props) => {
       e?.preventDefault();
 
       if (status) {
-        dispatch(replyCompose(status, account));
+        replyCompose(status, account);
       } else {
-        dispatch(mentionCompose(account));
+        mentionCompose(account);
       }
     },
     [account],

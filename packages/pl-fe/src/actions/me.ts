@@ -1,6 +1,7 @@
 import { selectAccount } from '@/queries/accounts/selectors';
 import { setSentryAccount } from '@/sentry';
 import KVStore from '@/storage/kv-store';
+import { useComposeStore } from '@/stores/compose';
 import { useSettingsStore } from '@/stores/settings';
 import { getAuthUserId, getAuthUserUrl } from '@/utils/auth';
 
@@ -89,6 +90,7 @@ const fetchMeSuccess = (account: CredentialAccount) => {
   setSentryAccount(account);
 
   useSettingsStore.getState().actions.loadUserSettings(account.settings_store?.[FE_NAME]);
+  useComposeStore.getState().actions.importDefaultSettings(account);
 
   return {
     type: ME_FETCH_SUCCESS,
@@ -109,6 +111,7 @@ interface MePatchSuccessAction {
 
 const patchMeSuccess = (me: CredentialAccount) => (dispatch: AppDispatch) => {
   dispatch(importEntities({ accounts: [me] }));
+  useComposeStore.getState().actions.importDefaultSettings(me);
   dispatch<MePatchSuccessAction>({
     type: ME_PATCH_SUCCESS,
     me,

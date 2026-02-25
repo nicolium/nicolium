@@ -4,17 +4,6 @@ import React, { Suspense, useCallback, useEffect, useRef, useState } from 'react
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { length } from 'stringz';
 
-import {
-  submitCompose,
-  clearComposeSuggestions,
-  fetchComposeSuggestions,
-  selectComposeSuggestion,
-  uploadCompose,
-  ignoreClearLinkSuggestion,
-  suggestClearLink,
-  resetCompose,
-  changeComposeRedactingOverwrite,
-} from '@/actions/compose';
 import DropdownMenu from '@/components/dropdown-menu';
 import List, { ListItem } from '@/components/list';
 import Icon from '@/components/ui/icon';
@@ -22,12 +11,16 @@ import SvgIcon from '@/components/ui/svg-icon';
 import Toggle from '@/components/ui/toggle';
 import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
 import { ComposeEditor } from '@/features/ui/util/async-components';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/hooks/use-instance';
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
+import {
+  useCompose,
+  useComposeActions,
+  useUploadCompose,
+  useSubmitCompose,
+} from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
@@ -61,7 +54,6 @@ import UploadForm from './upload-form';
 import VisualCharacterCounter from './visual-character-counter';
 import Warning from './warning';
 
-import type { AutoSuggestion } from '@/components/autosuggest-input';
 import type { Menu } from '@/components/dropdown-menu';
 import type { Emoji } from '@/features/emoji';
 import type { LinkNode } from '@lexical/link';
@@ -152,11 +144,13 @@ const ComposeForm = <ID extends string>({
   compact,
 }: IComposeForm<ID>) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const { configuration } = useInstance();
   const { closeModal } = useModalsActions();
+  const actions = useComposeActions();
 
   const compose = useCompose(id);
+  const uploadCompose = useUploadCompose(id);
+  const submitCompose = useSubmitCompose(id);
   const maxTootChars = configuration.statuses.max_characters;
   const features = useFeatures();
   const persistDraftStatus = usePersistDraftStatus();
@@ -230,19 +224,17 @@ const ComposeForm = <ID extends string>({
     if (!canSubmit) return;
     e?.preventDefault();
 
-    dispatch(
-      submitCompose(id, {
-        onSuccess: () => {
-          editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
-        },
-      }),
-    );
+    submitCompose({
+      onSuccess: () => {
+        editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
+      },
+    });
   };
 
   const handlePreview = (e?: React.FormEvent) => {
     e?.preventDefault();
 
-    dispatch(submitCompose(id, {}, true));
+    submitCompose({ preview: true });
   };
 
   const handleSaveDraft = (e?: React.FormEvent) => {
@@ -250,29 +242,13 @@ const ComposeForm = <ID extends string>({
 
     persistDraftStatus(id);
     closeModal('COMPOSE');
-    dispatch(resetCompose(id));
+    actions.resetCompose(id);
     editorRef.current?.dispatchCommand(CLEAR_EDITOR_COMMAND, undefined);
 
     toast.success(messages.draftSaved, {
       actionLabel: messages.view,
       actionLinkOptions: { to: '/draft_statuses' },
     });
-  };
-
-  const onSuggestionsClearRequested = () => {
-    dispatch(clearComposeSuggestions(id));
-  };
-
-  const onSuggestionsFetchRequested = (token: string | number) => {
-    dispatch(fetchComposeSuggestions(id, token as string));
-  };
-
-  const onSpoilerSuggestionSelected = (
-    tokenStart: number,
-    token: string | null,
-    value: AutoSuggestion,
-  ) => {
-    dispatch(selectComposeSuggestion(id, tokenStart, token, value, ['spoiler_text']));
   };
 
   const handleEmojiPick = (data: Emoji) => {
@@ -285,7 +261,7 @@ const ComposeForm = <ID extends string>({
   };
 
   const onPaste = (files: FileList) => {
-    dispatch(uploadCompose(id, files, intl));
+    uploadCompose(files);
   };
 
   const onAcceptClearLinkSuggestion = (key: string) => {
@@ -307,16 +283,25 @@ const ComposeForm = <ID extends string>({
           textNode.setTextContent(suggestion.cleanUrl);
         }
       }
-      dispatch(suggestClearLink(id, null));
+      actions.updateCompose(id, (draft) => {
+        draft.clearLinkSuggestion = null;
+      });
     });
   };
 
   const onRejectClearLinkSuggestion = (key: string) => {
-    dispatch(ignoreClearLinkSuggestion(id, key));
+    actions.updateCompose(id, (draft) => {
+      if (draft.clearLinkSuggestion?.key === key) {
+        draft.clearLinkSuggestion = null;
+      }
+      draft.dismissedClearLinksSuggestions.push(key);
+    });
   };
 
   const handleChangeRedactingOverwrite: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    dispatch(changeComposeRedactingOverwrite(id, e.target.checked));
+    actions.updateCompose(id, (draft) => {
+      draft.redactingOverwrite = e.target.checked;
+    });
   };
 
   useEffect(() => {
@@ -457,13 +442,7 @@ const ComposeForm = <ID extends string>({
       )}
 
       {features.spoilers && (
-        <SpoilerInput
-          composeId={id}
-          onSuggestionsFetchRequested={onSuggestionsFetchRequested}
-          onSuggestionsClearRequested={onSuggestionsClearRequested}
-          onSuggestionSelected={onSpoilerSuggestionSelected}
-          theme={transparent ? 'transparent' : 'normal'}
-        />
+        <SpoilerInput composeId={id} theme={transparent ? 'transparent' : 'normal'} />
       )}
 
       <div>

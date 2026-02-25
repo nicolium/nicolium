@@ -4,12 +4,16 @@ import React, { useCallback, useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { redactStatus } from '@/actions/admin';
-import { directCompose, mentionCompose, quoteCompose, replyCompose } from '@/actions/compose';
 import { emojiReact, unEmojiReact } from '@/actions/emoji-reacts';
 import { deleteStatusModal, toggleStatusSensitivityModal } from '@/actions/moderation';
 import { initReport, ReportableEntities } from '@/actions/reports';
 import { changeSetting } from '@/actions/settings';
-import { deleteStatus, editStatus, toggleMuteStatus } from '@/actions/statuses';
+import {
+  deleteStatus,
+  deleteStatusFromGroup,
+  editStatus,
+  toggleMuteStatus,
+} from '@/actions/statuses';
 import DropdownMenu from '@/components/dropdown-menu';
 import StatusActionButton from '@/components/status-action-button';
 import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
@@ -40,6 +44,7 @@ import {
   useUnpinStatus,
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
+import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
@@ -332,7 +337,7 @@ const ReplyButton: React.FC<IReplyButton> = ({
   onOpenUnauthorizedModal,
   rebloggedBy,
 }) => {
-  const dispatch = useAppDispatch();
+  const { replyCompose } = useComposeActions();
   const intl = useIntl();
 
   const canReply = useCanInteract(status, 'can_reply');
@@ -354,7 +359,7 @@ const ReplyButton: React.FC<IReplyButton> = ({
 
   const handleReplyClick: React.MouseEventHandler = (e) => {
     if (me) {
-      dispatch(replyCompose(status, rebloggedBy, canReply.approvalRequired ?? false));
+      replyCompose(status, rebloggedBy, canReply.approvalRequired ?? false);
     } else {
       onOpenUnauthorizedModal('REPLY');
     }
@@ -405,7 +410,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
   onOpenUnauthorizedModal,
   publicStatus,
 }) => {
-  const dispatch = useAppDispatch();
+  const { quoteCompose } = useComposeActions();
   const features = useFeatures();
   const intl = useIntl();
 
@@ -486,7 +491,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
 
   const handleQuoteClick: React.EventHandler<React.MouseEvent> = (e) => {
     if (me) {
-      dispatch(quoteCompose(status, canQuote.approvalRequired || false));
+      quoteCompose(status, canQuote.approvalRequired || false);
     } else {
       onOpenUnauthorizedModal('REBLOG');
     }
@@ -723,6 +728,7 @@ const MenuButton: React.FC<IMenuButton> = ({
   const intl = useIntl();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { mentionCompose, directCompose } = useComposeActions();
   const match = useMatch({ from: layouts.group.id, shouldThrow: false });
   const { boostModal } = useSettings();
   const client = useClient();
@@ -788,7 +794,7 @@ const MenuButton: React.FC<IMenuButton> = ({
 
     const doDeleteStatus = (withRedraft = false) => {
       if (!deleteModal) {
-        dispatch(deleteStatus(status.id, undefined, withRedraft));
+        dispatch(deleteStatus(status.id, withRedraft));
       } else {
         openModal('CONFIRM', {
           heading: intl.formatMessage(
@@ -800,7 +806,7 @@ const MenuButton: React.FC<IMenuButton> = ({
           confirm: intl.formatMessage(
             withRedraft ? messages.redraftConfirm : messages.deleteConfirm,
           ),
-          onConfirm: () => dispatch(deleteStatus(status.id, undefined, withRedraft)),
+          onConfirm: () => dispatch(deleteStatus(status.id, withRedraft)),
         });
       }
     };
@@ -840,11 +846,11 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleMentionClick: React.EventHandler<React.MouseEvent> = (e) => {
-      dispatch(mentionCompose(status.account));
+      mentionCompose(status.account);
     };
 
     const handleDirectClick: React.EventHandler<React.MouseEvent> = (e) => {
-      dispatch(directCompose(status.account));
+      directCompose(status.account);
     };
 
     const handleChatClick: React.EventHandler<React.MouseEvent> = (e) => {
@@ -936,7 +942,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         }),
         confirm: intl.formatMessage(messages.deleteConfirm),
         onConfirm: () => {
-          dispatch(deleteStatus(status.id, group?.id));
+          dispatch(deleteStatusFromGroup(status.id, group!.id));
         },
       });
     };

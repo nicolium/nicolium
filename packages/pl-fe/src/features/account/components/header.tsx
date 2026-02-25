@@ -6,7 +6,6 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import { mentionCompose, directCompose } from '@/actions/compose';
 import { initReport, ReportableEntities } from '@/actions/reports';
 import Account from '@/components/account';
 import AltIndicator from '@/components/alt-indicator';
@@ -43,6 +42,7 @@ import {
   blockDomainMutationOptions,
   unblockDomainMutationOptions,
 } from '@/queries/settings/domain-blocks';
+import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
@@ -166,6 +166,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const intl = useIntl();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { mentionCompose, directCompose } = useComposeActions();
   const client = useClient();
 
   const features = useFeatures();
@@ -228,11 +229,11 @@ const Header: React.FC<IHeader> = ({ account }) => {
   };
 
   const onMention = () => {
-    dispatch(mentionCompose(account));
+    mentionCompose(account);
   };
 
   const onDirect = () => {
-    dispatch(directCompose(account));
+    directCompose(account);
   };
 
   const onReblogToggle = () => {

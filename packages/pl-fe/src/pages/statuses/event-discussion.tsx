@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import { eventDiscussionCompose } from '@/actions/compose';
 import { fetchStatusWithContext } from '@/actions/statuses';
 import MissingIndicator from '@/components/missing-indicator';
 import ScrollableList from '@/components/scrollable-list';
@@ -15,6 +14,7 @@ import { ComposeForm } from '@/features/ui/util/async-components';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { makeGetStatus } from '@/selectors';
+import { useComposeActions } from '@/stores/compose';
 import { useDescendantsIds } from '@/stores/contexts';
 import { selectChild } from '@/utils/scroll-utils';
 
@@ -25,6 +25,7 @@ const EventDiscussionPage: React.FC = () => {
 
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const { eventDiscussionCompose } = useComposeActions();
 
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector((state) => getStatus(state, { id: statusId }));
@@ -51,7 +52,7 @@ const EventDiscussionPage: React.FC = () => {
   }, [statusId]);
 
   useEffect(() => {
-    if (isLoaded && me) dispatch(eventDiscussionCompose(`reply:${statusId}`, status!));
+    if (isLoaded && me) eventDiscussionCompose(`reply:${statusId}`, status!);
   }, [isLoaded, me]);
 
   const handleMoveUp = (id: string) => {

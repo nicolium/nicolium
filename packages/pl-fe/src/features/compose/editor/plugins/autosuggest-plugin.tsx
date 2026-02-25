@@ -32,11 +32,10 @@ import React, {
 } from 'react';
 import ReactDOM from 'react-dom';
 
-import { clearComposeSuggestions, fetchComposeSuggestions } from '@/actions/compose';
 import { saveSettings } from '@/actions/settings';
 import AutosuggestEmoji from '@/components/autosuggest-emoji';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
+import { useComposeSuggestions } from '@/hooks/use-compose-suggestions';
 import { queryClient } from '@/queries/client';
 import { useSettingsStoreActions } from '@/stores/settings';
 import { textAtCursorMatchesToken } from '@/utils/suggestions';
@@ -45,10 +44,9 @@ import AutosuggestAccount from '../../components/autosuggest-account';
 import { $createEmojiNode } from '../nodes/emoji-node';
 import { $createMentionNode } from '../nodes/mention-node';
 
+import type { AutoSuggestion } from '@/components/autosuggest-input';
 import type { Emoji } from '@/features/emoji';
 import type { Account } from 'pl-api';
-
-type AutoSuggestion = string | Emoji;
 
 type QueryMatch = {
   leadOffset: number;
@@ -264,23 +262,22 @@ const useMenuAnchorRef = (
 };
 
 type AutosuggestPluginProps = {
-  composeId: string;
   suggestionsHidden: boolean;
   setSuggestionsHidden: (value: boolean) => void;
 };
 
 const AutosuggestPlugin = ({
-  composeId,
   suggestionsHidden,
   setSuggestionsHidden,
 }: AutosuggestPluginProps): React.JSX.Element | null => {
   const { rememberEmojiUse } = useSettingsStoreActions();
-  const { suggestions } = useCompose(composeId);
   const dispatch = useAppDispatch();
 
   const [editor] = useLexicalComposerContext();
   const [resolution, setResolution] = useState<Resolution | null>(null);
   const [selectedSuggestion, setSelectedSuggestion] = useState(0);
+  const [token, setToken] = useState('');
+  const suggestions = useComposeSuggestions(token);
   const anchorElementRef = useMenuAnchorRef(resolution, setResolution);
 
   const handleSelectSuggestion: React.MouseEventHandler<HTMLDivElement> = (e) => {
@@ -293,39 +290,39 @@ const AutosuggestPlugin = ({
     const suggestion = suggestions[index];
 
     editor.update(() => {
-      dispatch((dispatch, getState) => {
-        const state = editor.getEditorState();
-        const node = (state._selection as RangeSelection)?.anchor?.getNode();
-        const { leadOffset, matchingString } = resolution!.match;
-        /** Offset for the beginning of the matched text, including the token. */
-        const offset = leadOffset - 1;
+      const state = editor.getEditorState();
+      const node = (state._selection as RangeSelection)?.anchor?.getNode();
+      const { leadOffset, matchingString } = resolution!.match;
+      /** Offset for the beginning of the matched text, including the token. */
+      const offset = leadOffset - 1;
 
-        /** Replace the matched text with the given node. */
-        const replaceMatch = (replaceWith: LexicalNode) => {
-          const result = (node as TextNode).splitText(offset, offset + matchingString.length);
-          const textNode = result[1] ?? result[0];
-          const replacedNode = textNode.replace(replaceWith);
-          replacedNode.insertAfter(new TextNode(' '));
-          replacedNode.selectNext();
-        };
+      /** Replace the matched text with the given node. */
+      const replaceMatch = (replaceWith: LexicalNode) => {
+        const result = (node as TextNode).splitText(offset, offset + matchingString.length);
+        const textNode = result[1] ?? result[0];
+        const replacedNode = textNode.replace(replaceWith);
+        replacedNode.insertAfter(new TextNode(' '));
+        replacedNode.selectNext();
+      };
 
-        if (typeof suggestion === 'object') {
-          if (!suggestion.id) return;
+      if (typeof suggestion === 'object' && 'id' in suggestion) {
+        if (!suggestion.id) return;
 
-          rememberEmojiUse(suggestion);
-          dispatch(saveSettings());
+        rememberEmojiUse(suggestion as Emoji);
+        dispatch(saveSettings());
 
-          replaceMatch($createEmojiNode(suggestion));
-        } else if (suggestion[0] === '#') {
+        replaceMatch($createEmojiNode(suggestion as Emoji));
+      } else if (typeof suggestion === 'string') {
+        if (suggestion[0] === '#') {
           (node as TextNode).setTextContent(`${suggestion} `);
           node.select();
         } else {
           const account = queryClient.getQueryData<Account>(['accounts', suggestion]);
           if (account) replaceMatch($createMentionNode(account));
         }
+      }
 
-        dispatch(clearComposeSuggestions(composeId));
-      });
+      setToken('');
     });
   };
 
@@ -353,15 +350,19 @@ const AutosuggestPlugin = ({
     let inner: string | React.JSX.Element;
     let key: React.Key;
 
-    if (typeof suggestion === 'object') {
-      inner = <AutosuggestEmoji emoji={suggestion} />;
+    if (typeof suggestion === 'object' && 'id' in suggestion) {
+      inner = <AutosuggestEmoji emoji={suggestion as Emoji} />;
       key = suggestion.id;
-    } else if (suggestion[0] === '#') {
-      inner = suggestion;
-      key = suggestion;
+    } else if (typeof suggestion === 'string') {
+      if (suggestion[0] === '#') {
+        inner = suggestion;
+        key = suggestion;
+      } else {
+        inner = <AutosuggestAccount id={suggestion} />;
+        key = suggestion;
+      }
     } else {
-      inner = <AutosuggestAccount id={suggestion} />;
-      key = suggestion;
+      return null;
     }
 
     return (
@@ -406,7 +407,7 @@ const AutosuggestPlugin = ({
           return;
         }
 
-        dispatch(fetchComposeSuggestions(composeId, match.matchingString.trim()));
+        setToken(match.matchingString.trim());
 
         if (!isSelectionOnEntityBoundary(editor, match.leadOffset)) {
           const isRangePositioned = tryToPositionRange(match.leadOffset, range);

@@ -27,9 +27,9 @@ import {
 import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useCompose } from '@/hooks/use-compose';
 import { usePrevious } from '@/hooks/use-previous';
+import { useComposeStore } from '@/stores/compose';
 
 import { useNodes } from './nodes';
 import AutosuggestPlugin from './plugins/autosuggest-plugin';
@@ -110,7 +110,6 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(
     },
     ref,
   ) => {
-    const dispatch = useAppDispatch();
     const { contentType, modifiedLanguage: language } = useCompose(composeId);
     const isWysiwyg = contentType === 'wysiwyg';
     const previouslyWasWysiwyg = usePrevious(isWysiwyg);
@@ -125,9 +124,8 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(
         onError: console.error,
         nodes,
         theme,
-        editorState: dispatch((_, getState) => {
-          const state = getState();
-          const compose = state.compose[composeId];
+        editorState: (() => {
+          const compose = useComposeStore.getState().actions.getCompose(composeId);
 
           if (!compose) return;
 
@@ -157,7 +155,7 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(
               $getRoot().clear().append(paragraph);
             }
           };
-        }),
+        })(),
       }),
       [composeId, isWysiwyg],
     );
@@ -228,7 +226,6 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(
           <HistoryPlugin />
           <HashtagPlugin />
           <AutosuggestPlugin
-            composeId={composeId}
             suggestionsHidden={suggestionsHidden}
             setSuggestionsHidden={setSuggestionsHidden}
           />

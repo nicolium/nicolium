@@ -1,3 +1,4 @@
+import { useComposeStore } from '@/stores/compose';
 import { getAuthUserUrl, getMeUrl } from '@/utils/auth';
 
 import { getClient, staticFetch } from '../api';
@@ -35,6 +36,7 @@ const fetchInstance = () => async (dispatch: AppDispatch, getState: () => RootSt
     const instance = await getClient(getState).instance.getInstance();
 
     dispatch<InstanceFetchSuccessAction>({ type: INSTANCE_FETCH_SUCCESS, instance });
+    useComposeStore.getState().actions.importDefaultContentType(instance);
   } catch (error) {
     dispatch({ type: INSTANCE_FETCH_FAIL, error });
   }

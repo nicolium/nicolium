@@ -4,7 +4,6 @@ import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useIntl } from 'react-intl';
 
-import { type ComposeReplyAction, mentionCompose, replyCompose } from '@/actions/compose';
 import ScrollableList from '@/components/scrollable-list';
 import StatusActionBar from '@/components/status-action-bar';
 import Tombstone from '@/components/tombstone';
@@ -12,13 +11,13 @@ import Stack from '@/components/ui/stack';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import PendingStatus from '@/features/ui/components/pending-status';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import {
   useFavouriteStatus,
   useReblogStatus,
   useUnfavouriteStatus,
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
+import { useComposeActions } from '@/stores/compose';
 import { useThread } from '@/stores/contexts';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
@@ -49,9 +48,9 @@ const Thread = ({
   withMedia = true,
   setExpandAllStatuses,
 }: IThread) => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const intl = useIntl();
+  const { replyCompose, mentionCompose } = useComposeActions();
 
   const { expandStatuses, revealStatusesMedia, toggleStatusesMediaHidden } = useStatusMetaActions();
   const { openModal } = useModalsActions();
@@ -80,8 +79,8 @@ const Thread = ({
     else favouriteStatus();
   };
 
-  const handleReplyClick = (status: ComposeReplyAction['status']) => {
-    dispatch(replyCompose(status));
+  const handleReplyClick = (status: Parameters<typeof replyCompose>[0]) => {
+    replyCompose(status);
   };
 
   const handleReblogClick = (status: SelectedStatus, e?: React.MouseEvent) => {
@@ -100,7 +99,7 @@ const Thread = ({
   };
 
   const handleMentionClick = (account: Pick<Account, 'acct'>) => {
-    dispatch(mentionCompose(account));
+    mentionCompose(account);
   };
 
   const handleHotkeyOpenMedia = (e?: KeyboardEvent) => {

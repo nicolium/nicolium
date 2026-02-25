@@ -1,8 +1,6 @@
 import React from 'react';
 
-import { uploadCompose } from '@/actions/compose';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
+import { useCompose, useUploadCompose } from '@/stores/compose';
 
 import UploadButton from '../components/upload-button';
 
@@ -13,11 +11,11 @@ interface IUploadButtonContainer {
 }
 
 const UploadButtonContainer: React.FC<IUploadButtonContainer> = ({ composeId }) => {
-  const dispatch = useAppDispatch();
   const { isUploading, resetFileKey } = useCompose(composeId);
+  const uploadCompose = useUploadCompose(composeId);
 
   const onSelectFile = (files: FileList, intl: IntlShape) => {
-    dispatch(uploadCompose(composeId, files, intl));
+    uploadCompose(files);
   };
 
   return (

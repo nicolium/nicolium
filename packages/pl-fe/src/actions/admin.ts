@@ -1,11 +1,11 @@
 import { importEntities } from '@/actions/importer';
 import { queryClient } from '@/queries/client';
+import { useComposeStore } from '@/stores/compose';
 import { useModalsStore } from '@/stores/modals';
 import { filterBadges, getTagDiff } from '@/utils/badges';
 
 import { getClient } from '../api';
 
-import { setComposeToStatus } from './compose';
 import { STATUS_FETCH_SOURCE_FAIL, type StatusesAction } from './statuses';
 import { deleteFromTimelines } from './timelines';
 
@@ -144,20 +144,10 @@ const redactStatus = (statusId: string) => (dispatch: AppDispatch, getState: () 
 
   return getClient(state)
     .statuses.getStatusSource(statusId)
-    .then((response) => {
-      dispatch(
-        setComposeToStatus(
-          status,
-          poll,
-          response.text,
-          response.spoiler_text,
-          response.content_type,
-          false,
-          undefined,
-          undefined,
-          true,
-        ),
-      );
+    .then((source) => {
+      useComposeStore
+        .getState()
+        .actions.setComposeToStatus(status, poll, source, false, null, null, true);
       useModalsStore.getState().actions.openModal('COMPOSE');
     })
     .catch((error) => {

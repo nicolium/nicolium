@@ -1,9 +1,7 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeComposeSpoilerness } from '@/actions/compose';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
+import { useCompose, useComposeActions } from '@/stores/compose';
 
 import ComposeFormButton from './compose-form-button';
 
@@ -21,11 +19,14 @@ interface ISensitiveMediaButton {
 
 const SensitiveMediaButton: React.FC<ISensitiveMediaButton> = ({ composeId }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
 
   const active = useCompose(composeId).sensitive;
 
-  const onClick = () => dispatch(changeComposeSpoilerness(composeId));
+  const onClick = () =>
+    updateCompose(composeId, (draft) => {
+      draft.sensitive = !draft.sensitive;
+    });
 
   return (
     <ComposeFormButton

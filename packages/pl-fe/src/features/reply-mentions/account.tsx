@@ -1,12 +1,10 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { addToMentions, removeFromMentions } from '@/actions/compose';
 import AccountComponent from '@/components/account';
 import IconButton from '@/components/ui/icon-button';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
 import { useAccount } from '@/queries/accounts/use-account';
+import { useCompose, useComposeActions } from '@/stores/compose';
 
 const messages = defineMessages({
   remove: { id: 'reply_mentions.account.remove', defaultMessage: 'Remove from mentions' },
@@ -21,14 +19,25 @@ interface IAccount {
 
 const Account: React.FC<IAccount> = ({ composeId, accountId, author }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
 
   const compose = useCompose(composeId);
   const { data: account } = useAccount(accountId);
   const added = !!account && compose.to?.includes(account.acct);
 
-  const onRemove = () => dispatch(removeFromMentions(composeId, accountId));
-  const onAdd = () => dispatch(addToMentions(composeId, accountId));
+  const onRemove = () =>
+    updateCompose(composeId, (draft) => {
+      if (account) {
+        draft.to = draft.to?.filter((acct) => acct !== account.acct) || [];
+      }
+    });
+  const onAdd = () =>
+    updateCompose(composeId, (draft) => {
+      if (account) {
+        if (draft.to?.includes(account.acct)) return;
+        draft.to = [...(draft.to || []), account.acct];
+      }
+    });
 
   if (!account) return null;
 

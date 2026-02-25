@@ -300,4 +300,4 @@ const AutosuggestInput: React.FC<IAutosuggestInput> = ({
   ];
 };
 
-export { type AutoSuggestion, type IAutosuggestInput, AutosuggestInput as default };
+export { type AutoSuggestion, AutosuggestInput as default };

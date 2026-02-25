@@ -3,10 +3,10 @@ import { create } from 'mutative';
 import { mediaAttachmentSchema } from 'pl-api';
 import * as v from 'valibot';
 
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { filteredArray } from '@/schemas/utils';
 import KVStore from '@/storage/kv-store';
+import { useComposeStore } from '@/stores/compose';
 import { APIEntity } from '@/types/entities';
 
 const draftStatusSchema = v.pipe(
@@ -72,27 +72,24 @@ const useDraftStatusesCountQuery = () =>
 
 const usePersistDraftStatus = () => {
   const { data: account } = useOwnAccount();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   return (composeId: string) => {
-    dispatch((_, getState) => {
-      const compose = getState().compose[composeId];
+    const compose = useComposeStore.getState().actions.getCompose(composeId);
 
-      const draft = {
-        ...compose,
-        draft_id: compose.draftId ?? crypto.randomUUID(),
-      };
+    const draft = {
+      ...compose,
+      draft_id: compose.draftId ?? crypto.randomUUID(),
+    };
 
-      const drafts = queryClient.getQueryData<Record<string, DraftStatus>>(['draftStatuses']) ?? {};
+    const drafts = queryClient.getQueryData<Record<string, DraftStatus>>(['draftStatuses']) ?? {};
 
-      const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
-        oldDrafts[draft.draft_id] = v.parse(draftStatusSchema, draft);
-      });
-      return persistDrafts(account!.url, newDrafts).then(() =>
-        queryClient.invalidateQueries({ queryKey: ['draftStatuses'] }),
-      );
+    const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
+      oldDrafts[draft.draft_id] = v.parse(draftStatusSchema, draft);
     });
+    return persistDrafts(account!.url, newDrafts).then(() =>
+      queryClient.invalidateQueries({ queryKey: ['draftStatuses'] }),
+    );
   };
 };
 

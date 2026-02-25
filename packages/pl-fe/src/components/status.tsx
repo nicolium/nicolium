@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-intl';
 
-import { mentionCompose, replyCompose } from '@/actions/compose';
 import { unfilterStatus } from '@/actions/statuses';
 import Card from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
@@ -23,6 +22,7 @@ import {
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { makeGetStatus, type SelectedStatus } from '@/selectors';
+import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMetaActions } from '@/stores/status-meta';
@@ -197,6 +197,7 @@ const Status: React.FC<IStatus> = (props) => {
 
   const { toggleStatusesMediaHidden } = useStatusMetaActions();
   const { openModal } = useModalsActions();
+  const { replyCompose, mentionCompose } = useComposeActions();
   const { boostModal } = useSettings();
   const didShowCard = useRef(false);
   const node = useRef<HTMLDivElement>(null);
@@ -276,7 +277,7 @@ const Status: React.FC<IStatus> = (props) => {
     if (status.rss_feed) return;
 
     e?.preventDefault();
-    dispatch(replyCompose(actualStatus, status.reblog_id ? status.account : undefined));
+    replyCompose(actualStatus, status.reblog_id ? status.account : undefined);
   };
 
   const handleHotkeyFavourite = (e?: KeyboardEvent) => {
@@ -305,7 +306,7 @@ const Status: React.FC<IStatus> = (props) => {
     if (status.rss_feed) return;
 
     e?.preventDefault();
-    dispatch(mentionCompose(actualStatus.account));
+    mentionCompose(actualStatus.account);
   };
 
   const handleHotkeyOpen = () => {

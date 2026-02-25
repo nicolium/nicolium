@@ -1,9 +1,7 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { addSchedule, removeSchedule } from '@/actions/compose';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
+import { useCompose, useComposeActions } from '@/stores/compose';
 
 import ComposeFormButton from './compose-form-button';
 
@@ -19,7 +17,7 @@ interface IScheduleButton {
 
 const ScheduleButton: React.FC<IScheduleButton> = ({ composeId, disabled }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
 
   const compose = useCompose(composeId);
 
@@ -27,11 +25,9 @@ const ScheduleButton: React.FC<IScheduleButton> = ({ composeId, disabled }) => {
   const unavailable = !!compose.editedId;
 
   const handleClick = () => {
-    if (active) {
-      dispatch(removeSchedule(composeId));
-    } else {
-      dispatch(addSchedule(composeId));
-    }
+    updateCompose(composeId, (draft) => {
+      draft.scheduledAt = active ? null : new Date(Date.now() + 10 * 60 * 1000);
+    });
   };
 
   if (unavailable) {

@@ -1,4 +1,5 @@
 import { getLocale } from '@/actions/settings';
+import { useComposeStore } from '@/stores/compose';
 import { useContextStore } from '@/stores/contexts';
 import { usePendingStatusesStore } from '@/stores/pending-statuses';
 import { useSettingsStore } from '@/stores/settings';
@@ -133,6 +134,7 @@ const deleteFromTimelines =
     const reblogOf = getState().statuses[statusId]?.reblog_id ?? null;
 
     useContextStore.getState().actions.deleteStatuses([statusId]);
+    useComposeStore.getState().actions.handleTimelineDelete(statusId);
 
     dispatch<TimelineDeleteAction>({
       type: TIMELINE_DELETE,

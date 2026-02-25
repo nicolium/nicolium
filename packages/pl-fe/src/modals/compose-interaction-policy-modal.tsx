@@ -1,17 +1,12 @@
 import { Link } from '@tanstack/react-router';
+import { create } from 'mutative';
 import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import {
-  changeComposeInteractionPolicyOption,
-  changeComposeQuotePolicyOption,
-} from '@/actions/compose';
 import Modal from '@/components/ui/modal';
 import Stack from '@/components/ui/stack';
 import Warning from '@/features/compose/components/warning';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
-import { useCompose } from '@/hooks/use-compose';
 import {
   InteractionPolicyConfig,
   type Policy,
@@ -19,9 +14,10 @@ import {
   type Scope,
 } from '@/pages/settings/interaction-policies';
 import { useInteractionPolicies } from '@/queries/settings/use-interaction-policies';
+import { useCompose, useComposeActions } from '@/stores/compose';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
-import type { CreateStatusParams } from 'pl-api';
+import type { CreateStatusParams, InteractionPolicy } from 'pl-api';
 
 const MANAGABLE_VISIBILITIES = ['public', 'unlisted', 'private'];
 
@@ -33,7 +29,7 @@ const ComposeInteractionPolicyModal: React.FC<
   BaseModalProps & ComposeInteractionPolicyModalProps
 > = ({ composeId, onClose }) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
   const [initialQuotePolicy, setInitialQuotePolicy] =
     useState<CreateStatusParams['quote_approval_policy']>(undefined);
   const { interactionPolicies: initial } = useInteractionPolicies();
@@ -65,13 +61,25 @@ const ComposeInteractionPolicyModal: React.FC<
   };
 
   const onChange = (policy: Policy, rule: Rule, value: Scope[]) => {
-    dispatch(
-      changeComposeInteractionPolicyOption(composeId, policy, rule, value, interactionPolicy),
-    );
+    updateCompose(composeId, (draft) => {
+      draft.interactionPolicy ??= JSON.parse(JSON.stringify(interactionPolicy))!;
+
+      draft.interactionPolicy = create(
+        draft.interactionPolicy ?? interactionPolicy,
+        (draftPolicy: InteractionPolicy) => {
+          draftPolicy[policy][rule] = value;
+          draftPolicy[policy][rule === 'always' ? 'with_approval' : 'always'] = draftPolicy[policy][
+            rule === 'always' ? 'with_approval' : 'always'
+          ].filter((r) => !value.includes(r as any));
+        },
+      );
+    });
   };
 
   const onQuotePolicyChange = (value: CreateStatusParams['quote_approval_policy']) => {
-    dispatch(changeComposeQuotePolicyOption(composeId, value));
+    updateCompose(composeId, (draft) => {
+      draft.quoteApprovalPolicy = value;
+    });
   };
 
   return (

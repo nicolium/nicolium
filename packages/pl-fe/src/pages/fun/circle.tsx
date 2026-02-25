@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { processCircle } from '@/actions/circle';
-import { resetCompose, uploadComposeSuccess, uploadFile } from '@/actions/compose';
+import { uploadFile } from '@/actions/media';
 import Account from '@/components/account';
 import Accordion from '@/components/ui/accordion';
 import Avatar from '@/components/ui/avatar';
@@ -17,6 +17,7 @@ import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { appendMedia, useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
@@ -76,6 +77,7 @@ const CirclePage: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const { openModal } = useModalsActions();
+  const { resetCompose, updateCompose } = useComposeActions();
   const { data: account } = useOwnAccount();
 
   useEffect(() => {}, []);
@@ -92,14 +94,16 @@ const CirclePage: React.FC = () => {
   const onCompose: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
 
-    dispatch(resetCompose('compose-modal'));
+    resetCompose('compose-modal');
 
     canvasRef.current!.toBlob((blob) => {
       const file = new File([blob!], 'interactions_circle.png', { type: 'image/png' });
 
       dispatch(
         uploadFile(file, intl, (data) => {
-          dispatch(uploadComposeSuccess('compose-modal', data));
+          updateCompose('compose-modal', (draft) => {
+            appendMedia(draft, data);
+          });
           openModal('COMPOSE');
         }),
       );

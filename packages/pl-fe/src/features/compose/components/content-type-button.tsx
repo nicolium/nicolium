@@ -1,12 +1,10 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeComposeContentType } from '@/actions/compose';
 import DropdownMenu from '@/components/dropdown-menu';
 import Icon from '@/components/ui/icon';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
 import { useInstance } from '@/hooks/use-instance';
+import { useCompose, useComposeActions } from '@/stores/compose';
 
 const messages = defineMessages({
   contentTypePlaintext: {
@@ -36,13 +34,15 @@ interface IContentTypeButton {
 
 const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
   const instance = useInstance();
 
   const { contentType } = useCompose(composeId);
 
-  const handleChange = (contentType: string) => () =>
-    dispatch(changeComposeContentType(composeId, contentType));
+  const handleChange = (value: string) => () =>
+    updateCompose(composeId, (draft) => {
+      draft.contentType = value;
+    });
 
   const postFormats = instance.pleroma.metadata.post_formats;
 

@@ -2,7 +2,6 @@ import { Location } from 'pl-api';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { setComposeLocation } from '@/actions/compose';
 import { ADDRESS_ICONS } from '@/components/autosuggest-location';
 import LocationSearch from '@/components/location-search';
 import HStack from '@/components/ui/hstack';
@@ -10,8 +9,7 @@ import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
+import { useCompose, useComposeActions } from '@/stores/compose';
 
 const messages = defineMessages({
   resetLocation: { id: 'compose_event.reset_location', defaultMessage: 'Reset location' },
@@ -22,13 +20,15 @@ interface ILocationForm {
 }
 
 const LocationForm: React.FC<ILocationForm> = ({ composeId }) => {
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
   const intl = useIntl();
 
   const { showLocationPicker, location } = useCompose(composeId);
 
-  const onChangeLocation = (location: Location | null) => {
-    dispatch(setComposeLocation(composeId, location));
+  const onChangeLocation = (loc: Location | null) => {
+    updateCompose(composeId, (draft) => {
+      draft.location = loc;
+    });
   };
 
   if (!showLocationPicker) {

@@ -7,6 +7,7 @@ import Emojify from '@/features/emoji/emojify';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { makeGetStatus } from '@/selectors';
+import { useCompose } from '@/stores/compose';
 
 interface IReplyGroupIndicator {
   composeId: string;
@@ -16,10 +17,9 @@ const ReplyGroupIndicator = (props: IReplyGroupIndicator) => {
   const { composeId } = props;
 
   const getStatus = useCallback(makeGetStatus(), []);
+  const { inReplyToId } = useCompose(composeId);
 
-  const status = useAppSelector((state) =>
-    getStatus(state, { id: state.compose[composeId]?.inReplyToId! }),
-  );
+  const status = useAppSelector((state) => getStatus(state, { id: inReplyToId! }));
 
   const { data: group } = useGroupQuery(status?.group_id ?? undefined);
 

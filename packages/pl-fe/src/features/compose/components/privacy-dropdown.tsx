@@ -1,15 +1,13 @@
 import React, { useMemo } from 'react';
 import { useIntl, defineMessages, IntlShape } from 'react-intl';
 
-import { changeComposeFederated, changeComposeVisibility } from '@/actions/compose';
 import DropdownMenu, { MenuItem } from '@/components/dropdown-menu';
 import Icon from '@/components/ui/icon';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
 import { useFeatures } from '@/hooks/use-features';
 import { getOrderedLists } from '@/pages/account-lists/lists';
 import { useCircles } from '@/queries/accounts/use-circles';
 import { useLists } from '@/queries/accounts/use-lists';
+import { useCompose, useComposeActions } from '@/stores/compose';
 
 import type { Circle, Features } from 'pl-api';
 
@@ -156,7 +154,7 @@ interface IPrivacyDropdown {
 const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({ composeId, compact }) => {
   const intl = useIntl();
   const features = useFeatures();
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
 
   const compose = useCompose(composeId);
   const { data: lists = [] } = useLists(getOrderedLists);
@@ -167,7 +165,11 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({ composeId, compact }) => 
   const value = compose.visibility;
   const unavailable = !!compose.editedId;
 
-  const onChange = (value: string) => value && dispatch(changeComposeVisibility(composeId, value));
+  const onChange = (value: string) =>
+    value &&
+    updateCompose(composeId, (draft) => {
+      draft.visibility = value;
+    });
 
   const options = useMemo(
     () => getItems(features, lists, circles, isReply, intl),
@@ -191,7 +193,10 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({ composeId, compact }) => 
       meta: intl.formatMessage(messages.localLong),
       type: 'toggle',
       checked: compose.localOnly,
-      onChange: () => dispatch(changeComposeFederated(composeId)),
+      onChange: () =>
+        updateCompose(composeId, (draft) => {
+          draft.localOnly = !draft.localOnly;
+        }),
     });
 
   const valueOption = useMemo(

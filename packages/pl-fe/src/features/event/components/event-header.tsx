@@ -2,7 +2,6 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { directCompose, mentionCompose, quoteCompose } from '@/actions/compose';
 import { fetchEventIcs } from '@/actions/events';
 import { deleteStatusModal, toggleStatusSensitivityModal } from '@/actions/moderation';
 import { initReport, ReportableEntities } from '@/actions/reports';
@@ -29,6 +28,7 @@ import {
   useUnpinStatus,
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
+import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import copy from '@/utils/copy';
@@ -113,6 +113,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { quoteCompose, mentionCompose, directCompose } = useComposeActions();
 
   const { openModal } = useModalsActions();
   const { getOrCreateChatByAccountId } = useChats();
@@ -187,7 +188,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleQuoteClick = () => {
-    dispatch(quoteCompose(status));
+    quoteCompose(status);
   };
 
   const handlePinClick = () => {
@@ -212,7 +213,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleMentionClick = () => {
-    dispatch(mentionCompose(account));
+    mentionCompose(account);
   };
 
   const handleChatClick = () => {
@@ -222,7 +223,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleDirectClick = () => {
-    dispatch(directCompose(account));
+    directCompose(account);
   };
 
   const handleMuteClick = () => {

@@ -3,16 +3,15 @@ import { useMatch } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { groupComposeModal } from '@/actions/compose';
 import ThumbNavigationLink from '@/components/thumb-navigation-link';
 import Icon from '@/components/ui/icon';
 import { useStatContext } from '@/contexts/stat-context';
 import { layouts } from '@/features/ui/router';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
+import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 import { isStandalone } from '@/utils/state';
@@ -31,7 +30,6 @@ const messages = defineMessages({
 
 const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const { data: account } = useOwnAccount();
   const features = useFeatures();
   const queryClient = useQueryClient();
@@ -41,6 +39,7 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
   const isSidebarOpen = useIsSidebarOpen();
   const { openSidebar, closeSidebar } = useUiStoreActions();
   const { openModal } = useModalsActions();
+  const { groupComposeModal } = useComposeActions();
   const { unreadChatsCount } = useStatContext();
 
   const standalone = useAppSelector(isStandalone);
@@ -48,10 +47,8 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
 
   const handleOpenComposeModal = () => {
     if (match?.params.groupId) {
-      dispatch((_, getState) => {
-        const group = queryClient.getQueryData<Group>(['groups', match.params.groupId]);
-        if (group) dispatch(groupComposeModal(group));
-      });
+      const group = queryClient.getQueryData<Group>(['groups', match.params.groupId]);
+      if (group) groupComposeModal(group);
     } else {
       openModal('COMPOSE');
     }

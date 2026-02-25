@@ -1,9 +1,7 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { addPoll, removePoll } from '@/actions/compose';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
+import { useCompose, useComposeActions, newPoll } from '@/stores/compose';
 
 import ComposeFormButton from './compose-form-button';
 
@@ -19,7 +17,7 @@ interface IPollButton {
 
 const PollButton: React.FC<IPollButton> = ({ composeId, disabled }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
 
   const compose = useCompose(composeId);
 
@@ -27,11 +25,9 @@ const PollButton: React.FC<IPollButton> = ({ composeId, disabled }) => {
   const active = compose.poll !== null;
 
   const onClick = () => {
-    if (active) {
-      dispatch(removePoll(composeId));
-    } else {
-      dispatch(addPoll(composeId));
-    }
+    updateCompose(composeId, (draft) => {
+      draft.poll = active ? null : newPoll();
+    });
   };
 
   if (unavailable) {

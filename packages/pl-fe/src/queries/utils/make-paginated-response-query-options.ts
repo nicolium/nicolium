@@ -1,6 +1,6 @@
 import { type InfiniteData, infiniteQueryOptions, type QueryKey } from '@tanstack/react-query';
 
-import { store } from '@/store';
+import { getClient } from '@/api';
 
 import {
   PaginatedResponseArray,
@@ -23,8 +23,7 @@ const makePaginatedResponseQueryOptions =
   (...params: T1) =>
     infiniteQueryOptions({
       queryKey: typeof queryKey === 'object' ? queryKey : queryKey(...params),
-      queryFn: ({ pageParam }) =>
-        pageParam.next?.() ?? queryFn(store.getState().auth.client, params),
+      queryFn: ({ pageParam }) => pageParam.next?.() ?? queryFn(getClient(), params),
       initialPageParam: {
         previous: null,
         next: null,

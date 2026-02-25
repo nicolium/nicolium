@@ -2,7 +2,6 @@ import { useNavigate } from '@tanstack/react-router';
 import React, { useCallback, useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changeUploadCompose, resetCompose } from '@/actions/compose';
 import { cancelEventCompose, initEventEdit, submitEvent } from '@/actions/events';
 import { uploadFile } from '@/actions/media';
 import { fetchStatus } from '@/actions/statuses';
@@ -27,6 +26,7 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useInstance } from '@/hooks/use-instance';
 import { makeGetStatus } from '@/selectors';
+import { useChangeUploadCompose, useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
@@ -69,6 +69,10 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const navigate = useNavigate();
   const { openModal } = useModalsActions();
 
+  const composeId = statusId ? `compose-event-${statusId}` : 'compose-event';
+  const { resetCompose } = useComposeActions();
+  const changeUploadCompose = useChangeUploadCompose(composeId);
+
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector((state) =>
     statusId ? getStatus(state, { id: statusId }) : undefined,
@@ -93,8 +97,6 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
 
   const [isDisabled, setIsDisabled] = useState(!!statusId);
   const [isUploading, setIsUploading] = useState(false);
-
-  const composeId = statusId ? `compose-event-${statusId}` : 'compose-event';
 
   const onChangeName: React.ChangeEventHandler<HTMLInputElement> = ({ target }) => {
     setName(target.value);
@@ -158,14 +160,12 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
       previousPosition: [0, 0],
       descriptionLimit: descriptionLimit,
       onSubmit: (description: string, position: [number, number]) =>
-        dispatch(
-          changeUploadCompose(composeId, banner.id, {
-            description,
-            focus: position
-              ? `${((position[0] - 0.5) * 2).toFixed(2)},${((position[1] - 0.5) * -2).toFixed(2)}`
-              : undefined,
-          }),
-        ).then((media) => setBanner(media || null)),
+        changeUploadCompose(banner.id, {
+          description,
+          focus: position
+            ? `${((position[0] - 0.5) * 2).toFixed(2)},${((position[1] - 0.5) * -2).toFixed(2)}`
+            : undefined,
+        }).then((media) => setBanner(media || null)),
     });
   };
 
@@ -190,7 +190,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
             to: '/@{$username}/events/$statusId',
             params: { username: status.account.acct, statusId: status.id },
           });
-        dispatch(resetCompose(composeId));
+        resetCompose(composeId);
       })
       .catch(() => {});
   };
@@ -218,7 +218,8 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
     }
 
     return () => {
-      dispatch(cancelEventCompose());
+      resetCompose(composeId);
+      cancelEventCompose();
     };
   }, [statusId]);
 

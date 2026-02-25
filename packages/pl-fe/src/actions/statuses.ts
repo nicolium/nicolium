@@ -1,5 +1,6 @@
 import { queryClient } from '@/queries/client';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
+import { useComposeStore } from '@/stores/compose';
 import { useContextStore } from '@/stores/contexts';
 import { useModalsStore } from '@/stores/modals';
 import { usePendingStatusesStore } from '@/stores/pending-statuses';
@@ -9,19 +10,12 @@ import { shouldHaveCard } from '@/utils/status';
 
 import { getClient } from '../api';
 
-import { setComposeToStatus } from './compose';
 import { importEntities } from './importer';
 import { deleteFromTimelines } from './timelines';
 
 import type { Status } from '@/normalizers/status';
 import type { AppDispatch, RootState } from '@/store';
-import type {
-  CreateStatusParams,
-  Status as BaseStatus,
-  ScheduledStatus,
-  StatusSource,
-  Poll,
-} from 'pl-api';
+import type { CreateStatusParams, Status as BaseStatus, ScheduledStatus, Poll } from 'pl-api';
 import type { IntlShape } from 'react-intl';
 
 const STATUS_CREATE_REQUEST = 'STATUS_CREATE_REQUEST' as const;
@@ -157,16 +151,7 @@ const editStatus = (statusId: string) => (dispatch: AppDispatch, getState: () =>
     .statuses.getStatusSource(statusId)
     .then((response) => {
       dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_SUCCESS });
-      dispatch(
-        setComposeToStatus(
-          status,
-          poll,
-          response.text,
-          response.spoiler_text,
-          response.content_type,
-          false,
-        ),
-      );
+      useComposeStore.getState().actions.setComposeToStatus(status, poll, response);
       useModalsStore.getState().actions.openModal('COMPOSE');
     })
     .catch((error) => {
@@ -192,7 +177,7 @@ const fetchStatus =
   };
 
 const deleteStatus =
-  (statusId: string, groupId?: string, withRedraft = false) =>
+  (statusId: string, withRedraft = false) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
@@ -205,29 +190,38 @@ const deleteStatus =
 
     dispatch<StatusesAction>({ type: STATUS_DELETE_REQUEST, params: status });
 
-    return (
-      groupId
-        ? getClient(state).experimental.groups.deleteGroupStatus(statusId, groupId)
-        : getClient(state).statuses.deleteStatus(statusId)
-    )
-      .then((response) => {
+    return getClient(state)
+      .statuses.deleteStatus(statusId)
+      .then((source) => {
         usePendingStatusesStore.getState().actions.deleteStatus(statusId);
         dispatch<StatusesAction>({ type: STATUS_DELETE_SUCCESS, statusId });
         dispatch(deleteFromTimelines(statusId));
 
         if (withRedraft) {
-          dispatch(
-            setComposeToStatus(
-              status,
-              poll,
-              response.text ?? '',
-              response.spoiler_text,
-              (response as StatusSource).content_type,
-              withRedraft,
-            ),
-          );
+          useComposeStore.getState().actions.setComposeToStatus(status, poll, source, withRedraft);
           useModalsStore.getState().actions.openModal('COMPOSE');
         }
+      })
+      .catch((error) => {
+        dispatch<StatusesAction>({ type: STATUS_DELETE_FAIL, params: status, error });
+      });
+  };
+
+const deleteStatusFromGroup =
+  (statusId: string, groupId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+    if (!isLoggedIn(getState)) return null;
+
+    const state = getState();
+    const status = state.statuses[statusId];
+
+    dispatch<StatusesAction>({ type: STATUS_DELETE_REQUEST, params: status });
+
+    return getClient(state)
+      .experimental.groups.deleteGroupStatus(statusId, groupId)
+      .then((response) => {
+        usePendingStatusesStore.getState().actions.deleteStatus(statusId);
+        dispatch<StatusesAction>({ type: STATUS_DELETE_SUCCESS, statusId });
+        dispatch(deleteFromTimelines(statusId));
       })
       .catch((error) => {
         dispatch<StatusesAction>({ type: STATUS_DELETE_FAIL, params: status, error });
@@ -404,6 +398,7 @@ export {
   editStatus,
   fetchStatus,
   deleteStatus,
+  deleteStatusFromGroup,
   updateStatus,
   fetchContext,
   fetchStatusWithContext,

@@ -1,10 +1,8 @@
 import clsx from 'clsx';
 import React, { useCallback, useRef } from 'react';
 
-import { changeMediaOrder } from '@/actions/compose';
 import HStack from '@/components/ui/hstack';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
+import { useCompose, useComposeActions } from '@/stores/compose';
 
 import Upload from './upload';
 import UploadProgress from './upload-progress';
@@ -15,7 +13,7 @@ interface IUploadForm {
 }
 
 const UploadForm: React.FC<IUploadForm> = ({ composeId, onSubmit }) => {
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
 
   const { isUploading, mediaAttachments } = useCompose(composeId);
 
@@ -39,7 +37,12 @@ const UploadForm: React.FC<IUploadForm> = ({ composeId, onSubmit }) => {
   );
 
   const handleDragEnd = useCallback(() => {
-    dispatch(changeMediaOrder(composeId, dragItem.current!, dragOverItem.current!));
+    updateCompose(composeId, (draft) => {
+      const indexA = draft.mediaAttachments.findIndex((x) => x.id === dragItem.current!);
+      const indexB = draft.mediaAttachments.findIndex((x) => x.id === dragOverItem.current!);
+      const item = draft.mediaAttachments.splice(indexA, 1)[0];
+      draft.mediaAttachments.splice(indexB, 0, item);
+    });
     dragItem.current = null;
     dragOverItem.current = null;
   }, [dragItem, dragOverItem]);
