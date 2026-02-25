@@ -225,6 +225,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
   }, [notifications, topNotification]);
   const hasMore = hasNextPage ?? false;
 
+  const isFirstRender = useRef(true);
   const node = useRef<VirtuosoHandle | null>(null);
   const scrollableContentRef = useRef<Array<React.JSX.Element> | null>(null);
 
@@ -266,7 +267,7 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
   };
 
   const handleDequeueNotifications = useCallback(() => {
-    setTopNotification(undefined);
+    setTopNotification(notifications[0]?.most_recent_notification_id);
 
     markNotificationsRead(notifications[0]?.most_recent_notification_id);
   }, [notifications, markNotificationsRead]);
@@ -296,6 +297,10 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
   }, []);
 
   useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     setTopNotification(undefined);
   }, [activeFilter]);
 
