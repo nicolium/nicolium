@@ -19,17 +19,6 @@ const initialState: State = {
   needsReboot: false,
 };
 
-// const deleteUser = (state: State, accountId: string) => {
-//   state.awaitingApproval = state.awaitingApproval.filter(id => id !== accountId);
-//   delete state.users[accountId];
-// };
-
-// const approveUser = (state: State, user: AdminAccount) => {
-//   const normalizedUser = minifyUser(user);
-//   state.awaitingApproval = state.awaitingApproval.filter(id => id !== user.id);
-//   state.users[user.id] = normalizedUser;
-// };
-
 const importConfigs = (state: State, configs: any) => {
   state.configs = configs;
 };
@@ -41,8 +30,6 @@ const admin = (state = initialState, action: AdminActions): State => {
       return create(state, (draft) => {
         importConfigs(draft, action.configs);
       });
-    // case ADMIN_USER_DELETE_SUCCESS:
-    //   return create(state, (draft) => deleteUser(draft, action.accountId));
     default:
       return state;
   }
