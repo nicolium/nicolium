@@ -275,6 +275,8 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
     queryClient.setQueryData<InfiniteData<any>>(['notifications', activeFilter], (data) => {
       if (!data) return data;
 
+      // from https://github.com/TanStack/query/discussions/875#discussioncomment-754458
+      // TODO: maybe needed in more places so maybe make a helper for this
       return {
         ...data,
         pages: data.pages.slice(0, 1),
