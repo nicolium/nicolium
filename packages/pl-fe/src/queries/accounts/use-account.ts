@@ -34,7 +34,10 @@ const useAccount = (accountId?: string, withRelationship = false) => {
     queryKey: ['accounts', accountId],
     queryFn: async () => {
       const account = await client.accounts.getAccount(accountId!);
-      queryClient.setQueryData(['accounts', 'lookup', account.acct.toLowerCase()], account.id);
+      queryClient.setQueryData<string>(
+        ['accounts', 'lookup', account.acct.toLowerCase()],
+        account.id,
+      );
       return account;
     },
     enabled: !!accountId,

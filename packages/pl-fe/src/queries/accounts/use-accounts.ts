@@ -14,7 +14,10 @@ const useAccounts = (accountIds: Array<string>) => {
       queryKey: ['accounts', accountId],
       queryFn: async () => {
         const response = await client.accounts.getAccount(accountId);
-        queryClient.setQueryData(['accounts', 'lookup', response.acct.toLowerCase()], response.id);
+        queryClient.setQueryData<string>(
+          ['accounts', 'lookup', response.acct.toLowerCase()],
+          response.id,
+        );
         return response;
       },
       enabled: !!accountId,
