@@ -1,4 +1,9 @@
-import { type InfiniteData, useMutation, useQuery } from '@tanstack/react-query';
+import {
+  type InfiniteData,
+  type UseQueryResult,
+  useMutation,
+  useQuery,
+} from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
@@ -10,7 +15,9 @@ import { minifyAccountList } from '../utils/minify-list';
 
 import type { Circle, PaginatedResponse } from 'pl-api';
 
-const useCircles = <T>(select?: (data: Array<Circle>) => T) => {
+function useCircles<T>(select: (data: Array<Circle>) => T): UseQueryResult<T, Error>;
+function useCircles(): UseQueryResult<Array<Circle>, Error>;
+function useCircles<T = Array<Circle>>(select?: (data: Array<Circle>) => T) {
   const client = useClient();
   const features = useFeatures();
 
@@ -20,7 +27,7 @@ const useCircles = <T>(select?: (data: Array<Circle>) => T) => {
     enabled: features.circles,
     select,
   });
-};
+}
 
 const useCircle = (circleId?: string) =>
   useCircles((data) => (circleId ? data.find((circle) => circle.id === circleId) : undefined));

@@ -98,7 +98,7 @@ const BookmarkFoldersPage: React.FC = () => {
   const intl = useIntl();
   const features = useFeatures();
 
-  const { data: bookmarkFolders, isFetching } = useBookmarkFolders((data) => data);
+  const { data: bookmarkFolders, isFetching } = useBookmarkFolders();
 
   if (!features.bookmarkFolders)
     return <Navigate to='/bookmarks/$folderId' params={{ folderId: 'all' }} replace />;

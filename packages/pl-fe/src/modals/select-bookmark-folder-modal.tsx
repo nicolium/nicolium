@@ -52,7 +52,7 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
     setSearchTerm(e.target.value);
   };
 
-  const { isFetching, data: bookmarkFolders } = useBookmarkFolders((data) => data);
+  const { isFetching, data: bookmarkFolders } = useBookmarkFolders();
   const { data: selectedBookmarkFolders, isPending: fetchingSelectedBookmarkFolders } =
     useStatusBookmarkFolders(statusId);
   const { mutate: addBookmarkToFolder, isPending: addingBookmarkToFolder } =

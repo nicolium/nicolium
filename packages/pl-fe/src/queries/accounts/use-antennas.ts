@@ -1,4 +1,9 @@
-import { type InfiniteData, useMutation, useQuery } from '@tanstack/react-query';
+import {
+  type InfiniteData,
+  useMutation,
+  useQuery,
+  type UseQueryResult,
+} from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
@@ -10,7 +15,9 @@ import { minifyAccountList } from '../utils/minify-list';
 
 import type { Antenna, PaginatedResponse, CreateAntennaParams, UpdateAntennaParams } from 'pl-api';
 
-const useAntennas = <T>(select?: (data: Array<Antenna>) => T) => {
+function useAntennas<T>(select: (data: Array<Antenna>) => T): UseQueryResult<T, Error>;
+function useAntennas(): UseQueryResult<Array<Antenna>, Error>;
+function useAntennas<T = Array<Antenna>>(select?: (data: Array<Antenna>) => T) {
   const client = useClient();
   const features = useFeatures();
 
@@ -20,7 +27,7 @@ const useAntennas = <T>(select?: (data: Array<Antenna>) => T) => {
     enabled: features.antennas,
     select,
   });
-};
+}
 
 const useAntenna = (antennaId?: string) =>
   useAntennas((data) => (antennaId ? data.find((antenna) => antenna.id === antennaId) : undefined));

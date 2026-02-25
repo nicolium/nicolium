@@ -1,4 +1,9 @@
-import { type QueryClient, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  type QueryClient,
+  useQuery,
+  useQueryClient,
+  type UseQueryResult,
+} from '@tanstack/react-query';
 import { create } from 'mutative';
 import { mediaAttachmentSchema } from 'pl-api';
 import * as v from 'valibot';
@@ -53,7 +58,13 @@ const getDrafts = async (accountUrl: string) => {
 const persistDrafts = (accountUrl: string, drafts: Record<string, APIEntity>) =>
   KVStore.setItem(`drafts:${accountUrl}`, Object.values(drafts));
 
-const useDraftStatusesQuery = <T>(select?: (data: Record<string, DraftStatus>) => T) => {
+function useDraftStatusesQuery<T>(
+  select: (data: Record<string, DraftStatus>) => T,
+): UseQueryResult<T, Error>;
+function useDraftStatusesQuery(): UseQueryResult<Record<string, DraftStatus>, Error>;
+function useDraftStatusesQuery<T = Record<string, DraftStatus>>(
+  select?: (data: Record<string, DraftStatus>) => T,
+) {
   const { data: account } = useOwnAccount();
 
   return useQuery({
@@ -62,7 +73,7 @@ const useDraftStatusesQuery = <T>(select?: (data: Record<string, DraftStatus>) =
     enabled: !!account,
     select,
   });
-};
+}
 
 const useDraftStatusQuery = (draftStatusId: string) =>
   useDraftStatusesQuery((data) => data[draftStatusId]);

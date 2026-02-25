@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
@@ -7,7 +7,13 @@ import { queryClient } from '../client';
 
 import type { BookmarkFolder } from 'pl-api';
 
-const useBookmarkFolders = <T>(select?: (data: Array<BookmarkFolder>) => T) => {
+function useBookmarkFolders<T>(
+  select: (data: Array<BookmarkFolder>) => T,
+): UseQueryResult<T, Error>;
+function useBookmarkFolders(): UseQueryResult<Array<BookmarkFolder>, Error>;
+function useBookmarkFolders<T = Array<BookmarkFolder>>(
+  select?: (data: Array<BookmarkFolder>) => T,
+) {
   const client = useClient();
   const features = useFeatures();
 
@@ -17,7 +23,7 @@ const useBookmarkFolders = <T>(select?: (data: Array<BookmarkFolder>) => T) => {
     enabled: features.bookmarkFolders,
     select,
   });
-};
+}
 
 const useBookmarkFolder = (folderId?: string) =>
   useBookmarkFolders((data) =>

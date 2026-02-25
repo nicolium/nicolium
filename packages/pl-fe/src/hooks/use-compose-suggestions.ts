@@ -19,8 +19,7 @@ const useComposeSuggestions = (token: string): Array<AutoSuggestion> => {
         ? 'emojis'
         : null;
 
-  // TODO: fix default selectors across the code
-  const { data: customEmojis } = useCustomEmojis((emojis) => emojis);
+  const { data: customEmojis } = useCustomEmojis();
   const { data: accountIds } = useAccountSearch(searchedType === 'accounts' ? debouncedToken : '', {
     resolve: false,
     limit: 5,
