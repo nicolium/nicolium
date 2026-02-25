@@ -21,6 +21,8 @@ import type { PlfeResponse } from '@/api';
 
 const messages = defineMessages({
   placeholder: { id: 'chat_search.placeholder', defaultMessage: 'Type a name' },
+  clearSearch: { id: 'chat_search.clear', defaultMessage: 'Clear search' },
+  search: { id: 'chat_search.search', defaultMessage: 'Search' },
 });
 
 interface IChatSearch {
@@ -101,7 +103,12 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
           outerClassName='mt-0'
           theme='search'
           append={
-            <button onClick={clearValue}>
+            <button
+              onClick={clearValue}
+              aria-label={intl.formatMessage(
+                hasSearchValue ? messages.clearSearch : messages.search,
+              )}
+            >
               <Icon
                 src={
                   hasSearchValue

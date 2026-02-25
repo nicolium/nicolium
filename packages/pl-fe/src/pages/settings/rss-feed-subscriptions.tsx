@@ -24,6 +24,7 @@ import toast from '@/toast';
 const messages = defineMessages({
   heading: { id: 'column.rss_feed_subscriptions', defaultMessage: 'Subscribed RSS feeds' },
   label: { id: 'rss_feed_subscriptions.new.title_placeholder', defaultMessage: 'RSS feed URL' },
+  deleteFeed: { id: 'rss_feed_subscriptions.delete', defaultMessage: 'Delete feed' },
   createSuccess: {
     id: 'rss_feed_subscriptions.add.success',
     defaultMessage: 'Successfully subscribed to RSS feed',
@@ -137,6 +138,7 @@ const RssFeedSubscriptions = () => {
                       disabled={isPending}
                       className='size-8 text-gray-700 dark:text-gray-600'
                       src={require('@phosphor-icons/core/regular/x.svg')}
+                      title={intl.formatMessage(messages.deleteFeed)}
                     />
                   </HStack>
                 }

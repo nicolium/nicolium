@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
@@ -12,8 +12,13 @@ import { useInstance } from '@/hooks/use-instance';
 
 import Shoutbox from '../../shoutbox';
 
+const messages = defineMessages({
+  back: { id: 'chats.back', defaultMessage: 'Back to chats' },
+});
+
 const ChatsPageShoutbox = () => {
   const navigate = useNavigate();
+  const intl = useIntl();
   const instance = useInstance();
   const { logo } = useFrontendConfig();
 
@@ -26,6 +31,7 @@ const ChatsPageShoutbox = () => {
               src={require('@phosphor-icons/core/regular/arrow-left.svg')}
               className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
               onClick={() => navigate({ to: '/chats' })}
+              title={intl.formatMessage(messages.back)}
             />
 
             <Avatar src={logo} alt='' size={40} className='flex-none' />

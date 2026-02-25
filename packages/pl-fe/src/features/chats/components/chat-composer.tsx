@@ -30,6 +30,7 @@ import type { MediaAttachment } from 'pl-api';
 
 const messages = defineMessages({
   placeholder: { id: 'chat.input.placeholder', defaultMessage: 'Type a message' },
+  send: { id: 'chat.actions.send', defaultMessage: 'Send' },
   unblockMessage: {
     id: 'chat_settings.unblock.message',
     defaultMessage:
@@ -256,6 +257,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
               className='text-primary-500'
               disabled={isSubmitDisabled}
               onClick={onSubmit}
+              title={intl.formatMessage(messages.send)}
             />
           </Stack>
         </HStack>

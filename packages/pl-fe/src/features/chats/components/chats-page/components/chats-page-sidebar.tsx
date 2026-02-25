@@ -13,6 +13,8 @@ import type { Chat } from 'pl-api';
 
 const messages = defineMessages({
   title: { id: 'column.chats', defaultMessage: 'Chats' },
+  settings: { id: 'chat_list_item.settings', defaultMessage: 'Chat settings' },
+  newChat: { id: 'chat_pane.header.new_chat', defaultMessage: 'New chat' },
 });
 
 const ChatsPageSidebar = () => {
@@ -49,12 +51,14 @@ const ChatsPageSidebar = () => {
               src={require('@phosphor-icons/core/regular/sliders-horizontal.svg')}
               iconClassName='h-5 w-5 text-gray-600'
               onClick={handleSettingsClick}
+              title={intl.formatMessage(messages.settings)}
             />
 
             <IconButton
               src={require('@phosphor-icons/core/regular/pencil-simple.svg')}
               iconClassName='h-5 w-5 text-gray-600'
               onClick={handleChatCreate}
+              title={intl.formatMessage(messages.newChat)}
             />
           </HStack>
         </HStack>

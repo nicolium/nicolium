@@ -57,6 +57,10 @@ const messages = defineMessages({
     id: 'compose_event.header_description',
     defaultMessage: 'Add header alt text.',
   },
+  eventHeaderDescriptionPlaceholder: {
+    id: 'compose_event.header_description_placeholder',
+    defaultMessage: 'Event banner',
+  },
 });
 
 interface IEditEvent {
@@ -263,7 +267,13 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
         <div className='⁂-edit-event__banner__container'>
           {banner ? (
             <>
-              <img src={banner.url} alt='' />
+              <img
+                src={banner.url}
+                alt={
+                  banner.description ||
+                  intl.formatMessage(messages.eventHeaderDescriptionPlaceholder)
+                }
+              />
               <IconButton
                 src={require('@phosphor-icons/core/regular/x.svg')}
                 onClick={handleClearBanner}

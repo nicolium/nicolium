@@ -1,10 +1,15 @@
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
+
+const messages = defineMessages({
+  authorize: { id: 'authorize.action', defaultMessage: 'Approve' },
+  reject: { id: 'reject.action', defaultMessage: 'Reject' },
+});
 
 interface IAuthorizeRejectButtons {
   onAuthorize(): Promise<unknown> | unknown;
@@ -18,6 +23,7 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({
   onReject,
   countdown,
 }) => {
+  const intl = useIntl();
   const [state, setState] = useState<
     'authorizing' | 'rejecting' | 'authorized' | 'rejected' | 'pending'
   >('pending');
@@ -129,6 +135,7 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({
             isLoading={state === 'rejecting'}
             disabled={state === 'authorizing'}
             style={renderStyle('rejecting')}
+            title={intl.formatMessage(messages.reject)}
           />
           <AuthorizeRejectButton
             theme='primary'
@@ -137,6 +144,7 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({
             isLoading={state === 'authorizing'}
             disabled={state === 'rejecting'}
             style={renderStyle('authorizing')}
+            title={intl.formatMessage(messages.authorize)}
           />
         </HStack>
       );
@@ -162,6 +170,7 @@ interface IAuthorizeRejectButton {
   isLoading?: boolean;
   disabled?: boolean;
   style: React.CSSProperties;
+  title?: string;
 }
 
 const AuthorizeRejectButton: React.FC<IAuthorizeRejectButton> = ({
@@ -171,6 +180,7 @@ const AuthorizeRejectButton: React.FC<IAuthorizeRejectButton> = ({
   isLoading,
   style,
   disabled,
+  title,
 }) => (
   <div className='relative'>
     <div
@@ -191,6 +201,7 @@ const AuthorizeRejectButton: React.FC<IAuthorizeRejectButton> = ({
           'text-danger-600': theme === 'danger',
         })}
         disabled={disabled}
+        title={title}
       />
     </div>
   </div>

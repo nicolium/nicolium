@@ -47,6 +47,8 @@ const messages = defineMessages({
     id: 'upload_form.description_missing.title',
     defaultMessage: "This attachment doesn't have a description",
   },
+  preview: { id: 'upload_form.preview', defaultMessage: 'Preview' },
+  delete: { id: 'upload_form.undo', defaultMessage: 'Delete' },
 });
 
 const imageCache = new Set();
@@ -303,6 +305,7 @@ const ImageComponent = ({
               theme='dark'
               className='!p-1.5 hover:scale-105 hover:bg-gray-900'
               iconClassName='h-5 w-5'
+              title={intl.formatMessage(messages.preview)}
             />
             <IconButton
               onClick={deleteNode}
@@ -310,6 +313,7 @@ const ImageComponent = ({
               theme='dark'
               className='!p-1.5 hover:scale-105 hover:bg-gray-900'
               iconClassName='h-5 w-5'
+              title={intl.formatMessage(messages.delete)}
             />
           </HStack>
 

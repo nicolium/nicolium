@@ -40,6 +40,7 @@ const messages = defineMessages({
     defaultMessage: 'Chat settings updated successfully',
   },
   fail: { id: 'settings.messages.fail', defaultMessage: 'Failed to update chat settings' },
+  back: { id: 'chats.back', defaultMessage: 'Back to chats' },
 });
 
 const ChatsPageSettings = () => {
@@ -78,6 +79,7 @@ const ChatsPageSettings = () => {
           src={require('@phosphor-icons/core/regular/arrow-left.svg')}
           className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
           onClick={() => navigate({ to: '/chats' })}
+          title={intl.formatMessage(messages.back)}
         />
 
         <CardTitle title={intl.formatMessage(messages.title)} />

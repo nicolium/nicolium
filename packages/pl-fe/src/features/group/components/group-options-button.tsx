@@ -18,6 +18,7 @@ const messages = defineMessages({
   leave: { id: 'group.leave.label', defaultMessage: 'Leave' },
   leaveSuccess: { id: 'group.leave.success', defaultMessage: 'Left the group' },
   share: { id: 'group.share.label', defaultMessage: 'Share' },
+  groupOptions: { id: 'group.options', defaultMessage: 'Group options' },
 });
 
 interface IGroupActionButton {
@@ -95,6 +96,7 @@ const GroupOptionsButton = ({ group }: IGroupActionButton) => {
         iconClassName='h-5 w-5'
         className='self-stretch px-2.5'
         data-testid='dropdown-menu-button'
+        title={intl.formatMessage(messages.groupOptions)}
       />
     </DropdownMenu>
   );

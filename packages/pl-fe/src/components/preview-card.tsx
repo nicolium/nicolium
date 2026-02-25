@@ -7,7 +7,7 @@ import {
   mediaAttachmentSchema,
 } from 'pl-api';
 import React, { useState, useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
 import Blurhash from '@/components/blurhash';
@@ -22,6 +22,12 @@ import Purify from '@/utils/url-purify';
 
 import HoverAccountWrapper from './hover-account-wrapper';
 import Avatar from './ui/avatar';
+
+const messages = defineMessages({
+  play: { id: 'preview_card.play', defaultMessage: 'Play' },
+  expand: { id: 'preview_card.expand', defaultMessage: 'Enlarge image' },
+  externalLink: { id: 'preview_card.external_link', defaultMessage: 'Open in new tab' },
+});
 
 const domParser = new DOMParser();
 
@@ -106,6 +112,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   cacheWidth,
   onOpenMedia,
 }): React.JSX.Element => {
+  const intl = useIntl();
   const {
     urlPrivacy: { clearLinksInContent, redirectLinksMode },
   } = useSettings();
@@ -253,6 +260,9 @@ const PreviewCard: React.FC<IPreviewCard> = ({
                 <button
                   onClick={handleEmbedClick}
                   className='appearance-none text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-100'
+                  title={intl.formatMessage(
+                    card.type === 'photo' ? messages.expand : messages.play,
+                  )}
                 >
                   <Icon src={iconVariant} className='size-6 text-inherit' />
                 </button>
@@ -266,6 +276,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
                     target='_blank'
                     rel='noopener'
                     className='text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-100'
+                    title={intl.formatMessage(messages.externalLink)}
                   >
                     <Icon
                       src={require('@phosphor-icons/core/regular/arrow-square-out.svg')}

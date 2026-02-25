@@ -65,7 +65,14 @@ const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
   const className = 'size-4 flex-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2';
 
   if (disabled) {
-    return <img src={account.favicon} alt='' title={account.domain} className={className} />;
+    return (
+      <img
+        src={account.favicon}
+        alt={account.domain}
+        title={account.domain}
+        className={className}
+      />
+    );
   }
 
   return (
@@ -75,7 +82,12 @@ const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
       disabled={disabled}
       title={intl.formatMessage(messages.timeline, { domain: account.domain })}
     >
-      <img src={account.favicon} alt='' title={account.domain} className='max-h-full w-full' />
+      <img
+        src={account.favicon}
+        alt={account.domain}
+        title={account.domain}
+        className='max-h-full w-full'
+      />
     </button>
   );
 };

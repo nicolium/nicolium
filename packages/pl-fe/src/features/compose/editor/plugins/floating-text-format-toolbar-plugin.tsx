@@ -62,6 +62,7 @@ const messages = defineMessages({
     defaultMessage: 'Insert code block',
   },
   insertLink: { id: 'compose_form.lexical.insert_link', defaultMessage: 'Insert link' },
+  blockType: { id: 'compose_form.lexical.block_type', defaultMessage: 'Change block type' },
 });
 
 const blockTypeToIcon = {
@@ -124,6 +125,7 @@ const BlockTypeDropdown = ({
   icon: string;
 }) => {
   const { composeAllowHeadings } = useFeatures();
+  const intl = useIntl();
 
   const [showDropDown, setShowDropDown] = useState(false);
 
@@ -201,7 +203,7 @@ const BlockTypeDropdown = ({
           setShowDropDown(!showDropDown);
         }}
         className='relative flex cursor-pointer rounded-lg border-0 bg-none p-1 align-middle hover:bg-gray-100 disabled:cursor-not-allowed disabled:hover:bg-none dark:hover:bg-primary-700'
-        aria-label=''
+        aria-label={intl.formatMessage(messages.blockType)}
         type='button'
       >
         <Icon src={icon} />

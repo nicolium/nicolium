@@ -14,6 +14,7 @@ import { useReports } from '@/queries/admin/use-reports';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.reports', defaultMessage: 'Reports' },
+  clearFilter: { id: 'column.admin.reports.clear_filter', defaultMessage: 'Clear filter' },
 });
 
 const Reports: React.FC = () => {
@@ -54,6 +55,7 @@ const Reports: React.FC = () => {
             iconClassName='h-5 w-5'
             src={require('@phosphor-icons/core/regular/x.svg')}
             onClick={handleUnsetAccounts}
+            title={intl.formatMessage(messages.clearFilter)}
           />
           <Text>
             <FormattedMessage

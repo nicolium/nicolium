@@ -22,6 +22,7 @@ const messages = defineMessages({
   heading: { id: 'column.search', defaultMessage: 'Search' },
   placeholder: { id: 'search.placeholder', defaultMessage: 'Search' },
   clear: { id: 'search.clear', defaultMessage: 'Clear input' },
+  clearAccountFilter: { id: 'search.clear_account_filter', defaultMessage: 'Clear account filter' },
   accounts: { id: 'search_results.accounts', defaultMessage: 'People' },
   statuses: { id: 'search_results.statuses', defaultMessage: 'Posts' },
   hashtags: { id: 'search_results.hashtags', defaultMessage: 'Hashtags' },
@@ -202,6 +203,7 @@ const SearchResults = () => {
             iconClassName='h-5 w-5'
             src={require('@phosphor-icons/core/regular/x.svg')}
             onClick={handleUnsetAccount}
+            title={intl.formatMessage(messages.clearAccountFilter)}
           />
           <Text truncate>
             <FormattedMessage

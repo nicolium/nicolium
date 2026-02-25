@@ -108,6 +108,7 @@ const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxC
               className='text-primary-500'
               disabled={isSubmitDisabled}
               onClick={onSubmit}
+              title={intl.formatMessage(messages.send)}
             />
           </Stack>
         </HStack>
