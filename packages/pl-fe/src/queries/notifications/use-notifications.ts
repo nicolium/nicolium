@@ -34,6 +34,7 @@ import { minifyGroupedNotifications } from '../utils/minify-list';
 
 import type {
   GetGroupedNotificationsParams,
+  Marker,
   Notification,
   NotificationGroup,
   PaginatedResponse,
@@ -242,6 +243,11 @@ const useMarkNotificationsReadMutation = () => {
     mutationKey: ['markers', 'notifications', 'save'],
     mutationFn: async (lastReadId?: string | null) => {
       if (!lastReadId) return;
+
+      const currentMarker = queryClient.getQueryData<Marker>(['markers', 'notifications']);
+      if (currentMarker && compareId(currentMarker.last_read_id, lastReadId) >= 0) {
+        return;
+      }
 
       return await client.timelines.saveMarkers({
         notifications: {
