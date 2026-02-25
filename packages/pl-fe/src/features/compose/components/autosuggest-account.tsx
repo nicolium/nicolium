@@ -1,14 +1,14 @@
 import React from 'react';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import Account from '@/components/account';
+import { useAccount } from '@/queries/accounts/use-account';
 
 interface IAutosuggestAccount {
   id: string;
 }
 
 const AutosuggestAccount: React.FC<IAutosuggestAccount> = ({ id }) => {
-  const { account } = useAccount(id);
+  const { data: account } = useAccount(id);
   if (!account) return null;
 
   return (

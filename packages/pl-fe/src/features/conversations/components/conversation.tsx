@@ -1,8 +1,8 @@
 import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import StatusContainer from '@/containers/status-container';
+import { useAccount } from '@/queries/accounts/use-account';
 import {
   useMarkConversationRead,
   type MinifiedConversation,
@@ -19,7 +19,7 @@ const Conversation: React.FC<IConversation> = ({ conversation, onMoveUp, onMoveD
 
   const { id: conversationId, account_ids, unread, last_status: lastStatusId } = conversation;
   const { mutate: markConversationRead } = useMarkConversationRead(conversationId);
-  const { account: lastStatusAccount } = useAccount(account_ids[0]);
+  const { data: lastStatusAccount } = useAccount(account_ids[0]);
 
   const handleClick = () => {
     if (unread) {

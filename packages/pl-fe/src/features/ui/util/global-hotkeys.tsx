@@ -46,7 +46,7 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
   const navigate = useNavigate();
   const { history } = useRouter();
   const dispatch = useAppDispatch();
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const { openModal } = useModalsActions();
 
   const handlers = useMemo(() => {

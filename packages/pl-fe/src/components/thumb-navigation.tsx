@@ -32,7 +32,7 @@ const messages = defineMessages({
 const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const features = useFeatures();
   const queryClient = useQueryClient();
 

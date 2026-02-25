@@ -17,7 +17,7 @@ import { federationRestrictionsDisclosed } from '@/utils/state';
 const RemoteInstanceLayout = () => {
   const { instance } = layouts.remoteInstance.useParams();
 
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const disclosed = useAppSelector(federationRestrictionsDisclosed);
 
   return (

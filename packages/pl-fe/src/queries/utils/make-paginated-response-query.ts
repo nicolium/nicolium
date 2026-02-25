@@ -30,7 +30,7 @@ const makePaginatedResponseQuery =
   ) =>
   (...params: T1) => {
     const client = useClient();
-    const { account } = useOwnAccount();
+    const { data: account } = useOwnAccount();
 
     return useInfiniteQuery({
       queryKey: typeof queryKey === 'object' ? queryKey : queryKey(...params),

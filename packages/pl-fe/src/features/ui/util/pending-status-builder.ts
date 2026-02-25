@@ -1,9 +1,8 @@
 import { create } from 'mutative';
-import { statusSchema } from 'pl-api';
+import { statusSchema, type Account } from 'pl-api';
 import * as v from 'valibot';
 
 import { normalizeStatus } from '@/normalizers/status';
-import { selectOwnAccount } from '@/selectors';
 
 import type { RootState } from '@/store';
 import type { PendingStatus } from '@/stores/pending-statuses';
@@ -27,8 +26,12 @@ const buildPoll = (pendingStatus: PendingStatus) => {
   }
 };
 
-const buildStatus = (state: RootState, pendingStatus: PendingStatus, idempotencyKey: string) => {
-  const account = selectOwnAccount(state)!;
+const buildStatus = (
+  account: Account,
+  state: RootState,
+  pendingStatus: PendingStatus,
+  idempotencyKey: string,
+) => {
   const inReplyToId = pendingStatus.in_reply_to_id;
 
   const status = {

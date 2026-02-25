@@ -2,7 +2,6 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import StillImage from '@/components/still-image';
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
@@ -12,6 +11,7 @@ import Text from '@/components/ui/text';
 import VerificationBadge from '@/components/verification-badge';
 import Emojify from '@/features/emoji/emojify';
 import { useAcct } from '@/hooks/use-acct';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useSettings } from '@/stores/settings';
 import { shortNumberFormat } from '@/utils/numbers';
 
@@ -33,7 +33,7 @@ interface IUserPanel {
 const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) => {
   const intl = useIntl();
   const { demetricator, disableUserProvidedMedia } = useSettings();
-  const { account } = useAccount(accountId);
+  const { data: account } = useAccount(accountId);
   const displayedAcct = useAcct(account);
 
   if (!account) return null;

@@ -5,9 +5,9 @@ import { getClient } from '@/api';
 import { isNativeEmoji } from '@/features/emoji';
 import emojiSearch from '@/features/emoji/search';
 import { Language } from '@/features/preferences';
+import { selectAccount, selectOwnAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
 import { cancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
-import { selectAccount, selectOwnAccount } from '@/selectors';
 import { useModalsStore } from '@/stores/modals';
 import { useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
@@ -872,7 +872,7 @@ const selectComposeSuggestion =
       completion = suggestion;
       startPosition = position - 1;
     } else if (typeof suggestion === 'string') {
-      completion = selectAccount(getState(), suggestion)!.acct;
+      completion = selectAccount(suggestion)!.acct;
       startPosition = position;
     }
 
@@ -1006,18 +1006,16 @@ interface ComposeAddToMentionsAction {
   account: string;
 }
 
-const addToMentions =
-  (composeId: string, accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const account = selectAccount(state, accountId);
-    if (!account) return;
+const addToMentions = (composeId: string, accountId: string) => (dispatch: AppDispatch) => {
+  const account = selectAccount(accountId);
+  if (!account) return;
 
-    return dispatch<ComposeAddToMentionsAction>({
-      type: COMPOSE_ADD_TO_MENTIONS,
-      composeId,
-      account: account.acct,
-    });
-  };
+  return dispatch<ComposeAddToMentionsAction>({
+    type: COMPOSE_ADD_TO_MENTIONS,
+    composeId,
+    account: account.acct,
+  });
+};
 
 interface ComposeRemoveFromMentionsAction {
   type: typeof COMPOSE_REMOVE_FROM_MENTIONS;
@@ -1025,18 +1023,16 @@ interface ComposeRemoveFromMentionsAction {
   account: string;
 }
 
-const removeFromMentions =
-  (composeId: string, accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const account = selectAccount(state, accountId);
-    if (!account) return;
+const removeFromMentions = (composeId: string, accountId: string) => (dispatch: AppDispatch) => {
+  const account = selectAccount(accountId);
+  if (!account) return;
 
-    return dispatch<ComposeRemoveFromMentionsAction>({
-      type: COMPOSE_REMOVE_FROM_MENTIONS,
-      composeId,
-      account: account.acct,
-    });
-  };
+  return dispatch<ComposeRemoveFromMentionsAction>({
+    type: COMPOSE_REMOVE_FROM_MENTIONS,
+    composeId,
+    account: account.acct,
+  });
+};
 
 interface ComposeEventReplyAction {
   type: typeof COMPOSE_EVENT_REPLY;

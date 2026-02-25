@@ -119,7 +119,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
   const features = useFeatures();
   const { boostModal } = useSettings();
-  const { account: ownAccount } = useOwnAccount();
+  const { data: ownAccount } = useOwnAccount();
   const isStaff = ownAccount ? (ownAccount.is_admin ?? ownAccount.is_moderator) : false;
   const isAdmin = ownAccount ? ownAccount.is_admin : false;
 

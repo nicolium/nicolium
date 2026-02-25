@@ -25,7 +25,7 @@ const GroupTimelinePage: React.FC = () => {
   const { groupId } = groupTimelineRoute.useParams();
 
   const intl = useIntl();
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const dispatch = useAppDispatch();
   const composer = useRef<HTMLDivElement>(null);
 

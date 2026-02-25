@@ -11,7 +11,7 @@ import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import PollPreview from '@/features/ui/components/poll-preview';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useOwnAccount } from '@/hooks/use-own-account';
 
 import { buildStatus } from '../builder';
 
@@ -24,10 +24,11 @@ interface IDraftStatus {
 }
 
 const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
-  const status = useAppSelector((state) => {
-    if (!draftStatus) return null;
-    return buildStatus(state, draftStatus);
-  });
+  const { data: ownAccount } = useOwnAccount();
+
+  if (!ownAccount || !draftStatus) return null;
+
+  const status = buildStatus(ownAccount, draftStatus);
 
   if (!status) return null;
 

@@ -1,4 +1,5 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMemo } from 'react';
 
 import {
   ACCOUNT_BLOCK_SUCCESS,
@@ -62,6 +63,29 @@ const useRelationshipQuery = (accountId?: string) => {
         .then((data) => data || undefined),
     enabled: isLoggedIn && !!accountId,
   });
+};
+
+const useRelationshipsQuery = (accountIds?: Array<string>) => {
+  const client = useClient();
+  const { isLoggedIn } = useLoggedIn();
+
+  const queries = useMemo(
+    () =>
+      isLoggedIn && accountIds
+        ? accountIds.map((accountId) => ({
+            queryKey: ['accountRelationships', accountId] as const,
+            queryFn: () =>
+              batcher
+                .relationships(client)
+                .fetch(accountId)
+                .then((data) => data || undefined),
+            enabled: !!accountId,
+          }))
+        : [],
+    [isLoggedIn, accountIds?.join(',')],
+  );
+
+  return useQueries({ queries });
 };
 
 const useFollowAccountMutation = (accountId: string) => {
@@ -371,6 +395,7 @@ const useUpdateAccountNoteMutation = (accountId: string) => {
 
 export {
   useRelationshipQuery,
+  useRelationshipsQuery,
   useFollowAccountMutation,
   useUnfollowAccountMutation,
   useBlockAccountMutation,

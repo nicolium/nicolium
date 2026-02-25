@@ -33,7 +33,7 @@ const PlFeLoad: React.FC<IPlFeLoad> = ({ children }) => {
   const dispatch = useAppDispatch();
 
   const me = useAppSelector((state) => state.me);
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const locale = useLocale();
 
   const [messages, setMessages] = useState<Record<string, string>>({});

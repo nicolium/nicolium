@@ -2,7 +2,6 @@ import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useAccountLookup } from '@/api/hooks/accounts/use-account-lookup';
 import List, { ListItem } from '@/components/list';
 import MissingIndicator from '@/components/missing-indicator';
 import ScrollableList from '@/components/scrollable-list';
@@ -12,6 +11,7 @@ import Toggle from '@/components/ui/toggle';
 import AccountContainer from '@/containers/account-container';
 import { profileSubscribersRoute } from '@/features/ui/router';
 import { useSubscribers } from '@/queries/account-lists/use-follows';
+import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
 
 const messages = defineMessages({
   heading: { id: 'column.subscribers', defaultMessage: 'Subscribers' },
@@ -25,7 +25,7 @@ const SubscribersPage: React.FC = () => {
 
   const intl = useIntl();
 
-  const { account, isUnavailable } = useAccountLookup(username);
+  const { data: account, isUnavailable } = useAccountLookup(username);
 
   const {
     data = [],

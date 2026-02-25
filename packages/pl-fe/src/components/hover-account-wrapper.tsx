@@ -2,8 +2,6 @@ import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import React, { useRef } from 'react';
 
-import { fetchAccount } from '@/actions/accounts';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { isMobile } from '@/is-mobile';
 import { useAccountHoverCardActions } from '@/stores/account-hover-card';
 
@@ -21,8 +19,6 @@ interface IHoverAccountWrapper {
 /** Makes a profile hover card appear when the wrapped element is hovered. */
 const HoverAccountWrapper: React.FC<IHoverAccountWrapper> = React.memo(
   ({ accountId, children, element: Elem = 'div', className }) => {
-    const dispatch = useAppDispatch();
-
     const { openAccountHoverCard, closeAccountHoverCard } = useAccountHoverCardActions();
 
     const ref = useRef<HTMLDivElement>(null);
@@ -31,7 +27,6 @@ const HoverAccountWrapper: React.FC<IHoverAccountWrapper> = React.memo(
       if (!accountId) return;
 
       if (!isMobile(window.innerWidth)) {
-        dispatch(fetchAccount(accountId));
         showAccountHoverCard(openAccountHoverCard, ref, accountId);
       }
     };

@@ -43,7 +43,7 @@ const messages = defineMessages({
 });
 
 const ChatsPageSettings = () => {
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const intl = useIntl();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();

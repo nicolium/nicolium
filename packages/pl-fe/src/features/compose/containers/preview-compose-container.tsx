@@ -36,7 +36,7 @@ interface IQuotedStatusContainer {
 const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }) => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
-  const { account: ownAccount } = useOwnAccount();
+  const { data: ownAccount } = useOwnAccount();
 
   const previewedStatus = useCompose(composeId).preview as unknown as Status;
 

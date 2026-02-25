@@ -50,7 +50,7 @@ const UI: React.FC = React.memo(() => {
   const dispatch = useAppDispatch();
   const node = useRef<HTMLDivElement | null>(null);
   const me = useAppSelector((state) => state.me);
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const features = useFeatures();
   const vapidKey = useAppSelector((state) => getVapidKey(state));
   const client = useClient();

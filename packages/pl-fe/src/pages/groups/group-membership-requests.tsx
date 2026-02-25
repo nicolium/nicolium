@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import Account from '@/components/account';
 import { AuthorizeRejectButtons } from '@/components/authorize-reject-buttons';
 import ScrollableList from '@/components/scrollable-list';
@@ -10,6 +9,7 @@ import HStack from '@/components/ui/hstack';
 import Spinner from '@/components/ui/spinner';
 import ColumnForbidden from '@/features/ui/components/column-forbidden';
 import { groupMembershipRequestsRoute } from '@/features/ui/router';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import {
   useAcceptGroupMembershipRequestMutation,
@@ -37,7 +37,7 @@ interface IMembershipRequest {
 }
 
 const MembershipRequest: React.FC<IMembershipRequest> = ({ accountId, onAuthorize, onReject }) => {
-  const { account } = useAccount();
+  const { data: account } = useAccount(accountId);
 
   if (!account) return null;
 

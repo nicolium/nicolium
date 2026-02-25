@@ -16,7 +16,7 @@ interface ISentryFeedbackForm {
 
 /** Accept feedback for the given Sentry event. */
 const SentryFeedbackForm: React.FC<ISentryFeedbackForm> = ({ eventId }) => {
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
 
   const [feedback, setFeedback] = useState<string>();
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);

@@ -49,7 +49,7 @@ const SettingsPage = () => {
 
   const { data: mfa } = useMfaConfig();
   const features = useFeatures();
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
 
   const isMfaEnabled = mfa?.settings.totp;
 

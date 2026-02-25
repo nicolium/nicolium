@@ -23,8 +23,8 @@ import { createApp } from '@/actions/apps';
 import { fetchMeSuccess, fetchMeFail } from '@/actions/me';
 import { obtainOAuthToken, revokeOAuthToken } from '@/actions/oauth';
 import * as BuildConfig from '@/build-config';
+import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
-import { selectAccount } from '@/selectors';
 import { unsetSentryAccount } from '@/sentry';
 import KVStore from '@/storage/kv-store';
 import toast from '@/toast';
@@ -290,8 +290,8 @@ interface SwitchAccountAction {
   account: Account;
 }
 
-const switchAccount = (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  const account = selectAccount(getState(), accountId);
+const switchAccount = (accountId: string) => (dispatch: AppDispatch) => {
+  const account = selectAccount(accountId);
   if (!account) return;
 
   // Clear all stored cache from React Query
@@ -304,7 +304,7 @@ const switchAccount = (accountId: string) => (dispatch: AppDispatch, getState: (
 const fetchOwnAccounts = () => (dispatch: AppDispatch, getState: () => RootState) => {
   const state = getState();
   Object.values(state.auth.users).forEach((user) => {
-    const account = selectAccount(state, user.id);
+    const account = selectAccount(user.id);
     if (!account) {
       dispatch(verifyCredentials(user.access_token, user.url)).catch(() => {
         console.warn(`Failed to load account: ${user.url}`);

@@ -1,4 +1,4 @@
-import { selectAccount } from '@/selectors';
+import { selectAccount } from '@/queries/accounts/selectors';
 import { setSentryAccount } from '@/sentry';
 import KVStore from '@/storage/kv-store';
 import { useSettingsStore } from '@/stores/settings';
@@ -29,7 +29,7 @@ const getMeId = (state: RootState) => state.me ?? getAuthUserId(state);
 const getMeUrl = (state: RootState) => {
   const accountId = getMeId(state);
   if (accountId) {
-    return selectAccount(state, accountId)?.url ?? getAuthUserUrl(state);
+    return selectAccount(accountId)?.url ?? getAuthUserUrl(state);
   }
 };
 

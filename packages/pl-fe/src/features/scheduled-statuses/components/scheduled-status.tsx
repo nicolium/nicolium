@@ -8,7 +8,7 @@ import StatusReplyMentions from '@/components/status-reply-mentions';
 import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import PollPreview from '@/features/ui/components/poll-preview';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useOwnAccount } from '@/hooks/use-own-account';
 
 import { buildStatus } from '../builder';
 
@@ -21,9 +21,11 @@ interface IScheduledStatus {
 }
 
 const ScheduledStatus: React.FC<IScheduledStatus> = ({ scheduledStatus, ...other }) => {
-  const status = useAppSelector((state) => {
-    return buildStatus(state, scheduledStatus);
-  });
+  const { data: ownAccount } = useOwnAccount();
+
+  if (!ownAccount) return null;
+
+  const status = buildStatus(ownAccount, scheduledStatus);
 
   if (!status) return null;
 

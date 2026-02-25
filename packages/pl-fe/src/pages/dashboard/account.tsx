@@ -4,9 +4,6 @@ import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } fro
 
 import { setBadges as saveBadges, setRole } from '@/actions/admin';
 import { deactivateUserModal, deleteUserModal } from '@/actions/moderation';
-import { useAccount } from '@/api/hooks/accounts/use-account';
-import { useSuggest } from '@/api/hooks/admin/use-suggest';
-import { useVerify } from '@/api/hooks/admin/use-verify';
 import Account from '@/components/account';
 import List, { ListItem } from '@/components/list';
 import MissingIndicator from '@/components/missing-indicator';
@@ -24,6 +21,15 @@ import { adminAccountRoute } from '@/features/ui/router';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useAccount } from '@/queries/accounts/use-account';
+import {
+  useAdminSuggestAccountMutation,
+  useAdminUnsuggestAccountMutation,
+} from '@/queries/admin/use-suggest-account';
+import {
+  useAdminVerifyAccountMutation,
+  useAdminUnverifyAccountMutation,
+} from '@/queries/admin/use-verify-account';
 import toast from '@/toast';
 import { badgeToTag, tagToBadge, getBadges } from '@/utils/badges';
 
@@ -161,11 +167,13 @@ const AdminAccountPage: React.FC = () => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const { suggest, unsuggest } = useSuggest();
-  const { verify, unverify } = useVerify();
-  const { account: ownAccount } = useOwnAccount();
+  const { mutate: suggest } = useAdminSuggestAccountMutation(accountId);
+  const { mutate: unsuggest } = useAdminUnsuggestAccountMutation(accountId);
+  const { mutate: verify } = useAdminVerifyAccountMutation(accountId);
+  const { mutate: unverify } = useAdminUnverifyAccountMutation(accountId);
+  const { data: ownAccount } = useOwnAccount();
   const features = useFeatures();
-  const { account, isLoading } = useAccount(accountId);
+  const { data: account, isLoading } = useAccount(accountId);
 
   const accountBadges = account ? getBadges(account) : [];
   const [badges, setBadges] = useState<string[]>(accountBadges);
@@ -192,7 +200,7 @@ const AdminAccountPage: React.FC = () => {
     const message = checked ? messages.userVerified : messages.userUnverified;
     const action = checked ? verify : unverify;
 
-    action(account.id, {
+    action(undefined, {
       onSuccess: () => {
         toast.success(intl.formatMessage(message, { acct: account.acct }));
       },
@@ -205,7 +213,7 @@ const AdminAccountPage: React.FC = () => {
     const message = checked ? messages.userSuggested : messages.userUnsuggested;
     const action = checked ? suggest : unsuggest;
 
-    action(account.id, {
+    action(undefined, {
       onSuccess: () => {
         toast.success(intl.formatMessage(message, { acct: account.acct }));
       },

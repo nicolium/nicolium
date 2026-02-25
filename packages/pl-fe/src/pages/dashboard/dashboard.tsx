@@ -25,7 +25,7 @@ const Dashboard: React.FC = () => {
   const intl = useIntl();
   const instance = useInstance();
   const features = useFeatures();
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
 
   const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
   const { data: pendingReportsCount = 0 } = usePendingReportsCount();

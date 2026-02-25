@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import AttachmentThumbs from '@/components/attachment-thumbs';
 import Icon from '@/components/icon';
 import PullToRefresh from '@/components/pull-to-refresh';
@@ -20,6 +19,7 @@ import { buildLink } from '@/features/notifications/components/notification';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useAccount } from '@/queries/accounts/use-account';
 import {
   type MinifiedInteractionRequest,
   useAuthorizeInteractionRequestMutation,
@@ -122,8 +122,8 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
   onMoveDown,
 }) => {
   const intl = useIntl();
-  const { account: ownAccount } = useOwnAccount();
-  const { account } = useAccount(interactionRequest.account_id);
+  const { data: ownAccount } = useOwnAccount();
+  const { data: account } = useAccount(interactionRequest.account_id);
 
   const { mutate: authorize } = useAuthorizeInteractionRequestMutation(interactionRequest.id);
   const { mutate: reject } = useRejectInteractionRequestMutation(interactionRequest.id);

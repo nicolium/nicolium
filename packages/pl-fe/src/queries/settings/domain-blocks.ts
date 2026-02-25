@@ -1,12 +1,10 @@
 import { getClient } from '@/api';
-import { Entities } from '@/entity-store/entities';
 
 import { queryClient } from '../client';
 import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';
 import { mutationOptions } from '../utils/mutation-options';
 
 import type { MinifiedSuggestion } from '../trends/use-suggested-accounts';
-import type { EntityStore } from '@/entity-store/types';
 import type { RootState, Store } from '@/store';
 import type { Account } from 'pl-api';
 
@@ -44,11 +42,12 @@ const unblockDomainMutationOptions = mutationOptions({
 });
 
 const selectAccountsByDomain = (state: RootState, domain: string): string[] => {
-  const store = state.entities[Entities.ACCOUNTS]?.store as EntityStore<Account> | undefined;
-  const entries = store ? Object.entries(store) : undefined;
-  const accounts = entries
-    ?.filter(([_, item]) => item && item.acct.endsWith(`@${domain}`))
-    .map(([_, item]) => item!.id);
+  const accounts = queryClient
+    .getQueriesData<Account>({ queryKey: ['accounts'] })
+    .map(([, account]) => account)
+    .filter((account): account is Account => !!account && typeof account.id === 'string')
+    .filter((account) => account.acct.endsWith(`@${domain}`))
+    .map((account) => account.id);
   return accounts ?? [];
 };
 

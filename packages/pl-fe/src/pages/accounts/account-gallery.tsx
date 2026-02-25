@@ -3,8 +3,6 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
-import { useAccountLookup } from '@/api/hooks/accounts/use-account-lookup';
 import Blurhash from '@/components/blurhash';
 import Icon from '@/components/icon';
 import LoadMore from '@/components/load-more';
@@ -15,6 +13,8 @@ import Spinner from '@/components/ui/spinner';
 import { profileMediaRoute } from '@/features/ui/router';
 import { type AccountGalleryAttachment, useAccountGallery } from '@/hooks/use-account-gallery';
 import { isIOS } from '@/is-mobile';
+import { useAccount } from '@/queries/accounts/use-account';
+import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 
@@ -26,7 +26,7 @@ interface IMediaItem {
 
 const MediaItem: React.FC<IMediaItem> = ({ attachment, onOpenMedia, isLast }) => {
   const { autoPlayGif, displayMedia } = useSettings();
-  const { account } = useAccount(attachment.account_id);
+  const { data: account } = useAccount(attachment.account_id);
   const [visible, setVisible] = useState<boolean>(
     (displayMedia !== 'hide_all' && !attachment.sensitive) || displayMedia === 'show_all',
   );
@@ -160,11 +160,7 @@ const AccountGalleryPage = () => {
   const { username } = profileMediaRoute.useParams();
   const { openModal } = useModalsActions();
 
-  const {
-    account,
-    isLoading: accountLoading,
-    isUnavailable,
-  } = useAccountLookup(username, { withRelationship: true });
+  const { data: account, isLoading: accountLoading, isUnavailable } = useAccountLookup(username);
 
   const {
     data: attachments,

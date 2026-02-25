@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import React from 'react';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
+import { useAccount } from '@/queries/accounts/use-account';
 
 import HoverAccountWrapper from './hover-account-wrapper';
 
@@ -11,7 +11,7 @@ interface IStatusMention {
 }
 
 const StatusMention: React.FC<IStatusMention> = ({ accountId, fallback }) => {
-  const { account } = useAccount(accountId);
+  const { data: account } = useAccount(accountId);
 
   if (!account)
     return (

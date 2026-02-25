@@ -1,4 +1,4 @@
-import { selectAccount, selectOwnAccount } from '@/selectors';
+import { selectAccount, selectOwnAccount } from '@/queries/accounts/selectors';
 
 import type { RootState } from '@/store';
 
@@ -28,7 +28,7 @@ const isLoggedIn = (getState: () => RootState) => validId(getState().me);
 
 const getUserToken = (state: RootState, accountId?: string | false | null) => {
   if (!accountId) return;
-  const accountUrl = selectAccount(state, accountId)?.url;
+  const accountUrl = selectAccount(accountId)?.url;
   if (!accountUrl) return;
   return state.auth.users[accountUrl]?.access_token;
 };

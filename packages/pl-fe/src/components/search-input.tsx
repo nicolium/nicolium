@@ -5,8 +5,9 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import AutosuggestAccountInput from '@/components/autosuggest-account-input';
 import SvgIcon from '@/components/ui/svg-icon';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { selectAccount } from '@/selectors';
+import { queryClient } from '@/queries/client';
+
+import type { Account } from 'pl-api';
 
 const messages = defineMessages({
   placeholder: { id: 'search.placeholder', defaultMessage: 'Search' },
@@ -17,7 +18,6 @@ const messages = defineMessages({
 const SearchInput = React.memo(() => {
   const [value, setValue] = useState('');
 
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const intl = useIntl();
 
@@ -51,12 +51,13 @@ const SearchInput = React.memo(() => {
 
   const handleSelected = (accountId: string) => {
     setValue('');
-    dispatch((_, getState) =>
+    const account = queryClient.getQueryData<Account>(['accounts', accountId]);
+    if (account) {
       navigate({
         to: '/@{$username}',
-        params: { username: selectAccount(getState(), accountId)!.acct },
-      }),
-    );
+        params: { username: account.acct },
+      });
+    }
   };
 
   const makeMenu = () => [

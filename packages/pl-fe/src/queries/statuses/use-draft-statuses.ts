@@ -54,7 +54,7 @@ const persistDrafts = (accountUrl: string, drafts: Record<string, APIEntity>) =>
   KVStore.setItem(`drafts:${accountUrl}`, Object.values(drafts));
 
 const useDraftStatusesQuery = <T>(select?: (data: Record<string, DraftStatus>) => T) => {
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
 
   return useQuery({
     queryKey: ['draftStatuses'],
@@ -71,7 +71,7 @@ const useDraftStatusesCountQuery = () =>
   useDraftStatusesQuery((data) => Object.values(data).length);
 
 const usePersistDraftStatus = () => {
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
@@ -108,7 +108,7 @@ const cancelDraftStatus = (queryClient: QueryClient, accountUrl: string, draftId
 };
 
 const useCancelDraftStatus = () => {
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const queryClient = useQueryClient();
 
   return (draftId: string) => cancelDraftStatus(queryClient, account!.url, draftId);

@@ -7,10 +7,10 @@ import {
 } from '@tanstack/react-query';
 
 import { importEntities } from '@/actions/importer';
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useAccount } from '@/queries/accounts/use-account';
 
 import { filterById } from '../utils/filter-id';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
@@ -51,7 +51,7 @@ const useAdminAccount = (accountId?: string) => {
     enabled: !!accountId,
   });
 
-  const { account } = useAccount(query.data ? accountId : undefined);
+  const { data: account } = useAccount(query.data ? accountId : undefined);
 
   if (query.data && account) query.data.account = account;
 
@@ -67,7 +67,7 @@ const pendingUsersQuery = makePaginatedResponseQueryOptions(
 )();
 
 const usePendingUsersCount = () => {
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
 
   return useInfiniteQuery({
     ...pendingUsersQuery,

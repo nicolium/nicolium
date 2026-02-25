@@ -1,12 +1,12 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import { ParsedContent } from '@/components/parsed-content';
 import Avatar from '@/components/ui/avatar';
 import Emojify from '@/features/emoji/emojify';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/hooks/use-instance';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useShoutboxMessages } from '@/stores/shoutbox';
 
 import type { Chat } from 'pl-api';
@@ -27,7 +27,7 @@ const ChatListShoutbox: React.FC<IChatListShoutboxInterface> = ({ onClick }) => 
   };
 
   const lastMessage = messages.at(-1);
-  const { account: lastMessageAuthor } = useAccount(lastMessage?.author_id);
+  const { data: lastMessageAuthor } = useAccount(lastMessage?.author_id);
 
   return (
     <div

@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import Account from '@/components/account';
 import Badge from '@/components/badge';
 import HoverAccountWrapper from '@/components/hover-account-wrapper';
@@ -20,6 +19,7 @@ import { directoryRoute } from '@/features/ui/router';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/hooks/use-instance';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useDirectory } from '@/queries/accounts/use-directory';
 import { shortNumberFormat } from '@/utils/numbers';
 
@@ -37,7 +37,7 @@ interface IAccountCard {
 
 const AccountCard: React.FC<IAccountCard> = ({ id }) => {
   const me = useAppSelector((state) => state.me);
-  const { account } = useAccount(id);
+  const { data: account } = useAccount(id);
 
   if (!account) return null;
 

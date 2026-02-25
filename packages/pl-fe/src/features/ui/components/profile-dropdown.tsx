@@ -2,16 +2,13 @@ import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { createSelector } from 'reselect';
 
 import { logOut, switchAccount } from '@/actions/auth';
 import Account from '@/components/account';
 import DropdownMenu from '@/components/dropdown-menu';
-import { Entities } from '@/entity-store/entities';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
-import { RootState } from '@/store';
+import { useLoggedInAccounts } from '@/queries/accounts/use-logged-in-accounts';
 
 import ThemeToggle from './theme-toggle';
 
@@ -36,23 +33,12 @@ type IMenuItem = {
   action?: (event: React.MouseEvent) => void;
 };
 
-const getOtherAccounts = createSelector(
-  [
-    (state: RootState) => state.auth.users,
-    (state: RootState) => state.entities[Entities.ACCOUNTS]?.store,
-  ],
-  (signedAccounts, accountEntities) =>
-    Object.values(signedAccounts)
-      .map(({ id }) => accountEntities?.[id] as AccountEntity)
-      .filter((account) => account),
-);
-
 const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const intl = useIntl();
 
-  const otherAccounts = useAppSelector(getOtherAccounts);
+  const { accounts: otherAccounts } = useLoggedInAccounts();
 
   const handleLogOut = () => {
     dispatch(logOut());

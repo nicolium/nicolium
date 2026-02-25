@@ -277,7 +277,7 @@ const EditProfilePage: React.FC = () => {
   const instance = useInstance();
   const client = useClient();
 
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const features = useFeatures();
   const maxFields = instance.configuration.accounts
     ? instance.configuration.accounts.max_profile_fields

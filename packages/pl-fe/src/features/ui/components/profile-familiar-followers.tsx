@@ -2,13 +2,13 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import AvatarStack from '@/components/avatar-stack';
 import HoverAccountWrapper from '@/components/hover-account-wrapper';
 import HStack from '@/components/ui/hstack';
 import Text from '@/components/ui/text';
 import VerificationBadge from '@/components/verification-badge';
 import Emojify from '@/features/emoji/emojify';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useFamiliarFollowers } from '@/queries/accounts/use-familiar-followers';
 import { useModalsActions } from '@/stores/modals';
 
@@ -19,7 +19,7 @@ interface IFamiliarFollowerLink {
 }
 
 const FamiliarFollowerLink: React.FC<IFamiliarFollowerLink> = ({ id }) => {
-  const { account } = useAccount(id);
+  const { data: account } = useAccount(id);
 
   if (!account) return null;
 

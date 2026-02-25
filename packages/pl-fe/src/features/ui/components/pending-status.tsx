@@ -11,6 +11,7 @@ import PlaceholderCard from '@/features/placeholder/components/placeholder-card'
 import PlaceholderMediaGallery from '@/features/placeholder/components/placeholder-media-gallery';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import { useAppSelector } from '@/hooks/use-app-selector';
+import { useOwnAccount } from '@/hooks/use-own-account';
 import { usePendingStatus } from '@/stores/pending-statuses';
 
 import { buildStatus } from '../util/pending-status-builder';
@@ -50,9 +51,12 @@ const PendingStatus: React.FC<IPendingStatus> = ({
   variant = 'rounded',
 }) => {
   const pendingStatus = usePendingStatus(idempotencyKey);
+  const { data: ownAccount } = useOwnAccount();
 
   const status = useAppSelector((state) => {
-    return pendingStatus ? buildStatus(state, pendingStatus, idempotencyKey) : null;
+    return pendingStatus && ownAccount
+      ? buildStatus(ownAccount, state, pendingStatus, idempotencyKey)
+      : null;
   });
 
   if (!status) return null;

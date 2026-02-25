@@ -2,7 +2,6 @@ import { combineReducers } from '@reduxjs/toolkit';
 
 import { AUTH_LOGGED_OUT } from '@/actions/auth';
 import * as BuildConfig from '@/build-config';
-import entities from '@/entity-store/reducer';
 
 import admin from './admin';
 import auth from './auth';
@@ -20,7 +19,6 @@ const reducers = {
   admin,
   auth,
   compose,
-  entities,
   filters,
   frontendConfig,
   instance,

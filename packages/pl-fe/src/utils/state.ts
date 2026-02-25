@@ -6,7 +6,7 @@
 import { getFrontendConfig } from '@/actions/frontend-config';
 import * as BuildConfig from '@/build-config';
 import { isPrerendered } from '@/precheck';
-import { selectOwnAccount } from '@/selectors';
+import { selectOwnAccount } from '@/queries/accounts/selectors';
 import { isURL } from '@/utils/auth';
 
 import type { RootState } from '@/store';

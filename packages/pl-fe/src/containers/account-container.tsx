@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import Account, { IAccount } from '@/components/account';
+import { useAccount } from '@/queries/accounts/use-account';
 
 interface IAccountContainer extends Omit<IAccount, 'account'> {
   id: string;
@@ -9,7 +9,7 @@ interface IAccountContainer extends Omit<IAccount, 'account'> {
 }
 
 const AccountContainer: React.FC<IAccountContainer> = ({ id, withRelationship, ...props }) => {
-  const { account } = useAccount(id, { withRelationship });
+  const { data: account } = useAccount(id, withRelationship);
 
   return <Account account={account!} withRelationship={withRelationship} {...props} />;
 };

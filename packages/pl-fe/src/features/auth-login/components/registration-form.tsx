@@ -3,7 +3,6 @@ import debounce from 'lodash/debounce';
 import React, { useState, useRef, useCallback } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
-import { accountLookup } from '@/actions/accounts';
 import { register, verifyCredentials } from '@/actions/auth';
 import BirthdayInput from '@/components/birthday-input';
 import Button from '@/components/ui/button';
@@ -16,6 +15,7 @@ import Select from '@/components/ui/select';
 import Textarea from '@/components/ui/textarea';
 import CaptchaField from '@/features/auth-login/components/captcha';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/hooks/use-instance';
 import { useModalsActions } from '@/stores/modals';
@@ -52,6 +52,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const client = useClient();
   const { locale } = useSettings();
   const features = useFeatures();
   const instance = useInstance();
@@ -207,9 +208,10 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
         controller.current.abort();
         controller.current = new AbortController();
 
-        dispatch(
-          accountLookup(`${username}${domain ? `@${domain}` : ''}`, controller.current.signal),
-        )
+        client.accounts
+          .lookupAccount(`${username}${domain ? `@${domain}` : ''}`, {
+            signal: controller.current.signal,
+          })
           .then((account) => {
             setUsernameUnavailable(!!account);
           })

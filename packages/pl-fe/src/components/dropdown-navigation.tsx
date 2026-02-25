@@ -2,11 +2,10 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { fetchOwnAccounts, logOut, switchAccount } from '@/actions/auth';
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import Account from '@/components/account';
 import Divider from '@/components/ui/divider';
 import Icon from '@/components/ui/icon';
@@ -18,11 +17,12 @@ import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/hooks/use-instance';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
+import { useLoggedInAccounts } from '@/queries/accounts/use-logged-in-accounts';
 import { scheduledStatusesCountQueryOptions } from '@/queries/statuses/scheduled-statuses';
 import { useDraftStatusesCountQuery } from '@/queries/statuses/use-draft-statuses';
 import { useInteractionRequestsCount } from '@/queries/statuses/use-interaction-requests';
-import { makeGetOtherAccounts } from '@/selectors';
 import { useSettings } from '@/stores/settings';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 import sourceCode from '@/utils/code';
@@ -83,9 +83,8 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
     [me, features],
   );
 
-  const getOtherAccounts = useCallback(makeGetOtherAccounts(), []);
-  const { account } = useAccount(me || undefined);
-  const otherAccounts = useAppSelector((state) => getOtherAccounts(state));
+  const { data: account } = useAccount(me || undefined);
+  const { accounts: otherAccounts } = useLoggedInAccounts();
   const settings = useSettings();
   const followRequestsCount = useFollowRequestsCount().data ?? 0;
   const interactionRequestsCount = useInteractionRequestsCount().data ?? 0;

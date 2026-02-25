@@ -67,7 +67,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
 
   const instance = useInstance();
   const features = useFeatures();
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const { isOpen } = useRegistrationStatus();
 
   const authenticatedScheduledStatusesCountQueryOptions = useMemo(

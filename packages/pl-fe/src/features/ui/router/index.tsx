@@ -1613,7 +1613,7 @@ const RouterWithContext = () => {
   const features = useFeatures();
   const { cryptoAddresses } = useFrontendConfig();
   const hasCrypto = cryptoAddresses.length > 0;
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
 
   const context: RouterContext = useMemo(
     () => ({

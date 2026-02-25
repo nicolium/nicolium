@@ -14,7 +14,7 @@ const messages = defineMessages({
 });
 
 const useDefaultCloseIcon = (): string => {
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
 
   if (
     account?.url === 'https://donotsta.re/users/pmysl' ||

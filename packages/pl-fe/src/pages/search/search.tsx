@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import SearchColumn from '@/columns/search';
 import Column from '@/components/ui/column';
 import HStack from '@/components/ui/hstack';
@@ -15,6 +14,7 @@ import Tabs from '@/components/ui/tabs';
 import Text from '@/components/ui/text';
 import { searchRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
+import { useAccount } from '@/queries/accounts/use-account';
 
 type SearchFilter = 'accounts' | 'hashtags' | 'statuses' | 'links';
 
@@ -145,7 +145,7 @@ const SearchResults = () => {
     } else navigate({ search: (prev) => ({ ...prev, type: newActiveFilter }) });
   };
 
-  const { account } = useAccount(accountId);
+  const { data: account } = useAccount(accountId);
 
   const handleUnsetAccount = () => {
     navigate({ search: ({ accountId, ...prev }) => prev });

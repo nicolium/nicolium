@@ -76,7 +76,7 @@ const CirclePage: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const { openModal } = useModalsActions();
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
 
   useEffect(() => {}, []);
 

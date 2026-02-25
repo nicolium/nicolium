@@ -1,10 +1,8 @@
-import { importEntities as importEntityStoreEntities } from '@/entity-store/actions';
-import { Entities } from '@/entity-store/entities';
+import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
-import { selectAccount } from '@/selectors';
 import { useContextStore } from '@/stores/contexts';
 
-import type { AppDispatch, RootState } from '@/store';
+import type { AppDispatch } from '@/store';
 import type {
   Account as BaseAccount,
   Group as BaseGroup,
@@ -48,10 +46,8 @@ const importEntities =
       withParents: true,
     },
   ) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+  (dispatch: AppDispatch) => {
     const override = options.override ?? true;
-
-    const state: RootState = !override ? getState() : (undefined as any);
 
     const accounts: Record<string, BaseAccount> = {};
     const groups: Record<string, BaseGroup> = {};
@@ -60,7 +56,7 @@ const importEntities =
     const statuses: Record<string, BaseStatus> = {};
 
     const processAccount = (account: BaseAccount, withSelf = true) => {
-      if (!override && selectAccount(state, account.id)) return;
+      if (!override && selectAccount(account.id)) return;
 
       if (withSelf) accounts[account.id] = account;
 
@@ -109,8 +105,11 @@ const importEntities =
       entities.statuses?.forEach((status) => status && processStatus(status, options.withParents));
     }
 
-    if (!isEmpty(accounts))
-      dispatch(importEntityStoreEntities(Object.values(accounts), Entities.ACCOUNTS));
+    if (!isEmpty(accounts)) {
+      for (const account of Object.values(accounts)) {
+        queryClient.setQueryData<BaseAccount>(['accounts', account.id], account);
+      }
+    }
     if (!isEmpty(groups))
       for (const group of Object.values(groups)) {
         queryClient.setQueryData<BaseGroup>(['groups', group.id], group);

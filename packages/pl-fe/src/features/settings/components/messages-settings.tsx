@@ -20,7 +20,7 @@ const messages = defineMessages({
 });
 
 const MessagesSettings = () => {
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const intl = useIntl();
   const updateCredentials = useUpdateCredentials();
 

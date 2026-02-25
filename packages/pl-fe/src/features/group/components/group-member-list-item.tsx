@@ -3,11 +3,11 @@ import { GroupRoles } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import Account from '@/components/account';
 import DropdownMenu from '@/components/dropdown-menu/dropdown-menu';
 import HStack from '@/components/ui/hstack';
 import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useBlockGroupUserMutation } from '@/queries/groups/use-group-blocks';
 import {
   useDemoteGroupMemberMutation,
@@ -78,7 +78,7 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
   const { mutate: promoteGroupMember } = usePromoteGroupMemberMutation(group.id);
   const { mutate: demoteGroupMember } = useDemoteGroupMemberMutation(group.id);
 
-  const { account, isLoading } = useAccount(member.account_id);
+  const { data: account, isLoading } = useAccount(member.account_id);
 
   // Current user role
   const isCurrentUserOwner = group.relationship?.role === GroupRoles.OWNER;

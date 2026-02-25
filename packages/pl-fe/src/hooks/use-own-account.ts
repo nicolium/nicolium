@@ -1,4 +1,4 @@
-import { useAccount } from '@/api/hooks/accounts/use-account';
+import { useAccount } from '@/queries/accounts/use-account';
 
 import { useLoggedIn } from './use-logged-in';
 

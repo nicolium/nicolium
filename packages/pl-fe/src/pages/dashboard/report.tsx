@@ -3,7 +3,6 @@ import React, { useCallback, useState } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import ReactSwipeableViews from 'react-swipeable-views';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import Account from '@/components/account';
 import List, { ListItem } from '@/components/list';
 import Card from '@/components/ui/card';
@@ -18,6 +17,7 @@ import ColumnLoading from '@/features/ui/components/column-loading';
 import { adminReportRoute } from '@/features/ui/router';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
+import { useAccount } from '@/queries/accounts/use-account';
 import {
   useReopenReport,
   useReport,
@@ -115,8 +115,8 @@ const ReportPage: React.FC = () => {
 
   const report = useAppSelector((state) => getReport(state, minifiedReport));
 
-  const { account: authorAccount } = useAccount(report?.account_id);
-  const { account: targetAccount } = useAccount(report?.target_account_id);
+  const { data: authorAccount } = useAccount(report?.account_id);
+  const { data: targetAccount } = useAccount(report?.target_account_id);
 
   const { mutate: selfAssignReport } = useSelfAssignReport(reportId);
   const { mutate: unassignReport } = useUnassignReport(reportId);

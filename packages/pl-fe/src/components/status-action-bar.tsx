@@ -766,7 +766,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     return autoTranslate && features.translations && renderTranslate && supportsLanguages;
   }, [me, status, autoTranslate]);
 
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const isStaff = account ? (account.is_admin ?? account.is_moderator) : false;
   const isAdmin = account ? account.is_admin : false;
 

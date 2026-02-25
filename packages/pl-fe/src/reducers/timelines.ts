@@ -25,7 +25,6 @@ import {
   type TimelineAction,
 } from '../actions/timelines';
 
-import type { ImportPosition } from '@/entity-store/types';
 import type { Status } from '@/normalizers/status';
 import type {
   PaginatedResponse,
@@ -33,6 +32,8 @@ import type {
   Relationship,
   CreateStatusParams,
 } from 'pl-api';
+
+type ImportPosition = 'start' | 'end';
 
 const TRUNCATE_LIMIT = 40;
 const TRUNCATE_SIZE = 20;

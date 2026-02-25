@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import AccountComponent from '@/components/account';
 import Icon from '@/components/icon';
 import ScrollableList from '@/components/scrollable-list';
@@ -14,6 +13,7 @@ import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useSearchAccounts } from '@/queries/search/use-search';
 import {
   useAccountAliases,
@@ -40,7 +40,7 @@ const Account: React.FC<IAccount> = ({ accountId, aliases }) => {
   const features = useFeatures();
 
   const me = useAppSelector((state) => state.me);
-  const { account } = useAccount(accountId);
+  const { data: account } = useAccount(accountId);
 
   const { mutate: addAccountAlias } = useAddAccountAlias();
 

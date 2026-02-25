@@ -2,7 +2,6 @@ import { Link } from '@tanstack/react-router';
 import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import HoverAccountWrapper from '@/components/hover-account-wrapper';
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
@@ -10,6 +9,7 @@ import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAppSelector } from '@/hooks/use-app-selector';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useReport } from '@/queries/admin/use-reports';
 import { makeGetReport } from '@/selectors';
 
@@ -24,7 +24,7 @@ const Report: React.FC<IReport> = ({ id }) => {
 
   const report = useAppSelector((state) => getReport(state, minifiedReport));
 
-  const { account: targetAccount } = useAccount(report?.target_account_id);
+  const { data: targetAccount } = useAccount(report?.target_account_id);
 
   if (!report) return null;
 

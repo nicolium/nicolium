@@ -33,7 +33,7 @@ const HomeLayout = () => {
   const dispatch = useAppDispatch();
 
   const me = useAppSelector((state) => state.me);
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const features = useFeatures();
   const frontendConfig = useFrontendConfig();
   const { disableUserProvidedMedia } = useSettings();

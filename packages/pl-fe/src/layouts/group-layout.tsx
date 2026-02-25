@@ -46,7 +46,7 @@ const GroupLayout = () => {
 
   const intl = useIntl();
   const location = useLocation();
-  const { account: me } = useOwnAccount();
+  const { data: me } = useOwnAccount();
 
   const { data: group } = useGroupQuery(groupId, true);
   const { data: membershipRequests = [] } = useGroupMembershipRequestsQuery(groupId);

@@ -169,7 +169,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const client = useClient();
 
   const features = useFeatures();
-  const { account: ownAccount } = useOwnAccount();
+  const { data: ownAccount } = useOwnAccount();
   const { mutate: followAccount } = useFollowAccountMutation(account?.id!);
   const { mutate: unblockAccount } = useUnblockAccountMutation(account?.id!);
   const { mutate: unmuteAccount } = useUnmuteAccountMutation(account?.id!);

@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { fetchAccount } from '@/actions/accounts';
 import { addToMentions, removeFromMentions } from '@/actions/compose';
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import AccountComponent from '@/components/account';
 import IconButton from '@/components/ui/icon-button';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useCompose } from '@/hooks/use-compose';
+import { useAccount } from '@/queries/accounts/use-account';
 
 const messages = defineMessages({
   remove: { id: 'reply_mentions.account.remove', defaultMessage: 'Remove from mentions' },
@@ -25,17 +24,11 @@ const Account: React.FC<IAccount> = ({ composeId, accountId, author }) => {
   const dispatch = useAppDispatch();
 
   const compose = useCompose(composeId);
-  const { account } = useAccount(accountId);
+  const { data: account } = useAccount(accountId);
   const added = !!account && compose.to?.includes(account.acct);
 
   const onRemove = () => dispatch(removeFromMentions(composeId, accountId));
   const onAdd = () => dispatch(addToMentions(composeId, accountId));
-
-  useEffect(() => {
-    if (accountId && !account) {
-      dispatch(fetchAccount(accountId));
-    }
-  }, []);
 
   if (!account) return null;
 

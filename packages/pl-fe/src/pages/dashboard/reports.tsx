@@ -2,7 +2,6 @@ import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import HStack from '@/components/ui/hstack';
@@ -10,6 +9,7 @@ import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
 import Report from '@/features/admin/components/report';
 import { adminReportsRoute } from '@/features/ui/router';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useReports } from '@/queries/admin/use-reports';
 
 const messages = defineMessages({
@@ -26,8 +26,8 @@ const Reports: React.FC = () => {
   } = adminReportsRoute.useSearch();
   const navigate = useNavigate({ from: adminReportsRoute.fullPath });
 
-  const { account } = useAccount(accountId);
-  const { account: targetAccount } = useAccount(targetAccountId);
+  const { data: account } = useAccount(accountId);
+  const { data: targetAccount } = useAccount(targetAccountId);
 
   const {
     data: reportIds = [],

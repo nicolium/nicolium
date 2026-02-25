@@ -33,7 +33,7 @@ const pendingReportsQuery = makePaginatedResponseQueryOptions(
 )();
 
 const usePendingReportsCount = () => {
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const instance = useInstance();
 
   return useInfiniteQuery({
