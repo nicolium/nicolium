@@ -406,7 +406,7 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isBold}
             aria-label={intl.formatMessage(messages.formatBold)}
-            aria-label={intl.formatMessage(messages.formatBold)}
+            title={intl.formatMessage(messages.formatBold)}
             icon={require('@phosphor-icons/core/regular/text-b.svg')}
           />
           <ToolbarButton
@@ -415,7 +415,7 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isItalic}
             aria-label={intl.formatMessage(messages.formatItalic)}
-            aria-label={intl.formatMessage(messages.formatItalic)}
+            title={intl.formatMessage(messages.formatItalic)}
             icon={require('@phosphor-icons/core/regular/text-italic.svg')}
           />
           <ToolbarButton
@@ -424,7 +424,7 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isUnderline}
             aria-label={intl.formatMessage(messages.formatUnderline)}
-            aria-label={intl.formatMessage(messages.formatUnderline)}
+            title={intl.formatMessage(messages.formatUnderline)}
             icon={require('@phosphor-icons/core/regular/text-underline.svg')}
           />
           <ToolbarButton
@@ -433,7 +433,7 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isStrikethrough}
             aria-label={intl.formatMessage(messages.formatStrikethrough)}
-            aria-label={intl.formatMessage(messages.formatStrikethrough)}
+            title={intl.formatMessage(messages.formatStrikethrough)}
             icon={require('@phosphor-icons/core/regular/text-strikethrough.svg')}
           />
           <ToolbarButton
@@ -442,14 +442,14 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isCode}
             aria-label={intl.formatMessage(messages.insertCodeBlock)}
-            aria-label={intl.formatMessage(messages.insertCodeBlock)}
+            title={intl.formatMessage(messages.insertCodeBlock)}
             icon={require('@phosphor-icons/core/regular/code.svg')}
           />
           <ToolbarButton
             onClick={insertLink}
             active={isLink}
             aria-label={intl.formatMessage(messages.insertLink)}
-            aria-label={intl.formatMessage(messages.insertLink)}
+            title={intl.formatMessage(messages.insertLink)}
             icon={require('@phosphor-icons/core/regular/link-simple-horizontal.svg')}
           />
         </>
