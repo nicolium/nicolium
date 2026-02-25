@@ -21,7 +21,7 @@ const messages = defineMessages({
   uploadErrorLimit: { id: 'upload_error.limit', defaultMessage: 'File upload limit exceeded.' },
 });
 
-interface ChatInterface {
+interface IChat {
   chat: ChatEntity;
   inputRef?: MutableRefObject<HTMLTextAreaElement | null>;
   className?: string;
@@ -50,7 +50,7 @@ const clearNativeInputValue = (element: HTMLTextAreaElement) => {
  * Chat UI with just the messages and textarea.
  * Reused between floating desktop chats and fullscreen/mobile chats.
  */
-const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
+const Chat: React.FC<IChat> = ({ chat, inputRef, className }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 

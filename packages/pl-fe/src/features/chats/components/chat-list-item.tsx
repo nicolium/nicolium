@@ -31,12 +31,12 @@ const messages = defineMessages({
   settings: { id: 'chat_list_item.settings', defaultMessage: 'Chat settings' },
 });
 
-interface IChatListItemInterface {
+interface IChatListItem {
   chat: Chat;
   onClick: (chat: Chat) => void;
 }
 
-const ChatListItem: React.FC<IChatListItemInterface> = React.memo(({ chat, onClick }) => {
+const ChatListItem: React.FC<IChatListItem> = React.memo(({ chat, onClick }) => {
   const { openModal } = useModalsActions();
   const intl = useIntl();
   const features = useFeatures();

@@ -11,11 +11,11 @@ import { useShoutboxMessages } from '@/stores/shoutbox';
 
 import type { Chat } from 'pl-api';
 
-interface IChatListShoutboxInterface {
+interface IChatListShoutbox {
   onClick: (chat: Chat | 'shoutbox') => void;
 }
 
-const ChatListShoutbox: React.FC<IChatListShoutboxInterface> = ({ onClick }) => {
+const ChatListShoutbox: React.FC<IChatListShoutbox> = ({ onClick }) => {
   const instance = useInstance();
   const { logo } = useFrontendConfig();
   const messages = useShoutboxMessages();

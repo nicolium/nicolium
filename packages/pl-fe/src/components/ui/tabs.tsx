@@ -18,7 +18,7 @@ import './tabs.css';
 const HORIZONTAL_PADDING = 8;
 const AnimatedContext = React.createContext(null);
 
-interface IAnimatedInterface {
+interface IAnimatedTabs {
   /** Callback when a tab is chosen. */
   onChange(index: number): void;
   /** Default tab index. */
@@ -27,7 +27,7 @@ interface IAnimatedInterface {
 }
 
 /** Tabs with a sliding active state. */
-const AnimatedTabs: React.FC<IAnimatedInterface> = ({ children, ...rest }) => {
+const AnimatedTabs: React.FC<IAnimatedTabs> = ({ children, ...rest }) => {
   const [activeRect, setActiveRect] = React.useState(null);
   const ref = React.useRef<any>(null);
   const rect = useRect(ref);
