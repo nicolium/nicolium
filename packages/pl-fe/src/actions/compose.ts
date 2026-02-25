@@ -39,6 +39,7 @@ import type {
   InteractionPolicy,
   UpdateMediaParams,
   Location,
+  EditStatusParams,
 } from 'pl-api';
 
 let cancelFetchComposeSuggestions = new AbortController();
@@ -515,8 +516,24 @@ const submitCompose =
         undefined,
       quote_approval_policy: compose.quoteApprovalPolicy ?? undefined,
       location_id: compose.location?.origin_id ?? undefined,
-      preview,
     };
+
+    if (compose.editedId) {
+      // @ts-ignore
+      params.media_attributes = media.map((item) => {
+        const focalPoint = (item.type === 'image' || item.type === 'gifv') && item.meta?.focus;
+
+        const focus = focalPoint
+          ? `${focalPoint.x.toFixed(2)},${focalPoint.y.toFixed(2)}`
+          : undefined;
+
+        return {
+          id: item.id,
+          description: item.description,
+          focus,
+        };
+      }) as EditStatusParams['media_attributes'];
+    }
 
     if (compose.poll) {
       params.poll = {
@@ -680,6 +697,8 @@ const changeUploadCompose =
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return Promise.resolve();
 
+    const compose = getState().compose[composeId];
+
     dispatch(changeUploadComposeRequest(composeId));
 
     return dispatch(updateMedia(mediaId, params))
@@ -688,6 +707,16 @@ const changeUploadCompose =
         return response;
       })
       .catch((error) => {
+        if (error.response?.status === 404 && compose.editedId) {
+          // Editing an existing status. Mastodon doesn't let you update media attachments for already posted statuses.
+          // Pretend we got a success response.
+          const previousMedia = compose.mediaAttachments.find((m) => m.id === mediaId);
+
+          if (previousMedia) {
+            dispatch(changeUploadComposeSuccess(composeId, { ...previousMedia, ...params }));
+            return;
+          }
+        }
         dispatch(changeUploadComposeFail(composeId, mediaId, error));
       });
   };

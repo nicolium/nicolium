@@ -164,7 +164,13 @@ type EditStatusOptionalParams = Pick<
  * @category Request params
  */
 type EditStatusParams = (CreateStatusWithContent | CreateStatusWithMedia) &
-  EditStatusOptionalParams;
+  EditStatusOptionalParams & {
+    media_attributes?: Array<{
+      id: string;
+      description?: string;
+      focus?: string;
+    }>;
+  };
 
 /**
  * @category Request params
