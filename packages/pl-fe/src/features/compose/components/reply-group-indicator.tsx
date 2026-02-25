@@ -13,7 +13,7 @@ interface IReplyGroupIndicator {
   composeId: string;
 }
 
-const ReplyGroupIndicator = (props: IReplyGroupIndicator) => {
+const ReplyGroupIndicator: React.FC<IReplyGroupIndicator> = (props) => {
   const { composeId } = props;
 
   const getStatus = useCallback(makeGetStatus(), []);

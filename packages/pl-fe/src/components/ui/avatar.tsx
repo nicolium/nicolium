@@ -42,7 +42,7 @@ interface IAvatar extends Pick<IStillImage, 'alt' | 'src' | 'staticSrc' | 'onErr
 const fac = new FastAverageColor();
 
 /** Round profile avatar for accounts. */
-const Avatar = (props: IAvatar) => {
+const Avatar: React.FC<IAvatar> = (props) => {
   const intl = useIntl();
   const { disableUserProvidedMedia } = useSettings();
 

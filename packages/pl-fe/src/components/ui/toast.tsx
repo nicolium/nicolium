@@ -36,7 +36,7 @@ interface IToast {
 /**
  * Customizable Toasts for in-app notifications.
  */
-const Toast = (props: IToast) => {
+const Toast: React.FC<IToast> = (props) => {
   const { t, message, type, action, actionLinkOptions, actionLabel, summary } = props;
 
   const intl = useIntl();

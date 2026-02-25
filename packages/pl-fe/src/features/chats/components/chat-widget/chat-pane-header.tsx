@@ -20,7 +20,7 @@ interface IChatPaneHeader {
   secondaryActionTitle?: string;
 }
 
-const ChatPaneHeader = (props: IChatPaneHeader) => {
+const ChatPaneHeader: React.FC<IChatPaneHeader> = (props) => {
   const {
     isOpen,
     isToggleable = true,
