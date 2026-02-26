@@ -1,4 +1,3 @@
-import { type PlApiClient, type ShoutMessage as BaseShoutMessage, Account } from 'pl-api';
 import { useEffect } from 'react';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
@@ -8,6 +7,8 @@ import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
+
+import type { PlApiClient, ShoutMessage as BaseShoutMessage } from 'pl-api';
 
 const minifyMessage = ({ author, ...message }: BaseShoutMessage) => ({
   author_id: author.id,
@@ -37,7 +38,7 @@ const useShoutboxStore = create<State>()(
         setMessages: (messages) => {
           set((state: State) => {
             for (const { author } of messages.toReversed()) {
-              queryClient.setQueryData<Account>(
+              queryClient.setQueryData(
                 queryKeys.accounts.show(author.id),
                 (account) => account || author,
               );
@@ -48,10 +49,7 @@ const useShoutboxStore = create<State>()(
         },
         pushMessage: (message) => {
           set((state: State) => {
-            queryClient.setQueryData<Account>(
-              queryKeys.accounts.show(message.author.id),
-              message.author,
-            );
+            queryClient.setQueryData(queryKeys.accounts.show(message.author.id), message.author);
             state.messages.push(minifyMessage(message));
           });
         },

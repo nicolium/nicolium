@@ -1,9 +1,4 @@
-import {
-  type InfiniteData,
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import 'intl-pluralrules';
 import { useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
@@ -33,12 +28,7 @@ import { queryKeys } from '../keys';
 import { useNotificationsMarker } from '../markers/use-markers';
 import { minifyGroupedNotifications } from '../utils/minify-list';
 
-import type {
-  GetGroupedNotificationsParams,
-  Notification,
-  NotificationGroup,
-  PaginatedResponse,
-} from 'pl-api';
+import type { GetGroupedNotificationsParams, Notification, NotificationGroup } from 'pl-api';
 
 const FILTER_TYPES = {
   all: undefined,
@@ -305,25 +295,22 @@ const comparator = (
 };
 
 const prependNotification = (notification: NotificationGroup, filter: FilterType) => {
-  queryClient.setQueryData<InfiniteData<PaginatedResponse<NotificationGroup>>>(
-    queryKeys.notifications.list(filter),
-    (data) => {
-      if (!data || !data.pages.length) return data;
+  queryClient.setQueryData(queryKeys.notifications.list(filter), (data) => {
+    if (!data || !data.pages.length) return data;
 
-      const [firstPage, ...restPages] = data.pages;
+    const [firstPage, ...restPages] = data.pages;
 
-      return {
-        ...data,
-        pages: [
-          {
-            ...firstPage,
-            items: [notification, ...firstPage.items].toSorted(comparator).filter(filterUnique),
-          },
-          ...restPages,
-        ],
-      };
-    },
-  );
+    return {
+      ...data,
+      pages: [
+        {
+          ...firstPage,
+          items: [notification, ...firstPage.items].toSorted(comparator).filter(filterUnique),
+        },
+        ...restPages,
+      ],
+    };
+  });
 };
 
 export {

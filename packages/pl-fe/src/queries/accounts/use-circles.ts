@@ -1,9 +1,4 @@
-import {
-  type InfiniteData,
-  type UseQueryResult,
-  useMutation,
-  useQuery,
-} from '@tanstack/react-query';
+import { type UseQueryResult, useMutation, useQuery } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
@@ -14,7 +9,7 @@ import { filterById } from '../utils/filter-id';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 import { minifyAccountList } from '../utils/minify-list';
 
-import type { Circle, PaginatedResponse } from 'pl-api';
+import type { Circle } from 'pl-api';
 
 function useCircles<T>(select: (data: Array<Circle>) => T): UseQueryResult<T, Error>;
 function useCircles(): UseQueryResult<Array<Circle>, Error>;
@@ -50,7 +45,7 @@ const useDeleteCircle = () => {
     mutationKey: ['circles', 'delete'],
     mutationFn: (circleId: string) => client.circles.deleteCircle(circleId),
     onSuccess: (_, deletedCircleId) => {
-      queryClient.setQueryData<Array<Circle>>(queryKeys.circles.all, (prevData) =>
+      queryClient.setQueryData(queryKeys.circles.all, (prevData) =>
         prevData?.filter(({ id }) => id !== deletedCircleId),
       );
     },
@@ -93,7 +88,7 @@ const useRemoveAccountsFromCircle = (circleId: string) => {
     mutationFn: (accountIds: Array<string>) =>
       client.circles.deleteCircleAccounts(circleId, accountIds),
     onSettled: (_, __, accountIds) => {
-      queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
+      queryClient.setQueryData(
         queryKeys.accountsLists.circleMembers(circleId),
         filterById(accountIds),
       );

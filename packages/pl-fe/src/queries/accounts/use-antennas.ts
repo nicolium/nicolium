@@ -45,7 +45,7 @@ const useDeleteAntenna = () => {
     mutationKey: ['antennas', 'delete'],
     mutationFn: (antennaId: string) => client.antennas.deleteAntenna(antennaId),
     onSuccess: (_, deletedAntennaId) => {
-      queryClient.setQueryData<Array<Antenna>>(queryKeys.antennas.all, (prevData) =>
+      queryClient.setQueryData(queryKeys.antennas.all, (prevData) =>
         prevData?.filter(({ id }) => id !== deletedAntennaId),
       );
     },

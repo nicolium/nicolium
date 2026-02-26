@@ -198,7 +198,7 @@ const useBookmarkStatus = (statusId: string) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusReblogs(statusId) });
 
       if (previousFolder) {
-        queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
+        queryClient.setQueryData(
           queryKeys.statusLists.bookmarks(previousFolder),
           filterById(statusId),
         );

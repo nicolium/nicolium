@@ -5,7 +5,6 @@ import { queryKeys } from '../keys';
 import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';
 import { mutationOptions } from '../utils/mutation-options';
 
-import type { MinifiedSuggestion } from '../trends/use-suggested-accounts';
 import type { RootState, Store } from '@/store';
 import type { Account } from 'pl-api';
 
@@ -26,7 +25,7 @@ const blockDomainMutationOptions = mutationOptions({
     const accounts = selectAccountsByDomain(store.getState(), domain);
     if (!accounts) return;
 
-    queryClient.setQueryData<Array<MinifiedSuggestion>>(queryKeys.suggestions.all, (suggestions) =>
+    queryClient.setQueryData(queryKeys.suggestions.all, (suggestions) =>
       suggestions
         ? suggestions.filter((suggestion) => !accounts.includes(suggestion.account_id))
         : undefined,

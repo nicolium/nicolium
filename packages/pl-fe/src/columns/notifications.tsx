@@ -1,4 +1,4 @@
-import { InfiniteData, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -277,20 +277,17 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
   }, [notifications, markNotificationsRead]);
 
   const handleRefresh = useCallback(() => {
-    queryClient.setQueryData<InfiniteData<any>>(
-      queryKeys.notifications.list(activeFilter),
-      (data) => {
-        if (!data) return data;
+    queryClient.setQueryData(queryKeys.notifications.list(activeFilter), (data) => {
+      if (!data) return data;
 
-        // from https://github.com/TanStack/query/discussions/875#discussioncomment-754458
-        // TODO: maybe needed in more places so maybe make a helper for this
-        return {
-          ...data,
-          pages: data.pages.slice(0, 1),
-          pageParams: data.pageParams.slice(0, 1),
-        };
-      },
-    );
+      // from https://github.com/TanStack/query/discussions/875#discussioncomment-754458
+      // TODO: maybe needed in more places so maybe make a helper for this
+      return {
+        ...data,
+        pages: data.pages.slice(0, 1),
+        pageParams: data.pageParams.slice(0, 1),
+      };
+    });
     refetch().catch(console.error);
   }, [refetch]);
 

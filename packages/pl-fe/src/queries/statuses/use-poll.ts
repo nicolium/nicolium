@@ -23,7 +23,7 @@ const usePollVoteMutation = (pollId: string) => {
     mutationKey: ['statuses', 'polls', pollId, 'vote'],
     mutationFn: (choices: number[]) => client.polls.vote(pollId, choices),
     onSuccess: (poll) => {
-      queryClient.setQueryData<Poll>(queryKeys.statuses.polls.show(pollId), poll);
+      queryClient.setQueryData(queryKeys.statuses.polls.show(pollId), poll);
     },
   });
 };

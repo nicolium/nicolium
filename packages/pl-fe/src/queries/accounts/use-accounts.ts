@@ -15,7 +15,7 @@ const useAccounts = (accountIds: Array<string>) => {
       queryKey: queryKeys.accounts.show(accountId),
       queryFn: async () => {
         const response = await client.accounts.getAccount(accountId);
-        queryClient.setQueryData<string>(
+        queryClient.setQueryData(
           queryKeys.accounts.lookup(response.acct.toLowerCase()),
           response.id,
         );

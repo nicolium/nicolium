@@ -1,4 +1,4 @@
-import { type InfiniteData, useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
@@ -9,7 +9,7 @@ import { filterById } from '../utils/filter-id';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 import { minifyAccountList } from '../utils/minify-list';
 
-import type { CreateListParams, List, PaginatedResponse, UpdateListParams } from 'pl-api';
+import type { CreateListParams, List, UpdateListParams } from 'pl-api';
 
 const useLists = <T>(select?: (data: Array<List>) => T) => {
   const client = useClient();
@@ -43,7 +43,7 @@ const useDeleteList = () => {
     mutationKey: ['lists', 'delete'],
     mutationFn: (listId: string) => client.lists.deleteList(listId),
     onSuccess: (_, deletedListId) => {
-      queryClient.setQueryData<Array<List>>(queryKeys.lists.all, (prevData) =>
+      queryClient.setQueryData(queryKeys.lists.all, (prevData) =>
         prevData?.filter(({ id }) => id !== deletedListId),
       );
     },
@@ -74,7 +74,7 @@ const useAddAccountsToList = (listId: string) => {
     onSettled: (_, __, accountIds) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.listMembers(listId) });
       accountIds.forEach((accountId) =>
-        queryClient.setQueryData<Array<string>>(queryKeys.lists.forAccount(accountId), (listIds) =>
+        queryClient.setQueryData(queryKeys.lists.forAccount(accountId), (listIds) =>
           listIds ? [...listIds, listId] : undefined,
         ),
       );
@@ -89,12 +89,9 @@ const useRemoveAccountsFromList = (listId: string) => {
     mutationKey: ['accountsLists', 'lists', listId, 'remove'],
     mutationFn: (accountIds: Array<string>) => client.lists.deleteListAccounts(listId, accountIds),
     onSettled: (_, __, accountIds) => {
-      queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
-        queryKeys.accountsLists.listMembers(listId),
-        filterById(accountIds),
-      );
+      queryClient.setQueryData(queryKeys.accountsLists.listMembers(listId), filterById(accountIds));
       accountIds.forEach((accountId) =>
-        queryClient.setQueryData<Array<string>>(queryKeys.lists.forAccount(accountId), (listIds) =>
+        queryClient.setQueryData(queryKeys.lists.forAccount(accountId), (listIds) =>
           listIds?.filter((id) => id !== listId),
         ),
       );

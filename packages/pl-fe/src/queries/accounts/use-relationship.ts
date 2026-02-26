@@ -14,7 +14,6 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { queryKeys } from '@/queries/keys';
 import { useContextsActions } from '@/stores/contexts';
 
-import type { MinifiedSuggestion } from '../trends/use-suggested-accounts';
 import type {
   BlockAccountParams,
   FollowAccountParams,
@@ -174,12 +173,10 @@ const useBlockAccountMutation = (accountId: string) => {
     onSuccess: (data) => {
       queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
 
-      queryClient.setQueryData<Array<MinifiedSuggestion>>(
-        queryKeys.suggestions.all,
-        (suggestions) =>
-          suggestions
-            ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
-            : undefined,
+      queryClient.setQueryData(queryKeys.suggestions.all, (suggestions) =>
+        suggestions
+          ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
+          : undefined,
       );
 
       queryClient.invalidateQueries({
@@ -247,12 +244,10 @@ const useMuteAccountMutation = (accountId: string) => {
     onSuccess: (data) => {
       queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
 
-      queryClient.setQueryData<Array<MinifiedSuggestion>>(
-        queryKeys.suggestions.all,
-        (suggestions) =>
-          suggestions
-            ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
-            : undefined,
+      queryClient.setQueryData(queryKeys.suggestions.all, (suggestions) =>
+        suggestions
+          ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
+          : undefined,
       );
 
       queryClient.invalidateQueries({

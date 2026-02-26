@@ -1,9 +1,7 @@
-import { type InfiniteData, useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { create } from 'mutative';
 import {
   adminAnnouncementSchema,
-  PaginatedResponse,
-  type AdminAnnouncement,
   type AdminCreateAnnouncementParams,
   type AdminUpdateAnnouncementParams,
 } from 'pl-api';
@@ -49,15 +47,13 @@ const useUpdateAnnouncementMutation = () => {
       client.admin.announcements.updateAnnouncement(id, params),
     retry: false,
     onSuccess: (data) => {
-      queryClient.setQueryData<InfiniteData<PaginatedResponse<AdminAnnouncement>>>(
-        queryKeys.admin.announcements,
-        (prevData) =>
-          create(prevData, (draft) => {
-            draft?.pages.forEach(({ items }) => {
-              const index = items.findIndex(({ id }) => id === data.id);
-              if (index !== -1) items[index] = v.parse(adminAnnouncementSchema, data);
-            });
-          }),
+      queryClient.setQueryData(queryKeys.admin.announcements, (prevData) =>
+        create(prevData, (draft) => {
+          draft?.pages.forEach(({ items }) => {
+            const index = items.findIndex(({ id }) => id === data.id);
+            if (index !== -1) items[index] = v.parse(adminAnnouncementSchema, data);
+          });
+        }),
       );
       queryClient.invalidateQueries({ queryKey: queryKeys.announcements.root });
     },
@@ -71,14 +67,12 @@ const useDeleteAnnouncementMutation = () => {
     mutationFn: (id: string) => client.admin.announcements.deleteAnnouncement(id),
     retry: false,
     onSuccess: (_, deletedAnnouncementId) => {
-      queryClient.setQueryData<InfiniteData<PaginatedResponse<AdminAnnouncement>>>(
-        queryKeys.admin.announcements,
-        (prevData) =>
-          create(prevData, (draft) => {
-            draft?.pages.forEach(
-              (page) => (page.items = page.items.filter(({ id }) => id !== deletedAnnouncementId)),
-            );
-          }),
+      queryClient.setQueryData(queryKeys.admin.announcements, (prevData) =>
+        create(prevData, (draft) => {
+          draft?.pages.forEach(
+            (page) => (page.items = page.items.filter(({ id }) => id !== deletedAnnouncementId)),
+          );
+        }),
       );
       queryClient.invalidateQueries({ queryKey: queryKeys.announcements.root });
     },

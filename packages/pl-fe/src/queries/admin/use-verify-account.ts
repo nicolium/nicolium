@@ -36,12 +36,12 @@ const useAdminVerifyAccountMutation = (accountId: string) => {
     mutationKey: ['admin', 'accounts', accountId, 'verify'],
     mutationFn: () => client.admin.accounts.tagUser(accountId, ['verified']),
     onMutate: () => {
-      queryClient.setQueryData<Account>(queryKeys.accounts.show(accountId), (account) =>
+      queryClient.setQueryData(queryKeys.accounts.show(accountId), (account) =>
         setVerified(account, true),
       );
     },
     onError: () => {
-      queryClient.setQueryData<Account>(queryKeys.accounts.show(accountId), (account) =>
+      queryClient.setQueryData(queryKeys.accounts.show(accountId), (account) =>
         setVerified(account, false),
       );
     },
@@ -56,12 +56,12 @@ const useAdminUnverifyAccountMutation = (accountId: string) => {
     mutationKey: ['admin', 'accounts', accountId, 'unverify'],
     mutationFn: () => client.admin.accounts.untagUser(accountId, ['verified']),
     onMutate: () => {
-      queryClient.setQueryData<Account>(queryKeys.accounts.show(accountId), (account) =>
+      queryClient.setQueryData(queryKeys.accounts.show(accountId), (account) =>
         setVerified(account, false),
       );
     },
     onError: () => {
-      queryClient.setQueryData<Account>(queryKeys.accounts.show(accountId), (account) =>
+      queryClient.setQueryData(queryKeys.accounts.show(accountId), (account) =>
         setVerified(account, true),
       );
     },

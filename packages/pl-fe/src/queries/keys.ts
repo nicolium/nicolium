@@ -1,10 +1,10 @@
-import { MinifiedInteractionRequest } from './statuses/use-interaction-requests';
-
 import type { MinifiedScrobble } from './accounts/account-scrobble';
 import type { FilterType } from './notifications/use-notifications';
 import type { DraftStatus } from './statuses/use-draft-statuses';
+import type { MinifiedInteractionRequest } from './statuses/use-interaction-requests';
 import type { MinifiedStatusEdit } from './statuses/use-status-history';
 import type { MinifiedEmojiReaction } from './statuses/use-status-interactions';
+import type { TimelineEntry } from './timelines/use-home-timeline';
 import type { MinifiedSuggestion } from './trends/use-suggested-accounts';
 import type {
   MinifiedAdminAccount,
@@ -356,7 +356,7 @@ const notifications = {
   root: ['notifications'] as const,
   list: (activeFilter?: FilterType) => {
     const key = ['notifications', activeFilter] as const;
-    return key as TaggedKey<typeof key, Array<NotificationGroup>>;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<NotificationGroup>>>;
   },
 };
 
@@ -407,7 +407,7 @@ const suggestions = {
 
 const timelines = {
   root: ['timelines'] as const,
-  home: ['timelines', 'home'] as const,
+  home: ['timelines', 'home'] as TaggedKey<['timelines', 'home'], Array<TimelineEntry>>,
 };
 
 const timelineIds = {
@@ -518,7 +518,7 @@ const lists = {
   all: ['lists'] as TaggedKey<['lists'], Array<List>>,
   forAccount: (accountId: string) => {
     const key = ['lists', 'forAccount', accountId] as const;
-    return key as TaggedKey<typeof key, Array<List>>;
+    return key as TaggedKey<typeof key, Array<string>>;
   },
 };
 

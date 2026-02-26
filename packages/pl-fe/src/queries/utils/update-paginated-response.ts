@@ -1,7 +1,7 @@
-import { type InfiniteData, type QueryKey } from '@tanstack/react-query';
-import { PaginatedResponse } from 'pl-api';
-
 import { queryClient } from '@/queries/client';
+
+import type { InfiniteData, QueryKey } from '@tanstack/react-query';
+import type { PaginatedResponse } from 'pl-api';
 
 const updatePaginatedResponse = <T>(
   queryKey: QueryKey,

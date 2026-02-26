@@ -7,7 +7,7 @@ import { useFeatures } from '@/hooks/use-features';
 
 import { queryKeys } from '../keys';
 
-import type { CreateFilterParams, Filter, UpdateFilterParams } from 'pl-api';
+import type { CreateFilterParams, UpdateFilterParams } from 'pl-api';
 
 const useFilters = () => {
   const client = useClient();
@@ -56,7 +56,7 @@ const useCreateFilter = () => {
     mutationFn: (data: CreateFilterParams) => client.filtering.createFilter(data),
     onSettled: (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.filters.all });
-      if (data) queryClient.setQueryData<Filter>(queryKeys.filters.show(data.id), data);
+      if (data) queryClient.setQueryData(queryKeys.filters.show(data.id), data);
     },
   });
 };
@@ -70,7 +70,7 @@ const useUpdateFilter = (filterId: string) => {
     mutationFn: (data: UpdateFilterParams) => client.filtering.updateFilter(filterId, data),
     onSettled: (data) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.filters.all });
-      if (data) queryClient.setQueryData<Filter>(queryKeys.filters.show(filterId), data);
+      if (data) queryClient.setQueryData(queryKeys.filters.show(filterId), data);
     },
   });
 };

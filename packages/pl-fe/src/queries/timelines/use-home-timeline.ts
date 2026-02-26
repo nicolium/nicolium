@@ -145,7 +145,7 @@ const useHomeTimeline = () => {
 
         const timelinePage = processPage(response);
 
-        queryClient.setQueryData<Array<TimelineEntry>>(queryKeys.timelines.home, (oldData) => {
+        queryClient.setQueryData(queryKeys.timelines.home, (oldData) => {
           if (!oldData) return timelinePage;
 
           const index = oldData.indexOf(entry);

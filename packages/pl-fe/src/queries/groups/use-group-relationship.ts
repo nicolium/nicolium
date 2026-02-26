@@ -33,30 +33,24 @@ const useJoinGroupMutation = (id: string) => {
     onMutate: () => {
       let previousRelationship: GroupRelationship | undefined = undefined;
 
-      queryClient.setQueryData<GroupRelationship>(
-        queryKeys.groupRelationships.show(id),
-        (relationship) => {
-          previousRelationship = relationship;
-          if (!relationship) return undefined;
-          return {
-            ...relationship,
-            requested: true,
-          };
-        },
-      );
+      queryClient.setQueryData(queryKeys.groupRelationships.show(id), (relationship) => {
+        previousRelationship = relationship;
+        if (!relationship) return undefined;
+        return {
+          ...relationship,
+          requested: true,
+        };
+      });
 
       return previousRelationship;
     },
     onError: (_, __, previousRelationship) => {
       if (previousRelationship) {
-        queryClient.setQueryData<GroupRelationship>(
-          ['groupRelationships', id],
-          previousRelationship,
-        );
+        queryClient.setQueryData(queryKeys.groupRelationships.show(id), previousRelationship);
       }
     },
     onSuccess: (data) => {
-      queryClient.setQueryData<GroupRelationship>(queryKeys.groupRelationships.show(id), data);
+      queryClient.setQueryData(queryKeys.groupRelationships.show(id), data);
     },
   });
 };
@@ -70,32 +64,26 @@ const useLeaveGroupMutation = (id: string) => {
     onMutate: () => {
       let previousRelationship: GroupRelationship | undefined = undefined;
 
-      queryClient.setQueryData<GroupRelationship>(
-        queryKeys.groupRelationships.show(id),
-        (relationship) => {
-          previousRelationship = relationship;
-          if (!relationship) return undefined;
-          return {
-            ...relationship,
-            requested: false,
-            member: false,
-            role: undefined,
-          };
-        },
-      );
+      queryClient.setQueryData(queryKeys.groupRelationships.show(id), (relationship) => {
+        previousRelationship = relationship;
+        if (!relationship) return undefined;
+        return {
+          ...relationship,
+          requested: false,
+          member: false,
+          role: undefined,
+        };
+      });
 
       return previousRelationship;
     },
     onError: (_, __, previousRelationship) => {
       if (previousRelationship) {
-        queryClient.setQueryData<GroupRelationship>(
-          ['groupRelationships', id],
-          previousRelationship,
-        );
+        queryClient.setQueryData(queryKeys.groupRelationships.show(id), previousRelationship);
       }
     },
     onSuccess: (data) => {
-      queryClient.setQueryData<GroupRelationship>(queryKeys.groupRelationships.show(id), data);
+      queryClient.setQueryData(queryKeys.groupRelationships.show(id), data);
     },
   });
 };

@@ -119,12 +119,12 @@ const importEntities =
       }
     if (!isEmpty(polls)) {
       for (const poll of Object.values(polls)) {
-        queryClient.setQueryData<BasePoll>(queryKeys.statuses.polls.show(poll.id), poll);
+        queryClient.setQueryData(queryKeys.statuses.polls.show(poll.id), poll);
       }
     }
     if (!isEmpty(relationships)) {
       for (const relationship of Object.values(relationships)) {
-        queryClient.setQueryData<BaseRelationship>(
+        queryClient.setQueryData(
           queryKeys.accountRelationships.show(relationship.id),
           relationship,
         );

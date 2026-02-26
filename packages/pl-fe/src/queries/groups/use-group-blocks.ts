@@ -1,4 +1,4 @@
-import { useMutation, type InfiniteData } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
@@ -11,25 +11,19 @@ import { filterById } from '../utils/filter-id';
 import { removeGroupMember } from './use-group-members';
 
 const appendGroupBlock = (groupId: string, accountId: string) =>
-  queryClient.setQueryData<InfiniteData<ReturnType<typeof minifyAccountList>>>(
-    queryKeys.accountsLists.groupBlocks(groupId),
-    (data) => {
-      if (!data || data.pages.some((page) => page.items.includes(accountId))) return data;
+  queryClient.setQueryData(queryKeys.accountsLists.groupBlocks(groupId), (data) => {
+    if (!data || data.pages.some((page) => page.items.includes(accountId))) return data;
 
-      return {
-        ...data,
-        pages: data.pages.map((page, index) =>
-          index === 0 ? { ...page, items: [accountId, ...page.items] } : page,
-        ),
-      };
-    },
-  );
+    return {
+      ...data,
+      pages: data.pages.map((page, index) =>
+        index === 0 ? { ...page, items: [accountId, ...page.items] } : page,
+      ),
+    };
+  });
 
 const removeGroupBlock = (groupId: string, accountId: string) =>
-  queryClient.setQueryData<InfiniteData<ReturnType<typeof minifyAccountList>>>(
-    queryKeys.accountsLists.groupBlocks(groupId),
-    filterById(accountId),
-  );
+  queryClient.setQueryData(queryKeys.accountsLists.groupBlocks(groupId), filterById(accountId));
 
 const useGroupBlocks = makePaginatedResponseQuery(
   (groupId: string) => queryKeys.accountsLists.groupBlocks(groupId),

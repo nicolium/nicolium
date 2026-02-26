@@ -1,9 +1,4 @@
-import {
-  type InfiniteData,
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { create } from 'mutative';
 import { useMemo } from 'react';
 
@@ -45,31 +40,28 @@ const importConversationEntities = (conversations: Conversation[]) => {
 const updateConversations = (conversation: Conversation) => {
   importConversationEntities([conversation]);
 
-  queryClient.setQueryData<InfiniteData<PaginatedResponse<MinifiedConversation>>>(
-    ['conversations'],
-    (data) => {
-      if (!data || !data.pages.length) return data;
+  queryClient.setQueryData(queryKeys.conversations.all, (data) => {
+    if (!data || !data.pages.length) return data;
 
-      return create(data, (draft) => {
-        const updatedConversation = minifyConversation(conversation);
+    return create(data, (draft) => {
+      const updatedConversation = minifyConversation(conversation);
 
-        let found = false;
+      let found = false;
 
-        for (const page of draft.pages) {
-          const index = page.items.findIndex((item) => item.id === updatedConversation.id);
-          if (index !== -1) {
-            page.items[index] = updatedConversation;
-            found = true;
-            break;
-          }
+      for (const page of draft.pages) {
+        const index = page.items.findIndex((item) => item.id === updatedConversation.id);
+        if (index !== -1) {
+          page.items[index] = updatedConversation;
+          found = true;
+          break;
         }
+      }
 
-        if (!found) {
-          draft.pages[0].items.unshift(updatedConversation);
-        }
-      });
-    },
-  );
+      if (!found) {
+        draft.pages[0].items.unshift(updatedConversation);
+      }
+    });
+  });
 };
 
 const useConversations = () => {

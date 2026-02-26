@@ -11,19 +11,16 @@ import { filterById } from '../utils/filter-id';
 import type { PaginatedResponse, PlApiClient } from 'pl-api';
 
 const appendFollowRequest = (accountId: string) =>
-  queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
-    queryKeys.accountsLists.followRequests,
-    (data) => {
-      if (!data || data.pages.some((page) => page.items.includes(accountId))) return data;
+  queryClient.setQueryData(queryKeys.accountsLists.followRequests, (data) => {
+    if (!data || data.pages.some((page) => page.items.includes(accountId))) return data;
 
-      return {
-        ...data,
-        pages: data.pages.map((page, index) =>
-          index === 0 ? { ...page, items: [accountId, ...page.items] } : page,
-        ),
-      };
-    },
-  );
+    return {
+      ...data,
+      pages: data.pages.map((page, index) =>
+        index === 0 ? { ...page, items: [accountId, ...page.items] } : page,
+      ),
+    };
+  });
 
 const removeFollowRequest = (accountId: string) =>
   queryClient.setQueryData(queryKeys.accountsLists.followRequests, filterById(accountId));
