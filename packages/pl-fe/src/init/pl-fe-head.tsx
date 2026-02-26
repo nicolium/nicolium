@@ -26,6 +26,7 @@ const PlFeHead = () => {
   const frontendConfig = useFrontendConfig();
   const theme = useTheme();
   const [wcoVisible, setWcoVisible] = React.useState(false);
+  const [wcoRight, setWcoRight] = React.useState(false);
 
   const withModals = useHasModals();
 
@@ -50,7 +51,16 @@ const PlFeHead = () => {
     const overlay = navigator.windowControlsOverlay;
     if (!overlay) return;
 
-    const update = () => setWcoVisible(overlay.visible);
+    const update = () => {
+      setWcoVisible(overlay.visible);
+      if (overlay.visible) {
+        const rect = overlay.getTitlebarAreaRect();
+        setWcoRight(rect.x + rect.width < window.innerWidth);
+      } else {
+        setWcoRight(false);
+      }
+    };
+    update();
     overlay.addEventListener('geometrychange', update);
     return () => overlay.removeEventListener('geometrychange', update);
   }, []);
@@ -60,7 +70,7 @@ const PlFeHead = () => {
       return window.getComputedStyle(document.body, null).getPropertyValue('background-color');
     }
     return frontendConfig.brandColor;
-  }, [frontendConfig.brandColor, theme, wcoVisible]);
+  }, [frontendConfig.brandColor, theme, wcoVisible, wcoRight]);
 
   return (
     <>
@@ -71,6 +81,7 @@ const PlFeHead = () => {
             dark: theme === 'dark',
             'black dark': theme === 'black',
             'window-controls-overlay': wcoVisible,
+            'window-controls-overlay--right': wcoRight,
           })}
         />
         <body className={bodyClass} dir={direction} />

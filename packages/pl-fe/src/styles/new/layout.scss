@@ -379,7 +379,9 @@ body {
       padding-top: env(titlebar-area-height);
 
       @media (min-width: variables.$breakpoint-lg) {
-        padding-top: 0;
+        &:is(.window-controls-overlay:not(.window-controls-overlay--right) *) {
+          padding-top: 0;
+        }
       }
     }
   }

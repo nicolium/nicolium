@@ -140,7 +140,8 @@ const Main: React.FC<React.HTMLAttributes<HTMLDivElement>> = ({ children, classN
 const Aside: React.FC<IAside> = ({ children }) => {
   const isVisible = useMinWidth(`(min-width: ${breakpoints.xl})`);
   const wcoRect = useWindowControlsOverlay();
-  const offsetTop = wcoRect && wcoRect.x + wcoRect.width < window.innerWidth ? 16 + wcoRect.y : 16;
+  const offsetTop =
+    wcoRect && wcoRect.x + wcoRect.width < window.innerWidth ? 16 + wcoRect.height : 16;
 
   if (!isVisible) {
     return null;
