@@ -23,7 +23,6 @@ import VerificationBadge from '@/components/verification-badge';
 import Emojify from '@/features/emoji/emojify';
 import ActionButton from '@/features/ui/components/action-button';
 import SubscriptionButton from '@/features/ui/components/subscription-button';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -166,7 +165,6 @@ interface IHeader {
 const Header: React.FC<IHeader> = ({ account }) => {
   const intl = useIntl();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const { mentionCompose, directCompose } = useComposeActions();
   const client = useClient();
 
@@ -309,7 +307,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
   };
 
   const onReport = () => {
-    dispatch(initReport(ReportableEntities.ACCOUNT, account));
+    initReport(ReportableEntities.ACCOUNT, account);
   };
 
   const onMute = () => {

@@ -235,7 +235,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleReport = () => {
-    dispatch(initReport(ReportableEntities.STATUS, account, { status }));
+    initReport(ReportableEntities.STATUS, account, { status });
   };
 
   const handleToggleStatusSensitivity = () => {

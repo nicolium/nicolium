@@ -10,7 +10,6 @@ import Text from '@/components/ui/text';
 import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
 import DurationSelector from '@/features/compose/components/polls/duration-selector';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';
 import {
@@ -40,7 +39,6 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
   onClose,
   action,
 }) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const { data: account } = useAccount(accountId || undefined, true);
@@ -83,7 +81,7 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
 
   const handleBlockAndReport = () => {
     handleClick(() => {
-      dispatch(initReport(ReportableEntities.STATUS, account, { statusId }));
+      initReport(ReportableEntities.STATUS, account, { statusId });
     });
   };
 
