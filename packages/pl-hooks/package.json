@@ -37,7 +37,7 @@
     "@types/react": "^19.2.14",
     "oxfmt": "^0.35.0",
     "oxlint": "^1.50.0",
-    "oxlint-tsgolint": "^0.14.2",
+    "oxlint-tsgolint": "^0.15.0",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
     "vite-plugin-dts": "^4.5.4ls"
