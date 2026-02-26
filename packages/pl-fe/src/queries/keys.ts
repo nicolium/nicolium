@@ -38,6 +38,7 @@ import type {
   RssFeed,
   Tag,
   Translation,
+  TrendsLink,
 } from 'pl-api';
 
 type TaggedKey<TKey extends readonly unknown[], TData> = DataTag<TKey, TData>;
@@ -370,9 +371,9 @@ const search = {
 
 const trends = {
   root: ['trends'] as const,
-  tags: ['trends', 'tags'] as const,
-  statuses: ['trends', 'statuses'] as const,
-  links: ['trends', 'links'] as const,
+  tags: ['trends', 'tags'] as TaggedKey<['trends', 'tags'], Array<Tag>>,
+  statuses: ['trends', 'statuses'] as TaggedKey<['trends', 'statuses'], Array<string>>,
+  links: ['trends', 'links'] as TaggedKey<['trends', 'links'], Array<TrendsLink>>,
 };
 
 const suggestions = {
