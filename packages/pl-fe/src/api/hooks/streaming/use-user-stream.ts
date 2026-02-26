@@ -167,7 +167,7 @@ const useUserStream = () => {
         deleteAnnouncement(event.payload);
         break;
       case 'marker':
-        queryClient.setQueryData(['markers', 'notifications'], event.payload ?? null);
+        queryClient.setQueryData(['markers', 'notifications'], event.payload.notifications ?? null);
         break;
     }
   }, []);
