@@ -218,8 +218,9 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
             '⁂-status-title--clamp': !expanded && lineClamp,
           })}
           key='spoiler'
-          aria-expanded={expanded}
-          {...(expandable ? { onClick: toggleExpanded, role: 'button' } : {})}
+          {...(expandable
+            ? { onClick: toggleExpanded, role: 'button', 'aria-expanded': expanded }
+            : {})}
         >
           <span ref={spoilerNode}>
             <Emojify text={spoilerText} emojis={status.emojis} />

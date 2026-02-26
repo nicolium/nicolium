@@ -57,6 +57,7 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
       .join('');
 
   const genEl = (ast: mfm.MfmNode[], scale: number) =>
+    /* eslint-disable react/jsx-key */
     ast
       .map((token): React.JSX.Element | string | (React.JSX.Element | string)[] => {
         switch (token.type) {

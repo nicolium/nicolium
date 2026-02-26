@@ -45,15 +45,14 @@ const About: React.FC<IAbout> = ({ slug }) => {
         </li>
         {pageLocales?.map((locale) => (
           <li className="inline after:content-['_·_'] last:after:content-none" key={locale}>
-            <a
-              href='#'
+            <button
               onClick={() => {
                 setLocale(locale);
               }}
             >
               {/* @ts-expect-error */}
               {languages[locale] ?? locale}
-            </a>
+            </button>
           </li>
         ))}
       </ul>

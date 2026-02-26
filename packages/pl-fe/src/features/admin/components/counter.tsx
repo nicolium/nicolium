@@ -76,6 +76,7 @@ const Counter: React.FC<ICounter> = ({
             })}
           >
             {percentChange > 0 && '+'}
+            {/* eslint-disable-next-line react/style-prop-object */}
             <FormattedNumber value={percentChange} style='percent' />
           </span>
         )}

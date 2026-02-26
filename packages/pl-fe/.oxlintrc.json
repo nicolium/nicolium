@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["typescript", "import", "promise"],
+  "plugins": ["typescript", "import", "promise", "react", "jsx-a11y"],
   "jsPlugins": ["eslint-plugin-formatjs"],
   "categories": {
     "correctness": "error",
@@ -44,6 +44,17 @@
     "require-array-sort-compare": "off",
     "unbound-method": "warn",
     "no-shadow": "off",
+
+    "react/exhaustive-deps": "off",
+
+    "jsx-a11y/anchor-is-valid": "warn",
+    "jsx-a11y/click-events-have-key-events": "warn",
+    "jsx-a11y/label-has-associated-control": "warn",
+    "jsx-a11y/media-has-caption": "off",
+    "jsx-a11y/mouse-events-have-key-events": "warn",
+    "jsx-a11y/no-autofocus": "warn",
+    "jsx-a11y/no-static-element-interactions": "warn",
+    "jsx-a11y/prefer-tag-over-role": "warn",
 
     "formatjs/enforce-default-message": "error",
     "formatjs/enforce-id": "error",
