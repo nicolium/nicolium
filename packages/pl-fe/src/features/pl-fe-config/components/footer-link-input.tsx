@@ -8,8 +8,11 @@ import type { StreamfieldComponent } from '@/components/ui/streamfield';
 import type { FooterItem } from '@/normalizers/frontend-config';
 
 const messages = defineMessages({
-  label: { id: 'plfe_config.home_footer.meta_fields.label_placeholder', defaultMessage: 'Label' },
-  url: { id: 'plfe_config.home_footer.meta_fields.url_placeholder', defaultMessage: 'URL' },
+  label: {
+    id: 'frontend_config.home_footer.meta_fields.label_placeholder',
+    defaultMessage: 'Label',
+  },
+  url: { id: 'frontend_config.home_footer.meta_fields.url_placeholder', defaultMessage: 'URL' },
 });
 
 const PromoPanelInput: StreamfieldComponent<FooterItem> = ({ value, onChange }) => {

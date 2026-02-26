@@ -92,7 +92,7 @@ const SettingsStore: React.FC = () => {
 
         <FormActions>
           <Button theme='primary' type='submit' disabled={!jsonValid || isLoading}>
-            <FormattedMessage id='plfe_config.save' defaultMessage='Save' />
+            <FormattedMessage id='frontend_config.save' defaultMessage='Save' />
           </Button>
         </FormActions>
       </Form>

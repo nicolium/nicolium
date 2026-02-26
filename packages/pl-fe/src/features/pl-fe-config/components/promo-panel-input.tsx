@@ -10,9 +10,12 @@ import type { StreamfieldComponent } from '@/components/ui/streamfield';
 import type { PromoPanelItem } from '@/normalizers/frontend-config';
 
 const messages = defineMessages({
-  icon: { id: 'plfe_config.promo_panel.meta_fields.icon_placeholder', defaultMessage: 'Icon' },
-  label: { id: 'plfe_config.promo_panel.meta_fields.label_placeholder', defaultMessage: 'Label' },
-  url: { id: 'plfe_config.promo_panel.meta_fields.url_placeholder', defaultMessage: 'URL' },
+  icon: { id: 'frontend_config.promo_panel.meta_fields.icon_placeholder', defaultMessage: 'Icon' },
+  label: {
+    id: 'frontend_config.promo_panel.meta_fields.label_placeholder',
+    defaultMessage: 'Label',
+  },
+  url: { id: 'frontend_config.promo_panel.meta_fields.url_placeholder', defaultMessage: 'URL' },
 });
 
 const PromoPanelInput: StreamfieldComponent<PromoPanelItem> = ({ value, onChange }) => {

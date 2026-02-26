@@ -271,7 +271,7 @@ const Dashboard: React.FC = () => {
               to='/pl-fe/config'
               label={
                 <FormattedMessage
-                  id='column.plfe_config'
+                  id='column.frontend_config'
                   defaultMessage='Front-end configuration'
                 />
               }

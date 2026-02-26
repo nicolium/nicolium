@@ -9,15 +9,15 @@ import type { CryptoAddress } from '@/normalizers/frontend-config';
 
 const messages = defineMessages({
   ticker: {
-    id: 'plfe_config.crypto_address.meta_fields.ticker_placeholder',
+    id: 'frontend_config.crypto_address.meta_fields.ticker_placeholder',
     defaultMessage: 'Ticker',
   },
   address: {
-    id: 'plfe_config.crypto_address.meta_fields.address_placeholder',
+    id: 'frontend_config.crypto_address.meta_fields.address_placeholder',
     defaultMessage: 'Address',
   },
   note: {
-    id: 'plfe_config.crypto_address.meta_fields.note_placeholder',
+    id: 'frontend_config.crypto_address.meta_fields.note_placeholder',
     defaultMessage: 'Note (optional)',
   },
 });
