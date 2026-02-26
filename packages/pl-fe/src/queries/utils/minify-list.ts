@@ -211,6 +211,8 @@ const minifyAdminReport = ({
   };
 };
 
+type MinifiedAdminReport = ReturnType<typeof minifyAdminReport>;
+
 const minifyAdminReportList = (response: PaginatedResponse<AdminReport>) =>
   minifyList(
     response,
@@ -241,4 +243,5 @@ export {
   minifyAdminReportList,
   type MinifiedConversation,
   type MinifiedAdminAccount,
+  type MinifiedAdminReport,
 };
