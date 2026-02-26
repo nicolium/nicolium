@@ -1,8 +1,8 @@
-import { Link } from '@tanstack/react-router';
 import React, { useCallback, useEffect, useRef } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { fetchHomeTimeline } from '@/actions/timelines';
+import { Link } from '@/components/link';
 import PullToRefresh from '@/components/pull-to-refresh';
 import Column from '@/components/ui/column';
 import Stack from '@/components/ui/stack';
@@ -85,10 +85,7 @@ const HomeTimelinePage: React.FC = () => {
                     defaultMessage='Or you can visit {public} to get started and meet other users.'
                     values={{
                       public: (
-                        <Link
-                          to='/timeline/local'
-                          className='text-primary-600 hover:underline dark:text-primary-400'
-                        >
+                        <Link to='/timeline/local'>
                           <FormattedMessage
                             id='empty_column.home.local_tab'
                             defaultMessage='the Local tab'

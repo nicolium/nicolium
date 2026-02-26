@@ -1,6 +1,6 @@
-import { Link } from '@tanstack/react-router';
 import React from 'react';
 
+import { Link } from '@/components/link';
 import Tooltip from '@/components/ui/tooltip';
 
 import type { Mention as MentionEntity } from 'pl-api';
@@ -21,13 +21,7 @@ const Mention: React.FC<IMention> = ({ mention: { acct, username }, disabled }) 
 
   return (
     <Tooltip text={`@${acct}`}>
-      <Link
-        to='/@{$username}'
-        params={{ username: acct }}
-        className='text-primary-600 hover:underline dark:text-primary-400'
-        onClick={handleClick}
-        dir='ltr'
-      >
+      <Link to='/@{$username}' params={{ username: acct }} onClick={handleClick} dir='ltr'>
         @{username}
       </Link>
     </Tooltip>

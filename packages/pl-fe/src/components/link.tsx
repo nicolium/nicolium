@@ -5,4 +5,4 @@ const Link = (props: LinkProps) => (
   <Comp {...props} className='text-primary-600 hover:underline dark:text-primary-400' />
 );
 
-export { Link as default };
+export { Link as default, Link };

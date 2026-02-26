@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { resetPassword } from '@/actions/security';
-import { BigCard } from '@/components/big-card';
+import { BigCard } from '@/components/ui/big-card';
 import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';

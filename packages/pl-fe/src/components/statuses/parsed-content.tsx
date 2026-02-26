@@ -1,5 +1,3 @@
-/* eslint-disable no-redeclare */
-import { Link } from '@tanstack/react-router';
 import parse, {
   Element,
   type HTMLReactParserOptions,
@@ -12,6 +10,8 @@ import minBy from 'lodash/minBy';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
+/* eslint-disable no-redeclare */
+import { Link } from '@/components/link';
 import Emojify from '@/features/emoji/emojify';
 import { useSettings } from '@/stores/settings';
 import { makeEmojiMap } from '@/utils/normalizers';
@@ -268,7 +268,6 @@ function parseContent(
                 <Link
                   to='/@{$username}'
                   params={{ username: mention.acct }}
-                  className='text-primary-600 hover:underline dark:text-primary-400'
                   dir='ltr'
                   onClick={(e) => {
                     e.stopPropagation();

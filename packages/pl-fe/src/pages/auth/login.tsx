@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { logIn, verifyCredentials, switchAccount } from '@/actions/auth';
 import { fetchInstance } from '@/actions/instance';
-import { BigCard } from '@/components/big-card';
+import { BigCard } from '@/components/ui/big-card';
 import Button from '@/components/ui/button';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';

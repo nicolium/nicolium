@@ -1,10 +1,10 @@
-// ~~Shamelessly stolen~~ ported to React from Sharkey
-// https://activitypub.software/TransFem-org/Sharkey/-/blob/develop/packages/frontend/src/components/global/MkMfm.ts
-import { Link } from '@tanstack/react-router';
 import * as mfm from '@transfem-org/sfm-js';
 import clamp from 'lodash/clamp';
 import React, { type CSSProperties } from 'react';
 
+// ~~Shamelessly stolen~~ ported to React from Sharkey
+// https://activitypub.software/TransFem-org/Sharkey/-/blob/develop/packages/frontend/src/components/global/MkMfm.ts
+import { Link } from '@/components/link';
 import { useSettings } from '@/stores/settings';
 import { makeEmojiMap } from '@/utils/normalizers';
 import nyaize from '@/utils/nyaize';
@@ -438,7 +438,6 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
                     <Link
                       to='/@{$username}'
                       params={{ username: mention.acct }}
-                      className='text-primary-600 hover:underline dark:text-primary-400'
                       dir='ltr'
                       onClick={(e) => {
                         e.stopPropagation();
@@ -458,7 +457,6 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
                 <Link
                   to='/@{$username}'
                   params={{ username: token.props.acct.slice(1) }}
-                  className='text-primary-600 hover:underline dark:text-primary-400'
                   dir='ltr'
                   onClick={(e) => {
                     e.stopPropagation();

@@ -1,6 +1,6 @@
-import { Link } from '@tanstack/react-router';
 import React from 'react';
 
+import { Link } from '@/components/link';
 import { useAccount } from '@/queries/accounts/use-account';
 
 import HoverAccountWrapper from '../accounts/hover-account-wrapper';
@@ -24,7 +24,6 @@ const StatusMention: React.FC<IStatusMention> = ({ accountId, fallback }) => {
     <Link
       to='/@{$username}'
       params={{ username: account.acct }}
-      className='text-primary-600 hover:underline dark:text-primary-400'
       dir='ltr'
       onClick={(e) => {
         e.stopPropagation();

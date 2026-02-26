@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { otpVerify, verifyCredentials, switchAccount } from '@/actions/auth';
-import { BigCard } from '@/components/big-card';
+import { BigCard } from '@/components/ui/big-card';
 import Button from '@/components/ui/button';
 import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Form from '@/components/ui/form';
