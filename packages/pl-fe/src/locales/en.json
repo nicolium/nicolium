@@ -1774,6 +1774,7 @@
   "security.update_password.success": "Password successfully updated.",
   "select.no_options": "No options available",
   "select.placeholder": "Select",
+  "select.remove_item": "Remove item",
   "select_bookmark_folder_modal.header_title": "Select folder",
   "settings.configure_mfa": "Configure MFA",
   "settings.edit_profile": "Edit profile",

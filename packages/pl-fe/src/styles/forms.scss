@@ -84,11 +84,6 @@ select {
     z-index: 2;
   }
 
-  .highlightOption {
-    @apply bg-primary-600;
-    color: #fff;
-  }
-
   .displayBlock {
     display: block;
   }
@@ -108,5 +103,10 @@ select {
 
   .option {
     @apply hover:bg-primary-600;
+
+    &:focus {
+      @apply bg-primary-600;
+      color: #fff;
+    }
   }
 }
