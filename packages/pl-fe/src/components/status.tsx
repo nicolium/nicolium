@@ -547,7 +547,12 @@ const Status: React.FC<IStatus> = (props) => {
     };
 
     return (
-      <Hotkeys handlers={minHandlers} focusable={focusable} element='article'>
+      <Hotkeys
+        handlers={minHandlers}
+        focusable={focusable}
+        element='article'
+        lang={actualStatus.language}
+      >
         {body}
       </Hotkeys>
     );
@@ -658,7 +663,13 @@ const Status: React.FC<IStatus> = (props) => {
   };
 
   return (
-    <Hotkeys handlers={handlers} focusable={focusable} element='article' data-testid='status'>
+    <Hotkeys
+      handlers={handlers}
+      focusable={focusable}
+      element='article'
+      lang={actualStatus.language}
+      data-testid='status'
+    >
       {body}
     </Hotkeys>
   );

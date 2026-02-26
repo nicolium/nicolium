@@ -213,7 +213,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
 
     if (spoilerText) {
       output.push(
-        <p
+        <h2
           className={clsx('⁂-status-title', {
             '⁂-status-title--clamp': !expanded && lineClamp,
           })}
@@ -236,7 +236,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
               </span>
             </button>
           )}
-        </p>,
+        </h2>,
       );
     }
 
