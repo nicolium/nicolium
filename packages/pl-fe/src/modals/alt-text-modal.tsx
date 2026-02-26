@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Blurhash from '@/components/blurhash';
+import Blurhash from '@/components/media/blurhash';
 import FormGroup from '@/components/ui/form-group';
 import Icon from '@/components/ui/icon';
 import Modal from '@/components/ui/modal';

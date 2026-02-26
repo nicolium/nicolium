@@ -17,15 +17,15 @@ import { getTextDirection } from '@/utils/rtl';
 
 import Markup from '../markup';
 import OutlineBox from '../outline-box';
-import { ParsedMfm } from '../parsed-mfm';
 import Poll from '../polls/poll';
-import TranslateButton from '../translate-button';
 
 import HashtagsBar from './hashtags-bar';
 import { parseContent } from './parsed-content';
+import { ParsedMfm } from './parsed-mfm';
 import QuotedStatusIndicator from './quoted-status-indicator';
 import SensitiveContentOverlay from './sensitive-content-overlay';
 import StatusMedia from './status-media';
+import TranslateButton from './translate-button';
 
 import type { Sizes } from '@/components/ui/text';
 import type { NormalizedStatus } from '@/reducers/statuses';

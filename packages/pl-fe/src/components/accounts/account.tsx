@@ -4,6 +4,7 @@ import React, { useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
+import VerificationBadge from '@/components/accounts/verification-badge';
 import Avatar from '@/components/ui/avatar';
 import Emoji from '@/components/ui/emoji';
 import HStack from '@/components/ui/hstack';
@@ -11,7 +12,6 @@ import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import VerificationBadge from '@/components/verification-badge';
 import Emojify from '@/features/emoji/emojify';
 import ActionButton from '@/features/ui/components/action-button';
 import { useAcct } from '@/hooks/use-acct';

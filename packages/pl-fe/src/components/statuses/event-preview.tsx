@@ -2,12 +2,12 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import VerificationBadge from '@/components/accounts/verification-badge';
 import Icon from '@/components/icon';
 import Button from '@/components/ui/button';
 import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import VerificationBadge from '@/components/verification-badge';
 import Emojify from '@/features/emoji/emojify';
 import EventActionButton from '@/features/event/components/event-action-button';
 import EventDate from '@/features/event/components/event-date';

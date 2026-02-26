@@ -2,9 +2,9 @@ import clsx from 'clsx';
 import React, { useState, useRef, useLayoutEffect, type CSSProperties } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Blurhash from '@/components/blurhash';
 import Icon from '@/components/icon';
 import AltIndicator from '@/components/media/alt-indicator';
+import Blurhash from '@/components/media/blurhash';
 import StillImage from '@/components/still-image';
 import Popover from '@/components/ui/popover';
 import Stack from '@/components/ui/stack';

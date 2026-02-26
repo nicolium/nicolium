@@ -3,13 +3,13 @@ import React, { useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
+import VerificationBadge from '@/components/accounts/verification-badge';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import VerificationBadge from '@/components/verification-badge';
 import { chatRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
 import {

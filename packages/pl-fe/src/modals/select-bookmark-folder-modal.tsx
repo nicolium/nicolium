@@ -3,11 +3,11 @@ import React, { useCallback, useDeferredValue, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { ListItem } from '@/components/list';
-import { RadioGroup, RadioItem } from '@/components/radio';
 import Emoji from '@/components/ui/emoji';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Modal from '@/components/ui/modal';
+import { RadioGroup, RadioItem } from '@/components/ui/radio';
 import Spinner from '@/components/ui/spinner';
 import Stack from '@/components/ui/stack';
 import Toggle from '@/components/ui/toggle';

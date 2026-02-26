@@ -2,7 +2,7 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import { length } from 'stringz';
 
-import ProgressCircle from '@/components/progress-circle';
+import ProgressCircle from './progress-circle';
 
 const messages = defineMessages({
   title: {

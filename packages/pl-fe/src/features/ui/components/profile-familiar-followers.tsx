@@ -2,11 +2,11 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 
+import AvatarStack from '@/components/accounts/avatar-stack';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
-import AvatarStack from '@/components/avatar-stack';
+import VerificationBadge from '@/components/accounts/verification-badge';
 import HStack from '@/components/ui/hstack';
 import Text from '@/components/ui/text';
-import VerificationBadge from '@/components/verification-badge';
 import Emojify from '@/features/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useFamiliarFollowers } from '@/queries/accounts/use-familiar-followers';

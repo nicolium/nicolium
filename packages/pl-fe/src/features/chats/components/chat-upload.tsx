@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Blurhash from '@/components/blurhash';
+import Blurhash from '@/components/media/blurhash';
 import Icon from '@/components/ui/icon';
 import { useModalsActions } from '@/stores/modals';
 

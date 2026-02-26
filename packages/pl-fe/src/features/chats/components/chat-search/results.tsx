@@ -2,11 +2,11 @@ import clsx from 'clsx';
 import React, { useCallback, useState } from 'react';
 import { Virtuoso } from 'react-virtuoso';
 
+import VerificationBadge from '@/components/accounts/verification-badge';
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import VerificationBadge from '@/components/verification-badge';
 import { useAccounts } from '@/queries/accounts/use-accounts';
 
 import type { useAccountSearch } from '@/queries/search/use-search-accounts';

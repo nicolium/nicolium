@@ -2,7 +2,7 @@ import React from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
 import { updateConfig } from '@/actions/admin';
-import { RadioGroup, RadioItem } from '@/components/radio';
+import { RadioGroup, RadioItem } from '@/components/ui/radio';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useInstance } from '@/hooks/use-instance';
 import toast from '@/toast';

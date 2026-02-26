@@ -1,6 +1,6 @@
 import React from 'react';
 
-import List, { type IListItem, ListItem } from './list';
+import List, { type IListItem, ListItem } from '../list';
 
 interface IRadioGroup {
   onChange: React.ChangeEventHandler;

@@ -4,8 +4,8 @@ import throttle from 'lodash/throttle';
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Blurhash from '@/components/blurhash';
 import Icon from '@/components/icon';
+import Blurhash from '@/components/media/blurhash';
 import {
   isPanoramic,
   isPortrait,

@@ -3,9 +3,9 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Blurhash from '@/components/blurhash';
 import Icon from '@/components/icon';
 import LoadMore from '@/components/load-more';
+import Blurhash from '@/components/media/blurhash';
 import MissingIndicator from '@/components/missing-indicator';
 import StillImage from '@/components/still-image';
 import Column from '@/components/ui/column';

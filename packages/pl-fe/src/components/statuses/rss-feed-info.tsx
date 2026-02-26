@@ -1,12 +1,12 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import RelativeTimestamp from './relative-timestamp';
-import Avatar from './ui/avatar';
-import HStack from './ui/hstack';
-import Icon from './ui/icon';
-import Stack from './ui/stack';
-import Text from './ui/text';
+import RelativeTimestamp from '../relative-timestamp';
+import Avatar from '../ui/avatar';
+import HStack from '../ui/hstack';
+import Icon from '../ui/icon';
+import Stack from '../ui/stack';
+import Text from '../ui/text';
 
 import type { RssFeed } from 'pl-api';
 

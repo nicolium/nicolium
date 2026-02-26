@@ -3,12 +3,12 @@ import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import VerificationBadge from '@/components/accounts/verification-badge';
 import DropdownMenu from '@/components/dropdown-menu';
 import RelativeTimestamp from '@/components/relative-timestamp';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Avatar from '@/components/ui/avatar';
 import IconButton from '@/components/ui/icon-button';
-import VerificationBadge from '@/components/verification-badge';
 import { useChatContext } from '@/contexts/chat-context';
 import Emojify from '@/features/emoji/emojify';
 import { Hotkeys } from '@/features/ui/components/hotkeys';

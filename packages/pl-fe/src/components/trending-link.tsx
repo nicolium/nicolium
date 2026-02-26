@@ -3,8 +3,8 @@ import React from 'react';
 
 import { getTextDirection } from '@/utils/rtl';
 
-import Blurhash from './blurhash';
 import { accountsCountRenderer } from './hashtag';
+import Blurhash from './media/blurhash';
 import HStack from './ui/hstack';
 import Icon from './ui/icon';
 import Stack from './ui/stack';

@@ -2,13 +2,13 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import VerificationBadge from '@/components/accounts/verification-badge';
 import StillImage from '@/components/still-image';
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import VerificationBadge from '@/components/verification-badge';
 import Emojify from '@/features/emoji/emojify';
 import { useAcct } from '@/hooks/use-acct';
 import { useAccount } from '@/queries/accounts/use-account';

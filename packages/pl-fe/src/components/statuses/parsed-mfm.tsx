@@ -9,10 +9,11 @@ import { useSettings } from '@/stores/settings';
 import { makeEmojiMap } from '@/utils/normalizers';
 import nyaize from '@/utils/nyaize';
 
-import HoverAccountWrapper from './accounts/hover-account-wrapper';
-import HashtagLink from './hashtag-link';
-import { ParsedUrl } from './statuses/parsed-content';
-import Emoji from './ui/emoji';
+import HoverAccountWrapper from '../accounts/hover-account-wrapper';
+import HashtagLink from '../hashtag-link';
+import Emoji from '../ui/emoji';
+
+import { ParsedUrl } from './parsed-content';
 
 import type { CustomEmoji, Mention } from 'pl-api';
 

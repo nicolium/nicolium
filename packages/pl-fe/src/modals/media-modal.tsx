@@ -6,7 +6,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { fetchStatusWithContext } from '@/actions/statuses';
-import ExtendedVideoPlayer from '@/components/extended-video-player';
+import ExtendedVideoPlayer from '@/components/media/extended-video-player';
 import MissingIndicator from '@/components/missing-indicator';
 import StatusActionBar from '@/components/statuses/status-action-bar';
 import HStack from '@/components/ui/hstack';

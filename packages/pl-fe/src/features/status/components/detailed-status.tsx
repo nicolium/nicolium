@@ -3,7 +3,7 @@ import React, { useRef } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
-import RssFeedInfo from '@/components/rss-feed-info';
+import RssFeedInfo from '@/components/statuses/rss-feed-info';
 import StatusContent from '@/components/statuses/status-content';
 import StatusInfo from '@/components/statuses/status-info';
 import StatusLanguagePicker from '@/components/statuses/status-language-picker';

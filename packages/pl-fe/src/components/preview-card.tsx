@@ -10,7 +10,7 @@ import React, { useState, useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import Blurhash from '@/components/blurhash';
+import Blurhash from '@/components/media/blurhash';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';

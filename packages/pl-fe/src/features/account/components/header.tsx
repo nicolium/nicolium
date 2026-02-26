@@ -8,6 +8,7 @@ import * as v from 'valibot';
 
 import { initReport, ReportableEntities } from '@/actions/reports';
 import Account from '@/components/accounts/account';
+import VerificationBadge from '@/components/accounts/verification-badge';
 import Badge from '@/components/badge';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import Icon from '@/components/icon';
@@ -19,7 +20,6 @@ import IconButton from '@/components/ui/icon-button';
 import Popover from '@/components/ui/popover';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import VerificationBadge from '@/components/verification-badge';
 import Emojify from '@/features/emoji/emojify';
 import ActionButton from '@/features/ui/components/action-button';
 import SubscriptionButton from '@/features/ui/components/subscription-button';

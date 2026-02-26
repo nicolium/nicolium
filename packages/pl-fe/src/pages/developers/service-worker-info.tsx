@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Indicator from '@/components/indicator';
 import List, { ListItem } from '@/components/list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import FormActions from '@/components/ui/form-actions';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
+import Indicator from '@/components/ui/indicator';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { unregisterSW } from '@/utils/sw';

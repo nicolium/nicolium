@@ -3,7 +3,7 @@ import { createUseGesture, dragAction, pinchAction } from '@use-gesture/react';
 import clsx from 'clsx';
 import React, { useState, useCallback, useRef, useEffect } from 'react';
 
-import Blurhash from '@/components/blurhash';
+import Blurhash from '@/components/media/blurhash';
 import Spinner from '@/components/ui/spinner';
 
 const MIN_SCALE = 1;

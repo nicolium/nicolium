@@ -30,9 +30,9 @@ import { textForScreenReader } from '@/utils/status';
 
 import HashtagLink from '../hashtag-link';
 import RelativeTimestamp from '../relative-timestamp';
-import RssFeedInfo from '../rss-feed-info';
 
 import EventPreview from './event-preview';
+import RssFeedInfo from './rss-feed-info';
 import StatusActionBar from './status-action-bar';
 import StatusContent from './status-content';
 import StatusInfo from './status-info';

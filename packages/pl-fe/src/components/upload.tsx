@@ -25,8 +25,8 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Blurhash from '@/components/blurhash';
 import AltIndicator from '@/components/media/alt-indicator';
+import Blurhash from '@/components/media/blurhash';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
