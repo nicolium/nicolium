@@ -185,7 +185,8 @@ const toggleStatusSensitivityModal =
   (intl: IntlShape, statusId: string, sensitive: boolean, afterConfirm = () => {}) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-    const acct = state.statuses[statusId].account.acct;
+    const statusAccount = selectAccount(state.statuses[statusId].account_id);
+    const acct = statusAccount?.acct;
 
     useModalsStore.getState().actions.openModal('CONFIRM', {
       heading: intl.formatMessage(
@@ -217,7 +218,8 @@ const deleteStatusModal =
   (intl: IntlShape, statusId: string, afterConfirm = () => {}) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
-    const acct = state.statuses[statusId].account.acct;
+    const statusAccount = selectAccount(state.statuses[statusId].account_id);
+    const acct = statusAccount?.acct;
 
     useModalsStore.getState().actions.openModal('CONFIRM', {
       heading: intl.formatMessage(messages.deleteStatusHeading),

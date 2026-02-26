@@ -209,36 +209,38 @@ const newPoll = (params: Partial<ComposePoll> = {}): ComposePoll => ({
 });
 
 const statusToTextMentions = (
-  status: Pick<Status, 'account' | 'mentions'>,
+  status: Pick<Status, 'account_id' | 'mentions'>,
   account: Pick<Account, 'acct'>,
 ) => {
-  const author = status.account.acct;
+  const statusAccount = selectAccount(status.account_id);
+  const author = statusAccount?.acct;
   const mentions = status.mentions.map((m) => m.acct);
 
-  return [...new Set([author, ...mentions].filter((acct) => acct !== account.acct))]
+  return [...new Set([author, ...mentions].filter((acct) => acct && acct !== account.acct))]
     .map((m) => `@${m} `)
     .join('');
 };
 
 const statusToMentionsArray = (
-  status: Pick<Status, 'account' | 'mentions'>,
+  status: Pick<Status, 'account_id' | 'mentions'>,
   account: Pick<Account, 'acct'>,
   rebloggedBy?: Pick<Account, 'acct'>,
 ) => {
-  const author = status.account.acct;
+  const statusAccount = selectAccount(status.account_id);
+  const author = statusAccount?.acct;
   const mentions = status.mentions.map((m) => m.acct);
 
   return [
     ...new Set(
       [author, ...(rebloggedBy ? [rebloggedBy.acct] : []), ...mentions].filter(
-        (acct) => acct !== account.acct,
+        (acct): acct is string => !!acct && acct !== account.acct,
       ),
     ),
   ];
 };
 
 const statusToMentionsAccountIdsArray = (
-  status: Pick<Status, 'mentions' | 'account'>,
+  status: Pick<Status, 'mentions' | 'account_id'>,
   account: Pick<Account, 'id'>,
   parentRebloggedBy?: string | null,
 ) => {
@@ -246,7 +248,7 @@ const statusToMentionsAccountIdsArray = (
 
   return [
     ...new Set(
-      [status.account.id, ...(parentRebloggedBy ? [parentRebloggedBy] : []), ...mentions].filter(
+      [status.account_id, ...(parentRebloggedBy ? [parentRebloggedBy] : []), ...mentions].filter(
         (id) => id !== account.id,
       ),
     ),
@@ -307,7 +309,7 @@ interface ComposeActions {
     status: Pick<
       Status,
       | 'id'
-      | 'account'
+      | 'account_id'
       | 'content'
       | 'group_id'
       | 'in_reply_to_id'
@@ -330,7 +332,7 @@ interface ComposeActions {
     status: Pick<
       Status,
       | 'id'
-      | 'account'
+      | 'account_id'
       | 'group_id'
       | 'list_id'
       | 'local_only'
@@ -342,7 +344,7 @@ interface ComposeActions {
     approvalRequired?: boolean,
   ) => void;
   quoteCompose: (
-    status: Pick<Status, 'id' | 'account' | 'visibility' | 'group_id' | 'list_id'>,
+    status: Pick<Status, 'id' | 'account_id' | 'visibility' | 'group_id' | 'list_id'>,
     approvalRequired?: boolean,
   ) => void;
   mentionCompose: (account: Pick<Account, 'acct'>) => void;
@@ -351,7 +353,7 @@ interface ComposeActions {
   openComposeWithText: (composeId: string, text?: string) => void;
   eventDiscussionCompose: (
     composeId: string,
-    status: Pick<Status, 'id' | 'account' | 'mentions'>,
+    status: Pick<Status, 'id' | 'account_id' | 'mentions'>,
   ) => void;
   resetCompose: (composeId?: string) => void;
   selectComposeSuggestion: (
@@ -423,7 +425,7 @@ const useComposeStore = create<ComposeStore>()(
 
             const compose = state.composers['compose-modal'];
             const mentions = explicitAddressing
-              ? getExplicitMentions(status.account.id, status)
+              ? getExplicitMentions(status.account_id, status)
               : [];
             if (!withRedraft && !draftId) {
               compose.editedId = status.id;
@@ -526,7 +528,8 @@ const useComposeStore = create<ComposeStore>()(
             }
             const compose = draft.composers['compose-modal'];
 
-            const author = status.account.acct;
+            const statusAccount = selectAccount(status.account_id);
+            const author = statusAccount?.acct ?? '';
 
             compose.quoteId = status.id;
             compose.to = [author];

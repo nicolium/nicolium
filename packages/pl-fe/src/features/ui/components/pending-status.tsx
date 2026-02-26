@@ -12,6 +12,7 @@ import PlaceholderMediaGallery from '@/features/placeholder/components/placehold
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { usePollQuery } from '@/queries/statuses/use-poll';
 import { usePendingStatus } from '@/stores/pending-statuses';
 
 import { buildStatus } from '../util/pending-status-builder';
@@ -36,7 +37,7 @@ interface IPendingStatusMedia {
 const PendingStatusMedia: React.FC<IPendingStatusMedia> = ({ status }) => {
   if (status.media_attachments && status.media_attachments.length) {
     return <PlaceholderMediaGallery media={status.media_attachments} />;
-  } else if (!status.quote && shouldHaveCard(status)) {
+  } else if (!status.quote_id && shouldHaveCard(status)) {
     return <PlaceholderCard />;
   } else {
     return null;
@@ -57,10 +58,10 @@ const PendingStatus: React.FC<IPendingStatus> = ({
       : null;
   });
 
-  if (!status) return null;
-  if (!status.account) return null;
+  const { data: poll } = usePollQuery(status?.poll_id ?? '');
 
-  const account = status.account;
+  if (!status) return null;
+  if (!ownAccount) return null;
 
   return (
     <div className={clsx('opacity-50', className)}>
@@ -75,8 +76,8 @@ const PendingStatus: React.FC<IPendingStatus> = ({
           <div className='mb-4'>
             <HStack justifyContent='between' alignItems='start'>
               <Account
-                key={account.id}
-                account={account}
+                key={ownAccount.id}
+                account={ownAccount}
                 timestamp={status.created_at}
                 hideActions
                 withLinkToProfile={false}
@@ -92,7 +93,7 @@ const PendingStatus: React.FC<IPendingStatus> = ({
 
               <PendingStatusMedia status={status} />
 
-              {status.poll && <PollPreview poll={status.poll} />}
+              {poll && <PollPreview poll={poll} />}
 
               {status.quote_id && <QuotedStatus statusId={status.quote_id} />}
             </Stack>

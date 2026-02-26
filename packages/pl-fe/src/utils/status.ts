@@ -1,3 +1,5 @@
+import { selectAccount } from '@/queries/accounts/selectors';
+
 import type { NormalizedStatus as Status } from '@/reducers/statuses';
 import type { IntlShape } from 'react-intl';
 
@@ -21,10 +23,10 @@ const shouldHaveCard = (status: Pick<Status, 'content'>): boolean =>
 /** Sanitize status text for use with screen readers. */
 const textForScreenReader = (
   intl: IntlShape,
-  status: Pick<Status, 'account' | 'spoiler_text' | 'search_index' | 'created_at'>,
+  status: Pick<Status, 'account_id' | 'spoiler_text' | 'search_index' | 'created_at'>,
   rebloggedByText?: string,
 ): string => {
-  const { account } = status;
+  const account = selectAccount(status.account_id);
   if (!account || typeof account !== 'object') return '';
 
   const displayName = account.display_name;

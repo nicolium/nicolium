@@ -7,6 +7,7 @@ import Stack from '@/components/ui/stack';
 import Emojify from '@/features/emoji/emojify';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useLocalStatusTranslation } from '@/queries/statuses/use-local-status-translation';
 import { useStatusTranslation } from '@/queries/statuses/use-status-translation';
 import { useSettings } from '@/stores/settings';
@@ -79,6 +80,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
   }) => {
     const { urlPrivacy, displaySpoilers, renderMfm } = useSettings();
     const { greentext } = useFrontendConfig();
+    const { data: account } = useAccount(status.account_id);
 
     const [collapsed, setCollapsed] = useState<boolean | null>(null);
     const [onlyEmoji, setOnlyEmoji] = useState(false);
@@ -172,11 +174,11 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
           redirectUrls: urlPrivacy.redirectLinksMode !== 'off',
           displayTargetHost: urlPrivacy.displayTargetHost,
           greentext,
-          speakAsCat: status.account.speak_as_cat,
+          speakAsCat: account?.speak_as_cat,
         },
         true,
       );
-    }, [content, renderMfm]);
+    }, [content, renderMfm, account?.speak_as_cat]);
 
     const spoilerText =
       status.spoiler_text_map && statusMeta.currentLanguage

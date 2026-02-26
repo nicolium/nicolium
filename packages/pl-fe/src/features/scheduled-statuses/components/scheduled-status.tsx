@@ -7,6 +7,7 @@ import StatusContent from '@/components/status-content';
 import StatusReplyMentions from '@/components/status-reply-mentions';
 import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
+import { buildPoll } from '@/features/draft-statuses/builder';
 import PollPreview from '@/features/ui/components/poll-preview';
 import { useOwnAccount } from '@/hooks/use-own-account';
 
@@ -26,10 +27,9 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ scheduledStatus, ...other
   if (!ownAccount) return null;
 
   const status = buildStatus(ownAccount, scheduledStatus);
+  const poll = scheduledStatus.params.poll ? buildPoll(scheduledStatus.params.poll) : null;
 
   if (!status) return null;
-
-  const account = status.account;
 
   return (
     <div
@@ -47,8 +47,8 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ scheduledStatus, ...other
         <div className='mb-4'>
           <HStack justifyContent='between' alignItems='start'>
             <Account
-              key={account.id}
-              account={account}
+              key={ownAccount.id}
+              account={ownAccount}
               timestamp={status.created_at}
               futureTimestamp
               action={<ScheduledStatusActionBar status={status} {...other} />}
@@ -63,7 +63,7 @@ const ScheduledStatus: React.FC<IScheduledStatus> = ({ scheduledStatus, ...other
 
           {status.media_attachments.length > 0 && <AttachmentThumbs status={status} />}
 
-          {status.poll && <PollPreview poll={status.poll} />}
+          {poll && <PollPreview poll={poll} />}
         </Stack>
       </div>
     </div>

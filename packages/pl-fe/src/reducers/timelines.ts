@@ -223,7 +223,7 @@ const isReblogOf = (reblog: Pick<Status, 'reblog_id'>, status: Pick<Status, 'id'
   reblog.reblog_id === status.id;
 
 const buildReferencesTo = (
-  statuses: Record<string, Pick<Status, 'id' | 'account' | 'reblog_id'>>,
+  statuses: Record<string, Pick<Status, 'id' | 'account_id' | 'reblog_id'>>,
   status: Pick<Status, 'id'>,
 ): Array<[string]> =>
   Object.values(statuses)
@@ -239,7 +239,7 @@ const buildReferencesTo = (
 const filterTimelines = (
   state: State,
   relationship: Relationship,
-  statuses: Record<string, Pick<Status, 'id' | 'account' | 'account_id' | 'reblog_id'>>,
+  statuses: Record<string, Pick<Status, 'id' | 'account_id' | 'reblog_id'>>,
 ) => {
   for (const statusId in statuses) {
     const status = statuses[statusId];

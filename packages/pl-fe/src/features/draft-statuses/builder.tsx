@@ -1,17 +1,17 @@
-import { statusSchema, type Account } from 'pl-api';
+import { pollSchema, statusSchema, type Account } from 'pl-api';
 import * as v from 'valibot';
 
 import { normalizeStatus } from '@/reducers/statuses';
 
 import type { DraftStatus } from '@/queries/statuses/use-draft-statuses';
 
-const buildPoll = (draftStatus: DraftStatus) => {
-  if (draftStatus.poll?.options) {
-    return {
-      ...draftStatus.poll,
-      id: `${draftStatus.draft_id}-poll`,
-      options: draftStatus.poll.options.map((title: string) => ({ title })).toArray(),
-    };
+const buildPoll = (draftPoll: DraftStatus['poll']) => {
+  if (draftPoll?.options) {
+    return v.parse(pollSchema, {
+      ...draftPoll,
+      id: 'poll',
+      options: draftPoll.options.map((title: string) => ({ title })).toArray(),
+    });
   } else {
     return null;
   }
@@ -29,7 +29,6 @@ const buildStatus = (account: Account, draftStatus: DraftStatus) => {
     group: draftStatus.group_id,
     in_reply_to_id: draftStatus.in_reply_to,
     media_attachments: draftStatus.media_attachments,
-    poll: buildPoll(draftStatus),
     quote_id: draftStatus.quote,
     sensitive: draftStatus.sensitive,
     spoiler_text: draftStatus.spoiler_text,
@@ -41,4 +40,4 @@ const buildStatus = (account: Account, draftStatus: DraftStatus) => {
   return normalizeStatus(status);
 };
 
-export { buildStatus };
+export { buildStatus, buildPoll };

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import EventPreview from '@/components/event-preview';
@@ -14,7 +14,6 @@ import IconButton from '@/components/ui/icon-button';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import AccountContainer from '@/containers/account-container';
-import { useOwnAccount } from '@/hooks/use-own-account';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
 import type { NormalizedStatus as Status } from '@/reducers/statuses';
@@ -34,7 +33,6 @@ interface IQuotedStatusContainer {
 const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }) => {
   const { updateCompose } = useComposeActions();
   const intl = useIntl();
-  const { data: ownAccount } = useOwnAccount();
 
   const previewedStatus = useCompose(composeId).preview as unknown as Status;
 
@@ -44,16 +42,7 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
     });
   };
 
-  const status = useMemo(
-    () =>
-      previewedStatus
-        ? {
-            ...previewedStatus,
-            account: previewedStatus.account || ownAccount,
-          }
-        : null,
-    [previewedStatus, ownAccount],
-  );
+  const status = previewedStatus ?? null;
 
   if (!status) {
     return null;
@@ -80,7 +69,7 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
           />
         </HStack>
         <AccountContainer
-          id={status.account.id}
+          id={status.account_id}
           timestamp={status.created_at}
           withRelationship={false}
           showAccountHoverCard={false}

@@ -10,6 +10,7 @@ import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAppSelector } from '@/hooks/use-app-selector';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useStatusHistory } from '@/queries/statuses/use-status-history';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
@@ -25,6 +26,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
   const { data: versions, isLoading } = useStatusHistory(statusId);
 
   const status = useAppSelector((state) => state.statuses[statusId]);
+  const { data: statusAccount } = useAccount(status?.account_id ?? '');
 
   const onClickClose = () => {
     onClose('COMPARE_HISTORY');
@@ -44,7 +46,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
               mentions={status?.mentions}
               hasQuote={!!status?.quote_id}
               emojis={version.emojis}
-              speakAsCat={status.account.speak_as_cat}
+              speakAsCat={statusAccount?.speak_as_cat}
             />
           );
 
@@ -81,7 +83,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
                           <ParsedContent
                             html={option.title}
                             emojis={version.emojis}
-                            speakAsCat={status.account.speak_as_cat}
+                            speakAsCat={statusAccount?.speak_as_cat}
                           />
                         </span>
                       </HStack>

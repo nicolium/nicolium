@@ -33,7 +33,7 @@ const getGallery = createSelector(
           sensitive: status.sensitive,
           visibility: status.visibility,
           status_id: statusId,
-          account_id: status.account.id,
+          account_id: status.account_id,
         })),
       );
     }, []),

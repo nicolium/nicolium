@@ -14,6 +14,7 @@ import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useGroupQuery } from '@/queries/groups/use-group';
 
 import StatusInteractionBar from './status-interaction-bar';
@@ -41,6 +42,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
   const node = useRef<HTMLDivElement>(null);
 
   const { data: group } = useGroupQuery(status.group_id ?? undefined);
+  const { data: account } = useAccount(status.account_id);
 
   const handleOpenCompareHistoryModal = () => {
     onOpenCompareHistoryModal(status);
@@ -93,8 +95,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
   const actualStatus = status?.reblog || status;
   if (!actualStatus) return null;
-  const { account } = actualStatus;
-  if (!account || typeof account !== 'object') return null;
+  if (!account) return null;
 
   return (
     <div className='border-box'>

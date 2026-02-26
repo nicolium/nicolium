@@ -13,7 +13,7 @@ import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import PollPreview from '@/features/ui/components/poll-preview';
 import { useOwnAccount } from '@/hooks/use-own-account';
 
-import { buildStatus } from '../builder';
+import { buildPoll, buildStatus } from '../builder';
 
 import DraftStatusActionBar from './draft-status-action-bar';
 
@@ -29,10 +29,11 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
   if (!ownAccount || !draftStatus) return null;
 
   const status = buildStatus(ownAccount, draftStatus);
+  const poll = draftStatus.poll ? buildPoll(draftStatus.poll) : null;
 
   if (!status) return null;
 
-  const account = status.account;
+  const account = ownAccount;
 
   let quote;
 
@@ -82,7 +83,7 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
 
           {quote}
 
-          {status.poll && <PollPreview poll={status.poll} />}
+          {poll && <PollPreview poll={poll} />}
         </Stack>
       </div>
     </div>

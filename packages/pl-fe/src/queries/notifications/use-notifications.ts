@@ -5,10 +5,7 @@ import { useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
 import { importEntities } from '@/actions/importer';
-import {
-  getNotificationStatus,
-  notificationMessages,
-} from '@/features/notifications/components/notification';
+import { notificationMessages } from '@/features/notifications/components/notification';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useClient } from '@/hooks/use-client';
@@ -150,7 +147,7 @@ const useProcessStreamNotification = () => {
       if (notification.type === 'chat_mention') return;
 
       const playSound = sounds[notification.type];
-      const status = getNotificationStatus(notification);
+      const status = 'status' in notification ? notification.status : null;
 
       let filtered: boolean | null = false;
 
@@ -166,7 +163,7 @@ const useProcessStreamNotification = () => {
 
         if (!filtered && isNotificationsEnabled) {
           const targetName = notification.type === 'move' ? notification.target.acct : '';
-          const isReblog = status?.reblog_id ? 1 : 0;
+          const isReblog = status?.reblog ? 1 : 0;
 
           const title = intl.formatMessage(notificationMessages[notification.type], {
             name: notification.account.display_name,

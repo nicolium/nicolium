@@ -12,6 +12,7 @@ import Emojify from '@/features/emoji/emojify';
 import EventActionButton from '@/features/event/components/event-action-button';
 import EventDate from '@/features/event/components/event-date';
 import { useAppSelector } from '@/hooks/use-app-selector';
+import { useAccount } from '@/queries/accounts/use-account';
 
 import type { NormalizedStatus as StatusEntity } from '@/reducers/statuses';
 
@@ -26,7 +27,7 @@ const messages = defineMessages({
 });
 
 interface IEventPreview {
-  status: Pick<StatusEntity, 'id' | 'account' | 'event' | 'url'>;
+  status: Pick<StatusEntity, 'id' | 'account_id' | 'event' | 'url'>;
   className?: string;
   hideAction?: boolean;
   floatingAction?: boolean;
@@ -41,9 +42,11 @@ const EventPreview: React.FC<IEventPreview> = ({
   const intl = useIntl();
 
   const me = useAppSelector((state) => state.me);
+  const { data: account } = useAccount(status.account_id);
 
-  const account = status.account;
   const event = status.event!;
+
+  if (!account) return null;
 
   const banner = event.banner;
 

@@ -5,6 +5,8 @@ import { fetchStatus } from '@/actions/statuses';
 import Button from '@/components/ui/button';
 import HStack from '@/components/ui/hstack';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { useCancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
@@ -55,7 +57,10 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
 
   const handleEditClick = () => {
     if (status.in_reply_to_id) dispatch(fetchStatus(status.in_reply_to_id));
-    setComposeToStatus(status, status.poll, source, false, source.draft_id, source.editorState);
+    const poll = status.poll_id
+      ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
+      : undefined;
+    setComposeToStatus(status, poll, source, false, source.draft_id, source.editorState);
     openModal('COMPOSE');
   };
 

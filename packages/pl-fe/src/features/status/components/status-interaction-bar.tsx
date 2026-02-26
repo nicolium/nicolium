@@ -7,6 +7,7 @@ import AnimatedNumber from '@/components/animated-number';
 import HStack from '@/components/ui/hstack';
 import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useModalsActions } from '@/stores/modals';
 
 import type { NormalizedStatus as Status } from '@/reducers/statuses';
@@ -15,7 +16,7 @@ interface IStatusInteractionBar {
   status: Pick<
     Status,
     | 'id'
-    | 'account'
+    | 'account_id'
     | 'dislikes_count'
     | 'favourited'
     | 'favourites_count'
@@ -29,7 +30,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
 }): React.JSX.Element | null => {
   const { openModal } = useModalsActions();
   const features = useFeatures();
-  const { account } = status;
+  const { data: account } = useAccount(status.account_id);
 
   if (!account || typeof account !== 'object') return null;
 
@@ -74,7 +75,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
         <InteractionCounter
           count={status.quotes_count}
           to='/@{$username}/posts/$statusId/quotes'
-          params={{ username: status.account.acct, statusId: status.id }}
+          params={{ username: account?.acct ?? '', statusId: status.id }}
         >
           <FormattedMessage
             id='status.interactions.quotes'

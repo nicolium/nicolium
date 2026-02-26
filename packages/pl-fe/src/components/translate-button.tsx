@@ -7,6 +7,7 @@ import Text from '@/components/ui/text';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/hooks/use-instance';
+import { selectAccount } from '@/queries/accounts/selectors';
 import { useTranslationLanguages } from '@/queries/instance/use-translation-languages';
 import { useLocalStatusTranslation } from '@/queries/statuses/use-local-status-translation';
 import { useStatusTranslation } from '@/queries/statuses/use-status-translation';
@@ -40,7 +41,8 @@ const canRemoteTranslate = (
 
   if (!isLoggedIn && !allowUnauthenticated) return false;
 
-  if (!status.account.local && !allowRemote) return false;
+  const statusAccount = selectAccount(status.account_id);
+  if (statusAccount && !statusAccount.local && !allowRemote) return false;
 
   if (!supportedLanguages[status.language]?.includes(locale)) return false;
 
@@ -68,7 +70,7 @@ const localTranslationAvailability = async (
 };
 
 interface ITranslateButton {
-  status: Pick<Status, 'id' | 'account' | 'content' | 'content_map' | 'language' | 'visibility'>;
+  status: Pick<Status, 'id' | 'account_id' | 'content' | 'content_map' | 'language' | 'visibility'>;
 }
 
 const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {

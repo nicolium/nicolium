@@ -4,14 +4,13 @@ import { useClient } from '@/hooks/use-client';
 
 import { queryKeys } from '../keys';
 
-import type { Poll } from 'pl-api';
-
 const usePollQuery = (pollId: string) => {
   const client = useClient();
 
-  return useQuery<Poll>({
+  return useQuery({
     queryKey: queryKeys.statuses.polls.show(pollId),
     queryFn: () => client.polls.getPoll(pollId),
+    enabled: !!pollId,
   });
 };
 

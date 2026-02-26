@@ -127,7 +127,7 @@ interface TimelineDeleteAction {
 
 const deleteFromTimelines =
   (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-    const accountId = getState().statuses[statusId]?.account?.id;
+    const accountId = getState().statuses[statusId]?.account_id;
     const references: Array<[string, string]> = Object.entries(getState().statuses)
       .filter(([key, status]) => [key, status.reblog_id === statusId])
       .map(([key, status]) => [key, status.account_id]);

@@ -19,6 +19,7 @@ import Emojify from '@/features/emoji/emojify';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useChats } from '@/queries/chats';
 import {
   useBookmarkStatus,
@@ -94,7 +95,7 @@ interface IEventHeader {
   status?: Pick<
     Status,
     | 'id'
-    | 'account'
+    | 'account_id'
     | 'bookmarked'
     | 'event'
     | 'group_id'
@@ -121,6 +122,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const features = useFeatures();
   const { boostModal } = useSettings();
   const { data: ownAccount } = useOwnAccount();
+  const { data: account } = useAccount(status?.account_id!);
   const isStaff = ownAccount ? (ownAccount.is_admin ?? ownAccount.is_moderator) : false;
   const isAdmin = ownAccount ? ownAccount.is_admin : false;
 
@@ -131,7 +133,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const { mutate: pinStatus } = usePinStatus(status?.id!);
   const { mutate: unpinStatus } = useUnpinStatus(status?.id!);
 
-  if (!status || !status.event) {
+  if (!status || !status.event || !account) {
     return (
       <>
         <div className='-mx-4 -mt-4'>
@@ -142,10 +144,10 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
       </>
     );
   }
-
-  const account = status.account;
   const event = status.event;
   const banner = event.banner;
+
+  if (!account) return null;
 
   const username = account.username;
 
@@ -365,7 +367,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         icon: require('@phosphor-icons/core/regular/at.svg'),
       });
 
-      if (status.account.accepts_chat_messages === true) {
+      if (account.accepts_chat_messages === true) {
         menu.push({
           text: intl.formatMessage(messages.chat, { name: username }),
           action: handleChatClick,

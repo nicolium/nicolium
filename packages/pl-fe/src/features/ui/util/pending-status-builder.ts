@@ -1,4 +1,3 @@
-import { create } from 'mutative';
 import { statusSchema, type Account } from 'pl-api';
 import * as v from 'valibot';
 
@@ -12,17 +11,6 @@ const buildMentions = (pendingStatus: PendingStatus) => {
     return (pendingStatus.to ?? []).map((acct) => ({ acct }));
   } else {
     return [];
-  }
-};
-
-const buildPoll = (pendingStatus: PendingStatus) => {
-  if (pendingStatus.poll?.options) {
-    return create(pendingStatus.poll, (draft) => {
-      // @ts-expect-error
-      draft.options = draft.options.map((title) => ({ title }));
-    });
-  } else {
-    return null;
   }
 };
 
@@ -42,7 +30,6 @@ const buildStatus = (
     in_reply_to_id: inReplyToId,
     media_attachments: (pendingStatus.media_ids ?? []).map((id: string) => ({ id })),
     mentions: buildMentions(pendingStatus),
-    poll: buildPoll(pendingStatus),
     quote: pendingStatus.quote_id ? state.statuses[pendingStatus.quote_id] : null,
     sensitive: pendingStatus.sensitive,
     visibility: pendingStatus.visibility,

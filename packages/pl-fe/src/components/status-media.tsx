@@ -4,6 +4,7 @@ import AttachmentThumbs from '@/components/attachment-thumbs';
 import PreviewCard from '@/components/preview-card';
 import PlaceholderCard from '@/features/placeholder/components/placeholder-card';
 import { MediaGallery, Video, Audio } from '@/features/ui/util/async-components';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 
@@ -17,7 +18,7 @@ interface IStatusMedia {
   status: Pick<
     Status,
     | 'id'
-    | 'account'
+    | 'account_id'
     | 'card'
     | 'expectsCard'
     | 'filtered'
@@ -36,6 +37,7 @@ interface IStatusMedia {
 const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick }) => {
   const { openModal } = useModalsActions();
   const { displayMedia } = useSettings();
+  const { data: account } = useAccount(status.account_id);
 
   const [visible] = useMediaVisible(status, displayMedia);
 
@@ -97,7 +99,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
             poster={
               attachment.preview_url !== attachment.url
                 ? attachment.preview_url
-                : status.account.avatar_static
+                : account?.avatar_static
             }
             backgroundColor={attachment.meta.colors?.background}
             foregroundColor={attachment.meta.colors?.foreground}
@@ -128,13 +130,7 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
   if (media) {
     return (
       // eslint-disable-next-line jsx-a11y/no-static-element-interactions
-      <div
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
-        {media}
-      </div>
+      <div onClick={(e) => e.stopPropagation()}>{media}</div>
     );
   } else {
     return null;
