@@ -2,7 +2,6 @@ import {
   type InfiniteData,
   useInfiniteQuery,
   useMutation,
-  useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
 import 'intl-pluralrules';
@@ -31,6 +30,7 @@ import { play, soundCache } from '@/utils/sounds';
 import { joinPublicPath } from '@/utils/static';
 
 import { queryKeys } from '../keys';
+import { useNotificationsMarker } from '../markers/use-markers';
 import { minifyGroupedNotifications } from '../utils/minify-list';
 
 import type {
@@ -114,18 +114,6 @@ const useNotifications = (activeFilter: FilterType) => {
 
   return useInfiniteQuery({
     ...notificationsQueryOptions(activeFilter),
-    enabled: !!me,
-  });
-};
-
-const useNotificationsMarker = () => {
-  const client = useClient();
-  const { me } = useLoggedIn();
-
-  return useQuery({
-    queryKey: queryKeys.markers.notifications,
-    queryFn: async () =>
-      (await client.timelines.getMarkers(['notifications'])).notifications ?? null,
     enabled: !!me,
   });
 };
@@ -344,7 +332,6 @@ export {
   type FilterType,
   useMarkNotificationsReadMutation,
   useNotifications,
-  useNotificationsMarker,
   useNotificationsUnreadCount,
   usePrefetchNotifications,
   usePrefetchNotificationsMarker,
