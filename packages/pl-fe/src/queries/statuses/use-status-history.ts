@@ -1,8 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { StatusEdit } from 'pl-api';
 
-import { importEntities } from '@/actions/importer';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 
 const minifyStatusEdit = ({ account, ...statusEdit }: StatusEdit) => ({
@@ -12,19 +10,18 @@ const minifyStatusEdit = ({ account, ...statusEdit }: StatusEdit) => ({
 
 const useStatusHistory = (statusId: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   return useQuery({
     queryKey: ['statuses', 'history', statusId],
-    queryFn: () =>
-      client.statuses
-        .getStatusHistory(statusId)
-        .then(
-          (history) => (
-            dispatch(importEntities({ accounts: history.map(({ account }) => account) })), history
-          ),
-        )
-        .then((history) => history.map(minifyStatusEdit)),
+    queryFn: async () => {
+      const history = await client.statuses.getStatusHistory(statusId);
+      for (const { account } of history) {
+        // why am i even doing this it's always the same account lol
+        queryClient.setQueryData(['accounts', account.id], account);
+      }
+      return history.map(minifyStatusEdit);
+    },
   });
 };
 

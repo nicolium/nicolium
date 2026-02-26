@@ -1,11 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { importEntities } from '@/actions/importer';
 import { useClient } from '@/hooks/use-client';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
 import { minifyList } from '@/queries/utils/minify-list';
 import { updatePaginatedResponse } from '@/queries/utils/update-paginated-response';
-import { store } from '@/store';
+
+import { queryClient } from '../client';
 
 import type { PlApiClient } from 'pl-api';
 
@@ -17,10 +17,11 @@ const minifyRequestList = (
   minifyList(
     response,
     ({ account, participation_message }) => ({ account_id: account.id, participation_message }),
-    (requests) =>
-      store.dispatch(
-        importEntities({ accounts: requests.map((request) => request.account) }) as any,
-      ),
+    (requests) => {
+      for (const { account } of requests) {
+        queryClient.setQueryData(['accounts', account.id], account);
+      }
+    },
   );
 
 type MinifiedRequestList = ReturnType<typeof minifyRequestList>;

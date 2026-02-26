@@ -28,10 +28,19 @@ const translations = memoize((lang: string, client: PlApiClient) =>
   }),
 );
 
+const familiarFollowers = memoize((client: PlApiClient) =>
+  create({
+    fetcher: (ids: string[]) => client.accounts.getFamiliarFollowers(ids),
+    resolver: keyResolver('id'),
+    scheduler: bufferScheduler(200),
+  }),
+);
+
 const batcher = {
   relationships,
   groupRelationships,
   translations,
+  familiarFollowers,
 };
 
 export { batcher };

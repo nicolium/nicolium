@@ -44,13 +44,17 @@ const useStatusReblogs = makeUseStatusInteractions('getRebloggedBy');
 
 const useStatusReactions = (statusId: string, emoji?: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   return useQuery({
     queryKey: ['accountsLists', 'statusReactions', statusId, emoji],
     queryFn: () =>
       client.statuses.getStatusReactions(statusId, emoji).then((reactions) => {
-        dispatch(importEntities({ accounts: reactions.map(({ accounts }) => accounts).flat() }));
+        for (const { accounts } of reactions) {
+          for (const account of accounts) {
+            queryClient.setQueryData(['accounts', account.id], account);
+          }
+        }
 
         return reactions.map(({ accounts, ...reactions }) => reactions);
       }),

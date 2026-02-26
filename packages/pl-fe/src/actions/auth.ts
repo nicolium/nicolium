@@ -36,8 +36,6 @@ import { isStandalone } from '@/utils/state';
 
 import { type PlfeResponse, getClient } from '../api';
 
-import { importEntities } from './importer';
-
 import type { AppDispatch, RootState } from '@/store';
 
 const SWITCH_ACCOUNT = 'SWITCH_ACCOUNT' as const;
@@ -180,7 +178,7 @@ const verifyCredentials =
     return client.settings
       .verifyCredentials()
       .then((account) => {
-        dispatch(importEntities({ accounts: [account] }));
+        queryClient.setQueryData(['accounts', account.id], account);
         dispatch<VerifyCredentialsSuccessAction>({
           type: VERIFY_CREDENTIALS_SUCCESS,
           token,
@@ -194,7 +192,7 @@ const verifyCredentials =
           // The user is waitlisted
           const account = error.response.json;
           const parsedAccount = v.parse(credentialAccountSchema, error.response.json);
-          dispatch(importEntities({ accounts: [parsedAccount] }));
+          queryClient.setQueryData(['accounts', parsedAccount.id], parsedAccount);
           dispatch<VerifyCredentialsSuccessAction>({
             type: VERIFY_CREDENTIALS_SUCCESS,
             token,
@@ -219,7 +217,7 @@ interface AuthAccountRememberSuccessAction {
 const rememberAuthAccount =
   (accountUrl: string) => (dispatch: AppDispatch, getState: () => RootState) =>
     KVStore.getItemOrError(`authAccount:${accountUrl}`).then((account) => {
-      dispatch(importEntities({ accounts: [account] }));
+      queryClient.setQueryData(['accounts', account.id], account);
       dispatch<AuthAccountRememberSuccessAction>({
         type: AUTH_ACCOUNT_REMEMBER_SUCCESS,
         account,

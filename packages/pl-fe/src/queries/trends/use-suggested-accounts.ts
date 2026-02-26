@@ -1,7 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { importEntities } from '@/actions/importer';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 
@@ -11,14 +9,16 @@ type MinifiedSuggestion = Omit<Suggestion, 'account'> & { account_id: string };
 
 const useSuggestedAccounts = () => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const features = useFeatures();
+  const queryClient = useQueryClient();
 
   return useQuery({
     queryKey: ['suggestions'],
     queryFn: () =>
       client.myAccount.getSuggestions().then((suggestions) => {
-        dispatch(importEntities({ accounts: suggestions.map(({ account }) => account) }));
+        for (const { account } of suggestions) {
+          queryClient.setQueryData(['accounts', account.id], account);
+        }
         return suggestions.map(
           ({ account, ...suggestion }): MinifiedSuggestion => ({
             account_id: account.id,

@@ -6,8 +6,6 @@ import {
   useQueryClient,
 } from '@tanstack/react-query';
 
-import { importEntities } from '@/actions/importer';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -39,13 +37,13 @@ const useAdminAccounts = makePaginatedResponseQuery(
 
 const useAdminAccount = (accountId?: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   const query = useQuery<AdminAccount>({
     queryKey: ['admin', 'accounts', accountId],
     queryFn: () =>
       client.admin.accounts.getAccount(accountId!).then(({ account, ...adminAccount }) => {
-        dispatch(importEntities({ accounts: [account] }));
+        if (account) queryClient.setQueryData(['accounts', account.id], account);
         return adminAccount as AdminAccount;
       }),
     enabled: !!accountId,
@@ -79,14 +77,13 @@ const usePendingUsersCount = () => {
 
 const useAdminApproveAccountMutation = (accountId: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ['admin', 'acounts', accountId],
     mutationFn: () => client.admin.accounts.approveAccount(accountId),
     onSuccess: ({ account, ...adminAccount }) => {
-      dispatch(importEntities({ accounts: [account] }));
+      if (account) queryClient.setQueryData(['accounts', account.id], account);
       queryClient.setQueryData(['admin', 'accounts', adminAccount.id], adminAccount);
       queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
         {

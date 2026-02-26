@@ -1,17 +1,12 @@
+import { type PlApiClient, type ShoutMessage as BaseShoutMessage, Account } from 'pl-api';
 import { useEffect } from 'react';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
-import { importEntities } from '@/actions/importer';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
-
-import type { store } from '@/store';
-import type { PlApiClient, ShoutMessage as BaseShoutMessage } from 'pl-api';
-
-let lazyStore: typeof store;
-import('@/store').then(({ store }) => (lazyStore = store)).catch(() => {});
+import { queryClient } from '@/queries/client';
 
 const minifyMessage = ({ author, ...message }: BaseShoutMessage) => ({
   author_id: author.id,
@@ -40,19 +35,19 @@ const useShoutboxStore = create<State>()(
       actions: {
         setMessages: (messages) => {
           set((state: State) => {
-            lazyStore?.dispatch(
-              importEntities(
-                { accounts: messages.map((msg) => msg.author) },
-                { override: false },
-              ) as any,
-            );
+            for (const { author } of messages.toReversed()) {
+              queryClient.setQueryData<Account>(
+                ['accounts', author.id],
+                (account) => account || author,
+              );
+            }
             state.messages = messages.map(minifyMessage);
             state.isLoading = false;
           });
         },
         pushMessage: (message) => {
           set((state: State) => {
-            lazyStore?.dispatch(importEntities({ accounts: [message.author] }) as any);
+            queryClient.setQueryData<Account>(['accounts', message.author.id], message.author);
             state.messages.push(minifyMessage(message));
           });
         },

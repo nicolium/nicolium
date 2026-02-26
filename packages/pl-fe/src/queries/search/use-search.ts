@@ -1,4 +1,4 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 
 import { importEntities } from '@/actions/importer';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
@@ -11,7 +11,7 @@ const useSearchAccounts = (
   params?: Omit<SearchParams, keyof PaginationParams | 'type' | 'offset'>,
 ) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   return useInfiniteQuery({
     queryKey: ['search', 'accounts', query, params],
@@ -29,7 +29,12 @@ const useSearchAccounts = (
           { signal },
         )
         .then(({ accounts }) => {
-          dispatch(importEntities({ accounts }));
+          for (const account of accounts) {
+            queryClient.setQueryData(['accounts', account.id], account);
+            if (account.relationship) {
+              queryClient.setQueryData(['accountRelationships', account.id], account.relationship);
+            }
+          }
           return accounts.map(({ id }) => id);
         }),
     enabled: !!query?.trim(),
@@ -110,7 +115,7 @@ const useSearchGroups = (
   params?: Omit<SearchParams, keyof PaginationParams | 'type' | 'offset'>,
 ) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   return useInfiniteQuery({
     queryKey: ['search', 'groups', query, params],
@@ -127,7 +132,9 @@ const useSearchGroups = (
           { signal },
         )
         .then(({ groups }) => {
-          dispatch(importEntities({ groups }));
+          for (const group of groups) {
+            queryClient.setQueryData(['groups', group.id], group);
+          }
           return groups.map(({ id }) => id);
         }),
     enabled: !!query?.trim(),

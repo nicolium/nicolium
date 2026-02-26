@@ -56,7 +56,12 @@ const minifyAccountList = (response: PaginatedResponse<Account>): PaginatedRespo
     response,
     (account) => account.id,
     (accounts) => {
-      store.dispatch(importEntities({ accounts }) as any);
+      for (const account of accounts) {
+        queryClient.setQueryData(['accounts', account.id], account);
+        if (account.relationship) {
+          queryClient.setQueryData(['accountRelationships', account.id], account.relationship);
+        }
+      }
     },
   );
 
@@ -67,7 +72,12 @@ const minifyBlockedAccountList = (
     response,
     (account) => [account.id, account.block_expires_at],
     (accounts) => {
-      store.dispatch(importEntities({ accounts }) as any);
+      for (const account of accounts) {
+        queryClient.setQueryData(['accounts', account.id], account);
+        if (account.relationship) {
+          queryClient.setQueryData(['accountRelationships', account.id], account.relationship);
+        }
+      }
     },
   );
 
@@ -78,7 +88,12 @@ const minifyMutedAccountList = (
     response,
     (account) => [account.id, account.mute_expires_at],
     (accounts) => {
-      store.dispatch(importEntities({ accounts }) as any);
+      for (const account of accounts) {
+        queryClient.setQueryData(['accounts', account.id], account);
+        if (account.relationship) {
+          queryClient.setQueryData(['accountRelationships', account.id], account.relationship);
+        }
+      }
     },
   );
 
@@ -122,18 +137,13 @@ const minifyGroupedNotifications = (
     (results) => {
       const { accounts, statuses } = results;
 
-      store.dispatch(
-        importEntities({
-          accounts,
-          statuses,
-        }) as any,
-      );
+      store.dispatch(importEntities({ accounts, statuses }) as any);
     },
     false,
   );
 
 const minifyAdminAccount = ({ account, ...adminAccount }: AdminAccount) => {
-  store.dispatch(importEntities({ accounts: [account] }) as any);
+  if (account) queryClient.setQueryData(['accounts', account.id], account);
   queryClient.setQueryData(['admin', 'accounts', adminAccount.id], adminAccount);
 
   return adminAccount;
@@ -144,10 +154,8 @@ const minifyAdminAccountList = (response: PaginatedResponse<AdminAccount>) =>
     response,
     (account) => account.id,
     (accounts) => {
-      store.dispatch(
-        importEntities({ accounts: accounts.map((account) => account.account) }) as any,
-      );
       for (const { account, ...adminAccount } of accounts) {
+        if (account) queryClient.setQueryData(['accounts', account.id], account);
         queryClient.setQueryData(['admin', 'accounts', adminAccount.id], adminAccount);
       }
     },

@@ -1,9 +1,7 @@
-import { type InfiniteData, useMutation } from '@tanstack/react-query';
+import { type InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { importEntities } from '@/actions/importer';
 import { useClient } from '@/hooks/use-client';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
-import { store } from '@/store';
 
 import { queryClient } from '../client';
 import { minifyAccountList, minifyList } from '../utils/minify-list';
@@ -32,9 +30,9 @@ const minifyGroupMembersList = (
     response,
     ({ account, ...groupMember }) => ({ ...groupMember, account_id: account.id }),
     (groupMembers) => {
-      store.dispatch(
-        importEntities({ accounts: groupMembers.map(({ account }) => account) }) as any,
-      );
+      for (const { account } of groupMembers) {
+        queryClient.setQueryData(['accounts', account.id], account);
+      }
     },
   );
 
@@ -62,6 +60,7 @@ const useGroupMembershipRequestsQuery = makePaginatedResponseQuery(
 
 const useAcceptGroupMembershipRequestMutation = (groupId: string) => {
   const client = useClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ['accountsLists', 'groupMembershipRequests', groupId],
@@ -78,6 +77,7 @@ const useAcceptGroupMembershipRequestMutation = (groupId: string) => {
 
 const useRejectGroupMembershipRequestMutation = (groupId: string) => {
   const client = useClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ['accountsLists', 'groupMembershipRequests', groupId],
@@ -94,6 +94,7 @@ const useRejectGroupMembershipRequestMutation = (groupId: string) => {
 
 const usePromoteGroupMemberMutation = (groupId: string) => {
   const client = useClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ['accountsLists', 'groupMembers', groupId],
@@ -107,6 +108,7 @@ const usePromoteGroupMemberMutation = (groupId: string) => {
 
 const useDemoteGroupMemberMutation = (groupId: string) => {
   const client = useClient();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ['accountsLists', 'groupMembers', groupId],

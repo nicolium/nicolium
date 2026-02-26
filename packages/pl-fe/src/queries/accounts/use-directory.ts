@@ -1,12 +1,10 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 
-import { importEntities } from '@/actions/importer';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 
 const useDirectory = (order: 'active' | 'new', local: boolean = false) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   return useInfiniteQuery({
     queryKey: ['accountsLists', 'directory', order, local],
@@ -18,7 +16,9 @@ const useDirectory = (order: 'active' | 'new', local: boolean = false) => {
           offset,
         })
         .then((accounts) => {
-          dispatch(importEntities({ accounts }));
+          for (const account of accounts) {
+            queryClient.setQueryData(['accounts', account.id], account);
+          }
           return accounts.map(({ id }) => id);
         }),
     initialPageParam: 0,

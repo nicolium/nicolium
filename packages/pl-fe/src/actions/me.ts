@@ -1,4 +1,5 @@
 import { selectAccount } from '@/queries/accounts/selectors';
+import { queryClient } from '@/queries/client';
 import { setSentryAccount } from '@/sentry';
 import KVStore from '@/storage/kv-store';
 import { useComposeStore } from '@/stores/compose';
@@ -8,7 +9,6 @@ import { getAuthUserId, getAuthUserUrl } from '@/utils/auth';
 import { getClient } from '../api';
 
 import { loadCredentials } from './auth';
-import { importEntities } from './importer';
 import { FE_NAME } from './settings';
 
 import type { AppDispatch, RootState } from '@/store';
@@ -110,7 +110,7 @@ interface MePatchSuccessAction {
 }
 
 const patchMeSuccess = (me: CredentialAccount) => (dispatch: AppDispatch) => {
-  dispatch(importEntities({ accounts: [me] }));
+  queryClient.setQueryData(['accounts', me.id], me);
   useComposeStore.getState().actions.importDefaultSettings(me);
   dispatch<MePatchSuccessAction>({
     type: ME_PATCH_SUCCESS,

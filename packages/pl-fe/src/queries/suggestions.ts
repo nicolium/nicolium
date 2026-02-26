@@ -1,13 +1,10 @@
-import { useMutation, keepPreviousData, useQuery } from '@tanstack/react-query';
+import { useMutation, keepPreviousData, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { importEntities } from '@/actions/importer';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { batcher } from '@/api/batcher';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 
 import { removePageItem } from '../utils/queries';
-
-import { useRelationshipsQuery } from './accounts/use-relationship';
 
 const SuggestionKeys = {
   suggestions: ['suggestions'] as const,
@@ -15,14 +12,18 @@ const SuggestionKeys = {
 
 const useSuggestions = () => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const { isLoggedIn } = useLoggedIn();
+  const queryClient = useQueryClient();
 
   const getSuggestions = async () => {
     const response = await client.myAccount.getSuggestions();
 
-    const accounts = response.map(({ account }) => account);
-    dispatch(importEntities({ accounts }));
+    const fetcher = batcher.relationships(client).fetch;
+
+    for (const { account } of response) {
+      fetcher(account.id);
+      queryClient.setQueryData(['accounts', account.id], account);
+    }
 
     return response.map(({ account, ...x }) => ({ ...x, account_id: account.id }));
   };
@@ -33,8 +34,6 @@ const useSuggestions = () => {
     placeholderData: keepPreviousData,
     enabled: isLoggedIn,
   });
-
-  useRelationshipsQuery(query.data?.map((s) => s.account_id));
 
   return query;
 };

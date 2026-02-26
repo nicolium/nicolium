@@ -4,6 +4,7 @@ import {
   useInfiniteQuery,
   useMutation,
   useQuery,
+  useQueryClient,
 } from '@tanstack/react-query';
 import sumBy from 'lodash/sumBy';
 import {
@@ -14,11 +15,9 @@ import {
 } from 'pl-api';
 import * as v from 'valibot';
 
-import { importEntities } from '@/actions/importer';
 import { batcher } from '@/api/batcher';
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 import { useStatContext } from '@/contexts/stat-context';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
@@ -73,7 +72,6 @@ const useChatMessages = (chat: Chat) => {
 
 const useChats = () => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const features = useFeatures();
   const { setUnreadChatsCount } = useStatContext();
   const { me } = useLoggedIn();
@@ -86,10 +84,12 @@ const useChats = () => {
 
     setUnreadChatsCount(sumBy(data, (chat) => chat.unread));
 
-    // Set the relationships to these users in the redux store.
+    // Fetch account relationships
     const fetcher = batcher.relationships(client).fetch;
-    items.map((item) => item.account.id).forEach(fetcher);
-    dispatch(importEntities({ accounts: items.map((item) => item.account) }));
+    for (const { account } of items) {
+      fetcher(account.id);
+      queryClient.setQueryData(['accounts', account.id], account);
+    }
 
     return response;
   };
@@ -117,13 +117,13 @@ const useChats = () => {
 
 const useChat = (chatId?: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   const getChat = async () => {
     if (chatId) {
       const data = await client.chats.getChat(chatId);
 
-      dispatch(importEntities({ accounts: [data.account] }));
+      queryClient.setQueryData(['accounts', data.account.id], data.account);
 
       return data;
     }

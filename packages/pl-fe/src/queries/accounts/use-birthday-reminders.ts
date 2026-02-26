@@ -1,20 +1,20 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { importEntities } from '@/actions/importer';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 
 const useBirthdayReminders = (month: number, day: number) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const { isLoggedIn } = useLoggedIn();
+  const queryClient = useQueryClient();
 
   return useQuery({
     queryKey: ['accountsLists', 'birthdayReminders', month, day],
     queryFn: () =>
       client.accounts.getBirthdays(day, month).then((accounts) => {
-        dispatch(importEntities({ accounts }));
+        for (const account of accounts) {
+          queryClient.setQueryData(['accounts', account.id], account);
+        }
 
         return accounts.map(({ id }) => id);
       }),

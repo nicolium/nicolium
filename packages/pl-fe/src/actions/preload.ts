@@ -1,7 +1,10 @@
 import mapValues from 'lodash/mapValues';
+import { accountSchema } from 'pl-api';
+import * as v from 'valibot';
+
+import { queryClient } from '@/queries/client';
 
 import { verifyCredentials } from './auth';
-import { importEntities } from './importer';
 
 import type { AppDispatch } from '@/store';
 
@@ -57,7 +60,14 @@ const preloadMastodon = (data: Record<string, any>) => (dispatch: AppDispatch) =
   const { me, access_token } = data.meta;
   const { url } = data.accounts[me];
 
-  dispatch(importEntities({ accounts: Object.values(data.accounts) }));
+  for (const account of Object.values(data.accounts)) {
+    try {
+      const parsedAccount = v.parse(accountSchema, account);
+      queryClient.setQueryData(['accounts', parsedAccount.id], parsedAccount);
+    } catch {
+      //
+    }
+  }
   dispatch(verifyCredentials(access_token, url));
   dispatch({ type: MASTODON_PRELOAD_IMPORT, data });
 };
