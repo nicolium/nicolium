@@ -1,18 +1,24 @@
-import { MinifiedAdminAccount } from './utils/minify-list';
-
 import type { FilterType } from './notifications/use-notifications';
 import type { MinifiedStatusEdit } from './statuses/use-status-history';
 import type { MinifiedEmojiReaction } from './statuses/use-status-interactions';
 import type { MinifiedSuggestion } from './trends/use-suggested-accounts';
+import type { MinifiedAdminAccount, MinifiedAdminReport } from './utils/minify-list';
 import type { ChatMessage } from '@/normalizers/chat-message';
 import type { DataTag, InfiniteData } from '@tanstack/react-query';
 import type {
   Account,
   AdminAnnouncement,
+  AdminCohort,
+  AdminDimension,
+  AdminDomain,
   AdminGetAccountsParams,
   AdminGetDimensionsParams,
   AdminGetMeasuresParams,
   AdminGetReportsParams,
+  AdminMeasure,
+  AdminModerationLogEntry,
+  AdminRelay,
+  AdminRule,
   Chat,
   CredentialAccount,
   CustomEmoji,
@@ -22,6 +28,8 @@ import type {
   Group,
   GroupRelationship,
   GroupRole,
+  Marker,
+  NotificationGroup,
   OauthToken,
   PaginatedResponse,
   Poll,
@@ -280,36 +288,54 @@ const admin = {
   },
   reports: {
     root: ['admin', 'reports'] as const,
-    show: (reportId: string) => ['admin', 'reports', reportId] as const,
+    show: (reportId: string) => {
+      const key = ['admin', 'reports', reportId] as const;
+      return key as TaggedKey<typeof key, MinifiedAdminReport>;
+    },
   },
   reportLists: {
     root: ['admin', 'reportLists'] as const,
-    show: (params?: AdminGetReportsParams) => ['admin', 'reportLists', params] as const,
+    show: (params?: AdminGetReportsParams) => {
+      const key = ['admin', 'reportLists', params] as const;
+      return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+    },
   },
-  rules: ['admin', 'rules'] as const,
-  relays: ['admin', 'relays'] as const,
-  domains: ['admin', 'domains'] as const,
+  rules: ['admin', 'rules'] as TaggedKey<['admin', 'rules'], Array<AdminRule>>,
+  relays: ['admin', 'relays'] as TaggedKey<['admin', 'relays'], Array<AdminRelay>>,
+  domains: ['admin', 'domains'] as TaggedKey<['admin', 'domains'], Array<AdminDomain>>,
   announcements: ['admin', 'announcements'] as TaggedKey<
     ['admin', 'announcements'],
     InfiniteData<PaginatedResponse<AdminAnnouncement>>
   >,
-  moderationLog: ['admin', 'moderation_log'] as const,
-  dimensions: (keys: string[], params?: AdminGetDimensionsParams) =>
-    ['admin', 'dimensions', keys, params] as const,
-  measures: (keys: string[], startAt: string, endAt: string, params?: AdminGetMeasuresParams) =>
-    ['admin', 'measures', keys, startAt, endAt, params] as const,
-  retention: (startAt: string, endAt: string, frequency: 'day' | 'month') =>
-    ['admin', 'retention', startAt, endAt, frequency] as const,
+  moderationLog: ['admin', 'moderation_log'] as TaggedKey<
+    ['admin', 'moderation_log'],
+    InfiniteData<PaginatedResponse<AdminModerationLogEntry>>
+  >,
+  dimensions: (keys: string[], params?: AdminGetDimensionsParams) => {
+    const key = ['admin', 'dimensions', keys, params] as const;
+    return key as TaggedKey<typeof key, Array<AdminDimension>>;
+  },
+  measures: (keys: string[], startAt: string, endAt: string, params?: AdminGetMeasuresParams) => {
+    const key = ['admin', 'measures', keys, startAt, endAt, params] as const;
+    return key as TaggedKey<typeof key, Array<AdminMeasure>>;
+  },
+  retention: (startAt: string, endAt: string, frequency: 'day' | 'month') => {
+    const key = ['admin', 'retention', startAt, endAt, frequency] as const;
+    return key as TaggedKey<typeof key, Array<AdminCohort>>;
+  },
 };
 
 const notifications = {
   root: ['notifications'] as const,
-  list: (activeFilter?: FilterType) => ['notifications', activeFilter] as const,
+  list: (activeFilter?: FilterType) => {
+    const key = ['notifications', activeFilter] as const;
+    return key as TaggedKey<typeof key, Array<NotificationGroup>>;
+  },
 };
 
 const markers = {
   root: ['markers'] as const,
-  notifications: ['markers', 'notifications'] as const,
+  notifications: ['markers', 'notifications'] as TaggedKey<['markers', 'notifications'], Marker>,
 };
 
 const search = {
