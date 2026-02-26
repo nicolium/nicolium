@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { MutableRefObject, useEffect, useState } from 'react';
+import React, { type MutableRefObject, useEffect, useState } from 'react';
 
 import Stack from '@/components/ui/stack';
 import { useCreateShoutboxMessage } from '@/stores/shoutbox';
@@ -10,15 +10,14 @@ import ShoutboxMessageList from './shoutbox-message-list';
 
 const fileKeyGen = (): number => Math.floor(Math.random() * 0x10000);
 
-interface ChatInterface {
+interface IShoutbox {
   inputRef?: MutableRefObject<HTMLTextAreaElement | null>;
   className?: string;
 }
 
-const Shoutbox: React.FC<ChatInterface> = ({ inputRef, className }) => {
+const Shoutbox: React.FC<IShoutbox> = ({ inputRef, className }) => {
   const [content, setContent] = useState<string>('');
   const [resetContentKey, setResetContentKey] = useState<number>(fileKeyGen());
-  const [errorMessage] = useState<string>();
 
   const { mutate: createShoutboxMessage } = useCreateShoutboxMessage();
 
@@ -80,7 +79,6 @@ const Shoutbox: React.FC<ChatInterface> = ({ inputRef, className }) => {
         value={content}
         onChange={handleContentChange}
         onSubmit={sendMessage}
-        errorMessage={errorMessage}
         resetContentKey={resetContentKey}
         disabled={!createShoutboxMessage}
       />

@@ -1,29 +1,27 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeComposeContentType } from '@/actions/compose';
 import DropdownMenu from '@/components/dropdown-menu';
 import Icon from '@/components/ui/icon';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
 import { useInstance } from '@/hooks/use-instance';
+import { useCompose, useComposeActions } from '@/stores/compose';
 
 const messages = defineMessages({
-  content_type_plaintext: {
+  contentTypePlaintext: {
     id: 'preferences.options.content_type_plaintext',
     defaultMessage: 'Plain text',
   },
-  content_type_markdown: {
+  contentTypeMarkdown: {
     id: 'preferences.options.content_type_markdown',
     defaultMessage: 'Markdown',
   },
-  content_type_mfm: { id: 'preferences.options.content_type_mfm', defaultMessage: 'MFM' },
-  content_type_html: { id: 'preferences.options.content_type_html', defaultMessage: 'HTML' },
-  content_type_wysiwyg: {
+  contentTypeMfm: { id: 'preferences.options.content_type_mfm', defaultMessage: 'MFM' },
+  contentTypeHtml: { id: 'preferences.options.content_type_html', defaultMessage: 'HTML' },
+  contentTypeWysiwyg: {
     id: 'preferences.options.content_type_wysiwyg',
     defaultMessage: 'WYSIWYG',
   },
-  change_content_type: {
+  changeContentType: {
     id: 'compose_form.content_type.change',
     defaultMessage: 'Change content type',
   },
@@ -36,13 +34,15 @@ interface IContentTypeButton {
 
 const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
   const instance = useInstance();
 
   const { contentType } = useCompose(composeId);
 
-  const handleChange = (contentType: string) => () =>
-    dispatch(changeComposeContentType(composeId, contentType));
+  const handleChange = (value: string) => () =>
+    updateCompose(composeId, (draft) => {
+      draft.contentType = value;
+    });
 
   const postFormats = instance.pleroma.metadata.post_formats;
 
@@ -51,7 +51,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
   if (postFormats.includes('text/plain')) {
     options.push({
       icon: require('@phosphor-icons/core/regular/paragraph.svg'),
-      text: intl.formatMessage(messages.content_type_plaintext),
+      text: intl.formatMessage(messages.contentTypePlaintext),
       value: 'text/plain',
     });
   }
@@ -59,7 +59,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
   if (postFormats.includes('text/markdown')) {
     options.push({
       icon: require('@phosphor-icons/core/regular/markdown-logo.svg'),
-      text: intl.formatMessage(messages.content_type_markdown),
+      text: intl.formatMessage(messages.contentTypeMarkdown),
       value: 'text/markdown',
     });
   }
@@ -67,7 +67,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
   if (postFormats.includes('text/x.misskeymarkdown')) {
     options.push({
       icon: require('@phosphor-icons/core/regular/sparkle.svg'),
-      text: intl.formatMessage(messages.content_type_mfm),
+      text: intl.formatMessage(messages.contentTypeMfm),
       value: 'text/x.misskeymarkdown',
     });
   }
@@ -75,7 +75,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
   if (postFormats.includes('text/html')) {
     options.push({
       icon: require('@phosphor-icons/core/regular/file-html.svg'),
-      text: intl.formatMessage(messages.content_type_html),
+      text: intl.formatMessage(messages.contentTypeHtml),
       value: 'text/html',
     });
   }
@@ -83,7 +83,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
   if (postFormats.includes('text/markdown')) {
     options.push({
       icon: require('@phosphor-icons/core/regular/text-indent.svg'),
-      text: intl.formatMessage(messages.content_type_wysiwyg),
+      text: intl.formatMessage(messages.contentTypeWysiwyg),
       value: 'wysiwyg',
     });
   }
@@ -101,7 +101,7 @@ const ContentTypeButton: React.FC<IContentTypeButton> = ({ composeId, compact })
     >
       <button
         className='⁂-content-type-button'
-        title={compact ? option?.text : intl.formatMessage(messages.change_content_type)}
+        title={compact ? option?.text : intl.formatMessage(messages.changeContentType)}
       >
         {option?.icon && <Icon src={option.icon} aria-hidden />}
         {compact ? undefined : option?.text}

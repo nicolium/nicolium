@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { initReport, ReportableEntities } from '@/actions/reports';
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import FormGroup from '@/components/ui/form-group';
 import HStack from '@/components/ui/hstack';
 import Modal from '@/components/ui/modal';
@@ -11,8 +10,8 @@ import Text from '@/components/ui/text';
 import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
 import DurationSelector from '@/features/compose/components/polls/duration-selector';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
+import { useAccount } from '@/queries/accounts/use-account';
 import {
   useBlockAccountMutation,
   useMuteAccountMutation,
@@ -40,10 +39,9 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
   onClose,
   action,
 }) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const { account } = useAccount(accountId || undefined, { withRelationship: true });
+  const { data: account } = useAccount(accountId || undefined, true);
   const [notifications, setNotifications] = useState(true);
   const [duration, setDuration] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -83,7 +81,7 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
 
   const handleBlockAndReport = () => {
     handleClick(() => {
-      dispatch(initReport(ReportableEntities.STATUS, account, { statusId }));
+      initReport(ReportableEntities.STATUS, account, { statusId });
     });
   };
 

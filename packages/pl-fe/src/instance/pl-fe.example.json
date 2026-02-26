@@ -1,5 +1,6 @@
 {
-  "logo": "/instance/images/soapbox-logo.svg",
+  "logo": "/instance/images/nicolium-logo.svg",
+  "logoDarkMode": "/instance/images/nicolium-logo-dark.svg",
   "brandColor": "#d80482",
   "promoPanel": {
     "items": [
@@ -24,9 +25,7 @@
     "homeFooter": [
       { "title": "About", "url": "/about" },
       { "title": "Terms of Service", "url": "/about/tos" },
-      { "title": "Privacy Policy", "url": "/about/privacy" },
-      { "title": "DMCA", "url": "/about/dmca" },
-      { "title": "Source Code", "url": "/about#opensource" }
+      { "title": "Privacy Policy", "url": "/about/privacy" }
     ]
   }
 }

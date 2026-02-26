@@ -1,17 +1,17 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 
-import { importEntities } from '@/actions/importer';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
+
+import { queryKeys } from '../keys';
 
 import type { SearchAccountParams } from 'pl-api';
 
 const useAccountSearch = (query: string, params?: Omit<SearchAccountParams, 'offset'>) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   return useInfiniteQuery({
-    queryKey: ['search', 'accountSearch', query.trim(), params],
+    queryKey: queryKeys.search.accountSearch(query.trim(), params),
     queryFn: ({ pageParam: offset, signal }) =>
       client.accounts
         .searchAccounts(
@@ -23,7 +23,9 @@ const useAccountSearch = (query: string, params?: Omit<SearchAccountParams, 'off
           { signal },
         )
         .then((accounts) => {
-          dispatch(importEntities({ accounts }));
+          for (const account of accounts) {
+            queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+          }
           return accounts.map(({ id }) => id);
         }),
     enabled: !!query?.trim(),

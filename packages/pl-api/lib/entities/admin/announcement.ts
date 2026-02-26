@@ -1,6 +1,6 @@
-import pick from 'lodash.pick';
 import * as v from 'valibot';
 
+import { pick } from '../../utils';
 import { announcementSchema } from '../announcement';
 
 /**
@@ -11,7 +11,7 @@ const adminAnnouncementSchema = v.pipe(
   v.any(),
   v.transform((announcement: any) => ({
     ...announcement,
-    ...pick(announcement.pleroma, 'raw_content'),
+    ...pick(announcement.pleroma, ['raw_content']),
   })),
   v.object({
     ...announcementSchema.entries,

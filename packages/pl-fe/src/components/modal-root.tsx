@@ -4,14 +4,13 @@ import range from 'lodash/range';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { cancelReplyCompose } from '@/actions/compose';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { usePrevious } from '@/hooks/use-previous';
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
+import { useComposeStore } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 
 import type { ModalType } from '@/features/ui/components/modal-root';
-import type { Compose } from '@/reducers/compose';
+import type { Compose } from '@/stores/compose';
 
 const messages = defineMessages({
   confirm: { id: 'confirmations.cancel.confirm', defaultMessage: 'Discard' },
@@ -40,8 +39,6 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
   const intl = useIntl();
   const router = useRouter();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-
   const persistDraftStatus = usePersistDraftStatus();
   const { openModal } = useModalsActions();
 
@@ -51,7 +48,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
   const activeElement = useRef<HTMLDivElement | null>(
     revealed ? (document.activeElement as HTMLDivElement | null) : null,
   );
-  const unlistenHistory = useRef<() => void>();
+  const unlistenHistory = useRef<(() => void) | null>(null);
 
   const prevChildren = usePrevious(children);
 
@@ -64,65 +61,64 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
   };
 
   const handleOnClose = () => {
-    dispatch((_, getState) => {
-      const compose = getState().compose['compose-modal'];
-      const hasComposeContent = checkComposeContent(compose);
+    const { actions } = useComposeStore.getState();
+    const compose = actions.getCompose('compose-modal');
+    const hasComposeContent = checkComposeContent(compose);
 
-      if (hasComposeContent && type === 'COMPOSE') {
-        const isEditing = compose.editedId !== null;
-        openModal('CONFIRM', {
-          heading: isEditing ? (
-            <FormattedMessage
-              id='confirmations.cancel_editing.heading'
-              defaultMessage='Cancel post editing'
-            />
-          ) : compose.draftId ? (
-            <FormattedMessage
-              id='confirmations.cancel_draft.heading'
-              defaultMessage='Discard draft changes'
-            />
-          ) : (
-            <FormattedMessage id='confirmations.cancel.heading' defaultMessage='Discard post' />
-          ),
-          message: isEditing ? (
-            <FormattedMessage
-              id='confirmations.cancel_editing.message'
-              defaultMessage='Are you sure you want to discard the changes to this post? All changes will be lost.'
-            />
-          ) : compose.draftId ? (
-            <FormattedMessage
-              id='confirmations.cancel_draft_editing.message'
-              defaultMessage='Are you sure you want to discard the changes to this draft post? All changes will be lost.'
-            />
-          ) : (
-            <FormattedMessage
-              id='confirmations.cancel.message'
-              defaultMessage='Are you sure you want to discard the currently composed post?'
-            />
-          ),
-          confirm: intl.formatMessage(messages.confirm),
-          onConfirm: () => {
-            onClose('COMPOSE');
-            dispatch(cancelReplyCompose());
-          },
-          onCancel: () => {
-            onClose('CONFIRM');
-          },
-          secondary: intl.formatMessage(messages.saveDraft),
-          onSecondary: isEditing
-            ? undefined
-            : () => {
-                persistDraftStatus('compose-modal');
-                onClose('COMPOSE');
-                dispatch(cancelReplyCompose());
-              },
-        });
-      } else if (hasComposeContent && type === 'CONFIRM') {
-        onClose('CONFIRM');
-      } else {
-        onClose();
-      }
-    });
+    if (hasComposeContent && type === 'COMPOSE') {
+      const isEditing = compose.editedId !== null;
+      openModal('CONFIRM', {
+        heading: isEditing ? (
+          <FormattedMessage
+            id='confirmations.cancel_editing.heading'
+            defaultMessage='Cancel post editing'
+          />
+        ) : compose.draftId ? (
+          <FormattedMessage
+            id='confirmations.cancel_draft.heading'
+            defaultMessage='Discard draft changes'
+          />
+        ) : (
+          <FormattedMessage id='confirmations.cancel.heading' defaultMessage='Discard post' />
+        ),
+        message: isEditing ? (
+          <FormattedMessage
+            id='confirmations.cancel_editing.message'
+            defaultMessage='Are you sure you want to discard the changes to this post? All changes will be lost.'
+          />
+        ) : compose.draftId ? (
+          <FormattedMessage
+            id='confirmations.cancel_draft_editing.message'
+            defaultMessage='Are you sure you want to discard the changes to this draft post? All changes will be lost.'
+          />
+        ) : (
+          <FormattedMessage
+            id='confirmations.cancel.message'
+            defaultMessage='Are you sure you want to discard the currently composed post?'
+          />
+        ),
+        confirm: intl.formatMessage(messages.confirm),
+        onConfirm: () => {
+          onClose('COMPOSE');
+          actions.resetCompose('compose-modal');
+        },
+        onCancel: () => {
+          onClose('CONFIRM');
+        },
+        secondary: intl.formatMessage(messages.saveDraft),
+        onSecondary: isEditing
+          ? undefined
+          : () => {
+              persistDraftStatus('compose-modal');
+              onClose('COMPOSE');
+              actions.resetCompose('compose-modal');
+            },
+      });
+    } else if (hasComposeContent && type === 'CONFIRM') {
+      onClose('CONFIRM');
+    } else {
+      onClose();
+    }
   };
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {

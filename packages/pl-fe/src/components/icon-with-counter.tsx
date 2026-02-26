@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Icon, { IIcon } from '@/components/icon';
+import Icon, { type IIcon } from '@/components/icon';
 import Counter from '@/components/ui/counter';
 
 interface IIconWithCounter extends React.HTMLAttributes<HTMLDivElement> {

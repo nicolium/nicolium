@@ -64,7 +64,7 @@ const StatusList: React.FC<IStatusList> = ({
   className,
   ...other
 }) => {
-  const node = useRef<VirtuosoHandle>(null);
+  const node = useRef<VirtuosoHandle | null>(null);
 
   const getFeaturedStatusCount = () => featuredStatusIds?.length ?? 0;
 

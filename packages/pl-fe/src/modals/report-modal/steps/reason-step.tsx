@@ -73,7 +73,7 @@ const ReasonStep: React.FC<IReasonStep> = ({ comment, setComment, ruleIds, setRu
         setNearBottom(true);
       }
     }
-  }, [rules, rulesListRef.current]);
+  }, [rules]);
 
   return (
     <Stack space={4}>

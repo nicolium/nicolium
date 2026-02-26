@@ -3,7 +3,6 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { FormattedMessage } from 'react-intl';
 
-import { useAccountLookup } from '@/api/hooks/accounts/use-account-lookup';
 import Column from '@/components/ui/column';
 import Layout from '@/components/ui/layout';
 import Tabs, { type Item } from '@/components/ui/tabs';
@@ -22,13 +21,14 @@ import {
 import { useAcct } from '@/hooks/use-acct';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
+import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
 
 /** Layout to display a user's profile. */
 const ProfileLayout: React.FC = () => {
   const { username } = layouts.profile.useParams();
   const location = useLocation();
 
-  const { account, isUnauthorized } = useAccountLookup(username, { withRelationship: true });
+  const { data: account, isUnauthorized } = useAccountLookup(username, true);
 
   const me = useAppSelector((state) => state.me);
   const features = useFeatures();

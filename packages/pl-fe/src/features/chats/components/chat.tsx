@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { MutableRefObject, useEffect, useState } from 'react';
+import React, { type MutableRefObject, useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { uploadMedia } from '@/actions/media';
@@ -21,7 +21,7 @@ const messages = defineMessages({
   uploadErrorLimit: { id: 'upload_error.limit', defaultMessage: 'File upload limit exceeded.' },
 });
 
-interface ChatInterface {
+interface IChat {
   chat: ChatEntity;
   inputRef?: MutableRefObject<HTMLTextAreaElement | null>;
   className?: string;
@@ -50,11 +50,11 @@ const clearNativeInputValue = (element: HTMLTextAreaElement) => {
  * Chat UI with just the messages and textarea.
  * Reused between floating desktop chats and fullscreen/mobile chats.
  */
-const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
+const Chat: React.FC<IChat> = ({ chat, inputRef, className }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const createChatMessage = useCreateChatMessage(chat.id);
+  const createChatMessage = useCreateChatMessage();
 
   const [content, setContent] = useState<string>('');
   const [attachment, setAttachment] = useState<MediaAttachment | null>(null);
@@ -73,10 +73,9 @@ const Chat: React.FC<ChatInterface> = ({ chat, inputRef, className }) => {
         onSuccess: () => {
           setErrorMessage(undefined);
         },
-        onError: (error: { response: PlfeResponse }, _variables, context) => {
+        onError: (error: { response: PlfeResponse }, _variables) => {
           const message = error.response?.json?.error;
           setErrorMessage(message ?? intl.formatMessage(messages.failedToSend));
-          setContent(context.prevContent as string);
         },
       },
     );

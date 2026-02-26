@@ -14,8 +14,7 @@ import { useDisableMfa } from '@/queries/security/use-mfa';
 import toast from '@/toast';
 
 const messages = defineMessages({
-  mfa_setup_disable_button: { id: 'column.mfa_disable_button', defaultMessage: 'Disable' },
-  disableFail: { id: 'security.disable.fail', defaultMessage: 'Incorrect password. Try again.' },
+  disableFail: { id: 'mfa.disable.fail', defaultMessage: 'Incorrect password. Try again.' },
   mfaDisableSuccess: { id: 'mfa.disable.success_message', defaultMessage: 'MFA disabled' },
   passwordPlaceholder: { id: 'mfa.mfa_setup.password_placeholder', defaultMessage: 'Password' },
 });
@@ -85,7 +84,7 @@ const DisableOtpForm: React.FC = () => {
           disabled={isPending}
           theme='danger'
           type='submit'
-          text={intl.formatMessage(messages.mfa_setup_disable_button)}
+          text={<FormattedMessage id='column.mfa_disable_button' defaultMessage='Disable' />}
         />
       </FormActions>
     </Form>

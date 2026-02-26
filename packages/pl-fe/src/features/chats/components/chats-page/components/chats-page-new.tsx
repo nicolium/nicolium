@@ -11,6 +11,7 @@ import ChatSearch from '../../chat-search/chat-search';
 
 const messages = defineMessages({
   title: { id: 'chat.new_message.title', defaultMessage: 'New Message' },
+  back: { id: 'chats.back', defaultMessage: 'Back to chats' },
 });
 
 /** New message form to create a chat. */
@@ -26,6 +27,7 @@ const ChatsPageNew: React.FC = () => {
             src={require('@phosphor-icons/core/regular/arrow-left.svg')}
             className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
             onClick={() => navigate({ to: '/chats' })}
+            title={intl.formatMessage(messages.back)}
           />
 
           <CardTitle title={intl.formatMessage(messages.title)} />

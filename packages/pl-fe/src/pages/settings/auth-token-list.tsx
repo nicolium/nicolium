@@ -69,7 +69,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
             <HStack space={1} alignItems='center'>
               {token.app_name}
               {token.app_website && (
-                <a href={token.app_website} target='_blank' rel='noopener'>
+                <a href={token.app_website} target='_blank' rel='noopener noreferrer'>
                   <Icon
                     src={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
                     className='inline size-4 text-inherit'
@@ -83,7 +83,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
               <Text size='sm' theme='muted'>
                 <FormattedMessage id='security.tokens.scopes' defaultMessage='Scopes:' />
               </Text>
-              {token.scopes.map((scope, index) => (
+              {token.scopes.map((scope) => (
                 <Badge title={scope} slug='opaque' key={scope} />
               ))}
             </HStack>

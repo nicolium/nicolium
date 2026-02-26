@@ -1,6 +1,6 @@
 import { serialize } from 'object-to-formdata';
 import React, { useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl, type MessageDescriptor } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import List, { ListItem } from '@/components/list';
 import Button from '@/components/ui/button';
@@ -33,61 +33,23 @@ const messages = defineMessages({
   },
 });
 
-const followMessages = defineMessages({
-  input_label: { id: 'import_data.follows_label', defaultMessage: 'Follows' },
-  input_hint: {
-    id: 'import_data.hints.follows',
-    defaultMessage: 'CSV file containing a list of followed accounts',
-  },
-  submit: { id: 'import_data.actions.import_follows', defaultMessage: 'Import follows' },
-});
-
-const blockMessages = defineMessages({
-  input_label: { id: 'import_data.blocks_label', defaultMessage: 'Blocks' },
-  input_hint: {
-    id: 'import_data.hints.blocks',
-    defaultMessage: 'CSV file containing a list of blocked accounts',
-  },
-  submit: { id: 'import_data.actions.import_blocks', defaultMessage: 'Import blocks' },
-});
-
-const muteMessages = defineMessages({
-  input_label: { id: 'import_data.mutes_label', defaultMessage: 'Mutes' },
-  input_hint: {
-    id: 'import_data.hints.mutes',
-    defaultMessage: 'CSV file containing a list of muted accounts',
-  },
-  submit: { id: 'import_data.actions.import_mutes', defaultMessage: 'Import mutes' },
-});
-
-const archiveMessages = defineMessages({
-  input_label: { id: 'import_data.archive_label', defaultMessage: 'Archive' },
-  input_hint: {
-    id: 'import_data.hints.archive',
-    defaultMessage: 'Archive containing an archive of statuses',
-  },
-  submit: { id: 'import_data.actions.import_archive', defaultMessage: 'Import archive' },
-});
-
 interface IDataImporter {
-  messages: {
-    input_label: MessageDescriptor;
-    input_hint: MessageDescriptor;
-    submit: MessageDescriptor;
-  };
+  inputLabel: React.ReactNode;
+  inputHint: React.ReactNode;
+  submitText: React.ReactNode;
   action: (list: File, overwrite?: boolean) => Promise<void>;
   accept?: string;
   allowOverwrite?: boolean;
 }
 
 const DataImporter: React.FC<IDataImporter> = ({
-  messages,
+  inputLabel,
+  inputHint,
+  submitText,
   action,
   accept = '.csv,text/csv',
   allowOverwrite,
 }) => {
-  const intl = useIntl();
-
   const [isLoading, setIsLoading] = useState(false);
   const [file, setFile] = useState<File | null | undefined>(null);
   const [overwrite, setOverwrite] = useState(false);
@@ -113,9 +75,9 @@ const DataImporter: React.FC<IDataImporter> = ({
   return (
     <Form onSubmit={handleSubmit}>
       <Text size='xl' weight='bold' tag='label'>
-        {intl.formatMessage(messages.input_label)}
+        {inputLabel}
       </Text>
-      <FormGroup hintText={<Text theme='muted'>{intl.formatMessage(messages.input_hint)}</Text>}>
+      <FormGroup hintText={<Text theme='muted'>{inputHint}</Text>}>
         <FileInput accept={accept} onChange={handleFileChange} required />
       </FormGroup>
 
@@ -140,8 +102,8 @@ const DataImporter: React.FC<IDataImporter> = ({
       )}
 
       <FormActions>
-        <Button type='submit' theme='primary' disabled={isLoading}>
-          {intl.formatMessage(messages.submit)}
+        <Button type='submit' theme='primary' disabled={isLoading || !file}>
+          {submitText}
         </Button>
       </FormActions>
     </Form>
@@ -187,28 +149,73 @@ const ImportDataPage = () => {
       {features.importFollows && (
         <DataImporter
           action={importFollows}
-          messages={followMessages}
+          inputLabel={<FormattedMessage id='import_data.follows_label' defaultMessage='Follows' />}
+          inputHint={
+            <FormattedMessage
+              id='import_data.hints.follows'
+              defaultMessage='CSV file containing a list of followed accounts'
+            />
+          }
+          submitText={
+            <FormattedMessage
+              id='import_data.actions.import_follows'
+              defaultMessage='Import follows'
+            />
+          }
           allowOverwrite={features.importOverwrite}
         />
       )}
       {features.importBlocks && (
         <DataImporter
           action={importBlocks}
-          messages={blockMessages}
+          inputLabel={<FormattedMessage id='import_data.blocks_label' defaultMessage='Blocks' />}
+          inputHint={
+            <FormattedMessage
+              id='import_data.hints.blocks'
+              defaultMessage='CSV file containing a list of blocked accounts'
+            />
+          }
+          submitText={
+            <FormattedMessage
+              id='import_data.actions.import_blocks'
+              defaultMessage='Import blocks'
+            />
+          }
           allowOverwrite={features.importOverwrite}
         />
       )}
       {features.importMutes && (
         <DataImporter
           action={importMutes}
-          messages={muteMessages}
+          inputLabel={<FormattedMessage id='import_data.mutes_label' defaultMessage='Mutes' />}
+          inputHint={
+            <FormattedMessage
+              id='import_data.hints.mutes'
+              defaultMessage='CSV file containing a list of muted accounts'
+            />
+          }
+          submitText={
+            <FormattedMessage id='import_data.actions.import_mutes' defaultMessage='Import mutes' />
+          }
           allowOverwrite={features.importOverwrite}
         />
       )}
       {features.importArchive && (
         <DataImporter
           action={importArchive}
-          messages={archiveMessages}
+          inputLabel={<FormattedMessage id='import_data.archive_label' defaultMessage='Archive' />}
+          inputHint={
+            <FormattedMessage
+              id='import_data.hints.archive'
+              defaultMessage='File containing an archive of statuses'
+            />
+          }
+          submitText={
+            <FormattedMessage
+              id='import_data.actions.import_archive'
+              defaultMessage='Import archive'
+            />
+          }
           accept='.tar,.tar.gz,.zip'
         />
       )}

@@ -15,7 +15,7 @@ const regexSupplant = (regex: string | RegExp, flags = '') => {
     regex = regex.source;
   }
   return new RegExp(
-    regex.replace(/#\{(\w+)\}/g, (match, name) => {
+    regex.replaceAll(/#\{(\w+)\}/g, (match, name) => {
       let newRegex = regexen[name] || '';
       if (typeof newRegex !== 'string') {
         newRegex = newRegex.source;
@@ -27,11 +27,11 @@ const regexSupplant = (regex: string | RegExp, flags = '') => {
 };
 
 const stringSupplant = (str: string, values: { [x: string]: any }) =>
-  str.replace(/#\{(\w+)\}/g, (match, name) => values[name] ?? '');
+  str.replaceAll(/#\{(\w+)\}/g, (match, name) => values[name] ?? '');
 
 const urlRegex = (() => {
   regexen.spaces_group =
-    /\x09-\x0D\x20\x85\xA0\u1680\u180E\u2000-\u200A\u2028\u2029\u202F\u205F\u3000/; // eslint-disable-line no-control-regex
+    /\u0009-\u000D\u0020\u0085\u00A0\u1680\u180E\u2000-\u200A\u2028\u2029\u202F\u205F\u3000/; // eslint-disable-line no-control-regex
   regexen.invalid_chars_group = /\uFFFE\uFEFF\uFFFF\u202A-\u202E/;
   // eslint-disable-next-line no-useless-escape
   regexen.punct = /!'#%&@,:;<=>_~{}\$\?\^\*\+\-\.\(\)\[\]\|\/\\/;
@@ -165,7 +165,7 @@ const urlRegex = (() => {
   );
   regexen.validPortNumber = /[0-9]+/;
   regexen.pd =
-    /\u002d\u058a\u05be\u1400\u1806\u2010-\u2015\u2e17\u2e1a\u2e3a\u2e40\u301c\u3030\u30a0\ufe31\ufe58\ufe63\uff0d/;
+    /\u002D\u058A\u05BE\u1400\u1806\u2010-\u2015\u2E17\u2E1A\u2E3A\u2E40\u301C\u3030\u30A0\uFE31\uFE58\uFE63\uFF0D/;
   regexen.validGeneralUrlPathChars = regexSupplant(/[^#{spaces_group}()?]/i);
   // Allow URL paths to contain up to two nested levels of balanced parens
   //  1. Used in Wikipedia URLs like /Primer_(film)

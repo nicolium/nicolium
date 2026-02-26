@@ -6,8 +6,8 @@ import Account from '@/features/reply-mentions/account';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useCompose } from '@/hooks/use-compose';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { statusToMentionsAccountIdsArray } from '@/reducers/compose';
 import { makeGetStatus } from '@/selectors';
+import { statusToMentionsAccountIdsArray } from '@/stores/compose';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
@@ -23,7 +23,7 @@ const ReplyMentionsModal: React.FC<BaseModalProps & ReplyMentionsModalProps> = (
 
   const getStatus = useCallback(makeGetStatus(), []);
   const status = useAppSelector((state) => getStatus(state, { id: compose.inReplyToId! }));
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
 
   const mentions = statusToMentionsAccountIdsArray(status!, account!, compose.parentRebloggedById);
   const author = status?.account_id;

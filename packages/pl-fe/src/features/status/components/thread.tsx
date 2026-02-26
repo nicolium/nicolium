@@ -1,11 +1,9 @@
-import { createSelector } from '@reduxjs/toolkit';
 import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useIntl } from 'react-intl';
 
-import { type ComposeReplyAction, mentionCompose, replyCompose } from '@/actions/compose';
 import ScrollableList from '@/components/scrollable-list';
 import StatusActionBar from '@/components/status-action-bar';
 import Tombstone from '@/components/tombstone';
@@ -13,15 +11,14 @@ import Stack from '@/components/ui/stack';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import PendingStatus from '@/features/ui/components/pending-status';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import {
   useFavouriteStatus,
   useReblogStatus,
   useUnfavouriteStatus,
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
-import { RootState } from '@/store';
+import { useComposeActions } from '@/stores/compose';
+import { useThread } from '@/stores/contexts';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMetaActions } from '@/stores/status-meta';
@@ -31,108 +28,10 @@ import { textForScreenReader } from '@/utils/status';
 import DetailedStatus from './detailed-status';
 import ThreadStatus from './thread-status';
 
-import type { Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/reducers/statuses';
 import type { SelectedStatus } from '@/selectors';
 import type { Account } from 'pl-api';
 import type { VirtuosoHandle } from 'react-virtuoso';
-
-const makeGetAncestorsIds = () =>
-  createSelector(
-    [(_: RootState, statusId: string) => statusId, (state: RootState) => state.contexts.inReplyTos],
-    (statusId, inReplyTos) => {
-      let ancestorsIds: Array<string> = [];
-      let id: string = statusId;
-
-      while (id && !ancestorsIds.includes(id)) {
-        ancestorsIds = [id, ...ancestorsIds];
-        id = inReplyTos[id];
-      }
-
-      return [...new Set(ancestorsIds)];
-    },
-  );
-
-const makeGetDescendantsIds = () =>
-  createSelector(
-    [(_: RootState, statusId: string) => statusId, (state: RootState) => state.contexts.replies],
-    (statusId, contextReplies) => {
-      let descendantsIds: Array<string> = [];
-      const ids = [statusId];
-
-      while (ids.length > 0) {
-        const id = ids.shift();
-        if (!id) break;
-
-        const replies = contextReplies[id];
-
-        if (descendantsIds.includes(id)) {
-          break;
-        }
-
-        if (statusId !== id) {
-          descendantsIds = [...descendantsIds, id];
-        }
-
-        if (replies) {
-          replies.toReversed().forEach((reply: string) => {
-            ids.unshift(reply);
-          });
-        }
-      }
-
-      return [...new Set(descendantsIds)];
-    },
-  );
-
-const makeGetThreadStatusesIds = () =>
-  createSelector(
-    [
-      (_: RootState, statusId: string) => statusId,
-      (state: RootState) => state.contexts.inReplyTos,
-      (state: RootState) => state.contexts.replies,
-    ],
-    (statusId, inReplyTos, replies) => {
-      let parentStatus: string = statusId;
-
-      while (inReplyTos[parentStatus]) {
-        parentStatus = inReplyTos[parentStatus];
-      }
-
-      const threadStatuses = [parentStatus];
-
-      for (let i = 0; i < threadStatuses.length; i++) {
-        for (const reply of replies[threadStatuses[i]] || []) {
-          if (!threadStatuses.includes(reply)) threadStatuses.push(reply);
-        }
-      }
-
-      return threadStatuses.toSorted();
-    },
-  );
-
-const makeGetThread = (linear = false) => {
-  if (linear) {
-    const getThreadStatusesIds = makeGetThreadStatusesIds();
-    return (state: RootState, statusId: string) => getThreadStatusesIds(state, statusId);
-  }
-
-  const getAncestorsIds = makeGetAncestorsIds();
-  const getDescendantsIds = makeGetDescendantsIds();
-
-  return createSelector(
-    [
-      (state: RootState, statusId: string) => getAncestorsIds(state, statusId),
-      (state: RootState, statusId: string) => getDescendantsIds(state, statusId),
-      (_, statusId: string) => statusId,
-    ],
-    (ancestorsIds, descendantsIds, statusId) => {
-      ancestorsIds = ancestorsIds.filter((id) => id !== statusId && !descendantsIds.includes(id));
-      descendantsIds = descendantsIds.filter((id) => id !== statusId && !ancestorsIds.includes(id));
-
-      return [...ancestorsIds, statusId, ...descendantsIds];
-    },
-  );
-};
 
 interface IThread {
   status: SelectedStatus;
@@ -149,9 +48,9 @@ const Thread = ({
   withMedia = true,
   setExpandAllStatuses,
 }: IThread) => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const intl = useIntl();
+  const { replyCompose, mentionCompose } = useComposeActions();
 
   const { expandStatuses, revealStatusesMedia, toggleStatusesMediaHidden } = useStatusMetaActions();
   const { openModal } = useModalsActions();
@@ -166,25 +65,22 @@ const Thread = ({
   const { mutate: unreblogStatus } = useUnreblogStatus(status.id);
 
   const linear = displayMode === 'linear';
-
-  const getThread = useCallback(makeGetThread(linear), [linear]);
-
-  const thread = useAppSelector((state) => getThread(state, status.id));
+  const thread = useThread(status.id, linear);
 
   const statusIndex = thread.indexOf(status.id);
   const initialIndex = isModal && statusIndex !== 0 ? statusIndex + 1 : statusIndex;
 
   const node = useRef<HTMLDivElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
-  const scroller = useRef<VirtuosoHandle>(null);
+  const scroller = useRef<VirtuosoHandle | null>(null);
 
   const handleFavouriteClick = (status: SelectedStatus) => {
     if (status.favourited) unfavouriteStatus();
     else favouriteStatus();
   };
 
-  const handleReplyClick = (status: ComposeReplyAction['status']) => {
-    dispatch(replyCompose(status));
+  const handleReplyClick = (status: Parameters<typeof replyCompose>[0]) => {
+    replyCompose(status);
   };
 
   const handleReblogClick = (status: SelectedStatus, e?: React.MouseEvent) => {
@@ -203,7 +99,7 @@ const Thread = ({
   };
 
   const handleMentionClick = (account: Pick<Account, 'acct'>) => {
-    dispatch(mentionCompose(account));
+    mentionCompose(account);
   };
 
   const handleHotkeyOpenMedia = (e?: KeyboardEvent) => {
@@ -352,7 +248,7 @@ const Thread = ({
                 deleted
               />
             ) : (
-              <Hotkeys handlers={handlers}>
+              <Hotkeys handlers={handlers} element='article' lang={status.language || undefined}>
                 <div
                   ref={statusRef}
                   className='relative'
@@ -446,6 +342,45 @@ const Thread = ({
     return children;
   }, [thread, linear, status, isModal]);
 
+  const meta = useMemo(() => {
+    const firstAttachment = status.media_attachments && status.media_attachments[0];
+
+    return (
+      <Helmet>
+        {status.spoiler_text && <meta property='og:title' content={status.spoiler_text} />}
+        {(firstAttachment?.type === 'image' || firstAttachment?.type === 'gifv') && (
+          <>
+            <meta property='og:image' content={firstAttachment.preview_url} />
+            <meta property='og:image:alt' content={firstAttachment.description || ''} />
+            {firstAttachment.mime_type && (
+              <meta property='og:type' content={firstAttachment.mime_type} />
+            )}
+            {firstAttachment.meta.original && (
+              <meta
+                property='og:image:width'
+                content={firstAttachment.meta.original.width.toString()}
+              />
+            )}
+            {firstAttachment.meta.original && (
+              <meta
+                property='og:image:height'
+                content={firstAttachment.meta.original.height.toString()}
+              />
+            )}
+          </>
+        )}
+        <meta property='og:url' content={status.url} />
+        <meta name='author' content={status.account.display_name || status.account.acct} />
+        <meta property='article:author' content={status.account.url} />
+        <meta property='article:published_time' content={status.created_at} />
+        <meta property='fediverse.creator' name='fediverse.creator' content={status.account.acct} />
+        {status.edited_at && <meta property='article:modified_time' content={status.edited_at} />}
+
+        {status.account.local === false && <meta content='noindex, noarchive' name='robots' />}
+      </Helmet>
+    );
+  }, [status]);
+
   useEffect(() => {
     setExpandAllStatuses?.(() => {
       expandStatuses(thread);
@@ -461,11 +396,7 @@ const Thread = ({
         'mt-2': !isModal,
       })}
     >
-      {status.account.local === false && (
-        <Helmet>
-          <meta content='noindex, noarchive' name='robots' />
-        </Helmet>
-      )}
+      {meta}
 
       <div
         ref={node}
@@ -494,4 +425,4 @@ const Thread = ({
   );
 };
 
-export { makeGetDescendantsIds, Thread as default };
+export { Thread as default };

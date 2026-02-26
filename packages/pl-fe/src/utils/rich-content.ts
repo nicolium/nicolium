@@ -9,7 +9,7 @@ const onlyEmoji = (node: HTMLElement, limit = 1, ignoreMentions = true): boolean
       node.querySelectorAll('a.mention').forEach((m) => m.parentNode?.removeChild(m));
     }
 
-    if (node.textContent?.replace(new RegExp(' ', 'g'), '') !== '') return false;
+    if (node.textContent?.replaceAll(new RegExp(' ', 'g'), '') !== '') return false;
     const emojis = Array.from(node.querySelectorAll('img.emojione'));
     if (emojis.length === 0) return false;
     if (emojis.length > limit) return false;

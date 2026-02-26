@@ -1,10 +1,11 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 
+import { queryKeys } from '../keys';
 import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';
 import { minifyStatusList } from '../utils/minify-list';
 
 const recentEventsQueryOptions = makePaginatedResponseQueryOptions(
-  ['statusLists', 'recentEvents'],
+  queryKeys.statusLists.recentEvents,
   (client) =>
     client.timelines
       .publicTimeline({
@@ -24,7 +25,7 @@ const useRecentEventsTimeline = () =>
   });
 
 const joinedEventsQueryOptions = makePaginatedResponseQueryOptions(
-  ['statusLists', 'joinedEvents'],
+  queryKeys.statusLists.joinedEvents,
   (client) => client.events.getJoinedEvents().then(minifyStatusList),
 )();
 

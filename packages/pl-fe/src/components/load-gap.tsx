@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import Icon from '@/components/icon';
 
 const messages = defineMessages({
-  load_more: { id: 'status.load_more', defaultMessage: 'Load more' },
+  loadMore: { id: 'status.load_more', defaultMessage: 'Load more' },
 });
 
 interface ILoadGap {
@@ -25,7 +25,7 @@ const LoadGap: React.FC<ILoadGap> = ({ disabled, maxId, onClick }) => {
       className='m-0 box-border block w-full border-0 bg-transparent p-4 text-gray-900'
       disabled={disabled}
       onClick={handleClick}
-      aria-label={intl.formatMessage(messages.load_more)}
+      aria-label={intl.formatMessage(messages.loadMore)}
     >
       <Icon className='mx-auto' src={require('@phosphor-icons/core/regular/dots-three.svg')} />
     </button>

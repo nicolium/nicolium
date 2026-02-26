@@ -54,7 +54,7 @@ const SettingsStore: React.FC = () => {
     dispatch(changeSetting(key, checked, { showAlert: true }));
   };
 
-  const handleSubmit: React.FormEventHandler = (e) => {
+  const handleSubmit: React.FormEventHandler = () => {
     const settings = JSON.parse(rawJSON);
 
     setLoading(true);
@@ -92,7 +92,7 @@ const SettingsStore: React.FC = () => {
 
         <FormActions>
           <Button theme='primary' type='submit' disabled={!jsonValid || isLoading}>
-            <FormattedMessage id='plfe_config.save' defaultMessage='Save' />
+            <FormattedMessage id='frontend_config.save' defaultMessage='Save' />
           </Button>
         </FormActions>
       </Form>
@@ -107,7 +107,7 @@ const SettingsStore: React.FC = () => {
           hint={
             <FormattedMessage
               id='preferences.fields.demo_hint'
-              defaultMessage='Use the default pl-fe logo and color scheme. Useful for taking screenshots.'
+              defaultMessage='Use the default Nicolium logo and color scheme. Useful for taking screenshots.'
             />
           }
         >

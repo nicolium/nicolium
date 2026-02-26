@@ -4,18 +4,21 @@ import { defineMessages, useIntl } from 'react-intl';
 import Select from '@/components/ui/select';
 
 const messages = defineMessages({
-  minutes: {
-    id: 'intervals.full.minutes',
-    defaultMessage: '{number, plural, one {# minute} other {# minutes}}',
+  days: {
+    id: 'intervals.full.days',
+    defaultMessage: '{number, plural, one {# day} other {# days}}',
   },
   hours: {
     id: 'intervals.full.hours',
     defaultMessage: '{number, plural, one {# hour} other {# hours}}',
   },
-  days: {
-    id: 'intervals.full.days',
-    defaultMessage: '{number, plural, one {# day} other {# days}}',
+  minutes: {
+    id: 'intervals.full.minutes',
+    defaultMessage: '{number, plural, one {# minute} other {# minutes}}',
   },
+  daysTitle: { id: 'compose_form.poll.duration.days', defaultMessage: 'Days' },
+  hoursTitle: { id: 'compose_form.poll.duration.hours', defaultMessage: 'Hours' },
+  minutesTitle: { id: 'compose_form.poll.duration.minutes', defaultMessage: 'Minutes' },
 });
 
 interface IDurationSelector {
@@ -52,6 +55,7 @@ const DurationSelector = ({ onDurationChange, value }: IDurationSelector) => {
             setDays(Number(event.target.value));
           }}
           data-testid='duration-selector-days'
+          title={intl.formatMessage(messages.daysTitle)}
         >
           {[...Array(8).fill(undefined)].map((_, number) => (
             <option value={number} key={number}>
@@ -69,6 +73,7 @@ const DurationSelector = ({ onDurationChange, value }: IDurationSelector) => {
           }}
           disabled={days === 7}
           data-testid='duration-selector-hours'
+          title={intl.formatMessage(messages.hoursTitle)}
         >
           {[...Array(24).fill(undefined)].map((_, number) => (
             <option value={number} key={number}>
@@ -86,6 +91,7 @@ const DurationSelector = ({ onDurationChange, value }: IDurationSelector) => {
           }}
           disabled={days === 7}
           data-testid='duration-selector-minutes'
+          title={intl.formatMessage(messages.minutesTitle)}
         >
           {[0, 15, 30, 45].map((number) => (
             <option value={number} key={number}>

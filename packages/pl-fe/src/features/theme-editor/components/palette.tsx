@@ -14,6 +14,7 @@ interface ColorGroup {
 }
 
 interface IPalette {
+  id?: string;
   palette: ColorGroup;
   onChange: (palette: ColorGroup) => void;
   resetKey?: string;
@@ -21,8 +22,14 @@ interface IPalette {
 }
 
 /** Editable color palette. */
-const Palette: React.FC<IPalette> = ({ palette, onChange, resetKey, allowTintChange = true }) => {
-  const tints = Object.keys(palette).sort(compareId);
+const Palette: React.FC<IPalette> = ({
+  id,
+  palette,
+  onChange,
+  resetKey,
+  allowTintChange = true,
+}) => {
+  const tints = Object.keys(palette).toSorted(compareId);
 
   const [hue, setHue] = useState(0);
   const lastHue = usePrevious(hue);
@@ -61,7 +68,7 @@ const Palette: React.FC<IPalette> = ({ palette, onChange, resetKey, allowTintCha
         ))}
       </HStack>
 
-      <Slider value={hue} onChange={setHue} />
+      <Slider id={id} value={hue} onChange={setHue} />
     </Stack>
   );
 };

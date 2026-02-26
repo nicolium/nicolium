@@ -2,11 +2,10 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { fetchOwnAccounts, logOut, switchAccount } from '@/actions/auth';
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import Account from '@/components/account';
 import Divider from '@/components/ui/divider';
 import Icon from '@/components/ui/icon';
@@ -18,11 +17,12 @@ import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/hooks/use-instance';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
+import { useLoggedInAccounts } from '@/queries/accounts/use-logged-in-accounts';
 import { scheduledStatusesCountQueryOptions } from '@/queries/statuses/scheduled-statuses';
 import { useDraftStatusesCountQuery } from '@/queries/statuses/use-draft-statuses';
 import { useInteractionRequestsCount } from '@/queries/statuses/use-interaction-requests';
-import { makeGetOtherAccounts } from '@/selectors';
 import { useSettings } from '@/stores/settings';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 import sourceCode from '@/utils/code';
@@ -32,7 +32,7 @@ import type { Account as AccountEntity } from 'pl-api';
 interface IDropdownNavigationLink extends Partial<LinkOptions> {
   href?: string;
   icon: string;
-  text: string | JSX.Element;
+  text: string | React.JSX.Element;
   onClick: React.EventHandler<React.MouseEvent>;
 }
 
@@ -66,7 +66,7 @@ const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(
   },
 );
 
-const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
+const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => {
   const dispatch = useAppDispatch();
 
   const isSidebarOpen = useIsSidebarOpen();
@@ -83,9 +83,8 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
     [me, features],
   );
 
-  const getOtherAccounts = useCallback(makeGetOtherAccounts(), []);
-  const { account } = useAccount(me || undefined);
-  const otherAccounts = useAppSelector((state) => getOtherAccounts(state));
+  const { data: account } = useAccount(me || undefined);
+  const { accounts: otherAccounts } = useLoggedInAccounts();
   const settings = useSettings();
   const followRequestsCount = useFollowRequestsCount().data ?? 0;
   const interactionRequestsCount = useInteractionRequestsCount().data ?? 0;
@@ -160,7 +159,7 @@ const DropdownNavigation: React.FC = React.memo((): JSX.Element | null => {
   const handleTouchMove: React.TouchEventHandler<HTMLDivElement> = (e) =>
     (touchEnd.current = e.targetTouches[0].clientX);
 
-  const handleTouchEnd: React.TouchEventHandler<HTMLDivElement> = (e) => {
+  const handleTouchEnd: React.TouchEventHandler<HTMLDivElement> = () => {
     if (touchEnd.current !== null && touchStart.current - touchEnd.current > 100) {
       handleClose();
     }

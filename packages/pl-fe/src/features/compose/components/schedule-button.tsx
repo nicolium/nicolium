@@ -1,15 +1,13 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { addSchedule, removeSchedule } from '@/actions/compose';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
+import { useCompose, useComposeActions } from '@/stores/compose';
 
 import ComposeFormButton from './compose-form-button';
 
 const messages = defineMessages({
-  add_schedule: { id: 'schedule_button.add_schedule', defaultMessage: 'Schedule post for later' },
-  remove_schedule: { id: 'schedule_button.remove_schedule', defaultMessage: 'Post immediately' },
+  addSchedule: { id: 'schedule_button.add_schedule', defaultMessage: 'Schedule post for later' },
+  removeSchedule: { id: 'schedule_button.remove_schedule', defaultMessage: 'Post immediately' },
 });
 
 interface IScheduleButton {
@@ -19,7 +17,7 @@ interface IScheduleButton {
 
 const ScheduleButton: React.FC<IScheduleButton> = ({ composeId, disabled }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
 
   const compose = useCompose(composeId);
 
@@ -27,11 +25,9 @@ const ScheduleButton: React.FC<IScheduleButton> = ({ composeId, disabled }) => {
   const unavailable = !!compose.editedId;
 
   const handleClick = () => {
-    if (active) {
-      dispatch(removeSchedule(composeId));
-    } else {
-      dispatch(addSchedule(composeId));
-    }
+    updateCompose(composeId, (draft) => {
+      draft.scheduledAt = active ? null : new Date(Date.now() + 10 * 60 * 1000);
+    });
   };
 
   if (unavailable) {
@@ -41,7 +37,7 @@ const ScheduleButton: React.FC<IScheduleButton> = ({ composeId, disabled }) => {
   return (
     <ComposeFormButton
       icon={require('@phosphor-icons/core/regular/calendar-plus.svg')}
-      title={intl.formatMessage(active ? messages.remove_schedule : messages.add_schedule)}
+      title={intl.formatMessage(active ? messages.removeSchedule : messages.addSchedule)}
       active={active}
       disabled={disabled}
       onClick={handleClick}

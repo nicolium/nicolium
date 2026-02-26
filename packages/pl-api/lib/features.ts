@@ -404,7 +404,9 @@ const getFeatures = (instance: Instance) => {
     ]),
 
     /** Whether people who blocked you are visible through the API. */
-    blockersVisible: instance.api_versions['blockers_visible.pleroma.pl-api'] >= 1,
+    blockersVisible:
+      !any([v.software === PLEROMA, v.software === AKKOMA]) ||
+      instance.api_versions['blockers_visible.pleroma.pl-api'] >= 1,
 
     /**
      * Ability to specify how long the account block should last.

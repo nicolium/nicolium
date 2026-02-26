@@ -1,37 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { changeComposeSpoilerText } from '@/actions/compose';
-import AutosuggestInput, { IAutosuggestInput } from '@/components/autosuggest-input';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
+import AutosuggestInput from '@/components/autosuggest-input';
+import { useComposeSuggestions } from '@/hooks/use-compose-suggestions';
+import { useCompose, useComposeActions } from '@/stores/compose';
+
+import type { AutoSuggestion } from '@/components/autosuggest-input';
+import type { InputThemes } from '@/components/ui/input';
 
 const messages = defineMessages({
   placeholder: { id: 'compose_form.spoiler_placeholder', defaultMessage: 'Subject (optional)' },
 });
 
-interface ISpoilerInput extends Pick<
-  IAutosuggestInput,
-  'onSuggestionsFetchRequested' | 'onSuggestionsClearRequested' | 'onSuggestionSelected' | 'theme'
-> {
+interface ISpoilerInput {
   composeId: string extends 'default' ? never : string;
+  theme?: InputThemes;
 }
 
 /** Text input for content warning in composer. */
-const SpoilerInput: React.FC<ISpoilerInput> = ({
-  composeId,
-  onSuggestionsFetchRequested,
-  onSuggestionsClearRequested,
-  onSuggestionSelected,
-  theme,
-}) => {
+const SpoilerInput: React.FC<ISpoilerInput> = ({ composeId, theme }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
-  const { language, modifiedLanguage, spoilerText, spoilerTextMap, suggestions } =
-    useCompose(composeId);
+  const { selectComposeSuggestion, updateCompose } = useComposeActions();
+  const { language, modifiedLanguage, spoilerText, spoilerTextMap } = useCompose(composeId);
+
+  const [token, setToken] = useState('');
+  const suggestions = useComposeSuggestions(token);
 
   const handleChangeSpoilerText: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    dispatch(changeComposeSpoilerText(composeId, e.target.value));
+    const text = e.target.value;
+    updateCompose(composeId, (draft) => {
+      if (!draft.modifiedLanguage || draft.modifiedLanguage === draft.language) {
+        draft.spoilerText = text;
+      } else {
+        draft.spoilerTextMap[draft.modifiedLanguage] = text;
+      }
+    });
+  };
+
+  const onSuggestionsFetchRequested = (token: string) => setToken(token);
+  const onSuggestionsClearRequested = () => setToken('');
+  const onSuggestionSelected = (
+    tokenStart: number,
+    token: string | null,
+    value: AutoSuggestion,
+  ) => {
+    if (token && typeof token === 'string') {
+      selectComposeSuggestion(composeId, tokenStart, token, value, ['spoiler_text']);
+    }
   };
 
   const value =

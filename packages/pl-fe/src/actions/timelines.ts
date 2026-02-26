@@ -1,4 +1,7 @@
 import { getLocale } from '@/actions/settings';
+import { useComposeStore } from '@/stores/compose';
+import { useContextStore } from '@/stores/contexts';
+import { usePendingStatusesStore } from '@/stores/pending-statuses';
 import { useSettingsStore } from '@/stores/settings';
 import { shouldFilter } from '@/utils/timelines';
 
@@ -39,7 +42,8 @@ const processTimelineUpdate =
   (timeline: string, status: BaseStatus) => (dispatch: AppDispatch, getState: () => RootState) => {
     const me = getState().me;
     const ownStatus = status.account?.id === me;
-    const hasPendingStatuses = !!getState().pending_statuses.length;
+
+    const hasPendingStatuses = Object.keys(usePendingStatusesStore.getState().statuses).length > 0;
 
     const columnSettings = useSettingsStore.getState().settings.timelines[timeline];
     const shouldSkipQueue = shouldFilter(
@@ -102,7 +106,7 @@ const dequeueTimeline =
 
     if (typeof expandFunc === 'function') {
       dispatch(clearTimeline(timelineId));
-      // @ts-ignore
+      // @ts-expect-error
       expandFunc();
     } else if (timelineId === 'home') {
       dispatch(clearTimeline(timelineId));
@@ -128,6 +132,9 @@ const deleteFromTimelines =
       .filter(([key, status]) => [key, status.reblog_id === statusId])
       .map(([key, status]) => [key, status.account_id]);
     const reblogOf = getState().statuses[statusId]?.reblog_id ?? null;
+
+    useContextStore.getState().actions.deleteStatuses([statusId]);
+    useComposeStore.getState().actions.handleTimelineDelete(statusId);
 
     dispatch<TimelineDeleteAction>({
       type: TIMELINE_DELETE,
@@ -159,7 +166,7 @@ const deduplicateStatuses = (statuses: Array<BaseStatus>) => {
       reblogged.accounts.push(status.account);
       reblogged.id += ':' + status.id;
     } else if (
-      !deduplicatedStatuses.find(
+      !deduplicatedStatuses.some(
         (deduplicatedStatus) => deduplicatedStatus.reblog?.id === status.id,
       )
     ) {

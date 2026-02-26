@@ -2,9 +2,8 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useCompose } from '@/hooks/use-compose';
-import { selectOwnAccount } from '@/selectors';
+import { useOwnAccount } from '@/hooks/use-own-account';
 
 import Warning from '../components/warning';
 
@@ -16,12 +15,10 @@ interface IWarningWrapper {
 
 const WarningWrapper: React.FC<IWarningWrapper> = ({ composeId }) => {
   const compose = useCompose(composeId);
+  const { data: account } = useOwnAccount();
 
-  const needsLockWarning = useAppSelector(
-    (state) =>
-      (compose.visibility === 'private' || compose.visibility === 'mutuals_only') &&
-      !selectOwnAccount(state)!.locked,
-  );
+  const needsLockWarning =
+    (compose.visibility === 'private' || compose.visibility === 'mutuals_only') && !account?.locked;
   const hashtagWarning =
     compose.visibility !== 'public' &&
     compose.visibility !== 'group' &&

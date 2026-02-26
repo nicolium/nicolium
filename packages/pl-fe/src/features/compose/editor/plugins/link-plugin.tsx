@@ -18,6 +18,6 @@ const validateUrl = (url: string): boolean => {
   return url === 'https://' || urlRegExp.test(url);
 };
 
-const LinkPlugin = (): JSX.Element => <LexicalLinkPlugin validateUrl={validateUrl} />;
+const LinkPlugin = (): React.JSX.Element => <LexicalLinkPlugin validateUrl={validateUrl} />;
 
 export { LinkPlugin as default };

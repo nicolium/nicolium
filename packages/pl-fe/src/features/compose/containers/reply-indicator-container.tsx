@@ -1,10 +1,8 @@
 import React, { useCallback } from 'react';
 
-import { cancelReplyCompose } from '@/actions/compose';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
-import { useCompose } from '@/hooks/use-compose';
 import { makeGetStatus } from '@/selectors';
+import { useCompose, useComposeActions } from '@/stores/compose';
 
 import ReplyIndicator from '../components/reply-indicator';
 
@@ -17,10 +15,10 @@ const ReplyIndicatorContainer: React.FC<IReplyIndicatorContainer> = ({ composeId
 
   const { inReplyToId, editedId } = useCompose(composeId);
   const status = useAppSelector((state) => getStatus(state, { id: inReplyToId! }));
-  const dispatch = useAppDispatch();
+  const { resetCompose } = useComposeActions();
 
   const onCancel = () => {
-    dispatch(cancelReplyCompose());
+    resetCompose('compose-modal');
   };
 
   if (!status) return null;

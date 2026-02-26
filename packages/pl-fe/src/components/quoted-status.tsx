@@ -1,6 +1,6 @@
 import { linkOptions, useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
-import React, { MouseEventHandler } from 'react';
+import React, { type MouseEventHandler } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import Stack from '@/components/ui/stack';
@@ -98,10 +98,8 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
         {status.event ? (
           <EventPreview status={status} hideAction />
         ) : (
-          <Stack className='relative z-0'>
-            <Stack space={4}>
-              <StatusContent status={status} collapsable isQuote withMedia compose={compose} />
-            </Stack>
+          <Stack space={4} className='relative z-0'>
+            <StatusContent status={status} collapsable isQuote withMedia compose={compose} />
           </Stack>
         )}
       </Stack>

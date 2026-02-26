@@ -80,18 +80,24 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
       </Link>
 
       {account.subscribers_count > 0 && (
-        // <Link to='/@{$username}/subscribers' params={{ username: account.acct }} onClick={onClickHandler} title={intl.formatNumber(account.subscribers_count)} className='hover:underline'>
-        <HStack alignItems='center' space={1}>
-          {!demetricator && (
-            <Text theme='primary' weight='bold' size='sm'>
-              {shortNumberFormat(account.subscribers_count)}
+        <Link
+          to='/@{$username}/subscribers'
+          params={{ username: account.acct }}
+          onClick={onClickHandler}
+          title={intl.formatNumber(account.subscribers_count)}
+          className='hover:underline'
+        >
+          <HStack alignItems='center' space={1}>
+            {!demetricator && (
+              <Text theme='primary' weight='bold' size='sm'>
+                {shortNumberFormat(account.subscribers_count)}
+              </Text>
+            )}
+            <Text weight='bold' size='sm'>
+              <FormattedMessage id='account.subscribers' defaultMessage='Subscribers' />
             </Text>
-          )}
-          <Text weight='bold' size='sm'>
-            <FormattedMessage id='account.subscribers' defaultMessage='Subscribers' />
-          </Text>
-        </HStack>
-        // </Link>
+          </HStack>
+        </Link>
       )}
     </HStack>
   );

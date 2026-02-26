@@ -1,6 +1,6 @@
 import React from 'react';
 
-import AutosuggestInput, { AutoSuggestion } from '@/components/autosuggest-input';
+import AutosuggestInput, { type AutoSuggestion } from '@/components/autosuggest-input';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useAccountSearch } from '@/queries/search/use-search-accounts';
 

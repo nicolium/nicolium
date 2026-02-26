@@ -1,4 +1,4 @@
-import { Link, LinkOptions } from '@tanstack/react-router';
+import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
@@ -9,7 +9,7 @@ import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import { useModalsActions } from '@/stores/modals';
 
-import type { Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/reducers/statuses';
 
 interface IStatusInteractionBar {
   status: Pick<
@@ -24,7 +24,9 @@ interface IStatusInteractionBar {
   >;
 }
 
-const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.Element | null => {
+const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
+  status,
+}): React.JSX.Element | null => {
   const { openModal } = useModalsActions();
   const features = useFeatures();
   const { account } = status;
@@ -72,7 +74,7 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({ status }): JSX.
         <InteractionCounter
           count={status.quotes_count}
           to='/@{$username}/posts/$statusId/quotes'
-          params={{ username: status.account.acct, id: status.id }}
+          params={{ username: status.account.acct, statusId: status.id }}
         >
           <FormattedMessage
             id='status.interactions.quotes'

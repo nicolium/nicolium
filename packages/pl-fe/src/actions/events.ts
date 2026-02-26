@@ -1,6 +1,7 @@
 import { defineMessages } from 'react-intl';
 
 import { getClient } from '@/api';
+import { useComposeStore } from '@/stores/compose';
 import toast from '@/toast';
 
 import { importEntities } from './importer';
@@ -18,10 +19,6 @@ const EVENT_JOIN_FAIL = 'EVENT_JOIN_FAIL' as const;
 
 const EVENT_LEAVE_REQUEST = 'EVENT_LEAVE_REQUEST' as const;
 const EVENT_LEAVE_FAIL = 'EVENT_LEAVE_FAIL' as const;
-
-const EVENT_COMPOSE_CANCEL = 'EVENT_COMPOSE_CANCEL' as const;
-
-const EVENT_FORM_SET = 'EVENT_FORM_SET' as const;
 
 const messages = defineMessages({
   exceededImageSizeLimit: {
@@ -123,15 +120,12 @@ interface LeaveEventFail {
 const fetchEventIcs = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) =>
   getClient(getState).events.getEventIcs(statusId);
 
-const cancelEventCompose = () => ({
-  type: EVENT_COMPOSE_CANCEL,
-});
-
-interface EventFormSetAction {
-  type: typeof EVENT_FORM_SET;
-  composeId: string;
-  text: string;
-}
+// todo: move to compose store?
+const cancelEventCompose = () => {
+  useComposeStore.getState().actions.updateCompose('event-compose-modal', (draft) => {
+    draft.text = '';
+  });
+};
 
 const initEventEdit = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   dispatch({ type: STATUS_FETCH_SOURCE_REQUEST, statusId });
@@ -140,11 +134,11 @@ const initEventEdit = (statusId: string) => (dispatch: AppDispatch, getState: ()
     .statuses.getStatusSource(statusId)
     .then((response) => {
       dispatch({ type: STATUS_FETCH_SOURCE_SUCCESS, statusId });
-      dispatch<EventFormSetAction>({
-        type: EVENT_FORM_SET,
-        composeId: `compose-event-modal-${statusId}`,
-        text: response.text,
-      });
+      useComposeStore
+        .getState()
+        .actions.updateCompose(`compose-event-modal-${statusId}`, (draft) => {
+          draft.text = response.text;
+        });
       return response;
     })
     .catch((error) => {
@@ -152,21 +146,13 @@ const initEventEdit = (statusId: string) => (dispatch: AppDispatch, getState: ()
     });
 };
 
-type EventsAction =
-  | JoinEventRequest
-  | JoinEventFail
-  | LeaveEventRequest
-  | LeaveEventFail
-  | ReturnType<typeof cancelEventCompose>
-  | EventFormSetAction;
+type EventsAction = JoinEventRequest | JoinEventFail | LeaveEventRequest | LeaveEventFail;
 
 export {
   EVENT_JOIN_REQUEST,
   EVENT_JOIN_FAIL,
   EVENT_LEAVE_REQUEST,
   EVENT_LEAVE_FAIL,
-  EVENT_COMPOSE_CANCEL,
-  EVENT_FORM_SET,
   submitEvent,
   fetchEventIcs,
   cancelEventCompose,

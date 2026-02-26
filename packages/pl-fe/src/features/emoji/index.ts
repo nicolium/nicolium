@@ -1,7 +1,6 @@
-import { IntlShape } from 'react-intl';
-
 import type { Emoji as EmojiMart, CustomEmoji as EmojiMartCustom } from './data';
 import type { CustomEmoji as BaseCustomEmoji } from 'pl-api';
+import type { IntlShape } from 'react-intl';
 
 /*
  * TODO: Consolate emoji object types

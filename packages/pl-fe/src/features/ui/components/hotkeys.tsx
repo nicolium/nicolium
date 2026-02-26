@@ -193,7 +193,7 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
         isKeyboardEvent(event) &&
         !event.defaultPrevented &&
         !['input', 'textarea', 'select', 'em-emoji-picker'].includes(tagName) &&
-        !(event.target as HTMLElement).closest('[contenteditable]') &&
+        !(event.target as HTMLElement).closest('[contenteditable], .multiselect-container') &&
         !(['a', 'button'].includes(tagName) && normalizeKey(event.key) === 'enter');
 
       if (shouldHandleEvent) {
@@ -217,7 +217,7 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
         });
 
         // Sort all matches by priority
-        matchCandidates.sort((a, b) => b.priority - a.priority);
+        matchCandidates.toSorted((a, b) => b.priority - a.priority);
 
         const bestMatchingHandler = matchCandidates.at(0)?.handler;
         if (bestMatchingHandler) {
@@ -267,7 +267,7 @@ interface IHotkeys extends React.HTMLAttributes<HTMLDivElement> {
    */
   focusable?: boolean;
   children: React.ReactNode;
-  element?: React.ComponentType | keyof JSX.IntrinsicElements;
+  element?: React.ComponentType | keyof React.JSX.IntrinsicElements;
 }
 
 /**

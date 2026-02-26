@@ -51,7 +51,7 @@ const dropOrientationIfNeeded = (orientation: number) =>
 /** Convert the file into a local blob URL. */
 const getImageUrl = (inputFile: File) =>
   new Promise<string>((resolve, reject) => {
-    // @ts-ignore: This is a browser capabilities check.
+    // @ts-expect-error: This is a browser capabilities check.
     if (window.URL?.createObjectURL) {
       try {
         resolve(URL.createObjectURL(inputFile));
@@ -177,7 +177,7 @@ const processImage = (
         reject(blob);
         return;
       }
-      resolve(new File([blob], name, { type, lastModified: new Date().getTime() }));
+      resolve(new File([blob], name, { type, lastModified: Date.now() }));
     }, type);
   });
 
@@ -214,7 +214,7 @@ const resize = async (
 ): Promise<File> => {
   if (!hasCanvasExtractPermission) return inputFile;
 
-  if (!inputFile.type.match(/image.*/) || inputFile.type === 'image/gif') {
+  if (!/image.*/.test(inputFile.type) || inputFile.type === 'image/gif') {
     return inputFile;
   }
 

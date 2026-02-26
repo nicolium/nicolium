@@ -14,7 +14,7 @@ interface ISubmitPlugin {
   handleSubmit?: () => void;
 }
 
-const SubmitPlugin: React.FC<ISubmitPlugin> = ({ composeId, handleSubmit }) => {
+const SubmitPlugin: React.FC<ISubmitPlugin> = ({ handleSubmit }) => {
   const [editor] = useLexicalComposerContext();
 
   useEffect(() => {

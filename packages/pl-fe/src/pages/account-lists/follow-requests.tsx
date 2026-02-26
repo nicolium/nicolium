@@ -2,7 +2,6 @@ import { useMatch } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import Account from '@/components/account';
 import { AuthorizeRejectButtons } from '@/components/authorize-reject-buttons';
 import ScrollableList from '@/components/scrollable-list';
@@ -11,6 +10,7 @@ import Spinner from '@/components/ui/spinner';
 import Tabs, { type Item } from '@/components/ui/tabs';
 import { followRequestsRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
+import { useAccount } from '@/queries/accounts/use-account';
 import {
   useAcceptFollowRequestMutation,
   useFollowRequests,
@@ -31,7 +31,7 @@ interface IAccountAuthorize {
 }
 
 const AccountAuthorize: React.FC<IAccountAuthorize> = ({ id }) => {
-  const { account } = useAccount(id);
+  const { data: account } = useAccount(id);
 
   const { mutate: authorizeFollowRequest } = useAcceptFollowRequestMutation(id);
   const { mutate: rejectFollowRequest } = useRejectFollowRequestMutation(id);

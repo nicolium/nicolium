@@ -8,7 +8,7 @@ import Text from '@/components/ui/text';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
-import type { Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/reducers/statuses';
 import type { FilterResult } from 'pl-api';
 
 const useMediaVisible = (
@@ -73,7 +73,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
 
     return (
       <div
-        className={clsx('absolute z-40', {
+        className={clsx('absolute z-[1]', {
           'flex h-full w-full cursor-default justify-center rounded-md border-0 backdrop-blur-lg':
             !visible,
           'inset-0 bg-gray-800/75': !visible,

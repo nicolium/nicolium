@@ -5,7 +5,7 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 
 import * as BuildConfig from '@/build-config';
-import PlFe from '@/init/pl-fe';
+import Nicolium from '@/init/nicolium';
 import { printConsoleWarning } from '@/utils/console';
 
 import '@fontsource/inter/200.css';
@@ -22,7 +22,7 @@ import './styles/i18n.css';
 import './styles/application.scss';
 import './styles/tailwind.css';
 import './precheck';
-import ready from './ready';
+import ready from './init/ready';
 import { registerSW, lockSW } from './utils/sw';
 
 if (BuildConfig.NODE_ENV === 'production') {
@@ -35,5 +35,5 @@ ready(() => {
   const container = document.getElementById('plfe') as HTMLElement;
   const root = createRoot(container);
 
-  root.render(<PlFe />);
+  root.render(<Nicolium />);
 });

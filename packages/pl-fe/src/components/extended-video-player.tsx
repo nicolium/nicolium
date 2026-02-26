@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 
-import { isIOS } from '@/is-mobile';
+import { isIOS } from '@/utils/is-mobile';
 
 interface IExtendedVideoPlayer {
   src: string;
@@ -35,7 +35,7 @@ const ExtendedVideoPlayer: React.FC<IExtendedVideoPlayer> = ({
     return () => {
       video.current?.removeEventListener('loadeddata', handleLoadedData);
     };
-  }, [video.current]);
+  }, []);
 
   const handleClick: React.MouseEventHandler<HTMLVideoElement> = (e) => {
     e.stopPropagation();

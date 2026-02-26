@@ -1,11 +1,12 @@
-import { type InfiniteData, useMutation } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
-import { importEntities } from '@/actions/importer';
 import { useClient } from '@/hooks/use-client';
-import { queryClient } from '@/queries/client';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
 import { minifyList } from '@/queries/utils/minify-list';
-import { store } from '@/store';
+import { updatePaginatedResponse } from '@/queries/utils/update-paginated-response';
+
+import { queryClient } from '../client';
+import { queryKeys } from '../keys';
 
 import type { PlApiClient } from 'pl-api';
 
@@ -17,31 +18,20 @@ const minifyRequestList = (
   minifyList(
     response,
     ({ account, participation_message }) => ({ account_id: account.id, participation_message }),
-    (requests) =>
-      store.dispatch(
-        importEntities({ accounts: requests.map((request) => request.account) }) as any,
-      ),
+    (requests) => {
+      for (const { account } of requests) {
+        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+      }
+    },
   );
 
-type MinifiedRequestList = ReturnType<typeof minifyRequestList>;
-
 const removeRequest = (statusId: string, accountId: string) =>
-  queryClient.setQueryData<InfiniteData<MinifiedRequestList>>(
-    ['accountsLists', 'eventParticipationRequests', statusId],
-    (data) =>
-      data
-        ? {
-            ...data,
-            pages: data.pages.map(({ items, ...page }) => ({
-              ...page,
-              items: items.filter(({ account_id }) => account_id !== accountId),
-            })),
-          }
-        : undefined,
+  updatePaginatedResponse(queryKeys.accountsLists.eventParticipationRequests(statusId), (items) =>
+    items.filter(({ account_id }) => account_id !== accountId),
   );
 
 const useEventParticipationRequests = makePaginatedResponseQuery(
-  (statusId: string) => ['accountsLists', 'eventParticipationRequests', statusId],
+  (statusId: string) => queryKeys.accountsLists.eventParticipationRequests(statusId),
   (client, params) =>
     client.events.getEventParticipationRequests(...params).then(minifyRequestList),
 );

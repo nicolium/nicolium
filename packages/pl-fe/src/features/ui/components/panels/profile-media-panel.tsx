@@ -25,10 +25,10 @@ const ProfileMediaPanel: React.FC<IProfileMediaPanel> = ({ account }) => {
   const children = useMemo(() => {
     if (isLoading || !account) return <Spinner />;
 
-    const publicVisibilities = ['public', 'unlisted'];
+    const publicVisibilities = new Set(['public', 'unlisted']);
 
     const publicAttachments = attachments
-      .filter((attachment) => publicVisibilities.includes(attachment.visibility))
+      .filter((attachment) => publicVisibilities.has(attachment.visibility))
       .slice(0, 9);
 
     if (publicAttachments.length) {

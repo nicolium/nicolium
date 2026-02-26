@@ -20,7 +20,8 @@ import {
 } from '@mkljczk/url-purify';
 
 import KVStore from '@/storage/kv-store';
-import { Me } from '@/types/pl-fe';
+
+import type { Me } from '@/reducers/me';
 
 interface KVStoreRulesItem {
   hashUrl?: string;

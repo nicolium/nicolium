@@ -3,7 +3,7 @@ import {
   autoUpdate,
   flip,
   offset,
-  Placement,
+  type Placement,
   shift,
   size,
   useFloating,
@@ -16,11 +16,11 @@ import ReactSwipeableViews from 'react-swipeable-views';
 
 import IconButton from '@/components/ui/icon-button';
 import Portal from '@/components/ui/portal';
-import { userTouching } from '@/is-mobile';
 import { useModalsActions } from '@/stores/modals';
 import { useUiStoreActions } from '@/stores/ui';
+import { userTouching } from '@/utils/is-mobile';
 
-import DropdownMenuItem, { Menu } from './dropdown-menu-item';
+import DropdownMenuItem, { type Menu } from './dropdown-menu-item';
 
 const messages = defineMessages({
   back: { id: 'card.back.label', defaultMessage: 'Back' },
@@ -36,7 +36,7 @@ interface IDropdownMenuContent {
 }
 
 interface IDropdownMenu {
-  children?: React.ReactElement;
+  children?: React.ReactElement<any>;
   disabled?: boolean;
   items?: Menu;
   component?: React.FC<{ handleClose: () => any }>;
@@ -73,7 +73,11 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
     () => (e: KeyboardEvent) => {
       if (!ref.current) return;
 
-      const elements = Array.from(ref.current.querySelectorAll('a, button'));
+      const elements = Array.from(
+        ref.current.querySelectorAll<HTMLElement>(
+          'a, button:not([disabled]), input:not([disabled]), select:not([disabled])',
+        ),
+      ).filter((element) => !element.hasAttribute('aria-hidden'));
       const index = elements.indexOf(document.activeElement as any);
 
       let element = null;
@@ -82,7 +86,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
         case 'ArrowLeft':
           setTab((tab) => {
             if (tab !== undefined) {
-              (elements[tab] as HTMLElement)?.focus();
+              (ref.current?.querySelector(`[data-index="${tab}"]`) as HTMLElement)?.focus();
               return undefined;
             }
             return tab;
@@ -119,12 +123,12 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
       }
 
       if (element) {
-        (element as HTMLAnchorElement).focus();
+        (element as HTMLElement).focus();
         e.preventDefault();
         e.stopPropagation();
       }
     },
-    [ref.current],
+    [],
   );
 
   const handleDocumentClick = useMemo(
@@ -134,7 +138,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
         event.stopPropagation();
       }
     },
-    [ref.current],
+    [],
   );
 
   useEffect(() => {
@@ -149,7 +153,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
       document.removeEventListener('touchend', handleDocumentClick);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [ref.current]);
+  }, []);
 
   const handleExitSubmenu: React.EventHandler<any> = (event) => {
     event.stopPropagation();
@@ -207,7 +211,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
   );
 };
 
-const DropdownMenu = (props: IDropdownMenu) => {
+const DropdownMenu: React.FC<IDropdownMenu> = (props) => {
   const {
     children,
     disabled,

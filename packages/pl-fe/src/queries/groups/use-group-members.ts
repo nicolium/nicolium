@@ -1,17 +1,17 @@
-import { type InfiniteData, useMutation } from '@tanstack/react-query';
-import { GroupMember, GroupRole, PaginatedResponse } from 'pl-api';
+import { type InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { importEntities } from '@/actions/importer';
 import { useClient } from '@/hooks/use-client';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
-import { store } from '@/store';
 
 import { queryClient } from '../client';
-import { minifyList } from '../utils/minify-list';
+import { queryKeys } from '../keys';
+import { minifyAccountList, minifyList } from '../utils/minify-list';
+
+import type { GroupMember, GroupRole, PaginatedResponse } from 'pl-api';
 
 const removeGroupMember = (groupId: string, accountId: string) =>
   queryClient.setQueriesData<InfiniteData<PaginatedResponse<MinifiedGroupMember>>>(
-    { queryKey: ['accountsLists', 'groupMembers', groupId] },
+    { queryKey: queryKeys.accountsLists.groupMembers.root(groupId) },
     (data) =>
       data
         ? {
@@ -24,21 +24,24 @@ const removeGroupMember = (groupId: string, accountId: string) =>
         : undefined,
   );
 
+const minifyGroupMember = ({ account, ...groupMember }: GroupMember) => ({
+  ...groupMember,
+  account_id: account.id,
+});
+
+type MinifiedGroupMember = ReturnType<typeof minifyGroupMember>;
+
 const minifyGroupMembersList = (
   response: PaginatedResponse<GroupMember>,
-): PaginatedResponse<Omit<GroupMember, 'account'> & { account_id: string }> =>
-  minifyList(
-    response,
-    ({ account, ...groupMember }) => ({ ...groupMember, account_id: account.id }),
-    (groupMembers) => {
-      store.dispatch(
-        importEntities({ accounts: groupMembers.map(({ account }) => account) }) as any,
-      );
-    },
-  );
+): PaginatedResponse<MinifiedGroupMember> =>
+  minifyList(response, minifyGroupMember, (groupMembers) => {
+    for (const { account } of groupMembers) {
+      queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+    }
+  });
 
 const useGroupMembers = makePaginatedResponseQuery(
-  (groupId: string, role?: GroupRole) => ['accountsLists', 'groupMembers', groupId, role],
+  (groupId: string, role?: GroupRole) => queryKeys.accountsLists.groupMembers.byRole(groupId, role),
   (client, [groupId, role]) =>
     client.experimental.groups.getGroupMemberships(groupId, role).then(minifyGroupMembersList),
 );
@@ -53,6 +56,90 @@ const useKickGroupMemberMutation = (groupId: string, accountId: string) => {
   });
 };
 
-type MinifiedGroupMember = ReturnType<typeof minifyGroupMembersList>['items'][0];
+const useGroupMembershipRequestsQuery = makePaginatedResponseQuery(
+  (groupId: string) => queryKeys.accountsLists.groupMembershipRequests(groupId),
+  (client, [groupId]) =>
+    client.experimental.groups.getGroupMembershipRequests(groupId).then(minifyAccountList),
+);
 
-export { useGroupMembers, useKickGroupMemberMutation, removeGroupMember, type MinifiedGroupMember };
+const useAcceptGroupMembershipRequestMutation = (groupId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: queryKeys.accountsLists.groupMembershipRequests(groupId),
+    mutationFn: (accountId: string) =>
+      client.experimental.groups.acceptGroupMembershipRequest(groupId, accountId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.accountsLists.groupMembershipRequests(groupId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.accountsLists.groupMembers.root(groupId),
+      });
+    },
+  });
+};
+
+const useRejectGroupMembershipRequestMutation = (groupId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: queryKeys.accountsLists.groupMembershipRequests(groupId),
+    mutationFn: (accountId: string) =>
+      client.experimental.groups.rejectGroupMembershipRequest(groupId, accountId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.accountsLists.groupMembershipRequests(groupId),
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.accountsLists.groupMembers.root(groupId),
+      });
+    },
+  });
+};
+
+const usePromoteGroupMemberMutation = (groupId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: queryKeys.accountsLists.groupMembers.root(groupId),
+    mutationFn: ({ accountId, role }: { accountId: string; role: GroupRole }) =>
+      client.experimental.groups.promoteGroupUsers(groupId, [accountId], role),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.accountsLists.groupMembers.root(groupId),
+      });
+    },
+  });
+};
+
+const useDemoteGroupMemberMutation = (groupId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: queryKeys.accountsLists.groupMembers.root(groupId),
+    mutationFn: ({ accountId, role }: { accountId: string; role: GroupRole }) =>
+      client.experimental.groups.demoteGroupUsers(groupId, [accountId], role),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.accountsLists.groupMembers.root(groupId),
+      });
+    },
+  });
+};
+
+export {
+  useGroupMembers,
+  useKickGroupMemberMutation,
+  useGroupMembershipRequestsQuery,
+  useAcceptGroupMembershipRequestMutation,
+  useRejectGroupMembershipRequestMutation,
+  usePromoteGroupMemberMutation,
+  useDemoteGroupMemberMutation,
+  removeGroupMember,
+  type MinifiedGroupMember,
+};

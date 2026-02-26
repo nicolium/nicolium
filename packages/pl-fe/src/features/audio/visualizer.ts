@@ -114,7 +114,7 @@ class Visualizer {
 
       if (i < 20) {
         let scale = delta / (200 * scaleCoefficient);
-        scale = scale < 1 ? 1 : scale;
+        scale = Math.max(1, scale);
         allScales.push(scale);
       }
     });

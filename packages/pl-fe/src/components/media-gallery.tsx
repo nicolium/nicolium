@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useState, useRef, useLayoutEffect, CSSProperties } from 'react';
+import React, { useState, useRef, useLayoutEffect, type CSSProperties } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AltIndicator from '@/components/alt-indicator';
@@ -14,7 +14,7 @@ import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useSettings } from '@/stores/settings';
 import { truncateFilename } from '@/utils/media';
 
-import { isIOS } from '../is-mobile';
+import { isIOS } from '../utils/is-mobile';
 import {
   isPanoramic,
   isPortrait,
@@ -367,7 +367,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
 
       setWidth(offsetWidth);
     }
-  }, [node.current]);
+  }, []);
 
   const handleClick = (index: number) => {
     onOpenMedia(media, index);
@@ -655,7 +655,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
     if (compact) {
       return {
         style: {},
-        itemsDimensions: [...new Array(size)].map(() => ({
+        itemsDimensions: new Array(size).fill('').map(() => ({
           w: 'auto',
           h: 'auto',
           top: 'auto',

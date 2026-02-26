@@ -1,12 +1,12 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useAccountLookup } from '@/api/hooks/accounts/use-account-lookup';
 import MissingIndicator from '@/components/missing-indicator';
 import StatusList from '@/components/status-list';
 import Column from '@/components/ui/column';
 import { profileFavoritesRoute } from '@/features/ui/router';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
 import { useFavourites } from '@/queries/status-lists/use-favourites';
 
 const messages = defineMessages({
@@ -18,8 +18,8 @@ const FavouritedStatusesPage: React.FC = () => {
   const { username } = profileFavoritesRoute.useParams();
 
   const intl = useIntl();
-  const { account: ownAccount } = useOwnAccount();
-  const { account, isUnavailable } = useAccountLookup(username, { withRelationship: true });
+  const { data: ownAccount } = useOwnAccount();
+  const { data: account, isUnavailable } = useAccountLookup(username);
 
   const isOwnAccount = username.toLowerCase() === ownAccount?.acct?.toLowerCase();
   const accountId = isOwnAccount ? undefined : account?.id;

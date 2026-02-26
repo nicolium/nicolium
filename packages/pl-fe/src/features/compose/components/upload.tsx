@@ -1,10 +1,8 @@
 import React, { useCallback } from 'react';
 
-import { undoUploadCompose, changeUploadCompose } from '@/actions/compose';
 import Upload from '@/components/upload';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
 import { useInstance } from '@/hooks/use-instance';
+import { useChangeUploadCompose, useCompose, useComposeActions } from '@/stores/compose';
 
 interface IUploadCompose {
   id: string;
@@ -23,7 +21,8 @@ const UploadCompose: React.FC<IUploadCompose> = ({
   onDragEnter,
   onDragEnd,
 }) => {
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
+  const changeUploadCompose = useChangeUploadCompose(composeId);
   const {
     pleroma: {
       metadata: { description_limit: descriptionLimit },
@@ -33,18 +32,20 @@ const UploadCompose: React.FC<IUploadCompose> = ({
   const media = useCompose(composeId).mediaAttachments.find((item) => item.id === id)!;
 
   const handleDescriptionChange = (description: string, position?: [number, number]) => {
-    return dispatch(
-      changeUploadCompose(composeId, media.id, {
-        description,
-        focus: position
-          ? `${((position[0] - 0.5) * 2).toFixed(2)},${((position[1] - 0.5) * -2).toFixed(2)}`
-          : undefined,
-      }),
-    );
+    return changeUploadCompose(media.id, {
+      description,
+      focus: position
+        ? `${((position[0] - 0.5) * 2).toFixed(2)},${((position[1] - 0.5) * -2).toFixed(2)}`
+        : undefined,
+    });
   };
 
   const handleDelete = () => {
-    dispatch(undoUploadCompose(composeId, media.id));
+    updateCompose(composeId, (draft) => {
+      const prevSize = draft.mediaAttachments.length;
+      draft.mediaAttachments = draft.mediaAttachments.filter((item) => item.id !== media.id);
+      if (prevSize === 1) draft.sensitive = false;
+    });
   };
 
   const handleDragStart = useCallback(() => {

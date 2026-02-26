@@ -16,7 +16,7 @@ interface IChatUploadPreview {
  * Displays a generic preview for an upload depending on its media type.
  * It fills its container and is expected to be sized by its parent.
  */
-const ChatUploadPreview: React.FC<IChatUploadPreview> = ({ className, attachment }) => {
+const ChatUploadPreview: React.FC<IChatUploadPreview> = ({ attachment }) => {
   const mimeType = attachment.mime_type as string | undefined;
 
   switch (attachment.type) {

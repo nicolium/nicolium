@@ -1,13 +1,13 @@
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
-import DOMPurify from 'isomorphic-dompurify';
+import { sanitize } from 'isomorphic-dompurify';
 import {
   type MediaAttachment,
   type PreviewCard as CardEntity,
   mediaAttachmentSchema,
 } from 'pl-api';
 import React, { useState, useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
 import Blurhash from '@/components/blurhash';
@@ -16,10 +16,18 @@ import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
+import { useSettings } from '@/stores/settings';
 import { getTextDirection } from '@/utils/rtl';
+import Purify from '@/utils/url-purify';
 
 import HoverAccountWrapper from './hover-account-wrapper';
 import Avatar from './ui/avatar';
+
+const messages = defineMessages({
+  play: { id: 'preview_card.play', defaultMessage: 'Play' },
+  expand: { id: 'preview_card.expand', defaultMessage: 'Enlarge image' },
+  externalLink: { id: 'preview_card.external_link', defaultMessage: 'Open in new tab' },
+});
 
 const domParser = new DOMParser();
 
@@ -63,7 +71,7 @@ interface IPreviewCardVideo {
 
 const PreviewCardVideo: React.FC<IPreviewCardVideo> = React.memo(
   React.forwardRef<HTMLDivElement, IPreviewCardVideo>(({ card }, ref) => {
-    const html = DOMPurify.sanitize(handleIframeUrl(card.html, card.url, card.provider_name), {
+    const html = sanitize(handleIframeUrl(card.html, card.url, card.provider_name), {
       ADD_TAGS: ['iframe'],
       ADD_ATTR: ['allow', 'allowfullscreen', 'referrerpolicy'],
     });
@@ -103,7 +111,11 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   compact = false,
   cacheWidth,
   onOpenMedia,
-}): JSX.Element => {
+}): React.JSX.Element => {
+  const intl = useIntl();
+  const {
+    urlPrivacy: { clearLinksInContent, redirectLinksMode },
+  } = useSettings();
   const [width, setWidth] = useState(defaultWidth);
   const [embedded, setEmbedded] = useState(false);
 
@@ -111,6 +123,15 @@ const PreviewCard: React.FC<IPreviewCard> = ({
     setEmbedded(false);
   }, [card.url]);
 
+  let href = card.url;
+
+  if (clearLinksInContent) {
+    try {
+      href = Purify.clearUrl(href, clearLinksInContent, redirectLinksMode !== 'off');
+    } catch (_) {
+      //
+    }
+  }
   const direction = getTextDirection(card.title + card.description);
 
   const trimmedTitle = trim(card.title, maxTitle);
@@ -168,9 +189,9 @@ const PreviewCard: React.FC<IPreviewCard> = ({
       onClick={(e) => {
         e.stopPropagation();
       }}
-      href={card.url}
+      href={href}
       title={trimmedTitle}
-      rel='noopener'
+      rel='noopener noreferrer'
       target='_blank'
       dir={direction}
     >
@@ -239,6 +260,9 @@ const PreviewCard: React.FC<IPreviewCard> = ({
                 <button
                   onClick={handleEmbedClick}
                   className='appearance-none text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-100'
+                  title={intl.formatMessage(
+                    card.type === 'photo' ? messages.expand : messages.play,
+                  )}
                 >
                   <Icon src={iconVariant} className='size-6 text-inherit' />
                 </button>
@@ -248,10 +272,11 @@ const PreviewCard: React.FC<IPreviewCard> = ({
                     onClick={(e) => {
                       e.stopPropagation();
                     }}
-                    href={card.url}
+                    href={href}
                     target='_blank'
-                    rel='noopener'
+                    rel='noopener noreferrer'
                     className='text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-100'
+                    title={intl.formatMessage(messages.externalLink)}
                   >
                     <Icon
                       src={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
@@ -292,10 +317,10 @@ const PreviewCard: React.FC<IPreviewCard> = ({
 
   const link = (
     <a
-      href={card.url}
+      href={href}
       className={className}
       target='_blank'
-      rel='noopener'
+      rel='noopener noreferrer'
       ref={setRef}
       onClick={(e) => {
         e.stopPropagation();
@@ -314,33 +339,44 @@ const PreviewCard: React.FC<IPreviewCard> = ({
           <Text theme='muted' className='flex items-center gap-2'>
             <FormattedMessage
               id='link_preview.more_from_author'
-              defaultMessage='More from {name}'
+              defaultMessage='From {name}'
               values={{
-                name: card.authors.map((author) => (
-                  <HoverAccountWrapper
-                    key={author.url}
-                    accountId={author.account?.id}
-                    element='bdi'
-                  >
-                    <Link to='/@{$username}' params={{ username: author.account?.acct ?? '' }}>
-                      <HStack space={1} alignItems='center'>
-                        {author.account && (
-                          <Avatar
-                            src={author.account?.avatar}
-                            size={16}
-                            username={author.account.username}
-                          />
-                        )}
-                        <Text weight='medium'>
-                          <Emojify
-                            text={author.account?.display_name ?? author.name}
-                            emojis={author.account?.emojis}
-                          />
-                        </Text>
-                      </HStack>
-                    </Link>
-                  </HoverAccountWrapper>
-                )),
+                name: card.authors.map((author) => {
+                  const linkBody = (
+                    <HStack space={1} alignItems='center'>
+                      {author.account && (
+                        <Avatar
+                          src={author.account?.avatar}
+                          size={16}
+                          username={author.account.username}
+                        />
+                      )}
+                      <Text weight='medium'>
+                        <Emojify
+                          text={author.account?.display_name ?? author.name}
+                          emojis={author.account?.emojis}
+                        />
+                      </Text>
+                    </HStack>
+                  );
+                  return (
+                    <HoverAccountWrapper
+                      key={author.url}
+                      accountId={author.account?.id}
+                      element='bdi'
+                    >
+                      {author.account ? (
+                        <Link to='/@{$username}' params={{ username: author.account?.acct ?? '' }}>
+                          {linkBody}
+                        </Link>
+                      ) : (
+                        <a href={author.url} target='_blank' rel='noopener noreferrer'>
+                          {linkBody}
+                        </a>
+                      )}
+                    </HoverAccountWrapper>
+                  );
+                }),
               }}
             />
           </Text>
@@ -360,7 +396,7 @@ const trim = (text: string, len: number): string => {
     return text;
   }
 
-  return text.substring(0, cut) + (text.length > len ? '…' : '');
+  return text.slice(0, cut) + (text.length > len ? '…' : '');
 };
 
 export { PreviewCard as default };

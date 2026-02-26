@@ -1,9 +1,8 @@
-import { useMutation, type InfiniteData } from '@tanstack/react-query';
+import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query';
 
-import { importEntities } from '@/actions/importer';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from '@/queries/utils/minify-list';
 
@@ -12,78 +11,70 @@ import { filterById } from '../utils/filter-id';
 import type { PaginatedResponse, PlApiClient } from 'pl-api';
 
 const appendFollowRequest = (accountId: string) =>
-  queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
-    ['accountsLists', 'followRequests'],
-    (data) => {
-      if (!data || data.pages.some((page) => page.items.includes(accountId))) return data;
+  queryClient.setQueryData(queryKeys.accountsLists.followRequests, (data) => {
+    if (!data || data.pages.some((page) => page.items.includes(accountId))) return data;
 
-      return {
-        ...data,
-        pages: data.pages.map((page, index) =>
-          index === 0 ? { ...page, items: [accountId, ...page.items] } : page,
-        ),
-      };
-    },
-  );
+    return {
+      ...data,
+      pages: data.pages.map((page, index) =>
+        index === 0 ? { ...page, items: [accountId, ...page.items] } : page,
+      ),
+    };
+  });
 
 const removeFollowRequest = (accountId: string) =>
-  queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
-    ['accountsLists', 'followRequests'],
-    filterById(accountId),
-  );
+  queryClient.setQueryData(queryKeys.accountsLists.followRequests, filterById(accountId));
 
 const makeUseFollowRequests = <T>(select: (data: InfiniteData<PaginatedResponse<string>>) => T) =>
   makePaginatedResponseQuery(
-    () => ['accountsLists', 'followRequests'],
+    queryKeys.accountsLists.followRequests,
     (client) => client.myAccount.getFollowRequests().then(minifyAccountList),
     select,
     'isLoggedIn',
   );
 
-const useFollowRequests = makeUseFollowRequests((data) =>
-  data.pages.map((page) => page.items).flat(),
-);
+const useFollowRequests = makeUseFollowRequests((data) => data.pages.flatMap((page) => page.items));
 
 const useFollowRequestsCount = makeUseFollowRequests(
-  (data) => data.pages.map((page) => page.items).flat().length,
+  (data) => data.pages.flatMap((page) => page.items).length,
 );
 
 const useOutgoingFollowRequests = makePaginatedResponseQuery(
-  ['accountsLists', 'outgoingFollowRequests'],
+  queryKeys.accountsLists.outgoingFollowRequests,
   (client) => client.myAccount.getOutgoingFollowRequests().then(minifyAccountList),
 );
 
 const useAcceptFollowRequestMutation = (accountId: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ['accountsLists', 'followRequests', accountId],
     mutationFn: () => client.myAccount.acceptFollowRequest(accountId),
     onSettled: (relationship) => {
       removeFollowRequest(accountId);
-      dispatch(importEntities({ relationships: [relationship] }));
+      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), relationship);
     },
   });
 };
 
 const useRejectFollowRequestMutation = (accountId: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationKey: ['accountsLists', 'followRequests', accountId],
     mutationFn: () => client.myAccount.rejectFollowRequest(accountId),
     onSettled: (relationship) => {
       removeFollowRequest(accountId);
-      dispatch(importEntities({ relationships: [relationship] }));
+      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), relationship);
     },
   });
 };
 
 const prefetchFollowRequests = (client: PlApiClient) =>
   queryClient.prefetchInfiniteQuery({
-    queryKey: ['accountsLists', 'followRequests'],
+    queryKey: queryKeys.accountsLists.followRequests,
     queryFn: ({ pageParam }) =>
       pageParam.next?.() ?? client.myAccount.getFollowRequests().then(minifyAccountList),
     initialPageParam: {

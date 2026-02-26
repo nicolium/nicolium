@@ -10,6 +10,7 @@ import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useChats } from '@/queries/chats';
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { useAccountSearch } from '@/queries/search/use-search-accounts';
 import toast from '@/toast';
 
@@ -21,6 +22,8 @@ import type { PlfeResponse } from '@/api';
 
 const messages = defineMessages({
   placeholder: { id: 'chat_search.placeholder', defaultMessage: 'Type a name' },
+  clearSearch: { id: 'chat_search.clear', defaultMessage: 'Clear search' },
+  search: { id: 'chat_search.search', defaultMessage: 'Search' },
 });
 
 interface IChatSearch {
@@ -58,7 +61,7 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
         changeScreen(ChatWidgetScreens.CHAT, response.id);
       }
 
-      queryClient.invalidateQueries({ queryKey: ['chats', 'search'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.chats.search });
     },
   });
 
@@ -71,7 +74,6 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
             handleClickOnSearchResult.mutate(id);
             clearValue();
           }}
-          parentRef={parentRef}
         />
       );
     } else if (hasSearchValue && !hasSearchResults && !isFetching) {
@@ -102,7 +104,12 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
           outerClassName='mt-0'
           theme='search'
           append={
-            <button onClick={clearValue}>
+            <button
+              onClick={clearValue}
+              aria-label={intl.formatMessage(
+                hasSearchValue ? messages.clearSearch : messages.search,
+              )}
+            >
               <Icon
                 src={
                   hasSearchValue

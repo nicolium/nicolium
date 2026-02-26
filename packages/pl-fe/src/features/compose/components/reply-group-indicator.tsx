@@ -5,21 +5,23 @@ import Link from '@/components/link';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAppSelector } from '@/hooks/use-app-selector';
+import { useGroupQuery } from '@/queries/groups/use-group';
 import { makeGetStatus } from '@/selectors';
+import { useCompose } from '@/stores/compose';
 
 interface IReplyGroupIndicator {
   composeId: string;
 }
 
-const ReplyGroupIndicator = (props: IReplyGroupIndicator) => {
+const ReplyGroupIndicator: React.FC<IReplyGroupIndicator> = (props) => {
   const { composeId } = props;
 
   const getStatus = useCallback(makeGetStatus(), []);
+  const { inReplyToId } = useCompose(composeId);
 
-  const status = useAppSelector((state) =>
-    getStatus(state, { id: state.compose[composeId]?.inReplyToId! }),
-  );
-  const group = status?.group;
+  const status = useAppSelector((state) => getStatus(state, { id: inReplyToId! }));
+
+  const { data: group } = useGroupQuery(status?.group_id ?? undefined);
 
   if (!group) {
     return null;

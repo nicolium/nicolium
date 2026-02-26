@@ -4,7 +4,7 @@ import {
   autoUpdate,
   FloatingArrow,
   offset,
-  Placement,
+  type Placement,
   shift,
   useClick,
   useDismiss,
@@ -20,7 +20,7 @@ import React, { useRef, useState } from 'react';
 import Portal from './portal';
 
 interface IPopover {
-  children: React.ReactElement;
+  children: React.ReactElement<any>;
   /** The content of the popover */
   content: React.ReactNode;
   /** Should we remove padding on the Popover */

@@ -75,7 +75,7 @@ const unicodeMapping = compileTime(() => {
     '🏳‍⚧': ['1f3f3-fe0f-200d-26a7-fe0f', 'transgender_flag'],
   };
 
-  const stripcodes = (unified: string, native: string) => {
+  const stripcodes = (unified: string) => {
     const stripped = unified.replace(stripLeadingZeros, '');
 
     if (unified.includes('200d') && !(unified in blacklist)) {
@@ -92,14 +92,14 @@ const unicodeMapping = compileTime(() => {
     for (const value of emojis) {
       for (const item of value.skins) {
         const { unified, native } = item;
-        const stripped = stripcodes(unified, native);
+        const stripped = stripcodes(unified);
 
         result[native] = { unified: stripped, shortcode: value.id };
       }
     }
 
     for (const [native, [unified, shortcode]] of Object.entries(tweaks)) {
-      const stripped = stripcodes(unified, native);
+      const stripped = stripcodes(unified);
 
       result[native] = { unified: stripped, shortcode };
     }

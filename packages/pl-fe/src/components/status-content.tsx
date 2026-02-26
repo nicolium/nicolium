@@ -27,7 +27,7 @@ import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
 import TranslateButton from './translate-button';
 
 import type { Sizes } from '@/components/ui/text';
-import type { MinifiedStatus } from '@/reducers/statuses';
+import type { NormalizedStatus } from '@/reducers/statuses';
 
 const BIG_EMOJI_LIMIT = 10;
 
@@ -53,7 +53,7 @@ const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick, preview }) => (
 );
 
 interface IStatusContent {
-  status: MinifiedStatus;
+  status: NormalizedStatus;
   onClick?: () => void;
   collapsable?: boolean;
   translatable?: boolean;
@@ -213,13 +213,14 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
 
     if (spoilerText) {
       output.push(
-        <p
+        <h2
           className={clsx('⁂-status-title', {
             '⁂-status-title--clamp': !expanded && lineClamp,
           })}
           key='spoiler'
-          aria-expanded={expanded}
-          {...(expandable ? { onClick: toggleExpanded, role: 'button' } : {})}
+          {...(expandable
+            ? { onClick: toggleExpanded, role: 'button', 'aria-expanded': expanded }
+            : {})}
         >
           <span ref={spoilerNode}>
             <Emojify text={spoilerText} emojis={status.emojis} />
@@ -236,7 +237,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
               </span>
             </button>
           )}
-        </p>,
+        </h2>,
       );
     }
 

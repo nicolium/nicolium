@@ -18,7 +18,7 @@ import {
   $createHeadingNode,
   $createQuoteNode,
   $isHeadingNode,
-  HeadingTagType,
+  type HeadingTagType,
 } from '@lexical/rich-text';
 import { $setBlocksType } from '@lexical/selection';
 import { $findMatchingParent, $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
@@ -31,7 +31,7 @@ import {
   $isTextNode,
   COMMAND_PRIORITY_LOW,
   FORMAT_TEXT_COMMAND,
-  LexicalEditor,
+  type LexicalEditor,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -62,6 +62,15 @@ const messages = defineMessages({
     defaultMessage: 'Insert code block',
   },
   insertLink: { id: 'compose_form.lexical.insert_link', defaultMessage: 'Insert link' },
+  blockType: { id: 'compose_form.lexical.block_type', defaultMessage: 'Change block type' },
+  paragraph: { id: 'compose_form.lexical.block_type.paragraph', defaultMessage: 'Normal' },
+  h1: { id: 'compose_form.lexical.block_type.h1', defaultMessage: 'Heading 1' },
+  h2: { id: 'compose_form.lexical.block_type.h2', defaultMessage: 'Heading 2' },
+  h3: { id: 'compose_form.lexical.block_type.h3', defaultMessage: 'Heading 3' },
+  bulletList: { id: 'compose_form.lexical.block_type.bullet', defaultMessage: 'Bulleted list' },
+  numberedList: { id: 'compose_form.lexical.block_type.number', defaultMessage: 'Numbered list' },
+  quote: { id: 'compose_form.lexical.block_type.quote', defaultMessage: 'Quote' },
+  codeBlock: { id: 'compose_form.lexical.block_type.code', defaultMessage: 'Code block' },
 });
 
 const blockTypeToIcon = {
@@ -114,16 +123,15 @@ export const ToolbarButton: React.FC<IToolbarButton> = ({ active, icon, ...props
 
 const BlockTypeDropdown = ({
   editor,
-  anchorElem,
   blockType,
   icon,
 }: {
   editor: LexicalEditor;
-  anchorElem: HTMLElement;
   blockType: keyof typeof blockTypeToBlockName;
   icon: string;
 }) => {
   const { composeAllowHeadings } = useFeatures();
+  const intl = useIntl();
 
   const [showDropDown, setShowDropDown] = useState(false);
 
@@ -201,7 +209,7 @@ const BlockTypeDropdown = ({
           setShowDropDown(!showDropDown);
         }}
         className='relative flex cursor-pointer rounded-lg border-0 bg-none p-1 align-middle hover:bg-gray-100 disabled:cursor-not-allowed disabled:hover:bg-none dark:hover:bg-primary-700'
-        aria-label=''
+        aria-label={intl.formatMessage(messages.blockType)}
         type='button'
       >
         <Icon src={icon} />
@@ -215,6 +223,7 @@ const BlockTypeDropdown = ({
               onClick={formatParagraph}
               active={blockType === 'paragraph'}
               icon={blockTypeToIcon.paragraph}
+              aria-label={intl.formatMessage(messages.paragraph)}
             />
             {composeAllowHeadings && (
               <>
@@ -224,6 +233,7 @@ const BlockTypeDropdown = ({
                   }}
                   active={blockType === 'h1'}
                   icon={blockTypeToIcon.h1}
+                  aria-label={intl.formatMessage(messages.h1)}
                 />
                 <ToolbarButton
                   onClick={() => {
@@ -231,6 +241,7 @@ const BlockTypeDropdown = ({
                   }}
                   active={blockType === 'h2'}
                   icon={blockTypeToIcon.h2}
+                  aria-label={intl.formatMessage(messages.h2)}
                 />
                 <ToolbarButton
                   onClick={() => {
@@ -238,6 +249,7 @@ const BlockTypeDropdown = ({
                   }}
                   active={blockType === 'h3'}
                   icon={blockTypeToIcon.h3}
+                  aria-label={intl.formatMessage(messages.h3)}
                 />
               </>
             )}
@@ -245,21 +257,25 @@ const BlockTypeDropdown = ({
               onClick={formatBulletList}
               active={blockType === 'bullet'}
               icon={blockTypeToIcon.bullet}
+              aria-label={intl.formatMessage(messages.bulletList)}
             />
             <ToolbarButton
               onClick={formatNumberedList}
               active={blockType === 'number'}
               icon={blockTypeToIcon.number}
+              aria-label={intl.formatMessage(messages.numberedList)}
             />
             <ToolbarButton
               onClick={formatQuote}
               active={blockType === 'quote'}
               icon={blockTypeToIcon.quote}
+              aria-label={intl.formatMessage(messages.quote)}
             />
             <ToolbarButton
               onClick={formatCode}
               active={blockType === 'code'}
               icon={blockTypeToIcon.code}
+              aria-label={intl.formatMessage(messages.codeBlock)}
             />
           </div>
         )}
@@ -288,7 +304,7 @@ const TextFormatFloatingToolbar = ({
   isLink: boolean;
   isStrikethrough: boolean;
   isUnderline: boolean;
-}): JSX.Element => {
+}): React.JSX.Element => {
   const intl = useIntl();
   const popupCharStylesEditorRef = useRef<HTMLDivElement | null>(null);
 
@@ -378,7 +394,6 @@ const TextFormatFloatingToolbar = ({
         <>
           <BlockTypeDropdown
             editor={editor}
-            anchorElem={anchorElem}
             blockType={blockType}
             icon={blockTypeToIcon[blockType]}
           />
@@ -388,6 +403,7 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isBold}
             aria-label={intl.formatMessage(messages.formatBold)}
+            title={intl.formatMessage(messages.formatBold)}
             icon={require('@phosphor-icons/core/regular/text-b.svg')}
           />
           <ToolbarButton
@@ -396,6 +412,7 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isItalic}
             aria-label={intl.formatMessage(messages.formatItalic)}
+            title={intl.formatMessage(messages.formatItalic)}
             icon={require('@phosphor-icons/core/regular/text-italic.svg')}
           />
           <ToolbarButton
@@ -404,6 +421,7 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isUnderline}
             aria-label={intl.formatMessage(messages.formatUnderline)}
+            title={intl.formatMessage(messages.formatUnderline)}
             icon={require('@phosphor-icons/core/regular/text-underline.svg')}
           />
           <ToolbarButton
@@ -412,6 +430,7 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isStrikethrough}
             aria-label={intl.formatMessage(messages.formatStrikethrough)}
+            title={intl.formatMessage(messages.formatStrikethrough)}
             icon={require('@phosphor-icons/core/regular/text-strikethrough.svg')}
           />
           <ToolbarButton
@@ -420,12 +439,14 @@ const TextFormatFloatingToolbar = ({
             }}
             active={isCode}
             aria-label={intl.formatMessage(messages.insertCodeBlock)}
+            title={intl.formatMessage(messages.insertCodeBlock)}
             icon={require('@phosphor-icons/core/regular/code.svg')}
           />
           <ToolbarButton
             onClick={insertLink}
             active={isLink}
             aria-label={intl.formatMessage(messages.insertLink)}
+            title={intl.formatMessage(messages.insertLink)}
             icon={require('@phosphor-icons/core/regular/link-simple-horizontal.svg')}
           />
         </>
@@ -437,7 +458,7 @@ const TextFormatFloatingToolbar = ({
 const useFloatingTextFormatToolbar = (
   editor: LexicalEditor,
   anchorElem: HTMLElement,
-): JSX.Element | null => {
+): React.JSX.Element | null => {
   const [blockType, setBlockType] = useState<keyof typeof blockTypeToBlockName>('paragraph');
   const [isText, setIsText] = useState(false);
   const [isLink, setIsLink] = useState(false);
@@ -567,7 +588,7 @@ const FloatingTextFormatToolbarPlugin = ({
   anchorElem = document.body,
 }: {
   anchorElem?: HTMLElement;
-}): JSX.Element | null => {
+}): React.JSX.Element | null => {
   const [editor] = useLexicalComposerContext();
   return useFloatingTextFormatToolbar(editor, anchorElem);
 };

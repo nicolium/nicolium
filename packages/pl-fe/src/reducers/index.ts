@@ -2,41 +2,27 @@ import { combineReducers } from '@reduxjs/toolkit';
 
 import { AUTH_LOGGED_OUT } from '@/actions/auth';
 import * as BuildConfig from '@/build-config';
-import entities from '@/entity-store/reducer';
 
-import accounts_meta from './accounts-meta';
 import admin from './admin';
 import auth from './auth';
-import compose from './compose';
-import contexts from './contexts';
-import conversations from './conversations';
 import filters from './filters';
 import frontendConfig from './frontend-config';
 import instance from './instance';
 import me from './me';
 import meta from './meta';
-import notifications from './notifications';
-import pending_statuses from './pending-statuses';
-import push_notifications from './push-notifications';
+import pushNotifications from './push-notifications';
 import statuses from './statuses';
 import timelines from './timelines';
 
 const reducers = {
-  accounts_meta,
   admin,
   auth,
-  compose,
-  contexts,
-  conversations,
-  entities,
   filters,
   frontendConfig,
   instance,
   me,
   meta,
-  notifications,
-  pending_statuses,
-  push_notifications,
+  pushNotifications,
   statuses,
   timelines,
 };

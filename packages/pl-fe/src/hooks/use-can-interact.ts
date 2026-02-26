@@ -2,12 +2,12 @@ import { useMemo } from 'react';
 
 import { useAppSelector } from './use-app-selector';
 
-import type { MinifiedStatus } from '@/reducers/statuses';
+import type { NormalizedStatus } from '@/reducers/statuses';
 import type { InteractionPolicy, InteractionPolicyEntry } from 'pl-api';
 
 const useCanInteract = (
   status: Pick<
-    MinifiedStatus,
+    NormalizedStatus,
     'account_id' | 'id' | 'interaction_policy' | 'mentions' | 'quote_approval'
   >,
   type: keyof InteractionPolicy | 'can_quote',

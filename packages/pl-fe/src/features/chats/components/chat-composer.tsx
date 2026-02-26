@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { defineMessages, FormattedMessage, IntlShape, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Button from '@/components/ui/button';
 import Combobox, {
@@ -30,6 +30,7 @@ import type { MediaAttachment } from 'pl-api';
 
 const messages = defineMessages({
   placeholder: { id: 'chat.input.placeholder', defaultMessage: 'Type a message' },
+  send: { id: 'chat.actions.send', defaultMessage: 'Send' },
   unblockMessage: {
     id: 'chat_settings.unblock.message',
     defaultMessage:
@@ -58,7 +59,7 @@ interface IChatComposer extends Pick<
   value: string;
   onSubmit: () => void;
   errorMessage: string | undefined;
-  onSelectFile: (files: FileList, intl: IntlShape) => void;
+  onSelectFile: (files: FileList) => void;
   resetFileKey: number | null;
   resetContentKey: number | null;
   attachment?: MediaAttachment | null;
@@ -256,6 +257,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
               className='text-primary-500'
               disabled={isSubmitDisabled}
               onClick={onSubmit}
+              title={intl.formatMessage(messages.send)}
             />
           </Stack>
         </HStack>

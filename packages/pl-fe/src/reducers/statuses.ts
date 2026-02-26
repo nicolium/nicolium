@@ -1,8 +1,15 @@
-import omit from 'lodash/omit';
 import { create } from 'mutative';
+import {
+  type Account as BaseAccount,
+  type Status as BaseStatus,
+  type CreateStatusParams,
+  type MediaAttachment,
+  mentionSchema,
+} from 'pl-api';
+import * as v from 'valibot';
 
-import { normalizeStatus, Status as StatusRecord } from '@/normalizers/status';
 import { simulateEmojiReact, simulateUnEmojiReact } from '@/utils/emoji-reacts';
+import { unescapeHTML } from '@/utils/html';
 
 import {
   EMOJI_REACT_FAIL,
@@ -44,38 +51,143 @@ import {
 } from '../actions/statuses';
 import { TIMELINE_DELETE, type TimelineAction } from '../actions/timelines';
 
-import type { Status as BaseStatus, CreateStatusParams } from 'pl-api';
+const domParser = new DOMParser();
 
-type State = Record<string, MinifiedStatus>;
+type StatusApprovalStatus = Exclude<BaseStatus['approval_status'], null>;
 
-type MinifiedStatus = ReturnType<typeof minifyStatus>;
+type OldStatus = Pick<BaseStatus, 'content' | 'spoiler_text'> & { search_index: string };
 
-const minifyStatus = (status: StatusRecord) => omit(status, ['reblog', 'poll', 'quote', 'group']);
-
-// Check whether a status is a quote by secondary characteristics
-const isQuote = (status: StatusRecord) => Boolean(status.quote_url);
-
-// Preserve quote if an existing status already has it
-const fixQuote = (status: StatusRecord, oldStatus?: StatusRecord): StatusRecord => {
-  if (oldStatus && !status.quote && isQuote(status)) {
-    return {
-      ...status,
-      quote: oldStatus.quote,
-      quote_visible: status.quote_visible ?? oldStatus.quote_visible,
-    };
+// Gets titles of poll options from status
+const getPollOptionTitles = (poll?: BaseStatus['poll']): readonly string[] => {
+  if (poll && typeof poll === 'object') {
+    return poll.options.map(({ title }) => title);
   } else {
-    return status;
+    return [];
   }
 };
 
-const fixStatus = (state: State, status: BaseStatus): MinifiedStatus => {
-  const oldStatus = state[status.id];
+// Gets usernames of mentioned users from status
+const getMentionedUsernames = (status: Pick<BaseStatus, 'mentions'>): Array<string> =>
+  status.mentions.map(({ acct }) => `@${acct}`);
 
-  return minifyStatus(fixQuote(normalizeStatus(status, oldStatus)));
+// Creates search text from the status
+const buildSearchContent = (
+  status: Pick<BaseStatus, 'mentions' | 'spoiler_text' | 'content'>,
+  poll?: BaseStatus['poll'],
+): string => {
+  const pollOptionTitles = getPollOptionTitles(poll);
+  const mentionedUsernames = getMentionedUsernames(status);
+
+  const fields = [status.spoiler_text, status.content, ...pollOptionTitles, ...mentionedUsernames];
+
+  return unescapeHTML(fields.join('\n\n')) || '';
 };
 
+const getSearchIndex = (
+  status: Omit<BaseStatus, 'account' | 'reblog' | 'quote' | 'poll' | 'group'>,
+  oldStatus?: OldStatus,
+  poll?: BaseStatus['poll'],
+) => {
+  if (
+    oldStatus &&
+    oldStatus.content === status.content &&
+    oldStatus.spoiler_text === status.spoiler_text
+  ) {
+    return oldStatus.search_index;
+  } else {
+    const searchContent = buildSearchContent(status, poll);
+
+    return domParser.parseFromString(searchContent, 'text/html').documentElement.textContent || '';
+  }
+};
+
+const normalizeStatus = (
+  {
+    account,
+    reblog,
+    quote,
+    poll,
+    group,
+    ...status
+  }: BaseStatus & {
+    accounts?: Array<BaseAccount>;
+  },
+  oldStatus?: OldStatus,
+) => {
+  const searchIndex = getSearchIndex(status, oldStatus, poll);
+
+  // Sort the replied-to mention to the top
+  let mentions = status.mentions.toSorted((a, _b) => {
+    if (a.id === status.in_reply_to_account_id) {
+      return -1;
+    } else {
+      return 0;
+    }
+  });
+
+  // Add self to mentions if it's a reply to self
+  const isSelfReply = account.id === status.in_reply_to_account_id;
+  const hasSelfMention = status.mentions.some((mention) => account.id === mention.id);
+
+  if (isSelfReply && !hasSelfMention) {
+    const selfMention = v.parse(mentionSchema, account);
+    mentions = [selfMention, ...mentions];
+  }
+
+  // Normalize event
+  let event: BaseStatus['event'] &
+    ({
+      banner: MediaAttachment | null;
+      links: Array<MediaAttachment>;
+    } | null) = null;
+  let media_attachments = status.media_attachments;
+
+  if (status.event) {
+    const firstAttachment = status.media_attachments[0];
+    let banner: MediaAttachment | null = null;
+
+    if (firstAttachment?.description === 'Banner' && firstAttachment.type === 'image') {
+      banner = firstAttachment;
+      media_attachments = media_attachments.slice(1);
+    }
+
+    const links = media_attachments.filter((attachment) => attachment.mime_type === 'text/html');
+    media_attachments = media_attachments.filter(
+      (attachment) => attachment.mime_type !== 'text/html',
+    );
+
+    event = {
+      ...status.event,
+      banner,
+      links,
+    };
+  }
+
+  return {
+    account_id: account.id,
+    reblog_id: reblog?.id ?? null,
+    poll_id: poll?.id ?? null,
+    group_id: group?.id ?? null,
+    expectsCard: false,
+    showFiltered: null as null | boolean,
+    deleted: false,
+    ...status,
+    quote_id: status.quote_id ?? null,
+    mentions,
+    event,
+    media_attachments,
+    search_index: searchIndex,
+  };
+};
+
+type NormalizedStatus = ReturnType<typeof normalizeStatus>;
+
+type State = Record<string, NormalizedStatus>;
+
 const importStatus = (state: State, status: BaseStatus) => {
-  state[status.id] = fixStatus(state, status);
+  const oldStatus = state[status.id];
+
+  state[status.id] = normalizeStatus(status, oldStatus);
 };
 
 const importStatuses = (state: State, statuses: Array<BaseStatus>) => {
@@ -328,4 +440,4 @@ const statuses = (
   }
 };
 
-export { type MinifiedStatus, statuses as default };
+export { statuses as default, type StatusApprovalStatus, normalizeStatus, type NormalizedStatus };

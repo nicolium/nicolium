@@ -1,9 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
-import { Filter, type FilterContext } from 'pl-api';
 import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { createFilter, fetchFilter, updateFilter } from '@/actions/filters';
 import List, { ListItem } from '@/components/list';
 import MissingIndicator from '@/components/missing-indicator';
 import Button from '@/components/ui/button';
@@ -20,11 +18,12 @@ import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import { SelectDropdown } from '@/features/forms';
 import { editFilterRoute } from '@/features/ui/router';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
+import { useCreateFilter, useFilter, useUpdateFilter } from '@/queries/settings/use-filters';
 import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
+import type { Filter, FilterContext } from 'pl-api';
 
 interface IFilterField {
   id?: string;
@@ -34,56 +33,22 @@ interface IFilterField {
 }
 
 const messages = defineMessages({
-  subheading_add_new: { id: 'column.filters.subheading_add_new', defaultMessage: 'Add new filter' },
-  title: { id: 'column.filters.title', defaultMessage: 'Title' },
+  subheadingAddNew: { id: 'column.filters.subheading_add_new', defaultMessage: 'Add new filter' },
   keyword: { id: 'column.filters.keyword', defaultMessage: 'Keyword or phrase' },
-  keywords: { id: 'column.filters.keywords', defaultMessage: 'Keywords or phrases' },
-  expires: { id: 'column.filters.expires', defaultMessage: 'Expire after' },
-  home_timeline: { id: 'column.filters.home_timeline', defaultMessage: 'Home timeline' },
-  public_timeline: { id: 'column.filters.public_timeline', defaultMessage: 'Public timeline' },
-  notifications: { id: 'column.filters.notifications', defaultMessage: 'Notifications' },
-  conversations: { id: 'column.filters.conversations', defaultMessage: 'Conversations' },
-  accounts: { id: 'column.filters.accounts', defaultMessage: 'Accounts' },
-  drop_header: { id: 'column.filters.drop_header', defaultMessage: 'Drop instead of hide' },
-  drop_hint: {
-    id: 'column.filters.drop_hint',
-    defaultMessage: 'Filtered posts will disappear irreversibly, even if filter is later removed',
+  createError: { id: 'column.filters.create.error', defaultMessage: 'Error adding filter' },
+  editError: { id: 'column.filters.edit.error', defaultMessage: 'Error editing filter' },
+  createSuccess: {
+    id: 'column.filters.create.success',
+    defaultMessage: 'Filter added successfully',
   },
-  hide_header: { id: 'column.filters.hide_header', defaultMessage: 'Hide completely' },
-  hide_hint: {
-    id: 'column.filters.hide_hint',
-    defaultMessage: 'Completely hide the filtered content, instead of showing a warning',
-  },
-  filter_action_header: {
-    id: 'column.filters.filter_action_header',
-    defaultMessage: 'Filter action',
-  },
-  filter_action_hint: {
-    id: 'column.filters.filter_action_hint',
-    defaultMessage: 'Choose which action to perform when a post matches the filter',
-  },
-  filter_action_warn: {
-    id: 'column.filters.filter_action_warn',
-    defaultMessage: 'Hide with a warning',
-  },
-  filter_action_blur: {
-    id: 'column.filters.filter_action_blur',
-    defaultMessage: 'Hide media with a warning',
-  },
-  filter_action_hide: {
-    id: 'column.filters.filter_action_hide',
-    defaultMessage: 'Hide completely',
-  },
-  add_new: { id: 'column.filters.add_new', defaultMessage: 'Add new filter' },
-  edit: { id: 'column.filters.edit', defaultMessage: 'Edit filter' },
-  create_error: { id: 'column.filters.create_error', defaultMessage: 'Error adding filter' },
-  expiration_never: { id: 'column.filters.expiration.never', defaultMessage: 'Never' },
-  expiration_1800: { id: 'column.filters.expiration.1800', defaultMessage: '30 minutes' },
-  expiration_3600: { id: 'column.filters.expiration.3600', defaultMessage: '1 hour' },
-  expiration_21600: { id: 'column.filters.expiration.21600', defaultMessage: '6 hours' },
-  expiration_43200: { id: 'column.filters.expiration.43200', defaultMessage: '12 hours' },
-  expiration_86400: { id: 'column.filters.expiration.86400', defaultMessage: '1 day' },
-  expiration_604800: { id: 'column.filters.expiration.604800', defaultMessage: '1 week' },
+  editSuccess: { id: 'column.filters.edit.success', defaultMessage: 'Filter edited successfully' },
+  expirationNever: { id: 'column.filters.expiration.never', defaultMessage: 'Never' },
+  expiration1800: { id: 'column.filters.expiration.1800', defaultMessage: '30 minutes' },
+  expiration3600: { id: 'column.filters.expiration.3600', defaultMessage: '1 hour' },
+  expiration21600: { id: 'column.filters.expiration.21600', defaultMessage: '6 hours' },
+  expiration43200: { id: 'column.filters.expiration.43200', defaultMessage: '12 hours' },
+  expiration86400: { id: 'column.filters.expiration.86400', defaultMessage: '1 day' },
+  expiration604800: { id: 'column.filters.expiration.604800', defaultMessage: '1 week' },
 });
 
 const FilterField: StreamfieldComponent<IFilterField> = ({ value, onChange }) => {
@@ -123,11 +88,15 @@ const EditFilterPage: React.FC = () => {
 
   const intl = useIntl();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const features = useFeatures();
 
-  const [loading, setLoading] = useState(false);
-  const [notFound, setNotFound] = useState(false);
+  const {
+    data: filter,
+    isFetching: isFetchingFilter,
+    isError: notFound,
+  } = useFilter(filterId !== 'new' ? filterId : undefined);
+  const { mutate: createFilter, isPending: isCreating } = useCreateFilter();
+  const { mutate: updateFilter, isPending: isUpdating } = useUpdateFilter(filterId);
 
   const [title, setTitle] = useState('');
   const [expiresIn, setExpiresIn] = useState<number | undefined>();
@@ -141,13 +110,13 @@ const EditFilterPage: React.FC = () => {
 
   const expirations = useMemo(
     () => ({
-      '': intl.formatMessage(messages.expiration_never),
-      1800: intl.formatMessage(messages.expiration_1800),
-      3600: intl.formatMessage(messages.expiration_3600),
-      21600: intl.formatMessage(messages.expiration_21600),
-      43200: intl.formatMessage(messages.expiration_43200),
-      86400: intl.formatMessage(messages.expiration_86400),
-      604800: intl.formatMessage(messages.expiration_604800),
+      '': intl.formatMessage(messages.expirationNever),
+      1800: intl.formatMessage(messages.expiration1800),
+      3600: intl.formatMessage(messages.expiration3600),
+      21600: intl.formatMessage(messages.expiration21600),
+      43200: intl.formatMessage(messages.expiration43200),
+      86400: intl.formatMessage(messages.expiration86400),
+      604800: intl.formatMessage(messages.expiration604800),
     }),
     [],
   );
@@ -176,17 +145,28 @@ const EditFilterPage: React.FC = () => {
       context.push('account');
     }
 
-    dispatch(
-      filterId !== 'new'
-        ? updateFilter(filterId, title, expiresIn, context, filterAction, keywords)
-        : createFilter(title, expiresIn, context, filterAction, keywords),
-    )
-      .then(() => {
-        navigate({ to: '/filters' });
-      })
-      .catch(() => {
-        toast.error(intl.formatMessage(messages.create_error));
-      });
+    (filterId !== 'new' ? updateFilter : createFilter)(
+      {
+        title,
+        expires_in: expiresIn,
+        context,
+        filter_action: filterAction,
+        keywords_attributes: keywords,
+      },
+      {
+        onSuccess: () => {
+          navigate({ to: '/filters' });
+          toast.success(
+            intl.formatMessage(filterId !== 'new' ? messages.editSuccess : messages.createSuccess),
+          );
+        },
+        onError: () => {
+          toast.error(
+            intl.formatMessage(filterId !== 'new' ? messages.editError : messages.createError),
+          );
+        },
+      },
+    );
   };
 
   const handleChangeKeyword = (keywords: { keyword: string; whole_word: boolean }[]) => {
@@ -206,31 +186,23 @@ const EditFilterPage: React.FC = () => {
   };
 
   useEffect(() => {
-    if (filterId !== 'new') {
-      setLoading(true);
-      dispatch(fetchFilter(filterId))?.then((filter) => {
-        if (filter) {
-          setTitle(filter.title);
-          setHomeTimeline(filter.context.includes('home'));
-          setPublicTimeline(filter.context.includes('public'));
-          setNotifications(filter.context.includes('notifications'));
-          setConversations(filter.context.includes('thread'));
-          setAccounts(filter.context.includes('account'));
-          setFilterAction(filter.filter_action);
-          setKeywords(filter.keywords);
-        } else {
-          setNotFound(true);
-        }
-        setLoading(false);
-      });
+    if (filter) {
+      setTitle(filter.title);
+      setHomeTimeline(filter.context.includes('home'));
+      setPublicTimeline(filter.context.includes('public'));
+      setNotifications(filter.context.includes('notifications'));
+      setConversations(filter.context.includes('thread'));
+      setAccounts(filter.context.includes('account'));
+      setFilterAction(filter.filter_action);
+      setKeywords(filter.keywords);
     }
-  }, [filterId]);
+  }, [isFetchingFilter]);
 
   if (notFound) return <MissingIndicator />;
 
   const keywordsField = (
     <Streamfield
-      label={intl.formatMessage(messages.keywords)}
+      label={<FormattedMessage id='column.filters.keywords' defaultMessage='Keywords or phrases' />}
       component={FilterField}
       values={keywords}
       onChange={handleChangeKeyword}
@@ -242,13 +214,12 @@ const EditFilterPage: React.FC = () => {
   );
 
   return (
-    <Column
-      className='filter-settings-panel'
-      label={intl.formatMessage(messages.subheading_add_new)}
-    >
+    <Column className='filter-settings-panel' label={intl.formatMessage(messages.subheadingAddNew)}>
       <Form onSubmit={handleAddNew}>
         {features.filtersV2 ? (
-          <FormGroup labelText={intl.formatMessage(messages.title)}>
+          <FormGroup
+            labelText={<FormattedMessage id='column.filters.title' defaultMessage='Title' />}
+          >
             <Input
               required
               type='text'
@@ -263,7 +234,9 @@ const EditFilterPage: React.FC = () => {
           keywordsField
         )}
 
-        <FormGroup labelText={intl.formatMessage(messages.expires)}>
+        <FormGroup
+          labelText={<FormattedMessage id='column.filters.expires' defaultMessage='Expire after' />}
+        >
           <SelectDropdown items={expirations} defaultValue='' onChange={handleSelectChange} />
         </FormGroup>
 
@@ -280,7 +253,11 @@ const EditFilterPage: React.FC = () => {
         </Stack>
 
         <List>
-          <ListItem label={intl.formatMessage(messages.home_timeline)}>
+          <ListItem
+            label={
+              <FormattedMessage id='column.filters.home_timeline' defaultMessage='Home timeline' />
+            }
+          >
             <Toggle
               checked={homeTimeline}
               onChange={({ target }) => {
@@ -288,7 +265,14 @@ const EditFilterPage: React.FC = () => {
               }}
             />
           </ListItem>
-          <ListItem label={intl.formatMessage(messages.public_timeline)}>
+          <ListItem
+            label={
+              <FormattedMessage
+                id='column.filters.public_timeline'
+                defaultMessage='Public timeline'
+              />
+            }
+          >
             <Toggle
               checked={publicTimeline}
               onChange={({ target }) => {
@@ -296,7 +280,11 @@ const EditFilterPage: React.FC = () => {
               }}
             />
           </ListItem>
-          <ListItem label={intl.formatMessage(messages.notifications)}>
+          <ListItem
+            label={
+              <FormattedMessage id='column.filters.notifications' defaultMessage='Notifications' />
+            }
+          >
             <Toggle
               checked={notifications}
               onChange={({ target }) => {
@@ -304,7 +292,11 @@ const EditFilterPage: React.FC = () => {
               }}
             />
           </ListItem>
-          <ListItem label={intl.formatMessage(messages.conversations)}>
+          <ListItem
+            label={
+              <FormattedMessage id='column.filters.conversations' defaultMessage='Conversations' />
+            }
+          >
             <Toggle
               checked={conversations}
               onChange={({ target }) => {
@@ -313,7 +305,9 @@ const EditFilterPage: React.FC = () => {
             />
           </ListItem>
           {features.filtersV2 && (
-            <ListItem label={intl.formatMessage(messages.accounts)}>
+            <ListItem
+              label={<FormattedMessage id='column.filters.accounts' defaultMessage='Accounts' />}
+            >
               <Toggle
                 checked={accounts}
                 onChange={({ target }) => {
@@ -327,8 +321,18 @@ const EditFilterPage: React.FC = () => {
         <List>
           {features.filtersV2BlurAction ? (
             <ListItem
-              label={intl.formatMessage(messages.filter_action_header)}
-              hint={intl.formatMessage(messages.filter_action_hint)}
+              label={
+                <FormattedMessage
+                  id='column.filters.filter_action_header'
+                  defaultMessage='Filter action'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='column.filters.filter_action_hint'
+                  defaultMessage='Choose which action to perform when a post matches the filter'
+                />
+              }
             >
               <Select
                 value={filterAction}
@@ -336,19 +340,54 @@ const EditFilterPage: React.FC = () => {
                   setFilterAction(target.value as Filter['filter_action']);
                 }}
               >
-                <option value='warn'>{intl.formatMessage(messages.filter_action_warn)}</option>
-                <option value='hide'>{intl.formatMessage(messages.filter_action_hide)}</option>
-                <option value='blur'>{intl.formatMessage(messages.filter_action_blur)}</option>
+                <option value='warn'>
+                  <FormattedMessage
+                    id='column.filters.filter_action_warn'
+                    defaultMessage='Hide with a warning'
+                  />
+                </option>
+                <option value='hide'>
+                  <FormattedMessage
+                    id='column.filters.filter_action_hide'
+                    defaultMessage='Hide completely'
+                  />
+                </option>
+                <option value='blur'>
+                  <FormattedMessage
+                    id='column.filters.filter_action_blur'
+                    defaultMessage='Hide media with a warning'
+                  />
+                </option>
               </Select>
             </ListItem>
           ) : (
             <ListItem
-              label={intl.formatMessage(
-                features.filtersV2 ? messages.hide_header : messages.drop_header,
-              )}
-              hint={intl.formatMessage(
-                features.filtersV2 ? messages.hide_hint : messages.drop_hint,
-              )}
+              label={
+                features.filtersV2 ? (
+                  <FormattedMessage
+                    id='column.filters.hide_header'
+                    defaultMessage='Hide completely'
+                  />
+                ) : (
+                  <FormattedMessage
+                    id='column.filters.drop_header'
+                    defaultMessage='Drop instead of hide'
+                  />
+                )
+              }
+              hint={
+                features.filtersV2 ? (
+                  <FormattedMessage
+                    id='column.filters.hide_hint'
+                    defaultMessage='Completely hide the filtered content, instead of showing a warning'
+                  />
+                ) : (
+                  <FormattedMessage
+                    id='column.filters.drop_hint'
+                    defaultMessage='Filtered posts will disappear irreversibly, even if filter is later removed'
+                  />
+                )
+              }
             >
               <Toggle
                 checked={filterAction === 'hide'}
@@ -363,8 +402,16 @@ const EditFilterPage: React.FC = () => {
         {features.filtersV2 && keywordsField}
 
         <FormActions>
-          <Button type='submit' theme='primary' disabled={loading}>
-            {intl.formatMessage(filterId !== 'new' ? messages.edit : messages.add_new)}
+          <Button
+            type='submit'
+            theme='primary'
+            disabled={isFetchingFilter || isUpdating || isCreating}
+          >
+            {filterId !== 'new' ? (
+              <FormattedMessage id='column.filters.edit' defaultMessage='Edit filter' />
+            ) : (
+              <FormattedMessage id='column.filters.add_new' defaultMessage='Add new filter' />
+            )}
           </Button>
         </FormActions>
       </Form>

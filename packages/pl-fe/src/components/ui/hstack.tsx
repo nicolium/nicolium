@@ -52,7 +52,7 @@ interface IHStack extends Pick<
   /** Whether to let the flexbox grow. */
   grow?: boolean;
   /** HTML element to use for container. */
-  element?: React.ComponentType | keyof JSX.IntrinsicElements;
+  element?: React.ComponentType | keyof React.JSX.IntrinsicElements;
   /** Whether to let the flexbox wrap onto multiple lines. */
   wrap?: boolean;
 }
@@ -79,11 +79,11 @@ const HStack = forwardRef<HTMLDivElement, IHStack>((props, ref) => {
       className={clsx(
         'flex',
         {
-          // @ts-ignore
+          // @ts-expect-error
           [alignItemsOptions[alignItems]]: typeof alignItems !== 'undefined',
-          // @ts-ignore
+          // @ts-expect-error
           [justifyContentOptions[justifyContent]]: typeof justifyContent !== 'undefined',
-          // @ts-ignore
+          // @ts-expect-error
           [spaces[space]]: typeof space !== 'undefined',
           grow: grow,
           'flex-wrap': wrap,

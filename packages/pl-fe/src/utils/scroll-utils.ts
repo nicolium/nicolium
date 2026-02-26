@@ -3,7 +3,7 @@ import type { VirtuosoHandle } from 'react-virtuoso';
 
 const selectChild = (
   index: number,
-  handle: React.RefObject<VirtuosoHandle>,
+  handle: React.RefObject<VirtuosoHandle | null>,
   node: ParentNode = document,
   count?: number,
   align?: 'start' | 'center' | 'end',

@@ -1,5 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 
 import Blurhash from '@/components/blurhash';
 import Icon from '@/components/ui/icon';
@@ -8,6 +9,10 @@ import { useModalsActions } from '@/stores/modals';
 import ChatUploadPreview from './chat-upload-preview';
 
 import type { MediaAttachment } from 'pl-api';
+
+const messages = defineMessages({
+  removeAttachment: { id: 'chat.actions.remove_attachment', defaultMessage: 'Remove attachment' },
+});
 
 interface IChatUpload {
   attachment: MediaAttachment;
@@ -46,14 +51,19 @@ interface IRemoveButton {
 }
 
 /** Floating button to remove an attachment. */
-const RemoveButton: React.FC<IRemoveButton> = ({ onClick }) => (
-  <button
-    type='button'
-    onClick={onClick}
-    className='flex size-5 items-center justify-center rounded-full bg-secondary-500 p-1'
-  >
-    <Icon className='size-3 text-white' src={require('@phosphor-icons/core/regular/x.svg')} />
-  </button>
-);
+const RemoveButton: React.FC<IRemoveButton> = ({ onClick }) => {
+  const intl = useIntl();
+
+  return (
+    <button
+      type='button'
+      onClick={onClick}
+      className='flex size-5 items-center justify-center rounded-full bg-secondary-500 p-1'
+      aria-label={intl.formatMessage(messages.removeAttachment)}
+    >
+      <Icon className='size-3 text-white' src={require('@phosphor-icons/core/regular/x.svg')} />
+    </button>
+  );
+};
 
 export { ChatUpload as default };

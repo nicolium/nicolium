@@ -1,13 +1,21 @@
-import { type QueryClient, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  type QueryClient,
+  useQuery,
+  useQueryClient,
+  type UseQueryResult,
+} from '@tanstack/react-query';
 import { create } from 'mutative';
 import { mediaAttachmentSchema } from 'pl-api';
 import * as v from 'valibot';
 
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { filteredArray } from '@/schemas/utils';
 import KVStore from '@/storage/kv-store';
-import { APIEntity } from '@/types/entities';
+import { useComposeStore } from '@/stores/compose';
+
+import { queryKeys } from '../keys';
+
+import type { APIEntity } from '@/types/entities';
 
 const draftStatusSchema = v.pipe(
   v.any(),
@@ -53,16 +61,22 @@ const getDrafts = async (accountUrl: string) => {
 const persistDrafts = (accountUrl: string, drafts: Record<string, APIEntity>) =>
   KVStore.setItem(`drafts:${accountUrl}`, Object.values(drafts));
 
-const useDraftStatusesQuery = <T>(select?: (data: Record<string, DraftStatus>) => T) => {
-  const { account } = useOwnAccount();
+function useDraftStatusesQuery<T>(
+  select: (data: Record<string, DraftStatus>) => T,
+): UseQueryResult<T, Error>;
+function useDraftStatusesQuery(): UseQueryResult<Record<string, DraftStatus>, Error>;
+function useDraftStatusesQuery<T = Record<string, DraftStatus>>(
+  select?: (data: Record<string, DraftStatus>) => T,
+) {
+  const { data: account } = useOwnAccount();
 
   return useQuery({
-    queryKey: ['draftStatuses'],
+    queryKey: queryKeys.draftStatuses.all,
     queryFn: () => getDrafts(account!.url),
     enabled: !!account,
     select,
   });
-};
+}
 
 const useDraftStatusQuery = (draftStatusId: string) =>
   useDraftStatusesQuery((data) => data[draftStatusId]);
@@ -71,44 +85,41 @@ const useDraftStatusesCountQuery = () =>
   useDraftStatusesQuery((data) => Object.values(data).length);
 
 const usePersistDraftStatus = () => {
-  const { account } = useOwnAccount();
-  const dispatch = useAppDispatch();
+  const { data: account } = useOwnAccount();
   const queryClient = useQueryClient();
 
   return (composeId: string) => {
-    dispatch((_, getState) => {
-      const compose = getState().compose[composeId];
+    const compose = useComposeStore.getState().actions.getCompose(composeId);
 
-      const draft = {
-        ...compose,
-        draft_id: compose.draftId ?? crypto.randomUUID(),
-      };
+    const draft = {
+      ...compose,
+      draft_id: compose.draftId ?? crypto.randomUUID(),
+    };
 
-      const drafts = queryClient.getQueryData<Record<string, DraftStatus>>(['draftStatuses']) ?? {};
+    const drafts = queryClient.getQueryData(queryKeys.draftStatuses.all) ?? {};
 
-      const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
-        oldDrafts[draft.draft_id] = v.parse(draftStatusSchema, draft);
-      });
-      return persistDrafts(account!.url, newDrafts).then(() =>
-        queryClient.invalidateQueries({ queryKey: ['draftStatuses'] }),
-      );
+    const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
+      oldDrafts[draft.draft_id] = v.parse(draftStatusSchema, draft);
     });
+    return persistDrafts(account!.url, newDrafts).then(() =>
+      queryClient.invalidateQueries({ queryKey: queryKeys.draftStatuses.all }),
+    );
   };
 };
 
 const cancelDraftStatus = (queryClient: QueryClient, accountUrl: string, draftId: string) => {
-  const drafts = queryClient.getQueryData<Record<string, DraftStatus>>(['draftStatuses']) ?? {};
+  const drafts = queryClient.getQueryData(queryKeys.draftStatuses.all) ?? {};
 
   const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
     delete oldDrafts[draftId];
   });
-  return persistDrafts(accountUrl, newDrafts).then((drafts) =>
-    queryClient.invalidateQueries({ queryKey: ['draftStatuses'] }),
+  return persistDrafts(accountUrl, newDrafts).then(() =>
+    queryClient.invalidateQueries({ queryKey: queryKeys.draftStatuses.all }),
   );
 };
 
 const useCancelDraftStatus = () => {
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const queryClient = useQueryClient();
 
   return (draftId: string) => cancelDraftStatus(queryClient, account!.url, draftId);

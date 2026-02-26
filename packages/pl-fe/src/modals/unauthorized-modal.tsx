@@ -8,12 +8,11 @@ import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/hooks/use-instance';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
-import { selectAccount } from '@/selectors';
+import { useAccount } from '@/queries/accounts/use-account';
 import toast from '@/toast';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
@@ -59,14 +58,15 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
   const instance = useInstance();
   const { isOpen } = useRegistrationStatus();
   const client = useClient();
+  const { data: account } = useAccount(accountId || undefined, false);
 
-  const username = useAppSelector((state) => selectAccount(state, accountId!)?.display_name);
+  const username = account?.display_name;
   const features = useFeatures();
 
-  const [account, setAccount] = useState('');
+  const [remoteAccount, setRemoteAccount] = useState('');
 
   const onAccountChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setAccount(e.target.value);
+    setRemoteAccount(e.target.value);
   };
 
   const onClickClose = () => {
@@ -77,7 +77,7 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
     e.preventDefault();
 
     client.accounts
-      .remoteInteraction(apId!, account)
+      .remoteInteraction(apId!, remoteAccount)
       .then(({ url }) => {
         window.open(url, '_new', 'noopener,noreferrer');
         onClose('UNAUTHORIZED');
@@ -190,7 +190,7 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
             <Input
               placeholder={intl.formatMessage(messages.accountPlaceholder)}
               name='remote_follow[acct]'
-              value={account}
+              value={remoteAccount}
               autoCorrect='off'
               autoCapitalize='off'
               onChange={onAccountChange}

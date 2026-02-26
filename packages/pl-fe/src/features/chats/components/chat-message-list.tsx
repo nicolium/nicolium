@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useIntl, defineMessages } from 'react-intl';
-import { Components, Virtuoso, VirtuosoHandle } from 'react-virtuoso';
+import { type Components, Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 
 import Avatar from '@/components/ui/avatar';
 import Button from '@/components/ui/button';
@@ -10,11 +10,14 @@ import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import PlaceholderChatMessage from '@/features/placeholder/components/placeholder-chat-message';
 import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
-import { useChatMessages, useMarkChatAsRead } from '@/queries/chats';
+import {
+  useChatMessages,
+  useMarkChatAsRead,
+  type ChatMessage as ChatMessageEntity,
+} from '@/queries/chats';
 
 import ChatMessage from './chat-message';
 
-import type { ChatMessage as ChatMessageEntity } from '@/normalizers/chat-message';
 import type { Chat } from 'pl-api';
 
 const messages = defineMessages({
@@ -79,7 +82,7 @@ interface IChatMessageList {
 const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
   const intl = useIntl();
 
-  const node = useRef<VirtuosoHandle>(null);
+  const node = useRef<VirtuosoHandle | null>(null);
   const [firstItemIndex, setFirstItemIndex] = useState(START_INDEX - 20);
 
   const markChatAsRead = useMarkChatAsRead(chat.id);

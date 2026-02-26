@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { cancelPreviewCompose } from '@/actions/compose';
 import EventPreview from '@/components/event-preview';
 import OutlineBox from '@/components/outline-box';
 import QuotedStatusIndicator from '@/components/quoted-status-indicator';
@@ -15,11 +14,10 @@ import IconButton from '@/components/ui/icon-button';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import AccountContainer from '@/containers/account-container';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useCompose, useComposeActions } from '@/stores/compose';
 
-import type { Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/reducers/statuses';
 
 const messages = defineMessages({
   close: {
@@ -34,14 +32,16 @@ interface IQuotedStatusContainer {
 
 /** Previewed status shown in post composer. */
 const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }) => {
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
   const intl = useIntl();
-  const { account: ownAccount } = useOwnAccount();
+  const { data: ownAccount } = useOwnAccount();
 
   const previewedStatus = useCompose(composeId).preview as unknown as Status;
 
   const handleClose = () => {
-    dispatch(cancelPreviewCompose(composeId));
+    updateCompose(composeId, (draft) => {
+      draft.preview = null;
+    });
   };
 
   const status = useMemo(

@@ -1,12 +1,9 @@
 import { autoUpdate, flip, shift, useFloating, useTransitionStyles } from '@floating-ui/react';
-import { useQuery } from '@tanstack/react-query';
 import { useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
 import { useIntl, FormattedMessage } from 'react-intl';
 
-import { fetchRelationships } from '@/actions/accounts';
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import Badge from '@/components/badge';
 import Card, { CardBody } from '@/components/ui/card';
 import HStack from '@/components/ui/hstack';
@@ -16,9 +13,9 @@ import Text from '@/components/ui/text';
 import ActionButton from '@/features/ui/components/action-button';
 import { isTimezoneLabel } from '@/features/ui/components/profile-field';
 import { UserPanel } from '@/features/ui/util/async-components';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
-import { accountScrobbleQueryOptions } from '@/queries/accounts/account-scrobble';
+import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useAccountHoverCardActions, useAccountHoverCardStore } from '@/stores/account-hover-card';
 
 import AccountLocalTime from './account-local-time';
@@ -33,7 +30,7 @@ const messages = {
   pronouns: { id: 'account.pronouns.with_label', defaultMessage: 'Pronouns: {pronouns}' },
 };
 
-const getBadges = (account?: Pick<Account, 'is_admin' | 'is_moderator'>): JSX.Element[] => {
+const getBadges = (account?: Pick<Account, 'is_admin' | 'is_moderator'>): React.JSX.Element[] => {
   const badges = [];
 
   if (account?.is_admin) {
@@ -70,7 +67,6 @@ interface IAccountHoverCard {
 
 /** Popup profile preview that appears when hovering avatars and display names. */
 const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
-  const dispatch = useAppDispatch();
   const router = useRouter();
   const intl = useIntl();
 
@@ -78,13 +74,9 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
   const { updateAccountHoverCard, closeAccountHoverCard } = useAccountHoverCardActions();
 
   const me = useAppSelector((state) => state.me);
-  const { account } = useAccount(accountId ?? undefined, { withRelationship: true });
-  const { data: scrobble } = useQuery(accountScrobbleQueryOptions(account?.id));
+  const { data: account } = useAccount(accountId ?? undefined, true);
+  const { data: scrobble } = useAccountScrobbleQuery(account?.id);
   const badges = getBadges(account);
-
-  useEffect(() => {
-    if (accountId) dispatch(fetchRelationships([accountId]));
-  }, [dispatch, accountId]);
 
   useEffect(() => {
     const unlisten = router.subscribe('onLoad', ({ pathChanged }) => {

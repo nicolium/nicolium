@@ -14,9 +14,10 @@ import {
   $isHorizontalRuleNode,
   HorizontalRuleNode,
 } from '@lexical/react/LexicalHorizontalRuleNode';
-import { LexicalNode } from 'lexical';
 
 import { $createImageNode, $isImageNode, ImageNode } from '../nodes/image-node';
+
+import type { LexicalNode } from 'lexical';
 
 const IMAGE_TRANSFORMER: TextMatchTransformer = {
   dependencies: [ImageNode],
@@ -24,7 +25,7 @@ const IMAGE_TRANSFORMER: TextMatchTransformer = {
     if ($isImageNode(node)) {
       const src = node.getSrc();
       const alt = node.getAltText();
-      return `![${alt.replace(/([[\]])/g, '\\$1')}](${src})`;
+      return `![${alt.replaceAll(/([[\]])/g, '\\$1')}](${src})`;
     }
     return null;
   },

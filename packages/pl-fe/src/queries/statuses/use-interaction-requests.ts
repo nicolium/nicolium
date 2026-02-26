@@ -6,6 +6,8 @@ import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 
+import { queryKeys } from '../keys';
+
 import type { AppDispatch } from '@/store';
 import type { InteractionRequest, PaginatedResponse } from 'pl-api';
 
@@ -29,7 +31,7 @@ const minifyInteractionRequestsList = (
 ): PaginatedResponse<MinifiedInteractionRequest> => {
   dispatch(
     importEntities({
-      statuses: items.map((item) => [item.status, item.reply]).flat(),
+      statuses: items.flatMap((item) => [item.status, item.reply]),
     }),
   );
 
@@ -54,7 +56,7 @@ const useInteractionRequests = <T>(
   const { isLoggedIn } = useLoggedIn();
 
   return useInfiniteQuery({
-    queryKey: ['interactionRequests'],
+    queryKey: queryKeys.interactionRequests.all,
     queryFn: ({ pageParam }) =>
       pageParam.next?.() ??
       client.interactionRequests
@@ -74,11 +76,11 @@ const useInteractionRequests = <T>(
 
 const useFlatInteractionRequests = () =>
   useInteractionRequests((data: InfiniteData<PaginatedResponse<MinifiedInteractionRequest>>) =>
-    data.pages.map((page) => page.items).flat(),
+    data.pages.flatMap((page) => page.items),
   );
 
 const useInteractionRequestsCount = () =>
-  useInteractionRequests((data) => data.pages.map(({ items }) => items).flat().length);
+  useInteractionRequests((data) => data.pages.flatMap(({ items }) => items).length);
 
 const useAuthorizeInteractionRequestMutation = (requestId: string) => {
   const client = useClient();

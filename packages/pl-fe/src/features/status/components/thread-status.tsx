@@ -5,6 +5,7 @@ import Tombstone from '@/components/tombstone';
 import StatusContainer from '@/containers/status-container';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import { useAppSelector } from '@/hooks/use-app-selector';
+import { useReplyCount, useReplyToId } from '@/stores/contexts';
 
 interface IThreadStatus {
   id: string;
@@ -16,11 +17,11 @@ interface IThreadStatus {
 }
 
 /** Status with reply-connector in threads. */
-const ThreadStatus: React.FC<IThreadStatus> = (props): JSX.Element => {
+const ThreadStatus: React.FC<IThreadStatus> = (props): React.JSX.Element => {
   const { id, focusedStatusId } = props;
 
-  const replyToId = useAppSelector((state) => state.contexts.inReplyTos[id]);
-  const replyCount = useAppSelector((state) => (state.contexts.replies[id] || []).length);
+  const replyToId = useReplyToId(id);
+  const replyCount = useReplyCount(id);
   const isLoaded = useAppSelector((state) => Boolean(state.statuses[id]));
   const isDeleted = useAppSelector((state) => Boolean(state.statuses[id]?.deleted));
 
@@ -32,7 +33,7 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): JSX.Element => {
     );
   }
 
-  const renderConnector = (): JSX.Element | null => {
+  const renderConnector = (): React.JSX.Element | null => {
     if (props.linear) return null;
 
     const isConnectedTop = replyToId && replyToId !== focusedStatusId;
@@ -59,7 +60,6 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): JSX.Element => {
     >
       {renderConnector()}
       {isLoaded ? (
-        // @ts-ignore FIXME
         <StatusContainer {...props} showGroup={false} />
       ) : (
         <PlaceholderStatus variant='default' />

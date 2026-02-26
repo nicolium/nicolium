@@ -42,7 +42,7 @@ const SafeEmbed: React.FC<ISafeEmbed> = ({ className, sandbox, title, html }) =>
     return () => {
       iframe.current?.contentWindow?.removeEventListener('message', handleMessage);
     };
-  }, [iframe.current, html]);
+  }, [html]);
 
   return (
     <iframe ref={iframe} className={className} sandbox={sandbox} height={height} title={title} />

@@ -4,17 +4,18 @@ import { create } from 'mutative';
 import { getClient } from '@/api';
 
 import { queryClient } from '../client';
+import { queryKeys } from '../keys';
 import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';
 import { mutationOptions } from '../utils/mutation-options';
 
 const scheduledStatusesQueryOptions = makePaginatedResponseQueryOptions(
-  ['scheduledStatuses'],
+  queryKeys.scheduledStatuses.all,
   (client) => client.scheduledStatuses.getScheduledStatuses(),
 )();
 
 const scheduledStatusesCountQueryOptions = infiniteQueryOptions({
   ...scheduledStatusesQueryOptions,
-  select: (data) => data.pages.map((page) => page.items).flat().length,
+  select: (data) => data.pages.flatMap((page) => page.items).length,
 });
 
 const cancelScheduledStatusMutationOptions = (scheduledStatusId: string) =>

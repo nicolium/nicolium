@@ -3,12 +3,13 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useClient } from '@/hooks/use-client';
 
 import { queryClient } from '../client';
+import { queryKeys } from '../keys';
 
 const useBackups = () => {
   const client = useClient();
 
   return useQuery({
-    queryKey: ['settings', 'backups'],
+    queryKey: queryKeys.settings.backups,
     queryFn: () => client.settings.getBackups(),
     select: (backups) => backups.toSorted((a, b) => b.inserted_at.localeCompare(a.inserted_at)),
   });
@@ -22,7 +23,7 @@ const useCreateBackupMutation = () => {
     mutationFn: () => client.settings.createBackup(),
     onSuccess: () =>
       queryClient.invalidateQueries({
-        queryKey: ['settings', 'backups'],
+        queryKey: queryKeys.settings.backups,
       }),
   });
 };

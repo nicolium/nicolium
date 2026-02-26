@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { defineMessages, IntlShape, useIntl } from 'react-intl';
+import { defineMessages, useIntl } from 'react-intl';
 
 import IconButton from '@/components/ui/icon-button';
 import { useInstance } from '@/hooks/use-instance';
@@ -14,7 +14,7 @@ const onlyImages = (types: string[] | undefined): boolean =>
 interface IUploadButton {
   disabled?: boolean;
   unavailable?: boolean;
-  onSelectFile: (files: FileList, intl: IntlShape) => void;
+  onSelectFile: (files: FileList) => void;
   style?: React.CSSProperties;
   resetFileKey: number | null;
   className?: string;
@@ -42,7 +42,7 @@ const UploadButton: React.FC<IUploadButton> = ({
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     if (e.target.files?.length) {
-      onSelectFile(e.target.files, intl);
+      onSelectFile(e.target.files);
     }
   };
 

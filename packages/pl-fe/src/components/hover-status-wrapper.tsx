@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import React, { useRef } from 'react';
 
-import { isMobile } from '@/is-mobile';
 import { useStatusHoverCardActions } from '@/stores/status-hover-card';
+import { isMobile } from '@/utils/is-mobile';
 
 const showStatusHoverCard = debounce((openStatusHoverCard, ref, statusId) => {
   openStatusHoverCard(ref, statusId);
@@ -26,7 +26,7 @@ const HoverStatusWrapper: React.FC<IHoverStatusWrapper> = ({
   const { openStatusHoverCard, closeStatusHoverCard } = useStatusHoverCardActions();
 
   const ref = useRef<HTMLDivElement>(null);
-  const Elem: keyof JSX.IntrinsicElements = inline ? 'span' : 'div';
+  const Elem: keyof React.JSX.IntrinsicElements = inline ? 'span' : 'div';
 
   const handleMouseEnter = () => {
     if (!isMobile(window.innerWidth)) {

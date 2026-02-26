@@ -1,5 +1,6 @@
-import { ExtendedRefs } from '@floating-ui/react';
 import { useCallback, useEffect } from 'react';
+
+import type { ExtendedRefs } from '@floating-ui/react';
 
 /** Trigger `callback` when a Floating UI element is clicked outside from. */
 const useClickOutside = <T extends HTMLElement>(

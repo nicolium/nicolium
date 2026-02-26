@@ -1,9 +1,8 @@
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Virtuoso, VirtuosoHandle } from 'react-virtuoso';
+import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import HoverAccountWrapper from '@/components/hover-account-wrapper';
 import { ParsedContent } from '@/components/parsed-content';
 import Avatar from '@/components/ui/avatar';
@@ -13,6 +12,7 @@ import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import PlaceholderChatMessage from '@/features/placeholder/components/placeholder-chat-message';
 import { useAppSelector } from '@/hooks/use-app-selector';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useShoutboxIsLoading, useShoutboxMessages, type ShoutMessage } from '@/stores/shoutbox';
 
 import { ChatMessageListList, ChatMessageListScroller } from './chat-message-list';
@@ -25,7 +25,7 @@ interface IShoutboxMessage {
 }
 
 const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) => {
-  const { account } = useAccount(message.author_id);
+  const { data: account } = useAccount(message.author_id);
 
   if (!account) return null;
 
@@ -100,7 +100,7 @@ const ShoutboxMessage: React.FC<IShoutboxMessage> = ({ message, isMyMessage }) =
 
 /** Scrollable list of shoutbox messages. */
 const ShoutboxMessageList: React.FC = () => {
-  const node = useRef<VirtuosoHandle>(null);
+  const node = useRef<VirtuosoHandle | null>(null);
   const [firstItemIndex, setFirstItemIndex] = useState(START_INDEX - 20);
 
   const me = useAppSelector((state) => state.me);

@@ -1,17 +1,17 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { setComposeToStatus } from '@/actions/compose';
 import { fetchStatus } from '@/actions/statuses';
 import Button from '@/components/ui/button';
 import HStack from '@/components/ui/hstack';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useCancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
+import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 
-import type { Status as StatusEntity } from '@/normalizers/status';
 import type { DraftStatus } from '@/queries/statuses/use-draft-statuses';
+import type { NormalizedStatus as StatusEntity } from '@/reducers/statuses';
 
 const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.draft_status_delete.confirm', defaultMessage: 'Discard' },
@@ -34,6 +34,7 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
   const intl = useIntl();
 
   const { openModal } = useModalsActions();
+  const { setComposeToStatus } = useComposeActions();
   const settings = useSettings();
   const dispatch = useAppDispatch();
   const cancelDraftStatus = useCancelDraftStatus();
@@ -54,18 +55,7 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
 
   const handleEditClick = () => {
     if (status.in_reply_to_id) dispatch(fetchStatus(status.in_reply_to_id));
-    dispatch(
-      setComposeToStatus(
-        status,
-        status.poll,
-        source.text,
-        source.spoiler_text,
-        source.content_type,
-        false,
-        source.draft_id,
-        source.editorState,
-      ),
-    );
+    setComposeToStatus(status, status.poll, source, false, source.draft_id, source.editorState);
     openModal('COMPOSE');
   };
 

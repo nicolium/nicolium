@@ -46,6 +46,7 @@ const messages = defineMessages({
   blockUser: { id: 'chat_settings.options.block_user', defaultMessage: 'Block @{acct}' },
   unblockUser: { id: 'chat_settings.options.unblock_user', defaultMessage: 'Unblock @{acct}' },
   leaveChat: { id: 'chat_settings.options.leave_chat', defaultMessage: 'Leave chat' },
+  back: { id: 'chats.back', defaultMessage: 'Back to chats' },
 });
 
 const ChatsPageChat = () => {
@@ -129,6 +130,7 @@ const ChatsPageChat = () => {
               src={require('@phosphor-icons/core/regular/arrow-left.svg')}
               className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
               onClick={() => navigate({ to: '/chats' })}
+              title={intl.formatMessage(messages.back)}
             />
 
             <Link to='/@{$username}' params={{ username: chat.account.acct }}>

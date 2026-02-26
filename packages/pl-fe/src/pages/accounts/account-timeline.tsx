@@ -1,9 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { fetchAccountByUsername } from '@/actions/accounts';
 import { fetchAccountTimeline } from '@/actions/timelines';
-import { useAccountLookup } from '@/api/hooks/accounts/use-account-lookup';
 import MissingIndicator from '@/components/missing-indicator';
 import StatusList from '@/components/status-list';
 import Card, { CardBody } from '@/components/ui/card';
@@ -13,6 +11,7 @@ import { profileRoute } from '@/features/ui/router';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
+import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
 import { makeGetStatusIds } from '@/selectors';
 import { useSettings } from '@/stores/settings';
 
@@ -26,8 +25,7 @@ const AccountTimelinePage: React.FC = () => {
   const features = useFeatures();
   const settings = useSettings();
 
-  const { account } = useAccountLookup(username, { withRelationship: true });
-  const [accountLoading, setAccountLoading] = useState<boolean>(!account);
+  const { data: account, isPending } = useAccountLookup(username);
 
   const path = withReplies ? `${account?.id}:with_replies` : account?.id;
   const showPins = settings.account_timeline.shows.pinned && !withReplies;
@@ -41,22 +39,11 @@ const AccountTimelinePage: React.FC = () => {
     }),
   );
 
-  const isBlocked = account?.relationship?.blocked_by;
-  const unavailable = isBlocked && !features.blockersVisible;
+  const isBlocked = account?.relationship?.blocked_by && !features.blockersVisible;
   const isLoading = useAppSelector((state) => state.timelines[`account:${path}`]?.isLoading);
   const hasMore = useAppSelector((state) => state.timelines[`account:${path}`]?.hasMore);
 
   const accountUsername = account?.username ?? username;
-
-  useEffect(() => {
-    dispatch(fetchAccountByUsername(username))
-      .then(() => {
-        setAccountLoading(false);
-      })
-      .catch(() => {
-        setAccountLoading(false);
-      });
-  }, [username]);
 
   useEffect(() => {
     if (account) {
@@ -74,29 +61,22 @@ const AccountTimelinePage: React.FC = () => {
     }
   };
 
-  if (!account && accountLoading) {
+  if (!account && isPending) {
     return <Spinner />;
   } else if (!account) {
     return <MissingIndicator nested />;
   }
 
-  if (unavailable) {
+  if (isBlocked) {
     return (
       <Card>
         <CardBody>
           <Text align='center'>
-            {isBlocked ? (
-              <FormattedMessage
-                id='empty_column.account_blocked'
-                defaultMessage='You are blocked by @{accountUsername}.'
-                values={{ accountUsername }}
-              />
-            ) : (
-              <FormattedMessage
-                id='empty_column.account_unavailable'
-                defaultMessage='Profile unavailable'
-              />
-            )}
+            <FormattedMessage
+              id='empty_column.account_blocked'
+              defaultMessage='You are blocked by @{accountUsername}.'
+              values={{ accountUsername }}
+            />
           </Text>
         </CardBody>
       </Card>

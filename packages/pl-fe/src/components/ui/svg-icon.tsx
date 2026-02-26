@@ -1,5 +1,5 @@
 import React from 'react';
-import InlineSVG, { Props as InlineSVGProps } from 'react-inlinesvg'; // eslint-disable-line no-restricted-imports
+import InlineSVG, { type Props as InlineSVGProps } from 'react-inlinesvg'; // eslint-disable-line no-restricted-imports
 
 interface ISvgIcon extends InlineSVGProps {
   /** Class name for the <svg> */
@@ -19,7 +19,7 @@ const SvgIcon: React.FC<ISvgIcon> = ({
   size = 24,
   className,
   ...filteredProps
-}): JSX.Element => {
+}): React.JSX.Element => {
   const loader = (
     <svg
       className={className}

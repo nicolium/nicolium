@@ -85,15 +85,13 @@ const ReactionsModal: React.FC<BaseModalProps & ReactionsModalProps> = ({
           reactionUrl: reactionRecord.url ?? undefined,
         }));
     } else {
-      return reactions
-        .map(({ account_ids, name, url }) =>
-          account_ids.map((account) => ({
-            id: account,
-            reaction: name,
-            reactionUrl: url ?? undefined,
-          })),
-        )
-        .flat();
+      return reactions.flatMap(({ account_ids, name, url }) =>
+        account_ids.map((account) => ({
+          id: account,
+          reaction: name,
+          reactionUrl: url ?? undefined,
+        })),
+      );
     }
   }, [reactions, reaction]);
 

@@ -44,6 +44,7 @@ const ConsumerButton: React.FC<IConsumerButton> = ({ provider }) => {
         iconClassName='h-6 w-6'
         src={icon}
         onClick={handleClick}
+        title={intl.formatMessage(messages.tooltip, { provider: capitalize(provider) })}
       />
     </Tooltip>
   );

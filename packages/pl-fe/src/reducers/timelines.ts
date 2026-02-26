@@ -25,14 +25,15 @@ import {
   type TimelineAction,
 } from '../actions/timelines';
 
-import type { ImportPosition } from '@/entity-store/types';
-import type { Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/reducers/statuses';
 import type {
   PaginatedResponse,
   Status as BaseStatus,
   Relationship,
   CreateStatusParams,
 } from 'pl-api';
+
+type ImportPosition = 'start' | 'end';
 
 const TRUNCATE_LIMIT = 40;
 const TRUNCATE_SIZE = 20;
@@ -400,7 +401,7 @@ const timelines = (
     //   return filterTimeline(state, 'home', action.relationship, action.statuses);
     case TIMELINE_SCROLL_TOP:
       return create(state, (draft) => {
-        updateTop(state, action.timeline, action.top);
+        updateTop(draft, action.timeline, action.top);
       });
     case PIN_SUCCESS:
       return create(state, (draft) => {

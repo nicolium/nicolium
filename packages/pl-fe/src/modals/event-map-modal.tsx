@@ -29,7 +29,7 @@ const EventMapModal: React.FC<BaseModalProps & EventMapModalProps> = ({ onClose,
   const status = useAppSelector((state) => getStatus(state, { id: statusId }))!;
   const location = status.event!.location!;
 
-  const map = useRef<L.Map>();
+  const map = useRef<L.Map | null>(null);
 
   useEffect(() => {
     const latlng: [number, number] = [location.latitude!, location.longitude!];

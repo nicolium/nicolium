@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import * as v from 'valibot';
 
 import { getHost } from '@/actions/instance';
-import { frontendConfigSchema } from '@/normalizers/frontend-config';
+import { frontendConfigSchema } from '@/schemas/frontend-config';
 import KVStore from '@/storage/kv-store';
 import { useSettingsStore } from '@/stores/settings';
 
@@ -35,7 +35,7 @@ const rememberFrontendConfig = (host: string | null) => (dispatch: AppDispatch) 
 const fetchFrontendConfigurations = () => (dispatch: AppDispatch, getState: () => RootState) =>
   getClient(getState).instance.getFrontendConfigurations();
 
-/** Conditionally fetches pl-fe config depending on backend features */
+/** Conditionally fetches Nicolium config depending on backend features */
 const fetchFrontendConfig =
   (host: string | null) => (dispatch: AppDispatch, getState: () => RootState) => {
     const features = getState().auth.client.features;
@@ -47,11 +47,11 @@ const fetchFrontendConfig =
           dispatch(importFrontendConfig(data[key], host));
           return data[key];
         } else {
-          return dispatch(fetchPlFeJson(host));
+          return dispatch(fetchFrontendConfigJson(host));
         }
       });
     } else {
-      return dispatch(fetchPlFeJson(host));
+      return dispatch(fetchFrontendConfigJson(host));
     }
   };
 
@@ -69,10 +69,10 @@ const loadFrontendConfig = () => async (dispatch: AppDispatch, getState: () => R
   }
 };
 
-const fetchPlFeJson = (host: string | null) => (dispatch: AppDispatch) =>
+const fetchFrontendConfigJson = (host: string | null) => (dispatch: AppDispatch) =>
   staticFetch('/instance/pl-fe.json')
     .then(({ json: data }) => {
-      if (!isObject(data)) throw 'pl-fe.json failed';
+      if (!isObject(data)) throw 'pl-fe.json fetch failed';
       dispatch(importFrontendConfig(data, host));
       return data;
     })

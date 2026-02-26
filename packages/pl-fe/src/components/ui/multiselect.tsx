@@ -23,398 +23,262 @@ THE SOFTWARE.
  */
 // Adapted from [multiselect-react-dropdown](https://github.com/srigar/multiselect-react-dropdown)
 
-/* eslint-disable jsdoc/require-jsdoc */
-// @ts-nocheck
 import clsx from 'clsx';
-import React, { useRef, useEffect } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 
 import Icon from './icon';
 
-function useOutsideAlerter(ref, clickEvent) {
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (ref.current && !ref.current.contains(event.target)) {
-        clickEvent();
-      }
-    }
+const messages = defineMessages({
+  placeholder: { id: 'select.placeholder', defaultMessage: 'Select' },
+  noOptions: { id: 'select.no_options', defaultMessage: 'No options available' },
+  removeItem: { id: 'select.remove_item', defaultMessage: 'Remove item' },
+});
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [ref]);
+interface Option {
+  key: string;
+  value: string;
 }
 
-/**
- * Component that alerts if you click outside of it
- */
-const OutsideAlerter = (props) => {
-  const wrapperRef = useRef(null);
-  useOutsideAlerter(wrapperRef, props.outsideClick);
-  return <div ref={wrapperRef}>{props.children}</div>;
-};
-
-interface IMultiselectProps {
-  options: any;
-  selectedValues?: any;
-  displayValue?: string;
-  placeholder?: string;
-  loading?: boolean;
-  emptyRecordMsg?: string;
-  onSelect?: (selectedList: any, selectedItem: any) => void;
-  onRemove?: (selectedList: any, selectedItem: any) => void;
-  onSearch?: (value: string) => void;
-  onKeyPressFn?: (event: any, value: string) => void;
-  id?: string;
-  name?: string;
-  disabled?: boolean;
+interface IMultiselect {
   className?: string;
+  items: Record<string, string>;
+  value?: string[];
+  onChange?: (values: string[]) => void;
+  disabled?: boolean;
 }
 
-export class Multiselect extends React.Component<IMultiselectProps, any> {
-  static defaultProps: IMultiselectProps;
+const matchValues = (value: string, search: string): boolean =>
+  value.toLowerCase().includes(search.toLowerCase());
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      inputValue: '',
-      options: props.options,
-      filteredOptions: props.options,
-      unfilteredOptions: props.options,
-      selectedValues: Object.assign([], props.selectedValues),
-      toggleOptionsList: false,
-      highlightOption: 0,
+const Multiselect: React.FC<IMultiselect> = ({
+  className,
+  items,
+  value,
+  onChange,
+  disabled = false,
+}) => {
+  const intl = useIntl();
+
+  const allOptions = useMemo<Option[]>(
+    () => Object.entries(items).map(([key, value]) => ({ key, value })),
+    [items],
+  );
+
+  const selectedValues = useMemo<Option[]>(
+    () =>
+      (value ?? [])
+        .map((key) => allOptions.find((o) => o.key === key))
+        .filter((o): o is Option => o !== undefined),
+    [value, allOptions],
+  );
+
+  const [inputValue, setInputValue] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+
+  const searchWrapperRef = useRef<HTMLDivElement>(null);
+  const searchBoxRef = useRef<HTMLInputElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const visibleOptions = useMemo(() => {
+    const selectedKeys = new Set(selectedValues.map((v) => v.key));
+    return allOptions
+      .filter((o) => !selectedKeys.has(o.key))
+      .filter((o) => matchValues(o.value, inputValue));
+  }, [allOptions, selectedValues, inputValue]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+        setInputValue('');
+      }
     };
-    // @ts-ignore
-    this.optionTimeout = null;
-    // @ts-ignore
-    this.searchWrapper = React.createRef();
-    // @ts-ignore
-    this.searchBox = React.createRef();
-    this.onChange = this.onChange.bind(this);
-    this.onKeyPress = this.onKeyPress.bind(this);
-    this.onFocus = this.onFocus.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.renderMultiselectContainer = this.renderMultiselectContainer.bind(this);
-    this.renderSelectedList = this.renderSelectedList.bind(this);
-    this.onRemoveSelectedItem = this.onRemoveSelectedItem.bind(this);
-    this.toggleOptionList = this.toggleOptionList.bind(this);
-    this.onArrowKeyNavigation = this.onArrowKeyNavigation.bind(this);
-    this.onSelectItem = this.onSelectItem.bind(this);
-    this.filterOptionsByInput = this.filterOptionsByInput.bind(this);
-    this.removeSelectedValuesFromOptions = this.removeSelectedValuesFromOptions.bind(this);
-    this.isSelectedValue = this.isSelectedValue.bind(this);
-    this.renderOption = this.renderOption.bind(this);
-    this.listenerCallback = this.listenerCallback.bind(this);
-    this.onCloseOptionList = this.onCloseOptionList.bind(this);
-  }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
-  initialSetValue() {
-    this.removeSelectedValuesFromOptions(false);
-  }
+  useEffect(() => {
+    const wrapper = searchWrapperRef.current;
+    const focusInput = () => searchBoxRef.current?.focus();
+    wrapper?.addEventListener('click', focusInput);
+    return () => wrapper?.removeEventListener('click', focusInput);
+  }, []);
 
-  componentDidMount() {
-    this.initialSetValue();
-    // @ts-ignore
-    this.searchWrapper.current.addEventListener('click', this.listenerCallback);
-  }
+  const emitChange = useCallback(
+    (next: Option[]) => onChange?.(next.map((o) => o.key)),
+    [onChange],
+  );
 
-  componentDidUpdate(prevProps) {
-    const { options, selectedValues } = this.props;
-    const { options: prevOptions, selectedValues: prevSelectedvalues } = prevProps;
-    if (JSON.stringify(prevOptions) !== JSON.stringify(options)) {
-      this.setState(
-        { options, filteredOptions: options, unfilteredOptions: options },
-        this.initialSetValue,
-      );
-    }
-    if (JSON.stringify(prevSelectedvalues) !== JSON.stringify(selectedValues)) {
-      this.setState({ selectedValues: Object.assign([], selectedValues) }, this.initialSetValue);
-    }
-  }
-
-  listenerCallback() {
-    // @ts-ignore
-    this.searchBox.current.focus();
-  }
-
-  componentWillUnmount() {
-    // @ts-ignore
-    if (this.optionTimeout) {
-      // @ts-ignore
-      clearTimeout(this.optionTimeout);
-    }
-    // @ts-ignore
-    this.searchWrapper.current.removeEventListener('click', this.listenerCallback);
-  }
-
-  // Skipcheck flag - value will be true when the func called from on deselect anything.
-  removeSelectedValuesFromOptions(skipCheck) {
-    const { displayValue } = this.props;
-    const { selectedValues = [], unfilteredOptions } = this.state;
-    if (!selectedValues.length && !skipCheck) {
-      return;
-    }
-    const optionList = unfilteredOptions.filter((item) => {
-      return selectedValues.findIndex((v) => v[displayValue] === item[displayValue]) === -1;
-    });
-    this.setState({ options: optionList, filteredOptions: optionList }, this.filterOptionsByInput);
-  }
-
-  onChange(event) {
-    const { onSearch } = this.props;
-    this.setState({ inputValue: event.target.value }, this.filterOptionsByInput);
-    if (onSearch) {
-      onSearch(event.target.value);
-    }
-  }
-
-  onKeyPress(event) {
-    const { onKeyPressFn } = this.props;
-    if (onKeyPressFn) {
-      onKeyPressFn(event, event.target.value);
-    }
-  }
-
-  filterOptionsByInput() {
-    let { options } = this.state;
-    const { filteredOptions, inputValue } = this.state;
-    const { displayValue } = this.props;
-    options = filteredOptions.filter((i) => this.matchValues(i[displayValue], inputValue));
-    this.setState({ options });
-  }
-
-  matchValues(value, search) {
-    if (value.toLowerCase) {
-      return value.toLowerCase().indexOf(search.toLowerCase()) > -1;
-    }
-    return value.toString().indexOf(search) > -1;
-  }
-
-  onArrowKeyNavigation(e) {
-    const { options, highlightOption, toggleOptionsList, inputValue, selectedValues } = this.state;
-    if (e.keyCode === 8 && !inputValue && selectedValues.length) {
-      this.onRemoveSelectedItem(selectedValues.length - 1);
-    }
-    if (!options.length) {
-      return;
-    }
-    if (e.keyCode === 38) {
-      if (highlightOption > 0) {
-        this.setState((previousState) => ({
-          highlightOption: previousState.highlightOption - 1,
-        }));
+  const onSelectItem = useCallback(
+    (option: Option) => {
+      setInputValue('');
+      const alreadySelected = selectedValues.some((v) => v.key === option.key);
+      if (alreadySelected) {
+        emitChange(selectedValues.filter((v) => v.key !== option.key));
       } else {
-        this.setState({ highlightOption: options.length - 1 });
+        emitChange([...selectedValues, option]);
       }
-    } else if (e.keyCode === 40) {
-      if (highlightOption < options.length - 1) {
-        this.setState((previousState) => ({
-          highlightOption: previousState.highlightOption + 1,
-        }));
-      } else {
-        this.setState({ highlightOption: 0 });
-      }
-    } else if (e.key === 'Enter' && options.length && toggleOptionsList) {
-      if (highlightOption === -1) {
+    },
+    [selectedValues, emitChange],
+  );
+
+  const onRemoveSelectedItem = useCallback(
+    (option: Option) => {
+      emitChange(selectedValues.filter((v) => v.key !== option.key));
+    },
+    [selectedValues, emitChange],
+  );
+
+  const onInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputValue(e.target.value);
+  }, []);
+
+  const onFocus = useCallback(() => {
+    setIsOpen(true);
+  }, []);
+
+  const optionTimeoutRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+
+  const onBlur = useCallback(() => {
+    optionTimeoutRef.current = setTimeout(() => {
+      const activeElement = document.activeElement;
+      const stillInsideContainer =
+        !!activeElement && !!containerRef.current?.contains(activeElement);
+
+      if (stillInsideContainer) {
         return;
       }
-      this.onSelectItem(options[highlightOption]);
-    }
-    // TODO: Instead of scrollIntoView need to find better soln for scroll the dropwdown container.
-    // setTimeout(() => {
-    //   const element = document.querySelector("ul.optionContainer .highlight");
-    //   if (element) {
-    //     element.scrollIntoView();
-    //   }
-    // });
-  }
 
-  onRemoveSelectedItem(item) {
-    const { selectedValues } = this.state;
-    let { index = 0 } = this.state;
-    const { onRemove, displayValue } = this.props;
-    index = selectedValues.findIndex((i) => i[displayValue] === item[displayValue]);
-    selectedValues.splice(index, 1);
-    onRemove(selectedValues, item);
-    this.setState({ selectedValues }, () => {
-      this.removeSelectedValuesFromOptions(true);
-    });
-  }
+      setInputValue('');
+      setIsOpen(false);
+    }, 0);
+  }, []);
 
-  onSelectItem(item) {
-    const { selectedValues } = this.state;
-    const { onSelect } = this.props;
-    this.setState({
-      inputValue: '',
-    });
-    if (this.isSelectedValue(item)) {
-      this.onRemoveSelectedItem(item);
-      return;
-    }
-    selectedValues.push(item);
-    onSelect(selectedValues, item);
-    this.setState({ selectedValues }, () => {
-      this.removeSelectedValuesFromOptions(true);
-    });
-  }
+  const onKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      if (e.key === 'Backspace' && !inputValue && selectedValues.length) {
+        onRemoveSelectedItem(selectedValues[selectedValues.length - 1]);
+        return;
+      }
+      if (!visibleOptions.length) return;
 
-  isSelectedValue(item) {
-    const { displayValue } = this.props;
-    const { selectedValues } = this.state;
-    return selectedValues.filter((i) => i[displayValue] === item[displayValue]).length > 0;
-  }
+      const options = Array.from(
+        containerRef.current?.querySelectorAll('ul li') || [],
+      ) as HTMLLIElement[];
+      const index = options.indexOf(document.activeElement as any);
 
-  renderOptionList() {
-    const { emptyRecordMsg, loading, loadingMessage = 'loading...' } = this.props;
-    const { options } = this.state;
-    if (loading) {
-      return (
-        <ul className='optionContainer'>
-          {typeof loadingMessage === 'string' && <span className='notFound'>{loadingMessage}</span>}
-          {typeof loadingMessage !== 'string' && loadingMessage}
-        </ul>
-      );
-    }
-    return (
-      <ul className='optionContainer'>
-        {options.length === 0 && <span className='notFound'>{emptyRecordMsg}</span>}
-        {this.renderOption()}
-      </ul>
-    );
-  }
+      switch (e.key) {
+        case 'ArrowUp':
+          e.preventDefault();
+          if (index === 0) searchBoxRef.current?.focus();
+          else options[Math.max(index - 1, 0) as any]?.focus();
+          break;
+        case 'ArrowDown':
+          e.preventDefault();
+          options[Math.min(index + 1, options.length - 1) as any]?.focus();
+          break;
+        case 'PageUp':
+        case 'Home':
+          e.preventDefault();
+          options[0]?.focus();
+          break;
+        case 'PageDown':
+        case 'End':
+          e.preventDefault();
+          options[options.length - 1]?.focus();
+          break;
+        case 'Enter':
+          if (isOpen) {
+            e.preventDefault();
+            if (index !== -1) onSelectItem(visibleOptions[index]);
+          }
+          break;
+        case 'Escape':
+          setIsOpen(false);
+          searchBoxRef.current?.focus();
+          break;
+        default:
+          if (document.activeElement !== searchBoxRef.current) {
+            if (
+              e.key === 'Backspace' ||
+              e.key === 'ArrowLeft' ||
+              e.key === 'ArrowRight' ||
+              (e.key.length === 1 && !e.ctrlKey && !e.metaKey)
+            ) {
+              searchBoxRef.current?.focus();
+            }
+          } else if (!isOpen) {
+            setIsOpen(true);
+          }
+      }
+    },
+    [inputValue, selectedValues, visibleOptions, isOpen, onSelectItem, onRemoveSelectedItem],
+  );
 
-  renderOption() {
-    const { displayValue } = this.props;
-    const { highlightOption } = this.state;
-    return this.state.options.map((option, i) => {
-      const isSelected = this.isSelectedValue(option);
-      return (
-        <li
-          key={`option${i}`}
-          className={`option ${isSelected ? 'selected' : ''} ${highlightOption === i ? 'highlightOption highlight' : ''}`}
-          onClick={() => {
-            this.onSelectItem(option);
-          }}
-        >
-          {option[displayValue]}
-        </li>
-      );
-    });
-  }
-
-  renderSelectedList() {
-    const { displayValue } = this.props;
-    const { selectedValues } = this.state;
-    return selectedValues.map((value, index) => (
-      <span className='chip' key={index}>
-        {value[displayValue]}
-        <button
-          onClick={() => {
-            this.onRemoveSelectedItem(value);
-          }}
-        >
-          <Icon
-            className='ml-1 size-4 hover:cursor-pointer'
-            src={require('@phosphor-icons/core/regular/x-circle.svg')}
-          />
-        </button>
-      </span>
-    ));
-  }
-
-  toggleOptionList() {
-    this.setState({
-      toggleOptionsList: !this.state.toggleOptionsList,
-      highlightOption: 0,
-    });
-  }
-
-  onCloseOptionList() {
-    this.setState({
-      toggleOptionsList: false,
-      highlightOption: 0,
-      inputValue: '',
-    });
-  }
-
-  onFocus() {
-    if (this.state.toggleOptionsList) {
-      // @ts-ignore
-      clearTimeout(this.optionTimeout);
-    } else {
-      this.toggleOptionList();
-    }
-  }
-
-  onBlur() {
-    this.setState({ inputValue: '' }, this.filterOptionsByInput);
-    // @ts-ignore
-    this.optionTimeout = setTimeout(this.onCloseOptionList, 250);
-  }
-
-  renderMultiselectContainer() {
-    const { inputValue, toggleOptionsList } = this.state;
-    const { placeholder, id, name, disabled, className } = this.props;
-    return (
+  return (
+    <div ref={containerRef} onBlur={onBlur} onKeyDown={onKeyDown}>
       <div
         className={clsx(
           'multiselect-container',
           { 'multiselect-container--disabled': disabled },
           className,
         )}
-        id={id}
       >
-        <div className='searchWrapper' ref={this.searchWrapper}>
-          {this.renderSelectedList()}
+        <div className='searchWrapper' ref={searchWrapperRef}>
+          {selectedValues.map((option) => (
+            <span className='chip' key={option.key}>
+              {option.value}
+              <button
+                type='button'
+                onClick={() => onRemoveSelectedItem(option)}
+                title={intl.formatMessage(messages.removeItem)}
+                aria-label={intl.formatMessage(messages.removeItem)}
+              >
+                <Icon
+                  className='ml-1 size-4 hover:cursor-pointer'
+                  src={require('@phosphor-icons/core/regular/x-circle.svg')}
+                />
+              </button>
+            </span>
+          ))}
           <input
             type='text'
-            ref={this.searchBox}
+            ref={searchBoxRef}
             className='searchBox'
-            name={`${name ?? 'search-name'}-input`}
-            onChange={this.onChange}
-            onKeyPress={this.onKeyPress}
+            name='search-name-input'
+            onChange={onInputChange}
             value={inputValue}
-            onFocus={this.onFocus}
-            onBlur={this.onBlur}
-            placeholder={placeholder}
-            onKeyDown={this.onArrowKeyNavigation}
+            onFocus={onFocus}
+            placeholder={intl.formatMessage(messages.placeholder)}
             autoComplete='off'
             disabled={disabled}
           />
         </div>
         <div
-          className={`optionListContainer ${toggleOptionsList ? 'displayBlock' : 'displayNone'}`}
-          onMouseDown={(e) => {
-            e.preventDefault();
-          }}
+          className={clsx('optionListContainer', isOpen ? 'displayBlock' : 'displayNone')}
+          onMouseDown={(e) => e.preventDefault()}
         >
-          {this.renderOptionList()}
+          <ul className='optionContainer'>
+            {visibleOptions.length === 0 && (
+              <span className='notFound'>{intl.formatMessage(messages.noOptions)}</span>
+            )}
+            {visibleOptions.map((option, i) => (
+              <li
+                key={option.key}
+                className='option'
+                onClick={() => onSelectItem(option)}
+                data-index={i}
+                tabIndex={0}
+              >
+                {option.value}
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
-    );
-  }
+    </div>
+  );
+};
 
-  render() {
-    return (
-      <OutsideAlerter outsideClick={this.onCloseOptionList}>
-        {this.renderMultiselectContainer()}
-      </OutsideAlerter>
-    );
-  }
-}
-
-Multiselect.defaultProps = {
-  options: [],
-  selectedValues: [],
-  displayValue: 'model',
-  placeholder: 'Select',
-  emptyRecordMsg: 'No Options Available',
-  onSelect: () => {},
-  onRemove: () => {},
-  onKeyPressFn: () => {},
-  id: '',
-  name: '',
-  disabled: false,
-  className: '',
-} as IMultiselectProps;
+export { Multiselect };

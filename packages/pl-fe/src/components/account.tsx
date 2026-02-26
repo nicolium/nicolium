@@ -22,7 +22,7 @@ import Badge from './badge';
 import { ParsedContent } from './parsed-content';
 import RelativeTimestamp from './relative-timestamp';
 
-import type { StatusApprovalStatus } from '@/normalizers/status';
+import type { StatusApprovalStatus } from '@/reducers/statuses';
 import type { Account as AccountSchema } from 'pl-api';
 
 interface IInstanceFavicon {
@@ -33,7 +33,7 @@ interface IInstanceFavicon {
 const messages = defineMessages({
   bot: { id: 'account.badges.bot', defaultMessage: 'Bot' },
   timeline: { id: 'account.instance_favicon', defaultMessage: 'Visit {domain} timeline' },
-  account_locked: {
+  accountLocked: {
     id: 'account.locked_info',
     defaultMessage:
       'This account privacy status is set to locked. The owner manually reviews who can follow them.',
@@ -65,7 +65,14 @@ const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
   const className = 'size-4 flex-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2';
 
   if (disabled) {
-    return <img src={account.favicon} alt='' title={account.domain} className={className} />;
+    return (
+      <img
+        src={account.favicon}
+        alt={account.domain}
+        title={account.domain}
+        className={className}
+      />
+    );
   }
 
   return (
@@ -75,7 +82,12 @@ const InstanceFavicon: React.FC<IInstanceFavicon> = ({ account, disabled }) => {
       disabled={disabled}
       title={intl.formatMessage(messages.timeline, { domain: account.domain })}
     >
-      <img src={account.favicon} alt='' title={account.domain} className='max-h-full w-full' />
+      <img
+        src={account.favicon}
+        alt={account.domain}
+        title={account.domain}
+        className='max-h-full w-full'
+      />
     </button>
   );
 };
@@ -302,7 +314,7 @@ const Account = ({
                     <>
                       <Icon
                         src={require('@phosphor-icons/core/regular/lock.svg')}
-                        alt={intl.formatMessage(messages.account_locked)}
+                        alt={intl.formatMessage(messages.accountLocked)}
                         className='size-4 text-gray-600'
                       />
 
@@ -413,7 +425,7 @@ const Account = ({
                   <>
                     <Icon
                       src={require('@phosphor-icons/core/regular/lock.svg')}
-                      alt={intl.formatMessage(messages.account_locked)}
+                      alt={intl.formatMessage(messages.accountLocked)}
                       className='size-4 text-gray-600'
                     />
                     {account.favicon && !disableUserProvidedMedia && (

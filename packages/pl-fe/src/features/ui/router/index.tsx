@@ -142,6 +142,7 @@ import {
   SettingsStore,
   Share,
   Status,
+  Subscribers,
   TestTimeline,
   ThemeEditor,
   Privacy,
@@ -729,6 +730,15 @@ export const profileFollowingRoute = createRoute({
   component: Following,
 });
 
+export const profileSubscribersRoute = createRoute({
+  getParentRoute: () => layouts.profile,
+  path: '/subscribers',
+  component: Subscribers,
+  validateSearch: v.object({
+    include_expired: v.optional(v.boolean(), false),
+  }),
+});
+
 export const profileMediaRoute = createRoute({
   getParentRoute: () => layouts.profile,
   path: '/media',
@@ -1281,7 +1291,7 @@ const redirectPleromaStatusRoute = createRoute({
 });
 const redirectPleromaUsernameRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/users/@{$username}',
+  path: '/users/$username',
   component: () => {
     const { username } = redirectPleromaUsernameRoute.useParams();
     return <Navigate to='/@{$username}' params={{ username }} replace />;
@@ -1538,6 +1548,7 @@ const routeTree = rootRoute.addChildren([
     profileRoute,
     profileFollowersRoute,
     profileFollowingRoute,
+    profileSubscribersRoute,
     profileMediaRoute,
     profileTaggedRoute,
     profileFavoritesRoute,
@@ -1549,7 +1560,7 @@ const routeTree = rootRoute.addChildren([
   ...redirectRoutes,
 ]);
 
-const FallbackLayout: React.FC<{ children: JSX.Element }> = ({ children }) => (
+const FallbackLayout: React.FC<{ children: React.JSX.Element }> = ({ children }) => (
   <>
     <Layout.Main>{children}</Layout.Main>
 
@@ -1602,7 +1613,7 @@ const RouterWithContext = () => {
   const features = useFeatures();
   const { cryptoAddresses } = useFrontendConfig();
   const hasCrypto = cryptoAddresses.length > 0;
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
 
   const context: RouterContext = useMemo(
     () => ({

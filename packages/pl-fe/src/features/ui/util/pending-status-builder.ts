@@ -1,12 +1,11 @@
 import { create } from 'mutative';
-import { statusSchema } from 'pl-api';
+import { statusSchema, type Account } from 'pl-api';
 import * as v from 'valibot';
 
-import { normalizeStatus } from '@/normalizers/status';
-import { selectOwnAccount } from '@/selectors';
+import { normalizeStatus } from '@/reducers/statuses';
 
-import type { PendingStatus } from '@/reducers/pending-statuses';
 import type { RootState } from '@/store';
+import type { PendingStatus } from '@/stores/pending-statuses';
 
 const buildMentions = (pendingStatus: PendingStatus) => {
   if (pendingStatus.in_reply_to_id) {
@@ -19,7 +18,7 @@ const buildMentions = (pendingStatus: PendingStatus) => {
 const buildPoll = (pendingStatus: PendingStatus) => {
   if (pendingStatus.poll?.options) {
     return create(pendingStatus.poll, (draft) => {
-      // @ts-ignore
+      // @ts-expect-error
       draft.options = draft.options.map((title) => ({ title }));
     });
   } else {
@@ -27,16 +26,17 @@ const buildPoll = (pendingStatus: PendingStatus) => {
   }
 };
 
-const buildStatus = (state: RootState, pendingStatus: PendingStatus, idempotencyKey: string) => {
-  const account = selectOwnAccount(state)!;
+const buildStatus = (
+  account: Account,
+  state: RootState,
+  pendingStatus: PendingStatus,
+  idempotencyKey: string,
+) => {
   const inReplyToId = pendingStatus.in_reply_to_id;
 
   const status = {
     account,
-    content: pendingStatus.status.replace(
-      new RegExp('\n', 'g'),
-      '<br>',
-    ) /* eslint-disable-line no-control-regex */,
+    content: pendingStatus.status.replaceAll('\n', '<br>'),
     id: `末pending-${idempotencyKey}`,
     in_reply_to_account_id: state.statuses[inReplyToId ?? '']?.account_id || null,
     in_reply_to_id: inReplyToId,

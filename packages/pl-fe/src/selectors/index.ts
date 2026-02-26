@@ -1,32 +1,18 @@
 import { createSelector } from 'reselect';
 
-import { Entities } from '@/entity-store/entities';
+import { getAccounts, selectAccount, selectAccounts } from '@/queries/accounts/selectors';
+import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { useSettingsStore } from '@/stores/settings';
 import { getDomain } from '@/utils/accounts';
-import { validId } from '@/utils/auth';
 import ConfigDB from '@/utils/config-db';
 import { shouldFilter } from '@/utils/timelines';
 
-import type { EntityStore } from '@/entity-store/types';
 import type { minifyAdminReport } from '@/queries/utils/minify-list';
-import type { MinifiedStatus } from '@/reducers/statuses';
+import type { NormalizedStatus } from '@/reducers/statuses';
 import type { MRFSimple } from '@/schemas/pleroma';
 import type { RootState } from '@/store';
-import type { Account, Filter, FilterResult, Group, NotificationGroup } from 'pl-api';
-
-const selectAccount = (state: RootState, accountId: string) =>
-  state.entities[Entities.ACCOUNTS]?.store[accountId] as Account | undefined;
-
-const selectAccounts = (state: RootState, accountIds: Array<string>) =>
-  accountIds
-    .map((accountId) => state.entities[Entities.ACCOUNTS]?.store[accountId] as Account | undefined)
-    .filter((account): account is Account => account !== undefined);
-
-const selectOwnAccount = (state: RootState) => {
-  if (state.me) {
-    return selectAccount(state, state.me);
-  }
-};
+import type { Account, Filter, FilterResult, NotificationGroup } from 'pl-api';
 
 const toServerSideType = (columnType: string): Filter['context'][0] => {
   switch (columnType) {
@@ -49,10 +35,10 @@ const getFilters = (state: Pick<RootState, 'filters'>, query: FilterContext) =>
   state.filters.filter(
     (filter) =>
       (!query?.contextType || filter.context.includes(toServerSideType(query.contextType))) &&
-      (filter.expires_at === null || Date.parse(filter.expires_at) > new Date().getTime()),
+      (filter.expires_at === null || Date.parse(filter.expires_at) > Date.now()),
   );
 
-const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+const escapeRegExp = (string: string) => string.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 
 const regexFromFilters = (filters: Array<Filter>) => {
   if (filters.length === 0) return null;
@@ -120,11 +106,6 @@ const makeGetStatus = () =>
         state.statuses[state.statuses[id]?.reblog_id ?? ''] || null,
       (state: RootState, { id }: APIStatus) =>
         state.statuses[state.statuses[id]?.quote_id ?? ''] || null,
-      (state: RootState, { id }: APIStatus) => {
-        const group = state.statuses[id]?.group_id;
-        if (group) return state.entities[Entities.GROUPS]?.store[group] as Group;
-        return undefined;
-      },
       (_state: RootState, { username }: APIStatus) => username,
       (state: RootState) => state.filters,
       (_state: RootState, { contextType }: FilterContext) => contextType,
@@ -132,19 +113,9 @@ const makeGetStatus = () =>
       (state: RootState) => state.auth.client.features,
     ],
 
-    (
-      statusBase,
-      statusReblog,
-      statusQuote,
-      statusGroup,
-      username,
-      filters,
-      contextType,
-      me,
-      features,
-    ) => {
+    (statusBase, statusReblog, statusQuote, username, filters, contextType, me, features) => {
       if (!statusBase) return null;
-      const { account } = statusBase;
+      const account = queryClient.getQueryData(queryKeys.accounts.show(statusBase.account_id))!;
       const accountUsername = account.acct;
 
       // Must be owner of status if username exists.
@@ -163,9 +134,9 @@ const makeGetStatus = () =>
 
       return {
         ...statusBase,
+        account,
         reblog: statusReblog || null,
         quote: statusQuote || null,
-        group: statusGroup ?? null,
         filtered,
       };
     },
@@ -177,13 +148,13 @@ const makeGetNotification = () =>
   createSelector(
     [
       (_state: RootState, notification: NotificationGroup) => notification,
-      (state: RootState, notification: NotificationGroup) =>
+      (_state: RootState, notification: NotificationGroup) =>
         // @ts-expect-error types will be fine valibot ensures that
-        selectAccount(state, notification.target_id),
+        selectAccount(notification.target_id),
       // @ts-expect-error types will be fine valibot ensures that
       (state: RootState, notification: NotificationGroup) => state.statuses[notification.status_id],
-      (state: RootState, notification: NotificationGroup) =>
-        selectAccounts(state, notification.sample_account_ids),
+      (_state: RootState, notification: NotificationGroup) =>
+        selectAccounts(notification.sample_account_ids),
     ],
     (notification, target, status, accounts): SelectedNotification => ({
       ...notification,
@@ -215,7 +186,7 @@ type SelectedNotification = NotificationGroup & {
           | 'participation_request'
           | 'quote'
           | 'quoted_update';
-        status: MinifiedStatus;
+        status: NormalizedStatus;
       }
     | {
         type: 'move';
@@ -228,20 +199,19 @@ const makeGetReport = () => {
 
   return createSelector(
     [
-      (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => report,
-      (state: RootState, report?: ReturnType<typeof minifyAdminReport>) =>
-        selectAccount(state, report?.account_id ?? ''),
-      (state: RootState, report?: ReturnType<typeof minifyAdminReport>) =>
-        selectAccount(state, report?.target_account_id ?? ''),
-      (state: RootState, report?: ReturnType<typeof minifyAdminReport>) =>
-        selectAccount(state, report?.assigned_account_id ?? ''),
+      (_state: RootState, report?: ReturnType<typeof minifyAdminReport>) => report,
       (state: RootState, report?: ReturnType<typeof minifyAdminReport>) =>
         report?.status_ids
           .map((statusId) => getStatus(state, { id: statusId }))
           .filter((status): status is SelectedStatus => status !== null),
     ],
-    (report, account, target_account, assigned_account, statuses = []) => {
+    (report, statuses = []) => {
       if (!report) return null;
+
+      const account = selectAccount(report.account_id ?? '');
+      const target_account = selectAccount(report.target_account_id ?? '');
+      const assigned_account = selectAccount(report.assigned_account_id ?? '');
+
       return {
         ...report,
         account,
@@ -252,30 +222,6 @@ const makeGetReport = () => {
     },
   );
 };
-
-const getAuthUserIds = createSelector([(state: RootState) => state.auth.users], (authUsers) =>
-  Object.values(authUsers).reduce((userIds: Array<string>, authUser) => {
-    const userId = authUser?.id;
-    if (validId(userId)) userIds.push(userId);
-    return userIds;
-  }, []),
-);
-
-const makeGetOtherAccounts = () =>
-  createSelector(
-    [
-      (state: RootState) => state.entities[Entities.ACCOUNTS]?.store as EntityStore<Account>,
-      getAuthUserIds,
-      (state: RootState) => state.me,
-    ],
-    (accounts, authUserIds, me) =>
-      authUserIds.reduce<Array<Account>>((list, id) => {
-        if (id === me) return list;
-        const account = accounts?.[id];
-        if (account) list.push(account);
-        return list;
-      }, []),
-  );
 
 const getSimplePolicy = createSelector(
   [
@@ -288,11 +234,8 @@ const getSimplePolicy = createSelector(
   }),
 );
 
-const getRemoteInstanceFavicon = (state: RootState, host: string) => {
-  const accounts = state.entities[Entities.ACCOUNTS]?.store as EntityStore<Account>;
-  const account = Object.entries(accounts).find(
-    ([_, account]) => account && getDomain(account) === host,
-  )?.[1];
+const getRemoteInstanceFavicon = (_state: RootState, host: string) => {
+  const account = getAccounts().find((item) => item && getDomain(item) === host);
   return account?.favicon ?? null;
 };
 
@@ -345,7 +288,7 @@ type ColumnQuery = { type: string; prefix?: string };
 const makeGetStatusIds = () =>
   createSelector(
     [
-      (state: RootState, { type, prefix }: ColumnQuery) =>
+      (_state: RootState, { type, prefix }: ColumnQuery) =>
         useSettingsStore.getState().settings.timelines[prefix ?? type],
       (state: RootState, { type }: ColumnQuery) => state.timelines[type]?.items || [],
       (state: RootState) => state.statuses,
@@ -360,16 +303,12 @@ const makeGetStatusIds = () =>
 
 export {
   type RemoteInstance,
-  selectAccount,
-  selectAccounts,
-  selectOwnAccount,
   getFilters,
   regexFromFilters,
   makeGetStatus,
   type SelectedStatus,
   makeGetNotification,
   makeGetReport,
-  makeGetOtherAccounts,
   makeGetHosts,
   makeGetRemoteInstance,
   makeGetStatusIds,

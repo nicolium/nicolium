@@ -51,7 +51,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
           const poll = typeof version.poll !== 'string' && version.poll;
 
           return (
-            <Stack space={2} className='py-2 first:pt-0 last:pb-0'>
+            <Stack space={2} className='py-2 first:pt-0 last:pb-0' key={version.created_at}>
               {version.spoiler_text.length > 0 && (
                 <>
                   <span>
@@ -67,11 +67,14 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
                 <div className='poll'>
                   <Stack>
                     {poll.options.map((option: any) => (
-                      <HStack alignItems='center' className='p-1 text-gray-900 dark:text-gray-300'>
+                      <HStack
+                        alignItems='center'
+                        className='p-1 text-gray-900 dark:text-gray-300'
+                        key={option.title}
+                      >
                         <span
                           className='mr-2.5 inline-block size-4 flex-none rounded-full border border-solid border-primary-600'
-                          tabIndex={0}
-                          role='radio'
+                          aria-hidden
                         />
 
                         <span>

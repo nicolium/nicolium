@@ -1,8 +1,9 @@
 import LinkHeader from 'http-link-header';
 import { serialize } from 'object-to-formdata';
 
-import PlApiClient from './client';
 import { buildFullPath } from './utils/url';
+
+import type { PlApiBaseClient } from './client-base';
 
 type Response<T = any> = {
   headers: Headers;
@@ -84,7 +85,7 @@ type RequestMeta = Pick<RequestBody, 'idempotencyKey' | 'onUploadProgress' | 'si
 
 function request<T = any>(
   this: Pick<
-    PlApiClient,
+    PlApiBaseClient,
     'accessToken' | 'customAuthorizationToken' | 'iceshrimpAccessToken' | 'baseURL'
   >,
   input: URL | RequestInfo,

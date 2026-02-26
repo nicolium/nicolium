@@ -2,25 +2,19 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useGroups } from '@/api/hooks/groups/use-groups';
 import GroupCard from '@/components/group-card';
 import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import PlaceholderGroupCard from '@/features/placeholder/components/placeholder-group-card';
+import { useGroupsQuery } from '@/queries/groups/use-groups';
 import { useModalsActions } from '@/stores/modals';
 
 const Groups: React.FC = () => {
   const { openModal } = useModalsActions();
 
-  const { groups, isLoading, hasNextPage, fetchNextPage } = useGroups();
-
-  const handleLoadMore = () => {
-    if (hasNextPage) {
-      fetchNextPage();
-    }
-  };
+  const { data: groupIds = [], isFetching, isLoading } = useGroupsQuery();
 
   const createGroup = () => {
     openModal('CREATE_GROUP');
@@ -49,7 +43,7 @@ const Groups: React.FC = () => {
 
   return (
     <Stack space={4}>
-      {!(!isLoading && groups.length === 0) && (
+      {!(!isFetching && groupIds.length === 0) && (
         <Button
           className='xl:hidden'
           icon={require('@phosphor-icons/core/regular/users-three.svg')}
@@ -65,16 +59,14 @@ const Groups: React.FC = () => {
         scrollKey='groups'
         emptyMessageText={renderBlankslate()}
         itemClassName='pb-4 last:pb-0'
-        isLoading={isLoading}
-        showLoading={isLoading && groups.length === 0}
+        isLoading={isFetching}
+        showLoading={isLoading}
         placeholderComponent={PlaceholderGroupCard}
         placeholderCount={3}
-        onLoadMore={handleLoadMore}
-        hasMore={hasNextPage}
       >
-        {groups.map((group) => (
-          <Link key={group.id} to='/groups/$groupId' params={{ groupId: group.id }}>
-            <GroupCard group={group} />
+        {groupIds.map((groupId) => (
+          <Link key={groupId} to='/groups/$groupId' params={{ groupId }}>
+            <GroupCard groupId={groupId} />
           </Link>
         ))}
       </ScrollableList>

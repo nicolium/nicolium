@@ -2,16 +2,13 @@ import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import { createSelector } from 'reselect';
 
 import { logOut, switchAccount } from '@/actions/auth';
 import Account from '@/components/account';
 import DropdownMenu from '@/components/dropdown-menu';
-import { Entities } from '@/entity-store/entities';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
-import { RootState } from '@/store';
+import { useLoggedInAccounts } from '@/queries/accounts/use-logged-in-accounts';
 
 import ThemeToggle from './theme-toggle';
 
@@ -31,35 +28,24 @@ interface IProfileDropdown {
 type IMenuItem = {
   text: string | React.ReactElement | null;
   linkOptions?: LinkOptions;
-  toggle?: JSX.Element;
+  toggle?: React.JSX.Element;
   icon?: string;
   action?: (event: React.MouseEvent) => void;
 };
-
-const getOtherAccounts = createSelector(
-  [
-    (state: RootState) => state.auth.users,
-    (state: RootState) => state.entities[Entities.ACCOUNTS]?.store,
-  ],
-  (signedAccounts, accountEntities) =>
-    Object.values(signedAccounts)
-      .map(({ id }) => accountEntities?.[id] as AccountEntity)
-      .filter((account) => account),
-);
 
 const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const intl = useIntl();
 
-  const otherAccounts = useAppSelector(getOtherAccounts);
+  const { accounts: otherAccounts } = useLoggedInAccounts();
 
   const handleLogOut = () => {
     dispatch(logOut());
   };
 
-  const handleSwitchAccount = (account: AccountEntity) => () => {
-    dispatch(switchAccount(account.id));
+  const handleSwitchAccount = (otherAccount: AccountEntity) => () => {
+    dispatch(switchAccount(otherAccount.id));
   };
 
   const renderAccount = (account: AccountEntity) => (
@@ -134,11 +120,11 @@ const MenuItem: React.FC<MenuItemProps> = ({ className, menuItem }) => {
 
   if (menuItem.toggle) {
     return (
-      <div className='flex flex-row items-center justify-between space-x-4 px-4 py-1 text-sm text-gray-700 dark:text-gray-400'>
+      <label className='flex flex-row items-center justify-between space-x-4 px-4 py-1 text-sm text-gray-700 dark:text-gray-400'>
         <span>{menuItem.text}</span>
 
         {menuItem.toggle}
-      </div>
+      </label>
     );
   } else if (!menuItem.text) {
     return (

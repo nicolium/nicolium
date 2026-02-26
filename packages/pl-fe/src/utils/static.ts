@@ -1,6 +1,6 @@
 /**
  * Static: functions related to static files.
- * @module pl-fe/utils/static
+ * @module @/utils/static
  */
 
 import { join } from 'path-browserify';

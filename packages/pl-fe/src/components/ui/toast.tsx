@@ -1,15 +1,15 @@
 import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
-import toast, { Toast as RHToast } from 'react-hot-toast';
+import toast, { type Toast as RHToast } from 'react-hot-toast';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
-
-import { ToastText, ToastType } from '@/toast';
 
 import HStack from './hstack';
 import Icon from './icon';
 import Stack from './stack';
 import Text from './text';
+
+import type { ToastText, ToastType } from '@/toast';
 
 const messages = defineMessages({
   close: { id: 'lightbox.close', defaultMessage: 'Close' },
@@ -36,7 +36,7 @@ interface IToast {
 /**
  * Customizable Toasts for in-app notifications.
  */
-const Toast = (props: IToast) => {
+const Toast: React.FC<IToast> = (props) => {
   const { t, message, type, action, actionLinkOptions, actionLabel, summary } = props;
 
   const intl = useIntl();

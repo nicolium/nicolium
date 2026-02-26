@@ -14,8 +14,9 @@ import Toggle from '@/components/ui/toggle';
 import SettingToggle from '@/features/settings/components/setting-toggle';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { useUpdateCredentials } from '@/queries/accounts';
+import { useUpdateCredentials } from '@/queries/accounts/use-account-credentials';
 import { useSettings } from '@/stores/settings';
+import toast from '@/toast';
 
 type FormData = {
   accepts_chat_messages?: boolean;
@@ -34,10 +35,16 @@ const messages = defineMessages({
     defaultMessage: 'Play a sound when you receive a message',
   },
   submit: { id: 'chat.page_settings.submit', defaultMessage: 'Save' },
+  success: {
+    id: 'settings.messages.success',
+    defaultMessage: 'Chat settings updated successfully',
+  },
+  fail: { id: 'settings.messages.fail', defaultMessage: 'Failed to update chat settings' },
+  back: { id: 'chats.back', defaultMessage: 'Back to chats' },
 });
 
 const ChatsPageSettings = () => {
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const intl = useIntl();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -55,7 +62,14 @@ const ChatsPageSettings = () => {
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
 
-    updateCredentials.mutate(data);
+    updateCredentials.mutate(data, {
+      onSuccess: () => {
+        toast.success(intl.formatMessage(messages.success));
+      },
+      onError: () => {
+        toast.error(intl.formatMessage(messages.fail));
+      },
+    });
   };
 
   return (
@@ -65,6 +79,7 @@ const ChatsPageSettings = () => {
           src={require('@phosphor-icons/core/regular/arrow-left.svg')}
           className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
           onClick={() => navigate({ to: '/chats' })}
+          title={intl.formatMessage(messages.back)}
         />
 
         <CardTitle title={intl.formatMessage(messages.title)} />

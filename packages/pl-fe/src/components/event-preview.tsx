@@ -13,7 +13,7 @@ import EventActionButton from '@/features/event/components/event-action-button';
 import EventDate from '@/features/event/components/event-date';
 import { useAppSelector } from '@/hooks/use-app-selector';
 
-import type { Status as StatusEntity } from '@/normalizers/status';
+import type { NormalizedStatus as StatusEntity } from '@/reducers/statuses';
 
 const messages = defineMessages({
   eventBanner: { id: 'event.banner', defaultMessage: 'Event banner' },

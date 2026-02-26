@@ -3,7 +3,6 @@ import debounce from 'lodash/debounce';
 import React, { useState, useRef, useCallback } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
-import { accountLookup } from '@/actions/accounts';
 import { register, verifyCredentials } from '@/actions/auth';
 import BirthdayInput from '@/components/birthday-input';
 import Button from '@/components/ui/button';
@@ -16,6 +15,7 @@ import Select from '@/components/ui/select';
 import Textarea from '@/components/ui/textarea';
 import CaptchaField from '@/features/auth-login/components/captcha';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/hooks/use-instance';
 import { useModalsActions } from '@/stores/modals';
@@ -25,10 +25,6 @@ import type { CreateAccountParams } from 'pl-api';
 
 const messages = defineMessages({
   username: { id: 'registration.fields.username_placeholder', defaultMessage: 'Username' },
-  username_hint: {
-    id: 'registration.fields.username_hint',
-    defaultMessage: 'Only letters, numbers, and underscores are allowed.',
-  },
   usernameUnavailable: {
     id: 'registration.username_unavailable',
     defaultMessage: 'Username is already taken.',
@@ -40,18 +36,6 @@ const messages = defineMessages({
     defaultMessage: "Passwords don't match.",
   },
   confirm: { id: 'registration.fields.confirm_placeholder', defaultMessage: 'Password (again)' },
-  agreement: { id: 'registration.agreement', defaultMessage: 'I agree to the {tos}.' },
-  tos: { id: 'registration.tos', defaultMessage: 'Terms of Service' },
-  close: { id: 'registration.confirmation_modal.close', defaultMessage: 'Close' },
-  newsletter: { id: 'registration.newsletter', defaultMessage: 'Subscribe to newsletter.' },
-  needsConfirmationHeader: {
-    id: 'confirmations.register.needs_confirmation.header',
-    defaultMessage: 'Confirmation needed',
-  },
-  needsApprovalHeader: {
-    id: 'confirmations.register.needs_approval.header',
-    defaultMessage: 'Approval needed',
-  },
   reasonHint: {
     id: 'registration.reason_hint',
     defaultMessage: 'This will help us review your application',
@@ -68,6 +52,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const client = useClient();
   const { locale } = useSettings();
   const features = useFeatures();
   const instance = useInstance();
@@ -183,13 +168,21 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
     );
 
     openModal('CONFIRM', {
-      heading: needsConfirmation
-        ? intl.formatMessage(messages.needsConfirmationHeader)
-        : needsApproval
-          ? intl.formatMessage(messages.needsApprovalHeader)
-          : undefined,
+      heading: needsConfirmation ? (
+        <FormattedMessage
+          id='confirmations.register.needs_confirmation.header'
+          defaultMessage='Confirmation required'
+        />
+      ) : needsApproval ? (
+        <FormattedMessage
+          id='confirmations.register.needs_approval.header'
+          defaultMessage='Approval required'
+        />
+      ) : undefined,
       message,
-      confirm: intl.formatMessage(messages.close),
+      confirm: (
+        <FormattedMessage id='registration.confirmation_modal.close' defaultMessage='Close' />
+      ),
       onConfirm: () => {},
     });
   };
@@ -215,9 +208,10 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
         controller.current.abort();
         controller.current = new AbortController();
 
-        dispatch(
-          accountLookup(`${username}${domain ? `@${domain}` : ''}`, controller.current.signal),
-        )
+        client.accounts
+          .lookupAccount(`${username}${domain ? `@${domain}` : ''}`, {
+            signal: controller.current.signal,
+          })
           .then((account) => {
             setUsernameUnavailable(!!account);
           })
@@ -287,7 +281,12 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
       <fieldset disabled={isLoading} className='space-y-3'>
         <>
           <FormGroup
-            hintText={intl.formatMessage(messages.username_hint)}
+            hintText={
+              <FormattedMessage
+                id='registration.fields.username_hint'
+                defaultMessage='Only letters, numbers, and underscores are allowed.'
+              />
+            }
             errors={
               usernameUnavailable ? [intl.formatMessage(messages.usernameUnavailable)] : undefined
             }
@@ -400,13 +399,19 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
           />
 
           <FormGroup
-            labelText={intl.formatMessage(messages.agreement, {
-              tos: (
-                <Link to='/about/{-$slug}' params={{ slug: 'tos' }} target='_blank' key={0}>
-                  {intl.formatMessage(messages.tos)}
-                </Link>
-              ),
-            })}
+            labelText={
+              <FormattedMessage
+                id='registration.agreement'
+                defaultMessage='I agree to the {tos}.'
+                values={{
+                  tos: (
+                    <Link to='/about/{-$slug}' params={{ slug: 'tos' }} target='_blank'>
+                      <FormattedMessage id='registration.tos' defaultMessage='Terms of Service' />
+                    </Link>
+                  ),
+                }}
+              />
+            }
           >
             <Checkbox
               name='agreement'

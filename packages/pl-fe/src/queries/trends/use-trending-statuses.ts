@@ -5,6 +5,8 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 
+import { queryKeys } from '../keys';
+
 const useTrendingStatuses = () => {
   const client = useClient();
   const dispatch = useAppDispatch();
@@ -19,7 +21,7 @@ const useTrendingStatuses = () => {
   };
 
   return useQuery({
-    queryKey: ['trends', 'statuses'],
+    queryKey: queryKeys.trends.statuses,
     queryFn: fetchTrendingStatuses,
     enabled: features.trendingStatuses,
   });

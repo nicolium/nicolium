@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import AccountComponent from '@/components/account';
 import Icon from '@/components/icon';
 import ScrollableList from '@/components/scrollable-list';
@@ -14,6 +13,7 @@ import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useSearchAccounts } from '@/queries/search/use-search';
 import {
   useAccountAliases,
@@ -23,13 +23,6 @@ import {
 
 const messages = defineMessages({
   heading: { id: 'column.aliases', defaultMessage: 'Account aliases' },
-  subheading_add_new: { id: 'column.aliases.subheading_add_new', defaultMessage: 'Add new alias' },
-  create_error: { id: 'column.aliases.create_error', defaultMessage: 'Error creating alias' },
-  delete_error: { id: 'column.aliases.delete_error', defaultMessage: 'Error deleting alias' },
-  subheading_aliases: {
-    id: 'column.aliases.subheading_aliases',
-    defaultMessage: 'Current aliases',
-  },
   delete: { id: 'column.aliases.delete', defaultMessage: 'Delete' },
   add: { id: 'aliases.account.add', defaultMessage: 'Create alias' },
   search: { id: 'aliases.search', defaultMessage: 'Search your old account' },
@@ -47,7 +40,7 @@ const Account: React.FC<IAccount> = ({ accountId, aliases }) => {
   const features = useFeatures();
 
   const me = useAppSelector((state) => state.me);
-  const { account } = useAccount(accountId);
+  const { data: account } = useAccount(accountId);
 
   const { mutate: addAccountAlias } = useAddAccountAlias();
 
@@ -168,7 +161,14 @@ const AliasesPage = () => {
   return (
     <Column className='flex-1' label={intl.formatMessage(messages.heading)}>
       <CardHeader>
-        <CardTitle title={intl.formatMessage(messages.subheading_add_new)} />
+        <CardTitle
+          title={
+            <FormattedMessage
+              id='column.aliases.subheading_add_new'
+              defaultMessage='Add new alias'
+            />
+          }
+        />
       </CardHeader>
       <Search onSubmit={setQuery} />
       {isFetched && searchAccountIds.length === 0 ? (
@@ -186,7 +186,14 @@ const AliasesPage = () => {
         </div>
       )}
       <CardHeader>
-        <CardTitle title={intl.formatMessage(messages.subheading_aliases)} />
+        <CardTitle
+          title={
+            <FormattedMessage
+              id='column.aliases.subheading_aliases'
+              defaultMessage='Current aliases'
+            />
+          }
+        />
       </CardHeader>
       <div className='flex-1'>
         <ScrollableList scrollKey='aliases' emptyMessageText={emptyMessage}>

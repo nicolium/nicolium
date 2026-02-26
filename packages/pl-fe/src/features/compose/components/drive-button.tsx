@@ -3,9 +3,8 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import { uploadComposeSuccess } from '@/actions/compose';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useInstance } from '@/hooks/use-instance';
+import { appendMedia, useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 
 import ComposeFormButton from './compose-form-button';
@@ -20,7 +19,7 @@ interface IDriveButton {
 
 const DriveButton: React.FC<IDriveButton> = ({ composeId }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
   const { configuration } = useInstance();
   const { openModal } = useModalsActions();
 
@@ -50,7 +49,9 @@ const DriveButton: React.FC<IDriveButton> = ({ composeId }) => {
           mime_type: file.content_type,
         });
 
-        dispatch(uploadComposeSuccess(composeId, mediaAttachment));
+        updateCompose(composeId, (draft) => {
+          appendMedia(draft, mediaAttachment);
+        });
       },
     });
   };

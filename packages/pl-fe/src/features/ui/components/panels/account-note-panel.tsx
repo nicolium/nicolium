@@ -59,7 +59,7 @@ const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
             <FormattedMessage id='account_note.header' defaultMessage='Note' />
           </label>
           {saved && (
-            <span>
+            <span role='status' aria-live='polite' aria-atomic='true'>
               <FormattedMessage id='generic.saved' defaultMessage='Saved' />
             </span>
           )}

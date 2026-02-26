@@ -35,16 +35,10 @@ const messages = defineMessages({
   public: { id: 'interaction_policies.tabs.public', defaultMessage: 'Public' },
   unlisted: { id: 'interaction_policies.tabs.unlisted', defaultMessage: 'Unlisted' },
   private: { id: 'interaction_policies.tabs.private', defaultMessage: 'Followers-only' },
-  submit: { id: 'interaction_policies.update', defaultMessage: 'Update' },
   success: { id: 'interaction_policies.success', defaultMessage: 'Updated interaction policies' },
   fail: {
     id: 'interaction_policies.fail',
     defaultMessage: 'Failed to update interaction policies',
-  },
-  always: { id: 'interaction_policies.rule.always', defaultMessage: 'Always' },
-  with_approval: {
-    id: 'interaction_policies.rule.with_approval',
-    defaultMessage: 'Require approval',
   },
 });
 
@@ -206,7 +200,14 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({
               )}
 
               <List>
-                <ListItem label={intl.formatMessage(messages.always)}>
+                <ListItem
+                  label={
+                    <FormattedMessage
+                      id='interaction_policies.rule.always'
+                      defaultMessage='Always'
+                    />
+                  }
+                >
                   <InlineMultiselect<Scope>
                     items={items}
                     value={interactionPolicy[policy].always as Array<Scope>}
@@ -214,7 +215,14 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({
                     disabled={disabled}
                   />
                 </ListItem>
-                <ListItem label={intl.formatMessage(messages.with_approval)}>
+                <ListItem
+                  label={
+                    <FormattedMessage
+                      id='interaction_policies.rule.with_approval'
+                      defaultMessage='Require approval'
+                    />
+                  }
+                >
                   <InlineMultiselect
                     items={items}
                     value={interactionPolicy[policy].with_approval as Array<Scope>}
@@ -369,7 +377,7 @@ const InteractionPoliciesPage = () => {
 
         <FormActions>
           <Button type='submit' theme='primary' disabled={isUpdating}>
-            {intl.formatMessage(messages.submit)}
+            <FormattedMessage id='interaction_policies.update' defaultMessage='Update' />
           </Button>
         </FormActions>
       </Form>

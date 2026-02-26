@@ -4,7 +4,7 @@ import { defineMessages } from 'react-intl';
 
 import { dequeueTimeline, scrollTopTimeline } from '@/actions/timelines';
 import ScrollTopButton from '@/components/scroll-top-button';
-import StatusList, { IStatusList } from '@/components/status-list';
+import StatusList, { type IStatusList } from '@/components/status-list';
 import Portal from '@/components/ui/portal';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
@@ -14,6 +14,10 @@ const messages = defineMessages({
   queue: {
     id: 'status_list.queue_label',
     defaultMessage: 'Click to see {count} new {count, plural, one {post} other {posts}}',
+  },
+  queueLiveRegion: {
+    id: 'status_list.queue_label.live_region',
+    defaultMessage: '{count} new {count, plural, one {post} other {posts}}.',
   },
 });
 
@@ -59,6 +63,7 @@ const Timeline: React.FC<ITimeline> = ({ timelineId, onLoadMore, prefix, ...rest
           onClick={handleDequeueTimeline}
           count={totalQueuedItemsCount}
           message={messages.queue}
+          liveRegionMessage={messages.queueLiveRegion}
         />
       </Portal>
 

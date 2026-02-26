@@ -1,4 +1,5 @@
 @use 'mixins';
+@use 'variables';
 
 html {
   height: 100%;
@@ -39,7 +40,7 @@ body {
   }
 }
 
-#pl-fe {
+#app {
   height: 100%;
 }
 
@@ -372,6 +373,20 @@ body {
 
     &--chats {
       @apply xl:pb-16;
+    }
+
+    &:is(.window-controls-overlay *) {
+      padding-top: env(titlebar-area-height);
+
+      @media (min-width: variables.$breakpoint-lg) {
+        &:is(.window-controls-overlay:not(.window-controls-overlay--right) *) {
+          padding-top: 0;
+        }
+      }
+
+      @media (min-width: variables.$breakpoint-xl) {
+        padding-top: 0;
+      }
     }
   }
 

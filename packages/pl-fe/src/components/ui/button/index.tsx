@@ -59,7 +59,7 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, IButton>(
       ...props
     },
     ref: React.ForwardedRef<HTMLButtonElement | HTMLAnchorElement>,
-  ): JSX.Element => {
+  ): React.JSX.Element => {
     const body = text ?? children;
 
     const themeClass = useButtonStyles({
@@ -126,8 +126,7 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, IButton>(
           ref={ref as React.ForwardedRef<HTMLAnchorElement>}
           href={href}
           target='_blank'
-          rel='noopener'
-          tabIndex={-1}
+          rel='noopener noreferrer'
         >
           {buttonChildren}
         </a>

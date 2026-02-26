@@ -4,7 +4,7 @@ import { patchMe } from '@/actions/me';
 import { getClient } from '@/api';
 import { NODE_ENV } from '@/build-config';
 import messages from '@/messages';
-import { selectOwnAccount } from '@/selectors';
+import { selectOwnAccount } from '@/queries/accounts/selectors';
 import KVStore from '@/storage/kv-store';
 import { useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';

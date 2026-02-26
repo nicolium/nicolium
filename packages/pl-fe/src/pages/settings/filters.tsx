@@ -1,7 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchFilters, deleteFilter } from '@/actions/filters';
 import RelativeTimestamp from '@/components/relative-timestamp';
 import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
@@ -9,26 +8,29 @@ import Column from '@/components/ui/column';
 import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
+import { useDeleteFilter, useFilters } from '@/queries/settings/use-filters';
 import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.filters', defaultMessage: 'Muted words' },
-  home_timeline: { id: 'column.filters.home_timeline', defaultMessage: 'Home timeline' },
-  public_timeline: { id: 'column.filters.public_timeline', defaultMessage: 'Public timeline' },
+  homeTimeline: { id: 'column.filters.home_timeline', defaultMessage: 'Home timeline' },
+  publicTimeline: { id: 'column.filters.public_timeline', defaultMessage: 'Public timeline' },
   notifications: { id: 'column.filters.notifications', defaultMessage: 'Notifications' },
   conversations: { id: 'column.filters.conversations', defaultMessage: 'Conversations' },
   accounts: { id: 'column.filters.accounts', defaultMessage: 'Accounts' },
-  delete_error: { id: 'column.filters.delete_error', defaultMessage: 'Error deleting filter' },
+  deleteSuccess: {
+    id: 'column.filters.delete.success',
+    defaultMessage: 'Filter deleted successfully',
+  },
+  deleteError: { id: 'column.filters.delete.error', defaultMessage: 'Error deleting filter' },
   edit: { id: 'column.filters.edit', defaultMessage: 'Edit filter' },
   delete: { id: 'column.filters.delete', defaultMessage: 'Delete' },
 });
 
 const contexts = {
-  home: messages.home_timeline,
-  public: messages.public_timeline,
+  home: messages.homeTimeline,
+  public: messages.publicTimeline,
   notifications: messages.notifications,
   thread: messages.conversations,
   account: messages.accounts,
@@ -36,28 +38,24 @@ const contexts = {
 
 const FiltersPage = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const { filtersV2 } = useFeatures();
 
-  const filters = useAppSelector((state) => state.filters);
+  const { data: filters = [] } = useFilters();
+  const { mutate: deleteFilter } = useDeleteFilter();
 
   const handleFilterDelete = (id: string) => () => {
-    dispatch(deleteFilter(id))
-      .then(() => dispatch(fetchFilters()))
-      .catch(() => {
-        toast.error(intl.formatMessage(messages.delete_error));
-      });
+    deleteFilter(id, {
+      onSuccess: () => {
+        toast.success(intl.formatMessage(messages.deleteSuccess));
+      },
+      onError: () => {
+        toast.error(intl.formatMessage(messages.deleteError));
+      },
+    });
   };
 
-  useEffect(() => {
-    dispatch(fetchFilters());
-  }, []);
-
   const emptyMessage = (
-    <FormattedMessage
-      id='empty_column.filters'
-      defaultMessage="You haven't created any muted words yet."
-    />
+    <FormattedMessage id='empty_column.filters' defaultMessage="You haven't muted any word yet." />
   );
 
   return (

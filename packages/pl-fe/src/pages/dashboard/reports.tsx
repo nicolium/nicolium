@@ -2,7 +2,6 @@ import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import HStack from '@/components/ui/hstack';
@@ -10,10 +9,12 @@ import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
 import Report from '@/features/admin/components/report';
 import { adminReportsRoute } from '@/features/ui/router';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useReports } from '@/queries/admin/use-reports';
 
 const messages = defineMessages({
   heading: { id: 'column.admin.reports', defaultMessage: 'Reports' },
+  clearFilter: { id: 'column.admin.reports.clear_filter', defaultMessage: 'Clear filter' },
 });
 
 const Reports: React.FC = () => {
@@ -26,8 +27,8 @@ const Reports: React.FC = () => {
   } = adminReportsRoute.useSearch();
   const navigate = useNavigate({ from: adminReportsRoute.fullPath });
 
-  const { account } = useAccount(accountId);
-  const { account: targetAccount } = useAccount(targetAccountId);
+  const { data: account } = useAccount(accountId);
+  const { data: targetAccount } = useAccount(targetAccountId);
 
   const {
     data: reportIds = [],
@@ -54,6 +55,7 @@ const Reports: React.FC = () => {
             iconClassName='h-5 w-5'
             src={require('@phosphor-icons/core/regular/x.svg')}
             onClick={handleUnsetAccounts}
+            title={intl.formatMessage(messages.clearFilter)}
           />
           <Text>
             <FormattedMessage
@@ -65,6 +67,7 @@ const Reports: React.FC = () => {
                     value={[
                       account && (
                         <FormattedMessage
+                          key='account'
                           id='column.admin.reports.filter_message.account'
                           defaultMessage='from @{acct}'
                           values={{
@@ -74,6 +77,7 @@ const Reports: React.FC = () => {
                       ),
                       targetAccount && (
                         <FormattedMessage
+                          key='targetAccount'
                           id='column.admin.reports.filter_message.target_account'
                           defaultMessage='targeting @{acct}'
                           values={{

@@ -6,14 +6,14 @@ import Hashtag from '@/components/hashtag';
 import Text from '@/components/ui/text';
 import Widget from '@/components/ui/widget';
 import PlaceholderSidebarTrends from '@/features/placeholder/components/placeholder-sidebar-trends';
-import useTrends from '@/queries/trends';
+import useTrendingTags from '@/queries/trends/use-trending-tags';
 
 interface ITrendsPanel {
   limit: number;
 }
 
 const TrendsPanel = ({ limit }: ITrendsPanel) => {
-  const { data: trends, isFetching } = useTrends();
+  const { data: trends, isFetching } = useTrendingTags();
 
   if (!isFetching && !trends?.length) {
     return null;

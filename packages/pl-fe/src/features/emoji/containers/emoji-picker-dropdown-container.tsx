@@ -1,13 +1,15 @@
 import { useFloating, shift, flip, autoUpdate, useTransitionStyles } from '@floating-ui/react';
 import clsx from 'clsx';
-import React, { KeyboardEvent, useMemo, useState } from 'react';
+import React, { type KeyboardEvent, useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import IconButton from '@/components/ui/icon-button';
 import Portal from '@/components/ui/portal';
 import { useClickOutside } from '@/hooks/use-click-outside';
 
-import EmojiPickerDropdown, { IEmojiPickerDropdown } from '../components/emoji-picker-dropdown';
+import EmojiPickerDropdown, {
+  type IEmojiPickerDropdown,
+} from '../components/emoji-picker-dropdown';
 
 const messages = defineMessages({
   emoji: { id: 'emoji_button.label', defaultMessage: 'Insert emoji' },
@@ -17,7 +19,7 @@ interface IEmojiPickerDropdownContainer extends Pick<
   IEmojiPickerDropdown,
   'onPickEmoji' | 'condensed' | 'withCustom'
 > {
-  children?: JSX.Element;
+  children?: React.JSX.Element;
   theme?: 'default' | 'inverse';
 }
 

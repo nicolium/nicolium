@@ -2,11 +2,13 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 
+import { queryKeys } from '../keys';
+
 const useMfaConfig = () => {
   const client = useClient();
 
   return useQuery({
-    queryKey: ['settings', 'mfa'],
+    queryKey: queryKeys.settings.mfa,
     queryFn: () => client.settings.mfa.getMfaSettings(),
   });
 };
@@ -20,7 +22,7 @@ const useConfirmMfa = () => {
     mutationFn: ({ code, password }: { code: string; password: string }) =>
       client.settings.mfa.confirmMfaSetup('totp', code, password),
     onSuccess: () => {
-      queryClient.setQueryData(['settings', 'mfa'], {
+      queryClient.setQueryData(queryKeys.settings.mfa, {
         settings: {
           enabled: true,
           totp: true,
@@ -38,7 +40,7 @@ const useDisableMfa = () => {
     mutationKey: ['settings', 'mfa'],
     mutationFn: (password: string) => client.settings.mfa.disableMfa('totp', password),
     onSuccess: () => {
-      queryClient.setQueryData(['settings', 'mfa'], {
+      queryClient.setQueryData(queryKeys.settings.mfa, {
         settings: {
           enabled: false,
           totp: false,

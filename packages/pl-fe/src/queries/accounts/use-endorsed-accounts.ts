@@ -1,18 +1,24 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { importEntities } from '@/actions/importer';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { batcher } from '@/api/batcher';
 import { useClient } from '@/hooks/use-client';
+import { queryKeys } from '@/queries/keys';
 
 const useEndorsedAccounts = (accountId: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   return useQuery({
-    queryKey: ['accountsLists', 'endorsedAccounts', accountId],
+    queryKey: queryKeys.accountsLists.endorsedAccounts(accountId),
     queryFn: () =>
       client.accounts.getAccountEndorsements(accountId).then(({ items: accounts }) => {
-        dispatch(importEntities({ accounts }));
+        const fetcher = batcher.relationships(client).fetch;
+
+        for (const account of accounts) {
+          fetcher(account.id);
+          queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+        }
+
         return accounts.map(({ id }) => id);
       }),
   });

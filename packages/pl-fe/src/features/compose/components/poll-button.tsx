@@ -1,15 +1,13 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { addPoll, removePoll } from '@/actions/compose';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
+import { useCompose, useComposeActions, newPoll } from '@/stores/compose';
 
 import ComposeFormButton from './compose-form-button';
 
 const messages = defineMessages({
-  add_poll: { id: 'poll_button.add_poll', defaultMessage: 'Add a poll' },
-  remove_poll: { id: 'poll_button.remove_poll', defaultMessage: 'Remove poll' },
+  addPoll: { id: 'poll_button.add_poll', defaultMessage: 'Add a poll' },
+  removePoll: { id: 'poll_button.remove_poll', defaultMessage: 'Remove poll' },
 });
 
 interface IPollButton {
@@ -19,7 +17,7 @@ interface IPollButton {
 
 const PollButton: React.FC<IPollButton> = ({ composeId, disabled }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
 
   const compose = useCompose(composeId);
 
@@ -27,11 +25,9 @@ const PollButton: React.FC<IPollButton> = ({ composeId, disabled }) => {
   const active = compose.poll !== null;
 
   const onClick = () => {
-    if (active) {
-      dispatch(removePoll(composeId));
-    } else {
-      dispatch(addPoll(composeId));
-    }
+    updateCompose(composeId, (draft) => {
+      draft.poll = active ? null : newPoll();
+    });
   };
 
   if (unavailable) {
@@ -41,7 +37,7 @@ const PollButton: React.FC<IPollButton> = ({ composeId, disabled }) => {
   return (
     <ComposeFormButton
       icon={require('@phosphor-icons/core/regular/chart-bar.svg')}
-      title={intl.formatMessage(active ? messages.remove_poll : messages.add_poll)}
+      title={intl.formatMessage(active ? messages.removePoll : messages.addPoll)}
       active={active}
       disabled={disabled}
       onClick={onClick}

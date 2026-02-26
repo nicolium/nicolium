@@ -5,7 +5,7 @@ import React, { useEffect, useRef } from 'react';
 import Counter from '@/components/ui/counter';
 import Icon from '@/components/ui/icon';
 import Toggle from '@/components/ui/toggle';
-import { userTouching } from '@/is-mobile';
+import { userTouching } from '@/utils/is-mobile';
 
 type Menu = Array<MenuItem | null>;
 
@@ -47,7 +47,10 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
     event.stopPropagation();
 
     if (!item) return;
-    if (item.disabled) return;
+    if (item.disabled) {
+      event.preventDefault();
+      return;
+    }
 
     if (item.items?.length) {
       event.preventDefault();
@@ -113,7 +116,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
     if (itemRef.current && (autoFocus ? firstItem : item?.active)) {
       itemRef.current.focus({ preventScroll: true });
     }
-  }, [itemRef.current, index]);
+  }, [index]);
 
   if (item === null) {
     return <hr />;
@@ -124,7 +127,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
       <a
         href={item.href ?? item.to ?? '#'}
         role='button'
-        tabIndex={0}
+        tabIndex={item.disabled ? -1 : 0}
         ref={itemRef}
         data-index={index}
         onClick={handleClick}
@@ -133,10 +136,12 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
         target={typeof item.target === 'string' ? item.target : '_blank'}
         title={item.text}
         className={clsx(
-          'mx-2 my-1 flex cursor-pointer items-center rounded-md px-2 py-1.5 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-800 focus:bg-gray-100 focus:text-gray-800 focus:outline-none black:hover:bg-gray-900 black:focus:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-gray-200 dark:focus:bg-gray-800 dark:focus:text-gray-200',
+          'mx-2 my-1 flex cursor-pointer items-center rounded-md px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300',
           {
             'text-danger-600 dark:text-danger-400': item.destructive,
             'cursor-not-allowed opacity-50': item.disabled,
+            'hover:bg-gray-100 hover:text-gray-800 focus:bg-gray-100 focus:text-gray-800 focus:outline-none black:hover:bg-gray-900 black:focus:bg-gray-900 dark:hover:bg-gray-800 dark:hover:text-gray-200 dark:focus:bg-gray-800 dark:focus:text-gray-200':
+              !item.disabled,
           },
         )}
       >
@@ -168,7 +173,12 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
 
         {(item.type === 'toggle' || item.type === 'radio') && (
           <div className='ml-auto'>
-            <Toggle checked={item.checked} onChange={handleChange} radio={item.type === 'radio'} />
+            <Toggle
+              checked={item.checked}
+              onChange={handleChange}
+              radio={item.type === 'radio'}
+              disabled={item.disabled}
+            />
           </div>
         )}
 

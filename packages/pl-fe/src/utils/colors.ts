@@ -28,7 +28,7 @@ SOFTWARE.
 import type { Rgb, TailwindColorObject } from '@/types/colors';
 
 const hexToRgb = (hex: string): Rgb | null => {
-  const sanitizedHex = hex.replace(/##/g, '#');
+  const sanitizedHex = hex.replaceAll('##', '#');
   const colorParts = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(sanitizedHex);
 
   if (!colorParts) {
@@ -79,7 +79,7 @@ const darken = (hex: string, intensity: number): string => {
 
 const colors = (baseColor: string): TailwindColorObject => {
   const response: TailwindColorObject = {
-    500: `#${baseColor}`.replace(/##/g, '#'),
+    500: `#${baseColor}`.replaceAll('##', '#'),
   };
 
   const intensityMap: {

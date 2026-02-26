@@ -13,12 +13,13 @@ import {
   $isRangeSelection,
   COMMAND_PRIORITY_CRITICAL,
   COMMAND_PRIORITY_LOW,
-  LexicalEditor,
+  type LexicalEditor,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import * as React from 'react';
 import { createPortal } from 'react-dom';
+import { defineMessages, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
 
@@ -26,18 +27,25 @@ import { getSelectedNode } from '../utils/get-selected-node';
 import { setFloatingElemPosition } from '../utils/set-floating-elem-position';
 import { sanitizeUrl } from '../utils/url';
 
+const messages = defineMessages({
+  editLink: { id: 'compose_form.lexical.edit_link', defaultMessage: 'Edit link' },
+  removeLink: { id: 'compose_form.lexical.remove_link', defaultMessage: 'Remove link' },
+});
+
 const FloatingLinkEditor = ({
   editor,
   anchorElem,
 }: {
   editor: LexicalEditor;
   anchorElem: HTMLElement;
-}): JSX.Element => {
+}): React.JSX.Element => {
   const editorRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [linkUrl, setLinkUrl] = useState('');
   const [isEditMode, setEditMode] = useState(false);
   const [lastSelection, setLastSelection] = useState<BaseSelection | null>(null);
+
+  const intl = useIntl();
 
   const updateLinkEditor = useCallback(() => {
     const selection = $getSelection();
@@ -185,14 +193,25 @@ const FloatingLinkEditor = ({
               className='absolute inset-y-0 right-0 flex w-9 cursor-pointer items-center justify-center'
               role='button'
               tabIndex={0}
+              aria-label={intl.formatMessage(messages.removeLink)}
               onMouseDown={(event) => {
                 event.preventDefault();
               }}
               onClick={() => {
                 editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
               }}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
+                }
+              }}
             >
-              <Icon className='size-5' src={require('@phosphor-icons/core/regular/x.svg')} />
+              <Icon
+                className='size-5'
+                src={require('@phosphor-icons/core/regular/x.svg')}
+                aria-hidden
+              />
             </div>
           </>
         ) : (
@@ -209,16 +228,24 @@ const FloatingLinkEditor = ({
               className='absolute inset-y-0 right-0 flex w-9 cursor-pointer items-center justify-center'
               role='button'
               tabIndex={0}
+              aria-label={intl.formatMessage(messages.editLink)}
               onMouseDown={(event) => {
                 event.preventDefault();
               }}
               onClick={() => {
                 setEditMode(true);
               }}
+              onKeyDown={(event) => {
+                if (event.key === 'Enter' || event.key === ' ') {
+                  event.preventDefault();
+                  setEditMode(true);
+                }
+              }}
             >
               <Icon
                 className='size-5'
                 src={require('@phosphor-icons/core/regular/pencil-simple.svg')}
+                aria-hidden
               />
             </div>
           </>
@@ -231,7 +258,7 @@ const FloatingLinkEditor = ({
 const useFloatingLinkEditorToolbar = (
   editor: LexicalEditor,
   anchorElem: HTMLElement,
-): JSX.Element | null => {
+): React.JSX.Element | null => {
   const [activeEditor, setActiveEditor] = useState(editor);
   const [isLink, setIsLink] = useState(false);
 
@@ -272,7 +299,7 @@ const FloatingLinkEditorPlugin = ({
   anchorElem = document.body,
 }: {
   anchorElem?: HTMLElement;
-}): JSX.Element | null => {
+}): React.JSX.Element | null => {
   const [editor] = useLexicalComposerContext();
   return useFloatingLinkEditorToolbar(editor, anchorElem);
 };

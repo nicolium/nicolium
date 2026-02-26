@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
+import List, { ListItem } from '@/components/list';
 import Form from '@/components/ui/form';
 import FormGroup from '@/components/ui/form-group';
-import HStack from '@/components/ui/hstack';
 import Modal from '@/components/ui/modal';
-import Stack from '@/components/ui/stack';
-import Text from '@/components/ui/text';
 import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
 import { DatePicker } from '@/features/ui/util/async-components';
@@ -186,23 +184,24 @@ const EditAnnouncementModal: React.FC<BaseModalProps & EditAnnouncementModalProp
             isClearable
           />
         </FormGroup>
-        <HStack alignItems='center' space={2}>
-          <Toggle checked={allDay} onChange={onChangeAllDay} />
-          <Stack>
-            <Text tag='span' theme='muted'>
+        <List>
+          <ListItem
+            label={
               <FormattedMessage
                 id='admin.edit_announcement.fields.all_day_label'
                 defaultMessage='All-day event'
               />
-            </Text>
-            <Text size='xs' tag='span' theme='muted'>
+            }
+            hint={
               <FormattedMessage
                 id='admin.edit_announcement.fields.all_day_hint'
                 defaultMessage='When checked, only the dates of the time range will be displayed'
               />
-            </Text>
-          </Stack>
-        </HStack>
+            }
+          >
+            <Toggle checked={allDay} onChange={onChangeAllDay} />
+          </ListItem>
+        </List>
       </Form>
     </Modal>
   );

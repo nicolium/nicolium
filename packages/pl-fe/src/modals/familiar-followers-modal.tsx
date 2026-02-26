@@ -1,12 +1,12 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import ScrollableList from '@/components/scrollable-list';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
 import AccountContainer from '@/containers/account-container';
 import Emojify from '@/features/emoji/emojify';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useFamiliarFollowers } from '@/queries/accounts/use-familiar-followers';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
@@ -19,7 +19,7 @@ const FamiliarFollowersModal: React.FC<BaseModalProps & FamiliarFollowersModalPr
   accountId,
   onClose,
 }) => {
-  const { account } = useAccount(accountId);
+  const { data: account } = useAccount(accountId);
   const { data: familiarFollowerIds } = useFamiliarFollowers(accountId);
 
   const onClickClose = () => {

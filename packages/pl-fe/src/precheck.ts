@@ -1,6 +1,6 @@
 /**
  * Precheck: information about the site before anything renders.
- * @module pl-fe/precheck
+ * @module @/precheck
  */
 
 /** Whether pre-rendered data exists in Pleroma's format. */

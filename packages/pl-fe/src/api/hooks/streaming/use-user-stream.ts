@@ -1,17 +1,14 @@
 import { useCallback } from 'react';
 
-import { updateConversations } from '@/actions/conversations';
-import { fetchFilters } from '@/actions/filters';
-import { MARKER_FETCH_SUCCESS } from '@/actions/markers';
-import { updateNotificationsQueue } from '@/actions/notifications';
-import { getLocale } from '@/actions/settings';
 import { updateStatus } from '@/actions/statuses';
 import { deleteFromTimelines, processTimelineUpdate } from '@/actions/timelines';
 import { useStatContext } from '@/contexts/stat-context';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useLoggedIn } from '@/hooks/use-logged-in';
-import messages from '@/messages';
 import { queryClient } from '@/queries/client';
+import { updateConversations } from '@/queries/conversations/use-conversations';
+import { queryKeys } from '@/queries/keys';
+import { useProcessStreamNotification } from '@/queries/notifications/use-notifications';
 import { useSettings } from '@/stores/settings';
 import { getUnreadChatsCount, updateChatListItem } from '@/utils/chats';
 import { play, soundCache } from '@/utils/sounds';
@@ -25,13 +22,12 @@ import type {
   Announcement,
   AnnouncementReaction,
   FollowRelationshipUpdate,
-  Relationship,
   StreamingEvent,
 } from 'pl-api';
 
 const updateAnnouncementReactions = (reaction: AnnouncementReaction) => {
-  queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-    prevResult.map((value) => {
+  queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
+    prevResult?.map((value) => {
       if (value.id !== reaction.announcement_id) return value;
 
       return {
@@ -43,7 +39,9 @@ const updateAnnouncementReactions = (reaction: AnnouncementReaction) => {
 };
 
 const updateAnnouncement = (announcement: Announcement) =>
-  queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) => {
+  queryClient.setQueryData(queryKeys.announcements.all, (prevResult) => {
+    if (!prevResult) return;
+
     let updated = false;
 
     const result = prevResult.map((value) =>
@@ -54,8 +52,8 @@ const updateAnnouncement = (announcement: Announcement) =>
   });
 
 const deleteAnnouncement = (announcementId: string) =>
-  queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-    prevResult.filter((value) => value.id !== announcementId),
+  queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
+    prevResult?.filter((value) => value.id !== announcementId),
   );
 
 const followStateToRelationship = (followState: FollowRelationshipUpdate['state']) => {
@@ -78,8 +76,8 @@ const updateFollowRelationships =
     const me = state.me;
 
     if (update.follower.id === me) {
-      queryClient.setQueryData<Relationship>(
-        ['accountRelationships', update.following.id],
+      queryClient.setQueryData(
+        queryKeys.accountRelationships.show(update.following.id),
         (relationship) =>
           relationship
             ? {
@@ -109,6 +107,7 @@ const useUserStream = () => {
   const dispatch = useAppDispatch();
   const statContext = useStatContext();
   const settings = useSettings();
+  const processStreamNotification = useProcessStreamNotification();
 
   const listener = useCallback((event: StreamingEvent) => {
     switch (event.event) {
@@ -122,19 +121,13 @@ const useUserStream = () => {
         dispatch(deleteFromTimelines(event.payload));
         break;
       case 'notification':
-        messages[getLocale()]()
-          .then((messages) => {
-            dispatch(updateNotificationsQueue(event.payload, messages, getLocale()));
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        processStreamNotification(event.payload);
         break;
       case 'conversation':
-        dispatch(updateConversations(event.payload));
+        updateConversations(event.payload);
         break;
       case 'filters_changed':
-        dispatch(fetchFilters());
+        queryClient.invalidateQueries({ queryKey: queryKeys.filters.all });
         break;
       case 'chat_update':
         dispatch((_dispatch, getState) => {
@@ -168,7 +161,10 @@ const useUserStream = () => {
         deleteAnnouncement(event.payload);
         break;
       case 'marker':
-        dispatch({ type: MARKER_FETCH_SUCCESS, marker: event.payload });
+        queryClient.setQueryData(
+          queryKeys.markers.notifications,
+          event.payload.notifications ?? null,
+        );
         break;
     }
   }, []);

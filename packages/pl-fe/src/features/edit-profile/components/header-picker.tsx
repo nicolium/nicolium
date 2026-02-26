@@ -82,7 +82,13 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
         title={intl.formatMessage(messages.title)}
         tabIndex={0}
       >
-        {src && <img className='size-full object-cover' src={src} alt='' />}
+        {src && (
+          <img
+            className='size-full object-cover'
+            src={src}
+            alt={intl.formatMessage(messages.title)}
+          />
+        )}
         <HStack
           className={clsx('absolute top-0 size-full transition-opacity', {
             'bg-primary-100 opacity-0 hover:opacity-90 dark:bg-gray-800': src,

@@ -10,7 +10,7 @@ import('./data')
   .then((data) => {
     emojis = data.emojis;
 
-    const sortedEmojis = Object.entries(emojis).sort((a, b) => a[0].localeCompare(b[0]));
+    const sortedEmojis = Object.entries(emojis).toSorted((a, b) => a[0].localeCompare(b[0]));
     for (const [key, emoji] of sortedEmojis) {
       index.add('n' + key, `${emoji.id} ${emoji.name} ${emoji.keywords.join(' ')}`);
     }
@@ -29,7 +29,7 @@ interface searchOptions {
 }
 
 const addCustomToPool = (customEmojis: any[]) => {
-  // @ts-ignore
+  // @ts-expect-error
   for (const key in index.register) {
     if (key[0] === 'c') {
       index.remove(key); // remove old custom emojis

@@ -4,6 +4,10 @@ import React, { useCallback, useRef } from 'react';
 import { getPointerPosition } from '@/features/video';
 
 interface IStepSlider {
+  id?: string;
+  'aria-labelledby'?: string;
+  'aria-describedby'?: string;
+  'aria-valuetext'?: string;
   /** Value between 0 and the amount of steps minus one. */
   value: number;
   /** Steps available in the slider. */
@@ -13,7 +17,15 @@ interface IStepSlider {
 }
 
 /** Slider allowing selecting integers in a given range. */
-const StepSlider: React.FC<IStepSlider> = ({ value, steps, onChange }) => {
+const StepSlider: React.FC<IStepSlider> = ({
+  id,
+  value,
+  steps,
+  onChange,
+  'aria-labelledby': ariaLabelledby,
+  'aria-describedby': ariaDescribedby,
+  'aria-valuetext': ariaValueText,
+}) => {
   const node = useRef<HTMLDivElement>(null);
 
   const handleMouseDown: React.MouseEventHandler = (e) => {
@@ -57,6 +69,42 @@ const StepSlider: React.FC<IStepSlider> = ({ value, steps, onChange }) => {
     [node.current],
   );
 
+  const handleKeyDown: React.KeyboardEventHandler<HTMLSpanElement> = (event) => {
+    let nextValue: number | null = null;
+
+    switch (event.key) {
+      case 'ArrowLeft':
+      case 'ArrowDown':
+        nextValue = value - 1;
+        break;
+      case 'ArrowRight':
+      case 'ArrowUp':
+        nextValue = value + 1;
+        break;
+      case 'PageDown':
+      case 'Home':
+        nextValue = 0;
+        break;
+      case 'PageUp':
+      case 'End':
+        nextValue = steps - 1;
+        break;
+      default:
+        break;
+    }
+
+    if (nextValue !== null) {
+      event.preventDefault();
+      if (nextValue < 0) {
+        nextValue = 0;
+      } else if (nextValue > steps - 1) {
+        nextValue = steps - 1;
+      }
+
+      onChange(nextValue);
+    }
+  };
+
   return (
     <div
       className='relative inline-flex h-6 cursor-pointer transition'
@@ -76,8 +124,18 @@ const StepSlider: React.FC<IStepSlider> = ({ value, steps, onChange }) => {
         />
       ))}
       <span
-        className='absolute top-1/2 z-10 -ml-1.5 size-3 -translate-y-1/2 rounded-full bg-accent-500 shadow'
+        id={id}
+        className='absolute top-1/2 z-10 -ml-1.5 size-3 -translate-y-1/2 rounded-full bg-accent-500 shadow transition-[left] duration-100 ease-in-out'
         tabIndex={0}
+        role='slider'
+        aria-valuemin={0}
+        aria-valuemax={steps - 1}
+        aria-valuenow={value}
+        aria-valuetext={ariaValueText}
+        aria-orientation='horizontal'
+        aria-labelledby={ariaLabelledby}
+        aria-describedby={ariaDescribedby}
+        onKeyDown={handleKeyDown}
         style={{ left: `calc(${(value / (steps - 1)) * 100}% + 0.125rem)` }}
       />
     </div>

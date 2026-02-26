@@ -1,13 +1,14 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, IntlShape } from 'react-intl';
+import { defineMessages, FormattedMessage, type IntlShape } from 'react-intl';
 
-import { fetchAccountByUsername } from '@/actions/accounts';
 import { deactivateUser, deleteUser, deleteStatus, toggleStatusSensitivity } from '@/actions/admin';
 import OutlineBox from '@/components/outline-box';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import AccountContainer from '@/containers/account-container';
-import { selectAccount } from '@/selectors';
+import { selectAccount } from '@/queries/accounts/selectors';
+import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { useModalsStore } from '@/stores/modals';
 import toast from '@/toast';
 
@@ -96,10 +97,9 @@ const messages = defineMessages({
 
 const deactivateUserModal =
   (intl: IntlShape, accountId: string, afterConfirm = () => {}) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const acct = selectAccount(state, accountId)!.acct;
-    const name = selectAccount(state, accountId)!.username;
+  (dispatch: AppDispatch) => {
+    const acct = selectAccount(accountId)!.acct;
+    const name = selectAccount(accountId)!.username;
 
     const message = (
       <Stack space={4}>
@@ -135,9 +135,8 @@ const deactivateUserModal =
 
 const deleteUserModal =
   (intl: IntlShape, accountId: string, afterConfirm = () => {}) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const account = selectAccount(state, accountId)!;
+  (dispatch: AppDispatch) => {
+    const account = selectAccount(accountId)!;
     const acct = account.acct;
     const name = account.username;
     const local = account.local;
@@ -170,7 +169,10 @@ const deleteUserModal =
         dispatch(deleteUser(accountId))
           .then(() => {
             const message = intl.formatMessage(messages.userDeleted, { acct });
-            dispatch(fetchAccountByUsername(acct));
+            queryClient.invalidateQueries({ queryKey: queryKeys.accounts.show(accountId) });
+            queryClient.invalidateQueries({
+              queryKey: queryKeys.accounts.lookup(acct.toLocaleLowerCase()),
+            });
             toast.success(message);
             afterConfirm();
           })

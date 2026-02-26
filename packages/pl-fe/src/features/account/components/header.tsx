@@ -6,12 +6,11 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import { mentionCompose, directCompose } from '@/actions/compose';
 import { initReport, ReportableEntities } from '@/actions/reports';
 import Account from '@/components/account';
 import AltIndicator from '@/components/alt-indicator';
 import Badge from '@/components/badge';
-import DropdownMenu, { Menu } from '@/components/dropdown-menu';
+import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import Icon from '@/components/icon';
 import StillImage from '@/components/still-image';
 import Avatar from '@/components/ui/avatar';
@@ -24,7 +23,6 @@ import VerificationBadge from '@/components/verification-badge';
 import Emojify from '@/features/emoji/emojify';
 import ActionButton from '@/features/ui/components/action-button';
 import SubscriptionButton from '@/features/ui/components/subscription-button';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -39,10 +37,12 @@ import {
 } from '@/queries/accounts/use-relationship';
 import { useChats } from '@/queries/chats';
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import {
   blockDomainMutationOptions,
   unblockDomainMutationOptions,
 } from '@/queries/settings/domain-blocks';
+import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import toast from '@/toast';
@@ -52,16 +52,7 @@ import type { PlfeResponse } from '@/api';
 import type { Account as AccountEntity } from 'pl-api';
 
 const messages = defineMessages({
-  edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },
-  linkVerifiedOn: {
-    id: 'account.link_verified_on',
-    defaultMessage: 'Ownership of this link was checked on {date}',
-  },
-  account_locked: {
-    id: 'account.locked_info',
-    defaultMessage:
-      'This account privacy status is set to locked. The owner manually reviews who can follow them.',
-  },
+  editProfile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },
   mention: { id: 'account.mention', defaultMessage: 'Mention' },
   chat: { id: 'account.chat', defaultMessage: 'Chat with @{name}' },
   direct: { id: 'account.direct', defaultMessage: 'Direct message @{name}' },
@@ -78,9 +69,7 @@ const messages = defineMessages({
   hideReblogs: { id: 'account.hide_reblogs', defaultMessage: 'Hide reposts from @{name}' },
   showReblogs: { id: 'account.show_reblogs', defaultMessage: 'Show reposts from @{name}' },
   preferences: { id: 'column.preferences', defaultMessage: 'Preferences' },
-  follow_requests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },
   blocks: { id: 'column.blocks', defaultMessage: 'Blocks' },
-  domain_blocks: { id: 'column.domain_blocks', defaultMessage: 'Domain blocks' },
   mutes: { id: 'column.mutes', defaultMessage: 'Mutes' },
   endorse: { id: 'account.endorse', defaultMessage: 'Feature on profile' },
   unendorse: { id: 'account.unendorse', defaultMessage: "Don't feature on profile" },
@@ -90,7 +79,7 @@ const messages = defineMessages({
     defaultMessage: 'Remove this follower',
   },
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
-  add_or_remove_from_list: {
+  addOrRemoveFromList: {
     id: 'account.add_or_remove_from_list',
     defaultMessage: 'Add or remove from lists',
   },
@@ -176,11 +165,11 @@ interface IHeader {
 const Header: React.FC<IHeader> = ({ account }) => {
   const intl = useIntl();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const { mentionCompose, directCompose } = useComposeActions();
   const client = useClient();
 
   const features = useFeatures();
-  const { account: ownAccount } = useOwnAccount();
+  const { data: ownAccount } = useOwnAccount();
   const { mutate: followAccount } = useFollowAccountMutation(account?.id!);
   const { mutate: unblockAccount } = useUnblockAccountMutation(account?.id!);
   const { mutate: unmuteAccount } = useUnmuteAccountMutation(account?.id!);
@@ -207,7 +196,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
     onSuccess: (response) => {
       navigate({ to: '/chats/$chatId', params: { chatId: response.id } });
       queryClient.invalidateQueries({
-        queryKey: ['chats', 'search'],
+        queryKey: queryKeys.chats.search,
       });
     },
   });
@@ -239,11 +228,11 @@ const Header: React.FC<IHeader> = ({ account }) => {
   };
 
   const onMention = () => {
-    dispatch(mentionCompose(account));
+    mentionCompose(account);
   };
 
   const onDirect = () => {
-    dispatch(directCompose(account));
+    directCompose(account);
   };
 
   const onReblogToggle = () => {
@@ -318,7 +307,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
   };
 
   const onReport = () => {
-    dispatch(initReport(ReportableEntities.ACCOUNT, account));
+    initReport(ReportableEntities.ACCOUNT, account);
   };
 
   const onMute = () => {
@@ -432,7 +421,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       });
   };
 
-  const handleCopy: React.EventHandler<React.MouseEvent> = (e) => {
+  const handleCopy: React.EventHandler<React.MouseEvent> = () => {
     copy(account.url);
   };
 
@@ -496,7 +485,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
     if (account.id === ownAccount.id) {
       menu.push({
-        text: intl.formatMessage(messages.edit_profile),
+        text: intl.formatMessage(messages.editProfile),
         to: '/settings/profile',
         icon: require('@phosphor-icons/core/regular/user.svg'),
       });
@@ -548,7 +537,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
         if (features.lists) {
           menu.push({
-            text: intl.formatMessage(messages.add_or_remove_from_list),
+            text: intl.formatMessage(messages.addOrRemoveFromList),
             action: onAddToList,
             icon: require('@phosphor-icons/core/regular/list-bullets.svg'),
           });
@@ -567,7 +556,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
         }
       } else if (features.lists && features.unrestrictedLists) {
         menu.push({
-          text: intl.formatMessage(messages.add_or_remove_from_list),
+          text: intl.formatMessage(messages.addOrRemoveFromList),
           action: onAddToList,
           icon: require('@phosphor-icons/core/regular/list-bullets.svg'),
         });

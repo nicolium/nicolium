@@ -3,7 +3,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { submitReport, ReportableEntities } from '@/actions/reports';
 import { fetchAccountTimeline } from '@/actions/timelines';
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import AttachmentThumbs from '@/components/attachment-thumbs';
 import StatusContent from '@/components/status-content';
 import Modal from '@/components/ui/modal';
@@ -14,6 +13,7 @@ import AccountContainer from '@/containers/account-container';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useInstance } from '@/hooks/use-instance';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useBlockAccountMutation } from '@/queries/accounts/use-relationship';
 
 import ConfirmationStep from './steps/confirmation-step';
@@ -85,7 +85,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const { account } = useAccount(accountId || undefined);
+  const { data: account } = useAccount(accountId || undefined);
 
   const { mutate: blockAccount } = useBlockAccountMutation(accountId);
 
@@ -112,7 +112,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
         setIsSubmitting(false);
         setCurrentStep(Steps.THREE);
       })
-      .catch((error) => {
+      .catch(() => {
         setIsSubmitting(false);
       });
 

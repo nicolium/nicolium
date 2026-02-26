@@ -14,7 +14,7 @@ import {
   $isRangeSelection,
   $isRootOrShadowRoot,
   COMMAND_PRIORITY_LOW,
-  LexicalEditor,
+  type LexicalEditor,
   SELECTION_CHANGE_COMMAND,
 } from 'lexical';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -22,7 +22,7 @@ import * as React from 'react';
 import { createPortal } from 'react-dom';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { uploadFile } from '@/actions/compose';
+import { uploadFile } from '@/actions/media';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/hooks/use-instance';
@@ -57,7 +57,6 @@ const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
     if (e.target.files?.length) {
       setDisabled(true);
 
-      // @ts-ignore
       dispatch(
         uploadFile(
           e.target.files.item(0) as File,
@@ -110,7 +109,7 @@ const BlockTypeFloatingToolbar = ({
 }: {
   editor: LexicalEditor;
   anchorElem: HTMLElement;
-}): JSX.Element => {
+}): React.JSX.Element => {
   const intl = useIntl();
   const popupCharStylesEditorRef = useRef<HTMLDivElement | null>(null);
   const { composeAllowInlineImages } = useFeatures();
@@ -231,7 +230,7 @@ const BlockTypeFloatingToolbar = ({
 const useFloatingBlockTypeToolbar = (
   editor: LexicalEditor,
   anchorElem: HTMLElement,
-): JSX.Element | null => {
+): React.JSX.Element | null => {
   const [isEmptyBlock, setIsEmptyBlock] = useState(false);
 
   const updatePopup = useCallback(() => {
@@ -300,7 +299,7 @@ const FloatingBlockTypeToolbarPlugin = ({
   anchorElem = document.body,
 }: {
   anchorElem?: HTMLElement;
-}): JSX.Element | null => {
+}): React.JSX.Element | null => {
   const [editor] = useLexicalComposerContext();
   return useFloatingBlockTypeToolbar(editor, anchorElem);
 };

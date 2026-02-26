@@ -1,25 +1,22 @@
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
+import { useComposeStore } from '@/stores/compose';
+import { useContextStore } from '@/stores/contexts';
 import { useModalsStore } from '@/stores/modals';
+import { usePendingStatusesStore } from '@/stores/pending-statuses';
 import { useSettingsStore } from '@/stores/settings';
 import { isLoggedIn } from '@/utils/auth';
 import { shouldHaveCard } from '@/utils/status';
 
 import { getClient } from '../api';
 
-import { setComposeToStatus } from './compose';
 import { importEntities } from './importer';
 import { deleteFromTimelines } from './timelines';
 
-import type { Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/reducers/statuses';
 import type { AppDispatch, RootState } from '@/store';
-import type {
-  CreateStatusParams,
-  Status as BaseStatus,
-  ScheduledStatus,
-  StatusSource,
-  Poll,
-} from 'pl-api';
+import type { CreateStatusParams, Status as BaseStatus, ScheduledStatus } from 'pl-api';
 import type { IntlShape } from 'react-intl';
 
 const STATUS_CREATE_REQUEST = 'STATUS_CREATE_REQUEST' as const;
@@ -50,7 +47,9 @@ const createStatus =
     redacting = false,
   ) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!params.preview)
+    if (!params.preview) {
+      usePendingStatusesStore.getState().actions.importStatus(params, idempotencyKey);
+      useContextStore.getState().actions.importPendingStatus(params.in_reply_to_id, idempotencyKey);
       dispatch<StatusesAction>({
         type: STATUS_CREATE_REQUEST,
         params,
@@ -58,6 +57,7 @@ const createStatus =
         editing: !!editedId,
         redacting,
       });
+    }
 
     const client = getClient(getState());
 
@@ -93,6 +93,13 @@ const createStatus =
           editing: !!editedId,
         });
 
+        useContextStore
+          .getState()
+          .actions.deletePendingStatus(
+            'in_reply_to_id' in status ? status.in_reply_to_id : null,
+            idempotencyKey,
+          );
+
         // Poll the backend for the updated card
         if (expectsCard) {
           const delay = 1000;
@@ -116,6 +123,10 @@ const createStatus =
         return status;
       })
       .catch((error) => {
+        usePendingStatusesStore.getState().actions.deleteStatus(idempotencyKey);
+        useContextStore
+          .getState()
+          .actions.deletePendingStatus(params.in_reply_to_id, idempotencyKey);
         dispatch<StatusesAction>({
           type: STATUS_CREATE_FAIL,
           error,
@@ -132,7 +143,7 @@ const editStatus = (statusId: string) => (dispatch: AppDispatch, getState: () =>
 
   const status = state.statuses[statusId];
   const poll = status.poll_id
-    ? queryClient.getQueryData<Poll>(['statuses', 'polls', status.poll_id])
+    ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
     : undefined;
 
   dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_REQUEST });
@@ -141,16 +152,7 @@ const editStatus = (statusId: string) => (dispatch: AppDispatch, getState: () =>
     .statuses.getStatusSource(statusId)
     .then((response) => {
       dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_SUCCESS });
-      dispatch(
-        setComposeToStatus(
-          status,
-          poll,
-          response.text,
-          response.spoiler_text,
-          response.content_type,
-          false,
-        ),
-      );
+      useComposeStore.getState().actions.setComposeToStatus(status, poll, response);
       useModalsStore.getState().actions.openModal('COMPOSE');
     })
     .catch((error) => {
@@ -176,7 +178,7 @@ const fetchStatus =
   };
 
 const deleteStatus =
-  (statusId: string, groupId?: string, withRedraft = false) =>
+  (statusId: string, withRedraft = false) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
@@ -184,33 +186,43 @@ const deleteStatus =
 
     const status = state.statuses[statusId];
     const poll = status.poll_id
-      ? queryClient.getQueryData<Poll>(['statuses', 'polls', status.poll_id])
+      ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
       : undefined;
 
     dispatch<StatusesAction>({ type: STATUS_DELETE_REQUEST, params: status });
 
-    return (
-      groupId
-        ? getClient(state).experimental.groups.deleteGroupStatus(statusId, groupId)
-        : getClient(state).statuses.deleteStatus(statusId)
-    )
-      .then((response) => {
+    return getClient(state)
+      .statuses.deleteStatus(statusId)
+      .then((source) => {
+        usePendingStatusesStore.getState().actions.deleteStatus(statusId);
         dispatch<StatusesAction>({ type: STATUS_DELETE_SUCCESS, statusId });
         dispatch(deleteFromTimelines(statusId));
 
         if (withRedraft) {
-          dispatch(
-            setComposeToStatus(
-              status,
-              poll,
-              response.text ?? '',
-              response.spoiler_text,
-              (response as StatusSource).content_type,
-              withRedraft,
-            ),
-          );
+          useComposeStore.getState().actions.setComposeToStatus(status, poll, source, withRedraft);
           useModalsStore.getState().actions.openModal('COMPOSE');
         }
+      })
+      .catch((error) => {
+        dispatch<StatusesAction>({ type: STATUS_DELETE_FAIL, params: status, error });
+      });
+  };
+
+const deleteStatusFromGroup =
+  (statusId: string, groupId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+    if (!isLoggedIn(getState)) return null;
+
+    const state = getState();
+    const status = state.statuses[statusId];
+
+    dispatch<StatusesAction>({ type: STATUS_DELETE_REQUEST, params: status });
+
+    return getClient(state)
+      .experimental.groups.deleteGroupStatus(statusId, groupId)
+      .then(() => {
+        usePendingStatusesStore.getState().actions.deleteStatus(statusId);
+        dispatch<StatusesAction>({ type: STATUS_DELETE_SUCCESS, statusId });
+        dispatch(deleteFromTimelines(statusId));
       })
       .catch((error) => {
         dispatch<StatusesAction>({ type: STATUS_DELETE_FAIL, params: status, error });
@@ -236,6 +248,7 @@ const fetchContext =
         const { ancestors, descendants } = context;
         const statuses = ancestors.concat(descendants);
         dispatch(importEntities({ statuses }));
+        useContextStore.getState().actions.importContext(statusId, context);
         dispatch<StatusesAction>({ type: CONTEXT_FETCH_SUCCESS, statusId, ancestors, descendants });
         return context;
       })
@@ -254,7 +267,7 @@ const muteStatus = (statusId: string) => (dispatch: AppDispatch, getState: () =>
 
   return getClient(getState())
     .statuses.muteStatus(statusId)
-    .then((status) => {
+    .then(() => {
       dispatch<StatusesAction>({ type: STATUS_MUTE_SUCCESS, statusId });
     });
 };
@@ -386,6 +399,7 @@ export {
   editStatus,
   fetchStatus,
   deleteStatus,
+  deleteStatusFromGroup,
   updateStatus,
   fetchContext,
   fetchStatusWithContext,

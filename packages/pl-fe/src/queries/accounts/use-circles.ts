@@ -1,26 +1,29 @@
-import { type InfiniteData, useMutation, useQuery } from '@tanstack/react-query';
+import { type UseQueryResult, useMutation, useQuery } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { queryKeys } from '@/queries/keys';
 
 import { queryClient } from '../client';
 import { filterById } from '../utils/filter-id';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 import { minifyAccountList } from '../utils/minify-list';
 
-import type { Circle, PaginatedResponse } from 'pl-api';
+import type { Circle } from 'pl-api';
 
-const useCircles = <T>(select?: (data: Array<Circle>) => T) => {
+function useCircles<T>(select: (data: Array<Circle>) => T): UseQueryResult<T, Error>;
+function useCircles(): UseQueryResult<Array<Circle>, Error>;
+function useCircles<T = Array<Circle>>(select?: (data: Array<Circle>) => T) {
   const client = useClient();
   const features = useFeatures();
 
   return useQuery({
-    queryKey: ['circles'],
+    queryKey: queryKeys.circles.all,
     queryFn: () => client.circles.fetchCircles(),
     enabled: features.circles,
     select,
   });
-};
+}
 
 const useCircle = (circleId?: string) =>
   useCircles((data) => (circleId ? data.find((circle) => circle.id === circleId) : undefined));
@@ -31,7 +34,7 @@ const useCreateCircle = () => {
   return useMutation({
     mutationKey: ['circles', 'create'],
     mutationFn: (title: string) => client.circles.createCircle(title),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['circles'] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.circles.all }),
   });
 };
 
@@ -42,7 +45,7 @@ const useDeleteCircle = () => {
     mutationKey: ['circles', 'delete'],
     mutationFn: (circleId: string) => client.circles.deleteCircle(circleId),
     onSuccess: (_, deletedCircleId) => {
-      queryClient.setQueryData<Array<Circle>>(['circles'], (prevData) =>
+      queryClient.setQueryData(queryKeys.circles.all, (prevData) =>
         prevData?.filter(({ id }) => id !== deletedCircleId),
       );
     },
@@ -55,12 +58,12 @@ const useUpdateCircle = (circleId: string) => {
   return useMutation({
     mutationKey: ['circles', 'update', circleId],
     mutationFn: (title: string) => client.circles.updateCircle(circleId, title),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['circles'] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.circles.all }),
   });
 };
 
 const useCircleAccounts = makePaginatedResponseQuery(
-  (circleId: string) => ['accountsLists', 'circles', circleId],
+  (circleId: string) => queryKeys.accountsLists.circleMembers(circleId),
   (client, [circleId]) => client.circles.getCircleAccounts(circleId).then(minifyAccountList),
 );
 
@@ -71,8 +74,8 @@ const useAddAccountsToCircle = (circleId: string) => {
     mutationKey: ['accountsLists', 'circles', circleId, 'add'],
     mutationFn: (accountIds: Array<string>) =>
       client.circles.addCircleAccounts(circleId, accountIds),
-    onSettled: (_, __, accountIds) => {
-      queryClient.invalidateQueries({ queryKey: ['accountsLists', 'circles', circleId] });
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.circleMembers(circleId) });
     },
   });
 };
@@ -85,8 +88,8 @@ const useRemoveAccountsFromCircle = (circleId: string) => {
     mutationFn: (accountIds: Array<string>) =>
       client.circles.deleteCircleAccounts(circleId, accountIds),
     onSettled: (_, __, accountIds) => {
-      queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
-        ['accountsLists', 'circles', circleId],
+      queryClient.setQueryData(
+        queryKeys.accountsLists.circleMembers(circleId),
         filterById(accountIds),
       );
     },

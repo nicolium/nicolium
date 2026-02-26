@@ -1,10 +1,10 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import AccountComponent from '@/components/account';
 import Icon from '@/components/icon';
 import HStack from '@/components/ui/hstack';
+import { useAccount } from '@/queries/accounts/use-account';
 
 const messages = defineMessages({
   birthday: { id: 'account.birthday', defaultMessage: 'Born {date}' },
@@ -16,7 +16,7 @@ interface IAccount {
 
 const Account: React.FC<IAccount> = ({ accountId }) => {
   const intl = useIntl();
-  const { account } = useAccount(accountId);
+  const { data: account } = useAccount(accountId);
 
   if (!account) return null;
 

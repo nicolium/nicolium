@@ -15,11 +15,10 @@ interface IEmoji {
 const Emoji: React.FC<IEmoji> = ({ emoji, emojiMap, hovered }) => {
   const { autoPlayGif, systemEmojiFont } = useSettings();
 
-  // @ts-ignore
   if (unicodeMapping[emoji]) {
     if (systemEmojiFont) return <>{emoji}</>;
 
-    // @ts-ignore
+    // @ts-expect-error
     const { unified, shortCode } = unicodeMapping[emoji];
     const title = shortCode ? `:${shortCode}:` : '';
 

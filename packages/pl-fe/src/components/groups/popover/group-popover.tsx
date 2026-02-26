@@ -23,7 +23,7 @@ interface IGroupPopoverContainer {
   group: Group;
 }
 
-const GroupPopover = (props: IGroupPopoverContainer) => {
+const GroupPopover: React.FC<IGroupPopoverContainer> = (props) => {
   const { children, group, isEnabled } = props;
 
   const shouldHideAction = !!useMatch({ from: groupTimelineRoute.fullPath, shouldThrow: false });

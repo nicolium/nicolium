@@ -4,6 +4,8 @@ import { batcher } from '@/api/batcher';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 
+import { queryKeys } from '../keys';
+
 import type { Translation } from 'pl-api';
 
 const useStatusTranslation = (statusId: string, targetLanguage?: string) => {
@@ -11,7 +13,7 @@ const useStatusTranslation = (statusId: string, targetLanguage?: string) => {
   const features = useFeatures();
 
   return useQuery<Translation | false>({
-    queryKey: ['statuses', 'translations', statusId, targetLanguage],
+    queryKey: queryKeys.statuses.translations(statusId, targetLanguage!),
     queryFn: () =>
       (features.lazyTranslations && targetLanguage
         ? batcher.translations(targetLanguage, client).fetch(statusId)

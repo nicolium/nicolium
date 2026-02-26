@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Stack from './stack';
 import Text from './text';
+
 import './spinner.css';
 
 interface ISpinner {

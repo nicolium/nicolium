@@ -1,28 +1,27 @@
 import sumBy from 'lodash/sumBy';
 
-import { normalizeChatMessage } from '@/normalizers/chat-message';
-import { ChatKeys } from '@/queries/chats';
+import { normalizeChatMessage } from '@/queries/chats';
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 
 import { compareDate } from './comparators';
 import { appendPageItem, flattenPages, sortQueryData, updatePageItem } from './queries';
 
-import type { InfiniteData } from '@tanstack/react-query';
-import type { Chat, PaginatedResponse } from 'pl-api';
+import type { Chat } from 'pl-api';
 
 /**
  * Update the Chat entity inside the ChatSearch query.
  * @param newChat - Chat entity.
  */
 const updateChatInChatSearchQuery = (newChat: Chat) => {
-  updatePageItem<Chat>(['chats', 'search'], newChat as any, (o, n) => o.id === n.id);
+  updatePageItem<Chat>(queryKeys.chats.search, newChat as any, (o, n) => o.id === n.id);
 };
 
 /**
  * Re-order the ChatSearch query by the last message timestamp.
  */
 const reOrderChatListItems = () => {
-  sortQueryData<Chat>(['chats', 'search'], (chatA, chatB) =>
+  sortQueryData(queryKeys.chats.search, (chatA, chatB) =>
     compareDate(chatA.last_message?.created_at as string, chatB.last_message?.created_at as string),
   );
 };
@@ -33,9 +32,7 @@ const reOrderChatListItems = () => {
  * @returns Boolean
  */
 const checkIfChatExists = (chatId: string) => {
-  const currentChats = flattenPages(
-    queryClient.getQueryData<InfiniteData<PaginatedResponse<Chat>>>(['chats', 'search']),
-  );
+  const currentChats = flattenPages(queryClient.getQueryData(queryKeys.chats.search));
 
   return currentChats?.find((chat: Chat) => chat.id === chatId);
 };
@@ -45,7 +42,7 @@ const checkIfChatExists = (chatId: string) => {
  */
 const invalidateChatSearchQuery = () => {
   queryClient.invalidateQueries({
-    queryKey: ['chats', 'search'],
+    queryKey: queryKeys.chats.search,
   });
 };
 
@@ -67,15 +64,13 @@ const updateChatListItem = (newChat: Chat) => {
 
   if (lastMessage) {
     // Update the Chat Messages query data.
-    appendPageItem(ChatKeys.chatMessages(newChat.id), normalizeChatMessage(lastMessage));
+    appendPageItem(queryKeys.chats.chatMessages(newChat.id), normalizeChatMessage(lastMessage));
   }
 };
 
 /** Get unread chats count. */
 const getUnreadChatsCount = (): number => {
-  const chats = flattenPages(
-    queryClient.getQueryData<InfiniteData<PaginatedResponse<Chat>>>(['chats', 'search']),
-  );
+  const chats = flattenPages(queryClient.getQueryData(queryKeys.chats.search));
 
   return sumBy(chats, (chat) => chat.unread);
 };

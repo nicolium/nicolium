@@ -1,11 +1,9 @@
-import { statusSchema } from 'pl-api';
+import { statusSchema, type Account } from 'pl-api';
 import * as v from 'valibot';
 
-import { normalizeStatus } from '@/normalizers/status';
-import { selectOwnAccount } from '@/selectors';
+import { normalizeStatus } from '@/reducers/statuses';
 
 import type { DraftStatus } from '@/queries/statuses/use-draft-statuses';
-import type { RootState } from '@/store';
 
 const buildPoll = (draftStatus: DraftStatus) => {
   if (draftStatus.poll?.options) {
@@ -19,13 +17,11 @@ const buildPoll = (draftStatus: DraftStatus) => {
   }
 };
 
-const buildStatus = (state: RootState, draftStatus: DraftStatus) => {
-  const account = selectOwnAccount(state);
-
+const buildStatus = (account: Account, draftStatus: DraftStatus) => {
   const status = v.parse(statusSchema, {
     id: 'draft',
     account,
-    content: draftStatus.text.replace(
+    content: draftStatus.text.replaceAll(
       new RegExp('\n', 'g'),
       '<br>',
     ) /* eslint-disable-line no-control-regex */,

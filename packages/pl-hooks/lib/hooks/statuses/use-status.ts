@@ -1,11 +1,11 @@
 import { useQueries, useQuery, UseQueryOptions, type UseQueryResult } from '@tanstack/react-query';
 
-import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
-import { queryClient, usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
-import { usePoll } from 'pl-hooks/hooks/polls/use-poll';
-import { importEntities } from 'pl-hooks/importer';
-import { type NormalizedAccount } from 'pl-hooks/normalizers/account';
-import { type NormalizedStatus, normalizeStatus } from 'pl-hooks/normalizers/status';
+import { usePlHooksApiClient } from '@/contexts/api-client';
+import { queryClient, usePlHooksQueryClient } from '@/contexts/query-client';
+import { usePoll } from '@/hooks/polls/use-poll';
+import { importEntities } from '@/importer';
+import { type NormalizedAccount } from '@/normalizers/account';
+import { type NormalizedStatus, normalizeStatus } from '@/normalizers/status';
 
 import type { Poll } from 'pl-api';
 
@@ -80,10 +80,7 @@ import type { Poll } from 'pl-api';
 //     }, [])), []);
 
 const importStatus = (status: NormalizedStatus) => {
-  queryClient.setQueryData<NormalizedStatus>(
-    ['statuses', 'entities', status.id],
-    status,
-  );
+  queryClient.setQueryData<NormalizedStatus>(['statuses', 'entities', status.id], status);
 };
 
 type Status = NormalizedStatus & {
@@ -98,21 +95,33 @@ interface UseStatusOpts {
   withReblog?: boolean;
 }
 
-type UseStatusQueryResult = Omit<UseQueryResult<NormalizedStatus>, 'data'> & { data: Status | undefined };
+type UseStatusQueryResult = Omit<UseQueryResult<NormalizedStatus>, 'data'> & {
+  data: Status | undefined;
+};
 
-const useStatus = (statusId?: string, opts: UseStatusOpts = { withReblog: true }): UseStatusQueryResult => {
+const useStatus = (
+  statusId?: string,
+  opts: UseStatusOpts = { withReblog: true },
+): UseStatusQueryResult => {
   const queryClient = usePlHooksQueryClient();
   const { client } = usePlHooksApiClient();
 
-  const statusQuery = useQuery({
-    queryKey: ['statuses', 'entities', statusId],
-    queryFn: () => client.statuses.getStatus(statusId!, {
-      language: opts.language,
-    })
-      .then(status => (importEntities({ statuses: [status] }, { withParents: false }), status))
-      .then(normalizeStatus),
-    enabled: !!statusId,
-  }, queryClient);
+  const statusQuery = useQuery(
+    {
+      queryKey: ['statuses', 'entities', statusId],
+      queryFn: () =>
+        client.statuses
+          .getStatus(statusId!, {
+            language: opts.language,
+          })
+          .then(
+            (status) => (importEntities({ statuses: [status] }, { withParents: false }), status),
+          )
+          .then(normalizeStatus),
+      enabled: !!statusId,
+    },
+    queryClient,
+  );
 
   const status = statusQuery.data;
 
@@ -123,11 +132,15 @@ const useStatus = (statusId?: string, opts: UseStatusOpts = { withReblog: true }
     reblogQuery = useStatus(status?.reblog_id || undefined, { ...opts, withReblog: false });
   }
 
-  const accountsQuery = useQueries<UseQueryOptions<NormalizedAccount>[]>({
-    queries: status?.account_ids.map(accountId => ({
-      queryKey: ['accounts', 'entities', accountId],
-    })) || [],
-  }, queryClient);
+  const accountsQuery = useQueries<UseQueryOptions<NormalizedAccount>[]>(
+    {
+      queries:
+        status?.account_ids.map((accountId) => ({
+          queryKey: ['accounts', 'entities', accountId],
+        })) || [],
+    },
+    queryClient,
+  );
 
   let data: Status | undefined;
 

@@ -1,6 +1,6 @@
 import { useNavigate } from '@tanstack/react-router';
 import React, { useEffect } from 'react';
-import { FormattedMessage } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { fetchPublicTimeline } from '@/actions/timelines';
 import { useRemoteStream } from '@/api/hooks/streaming/use-remote-stream';
@@ -14,10 +14,15 @@ import { remoteTimelineRoute } from '@/features/ui/router';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useSettings } from '@/stores/settings';
 
+const messages = defineMessages({
+  close: { id: 'remote_timeline.close', defaultMessage: 'Close remote timeline' },
+});
+
 /** View statuses from a remote instance. */
 const RemoteTimelinePage: React.FC = () => {
   const { instance } = remoteTimelineRoute.useParams();
 
+  const intl = useIntl();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -53,6 +58,7 @@ const RemoteTimelinePage: React.FC = () => {
             iconClassName='h-5 w-5'
             src={require('@phosphor-icons/core/regular/x.svg')}
             onClick={handleCloseClick}
+            title={intl.formatMessage(messages.close)}
           />
           <Text>
             <FormattedMessage

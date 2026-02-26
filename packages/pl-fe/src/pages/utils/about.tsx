@@ -6,7 +6,7 @@ import Card from '@/components/ui/card';
 import { languages } from '@/features/preferences';
 import { aboutRoute } from '@/features/ui/router';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
-import { useAboutPage } from '@/queries/pl-fe/use-about-page';
+import { useAboutPage } from '@/queries/frontend/use-about-page';
 import { useSettings } from '@/stores/settings';
 
 interface IAbout {
@@ -39,21 +39,20 @@ const About: React.FC<IAbout> = ({ slug }) => {
               setLocale(defaultLocale);
             }}
           >
-            {/* @ts-ignore */}
+            {/* @ts-expect-error */}
             {languages[defaultLocale] ?? defaultLocale}
           </a>
         </li>
         {pageLocales?.map((locale) => (
           <li className="inline after:content-['_·_'] last:after:content-none" key={locale}>
-            <a
-              href='#'
+            <button
               onClick={() => {
                 setLocale(locale);
               }}
             >
-              {/* @ts-ignore */}
+              {/* @ts-expect-error */}
               {languages[locale] ?? locale}
-            </a>
+            </button>
           </li>
         ))}
       </ul>

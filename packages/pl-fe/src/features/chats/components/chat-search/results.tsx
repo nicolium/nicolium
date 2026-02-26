@@ -7,21 +7,19 @@ import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import VerificationBadge from '@/components/verification-badge';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { useAccountSearch } from '@/queries/search/use-search-accounts';
-import { selectAccounts } from '@/selectors';
+import { useAccounts } from '@/queries/accounts/use-accounts';
 
+import type { useAccountSearch } from '@/queries/search/use-search-accounts';
 import type { Account } from 'pl-api';
 
 interface IResults {
   accountSearchResult: ReturnType<typeof useAccountSearch>;
   onSelect(id: string): void;
-  parentRef: React.RefObject<HTMLElement>;
 }
 
-const Results = ({ accountSearchResult, onSelect, parentRef }: IResults) => {
+const Results = ({ accountSearchResult, onSelect }: IResults) => {
   const { data: accountIds = [], isFetching, hasNextPage, fetchNextPage } = accountSearchResult;
-  const accounts = useAppSelector((state) => selectAccounts(state, accountIds));
+  const { accounts } = useAccounts(accountIds);
 
   const [isNearBottom, setNearBottom] = useState<boolean>(false);
   const [isNearTop, setNearTop] = useState<boolean>(true);

@@ -1,6 +1,6 @@
 /**
  * Icon: abstract component to render SVG icons.
- * @module pl-fe/components/icon
+ * @module @/components/icon
  */
 
 import clsx from 'clsx';

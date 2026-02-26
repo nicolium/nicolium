@@ -5,6 +5,7 @@ import { accountSchema } from './account';
 enum GroupRoles {
   OWNER = 'owner',
   ADMIN = 'admin',
+  MODERATOR = 'moderator',
   USER = 'user',
 }
 

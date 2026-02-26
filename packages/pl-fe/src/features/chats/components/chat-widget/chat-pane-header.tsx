@@ -1,4 +1,4 @@
-import React, { HTMLAttributes } from 'react';
+import React, { type HTMLAttributes } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import IconButton from '@/components/ui/icon-button';
@@ -20,7 +20,7 @@ interface IChatPaneHeader {
   secondaryActionTitle?: string;
 }
 
-const ChatPaneHeader = (props: IChatPaneHeader) => {
+const ChatPaneHeader: React.FC<IChatPaneHeader> = (props) => {
   const {
     isOpen,
     isToggleable = true,

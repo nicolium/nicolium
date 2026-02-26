@@ -1,9 +1,9 @@
-import { importEntities as importEntityStoreEntities } from '@/entity-store/actions';
-import { Entities } from '@/entity-store/entities';
+import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
-import { selectAccount } from '@/selectors';
+import { queryKeys } from '@/queries/keys';
+import { useContextStore } from '@/stores/contexts';
 
-import type { AppDispatch, RootState } from '@/store';
+import type { AppDispatch } from '@/store';
 import type {
   Account as BaseAccount,
   Group as BaseGroup,
@@ -46,10 +46,8 @@ const importEntities =
       withParents: true,
     },
   ) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
+  (dispatch: AppDispatch) => {
     const override = options.override ?? true;
-
-    const state: RootState = !override ? getState() : (undefined as any);
 
     const accounts: Record<string, BaseAccount> = {};
     const groups: Record<string, BaseGroup> = {};
@@ -58,7 +56,7 @@ const importEntities =
     const statuses: Record<string, BaseStatus> = {};
 
     const processAccount = (account: BaseAccount, withSelf = true) => {
-      if (!override && selectAccount(state, account.id)) return;
+      if (!override && selectAccount(account.id)) return;
 
       if (withSelf) accounts[account.id] = account;
 
@@ -96,6 +94,7 @@ const importEntities =
     );
 
     if (entities.statuses?.length === 1 && entities.statuses[0] && options.idempotencyKey) {
+      useContextStore.getState().actions.importStatus(entities.statuses[0], options.idempotencyKey);
       dispatch<ImportStatusAction>({
         type: STATUS_IMPORT,
         status: entities.statuses[0],
@@ -106,23 +105,34 @@ const importEntities =
       entities.statuses?.forEach((status) => status && processStatus(status, options.withParents));
     }
 
-    if (!isEmpty(accounts))
-      dispatch(importEntityStoreEntities(Object.values(accounts), Entities.ACCOUNTS));
+    if (!isEmpty(accounts)) {
+      for (const account of Object.values(accounts)) {
+        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+      }
+    }
     if (!isEmpty(groups))
-      dispatch(importEntityStoreEntities(Object.values(groups), Entities.GROUPS));
+      for (const group of Object.values(groups)) {
+        queryClient.setQueryData(queryKeys.groups.show(group.id), group);
+        if (group.relationship) {
+          queryClient.setQueryData(queryKeys.groupRelationships.show(group.id), group.relationship);
+        }
+      }
     if (!isEmpty(polls)) {
       for (const poll of Object.values(polls)) {
-        queryClient.setQueryData<BasePoll>(['statuses', 'polls', poll.id], poll);
+        queryClient.setQueryData(queryKeys.statuses.polls.show(poll.id), poll);
       }
     }
     if (!isEmpty(relationships)) {
       for (const relationship of Object.values(relationships)) {
-        queryClient.setQueryData<BaseRelationship>(
-          ['accountRelationships', relationship.id],
+        queryClient.setQueryData(
+          queryKeys.accountRelationships.show(relationship.id),
           relationship,
         );
       }
     }
+    if (!isEmpty(statuses))
+      useContextStore.getState().actions.importStatuses(Object.values(statuses));
+
     if (!isEmpty(statuses))
       dispatch<ImportStatusesAction>({ type: STATUSES_IMPORT, statuses: Object.values(statuses) });
   };

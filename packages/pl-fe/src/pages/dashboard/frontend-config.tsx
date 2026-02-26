@@ -19,10 +19,10 @@ import Select from '@/components/ui/select';
 import Streamfield from '@/components/ui/streamfield';
 import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
-import CryptoAddressInput from '@/features/pl-fe-config/components/crypto-address-input';
-import FooterLinkInput from '@/features/pl-fe-config/components/footer-link-input';
-import PromoPanelInput from '@/features/pl-fe-config/components/promo-panel-input';
-import SitePreview from '@/features/pl-fe-config/components/site-preview';
+import CryptoAddressInput from '@/features/frontend-config/components/crypto-address-input';
+import FooterLinkInput from '@/features/frontend-config/components/footer-link-input';
+import PromoPanelInput from '@/features/frontend-config/components/promo-panel-input';
+import SitePreview from '@/features/frontend-config/components/site-preview';
 import ThemeSelector from '@/features/ui/components/theme-selector';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
@@ -33,63 +33,63 @@ import {
   frontendConfigSchema,
   promoPanelItemSchema,
   type FrontendConfig,
-} from '@/normalizers/frontend-config';
+} from '@/schemas/frontend-config';
 import toast from '@/toast';
 
 const messages = defineMessages({
-  heading: { id: 'column.plfe_config', defaultMessage: 'Front-end configuration' },
-  saved: { id: 'plfe_config.saved', defaultMessage: 'pl-fe config saved!' },
+  heading: { id: 'column.frontend_config', defaultMessage: 'Front-end configuration' },
+  saved: { id: 'frontend_config.saved', defaultMessage: 'Nicolium config saved!' },
   copyrightFooterLabel: {
-    id: 'plfe_config.copyright_footer.meta_fields.label_placeholder',
+    id: 'frontend_config.copyright_footer.meta_fields.label_placeholder',
     defaultMessage: 'Copyright footer',
   },
   cryptoDonatePanelLimitLabel: {
-    id: 'plfe_config.crypto_donate_panel_limit.meta_fields.limit_placeholder',
+    id: 'frontend_config.crypto_donate_panel_limit.meta_fields.limit_placeholder',
     defaultMessage: 'Number of items to display in the crypto homepage widget',
   },
   rawJSONLabel: {
-    id: 'plfe_config.raw_json_label',
+    id: 'frontend_config.raw_json_label',
     defaultMessage: 'Advanced: Edit raw JSON data',
   },
   rawJSONHint: {
-    id: 'plfe_config.raw_json_hint',
+    id: 'frontend_config.raw_json_hint',
     defaultMessage:
       'Edit the settings data directly. Changes made directly to the JSON file will override the form fields above. Click "Save" to apply your changes.',
   },
-  rawJSONInvalid: { id: 'plfe_config.raw_json_invalid', defaultMessage: 'is invalid' },
+  rawJSONInvalid: { id: 'frontend_config.raw_json_invalid', defaultMessage: 'is invalid' },
   displayFqnLabel: {
-    id: 'plfe_config.display_fqn_label',
+    id: 'frontend_config.display_fqn_label',
     defaultMessage: 'Display domain (eg @user@domain) for local accounts.',
   },
   greentextLabel: {
-    id: 'plfe_config.greentext_label',
+    id: 'frontend_config.greentext_label',
     defaultMessage: '<span>>render greentext</span>',
   },
   mediaPreviewLabel: {
-    id: 'plfe_config.media_preview_label',
+    id: 'frontend_config.media_preview_label',
     defaultMessage: 'Prefer preview media for thumbnails',
   },
   mediaPreviewHint: {
-    id: 'plfe_config.media_preview_hint',
+    id: 'frontend_config.media_preview_hint',
     defaultMessage:
       'Some backends provide an optimized version of media for display in timelines. However, these preview images may be too small without additional configuration.',
   },
-  tileServerLabel: { id: 'plfe_config.tile_server_label', defaultMessage: 'Map tile server' },
+  tileServerLabel: { id: 'frontend_config.tile_server_label', defaultMessage: 'Map tile server' },
   tileServerAttributionLabel: {
-    id: 'plfe_config.tile_server_attribution_label',
+    id: 'frontend_config.tile_server_attribution_label',
     defaultMessage: 'Map tiles attribution',
   },
   redirectRootNoLoginLabel: {
-    id: 'plfe_config.redirect_root_no_login_label',
+    id: 'frontend_config.redirect_root_no_login_label',
     defaultMessage: 'Redirect homepage',
   },
   redirectRootNoLoginHint: {
-    id: 'plfe_config.redirect_root_no_login_hint',
+    id: 'frontend_config.redirect_root_no_login_hint',
     defaultMessage: 'Path to redirect the homepage when a user is not logged in.',
   },
-  sentryDsnLabel: { id: 'plfe_config.sentry_dsn_label', defaultMessage: 'Sentry DSN' },
+  sentryDsnLabel: { id: 'frontend_config.sentry_dsn_label', defaultMessage: 'Sentry DSN' },
   sentryDsnHint: {
-    id: 'plfe_config.sentry_dsn_hint',
+    id: 'frontend_config.sentry_dsn_hint',
     defaultMessage: 'DSN URL for error reporting. Works with Sentry and GlitchTip.',
   },
 });
@@ -177,7 +177,7 @@ const FrontendConfigEditor: React.FC = () => {
       if (path[0] === 'cryptoAddresses') {
         draft.cryptoAddresses = values;
       } else {
-        // @ts-ignore
+        // @ts-expect-error
         draft[path[0]][path[1]] = values;
       }
     });
@@ -191,7 +191,7 @@ const FrontendConfigEditor: React.FC = () => {
         if (path[0] === 'cryptoAddresses') {
           draft.cryptoAddresses.push(v.parse(cryptoAddressSchema, {}));
         } else {
-          // @ts-ignore
+          // @ts-expect-error
           draft[path[0]][path[1]].push(v.parse(schema, {}));
         }
       });
@@ -203,7 +203,7 @@ const FrontendConfigEditor: React.FC = () => {
       if (path[0] === 'cryptoAddresses') {
         draft.cryptoAddresses = draft.cryptoAddresses.filter((_, index) => index !== i);
       } else {
-        // @ts-ignore
+        // @ts-expect-error
         draft[path[0]][path[1]] = draft[path[0]][path[1]].filter((_, index) => index !== i);
       }
     });
@@ -243,7 +243,9 @@ const FrontendConfigEditor: React.FC = () => {
 
           <CardHeader>
             <CardTitle
-              title={<FormattedMessage id='plfe_config.headings.theme' defaultMessage='Theme' />}
+              title={
+                <FormattedMessage id='frontend_config.headings.theme' defaultMessage='Theme' />
+              }
             />
           </CardHeader>
 
@@ -251,7 +253,7 @@ const FrontendConfigEditor: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='plfe_config.fields.theme_label'
+                  id='frontend_config.fields.theme_label'
                   defaultMessage='Default theme'
                 />
               }
@@ -265,7 +267,7 @@ const FrontendConfigEditor: React.FC = () => {
             <ListItem
               label={
                 <FormattedMessage
-                  id='plfe_config.fields.edit_theme_label'
+                  id='frontend_config.fields.edit_theme_label'
                   defaultMessage='Edit theme'
                 />
               }
@@ -275,11 +277,11 @@ const FrontendConfigEditor: React.FC = () => {
 
           <FormGroup
             labelText={
-              <FormattedMessage id='plfe_config.fields.logo_label' defaultMessage='Logo' />
+              <FormattedMessage id='frontend_config.fields.logo_label' defaultMessage='Logo' />
             }
             hintText={
               <FormattedMessage
-                id='plfe_config.hints.logo'
+                id='frontend_config.hints.logo'
                 defaultMessage='SVG or PNG. At most 2 MB. Will be displayed to 50px height, maintaining aspect ratio'
               />
             }
@@ -290,13 +292,13 @@ const FrontendConfigEditor: React.FC = () => {
           <FormGroup
             labelText={
               <FormattedMessage
-                id='plfe_config.fields.logo_dark_label'
+                id='frontend_config.fields.logo_dark_label'
                 defaultMessage='Logo (dark)'
               />
             }
             hintText={
               <FormattedMessage
-                id='plfe_config.hints.logo_dark'
+                id='frontend_config.hints.logo_dark'
                 defaultMessage='SVG or PNG. At most 2 MB. Will be displayed when in dark mode'
               />
             }
@@ -312,7 +314,7 @@ const FrontendConfigEditor: React.FC = () => {
               <ListItem
                 label={
                   <FormattedMessage
-                    id='plfe_config.fields.logo_alignment'
+                    id='frontend_config.fields.logo_alignment'
                     defaultMessage='Logo alignment'
                   />
                 }
@@ -324,13 +326,13 @@ const FrontendConfigEditor: React.FC = () => {
                 >
                   <option value='center'>
                     <FormattedMessage
-                      id='plfe_config.fields.logo_alignment.center'
+                      id='frontend_config.fields.logo_alignment.center'
                       defaultMessage='Center'
                     />
                   </option>
                   <option value='left'>
                     <FormattedMessage
-                      id='plfe_config.fields.logo_alignment.left'
+                      id='frontend_config.fields.logo_alignment.left'
                       defaultMessage='Left'
                     />
                   </option>
@@ -342,7 +344,7 @@ const FrontendConfigEditor: React.FC = () => {
           <CardHeader>
             <CardTitle
               title={
-                <FormattedMessage id='plfe_config.headings.options' defaultMessage='Options' />
+                <FormattedMessage id='frontend_config.headings.options' defaultMessage='Options' />
               }
             />
           </CardHeader>
@@ -407,7 +409,7 @@ const FrontendConfigEditor: React.FC = () => {
             <CardTitle
               title={
                 <FormattedMessage
-                  id='plfe_config.headings.navigation'
+                  id='frontend_config.headings.navigation'
                   defaultMessage='Navigation'
                 />
               }
@@ -417,13 +419,13 @@ const FrontendConfigEditor: React.FC = () => {
           <Streamfield
             label={
               <FormattedMessage
-                id='plfe_config.fields.promo_panel_fields_label'
+                id='frontend_config.fields.promo_panel_fields_label'
                 defaultMessage='Promo panel items'
               />
             }
             hint={
               <FormattedMessage
-                id='plfe_config.hints.promo_panel_fields'
+                id='frontend_config.hints.promo_panel_fields'
                 defaultMessage='You can have custom defined links displayed on the right panel of the timelines page.'
               />
             }
@@ -438,13 +440,13 @@ const FrontendConfigEditor: React.FC = () => {
           <Streamfield
             label={
               <FormattedMessage
-                id='plfe_config.fields.home_footer_fields_label'
+                id='frontend_config.fields.home_footer_fields_label'
                 defaultMessage='Home footer items'
               />
             }
             hint={
               <FormattedMessage
-                id='plfe_config.hints.home_footer_fields'
+                id='frontend_config.hints.home_footer_fields'
                 defaultMessage='You can have custom defined links displayed on the footer of your static pages'
               />
             }
@@ -470,7 +472,10 @@ const FrontendConfigEditor: React.FC = () => {
               <CardHeader>
                 <CardTitle
                   title={
-                    <FormattedMessage id='plfe_config.headings.events' defaultMessage='Events' />
+                    <FormattedMessage
+                      id='frontend_config.headings.events'
+                      defaultMessage='Events'
+                    />
                   }
                 />
               </CardHeader>
@@ -499,7 +504,7 @@ const FrontendConfigEditor: React.FC = () => {
             <CardTitle
               title={
                 <FormattedMessage
-                  id='plfe_config.headings.cryptocurrency'
+                  id='frontend_config.headings.cryptocurrency'
                   defaultMessage='Cryptocurrency'
                 />
               }
@@ -509,13 +514,13 @@ const FrontendConfigEditor: React.FC = () => {
           <Streamfield
             label={
               <FormattedMessage
-                id='plfe_config.fields.crypto_addresses_label'
+                id='frontend_config.fields.crypto_addresses_label'
                 defaultMessage='Cryptocurrency addresses'
               />
             }
             hint={
               <FormattedMessage
-                id='plfe_config.hints.crypto_addresses'
+                id='frontend_config.hints.crypto_addresses'
                 defaultMessage='Add cryptocurrency addresses so users of your site can donate to you. Order matters, and you must use lowercase ticker values.'
               />
             }
@@ -543,7 +548,10 @@ const FrontendConfigEditor: React.FC = () => {
           <CardHeader>
             <CardTitle
               title={
-                <FormattedMessage id='plfe_config.headings.advanced' defaultMessage='Advanced' />
+                <FormattedMessage
+                  id='frontend_config.headings.advanced'
+                  defaultMessage='Advanced'
+                />
               }
             />
           </CardHeader>
@@ -564,7 +572,7 @@ const FrontendConfigEditor: React.FC = () => {
 
         <FormActions>
           <Button type='submit'>
-            <FormattedMessage id='plfe_config.save' defaultMessage='Save' />
+            <FormattedMessage id='frontend_config.save' defaultMessage='Save' />
           </Button>
         </FormActions>
       </Form>

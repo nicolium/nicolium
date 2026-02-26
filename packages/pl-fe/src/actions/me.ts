@@ -1,13 +1,15 @@
-import { selectAccount } from '@/selectors';
+import { selectAccount } from '@/queries/accounts/selectors';
+import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { setSentryAccount } from '@/sentry';
 import KVStore from '@/storage/kv-store';
+import { useComposeStore } from '@/stores/compose';
 import { useSettingsStore } from '@/stores/settings';
 import { getAuthUserId, getAuthUserUrl } from '@/utils/auth';
 
 import { getClient } from '../api';
 
 import { loadCredentials } from './auth';
-import { importEntities } from './importer';
 import { FE_NAME } from './settings';
 
 import type { AppDispatch, RootState } from '@/store';
@@ -29,7 +31,7 @@ const getMeId = (state: RootState) => state.me ?? getAuthUserId(state);
 const getMeUrl = (state: RootState) => {
   const accountId = getMeId(state);
   if (accountId) {
-    return selectAccount(state, accountId)?.url ?? getAuthUserUrl(state);
+    return selectAccount(accountId)?.url ?? getAuthUserUrl(state);
   }
 };
 
@@ -89,6 +91,7 @@ const fetchMeSuccess = (account: CredentialAccount) => {
   setSentryAccount(account);
 
   useSettingsStore.getState().actions.loadUserSettings(account.settings_store?.[FE_NAME]);
+  useComposeStore.getState().actions.importDefaultSettings(account);
 
   return {
     type: ME_FETCH_SUCCESS,
@@ -108,7 +111,8 @@ interface MePatchSuccessAction {
 }
 
 const patchMeSuccess = (me: CredentialAccount) => (dispatch: AppDispatch) => {
-  dispatch(importEntities({ accounts: [me] }));
+  queryClient.setQueryData(queryKeys.accounts.show(me.id), me);
+  useComposeStore.getState().actions.importDefaultSettings(me);
   dispatch<MePatchSuccessAction>({
     type: ME_PATCH_SUCCESS,
     me,

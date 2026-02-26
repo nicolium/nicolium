@@ -116,7 +116,7 @@ const ZoomableImage: React.FC<IZoomableImage> = ({
 
   const containerRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
-  const doubleClickTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>();
+  const doubleClickTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const zoomMatrixRef = useRef<ZoomMatrix | null>(null);
 
   const [style, api] = useSpring(() => ({

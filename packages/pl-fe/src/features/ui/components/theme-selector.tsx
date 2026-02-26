@@ -5,12 +5,13 @@ import Icon from '@/components/ui/icon';
 import Select from '@/components/ui/select';
 
 interface IThemeSelector {
+  id?: string;
   value: string;
   onChange: (value: 'system' | 'light' | 'dark' | 'black') => void;
 }
 
 /** Pure theme selector. */
-const ThemeSelector: React.FC<IThemeSelector> = ({ value, onChange }) => {
+const ThemeSelector: React.FC<IThemeSelector> = ({ id, value, onChange }) => {
   const themeIconSrc = useMemo(() => {
     switch (value) {
       case 'system':
@@ -31,35 +32,33 @@ const ThemeSelector: React.FC<IThemeSelector> = ({ value, onChange }) => {
   };
 
   return (
-    <label>
-      <div className='relative rounded-md shadow-sm'>
-        <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
-          <Icon src={themeIconSrc} className='size-4 text-gray-600 dark:text-gray-700' />
-        </div>
-
-        <Select onChange={handleChange} defaultValue={value} className='!pl-10'>
-          <option value='system'>
-            <FormattedMessage id='theme_toggle.system' defaultMessage='System' />
-          </option>
-          <option value='light'>
-            <FormattedMessage id='theme_toggle.light' defaultMessage='Light' />
-          </option>
-          <option value='dark'>
-            <FormattedMessage id='theme_toggle.dark' defaultMessage='Dark' />
-          </option>
-          <option value='black'>
-            <FormattedMessage id='theme_toggle.black' defaultMessage='Black' />
-          </option>
-        </Select>
-
-        <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3'>
-          <Icon
-            src={require('@phosphor-icons/core/regular/caret-down.svg')}
-            className='size-4 text-gray-600 dark:text-gray-700'
-          />
-        </div>
+    <div className='relative rounded-md shadow-sm'>
+      <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
+        <Icon src={themeIconSrc} className='size-4 text-gray-600 dark:text-gray-700' />
       </div>
-    </label>
+
+      <Select id={id} onChange={handleChange} defaultValue={value} className='!pl-10'>
+        <option value='system'>
+          <FormattedMessage id='theme_toggle.system' defaultMessage='System' />
+        </option>
+        <option value='light'>
+          <FormattedMessage id='theme_toggle.light' defaultMessage='Light' />
+        </option>
+        <option value='dark'>
+          <FormattedMessage id='theme_toggle.dark' defaultMessage='Dark' />
+        </option>
+        <option value='black'>
+          <FormattedMessage id='theme_toggle.black' defaultMessage='Black' />
+        </option>
+      </Select>
+
+      <div className='pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3'>
+        <Icon
+          src={require('@phosphor-icons/core/regular/caret-down.svg')}
+          className='size-4 text-gray-600 dark:text-gray-700'
+        />
+      </div>
+    </div>
   );
 };
 

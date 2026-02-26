@@ -11,7 +11,7 @@ interface ILightningAddress {
   address: string;
 }
 
-const LightningAddress: React.FC<ILightningAddress> = (props): JSX.Element => {
+const LightningAddress: React.FC<ILightningAddress> = (props): React.JSX.Element => {
   const { address } = props;
 
   return (

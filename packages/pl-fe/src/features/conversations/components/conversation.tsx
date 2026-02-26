@@ -1,32 +1,29 @@
 import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 
-import { markConversationRead } from '@/actions/conversations';
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import StatusContainer from '@/containers/status-container';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useAccount } from '@/queries/accounts/use-account';
+import {
+  useMarkConversationRead,
+  type MinifiedConversation,
+} from '@/queries/conversations/use-conversations';
 
 interface IConversation {
-  conversationId: string;
+  conversation: MinifiedConversation;
   onMoveUp: (id: string) => void;
   onMoveDown: (id: string) => void;
 }
 
-const Conversation: React.FC<IConversation> = ({ conversationId, onMoveUp, onMoveDown }) => {
-  const dispatch = useAppDispatch();
+const Conversation: React.FC<IConversation> = ({ conversation, onMoveUp, onMoveDown }) => {
   const navigate = useNavigate();
 
-  const {
-    account_ids,
-    unread,
-    last_status: lastStatusId,
-  } = useAppSelector((state) => state.conversations.items.find((x) => x.id === conversationId)!);
-  const { account: lastStatusAccount } = useAccount(account_ids[0]);
+  const { id: conversationId, account_ids, unread, last_status: lastStatusId } = conversation;
+  const { mutate: markConversationRead } = useMarkConversationRead(conversationId);
+  const { data: lastStatusAccount } = useAccount(account_ids[0]);
 
   const handleClick = () => {
     if (unread) {
-      dispatch(markConversationRead(conversationId));
+      markConversationRead();
     }
 
     if (lastStatusId)

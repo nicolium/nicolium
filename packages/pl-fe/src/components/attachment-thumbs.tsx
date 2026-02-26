@@ -6,7 +6,7 @@ import { useSettings } from '@/stores/settings';
 
 import { useMediaVisible } from './statuses/sensitive-content-overlay';
 
-import type { Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/reducers/statuses';
 import type { MediaAttachment } from 'pl-api';
 
 interface IAttachmentThumbs {

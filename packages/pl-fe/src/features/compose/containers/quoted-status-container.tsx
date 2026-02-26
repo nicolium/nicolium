@@ -1,10 +1,9 @@
 import React, { useCallback } from 'react';
 
-import { cancelQuoteCompose } from '@/actions/compose';
 import QuotedStatus from '@/components/quoted-status';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { makeGetStatus } from '@/selectors';
+import { useCompose, useComposeActions } from '@/stores/compose';
 
 interface IQuotedStatusContainer {
   composeId: string;
@@ -12,15 +11,17 @@ interface IQuotedStatusContainer {
 
 /** QuotedStatus shown in post composer. */
 const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({ composeId }) => {
-  const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
   const getStatus = useCallback(makeGetStatus(), []);
+  const { quoteId } = useCompose(composeId);
 
-  const status = useAppSelector((state) =>
-    getStatus(state, { id: state.compose[composeId]?.quoteId! }),
-  );
+  const status = useAppSelector((state) => getStatus(state, { id: quoteId! }));
 
   const onCancel = () => {
-    dispatch(cancelQuoteCompose(composeId));
+    updateCompose(composeId, (draft) => {
+      if (draft.quoteId) draft.dismissedQuotes.push(draft.quoteId);
+      draft.quoteId = null;
+    });
   };
 
   if (!status) {

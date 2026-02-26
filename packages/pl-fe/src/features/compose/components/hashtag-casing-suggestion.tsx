@@ -1,13 +1,12 @@
 import React from 'react';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
-import { ignoreHashtagCasingSuggestion } from '@/actions/compose';
 import { changeSetting } from '@/actions/settings';
 import Button from '@/components/ui/button';
 import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
+import { useCompose, useComposeActions } from '@/stores/compose';
 import toast from '@/toast';
 
 import Warning from './warning';
@@ -25,12 +24,16 @@ interface IHashtagCasingSuggestion {
 
 const HashtagCasingSuggestion = ({ composeId }: IHashtagCasingSuggestion) => {
   const dispatch = useAppDispatch();
+  const { updateCompose } = useComposeActions();
 
   const compose = useCompose(composeId);
   const suggestion = compose.hashtagCasingSuggestion;
 
   const onIgnore = () => {
-    dispatch(ignoreHashtagCasingSuggestion(composeId));
+    updateCompose(composeId, (draft) => {
+      draft.hashtagCasingSuggestion = null;
+      draft.hashtagCasingSuggestionIgnored = true;
+    });
   };
 
   const onDontAskAgain = () => {
@@ -38,7 +41,7 @@ const HashtagCasingSuggestion = ({ composeId }: IHashtagCasingSuggestion) => {
       changeSetting(['ignoreHashtagCasingSuggestions'], true, { showAlert: false, save: true }),
     );
     toast.info(messages.hashtagCasingSuggestionsDisabled);
-    dispatch(ignoreHashtagCasingSuggestion(composeId));
+    onIgnore();
   };
 
   if (!suggestion) return null;

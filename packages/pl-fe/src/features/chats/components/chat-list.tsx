@@ -1,6 +1,6 @@
 import clsx from 'clsx';
-import React, { useCallback, useState } from 'react';
-import { Virtuoso } from 'react-virtuoso';
+import React, { useCallback, useRef, useState } from 'react';
+import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 
 import PullToRefresh from '@/components/pull-to-refresh';
 import Spinner from '@/components/ui/spinner';
@@ -8,6 +8,7 @@ import Stack from '@/components/ui/stack';
 import PlaceholderChat from '@/features/placeholder/components/placeholder-chat';
 import { useChats } from '@/queries/chats';
 import { useShoutboxIsLoading } from '@/stores/shoutbox';
+import { selectChild } from '@/utils/scroll-utils';
 
 import ChatListItem from './chat-list-item';
 import ChatListShoutbox from './chat-list-shoutbox';
@@ -20,6 +21,8 @@ interface IChatList {
 }
 
 const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false }) => {
+  const node = useRef<VirtuosoHandle | null>(null);
+
   const showShoutbox = !useShoutboxIsLoading();
 
   const {
@@ -41,20 +44,47 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
 
   const handleRefresh = () => refetch();
 
+  const getCurrentIndex = (id: string): number =>
+    allChats?.findIndex((key) => (key === 'shoutbox' ? key : key.id) === id) ?? -1;
+
+  const handleMoveUp = (chatId: string) => {
+    const elementIndex = getCurrentIndex(chatId) - 1;
+    selectChild(elementIndex, node, document.querySelector('.⁂-chat-widget__list') ?? undefined);
+  };
+
+  const handleMoveDown = (chatId: string) => {
+    const elementIndex = getCurrentIndex(chatId) + 1;
+    selectChild(
+      elementIndex,
+      node,
+      document.querySelector('.⁂-chat-widget__list') ?? undefined,
+      allChats?.length,
+    );
+  };
+
   const renderChatListItem = useCallback(
     (_index: number, chat: Chat | 'shoutbox') => {
       if (chat === 'shoutbox') {
         return (
           <div key='shoutbox' className='px-2'>
-            <ChatListShoutbox onClick={onClickChat} />
+            <ChatListShoutbox
+              key='shoutbox'
+              onClick={onClickChat}
+              onMoveUp={handleMoveUp}
+              onMoveDown={handleMoveDown}
+            />
           </div>
         );
       }
 
       return (
-        <div key={chat.id} className='px-2'>
-          <ChatListItem chat={chat} onClick={onClickChat} />
-        </div>
+        <ChatListItem
+          key={chat.id}
+          chat={chat}
+          onClick={onClickChat}
+          onMoveUp={handleMoveUp}
+          onMoveDown={handleMoveDown}
+        />
       );
     },
     [onClickChat],
@@ -83,6 +113,7 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
       })}
     >
       <Virtuoso
+        ref={node}
         atTopStateChange={(atTop) => {
           setNearTop(atTop);
         }}

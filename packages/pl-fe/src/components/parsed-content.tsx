@@ -6,7 +6,7 @@ import parse, {
   domToReact,
   type DOMNode,
 } from 'html-react-parser';
-import DOMPurify from 'isomorphic-dompurify';
+import { sanitize } from 'isomorphic-dompurify';
 import groupBy from 'lodash/groupBy';
 import minBy from 'lodash/minBy';
 import React from 'react';
@@ -29,7 +29,7 @@ const GREENTEXT_CLASS = 'dark:text-accent-green text-lime-600';
 const checkSuspiciousUrl = (url: string): boolean => {
   try {
     const { host } = new URL(url);
-    return /^verify\.form/.test(host);
+    return host.startsWith('verify.form');
   } catch (e) {
     return false;
   }
@@ -173,17 +173,7 @@ function parseContent(
 };
 
 function parseContent(
-  {
-    html,
-    mentions,
-    hasQuote,
-    emojis,
-    cleanUrls = false,
-    redirectUrls = false,
-    displayTargetHost = true,
-    greentext = false,
-    speakAsCat = false,
-  }: IParsedContent,
+  { html, mentions, hasQuote, emojis, greentext = false, speakAsCat = false }: IParsedContent,
   extractHashtags = false,
 ) {
   if (html.length === 0) {
@@ -213,16 +203,16 @@ function parseContent(
   const options: HTMLReactParserOptions = {
     replace(domNode) {
       if (!(domNode instanceof Element)) {
-        // @ts-ignore
+        // @ts-expect-error
         domNode.preGreentext =
-          // @ts-ignore
+          // @ts-expect-error
           (!domNode.prev || domNode.prev.preGreentext) && !domNode.data.trim().length;
 
-        // @ts-ignore
+        // @ts-expect-error
         const data = domNode.prev?.preGreentext ? domNode.data.trim() : domNode.data;
-        // @ts-ignore
+        // @ts-expect-error
         if (greentext && (data.startsWith('>') || domNode.prev?.greentext)) {
-          // @ts-ignore
+          // @ts-expect-error
           domNode.greentext = true;
           return <span className={GREENTEXT_CLASS}>{transformText(domNode.data)}</span>;
         }
@@ -239,24 +229,24 @@ function parseContent(
       }
 
       if (domNode.attribs.class?.split(' ').includes('h-card')) {
-        // @ts-ignore
+        // @ts-expect-error
         domNode.preGreentext = !domNode.prev || domNode.prev.preGreentext;
       }
 
-      // @ts-ignore
+      // @ts-expect-error
       if (domNode.name !== 'br' && domNode.prev?.greentext) {
         domNode.attribs.class = `${domNode.attribs.class || ''} ${GREENTEXT_CLASS}`;
-        // @ts-ignore
+        // @ts-expect-error
         domNode.greentext = true;
       }
 
       if (domNode.name === 'a') {
         const classes = domNode.attribs.class?.split(' ');
 
-        // @ts-ignore
+        // @ts-expect-error
         if (domNode.prev?.greentext) {
           classes.push(GREENTEXT_CLASS);
-          // @ts-ignore
+          // @ts-expect-error
           domNode.greentext = true;
         }
 
@@ -348,12 +338,12 @@ function parseContent(
         return transformText(reactNode, index);
       }
 
-      return reactNode as JSX.Element;
+      return reactNode as React.JSX.Element;
     },
   };
 
   let content = parse(
-    DOMPurify.sanitize(html, { ADD_ATTR: ['target'], USE_PROFILES: { html: true } }),
+    sanitize(html, { ADD_ATTR: ['target'], USE_PROFILES: { html: true } }),
     options,
   );
 

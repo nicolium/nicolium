@@ -20,7 +20,9 @@ interface ICryptoDonatePanel {
   limit: number;
 }
 
-const CryptoDonatePanel: React.FC<ICryptoDonatePanel> = ({ limit = 3 }): JSX.Element | null => {
+const CryptoDonatePanel: React.FC<ICryptoDonatePanel> = ({
+  limit = 3,
+}): React.JSX.Element | null => {
   const intl = useIntl();
   const navigate = useNavigate();
   const instance = useInstance();

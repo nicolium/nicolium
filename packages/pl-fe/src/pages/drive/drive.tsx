@@ -6,7 +6,7 @@ import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import DropdownMenu, { Menu } from '@/components/dropdown-menu';
+import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import { EmptyMessage } from '@/components/empty-message';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
@@ -616,7 +616,7 @@ const DrivePage: React.FC = () => {
           onSuccess: () => {
             toast.success(messages.fileUploadSuccess);
           },
-          onError: (error) => {
+          onError: () => {
             toast.error(messages.fileUploadError);
           },
         });

@@ -3,9 +3,9 @@
 const unescapeHTML = (html: string = ''): string => {
   const wrapper = document.createElement('div');
   wrapper.innerHTML = html
-    .replace(/<br\s*\/?>/g, '\n')
-    .replace(/<\/p><[^>]*>/g, '\n\n')
-    .replace(/<[^>]*>/g, '');
+    .replaceAll(/<br\s*\/?>/g, '\n')
+    .replaceAll(/<\/p><[^>]*>/g, '\n\n')
+    .replaceAll(/<[^>]*>/g, '');
   return wrapper.textContent || '';
 };
 

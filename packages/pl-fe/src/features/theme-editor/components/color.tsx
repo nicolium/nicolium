@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ColorPicker from '@/features/pl-fe-config/components/color-picker';
+import ColorPicker from '@/features/frontend-config/components/color-picker';
 
 import type { ColorChangeHandler } from 'react-color';
 

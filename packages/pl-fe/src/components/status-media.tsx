@@ -9,7 +9,7 @@ import { useSettings } from '@/stores/settings';
 
 import { useMediaVisible } from './statuses/sensitive-content-overlay';
 
-import type { Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/reducers/statuses';
 import type { MediaAttachment } from 'pl-api';
 
 interface IStatusMedia {
@@ -42,20 +42,20 @@ const StatusMedia: React.FC<IStatusMedia> = ({ status, muted = false, onClick })
   const size = status.media_attachments.length;
   const firstAttachment = status.media_attachments[0];
 
-  let media: JSX.Element | null = null;
+  let media: React.JSX.Element | null = null;
 
-  const renderLoadingMediaGallery = (): JSX.Element => (
+  const renderLoadingMediaGallery = (): React.JSX.Element => (
     <div className='media_gallery' style={{ height: '285px' }} />
   );
 
-  const renderLoadingVideoPlayer = (): JSX.Element => (
+  const renderLoadingVideoPlayer = (): React.JSX.Element => (
     <div
       className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat'
       style={{ height: '285px' }}
     />
   );
 
-  const renderLoadingAudioPlayer = (): JSX.Element => (
+  const renderLoadingAudioPlayer = (): React.JSX.Element => (
     <div
       className='relative mt-2 block cursor-pointer border-0 bg-cover bg-center bg-no-repeat'
       style={{ height: '285px' }}

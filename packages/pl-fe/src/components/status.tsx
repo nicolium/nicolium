@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-intl';
 
-import { mentionCompose, replyCompose } from '@/actions/compose';
 import { unfilterStatus } from '@/actions/statuses';
 import Card from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
@@ -14,6 +13,7 @@ import StatusTypeIcon from '@/features/status/components/status-type-icon';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
+import { useGroupQuery } from '@/queries/groups/use-group';
 import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
 import {
   useFavouriteStatus,
@@ -22,6 +22,7 @@ import {
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { makeGetStatus, type SelectedStatus } from '@/selectors';
+import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMetaActions } from '@/stores/status-meta';
@@ -41,7 +42,7 @@ import Tombstone from './tombstone';
 
 const messages = defineMessages({
   edited: { id: 'status.edited', defaultMessage: 'Edited {date}' },
-  reblogged_by: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
+  rebloggedBy: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
 });
 
 interface IAccountInfo {
@@ -196,6 +197,7 @@ const Status: React.FC<IStatus> = (props) => {
 
   const { toggleStatusesMediaHidden } = useStatusMetaActions();
   const { openModal } = useModalsActions();
+  const { replyCompose, mentionCompose } = useComposeActions();
   const { boostModal } = useSettings();
   const didShowCard = useRef(false);
   const node = useRef<HTMLDivElement>(null);
@@ -205,13 +207,14 @@ const Status: React.FC<IStatus> = (props) => {
     (state) => (status.reblog_id && getStatus(state, { id: status.reblog_id })!) || status,
   );
 
+  const { data: group } = useGroupQuery(actualStatus.group_id ?? undefined);
+
   const { mutate: favouriteStatus } = useFavouriteStatus(actualStatus.id);
   const { mutate: unfavouriteStatus } = useUnfavouriteStatus(actualStatus.id);
   const { mutate: reblogStatus } = useReblogStatus(actualStatus.id);
   const { mutate: unreblogStatus } = useUnreblogStatus(actualStatus.id);
 
   const isReblog = status.reblog_id;
-  const group = actualStatus.group;
 
   const filterResults = useMemo(() => {
     return [...status.filtered, ...actualStatus.filtered]
@@ -274,7 +277,7 @@ const Status: React.FC<IStatus> = (props) => {
     if (status.rss_feed) return;
 
     e?.preventDefault();
-    dispatch(replyCompose(actualStatus, status.reblog_id ? status.account : undefined));
+    replyCompose(actualStatus, status.reblog_id ? status.account : undefined);
   };
 
   const handleHotkeyFavourite = (e?: KeyboardEvent) => {
@@ -303,7 +306,7 @@ const Status: React.FC<IStatus> = (props) => {
     if (status.rss_feed) return;
 
     e?.preventDefault();
-    dispatch(mentionCompose(actualStatus.account));
+    mentionCompose(actualStatus.account);
   };
 
   const handleHotkeyOpen = () => {
@@ -317,13 +320,13 @@ const Status: React.FC<IStatus> = (props) => {
     navigate({ to: '/@{$username}', params: { username: actualStatus.account.acct } });
   };
 
-  const handleHotkeyMoveUp = (e?: KeyboardEvent) => {
+  const handleHotkeyMoveUp = () => {
     if (onMoveUp) {
       onMoveUp(status.id, featured);
     }
   };
 
-  const handleHotkeyMoveDown = (e?: KeyboardEvent) => {
+  const handleHotkeyMoveDown = () => {
     if (onMoveDown) {
       onMoveDown(status.id, featured);
     }
@@ -544,7 +547,12 @@ const Status: React.FC<IStatus> = (props) => {
     };
 
     return (
-      <Hotkeys handlers={minHandlers} focusable={focusable} element='article'>
+      <Hotkeys
+        handlers={minHandlers}
+        focusable={focusable}
+        element='article'
+        lang={actualStatus.language || undefined}
+      >
         {body}
       </Hotkeys>
     );
@@ -552,7 +560,7 @@ const Status: React.FC<IStatus> = (props) => {
 
   let rebloggedByText;
   if (status.reblog_id === 'object') {
-    rebloggedByText = intl.formatMessage(messages.reblogged_by, { name: status.account.acct });
+    rebloggedByText = intl.formatMessage(messages.rebloggedBy, { name: status.account.acct });
   }
 
   const body = (
@@ -655,7 +663,13 @@ const Status: React.FC<IStatus> = (props) => {
   };
 
   return (
-    <Hotkeys handlers={handlers} focusable={focusable} element='article' data-testid='status'>
+    <Hotkeys
+      handlers={handlers}
+      focusable={focusable}
+      element='article'
+      lang={actualStatus.language || undefined}
+      data-testid='status'
+    >
       {body}
     </Hotkeys>
   );

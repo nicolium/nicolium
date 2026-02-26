@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router';
-import { TrendsLink } from 'pl-api';
 import React from 'react';
 
 import { getTextDirection } from '@/utils/rtl';
@@ -10,6 +9,8 @@ import HStack from './ui/hstack';
 import Icon from './ui/icon';
 import Stack from './ui/stack';
 import Text from './ui/text';
+
+import type { TrendsLink } from 'pl-api';
 
 interface ITrendingLink {
   trendingLink: TrendsLink;
@@ -42,7 +43,7 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
       className='flex cursor-pointer gap-4 overflow-hidden rounded-lg border border-solid border-gray-200 p-4 text-sm text-gray-800 no-underline hover:bg-gray-100 hover:no-underline dark:border-gray-800 dark:text-gray-200 dark:hover:bg-primary-800/30'
       href={trendingLink.url}
       target='_blank'
-      rel='noopener'
+      rel='noopener noreferrer'
     >
       {media}
       <Stack space={2} className='flex-1 overflow-hidden'>

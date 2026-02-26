@@ -1,6 +1,6 @@
 import { queryClient } from '@/queries/client';
 
-import type { InfiniteData, QueryKey } from '@tanstack/react-query';
+import type { DataTag, InfiniteData, QueryKey } from '@tanstack/react-query';
 import type { PaginatedResponse } from 'pl-api';
 
 interface Entity {
@@ -52,8 +52,11 @@ const updatePageItem = <T>(
 };
 
 /** Insert the new item at the beginning of the first page. */
-const appendPageItem = <T>(queryKey: QueryKey, newItem: T) => {
-  queryClient.setQueryData<InfiniteData<PaginatedResponse<T>>>(queryKey, (data) => {
+const appendPageItem = <T>(
+  queryKey: DataTag<QueryKey, InfiniteData<PaginatedResponse<T>>>,
+  newItem: T,
+) => {
+  queryClient.setQueryData(queryKey, (data) => {
     if (data) {
       const pages = [...data.pages];
       pages[0] = { ...pages[0], items: [newItem, ...pages[0].items] };
@@ -90,12 +93,15 @@ const paginateQueryData = <T>(array: T[] | undefined) =>
     return resultArray;
   }, []);
 
-const sortQueryData = <T>(queryKey: QueryKey, comparator: (a: T, b: T) => number) => {
-  queryClient.setQueryData<InfiniteData<PaginatedResponse<T>>>(queryKey, (prevResult) => {
+const sortQueryData = <T>(
+  queryKey: DataTag<QueryKey, InfiniteData<PaginatedResponse<T>>>,
+  comparator: (a: T, b: T) => number,
+) => {
+  queryClient.setQueryData(queryKey, (prevResult) => {
     if (prevResult) {
       const nextResult = { ...prevResult };
       const flattenedQueryData = flattenPages(nextResult);
-      const sortedQueryData = flattenedQueryData?.sort(comparator);
+      const sortedQueryData = flattenedQueryData?.toSorted(comparator);
       const paginatedPages = paginateQueryData(sortedQueryData);
       const newPages = paginatedPages.map((page: T, idx: number) => ({
         ...prevResult.pages[idx],

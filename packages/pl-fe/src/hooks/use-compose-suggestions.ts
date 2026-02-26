@@ -1,0 +1,54 @@
+import { useMemo } from 'react';
+
+import emojiSearch from '@/features/emoji/search';
+import { useDebounce } from '@/hooks/use-debounce';
+import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
+import { useSearchHashtags } from '@/queries/search/use-search';
+import { useAccountSearch } from '@/queries/search/use-search-accounts';
+import useTrendingTags from '@/queries/trends/use-trending-tags';
+
+import type { AutoSuggestion } from '@/components/autosuggest-input';
+
+const useComposeSuggestions = (token: string): Array<AutoSuggestion> => {
+  const debouncedToken = useDebounce(token, 300);
+
+  const searchedType = token.startsWith('@')
+    ? 'accounts'
+    : token.startsWith('#')
+      ? 'hashtags'
+      : token.startsWith(':')
+        ? 'emojis'
+        : null;
+
+  const { data: customEmojis } = useCustomEmojis();
+  const { data: accountIds } = useAccountSearch(searchedType === 'accounts' ? debouncedToken : '', {
+    resolve: false,
+    limit: 5,
+  });
+  const { data: trendingTags } = useTrendingTags();
+  const { data: searchResult } = useSearchHashtags(
+    searchedType === 'hashtags' ? debouncedToken : '',
+  );
+
+  return useMemo((): Array<AutoSuggestion> => {
+    if (searchedType === 'emojis') {
+      return emojiSearch(token.replace(':', ''), { maxResults: 10 }, customEmojis);
+    }
+
+    if (searchedType === 'accounts') {
+      return accountIds ?? [];
+    }
+
+    if (searchedType === 'hashtags') {
+      if (token.length === 1) {
+        return (trendingTags ?? []).map(({ name }) => `#${name}`);
+      }
+
+      return (searchResult ?? []).map(({ name }) => `#${name}`);
+    }
+
+    return [];
+  }, [searchedType, token, customEmojis, accountIds, trendingTags, searchResult]);
+};
+
+export { useComposeSuggestions };

@@ -7,6 +7,8 @@ import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { queryClient } from '@/queries/client';
 
+import { queryKeys } from '../keys';
+
 const emptySchema = v.parse(interactionPoliciesSchema, {});
 
 const useInteractionPolicies = () => {
@@ -15,7 +17,7 @@ const useInteractionPolicies = () => {
   const features = useFeatures();
 
   const { data, ...result } = useQuery({
-    queryKey: ['interactionPolicies'],
+    queryKey: queryKeys.interactionPolicies.all,
     queryFn: client.settings.getInteractionPolicies,
     placeholderData: emptySchema,
     enabled: isLoggedIn && features.interactionRequests,
@@ -25,7 +27,7 @@ const useInteractionPolicies = () => {
     mutationFn: (policy: InteractionPolicies) => client.settings.updateInteractionPolicies(policy),
     retry: false,
     onSuccess: (policy) => {
-      queryClient.setQueryData(['interactionPolicies'], policy);
+      queryClient.setQueryData(queryKeys.interactionPolicies.all, policy);
     },
   });
 

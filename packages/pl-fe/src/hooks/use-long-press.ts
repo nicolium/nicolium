@@ -53,7 +53,7 @@ const useLongPress = (callback: (e: Event) => void, options: LongPressOptions = 
   } = options;
   const isLongPressActive = React.useRef(false);
   const isPressed = React.useRef(false);
-  const timerId = React.useRef<NodeJS.Timeout>();
+  const timerId = React.useRef<NodeJS.Timeout | null>(null);
   let startY: number;
 
   return React.useMemo(() => {

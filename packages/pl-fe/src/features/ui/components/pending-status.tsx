@@ -11,20 +11,21 @@ import PlaceholderCard from '@/features/placeholder/components/placeholder-card'
 import PlaceholderMediaGallery from '@/features/placeholder/components/placeholder-media-gallery';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import { useAppSelector } from '@/hooks/use-app-selector';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { usePendingStatus } from '@/stores/pending-statuses';
 
 import { buildStatus } from '../util/pending-status-builder';
 
 import PollPreview from './poll-preview';
 
-import type { Status as StatusEntity } from '@/normalizers/status';
+import type { NormalizedStatus as StatusEntity } from '@/reducers/statuses';
 
 const shouldHaveCard = (pendingStatus: StatusEntity) =>
-  Boolean(pendingStatus.content.match(/https?:\/\/\S*/));
+  Boolean(/https?:\/\/\S*/.test(pendingStatus.content));
 
 interface IPendingStatus {
   className?: string;
   idempotencyKey: string;
-  muted?: boolean;
   variant?: 'default' | 'rounded' | 'slim';
 }
 
@@ -45,12 +46,15 @@ const PendingStatusMedia: React.FC<IPendingStatusMedia> = ({ status }) => {
 const PendingStatus: React.FC<IPendingStatus> = ({
   idempotencyKey,
   className,
-  muted,
   variant = 'rounded',
 }) => {
+  const pendingStatus = usePendingStatus(idempotencyKey);
+  const { data: ownAccount } = useOwnAccount();
+
   const status = useAppSelector((state) => {
-    const pendingStatus = state.pending_statuses[idempotencyKey];
-    return pendingStatus ? buildStatus(state, pendingStatus, idempotencyKey) : null;
+    return pendingStatus && ownAccount
+      ? buildStatus(ownAccount, state, pendingStatus, idempotencyKey)
+      : null;
   });
 
   if (!status) return null;

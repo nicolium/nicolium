@@ -1,16 +1,17 @@
-import { queryOptions, useQuery } from '@tanstack/react-query';
+import { queryOptions, useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import { buildCustomEmojis } from '@/features/emoji';
 import { addCustomToPool } from '@/features/emoji/search';
 import { useClient } from '@/hooks/use-client';
 
 import { queryClient } from '../client';
+import { queryKeys } from '../keys';
 
 import type { CustomEmoji, PlApiClient } from 'pl-api';
 
 const customEmojisQueryOptions = (client: PlApiClient) =>
   queryOptions({
-    queryKey: ['instance', 'customEmojis'],
+    queryKey: queryKeys.instance.customEmojis,
     queryFn: () =>
       client.instance.getCustomEmojis().then((emojis) => {
         addCustomToPool(buildCustomEmojis(emojis));
@@ -18,14 +19,16 @@ const customEmojisQueryOptions = (client: PlApiClient) =>
       }),
   });
 
-const useCustomEmojis = <T>(select?: (data: Array<CustomEmoji>) => T) => {
+function useCustomEmojis<T>(select: (data: Array<CustomEmoji>) => T): UseQueryResult<T, Error>;
+function useCustomEmojis(): UseQueryResult<Array<CustomEmoji>, Error>;
+function useCustomEmojis<T = Array<CustomEmoji>>(select?: (data: Array<CustomEmoji>) => T) {
   const client = useClient();
 
   return useQuery({
     ...customEmojisQueryOptions(client),
-    select: select ?? ((data) => data as T),
+    select,
   });
-};
+}
 
 const prefetchCustomEmojis = (client: PlApiClient) =>
   queryClient.prefetchQuery(customEmojisQueryOptions(client));

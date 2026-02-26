@@ -1,10 +1,9 @@
 import { useNavigate, useRouter } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 
-import { resetCompose } from '@/actions/compose';
 import { FOCUS_EDITOR_COMMAND } from '@/features/compose/editor/plugins/focus-plugin';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 
 import { Hotkeys } from '../components/hotkeys';
@@ -45,9 +44,9 @@ interface IGlobalHotkeys {
 const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
   const navigate = useNavigate();
   const { history } = useRouter();
-  const dispatch = useAppDispatch();
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const { openModal } = useModalsActions();
+  const { resetCompose } = useComposeActions();
 
   const handlers = useMemo(() => {
     const handleHotkeyNew = (e?: KeyboardEvent) => {
@@ -84,7 +83,7 @@ const GlobalHotkeys: React.FC<IGlobalHotkeys> = ({ children, node }) => {
 
     const handleHotkeyForceNew = (e?: KeyboardEvent) => {
       const composeId = handleHotkeyNew(e);
-      dispatch(resetCompose(composeId ?? undefined));
+      resetCompose(composeId ?? undefined);
     };
 
     const handleHotkeyBack = () => {

@@ -16,10 +16,7 @@ const messages = defineMessages({
   votes: { id: 'poll.votes', defaultMessage: '{votes, plural, one {# vote} other {# votes}}' },
 });
 
-const PollPercentageBar: React.FC<{ percent: number; leading: boolean }> = ({
-  percent,
-  leading,
-}): JSX.Element => {
+const PollPercentageBar: React.FC<{ percent: number }> = ({ percent }): React.JSX.Element => {
   const styles = useSpring({
     from: { width: '0%' },
     to: { width: `${percent}%` },
@@ -132,7 +129,7 @@ interface IPollOption {
   truncate?: boolean;
 }
 
-const PollOption: React.FC<IPollOption> = (props): JSX.Element | null => {
+const PollOption: React.FC<IPollOption> = (props): React.JSX.Element | null => {
   const { index, poll, option, showResults, language, truncate } = props;
 
   const intl = useIntl();
@@ -144,10 +141,6 @@ const PollOption: React.FC<IPollOption> = (props): JSX.Element | null => {
   const voted = poll.own_votes?.includes(index);
   const message = intl.formatMessage(messages.votes, { votes: option.votes_count });
 
-  const leading = poll.options
-    .filter((other) => other.title !== option.title)
-    .every((other) => option.votes_count >= other.votes_count);
-
   return (
     <div key={option.title}>
       {showResults ? (
@@ -157,7 +150,7 @@ const PollOption: React.FC<IPollOption> = (props): JSX.Element | null => {
             alignItems='center'
             className='relative w-full overflow-hidden rounded-md bg-white p-2 dark:bg-primary-800'
           >
-            <PollPercentageBar percent={percent} leading={leading} />
+            <PollPercentageBar percent={percent} />
 
             <div className='overflow-hidden text-primary-600 dark:text-white'>
               <Text

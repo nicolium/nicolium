@@ -10,7 +10,7 @@ interface IGroupAvatar {
   withRing?: boolean;
 }
 
-const GroupAvatar = (props: IGroupAvatar) => {
+const GroupAvatar: React.FC<IGroupAvatar> = (props) => {
   const { group, size, withRing = false } = props;
 
   const isOwner = group.relationship?.role === GroupRoles.OWNER;

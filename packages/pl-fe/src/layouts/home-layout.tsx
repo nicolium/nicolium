@@ -1,11 +1,12 @@
 import { Outlet, Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useRef } from 'react';
-import { useIntl } from 'react-intl';
 
-import { uploadCompose } from '@/actions/compose';
+import { BANNER_HTML } from '@/build-config';
 import Avatar from '@/components/ui/avatar';
 import Layout from '@/components/ui/layout';
+import Text from '@/components/ui/text';
+import Warning from '@/features/compose/components/warning';
 import LinkFooter from '@/features/ui/components/link-footer';
 import {
   WhoToFollowPanel,
@@ -17,20 +18,17 @@ import {
   AnnouncementsPanel,
   ComposeForm,
 } from '@/features/ui/util/async-components';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useFeatures } from '@/hooks/use-features';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useUploadCompose } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
 
 const HomeLayout = () => {
-  const intl = useIntl();
-  const dispatch = useAppDispatch();
-
   const me = useAppSelector((state) => state.me);
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const features = useFeatures();
   const frontendConfig = useFrontendConfig();
   const { disableUserProvidedMedia } = useSettings();
@@ -38,11 +36,13 @@ const HomeLayout = () => {
   const composeId = 'home';
   const composeBlock = useRef<HTMLDivElement>(null);
 
+  const uploadCompose = useUploadCompose(composeId);
+
   const hasCrypto = typeof frontendConfig.cryptoAddresses[0]?.ticker === 'string';
   const cryptoLimit = frontendConfig.cryptoDonatePanel.limit;
 
   const { isDragging, isDraggedOver } = useDraggedFiles(composeBlock, (files) => {
-    dispatch(uploadCompose(composeId, files, intl));
+    uploadCompose(files);
   });
 
   const acct = account ? account.acct : '';
@@ -88,6 +88,13 @@ const HomeLayout = () => {
               </div>
             </div>
           </div>
+        )}
+
+        {BANNER_HTML && BANNER_HTML.length > 0 && (
+          <Warning
+            message={<Text theme='muted' dangerouslySetInnerHTML={{ __html: BANNER_HTML }} />}
+            className='!m-4'
+          />
         )}
 
         <Outlet />

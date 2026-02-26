@@ -6,7 +6,7 @@ import { generateAccent, generateThemeCss } from '@/utils/theme';
 
 import { useFrontendConfig } from './use-frontend-config';
 
-import type { FrontendConfig } from '@/normalizers/frontend-config';
+import type { FrontendConfig } from '@/schemas/frontend-config';
 
 const DEFAULT_COLORS = {
   success: {
@@ -56,14 +56,14 @@ const normalizeColors = (
   const normalizedColors = toTailwind({
     brandColor,
     accentColor,
-    // @ts-ignore
+    // @ts-expect-error
     colors,
   });
 
   return {
-    // @ts-ignore
+    // @ts-expect-error
     'gradient-start': normalizedColors.primary?.['500'],
-    // @ts-ignore
+    // @ts-expect-error
     'gradient-end': normalizedColors.accent?.['500'],
     ...normalizedColors,
   } as typeof normalizedColors;

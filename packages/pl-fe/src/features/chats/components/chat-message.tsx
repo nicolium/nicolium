@@ -11,13 +11,12 @@ import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { MediaGallery } from '@/features/ui/util/async-components';
 import { useAppSelector } from '@/hooks/use-app-selector';
-import { useDeleteChatMessage } from '@/queries/chats';
+import { useDeleteChatMessage, type ChatMessage as ChatMessageEntity } from '@/queries/chats';
 import { useModalsActions } from '@/stores/modals';
 import { stripHTML } from '@/utils/html';
 import { onlyEmoji } from '@/utils/rich-content';
 
 import type { Menu as IMenu } from '@/components/dropdown-menu';
-import type { ChatMessage as ChatMessageEntity } from '@/normalizers/chat-message';
 import type { Chat } from 'pl-api';
 
 const messages = defineMessages({
@@ -29,7 +28,8 @@ const messages = defineMessages({
 
 const BIG_EMOJI_LIMIT = 3;
 
-const parsePendingContent = (content: string) => escape(content).replace(/(?:\r\n|\r|\n)/g, '<br>');
+const parsePendingContent = (content: string) =>
+  escape(content).replaceAll(/(?:\r\n|\r|\n)/g, '<br>');
 
 const parseContent = (chatMessage: ChatMessageEntity) => {
   const content = chatMessage.content || '';

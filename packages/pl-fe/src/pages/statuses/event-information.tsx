@@ -167,7 +167,7 @@ const EventInformationPage: React.FC = () => {
         </Text>
 
         {status.event.links.map((link) => (
-          <HStack space={2} alignItems='center'>
+          <HStack space={2} alignItems='center' key={link.url}>
             <Icon src={require('@phosphor-icons/core/regular/link-simple.svg')} />
             <a
               href={link.remote_url ?? link.url}

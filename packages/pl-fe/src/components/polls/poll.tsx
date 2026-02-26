@@ -11,7 +11,7 @@ import { useStatusMeta } from '@/stores/status-meta';
 import PollFooter from './poll-footer';
 import PollOption from './poll-option';
 
-import type { Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/reducers/statuses';
 
 type Selected = Record<number, boolean>;
 
@@ -22,7 +22,7 @@ interface IPoll {
   truncate?: boolean;
 }
 
-const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): JSX.Element | null => {
+const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.Element | null => {
   const { openModal } = useModalsActions();
 
   const isLoggedIn = useAppSelector((state) => state.me);

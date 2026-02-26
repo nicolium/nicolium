@@ -30,7 +30,7 @@ const getOrderedLists = (lists: Array<Pick<ListEntity, 'title'>>) => {
 
   return Object.values(lists)
     .filter((item): item is ListEntity => !!item)
-    .sort((a, b) => a.title.localeCompare(b.title));
+    .toSorted((a, b) => a.title.localeCompare(b.title));
 };
 
 const NewListForm: React.FC = () => {

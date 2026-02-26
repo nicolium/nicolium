@@ -5,11 +5,10 @@ import {
   useIntl,
   FormattedList,
   FormattedMessage,
-  IntlShape,
-  MessageDescriptor,
+  type IntlShape,
+  type MessageDescriptor,
 } from 'react-intl';
 
-import { mentionCompose, replyCompose } from '@/actions/compose';
 import AttachmentThumbs from '@/components/attachment-thumbs';
 import HoverAccountWrapper from '@/components/hover-account-wrapper';
 import Icon from '@/components/icon';
@@ -22,7 +21,6 @@ import AccountContainer from '@/containers/account-container';
 import StatusContainer from '@/containers/status-container';
 import Emojify from '@/features/emoji/emojify';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useInstance } from '@/hooks/use-instance';
 import { useLoggedIn } from '@/hooks/use-logged-in';
@@ -33,12 +31,13 @@ import {
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { makeGetNotification } from '@/selectors';
+import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMetaActions } from '@/stores/status-meta';
-import { NotificationType } from '@/utils/notification';
 
-import type { Status as StatusEntity } from '@/normalizers/status';
+import type { NormalizedStatus as StatusEntity } from '@/reducers/statuses';
+import type { NotificationType } from '@/utils/notification';
 import type { Account, NotificationGroup } from 'pl-api';
 
 const notificationForScreenReader = (intl: IntlShape, message: string, timestamp: string) => {
@@ -58,7 +57,7 @@ const notificationForScreenReader = (intl: IntlShape, message: string, timestamp
 
 const buildLink = (
   account: Pick<Account, 'acct' | 'display_name' | 'emojis' | 'id'>,
-): JSX.Element => (
+): React.JSX.Element => (
   <Link
     className='font-bold text-gray-800 hover:underline dark:text-gray-200'
     title={account.acct}
@@ -280,7 +279,7 @@ const getNotificationStatus = (
       'quoted_update',
     ].includes(n.type)
   )
-    // @ts-ignore
+    // @ts-expect-error
     return n.status;
   return null;
 };
@@ -288,7 +287,7 @@ const getNotificationStatus = (
 const Notification: React.FC<INotification> = (props) => {
   const { onMoveUp, onMoveDown, compact } = props;
 
-  const dispatch = useAppDispatch();
+  const { mentionCompose, replyCompose } = useComposeActions();
 
   const getNotification = useCallback(makeGetNotification(), []);
 
@@ -336,7 +335,7 @@ const Notification: React.FC<INotification> = (props) => {
     (e?: KeyboardEvent) => {
       e?.preventDefault();
 
-      dispatch(mentionCompose(account));
+      mentionCompose(account);
     },
     [account],
   );
@@ -346,26 +345,23 @@ const Notification: React.FC<INotification> = (props) => {
       e?.preventDefault();
 
       if (status) {
-        dispatch(replyCompose(status, account));
+        replyCompose(status, account);
       } else {
-        dispatch(mentionCompose(account));
+        mentionCompose(account);
       }
     },
     [account],
   );
 
-  const handleHotkeyFavourite = useCallback(
-    (e?: KeyboardEvent) => {
-      if (status && typeof status === 'object') {
-        if (status.favourited) {
-          unfavouriteStatus();
-        } else {
-          favouriteStatus();
-        }
+  const handleHotkeyFavourite = useCallback(() => {
+    if (status && typeof status === 'object') {
+      if (status.favourited) {
+        unfavouriteStatus();
+      } else {
+        favouriteStatus();
       }
-    },
-    [status],
-  );
+    }
+  }, [status]);
 
   const handleHotkeyBoost = useCallback(
     (e?: KeyboardEvent) => {
@@ -580,4 +576,9 @@ const Notification: React.FC<INotification> = (props) => {
   );
 };
 
-export { Notification as default, buildLink, getNotificationStatus };
+export {
+  Notification as default,
+  buildLink,
+  getNotificationStatus,
+  messages as notificationMessages,
+};

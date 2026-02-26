@@ -2,14 +2,12 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { cancelReplyCompose, uploadCompose } from '@/actions/compose';
 import { checkComposeContent } from '@/components/modal-root';
 import Modal from '@/components/ui/modal';
 import { ComposeForm } from '@/features/ui/util/async-components';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useCompose } from '@/hooks/use-compose';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
+import { useCompose, useComposeActions, useUploadCompose } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
@@ -29,16 +27,17 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
   composeId = 'compose-modal',
 }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const node = useRef<HTMLDivElement>(null);
   const compose = useCompose(composeId);
+  const uploadCompose = useUploadCompose(composeId);
+  const { resetCompose } = useComposeActions();
   const { openModal } = useModalsActions();
   const persistDraftStatus = usePersistDraftStatus();
 
   const { editedId, visibility, inReplyToId, quoteId, groupId } = compose;
 
   const { isDragging, isDraggedOver } = useDraggedFiles(node, (files) => {
-    dispatch(uploadCompose(composeId, files, intl));
+    uploadCompose(files);
   });
 
   const onClickClose = () => {
@@ -76,7 +75,7 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
         confirm: intl.formatMessage(editedId ? messages.cancelEditing : messages.confirm),
         onConfirm: () => {
           onClose('COMPOSE');
-          dispatch(cancelReplyCompose());
+          resetCompose('compose-modal');
         },
         secondary: intl.formatMessage(messages.saveDraft),
         onSecondary: editedId
@@ -84,7 +83,7 @@ const ComposeModal: React.FC<BaseModalProps & ComposeModalProps> = ({
           : () => {
               persistDraftStatus(composeId);
               onClose('COMPOSE');
-              dispatch(cancelReplyCompose());
+              resetCompose('compose-modal');
             },
       });
     } else {

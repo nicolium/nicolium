@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Button from '@/components/ui/button';
 import HStack from '@/components/ui/hstack';
@@ -25,20 +25,6 @@ import toast from '@/toast';
 import type { Account } from 'pl-api';
 
 const messages = defineMessages({
-  block: { id: 'account.block', defaultMessage: 'Block @{name}' },
-  blocked: { id: 'account.blocked', defaultMessage: 'Blocked' },
-  edit_profile: { id: 'account.edit_profile', defaultMessage: 'Edit profile' },
-  follow: { id: 'account.follow', defaultMessage: 'Follow' },
-  mute: { id: 'account.mute', defaultMessage: 'Mute @{name}' },
-  remote_follow: { id: 'account.remote_follow', defaultMessage: 'Remote follow' },
-  requested: { id: 'account.requested', defaultMessage: 'Follow requested. Click to cancel' },
-  requested_small: { id: 'account.requested_small', defaultMessage: 'Follow requested' },
-  unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
-  unfollow: { id: 'account.unfollow', defaultMessage: 'Unfollow' },
-  unmute: { id: 'account.unmute', defaultMessage: 'Unmute @{name}' },
-  authorize: { id: 'follow_request.authorize', defaultMessage: 'Authorize' },
-  reject: { id: 'follow_request.reject', defaultMessage: 'Reject' },
-  bite: { id: 'account.bite', defaultMessage: 'Bite @{name}' },
   userBit: { id: 'account.bite.success', defaultMessage: 'You have bit @{acct}' },
   userBiteFail: { id: 'account.bite.fail', defaultMessage: 'Failed to bite @{acct}' },
 });
@@ -134,25 +120,54 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
   /** Handles actionType='muting' */
   const mutingAction = () => {
     const isMuted = relationship?.muting;
-    const messageKey = isMuted ? messages.unmute : messages.mute;
-    const text = intl.formatMessage(messageKey, { name: account.username });
 
     return (
-      <Button theme={isMuted ? 'danger' : 'secondary'} size='sm' text={text} onClick={handleMute} />
+      <Button
+        theme={isMuted ? 'danger' : 'secondary'}
+        size='sm'
+        text={
+          isMuted ? (
+            <FormattedMessage
+              id='account.unmute'
+              defaultMessage='Unmute @{name}'
+              values={{ name: account.username }}
+            />
+          ) : (
+            <FormattedMessage
+              id='account.mute'
+              defaultMessage='Mute @{name}'
+              values={{ name: account.username }}
+            />
+          )
+        }
+        onClick={handleMute}
+      />
     );
   };
 
   /** Handles actionType='blocking' */
   const blockingAction = () => {
     const isBlocked = relationship?.blocking;
-    const messageKey = isBlocked ? messages.unblock : messages.block;
-    const text = intl.formatMessage(messageKey, { name: account.username });
 
     return (
       <Button
         theme={isBlocked ? 'danger' : 'secondary'}
         size='sm'
-        text={text}
+        text={
+          isBlocked ? (
+            <FormattedMessage
+              id='account.unblock'
+              defaultMessage='Unblock @{name}'
+              values={{ name: account.username }}
+            />
+          ) : (
+            <FormattedMessage
+              id='account.block'
+              defaultMessage='Block @{name}'
+              values={{ name: account.username }}
+            />
+          )
+        }
         onClick={handleBlock}
       />
     );
@@ -160,13 +175,17 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
 
   /** Handles actionType='blocking' */
   const bitingAction = () => {
-    const text = intl.formatMessage(messages.bite, { name: account.username });
-
     return (
       <Button
         theme='secondary'
         size='sm'
-        text={text}
+        text={
+          <FormattedMessage
+            id='account.bite'
+            defaultMessage='Bite @{name}'
+            values={{ name: account.username }}
+          />
+        }
         onClick={handleBite}
         icon={require('@phosphor-icons/core/regular/tooth.svg')}
       />
@@ -179,13 +198,13 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
         <Button
           theme='secondary'
           size='sm'
-          text={intl.formatMessage(messages.authorize)}
+          text={<FormattedMessage id='follow_request.authorize' defaultMessage='Authorize' />}
           onClick={handleAuthorize}
         />
         <Button
           theme='danger'
           size='sm'
-          text={intl.formatMessage(messages.reject)}
+          text={<FormattedMessage id='follow_request.reject' defaultMessage='Reject' />}
           onClick={handleReject}
         />
       </HStack>
@@ -200,7 +219,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
         <Button
           onClick={handleRemoteFollow}
           icon={require('@phosphor-icons/core/regular/plus.svg')}
-          text={intl.formatMessage(messages.follow)}
+          text={<FormattedMessage id='account.follow' defaultMessage='Follow' />}
           size='sm'
         />
       );
@@ -210,7 +229,11 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
         <form method='POST' action='/main/ostatus'>
           <input type='hidden' name='nickname' value={account.acct} />
           <input type='hidden' name='profile' value='' />
-          <Button text={intl.formatMessage(messages.remote_follow)} type='submit' size='sm' />
+          <Button
+            text={<FormattedMessage id='account.remote_follow' defaultMessage='Remote follow' />}
+            type='submit'
+            size='sm'
+          />
         </form>
       );
     }
@@ -266,9 +289,14 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
           size='sm'
           theme='tertiary'
           text={
-            small
-              ? intl.formatMessage(messages.requested_small)
-              : intl.formatMessage(messages.requested)
+            small ? (
+              <FormattedMessage id='account.requested_small' defaultMessage='Follow requested' />
+            ) : (
+              <FormattedMessage
+                id='account.requested'
+                defaultMessage='Follow requested. Click to cancel'
+              />
+            )
           }
           onClick={handleFollow}
         />
@@ -287,9 +315,13 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
           }
           onClick={handleFollow}
         >
-          {isFollowing
-            ? intl.formatMessage(messages.unfollow)
-            : intl.formatMessage(blockedBy ? messages.blocked : messages.follow)}
+          {isFollowing ? (
+            <FormattedMessage id='account.unfollow' defaultMessage='Unfollow' />
+          ) : blockedBy ? (
+            <FormattedMessage id='account.blocked' defaultMessage='Blocked' />
+          ) : (
+            <FormattedMessage id='account.follow' defaultMessage='Follow' />
+          )}
         </Button>
       );
     } else if (relationship?.blocking) {
@@ -298,7 +330,13 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
         <Button
           theme='danger'
           size='sm'
-          text={intl.formatMessage(messages.unblock, { name: account.username })}
+          text={
+            <FormattedMessage
+              id='account.unblock'
+              defaultMessage='Unblock @{name}'
+              values={{ name: account.username }}
+            />
+          }
           onClick={handleBlock}
         />
       );
@@ -309,7 +347,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
       <Button
         theme='tertiary'
         size='sm'
-        text={intl.formatMessage(messages.edit_profile)}
+        text={<FormattedMessage id='account.edit_profile' defaultMessage='Edit profile' />}
         to='/settings/profile'
       />
     );

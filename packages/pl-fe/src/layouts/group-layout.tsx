@@ -2,8 +2,6 @@ import { Outlet, useLocation } from '@tanstack/react-router';
 import React, { useMemo } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { useGroup } from '@/api/hooks/groups/use-group';
-import { useGroupMembershipRequests } from '@/api/hooks/groups/use-group-membership-requests';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
 import Layout from '@/components/ui/layout';
@@ -15,6 +13,8 @@ import LinkFooter from '@/features/ui/components/link-footer';
 import { layouts } from '@/features/ui/router';
 import { GroupMediaPanel, SignUpPanel } from '@/features/ui/util/async-components';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useGroupQuery } from '@/queries/groups/use-group';
+import { useGroupMembershipRequestsQuery } from '@/queries/groups/use-group-members';
 
 const messages = defineMessages({
   all: { id: 'group.tabs.all', defaultMessage: 'All' },
@@ -46,10 +46,10 @@ const GroupLayout = () => {
 
   const intl = useIntl();
   const location = useLocation();
-  const { account: me } = useOwnAccount();
+  const { data: me } = useOwnAccount();
 
-  const { group } = useGroup(groupId);
-  const { accounts: pending } = useGroupMembershipRequests(groupId);
+  const { data: group } = useGroupQuery(groupId, true);
+  const { data: membershipRequests = [] } = useGroupMembershipRequestsQuery(groupId);
 
   const isMember = !!group?.relationship?.member;
   const isPrivate = group?.locked;
@@ -76,12 +76,12 @@ const GroupLayout = () => {
         to: '/groups/$groupId/members',
         params: { groupId },
         name: '/groups/$groupId/members',
-        count: pending.length,
+        count: membershipRequests.length,
       },
     );
 
     return items;
-  }, [pending.length, groupId]);
+  }, [membershipRequests.length, groupId]);
 
   const renderChildren = () => {
     if (!isMember && isPrivate) {

@@ -1,23 +1,30 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 
 import { queryClient } from '../client';
+import { queryKeys } from '../keys';
 
 import type { BookmarkFolder } from 'pl-api';
 
-const useBookmarkFolders = <T>(select?: (data: Array<BookmarkFolder>) => T) => {
+function useBookmarkFolders<T>(
+  select: (data: Array<BookmarkFolder>) => T,
+): UseQueryResult<T, Error>;
+function useBookmarkFolders(): UseQueryResult<Array<BookmarkFolder>, Error>;
+function useBookmarkFolders<T = Array<BookmarkFolder>>(
+  select?: (data: Array<BookmarkFolder>) => T,
+) {
   const client = useClient();
   const features = useFeatures();
 
   return useQuery({
-    queryKey: ['bookmarkFolders'],
+    queryKey: queryKeys.bookmarkFolders.all,
     queryFn: () => client.myAccount.getBookmarkFolders(),
     enabled: features.bookmarkFolders,
     select,
   });
-};
+}
 
 const useBookmarkFolder = (folderId?: string) =>
   useBookmarkFolders((data) =>
@@ -36,7 +43,7 @@ const useCreateBookmarkFolder = () => {
     mutationKey: ['bookmarkFolders', 'create'],
     mutationFn: (params: CreateBookmarkFolderParams) =>
       client.myAccount.createBookmarkFolder(params),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['bookmarkFolders'] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.bookmarkFolders.all }),
   });
 };
 
@@ -46,7 +53,7 @@ const useDeleteBookmarkFolder = () => {
   return useMutation({
     mutationKey: ['bookmarkFolders', 'delete'],
     mutationFn: (folderId: string) => client.myAccount.deleteBookmarkFolder(folderId),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['bookmarkFolders'] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.bookmarkFolders.all }),
   });
 };
 
@@ -62,7 +69,7 @@ const useUpdateBookmarkFolder = (folderId: string) => {
     mutationKey: ['bookmarkFolders', 'update', folderId],
     mutationFn: (params: UpdateBookmarkFolderParams) =>
       client.myAccount.updateBookmarkFolder(folderId, params),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['bookmarkFolders'] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.bookmarkFolders.all }),
   });
 };
 
@@ -71,7 +78,7 @@ const useStatusBookmarkFolders = (statusId: string) => {
   const features = useFeatures();
 
   return useQuery({
-    queryKey: ['bookmarkFolders', 'status', statusId],
+    queryKey: queryKeys.bookmarkFolders.forStatus(statusId),
     queryFn: () =>
       client.statuses
         .getStatusBookmarkFolders(statusId)
@@ -87,7 +94,7 @@ const useAddBookmarkToFolder = (statusId: string) => {
     mutationKey: ['bookmarkFolders', 'add', statusId],
     mutationFn: (folderId: string) => client.myAccount.addBookmarkToFolder(statusId, folderId),
     onSettled: () =>
-      queryClient.invalidateQueries({ queryKey: ['bookmarkFolders', 'status', statusId] }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.bookmarkFolders.forStatus(statusId) }),
   });
 };
 
@@ -98,7 +105,7 @@ const useRemoveBookmarkFromFolder = (statusId: string) => {
     mutationKey: ['bookmarkFolders', 'remove', statusId],
     mutationFn: (folderId: string) => client.myAccount.removeBookmarkFromFolder(statusId, folderId),
     onSettled: () =>
-      queryClient.invalidateQueries({ queryKey: ['bookmarkFolders', 'status', statusId] }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.bookmarkFolders.forStatus(statusId) }),
   });
 };
 

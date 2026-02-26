@@ -2,8 +2,8 @@
  * Apps: manage OAuth applications.
  * Particularly useful for auth.
  * https://docs.joinmastodon.org/methods/apps/
- * @module pl-fe/actions/apps
- * @see module:pl-fe/actions/auth
+ * @module @/actions/apps
+ * @see module:@/actions/auth
  */
 
 import { PlApiClient, type CreateApplicationParams } from 'pl-api';

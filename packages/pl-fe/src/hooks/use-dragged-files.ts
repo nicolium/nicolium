@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 /** Controls the state of files being dragged over a node. */
 const useDraggedFiles = <R extends HTMLElement>(
-  node: React.RefObject<R>,
+  node: React.RefObject<R | null>,
   onDrop?: (files: FileList) => void,
 ) => {
   const [isDragging, setIsDragging] = useState(false);
@@ -26,13 +26,10 @@ const useDraggedFiles = <R extends HTMLElement>(
     [setIsDragging],
   );
 
-  const handleDocumentDrop = useCallback(
-    (e: DragEvent) => {
-      setIsDragging(false);
-      setIsDraggedOver(false);
-    },
-    [setIsDragging],
-  );
+  const handleDocumentDrop = useCallback(() => {
+    setIsDragging(false);
+    setIsDraggedOver(false);
+  }, [setIsDragging]);
 
   const handleDragEnter = useCallback(
     (e: DragEvent) => {

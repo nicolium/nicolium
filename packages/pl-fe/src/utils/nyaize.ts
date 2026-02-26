@@ -9,7 +9,7 @@ const ifAfter = (prefix: string, fn: (x: string) => string) => {
   const preLen = prefix.length;
   const regex = new RegExp(prefix, 'i');
   return (x: string, pos: number, string: string) => {
-    return pos > 0 && string.substring(pos - preLen, pos).match(regex) ? fn(x) : x;
+    return pos > 0 && string.slice(pos - preLen, pos).match(regex) ? fn(x) : x;
   };
 };
 
@@ -20,26 +20,26 @@ const nyaize = (text: string) =>
     .replaceAll('ナ', 'ニャ')
     .replaceAll('ﾅ', 'ﾆｬ')
     // en-US
-    .replace(
-      /a/gi,
+    .replaceAll(
+      'a',
       ifAfter('n', (x) => (x === 'A' ? 'YA' : 'ya')),
     )
-    .replace(
-      /ing/gi,
+    .replaceAll(
+      'ing',
       ifAfter('morn', (x) => (x === 'ING' ? 'YAN' : 'yan')),
     )
-    .replace(
-      /one/gi,
+    .replaceAll(
+      'one',
       ifAfter('every', (x) => (x === 'ONE' ? 'NYAN' : 'nyan')),
     )
     // pl-PL
-    .replace(
-      /ł/gi,
+    .replaceAll(
+      'ł',
       ifAfter('mia', (x) => (x === 'Ł' ? 'U' : 'u')),
     )
     // ru-RU
-    .replace(
-      /а/gi,
+    .replaceAll(
+      'а',
       ifAfter('н', (x) => (x === 'А' ? 'Я' : 'я')),
     )
     // ko-KR

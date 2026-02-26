@@ -2,7 +2,6 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { directCompose, mentionCompose, quoteCompose } from '@/actions/compose';
 import { fetchEventIcs } from '@/actions/events';
 import { deleteStatusModal, toggleStatusSensitivityModal } from '@/actions/moderation';
 import { initReport, ReportableEntities } from '@/actions/reports';
@@ -29,6 +28,7 @@ import {
   useUnpinStatus,
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
+import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import copy from '@/utils/copy';
@@ -39,7 +39,7 @@ import PlaceholderEventHeader from '../../placeholder/components/placeholder-eve
 import EventActionButton from '../components/event-action-button';
 import EventDate from '../components/event-date';
 
-import type { Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/reducers/statuses';
 
 const messages = defineMessages({
   bannerHeader: { id: 'event.banner', defaultMessage: 'Event banner' },
@@ -50,17 +50,17 @@ const messages = defineMessages({
   unbookmark: { id: 'status.unbookmark', defaultMessage: 'Remove bookmark' },
   quotePost: { id: 'event.quote', defaultMessage: 'Quote event' },
   reblog: { id: 'event.reblog', defaultMessage: 'Repost event' },
-  reblog_private: { id: 'status.reblog_private', defaultMessage: 'Repost to original audience' },
-  cancel_reblog_private: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },
-  reblog_visibility_public: {
+  reblogPrivate: { id: 'status.reblog_private', defaultMessage: 'Repost to original audience' },
+  cancelReblogPrivate: { id: 'status.cancel_reblog_private', defaultMessage: 'Un-repost' },
+  reblogVisibilityPublic: {
     id: 'status.reblog_visibility_public',
     defaultMessage: 'Public repost',
   },
-  reblog_visibility_unlisted: {
+  reblogVisibilityUnlisted: {
     id: 'status.reblog_visibility_unlisted',
     defaultMessage: 'Quiet public repost',
   },
-  reblog_visibility_private: {
+  reblogVisibilityPrivate: {
     id: 'status.reblog_visibility_private',
     defaultMessage: 'Followers-only repost',
   },
@@ -88,12 +88,6 @@ const messages = defineMessages({
     defaultMessage: 'Mark post not sensitive',
   },
   deleteStatus: { id: 'admin.statuses.actions.delete_status', defaultMessage: 'Delete post' },
-  deleteConfirm: { id: 'confirmations.delete_event.confirm', defaultMessage: 'Delete' },
-  deleteHeading: { id: 'confirmations.delete_event.heading', defaultMessage: 'Delete event' },
-  deleteMessage: {
-    id: 'confirmations.delete_event.message',
-    defaultMessage: 'Are you sure you want to delete this event?',
-  },
 });
 
 interface IEventHeader {
@@ -119,13 +113,14 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { quoteCompose, mentionCompose, directCompose } = useComposeActions();
 
   const { openModal } = useModalsActions();
   const { getOrCreateChatByAccountId } = useChats();
 
   const features = useFeatures();
   const { boostModal } = useSettings();
-  const { account: ownAccount } = useOwnAccount();
+  const { data: ownAccount } = useOwnAccount();
   const isStaff = ownAccount ? (ownAccount.is_admin ?? ownAccount.is_moderator) : false;
   const isAdmin = ownAccount ? ownAccount.is_admin : false;
 
@@ -193,7 +188,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleQuoteClick = () => {
-    dispatch(quoteCompose(status));
+    quoteCompose(status);
   };
 
   const handlePinClick = () => {
@@ -203,15 +198,22 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
   const handleDeleteClick = () => {
     openModal('CONFIRM', {
-      heading: intl.formatMessage(messages.deleteHeading),
-      message: intl.formatMessage(messages.deleteMessage),
-      confirm: intl.formatMessage(messages.deleteConfirm),
+      heading: (
+        <FormattedMessage id='confirmations.delete_event.heading' defaultMessage='Delete event' />
+      ),
+      message: (
+        <FormattedMessage
+          id='confirmations.delete_event.message'
+          defaultMessage='Are you sure you want to delete this event?'
+        />
+      ),
+      confirm: <FormattedMessage id='confirmations.delete_event.confirm' defaultMessage='Delete' />,
       onConfirm: () => dispatch(deleteStatus(status.id)),
     });
   };
 
   const handleMentionClick = () => {
-    dispatch(mentionCompose(account));
+    mentionCompose(account);
   };
 
   const handleChatClick = () => {
@@ -221,7 +223,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleDirectClick = () => {
-    dispatch(directCompose(account));
+    directCompose(account);
   };
 
   const handleMuteClick = () => {
@@ -233,7 +235,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleReport = () => {
-    dispatch(initReport(ReportableEntities.STATUS, account, { status }));
+    initReport(ReportableEntities.STATUS, account, { status });
   };
 
   const handleToggleStatusSensitivity = () => {
@@ -288,21 +290,21 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
           ? {
               items: [
                 {
-                  text: intl.formatMessage(messages.reblog_visibility_public),
+                  text: intl.formatMessage(messages.reblogVisibilityPublic),
                   action: () => {
                     handleReblogClick('public');
                   },
                   icon: require('@phosphor-icons/core/regular/globe.svg'),
                 },
                 {
-                  text: intl.formatMessage(messages.reblog_visibility_unlisted),
+                  text: intl.formatMessage(messages.reblogVisibilityUnlisted),
                   action: () => {
                     handleReblogClick('unlisted');
                   },
                   icon: require('@phosphor-icons/core/regular/moon.svg'),
                 },
                 {
-                  text: intl.formatMessage(messages.reblog_visibility_private),
+                  text: intl.formatMessage(messages.reblogVisibilityPrivate),
                   action: () => {
                     handleReblogClick('private');
                   },
@@ -328,7 +330,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
     } else if (status.visibility === 'private' || status.visibility === 'mutuals_only') {
       menu.push({
         text: intl.formatMessage(
-          status.reblogged ? messages.cancel_reblog_private : messages.reblog_private,
+          status.reblogged ? messages.cancelReblogPrivate : messages.reblogPrivate,
         ),
         action: () => {
           handleReblogClick();

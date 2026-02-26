@@ -5,13 +5,13 @@ import { decode as decodeBase64 } from '@/utils/base64';
 
 import { setBrowserSupport, setSubscription, clearSubscription } from './setter';
 
+import type { Me } from '@/reducers/me';
 import type { AppDispatch, RootState } from '@/store';
-import type { Me } from '@/types/pl-fe';
 
 // Taken from https://www.npmjs.com/package/web-push
 const urlBase64ToUint8Array = (base64String: string) => {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const base64 = (base64String + padding).replaceAll('-', '+').replaceAll('_', '/');
 
   return decodeBase64(base64);
 };
@@ -51,7 +51,7 @@ const unsubscribe = ({
 const sendSubscriptionToBackend =
   (subscription: PushSubscription, me: Me) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
-    const alerts = getState().push_notifications.alerts;
+    const alerts = getState().pushNotifications.alerts;
     const params = { subscription, data: { alerts } };
 
     if (me) {
@@ -96,7 +96,7 @@ const register = () => (dispatch: AppDispatch, getState: () => RootState) => {
           subscription.options.applicationServerKey!,
         ).toString();
         const subscriptionServerKey = urlBase64ToUint8Array(vapidKey).toString();
-        const serverEndpoint = getState().push_notifications.subscription?.endpoint;
+        const serverEndpoint = getState().pushNotifications.subscription?.endpoint;
 
         // If the VAPID public key did not change and the endpoint corresponds
         // to the endpoint saved in the backend, the subscription is valid

@@ -23,7 +23,7 @@ const ConsumersList: React.FC = () => {
           </Text>
           <HStack space={2}>
             {providers.map((provider) => (
-              <ConsumerButton provider={provider} />
+              <ConsumerButton key={provider} provider={provider} />
             ))}
           </HStack>
         </Stack>

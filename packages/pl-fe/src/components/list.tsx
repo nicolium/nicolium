@@ -20,7 +20,7 @@ type IListItem = {
   href?: string;
   onClick?(): void;
   isSelected?: boolean;
-  children?: React.ReactNode;
+  children?: React.ReactElement<any> | Array<React.ReactElement<any>>;
   size?: 'sm' | 'md';
 } & (LinkOptions | {});
 
@@ -36,6 +36,8 @@ const ListItem: React.FC<IListItem> = ({
   ...rest
 }) => {
   const [domId] = useState(`list-group-${crypto.randomUUID()}`);
+  const labelId = `${domId}-label`;
+  const hintId = `${domId}-hint`;
 
   const onKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
@@ -47,25 +49,38 @@ const ListItem: React.FC<IListItem> = ({
 
   const renderChildren = React.useCallback(
     () =>
-      React.Children.map(children, (child) => {
-        if (React.isValidElement(child)) {
-          const isSelect = child.type === SelectDropdown || child.type === Select;
+      children
+        ? React.Children.map(children, (child: React.ReactElement<any>) => {
+            if (React.isValidElement(child)) {
+              const props = child.props as any;
+              const isSelect = child.type === SelectDropdown || child.type === Select;
+              const childLabelledBy = props['aria-labelledby'];
+              const childDescribedBy = props['aria-describedby'];
+              const ariaLabelledBy = childLabelledBy ? `${childLabelledBy} ${labelId}` : labelId;
+              const ariaDescribedBy = hint
+                ? childDescribedBy
+                  ? `${childDescribedBy} ${hintId}`
+                  : hintId
+                : childDescribedBy;
 
-          return React.cloneElement(child, {
-            // @ts-ignore
-            id: domId,
-            className: clsx(
-              {
-                'w-auto': isSelect,
-              },
-              child.props.className,
-            ),
-          });
-        }
+              return React.cloneElement(child, {
+                // @ts-expect-error
+                id: domId,
+                'aria-labelledby': ariaLabelledBy,
+                'aria-describedby': ariaDescribedBy,
+                className: clsx(
+                  {
+                    'w-auto': isSelect,
+                  },
+                  props.className,
+                ),
+              });
+            }
 
-        return null;
-      }),
-    [children, domId],
+            return null;
+          })
+        : null,
+    [children, domId, labelId, hint, hintId],
   );
 
   const classNames = clsx('⁂-list-item', className, {
@@ -76,16 +91,22 @@ const ListItem: React.FC<IListItem> = ({
   const body = (
     <>
       <div className='⁂-list-item__label'>
-        <LabelComp htmlFor={domId}>{label}</LabelComp>
+        <LabelComp id={labelId} {...(LabelComp === 'label' ? { htmlFor: domId } : {})}>
+          {label}
+        </LabelComp>
 
-        {hint ? <span className='⁂-list-item__hint'>{hint}</span> : null}
+        {hint ? (
+          <span id={hintId} className='⁂-list-item__hint'>
+            {hint}
+          </span>
+        ) : null}
       </div>
 
       {'to' in rest || href || onClick ? (
         <HStack space={1} alignItems='center' className='⁂-list-item__body'>
           {children}
 
-          <Icon src={require('@phosphor-icons/core/regular/caret-right.svg')} />
+          <Icon src={require('@phosphor-icons/core/regular/caret-right.svg')} aria-hidden />
         </HStack>
       ) : null}
 

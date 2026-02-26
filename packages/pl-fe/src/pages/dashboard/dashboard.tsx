@@ -25,7 +25,7 @@ const Dashboard: React.FC = () => {
   const intl = useIntl();
   const instance = useInstance();
   const features = useFeatures();
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
 
   const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
   const { data: pendingReportsCount = 0 } = usePendingReportsCount();
@@ -43,10 +43,10 @@ const Dashboard: React.FC = () => {
 
   const [today] = useState<string>(new Date().toISOString().slice(0, 10));
   const [monthAgo] = useState<string>(
-    new Date(new Date().getTime() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+    new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
   );
   const [sixMonthsAgo] = useState<string>(
-    new Date(new Date().getTime() - 30 * 6 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
+    new Date(Date.now() - 30 * 6 * 24 * 60 * 60 * 1000).toISOString().slice(0, 10),
   );
 
   if (!account) return null;
@@ -271,7 +271,7 @@ const Dashboard: React.FC = () => {
               to='/pl-fe/config'
               label={
                 <FormattedMessage
-                  id='column.plfe_config'
+                  id='column.frontend_config'
                   defaultMessage='Front-end configuration'
                 />
               }

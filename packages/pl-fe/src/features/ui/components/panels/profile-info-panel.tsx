@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
@@ -14,7 +13,7 @@ import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAcct } from '@/hooks/use-acct';
 import { useAppSelector } from '@/hooks/use-app-selector';
-import { accountScrobbleQueryOptions } from '@/queries/accounts/account-scrobble';
+import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
 import { capitalize } from '@/utils/strings';
 
 import { ProfileField } from '../../util/async-components';
@@ -28,7 +27,7 @@ const messages = defineMessages({
     id: 'account.link_verified_on',
     defaultMessage: 'Ownership of this link was checked on {date}',
   },
-  account_locked: {
+  accountLocked: {
     id: 'account.locked_info',
     defaultMessage:
       'This account privacy status is set to locked. The owner manually reviews who can follow them.',
@@ -51,7 +50,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   const me = useAppSelector((state) => state.me);
   const ownAccount = account?.id === me;
 
-  const { data: scrobble } = useQuery(accountScrobbleQueryOptions(account?.id));
+  const { data: scrobble } = useAccountScrobbleQuery(account?.id);
 
   const getStaffBadge = (): React.ReactNode => {
     if (account?.is_admin) {
@@ -201,7 +200,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
             {account.locked && (
               <Icon
                 src={require('@phosphor-icons/core/regular/lock.svg')}
-                alt={intl.formatMessage(messages.account_locked)}
+                alt={intl.formatMessage(messages.accountLocked)}
                 className='size-4 text-gray-600'
               />
             )}

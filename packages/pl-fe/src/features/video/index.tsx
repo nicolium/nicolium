@@ -26,7 +26,7 @@ const messages = defineMessages({
   unmute: { id: 'video.unmute', defaultMessage: 'Unmute sound' },
   download: { id: 'video.download', defaultMessage: 'Download file' },
   fullscreen: { id: 'video.fullscreen', defaultMessage: 'Full screen' },
-  exit_fullscreen: { id: 'video.exit_fullscreen', defaultMessage: 'Exit full screen' },
+  exitFullscreen: { id: 'video.exit_fullscreen', defaultMessage: 'Exit full screen' },
 });
 
 const formatTime = (secondsNum: number): string => {
@@ -166,14 +166,14 @@ const Video: React.FC<IVideo> = ({
 
   useLayoutEffect(() => {
     setDimensions();
-  }, [player.current]);
+  }, []);
 
   useEffect(() => {
     if (video.current) {
       setVolume(video.current.volume);
       setMuted(video.current.muted);
     }
-  }, [video.current]);
+  }, []);
 
   const handleClickRoot: React.MouseEventHandler = (e) => {
     e.stopPropagation();
@@ -624,11 +624,9 @@ const Video: React.FC<IVideo> = ({
             </a>
             <button
               type='button'
-              title={intl.formatMessage(
-                fullscreen ? messages.exit_fullscreen : messages.fullscreen,
-              )}
+              title={intl.formatMessage(fullscreen ? messages.exitFullscreen : messages.fullscreen)}
               aria-label={intl.formatMessage(
-                fullscreen ? messages.exit_fullscreen : messages.fullscreen,
+                fullscreen ? messages.exitFullscreen : messages.fullscreen,
               )}
               className={clsx('player-button', detailed || (fullscreen && 'py-2.5'))}
               onClick={toggleFullscreen}

@@ -14,6 +14,7 @@ import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
+import { useGroupQuery } from '@/queries/groups/use-group';
 
 import StatusInteractionBar from './status-interaction-bar';
 import StatusTypeIcon from './status-type-icon';
@@ -39,12 +40,14 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
   const node = useRef<HTMLDivElement>(null);
 
+  const { data: group } = useGroupQuery(status.group_id ?? undefined);
+
   const handleOpenCompareHistoryModal = () => {
     onOpenCompareHistoryModal(status);
   };
 
   const renderStatusInfo = () => {
-    if (status.group) {
+    if (status.group_id) {
       return (
         <div className='mb-4'>
           <StatusInfo
@@ -58,28 +61,29 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
               />
             }
             text={
-              <FormattedMessage
-                id='status.group'
-                defaultMessage='Posted in {group}'
-                values={{
-                  group: (
-                    <Link
-                      to='/groups/$groupId'
-                      params={{ groupId: status.group.id }}
-                      className='hover:underline'
-                    >
-                      <bdi className='truncate'>
-                        <strong className='text-gray-800 dark:text-gray-200'>
-                          <Emojify
-                            text={status.account.display_name}
-                            emojis={status.account.emojis}
-                          />
-                        </strong>
-                      </bdi>
-                    </Link>
-                  ),
-                }}
-              />
+              group ? (
+                <FormattedMessage
+                  id='status.group'
+                  defaultMessage='Posted in {group}'
+                  values={{
+                    group: (
+                      <Link
+                        to='/groups/$groupId'
+                        params={{ groupId: status.group_id }}
+                        className='hover:underline'
+                      >
+                        <bdi className='truncate'>
+                          <strong className='text-gray-800 dark:text-gray-200'>
+                            <Emojify text={group.display_name} emojis={group.emojis} />
+                          </strong>
+                        </bdi>
+                      </Link>
+                    ),
+                  }}
+                />
+              ) : (
+                <FormattedMessage id='status.group.unknown' defaultMessage='Posted in a group' />
+              )
             }
           />
         </div>
@@ -133,7 +137,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                       <a
                         href={actualStatus.url}
                         target='_blank'
-                        rel='noopener'
+                        rel='noopener noreferrer'
                         className='hover:underline'
                       >
                         <FormattedDate
@@ -153,7 +157,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                           <a
                             href={actualStatus.application.website ?? '#'}
                             target='_blank'
-                            rel='noopener'
+                            rel='noopener noreferrer'
                             className='hover:underline'
                             title={intl.formatMessage(messages.applicationName, {
                               name: actualStatus.application.name,
@@ -167,11 +171,9 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                       {actualStatus.edited_at && (
                         <>
                           <span className='⁂-separator' />
-                          <div
+                          <button
                             className='inline hover:underline'
                             onClick={handleOpenCompareHistoryModal}
-                            role='button'
-                            tabIndex={0}
                           >
                             <FormattedMessage
                               id='status.edited'
@@ -186,7 +188,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                                 }),
                               }}
                             />
-                          </div>
+                          </button>
                         </>
                       )}
                     </HStack>

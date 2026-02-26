@@ -2,31 +2,44 @@ import { importEntities } from '@/actions/importer';
 import { store } from '@/store';
 
 import { queryClient } from '../client';
+import { queryKeys } from '../keys';
 
 import type {
   Account,
   AdminAccount,
   AdminReport,
   BlockedAccount,
+  Conversation,
+  Group,
+  GroupedNotificationsResults,
   MutedAccount,
+  NotificationGroup,
   PaginatedResponse,
   Status,
 } from 'pl-api';
 
-const minifyList = <T1, T2>(
-  { previous, next, items, ...response }: PaginatedResponse<T1>,
+const minifyList = <T1, T2, IsArray extends boolean = true>(
+  { previous, next, items, ...response }: PaginatedResponse<T1, IsArray>,
   minifier: (value: T1) => T2,
-  importer?: (items: Array<T1>) => void,
-): PaginatedResponse<T2> => {
+  importer?: (items: PaginatedResponse<T1, IsArray>['items']) => void,
+  isArray: IsArray = true as IsArray,
+): PaginatedResponse<T2, IsArray> => {
   importer?.(items);
+
+  const minifiedItems = (
+    isArray ? (items as T1[]).map(minifier) : minifier(items as T1)
+  ) as PaginatedResponse<T2, IsArray>['items'];
 
   return {
     ...response,
     previous: previous
-      ? () => previous().then((list) => minifyList(list, minifier, importer))
+      ? () =>
+          previous().then((list) => minifyList<T1, T2, IsArray>(list, minifier, importer, isArray))
       : null,
-    next: next ? () => next().then((list) => minifyList(list, minifier, importer)) : null,
-    items: items.map(minifier),
+    next: next
+      ? () => next().then((list) => minifyList<T1, T2, IsArray>(list, minifier, importer, isArray))
+      : null,
+    items: minifiedItems,
   };
 };
 
@@ -44,7 +57,15 @@ const minifyAccountList = (response: PaginatedResponse<Account>): PaginatedRespo
     response,
     (account) => account.id,
     (accounts) => {
-      store.dispatch(importEntities({ accounts }) as any);
+      for (const account of accounts) {
+        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+        if (account.relationship) {
+          queryClient.setQueryData(
+            queryKeys.accountRelationships.show(account.id),
+            account.relationship,
+          );
+        }
+      }
     },
   );
 
@@ -55,7 +76,15 @@ const minifyBlockedAccountList = (
     response,
     (account) => [account.id, account.block_expires_at],
     (accounts) => {
-      store.dispatch(importEntities({ accounts }) as any);
+      for (const account of accounts) {
+        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+        if (account.relationship) {
+          queryClient.setQueryData(
+            queryKeys.accountRelationships.show(account.id),
+            account.relationship,
+          );
+        }
+      }
     },
   );
 
@@ -66,27 +95,80 @@ const minifyMutedAccountList = (
     response,
     (account) => [account.id, account.mute_expires_at],
     (accounts) => {
-      store.dispatch(importEntities({ accounts }) as any);
+      for (const account of accounts) {
+        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+        if (account.relationship) {
+          queryClient.setQueryData(
+            queryKeys.accountRelationships.show(account.id),
+            account.relationship,
+          );
+        }
+      }
     },
   );
 
+const minifyGroupList = (response: PaginatedResponse<Group>): PaginatedResponse<string> =>
+  minifyList(
+    response,
+    (group) => group.id,
+    (groups) => {
+      for (const group of groups) {
+        queryClient.setQueryData(queryKeys.groups.show(group.id), group);
+      }
+    },
+  );
+
+const minifyConversation = (conversation: Conversation) => ({
+  id: conversation.id,
+  unread: conversation.unread,
+  account_ids: conversation.accounts.map((account) => account.id),
+  last_status: conversation.last_status?.id ?? null,
+  last_status_created_at: conversation.last_status?.created_at ?? null,
+});
+
+type MinifiedConversation = ReturnType<typeof minifyConversation>;
+
+const minifyConversationList = (response: PaginatedResponse<Conversation>) =>
+  minifyList(response, minifyConversation, (conversations) => {
+    store.dispatch(
+      importEntities({
+        accounts: conversations.flatMap((conversation) => conversation.accounts),
+        statuses: conversations.map((conversation) => conversation.last_status),
+      }) as any,
+    );
+  });
+
+const minifyGroupedNotifications = (
+  response: PaginatedResponse<GroupedNotificationsResults, false>,
+): PaginatedResponse<NotificationGroup[], false> =>
+  minifyList(
+    response,
+    (results) => results.notification_groups,
+    (results) => {
+      const { accounts, statuses } = results;
+
+      store.dispatch(importEntities({ accounts, statuses }) as any);
+    },
+    false,
+  );
+
 const minifyAdminAccount = ({ account, ...adminAccount }: AdminAccount) => {
-  store.dispatch(importEntities({ accounts: [account] }) as any);
-  queryClient.setQueryData(['admin', 'accounts', adminAccount.id], adminAccount);
+  if (account) queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+  queryClient.setQueryData(queryKeys.admin.accounts.show(adminAccount.id), adminAccount);
 
   return adminAccount;
 };
+
+type MinifiedAdminAccount = ReturnType<typeof minifyAdminAccount>;
 
 const minifyAdminAccountList = (response: PaginatedResponse<AdminAccount>) =>
   minifyList(
     response,
     (account) => account.id,
     (accounts) => {
-      store.dispatch(
-        importEntities({ accounts: accounts.map((account) => account.account) }) as any,
-      );
       for (const { account, ...adminAccount } of accounts) {
-        queryClient.setQueryData(['admin', 'accounts', adminAccount.id], adminAccount);
+        if (account) queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+        queryClient.setQueryData(queryKeys.admin.accounts.show(adminAccount.id), adminAccount);
       }
     },
   );
@@ -129,13 +211,18 @@ const minifyAdminReport = ({
   };
 };
 
+type MinifiedAdminReport = ReturnType<typeof minifyAdminReport>;
+
 const minifyAdminReportList = (response: PaginatedResponse<AdminReport>) =>
   minifyList(
     response,
     (report) => report.id,
     (reports) => {
       for (const report of reports) {
-        queryClient.setQueryData(['admin', 'reports', report.id], minifyAdminReport(report));
+        queryClient.setQueryData(
+          queryKeys.admin.reports.show(report.id),
+          minifyAdminReport(report),
+        );
       }
     },
   );
@@ -146,8 +233,15 @@ export {
   minifyBlockedAccountList,
   minifyMutedAccountList,
   minifyStatusList,
+  minifyGroupList,
+  minifyConversation,
+  minifyConversationList,
+  minifyGroupedNotifications,
   minifyAdminAccount,
   minifyAdminAccountList,
   minifyAdminReport,
   minifyAdminReportList,
+  type MinifiedConversation,
+  type MinifiedAdminAccount,
+  type MinifiedAdminReport,
 };

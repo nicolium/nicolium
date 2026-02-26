@@ -3,19 +3,16 @@ import { GroupRoles } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
-import { useDemoteGroupMember } from '@/api/hooks/groups/use-demote-group-member';
-import { usePromoteGroupMember } from '@/api/hooks/groups/use-promote-group-member';
 import Account from '@/components/account';
 import DropdownMenu from '@/components/dropdown-menu/dropdown-menu';
 import HStack from '@/components/ui/hstack';
-import { deleteEntities } from '@/entity-store/actions';
-import { Entities } from '@/entity-store/entities';
 import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useAccount } from '@/queries/accounts/use-account';
 import { useBlockGroupUserMutation } from '@/queries/groups/use-group-blocks';
 import {
+  useDemoteGroupMemberMutation,
   useKickGroupMemberMutation,
+  usePromoteGroupMemberMutation,
   type MinifiedGroupMember,
 } from '@/queries/groups/use-group-members';
 import { useModalsActions } from '@/stores/modals';
@@ -73,16 +70,15 @@ interface IGroupMemberListItem {
 }
 
 const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
   const { openModal } = useModalsActions();
 
   const { mutate: blockGroupMember } = useBlockGroupUserMutation(group.id, member.account_id);
   const { mutate: kickGroupMember } = useKickGroupMemberMutation(group.id, member.account_id);
-  const promoteGroupMember = usePromoteGroupMember(group, member);
-  const demoteGroupMember = useDemoteGroupMember(group, member);
+  const { mutate: promoteGroupMember } = usePromoteGroupMemberMutation(group.id);
+  const { mutate: demoteGroupMember } = useDemoteGroupMemberMutation(group.id);
 
-  const { account, isLoading } = useAccount(member.account_id);
+  const { data: account, isLoading } = useAccount(member.account_id);
 
   // Current user role
   const isCurrentUserOwner = group.relationship?.role === GroupRoles.OWNER;
@@ -91,6 +87,7 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
   // Member role
   const isMemberOwner = member.role === GroupRoles.OWNER;
   const isMemberAdmin = member.role === GroupRoles.ADMIN;
+  // const isMemberModerator = membisMemberModeratorer.role === GroupRoles.MODERATOR;
   const isMemberUser = member.role === GroupRoles.USER;
 
   const handleKickFromGroup = () => {
@@ -116,7 +113,6 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
       onConfirm: () => {
         blockGroupMember(undefined, {
           onSuccess() {
-            dispatch(deleteEntities([member.id], Entities.GROUP_MEMBERSHIPS));
             toast.success(intl.formatMessage(messages.blocked, { name: account?.acct }));
           },
         });
@@ -131,7 +127,7 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
       confirm: intl.formatMessage(messages.promoteConfirm),
       onConfirm: () => {
         promoteGroupMember(
-          { role: GroupRoles.ADMIN, account_ids: [member.account_id] },
+          { accountId: member.account_id, role: GroupRoles.ADMIN },
           {
             onSuccess() {
               toast.success(intl.formatMessage(messages.promotedToAdmin, { name: account?.acct }));
@@ -144,7 +140,7 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
 
   const handleUserAssignment = () => {
     demoteGroupMember(
-      { role: GroupRoles.USER, account_ids: [member.account_id] },
+      { accountId: member.account_id, role: GroupRoles.USER },
       {
         onSuccess() {
           toast.success(intl.formatMessage(messages.demotedToUser, { name: account?.acct }));

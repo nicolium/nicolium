@@ -17,7 +17,7 @@ const DetailedCryptoAddress: React.FC<IDetailedCryptoAddress> = ({
   address,
   ticker,
   note,
-}): JSX.Element => {
+}): React.JSX.Element => {
   const title = getTitle(ticker);
 
   return (

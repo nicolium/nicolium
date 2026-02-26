@@ -5,6 +5,8 @@ import * as v from 'valibot';
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
 
+import { queryKeys } from '../keys';
+
 const updateReaction = (
   reaction: AnnouncementReaction,
   count: number,
@@ -42,7 +44,7 @@ const useAnnouncements = () => {
   const client = useClient();
 
   const { data, ...result } = useQuery<ReadonlyArray<Announcement>>({
-    queryKey: ['announcements'],
+    queryKey: queryKeys.announcements.all,
     queryFn: () => client.announcements.getAnnouncements(),
     placeholderData: [],
   });
@@ -52,8 +54,8 @@ const useAnnouncements = () => {
       client.announcements.addAnnouncementReaction(announcementId, name),
     retry: false,
     onMutate: ({ announcementId: id, name }) => {
-      queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-        prevResult.map((value) =>
+      queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
+        prevResult?.map((value) =>
           value.id !== id
             ? value
             : {
@@ -64,8 +66,8 @@ const useAnnouncements = () => {
       );
     },
     onError: (_, { announcementId: id, name }) => {
-      queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-        prevResult.map((value) =>
+      queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
+        prevResult?.map((value) =>
           value.id !== id
             ? value
             : {
@@ -82,8 +84,8 @@ const useAnnouncements = () => {
       client.announcements.deleteAnnouncementReaction(announcementId, name),
     retry: false,
     onMutate: ({ announcementId: id, name }) => {
-      queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-        prevResult.map((value) =>
+      queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
+        prevResult?.map((value) =>
           value.id !== id
             ? value
             : {
@@ -94,8 +96,8 @@ const useAnnouncements = () => {
       );
     },
     onError: (_, { announcementId: id, name }) => {
-      queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
-        prevResult.map((value) =>
+      queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
+        prevResult?.map((value) =>
           value.id !== id
             ? value
             : {
@@ -108,7 +110,7 @@ const useAnnouncements = () => {
   });
 
   return {
-    data: data ? [...data].sort(compareAnnouncements) : undefined,
+    data: data?.toSorted(compareAnnouncements),
     ...result,
     addReaction,
     removeReaction,

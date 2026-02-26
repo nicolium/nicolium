@@ -3,8 +3,7 @@ import React from 'react';
 
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { selectAccounts } from '@/selectors';
+import { useAccounts } from '@/queries/accounts/use-accounts';
 
 interface IAvatarStack {
   accountIds: Array<string>;
@@ -12,7 +11,7 @@ interface IAvatarStack {
 }
 
 const AvatarStack: React.FC<IAvatarStack> = ({ accountIds, limit = 3 }) => {
-  const accounts = useAppSelector((state) => selectAccounts(state, accountIds.slice(0, limit)));
+  const { accounts } = useAccounts(accountIds.slice(0, limit));
 
   return (
     <HStack className='relative' aria-hidden>

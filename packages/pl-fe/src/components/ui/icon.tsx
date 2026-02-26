@@ -29,7 +29,7 @@ const Icon: React.FC<IIcon> = React.forwardRef<HTMLDivElement, IIcon>(
   (
     { src, alt, count, size, countMax, containerClassName, title, ...filteredProps },
     ref,
-  ): JSX.Element => (
+  ): React.JSX.Element => (
     <div
       className={clsx('⁂-icon', containerClassName)}
       data-testid={filteredProps['data-testid'] ?? 'icon'}

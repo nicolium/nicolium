@@ -22,7 +22,7 @@ const ThumbNavigationLink: React.FC<IThumbNavigationLink> = ({
   text,
   exact,
   ...props
-}): JSX.Element => {
+}): React.JSX.Element => {
   const { demetricator } = useSettings();
 
   const matchRoute = useMatchRoute();

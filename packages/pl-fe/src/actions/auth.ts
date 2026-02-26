@@ -1,10 +1,10 @@
 /**
  * Auth: login & registration workflow.
  * This file contains abstractions over auth concepts.
- * @module pl-fe/actions/auth
- * @see module:pl-fe/actions/apps
- * @see module:pl-fe/actions/oauth
- * @see module:pl-fe/actions/security
+ * @module @/actions/auth
+ * @see module:@/actions/apps
+ * @see module:@/actions/oauth
+ * @see module:@/actions/security
  */
 import {
   credentialAccountSchema,
@@ -23,8 +23,9 @@ import { createApp } from '@/actions/apps';
 import { fetchMeSuccess, fetchMeFail } from '@/actions/me';
 import { obtainOAuthToken, revokeOAuthToken } from '@/actions/oauth';
 import * as BuildConfig from '@/build-config';
+import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
-import { selectAccount } from '@/selectors';
+import { queryKeys } from '@/queries/keys';
 import { unsetSentryAccount } from '@/sentry';
 import KVStore from '@/storage/kv-store';
 import toast from '@/toast';
@@ -35,8 +36,6 @@ import { getScopes } from '@/utils/scopes';
 import { isStandalone } from '@/utils/state';
 
 import { type PlfeResponse, getClient } from '../api';
-
-import { importEntities } from './importer';
 
 import type { AppDispatch, RootState } from '@/store';
 
@@ -134,7 +133,7 @@ const otpVerify =
   (code: string, mfa_token: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const app = state.auth.app;
-    const baseUrl = parseBaseURL(state.me) || BuildConfig.BACKEND_URL;
+    const baseUrl = parseBaseURL(state.me || undefined) || BuildConfig.BACKEND_URL;
     const client = new PlApiClient(baseUrl);
     return client.oauth
       .mfaChallenge({
@@ -180,7 +179,7 @@ const verifyCredentials =
     return client.settings
       .verifyCredentials()
       .then((account) => {
-        dispatch(importEntities({ accounts: [account] }));
+        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
         dispatch<VerifyCredentialsSuccessAction>({
           type: VERIFY_CREDENTIALS_SUCCESS,
           token,
@@ -194,7 +193,7 @@ const verifyCredentials =
           // The user is waitlisted
           const account = error.response.json;
           const parsedAccount = v.parse(credentialAccountSchema, error.response.json);
-          dispatch(importEntities({ accounts: [parsedAccount] }));
+          queryClient.setQueryData(queryKeys.accounts.show(parsedAccount.id), parsedAccount);
           dispatch<VerifyCredentialsSuccessAction>({
             type: VERIFY_CREDENTIALS_SUCCESS,
             token,
@@ -219,7 +218,7 @@ interface AuthAccountRememberSuccessAction {
 const rememberAuthAccount =
   (accountUrl: string) => (dispatch: AppDispatch, getState: () => RootState) =>
     KVStore.getItemOrError(`authAccount:${accountUrl}`).then((account) => {
-      dispatch(importEntities({ accounts: [account] }));
+      queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
       dispatch<AuthAccountRememberSuccessAction>({
         type: AUTH_ACCOUNT_REMEMBER_SUCCESS,
         account,
@@ -290,8 +289,8 @@ interface SwitchAccountAction {
   account: Account;
 }
 
-const switchAccount = (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  const account = selectAccount(getState(), accountId);
+const switchAccount = (accountId: string) => (dispatch: AppDispatch) => {
+  const account = selectAccount(accountId);
   if (!account) return;
 
   // Clear all stored cache from React Query
@@ -304,7 +303,7 @@ const switchAccount = (accountId: string) => (dispatch: AppDispatch, getState: (
 const fetchOwnAccounts = () => (dispatch: AppDispatch, getState: () => RootState) => {
   const state = getState();
   Object.values(state.auth.users).forEach((user) => {
-    const account = selectAccount(state, user.id);
+    const account = selectAccount(user.id);
     if (!account) {
       dispatch(verifyCredentials(user.access_token, user.url)).catch(() => {
         console.warn(`Failed to load account: ${user.url}`);

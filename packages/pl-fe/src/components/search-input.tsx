@@ -5,8 +5,8 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import AutosuggestAccountInput from '@/components/autosuggest-account-input';
 import SvgIcon from '@/components/ui/svg-icon';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { selectAccount } from '@/selectors';
+import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 
 const messages = defineMessages({
   placeholder: { id: 'search.placeholder', defaultMessage: 'Search' },
@@ -17,7 +17,6 @@ const messages = defineMessages({
 const SearchInput = React.memo(() => {
   const [value, setValue] = useState('');
 
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const intl = useIntl();
 
@@ -27,13 +26,13 @@ const SearchInput = React.memo(() => {
     setValue(value);
   };
 
-  const handleClear = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClear = () => {
     setValue('');
   };
 
   const handleSubmit = () => {
     setValue('');
-    const guessedType = /^(?:\/statuses\/|\/notice\/|\/objects\/|\/@[\w.-]+\/\d+)/.test(value)
+    const guessedType = /(?:\/statuses\/|\/notice\/|\/objects\/|\/@[\w.-]+\/\d+)/.test(value)
       ? 'statuses'
       : 'accounts';
     navigate({ to: '/search', search: { q: value, type: guessedType } });
@@ -51,12 +50,13 @@ const SearchInput = React.memo(() => {
 
   const handleSelected = (accountId: string) => {
     setValue('');
-    dispatch((_, getState) =>
+    const account = queryClient.getQueryData(queryKeys.accounts.show(accountId));
+    if (account) {
       navigate({
         to: '/@{$username}',
-        params: { username: selectAccount(getState(), accountId)!.acct },
-      }),
-    );
+        params: { username: account.acct },
+      });
+    }
   };
 
   const makeMenu = () => [
@@ -87,7 +87,7 @@ const SearchInput = React.memo(() => {
         />
 
         <button
-          tabIndex={0}
+          tabIndex={hasValue ? 0 : -1}
           className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto'
           onClick={handleClear}
           title={

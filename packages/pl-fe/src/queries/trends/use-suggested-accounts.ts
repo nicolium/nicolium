@@ -1,9 +1,12 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { importEntities } from '@/actions/importer';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { batcher } from '@/api/batcher';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useLoggedIn } from '@/hooks/use-logged-in';
+import { removePageItem } from '@/utils/queries';
+
+import { queryKeys } from '../keys';
 
 import type { Suggestion } from 'pl-api';
 
@@ -11,23 +14,46 @@ type MinifiedSuggestion = Omit<Suggestion, 'account'> & { account_id: string };
 
 const useSuggestedAccounts = () => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const features = useFeatures();
+  const { isLoggedIn } = useLoggedIn();
+  const queryClient = useQueryClient();
 
-  return useQuery({
-    queryKey: ['suggestions'],
-    queryFn: () =>
-      client.myAccount.getSuggestions().then((suggestions) => {
-        dispatch(importEntities({ accounts: suggestions.map(({ account }) => account) }));
-        return suggestions.map(
-          ({ account, ...suggestion }): MinifiedSuggestion => ({
-            account_id: account.id,
-            ...suggestion,
-          }),
-        );
-      }),
-    enabled: features.suggestions || features.suggestionsV2,
+  const getSuggestions = async (): Promise<MinifiedSuggestion[]> => {
+    const response = await client.myAccount.getSuggestions();
+
+    const fetcher = batcher.relationships(client).fetch;
+
+    for (const { account } of response) {
+      fetcher(account.id);
+      queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+    }
+
+    return response.map(({ account, ...x }) => ({ ...x, account_id: account.id }));
+  };
+
+  const query = useQuery({
+    queryKey: queryKeys.suggestions.all,
+    queryFn: () => getSuggestions(),
+    placeholderData: keepPreviousData,
+    enabled: (isLoggedIn && features.suggestions) || features.suggestionsV2,
+  });
+
+  return query;
+};
+
+const useDismissSuggestion = () => {
+  const client = useClient();
+
+  return useMutation({
+    mutationFn: (accountId: string) => client.myAccount.dismissSuggestions(accountId),
+    onMutate(accountId: string) {
+      removePageItem(
+        queryKeys.suggestions.all,
+        accountId,
+        (item: any, newItem: any) => item.account_id === newItem,
+      );
+    },
   });
 };
 
-export { useSuggestedAccounts, type MinifiedSuggestion };
+export { useSuggestedAccounts, useDismissSuggestion, type MinifiedSuggestion };

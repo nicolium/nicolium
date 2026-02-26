@@ -16,7 +16,7 @@ const PinnedStatusesPage = () => {
   const intl = useIntl();
   const { username } = profilePinsRoute.useParams();
 
-  const { account } = useOwnAccount();
+  const { data: account } = useOwnAccount();
   const {
     data: statusIds = [],
     isFetching: isLoading,

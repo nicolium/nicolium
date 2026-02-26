@@ -1,17 +1,30 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
-import { queryClient, usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
-import { type NormalizedNotification, normalizeNotification } from 'pl-hooks/normalizers/notification';
+import { usePlHooksApiClient } from '@/contexts/api-client';
+import { queryClient, usePlHooksQueryClient } from '@/contexts/query-client';
+import { type NormalizedNotification, normalizeNotification } from '@/normalizers/notification';
 
 import { useAccount } from '../accounts/use-account';
 import { useStatus } from '../statuses/use-status';
 
-import type { NormalizedAccount as Account } from 'pl-hooks/normalizers/account';
-import type { NormalizedStatus as Status } from 'pl-hooks/normalizers/status';
+import type { NormalizedAccount as Account } from '@/normalizers/account';
+import type { NormalizedStatus as Status } from '@/normalizers/status';
 
 const getNotificationStatusId = (n: NormalizedNotification) => {
-  if (['mention', 'status', 'reblog', 'favourite', 'poll', 'update', 'emoji_reaction', 'event_reminder', 'participation_accepted', 'participation_request'].includes(n.type))
+  if (
+    [
+      'mention',
+      'status',
+      'reblog',
+      'favourite',
+      'poll',
+      'update',
+      'emoji_reaction',
+      'event_reminder',
+      'participation_accepted',
+      'participation_request',
+    ].includes(n.type)
+  )
     // @ts-ignore
     return n.status_id;
   return null;
@@ -20,7 +33,8 @@ const getNotificationStatusId = (n: NormalizedNotification) => {
 const importNotification = (notification: NormalizedNotification) => {
   queryClient.setQueryData<NormalizedNotification>(
     ['notifications', 'entities', notification.id],
-    existingNotification => existingNotification?.duplicate ? existingNotification : notification,
+    (existingNotification) =>
+      existingNotification?.duplicate ? existingNotification : notification,
   );
 };
 
@@ -28,11 +42,14 @@ const useNotification = (notificationId: string) => {
   const { client } = usePlHooksApiClient();
   const queryClient = usePlHooksQueryClient();
 
-  const notificationQuery = useQuery({
-    queryKey: ['notifications', 'entities', notificationId],
-    queryFn: () => client.notifications.getNotification(notificationId)
-      .then(normalizeNotification),
-  }, queryClient);
+  const notificationQuery = useQuery(
+    {
+      queryKey: ['notifications', 'entities', notificationId],
+      queryFn: () =>
+        client.notifications.getNotification(notificationId).then(normalizeNotification),
+    },
+    queryClient,
+  );
 
   const notification = notificationQuery.data;
 
@@ -40,15 +57,19 @@ const useNotification = (notificationId: string) => {
     queryKey: ['accounts', 'entities', notification?.account_ids],
   });
 
-  const moveTargetAccountQuery = useAccount(notification?.type === 'move' ? notification.target_id : undefined);
+  const moveTargetAccountQuery = useAccount(
+    notification?.type === 'move' ? notification.target_id : undefined,
+  );
   const statusQuery = useStatus(notification ? getNotificationStatusId(notification) : false);
 
-  let data: (NormalizedNotification & {
-    account: Account;
-    accounts: Array<Account>;
-    target: Account | undefined;
-    status: Status | undefined;
-  }) | undefined;
+  let data:
+    | (NormalizedNotification & {
+        account: Account;
+        accounts: Array<Account>;
+        target: Account | undefined;
+        status: Status | undefined;
+      })
+    | undefined;
 
   if (notification) {
     data = {

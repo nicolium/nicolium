@@ -1,6 +1,6 @@
-import { type Features } from 'pl-api';
-
 import { useAppSelector } from './use-app-selector';
+
+import type { Features } from 'pl-api';
 
 /** Get features for the current instance. */
 const useFeatures = (): Features => ({

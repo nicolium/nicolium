@@ -3,7 +3,7 @@ import { FastAverageColor } from 'fast-average-color';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import StillImage, { IStillImage } from '@/components/still-image';
+import StillImage, { type IStillImage } from '@/components/still-image';
 import { useSettings } from '@/stores/settings';
 
 import AltIndicator from '../alt-indicator';
@@ -19,11 +19,11 @@ const AVATAR_SIZE = 42;
 
 const messages = defineMessages({
   avatar: { id: 'account.avatar.alt', defaultMessage: 'Avatar' },
-  avatar_with_username: {
+  avatarWithUsername: {
     id: 'account.avatar.with_username',
     defaultMessage: 'Avatar for {username}',
   },
-  avatar_with_content: {
+  avatarWithContent: {
     id: 'account.avatar.with_content',
     defaultMessage: 'Avatar for {username}: {alt}',
   },
@@ -42,7 +42,7 @@ interface IAvatar extends Pick<IStillImage, 'alt' | 'src' | 'staticSrc' | 'onErr
 const fac = new FastAverageColor();
 
 /** Round profile avatar for accounts. */
-const Avatar = (props: IAvatar) => {
+const Avatar: React.FC<IAvatar> = (props) => {
   const intl = useIntl();
   const { disableUserProvidedMedia } = useSettings();
 
@@ -134,9 +134,9 @@ const Avatar = (props: IAvatar) => {
 
   const altText =
     props.showAlt && alt
-      ? intl.formatMessage(messages.avatar_with_content, { username: props.username, alt })
+      ? intl.formatMessage(messages.avatarWithContent, { username: props.username, alt })
       : props.username
-        ? intl.formatMessage(messages.avatar_with_username, { username: props.username })
+        ? intl.formatMessage(messages.avatarWithUsername, { username: props.username })
         : intl.formatMessage(messages.avatar);
 
   return (

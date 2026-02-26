@@ -1,9 +1,9 @@
 import { useQuery, UseQueryResult } from '@tanstack/react-query';
 
-import { usePlHooksApiClient } from 'pl-hooks/contexts/api-client';
-import { queryClient, usePlHooksQueryClient } from 'pl-hooks/contexts/query-client';
-import { importEntities } from 'pl-hooks/importer';
-import { normalizeAccount, type NormalizedAccount } from 'pl-hooks/normalizers/account';
+import { usePlHooksApiClient } from '@/contexts/api-client';
+import { queryClient, usePlHooksQueryClient } from '@/contexts/query-client';
+import { importEntities } from '@/importer';
+import { normalizeAccount, type NormalizedAccount } from '@/normalizers/account';
 
 import { useAccountRelationship } from './use-account-relationship';
 
@@ -19,18 +19,22 @@ interface UseAccountOpts {
   withMoveTarget?: boolean;
 }
 
-type UseAccountQueryResult = Omit<UseQueryResult<NormalizedAccount>, 'data'> & { data: Account | undefined };
+type UseAccountQueryResult = Omit<UseQueryResult<NormalizedAccount>, 'data'> & {
+  data: Account | undefined;
+};
 
 const useAccount = (accountId?: string, opts: UseAccountOpts = {}): UseAccountQueryResult => {
   const { client } = usePlHooksApiClient();
   const queryClient = usePlHooksQueryClient();
 
-  const accountQuery = useQuery({
-    queryKey: ['accounts', 'entities', accountId],
-    queryFn: () => client.accounts.getAccount(accountId!)
-      .then(normalizeAccount),
-    enabled: !!accountId,
-  }, queryClient);
+  const accountQuery = useQuery(
+    {
+      queryKey: ['accounts', 'entities', accountId],
+      queryFn: () => client.accounts.getAccount(accountId!).then(normalizeAccount),
+      enabled: !!accountId,
+    },
+    queryClient,
+  );
 
   const relationshipQuery = useAccountRelationship(opts.withRelationship ? accountId : undefined);
 
@@ -40,7 +44,14 @@ const useAccount = (accountId?: string, opts: UseAccountOpts = {}): UseAccountQu
     data = {
       ...accountQuery.data,
       relationship: relationshipQuery.data || null,
-      moved: opts.withMoveTarget && queryClient.getQueryData(['accounts', 'entities', accountQuery.data?.moved_id]) as Account || null,
+      moved:
+        (opts.withMoveTarget &&
+          (queryClient.getQueryData([
+            'accounts',
+            'entities',
+            accountQuery.data?.moved_id,
+          ]) as Account)) ||
+        null,
     };
   }
 
@@ -50,8 +61,8 @@ const useAccount = (accountId?: string, opts: UseAccountOpts = {}): UseAccountQu
 const prefetchAccount = (client: PlApiClient, accountId: string) =>
   queryClient.prefetchQuery({
     queryKey: ['accounts', 'entities', accountId],
-    queryFn: () => client.accounts.getAccount(accountId!)
-      .then(account => {
+    queryFn: () =>
+      client.accounts.getAccount(accountId!).then((account) => {
         importEntities({ accounts: [account] }, { withParents: false });
 
         return normalizeAccount(account);

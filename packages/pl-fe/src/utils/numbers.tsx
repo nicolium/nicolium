@@ -39,6 +39,7 @@ const shortNumberFormat = (number: any, max?: number): React.ReactNode => {
         minimumFractionDigits={0}
         maximumSignificantDigits={3}
         numberingSystem='latn'
+        // eslint-disable-next-line react/style-prop-object
         style='decimal'
       />
       {factor}

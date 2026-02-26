@@ -8,7 +8,6 @@ import Tabs from '@/components/ui/tabs';
 import { EditEvent } from '@/features/compose-event/tabs/edit-event';
 import { ManagePendingParticipants } from '@/features/compose-event/tabs/manage-pending-participants';
 import { eventEditRoute } from '@/features/ui/router';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 
 const messages = defineMessages({
   manageEvent: { id: 'navigation_bar.manage_event', defaultMessage: 'Manage event' },
@@ -19,7 +18,6 @@ const messages = defineMessages({
 
 const EditEventPage = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const { statusId } = eventEditRoute.useParams();
 
@@ -27,7 +25,7 @@ const EditEventPage = () => {
 
   useEffect(
     () => () => {
-      dispatch(cancelEventCompose());
+      cancelEventCompose();
     },
     [statusId],
   );
@@ -69,11 +67,10 @@ const EditEventPage = () => {
 
 const ComposeEventPage = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   useEffect(
     () => () => {
-      dispatch(cancelEventCompose());
+      cancelEventCompose();
     },
     [],
   );

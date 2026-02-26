@@ -39,7 +39,7 @@ interface IStack extends React.HTMLAttributes<HTMLDivElement> {
   /** Whether to let the flexbox grow. */
   grow?: boolean;
   /** HTML element to use for container. */
-  element?: React.ComponentType | keyof JSX.IntrinsicElements;
+  element?: React.ComponentType | keyof React.JSX.IntrinsicElements;
 }
 
 /** Vertical stack of child elements. */
@@ -64,11 +64,11 @@ const Stack = React.forwardRef<HTMLDivElement, IStack>(
         className={clsx(
           'flex flex-col',
           {
-            // @ts-ignore
+            // @ts-expect-error
             [spaces[space]]: typeof space !== 'undefined',
-            // @ts-ignore
+            // @ts-expect-error
             [alignItemsOptions[alignItems]]: typeof alignItems !== 'undefined',
-            // @ts-ignore
+            // @ts-expect-error
             [justifyContentOptions[justifyContent]]: typeof justifyContent !== 'undefined',
             grow: grow,
           },

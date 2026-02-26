@@ -1,8 +1,6 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
-import { useGroup } from '@/api/hooks/groups/use-group';
 import Account from '@/components/account';
 import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
@@ -11,6 +9,8 @@ import HStack from '@/components/ui/hstack';
 import Spinner from '@/components/ui/spinner';
 import ColumnForbidden from '@/features/ui/components/column-forbidden';
 import { groupBlocksRoute } from '@/features/ui/router';
+import { useAccount } from '@/queries/accounts/use-account';
+import { useGroupQuery } from '@/queries/groups/use-group';
 import { useGroupBlocks, useUnblockGroupUserMutation } from '@/queries/groups/use-group-blocks';
 import toast from '@/toast';
 
@@ -30,7 +30,7 @@ interface IBlockedMember {
 
 const BlockedMember: React.FC<IBlockedMember> = ({ accountId, groupId }) => {
   const intl = useIntl();
-  const { account } = useAccount(accountId);
+  const { data: account } = useAccount(accountId);
 
   const { mutate: unblockGroupUser } = useUnblockGroupUserMutation(groupId, accountId);
 
@@ -64,7 +64,7 @@ const GroupBlockedMembers: React.FC = () => {
 
   const intl = useIntl();
 
-  const { group } = useGroup(groupId);
+  const { data: group } = useGroupQuery(groupId, true);
   const { data: accountIds } = useGroupBlocks(groupId);
 
   if (!group || !group.relationship || !accountIds) {

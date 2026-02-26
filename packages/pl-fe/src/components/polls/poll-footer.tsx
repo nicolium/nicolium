@@ -34,7 +34,7 @@ const PollFooter: React.FC<IPollFooter> = ({
   showResults,
   selected,
   statusId,
-}): JSX.Element => {
+}): React.JSX.Element => {
   const intl = useIntl();
 
   const { refetch } = usePollQuery(poll.id);

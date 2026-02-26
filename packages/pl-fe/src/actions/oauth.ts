@@ -2,8 +2,8 @@
  * OAuth: create and revoke tokens.
  * Tokens can be used by users and apps.
  * https://docs.joinmastodon.org/methods/apps/oauth/
- * @module pl-fe/actions/oauth
- * @see module:pl-fe/actions/auth
+ * @module @/actions/oauth
+ * @see module:@/actions/auth
  */
 
 import { PlApiClient, type GetTokenParams, type RevokeTokenParams } from 'pl-api';

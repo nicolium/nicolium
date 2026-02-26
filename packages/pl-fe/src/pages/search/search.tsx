@@ -4,7 +4,6 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { useAccount } from '@/api/hooks/accounts/use-account';
 import SearchColumn from '@/columns/search';
 import Column from '@/components/ui/column';
 import HStack from '@/components/ui/hstack';
@@ -15,6 +14,8 @@ import Tabs from '@/components/ui/tabs';
 import Text from '@/components/ui/text';
 import { searchRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
+import { useAccount } from '@/queries/accounts/use-account';
+import { queryKeys } from '@/queries/keys';
 
 type SearchFilter = 'accounts' | 'hashtags' | 'statuses' | 'links';
 
@@ -22,6 +23,7 @@ const messages = defineMessages({
   heading: { id: 'column.search', defaultMessage: 'Search' },
   placeholder: { id: 'search.placeholder', defaultMessage: 'Search' },
   clear: { id: 'search.clear', defaultMessage: 'Clear input' },
+  clearAccountFilter: { id: 'search.clear_account_filter', defaultMessage: 'Clear account filter' },
   accounts: { id: 'search_results.accounts', defaultMessage: 'People' },
   statuses: { id: 'search_results.statuses', defaultMessage: 'Posts' },
   hashtags: { id: 'search_results.hashtags', defaultMessage: 'Hashtags' },
@@ -95,7 +97,7 @@ const SearchInput: React.FC<ISearchInput> = ({ className, placeholder, query }) 
         />
 
         <button
-          tabIndex={0}
+          tabIndex={value ? 0 : -1}
           className='absolute inset-y-0 right-0 flex cursor-pointer items-center px-3 rtl:left-0 rtl:right-auto'
           onClick={handleClick}
           title={
@@ -133,19 +135,18 @@ const SearchResults = () => {
 
   const selectFilter = (newActiveFilter: SearchFilter) => {
     if (newActiveFilter === selectedFilter) {
+      if (newActiveFilter === 'links') return;
       queryClient.refetchQueries({
-        queryKey: [
-          'search',
-          newActiveFilter,
+        queryKey: queryKeys.search[newActiveFilter](
           value,
           newActiveFilter === 'statuses' ? { account_id: accountId } : undefined,
-        ],
+        ),
         exact: true,
       });
     } else navigate({ search: (prev) => ({ ...prev, type: newActiveFilter }) });
   };
 
-  const { account } = useAccount(accountId);
+  const { data: account } = useAccount(accountId);
 
   const handleUnsetAccount = () => {
     navigate({ search: ({ accountId, ...prev }) => prev });
@@ -202,6 +203,7 @@ const SearchResults = () => {
             iconClassName='h-5 w-5'
             src={require('@phosphor-icons/core/regular/x.svg')}
             onClick={handleUnsetAccount}
+            title={intl.formatMessage(messages.clearAccountFilter)}
           />
           <Text truncate>
             <FormattedMessage

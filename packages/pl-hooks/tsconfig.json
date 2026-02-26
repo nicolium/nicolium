@@ -22,8 +22,8 @@
     "noFallthroughCasesInSwitch": true,
 
     "paths": {
-      "pl-hooks/*": ["lib/*"],
-    },
+      "@/*": ["lib/*"]
+    }
   },
   "include": ["lib"]
 }

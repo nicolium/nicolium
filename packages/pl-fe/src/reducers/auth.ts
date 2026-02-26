@@ -1,5 +1,5 @@
 import trim from 'lodash/trim';
-import { create, Draft } from 'mutative';
+import { create, type Draft } from 'mutative';
 import {
   type Account as AccountEntity,
   applicationSchema,

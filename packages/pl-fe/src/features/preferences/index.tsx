@@ -7,8 +7,9 @@ import List, { ListItem } from '@/components/list';
 import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
 import HStack from '@/components/ui/hstack';
+import { Multiselect } from '@/components/ui/multiselect';
 import StepSlider from '@/components/ui/step-slider';
-import { Multiselect, SelectDropdown } from '@/features/forms';
+import { SelectDropdown } from '@/features/forms';
 import SettingToggle from '@/features/settings/components/setting-toggle';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
@@ -108,26 +109,42 @@ const messages = defineMessages({
     id: 'preferences.fields.display_media.show_all',
     defaultMessage: 'Always show posts',
   },
-  privacy_public: { id: 'preferences.options.privacy_public', defaultMessage: 'Public' },
-  privacy_unlisted: { id: 'preferences.options.privacy_unlisted', defaultMessage: 'Unlisted' },
-  privacy_followers_only: {
+  privacyPublic: { id: 'preferences.options.privacy_public', defaultMessage: 'Public' },
+  privacyUnlisted: { id: 'preferences.options.privacy_unlisted', defaultMessage: 'Unlisted' },
+  privacyFollowersOnly: {
     id: 'preferences.options.privacy_followers_only',
     defaultMessage: 'Followers-only',
   },
-  content_type_plaintext: {
+  contentTypePlaintext: {
     id: 'preferences.options.content_type_plaintext',
     defaultMessage: 'Plain text',
   },
-  content_type_markdown: {
+  contentTypeMarkdown: {
     id: 'preferences.options.content_type_markdown',
     defaultMessage: 'Markdown',
   },
-  content_type_html: { id: 'preferences.options.content_type_html', defaultMessage: 'HTML' },
-  content_type_wysiwyg: {
+  contentTypeHtml: { id: 'preferences.options.content_type_html', defaultMessage: 'HTML' },
+  contentTypeWysiwyg: {
     id: 'preferences.options.content_type_wysiwyg',
     defaultMessage: 'WYSIWYG',
   },
   brandColor: { id: 'preferences.options.brand_color', defaultMessage: 'Base color' },
+  interfaceSizeSmall: {
+    id: 'preferences.options.interface_size.sm',
+    defaultMessage: 'Small',
+  },
+  interfaceSizeMedium: {
+    id: 'preferences.options.interface_size.md',
+    defaultMessage: 'Medium',
+  },
+  interfaceSizeLarge: {
+    id: 'preferences.options.interface_size.lg',
+    defaultMessage: 'Large',
+  },
+  interfaceSizeExtraLarge: {
+    id: 'preferences.options.interface_size.xl',
+    defaultMessage: 'Extra large',
+  },
   dark: { id: 'theme_toggle.dark', defaultMessage: 'Dark' },
   black: { id: 'theme_toggle.black', defaultMessage: 'Black' },
 });
@@ -218,9 +235,9 @@ const Preferences = () => {
 
   const defaultPrivacyOptions = React.useMemo(
     () => ({
-      public: intl.formatMessage(messages.privacy_public),
-      unlisted: intl.formatMessage(messages.privacy_unlisted),
-      private: intl.formatMessage(messages.privacy_followers_only),
+      public: intl.formatMessage(messages.privacyPublic),
+      unlisted: intl.formatMessage(messages.privacyUnlisted),
+      private: intl.formatMessage(messages.privacyFollowersOnly),
     }),
     [settings.locale],
   );
@@ -233,17 +250,32 @@ const Preferences = () => {
     [settings.locale],
   );
 
+  const interfaceSizeValueText = React.useMemo(() => {
+    const size = settings.theme?.interfaceSize ?? 'md';
+
+    switch (size) {
+      case 'sm':
+        return intl.formatMessage(messages.interfaceSizeSmall);
+      case 'lg':
+        return intl.formatMessage(messages.interfaceSizeLarge);
+      case 'xl':
+        return intl.formatMessage(messages.interfaceSizeExtraLarge);
+      default:
+        return intl.formatMessage(messages.interfaceSizeMedium);
+    }
+  }, [settings.theme?.interfaceSize, settings.locale]);
+
   const defaultContentTypeOptions = React.useMemo(() => {
     const postFormats = instance.pleroma.metadata.post_formats;
 
     const options = Object.entries({
-      'text/plain': intl.formatMessage(messages.content_type_plaintext),
-      'text/markdown': intl.formatMessage(messages.content_type_markdown),
-      'text/html': intl.formatMessage(messages.content_type_html),
+      'text/plain': intl.formatMessage(messages.contentTypePlaintext),
+      'text/markdown': intl.formatMessage(messages.contentTypeMarkdown),
+      'text/html': intl.formatMessage(messages.contentTypeHtml),
     }).filter(([key]) => postFormats.includes(key));
 
     if (postFormats.includes('text/markdown'))
-      options.push(['wysiwyg', intl.formatMessage(messages.content_type_wysiwyg)]);
+      options.push(['wysiwyg', intl.formatMessage(messages.contentTypeWysiwyg)]);
 
     if (options.length > 1) return Object.fromEntries(options);
   }, [settings.locale]);
@@ -311,6 +343,7 @@ const Preferences = () => {
               value={INTERFACE_SIZES.indexOf(settings.theme?.interfaceSize ?? 'md')}
               steps={4}
               onChange={onInterfaceSizeChange}
+              aria-valuetext={interfaceSizeValueText}
             />
           </div>
         </ListItem>
@@ -380,7 +413,7 @@ const Preferences = () => {
                   <a
                     className='underline'
                     href='https://hosted.weblate.org/projects/pl-fe/pl-fe/'
-                    rel='noopener'
+                    rel='noopener noreferrer'
                     target='_blank'
                   >
                     {children}

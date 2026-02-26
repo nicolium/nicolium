@@ -1,9 +1,9 @@
 import {
-  InfiniteData,
   keepPreviousData,
   useInfiniteQuery,
   useMutation,
   useQuery,
+  useQueryClient,
 } from '@tanstack/react-query';
 import sumBy from 'lodash/sumBy';
 import {
@@ -14,26 +14,30 @@ import {
 } from 'pl-api';
 import * as v from 'valibot';
 
-import { importEntities } from '@/actions/importer';
 import { batcher } from '@/api/batcher';
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 import { useStatContext } from '@/contexts/stat-context';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { type ChatMessage, normalizeChatMessage } from '@/normalizers/chat-message';
 import { reOrderChatListItems } from '@/utils/chats';
 import { flattenPages, updatePageItem } from '@/utils/queries';
 
 import { useRelationshipQuery } from './accounts/use-relationship';
 import { queryClient } from './client';
+import { queryKeys } from './keys';
 
-const ChatKeys = {
-  chat: (chatId?: string) => ['chats', 'chat', chatId] as const,
-  chatMessages: (chatId: string) => ['chats', 'messages', chatId] as const,
-};
+const normalizeChatMessage = (
+  chatMessage: BaseChatMessage & { pending?: boolean; deleting?: boolean },
+) => ({
+  type: 'message' as const,
+  pending: false,
+  deleting: false,
+  ...chatMessage,
+});
+
+type ChatMessage = ReturnType<typeof normalizeChatMessage>;
 
 const useChatMessages = (chat: Chat) => {
   const client = useClient();
@@ -54,7 +58,7 @@ const useChatMessages = (chat: Chat) => {
   };
 
   const queryInfo = useInfiniteQuery({
-    queryKey: ChatKeys.chatMessages(chat.id),
+    queryKey: queryKeys.chats.chatMessages(chat.id),
     queryFn: ({ pageParam }) => getChatMessages(chat.id, pageParam),
     enabled: !isBlocked,
     gcTime: 0,
@@ -73,7 +77,6 @@ const useChatMessages = (chat: Chat) => {
 
 const useChats = () => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const features = useFeatures();
   const { setUnreadChatsCount } = useStatContext();
   const { me } = useLoggedIn();
@@ -86,16 +89,18 @@ const useChats = () => {
 
     setUnreadChatsCount(sumBy(data, (chat) => chat.unread));
 
-    // Set the relationships to these users in the redux store.
+    // Fetch account relationships
     const fetcher = batcher.relationships(client).fetch;
-    items.map((item) => item.account.id).forEach(fetcher);
-    dispatch(importEntities({ accounts: items.map((item) => item.account) }));
+    for (const { account } of items) {
+      fetcher(account.id);
+      queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+    }
 
     return response;
   };
 
   const queryInfo = useInfiniteQuery({
-    queryKey: ['chats', 'search'],
+    queryKey: queryKeys.chats.search,
     queryFn: ({ pageParam }) => getChats(pageParam),
     placeholderData: keepPreviousData,
     enabled: features.chats && !!me,
@@ -117,20 +122,20 @@ const useChats = () => {
 
 const useChat = (chatId?: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
+  const queryClient = useQueryClient();
 
   const getChat = async () => {
     if (chatId) {
       const data = await client.chats.getChat(chatId);
 
-      dispatch(importEntities({ accounts: [data.account] }));
+      queryClient.setQueryData(queryKeys.accounts.show(data.account.id), data.account);
 
       return data;
     }
   };
 
   return useQuery<Chat | undefined>({
-    queryKey: ChatKeys.chat(chatId),
+    queryKey: queryKeys.chats.chat(chatId),
     queryFn: getChat,
     gcTime: 0,
     enabled: !!chatId,
@@ -145,11 +150,8 @@ const useMarkChatAsRead = (chatId: string) => {
   return useMutation({
     mutationFn: (lastReadId: string) => client.chats.markChatAsRead(chatId, lastReadId),
     onSuccess: (data) => {
-      updatePageItem(['chats', 'search'], data, (o, n) => o.id === n.id);
-      const queryData = queryClient.getQueryData<InfiniteData<PaginatedResponse<unknown>>>([
-        'chats',
-        'search',
-      ]);
+      updatePageItem(queryKeys.chats.search, data, (o, n) => o.id === n.id);
+      const queryData = queryClient.getQueryData(queryKeys.chats.search);
 
       if (queryData) {
         const flattenedQueryData: any = flattenPages(queryData)?.map((chat: any) => {
@@ -164,8 +166,8 @@ const useMarkChatAsRead = (chatId: string) => {
   });
 };
 
-const useCreateChatMessage = (chatId: string) => {
-  const { account } = useOwnAccount();
+const useCreateChatMessage = () => {
+  const { data: account } = useOwnAccount();
   const client = useClient();
 
   const { chat } = useChatContext();
@@ -184,18 +186,21 @@ const useCreateChatMessage = (chatId: string) => {
     onMutate: async (variables) => {
       // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
       await queryClient.cancelQueries({
-        queryKey: ['chats', 'messages', variables.chatId],
+        queryKey: queryKeys.chats.chatMessages(variables.chatId),
       });
 
       // Snapshot the previous value
       const prevContent = variables.content;
-      const prevChatMessages = queryClient.getQueryData(['chats', 'messages', variables.chatId]);
-      const pendingId = String(Number(new Date()));
+      const prevChatMessages = queryClient.getQueryData(
+        queryKeys.chats.chatMessages(variables.chatId),
+      );
+      const pendingId = String(Date.now());
 
       // Optimistically update to the new value
-      queryClient.setQueryData(ChatKeys.chatMessages(variables.chatId), (prevResult: any) => {
+      queryClient.setQueryData(queryKeys.chats.chatMessages(variables.chatId), (prevResult) => {
+        if (!prevResult?.pages) return prevResult;
         const newResult = { ...prevResult };
-        newResult.pages = newResult.pages.map((page: any, idx: number) => {
+        newResult.pages = newResult.pages.map((page, idx: number) => {
           if (idx === 0) {
             return {
               ...page,
@@ -225,14 +230,19 @@ const useCreateChatMessage = (chatId: string) => {
       return { prevChatMessages, prevContent, pendingId };
     },
     // If the mutation fails, use the context returned from onMutate to roll back
-    onError: (_error: any, variables, context: any) => {
-      queryClient.setQueryData(['chats', 'messages', variables.chatId], context.prevChatMessages);
+    onError: (_error: any, variables, context) => {
+      if (context) {
+        queryClient.setQueryData(
+          queryKeys.chats.chatMessages(variables.chatId),
+          context.prevChatMessages,
+        );
+      }
     },
     onSuccess: (response: any, variables, context) => {
       const nextChat = { ...chat, last_message: response };
-      updatePageItem(['chats', 'search'], nextChat, (o, n) => o.id === n.id);
+      updatePageItem(queryKeys.chats.search, nextChat, (o, n) => o.id === n.id);
       updatePageItem(
-        ChatKeys.chatMessages(variables.chatId),
+        queryKeys.chats.chatMessages(variables.chatId),
         normalizeChatMessage(response),
         (o) => o.id === context.pendingId,
       );
@@ -250,8 +260,8 @@ const useDeleteChat = (chatId: string) => {
     mutationFn: () => client.chats.deleteChat(chatId),
     onSuccess() {
       changeScreen(ChatWidgetScreens.INBOX);
-      queryClient.invalidateQueries({ queryKey: ChatKeys.chatMessages(chatId) });
-      queryClient.invalidateQueries({ queryKey: ['chats', 'search'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.chats.chatMessages(chatId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.chats.search });
     },
   });
 };
@@ -263,14 +273,14 @@ const useDeleteChatMessage = (chatId: string) => {
     mutationFn: (chatMessageId: string) => client.chats.deleteChatMessage(chatId, chatMessageId),
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: ChatKeys.chatMessages(chatId),
+        queryKey: queryKeys.chats.chatMessages(chatId),
       });
     },
   });
 };
 
 export {
-  ChatKeys,
+  normalizeChatMessage,
   useChat,
   useMarkChatAsRead,
   useCreateChatMessage,
@@ -278,4 +288,5 @@ export {
   useDeleteChatMessage,
   useChats,
   useChatMessages,
+  type ChatMessage,
 };
