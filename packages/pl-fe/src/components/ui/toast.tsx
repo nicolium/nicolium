@@ -4,12 +4,12 @@ import React from 'react';
 import toast, { type Toast as RHToast } from 'react-hot-toast';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { type ToastText, type ToastType } from '@/toast';
-
 import HStack from './hstack';
 import Icon from './icon';
 import Stack from './stack';
 import Text from './text';
+
+import type { ToastText, ToastType } from '@/toast';
 
 const messages = defineMessages({
   close: { id: 'lightbox.close', defaultMessage: 'Close' },

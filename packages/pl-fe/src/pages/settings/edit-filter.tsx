@@ -1,5 +1,4 @@
 import { useNavigate } from '@tanstack/react-router';
-import { type Filter, type FilterContext } from 'pl-api';
 import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
@@ -24,6 +23,7 @@ import { useCreateFilter, useFilter, useUpdateFilter } from '@/queries/settings/
 import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
+import type { Filter, FilterContext } from 'pl-api';
 
 interface IFilterField {
   id?: string;
