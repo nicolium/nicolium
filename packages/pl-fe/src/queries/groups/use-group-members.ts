@@ -11,7 +11,7 @@ import type { GroupMember, GroupRole, PaginatedResponse } from 'pl-api';
 
 const removeGroupMember = (groupId: string, accountId: string) =>
   queryClient.setQueriesData<InfiniteData<PaginatedResponse<MinifiedGroupMember>>>(
-    { queryKey: queryKeys.accountsLists.groupmembers.root(groupId) },
+    { queryKey: queryKeys.accountsLists.groupMembers.root(groupId) },
     (data) =>
       data
         ? {
@@ -72,7 +72,7 @@ const useAcceptGroupMembershipRequestMutation = (groupId: string) => {
         queryKey: queryKeys.accountsLists.groupMembershipRequests(groupId),
       });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.accountsLists.groupmembers.root(groupId),
+        queryKey: queryKeys.accountsLists.groupMembers.root(groupId),
       });
     },
   });
@@ -91,7 +91,7 @@ const useRejectGroupMembershipRequestMutation = (groupId: string) => {
         queryKey: queryKeys.accountsLists.groupMembershipRequests(groupId),
       });
       queryClient.invalidateQueries({
-        queryKey: queryKeys.accountsLists.groupmembers.root(groupId),
+        queryKey: queryKeys.accountsLists.groupMembers.root(groupId),
       });
     },
   });
@@ -102,12 +102,12 @@ const usePromoteGroupMemberMutation = (groupId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: queryKeys.accountsLists.groupmembers.root(groupId),
+    mutationKey: queryKeys.accountsLists.groupMembers.root(groupId),
     mutationFn: ({ accountId, role }: { accountId: string; role: GroupRole }) =>
       client.experimental.groups.promoteGroupUsers(groupId, [accountId], role),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.accountsLists.groupmembers.root(groupId),
+        queryKey: queryKeys.accountsLists.groupMembers.root(groupId),
       });
     },
   });
@@ -118,12 +118,12 @@ const useDemoteGroupMemberMutation = (groupId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: queryKeys.accountsLists.groupmembers.root(groupId),
+    mutationKey: queryKeys.accountsLists.groupMembers.root(groupId),
     mutationFn: ({ accountId, role }: { accountId: string; role: GroupRole }) =>
       client.experimental.groups.demoteGroupUsers(groupId, [accountId], role),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: queryKeys.accountsLists.groupmembers.root(groupId),
+        queryKey: queryKeys.accountsLists.groupMembers.root(groupId),
       });
     },
   });
