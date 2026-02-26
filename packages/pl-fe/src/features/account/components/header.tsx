@@ -423,7 +423,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
       });
   };
 
-  const handleCopy: React.EventHandler<React.MouseEvent> = (e) => {
+  const handleCopy: React.EventHandler<React.MouseEvent> = () => {
     copy(account.url);
   };
 

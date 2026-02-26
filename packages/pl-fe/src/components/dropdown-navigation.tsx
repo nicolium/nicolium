@@ -159,7 +159,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
   const handleTouchMove: React.TouchEventHandler<HTMLDivElement> = (e) =>
     (touchEnd.current = e.targetTouches[0].clientX);
 
-  const handleTouchEnd: React.TouchEventHandler<HTMLDivElement> = (e) => {
+  const handleTouchEnd: React.TouchEventHandler<HTMLDivElement> = () => {
     if (touchEnd.current !== null && touchStart.current - touchEnd.current > 100) {
       handleClose();
     }

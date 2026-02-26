@@ -26,7 +26,6 @@ const shouldHaveCard = (pendingStatus: StatusEntity) =>
 interface IPendingStatus {
   className?: string;
   idempotencyKey: string;
-  muted?: boolean;
   variant?: 'default' | 'rounded' | 'slim';
 }
 
@@ -47,7 +46,6 @@ const PendingStatusMedia: React.FC<IPendingStatusMedia> = ({ status }) => {
 const PendingStatus: React.FC<IPendingStatus> = ({
   idempotencyKey,
   className,
-  muted,
   variant = 'rounded',
 }) => {
   const pendingStatus = usePendingStatus(idempotencyKey);

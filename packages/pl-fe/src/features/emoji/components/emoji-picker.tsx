@@ -5,7 +5,7 @@ import { joinPublicPath } from '@/utils/static';
 
 import data from '../data';
 
-const getSpritesheetURL = (set: string) => require('emoji-datasource/img/twitter/sheets/32.png');
+const getSpritesheetURL = () => require('emoji-datasource/img/twitter/sheets/32.png');
 
 const getImageURL = (set: string, name: string) => joinPublicPath(`/packs/emoji/${name}.svg`);
 

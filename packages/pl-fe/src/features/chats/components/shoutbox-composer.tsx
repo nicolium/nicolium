@@ -22,24 +22,11 @@ interface IShoutboxComposer extends Pick<
 > {
   value: string;
   onSubmit: () => void;
-  errorMessage: string | undefined;
   resetContentKey: number | null;
 }
 
 const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxComposer>(
-  (
-    {
-      onKeyDown,
-      onChange,
-      value,
-      onSubmit,
-      errorMessage = false,
-      disabled = false,
-      resetContentKey,
-      onPaste,
-    },
-    ref,
-  ) => {
+  ({ onKeyDown, onChange, value, onSubmit, disabled = false, resetContentKey, onPaste }, ref) => {
     const intl = useIntl();
 
     const maxCharacterCount = useInstance().configuration.chats.max_characters;

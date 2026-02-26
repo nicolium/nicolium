@@ -112,7 +112,7 @@ const cancelDraftStatus = (queryClient: QueryClient, accountUrl: string, draftId
   const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
     delete oldDrafts[draftId];
   });
-  return persistDrafts(accountUrl, newDrafts).then((drafts) =>
+  return persistDrafts(accountUrl, newDrafts).then(() =>
     queryClient.invalidateQueries({ queryKey: queryKeys.draftStatuses.all }),
   );
 };

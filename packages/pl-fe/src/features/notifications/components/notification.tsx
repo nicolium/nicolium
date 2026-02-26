@@ -353,18 +353,15 @@ const Notification: React.FC<INotification> = (props) => {
     [account],
   );
 
-  const handleHotkeyFavourite = useCallback(
-    (e?: KeyboardEvent) => {
-      if (status && typeof status === 'object') {
-        if (status.favourited) {
-          unfavouriteStatus();
-        } else {
-          favouriteStatus();
-        }
+  const handleHotkeyFavourite = useCallback(() => {
+    if (status && typeof status === 'object') {
+      if (status.favourited) {
+        unfavouriteStatus();
+      } else {
+        favouriteStatus();
       }
-    },
-    [status],
-  );
+    }
+  }, [status]);
 
   const handleHotkeyBoost = useCallback(
     (e?: KeyboardEvent) => {

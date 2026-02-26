@@ -75,7 +75,7 @@ const unicodeMapping = compileTime(() => {
     '🏳‍⚧': ['1f3f3-fe0f-200d-26a7-fe0f', 'transgender_flag'],
   };
 
-  const stripcodes = (unified: string, native: string) => {
+  const stripcodes = (unified: string) => {
     const stripped = unified.replace(stripLeadingZeros, '');
 
     if (unified.includes('200d') && !(unified in blacklist)) {

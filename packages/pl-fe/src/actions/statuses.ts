@@ -219,7 +219,7 @@ const deleteStatusFromGroup =
 
     return getClient(state)
       .experimental.groups.deleteGroupStatus(statusId, groupId)
-      .then((response) => {
+      .then(() => {
         usePendingStatusesStore.getState().actions.deleteStatus(statusId);
         dispatch<StatusesAction>({ type: STATUS_DELETE_SUCCESS, statusId });
         dispatch(deleteFromTimelines(statusId));
@@ -267,7 +267,7 @@ const muteStatus = (statusId: string) => (dispatch: AppDispatch, getState: () =>
 
   return getClient(getState())
     .statuses.muteStatus(statusId)
-    .then((status) => {
+    .then(() => {
       dispatch<StatusesAction>({ type: STATUS_MUTE_SUCCESS, statusId });
     });
 };

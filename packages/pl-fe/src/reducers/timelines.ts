@@ -401,7 +401,7 @@ const timelines = (
     //   return filterTimeline(state, 'home', action.relationship, action.statuses);
     case TIMELINE_SCROLL_TOP:
       return create(state, (draft) => {
-        updateTop(state, action.timeline, action.top);
+        updateTop(draft, action.timeline, action.top);
       });
     case PIN_SUCCESS:
       return create(state, (draft) => {

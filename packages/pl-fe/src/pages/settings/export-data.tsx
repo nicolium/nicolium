@@ -23,7 +23,7 @@ const CSVExporter: React.FC<ICSVExporter> = ({ inputLabel, inputHint, submitText
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleClick: React.MouseEventHandler = (event) => {
+  const handleClick: React.MouseEventHandler = () => {
     setIsLoading(true);
     dispatch(action())
       .then(() => {

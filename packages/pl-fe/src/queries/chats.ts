@@ -156,7 +156,7 @@ const useMarkChatAsRead = (chatId: string) => {
   });
 };
 
-const useCreateChatMessage = (chatId: string) => {
+const useCreateChatMessage = () => {
   const { data: account } = useOwnAccount();
   const client = useClient();
 

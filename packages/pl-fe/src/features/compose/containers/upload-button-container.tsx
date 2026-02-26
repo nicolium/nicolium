@@ -4,8 +4,6 @@ import { useCompose, useUploadCompose } from '@/stores/compose';
 
 import UploadButton from '../components/upload-button';
 
-import type { IntlShape } from 'react-intl';
-
 interface IUploadButtonContainer {
   composeId: string;
 }
@@ -14,7 +12,7 @@ const UploadButtonContainer: React.FC<IUploadButtonContainer> = ({ composeId }) 
   const { isUploading, resetFileKey } = useCompose(composeId);
   const uploadCompose = useUploadCompose(composeId);
 
-  const onSelectFile = (files: FileList, intl: IntlShape) => {
+  const onSelectFile = (files: FileList) => {
     uploadCompose(files);
   };
 

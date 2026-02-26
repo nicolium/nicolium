@@ -173,17 +173,7 @@ function parseContent(
 };
 
 function parseContent(
-  {
-    html,
-    mentions,
-    hasQuote,
-    emojis,
-    cleanUrls = false,
-    redirectUrls = false,
-    displayTargetHost = true,
-    greentext = false,
-    speakAsCat = false,
-  }: IParsedContent,
+  { html, mentions, hasQuote, emojis, greentext = false, speakAsCat = false }: IParsedContent,
   extractHashtags = false,
 ) {
   if (html.length === 0) {

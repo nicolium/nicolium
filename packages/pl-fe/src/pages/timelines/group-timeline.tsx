@@ -43,7 +43,7 @@ const GroupTimelinePage: React.FC = () => {
     uploadCompose(files);
   });
 
-  const handleLoadMore = (maxId: string) => {
+  const handleLoadMore = () => {
     dispatch(fetchGroupTimeline(groupId, {}, true));
   };
 

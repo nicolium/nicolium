@@ -259,7 +259,13 @@ a.⁂-list-item,
 }
 
 .⁂-card-title {
-  @include mixins.text($size: xl, $weight: bold, $truncate: true);
+  @include mixins.text($size: xl, $weight: bold);
+
+  &--truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .⁂-animated-number {

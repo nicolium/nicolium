@@ -123,12 +123,10 @@ export const ToolbarButton: React.FC<IToolbarButton> = ({ active, icon, ...props
 
 const BlockTypeDropdown = ({
   editor,
-  anchorElem,
   blockType,
   icon,
 }: {
   editor: LexicalEditor;
-  anchorElem: HTMLElement;
   blockType: keyof typeof blockTypeToBlockName;
   icon: string;
 }) => {
@@ -396,7 +394,6 @@ const TextFormatFloatingToolbar = ({
         <>
           <BlockTypeDropdown
             editor={editor}
-            anchorElem={anchorElem}
             blockType={blockType}
             icon={blockTypeToIcon[blockType]}
           />

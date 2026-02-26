@@ -320,13 +320,13 @@ const Status: React.FC<IStatus> = (props) => {
     navigate({ to: '/@{$username}', params: { username: actualStatus.account.acct } });
   };
 
-  const handleHotkeyMoveUp = (e?: KeyboardEvent) => {
+  const handleHotkeyMoveUp = () => {
     if (onMoveUp) {
       onMoveUp(status.id, featured);
     }
   };
 
-  const handleHotkeyMoveDown = (e?: KeyboardEvent) => {
+  const handleHotkeyMoveDown = () => {
     if (onMoveDown) {
       onMoveDown(status.id, featured);
     }

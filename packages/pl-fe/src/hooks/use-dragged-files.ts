@@ -26,13 +26,10 @@ const useDraggedFiles = <R extends HTMLElement>(
     [setIsDragging],
   );
 
-  const handleDocumentDrop = useCallback(
-    (e: DragEvent) => {
-      setIsDragging(false);
-      setIsDraggedOver(false);
-    },
-    [setIsDragging],
-  );
+  const handleDocumentDrop = useCallback(() => {
+    setIsDragging(false);
+    setIsDraggedOver(false);
+  }, [setIsDragging]);
 
   const handleDragEnter = useCallback(
     (e: DragEvent) => {

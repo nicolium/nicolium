@@ -56,7 +56,7 @@ const useDeleteDriveFileMutation = (fileId: string) => {
   return useMutation({
     mutationKey: ['drive', 'files'],
     mutationFn: () => client.drive.deleteFile(fileId),
-    onSuccess: (file) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.drive.folders.root, exact: false });
     },
   });

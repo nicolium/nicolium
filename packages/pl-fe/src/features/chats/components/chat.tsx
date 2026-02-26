@@ -54,7 +54,7 @@ const Chat: React.FC<IChat> = ({ chat, inputRef, className }) => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
 
-  const createChatMessage = useCreateChatMessage(chat.id);
+  const createChatMessage = useCreateChatMessage();
 
   const [content, setContent] = useState<string>('');
   const [attachment, setAttachment] = useState<MediaAttachment | null>(null);

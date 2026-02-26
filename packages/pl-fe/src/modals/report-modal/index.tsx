@@ -112,7 +112,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
         setIsSubmitting(false);
         setCurrentStep(Steps.THREE);
       })
-      .catch((error) => {
+      .catch(() => {
         setIsSubmitting(false);
       });
 

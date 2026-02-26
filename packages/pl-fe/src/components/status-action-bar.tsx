@@ -357,7 +357,7 @@ const ReplyButton: React.FC<IReplyButton> = ({
     replyTitle = intl.formatMessage(messages.replyAll);
   }
 
-  const handleReplyClick: React.MouseEventHandler = (e) => {
+  const handleReplyClick: React.MouseEventHandler = () => {
     if (me) {
       replyCompose(status, rebloggedBy, canReply.approvalRequired ?? false);
     } else {
@@ -489,7 +489,7 @@ const ReblogButton: React.FC<IReblogButton> = ({
 
   if (!features.quotePosts || !me) return reblogButton;
 
-  const handleQuoteClick: React.EventHandler<React.MouseEvent> = (e) => {
+  const handleQuoteClick: React.EventHandler<React.MouseEvent> = () => {
     if (me) {
       quoteCompose(status, canQuote.approvalRequired || false);
     } else {
@@ -533,7 +533,7 @@ const FavouriteButton: React.FC<IActionButton> = ({
   const { mutate: favouriteStatus } = useFavouriteStatus(status.id);
   const { mutate: unfavouriteStatus } = useUnfavouriteStatus(status.id);
 
-  const handleFavouriteClick: React.EventHandler<React.MouseEvent> = (e) => {
+  const handleFavouriteClick: React.EventHandler<React.MouseEvent> = () => {
     if (me) {
       if (status.favourited) {
         unfavouriteStatus();
@@ -604,7 +604,7 @@ const DislikeButton: React.FC<IActionButton> = ({
 
   if (!features.statusDislikes) return;
 
-  const handleDislikeClick: React.EventHandler<React.MouseEvent> = (e) => {
+  const handleDislikeClick: React.EventHandler<React.MouseEvent> = () => {
     if (me) {
       if (status.disliked) {
         undislikeStatus();
@@ -655,7 +655,7 @@ const WrenchButton: React.FC<IActionButton> = ({ status, withLabels, me }) => {
   const wrenches =
     showWrenchButton && (status.emoji_reactions.find((emoji) => emoji.name === '🔧') ?? undefined);
 
-  const handleWrenchClick: React.EventHandler<React.MouseEvent> = (e) => {
+  const handleWrenchClick: React.EventHandler<React.MouseEvent> = () => {
     if (wrenches?.me) {
       dispatch(unEmojiReact(status.id, '🔧'));
     } else {
@@ -781,7 +781,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     const ownAccount = status.account_id === me;
     const { username, local: localAccount } = status.account;
 
-    const handleBookmarkClick: React.EventHandler<React.MouseEvent> = (e) => {
+    const handleBookmarkClick: React.EventHandler<React.MouseEvent> = () => {
       if (status.bookmarked) unbookmarkStatus();
       else bookmarkStatus(undefined);
     };
@@ -811,11 +811,11 @@ const MenuButton: React.FC<IMenuButton> = ({
       }
     };
 
-    const handleDeleteClick: React.EventHandler<React.MouseEvent> = (e) => {
+    const handleDeleteClick: React.EventHandler<React.MouseEvent> = () => {
       doDeleteStatus();
     };
 
-    const handleRedraftClick: React.EventHandler<React.MouseEvent> = (e) => {
+    const handleRedraftClick: React.EventHandler<React.MouseEvent> = () => {
       doDeleteStatus(true);
     };
 
@@ -828,7 +828,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       else dispatch(editStatus(status.id));
     };
 
-    const handlePinClick: React.EventHandler<React.MouseEvent> = (e) => {
+    const handlePinClick: React.EventHandler<React.MouseEvent> = () => {
       if (status.pinned) unpinStatus();
       else pinStatus();
     };
@@ -845,15 +845,15 @@ const MenuButton: React.FC<IMenuButton> = ({
       }
     };
 
-    const handleMentionClick: React.EventHandler<React.MouseEvent> = (e) => {
+    const handleMentionClick: React.EventHandler<React.MouseEvent> = () => {
       mentionCompose(status.account);
     };
 
-    const handleDirectClick: React.EventHandler<React.MouseEvent> = (e) => {
+    const handleDirectClick: React.EventHandler<React.MouseEvent> = () => {
       directCompose(status.account);
     };
 
-    const handleChatClick: React.EventHandler<React.MouseEvent> = (e) => {
+    const handleChatClick: React.EventHandler<React.MouseEvent> = () => {
       const account = status.account;
 
       getOrCreateChatByAccountId(account.id)
@@ -861,11 +861,11 @@ const MenuButton: React.FC<IMenuButton> = ({
         .catch(() => {});
     };
 
-    const handleMuteClick: React.EventHandler<React.MouseEvent> = (e) => {
+    const handleMuteClick: React.EventHandler<React.MouseEvent> = () => {
       openModal('BLOCK_MUTE', { accountId: status.account.id, action: 'MUTE' });
     };
 
-    const handleBlockClick: React.EventHandler<React.MouseEvent> = (e) => {
+    const handleBlockClick: React.EventHandler<React.MouseEvent> = () => {
       openModal('BLOCK_MUTE', {
         accountId: status.account.id,
         statusId: status.id,
@@ -873,7 +873,7 @@ const MenuButton: React.FC<IMenuButton> = ({
       });
     };
 
-    const handleUnblockClick: React.EventHandler<React.MouseEvent> = (e) => {
+    const handleUnblockClick: React.EventHandler<React.MouseEvent> = () => {
       unblockAccount();
     };
 
@@ -888,11 +888,11 @@ const MenuButton: React.FC<IMenuButton> = ({
       openModal('REACTIONS', { statusId: status.id });
     };
 
-    const handleReport: React.EventHandler<React.MouseEvent> = (e) => {
-      dispatch(initReport(ReportableEntities.STATUS, status.account, { status }));
+    const handleReport: React.EventHandler<React.MouseEvent> = () => {
+      initReport(ReportableEntities.STATUS, status.account, { status });
     };
 
-    const handleConversationMuteClick: React.EventHandler<React.MouseEvent> = (e) => {
+    const handleConversationMuteClick: React.EventHandler<React.MouseEvent> = () => {
       dispatch(toggleMuteStatus(status));
     };
 
@@ -902,12 +902,12 @@ const MenuButton: React.FC<IMenuButton> = ({
         .then(() => {
           toast.success(messages.loadConversationSuccess);
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error(messages.loadConversationError);
         });
     };
 
-    const handleCopy: React.EventHandler<React.MouseEvent> = (e) => {
+    const handleCopy: React.EventHandler<React.MouseEvent> = () => {
       const { uri } = status;
 
       copy(uri);
@@ -924,11 +924,11 @@ const MenuButton: React.FC<IMenuButton> = ({
         });
     };
 
-    const handleDeleteStatus: React.EventHandler<React.MouseEvent> = (e) => {
+    const handleDeleteStatus: React.EventHandler<React.MouseEvent> = () => {
       dispatch(deleteStatusModal(intl, status.id));
     };
 
-    const handleToggleStatusSensitivity: React.EventHandler<React.MouseEvent> = (e) => {
+    const handleToggleStatusSensitivity: React.EventHandler<React.MouseEvent> = () => {
       dispatch(toggleStatusSensitivityModal(intl, status.id, status.sensitive));
     };
 

@@ -83,7 +83,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
               <Text size='sm' theme='muted'>
                 <FormattedMessage id='security.tokens.scopes' defaultMessage='Scopes:' />
               </Text>
-              {token.scopes.map((scope, index) => (
+              {token.scopes.map((scope) => (
                 <Badge title={scope} slug='opaque' key={scope} />
               ))}
             </HStack>

@@ -64,7 +64,7 @@ const MigrationPage = () => {
     setPassword('');
   };
 
-  const handleSubmit: React.FormEventHandler = (e) => {
+  const handleSubmit: React.FormEventHandler = () => {
     setIsLoading(true);
     return dispatch(moveAccount(targetAccount, password))
       .then(() => {

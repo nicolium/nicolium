@@ -616,7 +616,7 @@ const DrivePage: React.FC = () => {
           onSuccess: () => {
             toast.success(messages.fileUploadSuccess);
           },
-          onError: (error) => {
+          onError: () => {
             toast.error(messages.fileUploadError);
           },
         });

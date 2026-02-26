@@ -53,7 +53,7 @@ const emojiReact =
                 );
               }
             })
-            .catch((e) => {});
+            .catch(() => {});
         }
       })
       .catch((error) => {

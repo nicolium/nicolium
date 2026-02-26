@@ -26,7 +26,7 @@ const SearchInput = React.memo(() => {
     setValue(value);
   };
 
-  const handleClear = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClear = () => {
     setValue('');
   };
 

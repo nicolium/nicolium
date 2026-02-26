@@ -74,7 +74,7 @@ const useAddAccountsToCircle = (circleId: string) => {
     mutationKey: ['accountsLists', 'circles', circleId, 'add'],
     mutationFn: (accountIds: Array<string>) =>
       client.circles.addCircleAccounts(circleId, accountIds),
-    onSettled: (_, __, accountIds) => {
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.circleMembers(circleId) });
     },
   });

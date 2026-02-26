@@ -145,12 +145,12 @@ const makeGetNotification = () =>
   createSelector(
     [
       (_state: RootState, notification: NotificationGroup) => notification,
-      (state: RootState, notification: NotificationGroup) =>
+      (_state: RootState, notification: NotificationGroup) =>
         // @ts-expect-error types will be fine valibot ensures that
         selectAccount(notification.target_id),
       // @ts-expect-error types will be fine valibot ensures that
       (state: RootState, notification: NotificationGroup) => state.statuses[notification.status_id],
-      (state: RootState, notification: NotificationGroup) =>
+      (_state: RootState, notification: NotificationGroup) =>
         selectAccounts(notification.sample_account_ids),
     ],
     (notification, target, status, accounts): SelectedNotification => ({
@@ -196,7 +196,7 @@ const makeGetReport = () => {
 
   return createSelector(
     [
-      (state: RootState, report?: ReturnType<typeof minifyAdminReport>) => report,
+      (_state: RootState, report?: ReturnType<typeof minifyAdminReport>) => report,
       (state: RootState, report?: ReturnType<typeof minifyAdminReport>) =>
         report?.status_ids
           .map((statusId) => getStatus(state, { id: statusId }))
@@ -285,7 +285,7 @@ type ColumnQuery = { type: string; prefix?: string };
 const makeGetStatusIds = () =>
   createSelector(
     [
-      (state: RootState, { type, prefix }: ColumnQuery) =>
+      (_state: RootState, { type, prefix }: ColumnQuery) =>
         useSettingsStore.getState().settings.timelines[prefix ?? type],
       (state: RootState, { type }: ColumnQuery) => state.timelines[type]?.items || [],
       (state: RootState) => state.statuses,

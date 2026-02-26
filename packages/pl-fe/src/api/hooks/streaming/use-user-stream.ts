@@ -1,12 +1,10 @@
 import { useCallback } from 'react';
 
-import { getLocale } from '@/actions/settings';
 import { updateStatus } from '@/actions/statuses';
 import { deleteFromTimelines, processTimelineUpdate } from '@/actions/timelines';
 import { useStatContext } from '@/contexts/stat-context';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useLoggedIn } from '@/hooks/use-logged-in';
-import messages from '@/messages';
 import { queryClient } from '@/queries/client';
 import { updateConversations } from '@/queries/conversations/use-conversations';
 import { queryKeys } from '@/queries/keys';
@@ -123,13 +121,7 @@ const useUserStream = () => {
         dispatch(deleteFromTimelines(event.payload));
         break;
       case 'notification':
-        messages[getLocale()]()
-          .then((messages) => {
-            processStreamNotification(event.payload, messages, getLocale());
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        processStreamNotification(event.payload);
         break;
       case 'conversation':
         updateConversations(event.payload);

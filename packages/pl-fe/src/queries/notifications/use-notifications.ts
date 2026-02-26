@@ -130,7 +130,7 @@ const useProcessStreamNotification = () => {
   const { sounds } = useSettingsStore((state) => state.settings.notifications);
 
   const processStreamNotification = useCallback(
-    (notification: Notification, intlMessages: Record<string, string>, intlLocale: string) => {
+    (notification: Notification) => {
       if (!notification.type) return;
       if (notification.type === 'chat_mention') return;
 
@@ -233,7 +233,7 @@ const useMarkNotificationsReadMutation = () => {
         },
       });
     },
-    onSuccess: (markers, lastReadId) => {
+    onSuccess: (markers) => {
       if (markers?.notifications) {
         queryClient.setQueryData(queryKeys.markers.notifications, markers.notifications);
       }

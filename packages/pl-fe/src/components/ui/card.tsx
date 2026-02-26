@@ -100,7 +100,10 @@ interface ICardTitle {
 
 /** A card's title. */
 const CardTitle: React.FC<ICardTitle> = ({ title, truncate = true }): React.JSX.Element => (
-  <h1 className='⁂-card-title' data-testid='card-title'>
+  <h1
+    className={clsx('⁂-card-title', { '⁂-card-title--truncate': truncate })}
+    data-testid='card-title'
+  >
     {title}
   </h1>
 );
