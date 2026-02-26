@@ -3,7 +3,7 @@ import {
   autoUpdate,
   flip,
   offset,
-  Placement,
+  type Placement,
   shift,
   size,
   useFloating,
@@ -20,7 +20,7 @@ import { userTouching } from '@/is-mobile';
 import { useModalsActions } from '@/stores/modals';
 import { useUiStoreActions } from '@/stores/ui';
 
-import DropdownMenuItem, { Menu } from './dropdown-menu-item';
+import DropdownMenuItem, { type Menu } from './dropdown-menu-item';
 
 const messages = defineMessages({
   back: { id: 'card.back.label', defaultMessage: 'Back' },

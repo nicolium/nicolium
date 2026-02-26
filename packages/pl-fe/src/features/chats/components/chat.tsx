@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { MutableRefObject, useEffect, useState } from 'react';
+import React, { type MutableRefObject, useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { uploadMedia } from '@/actions/media';

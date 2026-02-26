@@ -1,6 +1,6 @@
 import { linkOptions, useNavigate, useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
-import React, { MouseEventHandler } from 'react';
+import React, { type MouseEventHandler } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import Stack from '@/components/ui/stack';

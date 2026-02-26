@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import throttle from 'lodash/throttle';
 import React, { useState, useEffect, useCallback } from 'react';
-import { useIntl, MessageDescriptor } from 'react-intl';
+import { useIntl, type MessageDescriptor } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
 import { useSettings } from '@/stores/settings';

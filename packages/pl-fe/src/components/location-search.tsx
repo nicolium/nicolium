@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import AutosuggestInput, { AutoSuggestion } from '@/components/autosuggest-input';
+import AutosuggestInput, { type AutoSuggestion } from '@/components/autosuggest-input';
 import Icon from '@/components/icon';
 import { useSearchLocation } from '@/queries/search/use-search-location';
 

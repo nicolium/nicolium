@@ -1,4 +1,3 @@
-import { Instance } from 'pl-api';
 import React from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
@@ -7,6 +6,8 @@ import { RadioGroup, RadioItem } from '@/components/radio';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useInstance } from '@/hooks/use-instance';
 import toast from '@/toast';
+
+import type { Instance } from 'pl-api';
 
 type RegistrationMode = 'open' | 'approval' | 'closed';
 

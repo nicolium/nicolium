@@ -1,4 +1,4 @@
-import { defineMessages, IntlShape } from 'react-intl';
+import { defineMessages, type IntlShape } from 'react-intl';
 
 import { useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';

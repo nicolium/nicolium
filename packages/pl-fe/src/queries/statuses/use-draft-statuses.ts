@@ -12,9 +12,10 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { filteredArray } from '@/schemas/utils';
 import KVStore from '@/storage/kv-store';
 import { useComposeStore } from '@/stores/compose';
-import { APIEntity } from '@/types/entities';
 
 import { queryKeys } from '../keys';
+
+import type { APIEntity } from '@/types/entities';
 
 const draftStatusSchema = v.pipe(
   v.any(),

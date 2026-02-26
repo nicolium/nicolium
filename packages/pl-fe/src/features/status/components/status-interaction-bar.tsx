@@ -1,4 +1,4 @@
-import { Link, LinkOptions } from '@tanstack/react-router';
+import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';

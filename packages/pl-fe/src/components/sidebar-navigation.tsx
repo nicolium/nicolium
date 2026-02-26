@@ -23,7 +23,7 @@ import { useModalsActions } from '@/stores/modals';
 import sourceCode from '@/utils/code';
 
 import Account from './account';
-import DropdownMenu, { Menu } from './dropdown-menu';
+import DropdownMenu, { type Menu } from './dropdown-menu';
 import SearchInput from './search-input';
 import SidebarNavigationLink from './sidebar-navigation-link';
 import SiteLogo from './site-logo';

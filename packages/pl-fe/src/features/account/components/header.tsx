@@ -10,7 +10,7 @@ import { initReport, ReportableEntities } from '@/actions/reports';
 import Account from '@/components/account';
 import AltIndicator from '@/components/alt-indicator';
 import Badge from '@/components/badge';
-import DropdownMenu, { Menu } from '@/components/dropdown-menu';
+import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import Icon from '@/components/icon';
 import StillImage from '@/components/still-image';
 import Avatar from '@/components/ui/avatar';

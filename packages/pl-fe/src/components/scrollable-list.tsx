@@ -3,11 +3,11 @@ import debounce from 'lodash/debounce';
 import React, { useEffect, useRef, useMemo, useCallback } from 'react';
 import {
   Virtuoso,
-  Components,
-  VirtuosoProps,
-  VirtuosoHandle,
-  ListRange,
-  IndexLocationWithAlign,
+  type Components,
+  type VirtuosoProps,
+  type VirtuosoHandle,
+  type ListRange,
+  type IndexLocationWithAlign,
 } from 'react-virtuoso';
 
 import LoadMore from '@/components/load-more';

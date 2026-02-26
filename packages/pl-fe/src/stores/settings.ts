@@ -8,7 +8,7 @@ import { settingsSchema, type Settings } from '@/schemas/pl-fe/settings';
 import KVStore from '@/storage/kv-store';
 import toast from '@/toast';
 import {
-  KVStoreRedirectServicesItem,
+  type KVStoreRedirectServicesItem,
   resetRules,
   setManualRedirectServices,
   updateRedirectServicesFromUrl,

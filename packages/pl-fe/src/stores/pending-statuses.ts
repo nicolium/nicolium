@@ -1,6 +1,7 @@
-import { CreateStatusParams } from 'pl-api';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
+
+import type { CreateStatusParams } from 'pl-api';
 
 interface PendingStatus {
   content_type: string;

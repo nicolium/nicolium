@@ -1,12 +1,13 @@
 import { useMemo } from 'react';
 
-import { AutoSuggestion } from '@/components/autosuggest-input';
 import emojiSearch from '@/features/emoji/search';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
 import { useSearchHashtags } from '@/queries/search/use-search';
 import { useAccountSearch } from '@/queries/search/use-search-accounts';
 import useTrendingTags from '@/queries/trends/use-trending-tags';
+
+import type { AutoSuggestion } from '@/components/autosuggest-input';
 
 const useComposeSuggestions = (token: string): Array<AutoSuggestion> => {
   const debouncedToken = useDebounce(token, 300);

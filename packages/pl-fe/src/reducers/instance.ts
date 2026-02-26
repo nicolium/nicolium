@@ -1,5 +1,5 @@
 import { create } from 'mutative';
-import { type Instance, instanceSchema, PleromaConfig } from 'pl-api';
+import { type Instance, instanceSchema, type PleromaConfig } from 'pl-api';
 import * as v from 'valibot';
 
 import {

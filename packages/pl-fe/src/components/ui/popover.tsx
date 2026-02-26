@@ -4,7 +4,7 @@ import {
   autoUpdate,
   FloatingArrow,
   offset,
-  Placement,
+  type Placement,
   shift,
   useClick,
   useDismiss,

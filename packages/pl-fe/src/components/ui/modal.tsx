@@ -4,8 +4,9 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { useOwnAccount } from '@/hooks/use-own-account';
 
-import { ButtonThemes } from './button/useButtonStyles';
 import IconButton from './icon-button';
+
+import type { ButtonThemes } from './button/useButtonStyles';
 
 const messages = defineMessages({
   back: { id: 'card.back.label', defaultMessage: 'Back' },

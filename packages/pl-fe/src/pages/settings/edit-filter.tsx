@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router';
-import { Filter, type FilterContext } from 'pl-api';
+import { type Filter, type FilterContext } from 'pl-api';
 import React, { useEffect, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 

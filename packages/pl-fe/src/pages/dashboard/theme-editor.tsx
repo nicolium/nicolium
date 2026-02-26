@@ -12,7 +12,7 @@ import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import ColorPicker from '@/features/pl-fe-config/components/color-picker';
-import Palette, { ColorGroup } from '@/features/theme-editor/components/palette';
+import Palette, { type ColorGroup } from '@/features/theme-editor/components/palette';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';

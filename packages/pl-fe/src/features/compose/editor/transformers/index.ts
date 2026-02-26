@@ -14,9 +14,10 @@ import {
   $isHorizontalRuleNode,
   HorizontalRuleNode,
 } from '@lexical/react/LexicalHorizontalRuleNode';
-import { LexicalNode } from 'lexical';
 
 import { $createImageNode, $isImageNode, ImageNode } from '../nodes/image-node';
+
+import type { LexicalNode } from 'lexical';
 
 const IMAGE_TRANSFORMER: TextMatchTransformer = {
   dependencies: [ImageNode],

@@ -5,7 +5,7 @@
  */
 
 import { $isAtNodeEnd } from '@lexical/selection';
-import { ElementNode, RangeSelection, TextNode } from 'lexical';
+import { type ElementNode, type RangeSelection, type TextNode } from 'lexical';
 
 export const getSelectedNode = (selection: RangeSelection): TextNode | ElementNode => {
   const anchor = selection.anchor;

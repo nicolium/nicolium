@@ -1,9 +1,10 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { StatusEdit } from 'pl-api';
 
 import { useClient } from '@/hooks/use-client';
 
 import { queryKeys } from '../keys';
+
+import type { StatusEdit } from 'pl-api';
 
 const minifyStatusEdit = ({ account, ...statusEdit }: StatusEdit) => ({
   account_id: account.id,

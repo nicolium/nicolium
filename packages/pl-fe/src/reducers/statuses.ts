@@ -1,7 +1,7 @@
 import omit from 'lodash/omit';
 import { create } from 'mutative';
 
-import { normalizeStatus, Status as StatusRecord } from '@/normalizers/status';
+import { normalizeStatus, type Status as StatusRecord } from '@/normalizers/status';
 import { simulateEmojiReact, simulateUnEmojiReact } from '@/utils/emoji-reacts';
 
 import {

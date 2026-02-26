@@ -3,7 +3,7 @@ import { FastAverageColor } from 'fast-average-color';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import StillImage, { IStillImage } from '@/components/still-image';
+import StillImage, { type IStillImage } from '@/components/still-image';
 import { useSettings } from '@/stores/settings';
 
 import AltIndicator from '../alt-indicator';

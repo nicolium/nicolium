@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useState, useRef, useLayoutEffect, CSSProperties } from 'react';
+import React, { useState, useRef, useLayoutEffect, type CSSProperties } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AltIndicator from '@/components/alt-indicator';

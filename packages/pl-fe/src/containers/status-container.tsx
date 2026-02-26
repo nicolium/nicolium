@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import Status, { IStatus } from '@/components/status';
+import Status, { type IStatus } from '@/components/status';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { makeGetStatus } from '@/selectors';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, IntlShape } from 'react-intl';
+import { defineMessages, FormattedMessage, type IntlShape } from 'react-intl';
 
 import { deactivateUser, deleteUser, deleteStatus, toggleStatusSensitivity } from '@/actions/admin';
 import OutlineBox from '@/components/outline-box';

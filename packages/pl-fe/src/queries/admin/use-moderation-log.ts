@@ -1,11 +1,11 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { PaginatedResponse } from 'pl-api';
 
 import { useClient } from '@/hooks/use-client';
 import { flattenPages } from '@/utils/queries';
 
 import { queryKeys } from '../keys';
 
+import type { PaginatedResponse } from 'pl-api';
 import type { AdminModerationLogEntry } from 'pl-api';
 
 const useModerationLog = () => {

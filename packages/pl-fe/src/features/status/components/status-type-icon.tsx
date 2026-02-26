@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, MessageDescriptor, useIntl } from 'react-intl';
+import { defineMessages, type MessageDescriptor, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
 

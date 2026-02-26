@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-import { useIntl, defineMessages, IntlShape } from 'react-intl';
+import { useIntl, defineMessages, type IntlShape } from 'react-intl';
 
-import DropdownMenu, { MenuItem } from '@/components/dropdown-menu';
+import DropdownMenu, { type MenuItem } from '@/components/dropdown-menu';
 import Icon from '@/components/ui/icon';
 import { useFeatures } from '@/hooks/use-features';
 import { getOrderedLists } from '@/pages/account-lists/lists';

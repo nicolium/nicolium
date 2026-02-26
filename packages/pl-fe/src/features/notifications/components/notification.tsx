@@ -5,8 +5,8 @@ import {
   useIntl,
   FormattedList,
   FormattedMessage,
-  IntlShape,
-  MessageDescriptor,
+  type IntlShape,
+  type MessageDescriptor,
 } from 'react-intl';
 
 import AttachmentThumbs from '@/components/attachment-thumbs';
@@ -35,9 +35,9 @@ import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMetaActions } from '@/stores/status-meta';
-import { NotificationType } from '@/utils/notification';
 
 import type { Status as StatusEntity } from '@/normalizers/status';
+import type { NotificationType } from '@/utils/notification';
 import type { Account, NotificationGroup } from 'pl-api';
 
 const notificationForScreenReader = (intl: IntlShape, message: string, timestamp: string) => {

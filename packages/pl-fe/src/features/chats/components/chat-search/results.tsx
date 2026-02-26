@@ -8,8 +8,8 @@ import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import VerificationBadge from '@/components/verification-badge';
 import { useAccounts } from '@/queries/accounts/use-accounts';
-import { useAccountSearch } from '@/queries/search/use-search-accounts';
 
+import type { useAccountSearch } from '@/queries/search/use-search-accounts';
 import type { Account } from 'pl-api';
 
 interface IResults {

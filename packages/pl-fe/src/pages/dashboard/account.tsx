@@ -1,5 +1,5 @@
 import { PLEROMA } from 'pl-api';
-import React, { ChangeEventHandler, useMemo, useState } from 'react';
+import React, { type ChangeEventHandler, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } from 'react-intl';
 
 import { setBadges as saveBadges, setRole } from '@/actions/admin';

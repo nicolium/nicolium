@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { defineMessages } from 'react-intl';
 
-import { EventsAction } from '@/actions/events';
 import { importEntities } from '@/actions/importer';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
@@ -9,6 +8,7 @@ import toast from '@/toast';
 
 import { queryKeys } from '../keys';
 
+import type { EventsAction } from '@/actions/events';
 import type { Status } from 'pl-api';
 
 const messages = defineMessages({

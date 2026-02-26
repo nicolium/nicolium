@@ -2,7 +2,7 @@ import { GroupRoles, type Group } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import DropdownMenu, { Menu } from '@/components/dropdown-menu';
+import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import IconButton from '@/components/ui/icon-button';
 import { useLeaveGroupMutation } from '@/queries/groups/use-group-relationship';
 import { useModalsActions } from '@/stores/modals';

@@ -1,5 +1,6 @@
-import { MediaAttachment } from 'pl-api';
 import React, { useState } from 'react';
+
+import type { MediaAttachment } from 'pl-api';
 
 interface IPlaceholderMediaGallery {
   media: Array<MediaAttachment>;

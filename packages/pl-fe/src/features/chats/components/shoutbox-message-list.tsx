@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import { Virtuoso, VirtuosoHandle } from 'react-virtuoso';
+import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 
 import HoverAccountWrapper from '@/components/hover-account-wrapper';
 import { ParsedContent } from '@/components/parsed-content';

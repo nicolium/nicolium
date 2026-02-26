@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { defineMessages, useIntl, FormatDateOptions } from 'react-intl';
+import { defineMessages, useIntl, type FormatDateOptions } from 'react-intl';
 
-import Text, { IText } from './ui/text';
+import Text, { type IText } from './ui/text';
 
 const messages = defineMessages({
   justNow: { id: 'relative_time.just_now', defaultMessage: 'now' },

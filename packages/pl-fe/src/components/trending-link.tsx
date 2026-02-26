@@ -1,5 +1,4 @@
 import { Link } from '@tanstack/react-router';
-import { TrendsLink } from 'pl-api';
 import React from 'react';
 
 import { getTextDirection } from '@/utils/rtl';
@@ -10,6 +9,8 @@ import HStack from './ui/hstack';
 import Icon from './ui/icon';
 import Stack from './ui/stack';
 import Text from './ui/text';
+
+import type { TrendsLink } from 'pl-api';
 
 interface ITrendingLink {
   trendingLink: TrendsLink;

@@ -19,7 +19,8 @@ import { useAppSelector } from '@/hooks/use-app-selector';
 import KVStore from '@/storage/kv-store';
 import { useSettings } from '@/stores/settings';
 import { hasCanvasExtractPermission } from '@/utils/favicon-service';
-import { KVStoreRedirectServicesItem } from '@/utils/url-purify';
+
+import type { KVStoreRedirectServicesItem } from '@/utils/url-purify';
 
 const messages = defineMessages({
   heading: { id: 'column.privacy', defaultMessage: 'Privacy' },

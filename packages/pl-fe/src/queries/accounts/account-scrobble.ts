@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query';
-import { Scrobble } from 'pl-api';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { queryKeys } from '@/queries/keys';
+
+import type { Scrobble } from 'pl-api';
 
 const minifyScrobble = ({ account, ...scrobble }: Scrobble) => scrobble;
 

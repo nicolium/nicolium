@@ -1,4 +1,3 @@
-import { Location } from 'pl-api';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -10,6 +9,8 @@ import IconButton from '@/components/ui/icon-button';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useCompose, useComposeActions } from '@/stores/compose';
+
+import type { Location } from 'pl-api';
 
 const messages = defineMessages({
   resetLocation: { id: 'compose_event.reset_location', defaultMessage: 'Reset location' },

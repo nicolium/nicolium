@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useIntl, defineMessages } from 'react-intl';
-import { Components, Virtuoso, VirtuosoHandle } from 'react-virtuoso';
+import { type Components, Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 
 import Avatar from '@/components/ui/avatar';
 import Button from '@/components/ui/button';

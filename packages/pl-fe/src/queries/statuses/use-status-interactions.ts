@@ -1,4 +1,4 @@
-import { InfiniteData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { type InfiniteData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { defineMessages } from 'react-intl';
 
 import { importEntities } from '@/actions/importer';
@@ -10,7 +10,7 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from '@/queries/utils/minify-list';
 import { useModalsActions } from '@/stores/modals';
-import toast, { IToastOptions } from '@/toast';
+import toast, { type IToastOptions } from '@/toast';
 
 import { queryKeys } from '../keys';
 import { filterById } from '../utils/filter-id';

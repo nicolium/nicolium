@@ -1,5 +1,4 @@
 import fuzzysort from 'fuzzysort';
-import { BookmarkFolder } from 'pl-api';
 import React, { useCallback, useDeferredValue, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -25,6 +24,7 @@ import { useBookmarkStatus } from '@/queries/statuses/use-status-interactions';
 import { makeGetStatus } from '@/selectors';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
+import type { BookmarkFolder } from 'pl-api';
 
 interface SelectBookmarkFolderModalProps {
   statusId: string;
