@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import React, { useRef } from 'react';
 
-import { isMobile } from '@/is-mobile';
 import { useAccountHoverCardActions } from '@/stores/account-hover-card';
+import { isMobile } from '@/utils/is-mobile';
 
 const showAccountHoverCard = debounce((openAccountHoverCard, ref, accountId) => {
   openAccountHoverCard(ref, accountId);

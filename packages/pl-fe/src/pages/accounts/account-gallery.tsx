@@ -12,11 +12,11 @@ import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
 import { profileMediaRoute } from '@/features/ui/router';
 import { type AccountGalleryAttachment, useAccountGallery } from '@/hooks/use-account-gallery';
-import { isIOS } from '@/is-mobile';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
+import { isIOS } from '@/utils/is-mobile';
 
 interface IMediaItem {
   attachment: AccountGalleryAttachment;

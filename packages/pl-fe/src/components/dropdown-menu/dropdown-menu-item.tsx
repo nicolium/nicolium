@@ -5,7 +5,7 @@ import React, { useEffect, useRef } from 'react';
 import Counter from '@/components/ui/counter';
 import Icon from '@/components/ui/icon';
 import Toggle from '@/components/ui/toggle';
-import { userTouching } from '@/is-mobile';
+import { userTouching } from '@/utils/is-mobile';
 
 type Menu = Array<MenuItem | null>;
 

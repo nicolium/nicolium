@@ -19,8 +19,8 @@ import ZoomableImage from '@/features/ui/components/zoomable-image';
 import Video from '@/features/video';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
-import { userTouching } from '@/is-mobile';
 import { makeGetStatus } from '@/selectors';
+import { userTouching } from '@/utils/is-mobile';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 import type { MediaAttachment } from 'pl-api';

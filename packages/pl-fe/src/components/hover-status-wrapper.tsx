@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import debounce from 'lodash/debounce';
 import React, { useRef } from 'react';
 
-import { isMobile } from '@/is-mobile';
 import { useStatusHoverCardActions } from '@/stores/status-hover-card';
+import { isMobile } from '@/utils/is-mobile';
 
 const showStatusHoverCard = debounce((openStatusHoverCard, ref, statusId) => {
   openStatusHoverCard(ref, statusId);

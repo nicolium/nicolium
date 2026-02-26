@@ -16,9 +16,9 @@ import ReactSwipeableViews from 'react-swipeable-views';
 
 import IconButton from '@/components/ui/icon-button';
 import Portal from '@/components/ui/portal';
-import { userTouching } from '@/is-mobile';
 import { useModalsActions } from '@/stores/modals';
 import { useUiStoreActions } from '@/stores/ui';
+import { userTouching } from '@/utils/is-mobile';
 
 import DropdownMenuItem, { type Menu } from './dropdown-menu-item';
 

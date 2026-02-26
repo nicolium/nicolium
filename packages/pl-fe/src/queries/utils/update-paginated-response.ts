@@ -14,18 +14,15 @@ const updatePaginatedResponse = <
     items: PaginatedResponse<InferPaginatedItem<TKey>>['items'],
   ) => PaginatedResponse<InferPaginatedItem<TKey>>['items'],
 ) =>
-  queryClient.setQueryData<InfiniteData<PaginatedResponse<InferPaginatedItem<TKey>>>>(
-    queryKey,
-    (data) => {
-      if (!data) return undefined;
-      return {
-        ...data,
-        pages: data.pages.map((page) => ({
-          ...page,
-          items: updater(page.items),
-        })),
-      };
-    },
-  );
+  queryClient.setQueryData(queryKey, (data) => {
+    if (!data) return undefined;
+    return {
+      ...data,
+      pages: data.pages.map((page) => ({
+        ...page,
+        items: updater(page.items),
+      })),
+    };
+  });
 
 export { updatePaginatedResponse };

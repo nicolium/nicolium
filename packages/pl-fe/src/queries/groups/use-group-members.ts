@@ -24,18 +24,21 @@ const removeGroupMember = (groupId: string, accountId: string) =>
         : undefined,
   );
 
+const minifyGroupMember = ({ account, ...groupMember }: GroupMember) => ({
+  ...groupMember,
+  account_id: account.id,
+});
+
+type MinifiedGroupMember = ReturnType<typeof minifyGroupMember>;
+
 const minifyGroupMembersList = (
   response: PaginatedResponse<GroupMember>,
-): PaginatedResponse<Omit<GroupMember, 'account'> & { account_id: string }> =>
-  minifyList(
-    response,
-    ({ account, ...groupMember }) => ({ ...groupMember, account_id: account.id }),
-    (groupMembers) => {
-      for (const { account } of groupMembers) {
-        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
-      }
-    },
-  );
+): PaginatedResponse<MinifiedGroupMember> =>
+  minifyList(response, minifyGroupMember, (groupMembers) => {
+    for (const { account } of groupMembers) {
+      queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+    }
+  });
 
 const useGroupMembers = makePaginatedResponseQuery(
   (groupId: string, role?: GroupRole) => queryKeys.accountsLists.groupMembers.byRole(groupId, role),
@@ -128,8 +131,6 @@ const useDemoteGroupMemberMutation = (groupId: string) => {
     },
   });
 };
-
-type MinifiedGroupMember = ReturnType<typeof minifyGroupMembersList>['items'][0];
 
 export {
   useGroupMembers,

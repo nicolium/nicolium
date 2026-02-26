@@ -14,7 +14,7 @@ import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useSettings } from '@/stores/settings';
 import { truncateFilename } from '@/utils/media';
 
-import { isIOS } from '../is-mobile';
+import { isIOS } from '../utils/is-mobile';
 import {
   isPanoramic,
   isPortrait,

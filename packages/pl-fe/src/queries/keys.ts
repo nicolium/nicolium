@@ -1,4 +1,5 @@
 import type { MinifiedScrobble } from './accounts/account-scrobble';
+import type { MinifiedGroupMember } from './groups/use-group-members';
 import type { FilterType } from './notifications/use-notifications';
 import type { DraftStatus } from './statuses/use-draft-statuses';
 import type { MinifiedInteractionRequest } from './statuses/use-interaction-requests';
@@ -155,11 +156,11 @@ const accountsLists = {
   groupMembers: {
     root: (groupId: string) => {
       const key = ['accountsLists', 'groupMembers', groupId] as const;
-      return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+      return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<MinifiedGroupMember>>>;
     },
     byRole: (groupId: string, role?: GroupRole) => {
       const key = ['accountsLists', 'groupMembers', groupId, role] as const;
-      return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+      return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<MinifiedGroupMember>>>;
     },
   },
   groupMembershipRequests: (groupId: string) => {
@@ -356,7 +357,10 @@ const notifications = {
   root: ['notifications'] as const,
   list: (activeFilter?: FilterType) => {
     const key = ['notifications', activeFilter] as const;
-    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<NotificationGroup>>>;
+    return key as TaggedKey<
+      typeof key,
+      InfiniteData<PaginatedResponse<Array<NotificationGroup>, false>>
+    >;
   },
 };
 
@@ -435,7 +439,7 @@ const settings = {
   >,
   domainBlocks: ['settings', 'domainBlocks'] as TaggedKey<
     ['settings', 'domainBlocks'],
-    Array<string>
+    InfiniteData<PaginatedResponse<string>>
   >,
 };
 
@@ -457,7 +461,7 @@ const security = {
   root: ['security'] as const,
   oauthTokens: ['security', 'oauthTokens'] as TaggedKey<
     ['security', 'oauthTokens'],
-    Array<OauthToken>
+    InfiniteData<PaginatedResponse<OauthToken>>
   >,
 };
 
@@ -563,7 +567,10 @@ const draftStatuses = {
 
 const scheduledStatuses = {
   root: ['scheduledStatuses'] as const,
-  all: ['scheduledStatuses'] as TaggedKey<['scheduledStatuses'], Array<ScheduledStatus>>,
+  all: ['scheduledStatuses'] as TaggedKey<
+    ['scheduledStatuses'],
+    InfiniteData<PaginatedResponse<ScheduledStatus>>
+  >,
 };
 
 const interactionRequests = {
