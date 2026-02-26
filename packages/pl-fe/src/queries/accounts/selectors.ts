@@ -11,7 +11,7 @@ const getAccounts = (): Array<Account> =>
     .filter((account): account is Account => !!account && typeof account.id === 'string');
 
 const selectAccount = (accountId: string) =>
-  queryClient.getQueryData<Account>(queryKeys.accounts.show(accountId));
+  queryClient.getQueryData(queryKeys.accounts.show(accountId));
 
 const selectAccounts = (accountIds: Array<string>) =>
   accountIds

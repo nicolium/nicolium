@@ -10,7 +10,6 @@ import type {
   Poll as BasePoll,
   Relationship as BaseRelationship,
   Status as BaseStatus,
-  GroupRelationship,
 } from 'pl-api';
 
 const STATUS_IMPORT = 'STATUS_IMPORT' as const;
@@ -108,17 +107,14 @@ const importEntities =
 
     if (!isEmpty(accounts)) {
       for (const account of Object.values(accounts)) {
-        queryClient.setQueryData<BaseAccount>(queryKeys.accounts.show(account.id), account);
+        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
       }
     }
     if (!isEmpty(groups))
       for (const group of Object.values(groups)) {
-        queryClient.setQueryData<BaseGroup>(queryKeys.groups.show(group.id), group);
+        queryClient.setQueryData(queryKeys.groups.show(group.id), group);
         if (group.relationship) {
-          queryClient.setQueryData<GroupRelationship>(
-            queryKeys.groupRelationships.show(group.id),
-            group.relationship,
-          );
+          queryClient.setQueryData(queryKeys.groupRelationships.show(group.id), group.relationship);
         }
       }
     if (!isEmpty(polls)) {

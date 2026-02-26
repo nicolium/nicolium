@@ -22,14 +22,9 @@ type Embed = {
 const useEmbed = (url: string) => {
   const client = useClient();
 
-  const getEmbed = async () => {
-    const data = await client.oembed.getOembed(url);
-    return data;
-  };
-
   return useQuery<Embed>({
     queryKey: queryKeys.embed.show(url),
-    queryFn: getEmbed,
+    queryFn: () => client.oembed.getOembed(url),
   });
 };
 

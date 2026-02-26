@@ -8,8 +8,7 @@ import { queryKeys } from '@/queries/keys';
 import { compareDate } from './comparators';
 import { appendPageItem, flattenPages, sortQueryData, updatePageItem } from './queries';
 
-import type { InfiniteData } from '@tanstack/react-query';
-import type { Chat, PaginatedResponse } from 'pl-api';
+import type { Chat } from 'pl-api';
 
 /**
  * Update the Chat entity inside the ChatSearch query.
@@ -34,9 +33,7 @@ const reOrderChatListItems = () => {
  * @returns Boolean
  */
 const checkIfChatExists = (chatId: string) => {
-  const currentChats = flattenPages(
-    queryClient.getQueryData<InfiniteData<PaginatedResponse<Chat>>>(queryKeys.chats.search),
-  );
+  const currentChats = flattenPages(queryClient.getQueryData(queryKeys.chats.search));
 
   return currentChats?.find((chat: Chat) => chat.id === chatId);
 };
@@ -74,9 +71,7 @@ const updateChatListItem = (newChat: Chat) => {
 
 /** Get unread chats count. */
 const getUnreadChatsCount = (): number => {
-  const chats = flattenPages(
-    queryClient.getQueryData<InfiniteData<PaginatedResponse<Chat>>>(queryKeys.chats.search),
-  );
+  const chats = flattenPages(queryClient.getQueryData(queryKeys.chats.search));
 
   return sumBy(chats, (chat) => chat.unread);
 };

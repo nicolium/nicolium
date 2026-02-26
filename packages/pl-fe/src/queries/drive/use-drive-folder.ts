@@ -5,8 +5,6 @@ import { useFeatures } from '@/hooks/use-features';
 
 import { queryKeys } from '../keys';
 
-import type { DriveFolder } from 'pl-api';
-
 const useDriveFolderQuery = (folderId?: string) => {
   const client = useClient();
   const features = useFeatures();
@@ -45,9 +43,7 @@ const useUpdateDriveFolderMutation = (folderId: string) => {
   return useMutation({
     mutationKey: ['drive', 'folders'],
     mutationFn: (name: string) => {
-      const oldFolder = queryClient.getQueryData<DriveFolder>(
-        queryKeys.drive.folders.show(folderId),
-      );
+      const oldFolder = queryClient.getQueryData(queryKeys.drive.folders.show(folderId));
       if (oldFolder) {
         previousParentId = oldFolder.parent_id;
       } else {
@@ -76,9 +72,7 @@ const useDeleteDriveFolderMutation = (folderId: string) => {
   return useMutation({
     mutationKey: ['drive', 'folders'],
     mutationFn: () => {
-      const oldFolder = queryClient.getQueryData<DriveFolder>(
-        queryKeys.drive.folders.show(folderId),
-      );
+      const oldFolder = queryClient.getQueryData(queryKeys.drive.folders.show(folderId));
       if (oldFolder) {
         previousParentId = oldFolder.parent_id;
       } else {
@@ -110,9 +104,7 @@ const useMoveDriveFolderMutation = (folderId: string) => {
   return useMutation({
     mutationKey: ['drive', 'folders'],
     mutationFn: (targetFolderId?: string) => {
-      const oldFolder = queryClient.getQueryData<DriveFolder>(
-        queryKeys.drive.folders.show(folderId),
-      );
+      const oldFolder = queryClient.getQueryData(queryKeys.drive.folders.show(folderId));
       if (oldFolder) {
         previousParentId = oldFolder.parent_id;
       } else {

@@ -6,10 +6,10 @@ import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 
-import type { Scrobble as ScrobbleEntity } from 'pl-api';
+import type { MinifiedScrobble } from '@/queries/accounts/account-scrobble';
 
 interface IScrobble {
-  scrobble: ScrobbleEntity;
+  scrobble: MinifiedScrobble;
 }
 
 const Scrobble: React.FC<IScrobble> = ({ scrobble }) => {

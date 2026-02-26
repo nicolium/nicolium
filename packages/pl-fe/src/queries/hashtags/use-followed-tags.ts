@@ -6,7 +6,7 @@ import { queryClient } from '../client';
 import { queryKeys } from '../keys';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 
-const useFollowedTags = makePaginatedResponseQuery(['followedTags'], (client) =>
+const useFollowedTags = makePaginatedResponseQuery(queryKeys.followedTags.all, (client) =>
   client.myAccount.getFollowedTags(),
 );
 

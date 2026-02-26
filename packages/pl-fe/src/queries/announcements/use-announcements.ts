@@ -54,8 +54,8 @@ const useAnnouncements = () => {
       client.announcements.addAnnouncementReaction(announcementId, name),
     retry: false,
     onMutate: ({ announcementId: id, name }) => {
-      queryClient.setQueryData(queryKeys.announcements.all, (prevResult: Announcement[]) =>
-        prevResult.map((value) =>
+      queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
+        prevResult?.map((value) =>
           value.id !== id
             ? value
             : {
@@ -66,8 +66,8 @@ const useAnnouncements = () => {
       );
     },
     onError: (_, { announcementId: id, name }) => {
-      queryClient.setQueryData(queryKeys.announcements.all, (prevResult: Announcement[]) =>
-        prevResult.map((value) =>
+      queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
+        prevResult?.map((value) =>
           value.id !== id
             ? value
             : {
@@ -84,8 +84,8 @@ const useAnnouncements = () => {
       client.announcements.deleteAnnouncementReaction(announcementId, name),
     retry: false,
     onMutate: ({ announcementId: id, name }) => {
-      queryClient.setQueryData(queryKeys.announcements.all, (prevResult: Announcement[]) =>
-        prevResult.map((value) =>
+      queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
+        prevResult?.map((value) =>
           value.id !== id
             ? value
             : {
@@ -96,8 +96,8 @@ const useAnnouncements = () => {
       );
     },
     onError: (_, { announcementId: id, name }) => {
-      queryClient.setQueryData(queryKeys.announcements.all, (prevResult: Announcement[]) =>
-        prevResult.map((value) =>
+      queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
+        prevResult?.map((value) =>
           value.id !== id
             ? value
             : {

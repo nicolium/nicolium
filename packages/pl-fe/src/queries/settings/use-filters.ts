@@ -43,9 +43,7 @@ const useFilter = (filterId?: string) => {
     },
     enabled: !!filterId,
     placeholderData: () =>
-      queryClient
-        .getQueryData<Array<Filter>>(['filters'])
-        ?.find((filter) => filter.id === filterId),
+      queryClient.getQueryData(queryKeys.filters.all)?.find((filter) => filter.id === filterId),
   });
 };
 

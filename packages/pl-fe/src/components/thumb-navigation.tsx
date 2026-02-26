@@ -17,8 +17,6 @@ import { useModalsActions } from '@/stores/modals';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 import { isStandalone } from '@/utils/state';
 
-import type { Group } from 'pl-api';
-
 const messages = defineMessages({
   home: { id: 'column.home', defaultMessage: 'Home' },
   search: { id: 'column.search', defaultMessage: 'Search' },
@@ -48,7 +46,7 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
 
   const handleOpenComposeModal = () => {
     if (match?.params.groupId) {
-      const group = queryClient.getQueryData<Group>(queryKeys.groups.show(match.params.groupId));
+      const group = queryClient.getQueryData(queryKeys.groups.show(match.params.groupId));
       if (group) groupComposeModal(group);
     } else {
       openModal('COMPOSE');

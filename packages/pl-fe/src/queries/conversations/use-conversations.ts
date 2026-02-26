@@ -111,11 +111,9 @@ const useMarkConversationRead = (conversationId: string) => {
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: queryKeys.conversations.all });
 
-      const previous = queryClient.getQueryData<
-        InfiniteData<PaginatedResponse<MinifiedConversation>>
-      >(['conversations']);
+      const previous = queryClient.getQueryData(queryKeys.conversations.all);
 
-      updatePaginatedResponse<MinifiedConversation>(['conversations'], (items) =>
+      updatePaginatedResponse<MinifiedConversation>(queryKeys.conversations.all, (items) =>
         items.map((item) => (item.id === conversationId ? { ...item, unread: false } : item)),
       );
 

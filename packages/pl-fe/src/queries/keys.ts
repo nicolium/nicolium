@@ -1,8 +1,16 @@
+import { MinifiedInteractionRequest } from './statuses/use-interaction-requests';
+
+import type { MinifiedScrobble } from './accounts/account-scrobble';
 import type { FilterType } from './notifications/use-notifications';
+import type { DraftStatus } from './statuses/use-draft-statuses';
 import type { MinifiedStatusEdit } from './statuses/use-status-history';
 import type { MinifiedEmojiReaction } from './statuses/use-status-interactions';
 import type { MinifiedSuggestion } from './trends/use-suggested-accounts';
-import type { MinifiedAdminAccount, MinifiedAdminReport } from './utils/minify-list';
+import type {
+  MinifiedAdminAccount,
+  MinifiedAdminReport,
+  MinifiedConversation,
+} from './utils/minify-list';
 import type { ChatMessage } from '@/normalizers/chat-message';
 import type { DataTag, InfiniteData } from '@tanstack/react-query';
 import type {
@@ -10,16 +18,23 @@ import type {
   AdminAnnouncement,
   AdminCohort,
   AdminDimension,
+  AdminDimensionKey,
   AdminDomain,
   AdminGetAccountsParams,
   AdminGetDimensionsParams,
   AdminGetMeasuresParams,
   AdminGetReportsParams,
   AdminMeasure,
+  AdminMeasureKey,
   AdminModerationLogEntry,
   AdminRelay,
   AdminRule,
+  Announcement,
+  Antenna,
+  Backup,
+  BookmarkFolder,
   Chat,
+  Circle,
   CredentialAccount,
   CustomEmoji,
   DriveFile,
@@ -28,14 +43,18 @@ import type {
   Group,
   GroupRelationship,
   GroupRole,
+  InteractionPolicies,
+  List,
   Location,
   Marker,
   NotificationGroup,
   OauthToken,
   PaginatedResponse,
+  PlApiClient,
   Poll,
   Relationship,
   RssFeed,
+  ScheduledStatus,
   Tag,
   Translation,
   TrendsLink,
@@ -314,11 +333,16 @@ const admin = {
     ['admin', 'moderation_log'],
     InfiniteData<PaginatedResponse<AdminModerationLogEntry>>
   >,
-  dimensions: (keys: string[], params?: AdminGetDimensionsParams) => {
+  dimensions: (keys: Array<AdminDimensionKey>, params?: AdminGetDimensionsParams) => {
     const key = ['admin', 'dimensions', keys, params] as const;
     return key as TaggedKey<typeof key, Array<AdminDimension>>;
   },
-  measures: (keys: string[], startAt: string, endAt: string, params?: AdminGetMeasuresParams) => {
+  measures: (
+    keys: Array<AdminMeasureKey>,
+    startAt: string,
+    endAt: string,
+    params?: AdminGetMeasuresParams,
+  ) => {
     const key = ['admin', 'measures', keys, startAt, endAt, params] as const;
     return key as TaggedKey<typeof key, Array<AdminMeasure>>;
   },
@@ -388,22 +412,36 @@ const timelines = {
 
 const timelineIds = {
   root: ['timelineIds'] as const,
-  accountMedia: (accountId: string) =>
-    ['timelineIds', `account:${accountId}:with_replies:media`] as const,
-  groupMedia: (groupId: string) => ['timelineIds', `group:${groupId}:media`] as const,
+  accountMedia: (accountId: string) => {
+    const key = ['timelineIds', `account:${accountId}:with_replies:media`] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  groupMedia: (groupId: string) => {
+    const key = ['timelineIds', `group:${groupId}:media`] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
 };
 
 const settings = {
   root: ['settings'] as const,
-  mfa: ['settings', 'mfa'] as const,
-  backups: ['settings', 'backups'] as const,
-  accountAliases: ['settings', 'accountAliases'] as const,
-  domainBlocks: ['settings', 'domainBlocks'] as const,
+  mfa: ['settings', 'mfa'] as TaggedKey<
+    ['settings', 'mfa'],
+    Awaited<ReturnType<InstanceType<typeof PlApiClient>['settings']['mfa']['getMfaSettings']>>
+  >,
+  backups: ['settings', 'backups'] as TaggedKey<['settings', 'backups'], Array<Backup>>,
+  accountAliases: ['settings', 'accountAliases'] as TaggedKey<
+    ['settings', 'accountAliases'],
+    Array<string>
+  >,
+  domainBlocks: ['settings', 'domainBlocks'] as TaggedKey<
+    ['settings', 'domainBlocks'],
+    Array<string>
+  >,
 };
 
 const interactionPolicies = {
   root: ['interactionPolicies'] as const,
-  all: ['interactionPolicies'] as const,
+  all: ['interactionPolicies'] as TaggedKey<['interactionPolicies'], InteractionPolicies>,
 };
 
 const filters = {
@@ -443,72 +481,106 @@ const drive = {
 
 const hashtags = {
   root: ['hashtags'] as const,
-  show: (tag: string) => ['hashtags', tag] as const,
+  show: (tag: string) => {
+    const key = ['hashtags', tag] as const;
+    return key as TaggedKey<typeof key, Tag>;
+  },
 };
 
 const followedTags = {
   root: ['followedTags'] as const,
-  all: ['followedTags'] as const,
+  all: ['followedTags'] as TaggedKey<['followedTags'], InfiniteData<PaginatedResponse<Tag>>>,
 };
 
 const conversations = {
   root: ['conversations'] as const,
-  all: ['conversations'] as const,
+  all: ['conversations'] as TaggedKey<
+    ['conversations'],
+    InfiniteData<PaginatedResponse<MinifiedConversation>>
+  >,
 };
 
 const announcements = {
   root: ['announcements'] as const,
-  all: ['announcements'] as const,
+  all: ['announcements'] as TaggedKey<['announcements'], Array<Announcement>>,
 };
 
 const scrobbles = {
   root: ['scrobbles'] as const,
-  show: (accountId: string) => ['scrobbles', accountId] as const,
+  show: (accountId: string) => {
+    const key = ['scrobbles', accountId] as const;
+    return key as TaggedKey<typeof key, MinifiedScrobble | null>;
+  },
 };
 
 const lists = {
   root: ['lists'] as const,
-  all: ['lists'] as const,
-  forAccount: (accountId: string) => ['lists', 'forAccount', accountId] as const,
+  all: ['lists'] as TaggedKey<['lists'], Array<List>>,
+  forAccount: (accountId: string) => {
+    const key = ['lists', 'forAccount', accountId] as const;
+    return key as TaggedKey<typeof key, Array<List>>;
+  },
 };
 
 const circles = {
   root: ['circles'] as const,
-  all: ['circles'] as const,
+  all: ['circles'] as TaggedKey<['circles'], Array<Circle>>,
 };
 
 const antennas = {
   root: ['antennas'] as const,
-  all: ['antennas'] as TaggedKey<['antennas'], Array<string>>,
-  domains: (antennaId: string) => ['antennas', antennaId, 'domains'] as const,
-  keywords: (antennaId: string) => ['antennas', antennaId, 'keywords'] as const,
-  tags: (antennaId: string) => ['antennas', antennaId, 'tags'] as const,
+  all: ['antennas'] as TaggedKey<['antennas'], Array<Antenna>>,
+  domains: (antennaId: string) => {
+    const key = ['antennas', antennaId, 'domains'] as const;
+    return key as TaggedKey<typeof key, { domains: Array<string>; exclude_domains: Array<string> }>;
+  },
+  keywords: (antennaId: string) => {
+    const key = ['antennas', antennaId, 'keywords'] as const;
+    return key as TaggedKey<
+      typeof key,
+      { keywords: Array<string>; exclude_keywords: Array<string> }
+    >;
+  },
+  tags: (antennaId: string) => {
+    const key = ['antennas', antennaId, 'tags'] as const;
+    return key as TaggedKey<typeof key, { tags: Array<string>; exclude_tags: Array<string> }>;
+  },
 };
 
 const bookmarkFolders = {
   root: ['bookmarkFolders'] as const,
-  all: ['bookmarkFolders'] as const,
-  forStatus: (statusId: string) => ['bookmarkFolders', 'status', statusId] as const,
+  all: ['bookmarkFolders'] as TaggedKey<['bookmarkFolders'], Array<BookmarkFolder>>,
+  forStatus: (statusId: string) => {
+    const key = ['bookmarkFolders', 'status', statusId] as const;
+    return key as TaggedKey<typeof key, Array<BookmarkFolder>>;
+  },
 };
 
 const draftStatuses = {
   root: ['draftStatuses'] as const,
-  all: ['draftStatuses'] as const,
+  all: ['draftStatuses'] as TaggedKey<['draftStatuses'], Record<string, DraftStatus>>,
 };
 
 const scheduledStatuses = {
   root: ['scheduledStatuses'] as const,
-  all: ['scheduledStatuses'] as const,
+  all: ['scheduledStatuses'] as TaggedKey<['scheduledStatuses'], Array<ScheduledStatus>>,
 };
 
 const interactionRequests = {
   root: ['interactionRequests'] as const,
-  all: ['interactionRequests'] as const,
+  all: ['interactionRequests'] as TaggedKey<
+    ['interactionRequests'],
+    InfiniteData<PaginatedResponse<MinifiedInteractionRequest>>
+  >,
 };
 
 const embed = {
   root: ['embed'] as const,
-  show: (url: string) => ['embed', url] as const,
+  show: (url: string) =>
+    ['embed', url] as TaggedKey<
+      ['embed', string],
+      Awaited<ReturnType<PlApiClient['oembed']['getOembed']>>
+    >,
 };
 
 const rssFeedSubscriptions = {

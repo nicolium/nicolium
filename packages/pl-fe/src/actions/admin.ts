@@ -11,7 +11,7 @@ import { STATUS_FETCH_SOURCE_FAIL, type StatusesAction } from './statuses';
 import { deleteFromTimelines } from './timelines';
 
 import type { AppDispatch, RootState } from '@/store';
-import type { PleromaConfig, Poll } from 'pl-api';
+import type { PleromaConfig } from 'pl-api';
 
 const ADMIN_CONFIG_FETCH_SUCCESS = 'ADMIN_CONFIG_FETCH_SUCCESS' as const;
 
@@ -140,7 +140,7 @@ const redactStatus = (statusId: string) => (dispatch: AppDispatch, getState: () 
 
   const status = state.statuses[statusId];
   const poll = status.poll_id
-    ? queryClient.getQueryData<Poll>(queryKeys.statuses.polls.show(status.poll_id))
+    ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
     : undefined;
 
   return getClient(state)

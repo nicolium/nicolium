@@ -27,7 +27,7 @@ const updateRelationship = (
   changes: Partial<Relationship> | ((relationship: Relationship) => Relationship),
   queryClient: ReturnType<typeof useQueryClient>,
 ) => {
-  const previousRelationship = queryClient.getQueryData<Relationship>(
+  const previousRelationship = queryClient.getQueryData(
     queryKeys.accountRelationships.show(accountId),
   );
   if (!previousRelationship) return;

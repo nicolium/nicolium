@@ -24,13 +24,12 @@ import type {
   Announcement,
   AnnouncementReaction,
   FollowRelationshipUpdate,
-  Relationship,
   StreamingEvent,
 } from 'pl-api';
 
 const updateAnnouncementReactions = (reaction: AnnouncementReaction) => {
-  queryClient.setQueryData(queryKeys.announcements.all, (prevResult: Announcement[]) =>
-    prevResult.map((value) => {
+  queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
+    prevResult?.map((value) => {
       if (value.id !== reaction.announcement_id) return value;
 
       return {
@@ -42,7 +41,9 @@ const updateAnnouncementReactions = (reaction: AnnouncementReaction) => {
 };
 
 const updateAnnouncement = (announcement: Announcement) =>
-  queryClient.setQueryData(queryKeys.announcements.all, (prevResult: Announcement[]) => {
+  queryClient.setQueryData(queryKeys.announcements.all, (prevResult) => {
+    if (!prevResult) return;
+
     let updated = false;
 
     const result = prevResult.map((value) =>
@@ -53,8 +54,8 @@ const updateAnnouncement = (announcement: Announcement) =>
   });
 
 const deleteAnnouncement = (announcementId: string) =>
-  queryClient.setQueryData(queryKeys.announcements.all, (prevResult: Announcement[]) =>
-    prevResult.filter((value) => value.id !== announcementId),
+  queryClient.setQueryData(queryKeys.announcements.all, (prevResult) =>
+    prevResult?.filter((value) => value.id !== announcementId),
   );
 
 const followStateToRelationship = (followState: FollowRelationshipUpdate['state']) => {
@@ -77,7 +78,7 @@ const updateFollowRelationships =
     const me = state.me;
 
     if (update.follower.id === me) {
-      queryClient.setQueryData<Relationship>(
+      queryClient.setQueryData(
         queryKeys.accountRelationships.show(update.following.id),
         (relationship) =>
           relationship

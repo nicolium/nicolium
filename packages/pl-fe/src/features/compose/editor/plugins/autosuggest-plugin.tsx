@@ -47,7 +47,6 @@ import { $createMentionNode } from '../nodes/mention-node';
 
 import type { AutoSuggestion } from '@/components/autosuggest-input';
 import type { Emoji } from '@/features/emoji';
-import type { Account } from 'pl-api';
 
 type QueryMatch = {
   leadOffset: number;
@@ -318,7 +317,7 @@ const AutosuggestPlugin = ({
           (node as TextNode).setTextContent(`${suggestion} `);
           node.select();
         } else {
-          const account = queryClient.getQueryData<Account>(queryKeys.accounts.show(suggestion));
+          const account = queryClient.getQueryData(queryKeys.accounts.show(suggestion));
           if (account) replaceMatch($createMentionNode(account));
         }
       }

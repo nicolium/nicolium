@@ -95,8 +95,7 @@ const usePersistDraftStatus = () => {
       draft_id: compose.draftId ?? crypto.randomUUID(),
     };
 
-    const drafts =
-      queryClient.getQueryData<Record<string, DraftStatus>>(queryKeys.draftStatuses.all) ?? {};
+    const drafts = queryClient.getQueryData(queryKeys.draftStatuses.all) ?? {};
 
     const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
       oldDrafts[draft.draft_id] = v.parse(draftStatusSchema, draft);
@@ -108,8 +107,7 @@ const usePersistDraftStatus = () => {
 };
 
 const cancelDraftStatus = (queryClient: QueryClient, accountUrl: string, draftId: string) => {
-  const drafts =
-    queryClient.getQueryData<Record<string, DraftStatus>>(queryKeys.draftStatuses.all) ?? {};
+  const drafts = queryClient.getQueryData(queryKeys.draftStatuses.all) ?? {};
 
   const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
     delete oldDrafts[draftId];
