@@ -13,7 +13,8 @@ import {
 } from '../actions/me';
 
 import type { PlfeResponse } from '@/api';
-import type { Me } from '@/types/pl-fe';
+
+type Me = string | null | false;
 
 const initialState: Me = null;
 
@@ -42,4 +43,4 @@ const me = (state: Me = initialState, action: AuthAction | MeAction): Me => {
   }
 };
 
-export { me as default };
+export { me as default, type Me };

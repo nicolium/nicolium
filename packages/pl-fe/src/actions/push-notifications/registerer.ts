@@ -5,8 +5,8 @@ import { decode as decodeBase64 } from '@/utils/base64';
 
 import { setBrowserSupport, setSubscription, clearSubscription } from './setter';
 
+import type { Me } from '@/reducers/me';
 import type { AppDispatch, RootState } from '@/store';
-import type { Me } from '@/types/pl-fe';
 
 // Taken from https://www.npmjs.com/package/web-push
 const urlBase64ToUint8Array = (base64String: string) => {
