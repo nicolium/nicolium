@@ -105,7 +105,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
         for (const tag of hashtagNodes) {
           const text = tag.getTextContent();
 
-          if (text.length > 10 && text.toLowerCase() === text && !text.match(/[0-9]/)) {
+          if (text.length > 10 && text.toLowerCase() === text && !/[0-9]/.test(text)) {
             actions.updateCompose(composeId, (draft) => {
               draft.hashtagCasingSuggestion = text;
             });

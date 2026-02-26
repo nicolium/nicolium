@@ -190,7 +190,7 @@ const useCreateChatMessage = (chatId: string) => {
       // Snapshot the previous value
       const prevContent = variables.content;
       const prevChatMessages = queryClient.getQueryData(['chats', 'messages', variables.chatId]);
-      const pendingId = String(Number(new Date()));
+      const pendingId = String(Date.now());
 
       // Optimistically update to the new value
       queryClient.setQueryData(ChatKeys.chatMessages(variables.chatId), (prevResult: any) => {

@@ -15,7 +15,7 @@ const buildStatus = (account: Account, scheduledStatus: ScheduledStatus) => {
 
   const status = v.parse(statusSchema, {
     account,
-    content: scheduledStatus.params.text?.replace(
+    content: scheduledStatus.params.text?.replaceAll(
       new RegExp('\n', 'g'),
       '<br>',
     ) /* eslint-disable-line no-control-regex */,

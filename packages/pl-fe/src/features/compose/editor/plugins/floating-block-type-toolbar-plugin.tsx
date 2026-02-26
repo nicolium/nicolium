@@ -57,7 +57,6 @@ const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
     if (e.target.files?.length) {
       setDisabled(true);
 
-      // @ts-ignore
       dispatch(
         uploadFile(
           e.target.files.item(0) as File,

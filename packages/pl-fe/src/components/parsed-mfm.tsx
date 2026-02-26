@@ -26,12 +26,12 @@ const safeParseFloat = (str: unknown): number | null => {
 const validTime = (t: string | boolean | null | undefined) => {
   if (t === null || t === undefined) return null;
   if (typeof t === 'boolean') return null;
-  return t.match(/^-?[0-9.]+s$/) ? t : null;
+  return /^-?[0-9.]+s$/.test(t) ? t : null;
 };
 
 const validColor = (c: unknown): string | null => {
   if (typeof c !== 'string') return null;
-  return c.match(/^[0-9a-f]{3,6}$/i) ? c : null;
+  return /^[0-9a-f]{3,6}$/i.test(c) ? c : null;
 };
 
 interface IParsedMfm {
@@ -61,7 +61,7 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
       .map((token): React.JSX.Element | string | (React.JSX.Element | string)[] => {
         switch (token.type) {
           case 'text': {
-            let text = token.props.text.replace(/(\r\n|\n|\r)/g, '\n');
+            let text = token.props.text.replaceAll(/(\r\n|\n|\r)/g, '\n');
 
             if (speakAsCat) text = nyaize(text);
 

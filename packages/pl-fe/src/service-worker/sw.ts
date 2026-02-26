@@ -154,9 +154,9 @@ const formatMessage = (messageId: string, locale: string, values = {}): string =
 const htmlToPlainText = (html: string): string =>
   unescape(
     html
-      .replace(/<br\s*\/?>/g, '\n')
-      .replace(/<\/p><[^>]*>/g, '\n\n')
-      .replace(/<[^>]*>/g, ''),
+      .replaceAll(/<br\s*\/?>/g, '\n')
+      .replaceAll(/<\/p><[^>]*>/g, '\n\n')
+      .replaceAll(/<[^>]*>/g, ''),
   );
 
 /** ServiceWorker `push` event callback. */
@@ -218,7 +218,7 @@ const handlePush = (event: PushEvent) => {
           body,
           icon,
           tag: notification_id,
-          timestamp: Number(new Date()),
+          timestamp: Date.now(),
           data: { access_token, preferred_locale, url: '/notifications' },
         }),
       ),

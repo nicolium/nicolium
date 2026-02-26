@@ -723,10 +723,10 @@ const useSubmitCompose = (composeId: string) => {
       if (!preview) {
         const scheduledAt = compose.scheduledAt;
         if (scheduledAt) {
-          const fiveMinutesFromNow = new Date(new Date().getTime() + 300000);
+          const fiveMinutesFromNow = new Date(Date.now() + 300000);
           const valid =
             scheduledAt.getTime() > fiveMinutesFromNow.getTime() ||
-            (features.scheduledStatusesBackwards && scheduledAt.getTime() < new Date().getTime());
+            (features.scheduledStatusesBackwards && scheduledAt.getTime() < Date.now());
           if (!valid) {
             toast.error(messages.scheduleError);
             return;
@@ -760,12 +760,7 @@ const useSubmitCompose = (composeId: string) => {
         to = [
           ...new Set([
             ...to,
-            ...mentionsMatch.map((mention) =>
-              mention
-                .replace(/&#x20;/g, '')
-                .trim()
-                .slice(1),
-            ),
+            ...mentionsMatch.map((mention) => mention.replaceAll('&#x20;', '').trim().slice(1)),
           ]),
         ];
       }
@@ -808,7 +803,7 @@ const useSubmitCompose = (composeId: string) => {
       };
 
       if (compose.editedId) {
-        // @ts-ignore
+        // @ts-expect-error
         params.media_attributes = media.map((item) => {
           const focalPoint = (item.type === 'image' || item.type === 'gifv') && item.meta?.focus;
           const focus = focalPoint
@@ -860,7 +855,7 @@ const useSubmitCompose = (composeId: string) => {
         } catch {}
       } else {
         if (compose.redacting) {
-          // @ts-ignore
+          // @ts-expect-error
           params.overwrite = compose.redactingOverwrite;
         }
 

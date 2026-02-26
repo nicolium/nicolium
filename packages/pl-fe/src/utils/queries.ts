@@ -95,7 +95,7 @@ const sortQueryData = <T>(queryKey: QueryKey, comparator: (a: T, b: T) => number
     if (prevResult) {
       const nextResult = { ...prevResult };
       const flattenedQueryData = flattenPages(nextResult);
-      const sortedQueryData = flattenedQueryData?.sort(comparator);
+      const sortedQueryData = flattenedQueryData?.toSorted(comparator);
       const paginatedPages = paginateQueryData(sortedQueryData);
       const newPages = paginatedPages.map((page: T, idx: number) => ({
         ...prevResult.pages[idx],

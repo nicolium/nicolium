@@ -64,7 +64,7 @@ const ListItem: React.FC<IListItem> = ({
                 : childDescribedBy;
 
               return React.cloneElement(child, {
-                // @ts-ignore
+                // @ts-expect-error
                 id: domId,
                 'aria-labelledby': ariaLabelledBy,
                 'aria-describedby': ariaDescribedBy,

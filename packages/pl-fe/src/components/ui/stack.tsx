@@ -64,11 +64,11 @@ const Stack = React.forwardRef<HTMLDivElement, IStack>(
         className={clsx(
           'flex flex-col',
           {
-            // @ts-ignore
+            // @ts-expect-error
             [spaces[space]]: typeof space !== 'undefined',
-            // @ts-ignore
+            // @ts-expect-error
             [alignItemsOptions[alignItems]]: typeof alignItems !== 'undefined',
-            // @ts-ignore
+            // @ts-expect-error
             [justifyContentOptions[justifyContent]]: typeof justifyContent !== 'undefined',
             grow: grow,
           },

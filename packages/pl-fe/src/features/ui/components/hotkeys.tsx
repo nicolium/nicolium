@@ -217,7 +217,7 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
         });
 
         // Sort all matches by priority
-        matchCandidates.sort((a, b) => b.priority - a.priority);
+        matchCandidates.toSorted((a, b) => b.priority - a.priority);
 
         const bestMatchingHandler = matchCandidates.at(0)?.handler;
         if (bestMatchingHandler) {

@@ -39,7 +39,7 @@ const About: React.FC<IAbout> = ({ slug }) => {
               setLocale(defaultLocale);
             }}
           >
-            {/* @ts-ignore */}
+            {/* @ts-expect-error */}
             {languages[defaultLocale] ?? defaultLocale}
           </a>
         </li>
@@ -51,7 +51,7 @@ const About: React.FC<IAbout> = ({ slug }) => {
                 setLocale(locale);
               }}
             >
-              {/* @ts-ignore */}
+              {/* @ts-expect-error */}
               {languages[locale] ?? locale}
             </a>
           </li>

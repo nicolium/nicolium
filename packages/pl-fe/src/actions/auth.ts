@@ -132,7 +132,7 @@ const otpVerify =
   (code: string, mfa_token: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const app = state.auth.app;
-    const baseUrl = parseBaseURL(state.me) || BuildConfig.BACKEND_URL;
+    const baseUrl = parseBaseURL(state.me || undefined) || BuildConfig.BACKEND_URL;
     const client = new PlApiClient(baseUrl);
     return client.oauth
       .mfaChallenge({

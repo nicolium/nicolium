@@ -106,7 +106,7 @@ const dequeueTimeline =
 
     if (typeof expandFunc === 'function') {
       dispatch(clearTimeline(timelineId));
-      // @ts-ignore
+      // @ts-expect-error
       expandFunc();
     } else if (timelineId === 'home') {
       dispatch(clearTimeline(timelineId));
@@ -166,7 +166,7 @@ const deduplicateStatuses = (statuses: Array<BaseStatus>) => {
       reblogged.accounts.push(status.account);
       reblogged.id += ':' + status.id;
     } else if (
-      !deduplicatedStatuses.find(
+      !deduplicatedStatuses.some(
         (deduplicatedStatus) => deduplicatedStatus.reblog?.id === status.id,
       )
     ) {

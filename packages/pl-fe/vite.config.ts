@@ -160,7 +160,7 @@ const config = defineConfig(() => ({
       name: 'mock-api',
       configureServer(server) {
         server.middlewares.use((req, res, next) => {
-          if (/^\/api\//.test(req.url!)) {
+          if (req.url?.startsWith('/api')) {
             res.statusCode = 404;
             res.end('Not Found');
           } else {

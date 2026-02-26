@@ -79,11 +79,11 @@ const HStack = forwardRef<HTMLDivElement, IHStack>((props, ref) => {
       className={clsx(
         'flex',
         {
-          // @ts-ignore
+          // @ts-expect-error
           [alignItemsOptions[alignItems]]: typeof alignItems !== 'undefined',
-          // @ts-ignore
+          // @ts-expect-error
           [justifyContentOptions[justifyContent]]: typeof justifyContent !== 'undefined',
-          // @ts-ignore
+          // @ts-expect-error
           [spaces[space]]: typeof space !== 'undefined',
           grow: grow,
           'flex-wrap': wrap,

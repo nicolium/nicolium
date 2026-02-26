@@ -19,7 +19,7 @@ import { useCompose, useComposeActions } from '@/stores/compose';
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 import type { CreateStatusParams, InteractionPolicy } from 'pl-api';
 
-const MANAGABLE_VISIBILITIES = ['public', 'unlisted', 'private'];
+const MANAGABLE_VISIBILITIES = new Set(['public', 'unlisted', 'private']);
 
 interface ComposeInteractionPolicyModalProps {
   composeId: string;
@@ -35,7 +35,7 @@ const ComposeInteractionPolicyModal: React.FC<
   const { interactionPolicies: initial } = useInteractionPolicies();
   const compose = useCompose(composeId);
 
-  const canManageInteractionPolicies = MANAGABLE_VISIBILITIES.includes(compose.visibility);
+  const canManageInteractionPolicies = MANAGABLE_VISIBILITIES.has(compose.visibility);
 
   useEffect(() => {
     if (!canManageInteractionPolicies) {

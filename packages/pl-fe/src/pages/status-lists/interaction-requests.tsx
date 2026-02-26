@@ -296,15 +296,15 @@ const InteractionRequestsPage = () => {
 
   const handleMoveUp = (id: string) => {
     const elementIndex = data.findIndex((item) => item !== null && item.id === id) - 1;
-    _selectChild(elementIndex);
+    selectChild(elementIndex);
   };
 
   const handleMoveDown = (id: string) => {
     const elementIndex = data.findIndex((item) => item !== null && item.id === id) + 1;
-    _selectChild(elementIndex);
+    selectChild(elementIndex);
   };
 
-  const _selectChild = (index: number) => {
+  const selectChild = (index: number) => {
     const selector = `[data-index="${index}"] .focusable`;
     const element = document.querySelector<HTMLDivElement>(selector);
 

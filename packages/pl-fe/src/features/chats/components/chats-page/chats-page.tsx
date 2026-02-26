@@ -35,7 +35,7 @@ const ChatsPage: React.FC = () => {
 
   useLayoutEffect(() => {
     calculateHeight();
-  }, [containerRef.current]);
+  }, []);
 
   useEffect(() => {
     window.addEventListener('resize', calculateHeight);

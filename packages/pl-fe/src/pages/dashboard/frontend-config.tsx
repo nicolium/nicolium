@@ -177,7 +177,7 @@ const FrontendConfigEditor: React.FC = () => {
       if (path[0] === 'cryptoAddresses') {
         draft.cryptoAddresses = values;
       } else {
-        // @ts-ignore
+        // @ts-expect-error
         draft[path[0]][path[1]] = values;
       }
     });
@@ -191,7 +191,7 @@ const FrontendConfigEditor: React.FC = () => {
         if (path[0] === 'cryptoAddresses') {
           draft.cryptoAddresses.push(v.parse(cryptoAddressSchema, {}));
         } else {
-          // @ts-ignore
+          // @ts-expect-error
           draft[path[0]][path[1]].push(v.parse(schema, {}));
         }
       });
@@ -203,7 +203,7 @@ const FrontendConfigEditor: React.FC = () => {
       if (path[0] === 'cryptoAddresses') {
         draft.cryptoAddresses = draft.cryptoAddresses.filter((_, index) => index !== i);
       } else {
-        // @ts-ignore
+        // @ts-expect-error
         draft[path[0]][path[1]] = draft[path[0]][path[1]].filter((_, index) => index !== i);
       }
     });

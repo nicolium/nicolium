@@ -33,10 +33,10 @@ const getFilters = (state: Pick<RootState, 'filters'>, query: FilterContext) =>
   state.filters.filter(
     (filter) =>
       (!query?.contextType || filter.context.includes(toServerSideType(query.contextType))) &&
-      (filter.expires_at === null || Date.parse(filter.expires_at) > new Date().getTime()),
+      (filter.expires_at === null || Date.parse(filter.expires_at) > Date.now()),
   );
 
-const escapeRegExp = (string: string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
+const escapeRegExp = (string: string) => string.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
 
 const regexFromFilters = (filters: Array<Filter>) => {
   if (filters.length === 0) return null;

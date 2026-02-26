@@ -29,7 +29,8 @@ const messages = defineMessages({
 
 const BIG_EMOJI_LIMIT = 3;
 
-const parsePendingContent = (content: string) => escape(content).replace(/(?:\r\n|\r|\n)/g, '<br>');
+const parsePendingContent = (content: string) =>
+  escape(content).replaceAll(/(?:\r\n|\r|\n)/g, '<br>');
 
 const parseContent = (chatMessage: ChatMessageEntity) => {
   const content = chatMessage.content || '';

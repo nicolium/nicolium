@@ -201,13 +201,7 @@ const PrivacyDropdown: React.FC<IPrivacyDropdown> = ({ composeId, compact }) => 
 
   const valueOption = useMemo(
     () =>
-      [
-        options,
-        options
-          .filter((option) => option.items)
-          .map((option) => option.items)
-          .flat(),
-      ]
+      [options, options.filter((option) => option.items).flatMap((option) => option.items)]
         .flat()
         .find((item) => item!.value === value),
     [value, lists, circles],

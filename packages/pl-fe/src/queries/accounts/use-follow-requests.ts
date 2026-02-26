@@ -38,12 +38,10 @@ const makeUseFollowRequests = <T>(select: (data: InfiniteData<PaginatedResponse<
     'isLoggedIn',
   );
 
-const useFollowRequests = makeUseFollowRequests((data) =>
-  data.pages.map((page) => page.items).flat(),
-);
+const useFollowRequests = makeUseFollowRequests((data) => data.pages.flatMap((page) => page.items));
 
 const useFollowRequestsCount = makeUseFollowRequests(
-  (data) => data.pages.map((page) => page.items).flat().length,
+  (data) => data.pages.flatMap((page) => page.items).length,
 );
 
 const useOutgoingFollowRequests = makePaginatedResponseQuery(

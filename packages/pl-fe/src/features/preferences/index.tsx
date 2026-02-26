@@ -413,7 +413,7 @@ const Preferences = () => {
                   <a
                     className='underline'
                     href='https://hosted.weblate.org/projects/pl-fe/pl-fe/'
-                    rel='noopener'
+                    rel='noopener noreferrer'
                     target='_blank'
                   >
                     {children}

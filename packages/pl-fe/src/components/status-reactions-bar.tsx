@@ -77,9 +77,7 @@ const StatusReaction: React.FC<IStatusReaction> = ({
 
   let shortCode = reaction.name;
 
-  // @ts-ignore
   if (unicodeMapping[shortCode]?.shortcode) {
-    // @ts-ignore
     shortCode = unicodeMapping[shortCode].shortcode;
   }
 

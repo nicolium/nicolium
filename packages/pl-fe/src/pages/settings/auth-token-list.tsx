@@ -69,7 +69,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
             <HStack space={1} alignItems='center'>
               {token.app_name}
               {token.app_website && (
-                <a href={token.app_website} target='_blank' rel='noopener'>
+                <a href={token.app_website} target='_blank' rel='noopener noreferrer'>
                   <Icon
                     src={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
                     className='inline size-4 text-inherit'

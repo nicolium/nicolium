@@ -21,7 +21,7 @@ const buildStatus = (account: Account, draftStatus: DraftStatus) => {
   const status = v.parse(statusSchema, {
     id: 'draft',
     account,
-    content: draftStatus.text.replace(
+    content: draftStatus.text.replaceAll(
       new RegExp('\n', 'g'),
       '<br>',
     ) /* eslint-disable-line no-control-regex */,

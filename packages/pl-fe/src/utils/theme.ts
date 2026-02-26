@@ -8,7 +8,7 @@ const rgbToHsl = (value: Rgb): Hsl => {
   const r = value.r / 255;
   const g = value.g / 255;
   const b = value.b / 255;
-  const rgbOrdered = [r, g, b].sort();
+  const rgbOrdered = [r, g, b].toSorted();
   const l = ((rgbOrdered[0] + rgbOrdered[2]) / 2) * 100;
   let s, h;
   if (rgbOrdered[0] === rgbOrdered[2]) {

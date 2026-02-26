@@ -191,7 +191,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
       }}
       href={href}
       title={trimmedTitle}
-      rel='noopener'
+      rel='noopener noreferrer'
       target='_blank'
       dir={direction}
     >
@@ -274,7 +274,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
                     }}
                     href={href}
                     target='_blank'
-                    rel='noopener'
+                    rel='noopener noreferrer'
                     className='text-gray-700 hover:text-gray-900 dark:text-gray-200 dark:hover:text-gray-100'
                     title={intl.formatMessage(messages.externalLink)}
                   >
@@ -320,7 +320,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
       href={href}
       className={className}
       target='_blank'
-      rel='noopener'
+      rel='noopener noreferrer'
       ref={setRef}
       onClick={(e) => {
         e.stopPropagation();
@@ -370,7 +370,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
                           {linkBody}
                         </Link>
                       ) : (
-                        <a href={author.url} target='_blank' rel='noopener'>
+                        <a href={author.url} target='_blank' rel='noopener noreferrer'>
                           {linkBody}
                         </a>
                       )}
@@ -396,7 +396,7 @@ const trim = (text: string, len: number): string => {
     return text;
   }
 
-  return text.substring(0, cut) + (text.length > len ? '…' : '');
+  return text.slice(0, cut) + (text.length > len ? '…' : '');
 };
 
 export { PreviewCard as default };

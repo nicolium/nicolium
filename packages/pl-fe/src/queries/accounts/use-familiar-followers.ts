@@ -21,7 +21,7 @@ const useFamiliarFollowers = (accountId: string) => {
           for (const account of accounts) {
             queryClient.setQueryData(['accounts', account.id], account);
           }
-          accounts.map(({ id }) => id);
+          return accounts.map(({ id }) => id);
         }),
     enabled: isLoggedIn && features.familiarFollowers,
   });

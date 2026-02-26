@@ -56,14 +56,14 @@ const normalizeColors = (
   const normalizedColors = toTailwind({
     brandColor,
     accentColor,
-    // @ts-ignore
+    // @ts-expect-error
     colors,
   });
 
   return {
-    // @ts-ignore
+    // @ts-expect-error
     'gradient-start': normalizedColors.primary?.['500'],
-    // @ts-ignore
+    // @ts-expect-error
     'gradient-end': normalizedColors.accent?.['500'],
     ...normalizedColors,
   } as typeof normalizedColors;

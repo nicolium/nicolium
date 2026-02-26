@@ -67,6 +67,7 @@ const Reports: React.FC = () => {
                     value={[
                       account && (
                         <FormattedMessage
+                          key='account'
                           id='column.admin.reports.filter_message.account'
                           defaultMessage='from @{acct}'
                           values={{
@@ -76,6 +77,7 @@ const Reports: React.FC = () => {
                       ),
                       targetAccount && (
                         <FormattedMessage
+                          key='targetAccount'
                           id='column.admin.reports.filter_message.target_account'
                           defaultMessage='targeting @{acct}'
                           values={{

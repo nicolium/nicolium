@@ -14,7 +14,7 @@ const scheduledStatusesQueryOptions = makePaginatedResponseQueryOptions(
 
 const scheduledStatusesCountQueryOptions = infiniteQueryOptions({
   ...scheduledStatusesQueryOptions,
-  select: (data) => data.pages.map((page) => page.items).flat().length,
+  select: (data) => data.pages.flatMap((page) => page.items).length,
 });
 
 const cancelScheduledStatusMutationOptions = (scheduledStatusId: string) =>

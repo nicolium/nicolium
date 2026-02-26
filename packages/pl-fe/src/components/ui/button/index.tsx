@@ -126,7 +126,7 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, IButton>(
           ref={ref as React.ForwardedRef<HTMLAnchorElement>}
           href={href}
           target='_blank'
-          rel='noopener'
+          rel='noopener noreferrer'
         >
           {buttonChildren}
         </a>

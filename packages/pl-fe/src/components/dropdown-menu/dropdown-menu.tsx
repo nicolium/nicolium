@@ -128,7 +128,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
         e.stopPropagation();
       }
     },
-    [ref.current],
+    [],
   );
 
   const handleDocumentClick = useMemo(
@@ -138,7 +138,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
         event.stopPropagation();
       }
     },
-    [ref.current],
+    [],
   );
 
   useEffect(() => {
@@ -153,7 +153,7 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
       document.removeEventListener('touchend', handleDocumentClick);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [ref.current]);
+  }, []);
 
   const handleExitSubmenu: React.EventHandler<any> = (event) => {
     event.stopPropagation();

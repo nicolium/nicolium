@@ -21,7 +21,7 @@ import PollPreview from './poll-preview';
 import type { Status as StatusEntity } from '@/normalizers/status';
 
 const shouldHaveCard = (pendingStatus: StatusEntity) =>
-  Boolean(pendingStatus.content.match(/https?:\/\/\S*/));
+  Boolean(/https?:\/\/\S*/.test(pendingStatus.content));
 
 interface IPendingStatus {
   className?: string;

@@ -22,17 +22,17 @@ const isRtl = (text: string, confidence = 0.3): boolean => {
   }
 
   // Remove http(s), (s)ftp, ws(s), blob and smtp(s) links
-  text = text.replace(/(?:https?|ftp|sftp|ws|wss|blob|smtp|smtps):\/\/[\S]+/g, '');
+  text = text.replaceAll(/(?:https?|ftp|sftp|ws|wss|blob|smtp|smtps):\/\/[\S]+/g, '');
   // Remove email address links
-  text = text.replace(/(mailto:)([^\s@]+@[^\s@]+\.[^\s@]+)/g, '');
+  text = text.replaceAll(/(mailto:)([^\s@]+@[^\s@]+\.[^\s@]+)/g, '');
   // Remove phone number links
-  text = text.replace(/(tel:)([+\d\s()-]+)/g, '');
+  text = text.replaceAll(/(tel:)([+\d\s()-]+)/g, '');
   // Remove mentions
-  text = text.replace(/(?:^|[^/\w])@([a-z0-9_]+(@[a-z0-9.-]+)?)/gi, '');
+  text = text.replaceAll(/(?:^|[^/\w])@([a-z0-9_]+(@[a-z0-9.-]+)?)/gi, '');
   // Remove hashtags
-  text = text.replace(/(?:^|[^/\w])#([\S]+)/gi, '');
+  text = text.replaceAll(/(?:^|[^/\w])#([\S]+)/gi, '');
   // Remove all non-word characters
-  text = text.replace(/\s+/g, '');
+  text = text.replaceAll(/\s+/g, '');
 
   const matches = text.match(rtlChars);
 

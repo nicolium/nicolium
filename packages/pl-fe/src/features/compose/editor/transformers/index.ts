@@ -24,7 +24,7 @@ const IMAGE_TRANSFORMER: TextMatchTransformer = {
     if ($isImageNode(node)) {
       const src = node.getSrc();
       const alt = node.getAltText();
-      return `![${alt.replace(/([[\]])/g, '\\$1')}](${src})`;
+      return `![${alt.replaceAll(/([[\]])/g, '\\$1')}](${src})`;
     }
     return null;
   },

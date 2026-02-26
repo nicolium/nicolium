@@ -32,21 +32,17 @@ const AnimatedTabs: React.FC<IAnimatedTabs> = ({ children, ...rest }) => {
   const ref = React.useRef<any>(null);
   const rect = useRect(ref);
 
-  // @ts-ignore
+  // @ts-expect-error
   const top: number = (activeRect && activeRect.bottom) - (rect && rect.top);
-  // @ts-ignore
+  // @ts-expect-error
   const width: number = activeRect && activeRect.width - HORIZONTAL_PADDING * 2;
-  // @ts-ignore
+  // @ts-expect-error
   const left: number = (activeRect && activeRect.left) - (rect && rect.left) + HORIZONTAL_PADDING;
 
   return (
-    // @ts-ignore
+    // @ts-expect-error
     <AnimatedContext.Provider value={setActiveRect}>
-      <ReachTabs
-        {...rest}
-        // @ts-ignore
-        ref={ref}
-      >
+      <ReachTabs {...rest} ref={ref}>
         <div className='absolute h-[3px] w-full bg-primary-200 dark:bg-gray-800' style={{ top }} />
         <div
           className={clsx('absolute h-[3px] bg-primary-500 transition-all duration-200', {
@@ -89,15 +85,12 @@ const AnimatedTab: React.FC<IAnimatedTab> = ({ index, ...props }) => {
   // callup to set styles whenever we're active
   React.useLayoutEffect(() => {
     if (isSelected) {
-      // @ts-ignore
+      // @ts-expect-error
       setActiveRect(rect);
     }
   }, [isSelected, rect, setActiveRect]);
 
-  return (
-    // @ts-ignore
-    <ReachTab ref={ref} {...props} />
-  );
+  return <ReachTab ref={ref} {...props} />;
 };
 
 /** Structure to represent a tab. */
@@ -147,7 +140,7 @@ const Tabs = ({ items, activeItem }: ITabs) => {
         key={name}
         as='button'
         role='button'
-        // @ts-ignore
+        // @ts-expect-error
         title={title}
         index={idx}
       >

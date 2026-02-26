@@ -108,7 +108,7 @@ const useAnnouncements = () => {
   });
 
   return {
-    data: data ? [...data].sort(compareAnnouncements) : undefined,
+    data: data?.toSorted(compareAnnouncements),
     ...result,
     addReaction,
     removeReaction,

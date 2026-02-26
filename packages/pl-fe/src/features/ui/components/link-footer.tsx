@@ -25,7 +25,7 @@ const LinkFooter: React.FC = (): React.JSX.Element => {
             values={{
               code_name: sourceCode.displayName,
               code_link: (
-                <a href={sourceCode.url} rel='noopener' target='_blank'>
+                <a href={sourceCode.url} rel='noopener noreferrer' target='_blank'>
                   {sourceCode.repository}
                 </a>
               ),

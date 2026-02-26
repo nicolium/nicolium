@@ -53,7 +53,7 @@ const TagInput: React.FC<ITagInput> = ({ tags, onChange, placeholder }) => {
         wrap
       >
         {tags.map((tag, i) => (
-          <div className='mb-2'>
+          <div key={tag} className='mb-2'>
             <Tag tag={tag} onDelete={handleTagDelete} />
           </div>
         ))}

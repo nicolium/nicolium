@@ -126,7 +126,7 @@ const getLanguageDropdown =
 
     const search = (value: string) => {
       if (value === '') {
-        return [...languages].sort((a, b) => {
+        return languages.toSorted((a, b) => {
           // Push current selection to the top of the list
 
           if (a[0] in textMap) {
@@ -168,13 +168,13 @@ const getLanguageDropdown =
 
     useEffect(() => {
       if (!language) input.current?.focus();
-    }, [input.current]);
+    }, []);
 
     useEffect(() => {
       if (node.current) {
         (node.current?.querySelector('button[aria-selected=true]') as HTMLButtonElement)?.focus();
       }
-    }, [node.current]);
+    }, []);
 
     const isSearching = searchValue !== '';
 

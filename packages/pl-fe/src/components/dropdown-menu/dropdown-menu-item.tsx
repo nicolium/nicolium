@@ -116,7 +116,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
     if (itemRef.current && (autoFocus ? firstItem : item?.active)) {
       itemRef.current.focus({ preventScroll: true });
     }
-  }, [itemRef.current, index]);
+  }, [index]);
 
   if (item === null) {
     return <hr />;

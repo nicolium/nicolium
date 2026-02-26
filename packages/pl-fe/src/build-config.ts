@@ -15,7 +15,7 @@ const env = compileTime(() => {
   };
 
   const sanitizeBasename = (path: string | undefined = ''): string =>
-    `/${path.replace(/^\/+|\/+$/g, '')}`;
+    `/${path.replaceAll(/^\/+|\/+$/g, '')}`;
 
   return {
     NODE_ENV: NODE_ENV ?? 'development',

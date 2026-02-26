@@ -79,8 +79,8 @@ const ReportStatuses: React.FC<IReportStatuses> = ({ statusIds }) => {
       )}
       <ReactSwipeableViews animateHeight index={index} onChangeIndex={handleChangeIndex}>
         {statusIds.map((statusId) => (
-          <div className='w-full'>
-            <StatusContainer key={statusId} id={statusId} />
+          <div className='w-full' key={statusId}>
+            <StatusContainer id={statusId} />
           </div>
         ))}
       </ReactSwipeableViews>

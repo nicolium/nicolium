@@ -21,7 +21,7 @@ const ReactionsBar: React.FC<IReactionsBar> = ({ announcementId, reactions, emoj
   const { addReaction } = useAnnouncements();
 
   const handleEmojiPick = (data: Emoji) => {
-    addReaction({ announcementId, name: (data as NativeEmoji).native.replace(/:/g, '') });
+    addReaction({ announcementId, name: (data as NativeEmoji).native.replaceAll(':', '') });
   };
 
   const visibleReactions = reactions.filter((x) => x.count > 0);

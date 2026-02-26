@@ -367,7 +367,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
 
       setWidth(offsetWidth);
     }
-  }, [node.current]);
+  }, []);
 
   const handleClick = (index: number) => {
     onOpenMedia(media, index);
@@ -655,7 +655,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
     if (compact) {
       return {
         style: {},
-        itemsDimensions: [...new Array(size)].map(() => ({
+        itemsDimensions: new Array(size).fill('').map(() => ({
           w: 'auto',
           h: 'auto',
           top: 'auto',

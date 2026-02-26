@@ -29,7 +29,7 @@ const Palette: React.FC<IPalette> = ({
   resetKey,
   allowTintChange = true,
 }) => {
-  const tints = Object.keys(palette).sort(compareId);
+  const tints = Object.keys(palette).toSorted(compareId);
 
   const [hue, setHue] = useState(0);
   const lastHue = usePrevious(hue);

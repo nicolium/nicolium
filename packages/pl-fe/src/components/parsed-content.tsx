@@ -29,7 +29,7 @@ const GREENTEXT_CLASS = 'dark:text-accent-green text-lime-600';
 const checkSuspiciousUrl = (url: string): boolean => {
   try {
     const { host } = new URL(url);
-    return /^verify\.form/.test(host);
+    return host.startsWith('verify.form');
   } catch (e) {
     return false;
   }
@@ -213,16 +213,16 @@ function parseContent(
   const options: HTMLReactParserOptions = {
     replace(domNode) {
       if (!(domNode instanceof Element)) {
-        // @ts-ignore
+        // @ts-expect-error
         domNode.preGreentext =
-          // @ts-ignore
+          // @ts-expect-error
           (!domNode.prev || domNode.prev.preGreentext) && !domNode.data.trim().length;
 
-        // @ts-ignore
+        // @ts-expect-error
         const data = domNode.prev?.preGreentext ? domNode.data.trim() : domNode.data;
-        // @ts-ignore
+        // @ts-expect-error
         if (greentext && (data.startsWith('>') || domNode.prev?.greentext)) {
-          // @ts-ignore
+          // @ts-expect-error
           domNode.greentext = true;
           return <span className={GREENTEXT_CLASS}>{transformText(domNode.data)}</span>;
         }
@@ -239,24 +239,24 @@ function parseContent(
       }
 
       if (domNode.attribs.class?.split(' ').includes('h-card')) {
-        // @ts-ignore
+        // @ts-expect-error
         domNode.preGreentext = !domNode.prev || domNode.prev.preGreentext;
       }
 
-      // @ts-ignore
+      // @ts-expect-error
       if (domNode.name !== 'br' && domNode.prev?.greentext) {
         domNode.attribs.class = `${domNode.attribs.class || ''} ${GREENTEXT_CLASS}`;
-        // @ts-ignore
+        // @ts-expect-error
         domNode.greentext = true;
       }
 
       if (domNode.name === 'a') {
         const classes = domNode.attribs.class?.split(' ');
 
-        // @ts-ignore
+        // @ts-expect-error
         if (domNode.prev?.greentext) {
           classes.push(GREENTEXT_CLASS);
-          // @ts-ignore
+          // @ts-expect-error
           domNode.greentext = true;
         }
 

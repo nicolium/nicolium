@@ -137,7 +137,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                       <a
                         href={actualStatus.url}
                         target='_blank'
-                        rel='noopener'
+                        rel='noopener noreferrer'
                         className='hover:underline'
                       >
                         <FormattedDate
@@ -157,7 +157,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                           <a
                             href={actualStatus.application.website ?? '#'}
                             target='_blank'
-                            rel='noopener'
+                            rel='noopener noreferrer'
                             className='hover:underline'
                             title={intl.formatMessage(messages.applicationName, {
                               name: actualStatus.application.name,
@@ -171,11 +171,9 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                       {actualStatus.edited_at && (
                         <>
                           <span className='⁂-separator' />
-                          <div
+                          <button
                             className='inline hover:underline'
                             onClick={handleOpenCompareHistoryModal}
-                            role='button'
-                            tabIndex={0}
                           >
                             <FormattedMessage
                               id='status.edited'
@@ -190,7 +188,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                                 }),
                               }}
                             />
-                          </div>
+                          </button>
                         </>
                       )}
                     </HStack>

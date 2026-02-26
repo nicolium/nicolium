@@ -60,7 +60,6 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): React.JSX.Element => {
     >
       {renderConnector()}
       {isLoaded ? (
-        // @ts-ignore FIXME
         <StatusContainer {...props} showGroup={false} />
       ) : (
         <PlaceholderStatus variant='default' />

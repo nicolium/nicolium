@@ -44,8 +44,8 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
     dispatch(logOut());
   };
 
-  const handleSwitchAccount = (account: AccountEntity) => () => {
-    dispatch(switchAccount(account.id));
+  const handleSwitchAccount = (otherAccount: AccountEntity) => () => {
+    dispatch(switchAccount(otherAccount.id));
   };
 
   const renderAccount = (account: AccountEntity) => (

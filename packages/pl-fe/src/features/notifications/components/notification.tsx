@@ -279,7 +279,7 @@ const getNotificationStatus = (
       'quoted_update',
     ].includes(n.type)
   )
-    // @ts-ignore
+    // @ts-expect-error
     return n.status;
   return null;
 };

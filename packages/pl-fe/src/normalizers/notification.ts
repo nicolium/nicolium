@@ -11,9 +11,9 @@ const normalizeNotification = (notification: BaseNotification): NotificationGrou
   page_max_id: notification.id,
   latest_page_notification_at: notification.created_at,
   sample_account_ids: [notification.account.id],
-  // @ts-ignore
+  // @ts-expect-error
   status_id: notification.status?.id,
-  // @ts-ignore
+  // @ts-expect-error
   target_id: notification.target?.id,
 });
 

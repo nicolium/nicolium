@@ -21,7 +21,7 @@ const IconPickerMenu: React.FC<IIconPickerMenu> = ({ icons, onPick }) => {
   useEffect(() => {
     const firstButton = containerNode.current?.querySelector('button') as HTMLButtonElement;
     firstButton?.focus();
-  }, [containerNode.current]);
+  }, []);
 
   const handleClick = (icon: string) => {
     onPick(icon);

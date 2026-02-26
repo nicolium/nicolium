@@ -166,14 +166,14 @@ const Video: React.FC<IVideo> = ({
 
   useLayoutEffect(() => {
     setDimensions();
-  }, [player.current]);
+  }, []);
 
   useEffect(() => {
     if (video.current) {
       setVolume(video.current.volume);
       setMuted(video.current.muted);
     }
-  }, [video.current]);
+  }, []);
 
   const handleClickRoot: React.MouseEventHandler = (e) => {
     e.stopPropagation();

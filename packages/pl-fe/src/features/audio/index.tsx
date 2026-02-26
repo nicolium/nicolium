@@ -308,7 +308,7 @@ const Audio: React.FC<IAudio> = (props) => {
 
   const _initAudioContext = () => {
     if (audio.current) {
-      // @ts-ignore
+      // @ts-expect-error
       // eslint-disable-next-line compat/compat
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       const context = new AudioContext();
@@ -420,20 +420,20 @@ const Audio: React.FC<IAudio> = (props) => {
     if (player.current) {
       _setDimensions();
     }
-  }, [player.current]);
+  }, []);
 
   useEffect(() => {
     if (audio.current) {
       setVolume(audio.current.volume);
       setMuted(audio.current.muted);
     }
-  }, [audio.current]);
+  }, []);
 
   useEffect(() => {
     if (canvas.current && visualizer.current) {
       visualizer.current.setCanvas(canvas.current);
     }
-  }, [canvas.current, visualizer.current]);
+  }, []);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
