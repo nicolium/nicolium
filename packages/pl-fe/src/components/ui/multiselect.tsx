@@ -171,7 +171,8 @@ const Multiselect: React.FC<IMultiselect> = ({
       switch (e.key) {
         case 'ArrowUp':
           e.preventDefault();
-          options[Math.max(index - 1, 0) as any]?.focus();
+          if (index === 0) searchBoxRef.current?.focus();
+          else options[Math.max(index - 1, 0) as any]?.focus();
           break;
         case 'ArrowDown':
           e.preventDefault();
