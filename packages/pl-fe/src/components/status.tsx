@@ -551,7 +551,7 @@ const Status: React.FC<IStatus> = (props) => {
         handlers={minHandlers}
         focusable={focusable}
         element='article'
-        lang={actualStatus.language}
+        lang={actualStatus.language || undefined}
       >
         {body}
       </Hotkeys>
@@ -667,7 +667,7 @@ const Status: React.FC<IStatus> = (props) => {
       handlers={handlers}
       focusable={focusable}
       element='article'
-      lang={actualStatus.language}
+      lang={actualStatus.language || undefined}
       data-testid='status'
     >
       {body}

@@ -248,7 +248,7 @@ const Thread = ({
                 deleted
               />
             ) : (
-              <Hotkeys handlers={handlers} element='article' lang={status.language}>
+              <Hotkeys handlers={handlers} element='article' lang={status.language || undefined}>
                 <div
                   ref={statusRef}
                   className='relative'
@@ -357,11 +357,16 @@ const Thread = ({
         'mt-2': !isModal,
       })}
     >
-      {status.account.local === false && (
-        <Helmet>
-          <meta content='noindex, noarchive' name='robots' />
-        </Helmet>
-      )}
+      <Helmet>
+        {status.spoiler_text && <meta property='og:title' content={status.spoiler_text} />}
+        <meta property='og:url' content={status.url} />
+        <meta name='author' content={status.account.display_name || status.account.acct} />
+        <meta property='article:author' content={status.account.url} />
+        <meta property='article:published_time' content={status.created_at} />
+        {status.edited_at && <meta property='article:modified_time' content={status.edited_at} />}
+
+        {status.account.local === false && <meta content='noindex, noarchive' name='robots' />}
+      </Helmet>
 
       <div
         ref={node}
