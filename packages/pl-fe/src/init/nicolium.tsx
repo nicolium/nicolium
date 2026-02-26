@@ -10,25 +10,25 @@ import { queryClient } from '@/queries/client';
 import { preload } from '../actions/preload';
 import { store } from '../store';
 
-import PlFeHead from './pl-fe-head';
-import PlFeLoad from './pl-fe-load';
-import PlFeMount from './pl-fe-mount';
+import NicoliumHead from './nicolium-head';
+import NicoliumLoad from './nicolium-load';
+import NicoliumMount from './nicolium-mount';
 
 // Preload happens synchronously
 store.dispatch(preload() as any);
 
 /** The root React node of the application. */
-const PlFe: React.FC = () => (
+const Nicolium: React.FC = () => (
   <>
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <DefaultCurrentAccountProvider>
           <StatProvider>
             <HelmetProvider>
-              <PlFeHead />
-              <PlFeLoad>
-                <PlFeMount />
-              </PlFeLoad>
+              <NicoliumHead />
+              <NicoliumLoad>
+                <NicoliumMount />
+              </NicoliumLoad>
             </HelmetProvider>
           </StatProvider>
         </DefaultCurrentAccountProvider>
@@ -37,4 +37,4 @@ const PlFe: React.FC = () => (
   </>
 );
 
-export { PlFe as default };
+export { Nicolium as default };

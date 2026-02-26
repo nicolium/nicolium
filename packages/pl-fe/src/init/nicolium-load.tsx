@@ -24,12 +24,12 @@ const loadInitial = () => async (dispatch: AppDispatch) => {
   await dispatch(loadFrontendConfig());
 };
 
-interface IPlFeLoad {
+interface INicoliumLoad {
   children: React.ReactNode;
 }
 
 /** Initial data loader. */
-const PlFeLoad: React.FC<IPlFeLoad> = ({ children }) => {
+const NicoliumLoad: React.FC<INicoliumLoad> = ({ children }) => {
   const dispatch = useAppDispatch();
 
   const me = useAppSelector((state) => state.me);
@@ -77,4 +77,4 @@ const PlFeLoad: React.FC<IPlFeLoad> = ({ children }) => {
   );
 };
 
-export { PlFeLoad as default };
+export { NicoliumLoad as default };

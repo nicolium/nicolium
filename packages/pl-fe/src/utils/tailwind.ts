@@ -3,7 +3,7 @@ import { generateAccent, generateNeutral } from '@/utils/theme';
 
 import type { TailwindColorPalette } from '@/types/colors';
 
-type PlFeColors = Record<string, Record<string, string>>;
+type FrontendColors = Record<string, Record<string, string>>;
 
 /** Check if the value is a valid hex color */
 const isHex = (value: any): boolean => /^#([0-9A-F]{3}){1,2}$/i.test(value);
@@ -55,7 +55,7 @@ const toTailwind = (config: {
   accentColor: string | null;
   colors: Record<string, Record<string, string>>;
 }): Record<string, Record<string, string> | string> => {
-  const colors: PlFeColors = config.colors;
+  const colors: FrontendColors = config.colors;
   const basicColors = fromBasicColors(config);
 
   return {

@@ -13,7 +13,7 @@ import { useSettings } from '@/stores/settings';
 const Helmet = React.lazy(() => import('@/components/helmet'));
 
 /** Injects metadata into site head with Helmet. */
-const PlFeHead = () => {
+const NicoliumHead = () => {
   const locale = useLocale();
   const direction = useLocaleDirection(locale);
   const {
@@ -95,4 +95,4 @@ const PlFeHead = () => {
   );
 };
 
-export { PlFeHead as default };
+export { NicoliumHead as default };

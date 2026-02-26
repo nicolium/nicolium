@@ -47,11 +47,11 @@ const fetchFrontendConfig =
           dispatch(importFrontendConfig(data[key], host));
           return data[key];
         } else {
-          return dispatch(fetchPlFeJson(host));
+          return dispatch(fetchFrontendConfigJson(host));
         }
       });
     } else {
-      return dispatch(fetchPlFeJson(host));
+      return dispatch(fetchFrontendConfigJson(host));
     }
   };
 
@@ -69,7 +69,7 @@ const loadFrontendConfig = () => async (dispatch: AppDispatch, getState: () => R
   }
 };
 
-const fetchPlFeJson = (host: string | null) => (dispatch: AppDispatch) =>
+const fetchFrontendConfigJson = (host: string | null) => (dispatch: AppDispatch) =>
   staticFetch('/instance/pl-fe.json')
     .then(({ json: data }) => {
       if (!isObject(data)) throw 'pl-fe.json fetch failed';

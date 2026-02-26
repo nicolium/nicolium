@@ -4,7 +4,7 @@ import LoadingScreen from '@/components/loading-screen';
 import { RouterWithContext } from '@/features/ui/router';
 
 /** Highest level node with the Redux store. */
-const PlFeMount = () => {
+const NicoliumMount = () => {
   return (
     <Suspense fallback={<LoadingScreen />}>
       <RouterWithContext />
@@ -12,4 +12,4 @@ const PlFeMount = () => {
   );
 };
 
-export { PlFeMount as default };
+export { NicoliumMount as default };
