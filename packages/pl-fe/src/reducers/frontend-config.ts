@@ -9,7 +9,7 @@ import {
   FRONTEND_CONFIG_REQUEST_FAIL,
 } from '../actions/frontend-config';
 
-import type { FrontendConfig } from '@/normalizers/frontend-config';
+import type { FrontendConfig } from '@/schemas/frontend-config';
 import type { PleromaConfig } from 'pl-api';
 
 const initialState: Partial<FrontendConfig> = {};

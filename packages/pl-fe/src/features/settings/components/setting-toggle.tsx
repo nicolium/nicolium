@@ -3,7 +3,7 @@ import React from 'react';
 
 import Toggle from '@/components/ui/toggle';
 
-import type { Settings } from '@/schemas/pl-fe/settings';
+import type { Settings } from '@/schemas/frontend-settings';
 
 interface ISettingToggle {
   /** Unique identifier for the Toggle. */

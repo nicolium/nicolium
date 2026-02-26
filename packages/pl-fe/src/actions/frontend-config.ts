@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import * as v from 'valibot';
 
 import { getHost } from '@/actions/instance';
-import { frontendConfigSchema } from '@/normalizers/frontend-config';
+import { frontendConfigSchema } from '@/schemas/frontend-config';
 import KVStore from '@/storage/kv-store';
 import { useSettingsStore } from '@/stores/settings';
 

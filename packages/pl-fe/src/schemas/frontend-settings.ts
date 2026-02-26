@@ -2,7 +2,7 @@ import * as v from 'valibot';
 
 import { locales } from '@/messages';
 
-import { coerceObject } from '../utils';
+import { coerceObject } from './utils';
 
 const skinToneSchema = v.picklist([1, 2, 3, 4, 5, 6]);
 

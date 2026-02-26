@@ -17,7 +17,7 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { normalizeColors } from '@/hooks/use-theme-css';
-import { frontendConfigSchema } from '@/normalizers/frontend-config';
+import { frontendConfigSchema } from '@/schemas/frontend-config';
 import toast from '@/toast';
 import { download } from '@/utils/download';
 

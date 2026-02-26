@@ -1,4 +1,5 @@
 import type { MinifiedScrobble } from './accounts/account-scrobble';
+import type { ChatMessage } from './chats';
 import type { MinifiedGroupMember } from './groups/use-group-members';
 import type { FilterType } from './notifications/use-notifications';
 import type { DraftStatus } from './statuses/use-draft-statuses';
@@ -12,7 +13,6 @@ import type {
   MinifiedAdminReport,
   MinifiedConversation,
 } from './utils/minify-list';
-import type { ChatMessage } from '@/normalizers/chat-message';
 import type { DataTag, InfiniteData } from '@tanstack/react-query';
 import type {
   Account,

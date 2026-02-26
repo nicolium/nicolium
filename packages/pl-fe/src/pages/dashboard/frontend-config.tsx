@@ -33,7 +33,7 @@ import {
   frontendConfigSchema,
   promoPanelItemSchema,
   type FrontendConfig,
-} from '@/normalizers/frontend-config';
+} from '@/schemas/frontend-config';
 import toast from '@/toast';
 
 const messages = defineMessages({

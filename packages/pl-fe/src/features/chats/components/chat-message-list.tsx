@@ -10,11 +10,14 @@ import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import PlaceholderChatMessage from '@/features/placeholder/components/placeholder-chat-message';
 import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
-import { useChatMessages, useMarkChatAsRead } from '@/queries/chats';
+import {
+  useChatMessages,
+  useMarkChatAsRead,
+  type ChatMessage as ChatMessageEntity,
+} from '@/queries/chats';
 
 import ChatMessage from './chat-message';
 
-import type { ChatMessage as ChatMessageEntity } from '@/normalizers/chat-message';
 import type { Chat } from 'pl-api';
 
 const messages = defineMessages({

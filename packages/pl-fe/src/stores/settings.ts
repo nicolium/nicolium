@@ -4,7 +4,7 @@ import * as v from 'valibot';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
-import { settingsSchema, type Settings } from '@/schemas/pl-fe/settings';
+import { settingsSchema, type Settings } from '@/schemas/frontend-settings';
 import KVStore from '@/storage/kv-store';
 import toast from '@/toast';
 import {

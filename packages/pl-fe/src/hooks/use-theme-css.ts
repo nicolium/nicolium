@@ -6,7 +6,7 @@ import { generateAccent, generateThemeCss } from '@/utils/theme';
 
 import { useFrontendConfig } from './use-frontend-config';
 
-import type { FrontendConfig } from '@/normalizers/frontend-config';
+import type { FrontendConfig } from '@/schemas/frontend-config';
 
 const DEFAULT_COLORS = {
   success: {

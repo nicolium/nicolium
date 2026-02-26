@@ -5,7 +5,7 @@ import HStack from '@/components/ui/hstack';
 import Input from '@/components/ui/input';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
-import type { FooterItem } from '@/normalizers/frontend-config';
+import type { FooterItem } from '@/schemas/frontend-config';
 
 const messages = defineMessages({
   label: {

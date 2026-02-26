@@ -1,5 +1,5 @@
 import type { Status } from '@/normalizers/status';
-import type { Settings } from '@/schemas/pl-fe/settings';
+import type { Settings } from '@/schemas/frontend-settings';
 
 const shouldFilter = (
   status: Pick<Status, 'in_reply_to_id' | 'visibility' | 'reblog_id'>,

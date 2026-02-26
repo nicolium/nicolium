@@ -1,6 +1,6 @@
 import sumBy from 'lodash/sumBy';
 
-import { normalizeChatMessage } from '@/normalizers/chat-message';
+import { normalizeChatMessage } from '@/queries/chats';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 

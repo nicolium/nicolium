@@ -1,5 +1,6 @@
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import 'intl-pluralrules';
+import omit from 'lodash/omit';
 import { useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -12,7 +13,6 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
-import { normalizeNotification } from '@/normalizers/notification';
 import { appendFollowRequest } from '@/queries/accounts/use-follow-requests';
 import { queryClient } from '@/queries/client';
 import { makePaginatedResponseQueryOptions } from '@/queries/utils/make-paginated-response-query-options';
@@ -42,6 +42,21 @@ const FILTER_TYPES = {
 } as const;
 
 type FilterType = keyof typeof FILTER_TYPES;
+
+const normalizeNotification = (notification: Notification): NotificationGroup => ({
+  ...omit(notification, ['account', 'status', 'target']),
+  group_key: notification.id,
+  notifications_count: 1,
+  most_recent_notification_id: notification.id,
+  page_min_id: notification.id,
+  page_max_id: notification.id,
+  latest_page_notification_at: notification.created_at,
+  sample_account_ids: [notification.account.id],
+  // @ts-expect-error
+  status_id: notification.status?.id,
+  // @ts-expect-error
+  target_id: notification.target?.id,
+});
 
 const useActiveFilter = () =>
   useSettingsStore((state) => state.settings.notifications.quickFilter.active);

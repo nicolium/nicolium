@@ -21,13 +21,23 @@ import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { type ChatMessage, normalizeChatMessage } from '@/normalizers/chat-message';
 import { reOrderChatListItems } from '@/utils/chats';
 import { flattenPages, updatePageItem } from '@/utils/queries';
 
 import { useRelationshipQuery } from './accounts/use-relationship';
 import { queryClient } from './client';
 import { queryKeys } from './keys';
+
+const normalizeChatMessage = (
+  chatMessage: BaseChatMessage & { pending?: boolean; deleting?: boolean },
+) => ({
+  type: 'message' as const,
+  pending: false,
+  deleting: false,
+  ...chatMessage,
+});
+
+type ChatMessage = ReturnType<typeof normalizeChatMessage>;
 
 const useChatMessages = (chat: Chat) => {
   const client = useClient();
@@ -270,6 +280,7 @@ const useDeleteChatMessage = (chatId: string) => {
 };
 
 export {
+  normalizeChatMessage,
   useChat,
   useMarkChatAsRead,
   useCreateChatMessage,
@@ -277,4 +288,5 @@ export {
   useDeleteChatMessage,
   useChats,
   useChatMessages,
+  type ChatMessage,
 };

@@ -7,7 +7,7 @@ import BackgroundShapes from '@/features/ui/components/background-shapes';
 import { useSystemTheme } from '@/hooks/use-system-theme';
 import { useThemeCss } from '@/hooks/use-theme-css';
 
-import type { FrontendConfig } from '@/normalizers/frontend-config';
+import type { FrontendConfig } from '@/schemas/frontend-config';
 
 interface ISitePreview {
   /** Raw pl-fe configuration. */
