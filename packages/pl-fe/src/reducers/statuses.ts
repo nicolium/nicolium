@@ -52,26 +52,10 @@ type MinifiedStatus = ReturnType<typeof minifyStatus>;
 
 const minifyStatus = (status: StatusRecord) => omit(status, ['reblog', 'poll', 'quote', 'group']);
 
-// Check whether a status is a quote by secondary characteristics
-const isQuote = (status: StatusRecord) => Boolean(status.quote_url);
-
-// Preserve quote if an existing status already has it
-const fixQuote = (status: StatusRecord, oldStatus?: StatusRecord): StatusRecord => {
-  if (oldStatus && !status.quote && isQuote(status)) {
-    return {
-      ...status,
-      quote: oldStatus.quote,
-      quote_visible: status.quote_visible ?? oldStatus.quote_visible,
-    };
-  } else {
-    return status;
-  }
-};
-
 const fixStatus = (state: State, status: BaseStatus): MinifiedStatus => {
   const oldStatus = state[status.id];
 
-  return minifyStatus(fixQuote(normalizeStatus(status, oldStatus)));
+  return minifyStatus(normalizeStatus(status, oldStatus));
 };
 
 const importStatus = (state: State, status: BaseStatus) => {
