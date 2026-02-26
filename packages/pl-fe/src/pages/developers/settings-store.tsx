@@ -107,7 +107,7 @@ const SettingsStore: React.FC = () => {
           hint={
             <FormattedMessage
               id='preferences.fields.demo_hint'
-              defaultMessage='Use the default pl-fe logo and color scheme. Useful for taking screenshots.'
+              defaultMessage='Use the default Nicolium logo and color scheme. Useful for taking screenshots.'
             />
           }
         >

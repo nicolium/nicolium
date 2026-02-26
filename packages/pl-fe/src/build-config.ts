@@ -1,6 +1,6 @@
 /**
  * Build config: configuration set at build time.
- * @module pl-fe/build-config
+ * @module @/build-config
  */
 
 const env = compileTime(() => {

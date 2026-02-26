@@ -19,7 +19,7 @@ import type { CredentialApplication, Token } from 'pl-api';
 
 const messages = defineMessages({
   heading: { id: 'column.app_create', defaultMessage: 'Create app' },
-  namePlaceholder: { id: 'app_create.name_placeholder', defaultMessage: "e.g. 'pl-fe'" },
+  namePlaceholder: { id: 'app_create.name_placeholder', defaultMessage: "e.g. 'Nicolium'" },
   scopesPlaceholder: {
     id: 'app_create.scopes_placeholder',
     defaultMessage: "e.g. 'read write follow'",

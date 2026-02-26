@@ -35,7 +35,7 @@ const rememberFrontendConfig = (host: string | null) => (dispatch: AppDispatch) 
 const fetchFrontendConfigurations = () => (dispatch: AppDispatch, getState: () => RootState) =>
   getClient(getState).instance.getFrontendConfigurations();
 
-/** Conditionally fetches pl-fe config depending on backend features */
+/** Conditionally fetches Nicolium config depending on backend features */
 const fetchFrontendConfig =
   (host: string | null) => (dispatch: AppDispatch, getState: () => RootState) => {
     const features = getState().auth.client.features;

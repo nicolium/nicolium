@@ -1,7 +1,7 @@
 /**
  * Security: Pleroma-specific account management features.
- * @module pl-fe/actions/security
- * @see module:pl-fe/actions/auth
+ * @module @/actions/security
+ * @see module:@/actions/auth
  */
 
 import { getClient } from '@/api';

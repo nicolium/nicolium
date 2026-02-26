@@ -103,7 +103,7 @@ const frontendConfigSchema = coerceObject({
             return '';
           }
         } catch (e) {
-          console.error('You have configured an invalid redirect in pl-fe Config.');
+          console.error('You have configured an invalid redirect in Nicolium Config.');
           console.error(e);
           return '';
         }

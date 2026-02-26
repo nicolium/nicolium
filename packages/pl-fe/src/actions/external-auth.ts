@@ -1,9 +1,9 @@
 /**
  * External Auth: workflow for logging in to remote servers.
- * @module pl-fe/actions/external_auth
- * @see module:pl-fe/actions/auth
- * @see module:pl-fe/actions/apps
- * @see module:pl-fe/actions/oauth
+ * @module @/actions/external_auth
+ * @see module:@/actions/auth
+ * @see module:@/actions/apps
+ * @see module:@/actions/oauth
  */
 
 import { instanceSchema, PlApiClient, type Instance } from 'pl-api';

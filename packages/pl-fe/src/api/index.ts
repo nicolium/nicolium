@@ -1,6 +1,6 @@
 /**
  * API: HTTP client and utilities.
- * @module pl-fe/api
+ * @module @/api
  */
 import * as BuildConfig from '@/build-config';
 import { buildFullPath } from '@/utils/url';

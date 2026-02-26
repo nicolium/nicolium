@@ -1,6 +1,6 @@
 import type { Notification } from 'pl-api';
 
-/** Notification types known to pl-fe. */
+/** Notification types known to Nicolium. */
 const NOTIFICATION_TYPES = [
   'follow',
   'follow_request',

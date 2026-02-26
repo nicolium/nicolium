@@ -1,8 +1,8 @@
 /**
  * ForkAwesomeIcon: renders a ForkAwesome icon.
  * Full list: https://forkaweso.me/Fork-Awesome/icons/
- * @module pl-fe/components/fork_awesome_icon
- * @see pl-fe/components/icon
+ * @module @/components/fork_awesome_icon
+ * @see @/components/icon
  */
 
 import clsx from 'clsx';

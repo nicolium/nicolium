@@ -19,7 +19,7 @@ const GROUP_TAG = 'tag';
 // https://www.devextent.com/create-service-worker-typescript/
 declare const self: ServiceWorkerGlobalScope;
 
-/** pl-fe notification data from push event. */
+/** Nicolium notification data from push event. */
 interface NotificationData {
   access_token?: string;
   count?: number;

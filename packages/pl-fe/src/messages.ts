@@ -94,7 +94,7 @@ const locales = [
   'zh-TW',
 ] as const;
 
-/** pl-fe locales map */
+/** Nicolium locales map */
 const messages = locales.reduce(
   (acc, locale) => {
     acc[locale] = () => importMessagesWithCustom(locale);

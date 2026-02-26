@@ -1,10 +1,10 @@
 /**
  * Auth: login & registration workflow.
  * This file contains abstractions over auth concepts.
- * @module pl-fe/actions/auth
- * @see module:pl-fe/actions/apps
- * @see module:pl-fe/actions/oauth
- * @see module:pl-fe/actions/security
+ * @module @/actions/auth
+ * @see module:@/actions/apps
+ * @see module:@/actions/oauth
+ * @see module:@/actions/security
  */
 import {
   credentialAccountSchema,

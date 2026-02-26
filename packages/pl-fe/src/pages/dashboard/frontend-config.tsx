@@ -19,10 +19,10 @@ import Select from '@/components/ui/select';
 import Streamfield from '@/components/ui/streamfield';
 import Textarea from '@/components/ui/textarea';
 import Toggle from '@/components/ui/toggle';
-import CryptoAddressInput from '@/features/pl-fe-config/components/crypto-address-input';
-import FooterLinkInput from '@/features/pl-fe-config/components/footer-link-input';
-import PromoPanelInput from '@/features/pl-fe-config/components/promo-panel-input';
-import SitePreview from '@/features/pl-fe-config/components/site-preview';
+import CryptoAddressInput from '@/features/frontend-config/components/crypto-address-input';
+import FooterLinkInput from '@/features/frontend-config/components/footer-link-input';
+import PromoPanelInput from '@/features/frontend-config/components/promo-panel-input';
+import SitePreview from '@/features/frontend-config/components/site-preview';
 import ThemeSelector from '@/features/ui/components/theme-selector';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
@@ -38,7 +38,7 @@ import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.frontend_config', defaultMessage: 'Front-end configuration' },
-  saved: { id: 'frontend_config.saved', defaultMessage: 'pl-fe config saved!' },
+  saved: { id: 'frontend_config.saved', defaultMessage: 'Nicolium config saved!' },
   copyrightFooterLabel: {
     id: 'frontend_config.copyright_footer.meta_fields.label_placeholder',
     defaultMessage: 'Copyright footer',

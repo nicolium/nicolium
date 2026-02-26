@@ -10,7 +10,7 @@ import { useThemeCss } from '@/hooks/use-theme-css';
 import type { FrontendConfig } from '@/schemas/frontend-config';
 
 interface ISitePreview {
-  /** Raw pl-fe configuration. */
+  /** Raw Nicolium configuration. */
   frontendConfig: FrontendConfig;
 }
 
