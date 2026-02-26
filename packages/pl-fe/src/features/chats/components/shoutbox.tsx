@@ -18,7 +18,6 @@ interface IShoutbox {
 const Shoutbox: React.FC<IShoutbox> = ({ inputRef, className }) => {
   const [content, setContent] = useState<string>('');
   const [resetContentKey, setResetContentKey] = useState<number>(fileKeyGen());
-  const [errorMessage] = useState<string>();
 
   const { mutate: createShoutboxMessage } = useCreateShoutboxMessage();
 
@@ -80,7 +79,6 @@ const Shoutbox: React.FC<IShoutbox> = ({ inputRef, className }) => {
         value={content}
         onChange={handleContentChange}
         onSubmit={sendMessage}
-        errorMessage={errorMessage}
         resetContentKey={resetContentKey}
         disabled={!createShoutboxMessage}
       />

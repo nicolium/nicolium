@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { defineMessages, FormattedMessage, IntlShape, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Button from '@/components/ui/button';
 import Combobox, {
@@ -59,7 +59,7 @@ interface IChatComposer extends Pick<
   value: string;
   onSubmit: () => void;
   errorMessage: string | undefined;
-  onSelectFile: (files: FileList, intl: IntlShape) => void;
+  onSelectFile: (files: FileList) => void;
   resetFileKey: number | null;
   resetContentKey: number | null;
   attachment?: MediaAttachment | null;
