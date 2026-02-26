@@ -1437,7 +1437,6 @@
   "frontend_config.hints.logo": "SVG. Taille maximale de 2 MB. Sera affiché avec une hauteur de 50 pixels, en conservant le rapport hauteur/largeur",
   "frontend_config.hints.logo_dark": "Format SVG ou PNG. Taille de 2 Mo maximum. Utilisé en mode sombre",
   "frontend_config.hints.promo_panel_fields": "Vous pouvez afficher des liens personnalisés dans le menu de droite de la page du fil d’actualités.",
-  "frontend_config.hints.promo_panel_icons.link": "Soapbox Icons List",
   "frontend_config.home_footer.meta_fields.label_placeholder": "Label",
   "frontend_config.home_footer.meta_fields.url_placeholder": "URL",
   "frontend_config.media_preview_hint": "Certains backends offrent une version optimisée de médias pour l’affichage dans les délais. Cependant, ces images de prévisualisation peuvent être trop petites sans configuration supplémentaire.",

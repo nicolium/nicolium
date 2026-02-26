@@ -1334,7 +1334,6 @@
   "frontend_config.hints.logo": "எச்.வி.சி அல்லது பி.என்.சி. அதிகபட்சம் 2 எம்பி. விகித விகிதத்தை பராமரிக்கும், 50px உயரத்திற்கு காண்பிக்கப்படும்",
   "frontend_config.hints.logo_dark": "எச்.வி.சி அல்லது பி.என்.சி. அதிகபட்சம் 2 எம்பி. இருண்ட பயன்முறையில் இருக்கும்போது காண்பிக்கப்படும்",
   "frontend_config.hints.promo_panel_fields": "காலக்கெடு பக்கத்தின் வலது பேனலில் காண்பிக்கப்படும் தனிப்பயன் வரையறுக்கப்பட்ட இணைப்புகளை நீங்கள் கொண்டிருக்கலாம்.",
-  "frontend_config.hints.promo_panel_icons.link": "Soapbox Icons List",
   "frontend_config.home_footer.meta_fields.label_placeholder": "சிட்டை",
   "frontend_config.home_footer.meta_fields.url_placeholder": "முகவரி",
   "frontend_config.media_preview_hint": "சில பின்தளத்தில் காலக்கெடுவில் காட்சிக்கு மீடியாவின் உகந்த பதிப்பை வழங்குகின்றன. இருப்பினும், இந்த முன்னோட்ட படங்கள் கூடுதல் உள்ளமைவு இல்லாமல் மிகச் சிறியதாக இருக்கலாம்.",

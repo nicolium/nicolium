@@ -216,7 +216,6 @@
   "aliases.success.remove": "Pseudonim je uspješno uklonjen",
   "announcements.title": "Najave",
   "app_create.name_label": "Naziv aplikacije",
-  "app_create.name_placeholder": "npr. 'Soapbox'",
   "app_create.redirect_uri_label": "Preusmjeravanje URI-ja",
   "app_create.restart": "Kreirajte drugi",
   "app_create.results.app_label": "Aplikacija",

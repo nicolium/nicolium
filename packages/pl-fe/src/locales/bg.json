@@ -1292,7 +1292,6 @@
   "frontend_config.hints.home_footer_fields": "",
   "frontend_config.hints.logo": "",
   "frontend_config.hints.promo_panel_fields": "",
-  "frontend_config.hints.promo_panel_icons.link": "Soapbox Icons List",
   "frontend_config.home_footer.meta_fields.label_placeholder": "Етикет",
   "frontend_config.home_footer.meta_fields.url_placeholder": "URL адрес",
   "frontend_config.media_preview_hint": "",
