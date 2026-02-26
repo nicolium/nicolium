@@ -1,7 +1,7 @@
 import { statusSchema, type Account } from 'pl-api';
 import * as v from 'valibot';
 
-import { normalizeStatus } from '@/normalizers/status';
+import { normalizeStatus } from '@/reducers/statuses';
 
 import type { DraftStatus } from '@/queries/statuses/use-draft-statuses';
 

@@ -14,7 +14,7 @@ import { getClient } from '../api';
 import { importEntities } from './importer';
 import { deleteFromTimelines } from './timelines';
 
-import type { Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/reducers/statuses';
 import type { AppDispatch, RootState } from '@/store';
 import type { CreateStatusParams, Status as BaseStatus, ScheduledStatus } from 'pl-api';
 import type { IntlShape } from 'react-intl';

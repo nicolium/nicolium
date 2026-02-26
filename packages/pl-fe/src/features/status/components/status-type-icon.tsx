@@ -3,7 +3,7 @@ import { defineMessages, type MessageDescriptor, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
 
-import type { Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/reducers/statuses';
 
 interface IStatusTypeIcon {
   visibility: Status['visibility'];

@@ -28,7 +28,7 @@ import { textForScreenReader } from '@/utils/status';
 import DetailedStatus from './detailed-status';
 import ThreadStatus from './thread-status';
 
-import type { Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/reducers/statuses';
 import type { SelectedStatus } from '@/selectors';
 import type { Account } from 'pl-api';
 import type { VirtuosoHandle } from 'react-virtuoso';

@@ -2,7 +2,7 @@ import { create } from 'mutative';
 import { statusSchema, type Account } from 'pl-api';
 import * as v from 'valibot';
 
-import { normalizeStatus } from '@/normalizers/status';
+import { normalizeStatus } from '@/reducers/statuses';
 
 import type { RootState } from '@/store';
 import type { PendingStatus } from '@/stores/pending-statuses';

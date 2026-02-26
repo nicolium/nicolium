@@ -1,6 +1,6 @@
 import { getClient } from '../api';
 
-import type { MinifiedStatus } from '@/reducers/statuses';
+import type { NormalizedStatus } from '@/reducers/statuses';
 import type { AppDispatch, RootState } from '@/store';
 import type { CreateAccountParams, Relationship } from 'pl-api';
 
@@ -16,7 +16,7 @@ const createAccount =
 type AccountsAction = {
   type: typeof ACCOUNT_BLOCK_SUCCESS | typeof ACCOUNT_MUTE_SUCCESS;
   relationship: Relationship;
-  statuses: Record<string, MinifiedStatus>;
+  statuses: Record<string, NormalizedStatus>;
 };
 
 export { ACCOUNT_BLOCK_SUCCESS, ACCOUNT_MUTE_SUCCESS, createAccount, type AccountsAction };

@@ -36,7 +36,7 @@ import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMetaActions } from '@/stores/status-meta';
 
-import type { Status as StatusEntity } from '@/normalizers/status';
+import type { NormalizedStatus as StatusEntity } from '@/reducers/statuses';
 import type { NotificationType } from '@/utils/notification';
 import type { Account, NotificationGroup } from 'pl-api';
 

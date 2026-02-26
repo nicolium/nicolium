@@ -2,7 +2,7 @@ import { useModalsStore } from '@/stores/modals';
 
 import { getClient } from '../api';
 
-import type { Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/reducers/statuses';
 import type { AppDispatch, RootState } from '@/store';
 import type { Account } from 'pl-api';
 

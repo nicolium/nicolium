@@ -10,8 +10,8 @@ import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 
-import type { Status as StatusEntity } from '@/normalizers/status';
 import type { DraftStatus } from '@/queries/statuses/use-draft-statuses';
+import type { NormalizedStatus as StatusEntity } from '@/reducers/statuses';
 
 const messages = defineMessages({
   deleteConfirm: { id: 'confirmations.draft_status_delete.confirm', defaultMessage: 'Discard' },

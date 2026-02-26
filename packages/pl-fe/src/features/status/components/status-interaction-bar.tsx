@@ -9,7 +9,7 @@ import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import { useModalsActions } from '@/stores/modals';
 
-import type { Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/reducers/statuses';
 
 interface IStatusInteractionBar {
   status: Pick<

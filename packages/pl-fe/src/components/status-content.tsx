@@ -27,7 +27,7 @@ import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
 import TranslateButton from './translate-button';
 
 import type { Sizes } from '@/components/ui/text';
-import type { MinifiedStatus } from '@/reducers/statuses';
+import type { NormalizedStatus } from '@/reducers/statuses';
 
 const BIG_EMOJI_LIMIT = 10;
 
@@ -53,7 +53,7 @@ const ReadMoreButton: React.FC<IReadMoreButton> = ({ onClick, preview }) => (
 );
 
 interface IStatusContent {
-  status: MinifiedStatus;
+  status: NormalizedStatus;
   onClick?: () => void;
   collapsable?: boolean;
   translatable?: boolean;

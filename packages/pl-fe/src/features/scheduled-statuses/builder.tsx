@@ -1,7 +1,7 @@
 import { statusSchema, type Account, type ScheduledStatus } from 'pl-api';
 import * as v from 'valibot';
 
-import { normalizeStatus } from '@/normalizers/status';
+import { normalizeStatus } from '@/reducers/statuses';
 
 const buildStatus = (account: Account, scheduledStatus: ScheduledStatus) => {
   const poll = scheduledStatus.params.poll

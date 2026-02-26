@@ -22,7 +22,7 @@ import Badge from './badge';
 import { ParsedContent } from './parsed-content';
 import RelativeTimestamp from './relative-timestamp';
 
-import type { StatusApprovalStatus } from '@/normalizers/status';
+import type { StatusApprovalStatus } from '@/reducers/statuses';
 import type { Account as AccountSchema } from 'pl-api';
 
 interface IInstanceFavicon {

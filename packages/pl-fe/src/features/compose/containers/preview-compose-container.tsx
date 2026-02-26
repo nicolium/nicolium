@@ -17,7 +17,7 @@ import AccountContainer from '@/containers/account-container';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
-import type { Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/reducers/statuses';
 
 const messages = defineMessages({
   close: {

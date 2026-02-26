@@ -1,4 +1,4 @@
-import type { Status } from '@/normalizers/status';
+import type { NormalizedStatus as Status } from '@/reducers/statuses';
 import type { Settings } from '@/schemas/frontend-settings';
 
 const shouldFilter = (

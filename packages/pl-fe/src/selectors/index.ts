@@ -1,13 +1,15 @@
 import { createSelector } from 'reselect';
 
 import { getAccounts, selectAccount, selectAccounts } from '@/queries/accounts/selectors';
+import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { useSettingsStore } from '@/stores/settings';
 import { getDomain } from '@/utils/accounts';
 import ConfigDB from '@/utils/config-db';
 import { shouldFilter } from '@/utils/timelines';
 
 import type { minifyAdminReport } from '@/queries/utils/minify-list';
-import type { MinifiedStatus } from '@/reducers/statuses';
+import type { NormalizedStatus } from '@/reducers/statuses';
 import type { MRFSimple } from '@/schemas/pleroma';
 import type { RootState } from '@/store';
 import type { Account, Filter, FilterResult, NotificationGroup } from 'pl-api';
@@ -113,7 +115,7 @@ const makeGetStatus = () =>
 
     (statusBase, statusReblog, statusQuote, username, filters, contextType, me, features) => {
       if (!statusBase) return null;
-      const { account } = statusBase;
+      const account = queryClient.getQueryData(queryKeys.accounts.show(statusBase.account_id))!;
       const accountUsername = account.acct;
 
       // Must be owner of status if username exists.
@@ -132,6 +134,7 @@ const makeGetStatus = () =>
 
       return {
         ...statusBase,
+        account,
         reblog: statusReblog || null,
         quote: statusQuote || null,
         filtered,
@@ -183,7 +186,7 @@ type SelectedNotification = NotificationGroup & {
           | 'participation_request'
           | 'quote'
           | 'quoted_update';
-        status: MinifiedStatus;
+        status: NormalizedStatus;
       }
     | {
         type: 'move';
