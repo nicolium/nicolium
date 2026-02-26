@@ -568,3 +568,12 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
 .⁂-emoji {
   @apply transition-transform hover:scale-125;
 }
+
+.⁂-alt-indicator {
+  @apply inline-flex items-center gap-1 rounded bg-gray-900 px-2 py-1 text-xs font-medium uppercase text-white;
+
+  svg {
+    height: 1rem;
+    width: 1rem;
+  }
+}

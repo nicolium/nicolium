@@ -1,0 +1,10 @@
+.⁂-account-note-panel__header {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  span {
+    @include mixins.text($theme: success);
+    line-height: 1;
+  }
+}

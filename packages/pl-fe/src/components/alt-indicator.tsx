@@ -11,21 +11,8 @@ interface IAltIndicator extends Pick<React.HTMLAttributes<HTMLSpanElement>, 'tit
 
 const AltIndicator: React.FC<IAltIndicator> = React.forwardRef<HTMLSpanElement, IAltIndicator>(
   ({ className, warning, message, ...props }, ref) => (
-    <span
-      className={clsx(
-        'inline-flex items-center gap-1 rounded bg-gray-900 px-2 py-1 text-xs font-medium uppercase text-white',
-        className,
-      )}
-      {...props}
-      ref={ref}
-    >
-      {warning && (
-        <Icon
-          className='size-4'
-          src={require('@phosphor-icons/core/regular/warning.svg')}
-          aria-hidden
-        />
-      )}
+    <span className={clsx('⁂-alt-indicator', className)} {...props} ref={ref}>
+      {warning && <Icon src={require('@phosphor-icons/core/regular/warning.svg')} aria-hidden />}
       {message ?? (
         <FormattedMessage id='upload_form.description_missing.indicator' defaultMessage='Alt' />
       )}

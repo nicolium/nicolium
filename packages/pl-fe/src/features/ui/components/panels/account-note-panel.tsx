@@ -2,8 +2,6 @@ import { debounce } from '@tanstack/react-pacer/debouncer';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import HStack from '@/components/ui/hstack';
-import Text from '@/components/ui/text';
 import Textarea from '@/components/ui/textarea';
 import Widget from '@/components/ui/widget';
 import { useAppSelector } from '@/hooks/use-app-selector';
@@ -56,16 +54,16 @@ const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
   return (
     <Widget
       title={
-        <HStack space={2} alignItems='center'>
+        <div className='⁂-account-note-panel__header'>
           <label htmlFor={`account-note-${account.id}`}>
             <FormattedMessage id='account_note.header' defaultMessage='Note' />
           </label>
           {saved && (
-            <Text theme='success' tag='span' className='leading-none'>
+            <span>
               <FormattedMessage id='generic.saved' defaultMessage='Saved' />
-            </Text>
+            </span>
           )}
-        </HStack>
+        </div>
       }
     >
       <Textarea
