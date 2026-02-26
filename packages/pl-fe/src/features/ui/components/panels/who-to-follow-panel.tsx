@@ -7,7 +7,10 @@ import Widget from '@/components/ui/widget';
 import AccountContainer from '@/containers/account-container';
 import PlaceholderSidebarSuggestions from '@/features/placeholder/components/placeholder-sidebar-suggestions';
 import { useFeatures } from '@/hooks/use-features';
-import { useDismissSuggestion, useSuggestions } from '@/queries/suggestions';
+import {
+  useDismissSuggestion,
+  useSuggestedAccounts,
+} from '@/queries/trends/use-suggested-accounts';
 
 import type { Account as AccountEntity } from 'pl-api';
 
@@ -23,7 +26,7 @@ const WhoToFollowPanel = ({ limit }: IWhoToFollowPanel) => {
   const features = useFeatures();
   const intl = useIntl();
 
-  const { data: suggestions = [], isFetching } = useSuggestions();
+  const { data: suggestions = [], isFetching } = useSuggestedAccounts();
   const dismissSuggestion = useDismissSuggestion();
 
   const suggestionsToRender = suggestions.slice(0, limit);

@@ -9,10 +9,10 @@ import StatusContainer from '@/containers/status-container';
 import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
 import PlaceholderHashtag from '@/features/placeholder/components/placeholder-hashtag';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
-import useTrends from '@/queries/trends';
 import { useSuggestedAccounts } from '@/queries/trends/use-suggested-accounts';
 import { useTrendingLinks } from '@/queries/trends/use-trending-links';
 import { useTrendingStatuses } from '@/queries/trends/use-trending-statuses';
+import useTrendingTags from '@/queries/trends/use-trending-tags';
 
 interface ITrendsColumn {
   type: 'accounts' | 'hashtags' | 'statuses' | 'links';
@@ -26,7 +26,11 @@ const TrendsColumn: React.FC<ITrendsColumn> = ({ type, multiColumn }) => {
     isFetching: isFetchingAccounts,
     isLoading: isLoadingAccounts,
   } = useSuggestedAccounts();
-  const { data: trendingTags, isFetching: isFetchingTags, isLoading: isLoadingTags } = useTrends();
+  const {
+    data: trendingTags,
+    isFetching: isFetchingTags,
+    isLoading: isLoadingTags,
+  } = useTrendingTags();
   const {
     data: trendingStatuses,
     isFetching: isFetchingStatuses,

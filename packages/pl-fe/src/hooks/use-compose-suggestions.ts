@@ -6,7 +6,7 @@ import { useDebounce } from '@/hooks/use-debounce';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
 import { useSearchHashtags } from '@/queries/search/use-search';
 import { useAccountSearch } from '@/queries/search/use-search-accounts';
-import useTrends from '@/queries/trends';
+import useTrendingTags from '@/queries/trends/use-trending-tags';
 
 const useComposeSuggestions = (token: string): Array<AutoSuggestion> => {
   const debouncedToken = useDebounce(token, 300);
@@ -24,7 +24,7 @@ const useComposeSuggestions = (token: string): Array<AutoSuggestion> => {
     resolve: false,
     limit: 5,
   });
-  const { data: trendingTags } = useTrends();
+  const { data: trendingTags } = useTrendingTags();
   const { data: searchResult } = useSearchHashtags(
     searchedType === 'hashtags' ? debouncedToken : '',
   );

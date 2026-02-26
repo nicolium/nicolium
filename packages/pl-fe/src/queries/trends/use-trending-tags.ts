@@ -7,7 +7,7 @@ import { queryKeys } from '@/queries/keys';
 
 import type { Tag } from 'pl-api';
 
-const useTrends = () => {
+const useTrendingTags = () => {
   const client = useClient();
   const features = useFeatures();
   const { isLoggedIn } = useLoggedIn();
@@ -21,4 +21,4 @@ const useTrends = () => {
   });
 };
 
-export { useTrends as default };
+export { useTrendingTags as default };
