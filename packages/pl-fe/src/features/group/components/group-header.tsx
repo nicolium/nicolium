@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
 import GroupAvatar from '@/components/groups/group-avatar';
-import { ParsedContent } from '@/components/parsed-content';
+import { ParsedContent } from '@/components/statuses/parsed-content';
 import StillImage from '@/components/still-image';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';

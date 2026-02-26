@@ -16,14 +16,14 @@ const Navlinks: React.FC<INavlinks> = ({ type }) => {
   return (
     <footer className='relative mx-auto mt-auto max-w-7xl py-8'>
       <div className='flex flex-wrap justify-center'>
-        {navlinks[type]?.map((link, idx) => {
+        {navlinks[type]?.map((link) => {
           const url = link.url;
           const isExternal = url.startsWith('http');
           const Comp = (isExternal ? 'a' : Link) as 'a';
           const compProps = isExternal ? { href: url, target: '_blank' } : { to: url };
 
           return (
-            <div key={idx} className='px-5 py-2'>
+            <div key={link.url} className='px-5 py-2'>
               <Comp
                 {...compProps}
                 className='text-primary-600 hover:underline dark:text-primary-400'

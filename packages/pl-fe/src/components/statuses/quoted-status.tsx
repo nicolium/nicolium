@@ -6,8 +6,9 @@ import { defineMessages, useIntl } from 'react-intl';
 import Stack from '@/components/ui/stack';
 import AccountContainer from '@/containers/account-container';
 
+import OutlineBox from '../outline-box';
+
 import EventPreview from './event-preview';
-import OutlineBox from './outline-box';
 import StatusContent from './status-content';
 import StatusReplyMentions from './status-reply-mentions';
 

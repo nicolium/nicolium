@@ -3,12 +3,12 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import AttachmentThumbs from '@/components/attachment-thumbs';
 import Icon from '@/components/icon';
+import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import PullToRefresh from '@/components/pull-to-refresh';
 import RelativeTimestamp from '@/components/relative-timestamp';
 import ScrollableList from '@/components/scrollable-list';
-import StatusContent from '@/components/status-content';
+import StatusContent from '@/components/statuses/status-content';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import HStack from '@/components/ui/hstack';

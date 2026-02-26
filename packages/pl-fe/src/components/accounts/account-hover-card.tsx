@@ -18,10 +18,11 @@ import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccountHoverCardActions, useAccountHoverCardStore } from '@/stores/account-hover-card';
 
+import { dateFormatOptions } from '../relative-timestamp';
+import { ParsedContent } from '../statuses/parsed-content';
+
 import AccountLocalTime from './account-local-time';
 import { showAccountHoverCard } from './hover-account-wrapper';
-import { ParsedContent } from './parsed-content';
-import { dateFormatOptions } from './relative-timestamp';
 import Scrobble from './scrobble';
 
 import type { Account } from 'pl-api';

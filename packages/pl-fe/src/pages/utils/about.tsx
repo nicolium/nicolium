@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { Navlinks } from '@/components/navlinks';
+import { Navlinks } from '@/components/navigation/navlinks';
 import Card from '@/components/ui/card';
 import { languages } from '@/features/preferences';
 import { aboutRoute } from '@/features/ui/router';

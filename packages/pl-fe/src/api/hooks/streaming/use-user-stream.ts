@@ -5,6 +5,7 @@ import { deleteFromTimelines, processTimelineUpdate } from '@/actions/timelines'
 import { useStatContext } from '@/contexts/stat-context';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { updateReactions } from '@/queries/announcements/use-announcements';
 import { queryClient } from '@/queries/client';
 import { updateConversations } from '@/queries/conversations/use-conversations';
 import { queryKeys } from '@/queries/keys';
@@ -12,8 +13,6 @@ import { useProcessStreamNotification } from '@/queries/notifications/use-notifi
 import { useSettings } from '@/stores/settings';
 import { getUnreadChatsCount, updateChatListItem } from '@/utils/chats';
 import { play, soundCache } from '@/utils/sounds';
-
-import { updateReactions } from '../../../queries/announcements/use-announcements';
 
 import { useTimelineStream } from './use-timeline-stream';
 

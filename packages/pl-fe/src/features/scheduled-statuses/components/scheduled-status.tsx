@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import Account from '@/components/account';
-import AttachmentThumbs from '@/components/attachment-thumbs';
-import StatusContent from '@/components/status-content';
-import StatusReplyMentions from '@/components/status-reply-mentions';
+import Account from '@/components/accounts/account';
+import AttachmentThumbs from '@/components/media/attachment-thumbs';
+import StatusContent from '@/components/statuses/status-content';
+import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import { buildPoll } from '@/features/draft-statuses/builder';

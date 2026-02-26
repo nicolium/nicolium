@@ -4,7 +4,7 @@ import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } fro
 
 import { setBadges as saveBadges, setRole } from '@/actions/admin';
 import { deactivateUserModal, deleteUserModal } from '@/actions/moderation';
-import Account from '@/components/account';
+import Account from '@/components/accounts/account';
 import List, { ListItem } from '@/components/list';
 import MissingIndicator from '@/components/missing-indicator';
 import OutlineBox from '@/components/outline-box';

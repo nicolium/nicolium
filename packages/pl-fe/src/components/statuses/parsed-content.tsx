@@ -18,8 +18,9 @@ import { makeEmojiMap } from '@/utils/normalizers';
 import nyaize from '@/utils/nyaize';
 import Purify from '@/utils/url-purify';
 
-import HashtagLink from './hashtag-link';
-import HoverAccountWrapper from './hover-account-wrapper';
+import HoverAccountWrapper from '../accounts/hover-account-wrapper';
+import HashtagLink from '../hashtag-link';
+
 import StatusMention from './status-mention';
 
 import type { CustomEmoji, Mention } from 'pl-api';

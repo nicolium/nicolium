@@ -1,10 +1,10 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import AttachmentThumbs from '@/components/attachment-thumbs';
 import Markup from '@/components/markup';
-import { ParsedContent } from '@/components/parsed-content';
-import QuotedStatusIndicator from '@/components/quoted-status-indicator';
+import AttachmentThumbs from '@/components/media/attachment-thumbs';
+import { ParsedContent } from '@/components/statuses/parsed-content';
+import QuotedStatusIndicator from '@/components/statuses/quoted-status-indicator';
 import Stack from '@/components/ui/stack';
 import AccountContainer from '@/containers/account-container';
 import { getTextDirection } from '@/utils/rtl';

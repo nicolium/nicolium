@@ -3,7 +3,7 @@ import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
 import { fetchStatus } from '@/actions/statuses';
 import MissingIndicator from '@/components/missing-indicator';
-import StatusContent from '@/components/status-content';
+import StatusContent from '@/components/statuses/status-content';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';

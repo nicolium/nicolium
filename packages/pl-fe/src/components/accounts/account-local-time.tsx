@@ -3,9 +3,9 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { useLoggedIn } from '@/hooks/use-logged-in';
 
-import HStack from './ui/hstack';
-import Icon from './ui/icon';
-import Text from './ui/text';
+import HStack from '../ui/hstack';
+import Icon from '../ui/icon';
+import Text from '../ui/text';
 
 import type { Account } from 'pl-api';
 

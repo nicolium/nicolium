@@ -1,13 +1,13 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import EventPreview from '@/components/event-preview';
 import OutlineBox from '@/components/outline-box';
-import QuotedStatusIndicator from '@/components/quoted-status-indicator';
-import StatusContent from '@/components/status-content';
-import StatusMedia from '@/components/status-media';
-import StatusReplyMentions from '@/components/status-reply-mentions';
+import EventPreview from '@/components/statuses/event-preview';
+import QuotedStatusIndicator from '@/components/statuses/quoted-status-indicator';
 import SensitiveContentOverlay from '@/components/statuses/sensitive-content-overlay';
+import StatusContent from '@/components/statuses/status-content';
+import StatusMedia from '@/components/statuses/status-media';
+import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';

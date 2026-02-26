@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { ParsedContent } from '@/components/parsed-content';
+import { ParsedContent } from '@/components/statuses/parsed-content';
 import Avatar from '@/components/ui/avatar';
 import Button from '@/components/ui/button';
 import Divider from '@/components/ui/divider';

@@ -4,7 +4,7 @@ import { FormattedMessage, useIntl } from 'react-intl';
 import { fetchStatusWithContext } from '@/actions/statuses';
 import MissingIndicator from '@/components/missing-indicator';
 import ScrollableList from '@/components/scrollable-list';
-import Tombstone from '@/components/tombstone';
+import Tombstone from '@/components/statuses/tombstone';
 import Stack from '@/components/ui/stack';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import ThreadStatus from '@/features/status/components/thread-status';

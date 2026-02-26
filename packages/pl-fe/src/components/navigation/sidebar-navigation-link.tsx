@@ -3,7 +3,7 @@ import React from 'react';
 
 import { useSettings } from '@/stores/settings';
 
-import Icon from './ui/icon';
+import Icon from '../ui/icon';
 
 interface ISidebarNavigationLink extends Partial<LinkOptions> {
   /** Notification count, if any. */

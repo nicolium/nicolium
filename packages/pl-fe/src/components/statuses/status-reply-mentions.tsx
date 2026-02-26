@@ -2,8 +2,8 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 
-import HoverAccountWrapper from '@/components/hover-account-wrapper';
-import HoverStatusWrapper from '@/components/hover-status-wrapper';
+import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
+import HoverStatusWrapper from '@/components/statuses/hover-status-wrapper';
 import { useModalsActions } from '@/stores/modals';
 
 import type { NormalizedStatus as Status } from '@/reducers/statuses';

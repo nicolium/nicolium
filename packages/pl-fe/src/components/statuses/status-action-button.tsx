@@ -6,7 +6,7 @@ import Text from '@/components/ui/text';
 import { useLongPress } from '@/hooks/use-long-press';
 import { useSettings } from '@/stores/settings';
 
-import AnimatedNumber from './animated-number';
+import AnimatedNumber from '../animated-number';
 
 interface IStatusActionCounter {
   count: number;

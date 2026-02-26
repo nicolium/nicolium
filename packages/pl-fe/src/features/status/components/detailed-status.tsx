@@ -2,13 +2,13 @@ import { Link } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 
-import Account from '@/components/account';
+import Account from '@/components/accounts/account';
 import RssFeedInfo from '@/components/rss-feed-info';
-import StatusContent from '@/components/status-content';
-import StatusLanguagePicker from '@/components/status-language-picker';
-import StatusReactionsBar from '@/components/status-reactions-bar';
-import StatusReplyMentions from '@/components/status-reply-mentions';
+import StatusContent from '@/components/statuses/status-content';
 import StatusInfo from '@/components/statuses/status-info';
+import StatusLanguagePicker from '@/components/statuses/status-language-picker';
+import StatusReactionsBar from '@/components/statuses/status-reactions-bar';
+import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';

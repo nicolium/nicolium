@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import Account from '@/components/account';
+import Account from '@/components/accounts/account';
 import { AuthorizeRejectButtons } from '@/components/authorize-reject-buttons';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';

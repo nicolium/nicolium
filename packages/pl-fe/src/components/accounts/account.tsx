@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import HoverAccountWrapper from '@/components/hover-account-wrapper';
+import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import Avatar from '@/components/ui/avatar';
 import Emoji from '@/components/ui/emoji';
 import HStack from '@/components/ui/hstack';
@@ -18,9 +18,9 @@ import { useAcct } from '@/hooks/use-acct';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useSettings } from '@/stores/settings';
 
-import Badge from './badge';
-import { ParsedContent } from './parsed-content';
-import RelativeTimestamp from './relative-timestamp';
+import Badge from '../badge';
+import RelativeTimestamp from '../relative-timestamp';
+import { ParsedContent } from '../statuses/parsed-content';
 
 import type { StatusApprovalStatus } from '@/reducers/statuses';
 import type { Account as AccountSchema } from 'pl-api';

@@ -4,7 +4,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import DropdownMenu from '@/components/dropdown-menu';
 import PullToRefresh from '@/components/pull-to-refresh';
-import StatusList from '@/components/status-list';
+import StatusList from '@/components/statuses/status-list';
 import Column from '@/components/ui/column';
 import { bookmarksRoute } from '@/features/ui/router';
 import { useBookmarks } from '@/queries/status-lists/use-bookmarks';

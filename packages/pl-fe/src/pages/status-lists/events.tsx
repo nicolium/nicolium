@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import ReactSwipeableViews from 'react-swipeable-views';
 
-import EventPreview from '@/components/event-preview';
+import EventPreview from '@/components/statuses/event-preview';
 import Button from '@/components/ui/button';
 import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';

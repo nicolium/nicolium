@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 
 import { getTextDirection } from '@/utils/rtl';
 
-import { ParsedContent } from '../parsed-content';
+import { ParsedContent } from '../statuses/parsed-content';
 
 import type { Announcement, Mention as MentionEntity } from 'pl-api';
 

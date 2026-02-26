@@ -9,12 +9,12 @@ import {
   type MessageDescriptor,
 } from 'react-intl';
 
-import AttachmentThumbs from '@/components/attachment-thumbs';
-import HoverAccountWrapper from '@/components/hover-account-wrapper';
+import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import Icon from '@/components/icon';
 import Markup from '@/components/markup';
-import { ParsedContent } from '@/components/parsed-content';
+import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import RelativeTimestamp from '@/components/relative-timestamp';
+import { ParsedContent } from '@/components/statuses/parsed-content';
 import StatusInfo from '@/components/statuses/status-info';
 import Emoji from '@/components/ui/emoji';
 import AccountContainer from '@/containers/account-container';

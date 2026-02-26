@@ -10,7 +10,7 @@ import PlaceholderStatus from '@/features/placeholder/components/placeholder-sta
 import PendingStatus from '@/features/ui/components/pending-status';
 import { selectChild } from '@/utils/scroll-utils';
 
-import Icon from './ui/icon';
+import Icon from '../ui/icon';
 
 import type { VirtuosoHandle } from 'react-virtuoso';
 

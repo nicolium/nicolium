@@ -2,8 +2,8 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedList, FormattedMessage } from 'react-intl';
 
+import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import AvatarStack from '@/components/avatar-stack';
-import HoverAccountWrapper from '@/components/hover-account-wrapper';
 import HStack from '@/components/ui/hstack';
 import Text from '@/components/ui/text';
 import VerificationBadge from '@/components/verification-badge';

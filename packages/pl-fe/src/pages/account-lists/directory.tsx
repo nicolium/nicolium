@@ -3,13 +3,13 @@ import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import Account from '@/components/account';
+import Account from '@/components/accounts/account';
+import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import Badge from '@/components/badge';
-import HoverAccountWrapper from '@/components/hover-account-wrapper';
 import LoadMore from '@/components/load-more';
-import { ParsedContent } from '@/components/parsed-content';
 import { RadioGroup, RadioItem } from '@/components/radio';
 import RelativeTimestamp from '@/components/relative-timestamp';
+import { ParsedContent } from '@/components/statuses/parsed-content';
 import StillImage from '@/components/still-image';
 import Avatar from '@/components/ui/avatar';
 import { CardTitle } from '@/components/ui/card';

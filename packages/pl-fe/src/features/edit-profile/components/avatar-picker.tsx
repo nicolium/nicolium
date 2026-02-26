@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import AltIndicator from '@/components/alt-indicator';
+import AltIndicator from '@/components/media/alt-indicator';
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';

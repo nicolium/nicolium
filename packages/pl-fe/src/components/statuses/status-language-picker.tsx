@@ -7,7 +7,7 @@ import Text from '@/components/ui/text';
 import { type Language, languages } from '@/features/preferences';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 
-import DropdownMenu from './dropdown-menu';
+import DropdownMenu from '../dropdown-menu';
 
 import type { NormalizedStatus as Status } from '@/reducers/statuses';
 

@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 
-import AttachmentThumbs from '@/components/attachment-thumbs';
+import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import PreviewCard from '@/components/preview-card';
 import PlaceholderCard from '@/features/placeholder/components/placeholder-card';
 import { MediaGallery, Video, Audio } from '@/features/ui/util/async-components';
@@ -8,7 +8,7 @@ import { useAccount } from '@/queries/accounts/use-account';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 
-import { useMediaVisible } from './statuses/sensitive-content-overlay';
+import { useMediaVisible } from './sensitive-content-overlay';
 
 import type { NormalizedStatus as Status } from '@/reducers/statuses';
 import type { MediaAttachment } from 'pl-api';

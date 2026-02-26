@@ -2,7 +2,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import PullToRefresh from '@/components/pull-to-refresh';
-import StatusList from '@/components/status-list';
+import StatusList from '@/components/statuses/status-list';
 import Column from '@/components/ui/column';
 import { statusQuotesRoute } from '@/features/ui/router';
 import { useStatusQuotes } from '@/queries/statuses/use-status-quotes';

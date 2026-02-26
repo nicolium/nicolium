@@ -2,7 +2,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import MissingIndicator from '@/components/missing-indicator';
-import StatusList from '@/components/status-list';
+import StatusList from '@/components/statuses/status-list';
 import Column from '@/components/ui/column';
 import { profilePinsRoute } from '@/features/ui/router';
 import { useOwnAccount } from '@/hooks/use-own-account';

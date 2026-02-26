@@ -6,7 +6,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { fetchOwnAccounts, logOut, switchAccount } from '@/actions/auth';
-import Account from '@/components/account';
+import Account from '@/components/accounts/account';
 import Divider from '@/components/ui/divider';
 import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';

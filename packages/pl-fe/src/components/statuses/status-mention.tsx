@@ -3,7 +3,7 @@ import React from 'react';
 
 import { useAccount } from '@/queries/accounts/use-account';
 
-import HoverAccountWrapper from './hover-account-wrapper';
+import HoverAccountWrapper from '../accounts/hover-account-wrapper';
 
 interface IStatusMention {
   accountId: string;

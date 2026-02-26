@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormattedDate, FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { ParsedContent } from '@/components/parsed-content';
 import ScrollableList from '@/components/scrollable-list';
+import { ParsedContent } from '@/components/statuses/parsed-content';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import HStack from '@/components/ui/hstack';

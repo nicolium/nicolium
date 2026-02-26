@@ -1,8 +1,8 @@
 import React from 'react';
 import { FormattedDate, FormattedMessage } from 'react-intl';
 
-import AttachmentThumbs from '@/components/attachment-thumbs';
-import { ParsedContent } from '@/components/parsed-content';
+import AttachmentThumbs from '@/components/media/attachment-thumbs';
+import { ParsedContent } from '@/components/statuses/parsed-content';
 import HStack from '@/components/ui/hstack';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';

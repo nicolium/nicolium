@@ -1,7 +1,7 @@
 import noop from 'lodash/noop';
 import React, { Suspense } from 'react';
 
-import StatusContent from '@/components/status-content';
+import StatusContent from '@/components/statuses/status-content';
 import Stack from '@/components/ui/stack';
 import Toggle from '@/components/ui/toggle';
 import { MediaGallery, Video, Audio } from '@/features/ui/util/async-components';

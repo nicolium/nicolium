@@ -1,7 +1,7 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import AccountComponent from '@/components/account';
+import AccountComponent from '@/components/accounts/account';
 import Icon from '@/components/icon';
 import HStack from '@/components/ui/hstack';
 import { useAccount } from '@/queries/accounts/use-account';

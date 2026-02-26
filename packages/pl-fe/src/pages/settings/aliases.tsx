@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import AccountComponent from '@/components/account';
+import AccountComponent from '@/components/accounts/account';
 import Icon from '@/components/icon';
 import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';

@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import Tombstone from '@/components/tombstone';
+import Tombstone from '@/components/statuses/tombstone';
 import StatusContainer from '@/containers/status-container';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import { useAppSelector } from '@/hooks/use-app-selector';

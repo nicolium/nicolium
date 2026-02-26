@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl, type FormatDateOptions } from 'react-intl';
 
-import AccountLocalTime from '@/components/account-local-time';
-import { ParsedContent } from '@/components/parsed-content';
+import AccountLocalTime from '@/components/accounts/account-local-time';
+import { ParsedContent } from '@/components/statuses/parsed-content';
 import Icon from '@/components/ui/icon';
 import CryptoAddress from '@/features/crypto-donate/components/crypto-address';
 import LightningAddress from '@/features/crypto-donate/components/lightning-address';

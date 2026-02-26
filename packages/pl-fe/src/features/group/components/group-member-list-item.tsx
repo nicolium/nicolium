@@ -3,7 +3,7 @@ import { GroupRoles } from 'pl-api';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Account from '@/components/account';
+import Account from '@/components/accounts/account';
 import DropdownMenu from '@/components/dropdown-menu/dropdown-menu';
 import HStack from '@/components/ui/hstack';
 import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';

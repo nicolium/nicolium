@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
+import Indicator from '@/components/indicator';
 import List, { ListItem } from '@/components/list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
@@ -9,7 +10,6 @@ import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-import Indicator from '@/features/developers/components/indicator';
 import { unregisterSW } from '@/utils/sw';
 
 const messages = defineMessages({

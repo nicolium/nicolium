@@ -5,8 +5,8 @@ import { Helmet } from 'react-helmet-async';
 import { useIntl } from 'react-intl';
 
 import ScrollableList from '@/components/scrollable-list';
-import StatusActionBar from '@/components/status-action-bar';
-import Tombstone from '@/components/tombstone';
+import StatusActionBar from '@/components/statuses/status-action-bar';
+import Tombstone from '@/components/statuses/tombstone';
 import Stack from '@/components/ui/stack';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import { Hotkeys } from '@/features/ui/components/hotkeys';

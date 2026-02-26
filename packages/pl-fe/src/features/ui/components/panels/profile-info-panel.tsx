@@ -1,11 +1,11 @@
 import React from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
+import Scrobble from '@/components/accounts/scrobble';
 import Badge from '@/components/badge';
 import Markup from '@/components/markup';
-import { ParsedContent } from '@/components/parsed-content';
 import { dateFormatOptions } from '@/components/relative-timestamp';
-import Scrobble from '@/components/scrobble';
+import { ParsedContent } from '@/components/statuses/parsed-content';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';

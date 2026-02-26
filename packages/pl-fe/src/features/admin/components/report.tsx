@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router';
 import React, { useCallback } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import HoverAccountWrapper from '@/components/hover-account-wrapper';
+import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';

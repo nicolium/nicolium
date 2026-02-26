@@ -5,7 +5,7 @@ import React, { useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
 import { fetchStatus } from '@/actions/statuses';
-import { showStatusHoverCard } from '@/components/hover-status-wrapper';
+import { showStatusHoverCard } from '@/components/statuses/hover-status-wrapper';
 import StatusContainer from '@/containers/status-container';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';

@@ -7,7 +7,7 @@ import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 
-import { ParsedContent } from '../parsed-content';
+import { ParsedContent } from '../statuses/parsed-content';
 
 import type { Poll } from 'pl-api';
 

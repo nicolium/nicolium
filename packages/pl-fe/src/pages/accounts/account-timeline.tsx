@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { fetchAccountTimeline } from '@/actions/timelines';
 import MissingIndicator from '@/components/missing-indicator';
-import StatusList from '@/components/status-list';
+import StatusList from '@/components/statuses/status-list';
 import Card, { CardBody } from '@/components/ui/card';
 import Spinner from '@/components/ui/spinner';
 import Text from '@/components/ui/text';

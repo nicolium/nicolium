@@ -13,19 +13,19 @@ import { useStatusTranslation } from '@/queries/statuses/use-status-translation'
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 import { onlyEmoji as isOnlyEmoji } from '@/utils/rich-content';
+import { getTextDirection } from '@/utils/rtl';
 
-import { getTextDirection } from '../utils/rtl';
+import Markup from '../markup';
+import OutlineBox from '../outline-box';
+import { ParsedMfm } from '../parsed-mfm';
+import Poll from '../polls/poll';
+import TranslateButton from '../translate-button';
 
 import HashtagsBar from './hashtags-bar';
-import Markup from './markup';
-import OutlineBox from './outline-box';
 import { parseContent } from './parsed-content';
-import { ParsedMfm } from './parsed-mfm';
-import Poll from './polls/poll';
 import QuotedStatusIndicator from './quoted-status-indicator';
+import SensitiveContentOverlay from './sensitive-content-overlay';
 import StatusMedia from './status-media';
-import SensitiveContentOverlay from './statuses/sensitive-content-overlay';
-import TranslateButton from './translate-button';
 
 import type { Sizes } from '@/components/ui/text';
 import type { NormalizedStatus } from '@/reducers/statuses';

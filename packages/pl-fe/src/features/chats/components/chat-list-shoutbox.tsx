@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { ParsedContent } from '@/components/parsed-content';
+import { ParsedContent } from '@/components/statuses/parsed-content';
 import Avatar from '@/components/ui/avatar';
 import Emojify from '@/features/emoji/emojify';
 import { Hotkeys } from '@/features/ui/components/hotkeys';

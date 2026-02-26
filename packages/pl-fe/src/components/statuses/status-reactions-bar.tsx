@@ -14,7 +14,7 @@ import { useLongPress } from '@/hooks/use-long-press';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 
-import AnimatedNumber from './animated-number';
+import AnimatedNumber from '../animated-number';
 
 import type { Emoji as EmojiType } from '@/features/emoji';
 import type { SelectedStatus } from '@/selectors';

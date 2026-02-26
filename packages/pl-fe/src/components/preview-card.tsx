@@ -20,7 +20,7 @@ import { useSettings } from '@/stores/settings';
 import { getTextDirection } from '@/utils/rtl';
 import Purify from '@/utils/url-purify';
 
-import HoverAccountWrapper from './hover-account-wrapper';
+import HoverAccountWrapper from './accounts/hover-account-wrapper';
 import Avatar from './ui/avatar';
 
 const messages = defineMessages({

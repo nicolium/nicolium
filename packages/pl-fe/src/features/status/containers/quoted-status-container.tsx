@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 
-import QuotedStatus from '@/components/quoted-status';
+import QuotedStatus from '@/components/statuses/quoted-status';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { makeGetStatus } from '@/selectors';
 

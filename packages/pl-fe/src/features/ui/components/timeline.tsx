@@ -4,7 +4,7 @@ import { defineMessages } from 'react-intl';
 
 import { dequeueTimeline, scrollTopTimeline } from '@/actions/timelines';
 import ScrollTopButton from '@/components/scroll-top-button';
-import StatusList, { type IStatusList } from '@/components/status-list';
+import StatusList, { type IStatusList } from '@/components/statuses/status-list';
 import Portal from '@/components/ui/portal';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';

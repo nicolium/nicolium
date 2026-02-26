@@ -2,11 +2,11 @@ import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Account from '@/components/account';
-import AttachmentThumbs from '@/components/attachment-thumbs';
+import Account from '@/components/accounts/account';
+import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import OutlineBox from '@/components/outline-box';
-import StatusContent from '@/components/status-content';
-import StatusReplyMentions from '@/components/status-reply-mentions';
+import StatusContent from '@/components/statuses/status-content';
+import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';

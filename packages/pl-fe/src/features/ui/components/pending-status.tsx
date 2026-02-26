@@ -1,9 +1,9 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import Account from '@/components/account';
-import StatusContent from '@/components/status-content';
-import StatusReplyMentions from '@/components/status-reply-mentions';
+import Account from '@/components/accounts/account';
+import StatusContent from '@/components/statuses/status-content';
+import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import Card from '@/components/ui/card';
 import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';

@@ -4,7 +4,7 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { processCircle } from '@/actions/circle';
 import { uploadFile } from '@/actions/media';
-import Account from '@/components/account';
+import Account from '@/components/accounts/account';
 import Accordion from '@/components/ui/accordion';
 import Avatar from '@/components/ui/avatar';
 import Button from '@/components/ui/button';

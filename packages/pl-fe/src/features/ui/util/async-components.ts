@@ -76,7 +76,7 @@ export const ListTimeline = lazy(() => import('@/pages/timelines/list-timeline')
 export const LoginPage = lazy(() => import('@/pages/auth/login'));
 export const LogoutPage = lazy(() => import('@/pages/auth/logout'));
 export const ManageGroup = lazy(() => import('@/pages/groups/manage-group'));
-export const MediaGallery = lazy(() => import('@/components/media-gallery'));
+export const MediaGallery = lazy(() => import('@/components/media/media-gallery'));
 export const Migration = lazy(() => import('@/pages/settings/migration'));
 export const ModerationLog = lazy(() => import('@/pages/dashboard/moderation-log'));
 export const Mutes = lazy(() => import('@/pages/settings/mutes'));
@@ -164,12 +164,12 @@ export const ChatWidget = lazy(() => import('@/features/chats/components/chat-wi
 export const ComposeEditor = lazy(() => import('@/features/compose/editor'));
 export const ComposeForm = lazy(() => import('@/features/compose/components/compose-form'));
 export const DatePicker = lazy(() => import('@/features/birthdays/date-picker'));
-export const DropdownNavigation = lazy(() => import('@/components/dropdown-navigation'));
+export const DropdownNavigation = lazy(() => import('@/components/navigation/dropdown-navigation'));
 export const EmojiPicker = lazy(() => import('@/features/emoji/components/emoji-picker'));
 export const EventHeader = lazy(() => import('@/features/event/components/event-header'));
 export const MfaForm = lazy(() => import('@/features/security/mfa-form'));
 export const ModalRoot = lazy(() => import('@/features/ui/components/modal-root'));
 export const ProfileField = lazy(() => import('@/features/ui/components/profile-field'));
-export const AccountHoverCard = lazy(() => import('@/components/account-hover-card'));
-export const StatusHoverCard = lazy(() => import('@/components/status-hover-card'));
+export const AccountHoverCard = lazy(() => import('@/components/accounts/account-hover-card'));
+export const StatusHoverCard = lazy(() => import('@/components/statuses/status-hover-card'));
 export const Video = lazy(() => import('@/features/video'));

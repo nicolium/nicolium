@@ -15,7 +15,7 @@ import {
   toggleMuteStatus,
 } from '@/actions/statuses';
 import DropdownMenu from '@/components/dropdown-menu';
-import StatusActionButton from '@/components/status-action-button';
+import StatusActionButton from '@/components/statuses/status-action-button';
 import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
 import { languages } from '@/features/preferences';
 import { layouts } from '@/features/ui/router';
@@ -51,8 +51,8 @@ import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 import toast from '@/toast';
 import copy from '@/utils/copy';
 
-import GroupPopover from './groups/popover/group-popover';
-import Popover from './ui/popover';
+import GroupPopover from '../groups/popover/group-popover';
+import Popover from '../ui/popover';
 
 import type { Menu } from '@/components/dropdown-menu';
 import type { Emoji as EmojiType } from '@/features/emoji';

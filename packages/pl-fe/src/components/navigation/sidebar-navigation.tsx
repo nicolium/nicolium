@@ -22,12 +22,13 @@ import { useInteractionRequestsCount } from '@/queries/statuses/use-interaction-
 import { useModalsActions } from '@/stores/modals';
 import sourceCode from '@/utils/code';
 
-import Account from './account';
-import DropdownMenu, { type Menu } from './dropdown-menu';
-import SearchInput from './search-input';
+import Account from '../accounts/account';
+import DropdownMenu, { type Menu } from '../dropdown-menu';
+import SearchInput from '../search-input';
+import SiteLogo from '../site-logo';
+import Avatar from '../ui/avatar';
+
 import SidebarNavigationLink from './sidebar-navigation-link';
-import SiteLogo from './site-logo';
-import Avatar from './ui/avatar';
 
 const messages = defineMessages({
   followRequests: { id: 'column.follow_requests', defaultMessage: 'Follow requests' },

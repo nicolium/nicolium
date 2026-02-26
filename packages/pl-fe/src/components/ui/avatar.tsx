@@ -6,7 +6,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import StillImage, { type IStillImage } from '@/components/still-image';
 import { useSettings } from '@/stores/settings';
 
-import AltIndicator from '../alt-indicator';
+import AltIndicator from '../media/alt-indicator';
 
 import Icon from './icon';
 import Popover from './popover';

@@ -4,8 +4,8 @@ import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import DropdownMenu from '@/components/dropdown-menu';
-import { ParsedContent } from '@/components/parsed-content';
 import RelativeTimestamp from '@/components/relative-timestamp';
+import { ParsedContent } from '@/components/statuses/parsed-content';
 import Avatar from '@/components/ui/avatar';
 import IconButton from '@/components/ui/icon-button';
 import VerificationBadge from '@/components/verification-badge';

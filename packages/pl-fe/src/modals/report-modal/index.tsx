@@ -3,8 +3,8 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { submitReport, ReportableEntities } from '@/actions/reports';
 import { fetchAccountTimeline } from '@/actions/timelines';
-import AttachmentThumbs from '@/components/attachment-thumbs';
-import StatusContent from '@/components/status-content';
+import AttachmentThumbs from '@/components/media/attachment-thumbs';
+import StatusContent from '@/components/statuses/status-content';
 import Modal from '@/components/ui/modal';
 import ProgressBar from '@/components/ui/progress-bar';
 import Stack from '@/components/ui/stack';

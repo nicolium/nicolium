@@ -2,9 +2,9 @@ import clsx from 'clsx';
 import React, { useState, useRef, useLayoutEffect, type CSSProperties } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import AltIndicator from '@/components/alt-indicator';
 import Blurhash from '@/components/blurhash';
 import Icon from '@/components/icon';
+import AltIndicator from '@/components/media/alt-indicator';
 import StillImage from '@/components/still-image';
 import Popover from '@/components/ui/popover';
 import Stack from '@/components/ui/stack';
@@ -12,18 +12,17 @@ import Text from '@/components/ui/text';
 import { MIMETYPE_ICONS } from '@/components/upload';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useSettings } from '@/stores/settings';
+import { isIOS } from '@/utils/is-mobile';
 import { truncateFilename } from '@/utils/media';
-
-import { isIOS } from '../utils/is-mobile';
 import {
   isPanoramic,
   isPortrait,
   isNonConformingRatio,
   minimumAspectRatio,
   maximumAspectRatio,
-} from '../utils/media-aspect-ratio';
+} from '@/utils/media-aspect-ratio';
 
-import HStack from './ui/hstack';
+import HStack from '../ui/hstack';
 
 import type { MediaAttachment } from 'pl-api';
 

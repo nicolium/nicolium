@@ -1,7 +1,7 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import AccountComponent from '@/components/account';
+import AccountComponent from '@/components/accounts/account';
 import IconButton from '@/components/ui/icon-button';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useCompose, useComposeActions } from '@/stores/compose';

@@ -2,7 +2,7 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import React, { useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Account from '@/components/account';
+import Account from '@/components/accounts/account';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';

@@ -3,7 +3,7 @@ import { useMatch } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import ThumbNavigationLink from '@/components/thumb-navigation-link';
+import ThumbNavigationLink from '@/components/navigation/thumb-navigation-link';
 import Icon from '@/components/ui/icon';
 import { useStatContext } from '@/contexts/stat-context';
 import { layouts } from '@/features/ui/router';

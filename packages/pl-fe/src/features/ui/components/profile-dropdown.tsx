@@ -4,7 +4,7 @@ import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { logOut, switchAccount } from '@/actions/auth';
-import Account from '@/components/account';
+import Account from '@/components/accounts/account';
 import DropdownMenu from '@/components/dropdown-menu';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';

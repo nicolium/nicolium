@@ -8,7 +8,7 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { fetchStatusWithContext } from '@/actions/statuses';
 import ExtendedVideoPlayer from '@/components/extended-video-player';
 import MissingIndicator from '@/components/missing-indicator';
-import StatusActionBar from '@/components/status-action-bar';
+import StatusActionBar from '@/components/statuses/status-action-bar';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';

@@ -7,8 +7,8 @@ import { fetchConfig } from '@/actions/admin';
 import { register as registerPushNotifications } from '@/actions/push-notifications/registerer';
 import { fetchHomeTimeline } from '@/actions/timelines';
 import { useUserStream } from '@/api/hooks/streaming/use-user-stream';
-import SidebarNavigation from '@/components/sidebar-navigation';
-import ThumbNavigation from '@/components/thumb-navigation';
+import SidebarNavigation from '@/components/navigation/sidebar-navigation';
+import ThumbNavigation from '@/components/navigation/thumb-navigation';
 import Layout from '@/components/ui/layout';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
@@ -42,7 +42,7 @@ import {
 } from './util/async-components';
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
-import '@/components/status';
+import '@/components/statuses/status';
 import GlobalHotkeys from './util/global-hotkeys';
 
 const UI: React.FC = React.memo(() => {

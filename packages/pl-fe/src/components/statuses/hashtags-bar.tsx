@@ -3,8 +3,8 @@ import { Link } from '@tanstack/react-router';
 import React, { useCallback, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import HStack from './ui/hstack';
-import Text from './ui/text';
+import HStack from '../ui/hstack';
+import Text from '../ui/text';
 
 // Fit on a single line on desktop
 const VISIBLE_HASHTAGS = 3;

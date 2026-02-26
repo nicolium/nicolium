@@ -9,9 +9,9 @@ import { useSettings } from '@/stores/settings';
 import { makeEmojiMap } from '@/utils/normalizers';
 import nyaize from '@/utils/nyaize';
 
+import HoverAccountWrapper from './accounts/hover-account-wrapper';
 import HashtagLink from './hashtag-link';
-import HoverAccountWrapper from './hover-account-wrapper';
-import { ParsedUrl } from './parsed-content';
+import { ParsedUrl } from './statuses/parsed-content';
 import Emoji from './ui/emoji';
 
 import type { CustomEmoji, Mention } from 'pl-api';

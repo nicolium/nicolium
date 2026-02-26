@@ -7,11 +7,11 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
 import { initReport, ReportableEntities } from '@/actions/reports';
-import Account from '@/components/account';
-import AltIndicator from '@/components/alt-indicator';
+import Account from '@/components/accounts/account';
 import Badge from '@/components/badge';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import Icon from '@/components/icon';
+import AltIndicator from '@/components/media/alt-indicator';
 import StillImage from '@/components/still-image';
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';

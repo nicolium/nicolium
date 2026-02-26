@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Account from '@/components/account';
+import Account from '@/components/accounts/account';
 import { useAccount } from '@/queries/accounts/use-account';
 
 interface IAutosuggestAccount {

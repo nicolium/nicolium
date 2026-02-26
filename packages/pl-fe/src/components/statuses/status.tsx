@@ -28,16 +28,17 @@ import { useSettings } from '@/stores/settings';
 import { useStatusMetaActions } from '@/stores/status-meta';
 import { textForScreenReader } from '@/utils/status';
 
+import HashtagLink from '../hashtag-link';
+import RelativeTimestamp from '../relative-timestamp';
+import RssFeedInfo from '../rss-feed-info';
+
 import EventPreview from './event-preview';
-import HashtagLink from './hashtag-link';
-import RelativeTimestamp from './relative-timestamp';
-import RssFeedInfo from './rss-feed-info';
 import StatusActionBar from './status-action-bar';
 import StatusContent from './status-content';
+import StatusInfo from './status-info';
 import StatusLanguagePicker from './status-language-picker';
 import StatusReactionsBar from './status-reactions-bar';
 import StatusReplyMentions from './status-reply-mentions';
-import StatusInfo from './statuses/status-info';
 import Tombstone from './tombstone';
 
 const messages = defineMessages({

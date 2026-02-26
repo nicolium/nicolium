@@ -1,7 +1,7 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import Account from '@/components/account';
+import Account from '@/components/accounts/account';
 import List, { ListItem } from '@/components/list';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Account, { type IAccount } from '@/components/account';
+import Account, { type IAccount } from '@/components/accounts/account';
 import { useAccount } from '@/queries/accounts/use-account';
 
 interface IAccountContainer extends Omit<IAccount, 'account'> {

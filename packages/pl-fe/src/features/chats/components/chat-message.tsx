@@ -4,7 +4,7 @@ import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import DropdownMenu from '@/components/dropdown-menu';
-import { ParsedContent } from '@/components/parsed-content';
+import { ParsedContent } from '@/components/statuses/parsed-content';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';
