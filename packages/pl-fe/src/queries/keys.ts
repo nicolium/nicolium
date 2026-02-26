@@ -28,6 +28,7 @@ import type {
   Group,
   GroupRelationship,
   GroupRole,
+  Location,
   Marker,
   NotificationGroup,
   OauthToken,
@@ -35,6 +36,7 @@ import type {
   Poll,
   Relationship,
   RssFeed,
+  Tag,
   Translation,
 } from 'pl-api';
 
@@ -340,17 +342,30 @@ const markers = {
 
 const search = {
   root: ['search'] as const,
-  accounts: (query: string, params?: Record<string, unknown>) =>
-    ['search', 'accounts', query, params] as const,
-  statuses: (query: string, params?: Record<string, unknown>) =>
-    ['search', 'statuses', query, params] as const,
-  hashtags: (query: string, params?: Record<string, unknown>) =>
-    ['search', 'hashtags', query, params] as const,
-  groups: (query: string, params?: Record<string, unknown>) =>
-    ['search', 'groups', query, params] as const,
-  accountSearch: (query: string, params?: Record<string, unknown>) =>
-    ['search', 'accountSearch', query, params] as const,
-  location: (query: string) => ['search', 'location', query] as const,
+  accounts: (query: string, params?: Record<string, unknown>) => {
+    const key = ['search', 'accounts', query, params] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  statuses: (query: string, params?: Record<string, unknown>) => {
+    const key = ['search', 'statuses', query, params] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  hashtags: (query: string, params?: Record<string, unknown>) => {
+    const key = ['search', 'hashtags', query, params] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<Tag>>>;
+  },
+  groups: (query: string, params?: Record<string, unknown>) => {
+    const key = ['search', 'groups', query, params] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  accountSearch: (query: string, params?: Record<string, unknown>) => {
+    const key = ['search', 'accountSearch', query, params] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  location: (query: string) => {
+    const key = ['search', 'location', query] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<Location>>>;
+  },
 };
 
 const trends = {

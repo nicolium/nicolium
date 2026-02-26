@@ -22,18 +22,17 @@ const useRelays = () => {
     mutationFn: (relayUrl: string) => client.admin.relays.followRelay(relayUrl),
     retry: false,
     onSuccess: (data) =>
-      queryClient.setQueryData(queryKeys.admin.relays, (prevResult: ReadonlyArray<AdminRelay>) => [
-        ...prevResult,
-        data,
-      ]),
+      queryClient.setQueryData(queryKeys.admin.relays, (prevResult) =>
+        prevResult ? [...prevResult, data] : undefined,
+      ),
   });
 
   const { mutate: unfollowRelay, isPending: isPendingUnfollow } = useMutation({
     mutationFn: (relayUrl: string) => client.admin.relays.unfollowRelay(relayUrl),
     retry: false,
     onSuccess: (_, relayUrl) =>
-      queryClient.setQueryData(queryKeys.admin.relays, (prevResult: ReadonlyArray<AdminRelay>) =>
-        prevResult.filter(({ actor }) => actor !== relayUrl),
+      queryClient.setQueryData(queryKeys.admin.relays, (prevResult) =>
+        prevResult?.filter(({ actor }) => actor !== relayUrl),
       ),
   });
 

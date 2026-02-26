@@ -32,9 +32,8 @@ const useDomains = () => {
     mutationFn: (params: CreateDomainParams) => client.admin.domains.createDomain(params),
     retry: false,
     onSuccess: (data) =>
-      queryClient.setQueryData(
-        queryKeys.admin.domains,
-        (prevResult: ReadonlyArray<AdminDomain>) => [...prevResult, data],
+      queryClient.setQueryData(queryKeys.admin.domains, (prevResult) =>
+        prevResult ? [...prevResult, data] : undefined,
       ),
   });
 
@@ -43,8 +42,8 @@ const useDomains = () => {
       client.admin.domains.updateDomain(id, params.public),
     retry: false,
     onSuccess: (data) =>
-      queryClient.setQueryData(queryKeys.admin.domains, (prevResult: ReadonlyArray<AdminDomain>) =>
-        prevResult.map((domain) => (domain.id === data.id ? data : domain)),
+      queryClient.setQueryData(queryKeys.admin.domains, (prevResult) =>
+        prevResult?.map((domain) => (domain.id === data.id ? data : domain)),
       ),
   });
 
@@ -52,8 +51,8 @@ const useDomains = () => {
     mutationFn: (id: string) => client.admin.domains.deleteDomain(id),
     retry: false,
     onSuccess: (_, id) =>
-      queryClient.setQueryData(queryKeys.admin.domains, (prevResult: ReadonlyArray<AdminDomain>) =>
-        prevResult.filter(({ id: domainId }) => domainId !== id),
+      queryClient.setQueryData(queryKeys.admin.domains, (prevResult) =>
+        prevResult?.filter(({ id: domainId }) => domainId !== id),
       ),
   });
 
