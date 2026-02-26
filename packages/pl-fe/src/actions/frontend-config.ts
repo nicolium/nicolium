@@ -72,7 +72,7 @@ const loadFrontendConfig = () => async (dispatch: AppDispatch, getState: () => R
 const fetchPlFeJson = (host: string | null) => (dispatch: AppDispatch) =>
   staticFetch('/instance/pl-fe.json')
     .then(({ json: data }) => {
-      if (!isObject(data)) throw 'pl-fe.json failed';
+      if (!isObject(data)) throw 'pl-fe.json fetch failed';
       dispatch(importFrontendConfig(data, host));
       return data;
     })
