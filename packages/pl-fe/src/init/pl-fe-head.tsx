@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import InlineStyle from '@/components/inline-style';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
@@ -25,6 +25,7 @@ const PlFeHead = () => {
   } = useSettings();
   const frontendConfig = useFrontendConfig();
   const theme = useTheme();
+  const [wcoVisible, setWcoVisible] = React.useState(false);
 
   const withModals = useHasModals();
 
@@ -45,6 +46,22 @@ const PlFeHead = () => {
     }
   }, [dsn]);
 
+  useEffect(() => {
+    const overlay = navigator.windowControlsOverlay;
+    if (!overlay) return;
+
+    const update = () => setWcoVisible(overlay.visible);
+    overlay.addEventListener('geometrychange', update);
+    return () => overlay.removeEventListener('geometrychange', update);
+  }, []);
+
+  const color = useMemo(() => {
+    if (wcoVisible) {
+      return window.getComputedStyle(document.body, null).getPropertyValue('background-color');
+    }
+    return frontendConfig.brandColor;
+  }, [frontendConfig.brandColor, theme, wcoVisible]);
+
   return (
     <>
       <Helmet>
@@ -53,10 +70,11 @@ const PlFeHead = () => {
           className={clsx(`text-${themeSettings?.interfaceSize ?? 'md'}`, {
             dark: theme === 'dark',
             'black dark': theme === 'black',
+            'window-controls-overlay': wcoVisible,
           })}
         />
         <body className={bodyClass} dir={direction} />
-        <meta name='theme-color' content={frontendConfig.brandColor} />
+        <meta name='theme-color' content={color} />
       </Helmet>
       <InlineStyle>{`:root { ${themeCss} }`}</InlineStyle>
       {['dark', 'black'].includes(theme) && (

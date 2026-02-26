@@ -1,4 +1,5 @@
 @use 'mixins';
+@use 'variables';
 
 html {
   height: 100%;
@@ -372,6 +373,14 @@ body {
 
     &--chats {
       @apply xl:pb-16;
+    }
+
+    &:is(.window-controls-overlay *) {
+      padding-top: env(titlebar-area-height);
+
+      @media (min-width: variables.$breakpoint-lg) {
+        padding-top: 0;
+      }
     }
   }
 
