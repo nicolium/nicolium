@@ -195,8 +195,21 @@ const Multiselect: React.FC<IMultiselect> = ({
           break;
         case 'Escape':
           setIsOpen(false);
+          searchBoxRef.current?.focus();
           break;
         default:
+          if (document.activeElement !== searchBoxRef.current) {
+            if (
+              e.key === 'Backspace' ||
+              e.key === 'ArrowLeft' ||
+              e.key === 'ArrowRight' ||
+              (e.key.length === 1 && !e.ctrlKey && !e.metaKey)
+            ) {
+              searchBoxRef.current?.focus();
+            }
+          } else if (!isOpen) {
+            setIsOpen(true);
+          }
       }
     },
     [inputValue, selectedValues, visibleOptions, isOpen, onSelectItem, onRemoveSelectedItem],

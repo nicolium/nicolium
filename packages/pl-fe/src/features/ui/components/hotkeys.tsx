@@ -193,7 +193,7 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
         isKeyboardEvent(event) &&
         !event.defaultPrevented &&
         !['input', 'textarea', 'select', 'em-emoji-picker'].includes(tagName) &&
-        !(event.target as HTMLElement).closest('[contenteditable]') &&
+        !(event.target as HTMLElement).closest('[contenteditable], .multiselect-container') &&
         !(['a', 'button'].includes(tagName) && normalizeKey(event.key) === 'enter');
 
       if (shouldHandleEvent) {
