@@ -342,6 +342,45 @@ const Thread = ({
     return children;
   }, [thread, linear, status, isModal]);
 
+  const meta = useMemo(() => {
+    const firstAttachment = status.media_attachments && status.media_attachments[0];
+
+    return (
+      <Helmet>
+        {status.spoiler_text && <meta property='og:title' content={status.spoiler_text} />}
+        {(firstAttachment?.type === 'image' || firstAttachment?.type === 'gifv') && (
+          <>
+            <meta property='og:image' content={firstAttachment.preview_url} />
+            <meta property='og:image:alt' content={firstAttachment.description || ''} />
+            {firstAttachment.mime_type && (
+              <meta property='og:type' content={firstAttachment.mime_type} />
+            )}
+            {firstAttachment.meta.original && (
+              <meta
+                property='og:image:width'
+                content={firstAttachment.meta.original.width.toString()}
+              />
+            )}
+            {firstAttachment.meta.original && (
+              <meta
+                property='og:image:height'
+                content={firstAttachment.meta.original.height.toString()}
+              />
+            )}
+          </>
+        )}
+        <meta property='og:url' content={status.url} />
+        <meta name='author' content={status.account.display_name || status.account.acct} />
+        <meta property='article:author' content={status.account.url} />
+        <meta property='article:published_time' content={status.created_at} />
+        <meta property='fediverse.creator' name='fediverse.creator' content={status.account.acct} />
+        {status.edited_at && <meta property='article:modified_time' content={status.edited_at} />}
+
+        {status.account.local === false && <meta content='noindex, noarchive' name='robots' />}
+      </Helmet>
+    );
+  }, [status]);
+
   useEffect(() => {
     setExpandAllStatuses?.(() => {
       expandStatuses(thread);
@@ -357,16 +396,7 @@ const Thread = ({
         'mt-2': !isModal,
       })}
     >
-      <Helmet>
-        {status.spoiler_text && <meta property='og:title' content={status.spoiler_text} />}
-        <meta property='og:url' content={status.url} />
-        <meta name='author' content={status.account.display_name || status.account.acct} />
-        <meta property='article:author' content={status.account.url} />
-        <meta property='article:published_time' content={status.created_at} />
-        {status.edited_at && <meta property='article:modified_time' content={status.edited_at} />}
-
-        {status.account.local === false && <meta content='noindex, noarchive' name='robots' />}
-      </Helmet>
+      {meta}
 
       <div
         ref={node}
