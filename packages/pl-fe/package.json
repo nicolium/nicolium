@@ -29,6 +29,9 @@
     "lint:sass": "npx stylelint src/styles/**/*.scss",
     "fmt": "oxfmt",
     "fmt:check": "oxfmt --check",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "precommit": "lint-staged"
   },
   "dependencies": {
@@ -135,6 +138,9 @@
   "devDependencies": {
     "@formatjs/cli": "^6.13.0",
     "@sentry/types": "^8.47.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
     "@types/dom-chromium-ai": "^0.0.14",
     "@types/leaflet": "^1.9.21",
     "@types/lodash": "^4.17.24",
@@ -146,8 +152,10 @@
     "@types/react-swipeable-views": "^0.13.6",
     "@typescript/native-preview": "7.0.0-dev.20260226.1",
     "@vitejs/plugin-react": "^5.1.3",
+    "@vitest/coverage-v8": "4.0.18",
     "eslint-plugin-formatjs": "^6.2.0",
     "globals": "^17.3.0",
+    "jsdom": "^28.1.0",
     "oxfmt": "^0.35.0",
     "oxlint": "^1.50.0",
     "oxlint-tsgolint": "^0.15.0",
@@ -164,7 +172,8 @@
     "vite-plugin-html": "^3.2.2",
     "vite-plugin-pwa": "^1.2.0",
     "vite-plugin-require": "^1.2.14",
-    "vite-plugin-static-copy": "^3.2.0"
+    "vite-plugin-static-copy": "^3.2.0",
+    "vitest": "^4.0.18"
   },
   "lint-staged": {
     "*.{js,cjs,mjs,ts,tsx}": [

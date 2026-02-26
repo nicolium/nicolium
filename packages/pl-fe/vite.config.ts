@@ -183,6 +183,13 @@ const config = defineConfig(() => ({
     ],
     dedupe: ['@floating-ui/react', 'tabbable', 'query-string', 'valibot'],
   },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['./tests/test-setup.ts'],
+    include: ['tests/**/*.test.{ts,tsx}'],
+    css: false,
+  },
 }));
 
 /** Return file as string, or return empty string if the file isn't found. */
