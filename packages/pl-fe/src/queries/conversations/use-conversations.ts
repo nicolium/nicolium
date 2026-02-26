@@ -105,7 +105,7 @@ const useMarkConversationRead = (conversationId: string) => {
 
       const previous = queryClient.getQueryData(queryKeys.conversations.all);
 
-      updatePaginatedResponse<MinifiedConversation>(queryKeys.conversations.all, (items) =>
+      updatePaginatedResponse(queryKeys.conversations.all, (items) =>
         items.map((item) => (item.id === conversationId ? { ...item, unread: false } : item)),
       );
 

@@ -26,11 +26,8 @@ import type {
 } from 'pl-api';
 
 const useAdminAccounts = makePaginatedResponseQuery(
-  (params: Omit<AdminGetAccountsParams, keyof PaginationParams>) => [
-    'admin',
-    'accountLists',
-    params,
-  ],
+  (params: Omit<AdminGetAccountsParams, keyof PaginationParams>) =>
+    queryKeys.admin.accountLists.show(params),
   (client, [params]) => client.admin.accounts.getAccounts(params).then(minifyAdminAccountList),
   undefined,
   'isAdmin',

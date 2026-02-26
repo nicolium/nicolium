@@ -25,13 +25,9 @@ const minifyRequestList = (
     },
   );
 
-type MinifiedRequestList = ReturnType<typeof minifyRequestList>;
-type MinifiedRequest = MinifiedRequestList['items'][0];
-
 const removeRequest = (statusId: string, accountId: string) =>
-  updatePaginatedResponse<MinifiedRequest>(
-    queryKeys.accountsLists.eventParticipationRequests(statusId),
-    (items) => items.filter(({ account_id }) => account_id !== accountId),
+  updatePaginatedResponse(queryKeys.accountsLists.eventParticipationRequests(statusId), (items) =>
+    items.filter(({ account_id }) => account_id !== accountId),
   );
 
 const useEventParticipationRequests = makePaginatedResponseQuery(

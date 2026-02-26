@@ -1,4 +1,9 @@
-import { type InfiniteData, infiniteQueryOptions, type QueryKey } from '@tanstack/react-query';
+import {
+  type DataTag,
+  type InfiniteData,
+  infiniteQueryOptions,
+  type QueryKey,
+} from '@tanstack/react-query';
 
 import { getClient } from '@/api';
 
@@ -16,7 +21,9 @@ const makePaginatedResponseQueryOptions =
     IsArray extends boolean = true,
     T3 = PaginatedResponseQueryResult<T2, IsArray>,
   >(
-    queryKey: QueryKey | ((...params: T1) => QueryKey),
+    queryKey:
+      | DataTag<QueryKey, InfiniteData<PaginatedResponse<T2, IsArray>>>
+      | ((...params: T1) => DataTag<QueryKey, InfiniteData<PaginatedResponse<T2, IsArray>>>),
     queryFn: (client: PlApiClient, params: T1) => Promise<PaginatedResponse<T2, IsArray>>,
     select?: (data: InfiniteData<PaginatedResponse<T2, IsArray>>) => T3,
   ) =>

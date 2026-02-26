@@ -1,21 +1,31 @@
 import { queryClient } from '@/queries/client';
 
-import type { InfiniteData, QueryKey } from '@tanstack/react-query';
+import type { DataTag, InfiniteData, QueryKey } from '@tanstack/react-query';
 import type { PaginatedResponse } from 'pl-api';
 
-const updatePaginatedResponse = <T>(
-  queryKey: QueryKey,
-  updater: (items: PaginatedResponse<T>['items']) => PaginatedResponse<T>['items'],
+type InferPaginatedItem<TKey extends QueryKey> =
+  TKey extends DataTag<QueryKey, InfiniteData<PaginatedResponse<infer U, any>>> ? U : never;
+
+const updatePaginatedResponse = <
+  TKey extends DataTag<QueryKey, InfiniteData<PaginatedResponse<any>>>,
+>(
+  queryKey: TKey,
+  updater: (
+    items: PaginatedResponse<InferPaginatedItem<TKey>>['items'],
+  ) => PaginatedResponse<InferPaginatedItem<TKey>>['items'],
 ) =>
-  queryClient.setQueryData<InfiniteData<PaginatedResponse<T>>>(queryKey, (data) => {
-    if (!data) return undefined;
-    return {
-      ...data,
-      pages: data.pages.map((page) => ({
-        ...page,
-        items: updater(page.items),
-      })),
-    };
-  });
+  queryClient.setQueryData<InfiniteData<PaginatedResponse<InferPaginatedItem<TKey>>>>(
+    queryKey,
+    (data) => {
+      if (!data) return undefined;
+      return {
+        ...data,
+        pages: data.pages.map((page) => ({
+          ...page,
+          items: updater(page.items),
+        })),
+      };
+    },
+  );
 
 export { updatePaginatedResponse };

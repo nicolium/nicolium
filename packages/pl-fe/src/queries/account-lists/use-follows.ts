@@ -23,12 +23,8 @@ const useFollowing = makePaginatedResponseQuery(
 );
 
 const useSubscribers = makePaginatedResponseQuery(
-  (accountId?: string, includeExpired?: boolean) => [
-    'accountsLists',
-    'subscribers',
-    accountId,
-    includeExpired || false,
-  ],
+  (accountId?: string, includeExpired?: boolean) =>
+    queryKeys.accountsLists.subscribers(accountId!, includeExpired ?? false),
   (client, [accountId, includeExpired]) =>
     client.accounts
       .getAccountSubscribers(accountId!, {
