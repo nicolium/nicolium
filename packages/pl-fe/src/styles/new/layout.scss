@@ -383,6 +383,10 @@ body {
           padding-top: 0;
         }
       }
+
+      @media (min-width: variables.$breakpoint-xl) {
+        padding-top: 0;
+      }
     }
   }
 
