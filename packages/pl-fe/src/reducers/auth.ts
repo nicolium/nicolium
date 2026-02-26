@@ -13,6 +13,17 @@ import {
 import * as v from 'valibot';
 
 import {
+  AUTH_APP_CREATED,
+  AUTH_LOGGED_IN,
+  AUTH_APP_AUTHORIZED,
+  AUTH_LOGGED_OUT,
+  SWITCH_ACCOUNT,
+  VERIFY_CREDENTIALS_SUCCESS,
+  VERIFY_CREDENTIALS_FAIL,
+  type AuthAction,
+} from '@/actions/auth';
+import { ME_FETCH_SKIP, type MeAction } from '@/actions/me';
+import {
   decodeFromMarkup,
   MASTODON_PRELOAD_IMPORT,
   pleromaDecoder,
@@ -22,18 +33,6 @@ import * as BuildConfig from '@/build-config';
 import { coerceObject } from '@/schemas/utils';
 import KVStore from '@/storage/kv-store';
 import { validId, isURL, parseBaseURL } from '@/utils/auth';
-
-import {
-  AUTH_APP_CREATED,
-  AUTH_LOGGED_IN,
-  AUTH_APP_AUTHORIZED,
-  AUTH_LOGGED_OUT,
-  SWITCH_ACCOUNT,
-  VERIFY_CREDENTIALS_SUCCESS,
-  VERIFY_CREDENTIALS_FAIL,
-  type AuthAction,
-} from '../actions/auth';
-import { ME_FETCH_SKIP, type MeAction } from '../actions/me';
 
 import type { PlfeResponse } from '@/api';
 

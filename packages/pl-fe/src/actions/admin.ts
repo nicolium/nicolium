@@ -1,11 +1,10 @@
 import { importEntities } from '@/actions/importer';
+import { getClient } from '@/api';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { useComposeStore } from '@/stores/compose';
 import { useModalsStore } from '@/stores/modals';
 import { filterBadges, getTagDiff } from '@/utils/badges';
-
-import { getClient } from '../api';
 
 import { STATUS_FETCH_SOURCE_FAIL, type StatusesAction } from './statuses';
 import { deleteFromTimelines } from './timelines';

@@ -22,6 +22,7 @@ import { createAccount } from '@/actions/accounts';
 import { createApp } from '@/actions/apps';
 import { fetchMeSuccess, fetchMeFail } from '@/actions/me';
 import { obtainOAuthToken, revokeOAuthToken } from '@/actions/oauth';
+import { type PlfeResponse, getClient } from '@/api';
 import * as BuildConfig from '@/build-config';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
@@ -34,8 +35,6 @@ import sourceCode from '@/utils/code';
 import { normalizeUsername } from '@/utils/input';
 import { getScopes } from '@/utils/scopes';
 import { isStandalone } from '@/utils/state';
-
-import { type PlfeResponse, getClient } from '../api';
 
 import type { AppDispatch, RootState } from '@/store';
 

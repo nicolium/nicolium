@@ -3,14 +3,14 @@ import {
   AUTH_ACCOUNT_REMEMBER_SUCCESS,
   VERIFY_CREDENTIALS_SUCCESS,
   type AuthAction,
-} from '../actions/auth';
+} from '@/actions/auth';
 import {
   ME_FETCH_SUCCESS,
   ME_FETCH_FAIL,
   ME_FETCH_SKIP,
   ME_PATCH_SUCCESS,
   type MeAction,
-} from '../actions/me';
+} from '@/actions/me';
 
 import type { PlfeResponse } from '@/api';
 

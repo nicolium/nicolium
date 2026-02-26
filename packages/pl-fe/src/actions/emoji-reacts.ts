@@ -1,11 +1,10 @@
 import { defineMessages, type IntlShape } from 'react-intl';
 
+import { getClient } from '@/api';
 import { useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
 import { isLoggedIn } from '@/utils/auth';
 import { supportsEmojiReacts } from '@/utils/check-instance-capability';
-
-import { getClient } from '../api';
 
 import { importEntities } from './importer';
 

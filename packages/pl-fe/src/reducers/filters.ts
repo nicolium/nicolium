@@ -1,4 +1,4 @@
-import { FILTERS_FETCH_SUCCESS, type FiltersAction } from '../actions/filters';
+import { FILTERS_FETCH_SUCCESS, type FiltersAction } from '@/actions/filters';
 
 import type { Filter } from 'pl-api';
 

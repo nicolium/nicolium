@@ -1,7 +1,6 @@
+import { getClient, staticFetch } from '@/api';
 import { useComposeStore } from '@/stores/compose';
 import { getAuthUserUrl, getMeUrl } from '@/utils/auth';
-
-import { getClient, staticFetch } from '../api';
 
 import type { AppDispatch, RootState } from '@/store';
 import type { Instance } from 'pl-api';

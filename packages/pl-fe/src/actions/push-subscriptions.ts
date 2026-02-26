@@ -1,4 +1,4 @@
-import { getClient } from '../api';
+import { getClient } from '@/api';
 
 import type { AppDispatch, RootState } from '@/store';
 import type { CreatePushNotificationsSubscriptionParams } from 'pl-api';

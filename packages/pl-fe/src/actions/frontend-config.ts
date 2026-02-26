@@ -2,11 +2,10 @@ import { createSelector } from 'reselect';
 import * as v from 'valibot';
 
 import { getHost } from '@/actions/instance';
+import { getClient, staticFetch } from '@/api';
 import { frontendConfigSchema } from '@/schemas/frontend-config';
 import KVStore from '@/storage/kv-store';
 import { useSettingsStore } from '@/stores/settings';
-
-import { getClient, staticFetch } from '../api';
 
 import type { AppDispatch, RootState } from '@/store';
 import type { APIEntity } from '@/types/entities';

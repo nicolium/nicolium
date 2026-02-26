@@ -6,8 +6,7 @@ import { Sparklines, SparklinesCurve } from 'react-sparklines';
 import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
-
-import { shortNumberFormat } from '../utils/numbers';
+import { shortNumberFormat } from '@/utils/numbers';
 
 import type { Tag } from 'pl-api';
 

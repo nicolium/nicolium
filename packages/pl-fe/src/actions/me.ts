@@ -1,3 +1,4 @@
+import { getClient } from '@/api';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
@@ -6,8 +7,6 @@ import KVStore from '@/storage/kv-store';
 import { useComposeStore } from '@/stores/compose';
 import { useSettingsStore } from '@/stores/settings';
 import { getAuthUserId, getAuthUserUrl } from '@/utils/auth';
-
-import { getClient } from '../api';
 
 import { loadCredentials } from './auth';
 import { FE_NAME } from './settings';

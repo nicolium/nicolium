@@ -1,13 +1,12 @@
-import { PLEROMA_PRELOAD_IMPORT } from '@/actions/preload';
-import KVStore from '@/storage/kv-store';
-import ConfigDB from '@/utils/config-db';
-
-import { ADMIN_CONFIG_UPDATE_SUCCESS } from '../actions/admin';
+import { ADMIN_CONFIG_UPDATE_SUCCESS } from '@/actions/admin';
 import {
   FRONTEND_CONFIG_REMEMBER_SUCCESS,
   FRONTEND_CONFIG_REQUEST_SUCCESS,
   FRONTEND_CONFIG_REQUEST_FAIL,
-} from '../actions/frontend-config';
+} from '@/actions/frontend-config';
+import { PLEROMA_PRELOAD_IMPORT } from '@/actions/preload';
+import KVStore from '@/storage/kv-store';
+import ConfigDB from '@/utils/config-db';
 
 import type { FrontendConfig } from '@/schemas/frontend-config';
 import type { PleromaConfig } from 'pl-api';

@@ -8,23 +8,20 @@ import {
 } from 'pl-api';
 import * as v from 'valibot';
 
-import { simulateEmojiReact, simulateUnEmojiReact } from '@/utils/emoji-reacts';
-import { unescapeHTML } from '@/utils/html';
-
 import {
   EMOJI_REACT_FAIL,
   EMOJI_REACT_REQUEST,
   UNEMOJI_REACT_REQUEST,
   type EmojiReactsAction,
-} from '../actions/emoji-reacts';
+} from '@/actions/emoji-reacts';
 import {
   EVENT_JOIN_REQUEST,
   EVENT_JOIN_FAIL,
   EVENT_LEAVE_REQUEST,
   EVENT_LEAVE_FAIL,
   type EventsAction,
-} from '../actions/events';
-import { STATUS_IMPORT, STATUSES_IMPORT, type ImporterAction } from '../actions/importer';
+} from '@/actions/events';
+import { STATUS_IMPORT, STATUSES_IMPORT, type ImporterAction } from '@/actions/importer';
 import {
   REBLOG_REQUEST,
   REBLOG_FAIL,
@@ -37,7 +34,7 @@ import {
   UNDISLIKE_REQUEST,
   DISLIKE_FAIL,
   type InteractionsAction,
-} from '../actions/interactions';
+} from '@/actions/interactions';
 import {
   STATUS_CREATE_REQUEST,
   STATUS_CREATE_FAIL,
@@ -48,8 +45,10 @@ import {
   STATUS_UNMUTE_SUCCESS,
   type StatusesAction,
   STATUS_DELETE_SUCCESS,
-} from '../actions/statuses';
-import { TIMELINE_DELETE, type TimelineAction } from '../actions/timelines';
+} from '@/actions/statuses';
+import { TIMELINE_DELETE, type TimelineAction } from '@/actions/timelines';
+import { simulateEmojiReact, simulateUnEmojiReact } from '@/utils/emoji-reacts';
+import { unescapeHTML } from '@/utils/html';
 
 const domParser = new DOMParser();
 

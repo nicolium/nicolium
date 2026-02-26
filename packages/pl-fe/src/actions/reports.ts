@@ -1,6 +1,5 @@
+import { getClient } from '@/api';
 import { useModalsStore } from '@/stores/modals';
-
-import { getClient } from '../api';
 
 import type { NormalizedStatus as Status } from '@/reducers/statuses';
 import type { AppDispatch, RootState } from '@/store';

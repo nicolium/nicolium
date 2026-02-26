@@ -1,11 +1,10 @@
 import { getLocale } from '@/actions/settings';
+import { getClient } from '@/api';
 import { useComposeStore } from '@/stores/compose';
 import { useContextStore } from '@/stores/contexts';
 import { usePendingStatusesStore } from '@/stores/pending-statuses';
 import { useSettingsStore } from '@/stores/settings';
 import { shouldFilter } from '@/utils/timelines';
-
-import { getClient } from '../api';
 
 import { importEntities } from './importer';
 

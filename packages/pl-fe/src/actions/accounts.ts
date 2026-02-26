@@ -1,4 +1,4 @@
-import { getClient } from '../api';
+import { getClient } from '@/api';
 
 import type { NormalizedStatus } from '@/reducers/statuses';
 import type { AppDispatch, RootState } from '@/store';

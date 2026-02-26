@@ -1,3 +1,4 @@
+import { getClient } from '@/api';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
@@ -8,8 +9,6 @@ import { usePendingStatusesStore } from '@/stores/pending-statuses';
 import { useSettingsStore } from '@/stores/settings';
 import { isLoggedIn } from '@/utils/auth';
 import { shouldHaveCard } from '@/utils/status';
-
-import { getClient } from '../api';
 
 import { importEntities } from './importer';
 import { deleteFromTimelines } from './timelines';

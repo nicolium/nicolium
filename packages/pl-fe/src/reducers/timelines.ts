@@ -4,13 +4,13 @@ import {
   ACCOUNT_BLOCK_SUCCESS,
   ACCOUNT_MUTE_SUCCESS,
   type AccountsAction,
-} from '../actions/accounts';
-import { PIN_SUCCESS, UNPIN_SUCCESS, type InteractionsAction } from '../actions/interactions';
+} from '@/actions/accounts';
+import { PIN_SUCCESS, UNPIN_SUCCESS, type InteractionsAction } from '@/actions/interactions';
 import {
   STATUS_CREATE_REQUEST,
   STATUS_CREATE_SUCCESS,
   type StatusesAction,
-} from '../actions/statuses';
+} from '@/actions/statuses';
 import {
   TIMELINE_UPDATE,
   TIMELINE_DELETE,
@@ -23,7 +23,7 @@ import {
   MAX_QUEUED_ITEMS,
   TIMELINE_SCROLL_TOP,
   type TimelineAction,
-} from '../actions/timelines';
+} from '@/actions/timelines';
 
 import type { NormalizedStatus as Status } from '@/reducers/statuses';
 import type {
