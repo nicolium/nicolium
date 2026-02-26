@@ -1,7 +1,6 @@
 import sumBy from 'lodash/sumBy';
 
 import { normalizeChatMessage } from '@/normalizers/chat-message';
-import { ChatKeys } from '@/queries/chats';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 
@@ -65,7 +64,7 @@ const updateChatListItem = (newChat: Chat) => {
 
   if (lastMessage) {
     // Update the Chat Messages query data.
-    appendPageItem(ChatKeys.chatMessages(newChat.id), normalizeChatMessage(lastMessage));
+    appendPageItem(queryKeys.chats.chatMessages(newChat.id), normalizeChatMessage(lastMessage));
   }
 };
 

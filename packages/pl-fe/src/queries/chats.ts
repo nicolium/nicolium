@@ -269,10 +269,7 @@ const useDeleteChatMessage = (chatId: string) => {
   });
 };
 
-const ChatKeys = queryKeys.chats;
-
 export {
-  ChatKeys,
   useChat,
   useMarkChatAsRead,
   useCreateChatMessage,
