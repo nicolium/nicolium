@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import { staticFetch } from '@/api';
 
+import { queryKeys } from '../keys';
+
 const fetchAboutPage = async (slug: string, locale?: string) => {
   const filename = `${slug}${locale ? `.${locale}` : ''}.html`;
 
@@ -14,7 +16,7 @@ const fetchAboutPage = async (slug: string, locale?: string) => {
 
 const useAboutPage = (slug = 'index', locale?: string) =>
   useQuery({
-    queryKey: ['pl-fe', 'aboutPages', slug, locale],
+    queryKey: queryKeys.frontend.aboutPages(slug, locale),
     queryFn: () => fetchAboutPage(slug, locale),
   });
 

@@ -2,6 +2,7 @@ import { skipToken, useQueries } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { useAppSelector } from '@/hooks/use-app-selector';
+import { queryKeys } from '@/queries/keys';
 import { validId } from '@/utils/auth';
 
 import type { Account } from 'pl-api';
@@ -19,7 +20,7 @@ const useLoggedInAccounts = () => {
 
   const queries = useQueries({
     queries: otherAccountIds.map((accountId) => ({
-      queryKey: ['accounts', accountId] as const,
+      queryKey: queryKeys.accounts.show(accountId),
       queryFn: skipToken,
     })),
   });

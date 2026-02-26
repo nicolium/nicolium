@@ -14,6 +14,7 @@ import { store } from '@/store';
 import { compareDate } from '@/utils/comparators';
 
 import { queryClient } from '../client';
+import { queryKeys } from '../keys';
 import {
   minifyConversation,
   minifyConversationList,
@@ -76,7 +77,7 @@ const useConversations = () => {
   const { isLoggedIn } = useLoggedIn();
 
   const query = useInfiniteQuery({
-    queryKey: ['conversations'],
+    queryKey: queryKeys.conversations.all,
     queryFn: async ({ pageParam }) => {
       if (pageParam.next) {
         return pageParam.next();
@@ -108,7 +109,7 @@ const useMarkConversationRead = (conversationId: string) => {
     mutationKey: ['conversations', conversationId, 'read'],
     mutationFn: () => client.timelines.markConversationRead(conversationId),
     onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ['conversations'] });
+      await queryClient.cancelQueries({ queryKey: queryKeys.conversations.all });
 
       const previous = queryClient.getQueryData<
         InfiniteData<PaginatedResponse<MinifiedConversation>>
@@ -122,7 +123,7 @@ const useMarkConversationRead = (conversationId: string) => {
     },
     onError: (_, __, context) => {
       if (context?.previous) {
-        queryClient.setQueryData(['conversations'], context.previous);
+        queryClient.setQueryData(queryKeys.conversations.all, context.previous);
       }
     },
   });

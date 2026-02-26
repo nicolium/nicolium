@@ -3,6 +3,7 @@ import { accountSchema } from 'pl-api';
 import * as v from 'valibot';
 
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 
 import { verifyCredentials } from './auth';
 
@@ -63,7 +64,7 @@ const preloadMastodon = (data: Record<string, any>) => (dispatch: AppDispatch) =
   for (const account of Object.values(data.accounts)) {
     try {
       const parsedAccount = v.parse(accountSchema, account);
-      queryClient.setQueryData(['accounts', parsedAccount.id], parsedAccount);
+      queryClient.setQueryData(queryKeys.accounts.show(parsedAccount.id), parsedAccount);
     } catch {
       //
     }

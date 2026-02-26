@@ -1,4 +1,5 @@
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
 import { useComposeStore } from '@/stores/compose';
 import { useContextStore } from '@/stores/contexts';
@@ -15,7 +16,7 @@ import { deleteFromTimelines } from './timelines';
 
 import type { Status } from '@/normalizers/status';
 import type { AppDispatch, RootState } from '@/store';
-import type { CreateStatusParams, Status as BaseStatus, ScheduledStatus, Poll } from 'pl-api';
+import type { CreateStatusParams, Status as BaseStatus, ScheduledStatus } from 'pl-api';
 import type { IntlShape } from 'react-intl';
 
 const STATUS_CREATE_REQUEST = 'STATUS_CREATE_REQUEST' as const;
@@ -142,7 +143,7 @@ const editStatus = (statusId: string) => (dispatch: AppDispatch, getState: () =>
 
   const status = state.statuses[statusId];
   const poll = status.poll_id
-    ? queryClient.getQueryData<Poll>(['statuses', 'polls', status.poll_id])
+    ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
     : undefined;
 
   dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_REQUEST });
@@ -185,7 +186,7 @@ const deleteStatus =
 
     const status = state.statuses[statusId];
     const poll = status.poll_id
-      ? queryClient.getQueryData<Poll>(['statuses', 'polls', status.poll_id])
+      ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
       : undefined;
 
     dispatch<StatusesAction>({ type: STATUS_DELETE_REQUEST, params: status });

@@ -7,6 +7,8 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import toast from '@/toast';
 
+import { queryKeys } from '../keys';
+
 import type { Status } from 'pl-api';
 
 const messages = defineMessages({
@@ -39,7 +41,7 @@ const useJoinEventMutation = (statusId: string, withToast = true) => {
     onSettled: (status) => {
       if (!status) return;
       dispatch(importEntities({ statuses: [status] }));
-      queryClient.invalidateQueries({ queryKey: ['accountsLists', 'joinedEvents'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.joinedEvents });
 
       if (withToast) {
         toast.success(
@@ -80,7 +82,7 @@ const useLeaveEventMutation = (statusId: string) => {
     onSettled: (status) => {
       if (!status) return;
       dispatch(importEntities({ statuses: [status] }));
-      queryClient.invalidateQueries({ queryKey: ['accountsLists', 'joinedEvents'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.joinedEvents });
     },
   });
 };

@@ -4,6 +4,8 @@ import { PaginatedResponse } from 'pl-api';
 import { useClient } from '@/hooks/use-client';
 import { flattenPages } from '@/utils/queries';
 
+import { queryKeys } from '../keys';
+
 import type { AdminModerationLogEntry } from 'pl-api';
 
 const useModerationLog = () => {
@@ -15,7 +17,7 @@ const useModerationLog = () => {
     (pageParam?.next ?? client.admin.moderationLog.getModerationLog)();
 
   const queryInfo = useInfiniteQuery({
-    queryKey: ['admin', 'moderation_log'],
+    queryKey: queryKeys.admin.moderationLog,
     queryFn: ({ pageParam }) => getModerationLog(pageParam),
     initialPageParam: {
       next: null as (() => Promise<PaginatedResponse<AdminModerationLogEntry>>) | null,

@@ -5,13 +5,15 @@ import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/hooks/use-instance';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 
+import { queryKeys } from '../keys';
+
 const useTranslationLanguages = () => {
   const client = useClient();
   const { isLoggedIn } = useLoggedIn();
   const features = useFeatures();
   const instance = useInstance();
 
-  const getTranslationLanguages = () => {
+  const getTranslationLanguages = async () => {
     const metadata = instance.pleroma.metadata;
 
     if (metadata.translation.source_languages?.length) {
@@ -23,11 +25,11 @@ const useTranslationLanguages = () => {
       );
     }
 
-    return client.instance.getInstanceTranslationLanguages();
+    return await client.instance.getInstanceTranslationLanguages();
   };
 
   return useQuery({
-    queryKey: ['translationLanguages'],
+    queryKey: queryKeys.translationLanguages.all,
     queryFn: getTranslationLanguages,
     placeholderData: {},
     enabled: isLoggedIn && features.translations,

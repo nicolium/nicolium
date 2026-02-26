@@ -3,6 +3,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useClient } from '@/hooks/use-client';
 
 import { queryClient } from '../client';
+import { queryKeys } from '../keys';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 
 const useFollowedTags = makePaginatedResponseQuery(['followedTags'], (client) =>
@@ -17,9 +18,9 @@ const useFollowHashtagMutation = (tag: string) => {
     mutationFn: () => client.myAccount.followTag(tag),
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ['followedTags'],
+        queryKey: queryKeys.followedTags.all,
       });
-      queryClient.setQueryData(['hashtags', tag.toLocaleLowerCase()], data);
+      queryClient.setQueryData(queryKeys.hashtags.show(tag.toLocaleLowerCase()), data);
     },
   });
 };
@@ -32,9 +33,9 @@ const useUnfollowHashtagMutation = (tag: string) => {
     mutationFn: () => client.myAccount.unfollowTag(tag),
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ['followedTags'],
+        queryKey: queryKeys.followedTags.all,
       });
-      queryClient.setQueryData(['hashtags', tag.toLocaleLowerCase()], data);
+      queryClient.setQueryData(queryKeys.hashtags.show(tag.toLocaleLowerCase()), data);
     },
   });
 };

@@ -5,6 +5,8 @@ import * as v from 'valibot';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useLanguageModelAvailabilityActions } from '@/stores/language-model-availability';
 
+import { queryKeys } from '../keys';
+
 const useLocalStatusTranslation = (statusId: string, targetLanguage?: string) => {
   const status = useAppSelector((state) => state.statuses[statusId]);
   const { setLanguageModelAvailability, setLanguageModelDownloadProgress } =
@@ -13,7 +15,7 @@ const useLocalStatusTranslation = (statusId: string, targetLanguage?: string) =>
   const sourceLanguage = status?.language;
 
   return useQuery<Translation | false>({
-    queryKey: ['statuses', 'localTranslations', statusId, targetLanguage],
+    queryKey: queryKeys.statuses.localTranslations(statusId, targetLanguage!),
     queryFn: async ({ signal }) => {
       if (!('Translator' in globalThis)) return false;
 

@@ -4,6 +4,7 @@ import { patchMeSuccess } from '@/actions/me';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
+import { queryKeys } from '@/queries/keys';
 
 import type { UpdateCredentialsParams } from 'pl-api';
 
@@ -12,7 +13,7 @@ const useCredentialAccount = (enabled = true) => {
   const currentAccount = useCurrentAccount();
 
   return useQuery({
-    queryKey: [currentAccount, 'credentialAccount'],
+    queryKey: queryKeys.accountCredentials.show(currentAccount as string),
     queryFn: () => client.settings.verifyCredentials(),
     enabled: currentAccount !== 'unauthenticated' && enabled,
   });
@@ -25,10 +26,13 @@ const useUpdateCredentials = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: [currentAccount, 'credentialAccount'],
+    mutationKey: queryKeys.accountCredentials.show(currentAccount as string),
     mutationFn: (params: UpdateCredentialsParams) => client.settings.updateCredentials(params),
     onSuccess: (response) => {
-      queryClient.setQueryData([currentAccount, 'credentialAccount'], response);
+      queryClient.setQueryData(
+        queryKeys.accountCredentials.show(currentAccount as string),
+        response,
+      );
       dispatch(patchMeSuccess(response));
     },
   });

@@ -14,6 +14,8 @@ import KVStore from '@/storage/kv-store';
 import { useComposeStore } from '@/stores/compose';
 import { APIEntity } from '@/types/entities';
 
+import { queryKeys } from '../keys';
+
 const draftStatusSchema = v.pipe(
   v.any(),
   v.transform((draft) => ({
@@ -68,7 +70,7 @@ function useDraftStatusesQuery<T = Record<string, DraftStatus>>(
   const { data: account } = useOwnAccount();
 
   return useQuery({
-    queryKey: ['draftStatuses'],
+    queryKey: queryKeys.draftStatuses.all,
     queryFn: () => getDrafts(account!.url),
     enabled: !!account,
     select,
@@ -93,25 +95,27 @@ const usePersistDraftStatus = () => {
       draft_id: compose.draftId ?? crypto.randomUUID(),
     };
 
-    const drafts = queryClient.getQueryData<Record<string, DraftStatus>>(['draftStatuses']) ?? {};
+    const drafts =
+      queryClient.getQueryData<Record<string, DraftStatus>>(queryKeys.draftStatuses.all) ?? {};
 
     const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
       oldDrafts[draft.draft_id] = v.parse(draftStatusSchema, draft);
     });
     return persistDrafts(account!.url, newDrafts).then(() =>
-      queryClient.invalidateQueries({ queryKey: ['draftStatuses'] }),
+      queryClient.invalidateQueries({ queryKey: queryKeys.draftStatuses.all }),
     );
   };
 };
 
 const cancelDraftStatus = (queryClient: QueryClient, accountUrl: string, draftId: string) => {
-  const drafts = queryClient.getQueryData<Record<string, DraftStatus>>(['draftStatuses']) ?? {};
+  const drafts =
+    queryClient.getQueryData<Record<string, DraftStatus>>(queryKeys.draftStatuses.all) ?? {};
 
   const newDrafts: Record<string, DraftStatus> = create(drafts, (oldDrafts) => {
     delete oldDrafts[draftId];
   });
   return persistDrafts(accountUrl, newDrafts).then((drafts) =>
-    queryClient.invalidateQueries({ queryKey: ['draftStatuses'] }),
+    queryClient.invalidateQueries({ queryKey: queryKeys.draftStatuses.all }),
   );
 };
 

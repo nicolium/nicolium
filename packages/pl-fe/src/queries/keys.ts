@@ -1,0 +1,544 @@
+import { MinifiedAdminAccount } from './utils/minify-list';
+
+import type { FilterType } from './notifications/use-notifications';
+import type { MinifiedStatusEdit } from './statuses/use-status-history';
+import type { MinifiedEmojiReaction } from './statuses/use-status-interactions';
+import type { MinifiedSuggestion } from './trends/use-suggested-accounts';
+import type { ChatMessage } from '@/normalizers/chat-message';
+import type { DataTag, InfiniteData } from '@tanstack/react-query';
+import type {
+  Account,
+  AdminAnnouncement,
+  AdminGetAccountsParams,
+  AdminGetDimensionsParams,
+  AdminGetMeasuresParams,
+  AdminGetReportsParams,
+  Chat,
+  CredentialAccount,
+  CustomEmoji,
+  DriveFile,
+  DriveFolder,
+  Filter,
+  Group,
+  GroupRelationship,
+  GroupRole,
+  OauthToken,
+  PaginatedResponse,
+  Poll,
+  Relationship,
+  RssFeed,
+  Translation,
+} from 'pl-api';
+
+type TaggedKey<TKey extends readonly unknown[], TData> = DataTag<TKey, TData>;
+
+const accounts = {
+  root: ['accounts'] as const,
+  show: (accountId: string) => {
+    const key = ['accounts', accountId] as const;
+    return key as TaggedKey<typeof key, Account>;
+  },
+  lookup: (acct: string) => {
+    const key = ['accounts', 'lookup', acct] as const;
+    return key as TaggedKey<typeof key, string>;
+  },
+};
+
+const accountCredentials = {
+  root: ['credentialAccount'] as const,
+  show: (currentAccountUrl: string) => {
+    const key = [currentAccountUrl, 'credentialAccount'] as const;
+    return key as TaggedKey<typeof key, CredentialAccount>;
+  },
+};
+
+const accountRelationships = {
+  root: ['accountRelationships'] as const,
+  show: (accountId: string) => {
+    const key = ['accountRelationships', accountId] as const;
+    return key as TaggedKey<typeof key, Relationship>;
+  },
+};
+
+const accountsLists = {
+  root: ['accountsLists'] as const,
+  followers: (accountId: string) => {
+    const key = ['accountsLists', 'followers', accountId] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  following: (accountId: string) => {
+    const key = ['accountsLists', 'following', accountId] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  subscribers: (accountId: string, includeExpired?: boolean) => {
+    const key = ['accountsLists', 'subscribers', accountId, includeExpired] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  blocked: ['accountsLists', 'blocked'] as TaggedKey<
+    ['accountsLists', 'blocked'],
+    InfiniteData<PaginatedResponse<[string, string | null]>>
+  >,
+  muted: ['accountsLists', 'muted'] as TaggedKey<
+    ['accountsLists', 'muted'],
+    InfiniteData<PaginatedResponse<[string, string | null]>>
+  >,
+  endorsedAccounts: (accountId: string) => {
+    const key = ['accountsLists', 'endorsedAccounts', accountId] as const;
+    return key as TaggedKey<typeof key, Array<string>>;
+  },
+  familiarFollowers: (accountId: string) => {
+    const key = ['accountsLists', 'familiarFollowers', accountId] as const;
+    return key as TaggedKey<typeof key, Array<string>>;
+  },
+  birthdayReminders: (month: number, day: number) => {
+    const key = ['accountsLists', 'birthdayReminders', month, day] as const;
+    return key as TaggedKey<typeof key, Array<string>>;
+  },
+  directory: (order: string, local: boolean) => {
+    const key = ['accountsLists', 'directory', order, local] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  followRequests: ['accountsLists', 'followRequests'] as TaggedKey<
+    ['accountsLists', 'followRequests'],
+    InfiniteData<PaginatedResponse<string>>
+  >,
+  outgoingFollowRequests: ['accountsLists', 'outgoingFollowRequests'] as TaggedKey<
+    ['accountsLists', 'outgoingFollowRequests'],
+    InfiniteData<PaginatedResponse<string>>
+  >,
+  listMembers: (listId: string) => {
+    const key = ['accountsLists', 'lists', listId] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  circleMembers: (circleId: string) => {
+    const key = ['accountsLists', 'circles', circleId] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  antennaMembers: (antennaId: string) => {
+    const key = ['accountsLists', 'antennas', antennaId] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  antennaExcludedAccounts: (antennaId: string) => {
+    const key = ['accountsLists', 'antennas', antennaId, 'excluded'] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  groupMembers: {
+    root: (groupId: string) => {
+      const key = ['accountsLists', 'groupMembers', groupId] as const;
+      return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+    },
+    byRole: (groupId: string, role?: GroupRole) => {
+      const key = ['accountsLists', 'groupMembers', groupId, role] as const;
+      return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+    },
+  },
+  groupMembershipRequests: (groupId: string) => {
+    const key = ['accountsLists', 'groupMembershipRequests', groupId] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  groupBlocks: (groupId: string) => {
+    const key = ['accountsLists', 'groupBlocks', groupId] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  eventParticipations: (statusId: string) => {
+    const key = ['accountsLists', 'eventParticipations', statusId] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  eventParticipationRequests: (statusId: string) => {
+    const key = ['accountsLists', 'eventParticipationRequests', statusId] as const;
+    return key as TaggedKey<
+      typeof key,
+      InfiniteData<PaginatedResponse<{ account_id: string; participation_message: string }>>
+    >;
+  },
+  statusFavourites: (statusId: string) => {
+    const key = ['accountsLists', 'statusFavourites', statusId] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  statusDislikes: (statusId: string) => {
+    const key = ['accountsLists', 'statusDislikes', statusId] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  statusReblogs: (statusId: string) => {
+    const key = ['accountsLists', 'statusReblogs', statusId] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  statusReactions: (statusId: string, emoji?: string) => {
+    const key = ['accountsLists', 'statusReactions', statusId, emoji] as const;
+    return key as TaggedKey<typeof key, Array<MinifiedEmojiReaction>>;
+  },
+  joinedEvents: ['accountsLists', 'joinedEvents'] as TaggedKey<
+    ['accountsLists', 'joinedEvents'],
+    InfiniteData<PaginatedResponse<string>>
+  >,
+};
+
+const statusLists = {
+  root: ['statusLists'] as const,
+  pins: (accountId: string) => {
+    const key = ['statusLists', 'pins', accountId] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  favourites: (accountId: string) => {
+    const key = ['statusLists', 'favourites', accountId] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  bookmarks: (folderId?: string | null) => {
+    const key = ['statusLists', 'bookmarks', folderId] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  bookmarksRoot: ['statusLists', 'bookmarks'] as const,
+  quotes: (statusId: string) => {
+    const key = ['statusLists', 'quotes', statusId] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+  },
+  recentEvents: ['statusLists', 'recentEvents'] as TaggedKey<
+    ['statusLists', 'recentEvents'],
+    InfiniteData<PaginatedResponse<string>>
+  >,
+  joinedEvents: ['statusLists', 'joinedEvents'] as TaggedKey<
+    ['statusLists', 'joinedEvents'],
+    InfiniteData<PaginatedResponse<string>>
+  >,
+};
+
+const statuses = {
+  root: ['statuses'] as const,
+  polls: {
+    root: ['statuses', 'polls'] as const,
+    show: (pollId: string) => {
+      const key = ['statuses', 'polls', pollId] as const;
+      return key as TaggedKey<typeof key, Poll>;
+    },
+  },
+  translations: (statusId: string, targetLanguage: string) => {
+    const key = ['statuses', 'translations', statusId, targetLanguage] as const;
+    return key as TaggedKey<typeof key, Translation>;
+  },
+  localTranslations: (statusId: string, targetLanguage: string) => {
+    const key = ['statuses', 'localTranslations', statusId, targetLanguage] as const;
+    return key as TaggedKey<typeof key, Translation>;
+  },
+  history: (statusId: string) => {
+    const key = ['statuses', 'history', statusId] as const;
+    return key as TaggedKey<typeof key, Array<MinifiedStatusEdit>>;
+  },
+};
+
+const chats = {
+  root: ['chats'] as const,
+  chat: (chatId?: string) => {
+    const key = ['chats', 'chat', chatId] as const;
+    return key as TaggedKey<typeof key, Chat>;
+  },
+  chatMessages: (chatId: string) => {
+    const key = ['chats', 'messages', chatId] as const;
+    return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<ChatMessage>>>;
+  },
+  search: ['chats', 'search'] as TaggedKey<
+    ['chats', 'search'],
+    InfiniteData<PaginatedResponse<Chat>>
+  >,
+};
+
+const groups = {
+  root: ['groups'] as const,
+  show: (groupId: string) => {
+    const key = ['groups', groupId] as const;
+    return key as TaggedKey<typeof key, Group>;
+  },
+};
+
+const groupLists = {
+  root: ['groupLists'] as const,
+  myGroups: ['groupLists', 'myGroups'] as TaggedKey<['groupLists', 'myGroups'], Array<string>>,
+};
+
+const groupRelationships = {
+  root: ['groupRelationships'] as const,
+  show: (groupId: string) => {
+    const key = ['groupRelationships', groupId] as const;
+    return key as TaggedKey<typeof key, GroupRelationship>;
+  },
+};
+
+const admin = {
+  root: ['admin'] as const,
+  accounts: {
+    root: ['admin', 'accounts'] as const,
+    show: (accountId: string) => {
+      const key = ['admin', 'accounts', accountId] as const;
+      return key as TaggedKey<typeof key, MinifiedAdminAccount>;
+    },
+  },
+  accountLists: {
+    root: ['admin', 'accountLists'] as const,
+    show: (params?: AdminGetAccountsParams) => {
+      const key = ['admin', 'accountLists', params] as const;
+      return key as TaggedKey<typeof key, InfiniteData<PaginatedResponse<string>>>;
+    },
+  },
+  reports: {
+    root: ['admin', 'reports'] as const,
+    show: (reportId: string) => ['admin', 'reports', reportId] as const,
+  },
+  reportLists: {
+    root: ['admin', 'reportLists'] as const,
+    show: (params?: AdminGetReportsParams) => ['admin', 'reportLists', params] as const,
+  },
+  rules: ['admin', 'rules'] as const,
+  relays: ['admin', 'relays'] as const,
+  domains: ['admin', 'domains'] as const,
+  announcements: ['admin', 'announcements'] as TaggedKey<
+    ['admin', 'announcements'],
+    InfiniteData<PaginatedResponse<AdminAnnouncement>>
+  >,
+  moderationLog: ['admin', 'moderation_log'] as const,
+  dimensions: (keys: string[], params?: AdminGetDimensionsParams) =>
+    ['admin', 'dimensions', keys, params] as const,
+  measures: (keys: string[], startAt: string, endAt: string, params?: AdminGetMeasuresParams) =>
+    ['admin', 'measures', keys, startAt, endAt, params] as const,
+  retention: (startAt: string, endAt: string, frequency: 'day' | 'month') =>
+    ['admin', 'retention', startAt, endAt, frequency] as const,
+};
+
+const notifications = {
+  root: ['notifications'] as const,
+  list: (activeFilter?: FilterType) => ['notifications', activeFilter] as const,
+};
+
+const markers = {
+  root: ['markers'] as const,
+  notifications: ['markers', 'notifications'] as const,
+};
+
+const search = {
+  root: ['search'] as const,
+  accounts: (query: string, params?: Record<string, unknown>) =>
+    ['search', 'accounts', query, params] as const,
+  statuses: (query: string, params?: Record<string, unknown>) =>
+    ['search', 'statuses', query, params] as const,
+  hashtags: (query: string, params?: Record<string, unknown>) =>
+    ['search', 'hashtags', query, params] as const,
+  groups: (query: string, params?: Record<string, unknown>) =>
+    ['search', 'groups', query, params] as const,
+  accountSearch: (query: string, params?: Record<string, unknown>) =>
+    ['search', 'accountSearch', query, params] as const,
+  location: (query: string) => ['search', 'location', query] as const,
+};
+
+const trends = {
+  root: ['trends'] as const,
+  tags: ['trends', 'tags'] as const,
+  statuses: ['trends', 'statuses'] as const,
+  links: ['trends', 'links'] as const,
+};
+
+const suggestions = {
+  root: ['suggestions'] as const,
+  all: ['suggestions'] as TaggedKey<['suggestions'], Array<MinifiedSuggestion>>,
+};
+
+const timelines = {
+  root: ['timelines'] as const,
+  home: ['timelines', 'home'] as const,
+};
+
+const timelineIds = {
+  root: ['timelineIds'] as const,
+  accountMedia: (accountId: string) =>
+    ['timelineIds', `account:${accountId}:with_replies:media`] as const,
+  groupMedia: (groupId: string) => ['timelineIds', `group:${groupId}:media`] as const,
+};
+
+const settings = {
+  root: ['settings'] as const,
+  mfa: ['settings', 'mfa'] as const,
+  backups: ['settings', 'backups'] as const,
+  accountAliases: ['settings', 'accountAliases'] as const,
+  domainBlocks: ['settings', 'domainBlocks'] as const,
+};
+
+const interactionPolicies = {
+  root: ['interactionPolicies'] as const,
+  all: ['interactionPolicies'] as const,
+};
+
+const filters = {
+  root: ['filters'] as const,
+  all: ['filters'] as TaggedKey<['filters'], Array<Filter>>,
+  show: (filterId: string) => {
+    const key = ['filters', filterId] as const;
+    return key as TaggedKey<typeof key, Filter>;
+  },
+};
+
+const security = {
+  root: ['security'] as const,
+  oauthTokens: ['security', 'oauthTokens'] as TaggedKey<
+    ['security', 'oauthTokens'],
+    Array<OauthToken>
+  >,
+};
+
+const drive = {
+  root: ['drive'] as const,
+  files: {
+    root: ['drive', 'files'] as const,
+    show: (fileId: string) => {
+      const key = ['drive', 'files', fileId] as const;
+      return key as TaggedKey<typeof key, DriveFile>;
+    },
+  },
+  folders: {
+    root: ['drive', 'folders'] as const,
+    show: (folderId?: string) => {
+      const key = ['drive', 'folders', folderId] as const;
+      return key as TaggedKey<typeof key, DriveFolder>;
+    },
+  },
+};
+
+const hashtags = {
+  root: ['hashtags'] as const,
+  show: (tag: string) => ['hashtags', tag] as const,
+};
+
+const followedTags = {
+  root: ['followedTags'] as const,
+  all: ['followedTags'] as const,
+};
+
+const conversations = {
+  root: ['conversations'] as const,
+  all: ['conversations'] as const,
+};
+
+const announcements = {
+  root: ['announcements'] as const,
+  all: ['announcements'] as const,
+};
+
+const scrobbles = {
+  root: ['scrobbles'] as const,
+  show: (accountId: string) => ['scrobbles', accountId] as const,
+};
+
+const lists = {
+  root: ['lists'] as const,
+  all: ['lists'] as const,
+  forAccount: (accountId: string) => ['lists', 'forAccount', accountId] as const,
+};
+
+const circles = {
+  root: ['circles'] as const,
+  all: ['circles'] as const,
+};
+
+const antennas = {
+  root: ['antennas'] as const,
+  all: ['antennas'] as TaggedKey<['antennas'], Array<string>>,
+  domains: (antennaId: string) => ['antennas', antennaId, 'domains'] as const,
+  keywords: (antennaId: string) => ['antennas', antennaId, 'keywords'] as const,
+  tags: (antennaId: string) => ['antennas', antennaId, 'tags'] as const,
+};
+
+const bookmarkFolders = {
+  root: ['bookmarkFolders'] as const,
+  all: ['bookmarkFolders'] as const,
+  forStatus: (statusId: string) => ['bookmarkFolders', 'status', statusId] as const,
+};
+
+const draftStatuses = {
+  root: ['draftStatuses'] as const,
+  all: ['draftStatuses'] as const,
+};
+
+const scheduledStatuses = {
+  root: ['scheduledStatuses'] as const,
+  all: ['scheduledStatuses'] as const,
+};
+
+const interactionRequests = {
+  root: ['interactionRequests'] as const,
+  all: ['interactionRequests'] as const,
+};
+
+const embed = {
+  root: ['embed'] as const,
+  show: (url: string) => ['embed', url] as const,
+};
+
+const rssFeedSubscriptions = {
+  root: ['rssFeedSubscriptions'] as const,
+  all: ['rssFeedSubscriptions'] as TaggedKey<['rssFeedSubscriptions'], Array<RssFeed>>,
+};
+
+const translationLanguages = {
+  root: ['translationLanguages'] as const,
+  all: ['translationLanguages'] as TaggedKey<
+    ['translationLanguages'],
+    Record<string, Array<string>>
+  >,
+};
+
+const instance = {
+  root: ['instance'] as const,
+  customEmojis: ['instance', 'customEmojis'] as TaggedKey<
+    ['instance', 'customEmojis'],
+    Array<CustomEmoji>
+  >,
+};
+
+const frontend = {
+  root: ['frontend'] as const,
+  aboutPages: (slug: string, locale?: string) => {
+    const key = ['frontend', 'aboutPages', slug, locale] as const;
+    return key as TaggedKey<typeof key, string>;
+  },
+};
+
+const queryKeys = {
+  accounts,
+  accountCredentials,
+  accountRelationships,
+  accountsLists,
+  statusLists,
+  statuses,
+  chats,
+  groups,
+  groupLists,
+  groupRelationships,
+  admin,
+  notifications,
+  markers,
+  search,
+  trends,
+  suggestions,
+  timelines,
+  timelineIds,
+  settings,
+  interactionPolicies,
+  filters,
+  security,
+  drive,
+  hashtags,
+  followedTags,
+  conversations,
+  announcements,
+  scrobbles,
+  lists,
+  circles,
+  antennas,
+  bookmarkFolders,
+  draftStatuses,
+  scheduledStatuses,
+  interactionRequests,
+  embed,
+  rssFeedSubscriptions,
+  translationLanguages,
+  instance,
+  frontend,
+} as const;
+
+export { queryKeys, type TaggedKey };

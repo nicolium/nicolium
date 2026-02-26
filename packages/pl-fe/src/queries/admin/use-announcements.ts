@@ -12,9 +12,10 @@ import * as v from 'valibot';
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
 
+import { queryKeys } from '../keys';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 
-const useAnnouncements = makePaginatedResponseQuery(['admin', 'announcements'], (client) =>
+const useAnnouncements = makePaginatedResponseQuery(queryKeys.admin.announcements, (client) =>
   client.admin.announcements.getAnnouncements(),
 );
 
@@ -26,18 +27,16 @@ const useCreateAnnouncementMutation = () => {
       client.admin.announcements.createAnnouncement(params),
     retry: false,
     onSuccess: (data) => {
-      queryClient.setQueryData<InfiniteData<PaginatedResponse<AdminAnnouncement>>>(
-        ['admin', 'announcements'],
-        (prevData) =>
-          create(prevData, (draft) => {
-            if (draft?.pages.length)
-              draft.pages[0].items = [
-                v.parse(adminAnnouncementSchema, data),
-                ...draft.pages[0].items,
-              ];
-          }),
+      queryClient.setQueryData(queryKeys.admin.announcements, (prevData) =>
+        create(prevData, (draft) => {
+          if (draft?.pages.length)
+            draft.pages[0].items = [
+              v.parse(adminAnnouncementSchema, data),
+              ...draft.pages[0].items,
+            ];
+        }),
       );
-      queryClient.invalidateQueries({ queryKey: ['announcements'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.announcements.root });
     },
   });
 };
@@ -51,7 +50,7 @@ const useUpdateAnnouncementMutation = () => {
     retry: false,
     onSuccess: (data) => {
       queryClient.setQueryData<InfiniteData<PaginatedResponse<AdminAnnouncement>>>(
-        ['admin', 'announcements'],
+        queryKeys.admin.announcements,
         (prevData) =>
           create(prevData, (draft) => {
             draft?.pages.forEach(({ items }) => {
@@ -60,7 +59,7 @@ const useUpdateAnnouncementMutation = () => {
             });
           }),
       );
-      queryClient.invalidateQueries({ queryKey: ['announcements'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.announcements.root });
     },
   });
 };
@@ -73,7 +72,7 @@ const useDeleteAnnouncementMutation = () => {
     retry: false,
     onSuccess: (_, deletedAnnouncementId) => {
       queryClient.setQueryData<InfiniteData<PaginatedResponse<AdminAnnouncement>>>(
-        ['admin', 'announcements'],
+        queryKeys.admin.announcements,
         (prevData) =>
           create(prevData, (draft) => {
             draft?.pages.forEach(
@@ -81,7 +80,7 @@ const useDeleteAnnouncementMutation = () => {
             );
           }),
       );
-      queryClient.invalidateQueries({ queryKey: ['announcements'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.announcements.root });
     },
   });
 };

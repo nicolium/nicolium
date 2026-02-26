@@ -3,6 +3,8 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 
+import { queryKeys } from '../keys';
+
 import type { Suggestion } from 'pl-api';
 
 type MinifiedSuggestion = Omit<Suggestion, 'account'> & { account_id: string };
@@ -13,11 +15,11 @@ const useSuggestedAccounts = () => {
   const queryClient = useQueryClient();
 
   return useQuery({
-    queryKey: ['suggestions'],
+    queryKey: queryKeys.suggestions.all,
     queryFn: () =>
       client.myAccount.getSuggestions().then((suggestions) => {
         for (const { account } of suggestions) {
-          queryClient.setQueryData(['accounts', account.id], account);
+          queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
         }
         return suggestions.map(
           ({ account, ...suggestion }): MinifiedSuggestion => ({

@@ -73,10 +73,9 @@ const Chat: React.FC<IChat> = ({ chat, inputRef, className }) => {
         onSuccess: () => {
           setErrorMessage(undefined);
         },
-        onError: (error: { response: PlfeResponse }, _variables, context) => {
+        onError: (error: { response: PlfeResponse }, _variables) => {
           const message = error.response?.json?.error;
           setErrorMessage(message ?? intl.formatMessage(messages.failedToSend));
-          setContent(context.prevContent as string);
         },
       },
     );

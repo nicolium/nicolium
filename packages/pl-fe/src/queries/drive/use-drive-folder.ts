@@ -3,6 +3,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 
+import { queryKeys } from '../keys';
+
 import type { DriveFolder } from 'pl-api';
 
 const useDriveFolderQuery = (folderId?: string) => {
@@ -10,7 +12,7 @@ const useDriveFolderQuery = (folderId?: string) => {
   const features = useFeatures();
 
   return useQuery({
-    queryKey: ['drive', 'folders', folderId],
+    queryKey: queryKeys.drive.folders.show(folderId),
     queryFn: () => (folderId ? client.drive.getFolder(folderId) : client.drive.getDrive()),
     enabled: features.drive,
   });
@@ -25,9 +27,9 @@ const useCreateDriveFolderMutation = () => {
     mutationFn: ({ name, parentId }: { name: string; parentId?: string }) =>
       client.drive.createFolder(name, parentId),
     onSuccess: (folder) => {
-      queryClient.setQueryData(['drive', 'folders', folder.id], folder);
+      queryClient.setQueryData(queryKeys.drive.folders.show(folder.id || undefined), folder);
       queryClient.invalidateQueries({
-        queryKey: ['drive', 'folders', folder.parent_id ?? undefined],
+        queryKey: queryKeys.drive.folders.show(folder.parent_id ?? undefined),
         exact: true,
       });
     },
@@ -43,7 +45,9 @@ const useUpdateDriveFolderMutation = (folderId: string) => {
   return useMutation({
     mutationKey: ['drive', 'folders'],
     mutationFn: (name: string) => {
-      const oldFolder = queryClient.getQueryData<DriveFolder>(['drive', 'folders', folderId]);
+      const oldFolder = queryClient.getQueryData<DriveFolder>(
+        queryKeys.drive.folders.show(folderId),
+      );
       if (oldFolder) {
         previousParentId = oldFolder.parent_id;
       } else {
@@ -52,11 +56,13 @@ const useUpdateDriveFolderMutation = (folderId: string) => {
       return client.drive.updateFolder(folderId, name);
     },
     onSuccess: (folder) => {
-      queryClient.setQueryData(['drive', 'folders', folder.id], folder);
-      queryClient.invalidateQueries({
-        queryKey: ['drive', 'folders', previousParentId],
-        exact: true,
-      });
+      queryClient.setQueryData(queryKeys.drive.folders.show(folder.id!), folder);
+      if (previousParentId) {
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.drive.folders.show(previousParentId),
+          exact: true,
+        });
+      }
     },
   });
 };
@@ -70,7 +76,9 @@ const useDeleteDriveFolderMutation = (folderId: string) => {
   return useMutation({
     mutationKey: ['drive', 'folders'],
     mutationFn: () => {
-      const oldFolder = queryClient.getQueryData<DriveFolder>(['drive', 'folders', folderId]);
+      const oldFolder = queryClient.getQueryData<DriveFolder>(
+        queryKeys.drive.folders.show(folderId),
+      );
       if (oldFolder) {
         previousParentId = oldFolder.parent_id;
       } else {
@@ -79,11 +87,16 @@ const useDeleteDriveFolderMutation = (folderId: string) => {
       return client.drive.deleteFolder(folderId);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['drive', 'folders', folderId], exact: true });
       queryClient.invalidateQueries({
-        queryKey: ['drive', 'folders', previousParentId],
+        queryKey: queryKeys.drive.folders.show(folderId),
         exact: true,
       });
+      if (previousParentId) {
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.drive.folders.show(previousParentId),
+          exact: true,
+        });
+      }
     },
   });
 };
@@ -97,7 +110,9 @@ const useMoveDriveFolderMutation = (folderId: string) => {
   return useMutation({
     mutationKey: ['drive', 'folders'],
     mutationFn: (targetFolderId?: string) => {
-      const oldFolder = queryClient.getQueryData<DriveFolder>(['drive', 'folders', folderId]);
+      const oldFolder = queryClient.getQueryData<DriveFolder>(
+        queryKeys.drive.folders.show(folderId),
+      );
       if (oldFolder) {
         previousParentId = oldFolder.parent_id;
       } else {
@@ -106,14 +121,17 @@ const useMoveDriveFolderMutation = (folderId: string) => {
       return client.drive.moveFolder(folderId, targetFolderId);
     },
     onSuccess: (_, targetFolderId) => {
-      queryClient.invalidateQueries({ queryKey: ['drive', 'folders', folderId], exact: true });
       queryClient.invalidateQueries({
-        queryKey: ['drive', 'folders', targetFolderId],
+        queryKey: queryKeys.drive.folders.show(folderId),
+        exact: true,
+      });
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.drive.folders.show(targetFolderId),
         exact: true,
       });
       if (previousParentId)
         queryClient.invalidateQueries({
-          queryKey: ['drive', 'folders', previousParentId || undefined],
+          queryKey: queryKeys.drive.folders.show(previousParentId || undefined),
           exact: true,
         });
     },

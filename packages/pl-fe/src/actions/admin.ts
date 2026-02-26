@@ -1,5 +1,6 @@
 import { importEntities } from '@/actions/importer';
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { useComposeStore } from '@/stores/compose';
 import { useModalsStore } from '@/stores/modals';
 import { filterBadges, getTagDiff } from '@/utils/badges';
@@ -139,7 +140,7 @@ const redactStatus = (statusId: string) => (dispatch: AppDispatch, getState: () 
 
   const status = state.statuses[statusId];
   const poll = status.poll_id
-    ? queryClient.getQueryData<Poll>(['statuses', 'polls', status.poll_id])
+    ? queryClient.getQueryData<Poll>(queryKeys.statuses.polls.show(status.poll_id))
     : undefined;
 
   return getClient(state)

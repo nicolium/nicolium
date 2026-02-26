@@ -1,6 +1,7 @@
 import { getClient } from '@/api';
 
 import { queryClient } from '../client';
+import { queryKeys } from '../keys';
 import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';
 import { mutationOptions } from '../utils/mutation-options';
 
@@ -12,12 +13,12 @@ let store: Store;
 import('@/store').then((value) => (store = value.store)).catch(() => {});
 
 const domainBlocksQueryOptions = makePaginatedResponseQueryOptions(
-  ['settings', 'domainBlocks'],
+  queryKeys.settings.domainBlocks,
   (client) => client.filtering.getDomainBlocks(),
 )();
 
 const blockDomainMutationOptions = mutationOptions({
-  mutationKey: ['settings', 'domainBlocks'],
+  mutationKey: queryKeys.settings.domainBlocks,
   mutationFn: (domain: string) => getClient().filtering.blockDomain(domain),
   onSettled: (_, __, domain) => {
     queryClient.invalidateQueries(domainBlocksQueryOptions);
@@ -25,7 +26,7 @@ const blockDomainMutationOptions = mutationOptions({
     const accounts = selectAccountsByDomain(store.getState(), domain);
     if (!accounts) return;
 
-    queryClient.setQueryData<Array<MinifiedSuggestion>>(['suggestions'], (suggestions) =>
+    queryClient.setQueryData<Array<MinifiedSuggestion>>(queryKeys.suggestions.all, (suggestions) =>
       suggestions
         ? suggestions.filter((suggestion) => !accounts.includes(suggestion.account_id))
         : undefined,
@@ -34,7 +35,7 @@ const blockDomainMutationOptions = mutationOptions({
 });
 
 const unblockDomainMutationOptions = mutationOptions({
-  mutationKey: ['settings', 'domainBlocks'],
+  mutationKey: queryKeys.settings.domainBlocks,
   mutationFn: (domain: string) => getClient().filtering.unblockDomain(domain),
   onSettled: () => {
     queryClient.invalidateQueries(domainBlocksQueryOptions);
@@ -43,7 +44,7 @@ const unblockDomainMutationOptions = mutationOptions({
 
 const selectAccountsByDomain = (state: RootState, domain: string): string[] => {
   const accounts = queryClient
-    .getQueriesData<Account>({ queryKey: ['accounts'] })
+    .getQueriesData<Account>({ queryKey: queryKeys.accounts.root })
     .map(([, account]) => account)
     .filter((account): account is Account => !!account && typeof account.id === 'string')
     .filter((account) => account.acct.endsWith(`@${domain}`))

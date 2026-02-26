@@ -5,12 +5,13 @@ import { addCustomToPool } from '@/features/emoji/search';
 import { useClient } from '@/hooks/use-client';
 
 import { queryClient } from '../client';
+import { queryKeys } from '../keys';
 
 import type { CustomEmoji, PlApiClient } from 'pl-api';
 
 const customEmojisQueryOptions = (client: PlApiClient) =>
   queryOptions({
-    queryKey: ['instance', 'customEmojis'],
+    queryKey: queryKeys.instance.customEmojis,
     queryFn: () =>
       client.instance.getCustomEmojis().then((emojis) => {
         addCustomToPool(buildCustomEmojis(emojis));

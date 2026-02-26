@@ -4,6 +4,8 @@ import { defineMessages } from 'react-intl';
 import { useClient } from '@/hooks/use-client';
 import toast from '@/toast';
 
+import { queryKeys } from '../keys';
+
 const messages = defineMessages({
   createSuccess: {
     id: 'aliases.success.add',
@@ -19,7 +21,7 @@ const useAccountAliases = () => {
   const client = useClient();
 
   return useQuery({
-    queryKey: ['settings', 'accountAliases'],
+    queryKey: queryKeys.settings.accountAliases,
     queryFn: async (): Promise<Array<string>> =>
       (await client.settings.getAccountAliases()).aliases,
   });
@@ -37,7 +39,7 @@ const useAddAccountAlias = () => {
     },
     onSettled: () =>
       queryClient.invalidateQueries({
-        queryKey: ['settings', 'accountAliases'],
+        queryKey: queryKeys.settings.accountAliases,
       }),
   });
 };
@@ -54,7 +56,7 @@ const useDeleteAccountAlias = () => {
     },
     onSettled: () =>
       queryClient.invalidateQueries({
-        queryKey: ['settings', 'accountAliases'],
+        queryKey: queryKeys.settings.accountAliases,
       }),
   });
 };

@@ -2,6 +2,8 @@ import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 
+import { queryKeys } from '../keys';
+
 import type { SearchAccountParams } from 'pl-api';
 
 const useAccountSearch = (query: string, params?: Omit<SearchAccountParams, 'offset'>) => {
@@ -9,7 +11,7 @@ const useAccountSearch = (query: string, params?: Omit<SearchAccountParams, 'off
   const queryClient = useQueryClient();
 
   return useInfiniteQuery({
-    queryKey: ['search', 'accountSearch', query.trim(), params],
+    queryKey: queryKeys.search.accountSearch(query.trim(), params),
     queryFn: ({ pageParam: offset, signal }) =>
       client.accounts
         .searchAccounts(
@@ -22,7 +24,7 @@ const useAccountSearch = (query: string, params?: Omit<SearchAccountParams, 'off
         )
         .then((accounts) => {
           for (const account of accounts) {
-            queryClient.setQueryData(['accounts', account.id], account);
+            queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
           }
           return accounts.map(({ id }) => id);
         }),

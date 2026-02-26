@@ -7,6 +7,7 @@ import {
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { queryKeys } from '@/queries/keys';
 
 import { queryClient } from '../client';
 import { filterById } from '../utils/filter-id';
@@ -22,7 +23,7 @@ function useCircles<T = Array<Circle>>(select?: (data: Array<Circle>) => T) {
   const features = useFeatures();
 
   return useQuery({
-    queryKey: ['circles'],
+    queryKey: queryKeys.circles.all,
     queryFn: () => client.circles.fetchCircles(),
     enabled: features.circles,
     select,
@@ -38,7 +39,7 @@ const useCreateCircle = () => {
   return useMutation({
     mutationKey: ['circles', 'create'],
     mutationFn: (title: string) => client.circles.createCircle(title),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['circles'] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.circles.all }),
   });
 };
 
@@ -49,7 +50,7 @@ const useDeleteCircle = () => {
     mutationKey: ['circles', 'delete'],
     mutationFn: (circleId: string) => client.circles.deleteCircle(circleId),
     onSuccess: (_, deletedCircleId) => {
-      queryClient.setQueryData<Array<Circle>>(['circles'], (prevData) =>
+      queryClient.setQueryData<Array<Circle>>(queryKeys.circles.all, (prevData) =>
         prevData?.filter(({ id }) => id !== deletedCircleId),
       );
     },
@@ -62,12 +63,12 @@ const useUpdateCircle = (circleId: string) => {
   return useMutation({
     mutationKey: ['circles', 'update', circleId],
     mutationFn: (title: string) => client.circles.updateCircle(circleId, title),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['circles'] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.circles.all }),
   });
 };
 
 const useCircleAccounts = makePaginatedResponseQuery(
-  (circleId: string) => ['accountsLists', 'circles', circleId],
+  (circleId: string) => queryKeys.accountsLists.circleMembers(circleId),
   (client, [circleId]) => client.circles.getCircleAccounts(circleId).then(minifyAccountList),
 );
 
@@ -79,7 +80,7 @@ const useAddAccountsToCircle = (circleId: string) => {
     mutationFn: (accountIds: Array<string>) =>
       client.circles.addCircleAccounts(circleId, accountIds),
     onSettled: (_, __, accountIds) => {
-      queryClient.invalidateQueries({ queryKey: ['accountsLists', 'circles', circleId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.circleMembers(circleId) });
     },
   });
 };
@@ -93,7 +94,7 @@ const useRemoveAccountsFromCircle = (circleId: string) => {
       client.circles.deleteCircleAccounts(circleId, accountIds),
     onSettled: (_, __, accountIds) => {
       queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
-        ['accountsLists', 'circles', circleId],
+        queryKeys.accountsLists.circleMembers(circleId),
         filterById(accountIds),
       );
     },

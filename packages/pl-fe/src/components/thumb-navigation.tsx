@@ -10,6 +10,7 @@ import { layouts } from '@/features/ui/router';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { queryKeys } from '@/queries/keys';
 import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
@@ -47,7 +48,7 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
 
   const handleOpenComposeModal = () => {
     if (match?.params.groupId) {
-      const group = queryClient.getQueryData<Group>(['groups', match.params.groupId]);
+      const group = queryClient.getQueryData<Group>(queryKeys.groups.show(match.params.groupId));
       if (group) groupComposeModal(group);
     } else {
       openModal('COMPOSE');

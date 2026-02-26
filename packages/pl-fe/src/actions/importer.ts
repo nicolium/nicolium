@@ -1,5 +1,6 @@
 import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { useContextStore } from '@/stores/contexts';
 
 import type { AppDispatch } from '@/store';
@@ -107,28 +108,28 @@ const importEntities =
 
     if (!isEmpty(accounts)) {
       for (const account of Object.values(accounts)) {
-        queryClient.setQueryData<BaseAccount>(['accounts', account.id], account);
+        queryClient.setQueryData<BaseAccount>(queryKeys.accounts.show(account.id), account);
       }
     }
     if (!isEmpty(groups))
       for (const group of Object.values(groups)) {
-        queryClient.setQueryData<BaseGroup>(['groups', group.id], group);
+        queryClient.setQueryData<BaseGroup>(queryKeys.groups.show(group.id), group);
         if (group.relationship) {
           queryClient.setQueryData<GroupRelationship>(
-            ['groupRelationships', group.id],
+            queryKeys.groupRelationships.show(group.id),
             group.relationship,
           );
         }
       }
     if (!isEmpty(polls)) {
       for (const poll of Object.values(polls)) {
-        queryClient.setQueryData<BasePoll>(['statuses', 'polls', poll.id], poll);
+        queryClient.setQueryData<BasePoll>(queryKeys.statuses.polls.show(poll.id), poll);
       }
     }
     if (!isEmpty(relationships)) {
       for (const relationship of Object.values(relationships)) {
         queryClient.setQueryData<BaseRelationship>(
-          ['accountRelationships', relationship.id],
+          queryKeys.accountRelationships.show(relationship.id),
           relationship,
         );
       }

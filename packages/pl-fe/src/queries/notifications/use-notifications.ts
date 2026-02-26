@@ -30,6 +30,7 @@ import { EXCLUDE_TYPES, NOTIFICATION_TYPES } from '@/utils/notification';
 import { play, soundCache } from '@/utils/sounds';
 import { joinPublicPath } from '@/utils/static';
 
+import { queryKeys } from '../keys';
 import { minifyGroupedNotifications } from '../utils/minify-list';
 
 import type {
@@ -99,7 +100,7 @@ const shouldDisplayNotification = (
 };
 
 const notificationsQueryOptions = makePaginatedResponseQueryOptions(
-  (activeFilter: FilterType) => ['notifications', activeFilter],
+  (activeFilter: FilterType) => queryKeys.notifications.list(activeFilter),
   (client, [activeFilter]) =>
     client.groupedNotifications
       .getGroupedNotifications(
@@ -122,7 +123,7 @@ const useNotificationsMarker = () => {
   const { me } = useLoggedIn();
 
   return useQuery({
-    queryKey: ['markers', 'notifications'],
+    queryKey: queryKeys.markers.notifications,
     queryFn: async () =>
       (await client.timelines.getMarkers(['notifications'])).notifications ?? null,
     enabled: !!me,
@@ -137,7 +138,7 @@ const usePrefetchNotificationsMarker = () => {
   useEffect(() => {
     if (!me) return;
     queryClient.prefetchQuery({
-      queryKey: ['markers', 'notifications'],
+      queryKey: queryKeys.markers.notifications,
       queryFn: async () =>
         (await client.timelines.getMarkers(['notifications'])).notifications ?? null,
     });
@@ -244,7 +245,7 @@ const useMarkNotificationsReadMutation = () => {
     mutationFn: async (lastReadId?: string | null) => {
       if (!lastReadId) return;
 
-      const currentMarker = queryClient.getQueryData<Marker>(['markers', 'notifications']);
+      const currentMarker = queryClient.getQueryData<Marker>(queryKeys.markers.notifications);
       if (currentMarker && compareId(currentMarker.last_read_id, lastReadId) >= 0) {
         return;
       }
@@ -257,7 +258,7 @@ const useMarkNotificationsReadMutation = () => {
     },
     onSuccess: (markers, lastReadId) => {
       if (markers?.notifications) {
-        queryClient.setQueryData(['markers', 'notifications'], markers.notifications);
+        queryClient.setQueryData(queryKeys.markers.notifications, markers.notifications);
       }
     },
   });
@@ -318,7 +319,7 @@ const comparator = (
 
 const prependNotification = (notification: NotificationGroup, filter: FilterType) => {
   queryClient.setQueryData<InfiniteData<PaginatedResponse<NotificationGroup>>>(
-    ['notifications', filter],
+    queryKeys.notifications.list(filter),
     (data) => {
       if (!data || !data.pages.length) return data;
 

@@ -9,6 +9,7 @@ import { useLoggedIn } from '@/hooks/use-logged-in';
 import messages from '@/messages';
 import { queryClient } from '@/queries/client';
 import { updateConversations } from '@/queries/conversations/use-conversations';
+import { queryKeys } from '@/queries/keys';
 import { useProcessStreamNotification } from '@/queries/notifications/use-notifications';
 import { useSettings } from '@/stores/settings';
 import { getUnreadChatsCount, updateChatListItem } from '@/utils/chats';
@@ -28,7 +29,7 @@ import type {
 } from 'pl-api';
 
 const updateAnnouncementReactions = (reaction: AnnouncementReaction) => {
-  queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
+  queryClient.setQueryData(queryKeys.announcements.all, (prevResult: Announcement[]) =>
     prevResult.map((value) => {
       if (value.id !== reaction.announcement_id) return value;
 
@@ -41,7 +42,7 @@ const updateAnnouncementReactions = (reaction: AnnouncementReaction) => {
 };
 
 const updateAnnouncement = (announcement: Announcement) =>
-  queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) => {
+  queryClient.setQueryData(queryKeys.announcements.all, (prevResult: Announcement[]) => {
     let updated = false;
 
     const result = prevResult.map((value) =>
@@ -52,7 +53,7 @@ const updateAnnouncement = (announcement: Announcement) =>
   });
 
 const deleteAnnouncement = (announcementId: string) =>
-  queryClient.setQueryData(['announcements'], (prevResult: Announcement[]) =>
+  queryClient.setQueryData(queryKeys.announcements.all, (prevResult: Announcement[]) =>
     prevResult.filter((value) => value.id !== announcementId),
   );
 
@@ -77,7 +78,7 @@ const updateFollowRelationships =
 
     if (update.follower.id === me) {
       queryClient.setQueryData<Relationship>(
-        ['accountRelationships', update.following.id],
+        queryKeys.accountRelationships.show(update.following.id),
         (relationship) =>
           relationship
             ? {
@@ -133,7 +134,7 @@ const useUserStream = () => {
         updateConversations(event.payload);
         break;
       case 'filters_changed':
-        queryClient.invalidateQueries({ queryKey: ['filters'] });
+        queryClient.invalidateQueries({ queryKey: queryKeys.filters.all });
         break;
       case 'chat_update':
         dispatch((_dispatch, getState) => {
@@ -167,7 +168,10 @@ const useUserStream = () => {
         deleteAnnouncement(event.payload);
         break;
       case 'marker':
-        queryClient.setQueryData(['markers', 'notifications'], event.payload.notifications ?? null);
+        queryClient.setQueryData(
+          queryKeys.markers.notifications,
+          event.payload.notifications ?? null,
+        );
         break;
     }
   }, []);

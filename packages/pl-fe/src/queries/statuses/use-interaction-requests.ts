@@ -6,6 +6,8 @@ import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 
+import { queryKeys } from '../keys';
+
 import type { AppDispatch } from '@/store';
 import type { InteractionRequest, PaginatedResponse } from 'pl-api';
 
@@ -54,7 +56,7 @@ const useInteractionRequests = <T>(
   const { isLoggedIn } = useLoggedIn();
 
   return useInfiniteQuery({
-    queryKey: ['interactionRequests'],
+    queryKey: queryKeys.interactionRequests.all,
     queryFn: ({ pageParam }) =>
       pageParam.next?.() ??
       client.interactionRequests

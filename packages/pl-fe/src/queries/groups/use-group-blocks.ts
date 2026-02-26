@@ -5,13 +5,14 @@ import { queryClient } from '@/queries/client';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from '@/queries/utils/minify-list';
 
+import { queryKeys } from '../keys';
 import { filterById } from '../utils/filter-id';
 
 import { removeGroupMember } from './use-group-members';
 
 const appendGroupBlock = (groupId: string, accountId: string) =>
   queryClient.setQueryData<InfiniteData<ReturnType<typeof minifyAccountList>>>(
-    ['accountsLists', 'groupBlocks', groupId],
+    queryKeys.accountsLists.groupBlocks(groupId),
     (data) => {
       if (!data || data.pages.some((page) => page.items.includes(accountId))) return data;
 
@@ -26,12 +27,12 @@ const appendGroupBlock = (groupId: string, accountId: string) =>
 
 const removeGroupBlock = (groupId: string, accountId: string) =>
   queryClient.setQueryData<InfiniteData<ReturnType<typeof minifyAccountList>>>(
-    ['accountsLists', 'groupBlocks', groupId],
+    queryKeys.accountsLists.groupBlocks(groupId),
     filterById(accountId),
   );
 
 const useGroupBlocks = makePaginatedResponseQuery(
-  (groupId: string) => ['accountsLists', 'groupBlocks', groupId],
+  (groupId: string) => queryKeys.accountsLists.groupBlocks(groupId),
   (client, [groupId]) => client.experimental.groups.getGroupBlocks(groupId).then(minifyAccountList),
 );
 

@@ -8,6 +8,7 @@ import Text from '@/components/ui/text';
 import AccountContainer from '@/containers/account-container';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { useModalsStore } from '@/stores/modals';
 import toast from '@/toast';
 
@@ -168,9 +169,9 @@ const deleteUserModal =
         dispatch(deleteUser(accountId))
           .then(() => {
             const message = intl.formatMessage(messages.userDeleted, { acct });
-            queryClient.invalidateQueries({ queryKey: ['accounts', accountId] });
+            queryClient.invalidateQueries({ queryKey: queryKeys.accounts.show(accountId) });
             queryClient.invalidateQueries({
-              queryKey: ['accounts', 'lookup', acct.toLocaleLowerCase()],
+              queryKey: queryKeys.accounts.lookup(acct.toLocaleLowerCase()),
             });
             toast.success(message);
             afterConfirm();

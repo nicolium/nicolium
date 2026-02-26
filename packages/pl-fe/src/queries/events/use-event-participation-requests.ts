@@ -6,6 +6,7 @@ import { minifyList } from '@/queries/utils/minify-list';
 import { updatePaginatedResponse } from '@/queries/utils/update-paginated-response';
 
 import { queryClient } from '../client';
+import { queryKeys } from '../keys';
 
 import type { PlApiClient } from 'pl-api';
 
@@ -19,7 +20,7 @@ const minifyRequestList = (
     ({ account, participation_message }) => ({ account_id: account.id, participation_message }),
     (requests) => {
       for (const { account } of requests) {
-        queryClient.setQueryData(['accounts', account.id], account);
+        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
       }
     },
   );
@@ -29,12 +30,12 @@ type MinifiedRequest = MinifiedRequestList['items'][0];
 
 const removeRequest = (statusId: string, accountId: string) =>
   updatePaginatedResponse<MinifiedRequest>(
-    ['accountsLists', 'eventParticipationRequests', statusId],
+    queryKeys.accountsLists.eventParticipationRequests(statusId),
     (items) => items.filter(({ account_id }) => account_id !== accountId),
   );
 
 const useEventParticipationRequests = makePaginatedResponseQuery(
-  (statusId: string) => ['accountsLists', 'eventParticipationRequests', statusId],
+  (statusId: string) => queryKeys.accountsLists.eventParticipationRequests(statusId),
   (client, params) =>
     client.events.getEventParticipationRequests(...params).then(minifyRequestList),
 );

@@ -1,5 +1,4 @@
 import {
-  InfiniteData,
   keepPreviousData,
   useInfiniteQuery,
   useMutation,
@@ -28,11 +27,7 @@ import { flattenPages, updatePageItem } from '@/utils/queries';
 
 import { useRelationshipQuery } from './accounts/use-relationship';
 import { queryClient } from './client';
-
-const ChatKeys = {
-  chat: (chatId?: string) => ['chats', 'chat', chatId] as const,
-  chatMessages: (chatId: string) => ['chats', 'messages', chatId] as const,
-};
+import { queryKeys } from './keys';
 
 const useChatMessages = (chat: Chat) => {
   const client = useClient();
@@ -53,7 +48,7 @@ const useChatMessages = (chat: Chat) => {
   };
 
   const queryInfo = useInfiniteQuery({
-    queryKey: ChatKeys.chatMessages(chat.id),
+    queryKey: queryKeys.chats.chatMessages(chat.id),
     queryFn: ({ pageParam }) => getChatMessages(chat.id, pageParam),
     enabled: !isBlocked,
     gcTime: 0,
@@ -88,14 +83,14 @@ const useChats = () => {
     const fetcher = batcher.relationships(client).fetch;
     for (const { account } of items) {
       fetcher(account.id);
-      queryClient.setQueryData(['accounts', account.id], account);
+      queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
     }
 
     return response;
   };
 
   const queryInfo = useInfiniteQuery({
-    queryKey: ['chats', 'search'],
+    queryKey: queryKeys.chats.search,
     queryFn: ({ pageParam }) => getChats(pageParam),
     placeholderData: keepPreviousData,
     enabled: features.chats && !!me,
@@ -123,14 +118,14 @@ const useChat = (chatId?: string) => {
     if (chatId) {
       const data = await client.chats.getChat(chatId);
 
-      queryClient.setQueryData(['accounts', data.account.id], data.account);
+      queryClient.setQueryData(queryKeys.accounts.show(data.account.id), data.account);
 
       return data;
     }
   };
 
   return useQuery<Chat | undefined>({
-    queryKey: ChatKeys.chat(chatId),
+    queryKey: queryKeys.chats.chat(chatId),
     queryFn: getChat,
     gcTime: 0,
     enabled: !!chatId,
@@ -145,11 +140,8 @@ const useMarkChatAsRead = (chatId: string) => {
   return useMutation({
     mutationFn: (lastReadId: string) => client.chats.markChatAsRead(chatId, lastReadId),
     onSuccess: (data) => {
-      updatePageItem(['chats', 'search'], data, (o, n) => o.id === n.id);
-      const queryData = queryClient.getQueryData<InfiniteData<PaginatedResponse<unknown>>>([
-        'chats',
-        'search',
-      ]);
+      updatePageItem(queryKeys.chats.search, data, (o, n) => o.id === n.id);
+      const queryData = queryClient.getQueryData(queryKeys.chats.search);
 
       if (queryData) {
         const flattenedQueryData: any = flattenPages(queryData)?.map((chat: any) => {
@@ -184,18 +176,21 @@ const useCreateChatMessage = (chatId: string) => {
     onMutate: async (variables) => {
       // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
       await queryClient.cancelQueries({
-        queryKey: ['chats', 'messages', variables.chatId],
+        queryKey: queryKeys.chats.chatMessages(variables.chatId),
       });
 
       // Snapshot the previous value
       const prevContent = variables.content;
-      const prevChatMessages = queryClient.getQueryData(['chats', 'messages', variables.chatId]);
+      const prevChatMessages = queryClient.getQueryData(
+        queryKeys.chats.chatMessages(variables.chatId),
+      );
       const pendingId = String(Date.now());
 
       // Optimistically update to the new value
-      queryClient.setQueryData(ChatKeys.chatMessages(variables.chatId), (prevResult: any) => {
+      queryClient.setQueryData(queryKeys.chats.chatMessages(variables.chatId), (prevResult) => {
+        if (!prevResult?.pages) return prevResult;
         const newResult = { ...prevResult };
-        newResult.pages = newResult.pages.map((page: any, idx: number) => {
+        newResult.pages = newResult.pages.map((page, idx: number) => {
           if (idx === 0) {
             return {
               ...page,
@@ -225,14 +220,19 @@ const useCreateChatMessage = (chatId: string) => {
       return { prevChatMessages, prevContent, pendingId };
     },
     // If the mutation fails, use the context returned from onMutate to roll back
-    onError: (_error: any, variables, context: any) => {
-      queryClient.setQueryData(['chats', 'messages', variables.chatId], context.prevChatMessages);
+    onError: (_error: any, variables, context) => {
+      if (context) {
+        queryClient.setQueryData(
+          queryKeys.chats.chatMessages(variables.chatId),
+          context.prevChatMessages,
+        );
+      }
     },
     onSuccess: (response: any, variables, context) => {
       const nextChat = { ...chat, last_message: response };
-      updatePageItem(['chats', 'search'], nextChat, (o, n) => o.id === n.id);
+      updatePageItem(queryKeys.chats.search, nextChat, (o, n) => o.id === n.id);
       updatePageItem(
-        ChatKeys.chatMessages(variables.chatId),
+        queryKeys.chats.chatMessages(variables.chatId),
         normalizeChatMessage(response),
         (o) => o.id === context.pendingId,
       );
@@ -250,8 +250,8 @@ const useDeleteChat = (chatId: string) => {
     mutationFn: () => client.chats.deleteChat(chatId),
     onSuccess() {
       changeScreen(ChatWidgetScreens.INBOX);
-      queryClient.invalidateQueries({ queryKey: ChatKeys.chatMessages(chatId) });
-      queryClient.invalidateQueries({ queryKey: ['chats', 'search'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.chats.chatMessages(chatId) });
+      queryClient.invalidateQueries({ queryKey: queryKeys.chats.search });
     },
   });
 };
@@ -263,11 +263,13 @@ const useDeleteChatMessage = (chatId: string) => {
     mutationFn: (chatMessageId: string) => client.chats.deleteChatMessage(chatId, chatMessageId),
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: ChatKeys.chatMessages(chatId),
+        queryKey: queryKeys.chats.chatMessages(chatId),
       });
     },
   });
 };
+
+const ChatKeys = queryKeys.chats;
 
 export {
   ChatKeys,

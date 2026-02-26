@@ -3,6 +3,7 @@ import sumBy from 'lodash/sumBy';
 import { normalizeChatMessage } from '@/normalizers/chat-message';
 import { ChatKeys } from '@/queries/chats';
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 
 import { compareDate } from './comparators';
 import { appendPageItem, flattenPages, sortQueryData, updatePageItem } from './queries';
@@ -15,14 +16,14 @@ import type { Chat, PaginatedResponse } from 'pl-api';
  * @param newChat - Chat entity.
  */
 const updateChatInChatSearchQuery = (newChat: Chat) => {
-  updatePageItem<Chat>(['chats', 'search'], newChat as any, (o, n) => o.id === n.id);
+  updatePageItem<Chat>(queryKeys.chats.search, newChat as any, (o, n) => o.id === n.id);
 };
 
 /**
  * Re-order the ChatSearch query by the last message timestamp.
  */
 const reOrderChatListItems = () => {
-  sortQueryData<Chat>(['chats', 'search'], (chatA, chatB) =>
+  sortQueryData<Chat>(queryKeys.chats.search, (chatA, chatB) =>
     compareDate(chatA.last_message?.created_at as string, chatB.last_message?.created_at as string),
   );
 };
@@ -34,7 +35,7 @@ const reOrderChatListItems = () => {
  */
 const checkIfChatExists = (chatId: string) => {
   const currentChats = flattenPages(
-    queryClient.getQueryData<InfiniteData<PaginatedResponse<Chat>>>(['chats', 'search']),
+    queryClient.getQueryData<InfiniteData<PaginatedResponse<Chat>>>(queryKeys.chats.search),
   );
 
   return currentChats?.find((chat: Chat) => chat.id === chatId);
@@ -45,7 +46,7 @@ const checkIfChatExists = (chatId: string) => {
  */
 const invalidateChatSearchQuery = () => {
   queryClient.invalidateQueries({
-    queryKey: ['chats', 'search'],
+    queryKey: queryKeys.chats.search,
   });
 };
 
@@ -74,7 +75,7 @@ const updateChatListItem = (newChat: Chat) => {
 /** Get unread chats count. */
 const getUnreadChatsCount = (): number => {
   const chats = flattenPages(
-    queryClient.getQueryData<InfiniteData<PaginatedResponse<Chat>>>(['chats', 'search']),
+    queryClient.getQueryData<InfiniteData<PaginatedResponse<Chat>>>(queryKeys.chats.search),
   );
 
   return sumBy(chats, (chat) => chat.unread);

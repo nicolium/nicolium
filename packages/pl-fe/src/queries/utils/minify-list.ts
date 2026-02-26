@@ -2,6 +2,7 @@ import { importEntities } from '@/actions/importer';
 import { store } from '@/store';
 
 import { queryClient } from '../client';
+import { queryKeys } from '../keys';
 
 import type {
   Account,
@@ -57,9 +58,12 @@ const minifyAccountList = (response: PaginatedResponse<Account>): PaginatedRespo
     (account) => account.id,
     (accounts) => {
       for (const account of accounts) {
-        queryClient.setQueryData(['accounts', account.id], account);
+        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
         if (account.relationship) {
-          queryClient.setQueryData(['accountRelationships', account.id], account.relationship);
+          queryClient.setQueryData(
+            queryKeys.accountRelationships.show(account.id),
+            account.relationship,
+          );
         }
       }
     },
@@ -73,9 +77,12 @@ const minifyBlockedAccountList = (
     (account) => [account.id, account.block_expires_at],
     (accounts) => {
       for (const account of accounts) {
-        queryClient.setQueryData(['accounts', account.id], account);
+        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
         if (account.relationship) {
-          queryClient.setQueryData(['accountRelationships', account.id], account.relationship);
+          queryClient.setQueryData(
+            queryKeys.accountRelationships.show(account.id),
+            account.relationship,
+          );
         }
       }
     },
@@ -89,9 +96,12 @@ const minifyMutedAccountList = (
     (account) => [account.id, account.mute_expires_at],
     (accounts) => {
       for (const account of accounts) {
-        queryClient.setQueryData(['accounts', account.id], account);
+        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
         if (account.relationship) {
-          queryClient.setQueryData(['accountRelationships', account.id], account.relationship);
+          queryClient.setQueryData(
+            queryKeys.accountRelationships.show(account.id),
+            account.relationship,
+          );
         }
       }
     },
@@ -103,7 +113,7 @@ const minifyGroupList = (response: PaginatedResponse<Group>): PaginatedResponse<
     (group) => group.id,
     (groups) => {
       for (const group of groups) {
-        queryClient.setQueryData(['groups', group.id], group);
+        queryClient.setQueryData(queryKeys.groups.show(group.id), group);
       }
     },
   );
@@ -143,11 +153,13 @@ const minifyGroupedNotifications = (
   );
 
 const minifyAdminAccount = ({ account, ...adminAccount }: AdminAccount) => {
-  if (account) queryClient.setQueryData(['accounts', account.id], account);
-  queryClient.setQueryData(['admin', 'accounts', adminAccount.id], adminAccount);
+  if (account) queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+  queryClient.setQueryData(queryKeys.admin.accounts.show(adminAccount.id), adminAccount);
 
   return adminAccount;
 };
+
+type MinifiedAdminAccount = ReturnType<typeof minifyAdminAccount>;
 
 const minifyAdminAccountList = (response: PaginatedResponse<AdminAccount>) =>
   minifyList(
@@ -155,8 +167,8 @@ const minifyAdminAccountList = (response: PaginatedResponse<AdminAccount>) =>
     (account) => account.id,
     (accounts) => {
       for (const { account, ...adminAccount } of accounts) {
-        if (account) queryClient.setQueryData(['accounts', account.id], account);
-        queryClient.setQueryData(['admin', 'accounts', adminAccount.id], adminAccount);
+        if (account) queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+        queryClient.setQueryData(queryKeys.admin.accounts.show(adminAccount.id), adminAccount);
       }
     },
   );
@@ -205,7 +217,10 @@ const minifyAdminReportList = (response: PaginatedResponse<AdminReport>) =>
     (report) => report.id,
     (reports) => {
       for (const report of reports) {
-        queryClient.setQueryData(['admin', 'reports', report.id], minifyAdminReport(report));
+        queryClient.setQueryData(
+          queryKeys.admin.reports.show(report.id),
+          minifyAdminReport(report),
+        );
       }
     },
   );
@@ -225,4 +240,5 @@ export {
   minifyAdminReport,
   minifyAdminReportList,
   type MinifiedConversation,
+  type MinifiedAdminAccount,
 };

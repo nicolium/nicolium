@@ -6,6 +6,8 @@ import { useTimelineStream } from '@/api/hooks/streaming/use-timeline-stream';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 
+import { queryKeys } from '../keys';
+
 import type { PaginatedResponse, Status } from 'pl-api';
 
 type TimelineEntry =
@@ -111,7 +113,7 @@ const useHomeTimeline = () => {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const queryKey = ['timelines', 'home'];
+  const queryKey = queryKeys.timelines.home;
 
   const query = useQuery({
     queryKey,
@@ -143,7 +145,7 @@ const useHomeTimeline = () => {
 
         const timelinePage = processPage(response);
 
-        queryClient.setQueryData<Array<TimelineEntry>>(['timelines', 'home'], (oldData) => {
+        queryClient.setQueryData<Array<TimelineEntry>>(queryKeys.timelines.home, (oldData) => {
           if (!oldData) return timelinePage;
 
           const index = oldData.indexOf(entry);

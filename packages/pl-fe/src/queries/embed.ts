@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
+import { queryKeys } from '@/queries/keys';
 
 type Embed = {
   type: string;
@@ -27,7 +28,7 @@ const useEmbed = (url: string) => {
   };
 
   return useQuery<Embed>({
-    queryKey: ['embed', url],
+    queryKey: queryKeys.embed.show(url),
     queryFn: getEmbed,
   });
 };

@@ -3,6 +3,8 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 
+import { queryKeys } from '../keys';
+
 import type { UpdateFileParams } from 'pl-api';
 
 const useDriveFileQuery = (fileId: string) => {
@@ -10,7 +12,7 @@ const useDriveFileQuery = (fileId: string) => {
   const features = useFeatures();
 
   return useQuery({
-    queryKey: ['drive', 'files', fileId],
+    queryKey: queryKeys.drive.files.show(fileId),
     queryFn: () => client.drive.getFile(fileId),
     enabled: features.drive,
   });
@@ -24,8 +26,11 @@ const useCreateDriveFileMutation = (folderId?: string) => {
     mutationKey: ['drive', 'files'],
     mutationFn: (file: File) => client.drive.createFile(file, folderId),
     onSuccess: (file) => {
-      queryClient.setQueryData(['drive', 'files', file.id], file);
-      queryClient.invalidateQueries({ queryKey: ['drive', 'folders', folderId], exact: true });
+      queryClient.setQueryData(queryKeys.drive.files.show(file.id), file);
+      queryClient.invalidateQueries({
+        queryKey: queryKeys.drive.folders.show(folderId),
+        exact: true,
+      });
     },
   });
 };
@@ -38,8 +43,8 @@ const useUpdateDriveFileMutation = (fileId: string) => {
     mutationKey: ['drive', 'files'],
     mutationFn: (params: UpdateFileParams) => client.drive.updateFile(fileId, params),
     onSuccess: (file) => {
-      queryClient.setQueryData(['drive', 'files', file.id], file);
-      queryClient.invalidateQueries({ queryKey: ['drive', 'folders'], exact: false });
+      queryClient.setQueryData(queryKeys.drive.files.show(file.id), file);
+      queryClient.invalidateQueries({ queryKey: queryKeys.drive.folders.root, exact: false });
     },
   });
 };
@@ -52,7 +57,7 @@ const useDeleteDriveFileMutation = (fileId: string) => {
     mutationKey: ['drive', 'files'],
     mutationFn: () => client.drive.deleteFile(fileId),
     onSuccess: (file) => {
-      queryClient.invalidateQueries({ queryKey: ['drive', 'folders'], exact: false });
+      queryClient.invalidateQueries({ queryKey: queryKeys.drive.folders.root, exact: false });
     },
   });
 };
@@ -65,8 +70,8 @@ const useMoveDriveFileMutation = (fileId: string) => {
     mutationKey: ['drive', 'files'],
     mutationFn: (folderId?: string) => client.drive.moveFile(fileId, folderId),
     onSuccess: (file) => {
-      queryClient.invalidateQueries({ queryKey: ['drive', 'folders'], exact: false });
-      queryClient.setQueryData(['drive', 'files', file.id], file);
+      queryClient.invalidateQueries({ queryKey: queryKeys.drive.folders.root, exact: false });
+      queryClient.setQueryData(queryKeys.drive.files.show(file.id), file);
     },
   });
 };

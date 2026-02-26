@@ -1,8 +1,9 @@
+import { queryKeys } from '../keys';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 import { minifyAccountList } from '../utils/minify-list';
 
 const useFollowers = makePaginatedResponseQuery(
-  (accountId?: string) => ['accountsLists', 'followers', accountId],
+  (accountId?: string) => queryKeys.accountsLists.followers(accountId!),
   (client, [accountId]) =>
     client.accounts
       .getAccountFollowers(accountId!, { with_relationships: true })
@@ -12,7 +13,7 @@ const useFollowers = makePaginatedResponseQuery(
 );
 
 const useFollowing = makePaginatedResponseQuery(
-  (accountId?: string) => ['accountsLists', 'following', accountId],
+  (accountId?: string) => queryKeys.accountsLists.following(accountId!),
   (client, [accountId]) =>
     client.accounts
       .getAccountFollowing(accountId!, { with_relationships: true })

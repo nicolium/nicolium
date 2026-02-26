@@ -2,6 +2,7 @@ import { type InfiniteData, useMutation, useQuery } from '@tanstack/react-query'
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { queryKeys } from '@/queries/keys';
 
 import { queryClient } from '../client';
 import { filterById } from '../utils/filter-id';
@@ -15,7 +16,7 @@ const useLists = <T>(select?: (data: Array<List>) => T) => {
   const features = useFeatures();
 
   return useQuery({
-    queryKey: ['lists'],
+    queryKey: queryKeys.lists.all,
     queryFn: () => client.lists.getLists(),
     enabled: features.lists,
     select,
@@ -31,7 +32,7 @@ const useCreateList = () => {
   return useMutation({
     mutationKey: ['lists', 'create'],
     mutationFn: (params: CreateListParams) => client.lists.createList(params),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['lists'] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.lists.all }),
   });
 };
 
@@ -42,7 +43,7 @@ const useDeleteList = () => {
     mutationKey: ['lists', 'delete'],
     mutationFn: (listId: string) => client.lists.deleteList(listId),
     onSuccess: (_, deletedListId) => {
-      queryClient.setQueryData<Array<List>>(['lists'], (prevData) =>
+      queryClient.setQueryData<Array<List>>(queryKeys.lists.all, (prevData) =>
         prevData?.filter(({ id }) => id !== deletedListId),
       );
     },
@@ -55,12 +56,12 @@ const useUpdateList = (listId: string) => {
   return useMutation({
     mutationKey: ['lists', 'update', listId],
     mutationFn: (params: UpdateListParams) => client.lists.updateList(listId, params),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['lists'] }),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: queryKeys.lists.all }),
   });
 };
 
 const useListAccounts = makePaginatedResponseQuery(
-  (listId: string) => ['accountsLists', 'lists', listId],
+  (listId: string) => queryKeys.accountsLists.listMembers(listId),
   (client, [listId]) => client.lists.getListAccounts(listId).then(minifyAccountList),
 );
 
@@ -71,9 +72,9 @@ const useAddAccountsToList = (listId: string) => {
     mutationKey: ['accountsLists', 'lists', listId, 'add'],
     mutationFn: (accountIds: Array<string>) => client.lists.addListAccounts(listId, accountIds),
     onSettled: (_, __, accountIds) => {
-      queryClient.invalidateQueries({ queryKey: ['accountsLists', 'lists', listId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.listMembers(listId) });
       accountIds.forEach((accountId) =>
-        queryClient.setQueryData<Array<string>>(['lists', 'forAccount', accountId], (listIds) =>
+        queryClient.setQueryData<Array<string>>(queryKeys.lists.forAccount(accountId), (listIds) =>
           listIds ? [...listIds, listId] : undefined,
         ),
       );
@@ -89,11 +90,11 @@ const useRemoveAccountsFromList = (listId: string) => {
     mutationFn: (accountIds: Array<string>) => client.lists.deleteListAccounts(listId, accountIds),
     onSettled: (_, __, accountIds) => {
       queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
-        ['accountsLists', 'lists', listId],
+        queryKeys.accountsLists.listMembers(listId),
         filterById(accountIds),
       );
       accountIds.forEach((accountId) =>
-        queryClient.setQueryData<Array<string>>(['lists', 'forAccount', accountId], (listIds) =>
+        queryClient.setQueryData<Array<string>>(queryKeys.lists.forAccount(accountId), (listIds) =>
           listIds?.filter((id) => id !== listId),
         ),
       );
@@ -105,7 +106,7 @@ const useListsForAccount = (accountId: string) => {
   const client = useClient();
 
   return useQuery({
-    queryKey: ['lists', 'forAccount', accountId],
+    queryKey: queryKeys.lists.forAccount(accountId),
     queryFn: () =>
       client.accounts.getAccountLists(accountId).then((lists) => lists.map((list) => list.id)),
   });

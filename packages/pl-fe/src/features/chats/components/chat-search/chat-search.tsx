@@ -10,6 +10,7 @@ import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useChats } from '@/queries/chats';
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { useAccountSearch } from '@/queries/search/use-search-accounts';
 import toast from '@/toast';
 
@@ -60,7 +61,7 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
         changeScreen(ChatWidgetScreens.CHAT, response.id);
       }
 
-      queryClient.invalidateQueries({ queryKey: ['chats', 'search'] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.chats.search });
     },
   });
 

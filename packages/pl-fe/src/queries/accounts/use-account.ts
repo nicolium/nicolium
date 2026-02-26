@@ -6,6 +6,7 @@ import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useCredentialAccount } from '@/queries/accounts/use-account-credentials';
 import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
+import { queryKeys } from '@/queries/keys';
 
 import type { PlfeResponse } from '@/api';
 
@@ -31,11 +32,11 @@ const useAccount = (accountId?: string, withRelationship = false) => {
   const queryClient = useQueryClient();
 
   const accountQuery = useQuery({
-    queryKey: ['accounts', accountId],
+    queryKey: queryKeys.accounts.show(accountId!),
     queryFn: async () => {
       const account = await client.accounts.getAccount(accountId!);
       queryClient.setQueryData<string>(
-        ['accounts', 'lookup', account.acct.toLowerCase()],
+        queryKeys.accounts.lookup(account.acct.toLowerCase()),
         account.id,
       );
       return account;

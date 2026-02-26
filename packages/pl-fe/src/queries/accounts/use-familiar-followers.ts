@@ -4,6 +4,7 @@ import { batcher } from '@/api/batcher';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { queryKeys } from '@/queries/keys';
 
 const useFamiliarFollowers = (accountId: string) => {
   const client = useClient();
@@ -12,14 +13,14 @@ const useFamiliarFollowers = (accountId: string) => {
   const queryClient = useQueryClient();
 
   return useQuery({
-    queryKey: ['accountsLists', 'familiarFollowers', accountId],
+    queryKey: queryKeys.accountsLists.familiarFollowers(accountId),
     queryFn: () =>
       batcher
         .familiarFollowers(client)
         .fetch(accountId)
         .then(({ accounts }) => {
           for (const account of accounts) {
-            queryClient.setQueryData(['accounts', account.id], account);
+            queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
           }
           return accounts.map(({ id }) => id);
         }),

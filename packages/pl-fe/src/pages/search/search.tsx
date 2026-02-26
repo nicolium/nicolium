@@ -15,6 +15,7 @@ import Text from '@/components/ui/text';
 import { searchRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';
+import { queryKeys } from '@/queries/keys';
 
 type SearchFilter = 'accounts' | 'hashtags' | 'statuses' | 'links';
 
@@ -134,13 +135,12 @@ const SearchResults = () => {
 
   const selectFilter = (newActiveFilter: SearchFilter) => {
     if (newActiveFilter === selectedFilter) {
+      if (newActiveFilter === 'links') return;
       queryClient.refetchQueries({
-        queryKey: [
-          'search',
-          newActiveFilter,
+        queryKey: queryKeys.search[newActiveFilter](
           value,
           newActiveFilter === 'statuses' ? { account_id: accountId } : undefined,
-        ],
+        ),
         exact: true,
       });
     } else navigate({ search: (prev) => ({ ...prev, type: newActiveFilter }) });

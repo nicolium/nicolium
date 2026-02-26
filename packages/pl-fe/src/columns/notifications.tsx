@@ -18,6 +18,7 @@ import PlaceholderNotification from '@/features/placeholder/components/placehold
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import {
   type FilterType,
   useMarkNotificationsReadMutation,
@@ -67,7 +68,10 @@ const FilterBar = () => {
     changeSetting(['notifications', 'quickFilter', 'active'], filterType);
     dispatch(saveSettings());
     if (filterType === selectedFilter) {
-      queryClient.refetchQueries({ queryKey: ['notifications', filterType], exact: true });
+      queryClient.refetchQueries({
+        queryKey: queryKeys.notifications.list(filterType),
+        exact: true,
+      });
     }
   };
 
@@ -273,17 +277,20 @@ const NotificationsColumn: React.FC<INotificationsColumn> = ({ multiColumn }) =>
   }, [notifications, markNotificationsRead]);
 
   const handleRefresh = useCallback(() => {
-    queryClient.setQueryData<InfiniteData<any>>(['notifications', activeFilter], (data) => {
-      if (!data) return data;
+    queryClient.setQueryData<InfiniteData<any>>(
+      queryKeys.notifications.list(activeFilter),
+      (data) => {
+        if (!data) return data;
 
-      // from https://github.com/TanStack/query/discussions/875#discussioncomment-754458
-      // TODO: maybe needed in more places so maybe make a helper for this
-      return {
-        ...data,
-        pages: data.pages.slice(0, 1),
-        pageParams: data.pageParams.slice(0, 1),
-      };
-    });
+        // from https://github.com/TanStack/query/discussions/875#discussioncomment-754458
+        // TODO: maybe needed in more places so maybe make a helper for this
+        return {
+          ...data,
+          pages: data.pages.slice(0, 1),
+          pageParams: data.pageParams.slice(0, 1),
+        };
+      },
+    );
     refetch().catch(console.error);
   }, [refetch]);
 

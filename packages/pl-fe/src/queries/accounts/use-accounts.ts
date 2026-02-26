@@ -2,6 +2,7 @@ import { useQueries, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { useClient } from '@/hooks/use-client';
+import { queryKeys } from '@/queries/keys';
 
 import type { Account } from 'pl-api';
 
@@ -11,11 +12,11 @@ const useAccounts = (accountIds: Array<string>) => {
 
   const queries = useQueries({
     queries: accountIds.map((accountId) => ({
-      queryKey: ['accounts', accountId],
+      queryKey: queryKeys.accounts.show(accountId),
       queryFn: async () => {
         const response = await client.accounts.getAccount(accountId);
         queryClient.setQueryData<string>(
-          ['accounts', 'lookup', response.acct.toLowerCase()],
+          queryKeys.accounts.lookup(response.acct.toLowerCase()),
           response.id,
         );
         return response;

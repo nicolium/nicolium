@@ -2,6 +2,7 @@ import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-
 
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from '@/queries/utils/minify-list';
 
@@ -11,7 +12,7 @@ import type { PaginatedResponse, PlApiClient } from 'pl-api';
 
 const appendFollowRequest = (accountId: string) =>
   queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
-    ['accountsLists', 'followRequests'],
+    queryKeys.accountsLists.followRequests,
     (data) => {
       if (!data || data.pages.some((page) => page.items.includes(accountId))) return data;
 
@@ -25,14 +26,11 @@ const appendFollowRequest = (accountId: string) =>
   );
 
 const removeFollowRequest = (accountId: string) =>
-  queryClient.setQueryData<InfiniteData<PaginatedResponse<string>>>(
-    ['accountsLists', 'followRequests'],
-    filterById(accountId),
-  );
+  queryClient.setQueryData(queryKeys.accountsLists.followRequests, filterById(accountId));
 
 const makeUseFollowRequests = <T>(select: (data: InfiniteData<PaginatedResponse<string>>) => T) =>
   makePaginatedResponseQuery(
-    () => ['accountsLists', 'followRequests'],
+    queryKeys.accountsLists.followRequests,
     (client) => client.myAccount.getFollowRequests().then(minifyAccountList),
     select,
     'isLoggedIn',
@@ -45,7 +43,7 @@ const useFollowRequestsCount = makeUseFollowRequests(
 );
 
 const useOutgoingFollowRequests = makePaginatedResponseQuery(
-  ['accountsLists', 'outgoingFollowRequests'],
+  queryKeys.accountsLists.outgoingFollowRequests,
   (client) => client.myAccount.getOutgoingFollowRequests().then(minifyAccountList),
 );
 
@@ -58,7 +56,7 @@ const useAcceptFollowRequestMutation = (accountId: string) => {
     mutationFn: () => client.myAccount.acceptFollowRequest(accountId),
     onSettled: (relationship) => {
       removeFollowRequest(accountId);
-      queryClient.setQueryData(['accountRelationships', accountId], relationship);
+      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), relationship);
     },
   });
 };
@@ -72,14 +70,14 @@ const useRejectFollowRequestMutation = (accountId: string) => {
     mutationFn: () => client.myAccount.rejectFollowRequest(accountId),
     onSettled: (relationship) => {
       removeFollowRequest(accountId);
-      queryClient.setQueryData(['accountRelationships', accountId], relationship);
+      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), relationship);
     },
   });
 };
 
 const prefetchFollowRequests = (client: PlApiClient) =>
   queryClient.prefetchInfiniteQuery({
-    queryKey: ['accountsLists', 'followRequests'],
+    queryKey: queryKeys.accountsLists.followRequests,
     queryFn: ({ pageParam }) =>
       pageParam.next?.() ?? client.myAccount.getFollowRequests().then(minifyAccountList),
     initialPageParam: {

@@ -3,12 +3,9 @@ import { useMutation, keepPreviousData, useQuery, useQueryClient } from '@tansta
 import { batcher } from '@/api/batcher';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { queryKeys } from '@/queries/keys';
 
 import { removePageItem } from '../utils/queries';
-
-const SuggestionKeys = {
-  suggestions: ['suggestions'] as const,
-};
 
 const useSuggestions = () => {
   const client = useClient();
@@ -22,14 +19,14 @@ const useSuggestions = () => {
 
     for (const { account } of response) {
       fetcher(account.id);
-      queryClient.setQueryData(['accounts', account.id], account);
+      queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
     }
 
     return response.map(({ account, ...x }) => ({ ...x, account_id: account.id }));
   };
 
   const query = useQuery({
-    queryKey: SuggestionKeys.suggestions,
+    queryKey: queryKeys.suggestions.all,
     queryFn: () => getSuggestions(),
     placeholderData: keepPreviousData,
     enabled: isLoggedIn,
@@ -44,7 +41,11 @@ const useDismissSuggestion = () => {
   return useMutation({
     mutationFn: (accountId: string) => client.myAccount.dismissSuggestions(accountId),
     onMutate(accountId: string) {
-      removePageItem(SuggestionKeys.suggestions, accountId, (o: any, n: any) => o.account === n);
+      removePageItem(
+        queryKeys.suggestions.all,
+        accountId,
+        (item: any, newItem: any) => item.account_id === newItem,
+      );
     },
   });
 };

@@ -25,6 +25,7 @@ import { obtainOAuthToken, revokeOAuthToken } from '@/actions/oauth';
 import * as BuildConfig from '@/build-config';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { unsetSentryAccount } from '@/sentry';
 import KVStore from '@/storage/kv-store';
 import toast from '@/toast';
@@ -178,7 +179,7 @@ const verifyCredentials =
     return client.settings
       .verifyCredentials()
       .then((account) => {
-        queryClient.setQueryData(['accounts', account.id], account);
+        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
         dispatch<VerifyCredentialsSuccessAction>({
           type: VERIFY_CREDENTIALS_SUCCESS,
           token,
@@ -192,7 +193,7 @@ const verifyCredentials =
           // The user is waitlisted
           const account = error.response.json;
           const parsedAccount = v.parse(credentialAccountSchema, error.response.json);
-          queryClient.setQueryData(['accounts', parsedAccount.id], parsedAccount);
+          queryClient.setQueryData(queryKeys.accounts.show(parsedAccount.id), parsedAccount);
           dispatch<VerifyCredentialsSuccessAction>({
             type: VERIFY_CREDENTIALS_SUCCESS,
             token,
@@ -217,7 +218,7 @@ interface AuthAccountRememberSuccessAction {
 const rememberAuthAccount =
   (accountUrl: string) => (dispatch: AppDispatch, getState: () => RootState) =>
     KVStore.getItemOrError(`authAccount:${accountUrl}`).then((account) => {
-      queryClient.setQueryData(['accounts', account.id], account);
+      queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
       dispatch<AuthAccountRememberSuccessAction>({
         type: AUTH_ACCOUNT_REMEMBER_SUCCESS,
         account,

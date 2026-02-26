@@ -10,6 +10,8 @@ import { batcher } from '@/api/batcher';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { queryKeys } from '@/queries/keys';
 import { useContextsActions } from '@/stores/contexts';
 
 import type { MinifiedSuggestion } from '../trends/use-suggested-accounts';
@@ -25,17 +27,16 @@ const updateRelationship = (
   changes: Partial<Relationship> | ((relationship: Relationship) => Relationship),
   queryClient: ReturnType<typeof useQueryClient>,
 ) => {
-  const previousRelationship = queryClient.getQueryData<Relationship>([
-    'accountRelationships',
-    accountId,
-  ]);
+  const previousRelationship = queryClient.getQueryData<Relationship>(
+    queryKeys.accountRelationships.show(accountId),
+  );
   if (!previousRelationship) return;
 
   const newRelationship =
     typeof changes === 'function'
       ? changes(previousRelationship)
       : { ...previousRelationship, ...changes };
-  queryClient.setQueryData(['accountRelationships', accountId], newRelationship);
+  queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), newRelationship);
 
   return { previousRelationship };
 };
@@ -46,7 +47,10 @@ const restorePreviousRelationship = (
   queryClient: ReturnType<typeof useQueryClient>,
 ) => {
   if (context?.previousRelationship) {
-    queryClient.setQueryData(['accountRelationships', accountId], context.previousRelationship);
+    queryClient.setQueryData(
+      queryKeys.accountRelationships.show(accountId),
+      context.previousRelationship,
+    );
   }
 };
 
@@ -55,7 +59,7 @@ const useRelationshipQuery = (accountId?: string) => {
   const { isLoggedIn } = useLoggedIn();
 
   return useQuery({
-    queryKey: ['accountRelationships', accountId],
+    queryKey: queryKeys.accountRelationships.show(accountId!),
     queryFn: () =>
       batcher
         .relationships(client)
@@ -73,7 +77,7 @@ const useRelationshipsQuery = (accountIds?: Array<string>) => {
     () =>
       isLoggedIn && accountIds
         ? accountIds.map((accountId) => ({
-            queryKey: ['accountRelationships', accountId] as const,
+            queryKey: queryKeys.accountRelationships.show(accountId),
             queryFn: () =>
               batcher
                 .relationships(client)
@@ -93,7 +97,7 @@ const useFollowAccountMutation = (accountId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['accountRelationships', accountId],
+    mutationKey: queryKeys.accountRelationships.show(accountId),
     mutationFn: (params?: FollowAccountParams) => client.accounts.followAccount(accountId, params),
     onMutate: (params) => {
       return updateRelationship(
@@ -111,7 +115,7 @@ const useFollowAccountMutation = (accountId: string) => {
       restorePreviousRelationship(accountId, context, queryClient);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(['accountRelationships', accountId], data);
+      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
     },
   });
 };
@@ -121,7 +125,7 @@ const useUnfollowAccountMutation = (accountId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['accountRelationships', accountId],
+    mutationKey: queryKeys.accountRelationships.show(accountId),
     mutationFn: () => client.accounts.unfollowAccount(accountId),
     onMutate: () =>
       updateRelationship(
@@ -138,7 +142,7 @@ const useUnfollowAccountMutation = (accountId: string) => {
       restorePreviousRelationship(accountId, context, queryClient);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(['accountRelationships', accountId], data);
+      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
     },
   });
 };
@@ -150,7 +154,7 @@ const useBlockAccountMutation = (accountId: string) => {
   const { filterContexts } = useContextsActions();
 
   return useMutation({
-    mutationKey: ['accountRelationships', accountId],
+    mutationKey: queryKeys.accountRelationships.show(accountId),
     mutationFn: (params?: BlockAccountParams) => client.filtering.blockAccount(accountId, params),
     onMutate: () =>
       updateRelationship(
@@ -168,16 +172,18 @@ const useBlockAccountMutation = (accountId: string) => {
       restorePreviousRelationship(accountId, context, queryClient);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(['accountRelationships', accountId], data);
+      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
 
-      queryClient.setQueryData<Array<MinifiedSuggestion>>(['suggestions'], (suggestions) =>
-        suggestions
-          ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
-          : undefined,
+      queryClient.setQueryData<Array<MinifiedSuggestion>>(
+        queryKeys.suggestions.all,
+        (suggestions) =>
+          suggestions
+            ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
+            : undefined,
       );
 
       queryClient.invalidateQueries({
-        queryKey: ['accountsLists', 'blocked'],
+        queryKey: queryKeys.accountsLists.blocked,
       });
 
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
@@ -199,7 +205,7 @@ const useUnblockAccountMutation = (accountId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['accountRelationships', accountId],
+    mutationKey: queryKeys.accountRelationships.show(accountId),
     mutationFn: () => client.filtering.unblockAccount(accountId),
     onMutate: () =>
       updateRelationship(
@@ -213,7 +219,7 @@ const useUnblockAccountMutation = (accountId: string) => {
       restorePreviousRelationship(accountId, context, queryClient);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(['accountRelationships', accountId], data);
+      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
     },
   });
 };
@@ -225,7 +231,7 @@ const useMuteAccountMutation = (accountId: string) => {
   const { filterContexts } = useContextsActions();
 
   return useMutation({
-    mutationKey: ['accountRelationships', accountId],
+    mutationKey: queryKeys.accountRelationships.show(accountId),
     mutationFn: (params?: MuteAccountParams) => client.filtering.muteAccount(accountId, params),
     onMutate: () =>
       updateRelationship(
@@ -239,16 +245,18 @@ const useMuteAccountMutation = (accountId: string) => {
       restorePreviousRelationship(accountId, context, queryClient);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(['accountRelationships', accountId], data);
+      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
 
-      queryClient.setQueryData<Array<MinifiedSuggestion>>(['suggestions'], (suggestions) =>
-        suggestions
-          ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
-          : undefined,
+      queryClient.setQueryData<Array<MinifiedSuggestion>>(
+        queryKeys.suggestions.all,
+        (suggestions) =>
+          suggestions
+            ? suggestions.filter((suggestion) => suggestion.account_id !== accountId)
+            : undefined,
       );
 
       queryClient.invalidateQueries({
-        queryKey: ['accountsLists', 'muted'],
+        queryKey: queryKeys.accountsLists.muted,
       });
 
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
@@ -270,7 +278,7 @@ const useUnmuteAccountMutation = (accountId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['accountRelationships', accountId],
+    mutationKey: queryKeys.accountRelationships.show(accountId),
     mutationFn: () => client.filtering.unmuteAccount(accountId),
     onMutate: () =>
       updateRelationship(
@@ -284,7 +292,7 @@ const useUnmuteAccountMutation = (accountId: string) => {
       restorePreviousRelationship(accountId, context, queryClient);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(['accountRelationships', accountId], data);
+      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
     },
   });
 };
@@ -292,10 +300,10 @@ const useUnmuteAccountMutation = (accountId: string) => {
 const usePinAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const { me } = useLoggedIn();
+  const { data: account } = useOwnAccount();
 
   return useMutation({
-    mutationKey: ['accountRelationships', accountId],
+    mutationKey: queryKeys.accountRelationships.show(accountId),
     mutationFn: () => client.accounts.pinAccount(accountId),
     onMutate: () =>
       updateRelationship(
@@ -309,9 +317,9 @@ const usePinAccountMutation = (accountId: string) => {
       restorePreviousRelationship(accountId, context, queryClient);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(['accountRelationships', accountId], data);
+      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
       queryClient.invalidateQueries({
-        queryKey: ['accountsLists', 'endorsedAccounts', me],
+        queryKey: queryKeys.accountsLists.endorsedAccounts(account!.id),
       });
     },
   });
@@ -320,10 +328,10 @@ const usePinAccountMutation = (accountId: string) => {
 const useUnpinAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const { me } = useLoggedIn();
+  const { data: account } = useOwnAccount();
 
   return useMutation({
-    mutationKey: ['accountRelationships', accountId],
+    mutationKey: queryKeys.accountRelationships.show(accountId),
     mutationFn: () => client.accounts.unpinAccount(accountId),
     onMutate: () =>
       updateRelationship(
@@ -337,9 +345,9 @@ const useUnpinAccountMutation = (accountId: string) => {
       restorePreviousRelationship(accountId, context, queryClient);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(['accountRelationships', accountId], data);
+      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
       queryClient.invalidateQueries({
-        queryKey: ['accountsLists', 'endorsedAccounts', me],
+        queryKey: queryKeys.accountsLists.endorsedAccounts(account!.id),
       });
     },
   });
@@ -350,7 +358,7 @@ const useRemoveAccountFromFollowersMutation = (accountId: string) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationKey: ['accountRelationships', accountId],
+    mutationKey: queryKeys.accountRelationships.show(accountId),
     mutationFn: () => client.accounts.removeAccountFromFollowers(accountId),
     onMutate: () =>
       updateRelationship(
@@ -364,7 +372,7 @@ const useRemoveAccountFromFollowersMutation = (accountId: string) => {
       restorePreviousRelationship(accountId, context, queryClient);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(['accountRelationships', accountId], data);
+      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
     },
   });
 };
@@ -388,7 +396,7 @@ const useUpdateAccountNoteMutation = (accountId: string) => {
       restorePreviousRelationship(accountId, context, queryClient);
     },
     onSuccess: (data) => {
-      queryClient.setQueryData(['accountRelationships', accountId], data);
+      queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
     },
   });
 };

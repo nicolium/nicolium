@@ -37,6 +37,7 @@ import AutosuggestEmoji from '@/components/autosuggest-emoji';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useComposeSuggestions } from '@/hooks/use-compose-suggestions';
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { useSettingsStoreActions } from '@/stores/settings';
 import { textAtCursorMatchesToken } from '@/utils/suggestions';
 
@@ -317,7 +318,7 @@ const AutosuggestPlugin = ({
           (node as TextNode).setTextContent(`${suggestion} `);
           node.select();
         } else {
-          const account = queryClient.getQueryData<Account>(['accounts', suggestion]);
+          const account = queryClient.getQueryData<Account>(queryKeys.accounts.show(suggestion));
           if (account) replaceMatch($createMentionNode(account));
         }
       }

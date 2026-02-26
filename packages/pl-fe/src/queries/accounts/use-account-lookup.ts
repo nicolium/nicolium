@@ -2,6 +2,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { queryKeys } from '@/queries/keys';
 
 import { useAccount } from './use-account';
 
@@ -16,7 +17,7 @@ const useAccountLookup = (acct: string | undefined, withRelationship = false) =>
   const queryClient = useQueryClient();
 
   const accountIdQuery = useQuery({
-    queryKey: ['accounts', 'lookup', acct?.toLowerCase()],
+    queryKey: queryKeys.accounts.lookup(acct?.toLowerCase()!),
     queryFn: async ({ signal }) => {
       let account;
 
@@ -34,7 +35,7 @@ const useAccountLookup = (acct: string | undefined, withRelationship = false) =>
       }
 
       if (account) {
-        queryClient.setQueryData(['accounts', account.id], account);
+        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
         return account.id;
       }
     },

@@ -38,6 +38,7 @@ import {
 } from '@/queries/accounts/use-relationship';
 import { useChats } from '@/queries/chats';
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import {
   blockDomainMutationOptions,
   unblockDomainMutationOptions,
@@ -197,7 +198,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
     onSuccess: (response) => {
       navigate({ to: '/chats/$chatId', params: { chatId: response.id } });
       queryClient.invalidateQueries({
-        queryKey: ['chats', 'search'],
+        queryKey: queryKeys.chats.search,
       });
     },
   });

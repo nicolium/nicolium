@@ -7,6 +7,7 @@ import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 
 const minifyMessage = ({ author, ...message }: BaseShoutMessage) => ({
   author_id: author.id,
@@ -37,7 +38,7 @@ const useShoutboxStore = create<State>()(
           set((state: State) => {
             for (const { author } of messages.toReversed()) {
               queryClient.setQueryData<Account>(
-                ['accounts', author.id],
+                queryKeys.accounts.show(author.id),
                 (account) => account || author,
               );
             }
@@ -47,7 +48,10 @@ const useShoutboxStore = create<State>()(
         },
         pushMessage: (message) => {
           set((state: State) => {
-            queryClient.setQueryData<Account>(['accounts', message.author.id], message.author);
+            queryClient.setQueryData<Account>(
+              queryKeys.accounts.show(message.author.id),
+              message.author,
+            );
             state.messages.push(minifyMessage(message));
           });
         },

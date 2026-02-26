@@ -4,6 +4,8 @@ import { importEntities } from '@/actions/importer';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 
+import { queryKeys } from '../keys';
+
 import type { PaginationParams, SearchParams } from 'pl-api';
 
 const useSearchAccounts = (
@@ -14,7 +16,7 @@ const useSearchAccounts = (
   const queryClient = useQueryClient();
 
   return useInfiniteQuery({
-    queryKey: ['search', 'accounts', query, params],
+    queryKey: queryKeys.search.accounts(query, params),
     queryFn: ({ pageParam: offset, signal }) =>
       client.search
         .search(
@@ -30,9 +32,12 @@ const useSearchAccounts = (
         )
         .then(({ accounts }) => {
           for (const account of accounts) {
-            queryClient.setQueryData(['accounts', account.id], account);
+            queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
             if (account.relationship) {
-              queryClient.setQueryData(['accountRelationships', account.id], account.relationship);
+              queryClient.setQueryData(
+                queryKeys.accountRelationships.show(account.id),
+                account.relationship,
+              );
             }
           }
           return accounts.map(({ id }) => id);
@@ -54,7 +59,7 @@ const useSearchStatuses = (
   const dispatch = useAppDispatch();
 
   return useInfiniteQuery({
-    queryKey: ['search', 'statuses', query, params],
+    queryKey: queryKeys.search.statuses(query, params),
     queryFn: ({ pageParam: offset, signal }) =>
       client.search
         .search(
@@ -88,7 +93,7 @@ const useSearchHashtags = (
   const client = useClient();
 
   return useInfiniteQuery({
-    queryKey: ['search', 'hashtags', query, params],
+    queryKey: queryKeys.search.hashtags(query, params),
     queryFn: ({ pageParam: offset, signal }) =>
       client.search
         .search(
@@ -118,7 +123,7 @@ const useSearchGroups = (
   const queryClient = useQueryClient();
 
   return useInfiniteQuery({
-    queryKey: ['search', 'groups', query, params],
+    queryKey: queryKeys.search.groups(query, params),
     queryFn: ({ pageParam: offset, signal }) =>
       client.search
         .search(
@@ -133,7 +138,7 @@ const useSearchGroups = (
         )
         .then(({ groups }) => {
           for (const group of groups) {
-            queryClient.setQueryData(['groups', group.id], group);
+            queryClient.setQueryData(queryKeys.groups.show(group.id), group);
           }
           return groups.map(({ id }) => id);
         }),

@@ -6,8 +6,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import AutosuggestAccountInput from '@/components/autosuggest-account-input';
 import SvgIcon from '@/components/ui/svg-icon';
 import { queryClient } from '@/queries/client';
-
-import type { Account } from 'pl-api';
+import { queryKeys } from '@/queries/keys';
 
 const messages = defineMessages({
   placeholder: { id: 'search.placeholder', defaultMessage: 'Search' },
@@ -51,7 +50,7 @@ const SearchInput = React.memo(() => {
 
   const handleSelected = (accountId: string) => {
     setValue('');
-    const account = queryClient.getQueryData<Account>(['accounts', accountId]);
+    const account = queryClient.getQueryData(queryKeys.accounts.show(accountId));
     if (account) {
       navigate({
         to: '/@{$username}',

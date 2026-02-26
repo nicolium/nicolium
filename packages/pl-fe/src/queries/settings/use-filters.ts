@@ -5,6 +5,8 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 
+import { queryKeys } from '../keys';
+
 import type { CreateFilterParams, Filter, UpdateFilterParams } from 'pl-api';
 
 const useFilters = () => {
@@ -13,7 +15,7 @@ const useFilters = () => {
   const features = useFeatures();
 
   return useQuery({
-    queryKey: ['filters'],
+    queryKey: queryKeys.filters.all,
     queryFn: async () => {
       const response = await client.filtering.getFilters();
 
@@ -34,7 +36,7 @@ const useFilter = (filterId?: string) => {
   const queryClient = useQueryClient();
 
   return useQuery({
-    queryKey: ['filters', filterId],
+    queryKey: queryKeys.filters.show(filterId!),
     queryFn: () => {
       if (!filterId) return undefined;
       return client.filtering.getFilter(filterId);
@@ -55,8 +57,8 @@ const useCreateFilter = () => {
     mutationKey: ['filters', 'create'],
     mutationFn: (data: CreateFilterParams) => client.filtering.createFilter(data),
     onSettled: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['filters'] });
-      if (data) queryClient.setQueryData<Filter>(['filters', data.id], data);
+      queryClient.invalidateQueries({ queryKey: queryKeys.filters.all });
+      if (data) queryClient.setQueryData<Filter>(queryKeys.filters.show(data.id), data);
     },
   });
 };
@@ -69,8 +71,8 @@ const useUpdateFilter = (filterId: string) => {
     mutationKey: ['filters', filterId, 'update'],
     mutationFn: (data: UpdateFilterParams) => client.filtering.updateFilter(filterId, data),
     onSettled: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['filters'] });
-      if (data) queryClient.setQueryData<Filter>(['filters', filterId], data);
+      queryClient.invalidateQueries({ queryKey: queryKeys.filters.all });
+      if (data) queryClient.setQueryData<Filter>(queryKeys.filters.show(filterId), data);
     },
   });
 };
@@ -83,8 +85,8 @@ const useDeleteFilter = () => {
     mutationKey: ['filters', 'delete'],
     mutationFn: (filterId: string) => client.filtering.deleteFilter(filterId),
     onSettled: (_, __, filterId) => {
-      queryClient.invalidateQueries({ queryKey: ['filters'] });
-      queryClient.invalidateQueries({ queryKey: ['filters', filterId] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.filters.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.filters.show(filterId) });
     },
   });
 };

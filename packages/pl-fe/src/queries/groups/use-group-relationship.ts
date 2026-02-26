@@ -5,6 +5,7 @@ import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 
 import { queryClient } from '../client';
+import { queryKeys } from '../keys';
 
 import type { GroupRelationship } from 'pl-api';
 
@@ -13,7 +14,7 @@ const useGroupRelationshipQuery = (groupId?: string) => {
   const { isLoggedIn } = useLoggedIn();
 
   return useQuery({
-    queryKey: ['groupRelationships', groupId],
+    queryKey: queryKeys.groupRelationships.show(groupId!),
     queryFn: () =>
       batcher
         .groupRelationships(client)
@@ -32,14 +33,17 @@ const useJoinGroupMutation = (id: string) => {
     onMutate: () => {
       let previousRelationship: GroupRelationship | undefined = undefined;
 
-      queryClient.setQueryData<GroupRelationship>(['groupRelationships', id], (relationship) => {
-        previousRelationship = relationship;
-        if (!relationship) return undefined;
-        return {
-          ...relationship,
-          requested: true,
-        };
-      });
+      queryClient.setQueryData<GroupRelationship>(
+        queryKeys.groupRelationships.show(id),
+        (relationship) => {
+          previousRelationship = relationship;
+          if (!relationship) return undefined;
+          return {
+            ...relationship,
+            requested: true,
+          };
+        },
+      );
 
       return previousRelationship;
     },
@@ -52,7 +56,7 @@ const useJoinGroupMutation = (id: string) => {
       }
     },
     onSuccess: (data) => {
-      queryClient.setQueryData<GroupRelationship>(['groupRelationships', id], data);
+      queryClient.setQueryData<GroupRelationship>(queryKeys.groupRelationships.show(id), data);
     },
   });
 };
@@ -66,16 +70,19 @@ const useLeaveGroupMutation = (id: string) => {
     onMutate: () => {
       let previousRelationship: GroupRelationship | undefined = undefined;
 
-      queryClient.setQueryData<GroupRelationship>(['groupRelationships', id], (relationship) => {
-        previousRelationship = relationship;
-        if (!relationship) return undefined;
-        return {
-          ...relationship,
-          requested: false,
-          member: false,
-          role: undefined,
-        };
-      });
+      queryClient.setQueryData<GroupRelationship>(
+        queryKeys.groupRelationships.show(id),
+        (relationship) => {
+          previousRelationship = relationship;
+          if (!relationship) return undefined;
+          return {
+            ...relationship,
+            requested: false,
+            member: false,
+            role: undefined,
+          };
+        },
+      );
 
       return previousRelationship;
     },
@@ -88,7 +95,7 @@ const useLeaveGroupMutation = (id: string) => {
       }
     },
     onSuccess: (data) => {
-      queryClient.setQueryData<GroupRelationship>(['groupRelationships', id], data);
+      queryClient.setQueryData<GroupRelationship>(queryKeys.groupRelationships.show(id), data);
     },
   });
 };

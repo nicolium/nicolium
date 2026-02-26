@@ -1,13 +1,14 @@
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
+import { queryKeys } from '@/queries/keys';
 
 const useDirectory = (order: 'active' | 'new', local: boolean = false) => {
   const client = useClient();
   const queryClient = useQueryClient();
 
   return useInfiniteQuery({
-    queryKey: ['accountsLists', 'directory', order, local],
+    queryKey: queryKeys.accountsLists.directory(order, local),
     queryFn: ({ pageParam: offset }) =>
       client.instance
         .profileDirectory({
@@ -17,7 +18,7 @@ const useDirectory = (order: 'active' | 'new', local: boolean = false) => {
         })
         .then((accounts) => {
           for (const account of accounts) {
-            queryClient.setQueryData(['accounts', account.id], account);
+            queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
           }
           return accounts.map(({ id }) => id);
         }),

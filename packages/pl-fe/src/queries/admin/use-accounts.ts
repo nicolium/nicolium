@@ -10,6 +10,7 @@ import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
 
+import { queryKeys } from '../keys';
 import { filterById } from '../utils/filter-id';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';
@@ -40,10 +41,10 @@ const useAdminAccount = (accountId?: string) => {
   const queryClient = useQueryClient();
 
   const query = useQuery<AdminAccount>({
-    queryKey: ['admin', 'accounts', accountId],
+    queryKey: queryKeys.admin.accounts.show(accountId!),
     queryFn: () =>
       client.admin.accounts.getAccount(accountId!).then(({ account, ...adminAccount }) => {
-        if (account) queryClient.setQueryData(['accounts', account.id], account);
+        if (account) queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
         return adminAccount as AdminAccount;
       }),
     enabled: !!accountId,
@@ -57,7 +58,7 @@ const useAdminAccount = (accountId?: string) => {
 };
 
 const pendingUsersQuery = makePaginatedResponseQueryOptions(
-  ['admin', 'accountLists', { origin: 'local', status: 'pending' }],
+  queryKeys.admin.accountLists.show({ origin: 'local', status: 'pending' }),
   (client) =>
     client.admin.accounts
       .getAccounts({ origin: 'local', status: 'pending' })
@@ -83,17 +84,11 @@ const useAdminApproveAccountMutation = (accountId: string) => {
     mutationKey: ['admin', 'acounts', accountId],
     mutationFn: () => client.admin.accounts.approveAccount(accountId),
     onSuccess: ({ account, ...adminAccount }) => {
-      if (account) queryClient.setQueryData(['accounts', account.id], account);
-      queryClient.setQueryData(['admin', 'accounts', adminAccount.id], adminAccount);
+      if (account) queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+      queryClient.setQueryData(queryKeys.admin.accounts.show(adminAccount.id), adminAccount);
       queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
         {
-          queryKey: [
-            'admin',
-            'accountLists',
-            {
-              status: 'pending',
-            },
-          ],
+          queryKey: queryKeys.admin.accountLists.show({ status: 'pending' }),
           exact: false,
         },
         filterById(accountId),
@@ -112,13 +107,7 @@ const useAdminRejectAccountMutation = (accountId: string) => {
     onSuccess: () => {
       queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
         {
-          queryKey: [
-            'admin',
-            'accountLists',
-            {
-              status: 'pending',
-            },
-          ],
+          queryKey: queryKeys.admin.accountLists.show({ status: 'pending' }),
           exact: false,
         },
         filterById(accountId),
@@ -137,7 +126,7 @@ const useAdminDeleteAccountMutation = (accountId: string) => {
     onSuccess: () => {
       queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
         {
-          queryKey: ['admin', 'accountLists'],
+          queryKey: queryKeys.admin.accountLists.root,
           exact: false,
         },
         filterById(accountId),
@@ -155,7 +144,7 @@ const useAdminPerformAccountActionMutation = (accountId: string, type: AdminAcco
     mutationFn: (params?: AdminPerformAccountActionParams) =>
       client.admin.accounts.performAccountAction(accountId, type, params),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['admin', 'accountLists'], exact: false });
+      queryClient.invalidateQueries({ queryKey: queryKeys.admin.accountLists.root, exact: false });
     },
   });
 };
@@ -170,7 +159,7 @@ const useAdminEnableAccountMutation = (accountId: string) => {
     onSuccess: (account) => {
       queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
         {
-          queryKey: ['admin', 'accountLists', { status: 'disabled' }],
+          queryKey: queryKeys.admin.accountLists.show({ status: 'disabled' }),
           exact: false,
         },
         filterById(accountId),
@@ -190,7 +179,7 @@ const useAdminUnsilenceAccountMutation = (accountId: string) => {
     onSuccess: (account) => {
       queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
         {
-          queryKey: ['admin', 'accountLists', { status: 'silenced' }],
+          queryKey: queryKeys.admin.accountLists.show({ status: 'silenced' }),
           exact: false,
         },
         filterById(accountId),
@@ -210,7 +199,7 @@ const useAdminUnsuspendAccountMutation = (accountId: string) => {
     onSuccess: (account) => {
       queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
         {
-          queryKey: ['admin', 'accountLists', { status: 'suspended' }],
+          queryKey: queryKeys.admin.accountLists.show({ status: 'suspended' }),
           exact: false,
         },
         filterById(accountId),

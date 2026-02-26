@@ -3,6 +3,8 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
 
+import { queryKeys } from '../keys';
+
 import type { AdminRule } from 'pl-api';
 
 interface CreateRuleParams {
@@ -24,7 +26,7 @@ const useRules = () => {
   const getRules = () => client.admin.rules.getRules();
 
   const result = useQuery<ReadonlyArray<AdminRule>>({
-    queryKey: ['admin', 'rules'],
+    queryKey: queryKeys.admin.rules,
     queryFn: getRules,
     placeholderData: [],
   });
@@ -33,7 +35,7 @@ const useRules = () => {
     mutationFn: (params: CreateRuleParams) => client.admin.rules.createRule(params),
     retry: false,
     onSuccess: (data) =>
-      queryClient.setQueryData(['admin', 'rules'], (prevResult: ReadonlyArray<AdminRule>) => [
+      queryClient.setQueryData(queryKeys.admin.rules, (prevResult: ReadonlyArray<AdminRule>) => [
         ...prevResult,
         data,
       ]),
@@ -43,7 +45,7 @@ const useRules = () => {
     mutationFn: ({ id, ...params }: UpdateRuleParams) => client.admin.rules.updateRule(id, params),
     retry: false,
     onSuccess: (data) =>
-      queryClient.setQueryData(['admin', 'rules'], (prevResult: ReadonlyArray<AdminRule>) =>
+      queryClient.setQueryData(queryKeys.admin.rules, (prevResult: ReadonlyArray<AdminRule>) =>
         prevResult.map((rule) => (rule.id === data.id ? data : rule)),
       ),
   });
@@ -52,7 +54,7 @@ const useRules = () => {
     mutationFn: (id: string) => client.admin.rules.deleteRule(id),
     retry: false,
     onSuccess: (_, id) =>
-      queryClient.setQueryData(['admin', 'rules'], (prevResult: ReadonlyArray<AdminRule>) =>
+      queryClient.setQueryData(queryKeys.admin.rules, (prevResult: ReadonlyArray<AdminRule>) =>
         prevResult.filter(({ id: ruleId }) => ruleId !== id),
       ),
   });
