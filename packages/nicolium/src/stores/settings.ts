@@ -50,8 +50,8 @@ type State = {
   settings: Settings;
 
   actions: {
-    loadDefaultSettings: (settings: APIEntity) => void;
-    loadUserSettings: (settings: APIEntity) => void;
+    loadDefaultSettings: (settings: unknown) => void;
+    loadUserSettings: (settings: unknown) => void;
     userSettingsSaving: () => void;
     changeSetting: (path: string[], value: any) => void;
     rememberEmojiUse: (emoji: Emoji) => void;
@@ -146,7 +146,7 @@ const useSettingsStore = create<State>()(
       settings: v.parse(settingsSchema, { locale: navigator.language }),
 
       actions: {
-        loadDefaultSettings: (settings: APIEntity) => {
+        loadDefaultSettings: (settings: unknown) => {
           set((state: State) => {
             if (typeof settings !== 'object') return;
 
@@ -155,7 +155,7 @@ const useSettingsStore = create<State>()(
           });
         },
 
-        loadUserSettings: (settings?: APIEntity) => {
+        loadUserSettings: (settings?: unknown) => {
           set((state: State) => {
             if (typeof settings !== 'object') return;
 

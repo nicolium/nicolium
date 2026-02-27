@@ -1,19 +1,22 @@
-import { ADMIN_CONFIG_UPDATE_SUCCESS } from '@/actions/admin';
+import * as v from 'valibot';
+
+import { ADMIN_CONFIG_UPDATE_SUCCESS, type AdminActions } from '@/actions/admin';
 import {
   FRONTEND_CONFIG_REMEMBER_SUCCESS,
   FRONTEND_CONFIG_REQUEST_SUCCESS,
   FRONTEND_CONFIG_REQUEST_FAIL,
+  type FrontendConfigAction,
 } from '@/actions/frontend-config';
-import { PLEROMA_PRELOAD_IMPORT } from '@/actions/preload';
+import { PLEROMA_PRELOAD_IMPORT, type PreloadAction } from '@/actions/preload';
+import { type PartialFrontendConfig, partialFrontendConfigSchema } from '@/schemas/frontend-config';
 import KVStore from '@/storage/kv-store';
 import ConfigDB from '@/utils/config-db';
 
-import type { FrontendConfig } from '@/schemas/frontend-config';
 import type { PleromaConfig } from 'pl-api';
 
-const initialState: Partial<FrontendConfig> = {};
+const initialState: PartialFrontendConfig = {};
 
-const fallbackState: Partial<FrontendConfig> = {
+const fallbackState: PartialFrontendConfig = {
   brandColor: '#d80482',
 };
 
@@ -39,32 +42,42 @@ const preloadImport = (state: Record<string, any>, action: Record<string, any>) 
   }
 };
 
-const persistFrontendConfig = (frontendConfig: Record<string, any>, host: string) => {
+const persistFrontendConfig = (frontendConfig: PartialFrontendConfig, host: string) => {
   if (host) {
     KVStore.setItem(`plfe_config:${host}`, frontendConfig).catch(console.error);
   }
 };
 
-const importFrontendConfig = (frontendConfig: FrontendConfig, host: string) => {
-  persistFrontendConfig(frontendConfig, host);
-  return frontendConfig;
+const importFrontendConfig = (frontendConfig: unknown, host: string) => {
+  const parsedFrontendConfig = v.parse(partialFrontendConfigSchema, frontendConfig);
+  persistFrontendConfig(parsedFrontendConfig, host);
+  return parsedFrontendConfig;
+};
+
+const parseFrontendConfig = (frontendConfig: unknown) => {
+  try {
+    return v.parse(partialFrontendConfigSchema, frontendConfig);
+  } catch (e) {
+    console.error('Failed to parse frontend config', e);
+    return null;
+  }
 };
 
 const frontendConfig = (
   state = initialState,
-  action: Record<string, any>,
-): Partial<FrontendConfig> => {
+  action: PreloadAction | FrontendConfigAction | AdminActions,
+): PartialFrontendConfig => {
   switch (action.type) {
     case PLEROMA_PRELOAD_IMPORT:
-      return preloadImport(state, action);
+      return parseFrontendConfig(preloadImport(state, action)) || state;
     case FRONTEND_CONFIG_REMEMBER_SUCCESS:
-      return action.frontendConfig;
+      return parseFrontendConfig(action.frontendConfig) || state;
     case FRONTEND_CONFIG_REQUEST_SUCCESS:
-      return importFrontendConfig(action.frontendConfig ?? {}, action.host);
+      return importFrontendConfig(action.frontendConfig ?? {}, action.host || '') || state;
     case FRONTEND_CONFIG_REQUEST_FAIL:
       return { ...fallbackState, ...state };
     case ADMIN_CONFIG_UPDATE_SUCCESS:
-      return updateFromAdmin(state, action.configs ?? []);
+      return parseFrontendConfig(updateFromAdmin(state, action.configs ?? [])) || state;
     default:
       return state;
   }

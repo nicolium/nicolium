@@ -41,7 +41,7 @@ const cryptoAddressSchema = v.pipe(
 
 type CryptoAddress = v.InferOutput<typeof cryptoAddressSchema>;
 
-const frontendConfigSchema = coerceObject({
+const frontendConfigSchemaShape = {
   appleAppId: v.fallback(v.nullable(v.string()), null),
   logo: v.fallback(v.string(), ''),
   logoDarkMode: v.fallback(v.nullable(v.string()), null),
@@ -117,18 +117,26 @@ const frontendConfigSchema = coerceObject({
    */
   mediaPreview: v.fallback(v.boolean(), false),
   sentryDsn: v.fallback(v.optional(v.string()), undefined),
-});
+};
+
+const frontendConfigSchema = coerceObject(frontendConfigSchemaShape);
 
 type FrontendConfig = v.InferOutput<typeof frontendConfigSchema>;
+
+const partialFrontendConfigSchema = v.partial(v.object(frontendConfigSchemaShape));
+
+type PartialFrontendConfig = v.InferOutput<typeof partialFrontendConfigSchema>;
 
 export {
   promoPanelItemSchema,
   footerItemSchema,
   cryptoAddressSchema,
   frontendConfigSchema,
+  partialFrontendConfigSchema,
   type PromoPanelItem,
   type PromoPanel,
   type FooterItem,
   type CryptoAddress,
   type FrontendConfig,
+  type PartialFrontendConfig,
 };

@@ -37,7 +37,7 @@ const logOut = (state: AppState): ReturnType<typeof appReducer> => {
     location.href = '/login';
   }
 
-  const newState = rootReducer(undefined, { type: '' });
+  const newState = rootReducer(undefined, { type: '' } as any);
 
   const { instance, frontendConfig, auth } = state;
   return { ...newState, instance, frontendConfig, auth };

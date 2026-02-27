@@ -1,9 +1,5 @@
-import { createSelector } from 'reselect';
-import * as v from 'valibot';
-
 import { getHost } from '@/actions/instance';
 import { getClient, staticFetch } from '@/api';
-import { frontendConfigSchema } from '@/schemas/frontend-config';
 import KVStore from '@/storage/kv-store';
 import { useSettingsStore } from '@/stores/settings';
 
@@ -15,18 +11,14 @@ const FRONTEND_CONFIG_REQUEST_FAIL = 'FRONTEND_CONFIG_REQUEST_FAIL' as const;
 
 const FRONTEND_CONFIG_REMEMBER_SUCCESS = 'FRONTEND_CONFIG_REMEMBER_SUCCESS' as const;
 
-const getFrontendConfig = createSelector(
-  [
-    (state: RootState) => state.frontendConfig,
-    // Do some additional normalization with the state
-  ],
-  (frontendConfig) => v.parse(frontendConfigSchema, frontendConfig),
-);
-
 const rememberFrontendConfig = (host: string | null) => (dispatch: AppDispatch) =>
   KVStore.getItemOrError(`plfe_config:${host}`)
     .then((frontendConfig) => {
-      dispatch({ type: FRONTEND_CONFIG_REMEMBER_SUCCESS, host, frontendConfig });
+      dispatch<FrontendConfigAction>({
+        type: FRONTEND_CONFIG_REMEMBER_SUCCESS,
+        host,
+        frontendConfig,
+      });
       return true;
     })
     .catch(() => false);
@@ -101,11 +93,20 @@ const frontendConfigFail = (error: unknown, host: string | null) => ({
 // https://stackoverflow.com/a/46663081
 const isObject = (o: any) => o instanceof Object && o.constructor === Object;
 
+type FrontendConfigAction =
+  | ReturnType<typeof importFrontendConfig>
+  | ReturnType<typeof frontendConfigFail>
+  | {
+      type: typeof FRONTEND_CONFIG_REMEMBER_SUCCESS;
+      frontendConfig: APIEntity;
+      host: string | null;
+    };
+
 export {
   FRONTEND_CONFIG_REQUEST_SUCCESS,
   FRONTEND_CONFIG_REQUEST_FAIL,
   FRONTEND_CONFIG_REMEMBER_SUCCESS,
-  getFrontendConfig,
   fetchFrontendConfig,
   loadFrontendConfig,
+  type FrontendConfigAction,
 };

@@ -1,7 +1,6 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { getFrontendConfig } from '@/actions/frontend-config';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useAppSelector } from '@/hooks/use-app-selector';
@@ -30,23 +29,31 @@ const renderTermsOfServiceLink = (href: string) => (
 
 const ConfirmationStep: React.FC = () => {
   const intl = useIntl();
-  const links = useAppSelector((state) => getFrontendConfig(state).links);
+  const links = useAppSelector((state) => state.frontendConfig.links);
 
   const entity = intl.formatMessage(messages.accountEntity);
 
   return (
     <Stack space={1}>
       <Text weight='semibold' tag='h1' size='xl'>
+        <FormattedMessage
+          id='report.confirmation.title'
+          defaultMessage='Thanks for submitting your report.'
+        />
         {intl.formatMessage(messages.title)}
       </Text>
 
       <Text>
-        {intl.formatMessage(messages.content, {
-          entity,
-          link: links.termsOfService
-            ? renderTermsOfServiceLink(links.termsOfService)
-            : termsOfServiceText,
-        })}
+        <FormattedMessage
+          id='report.confirmation.content'
+          defaultMessage='If we find that this {entity} is violating the {link} we will take further action on the matter.'
+          values={{
+            entity,
+            link: links?.termsOfService
+              ? renderTermsOfServiceLink(links.termsOfService)
+              : termsOfServiceText,
+          }}
+        />
       </Text>
     </Stack>
   );
