@@ -70,7 +70,7 @@ const ComposeInteractionPolicyModal: React.FC<
           draftPolicy[policy][rule] = value;
           draftPolicy[policy][rule === 'always' ? 'with_approval' : 'always'] = draftPolicy[policy][
             rule === 'always' ? 'with_approval' : 'always'
-          ].filter((r) => !value.includes(r as any));
+          ].filter((r) => !value.includes(r as Scope));
         },
       );
     });
