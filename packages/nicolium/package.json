@@ -71,7 +71,7 @@
     "@use-gesture/react": "^10.3.1",
     "@yornaath/batshit": "^0.14.0",
     "abortcontroller-polyfill": "^1.7.8",
-    "autoprefixer": "^10.4.24",
+    "autoprefixer": "^10.4.27",
     "blurhash": "^2.0.5",
     "bowser": "^2.14.1",
     "browserslist": "^4.28.1",
