@@ -1335,6 +1335,7 @@ const getFeatures = (instance: Instance) => {
      */
     outgoingFollowRequests: any([
       v.software === GOTOSOCIAL && gte(v.version, '0.20.0'),
+      v.software === MITRA && gte(v.version, '4.19.0'),
       v.software === ICESHRIMP_NET,
       instance.api_versions['outgoing_follow_requests.pleroma.pl-api'] >= 1,
     ]),

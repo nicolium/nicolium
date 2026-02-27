@@ -11,7 +11,7 @@ import {
 } from '@/entities';
 import { filteredArray } from '@/entities/utils';
 
-import { GOTOSOCIAL, ICESHRIMP_NET, PIXELFED, PLEROMA } from '../features';
+import { GOTOSOCIAL, ICESHRIMP_NET, MITRA, PIXELFED, PLEROMA } from '../features';
 import { getNextLink, getPrevLink } from '../request';
 
 import type { PaginatedResponse } from '../responses';
@@ -98,6 +98,7 @@ const myAccount = (client: PlApiBaseClient & { accounts: ReturnType<typeof accou
 
     switch (client.features.version.software) {
       case GOTOSOCIAL:
+      case MITRA:
         return client.paginatedGet('/api/v1/follow_requests/outgoing', { params }, accountSchema);
 
       default:
