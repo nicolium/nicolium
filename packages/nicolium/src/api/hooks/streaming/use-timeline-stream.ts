@@ -9,7 +9,7 @@ import type { StreamingEvent } from 'pl-api';
 
 const useTimelineStream = (
   stream: string,
-  params: { list?: string; tag?: string } = {},
+  params: { list?: string; tag?: string; group?: string } = {},
   enabled = true,
   listener?: (event: StreamingEvent) => any,
 ) => {
@@ -26,6 +26,7 @@ const useTimelineStream = (
       params?: {
         list?: string;
         tag?: string;
+        group?: string;
       },
     ) => void;
     unsubscribe: (
@@ -33,6 +34,7 @@ const useTimelineStream = (
       params?: {
         list?: string;
         tag?: string;
+        group?: string;
       },
     ) => void;
     close: () => void;
@@ -61,7 +63,7 @@ const useTimelineStream = (
     socket.current?.subscribe(stream, params);
 
     return () => socket.current?.unsubscribe(stream, params);
-  }, [stream, params.list, params.tag, enabled]);
+  }, [stream, params.list, params.tag, params.group, enabled]);
 
   useEffect(() => {
     if (enabled) {

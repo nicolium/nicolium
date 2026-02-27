@@ -43,7 +43,7 @@ const PollFooter: React.FC<IPollFooter> = ({
   const { toggleShowPollResults } = useStatusMetaActions();
 
   const handleVote = () => {
-    vote(Object.keys(selected) as any as number[]);
+    vote(Object.keys(selected).map((optionId) => parseInt(optionId, 10)));
   };
 
   const handleRefresh: React.EventHandler<React.MouseEvent> = (e) => {

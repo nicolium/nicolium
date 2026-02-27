@@ -434,7 +434,7 @@ const Notification: React.FC<INotification> = (props) => {
     } else {
       return null;
     }
-  }, [type, (notification as any).emoji]);
+  }, [type, 'emoji' in notification && notification.emoji]);
 
   const renderContent = () => {
     if (type === 'bite' && status) {

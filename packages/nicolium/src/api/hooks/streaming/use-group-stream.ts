@@ -1,5 +1,5 @@
 import { useTimelineStream } from './use-timeline-stream';
 
-const useGroupStream = (groupId: string) => useTimelineStream('group', { group: groupId } as any);
+const useGroupStream = (groupId: string) => useTimelineStream('group', { group: groupId });
 
 export { useGroupStream };
