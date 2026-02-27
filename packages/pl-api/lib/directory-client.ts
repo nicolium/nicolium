@@ -12,7 +12,7 @@ interface Params {
   language?: string;
   /** Server topic. */
   category?: string;
-  /** Region where teh server is legally based. */
+  /** Region where the server is legally based. */
   region?: 'europe' | 'north_america' | 'south_america' | 'africa' | 'asia' | 'oceania';
   /** Whether the server is governed by a public organization or a private individual. */
   ownership?: 'juridicial' | 'natural';
