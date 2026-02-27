@@ -15,6 +15,7 @@ import toast, { type IToastOptions } from '@/toast';
 import { queryKeys } from '../keys';
 import { filterById } from '../utils/filter-id';
 
+import type { NormalizedStatus } from '@/reducers/statuses';
 import type { EmojiReaction, PaginatedResponse } from 'pl-api';
 
 const messages = defineMessages({
@@ -47,6 +48,33 @@ const minifyEmojiReaction = ({ accounts, ...reaction }: EmojiReaction) => reacti
 
 type MinifiedEmojiReaction = ReturnType<typeof minifyEmojiReaction>;
 
+const updateStatus = (
+  statusId: string,
+  changes: Partial<NormalizedStatus> | ((status: NormalizedStatus) => NormalizedStatus),
+  queryClient: ReturnType<typeof useQueryClient>,
+) => {
+  const previousStatus = queryClient.getQueryData<NormalizedStatus>(
+    queryKeys.statuses.show(statusId),
+  );
+  if (!previousStatus) return;
+
+  const newStatus =
+    typeof changes === 'function' ? changes(previousStatus) : { ...previousStatus, ...changes };
+  queryClient.setQueryData(queryKeys.statuses.show(statusId), newStatus);
+
+  return { previousStatus };
+};
+
+const restorePreviousStatus = (
+  statusId: string,
+  context: { previousStatus?: NormalizedStatus } | undefined,
+  queryClient: ReturnType<typeof useQueryClient>,
+) => {
+  if (context?.previousStatus) {
+    queryClient.setQueryData(queryKeys.statuses.show(statusId), context.previousStatus);
+  }
+};
+
 const useStatusReactions = (statusId: string, emoji?: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
@@ -75,8 +103,17 @@ const useFavouriteStatus = (statusId: string) => {
   return useMutation({
     mutationKey: ['statuses', 'favourite', statusId],
     mutationFn: () => client.statuses.favouriteStatus(statusId),
-    onMutate: () => dispatch<InteractionsAction>({ type: 'FAVOURITE_REQUEST', statusId }),
-    onError: () => dispatch<InteractionsAction>({ type: 'UNFAVOURITE_REQUEST', statusId }),
+    onMutate: () =>
+      updateStatus(
+        statusId,
+        (status) => ({
+          ...status,
+          favourited: true,
+          favourites_count: status.favourites_count + 1,
+        }),
+        queryClient,
+      ),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status) => {
       dispatch(importEntities({ statuses: [status] }));
       queryClient.invalidateQueries({
@@ -94,8 +131,17 @@ const useUnfavouriteStatus = (statusId: string) => {
   return useMutation({
     mutationKey: ['statuses', 'favourite', statusId],
     mutationFn: () => client.statuses.unfavouriteStatus(statusId),
-    onMutate: () => dispatch<InteractionsAction>({ type: 'UNFAVOURITE_REQUEST', statusId }),
-    onError: () => dispatch<InteractionsAction>({ type: 'FAVOURITE_REQUEST', statusId }),
+    onMutate: () =>
+      updateStatus(
+        statusId,
+        (status) => ({
+          ...status,
+          favourited: false,
+          favourites_count: Math.max(0, status.favourites_count - 1),
+        }),
+        queryClient,
+      ),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status) => {
       dispatch(importEntities({ statuses: [status] }));
       queryClient.invalidateQueries({
@@ -113,8 +159,17 @@ const useDislikeStatus = (statusId: string) => {
   return useMutation({
     mutationKey: ['statuses', 'dislike', statusId],
     mutationFn: () => client.statuses.dislikeStatus(statusId),
-    onMutate: () => dispatch<InteractionsAction>({ type: 'DISLIKE_REQUEST', statusId }),
-    onError: () => dispatch<InteractionsAction>({ type: 'UNDISLIKE_REQUEST', statusId }),
+    onMutate: () =>
+      updateStatus(
+        statusId,
+        (status) => ({
+          ...status,
+          disliked: true,
+          dislikes_count: status.dislikes_count + 1,
+        }),
+        queryClient,
+      ),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status) => {
       dispatch(importEntities({ statuses: [status] }));
       queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusDislikes(statusId) });
@@ -130,8 +185,17 @@ const useUndislikeStatus = (statusId: string) => {
   return useMutation({
     mutationKey: ['statuses', 'dislike', statusId],
     mutationFn: () => client.statuses.undislikeStatus(statusId),
-    onMutate: () => dispatch<InteractionsAction>({ type: 'UNDISLIKE_REQUEST', statusId }),
-    onError: () => dispatch<InteractionsAction>({ type: 'DISLIKE_REQUEST', statusId }),
+    onMutate: () =>
+      updateStatus(
+        statusId,
+        (status) => ({
+          ...status,
+          disliked: false,
+          dislikes_count: Math.max(0, status.dislikes_count - 1),
+        }),
+        queryClient,
+      ),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status) => {
       dispatch(importEntities({ statuses: [status] }));
       queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusDislikes(statusId) });
@@ -147,8 +211,17 @@ const useReblogStatus = (statusId: string) => {
   return useMutation({
     mutationKey: ['statuses', 'reblog', statusId],
     mutationFn: (visibility?: string) => client.statuses.reblogStatus(statusId, visibility),
-    onMutate: () => dispatch<InteractionsAction>({ type: 'REBLOG_REQUEST', statusId }),
-    onError: (error) => dispatch<InteractionsAction>({ type: 'REBLOG_FAIL', statusId, error }),
+    onMutate: () =>
+      updateStatus(
+        statusId,
+        (status) => ({
+          ...status,
+          reblogged: true,
+          reblogs_count: status.reblogs_count + 1,
+        }),
+        queryClient,
+      ),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status) => {
       dispatch(importEntities({ statuses: [status] }));
       queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusReblogs(statusId) });
@@ -164,8 +237,17 @@ const useUnreblogStatus = (statusId: string) => {
   return useMutation({
     mutationKey: ['statuses', 'reblog', statusId],
     mutationFn: () => client.statuses.unreblogStatus(statusId),
-    onMutate: () => dispatch<InteractionsAction>({ type: 'UNREBLOG_REQUEST', statusId }),
-    onError: (error) => dispatch<InteractionsAction>({ type: 'UNREBLOG_FAIL', statusId, error }),
+    onMutate: () =>
+      updateStatus(
+        statusId,
+        (status) => ({
+          ...status,
+          reblogged: false,
+          reblogs_count: Math.max(0, status.reblogs_count - 1),
+        }),
+        queryClient,
+      ),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status) => {
       dispatch(importEntities({ statuses: [status] }));
       queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusReblogs(statusId) });
@@ -193,6 +275,8 @@ const useBookmarkStatus = (statusId: string) => {
       });
       return client.statuses.bookmarkStatus(statusId, folderId);
     },
+    onMutate: () => updateStatus(statusId, { bookmarked: true }, queryClient),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status, _, folderId) => {
       dispatch(importEntities({ statuses: [status] }));
       queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusReblogs(statusId) });
@@ -247,6 +331,8 @@ const useUnbookmarkStatus = (statusId: string) => {
   return useMutation({
     mutationKey: ['statuses', 'bookmark', statusId],
     mutationFn: () => client.statuses.unbookmarkStatus(statusId),
+    onMutate: () => updateStatus(statusId, { bookmarked: false }, queryClient),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status) => {
       dispatch(importEntities({ statuses: [status] }));
 
@@ -272,6 +358,8 @@ const usePinStatus = (statusId: string) => {
   return useMutation({
     mutationKey: ['statuses', 'pin', statusId],
     mutationFn: () => client.statuses.pinStatus(statusId),
+    onMutate: () => updateStatus(statusId, { pinned: true }, queryClient),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSuccess: (status) => {
       dispatch(importEntities({ statuses: [status] }));
       queryClient.invalidateQueries({ queryKey: queryKeys.statusLists.pins(account!.id) });
@@ -293,6 +381,8 @@ const useUnpinStatus = (statusId: string) => {
   return useMutation({
     mutationKey: ['statuses', 'unpin', statusId],
     mutationFn: () => client.statuses.unpinStatus(statusId),
+    onMutate: () => updateStatus(statusId, { pinned: false }, queryClient),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSuccess: (status) => {
       dispatch(importEntities({ statuses: [status] }));
       queryClient.setQueryData(queryKeys.statusLists.pins(account!.id), filterById(statusId));
