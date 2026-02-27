@@ -161,7 +161,7 @@ const useMarkChatAsRead = (chatId: string) => {
       const queryData = queryClient.getQueryData(queryKeys.chats.search);
 
       if (queryData) {
-        const flattenedQueryData: any = flattenPages(queryData)?.map((chat: any) => {
+        const flattenedQueryData: any = flattenPages(queryData)?.map((chat) => {
           if (chat.id === data.id) {
             return data;
           }
@@ -245,7 +245,7 @@ const useCreateChatMessage = () => {
         );
       }
     },
-    onSuccess: (response: any, variables, context) => {
+    onSuccess: (response, variables, context) => {
       const nextChat = { ...chat, last_message: response };
       updatePageItem(queryKeys.chats.search, nextChat, (o, n) => o.id === n.id);
       updatePageItem(

@@ -165,7 +165,7 @@ const FrontendConfigEditor: React.FC = () => {
 
       if (file) {
         dispatch(uploadMedia({ file }))
-          .then((data: any) => {
+          .then((data) => {
             handleChange(path, () => data.url)(e);
           })
           .catch(console.error);

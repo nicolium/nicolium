@@ -106,7 +106,7 @@ const ListsPage: React.FC = () => {
           </Card>
         ) : (
           <List>
-            {lists.map((list: any) => (
+            {lists.map((list) => (
               <ListItem
                 key={list.id}
                 to='/list/$listId'

@@ -47,11 +47,7 @@ const useDismissSuggestion = () => {
   return useMutation({
     mutationFn: (accountId: string) => client.myAccount.dismissSuggestions(accountId),
     onMutate(accountId: string) {
-      removePageItem(
-        queryKeys.suggestions.all,
-        accountId,
-        (item: any, newItem: any) => item.account_id === newItem,
-      );
+      removePageItem(queryKeys.suggestions.all, accountId, (item, newItem) => item === newItem);
     },
   });
 };

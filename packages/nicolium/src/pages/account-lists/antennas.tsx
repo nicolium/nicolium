@@ -71,7 +71,7 @@ const AntennasPage: React.FC = () => {
           </Card>
         ) : (
           <List>
-            {antennas.map((antenna: any) => (
+            {antennas.map((antenna) => (
               <ListItem
                 key={antenna.id}
                 to='/antennas/$antennaId'

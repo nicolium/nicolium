@@ -68,7 +68,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
               {poll && (
                 <div className='poll'>
                   <Stack>
-                    {poll.options.map((option: any) => (
+                    {poll.options.map((option) => (
                       <HStack
                         alignItems='center'
                         className='p-1 text-gray-900 dark:text-gray-300'
