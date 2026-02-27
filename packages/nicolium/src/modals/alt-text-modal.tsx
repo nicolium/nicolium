@@ -54,8 +54,8 @@ const Preview: React.FC<PreviewProps> = ({ media, position: [x, y], onPositionCh
     nodeRef.current = e;
   }, []);
 
-  const handleMouseDown = useCallback(
-    (e: React.MouseEvent) => {
+  const handleMouseDown: React.MouseEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
       if (e.button !== 0 || !nodeRef.current) {
         return;
       }
@@ -68,8 +68,8 @@ const Preview: React.FC<PreviewProps> = ({ media, position: [x, y], onPositionCh
     [onPositionChange],
   );
 
-  const handleTouchStart = useCallback(
-    (e: React.TouchEvent) => {
+  const handleTouchStart: React.TouchEventHandler<HTMLDivElement> = useCallback(
+    (e) => {
       if (!nodeRef.current) return;
 
       const { x, y } = getPointerPosition(nodeRef.current, e);
@@ -203,8 +203,8 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
   const [isSaving, setIsSaving] = useState(false);
   const dirtyRef = useRef(Boolean(previousDescription));
 
-  const handleDescriptionChange = useCallback(
-    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleDescriptionChange: React.ChangeEventHandler<HTMLTextAreaElement> = useCallback(
+    (e) => {
       setDescription(e.target.value);
       dirtyRef.current = true;
     },
@@ -235,8 +235,8 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
       });
   }, [dispatch, setIsSaving, media.id, onClose, description, position]);
 
-  const handleKeyUp = useCallback(
-    (e: React.KeyboardEvent) => {
+  const handleKeyUp: React.KeyboardEventHandler<HTMLTextAreaElement> = useCallback(
+    (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
         e.preventDefault();
       }

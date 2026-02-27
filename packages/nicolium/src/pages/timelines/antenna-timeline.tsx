@@ -48,7 +48,7 @@ const AntennaTimelinePage: React.FC = () => {
     openModal('ANTENNA_EDITOR', { antennaId });
   };
 
-  const handleDeleteClick = (e: React.MouseEvent | React.KeyboardEvent) => {
+  const handleDeleteClick: React.EventHandler<React.KeyboardEvent | React.MouseEvent> = (e) => {
     e.preventDefault();
 
     openModal('CONFIRM', {

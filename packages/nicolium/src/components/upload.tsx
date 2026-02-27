@@ -125,7 +125,7 @@ const Upload: React.FC<IUpload> = ({
     openModal('MEDIA', { media: [media], index: 0 });
   };
 
-  const handleOpenAltTextModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleOpenAltTextModal: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
     e.preventDefault();
 

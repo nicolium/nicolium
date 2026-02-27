@@ -27,7 +27,7 @@ const IconPickerMenu: React.FC<IIconPickerMenu> = ({ icons, onPick }) => {
     onPick(icon);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown: React.KeyboardEventHandler<HTMLUListElement> = (e) => {
     const target = e.target as HTMLButtonElement;
     const icon = target.dataset.index;
 

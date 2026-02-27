@@ -48,7 +48,7 @@ const CircleTimelinePage: React.FC = () => {
     openModal('CIRCLE_EDITOR', { circleId });
   };
 
-  const handleDeleteClick = (e: React.MouseEvent | React.KeyboardEvent) => {
+  const handleDeleteClick: React.EventHandler<React.KeyboardEvent | React.MouseEvent> = (e) => {
     e.preventDefault();
 
     openModal('CONFIRM', {

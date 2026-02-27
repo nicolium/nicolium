@@ -87,11 +87,11 @@ const Search: React.FC<IAliasesSearch> = ({ onSubmit }) => {
 
   const [value, setValue] = useState('');
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setValue(e.target.value);
   };
 
-  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyUp: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.keyCode === 13) {
       onSubmit(value);
     }

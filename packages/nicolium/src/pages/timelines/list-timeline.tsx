@@ -51,7 +51,7 @@ const ListTimelinePage: React.FC = () => {
     openModal('LIST_EDITOR', { listId });
   };
 
-  const handleDeleteClick = (e: React.MouseEvent | React.KeyboardEvent) => {
+  const handleDeleteClick: React.EventHandler<React.KeyboardEvent | React.MouseEvent> = (e) => {
     e.preventDefault();
 
     openModal('CONFIRM', {

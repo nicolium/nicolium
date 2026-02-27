@@ -39,7 +39,7 @@ const ListItem: React.FC<IListItem> = ({
   const labelId = `${domId}-label`;
   const hintId = `${domId}-hint`;
 
-  const onKeyDown = (e: React.KeyboardEvent) => {
+  const onKeyDown: React.KeyboardEventHandler<HTMLAnchorElement | HTMLDivElement> = (e) => {
     if (e.key === 'Enter') {
       onClick!();
     }

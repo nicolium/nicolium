@@ -249,7 +249,7 @@ const ZoomableImage: React.FC<IZoomableImage> = ({
     }
   }, [api, style.scale, zoomedIn, width, height, loaded]);
 
-  const handleClick = useCallback((e: React.MouseEvent) => {
+  const handleClick: React.MouseEventHandler<HTMLImageElement> = useCallback((e) => {
     // This handler exists to cancel the onClick handler on the media modal which would
     // otherwise close the modal. It cannot be used for actual click handling because
     // we don't know if the user is about to pan the image or not.

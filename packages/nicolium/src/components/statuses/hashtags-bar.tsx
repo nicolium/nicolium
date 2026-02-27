@@ -15,7 +15,7 @@ interface IHashtagsBar {
 
 const HashtagsBar: React.FC<IHashtagsBar> = ({ hashtags }) => {
   const [expanded, setExpanded] = useState(false);
-  const handleClick = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = useCallback((e) => {
     e.stopPropagation();
 
     setExpanded(true);

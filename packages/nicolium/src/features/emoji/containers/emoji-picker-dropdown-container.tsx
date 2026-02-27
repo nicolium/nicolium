@@ -54,13 +54,13 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
     setIsOpen(false);
   });
 
-  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.stopPropagation();
     e.preventDefault();
     setIsOpen(!isOpen);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+  const handleKeyDown: React.KeyboardEventHandler<HTMLButtonElement> = (e) => {
     if (['Enter', ' '].includes(e.key)) {
       e.stopPropagation();
       e.preventDefault();

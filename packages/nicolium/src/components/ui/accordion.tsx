@@ -40,12 +40,12 @@ const Accordion: React.FC<IAccordion> = ({
 }) => {
   const intl = useIntl();
 
-  const handleToggle = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleToggle: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     onToggle(!expanded);
     e.preventDefault();
   };
 
-  const handleAction = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleAction: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     if (!action) return;
 
     action();

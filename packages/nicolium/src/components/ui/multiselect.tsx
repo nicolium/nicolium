@@ -130,7 +130,7 @@ const Multiselect: React.FC<IMultiselect> = ({
     [selectedValues, emitChange],
   );
 
-  const onInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+  const onInputChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
     setInputValue(e.target.value);
   }, []);
 
@@ -155,8 +155,8 @@ const Multiselect: React.FC<IMultiselect> = ({
     }, 0);
   }, []);
 
-  const onKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const onKeyDown: React.KeyboardEventHandler<HTMLInputElement> = useCallback(
+    (e) => {
       if (e.key === 'Backspace' && !inputValue && selectedValues.length) {
         onRemoveSelectedItem(selectedValues[selectedValues.length - 1]);
         return;

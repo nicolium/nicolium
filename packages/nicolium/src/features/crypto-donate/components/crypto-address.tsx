@@ -22,7 +22,7 @@ const CryptoAddress: React.FC<ICryptoAddress> = (props): React.JSX.Element => {
 
   const { openModal } = useModalsActions();
 
-  const handleModalClick = (e: React.MouseEvent<HTMLElement>): void => {
+  const handleModalClick: React.MouseEventHandler<HTMLElement> = (e) => {
     openModal('CRYPTO_DONATE', props);
     e.preventDefault();
   };

@@ -40,7 +40,7 @@ const ScheduleForm: React.FC<IScheduleForm> = ({ composeId }) => {
     });
   };
 
-  const handleRemove = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleRemove: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     updateCompose(composeId, (draft) => {
       draft.scheduledAt = null;
     });

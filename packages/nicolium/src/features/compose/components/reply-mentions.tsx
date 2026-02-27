@@ -23,7 +23,7 @@ const ReplyMentions: React.FC<IReplyMentions> = ({ composeId }) => {
     return null;
   }
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleClick: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault();
 
     openModal('REPLY_MENTIONS', {
