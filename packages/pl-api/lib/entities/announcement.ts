@@ -17,7 +17,7 @@ const announcementSchema = v.object({
   ends_at: v.fallback(v.nullable(datetimeSchema), null),
   all_day: v.fallback(v.boolean(), false),
   read: v.fallback(v.boolean(), false),
-  published_at: v.fallback(datetimeSchema, new Date().toISOString()),
+  published_at: v.fallback(datetimeSchema, () => new Date().toISOString()),
   reactions: filteredArray(announcementReactionSchema),
   statuses: v.pipe(
     v.any(),
@@ -33,7 +33,7 @@ const announcementSchema = v.object({
   mentions: filteredArray(mentionSchema),
   tags: filteredArray(tagSchema),
   emojis: filteredArray(customEmojiSchema),
-  updated_at: v.fallback(datetimeSchema, new Date().toISOString()),
+  updated_at: v.fallback(datetimeSchema, () => new Date().toISOString()),
 });
 
 /**

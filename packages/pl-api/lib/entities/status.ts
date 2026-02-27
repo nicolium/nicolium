@@ -46,11 +46,11 @@ const statusEventSchema = v.object({
 const baseStatusSchema = v.object({
   id: v.string(),
   uri: v.fallback(v.pipe(v.string(), v.url()), ''),
-  created_at: v.fallback(datetimeSchema, new Date().toISOString()),
+  created_at: v.fallback(datetimeSchema, () => new Date().toISOString()),
   account: v.pipe(
     v.unknown(),
     v.transform((account) => {
-      if ((window as any).__PL_API_FALLBACK_ACCOUNT && JSON.stringify(account) === '{}')
+      if ((window as any)?.__PL_API_FALLBACK_ACCOUNT && JSON.stringify(account) === '{}')
         return (window as any).__PL_API_FALLBACK_ACCOUNT;
       return account;
     }),

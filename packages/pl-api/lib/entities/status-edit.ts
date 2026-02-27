@@ -13,7 +13,7 @@ const statusEditSchema = v.object({
   content: v.fallback(v.string(), ''),
   spoiler_text: v.fallback(v.string(), ''),
   sensitive: v.pipe(v.unknown(), v.transform(Boolean)),
-  created_at: v.fallback(datetimeSchema, new Date().toISOString()),
+  created_at: v.fallback(datetimeSchema, () => new Date().toISOString()),
   account: accountSchema,
   poll: v.fallback(
     v.nullable(

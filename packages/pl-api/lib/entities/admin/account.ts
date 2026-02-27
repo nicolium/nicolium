@@ -46,7 +46,7 @@ const adminAccountSchema = v.pipe(
     id: v.string(),
     username: v.string(),
     domain: v.fallback(v.nullable(v.string()), null),
-    created_at: v.fallback(datetimeSchema, new Date().toISOString()),
+    created_at: v.fallback(datetimeSchema, () => new Date().toISOString()),
     email: v.fallback(v.nullable(v.string()), null),
     ip: v.fallback(v.nullable(v.pipe(v.string(), v.ip())), null),
     ips: filteredArray(adminIpSchema),

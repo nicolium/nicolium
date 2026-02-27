@@ -48,7 +48,7 @@ const groupSchema = v.pipe(
   v.object({
     avatar: v.fallback(v.string(), ''),
     avatar_static: v.fallback(v.string(), ''),
-    created_at: v.fallback(datetimeSchema, new Date().toISOString()),
+    created_at: v.fallback(datetimeSchema, () => new Date().toISOString()),
     display_name: v.fallback(v.string(), ''),
     domain: v.fallback(v.string(), ''),
     emojis: filteredArray(customEmojiSchema),

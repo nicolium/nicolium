@@ -9,7 +9,7 @@ const subscriptionDetailsSchema = v.object({
   /** Subscription ID. */
   id: v.number(),
   /** The date when subscription expires. */
-  expires_at: v.fallback(datetimeSchema, new Date().toISOString()),
+  expires_at: v.fallback(datetimeSchema, () => new Date().toISOString()),
 });
 
 /**

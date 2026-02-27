@@ -28,7 +28,7 @@ const accountWarningSchema = v.object({
   status_ids: v.fallback(v.array(v.string()), []),
   target_account: accountSchema,
   appeal: v.fallback(v.nullable(appealSchema), null),
-  created_at: v.fallback(datetimeSchema, new Date().toISOString()),
+  created_at: v.fallback(datetimeSchema, () => new Date().toISOString()),
 });
 
 /**

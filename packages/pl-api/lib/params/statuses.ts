@@ -178,7 +178,7 @@ interface EditInteractionPolicyParams {
   /**
    * Sets who is allowed to quote the status. Ignored if `visibility` is `private` or `direct`, in which case the policy will always be set to `nobody`. Changing the policy does not invalidate past quotes.
    */
-  quote_approval_policy: ['public', 'followers', 'nobody'];
+  quote_approval_policy: 'public' | 'followers' | 'nobody';
 }
 
 /**
