@@ -55,13 +55,12 @@ const streaming = (client: PlApiBaseClient) => ({
     };
 
     client.socket = {
-      listen: (listener: (event: StreamingEvent) => any, stream?: string) =>
-        listeners.push({ listener, stream }),
-      unlisten: (listener: (event: StreamingEvent) => any) =>
+      listen: (listener, stream) => listeners.push({ listener, stream }),
+      unlisten: (listener) =>
         (listeners = listeners.filter((value) => value.listener !== listener)),
-      subscribe: (stream: string, { list, tag }: { list?: string; tag?: string } = {}) =>
+      subscribe: (stream, { list, tag } = {}) =>
         enqueue(() => ws.send(JSON.stringify({ type: 'subscribe', stream, list, tag }))),
-      unsubscribe: (stream: string, { list, tag }: { list?: string; tag?: string } = {}) =>
+      unsubscribe: (stream, { list, tag } = {}) =>
         enqueue(() => ws.send(JSON.stringify({ type: 'unsubscribe', stream, list, tag }))),
       close: () => {
         ws.close();

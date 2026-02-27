@@ -22,5 +22,6 @@ export * from './scheduled-statuses';
 export * from './search';
 export * from './settings';
 export * from './statuses';
+export * from './streaming';
 export * from './timelines';
 export * from './trends';

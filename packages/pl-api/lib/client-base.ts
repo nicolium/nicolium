@@ -6,6 +6,8 @@ import { type Features, getFeatures } from './features';
 import request, { getNextLink, getPrevLink, type RequestBody } from './request';
 
 import type { Instance } from './entities/instance';
+import type { StreamingEvent } from './entities/streaming-event';
+import type { StreamingParams } from './params/streaming';
 import type { Response as PlApiResponse } from './request';
 import type { PaginatedResponse } from './responses';
 
@@ -31,10 +33,10 @@ class PlApiBaseClient {
   public features: Features = getFeatures(this.#instance);
   /** @internal */
   socket?: {
-    listen: (listener: any, stream?: string) => number;
-    unlisten: (listener: any) => void;
-    subscribe: (stream: string, params?: { list?: string; tag?: string }) => void;
-    unsubscribe: (stream: string, params?: { list?: string; tag?: string }) => void;
+    listen: (listener: (event: StreamingEvent) => void, stream?: string) => number;
+    unlisten: (listener: (event: StreamingEvent) => void) => void;
+    subscribe: (stream: string, params?: StreamingParams) => void;
+    unsubscribe: (stream: string, params?: StreamingParams) => void;
     close: () => void;
   };
   /** @internal */
