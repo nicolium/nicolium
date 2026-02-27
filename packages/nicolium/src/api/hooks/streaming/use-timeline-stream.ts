@@ -5,11 +5,11 @@ import { useClient } from '@/hooks/use-client';
 import { useInstance } from '@/hooks/use-instance';
 import { getAccessToken } from '@/utils/auth';
 
-import type { StreamingEvent } from 'pl-api';
+import type { StreamingEvent, StreamingParams } from 'pl-api';
 
 const useTimelineStream = (
   stream: string,
-  params: { list?: string; tag?: string; group?: string } = {},
+  params: StreamingParams = {},
   enabled = true,
   listener?: (event: StreamingEvent) => any,
 ) => {
