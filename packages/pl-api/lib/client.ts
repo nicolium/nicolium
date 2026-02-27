@@ -37,13 +37,15 @@ import { trends } from './client/trends';
 import { utils } from './client/utils';
 import { ICESHRIMP_NET } from './features';
 
+import type { Instance } from './entities/instance';
+
 interface PlApiClientFullConstructorOpts extends PlApiClientConstructorOpts {
   /** Fetch instance after constructing */
   fetchInstance?: boolean;
   /** Abort signal which can be used to cancel the callbacks */
   fetchInstanceSignal?: AbortSignal;
   /** Executed after the initial instance fetch */
-  onInstanceFetchSuccess?: (instance: import('./entities/instance').Instance) => void;
+  onInstanceFetchSuccess?: (instance: Instance) => void;
   /** Executed when the initial instance fetch failed */
   onInstanceFetchError?: (error?: any) => void;
 }

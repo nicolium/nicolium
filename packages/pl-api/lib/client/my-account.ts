@@ -25,11 +25,12 @@ import type {
   UpdateBookmarkFolderParams,
 } from '../params/my-account';
 import type { PaginatedResponse } from '../responses';
+import type { accounts } from './accounts';
 
 type EmptyObject = Record<string, never>;
 
 const paginatedIceshrimpAccountsList = async <T>(
-  client: PlApiBaseClient & { accounts: ReturnType<typeof import('./accounts').accounts> },
+  client: PlApiBaseClient & { accounts: ReturnType<typeof accounts> },
   url: string,
   fn: (body: T) => Array<string>,
 ): Promise<PaginatedResponse<Account>> => {
@@ -51,9 +52,7 @@ const paginatedIceshrimpAccountsList = async <T>(
   };
 };
 
-const myAccount = (
-  client: PlApiBaseClient & { accounts: ReturnType<typeof import('./accounts').accounts> },
-) => ({
+const myAccount = (client: PlApiBaseClient & { accounts: ReturnType<typeof accounts> }) => ({
   /**
    * View bookmarked statuses
    * Statuses the user has bookmarked.

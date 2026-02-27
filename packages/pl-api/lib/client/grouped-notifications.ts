@@ -18,6 +18,7 @@ import type {
   GetUnreadNotificationGroupCountParams,
 } from '../params/grouped-notifications';
 import type { PaginatedResponse } from '../responses';
+import type { notifications } from './notifications';
 
 type EmptyObject = Record<string, never>;
 
@@ -104,7 +105,7 @@ const _groupNotifications = (
  */
 const groupedNotifications = (
   client: PlApiBaseClient & {
-    notifications: ReturnType<typeof import('./notifications').notifications>;
+    notifications: ReturnType<typeof notifications>;
   },
 ) => {
   const category = {

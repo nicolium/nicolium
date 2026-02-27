@@ -1,6 +1,5 @@
-import { UpdateInteractionPoliciesParams } from './settings';
-
 import type { PaginationParams } from './common';
+import type { UpdateInteractionPoliciesParams } from './settings';
 
 /**
  * @category Request params

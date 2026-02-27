@@ -1,4 +1,4 @@
-import { PaginationParams, WithMutedParam } from './common';
+import type { PaginationParams, WithMutedParam } from './common';
 
 /**
  * @category Request params
