@@ -356,7 +356,7 @@ const statuses = (client: PlApiBaseClient) => ({
   /**
    * Edit a status
    * Edit a given status to change its text, sensitivity, media attachments, or poll. Note that editing a poll’s options will reset the votes.
-   * @see {@link https://docs.joinmastodon.org/methods/statuses/#unpin}
+   * @see {@link https://docs.joinmastodon.org/methods/statuses/#edit}
    */
   editStatus: async (statusId: string, params: EditStatusParams) => {
     type ExtendedEditStatusParams = EditStatusParams & {
@@ -374,7 +374,7 @@ const statuses = (client: PlApiBaseClient) => ({
 
     const response = await client.request(`/api/v1/statuses/${statusId}`, {
       method: 'PUT',
-      body: params,
+      body: fixedParams,
     });
 
     return v.parse(statusSchema, response.json);
