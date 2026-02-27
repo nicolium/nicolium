@@ -86,7 +86,7 @@
     "exifr": "^7.1.3",
     "fast-average-color": "^9.5.0",
     "fasttext.wasm.js": "^1.0.0",
-    "flexsearch": "^0.7.43",
+    "flexsearch": "^0.8.212",
     "fuzzysort": "^3.1.0",
     "graphemesplit": "^2.4.4",
     "html-react-parser": "^5.2.17",
