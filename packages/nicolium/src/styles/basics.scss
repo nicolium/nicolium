@@ -3,12 +3,6 @@ body {
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
-// Note: this is needed for React HotKeys performance. Removing this
-// will cause severe performance degradation on Safari.
-div[tabindex='-1']:focus {
-  @apply outline-0;
-}
-
 ::selection {
   @apply bg-primary-600 text-white;
 }
