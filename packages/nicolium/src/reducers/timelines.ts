@@ -230,11 +230,21 @@ const buildReferencesTo = (
     .filter((reblog) => isReblogOf(reblog, status))
     .map((status) => [status.id]);
 
-// const filterTimeline = (state: State, timelineId: string, relationship: APIEntity, statuses: ImmutableList<ImmutableMap<string, any>>) =>
-//   state.updateIn([timelineId, 'items'], ImmutableOrderedSet(), (ids) =>
-//     (ids as ImmutableOrderedSet<string>).filterNot(statusId =>
-//       statuses.getIn([statusId, 'account']) === relationship.id,
-//     ));
+// const filterTimeline = (
+//   state: State,
+//   timelineId: string,
+//   relationship: Relationship,
+//   statuses: Record<string, Pick<Status, 'id' | 'account_id' | 'reblog_id'>>,
+// ) => {
+//   const timeline = state[timelineId];
+//   if (!timeline) {
+//     return;
+//   }
+//   timeline.items = timeline.items.filter((id) => {
+//     const status = statuses[id];
+//     return !(status && status.account_id === relationship.id);
+//   });
+// };
 
 const filterTimelines = (
   state: State,
