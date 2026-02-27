@@ -10,7 +10,10 @@ import type {
   Poll as BasePoll,
   Relationship as BaseRelationship,
   Status as BaseStatus,
+  StatusWithoutAccount,
 } from 'pl-api';
+
+type Status = BaseStatus | (StatusWithoutAccount & { expectsCard?: boolean });
 
 const STATUS_IMPORT = 'STATUS_IMPORT' as const;
 const STATUSES_IMPORT = 'STATUSES_IMPORT' as const;
@@ -19,13 +22,13 @@ const isEmpty = (object: Record<string, any>) => !Object.values(object).some((va
 
 interface ImportStatusAction {
   type: typeof STATUS_IMPORT;
-  status: BaseStatus;
+  status: Status;
   idempotencyKey?: string;
 }
 
 interface ImportStatusesAction {
   type: typeof STATUSES_IMPORT;
-  statuses: Array<BaseStatus>;
+  statuses: Array<Status>;
 }
 
 const importEntities =
@@ -34,7 +37,7 @@ const importEntities =
       accounts?: Array<BaseAccount | undefined | null>;
       groups?: Array<BaseGroup | undefined | null>;
       polls?: Array<BasePoll | undefined | null>;
-      statuses?: Array<(BaseStatus & { expectsCard?: boolean }) | undefined | null>;
+      statuses?: Array<Status | undefined | null>;
       relationships?: Array<BaseRelationship | undefined | null>;
     },
     options: {
@@ -53,7 +56,7 @@ const importEntities =
     const groups: Record<string, BaseGroup> = {};
     const polls: Record<string, BasePoll> = {};
     const relationships: Record<string, BaseRelationship> = {};
-    const statuses: Record<string, BaseStatus> = {};
+    const statuses: Record<string, Status> = {};
 
     const processAccount = (account: BaseAccount, withSelf = true) => {
       if (!override && selectAccount(account.id)) return;
@@ -64,7 +67,7 @@ const importEntities =
       if (account.relationship) relationships[account.relationship.id] = account.relationship;
     };
 
-    const processStatus = (status: BaseStatus, withSelf = true) => {
+    const processStatus = (status: Status, withSelf = true) => {
       // Skip broken statuses
       if (status.scheduled_at !== null) return;
 

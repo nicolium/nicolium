@@ -33,7 +33,7 @@ const importConversationEntities = (conversations: Conversation[]) => {
     importEntities({
       accounts: conversations.flatMap((conversation) => conversation.accounts),
       statuses: conversations.map((conversation) => conversation.last_status),
-    }) as any,
+    }),
   );
 };
 

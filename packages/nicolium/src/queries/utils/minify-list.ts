@@ -47,9 +47,7 @@ const minifyStatusList = (response: PaginatedResponse<Status>): PaginatedRespons
   minifyList(
     response,
     (status) => status.id,
-    (statuses) => {
-      store.dispatch(importEntities({ statuses }) as any);
-    },
+    (statuses) => store.dispatch(importEntities({ statuses })),
   );
 
 const minifyAccountList = (response: PaginatedResponse<Account>): PaginatedResponse<string> =>
@@ -134,7 +132,7 @@ const minifyConversationList = (response: PaginatedResponse<Conversation>) =>
       importEntities({
         accounts: conversations.flatMap((conversation) => conversation.accounts),
         statuses: conversations.map((conversation) => conversation.last_status),
-      }) as any,
+      }),
     );
   });
 
@@ -147,7 +145,7 @@ const minifyGroupedNotifications = (
     (results) => {
       const { accounts, statuses } = results;
 
-      store.dispatch(importEntities({ accounts, statuses }) as any);
+      store.dispatch(importEntities({ accounts, statuses }));
     },
     false,
   );
@@ -198,8 +196,8 @@ const minifyAdminReport = ({
         assigned_account?.account,
         target_account?.account,
       ],
-      statuses: statuses as any,
-    }) as any,
+      statuses: statuses,
+    }),
   );
   return {
     account_id: account.id,

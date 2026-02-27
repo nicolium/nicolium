@@ -14,26 +14,24 @@ import NicoliumLoad from './nicolium-load';
 import NicoliumMount from './nicolium-mount';
 
 // Preload happens synchronously
-store.dispatch(preload() as any);
+store.dispatch(preload());
 
 /** The root React node of the application. */
 const Nicolium: React.FC = () => (
-  <>
-    <Provider store={store}>
-      <QueryClientProvider client={queryClient}>
-        <DefaultCurrentAccountProvider>
-          <StatProvider>
-            <HelmetProvider>
-              <NicoliumHead />
-              <NicoliumLoad>
-                <NicoliumMount />
-              </NicoliumLoad>
-            </HelmetProvider>
-          </StatProvider>
-        </DefaultCurrentAccountProvider>
-      </QueryClientProvider>
-    </Provider>
-  </>
+  <Provider store={store}>
+    <QueryClientProvider client={queryClient}>
+      <DefaultCurrentAccountProvider>
+        <StatProvider>
+          <HelmetProvider>
+            <NicoliumHead />
+            <NicoliumLoad>
+              <NicoliumMount />
+            </NicoliumLoad>
+          </HelmetProvider>
+        </StatProvider>
+      </DefaultCurrentAccountProvider>
+    </QueryClientProvider>
+  </Provider>
 );
 
 export { Nicolium as default };
