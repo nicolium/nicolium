@@ -27,9 +27,7 @@ const simplePolicyMerge = (
   });
 
   return Object.fromEntries([
-    ...Object.keys(
-      (mrfSimpleSchema as any).wrapped.pipe[2].entries as typeof mrfSimpleSchema.entries,
-    ).map((key) => [key, []]),
+    ...Object.keys(mrfSimpleSchema.wrapped.pipe[2].entries).map((key) => [key, []]),
     ...entries,
   ]);
 };
