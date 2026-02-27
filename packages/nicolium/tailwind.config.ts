@@ -34,7 +34,7 @@ const config: Config = {
       },
       fontFamily: {
         sans: [
-          'pl-fe i18n',
+          'nicolium i18n',
           'Inter',
           'ui-sans-serif',
           'system-ui',

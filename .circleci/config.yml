@@ -16,17 +16,17 @@ jobs:
           command: pnpm run build
       - run:
           name: Install Nicolium deps
-          working_directory: packages/pl-fe
+          working_directory: packages/nicolium
           command: pnpm install
       - run:
           name: Build Nicolium
-          working_directory: packages/pl-fe
+          working_directory: packages/nicolium
           command: pnpm run build
       - run:
           name: Install Vercel CLI
           command: sudo npm install -g vercel
       - run:
-          working_directory: packages/pl-fe
+          working_directory: packages/nicolium
           name: Deploy to Vercel
           command: vercel deploy --token $VERCEL_TOKEN --prod=false --confirm --name pl-fe
 

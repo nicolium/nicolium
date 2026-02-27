@@ -19,10 +19,10 @@ pnpm install
 # Build the pl-api dependency
 pnpm -F pl-api build
 # Build the Nicolium project
-pnpm -F pl-fe build
+pnpm -F nicolium build
 ```
 
-The built files will be located in the `packages/pl-fe/dist` directory. You can [serve them using a static web server](./installing/standalone.md).
+The built files will be located in the `packages/nicolium/dist` directory. You can [serve them using a static web server](./installing/standalone.md).
 
 Following environment variables can be used to customize the instance in build process:
 

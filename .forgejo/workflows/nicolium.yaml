@@ -1,4 +1,4 @@
-name: pl-fe CI
+name: Nicolium CI
 
 on:
   push:
@@ -31,34 +31,34 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - name: Install deps
-        working-directory: ./packages/pl-fe
+        working-directory: ./packages/nicolium
         run: yarn install --ignore-scripts
 
       - name: Lint
-        working-directory: ./packages/pl-fe
+        working-directory: ./packages/nicolium
         run: yarn lint
 
       - name: Build
         env:
           NODE_ENV: production
-        working-directory: ./packages/pl-fe
+        working-directory: ./packages/nicolium
         run: yarn build
 
       - name: i18n
-        working-directory: ./packages/pl-fe
+        working-directory: ./packages/nicolium
         run: |
           yarn i18n
           git diff
           git diff --quiet || (echo "Locale files are out of date. Please run \`yarn i18n\`" && exit 1)
 
       - name: Include archive
-        working-directory: ./packages/pl-fe/dist
+        working-directory: ./packages/nicolium/dist
         run: zip -r ../pl-fe.zip .
 
       - name: Build with landing page
         env:
           NODE_ENV: production
-        working-directory: ./packages/pl-fe
+        working-directory: ./packages/nicolium
         run: |
           WITH_LANDING_PAGE=true yarn build
           cp dist/index.html dist/404.html
@@ -74,7 +74,7 @@ jobs:
 
       - name: Copy pl-api documentation
         working-directory: ./packages/pl-api
-        run: cp docs ../pl-fe/dist/pl-api-docs -r
+        run: cp docs ../nicolium/dist/pl-api-docs -r
 
       - name: cloudflare lol
         working-directory: .
@@ -85,4 +85,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy packages/pl-fe/dist --project-name=plfe
+          command: pages deploy packages/nicolium/dist --project-name=plfe

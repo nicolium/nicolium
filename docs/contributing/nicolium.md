@@ -31,7 +31,7 @@ pnpm install
 # Build the pl-api dependency
 pnpm -F pl-api build # Use `pnpm -F pl-api watch` if you want to develop pl-api alongside Nicolium
 # Run the Nicolium development server (by default at http://localhost:7312)
-pnpm -F pl-fe dev
+pnpm -F nicolium dev
 ```
 
 The server supports hot module reloading, so any changes you make to the source code will be reflected in the browser automatically.
@@ -49,7 +49,7 @@ Nicolium hosts its repository on [Codeberg](https://codeberg.org/mkljczk/nicoliu
 The project uses [ESLint](https://eslint.org/) and [Stylelint](https://stylelint.io/) for code style checking, which is automatically run on every commit using [Husky](https://typicode.github.io/husky). You can run the linters manually using the following command:
 
 ```bash
-pnpm -F pl-fe lint
+pnpm -F nicolium lint
 ```
 
 While contributing code, try to follow the existing coding style. Common sense rules regarding contributions apply. Keep your changes focused on a single issue or feature. Do not create pull requests including larger changes you don't understand fully—whether it's from another project or some auto-generated code.
@@ -61,7 +61,7 @@ While contributing code, try to follow the existing coding style. Common sense r
 Before committing changes adding or modifying user-visible strings, make sure to extract the messages using the following command:
 
 ```bash
-pnpm -F pl-fe i18n
+pnpm -F nicolium i18n
 ```
 
 You can help translating Nicolium into your language on [Weblate](https://hosted.weblate.org/projects/pl-fe/).

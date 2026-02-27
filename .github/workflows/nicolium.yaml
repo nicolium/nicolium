@@ -1,4 +1,4 @@
-name: pl-fe CI
+name: Nicolium CI
 
 on:
   push:
@@ -48,17 +48,17 @@ jobs:
       run: pnpm build
 
     - name: Lint
-      working-directory: ./packages/pl-fe
+      working-directory: ./packages/nicolium
       run: pnpm lint
 
     - name: Build
       env:
         NODE_ENV: production
-      working-directory: ./packages/pl-fe
+      working-directory: ./packages/nicolium
       run: pnpm build
 
     - name: i18n
-      working-directory: ./packages/pl-fe
+      working-directory: ./packages/nicolium
       run: |
           pnpm i18n
           git diff
@@ -68,16 +68,16 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: pl-fe
-        path: packages/pl-fe/dist
+        path: packages/nicolium/dist
 
     - name: Include archive
-      working-directory: ./packages/pl-fe/dist
+      working-directory: ./packages/nicolium/dist
       run: zip -r ../pl-fe.zip .
 
     - name: build
       env:
         NODE_ENV: production
-      working-directory: ./packages/pl-fe
+      working-directory: ./packages/nicolium
       run: |
           BANNER_HTML="pl.mkljczk.pl runs Nicolium's \`develop\` branch, which can break sometimes. For a more stable experience, use <a href=\"https://web.nicolium.app\" target=\"_blank\" rel=\"noopener noreferrer\">web.nicolium.app</a>." WITH_LANDING_PAGE=true pnpm build
           cp dist/index.html dist/404.html
@@ -89,7 +89,7 @@ jobs:
 
     - name: Copy pl-api documentation
       working-directory: ./packages/pl-api
-      run: cp docs ../pl-fe/dist/pl-api-docs -r
+      run: cp docs ../nicolium/dist/pl-api-docs -r
 
     - name: Build documentation
       working-directory: .
@@ -97,13 +97,13 @@ jobs:
 
     - name: Copy documentation
       working-directory: .
-      run: cp site ./packages/pl-fe/dist/docs -r
+      run: cp site ./packages/nicolium/dist/docs -r
 
     - name: Upload Github Pages artifact
       uses: actions/upload-pages-artifact@v3
       with:
         name: github-pages
-        path: packages/pl-fe/dist
+        path: packages/nicolium/dist
 
   deploy:
     needs: build
