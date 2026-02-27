@@ -12,16 +12,15 @@ import Emojify from '@/features/emoji/emojify';
 import StatusTypeIcon from '@/features/status/components/status-type-icon';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
+import { useStatus, type SelectedStatus } from '@/queries/statuses/use-status';
 import {
   useFavouriteStatus,
   useReblogStatus,
   useUnfavouriteStatus,
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
-import { makeGetStatus, type SelectedStatus } from '@/selectors';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
@@ -203,10 +202,7 @@ const Status: React.FC<IStatus> = (props) => {
   const didShowCard = useRef(false);
   const node = useRef<HTMLDivElement>(null);
 
-  const getStatus = useMemo(makeGetStatus, []);
-  const actualStatus = useAppSelector(
-    (state) => (status.reblog_id && getStatus(state, { id: status.reblog_id })!) || status,
-  );
+  const actualStatus = useStatus(status.reblog_id || undefined).data || status;
 
   const { data: group } = useGroupQuery(actualStatus.group_id ?? undefined);
 

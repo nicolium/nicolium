@@ -11,6 +11,7 @@ import type {
   Relationship as BaseRelationship,
   Status as BaseStatus,
   StatusWithoutAccount,
+  Translation,
 } from 'pl-api';
 
 type Status = BaseStatus | (StatusWithoutAccount & { expectsCard?: boolean });
@@ -24,6 +25,7 @@ interface ImportStatusAction {
   type: typeof STATUS_IMPORT;
   status: Status;
   idempotencyKey?: string;
+  skipQueryDataUpdate?: boolean;
 }
 
 interface ImportStatusesAction {
@@ -57,6 +59,7 @@ const importEntities =
     const polls: Record<string, BasePoll> = {};
     const relationships: Record<string, BaseRelationship> = {};
     const statuses: Record<string, Status> = {};
+    const translations: Record<string, Record<string, Translation>> = {};
 
     const processAccount = (account: BaseAccount, withSelf = true) => {
       if (!override && selectAccount(account.id)) return;
@@ -82,6 +85,10 @@ const importEntities =
       if (status.reblog) processStatus(status.reblog);
       if (status.poll) polls[status.poll.id] = status.poll;
       if (status.group) groups[status.group.id] = status.group;
+      if (status.translation) {
+        if (!translations[status.id]) translations[status.id] = {};
+        translations[status.id][status.translation.language] = status.translation;
+      }
     };
 
     if (options.withParents) {
@@ -138,6 +145,16 @@ const importEntities =
 
     if (!isEmpty(statuses))
       dispatch<ImportStatusesAction>({ type: STATUSES_IMPORT, statuses: Object.values(statuses) });
+    if (!isEmpty(translations)) {
+      for (const [statusId, translationsByLanguage] of Object.entries(translations)) {
+        for (const [language, translation] of Object.entries(translationsByLanguage)) {
+          queryClient.setQueryData(
+            queryKeys.statuses.translations(statusId, language),
+            translation,
+          );
+        }
+      }
+    }
   };
 
 type ImporterAction = ImportStatusAction | ImportStatusesAction;

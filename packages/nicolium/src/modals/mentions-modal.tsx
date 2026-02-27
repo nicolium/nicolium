@@ -1,13 +1,10 @@
-import React, { useCallback, useEffect } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import React from 'react';
+import { FormattedMessage } from 'react-intl';
 
-import { fetchStatusWithContext } from '@/actions/statuses';
 import ScrollableList from '@/components/scrollable-list';
 import Modal from '@/components/ui/modal';
 import AccountContainer from '@/containers/account-container';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { makeGetStatus } from '@/selectors';
+import { useStatus } from '@/queries/statuses/use-status';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
@@ -16,24 +13,12 @@ interface MentionsModalProps {
 }
 
 const MentionsModal: React.FC<BaseModalProps & MentionsModalProps> = ({ onClose, statusId }) => {
-  const dispatch = useAppDispatch();
-  const intl = useIntl();
-  const getStatus = useCallback(makeGetStatus(), []);
-
-  const status = useAppSelector((state) => getStatus(state, { id: statusId }));
+  const { data: status } = useStatus(statusId);
   const accountIds = status ? status.mentions.map((m) => m.id) : null;
-
-  const fetchData = () => {
-    dispatch(fetchStatusWithContext(statusId, intl));
-  };
 
   const onClickClose = () => {
     onClose('MENTIONS');
   };
-
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   return (
     <Modal

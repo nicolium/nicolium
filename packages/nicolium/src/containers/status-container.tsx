@@ -1,8 +1,7 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import Status, { type IStatus } from '@/components/statuses/status';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { makeGetStatus } from '@/selectors';
+import { useStatus } from '@/queries/statuses/use-status';
 
 interface IStatusContainer extends Omit<IStatus, 'status'> {
   id: string;
@@ -16,10 +15,9 @@ interface IStatusContainer extends Omit<IStatus, 'status'> {
  * @deprecated Use the Status component directly.
  */
 const StatusContainer: React.FC<IStatusContainer> = (props) => {
-  const { id, contextType } = props;
+  const { id, contextType: _contextType } = props;
 
-  const getStatus = useMemo(makeGetStatus, []);
-  const status = useAppSelector((state) => getStatus(state, { id, contextType }));
+  const { data: status } = useStatus(id);
 
   if (status) {
     return <Status {...props} status={status} />;

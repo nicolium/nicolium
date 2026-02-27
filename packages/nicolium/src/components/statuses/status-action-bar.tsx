@@ -57,8 +57,8 @@ import Popover from '../ui/popover';
 import type { Menu } from '@/components/dropdown-menu';
 import type { Emoji as EmojiType } from '@/features/emoji';
 import type { UnauthorizedModalAction } from '@/modals/unauthorized-modal';
+import type { SelectedStatus } from '@/queries/statuses/use-status';
 import type { Me } from '@/reducers/me';
-import type { SelectedStatus } from '@/selectors';
 
 const messages = defineMessages({
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },

@@ -4,6 +4,7 @@ import type { MinifiedGroupMember } from './groups/use-group-members';
 import type { FilterType } from './notifications/use-notifications';
 import type { DraftStatus } from './statuses/use-draft-statuses';
 import type { MinifiedInteractionRequest } from './statuses/use-interaction-requests';
+import type { MinifiedContext } from './statuses/use-status';
 import type { MinifiedStatusEdit } from './statuses/use-status-history';
 import type { MinifiedEmojiReaction } from './statuses/use-status-interactions';
 import type { TimelineEntry } from './timelines/use-home-timeline';
@@ -13,6 +14,7 @@ import type {
   MinifiedAdminReport,
   MinifiedConversation,
 } from './utils/minify-list';
+import type { NormalizedStatus } from '@/reducers/statuses';
 import type { DataTag, InfiniteData } from '@tanstack/react-query';
 import type {
   Account,
@@ -235,6 +237,14 @@ const statusLists = {
 
 const statuses = {
   root: ['statuses'] as const,
+  show: (statusId: string) => {
+    const key = ['statuses', statusId] as const;
+    return key as TaggedKey<typeof key, NormalizedStatus>;
+  },
+  contexts: (statusId: string) => {
+    const key = ['statuses', 'contexts', statusId] as const;
+    return key as TaggedKey<typeof key, MinifiedContext>;
+  },
   polls: {
     root: ['statuses', 'polls'] as const,
     show: (pollId: string) => {

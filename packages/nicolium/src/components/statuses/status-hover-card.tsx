@@ -2,13 +2,10 @@ import { autoUpdate, flip, shift, useFloating, useTransitionStyles } from '@floa
 import { useRouter } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useEffect } from 'react';
-import { useIntl } from 'react-intl';
 
-import { fetchStatus } from '@/actions/statuses';
 import { showStatusHoverCard } from '@/components/statuses/hover-status-wrapper';
 import StatusContainer from '@/containers/status-container';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useStatus } from '@/queries/statuses/use-status';
 import { useStatusHoverCardActions, useStatusHoverCardStore } from '@/stores/status-hover-card';
 
 interface IStatusHoverCard {
@@ -17,20 +14,12 @@ interface IStatusHoverCard {
 
 /** Popup status preview that appears when hovering reply to */
 const StatusHoverCard: React.FC<IStatusHoverCard> = ({ visible = true }) => {
-  const dispatch = useAppDispatch();
   const router = useRouter();
-  const intl = useIntl();
 
   const { statusId, ref } = useStatusHoverCardStore();
   const { closeStatusHoverCard, updateStatusHoverCard } = useStatusHoverCardActions();
 
-  const status = useAppSelector((state) => state.statuses[statusId!]);
-
-  useEffect(() => {
-    if (statusId && !status) {
-      dispatch(fetchStatus(statusId, intl));
-    }
-  }, [statusId, status]);
+  useStatus(statusId ?? undefined);
 
   useEffect(() => {
     const unlisten = router.subscribe('onLoad', ({ pathChanged }) => {

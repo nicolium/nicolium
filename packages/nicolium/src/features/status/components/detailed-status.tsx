@@ -20,7 +20,7 @@ import { useGroupQuery } from '@/queries/groups/use-group';
 import StatusInteractionBar from './status-interaction-bar';
 import StatusTypeIcon from './status-type-icon';
 
-import type { SelectedStatus } from '@/selectors';
+import type { SelectedStatus } from '@/queries/statuses/use-status';
 
 const messages = defineMessages({
   applicationName: { id: 'status.application_name', defaultMessage: 'Sent from {name}' },

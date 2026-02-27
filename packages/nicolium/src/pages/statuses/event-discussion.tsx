@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react';
-import { FormattedMessage, useIntl } from 'react-intl';
+import React, { useEffect, useRef } from 'react';
+import { FormattedMessage } from 'react-intl';
 
-import { fetchStatusWithContext } from '@/actions/statuses';
 import MissingIndicator from '@/components/missing-indicator';
 import ScrollableList from '@/components/scrollable-list';
 import Tombstone from '@/components/statuses/tombstone';
@@ -11,9 +10,8 @@ import ThreadStatus from '@/features/status/components/thread-status';
 import PendingStatus from '@/features/ui/components/pending-status';
 import { eventDiscussionRoute } from '@/features/ui/router';
 import { ComposeForm } from '@/features/ui/util/async-components';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
-import { makeGetStatus } from '@/selectors';
+import { useStatus } from '@/queries/statuses/use-status';
 import { useComposeActions } from '@/stores/compose';
 import { useDescendantsIds } from '@/stores/contexts';
 import { selectChild } from '@/utils/scroll-utils';
@@ -23,37 +21,20 @@ import type { VirtuosoHandle } from 'react-virtuoso';
 const EventDiscussionPage: React.FC = () => {
   const { statusId } = eventDiscussionRoute.useParams();
 
-  const intl = useIntl();
-  const dispatch = useAppDispatch();
   const { eventDiscussionCompose } = useComposeActions();
 
-  const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector((state) => getStatus(state, { id: statusId }));
+  const { data: status, isPending } = useStatus(statusId);
 
   const me = useAppSelector((state) => state.me);
 
   const descendantsIds = useDescendantsIds(statusId);
 
-  const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
-
   const node = useRef<HTMLDivElement>(null);
   const scroller = useRef<VirtuosoHandle | null>(null);
 
-  const fetchData = () => dispatch(fetchStatusWithContext(statusId, intl));
-
   useEffect(() => {
-    fetchData()
-      .then(() => {
-        setIsLoaded(true);
-      })
-      .catch(() => {
-        setIsLoaded(true);
-      });
-  }, [statusId]);
-
-  useEffect(() => {
-    if (isLoaded && me) eventDiscussionCompose(`reply:${statusId}`, status!);
-  }, [isLoaded, me]);
+    if (status && me) eventDiscussionCompose(`reply:${statusId}`, status);
+  }, [status, me]);
 
   const handleMoveUp = (id: string) => {
     const index = descendantsIds.indexOf(id);
@@ -100,7 +81,7 @@ const EventDiscussionPage: React.FC = () => {
 
   const hasDescendants = descendantsIds.length > 0;
 
-  if (!status && isLoaded) {
+  if (!status && isPending) {
     return <MissingIndicator />;
   } else if (!status) {
     return <PlaceholderStatus />;

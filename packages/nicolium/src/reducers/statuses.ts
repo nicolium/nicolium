@@ -48,6 +48,8 @@ import {
   STATUS_DELETE_SUCCESS,
 } from '@/actions/statuses';
 import { TIMELINE_DELETE, type TimelineAction } from '@/actions/timelines';
+import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { simulateEmojiReact, simulateUnEmojiReact } from '@/utils/emoji-reacts';
 import { unescapeHTML } from '@/utils/html';
 
@@ -188,10 +190,18 @@ type NormalizedStatus = ReturnType<typeof normalizeStatus>;
 
 type State = Record<string, NormalizedStatus>;
 
-const importStatus = (state: State, status: BaseStatus | StatusWithoutAccount) => {
+const importStatus = (
+  state: State,
+  status: BaseStatus | StatusWithoutAccount,
+  skipQueryDataUpdate?: boolean,
+) => {
   const oldStatus = state[status.id];
+  const normalizedStatus = normalizeStatus(status, oldStatus);
 
-  state[status.id] = normalizeStatus(status, oldStatus);
+  state[status.id] = normalizedStatus;
+
+  if (skipQueryDataUpdate) return;
+  queryClient.setQueryData(queryKeys.statuses.show(status.id), normalizedStatus);
 };
 
 const importStatuses = (state: State, statuses: Array<BaseStatus | StatusWithoutAccount>) => {
@@ -296,7 +306,7 @@ const statuses = (
   switch (action.type) {
     case STATUS_IMPORT:
       return create(state, (draft) => {
-        importStatus(draft, action.status);
+        importStatus(draft, action.status, action.skipQueryDataUpdate);
       });
     case STATUSES_IMPORT:
       return create(state, (draft) => {

@@ -1,7 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { FormattedDate, FormattedMessage, useIntl } from 'react-intl';
+import React, { useCallback } from 'react';
+import { FormattedDate, FormattedMessage } from 'react-intl';
 
-import { fetchStatus } from '@/actions/statuses';
 import MissingIndicator from '@/components/missing-indicator';
 import StatusContent from '@/components/statuses/status-content';
 import HStack from '@/components/ui/hstack';
@@ -9,47 +8,29 @@ import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { eventInformationRoute } from '@/features/ui/router';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
-import { makeGetStatus } from '@/selectors';
+import { useStatus } from '@/queries/statuses/use-status';
 import { useModalsActions } from '@/stores/modals';
 
 const EventInformationPage: React.FC = () => {
   const { statusId } = eventInformationRoute.useParams();
 
-  const dispatch = useAppDispatch();
-  const getStatus = useCallback(makeGetStatus(), []);
-  const intl = useIntl();
-
-  const status = useAppSelector((state) => getStatus(state, { id: statusId }))!;
+  const { data: status, isPending } = useStatus(statusId);
 
   const { openModal } = useModalsActions();
   const { tileServer } = useFrontendConfig();
-
-  const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
-
-  useEffect(() => {
-    dispatch(fetchStatus(statusId, intl))
-      .then(() => {
-        setIsLoaded(true);
-      })
-      .catch(() => {
-        setIsLoaded(true);
-      });
-  }, [statusId]);
 
   const handleShowMap: React.MouseEventHandler<HTMLAnchorElement> = (e) => {
     e.preventDefault();
 
     openModal('EVENT_MAP', {
-      statusId: status.id,
+      statusId: statusId,
     });
   };
 
   const renderEventLocation = useCallback(() => {
-    const event = status.event!;
-
+    if (!status?.event) return null;
+    const event = status.event;
     if (!event.location) return null;
 
     const text = [<React.Fragment key='event-name'>{event.location.name}</React.Fragment>];
@@ -107,8 +88,8 @@ const EventInformationPage: React.FC = () => {
   }, [status]);
 
   const renderEventDate = useCallback(() => {
-    const event = status.event!;
-
+    if (!status?.event) return null;
+    const event = status.event;
     if (!event.start_time) return null;
 
     const startDate = new Date(event.start_time);
@@ -158,7 +139,7 @@ const EventInformationPage: React.FC = () => {
   }, [status]);
 
   const renderLinks = useCallback(() => {
-    if (!status.event?.links?.length) return null;
+    if (!status?.event?.links?.length) return null;
 
     return (
       <Stack space={1}>
@@ -182,7 +163,7 @@ const EventInformationPage: React.FC = () => {
     );
   }, [status]);
 
-  if (!status && isLoaded) {
+  if (!status && isPending) {
     return <MissingIndicator />;
   } else if (!status) return null;
 

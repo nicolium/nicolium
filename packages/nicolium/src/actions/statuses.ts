@@ -30,8 +30,6 @@ const STATUS_DELETE_REQUEST = 'STATUS_DELETE_REQUEST' as const;
 const STATUS_DELETE_SUCCESS = 'STATUS_DELETE_SUCCESS' as const;
 const STATUS_DELETE_FAIL = 'STATUS_DELETE_FAIL' as const;
 
-const CONTEXT_FETCH_SUCCESS = 'CONTEXT_FETCH_SUCCESS' as const;
-
 const STATUS_MUTE_SUCCESS = 'STATUS_MUTE_SUCCESS' as const;
 
 const STATUS_UNMUTE_SUCCESS = 'STATUS_UNMUTE_SUCCESS' as const;
@@ -232,35 +230,6 @@ const updateStatus = (status: BaseStatus) => (dispatch: AppDispatch) => {
   dispatch(importEntities({ statuses: [status] }));
 };
 
-const fetchContext =
-  (statusId: string, intl?: IntlShape) => (dispatch: AppDispatch, getState: () => RootState) => {
-    const params =
-      intl && useSettingsStore.getState().settings.autoTranslate
-        ? {
-            language: intl.locale,
-          }
-        : undefined;
-
-    return getClient(getState())
-      .statuses.getContext(statusId, params)
-      .then((context) => {
-        const { ancestors, descendants } = context;
-        const statuses = ancestors.concat(descendants);
-        dispatch(importEntities({ statuses }));
-        useContextStore.getState().actions.importContext(statusId, context);
-        dispatch<StatusesAction>({ type: CONTEXT_FETCH_SUCCESS, statusId, ancestors, descendants });
-        return context;
-      })
-      .catch((error) => {
-        if (error.response?.status === 404) {
-          dispatch(deleteFromTimelines(statusId));
-        }
-      });
-  };
-
-const fetchStatusWithContext = (statusId: string, intl?: IntlShape) => (dispatch: AppDispatch) =>
-  Promise.all([dispatch(fetchContext(statusId, intl)), dispatch(fetchStatus(statusId, intl))]);
-
 const muteStatus = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   if (!isLoggedIn(getState)) return;
 
@@ -370,12 +339,6 @@ type StatusesAction =
       params: Pick<Status, 'in_reply_to_id' | 'quote_id'>;
       error: unknown;
     }
-  | {
-      type: typeof CONTEXT_FETCH_SUCCESS;
-      statusId: string;
-      ancestors: Array<BaseStatus>;
-      descendants: Array<BaseStatus>;
-    }
   | { type: typeof STATUS_MUTE_SUCCESS; statusId: string }
   | { type: typeof STATUS_UNMUTE_SUCCESS; statusId: string }
   | ReturnType<typeof unfilterStatus>;
@@ -390,7 +353,6 @@ export {
   STATUS_DELETE_REQUEST,
   STATUS_DELETE_SUCCESS,
   STATUS_DELETE_FAIL,
-  CONTEXT_FETCH_SUCCESS,
   STATUS_MUTE_SUCCESS,
   STATUS_UNMUTE_SUCCESS,
   STATUS_UNFILTER,
@@ -400,8 +362,6 @@ export {
   deleteStatus,
   deleteStatusFromGroup,
   updateStatus,
-  fetchContext,
-  fetchStatusWithContext,
   muteStatus,
   unmuteStatus,
   toggleMuteStatus,

@@ -1,9 +1,8 @@
 import { Navigate } from '@tanstack/react-router';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
-import { fetchStatusWithContext } from '@/actions/statuses';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import MissingIndicator from '@/components/missing-indicator';
 import PullToRefresh from '@/components/pull-to-refresh';
@@ -13,8 +12,7 @@ import PlaceholderStatus from '@/features/placeholder/components/placeholder-sta
 import Thread from '@/features/status/components/thread';
 import { statusRoute } from '@/features/ui/router';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { makeGetStatus } from '@/selectors';
+import { useStatus } from '@/queries/statuses/use-status';
 import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
@@ -53,33 +51,24 @@ const StatusPage: React.FC = () => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector((state) => getStatus(state, { id: statusId }));
+  const {
+    data: status,
+    isPending,
+    refetch,
+    refetchContext,
+  } = useStatus(statusId, { withContext: true });
+
   const [expandAllStatuses, setExpandAllStatuses] = useState<() => void>();
-  const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
 
   const {
     displaySpoilers,
     threads: { displayMode },
   } = useSettings();
 
-  /** Fetch the status (and context) from the API. */
-  const fetchData = () => {
-    return dispatch(fetchStatusWithContext(statusId, intl));
+  const handleRefresh = () => {
+    refetch();
+    refetchContext();
   };
-
-  // Load data.
-  useEffect(() => {
-    fetchData()
-      .then(() => {
-        setIsLoaded(true);
-      })
-      .catch(() => {
-        setIsLoaded(true);
-      });
-  }, [statusId]);
-
-  const handleRefresh = () => fetchData();
 
   const items = useMemo(() => {
     const menu: Menu = [
@@ -133,7 +122,7 @@ const StatusPage: React.FC = () => {
     );
   }
 
-  if (!status && isLoaded) {
+  if (!status && !isPending) {
     return <MissingIndicator />;
   } else if (!status) {
     return (

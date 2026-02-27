@@ -5,7 +5,6 @@ import clsx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { fetchStatusWithContext } from '@/actions/statuses';
 import ExtendedVideoPlayer from '@/components/media/extended-video-player';
 import MissingIndicator from '@/components/missing-indicator';
 import StatusActionBar from '@/components/statuses/status-action-bar';
@@ -17,9 +16,7 @@ import PlaceholderStatus from '@/features/placeholder/components/placeholder-sta
 import Thread from '@/features/status/components/thread';
 import ZoomableImage from '@/features/ui/components/zoomable-image';
 import Video from '@/features/video';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { makeGetStatus } from '@/selectors';
+import { useStatus } from '@/queries/statuses/use-status';
 import { userTouching } from '@/utils/is-mobile';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
@@ -49,16 +46,11 @@ interface MediaModalProps {
 const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   const { statusId, onClose, time = 0 } = props;
 
-  const dispatch = useAppDispatch();
   const intl = useIntl();
 
-  const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector((state) =>
-    statusId ? getStatus(state, { id: statusId }) : undefined,
-  );
+  const { data: status, isPending } = useStatus(statusId, { withContext: true });
   const media = status?.media_attachments ?? props.media ?? [];
 
-  const [isLoaded, setIsLoaded] = useState<boolean>(!!status);
   const [index, setIndex] = useState<number>(props.index || 0);
   const [zoomedIn, setZoomedIn] = useState(false);
   const [navigationHidden, setNavigationHidden] = useState(false);
@@ -267,19 +259,6 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
     [media.length, index, zoomedIn, handleZoomClick],
   );
 
-  // Load data.
-  useEffect(() => {
-    if (status?.id) {
-      dispatch(fetchStatusWithContext(status.id, intl))
-        .then(() => {
-          setIsLoaded(true);
-        })
-        .catch(() => {
-          setIsLoaded(true);
-        });
-    }
-  }, [status?.id]);
-
   useEffect(() => {
     window.addEventListener('keydown', handleKeyDown, false);
 
@@ -289,7 +268,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
   }, [index]);
 
   if (statusId) {
-    if (!isLoaded) {
+    if (isPending) {
       return <MissingIndicator />;
     } else if (!status) {
       return <PlaceholderStatus />;
