@@ -36,7 +36,7 @@ const emojiSchema = v.pipe(v.string(), v.emoji());
 const mimeSchema = v.pipe(v.string(), v.regex(/^\w+\/[-+.\w]+$/));
 
 /** valibot schema to force the value into an object, if it isn't already. */
-const coerceObject = <T extends v.ObjectEntries>(shape: T): v.ObjectSchema<T, undefined> =>
+const coerceObject = <T extends v.ObjectEntries>(shape: T) =>
   v.optional(
     v.pipe(
       v.any(),
@@ -44,6 +44,6 @@ const coerceObject = <T extends v.ObjectEntries>(shape: T): v.ObjectSchema<T, un
       v.object(shape),
     ),
     {},
-  ) as any;
+  );
 
 export { filteredArray, emojiSchema, datetimeSchema, dateSchema, mimeSchema, coerceObject };
