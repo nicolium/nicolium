@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Icon from '@/components/icon';
@@ -6,8 +6,7 @@ import Modal from '@/components/ui/modal';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import ReplyIndicator from '@/features/compose/components/reply-indicator';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { makeGetStatus } from '@/selectors';
+import { useMinimalStatus } from '@/queries/statuses/use-status';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
@@ -23,16 +22,14 @@ const BoostModal: React.FC<BaseModalProps & BoostModalProps> = ({
   visibility,
   onClose,
 }) => {
-  const getStatus = useCallback(makeGetStatus(), []);
-
-  const status = useAppSelector((state) => getStatus(state, { id: statusId }))!;
+  const { data: status } = useMinimalStatus(statusId);
 
   const handleReblog = () => {
     onReblog();
     onClose('BOOST');
   };
 
-  const buttonText = status.reblogged ? (
+  const buttonText = status?.reblogged ? (
     <FormattedMessage id='status.cancel_reblog_private' defaultMessage='Un-repost' />
   ) : (
     <FormattedMessage id='status.reblog' defaultMessage='Repost' />

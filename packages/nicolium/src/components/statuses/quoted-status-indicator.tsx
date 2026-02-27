@@ -1,10 +1,9 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { makeGetStatus } from '@/selectors';
+import { useMinimalStatus } from '@/queries/statuses/use-status';
 
 interface IQuotedStatusIndicator {
   /** The quoted status id. */
@@ -14,11 +13,7 @@ interface IQuotedStatusIndicator {
 }
 
 const QuotedStatusIndicator: React.FC<IQuotedStatusIndicator> = ({ statusId, statusUrl }) => {
-  const getStatus = useCallback(makeGetStatus(), []);
-
-  statusUrl = useAppSelector(
-    (state) => statusUrl ?? (statusId && getStatus(state, { id: statusId })?.url),
-  );
+  statusUrl = useMinimalStatus(statusId).data?.url || statusUrl;
 
   if (!statusUrl) return null;
 

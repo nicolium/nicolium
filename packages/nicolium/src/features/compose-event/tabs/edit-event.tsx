@@ -1,5 +1,5 @@
 import { useNavigate } from '@tanstack/react-router';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { cancelEventCompose, initEventEdit, submitEvent } from '@/actions/events';
@@ -23,9 +23,8 @@ import ContentTypeButton from '@/features/compose/components/content-type-button
 import { isCurrentOrFutureDate } from '@/features/compose/components/schedule-form';
 import { ComposeEditor, DatePicker } from '@/features/ui/util/async-components';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useInstance } from '@/hooks/use-instance';
-import { makeGetStatus } from '@/selectors';
+import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useChangeUploadCompose, useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
@@ -77,10 +76,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const { resetCompose } = useComposeActions();
   const changeUploadCompose = useChangeUploadCompose(composeId);
 
-  const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector((state) =>
-    statusId ? getStatus(state, { id: statusId }) : undefined,
-  );
+  const { data: status } = useMinimalStatus(statusId ?? undefined);
   const {
     pleroma: {
       metadata: { description_limit: descriptionLimit },

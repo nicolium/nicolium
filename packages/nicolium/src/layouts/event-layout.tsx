@@ -17,9 +17,7 @@ import {
 } from '@/features/ui/util/async-components';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
-import { makeGetStatus } from '@/selectors';
-
-const getStatus = makeGetStatus();
+import { useStatus } from '@/queries/statuses/use-status';
 
 const EventLayout = () => {
   const { statusId } = layouts.event.useParams();
@@ -30,7 +28,7 @@ const EventLayout = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const status = useAppSelector((state) => getStatus(state, { id: statusId }) ?? undefined);
+  const { data: status } = useStatus(statusId);
 
   const event = status?.event;
 

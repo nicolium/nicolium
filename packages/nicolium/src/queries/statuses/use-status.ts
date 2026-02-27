@@ -34,11 +34,11 @@ type SelectedStatus = NormalizedStatus & {
   quote?: SelectedStatus;
 };
 
-const useStatusQuery = (statusId?: string) => {
+const useMinimalStatus = (statusId?: string) => {
   const client = useClient();
   const dispatch = useAppDispatch();
 
-  const statusQuery = useQuery({
+  return useQuery({
     queryKey: queryKeys.statuses.show(statusId!),
     queryFn: () =>
       client.statuses.getStatus(statusId!).then((status) => {
@@ -55,6 +55,10 @@ const useStatusQuery = (statusId?: string) => {
       }),
     enabled: !!statusId,
   });
+};
+
+const useStatusQuery = (statusId?: string) => {
+  const statusQuery = useMinimalStatus(statusId);
 
   const account = useAccount(statusQuery.data?.account_id ?? undefined);
   const { data: accounts } = useAccounts(
@@ -126,4 +130,4 @@ const useStatusContext = (statusId?: string) => {
   });
 };
 
-export { useStatus, useStatusContext, type MinifiedContext, type SelectedStatus };
+export { useMinimalStatus, useStatus, useStatusContext, type MinifiedContext, type SelectedStatus };
