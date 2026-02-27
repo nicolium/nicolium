@@ -53,7 +53,7 @@ const WhoToFollowPanel = ({ limit }: IWhoToFollowPanel) => {
       {isFetching ? (
         <PlaceholderSidebarSuggestions limit={limit} />
       ) : (
-        suggestionsToRender.map((suggestion: any) => (
+        suggestionsToRender.map((suggestion) => (
           <AccountContainer
             key={suggestion.account_id}
             id={suggestion.account_id}

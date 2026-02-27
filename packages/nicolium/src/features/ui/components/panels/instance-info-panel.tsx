@@ -26,7 +26,7 @@ const InstanceInfoPanel: React.FC<IInstanceInfoPanel> = ({ host }) => {
   const dispatch = useAppDispatch();
 
   const settings = useSettings();
-  const remoteInstance: any = useAppSelector((state) => getRemoteInstance(state, host));
+  const remoteInstance = useAppSelector((state) => getRemoteInstance(state, host));
   const pinned = settings.remote_timeline.pinnedHosts.includes(host);
 
   const handlePinHost = () => {
