@@ -8,6 +8,7 @@ import { type NormalizedStatus, normalizeStatus } from '@/reducers/statuses';
 import { useContextsActions } from '@/stores/contexts';
 
 import { useAccount } from '../accounts/use-account';
+import { useAccounts } from '../accounts/use-accounts';
 import { queryKeys } from '../keys';
 
 import type { Context, AsyncRefreshHeader, Account } from 'pl-api';
@@ -28,6 +29,7 @@ type MinifiedContext = ReturnType<typeof minifyContext>;
 
 type SelectedStatus = NormalizedStatus & {
   account: Account;
+  accounts?: Array<Account>;
   reblog?: SelectedStatus;
   quote?: SelectedStatus;
 };
@@ -55,6 +57,9 @@ const useStatusQuery = (statusId?: string) => {
   });
 
   const account = useAccount(statusQuery.data?.account_id ?? undefined);
+  const { data: accounts } = useAccounts(
+    statusQuery.data?.account_id ? [statusQuery.data.account_id] : [],
+  );
 
   return useMemo(() => {
     if (!statusQuery.data) return statusQuery;
@@ -63,9 +68,10 @@ const useStatusQuery = (statusId?: string) => {
       data: {
         ...statusQuery.data,
         account: account.data!,
+        accounts,
       },
     };
-  }, [statusQuery.data, account.data]) as unknown as UseQueryResult<NormalizedStatus>;
+  }, [statusQuery.data, account.data, accounts]) as unknown as UseQueryResult<NormalizedStatus>;
 };
 
 const useStatus = (
@@ -93,7 +99,12 @@ const useStatus = (
       },
       refetchContext,
     };
-  }, [statusQuery.data, reblogQuery.data, quoteQuery.data, account.data]);
+  }, [
+    statusQuery.data,
+    reblogQuery.data,
+    quoteQuery.data,
+    account.data,
+  ]) as unknown as UseQueryResult<SelectedStatus> & { refetchContext: () => void };
 };
 
 const useStatusContext = (statusId?: string) => {

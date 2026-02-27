@@ -14,7 +14,10 @@ import type {
   Translation,
 } from 'pl-api';
 
-type Status = BaseStatus | (StatusWithoutAccount & { expectsCard?: boolean });
+type Status = (BaseStatus | StatusWithoutAccount) & {
+  expectsCard?: boolean;
+  accounts?: Array<BaseAccount>;
+};
 
 const STATUS_IMPORT = 'STATUS_IMPORT' as const;
 const STATUSES_IMPORT = 'STATUSES_IMPORT' as const;
@@ -78,6 +81,10 @@ const importEntities =
 
       if (status.account) {
         processAccount(status.account);
+      }
+
+      if (status.accounts) {
+        for (const account of status.accounts) processAccount(account);
       }
 
       if (status.quote && 'quoted_status' in status.quote && status.quote.quoted_status)

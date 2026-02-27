@@ -93,16 +93,15 @@ const getSearchIndex = (
 const normalizeStatus = (
   {
     account,
+    accounts,
     reblog,
     quote,
     poll,
     group,
     ...status
-  }:
-    | BaseStatus
-    | (StatusWithoutAccount & {
-        accounts?: Array<BaseAccount>;
-      }),
+  }: (BaseStatus | StatusWithoutAccount) & {
+    accounts?: Array<BaseAccount>;
+  },
   oldStatus?: OldStatus,
 ) => {
   const searchIndex = getSearchIndex(status, oldStatus, poll);
@@ -158,6 +157,7 @@ const normalizeStatus = (
 
   return {
     account_id: accountId,
+    account_ids: accounts ? accounts.map(({ id }) => id) : [accountId],
     reblog_id: reblog?.id ?? null,
     poll_id: poll?.id ?? null,
     group_id: group?.id ?? null,

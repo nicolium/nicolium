@@ -31,7 +31,7 @@ const useAccounts = (accountIds: Array<string>) => {
   );
 
   return {
-    accounts,
+    data: accounts,
     isLoading: queries.some((query) => query.isLoading),
     isFetching: queries.some((query) => query.isFetching),
   };

@@ -19,7 +19,7 @@ interface IResults {
 
 const Results = ({ accountSearchResult, onSelect }: IResults) => {
   const { data: accountIds = [], isFetching, hasNextPage, fetchNextPage } = accountSearchResult;
-  const { accounts } = useAccounts(accountIds);
+  const { data: accounts } = useAccounts(accountIds);
 
   const [isNearBottom, setNearBottom] = useState<boolean>(false);
   const [isNearTop, setNearTop] = useState<boolean>(true);
