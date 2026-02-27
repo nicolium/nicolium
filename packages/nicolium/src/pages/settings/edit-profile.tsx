@@ -689,7 +689,7 @@ const EditProfilePage: React.FC = () => {
                   gallery: intl.formatMessage(messages.webLayoutGallery),
                 }}
                 defaultValue={data.web_layout}
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                onChange={(event) => {
                   handleFieldChange('web_layout')(event.target.value);
                 }}
               />
@@ -713,7 +713,7 @@ const EditProfilePage: React.FC = () => {
                   none: intl.formatMessage(messages.webVisibilityNone),
                 }}
                 defaultValue={data.web_visibility}
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                onChange={(event) => {
                   handleFieldChange('web_visibility')(event.target.value);
                 }}
               />
@@ -766,7 +766,7 @@ const EditProfilePage: React.FC = () => {
                   only_contacts: intl.formatMessage(messages.mentionPolicyOnlyContacts),
                 }}
                 defaultValue={data.mention_policy}
-                onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+                onChange={(event) => {
                   handleFieldChange('mention_policy')(event.target.value);
                 }}
               />

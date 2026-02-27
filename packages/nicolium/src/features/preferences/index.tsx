@@ -381,7 +381,7 @@ const Preferences = () => {
               className='max-w-[200px]'
               items={systemDarkThemePreferenceOptions}
               defaultValue={settings.theme?.systemDarkThemePreference ?? 'black'}
-              onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+              onChange={(event) => {
                 onSelectChange(event, ['theme', 'systemDarkThemePreference']);
               }}
             />
@@ -427,7 +427,7 @@ const Preferences = () => {
             className='max-w-[200px]'
             items={languages}
             defaultValue={settings.locale}
-            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+            onChange={(event) => {
               onSelectChange(event, ['locale']);
             }}
           />
@@ -460,7 +460,7 @@ const Preferences = () => {
             className='max-w-[200px]'
             items={displayMediaOptions}
             defaultValue={settings.displayMedia}
-            onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+            onChange={(event) => {
               onSelectChange(event, ['displayMedia']);
             }}
           />
@@ -479,7 +479,7 @@ const Preferences = () => {
               className='max-w-[200px]'
               items={defaultPrivacyOptions}
               defaultValue={settings.defaultPrivacy}
-              onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+              onChange={(event) => {
                 onSelectChange(event, ['defaultPrivacy']);
               }}
             />
@@ -499,7 +499,7 @@ const Preferences = () => {
               className='max-w-[200px]'
               items={defaultContentTypeOptions}
               defaultValue={settings.defaultContentType}
-              onChange={(event: React.ChangeEvent<HTMLSelectElement>) => {
+              onChange={(event) => {
                 onSelectChange(event, ['defaultContentType']);
               }}
             />
