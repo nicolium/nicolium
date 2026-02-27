@@ -50,7 +50,11 @@ const baseStatusSchema = v.object({
   account: v.pipe(
     v.unknown(),
     v.transform((account) => {
-      if ((window as any)?.__PL_API_FALLBACK_ACCOUNT && JSON.stringify(account) === '{}')
+      if (
+        typeof window !== 'undefined' &&
+        (window as any).__PL_API_FALLBACK_ACCOUNT &&
+        JSON.stringify(account) === '{}'
+      )
         return (window as any).__PL_API_FALLBACK_ACCOUNT;
       return account;
     }),
