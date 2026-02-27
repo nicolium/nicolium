@@ -19,7 +19,7 @@ const initialState: State = {
   needsReboot: false,
 };
 
-const importConfigs = (state: State, configs: any) => {
+const importConfigs = (state: State, configs: Array<Config>) => {
   state.configs = configs;
 };
 
