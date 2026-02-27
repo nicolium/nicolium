@@ -15,8 +15,6 @@ import { useComposeStore } from '@/stores/compose';
 
 import { queryKeys } from '../keys';
 
-import type { APIEntity } from '@/types/entities';
-
 const draftStatusSchema = v.pipe(
   v.any(),
   v.transform((draft) => ({
@@ -48,7 +46,7 @@ const draftStatusSchema = v.pipe(
 type DraftStatus = v.InferOutput<typeof draftStatusSchema>;
 
 const getDrafts = async (accountUrl: string) => {
-  const drafts = (await KVStore.getItem<Array<APIEntity>>(`drafts:${accountUrl}`)) ?? [];
+  const drafts = (await KVStore.getItem<Array<unknown>>(`drafts:${accountUrl}`)) ?? [];
 
   return Object.fromEntries(
     Object.values(drafts)
@@ -58,7 +56,7 @@ const getDrafts = async (accountUrl: string) => {
   );
 };
 
-const persistDrafts = (accountUrl: string, drafts: Record<string, APIEntity>) =>
+const persistDrafts = (accountUrl: string, drafts: Record<string, DraftStatus>) =>
   KVStore.setItem(`drafts:${accountUrl}`, Object.values(drafts));
 
 function useDraftStatusesQuery<T>(
