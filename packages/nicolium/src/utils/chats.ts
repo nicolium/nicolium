@@ -14,7 +14,7 @@ import type { Chat } from 'pl-api';
  * @param newChat - Chat entity.
  */
 const updateChatInChatSearchQuery = (newChat: Chat) => {
-  updatePageItem<Chat>(queryKeys.chats.search, newChat as any, (o, n) => o.id === n.id);
+  updatePageItem<Chat>(queryKeys.chats.search, newChat, (o, n) => o.id === n.id);
 };
 
 /**

@@ -39,22 +39,29 @@ const normalizeChatMessage = (
 
 type ChatMessage = ReturnType<typeof normalizeChatMessage>;
 
+const normalizeChatMessagesList = ({
+  previous,
+  next,
+  items,
+  ...response
+}: PaginatedResponse<BaseChatMessage>): PaginatedResponse<ChatMessage> => ({
+  ...response,
+  previous: previous ? () => previous().then((res) => normalizeChatMessagesList(res)) : null,
+  next: next ? () => next().then((res) => normalizeChatMessagesList(res)) : null,
+  items: items.map(normalizeChatMessage),
+});
+
 const useChatMessages = (chat: Chat) => {
   const client = useClient();
   const isBlocked = !!useRelationshipQuery(chat?.account.id).data?.blocked_by;
 
   const getChatMessages = async (
     chatId: string,
-    pageParam?: Pick<PaginatedResponse<BaseChatMessage>, 'next'>,
+    pageParam?: Pick<PaginatedResponse<ChatMessage>, 'next'>,
   ) => {
-    const response = await (pageParam?.next
-      ? pageParam.next()
-      : client.chats.getChatMessages(chatId));
+    if (pageParam?.next) return pageParam.next();
 
-    return {
-      ...response,
-      items: response.items.map(normalizeChatMessage),
-    };
+    return normalizeChatMessagesList(await client.chats.getChatMessages(chatId));
   };
 
   const queryInfo = useInfiniteQuery({
@@ -63,11 +70,11 @@ const useChatMessages = (chat: Chat) => {
     enabled: !isBlocked,
     gcTime: 0,
     staleTime: 0,
-    initialPageParam: { next: null as (() => Promise<PaginatedResponse<BaseChatMessage>>) | null },
+    initialPageParam: { next: null as (() => Promise<PaginatedResponse<ChatMessage>>) | null },
     getNextPageParam: (config) => (config.next ? config : undefined),
   });
 
-  const data = flattenPages<ChatMessage>(queryInfo.data as any)?.toReversed();
+  const data = flattenPages<ChatMessage>(queryInfo.data)?.toReversed();
 
   return {
     ...queryInfo,

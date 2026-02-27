@@ -19,7 +19,7 @@ type Me = string | null | false;
 const initialState: Me = null;
 
 const handleForbidden = (state: Me, error: { response: PlfeResponse }) => {
-  if (([401, 403] as any[]).includes(error.response?.status)) {
+  if (error.response?.status && [401, 403].includes(error.response.status)) {
     return false;
   }
   return state;
