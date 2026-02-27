@@ -40,20 +40,23 @@ const FILTER_TYPES = {
 
 type FilterType = keyof typeof FILTER_TYPES;
 
-const normalizeNotification = (notification: Notification): NotificationGroup => ({
-  ...omit(notification, ['account', 'status', 'target']),
-  group_key: notification.id,
-  notifications_count: 1,
-  most_recent_notification_id: notification.id,
-  page_min_id: notification.id,
-  page_max_id: notification.id,
-  latest_page_notification_at: notification.created_at,
-  sample_account_ids: [notification.account.id],
-  // @ts-expect-error
-  status_id: notification.status?.id,
-  // @ts-expect-error
-  target_id: notification.target?.id,
-});
+const normalizeNotification = (notification: Notification): NotificationGroup => {
+  const base = {
+    ...omit(notification, ['account', 'status', 'target']),
+    group_key: notification.id,
+    notifications_count: 1,
+    most_recent_notification_id: notification.id,
+    page_min_id: notification.id,
+    page_max_id: notification.id,
+    latest_page_notification_at: notification.created_at,
+    sample_account_ids: [notification.account.id],
+  };
+
+  return Object.assign(base, {
+    status_id: 'status' in notification ? notification.status?.id : undefined,
+    target_id: 'target' in notification ? notification.target?.id : undefined,
+  }) as NotificationGroup;
+};
 
 const useActiveFilter = () =>
   useSettingsStore((state) => state.settings.notifications.quickFilter.active);
