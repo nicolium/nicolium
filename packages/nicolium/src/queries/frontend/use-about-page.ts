@@ -9,7 +9,7 @@ const fetchAboutPage = async (slug: string, locale?: string) => {
 
   const { data } = await staticFetch(`/instance/about/${filename}`);
 
-  if (data.includes('<div id="plfe">')) return '';
+  if (data.includes('<div id="app">')) return '';
 
   return data;
 };

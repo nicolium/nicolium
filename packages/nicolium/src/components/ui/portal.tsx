@@ -19,7 +19,7 @@ const Portal: React.FC<IPortal> = ({ children }) => {
     return null;
   }
 
-  return ReactDOM.createPortal(children, document.getElementById('plfe') as HTMLDivElement);
+  return ReactDOM.createPortal(children, document.getElementById('app') as HTMLDivElement);
 };
 
 export { Portal as default };

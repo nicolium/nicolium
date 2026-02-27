@@ -78,7 +78,7 @@ const ScheduleForm: React.FC<IScheduleForm> = ({ composeId }) => {
             className={clsx({
               'has-error': !isValidTime(scheduledAt),
             })}
-            portalId='plfe'
+            portalId='app'
           />
         </Suspense>
         <IconButton

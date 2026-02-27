@@ -162,7 +162,7 @@ const EditAnnouncementModal: React.FC<BaseModalProps & EditAnnouncementModalProp
             selected={startTime}
             onChange={onChangeStartTime}
             isClearable
-            portalId='plfe'
+            portalId='app'
           />
         </FormGroup>
         <FormGroup
