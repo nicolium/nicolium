@@ -4,6 +4,7 @@ import {
   type Status as BaseStatus,
   type CreateStatusParams,
   type MediaAttachment,
+  type StatusWithoutAccount,
   mentionSchema,
 } from 'pl-api';
 import * as v from 'valibot';
@@ -108,9 +109,11 @@ const normalizeStatus = (
     poll,
     group,
     ...status
-  }: BaseStatus & {
-    accounts?: Array<BaseAccount>;
-  },
+  }:
+    | BaseStatus
+    | (StatusWithoutAccount & {
+        accounts?: Array<BaseAccount>;
+      }),
   oldStatus?: OldStatus,
 ) => {
   const searchIndex = getSearchIndex(status, oldStatus, poll);
@@ -124,9 +127,11 @@ const normalizeStatus = (
     }
   });
 
+  const accountId = (account || (window as any).__PL_API_FALLBACK_ACCOUNT)?.id;
+
   // Add self to mentions if it's a reply to self
-  const isSelfReply = account.id === status.in_reply_to_account_id;
-  const hasSelfMention = status.mentions.some((mention) => account.id === mention.id);
+  const isSelfReply = accountId === status.in_reply_to_account_id;
+  const hasSelfMention = status.mentions.some((mention) => accountId === mention.id);
 
   if (isSelfReply && !hasSelfMention) {
     const selfMention = v.parse(mentionSchema, account);
@@ -163,7 +168,7 @@ const normalizeStatus = (
   }
 
   return {
-    account_id: account.id,
+    account_id: accountId,
     reblog_id: reblog?.id ?? null,
     poll_id: poll?.id ?? null,
     group_id: group?.id ?? null,
@@ -183,13 +188,13 @@ type NormalizedStatus = ReturnType<typeof normalizeStatus>;
 
 type State = Record<string, NormalizedStatus>;
 
-const importStatus = (state: State, status: BaseStatus) => {
+const importStatus = (state: State, status: BaseStatus | StatusWithoutAccount) => {
   const oldStatus = state[status.id];
 
   state[status.id] = normalizeStatus(status, oldStatus);
 };
 
-const importStatuses = (state: State, statuses: Array<BaseStatus>) => {
+const importStatuses = (state: State, statuses: Array<BaseStatus | StatusWithoutAccount>) => {
   statuses.forEach((status) => {
     importStatus(state, status);
   });
