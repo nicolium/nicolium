@@ -201,7 +201,7 @@ const ComposeForm = <ID extends string>({
       document.getElementById('privacy-dropdown'),
       document.querySelector('em-emoji-picker'),
       document.getElementById('modal-overlay'),
-    ].some((element) => element?.contains(e.target as any));
+    ].some((element) => element?.contains(e.target as Node));
 
   const handleClick = useCallback(
     (e: MouseEvent | React.MouseEvent) => {

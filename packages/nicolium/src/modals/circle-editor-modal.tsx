@@ -56,7 +56,7 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
   const { mutate: addToCircle } = useAddAccountsToCircle(circleId);
   const { mutate: removeFromCircle } = useRemoveAccountsFromCircle(circleId);
 
-  const handleSubmit: React.FormEventHandler = (e) => {
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     handleUpdate();
   };

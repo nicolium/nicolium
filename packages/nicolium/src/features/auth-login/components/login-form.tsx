@@ -26,7 +26,7 @@ const messages = defineMessages({
 
 interface ILoginForm {
   isLoading: boolean;
-  handleSubmit: React.FormEventHandler;
+  handleSubmit: React.SubmitEventHandler<HTMLFormElement>;
 }
 
 const LoginForm: React.FC<ILoginForm> = ({ isLoading, handleSubmit }) => {

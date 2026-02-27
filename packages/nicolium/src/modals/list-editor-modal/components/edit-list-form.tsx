@@ -41,7 +41,7 @@ const ListForm: React.FC<IListForm> = ({ listId, onTabChange }) => {
   const [exclusive, setExclusive] = useState(list!.exclusive);
   const [notify, setNotify] = useState(list!.notify);
 
-  const handleSubmit: React.FormEventHandler = (e) => {
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     handleUpdate();
   };

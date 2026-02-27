@@ -1,6 +1,6 @@
 import { useFloating, shift, flip, autoUpdate, useTransitionStyles } from '@floating-ui/react';
 import clsx from 'clsx';
-import React, { type KeyboardEvent, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import IconButton from '@/components/ui/icon-button';
@@ -54,13 +54,13 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
     setIsOpen(false);
   });
 
-  const handleClick = (e: MouseEvent) => {
+  const handleClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     e.preventDefault();
     setIsOpen(!isOpen);
   };
 
-  const handleKeyDown = (e: KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
     if (['Enter', ' '].includes(e.key)) {
       e.stopPropagation();
       e.preventDefault();
@@ -97,8 +97,8 @@ const EmojiPickerDropdownContainer: React.FC<IEmojiPickerDropdownContainer> = ({
           aria-label={title}
           aria-expanded={isOpen}
           role='button'
-          onClick={handleClick as any}
-          onKeyDown={handleKeyDown as React.KeyboardEventHandler<HTMLButtonElement>}
+          onClick={handleClick}
+          onKeyDown={handleKeyDown}
           tabIndex={0}
         />
       )}

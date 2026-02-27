@@ -18,9 +18,8 @@ const Emoji: React.FC<IEmoji> = ({ emoji, emojiMap, hovered }) => {
   if (unicodeMapping[emoji]) {
     if (systemEmojiFont) return <>{emoji}</>;
 
-    // @ts-expect-error
-    const { unified, shortCode } = unicodeMapping[emoji];
-    const title = shortCode ? `:${shortCode}:` : '';
+    const { unified, shortcode } = unicodeMapping[emoji];
+    const title = shortcode ? `:${shortcode}:` : '';
 
     return (
       <img

@@ -26,7 +26,7 @@ const SentryFeedbackForm: React.FC<ISentryFeedbackForm> = ({ eventId }) => {
     setFeedback(e.target.value);
   };
 
-  const handleSubmitFeedback: React.FormEventHandler = async (_e) => {
+  const handleSubmitFeedback: React.SubmitEventHandler<HTMLFormElement> = async (_e) => {
     if (!feedback || !eventId) return;
     setIsSubmitting(true);
 

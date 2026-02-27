@@ -40,11 +40,11 @@ const NewListForm: React.FC = () => {
 
   const { mutate: createList, isPending } = useCreateList();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setValue(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     createList({ title: value });
   };

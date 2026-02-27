@@ -16,7 +16,9 @@ import type { LinkOptions } from '@tanstack/react-router';
 import './tabs.css';
 
 const HORIZONTAL_PADDING = 8;
-const AnimatedContext = React.createContext(null);
+const AnimatedContext = React.createContext<React.Dispatch<
+  React.SetStateAction<DOMRect | null>
+> | null>(null);
 
 interface IAnimatedTabs {
   /** Callback when a tab is chosen. */
@@ -28,19 +30,15 @@ interface IAnimatedTabs {
 
 /** Tabs with a sliding active state. */
 const AnimatedTabs: React.FC<IAnimatedTabs> = ({ children, ...rest }) => {
-  const [activeRect, setActiveRect] = React.useState(null);
-  const ref = React.useRef<any>(null);
+  const [activeRect, setActiveRect] = React.useState<DOMRect | null>(null);
+  const ref = React.useRef<HTMLDivElement>(null);
   const rect = useRect(ref);
 
-  // @ts-expect-error
-  const top: number = (activeRect && activeRect.bottom) - (rect && rect.top);
-  // @ts-expect-error
-  const width: number = activeRect && activeRect.width - HORIZONTAL_PADDING * 2;
-  // @ts-expect-error
-  const left: number = (activeRect && activeRect.left) - (rect && rect.left) + HORIZONTAL_PADDING;
+  const top: number = (activeRect?.bottom ?? 0) - (rect?.top ?? 0);
+  const width: number = (activeRect?.width ?? 0) - HORIZONTAL_PADDING * 2;
+  const left: number = (activeRect?.left ?? 0) - (rect?.left ?? 0) + HORIZONTAL_PADDING;
 
   return (
-    // @ts-expect-error
     <AnimatedContext.Provider value={setActiveRect}>
       <ReachTabs {...rest} ref={ref}>
         <div className='absolute h-[3px] w-full bg-primary-200 dark:bg-gray-800' style={{ top }} />
@@ -67,6 +65,8 @@ interface IAnimatedTab {
   title: string;
   /** Index value of the tab. */
   index: number;
+  /** Tab content. */
+  children: React.ReactNode;
 }
 
 /** A single animated tab. */
@@ -76,7 +76,7 @@ const AnimatedTab: React.FC<IAnimatedTab> = ({ index, ...props }) => {
   const isSelected: boolean = selectedIndex === index;
 
   // measure the size of our element, only listen to rect if active
-  const ref = React.useRef<any>(null);
+  const ref = React.useRef<HTMLDivElement>(null);
   const rect = useRect(ref, { observe: isSelected });
 
   // get the style changing function from context
@@ -85,8 +85,7 @@ const AnimatedTab: React.FC<IAnimatedTab> = ({ index, ...props }) => {
   // callup to set styles whenever we're active
   React.useLayoutEffect(() => {
     if (isSelected) {
-      // @ts-expect-error
-      setActiveRect(rect);
+      setActiveRect?.(rect);
     }
   }, [isSelected, rect, setActiveRect]);
 
@@ -136,14 +135,7 @@ const Tabs = ({ items, activeItem }: ITabs) => {
     const { name, text, title, count } = item;
 
     return (
-      <AnimatedTab
-        key={name}
-        as='button'
-        role='button'
-        // @ts-expect-error
-        title={title}
-        index={idx}
-      >
+      <AnimatedTab key={name} as='button' role='button' title={title || ''} index={idx}>
         <div className='relative'>
           {count ? (
             <span className='absolute left-full ml-2'>

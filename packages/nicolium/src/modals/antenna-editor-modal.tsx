@@ -521,7 +521,7 @@ const EditAntennaForm: React.FC<IEditAntennaForm> = ({ antennaId, onTabChange })
 
   const disabled = (antennaId ? updateDisabled : createDisabled) || listId === '';
 
-  const handleSubmit: React.FormEventHandler = (e) => {
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     handleUpdate();
   };

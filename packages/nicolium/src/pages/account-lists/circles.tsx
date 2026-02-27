@@ -29,11 +29,11 @@ const NewCircleForm: React.FC = () => {
 
   const { mutate: createCircle, isPending } = useCreateCircle();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setTitle(e.target.value);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     createCircle(title);
   };

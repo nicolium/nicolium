@@ -73,7 +73,7 @@ const UnauthorizedModal: React.FC<UnauthorizedModalProps & BaseModalProps> = ({
     onClose('UNAUTHORIZED');
   };
 
-  const onSubmit: React.FormEventHandler = (e) => {
+  const onSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
 
     client.accounts

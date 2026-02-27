@@ -190,7 +190,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
   };
 
   const getSiblings = () =>
-    [...(ref.current!.parentElement!.childNodes as any as ChildNode[])]
+    [...Array.from(ref.current!.parentElement!.childNodes)]
       .filter((node) => (node as HTMLDivElement).id !== '_rht_toaster')
       .filter((node) => node !== ref.current);
 

@@ -240,7 +240,7 @@ const Account = ({
 
   if (withDate) timestamp = account.created_at;
 
-  const LinkEl: any = withLinkToProfile ? Link : 'div';
+  const LinkEl: React.ElementType = withLinkToProfile ? Link : 'div';
   const linkProps = withLinkToProfile
     ? {
         to: '/@{$username}',

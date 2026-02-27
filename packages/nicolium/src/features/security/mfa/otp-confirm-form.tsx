@@ -69,7 +69,7 @@ const OtpConfirmForm: React.FC = () => {
     setState((prevState) => ({ ...prevState, [event.target.name]: event.target.value }));
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
     setState((prevState) => ({ ...prevState, isLoading: true }));
 
     confirmMfa(state, {

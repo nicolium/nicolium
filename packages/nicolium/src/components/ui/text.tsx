@@ -105,7 +105,7 @@ interface IText extends Pick<
 }
 
 /** UI-friendly text container with dark mode support. */
-const Text = React.forwardRef<any, IText>((props, ref) => {
+const Text = React.forwardRef<HTMLElement, IText>((props, ref) => {
   const {
     align,
     className,
@@ -121,7 +121,7 @@ const Text = React.forwardRef<any, IText>((props, ref) => {
     ...filteredProps
   } = props;
 
-  const Comp = tag as any as 'p';
+  const Comp = tag as React.ElementType;
 
   const alignmentClass = typeof align === 'string' ? alignments[align] : '';
 

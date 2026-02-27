@@ -25,10 +25,10 @@ const index = new FlexSearch.Index({
 
 interface searchOptions {
   maxResults?: number;
-  custom?: any;
+  custom?: CustomEmoji[];
 }
 
-const addCustomToPool = (customEmojis: any[]) => {
+const addCustomToPool = (customEmojis: CustomEmoji[]) => {
   // @ts-expect-error
   for (const key in index.register) {
     if (key[0] === 'c') {
@@ -39,7 +39,7 @@ const addCustomToPool = (customEmojis: any[]) => {
   let i = 0;
 
   for (const emoji of customEmojis) {
-    index.add('c' + i++, emoji.id);
+    index.add('c' + i++, emoji.shortcode);
   }
 };
 

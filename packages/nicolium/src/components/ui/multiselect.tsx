@@ -166,17 +166,17 @@ const Multiselect: React.FC<IMultiselect> = ({
       const options = Array.from(
         containerRef.current?.querySelectorAll('ul li') || [],
       ) as HTMLLIElement[];
-      const index = options.indexOf(document.activeElement as any);
+      const index = options.indexOf(document.activeElement as HTMLLIElement);
 
       switch (e.key) {
         case 'ArrowUp':
           e.preventDefault();
           if (index === 0) searchBoxRef.current?.focus();
-          else options[Math.max(index - 1, 0) as any]?.focus();
+          else options[Math.max(index - 1, 0)]?.focus();
           break;
         case 'ArrowDown':
           e.preventDefault();
-          options[Math.min(index + 1, options.length - 1) as any]?.focus();
+          options[Math.min(index + 1, options.length - 1)]?.focus();
           break;
         case 'PageUp':
         case 'Home':

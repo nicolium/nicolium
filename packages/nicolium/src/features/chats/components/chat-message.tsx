@@ -17,7 +17,7 @@ import { stripHTML } from '@/utils/html';
 import { onlyEmoji } from '@/utils/rich-content';
 
 import type { Menu as IMenu } from '@/components/dropdown-menu';
-import type { Chat } from 'pl-api';
+import type { Chat, MediaAttachment } from 'pl-api';
 
 const messages = defineMessages({
   copy: { id: 'chats.actions.copy', defaultMessage: 'Copy' },
@@ -64,7 +64,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
     return onlyEmoji(hiddenEl, BIG_EMOJI_LIMIT, false);
   }, []);
 
-  const onOpenMedia = (media: any, index: number) => {
+  const onOpenMedia = (media: Array<MediaAttachment>, index: number) => {
     openModal('MEDIA', { media, index });
   };
 

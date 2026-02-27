@@ -91,7 +91,7 @@ const Retention: React.FC<IRetention> = ({ startAt, endAt, frequency }) => {
                 <td key={retention.date}>
                   <div
                     className='bg-primary-200 p-2.5 font-medium dark:bg-gray-800'
-                    style={{ ['--tw-bg-opacity' as any]: 0.5 + average / 2 }}
+                    style={{ ['--tw-bg-opacity' as string]: 0.5 + average / 2 }}
                   >
                     {/* eslint-disable-next-line react/style-prop-object */}
                     <FormattedNumber value={average} style='percent' />
@@ -119,7 +119,7 @@ const Retention: React.FC<IRetention> = ({ startAt, endAt, frequency }) => {
                 <td key={retention.date}>
                   <div
                     className='bg-primary-200 p-2.5 font-medium dark:bg-gray-800'
-                    style={{ ['--tw-bg-opacity' as any]: 0.5 + retention.rate / 2 }}
+                    style={{ ['--tw-bg-opacity' as string]: 0.5 + retention.rate / 2 }}
                   >
                     {/* eslint-disable-next-line react/style-prop-object */}
                     <FormattedNumber value={retention.rate} style='percent' />

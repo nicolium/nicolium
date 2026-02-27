@@ -45,7 +45,7 @@ const IconButton = React.forwardRef(
         )}
         {...filteredProps}
         data-testid={filteredProps['data-testid'] ?? 'icon-button'}
-        {...(props.href ? ({ target: '_blank' } as any) : {})}
+        {...(props.href ? { target: '_blank' } : {})}
       >
         <SvgIcon src={src} className={iconClassName} aria-hidden />
 

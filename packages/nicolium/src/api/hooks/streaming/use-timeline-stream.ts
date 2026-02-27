@@ -19,8 +19,8 @@ const useTimelineStream = (
 
   const instance = useInstance();
   const socket = useRef<{
-    listen: (listener: any, stream?: string) => number;
-    unlisten: (listener: any) => void;
+    listen: (listener: (event: StreamingEvent) => void, stream?: string) => number;
+    unlisten: (listener: (event: StreamingEvent) => void) => void;
     subscribe: (
       stream: string,
       params?: {

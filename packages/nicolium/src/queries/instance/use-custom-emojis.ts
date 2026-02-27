@@ -1,6 +1,5 @@
 import { queryOptions, useQuery, type UseQueryResult } from '@tanstack/react-query';
 
-import { buildCustomEmojis } from '@/features/emoji';
 import { addCustomToPool } from '@/features/emoji/search';
 import { useClient } from '@/hooks/use-client';
 
@@ -14,7 +13,7 @@ const customEmojisQueryOptions = (client: PlApiClient) =>
     queryKey: queryKeys.instance.customEmojis,
     queryFn: () =>
       client.instance.getCustomEmojis().then((emojis) => {
-        addCustomToPool(buildCustomEmojis(emojis));
+        addCustomToPool(emojis);
         return emojis;
       }),
   });

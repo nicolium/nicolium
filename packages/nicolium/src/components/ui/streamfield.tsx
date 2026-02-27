@@ -19,9 +19,9 @@ type StreamfieldComponent<T> = React.ComponentType<{
   autoFocus: boolean;
 }>;
 
-interface IStreamfield {
+interface IStreamfield<T> {
   /** Array of values for the streamfield. */
-  values: any[];
+  values: T[];
   /** Input label message. */
   label?: React.ReactNode;
   /** Input hint message. */
@@ -31,9 +31,9 @@ interface IStreamfield {
   /** Callback to remove an item by index. */
   onRemoveItem?: (i: number) => void;
   /** Callback when values are changed. */
-  onChange: (values: any[]) => void;
+  onChange: (values: T[]) => void;
   /** Input to render for each value. */
-  component: StreamfieldComponent<any>;
+  component: StreamfieldComponent<T>;
   /** Minimum number of allowed inputs. */
   minItems?: number;
   /** Maximum number of allowed inputs. */
@@ -43,7 +43,7 @@ interface IStreamfield {
 }
 
 /** List of inputs that can be added or removed. */
-const Streamfield: React.FC<IStreamfield> = ({
+const Streamfield = <T,>({
   values,
   label,
   hint,
@@ -54,7 +54,7 @@ const Streamfield: React.FC<IStreamfield> = ({
   maxItems = Infinity,
   minItems = 0,
   draggable,
-}) => {
+}: IStreamfield<T>) => {
   const intl = useIntl();
 
   const dragItem = useRef<number | null>(null);
@@ -76,7 +76,7 @@ const Streamfield: React.FC<IStreamfield> = ({
     onChange(newData);
   };
 
-  const handleChange = (i: number) => (value: any) => {
+  const handleChange = (i: number) => (value: T) => {
     const newData = [...values];
     newData[i] = value;
     onChange(newData);
@@ -100,7 +100,7 @@ const Streamfield: React.FC<IStreamfield> = ({
       {values.length > 0 && (
         <Stack space={1}>
           {values.map((value, i) =>
-            value?._destroy ? null : (
+            (value as Record<string, unknown>)?._destroy ? null : (
               <HStack
                 key={i}
                 space={2}

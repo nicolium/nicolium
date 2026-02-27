@@ -35,10 +35,12 @@ const OtpAuthForm: React.FC<IOtpAuthForm> = ({ mfa_token, small }) => {
   const [shouldRedirect, setShouldRedirect] = useState(false);
   const [codeError, setCodeError] = useState<string | boolean>('');
 
-  const getFormData = (form: any) =>
-    Object.fromEntries(Array.from(form).map((i: any) => [i.name, i.value]));
+  const getFormData = (form: HTMLFormElement) =>
+    Object.fromEntries(
+      Array.from(form).map((i) => [(i as HTMLInputElement).name, (i as HTMLInputElement).value]),
+    );
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     const { code } = getFormData(event.target);
     dispatch(otpVerify(code, mfa_token))
       .then(({ access_token }) => {

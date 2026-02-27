@@ -59,7 +59,7 @@ const ChatsPageSettings = () => {
     dispatch(changeSetting(key, checked, { showAlert: true }));
   };
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (event) => {
     event.preventDefault();
 
     updateCredentials.mutate(data, {

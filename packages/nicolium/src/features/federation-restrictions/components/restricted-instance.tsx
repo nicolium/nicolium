@@ -14,7 +14,7 @@ interface IRestrictedInstance {
 }
 
 const RestrictedInstance: React.FC<IRestrictedInstance> = ({ host }) => {
-  const remoteInstance: any = useAppSelector((state) => getRemoteInstance(state, host));
+  const remoteInstance = useAppSelector((state) => getRemoteInstance(state, host));
 
   const [expanded, setExpanded] = useState(false);
 

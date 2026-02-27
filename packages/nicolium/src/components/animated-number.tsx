@@ -15,7 +15,7 @@ const obfuscatedCount = (count: number): string => {
   }
 };
 
-const shortNumberFormat = (number: any, intl: IntlShape, max?: number) => {
+const shortNumberFormat = (number: number, intl: IntlShape, max?: number) => {
   if (!isNumber(number)) return '•';
 
   let value = number;

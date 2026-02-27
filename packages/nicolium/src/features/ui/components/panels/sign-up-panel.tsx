@@ -34,10 +34,12 @@ const SignUpPanel = () => {
   const [shouldRedirect, setShouldRedirect] = useState(false);
 
   const getFormData = (form: HTMLFormElement) =>
-    Object.fromEntries(Array.from(form).map((i: any) => [i.name, i.value]));
+    Object.fromEntries(
+      Array.from(form).map((i) => [(i as HTMLInputElement).name, (i as HTMLInputElement).value]),
+    );
 
-  const handleSubmit: React.FormEventHandler = (event) => {
-    const { username, password } = getFormData(event.target as HTMLFormElement);
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (event) => {
+    const { username, password } = getFormData(event.target);
     dispatch(logIn(username, password))
       .then(({ access_token }) => dispatch(verifyCredentials(access_token)))
       // Refetch the instance for authenticated fetch
