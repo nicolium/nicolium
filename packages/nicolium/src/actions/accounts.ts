@@ -6,6 +6,7 @@ import type { CreateAccountParams, Relationship } from 'pl-api';
 
 const ACCOUNT_BLOCK_SUCCESS = 'ACCOUNT_BLOCK_SUCCESS' as const;
 const ACCOUNT_MUTE_SUCCESS = 'ACCOUNT_MUTE_SUCCESS' as const;
+const ACCOUNT_UNFOLLOW_SUCCESS = 'ACCOUNT_UNFOLLOW_SUCCESS' as const;
 
 const createAccount =
   (params: CreateAccountParams) => (_dispatch: AppDispatch, getState: () => RootState) =>
@@ -14,9 +15,18 @@ const createAccount =
       .then((response) => ({ params, response }));
 
 type AccountsAction = {
-  type: typeof ACCOUNT_BLOCK_SUCCESS | typeof ACCOUNT_MUTE_SUCCESS;
+  type:
+    | typeof ACCOUNT_BLOCK_SUCCESS
+    | typeof ACCOUNT_MUTE_SUCCESS
+    | typeof ACCOUNT_UNFOLLOW_SUCCESS;
   relationship: Relationship;
   statuses: Record<string, NormalizedStatus>;
 };
 
-export { ACCOUNT_BLOCK_SUCCESS, ACCOUNT_MUTE_SUCCESS, createAccount, type AccountsAction };
+export {
+  ACCOUNT_BLOCK_SUCCESS,
+  ACCOUNT_MUTE_SUCCESS,
+  ACCOUNT_UNFOLLOW_SUCCESS,
+  createAccount,
+  type AccountsAction,
+};

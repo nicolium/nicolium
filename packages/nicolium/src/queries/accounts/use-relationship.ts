@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import {
   ACCOUNT_BLOCK_SUCCESS,
   ACCOUNT_MUTE_SUCCESS,
+  ACCOUNT_UNFOLLOW_SUCCESS,
   type AccountsAction,
 } from '@/actions/accounts';
 import { batcher } from '@/api/batcher';
@@ -121,6 +122,7 @@ const useFollowAccountMutation = (accountId: string) => {
 
 const useUnfollowAccountMutation = (accountId: string) => {
   const client = useClient();
+  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -142,6 +144,14 @@ const useUnfollowAccountMutation = (accountId: string) => {
     },
     onSuccess: (data) => {
       queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
+
+      dispatch((dispatch, getState) => {
+        return dispatch({
+          type: ACCOUNT_UNFOLLOW_SUCCESS,
+          relationship: data,
+          statuses: getState().statuses,
+        });
+      });
     },
   });
 };
