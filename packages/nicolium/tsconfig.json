@@ -18,5 +18,5 @@
     "typeRoots": ["./src/types", "./node_modules/@types", "./node_modules"],
     "types": ["vite/client", "vite-plugin-compile-time/client", "dom-chromium-ai"]
   },
-  "exclude": ["src/**/*.test.ts", "src/**/*.test.tsx"]
+  "exclude": ["tests/**/*.test.ts", "tests/**/*.test.tsx"]
 }
