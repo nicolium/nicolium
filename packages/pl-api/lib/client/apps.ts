@@ -1,9 +1,9 @@
 import * as v from 'valibot';
 
-import { applicationSchema, credentialApplicationSchema } from '../entities';
+import { applicationSchema, credentialApplicationSchema } from '@/entities';
 
-import type { PlApiBaseClient } from '../client-base';
-import type { CreateApplicationParams } from '../params/apps';
+import type { PlApiBaseClient } from '@/client-base';
+import type { CreateApplicationParams } from '@/params/apps';
 
 /** Register client applications that can be used to obtain OAuth tokens. */
 const apps = (client: PlApiBaseClient) => ({

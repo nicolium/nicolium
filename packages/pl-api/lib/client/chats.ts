@@ -1,13 +1,13 @@
 import * as v from 'valibot';
 
-import { chatMessageSchema, chatSchema } from '../entities';
+import { chatMessageSchema, chatSchema } from '@/entities';
 
-import type { PlApiBaseClient } from '../client-base';
+import type { PlApiBaseClient } from '@/client-base';
 import type {
   CreateChatMessageParams,
   GetChatMessagesParams,
   GetChatsParams,
-} from '../params/chats';
+} from '@/params/chats';
 
 /** @see {@link https://docs.pleroma.social/backend/development/API/chats} */
 const chats = (client: PlApiBaseClient) => ({

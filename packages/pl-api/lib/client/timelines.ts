@@ -1,9 +1,10 @@
 import * as v from 'valibot';
 
-import { conversationSchema, markersSchema, statusSchema } from '../entities';
+import { conversationSchema, markersSchema, statusSchema } from '@/entities';
+
 import { PIXELFED } from '../features';
 
-import type { PlApiBaseClient } from '../client-base';
+import type { PlApiBaseClient } from '@/client-base';
 import type {
   AntennaTimelineParams,
   BubbleTimelineParams,
@@ -16,9 +17,8 @@ import type {
   PublicTimelineParams,
   SaveMarkersParams,
   WrenchedTimelineParams,
-} from '../params/timelines';
-
-type EmptyObject = Record<string, never>;
+} from '@/params/timelines';
+import type { EmptyObject } from '@/utils/types';
 
 const timelines = (client: PlApiBaseClient) => ({
   /**

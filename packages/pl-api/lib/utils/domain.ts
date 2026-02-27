@@ -1,4 +1,4 @@
-import type { Account } from '../entities';
+import type { Account } from '@/entities';
 
 const getDomainFromURL = (account: Pick<Account, 'url'>): string => {
   try {

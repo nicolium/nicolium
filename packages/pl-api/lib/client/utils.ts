@@ -1,4 +1,4 @@
-import type { PlApiBaseClient } from '../client-base';
+import type { PlApiBaseClient } from '@/client-base';
 
 const utils = (client: PlApiBaseClient) => ({
   paginatedGet: client.paginatedGet.bind(client),

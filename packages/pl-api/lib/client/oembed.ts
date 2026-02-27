@@ -1,6 +1,6 @@
 import * as v from 'valibot';
 
-import type { PlApiBaseClient } from '../client-base';
+import type { PlApiBaseClient } from '@/client-base';
 
 const oembed = (client: PlApiBaseClient) => ({
   /**

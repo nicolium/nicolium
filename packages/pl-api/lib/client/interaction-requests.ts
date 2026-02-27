@@ -1,9 +1,9 @@
 import * as v from 'valibot';
 
-import { interactionRequestSchema } from '../entities';
+import { interactionRequestSchema } from '@/entities';
 
-import type { PlApiBaseClient } from '../client-base';
-import type { GetInteractionRequestsParams } from '../params/interaction-requests';
+import type { PlApiBaseClient } from '@/client-base';
+import type { GetInteractionRequestsParams } from '@/params/interaction-requests';
 
 const interactionRequests = (client: PlApiBaseClient) => ({
   /**

@@ -1,11 +1,10 @@
 import * as v from 'valibot';
 
-import { rssFeedSchema } from '../entities';
-import { filteredArray } from '../entities/utils';
+import { rssFeedSchema } from '@/entities';
+import { filteredArray } from '@/entities/utils';
 
-import type { PlApiBaseClient } from '../client-base';
-
-type EmptyObject = Record<string, never>;
+import type { PlApiBaseClient } from '@/client-base';
+import type { EmptyObject } from '@/utils/types';
 
 const rssFeedSubscriptions = (client: PlApiBaseClient) => ({
   /**

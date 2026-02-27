@@ -4,18 +4,18 @@ import {
   notificationPolicySchema,
   notificationRequestSchema,
   notificationSchema,
-} from '../entities';
+} from '@/entities';
+
 import { type RequestMeta } from '../request';
 
-import type { PlApiBaseClient } from '../client-base';
+import type { PlApiBaseClient } from '@/client-base';
 import type {
   GetNotificationParams,
   GetNotificationRequestsParams,
   GetUnreadNotificationCountParams,
   UpdateNotificationPolicyRequest,
-} from '../params/notifications';
-
-type EmptyObject = Record<string, never>;
+} from '@/params/notifications';
+import type { EmptyObject } from '@/utils/types';
 
 const notifications = (client: PlApiBaseClient) => ({
   /**

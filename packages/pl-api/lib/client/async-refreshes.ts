@@ -1,8 +1,8 @@
 import * as v from 'valibot';
 
-import { asyncRefreshSchema } from '../entities';
+import { asyncRefreshSchema } from '@/entities';
 
-import type { PlApiBaseClient } from '../client-base';
+import type { PlApiBaseClient } from '@/client-base';
 
 /** Experimental async refreshes API methods */
 const asyncRefreshes = (client: PlApiBaseClient) => ({

@@ -1,12 +1,11 @@
 import * as v from 'valibot';
 
-import { accountSchema, circleSchema, statusSchema } from '../entities';
-import { filteredArray } from '../entities/utils';
+import { accountSchema, circleSchema, statusSchema } from '@/entities';
+import { filteredArray } from '@/entities/utils';
 
-import type { PlApiBaseClient } from '../client-base';
-import type { GetCircleAccountsParams, GetCircleStatusesParams } from '../params/circles';
-
-type EmptyObject = Record<string, never>;
+import type { PlApiBaseClient } from '@/client-base';
+import type { GetCircleAccountsParams, GetCircleStatusesParams } from '@/params/circles';
+import type { EmptyObject } from '@/utils/types';
 
 const circles = (client: PlApiBaseClient) => ({
   /**

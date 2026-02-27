@@ -1,12 +1,11 @@
 import * as v from 'valibot';
 
-import { accountSchema, listSchema } from '../entities';
-import { filteredArray } from '../entities/utils';
+import { accountSchema, listSchema } from '@/entities';
+import { filteredArray } from '@/entities/utils';
 
-import type { PlApiBaseClient } from '../client-base';
-import type { CreateListParams, GetListAccountsParams, UpdateListParams } from '../params/lists';
-
-type EmptyObject = Record<string, never>;
+import type { PlApiBaseClient } from '@/client-base';
+import type { CreateListParams, GetListAccountsParams, UpdateListParams } from '@/params/lists';
+import type { EmptyObject } from '@/utils/types';
 
 const lists = (client: PlApiBaseClient) => ({
   /**

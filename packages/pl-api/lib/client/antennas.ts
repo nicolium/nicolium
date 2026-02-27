@@ -1,12 +1,11 @@
 import * as v from 'valibot';
 
-import { accountSchema, antennaSchema } from '../entities';
-import { filteredArray } from '../entities/utils';
+import { accountSchema, antennaSchema } from '@/entities';
+import { filteredArray } from '@/entities/utils';
 
-import type { PlApiBaseClient } from '../client-base';
-import type { CreateAntennaParams, UpdateAntennaParams } from '../params/antennas';
-
-type EmptyObject = Record<string, never>;
+import type { PlApiBaseClient } from '@/client-base';
+import type { CreateAntennaParams, UpdateAntennaParams } from '@/params/antennas';
+import type { EmptyObject } from '@/utils/types';
 
 const antennas = (client: PlApiBaseClient) => ({
   /**

@@ -11,12 +11,13 @@ import {
   statusSchema,
   statusSourceSchema,
   translationSchema,
-} from '../entities';
-import { filteredArray } from '../entities/utils';
+} from '@/entities';
+import { filteredArray } from '@/entities/utils';
+
 import { AKKOMA, ICESHRIMP_NET, MITRA, PLEROMA } from '../features';
 import { getAsyncRefreshHeader } from '../request';
 
-import type { PlApiBaseClient } from '../client-base';
+import type { PlApiBaseClient } from '@/client-base';
 import type {
   CreateStatusParams,
   EditInteractionPolicyParams,
@@ -29,9 +30,8 @@ import type {
   GetStatusQuotesParams,
   GetStatusReferencesParams,
   GetStatusesParams,
-} from '../params/statuses';
-
-type EmptyObject = Record<string, never>;
+} from '@/params/statuses';
+import type { EmptyObject } from '@/utils/types';
 
 const statuses = (client: PlApiBaseClient) => {
   const category = {

@@ -1,6 +1,7 @@
 import * as v from 'valibot';
 
-import { pick } from '../../utils';
+import { pick } from '@/utils';
+
 import { announcementSchema } from '../announcement';
 
 /**

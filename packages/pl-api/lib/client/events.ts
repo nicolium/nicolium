@@ -1,15 +1,15 @@
 import * as v from 'valibot';
 
-import { accountSchema, statusSchema } from '../entities';
+import { accountSchema, statusSchema } from '@/entities';
 
-import type { PlApiBaseClient } from '../client-base';
+import type { PlApiBaseClient } from '@/client-base';
 import type {
   CreateEventParams,
   EditEventParams,
   GetEventParticipationRequestsParams,
   GetEventParticipationsParams,
   GetJoinedEventsParams,
-} from '../params/events';
+} from '@/params/events';
 
 const events = (client: PlApiBaseClient) => ({
   /**

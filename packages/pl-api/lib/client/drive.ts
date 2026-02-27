@@ -1,11 +1,10 @@
 import * as v from 'valibot';
 
-import { driveFileSchema, driveFolderSchema, driveStatusSchema } from '../entities';
+import { driveFileSchema, driveFolderSchema, driveStatusSchema } from '@/entities';
 
-import type { PlApiBaseClient } from '../client-base';
-import type { UpdateFileParams } from '../params/drive';
-
-type EmptyObject = Record<string, never>;
+import type { PlApiBaseClient } from '@/client-base';
+import type { UpdateFileParams } from '@/params/drive';
+import type { EmptyObject } from '@/utils/types';
 
 const drive = (client: PlApiBaseClient) => ({
   getDrive: async () => {

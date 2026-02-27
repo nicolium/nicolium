@@ -1,17 +1,17 @@
 import * as v from 'valibot';
 
-import { authorizationServerMetadataSchema, tokenSchema, userInfoSchema } from '../entities';
+import { authorizationServerMetadataSchema, tokenSchema, userInfoSchema } from '@/entities';
+
 import { ICESHRIMP_NET } from '../features';
 
-import type { PlApiBaseClient } from '../client-base';
+import type { PlApiBaseClient } from '@/client-base';
 import type {
   GetTokenParams,
   MfaChallengeParams,
   OauthAuthorizeParams,
   RevokeTokenParams,
-} from '../params/oauth';
-
-type EmptyObject = Record<string, never>;
+} from '@/params/oauth';
+import type { EmptyObject } from '@/utils/types';
 
 const oauth = (client: PlApiBaseClient) => ({
   /**

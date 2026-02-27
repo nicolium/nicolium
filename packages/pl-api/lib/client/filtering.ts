@@ -7,10 +7,10 @@ import {
   filterStatusSchema,
   mutedAccountSchema,
   relationshipSchema,
-} from '../entities';
-import { filteredArray } from '../entities/utils';
+} from '@/entities';
+import { filteredArray } from '@/entities/utils';
 
-import type { PlApiBaseClient } from '../client-base';
+import type { PlApiBaseClient } from '@/client-base';
 import type {
   BlockAccountParams,
   CreateFilterParams,
@@ -19,9 +19,8 @@ import type {
   GetMutesParams,
   MuteAccountParams,
   UpdateFilterParams,
-} from '../params/filtering';
-
-type EmptyObject = Record<string, never>;
+} from '@/params/filtering';
+import type { EmptyObject } from '@/utils/types';
 
 const filtering = (client: PlApiBaseClient) => ({
   /**

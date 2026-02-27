@@ -1,6 +1,5 @@
-import type { PlApiBaseClient } from '../client-base';
-
-type EmptyObject = Record<string, never>;
+import type { PlApiBaseClient } from '@/client-base';
+import type { EmptyObject } from '@/utils/types';
 
 const emails = (client: PlApiBaseClient) => ({
   resendConfirmationEmail: async (email: string) => {

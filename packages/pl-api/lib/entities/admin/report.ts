@@ -1,6 +1,7 @@
 import * as v from 'valibot';
 
-import { pick } from '../../utils';
+import { pick } from '@/utils';
+
 import { ruleSchema } from '../rule';
 import { statusWithoutAccountSchema } from '../status';
 import { datetimeSchema, filteredArray } from '../utils';

@@ -1,11 +1,10 @@
 import * as v from 'valibot';
 
-import { scheduledStatusSchema } from '../entities';
+import { scheduledStatusSchema } from '@/entities';
 
-import type { PlApiBaseClient } from '../client-base';
-import type { GetScheduledStatusesParams } from '../params/scheduled-statuses';
-
-type EmptyObject = Record<string, never>;
+import type { PlApiBaseClient } from '@/client-base';
+import type { GetScheduledStatusesParams } from '@/params/scheduled-statuses';
+import type { EmptyObject } from '@/utils/types';
 
 const scheduledStatuses = (client: PlApiBaseClient) => ({
   /**

@@ -6,19 +6,19 @@ import {
   interactionPoliciesSchema,
   oauthTokenSchema,
   tokenSchema,
-} from '../entities';
-import { coerceObject, filteredArray } from '../entities/utils';
+} from '@/entities';
+import { coerceObject, filteredArray } from '@/entities/utils';
+
 import { GOTOSOCIAL, ICESHRIMP_NET, MITRA, PIXELFED } from '../features';
 
-import type { PlApiBaseClient } from '../client-base';
+import type { PlApiBaseClient } from '@/client-base';
 import type {
   CreateAccountParams,
   UpdateCredentialsParams,
   UpdateInteractionPoliciesParams,
   UpdateNotificationSettingsParams,
-} from '../params/settings';
-
-type EmptyObject = Record<string, never>;
+} from '@/params/settings';
+import type { EmptyObject } from '@/utils/types';
 
 const settings = (client: PlApiBaseClient) => ({
   /**

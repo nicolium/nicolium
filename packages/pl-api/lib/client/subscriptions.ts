@@ -5,10 +5,10 @@ import {
   subscriptionDetailsSchema,
   subscriptionInvoiceSchema,
   subscriptionOptionSchema,
-} from '../entities';
-import { filteredArray } from '../entities/utils';
+} from '@/entities';
+import { filteredArray } from '@/entities/utils';
 
-import type { PlApiBaseClient } from '../client-base';
+import type { PlApiBaseClient } from '@/client-base';
 
 const subscriptions = (client: PlApiBaseClient) => ({
   /**

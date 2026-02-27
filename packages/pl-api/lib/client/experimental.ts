@@ -6,22 +6,22 @@ import {
   groupRelationshipSchema,
   groupSchema,
   statusSchema,
-} from '../entities';
-import { filteredArray } from '../entities/utils';
+} from '@/entities';
+import { filteredArray } from '@/entities/utils';
+
 import { PIXELFED } from '../features';
 
-import type { PlApiBaseClient } from '../client-base';
-import type { GroupRole } from '../entities';
-import type { AdminGetGroupsParams } from '../params/admin';
+import type { PlApiBaseClient } from '@/client-base';
+import type { GroupRole } from '@/entities';
+import type { AdminGetGroupsParams } from '@/params/admin';
 import type {
   CreateGroupParams,
   GetGroupBlocksParams,
   GetGroupMembershipRequestsParams,
   GetGroupMembershipsParams,
   UpdateGroupParams,
-} from '../params/groups';
-
-type EmptyObject = Record<string, never>;
+} from '@/params/groups';
+import type { EmptyObject } from '@/utils/types';
 
 /** Routes that are not part of any stable release */
 const experimental = (client: PlApiBaseClient) => {

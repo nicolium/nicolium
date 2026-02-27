@@ -1,12 +1,12 @@
 import * as v from 'valibot';
 
-import { mediaAttachmentSchema } from '../entities';
+import { mediaAttachmentSchema } from '@/entities';
+
 import { type RequestMeta } from '../request';
 
-import type { PlApiBaseClient } from '../client-base';
-import type { UpdateMediaParams, UploadMediaParams } from '../params/media';
-
-type EmptyObject = Record<string, never>;
+import type { PlApiBaseClient } from '@/client-base';
+import type { UpdateMediaParams, UploadMediaParams } from '@/params/media';
+import type { EmptyObject } from '@/utils/types';
 
 const media = (client: PlApiBaseClient) => ({
   /**

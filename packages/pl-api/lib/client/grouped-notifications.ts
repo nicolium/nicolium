@@ -1,26 +1,26 @@
 import * as v from 'valibot';
 
-import { accountSchema, groupedNotificationsResultsSchema } from '../entities';
-import { filteredArray } from '../entities/utils';
+import { accountSchema, groupedNotificationsResultsSchema } from '@/entities';
+import { filteredArray } from '@/entities/utils';
+
 import { type RequestMeta } from '../request';
 import { pick, omit } from '../utils';
 
-import type { PlApiBaseClient } from '../client-base';
+import type { PaginatedResponse } from '../responses';
+import type { notifications } from './notifications';
+import type { PlApiBaseClient } from '@/client-base';
 import type {
   Account,
   GroupedNotificationsResults,
   Notification,
   NotificationGroup,
   Status,
-} from '../entities';
+} from '@/entities';
 import type {
   GetGroupedNotificationsParams,
   GetUnreadNotificationGroupCountParams,
-} from '../params/grouped-notifications';
-import type { PaginatedResponse } from '../responses';
-import type { notifications } from './notifications';
-
-type EmptyObject = Record<string, never>;
+} from '@/params/grouped-notifications';
+import type { EmptyObject } from '@/utils/types';
 
 const GROUPED_TYPES = [
   'favourite',

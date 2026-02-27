@@ -8,13 +8,16 @@ import {
   statusSchema,
   suggestionSchema,
   tagSchema,
-} from '../entities';
-import { filteredArray } from '../entities/utils';
+} from '@/entities';
+import { filteredArray } from '@/entities/utils';
+
 import { GOTOSOCIAL, ICESHRIMP_NET, PIXELFED, PLEROMA } from '../features';
 import { getNextLink, getPrevLink } from '../request';
 
-import type { PlApiBaseClient } from '../client-base';
-import type { Account } from '../entities';
+import type { PaginatedResponse } from '../responses';
+import type { accounts } from './accounts';
+import type { PlApiBaseClient } from '@/client-base';
+import type { Account } from '@/entities';
 import type {
   CreateBookmarkFolderParams,
   GetBookmarksParams,
@@ -23,11 +26,8 @@ import type {
   GetFollowRequestsParams,
   GetFollowedTagsParams,
   UpdateBookmarkFolderParams,
-} from '../params/my-account';
-import type { PaginatedResponse } from '../responses';
-import type { accounts } from './accounts';
-
-type EmptyObject = Record<string, never>;
+} from '@/params/my-account';
+import type { EmptyObject } from '@/utils/types';
 
 const paginatedIceshrimpAccountsList = async <T>(
   client: PlApiBaseClient & { accounts: ReturnType<typeof accounts> },

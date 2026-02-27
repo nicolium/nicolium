@@ -22,11 +22,13 @@ import {
   statusSchema,
   statusSourceSchema,
   trendsLinkSchema,
-} from '../entities';
-import { filteredArray } from '../entities/utils';
+} from '@/entities';
+import { filteredArray } from '@/entities/utils';
+
 import { GOTOSOCIAL, MITRA, PLEROMA } from '../features';
 
-import type { PlApiBaseClient } from '../client-base';
+import type { PaginatedResponse } from '../responses';
+import type { PlApiBaseClient } from '@/client-base';
 import type {
   AdminAccount,
   AdminAnnouncement,
@@ -34,7 +36,7 @@ import type {
   AdminReport,
   PleromaConfig,
   Status,
-} from '../entities';
+} from '@/entities';
 import type {
   AdminAccountAction,
   AdminCreateAccountParams,
@@ -66,11 +68,9 @@ import type {
   AdminUpdateReportParams,
   AdminUpdateRuleParams,
   AdminUpdateStatusParams,
-} from '../params/admin';
-import type { EditStatusParams } from '../params/statuses';
-import type { PaginatedResponse } from '../responses';
-
-type EmptyObject = Record<string, never>;
+} from '@/params/admin';
+import type { EditStatusParams } from '@/params/statuses';
+import type { EmptyObject } from '@/utils/types';
 
 const paginatedPleromaAccounts = async (
   client: PlApiBaseClient,

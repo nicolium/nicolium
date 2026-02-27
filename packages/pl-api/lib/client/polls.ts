@@ -1,8 +1,8 @@
 import * as v from 'valibot';
 
-import { pollSchema } from '../entities';
+import { pollSchema } from '@/entities';
 
-import type { PlApiBaseClient } from '../client-base';
+import type { PlApiBaseClient } from '@/client-base';
 
 const polls = (client: PlApiBaseClient) => ({
   /**

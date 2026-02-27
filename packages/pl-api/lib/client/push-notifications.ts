@@ -1,14 +1,13 @@
 import * as v from 'valibot';
 
-import { webPushSubscriptionSchema } from '../entities';
+import { webPushSubscriptionSchema } from '@/entities';
 
-import type { PlApiBaseClient } from '../client-base';
+import type { PlApiBaseClient } from '@/client-base';
 import type {
   CreatePushNotificationsSubscriptionParams,
   UpdatePushNotificationsSubscriptionParams,
-} from '../params/push-notifications';
-
-type EmptyObject = Record<string, never>;
+} from '@/params/push-notifications';
+import type { EmptyObject } from '@/utils/types';
 
 const pushNotifications = (client: PlApiBaseClient) => ({
   /**

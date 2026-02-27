@@ -11,12 +11,13 @@ import {
   reportSchema,
   scrobbleSchema,
   statusSchema,
-} from '../entities';
-import { filteredArray } from '../entities/utils';
+} from '@/entities';
+import { filteredArray } from '@/entities/utils';
+
 import { ICESHRIMP_NET, PIXELFED, PLEROMA } from '../features';
 import { type RequestMeta } from '../request';
 
-import type { PlApiBaseClient } from '../client-base';
+import type { PlApiBaseClient } from '@/client-base';
 import type {
   CreateScrobbleParams,
   FollowAccountParams,
@@ -31,9 +32,8 @@ import type {
   GetScrobblesParams,
   ReportAccountParams,
   SearchAccountParams,
-} from '../params/accounts';
-
-type EmptyObject = Record<string, never>;
+} from '@/params/accounts';
+import type { EmptyObject } from '@/utils/types';
 
 const accounts = (client: PlApiBaseClient) => ({
   /**

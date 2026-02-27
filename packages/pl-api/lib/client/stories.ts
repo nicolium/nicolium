@@ -5,18 +5,17 @@ import {
   storyCarouselItemSchema,
   storyMediaSchema,
   storyProfileSchema,
-} from '../entities';
-import { filteredArray } from '../entities/utils';
+} from '@/entities';
+import { filteredArray } from '@/entities/utils';
 
-import type { PlApiBaseClient } from '../client-base';
+import type { PlApiBaseClient } from '@/client-base';
 import type {
   CreateStoryParams,
   CreateStoryPollParams,
   CropStoryPhotoParams,
   StoryReportType,
-} from '../params/stories';
-
-type EmptyObject = Record<string, never>;
+} from '@/params/stories';
+import type { EmptyObject } from '@/utils/types';
 
 const stories = (client: PlApiBaseClient) => ({
   getRecentStories: async () => {
