@@ -57,7 +57,7 @@ class PlApiDirectoryClient {
   }
 
   async getLanguages(params?: Params) {
-    const response = await this.request('/categories', { params });
+    const response = await this.request('/languages', { params });
 
     return v.parse(filteredArray(directoryLanguageSchema), response.json);
   }
