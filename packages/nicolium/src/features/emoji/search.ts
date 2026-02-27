@@ -1,4 +1,4 @@
-import FlexSearch from 'flexsearch';
+import { Index } from 'flexsearch';
 
 import type { EmojiData } from './data';
 import type { Emoji } from './index';
@@ -17,9 +17,9 @@ import('./data')
   })
   .catch(() => {});
 
-const index = new FlexSearch.Index({
+const index = new Index({
   tokenize: 'full',
-  optimize: true,
+  // optimize: true,
   context: true,
 });
 
