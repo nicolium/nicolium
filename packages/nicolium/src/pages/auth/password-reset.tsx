@@ -34,7 +34,7 @@ const PasswordResetPage = () => {
   const [success, setSuccess] = useState(false);
 
   const handleSubmit = (e: React.SubmitEvent<HTMLFormElement>) => {
-    const nicknameOrEmail = (e.target as HTMLFormElement).nickname_or_email.value;
+    const nicknameOrEmail = e.target.nickname_or_email.value;
     setIsLoading(true);
     dispatch(resetPassword(nicknameOrEmail))
       .then(() => {

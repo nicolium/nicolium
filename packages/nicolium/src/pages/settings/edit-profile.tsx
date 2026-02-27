@@ -324,7 +324,7 @@ const EditProfilePage: React.FC = () => {
     setData((prevData) => ({ ...prevData, [key]: value }));
   };
 
-  const handleSubmit: React.FormEventHandler = (event) => {
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (event) => {
     const promises = [];
 
     const { fields_attributes, ...rest } = data;

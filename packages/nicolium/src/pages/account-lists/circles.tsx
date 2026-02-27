@@ -56,7 +56,7 @@ const NewCircleForm: React.FC = () => {
           />
         </label>
 
-        <Button disabled={isPending} onClick={handleSubmit} theme='primary'>
+        <Button disabled={isPending} type='submit' theme='primary'>
           {create}
         </Button>
       </HStack>

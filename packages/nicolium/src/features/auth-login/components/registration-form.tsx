@@ -227,7 +227,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
     [],
   );
 
-  const onSubmit: React.FormEventHandler = () => {
+  const onSubmit: React.SubmitEventHandler<HTMLFormElement> = () => {
     if (!passwordsMatch()) {
       setPasswordMismatch(true);
       return;

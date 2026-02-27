@@ -54,7 +54,7 @@ const SettingsStore: React.FC = () => {
     dispatch(changeSetting(key, checked, { showAlert: true }));
   };
 
-  const handleSubmit: React.FormEventHandler = () => {
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = () => {
     const settings = JSON.parse(rawJSON);
 
     setLoading(true);

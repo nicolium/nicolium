@@ -54,7 +54,7 @@ const NewFolderForm: React.FC<INewFolderForm> = ({ search, onChange }) => {
     if (onChange) onChange(e);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     createBookmarkFolder(
       {
@@ -65,7 +65,7 @@ const NewFolderForm: React.FC<INewFolderForm> = ({ search, onChange }) => {
           toast.success(messages.createSuccess);
         },
         onError() {
-          toast.success(messages.createFail);
+          toast.error(messages.createFail);
         },
       },
     );
@@ -86,7 +86,7 @@ const NewFolderForm: React.FC<INewFolderForm> = ({ search, onChange }) => {
           onChange={handleChange}
         />
 
-        <Button disabled={isPending} onClick={handleSubmit} theme='primary'>
+        <Button disabled={isPending} type='submit' theme='primary'>
           <FormattedMessage id='bookmark_folders.new.create_title' defaultMessage='Add folder' />
         </Button>
       </HStack>

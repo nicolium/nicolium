@@ -74,7 +74,7 @@ const NewRelayForm: React.FC = () => {
 
   const { followRelay, isPendingFollow } = useRelays();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     followRelay(name.value, {
       onSuccess() {
@@ -97,7 +97,7 @@ const NewRelayForm: React.FC = () => {
           <Input type='text' placeholder={label} disabled={isPendingFollow} {...name} />
         </label>
 
-        <Button disabled={isPendingFollow} onClick={handleSubmit} theme='primary'>
+        <Button disabled={isPendingFollow} type='submit' theme='primary'>
           <FormattedMessage id='admin.relays.new.follow' defaultMessage='Follow' />
         </Button>
       </HStack>

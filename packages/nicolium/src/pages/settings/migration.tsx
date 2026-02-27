@@ -64,7 +64,7 @@ const MigrationPage = () => {
     setPassword('');
   };
 
-  const handleSubmit: React.FormEventHandler = () => {
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = () => {
     setIsLoading(true);
     return dispatch(moveAccount(targetAccount, password))
       .then(() => {
@@ -140,7 +140,7 @@ const MigrationPage = () => {
           <Button
             theme='primary'
             text={intl.formatMessage(messages.submit)}
-            onClick={handleSubmit}
+            type='submit'
             disabled={isLoading}
           />
         </FormActions>

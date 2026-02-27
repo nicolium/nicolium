@@ -42,7 +42,7 @@ const NewFeedForm: React.FC = () => {
 
   const { mutate: createRssFeedSubscription, isPending } = useCreateRssFeedSubscription();
 
-  const handleSubmit = (e: React.FormEvent<Element>) => {
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     createRssFeedSubscription(url.value, {
       onSuccess() {
@@ -65,7 +65,7 @@ const NewFeedForm: React.FC = () => {
           <Input type='text' placeholder={label} disabled={isPending} {...url} />
         </label>
 
-        <Button disabled={isPending} onClick={handleSubmit} theme='primary'>
+        <Button disabled={isPending} type='submit' theme='primary'>
           <FormattedMessage
             id='rss_feed_subscriptions.new.create_title'
             defaultMessage='Subscribe'

@@ -127,7 +127,7 @@ const FrontendConfigEditor: React.FC = () => {
     setJsonValid(true);
   };
 
-  const handleSubmit: React.FormEventHandler = (e) => {
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
     dispatch(updateFrontendConfig(data))
       .then(() => {
         setLoading(false);

@@ -54,7 +54,7 @@ const DataImporter: React.FC<IDataImporter> = ({
   const [file, setFile] = useState<File | null | undefined>(null);
   const [overwrite, setOverwrite] = useState(false);
 
-  const handleSubmit: React.FormEventHandler = (event) => {
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (event) => {
     setIsLoading(true);
     action(file!, overwrite)
       .then(() => {

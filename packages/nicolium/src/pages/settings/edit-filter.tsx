@@ -125,7 +125,7 @@ const EditFilterPage: React.FC = () => {
     setExpiresIn(+e.target.value || undefined);
   };
 
-  const handleAddNew: React.FormEventHandler = (e) => {
+  const handleAddNew: React.SubmitEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const context: Array<FilterContext> = [];
 
