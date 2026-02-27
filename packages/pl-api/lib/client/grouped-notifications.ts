@@ -31,7 +31,7 @@ const GROUPED_TYPES = [
   'participation_request',
 ];
 
-const _groupNotifications = (
+const groupNotifications = (
   { previous, next, items, ...response }: PaginatedResponse<Notification>,
   params?: GetGroupedNotificationsParams,
 ): PaginatedResponse<GroupedNotificationsResults, false> => {
@@ -94,8 +94,8 @@ const _groupNotifications = (
 
   return {
     ...response,
-    previous: previous ? async () => _groupNotifications(await previous(), params) : null,
-    next: next ? async () => _groupNotifications(await next(), params) : null,
+    previous: previous ? async () => groupNotifications(await previous(), params) : null,
+    next: next ? async () => groupNotifications(await next(), params) : null,
     items: groupedNotificationsResults,
   };
 };
@@ -139,7 +139,7 @@ const groupedNotifications = (
         ]),
       );
 
-      return _groupNotifications(response, params);
+      return groupNotifications(response, params);
     },
 
     /**
@@ -158,7 +158,7 @@ const groupedNotifications = (
 
       const response = await client.request(`/api/v1/notifications/${groupKey}`);
 
-      return _groupNotifications({
+      return groupNotifications({
         previous: null,
         next: null,
         items: [response.json],
