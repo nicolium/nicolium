@@ -149,21 +149,19 @@ const makeGetNotification = () =>
     [
       (_state: RootState, notification: NotificationGroup) => notification,
       (_state: RootState, notification: NotificationGroup) =>
-        // @ts-expect-error types will be fine valibot ensures that
-        selectAccount(notification.target_id),
-      // @ts-expect-error types will be fine valibot ensures that
-      (state: RootState, notification: NotificationGroup) => state.statuses[notification.status_id],
+        selectAccount(('target_id' in notification ? notification.target_id : undefined)!),
+      (state: RootState, notification: NotificationGroup) =>
+        state.statuses[('status_id' in notification ? notification.status_id : undefined)!],
       (_state: RootState, notification: NotificationGroup) =>
         selectAccounts(notification.sample_account_ids),
     ],
-    (notification, target, status, accounts): SelectedNotification => ({
-      ...notification,
-      // @ts-expect-error types will be fine valibot ensures that
-      target,
-      // @ts-expect-error types will be fine valibot ensures that
-      status,
-      accounts,
-    }),
+    (notification, target, status, accounts): SelectedNotification =>
+      ({
+        ...notification,
+        target: target!,
+        status: status!,
+        accounts,
+      }) as unknown as SelectedNotification,
   );
 
 type SelectedNotification = NotificationGroup & {
@@ -293,7 +291,7 @@ const makeGetStatusIds = () =>
       (state: RootState, { type }: ColumnQuery) => state.timelines[type]?.items || [],
       (state: RootState) => state.statuses,
     ],
-    (columnSettings: any, statusIds: Array<string>, statuses) =>
+    (columnSettings, statusIds: Array<string>, statuses) =>
       statusIds.filter((id: string) => {
         const status = statuses[id];
         if (!status) return true;

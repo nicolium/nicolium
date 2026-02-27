@@ -27,7 +27,7 @@ const isStandalone = (state: RootState): boolean => {
   return isURL(BuildConfig.BACKEND_URL) ? false : !isPrerendered && instanceFetchFailed;
 };
 
-const getHost = (url: any): string => {
+const getHost = (url: string = ''): string => {
   try {
     return new URL(url).origin;
   } catch {

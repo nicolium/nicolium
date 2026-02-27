@@ -85,7 +85,7 @@ const ThemeEditorPage: React.FC = () => {
     });
   };
 
-  const setTheme = (theme: any) => {
+  const setTheme = (theme: Record<string, Record<string, string> | string>) => {
     setResetKey(crypto.randomUUID());
     setIsDefault(false);
     setTimeout(() => {
@@ -130,7 +130,7 @@ const ThemeEditorPage: React.FC = () => {
       const json = JSON.parse(text);
       const colors = v.parse(frontendConfigSchema, { colors: json }).colors;
 
-      setTheme(colors);
+      if (colors) setTheme(colors);
       toast.success(intl.formatMessage(messages.importSuccess));
     }
   };

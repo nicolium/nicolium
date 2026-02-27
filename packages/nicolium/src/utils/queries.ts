@@ -83,7 +83,7 @@ const removePageItem = <T>(
 };
 
 const paginateQueryData = <T>(array: T[] | undefined) =>
-  array?.reduce((resultArray: any, item: any, index: any) => {
+  array?.reduce<T[][]>((resultArray, item, index) => {
     const chunkIndex = Math.floor(index / 20);
 
     resultArray[chunkIndex] ??= [];
@@ -103,10 +103,11 @@ const sortQueryData = <T>(
       const flattenedQueryData = flattenPages(nextResult);
       const sortedQueryData = flattenedQueryData?.toSorted(comparator);
       const paginatedPages = paginateQueryData(sortedQueryData);
-      const newPages = paginatedPages.map((page: T, idx: number) => ({
-        ...prevResult.pages[idx],
-        result: page,
-      }));
+      const newPages =
+        paginatedPages?.map((page, idx) => ({
+          ...prevResult.pages[idx],
+          result: page,
+        })) ?? [];
 
       nextResult.pages = newPages;
       return nextResult;

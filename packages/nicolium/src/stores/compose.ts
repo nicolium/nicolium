@@ -806,8 +806,7 @@ const useSubmitCompose = (composeId: string) => {
       };
 
       if (compose.editedId) {
-        // @ts-expect-error
-        params.media_attributes = media.map((item) => {
+        (params as EditStatusParams).media_attributes = media.map((item) => {
           const focalPoint = (item.type === 'image' || item.type === 'gifv') && item.meta?.focus;
           const focus = focalPoint
             ? `${focalPoint.x.toFixed(2)},${focalPoint.y.toFixed(2)}`

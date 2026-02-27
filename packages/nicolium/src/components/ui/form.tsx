@@ -3,7 +3,7 @@ import React from 'react';
 
 interface IForm {
   /** Form submission event handler. */
-  onSubmit?: (event: React.FormEvent) => void;
+  onSubmit?: (event: React.SubmitEvent<HTMLFormElement>) => void;
   /** Class name override for the <form> element. */
   className?: string;
   /** Elements to display within the Form. */
@@ -12,7 +12,7 @@ interface IForm {
 
 /** Form element with custom styles. */
 const Form: React.FC<IForm> = ({ onSubmit, children, className, ...filteredProps }) => {
-  const handleSubmit: React.FormEventHandler = React.useCallback(
+  const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = React.useCallback(
     (event) => {
       event.preventDefault();
 

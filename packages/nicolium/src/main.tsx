@@ -1,4 +1,14 @@
-(window as any).__PL_API_FALLBACK_ACCOUNT = { id: '', acct: 'undefined', url: location.origin };
+window.__PL_API_FALLBACK_ACCOUNT = { id: '', acct: 'undefined', url: location.origin };
+
+declare global {
+  interface Window {
+    __PL_API_FALLBACK_ACCOUNT: {
+      id: string;
+      acct: string;
+      url: string;
+    };
+  }
+}
 
 import './polyfills';
 import React from 'react';

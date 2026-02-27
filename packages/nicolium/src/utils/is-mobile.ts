@@ -5,7 +5,7 @@ const LAYOUT_BREAKPOINT = 581;
 const isMobile = (width: number) => width <= LAYOUT_BREAKPOINT;
 
 /** Whether the device is iOS (best guess). */
-const iOS: boolean = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+const iOS: boolean = /iPad|iPhone|iPod/.test(navigator.userAgent) && !('MSStream' in window);
 
 const userTouching = window.matchMedia('(pointer: coarse)');
 

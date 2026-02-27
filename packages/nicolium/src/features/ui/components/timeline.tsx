@@ -45,7 +45,7 @@ const Timeline: React.FC<ITimeline> = ({ timelineId, onLoadMore, prefix, ...rest
   );
 
   const handleDequeueTimeline = useCallback(() => {
-    dispatch(dequeueTimeline(timelineId, onLoadMore));
+    dispatch(dequeueTimeline(timelineId, onLoadMore ? () => onLoadMore(lastStatusId!) : undefined));
   }, []);
 
   const handleScroll = useCallback(

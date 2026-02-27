@@ -91,7 +91,7 @@ interface TimelineDequeueAction {
 }
 
 const dequeueTimeline =
-  (timelineId: string, expandFunc?: (lastStatusId: string) => void) =>
+  (timelineId: string, expandFunc?: () => void) =>
   (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const queuedCount = state.timelines[timelineId]?.totalQueuedItemsCount || 0;
@@ -105,7 +105,6 @@ const dequeueTimeline =
 
     if (typeof expandFunc === 'function') {
       dispatch(clearTimeline(timelineId));
-      // @ts-expect-error
       expandFunc();
     } else if (timelineId === 'home') {
       dispatch(clearTimeline(timelineId));

@@ -140,7 +140,7 @@ const cloneNotification = (notification: Notification): ClonedNotification => {
 
   // Object.assign() does not work with notifications
   for (k in notification) {
-    clone[k] = (notification as any)[k];
+    clone[k] = notification[k as keyof Notification];
   }
 
   return clone as ClonedNotification;
