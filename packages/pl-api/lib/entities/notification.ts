@@ -129,7 +129,7 @@ const notificationSchema: v.BaseSchema<any, Notification, v.BaseIssue<unknown>> 
     eventParticipationRequestNotificationSchema,
     biteNotificationSchema,
   ]),
-) as any;
+);
 
 /**
  * @category Entity types

@@ -33,7 +33,7 @@ const streaming = (client: PlApiBaseClient) => ({
       { access_token: client.accessToken },
     );
 
-    const ws = new WebSocket(path, client.accessToken as any);
+    const ws = new WebSocket(path, client.accessToken);
 
     let listeners: Array<{ listener: (event: StreamingEvent) => any; stream?: string }> = [];
     const queue: Array<() => any> = [];

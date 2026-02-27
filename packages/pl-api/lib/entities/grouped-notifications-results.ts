@@ -134,7 +134,7 @@ const notificationGroupSchema: v.BaseSchema<any, NotificationGroup, v.BaseIssue<
     chatMentionNotificationGroupSchema,
     eventParticipationRequestNotificationGroupSchema,
   ]),
-) as any;
+);
 
 /**
  * @category Entity types

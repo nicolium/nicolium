@@ -221,7 +221,7 @@ const statusSchema: v.BaseSchema<any, Status, v.BaseIssue<unknown>> = v.pipe(
 
     quote: v.fallback(v.nullable(v.lazy(() => v.union([quoteSchema, shallowQuoteSchema]))), null),
   }),
-) as any;
+);
 
 /**
  * @category Schemas

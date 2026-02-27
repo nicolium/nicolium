@@ -34,7 +34,7 @@ const driveFolderSchema: v.BaseSchema<any, DriveFolder, v.BaseIssue<unknown>> = 
     ...baseDriveFolderSchema.entries,
     folders: filteredArray(v.lazy(() => driveFolderSchema)),
   }),
-) as any;
+);
 
 /**
  * @category Entity types
