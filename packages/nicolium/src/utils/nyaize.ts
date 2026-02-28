@@ -39,9 +39,11 @@ const nyaize = (text: string) =>
     )
     .replaceAll('ą', 'au')
     .replaceAll('Ą', 'AU')
-    .replace(/\bnie\b/g, 'niau')
-    .replace(/\bNie\b/g, 'Niau')
-    .replace(/\bNIE\b/g, 'NIAU')
+    .replace(/\bnie\b/gi, (match) => {
+      if (match === 'NIE') return 'NIAU';
+      if (match === 'Nie') return 'Niau';
+      return 'niau';
+    })
     // ru-RU
     .replaceAll(
       'а',
