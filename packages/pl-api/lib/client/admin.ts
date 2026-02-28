@@ -805,24 +805,18 @@ const admin = (client: PlApiBaseClient) => {
       /**
        * Delete an individual reported status
        *
-       * Requires features{@link Features.pleromaAdminStatuses}.
+       * Requires features{@link Features.adminDeleteStatus}.
        * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#delete-apiv1pleromaadminstatusesid}
        */
       deleteStatus: async (statusId: string) => {
-        let response;
-
-        if (client.features.version.software === MITRA) {
-          response = await client.request<EmptyObject>(`/api/v1/admin/posts/${statusId}`, {
+        const response = await client.request<EmptyObject>(
+          client.features.version.software === MITRA
+            ? `/api/v1/admin/posts/${statusId}`
+            : `/api/v1/pleroma/admin/statuses/${statusId}`,
+          {
             method: 'DELETE',
-          });
-        } else {
-          response = await client.request<EmptyObject>(
-            `/api/v1/pleroma/admin/statuses/${statusId}`,
-            {
-              method: 'DELETE',
-            },
-          );
-        }
+          },
+        );
 
         return response.json;
       },
