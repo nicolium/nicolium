@@ -2,7 +2,7 @@ name: Nicolium CI
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "develop", "semistable" ]
   pull_request:
     branches: [ "develop" ]
 
@@ -107,7 +107,7 @@ jobs:
 
   deploy:
     needs: build
-    if: github.ref == 'refs/heads/develop'
+    if: github.ref == 'refs/heads/semistable'
 
     permissions:
       pages: write
