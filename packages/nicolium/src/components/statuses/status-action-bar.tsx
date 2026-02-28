@@ -1292,7 +1292,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         });
       }
 
-      if (!ownAccount) {
+      if (!ownAccount && features.adminDeleteStatus) {
         menu.push({
           text: intl.formatMessage(messages.deleteStatus),
           action: handleDeleteStatus,

@@ -341,6 +341,13 @@ const getFeatures = (instance: Instance) => {
     adminCustomEmojis: v.software === GOTOSOCIAL,
 
     /**
+     * Ability to delete statuses by admins.
+     * @see DELETE /api/v1/pleroma/admin/statuses/:id
+     * @see DELETE /api/v1/admin/posts/:id
+     */
+    adminDeleteStatus: any([v.software === AKKOMA, v.software === MITRA, v.software === PLEROMA]),
+
+    /**
      * Ability to manage instance rules by admins.
      * @see GET /api/v1/pleroma/admin/rules
      * @see POST /api/v1/pleroma/admin/rules
