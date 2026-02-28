@@ -20,26 +20,26 @@ const nyaize = (text: string) =>
     .replaceAll('ナ', 'ニャ')
     .replaceAll('ﾅ', 'ﾆｬ')
     // en-US
-    .replaceAll(
-      'a',
+    .replace(
+      /a/gi,
       ifAfter('n', (x) => (x === 'A' ? 'YA' : 'ya')),
     )
-    .replaceAll(
-      'ing',
+    .replace(
+      /ing/gi,
       ifAfter('morn', (x) => (x === 'ING' ? 'YAN' : 'yan')),
     )
-    .replaceAll(
-      'one',
+    .replace(
+      /one/gi,
       ifAfter('every', (x) => (x === 'ONE' ? 'NYAN' : 'nyan')),
     )
     // pl-PL
-    .replaceAll(
-      'ł',
+    .replace(
+      /ł/gi,
       ifAfter('mia', (x) => (x === 'Ł' ? 'U' : 'u')),
     )
     // ru-RU
-    .replaceAll(
-      'а',
+    .replace(
+      /а/gi,
       ifAfter('н', (x) => (x === 'А' ? 'Я' : 'я')),
     )
     // ko-KR
