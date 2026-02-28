@@ -18,4 +18,18 @@ describe('nyaize', () => {
       "miauam wydać nicolium v1 w 2024 :'/",
     );
   });
+
+  it('nyaizes polish ą to au', () => {
+    expect(nyaize('mają')).toBe('majau');
+  });
+
+  it('nyaizes polish nie to niau', () => {
+    expect(nyaize('nie wiem')).toBe('niau wiem');
+    expect(nyaize('Nie ma')).toBe('Niau ma');
+    expect(nyaize('NIE!')).toBe('NIAU!');
+  });
+
+  it('does not nyaize nie inside words', () => {
+    expect(nyaize('niebo')).toBe('niebo');
+  });
 });

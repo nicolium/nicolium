@@ -37,6 +37,11 @@ const nyaize = (text: string) =>
       'ł',
       ifAfter('mia', (x) => (x === 'Ł' ? 'U' : 'u')),
     )
+    .replaceAll('ą', 'au')
+    .replaceAll('Ą', 'AU')
+    .replace(/\bnie\b/g, 'niau')
+    .replace(/\bNie\b/g, 'Niau')
+    .replace(/\bNIE\b/g, 'NIAU')
     // ru-RU
     .replaceAll(
       'а',
