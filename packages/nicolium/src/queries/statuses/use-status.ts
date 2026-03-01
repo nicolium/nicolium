@@ -118,7 +118,6 @@ const useStatus = (
     statusQuery.data,
     reblogQuery.data,
     quoteQuery.data,
-    account.data,
     clientFilterResults,
   ]) as unknown as UseQueryResult<SelectedStatus> & { refetchContext: () => void };
 };
