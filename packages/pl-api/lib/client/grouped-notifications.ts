@@ -4,9 +4,9 @@ import { accountSchema, groupedNotificationsResultsSchema } from '@/entities';
 import { filteredArray } from '@/entities/utils';
 
 import { type RequestMeta } from '../request';
+import { PaginatedResponse } from '../responses';
 import { pick, omit } from '../utils';
 
-import type { PaginatedResponse } from '../responses';
 import type { notifications } from './notifications';
 import type { PlApiBaseClient } from '@/client-base';
 import type {
@@ -158,12 +158,11 @@ const groupedNotifications = (
 
       const response = await client.request(`/api/v1/notifications/${groupKey}`);
 
-      return groupNotifications({
-        previous: null,
-        next: null,
-        items: [response.json],
-        partial: false,
-      }).items;
+      return groupNotifications(
+        new PaginatedResponse([response.json], {
+          partial: false,
+        }),
+      ).items;
     },
 
     /**

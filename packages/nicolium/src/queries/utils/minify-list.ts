@@ -1,23 +1,22 @@
 import { notifyManager } from '@tanstack/react-query';
+import {
+  PaginatedResponse,
+  type Account,
+  type AdminAccount,
+  type AdminReport,
+  type BlockedAccount,
+  type Conversation,
+  type Group,
+  type GroupedNotificationsResults,
+  type MutedAccount,
+  type NotificationGroup,
+  type Status,
+} from 'pl-api';
 
 import { importEntities } from '@/actions/importer';
 
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';
-
-import type {
-  Account,
-  AdminAccount,
-  AdminReport,
-  BlockedAccount,
-  Conversation,
-  Group,
-  GroupedNotificationsResults,
-  MutedAccount,
-  NotificationGroup,
-  PaginatedResponse,
-  Status,
-} from 'pl-api';
 
 const minifyList = <T1, T2, IsArray extends boolean = true>(
   { previous, next, items, ...response }: PaginatedResponse<T1, IsArray>,
@@ -31,7 +30,7 @@ const minifyList = <T1, T2, IsArray extends boolean = true>(
     isArray ? (items as T1[]).map(minifier) : minifier(items as T1)
   ) as PaginatedResponse<T2, IsArray>['items'];
 
-  return {
+  return new PaginatedResponse(minifiedItems, {
     ...response,
     previous: previous
       ? () =>
@@ -40,8 +39,7 @@ const minifyList = <T1, T2, IsArray extends boolean = true>(
     next: next
       ? () => next().then((list) => minifyList<T1, T2, IsArray>(list, minifier, importer, isArray))
       : null,
-    items: minifiedItems,
-  };
+  });
 };
 
 const minifyStatusList = (response: PaginatedResponse<Status>): PaginatedResponse<string> =>
@@ -188,14 +186,14 @@ const minifyAdminReport = ({
   statuses,
   ...adminReport
 }: AdminReport) => {
-  minifyAdminAccountList({
-    items: [account, action_taken_by_account, assigned_account, target_account].filter(
-      (a): a is AdminAccount => !!a,
+  minifyAdminAccountList(
+    new PaginatedResponse(
+      [account, action_taken_by_account, assigned_account, target_account].filter(
+        (a): a is AdminAccount => !!a,
+      ),
+      { partial: false },
     ),
-    previous: null,
-    next: null,
-    partial: false,
-  });
+  );
 
   importEntities({
     accounts: [

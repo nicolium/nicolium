@@ -26,8 +26,8 @@ import {
 import { filteredArray } from '@/entities/utils';
 
 import { GOTOSOCIAL, MITRA, PLEROMA } from '../features';
+import { PaginatedResponse } from '../responses';
 
-import type { PaginatedResponse } from '../responses';
 import type { PlApiBaseClient } from '@/client-base';
 import type {
   AdminAccount,
@@ -89,7 +89,7 @@ const paginatedPleromaAccounts = async (
 
   const adminAccounts = v.parse(filteredArray(adminAccountSchema), response.json?.users);
 
-  return {
+  return new PaginatedResponse(adminAccounts, {
     previous: params.page
       ? () => paginatedPleromaAccounts(client, { ...params, page: params.page! - 1 })
       : null,
@@ -98,10 +98,9 @@ const paginatedPleromaAccounts = async (
       params.page_size * ((params.page || 1) - 1) + response.json?.users?.length
         ? () => paginatedPleromaAccounts(client, { ...params, page: (params.page || 0) + 1 })
         : null,
-    items: adminAccounts,
     partial: response.status === 206,
     total: response.json?.count,
-  };
+  });
 };
 
 const paginatedPleromaReports = async (
@@ -115,7 +114,7 @@ const paginatedPleromaReports = async (
 ): Promise<PaginatedResponse<AdminReport>> => {
   const response = await client.request('/api/v1/pleroma/admin/reports', { params });
 
-  return {
+  return new PaginatedResponse(v.parse(filteredArray(adminReportSchema), response.json?.reports), {
     previous: params.page
       ? () => paginatedPleromaReports(client, { ...params, page: params.page! - 1 })
       : null,
@@ -124,10 +123,9 @@ const paginatedPleromaReports = async (
       params.page_size * ((params.page || 1) - 1) + response.json?.reports?.length
         ? () => paginatedPleromaReports(client, { ...params, page: (params.page || 0) + 1 })
         : null,
-    items: v.parse(filteredArray(adminReportSchema), response.json?.reports),
     partial: response.status === 206,
     total: response.json?.total,
-  };
+  });
 };
 
 const paginatedPleromaStatuses = async (
@@ -142,16 +140,15 @@ const paginatedPleromaStatuses = async (
 ): Promise<PaginatedResponse<Status>> => {
   const response = await client.request('/api/v1/pleroma/admin/statuses', { params });
 
-  return {
+  return new PaginatedResponse(v.parse(filteredArray(statusSchema), response.json), {
     previous: params.page
       ? () => paginatedPleromaStatuses(client, { ...params, page: params.page! - 1 })
       : null,
     next: response.json?.length
       ? () => paginatedPleromaStatuses(client, { ...params, page: (params.page || 0) + 1 })
       : null,
-    items: v.parse(filteredArray(statusSchema), response.json),
     partial: response.status === 206,
-  };
+  });
 };
 
 const admin = (client: PlApiBaseClient) => {
@@ -1189,8 +1186,7 @@ const admin = (client: PlApiBaseClient) => {
 
         const items = v.parse(filteredArray(adminAnnouncementSchema), response.json);
 
-        return {
-          previous: null,
+        return new PaginatedResponse(items, {
           next: items.length
             ? () =>
                 category.announcements.getAnnouncements({
@@ -1198,9 +1194,8 @@ const admin = (client: PlApiBaseClient) => {
                   offset: (params?.offset || 0) + items.length,
                 })
             : null,
-          items,
           partial: false,
-        };
+        });
       },
 
       /**
@@ -1336,7 +1331,7 @@ const admin = (client: PlApiBaseClient) => {
 
         const items = v.parse(filteredArray(adminModerationLogEntrySchema), response.json.items);
 
-        return {
+        return new PaginatedResponse(items, {
           previous:
             params.page && params.page > 1
               ? () => category.moderationLog.getModerationLog({ ...params, page: params.page! - 1 })
@@ -1349,9 +1344,8 @@ const admin = (client: PlApiBaseClient) => {
                     page: (params.page || 1) + 1,
                   })
               : null,
-          items,
           partial: response.status === 206,
-        };
+        });
       },
     },
 

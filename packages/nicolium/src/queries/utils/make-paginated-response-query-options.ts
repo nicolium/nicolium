@@ -31,12 +31,7 @@ const makePaginatedResponseQueryOptions =
     infiniteQueryOptions({
       queryKey: typeof queryKey === 'object' ? queryKey : queryKey(...params),
       queryFn: ({ pageParam }) => pageParam.next?.() ?? queryFn(getClient(), params),
-      initialPageParam: {
-        previous: null,
-        next: null,
-        items: [] as unknown as PaginatedResponse<T2, IsArray>['items'],
-        partial: false,
-      } as Awaited<ReturnType<typeof queryFn>>,
+      initialPageParam: { next: null as (() => Promise<PaginatedResponse<T2, IsArray>>) | null },
       getNextPageParam: (page) => (page.next ? page : undefined),
       select:
         select ??
@@ -49,9 +44,7 @@ const makePaginatedResponseQueryOptions =
 
           if (Array.isArray(lastPage.items)) {
             const items = PaginatedResponseArray.from(
-              data.pages.flatMap((page) =>
-                Array.isArray(page.items) ? page.items : [page.items],
-              ),
+              data.pages.flatMap((page) => (Array.isArray(page.items) ? page.items : [page.items])),
             ).setMeta(lastPage.total, lastPage.partial);
 
             return items as T3;

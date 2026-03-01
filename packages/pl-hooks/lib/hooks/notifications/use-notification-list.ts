@@ -67,10 +67,7 @@ const useNotificationList = (
               exclude_types: params.excludeTypes,
             })
         ).then(importNotifications),
-      initialPageParam: { previous: null, next: null } as Pick<
-        PaginatedResponse<BaseNotification>,
-        'previous' | 'next'
-      >,
+      initialPageParam: { next: null as (() => Promise<PaginatedResponse<BaseNotification>>) | null },
       getNextPageParam: (response) => response,
     },
     queryClient,
@@ -94,10 +91,7 @@ const prefetchNotifications = (client: PlApiClient, params: UseNotificationParam
           exclude_types: params.excludeTypes,
         })
         .then(importNotifications),
-    initialPageParam: { previous: null, next: null } as Pick<
-      PaginatedResponse<BaseNotification>,
-      'previous' | 'next'
-    >,
+    initialPageParam: { next: null as (() => Promise<PaginatedResponse<BaseNotification>>) | null },
   });
 
 export { useNotificationList, prefetchNotifications };

@@ -77,12 +77,7 @@ const prefetchFollowRequests = (client: PlApiClient) =>
     queryKey: queryKeys.accountsLists.followRequests,
     queryFn: ({ pageParam }) =>
       pageParam.next?.() ?? client.myAccount.getFollowRequests().then(minifyAccountList),
-    initialPageParam: {
-      previous: null,
-      next: null,
-      items: [],
-      partial: false,
-    } as PaginatedResponse<string>,
+    initialPageParam: { next: null as (() => Promise<PaginatedResponse<string>>) | null },
   });
 
 export {

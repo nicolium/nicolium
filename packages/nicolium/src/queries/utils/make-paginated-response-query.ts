@@ -24,8 +24,18 @@ class PaginatedResponseArray<T> extends Array<T> {
 
   /** Set metadata as non-enumerable to preserve TanStack Query structural sharing. */
   setMeta(total: number | undefined, partial: boolean | undefined): this {
-    Object.defineProperty(this, 'total', { value: total, writable: true, enumerable: false, configurable: true });
-    Object.defineProperty(this, 'partial', { value: partial, writable: true, enumerable: false, configurable: true });
+    Object.defineProperty(this, 'total', {
+      value: total,
+      writable: true,
+      enumerable: false,
+      configurable: true,
+    });
+    Object.defineProperty(this, 'partial', {
+      value: partial,
+      writable: true,
+      enumerable: false,
+      configurable: true,
+    });
     return this;
   }
 }
@@ -57,12 +67,7 @@ const makePaginatedResponseQuery =
     return useInfiniteQuery({
       queryKey: typeof queryKey === 'object' ? queryKey : queryKey(...params),
       queryFn: ({ pageParam }) => pageParam.next?.() ?? queryFn(client, params),
-      initialPageParam: {
-        previous: null,
-        next: null,
-        items: [] as unknown as PaginatedResponse<T2, IsArray>['items'],
-        partial: false,
-      } as Awaited<ReturnType<typeof queryFn>>,
+      initialPageParam: { next: null as (() => Promise<PaginatedResponse<T2, IsArray>>) | null },
       getNextPageParam: (page) => (page.next ? page : undefined),
       select:
         select ??
@@ -75,9 +80,7 @@ const makePaginatedResponseQuery =
 
           if (Array.isArray(lastPage.items)) {
             const items = PaginatedResponseArray.from(
-              data.pages.flatMap((page) =>
-                Array.isArray(page.items) ? page.items : [page.items],
-              ),
+              data.pages.flatMap((page) => (Array.isArray(page.items) ? page.items : [page.items])),
             ).setMeta(lastPage.total, lastPage.partial);
 
             return items as T3;

@@ -9,7 +9,7 @@ import sumBy from 'lodash/sumBy';
 import {
   type Chat,
   type ChatMessage as BaseChatMessage,
-  type PaginatedResponse,
+  PaginatedResponse,
   chatMessageSchema,
 } from 'pl-api';
 import * as v from 'valibot';
@@ -44,12 +44,12 @@ const normalizeChatMessagesList = ({
   next,
   items,
   ...response
-}: PaginatedResponse<BaseChatMessage>): PaginatedResponse<ChatMessage> => ({
-  ...response,
-  previous: previous ? () => previous().then((res) => normalizeChatMessagesList(res)) : null,
-  next: next ? () => next().then((res) => normalizeChatMessagesList(res)) : null,
-  items: items.map(normalizeChatMessage),
-});
+}: PaginatedResponse<BaseChatMessage>): PaginatedResponse<ChatMessage> =>
+  new PaginatedResponse(items.map(normalizeChatMessage), {
+    ...response,
+    previous: previous ? () => previous().then((res) => normalizeChatMessagesList(res)) : null,
+    next: next ? () => next().then((res) => normalizeChatMessagesList(res)) : null,
+  });
 
 const useChatMessages = (chat: Chat) => {
   const client = useClient();

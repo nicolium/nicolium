@@ -13,8 +13,8 @@ import { filteredArray } from '@/entities/utils';
 
 import { GOTOSOCIAL, ICESHRIMP_NET, MITRA, PIXELFED, PLEROMA } from '../features';
 import { getNextLink, getPrevLink } from '../request';
+import { PaginatedResponse } from '../responses';
 
-import type { PaginatedResponse } from '../responses';
 import type { accounts } from './accounts';
 import type { PlApiBaseClient } from '@/client-base';
 import type { Account } from '@/entities';
@@ -44,12 +44,11 @@ const paginatedIceshrimpAccountsList = async <T>(
   const prevLink = getPrevLink(response);
   const nextLink = getNextLink(response);
 
-  return {
+  return new PaginatedResponse(items, {
     previous: prevLink ? () => paginatedIceshrimpAccountsList(client, prevLink, fn) : null,
     next: nextLink ? () => paginatedIceshrimpAccountsList(client, nextLink, fn) : null,
-    items,
     partial: response.status === 206,
-  };
+  });
 };
 
 const myAccount = (client: PlApiBaseClient & { accounts: ReturnType<typeof accounts> }) => ({

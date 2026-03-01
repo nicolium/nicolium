@@ -1,4 +1,5 @@
 import { type InfiniteData, useInfiniteQuery, useMutation } from '@tanstack/react-query';
+import { type InteractionRequest, PaginatedResponse } from 'pl-api';
 
 import { importEntities } from '@/actions/importer';
 import { useClient } from '@/hooks/use-client';
@@ -6,8 +7,6 @@ import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 
 import { queryKeys } from '../keys';
-
-import type { InteractionRequest, PaginatedResponse } from 'pl-api';
 
 const minifyInteractionRequest = ({
   account,
@@ -31,12 +30,11 @@ const minifyInteractionRequestsList = ({
 }: PaginatedResponse<InteractionRequest>): PaginatedResponse<MinifiedInteractionRequest> => {
   importEntities({ statuses: items.flatMap((item) => [item.status, item.reply]) });
 
-  return {
+  return new PaginatedResponse(items.map(minifyInteractionRequest), {
     ...response,
     previous: previous ? () => previous().then(minifyInteractionRequestsList) : null,
     next: next ? () => next().then(minifyInteractionRequestsList) : null,
-    items: items.map(minifyInteractionRequest),
-  };
+  });
 };
 
 const useInteractionRequests = <T>(
@@ -52,11 +50,8 @@ const useInteractionRequests = <T>(
       pageParam.next?.() ??
       client.interactionRequests.getInteractionRequests().then(minifyInteractionRequestsList),
     initialPageParam: {
-      previous: null,
-      next: null,
-      items: [],
-      partial: false,
-    } as PaginatedResponse<MinifiedInteractionRequest>,
+      next: null as (() => Promise<PaginatedResponse<MinifiedInteractionRequest>>) | null,
+    },
     getNextPageParam: (page) => (page.next ? page : undefined),
     enabled: isLoggedIn && features.interactionRequests,
     select,

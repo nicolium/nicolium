@@ -4,12 +4,12 @@ import { instanceSchema } from './entities/instance';
 import { filteredArray } from './entities/utils';
 import { type Features, getFeatures } from './features';
 import request, { getNextLink, getPrevLink, type RequestBody } from './request';
+import { PaginatedResponse } from './responses';
 
 import type { Instance } from './entities/instance';
 import type { StreamingEvent } from './entities/streaming-event';
 import type { StreamingParams } from './params/streaming';
 import type { Response as PlApiResponse } from './request';
-import type { PaginatedResponse } from './responses';
 
 interface PlApiClientConstructorOpts {
   /** Instance object to use by default, to be populated eg. from cache */
@@ -65,16 +65,18 @@ class PlApiBaseClient {
     body: RequestBody,
     schema: v.BaseSchema<any, T, v.BaseIssue<unknown>>,
     isArray = true as IsArray,
-  ): Promise<PaginatedResponse<T, typeof isArray>> => {
+  ) => {
     const targetSchema = isArray ? filteredArray(schema) : schema;
 
     const processResponse = (response: PlApiResponse<any>) =>
-      ({
-        previous: getMore(getPrevLink(response)),
-        next: getMore(getNextLink(response)),
-        items: v.parse(targetSchema, response.json),
-        partial: response.status === 206,
-      }) as PaginatedResponse<T, IsArray>;
+      new PaginatedResponse<T, IsArray>(
+        v.parse(targetSchema, response.json) as IsArray extends true ? Array<T> : T,
+        {
+          previous: getMore(getPrevLink(response)),
+          next: getMore(getNextLink(response)),
+          partial: response.status === 206,
+        },
+      );
 
     const getMore = (input: string | null) =>
       input ? () => this.request(input).then(processResponse) : null;
