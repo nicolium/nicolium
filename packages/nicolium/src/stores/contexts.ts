@@ -291,23 +291,11 @@ const useThread = (statusId?: string, linear?: boolean) => {
   }, [inReplyTos, replies, statusId, linear]);
 };
 
-const useReplyToId = (statusId?: string) => {
-  const inReplyTos = useContextStore((state) => state.inReplyTos);
+const useReplyToId = (statusId?: string) =>
+  useContextStore((state) => (statusId ? state.inReplyTos[statusId] : undefined));
 
-  return useMemo(() => {
-    if (!statusId) return undefined;
-    return inReplyTos[statusId];
-  }, [inReplyTos, statusId]);
-};
-
-const useReplyCount = (statusId?: string) => {
-  const replies = useContextStore((state) => state.replies);
-
-  return useMemo(() => {
-    if (!statusId) return 0;
-    return replies[statusId]?.length || 0;
-  }, [replies, statusId]);
-};
+const useReplyCount = (statusId?: string) =>
+  useContextStore((state) => (statusId ? (state.replies[statusId]?.length ?? 0) : 0));
 
 const useContextsActions = () => useContextStore((state) => state.actions);
 
