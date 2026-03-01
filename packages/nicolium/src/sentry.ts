@@ -1,7 +1,7 @@
 import { NODE_ENV } from '@/build-config';
 import sourceCode from '@/utils/code';
 
-import type { CaptureContext, UserFeedback } from '@sentry/types';
+import type { CaptureContext, SendFeedbackParams } from '@sentry/core';
 import type { Account } from 'pl-api';
 import type { SetOptional } from 'type-fest';
 
@@ -69,10 +69,10 @@ const captureSentryException = async (
 
 /** Capture user feedback and report it to Sentry. */
 const captureSentryFeedback = async (
-  feedback: SetOptional<UserFeedback, 'name' | 'email'>,
+  feedback: SetOptional<SendFeedbackParams, 'name' | 'email'>,
 ): Promise<void> => {
   const Sentry = await import('@sentry/react');
-  Sentry.captureUserFeedback(feedback as UserFeedback);
+  Sentry.captureFeedback(feedback);
 };
 
 export {
