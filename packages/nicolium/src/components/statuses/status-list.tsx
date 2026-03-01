@@ -8,6 +8,7 @@ import ScrollableList, { type IScrollableList } from '@/components/scrollable-li
 import StatusContainer from '@/containers/status-container';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import PendingStatus from '@/features/ui/components/pending-status';
+import { timelineToFilterContextType } from '@/queries/settings/use-filters';
 import { selectChild } from '@/utils/scroll-utils';
 
 import Icon from '../ui/icon';
@@ -65,6 +66,8 @@ const StatusList: React.FC<IStatusList> = ({
   ...other
 }) => {
   const node = useRef<VirtuosoHandle | null>(null);
+
+  const contextType = timelineToFilterContextType(timelineId);
 
   const getFeaturedStatusCount = () => featuredStatusIds?.length ?? 0;
 
@@ -139,7 +142,7 @@ const StatusList: React.FC<IStatusList> = ({
       id={statusId}
       onMoveUp={handleMoveUp}
       onMoveDown={handleMoveDown}
-      contextType={timelineId}
+      contextType={contextType}
       showGroup={showGroup}
       variant='slim'
       fromBookmarks={other.scrollKey === 'bookmarked_statuses'}
@@ -164,7 +167,7 @@ const StatusList: React.FC<IStatusList> = ({
           featured
           onMoveUp={handleMoveUp}
           onMoveDown={handleMoveDown}
-          contextType={timelineId}
+          contextType={contextType}
           showGroup={showGroup}
           variant='slim'
         />

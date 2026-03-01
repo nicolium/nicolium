@@ -3,15 +3,18 @@ import { useMemo } from 'react';
 
 import { importEntities } from '@/actions/importer';
 import { useClient } from '@/hooks/use-client';
+import { useFeatures } from '@/hooks/use-features';
 import { normalizeStatus, type NormalizedStatus } from '@/normalizers/status';
+import { useFilters } from '@/queries/settings/use-filters';
 import { useContextsActions } from '@/stores/contexts';
+import { checkFiltered } from '@/utils/filters';
 
 import { useAccount } from '../accounts/use-account';
 import { useAccounts } from '../accounts/use-accounts';
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';
 
-import type { Context, AsyncRefreshHeader, Account } from 'pl-api';
+import type { Context, AsyncRefreshHeader, Account, Filter, FilterResult } from 'pl-api';
 
 const minifyContext = ({
   ancestors,
@@ -71,10 +74,23 @@ const useStatusQuery = (statusId?: string) => {
   }, [statusQuery.data, account.data, accounts]) as unknown as UseQueryResult<NormalizedStatus>;
 };
 
+const emptyFilters: Array<Filter> = [];
+const emptyFilterResults: Array<FilterResult> = [];
+const selectAllFilters = (data: Array<Filter>) => data;
+const selectNoFilters = () => emptyFilters;
+
 const useStatus = (
   statusId?: string,
-  { withContext }: { withContext?: boolean; contextType?: string } = {},
+  {
+    withContext,
+    withFilteredResults,
+  }: { withContext?: boolean; withFilteredResults?: boolean } = {},
 ) => {
+  const features = useFeatures();
+  const withClientSideFilters = !!(features.filters && !features.filtersV2 && withFilteredResults);
+
+  const { data: filters } = useFilters(withClientSideFilters ? selectAllFilters : selectNoFilters);
+
   const { refetch: refetchContext } = useStatusContext(withContext ? statusId : undefined);
 
   const statusQuery = useStatusQuery(statusId);
@@ -84,8 +100,16 @@ const useStatus = (
 
   const account = useAccount(statusQuery.data?.account_id ?? undefined);
 
+  const clientFilterResults = useMemo(() => {
+    if (!withClientSideFilters || !filters?.length || !statusQuery.data) return emptyFilterResults;
+    return checkFiltered(statusQuery.data.search_index, filters);
+  }, [withClientSideFilters, filters, statusQuery.data?.search_index]);
+
   return useMemo(() => {
     if (!statusQuery.data) return { ...statusQuery, refetchContext };
+
+    const filtered = withClientSideFilters ? clientFilterResults : statusQuery.data.filtered;
+
     return {
       ...statusQuery,
       data: {
@@ -93,6 +117,7 @@ const useStatus = (
         account: account.data!,
         reblog: reblogQuery.data ?? null,
         quote: quoteQuery.data ?? null,
+        filtered,
       },
       refetchContext,
     };
@@ -101,6 +126,7 @@ const useStatus = (
     reblogQuery.data,
     quoteQuery.data,
     account.data,
+    clientFilterResults,
   ]) as unknown as UseQueryResult<SelectedStatus> & { refetchContext: () => void };
 };
 

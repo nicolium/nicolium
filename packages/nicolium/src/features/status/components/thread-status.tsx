@@ -7,9 +7,11 @@ import PlaceholderStatus from '@/features/placeholder/components/placeholder-sta
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useReplyCount, useReplyToId } from '@/stores/contexts';
 
+import type { FilterContextType } from '@/queries/settings/use-filters';
+
 interface IThreadStatus {
   id: string;
-  contextType?: string;
+  contextType?: FilterContextType;
   focusedStatusId: string;
   onMoveUp: (id: string) => void;
   onMoveDown: (id: string) => void;

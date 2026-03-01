@@ -6,69 +6,11 @@ import { queryKeys } from '@/queries/keys';
 import { useSettingsStore } from '@/stores/settings';
 import { getDomain } from '@/utils/accounts';
 import ConfigDB from '@/utils/config-db';
+import { regexFromFilters } from '@/utils/filters';
 import { shouldFilter } from '@/utils/timelines';
 
 import type { MRFSimple } from '@/schemas/pleroma';
 import type { RootState } from '@/store';
-import type { Filter } from 'pl-api';
-
-const escapeRegExp = (string: string) => string.replaceAll(/[.*+?^${}()|[\]\\]/g, '\\$&'); // $& means the whole matched string
-
-const regexFromFilters = (filters: Array<Filter>) => {
-  if (filters.length === 0) return null;
-
-  return new RegExp(
-    filters
-      .map((filter) =>
-        filter.keywords
-          .map((keyword) => {
-            let expr = escapeRegExp(keyword.keyword);
-
-            if (keyword.whole_word) {
-              if (/^[\w]/.test(expr)) {
-                expr = `\\b${expr}`;
-              }
-
-              if (/[\w]$/.test(expr)) {
-                expr = `${expr}\\b`;
-              }
-            }
-
-            return expr;
-          })
-          .join('|'),
-      )
-      .join('|'),
-    'i',
-  );
-};
-
-// const checkFiltered = (index: string, filters: Array<Filter>) =>
-//   filters.reduce(
-//     (result: Array<FilterResult>, filter) =>
-//       result.concat(
-//         filter.keywords.reduce((result: Array<FilterResult>, keyword) => {
-//           let expr = escapeRegExp(keyword.keyword);
-
-//           if (keyword.whole_word) {
-//             if (/^[\w]/.test(expr)) {
-//               expr = `\\b${expr}`;
-//             }
-
-//             if (/[\w]$/.test(expr)) {
-//               expr = `${expr}\\b`;
-//             }
-//           }
-
-//           const regex = new RegExp(expr);
-
-//           if (regex.test(index))
-//             return result.concat({ filter, keyword_matches: null, status_matches: null });
-//           return result;
-//         }, []),
-//       ),
-//     [],
-//   );
 
 const getSimplePolicy = createSelector(
   [

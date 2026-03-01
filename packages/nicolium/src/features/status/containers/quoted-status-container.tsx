@@ -9,7 +9,7 @@ interface IQuotedStatusContainer {
 }
 
 const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({ statusId }) => {
-  const { data: status } = useStatus(statusId);
+  const { data: status } = useStatus(statusId, { withFilteredResults: true });
 
   if (!status) {
     return null;

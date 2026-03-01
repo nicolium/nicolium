@@ -40,6 +40,8 @@ import StatusReactionsBar from './status-reactions-bar';
 import StatusReplyMentions from './status-reply-mentions';
 import Tombstone from './tombstone';
 
+import type { FilterContextType } from '@/queries/settings/use-filters';
+
 const messages = defineMessages({
   edited: { id: 'status.edited', defaultMessage: 'Edited {date}' },
   rebloggedBy: { id: 'status.reblogged_by', defaultMessage: '{name} reposted' },
@@ -154,6 +156,7 @@ interface IStatus {
   status: SelectedStatus;
   onClick?: () => void;
   muted?: boolean;
+  contextType?: FilterContextType;
   unread?: boolean;
   onMoveUp?: (statusId: string, featured?: boolean) => void;
   onMoveDown?: (statusId: string, featured?: boolean) => void;
@@ -188,6 +191,7 @@ const Status: React.FC<IStatus> = (props) => {
     fromBookmarks = false,
     fromHomeTimeline = false,
     className,
+    contextType,
   } = props;
 
   const intl = useIntl();
@@ -202,7 +206,8 @@ const Status: React.FC<IStatus> = (props) => {
   const didShowCard = useRef(false);
   const node = useRef<HTMLDivElement>(null);
 
-  const actualStatus = useStatus(status.reblog_id || undefined).data || status;
+  const actualStatus =
+    useStatus(status.reblog_id || undefined, { withFilteredResults: true }).data || status;
 
   const { data: group } = useGroupQuery(actualStatus.group_id ?? undefined);
 
@@ -214,8 +219,12 @@ const Status: React.FC<IStatus> = (props) => {
   const isReblog = status.reblog_id;
 
   const filterResults = useMemo(() => {
+    if (!contextType) return [];
+
     return [...status.filtered, ...actualStatus.filtered]
-      .filter(({ filter }) => filter.filter_action === 'warn')
+      .filter(
+        ({ filter }) => filter.filter_action === 'warn' && filter.context.includes(contextType),
+      )
       .reduce(
         (uniqueFilters, current) => {
           if (
@@ -227,7 +236,7 @@ const Status: React.FC<IStatus> = (props) => {
         },
         [] as typeof status.filtered,
       );
-  }, [status.filtered, actualStatus.filtered]);
+  }, [status.filtered, actualStatus.filtered, contextType]);
   const filtered = filterResults.length > 0;
 
   // Track height changes we know about to compensate scrolling.

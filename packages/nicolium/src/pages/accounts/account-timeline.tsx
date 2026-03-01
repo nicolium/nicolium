@@ -85,6 +85,7 @@ const AccountTimelinePage: React.FC = () => {
 
   return (
     <StatusList
+      timelineId={`account:${path}`}
       scrollKey='account_timeline'
       statusIds={statusIds}
       featuredStatusIds={showPins ? featuredStatusIds : undefined}

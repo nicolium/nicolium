@@ -9,6 +9,8 @@ import { queryKeys } from '../keys';
 
 import type { CreateFilterParams, Filter, UpdateFilterParams } from 'pl-api';
 
+type FilterContextType = Filter['context'][0];
+
 function useFilters<T>(select: (data: Array<Filter>) => T): UseQueryResult<T, Error>;
 function useFilters(): UseQueryResult<Array<Filter>, Error>;
 function useFilters<T = Array<Filter>>(select?: (data: Array<Filter>) => T) {
@@ -34,29 +36,35 @@ function useFilters<T = Array<Filter>>(select?: (data: Array<Filter>) => T) {
   });
 }
 
-const toServerSideType = (columnType: string): Filter['context'][0] => {
+const timelineToFilterContextType = (columnType?: string): FilterContextType => {
   switch (columnType) {
+    case undefined:
+      return 'public';
     case 'home':
     case 'notifications':
     case 'public':
     case 'thread':
       return columnType;
     default:
-      if (columnType.includes('list:')) {
+      if (columnType.startsWith('account:')) {
+        return 'account';
+      }
+      if (columnType.startsWith('list:')) {
         return 'home';
       }
       return 'public'; // community, account, hashtag
   }
 };
 
-const filterSelector = (contextType?: string) => (filters: Array<Filter>) =>
+const filterSelector = (contextType?: FilterContextType) => (filters: Array<Filter>) =>
   filters.filter(
     (filter) =>
-      (!contextType || filter.context.includes(toServerSideType(contextType))) &&
+      (!contextType || filter.context.includes(timelineToFilterContextType(contextType))) &&
       (filter.expires_at === null || Date.parse(filter.expires_at) > Date.now()),
   );
 
-const useFiltersByContext = (contextType: string) => useFilters(filterSelector(contextType));
+const useFiltersByContext = (contextType: FilterContextType) =>
+  useFilters(filterSelector(contextType));
 
 const useFilter = (filterId?: string) => {
   const client = useClient();
@@ -123,4 +131,6 @@ export {
   useCreateFilter,
   useUpdateFilter,
   useDeleteFilter,
+  timelineToFilterContextType,
+  type FilterContextType,
 };
