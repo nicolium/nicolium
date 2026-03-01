@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { fetchHomeTimeline } from '@/actions/timelines';
+import { NewTimelineColumn } from '@/columns/timeline';
 import { Link } from '@/components/link';
 import PullToRefresh from '@/components/pull-to-refresh';
 import Column from '@/components/ui/column';
@@ -12,13 +13,13 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/hooks/use-instance';
+import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
   title: { id: 'column.home', defaultMessage: 'Home' },
 });
 
-const HomeTimelinePage: React.FC = () => {
-  const intl = useIntl();
+const HomeTimeline: React.FC = () => {
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const instance = useInstance();
@@ -54,53 +55,62 @@ const HomeTimelinePage: React.FC = () => {
   useEffect(() => checkIfReloadNeeded(isPartial), [isPartial]);
 
   return (
-    <Column className='py-0' label={intl.formatMessage(messages.title)} withHeader={false}>
-      <PullToRefresh onRefresh={handleRefresh}>
-        <Timeline
-          loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
-          scrollKey='home_timeline'
-          onLoadMore={handleLoadMore}
-          timelineId='home'
-          emptyMessageText={
-            <Stack space={1}>
-              <Text size='xl' weight='medium' align='center'>
-                <FormattedMessage
-                  id='empty_column.home.title'
-                  defaultMessage="You're not following anyone yet"
-                />
-              </Text>
+    <PullToRefresh onRefresh={handleRefresh}>
+      <Timeline
+        loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
+        scrollKey='home_timeline'
+        onLoadMore={handleLoadMore}
+        timelineId='home'
+        emptyMessageText={
+          <Stack space={1}>
+            <Text size='xl' weight='medium' align='center'>
+              <FormattedMessage
+                id='empty_column.home.title'
+                defaultMessage="You're not following anyone yet"
+              />
+            </Text>
 
+            <Text theme='muted' align='center'>
+              <FormattedMessage
+                id='empty_column.home.subtitle'
+                defaultMessage='{siteTitle} gets more interesting once you follow other users.'
+                values={{ siteTitle: instance.title }}
+              />
+            </Text>
+
+            {features.federating && (
               <Text theme='muted' align='center'>
                 <FormattedMessage
-                  id='empty_column.home.subtitle'
-                  defaultMessage='{siteTitle} gets more interesting once you follow other users.'
-                  values={{ siteTitle: instance.title }}
+                  id='empty_column.home'
+                  defaultMessage='Or you can visit {public} to get started and meet other users.'
+                  values={{
+                    public: (
+                      <Link to='/timeline/local'>
+                        <FormattedMessage
+                          id='empty_column.home.local_tab'
+                          defaultMessage='the Local tab'
+                        />
+                      </Link>
+                    ),
+                  }}
                 />
               </Text>
+            )}
+          </Stack>
+        }
+        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+      />
+    </PullToRefresh>
+  );
+};
 
-              {features.federating && (
-                <Text theme='muted' align='center'>
-                  <FormattedMessage
-                    id='empty_column.home'
-                    defaultMessage='Or you can visit {public} to get started and meet other users.'
-                    values={{
-                      public: (
-                        <Link to='/timeline/local'>
-                          <FormattedMessage
-                            id='empty_column.home.local_tab'
-                            defaultMessage='the Local tab'
-                          />
-                        </Link>
-                      ),
-                    }}
-                  />
-                </Text>
-              )}
-            </Stack>
-          }
-          emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
-        />
-      </PullToRefresh>
+const HomeTimelinePage: React.FC = () => {
+  const intl = useIntl();
+  const { experimentalTimeline } = useSettings();
+
+  return (
+    <Column className='py-0' label={intl.formatMessage(messages.title)} withHeader={false}>
+      {experimentalTimeline ? <NewTimelineColumn /> : <HomeTimeline />}
     </Column>
   );
 };
