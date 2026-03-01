@@ -1,5 +1,4 @@
 import { useQueries, useQueryClient } from '@tanstack/react-query';
-import { useMemo } from 'react';
 
 import { useClient } from '@/hooks/use-client';
 import { queryKeys } from '@/queries/keys';
@@ -10,7 +9,7 @@ const useAccounts = (accountIds: Array<string>) => {
   const client = useClient();
   const queryClient = useQueryClient();
 
-  const queries = useQueries({
+  return useQueries({
     queries: accountIds.map((accountId) => ({
       queryKey: queryKeys.accounts.show(accountId),
       queryFn: async () => {
@@ -23,18 +22,12 @@ const useAccounts = (accountIds: Array<string>) => {
       },
       enabled: !!accountId,
     })),
+    combine: (results) => ({
+      data: results.map((result) => result.data).filter((account): account is Account => !!account),
+      isLoading: results.some((result) => result.isLoading),
+      isFetching: results.some((result) => result.isFetching),
+    }),
   });
-
-  const accounts = useMemo(
-    () => queries.map((query) => query.data).filter((account): account is Account => !!account),
-    [queries],
-  );
-
-  return {
-    data: accounts,
-    isLoading: queries.some((query) => query.isLoading),
-    isFetching: queries.some((query) => query.isFetching),
-  };
 };
 
 export { useAccounts };

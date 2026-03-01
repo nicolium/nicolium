@@ -265,9 +265,13 @@ const useThread = (statusId?: string, linear?: boolean) => {
 
     if (linear) {
       let parentStatus: string = statusId;
+      const visited = new Set<string>([parentStatus]);
 
       while (inReplyTos[parentStatus]) {
-        parentStatus = inReplyTos[parentStatus];
+        const next = inReplyTos[parentStatus];
+        if (visited.has(next)) break;
+        visited.add(next);
+        parentStatus = next;
       }
 
       const threadStatuses = [parentStatus];
