@@ -31,6 +31,7 @@
       { "ignoreAtRules": ["tailwind", "apply", "layer", "config"] }
     ],
     "scss/operator-no-unspaced": null,
-    "selector-class-pattern": null
+    "selector-class-pattern": null,
+    "no-invalid-position-declaration": null
   }
 }
