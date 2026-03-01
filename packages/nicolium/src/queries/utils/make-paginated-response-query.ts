@@ -11,8 +11,16 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import type { PaginatedResponse, PlApiClient } from 'pl-api';
 
 class PaginatedResponseArray<T> extends Array<T> {
-  total?: number;
-  partial?: boolean;
+  declare total: number | undefined;
+  declare partial: boolean | undefined;
+
+  static override from<T>(items: ArrayLike<T> | Iterable<T>): PaginatedResponseArray<T> {
+    const arr = new PaginatedResponseArray<T>();
+    for (const item of Array.from(items)) {
+      arr.push(item);
+    }
+    return arr;
+  }
 }
 
 type PaginatedResponseQueryResult<T, IsArray extends boolean> = IsArray extends true
@@ -59,14 +67,14 @@ const makePaginatedResponseQuery =
           }
 
           if (Array.isArray(lastPage.items)) {
-            const items = new PaginatedResponseArray(
-              ...data.pages.flatMap((page) =>
+            const items = PaginatedResponseArray.from(
+              data.pages.flatMap((page) =>
                 Array.isArray(page.items) ? page.items : [page.items],
               ),
             );
 
-            items.total = lastPage.total;
-            items.partial = lastPage.partial;
+            Object.defineProperty(items, 'total', { value: lastPage.total, writable: true, enumerable: false, configurable: true });
+            Object.defineProperty(items, 'partial', { value: lastPage.partial, writable: true, enumerable: false, configurable: true });
 
             return items as T3;
           }

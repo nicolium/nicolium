@@ -48,14 +48,14 @@ const makePaginatedResponseQueryOptions =
           }
 
           if (Array.isArray(lastPage.items)) {
-            const items = new PaginatedResponseArray(
-              ...data.pages.flatMap((page) =>
+            const items = PaginatedResponseArray.from(
+              data.pages.flatMap((page) =>
                 Array.isArray(page.items) ? page.items : [page.items],
               ),
             );
 
-            items.total = lastPage.total;
-            items.partial = lastPage.partial;
+            Object.defineProperty(items, 'total', { value: lastPage.total, writable: true, enumerable: false, configurable: true });
+            Object.defineProperty(items, 'partial', { value: lastPage.partial, writable: true, enumerable: false, configurable: true });
 
             return items as T3;
           }
