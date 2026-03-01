@@ -52,10 +52,7 @@ const makePaginatedResponseQueryOptions =
               data.pages.flatMap((page) =>
                 Array.isArray(page.items) ? page.items : [page.items],
               ),
-            );
-
-            Object.defineProperty(items, 'total', { value: lastPage.total, writable: true, enumerable: false, configurable: true });
-            Object.defineProperty(items, 'partial', { value: lastPage.partial, writable: true, enumerable: false, configurable: true });
+            ).setMeta(lastPage.total, lastPage.partial);
 
             return items as T3;
           }

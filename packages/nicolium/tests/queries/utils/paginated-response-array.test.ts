@@ -24,26 +24,21 @@ describe('PaginatedResponseArray', () => {
     expect(items.length).toBe(100_000);
   });
 
-  it('supports non-enumerable total and partial properties', () => {
-    const items = PaginatedResponseArray.from(['a', 'b', 'c']);
-    Object.defineProperty(items, 'total', { value: 42, writable: true, enumerable: false, configurable: true });
-    Object.defineProperty(items, 'partial', { value: true, writable: true, enumerable: false, configurable: true });
+  it('supports non-enumerable total and partial properties via setMeta', () => {
+    const items = PaginatedResponseArray.from(['a', 'b', 'c']).setMeta(42, true);
 
     expect(items.total).toBe(42);
     expect(items.partial).toBe(true);
   });
 
   it('passes isPlainArray check with non-enumerable properties for structural sharing', () => {
-    const items = PaginatedResponseArray.from([1, 2, 3]);
-    Object.defineProperty(items, 'total', { value: 10, writable: true, enumerable: false, configurable: true });
-    Object.defineProperty(items, 'partial', { value: false, writable: true, enumerable: false, configurable: true });
+    const items = PaginatedResponseArray.from([1, 2, 3]).setMeta(10, false);
 
     expect(isPlainArray(items)).toBe(true);
   });
 
-  it('total and partial properties are writable', () => {
-    const items = PaginatedResponseArray.from([1]);
-    Object.defineProperty(items, 'total', { value: 5, writable: true, enumerable: false, configurable: true });
+  it('total and partial properties are writable after setMeta', () => {
+    const items = PaginatedResponseArray.from([1]).setMeta(5, false);
 
     items.total = 10;
     expect(items.total).toBe(10);

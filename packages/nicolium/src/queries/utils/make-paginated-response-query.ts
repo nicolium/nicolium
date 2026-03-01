@@ -21,6 +21,13 @@ class PaginatedResponseArray<T> extends Array<T> {
     }
     return arr;
   }
+
+  /** Set metadata as non-enumerable to preserve TanStack Query structural sharing. */
+  setMeta(total: number | undefined, partial: boolean | undefined): this {
+    Object.defineProperty(this, 'total', { value: total, writable: true, enumerable: false, configurable: true });
+    Object.defineProperty(this, 'partial', { value: partial, writable: true, enumerable: false, configurable: true });
+    return this;
+  }
 }
 
 type PaginatedResponseQueryResult<T, IsArray extends boolean> = IsArray extends true
@@ -71,10 +78,7 @@ const makePaginatedResponseQuery =
               data.pages.flatMap((page) =>
                 Array.isArray(page.items) ? page.items : [page.items],
               ),
-            );
-
-            Object.defineProperty(items, 'total', { value: lastPage.total, writable: true, enumerable: false, configurable: true });
-            Object.defineProperty(items, 'partial', { value: lastPage.partial, writable: true, enumerable: false, configurable: true });
+            ).setMeta(lastPage.total, lastPage.partial);
 
             return items as T3;
           }
