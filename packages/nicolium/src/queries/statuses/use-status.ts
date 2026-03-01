@@ -10,7 +10,6 @@ import { useContextsActions } from '@/stores/contexts';
 import { checkFiltered } from '@/utils/filters';
 
 import { useAccount } from '../accounts/use-account';
-import { useAccounts } from '../accounts/use-accounts';
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';
 
@@ -57,9 +56,6 @@ const useStatusQuery = (statusId?: string) => {
   const statusQuery = useMinimalStatus(statusId);
 
   const account = useAccount(statusQuery.data?.account_id ?? undefined);
-  const { data: accounts } = useAccounts(
-    statusQuery.data?.account_id ? [statusQuery.data.account_id] : [],
-  );
 
   return useMemo(() => {
     if (!statusQuery.data) return statusQuery;
@@ -68,10 +64,10 @@ const useStatusQuery = (statusId?: string) => {
       data: {
         ...statusQuery.data,
         account: account.data!,
-        accounts,
+        accounts: [account.data!],
       },
     };
-  }, [statusQuery.data, account.data, accounts]) as unknown as UseQueryResult<NormalizedStatus>;
+  }, [statusQuery.data, account.data]) as unknown as UseQueryResult<NormalizedStatus>;
 };
 
 const emptyFilters: Array<Filter> = [];
@@ -98,8 +94,6 @@ const useStatus = (
   const reblogQuery = useStatusQuery(statusQuery.data?.reblog_id ?? undefined);
   const quoteQuery = useStatusQuery(statusQuery.data?.quote_id ?? undefined);
 
-  const account = useAccount(statusQuery.data?.account_id ?? undefined);
-
   const clientFilterResults = useMemo(() => {
     if (!withClientSideFilters || !filters?.length || !statusQuery.data) return emptyFilterResults;
     return checkFiltered(statusQuery.data.search_index, filters);
@@ -114,7 +108,6 @@ const useStatus = (
       ...statusQuery,
       data: {
         ...statusQuery.data,
-        account: account.data!,
         reblog: reblogQuery.data ?? null,
         quote: quoteQuery.data ?? null,
         filtered,
@@ -125,7 +118,6 @@ const useStatus = (
     statusQuery.data,
     reblogQuery.data,
     quoteQuery.data,
-    account.data,
     clientFilterResults,
   ]) as unknown as UseQueryResult<SelectedStatus> & { refetchContext: () => void };
 };
