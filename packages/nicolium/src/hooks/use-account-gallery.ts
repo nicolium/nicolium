@@ -50,7 +50,7 @@ const useAccountGallery = (accountId: string) => {
     ...result,
     data: useMemo(
       () => buildGallery(statusesData.filter((s): s is NormalizedStatus => !!s)),
-      statusesData,
+      [statusesData],
     ),
   };
 };
@@ -64,7 +64,7 @@ const useGroupGallery = (groupId: string) => {
     ...result,
     data: useMemo(
       () => buildGallery(statusesData.filter((s): s is NormalizedStatus => !!s)),
-      statusesData,
+      [statusesData],
     ),
   };
 };
