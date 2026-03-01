@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { notifyManager, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { queryKeys } from '@/queries/keys';
@@ -17,9 +17,11 @@ const useDirectory = (order: 'active' | 'new', local: boolean = false) => {
           offset,
         })
         .then((accounts) => {
-          for (const account of accounts) {
-            queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
-          }
+          notifyManager.batch(() => {
+            for (const account of accounts) {
+              queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+            }
+          });
           return accounts.map(({ id }) => id);
         }),
     initialPageParam: 0,

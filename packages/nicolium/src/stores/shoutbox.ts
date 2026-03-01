@@ -1,3 +1,4 @@
+import { notifyManager } from '@tanstack/react-query';
 import { useEffect } from 'react';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
@@ -37,12 +38,14 @@ const useShoutboxStore = create<State>()(
       actions: {
         setMessages: (messages) => {
           set((state: State) => {
-            for (const { author } of messages.toReversed()) {
-              queryClient.setQueryData(
-                queryKeys.accounts.show(author.id),
-                (account) => account || author,
-              );
-            }
+            notifyManager.batch(() => {
+              for (const { author } of messages.toReversed()) {
+                queryClient.setQueryData(
+                  queryKeys.accounts.show(author.id),
+                  (account) => account || author,
+                );
+              }
+            });
             state.messages = messages.map(minifyMessage);
             state.isLoading = false;
           });

@@ -1,3 +1,5 @@
+import { notifyManager } from '@tanstack/react-query';
+
 import { normalizeStatus } from '@/normalizers/status';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
@@ -102,45 +104,53 @@ const importEntities = (
     entities.statuses?.forEach((status) => status && processStatus(status, options.withParents));
   }
 
-  if (!isEmpty(accounts)) {
-    for (const account of Object.values(accounts)) {
-      queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
-    }
-  }
-  if (!isEmpty(groups))
-    for (const group of Object.values(groups)) {
-      queryClient.setQueryData(queryKeys.groups.show(group.id), group);
-      if (group.relationship) {
-        queryClient.setQueryData(queryKeys.groupRelationships.show(group.id), group.relationship);
+  notifyManager.batch(() => {
+    if (!isEmpty(accounts)) {
+      for (const account of Object.values(accounts)) {
+        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
       }
     }
-  if (!isEmpty(polls)) {
-    for (const poll of Object.values(polls)) {
-      queryClient.setQueryData(queryKeys.statuses.polls.show(poll.id), poll);
+    if (!isEmpty(groups))
+      for (const group of Object.values(groups)) {
+        queryClient.setQueryData(queryKeys.groups.show(group.id), group);
+        if (group.relationship) {
+          queryClient.setQueryData(queryKeys.groupRelationships.show(group.id), group.relationship);
+        }
+      }
+    if (!isEmpty(polls)) {
+      for (const poll of Object.values(polls)) {
+        queryClient.setQueryData(queryKeys.statuses.polls.show(poll.id), poll);
+      }
     }
-  }
-  if (!isEmpty(relationships)) {
-    for (const relationship of Object.values(relationships)) {
-      queryClient.setQueryData(queryKeys.accountRelationships.show(relationship.id), relationship);
+    if (!isEmpty(relationships)) {
+      for (const relationship of Object.values(relationships)) {
+        queryClient.setQueryData(
+          queryKeys.accountRelationships.show(relationship.id),
+          relationship,
+        );
+      }
     }
-  }
-  if (!isEmpty(statuses))
-    useContextStore.getState().actions.importStatuses(Object.values(statuses));
+    if (!isEmpty(statuses))
+      useContextStore.getState().actions.importStatuses(Object.values(statuses));
 
-  if (!isEmpty(statuses)) {
-    for (const status of Object.values(statuses)) {
-      const oldStatus = queryClient.getQueryData(queryKeys.statuses.show(status.id));
-      const normalized = normalizeStatus(status, oldStatus);
-      queryClient.setQueryData(queryKeys.statuses.show(status.id), normalized);
-    }
-  }
-  if (!isEmpty(translations)) {
-    for (const [statusId, translationsByLanguage] of Object.entries(translations)) {
-      for (const [language, translation] of Object.entries(translationsByLanguage)) {
-        queryClient.setQueryData(queryKeys.statuses.translations(statusId, language), translation);
+    if (!isEmpty(statuses)) {
+      for (const status of Object.values(statuses)) {
+        const oldStatus = queryClient.getQueryData(queryKeys.statuses.show(status.id));
+        const normalized = normalizeStatus(status, oldStatus);
+        queryClient.setQueryData(queryKeys.statuses.show(status.id), normalized);
       }
     }
-  }
+    if (!isEmpty(translations)) {
+      for (const [statusId, translationsByLanguage] of Object.entries(translations)) {
+        for (const [language, translation] of Object.entries(translationsByLanguage)) {
+          queryClient.setQueryData(
+            queryKeys.statuses.translations(statusId, language),
+            translation,
+          );
+        }
+      }
+    }
+  });
 };
 
 type ImporterAction = never;

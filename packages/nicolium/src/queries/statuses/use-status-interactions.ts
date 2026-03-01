@@ -1,4 +1,10 @@
-import { type InfiniteData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  type InfiniteData,
+  notifyManager,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { create } from 'mutative';
 import { defineMessages, useIntl } from 'react-intl';
 
@@ -94,11 +100,13 @@ const useStatusReactions = (statusId: string, emoji?: string) => {
     queryKey: queryKeys.accountsLists.statusReactions(statusId, emoji),
     queryFn: () =>
       client.statuses.getStatusReactions(statusId, emoji).then((reactions) => {
-        for (const { accounts } of reactions) {
-          for (const account of accounts) {
-            queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+        notifyManager.batch(() => {
+          for (const { accounts } of reactions) {
+            for (const account of accounts) {
+              queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+            }
           }
-        }
+        });
 
         return reactions.map(minifyEmojiReaction);
       }),

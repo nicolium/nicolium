@@ -1,3 +1,5 @@
+import { notifyManager } from '@tanstack/react-query';
+
 import { importEntities } from '@/actions/importer';
 
 import { queryClient } from '../client';
@@ -54,15 +56,17 @@ const minifyAccountList = (response: PaginatedResponse<Account>): PaginatedRespo
     response,
     (account) => account.id,
     (accounts) => {
-      for (const account of accounts) {
-        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
-        if (account.relationship) {
-          queryClient.setQueryData(
-            queryKeys.accountRelationships.show(account.id),
-            account.relationship,
-          );
+      notifyManager.batch(() => {
+        for (const account of accounts) {
+          queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+          if (account.relationship) {
+            queryClient.setQueryData(
+              queryKeys.accountRelationships.show(account.id),
+              account.relationship,
+            );
+          }
         }
-      }
+      });
     },
   );
 
@@ -73,15 +77,17 @@ const minifyBlockedAccountList = (
     response,
     (account) => [account.id, account.block_expires_at],
     (accounts) => {
-      for (const account of accounts) {
-        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
-        if (account.relationship) {
-          queryClient.setQueryData(
-            queryKeys.accountRelationships.show(account.id),
-            account.relationship,
-          );
+      notifyManager.batch(() => {
+        for (const account of accounts) {
+          queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+          if (account.relationship) {
+            queryClient.setQueryData(
+              queryKeys.accountRelationships.show(account.id),
+              account.relationship,
+            );
+          }
         }
-      }
+      });
     },
   );
 
@@ -92,15 +98,17 @@ const minifyMutedAccountList = (
     response,
     (account) => [account.id, account.mute_expires_at],
     (accounts) => {
-      for (const account of accounts) {
-        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
-        if (account.relationship) {
-          queryClient.setQueryData(
-            queryKeys.accountRelationships.show(account.id),
-            account.relationship,
-          );
+      notifyManager.batch(() => {
+        for (const account of accounts) {
+          queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+          if (account.relationship) {
+            queryClient.setQueryData(
+              queryKeys.accountRelationships.show(account.id),
+              account.relationship,
+            );
+          }
         }
-      }
+      });
     },
   );
 
@@ -109,9 +117,11 @@ const minifyGroupList = (response: PaginatedResponse<Group>): PaginatedResponse<
     response,
     (group) => group.id,
     (groups) => {
-      for (const group of groups) {
-        queryClient.setQueryData(queryKeys.groups.show(group.id), group);
-      }
+      notifyManager.batch(() => {
+        for (const group of groups) {
+          queryClient.setQueryData(queryKeys.groups.show(group.id), group);
+        }
+      });
     },
   );
 
@@ -161,10 +171,12 @@ const minifyAdminAccountList = (response: PaginatedResponse<AdminAccount>) =>
     response,
     (account) => account.id,
     (accounts) => {
-      for (const { account, ...adminAccount } of accounts) {
-        if (account) queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
-        queryClient.setQueryData(queryKeys.admin.accounts.show(adminAccount.id), adminAccount);
-      }
+      notifyManager.batch(() => {
+        for (const { account, ...adminAccount } of accounts) {
+          if (account) queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+          queryClient.setQueryData(queryKeys.admin.accounts.show(adminAccount.id), adminAccount);
+        }
+      });
     },
   );
 
@@ -211,12 +223,14 @@ const minifyAdminReportList = (response: PaginatedResponse<AdminReport>) =>
     response,
     (report) => report.id,
     (reports) => {
-      for (const report of reports) {
-        queryClient.setQueryData(
-          queryKeys.admin.reports.show(report.id),
-          minifyAdminReport(report),
-        );
-      }
+      notifyManager.batch(() => {
+        for (const report of reports) {
+          queryClient.setQueryData(
+            queryKeys.admin.reports.show(report.id),
+            minifyAdminReport(report),
+          );
+        }
+      });
     },
   );
 

@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { notifyManager, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 
 import { importEntities } from '@/actions/importer';
 import { useClient } from '@/hooks/use-client';
@@ -30,15 +30,17 @@ const useSearchAccounts = (
           { signal },
         )
         .then(({ accounts }) => {
-          for (const account of accounts) {
-            queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
-            if (account.relationship) {
-              queryClient.setQueryData(
-                queryKeys.accountRelationships.show(account.id),
-                account.relationship,
-              );
+          notifyManager.batch(() => {
+            for (const account of accounts) {
+              queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+              if (account.relationship) {
+                queryClient.setQueryData(
+                  queryKeys.accountRelationships.show(account.id),
+                  account.relationship,
+                );
+              }
             }
-          }
+          });
           return accounts.map(({ id }) => id);
         }),
     enabled: !!query?.trim(),
@@ -135,9 +137,11 @@ const useSearchGroups = (
           { signal },
         )
         .then(({ groups }) => {
-          for (const group of groups) {
-            queryClient.setQueryData(queryKeys.groups.show(group.id), group);
-          }
+          notifyManager.batch(() => {
+            for (const group of groups) {
+              queryClient.setQueryData(queryKeys.groups.show(group.id), group);
+            }
+          });
           return groups.map(({ id }) => id);
         }),
     enabled: !!query?.trim(),

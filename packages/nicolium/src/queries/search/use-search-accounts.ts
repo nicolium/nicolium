@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
+import { notifyManager, useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 
@@ -23,9 +23,11 @@ const useAccountSearch = (query: string, params?: Omit<SearchAccountParams, 'off
           { signal },
         )
         .then((accounts) => {
-          for (const account of accounts) {
-            queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
-          }
+          notifyManager.batch(() => {
+            for (const account of accounts) {
+              queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+            }
+          });
           return accounts.map(({ id }) => id);
         }),
     enabled: !!query?.trim(),

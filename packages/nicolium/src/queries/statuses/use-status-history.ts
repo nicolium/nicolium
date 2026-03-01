@@ -21,8 +21,9 @@ const useStatusHistory = (statusId: string) => {
     queryKey: queryKeys.statuses.history(statusId),
     queryFn: async () => {
       const history = await client.statuses.getStatusHistory(statusId);
-      for (const { account } of history) {
-        // why am i even doing this it's always the same account lol
+      // All entries include a current version of the same account.
+      const account = history[0]?.account;
+      if (account) {
         queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
       }
       return history.map(minifyStatusEdit);

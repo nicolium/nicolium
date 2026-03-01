@@ -1,4 +1,10 @@
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import {
+  keepPreviousData,
+  notifyManager,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 
 import { batcher } from '@/api/batcher';
 import { useClient } from '@/hooks/use-client';
@@ -23,10 +29,12 @@ const useSuggestedAccounts = () => {
 
     const fetcher = batcher.relationships(client).fetch;
 
-    for (const { account } of response) {
-      fetcher(account.id);
-      queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
-    }
+    notifyManager.batch(() => {
+      for (const { account } of response) {
+        fetcher(account.id);
+        queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+      }
+    });
 
     return response.map(({ account, ...x }) => ({ ...x, account_id: account.id }));
   };
