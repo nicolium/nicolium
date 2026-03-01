@@ -1,7 +1,8 @@
-import { type InfiniteData, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
+import { removePageItem } from '@/utils/queries';
 
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';
@@ -10,18 +11,10 @@ import { minifyAccountList, minifyList } from '../utils/minify-list';
 import type { GroupMember, GroupRole, PaginatedResponse } from 'pl-api';
 
 const removeGroupMember = (groupId: string, accountId: string) =>
-  queryClient.setQueriesData<InfiniteData<PaginatedResponse<MinifiedGroupMember>>>(
-    { queryKey: queryKeys.accountsLists.groupMembers.root(groupId) },
-    (data) =>
-      data
-        ? {
-            ...data,
-            pages: data.pages.map((page) => ({
-              ...page,
-              items: page.items.filter((member) => member.account_id !== accountId),
-            })),
-          }
-        : undefined,
+  removePageItem(
+    queryKeys.accountsLists.groupMembers.root(groupId),
+    accountId,
+    (member: MinifiedGroupMember, accountId: string) => member.account_id === accountId,
   );
 
 const minifyGroupMember = ({ account, ...groupMember }: GroupMember) => ({

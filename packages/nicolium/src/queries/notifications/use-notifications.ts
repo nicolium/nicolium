@@ -1,6 +1,12 @@
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import 'intl-pluralrules';
 import omit from 'lodash/omit';
+import {
+  PaginatedResponse,
+  type GetGroupedNotificationsParams,
+  type Notification,
+  type NotificationGroup,
+} from 'pl-api';
 import { useCallback, useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
@@ -29,8 +35,6 @@ import { useNotificationsMarker } from '../markers/use-markers';
 import { useFiltersByContext } from '../settings/use-filters';
 import { useStatus } from '../statuses/use-status';
 import { minifyGroupedNotifications } from '../utils/minify-list';
-
-import type { GetGroupedNotificationsParams, Notification, NotificationGroup } from 'pl-api';
 
 const FILTER_TYPES = {
   all: undefined,
@@ -338,10 +342,10 @@ const prependNotification = (notification: NotificationGroup, filter: FilterType
     return {
       ...data,
       pages: [
-        {
-          ...firstPage,
-          items: [notification, ...firstPage.items].toSorted(comparator).filter(filterUnique),
-        },
+        new PaginatedResponse<Array<NotificationGroup>, false>(
+          [notification, ...firstPage.items].toSorted(comparator).filter(filterUnique),
+          firstPage,
+        ),
         ...restPages,
       ],
     };

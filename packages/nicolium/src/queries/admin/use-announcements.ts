@@ -9,6 +9,7 @@ import * as v from 'valibot';
 
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
+import { removePageItem } from '@/utils/queries';
 
 import { queryKeys } from '../keys';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
@@ -67,12 +68,11 @@ const useDeleteAnnouncementMutation = () => {
     mutationFn: (id: string) => client.admin.announcements.deleteAnnouncement(id),
     retry: false,
     onSuccess: (_, deletedAnnouncementId) => {
-      queryClient.setQueryData(queryKeys.admin.announcements, (prevData) =>
-        create(prevData, (draft) => {
-          draft?.pages.forEach(
-            (page) => (page.items = page.items.filter(({ id }) => id !== deletedAnnouncementId)),
-          );
-        }),
+      removePageItem(
+        queryKeys.admin.announcements,
+        deletedAnnouncementId,
+        (announcement: { id: string }, id: string) => announcement.id === id,
+        true,
       );
       queryClient.invalidateQueries({ queryKey: queryKeys.announcements.root });
     },

@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query';
+import { PaginatedResponse } from 'pl-api';
 
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
@@ -17,7 +18,7 @@ const appendGroupBlock = (groupId: string, accountId: string) =>
     return {
       ...data,
       pages: data.pages.map((page, index) =>
-        index === 0 ? { ...page, items: [accountId, ...page.items] } : page,
+        index === 0 ? new PaginatedResponse([accountId, ...page.items], page) : page,
       ),
     };
   });

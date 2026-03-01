@@ -207,29 +207,27 @@ const useCreateChatMessage = () => {
       queryClient.setQueryData(queryKeys.chats.chatMessages(variables.chatId), (prevResult) => {
         if (!prevResult?.pages) return prevResult;
         const newResult = { ...prevResult };
-        newResult.pages = newResult.pages.map((page, idx: number) => {
-          if (idx === 0) {
-            return {
-              ...page,
-              items: [
-                normalizeChatMessage({
-                  ...v.parse(chatMessageSchema, {
-                    chat_id: variables.chatId,
-                    content: variables.content,
-                    id: pendingId,
-                    created_at: new Date().toISOString(),
-                    account_id: account?.id,
-                    unread: true,
-                  }),
-                  pending: true,
+        const [firstPage, ...restPages] = newResult.pages;
+        newResult.pages = [
+          new PaginatedResponse(
+            [
+              normalizeChatMessage({
+                ...v.parse(chatMessageSchema, {
+                  chat_id: variables.chatId,
+                  content: variables.content,
+                  id: pendingId,
+                  created_at: new Date().toISOString(),
+                  account_id: account?.id,
+                  unread: true,
                 }),
-                ...page.items,
-              ],
-            };
-          }
-
-          return page;
-        });
+                pending: true,
+              }),
+              ...firstPage.items,
+            ],
+            firstPage,
+          ),
+          ...restPages,
+        ];
 
         return newResult;
       });

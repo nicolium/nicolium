@@ -1,8 +1,6 @@
-import { create } from 'mutative';
-
 import { getClient } from '@/api';
+import { removePageItem } from '@/utils/queries';
 
-import { queryClient } from '../client';
 import { queryKeys } from '../keys';
 import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';
 import { mutationOptions } from '../utils/mutation-options';
@@ -17,12 +15,11 @@ const revokeOauthTokenMutationOptions = (oauthTokenId: string) =>
     mutationKey: ['security', 'oauthTokens', oauthTokenId],
     mutationFn: () => getClient().settings.deleteOauthToken(oauthTokenId),
     onSettled: () => {
-      queryClient.setQueryData(oauthTokensQueryOptions.queryKey, (data) =>
-        create(data, (draft) => {
-          draft?.pages.forEach(
-            (page) => (page.items = page.items.filter(({ id }) => id !== oauthTokenId)),
-          );
-        }),
+      removePageItem(
+        queryKeys.security.oauthTokens,
+        oauthTokenId,
+        (token: { id: string }, tokenId: string) => token.id === tokenId,
+        true,
       );
     },
   });

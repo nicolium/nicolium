@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient, type InfiniteData } from '@tanstack/react-query';
+import { PaginatedResponse, type PlApiClient } from 'pl-api';
 
 import { useClient } from '@/hooks/use-client';
 import { queryClient } from '@/queries/client';
@@ -8,8 +9,6 @@ import { minifyAccountList } from '@/queries/utils/minify-list';
 
 import { filterById } from '../utils/filter-id';
 
-import type { PaginatedResponse, PlApiClient } from 'pl-api';
-
 const appendFollowRequest = (accountId: string) =>
   queryClient.setQueryData(queryKeys.accountsLists.followRequests, (data) => {
     if (!data || data.pages.some((page) => page.items.includes(accountId))) return data;
@@ -17,7 +16,7 @@ const appendFollowRequest = (accountId: string) =>
     return {
       ...data,
       pages: data.pages.map((page, index) =>
-        index === 0 ? { ...page, items: [accountId, ...page.items] } : page,
+        index === 0 ? new PaginatedResponse([accountId, ...page.items], page) : page,
       ),
     };
   });

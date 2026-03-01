@@ -11,10 +11,10 @@ const recentEventsQueryOptions = makePaginatedResponseQueryOptions(
       .publicTimeline({
         only_events: true,
       })
-      .then((res) => ({
-        ...res,
-        items: res.items.filter(({ event }) => event),
-      }))
+      .then((res) => {
+        res.items = res.items.filter(({ event }) => event);
+        return res;
+      })
       .then(minifyStatusList),
 )();
 
