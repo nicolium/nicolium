@@ -72,8 +72,9 @@ interface IAntennaAccountsForm {
 const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, excluded = false }) => {
   const [searchValue, setSearchValue] = useState('');
 
-  const { data: accountIds = [], isFetching: isFetchingAccounts } = useAntennaAccounts(antennaId);
-  const { data: excludedAccountIds = [], isFetching: isFetchingExcludedAccounts } =
+  const { data: accountIds = [] as Array<string>, isFetching: isFetchingAccounts } =
+    useAntennaAccounts(antennaId);
+  const { data: excludedAccountIds = [] as Array<string>, isFetching: isFetchingExcludedAccounts } =
     useAntennaExcludedAccounts(antennaId);
   const { data: searchAccountIds = [] } = useAccountSearch(searchValue, {
     following: true,

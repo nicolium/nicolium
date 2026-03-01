@@ -2,7 +2,7 @@ name: Nicolium CI
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: [ "develop", "semistable" ]
   pull_request:
     branches: [ "develop" ]
 
