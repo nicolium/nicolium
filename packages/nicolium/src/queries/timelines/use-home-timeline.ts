@@ -1,5 +1,5 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { importEntities } from '@/actions/importer';
 import { useTimelineStream } from '@/api/hooks/streaming/use-timeline-stream';
@@ -115,30 +115,29 @@ const useHomeTimeline = () => {
 
   const query = useQuery({
     queryKey,
-    queryFn: () => {
+    queryFn: async () => {
       setIsLoading(true);
 
-      return client.timelines
-        .homeTimeline()
-        .then((response) => {
-          importEntities({ statuses: response.items });
+      const response = await client.timelines.homeTimeline();
 
-          return processPage(response);
-        })
-        .catch(() => {})
-        .finally(() => setIsLoading(false));
+      importEntities({ statuses: response.items });
+
+      return processPage(response);
     },
   });
 
-  const handleLoadMore = (entry: TimelineEntry) => {
-    if (isLoading) return;
+  const handleLoadMore = useCallback(
+    async (entry: TimelineEntry) => {
+      if (isLoading) return;
 
-    setIsLoading(true);
-    if (entry.type !== 'page-end' && entry.type !== 'page-start') return;
+      setIsLoading(true);
+      try {
+        if (entry.type !== 'page-end' && entry.type !== 'page-start') return;
 
-    return client.timelines
-      .homeTimeline(entry.type === 'page-end' ? { max_id: entry.minId } : { min_id: entry.maxId })
-      .then((response) => {
+        const response = await client.timelines.homeTimeline(
+          entry.type === 'page-end' ? { max_id: entry.minId } : { min_id: entry.maxId },
+        );
+
         importEntities({ statuses: response.items });
 
         const timelinePage = processPage(response);
@@ -149,15 +148,14 @@ const useHomeTimeline = () => {
           const index = oldData.indexOf(entry);
           return oldData.toSpliced(index, 1, ...timelinePage);
         });
-      })
-      .catch(() => {})
-      .finally(() => setIsLoading(false));
-  };
-  return {
-    ...query,
-    isLoading: isLoading,
-    handleLoadMore,
-  };
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    [isLoading],
+  );
+
+  return useMemo(() => ({ ...query, handleLoadMore, isLoading }), [query, isLoading]);
 };
 
 export { useHomeTimeline, type TimelineEntry };
