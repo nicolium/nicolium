@@ -14,7 +14,7 @@ import type {
   MinifiedAdminReport,
   MinifiedConversation,
 } from './utils/minify-list';
-import type { NormalizedStatus } from '@/reducers/statuses';
+import type { NormalizedStatus } from '@/normalizers/status';
 import type { DataTag, InfiniteData } from '@tanstack/react-query';
 import type {
   Account,
@@ -672,4 +672,4 @@ const queryKeys = {
   frontend,
 } as const;
 
-export { queryKeys, type TaggedKey };
+export { queryKeys };

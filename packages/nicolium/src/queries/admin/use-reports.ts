@@ -1,9 +1,11 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMemo } from 'react';
 
 import { useClient } from '@/hooks/use-client';
 import { useInstance } from '@/hooks/use-instance';
 import { useOwnAccount } from '@/hooks/use-own-account';
 
+import { useAccount } from '../accounts/use-account';
 import { queryKeys } from '../keys';
 import { filterById } from '../utils/filter-id';
 import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
@@ -20,13 +22,36 @@ const useReports = makePaginatedResponseQuery(
   'isAdmin',
 );
 
-const useReport = (reportId: string) => {
+const useMinimalReport = (reportId: string) => {
   const client = useClient();
 
   return useQuery({
     queryKey: queryKeys.admin.reports.show(reportId),
     queryFn: () => client.admin.reports.getReport(reportId).then(minifyAdminReport),
   });
+};
+
+const useReport = (reportId: string) => {
+  const reportQuery = useMinimalReport(reportId);
+
+  // const statuses = useStatuses();
+  const { data: account } = useAccount(reportQuery.data?.account_id ?? undefined);
+  const { data: targetAccount } = useAccount(reportQuery.data?.target_account_id ?? undefined);
+  const { data: assignedAccount } = useAccount(reportQuery.data?.assigned_account_id ?? undefined);
+
+  return useMemo(() => {
+    if (!reportQuery.data) return reportQuery;
+
+    return {
+      ...reportQuery,
+      data: {
+        ...reportQuery.data,
+        account,
+        target_account: targetAccount,
+        assigned_account: assignedAccount,
+      },
+    };
+  }, [reportQuery.data, account, targetAccount, assignedAccount]);
 };
 
 const pendingReportsQuery = makePaginatedResponseQueryOptions(

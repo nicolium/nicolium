@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import React, { useCallback } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
@@ -8,30 +8,20 @@ import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { useAccount } from '@/queries/accounts/use-account';
 import { useReport } from '@/queries/admin/use-reports';
-import { makeGetReport } from '@/selectors';
 
 interface IReport {
   id: string;
 }
 
 const Report: React.FC<IReport> = ({ id }) => {
-  const { data: minifiedReport } = useReport(id);
-
-  const getReport = useCallback(makeGetReport(), []);
-
-  const report = useAppSelector((state) => getReport(state, minifiedReport));
-
-  const { data: targetAccount } = useAccount(report?.target_account_id);
+  const { data: report } = useReport(id);
 
   if (!report) return null;
 
   const account = report.account;
 
-  const statuses = report.statuses;
-  const statusCount = statuses.length;
+  const statusCount = report.status_ids.length;
   const reporterAcct = account?.acct;
 
   return (
@@ -41,22 +31,25 @@ const Report: React.FC<IReport> = ({ id }) => {
       className='block rounded-lg bg-gray-100 p-4 dark:bg-primary-800'
     >
       <Stack space={2} className='h-full justify-between'>
-        {targetAccount && (
-          <HoverAccountWrapper accountId={targetAccount.id} element='span'>
+        {report.target_account && (
+          <HoverAccountWrapper accountId={report.target_account.id} element='span'>
             <HStack alignItems='center' space={2}>
               <Avatar
-                src={targetAccount.avatar}
-                alt={targetAccount.avatar_description}
+                src={report.target_account.avatar}
+                alt={report.target_account.avatar_description}
                 size={40}
-                isCat={targetAccount.is_cat}
-                username={targetAccount.username}
+                isCat={report.target_account.is_cat}
+                username={report.target_account.username}
               />
               <Stack>
                 <Text size='sm' weight='semibold' truncate>
-                  <Emojify text={targetAccount.display_name} emojis={targetAccount.emojis} />
+                  <Emojify
+                    text={report.target_account.display_name}
+                    emojis={report.target_account.emojis}
+                  />
                 </Text>
                 <Text size='sm' theme='muted' direction='ltr' truncate>
-                  @{targetAccount.fqn}
+                  @{report.target_account.fqn}
                 </Text>
               </Stack>
             </HStack>

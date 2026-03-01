@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 
 import { useAppSelector } from './use-app-selector';
 
-import type { NormalizedStatus } from '@/reducers/statuses';
+import type { NormalizedStatus } from '@/normalizers/status';
 import type { InteractionPolicy, InteractionPolicyEntry } from 'pl-api';
 
 const useCanInteract = (

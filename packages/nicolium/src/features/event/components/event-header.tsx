@@ -2,7 +2,6 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchEventIcs } from '@/actions/events';
 import { deleteStatusModal, toggleStatusSensitivityModal } from '@/actions/moderation';
 import { initReport, ReportableEntities } from '@/actions/reports';
 import { deleteStatus } from '@/actions/statuses';
@@ -17,6 +16,7 @@ import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -40,7 +40,7 @@ import PlaceholderEventHeader from '../../placeholder/components/placeholder-eve
 import EventActionButton from '../components/event-action-button';
 import EventDate from '../components/event-date';
 
-import type { NormalizedStatus as Status } from '@/reducers/statuses';
+import type { NormalizedStatus as Status } from '@/normalizers/status';
 
 const messages = defineMessages({
   bannerHeader: { id: 'event.banner', defaultMessage: 'Event banner' },
@@ -119,6 +119,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const { openModal } = useModalsActions();
   const { getOrCreateChatByAccountId } = useChats();
 
+  const client = useClient();
   const features = useFeatures();
   const { boostModal } = useSettings();
   const { data: ownAccount } = useOwnAccount();
@@ -159,7 +160,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleExportClick = () => {
-    dispatch(fetchEventIcs(status.id))
+    client.events
+      .getEventIcs(status.id)
       .then((data) => {
         download(data, 'calendar.ics');
       })

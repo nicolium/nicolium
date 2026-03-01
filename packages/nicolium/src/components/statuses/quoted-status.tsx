@@ -12,7 +12,7 @@ import EventPreview from './event-preview';
 import StatusContent from './status-content';
 import StatusReplyMentions from './status-reply-mentions';
 
-import type { SelectedStatus } from '@/selectors';
+import type { SelectedStatus } from '@/queries/statuses/use-status';
 
 const messages = defineMessages({
   cancel: { id: 'reply_indicator.cancel', defaultMessage: 'Cancel' },

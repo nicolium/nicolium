@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
 import ReactSwipeableViews from 'react-swipeable-views';
 
@@ -15,9 +15,7 @@ import Text from '@/components/ui/text';
 import StatusContainer from '@/containers/status-container';
 import ColumnLoading from '@/features/ui/components/column-loading';
 import { adminReportRoute } from '@/features/ui/router';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
-import { useAccount } from '@/queries/accounts/use-account';
 import {
   useReopenReport,
   useReport,
@@ -25,7 +23,6 @@ import {
   useSelfAssignReport,
   useUnassignReport,
 } from '@/queries/admin/use-reports';
-import { makeGetReport } from '@/selectors';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
@@ -108,15 +105,8 @@ const ReportPage: React.FC = () => {
 
   const features = useFeatures();
   const intl = useIntl();
-  const { data: minifiedReport } = useReport(reportId);
+  const { data: report } = useReport(reportId);
   const { openModal } = useModalsActions();
-
-  const getReport = useCallback(makeGetReport(), []);
-
-  const report = useAppSelector((state) => getReport(state, minifiedReport));
-
-  const { data: authorAccount } = useAccount(report?.account_id);
-  const { data: targetAccount } = useAccount(report?.target_account_id);
 
   const { mutate: selfAssignReport } = useSelfAssignReport(reportId);
   const { mutate: unassignReport } = useUnassignReport(reportId);
@@ -173,8 +163,12 @@ const ReportPage: React.FC = () => {
   return (
     <Column label={intl.formatMessage(messages.columnHeading, { id: reportId })}>
       <div className='mb-4 grid grid-cols-1 gap-2 md:grid-cols-2'>
-        {targetAccount && (
-          <Link to='/@{$username}' params={{ username: targetAccount.acct }} className='h-fit'>
+        {report.target_account && (
+          <Link
+            to='/@{$username}'
+            params={{ username: report.target_account.acct }}
+            className='h-fit'
+          >
             <Card variant='rounded'>
               <Stack space={2}>
                 <Text size='md' weight='medium'>
@@ -183,7 +177,7 @@ const ReportPage: React.FC = () => {
                     defaultMessage='Reported account'
                   />
                 </Text>
-                <Account account={targetAccount} disabled hideActions />
+                <Account account={report.target_account} disabled hideActions />
               </Stack>
             </Card>
           </Link>
@@ -209,7 +203,7 @@ const ReportPage: React.FC = () => {
                 </Text>
               </td>
             </tr>
-            {authorAccount && (
+            {report.account && (
               <tr className='border-b border-primary-200 last:border-none dark:border-gray-800'>
                 <td className='p-2.5'>
                   <Text weight='medium' size='sm' tag='span'>
@@ -223,7 +217,7 @@ const ReportPage: React.FC = () => {
                       to='/pl-fe/admin/accounts/$accountId'
                       params={{ accountId: report.account_id }}
                     >
-                      @{authorAccount.acct}
+                      @{report.account.acct}
                     </Link>
                   </Text>
                 </td>

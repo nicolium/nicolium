@@ -31,7 +31,7 @@ const TestTimelinePage: React.FC = () => {
   const dispatch = useAppDispatch();
 
   React.useEffect(() => {
-    dispatch(importEntities({ statuses: MOCK_STATUSES }));
+    importEntities({ statuses: MOCK_STATUSES });
     dispatch(expandTimelineSuccess(timelineId, MOCK_STATUSES, null, null, false));
   }, []);
 

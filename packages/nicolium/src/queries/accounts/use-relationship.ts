@@ -145,12 +145,9 @@ const useUnfollowAccountMutation = (accountId: string) => {
     onSuccess: (data) => {
       queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
 
-      dispatch((dispatch, getState) => {
-        return dispatch({
-          type: ACCOUNT_UNFOLLOW_SUCCESS,
-          relationship: data,
-          statuses: getState().statuses,
-        });
+      dispatch({
+        type: ACCOUNT_UNFOLLOW_SUCCESS,
+        relationship: data,
       });
     },
   });
@@ -194,14 +191,11 @@ const useBlockAccountMutation = (accountId: string) => {
       });
 
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
-      return dispatch<AccountsAction>((dispatch, getState) => {
-        filterContexts(data, getState().statuses);
+      filterContexts(data);
 
-        return dispatch({
-          type: ACCOUNT_BLOCK_SUCCESS,
-          relationship: data,
-          statuses: getState().statuses,
-        });
+      return dispatch<AccountsAction>({
+        type: ACCOUNT_BLOCK_SUCCESS,
+        relationship: data,
       });
     },
   });
@@ -265,14 +259,11 @@ const useMuteAccountMutation = (accountId: string) => {
       });
 
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
-      return dispatch<AccountsAction>((dispatch, getState) => {
-        filterContexts(data, getState().statuses);
+      filterContexts(data);
 
-        return dispatch({
-          type: ACCOUNT_MUTE_SUCCESS,
-          relationship: data,
-          statuses: getState().statuses,
-        });
+      return dispatch<AccountsAction>({
+        type: ACCOUNT_MUTE_SUCCESS,
+        relationship: data,
       });
     },
   });

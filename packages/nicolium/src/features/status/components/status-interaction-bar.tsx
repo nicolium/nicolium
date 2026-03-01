@@ -10,7 +10,7 @@ import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useModalsActions } from '@/stores/modals';
 
-import type { NormalizedStatus as Status } from '@/reducers/statuses';
+import type { NormalizedStatus as Status } from '@/normalizers/status';
 
 interface IStatusInteractionBar {
   status: Pick<

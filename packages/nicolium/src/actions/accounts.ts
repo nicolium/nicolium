@@ -1,6 +1,5 @@
 import { getClient } from '@/api';
 
-import type { NormalizedStatus } from '@/reducers/statuses';
 import type { AppDispatch, RootState } from '@/store';
 import type { CreateAccountParams, Relationship } from 'pl-api';
 
@@ -20,7 +19,6 @@ type AccountsAction = {
     | typeof ACCOUNT_MUTE_SUCCESS
     | typeof ACCOUNT_UNFOLLOW_SUCCESS;
   relationship: Relationship;
-  statuses: Record<string, NormalizedStatus>;
 };
 
 export {

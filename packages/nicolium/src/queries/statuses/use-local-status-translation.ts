@@ -2,13 +2,13 @@ import { useQuery } from '@tanstack/react-query';
 import { translationSchema, type Translation } from 'pl-api';
 import * as v from 'valibot';
 
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useLanguageModelAvailabilityActions } from '@/stores/language-model-availability';
 
 import { queryKeys } from '../keys';
 
 const useLocalStatusTranslation = (statusId: string, targetLanguage?: string) => {
-  const status = useAppSelector((state) => state.statuses[statusId]);
+  const { data: status } = useMinimalStatus(statusId);
   const { setLanguageModelAvailability, setLanguageModelDownloadProgress } =
     useLanguageModelAvailabilityActions();
 
@@ -16,8 +16,9 @@ const useLocalStatusTranslation = (statusId: string, targetLanguage?: string) =>
 
   return useQuery<Translation | false>({
     queryKey: queryKeys.statuses.localTranslations(statusId, targetLanguage!),
+    enabled: !!status && !!sourceLanguage && !!targetLanguage,
     queryFn: async ({ signal }) => {
-      if (!('Translator' in globalThis)) return false;
+      if (!('Translator' in globalThis) || !status) return false;
 
       try {
         const translator = await Translator.create({
@@ -48,7 +49,6 @@ const useLocalStatusTranslation = (statusId: string, targetLanguage?: string) =>
         return false;
       }
     },
-    enabled: !!sourceLanguage && !!targetLanguage,
   });
 };
 

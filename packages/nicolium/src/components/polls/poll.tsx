@@ -11,7 +11,7 @@ import { useStatusMeta } from '@/stores/status-meta';
 import PollFooter from './poll-footer';
 import PollOption from './poll-option';
 
-import type { NormalizedStatus as Status } from '@/reducers/statuses';
+import type { NormalizedStatus as Status } from '@/normalizers/status';
 
 type Selected = Record<number, boolean>;
 

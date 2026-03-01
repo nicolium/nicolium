@@ -12,13 +12,7 @@ import {
 } from './statuses';
 
 import type { AppDispatch, RootState } from '@/store';
-import type { CreateEventParams, Location, MediaAttachment, Status } from 'pl-api';
-
-const EVENT_JOIN_REQUEST = 'EVENT_JOIN_REQUEST' as const;
-const EVENT_JOIN_FAIL = 'EVENT_JOIN_FAIL' as const;
-
-const EVENT_LEAVE_REQUEST = 'EVENT_LEAVE_REQUEST' as const;
-const EVENT_LEAVE_FAIL = 'EVENT_LEAVE_FAIL' as const;
+import type { CreateEventParams, Location, MediaAttachment } from 'pl-api';
 
 const messages = defineMessages({
   exceededImageSizeLimit: {
@@ -81,7 +75,7 @@ const submitEvent =
       ? getClient(state).events.createEvent(params)
       : getClient(state).events.editEvent(statusId, params));
 
-    dispatch(importEntities({ statuses: [data] }));
+    importEntities({ statuses: [data] });
     toast.success(statusId ? messages.editSuccess : messages.success, {
       actionLabel: messages.view,
       actionLinkOptions: {
@@ -92,33 +86,6 @@ const submitEvent =
 
     return data;
   };
-
-interface JoinEventRequest {
-  type: typeof EVENT_JOIN_REQUEST;
-  statusId: string;
-}
-
-interface JoinEventFail {
-  type: typeof EVENT_JOIN_FAIL;
-  error: unknown;
-  statusId: string;
-  previousState: Exclude<Status['event'], null>['join_state'] | null;
-}
-
-interface LeaveEventRequest {
-  type: typeof EVENT_LEAVE_REQUEST;
-  statusId: string;
-}
-
-interface LeaveEventFail {
-  type: typeof EVENT_LEAVE_FAIL;
-  statusId: string;
-  error: unknown;
-  previousState: Exclude<Status['event'], null>['join_state'] | null;
-}
-
-const fetchEventIcs = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) =>
-  getClient(getState).events.getEventIcs(statusId);
 
 // todo: move to compose store?
 const cancelEventCompose = () => {
@@ -146,16 +113,4 @@ const initEventEdit = (statusId: string) => (dispatch: AppDispatch, getState: ()
     });
 };
 
-type EventsAction = JoinEventRequest | JoinEventFail | LeaveEventRequest | LeaveEventFail;
-
-export {
-  EVENT_JOIN_REQUEST,
-  EVENT_JOIN_FAIL,
-  EVENT_LEAVE_REQUEST,
-  EVENT_LEAVE_FAIL,
-  submitEvent,
-  fetchEventIcs,
-  cancelEventCompose,
-  initEventEdit,
-  type EventsAction,
-};
+export { submitEvent, cancelEventCompose, initEventEdit };

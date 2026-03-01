@@ -1,12 +1,11 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Link from '@/components/link';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useGroupQuery } from '@/queries/groups/use-group';
-import { makeGetStatus } from '@/selectors';
+import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useCompose } from '@/stores/compose';
 
 interface IReplyGroupIndicator {
@@ -16,10 +15,9 @@ interface IReplyGroupIndicator {
 const ReplyGroupIndicator: React.FC<IReplyGroupIndicator> = (props) => {
   const { composeId } = props;
 
-  const getStatus = useCallback(makeGetStatus(), []);
   const { inReplyToId } = useCompose(composeId);
 
-  const status = useAppSelector((state) => getStatus(state, { id: inReplyToId! }));
+  const { data: status } = useMinimalStatus(inReplyToId ?? undefined);
 
   const { data: group } = useGroupQuery(status?.group_id ?? undefined);
 

@@ -4,7 +4,6 @@ import React, { useCallback, useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { redactStatus } from '@/actions/admin';
-import { emojiReact, unEmojiReact } from '@/actions/emoji-reacts';
 import { deleteStatusModal, toggleStatusSensitivityModal } from '@/actions/moderation';
 import { initReport, ReportableEntities } from '@/actions/reports';
 import { changeSetting } from '@/actions/settings';
@@ -35,6 +34,8 @@ import { useTranslationLanguages } from '@/queries/instance/use-translation-lang
 import {
   useBookmarkStatus,
   useDislikeStatus,
+  useEmojiReactMutation,
+  useEmojiUnreactMutation,
   useFavouriteStatus,
   usePinStatus,
   useReblogStatus,
@@ -641,12 +642,14 @@ const getLongerWrench = (emojis: Array<CustomEmoji>) =>
   emojis.find(({ shortcode }) => shortcode === 'longest_wrench');
 
 const WrenchButton: React.FC<IActionButton> = ({ status, withLabels, me }) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
   const features = useFeatures();
 
   const { openModal } = useModalsActions();
   const { showWrenchButton } = useSettings();
+
+  const { mutate: emojiReact } = useEmojiReactMutation(status.id);
+  const { mutate: emojiUnreact } = useEmojiUnreactMutation(status.id);
 
   const { data: hasLongerWrench } = useCustomEmojis(getLongerWrench);
 
@@ -657,15 +660,15 @@ const WrenchButton: React.FC<IActionButton> = ({ status, withLabels, me }) => {
 
   const handleWrenchClick: React.EventHandler<React.MouseEvent> = () => {
     if (wrenches?.me) {
-      dispatch(unEmojiReact(status.id, '🔧'));
+      emojiUnreact('🔧');
     } else {
-      dispatch(emojiReact(status.id, '🔧', undefined, intl));
+      emojiReact('🔧');
     }
   };
 
   const handleWrenchLongPress = () => {
     if (features.customEmojiReacts && hasLongerWrench) {
-      dispatch(emojiReact(status.id, hasLongerWrench.shortcode, hasLongerWrench.url, intl));
+      emojiReact(hasLongerWrench.shortcode);
     } else if (wrenches?.count) {
       openModal('REACTIONS', { statusId: status.id, reaction: wrenches.name });
     }
@@ -689,19 +692,14 @@ const EmojiPickerButton: React.FC<Omit<IActionButton, 'onOpenUnauthorizedModal'>
   withLabels,
   me,
 }) => {
-  const dispatch = useAppDispatch();
-  const intl = useIntl();
-
   const features = useFeatures();
 
+  const { mutate: emojiReact } = useEmojiReactMutation(status.id);
+
   const handlePickEmoji = (emoji: EmojiType) => {
-    dispatch(
-      emojiReact(
-        status.id,
-        emoji.custom ? emoji.id : emoji.native,
-        emoji.custom ? emoji.imageUrl : undefined,
-        intl,
-      ),
+    emojiReact(
+      emoji.custom ? emoji.id : emoji.native,
+      // emoji.custom ? emoji.imageUrl : undefined,
     );
   };
 

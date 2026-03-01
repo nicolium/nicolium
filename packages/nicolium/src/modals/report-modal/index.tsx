@@ -11,10 +11,10 @@ import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import AccountContainer from '@/containers/account-container';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useInstance } from '@/hooks/use-instance';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useBlockAccountMutation } from '@/queries/accounts/use-relationship';
+import { useMinimalStatus } from '@/queries/statuses/use-status';
 
 import ConfirmationStep from './steps/confirmation-step';
 import OtherActionsStep from './steps/other-actions-step';
@@ -47,7 +47,7 @@ const reportSteps = {
 };
 
 const SelectedStatus = ({ statusId }: { statusId: string }) => {
-  const status = useAppSelector((state) => state.statuses[statusId]);
+  const { data: status } = useMinimalStatus(statusId);
 
   if (!status) {
     return null;

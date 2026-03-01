@@ -1,12 +1,11 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Modal from '@/components/ui/modal';
 import Account from '@/features/reply-mentions/account';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useCompose } from '@/hooks/use-compose';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { makeGetStatus } from '@/selectors';
+import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { statusToMentionsAccountIdsArray } from '@/stores/compose';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
@@ -21,8 +20,7 @@ const ReplyMentionsModal: React.FC<BaseModalProps & ReplyMentionsModalProps> = (
 }) => {
   const compose = useCompose(composeId);
 
-  const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector((state) => getStatus(state, { id: compose.inReplyToId! }));
+  const { data: status } = useMinimalStatus(compose.inReplyToId ?? undefined);
   const { data: account } = useOwnAccount();
 
   const mentions = statusToMentionsAccountIdsArray(status!, account!, compose.parentRebloggedById);

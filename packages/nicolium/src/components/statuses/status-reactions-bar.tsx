@@ -2,22 +2,24 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { emojiReact, unEmojiReact } from '@/actions/emoji-reacts';
 import Emoji from '@/components/ui/emoji';
 import Icon from '@/components/ui/icon';
 import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
 import unicodeMapping from '@/features/emoji/mapping';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useLongPress } from '@/hooks/use-long-press';
+import {
+  useEmojiReactMutation,
+  useEmojiUnreactMutation,
+} from '@/queries/statuses/use-status-interactions';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 
 import AnimatedNumber from '../animated-number';
 
 import type { Emoji as EmojiType } from '@/features/emoji';
-import type { SelectedStatus } from '@/selectors';
+import type { SelectedStatus } from '@/queries/statuses/use-status';
 import type { EmojiReaction } from 'pl-api';
 
 const messages = defineMessages({
@@ -46,10 +48,12 @@ const StatusReaction: React.FC<IStatusReaction> = ({
   obfuscate,
   unauthenticated,
 }) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
   const features = useFeatures();
   const { openModal } = useModalsActions();
+
+  const { mutate: emojiReact } = useEmojiReactMutation(statusId);
+  const { mutate: emojiUnreact } = useEmojiUnreactMutation(statusId);
 
   const bind = useLongPress((e) => {
     if (!features.emojiReactsList || e.type !== 'touchstart') return;
@@ -69,9 +73,9 @@ const StatusReaction: React.FC<IStatusReaction> = ({
       if (!features.emojiReactsList) return;
       openModal('REACTIONS', { statusId, reaction: reaction.name });
     } else if (reaction.me) {
-      dispatch(unEmojiReact(statusId, reaction.name));
+      emojiUnreact(reaction.name);
     } else {
-      dispatch(emojiReact(statusId, reaction.name, reaction.url, intl));
+      emojiReact(reaction.name /*, reaction.url */);
     }
   };
 
@@ -105,20 +109,18 @@ const StatusReaction: React.FC<IStatusReaction> = ({
 };
 
 const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
   const { me } = useLoggedIn();
   const { demetricator } = useSettings();
   const features = useFeatures();
 
+  const { mutate: emojiReact } = useEmojiReactMutation(status.id);
+
   const handlePickEmoji = (emoji: EmojiType) => {
-    dispatch(
-      emojiReact(
-        status.id,
-        emoji.custom ? emoji.id : emoji.native,
-        emoji.custom ? emoji.imageUrl : undefined,
-        intl,
-      ),
+    emojiReact(
+      emoji.custom ? emoji.id : emoji.native,
+      // emoji.custom ? emoji.imageUrl : undefined,
+      // intl,
     );
   };
 

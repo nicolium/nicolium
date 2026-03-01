@@ -1,5 +1,4 @@
 import { importEntities } from '@/actions/importer';
-import { store } from '@/store';
 
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';
@@ -47,7 +46,7 @@ const minifyStatusList = (response: PaginatedResponse<Status>): PaginatedRespons
   minifyList(
     response,
     (status) => status.id,
-    (statuses) => store.dispatch(importEntities({ statuses })),
+    (statuses) => importEntities({ statuses }),
   );
 
 const minifyAccountList = (response: PaginatedResponse<Account>): PaginatedResponse<string> =>
@@ -128,12 +127,10 @@ type MinifiedConversation = ReturnType<typeof minifyConversation>;
 
 const minifyConversationList = (response: PaginatedResponse<Conversation>) =>
   minifyList(response, minifyConversation, (conversations) => {
-    store.dispatch(
-      importEntities({
-        accounts: conversations.flatMap((conversation) => conversation.accounts),
-        statuses: conversations.map((conversation) => conversation.last_status),
-      }),
-    );
+    importEntities({
+      accounts: conversations.flatMap((conversation) => conversation.accounts),
+      statuses: conversations.map((conversation) => conversation.last_status),
+    });
   });
 
 const minifyGroupedNotifications = (
@@ -145,7 +142,7 @@ const minifyGroupedNotifications = (
     (results) => {
       const { accounts, statuses } = results;
 
-      store.dispatch(importEntities({ accounts, statuses }));
+      importEntities({ accounts, statuses });
     },
     false,
   );
@@ -188,17 +185,15 @@ const minifyAdminReport = ({
     partial: false,
   });
 
-  store.dispatch(
-    importEntities({
-      accounts: [
-        account.account,
-        action_taken_by_account?.account,
-        assigned_account?.account,
-        target_account?.account,
-      ],
-      statuses: statuses,
-    }),
-  );
+  importEntities({
+    accounts: [
+      account.account,
+      action_taken_by_account?.account,
+      assigned_account?.account,
+      target_account?.account,
+    ],
+    statuses: statuses,
+  });
   return {
     account_id: account.id,
     action_taken_by_account_id: action_taken_by_account?.id,

@@ -3,7 +3,6 @@ import { useState } from 'react';
 
 import { importEntities } from '@/actions/importer';
 import { useTimelineStream } from '@/api/hooks/streaming/use-timeline-stream';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 
 import { queryKeys } from '../keys';
@@ -106,7 +105,6 @@ const processPage = ({ items: statuses, next }: PaginatedResponse<Status>) => {
 
 const useHomeTimeline = () => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   useTimelineStream('home');
@@ -123,7 +121,7 @@ const useHomeTimeline = () => {
       return client.timelines
         .homeTimeline()
         .then((response) => {
-          dispatch(importEntities({ statuses: response.items }));
+          importEntities({ statuses: response.items });
 
           return processPage(response);
         })
@@ -141,7 +139,7 @@ const useHomeTimeline = () => {
     return client.timelines
       .homeTimeline(entry.type === 'page-end' ? { max_id: entry.minId } : { min_id: entry.maxId })
       .then((response) => {
-        dispatch(importEntities({ statuses: response.items }));
+        importEntities({ statuses: response.items });
 
         const timelinePage = processPage(response);
 

@@ -9,8 +9,8 @@ import Spinner from '@/components/ui/spinner';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useAccount } from '@/queries/accounts/use-account';
+import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useStatusHistory } from '@/queries/statuses/use-status-history';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
@@ -25,7 +25,7 @@ const CompareHistoryModal: React.FC<BaseModalProps & CompareHistoryModalProps> =
 }) => {
   const { data: versions, isLoading } = useStatusHistory(statusId);
 
-  const status = useAppSelector((state) => state.statuses[statusId]);
+  const { data: status } = useMinimalStatus(statusId);
   const { data: statusAccount } = useAccount(status?.account_id ?? '');
 
   const onClickClose = () => {

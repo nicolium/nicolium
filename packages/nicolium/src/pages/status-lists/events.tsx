@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import ReactSwipeableViews from 'react-swipeable-views';
 
@@ -10,20 +10,18 @@ import Column from '@/components/ui/column';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import PlaceholderEventPreview from '@/features/placeholder/components/placeholder-event-preview';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useStatus } from '@/queries/statuses/use-status';
 import {
   useJoinedEventsTimeline,
   useRecentEventsTimeline,
 } from '@/queries/timelines/use-events-lists';
-import { makeGetStatus } from '@/selectors';
 
 const messages = defineMessages({
   title: { id: 'column.events', defaultMessage: 'Events' },
 });
 
 const Event = ({ id }: { id: string }) => {
-  const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector((state) => getStatus(state, { id }));
+  const { data: status } = useStatus(id);
 
   if (!status) return null;
 

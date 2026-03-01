@@ -8,7 +8,7 @@ import { cancelScheduledStatusMutationOptions } from '@/queries/statuses/schedul
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 
-import type { NormalizedStatus as StatusEntity } from '@/reducers/statuses';
+import type { NormalizedStatus as StatusEntity } from '@/normalizers/status';
 
 const messages = defineMessages({
   cancel: { id: 'scheduled_status.cancel', defaultMessage: 'Cancel' },

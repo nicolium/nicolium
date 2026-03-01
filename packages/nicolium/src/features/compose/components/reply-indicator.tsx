@@ -9,7 +9,7 @@ import Stack from '@/components/ui/stack';
 import AccountContainer from '@/containers/account-container';
 import { getTextDirection } from '@/utils/rtl';
 
-import type { NormalizedStatus as Status } from '@/reducers/statuses';
+import type { NormalizedStatus as Status } from '@/normalizers/status';
 
 interface IReplyIndicator {
   className?: string;

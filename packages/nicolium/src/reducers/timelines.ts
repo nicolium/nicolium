@@ -24,8 +24,9 @@ import {
   TIMELINE_SCROLL_TOP,
   type TimelineAction,
 } from '@/actions/timelines';
+import { findStatuses } from '@/queries/statuses/use-status';
 
-import type { NormalizedStatus as Status } from '@/reducers/statuses';
+import type { NormalizedStatus as Status } from '@/normalizers/status';
 import type {
   PaginatedResponse,
   Status as BaseStatus,
@@ -222,13 +223,8 @@ const updateTop = (state: State, timelineId: string, top: boolean) => {
 const isReblogOf = (reblog: Pick<Status, 'reblog_id'>, status: Pick<Status, 'id'>) =>
   reblog.reblog_id === status.id;
 
-const buildReferencesTo = (
-  statuses: Record<string, Pick<Status, 'id' | 'account_id' | 'reblog_id'>>,
-  status: Pick<Status, 'id'>,
-): Array<[string]> =>
-  Object.values(statuses)
-    .filter((reblog) => isReblogOf(reblog, status))
-    .map((status) => [status.id]);
+const buildReferencesTo = (status: Pick<Status, 'id'>): Array<[string]> =>
+  findStatuses((reblog) => isReblogOf(reblog, status)).map(([id]) => [id]);
 
 // const filterTimeline = (
 //   state: State,
@@ -246,16 +242,11 @@ const buildReferencesTo = (
 //   });
 // };
 
-const filterTimelines = (
-  state: State,
-  relationship: Relationship,
-  statuses: Record<string, Pick<Status, 'id' | 'account_id' | 'reblog_id'>>,
-) => {
-  for (const statusId in statuses) {
-    const status = statuses[statusId];
+const filterTimelines = (state: State, relationship: Relationship) => {
+  const ownedStatuses = findStatuses((status) => status.account_id === relationship.id);
 
-    if (status.account_id !== relationship.id) return;
-    const references = buildReferencesTo(statuses, status);
+  for (const [, status] of ownedStatuses) {
+    const references = buildReferencesTo(status);
     deleteStatus(state, status.id, references, relationship.id);
   }
 };
@@ -405,7 +396,7 @@ const timelines = (
     case ACCOUNT_BLOCK_SUCCESS:
     case ACCOUNT_MUTE_SUCCESS:
       return create(state, (draft) => {
-        filterTimelines(draft, action.relationship, action.statuses);
+        filterTimelines(draft, action.relationship);
       });
     // case ACCOUNT_UNFOLLOW_SUCCESS:
     //   return filterTimeline(state, 'home', action.relationship, action.statuses);

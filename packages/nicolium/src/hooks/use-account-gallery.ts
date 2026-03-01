@@ -1,13 +1,12 @@
-import { createSelector } from 'reselect';
+import { useMemo } from 'react';
 
+import { useStatuses } from '@/queries/statuses/use-status';
 import {
   useAccountMediaTimeline,
   useGroupMediaTimeline,
 } from '@/queries/timelines/use-account-media-timeline';
 
-import { useAppSelector } from './use-app-selector';
-
-import type { RootState } from '@/store';
+import type { NormalizedStatus } from '@/normalizers/status';
 import type { MediaAttachment } from 'pl-api';
 
 type AccountGalleryAttachment = MediaAttachment & {
@@ -18,42 +17,55 @@ type AccountGalleryAttachment = MediaAttachment & {
   account_id: string;
 };
 
-const getGallery = createSelector(
-  [(state: RootState, statusIds: string[]) => statusIds, (state: RootState) => state.statuses],
-  (statusIds, statuses) =>
-    statusIds.reduce((medias: Array<AccountGalleryAttachment>, statusId: string) => {
-      const status = statuses[statusId];
-      if (!status) return medias;
-      if (status.reblog_id) return medias;
+const buildGallery = (
+  statuses: Array<
+    Pick<
+      NormalizedStatus,
+      'id' | 'account_id' | 'sensitive' | 'visibility' | 'media_attachments' | 'reblog_id'
+    >
+  > = [],
+) =>
+  statuses.reduce((medias: Array<AccountGalleryAttachment>, status) => {
+    if (!status) return medias;
+    if (status.reblog_id) return medias;
 
-      return medias.concat(
-        status.media_attachments.map((media, index) => ({
-          ...media,
-          index,
-          sensitive: status.sensitive,
-          visibility: status.visibility,
-          status_id: statusId,
-          account_id: status.account_id,
-        })),
-      );
-    }, []),
-);
+    return medias.concat(
+      status.media_attachments.map((media, index) => ({
+        ...media,
+        index,
+        sensitive: status.sensitive,
+        visibility: status.visibility,
+        status_id: status.id,
+        account_id: status.account_id,
+      })),
+    );
+  }, []);
 
 const useAccountGallery = (accountId: string) => {
-  const result = useAccountMediaTimeline(accountId);
+  const { data: statusIds, ...result } = useAccountMediaTimeline(accountId);
+  const statusesQueries = useStatuses(statusIds ?? []);
+  const statusesData = statusesQueries.map((query) => query.data);
 
   return {
     ...result,
-    data: useAppSelector((state) => getGallery(state, result.data ?? [])),
+    data: useMemo(
+      () => buildGallery(statusesData.filter((s): s is NormalizedStatus => !!s)),
+      statusesData,
+    ),
   };
 };
 
 const useGroupGallery = (groupId: string) => {
-  const result = useGroupMediaTimeline(groupId);
+  const { data: statusIds, ...result } = useGroupMediaTimeline(groupId);
+  const statusesQueries = useStatuses(statusIds ?? []);
+  const statusesData = statusesQueries.map((query) => query.data);
 
   return {
     ...result,
-    data: useAppSelector((state) => getGallery(state, result.data ?? [])),
+    data: useMemo(
+      () => buildGallery(statusesData.filter((s): s is NormalizedStatus => !!s)),
+      statusesData,
+    ),
   };
 };
 

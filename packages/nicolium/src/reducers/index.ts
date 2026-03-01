@@ -11,7 +11,6 @@ import instance from './instance';
 import me from './me';
 import meta from './meta';
 import pushNotifications from './push-notifications';
-import statuses from './statuses';
 import timelines from './timelines';
 
 const reducers = {
@@ -23,7 +22,6 @@ const reducers = {
   me,
   meta,
   pushNotifications,
-  statuses,
   timelines,
 };
 

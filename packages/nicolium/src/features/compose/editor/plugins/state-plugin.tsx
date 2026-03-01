@@ -10,15 +10,12 @@ import { useIntl } from 'react-intl';
 import { fetchStatus } from '@/actions/statuses';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
+import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { useComposeStore } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
 import { getStatusIdsFromLinksInContent } from '@/utils/status';
 import Purify from '@/utils/url-purify';
-
-import type { store } from '@/store';
-
-let lazyStore: typeof store;
-import('@/store').then(({ store }) => (lazyStore = store)).catch(() => {});
 
 import { TRANSFORMERS } from '../transformers';
 
@@ -135,8 +132,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
         for (const id of ids) {
           if (compose?.dismissedQuotes.includes(id)) continue;
 
-          const state = lazyStore.getState();
-          if (state.statuses[id]) {
+          if (queryClient.getQueryData(queryKeys.statuses.show(id))) {
             quoteId = id;
             break;
           }

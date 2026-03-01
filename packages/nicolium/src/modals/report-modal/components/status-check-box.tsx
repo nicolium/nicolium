@@ -5,7 +5,7 @@ import StatusContent from '@/components/statuses/status-content';
 import Stack from '@/components/ui/stack';
 import Toggle from '@/components/ui/toggle';
 import { MediaGallery, Video, Audio } from '@/features/ui/util/async-components';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useMinimalStatus } from '@/queries/statuses/use-status';
 
 interface IStatusCheckBox {
   id: string;
@@ -20,7 +20,7 @@ const StatusCheckBox: React.FC<IStatusCheckBox> = ({
   checked,
   toggleStatusReport,
 }) => {
-  const status = useAppSelector((state) => state.statuses[id]);
+  const { data: status } = useMinimalStatus(id);
 
   const onToggle: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     toggleStatusReport(e.target.checked);

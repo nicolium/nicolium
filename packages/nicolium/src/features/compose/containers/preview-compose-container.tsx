@@ -16,7 +16,7 @@ import Text from '@/components/ui/text';
 import AccountContainer from '@/containers/account-container';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
-import type { NormalizedStatus as Status } from '@/reducers/statuses';
+import type { NormalizedStatus as Status } from '@/normalizers/status';
 
 const messages = defineMessages({
   close: {

@@ -1,5 +1,8 @@
 import { getLocale } from '@/actions/settings';
 import { getClient } from '@/api';
+import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
+import { findStatuses } from '@/queries/statuses/use-status';
 import { useComposeStore } from '@/stores/compose';
 import { useContextStore } from '@/stores/contexts';
 import { usePendingStatusesStore } from '@/stores/pending-statuses';
@@ -61,7 +64,7 @@ const processTimelineUpdate =
       return;
     }
 
-    dispatch(importEntities({ statuses: [status] }));
+    importEntities({ statuses: [status] });
 
     if (shouldSkipQueue) {
       dispatch(updateTimeline(timeline, status.id));
@@ -123,25 +126,31 @@ interface TimelineDeleteAction {
   reblogOf: string | null;
 }
 
-const deleteFromTimelines =
-  (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-    const accountId = getState().statuses[statusId]?.account_id;
-    const references: Array<[string, string]> = Object.entries(getState().statuses)
-      .filter(([key, status]) => [key, status.reblog_id === statusId])
-      .map(([key, status]) => [key, status.account_id]);
-    const reblogOf = getState().statuses[statusId]?.reblog_id ?? null;
+const deleteFromTimelines = (statusId: string) => (dispatch: AppDispatch) => {
+  const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+  const accountId = status?.account_id ?? '';
+  const references: Array<[string, string]> = findStatuses((s) => s.reblog_id === statusId).map(
+    ([id, s]) => [id, s.account_id],
+  );
+  const reblogOf = status?.reblog_id ?? null;
 
-    useContextStore.getState().actions.deleteStatuses([statusId]);
-    useComposeStore.getState().actions.handleTimelineDelete(statusId);
+  useContextStore.getState().actions.deleteStatuses([statusId]);
+  useComposeStore.getState().actions.handleTimelineDelete(statusId);
 
-    dispatch<TimelineDeleteAction>({
-      type: TIMELINE_DELETE,
-      statusId,
-      accountId,
-      references,
-      reblogOf,
-    });
-  };
+  // Remove statuses from RQ cache
+  references.forEach(([refId]) =>
+    queryClient.removeQueries({ queryKey: queryKeys.statuses.show(refId) }),
+  );
+  queryClient.removeQueries({ queryKey: queryKeys.statuses.show(statusId) });
+
+  dispatch<TimelineDeleteAction>({
+    type: TIMELINE_DELETE,
+    statusId,
+    accountId,
+    references,
+    reblogOf,
+  });
+};
 
 const clearTimeline = (timeline: string) => ({ type: TIMELINE_CLEAR, timeline });
 
@@ -188,10 +197,10 @@ const handleTimelineExpand =
     try {
       const response = await fn;
 
-      dispatch(importEntities({ statuses: response.items }));
+      importEntities({ statuses: response.items });
 
       const statuses = deduplicateStatuses(response.items);
-      dispatch(importEntities({ statuses: statuses.filter((status) => status.accounts) }));
+      importEntities({ statuses: statuses.filter((status) => status.accounts) });
 
       dispatch(
         expandTimelineSuccess(

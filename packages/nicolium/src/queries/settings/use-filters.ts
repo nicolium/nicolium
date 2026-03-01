@@ -1,4 +1,4 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient, type UseQueryResult } from '@tanstack/react-query';
 
 import { type FiltersAction, FILTERS_FETCH_SUCCESS } from '@/actions/filters';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
@@ -7,9 +7,11 @@ import { useFeatures } from '@/hooks/use-features';
 
 import { queryKeys } from '../keys';
 
-import type { CreateFilterParams, UpdateFilterParams } from 'pl-api';
+import type { CreateFilterParams, Filter, UpdateFilterParams } from 'pl-api';
 
-const useFilters = () => {
+function useFilters<T>(select: (data: Array<Filter>) => T): UseQueryResult<T, Error>;
+function useFilters(): UseQueryResult<Array<Filter>, Error>;
+function useFilters<T = Array<Filter>>(select?: (data: Array<Filter>) => T) {
   const client = useClient();
   const dispatch = useAppDispatch();
   const features = useFeatures();
@@ -28,8 +30,33 @@ const useFilters = () => {
     },
     enabled: features.filters || features.filtersV2,
     staleTime: 30 * 60 * 1000,
+    select,
   });
+}
+
+const toServerSideType = (columnType: string): Filter['context'][0] => {
+  switch (columnType) {
+    case 'home':
+    case 'notifications':
+    case 'public':
+    case 'thread':
+      return columnType;
+    default:
+      if (columnType.includes('list:')) {
+        return 'home';
+      }
+      return 'public'; // community, account, hashtag
+  }
 };
+
+const filterSelector = (contextType?: string) => (filters: Array<Filter>) =>
+  filters.filter(
+    (filter) =>
+      (!contextType || filter.context.includes(toServerSideType(contextType))) &&
+      (filter.expires_at === null || Date.parse(filter.expires_at) > Date.now()),
+  );
+
+const useFiltersByContext = (contextType: string) => useFilters(filterSelector(contextType));
 
 const useFilter = (filterId?: string) => {
   const client = useClient();
@@ -89,4 +116,11 @@ const useDeleteFilter = () => {
   });
 };
 
-export { useFilters, useFilter, useCreateFilter, useUpdateFilter, useDeleteFilter };
+export {
+  useFilters,
+  useFiltersByContext,
+  useFilter,
+  useCreateFilter,
+  useUpdateFilter,
+  useDeleteFilter,
+};

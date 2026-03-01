@@ -1,14 +1,14 @@
-import { useQuery, type UseQueryResult } from '@tanstack/react-query';
+import { useQueries, useQuery, type UseQueryResult } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
 import { importEntities } from '@/actions/importer';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
-import { type NormalizedStatus, normalizeStatus } from '@/reducers/statuses';
+import { normalizeStatus, type NormalizedStatus } from '@/normalizers/status';
 import { useContextsActions } from '@/stores/contexts';
 
 import { useAccount } from '../accounts/use-account';
 import { useAccounts } from '../accounts/use-accounts';
+import { queryClient } from '../client';
 import { queryKeys } from '../keys';
 
 import type { Context, AsyncRefreshHeader, Account } from 'pl-api';
@@ -30,28 +30,21 @@ type MinifiedContext = ReturnType<typeof minifyContext>;
 type SelectedStatus = NormalizedStatus & {
   account: Account;
   accounts?: Array<Account>;
-  reblog?: SelectedStatus;
-  quote?: SelectedStatus;
+  reblog: SelectedStatus | null;
+  quote: SelectedStatus | null;
 };
 
 const useMinimalStatus = (statusId?: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
 
   return useQuery({
     queryKey: queryKeys.statuses.show(statusId!),
     queryFn: () =>
       client.statuses.getStatus(statusId!).then((status) => {
-        const normalizedStatus = normalizeStatus(status);
+        // Import related entities (accounts, polls, etc.) into the RQ cache
+        importEntities({ statuses: [status] }, { withParents: false });
 
-        dispatch({
-          type: 'STATUS_IMPORT',
-          status,
-          skipQueryDataUpdate: true,
-        });
-        dispatch(importEntities({ statuses: [status] }, { withParents: false }));
-
-        return normalizedStatus;
+        return normalizeStatus(status);
       }),
     enabled: !!statusId,
   });
@@ -98,8 +91,8 @@ const useStatus = (
       data: {
         ...statusQuery.data,
         account: account.data!,
-        reblog: reblogQuery.data,
-        quote: quoteQuery.data,
+        reblog: reblogQuery.data ?? null,
+        quote: quoteQuery.data ?? null,
       },
       refetchContext,
     };
@@ -113,7 +106,6 @@ const useStatus = (
 
 const useStatusContext = (statusId?: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const { importContext } = useContextsActions();
 
   return useQuery({
@@ -123,11 +115,49 @@ const useStatusContext = (statusId?: string) => {
         const { ancestors, descendants, references } = context;
         const statuses = [...ancestors, ...descendants, ...references];
         importContext(statusId!, context);
-        dispatch(importEntities({ statuses }));
+        importEntities({ statuses });
         return minifyContext(context);
       }),
     enabled: !!statusId,
   });
 };
 
-export { useMinimalStatus, useStatus, useStatusContext, type MinifiedContext, type SelectedStatus };
+const useStatuses = (statusIds: Array<string>) => {
+  const client = useClient();
+
+  return useQueries({
+    queries: statusIds.map((id) => ({
+      queryKey: queryKeys.statuses.show(id),
+      queryFn: () =>
+        client.statuses.getStatus(id).then((status) => {
+          importEntities({ statuses: [status] }, { withParents: true });
+          return normalizeStatus(status);
+        }),
+      enabled: !!id,
+    })),
+  });
+};
+
+const findStatuses = (
+  predicate: (status: NormalizedStatus) => boolean,
+): Array<[string, NormalizedStatus]> =>
+  queryClient
+    .getQueriesData<NormalizedStatus>({ queryKey: queryKeys.statuses.root })
+    .filter(
+      (entry): entry is [readonly ['statuses', string], NormalizedStatus] =>
+        entry[0].length === 2 &&
+        typeof entry[0][1] === 'string' &&
+        entry[1] !== undefined &&
+        predicate(entry[1]),
+    )
+    .map(([key, data]) => [key[1], data]);
+
+export {
+  useMinimalStatus,
+  useStatus,
+  useStatusContext,
+  useStatuses,
+  findStatuses,
+  type MinifiedContext,
+  type SelectedStatus,
+};

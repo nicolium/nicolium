@@ -12,7 +12,7 @@ import { queryKeys } from '@/queries/keys';
 import { useModalsStore } from '@/stores/modals';
 import toast from '@/toast';
 
-import type { AppDispatch, RootState } from '@/store';
+import type { AppDispatch } from '@/store';
 
 const messages = defineMessages({
   deactivateUserHeading: {
@@ -183,9 +183,9 @@ const deleteUserModal =
 
 const toggleStatusSensitivityModal =
   (intl: IntlShape, statusId: string, sensitive: boolean, afterConfirm = () => {}) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const statusAccount = selectAccount(state.statuses[statusId].account_id);
+  (dispatch: AppDispatch) => {
+    const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+    const statusAccount = status ? selectAccount(status.account_id) : undefined;
     const acct = statusAccount?.acct;
 
     useModalsStore.getState().actions.openModal('CONFIRM', {
@@ -216,9 +216,9 @@ const toggleStatusSensitivityModal =
 
 const deleteStatusModal =
   (intl: IntlShape, statusId: string, afterConfirm = () => {}) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const statusAccount = selectAccount(state.statuses[statusId].account_id);
+  (dispatch: AppDispatch) => {
+    const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+    const statusAccount = status ? selectAccount(status.account_id) : undefined;
     const acct = statusAccount?.acct;
 
     useModalsStore.getState().actions.openModal('CONFIRM', {

@@ -1,5 +1,6 @@
 import { type InfiniteData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { defineMessages } from 'react-intl';
+import { create } from 'mutative';
+import { defineMessages, useIntl } from 'react-intl';
 
 import { importEntities } from '@/actions/importer';
 import { PIN_SUCCESS, UNPIN_SUCCESS, type InteractionsAction } from '@/actions/interactions';
@@ -10,12 +11,15 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { makePaginatedResponseQuery } from '@/queries/utils/make-paginated-response-query';
 import { minifyAccountList } from '@/queries/utils/minify-list';
 import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 import toast, { type IToastOptions } from '@/toast';
+import { supportsEmojiReacts } from '@/utils/check-instance-capability';
+import { simulateEmojiReact, simulateUnEmojiReact } from '@/utils/emoji-reacts';
 
 import { queryKeys } from '../keys';
 import { filterById } from '../utils/filter-id';
 
-import type { NormalizedStatus } from '@/reducers/statuses';
+import type { NormalizedStatus } from '@/normalizers/status';
 import type { EmojiReaction, PaginatedResponse } from 'pl-api';
 
 const messages = defineMessages({
@@ -24,6 +28,11 @@ const messages = defineMessages({
   folderChanged: { id: 'status.bookmark_folder_changed', defaultMessage: 'Changed folder' },
   view: { id: 'toast.view', defaultMessage: 'View' },
   selectFolder: { id: 'status.bookmark.select_folder', defaultMessage: 'Select folder' },
+  emojiReactionsUnsupported: {
+    id: 'emoji_reactions.unsupported_by_remote',
+    defaultMessage:
+      '@{acct}’s instance most likely doesn’t understand emoji reactions. The user will not get notified of the reaction.',
+  },
 });
 
 const queryKey = {
@@ -50,7 +59,7 @@ type MinifiedEmojiReaction = ReturnType<typeof minifyEmojiReaction>;
 
 const updateStatus = (
   statusId: string,
-  changes: Partial<NormalizedStatus> | ((status: NormalizedStatus) => NormalizedStatus),
+  changes: Partial<NormalizedStatus> | ((status: NormalizedStatus) => NormalizedStatus | void),
   queryClient: ReturnType<typeof useQueryClient>,
 ) => {
   const previousStatus = queryClient.getQueryData<NormalizedStatus>(
@@ -59,7 +68,9 @@ const updateStatus = (
   if (!previousStatus) return;
 
   const newStatus =
-    typeof changes === 'function' ? changes(previousStatus) : { ...previousStatus, ...changes };
+    typeof changes === 'function'
+      ? create(previousStatus, changes)
+      : { ...previousStatus, ...changes };
   queryClient.setQueryData(queryKeys.statuses.show(statusId), newStatus);
 
   return { previousStatus };
@@ -95,9 +106,73 @@ const useStatusReactions = (statusId: string, emoji?: string) => {
   });
 };
 
+const useEmojiReactMutation = (statusId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['statuses', 'emojiReact', statusId],
+    mutationFn: async (emoji: string) => {
+      const status = await client.statuses.createStatusReaction(statusId, emoji);
+
+      importEntities({ statuses: [status] });
+    },
+    onMutate: (emoji) =>
+      updateStatus(
+        statusId,
+        (status) => ({
+          ...status,
+          // TODO: provide emoji url for custom emojis
+          emoji_reactions: simulateEmojiReact(status.emoji_reactions, emoji),
+        }),
+        queryClient,
+      ),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+  });
+};
+
+const useEmojiUnreactMutation = (statusId: string) => {
+  const client = useClient();
+  const intl = useIntl();
+  const queryClient = useQueryClient();
+  const { checkEmojiReactsSupport } = useSettings();
+
+  return useMutation({
+    mutationKey: ['statuses', 'emojiUnreact', statusId],
+    mutationFn: async (emoji: string) => {
+      const status = await client.statuses.deleteStatusReaction(statusId, emoji);
+
+      importEntities({ statuses: [status] });
+
+      if (checkEmojiReactsSupport && !status.account.local) {
+        supportsEmojiReacts(status.account.ap_id ?? status.account.url)
+          .then((result) => {
+            if (result === 'false') {
+              toast.info(
+                intl.formatMessage(messages.emojiReactionsUnsupported, {
+                  acct: status.account.acct,
+                }),
+              );
+            }
+          })
+          .catch(() => {});
+      }
+    },
+    onMutate: (emoji) =>
+      updateStatus(
+        statusId,
+        (status) => ({
+          ...status,
+          emoji_reactions: simulateUnEmojiReact(status.emoji_reactions, emoji),
+        }),
+        queryClient,
+      ),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
+  });
+};
+
 const useFavouriteStatus = (statusId: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -115,7 +190,7 @@ const useFavouriteStatus = (statusId: string) => {
       ),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status) => {
-      dispatch(importEntities({ statuses: [status] }));
+      importEntities({ statuses: [status] });
       queryClient.invalidateQueries({
         queryKey: queryKeys.accountsLists.statusFavourites(statusId),
       });
@@ -125,7 +200,6 @@ const useFavouriteStatus = (statusId: string) => {
 
 const useUnfavouriteStatus = (statusId: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -143,7 +217,7 @@ const useUnfavouriteStatus = (statusId: string) => {
       ),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status) => {
-      dispatch(importEntities({ statuses: [status] }));
+      importEntities({ statuses: [status] });
       queryClient.invalidateQueries({
         queryKey: queryKeys.accountsLists.statusFavourites(statusId),
       });
@@ -153,7 +227,6 @@ const useUnfavouriteStatus = (statusId: string) => {
 
 const useDislikeStatus = (statusId: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -171,7 +244,7 @@ const useDislikeStatus = (statusId: string) => {
       ),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status) => {
-      dispatch(importEntities({ statuses: [status] }));
+      importEntities({ statuses: [status] });
       queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusDislikes(statusId) });
     },
   });
@@ -179,7 +252,6 @@ const useDislikeStatus = (statusId: string) => {
 
 const useUndislikeStatus = (statusId: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -197,7 +269,7 @@ const useUndislikeStatus = (statusId: string) => {
       ),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status) => {
-      dispatch(importEntities({ statuses: [status] }));
+      importEntities({ statuses: [status] });
       queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusDislikes(statusId) });
     },
   });
@@ -205,7 +277,6 @@ const useUndislikeStatus = (statusId: string) => {
 
 const useReblogStatus = (statusId: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -223,7 +294,7 @@ const useReblogStatus = (statusId: string) => {
       ),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status) => {
-      dispatch(importEntities({ statuses: [status] }));
+      importEntities({ statuses: [status] });
       queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusReblogs(statusId) });
     },
   });
@@ -231,7 +302,6 @@ const useReblogStatus = (statusId: string) => {
 
 const useUnreblogStatus = (statusId: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -249,7 +319,7 @@ const useUnreblogStatus = (statusId: string) => {
       ),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status) => {
-      dispatch(importEntities({ statuses: [status] }));
+      importEntities({ statuses: [status] });
       queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusReblogs(statusId) });
     },
   });
@@ -257,7 +327,6 @@ const useUnreblogStatus = (statusId: string) => {
 
 const useBookmarkStatus = (statusId: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const features = useFeatures();
   const { openModal } = useModalsActions();
@@ -268,17 +337,15 @@ const useBookmarkStatus = (statusId: string) => {
   return useMutation({
     mutationKey: ['statuses', 'bookmark', statusId],
     mutationFn: (folderId?: string) => {
-      dispatch((_, getState) => {
-        const status = getState().statuses[statusId];
-        previouslyBookmarked = status?.bookmarked;
-        previousFolder = status?.bookmark_folder;
-      });
+      const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+      previouslyBookmarked = status?.bookmarked ?? false;
+      previousFolder = status?.bookmark_folder ?? null;
       return client.statuses.bookmarkStatus(statusId, folderId);
     },
     onMutate: () => updateStatus(statusId, { bookmarked: true }, queryClient),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status, _, folderId) => {
-      dispatch(importEntities({ statuses: [status] }));
+      importEntities({ statuses: [status] });
       queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.statusReblogs(statusId) });
 
       if (previousFolder) {
@@ -325,7 +392,6 @@ const useBookmarkStatus = (statusId: string) => {
 
 const useUnbookmarkStatus = (statusId: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -334,7 +400,7 @@ const useUnbookmarkStatus = (statusId: string) => {
     onMutate: () => updateStatus(statusId, { bookmarked: false }, queryClient),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status) => {
-      dispatch(importEntities({ statuses: [status] }));
+      importEntities({ statuses: [status] });
 
       queryClient.setQueriesData<InfiniteData<PaginatedResponse<string>>>(
         {
@@ -361,7 +427,7 @@ const usePinStatus = (statusId: string) => {
     onMutate: () => updateStatus(statusId, { pinned: true }, queryClient),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSuccess: (status) => {
-      dispatch(importEntities({ statuses: [status] }));
+      importEntities({ statuses: [status] });
       queryClient.invalidateQueries({ queryKey: queryKeys.statusLists.pins(account!.id) });
       dispatch<InteractionsAction>({
         type: PIN_SUCCESS,
@@ -384,7 +450,7 @@ const useUnpinStatus = (statusId: string) => {
     onMutate: () => updateStatus(statusId, { pinned: false }, queryClient),
     onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSuccess: (status) => {
-      dispatch(importEntities({ statuses: [status] }));
+      importEntities({ statuses: [status] });
       queryClient.setQueryData(queryKeys.statusLists.pins(account!.id), filterById(statusId));
       dispatch<InteractionsAction>({
         type: UNPIN_SUCCESS,
@@ -410,5 +476,9 @@ export {
   useUnbookmarkStatus,
   usePinStatus,
   useUnpinStatus,
+  useEmojiReactMutation,
+  useEmojiUnreactMutation,
+  updateStatus,
+  restorePreviousStatus,
   type MinifiedEmojiReaction,
 };

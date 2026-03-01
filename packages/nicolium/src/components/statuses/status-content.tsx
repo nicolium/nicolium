@@ -28,7 +28,7 @@ import StatusMedia from './status-media';
 import TranslateButton from './translate-button';
 
 import type { Sizes } from '@/components/ui/text';
-import type { NormalizedStatus } from '@/reducers/statuses';
+import type { NormalizedStatus } from '@/normalizers/status';
 
 const BIG_EMOJI_LIMIT = 10;
 

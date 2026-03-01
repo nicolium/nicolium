@@ -6,7 +6,7 @@ import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import HoverStatusWrapper from '@/components/statuses/hover-status-wrapper';
 import { useModalsActions } from '@/stores/modals';
 
-import type { NormalizedStatus as Status } from '@/reducers/statuses';
+import type { NormalizedStatus as Status } from '@/normalizers/status';
 
 interface IStatusReplyMentions {
   status: Pick<Status, 'in_reply_to_id' | 'id' | 'mentions'>;

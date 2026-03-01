@@ -11,7 +11,6 @@ import AccountContainer from '@/containers/account-container';
 import Emojify from '@/features/emoji/emojify';
 import StatusTypeIcon from '@/features/status/components/status-type-icon';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useFollowedTags } from '@/queries/hashtags/use-followed-tags';
 import { useStatus, type SelectedStatus } from '@/queries/statuses/use-status';
@@ -192,7 +191,6 @@ const Status: React.FC<IStatus> = (props) => {
 
   const intl = useIntl();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const router = useRouter();
 
   const { toggleStatusesMediaHidden } = useStatusMetaActions();
@@ -340,8 +338,8 @@ const Status: React.FC<IStatus> = (props) => {
   };
 
   const handleUnfilter = () => {
-    dispatch(unfilterStatus(actualStatus.id));
-    if (actualStatus.id !== status.id) dispatch(unfilterStatus(status.id));
+    unfilterStatus(actualStatus.id);
+    if (actualStatus.id !== status.id) unfilterStatus(status.id);
   };
 
   const statusInfo = useMemo(() => {

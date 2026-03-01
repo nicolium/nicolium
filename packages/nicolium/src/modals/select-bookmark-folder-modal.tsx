@@ -1,5 +1,5 @@
 import fuzzysort from 'fuzzysort';
-import React, { useCallback, useDeferredValue, useMemo, useState } from 'react';
+import React, { useDeferredValue, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { ListItem } from '@/components/list';
@@ -11,7 +11,6 @@ import { RadioGroup, RadioItem } from '@/components/ui/radio';
 import Spinner from '@/components/ui/spinner';
 import Stack from '@/components/ui/stack';
 import Toggle from '@/components/ui/toggle';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { NewFolderForm } from '@/pages/status-lists/bookmark-folders';
 import {
@@ -20,8 +19,8 @@ import {
   useRemoveBookmarkFromFolder,
   useStatusBookmarkFolders,
 } from '@/queries/statuses/use-bookmark-folders';
+import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useBookmarkStatus } from '@/queries/statuses/use-status-interactions';
-import { makeGetStatus } from '@/selectors';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 import type { BookmarkFolder } from 'pl-api';
@@ -40,11 +39,10 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
   statusId,
   onClose,
 }) => {
-  const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector((state) => getStatus(state, { id: statusId }))!;
+  const { data: status } = useMinimalStatus(statusId);
   const features = useFeatures();
 
-  const [selectedFolder, setSelectedFolder] = useState(status.bookmark_folder);
+  const [selectedFolder, setSelectedFolder] = useState(status?.bookmark_folder ?? null);
   const [searchTerm, setSearchTerm] = useState('');
   const deferredSearchTerm = useDeferredValue(searchTerm);
 
@@ -59,7 +57,7 @@ const SelectBookmarkFolderModal: React.FC<SelectBookmarkFolderModalProps & BaseM
     useAddBookmarkToFolder(statusId);
   const { mutate: removeBookmarkFromFolder, isPending: removingBookmarkFromFolder } =
     useRemoveBookmarkFromFolder(statusId);
-  const { mutate: bookmarkStatus } = useBookmarkStatus(status.id);
+  const { mutate: bookmarkStatus } = useBookmarkStatus(statusId);
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const folderId = e.target.value;

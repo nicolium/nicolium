@@ -1,8 +1,7 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import QuotedStatus from '@/components/statuses/quoted-status';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { makeGetStatus } from '@/selectors';
+import { useStatus } from '@/queries/statuses/use-status';
 
 interface IQuotedStatusContainer {
   /** Status ID to the quoted status. */
@@ -10,9 +9,7 @@ interface IQuotedStatusContainer {
 }
 
 const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({ statusId }) => {
-  const getStatus = useCallback(makeGetStatus(), []);
-
-  const status = useAppSelector((state) => getStatus(state, { id: statusId }));
+  const { data: status } = useStatus(statusId);
 
   if (!status) {
     return null;

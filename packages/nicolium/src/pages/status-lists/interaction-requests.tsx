@@ -17,7 +17,6 @@ import Text from '@/components/ui/text';
 import AccountContainer from '@/containers/account-container';
 import { buildLink } from '@/features/notifications/components/notification';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
 import {
@@ -26,6 +25,7 @@ import {
   useFlatInteractionRequests,
   useRejectInteractionRequestMutation,
 } from '@/queries/statuses/use-interaction-requests';
+import { useMinimalStatus } from '@/queries/statuses/use-status';
 import toast from '@/toast';
 
 const messages = defineMessages({
@@ -83,7 +83,7 @@ const InteractionRequestStatus: React.FC<IInteractionRequestStatus> = ({
   isReply,
   actions,
 }) => {
-  const status = useAppSelector((state) => state.statuses[statusId]);
+  const { data: status } = useMinimalStatus(statusId);
 
   if (!status) return null;
 

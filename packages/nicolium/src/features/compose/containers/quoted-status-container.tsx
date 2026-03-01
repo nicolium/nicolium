@@ -1,8 +1,7 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import QuotedStatus from '@/components/statuses/quoted-status';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { makeGetStatus } from '@/selectors';
+import { useStatus } from '@/queries/statuses/use-status';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
 interface IQuotedStatusContainer {
@@ -12,10 +11,9 @@ interface IQuotedStatusContainer {
 /** QuotedStatus shown in post composer. */
 const QuotedStatusContainer: React.FC<IQuotedStatusContainer> = ({ composeId }) => {
   const { updateCompose } = useComposeActions();
-  const getStatus = useCallback(makeGetStatus(), []);
   const { quoteId } = useCompose(composeId);
 
-  const status = useAppSelector((state) => getStatus(state, { id: quoteId! }));
+  const { data: status } = useStatus(quoteId ?? undefined);
 
   const onCancel = () => {
     updateCompose(composeId, (draft) => {

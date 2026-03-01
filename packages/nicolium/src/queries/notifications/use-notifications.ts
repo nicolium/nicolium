@@ -1,19 +1,20 @@
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import 'intl-pluralrules';
 import omit from 'lodash/omit';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useIntl } from 'react-intl';
 
 import { importEntities } from '@/actions/importer';
-import { notificationMessages } from '@/features/notifications/components/notification';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import {
+  getNotificationStatusId,
+  notificationMessages,
+} from '@/features/notifications/components/notification';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { appendFollowRequest } from '@/queries/accounts/use-follow-requests';
 import { queryClient } from '@/queries/client';
 import { makePaginatedResponseQueryOptions } from '@/queries/utils/make-paginated-response-query-options';
-import { getFilters, regexFromFilters } from '@/selectors';
+import { regexFromFilters } from '@/selectors';
 import { useSettingsStore } from '@/stores/settings';
 import { compareId } from '@/utils/comparators';
 import { unescapeHTML } from '@/utils/html';
@@ -21,8 +22,12 @@ import { EXCLUDE_TYPES, NOTIFICATION_TYPES } from '@/utils/notification';
 import { play, soundCache } from '@/utils/sounds';
 import { joinPublicPath } from '@/utils/static';
 
+import { useAccount } from '../accounts/use-account';
+import { useAccounts } from '../accounts/use-accounts';
 import { queryKeys } from '../keys';
 import { useNotificationsMarker } from '../markers/use-markers';
+import { useFiltersByContext } from '../settings/use-filters';
+import { useStatus } from '../statuses/use-status';
 import { minifyGroupedNotifications } from '../utils/minify-list';
 
 import type { GetGroupedNotificationsParams, Notification, NotificationGroup } from 'pl-api';
@@ -122,6 +127,24 @@ const useNotifications = (activeFilter: FilterType) => {
   });
 };
 
+const useNotification = (notification: NotificationGroup) => {
+  const statusId = getNotificationStatusId(notification);
+  const { data: status } = useStatus(statusId ?? undefined);
+  const { data: target } = useAccount(
+    'target_id' in notification ? notification.target_id : undefined,
+  );
+  const accounts = useAccounts(notification.sample_account_ids);
+
+  return useMemo(() => {
+    return {
+      ...notification,
+      status,
+      target,
+      accounts: accounts.data,
+    };
+  }, [notification, status, target, accounts.data]);
+};
+
 const usePrefetchNotificationsMarker = () => {
   const client = useClient();
   const queryClient = useQueryClient();
@@ -138,9 +161,8 @@ const usePrefetchNotificationsMarker = () => {
 };
 
 const useProcessStreamNotification = () => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
-  const filters = useAppSelector((state) => getFilters(state, { contextType: 'notifications' }));
+  const { data: filters = [] } = useFiltersByContext('notifications');
   const activeFilter = useActiveFilter();
   const { sounds } = useSettingsStore((state) => state.settings.notifications);
 
@@ -201,15 +223,13 @@ const useProcessStreamNotification = () => {
         play(soundCache.boop);
       }
 
-      dispatch(
-        importEntities({
-          accounts: [
-            notification.account,
-            notification.type === 'move' ? notification.target : undefined,
-          ],
-          statuses: [status],
-        }),
-      );
+      importEntities({
+        accounts: [
+          notification.account,
+          notification.type === 'move' ? notification.target : undefined,
+        ],
+        statuses: [status],
+      });
 
       const normalizedNotification = normalizeNotification(notification);
 
@@ -329,10 +349,10 @@ const prependNotification = (notification: NotificationGroup, filter: FilterType
 };
 
 export {
-  FILTER_TYPES,
   type FilterType,
   useMarkNotificationsReadMutation,
   useNotifications,
+  useNotification,
   useNotificationsUnreadCount,
   usePrefetchNotifications,
   usePrefetchNotificationsMarker,

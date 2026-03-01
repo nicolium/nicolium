@@ -5,7 +5,6 @@ import { useMemo } from 'react';
 import { importEntities } from '@/actions/importer';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
-import { store } from '@/store';
 import { compareDate } from '@/utils/comparators';
 
 import { queryClient } from '../client';
@@ -29,12 +28,10 @@ const sortConversations = (items: MinifiedConversation[]) =>
   });
 
 const importConversationEntities = (conversations: Conversation[]) => {
-  store.dispatch(
-    importEntities({
-      accounts: conversations.flatMap((conversation) => conversation.accounts),
-      statuses: conversations.map((conversation) => conversation.last_status),
-    }),
-  );
+  importEntities({
+    accounts: conversations.flatMap((conversation) => conversation.accounts),
+    statuses: conversations.map((conversation) => conversation.last_status),
+  });
 };
 
 const updateConversations = (conversation: Conversation) => {

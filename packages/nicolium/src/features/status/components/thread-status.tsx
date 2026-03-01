@@ -4,7 +4,7 @@ import React from 'react';
 import Tombstone from '@/components/statuses/tombstone';
 import StatusContainer from '@/containers/status-container';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useReplyCount, useReplyToId } from '@/stores/contexts';
 
 interface IThreadStatus {
@@ -22,8 +22,9 @@ const ThreadStatus: React.FC<IThreadStatus> = (props): React.JSX.Element => {
 
   const replyToId = useReplyToId(id);
   const replyCount = useReplyCount(id);
-  const isLoaded = useAppSelector((state) => Boolean(state.statuses[id]));
-  const isDeleted = useAppSelector((state) => Boolean(state.statuses[id]?.deleted));
+  const { data: statusData } = useMinimalStatus(id);
+  const isLoaded = Boolean(statusData);
+  const isDeleted = Boolean(statusData?.deleted);
 
   if (isDeleted) {
     return (

@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import { updateStatus } from '@/actions/statuses';
+import { importEntities } from '@/actions/importer';
 import { deleteFromTimelines, processTimelineUpdate } from '@/actions/timelines';
 import { useStatContext } from '@/contexts/stat-context';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
@@ -114,7 +114,7 @@ const useUserStream = () => {
         dispatch(processTimelineUpdate(getTimelineFromStream(event.stream), event.payload));
         break;
       case 'status.update':
-        dispatch(updateStatus(event.payload));
+        importEntities({ statuses: [event.payload] });
         break;
       case 'delete':
         dispatch(deleteFromTimelines(event.payload));

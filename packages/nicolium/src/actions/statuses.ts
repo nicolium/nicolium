@@ -2,6 +2,7 @@ import { getClient } from '@/api';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
+import { updateStatus } from '@/queries/statuses/use-status-interactions';
 import { useComposeStore } from '@/stores/compose';
 import { useContextStore } from '@/stores/contexts';
 import { useModalsStore } from '@/stores/modals';
@@ -13,7 +14,7 @@ import { shouldHaveCard } from '@/utils/status';
 import { importEntities } from './importer';
 import { deleteFromTimelines } from './timelines';
 
-import type { NormalizedStatus as Status } from '@/reducers/statuses';
+import type { NormalizedStatus as Status } from '@/normalizers/status';
 import type { AppDispatch, RootState } from '@/store';
 import type { CreateStatusParams, Status as BaseStatus, ScheduledStatus } from 'pl-api';
 import type { IntlShape } from 'react-intl';
@@ -26,15 +27,53 @@ const STATUS_FETCH_SOURCE_REQUEST = 'STATUS_FETCH_SOURCE_REQUEST' as const;
 const STATUS_FETCH_SOURCE_SUCCESS = 'STATUS_FETCH_SOURCE_SUCCESS' as const;
 const STATUS_FETCH_SOURCE_FAIL = 'STATUS_FETCH_SOURCE_FAIL' as const;
 
-const STATUS_DELETE_REQUEST = 'STATUS_DELETE_REQUEST' as const;
-const STATUS_DELETE_SUCCESS = 'STATUS_DELETE_SUCCESS' as const;
-const STATUS_DELETE_FAIL = 'STATUS_DELETE_FAIL' as const;
+const incrementReplyCount = (
+  params: Pick<BaseStatus | CreateStatusParams, 'in_reply_to_id' | 'quote_id'>,
+) => {
+  if (params.in_reply_to_id) {
+    updateStatus(
+      params.in_reply_to_id,
+      (parent) => {
+        parent.replies_count =
+          (typeof parent.replies_count === 'number' ? parent.replies_count : 0) + 1;
+      },
+      queryClient,
+    );
+  }
+  if (params.quote_id) {
+    updateStatus(
+      params.quote_id,
+      (parent) => {
+        parent.quotes_count =
+          (typeof parent.quotes_count === 'number' ? parent.quotes_count : 0) + 1;
+      },
+      queryClient,
+    );
+  }
+};
 
-const STATUS_MUTE_SUCCESS = 'STATUS_MUTE_SUCCESS' as const;
-
-const STATUS_UNMUTE_SUCCESS = 'STATUS_UNMUTE_SUCCESS' as const;
-
-const STATUS_UNFILTER = 'STATUS_UNFILTER' as const;
+const decrementReplyCount = (
+  params: Pick<BaseStatus | CreateStatusParams, 'in_reply_to_id' | 'quote_id'>,
+) => {
+  if (params.in_reply_to_id) {
+    updateStatus(
+      params.in_reply_to_id,
+      (parent) => {
+        parent.replies_count = Math.max(0, parent.replies_count - 1);
+      },
+      queryClient,
+    );
+  }
+  if (params.quote_id) {
+    updateStatus(
+      params.quote_id,
+      (parent) => {
+        parent.quotes_count = Math.max(0, parent.quotes_count - 1);
+      },
+      queryClient,
+    );
+  }
+};
 
 const createStatus =
   (
@@ -47,6 +86,9 @@ const createStatus =
     if (!params.preview) {
       usePendingStatusesStore.getState().actions.importStatus(params, idempotencyKey);
       useContextStore.getState().actions.importPendingStatus(params.in_reply_to_id, idempotencyKey);
+      if (!editedId) {
+        incrementReplyCount(params);
+      }
       dispatch<StatusesAction>({
         type: STATUS_CREATE_REQUEST,
         params,
@@ -72,11 +114,9 @@ const createStatus =
         const expectsCard = status.scheduled_at === null && !status.card && shouldHaveCard(status);
 
         if (status.scheduled_at === null) {
-          dispatch(
-            importEntities(
-              { statuses: [{ ...status, expectsCard }] },
-              { idempotencyKey, withParents: true },
-            ),
+          importEntities(
+            { statuses: [{ ...status, expectsCard }] },
+            { idempotencyKey, withParents: true },
           );
         } else {
           queryClient.invalidateQueries(scheduledStatusesQueryOptions);
@@ -106,7 +146,7 @@ const createStatus =
               .statuses.getStatus(status.id)
               .then((response) => {
                 if (response.card) {
-                  dispatch(importEntities({ statuses: [response] }));
+                  importEntities({ statuses: [response] });
                 } else if (retries > 0 && response) {
                   setTimeout(() => poll(retries - 1), delay);
                 }
@@ -124,6 +164,9 @@ const createStatus =
         useContextStore
           .getState()
           .actions.deletePendingStatus(params.in_reply_to_id, idempotencyKey);
+        if (!editedId) {
+          decrementReplyCount(params);
+        }
         dispatch<StatusesAction>({
           type: STATUS_CREATE_FAIL,
           error,
@@ -136,16 +179,16 @@ const createStatus =
   };
 
 const editStatus = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  const state = getState();
+  const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+  if (!status) return;
 
-  const status = state.statuses[statusId];
   const poll = status.poll_id
     ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
     : undefined;
 
   dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_REQUEST });
 
-  return getClient(state)
+  return getClient(getState())
     .statuses.getStatusSource(statusId)
     .then((response) => {
       dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_SUCCESS });
@@ -169,7 +212,7 @@ const fetchStatus =
     return getClient(getState())
       .statuses.getStatus(statusId, params)
       .then((status) => {
-        dispatch(importEntities({ statuses: [status] }));
+        importEntities({ statuses: [status] });
         return status;
       });
   };
@@ -179,20 +222,26 @@ const deleteStatus =
   (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
-    const state = getState();
+    const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+    if (!status) return null;
 
-    const status = state.statuses[statusId];
     const poll = status.poll_id
       ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
       : undefined;
 
-    dispatch<StatusesAction>({ type: STATUS_DELETE_REQUEST, params: status });
+    decrementReplyCount(status);
 
-    return getClient(state)
+    return getClient(getState())
       .statuses.deleteStatus(statusId)
       .then((source) => {
         usePendingStatusesStore.getState().actions.deleteStatus(statusId);
-        dispatch<StatusesAction>({ type: STATUS_DELETE_SUCCESS, statusId });
+        updateStatus(
+          statusId,
+          (s) => {
+            s.deleted = true;
+          },
+          queryClient,
+        );
         dispatch(deleteFromTimelines(statusId));
 
         if (withRedraft) {
@@ -200,8 +249,8 @@ const deleteStatus =
           useModalsStore.getState().actions.openModal('COMPOSE');
         }
       })
-      .catch((error) => {
-        dispatch<StatusesAction>({ type: STATUS_DELETE_FAIL, params: status, error });
+      .catch(() => {
+        incrementReplyCount(status);
       });
   };
 
@@ -209,44 +258,58 @@ const deleteStatusFromGroup =
   (statusId: string, groupId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
     if (!isLoggedIn(getState)) return null;
 
-    const state = getState();
-    const status = state.statuses[statusId];
+    const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+    if (!status) return null;
 
-    dispatch<StatusesAction>({ type: STATUS_DELETE_REQUEST, params: status });
+    decrementReplyCount(status);
 
-    return getClient(state)
+    return getClient(getState())
       .experimental.groups.deleteGroupStatus(statusId, groupId)
       .then(() => {
         usePendingStatusesStore.getState().actions.deleteStatus(statusId);
-        dispatch<StatusesAction>({ type: STATUS_DELETE_SUCCESS, statusId });
+        updateStatus(
+          statusId,
+          (s) => {
+            s.deleted = true;
+          },
+          queryClient,
+        );
         dispatch(deleteFromTimelines(statusId));
       })
-      .catch((error) => {
-        dispatch<StatusesAction>({ type: STATUS_DELETE_FAIL, params: status, error });
+      .catch(() => {
+        incrementReplyCount(status);
       });
   };
 
-const updateStatus = (status: BaseStatus) => (dispatch: AppDispatch) => {
-  dispatch(importEntities({ statuses: [status] }));
-};
-
-const muteStatus = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+const muteStatus = (statusId: string) => (_dispatch: AppDispatch, getState: () => RootState) => {
   if (!isLoggedIn(getState)) return;
 
   return getClient(getState())
     .statuses.muteStatus(statusId)
     .then(() => {
-      dispatch<StatusesAction>({ type: STATUS_MUTE_SUCCESS, statusId });
+      updateStatus(
+        statusId,
+        (status) => {
+          status.muted = true;
+        },
+        queryClient,
+      );
     });
 };
 
-const unmuteStatus = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+const unmuteStatus = (statusId: string) => (_dispatch: AppDispatch, getState: () => RootState) => {
   if (!isLoggedIn(getState)) return;
 
   return getClient(getState())
     .statuses.unmuteStatus(statusId)
     .then(() => {
-      dispatch<StatusesAction>({ type: STATUS_UNMUTE_SUCCESS, statusId });
+      updateStatus(
+        statusId,
+        (status) => {
+          status.muted = false;
+        },
+        queryClient,
+      );
     });
 };
 
@@ -302,10 +365,15 @@ const toggleMuteStatus = (status: Pick<Status, 'id' | 'muted'>) =>
 //     }
 //   };
 
-const unfilterStatus = (statusId: string) => ({
-  type: STATUS_UNFILTER,
-  statusId,
-});
+const unfilterStatus = (statusId: string) => {
+  updateStatus(
+    statusId,
+    (status) => {
+      status.showFiltered = true;
+    },
+    queryClient,
+  );
+};
 
 type StatusesAction =
   | {
@@ -331,17 +399,7 @@ type StatusesAction =
     }
   | { type: typeof STATUS_FETCH_SOURCE_REQUEST }
   | { type: typeof STATUS_FETCH_SOURCE_SUCCESS }
-  | { type: typeof STATUS_FETCH_SOURCE_FAIL; error: unknown }
-  | { type: typeof STATUS_DELETE_REQUEST; params: Pick<Status, 'in_reply_to_id' | 'quote_id'> }
-  | { type: typeof STATUS_DELETE_SUCCESS; statusId: string }
-  | {
-      type: typeof STATUS_DELETE_FAIL;
-      params: Pick<Status, 'in_reply_to_id' | 'quote_id'>;
-      error: unknown;
-    }
-  | { type: typeof STATUS_MUTE_SUCCESS; statusId: string }
-  | { type: typeof STATUS_UNMUTE_SUCCESS; statusId: string }
-  | ReturnType<typeof unfilterStatus>;
+  | { type: typeof STATUS_FETCH_SOURCE_FAIL; error: unknown };
 
 export {
   STATUS_CREATE_REQUEST,
@@ -350,20 +408,11 @@ export {
   STATUS_FETCH_SOURCE_REQUEST,
   STATUS_FETCH_SOURCE_SUCCESS,
   STATUS_FETCH_SOURCE_FAIL,
-  STATUS_DELETE_REQUEST,
-  STATUS_DELETE_SUCCESS,
-  STATUS_DELETE_FAIL,
-  STATUS_MUTE_SUCCESS,
-  STATUS_UNMUTE_SUCCESS,
-  STATUS_UNFILTER,
   createStatus,
   editStatus,
   fetchStatus,
   deleteStatus,
   deleteStatusFromGroup,
-  updateStatus,
-  muteStatus,
-  unmuteStatus,
   toggleMuteStatus,
   unfilterStatus,
   type StatusesAction,

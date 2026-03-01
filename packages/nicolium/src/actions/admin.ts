@@ -83,7 +83,7 @@ const toggleStatusSensitivity =
     getClient(getState)
       .admin.statuses.updateStatus(statusId, { sensitive: !sensitive })
       .then((status) => {
-        dispatch(importEntities({ statuses: [status] }));
+        importEntities({ statuses: [status] });
       });
 
 const tagUser =
@@ -135,14 +135,14 @@ const setRole =
   };
 
 const redactStatus = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  const state = getState();
+  const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+  if (!status) return;
 
-  const status = state.statuses[statusId];
   const poll = status.poll_id
     ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
     : undefined;
 
-  return getClient(state)
+  return getClient(getState())
     .statuses.getStatusSource(statusId)
     .then((source) => {
       useComposeStore

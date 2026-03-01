@@ -4,7 +4,7 @@ import { FormattedDate } from 'react-intl';
 import Icon from '@/components/icon';
 import HStack from '@/components/ui/hstack';
 
-import type { NormalizedStatus as Status } from '@/reducers/statuses';
+import type { NormalizedStatus as Status } from '@/normalizers/status';
 
 interface IEventDate {
   status: Pick<Status, 'event'>;

@@ -2,6 +2,8 @@ import { useMemo } from 'react';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
+import { findStatuses } from '@/queries/statuses/use-status';
+
 import type { Context, Status } from 'pl-api';
 
 /** Minimal status fields needed to process context. */
@@ -85,11 +87,8 @@ interface State {
   inReplyTos: Record<string, string>;
   replies: Record<string, Array<string>>;
   actions: {
-    /** Delete statuses upon blocking or muting a user. */
-    filterContexts: (
-      relationship: { id: string },
-      statuses: Record<string, ContextOwnedStatus>,
-    ) => void;
+    /** Delete statuses from an account upon blocking or muting. */
+    filterContexts: (relationship: { id: string }) => void;
     /** Import a status's ancestors and descendants. */
     importContext: (statusId: string, context: Context) => void;
     /** Add a fake status ID for a pending status. */
@@ -158,11 +157,11 @@ const useContextStore = create<State>()(
     inReplyTos: {},
     replies: {},
     actions: {
-      filterContexts: (relationship, statuses) =>
+      filterContexts: (relationship) =>
         set((state) => {
-          const ownedStatusIds = Object.values(statuses)
-            .filter((status) => getStatusAccountId(status) === relationship.id)
-            .map((status) => status.id);
+          const ownedStatusIds = findStatuses(
+            (status) => getStatusAccountId(status) === relationship.id,
+          ).map(([id]) => id);
 
           deleteStatuses(state, ownedStatusIds);
         }),

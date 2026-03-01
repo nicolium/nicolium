@@ -22,7 +22,7 @@ import toast from '@/toast';
 
 import type { AutoSuggestion } from '@/components/autosuggest-input';
 import type { Language } from '@/features/preferences';
-import type { NormalizedStatus as Status } from '@/reducers/statuses';
+import type { NormalizedStatus as Status } from '@/normalizers/status';
 import type { AppDispatch, RootState } from '@/store';
 import type { LinkOptions } from '@tanstack/react-router';
 import type {

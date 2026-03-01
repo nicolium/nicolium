@@ -2,14 +2,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { defineMessages } from 'react-intl';
 
 import { importEntities } from '@/actions/importer';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import toast from '@/toast';
 
 import { queryKeys } from '../keys';
 
-import type { EventsAction } from '@/actions/events';
-import type { Status } from 'pl-api';
+import { restorePreviousStatus, updateStatus } from './use-status-interactions';
 
 const messages = defineMessages({
   joinSuccess: { id: 'join_event.success', defaultMessage: 'Joined the event' },
@@ -22,25 +20,25 @@ const messages = defineMessages({
 
 const useJoinEventMutation = (statusId: string, withToast = true) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
-
-  let previousState: Exclude<Status['event'], null>['join_state'] | null;
 
   return useMutation({
     mutationKey: ['statuses', 'joinEvent', statusId],
-    mutationFn: (participationMessage?: string) => {
-      dispatch((_, getState) => {
-        previousState = getState().statuses[statusId]?.event?.join_state!;
-      });
-      return client.events.joinEvent(statusId, participationMessage);
-    },
-    onMutate: () => dispatch<EventsAction>({ type: 'EVENT_JOIN_REQUEST', statusId }),
-    onError: (error) =>
-      dispatch<EventsAction>({ type: 'EVENT_JOIN_FAIL', statusId, error, previousState }),
+    mutationFn: (participationMessage?: string) =>
+      client.events.joinEvent(statusId, participationMessage),
+    onMutate: () =>
+      updateStatus(
+        statusId,
+        (status) => ({
+          ...status,
+          event: status.event ? { ...status.event, join_state: 'pending' as const } : null,
+        }),
+        queryClient,
+      ),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status) => {
       if (!status) return;
-      dispatch(importEntities({ statuses: [status] }));
+      importEntities({ statuses: [status] });
       queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.joinedEvents });
 
       if (withToast) {
@@ -63,25 +61,24 @@ const useJoinEventMutation = (statusId: string, withToast = true) => {
 
 const useLeaveEventMutation = (statusId: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
-
-  let previousState: Exclude<Status['event'], null>['join_state'] | null;
 
   return useMutation({
     mutationKey: ['statuses', 'leaveEvent', statusId],
-    mutationFn: () => {
-      dispatch((_, getState) => {
-        previousState = getState().statuses[statusId]?.event?.join_state!;
-      });
-      return client.events.leaveEvent(statusId);
-    },
-    onMutate: () => dispatch<EventsAction>({ type: 'EVENT_LEAVE_REQUEST', statusId }),
-    onError: (error) =>
-      dispatch<EventsAction>({ type: 'EVENT_LEAVE_FAIL', statusId, error, previousState }),
+    mutationFn: () => client.events.leaveEvent(statusId),
+    onMutate: () =>
+      updateStatus(
+        statusId,
+        (status) => ({
+          ...status,
+          event: status.event ? { ...status.event, join_state: null } : null,
+        }),
+        queryClient,
+      ),
+    onError: (_, __, context) => restorePreviousStatus(statusId, context, queryClient),
     onSettled: (status) => {
       if (!status) return;
-      dispatch(importEntities({ statuses: [status] }));
+      importEntities({ statuses: [status] });
       queryClient.invalidateQueries({ queryKey: queryKeys.accountsLists.joinedEvents });
     },
   });

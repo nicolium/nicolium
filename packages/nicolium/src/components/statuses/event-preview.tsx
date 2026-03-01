@@ -14,7 +14,7 @@ import EventDate from '@/features/event/components/event-date';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useAccount } from '@/queries/accounts/use-account';
 
-import type { NormalizedStatus as StatusEntity } from '@/reducers/statuses';
+import type { NormalizedStatus as StatusEntity } from '@/normalizers/status';
 
 const messages = defineMessages({
   eventBanner: { id: 'event.banner', defaultMessage: 'Event banner' },

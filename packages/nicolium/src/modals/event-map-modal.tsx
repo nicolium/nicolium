@@ -1,13 +1,12 @@
 import L from 'leaflet';
-import React, { useCallback, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Button from '@/components/ui/button';
 import Modal from '@/components/ui/modal';
 import Stack from '@/components/ui/stack';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
-import { makeGetStatus } from '@/selectors';
+import { useMinimalStatus } from '@/queries/statuses/use-status';
 
 import 'leaflet/dist/leaflet.css';
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
@@ -25,9 +24,8 @@ interface EventMapModalProps {
 const EventMapModal: React.FC<BaseModalProps & EventMapModalProps> = ({ onClose, statusId }) => {
   const { tileServer, tileServerAttribution } = useFrontendConfig();
 
-  const getStatus = useCallback(makeGetStatus(), []);
-  const status = useAppSelector((state) => getStatus(state, { id: statusId }))!;
-  const location = status.event!.location!;
+  const { data: status } = useMinimalStatus(statusId);
+  const location = status?.event?.location!;
 
   const map = useRef<L.Map | null>(null);
 

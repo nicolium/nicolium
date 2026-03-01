@@ -1,7 +1,6 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { makeGetStatus } from '@/selectors';
+import { useStatus } from '@/queries/statuses/use-status';
 import { useCompose, useComposeActions } from '@/stores/compose';
 
 import ReplyIndicator from '../components/reply-indicator';
@@ -11,10 +10,8 @@ interface IReplyIndicatorContainer {
 }
 
 const ReplyIndicatorContainer: React.FC<IReplyIndicatorContainer> = ({ composeId }) => {
-  const getStatus = useCallback(makeGetStatus(), []);
-
   const { inReplyToId, editedId } = useCompose(composeId);
-  const status = useAppSelector((state) => getStatus(state, { id: inReplyToId! }));
+  const { data: status } = useStatus(inReplyToId ?? undefined);
   const { resetCompose } = useComposeActions();
 
   const onCancel = () => {

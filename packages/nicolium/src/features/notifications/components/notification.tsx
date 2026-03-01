@@ -21,22 +21,21 @@ import AccountContainer from '@/containers/account-container';
 import StatusContainer from '@/containers/status-container';
 import Emojify from '@/features/emoji/emojify';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useInstance } from '@/hooks/use-instance';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useNotification } from '@/queries/notifications/use-notifications';
 import {
   useFavouriteStatus,
   useUnfavouriteStatus,
   useReblogStatus,
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
-import { makeGetNotification } from '@/selectors';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMetaActions } from '@/stores/status-meta';
 
-import type { NormalizedStatus as StatusEntity } from '@/reducers/statuses';
+import type { NormalizedStatus as StatusEntity } from '@/normalizers/status';
 import type { NotificationType } from '@/utils/notification';
 import type { Account, NotificationGroup } from 'pl-api';
 
@@ -259,37 +258,31 @@ interface INotification {
   compact?: boolean;
 }
 
-const getNotificationStatus = (
-  n: Pick<NotificationGroup, 'type'> & ({ status: StatusEntity } | {}),
-): StatusEntity | null => {
-  if (
-    [
-      'mention',
-      'status',
-      'reblog',
-      'favourite',
-      'poll',
-      'update',
-      'emoji_reaction',
-      'event_reminder',
-      'participation_accepted',
-      'participation_request',
-      'bite',
-      'quote',
-      'quoted_update',
-    ].includes(n.type)
-  )
+const STATUS_NOTIFICATION_TYPES: readonly NotificationType[] = [
+  'mention',
+  'status',
+  'reblog',
+  'favourite',
+  'poll',
+  'update',
+  'emoji_reaction',
+  'event_reminder',
+  'participation_accepted',
+  'participation_request',
+  'bite',
+  'quote',
+  'quoted_update',
+] as const;
+
+const getNotificationStatusId = (notification: NotificationGroup): string | null => {
+  if (STATUS_NOTIFICATION_TYPES.includes(notification.type))
     // @ts-expect-error
-    return n.status;
+    return notification.status_id;
   return null;
 };
 
-const Notification: React.FC<INotification> = (props) => {
-  const { onMoveUp, onMoveDown, compact } = props;
-
+const Notification: React.FC<INotification> = ({ onMoveUp, onMoveDown, compact, ...props }) => {
   const { mentionCompose, replyCompose } = useComposeActions();
-
-  const getNotification = useCallback(makeGetNotification(), []);
 
   const { me } = useLoggedIn();
   const { toggleStatusesMediaHidden } = useStatusMetaActions();
@@ -298,8 +291,8 @@ const Notification: React.FC<INotification> = (props) => {
 
   const node = useRef<HTMLDivElement>(null);
 
-  const notification = useAppSelector((state) => getNotification(state, props.notification));
-  const status = getNotificationStatus(notification);
+  const notification = useNotification(props.notification);
+  const status = notification.status;
 
   const { mutate: favouriteStatus } = useFavouriteStatus(status?.id!);
   const { mutate: unfavouriteStatus } = useUnfavouriteStatus(status?.id!);
@@ -311,8 +304,7 @@ const Notification: React.FC<INotification> = (props) => {
   const instance = useInstance();
 
   const type = notification.type;
-  const { accounts } = notification;
-  const account = accounts[0];
+  const account = notification.accounts[0];
 
   const handleOpen = () => {
     if (status && typeof status === 'object' && account && typeof account === 'object') {
@@ -512,13 +504,13 @@ const Notification: React.FC<INotification> = (props) => {
     }
   };
 
-  const targetName = notification.type === 'move' ? notification.target.acct : '';
+  const targetName = notification.type === 'move' ? notification.target!.acct : '';
 
-  const message: React.ReactNode = accounts.length
+  const message: React.ReactNode = notification.accounts.length
     ? buildMessage(
         intl,
         displayedType,
-        accounts,
+        notification.accounts,
         targetName,
         instance.title,
         !!status,
@@ -529,9 +521,9 @@ const Notification: React.FC<INotification> = (props) => {
   const ariaLabel = notificationForScreenReader(
     intl,
     intl.formatMessage(messages[displayedType], {
-      name: accounts.length
+      name: notification.accounts.length
         ? intl.formatList(
-            accounts.map((account) => account.acct),
+            notification.accounts.map((account) => account.acct),
             { type: 'conjunction' },
           )
         : '',
@@ -579,6 +571,6 @@ const Notification: React.FC<INotification> = (props) => {
 export {
   Notification as default,
   buildLink,
-  getNotificationStatus,
+  getNotificationStatusId,
   messages as notificationMessages,
 };
