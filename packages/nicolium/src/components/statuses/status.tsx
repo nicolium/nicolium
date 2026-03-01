@@ -172,7 +172,7 @@ interface IStatus {
   className?: string;
 }
 
-const Status: React.FC<IStatus> = (props) => {
+const Status: React.FC<IStatus> = React.memo((props) => {
   const {
     status,
     avatarSize = 42,
@@ -683,6 +683,6 @@ const Status: React.FC<IStatus> = (props) => {
       {body}
     </Hotkeys>
   );
-};
+});
 
 export { type IStatus, Status as default };
