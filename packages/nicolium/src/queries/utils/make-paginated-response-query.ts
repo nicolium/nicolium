@@ -11,8 +11,23 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import type { PaginatedResponse, PlApiClient } from 'pl-api';
 
 class PaginatedResponseArray<T> extends Array<T> {
-  total?: number;
-  partial?: boolean;
+  declare total: number | undefined;
+  declare partial: boolean | undefined;
+
+  static override from<T>(items: ArrayLike<T> | Iterable<T>): PaginatedResponseArray<T> {
+    const arr = new PaginatedResponseArray<T>();
+    for (const item of Array.from(items)) {
+      arr.push(item);
+    }
+    return arr;
+  }
+
+  /** Set metadata as non-enumerable to preserve TanStack Query structural sharing. */
+  setMeta(total: number | undefined, partial: boolean | undefined): this {
+    Object.defineProperty(this, 'total', { value: total, writable: true, enumerable: false, configurable: true });
+    Object.defineProperty(this, 'partial', { value: partial, writable: true, enumerable: false, configurable: true });
+    return this;
+  }
 }
 
 type PaginatedResponseQueryResult<T, IsArray extends boolean> = IsArray extends true
@@ -59,14 +74,11 @@ const makePaginatedResponseQuery =
           }
 
           if (Array.isArray(lastPage.items)) {
-            const items = new PaginatedResponseArray(
-              ...data.pages.flatMap((page) =>
+            const items = PaginatedResponseArray.from(
+              data.pages.flatMap((page) =>
                 Array.isArray(page.items) ? page.items : [page.items],
               ),
-            );
-
-            items.total = lastPage.total;
-            items.partial = lastPage.partial;
+            ).setMeta(lastPage.total, lastPage.partial);
 
             return items as T3;
           }

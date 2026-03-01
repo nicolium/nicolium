@@ -22,7 +22,7 @@ interface IListMembersForm {
 const ListMembersForm: React.FC<IListMembersForm> = ({ listId }) => {
   const [searchValue, setSearchValue] = useState('');
 
-  const { data: accountIds = [], isFetching } = useListAccounts(listId);
+  const { data: accountIds = [] as Array<string>, isFetching } = useListAccounts(listId);
   const { data: searchAccountIds = [] } = useAccountSearch(searchValue, {
     following: true,
     limit: 5,

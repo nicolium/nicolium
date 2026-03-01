@@ -45,7 +45,8 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
 
   const { data: circle } = useCircle(circleId);
   const { mutate: updateCircle, isPending: disabled } = useUpdateCircle(circleId);
-  const { data: accountIds = [], isFetching: isFetchingAccounts } = useCircleAccounts(circleId);
+  const { data: accountIds = [] as Array<string>, isFetching: isFetchingAccounts } =
+    useCircleAccounts(circleId);
   const { data: searchAccountIds = [] } = useAccountSearch(searchValue, {
     following: true,
     limit: 5,
