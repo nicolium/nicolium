@@ -107,7 +107,7 @@ jobs:
 
   deploy:
     needs: build
-    if: github.ref == 'refs/heads/semistable'
+    if: github.ref == 'refs/heads/develop'
 
     permissions:
       pages: write
