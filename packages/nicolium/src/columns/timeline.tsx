@@ -43,9 +43,9 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props): React.JSX.Element => 
     return (
       <div
         className={clsx(
-          'absolute left-10 z-[1] hidden w-0.5 bg-gray-200 black:bg-gray-800 dark:bg-primary-800 rtl:left-auto rtl:right-5',
+          'absolute left-5 z-[1] hidden w-0.5 bg-gray-200 black:bg-gray-800 dark:bg-primary-800 rtl:left-auto rtl:right-5',
           {
-            'top-20 !block h-[calc(100%-42px-8px-1rem)]': isConnectedBottom,
+            'top-[calc(28px+42px)] !block h-[calc(100%-42px-8px-1rem)]': isConnectedBottom,
           },
         )}
       />
@@ -54,16 +54,17 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props): React.JSX.Element => 
 
   return (
     <div
-      className={clsx('relative', {
-        'timeline-status-connected': isConnectedBottom,
+      className={clsx('⁂-timeline-status relative', {
+        '⁂-timeline-status--connected-bottom': isConnectedBottom,
         'border-b border-solid border-gray-200 dark:border-gray-800': !isConnectedBottom,
+        '⁂-timeline-status--connected-top': isConnectedTop,
       })}
     >
       {renderConnector()}
       {statusQuery.isPending ? (
-        <PlaceholderStatus variant='default' />
+        <PlaceholderStatus variant='slim' />
       ) : statusQuery.data ? (
-        <Status status={statusQuery.data!} {...props} />
+        <Status status={statusQuery.data!} variant='slim' {...props} />
       ) : null}
     </div>
   );
