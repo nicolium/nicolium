@@ -7,9 +7,10 @@ import Status from '@/components/statuses/status';
 import Tombstone from '@/components/statuses/tombstone';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import { useStatus } from '@/queries/statuses/use-status';
-import { type TimelineEntry, useHomeTimeline } from '@/queries/timelines/use-home-timeline';
+import { useHomeTimeline } from '@/queries/timelines/use-timelines';
 
 import type { FilterContextType } from '@/queries/settings/use-filters';
+import type { TimelineEntry } from '@/queries/timelines/use-timeline';
 
 interface ITimelineStatus {
   id: string;

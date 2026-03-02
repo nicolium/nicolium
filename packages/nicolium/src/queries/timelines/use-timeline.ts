@@ -3,11 +3,9 @@ import { useCallback, useMemo, useState } from 'react';
 
 import { importEntities } from '@/actions/importer';
 import { useTimelineStream } from '@/api/hooks/streaming/use-timeline-stream';
-import { useClient } from '@/hooks/use-client';
 
-import { queryKeys } from '../keys';
-
-import type { PaginatedResponse, Status } from 'pl-api';
+import type { DataTag } from '@tanstack/react-query';
+import type { PaginatedResponse, Status, StreamingParams } from 'pl-api';
 
 type TimelineEntry =
   | {
@@ -33,15 +31,13 @@ type TimelineEntry =
       minId?: string;
     };
 
-const processPage = ({ items: statuses, next }: PaginatedResponse<Status>) => {
+const processPage = ({
+  items: statuses,
+  next,
+}: PaginatedResponse<Status>): Array<TimelineEntry> => {
   const timelinePage: Array<TimelineEntry> = [];
 
-  // if (previous) timelinePage.push({
-  //   type: 'page-start',
-  //   maxId: statuses.at(0)?.id,
-  // });
-
-  const processStatus = (status: Status) => {
+  const processStatus = (status: Status): boolean => {
     if (timelinePage.some((entry) => entry.type === 'status' && entry.id === status.id))
       return false;
 
@@ -49,14 +45,13 @@ const processPage = ({ items: statuses, next }: PaginatedResponse<Status>) => {
     const inReplyToId = (status.reblog || status).in_reply_to_id;
 
     if (inReplyToId) {
-      const foundStatus = statuses.find((status) => (status.reblog || status).id === inReplyToId);
+      const foundStatus = statuses.find((s) => (s.reblog || s).id === inReplyToId);
 
       if (foundStatus) {
         if (processStatus(foundStatus)) {
           const lastEntry = timelinePage.at(-1);
           // it's always of type status but doing this to satisfy ts
           if (lastEntry?.type === 'status') lastEntry.isConnectedBottom = true;
-
           isConnectedTop = true;
         }
       }
@@ -103,38 +98,49 @@ const processPage = ({ items: statuses, next }: PaginatedResponse<Status>) => {
   return timelinePage;
 };
 
-const useHomeTimeline = () => {
-  const client = useClient();
+type PaginationParams = { max_id?: string; min_id?: string };
+type TimelineFetcher = (params?: PaginationParams) => Promise<PaginatedResponse<Status>>;
+
+interface StreamConfig {
+  stream: string;
+  params?: StreamingParams;
+}
+
+type TimelineQueryKey = DataTag<readonly unknown[], Array<TimelineEntry>>;
+
+const useTimeline = (
+  queryKey: TimelineQueryKey,
+  fetcher: TimelineFetcher,
+  streamConfig?: StreamConfig,
+) => {
   const queryClient = useQueryClient();
 
-  useTimelineStream('home');
+  useTimelineStream(streamConfig?.stream ?? '', streamConfig?.params, !!streamConfig?.stream);
 
   const [isLoading, setIsLoading] = useState(true);
-
-  const queryKey = queryKeys.timelines.home;
 
   const query = useQuery({
     queryKey,
     queryFn: async () => {
       setIsLoading(true);
-
-      const response = await client.timelines.homeTimeline();
-
-      importEntities({ statuses: response.items });
-
-      return processPage(response);
+      try {
+        const response = await fetcher();
+        importEntities({ statuses: response.items });
+        return processPage(response);
+      } finally {
+        setIsLoading(false);
+      }
     },
   });
 
   const handleLoadMore = useCallback(
     async (entry: TimelineEntry) => {
       if (isLoading) return;
+      if (entry.type !== 'page-end' && entry.type !== 'page-start') return;
 
       setIsLoading(true);
       try {
-        if (entry.type !== 'page-end' && entry.type !== 'page-start') return;
-
-        const response = await client.timelines.homeTimeline(
+        const response = await fetcher(
           entry.type === 'page-end' ? { max_id: entry.minId } : { min_id: entry.maxId },
         );
 
@@ -142,20 +148,23 @@ const useHomeTimeline = () => {
 
         const timelinePage = processPage(response);
 
-        queryClient.setQueryData(queryKeys.timelines.home, (oldData) => {
+        queryClient.setQueryData(queryKey, (oldData) => {
           if (!oldData) return timelinePage;
-
           const index = oldData.indexOf(entry);
           return oldData.toSpliced(index, 1, ...timelinePage);
         });
-      } finally {
-        setIsLoading(false);
+      } catch (error) {
+        //
       }
+      setIsLoading(false);
     },
-    [isLoading],
+    [isLoading, fetcher, queryKey, queryClient],
   );
 
-  return useMemo(() => ({ ...query, handleLoadMore, isLoading }), [query, isLoading]);
+  return useMemo(
+    () => ({ ...query, handleLoadMore, isLoading }),
+    [query, handleLoadMore, isLoading],
+  );
 };
 
-export { useHomeTimeline, type TimelineEntry };
+export { useTimeline, type TimelineEntry };
