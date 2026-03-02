@@ -16,6 +16,7 @@ const customEmojisQueryOptions = (client: PlApiClient) =>
         addCustomToPool(emojis);
         return emojis;
       }),
+    staleTime: 60 * 60 * 1000, // 1 hour
   });
 
 function useCustomEmojis<T>(select: (data: Array<CustomEmoji>) => T): UseQueryResult<T, Error>;
