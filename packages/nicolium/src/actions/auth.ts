@@ -288,13 +288,15 @@ interface SwitchAccountAction {
   account: Account;
 }
 
-const switchAccount = (accountId: string) => (dispatch: AppDispatch) => {
+const switchAccount = (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   const account = selectAccount(accountId);
   if (!account) return;
 
-  // Clear all stored cache from React Query
-  queryClient.invalidateQueries();
-  queryClient.clear();
+  if (typeof getState().me === 'string' && getState().me !== account.id) {
+    // Clear all stored cache from React Query
+    queryClient.invalidateQueries();
+    queryClient.clear();
+  }
 
   return dispatch<SwitchAccountAction>({ type: SWITCH_ACCOUNT, account });
 };

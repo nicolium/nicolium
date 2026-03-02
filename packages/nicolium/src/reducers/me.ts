@@ -3,6 +3,7 @@ import {
   AUTH_ACCOUNT_REMEMBER_SUCCESS,
   VERIFY_CREDENTIALS_SUCCESS,
   type AuthAction,
+  SWITCH_ACCOUNT,
 } from '@/actions/auth';
 import {
   ME_FETCH_SUCCESS,
@@ -38,6 +39,8 @@ const me = (state: Me = initialState, action: AuthAction | MeAction): Me => {
       return false;
     case ME_FETCH_FAIL:
       return handleForbidden(state, action.error as any);
+    case SWITCH_ACCOUNT:
+      return action.account.id;
     default:
       return state;
   }

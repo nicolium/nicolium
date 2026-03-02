@@ -47,9 +47,8 @@ const LoginPage = () => {
       })
       .then((account: { id: string }) => {
         closeModal();
-        if (typeof me === 'string') {
-          dispatch(switchAccount(account.id));
-        } else {
+        dispatch(switchAccount(account.id));
+        if (typeof me !== 'string') {
           setShouldRedirect(true);
         }
       })
