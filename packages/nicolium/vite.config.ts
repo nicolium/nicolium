@@ -180,6 +180,10 @@ const config = defineConfig(() => ({
         find: 'lodash',
         replacement: 'lodash-es',
       },
+      {
+        find: /^react-dom\/client$/,
+        replacement: 'react-dom/profiling',
+      },
     ],
     dedupe: ['@floating-ui/react', 'tabbable', 'query-string', 'valibot'],
   },
