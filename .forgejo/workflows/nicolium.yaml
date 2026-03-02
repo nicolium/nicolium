@@ -53,7 +53,7 @@ jobs:
 
       - name: Include archive
         working-directory: ./packages/nicolium/dist
-        run: zip -r ../pl-fe.zip .
+        run: zip -r ../nicolium.zip .
 
       - name: Build with landing page
         env:
@@ -62,7 +62,7 @@ jobs:
         run: |
           WITH_LANDING_PAGE=true yarn build
           cp dist/index.html dist/404.html
-          cp pl-fe.zip dist/pl-fe.zip
+          cp nicolium.zip dist/pl-fe.zip
 
       - name: Install pl-api deps
         working-directory: ./packages/pl-api

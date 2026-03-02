@@ -17,7 +17,7 @@ const LandingPage = () => (
     <Column withHeader={false}>
       <Stack space={4}>
         <LogoText>
-          <FormattedMessage id='landing.logo' defaultMessage='Nicolium (formerly pl-fe)' />
+          <FormattedMessage id='landing.logo' defaultMessage='Nicolium' />
         </LogoText>
         <Text>
           <FormattedMessage

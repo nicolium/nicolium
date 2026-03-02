@@ -38,7 +38,7 @@ const startSentry = async (dsn: string): Promise<void> => {
     tracesSampleRate: 0.1,
   });
 
-  Sentry.setContext('pl-fe', sourceCode);
+  Sentry.setContext('nicolium', sourceCode);
 };
 
 /** Associate the account with Sentry events. */

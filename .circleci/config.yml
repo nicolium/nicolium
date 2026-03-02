@@ -28,7 +28,7 @@ jobs:
       - run:
           working_directory: packages/nicolium
           name: Deploy to Vercel
-          command: vercel deploy --token $VERCEL_TOKEN --prod=false --confirm --name pl-fe
+          command: vercel deploy --token $VERCEL_TOKEN --prod=false --confirm --name nicolium
 
 workflows:
   deploy_on_pr:

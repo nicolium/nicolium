@@ -1315,7 +1315,7 @@
   "landing.description": "Nicolium is a feature-rich Fediverse web client.",
   "landing.feature_rich.description": "Nicolium includes a lot features to improve your experience, like WYSIWYG text editor, draft posts and language detection.",
   "landing.feature_rich.title": "Feature-rich.",
-  "landing.logo": "Nicolium (formerly pl-fe)",
+  "landing.logo": "Nicolium",
   "landing.open_source.description": "Nicolium is free and open source software. You can participate in development, contribute to the project or report bugs.",
   "landing.open_source.title": "Open source.",
   "landing.pl_api.description": "Nicolium implements features not present in standard Mastodon API, like emoji reactions, chats or interaction policies.",

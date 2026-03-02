@@ -1,4 +1,4 @@
-# Nicolium (formerly `pl-fe`)
+# Nicolium
 
 [![Codeberg Repo stars](https://img.shields.io/gitea/stars/mkljczk/nicolium?gitea_url=https%3A%2F%2Fcodeberg.org&logo=Codeberg)](https://codeberg.org/mkljczk/nicolium)
 [![GitHub Repo stars](https://img.shields.io/github/stars/mkljczk/nicolium)](https://github.com/mkljczk/nicolium)
@@ -24,7 +24,7 @@ If you want to use Nicolium on your server, follow the installation instructions
 ## Repository
 
 The repository hosts Nicolium, but also libraries related to the project. Currently, this includes:
-- [Nicolium](./packages/pl-fe/) itself — a social networking client app
+- [Nicolium](./packages/nicolium/) itself — a social networking client app (formerly called pl-fe)
 - [pl-api](./packages/pl-api) — a library for interacting with Mastodon API-compatible servers, focused on support for projects extending the official Mastodon API. It is used by Nicolium.
 - [pl-hooks](./packages/pl-hooks) — a library including hooks for integrating with Mastodon API, based on `pl-api` and TanStack Query. It is intended to be used within Nicolium. Work  in progress.
 
@@ -33,16 +33,6 @@ The repository hosts Nicolium, but also libraries related to the project. Curren
 This project is hosted on [Codeberg](https://codeberg.org/mkljczk/nicolium) and [GitHub](https://github.com/mkljczk/nicolium). You can open issues on Codeberg or create pull requests on both platforms.
 
 You can find more information about setting up the development environment in [the documentation](https://pl.mkljczk.pl/docs/contributing/nicolium/).
-
-## ~~FAQ / Common misconceptions~~
-
-### ~~What does the project name mean?~~
-
-~~I named the project after my now-deprecated personal fork of Pleroma, called simply `pl`. They were meant to be recommended together. However, `pl-fe` evolved into something more serious than a little fork. This is a bad and confusing name, but I don't really care about branding.~~
-
-> For a maintained fork of Pleroma focused on Nicolium compatibility, check out my new project, [Nicolex](https://codeberg.org/mkljczk/nicolex).
-
-~~I will bite people calling `pl-fe` *Polish front-end* or *Polish Soapbox*. And I don't mean sending them the [`Bite` activity](https://ns.mia.jetzt/as/) (which works in pl-fe on supported backends btw).~~
 
 ## License
 

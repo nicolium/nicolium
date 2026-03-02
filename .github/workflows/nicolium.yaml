@@ -72,7 +72,7 @@ jobs:
 
     - name: Include archive
       working-directory: ./packages/nicolium/dist
-      run: zip -r ../pl-fe.zip .
+      run: zip -r ../nicolium.zip .
 
     - name: build
       env:
@@ -81,7 +81,7 @@ jobs:
       run: |
           BANNER_HTML="pl.mkljczk.pl runs Nicolium's \`develop\` branch, which can break sometimes. For a more stable experience, use <a href=\"https://web.nicolium.app\" target=\"_blank\" rel=\"noopener noreferrer\">web.nicolium.app</a>." WITH_LANDING_PAGE=true pnpm build
           cp dist/index.html dist/404.html
-          cp pl-fe.zip dist/pl-fe.zip
+          cp nicolium.zip dist/pl-fe.zip
 
     - name: Build pl-api documentation
       working-directory: ./packages/pl-api

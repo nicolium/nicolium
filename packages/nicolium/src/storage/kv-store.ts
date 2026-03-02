@@ -8,7 +8,7 @@ interface IKVStore extends LocalForage {
 // https://localforage.github.io/localForage/#settings-api-config
 const KVStore = localforage.createInstance({
   name: 'pl-fe',
-  description: 'pl-fe offline data store',
+  description: 'Nicolium offline data store',
   driver: localforage.INDEXEDDB,
   storeName: 'keyvaluepairs',
 }) as IKVStore;
