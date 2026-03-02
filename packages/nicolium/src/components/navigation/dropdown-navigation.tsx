@@ -2,7 +2,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
-import React, { useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { fetchOwnAccounts, logOut, switchAccount } from '@/actions/auth';
@@ -28,6 +28,63 @@ import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 import sourceCode from '@/utils/code';
 
 import type { Account as AccountEntity } from 'pl-api';
+
+interface IAccountSwitcher {
+  handleClose: () => void;
+}
+
+const AccountSwitcher: React.FC<IAccountSwitcher> = ({ handleClose }) => {
+  const dispatch = useAppDispatch();
+
+  const { accounts: otherAccounts } = useLoggedInAccounts();
+
+  const handleSwitchAccount =
+    (account: AccountEntity): React.MouseEventHandler =>
+    (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      dispatch(switchAccount(account.id));
+    };
+
+  const renderAccount = (account: AccountEntity) => (
+    <a
+      className='⁂-dropdown-navigation__account-switcher__account'
+      href='#'
+      onClick={handleSwitchAccount(account)}
+      key={account.id}
+    >
+      <div>
+        <Account
+          account={account}
+          showAccountHoverCard={false}
+          withRelationship={false}
+          withLinkToProfile={false}
+        />
+      </div>
+    </a>
+  );
+
+  return (
+    <div className='⁂-dropdown-navigation__account-switcher__accounts'>
+      {otherAccounts.map((account) => renderAccount(account))}
+
+      <Link
+        className='⁂-dropdown-navigation__account-switcher__add'
+        to='/login/add'
+        onClick={handleClose}
+      >
+        <Icon src={require('@phosphor-icons/core/regular/plus.svg')} />
+        <Text size='sm' weight='medium'>
+          <FormattedMessage
+            id='profile_dropdown.add_account'
+            defaultMessage='Add an existing account'
+          />
+        </Text>
+      </Link>
+    </div>
+  );
+};
 
 interface IDropdownNavigationLink extends Partial<LinkOptions> {
   href?: string;
@@ -86,7 +143,6 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
   );
 
   const { data: account } = useAccount(me || undefined);
-  const { accounts: otherAccounts } = useLoggedInAccounts();
   const settings = useSettings();
   const followRequestsCount = useFollowRequestsCount().data ?? 0;
   const interactionRequestsCount = useInteractionRequestsCount().data ?? 0;
@@ -106,19 +162,17 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
 
   const [switcher, setSwitcher] = React.useState(false);
 
-  const handleClose = () => {
-    setSwitcher(false);
-    closeSidebar();
+  const handleSwitcherClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setSwitcher((prevState) => !prevState);
   };
 
-  const handleSwitchAccount =
-    (account: AccountEntity): React.MouseEventHandler =>
-    (e) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      dispatch(switchAccount(account.id));
-    };
+  const handleClose = useCallback(() => {
+    setSwitcher(false);
+    closeSidebar();
+  }, [closeSidebar]);
 
   const onClickLogOut: React.MouseEventHandler = (e) => {
     e.preventDefault();
@@ -126,31 +180,6 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
 
     dispatch(logOut());
   };
-
-  const handleSwitcherClick: React.MouseEventHandler = (e) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    setSwitcher((prevState) => !prevState);
-  };
-
-  const renderAccount = (account: AccountEntity) => (
-    <a
-      className='⁂-dropdown-navigation__account-switcher__account'
-      href='#'
-      onClick={handleSwitchAccount(account)}
-      key={account.id}
-    >
-      <div>
-        <Account
-          account={account}
-          showAccountHoverCard={false}
-          withRelationship={false}
-          withLinkToProfile={false}
-        />
-      </div>
-    </a>
-  );
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
     if (e.key === 'Escape') handleClose();
@@ -483,25 +512,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
                   <Icon src={require('@phosphor-icons/core/regular/caret-down.svg')} />
                 </button>
 
-                {switcher && (
-                  <div className='⁂-dropdown-navigation__account-switcher__accounts'>
-                    {otherAccounts.map((account) => renderAccount(account))}
-
-                    <Link
-                      className='⁂-dropdown-navigation__account-switcher__add'
-                      to='/login/add'
-                      onClick={handleClose}
-                    >
-                      <Icon src={require('@phosphor-icons/core/regular/plus.svg')} />
-                      <Text size='sm' weight='medium'>
-                        <FormattedMessage
-                          id='profile_dropdown.add_account'
-                          defaultMessage='Add an existing account'
-                        />
-                      </Text>
-                    </Link>
-                  </div>
-                )}
+                {switcher && <AccountSwitcher handleClose={handleClose} />}
               </div>
             </Stack>
           </div>
