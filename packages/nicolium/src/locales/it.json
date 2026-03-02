@@ -240,7 +240,7 @@
   "alt_text_modal.saving_failed": "Errore salvando il testo alternativo",
   "announcements.title": "Annunci",
   "app_create.name_label": "Nome della App",
-  "app_create.name_placeholder": "es.: 'PL-FE'",
+  "app_create.name_placeholder": "es.: 'Nicolium'",
   "app_create.redirect_uri_label": "URL di ritorno",
   "app_create.restart": "Creane un'altra",
   "app_create.results.app_label": "App",

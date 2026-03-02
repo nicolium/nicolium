@@ -268,7 +268,7 @@
   "alt_text_modal.saving_failed": "Échec d’enregistrement du champ ALT",
   "announcements.title": "Annonces",
   "app_create.name_label": "Nom de l’application",
-  "app_create.name_placeholder": "ex. “pl-fe”",
+  "app_create.name_placeholder": "ex. “Nicolium”",
   "app_create.redirect_uri_label": "URIs de redirection",
   "app_create.restart": "Créer une autre application",
   "app_create.results.app_label": "Application",
