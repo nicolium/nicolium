@@ -214,7 +214,7 @@ const ReportPage: React.FC = () => {
                 <td className='p-2.5 text-end'>
                   <Text size='sm' className='hover:underline'>
                     <Link
-                      to='/pl-fe/admin/accounts/$accountId'
+                      to='/nicolium/admin/accounts/$accountId'
                       params={{ accountId: report.account_id }}
                     >
                       @{report.account.acct}
@@ -262,7 +262,7 @@ const ReportPage: React.FC = () => {
                     <HStack space={2} alignItems='center' justifyContent='end'>
                       <Text size='sm' className='hover:underline'>
                         <Link
-                          to='/pl-fe/admin/accounts/$accountId'
+                          to='/nicolium/admin/accounts/$accountId'
                           params={{ accountId: report.assigned_account.id }}
                         >
                           @{report.assigned_account.acct}
@@ -320,7 +320,7 @@ const ReportPage: React.FC = () => {
         )}
         <ListItem
           label={<FormattedMessage id='admin.report.moderate' defaultMessage='Moderate account' />}
-          to='/pl-fe/admin/accounts/$accountId'
+          to='/nicolium/admin/accounts/$accountId'
           params={{ accountId: report.target_account_id }}
         />
       </List>

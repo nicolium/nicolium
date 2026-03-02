@@ -1039,7 +1039,7 @@ export const settingsPrivacyRoute = createRoute({
 // Frontend config
 export const frontendConfigRoute = createRoute({
   getParentRoute: () => layouts.default,
-  path: '/pl-fe/config',
+  path: '/nicolium/config',
   component: FrontendConfig,
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
@@ -1049,7 +1049,7 @@ export const frontendConfigRoute = createRoute({
 // Admin routes
 export const adminDashboardRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/pl-fe/admin',
+  path: '/nicolium/admin',
   component: Dashboard,
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
@@ -1058,7 +1058,7 @@ export const adminDashboardRoute = createRoute({
 
 export const adminAccountRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/pl-fe/admin/accounts/$accountId',
+  path: '/nicolium/admin/accounts/$accountId',
   component: AdminAccount,
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
@@ -1067,7 +1067,7 @@ export const adminAccountRoute = createRoute({
 
 export const adminAwaitingApprovalRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/pl-fe/admin/approval',
+  path: '/nicolium/admin/approval',
   component: AwaitingApproval,
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
@@ -1076,7 +1076,7 @@ export const adminAwaitingApprovalRoute = createRoute({
 
 export const adminReportsRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/pl-fe/admin/reports',
+  path: '/nicolium/admin/reports',
   component: Reports,
   validateSearch: v.object({
     resolved: v.optional(v.boolean(), false),
@@ -1090,7 +1090,7 @@ export const adminReportsRoute = createRoute({
 
 export const adminReportRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/pl-fe/admin/reports/$reportId',
+  path: '/nicolium/admin/reports/$reportId',
   component: Report,
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
@@ -1099,7 +1099,7 @@ export const adminReportRoute = createRoute({
 
 export const adminLogRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/pl-fe/admin/log',
+  path: '/nicolium/admin/log',
   component: ModerationLog,
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
@@ -1108,7 +1108,7 @@ export const adminLogRoute = createRoute({
 
 export const adminUsersRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/pl-fe/admin/users',
+  path: '/nicolium/admin/users',
   component: UserIndex,
   validateSearch: v.object({
     q: v.optional(v.string()),
@@ -1120,7 +1120,7 @@ export const adminUsersRoute = createRoute({
 
 export const adminThemeRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/pl-fe/admin/theme',
+  path: '/nicolium/admin/theme',
   component: ThemeEditor,
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
@@ -1129,7 +1129,7 @@ export const adminThemeRoute = createRoute({
 
 export const adminRelaysRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/pl-fe/admin/relays',
+  path: '/nicolium/admin/relays',
   component: Relays,
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
@@ -1138,7 +1138,7 @@ export const adminRelaysRoute = createRoute({
 
 export const adminAnnouncementsRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/pl-fe/admin/announcements',
+  path: '/nicolium/admin/announcements',
   component: Announcements,
   beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
     if (!isAdmin || !features.announcements) throw notFound();
@@ -1147,7 +1147,7 @@ export const adminAnnouncementsRoute = createRoute({
 
 export const adminDomainsRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/pl-fe/admin/domains',
+  path: '/nicolium/admin/domains',
   component: Domains,
   beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
     if (!isAdmin || !features.domains) throw notFound();
@@ -1156,7 +1156,7 @@ export const adminDomainsRoute = createRoute({
 
 export const adminRulesRoute = createRoute({
   getParentRoute: () => layouts.admin,
-  path: '/pl-fe/admin/rules',
+  path: '/nicolium/admin/rules',
   component: Rules,
   beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
     if (!isAdmin || !features.adminRules) throw notFound();
@@ -1259,6 +1259,15 @@ export const federationRestrictionsRoute = createRoute({
 });
 
 // Redirect routes
+const redirectPlFeRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/pl-fe/$',
+  beforeLoad: ({ params }) => {
+    throw redirect({
+      to: ('/nicolium/' + ((params as any)._splat ?? '')) as '/',
+    });
+  },
+});
 const redirectTagRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/tag/$id',
@@ -1329,7 +1338,9 @@ const redirectWithRepliesRoute = createRoute({
     );
   },
 });
+
 const redirectRoutes = [
+  redirectPlFeRoute,
   createRoute({
     getParentRoute: () => rootRoute,
     path: '/timelines/home',
@@ -1378,7 +1389,7 @@ const redirectRoutes = [
   createRoute({
     getParentRoute: () => rootRoute,
     path: '/admin',
-    component: () => <Navigate to='/pl-fe/admin' replace />,
+    component: () => <Navigate to='/nicolium/admin' replace />,
   }),
   createRoute({
     getParentRoute: () => rootRoute,

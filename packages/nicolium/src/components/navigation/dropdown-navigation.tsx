@@ -468,7 +468,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
 
               {(account.is_admin ?? account.is_moderator) && (
                 <DropdownNavigationLink
-                  to='/pl-fe/admin'
+                  to='/nicolium/admin'
                   icon={require('@phosphor-icons/core/regular/gauge.svg')}
                   text={<FormattedMessage id='column.admin.dashboard' defaultMessage='Dashboard' />}
                   onClick={closeSidebar}

@@ -358,7 +358,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
 
             {(account.is_admin ?? account.is_moderator) && (
               <SidebarNavigationLink
-                to='/pl-fe/admin'
+                to='/nicolium/admin'
                 icon={require('@phosphor-icons/core/regular/gauge.svg')}
                 activeIcon={require('@phosphor-icons/core/fill/gauge-fill.svg')}
                 count={dashboardCount}

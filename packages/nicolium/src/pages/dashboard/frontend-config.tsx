@@ -271,7 +271,7 @@ const FrontendConfigEditor: React.FC = () => {
                   defaultMessage='Edit theme'
                 />
               }
-              to='/pl-fe/admin/theme'
+              to='/nicolium/admin/theme'
             />
           </List>
 

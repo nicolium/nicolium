@@ -26,7 +26,7 @@ const Report: React.FC<IReport> = ({ id }) => {
 
   return (
     <Link
-      to='/pl-fe/admin/reports/$reportId'
+      to='/nicolium/admin/reports/$reportId'
       params={{ reportId: id }}
       className='block rounded-lg bg-gray-100 p-4 dark:bg-primary-800'
     >
@@ -62,7 +62,7 @@ const Report: React.FC<IReport> = ({ id }) => {
               <FormattedMessage id='admin.reports.account' defaultMessage='Reported by:' />
             </Text>
             <HoverAccountWrapper accountId={account.id} element='span'>
-              <Link to='/pl-fe/admin/accounts/$accountId' params={{ accountId: account.id }}>
+              <Link to='/nicolium/admin/accounts/$accountId' params={{ accountId: account.id }}>
                 @{reporterAcct}
               </Link>
             </HoverAccountWrapper>

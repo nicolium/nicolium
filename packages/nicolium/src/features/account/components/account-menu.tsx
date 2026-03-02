@@ -535,7 +535,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
 
       menu.push({
         text: intl.formatMessage(messages.adminAccount, { name: account.username }),
-        to: '/pl-fe/admin/accounts/$accountId',
+        to: '/nicolium/admin/accounts/$accountId',
         params: { accountId: account.id },
         icon: require('@phosphor-icons/core/regular/gavel.svg'),
       });

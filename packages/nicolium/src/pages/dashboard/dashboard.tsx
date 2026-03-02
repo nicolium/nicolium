@@ -60,12 +60,12 @@ const Dashboard: React.FC = () => {
               measure='new_users'
               startAt={monthAgo}
               endAt={today}
-              to='/pl-fe/admin/users'
+              to='/nicolium/admin/users'
               label={<FormattedMessage id='admin.counters.new_users' defaultMessage='new users' />}
             />
           ) : (
             <DashCounter
-              to='/pl-fe/admin/users'
+              to='/nicolium/admin/users'
               count={userCount}
               label={
                 <FormattedMessage
@@ -124,7 +124,7 @@ const Dashboard: React.FC = () => {
                 measure='opened_reports'
                 startAt={monthAgo}
                 endAt={today}
-                to='/pl-fe/admin/reports'
+                to='/nicolium/admin/reports'
                 label={
                   <FormattedMessage
                     id='admin.counters.opened_reports'
@@ -136,7 +136,7 @@ const Dashboard: React.FC = () => {
                 measure='resolved_reports'
                 startAt={monthAgo}
                 endAt={today}
-                to='/pl-fe/admin/reports'
+                to='/nicolium/admin/reports'
                 search={{ resolved: true }}
                 label={
                   <FormattedMessage
@@ -163,7 +163,7 @@ const Dashboard: React.FC = () => {
           <List>
             <ListItem
               size='sm'
-              to='/pl-fe/admin/reports'
+              to='/nicolium/admin/reports'
               search={{ resolved: false }}
               label={
                 <FormattedMessage
@@ -182,7 +182,7 @@ const Dashboard: React.FC = () => {
             />
             <ListItem
               size='sm'
-              to='/pl-fe/admin/approval'
+              to='/nicolium/admin/approval'
               label={
                 <FormattedMessage
                   id='admin.links.pending_users'
@@ -198,8 +198,8 @@ const Dashboard: React.FC = () => {
                 />
               }
             />
-            {/* <ListItem size='sm' to='/pl-fe/admin' label={<FormattedMessage id='admin.links.pending_tags' defaultMessage='{count} pending tags' values={{ count: <strong>0</strong> }} />} />
-            <ListItem size='sm' to='/pl-fe/admin' label={<FormattedMessage id='admin.links.pending_appeals' defaultMessage='{count} pending appeals' values={{ count: <strong>0</strong> }} />} /> */}
+            {/* <ListItem size='sm' to='/nicolium/admin' label={<FormattedMessage id='admin.links.pending_tags' defaultMessage='{count} pending tags' values={{ count: <strong>0</strong> }} />} />
+            <ListItem size='sm' to='/nicolium/admin' label={<FormattedMessage id='admin.links.pending_appeals' defaultMessage='{count} pending appeals' values={{ count: <strong>0</strong> }} />} /> */}
           </List>
           {features.mastodonAdminMetrics && (
             <>
@@ -268,7 +268,7 @@ const Dashboard: React.FC = () => {
         <List>
           {features.pleromaAdminAccounts && account.is_admin && (
             <ListItem
-              to='/pl-fe/config'
+              to='/nicolium/config'
               label={
                 <FormattedMessage
                   id='column.frontend_config'
@@ -280,7 +280,7 @@ const Dashboard: React.FC = () => {
 
           {features.pleromaAdminModerationLog && (
             <ListItem
-              to='/pl-fe/admin/log'
+              to='/nicolium/admin/log'
               label={
                 <FormattedMessage
                   id='column.admin.moderation_log'
@@ -292,7 +292,7 @@ const Dashboard: React.FC = () => {
 
           {features.pleromaAdminAnnouncements && (
             <ListItem
-              to='/pl-fe/admin/announcements'
+              to='/nicolium/admin/announcements'
               label={
                 <FormattedMessage id='column.admin.announcements' defaultMessage='Announcements' />
               }
@@ -301,14 +301,14 @@ const Dashboard: React.FC = () => {
 
           {features.adminRules && (
             <ListItem
-              to='/pl-fe/admin/rules'
+              to='/nicolium/admin/rules'
               label={<FormattedMessage id='column.admin.rules' defaultMessage='Instance rules' />}
             />
           )}
 
           {features.domains && (
             <ListItem
-              to='/pl-fe/admin/domains'
+              to='/nicolium/admin/domains'
               label={<FormattedMessage id='column.admin.domains' defaultMessage='Domains' />}
             />
           )}

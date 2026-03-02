@@ -406,7 +406,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
 
       menu.push({
         text: intl.formatMessage(messages.adminAccount, { name: username }),
-        to: '/pl-fe/admin/accounts/$accountId',
+        to: '/nicolium/admin/accounts/$accountId',
         params: { accountId: account.id },
         icon: require('@phosphor-icons/core/regular/gavel.svg'),
       });
