@@ -33,6 +33,7 @@ const useTranslationLanguages = () => {
     queryFn: getTranslationLanguages,
     placeholderData: {},
     enabled: isLoggedIn && features.translations,
+    staleTime: 60 * 60 * 1000, // 1 hour
   });
 };
 

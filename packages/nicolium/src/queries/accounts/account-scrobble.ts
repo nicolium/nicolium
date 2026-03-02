@@ -23,7 +23,7 @@ const useAccountScrobbleQuery = (accountId?: string) => {
     },
     placeholderData: undefined,
     enabled: () => !!accountId && features.scrobbles,
-    staleTime: 3 * 60 * 1000,
+    staleTime: 3 * 60 * 1000, // 3 minutes
   });
 };
 

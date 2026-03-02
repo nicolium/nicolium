@@ -31,7 +31,7 @@ function useFilters<T = Array<Filter>>(select?: (data: Array<Filter>) => T) {
       return response;
     },
     enabled: features.filters || features.filtersV2,
-    staleTime: 30 * 60 * 1000,
+    staleTime: 30 * 60 * 1000, // 30 minutes
     select,
   });
 }
