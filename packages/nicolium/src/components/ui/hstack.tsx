@@ -93,4 +93,6 @@ const HStack = forwardRef<HTMLDivElement, IHStack>((props, ref) => {
   );
 });
 
+HStack.displayName = 'HStack';
+
 export { HStack as default };

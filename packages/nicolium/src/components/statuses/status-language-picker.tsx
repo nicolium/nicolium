@@ -70,4 +70,6 @@ const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = React.memo(
   },
 );
 
+StatusLanguagePicker.displayName = 'StatusLanguagePicker';
+
 export { StatusLanguagePicker as default };

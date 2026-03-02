@@ -66,6 +66,8 @@ const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(
   },
 );
 
+DropdownNavigationLink.displayName = 'DropdownNavigationLink';
+
 const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => {
   const dispatch = useAppDispatch();
 
@@ -581,5 +583,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
     </div>
   );
 });
+
+DropdownNavigation.displayName = 'DropdownNavigation';
 
 export { DropdownNavigation as default };

@@ -113,4 +113,6 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
   },
 );
 
+AvatarPicker.displayName = 'AvatarPicker';
+
 export { AvatarPicker as default };

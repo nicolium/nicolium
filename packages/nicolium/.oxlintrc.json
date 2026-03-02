@@ -45,6 +45,7 @@
     "unbound-method": "warn",
     "no-shadow": "off",
 
+    // "react/display-name": "error",
     "react/exhaustive-deps": "off",
 
     "jsx-a11y/anchor-is-valid": "warn",

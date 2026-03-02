@@ -206,4 +206,6 @@ const UI: React.FC = React.memo(() => {
   );
 });
 
+UI.displayName = 'UI';
+
 export { UI as default };

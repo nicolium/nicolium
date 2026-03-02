@@ -43,6 +43,8 @@ const List: Components<React.JSX.Element, Context>['List'] = React.forwardRef((p
   return <div ref={ref} className={context?.listClassName} {...rest} />;
 });
 
+List.displayName = 'List';
+
 interface IScrollableList extends VirtuosoProps<any, any> {
   /** Unique key to preserve the scroll position when navigating back. */
   scrollKey?: string;
@@ -277,5 +279,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
     );
   },
 );
+
+ScrollableList.displayName = 'ScrollableList';
 
 export { type IScrollableList, ScrollableList as default };

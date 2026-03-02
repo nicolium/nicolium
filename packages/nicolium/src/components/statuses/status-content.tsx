@@ -333,4 +333,6 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
   },
 );
 
+StatusContent.displayName = 'StatusContent';
+
 export { StatusContent as default };

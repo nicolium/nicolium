@@ -138,4 +138,6 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
   },
 );
 
+SensitiveContentOverlay.displayName = 'SensitiveContentOverlay';
+
 export { SensitiveContentOverlay as default, useMediaVisible };

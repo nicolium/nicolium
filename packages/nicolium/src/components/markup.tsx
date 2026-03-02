@@ -9,4 +9,6 @@ const Markup = React.forwardRef<HTMLElement, IMarkup>((props, ref) => (
   <Text ref={ref} {...props} data-markup />
 ));
 
+Markup.displayName = 'Markup';
+
 export { Markup as default };

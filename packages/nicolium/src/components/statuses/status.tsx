@@ -95,6 +95,8 @@ const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => {
   );
 });
 
+AccountInfo.displayName = 'AccountInfo';
+
 interface IStatusFollowedTagInfo {
   status: SelectedStatus;
   avatarSize: number;
@@ -684,5 +686,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     </Hotkeys>
   );
 });
+
+Status.displayName = 'Status';
 
 export { type IStatus, Status as default };

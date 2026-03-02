@@ -47,4 +47,6 @@ const Icon: React.FC<IIcon> = React.forwardRef<HTMLDivElement, IIcon>(
   ),
 );
 
+Icon.displayName = 'Icon';
+
 export { Icon as default };

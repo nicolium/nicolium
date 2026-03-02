@@ -268,4 +268,6 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
   );
 });
 
+ChatMessage.displayName = 'ChatMessage';
+
 export { ChatMessage as default };

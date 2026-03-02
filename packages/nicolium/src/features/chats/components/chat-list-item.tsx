@@ -200,4 +200,6 @@ const ChatListItem: React.FC<IChatListItem> = React.memo(
   },
 );
 
+ChatListItem.displayName = 'ChatListItem';
+
 export { ChatListItem as default };

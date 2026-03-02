@@ -149,4 +149,6 @@ const Text = React.forwardRef<HTMLElement, IText>((props, ref) => {
   );
 });
 
+Text.displayName = 'Text';
+
 export { type Sizes, type IText, Text as default };

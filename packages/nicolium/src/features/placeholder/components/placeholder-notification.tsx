@@ -33,4 +33,6 @@ const PlaceholderNotification = React.memo(() => (
   </div>
 ));
 
+PlaceholderNotification.displayName = 'PlaceholderNotification';
+
 export { PlaceholderNotification as default };

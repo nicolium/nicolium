@@ -106,4 +106,6 @@ const ShoutboxComposer = React.forwardRef<HTMLTextAreaElement | null, IShoutboxC
   },
 );
 
+ShoutboxComposer.displayName = 'ShoutboxComposer';
+
 export { ShoutboxComposer as default };

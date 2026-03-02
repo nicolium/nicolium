@@ -113,6 +113,8 @@ const ParsedUrl: React.FC<IParsedUrl> = React.memo((props) => {
   );
 });
 
+ParsedUrl.displayName = 'ParsedUrl';
+
 interface IParsedContent {
   /** HTML content to display. */
   html: string;
@@ -384,5 +386,7 @@ const ParsedContent: React.FC<IParsedContent> = React.memo(
   },
   (prevProps, nextProps) => prevProps.html === nextProps.html,
 );
+
+ParsedContent.displayName = 'ParsedContent';
 
 export { ParsedContent, ParsedUrl, parseContent };

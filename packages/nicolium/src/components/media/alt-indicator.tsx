@@ -20,4 +20,6 @@ const AltIndicator: React.FC<IAltIndicator> = React.forwardRef<HTMLSpanElement, 
   ),
 );
 
+AltIndicator.displayName = 'AltIndicator';
+
 export default AltIndicator;

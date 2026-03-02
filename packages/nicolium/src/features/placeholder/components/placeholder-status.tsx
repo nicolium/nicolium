@@ -40,4 +40,6 @@ const PlaceholderStatus: React.FC<IPlaceholderStatus> = React.memo(({ variant = 
   </div>
 ));
 
+PlaceholderStatus.displayName = 'PlaceholderStatus';
+
 export { PlaceholderStatus as default };

@@ -53,4 +53,6 @@ const Blurhash: React.FC<IBlurhash> = React.memo(
   },
 );
 
+Blurhash.displayName = 'Blurhash';
+
 export { Blurhash as default };

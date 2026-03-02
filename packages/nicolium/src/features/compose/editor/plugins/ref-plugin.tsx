@@ -16,4 +16,6 @@ const RefPlugin = React.forwardRef<LexicalEditor>((_props, ref) => {
   return null;
 });
 
+RefPlugin.displayName = 'RefPlugin';
+
 export { RefPlugin as default };

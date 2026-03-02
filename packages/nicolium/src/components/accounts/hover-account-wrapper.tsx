@@ -57,4 +57,6 @@ const HoverAccountWrapper: React.FC<IHoverAccountWrapper> = React.memo(
   },
 );
 
+HoverAccountWrapper.displayName = 'HoverAccountWrapper';
+
 export { HoverAccountWrapper as default, showAccountHoverCard };

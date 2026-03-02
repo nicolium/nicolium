@@ -140,4 +140,6 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
   },
 );
 
+HeaderPicker.displayName = 'HeaderPicker';
+
 export { HeaderPicker as default };

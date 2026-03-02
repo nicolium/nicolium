@@ -46,4 +46,6 @@ const ChatTextarea = React.forwardRef<HTMLTextAreaElement, IChatTextarea>(
   ),
 );
 
+ChatTextarea.displayName = 'ChatTextarea';
+
 export { ChatTextarea as default };

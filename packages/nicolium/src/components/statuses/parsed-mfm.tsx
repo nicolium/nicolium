@@ -551,4 +551,6 @@ const ParsedMfm: React.FC<IParsedMfm> = React.memo(({ text, emojis, mentions, sp
   );
 });
 
+ParsedMfm.displayName = 'ParsedMfm';
+
 export { ParsedMfm };

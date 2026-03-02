@@ -111,4 +111,6 @@ const SearchInput = React.memo(() => {
   );
 });
 
+SearchInput.displayName = 'SearchInput';
+
 export { SearchInput as default };

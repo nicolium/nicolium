@@ -449,4 +449,6 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   );
 });
 
+SidebarNavigation.displayName = 'SidebarNavigation';
+
 export { SidebarNavigation as default };

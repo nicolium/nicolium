@@ -25,6 +25,8 @@ const StatusActionCounter: React.FC<IStatusActionCounter> = React.memo(
   },
 );
 
+StatusActionCounter.displayName = 'StatusActionCounter';
+
 interface IStatusActionButton extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   iconClassName?: string;
   icon: string;
@@ -96,5 +98,7 @@ const StatusActionButton = React.forwardRef<HTMLButtonElement, IStatusActionButt
     );
   },
 );
+
+StatusActionButton.displayName = 'StatusActionButton';
 
 export { StatusActionButton as default };

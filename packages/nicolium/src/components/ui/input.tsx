@@ -178,4 +178,6 @@ const Input = React.forwardRef<HTMLInputElement, IInput>((props, ref) => {
   );
 });
 
+Input.displayName = 'Input';
+
 export { Input as default, InputThemes };

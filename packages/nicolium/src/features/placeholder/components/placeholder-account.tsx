@@ -18,4 +18,6 @@ const PlaceholderAccount: React.FC = React.memo(() => (
   </HStack>
 ));
 
+PlaceholderAccount.displayName = 'PlaceholderAccount';
+
 export { PlaceholderAccount as default };

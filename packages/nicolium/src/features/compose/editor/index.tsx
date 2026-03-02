@@ -250,4 +250,6 @@ const ComposeEditor = React.forwardRef<LexicalEditor, IComposeEditor>(
   },
 );
 
+ComposeEditor.displayName = 'ComposeEditor';
+
 export { ComposeEditor as default };

@@ -58,6 +58,8 @@ const List: Components['List'] = React.forwardRef((props, ref) => {
   return <div ref={ref} {...rest} className='mb-2' />;
 });
 
+List.displayName = 'ChatMessageListList';
+
 const Scroller: Components['Scroller'] = React.forwardRef((props, ref) => {
   const { style, context, ...rest } = props;
 
@@ -72,6 +74,8 @@ const Scroller: Components['Scroller'] = React.forwardRef((props, ref) => {
     />
   );
 });
+
+Scroller.displayName = 'ChatMessageListScroller';
 
 interface IChatMessageList {
   /** Chat the messages are being rendered from. */
@@ -290,6 +294,8 @@ const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
     </div>
   );
 });
+
+ChatMessageList.displayName = 'ChatMessageList';
 
 export {
   ChatMessageList as default,

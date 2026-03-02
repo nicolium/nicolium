@@ -45,6 +45,8 @@ const Card = React.forwardRef<HTMLDivElement, ICard>(
   ),
 );
 
+Card.displayName = 'Card';
+
 interface ICardHeader {
   backHref?: string;
   onBackClick?: (event: React.MouseEvent) => void;

@@ -70,4 +70,6 @@ const StatusTypeIcon: React.FC<IStatusTypeIcon> = React.memo(({ visibility }) =>
   );
 });
 
+StatusTypeIcon.displayName = 'StatusTypeIcon';
+
 export { StatusTypeIcon as default };

@@ -20,4 +20,6 @@ const PlaceholderCard: React.FC = React.memo(() => (
   </div>
 ));
 
+PlaceholderCard.displayName = 'PlaceholderCard';
+
 export { PlaceholderCard as default };

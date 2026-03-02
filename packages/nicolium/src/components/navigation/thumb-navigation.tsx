@@ -133,4 +133,6 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
   );
 });
 
+ThumbNavigation.displayName = 'ThumbNavigation';
+
 export { ThumbNavigation as default };

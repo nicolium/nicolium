@@ -182,4 +182,6 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(
   },
 );
 
+Modal.displayName = 'Modal';
+
 export { Modal as default };

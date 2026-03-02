@@ -78,4 +78,6 @@ const Stack = React.forwardRef<HTMLDivElement, IStack>(
   },
 );
 
+Stack.displayName = 'Stack';
+
 export { Stack as default };

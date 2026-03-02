@@ -23,4 +23,6 @@ const PlaceholderDisplayName: React.FC<IPlaceholderDisplayName> = React.memo(
   },
 );
 
+PlaceholderDisplayName.displayName = 'PlaceholderDisplayName';
+
 export { PlaceholderDisplayName as default };

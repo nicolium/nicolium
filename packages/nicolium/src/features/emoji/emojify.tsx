@@ -123,4 +123,6 @@ const Emojify: React.FC<IEmojify> = React.memo(({ text, emojis = {} }) => {
   return nodes;
 });
 
+Emojify.displayName = 'Emojify';
+
 export { Emojify as default };

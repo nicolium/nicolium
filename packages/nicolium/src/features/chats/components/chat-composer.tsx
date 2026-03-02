@@ -282,4 +282,6 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
   },
 );
 
+ChatComposer.displayName = 'ChatComposer';
+
 export { ChatComposer as default };
