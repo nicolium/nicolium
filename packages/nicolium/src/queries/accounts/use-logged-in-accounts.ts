@@ -1,22 +1,37 @@
-import { skipToken, useQueries } from '@tanstack/react-query';
+import { skipToken, useQueries, useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
+import { createSelector } from 'reselect';
 
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { queryKeys } from '@/queries/keys';
 import { validId } from '@/utils/auth';
 
+import type { RootState } from '@/store';
 import type { Account } from 'pl-api';
+
+const selectOtherAccountIds = createSelector(
+  (state: RootState) => state.auth.users,
+  (state: RootState) => state.me,
+  (users, me) =>
+    Object.values(users)
+      .map((authUser) => authUser?.id)
+      .filter((id): id is string => validId(id) && id !== me),
+);
+
+const useLoggedInAccount = (accountId: string) => {
+  const query = useQuery({
+    queryKey: queryKeys.accounts.show(accountId),
+    queryFn: skipToken,
+  });
+
+  return query;
+};
+
+const useLoggedInAccountIds = () => useAppSelector((state) => selectOtherAccountIds(state));
 
 /** doesn't fetch because it's a hack that should not exist like this */
 const useLoggedInAccounts = () => {
-  const { me, accountIds } = useAppSelector((state) => ({
-    me: state.me,
-    accountIds: Object.values(state.auth.users)
-      .map((authUser) => authUser?.id)
-      .filter((id): id is string => validId(id)),
-  }));
-
-  const otherAccountIds = useMemo(() => accountIds.filter((id) => id !== me), [accountIds, me]);
+  const otherAccountIds = useLoggedInAccountIds();
 
   const queries = useQueries({
     queries: otherAccountIds.map((accountId) => ({
@@ -33,4 +48,4 @@ const useLoggedInAccounts = () => {
   return { accounts };
 };
 
-export { useLoggedInAccounts };
+export { useLoggedInAccount, useLoggedInAccountIds, useLoggedInAccounts };
