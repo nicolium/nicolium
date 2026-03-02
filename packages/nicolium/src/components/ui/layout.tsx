@@ -82,6 +82,8 @@ const useWindowControlsOverlay = () => {
       () => setRect(overlay.visible ? overlay.getTitlebarAreaRect() : null),
       100,
     );
+    update();
+
     overlay.addEventListener('geometrychange', update);
     return () => {
       overlay.removeEventListener('geometrychange', update);
