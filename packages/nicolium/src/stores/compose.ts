@@ -4,7 +4,7 @@ import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
 import { uploadFile, updateMedia } from '@/actions/media';
-import { saveSettings } from '@/actions/settings';
+import { LEGACY_FE_NAME, saveSettings } from '@/actions/settings';
 import { FE_NAME } from '@/actions/settings';
 import { createStatus } from '@/actions/statuses';
 import { getClient } from '@/api';
@@ -660,7 +660,8 @@ const useComposeStore = create<ComposeStore>()(
 
         importDefaultSettings: (account) => {
           get().actions.updateCompose('default', (compose) => {
-            const settings = account.settings_store?.[FE_NAME];
+            const settings =
+              account.settings_store?.[FE_NAME] || account.settings_store?.[LEGACY_FE_NAME];
 
             if (!settings) return;
 

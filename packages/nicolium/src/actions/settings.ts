@@ -12,7 +12,8 @@ import { isLoggedIn } from '@/utils/auth';
 
 import type { AppDispatch, RootState } from '@/store';
 
-const FE_NAME = NODE_ENV === 'production' ? 'pl_fe' : 'pl_fe_dev';
+const LEGACY_FE_NAME = NODE_ENV === 'production' ? 'pl_fe' : 'pl_fe_dev';
+const FE_NAME = NODE_ENV === 'production' ? 'nicolium' : 'nicolium_dev';
 
 /** Options when changing/saving settings. */
 type SettingOpts = {
@@ -101,4 +102,4 @@ const getLocale = (fallback = 'en') => {
       : fallback;
 };
 
-export { FE_NAME, changeSetting, saveSettings, updateSettingsStore, getLocale };
+export { FE_NAME, LEGACY_FE_NAME, changeSetting, saveSettings, updateSettingsStore, getLocale };

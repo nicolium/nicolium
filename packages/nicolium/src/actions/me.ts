@@ -9,7 +9,7 @@ import { useSettingsStore } from '@/stores/settings';
 import { getAuthUserId, getAuthUserUrl } from '@/utils/auth';
 
 import { loadCredentials } from './auth';
-import { FE_NAME } from './settings';
+import { FE_NAME, LEGACY_FE_NAME } from './settings';
 
 import type { AppDispatch, RootState } from '@/store';
 import type { CredentialAccount, UpdateCredentialsParams } from 'pl-api';
@@ -89,7 +89,11 @@ const patchMe =
 const fetchMeSuccess = (account: CredentialAccount) => {
   setSentryAccount(account);
 
-  useSettingsStore.getState().actions.loadUserSettings(account.settings_store?.[FE_NAME]);
+  useSettingsStore
+    .getState()
+    .actions.loadUserSettings(
+      account.settings_store?.[FE_NAME] || account.settings_store?.[LEGACY_FE_NAME],
+    );
   useComposeStore.getState().actions.importDefaultSettings(account);
 
   return {
