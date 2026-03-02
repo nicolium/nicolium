@@ -10,7 +10,7 @@ import type { RootState, Store } from '@/store';
 let store: Store;
 import('@/store').then((value) => (store = value.store)).catch(() => {});
 
-type PlfeResponse<T = any> = Response & { data: string; json: T };
+type NicoliumResponse<T = any> = Response & { data: string; json: T };
 
 /**
  * Dumb client for grabbing static files.
@@ -44,7 +44,7 @@ const staticFetch = async (input: URL | RequestInfo, init?: RequestInit) => {
     url,
     data,
     json,
-  } as any as PlfeResponse;
+  } as any as NicoliumResponse;
 };
 
 const getClient = (state: RootState | (() => RootState) = store?.getState()) => {
@@ -53,4 +53,4 @@ const getClient = (state: RootState | (() => RootState) = store?.getState()) => 
   return state.auth.client;
 };
 
-export { type PlfeResponse, staticFetch, getClient };
+export { type NicoliumResponse, staticFetch, getClient };

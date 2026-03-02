@@ -18,7 +18,7 @@ import Blankslate from './blankslate';
 import EmptyResultsBlankslate from './empty-results-blankslate';
 import Results from './results';
 
-import type { PlfeResponse } from '@/api';
+import type { NicoliumResponse } from '@/api';
 
 const messages = defineMessages({
   placeholder: { id: 'chat_search.placeholder', defaultMessage: 'Type a name' },
@@ -50,7 +50,7 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
 
   const handleClickOnSearchResult = useMutation({
     mutationFn: (accountId: string) => getOrCreateChatByAccountId(accountId),
-    onError: (error: { response: PlfeResponse }) => {
+    onError: (error: { response: NicoliumResponse }) => {
       const data = error.response?.json;
       toast.error(data?.error);
     },

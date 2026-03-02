@@ -10,7 +10,7 @@ import toast from '@/toast';
 import ConfirmationStep from './steps/confirmation-step';
 import DetailsStep from './steps/details-step';
 
-import type { PlfeResponse } from '@/api';
+import type { NicoliumResponse } from '@/api';
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 import type { CreateGroupParams, Group } from 'pl-api';
 
@@ -58,7 +58,7 @@ const CreateGroupModal: React.FC<BaseModalProps> = ({ onClose }) => {
           onError(error) {
             const msg = v.safeParse(
               v.object({ error: v.string() }),
-              (error as { response?: PlfeResponse })?.response?.json,
+              (error as { response?: NicoliumResponse })?.response?.json,
             );
             if (msg.success) {
               toast.error(msg.output.error);

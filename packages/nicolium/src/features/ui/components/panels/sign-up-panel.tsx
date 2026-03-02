@@ -17,7 +17,7 @@ import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { getRedirectUrl } from '@/utils/redirect';
 import { isStandalone } from '@/utils/state';
 
-import type { PlfeResponse } from '@/api';
+import type { NicoliumResponse } from '@/api';
 
 const SignUpPanel = () => {
   const dispatch = useAppDispatch();
@@ -54,7 +54,7 @@ const SignUpPanel = () => {
           setShouldRedirect(true);
         }
       })
-      .catch((error: { response: PlfeResponse }) => {
+      .catch((error: { response: NicoliumResponse }) => {
         const data: any = error.response?.json;
         if (data?.error === 'mfa_required') {
           setMfaAuthNeeded(true);

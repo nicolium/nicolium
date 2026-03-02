@@ -22,7 +22,7 @@ import { createAccount } from '@/actions/accounts';
 import { createApp } from '@/actions/apps';
 import { fetchMeSuccess, fetchMeFail } from '@/actions/me';
 import { obtainOAuthToken, revokeOAuthToken } from '@/actions/oauth';
-import { type PlfeResponse, getClient } from '@/api';
+import { type NicoliumResponse, getClient } from '@/api';
 import * as BuildConfig from '@/build-config';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
@@ -235,7 +235,7 @@ const loadCredentials = (token: string, accountUrl: string) => (dispatch: AppDis
 const logIn = (username: string, password: string) => (dispatch: AppDispatch) =>
   dispatch(createAuthApp())
     .then(() => dispatch(createUserToken(normalizeUsername(username), password)))
-    .catch((error: { response: PlfeResponse }) => {
+    .catch((error: { response: NicoliumResponse }) => {
       if (error.response?.json?.error === 'mfa_required') {
         // If MFA is required, throw the error and handle it in the component.
         throw error;

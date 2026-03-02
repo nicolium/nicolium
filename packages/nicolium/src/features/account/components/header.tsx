@@ -32,7 +32,7 @@ import toast from '@/toast';
 
 import { AccountMenu } from './account-menu';
 
-import type { PlfeResponse } from '@/api';
+import type { NicoliumResponse } from '@/api';
 import type { Account as AccountEntity } from 'pl-api';
 
 const messages = defineMessages({
@@ -97,7 +97,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
   const createAndNavigateToChat = useMutation({
     mutationFn: (accountId: string) => getOrCreateChatByAccountId(accountId),
-    onError: (error: { response: PlfeResponse }) => {
+    onError: (error: { response: NicoliumResponse }) => {
       const data = error.response.json;
       toast.error(data?.error);
     },

@@ -18,7 +18,7 @@ import {
 } from '@/queries/groups/use-group-members';
 import toast from '@/toast';
 
-import type { PlfeResponse } from '@/api';
+import type { NicoliumResponse } from '@/api';
 import type { Account as AccountEntity } from 'pl-api';
 
 const messages = defineMessages({
@@ -90,7 +90,7 @@ const GroupMembershipRequests: React.FC = () => {
       acceptGroupMembershipRequest(account.id, {
         onSuccess: () => resolve(),
         onError: (error) => {
-          const { response } = error as unknown as { response: PlfeResponse };
+          const { response } = error as unknown as { response: NicoliumResponse };
 
           let message = intl.formatMessage(messages.authorizeFail, { name: account.username });
           if (response?.status === 409) {
@@ -108,7 +108,7 @@ const GroupMembershipRequests: React.FC = () => {
       rejectGroupMembershipRequest(account.id, {
         onSuccess: () => resolve(),
         onError: (error) => {
-          const { response } = error as unknown as { response: PlfeResponse };
+          const { response } = error as unknown as { response: NicoliumResponse };
 
           let message = intl.formatMessage(messages.rejectFail, { name: account.username });
           if (response?.status === 409) {

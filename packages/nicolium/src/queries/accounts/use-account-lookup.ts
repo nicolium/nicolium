@@ -6,10 +6,10 @@ import { queryKeys } from '@/queries/keys';
 
 import { useAccount } from './use-account';
 
-import type { PlfeResponse } from '@/api';
+import type { NicoliumResponse } from '@/api';
 
 const getResponseStatus = (error: unknown) =>
-  (error as { response?: PlfeResponse })?.response?.status;
+  (error as { response?: NicoliumResponse })?.response?.status;
 
 const useAccountLookup = (acct: string | undefined, withRelationship = false) => {
   const client = useClient();

@@ -8,12 +8,12 @@ import { useCredentialAccount } from '@/queries/accounts/use-account-credentials
 import { useRelationshipQuery } from '@/queries/accounts/use-relationship';
 import { queryKeys } from '@/queries/keys';
 
-import type { PlfeResponse } from '@/api';
+import type { NicoliumResponse } from '@/api';
 
 const ADMIN_PERMISSION = 0x1n;
 
 const getResponseStatus = (error: unknown) =>
-  (error as { response?: PlfeResponse })?.response?.status;
+  (error as { response?: NicoliumResponse })?.response?.status;
 
 const hasAdminPermission = (permissions?: string): boolean | undefined => {
   if (!permissions) return undefined;

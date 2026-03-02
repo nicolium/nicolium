@@ -12,13 +12,13 @@ import {
   type MeAction,
 } from '@/actions/me';
 
-import type { PlfeResponse } from '@/api';
+import type { NicoliumResponse } from '@/api';
 
 type Me = string | null | false;
 
 const initialState: Me = null;
 
-const handleForbidden = (state: Me, error: { response: PlfeResponse }) => {
+const handleForbidden = (state: Me, error: { response: NicoliumResponse }) => {
   if (error.response?.status && [401, 403].includes(error.response.status)) {
     return false;
   }

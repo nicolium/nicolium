@@ -17,7 +17,7 @@ import { useModalsActions } from '@/stores/modals';
 import { getRedirectUrl } from '@/utils/redirect';
 import { isStandalone } from '@/utils/state';
 
-import type { PlfeResponse } from '@/api';
+import type { NicoliumResponse } from '@/api';
 
 const LoginPage = () => {
   const dispatch = useAppDispatch();
@@ -53,7 +53,7 @@ const LoginPage = () => {
           setShouldRedirect(true);
         }
       })
-      .catch((error: { response: PlfeResponse }) => {
+      .catch((error: { response: NicoliumResponse }) => {
         const data: any = error.response?.json;
         if (data?.error === 'mfa_required') {
           setMfaAuthNeeded(true);

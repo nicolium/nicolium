@@ -34,7 +34,7 @@ import { coerceObject } from '@/schemas/utils';
 import KVStore from '@/storage/kv-store';
 import { validId, isURL, parseBaseURL } from '@/utils/auth';
 
-import type { PlfeResponse } from '@/api';
+import type { NicoliumResponse } from '@/api';
 
 const instance = (() => {
   try {
@@ -326,7 +326,7 @@ const persistAuthAccount = (account: CredentialAccount) => {
 
 const deleteForbiddenToken = (
   state: State | Draft<State>,
-  error: { response: PlfeResponse },
+  error: { response: NicoliumResponse },
   token: string,
 ) => {
   if (error.response && [401, 403].includes(error.response.status)) {

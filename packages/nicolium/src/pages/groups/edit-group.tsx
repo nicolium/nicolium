@@ -21,7 +21,7 @@ import { useGroupQuery, useUpdateGroupMutation } from '@/queries/groups/use-grou
 import toast from '@/toast';
 import { unescapeHTML } from '@/utils/html';
 
-import type { PlfeResponse } from '@/api';
+import type { NicoliumResponse } from '@/api';
 
 const messages = defineMessages({
   heading: { id: 'navigation_bar.edit_group', defaultMessage: 'Edit Group' },
@@ -79,7 +79,7 @@ const EditGroup: React.FC = () => {
           toast.success(intl.formatMessage(messages.groupSaved));
         },
         onError(error) {
-          const response = (error as { response?: PlfeResponse })?.response;
+          const response = (error as { response?: NicoliumResponse })?.response;
           const message = response?.json?.error;
 
           if (response?.status === 422 && typeof message !== 'undefined') {

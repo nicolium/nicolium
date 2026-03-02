@@ -5,7 +5,7 @@ import { defineMessages, type MessageDescriptor } from 'react-intl';
 import Toast from './components/ui/toast';
 import { httpErrorMessages } from './utils/errors';
 
-import type { PlfeResponse } from './api';
+import type { NicoliumResponse } from './api';
 import type { LinkOptions } from '@tanstack/react-router';
 
 type ToastText = string | MessageDescriptor;
@@ -45,7 +45,7 @@ const messages = defineMessages({
   unexpectedMessage: { id: 'alert.unexpected.message', defaultMessage: 'Something went wrong.' },
 });
 
-const showAlertForError = (networkError: { response: PlfeResponse }) => {
+const showAlertForError = (networkError: { response: NicoliumResponse }) => {
   if (networkError?.response) {
     const { json, status, statusText } = networkError.response;
 

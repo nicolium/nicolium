@@ -11,7 +11,7 @@ import toast from '@/toast';
 import ChatComposer from './chat-composer';
 import ChatMessageList from './chat-message-list';
 
-import type { PlfeResponse } from '@/api';
+import type { NicoliumResponse } from '@/api';
 import type { Chat as ChatEntity, MediaAttachment } from 'pl-api';
 
 const fileKeyGen = (): number => Math.floor(Math.random() * 0x10000);
@@ -73,7 +73,7 @@ const Chat: React.FC<IChat> = ({ chat, inputRef, className }) => {
         onSuccess: () => {
           setErrorMessage(undefined);
         },
-        onError: (error: { response: PlfeResponse }, _variables) => {
+        onError: (error: { response: NicoliumResponse }, _variables) => {
           const message = error.response?.json?.error;
           setErrorMessage(message ?? intl.formatMessage(messages.failedToSend));
         },
