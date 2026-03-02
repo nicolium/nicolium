@@ -3,7 +3,7 @@
 [![Codeberg Repo stars](https://img.shields.io/gitea/stars/mkljczk/nicolium?gitea_url=https%3A%2F%2Fcodeberg.org&logo=Codeberg)](https://codeberg.org/mkljczk/nicolium)
 [![GitHub Repo stars](https://img.shields.io/github/stars/mkljczk/nicolium)](https://github.com/mkljczk/nicolium)
 [![GitHub License](https://img.shields.io/github/license/mkljczk/nicolium)](https://github.com/mkljczk/nicolium?tab=AGPL-3.0-1-ov-file#readme)
-[![Weblate project translated](https://img.shields.io/weblate/progress/pl-fe)](https://hosted.weblate.org/engage/pl-fe/)
+[![Weblate project translated](https://img.shields.io/weblate/progress/nicolium)](https://hosted.weblate.org/engage/nicolium/)
 ![trans rights btw](https://img.shields.io/badge/-rights_btw-wtf?style=flat&label=trans&labelColor=5BCEFA&color=F5A9B8)
 
 Nicolium is a social networking client app. It works with any Mastodon API-compatible software, but it's focused on supporting alternative backends, like Pleroma or GoToSocial.

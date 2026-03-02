@@ -412,7 +412,7 @@ const Preferences = () => {
                 link: (children: React.ReactNode) => (
                   <a
                     className='underline'
-                    href='https://hosted.weblate.org/projects/pl-fe/pl-fe/'
+                    href='https://hosted.weblate.org/projects/nicolium/nicolium/'
                     rel='noopener noreferrer'
                     target='_blank'
                   >

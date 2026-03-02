@@ -64,8 +64,8 @@ Before committing changes adding or modifying user-visible strings, make sure to
 pnpm -F nicolium i18n
 ```
 
-You can help translating Nicolium into your language on [Weblate](https://hosted.weblate.org/projects/pl-fe/).
+You can help translating Nicolium into your language on [Weblate](https://hosted.weblate.org/projects/nicolium/).
 
-<a href="https://hosted.weblate.org/engage/pl-fe/">
-<img src="https://hosted.weblate.org/widget/pl-fe/287x66-grey.png" alt="Translation status" />
+<a href="https://hosted.weblate.org/engage/nicolium/">
+<img src="https://hosted.weblate.org/widget/nicolium/287x66-grey.png" alt="Translation status" />
 </a>
