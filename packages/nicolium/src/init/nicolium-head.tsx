@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import debounce from 'lodash/debounce';
 import React, { useEffect, useMemo } from 'react';
 
 import InlineStyle from '@/components/inline-style';
@@ -51,7 +52,7 @@ const NicoliumHead = () => {
     const overlay = navigator.windowControlsOverlay;
     if (!overlay) return;
 
-    const update = () => {
+    const update = debounce(() => {
       setWcoVisible(overlay.visible);
       if (overlay.visible) {
         const rect = overlay.getTitlebarAreaRect();
@@ -59,10 +60,14 @@ const NicoliumHead = () => {
       } else {
         setWcoRight(false);
       }
-    };
+    }, 100);
     update();
+
     overlay.addEventListener('geometrychange', update);
-    return () => overlay.removeEventListener('geometrychange', update);
+    return () => {
+      overlay.removeEventListener('geometrychange', update);
+      update.cancel();
+    };
   }, []);
 
   const color = useMemo(() => {

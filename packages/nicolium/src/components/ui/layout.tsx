@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import debounce from 'lodash/debounce';
 import React, { Suspense, useEffect, useState } from 'react';
 import StickyBox from 'react-sticky-box';
 
@@ -77,9 +78,15 @@ const useWindowControlsOverlay = () => {
     const overlay = navigator.windowControlsOverlay;
     if (!overlay) return;
 
-    const update = () => setRect(overlay.visible ? overlay.getTitlebarAreaRect() : null);
+    const update = debounce(
+      () => setRect(overlay.visible ? overlay.getTitlebarAreaRect() : null),
+      100,
+    );
     overlay.addEventListener('geometrychange', update);
-    return () => overlay.removeEventListener('geometrychange', update);
+    return () => {
+      overlay.removeEventListener('geometrychange', update);
+      update.cancel();
+    };
   }, []);
 
   return rect;
