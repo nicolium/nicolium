@@ -1,5 +1,4 @@
 import { skipToken, useQueries, useQuery } from '@tanstack/react-query';
-import { useMemo } from 'react';
 import { createSelector } from 'reselect';
 
 import { useAppSelector } from '@/hooks/use-app-selector';
@@ -19,7 +18,7 @@ const selectOtherAccountIds = createSelector(
 );
 
 const useLoggedInAccount = (accountId: string) => {
-  const query = useQuery({
+  const query = useQuery<Account>({
     queryKey: queryKeys.accounts.show(accountId),
     queryFn: skipToken,
   });
@@ -27,23 +26,21 @@ const useLoggedInAccount = (accountId: string) => {
   return query;
 };
 
-const useLoggedInAccountIds = () => useAppSelector((state) => selectOtherAccountIds(state));
+const useLoggedInAccountIds = () => useAppSelector(selectOtherAccountIds);
 
 /** doesn't fetch because it's a hack that should not exist like this */
 const useLoggedInAccounts = () => {
   const otherAccountIds = useLoggedInAccountIds();
 
-  const queries = useQueries({
+  const { accounts } = useQueries({
     queries: otherAccountIds.map((accountId) => ({
       queryKey: queryKeys.accounts.show(accountId),
       queryFn: skipToken,
     })),
+    combine: (results) => ({
+      accounts: results.map((q) => q.data).filter((account): account is Account => !!account),
+    }),
   });
-
-  const accounts = useMemo(
-    () => queries.map((q) => q.data).filter((account): account is Account => !!account),
-    [queries],
-  );
 
   return { accounts };
 };

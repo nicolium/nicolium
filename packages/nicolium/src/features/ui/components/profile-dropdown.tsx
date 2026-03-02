@@ -6,9 +6,13 @@ import { defineMessages, useIntl } from 'react-intl';
 import { logOut, switchAccount } from '@/actions/auth';
 import Account from '@/components/accounts/account';
 import DropdownMenu from '@/components/dropdown-menu';
+import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
-import { useLoggedInAccounts } from '@/queries/accounts/use-logged-in-accounts';
+import {
+  useLoggedInAccount,
+  useLoggedInAccountIds,
+} from '@/queries/accounts/use-logged-in-accounts';
 
 import ThemeToggle from './theme-toggle';
 
@@ -19,6 +23,20 @@ const messages = defineMessages({
   theme: { id: 'profile_dropdown.theme', defaultMessage: 'Theme' },
   logout: { id: 'profile_dropdown.logout', defaultMessage: 'Log out @{acct}' },
 });
+
+interface ILoggedInAccount {
+  accountId: string;
+}
+
+const LoggedInAccount: React.FC<ILoggedInAccount> = ({ accountId }) => {
+  const { data: account } = useLoggedInAccount(accountId);
+
+  if (!account) return <PlaceholderAccount />;
+
+  return (
+    <Account account={account} showAccountHoverCard={false} withLinkToProfile={false} hideActions />
+  );
+};
 
 interface IProfileDropdown {
   account: AccountEntity;
@@ -38,14 +56,14 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   const features = useFeatures();
   const intl = useIntl();
 
-  const { accounts: otherAccounts } = useLoggedInAccounts();
+  const otherAccountIds = useLoggedInAccountIds();
 
   const handleLogOut = () => {
     dispatch(logOut());
   };
 
-  const handleSwitchAccount = (otherAccount: AccountEntity) => () => {
-    dispatch(switchAccount(otherAccount.id));
+  const handleSwitchAccount = (otherAccountId: string) => () => {
+    dispatch(switchAccount(otherAccountId));
   };
 
   const renderAccount = (account: AccountEntity) => (
@@ -60,13 +78,11 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
       linkOptions: { to: '/@{$username}', params: { username: account.acct } },
     });
 
-    otherAccounts.forEach((otherAccount?: AccountEntity) => {
-      if (otherAccount && otherAccount.id !== account.id) {
-        menu.push({
-          text: renderAccount(otherAccount),
-          action: handleSwitchAccount(otherAccount),
-        });
-      }
+    otherAccountIds.forEach((otherAccountId) => {
+      menu.push({
+        text: <LoggedInAccount accountId={otherAccountId} />,
+        action: handleSwitchAccount(otherAccountId),
+      });
     });
 
     menu.push({ text: null });
@@ -93,7 +109,7 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
         ))}
       </>
     );
-  }, [account, otherAccounts.length, features]);
+  }, [account, otherAccountIds.length, features]);
 
   return (
     <DropdownMenu component={ProfileDropdownMenu}>
