@@ -56,9 +56,9 @@ const externalAuthorize = (instance: Instance, baseURL: string) => {
       scope: scopes,
     });
 
-    localStorage.setItem('plfe:external:app', JSON.stringify(app));
-    localStorage.setItem('plfe:external:baseurl', baseURL);
-    localStorage.setItem('plfe:external:scopes', scopes);
+    localStorage.setItem('nicolium:external:app', JSON.stringify(app));
+    localStorage.setItem('nicolium:external:baseurl', baseURL);
+    localStorage.setItem('nicolium:external:scopes', scopes);
 
     window.location.href = `${baseURL}/oauth/authorize?${query.toString()}`;
   });
@@ -73,10 +73,10 @@ const externalLogin = (host: string) => {
 };
 
 const loginWithCode = (code: string) => (dispatch: AppDispatch) => {
-  const app = JSON.parse(localStorage.getItem('plfe:external:app')!);
+  const app = JSON.parse(localStorage.getItem('nicolium:external:app')!);
   const { client_id, client_secret, redirect_uri } = app;
-  const baseURL = localStorage.getItem('plfe:external:baseurl')!;
-  const scope = localStorage.getItem('plfe:external:scopes')!;
+  const baseURL = localStorage.getItem('nicolium:external:baseurl')!;
+  const scope = localStorage.getItem('nicolium:external:scopes')!;
 
   const params = {
     client_id,

@@ -121,7 +121,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
     const { state: locationState } = useLocation();
 
     // Preserve scroll position
-    const scrollDataKey = `plfe:scrollData:${scrollKey}:${locationState.key}`;
+    const scrollDataKey = `nicolium:scrollData:${scrollKey}:${locationState.key}`;
     const scrollData: SavedScrollPosition | null = useMemo(
       () => JSON.parse(sessionStorage.getItem(scrollDataKey)!),
       [scrollDataKey],

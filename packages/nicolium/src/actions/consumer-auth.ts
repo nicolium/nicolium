@@ -30,9 +30,9 @@ const prepareRequest =
     const app = await dispatch(createProviderApp());
     const { client_id, redirect_uri } = app;
 
-    localStorage.setItem('plfe:external:app', JSON.stringify(app));
-    localStorage.setItem('plfe:external:baseurl', baseURL);
-    localStorage.setItem('plfe:external:scopes', scopes);
+    localStorage.setItem('nicolium:external:app', JSON.stringify(app));
+    localStorage.setItem('nicolium:external:baseurl', baseURL);
+    localStorage.setItem('nicolium:external:scopes', scopes);
 
     const params = {
       provider,
