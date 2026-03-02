@@ -117,8 +117,6 @@ const useTimeline = (
 
   useTimelineStream(streamConfig?.stream ?? '', streamConfig?.params, !!streamConfig?.stream);
 
-  const [isLoading, setIsLoading] = useState(true);
-
   const query = useQuery({
     queryKey,
     queryFn: async () => {
@@ -132,6 +130,8 @@ const useTimeline = (
       }
     },
   });
+
+  const [isLoading, setIsLoading] = useState(query.isPending);
 
   const handleLoadMore = useCallback(
     async (entry: TimelineEntry) => {
