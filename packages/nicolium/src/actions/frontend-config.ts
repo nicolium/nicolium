@@ -33,10 +33,14 @@ const fetchFrontendConfig =
 
     if (features.frontendConfigurations) {
       return dispatch(fetchFrontendConfigurations()).then((data) => {
-        const key = 'pl_fe';
-        if (data[key]) {
-          dispatch(importFrontendConfig(data[key], host));
-          return data[key];
+        const legacyKey = 'pl_fe';
+        const key = 'nicolium';
+
+        const foundData = data[key] || data[legacyKey];
+
+        if (foundData) {
+          dispatch(importFrontendConfig(foundData, host));
+          return foundData;
         } else {
           return dispatch(fetchFrontendConfigJson(host));
         }

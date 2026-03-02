@@ -35,8 +35,8 @@ const preloadImport = (state: Record<string, any>, action: Record<string, any>) 
   const feData = action.data[path];
 
   if (feData) {
-    const plfe = feData.pl_fe;
-    return plfe ? { ...fallbackState, ...plfe } : fallbackState;
+    const nicoliumConfig = feData.nicolium || feData.pl_fe;
+    return nicoliumConfig ? { ...fallbackState, ...nicoliumConfig } : fallbackState;
   } else {
     return state;
   }

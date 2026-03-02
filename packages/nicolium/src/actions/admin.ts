@@ -49,7 +49,7 @@ const updateFrontendConfig = (data: Record<string, any>) => (dispatch: AppDispat
       key: ':frontend_configurations',
       value: [
         {
-          tuple: [':pl_fe', data],
+          tuple: [':nicolium', data],
         },
       ],
     },
