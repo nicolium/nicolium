@@ -21,22 +21,8 @@ const useTimelineStream = (
   const socket = useRef<{
     listen: (listener: (event: StreamingEvent) => void, stream?: string) => number;
     unlisten: (listener: (event: StreamingEvent) => void) => void;
-    subscribe: (
-      stream: string,
-      params?: {
-        list?: string;
-        tag?: string;
-        group?: string;
-      },
-    ) => void;
-    unsubscribe: (
-      stream: string,
-      params?: {
-        list?: string;
-        tag?: string;
-        group?: string;
-      },
-    ) => void;
+    subscribe: (stream: string, params?: StreamingParams) => void;
+    unsubscribe: (stream: string, params?: StreamingParams) => void;
     close: () => void;
   } | null>(null);
 
@@ -63,7 +49,7 @@ const useTimelineStream = (
     socket.current?.subscribe(stream, params);
 
     return () => socket.current?.unsubscribe(stream, params);
-  }, [stream, params.list, params.tag, params.group, enabled]);
+  }, [stream, params.list, params.tag, params.group, params.instance, enabled]);
 
   useEffect(() => {
     if (enabled) {
