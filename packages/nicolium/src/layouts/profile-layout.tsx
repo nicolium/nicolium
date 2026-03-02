@@ -22,6 +22,7 @@ import { useAcct } from '@/hooks/use-acct';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
+import { LOCAL_STORAGE_REDIRECT_KEY } from '@/utils/redirect';
 
 /** Layout to display a user's profile. */
 const ProfileLayout: React.FC = () => {
@@ -35,7 +36,7 @@ const ProfileLayout: React.FC = () => {
   const acct = useAcct(account);
 
   if (isUnauthorized) {
-    localStorage.setItem('plfe:redirect_uri', location.href);
+    localStorage.setItem(LOCAL_STORAGE_REDIRECT_KEY, location.href);
     return <Navigate to='/login' />;
   }
 

@@ -37,6 +37,7 @@ import RemoteInstanceLayout from '@/layouts/remote-instance-layout';
 import SearchLayout from '@/layouts/search-layout';
 import StatusLayout from '@/layouts/status-layout';
 import { instanceInitialState } from '@/reducers/instance';
+import { LOCAL_STORAGE_REDIRECT_KEY } from '@/utils/redirect';
 import { isStandalone } from '@/utils/state';
 
 import ChatsPageChat from '../../chats/components/chats-page/components/chats-page-chat';
@@ -174,7 +175,7 @@ const requireAuth = ({
   context: RouterContext;
   location: ParsedLocation;
 }) => {
-  localStorage.setItem('plfe:redirect_uri', location.href);
+  localStorage.setItem(LOCAL_STORAGE_REDIRECT_KEY, location.href);
   if (!isLoggedIn)
     throw redirect({
       to: '/login',

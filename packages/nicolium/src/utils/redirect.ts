@@ -1,4 +1,4 @@
-const LOCAL_STORAGE_REDIRECT_KEY = 'plfe:redirect_uri';
+const LOCAL_STORAGE_REDIRECT_KEY = 'nicolium:redirect_uri';
 
 const getRedirectUrl = () => {
   let redirectUri = localStorage.getItem(LOCAL_STORAGE_REDIRECT_KEY);
@@ -10,4 +10,4 @@ const getRedirectUrl = () => {
   return redirectUri ?? '/';
 };
 
-export { getRedirectUrl };
+export { getRedirectUrl, LOCAL_STORAGE_REDIRECT_KEY };
