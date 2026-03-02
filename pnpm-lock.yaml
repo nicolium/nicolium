@@ -179,8 +179,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       flexsearch:
-        specifier: ^0.8.212
-        version: 0.8.212
+        specifier: ^0.7.43
+        version: 0.7.43
       fuzzysort:
         specifier: ^3.1.0
         version: 3.1.0
@@ -3859,8 +3859,8 @@ packages:
   flatted@3.3.3:
     resolution: {integrity: sha512-GX+ysw4PBCz0PzosHDepZGANEuFCMLrnRTiEy9McGjmkCQYwRq4A/X786G/fjM/+OjsWSU1ZrY5qyARZmO/uwg==}
 
-  flexsearch@0.8.212:
-    resolution: {integrity: sha512-wSyJr1GUWoOOIISRu+X2IXiOcVfg9qqBRyCPRUdLMIGJqPzMo+jMRlvE83t14v1j0dRMEaBbER/adQjp6Du2pw==}
+  flexsearch@0.7.43:
+    resolution: {integrity: sha512-c5o/+Um8aqCSOXGcZoqZOm+NqtVwNsvVpWv6lfmSclU954O3wvQKxxK8zj74fPaSJbXpSLTs4PRhh+wnoCXnKg==}
 
   for-each@0.3.5:
     resolution: {integrity: sha512-dKx12eRCVIzqCxFGplyFKJMPvLEWgmNtUrpTiJIR5u97zEhRG8ySrtboPHZXx7daLxQVrl643cTzbab2tkQjxg==}
@@ -10096,7 +10096,7 @@ snapshots:
 
   flatted@3.3.3: {}
 
-  flexsearch@0.8.212: {}
+  flexsearch@0.7.43: {}
 
   for-each@0.3.5:
     dependencies:
