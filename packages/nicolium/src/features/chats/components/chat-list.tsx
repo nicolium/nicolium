@@ -66,14 +66,12 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
     (_index: number, chat: Chat | 'shoutbox') => {
       if (chat === 'shoutbox') {
         return (
-          <div key='shoutbox' className='px-2'>
-            <ChatListShoutbox
-              key='shoutbox'
-              onClick={onClickChat}
-              onMoveUp={handleMoveUp}
-              onMoveDown={handleMoveDown}
-            />
-          </div>
+          <ChatListShoutbox
+            key='shoutbox'
+            onClick={onClickChat}
+            onMoveUp={handleMoveUp}
+            onMoveDown={handleMoveDown}
+          />
         );
       }
 
