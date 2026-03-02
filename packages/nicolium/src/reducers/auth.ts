@@ -97,8 +97,8 @@ const buildKey = (parts: string[]) => parts.join(':');
 
 // For subdirectory support
 const NAMESPACE = trim(BuildConfig.FE_SUBDIRECTORY, '/')
-  ? `pl-fe@${BuildConfig.FE_SUBDIRECTORY}`
-  : 'pl-fe';
+  ? `nicolium@${BuildConfig.FE_SUBDIRECTORY}`
+  : 'nicolium';
 
 const STORAGE_KEY = buildKey([NAMESPACE, 'auth']);
 

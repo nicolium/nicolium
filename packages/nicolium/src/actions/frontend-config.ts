@@ -12,7 +12,7 @@ const FRONTEND_CONFIG_REQUEST_FAIL = 'FRONTEND_CONFIG_REQUEST_FAIL' as const;
 const FRONTEND_CONFIG_REMEMBER_SUCCESS = 'FRONTEND_CONFIG_REMEMBER_SUCCESS' as const;
 
 const rememberFrontendConfig = (host: string | null) => (dispatch: AppDispatch) =>
-  KVStore.getItemOrError(`plfe_config:${host}`)
+  KVStore.getItemOrError(`frontendConfig:${host}`)
     .then((frontendConfig) => {
       dispatch<FrontendConfigAction>({
         type: FRONTEND_CONFIG_REMEMBER_SUCCESS,

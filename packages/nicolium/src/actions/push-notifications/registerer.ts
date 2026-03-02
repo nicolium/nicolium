@@ -1,5 +1,5 @@
 import { createPushSubscription } from '@/actions/push-subscriptions';
-import { pushNotificationsSetting } from '@/settings';
+import { pushNotificationsSettings } from '@/settings';
 import { getVapidKey } from '@/utils/auth';
 import { decode as decodeBase64 } from '@/utils/base64';
 
@@ -55,7 +55,7 @@ const sendSubscriptionToBackend =
     const params = { subscription, data: { alerts } };
 
     if (me) {
-      const data = pushNotificationsSetting.get(me);
+      const data = pushNotificationsSettings.get(me);
       if (data) {
         params.data = data;
       }
@@ -124,7 +124,7 @@ const register = () => (dispatch: AppDispatch, getState: () => RootState) => {
       if (!(subscription instanceof PushSubscription)) {
         dispatch(setSubscription(subscription));
         if (me) {
-          pushNotificationsSetting.set(me, { alerts: subscription.alerts });
+          pushNotificationsSettings.set(me, { alerts: subscription.alerts });
         }
       }
     })
@@ -141,7 +141,7 @@ const register = () => (dispatch: AppDispatch, getState: () => RootState) => {
       dispatch(clearSubscription());
 
       if (me) {
-        pushNotificationsSetting.remove(me);
+        pushNotificationsSettings.remove(me);
       }
 
       return getRegistration().then(getPushSubscription).then(unsubscribe);

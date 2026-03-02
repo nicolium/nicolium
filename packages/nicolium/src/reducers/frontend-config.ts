@@ -44,7 +44,7 @@ const preloadImport = (state: Record<string, any>, action: Record<string, any>) 
 
 const persistFrontendConfig = (frontendConfig: PartialFrontendConfig, host: string) => {
   if (host) {
-    KVStore.setItem(`plfe_config:${host}`, frontendConfig).catch(console.error);
+    KVStore.setItem(`frontendConfig:${host}`, frontendConfig).catch(console.error);
   }
 };
 

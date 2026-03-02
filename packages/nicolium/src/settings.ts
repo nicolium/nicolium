@@ -45,6 +45,6 @@ class Settings {
 }
 
 /** Remember push notification settings. */
-const pushNotificationsSetting = new Settings('plfe_push_notification_data');
+const pushNotificationsSettings = new Settings('nicolium:pushNotificationSettings');
 
-export { pushNotificationsSetting };
+export { pushNotificationsSettings };
