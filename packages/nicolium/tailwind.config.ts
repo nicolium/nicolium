@@ -58,7 +58,7 @@ const config: Config = {
       },
       colors: parseColorMatrix({
         // Define color matrix (of available colors)
-        // Colors are configured at runtime with CSS variables in pl-fe.json
+        // Colors are configured at runtime with CSS variables in nicolium.json or frontend_configurations
         gray: [50, 100, 200, 300, 400, 500, 600, 700, 800, 900],
         primary: [50, 100, 200, 300, 400, 500, 600, 700, 800, 900],
         secondary: [100, 200, 300, 400, 500, 600],

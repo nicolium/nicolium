@@ -61,9 +61,9 @@ const loadFrontendConfig = () => async (dispatch: AppDispatch, getState: () => R
 };
 
 const fetchFrontendConfigJson = (host: string | null) => (dispatch: AppDispatch) =>
-  staticFetch('/instance/pl-fe.json')
+  staticFetch('/instance/nicolium.json')
     .then(({ json: data }) => {
-      if (!isObject(data)) throw 'pl-fe.json fetch failed';
+      if (!isObject(data)) throw 'nicolium.json fetch failed';
       dispatch(importFrontendConfig(data, host));
       return data;
     })
