@@ -117,11 +117,7 @@ const StatusReactionsBar: React.FC<IStatusReactionsBar> = ({ status, collapsed }
   const { mutate: emojiReact } = useEmojiReactMutation(status.id);
 
   const handlePickEmoji = (emoji: EmojiType) => {
-    emojiReact(
-      emoji.custom ? emoji.id : emoji.native,
-      // emoji.custom ? emoji.imageUrl : undefined,
-      // intl,
-    );
+    emojiReact(emoji.custom ? emoji.id : emoji.native);
   };
 
   if ((demetricator || status.emoji_reactions.length === 0) && collapsed) return null;
