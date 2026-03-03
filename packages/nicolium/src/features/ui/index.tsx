@@ -180,7 +180,7 @@ const UI: React.FC = React.memo(() => {
 
           {me && features.chats && (
             <div className='⁂-chat-widget__container'>
-              <Suspense fallback={<div className='⁂-chat-widget--placeholder' />}>
+              <Suspense fallback={<div className='⁂-chat-widget ⁂-chat-widget--placeholder' />}>
                 <ChatWidget />
               </Suspense>
             </div>

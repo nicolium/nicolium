@@ -2,7 +2,25 @@
 @use 'variables';
 
 .⁂-chat-widget {
-  @apply fixed bottom-0 z-[99] flex w-96 flex-col rounded-t-lg bg-white shadow-3xl black:border black:border-b-0 black:border-gray-800 black:bg-black dark:bg-gray-900 ltr:right-5 rtl:left-5 h-16;
+  position: fixed;
+  bottom: 0;
+  z-index: 99;
+  display: flex;
+  flex-direction: column;
+  width: 24rem;
+  height: 4rem;
+  border-radius: 0.5rem 0.5rem 0 0;
+  background: white;
+  box-shadow: 0 25px 75px -15px rgb(0, 0, 0, 0.25);
+  @apply ltr:right-5 rtl:left-5;
+
+  &:is(.dark *) {
+    background: rgb(var(--color-gray-900));
+  }
+
+  &:is(.black *) {
+    background: black;
+  }
 
   &--open {
     height: 550px;
@@ -14,7 +32,7 @@
   }
 
   &--placeholder {
-    @apply fixed bottom-0 z-[99] flex h-16 w-96 animate-pulse flex-col rounded-t-lg bg-white shadow-3xl dark:bg-gray-900 ltr:right-5 rtl:left-5;
+    @apply animate-pulse;
   }
 
   &__container {
@@ -121,7 +139,11 @@
 
       &.⁂-chat-widget__list--near-top::before,
       &.⁂-chat-widget__list--near-bottom::after {
-        @apply opacity-0 black:opacity-0;
+        opacity: 0;
+
+        &:is(.black *) {
+          @apply opacity-0;
+        }
       }
     }
   }
@@ -165,11 +187,14 @@
   }
 
   &--shoutbox > div {
-    @apply justify-normal;
+    justify-content: normal;
   }
 
   &__info {
-    @apply flex items-center gap-2 overflow-hidden;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    overflow: hidden;
   }
 
   &__avatar {
