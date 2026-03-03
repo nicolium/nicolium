@@ -1,5 +1,41 @@
 @use 'mixins';
 
+.⁂-event-information {
+  @apply flex flex-col mt-4 sm:p-3 gap-2;
+
+  &__content,
+  &__location,
+  &__date,
+  &__links {
+    @apply flex flex-col gap-1;
+
+    h2 {
+      @include mixins.text($size: xl, $weight: bold);
+    }
+  }
+
+  &__location,
+  &__date {
+    &__body {
+      @apply flex gap-2 items-center;
+
+      p {
+        @include mixins.text;
+      }
+    }
+  }
+
+  &__links {
+    ul li {
+      @apply flex gap-2 items-center;
+
+      a {
+        @apply text-primary-600 hover:underline dark:text-primary-400;
+      }
+    }
+  }
+}
+
 .⁂-edit-event {
   .⁂-content-type-button {
     position: absolute;

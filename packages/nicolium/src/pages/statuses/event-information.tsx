@@ -3,10 +3,7 @@ import { FormattedDate, FormattedMessage } from 'react-intl';
 
 import MissingIndicator from '@/components/missing-indicator';
 import StatusContent from '@/components/statuses/status-content';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
-import Text from '@/components/ui/text';
 import { eventInformationRoute } from '@/features/ui/router';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useStatus } from '@/queries/statuses/use-status';
@@ -74,15 +71,15 @@ const EventInformationPage: React.FC = () => {
 
     return (
       event.location && (
-        <Stack space={1}>
-          <Text size='xl' weight='bold'>
+        <div className='⁂-event-information__location'>
+          <h2>
             <FormattedMessage id='event.location' defaultMessage='Location' />
-          </Text>
-          <HStack space={2} alignItems='center'>
+          </h2>
+          <div className='⁂-event-information__location__body'>
             <Icon src={require('@phosphor-icons/core/regular/map-pin.svg')} />
-            <Text>{text}</Text>
-          </HStack>
-        </Stack>
+            <p>{text}</p>
+          </div>
+        </div>
       )
     );
   }, [status]);
@@ -102,13 +99,13 @@ const EventInformationPage: React.FC = () => {
       startDate.getFullYear() === endDate.getFullYear();
 
     return (
-      <Stack space={1}>
-        <Text size='xl' weight='bold'>
+      <div className='⁂-event-information__date'>
+        <h2>
           <FormattedMessage id='event.date' defaultMessage='Date' />
-        </Text>
-        <HStack space={2} alignItems='center'>
+        </h2>
+        <div className='⁂-event-information__date__body'>
           <Icon src={require('@phosphor-icons/core/regular/calendar-dots.svg')} />
-          <Text>
+          <p>
             <FormattedDate
               value={startDate}
               year='numeric'
@@ -132,9 +129,9 @@ const EventInformationPage: React.FC = () => {
                 />
               </>
             )}
-          </Text>
-        </HStack>
-      </Stack>
+          </p>
+        </div>
+      </div>
     );
   }, [status]);
 
@@ -142,24 +139,26 @@ const EventInformationPage: React.FC = () => {
     if (!status?.event?.links?.length) return null;
 
     return (
-      <Stack space={1}>
-        <Text size='xl' weight='bold'>
+      <div className='⁂-event-information__links'>
+        <h2>
           <FormattedMessage id='event.website' defaultMessage='External links' />
-        </Text>
+        </h2>
 
-        {status.event.links.map((link) => (
-          <HStack space={2} alignItems='center' key={link.url}>
-            <Icon src={require('@phosphor-icons/core/regular/link-simple.svg')} />
-            <a
-              href={link.remote_url ?? link.url}
-              className='text-primary-600 hover:underline dark:text-primary-400'
-              target='_blank'
-            >
-              {(link.remote_url ?? link.url).replace(/^https?:\/\//, '')}
-            </a>
-          </HStack>
-        ))}
-      </Stack>
+        <ul>
+          {status.event.links.map((link) => (
+            <li key={link.id}>
+              <Icon src={require('@phosphor-icons/core/regular/link-simple.svg')} />
+              <a
+                href={link.remote_url ?? link.url}
+                className='text-primary-600 hover:underline dark:text-primary-400'
+                target='_blank'
+              >
+                {(link.remote_url ?? link.url).replace(/^https?:\/\//, '')}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
     );
   }, [status]);
 
@@ -168,15 +167,15 @@ const EventInformationPage: React.FC = () => {
   } else if (!status) return null;
 
   return (
-    <Stack className='mt-4 sm:p-2' space={2}>
+    <div className='⁂-event-information'>
       {!!status.content.trim() && (
-        <Stack space={1}>
-          <Text size='xl' weight='bold'>
+        <div className='⁂-event-information__content'>
+          <h2>
             <FormattedMessage id='event.description' defaultMessage='Description' />
-          </Text>
+          </h2>
 
           <StatusContent status={status} translatable withMedia />
-        </Stack>
+        </div>
       )}
 
       {renderEventLocation()}
@@ -184,7 +183,7 @@ const EventInformationPage: React.FC = () => {
       {renderEventDate()}
 
       {renderLinks()}
-    </Stack>
+    </div>
   );
 };
 
