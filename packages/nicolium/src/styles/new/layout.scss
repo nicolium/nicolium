@@ -19,7 +19,7 @@ body.with-modals {
 }
 
 body {
-  @apply bg-white text-base antialiased black:bg-black dark:bg-gray-800;
+  @apply bg-primary-50 text-base antialiased black:bg-black dark:bg-gray-800;
   height: 100%;
 
   &.system-font,
@@ -239,7 +239,7 @@ body {
     @apply text-gray-700 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200;
 
     .⁂-sidebar-navigation-link__icon {
-      @apply bg-primary-50 dark:bg-gray-900;
+      @apply bg-primary-100 dark:bg-gray-900;
 
       svg {
         @apply text-primary-700 dark:text-white;
@@ -248,7 +248,7 @@ body {
   }
 
   &:hover:not(&--active) &__icon {
-    @apply bg-primary-100 dark:bg-gray-700 black:bg-gray-800;
+    @apply bg-primary-200 dark:bg-gray-700 black:bg-gray-800;
   }
 
   > p {
