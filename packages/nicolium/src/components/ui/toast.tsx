@@ -42,6 +42,11 @@ const Toast: React.FC<IToast> = (props) => {
     toast.dismiss(t.id);
   };
 
+  const liveRegionRole = type === 'error' ? 'alert' : 'status';
+  const liveRegionPriority = type === 'error' ? 'assertive' : 'polite';
+  const messageId = `toast-message-${String(t.id)}`;
+  const summaryId = summary ? `toast-summary-${String(t.id)}` : undefined;
+
   const renderIcon = () => {
     switch (type) {
       case 'success':
@@ -85,6 +90,10 @@ const Toast: React.FC<IToast> = (props) => {
   return (
     <div
       data-testid='toast'
+      role={liveRegionRole}
+      aria-live={liveRegionPriority}
+      aria-atomic='true'
+      aria-describedby={summaryId ? `${messageId} ${summaryId}` : messageId}
       className={clsx({
         [`⁂-toast ⁂-toast--${type}`]: true,
         '⁂-toast--visible': t.visible,
@@ -95,7 +104,9 @@ const Toast: React.FC<IToast> = (props) => {
           <div className='⁂-toast__content'>
             <div className={`⁂-toast__icon`}>{renderIcon()}</div>
 
-            <p data-testid='toast-message'>{renderText(message)}</p>
+            <p id={messageId} data-testid='toast-message'>
+              {renderText(message)}
+            </p>
           </div>
 
           {/* Action */}
@@ -110,13 +121,14 @@ const Toast: React.FC<IToast> = (props) => {
             onClick={dismissToast}
             data-testid='toast-dismiss'
             title={intl.formatMessage(messages.close)}
+            aria-label={intl.formatMessage(messages.close)}
           >
             <Icon src={require('@phosphor-icons/core/regular/x.svg')} className='size-5' />
           </button>
         </div>
       </div>
 
-      {summary ? <p>{summary}</p> : null}
+      {summary ? <p id={summaryId}>{summary}</p> : null}
     </div>
   );
 };
