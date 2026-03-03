@@ -1579,7 +1579,6 @@
   "preferences.fields.theme": "Theme",
   "preferences.fields.theme.dark_theme_preference_hint": "Select dark theme to be used when theme is set to \"System\"",
   "preferences.fields.theme.dark_theme_preference_label": "Dark theme preference",
-  "preferences.fields.theme.display_background_gradient": "Display background gradient",
   "preferences.fields.theme_reset": "Reset theme",
   "preferences.fields.underline_links_label": "Always underline links in posts",
   "preferences.fields.unfollow_modal_label": "Show confirmation dialog before unfollowing someone",

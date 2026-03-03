@@ -399,20 +399,6 @@ body {
   }
 }
 
-.⁂-background-shapes {
-  @apply fixed pointer-events-none inset-x-0 top-0 flex justify-center overflow-hidden black:hidden;
-
-  &--preview {
-    position: absolute;
-  }
-
-  > div {
-    height: 100vh;
-    width: 100vw;
-    @apply bg-gradient-sm lg:bg-gradient-light lg:dark:bg-gradient-dark;
-  }
-}
-
 .⁂-widget {
   @apply border-b border-solid border-gray-200 black:border-gray-800 dark:border-primary-800;
   display: flex;
@@ -445,7 +431,6 @@ body {
   }
 }
 
-div:has(.⁂-background-shapes),
 .dark {
   .⁂-widget {
     @include mixins.card($variant: rounded);

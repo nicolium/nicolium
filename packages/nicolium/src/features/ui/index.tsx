@@ -26,13 +26,11 @@ import {
 } from '@/queries/notifications/use-notifications';
 import { useFilters } from '@/queries/settings/use-filters';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
-import { useSettings } from '@/stores/settings';
 import { useShoutboxSubscription } from '@/stores/shoutbox';
 import { useIsDropdownMenuOpen } from '@/stores/ui';
 import { getVapidKey } from '@/utils/auth';
 import { isStandalone } from '@/utils/state';
 
-import BackgroundShapes from './components/background-shapes';
 import {
   ModalRoot,
   AccountHoverCard,
@@ -55,7 +53,6 @@ const UI: React.FC = React.memo(() => {
   const vapidKey = useAppSelector((state) => getVapidKey(state));
   const client = useClient();
   const instance = useInstance();
-  const { theme } = useSettings();
 
   const isDropdownMenuOpen = useIsDropdownMenuOpen();
   const standalone = useAppSelector(isStandalone);
@@ -162,8 +159,6 @@ const UI: React.FC = React.memo(() => {
             '⁂-dragging-area--dragging': isDragging,
           })}
         />
-
-        {(theme?.backgroundGradient ?? true) && <BackgroundShapes />}
 
         <div className='⁂-layout__container'>
           <Layout fullWidth={fullWidth}>

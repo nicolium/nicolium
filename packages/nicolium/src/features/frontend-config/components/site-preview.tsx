@@ -3,7 +3,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import InlineStyle from '@/components/inline-style';
-import BackgroundShapes from '@/features/ui/components/background-shapes';
 import { useSystemTheme } from '@/hooks/use-system-theme';
 import { useThemeCss } from '@/hooks/use-theme-css';
 
@@ -40,7 +39,6 @@ const SitePreview: React.FC<ISitePreview> = ({ frontendConfig }) => {
   return (
     <div className={bodyClass}>
       <InlineStyle>{`.site-preview {${themeCss}}`}</InlineStyle>
-      <BackgroundShapes preview hidden={userTheme === 'black'} />
 
       <div className='absolute z-[2] self-center overflow-hidden rounded-lg bg-accent-500 p-2 text-white'>
         <FormattedMessage id='site_preview.preview' defaultMessage='Preview' />
