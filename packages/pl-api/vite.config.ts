@@ -13,7 +13,7 @@ export default defineConfig(() => ({
     lib: {
       entry: resolve(__dirname, 'lib/main.ts'),
       fileName: (format) => `main.${format}.js`,
-      formats: ['es'],
+      formats: ['cjs', 'es', 'umd'],
       name: 'pl-api',
     },
     target: 'esnext',
