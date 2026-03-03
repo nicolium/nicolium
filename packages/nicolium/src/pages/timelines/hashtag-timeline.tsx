@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { fetchHashtagTimeline, clearTimeline } from '@/actions/timelines';
 import { useHashtagStream } from '@/api/hooks/streaming/use-hashtag-stream';
+import { HashtagTimelineColumn } from '@/columns/timeline';
 import List, { ListItem } from '@/components/list';
 import Column from '@/components/ui/column';
 import Toggle from '@/components/ui/toggle';
@@ -16,21 +17,52 @@ import {
   useUnfollowHashtagMutation,
 } from '@/queries/hashtags/use-followed-tags';
 import { useHashtag } from '@/queries/hashtags/use-hashtag';
+import { useSettings } from '@/stores/settings';
 
-const HashtagTimelinePage: React.FC = () => {
-  const { id: tagId } = hashtagTimelineRoute.useParams();
+interface IHashtagTimeline {
+  hashtag: string;
+}
 
-  const features = useFeatures();
+const HashtagTimeline: React.FC<IHashtagTimeline> = ({ hashtag }) => {
   const dispatch = useAppDispatch();
-  const { data: tag } = useHashtag(tagId);
-  const { isLoggedIn } = useLoggedIn();
-
-  const { mutate: followHashtag } = useFollowHashtagMutation(tagId);
-  const { mutate: unfollowHashtag } = useUnfollowHashtagMutation(tagId);
 
   const handleLoadMore = () => {
-    dispatch(fetchHashtagTimeline(tagId, {}, true));
+    dispatch(fetchHashtagTimeline(hashtag, {}, true));
   };
+
+  useHashtagStream(hashtag);
+
+  useEffect(() => {
+    dispatch(clearTimeline(`hashtag:${hashtag}`));
+    dispatch(fetchHashtagTimeline(hashtag));
+  }, [hashtag]);
+
+  return (
+    <Timeline
+      loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
+      scrollKey='hashtag_timeline'
+      timelineId={`hashtag:${hashtag}`}
+      onLoadMore={handleLoadMore}
+      emptyMessageText={
+        <FormattedMessage
+          id='empty_column.hashtag'
+          defaultMessage='There is nothing in this hashtag yet.'
+        />
+      }
+    />
+  );
+};
+
+const HashtagTimelinePage: React.FC = () => {
+  const { hashtag } = hashtagTimelineRoute.useParams();
+
+  const features = useFeatures();
+  const { experimentalTimeline } = useSettings();
+  const { data: tag } = useHashtag(hashtag);
+  const { isLoggedIn } = useLoggedIn();
+
+  const { mutate: followHashtag } = useFollowHashtagMutation(hashtag);
+  const { mutate: unfollowHashtag } = useUnfollowHashtagMutation(hashtag);
 
   const handleFollow = () => {
     if (tag?.following) {
@@ -40,15 +72,8 @@ const HashtagTimelinePage: React.FC = () => {
     }
   };
 
-  useHashtagStream(tagId);
-
-  useEffect(() => {
-    dispatch(clearTimeline(`hashtag:${tagId}`));
-    dispatch(fetchHashtagTimeline(tagId));
-  }, [tagId]);
-
   return (
-    <Column label={`#${tagId}`}>
+    <Column label={`#${hashtag}`}>
       {features.followHashtags && isLoggedIn && (
         <List>
           <ListItem
@@ -59,18 +84,11 @@ const HashtagTimelinePage: React.FC = () => {
           </ListItem>
         </List>
       )}
-      <Timeline
-        loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
-        scrollKey='hashtag_timeline'
-        timelineId={`hashtag:${tagId}`}
-        onLoadMore={handleLoadMore}
-        emptyMessageText={
-          <FormattedMessage
-            id='empty_column.hashtag'
-            defaultMessage='There is nothing in this hashtag yet.'
-          />
-        }
-      />
+      {experimentalTimeline ? (
+        <HashtagTimelineColumn hashtag={hashtag} />
+      ) : (
+        <HashtagTimeline hashtag={hashtag} />
+      )}
     </Column>
   );
 };

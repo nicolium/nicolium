@@ -35,7 +35,7 @@ const AnnouncementContent: React.FC<IAnnouncementContent> = ({ announcement }) =
     if (e.button === 0 && !(e.ctrlKey || e.metaKey)) {
       e.preventDefault();
       e.stopPropagation();
-      navigate({ to: '/tags/$id', params: { id: hashtag } });
+      navigate({ to: '/tags/$hashtag', params: { hashtag } });
     }
   };
 

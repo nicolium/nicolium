@@ -1,22 +1,21 @@
 import clsx from 'clsx';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { fetchPublicTimeline } from '@/actions/timelines';
-import { useCommunityStream } from '@/api/hooks/streaming/use-community-stream';
+import { PublicTimelineColumn } from '@/columns/timeline';
 import Markup from '@/components/markup';
-import PullToRefresh from '@/components/pull-to-refresh';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
-import Timeline from '@/features/ui/components/timeline';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useInstance } from '@/hooks/use-instance';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { About } from '@/pages/utils/about';
+import { useSettings } from '@/stores/settings';
 import { getTextDirection } from '@/utils/rtl';
+
+import { CommunityTimeline } from './community-timeline';
 
 interface ILogoText extends Pick<React.HTMLAttributes<HTMLHeadingElement>, 'className' | 'dir'> {
   children: React.ReactNode;
@@ -54,33 +53,13 @@ const SiteBanner: React.FC = () => {
 };
 
 const LandingTimelinePage = () => {
-  const dispatch = useAppDispatch();
   const instance = useInstance();
   const { isOpen } = useRegistrationStatus();
+  const { experimentalTimeline } = useSettings();
 
   const [timelineFailed, setTimelineFailed] = useState(false);
 
   const timelineEnabled = !instance.pleroma.metadata.restrict_unauthenticated.timelines.local;
-
-  const timelineId = 'public:local';
-
-  const handleLoadMore = () => {
-    dispatch(fetchPublicTimeline({ local: true }, true));
-  };
-
-  const handleRefresh = () => dispatch(fetchPublicTimeline({ local: true }));
-
-  useCommunityStream({ enabled: timelineEnabled });
-
-  useEffect(() => {
-    if (timelineEnabled) {
-      dispatch(
-        fetchPublicTimeline({ local: true }, false, undefined, () => {
-          setTimelineFailed(true);
-        }),
-      );
-    }
-  }, []);
 
   return (
     <Column withHeader={false}>
@@ -100,22 +79,11 @@ const LandingTimelinePage = () => {
       </HStack>
 
       {timelineEnabled && !timelineFailed ? (
-        <PullToRefresh onRefresh={handleRefresh}>
-          <Timeline
-            loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
-            scrollKey={`${timelineId}_timeline`}
-            timelineId={timelineId}
-            prefix='home'
-            onLoadMore={handleLoadMore}
-            emptyMessageText={
-              <FormattedMessage
-                id='empty_column.community'
-                defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!'
-              />
-            }
-            emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
-          />
-        </PullToRefresh>
+        experimentalTimeline ? (
+          <PublicTimelineColumn local />
+        ) : (
+          <CommunityTimeline onTimelineFailed={() => setTimelineFailed(true)} />
+        )
       ) : (
         <About slug='index' />
       )}

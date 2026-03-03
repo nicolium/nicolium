@@ -438,7 +438,7 @@ export const conversationsRoute = createRoute({
 // Tags and links
 export const hashtagTimelineRoute = createRoute({
   getParentRoute: () => layouts.default,
-  path: '/tags/$id',
+  path: '/tags/$hashtag',
   component: HashtagTimeline,
   beforeLoad: (options) => {
     const {
@@ -1271,10 +1271,10 @@ const redirectPlFeRoute = createRoute({
 });
 const redirectTagRoute = createRoute({
   getParentRoute: () => rootRoute,
-  path: '/tag/$id',
+  path: '/tag/$hashtag',
   component: () => {
-    const { id } = redirectTagRoute.useParams();
-    return <Navigate to='/tags/$id' params={{ id }} replace />;
+    const { hashtag } = redirectTagRoute.useParams();
+    return <Navigate to='/tags/$hashtag' params={{ hashtag }} replace />;
   },
 });
 const redirectNoticeStatusRoute = createRoute({

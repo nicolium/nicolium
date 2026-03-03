@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { fetchAntennaTimeline } from '@/actions/timelines';
+import { AntennaTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
 import MissingIndicator from '@/components/missing-indicator';
 // import Button from '@/components/ui/button';
@@ -13,6 +14,7 @@ import { antennaTimelineRoute } from '@/features/ui/router';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAntenna, useDeleteAntenna } from '@/queries/accounts/use-antennas';
 import { useModalsActions } from '@/stores/modals';
+import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
   deleteHeading: { id: 'confirmations.delete_antenna.heading', defaultMessage: 'Delete antenna' },
@@ -25,16 +27,12 @@ const messages = defineMessages({
   deleteAntenna: { id: 'antennas.delete', defaultMessage: 'Delete antenna' },
 });
 
-const AntennaTimelinePage: React.FC = () => {
-  const { antennaId } = antennaTimelineRoute.useParams();
+interface IAntennaTimeline {
+  antennaId: string;
+}
 
-  const intl = useIntl();
+const AntennaTimeline: React.FC<IAntennaTimeline> = ({ antennaId }) => {
   const dispatch = useAppDispatch();
-  const { openModal } = useModalsActions();
-  const navigate = useNavigate();
-
-  const { data: antenna, isFetching } = useAntenna(antennaId);
-  const { mutate: deleteAntenna } = useDeleteAntenna();
 
   useEffect(() => {
     dispatch(fetchAntennaTimeline(antennaId));
@@ -43,6 +41,40 @@ const AntennaTimelinePage: React.FC = () => {
   const handleLoadMore = () => {
     dispatch(fetchAntennaTimeline(antennaId, true));
   };
+
+  const emptyMessage = (
+    <div>
+      <FormattedMessage
+        id='empty_column.antenna'
+        defaultMessage='There is nothing in this antenna yet. When posts matching the criteria will be created, they will appear here.'
+      />
+      {/* <br /><br />
+      <Button onClick={handleEditClick}><FormattedMessage id='circle.click_to_add' defaultMessage='Click here to add people' /></Button> */}
+    </div>
+  );
+
+  return (
+    <Timeline
+      loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
+      scrollKey='antenna_timeline'
+      timelineId={`antenna:${antennaId}`}
+      onLoadMore={handleLoadMore}
+      emptyMessageText={emptyMessage}
+      emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+    />
+  );
+};
+
+const AntennaTimelinePage: React.FC = () => {
+  const { antennaId } = antennaTimelineRoute.useParams();
+
+  const intl = useIntl();
+  const { experimentalTimeline } = useSettings();
+  const { openModal } = useModalsActions();
+  const navigate = useNavigate();
+
+  const { data: antenna, isFetching } = useAntenna(antennaId);
+  const { mutate: deleteAntenna } = useDeleteAntenna();
 
   const handleEditClick = () => {
     openModal('ANTENNA_EDITOR', { antennaId });
@@ -79,17 +111,6 @@ const AntennaTimelinePage: React.FC = () => {
     return <MissingIndicator />;
   }
 
-  const emptyMessage = (
-    <div>
-      <FormattedMessage
-        id='empty_column.antenna'
-        defaultMessage='There is nothing in this antenna yet. When posts matching the criteria will be created, they will appear here.'
-      />
-      {/* <br /><br />
-      <Button onClick={handleEditClick}><FormattedMessage id='circle.click_to_add' defaultMessage='Click here to add people' /></Button> */}
-    </div>
-  );
-
   const items = [
     {
       text: intl.formatMessage(messages.editAntenna),
@@ -113,14 +134,11 @@ const AntennaTimelinePage: React.FC = () => {
         />
       }
     >
-      <Timeline
-        loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
-        scrollKey='antenna_timeline'
-        timelineId={`antenna:${antennaId}`}
-        onLoadMore={handleLoadMore}
-        emptyMessageText={emptyMessage}
-        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
-      />
+      {experimentalTimeline ? (
+        <AntennaTimelineColumn antennaId={antennaId} />
+      ) : (
+        <AntennaTimeline antennaId={antennaId} />
+      )}
     </Column>
   );
 };

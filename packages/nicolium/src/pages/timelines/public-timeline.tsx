@@ -5,6 +5,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import { changeSetting } from '@/actions/settings';
 import { fetchPublicTimeline } from '@/actions/timelines';
 import { usePublicStream } from '@/api/hooks/streaming/use-public-stream';
+import { PublicTimelineColumn } from '@/columns/timeline';
 import PullToRefresh from '@/components/pull-to-refresh';
 import Accordion from '@/components/ui/accordion';
 import Column from '@/components/ui/column';
@@ -19,26 +20,12 @@ const messages = defineMessages({
   dismiss: { id: 'fediverse_tab.explanation_box.dismiss', defaultMessage: "Don't show again" },
 });
 
-const PublicTimelinePage = () => {
-  const intl = useIntl();
+const PublicTimeline = () => {
   const dispatch = useAppDispatch();
-
-  const instance = useInstance();
   const settings = useSettings();
   const onlyMedia = settings.timelines.public?.other.onlyMedia ?? false;
 
   const timelineId = 'public';
-
-  const explanationBoxExpanded = settings.explanationBox;
-  const showExplanationBox = settings.showExplanationBox;
-
-  const dismissExplanationBox = () => {
-    dispatch(changeSetting(['showExplanationBox'], false));
-  };
-
-  const toggleExplanationBox = (setting: boolean) => {
-    dispatch(changeSetting(['explanationBox'], setting));
-  };
 
   const handleLoadMore = () => {
     dispatch(fetchPublicTimeline({ onlyMedia }, true));
@@ -51,6 +38,45 @@ const PublicTimelinePage = () => {
   useEffect(() => {
     dispatch(fetchPublicTimeline({ onlyMedia }, true));
   }, [onlyMedia]);
+
+  return (
+    <PullToRefresh onRefresh={handleRefresh}>
+      <Timeline
+        loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
+        scrollKey={`${timelineId}_timeline`}
+        timelineId={`${timelineId}${onlyMedia ? ':media' : ''}`}
+        prefix='home'
+        onLoadMore={handleLoadMore}
+        emptyMessageText={
+          <FormattedMessage
+            id='empty_column.public'
+            defaultMessage='There is nothing here! Write something publicly, or manually follow users from other servers to fill it up'
+          />
+        }
+        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+      />
+    </PullToRefresh>
+  );
+};
+
+const PublicTimelinePage = () => {
+  const dispatch = useAppDispatch();
+  const intl = useIntl();
+
+  const instance = useInstance();
+  const settings = useSettings();
+  const { experimentalTimeline } = settings;
+
+  const explanationBoxExpanded = settings.explanationBox;
+  const showExplanationBox = settings.showExplanationBox;
+
+  const dismissExplanationBox = () => {
+    dispatch(changeSetting(['showExplanationBox'], false));
+  };
+
+  const toggleExplanationBox = (setting: boolean) => {
+    dispatch(changeSetting(['explanationBox'], setting));
+  };
 
   return (
     <Column className='-mt-3 sm:mt-0' label={intl.formatMessage(messages.title)}>
@@ -89,22 +115,7 @@ const PublicTimelinePage = () => {
           />
         </Accordion>
       )}
-      <PullToRefresh onRefresh={handleRefresh}>
-        <Timeline
-          loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
-          scrollKey={`${timelineId}_timeline`}
-          timelineId={`${timelineId}${onlyMedia ? ':media' : ''}`}
-          prefix='home'
-          onLoadMore={handleLoadMore}
-          emptyMessageText={
-            <FormattedMessage
-              id='empty_column.public'
-              defaultMessage='There is nothing here! Write something publicly, or manually follow users from other servers to fill it up'
-            />
-          }
-          emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
-        />
-      </PullToRefresh>
+      {experimentalTimeline ? <PublicTimelineColumn /> : <PublicTimeline />}
     </Column>
   );
 };

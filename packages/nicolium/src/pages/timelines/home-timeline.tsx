@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import { fetchHomeTimeline } from '@/actions/timelines';
-import { NewTimelineColumn } from '@/columns/timeline';
+import { HomeTimelineColumn } from '@/columns/timeline';
 import { Link } from '@/components/link';
 import PullToRefresh from '@/components/pull-to-refresh';
 import Column from '@/components/ui/column';
@@ -110,7 +110,7 @@ const HomeTimelinePage: React.FC = () => {
 
   return (
     <Column className='py-0' label={intl.formatMessage(messages.title)} withHeader={false}>
-      {experimentalTimeline ? <NewTimelineColumn /> : <HomeTimeline />}
+      {experimentalTimeline ? <HomeTimelineColumn /> : <HomeTimeline />}
     </Column>
   );
 };

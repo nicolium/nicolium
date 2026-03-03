@@ -32,8 +32,8 @@ const HashtagsBar: React.FC<IHashtagsBar> = ({ hashtags }) => {
       {revealedHashtags.map((hashtag) => (
         <Link
           key={hashtag}
-          to='/tags/$id'
-          params={{ id: hashtag }}
+          to='/tags/$hashtag'
+          params={{ hashtag }}
           onClick={(e) => {
             e.stopPropagation();
           }}

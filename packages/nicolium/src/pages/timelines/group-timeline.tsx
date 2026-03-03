@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 
 import { fetchGroupTimeline } from '@/actions/timelines';
 import { useGroupStream } from '@/api/hooks/streaming/use-group-stream';
+import { GroupTimelineColumn } from '@/columns/timeline';
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
@@ -18,30 +19,20 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { makeGetStatusIds } from '@/selectors';
 import { useComposeActions, useUploadCompose } from '@/stores/compose';
+import { useSettings } from '@/stores/settings';
 
 const getStatusIds = makeGetStatusIds();
 
-const GroupTimelinePage: React.FC = () => {
-  const { groupId } = groupTimelineRoute.useParams();
+interface IGroupTimeline {
+  groupId: string;
+}
 
-  const composeId = `group:${groupId}`;
-
-  const { data: account } = useOwnAccount();
+const GroupTimeline: React.FC<IGroupTimeline> = ({ groupId }) => {
   const dispatch = useAppDispatch();
-  const uploadCompose = useUploadCompose(composeId);
-  const { updateCompose } = useComposeActions();
-  const composer = useRef<HTMLDivElement>(null);
 
-  const { data: group } = useGroupQuery(groupId);
-
-  const canComposeGroupStatus = !!account && group?.relationship?.member;
   const featuredStatusIds = useAppSelector((state) =>
-    getStatusIds(state, { type: `group:${group?.id}:pinned` }),
+    getStatusIds(state, { type: `group:${groupId}:pinned` }),
   );
-
-  const { isDragging, isDraggedOver } = useDraggedFiles(composer, (files) => {
-    uploadCompose(files);
-  });
 
   const handleLoadMore = () => {
     dispatch(fetchGroupTimeline(groupId, {}, true));
@@ -51,7 +42,46 @@ const GroupTimelinePage: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchGroupTimeline(groupId, {}));
-    // dispatch(fetchGroupTimeline(groupId, { pinned: true }));
+  }, [groupId]);
+
+  return (
+    <Timeline
+      scrollKey='group_timeline'
+      timelineId={`group:${groupId}`}
+      onLoadMore={handleLoadMore}
+      emptyMessageText={
+        <FormattedMessage
+          id='empty_column.group'
+          defaultMessage='There are no posts in this group yet.'
+        />
+      }
+      emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+      showGroup={false}
+      featuredStatusIds={featuredStatusIds}
+    />
+  );
+};
+
+const GroupTimelinePage: React.FC = () => {
+  const { groupId } = groupTimelineRoute.useParams();
+
+  const composeId = `group:${groupId}`;
+
+  const { data: account } = useOwnAccount();
+  const { experimentalTimeline } = useSettings();
+  const uploadCompose = useUploadCompose(composeId);
+  const { updateCompose } = useComposeActions();
+  const composer = useRef<HTMLDivElement>(null);
+
+  const { data: group } = useGroupQuery(groupId);
+
+  const canComposeGroupStatus = !!account && group?.relationship?.member;
+
+  const { isDragging, isDraggedOver } = useDraggedFiles(composer, (files) => {
+    uploadCompose(files);
+  });
+
+  useEffect(() => {
     updateCompose(composeId, (draft) => {
       draft.visibility = 'group';
       draft.groupId = groupId;
@@ -85,32 +115,16 @@ const GroupTimelinePage: React.FC = () => {
               />
             </Link>
 
-            <ComposeForm
-              id={composeId}
-              shouldCondense
-              autoFocus={false}
-              group={groupId}
-              withAvatar
-              transparent
-            />
+            <ComposeForm id={composeId} shouldCondense group={groupId} withAvatar transparent />
           </HStack>
         </div>
       )}
 
-      <Timeline
-        scrollKey='group_timeline'
-        timelineId={composeId}
-        onLoadMore={handleLoadMore}
-        emptyMessageText={
-          <FormattedMessage
-            id='empty_column.group'
-            defaultMessage='There are no posts in this group yet.'
-          />
-        }
-        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
-        showGroup={false}
-        featuredStatusIds={featuredStatusIds}
-      />
+      {experimentalTimeline ? (
+        <GroupTimelineColumn groupId={groupId} />
+      ) : (
+        <GroupTimeline groupId={groupId} />
+      )}
     </Stack>
   );
 };

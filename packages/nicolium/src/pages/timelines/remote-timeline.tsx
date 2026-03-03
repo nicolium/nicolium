@@ -4,6 +4,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { fetchPublicTimeline } from '@/actions/timelines';
 import { useRemoteStream } from '@/api/hooks/streaming/use-remote-stream';
+import { PublicTimelineColumn } from '@/columns/timeline';
 import Column from '@/components/ui/column';
 import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
@@ -18,24 +19,16 @@ const messages = defineMessages({
   close: { id: 'remote_timeline.close', defaultMessage: 'Close remote timeline' },
 });
 
-/** View statuses from a remote instance. */
-const RemoteTimelinePage: React.FC = () => {
-  const { instance } = remoteTimelineRoute.useParams();
+interface IRemoteTimeline {
+  instance: string;
+}
 
-  const intl = useIntl();
-  const navigate = useNavigate();
+const RemoteTimeline: React.FC<IRemoteTimeline> = ({ instance }) => {
   const dispatch = useAppDispatch();
-
   const settings = useSettings();
 
   const timelineId = 'remote';
   const onlyMedia = settings.timelines.remote?.other.onlyMedia ?? false;
-
-  const pinned = settings.remote_timeline.pinnedHosts.includes(instance);
-
-  const handleCloseClick: React.MouseEventHandler = () => {
-    navigate({ to: '/timeline/fediverse' });
-  };
 
   const handleLoadMore = () => {
     dispatch(fetchPublicTimeline({ onlyMedia, instance }, true));
@@ -45,7 +38,41 @@ const RemoteTimelinePage: React.FC = () => {
 
   useEffect(() => {
     dispatch(fetchPublicTimeline({ onlyMedia, instance }));
-  }, [onlyMedia]);
+  }, [onlyMedia, instance]);
+
+  return (
+    <Timeline
+      loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
+      scrollKey={`${timelineId}_${instance}_timeline`}
+      timelineId={`${timelineId}${onlyMedia ? ':media' : ''}:${instance}`}
+      onLoadMore={handleLoadMore}
+      emptyMessageText={
+        <FormattedMessage
+          id='empty_column.remote'
+          defaultMessage='There is nothing here! Manually follow users from {instance} to fill it up.'
+          values={{ instance }}
+        />
+      }
+      emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+    />
+  );
+};
+
+/** View statuses from a remote instance. */
+const RemoteTimelinePage: React.FC = () => {
+  const { instance } = remoteTimelineRoute.useParams();
+
+  const intl = useIntl();
+  const navigate = useNavigate();
+
+  const settings = useSettings();
+  const { experimentalTimeline } = settings;
+
+  const pinned = settings.remote_timeline.pinnedHosts.includes(instance);
+
+  const handleCloseClick: React.MouseEventHandler = () => {
+    navigate({ to: '/timeline/fediverse' });
+  };
 
   return (
     <Column label={instance}>
@@ -70,20 +97,11 @@ const RemoteTimelinePage: React.FC = () => {
         </HStack>
       )}
 
-      <Timeline
-        loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
-        scrollKey={`${timelineId}_${instance}_timeline`}
-        timelineId={`${timelineId}${onlyMedia ? ':media' : ''}:${instance}`}
-        onLoadMore={handleLoadMore}
-        emptyMessageText={
-          <FormattedMessage
-            id='empty_column.remote'
-            defaultMessage='There is nothing here! Manually follow users from {instance} to fill it up.'
-            values={{ instance }}
-          />
-        }
-        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
-      />
+      {experimentalTimeline ? (
+        <PublicTimelineColumn instance={instance} />
+      ) : (
+        <RemoteTimeline instance={instance} />
+      )}
     </Column>
   );
 };

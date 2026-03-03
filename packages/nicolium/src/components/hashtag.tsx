@@ -34,7 +34,7 @@ const Hashtag: React.FC<IHashtag> = ({ hashtag }) => {
   return (
     <HStack alignItems='center' justifyContent='between' data-testid='hashtag'>
       <Stack>
-        <Link to='/tags/$id' params={{ id: hashtag.name }} className='hover:underline'>
+        <Link to='/tags/$hashtag' params={{ hashtag: hashtag.name }} className='hover:underline'>
           <Text tag='span' size='sm' weight='semibold'>
             #{hashtag.name}
           </Text>

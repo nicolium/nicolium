@@ -7,7 +7,17 @@ import Status from '@/components/statuses/status';
 import Tombstone from '@/components/statuses/tombstone';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import { useStatus } from '@/queries/statuses/use-status';
-import { useHomeTimeline } from '@/queries/timelines/use-timelines';
+import {
+  useAntennaTimeline,
+  useBubbleTimeline,
+  useGroupTimeline,
+  useHashtagTimeline,
+  useHomeTimeline,
+  useLinkTimeline,
+  useListTimeline,
+  usePublicTimeline,
+  useWrenchedTimeline,
+} from '@/queries/timelines/use-timelines';
 
 import type { FilterContextType } from '@/queries/settings/use-filters';
 import type { TimelineEntry } from '@/queries/timelines/use-timeline';
@@ -70,8 +80,13 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props): React.JSX.Element => 
   );
 };
 
-const NewTimelineColumn = () => {
-  const { data, handleLoadMore, isLoading } = useHomeTimeline();
+interface ITimeline {
+  query: ReturnType<typeof useHomeTimeline>;
+  contextType?: FilterContextType;
+}
+
+const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
+  const { data, handleLoadMore, isLoading } = query;
 
   const renderEntry = (entry: TimelineEntry) => {
     if (entry.type === 'status') {
@@ -81,7 +96,7 @@ const NewTimelineColumn = () => {
           id={entry.id}
           isConnectedTop={entry.isConnectedTop}
           isConnectedBottom={entry.isConnectedBottom}
-          contextType='home'
+          contextType={contextType}
           // onMoveUp={handleMoveUp}
           // onMoveDown={handleMoveDown}
           // contextType={timelineId}
@@ -122,4 +137,94 @@ const NewTimelineColumn = () => {
   );
 };
 
-export { NewTimelineColumn };
+const HomeTimelineColumn = () => {
+  const timelineQuery = useHomeTimeline();
+
+  return <Timeline query={timelineQuery} contextType='home' />;
+};
+
+interface IPublicTimelineColumn {
+  local?: boolean;
+  remote?: boolean;
+  instance?: string;
+}
+
+const PublicTimelineColumn: React.FC<IPublicTimelineColumn> = (params) => {
+  const timelineQuery = usePublicTimeline(params);
+
+  return <Timeline query={timelineQuery} contextType='public' />;
+};
+
+interface IHashtagTimelineColumn {
+  hashtag: string;
+}
+
+const HashtagTimelineColumn: React.FC<IHashtagTimelineColumn> = ({ hashtag }) => {
+  const timelineQuery = useHashtagTimeline(hashtag);
+
+  return <Timeline query={timelineQuery} contextType='public' />;
+};
+
+interface ILinkTimelineColumn {
+  url: string;
+}
+
+const LinkTimelineColumn: React.FC<ILinkTimelineColumn> = ({ url }) => {
+  const timelineQuery = useLinkTimeline(url);
+
+  return <Timeline query={timelineQuery} contextType='public' />;
+};
+
+interface IListTimelineColumn {
+  listId: string;
+}
+
+const ListTimelineColumn: React.FC<IListTimelineColumn> = ({ listId }) => {
+  const timelineQuery = useListTimeline(listId);
+
+  return <Timeline query={timelineQuery} contextType='home' />;
+};
+
+interface IGroupTimelineColumn {
+  groupId: string;
+}
+
+const GroupTimelineColumn: React.FC<IGroupTimelineColumn> = ({ groupId }) => {
+  const timelineQuery = useGroupTimeline(groupId);
+
+  return <Timeline query={timelineQuery} contextType='public' />;
+};
+
+const BubbleTimelineColumn = () => {
+  const timelineQuery = useBubbleTimeline();
+
+  return <Timeline query={timelineQuery} contextType='public' />;
+};
+
+interface IAntennaTimelineColumn {
+  antennaId: string;
+}
+
+const AntennaTimelineColumn: React.FC<IAntennaTimelineColumn> = ({ antennaId }) => {
+  const timelineQuery = useAntennaTimeline(antennaId);
+
+  return <Timeline query={timelineQuery} contextType='public' />;
+};
+
+const WrenchedTimelineColumn = () => {
+  const timelineQuery = useWrenchedTimeline();
+
+  return <Timeline query={timelineQuery} contextType='public' />;
+};
+
+export {
+  HomeTimelineColumn,
+  PublicTimelineColumn,
+  HashtagTimelineColumn,
+  LinkTimelineColumn,
+  ListTimelineColumn,
+  GroupTimelineColumn,
+  BubbleTimelineColumn,
+  AntennaTimelineColumn,
+  WrenchedTimelineColumn,
+};
