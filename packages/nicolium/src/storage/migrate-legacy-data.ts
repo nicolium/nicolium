@@ -8,7 +8,7 @@
 import localforage from 'localforage';
 import trim from 'lodash/trim';
 
-import { FE_SUBDIRECTORY } from '@/build-config';
+import { FE_SUBDIRECTORY, NODE_ENV } from '@/build-config';
 
 // synchronous localStorage migrations
 
@@ -48,8 +48,12 @@ const migratePushNotificationSettings = () => {
   }
 };
 
-migrateAuthStorage();
-migratePushNotificationSettings();
+const shouldMigrateLegacyData = NODE_ENV !== 'test';
+
+if (shouldMigrateLegacyData) {
+  migrateAuthStorage();
+  migratePushNotificationSettings();
+}
 
 // async migrations
 
@@ -90,6 +94,6 @@ const migrateIndexedDB = async () => {
   }
 };
 
-const migrationComplete = migrateIndexedDB();
+const migrationComplete = shouldMigrateLegacyData ? migrateIndexedDB() : Promise.resolve();
 
 export { migrationComplete };
