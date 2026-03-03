@@ -201,7 +201,7 @@ const UI: React.FC = React.memo(() => {
         <ModalRoot />
       </Suspense>
 
-      <Toaster position='top-right' containerClassName='top-4' />
+      <Toaster position='top-right' containerClassName='⁂-toast__container' />
     </GlobalHotkeys>
   );
 });

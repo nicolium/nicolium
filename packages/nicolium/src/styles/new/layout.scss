@@ -548,3 +548,77 @@ div:has(.⁂-background-shapes),
 .⁂-layout__content .⁂-site-error {
   height: fit-content;
 }
+
+.⁂-toast {
+  @apply pointer-events-auto flex w-full max-w-sm flex-col gap-2 overflow-hidden rounded-lg bg-white p-4 shadow-lg black:bg-black dark:bg-gray-900 dark:ring-2 dark:ring-gray-800;
+
+  &--visible {
+    @apply animate-enter;
+  }
+
+  &:not(&--visible) {
+    @apply animate-leave;
+  }
+
+  > div {
+    @apply flex gap-4 items-start;
+  }
+
+  &__body {
+    @apply flex gap-3 justify-between items-start w-0 flex-1;
+
+    button,
+    a {
+      @apply mt-0.5 flex-shrink-0 rounded-full text-sm font-medium text-primary-600 dark:text-primary-400 hover:underline focus:outline-none;
+    }
+  }
+
+  &__content {
+    @apply flex gap-3 items-start w-0 flex-1;
+
+    p {
+      @apply pt-0.5;
+      @include mixins.text($weight: normal, $size: sm);
+    }
+  }
+
+  &:has(> p) .⁂-toast__body p {
+    font-weight: medium;
+  }
+
+  &__icon {
+    @apply shrink-0;
+
+    svg {
+      @apply size-6;
+    }
+  }
+
+  > p {
+    @include mixins.text($theme: muted, $size: sm);
+  }
+
+  &__dismiss {
+    @apply flex shrink-0 pt-0.5;
+
+    button {
+      @apply inline-flex rounded-md text-gray-600 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:text-gray-600 dark:hover:text-gray-500;
+    }
+  }
+
+  &__container {
+    @apply top-4;
+  }
+
+  &--success svg {
+    @apply text-success-500 dark:text-success-400;
+  }
+
+  &--info svg {
+    @apply text-primary-600 dark:text-primary-400;
+  }
+
+  &--error svg {
+    @apply text-danger-600;
+  }
+}
