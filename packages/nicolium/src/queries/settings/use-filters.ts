@@ -1,7 +1,5 @@
 import { useMutation, useQuery, useQueryClient, type UseQueryResult } from '@tanstack/react-query';
 
-import { type FiltersAction, FILTERS_FETCH_SUCCESS } from '@/actions/filters';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 
@@ -15,21 +13,11 @@ function useFilters<T>(select: (data: Array<Filter>) => T): UseQueryResult<T, Er
 function useFilters(): UseQueryResult<Array<Filter>, Error>;
 function useFilters<T = Array<Filter>>(select?: (data: Array<Filter>) => T) {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const features = useFeatures();
 
   return useQuery({
     queryKey: queryKeys.filters.all,
-    queryFn: async () => {
-      const response = await client.filtering.getFilters();
-
-      dispatch<FiltersAction>({
-        type: FILTERS_FETCH_SUCCESS,
-        filters: response,
-      });
-
-      return response;
-    },
+    queryFn: async () => client.filtering.getFilters(),
     enabled: features.filters || features.filtersV2,
     staleTime: 30 * 60 * 1000, // 30 minutes
     select,

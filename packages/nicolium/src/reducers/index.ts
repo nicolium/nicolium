@@ -5,7 +5,6 @@ import * as BuildConfig from '@/build-config';
 
 import admin from './admin';
 import auth from './auth';
-import filters from './filters';
 import frontendConfig from './frontend-config';
 import instance from './instance';
 import me from './me';
@@ -16,7 +15,6 @@ import timelines from './timelines';
 const reducers = {
   admin,
   auth,
-  filters,
   frontendConfig,
   instance,
   me,
