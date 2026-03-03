@@ -697,10 +697,7 @@ const EmojiPickerButton: React.FC<Omit<IActionButton, 'onOpenUnauthorizedModal'>
   const { mutate: emojiReact } = useEmojiReactMutation(status.id);
 
   const handlePickEmoji = (emoji: EmojiType) => {
-    emojiReact(
-      emoji.custom ? emoji.id : emoji.native,
-      // emoji.custom ? emoji.imageUrl : undefined,
-    );
+    emojiReact(emoji.custom ? emoji.id : emoji.native);
   };
 
   return (
