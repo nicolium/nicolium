@@ -32,7 +32,7 @@ const useComposeSuggestions = (token: string): Array<AutoSuggestion> => {
 
   return useMemo((): Array<AutoSuggestion> => {
     if (searchedType === 'emojis') {
-      return emojiSearch(token.replace(':', ''), { maxResults: 10 }, customEmojis);
+      return emojiSearch(token.replace(':', ''), customEmojis, 10);
     }
 
     if (searchedType === 'accounts') {

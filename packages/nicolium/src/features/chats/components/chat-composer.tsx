@@ -20,6 +20,7 @@ import {
   useRelationshipQuery,
   useUnblockAccountMutation,
 } from '@/queries/accounts/use-relationship';
+import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
 import { useModalsActions } from '@/stores/modals';
 import { textAtCursorMatchesToken } from '@/utils/suggestions';
 
@@ -95,6 +96,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
     const { chat } = useChatContext();
     const { data: relationship } = useRelationshipQuery(chat?.account.id);
     const { mutate: unblockAccount } = useUnblockAccountMutation(chat?.account.id!);
+    const { data: customEmojis } = useCustomEmojis();
 
     const isBlocked = relationship?.blocked_by && false;
     const isBlocking = relationship?.blocking && false;
@@ -130,7 +132,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
       );
 
       if (token && tokenStart) {
-        const results = emojiSearch(token.replace(':', ''), { maxResults: 5 });
+        const results = emojiSearch(token.replace(':', ''), customEmojis, 5);
         setSuggestions({
           list: results,
           token,
