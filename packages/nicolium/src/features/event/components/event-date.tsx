@@ -2,7 +2,6 @@ import React from 'react';
 import { FormattedDate } from 'react-intl';
 
 import Icon from '@/components/icon';
-import HStack from '@/components/ui/hstack';
 
 import type { NormalizedStatus as Status } from '@/normalizers/status';
 
@@ -80,10 +79,10 @@ const EventDate: React.FC<IEventDate> = ({ status }) => {
   }
 
   return (
-    <HStack alignItems='center' space={2}>
+    <div className='⁂-event-date'>
       <Icon src={require('@phosphor-icons/core/regular/calendar-dots.svg')} />
       <span>{date}</span>
-    </HStack>
+    </div>
   );
 };
 

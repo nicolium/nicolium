@@ -5,9 +5,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import Icon from '@/components/icon';
 import Button from '@/components/ui/button';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
-import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import EventActionButton from '@/features/event/components/event-action-button';
 import EventDate from '@/features/event/components/event-date';
@@ -66,52 +63,39 @@ const EventPreview: React.FC<IEventPreview> = ({
     ));
 
   return (
-    <div
-      className={clsx(
-        'relative w-full overflow-hidden rounded-lg bg-gray-100 black:border black:border-gray-800 black:bg-black dark:bg-primary-800',
-        className,
-      )}
-    >
-      <div className='absolute right-3 top-28'>{floatingAction && action}</div>
-      <div className='h-40 bg-primary-200 dark:bg-gray-600'>
-        {banner && (
-          <img
-            className='size-full object-cover'
-            src={banner.url}
-            alt={intl.formatMessage(messages.eventBanner)}
-          />
-        )}
+    <div className={clsx('⁂-event-card', className)}>
+      <div className='⁂-event-card__action__container'>{floatingAction && action}</div>
+      <div className='⁂-event-card__banner'>
+        {banner && <img src={banner.url} alt={intl.formatMessage(messages.eventBanner)} />}
       </div>
-      <Stack className='p-2.5' space={2}>
-        <HStack space={2} alignItems='center' justifyContent='between'>
-          <Text weight='semibold' truncate>
-            {event.name}
-          </Text>
+      <div className='⁂-event-card__body'>
+        <div className='⁂-event-card__heading'>
+          <p>{event.name}</p>
 
           {!floatingAction && action}
-        </HStack>
+        </div>
 
-        <div className='flex flex-wrap gap-x-2 gap-y-1 text-gray-700 dark:text-gray-600'>
-          <HStack alignItems='center' space={2}>
+        <div className='⁂-event-card__info'>
+          <div className='⁂-event-card__author'>
             <Icon src={require('@phosphor-icons/core/regular/user.svg')} />
-            <HStack space={1} alignItems='center' grow>
+            <div className='⁂-event-card__author__name'>
               <span>
                 <Emojify text={account.display_name} emojis={account.emojis} />
               </span>
               {account.verified && <VerificationBadge />}
-            </HStack>
-          </HStack>
+            </div>
+          </div>
 
           <EventDate status={status} />
 
           {event.location && (
-            <HStack alignItems='center' space={2}>
+            <div className='⁂-event-card__location'>
               <Icon src={require('@phosphor-icons/core/regular/map-pin.svg')} />
               <span>{event.location.name}</span>
-            </HStack>
+            </div>
           )}
         </div>
-      </Stack>
+      </div>
     </div>
   );
 };
