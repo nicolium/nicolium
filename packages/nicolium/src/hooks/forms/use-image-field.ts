@@ -17,7 +17,7 @@ const useImageField = (opts: UseImageFieldOpts = {}) => {
   const { stripMetadata } = useSettings();
 
   const [file, setFile] = useState<File | null>(null);
-  const src = usePreview(file) ?? (file === null ? undefined : opts.preview);
+  const src = usePreview(file) ?? (file === null ? opts.preview : undefined);
 
   const onChange = async (files: FileList | null) => {
     const file = files?.item(0);
