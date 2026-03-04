@@ -37,7 +37,7 @@ const ThemeSelector: React.FC<IThemeSelector> = ({ id, value, onChange }) => {
         <Icon src={themeIconSrc} className='size-4 text-gray-600 dark:text-gray-700' />
       </div>
 
-      <Select id={id} onChange={handleChange} defaultValue={value} className='!pl-10'>
+      <Select id={id} onChange={handleChange} value={value} className='!pl-10'>
         <option value='system'>
           <FormattedMessage id='theme_toggle.system' defaultMessage='System' />
         </option>

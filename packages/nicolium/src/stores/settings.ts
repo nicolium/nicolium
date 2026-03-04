@@ -279,6 +279,7 @@ const useSettingsStore = create<State>()(
 );
 
 const useSettings = () => useSettingsStore((state) => state.settings);
+const useDefaultSettings = () => useSettingsStore((state) => state.defaultSettings);
 const useSettingsStoreActions = () => useSettingsStore((state) => state.actions);
 
-export { useSettingsStore, useSettings, useSettingsStoreActions };
+export { useSettingsStore, useSettings, useDefaultSettings, useSettingsStoreActions };
