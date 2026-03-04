@@ -3,7 +3,7 @@ import gt from 'semver/functions/gt';
 import gte from 'semver/functions/gte';
 import semverParse from 'semver/functions/parse';
 
-import type { Instance } from './entities/instance';
+import type { Instance } from '@/entities/instance';
 
 /** Truthy array convenience function */
 const any = (arr: Array<any>): boolean => arr.some(Boolean);

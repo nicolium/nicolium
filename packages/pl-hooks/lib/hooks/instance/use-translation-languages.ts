@@ -12,7 +12,7 @@ const useTranslationLanguages = () => {
 
   const { allow_unauthenticated: allowUnauthenticated } = instance!.pleroma.metadata.translation;
 
-  const getTranslationLanguages = async () => {
+  const getTranslationLanguages = () => {
     const metadata = instance!.pleroma.metadata;
 
     if (metadata.translation.source_languages?.length) {

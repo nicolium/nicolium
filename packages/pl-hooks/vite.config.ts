@@ -24,6 +24,6 @@ export default defineConfig({
   },
   resolve: {
     alias: [{ find: '@/', replacement: fileURLToPath(new URL('./lib/', import.meta.url)) }],
-    dedupe: ['valibot'],
+    dedupe: ['pl-api', 'valibot'],
   },
 });

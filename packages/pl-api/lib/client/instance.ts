@@ -11,8 +11,7 @@ import {
   termsOfServiceSchema,
 } from '@/entities';
 import { filteredArray } from '@/entities/utils';
-
-import { AKKOMA, MITRA } from '../features';
+import { AKKOMA, MITRA } from '@/features';
 
 import type { PlApiBaseClient } from '@/client-base';
 import type { ProfileDirectoryParams } from '@/params/instance';

@@ -6,8 +6,6 @@ import {
   notificationSchema,
 } from '@/entities';
 
-import { type RequestMeta } from '../request';
-
 import type { PlApiBaseClient } from '@/client-base';
 import type {
   GetNotificationParams,
@@ -15,6 +13,7 @@ import type {
   GetUnreadNotificationCountParams,
   UpdateNotificationPolicyRequest,
 } from '@/params/notifications';
+import type { RequestMeta } from '@/request';
 import type { EmptyObject } from '@/utils/types';
 
 const notifications = (client: PlApiBaseClient) => ({

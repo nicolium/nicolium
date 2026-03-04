@@ -1,6 +1,6 @@
 import * as v from 'valibot';
 
-import { pick } from '../utils';
+import { pick } from '@/utils';
 
 import { type Account, accountSchema } from './account';
 import { customEmojiSchema } from './custom-emoji';

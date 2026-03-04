@@ -8,8 +8,7 @@ import {
   tokenSchema,
 } from '@/entities';
 import { coerceObject, filteredArray } from '@/entities/utils';
-
-import { GOTOSOCIAL, ICESHRIMP_NET, MITRA, PIXELFED } from '../features';
+import { GOTOSOCIAL, ICESHRIMP_NET, MITRA, PIXELFED } from '@/features';
 
 import type { PlApiBaseClient } from '@/client-base';
 import type {

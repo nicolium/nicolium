@@ -24,9 +24,8 @@ import {
   trendsLinkSchema,
 } from '@/entities';
 import { filteredArray } from '@/entities/utils';
-
-import { GOTOSOCIAL, MITRA, PLEROMA } from '../features';
-import { PaginatedResponse } from '../responses';
+import { GOTOSOCIAL, MITRA, PLEROMA } from '@/features';
+import { PaginatedResponse } from '@/responses';
 
 import type { PlApiBaseClient } from '@/client-base';
 import type {

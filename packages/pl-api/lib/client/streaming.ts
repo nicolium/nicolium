@@ -2,8 +2,7 @@ import { WebSocket } from 'isows';
 import * as v from 'valibot';
 
 import { streamingEventSchema } from '@/entities';
-
-import { buildFullPath } from '../utils/url';
+import { buildFullPath } from '@/utils/url';
 
 import type { PlApiBaseClient } from '@/client-base';
 import type { StreamingEvent } from '@/entities';

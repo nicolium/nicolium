@@ -1,9 +1,9 @@
 import LinkHeader from 'http-link-header';
 import { serialize } from 'object-to-formdata';
 
-import { buildFullPath } from './utils/url';
+import { buildFullPath } from '@/utils/url';
 
-import type { PlApiBaseClient } from './client-base';
+import type { PlApiBaseClient } from '@/client-base';
 
 type Response<T = any> = {
   headers: Headers;

@@ -1,8 +1,7 @@
 import * as v from 'valibot';
 
 import { conversationSchema, markersSchema, statusSchema } from '@/entities';
-
-import { PIXELFED } from '../features';
+import { PIXELFED } from '@/features';
 
 import type { PlApiBaseClient } from '@/client-base';
 import type {

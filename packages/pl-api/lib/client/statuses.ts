@@ -13,9 +13,8 @@ import {
   translationSchema,
 } from '@/entities';
 import { filteredArray } from '@/entities/utils';
-
-import { AKKOMA, ICESHRIMP_NET, MITRA, PLEROMA } from '../features';
-import { getAsyncRefreshHeader } from '../request';
+import { AKKOMA, ICESHRIMP_NET, MITRA, PLEROMA } from '@/features';
+import { getAsyncRefreshHeader } from '@/request';
 
 import type { PlApiBaseClient } from '@/client-base';
 import type {

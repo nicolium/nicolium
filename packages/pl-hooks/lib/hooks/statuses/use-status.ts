@@ -1,12 +1,17 @@
-import { useQueries, useQuery, UseQueryOptions, type UseQueryResult } from '@tanstack/react-query';
+import {
+  useQueries,
+  useQuery,
+  type UseQueryOptions,
+  type UseQueryResult,
+} from '@tanstack/react-query';
 
 import { usePlHooksApiClient } from '@/contexts/api-client';
 import { queryClient, usePlHooksQueryClient } from '@/contexts/query-client';
 import { usePoll } from '@/hooks/polls/use-poll';
 import { importEntities } from '@/importer';
-import { type NormalizedAccount } from '@/normalizers/account';
 import { type NormalizedStatus, normalizeStatus } from '@/normalizers/status';
 
+import type { NormalizedAccount } from '@/normalizers/account';
 import type { Poll } from 'pl-api';
 
 // const toServerSideType = (columnType: string): Filter['context'][0] => {

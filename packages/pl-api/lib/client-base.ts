@@ -1,15 +1,15 @@
 import * as v from 'valibot';
 
-import { instanceSchema } from './entities/instance';
-import { filteredArray } from './entities/utils';
-import { type Features, getFeatures } from './features';
-import request, { getNextLink, getPrevLink, type RequestBody } from './request';
-import { PaginatedResponse } from './responses';
+import { instanceSchema } from '@/entities/instance';
+import { filteredArray } from '@/entities/utils';
+import { type Features, getFeatures } from '@/features';
+import request, { getNextLink, getPrevLink, type RequestBody } from '@/request';
+import { PaginatedResponse } from '@/responses';
 
-import type { Instance } from './entities/instance';
-import type { StreamingEvent } from './entities/streaming-event';
-import type { StreamingParams } from './params/streaming';
-import type { Response as PlApiResponse } from './request';
+import type { Instance } from '@/entities/instance';
+import type { StreamingEvent } from '@/entities/streaming-event';
+import type { StreamingParams } from '@/params/streaming';
+import type { Response as PlApiResponse } from '@/request';
 
 interface PlApiClientConstructorOpts {
   /** Instance object to use by default, to be populated eg. from cache */

@@ -2,10 +2,8 @@ import * as v from 'valibot';
 
 import { accountSchema, groupedNotificationsResultsSchema } from '@/entities';
 import { filteredArray } from '@/entities/utils';
-
-import { type RequestMeta } from '../request';
-import { PaginatedResponse } from '../responses';
-import { pick, omit } from '../utils';
+import { PaginatedResponse } from '@/responses';
+import { pick, omit } from '@/utils';
 
 import type { notifications } from './notifications';
 import type { PlApiBaseClient } from '@/client-base';
@@ -20,6 +18,7 @@ import type {
   GetGroupedNotificationsParams,
   GetUnreadNotificationGroupCountParams,
 } from '@/params/grouped-notifications';
+import type { RequestMeta } from '@/request';
 import type { EmptyObject } from '@/utils/types';
 
 const GROUPED_TYPES = [

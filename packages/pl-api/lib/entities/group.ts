@@ -1,7 +1,7 @@
 import * as v from 'valibot';
 
-import { isDefaultAvatar, isDefaultHeader } from '../utils/accounts';
-import { getDomainFromURL } from '../utils/domain';
+import { isDefaultAvatar, isDefaultHeader } from '@/utils/accounts';
+import { getDomainFromURL } from '@/utils/domain';
 
 import { customEmojiSchema } from './custom-emoji';
 import { groupRelationshipSchema } from './group-relationship';

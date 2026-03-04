@@ -3,10 +3,9 @@ import * as v from 'valibot';
 import { locationSchema, searchSchema } from '@/entities';
 import { filteredArray } from '@/entities/utils';
 
-import { type RequestMeta } from '../request';
-
 import type { PlApiBaseClient } from '@/client-base';
 import type { SearchParams } from '@/params/search';
+import type { RequestMeta } from '@/request';
 
 const search = (client: PlApiBaseClient) => ({
   /**

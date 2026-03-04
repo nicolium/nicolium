@@ -15,12 +15,7 @@ const useStatusQuotes = (statusId: string) => {
       queryKey: ['statusLists', 'quotes', statusId],
       queryFn: ({ pageParam }) =>
         pageParam.next?.() || client.statuses.getStatusQuotes(statusId).then(minifyStatusList),
-      initialPageParam: {
-        previous: null,
-        next: null,
-        items: [],
-        partial: false,
-      } as PaginatedResponse<string>,
+      initialPageParam: { next: null as (() => Promise<PaginatedResponse<string>>) | null },
       getNextPageParam: (page) => (page.next ? page : undefined),
       select: (data) => data.pages.map((page) => page.items).flat(),
     },

@@ -1,4 +1,8 @@
-import { InfiniteData, useInfiniteQuery, UseInfiniteQueryResult } from '@tanstack/react-query';
+import {
+  type InfiniteData,
+  useInfiniteQuery,
+  type UseInfiniteQueryResult,
+} from '@tanstack/react-query';
 
 import { usePlHooksApiClient } from '@/contexts/api-client';
 import { queryClient, usePlHooksQueryClient } from '@/contexts/query-client';
@@ -67,7 +71,9 @@ const useNotificationList = (
               exclude_types: params.excludeTypes,
             })
         ).then(importNotifications),
-      initialPageParam: { next: null as (() => Promise<PaginatedResponse<BaseNotification>>) | null },
+      initialPageParam: {
+        next: null as (() => Promise<PaginatedResponse<BaseNotification>>) | null,
+      },
       getNextPageParam: (response) => response,
     },
     queryClient,

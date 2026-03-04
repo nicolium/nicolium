@@ -1,8 +1,8 @@
 import * as v from 'valibot';
 
-import { pick } from '../utils';
-import { isDefaultAvatar, isDefaultHeader } from '../utils/accounts';
-import { guessFqn } from '../utils/domain';
+import { pick } from '@/utils';
+import { isDefaultAvatar, isDefaultHeader } from '@/utils/accounts';
+import { guessFqn } from '@/utils/domain';
 
 import { customEmojiSchema } from './custom-emoji';
 import { relationshipSchema } from './relationship';

@@ -1,5 +1,5 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import type { Features } from '../features';
+import type { Features } from '@/features';
 
 /**
  * @category Request params

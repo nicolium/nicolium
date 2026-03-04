@@ -1,8 +1,7 @@
 import * as v from 'valibot';
 
 import { authorizationServerMetadataSchema, tokenSchema, userInfoSchema } from '@/entities';
-
-import { ICESHRIMP_NET } from '../features';
+import { ICESHRIMP_NET } from '@/features';
 
 import type { PlApiBaseClient } from '@/client-base';
 import type {

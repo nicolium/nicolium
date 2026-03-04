@@ -1,11 +1,11 @@
 import * as v from 'valibot';
 
-import { directoryCategorySchema } from './entities/directory/category';
-import { directoryLanguageSchema } from './entities/directory/language';
-import { directoryServerSchema } from './entities/directory/server';
-import { directoryStatisticsPeriodSchema } from './entities/directory/statistics-period';
-import { filteredArray } from './entities/utils';
-import request from './request';
+import { directoryCategorySchema } from '@/entities/directory/category';
+import { directoryLanguageSchema } from '@/entities/directory/language';
+import { directoryServerSchema } from '@/entities/directory/server';
+import { directoryStatisticsPeriodSchema } from '@/entities/directory/statistics-period';
+import { filteredArray } from '@/entities/utils';
+import request from '@/request';
 
 interface Params {
   /** ISO 639 language code for servers. */

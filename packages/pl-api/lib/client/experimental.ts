@@ -8,8 +8,7 @@ import {
   statusSchema,
 } from '@/entities';
 import { filteredArray } from '@/entities/utils';
-
-import { PIXELFED } from '../features';
+import { PIXELFED } from '@/features';
 
 import type { PlApiBaseClient } from '@/client-base';
 import type { GroupRole } from '@/entities';

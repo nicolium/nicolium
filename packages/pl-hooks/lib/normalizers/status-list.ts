@@ -1,6 +1,6 @@
-import { PaginatedResponse, Status } from 'pl-api';
-
 import { importEntities } from '@/importer';
+
+import type { PaginatedResponse, Status } from 'pl-api';
 
 const minifyStatusList = ({
   previous,

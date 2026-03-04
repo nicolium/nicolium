@@ -10,10 +10,9 @@ import {
   tagSchema,
 } from '@/entities';
 import { filteredArray } from '@/entities/utils';
-
-import { GOTOSOCIAL, ICESHRIMP_NET, MITRA, PIXELFED, PLEROMA } from '../features';
-import { getNextLink, getPrevLink } from '../request';
-import { PaginatedResponse } from '../responses';
+import { GOTOSOCIAL, ICESHRIMP_NET, MITRA, PIXELFED, PLEROMA } from '@/features';
+import { getNextLink, getPrevLink } from '@/request';
+import { PaginatedResponse } from '@/responses';
 
 import type { accounts } from './accounts';
 import type { PlApiBaseClient } from '@/client-base';

@@ -1,6 +1,6 @@
 import * as v from 'valibot';
 
-import { pick } from '../utils';
+import { pick } from '@/utils';
 
 import { accountSchema } from './account';
 import { accountWarningSchema } from './account-warning';

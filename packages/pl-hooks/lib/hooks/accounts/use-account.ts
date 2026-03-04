@@ -1,4 +1,4 @@
-import { useQuery, UseQueryResult } from '@tanstack/react-query';
+import { useQuery, type UseQueryResult } from '@tanstack/react-query';
 
 import { usePlHooksApiClient } from '@/contexts/api-client';
 import { queryClient, usePlHooksQueryClient } from '@/contexts/query-client';

@@ -13,9 +13,7 @@ import {
   statusSchema,
 } from '@/entities';
 import { filteredArray } from '@/entities/utils';
-
-import { ICESHRIMP_NET, PIXELFED, PLEROMA } from '../features';
-import { type RequestMeta } from '../request';
+import { ICESHRIMP_NET, PIXELFED, PLEROMA } from '@/features';
 
 import type { PlApiBaseClient } from '@/client-base';
 import type {
@@ -33,6 +31,7 @@ import type {
   ReportAccountParams,
   SearchAccountParams,
 } from '@/params/accounts';
+import type { RequestMeta } from '@/request';
 import type { EmptyObject } from '@/utils/types';
 
 const accounts = (client: PlApiBaseClient) => ({

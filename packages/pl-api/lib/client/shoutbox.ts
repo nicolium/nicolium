@@ -3,8 +3,7 @@ import * as v from 'valibot';
 
 import { shoutMessageSchema } from '@/entities';
 import { filteredArray } from '@/entities/utils';
-
-import { buildFullPath } from '../utils/url';
+import { buildFullPath } from '@/utils/url';
 
 import type { PlApiBaseClient } from '@/client-base';
 import type { ShoutMessage } from '@/entities';
