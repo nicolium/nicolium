@@ -1,11 +1,11 @@
 import fs from 'node:fs';
 import { fileURLToPath, URL } from 'node:url';
 
+import { tsgoChecker } from '@mkljczk/vite-tsgo-checker';
 import react from '@vitejs/plugin-react';
 import browserslistToEsbuild from 'browserslist-to-esbuild';
 import { bundleStats } from 'rollup-plugin-bundle-stats';
 import { defineConfig } from 'vite';
-import checker from 'vite-plugin-checker';
 import compileTime from 'vite-plugin-compile-time';
 import { createHtmlPlugin } from 'vite-plugin-html';
 import { VitePWA } from 'vite-plugin-pwa';
@@ -33,7 +33,7 @@ const config = defineConfig(() => ({
     ws: process.env.WS_DISABLED === 'true' ? false : undefined,
   },
   plugins: [
-    checker({ typescript: true }),
+    tsgoChecker(),
     // @ts-expect-error https://github.com/wangzongming/vite-plugin-require/issues/23
     vitePluginRequire.default(),
     compileTime(),
