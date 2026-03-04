@@ -1,102 +1,10 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import { importEntities } from '@/actions/importer';
 import { useTimelineStream } from '@/api/hooks/streaming/use-timeline-stream';
+import { useTimeline as useStoreTimeline, useTimelinesActions } from '@/stores/timelines';
 
-import type { DataTag } from '@tanstack/react-query';
 import type { PaginatedResponse, Status, StreamingParams } from 'pl-api';
-
-type TimelineEntry =
-  | {
-      type: 'status';
-      id: string;
-      rebloggedBy: Array<string>;
-      isConnectedTop?: boolean;
-      isConnectedBottom?: boolean;
-    }
-  | {
-      type: 'pending-status';
-      id: string;
-    }
-  | {
-      type: 'gap';
-    }
-  | {
-      type: 'page-start';
-      maxId?: string;
-    }
-  | {
-      type: 'page-end';
-      minId?: string;
-    };
-
-const processPage = ({
-  items: statuses,
-  next,
-}: PaginatedResponse<Status>): Array<TimelineEntry> => {
-  const timelinePage: Array<TimelineEntry> = [];
-
-  const processStatus = (status: Status): boolean => {
-    if (timelinePage.some((entry) => entry.type === 'status' && entry.id === status.id))
-      return false;
-
-    let isConnectedTop = false;
-    const inReplyToId = (status.reblog || status).in_reply_to_id;
-
-    if (inReplyToId) {
-      const foundStatus = statuses.find((s) => (s.reblog || s).id === inReplyToId);
-
-      if (foundStatus) {
-        if (processStatus(foundStatus)) {
-          const lastEntry = timelinePage.at(-1);
-          // it's always of type status but doing this to satisfy ts
-          if (lastEntry?.type === 'status') lastEntry.isConnectedBottom = true;
-          isConnectedTop = true;
-        }
-      }
-    }
-
-    if (status.reblog) {
-      const existingEntry = timelinePage.find(
-        (entry) => entry.type === 'status' && entry.id === status.reblog!.id,
-      );
-
-      if (existingEntry?.type === 'status') {
-        existingEntry.rebloggedBy.push(status.account.id);
-      } else {
-        timelinePage.push({
-          type: 'status',
-          id: status.reblog.id,
-          rebloggedBy: [status.account.id],
-          isConnectedTop,
-        });
-      }
-      return true;
-    }
-
-    timelinePage.push({
-      type: 'status',
-      id: status.id,
-      rebloggedBy: [],
-      isConnectedTop,
-    });
-
-    return true;
-  };
-
-  for (const status of statuses) {
-    processStatus(status);
-  }
-
-  if (next)
-    timelinePage.push({
-      type: 'page-end',
-      minId: statuses.at(-1)?.id,
-    });
-
-  return timelinePage;
-};
 
 type PaginationParams = { max_id?: string; min_id?: string };
 type TimelineFetcher = (params?: PaginationParams) => Promise<PaginatedResponse<Status>>;
@@ -106,65 +14,45 @@ interface StreamConfig {
   params?: StreamingParams;
 }
 
-type TimelineQueryKey = DataTag<readonly unknown[], Array<TimelineEntry>>;
-
-const useTimeline = (
-  queryKey: TimelineQueryKey,
-  fetcher: TimelineFetcher,
-  streamConfig?: StreamConfig,
-) => {
-  const queryClient = useQueryClient();
+const useTimeline = (timelineId: string, fetcher: TimelineFetcher, streamConfig?: StreamConfig) => {
+  const timeline = useStoreTimeline(timelineId);
+  const timelineActions = useTimelinesActions();
 
   useTimelineStream(streamConfig?.stream ?? '', streamConfig?.params, !!streamConfig?.stream);
 
-  const query = useQuery({
-    queryKey,
-    queryFn: async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetcher();
-        importEntities({ statuses: response.items });
-        return processPage(response);
-      } finally {
-        setIsLoading(false);
-      }
-    },
-  });
+  useEffect(() => {
+    if (!timeline.isPending) return;
+    fetchInitial();
+  }, []);
 
-  const [isLoading, setIsLoading] = useState(query.isPending);
+  const fetchInitial = useCallback(async () => {
+    timelineActions.setLoading(timelineId, true);
+    try {
+      const response = await fetcher();
+      importEntities({ statuses: response.items });
+      timelineActions.expandTimeline(timelineId, response.items, !!response.next, true);
+    } catch (error) {
+      //
+    }
+  }, [timelineId]);
 
-  const handleLoadMore = useCallback(
-    async (entry: TimelineEntry) => {
-      if (isLoading) return;
-      if (entry.type !== 'page-end' && entry.type !== 'page-start') return;
+  const fetchNextPage = useCallback(async () => {
+    timelineActions.setLoading(timelineId, true);
+    const lastEntry = timeline.entries.at(-1);
+    if (!lastEntry || lastEntry.type !== 'page-end') return;
 
-      setIsLoading(true);
-      try {
-        const response = await fetcher(
-          entry.type === 'page-end' ? { max_id: entry.minId } : { min_id: entry.maxId },
-        );
+    try {
+      const response = await fetcher({ max_id: lastEntry.minId });
 
-        importEntities({ statuses: response.items });
+      importEntities({ statuses: response.items });
 
-        const timelinePage = processPage(response);
+      timelineActions.expandTimeline(timelineId, response.items, !!response.next, false);
+    } catch (error) {
+      //
+    }
+  }, [timelineId, timeline.entries]);
 
-        queryClient.setQueryData(queryKey, (oldData) => {
-          if (!oldData) return timelinePage;
-          const index = oldData.indexOf(entry);
-          return oldData.toSpliced(index, 1, ...timelinePage);
-        });
-      } catch (error) {
-        //
-      }
-      setIsLoading(false);
-    },
-    [isLoading, fetcher, queryKey, queryClient],
-  );
-
-  return useMemo(
-    () => ({ ...query, handleLoadMore, isLoading }),
-    [query, handleLoadMore, isLoading],
-  );
+  return useMemo(() => ({ ...timeline, fetchNextPage }), [timeline, fetchNextPage]);
 };
 
-export { useTimeline, type TimelineEntry };
+export { useTimeline };

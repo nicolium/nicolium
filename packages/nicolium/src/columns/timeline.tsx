@@ -20,7 +20,7 @@ import {
 } from '@/queries/timelines/use-timelines';
 
 import type { FilterContextType } from '@/queries/settings/use-filters';
-import type { TimelineEntry } from '@/queries/timelines/use-timeline';
+import type { TimelineEntry } from '@/stores/timelines';
 
 interface ITimelineStatus {
   id: string;
@@ -86,7 +86,7 @@ interface ITimeline {
 }
 
 const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
-  const { data, handleLoadMore, isLoading } = query;
+  const { entries, fetchNextPage, isFetching, isPending } = query;
 
   const renderEntry = (entry: TimelineEntry) => {
     if (entry.type === 'status') {
@@ -102,14 +102,13 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
           // contextType={timelineId}
           // showGroup={showGroup}
           // variant={divideType === 'border' ? 'slim' : 'rounded'}
-          // fromBookmarks={other.scrollKey === 'bookmarked_statuses'}
         />
       );
     }
     if (entry.type === 'page-end' || entry.type === 'page-start') {
       return (
         <div className='m-4'>
-          <LoadMore key='load-more' onClick={() => handleLoadMore(entry)} disabled={isLoading} />
+          <LoadMore key='load-more' onClick={fetchNextPage} disabled={isFetching} />
         </div>
       );
     }
@@ -119,8 +118,8 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
     <ScrollableList
       id='status-list'
       key='scrollable-list'
-      isLoading={isLoading}
-      showLoading={isLoading && !data}
+      isLoading={isFetching}
+      showLoading={isPending}
       placeholderComponent={() => <PlaceholderStatus variant={'slim'} />}
       placeholderCount={20}
       // className={className}
@@ -132,7 +131,7 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
       // })}
       // {...other}
     >
-      {(data || []).map(renderEntry)}
+      {(entries || []).map(renderEntry)}
     </ScrollableList>
   );
 };

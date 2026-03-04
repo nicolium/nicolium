@@ -1,7 +1,5 @@
 import { useClient } from '@/hooks/use-client';
 
-import { queryKeys } from '../keys';
-
 import { useTimeline } from './use-timeline';
 
 import type {
@@ -22,7 +20,7 @@ const useHomeTimeline = (params?: Omit<HomeTimelineParams, keyof PaginationParam
   const stream = 'home';
 
   return useTimeline(
-    queryKeys.timelines.home(params),
+    'home',
     (paginationParams) => client.timelines.homeTimeline({ ...params, ...paginationParams }),
     { stream },
   );
@@ -33,7 +31,7 @@ const usePublicTimeline = (params?: Omit<PublicTimelineParams, keyof PaginationP
   const stream = params?.local ? 'public:local' : params?.instance ? `public:remote` : 'public';
 
   return useTimeline(
-    queryKeys.timelines.public(params?.local, params),
+    `public${params?.local ? ':local' : params?.instance ? `:remote:` + params.instance : ''}`,
     (paginationParams) => client.timelines.publicTimeline({ ...params, ...paginationParams }),
     { stream },
   );
@@ -46,7 +44,7 @@ const useHashtagTimeline = (
   const client = useClient();
 
   return useTimeline(
-    queryKeys.timelines.hashtag(hashtag, params),
+    `hashtag:${hashtag}`,
     (paginationParams) =>
       client.timelines.hashtagTimeline(hashtag, { ...params, ...paginationParams }),
     { stream: 'hashtag', params: { tag: hashtag } },
@@ -59,7 +57,7 @@ const useLinkTimeline = (
 ) => {
   const client = useClient();
 
-  return useTimeline(queryKeys.timelines.link(url, params), (paginationParams) =>
+  return useTimeline(`link:${url}`, (paginationParams) =>
     client.timelines.linkTimeline(url, { ...params, ...paginationParams }),
   );
 };
@@ -71,7 +69,7 @@ const useListTimeline = (
   const client = useClient();
 
   return useTimeline(
-    queryKeys.timelines.list(listId, params),
+    `list:${listId}`,
     (paginationParams) => client.timelines.listTimeline(listId, { ...params, ...paginationParams }),
     { stream: 'list', params: { list: listId } },
   );
@@ -84,7 +82,7 @@ const useGroupTimeline = (
   const client = useClient();
 
   return useTimeline(
-    queryKeys.timelines.group(groupId, params),
+    `group:${groupId}`,
     (paginationParams) =>
       client.timelines.groupTimeline(groupId, { ...params, ...paginationParams }),
     { stream: 'group', params: { group: groupId } },
@@ -95,7 +93,7 @@ const useBubbleTimeline = (params?: Omit<BubbleTimelineParams, keyof PaginationP
   const client = useClient();
 
   return useTimeline(
-    queryKeys.timelines.bubble(params),
+    `bubble`,
     (paginationParams) => client.timelines.bubbleTimeline({ ...params, ...paginationParams }),
     { stream: 'bubble' },
   );
@@ -107,7 +105,7 @@ const useAntennaTimeline = (
 ) => {
   const client = useClient();
 
-  return useTimeline(queryKeys.timelines.antenna(antennaId, params), (paginationParams) =>
+  return useTimeline(`antenna:${antennaId}`, (paginationParams) =>
     client.timelines.antennaTimeline(antennaId, { ...params, ...paginationParams }),
   );
 };
@@ -115,7 +113,7 @@ const useAntennaTimeline = (
 const useWrenchedTimeline = (params?: Omit<WrenchedTimelineParams, keyof PaginationParams>) => {
   const client = useClient();
 
-  return useTimeline(queryKeys.timelines.wrenched(params), (paginationParams) =>
+  return useTimeline(`wrenched`, (paginationParams) =>
     client.timelines.wrenchedTimeline({ ...params, ...paginationParams }),
   );
 };
