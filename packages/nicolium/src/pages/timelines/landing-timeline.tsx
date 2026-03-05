@@ -12,10 +12,7 @@ import Stack from '@/components/ui/stack';
 import { useInstance } from '@/hooks/use-instance';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { About } from '@/pages/utils/about';
-import { useSettings } from '@/stores/settings';
 import { getTextDirection } from '@/utils/rtl';
-
-import { CommunityTimeline } from './community-timeline';
 
 interface ILogoText extends Pick<React.HTMLAttributes<HTMLHeadingElement>, 'className' | 'dir'> {
   children: React.ReactNode;
@@ -55,9 +52,9 @@ const SiteBanner: React.FC = () => {
 const LandingTimelinePage = () => {
   const instance = useInstance();
   const { isOpen } = useRegistrationStatus();
-  const { experimentalTimeline } = useSettings();
 
-  const [timelineFailed, setTimelineFailed] = useState(false);
+  // todo fix this
+  const [timelineFailed, _setTimelineFailed] = useState(false);
 
   const timelineEnabled = !instance.pleroma.metadata.restrict_unauthenticated.timelines.local;
 
@@ -79,11 +76,16 @@ const LandingTimelinePage = () => {
       </HStack>
 
       {timelineEnabled && !timelineFailed ? (
-        experimentalTimeline ? (
-          <PublicTimelineColumn local />
-        ) : (
-          <CommunityTimeline onTimelineFailed={() => setTimelineFailed(true)} />
-        )
+        <PublicTimelineColumn
+          local
+          emptyMessageText={
+            <FormattedMessage
+              id='empty_column.community'
+              defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!'
+            />
+          }
+          emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+        />
       ) : (
         <About slug='index' />
       )}

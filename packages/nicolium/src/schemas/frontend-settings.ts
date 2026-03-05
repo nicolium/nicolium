@@ -122,8 +122,6 @@ const settingsSchema = v.object({
   saved: v.fallback(v.boolean(), true),
 
   demo: v.fallback(v.boolean(), false),
-
-  experimentalTimeline: v.fallback(v.boolean(), false),
 });
 
 type Settings = v.InferOutput<typeof settingsSchema>;

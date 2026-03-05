@@ -3,55 +3,16 @@ import clsx from 'clsx';
 import React, { useEffect, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { fetchGroupTimeline } from '@/actions/timelines';
-import { useGroupStream } from '@/api/hooks/streaming/use-group-stream';
 import { GroupTimelineColumn } from '@/columns/timeline';
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
-import Timeline from '@/features/ui/components/timeline';
 import { groupTimelineRoute } from '@/features/ui/router';
 import { ComposeForm } from '@/features/ui/util/async-components';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useComposeActions, useUploadCompose } from '@/stores/compose';
-import { useSettings } from '@/stores/settings';
-
-interface IGroupTimeline {
-  groupId: string;
-}
-
-const GroupTimeline: React.FC<IGroupTimeline> = ({ groupId }) => {
-  const dispatch = useAppDispatch();
-
-  const handleLoadMore = () => {
-    dispatch(fetchGroupTimeline(groupId, {}, true));
-  };
-
-  useGroupStream(groupId);
-
-  useEffect(() => {
-    dispatch(fetchGroupTimeline(groupId, {}));
-  }, [groupId]);
-
-  return (
-    <Timeline
-      scrollKey='group_timeline'
-      timelineId={`group:${groupId}`}
-      onLoadMore={handleLoadMore}
-      emptyMessageText={
-        <FormattedMessage
-          id='empty_column.group'
-          defaultMessage='There are no posts in this group yet.'
-        />
-      }
-      emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
-      showGroup={false}
-    />
-  );
-};
 
 const GroupTimelinePage: React.FC = () => {
   const { groupId } = groupTimelineRoute.useParams();
@@ -59,7 +20,6 @@ const GroupTimelinePage: React.FC = () => {
   const composeId = `group:${groupId}`;
 
   const { data: account } = useOwnAccount();
-  const { experimentalTimeline } = useSettings();
   const uploadCompose = useUploadCompose(composeId);
   const { updateCompose } = useComposeActions();
   const composer = useRef<HTMLDivElement>(null);
@@ -111,11 +71,17 @@ const GroupTimelinePage: React.FC = () => {
         </div>
       )}
 
-      {experimentalTimeline ? (
-        <GroupTimelineColumn groupId={groupId} />
-      ) : (
-        <GroupTimeline groupId={groupId} />
-      )}
+      <GroupTimelineColumn
+        groupId={groupId}
+        emptyMessageText={
+          <FormattedMessage
+            id='empty_column.group'
+            defaultMessage='There are no posts in this group yet.'
+          />
+        }
+        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+        // showGroup={falsse}
+      />
     </Stack>
   );
 };

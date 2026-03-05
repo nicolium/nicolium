@@ -887,29 +887,6 @@ const Preferences = () => {
           </ListItem>
         </List>
       )}
-
-      <List>
-        <ListItem
-          label={
-            <FormattedMessage
-              id='preferences.fields.experimental_timeline_label'
-              defaultMessage='Enable experimental timeline'
-            />
-          }
-          hint={
-            <FormattedMessage
-              id='preferences.fields.experimental_timeline_hint'
-              defaultMessage='It replaces the stable timeline experience and might not offer all features.'
-            />
-          }
-        >
-          <SettingToggle
-            settings={settings}
-            settingPath={['experimentalTimeline']}
-            onChange={onToggleChange}
-          />
-        </ListItem>
-      </List>
     </Form>
   );
 };

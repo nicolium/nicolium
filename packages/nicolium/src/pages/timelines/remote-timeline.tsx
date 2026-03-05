@@ -1,62 +1,19 @@
 import { useNavigate } from '@tanstack/react-router';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchPublicTimeline } from '@/actions/timelines';
-import { useRemoteStream } from '@/api/hooks/streaming/use-remote-stream';
 import { PublicTimelineColumn } from '@/columns/timeline';
 import Column from '@/components/ui/column';
 import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
 import PinnedHostsPicker from '@/features/remote-timeline/components/pinned-hosts-picker';
-import Timeline from '@/features/ui/components/timeline';
 import { remoteTimelineRoute } from '@/features/ui/router';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
   close: { id: 'remote_timeline.close', defaultMessage: 'Close remote timeline' },
 });
-
-interface IRemoteTimeline {
-  instance: string;
-}
-
-const RemoteTimeline: React.FC<IRemoteTimeline> = ({ instance }) => {
-  const dispatch = useAppDispatch();
-  const settings = useSettings();
-
-  const timelineId = 'remote';
-  const onlyMedia = settings.timelines.remote?.other.onlyMedia ?? false;
-
-  const handleLoadMore = () => {
-    dispatch(fetchPublicTimeline({ onlyMedia, instance }, true));
-  };
-
-  useRemoteStream({ instance, onlyMedia });
-
-  useEffect(() => {
-    dispatch(fetchPublicTimeline({ onlyMedia, instance }));
-  }, [onlyMedia, instance]);
-
-  return (
-    <Timeline
-      loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
-      scrollKey={`${timelineId}_${instance}_timeline`}
-      timelineId={`${timelineId}${onlyMedia ? ':media' : ''}:${instance}`}
-      onLoadMore={handleLoadMore}
-      emptyMessageText={
-        <FormattedMessage
-          id='empty_column.remote'
-          defaultMessage='There is nothing here! Manually follow users from {instance} to fill it up.'
-          values={{ instance }}
-        />
-      }
-      emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
-    />
-  );
-};
 
 /** View statuses from a remote instance. */
 const RemoteTimelinePage: React.FC = () => {
@@ -66,7 +23,6 @@ const RemoteTimelinePage: React.FC = () => {
   const navigate = useNavigate();
 
   const settings = useSettings();
-  const { experimentalTimeline } = settings;
 
   const pinned = settings.remote_timeline.pinnedHosts.includes(instance);
 
@@ -97,11 +53,17 @@ const RemoteTimelinePage: React.FC = () => {
         </HStack>
       )}
 
-      {experimentalTimeline ? (
-        <PublicTimelineColumn instance={instance} />
-      ) : (
-        <RemoteTimeline instance={instance} />
-      )}
+      <PublicTimelineColumn
+        emptyMessageText={
+          <FormattedMessage
+            id='empty_column.remote'
+            defaultMessage='There is nothing here! Manually follow users from {instance} to fill it up.'
+            values={{ instance }}
+          />
+        }
+        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+        instance={instance}
+      />
     </Column>
   );
 };

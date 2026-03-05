@@ -1,49 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { fetchBubbleTimeline } from '@/actions/timelines';
-import { useBubbleStream } from '@/api/hooks/streaming/use-bubble-stream';
 import { BubbleTimelineColumn } from '@/columns/timeline';
-import PullToRefresh from '@/components/pull-to-refresh';
 import Column from '@/components/ui/column';
-import Timeline from '@/features/ui/components/timeline';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useFeatures } from '@/hooks/use-features';
-import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
   title: { id: 'column.bubble', defaultMessage: 'Bubble timeline' },
 });
 
-const BubbleTimeline = () => {
-  const dispatch = useAppDispatch();
-  const features = useFeatures();
-  const settings = useSettings();
-
-  const onlyMedia = settings.timelines.bubble?.other.onlyMedia ?? false;
-
-  const timelineId = 'bubble';
-
-  const handleLoadMore = () => {
-    dispatch(fetchBubbleTimeline({ onlyMedia }, true));
-  };
-
-  const handleRefresh = () => dispatch(fetchBubbleTimeline({ onlyMedia }, true));
-
-  useBubbleStream({ onlyMedia, enabled: features.bubbleTimelineStreaming });
-
-  useEffect(() => {
-    dispatch(fetchBubbleTimeline({ onlyMedia }));
-  }, [onlyMedia]);
+const BubbleTimelinePage = () => {
+  const intl = useIntl();
 
   return (
-    <PullToRefresh onRefresh={handleRefresh}>
-      <Timeline
-        loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
-        scrollKey={`${timelineId}_timeline`}
-        timelineId={`${timelineId}${onlyMedia ? ':media' : ''}`}
-        prefix='home'
-        onLoadMore={handleLoadMore}
+    <Column className='-mt-3 sm:mt-0' label={intl.formatMessage(messages.title)}>
+      <BubbleTimelineColumn
         emptyMessageText={
           <FormattedMessage
             id='empty_column.bubble'
@@ -52,19 +22,6 @@ const BubbleTimeline = () => {
         }
         emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
       />
-    </PullToRefresh>
-  );
-};
-
-const BubbleTimelinePage = () => {
-  const intl = useIntl();
-
-  const settings = useSettings();
-  const { experimentalTimeline } = settings;
-
-  return (
-    <Column className='-mt-3 sm:mt-0' label={intl.formatMessage(messages.title)}>
-      {experimentalTimeline ? <BubbleTimelineColumn /> : <BubbleTimeline />}
     </Column>
   );
 };

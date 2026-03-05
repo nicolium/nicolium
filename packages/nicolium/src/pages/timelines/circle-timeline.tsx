@@ -9,12 +9,10 @@ import MissingIndicator from '@/components/missing-indicator';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
-import Timeline from '@/features/ui/components/timeline';
 import { circleTimelineRoute } from '@/features/ui/router';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useCircle, useDeleteCircle } from '@/queries/accounts/use-circles';
 import { useModalsActions } from '@/stores/modals';
-import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
   deleteHeading: { id: 'confirmations.delete_circle.heading', defaultMessage: 'Delete circle' },
@@ -27,48 +25,6 @@ const messages = defineMessages({
   deleteCircle: { id: 'circles.delete', defaultMessage: 'Delete circle' },
 });
 
-interface ICircleTimeline {
-  circleId: string;
-}
-
-const CircleTimeline: React.FC<ICircleTimeline> = ({ circleId }) => {
-  const dispatch = useAppDispatch();
-  const { openModal } = useModalsActions();
-
-  const handleLoadMore = () => {
-    dispatch(fetchCircleTimeline(circleId, true));
-  };
-
-  const handleEditClick = () => {
-    openModal('CIRCLE_EDITOR', { circleId });
-  };
-
-  const emptyMessage = (
-    <div>
-      <FormattedMessage
-        id='empty_column.circle'
-        defaultMessage='There is nothing in this circle yet. When members of this circle create new posts, they will appear here.'
-      />
-      <br />
-      <br />
-      <Button onClick={handleEditClick}>
-        <FormattedMessage id='circle.click_to_add' defaultMessage='Click here to add people' />
-      </Button>
-    </div>
-  );
-
-  return (
-    <Timeline
-      loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
-      scrollKey='circle_timeline'
-      timelineId={`circle:${circleId}`}
-      onLoadMore={handleLoadMore}
-      emptyMessageText={emptyMessage}
-      emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
-    />
-  );
-};
-
 const CircleTimelinePage: React.FC = () => {
   const { circleId } = circleTimelineRoute.useParams();
 
@@ -76,7 +32,6 @@ const CircleTimelinePage: React.FC = () => {
   const dispatch = useAppDispatch();
   const { openModal } = useModalsActions();
   const navigate = useNavigate();
-  const { experimentalTimeline } = useSettings();
 
   const { data: circle, isFetching } = useCircle(circleId);
   const { mutate: deleteCircle } = useDeleteCircle();
@@ -143,11 +98,26 @@ const CircleTimelinePage: React.FC = () => {
         />
       }
     >
-      {experimentalTimeline ? (
-        <CircleTimelineColumn circleId={circleId} />
-      ) : (
-        <CircleTimeline circleId={circleId} />
-      )}
+      <CircleTimelineColumn
+        circleId={circleId}
+        emptyMessageText={
+          <div>
+            <FormattedMessage
+              id='empty_column.circle'
+              defaultMessage='There is nothing in this circle yet. When members of this circle create new posts, they will appear here.'
+            />
+            <br />
+            <br />
+            <Button onClick={handleEditClick}>
+              <FormattedMessage
+                id='circle.click_to_add'
+                defaultMessage='Click here to add people'
+              />
+            </Button>
+          </div>
+        }
+        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+      />
     </Column>
   );
 };
