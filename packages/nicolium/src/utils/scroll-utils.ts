@@ -8,12 +8,15 @@ const selectChild = (
   count?: number,
   align?: 'start' | 'center' | 'end',
 ) => {
+  if (index < 0) return false;
+
   if (count !== undefined && index === count) {
     const loadMoreButton = node.querySelector<HTMLButtonElement>('.⁂-load-more');
     if (loadMoreButton) {
       loadMoreButton.focus({ preventScroll: false });
       return;
     }
+    return false;
   }
 
   const selector = `[data-index="${index}"] .focusable`;

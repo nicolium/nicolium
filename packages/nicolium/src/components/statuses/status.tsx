@@ -330,14 +330,16 @@ const Status: React.FC<IStatus> = React.memo((props) => {
 
   const handleHotkeyMoveUp = () => {
     if (onMoveUp) {
-      onMoveUp(status.id, featured);
+      return onMoveUp(status.id, featured);
     }
+    return false;
   };
 
   const handleHotkeyMoveDown = () => {
     if (onMoveDown) {
-      onMoveDown(status.id, featured);
+      return onMoveDown(status.id, featured);
     }
+    return false;
   };
 
   const handleHotkeyToggleSensitive = () => {

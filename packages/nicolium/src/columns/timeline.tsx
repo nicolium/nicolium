@@ -106,18 +106,16 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
 
   const { entries, queuedCount, fetchNextPage, dequeueEntries, isFetching, isPending } = query;
 
-  const handleMoveUp = (index: number) => {
+  const handleMoveUp = (index: number) =>
     selectChild(index - 1, node, document.getElementById('status-list') ?? undefined);
-  };
 
-  const handleMoveDown = (index: number) => {
+  const handleMoveDown = (index: number) =>
     selectChild(
       index + 1,
       node,
       document.getElementById('status-list') ?? undefined,
       entries.length,
     );
-  };
 
   const renderEntry = (entry: TimelineEntry, index: number) => {
     if (entry.type === 'status') {

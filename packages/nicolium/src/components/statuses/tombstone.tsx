@@ -6,8 +6,8 @@ import { Hotkeys } from '@/features/ui/components/hotkeys';
 
 interface ITombstone {
   id: string;
-  onMoveUp?: (statusId: string) => void;
-  onMoveDown?: (statusId: string) => void;
+  onMoveUp?: (statusId: string) => void | boolean;
+  onMoveDown?: (statusId: string) => void | boolean;
   deleted?: boolean;
 }
 
