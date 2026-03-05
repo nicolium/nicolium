@@ -126,7 +126,7 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(
                 />
               )}
 
-              <h3>{title}</h3>
+              <h2 id='modal-title'>{title}</h2>
 
               {onClose && (
                 <IconButton
