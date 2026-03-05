@@ -594,15 +594,15 @@ body {
     @apply top-4;
   }
 
-  &--success svg {
+  &--success .⁂-toast__icon svg {
     @apply text-success-500 dark:text-success-400;
   }
 
-  &--info svg {
+  &--info .⁂-toast__icon svg {
     @apply text-primary-600 dark:text-primary-400;
   }
 
-  &--error svg {
+  &--error .⁂-toast__icon svg {
     @apply text-danger-600;
   }
 }
