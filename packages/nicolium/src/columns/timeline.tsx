@@ -16,6 +16,7 @@ import { useFeatures } from '@/hooks/use-features';
 import { useAccounts } from '@/queries/accounts/use-accounts';
 import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
 import {
+  useAccountTimeline,
   useAntennaTimeline,
   useBubbleTimeline,
   useCircleTimeline,
@@ -364,6 +365,20 @@ const WrenchedTimelineColumn = () => {
   return <Timeline query={timelineQuery} contextType='public' />;
 };
 
+interface IAccountTimelineColumn {
+  accountId: string;
+  excludeReplies?: boolean;
+}
+
+const AccountTimelineColumn: React.FC<IAccountTimelineColumn> = ({
+  accountId,
+  excludeReplies = false,
+}) => {
+  const timelineQuery = useAccountTimeline(accountId, { exclude_replies: excludeReplies });
+
+  return <Timeline query={timelineQuery} contextType='public' />;
+};
+
 export {
   HomeTimelineColumn,
   PublicTimelineColumn,
@@ -375,4 +390,5 @@ export {
   AntennaTimelineColumn,
   CircleTimelineColumn,
   WrenchedTimelineColumn,
+  AccountTimelineColumn,
 };

@@ -5,6 +5,7 @@ import { useTimeline } from './use-timeline';
 import type {
   AntennaTimelineParams,
   BubbleTimelineParams,
+  GetAccountStatusesParams,
   GetCircleStatusesParams,
   GroupTimelineParams,
   HashtagTimelineParams,
@@ -142,6 +143,22 @@ const useWrenchedTimeline = (params?: Omit<WrenchedTimelineParams, keyof Paginat
   );
 };
 
+const useAccountTimeline = (
+  accountId: string,
+  params?: Omit<GetAccountStatusesParams, keyof PaginationParams>,
+) => {
+  const client = useClient();
+
+  return useTimeline(
+    `account:${accountId}${params?.exclude_replies ? ':exclude_replies' : ''}`,
+    (paginationParams) =>
+      client.accounts.getAccountStatuses(accountId, {
+        ...params,
+        ...paginationParams,
+      }),
+  );
+};
+
 export {
   useHomeTimeline,
   usePublicTimeline,
@@ -153,4 +170,5 @@ export {
   useAntennaTimeline,
   useCircleTimeline,
   useWrenchedTimeline,
+  useAccountTimeline,
 };

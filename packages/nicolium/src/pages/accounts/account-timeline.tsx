@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { fetchAccountTimeline } from '@/actions/timelines';
+import { AccountTimelineColumn } from '@/columns/timeline';
 import MissingIndicator from '@/components/missing-indicator';
 import StatusList from '@/components/statuses/status-list';
 import Card, { CardBody } from '@/components/ui/card';
@@ -12,6 +13,7 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
+import { usePinnedStatuses } from '@/queries/status-lists/use-pinned-statuses';
 import { makeGetStatusIds } from '@/selectors';
 import { useSettings } from '@/stores/settings';
 
@@ -32,12 +34,7 @@ const AccountTimelinePage: React.FC = () => {
   const statusIds = useAppSelector((state) =>
     getStatusIds(state, { type: `account:${path}`, prefix: 'account_timeline' }),
   );
-  const featuredStatusIds = useAppSelector((state) =>
-    getStatusIds(state, {
-      type: `account:${account?.id}:with_replies:pinned`,
-      prefix: 'account_timeline',
-    }),
-  );
+  const { data: featuredStatusIds } = usePinnedStatuses(account?.id || '');
 
   const isBlocked = account?.relationship?.blocked_by && !features.blockersVisible;
   const isLoading = useAppSelector((state) => state.timelines[`account:${path}`]?.isLoading);
@@ -83,7 +80,13 @@ const AccountTimelinePage: React.FC = () => {
     );
   }
 
-  return (
+  return settings.experimentalTimeline ? (
+    <AccountTimelineColumn
+      accountId={account.id}
+      excludeReplies={withReplies}
+      // featuredStatusIds={showPins ? featuredStatusIds : undefined}
+    />
+  ) : (
     <StatusList
       timelineId={`account:${path}`}
       scrollKey='account_timeline'
