@@ -44,8 +44,6 @@ interface IStatusList extends Omit<IScrollableList, 'onLoadMore' | 'children'> {
   isPartial?: boolean;
   /** Whether we expect an additional page of data. */
   hasMore: boolean;
-  /** Message to display when the list is loaded but empty. */
-  emptyMessage?: React.ReactNode;
   /** ID of the timeline in Redux. */
   timelineId?: string;
   /** Whether to show group information. */
