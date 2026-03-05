@@ -526,6 +526,7 @@ const HomeTimelineColumn: React.FC<IBaseTimeline> = (props) => {
 
   const handleTopItemChanged = (index: number) => {
     const entry = timelineQuery.entries[index];
+    if (index === 0) return localStorage.removeItem(marker);
     if (!entry || entry.type !== 'status') return;
     localStorage.setItem(marker, entry.originalId);
   };
