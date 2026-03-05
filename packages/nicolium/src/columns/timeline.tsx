@@ -1,15 +1,17 @@
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
-import React, { useRef } from 'react';
-import { defineMessages, FormattedList, FormattedMessage } from 'react-intl';
+import React, { useRef, useState } from 'react';
+import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
 import ScrollTopButton from '@/components/scroll-top-button';
 import ScrollableList, { type IScrollableList } from '@/components/scrollable-list';
 import Status, { StatusFollowedTagInfo } from '@/components/statuses/status';
 import StatusInfo from '@/components/statuses/status-info';
 import Tombstone from '@/components/statuses/tombstone';
+import Button from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import Portal from '@/components/ui/portal';
+import Stack from '@/components/ui/stack';
 import Emojify from '@/features/emoji/emojify';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import PendingStatus from '@/features/ui/components/pending-status';
@@ -45,6 +47,14 @@ const messages = defineMessages({
     id: 'status_list.queue_label.live_region',
     defaultMessage: '{count} new {count, plural, one {post} other {posts}}.',
   },
+  gapExplanation: {
+    id: 'timeline.gap.explanation',
+    defaultMessage: 'Time elapsed between the two posts surrounding the gap.',
+  },
+  gapExplanationFirst: {
+    id: 'timeline.gap.explanation_first',
+    defaultMessage: 'Time elapsed since the post before the gap.',
+  },
 });
 
 const PlaceholderTimelineStatus = () => (
@@ -62,6 +72,126 @@ const TimelinePendingStatus: React.FC<ITimelinePendingStatus> = ({ idempotencyKe
     <div className='⁂-timeline-status relative border-b border-solid border-gray-200 dark:border-gray-800'>
       <PendingStatus idempotencyKey={idempotencyKey} variant='slim' />
     </div>
+  );
+};
+
+interface ITimelineGap {
+  gap: Extract<TimelineEntry, { type: 'gap' }>;
+  onFillGap: (
+    gap: Extract<TimelineEntry, { type: 'gap' }>,
+    direction: 'up' | 'down',
+  ) => Promise<void>;
+  firstEntry: boolean;
+}
+
+const TimelineGap: React.FC<ITimelineGap> = ({ gap, onFillGap, firstEntry }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const intl = useIntl();
+
+  const handleFill = async (direction: 'up' | 'down') => {
+    setIsLoading(true);
+    try {
+      await onFillGap(gap, direction);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const renderTimeDistance = () => {
+    console.log(gap);
+    if (!gap.minDate) return null;
+
+    const maxDate = gap.maxIdDate ? new Date(gap.maxIdDate) : new Date();
+    const minDate = new Date(gap.minDate);
+
+    const diff = Math.abs(maxDate.getTime() - minDate.getTime());
+    if (diff < 60 * 1000) {
+      return (
+        <FormattedMessage
+          id='datetime.distance.less_than_minute'
+          defaultMessage='Less than a minute'
+        />
+      );
+    } else if (diff < 60 * 60 * 1000) {
+      const minutes = Math.round(diff / (60 * 1000));
+      return (
+        <FormattedMessage
+          id='datetime.distance.minutes'
+          defaultMessage='{distance} {distance, plural, one {minute} other {minutes}}'
+          values={{ distance: minutes }}
+        />
+      );
+    } else if (diff < 24 * 60 * 60 * 1000) {
+      const hours = Math.round(diff / (60 * 60 * 1000));
+      return (
+        <FormattedMessage
+          id='datetime.distance.hours'
+          defaultMessage='{distance} {distance, plural, one {hour} other {hours}}'
+          values={{ distance: hours }}
+        />
+      );
+    } else if (diff < 30 * 24 * 60 * 60 * 1000) {
+      const days = Math.round(diff / (24 * 60 * 60 * 1000));
+      return (
+        <FormattedMessage
+          id='datetime.distance.days'
+          defaultMessage='{distance} {distance, plural, one {day} other {days}}'
+          values={{ distance: days }}
+        />
+      );
+    } else if (diff < 365 * 24 * 60 * 60 * 1000) {
+      const months = Math.round(diff / (30 * 24 * 60 * 60 * 1000));
+      return (
+        <FormattedMessage
+          id='datetime.distance.months'
+          defaultMessage='{distance} {distance, plural, one {month} other {months}}'
+          values={{ distance: months }}
+        />
+      );
+    } else {
+      const years = Math.round(diff / (365 * 24 * 60 * 60 * 1000));
+      return (
+        <FormattedMessage
+          id='datetime.distance.years'
+          defaultMessage='{distance} {distance, plural, one {year} other {years}}'
+          values={{ distance: years }}
+        />
+      );
+    }
+  };
+
+  return (
+    <Stack className='⁂-timeline-gap mx-auto items-stretch'>
+      <Button
+        theme='transparent'
+        icon={require('@phosphor-icons/core/regular/caret-double-down.svg')}
+        onClick={() => handleFill('down')}
+        disabled={isLoading}
+      >
+        {firstEntry ? (
+          <FormattedMessage id='timeline.gap.load_recent' defaultMessage='Load recent posts' />
+        ) : (
+          <FormattedMessage id='timeline.gap.load_older' defaultMessage='Load older posts' />
+        )}
+      </Button>
+      <div className='⁂-timeline-gap__separator'>
+        <span
+          title={intl.formatMessage(
+            firstEntry ? messages.gapExplanationFirst : messages.gapExplanation,
+          )}
+        >
+          {renderTimeDistance()}
+        </span>
+      </div>
+      <Button
+        theme='transparent'
+        icon={require('@phosphor-icons/core/regular/caret-double-up.svg')}
+        onClick={() => handleFill('up')}
+        disabled={isLoading}
+      >
+        <FormattedMessage id='timeline.gap.load_newer' defaultMessage='Load newer posts' />
+      </Button>
+    </Stack>
   );
 };
 
@@ -240,6 +370,7 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public', ...props
     queuedCount,
     fetchNextPage,
     dequeueEntries,
+    fillGap,
     isFetching,
     isPending,
     hasNextPage,
@@ -274,6 +405,15 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public', ...props
       );
     } else if (entry.type === 'pending-status') {
       return <TimelinePendingStatus key={entry.id} idempotencyKey={entry.id} />;
+    } else if (entry.type === 'gap') {
+      return (
+        <TimelineGap
+          key={`gap-${entry.minId}`}
+          gap={entry}
+          onFillGap={fillGap}
+          firstEntry={index === 0}
+        />
+      );
     }
   };
 

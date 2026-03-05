@@ -23,8 +23,10 @@ type TimelineEntry =
     }
   | {
       type: 'gap';
-      sinceId?: string;
+      maxId?: string;
+      maxIdDate?: string;
       minId: string;
+      minDate: string;
     };
 
 interface TimelineData {
@@ -53,6 +55,13 @@ interface State {
     setLoading: (timelineId: string, isFetching: boolean) => void;
     setError: (timelineId: string, isError: boolean) => void;
     dequeueEntries: (timelineId: string) => void;
+    fillGap: (
+      timelineId: string,
+      gapMinId: string,
+      statuses: Array<Status>,
+      hasMore: boolean,
+      direction: 'up' | 'down',
+    ) => void;
     importPendingStatus: (params: CreateStatusParams, idempotencyKey: string) => void;
     replacePendingStatus: (idempotencyKey: string, newId: string) => void;
     deletePendingStatus: (idempotencyKey: string) => void;
@@ -156,6 +165,7 @@ const useTimelinesStore = create<State>()(
             timeline.entries.unshift({
               type: 'gap',
               minId: statuses[0].id,
+              minDate: statuses[0].created_at,
             });
           }
           timeline.isPending = false;
@@ -226,6 +236,47 @@ const useTimelinesStore = create<State>()(
           timeline.entries.unshift(...processedEntries);
           timeline.queuedEntries = [];
           timeline.queuedCount = 0;
+        }),
+      fillGap: (timelineId, gapMinId, statuses, hasMore, direction) =>
+        set((state) => {
+          const timeline = state.timelines[timelineId];
+          if (!timeline) return;
+
+          const gapIndex = timeline.entries.findIndex(
+            (e) => e.type === 'gap' && e.minId === gapMinId,
+          );
+          if (gapIndex === -1) return;
+
+          const gap = timeline.entries[gapIndex] as Extract<TimelineEntry, { type: 'gap' }>;
+          const newEntries = processPage(statuses);
+
+          timeline.entries.splice(gapIndex, 1);
+
+          if (direction === 'up') {
+            if (hasMore && statuses.length > 0) {
+              const remainingGap: TimelineEntry = {
+                type: 'gap',
+                maxId: gap.maxId,
+                maxIdDate: gap.maxIdDate,
+                minId: statuses[0].id,
+                minDate: statuses[0].created_at,
+              };
+              timeline.entries.splice(gapIndex, 0, remainingGap, ...newEntries);
+            } else {
+              timeline.entries.splice(gapIndex, 0, ...newEntries);
+            }
+          } else if (hasMore && statuses.length > 0) {
+            const remainingGap: TimelineEntry = {
+              type: 'gap',
+              maxId: statuses.at(-1)?.id,
+              maxIdDate: statuses.at(-1)?.created_at,
+              minId: gap.minId,
+              minDate: gap.minDate,
+            };
+            timeline.entries.splice(gapIndex, 0, ...newEntries, remainingGap);
+          } else {
+            timeline.entries.splice(gapIndex, 0, ...newEntries);
+          }
         }),
       importPendingStatus: (params, idempotencyKey) =>
         set((state) => {

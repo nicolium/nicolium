@@ -2,11 +2,14 @@ import { useCallback, useEffect, useMemo } from 'react';
 
 import { importEntities } from '@/actions/importer';
 import { useTimelineStream } from '@/api/hooks/streaming/use-timeline-stream';
-import { useTimeline as useStoreTimeline, useTimelinesActions } from '@/stores/timelines';
+import {
+  useTimeline as useStoreTimeline,
+  useTimelinesActions,
+  type TimelineEntry,
+} from '@/stores/timelines';
 
-import type { PaginatedResponse, Status, StreamingParams } from 'pl-api';
+import type { PaginatedResponse, PaginationParams, Status, StreamingParams } from 'pl-api';
 
-type PaginationParams = { max_id?: string; min_id?: string };
 type TimelineFetcher = (params?: PaginationParams) => Promise<PaginatedResponse<Status>>;
 
 interface StreamConfig {
@@ -59,9 +62,29 @@ const useTimeline = (
     timelineActions.dequeueEntries(timelineId);
   }, [timelineId]);
 
+  const fillGap = useCallback(
+    async (gap: Extract<TimelineEntry, { type: 'gap' }>, direction: 'up' | 'down') => {
+      let params: PaginationParams;
+      if (direction === 'up') {
+        const gapIndex = timeline.entries.indexOf(gap);
+        const previousEntry = gapIndex > 0 ? timeline.entries[gapIndex - 1] : null;
+        const maxId =
+          previousEntry && previousEntry.type === 'status' ? previousEntry.originalId : undefined;
+        params = { min_id: gap.minId, max_id: maxId };
+      } else {
+        params = { max_id: gap.maxId, since_id: gap.minId };
+      }
+
+      const response = await fetcher(params);
+      importEntities({ statuses: response.items });
+      timelineActions.fillGap(timelineId, gap.minId, response.items, !!response.next, direction);
+    },
+    [timelineId, fetcher],
+  );
+
   return useMemo(
-    () => ({ ...timeline, timelineId, fetchNextPage, dequeueEntries }),
-    [timeline, timelineId, fetchNextPage, dequeueEntries],
+    () => ({ ...timeline, timelineId, fetchNextPage, dequeueEntries, fillGap }),
+    [timeline, timelineId, fetchNextPage, dequeueEntries, fillGap],
   );
 };
 
