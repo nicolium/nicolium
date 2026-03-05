@@ -11,6 +11,7 @@ type TimelineEntry =
       type: 'status';
       id: string;
       rebloggedBy: Array<string>;
+      reblogIds: Array<string>;
       isConnectedTop?: boolean;
       isConnectedBottom?: boolean;
     }
@@ -86,12 +87,14 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
         // entry connection stuff might happen to call processStatus on the same status multiple times
         if (!existingEntry.rebloggedBy.includes(status.account.id)) {
           existingEntry.rebloggedBy.push(status.account.id);
+          existingEntry.reblogIds.push(status.id);
         }
       } else {
         timelinePage.push({
           type: 'status',
           id: status.reblog.id,
           rebloggedBy: [status.account.id],
+          reblogIds: [status.id],
           isConnectedTop,
         });
       }
@@ -102,6 +105,7 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
       type: 'status',
       id: status.id,
       rebloggedBy: [],
+      reblogIds: [],
       isConnectedTop,
     });
 
@@ -230,6 +234,7 @@ const useTimelinesStore = create<State>()(
                 type: 'status',
                 id: newId,
                 rebloggedBy: [],
+                reblogIds: [],
               };
             }
           }
