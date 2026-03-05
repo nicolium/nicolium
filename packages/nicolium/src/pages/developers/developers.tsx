@@ -82,20 +82,6 @@ const DevelopersPage: React.FC = () => {
             </Text>
           </DashWidget>
 
-          <DashWidget to='/developers/timeline'>
-            <SvgIcon
-              src={require('@phosphor-icons/core/regular/list-bullets.svg')}
-              className='text-gray-700 dark:text-gray-600'
-            />
-
-            <Text>
-              <FormattedMessage
-                id='developers.navigation.test_timeline_label'
-                defaultMessage='Test timeline'
-              />
-            </Text>
-          </DashWidget>
-
           <DashWidget to='/error'>
             <SvgIcon
               src={require('@phosphor-icons/core/regular/bug.svg')}

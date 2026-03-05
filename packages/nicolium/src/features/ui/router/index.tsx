@@ -144,7 +144,6 @@ import {
   Share,
   Status,
   Subscribers,
-  TestTimeline,
   ThemeEditor,
   Privacy,
   UserIndex,
@@ -1211,13 +1210,6 @@ export const developersSettingsStoreRoute = createRoute({
   beforeLoad: requireAuth,
 });
 
-export const developersTimelineRoute = createRoute({
-  getParentRoute: () => layouts.default,
-  path: '/developers/timeline',
-  component: TestTimeline,
-  beforeLoad: requireAuth,
-});
-
 export const developersSwRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/developers/sw',
@@ -1519,7 +1511,6 @@ const routeTree = rootRoute.addChildren([
     developersRoute,
     developersAppsRoute,
     developersSettingsStoreRoute,
-    developersTimelineRoute,
     developersSwRoute,
     cryptoDonateRoute,
     federationRestrictionsRoute,
