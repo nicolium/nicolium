@@ -200,7 +200,7 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
         const matchCandidates: {
           // A candidate will be have an undefined handler if it's matched,
           // but handled in a parent component rather than this one.
-          handler: ((event: KeyboardEvent) => void) | undefined;
+          handler: ((event: KeyboardEvent) => void | boolean) | undefined;
           priority: number;
         }[] = [];
 
@@ -220,9 +220,11 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
 
         const bestMatchingHandler = matchCandidates.at(0)?.handler;
         if (bestMatchingHandler) {
-          bestMatchingHandler(event);
-          event.stopPropagation();
-          event.preventDefault();
+          const result = bestMatchingHandler(event);
+          if (result !== false) {
+            event.stopPropagation();
+            event.preventDefault();
+          }
         }
 
         // Add last keypress to buffer
