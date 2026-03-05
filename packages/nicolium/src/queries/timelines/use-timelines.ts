@@ -17,14 +17,19 @@ import type {
   WrenchedTimelineParams,
 } from 'pl-api';
 
-const useHomeTimeline = (params?: Omit<HomeTimelineParams, keyof PaginationParams>) => {
+const useHomeTimeline = (
+  params?: Omit<HomeTimelineParams, keyof PaginationParams>,
+  maxId?: string,
+) => {
   const client = useClient();
   const stream = 'home';
 
   return useTimeline(
     'home',
-    (paginationParams) => client.timelines.homeTimeline({ ...params, ...paginationParams }),
+    (paginationParams) =>
+      client.timelines.homeTimeline({ ...params, ...(paginationParams || { max_id: maxId }) }),
     { stream },
+    !!maxId,
   );
 };
 

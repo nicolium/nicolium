@@ -220,14 +220,17 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props): React.JSX.Element => 
   );
 };
 
-type IBaseTimeline = Pick<IScrollableList, 'emptyMessageIcon' | 'emptyMessageText'>;
+type IBaseTimeline = Pick<
+  IScrollableList,
+  'emptyMessageIcon' | 'emptyMessageText' | 'onTopItemChanged'
+>;
 
 interface ITimeline extends IBaseTimeline {
   query: ReturnType<typeof useHomeTimeline>;
   contextType?: FilterContextType;
 }
 
-const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
+const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public', ...props }) => {
   const node = useRef<VirtuosoHandle | null>(null);
 
   const {
@@ -293,6 +296,7 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
         ref={node}
         hasMore={hasNextPage}
         onLoadMore={fetchNextPage}
+        {...props}
       >
         {(entries || []).map(renderEntry)}
       </ScrollableList>

@@ -23,8 +23,8 @@ type TimelineEntry =
     }
   | {
       type: 'gap';
-      sinceId: string;
-      maxId: string;
+      sinceId?: string;
+      minId: string;
     };
 
 interface TimelineData {
@@ -46,6 +46,7 @@ interface State {
       statuses: Array<Status>,
       hasMore?: boolean,
       initialFetch?: boolean,
+      restoring?: boolean,
     ) => void;
     receiveStreamingStatus: (timelineId: string, status: Status) => void;
     deleteStatus: (statusId: string) => void;
@@ -144,13 +145,19 @@ const useTimelinesStore = create<State>()(
   mutative((set) => ({
     timelines: {} as Record<string, TimelineData>,
     actions: {
-      expandTimeline: (timelineId, statuses, hasMore, initialFetch = false) =>
+      expandTimeline: (timelineId, statuses, hasMore, initialFetch = false, restoring = false) =>
         set((state) => {
           const timeline = state.timelines[timelineId] ?? createEmptyTimeline();
           const entries = processPage(statuses);
 
           if (initialFetch) timeline.entries = entries;
           else timeline.entries.push(...entries);
+          if (restoring) {
+            timeline.entries.unshift({
+              type: 'gap',
+              minId: statuses[0].id,
+            });
+          }
           timeline.isPending = false;
           timeline.isFetching = false;
           if (typeof hasMore === 'boolean') {

@@ -14,7 +14,12 @@ interface StreamConfig {
   params?: StreamingParams;
 }
 
-const useTimeline = (timelineId: string, fetcher: TimelineFetcher, streamConfig?: StreamConfig) => {
+const useTimeline = (
+  timelineId: string,
+  fetcher: TimelineFetcher,
+  streamConfig?: StreamConfig,
+  restoring?: boolean,
+) => {
   const timeline = useStoreTimeline(timelineId);
   const timelineActions = useTimelinesActions();
 
@@ -30,11 +35,11 @@ const useTimeline = (timelineId: string, fetcher: TimelineFetcher, streamConfig?
     try {
       const response = await fetcher();
       importEntities({ statuses: response.items });
-      timelineActions.expandTimeline(timelineId, response.items, !!response.next, true);
+      timelineActions.expandTimeline(timelineId, response.items, !!response.next, true, restoring);
     } catch (error) {
       timelineActions.setError(timelineId, true);
     }
-  }, [timelineId]);
+  }, [timelineId, restoring]);
 
   const fetchNextPage = useCallback(async () => {
     timelineActions.setLoading(timelineId, true);
