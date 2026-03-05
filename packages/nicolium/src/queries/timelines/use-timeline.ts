@@ -21,7 +21,7 @@ const useTimeline = (timelineId: string, fetcher: TimelineFetcher, streamConfig?
   useTimelineStream(streamConfig?.stream ?? '', streamConfig?.params, !!streamConfig?.stream);
 
   useEffect(() => {
-    if (!timeline.isPending) return;
+    if (!timeline.isPending || timeline.isFetching) return;
     fetchInitial();
   }, []);
 
@@ -32,7 +32,7 @@ const useTimeline = (timelineId: string, fetcher: TimelineFetcher, streamConfig?
       importEntities({ statuses: response.items });
       timelineActions.expandTimeline(timelineId, response.items, !!response.next, true);
     } catch (error) {
-      //
+      timelineActions.setError(timelineId, true);
     }
   }, [timelineId]);
 
@@ -46,7 +46,7 @@ const useTimeline = (timelineId: string, fetcher: TimelineFetcher, streamConfig?
 
       timelineActions.expandTimeline(timelineId, response.items, !!response.next, false);
     } catch (error) {
-      //
+      timelineActions.setError(timelineId, true);
     }
   }, [timelineId, timeline.oldestStatusId]);
 

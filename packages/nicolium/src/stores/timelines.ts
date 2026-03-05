@@ -31,6 +31,7 @@ interface TimelineData {
   queuedCount: number;
   isFetching: boolean;
   isPending: boolean;
+  isError: boolean;
   hasNextPage: boolean;
   oldestStatusId?: string;
 }
@@ -47,6 +48,7 @@ interface State {
     receiveStreamingStatus: (timelineId: string, status: Status) => void;
     deleteStatus: (statusId: string) => void;
     setLoading: (timelineId: string, isFetching: boolean) => void;
+    setError: (timelineId: string, isError: boolean) => void;
     dequeueEntries: (timelineId: string) => void;
     importPendingStatus: (params: CreateStatusParams, idempotencyKey: string) => void;
     replacePendingStatus: (idempotencyKey: string, newId: string) => void;
@@ -193,6 +195,15 @@ const useTimelinesStore = create<State>()(
           if (!isFetching) timeline.isPending = false;
           state.timelines[timelineId] = timeline;
         }),
+      setError: (timelineId, isError) =>
+        set((state) => {
+          const timeline = state.timelines[timelineId] ?? createEmptyTimeline();
+
+          timeline.isFetching = false;
+          timeline.isPending = false;
+          timeline.isError = isError;
+          state.timelines[timelineId] = timeline;
+        }),
       dequeueEntries: (timelineId) =>
         set((state) => {
           const timeline = state.timelines[timelineId];
@@ -289,6 +300,7 @@ const createEmptyTimeline = (): TimelineData => ({
   queuedCount: 0,
   isFetching: false,
   isPending: true,
+  isError: false,
   hasNextPage: true,
   oldestStatusId: undefined,
 });

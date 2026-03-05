@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import { PublicTimelineColumn } from '@/columns/timeline';
@@ -12,6 +12,7 @@ import Stack from '@/components/ui/stack';
 import { useInstance } from '@/hooks/use-instance';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { About } from '@/pages/utils/about';
+import { usePublicTimeline } from '@/queries/timelines/use-timelines';
 import { getTextDirection } from '@/utils/rtl';
 
 interface ILogoText extends Pick<React.HTMLAttributes<HTMLHeadingElement>, 'className' | 'dir'> {
@@ -53,8 +54,7 @@ const LandingTimelinePage = () => {
   const instance = useInstance();
   const { isOpen } = useRegistrationStatus();
 
-  // todo fix this
-  const [timelineFailed, _setTimelineFailed] = useState(false);
+  const { isError } = usePublicTimeline({ local: true });
 
   const timelineEnabled = !instance.pleroma.metadata.restrict_unauthenticated.timelines.local;
 
@@ -75,7 +75,7 @@ const LandingTimelinePage = () => {
         )}
       </HStack>
 
-      {timelineEnabled && !timelineFailed ? (
+      {timelineEnabled && !isError ? (
         <PublicTimelineColumn
           local
           emptyMessageText={
