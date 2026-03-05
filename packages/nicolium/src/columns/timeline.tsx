@@ -19,6 +19,7 @@ import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
 import {
   useAntennaTimeline,
   useBubbleTimeline,
+  useCircleTimeline,
   useGroupTimeline,
   useHashtagTimeline,
   useHomeTimeline,
@@ -347,6 +348,16 @@ const AntennaTimelineColumn: React.FC<IAntennaTimelineColumn> = ({ antennaId }) 
   return <Timeline query={timelineQuery} contextType='public' />;
 };
 
+interface ICircleTimelineColumn {
+  circleId: string;
+}
+
+const CircleTimelineColumn: React.FC<ICircleTimelineColumn> = ({ circleId }) => {
+  const timelineQuery = useCircleTimeline(circleId);
+
+  return <Timeline query={timelineQuery} contextType='public' />;
+};
+
 const WrenchedTimelineColumn = () => {
   const timelineQuery = useWrenchedTimeline();
 
@@ -362,5 +373,6 @@ export {
   GroupTimelineColumn,
   BubbleTimelineColumn,
   AntennaTimelineColumn,
+  CircleTimelineColumn,
   WrenchedTimelineColumn,
 };

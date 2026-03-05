@@ -5,6 +5,7 @@ import { useTimeline } from './use-timeline';
 import type {
   AntennaTimelineParams,
   BubbleTimelineParams,
+  GetCircleStatusesParams,
   GroupTimelineParams,
   HashtagTimelineParams,
   HomeTimelineParams,
@@ -46,7 +47,10 @@ const useHashtagTimeline = (
   return useTimeline(
     `hashtag:${hashtag}`,
     (paginationParams) =>
-      client.timelines.hashtagTimeline(hashtag, { ...params, ...paginationParams }),
+      client.timelines.hashtagTimeline(hashtag, {
+        ...params,
+        ...paginationParams,
+      }),
     { stream: 'hashtag', params: { tag: hashtag } },
   );
 };
@@ -84,7 +88,10 @@ const useGroupTimeline = (
   return useTimeline(
     `group:${groupId}`,
     (paginationParams) =>
-      client.timelines.groupTimeline(groupId, { ...params, ...paginationParams }),
+      client.timelines.groupTimeline(groupId, {
+        ...params,
+        ...paginationParams,
+      }),
     { stream: 'group', params: { group: groupId } },
   );
 };
@@ -106,14 +113,31 @@ const useAntennaTimeline = (
   const client = useClient();
 
   return useTimeline(`antenna:${antennaId}`, (paginationParams) =>
-    client.timelines.antennaTimeline(antennaId, { ...params, ...paginationParams }),
+    client.timelines.antennaTimeline(antennaId, {
+      ...params,
+      ...paginationParams,
+    }),
+  );
+};
+
+const useCircleTimeline = (
+  circleId: string,
+  params?: Omit<GetCircleStatusesParams, keyof PaginationParams>,
+) => {
+  const client = useClient();
+
+  return useTimeline(`circle:${circleId}`, (paginationParams) =>
+    client.circles.getCircleStatuses(circleId, {
+      ...params,
+      ...paginationParams,
+    }),
   );
 };
 
 const useWrenchedTimeline = (params?: Omit<WrenchedTimelineParams, keyof PaginationParams>) => {
   const client = useClient();
 
-  return useTimeline(`wrenched`, (paginationParams) =>
+  return useTimeline('wrenched', (paginationParams) =>
     client.timelines.wrenchedTimeline({ ...params, ...paginationParams }),
   );
 };
@@ -127,5 +151,6 @@ export {
   useGroupTimeline,
   useBubbleTimeline,
   useAntennaTimeline,
+  useCircleTimeline,
   useWrenchedTimeline,
 };
