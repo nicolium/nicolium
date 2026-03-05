@@ -19,14 +19,6 @@ type TimelineEntry =
       type: 'gap';
       sinceId: string;
       maxId: string;
-    }
-  | {
-      type: 'page-start';
-      maxId?: string;
-    }
-  | {
-      type: 'page-end';
-      minId?: string;
     };
 
 interface TimelineData {
@@ -35,6 +27,8 @@ interface TimelineData {
   queuedCount: number;
   isFetching: boolean;
   isPending: boolean;
+  hasNextPage: boolean;
+  oldestStatusId?: string;
 }
 
 interface State {
@@ -43,8 +37,8 @@ interface State {
     expandTimeline: (
       timelineId: string,
       statuses: Array<Status>,
-      hasMore: boolean,
-      initialFetch: boolean,
+      hasMore?: boolean,
+      initialFetch?: boolean,
     ) => void;
     receiveStreamingStatus: (timelineId: string, status: Status) => void;
     deleteStatus: (statusId: string) => void;
@@ -53,7 +47,7 @@ interface State {
   };
 }
 
-const processPage = (statuses: Array<Status>, hasMore: boolean): Array<TimelineEntry> => {
+const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
   const timelinePage: Array<TimelineEntry> = [];
 
   const processStatus = (status: Status): boolean => {
@@ -111,12 +105,6 @@ const processPage = (statuses: Array<Status>, hasMore: boolean): Array<TimelineE
     processStatus(status);
   }
 
-  if (hasMore)
-    timelinePage.push({
-      type: 'page-end',
-      minId: statuses.at(-1)?.id,
-    });
-
   return timelinePage;
 };
 
@@ -124,16 +112,20 @@ const useTimelinesStore = create<State>()(
   mutative((set) => ({
     timelines: {} as Record<string, TimelineData>,
     actions: {
-      expandTimeline: (timelineId, statuses, hasMore, initialFetch) =>
+      expandTimeline: (timelineId, statuses, hasMore, initialFetch = false) =>
         set((state) => {
           const timeline = state.timelines[timelineId] ?? createEmptyTimeline();
-          const entries = processPage(statuses, hasMore);
+          const entries = processPage(statuses);
 
-          if (initialFetch) timeline.entries = [];
-          else if (timeline.entries.at(-1)?.type === 'page-end') timeline.entries.pop();
-          timeline.entries.push(...entries);
+          if (initialFetch) timeline.entries = entries;
+          else timeline.entries.push(...entries);
           timeline.isPending = false;
           timeline.isFetching = false;
+          if (typeof hasMore === 'boolean') {
+            timeline.hasNextPage = hasMore;
+            const oldestStatus = statuses.at(-1);
+            if (oldestStatus) timeline.oldestStatusId = oldestStatus.id;
+          }
           state.timelines[timelineId] = timeline;
         }),
       receiveStreamingStatus: (timelineId, status) => {
@@ -169,10 +161,11 @@ const useTimelinesStore = create<State>()(
       },
       setLoading: (timelineId, isFetching) =>
         set((state) => {
-          const timeline = (state.timelines[timelineId] ??= createEmptyTimeline());
+          const timeline = state.timelines[timelineId] ?? createEmptyTimeline();
 
           timeline.isFetching = isFetching;
           if (!isFetching) timeline.isPending = false;
+          state.timelines[timelineId] = timeline;
         }),
       dequeueEntries: (timelineId) =>
         set((state) => {
@@ -180,7 +173,7 @@ const useTimelinesStore = create<State>()(
 
           if (!timeline || timeline.queuedEntries.length === 0) return;
 
-          const processedEntries = processPage(timeline.queuedEntries, false);
+          const processedEntries = processPage(timeline.queuedEntries);
 
           timeline.entries.unshift(...processedEntries);
           timeline.queuedEntries = [];
@@ -196,6 +189,8 @@ const createEmptyTimeline = (): TimelineData => ({
   queuedCount: 0,
   isFetching: false,
   isPending: true,
+  hasNextPage: true,
+  oldestStatusId: undefined,
 });
 
 const emptyTimeline = createEmptyTimeline();

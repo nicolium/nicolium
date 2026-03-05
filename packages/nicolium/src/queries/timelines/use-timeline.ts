@@ -38,11 +38,9 @@ const useTimeline = (timelineId: string, fetcher: TimelineFetcher, streamConfig?
 
   const fetchNextPage = useCallback(async () => {
     timelineActions.setLoading(timelineId, true);
-    const lastEntry = timeline.entries.at(-1);
-    if (!lastEntry || lastEntry.type !== 'page-end') return;
 
     try {
-      const response = await fetcher({ max_id: lastEntry.minId });
+      const response = await fetcher({ max_id: timeline.oldestStatusId });
 
       importEntities({ statuses: response.items });
 
@@ -50,7 +48,7 @@ const useTimeline = (timelineId: string, fetcher: TimelineFetcher, streamConfig?
     } catch (error) {
       //
     }
-  }, [timelineId, timeline.entries]);
+  }, [timelineId, timeline.oldestStatusId]);
 
   const dequeueEntries = useCallback(() => {
     timelineActions.dequeueEntries(timelineId);

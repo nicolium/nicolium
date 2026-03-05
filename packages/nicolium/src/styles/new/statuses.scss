@@ -307,6 +307,16 @@
   }
 }
 
-.⁂-timeline-status--connected-bottom .status__content-wrapper {
-  padding-left: 54px;
+.⁂-timeline-status {
+  &--connected-bottom .status__content-wrapper {
+    padding-left: 54px;
+  }
+
+  &:not(.⁂-timeline-status--connected-bottom) {
+    @apply border-b border-solid border-gray-200 dark:border-gray-800;
+  }
+}
+
+div:last-child > .⁂-timeline-status {
+  @apply border-b-0;
 }

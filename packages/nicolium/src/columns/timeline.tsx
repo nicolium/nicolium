@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import React, { useRef } from 'react';
 import { defineMessages, FormattedList, FormattedMessage } from 'react-intl';
 
-import LoadMore from '@/components/load-more';
 import ScrollTopButton from '@/components/scroll-top-button';
 import ScrollableList from '@/components/scrollable-list';
 import Status, { StatusFollowedTagInfo } from '@/components/statuses/status';
@@ -177,7 +176,6 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props): React.JSX.Element => 
     <div
       className={clsx('⁂-timeline-status relative', {
         '⁂-timeline-status--connected-bottom': isConnectedBottom,
-        'border-b border-solid border-gray-200 dark:border-gray-800': !isConnectedBottom,
         '⁂-timeline-status--connected-top': isConnectedTop,
       })}
     >
@@ -206,8 +204,16 @@ interface ITimeline {
 const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
   const node = useRef<VirtuosoHandle | null>(null);
 
-  const { timelineId, entries, queuedCount, fetchNextPage, dequeueEntries, isFetching, isPending } =
-    query;
+  const {
+    timelineId,
+    entries,
+    queuedCount,
+    fetchNextPage,
+    dequeueEntries,
+    isFetching,
+    isPending,
+    hasNextPage,
+  } = query;
 
   const handleMoveUp = (index: number) =>
     selectChild(index - 1, node, document.getElementById('status-list') ?? undefined);
@@ -239,13 +245,6 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
         />
       );
     }
-    if ((entry.type === 'page-end' || entry.type === 'page-start') && !isFetching) {
-      return (
-        <div className='m-4'>
-          <LoadMore key='load-more' onClick={fetchNextPage} />
-        </div>
-      );
-    }
   };
 
   return (
@@ -266,7 +265,8 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
         placeholderComponent={() => <PlaceholderTimelineStatus />}
         placeholderCount={20}
         ref={node}
-        hasMore
+        hasMore={hasNextPage}
+        onLoadMore={fetchNextPage}
       >
         {(entries || []).map(renderEntry)}
       </ScrollableList>
