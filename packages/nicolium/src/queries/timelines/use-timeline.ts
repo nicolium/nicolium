@@ -57,8 +57,8 @@ const useTimeline = (timelineId: string, fetcher: TimelineFetcher, streamConfig?
   }, [timelineId]);
 
   return useMemo(
-    () => ({ ...timeline, fetchNextPage, dequeueEntries }),
-    [timeline, fetchNextPage, dequeueEntries],
+    () => ({ ...timeline, timelineId, fetchNextPage, dequeueEntries }),
+    [timeline, timelineId, fetchNextPage, dequeueEntries],
   );
 };
 

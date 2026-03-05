@@ -1,15 +1,21 @@
+import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useRef } from 'react';
-import { defineMessages } from 'react-intl';
+import { defineMessages, FormattedList, FormattedMessage } from 'react-intl';
 
 import LoadMore from '@/components/load-more';
 import ScrollTopButton from '@/components/scroll-top-button';
 import ScrollableList from '@/components/scrollable-list';
-import Status from '@/components/statuses/status';
+import Status, { StatusFollowedTagInfo } from '@/components/statuses/status';
+import StatusInfo from '@/components/statuses/status-info';
 import Tombstone from '@/components/statuses/tombstone';
+import Icon from '@/components/ui/icon';
 import Portal from '@/components/ui/portal';
+import Emojify from '@/features/emoji/emojify';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
-import { useStatus } from '@/queries/statuses/use-status';
+import { useFeatures } from '@/hooks/use-features';
+import { useAccounts } from '@/queries/accounts/use-accounts';
+import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
 import {
   useAntennaTimeline,
   useBubbleTimeline,
@@ -44,8 +50,90 @@ const PlaceholderTimelineStatus = () => (
   </div>
 );
 
+interface ITimelineStatusInfo {
+  status: SelectedStatus;
+  rebloggedBy: Array<string>;
+  timelineId: string;
+}
+
+const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({ status, rebloggedBy, timelineId }) => {
+  const features = useFeatures();
+  const isReblogged = rebloggedBy.length > 0;
+
+  const { data: accounts } = useAccounts(rebloggedBy);
+
+  if (isReblogged) {
+    const renderedAccounts = accounts.slice(0, 2).map(
+      (account) =>
+        !!account && (
+          <Link
+            key={account.acct}
+            to='/@{$username}'
+            params={{ username: account.acct }}
+            className='hover:underline'
+          >
+            <bdi className='truncate'>
+              <strong className='text-gray-800 dark:text-gray-200'>
+                <Emojify text={account.display_name} emojis={account.emojis} />
+              </strong>
+            </bdi>
+          </Link>
+        ),
+    );
+
+    if (accounts.length > 2) {
+      renderedAccounts.push(
+        <FormattedMessage
+          id='notification.more'
+          defaultMessage='{count, plural, one {# other} other {# others}}'
+          values={{ count: accounts.length - renderedAccounts.length }}
+        />,
+      );
+    }
+
+    const values = {
+      name: <FormattedList type='conjunction' value={renderedAccounts} />,
+      count: accounts.length,
+    };
+
+    return (
+      <StatusInfo
+        className='mt-4'
+        avatarSize={42}
+        icon={
+          <Icon
+            src={require('@phosphor-icons/core/regular/repeat.svg')}
+            className='size-4 text-green-600'
+            aria-hidden
+          />
+        }
+        text={
+          // status.visibility === 'private' ? (
+          //   <FormattedMessage
+          //     id='status.reblogged_by_private'
+          //     defaultMessage='{name} reposted to followers'
+          //     values={values}
+          //   />
+          // ) : (
+          <FormattedMessage
+            id='status.reblogged_by'
+            defaultMessage='{name} reposted'
+            values={values}
+          />
+          // )
+        }
+      />
+    );
+  }
+  if (timelineId.split(':')[0] === 'home' && features.followHashtags) {
+    return <StatusFollowedTagInfo className='mt-4' status={status} avatarSize={42} />;
+  }
+};
+
 interface ITimelineStatus {
   id: string;
+  rebloggedBy: Array<string>;
+  timelineId: string;
   contextType?: FilterContextType;
   isConnectedTop?: boolean;
   isConnectedBottom?: boolean;
@@ -92,6 +180,13 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props): React.JSX.Element => 
         '⁂-timeline-status--connected-top': isConnectedTop,
       })}
     >
+      {statusQuery.data && (
+        <TimelineStatusInfo
+          status={statusQuery.data!}
+          rebloggedBy={props.rebloggedBy}
+          timelineId={props.timelineId}
+        />
+      )}
       {renderConnector()}
       {statusQuery.isPending ? (
         <PlaceholderStatus variant='slim' />
@@ -110,7 +205,8 @@ interface ITimeline {
 const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
   const node = useRef<VirtuosoHandle | null>(null);
 
-  const { entries, queuedCount, fetchNextPage, dequeueEntries, isFetching, isPending } = query;
+  const { timelineId, entries, queuedCount, fetchNextPage, dequeueEntries, isFetching, isPending } =
+    query;
 
   const handleMoveUp = (index: number) =>
     selectChild(index - 1, node, document.getElementById('status-list') ?? undefined);
@@ -134,6 +230,8 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
           contextType={contextType}
           onMoveUp={() => handleMoveUp(index)}
           onMoveDown={() => handleMoveDown(index)}
+          rebloggedBy={entry.rebloggedBy}
+          timelineId={timelineId}
           // contextType={timelineId}
           // showGroup={showGroup}
           // variant={divideType === 'border' ? 'slim' : 'rounded'}
