@@ -31,7 +31,7 @@ type TimelineEntry =
 
 interface TimelineData {
   entries: Array<TimelineEntry>;
-  queuedEntries: Array<TimelineEntry>;
+  queuedEntries: Array<Status>;
   queuedCount: number;
   isFetching: boolean;
   isPending: boolean;
@@ -141,11 +141,7 @@ const useTimelinesStore = create<State>()(
           if (timeline.entries.some((entry) => entry.type === 'status' && entry.id === status.id))
             return;
 
-          timeline.queuedEntries.unshift({
-            type: 'status',
-            id: status.id,
-            rebloggedBy: [],
-          });
+          timeline.queuedEntries.unshift(status);
           timeline.queuedCount += 1;
         });
       },
@@ -159,7 +155,7 @@ const useTimelinesStore = create<State>()(
               timeline.entries.splice(entryIndex, 1);
             }
             const queuedEntryIndex = timeline.queuedEntries.findIndex(
-              (entry) => entry.type === 'status' && entry.id === statusId,
+              (queuedStatus) => queuedStatus.id === statusId,
             );
             if (queuedEntryIndex !== -1) {
               timeline.queuedEntries.splice(queuedEntryIndex, 1);
@@ -183,7 +179,9 @@ const useTimelinesStore = create<State>()(
 
           if (!timeline || timeline.queuedEntries.length === 0) return;
 
-          timeline.entries.unshift(...timeline.queuedEntries);
+          const processedEntries = processPage(timeline.queuedEntries, false);
+
+          timeline.entries.unshift(...processedEntries);
           timeline.queuedEntries = [];
           timeline.queuedCount = 0;
         }),
