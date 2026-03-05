@@ -255,7 +255,12 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
             onClick={handleOnClose}
           />
 
-          <div role='dialog' className='⁂-modal-root__container'>
+          <div
+            role={type === 'CONFIRM' ? 'alertdialog' : 'dialog'}
+            className='⁂-modal-root__container'
+            aria-modal
+            aria-labelledby='modal-title'
+          >
             {children}
           </div>
         </>
