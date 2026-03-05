@@ -223,7 +223,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
       // HACK: using the first index can be buggy.
       // Track the second item instead, unless the endIndex comes before it (eg one 1 item in view).
       topIndex.current = Math.min(range.startIndex + 1, range.endIndex);
-      onTopItemChanged?.(topIndex.current);
+      onTopItemChanged?.(range.startIndex);
       handleScroll();
     };
 

@@ -13,6 +13,7 @@ import Portal from '@/components/ui/portal';
 import Emojify from '@/features/emoji/emojify';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import PendingStatus from '@/features/ui/components/pending-status';
+import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccounts } from '@/queries/accounts/use-accounts';
 import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
@@ -305,9 +306,26 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public', ...props
 };
 
 const HomeTimelineColumn: React.FC<IBaseTimeline> = (props) => {
-  const timelineQuery = useHomeTimeline();
+  const me = useAppSelector((state) => state.me);
+  const marker = `nicolium:${me}:homeTimelinePosition`;
+  const restoredPosition = useRef(localStorage.getItem(marker));
 
-  return <Timeline query={timelineQuery} contextType='home' {...props} />;
+  const timelineQuery = useHomeTimeline(undefined, restoredPosition.current || undefined);
+
+  const handleTopItemChanged = (index: number) => {
+    const entry = timelineQuery.entries[index];
+    if (!entry || entry.type !== 'status') return;
+    localStorage.setItem(marker, entry.originalId);
+  };
+
+  return (
+    <Timeline
+      query={timelineQuery}
+      contextType='home'
+      onTopItemChanged={handleTopItemChanged}
+      {...props}
+    />
+  );
 };
 
 interface IPublicTimelineColumn extends IBaseTimeline {
