@@ -13,15 +13,11 @@ import Timeline from '@/features/ui/components/timeline';
 import { groupTimelineRoute } from '@/features/ui/router';
 import { ComposeForm } from '@/features/ui/util/async-components';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useGroupQuery } from '@/queries/groups/use-group';
-import { makeGetStatusIds } from '@/selectors';
 import { useComposeActions, useUploadCompose } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
-
-const getStatusIds = makeGetStatusIds();
 
 interface IGroupTimeline {
   groupId: string;
@@ -29,10 +25,6 @@ interface IGroupTimeline {
 
 const GroupTimeline: React.FC<IGroupTimeline> = ({ groupId }) => {
   const dispatch = useAppDispatch();
-
-  const featuredStatusIds = useAppSelector((state) =>
-    getStatusIds(state, { type: `group:${groupId}:pinned` }),
-  );
 
   const handleLoadMore = () => {
     dispatch(fetchGroupTimeline(groupId, {}, true));
@@ -57,7 +49,6 @@ const GroupTimeline: React.FC<IGroupTimeline> = ({ groupId }) => {
       }
       emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
       showGroup={false}
-      featuredStatusIds={featuredStatusIds}
     />
   );
 };
