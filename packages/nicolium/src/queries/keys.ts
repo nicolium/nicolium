@@ -375,7 +375,10 @@ const notifications = {
 
 const markers = {
   root: ['markers'] as const,
-  notifications: ['markers', 'notifications'] as TaggedKey<['markers', 'notifications'], Marker>,
+  timeline: (timeline: 'home' | 'notifications') => {
+    const key = ['markers', timeline] as const;
+    return key as TaggedKey<typeof key, Marker>;
+  },
 };
 
 const search = {

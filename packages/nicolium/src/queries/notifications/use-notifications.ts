@@ -149,21 +149,6 @@ const useNotification = (notification: NotificationGroup) => {
   }, [notification, status, target, accounts.data]);
 };
 
-const usePrefetchNotificationsMarker = () => {
-  const client = useClient();
-  const queryClient = useQueryClient();
-  const { me } = useLoggedIn();
-
-  useEffect(() => {
-    if (!me) return;
-    queryClient.prefetchQuery({
-      queryKey: queryKeys.markers.notifications,
-      queryFn: async () =>
-        (await client.timelines.getMarkers(['notifications'])).notifications ?? null,
-    });
-  }, [me]);
-};
-
 const useProcessStreamNotification = () => {
   const intl = useIntl();
   const { data: filters = [] } = useFiltersByContext('notifications');
@@ -261,7 +246,7 @@ const useMarkNotificationsReadMutation = () => {
     mutationFn: async (lastReadId?: string | null) => {
       if (!lastReadId) return;
 
-      const currentMarker = queryClient.getQueryData(queryKeys.markers.notifications);
+      const currentMarker = queryClient.getQueryData(queryKeys.markers.timeline('notifications'));
       if (currentMarker && compareId(currentMarker.last_read_id, lastReadId) >= 0) {
         return;
       }
@@ -274,7 +259,10 @@ const useMarkNotificationsReadMutation = () => {
     },
     onSuccess: (markers) => {
       if (markers?.notifications) {
-        queryClient.setQueryData(queryKeys.markers.notifications, markers.notifications);
+        queryClient.setQueryData(
+          queryKeys.markers.timeline('notifications'),
+          markers.notifications,
+        );
       }
     },
   });
@@ -359,6 +347,5 @@ export {
   useNotification,
   useNotificationsUnreadCount,
   usePrefetchNotifications,
-  usePrefetchNotificationsMarker,
   useProcessStreamNotification,
 };

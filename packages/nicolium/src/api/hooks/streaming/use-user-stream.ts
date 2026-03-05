@@ -162,12 +162,16 @@ const useUserStream = () => {
       case 'announcement.delete':
         deleteAnnouncement(event.payload);
         break;
-      case 'marker':
-        queryClient.setQueryData(
-          queryKeys.markers.notifications,
-          event.payload.notifications ?? null,
-        );
+      case 'marker': {
+        for (const timeline in event.payload) {
+          queryClient.setQueryData(
+            queryKeys.markers.timeline(timeline as 'home' | 'notifications'),
+            event.payload[timeline] ?? null,
+          );
+        }
+
         break;
+      }
     }
   }, []);
 

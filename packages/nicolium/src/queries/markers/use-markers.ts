@@ -1,20 +1,46 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 
 import { queryKeys } from '../keys';
 
-const useNotificationsMarker = () => {
+const useMarker = (timeline: 'home' | 'notifications') => {
   const client = useClient();
   const { me } = useLoggedIn();
 
   return useQuery({
-    queryKey: queryKeys.markers.notifications,
-    queryFn: async () =>
-      (await client.timelines.getMarkers(['notifications'])).notifications ?? null,
+    queryKey: queryKeys.markers.timeline(timeline),
+    queryFn: async () => (await client.timelines.getMarkers([timeline]))[timeline] ?? null,
     enabled: !!me,
   });
 };
 
-export { useNotificationsMarker };
+const useNotificationsMarker = () => useMarker('notifications');
+
+const useHomeTimelineMarker = () => useMarker('home');
+
+const usePrefetchMarker = (timeline: 'home' | 'notifications') => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+  const { me } = useLoggedIn();
+
+  useEffect(() => {
+    if (!me) return;
+    queryClient.prefetchQuery({
+      queryKey: queryKeys.markers.timeline(timeline),
+      queryFn: async () => (await client.timelines.getMarkers([timeline]))[timeline] ?? null,
+    });
+  }, [me, timeline]);
+};
+
+const usePrefetchHomeTimelineMarker = () => usePrefetchMarker('home');
+const usePrefetchNotificationsMarker = () => usePrefetchMarker('notifications');
+
+export {
+  useNotificationsMarker,
+  useHomeTimelineMarker,
+  usePrefetchHomeTimelineMarker,
+  usePrefetchNotificationsMarker,
+};
