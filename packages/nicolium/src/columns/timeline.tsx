@@ -517,18 +517,48 @@ const Timeline: React.FC<ITimeline> = ({
   );
 };
 
+const savePosition = (me: string, entry: TimelineEntry, index: number) => {
+  if (entry.type !== 'status') return;
+  return localStorage.setItem(
+    `nicolium:${me}:homeTimelinePosition`,
+    `${entry.originalId}|${index}|${Date.now()}`,
+  );
+};
+
+const getRestoredPosition = (me: string) => {
+  const markerKey = `nicolium:${me}:homeTimelinePosition`;
+  const marker = localStorage.getItem(markerKey);
+  if (!marker) return null;
+
+  return marker.split('|');
+};
+
 const HomeTimelineColumn: React.FC<IBaseTimeline> = (props) => {
   const me = useAppSelector((state) => state.me);
-  const marker = `nicolium:${me}:homeTimelinePosition`;
-  const restoredPosition = useRef(localStorage.getItem(marker));
 
-  const timelineQuery = useHomeTimeline(undefined, restoredPosition.current || undefined);
+  const maxId = useMemo(() => {
+    if (!me) return undefined;
+
+    const position = getRestoredPosition(me);
+
+    if (!position) return undefined;
+
+    if (position[1] === '0') {
+      const timeDifference = Date.now() - parseInt(position[2], 10);
+
+      if (timeDifference > 15 * 60 * 1000) {
+        return position[0];
+      }
+      return undefined;
+    }
+    return position[0];
+  }, []);
+
+  const timelineQuery = useHomeTimeline(undefined, maxId);
 
   const handleTopItemChanged = (index: number) => {
     const entry = timelineQuery.entries[index];
-    if (index === 0) return localStorage.removeItem(marker);
-    if (!entry || entry.type !== 'status') return;
-    localStorage.setItem(marker, entry.originalId);
+    if (me) savePosition(me, entry, index);
   };
 
   return (
