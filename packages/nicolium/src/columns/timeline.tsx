@@ -430,6 +430,7 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public', ...props
       <ScrollableList
         id='status-list'
         key='scrollable-list'
+        scrollKey={timelineId}
         isLoading={isFetching}
         showLoading={isPending}
         placeholderComponent={() => <PlaceholderTimelineStatus />}
