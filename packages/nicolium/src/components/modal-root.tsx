@@ -260,6 +260,7 @@ const ModalRoot: React.FC<IModalRoot> = ({ children, onCancel, onClose, type, mo
             className='⁂-modal-root__container'
             aria-modal
             aria-labelledby='modal-title'
+            aria-describedby='modal-body'
           >
             {children}
           </div>

@@ -140,7 +140,9 @@ const Modal = React.forwardRef<HTMLDivElement, IModal>(
         )}
 
         <div className='⁂-modal__body'>
-          <div className='⁂-modal__children'>{children}</div>
+          <div id='modal-body' className='⁂-modal__children'>
+            {children}
+          </div>
 
           {confirmationAction && (
             <div className='⁂-modal__actions' data-testid='modal-actions'>
