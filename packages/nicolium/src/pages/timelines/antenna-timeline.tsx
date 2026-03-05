@@ -48,8 +48,6 @@ const AntennaTimeline: React.FC<IAntennaTimeline> = ({ antennaId }) => {
         id='empty_column.antenna'
         defaultMessage='There is nothing in this antenna yet. When posts matching the criteria will be created, they will appear here.'
       />
-      {/* <br /><br />
-      <Button onClick={handleEditClick}><FormattedMessage id='circle.click_to_add' defaultMessage='Click here to add people' /></Button> */}
     </div>
   );
 

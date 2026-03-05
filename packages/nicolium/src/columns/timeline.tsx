@@ -4,7 +4,7 @@ import React, { useRef } from 'react';
 import { defineMessages, FormattedList, FormattedMessage } from 'react-intl';
 
 import ScrollTopButton from '@/components/scroll-top-button';
-import ScrollableList from '@/components/scrollable-list';
+import ScrollableList, { type IScrollableList } from '@/components/scrollable-list';
 import Status, { StatusFollowedTagInfo } from '@/components/statuses/status';
 import StatusInfo from '@/components/statuses/status-info';
 import Tombstone from '@/components/statuses/tombstone';
@@ -210,7 +210,9 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props): React.JSX.Element => 
   );
 };
 
-interface ITimeline {
+type IBaseTimeline = Pick<IScrollableList, 'emptyMessageIcon' | 'emptyMessageText'>;
+
+interface ITimeline extends IBaseTimeline {
   query: ReturnType<typeof useHomeTimeline>;
   contextType?: FilterContextType;
 }
@@ -288,13 +290,13 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
   );
 };
 
-const HomeTimelineColumn = () => {
+const HomeTimelineColumn: React.FC<IBaseTimeline> = () => {
   const timelineQuery = useHomeTimeline();
 
   return <Timeline query={timelineQuery} contextType='home' />;
 };
 
-interface IPublicTimelineColumn {
+interface IPublicTimelineColumn extends IBaseTimeline {
   local?: boolean;
   remote?: boolean;
   instance?: string;
@@ -306,7 +308,7 @@ const PublicTimelineColumn: React.FC<IPublicTimelineColumn> = (params) => {
   return <Timeline query={timelineQuery} contextType='public' />;
 };
 
-interface IHashtagTimelineColumn {
+interface IHashtagTimelineColumn extends IBaseTimeline {
   hashtag: string;
 }
 
@@ -316,7 +318,7 @@ const HashtagTimelineColumn: React.FC<IHashtagTimelineColumn> = ({ hashtag }) =>
   return <Timeline query={timelineQuery} contextType='public' />;
 };
 
-interface ILinkTimelineColumn {
+interface ILinkTimelineColumn extends IBaseTimeline {
   url: string;
 }
 
@@ -326,7 +328,7 @@ const LinkTimelineColumn: React.FC<ILinkTimelineColumn> = ({ url }) => {
   return <Timeline query={timelineQuery} contextType='public' />;
 };
 
-interface IListTimelineColumn {
+interface IListTimelineColumn extends IBaseTimeline {
   listId: string;
 }
 
@@ -336,7 +338,7 @@ const ListTimelineColumn: React.FC<IListTimelineColumn> = ({ listId }) => {
   return <Timeline query={timelineQuery} contextType='home' />;
 };
 
-interface IGroupTimelineColumn {
+interface IGroupTimelineColumn extends IBaseTimeline {
   groupId: string;
 }
 
@@ -346,13 +348,13 @@ const GroupTimelineColumn: React.FC<IGroupTimelineColumn> = ({ groupId }) => {
   return <Timeline query={timelineQuery} contextType='public' />;
 };
 
-const BubbleTimelineColumn = () => {
+const BubbleTimelineColumn: React.FC<IBaseTimeline> = () => {
   const timelineQuery = useBubbleTimeline();
 
   return <Timeline query={timelineQuery} contextType='public' />;
 };
 
-interface IAntennaTimelineColumn {
+interface IAntennaTimelineColumn extends IBaseTimeline {
   antennaId: string;
 }
 
@@ -362,7 +364,7 @@ const AntennaTimelineColumn: React.FC<IAntennaTimelineColumn> = ({ antennaId }) 
   return <Timeline query={timelineQuery} contextType='public' />;
 };
 
-interface ICircleTimelineColumn {
+interface ICircleTimelineColumn extends IBaseTimeline {
   circleId: string;
 }
 
@@ -372,13 +374,13 @@ const CircleTimelineColumn: React.FC<ICircleTimelineColumn> = ({ circleId }) => 
   return <Timeline query={timelineQuery} contextType='public' />;
 };
 
-const WrenchedTimelineColumn = () => {
+const WrenchedTimelineColumn: React.FC<IBaseTimeline> = () => {
   const timelineQuery = useWrenchedTimeline();
 
   return <Timeline query={timelineQuery} contextType='public' />;
 };
 
-interface IAccountTimelineColumn {
+interface IAccountTimelineColumn extends IBaseTimeline {
   accountId: string;
   excludeReplies?: boolean;
 }
