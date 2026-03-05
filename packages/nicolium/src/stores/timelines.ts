@@ -82,7 +82,10 @@ const processPage = (statuses: Array<Status>, hasMore: boolean): Array<TimelineE
       );
 
       if (existingEntry?.type === 'status') {
-        existingEntry.rebloggedBy.push(status.account.id);
+        // entry connection stuff might happen to call processStatus on the same status multiple times
+        if (!existingEntry.rebloggedBy.includes(status.account.id)) {
+          existingEntry.rebloggedBy.push(status.account.id);
+        }
       } else {
         timelinePage.push({
           type: 'status',
