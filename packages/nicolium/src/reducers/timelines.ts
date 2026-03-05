@@ -5,7 +5,6 @@ import {
   ACCOUNT_MUTE_SUCCESS,
   type AccountsAction,
 } from '@/actions/accounts';
-import { PIN_SUCCESS, UNPIN_SUCCESS, type InteractionsAction } from '@/actions/interactions';
 import {
   STATUS_CREATE_REQUEST,
   STATUS_CREATE_SUCCESS,
@@ -130,12 +129,6 @@ const expandNormalizedTimeline = (
     timeline.loaded = true;
 
     if (!next) timeline.hasMore = false;
-
-    // Pinned timelines can be replaced entirely
-    if (timelineId.endsWith(':pinned')) {
-      timeline.items = newIds;
-      return;
-    }
 
     if (newIds.length) {
       if (pos === 'end') {
@@ -343,7 +336,7 @@ const handleExpandFail = (state: State, timelineId: string) => {
 
 const timelines = (
   state: State = initialState,
-  action: AccountsAction | InteractionsAction | StatusesAction | TimelineAction,
+  action: AccountsAction | StatusesAction | TimelineAction,
 ): State => {
   switch (action.type) {
     case STATUS_CREATE_REQUEST:
@@ -403,18 +396,6 @@ const timelines = (
     case TIMELINE_SCROLL_TOP:
       return create(state, (draft) => {
         updateTop(draft, action.timeline, action.top);
-      });
-    case PIN_SUCCESS:
-      return create(state, (draft) => {
-        updateTimeline(draft, `account:${action.accountId}:with_replies:pinned`, (timeline) => {
-          timeline.items = [...new Set([action.statusId, ...timeline.items])];
-        });
-      });
-    case UNPIN_SUCCESS:
-      return create(state, (draft) => {
-        updateTimeline(draft, `account:${action.accountId}:with_replies:pinned`, (timeline) => {
-          timeline.items = timeline.items.filter((id) => id !== action.statusId);
-        });
       });
     default:
       return state;
