@@ -300,10 +300,10 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
   );
 };
 
-const HomeTimelineColumn: React.FC<IBaseTimeline> = () => {
+const HomeTimelineColumn: React.FC<IBaseTimeline> = (props) => {
   const timelineQuery = useHomeTimeline();
 
-  return <Timeline query={timelineQuery} contextType='home' />;
+  return <Timeline query={timelineQuery} contextType='home' {...props} />;
 };
 
 interface IPublicTimelineColumn extends IBaseTimeline {
@@ -312,82 +312,87 @@ interface IPublicTimelineColumn extends IBaseTimeline {
   instance?: string;
 }
 
-const PublicTimelineColumn: React.FC<IPublicTimelineColumn> = (params) => {
-  const timelineQuery = usePublicTimeline(params);
+const PublicTimelineColumn: React.FC<IPublicTimelineColumn> = ({
+  local,
+  remote,
+  instance,
+  ...props
+}) => {
+  const timelineQuery = usePublicTimeline({ local, remote, instance });
 
-  return <Timeline query={timelineQuery} contextType='public' />;
+  return <Timeline query={timelineQuery} contextType='public' {...props} />;
 };
 
 interface IHashtagTimelineColumn extends IBaseTimeline {
   hashtag: string;
 }
 
-const HashtagTimelineColumn: React.FC<IHashtagTimelineColumn> = ({ hashtag }) => {
+const HashtagTimelineColumn: React.FC<IHashtagTimelineColumn> = ({ hashtag, ...props }) => {
   const timelineQuery = useHashtagTimeline(hashtag);
 
-  return <Timeline query={timelineQuery} contextType='public' />;
+  return <Timeline query={timelineQuery} contextType='public' {...props} />;
 };
 
 interface ILinkTimelineColumn extends IBaseTimeline {
   url: string;
 }
 
-const LinkTimelineColumn: React.FC<ILinkTimelineColumn> = ({ url }) => {
+const LinkTimelineColumn: React.FC<ILinkTimelineColumn> = ({ url, ...props }) => {
   const timelineQuery = useLinkTimeline(url);
 
-  return <Timeline query={timelineQuery} contextType='public' />;
+  return <Timeline query={timelineQuery} contextType='public' {...props} />;
 };
 
 interface IListTimelineColumn extends IBaseTimeline {
   listId: string;
 }
 
-const ListTimelineColumn: React.FC<IListTimelineColumn> = ({ listId }) => {
+const ListTimelineColumn: React.FC<IListTimelineColumn> = ({ listId, ...props }) => {
   const timelineQuery = useListTimeline(listId);
 
-  return <Timeline query={timelineQuery} contextType='home' />;
+  return <Timeline query={timelineQuery} contextType='home' {...props} />;
 };
 
 interface IGroupTimelineColumn extends IBaseTimeline {
   groupId: string;
 }
 
-const GroupTimelineColumn: React.FC<IGroupTimelineColumn> = ({ groupId }) => {
+const GroupTimelineColumn: React.FC<IGroupTimelineColumn> = ({ groupId, ...props }) => {
   const timelineQuery = useGroupTimeline(groupId);
 
-  return <Timeline query={timelineQuery} contextType='public' />;
+  return <Timeline query={timelineQuery} contextType='public' {...props} />;
 };
 
-const BubbleTimelineColumn: React.FC<IBaseTimeline> = () => {
+const BubbleTimelineColumn: React.FC<IBaseTimeline> = (props) => {
   const timelineQuery = useBubbleTimeline();
 
-  return <Timeline query={timelineQuery} contextType='public' />;
+  return <Timeline query={timelineQuery} contextType='public' {...props} />;
 };
 
 interface IAntennaTimelineColumn extends IBaseTimeline {
   antennaId: string;
 }
 
-const AntennaTimelineColumn: React.FC<IAntennaTimelineColumn> = ({ antennaId }) => {
+const AntennaTimelineColumn: React.FC<IAntennaTimelineColumn> = ({ antennaId, ...props }) => {
   const timelineQuery = useAntennaTimeline(antennaId);
 
-  return <Timeline query={timelineQuery} contextType='public' />;
+  return <Timeline query={timelineQuery} contextType='public' {...props} />;
 };
 
 interface ICircleTimelineColumn extends IBaseTimeline {
   circleId: string;
 }
 
-const CircleTimelineColumn: React.FC<ICircleTimelineColumn> = ({ circleId }) => {
+const CircleTimelineColumn: React.FC<ICircleTimelineColumn> = ({ circleId, ...props }) => {
   const timelineQuery = useCircleTimeline(circleId);
 
-  return <Timeline query={timelineQuery} contextType='public' />;
+  return <Timeline query={timelineQuery} contextType='public' {...props} />;
 };
 
-const WrenchedTimelineColumn: React.FC<IBaseTimeline> = () => {
+const WrenchedTimelineColumn: React.FC<IBaseTimeline> = (props) => {
   const timelineQuery = useWrenchedTimeline();
 
-  return <Timeline query={timelineQuery} contextType='public' />;
+  return <Timeline query={timelineQuery} contextType='public' {...props} />;
 };
 
 interface IAccountTimelineColumn extends IBaseTimeline {
@@ -398,10 +403,11 @@ interface IAccountTimelineColumn extends IBaseTimeline {
 const AccountTimelineColumn: React.FC<IAccountTimelineColumn> = ({
   accountId,
   excludeReplies = false,
+  ...props
 }) => {
   const timelineQuery = useAccountTimeline(accountId, { exclude_replies: excludeReplies });
 
-  return <Timeline query={timelineQuery} contextType='public' />;
+  return <Timeline query={timelineQuery} contextType='public' {...props} />;
 };
 
 export {
