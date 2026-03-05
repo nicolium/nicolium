@@ -83,7 +83,7 @@ const AccountTimelinePage: React.FC = () => {
   return settings.experimentalTimeline ? (
     <AccountTimelineColumn
       accountId={account.id}
-      excludeReplies={withReplies}
+      excludeReplies={!withReplies}
       // featuredStatusIds={showPins ? featuredStatusIds : undefined}
     />
   ) : (
