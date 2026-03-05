@@ -11,6 +11,7 @@ import { updateConversations } from '@/queries/conversations/use-conversations';
 import { queryKeys } from '@/queries/keys';
 import { useProcessStreamNotification } from '@/queries/notifications/use-notifications';
 import { useSettings } from '@/stores/settings';
+import { useTimelinesStore } from '@/stores/timelines';
 import { getUnreadChatsCount, updateChatListItem } from '@/utils/chats';
 import { play, soundCache } from '@/utils/sounds';
 
@@ -110,14 +111,19 @@ const useUserStream = () => {
 
   const listener = useCallback((event: StreamingEvent) => {
     switch (event.event) {
-      case 'update':
+      case 'update': {
+        const timelineId = getTimelineFromStream(event.stream);
         dispatch(processTimelineUpdate(getTimelineFromStream(event.stream), event.payload));
+        importEntities({ statuses: [event.payload] });
+        useTimelinesStore.getState().actions.receiveStreamingStatus(timelineId, event.payload);
         break;
+      }
       case 'status.update':
         importEntities({ statuses: [event.payload] });
         break;
       case 'delete':
         dispatch(deleteFromTimelines(event.payload));
+        useTimelinesStore.getState().actions.deleteStatus(event.payload);
         break;
       case 'notification':
         processStreamNotification(event.payload);

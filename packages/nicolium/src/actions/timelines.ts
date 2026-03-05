@@ -64,8 +64,6 @@ const processTimelineUpdate =
       return;
     }
 
-    importEntities({ statuses: [status] });
-
     if (shouldSkipQueue) {
       dispatch(updateTimeline(timeline, status.id));
     } else {

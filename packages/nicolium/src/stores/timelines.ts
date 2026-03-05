@@ -46,6 +46,8 @@ interface State {
       hasMore: boolean,
       initialFetch: boolean,
     ) => void;
+    receiveStreamingStatus: (timelineId: string, status: Status) => void;
+    deleteStatus: (statusId: string) => void;
     setLoading: (timelineId: string, isFetching: boolean) => void;
     dequeueEntries: (timelineId: string) => void;
   };
@@ -131,6 +133,41 @@ const useTimelinesStore = create<State>()(
           timeline.isFetching = false;
           state.timelines[timelineId] = timeline;
         }),
+      receiveStreamingStatus: (timelineId, status) => {
+        set((state) => {
+          const timeline = state.timelines[timelineId];
+          if (!timeline) return;
+
+          if (timeline.entries.some((entry) => entry.type === 'status' && entry.id === status.id))
+            return;
+
+          timeline.queuedEntries.unshift({
+            type: 'status',
+            id: status.id,
+            rebloggedBy: [],
+          });
+          timeline.queuedCount += 1;
+        });
+      },
+      deleteStatus: (statusId) => {
+        set((state) => {
+          for (const timeline of Object.values(state.timelines)) {
+            const entryIndex = timeline.entries.findIndex(
+              (entry) => entry.type === 'status' && entry.id === statusId,
+            );
+            if (entryIndex !== -1) {
+              timeline.entries.splice(entryIndex, 1);
+            }
+            const queuedEntryIndex = timeline.queuedEntries.findIndex(
+              (entry) => entry.type === 'status' && entry.id === statusId,
+            );
+            if (queuedEntryIndex !== -1) {
+              timeline.queuedEntries.splice(queuedEntryIndex, 1);
+              timeline.queuedCount = Math.max(timeline.queuedCount - 1, 0);
+            }
+          }
+        });
+      },
       setLoading: (timelineId, isFetching) =>
         set((state) => {
           const timeline = state.timelines[timelineId];
