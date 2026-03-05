@@ -186,6 +186,14 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props): React.JSX.Element => 
     );
   };
 
+  const connector = renderConnector();
+
+  const status = statusQuery.isPending ? (
+    <PlaceholderStatus variant='slim' />
+  ) : statusQuery.data ? (
+    <Status status={statusQuery.data!} variant='slim' {...props} />
+  ) : null;
+
   return (
     <div
       className={clsx('⁂-timeline-status relative', {
@@ -200,12 +208,14 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props): React.JSX.Element => 
           timelineId={props.timelineId}
         />
       )}
-      {renderConnector()}
-      {statusQuery.isPending ? (
-        <PlaceholderStatus variant='slim' />
-      ) : statusQuery.data ? (
-        <Status status={statusQuery.data!} variant='slim' {...props} />
-      ) : null}
+      {connector ? (
+        <div className='relative'>
+          {connector}
+          {status}
+        </div>
+      ) : (
+        status
+      )}
     </div>
   );
 };
