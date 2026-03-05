@@ -18,8 +18,7 @@ const AccountTimelinePage: React.FC = () => {
   const features = useFeatures();
 
   const { data: account, isPending } = useAccountLookup(username);
-
-  const { data: _featuredStatusIds } = usePinnedStatuses(account?.id || '');
+  const { data: featuredStatusIds } = usePinnedStatuses(account?.id || '');
 
   const isBlocked = account?.relationship?.blocked_by && !features.blockersVisible;
 
@@ -51,7 +50,7 @@ const AccountTimelinePage: React.FC = () => {
     <AccountTimelineColumn
       accountId={account.id}
       excludeReplies={!withReplies}
-      // featuredStatusIds={showPins ? featuredStatusIds : undefined}
+      featuredStatusIds={!withReplies ? featuredStatusIds : undefined}
       emptyMessageText={
         <FormattedMessage id='empty_column.account_timeline' defaultMessage='No posts here!' />
       }

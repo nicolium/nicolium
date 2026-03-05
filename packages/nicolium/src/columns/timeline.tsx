@@ -1,6 +1,6 @@
 import { Link } from '@tanstack/react-router';
 import clsx from 'clsx';
-import React, { useRef, useState } from 'react';
+import React, { useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
 import ScrollTopButton from '@/components/scroll-top-button';
@@ -56,6 +56,18 @@ const messages = defineMessages({
     defaultMessage: 'Time elapsed since the post before the gap.',
   },
 });
+
+const SkipPinned: React.FC<React.ComponentProps<'button'>> = ({ onClick }) => {
+  return (
+    <button className='⁂-skip-pinned' onClick={onClick}>
+      <Icon src={require('@phosphor-icons/core/regular/arrow-line-down.svg')} />
+
+      <p>
+        <FormattedMessage id='status.skip_pinned' defaultMessage='Skip pinned posts' />
+      </p>
+    </button>
+  );
+};
 
 const PlaceholderTimelineStatus = () => (
   <div className='⁂-timeline-status relative border-b border-solid border-gray-200 dark:border-gray-800'>
@@ -284,6 +296,7 @@ interface ITimelineStatus {
   isConnectedBottom?: boolean;
   onMoveUp?: (id: string) => void | boolean;
   onMoveDown?: (id: string) => void | boolean;
+  featured?: boolean;
 }
 
 /** Status with reply-connector in threads. */
@@ -354,14 +367,21 @@ const TimelineStatus: React.FC<ITimelineStatus> = (props): React.JSX.Element => 
 type IBaseTimeline = Pick<
   IScrollableList,
   'emptyMessageIcon' | 'emptyMessageText' | 'onTopItemChanged'
->;
+> & {
+  featuredStatusIds?: Array<string>;
+};
 
 interface ITimeline extends IBaseTimeline {
   query: ReturnType<typeof useHomeTimeline>;
   contextType?: FilterContextType;
 }
 
-const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public', ...props }) => {
+const Timeline: React.FC<ITimeline> = ({
+  query,
+  contextType = 'public',
+  featuredStatusIds,
+  ...props
+}) => {
   const node = useRef<VirtuosoHandle | null>(null);
 
   const {
@@ -376,16 +396,36 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public', ...props
     hasNextPage,
   } = query;
 
-  const handleMoveUp = (index: number) =>
+  const handleMoveUp = (index: number) => {
+    console.log(index);
     selectChild(index - 1, node, document.getElementById('status-list') ?? undefined);
+  };
 
-  const handleMoveDown = (index: number) =>
+  const handleMoveDown = (index: number) => {
+    console.log(index);
     selectChild(
       index + 1,
       node,
       document.getElementById('status-list') ?? undefined,
       entries.length,
     );
+  };
+
+  const handleSkipPinned = () => {
+    const skipPinned = () => {
+      selectChild(
+        featuredStatusIds?.length ?? 0,
+        node,
+        document.getElementById('status-list') ?? undefined,
+        (featuredStatusIds?.length ?? 0) + entries.length,
+        'start',
+      );
+    };
+
+    skipPinned();
+
+    setTimeout(() => skipPinned, 0);
+  };
 
   const renderEntry = (entry: TimelineEntry, index: number) => {
     if (entry.type === 'status') {
@@ -417,6 +457,34 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public', ...props
     }
   };
 
+  const renderedEntries = useMemo(() => {
+    const rendered = [];
+
+    if (featuredStatusIds && featuredStatusIds.length > 0) {
+      for (const id of featuredStatusIds) {
+        const index = rendered.length;
+        rendered.push(
+          <TimelineStatus
+            key={id}
+            id={id}
+            contextType={contextType}
+            onMoveUp={() => handleMoveUp(index)}
+            onMoveDown={() => handleMoveDown(index)}
+            rebloggedBy={[]}
+            timelineId={timelineId}
+            featured
+          />,
+        );
+      }
+    }
+
+    for (const entry of entries) {
+      rendered.push(renderEntry(entry, rendered.length));
+    }
+
+    return rendered;
+  }, [entries, contextType, timelineId, featuredStatusIds]);
+
   return (
     <>
       <Portal>
@@ -427,6 +495,9 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public', ...props
           liveRegionMessage={messages.queueLiveRegion}
         />
       </Portal>
+      {featuredStatusIds && featuredStatusIds.length > 3 && entries?.length > 0 && (
+        <SkipPinned onClick={handleSkipPinned} />
+      )}
       <ScrollableList
         id='status-list'
         key='scrollable-list'
@@ -440,7 +511,7 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public', ...props
         onLoadMore={fetchNextPage}
         {...props}
       >
-        {(entries || []).map(renderEntry)}
+        {renderedEntries}
       </ScrollableList>
     </>
   );
