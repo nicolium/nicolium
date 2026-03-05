@@ -166,9 +166,7 @@ const useTimelinesStore = create<State>()(
       },
       setLoading: (timelineId, isFetching) =>
         set((state) => {
-          const timeline = state.timelines[timelineId];
-
-          if (!timeline) return;
+          const timeline = (state.timelines[timelineId] ??= createEmptyTimeline());
 
           timeline.isFetching = isFetching;
           if (!isFetching) timeline.isPending = false;

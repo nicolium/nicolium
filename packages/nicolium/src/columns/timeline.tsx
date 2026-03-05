@@ -38,6 +38,12 @@ const messages = defineMessages({
   },
 });
 
+const PlaceholderTimelineStatus = () => (
+  <div className='⁂-timeline-status relative border-b border-solid border-gray-200 dark:border-gray-800'>
+    <PlaceholderStatus variant='slim' />
+  </div>
+);
+
 interface ITimelineStatus {
   id: string;
   contextType?: FilterContextType;
@@ -134,10 +140,10 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
         />
       );
     }
-    if (entry.type === 'page-end' || entry.type === 'page-start') {
+    if ((entry.type === 'page-end' || entry.type === 'page-start') && !isFetching) {
       return (
         <div className='m-4'>
-          <LoadMore key='load-more' onClick={fetchNextPage} disabled={isFetching} />
+          <LoadMore key='load-more' onClick={fetchNextPage} />
         </div>
       );
     }
@@ -158,17 +164,10 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
         key='scrollable-list'
         isLoading={isFetching}
         showLoading={isPending}
-        placeholderComponent={() => <PlaceholderStatus variant={'slim'} />}
+        placeholderComponent={() => <PlaceholderTimelineStatus />}
         placeholderCount={20}
         ref={node}
-        // className={className}
-        // listClassName={clsx('divide-y divide-solid divide-gray-200 dark:divide-gray-800', {
-        //   'divide-none': divideType !== 'border',
-        // })}
-        // itemClassName={clsx({
-        //   'pb-3': divideType !== 'border',
-        // })}
-        // {...other}
+        hasMore
       >
         {(entries || []).map(renderEntry)}
       </ScrollableList>
