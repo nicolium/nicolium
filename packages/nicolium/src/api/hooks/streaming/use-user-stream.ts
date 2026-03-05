@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 
 import { importEntities } from '@/actions/importer';
-import { deleteFromTimelines, processTimelineUpdate } from '@/actions/timelines';
 import { useStatContext } from '@/contexts/stat-context';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useLoggedIn } from '@/hooks/use-logged-in';
@@ -113,7 +112,6 @@ const useUserStream = () => {
     switch (event.event) {
       case 'update': {
         const timelineId = getTimelineFromStream(event.stream);
-        dispatch(processTimelineUpdate(getTimelineFromStream(event.stream), event.payload));
         importEntities({ statuses: [event.payload] });
         useTimelinesStore.getState().actions.receiveStreamingStatus(timelineId, event.payload);
         break;
@@ -122,7 +120,6 @@ const useUserStream = () => {
         importEntities({ statuses: [event.payload] });
         break;
       case 'delete':
-        dispatch(deleteFromTimelines(event.payload));
         useTimelinesStore.getState().actions.deleteStatus(event.payload);
         break;
       case 'notification':

@@ -5,7 +5,6 @@ import { Toaster } from 'react-hot-toast';
 
 import { fetchConfig } from '@/actions/admin';
 import { register as registerPushNotifications } from '@/actions/push-notifications/registerer';
-import { fetchHomeTimeline } from '@/actions/timelines';
 import { useUserStream } from '@/api/hooks/streaming/use-user-stream';
 import SidebarNavigation from '@/components/navigation/sidebar-navigation';
 import ThumbNavigation from '@/components/navigation/thumb-navigation';
@@ -90,8 +89,6 @@ const UI: React.FC = React.memo(() => {
     if (!account) return;
 
     prefetchCustomEmojis(client);
-
-    dispatch(fetchHomeTimeline());
 
     if (account.is_admin && features.pleromaAdminAccounts) {
       dispatch(fetchConfig());

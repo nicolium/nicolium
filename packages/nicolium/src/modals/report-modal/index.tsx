@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { submitReport, ReportableEntities } from '@/actions/reports';
-import { fetchAccountTimeline } from '@/actions/timelines';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import StatusContent from '@/components/statuses/status-content';
 import Modal from '@/components/ui/modal';
@@ -15,6 +14,7 @@ import { useInstance } from '@/hooks/use-instance';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useBlockAccountMutation } from '@/queries/accounts/use-relationship';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
+import { useAccountTimeline } from '@/queries/timelines/use-timelines';
 
 import ConfirmationStep from './steps/confirmation-step';
 import OtherActionsStep from './steps/other-actions-step';
@@ -230,11 +230,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
     }
   }, [currentStep]);
 
-  useEffect(() => {
-    if (account?.id) {
-      dispatch(fetchAccountTimeline(account.id, { exclude_replies: false }));
-    }
-  }, [account?.id]);
+  useAccountTimeline(accountId, { exclude_replies: false });
 
   if (!account) {
     return null;

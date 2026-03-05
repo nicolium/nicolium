@@ -1,8 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { fetchCircleTimeline } from '@/actions/timelines';
 import { CircleTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
 import MissingIndicator from '@/components/missing-indicator';
@@ -10,7 +9,6 @@ import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
 import { circleTimelineRoute } from '@/features/ui/router';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useCircle, useDeleteCircle } from '@/queries/accounts/use-circles';
 import { useModalsActions } from '@/stores/modals';
 
@@ -29,16 +27,11 @@ const CircleTimelinePage: React.FC = () => {
   const { circleId } = circleTimelineRoute.useParams();
 
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const { openModal } = useModalsActions();
   const navigate = useNavigate();
 
   const { data: circle, isFetching } = useCircle(circleId);
   const { mutate: deleteCircle } = useDeleteCircle();
-
-  useEffect(() => {
-    dispatch(fetchCircleTimeline(circleId));
-  }, [circleId]);
 
   const handleEditClick = () => {
     openModal('CIRCLE_EDITOR', { circleId });

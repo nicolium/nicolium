@@ -13,7 +13,6 @@ import { isLoggedIn } from '@/utils/auth';
 import { shouldHaveCard } from '@/utils/status';
 
 import { importEntities } from './importer';
-import { deleteFromTimelines } from './timelines';
 
 import type { NormalizedStatus as Status } from '@/normalizers/status';
 import type { AppDispatch, RootState } from '@/store';

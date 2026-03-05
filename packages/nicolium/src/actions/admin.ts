@@ -4,9 +4,8 @@ import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { useComposeStore } from '@/stores/compose';
 import { useModalsStore } from '@/stores/modals';
+import { useTimelinesStore } from '@/stores/timelines';
 import { filterBadges, getTagDiff } from '@/utils/badges';
-
-import { deleteFromTimelines } from './timelines';
 
 import type { AppDispatch, RootState } from '@/store';
 import type { PleromaConfig } from 'pl-api';
@@ -73,7 +72,7 @@ const deleteStatus = (statusId: string) => (dispatch: AppDispatch, getState: () 
   getClient(getState)
     .admin.statuses.deleteStatus(statusId)
     .then(() => {
-      dispatch(deleteFromTimelines(statusId));
+      useTimelinesStore.getState().actions.deleteStatus(statusId);
       return { statusId };
     });
 

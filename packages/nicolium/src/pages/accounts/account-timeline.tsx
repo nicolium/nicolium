@@ -1,14 +1,12 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { fetchAccountTimeline } from '@/actions/timelines';
 import { AccountTimelineColumn } from '@/columns/timeline';
 import MissingIndicator from '@/components/missing-indicator';
 import Card, { CardBody } from '@/components/ui/card';
 import Spinner from '@/components/ui/spinner';
 import Text from '@/components/ui/text';
 import { profileRoute } from '@/features/ui/router';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
 import { usePinnedStatuses } from '@/queries/status-lists/use-pinned-statuses';
@@ -17,7 +15,6 @@ const AccountTimelinePage: React.FC = () => {
   const { username } = profileRoute.useParams();
   const { with_replies: withReplies = false } = profileRoute.useSearch();
 
-  const dispatch = useAppDispatch();
   const features = useFeatures();
 
   const { data: account, isPending } = useAccountLookup(username);
@@ -27,16 +24,6 @@ const AccountTimelinePage: React.FC = () => {
   const isBlocked = account?.relationship?.blocked_by && !features.blockersVisible;
 
   const accountUsername = account?.username ?? username;
-
-  useEffect(() => {
-    if (account) {
-      dispatch(fetchAccountTimeline(account.id, { exclude_replies: !withReplies }));
-
-      if (!withReplies) {
-        dispatch(fetchAccountTimeline(account.id, { pinned: true }));
-      }
-    }
-  }, [account?.id, withReplies]);
 
   if (!account && isPending) {
     return <Spinner />;
