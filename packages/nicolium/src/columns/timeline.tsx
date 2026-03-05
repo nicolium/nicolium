@@ -43,8 +43,8 @@ interface ITimelineStatus {
   contextType?: FilterContextType;
   isConnectedTop?: boolean;
   isConnectedBottom?: boolean;
-  onMoveUp?: (id: string) => void;
-  onMoveDown?: (id: string) => void;
+  onMoveUp?: (id: string) => void | boolean;
+  onMoveDown?: (id: string) => void | boolean;
 }
 
 /** Status with reply-connector in threads. */
