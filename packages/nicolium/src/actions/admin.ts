@@ -6,7 +6,6 @@ import { useComposeStore } from '@/stores/compose';
 import { useModalsStore } from '@/stores/modals';
 import { filterBadges, getTagDiff } from '@/utils/badges';
 
-import { STATUS_FETCH_SOURCE_FAIL, type StatusesAction } from './statuses';
 import { deleteFromTimelines } from './timelines';
 
 import type { AppDispatch, RootState } from '@/store';
@@ -149,9 +148,6 @@ const redactStatus = (statusId: string) => (dispatch: AppDispatch, getState: () 
         .getState()
         .actions.setComposeToStatus(status, poll, source, false, null, null, true);
       useModalsStore.getState().actions.openModal('COMPOSE');
-    })
-    .catch((error) => {
-      dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_FAIL, error });
     });
 };
 

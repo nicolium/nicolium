@@ -17,16 +17,8 @@ import { deleteFromTimelines } from './timelines';
 
 import type { NormalizedStatus as Status } from '@/normalizers/status';
 import type { AppDispatch, RootState } from '@/store';
-import type { CreateStatusParams, Status as BaseStatus, ScheduledStatus } from 'pl-api';
+import type { CreateStatusParams, Status as BaseStatus } from 'pl-api';
 import type { IntlShape } from 'react-intl';
-
-const STATUS_CREATE_REQUEST = 'STATUS_CREATE_REQUEST' as const;
-const STATUS_CREATE_SUCCESS = 'STATUS_CREATE_SUCCESS' as const;
-const STATUS_CREATE_FAIL = 'STATUS_CREATE_FAIL' as const;
-
-const STATUS_FETCH_SOURCE_REQUEST = 'STATUS_FETCH_SOURCE_REQUEST' as const;
-const STATUS_FETCH_SOURCE_SUCCESS = 'STATUS_FETCH_SOURCE_SUCCESS' as const;
-const STATUS_FETCH_SOURCE_FAIL = 'STATUS_FETCH_SOURCE_FAIL' as const;
 
 const incrementReplyCount = (
   params: Pick<BaseStatus | CreateStatusParams, 'in_reply_to_id' | 'quote_id'>,
@@ -91,13 +83,6 @@ const createStatus =
       if (!editedId) {
         incrementReplyCount(params);
       }
-      dispatch<StatusesAction>({
-        type: STATUS_CREATE_REQUEST,
-        params,
-        idempotencyKey,
-        editing: !!editedId,
-        redacting,
-      });
     }
 
     const client = getClient(getState());
@@ -123,14 +108,6 @@ const createStatus =
         } else {
           queryClient.invalidateQueries(scheduledStatusesQueryOptions);
         }
-
-        dispatch<StatusesAction>({
-          type: STATUS_CREATE_SUCCESS,
-          status,
-          params,
-          idempotencyKey,
-          editing: !!editedId,
-        });
 
         useContextStore
           .getState()
@@ -176,13 +153,6 @@ const createStatus =
         if (!editedId) {
           decrementReplyCount(params);
         }
-        dispatch<StatusesAction>({
-          type: STATUS_CREATE_FAIL,
-          error,
-          params,
-          idempotencyKey,
-          editing: !!editedId,
-        });
         throw error;
       });
   };
@@ -195,17 +165,11 @@ const editStatus = (statusId: string) => (dispatch: AppDispatch, getState: () =>
     ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
     : undefined;
 
-  dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_REQUEST });
-
   return getClient(getState())
     .statuses.getStatusSource(statusId)
     .then((response) => {
-      dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_SUCCESS });
       useComposeStore.getState().actions.setComposeToStatus(status, poll, response);
       useModalsStore.getState().actions.openModal('COMPOSE');
-    })
-    .catch((error) => {
-      dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_FAIL, error });
     });
 };
 
@@ -386,39 +350,7 @@ const unfilterStatus = (statusId: string) => {
   );
 };
 
-type StatusesAction =
-  | {
-      type: typeof STATUS_CREATE_REQUEST;
-      params: CreateStatusParams;
-      idempotencyKey: string;
-      editing: boolean;
-      redacting: boolean;
-    }
-  | {
-      type: typeof STATUS_CREATE_SUCCESS;
-      status: BaseStatus | ScheduledStatus;
-      params: CreateStatusParams;
-      idempotencyKey: string;
-      editing: boolean;
-    }
-  | {
-      type: typeof STATUS_CREATE_FAIL;
-      error: unknown;
-      params: CreateStatusParams;
-      idempotencyKey: string;
-      editing: boolean;
-    }
-  | { type: typeof STATUS_FETCH_SOURCE_REQUEST }
-  | { type: typeof STATUS_FETCH_SOURCE_SUCCESS }
-  | { type: typeof STATUS_FETCH_SOURCE_FAIL; error: unknown };
-
 export {
-  STATUS_CREATE_REQUEST,
-  STATUS_CREATE_SUCCESS,
-  STATUS_CREATE_FAIL,
-  STATUS_FETCH_SOURCE_REQUEST,
-  STATUS_FETCH_SOURCE_SUCCESS,
-  STATUS_FETCH_SOURCE_FAIL,
   createStatus,
   editStatus,
   fetchStatus,
@@ -426,5 +358,4 @@ export {
   deleteStatusFromGroup,
   toggleMuteStatus,
   unfilterStatus,
-  type StatusesAction,
 };
