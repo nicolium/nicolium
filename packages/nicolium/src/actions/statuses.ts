@@ -215,7 +215,6 @@ const deleteStatus =
           },
           queryClient,
         );
-        dispatch(deleteFromTimelines(statusId));
 
         if (withRedraft) {
           useComposeStore.getState().actions.setComposeToStatus(status, poll, source, withRedraft);
@@ -248,7 +247,6 @@ const deleteStatusFromGroup =
           },
           queryClient,
         );
-        dispatch(deleteFromTimelines(statusId));
       })
       .catch(() => {
         incrementReplyCount(status);
