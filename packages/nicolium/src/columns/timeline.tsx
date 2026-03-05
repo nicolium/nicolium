@@ -253,9 +253,7 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
           onMoveDown={() => handleMoveDown(index)}
           rebloggedBy={entry.rebloggedBy}
           timelineId={timelineId}
-          // contextType={timelineId}
           // showGroup={showGroup}
-          // variant={divideType === 'border' ? 'slim' : 'rounded'}
         />
       );
     } else if (entry.type === 'pending-status') {
