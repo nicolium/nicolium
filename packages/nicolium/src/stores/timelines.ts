@@ -10,6 +10,8 @@ type TimelineEntry =
   | {
       type: 'status';
       id: string;
+      // id of the topmost status where the target status was found, either the status itself or its reblog
+      originalId: string;
       rebloggedBy: Array<string>;
       reblogIds: Array<string>;
       isConnectedTop?: boolean;
@@ -95,6 +97,7 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
         timelinePage.push({
           type: 'status',
           id: status.reblog.id,
+          originalId: status.id,
           rebloggedBy: [status.account.id],
           reblogIds: [status.id],
           isConnectedTop,
@@ -106,6 +109,7 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
     timelinePage.push({
       type: 'status',
       id: status.id,
+      originalId: status.id,
       rebloggedBy: [],
       reblogIds: [],
       isConnectedTop,
@@ -244,6 +248,7 @@ const useTimelinesStore = create<State>()(
               timeline.entries[idx] = {
                 type: 'status',
                 id: newId,
+                originalId: newId,
                 rebloggedBy: [],
                 reblogIds: [],
               };
