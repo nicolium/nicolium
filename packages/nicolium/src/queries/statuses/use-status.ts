@@ -38,6 +38,7 @@ type SelectedStatus = NormalizedStatus & {
 
 const useMinimalStatus = (statusId?: string) => {
   const client = useClient();
+  const contextsActions = useContextsActions();
 
   return useQuery({
     queryKey: queryKeys.statuses.show(statusId!),
@@ -45,6 +46,7 @@ const useMinimalStatus = (statusId?: string) => {
       client.statuses.getStatus(statusId!).then((status) => {
         // Import related entities (accounts, polls, etc.) into the RQ cache
         importEntities({ statuses: [status] }, { withParents: false });
+        contextsActions.importStatus(status);
 
         return normalizeStatus(status);
       }),
