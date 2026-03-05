@@ -1,7 +1,10 @@
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
-import type { Status } from 'pl-api';
+import { findStatuses } from '@/queries/statuses/use-status';
+
+import type { NormalizedStatus } from '@/normalizers/status';
+import type { CreateStatusParams, Status } from 'pl-api';
 
 type TimelineEntry =
   | {
@@ -44,6 +47,10 @@ interface State {
     deleteStatus: (statusId: string) => void;
     setLoading: (timelineId: string, isFetching: boolean) => void;
     dequeueEntries: (timelineId: string) => void;
+    importPendingStatus: (params: CreateStatusParams, idempotencyKey: string) => void;
+    replacePendingStatus: (idempotencyKey: string, newId: string) => void;
+    deletePendingStatus: (idempotencyKey: string) => void;
+    filterTimelines: (accountId: string) => void;
   };
 }
 
@@ -106,6 +113,21 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
   }
 
   return timelinePage;
+};
+
+const getTimelinesForStatus = (
+  status: Pick<Status, 'visibility' | 'group'> | Pick<CreateStatusParams, 'visibility'>,
+): Array<string> => {
+  switch (status.visibility) {
+    case 'group':
+      return [`group:${'group' in status && status.group?.id}`];
+    case 'direct':
+      return [];
+    case 'public':
+      return ['home', 'public:local', 'public', 'bubble'];
+    default:
+      return ['home'];
+  }
 };
 
 const useTimelinesStore = create<State>()(
@@ -178,6 +200,79 @@ const useTimelinesStore = create<State>()(
           timeline.entries.unshift(...processedEntries);
           timeline.queuedEntries = [];
           timeline.queuedCount = 0;
+        }),
+      importPendingStatus: (params, idempotencyKey) =>
+        set((state) => {
+          if (params.scheduled_at) return;
+
+          const timelineIds = getTimelinesForStatus(params);
+
+          for (const timelineId of timelineIds) {
+            const timeline = state.timelines[timelineId];
+            if (!timeline) continue;
+
+            if (
+              timeline.entries.some((e) => e.type === 'pending-status' && e.id === idempotencyKey)
+            )
+              continue;
+
+            timeline.entries.unshift({ type: 'pending-status', id: idempotencyKey });
+          }
+        }),
+      replacePendingStatus: (idempotencyKey, newId) =>
+        set((state) => {
+          for (const timeline of Object.values(state.timelines)) {
+            const idx = timeline.entries.findIndex(
+              (e) => e.type === 'pending-status' && e.id === idempotencyKey,
+            );
+            if (idx !== -1) {
+              timeline.entries[idx] = {
+                type: 'status',
+                id: newId,
+                rebloggedBy: [],
+              };
+            }
+          }
+        }),
+      deletePendingStatus: (idempotencyKey) =>
+        set((state) => {
+          for (const timeline of Object.values(state.timelines)) {
+            const idx = timeline.entries.findIndex(
+              (e) => e.type === 'pending-status' && e.id === idempotencyKey,
+            );
+            if (idx !== -1) {
+              timeline.entries.splice(idx, 1);
+            }
+          }
+        }),
+      filterTimelines: (accountId) =>
+        set((state) => {
+          const ownedStatuses = findStatuses(
+            (status: NormalizedStatus) => status.account_id === accountId,
+          );
+
+          const statusIdsToRemove = new Set<string>();
+
+          for (const [, status] of ownedStatuses) {
+            statusIdsToRemove.add(status.id);
+          }
+
+          for (const timeline of Object.values(state.timelines)) {
+            timeline.entries = timeline.entries.filter((entry) => {
+              if (entry.type !== 'status') return true;
+              if (statusIdsToRemove.has(entry.id)) return false;
+
+              const index = entry.rebloggedBy.indexOf(accountId);
+              if (index !== -1) entry.rebloggedBy.splice(index, 1);
+
+              return true;
+            });
+            timeline.queuedEntries = timeline.queuedEntries.filter(
+              (status) =>
+                status.account.id !== accountId && status.reblog?.account.id !== accountId,
+            );
+            timeline.queuedCount = timeline.queuedEntries.length;
+          }
         }),
     },
   })),

@@ -8,6 +8,7 @@ import { useContextStore } from '@/stores/contexts';
 import { useModalsStore } from '@/stores/modals';
 import { usePendingStatusesStore } from '@/stores/pending-statuses';
 import { useSettingsStore } from '@/stores/settings';
+import { useTimelinesStore } from '@/stores/timelines';
 import { isLoggedIn } from '@/utils/auth';
 import { shouldHaveCard } from '@/utils/status';
 
@@ -86,6 +87,7 @@ const createStatus =
     if (!params.preview) {
       usePendingStatusesStore.getState().actions.importStatus(params, idempotencyKey);
       useContextStore.getState().actions.importPendingStatus(params.in_reply_to_id, idempotencyKey);
+      useTimelinesStore.getState().actions.importPendingStatus(params, idempotencyKey);
       if (!editedId) {
         incrementReplyCount(params);
       }
@@ -137,6 +139,12 @@ const createStatus =
             idempotencyKey,
           );
 
+        if (status.scheduled_at === null) {
+          useTimelinesStore.getState().actions.replacePendingStatus(idempotencyKey, status.id);
+        } else {
+          useTimelinesStore.getState().actions.deletePendingStatus(idempotencyKey);
+        }
+
         // Poll the backend for the updated card
         if (expectsCard) {
           const delay = 1000;
@@ -161,6 +169,7 @@ const createStatus =
       })
       .catch((error) => {
         usePendingStatusesStore.getState().actions.deleteStatus(idempotencyKey);
+        useTimelinesStore.getState().actions.deletePendingStatus(idempotencyKey);
         useContextStore
           .getState()
           .actions.deletePendingStatus(params.in_reply_to_id, idempotencyKey);
@@ -235,6 +244,7 @@ const deleteStatus =
       .statuses.deleteStatus(statusId)
       .then((source) => {
         usePendingStatusesStore.getState().actions.deleteStatus(statusId);
+        useTimelinesStore.getState().actions.deleteStatus(statusId);
         updateStatus(
           statusId,
           (s) => {
@@ -267,6 +277,7 @@ const deleteStatusFromGroup =
       .experimental.groups.deleteGroupStatus(statusId, groupId)
       .then(() => {
         usePendingStatusesStore.getState().actions.deleteStatus(statusId);
+        useTimelinesStore.getState().actions.deleteStatus(statusId);
         updateStatus(
           statusId,
           (s) => {

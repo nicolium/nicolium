@@ -14,6 +14,7 @@ import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { queryKeys } from '@/queries/keys';
 import { useContextsActions } from '@/stores/contexts';
+import { useTimelinesStore } from '@/stores/timelines';
 
 import type {
   BlockAccountParams,
@@ -192,6 +193,7 @@ const useBlockAccountMutation = (accountId: string) => {
 
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
       filterContexts(data);
+      useTimelinesStore.getState().actions.filterTimelines(data.id);
 
       return dispatch<AccountsAction>({
         type: ACCOUNT_BLOCK_SUCCESS,
@@ -260,6 +262,7 @@ const useMuteAccountMutation = (accountId: string) => {
 
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
       filterContexts(data);
+      useTimelinesStore.getState().actions.filterTimelines(data.id);
 
       return dispatch<AccountsAction>({
         type: ACCOUNT_MUTE_SUCCESS,

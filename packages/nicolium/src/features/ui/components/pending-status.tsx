@@ -1,3 +1,4 @@
+import { skipToken, useQuery } from '@tanstack/react-query';
 import clsx from 'clsx';
 import React from 'react';
 
@@ -11,7 +12,7 @@ import PlaceholderCard from '@/features/placeholder/components/placeholder-card'
 import PlaceholderMediaGallery from '@/features/placeholder/components/placeholder-media-gallery';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { usePollQuery } from '@/queries/statuses/use-poll';
+import { queryKeys } from '@/queries/keys';
 import { usePendingStatus } from '@/stores/pending-statuses';
 
 import { buildStatus } from '../util/pending-status-builder';
@@ -19,6 +20,7 @@ import { buildStatus } from '../util/pending-status-builder';
 import PollPreview from './poll-preview';
 
 import type { NormalizedStatus as StatusEntity } from '@/normalizers/status';
+import type { Poll } from 'pl-api';
 
 const shouldHaveCard = (pendingStatus: StatusEntity) =>
   Boolean(/https?:\/\/\S*/.test(pendingStatus.content));
@@ -54,7 +56,11 @@ const PendingStatus: React.FC<IPendingStatus> = ({
   const status =
     pendingStatus && ownAccount ? buildStatus(ownAccount, pendingStatus, idempotencyKey) : null;
 
-  const { data: poll } = usePollQuery(status?.poll_id ?? '');
+  const { data: poll } = useQuery<Poll>({
+    queryKey: queryKeys.statuses.polls.show(status?.poll_id ?? ''),
+    queryFn: skipToken,
+    enabled: !!status?.poll_id,
+  });
 
   if (!status) return null;
   if (!ownAccount) return null;

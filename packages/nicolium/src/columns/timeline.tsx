@@ -12,6 +12,7 @@ import Icon from '@/components/ui/icon';
 import Portal from '@/components/ui/portal';
 import Emojify from '@/features/emoji/emojify';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
+import PendingStatus from '@/features/ui/components/pending-status';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccounts } from '@/queries/accounts/use-accounts';
 import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
@@ -50,6 +51,18 @@ const PlaceholderTimelineStatus = () => (
     <PlaceholderStatus variant='slim' />
   </div>
 );
+
+interface ITimelinePendingStatus {
+  idempotencyKey: string;
+}
+
+const TimelinePendingStatus: React.FC<ITimelinePendingStatus> = ({ idempotencyKey }) => {
+  return (
+    <div className='⁂-timeline-status relative border-b border-solid border-gray-200 dark:border-gray-800'>
+      <PendingStatus idempotencyKey={idempotencyKey} variant='slim' />
+    </div>
+  );
+};
 
 interface ITimelineStatusInfo {
   status: SelectedStatus;
@@ -245,6 +258,8 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
           // variant={divideType === 'border' ? 'slim' : 'rounded'}
         />
       );
+    } else if (entry.type === 'pending-status') {
+      return <TimelinePendingStatus key={entry.id} idempotencyKey={entry.id} />;
     }
   };
 
