@@ -52,7 +52,14 @@ const useTimeline = (timelineId: string, fetcher: TimelineFetcher, streamConfig?
     }
   }, [timelineId, timeline.entries]);
 
-  return useMemo(() => ({ ...timeline, fetchNextPage }), [timeline, fetchNextPage]);
+  const dequeueEntries = useCallback(() => {
+    timelineActions.dequeueEntries(timelineId);
+  }, [timelineId]);
+
+  return useMemo(
+    () => ({ ...timeline, fetchNextPage, dequeueEntries }),
+    [timeline, fetchNextPage, dequeueEntries],
+  );
 };
 
 export { useTimeline };

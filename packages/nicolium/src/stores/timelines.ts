@@ -31,6 +31,8 @@ type TimelineEntry =
 
 interface TimelineData {
   entries: Array<TimelineEntry>;
+  queuedEntries: Array<TimelineEntry>;
+  queuedCount: number;
   isFetching: boolean;
   isPending: boolean;
 }
@@ -45,6 +47,7 @@ interface State {
       initialFetch: boolean,
     ) => void;
     setLoading: (timelineId: string, isFetching: boolean) => void;
+    dequeueEntries: (timelineId: string) => void;
   };
 }
 
@@ -137,12 +140,24 @@ const useTimelinesStore = create<State>()(
           timeline.isFetching = isFetching;
           if (!isFetching) timeline.isPending = false;
         }),
+      dequeueEntries: (timelineId) =>
+        set((state) => {
+          const timeline = state.timelines[timelineId];
+
+          if (!timeline || timeline.queuedEntries.length === 0) return;
+
+          timeline.entries.unshift(...timeline.queuedEntries);
+          timeline.queuedEntries = [];
+          timeline.queuedCount = 0;
+        }),
     },
   })),
 );
 
 const createEmptyTimeline = (): TimelineData => ({
   entries: [],
+  queuedEntries: [],
+  queuedCount: 0,
   isFetching: false,
   isPending: true,
 });

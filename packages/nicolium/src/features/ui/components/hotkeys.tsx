@@ -167,7 +167,7 @@ const hotkeyMatcherMap = {
 
 type HotkeyName = keyof typeof hotkeyMatcherMap;
 
-type HandlerMap = Partial<Record<HotkeyName, (event: KeyboardEvent) => void>>;
+type HandlerMap = Partial<Record<HotkeyName, (event: KeyboardEvent) => void | boolean>>;
 
 function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
   const ref = useRef<T>(null);

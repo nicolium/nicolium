@@ -1,10 +1,13 @@
 import clsx from 'clsx';
-import React from 'react';
+import React, { useRef } from 'react';
+import { defineMessages } from 'react-intl';
 
 import LoadMore from '@/components/load-more';
+import ScrollTopButton from '@/components/scroll-top-button';
 import ScrollableList from '@/components/scrollable-list';
 import Status from '@/components/statuses/status';
 import Tombstone from '@/components/statuses/tombstone';
+import Portal from '@/components/ui/portal';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import { useStatus } from '@/queries/statuses/use-status';
 import {
@@ -18,9 +21,22 @@ import {
   usePublicTimeline,
   useWrenchedTimeline,
 } from '@/queries/timelines/use-timelines';
+import { selectChild } from '@/utils/scroll-utils';
 
 import type { FilterContextType } from '@/queries/settings/use-filters';
 import type { TimelineEntry } from '@/stores/timelines';
+import type { VirtuosoHandle } from 'react-virtuoso';
+
+const messages = defineMessages({
+  queue: {
+    id: 'status_list.queue_label',
+    defaultMessage: 'Click to see {count} new {count, plural, one {post} other {posts}}',
+  },
+  queueLiveRegion: {
+    id: 'status_list.queue_label.live_region',
+    defaultMessage: '{count} new {count, plural, one {post} other {posts}}.',
+  },
+});
 
 interface ITimelineStatus {
   id: string;
@@ -86,9 +102,24 @@ interface ITimeline {
 }
 
 const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
-  const { entries, fetchNextPage, isFetching, isPending } = query;
+  const node = useRef<VirtuosoHandle | null>(null);
 
-  const renderEntry = (entry: TimelineEntry) => {
+  const { entries, queuedCount, fetchNextPage, dequeueEntries, isFetching, isPending } = query;
+
+  const handleMoveUp = (index: number) => {
+    selectChild(index - 1, node, document.getElementById('status-list') ?? undefined);
+  };
+
+  const handleMoveDown = (index: number) => {
+    selectChild(
+      index + 1,
+      node,
+      document.getElementById('status-list') ?? undefined,
+      entries.length,
+    );
+  };
+
+  const renderEntry = (entry: TimelineEntry, index: number) => {
     if (entry.type === 'status') {
       return (
         <TimelineStatus
@@ -97,8 +128,8 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
           isConnectedTop={entry.isConnectedTop}
           isConnectedBottom={entry.isConnectedBottom}
           contextType={contextType}
-          // onMoveUp={handleMoveUp}
-          // onMoveDown={handleMoveDown}
+          onMoveUp={() => handleMoveUp(index)}
+          onMoveDown={() => handleMoveDown(index)}
           // contextType={timelineId}
           // showGroup={showGroup}
           // variant={divideType === 'border' ? 'slim' : 'rounded'}
@@ -115,24 +146,35 @@ const Timeline: React.FC<ITimeline> = ({ query, contextType = 'public' }) => {
   };
 
   return (
-    <ScrollableList
-      id='status-list'
-      key='scrollable-list'
-      isLoading={isFetching}
-      showLoading={isPending}
-      placeholderComponent={() => <PlaceholderStatus variant={'slim'} />}
-      placeholderCount={20}
-      // className={className}
-      // listClassName={clsx('divide-y divide-solid divide-gray-200 dark:divide-gray-800', {
-      //   'divide-none': divideType !== 'border',
-      // })}
-      // itemClassName={clsx({
-      //   'pb-3': divideType !== 'border',
-      // })}
-      // {...other}
-    >
-      {(entries || []).map(renderEntry)}
-    </ScrollableList>
+    <>
+      <Portal>
+        <ScrollTopButton
+          onClick={dequeueEntries}
+          count={queuedCount}
+          message={messages.queue}
+          liveRegionMessage={messages.queueLiveRegion}
+        />
+      </Portal>
+      <ScrollableList
+        id='status-list'
+        key='scrollable-list'
+        isLoading={isFetching}
+        showLoading={isPending}
+        placeholderComponent={() => <PlaceholderStatus variant={'slim'} />}
+        placeholderCount={20}
+        ref={node}
+        // className={className}
+        // listClassName={clsx('divide-y divide-solid divide-gray-200 dark:divide-gray-800', {
+        //   'divide-none': divideType !== 'border',
+        // })}
+        // itemClassName={clsx({
+        //   'pb-3': divideType !== 'border',
+        // })}
+        // {...other}
+      >
+        {(entries || []).map(renderEntry)}
+      </ScrollableList>
+    </>
   );
 };
 
