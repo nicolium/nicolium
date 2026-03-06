@@ -60,7 +60,7 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
 
   return (
     <div className={clsx('⁂-token', { '⁂-token--current': isCurrent })}>
-      <div className='⁂-token__info'>
+      <div className='⁂-token__content'>
         <p className='⁂-token__name'>
           {token.app_name}
           {token.app_website && (
