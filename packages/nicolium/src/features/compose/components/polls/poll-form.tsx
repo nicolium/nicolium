@@ -21,21 +21,6 @@ const messages = defineMessages({
     id: 'compose_form.poll.option_placeholder',
     defaultMessage: 'Answer #{number}',
   },
-  pollDuration: { id: 'compose_form.poll.duration', defaultMessage: 'Poll duration' },
-  removePoll: { id: 'compose_form.poll.remove', defaultMessage: 'Remove poll' },
-  switchToMultiple: {
-    id: 'compose_form.poll.switch_to_multiple',
-    defaultMessage: 'Change poll to allow multiple answers',
-  },
-  switchToSingle: {
-    id: 'compose_form.poll.switch_to_single',
-    defaultMessage: 'Change poll to allow for a single answer',
-  },
-  multiSelect: { id: 'compose_form.poll.multiselect', defaultMessage: 'Multi-select' },
-  multiSelectDetail: {
-    id: 'compose_form.poll.multiselect_detail',
-    defaultMessage: 'Allow users to select multiple answers',
-  },
 });
 
 interface IOption {
@@ -137,7 +122,6 @@ interface IPollForm {
 
 const PollForm: React.FC<IPollForm> = ({ composeId }) => {
   const { updateCompose } = useComposeActions();
-  const intl = useIntl();
   const { configuration } = useInstance();
 
   const { poll, language, modifiedLanguage } = useCompose(composeId);
@@ -224,10 +208,15 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
       <label className='text-start'>
         <HStack alignItems='center' justifyContent='between'>
           <Stack>
-            <Text weight='medium'>{intl.formatMessage(messages.multiSelect)}</Text>
+            <Text weight='medium'>
+              <FormattedMessage id='compose_form.poll.multiselect' defaultMessage='Multi-select' />
+            </Text>
 
             <Text theme='muted' size='sm'>
-              {intl.formatMessage(messages.multiSelectDetail)}
+              <FormattedMessage
+                id='compose_form.poll.multiselect_detail'
+                defaultMessage='Allow users to select multiple answers'
+              />
             </Text>
           </Stack>
 
@@ -239,7 +228,9 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
 
       {/* Duration */}
       <Stack space={2}>
-        <Text weight='medium'>{intl.formatMessage(messages.pollDuration)}</Text>
+        <Text weight='medium'>
+          <FormattedMessage id='compose_form.poll.duration' defaultMessage='Poll duration' />
+        </Text>
 
         <DurationSelector
           onDurationChange={handleSelectDuration}
@@ -250,7 +241,7 @@ const PollForm: React.FC<IPollForm> = ({ composeId }) => {
       {/* Remove Poll */}
       <div className='text-center'>
         <button type='button' className='text-danger-500' onClick={onRemovePoll}>
-          {intl.formatMessage(messages.removePoll)}
+          <FormattedMessage id='compose_form.poll.remove' defaultMessage='Remove poll' />
         </button>
       </div>
     </div>

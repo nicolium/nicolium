@@ -1,21 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Select from '@/components/ui/select';
 
 const messages = defineMessages({
-  days: {
-    id: 'intervals.full.days',
-    defaultMessage: '{number, plural, one {# day} other {# days}}',
-  },
-  hours: {
-    id: 'intervals.full.hours',
-    defaultMessage: '{number, plural, one {# hour} other {# hours}}',
-  },
-  minutes: {
-    id: 'intervals.full.minutes',
-    defaultMessage: '{number, plural, one {# minute} other {# minutes}}',
-  },
   daysTitle: { id: 'compose_form.poll.duration.days', defaultMessage: 'Days' },
   hoursTitle: { id: 'compose_form.poll.duration.hours', defaultMessage: 'Hours' },
   minutesTitle: { id: 'compose_form.poll.duration.minutes', defaultMessage: 'Minutes' },
@@ -59,7 +47,11 @@ const DurationSelector = ({ onDurationChange, value }: IDurationSelector) => {
         >
           {[...Array(8).fill(undefined)].map((_, number) => (
             <option value={number} key={number}>
-              {intl.formatMessage(messages.days, { number })}
+              <FormattedMessage
+                id='intervals.full.days'
+                defaultMessage='{number, plural, one {# day} other {# days}}'
+                values={{ number }}
+              />
             </option>
           ))}
         </Select>
@@ -77,7 +69,11 @@ const DurationSelector = ({ onDurationChange, value }: IDurationSelector) => {
         >
           {[...Array(24).fill(undefined)].map((_, number) => (
             <option value={number} key={number}>
-              {intl.formatMessage(messages.hours, { number })}
+              <FormattedMessage
+                id='intervals.full.hours'
+                defaultMessage='{number, plural, one {# hour} other {# hours}}'
+                values={{ number }}
+              />
             </option>
           ))}
         </Select>
@@ -95,7 +91,11 @@ const DurationSelector = ({ onDurationChange, value }: IDurationSelector) => {
         >
           {[0, 15, 30, 45].map((number) => (
             <option value={number} key={number}>
-              {intl.formatMessage(messages.minutes, { number })}
+              <FormattedMessage
+                id='intervals.full.minutes'
+                defaultMessage='{number, plural, one {# minute} other {# minutes}}'
+                values={{ number }}
+              />
             </option>
           ))}
         </Select>

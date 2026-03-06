@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import FormGroup from '@/components/ui/form-group';
 import Stack from '@/components/ui/stack';
@@ -12,7 +12,6 @@ import type { Account } from 'pl-api';
 
 const messages = defineMessages({
   placeholder: { id: 'report.placeholder', defaultMessage: 'Additional comments' },
-  reasonForReporting: { id: 'report.reason.title', defaultMessage: 'Reason for reporting' },
 });
 
 interface IReasonStep {
@@ -80,7 +79,7 @@ const ReasonStep: React.FC<IReasonStep> = ({ comment, setComment, ruleIds, setRu
       {shouldRequireRule && (
         <Stack space={2}>
           <Text size='xl' weight='semibold' tag='h1'>
-            {intl.formatMessage(messages.reasonForReporting)}
+            <FormattedMessage id='report.reason.title' defaultMessage='Reason for reporting' />
           </Text>
 
           <div className='relative'>

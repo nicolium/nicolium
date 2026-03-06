@@ -671,8 +671,6 @@
   "compose_form.poll.option_placeholder": "Answer #{number}",
   "compose_form.poll.remove": "Remove poll",
   "compose_form.poll.remove_option": "Remove this answer",
-  "compose_form.poll.switch_to_multiple": "Change poll to allow multiple answers",
-  "compose_form.poll.switch_to_single": "Change poll to allow for a single answer",
   "compose_form.poll_placeholder": "Add a poll topic…",
   "compose_form.preview": "Preview post",
   "compose_form.preview.close": "Hide preview",
