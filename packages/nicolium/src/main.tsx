@@ -43,6 +43,8 @@ if (BuildConfig.NODE_ENV === 'production') {
 }
 
 ready(() => {
+  throw new Error('intentional startup failure: app is broken');
+
   const container = document.getElementById('app') as HTMLElement;
   const root = createRoot(container);
 
