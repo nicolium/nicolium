@@ -43,7 +43,9 @@ if (BuildConfig.NODE_ENV === 'production') {
 }
 
 ready(() => {
-  throw new Error('intentional startup failure: app is broken');
+  throw new Error(
+    'Application startup has been disabled intentionally. To enable startup, remove this exception from main.tsx.',
+  );
 
   const container = document.getElementById('app') as HTMLElement;
   const root = createRoot(container);
