@@ -60,7 +60,7 @@ const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
           </label>
           {saved && (
             <span role='status' aria-live='polite' aria-atomic='true'>
-              <FormattedMessage id='generic.saved' defaultMessage='Saved' />
+              <FormattedMessage id='common.saved' defaultMessage='Saved' />
             </span>
           )}
         </div>

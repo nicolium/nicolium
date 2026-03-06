@@ -303,7 +303,7 @@ const AdminAccountPage: React.FC = () => {
                 <HStack className='w-full' alignItems='center' space={2}>
                   <BadgeInput badges={badges} onChange={setBadges} />
                   <Button onClick={handleSaveBadges}>
-                    <FormattedMessage id='save' defaultMessage='Save' />
+                    <FormattedMessage id='common.save' defaultMessage='Save' />
                   </Button>
                 </HStack>
               </div>
