@@ -518,7 +518,7 @@ const Timeline: React.FC<ITimeline> = ({
 };
 
 const savePosition = (me: string, entry: TimelineEntry, index: number) => {
-  if (entry.type !== 'status') return;
+  if (!entry || entry.type !== 'status') return;
   return localStorage.setItem(
     `nicolium:${me}:homeTimelinePosition`,
     `${entry.originalId}|${index}|${Date.now()}`,
