@@ -68,7 +68,8 @@
     "typescript/consistent-type-exports": [
       "error",
       { "fixMixedExportsWithInlineTypeSpecifier": true }
-    ]
+    ],
+    "typescript/no-import-type-side-effects": "error"
   },
   "settings": {
     "jsx-a11y": {
