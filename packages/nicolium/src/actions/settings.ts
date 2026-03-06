@@ -86,6 +86,8 @@ const updateSettingsStore =
         }),
       );
     } else if (client.features.notes) {
+      // Inspired by Phanpy and designed for compatibility with other software doing this
+      // https://github.com/cheeaun/phanpy/commit/a8b5c8cd64d456d30aab09dc56da7e4e20100e67
       const note = (await client.accounts.getRelationships([state.me as string]))[0]?.note;
       const settingsNote = `<nicolium-config>${encodeURIComponent(JSON.stringify(settings))}</nicolium-config>`;
 

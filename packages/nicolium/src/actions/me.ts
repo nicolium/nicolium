@@ -86,21 +86,48 @@ const patchMe =
         dispatch(patchMeSuccess(response));
       });
 
-const fetchMeSuccess = (account: CredentialAccount) => {
-  setSentryAccount(account);
+interface MeFetchSuccessAction {
+  type: typeof ME_FETCH_SUCCESS;
+  me: CredentialAccount;
+}
 
-  useSettingsStore
-    .getState()
-    .actions.loadUserSettings(
-      account.settings_store?.[FE_NAME] || account.settings_store?.[LEGACY_FE_NAME],
-    );
-  useComposeStore.getState().actions.importDefaultSettings(account);
+const fetchMeSuccess =
+  (account: CredentialAccount) => async (dispatch: AppDispatch, getState: () => RootState) => {
+    const client = getClient(getState);
 
-  return {
-    type: ME_FETCH_SUCCESS,
-    me: account,
+    setSentryAccount(account);
+
+    const settings = account.settings_store?.[FE_NAME] || account.settings_store?.[LEGACY_FE_NAME];
+
+    if (client.features.frontendConfigurations) {
+      useSettingsStore.getState().actions.loadUserSettings(settings);
+    } else if (client.features.notes) {
+      const note = await getClient(getState)
+        .accounts.getRelationships([account.id])
+        .then((relationships) => relationships[0]?.note);
+
+      if (note) {
+        const match = note.match(/<nicolium-config>(.*)<\/nicolium-config>/);
+
+        if (match) {
+          try {
+            const frontendConfig = JSON.parse(decodeURIComponent(match[1]));
+            console.log(frontendConfig);
+            useSettingsStore.getState().actions.loadUserSettings(frontendConfig);
+            return frontendConfig;
+          } catch (error) {
+            console.error('Failed to parse frontend config from account note', error);
+          }
+        }
+      }
+    }
+    useComposeStore.getState().actions.importDefaultSettings(account);
+
+    return dispatch<MeFetchSuccessAction>({
+      type: ME_FETCH_SUCCESS,
+      me: account,
+    });
   };
-};
 
 const fetchMeFail = (error: unknown) => ({
   type: ME_FETCH_FAIL,
@@ -123,7 +150,7 @@ const patchMeSuccess = (me: CredentialAccount) => (dispatch: AppDispatch) => {
 };
 
 type MeAction =
-  | ReturnType<typeof fetchMeSuccess>
+  | MeFetchSuccessAction
   | ReturnType<typeof fetchMeFail>
   | MeFetchSkipAction
   | MePatchSuccessAction;
