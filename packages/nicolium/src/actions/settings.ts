@@ -73,7 +73,7 @@ const updateAuthAccount = async (url: string, settings: any) => {
 };
 
 const updateSettingsStore =
-  (settings: any) => (dispatch: AppDispatch, getState: () => RootState) => {
+  (settings: any) => async (dispatch: AppDispatch, getState: () => RootState) => {
     const state = getState();
     const client = getClient(state);
 
@@ -85,6 +85,17 @@ const updateSettingsStore =
           },
         }),
       );
+    } else if (client.features.notes) {
+      const note = (await client.accounts.getRelationships([state.me as string]))[0]?.note;
+      const settingsNote = `<nicolium-config>${encodeURIComponent(JSON.stringify(settings))}</nicolium-config>`;
+
+      if (/<nicolium-config>(.*)<\/nicolium-config>/.test(note || '')) {
+        const newNote = note!.replace(/<nicolium-config>(.*)<\/nicolium-config>/, settingsNote);
+        return client.accounts.updateAccountNote(state.me as string, newNote);
+      } else {
+        const newNote = `${note || ''}\n\n${settingsNote}`;
+        return client.accounts.updateAccountNote(state.me as string, newNote);
+      }
     } else {
       const accountUrl = selectOwnAccount(state)!.url;
 

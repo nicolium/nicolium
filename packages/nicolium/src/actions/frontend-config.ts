@@ -54,7 +54,6 @@ const loadFrontendConfig = () => async (dispatch: AppDispatch, getState: () => R
 
   if (result) {
     dispatch(fetchFrontendConfig(host));
-    return;
   } else {
     return dispatch(fetchFrontendConfig(host));
   }
