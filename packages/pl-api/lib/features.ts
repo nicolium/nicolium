@@ -305,9 +305,9 @@ const getFeatures = (instance: Instance) => {
      */
     accountNotifies: any([
       v.software === AKKOMA,
+      v.software === GOTOSOCIAL,
       v.software === MASTODON,
       v.software === PLEROMA && gte(v.version, '2.5.0'),
-      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -1281,10 +1281,10 @@ const getFeatures = (instance: Instance) => {
      */
     notes: any([
       v.software === AKKOMA,
+      v.software === GOTOSOCIAL,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === PLEROMA && gte(v.version, '2.5.0'),
-      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -1314,13 +1314,13 @@ const getFeatures = (instance: Instance) => {
     notificationsIncludeTypes: any([
       v.software === AKKOMA,
       v.software === FIREFISH,
+      v.software === GOTOSOCIAL,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
       v.software === NEODB,
       v.software === PLEROMA && gte(v.version, '2.5.0'),
       v.software === TAKAHE && gte(v.version, '0.6.2'),
-      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -1342,8 +1342,8 @@ const getFeatures = (instance: Instance) => {
      */
     outgoingFollowRequests: any([
       v.software === GOTOSOCIAL && gte(v.version, '0.20.0'),
-      v.software === MITRA && gte(v.version, '4.19.0'),
       v.software === ICESHRIMP_NET,
+      v.software === MITRA && gte(v.version, '4.19.0'),
       instance.api_versions['outgoing_follow_requests.pleroma.pl-api'] >= 1,
     ]),
 
@@ -1536,10 +1536,10 @@ const getFeatures = (instance: Instance) => {
      */
     richText: any([
       v.software === AKKOMA,
+      v.software === GOTOSOCIAL,
       v.software === MASTODON && v.build === GLITCH,
       v.software === PLEROMA,
       v.software === MITRA,
-      v.software === GOTOSOCIAL,
       instance.pleroma.metadata.post_formats.filter((format) => format !== 'text/plain').length > 0,
     ]),
 
@@ -1548,9 +1548,9 @@ const getFeatures = (instance: Instance) => {
      */
     rssFeeds: any([
       v.software === AKKOMA,
+      v.software === GOTOSOCIAL,
       v.software === MASTODON,
       v.software === PLEROMA,
-      v.software === GOTOSOCIAL,
     ]),
 
     /**
@@ -1616,10 +1616,10 @@ const getFeatures = (instance: Instance) => {
      */
     sessions: any([
       v.software === AKKOMA,
+      v.software === GOTOSOCIAL && gte(v.version, '0.18.2'),
       v.software === ICESHRIMP_NET,
       v.software === MITRA && gt(v.version, '4.13.1'),
       v.software === PLEROMA,
-      v.software === GOTOSOCIAL && gte(v.version, '0.18.2'),
     ]),
 
     shoutbox: instance.api_versions['shout.pleroma.pl-api'] >= 1,
