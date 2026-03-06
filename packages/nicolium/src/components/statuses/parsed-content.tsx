@@ -1,10 +1,10 @@
+import DOMPurify from 'dompurify';
 import parse, {
   Element,
   type HTMLReactParserOptions,
   domToReact,
   type DOMNode,
 } from 'html-react-parser';
-import { sanitize } from 'isomorphic-dompurify';
 import groupBy from 'lodash/groupBy';
 import minBy from 'lodash/minBy';
 import React from 'react';
@@ -345,7 +345,7 @@ function parseContent(
   };
 
   let content = parse(
-    sanitize(html, { ADD_ATTR: ['target'], USE_PROFILES: { html: true } }),
+    DOMPurify.sanitize(html, { ADD_ATTR: ['target'], USE_PROFILES: { html: true } }),
     options,
   );
 
