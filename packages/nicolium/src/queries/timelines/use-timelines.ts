@@ -22,7 +22,7 @@ const useHomeTimeline = (
   maxId?: string,
 ) => {
   const client = useClient();
-  const stream = 'home';
+  const stream = 'user';
 
   return useTimeline(
     'home',
