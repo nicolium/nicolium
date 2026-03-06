@@ -1,6 +1,5 @@
 import { Navigate, Outlet, useLocation } from '@tanstack/react-router';
 import React from 'react';
-import { Helmet } from 'react-helmet-async';
 import { FormattedMessage } from 'react-intl';
 
 import Column from '@/components/ui/column';
@@ -95,11 +94,7 @@ const ProfileLayout: React.FC = () => {
 
   return (
     <>
-      {account?.local === false && (
-        <Helmet>
-          <meta content='noindex, noarchive' name='robots' />
-        </Helmet>
-      )}
+      {account?.local === false && <meta content='noindex, noarchive' name='robots' />}
       <Layout.Main>
         <Column size='lg' label={account ? `@${acct}` : ''} withHeader={false}>
           <div className='space-y-4'>

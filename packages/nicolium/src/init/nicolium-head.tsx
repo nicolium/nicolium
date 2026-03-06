@@ -90,8 +90,8 @@ const NicoliumHead = () => {
           })}
         />
         <body className={bodyClass} dir={direction} />
-        <meta name='theme-color' content={color} />
       </Helmet>
+      <meta name='theme-color' content={color} />
       <InlineStyle>{`:root { ${themeCss} }`}</InlineStyle>
       {['dark', 'black'].includes(theme) && (
         <InlineStyle>{':root { color-scheme: dark; }'}</InlineStyle>

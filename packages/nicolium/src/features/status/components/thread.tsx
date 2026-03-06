@@ -1,7 +1,6 @@
 import { useNavigate } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { Helmet } from 'react-helmet-async';
 import { useIntl } from 'react-intl';
 
 import ScrollableList from '@/components/scrollable-list';
@@ -346,7 +345,7 @@ const Thread = ({
     const firstAttachment = status.media_attachments && status.media_attachments[0];
 
     return (
-      <Helmet>
+      <>
         {status.spoiler_text && <meta property='og:title' content={status.spoiler_text} />}
         {(firstAttachment?.type === 'image' || firstAttachment?.type === 'gifv') && (
           <>
@@ -377,7 +376,7 @@ const Thread = ({
         {status.edited_at && <meta property='article:modified_time' content={status.edited_at} />}
 
         {status.account.local === false && <meta content='noindex, noarchive' name='robots' />}
-      </Helmet>
+      </>
     );
   }, [status]);
 
