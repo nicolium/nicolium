@@ -187,9 +187,6 @@ importers:
       html-react-parser:
         specifier: ^5.2.17
         version: 5.2.17(@types/react@19.2.14)(react@19.2.4)
-      intersection-observer:
-        specifier: ^0.12.2
-        version: 0.12.2
       intl-messageformat:
         specifier: ^11.1.2
         version: 11.1.2
@@ -289,9 +286,6 @@ importers:
       reselect:
         specifier: ^5.1.1
         version: 5.1.1
-      resize-observer:
-        specifier: ^1.0.4
-        version: 1.0.4
       sass-embedded:
         specifier: ^1.97.3
         version: 1.97.3
@@ -4133,10 +4127,6 @@ packages:
     resolution: {integrity: sha512-4gd7VpWNQNB4UKKCFFVcp1AVv+FMOgs9NKzjHKusc8jTMhd5eL1NqQqOpE0KzMds804/yHlglp3uxgluOqAPLw==}
     engines: {node: '>= 0.4'}
 
-  intersection-observer@0.12.2:
-    resolution: {integrity: sha512-7m1vEcPCxXYI8HqnL8CKI6siDyD+eIWSwgB3DZA+ZTogxk9I4CDnj4wilt9x/+/QbHI4YG5YZNmC6458/e9Ktg==}
-    deprecated: The Intersection Observer polyfill is no longer needed and can safely be removed. Intersection Observer has been Baseline since 2019.
-
   intl-messageformat@11.1.2:
     resolution: {integrity: sha512-ucSrQmZGAxfiBHfBRXW/k7UC8MaGFlEj4Ry1tKiDcmgwQm1y3EDl40u+4VNHYomxJQMJi9NEI3riDRlth96jKg==}
 
@@ -5424,9 +5414,6 @@ packages:
 
   reselect@5.1.1:
     resolution: {integrity: sha512-K/BG6eIky/SBpzfHZv/dd+9JBFiS4SWV7FIujVyJRux6e45+73RaUHXLmIR1f7WOMaQ0U1km6qwklRQxpJJY0w==}
-
-  resize-observer@1.0.4:
-    resolution: {integrity: sha512-AQ2MdkWTng9d6JtjHvljiQR949qdae91pjSNugGGeOFzKIuLHvoZIYhUTjePla5hCFDwQHrnkciAIzjzdsTZew==}
 
   resolve-from@4.0.0:
     resolution: {integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==}
@@ -10372,8 +10359,6 @@ snapshots:
       hasown: 2.0.2
       side-channel: 1.1.0
 
-  intersection-observer@0.12.2: {}
-
   intl-messageformat@11.1.2:
     dependencies:
       '@formatjs/ecma402-abstract': 3.1.1
@@ -11622,8 +11607,6 @@ snapshots:
   require-from-string@2.0.2: {}
 
   reselect@5.1.1: {}
-
-  resize-observer@1.0.4: {}
 
   resolve-from@4.0.0: {}
 
