@@ -85,7 +85,7 @@ const AnimatedNumber: React.FC<IAnimatedNumber> = ({ value, obfuscate, short, ma
   });
 
   if (reduceMotion) {
-    return <>{formattedValue}</>;
+    return formattedValue;
   }
 
   return (

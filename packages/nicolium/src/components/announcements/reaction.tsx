@@ -1,6 +1,7 @@
 import { animated, type AnimatedProps } from '@react-spring/web';
 import clsx from 'clsx';
 import React, { useState } from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 
 import AnimatedNumber from '@/components/animated-number';
 import unicodeMapping from '@/features/emoji/mapping';
@@ -10,6 +11,13 @@ import Emoji from './emoji';
 
 import type { AnnouncementReaction, CustomEmoji } from 'pl-api';
 
+const messages = defineMessages({
+  emojiCount: {
+    id: 'status.reactions.label',
+    defaultMessage: '{count} {count, plural, one {person} other {people}} reacted with {emoji}',
+  },
+});
+
 interface IReaction {
   announcementId: string;
   reaction: AnnouncementReaction;
@@ -18,6 +26,7 @@ interface IReaction {
 }
 
 const Reaction: React.FC<IReaction> = ({ announcementId, reaction, emojiMap, style }) => {
+  const intl = useIntl();
   const [hovered, setHovered] = useState(false);
 
   const { addReaction, removeReaction } = useAnnouncements();
@@ -46,25 +55,23 @@ const Reaction: React.FC<IReaction> = ({ announcementId, reaction, emojiMap, sty
 
   return (
     <animated.button
-      className={clsx(
-        'flex shrink-0 items-center gap-1.5 rounded-sm bg-gray-100 px-1.5 py-1 transition-colors dark:bg-primary-900',
-        {
-          'bg-gray-200 dark:bg-primary-800': hovered,
-          'bg-primary-200 dark:bg-primary-500': reaction.me,
-        },
-      )}
+      className={clsx('⁂-status-reactions-bar__button', {
+        '⁂-status-reactions-bar__button--active': reaction.me,
+      })}
       onClick={handleClick}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      title={`:${shortCode}:`}
+      title={intl.formatMessage(messages.emojiCount, {
+        emoji: `:${shortCode}:`,
+        count: reaction.count,
+      })}
       style={style}
     >
-      <span className='block size-4'>
-        <Emoji hovered={hovered} emoji={reaction.name} emojiMap={emojiMap} />
-      </span>
-      <span className='block min-w-[9px] text-center text-xs font-medium text-primary-600 dark:text-white'>
+      <Emoji hovered={hovered} emoji={reaction.name} emojiMap={emojiMap} />
+
+      <p>
         <AnimatedNumber value={reaction.count} />
-      </span>
+      </p>
     </animated.button>
   );
 };
