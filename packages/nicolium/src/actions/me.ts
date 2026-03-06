@@ -112,7 +112,6 @@ const fetchMeSuccess =
         if (match) {
           try {
             const frontendConfig = JSON.parse(decodeURIComponent(match[1]));
-            console.log(frontendConfig);
             useSettingsStore.getState().actions.loadUserSettings(frontendConfig);
             return frontendConfig;
           } catch (error) {

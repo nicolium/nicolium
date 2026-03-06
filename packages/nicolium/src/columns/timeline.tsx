@@ -110,7 +110,6 @@ const TimelineGap: React.FC<ITimelineGap> = ({ gap, onFillGap, firstEntry }) => 
   };
 
   const renderTimeDistance = () => {
-    console.log(gap);
     if (!gap.minDate) return null;
 
     const maxDate = gap.maxIdDate ? new Date(gap.maxIdDate) : new Date();
@@ -397,12 +396,10 @@ const Timeline: React.FC<ITimeline> = ({
   } = query;
 
   const handleMoveUp = (index: number) => {
-    console.log(index);
     selectChild(index - 1, node, document.getElementById('status-list') ?? undefined);
   };
 
   const handleMoveDown = (index: number) => {
-    console.log(index);
     selectChild(
       index + 1,
       node,

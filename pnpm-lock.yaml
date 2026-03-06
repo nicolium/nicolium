@@ -130,9 +130,6 @@ importers:
       '@yornaath/batshit':
         specifier: ^0.14.0
         version: 0.14.0
-      abortcontroller-polyfill:
-        specifier: ^1.7.8
-        version: 1.7.8
       autoprefixer:
         specifier: ^10.4.27
         version: 10.4.27(postcss@8.5.8)
@@ -3009,9 +3006,6 @@ packages:
 
   '@yornaath/batshit@0.14.0':
     resolution: {integrity: sha512-0I+xMi5JoRs3+qVXXhk2AmsEl43MwrG+L+VW+nqw/qQqMFtgRPszLaxhJCfsBKnjfJ0gJzTI1Q9Q9+y903HyHQ==}
-
-  abortcontroller-polyfill@1.7.8:
-    resolution: {integrity: sha512-9f1iZ2uWh92VcrU9Y8x+LdM4DLj75VE0MJB8zuF1iUnroEptStw+DQ8EQPMUdfe5k+PkB1uUfDQfWbhstH8LrQ==}
 
   acorn-import-phases@1.0.4:
     resolution: {integrity: sha512-wKmbr/DDiIXzEOiWrTTUcDm24kQ2vGfZQvM2fwg2vXqR5uW6aapr7ObPtj1th32b9u90/Pf4AItvdTh42fBmVQ==}
@@ -9125,8 +9119,6 @@ snapshots:
   '@yornaath/batshit@0.14.0':
     dependencies:
       '@yornaath/batshit-devtools': 1.7.1
-
-  abortcontroller-polyfill@1.7.8: {}
 
   acorn-import-phases@1.0.4(acorn@8.16.0):
     dependencies:
