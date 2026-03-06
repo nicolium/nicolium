@@ -1,4 +1,3 @@
-import { useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
@@ -7,33 +6,25 @@ import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 
 /** To display on the chats main page when no message is selected. */
-const BlankslateEmpty: React.FC = () => {
-  const navigate = useNavigate();
+const BlankslateEmpty: React.FC = () => (
+  <Stack space={6} alignItems='center' justifyContent='center' className='h-full p-6'>
+    <Stack space={2} className='max-w-sm'>
+      <Text size='2xl' weight='bold' tag='h2' align='center'>
+        <FormattedMessage id='chats.main.blankslate.title' defaultMessage='No messages yet' />
+      </Text>
 
-  const handleNewChat = () => {
-    navigate({ to: '/chats/new' });
-  };
-
-  return (
-    <Stack space={6} alignItems='center' justifyContent='center' className='h-full p-6'>
-      <Stack space={2} className='max-w-sm'>
-        <Text size='2xl' weight='bold' tag='h2' align='center'>
-          <FormattedMessage id='chats.main.blankslate.title' defaultMessage='No messages yet' />
-        </Text>
-
-        <Text size='sm' theme='muted' align='center'>
-          <FormattedMessage
-            id='chats.main.blankslate.subtitle'
-            defaultMessage='Search for someone to chat with'
-          />
-        </Text>
-      </Stack>
-
-      <Button theme='primary' onClick={handleNewChat}>
-        <FormattedMessage id='chats.main.blankslate.new_chat' defaultMessage='Message someone' />
-      </Button>
+      <Text size='sm' theme='muted' align='center'>
+        <FormattedMessage
+          id='chats.main.blankslate.subtitle'
+          defaultMessage='Search for someone to chat with'
+        />
+      </Text>
     </Stack>
-  );
-};
+
+    <Button theme='primary' to='/chats/new'>
+      <FormattedMessage id='chats.main.blankslate.new_chat' defaultMessage='Message someone' />
+    </Button>
+  </Stack>
+);
 
 export { BlankslateEmpty as default };
