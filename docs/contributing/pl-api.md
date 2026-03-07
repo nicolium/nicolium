@@ -1,3 +1,9 @@
+---
+title: Contributing to pl-api
+section: Contributing
+order: 21
+---
+
 # Contributing to pl-api
 
 `pl-api` is a TypeScript library for interacting with Mastodon-compatible backends, focused on supporting multiple projects extending the official Mastodon API in incompatible ways. The goal of `pl-api` is to provide a unified, type-safe API for these backends.

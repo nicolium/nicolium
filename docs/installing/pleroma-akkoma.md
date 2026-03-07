@@ -1,3 +1,9 @@
+---
+title: Pleroma/Akkoma
+section: Installing
+order: 32
+---
+
 # Installing Nicolium as Pleroma/Akkoma frontend
 
 ## Installation in instance static directory

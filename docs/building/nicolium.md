@@ -1,3 +1,9 @@
+---
+title: Building Nicolium
+section: Building
+order: 10
+---
+
 # Building Nicolium
 
 Building Nicolium requires [Node.js](https://nodejs.org/) and [pnpm](https://pnpm.io/) package manager to be installed. Since Node v16.13, Node.js comes with `corepack` pre-installed, which can be used to manage package managers like `pnpm`.

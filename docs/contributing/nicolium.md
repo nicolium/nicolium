@@ -1,3 +1,9 @@
+---
+title: Contributing to Nicolium
+section: Contributing
+order: 20
+---
+
 # Contributing to Nicolium
 
 The page intends to provide a technical overview of the Nicolium codebase and guidelines for potential contributors.
@@ -6,8 +12,7 @@ The page intends to provide a technical overview of the Nicolium codebase and gu
 
 Nicolium is a single page application built using the [React](https://react.dev/) framework. It uses [TypeScript](https://www.typescriptlang.org/) as the programming language and [Vite](https://vitejs.dev/) as the build tool. Routing is handled by [TanStack Router](https://tanstack.com/router/latest). Client state management is done using [Zustand](https://zustand-demo.pmnd.rs/) and server state management using [TanStack Query](https://tanstack.com/query/latest).
 
-!!! note
-    Important parts of Nicolium are currently being refactored to use a different set of libraries. You can find occurrences of tools being phased out, like Redux or TailwindCSS. Larger contributions should wait until the refactor is complete.
+> **Note:** Important parts of Nicolium are currently being refactored to use a different set of libraries. You can find occurrences of tools being phased out, like Redux or TailwindCSS. Larger contributions should wait until the refactor is complete.
 
 Nicolium also uses `pl-api` library for interacting with the Mastodon-compatible backends. The goal of `pl-api` is to provide a unified, type-safe API for multiple backends extending Mastodon API in incompatible ways. You can find the `pl-api` source code in the `packages/pl-api` directory of the Nicolium repository.
 
@@ -36,8 +41,8 @@ pnpm -F nicolium dev
 
 The server supports hot module reloading, so any changes you make to the source code will be reflected in the browser automatically.
 
-!!! tip
-    You can install the [React Developer Tools](https://react.dev/learn/react-developer-tools) browser extension to inspect components, their props and state. It might help you understand the application better and identify performance problems. It is available for [Firefox](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/), [Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en) (and compatible Chromium-based browsers) and [Edge](https://microsoftedge.microsoft.com/addons/detail/react-developer-tools/gpphkfbcpidddadnkolkpfckpihlkkil).
+<!-- TODO: turn those into tip/note again -->
+> **Tip:** You can install the [React Developer Tools](https://react.dev/learn/react-developer-tools) browser extension to inspect components, their props and state. It might help you understand the application better and identify performance problems. It is available for [Firefox](https://addons.mozilla.org/en-US/firefox/addon/react-devtools/), [Chrome](https://chrome.google.com/webstore/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=en) (and compatible Chromium-based browsers) and [Edge](https://microsoftedge.microsoft.com/addons/detail/react-developer-tools/gpphkfbcpidddadnkolkpfckpihlkkil).
 
 ## Testing
 

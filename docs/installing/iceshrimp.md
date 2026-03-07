@@ -1,3 +1,9 @@
+---
+title: Iceshrimp.NET
+section: Installing
+order: 30
+---
+
 # Installing Nicolium as Iceshrimp.NET frontend
 
 Iceshrimp.NET does not have built-in support for alternative frontends. However, there are ways to use Nicolium as the frontend for Iceshrimp.NET by rerouting specific requests using a reverse proxy like Nginx.
