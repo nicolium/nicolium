@@ -73,7 +73,11 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
   const timelinePage: Array<TimelineEntry> = [];
 
   const processStatus = (status: Status): boolean => {
-    if (timelinePage.some((entry) => entry.type === 'status' && entry.id === status.id))
+    if (
+      timelinePage.some(
+        (entry) => entry.type === 'status' && entry.id === (status.reblog || status).id,
+      )
+    )
       return false;
 
     let isConnectedTop = false;
