@@ -182,7 +182,10 @@ const useTimelinesStore = create<State>()(
           const timeline = state.timelines[timelineId];
           if (!timeline) return;
 
-          if (timeline.entries.some((entry) => entry.type === 'status' && entry.id === status.id))
+          if (
+            timeline.entries.some((entry) => entry.type === 'status' && entry.id === status.id) ||
+            timeline.queuedEntries.some((s) => s.id === status.id)
+          )
             return;
 
           timeline.queuedEntries.unshift(status);
@@ -303,6 +306,13 @@ const useTimelinesStore = create<State>()(
               (e) => e.type === 'pending-status' && e.id === idempotencyKey,
             );
             if (idx !== -1) {
+              if (
+                timeline.entries.some((entry) => entry.type === 'status' && entry.id === newId) ||
+                timeline.queuedEntries.some((s) => s.id === newId)
+              ) {
+                timeline.entries.splice(idx, 1);
+                return;
+              }
               timeline.entries[idx] = {
                 type: 'status',
                 id: newId,
