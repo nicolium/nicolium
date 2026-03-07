@@ -218,7 +218,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
             text: intl.formatMessage(messages.keyboardShortcuts),
           },
           {
-            href: 'https://pl.mkljczk.pl/docs/',
+            href: 'https://nicolium.app/docs/',
             target: '_blank',
             icon: require('@phosphor-icons/core/regular/book-open.svg'),
             text: intl.formatMessage(messages.docs),

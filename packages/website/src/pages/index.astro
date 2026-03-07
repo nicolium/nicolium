@@ -4,15 +4,20 @@ import Hero from "@mkljczk/astro-theme/components/Hero.astro";
 import Section from "@mkljczk/astro-theme/components/Section.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
+import Screenshot2 from "../assets/screenshot2.png";
+import Screenshot3 from "../assets/screenshot3.png";
+import Screenshot4 from "../assets/screenshot4.png";
+import Screenshot5 from "../assets/screenshot5.png";
+import Screenshot6 from "../assets/screenshot6.png";
 ---
 
 <!doctype html>
-<html lang="pl">
+<html lang="en">
   <head>
     <BaseHead
       siteTitle="Nicolium"
       description="Mastodon-compatible social media front-end"
-      faviconPath="favicon.svg"
+      faviconPath="/favicon.svg"
     />
   </head>
   <body>
@@ -37,18 +42,26 @@ import Header from "../components/Header.astro";
           <Section
             heading="Feature-rich."
             subheading="Nicolium includes a lot features to improve your experience, like WYSIWYG text editor, draft posts and language detection."
+            imageSrc={Screenshot2}
+            imageAlt="Screenshot of post editor with WYSIWYG formatting options"
           />
           <Section
             heading="Get the most out of your Fediverse instance."
             subheading="Nicolium implements features not present in standard Mastodon API, like emoji reactions, chats or interaction policies."
+            imageSrc={Screenshot3}
+            imageAlt="Screenshot of a post with emoji reactions picker open"
           />
           <Section
             heading="Customizable."
             subheading="Nicolium lets you choose between three themes and adjust accent color to your liking."
+            imageSrc={Screenshot4}
+            imageAlt="Screenshot of theme settings with theme and accent color options"
           />
           <Section
             heading="Stay private."
             subheading="Nicolium includes features which help you maintain online privacy. This includes URL cleaning, which helps you remove unwanted parts of URLs used to mark your online activity."
+            imageSrc={Screenshot5}
+            imageAlt="Screenshot of post composer prompting to clean URL from tracking parameters"
           />
           <Section
             heading="Open source."
@@ -59,6 +72,8 @@ import Header from "../components/Header.astro";
             button2Text="GitHub"
             button2Link="https://github.com/mkljczk/nicolium"
             button2Target="_blank"
+            imageSrc={Screenshot6}
+            imageAlt="Screenshot of a part of pl-api source code"
           />
         </div>
       </section>

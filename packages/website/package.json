@@ -2,6 +2,14 @@
   "name": "website",
   "type": "module",
   "version": "0.0.1",
+  "homepage": "https://nicolium.app",
+  "bugs": {
+    "url": "https://codeberg.org/mkljczk/nicolium/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://codeberg.org/mkljczk/nicolium.git"
+  },
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",

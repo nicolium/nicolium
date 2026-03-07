@@ -1,0 +1,56 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BaseHead from "@mkljczk/astro-theme/components/BaseHead.astro";
+import BaseDocsLayout from "@mkljczk/astro-theme/layouts/DocsLayout.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+interface Props {
+  entry: CollectionEntry<"docs">;
+  headings: { depth: number; slug: string; text: string }[];
+  allDocs: CollectionEntry<"docs">[];
+}
+
+const { entry, headings, allDocs } = Astro.props;
+const { title } = entry.data;
+
+const sorted = [...allDocs].sort(
+  (a, b) => (a.data.order ?? 99) - (b.data.order ?? 99),
+);
+
+const sections: { name: string; items: CollectionEntry<"docs">[] }[] = [];
+const sectionMap = new Map<string, CollectionEntry<"docs">[]>();
+
+for (const doc of sorted) {
+  if (doc.id === "index") continue;
+
+  const section = doc.data.section ?? "General";
+  if (!sectionMap.has(section)) {
+    const items: CollectionEntry<"docs">[] = [];
+    sectionMap.set(section, items);
+    sections.push({ name: section, items });
+  }
+  sectionMap.get(section)!.push(doc);
+}
+---
+
+<BaseDocsLayout
+  lang="en"
+  headings={headings}
+  currentId={entry.id}
+  sections={sections}
+  tocButtonTitle="Toggle table of contents"
+  tocHeading="Table of Contents"
+  sidebarHeading="Documentation"
+>
+  <BaseHead
+    slot="head"
+    siteTitle="Nicolium"
+    title={`${title} — Docs`}
+    description={`${title} — Nicolium documentation`}
+    faviconPath="/favicon.svg"
+  />
+  <Header slot="header" docsNav={sections} />
+  <Footer slot="footer" />
+  <slot />
+</BaseDocsLayout>

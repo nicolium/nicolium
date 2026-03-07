@@ -1,7 +1,21 @@
 ---
+import type { CollectionEntry } from "astro:content";
 import BaseHeader from "@mkljczk/astro-theme/components/Header.astro";
 
+interface Props {
+  docsNav?: {
+    name: string;
+    items: CollectionEntry<"docs">[];
+  }[];
+}
+
+const { docsNav } = Astro.props;
+
 const navItems = [
+  {
+    label: "Docs",
+    href: "/docs/",
+  },
   {
     label: "Source code",
     href: "https://codeberg.org/mkljczk/nicolium",
@@ -16,4 +30,5 @@ const navItems = [
   menuExpandTitle="Expand"
   menuCollapseTitle="Collapse"
   navItems={navItems}
+  docsNav={docsNav}
 />
