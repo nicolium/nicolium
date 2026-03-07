@@ -72,13 +72,12 @@ interface State {
 const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
   const timelinePage: Array<TimelineEntry> = [];
 
-  const processStatus = (status: Status): boolean => {
-    if (
-      timelinePage.some(
-        (entry) => entry.type === 'status' && entry.id === (status.reblog || status).id,
-      )
-    )
-      return false;
+  const processStatus = (status: Status) => {
+    const existingEntry = timelinePage.findIndex(
+      (entry) => entry.type === 'status' && entry.id === (status.reblog || status).id,
+    );
+
+    if (existingEntry !== -1) return existingEntry;
 
     let isConnectedTop = false;
     const inReplyToId = (status.reblog || status).in_reply_to_id;
@@ -87,7 +86,8 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
       const foundStatus = statuses.find((s) => (s.reblog || s).id === inReplyToId);
 
       if (foundStatus) {
-        if (processStatus(foundStatus)) {
+        const entryIndex = processStatus(foundStatus);
+        if (entryIndex === -1) {
           const lastEntry = timelinePage.at(-1);
           // it's always of type status but doing this to satisfy ts
           if (lastEntry?.type === 'status') lastEntry.isConnectedBottom = true;
@@ -117,7 +117,7 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
           isConnectedTop,
         });
       }
-      return true;
+      return -1;
     }
 
     timelinePage.push({
@@ -129,7 +129,7 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
       isConnectedTop,
     });
 
-    return true;
+    return -1;
   };
 
   for (const status of statuses) {
