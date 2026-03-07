@@ -52,6 +52,7 @@ const settingsSchema = v.object({
   checkEmojiReactsSupport: v.fallback(v.boolean(), false),
   disableUserProvidedMedia: v.fallback(v.boolean(), false),
   stripMetadata: v.fallback(v.boolean(), false),
+  storeSettingsInNotes: v.fallback(v.boolean(), false),
 
   theme: v.optional(
     coerceObject({
