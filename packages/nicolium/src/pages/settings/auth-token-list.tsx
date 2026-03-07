@@ -19,16 +19,10 @@ import type { OauthToken } from 'pl-api';
 
 const messages = defineMessages({
   header: { id: 'column.tokens', defaultMessage: 'Active sessions' },
-  revoke: { id: 'security.tokens.revoke', defaultMessage: 'Revoke' },
   revokeSessionHeading: {
     id: 'confirmations.revoke_session.heading',
     defaultMessage: 'Revoke current session',
   },
-  revokeSessionMessage: {
-    id: 'confirmations.revoke_session.message',
-    defaultMessage: 'You are about to revoke your current session. You will be signed out.',
-  },
-  revokeSessionConfirm: { id: 'confirmations.revoke_session.confirm', defaultMessage: 'Revoke' },
 });
 
 interface IAuthToken {
@@ -47,8 +41,15 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
     if (isCurrent)
       openModal('CONFIRM', {
         heading: intl.formatMessage(messages.revokeSessionHeading),
-        message: intl.formatMessage(messages.revokeSessionMessage),
-        confirm: intl.formatMessage(messages.revokeSessionConfirm),
+        message: (
+          <FormattedMessage
+            id='confirmations.revoke_session.message'
+            defaultMessage='You are about to revoke your current session. You will be signed out.'
+          />
+        ),
+        confirm: (
+          <FormattedMessage id='confirmations.revoke_session.confirm' defaultMessage='Revoke' />
+        ),
         onConfirm: () => {
           revokeMutation.mutate();
         },
@@ -144,7 +145,9 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
         )}
       </div>
       <div className={clsx('⁂-token__actions')}>
-        <button onClick={handleRevoke}>{intl.formatMessage(messages.revoke)}</button>
+        <button onClick={handleRevoke}>
+          <FormattedMessage id='security.tokens.revoke' defaultMessage='Revoke' />
+        </button>
       </div>
     </div>
   );

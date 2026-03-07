@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router';
 import { GroupRoles } from 'pl-api';
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import List, { ListItem } from '@/components/list';
 import { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,19 +17,7 @@ import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.manage_group', defaultMessage: 'Manage group' },
-  editGroup: { id: 'manage_group.edit_group', defaultMessage: 'Edit group' },
-  pendingRequests: { id: 'manage_group.pending_requests', defaultMessage: 'Pending requests' },
-  blockedMembers: { id: 'manage_group.blocked_members', defaultMessage: 'Banned members' },
-  deleteGroup: { id: 'manage_group.delete_group', defaultMessage: 'Delete group' },
-  deleteConfirm: { id: 'confirmations.delete_group.confirm', defaultMessage: 'Delete' },
   deleteHeading: { id: 'confirmations.delete_group.heading', defaultMessage: 'Delete group' },
-  deleteMessage: {
-    id: 'confirmations.delete_group.message',
-    defaultMessage:
-      'Are you sure you want to delete this group? This is a permanent action that cannot be undone.',
-  },
-  members: { id: 'group.tabs.members', defaultMessage: 'Members' },
-  other: { id: 'settings.other', defaultMessage: 'Other options' },
   deleteSuccess: { id: 'group.delete.success', defaultMessage: 'Group successfully deleted' },
 });
 
@@ -64,8 +52,13 @@ const ManageGroup: React.FC = () => {
   const onDeleteGroup = () => {
     openModal('CONFIRM', {
       heading: intl.formatMessage(messages.deleteHeading),
-      message: intl.formatMessage(messages.deleteMessage),
-      confirm: intl.formatMessage(messages.deleteConfirm),
+      message: (
+        <FormattedMessage
+          id='confirmations.delete_group.message'
+          defaultMessage='Are you sure you want to delete this group? This is a permanent action that cannot be undone.'
+        />
+      ),
+      confirm: <FormattedMessage id='confirmations.delete_group.confirm' defaultMessage='Delete' />,
       onConfirm: () => {
         deleteGroup(undefined, {
           onSuccess() {
@@ -87,12 +80,18 @@ const ManageGroup: React.FC = () => {
         {isOwner && (
           <>
             <CardHeader>
-              <CardTitle title={intl.formatMessage(messages.editGroup)} />
+              <CardTitle
+                title={
+                  <FormattedMessage id='manage_group.edit_group' defaultMessage='Edit group' />
+                }
+              />
             </CardHeader>
 
             <List>
               <ListItem
-                label={intl.formatMessage(messages.editGroup)}
+                label={
+                  <FormattedMessage id='manage_group.edit_group' defaultMessage='Edit group' />
+                }
                 to='/groups/$groupId/manage/edit'
                 params={{ groupId: group.id }}
               >
@@ -105,18 +104,27 @@ const ManageGroup: React.FC = () => {
         )}
 
         <CardHeader>
-          <CardTitle title={intl.formatMessage(messages.members)} />
+          <CardTitle
+            title={<FormattedMessage id='group.tabs.members' defaultMessage='Members' />}
+          />
         </CardHeader>
 
         <List>
           <ListItem
-            label={intl.formatMessage(messages.pendingRequests)}
+            label={
+              <FormattedMessage
+                id='manage_group.pending_requests'
+                defaultMessage='Pending requests'
+              />
+            }
             to='/groups/$groupId/manage/requests'
             params={{ groupId: group.id }}
           />
 
           <ListItem
-            label={intl.formatMessage(messages.blockedMembers)}
+            label={
+              <FormattedMessage id='manage_group.blocked_members' defaultMessage='Banned members' />
+            }
             to='/groups/$groupId/manage/blocks'
             params={{ groupId: group.id }}
           />
@@ -125,12 +133,21 @@ const ManageGroup: React.FC = () => {
         {isOwner && (
           <>
             <CardHeader>
-              <CardTitle title={intl.formatMessage(messages.other)} />
+              <CardTitle
+                title={<FormattedMessage id='settings.other' defaultMessage='Other options' />}
+              />
             </CardHeader>
 
             <List>
               <ListItem
-                label={<Text theme='danger'>{intl.formatMessage(messages.deleteGroup)}</Text>}
+                label={
+                  <Text theme='danger'>
+                    <FormattedMessage
+                      id='manage_group.delete_group'
+                      defaultMessage='Delete group'
+                    />
+                  </Text>
+                }
                 onClick={onDeleteGroup}
               />
             </List>

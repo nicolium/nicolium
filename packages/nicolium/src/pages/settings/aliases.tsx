@@ -26,7 +26,6 @@ const messages = defineMessages({
   delete: { id: 'column.aliases.delete', defaultMessage: 'Delete' },
   add: { id: 'aliases.account.add', defaultMessage: 'Create alias' },
   search: { id: 'aliases.search', defaultMessage: 'Search your old account' },
-  searchTitle: { id: 'tabs_bar.search', defaultMessage: 'Search' },
   clear: { id: 'search.clear', defaultMessage: 'Clear input' },
 });
 
@@ -133,7 +132,9 @@ const Search: React.FC<IAliasesSearch> = ({ onSubmit }) => {
           />
         </button>
       </label>
-      <Button onClick={handleSubmit}>{intl.formatMessage(messages.searchTitle)}</Button>
+      <Button onClick={handleSubmit}>
+        <FormattedMessage id='tabs_bar.search' defaultMessage='Search' />
+      </Button>
     </div>
   );
 };

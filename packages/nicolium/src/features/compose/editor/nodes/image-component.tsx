@@ -326,7 +326,12 @@ const ImageComponent = ({
             )}
           >
             <label>
-              <span style={{ display: 'none' }}>{intl.formatMessage(messages.description)}</span>
+              <span className='sr-only'>
+                <FormattedMessage
+                  id='upload_form.description'
+                  defaultMessage='Describe for the visually impaired'
+                />
+              </span>
 
               <textarea
                 className='m-0 w-full rounded-md border border-solid border-white/25 bg-transparent p-2.5 text-sm text-white placeholder:text-white/60'
