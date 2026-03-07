@@ -31,7 +31,7 @@ const useTimeline = (
   useEffect(() => {
     if (!timeline.isPending || timeline.isFetching) return;
     fetchInitial();
-  }, []);
+  }, [timelineId]);
 
   const fetchInitial = useCallback(async () => {
     timelineActions.setLoading(timelineId, true);
