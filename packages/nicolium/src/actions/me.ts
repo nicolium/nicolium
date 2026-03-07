@@ -99,9 +99,11 @@ const fetchMeSuccess =
 
     const settings = account.settings_store?.[FE_NAME] || account.settings_store?.[LEGACY_FE_NAME];
 
-    if (client.features.frontendConfigurations) {
+    if (settings) {
       useSettingsStore.getState().actions.loadUserSettings(settings);
-    } else if (client.features.notes) {
+    }
+
+    if (!client.features.frontendConfigurations && client.features.notes) {
       const note = await getClient(getState)
         .accounts.getRelationships([account.id])
         .then((relationships) => relationships[0]?.note);
@@ -112,6 +114,9 @@ const fetchMeSuccess =
         if (match) {
           try {
             const frontendConfig = JSON.parse(decodeURIComponent(match[1]));
+            if (typeof frontendConfig === 'object' && frontendConfig !== null) {
+              frontendConfig.storeSettingsInNotes = true;
+            }
             useSettingsStore.getState().actions.loadUserSettings(frontendConfig);
             return frontendConfig;
           } catch (error) {

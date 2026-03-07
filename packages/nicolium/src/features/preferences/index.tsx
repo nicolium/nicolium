@@ -282,6 +282,32 @@ const Preferences = () => {
 
   return (
     <Form>
+      {!features.frontendConfigurations && features.notes && (
+        <List>
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.fields.store_settings_in_notes'
+                defaultMessage='Store settings in account notes (recommended)'
+              />
+            }
+            hint={
+              <FormattedMessage
+                id='preferences.fields.store_settings_in_notes_hint'
+                defaultMessage='It allows you to sync your settings across devices. They are only visible to you.'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['storeSettingsInNotes']}
+              defaultValue
+              onChange={onToggleChange}
+            />
+          </ListItem>
+        </List>
+      )}
+
       <List>
         <ListItem
           label={
@@ -298,30 +324,6 @@ const Preferences = () => {
             onChange={onToggleChange}
           />
         </ListItem>
-      </List>
-
-      <List>
-        {/* <ListItem
-          label={
-            <FormattedMessage
-              id='preferences.fields.store_settings_in_notes'
-              defaultMessage='Store settings in account notes'
-            />
-          }
-          hint={
-            <FormattedMessage
-              id='preferences.fields.store_settings_in_notes_hint'
-              defaultMessage='It allows you to sync your settings across devices. They are only visible to you.'
-            />
-          }
-        >
-          <SettingToggle
-            settings={settings}
-            settingPath={['storeSettingsInNotes']}
-            defaultValue
-            onChange={onToggleChange}
-          />
-        </ListItem> */}
 
         <ListItem
           label={

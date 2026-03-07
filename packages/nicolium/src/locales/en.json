@@ -1586,6 +1586,8 @@
   "preferences.fields.render_mfm_hint": "MFM support is experimental, not all node types are supported.",
   "preferences.fields.render_mfm_label": "Render Misskey Flavored Markdown",
   "preferences.fields.spoilers_display_label": "Automatically expand text behind spoilers",
+  "preferences.fields.store_settings_in_notes": "Store settings in account notes (recommended)",
+  "preferences.fields.store_settings_in_notes_hint": "It allows you to sync your settings across devices. They are only visible to you.",
   "preferences.fields.system_emoji_font_label": "Use system emoji font",
   "preferences.fields.system_font_label": "Use system's default font",
   "preferences.fields.theme": "Theme",
