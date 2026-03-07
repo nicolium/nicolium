@@ -5,7 +5,6 @@ import { Toaster } from 'react-hot-toast';
 
 import { fetchConfig } from '@/actions/admin';
 import { register as registerPushNotifications } from '@/actions/push-notifications/registerer';
-import { fetchHomeTimeline } from '@/actions/timelines';
 import { useUserStream } from '@/api/hooks/streaming/use-user-stream';
 import SidebarNavigation from '@/components/navigation/sidebar-navigation';
 import ThumbNavigation from '@/components/navigation/thumb-navigation';
@@ -20,17 +19,17 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { prefetchFollowRequests } from '@/queries/accounts/use-follow-requests';
 import { queryClient } from '@/queries/client';
 import { prefetchCustomEmojis } from '@/queries/instance/use-custom-emojis';
-import {
-  usePrefetchNotifications,
-  usePrefetchNotificationsMarker,
-} from '@/queries/notifications/use-notifications';
+import { usePrefetchNotificationsMarker } from '@/queries/markers/use-markers';
+import { usePrefetchNotifications } from '@/queries/notifications/use-notifications';
 import { useFilters } from '@/queries/settings/use-filters';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
 import { useShoutboxSubscription } from '@/stores/shoutbox';
 import { useIsDropdownMenuOpen } from '@/stores/ui';
 import { getVapidKey } from '@/utils/auth';
 import { isStandalone } from '@/utils/state';
-
+// Dummy import, to make sure that <Status /> ends up in the application bundle.
+// Without this it ends up in ~8 very commonly used bundles.
+import '@/components/statuses/status';
 import {
   ModalRoot,
   AccountHoverCard,
@@ -38,9 +37,6 @@ import {
   DropdownNavigation,
   StatusHoverCard,
 } from './util/async-components';
-// Dummy import, to make sure that <Status /> ends up in the application bundle.
-// Without this it ends up in ~8 very commonly used bundles.
-import '@/components/statuses/status';
 import GlobalHotkeys from './util/global-hotkeys';
 
 const UI: React.FC = React.memo(() => {
@@ -90,8 +86,6 @@ const UI: React.FC = React.memo(() => {
     if (!account) return;
 
     prefetchCustomEmojis(client);
-
-    dispatch(fetchHomeTimeline());
 
     if (account.is_admin && features.pleromaAdminAccounts) {
       dispatch(fetchConfig());

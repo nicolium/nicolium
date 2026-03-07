@@ -13,15 +13,10 @@ const getAccounts = (): Array<Account> =>
 const selectAccount = (accountId: string) =>
   queryClient.getQueryData(queryKeys.accounts.show(accountId));
 
-const selectAccounts = (accountIds: Array<string>) =>
-  accountIds
-    .map((accountId) => selectAccount(accountId))
-    .filter((account): account is Account => account !== undefined);
-
 const selectOwnAccount = (state: RootState) => {
   if (state.me) {
     return selectAccount(state.me);
   }
 };
 
-export { getAccounts, selectAccount, selectAccounts, selectOwnAccount };
+export { getAccounts, selectAccount, selectOwnAccount };

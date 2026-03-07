@@ -1,14 +1,21 @@
 import { useTransition } from '@react-spring/web';
 import React from 'react';
+import { defineMessages, useIntl } from 'react-intl';
 
 import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
 import { useAnnouncements } from '@/queries/announcements/use-announcements';
 import { useSettings } from '@/stores/settings';
 
+import Icon from '../ui/icon';
+
 import Reaction from './reaction';
 
 import type { Emoji, NativeEmoji } from '@/features/emoji';
 import type { AnnouncementReaction, CustomEmoji } from 'pl-api';
+
+const messages = defineMessages({
+  addEmoji: { id: 'emoji_button.label', defaultMessage: 'Insert emoji' },
+});
 
 interface IReactionsBar {
   announcementId: string;
@@ -17,6 +24,7 @@ interface IReactionsBar {
 }
 
 const ReactionsBar: React.FC<IReactionsBar> = ({ announcementId, reactions, emojiMap }) => {
+  const intl = useIntl();
   const { reduceMotion } = useSettings();
   const { addReaction } = useAnnouncements();
 
@@ -41,7 +49,7 @@ const ReactionsBar: React.FC<IReactionsBar> = ({ announcementId, reactions, emoj
   });
 
   return (
-    <div className='flex flex-wrap items-center gap-1'>
+    <div className='⁂-status-reactions-bar'>
       {transitions(({ scale }, reaction) => (
         <Reaction
           key={reaction.name}
@@ -52,7 +60,16 @@ const ReactionsBar: React.FC<IReactionsBar> = ({ announcementId, reactions, emoj
         />
       ))}
 
-      {visibleReactions.length < 8 && <EmojiPickerDropdown onPickEmoji={handleEmojiPick} />}
+      {visibleReactions.length < 8 && (
+        <EmojiPickerDropdown onPickEmoji={handleEmojiPick}>
+          <button
+            className='⁂-status-reactions-bar__picker-button emoji-picker-dropdown'
+            title={intl.formatMessage(messages.addEmoji)}
+          >
+            <Icon src={require('@phosphor-icons/core/regular/smiley-sticker.svg')} aria-hidden />
+          </button>
+        </EmojiPickerDropdown>
+      )}
     </div>
   );
 };

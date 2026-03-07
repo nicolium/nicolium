@@ -70,6 +70,8 @@ interface IScrollableList extends VirtuosoProps<any, any> {
   onScrollToTop?: () => void;
   /** Callback when the list is scrolled. */
   onScroll?: () => void;
+  /** Callback when the topmost visible item index changes. */
+  onTopItemChanged?: (index: number) => void;
   /** Placeholder component to render while loading. */
   placeholderComponent?: React.ComponentType | React.NamedExoticComponent;
   /** Number of placeholders to render while loading. */
@@ -104,6 +106,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
       onScroll,
       onScrollToTop,
       onLoadMore,
+      onTopItemChanged,
       className,
       listClassName,
       itemClassName,
@@ -220,6 +223,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
       // HACK: using the first index can be buggy.
       // Track the second item instead, unless the endIndex comes before it (eg one 1 item in view).
       topIndex.current = Math.min(range.startIndex + 1, range.endIndex);
+      onTopItemChanged?.(range.startIndex);
       handleScroll();
     };
 
@@ -268,7 +272,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
           itemClassName,
         }}
         components={{
-          Header: prepend ? () => <>{prepend}</> : undefined,
+          Header: prepend ? () => prepend : undefined,
           ScrollSeekPlaceholder: Placeholder as React.ComponentType<any>,
           EmptyPlaceholder: renderEmpty,
           List,

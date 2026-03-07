@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { useIntl, defineMessages } from 'react-intl';
+import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { type Components, Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 
 import Avatar from '@/components/ui/avatar';
@@ -22,16 +22,6 @@ import type { Chat } from 'pl-api';
 
 const messages = defineMessages({
   today: { id: 'chats.dividers.today', defaultMessage: 'Today' },
-  blockedBy: { id: 'chat_message_list.blocked_by', defaultMessage: 'You are blocked by' },
-  networkFailureTitle: { id: 'chat_message_list.network_failure.title', defaultMessage: 'Whoops!' },
-  networkFailureSubtitle: {
-    id: 'chat_message_list.network_failure.subtitle',
-    defaultMessage: 'We encountered a network failure.',
-  },
-  networkFailureAction: {
-    id: 'chat_message_list.network_failure.action',
-    defaultMessage: 'Try again',
-  },
 });
 
 type TimeFormat = 'today' | 'date';
@@ -219,7 +209,12 @@ const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
           />
           <Text align='center'>
             <>
-              <Text tag='span'>{intl.formatMessage(messages.blockedBy)}</Text>{' '}
+              <Text tag='span'>
+                <FormattedMessage
+                  id='chat_message_list.blocked_by'
+                  defaultMessage='You are blocked by'
+                />
+              </Text>{' '}
               <Text tag='span' theme='primary'>
                 @{chat.account.acct}
               </Text>
@@ -236,16 +231,25 @@ const ChatMessageList: React.FC<IChatMessageList> = React.memo(({ chat }) => {
         <Stack space={4}>
           <Stack space={1}>
             <Text size='lg' weight='bold' align='center'>
-              {intl.formatMessage(messages.networkFailureTitle)}
+              <FormattedMessage
+                id='chat_message_list.network_failure.title'
+                defaultMessage='Whoops!'
+              />
             </Text>
             <Text theme='muted' align='center'>
-              {intl.formatMessage(messages.networkFailureSubtitle)}
+              <FormattedMessage
+                id='chat_message_list.network_failure.subtitle'
+                defaultMessage='We encountered a network failure.'
+              />
             </Text>
           </Stack>
 
           <div className='mx-auto'>
             <Button theme='primary' onClick={() => refetch()}>
-              {intl.formatMessage(messages.networkFailureAction)}
+              <FormattedMessage
+                id='chat_message_list.network_failure.action'
+                defaultMessage='Try again'
+              />
             </Button>
           </div>
         </Stack>

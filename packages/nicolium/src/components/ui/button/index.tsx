@@ -111,7 +111,6 @@ const Button = React.forwardRef<HTMLButtonElement | HTMLAnchorElement, IButton>(
           to={props.to}
           params={props.params}
           search={props.search}
-          tabIndex={-1}
         >
           {buttonChildren}
         </Link>

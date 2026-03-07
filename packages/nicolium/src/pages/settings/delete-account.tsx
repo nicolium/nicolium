@@ -15,9 +15,6 @@ import { useFeatures } from '@/hooks/use-features';
 import toast from '@/toast';
 
 const messages = defineMessages({
-  passwordFieldLabel: { id: 'security.fields.password.label', defaultMessage: 'Password' },
-  deleteHeader: { id: 'column.delete_account', defaultMessage: 'Delete account' },
-  deleteSubmit: { id: 'security.submit.delete', defaultMessage: 'Delete account' },
   deleteAccountSuccess: {
     id: 'security.delete_account.success',
     defaultMessage: 'Account successfully deleted.',
@@ -61,7 +58,9 @@ const DeleteAccountPage = () => {
   return (
     <Card variant='rounded'>
       <CardHeader backHref='/settings'>
-        <CardTitle title={intl.formatMessage(messages.deleteHeader)} />
+        <CardTitle
+          title={<FormattedMessage id='column.delete_account' defaultMessage='Delete account' />}
+        />
       </CardHeader>
 
       <CardBody>
@@ -94,7 +93,11 @@ const DeleteAccountPage = () => {
 
           <Form onSubmit={handleSubmit}>
             {!features.deleteAccountWithoutPassword && (
-              <FormGroup labelText={intl.formatMessage(messages.passwordFieldLabel)}>
+              <FormGroup
+                labelText={
+                  <FormattedMessage id='security.fields.password.label' defaultMessage='Password' />
+                }
+              >
                 <Input
                   type='password'
                   name='password'
@@ -106,7 +109,7 @@ const DeleteAccountPage = () => {
 
             <FormActions>
               <Button type='submit' theme='danger' disabled={isLoading}>
-                {intl.formatMessage(messages.deleteSubmit)}
+                <FormattedMessage id='security.submit.delete' defaultMessage='Delete account' />
               </Button>
             </FormActions>
           </Form>

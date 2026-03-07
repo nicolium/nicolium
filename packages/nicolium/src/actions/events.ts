@@ -5,11 +5,6 @@ import { useComposeStore } from '@/stores/compose';
 import toast from '@/toast';
 
 import { importEntities } from './importer';
-import {
-  STATUS_FETCH_SOURCE_FAIL,
-  STATUS_FETCH_SOURCE_REQUEST,
-  STATUS_FETCH_SOURCE_SUCCESS,
-} from './statuses';
 
 import type { AppDispatch, RootState } from '@/store';
 import type { CreateEventParams, Location, MediaAttachment } from 'pl-api';
@@ -95,21 +90,15 @@ const cancelEventCompose = () => {
 };
 
 const initEventEdit = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  dispatch({ type: STATUS_FETCH_SOURCE_REQUEST, statusId });
-
   return getClient(getState())
     .statuses.getStatusSource(statusId)
     .then((response) => {
-      dispatch({ type: STATUS_FETCH_SOURCE_SUCCESS, statusId });
       useComposeStore
         .getState()
         .actions.updateCompose(`compose-event-modal-${statusId}`, (draft) => {
           draft.text = response.text;
         });
       return response;
-    })
-    .catch((error) => {
-      dispatch({ type: STATUS_FETCH_SOURCE_FAIL, statusId, error });
     });
 };
 

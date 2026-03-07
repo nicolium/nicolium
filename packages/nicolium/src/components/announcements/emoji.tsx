@@ -13,10 +13,10 @@ interface IEmoji {
 }
 
 const Emoji: React.FC<IEmoji> = ({ emoji, emojiMap, hovered }) => {
-  const { autoPlayGif, systemEmojiFont } = useSettings();
+  const { autoPlayGif, reduceMotion, systemEmojiFont } = useSettings();
 
   if (unicodeMapping[emoji]) {
-    if (systemEmojiFont) return <>{emoji}</>;
+    if (systemEmojiFont) return emoji;
 
     const { unified, shortcode } = unicodeMapping[emoji];
     const title = shortcode ? `:${shortcode}:` : '';
@@ -31,7 +31,8 @@ const Emoji: React.FC<IEmoji> = ({ emoji, emojiMap, hovered }) => {
       />
     );
   } else if (emojiMap[emoji]) {
-    const filename = autoPlayGif || hovered ? emojiMap[emoji].url : emojiMap[emoji].static_url;
+    const filename =
+      (autoPlayGif && !reduceMotion) || hovered ? emojiMap[emoji].url : emojiMap[emoji].static_url;
     const shortCode = `:${emoji}:`;
 
     return (

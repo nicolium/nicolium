@@ -12,35 +12,7 @@ import { useOwnAccount } from '@/hooks/use-own-account';
 import { useMfaConfig } from '@/queries/security/use-mfa';
 
 const messages = defineMessages({
-  accountAliases: { id: 'column.aliases', defaultMessage: 'Account aliases' },
-  accountMigration: { id: 'column.migration', defaultMessage: 'Move account' },
-  backups: { id: 'column.backups', defaultMessage: 'Backups' },
-  blocks: { id: 'column.blocks', defaultMessage: 'Blocks' },
-  changeEmail: { id: 'column.change_email', defaultMessage: 'Change email' },
-  changePassword: { id: 'column.change_password', defaultMessage: 'Change password' },
-  configureMfa: { id: 'settings.configure_mfa', defaultMessage: 'Configure MFA' },
-  deleteAccount: { id: 'column.delete_account', defaultMessage: 'Delete account' },
-  developers: { id: 'column.developers', defaultMessage: 'Developers' },
-  domainBlocks: { id: 'column.domain_blocks', defaultMessage: 'Domain blocks' },
-  editProfile: { id: 'settings.edit_profile', defaultMessage: 'Edit profile' },
-  exportData: { id: 'column.export_data', defaultMessage: 'Export data' },
-  filters: { id: 'column.filters', defaultMessage: 'Muted words' },
-  importData: { id: 'column.import_data', defaultMessage: 'Import data' },
-  interactionPolicies: {
-    id: 'column.interaction_policies',
-    defaultMessage: 'Interaction policies',
-  },
-  mfaDisabled: { id: 'mfa.disabled', defaultMessage: 'Disabled' },
-  mfaEnabled: { id: 'mfa.enabled', defaultMessage: 'Enabled' },
-  mutes: { id: 'column.mutes', defaultMessage: 'Mutes' },
-  mutesAndBlocks: { id: 'settings.mutes_blocks', defaultMessage: 'Mutes and blocks' },
-  other: { id: 'settings.other', defaultMessage: 'Other options' },
-  preferences: { id: 'column.preferences', defaultMessage: 'Preferences' },
-  profile: { id: 'settings.profile', defaultMessage: 'Profile' },
-  security: { id: 'settings.security', defaultMessage: 'Security' },
-  sessions: { id: 'column.tokens', defaultMessage: 'Active sessions' },
   settings: { id: 'settings.settings', defaultMessage: 'Settings' },
-  privacy: { id: 'column.privacy', defaultMessage: 'Privacy' },
 });
 
 /** User settings page. */
@@ -61,34 +33,60 @@ const SettingsPage = () => {
     <Column label={intl.formatMessage(messages.settings)} transparent withHeader={false}>
       <Card className='space-y-4' variant='rounded'>
         <CardHeader>
-          <CardTitle title={intl.formatMessage(messages.profile)} />
+          <CardTitle title={<FormattedMessage id='settings.profile' defaultMessage='Profile' />} />
         </CardHeader>
 
         <CardBody>
           <List>
-            <ListItem label={intl.formatMessage(messages.editProfile)} to='/settings/profile'>
+            <ListItem
+              label={<FormattedMessage id='settings.edit_profile' defaultMessage='Edit profile' />}
+              to='/settings/profile'
+            >
               <span className='max-w-full truncate'>{displayName}</span>
             </ListItem>
           </List>
         </CardBody>
 
         <CardHeader>
-          <CardTitle title={intl.formatMessage(messages.mutesAndBlocks)} />
+          <CardTitle
+            title={
+              <FormattedMessage id='settings.mutes_blocks' defaultMessage='Mutes and blocks' />
+            }
+          />
         </CardHeader>
 
         <CardBody>
           <List>
-            <ListItem label={intl.formatMessage(messages.mutes)} to='/mutes' />
-            <ListItem label={intl.formatMessage(messages.blocks)} to='/blocks' />
+            <ListItem
+              label={<FormattedMessage id='column.mutes' defaultMessage='Mutes' />}
+              to='/mutes'
+            />
+            <ListItem
+              label={<FormattedMessage id='column.blocks' defaultMessage='Blocks' />}
+              to='/blocks'
+            />
             {(features.filters || features.filtersV2) && (
-              <ListItem label={intl.formatMessage(messages.filters)} to='/filters' />
+              <ListItem
+                label={<FormattedMessage id='column.filters' defaultMessage='Muted words' />}
+                to='/filters'
+              />
             )}
             {features.federating && (
-              <ListItem label={intl.formatMessage(messages.domainBlocks)} to='/domain_blocks' />
+              <ListItem
+                label={
+                  <FormattedMessage id='column.domain_blocks' defaultMessage='Domain blocks' />
+                }
+                to='/domain_blocks'
+              />
             )}
             {(features.interactionRequests || features.quoteApprovalPolicies) && (
               <ListItem
-                label={intl.formatMessage(messages.interactionPolicies)}
+                label={
+                  <FormattedMessage
+                    id='column.interaction_policies'
+                    defaultMessage='Interaction policies'
+                  />
+                }
                 to='/settings/interaction_policies'
               />
             )}
@@ -96,33 +94,48 @@ const SettingsPage = () => {
         </CardBody>
 
         <CardHeader>
-          <CardTitle title={intl.formatMessage(messages.security)} />
+          <CardTitle
+            title={<FormattedMessage id='settings.security' defaultMessage='Security' />}
+          />
         </CardHeader>
 
         <CardBody>
           <List>
             {features.changeEmail && (
-              <ListItem label={intl.formatMessage(messages.changeEmail)} to='/settings/email' />
+              <ListItem
+                label={<FormattedMessage id='column.change_email' defaultMessage='Change email' />}
+                to='/settings/email'
+              />
             )}
             {features.changePassword && (
               <ListItem
-                label={intl.formatMessage(messages.changePassword)}
+                label={
+                  <FormattedMessage id='column.change_password' defaultMessage='Change password' />
+                }
                 to='/settings/password'
               />
             )}
             {features.manageMfa && (
-              <>
-                <ListItem label={intl.formatMessage(messages.configureMfa)} to='/settings/mfa'>
-                  <span>
-                    {isMfaEnabled
-                      ? intl.formatMessage(messages.mfaEnabled)
-                      : intl.formatMessage(messages.mfaDisabled)}
-                  </span>
-                </ListItem>
-              </>
+              <ListItem
+                label={
+                  <FormattedMessage id='settings.configure_mfa' defaultMessage='Configure MFA' />
+                }
+                to='/settings/mfa'
+              >
+                <span>
+                  {isMfaEnabled ? (
+                    <FormattedMessage id='mfa.enabled' defaultMessage='Enabled' />
+                  ) : (
+                    <FormattedMessage id='mfa.disabled' defaultMessage='Disabled' />
+                  )}
+                </span>
+              </ListItem>
             )}
             {features.sessions && (
-              <ListItem label={intl.formatMessage(messages.sessions)} to='/settings/tokens' />
+              <ListItem
+                label={<FormattedMessage id='column.tokens' defaultMessage='Active sessions' />}
+                to='/settings/tokens'
+              />
             )}
             <ListItem
               label={<FormattedMessage id='settings.privacy' defaultMessage='Privacy' />}
@@ -144,7 +157,9 @@ const SettingsPage = () => {
         ) : null}
 
         <CardHeader>
-          <CardTitle title={intl.formatMessage(messages.preferences)} />
+          <CardTitle
+            title={<FormattedMessage id='column.preferences' defaultMessage='Preferences' />}
+          />
         </CardHeader>
 
         <CardBody>
@@ -152,33 +167,49 @@ const SettingsPage = () => {
         </CardBody>
 
         <CardHeader>
-          <CardTitle title={intl.formatMessage(messages.other)} />
+          <CardTitle
+            title={<FormattedMessage id='settings.other' defaultMessage='Other options' />}
+          />
         </CardHeader>
 
         <CardBody>
           <List>
             {(features.importBlocks || features.importFollows || features.importMutes) && (
-              <ListItem label={intl.formatMessage(messages.importData)} to='/settings/import' />
+              <ListItem
+                label={<FormattedMessage id='column.import_data' defaultMessage='Import data' />}
+                to='/settings/import'
+              />
             )}
 
-            <ListItem label={intl.formatMessage(messages.exportData)} to='/settings/export' />
+            <ListItem
+              label={<FormattedMessage id='column.export_data' defaultMessage='Export data' />}
+              to='/settings/export'
+            />
 
             {features.accountBackups && (
-              <ListItem label={intl.formatMessage(messages.backups)} to='/settings/backups' />
+              <ListItem
+                label={<FormattedMessage id='column.backups' defaultMessage='Backups' />}
+                to='/settings/backups'
+              />
             )}
 
-            <ListItem label={intl.formatMessage(messages.developers)} to='/developers' />
+            <ListItem
+              label={<FormattedMessage id='column.developers' defaultMessage='Developers' />}
+              to='/developers'
+            />
 
             {features.federating &&
               (features.accountMoving ? (
                 <ListItem
-                  label={intl.formatMessage(messages.accountMigration)}
+                  label={<FormattedMessage id='column.migration' defaultMessage='Move account' />}
                   to='/settings/migration'
                 />
               ) : (
                 features.manageAccountAliases && (
                   <ListItem
-                    label={intl.formatMessage(messages.accountAliases)}
+                    label={
+                      <FormattedMessage id='column.aliases' defaultMessage='Account aliases' />
+                    }
                     to='/settings/aliases'
                   />
                 )
@@ -186,7 +217,11 @@ const SettingsPage = () => {
 
             {(features.deleteAccount || features.deleteAccountWithoutPassword) && (
               <ListItem
-                label={<Text theme='danger'>{intl.formatMessage(messages.deleteAccount)}</Text>}
+                label={
+                  <Text theme='danger'>
+                    <FormattedMessage id='column.delete_account' defaultMessage='Delete account' />
+                  </Text>
+                }
                 to='/settings/account'
               />
             )}

@@ -60,7 +60,9 @@ const DisableOtpForm: React.FC = () => {
       </Stack>
 
       <FormGroup
-        labelText={intl.formatMessage(messages.passwordPlaceholder)}
+        labelText={
+          <FormattedMessage id='mfa.mfa_setup.password_placeholder' defaultMessage='Password' />
+        }
         hintText={
           <FormattedMessage
             id='mfa.mfa_disable_enter_password'

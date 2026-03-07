@@ -74,7 +74,6 @@ const messages = defineMessages({
     id: 'edit_profile.fields.location_placeholder',
     defaultMessage: 'Location',
   },
-  cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
   mentionPolicyNone: { id: 'edit_profile.fields.mention_policy.none', defaultMessage: 'Everybody' },
   mentionPolicyOnlyKnown: {
     id: 'edit_profile.fields.mention_policy.only_known',
@@ -825,7 +824,7 @@ const EditProfilePage: React.FC = () => {
 
         <FormActions>
           <Button to='/settings' theme='tertiary'>
-            {intl.formatMessage(messages.cancel)}
+            <FormattedMessage id='common.cancel' defaultMessage='Cancel' />
           </Button>
 
           <Button theme='primary' type='submit' disabled={isLoading}>

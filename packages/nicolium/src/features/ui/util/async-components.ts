@@ -107,7 +107,6 @@ export const SettingsStore = lazy(() => import('@/pages/developers/settings-stor
 export const Share = lazy(() => import('@/pages/utils/share'));
 export const Status = lazy(() => import('@/pages/statuses/status'));
 export const Subscribers = lazy(() => import('@/pages/account-lists/subscribers'));
-export const TestTimeline = lazy(() => import('@/pages/timelines/test-timeline'));
 export const ThemeEditor = lazy(() => import('@/pages/dashboard/theme-editor'));
 export const Privacy = lazy(() => import('@/pages/settings/privacy'));
 export const UserIndex = lazy(() => import('@/pages/dashboard/user-index'));

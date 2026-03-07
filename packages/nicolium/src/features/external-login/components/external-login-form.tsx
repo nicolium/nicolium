@@ -83,7 +83,9 @@ const ExternalLoginForm: React.FC = () => {
 
   return (
     <Form className='⁂-external-login' onSubmit={handleSubmit} data-testid='external-login'>
-      <FormGroup labelText={intl.formatMessage(messages.instanceLabel)}>
+      <FormGroup
+        labelText={<FormattedMessage id='login.fields.instance_label' defaultMessage='Instance' />}
+      >
         <Input
           aria-label={intl.formatMessage(messages.instancePlaceholder)}
           placeholder={intl.formatMessage(messages.instancePlaceholder)}

@@ -148,6 +148,18 @@ const DropdownMenuContent: React.FC<IDropdownMenuContent> = ({
     }
     document.addEventListener('keydown', handleKeyDown, false);
 
+    if (Component && !items?.length) {
+      const elements = Array.from(
+        ref.current?.querySelectorAll<HTMLElement>(
+          'a, button:not([disabled]), input:not([disabled]), select:not([disabled])',
+        ) ?? [],
+      ).filter((element) => !element.hasAttribute('aria-hidden'));
+      const firstElement = elements[0];
+      if (firstElement) {
+        firstElement.focus();
+      }
+    }
+
     return () => {
       document.removeEventListener('click', handleDocumentClick);
       document.removeEventListener('touchend', handleDocumentClick);

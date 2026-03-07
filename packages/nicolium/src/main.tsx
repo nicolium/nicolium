@@ -10,7 +10,6 @@ declare global {
   }
 }
 
-import './polyfills';
 import '@/storage/migrate-legacy-data';
 import React from 'react';
 import { createRoot } from 'react-dom/client';

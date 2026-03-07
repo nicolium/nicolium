@@ -7,7 +7,6 @@ import type { MinifiedInteractionRequest } from './statuses/use-interaction-requ
 import type { MinifiedContext } from './statuses/use-status';
 import type { MinifiedStatusEdit } from './statuses/use-status-history';
 import type { MinifiedEmojiReaction } from './statuses/use-status-interactions';
-import type { TimelineEntry } from './timelines/use-timeline';
 import type { MinifiedSuggestion } from './trends/use-suggested-accounts';
 import type {
   MinifiedAdminAccount,
@@ -34,10 +33,8 @@ import type {
   AdminRule,
   Announcement,
   Antenna,
-  AntennaTimelineParams,
   Backup,
   BookmarkFolder,
-  BubbleTimelineParams,
   Chat,
   Circle,
   CredentialAccount,
@@ -48,29 +45,21 @@ import type {
   Group,
   GroupRelationship,
   GroupRole,
-  GroupTimelineParams,
-  HashtagTimelineParams,
-  HomeTimelineParams,
   InteractionPolicies,
-  LinkTimelineParams,
   List,
-  ListTimelineParams,
   Location,
   Marker,
   NotificationGroup,
   OauthToken,
   PaginatedResponse,
-  PaginationParams,
   PlApiClient,
   Poll,
-  PublicTimelineParams,
   Relationship,
   RssFeed,
   ScheduledStatus,
   Tag,
   Translation,
   TrendsLink,
-  WrenchedTimelineParams,
 } from 'pl-api';
 
 type TaggedKey<TKey extends readonly unknown[], TData> = DataTag<TKey, TData>;
@@ -386,7 +375,10 @@ const notifications = {
 
 const markers = {
   root: ['markers'] as const,
-  notifications: ['markers', 'notifications'] as TaggedKey<['markers', 'notifications'], Marker>,
+  timeline: (timeline: 'home' | 'notifications') => {
+    const key = ['markers', timeline] as const;
+    return key as TaggedKey<typeof key, Marker>;
+  },
 };
 
 const search = {
@@ -427,46 +419,6 @@ const trends = {
 const suggestions = {
   root: ['suggestions'] as const,
   all: ['suggestions'] as TaggedKey<['suggestions'], Array<MinifiedSuggestion>>,
-};
-
-const timelines = {
-  root: ['timelines'] as const,
-  home: (params?: Omit<HomeTimelineParams, keyof PaginationParams>) => {
-    const key = ['timelines', 'home', params] as const;
-    return key as TaggedKey<typeof key, Array<TimelineEntry>>;
-  },
-  public: (local?: boolean, params?: Omit<PublicTimelineParams, keyof PaginationParams>) => {
-    const key = ['timelines', 'public', { local, ...params }] as const;
-    return key as TaggedKey<typeof key, Array<TimelineEntry>>;
-  },
-  hashtag: (hashtag: string, params?: Omit<HashtagTimelineParams, keyof PaginationParams>) => {
-    const key = ['timelines', 'hashtag', hashtag, params] as const;
-    return key as TaggedKey<typeof key, Array<TimelineEntry>>;
-  },
-  link: (url: string, params?: Omit<LinkTimelineParams, keyof PaginationParams>) => {
-    const key = ['timelines', 'link', url, params] as const;
-    return key as TaggedKey<typeof key, Array<TimelineEntry>>;
-  },
-  list: (listId: string, params?: Omit<ListTimelineParams, keyof PaginationParams>) => {
-    const key = ['timelines', 'list', listId, params] as const;
-    return key as TaggedKey<typeof key, Array<TimelineEntry>>;
-  },
-  group: (groupId: string, params?: Omit<GroupTimelineParams, keyof PaginationParams>) => {
-    const key = ['timelines', 'group', groupId, params] as const;
-    return key as TaggedKey<typeof key, Array<TimelineEntry>>;
-  },
-  bubble: (params?: Omit<BubbleTimelineParams, keyof PaginationParams>) => {
-    const key = ['timelines', 'bubble', params] as const;
-    return key as TaggedKey<typeof key, Array<TimelineEntry>>;
-  },
-  antenna: (antennaId: string, params?: Omit<AntennaTimelineParams, keyof PaginationParams>) => {
-    const key = ['timelines', 'antenna', antennaId, params] as const;
-    return key as TaggedKey<typeof key, Array<TimelineEntry>>;
-  },
-  wrenched: (params?: Omit<WrenchedTimelineParams, keyof PaginationParams>) => {
-    const key = ['timelines', 'wrenched', params] as const;
-    return key as TaggedKey<typeof key, Array<TimelineEntry>>;
-  },
 };
 
 const timelineIds = {
@@ -691,7 +643,6 @@ const queryKeys = {
   search,
   trends,
   suggestions,
-  timelines,
   timelineIds,
   settings,
   interactionPolicies,

@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import React, { useCallback, useMemo, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import { submitReport, ReportableEntities } from '@/actions/reports';
-import { fetchAccountTimeline } from '@/actions/timelines';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import StatusContent from '@/components/statuses/status-content';
 import Modal from '@/components/ui/modal';
@@ -15,24 +14,13 @@ import { useInstance } from '@/hooks/use-instance';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useBlockAccountMutation } from '@/queries/accounts/use-relationship';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
+import { useAccountTimeline } from '@/queries/timelines/use-timelines';
 
 import ConfirmationStep from './steps/confirmation-step';
 import OtherActionsStep from './steps/other-actions-step';
 import ReasonStep from './steps/reason-step';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
-
-const messages = defineMessages({
-  blankslate: {
-    id: 'report.reason.blankslate',
-    defaultMessage: 'You have removed all statuses from being selected.',
-  },
-  done: { id: 'report.done', defaultMessage: 'Done' },
-  next: { id: 'report.next', defaultMessage: 'Next' },
-  submit: { id: 'report.submit', defaultMessage: 'Submit' },
-  cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
-  previous: { id: 'report.previous', defaultMessage: 'Previous' },
-});
 
 enum Steps {
   ONE = 'ONE',
@@ -83,7 +71,6 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
   statusIds,
 }) => {
   const dispatch = useAppDispatch();
-  const intl = useIntl();
 
   const { data: account } = useAccount(accountId || undefined);
 
@@ -126,7 +113,12 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
       case 0:
         return (
           <div className='flex w-full items-center justify-center rounded-lg bg-gray-100 p-4 dark:bg-gray-800'>
-            <Text theme='muted'>{intl.formatMessage(messages.blankslate)}</Text>
+            <Text theme='muted'>
+              <FormattedMessage
+                id='report.reason.blankslate'
+                defaultMessage='You have removed all statuses from being selected.'
+              />
+            </Text>
           </div>
         );
       default:
@@ -137,9 +129,9 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
   const cancelText = useMemo(() => {
     switch (currentStep) {
       case Steps.ONE:
-        return intl.formatMessage(messages.cancel);
+        return <FormattedMessage id='common.cancel' defaultMessage='Cancel' />;
       default:
-        return intl.formatMessage(messages.previous);
+        return <FormattedMessage id='report.previous' defaultMessage='Previous' />;
     }
   }, [currentStep]);
 
@@ -159,13 +151,13 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
   const confirmationText = useMemo(() => {
     switch (currentStep) {
       case Steps.ONE:
-        return intl.formatMessage(messages.next);
+        return <FormattedMessage id='report.next' defaultMessage='Next' />;
       case Steps.TWO:
-        return intl.formatMessage(messages.submit);
+        return <FormattedMessage id='report.submit' defaultMessage='Submit' />;
       case Steps.THREE:
-        return intl.formatMessage(messages.done);
+        return <FormattedMessage id='report.done' defaultMessage='Done' />;
       default:
-        return intl.formatMessage(messages.next);
+        return <FormattedMessage id='report.next' defaultMessage='Next' />;
     }
   }, [currentStep]);
 
@@ -230,11 +222,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
     }
   }, [currentStep]);
 
-  useEffect(() => {
-    if (account?.id) {
-      dispatch(fetchAccountTimeline(account.id, { exclude_replies: false }));
-    }
-  }, [account?.id]);
+  useAccountTimeline(accountId, { exclude_replies: false });
 
   if (!account) {
     return null;

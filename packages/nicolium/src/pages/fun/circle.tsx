@@ -68,9 +68,8 @@ const CirclePage: React.FC = () => {
     progress: number;
   }>({ state: 'unrequested', progress: 0 });
   const [expanded, setExpanded] = useState(false);
-  const [users, setUsers] = useState<
-    Array<{ id: string; avatar?: string; avatar_description?: string; acct: string }>
-  >();
+  const [users, setUsers] =
+    useState<Array<{ id: string; avatar?: string; avatar_description?: string; acct: string }>>();
 
   const intl = useIntl();
   const dispatch = useAppDispatch();

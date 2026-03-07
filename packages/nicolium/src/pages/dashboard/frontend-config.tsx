@@ -47,50 +47,11 @@ const messages = defineMessages({
     id: 'frontend_config.crypto_donate_panel_limit.meta_fields.limit_placeholder',
     defaultMessage: 'Number of items to display in the crypto homepage widget',
   },
-  rawJSONLabel: {
-    id: 'frontend_config.raw_json_label',
-    defaultMessage: 'Advanced: Edit raw JSON data',
-  },
-  rawJSONHint: {
-    id: 'frontend_config.raw_json_hint',
-    defaultMessage:
-      'Edit the settings data directly. Changes made directly to the JSON file will override the form fields above. Click "Save" to apply your changes.',
-  },
   rawJSONInvalid: { id: 'frontend_config.raw_json_invalid', defaultMessage: 'is invalid' },
-  displayFqnLabel: {
-    id: 'frontend_config.display_fqn_label',
-    defaultMessage: 'Display domain (eg @user@domain) for local accounts.',
-  },
-  greentextLabel: {
-    id: 'frontend_config.greentext_label',
-    defaultMessage: '<span>>render greentext</span>',
-  },
-  mediaPreviewLabel: {
-    id: 'frontend_config.media_preview_label',
-    defaultMessage: 'Prefer preview media for thumbnails',
-  },
-  mediaPreviewHint: {
-    id: 'frontend_config.media_preview_hint',
-    defaultMessage:
-      'Some backends provide an optimized version of media for display in timelines. However, these preview images may be too small without additional configuration.',
-  },
   tileServerLabel: { id: 'frontend_config.tile_server_label', defaultMessage: 'Map tile server' },
   tileServerAttributionLabel: {
     id: 'frontend_config.tile_server_attribution_label',
     defaultMessage: 'Map tiles attribution',
-  },
-  redirectRootNoLoginLabel: {
-    id: 'frontend_config.redirect_root_no_login_label',
-    defaultMessage: 'Redirect homepage',
-  },
-  redirectRootNoLoginHint: {
-    id: 'frontend_config.redirect_root_no_login_hint',
-    defaultMessage: 'Path to redirect the homepage when a user is not logged in.',
-  },
-  sentryDsnLabel: { id: 'frontend_config.sentry_dsn_label', defaultMessage: 'Sentry DSN' },
-  sentryDsnHint: {
-    id: 'frontend_config.sentry_dsn_hint',
-    defaultMessage: 'DSN URL for error reporting. Works with Sentry and GlitchTip.',
   },
 });
 
@@ -350,7 +311,14 @@ const FrontendConfigEditor: React.FC = () => {
           </CardHeader>
 
           <List>
-            <ListItem label={intl.formatMessage(messages.displayFqnLabel)}>
+            <ListItem
+              label={
+                <FormattedMessage
+                  id='frontend_config.display_fqn_label'
+                  defaultMessage='Display domain (eg @user@domain) for local accounts.'
+                />
+              }
+            >
               <Toggle
                 checked={frontendConfig.displayFqn}
                 onChange={handleChange('displayFqn', (e) => e.target.checked)}
@@ -358,11 +326,17 @@ const FrontendConfigEditor: React.FC = () => {
             </ListItem>
 
             <ListItem
-              label={intl.formatMessage(messages.greentextLabel, {
-                span: (children) => (
-                  <span className='dark:text-accent-green text-lime-600'>{children}</span>
-                ),
-              })}
+              label={
+                <FormattedMessage
+                  id='frontend_config.greentext_label'
+                  defaultMessage='<span>>render greentext</span>'
+                  values={{
+                    span: (children) => (
+                      <span className='dark:text-accent-green text-lime-600'>{children}</span>
+                    ),
+                  }}
+                />
+              }
             >
               <Toggle
                 checked={frontendConfig.greentext}
@@ -371,8 +345,18 @@ const FrontendConfigEditor: React.FC = () => {
             </ListItem>
 
             <ListItem
-              label={intl.formatMessage(messages.mediaPreviewLabel)}
-              hint={intl.formatMessage(messages.mediaPreviewHint)}
+              label={
+                <FormattedMessage
+                  id='frontend_config.media_preview_label'
+                  defaultMessage='Prefer preview media for thumbnails'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='frontend_config.media_preview_hint'
+                  defaultMessage='Some backends provide an optimized version of media for display in timelines. However, these preview images may be too small without additional configuration.'
+                />
+              }
             >
               <Toggle
                 checked={frontendConfig.mediaPreview}
@@ -381,8 +365,18 @@ const FrontendConfigEditor: React.FC = () => {
             </ListItem>
 
             <ListItem
-              label={intl.formatMessage(messages.redirectRootNoLoginLabel)}
-              hint={intl.formatMessage(messages.redirectRootNoLoginHint)}
+              label={
+                <FormattedMessage
+                  id='frontend_config.redirect_root_no_login_label'
+                  defaultMessage='Redirect homepage'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='frontend_config.redirect_root_no_login_hint'
+                  defaultMessage='Path to redirect the homepage when a user is not logged in.'
+                />
+              }
             >
               <Input
                 type='text'
@@ -393,8 +387,18 @@ const FrontendConfigEditor: React.FC = () => {
             </ListItem>
 
             <ListItem
-              label={intl.formatMessage(messages.sentryDsnLabel)}
-              hint={intl.formatMessage(messages.sentryDsnHint)}
+              label={
+                <FormattedMessage
+                  id='frontend_config.sentry_dsn_label'
+                  defaultMessage='Sentry DSN'
+                />
+              }
+              hint={
+                <FormattedMessage
+                  id='frontend_config.sentry_dsn_hint'
+                  defaultMessage='DSN URL for error reporting. Works with Sentry and GlitchTip.'
+                />
+              }
             >
               <Input
                 type='text'
@@ -458,7 +462,14 @@ const FrontendConfigEditor: React.FC = () => {
             draggable
           />
 
-          <FormGroup labelText={intl.formatMessage(messages.copyrightFooterLabel)}>
+          <FormGroup
+            labelText={
+              <FormattedMessage
+                id='frontend_config.copyright_footer.meta_fields.label_placeholder'
+                defaultMessage='Copyright footer'
+              />
+            }
+          >
             <Input
               type='text'
               placeholder={intl.formatMessage(messages.copyrightFooterLabel)}
@@ -480,7 +491,14 @@ const FrontendConfigEditor: React.FC = () => {
                 />
               </CardHeader>
 
-              <FormGroup labelText={intl.formatMessage(messages.tileServerLabel)}>
+              <FormGroup
+                labelText={
+                  <FormattedMessage
+                    id='frontend_config.tile_server_label'
+                    defaultMessage='Map tile server'
+                  />
+                }
+              >
                 <Input
                   type='text'
                   placeholder={intl.formatMessage(messages.tileServerLabel)}
@@ -489,7 +507,14 @@ const FrontendConfigEditor: React.FC = () => {
                 />
               </FormGroup>
 
-              <FormGroup labelText={intl.formatMessage(messages.tileServerAttributionLabel)}>
+              <FormGroup
+                labelText={
+                  <FormattedMessage
+                    id='frontend_config.tile_server_attribution_label'
+                    defaultMessage='Map tiles attribution'
+                  />
+                }
+              >
                 <Input
                   type='text'
                   placeholder={intl.formatMessage(messages.tileServerAttributionLabel)}
@@ -532,7 +557,14 @@ const FrontendConfigEditor: React.FC = () => {
             draggable
           />
 
-          <FormGroup labelText={intl.formatMessage(messages.cryptoDonatePanelLimitLabel)}>
+          <FormGroup
+            labelText={
+              <FormattedMessage
+                id='frontend_config.crypto_donate_panel_limit.meta_fields.limit_placeholder'
+                defaultMessage='Number of items to display in the crypto homepage widget'
+              />
+            }
+          >
             <Input
               type='number'
               min={0}
@@ -557,12 +589,22 @@ const FrontendConfigEditor: React.FC = () => {
           </CardHeader>
 
           <Accordion
-            headline={intl.formatMessage(messages.rawJSONLabel)}
+            headline={
+              <FormattedMessage
+                id='frontend_config.raw_json_label'
+                defaultMessage='Advanced: Edit raw JSON data'
+              />
+            }
             expanded={jsonEditorExpanded}
             onToggle={toggleJSONEditor}
           >
             <FormGroup
-              hintText={intl.formatMessage(messages.rawJSONHint)}
+              hintText={
+                <FormattedMessage
+                  id='frontend_config.raw_json_hint'
+                  defaultMessage='Edit the settings data directly. Changes made directly to the JSON file will override the form fields above. Click "Save" to apply your changes.'
+                />
+              }
               errors={jsonValid ? undefined : [intl.formatMessage(messages.rawJSONInvalid)]}
             >
               <Textarea value={rawJSON} onChange={handleEditJSON} isCodeEditor rows={12} />

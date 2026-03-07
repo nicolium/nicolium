@@ -21,7 +21,7 @@ const AutosuggestEmoji: React.FC<IAutosuggestEmoji> = ({ emoji }) => {
       <img className='emojione mr-2 block size-4' src={emoji.imageUrl} alt={emoji.colons} />
     );
   } else {
-    if (systemEmojiFont) emojiElement = <>{emoji.native}</>;
+    if (systemEmojiFont) emojiElement = emoji.native;
 
     const mapping =
       unicodeMapping[emoji.native] || unicodeMapping[emoji.native.replace(/\uFE0F$/, '')];

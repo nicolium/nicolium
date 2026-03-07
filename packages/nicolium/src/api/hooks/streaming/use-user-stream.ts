@@ -1,7 +1,6 @@
 import { useCallback } from 'react';
 
 import { importEntities } from '@/actions/importer';
-import { deleteFromTimelines, processTimelineUpdate } from '@/actions/timelines';
 import { useStatContext } from '@/contexts/stat-context';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useLoggedIn } from '@/hooks/use-logged-in';
@@ -11,6 +10,7 @@ import { updateConversations } from '@/queries/conversations/use-conversations';
 import { queryKeys } from '@/queries/keys';
 import { useProcessStreamNotification } from '@/queries/notifications/use-notifications';
 import { useSettings } from '@/stores/settings';
+import { useTimelinesStore } from '@/stores/timelines';
 import { getUnreadChatsCount, updateChatListItem } from '@/utils/chats';
 import { play, soundCache } from '@/utils/sounds';
 
@@ -110,14 +110,17 @@ const useUserStream = () => {
 
   const listener = useCallback((event: StreamingEvent) => {
     switch (event.event) {
-      case 'update':
-        dispatch(processTimelineUpdate(getTimelineFromStream(event.stream), event.payload));
+      case 'update': {
+        const timelineId = getTimelineFromStream(event.stream);
+        importEntities({ statuses: [event.payload] });
+        useTimelinesStore.getState().actions.receiveStreamingStatus(timelineId, event.payload);
         break;
+      }
       case 'status.update':
         importEntities({ statuses: [event.payload] });
         break;
       case 'delete':
-        dispatch(deleteFromTimelines(event.payload));
+        useTimelinesStore.getState().actions.deleteStatus(event.payload);
         break;
       case 'notification':
         processStreamNotification(event.payload);
@@ -159,12 +162,16 @@ const useUserStream = () => {
       case 'announcement.delete':
         deleteAnnouncement(event.payload);
         break;
-      case 'marker':
-        queryClient.setQueryData(
-          queryKeys.markers.notifications,
-          event.payload.notifications ?? null,
-        );
+      case 'marker': {
+        for (const timeline in event.payload) {
+          queryClient.setQueryData(
+            queryKeys.markers.timeline(timeline as 'home' | 'notifications'),
+            event.payload[timeline] ?? null,
+          );
+        }
+
         break;
+      }
     }
   }, []);
 

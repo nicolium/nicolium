@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Icon from '@/components/icon';
 import Button from '@/components/ui/button';
@@ -60,7 +60,9 @@ const Search: React.FC<ISearch> = ({ value, onSubmit }) => {
           </div>
         </label>
 
-        <Button onClick={handleSubmit}>{intl.formatMessage(messages.searchTitle)}</Button>
+        <Button onClick={handleSubmit}>
+          <FormattedMessage id='tabs_bar.search' defaultMessage='Search' />
+        </Button>
       </HStack>
     </Form>
   );

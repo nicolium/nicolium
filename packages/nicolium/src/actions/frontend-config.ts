@@ -28,26 +28,22 @@ const fetchFrontendConfigurations = () => (dispatch: AppDispatch, getState: () =
 
 /** Conditionally fetches Nicolium config depending on backend features */
 const fetchFrontendConfig =
-  (host: string | null) => (dispatch: AppDispatch, getState: () => RootState) => {
+  (host: string | null) => async (dispatch: AppDispatch, getState: () => RootState) => {
     const features = getState().auth.client.features;
 
     if (features.frontendConfigurations) {
-      return dispatch(fetchFrontendConfigurations()).then((data) => {
-        const legacyKey = 'pl_fe';
-        const key = 'nicolium';
+      const data = await dispatch(fetchFrontendConfigurations());
+      const legacyKey = 'pl_fe';
+      const key = 'nicolium';
 
-        const foundData = data[key] || data[legacyKey];
+      const foundData = data[key] || data[legacyKey];
 
-        if (foundData) {
-          dispatch(importFrontendConfig(foundData, host));
-          return foundData;
-        } else {
-          return dispatch(fetchFrontendConfigJson(host));
-        }
-      });
-    } else {
-      return dispatch(fetchFrontendConfigJson(host));
+      if (foundData) {
+        dispatch(importFrontendConfig(foundData, host));
+        return foundData;
+      }
     }
+    return dispatch(fetchFrontendConfigJson(host));
   };
 
 /** Tries to remember the config from browser storage before fetching it */
@@ -58,7 +54,6 @@ const loadFrontendConfig = () => async (dispatch: AppDispatch, getState: () => R
 
   if (result) {
     dispatch(fetchFrontendConfig(host));
-    return;
   } else {
     return dispatch(fetchFrontendConfig(host));
   }

@@ -1,0 +1,46 @@
+@use 'mixins';
+
+.⁂-tokens {
+  @apply grid grid-cols-1 gap-4 sm:grid-cols-2;
+}
+
+.⁂-token {
+  @apply rounded-lg bg-gray-100 p-4 dark:bg-primary-800 flex flex-col gap-2 h-full justify-between;
+
+  &__content {
+    @apply flex flex-col gap-1;
+  }
+
+  &__name {
+    @apply flex gap-1 items-center;
+    @include mixins.text($size: md, $weight: medium);
+
+    svg {
+      @apply inline size-4 text-inherit;
+    }
+  }
+
+  &__tokens {
+    @apply flex gap-2 items-center flex-wrap;
+
+    p {
+      @include mixins.text($size: sm, $theme: muted);
+    }
+  }
+
+  &__detail {
+    @include mixins.text($size: sm, $theme: muted);
+  }
+
+  &__actions {
+    @apply flex justify-end;
+
+    button {
+      @include mixins.button($theme: primary);
+    }
+  }
+
+  &--current button {
+    @apply border-transparent bg-danger-100 dark:bg-danger-900 text-danger-600 dark:text-danger-200 hover:bg-danger-600 hover:text-gray-100 dark:hover:text-gray-100 dark:hover:bg-danger-500 focus:ring-danger-500;
+  }
+}

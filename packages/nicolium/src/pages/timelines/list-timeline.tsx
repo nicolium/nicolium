@@ -1,21 +1,16 @@
 import { useNavigate } from '@tanstack/react-router';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { fetchListTimeline } from '@/actions/timelines';
-import { useListStream } from '@/api/hooks/streaming/use-list-stream';
 import { ListTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
 import MissingIndicator from '@/components/missing-indicator';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
-import Timeline from '@/features/ui/components/timeline';
 import { listTimelineRoute } from '@/features/ui/router';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useDeleteList, useList } from '@/queries/accounts/use-lists';
 import { useModalsActions } from '@/stores/modals';
-import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
   deleteHeading: { id: 'confirmations.delete_list.heading', defaultMessage: 'Delete list' },
@@ -28,60 +23,10 @@ const messages = defineMessages({
   deleteList: { id: 'lists.delete', defaultMessage: 'Delete list' },
 });
 
-interface IListTimeline {
-  listId: string;
-}
-
-const ListTimeline: React.FC<IListTimeline> = ({ listId }) => {
-  const dispatch = useAppDispatch();
-  const settings = useSettings();
-  const { openModal } = useModalsActions();
-
-  const onlyMedia = settings.timelines[`list:${listId}`]?.other.onlyMedia ?? false;
-
-  const handleLoadMore = () => {
-    dispatch(fetchListTimeline(listId, true));
-  };
-
-  useListStream(listId);
-
-  useEffect(() => {
-    dispatch(fetchListTimeline(listId, false));
-  }, [listId, onlyMedia]);
-
-  const handleEditClick = () => {
-    openModal('LIST_EDITOR', { listId });
-  };
-
-  return (
-    <Timeline
-      loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
-      scrollKey={`list_${listId}_timeline`}
-      timelineId={`list:${listId}${onlyMedia ? ':media' : ''}`}
-      onLoadMore={handleLoadMore}
-      emptyMessageText={
-        <div>
-          <FormattedMessage
-            id='empty_column.list'
-            defaultMessage='There is nothing in this list yet. When members of this list create new posts, they will appear here.'
-          />
-          <br />
-          <br />
-          <Button onClick={handleEditClick}>
-            <FormattedMessage id='list.click_to_add' defaultMessage='Click here to add people' />
-          </Button>
-        </div>
-      }
-      emptyMessageIcon={require('@phosphor-icons/core/regular/list-bullets.svg')}
-    />
-  );
-};
-
 const ListTimelinePage: React.FC = () => {
   const { listId } = listTimelineRoute.useParams();
 
   const intl = useIntl();
-  const { experimentalTimeline } = useSettings();
   const { openModal } = useModalsActions();
   const navigate = useNavigate();
 
@@ -146,11 +91,23 @@ const ListTimelinePage: React.FC = () => {
         />
       }
     >
-      {experimentalTimeline ? (
-        <ListTimelineColumn listId={listId} />
-      ) : (
-        <ListTimeline listId={listId} />
-      )}
+      <ListTimelineColumn
+        listId={listId}
+        emptyMessageText={
+          <div>
+            <FormattedMessage
+              id='empty_column.list'
+              defaultMessage='There is nothing in this list yet. When members of this list create new posts, they will appear here.'
+            />
+            <br />
+            <br />
+            <Button onClick={handleEditClick}>
+              <FormattedMessage id='list.click_to_add' defaultMessage='Click here to add people' />
+            </Button>
+          </div>
+        }
+        emptyMessageIcon={require('@phosphor-icons/core/regular/list-bullets.svg')}
+      />
     </Column>
   );
 };

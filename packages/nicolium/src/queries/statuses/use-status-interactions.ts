@@ -9,8 +9,6 @@ import { create } from 'mutative';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { importEntities } from '@/actions/importer';
-import { PIN_SUCCESS, UNPIN_SUCCESS, type InteractionsAction } from '@/actions/interactions';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -429,7 +427,6 @@ const useUnbookmarkStatus = (statusId: string) => {
 
 const usePinStatus = (statusId: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const { data: account } = useOwnAccount();
 
@@ -441,18 +438,12 @@ const usePinStatus = (statusId: string) => {
     onSuccess: (status) => {
       importEntities({ statuses: [status] });
       queryClient.invalidateQueries({ queryKey: queryKeys.statusLists.pins(account!.id) });
-      dispatch<InteractionsAction>({
-        type: PIN_SUCCESS,
-        statusId: status.id,
-        accountId: status.account.id,
-      });
     },
   });
 };
 
 const useUnpinStatus = (statusId: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
   const { data: account } = useOwnAccount();
 
@@ -464,11 +455,6 @@ const useUnpinStatus = (statusId: string) => {
     onSuccess: (status) => {
       importEntities({ statuses: [status] });
       queryClient.setQueryData(queryKeys.statusLists.pins(account!.id), filterById(statusId));
-      dispatch<InteractionsAction>({
-        type: UNPIN_SUCCESS,
-        statusId: status.id,
-        accountId: status.account.id,
-      });
     },
   });
 };

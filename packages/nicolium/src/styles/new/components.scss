@@ -358,7 +358,8 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
       @apply flex w-full items-center gap-2;
     }
 
-    h3 {
+    h3,
+    h2 {
       @apply grow text-lg font-bold leading-6 text-gray-900 dark:text-white;
     }
 

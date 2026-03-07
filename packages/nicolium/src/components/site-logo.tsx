@@ -5,7 +5,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import { useLogo } from '@/hooks/use-logo';
 
 const messages = defineMessages({
-  logo: { id: 'generic.logo', defaultMessage: 'Logo' },
+  logo: { id: 'common.logo', defaultMessage: 'Logo' },
 });
 
 interface ISiteLogo extends React.ComponentProps<'img'> {

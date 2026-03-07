@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Modal from '@/components/ui/modal';
@@ -11,18 +11,11 @@ import List from './components/list';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
 
-const messages = defineMessages({
-  subheading: { id: 'lists.subheading', defaultMessage: 'Your lists' },
-  add: { id: 'lists.new.create', defaultMessage: 'Add list' },
-});
-
 interface ListAdderModalProps {
   accountId: string;
 }
 
 const ListAdderModal: React.FC<BaseModalProps & ListAdderModalProps> = ({ accountId, onClose }) => {
-  const intl = useIntl();
-
   const { data: accountListIds = [] } = useListsForAccount(accountId);
 
   const { data: listIds = [] } = useLists((lists) => getOrderedLists(lists).map((list) => list.id));
@@ -43,14 +36,14 @@ const ListAdderModal: React.FC<BaseModalProps & ListAdderModalProps> = ({ accoun
       <br />
 
       <CardHeader>
-        <CardTitle title={intl.formatMessage(messages.add)} />
+        <CardTitle title={<FormattedMessage id='lists.new.create' defaultMessage='Add list' />} />
       </CardHeader>
       <NewListForm />
 
       <br />
 
       <CardHeader>
-        <CardTitle title={intl.formatMessage(messages.subheading)} />
+        <CardTitle title={<FormattedMessage id='lists.subheading' defaultMessage='Your lists' />} />
       </CardHeader>
       <div>
         {listIds.map((listId) => (

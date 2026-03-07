@@ -20,8 +20,15 @@
   @apply mb-1 block text-sm text-gray-700 dark:text-gray-600;
 }
 
+.⁂-status,
+.⁂-detailed-status {
+  .⁂-status-reactions-bar {
+    padding-top: 0.5rem;
+  }
+}
+
 .⁂-status-reactions-bar {
-  @apply flex gap-2 flex-wrap pt-2;
+  @apply flex gap-2 flex-wrap;
 
   &__button {
     @apply flex cursor-pointer items-center gap-2 overflow-hidden rounded-md border border-gray-400 px-1.5 py-1 transition-all bg-transparent dark:border-primary-700 dark:bg-primary-700 black:border-primary-800 black:bg-primary-800;
@@ -307,6 +314,105 @@
   }
 }
 
-.⁂-timeline-status--connected-bottom .status__content-wrapper {
-  padding-left: 54px;
+.⁂-timeline-gap {
+  @apply my-4 border-y border-gray-200 dark:border-gray-800;
+
+  --separator-border: var(--color-gray-200);
+  --separator-background: var(--color-primary-50);
+
+  &:is(.dark *) {
+    --separator-border: var(--color-gray-800);
+    --separator-background: var(--color-gray-900);
+  }
+
+  button {
+    margin: 0.5rem 0;
+  }
+
+  &__separator {
+    margin: 0 -1rem;
+    height: 4rem;
+
+    // Adapted from https://css-tricks.com/css-borders-using-masks/
+    background:
+      conic-gradient(
+          from -45deg at bottom,
+          transparent,
+          rgb(var(--separator-border)) 1deg 89deg,
+          transparent 90deg
+        )
+        bottom/2rem calc(50% + 1px) repeat-x,
+      conic-gradient(
+          from 135deg at top,
+          transparent,
+          rgb(var(--separator-border)) 1deg 89deg,
+          transparent 90deg
+        )
+        top / 2rem calc(50% + 1px) repeat-x;
+    background-position-y:
+      calc(100% + 1px),
+      -1px;
+    position: relative;
+
+    span {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      top: 0;
+      height: 100%;
+      width: 100%;
+      text-align: center;
+      font-size: 0.875rem;
+      color: rgb(var(--color-primary-600));
+      font-style: italic;
+      background:
+        conic-gradient(
+            from -45deg at bottom,
+            transparent,
+            rgb(var(--separator-background)) 1deg 89deg,
+            transparent 90deg
+          )
+          bottom/2rem calc(50% + 1px) repeat-x,
+        conic-gradient(
+            from 135deg at top,
+            transparent,
+            rgb(var(--separator-background)) 1deg 89deg,
+            transparent 90deg
+          )
+          top / 2rem calc(50% + 1px) repeat-x;
+
+      &:is(.dark *) {
+        color: rgb(var(--color-primary-400));
+      }
+    }
+  }
+}
+
+div:first-child:has(> .⁂-timeline-gap) {
+  .⁂-timeline-gap {
+    margin-top: 0;
+    border-top: none;
+
+    button:first-child {
+      margin-top: 0;
+    }
+  }
+}
+
+.⁂-timeline-status {
+  &--connected-bottom .status__content-wrapper {
+    padding-left: 54px;
+  }
+}
+
+div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
+  + div:has(> .⁂-timeline-status) {
+  .⁂-timeline-status {
+    border-top: 1px solid rgb(var(--color-gray-200));
+
+    &:is(.dark *) {
+      border-top-color: rgb(var(--color-gray-800));
+    }
+  }
 }

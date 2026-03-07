@@ -90,7 +90,6 @@ const StatusReaction: React.FC<IStatusReaction> = ({
       className={clsx('⁂-status-reactions-bar__button', {
         '⁂-status-reactions-bar__button--active': reaction.me,
       })}
-      key={reaction.name}
       onClick={handleClick}
       title={intl.formatMessage(messages.emojiCount, {
         emoji: `:${shortCode}:`,

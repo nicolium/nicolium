@@ -1,16 +1,14 @@
 import { useNavigate } from '@tanstack/react-router';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { fetchCircleTimeline } from '@/actions/timelines';
+import { CircleTimelineColumn } from '@/columns/timeline';
 import DropdownMenu from '@/components/dropdown-menu';
 import MissingIndicator from '@/components/missing-indicator';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Spinner from '@/components/ui/spinner';
-import Timeline from '@/features/ui/components/timeline';
 import { circleTimelineRoute } from '@/features/ui/router';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useCircle, useDeleteCircle } from '@/queries/accounts/use-circles';
 import { useModalsActions } from '@/stores/modals';
 
@@ -29,20 +27,11 @@ const CircleTimelinePage: React.FC = () => {
   const { circleId } = circleTimelineRoute.useParams();
 
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const { openModal } = useModalsActions();
   const navigate = useNavigate();
 
   const { data: circle, isFetching } = useCircle(circleId);
   const { mutate: deleteCircle } = useDeleteCircle();
-
-  useEffect(() => {
-    dispatch(fetchCircleTimeline(circleId));
-  }, [circleId]);
-
-  const handleLoadMore = () => {
-    dispatch(fetchCircleTimeline(circleId, true));
-  };
 
   const handleEditClick = () => {
     openModal('CIRCLE_EDITOR', { circleId });
@@ -79,20 +68,6 @@ const CircleTimelinePage: React.FC = () => {
     return <MissingIndicator />;
   }
 
-  const emptyMessage = (
-    <div>
-      <FormattedMessage
-        id='empty_column.circle'
-        defaultMessage='There is nothing in this circle yet. When members of this circle create new posts, they will appear here.'
-      />
-      <br />
-      <br />
-      <Button onClick={handleEditClick}>
-        <FormattedMessage id='circle.click_to_add' defaultMessage='Click here to add people' />
-      </Button>
-    </div>
-  );
-
   const items = [
     {
       text: intl.formatMessage(messages.editCircle),
@@ -116,12 +91,24 @@ const CircleTimelinePage: React.FC = () => {
         />
       }
     >
-      <Timeline
-        loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
-        scrollKey='circle_timeline'
-        timelineId={`circle:${circleId}`}
-        onLoadMore={handleLoadMore}
-        emptyMessageText={emptyMessage}
+      <CircleTimelineColumn
+        circleId={circleId}
+        emptyMessageText={
+          <div>
+            <FormattedMessage
+              id='empty_column.circle'
+              defaultMessage='There is nothing in this circle yet. When members of this circle create new posts, they will appear here.'
+            />
+            <br />
+            <br />
+            <Button onClick={handleEditClick}>
+              <FormattedMessage
+                id='circle.click_to_add'
+                defaultMessage='Click here to add people'
+              />
+            </Button>
+          </div>
+        }
         emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
       />
     </Column>

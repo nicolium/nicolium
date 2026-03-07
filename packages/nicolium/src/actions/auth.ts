@@ -7,7 +7,6 @@
  * @see module:@/actions/security
  */
 import {
-  credentialAccountSchema,
   PlApiClient,
   type Account,
   type CreateAccountParams,
@@ -16,7 +15,6 @@ import {
   type Token,
 } from 'pl-api';
 import { defineMessages } from 'react-intl';
-import * as v from 'valibot';
 
 import { createAccount } from '@/actions/accounts';
 import { createApp } from '@/actions/apps';
@@ -188,23 +186,9 @@ const verifyCredentials =
         return account;
       })
       .catch((error) => {
-        if (error?.response?.status === 403 && error?.response?.json?.id) {
-          // The user is waitlisted
-          const account = error.response.json;
-          const parsedAccount = v.parse(credentialAccountSchema, error.response.json);
-          queryClient.setQueryData(queryKeys.accounts.show(parsedAccount.id), parsedAccount);
-          dispatch<VerifyCredentialsSuccessAction>({
-            type: VERIFY_CREDENTIALS_SUCCESS,
-            token,
-            account: parsedAccount,
-          });
-          if (account.id === getState().me) dispatch(fetchMeSuccess(parsedAccount));
-          return parsedAccount;
-        } else {
-          if (getState().me === null) dispatch(fetchMeFail(error));
-          dispatch<VerifyCredentialsFailAction>({ type: VERIFY_CREDENTIALS_FAIL, token, error });
-          throw error;
-        }
+        if (getState().me === null) dispatch(fetchMeFail(error));
+        dispatch<VerifyCredentialsFailAction>({ type: VERIFY_CREDENTIALS_FAIL, token, error });
+        throw error;
       });
   };
 

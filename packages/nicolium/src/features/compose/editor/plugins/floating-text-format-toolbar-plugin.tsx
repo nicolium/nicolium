@@ -203,84 +203,82 @@ const BlockTypeDropdown = ({
   };
 
   return (
-    <>
-      <button
-        onClick={() => {
-          setShowDropDown(!showDropDown);
-        }}
-        className='relative flex cursor-pointer rounded-lg border-0 bg-none p-1 align-middle hover:bg-gray-100 disabled:cursor-not-allowed disabled:hover:bg-none dark:hover:bg-primary-700'
-        aria-label={intl.formatMessage(messages.blockType)}
-        type='button'
-      >
-        <Icon src={icon} />
-        <Icon
-          src={require('@phosphor-icons/core/regular/caret-down.svg')}
-          className='-bottom-2 size-4'
-        />
-        {showDropDown && (
-          <div className='absolute left-0 top-9 z-10 flex h-[38px] gap-0.5 rounded-lg bg-white p-1 shadow-lg transition-opacity dark:bg-gray-900'>
-            <ToolbarButton
-              onClick={formatParagraph}
-              active={blockType === 'paragraph'}
-              icon={blockTypeToIcon.paragraph}
-              aria-label={intl.formatMessage(messages.paragraph)}
-            />
-            {composeAllowHeadings && (
-              <>
-                <ToolbarButton
-                  onClick={() => {
-                    formatHeading('h1');
-                  }}
-                  active={blockType === 'h1'}
-                  icon={blockTypeToIcon.h1}
-                  aria-label={intl.formatMessage(messages.h1)}
-                />
-                <ToolbarButton
-                  onClick={() => {
-                    formatHeading('h2');
-                  }}
-                  active={blockType === 'h2'}
-                  icon={blockTypeToIcon.h2}
-                  aria-label={intl.formatMessage(messages.h2)}
-                />
-                <ToolbarButton
-                  onClick={() => {
-                    formatHeading('h3');
-                  }}
-                  active={blockType === 'h3'}
-                  icon={blockTypeToIcon.h3}
-                  aria-label={intl.formatMessage(messages.h3)}
-                />
-              </>
-            )}
-            <ToolbarButton
-              onClick={formatBulletList}
-              active={blockType === 'bullet'}
-              icon={blockTypeToIcon.bullet}
-              aria-label={intl.formatMessage(messages.bulletList)}
-            />
-            <ToolbarButton
-              onClick={formatNumberedList}
-              active={blockType === 'number'}
-              icon={blockTypeToIcon.number}
-              aria-label={intl.formatMessage(messages.numberedList)}
-            />
-            <ToolbarButton
-              onClick={formatQuote}
-              active={blockType === 'quote'}
-              icon={blockTypeToIcon.quote}
-              aria-label={intl.formatMessage(messages.quote)}
-            />
-            <ToolbarButton
-              onClick={formatCode}
-              active={blockType === 'code'}
-              icon={blockTypeToIcon.code}
-              aria-label={intl.formatMessage(messages.codeBlock)}
-            />
-          </div>
-        )}
-      </button>
-    </>
+    <button
+      onClick={() => {
+        setShowDropDown(!showDropDown);
+      }}
+      className='relative flex cursor-pointer rounded-lg border-0 bg-none p-1 align-middle hover:bg-gray-100 disabled:cursor-not-allowed disabled:hover:bg-none dark:hover:bg-primary-700'
+      aria-label={intl.formatMessage(messages.blockType)}
+      type='button'
+    >
+      <Icon src={icon} />
+      <Icon
+        src={require('@phosphor-icons/core/regular/caret-down.svg')}
+        className='-bottom-2 size-4'
+      />
+      {showDropDown && (
+        <div className='absolute left-0 top-9 z-10 flex h-[38px] gap-0.5 rounded-lg bg-white p-1 shadow-lg transition-opacity dark:bg-gray-900'>
+          <ToolbarButton
+            onClick={formatParagraph}
+            active={blockType === 'paragraph'}
+            icon={blockTypeToIcon.paragraph}
+            aria-label={intl.formatMessage(messages.paragraph)}
+          />
+          {composeAllowHeadings && (
+            <>
+              <ToolbarButton
+                onClick={() => {
+                  formatHeading('h1');
+                }}
+                active={blockType === 'h1'}
+                icon={blockTypeToIcon.h1}
+                aria-label={intl.formatMessage(messages.h1)}
+              />
+              <ToolbarButton
+                onClick={() => {
+                  formatHeading('h2');
+                }}
+                active={blockType === 'h2'}
+                icon={blockTypeToIcon.h2}
+                aria-label={intl.formatMessage(messages.h2)}
+              />
+              <ToolbarButton
+                onClick={() => {
+                  formatHeading('h3');
+                }}
+                active={blockType === 'h3'}
+                icon={blockTypeToIcon.h3}
+                aria-label={intl.formatMessage(messages.h3)}
+              />
+            </>
+          )}
+          <ToolbarButton
+            onClick={formatBulletList}
+            active={blockType === 'bullet'}
+            icon={blockTypeToIcon.bullet}
+            aria-label={intl.formatMessage(messages.bulletList)}
+          />
+          <ToolbarButton
+            onClick={formatNumberedList}
+            active={blockType === 'number'}
+            icon={blockTypeToIcon.number}
+            aria-label={intl.formatMessage(messages.numberedList)}
+          />
+          <ToolbarButton
+            onClick={formatQuote}
+            active={blockType === 'quote'}
+            icon={blockTypeToIcon.quote}
+            aria-label={intl.formatMessage(messages.quote)}
+          />
+          <ToolbarButton
+            onClick={formatCode}
+            active={blockType === 'code'}
+            icon={blockTypeToIcon.code}
+            aria-label={intl.formatMessage(messages.codeBlock)}
+          />
+        </div>
+      )}
+    </button>
   );
 };
 

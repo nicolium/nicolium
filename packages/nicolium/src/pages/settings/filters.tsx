@@ -24,8 +24,6 @@ const messages = defineMessages({
     defaultMessage: 'Filter deleted successfully',
   },
   deleteError: { id: 'column.filters.delete.error', defaultMessage: 'Error deleting filter' },
-  edit: { id: 'column.filters.edit', defaultMessage: 'Edit filter' },
-  delete: { id: 'column.filters.delete', defaultMessage: 'Delete' },
 });
 
 const contexts = {
@@ -142,10 +140,10 @@ const FiltersPage = () => {
               </Stack>
               <HStack space={2} justifyContent='end'>
                 <Button theme='primary' to='/filters/$filterId' params={{ filterId: filter.id }}>
-                  {intl.formatMessage(messages.edit)}
+                  <FormattedMessage id='column.filters.edit' defaultMessage='Edit filter' />
                 </Button>
                 <Button theme='danger' onClick={handleFilterDelete(filter.id)}>
-                  {intl.formatMessage(messages.delete)}
+                  <FormattedMessage id='column.filters.delete' defaultMessage='Delete' />
                 </Button>
               </HStack>
             </Stack>

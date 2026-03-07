@@ -68,7 +68,7 @@ const ConfirmationModal: React.FC<BaseModalProps & ConfirmationModalProps> = ({
       secondaryAction={onSecondary && handleSecondary}
     >
       <Stack space={4}>
-        <Text>{message}</Text>
+        <Text id='modal-description'>{message}</Text>
 
         {checkbox && (
           <List>

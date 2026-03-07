@@ -11,21 +11,7 @@ import PendingStatus from '@/features/ui/components/pending-status';
 import { timelineToFilterContextType } from '@/queries/settings/use-filters';
 import { selectChild } from '@/utils/scroll-utils';
 
-import Icon from '../ui/icon';
-
 import type { VirtuosoHandle } from 'react-virtuoso';
-
-const SkipPinned: React.FC<React.ComponentProps<'button'>> = ({ onClick }) => {
-  return (
-    <button className='⁂-skip-pinned' onClick={onClick}>
-      <Icon src={require('@phosphor-icons/core/regular/arrow-line-down.svg')} />
-
-      <p>
-        <FormattedMessage id='status.skip_pinned' defaultMessage='Skip pinned posts' />
-      </p>
-    </button>
-  );
-};
 
 interface IStatusList extends Omit<IScrollableList, 'onLoadMore' | 'children'> {
   /** Unique key to preserve the scroll position when navigating back. */
@@ -34,8 +20,6 @@ interface IStatusList extends Omit<IScrollableList, 'onLoadMore' | 'children'> {
   statusIds: Array<string>;
   /** Last _unfiltered_ status ID (maxId) for pagination. */
   lastStatusId?: string;
-  /** Pinned statuses to show at the top of the feed. */
-  featuredStatusIds?: Array<string>;
   /** Pagination callback when the end of the list is reached. */
   onLoadMore?: (lastStatusId: string) => void;
   /** Whether the data is currently being fetched. */
@@ -44,8 +28,6 @@ interface IStatusList extends Omit<IScrollableList, 'onLoadMore' | 'children'> {
   isPartial?: boolean;
   /** Whether we expect an additional page of data. */
   hasMore: boolean;
-  /** Message to display when the list is loaded but empty. */
-  emptyMessage?: React.ReactNode;
   /** ID of the timeline in Redux. */
   timelineId?: string;
   /** Whether to show group information. */
@@ -56,7 +38,6 @@ interface IStatusList extends Omit<IScrollableList, 'onLoadMore' | 'children'> {
 const StatusList: React.FC<IStatusList> = ({
   statusIds,
   lastStatusId,
-  featuredStatusIds,
   onLoadMore,
   timelineId,
   isLoading,
@@ -69,23 +50,17 @@ const StatusList: React.FC<IStatusList> = ({
 
   const contextType = timelineToFilterContextType(timelineId);
 
-  const getFeaturedStatusCount = () => featuredStatusIds?.length ?? 0;
-
-  const getCurrentStatusIndex = (id: string, featured: boolean): number => {
-    if (featured) {
-      return featuredStatusIds?.findIndex((key) => key === id) ?? 0;
-    } else {
-      return statusIds.findIndex((key) => key === id) + getFeaturedStatusCount();
-    }
+  const getCurrentStatusIndex = (id: string): number => {
+    return statusIds.findIndex((key) => key === id);
   };
 
-  const handleMoveUp = (id: string, featured: boolean = false) => {
-    const elementIndex = getCurrentStatusIndex(id, featured) - 1;
+  const handleMoveUp = (id: string) => {
+    const elementIndex = getCurrentStatusIndex(id) - 1;
     selectChild(elementIndex, node, document.getElementById('status-list') ?? undefined);
   };
 
-  const handleMoveDown = (id: string, featured: boolean = false) => {
-    const elementIndex = getCurrentStatusIndex(id, featured) + 1;
+  const handleMoveDown = (id: string) => {
+    const elementIndex = getCurrentStatusIndex(id) + 1;
     selectChild(
       elementIndex,
       node,
@@ -107,22 +82,6 @@ const StatusList: React.FC<IStatusList> = ({
     ),
     [onLoadMore, lastStatusId, statusIds.at(-1)],
   );
-
-  const handleSkipPinned = () => {
-    const skipPinned = () => {
-      selectChild(
-        getFeaturedStatusCount(),
-        node,
-        document.getElementById('status-list') ?? undefined,
-        scrollableContent.length,
-        'start',
-      );
-    };
-
-    skipPinned();
-
-    setTimeout(() => skipPinned, 0);
-  };
 
   const renderLoadGap = (index: number) => {
     const ids = statusIds;
@@ -157,23 +116,6 @@ const StatusList: React.FC<IStatusList> = ({
   };
 
   const scrollableContent = useMemo(() => {
-    const renderFeaturedStatuses = (): React.ReactNode[] => {
-      if (!featuredStatusIds) return [];
-
-      return featuredStatusIds.map((statusId) => (
-        <StatusContainer
-          key={`f-${statusId}`}
-          id={statusId}
-          featured
-          onMoveUp={handleMoveUp}
-          onMoveDown={handleMoveDown}
-          contextType={contextType}
-          showGroup={showGroup}
-          variant='slim'
-        />
-      ));
-    };
-
     const renderStatuses = (): React.ReactNode[] => {
       if (isLoading || statusIds.length > 0) {
         return statusIds.reduce((acc, statusId, index) => {
@@ -195,15 +137,10 @@ const StatusList: React.FC<IStatusList> = ({
       }
     };
 
-    const featuredStatuses = renderFeaturedStatuses();
     const statuses = renderStatuses();
 
-    if (featuredStatuses && statuses) {
-      return featuredStatuses.concat(statuses);
-    } else {
-      return statuses;
-    }
-  }, [featuredStatusIds, statusIds, isLoading, timelineId, showGroup]);
+    return statuses;
+  }, [statusIds, isLoading, timelineId, showGroup]);
 
   if (isPartial) {
     return (
@@ -227,26 +164,21 @@ const StatusList: React.FC<IStatusList> = ({
   }
 
   return (
-    <>
-      {featuredStatusIds && featuredStatusIds.length > 3 && statusIds.length > 0 && (
-        <SkipPinned onClick={handleSkipPinned} />
-      )}
-      <ScrollableList
-        id='status-list'
-        key='scrollable-list'
-        isLoading={isLoading}
-        showLoading={isLoading && statusIds.length === 0}
-        onLoadMore={handleLoadOlder}
-        placeholderComponent={() => <PlaceholderStatus variant='slim' />}
-        placeholderCount={20}
-        ref={node}
-        listClassName={clsx('⁂-status-list', className)}
-        {...other}
-      >
-        {scrollableContent}
-      </ScrollableList>
-    </>
+    <ScrollableList
+      id='status-list'
+      key='scrollable-list'
+      isLoading={isLoading}
+      showLoading={isLoading && statusIds.length === 0}
+      onLoadMore={handleLoadOlder}
+      placeholderComponent={() => <PlaceholderStatus variant='slim' />}
+      placeholderCount={20}
+      ref={node}
+      listClassName={clsx('⁂-status-list', className)}
+      {...other}
+    >
+      {scrollableContent}
+    </ScrollableList>
   );
 };
 
-export { type IStatusList, StatusList as default };
+export { StatusList as default };

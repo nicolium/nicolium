@@ -98,112 +98,110 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
   if (!account) return null;
 
   return (
-    <div className='border-box'>
-      <div ref={node} className='detailed-actualStatus' tabIndex={-1}>
-        {renderStatusInfo()}
+    <div ref={node} className='⁂-detailed-status' tabIndex={-1}>
+      {renderStatusInfo()}
 
-        {actualStatus.rss_feed ? (
-          <RssFeedInfo feed={actualStatus.rss_feed} timestamp={actualStatus.created_at} />
-        ) : (
-          <div className='mb-4'>
-            <Account
-              key={account.id}
-              account={account}
-              avatarSize={42}
-              hideActions
-              approvalStatus={actualStatus.approval_status}
-            />
-          </div>
-        )}
+      {actualStatus.rss_feed ? (
+        <RssFeedInfo feed={actualStatus.rss_feed} timestamp={actualStatus.created_at} />
+      ) : (
+        <div className='mb-4'>
+          <Account
+            key={account.id}
+            account={account}
+            avatarSize={42}
+            hideActions
+            approvalStatus={actualStatus.approval_status}
+          />
+        </div>
+      )}
 
-        <StatusReplyMentions status={actualStatus} />
+      <StatusReplyMentions status={actualStatus} />
 
-        <Stack className='relative z-0'>
-          <Stack space={4}>
-            <StatusContent status={actualStatus} textSize='lg' translatable withMedia={withMedia} />
-          </Stack>
+      <Stack className='relative z-0'>
+        <Stack space={4}>
+          <StatusContent status={actualStatus} textSize='lg' translatable withMedia={withMedia} />
         </Stack>
+      </Stack>
 
-        {!status.rss_feed && (
-          <>
-            <StatusReactionsBar status={actualStatus} />
+      {!status.rss_feed && (
+        <>
+          <StatusReactionsBar status={actualStatus} />
 
-            <HStack space={2} justifyContent='between' alignItems='center' className='py-3' wrap>
-              <StatusInteractionBar status={actualStatus} />
+          <HStack space={2} justifyContent='between' alignItems='center' className='py-3' wrap>
+            <StatusInteractionBar status={actualStatus} />
 
-              <HStack space={1} alignItems='center'>
-                <span>
-                  <Text tag='span' theme='muted' size='sm'>
-                    <HStack space={1} alignItems='center' wrap>
-                      <a
-                        href={actualStatus.url}
-                        target='_blank'
-                        rel='noopener noreferrer'
-                        className='hover:underline'
-                      >
-                        <FormattedDate
-                          value={new Date(actualStatus.created_at)}
-                          hour12
-                          year='numeric'
-                          month='short'
-                          day='2-digit'
-                          hour='numeric'
-                          minute='2-digit'
-                        />
-                      </a>
+            <HStack space={1} alignItems='center'>
+              <span>
+                <Text tag='span' theme='muted' size='sm'>
+                  <HStack space={1} alignItems='center' wrap>
+                    <a
+                      href={actualStatus.url}
+                      target='_blank'
+                      rel='noopener noreferrer'
+                      className='hover:underline'
+                    >
+                      <FormattedDate
+                        value={new Date(actualStatus.created_at)}
+                        hour12
+                        year='numeric'
+                        month='short'
+                        day='2-digit'
+                        hour='numeric'
+                        minute='2-digit'
+                      />
+                    </a>
 
-                      {actualStatus.application && (
-                        <>
-                          <span className='⁂-separator' />
-                          <a
-                            href={actualStatus.application.website ?? '#'}
-                            target='_blank'
-                            rel='noopener noreferrer'
-                            className='hover:underline'
-                            title={intl.formatMessage(messages.applicationName, {
-                              name: actualStatus.application.name,
-                            })}
-                          >
-                            {actualStatus.application.name}
-                          </a>
-                        </>
-                      )}
+                    {actualStatus.application && (
+                      <>
+                        <span className='⁂-separator' />
+                        <a
+                          href={actualStatus.application.website ?? '#'}
+                          target='_blank'
+                          rel='noopener noreferrer'
+                          className='hover:underline'
+                          title={intl.formatMessage(messages.applicationName, {
+                            name: actualStatus.application.name,
+                          })}
+                        >
+                          {actualStatus.application.name}
+                        </a>
+                      </>
+                    )}
 
-                      {actualStatus.edited_at && (
-                        <>
-                          <span className='⁂-separator' />
-                          <button
-                            className='inline hover:underline'
-                            onClick={handleOpenCompareHistoryModal}
-                          >
-                            <FormattedMessage
-                              id='status.edited'
-                              defaultMessage='Edited {date}'
-                              values={{
-                                date: intl.formatDate(new Date(actualStatus.edited_at), {
-                                  hour12: true,
-                                  month: 'short',
-                                  day: '2-digit',
-                                  hour: 'numeric',
-                                  minute: '2-digit',
-                                }),
-                              }}
-                            />
-                          </button>
-                        </>
-                      )}
-                    </HStack>
-                  </Text>
-                </span>
+                    {actualStatus.edited_at && (
+                      <>
+                        <span className='⁂-separator' />
+                        <button
+                          className='inline hover:underline'
+                          onClick={handleOpenCompareHistoryModal}
+                        >
+                          <FormattedMessage
+                            id='status.edited'
+                            defaultMessage='Edited {date}'
+                            values={{
+                              date: intl.formatDate(new Date(actualStatus.edited_at), {
+                                hour12: true,
+                                month: 'short',
+                                day: '2-digit',
+                                hour: 'numeric',
+                                minute: '2-digit',
+                              }),
+                            }}
+                          />
+                        </button>
+                      </>
+                    )}
+                  </HStack>
+                </Text>
+              </span>
 
-                <StatusTypeIcon visibility={actualStatus.visibility} />
+              <StatusTypeIcon visibility={actualStatus.visibility} />
 
-                <StatusLanguagePicker status={actualStatus} showLabel />
-              </HStack>
+              <StatusLanguagePicker status={actualStatus} showLabel />
             </HStack>
-          </>
-        )}
-      </div>
+          </HStack>
+        </>
+      )}
     </div>
   );
 };

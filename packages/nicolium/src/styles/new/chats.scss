@@ -20,6 +20,7 @@
 
   &:is(.black *) {
     background: black;
+    border: 1px solid rgb(var(--color-gray-800));
   }
 
   &--open {

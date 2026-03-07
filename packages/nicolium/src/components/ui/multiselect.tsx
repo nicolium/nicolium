@@ -25,13 +25,12 @@ THE SOFTWARE.
 
 import clsx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Icon from './icon';
 
 const messages = defineMessages({
   placeholder: { id: 'select.placeholder', defaultMessage: 'Select' },
-  noOptions: { id: 'select.no_options', defaultMessage: 'No options available' },
   removeItem: { id: 'select.remove_item', defaultMessage: 'Remove item' },
 });
 
@@ -261,7 +260,9 @@ const Multiselect: React.FC<IMultiselect> = ({
         >
           <ul className='optionContainer'>
             {visibleOptions.length === 0 && (
-              <span className='notFound'>{intl.formatMessage(messages.noOptions)}</span>
+              <span className='notFound'>
+                <FormattedMessage id='select.no_options' defaultMessage='No options available' />
+              </span>
             )}
             {visibleOptions.map((option, i) => (
               <li

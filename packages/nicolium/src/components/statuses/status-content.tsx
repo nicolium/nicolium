@@ -328,7 +328,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
     if (onClick) {
       return <div className='⁂-status-content__container'>{output}</div>;
     } else {
-      return <>{output}</>;
+      return output;
     }
   },
 );

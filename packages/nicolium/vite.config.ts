@@ -138,6 +138,10 @@ const config = defineConfig(() => ({
           dest: '.',
         },
         {
+          src: './favicon.svg',
+          dest: '.',
+        },
+        {
           src: './src/instance',
           dest: '.',
         },

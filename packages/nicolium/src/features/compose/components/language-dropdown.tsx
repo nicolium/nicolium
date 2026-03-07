@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import fuzzysort from 'fuzzysort';
 import React, { useDeferredValue, useEffect, useMemo, useRef, useState } from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import DropdownMenu from '@/components/dropdown-menu';
 import Icon from '@/components/ui/icon';
@@ -184,7 +184,12 @@ const getLanguageDropdown =
     return (
       <>
         <label className='⁂-language-dropdown__search'>
-          <span>{intl.formatMessage(messages.search)}</span>
+          <span>
+            <FormattedMessage
+              id='compose.language_dropdown.search'
+              defaultMessage='Search language…'
+            />
+          </span>
 
           <Input
             ref={input}

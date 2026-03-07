@@ -1,16 +1,12 @@
 import { Link } from '@tanstack/react-router';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
-import { fetchPublicTimeline } from '@/actions/timelines';
-import { usePublicStream } from '@/api/hooks/streaming/use-public-stream';
 import { PublicTimelineColumn } from '@/columns/timeline';
-import PullToRefresh from '@/components/pull-to-refresh';
 import Accordion from '@/components/ui/accordion';
 import Column from '@/components/ui/column';
 import PinnedHostsPicker from '@/features/remote-timeline/components/pinned-hosts-picker';
-import Timeline from '@/features/ui/components/timeline';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useInstance } from '@/hooks/use-instance';
 import { useSettings } from '@/stores/settings';
@@ -20,52 +16,12 @@ const messages = defineMessages({
   dismiss: { id: 'fediverse_tab.explanation_box.dismiss', defaultMessage: "Don't show again" },
 });
 
-const PublicTimeline = () => {
-  const dispatch = useAppDispatch();
-  const settings = useSettings();
-  const onlyMedia = settings.timelines.public?.other.onlyMedia ?? false;
-
-  const timelineId = 'public';
-
-  const handleLoadMore = () => {
-    dispatch(fetchPublicTimeline({ onlyMedia }, true));
-  };
-
-  const handleRefresh = () => dispatch(fetchPublicTimeline({ onlyMedia }));
-
-  usePublicStream({ onlyMedia });
-
-  useEffect(() => {
-    dispatch(fetchPublicTimeline({ onlyMedia }, true));
-  }, [onlyMedia]);
-
-  return (
-    <PullToRefresh onRefresh={handleRefresh}>
-      <Timeline
-        loadMoreClassName='sm:pb-4 black:sm:pb-0 black:sm:mx-4'
-        scrollKey={`${timelineId}_timeline`}
-        timelineId={`${timelineId}${onlyMedia ? ':media' : ''}`}
-        prefix='home'
-        onLoadMore={handleLoadMore}
-        emptyMessageText={
-          <FormattedMessage
-            id='empty_column.public'
-            defaultMessage='There is nothing here! Write something publicly, or manually follow users from other servers to fill it up'
-          />
-        }
-        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
-      />
-    </PullToRefresh>
-  );
-};
-
 const PublicTimelinePage = () => {
   const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const instance = useInstance();
   const settings = useSettings();
-  const { experimentalTimeline } = settings;
 
   const explanationBoxExpanded = settings.explanationBox;
   const showExplanationBox = settings.showExplanationBox;
@@ -115,7 +71,15 @@ const PublicTimelinePage = () => {
           />
         </Accordion>
       )}
-      {experimentalTimeline ? <PublicTimelineColumn /> : <PublicTimeline />}
+      <PublicTimelineColumn
+        emptyMessageText={
+          <FormattedMessage
+            id='empty_column.public'
+            defaultMessage='There is nothing here! Write something publicly, or manually follow users from other servers to fill it up'
+          />
+        }
+        emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
+      />
     </Column>
   );
 };

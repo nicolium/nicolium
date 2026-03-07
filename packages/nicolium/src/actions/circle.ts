@@ -49,6 +49,8 @@ const processCircle =
       const response = await (next?.() ?? client.accounts.getAccountStatuses(me, { limit: 40 }));
 
       response.items.forEach((status) => {
+        if (!['public', 'unlisted'].includes(status.visibility)) return;
+
         if (status.reblog) {
           if (status.reblog.account.id === me) return;
 
@@ -66,6 +68,18 @@ const processCircle =
           const interaction = interactions[status.in_reply_to_account_id];
 
           interaction.replies += 1;
+        } else if (status.quote && 'quoted_status' in status.quote && status.quote.quoted_status) {
+          if (status.quote.quoted_status.account.id === me) return;
+
+          initInteraction(status.quote.quoted_status.account.id);
+          const interaction = interactions[status.quote.quoted_status.account.id];
+          interaction.acct = status.quote.quoted_status.account.acct;
+          interaction.avatar =
+            status.quote.quoted_status.account.avatar_static ||
+            status.quote.quoted_status.account.avatar;
+          interaction.avatar_description = status.quote.quoted_status.account.avatar_description;
+
+          interaction.reblogs += 1;
         }
       });
 
@@ -78,6 +92,7 @@ const processCircle =
 
       response.items.forEach((status) => {
         if (status.account.id === me) return;
+        if (!['public', 'unlisted'].includes(status.visibility)) return;
 
         initInteraction(status.account.id);
         const interaction = interactions[status.account.id];

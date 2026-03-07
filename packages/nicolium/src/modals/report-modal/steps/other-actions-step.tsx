@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import React, { useMemo, useState } from 'react';
+import { FormattedMessage } from 'react-intl';
 
 import Button from '@/components/ui/button';
 import FormGroup from '@/components/ui/form-group';
@@ -7,32 +7,12 @@ import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import StatusCheckBox from '@/modals/report-modal/components/status-check-box';
+import { useAccountTimeline } from '@/queries/timelines/use-timelines';
 import { getDomain } from '@/utils/accounts';
 
 import type { Account } from 'pl-api';
-
-const messages = defineMessages({
-  addAdditionalStatuses: {
-    id: 'report.other_actions.add_additional',
-    defaultMessage: 'Would you like to add additional statuses to this report?',
-  },
-  addMore: { id: 'report.other_actions.add_more', defaultMessage: 'Add more' },
-  furtherActions: {
-    id: 'report.other_actions.further_actions',
-    defaultMessage: 'Further actions:',
-  },
-  hideAdditionalStatuses: {
-    id: 'report.other_actions.hide_additional',
-    defaultMessage: 'Hide additional statuses',
-  },
-  otherStatuses: {
-    id: 'report.other_actions.other_statuses',
-    defaultMessage: 'Include other statuses?',
-  },
-});
 
 interface IOtherActionsStep {
   account: Pick<Account, 'id' | 'acct' | 'local' | 'url'>;
@@ -56,14 +36,22 @@ const OtherActionsStep = ({
   isSubmitting,
 }: IOtherActionsStep) => {
   const features = useFeatures();
-  const intl = useIntl();
 
-  const statusIds = useAppSelector((state) => [
-    ...new Set([
-      ...state.timelines[`account:${account.id}:with_replies`].items,
-      ...selectedStatusIds,
-    ]),
-  ]);
+  const { entries } = useAccountTimeline(account.id, { exclude_replies: false });
+
+  const statusIds = useMemo(() => {
+    const timelineStatusIds = entries
+      .map((entry) =>
+        entry.type === 'status'
+          ? entry.reblogIds.length > 0
+            ? entry.reblogIds[0]
+            : entry.id
+          : null,
+      )
+      .filter((id): id is string => id !== null);
+
+    return [...new Set([...timelineStatusIds, ...selectedStatusIds])];
+  }, [entries, selectedStatusIds]);
   const isBlocked = block;
   const isForward = forward;
   const canForward = !account.local && features.federating;
@@ -91,10 +79,20 @@ const OtherActionsStep = ({
     <Stack space={4}>
       <Stack space={2}>
         <Text tag='h1' size='xl' weight='semibold'>
-          {intl.formatMessage(messages.otherStatuses)}
+          <FormattedMessage
+            id='report.other_actions.other_statuses'
+            defaultMessage='Include other statuses?'
+          />
         </Text>
 
-        <FormGroup labelText={intl.formatMessage(messages.addAdditionalStatuses)}>
+        <FormGroup
+          labelText={
+            <FormattedMessage
+              id='report.other_actions.add_additional'
+              defaultMessage='Would you like to add additional statuses to this report?'
+            />
+          }
+        >
           {showAdditionalStatuses ? (
             <Stack space={2}>
               <div className='⁂-status-list'>
@@ -117,7 +115,10 @@ const OtherActionsStep = ({
                     setShowAdditionalStatuses(false);
                   }}
                 >
-                  {intl.formatMessage(messages.hideAdditionalStatuses)}
+                  <FormattedMessage
+                    id='report.other_actions.hide_additional'
+                    defaultMessage='Hide additional statuses'
+                  />
                 </Button>
               </div>
             </Stack>
@@ -130,7 +131,7 @@ const OtherActionsStep = ({
                 setShowAdditionalStatuses(true);
               }}
             >
-              {intl.formatMessage(messages.addMore)}
+              <FormattedMessage id='report.other_actions.add_more' defaultMessage='Add more' />
             </Button>
           )}
         </FormGroup>
@@ -138,7 +139,10 @@ const OtherActionsStep = ({
 
       <Stack space={2}>
         <Text tag='h1' size='xl' weight='semibold'>
-          {intl.formatMessage(messages.furtherActions)}
+          <FormattedMessage
+            id='report.other_actions.further_actions'
+            defaultMessage='Further actions:'
+          />
         </Text>
 
         <FormGroup

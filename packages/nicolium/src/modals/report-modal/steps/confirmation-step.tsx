@@ -1,19 +1,9 @@
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useAppSelector } from '@/hooks/use-app-selector';
-
-const messages = defineMessages({
-  accountEntity: { id: 'report.confirmation.entity.account', defaultMessage: 'account' },
-  title: { id: 'report.confirmation.title', defaultMessage: 'Thanks for submitting your report.' },
-  content: {
-    id: 'report.confirmation.content',
-    defaultMessage:
-      'If we find that this {entity} is violating the {link} we will take further action on the matter.',
-  },
-});
 
 const termsOfServiceText = <FormattedMessage id='shared.tos' defaultMessage='Terms of Service' />;
 
@@ -28,10 +18,7 @@ const renderTermsOfServiceLink = (href: string) => (
 );
 
 const ConfirmationStep: React.FC = () => {
-  const intl = useIntl();
   const links = useAppSelector((state) => state.frontendConfig.links);
-
-  const entity = intl.formatMessage(messages.accountEntity);
 
   return (
     <Stack space={1}>
@@ -40,7 +27,6 @@ const ConfirmationStep: React.FC = () => {
           id='report.confirmation.title'
           defaultMessage='Thanks for submitting your report.'
         />
-        {intl.formatMessage(messages.title)}
       </Text>
 
       <Text>
@@ -48,7 +34,9 @@ const ConfirmationStep: React.FC = () => {
           id='report.confirmation.content'
           defaultMessage='If we find that this {entity} is violating the {link} we will take further action on the matter.'
           values={{
-            entity,
+            entity: (
+              <FormattedMessage id='report.confirmation.entity.account' defaultMessage='account' />
+            ),
             link: links?.termsOfService
               ? renderTermsOfServiceLink(links.termsOfService)
               : termsOfServiceText,

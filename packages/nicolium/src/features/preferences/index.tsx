@@ -281,6 +281,32 @@ const Preferences = () => {
 
   return (
     <Form>
+      {!features.frontendConfigurations && features.notes && (
+        <List>
+          <ListItem
+            label={
+              <FormattedMessage
+                id='preferences.fields.store_settings_in_notes'
+                defaultMessage='Store settings in account notes (recommended)'
+              />
+            }
+            hint={
+              <FormattedMessage
+                id='preferences.fields.store_settings_in_notes_hint'
+                defaultMessage='It allows you to sync your settings across devices. They are only visible to you.'
+              />
+            }
+          >
+            <SettingToggle
+              settings={settings}
+              settingPath={['storeSettingsInNotes']}
+              defaultValue
+              onChange={onToggleChange}
+            />
+          </ListItem>
+        </List>
+      )}
+
       <List>
         <ListItem
           label={
@@ -886,29 +912,6 @@ const Preferences = () => {
           </ListItem>
         </List>
       )}
-
-      <List>
-        <ListItem
-          label={
-            <FormattedMessage
-              id='preferences.fields.experimental_timeline_label'
-              defaultMessage='Enable experimental timeline'
-            />
-          }
-          hint={
-            <FormattedMessage
-              id='preferences.fields.experimental_timeline_hint'
-              defaultMessage='It replaces the stable timeline experience and might not offer all features.'
-            />
-          }
-        >
-          <SettingToggle
-            settings={settings}
-            settingPath={['experimentalTimeline']}
-            onChange={onToggleChange}
-          />
-        </ListItem>
-      </List>
     </Form>
   );
 };

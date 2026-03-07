@@ -1,5 +1,5 @@
 import React from 'react';
-import { defineMessages, useIntl } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { changePassword } from '@/actions/security';
 import Button from '@/components/ui/button';
@@ -24,21 +24,7 @@ const messages = defineMessages({
     id: 'security.update_password.password_confirmation_no_match',
     defaultMessage: 'Passwords do not match.',
   },
-  oldPasswordFieldLabel: {
-    id: 'security.fields.old_password.label',
-    defaultMessage: 'Current password',
-  },
-  newPasswordFieldLabel: {
-    id: 'security.fields.new_password.label',
-    defaultMessage: 'New password',
-  },
-  confirmationFieldLabel: {
-    id: 'security.fields.password_confirmation.label',
-    defaultMessage: 'New password (again)',
-  },
   header: { id: 'edit_password.header', defaultMessage: 'Change password' },
-  submit: { id: 'security.submit', defaultMessage: 'Save changes' },
-  cancel: { id: 'common.cancel', defaultMessage: 'Cancel' },
 });
 
 const initialState = { currentPassword: '', newPassword: '', newPasswordConfirmation: '' };
@@ -89,7 +75,14 @@ const EditPasswordPage = () => {
   return (
     <Column label={intl.formatMessage(messages.header)} backHref='/settings'>
       <Form onSubmit={handleSubmit}>
-        <FormGroup labelText={intl.formatMessage(messages.oldPasswordFieldLabel)}>
+        <FormGroup
+          labelText={
+            <FormattedMessage
+              id='security.fields.old_password.label'
+              defaultMessage='Current password'
+            />
+          }
+        >
           <Input
             type='password'
             name='currentPassword'
@@ -98,7 +91,14 @@ const EditPasswordPage = () => {
           />
         </FormGroup>
 
-        <FormGroup labelText={intl.formatMessage(messages.newPasswordFieldLabel)}>
+        <FormGroup
+          labelText={
+            <FormattedMessage
+              id='security.fields.new_password.label'
+              defaultMessage='New password'
+            />
+          }
+        >
           <Input
             type='password'
             name='newPassword'
@@ -107,7 +107,14 @@ const EditPasswordPage = () => {
           />
         </FormGroup>
 
-        <FormGroup labelText={intl.formatMessage(messages.confirmationFieldLabel)}>
+        <FormGroup
+          labelText={
+            <FormattedMessage
+              id='security.fields.password_confirmation.label'
+              defaultMessage='New password (again)'
+            />
+          }
+        >
           <Input
             type='password'
             name='newPasswordConfirmation'
@@ -118,7 +125,7 @@ const EditPasswordPage = () => {
 
         <FormActions>
           <Button to='/settings' theme='tertiary'>
-            {intl.formatMessage(messages.cancel)}
+            <FormattedMessage id='common.cancel' defaultMessage='Cancel' />
           </Button>
 
           <Button
@@ -126,7 +133,7 @@ const EditPasswordPage = () => {
             theme='primary'
             disabled={isLoading || newPassword !== newPasswordConfirmation}
           >
-            {intl.formatMessage(messages.submit)}
+            <FormattedMessage id='security.submit' defaultMessage='Save changes' />
           </Button>
         </FormActions>
       </Form>

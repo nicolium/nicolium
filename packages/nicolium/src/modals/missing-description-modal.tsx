@@ -35,7 +35,7 @@ const MissingDescriptionModal: React.FC<BaseModalProps & MissingDescriptionModal
         onClose('MISSING_DESCRIPTION');
       }}
     >
-      <p className='text-gray-600 dark:text-gray-300'>
+      <p className='text-gray-600 dark:text-gray-300' id='modal-description'>
         <FormattedMessage
           id='missing_description_modal.description'
           defaultMessage='Continue anyway?'

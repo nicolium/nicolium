@@ -16,7 +16,7 @@ interface IEmoji extends Pick<
 }
 
 /** A single emoji image. */
-const Emoji: React.FC<IEmoji> = (props): React.JSX.Element | null => {
+const Emoji: React.FC<IEmoji> = (props) => {
   const { disableUserProvidedMedia, systemEmojiFont } = useSettings();
   const { emoji, alt, src, staticSrc, noGroup, ...rest } = props;
 
@@ -30,8 +30,7 @@ const Emoji: React.FC<IEmoji> = (props): React.JSX.Element | null => {
   if (!filename && !src) return null;
 
   if (src) {
-    if (disableUserProvidedMedia)
-      return <>{alt ?? <span className={rest.className}>{emoji}</span>}</>;
+    if (disableUserProvidedMedia) return alt ?? <span className={rest.className}>{emoji}</span>;
     return (
       <StillImage
         alt={alt ?? emoji}

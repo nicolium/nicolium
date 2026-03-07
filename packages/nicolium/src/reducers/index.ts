@@ -10,7 +10,6 @@ import instance from './instance';
 import me from './me';
 import meta from './meta';
 import pushNotifications from './push-notifications';
-import timelines from './timelines';
 
 const reducers = {
   admin,
@@ -20,7 +19,6 @@ const reducers = {
   me,
   meta,
   pushNotifications,
-  timelines,
 };
 
 const appReducer = combineReducers(reducers);

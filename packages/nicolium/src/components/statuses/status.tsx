@@ -98,11 +98,16 @@ const AccountInfo: React.FC<IAccountInfo> = React.memo(({ status }) => {
 AccountInfo.displayName = 'AccountInfo';
 
 interface IStatusFollowedTagInfo {
+  className?: string;
   status: SelectedStatus;
   avatarSize: number;
 }
 
-const StatusFollowedTagInfo: React.FC<IStatusFollowedTagInfo> = ({ status, avatarSize }) => {
+const StatusFollowedTagInfo: React.FC<IStatusFollowedTagInfo> = ({
+  className,
+  status,
+  avatarSize,
+}) => {
   const { data: followedTags } = useFollowedTags();
 
   const filteredTags = status.tags.filter((tag) =>
@@ -130,7 +135,7 @@ const StatusFollowedTagInfo: React.FC<IStatusFollowedTagInfo> = ({ status, avata
 
   return (
     <StatusInfo
-      className='-mb-1'
+      className={className}
       avatarSize={avatarSize}
       icon={
         <Icon
@@ -330,14 +335,16 @@ const Status: React.FC<IStatus> = React.memo((props) => {
 
   const handleHotkeyMoveUp = () => {
     if (onMoveUp) {
-      onMoveUp(status.id, featured);
+      return onMoveUp(status.id, featured);
     }
+    return false;
   };
 
   const handleHotkeyMoveDown = () => {
     if (onMoveDown) {
-      onMoveDown(status.id, featured);
+      return onMoveDown(status.id, featured);
     }
+    return false;
   };
 
   const handleHotkeyToggleSensitive = () => {
@@ -524,7 +531,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
     } else if (fromHomeTimeline) {
       return (
         features.followHashtags && (
-          <StatusFollowedTagInfo status={actualStatus} avatarSize={avatarSize} />
+          <StatusFollowedTagInfo className='-mb-1' status={actualStatus} avatarSize={avatarSize} />
         )
       );
     }
@@ -689,4 +696,4 @@ const Status: React.FC<IStatus> = React.memo((props) => {
 
 Status.displayName = 'Status';
 
-export { type IStatus, Status as default };
+export { type IStatus, Status as default, StatusFollowedTagInfo };

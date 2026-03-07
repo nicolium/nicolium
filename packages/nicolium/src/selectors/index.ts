@@ -1,13 +1,9 @@
 import { createSelector } from 'reselect';
 
 import { getAccounts } from '@/queries/accounts/selectors';
-import { queryClient } from '@/queries/client';
-import { queryKeys } from '@/queries/keys';
-import { useSettingsStore } from '@/stores/settings';
 import { getDomain } from '@/utils/accounts';
 import ConfigDB from '@/utils/config-db';
 import { regexFromFilters } from '@/utils/filters';
-import { shouldFilter } from '@/utils/timelines';
 
 import type { MRFSimple } from '@/schemas/pleroma';
 import type { RootState } from '@/store';
@@ -72,27 +68,4 @@ const makeGetRemoteInstance = () =>
     }),
   );
 
-type ColumnQuery = { type: string; prefix?: string };
-
-const makeGetStatusIds = () =>
-  createSelector(
-    [
-      (_state: RootState, { type, prefix }: ColumnQuery) =>
-        useSettingsStore.getState().settings.timelines[prefix ?? type],
-      (state: RootState, { type }: ColumnQuery) => state.timelines[type]?.items || [],
-    ],
-    (columnSettings, statusIds: Array<string>) =>
-      statusIds.filter((id: string) => {
-        const status = queryClient.getQueryData(queryKeys.statuses.show(id));
-        if (!status) return true;
-        return !shouldFilter(status, columnSettings);
-      }),
-  );
-
-export {
-  type RemoteInstance,
-  regexFromFilters,
-  makeGetHosts,
-  makeGetRemoteInstance,
-  makeGetStatusIds,
-};
+export { type RemoteInstance, regexFromFilters, makeGetHosts, makeGetRemoteInstance };

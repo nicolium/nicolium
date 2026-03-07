@@ -167,7 +167,7 @@ const hotkeyMatcherMap = {
 
 type HotkeyName = keyof typeof hotkeyMatcherMap;
 
-type HandlerMap = Partial<Record<HotkeyName, (event: KeyboardEvent) => void>>;
+type HandlerMap = Partial<Record<HotkeyName, (event: KeyboardEvent) => void | boolean>>;
 
 function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
   const ref = useRef<T>(null);
@@ -200,7 +200,7 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
         const matchCandidates: {
           // A candidate will be have an undefined handler if it's matched,
           // but handled in a parent component rather than this one.
-          handler: ((event: KeyboardEvent) => void) | undefined;
+          handler: ((event: KeyboardEvent) => void | boolean) | undefined;
           priority: number;
         }[] = [];
 
@@ -216,13 +216,15 @@ function useHotkeys<T extends HTMLElement>(handlers: HandlerMap) {
         });
 
         // Sort all matches by priority
-        matchCandidates.toSorted((a, b) => b.priority - a.priority);
+        const sortedCandidates = matchCandidates.toSorted((a, b) => b.priority - a.priority);
 
-        const bestMatchingHandler = matchCandidates.at(0)?.handler;
+        const bestMatchingHandler = sortedCandidates.at(0)?.handler;
         if (bestMatchingHandler) {
-          bestMatchingHandler(event);
-          event.stopPropagation();
-          event.preventDefault();
+          const result = bestMatchingHandler(event);
+          if (result !== false) {
+            event.stopPropagation();
+            event.preventDefault();
+          }
         }
 
         // Add last keypress to buffer

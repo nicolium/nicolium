@@ -52,6 +52,7 @@ const settingsSchema = v.object({
   checkEmojiReactsSupport: v.fallback(v.boolean(), false),
   disableUserProvidedMedia: v.fallback(v.boolean(), false),
   stripMetadata: v.fallback(v.boolean(), false),
+  storeSettingsInNotes: v.fallback(v.boolean(), false),
 
   theme: v.optional(
     coerceObject({
@@ -122,8 +123,6 @@ const settingsSchema = v.object({
   saved: v.fallback(v.boolean(), true),
 
   demo: v.fallback(v.boolean(), false),
-
-  experimentalTimeline: v.fallback(v.boolean(), false),
 });
 
 type Settings = v.InferOutput<typeof settingsSchema>;

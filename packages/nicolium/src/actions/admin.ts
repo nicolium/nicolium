@@ -4,10 +4,8 @@ import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { useComposeStore } from '@/stores/compose';
 import { useModalsStore } from '@/stores/modals';
+import { useTimelinesStore } from '@/stores/timelines';
 import { filterBadges, getTagDiff } from '@/utils/badges';
-
-import { STATUS_FETCH_SOURCE_FAIL, type StatusesAction } from './statuses';
-import { deleteFromTimelines } from './timelines';
 
 import type { AppDispatch, RootState } from '@/store';
 import type { PleromaConfig } from 'pl-api';
@@ -74,7 +72,7 @@ const deleteStatus = (statusId: string) => (dispatch: AppDispatch, getState: () 
   getClient(getState)
     .admin.statuses.deleteStatus(statusId)
     .then(() => {
-      dispatch(deleteFromTimelines(statusId));
+      useTimelinesStore.getState().actions.deleteStatus(statusId);
       return { statusId };
     });
 
@@ -149,9 +147,6 @@ const redactStatus = (statusId: string) => (dispatch: AppDispatch, getState: () 
         .getState()
         .actions.setComposeToStatus(status, poll, source, false, null, null, true);
       useModalsStore.getState().actions.openModal('COMPOSE');
-    })
-    .catch((error) => {
-      dispatch<StatusesAction>({ type: STATUS_FETCH_SOURCE_FAIL, error });
     });
 };
 

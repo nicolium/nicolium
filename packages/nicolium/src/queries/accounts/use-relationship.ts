@@ -1,19 +1,13 @@
 import { useMutation, useQueries, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useMemo } from 'react';
 
-import {
-  ACCOUNT_BLOCK_SUCCESS,
-  ACCOUNT_MUTE_SUCCESS,
-  ACCOUNT_UNFOLLOW_SUCCESS,
-  type AccountsAction,
-} from '@/actions/accounts';
 import { batcher } from '@/api/batcher';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { queryKeys } from '@/queries/keys';
 import { useContextsActions } from '@/stores/contexts';
+import { useTimelinesStore } from '@/stores/timelines';
 
 import type {
   BlockAccountParams,
@@ -122,7 +116,6 @@ const useFollowAccountMutation = (accountId: string) => {
 
 const useUnfollowAccountMutation = (accountId: string) => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -144,11 +137,6 @@ const useUnfollowAccountMutation = (accountId: string) => {
     },
     onSuccess: (data) => {
       queryClient.setQueryData(queryKeys.accountRelationships.show(accountId), data);
-
-      dispatch({
-        type: ACCOUNT_UNFOLLOW_SUCCESS,
-        relationship: data,
-      });
     },
   });
 };
@@ -156,7 +144,6 @@ const useUnfollowAccountMutation = (accountId: string) => {
 const useBlockAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const dispatch = useAppDispatch();
   const { filterContexts } = useContextsActions();
 
   return useMutation({
@@ -192,11 +179,7 @@ const useBlockAccountMutation = (accountId: string) => {
 
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
       filterContexts(data);
-
-      return dispatch<AccountsAction>({
-        type: ACCOUNT_BLOCK_SUCCESS,
-        relationship: data,
-      });
+      useTimelinesStore.getState().actions.filterTimelines(data.id);
     },
   });
 };
@@ -228,7 +211,6 @@ const useUnblockAccountMutation = (accountId: string) => {
 const useMuteAccountMutation = (accountId: string) => {
   const client = useClient();
   const queryClient = useQueryClient();
-  const dispatch = useAppDispatch();
   const { filterContexts } = useContextsActions();
 
   return useMutation({
@@ -260,11 +242,7 @@ const useMuteAccountMutation = (accountId: string) => {
 
       // Pass in entire statuses map so we can use it to filter stuff in different parts of the reducers
       filterContexts(data);
-
-      return dispatch<AccountsAction>({
-        type: ACCOUNT_MUTE_SUCCESS,
-        relationship: data,
-      });
+      useTimelinesStore.getState().actions.filterTimelines(data.id);
     },
   });
 };
