@@ -1,0 +1,72 @@
+---
+import BaseHead from "@mkljczk/astro-theme/components/BaseHead.astro";
+import Hero from "@mkljczk/astro-theme/components/Hero.astro";
+import Section from "@mkljczk/astro-theme/components/Section.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+---
+
+<!doctype html>
+<html lang="pl">
+  <head>
+    <BaseHead
+      siteTitle="Nicolium"
+      description="Mastodon-compatible social media front-end"
+      faviconPath="favicon.svg"
+    />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <Hero
+        heading="Nicolium"
+        subheading="A feature-rich Fediverse web client for Mastodon-compatible backends"
+        buttonText="Try Nicolium"
+        buttonLink="https://web.nicolium.app"
+        buttonTarget="_blank"
+        button2Text="Source code"
+        button2Link="https://codeberg.org/mkljczk/nicolium"
+        button2Target="_blank"
+      />
+      <section class="sections">
+        <div class="container">
+          <Section
+            heading="Use with your favorite Fediverse platform."
+            subheading="Nicolium works with any backend implementing Mastodon API."
+          />
+          <Section
+            heading="Feature-rich."
+            subheading="Nicolium includes a lot features to improve your experience, like WYSIWYG text editor, draft posts and language detection."
+          />
+          <Section
+            heading="Get the most out of your Fediverse instance."
+            subheading="Nicolium implements features not present in standard Mastodon API, like emoji reactions, chats or interaction policies."
+          />
+          <Section
+            heading="Customizable."
+            subheading="Nicolium lets you choose between three themes and adjust accent color to your liking."
+          />
+          <Section
+            heading="Stay private."
+            subheading="Nicolium includes features which help you maintain online privacy. This includes URL cleaning, which helps you remove unwanted parts of URLs used to mark your online activity."
+          />
+          <Section
+            heading="Open source."
+            subheading="Nicolium is free and open source software. You can participate in development, contribute to the project or report bugs."
+            buttonText="Codeberg"
+            buttonLink="https://codeberg.org/mkljczk/nicolium"
+            buttonTarget="_blank"
+            button2Text="GitHub"
+            button2Link="https://github.com/mkljczk/nicolium"
+            button2Target="_blank"
+          />
+        </div>
+      </section>
+    </main>
+    <Footer />
+  </body><style>
+    .sections {
+      padding: 2rem 0;
+    }
+  </style>
+</html>

@@ -1,0 +1,18 @@
+---
+import BaseFooter from "@mkljczk/astro-theme/components/Footer.astro";
+
+const footerLinks = [
+  {
+    label: "Source code",
+    href: "https://codeberg.org/mkljczk/nicolium",
+    target: "_blank",
+  },
+];
+---
+
+<BaseFooter
+  slot="footer"
+  links={footerLinks}
+  copyText="Nicolium"
+  withTransFlag
+/>
