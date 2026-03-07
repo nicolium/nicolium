@@ -75,20 +75,18 @@ const ChatListShoutbox: React.FC<IChatListShoutbox> = ({ onClick, onMoveUp, onMo
             </div>
 
             {lastMessage && (
-              <>
-                <p className='⁂-chat-list-item__message'>
-                  {lastMessageAuthor && (
-                    <span className='⁂-chat-list-item__message__author'>
-                      <Emojify
-                        text={lastMessageAuthor.display_name}
-                        emojis={lastMessageAuthor.emojis}
-                      />
-                      {': '}
-                    </span>
-                  )}
-                  <ParsedContent html={lastMessage.text} />
-                </p>
-              </>
+              <p className='⁂-chat-list-item__message'>
+                {lastMessageAuthor && (
+                  <span className='⁂-chat-list-item__message__author'>
+                    <Emojify
+                      text={lastMessageAuthor.display_name}
+                      emojis={lastMessageAuthor.emojis}
+                    />
+                    {': '}
+                  </span>
+                )}
+                <ParsedContent html={lastMessage.text} />
+              </p>
             )}
           </div>
         </div>

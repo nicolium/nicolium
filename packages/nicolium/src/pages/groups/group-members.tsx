@@ -37,38 +37,36 @@ const GroupMembers: React.FC = () => {
   );
 
   return (
-    <>
-      <ScrollableList
-        scrollKey={`groupMembers:${groupId}`}
-        hasMore={hasNextPage}
-        onLoadMore={fetchNextPage}
-        isLoading={!group || isLoading}
-        showLoading={!group || ((isFetchingPending ?? isLoading) && members.length === 0)}
-        placeholderComponent={PlaceholderAccount}
-        placeholderCount={3}
-        className='⁂-status-list'
-        itemClassName='py-3 last:pb-0'
-        prepend={
-          membershipRequests.length > 0 && (
-            <div
-              className={clsx('py-3', {
-                'border-b border-gray-200 dark:border-gray-800': members.length,
-              })}
-            >
-              <PendingItemsRow
-                to='/groups/$groupId/manage/requests'
-                params={{ groupId }}
-                count={membershipRequests.length}
-              />
-            </div>
-          )
-        }
-      >
-        {members.map((member) => (
-          <GroupMemberListItem group={group!} member={member} key={member.account_id} />
-        ))}
-      </ScrollableList>
-    </>
+    <ScrollableList
+      scrollKey={`groupMembers:${groupId}`}
+      hasMore={hasNextPage}
+      onLoadMore={fetchNextPage}
+      isLoading={!group || isLoading}
+      showLoading={!group || ((isFetchingPending ?? isLoading) && members.length === 0)}
+      placeholderComponent={PlaceholderAccount}
+      placeholderCount={3}
+      className='⁂-status-list'
+      itemClassName='py-3 last:pb-0'
+      prepend={
+        membershipRequests.length > 0 && (
+          <div
+            className={clsx('py-3', {
+              'border-b border-gray-200 dark:border-gray-800': members.length,
+            })}
+          >
+            <PendingItemsRow
+              to='/groups/$groupId/manage/requests'
+              params={{ groupId }}
+              count={membershipRequests.length}
+            />
+          </div>
+        )
+      }
+    >
+      {members.map((member) => (
+        <GroupMemberListItem group={group!} member={member} key={member.account_id} />
+      ))}
+    </ScrollableList>
   );
 };
 

@@ -116,22 +116,20 @@ const SettingsPage = () => {
               />
             )}
             {features.manageMfa && (
-              <>
-                <ListItem
-                  label={
-                    <FormattedMessage id='settings.configure_mfa' defaultMessage='Configure MFA' />
-                  }
-                  to='/settings/mfa'
-                >
-                  <span>
-                    {isMfaEnabled ? (
-                      <FormattedMessage id='mfa.enabled' defaultMessage='Enabled' />
-                    ) : (
-                      <FormattedMessage id='mfa.disabled' defaultMessage='Disabled' />
-                    )}
-                  </span>
-                </ListItem>
-              </>
+              <ListItem
+                label={
+                  <FormattedMessage id='settings.configure_mfa' defaultMessage='Configure MFA' />
+                }
+                to='/settings/mfa'
+              >
+                <span>
+                  {isMfaEnabled ? (
+                    <FormattedMessage id='mfa.enabled' defaultMessage='Enabled' />
+                  ) : (
+                    <FormattedMessage id='mfa.disabled' defaultMessage='Disabled' />
+                  )}
+                </span>
+              </ListItem>
             )}
             {features.sessions && (
               <ListItem

@@ -50,12 +50,11 @@ const Counter: React.FC<ICounter> = ({
   let content;
 
   if (!data) {
-    content = (
-      <>
-        {/* <span className='sparkline__value__total'><Skeleton width={43} /></span>
-        <span className='sparkline__value__change'><Skeleton width={43} /></span> */}
-      </>
-    );
+    content = null;
+    {
+      /* <span className='sparkline__value__total'><Skeleton width={43} /></span>
+    <span className='sparkline__value__change'><Skeleton width={43} /></span> */
+    }
   } else {
     const measure = data[0];
     const percentChange =

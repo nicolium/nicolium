@@ -272,7 +272,7 @@ const ScrollableList = React.forwardRef<VirtuosoHandle, IScrollableList>(
           itemClassName,
         }}
         components={{
-          Header: prepend ? () => <>{prepend}</> : undefined,
+          Header: prepend ? () => prepend : undefined,
           ScrollSeekPlaceholder: Placeholder as React.ComponentType<any>,
           EmptyPlaceholder: renderEmpty,
           List,

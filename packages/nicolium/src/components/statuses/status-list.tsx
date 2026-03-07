@@ -164,22 +164,20 @@ const StatusList: React.FC<IStatusList> = ({
   }
 
   return (
-    <>
-      <ScrollableList
-        id='status-list'
-        key='scrollable-list'
-        isLoading={isLoading}
-        showLoading={isLoading && statusIds.length === 0}
-        onLoadMore={handleLoadOlder}
-        placeholderComponent={() => <PlaceholderStatus variant='slim' />}
-        placeholderCount={20}
-        ref={node}
-        listClassName={clsx('⁂-status-list', className)}
-        {...other}
-      >
-        {scrollableContent}
-      </ScrollableList>
-    </>
+    <ScrollableList
+      id='status-list'
+      key='scrollable-list'
+      isLoading={isLoading}
+      showLoading={isLoading && statusIds.length === 0}
+      onLoadMore={handleLoadOlder}
+      placeholderComponent={() => <PlaceholderStatus variant='slim' />}
+      placeholderCount={20}
+      ref={node}
+      listClassName={clsx('⁂-status-list', className)}
+      {...other}
+    >
+      {scrollableContent}
+    </ScrollableList>
   );
 };
 

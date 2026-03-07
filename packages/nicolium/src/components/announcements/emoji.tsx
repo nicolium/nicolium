@@ -16,7 +16,7 @@ const Emoji: React.FC<IEmoji> = ({ emoji, emojiMap, hovered }) => {
   const { autoPlayGif, reduceMotion, systemEmojiFont } = useSettings();
 
   if (unicodeMapping[emoji]) {
-    if (systemEmojiFont) return <>{emoji}</>;
+    if (systemEmojiFont) return emoji;
 
     const { unified, shortcode } = unicodeMapping[emoji];
     const title = shortcode ? `:${shortcode}:` : '';
