@@ -109,7 +109,7 @@ const OtpConfirmForm: React.FC = () => {
         </Text>
 
         <FormGroup
-          labelText={intl.formatMessage(messages.codePlaceholder)}
+          labelText={<FormattedMessage id='mfa.mfa_setup.code_placeholder' defaultMessage='Code' />}
           hintText={
             <FormattedMessage
               id='mfa.mfa_setup.code_hint'
@@ -131,7 +131,9 @@ const OtpConfirmForm: React.FC = () => {
 
         {features.manageMfaRequiresPassword && (
           <FormGroup
-            labelText={intl.formatMessage(messages.passwordPlaceholder)}
+            labelText={
+              <FormattedMessage id='mfa.mfa_setup.password_placeholder' defaultMessage='Password' />
+            }
             hintText={
               <FormattedMessage
                 id='mfa.mfa_setup.password_hint'

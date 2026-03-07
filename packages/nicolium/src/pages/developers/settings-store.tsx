@@ -26,12 +26,6 @@ const isJSONValid = (text: any): boolean => {
 
 const messages = defineMessages({
   heading: { id: 'column.settings_store', defaultMessage: 'Settings store' },
-  advanced: { id: 'developers.settings_store.advanced', defaultMessage: 'Advanced settings' },
-  hint: {
-    id: 'developers.settings_store.hint',
-    defaultMessage:
-      'It is possible to directly edit your user settings here. BE CAREFUL! Editing this section can break your account, and you will only be able to recover through the API.',
-  },
 });
 
 const SettingsStore: React.FC = () => {
@@ -78,7 +72,12 @@ const SettingsStore: React.FC = () => {
     <Column label={intl.formatMessage(messages.heading)} backHref='/developers'>
       <Form onSubmit={handleSubmit}>
         <FormGroup
-          hintText={intl.formatMessage(messages.hint)}
+          hintText={
+            <FormattedMessage
+              id='developers.settings_store.hint'
+              defaultMessage='It is possible to directly edit your user settings here. BE CAREFUL! Editing this section can break your account, and you will only be able to recover through the API.'
+            />
+          }
           errors={jsonValid ? [] : ['is invalid']}
         >
           <Textarea
@@ -98,7 +97,14 @@ const SettingsStore: React.FC = () => {
       </Form>
 
       <CardHeader className='mb-4'>
-        <CardTitle title={intl.formatMessage(messages.advanced)} />
+        <CardTitle
+          title={
+            <FormattedMessage
+              id='developers.settings_store.advanced'
+              defaultMessage='Advanced settings'
+            />
+          }
+        />
       </CardHeader>
 
       <List>

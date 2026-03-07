@@ -16,7 +16,6 @@ import toast from '@/toast';
 
 const messages = defineMessages({
   heading: { id: 'column.migration', defaultMessage: 'Move account' },
-  submit: { id: 'migration.submit', defaultMessage: 'Move followers' },
   moveAccountSuccess: {
     id: 'migration.move_account.success',
     defaultMessage: 'Account successfully moved.',
@@ -29,17 +28,9 @@ const messages = defineMessages({
     id: 'migration.move_account.fail.cooldown_period',
     defaultMessage: 'You have moved your account too recently. Please try again later.',
   },
-  acctFieldLabel: {
-    id: 'migration.fields.acct.label',
-    defaultMessage: 'Handle of the new account',
-  },
   acctFieldPlaceholder: {
     id: 'migration.fields.acct.placeholder',
     defaultMessage: 'username@domain',
-  },
-  currentPasswordFieldLabel: {
-    id: 'migration.fields.confirm_password.label',
-    defaultMessage: 'Current password',
   },
 });
 
@@ -118,7 +109,14 @@ const MigrationPage = () => {
             </>
           )}
         </Text>
-        <FormGroup labelText={intl.formatMessage(messages.acctFieldLabel)}>
+        <FormGroup
+          labelText={
+            <FormattedMessage
+              id='migration.fields.acct.label'
+              defaultMessage='Handle of the new account'
+            />
+          }
+        >
           <Input
             name='targetAccount'
             placeholder={intl.formatMessage(messages.acctFieldPlaceholder)}
@@ -127,7 +125,14 @@ const MigrationPage = () => {
             required
           />
         </FormGroup>
-        <FormGroup labelText={intl.formatMessage(messages.currentPasswordFieldLabel)}>
+        <FormGroup
+          labelText={
+            <FormattedMessage
+              id='migration.fields.confirm_password.label'
+              defaultMessage='Current password'
+            />
+          }
+        >
           <Input
             type='password'
             name='password'
@@ -139,7 +144,7 @@ const MigrationPage = () => {
         <FormActions>
           <Button
             theme='primary'
-            text={intl.formatMessage(messages.submit)}
+            text={<FormattedMessage id='migration.submit' defaultMessage='Move followers' />}
             type='submit'
             disabled={isLoading}
           />
