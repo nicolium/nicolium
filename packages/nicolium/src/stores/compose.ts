@@ -659,25 +659,26 @@ const useComposeStore = create<ComposeStore>()(
         },
 
         importDefaultSettings: (account) => {
-          get().actions.updateCompose('default', (compose) => {
+          set((state) => {
             const settings =
               account.settings_store?.[FE_NAME] || account.settings_store?.[LEGACY_FE_NAME];
 
             if (!settings) return;
 
-            if (settings.defaultPrivacy) compose.visibility = settings.defaultPrivacy;
-            if (settings.defaultContentType) compose.contentType = settings.defaultContentType;
+            if (settings.defaultPrivacy) state.default.visibility = settings.defaultPrivacy;
+            if (settings.defaultContentType)
+              state.default.contentType = settings.defaultContentType;
           });
         },
 
         importDefaultContentType: (instance) => {
-          get().actions.updateCompose('default', (compose) => {
+          set((state) => {
             const postFormats = instance.pleroma.metadata.post_formats;
 
-            compose.contentType =
-              postFormats.includes(compose.contentType) ||
-              (postFormats.includes('text/markdown') && compose.contentType === 'wysiwyg')
-                ? compose.contentType
+            state.default.contentType =
+              postFormats.includes(state.default.contentType) ||
+              (postFormats.includes('text/markdown') && state.default.contentType === 'wysiwyg')
+                ? state.default.contentType
                 : postFormats.includes('text/markdown')
                   ? 'text/markdown'
                   : postFormats[0];
