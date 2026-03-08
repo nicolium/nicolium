@@ -547,6 +547,9 @@ importers:
       '@astrojs/sitemap':
         specifier: ^3.7.0
         version: 3.7.0
+      '@mkljczk/astro-theme':
+        specifier: github:mkljczk/mkljczk-astro-theme
+        version: https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/b849fba79b02abce89c823e98ce8549e3819c5f7(astro@5.18.0(@types/node@25.3.3)(jiti@1.21.7)(lightningcss@1.31.1)(rollup@4.59.0)(sass-embedded@1.97.3)(sass@1.97.3)(terser@5.46.0)(typescript@5.9.3)(yaml@2.8.2))
       astro:
         specifier: ^5.18.0
         version: 5.18.0(@types/node@25.3.3)(jiti@1.21.7)(lightningcss@1.31.1)(rollup@4.59.0)(sass-embedded@1.97.3)(sass@1.97.3)(terser@5.46.0)(typescript@5.9.3)(yaml@2.8.2)
@@ -2103,6 +2106,11 @@ packages:
   '@microsoft/tsdoc@0.15.1':
     resolution: {integrity: sha512-4aErSrCR/On/e5G2hDP0wjooqDdauzEbIq8hIkIe5pXV0rtWJZvdCEKL0ykZxex+IxIwBp0eGeV48hQN07dXtw==}
 
+  '@mkljczk/astro-theme@https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/b849fba79b02abce89c823e98ce8549e3819c5f7':
+    resolution: {tarball: https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/b849fba79b02abce89c823e98ce8549e3819c5f7}
+    version: 0.0.1
+    peerDependencies:
+      astro: ^5.0.0
 
   '@mkljczk/url-purify@0.0.5':
     resolution: {integrity: sha512-Ejrr9xiiZNkjT9hRmLfqkpL5uU/0Loo5tzh24wJXT3CDevccINnbmrvxQyW8DU5iSKfetWkYWvFHP5ntREw9VQ==}
@@ -2473,10 +2481,6 @@ packages:
 
   '@phosphor-icons/core@2.1.1':
     resolution: {integrity: sha512-v4ARvrip4qBCImOE5rmPUylOEK4iiED9ZyKjcvzuezqMaiRASCHKcRIuvvxL/twvLpkfnEODCOJp5dM4eZilxQ==}
-
-  '@phosphor-icons/core@https://codeload.github.com/phosphor-icons/core/tar.gz/2b75f3ad12b420c9504ef05df8d2564a28f8500e':
-    resolution: {tarball: https://codeload.github.com/phosphor-icons/core/tar.gz/2b75f3ad12b420c9504ef05df8d2564a28f8500e}
-    version: 2.1.1
 
   '@preact/signals-core@1.13.0':
     resolution: {integrity: sha512-slT6XeTCAbdql61GVLlGU4x7XHI7kCZV5Um5uhE4zLX4ApgiiXc0UYFvVOKq06xcovzp7p+61l68oPi563ARKg==}
@@ -9434,6 +9438,10 @@ snapshots:
 
   '@microsoft/tsdoc@0.15.1': {}
 
+  '@mkljczk/astro-theme@https://codeload.github.com/mkljczk/mkljczk-astro-theme/tar.gz/b849fba79b02abce89c823e98ce8549e3819c5f7(astro@5.18.0(@types/node@25.3.3)(jiti@1.21.7)(lightningcss@1.31.1)(rollup@4.59.0)(sass-embedded@1.97.3)(sass@1.97.3)(terser@5.46.0)(typescript@5.9.3)(yaml@2.8.2))':
+    dependencies:
+      astro: 5.18.0(@types/node@25.3.3)(jiti@1.21.7)(lightningcss@1.31.1)(rollup@4.59.0)(sass-embedded@1.97.3)(sass@1.97.3)(terser@5.46.0)(typescript@5.9.3)(yaml@2.8.2)
+
   '@mkljczk/url-purify@0.0.5': {}
 
   '@mkljczk/vite-tsgo-checker@0.0.2': {}
@@ -9656,8 +9664,6 @@ snapshots:
     optional: true
 
   '@phosphor-icons/core@2.1.1': {}
-
-  '@phosphor-icons/core@https://codeload.github.com/phosphor-icons/core/tar.gz/2b75f3ad12b420c9504ef05df8d2564a28f8500e': {}
 
   '@preact/signals-core@1.13.0': {}
 
