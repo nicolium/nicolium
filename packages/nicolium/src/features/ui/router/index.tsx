@@ -1592,6 +1592,9 @@ const router = createRouter({
   defaultErrorComponent: SiteError,
   scrollRestoration: true,
   pathParamsAllowedCharacters: ['@'],
+  defaultViewTransition: {
+    types: ({ fromLocation }) => (fromLocation ? [''] : false),
+  },
 });
 
 router.subscribe('onBeforeNavigate', (event) => {

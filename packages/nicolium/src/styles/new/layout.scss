@@ -369,6 +369,7 @@ body {
 
   &__main {
     @apply md:col-span-12 lg:col-span-9 xl:col-span-6 pb-14 lg:pb-0 xl:pb-16 black:border-gray-800 lg:black:border-l xl:black:border-r;
+    navigation: auto;
 
     &--chats {
       @apply xl:pb-16;
