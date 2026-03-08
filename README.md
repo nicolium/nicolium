@@ -19,7 +19,7 @@ Nicolium is a social networking client app. It works with any Mastodon API-compa
 
 Want to test Nicolium with **any existing MastoAPI-compatible server?** Try [web.nicolium.app](https://web.nicolium.app) — enter your server's domain name to use Nicolium on any server!
 
-If you want to use Nicolium on your server, follow the installation instructions in the documentation. We offer guides for [Pleroma/Akkoma](https://pl.mkljczk.pl/docs/installing/pleroma/), [Iceshrimp.NET](https://pl.mkljczk.pl/docs/installing/iceshrimp/), [Mitra](https://pl.mkljczk.pl/docs/installing/mitra/), and [standalone installations](https://pl.mkljczk.pl/docs/installing/standalone/).
+If you want to use Nicolium on your server, follow the installation instructions in the documentation. We offer guides for [Pleroma/Akkoma](https://nicolium.app/docs/installing/pleroma-akkoma/), [Iceshrimp.NET](https://nicolium.app/docs/installing/iceshrimp/), [Mitra](https://nicolium.app/docs/installing/mitra/), and [standalone installations](https://nicolium.app/docs/installing/standalone/).
 
 ## Repository
 
@@ -32,7 +32,7 @@ The repository hosts Nicolium, but also libraries related to the project. Curren
 
 This project is hosted on [Codeberg](https://codeberg.org/mkljczk/nicolium) and [GitHub](https://github.com/mkljczk/nicolium). You can open issues on Codeberg or create pull requests on both platforms.
 
-You can find more information about setting up the development environment in [the documentation](https://pl.mkljczk.pl/docs/contributing/nicolium/).
+You can find more information about setting up the development environment in [the documentation](https://nicolium.app/docs/contributing/nicolium/).
 
 ## License
 
