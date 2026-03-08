@@ -126,6 +126,5 @@
   "admin.users.actions.demote_to_user_message": "@{acct} ꦢꦶꦝꦸꦤ꧀ꦏꦺꦢꦢꦶꦥꦔꦒꦼꦩ꧀ꦧꦶꦪꦱ",
   "admin.users.actions.promote_to_admin_message": "@{acct} ꦢꦶꦥꦿꦺꦴꦩꦺꦴꦱꦶꦏꦺꦢꦢꦶꦄꦝ꧀ꦩꦶꦤ꧀",
   "admin.users.actions.promote_to_moderator_message": "@{acct} ꦢꦶꦥꦿꦺꦴꦩꦺꦴꦱꦶꦏꦺꦢꦢꦶꦩꦺꦴꦝꦺꦫꦠꦺꦴꦂ",
-  "admin.users.remove_donor_message": "@{acct} ꦢꦶꦧꦸꦱꦼꦏ꧀ꦩꦶꦤꦁꦏꦝꦺꦴꦤꦺꦴꦂ",
-  "who_to_follow.title": ""
+  "admin.users.remove_donor_message": "@{acct} ꦢꦶꦧꦸꦱꦼꦏ꧀ꦩꦶꦤꦁꦏꦝꦺꦴꦤꦺꦴꦂ"
 }
