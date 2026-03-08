@@ -16,6 +16,11 @@ type TimelineEntry =
       reblogIds: Array<string>;
       isConnectedTop?: boolean;
       isConnectedBottom?: boolean;
+      isReply: boolean;
+      // this actually indicates whether the status exclusively appeared as a reblog on the processed page
+      isReblog: boolean;
+      isQuote: boolean;
+      hasMedia: boolean;
     }
   | {
       type: 'pending-status';
@@ -63,7 +68,7 @@ interface State {
       direction: 'up' | 'down',
     ) => void;
     importPendingStatus: (params: CreateStatusParams, idempotencyKey: string) => void;
-    replacePendingStatus: (idempotencyKey: string, newId: string) => void;
+    replacePendingStatus: (idempotencyKey: string, status: Status) => void;
     deletePendingStatus: (idempotencyKey: string) => void;
     filterTimelines: (accountId: string) => void;
   };
@@ -76,6 +81,11 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
     const existingEntry = timelinePage.findIndex(
       (entry) => entry.type === 'status' && entry.id === (status.reblog || status).id,
     );
+
+    if (!status.reblog && existingEntry !== -1) {
+      const entry = timelinePage[existingEntry];
+      if (entry.type === 'status') entry.isReblog = false;
+    }
 
     if (existingEntry !== -1) return existingEntry;
 
@@ -115,6 +125,10 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
           rebloggedBy: [status.account.id],
           reblogIds: [status.id],
           isConnectedTop,
+          isReply: status.reblog.in_reply_to_id !== null,
+          isReblog: true,
+          isQuote: status.reblog.quote !== null,
+          hasMedia: status.reblog.media_attachments.length > 0,
         });
       }
       return -1;
@@ -127,6 +141,10 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
       rebloggedBy: [],
       reblogIds: [],
       isConnectedTop,
+      isReply: status.in_reply_to_id !== null,
+      isReblog: false,
+      isQuote: status.quote !== null,
+      hasMedia: status.media_attachments.length > 0,
     });
 
     return -1;
@@ -303,7 +321,7 @@ const useTimelinesStore = create<State>()(
             timeline.entries.unshift({ type: 'pending-status', id: idempotencyKey });
           }
         }),
-      replacePendingStatus: (idempotencyKey, newId) =>
+      replacePendingStatus: (idempotencyKey, status) =>
         set((state) => {
           for (const timeline of Object.values(state.timelines)) {
             const idx = timeline.entries.findIndex(
@@ -311,18 +329,24 @@ const useTimelinesStore = create<State>()(
             );
             if (idx !== -1) {
               if (
-                timeline.entries.some((entry) => entry.type === 'status' && entry.id === newId) ||
-                timeline.queuedEntries.some((s) => s.id === newId)
+                timeline.entries.some(
+                  (entry) => entry.type === 'status' && entry.id === status.id,
+                ) ||
+                timeline.queuedEntries.some((queued) => queued.id === status.id)
               ) {
                 timeline.entries.splice(idx, 1);
                 return;
               }
               timeline.entries[idx] = {
                 type: 'status',
-                id: newId,
-                originalId: newId,
+                id: status.id,
+                originalId: status.id,
                 rebloggedBy: [],
                 reblogIds: [],
+                isReply: status.in_reply_to_id !== null,
+                isReblog: false,
+                isQuote: status.quote !== null,
+                hasMedia: status.media_attachments.length > 0,
               };
             }
           }

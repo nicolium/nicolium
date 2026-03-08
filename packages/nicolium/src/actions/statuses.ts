@@ -116,7 +116,7 @@ const createStatus =
           );
 
         if (status.scheduled_at === null) {
-          useTimelinesStore.getState().actions.replacePendingStatus(idempotencyKey, status.id);
+          useTimelinesStore.getState().actions.replacePendingStatus(idempotencyKey, status);
         } else {
           useTimelinesStore.getState().actions.deletePendingStatus(idempotencyKey);
         }
