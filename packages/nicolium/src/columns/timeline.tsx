@@ -428,23 +428,21 @@ const Timeline: React.FC<ITimeline> = ({
     setTimeout(() => skipPinned, 0);
   };
 
-  const renderEntry = (entry: TimelineEntry, index: number) => {
+  const renderEntry = (
+    entry: TimelineEntry,
+    index: number,
+    connections?: {
+      isConnectedTop: boolean;
+      isConnectedBottom: boolean;
+    },
+  ) => {
     if (entry.type === 'status') {
-      if (
-        (filters?.showDirect === false && entry.isDirect) ||
-        (filters?.showReblogs === false && entry.isReblog) ||
-        (filters?.showReplies === false && entry.isReply) ||
-        (filters?.showQuotes === false && entry.isQuote) ||
-        (filters?.showNonMedia === false && !entry.hasMedia)
-      ) {
-        return null;
-      }
       return (
         <TimelineStatus
           key={entry.id}
           id={entry.id}
-          isConnectedTop={entry.isConnectedTop}
-          isConnectedBottom={entry.isConnectedBottom}
+          isConnectedTop={connections?.isConnectedTop ?? entry.isConnectedTop}
+          isConnectedBottom={connections?.isConnectedBottom ?? entry.isConnectedBottom}
           contextType={contextType}
           onMoveUp={() => handleMoveUp(index)}
           onMoveDown={() => handleMoveDown(index)}
@@ -488,9 +486,45 @@ const Timeline: React.FC<ITimeline> = ({
       }
     }
 
-    for (const entry of entries) {
-      rendered.push(renderEntry(entry, rendered.length));
-    }
+    entries
+      .map((entry) => {
+        if (entry.type === 'status') {
+          return {
+            ...entry,
+            filtered:
+              (filters?.showDirect === false && entry.isDirect) ||
+              (filters?.showReblogs === false && entry.isReblog) ||
+              (filters?.showReplies === false && entry.isReply) ||
+              (filters?.showQuotes === false && entry.isQuote) ||
+              (filters?.showNonMedia === false && !entry.hasMedia),
+          };
+        }
+        return entry;
+      })
+      .forEach((entry, entryIndex, entries) => {
+        if (entry.type === 'status' && entry.filtered) {
+          return;
+        }
+
+        if (entry.type === 'status') {
+          const previousEntry = entries[entryIndex - 1];
+          const nextEntry = entries[entryIndex + 1];
+
+          rendered.push(
+            renderEntry(entry, rendered.length, {
+              isConnectedTop:
+                !!entry.isConnectedTop &&
+                previousEntry?.type === 'status' &&
+                !previousEntry.filtered,
+              isConnectedBottom:
+                !!entry.isConnectedBottom && nextEntry?.type === 'status' && !nextEntry.filtered,
+            }),
+          );
+          return;
+        }
+
+        rendered.push(renderEntry(entry, rendered.length));
+      });
 
     return rendered;
   }, [entries, contextType, timelineId, featuredStatusIds, filters]);
