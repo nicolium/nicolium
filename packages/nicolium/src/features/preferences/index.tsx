@@ -318,7 +318,7 @@ const Preferences = () => {
         >
           <SettingToggle
             settings={settings}
-            settingPath={['timelines', 'home', 'shows', 'reblog']}
+            settingPath={['timelines', 'home', 'showReblogs']}
             defaultValue
             onChange={onToggleChange}
           />
@@ -334,7 +334,39 @@ const Preferences = () => {
         >
           <SettingToggle
             settings={settings}
-            settingPath={['timelines', 'home', 'shows', 'reply']}
+            settingPath={['timelines', 'home', 'showReplies']}
+            defaultValue
+            onChange={onToggleChange}
+          />
+        </ListItem>
+
+        <ListItem
+          label={
+            <FormattedMessage
+              id='home.column_settings.show_quotes'
+              defaultMessage='Show quotes in home timeline'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['timelines', 'home', 'showQuotes']}
+            defaultValue
+            onChange={onToggleChange}
+          />
+        </ListItem>
+
+        <ListItem
+          label={
+            <FormattedMessage
+              id='home.column_settings.show_direct'
+              defaultMessage='Show direct messages in home timeline'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['timelines', 'home', 'showDirect']}
             defaultValue
             onChange={onToggleChange}
           />

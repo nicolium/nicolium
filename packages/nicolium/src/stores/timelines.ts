@@ -20,6 +20,7 @@ type TimelineEntry =
       // this actually indicates whether the status exclusively appeared as a reblog on the processed page
       isReblog: boolean;
       isQuote: boolean;
+      isDirect: boolean;
       hasMedia: boolean;
     }
   | {
@@ -128,6 +129,7 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
           isReply: status.reblog.in_reply_to_id !== null,
           isReblog: true,
           isQuote: status.reblog.quote !== null,
+          isDirect: status.reblog.visibility === 'direct',
           hasMedia: status.reblog.media_attachments.length > 0,
         });
       }
@@ -144,6 +146,7 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
       isReply: status.in_reply_to_id !== null,
       isReblog: false,
       isQuote: status.quote !== null,
+      isDirect: status.visibility === 'direct',
       hasMedia: status.media_attachments.length > 0,
     });
 
@@ -346,6 +349,7 @@ const useTimelinesStore = create<State>()(
                 isReply: status.in_reply_to_id !== null,
                 isReblog: false,
                 isQuote: status.quote !== null,
+                isDirect: status.visibility === 'direct',
                 hasMedia: status.media_attachments.length > 0,
               };
             }

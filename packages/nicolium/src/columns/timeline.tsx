@@ -32,9 +32,11 @@ import {
   usePublicTimeline,
   useWrenchedTimeline,
 } from '@/queries/timelines/use-timelines';
+import { useSettings } from '@/stores/settings';
 import { selectChild } from '@/utils/scroll-utils';
 
 import type { FilterContextType } from '@/queries/settings/use-filters';
+import type { Settings } from '@/schemas/frontend-settings';
 import type { TimelineEntry } from '@/stores/timelines';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
@@ -368,6 +370,7 @@ type IBaseTimeline = Pick<
   'emptyMessageIcon' | 'emptyMessageText' | 'onTopItemChanged'
 > & {
   featuredStatusIds?: Array<string>;
+  filters?: Settings['timelines'][string];
 };
 
 interface ITimeline extends IBaseTimeline {
@@ -379,6 +382,7 @@ const Timeline: React.FC<ITimeline> = ({
   query,
   contextType = 'public',
   featuredStatusIds,
+  filters,
   ...props
 }) => {
   const node = useRef<VirtuosoHandle | null>(null);
@@ -426,6 +430,15 @@ const Timeline: React.FC<ITimeline> = ({
 
   const renderEntry = (entry: TimelineEntry, index: number) => {
     if (entry.type === 'status') {
+      if (
+        (filters?.showDirect === false && entry.isDirect) ||
+        (filters?.showReblogs === false && entry.isReblog) ||
+        (filters?.showReplies === false && entry.isReply) ||
+        (filters?.showQuotes === false && entry.isQuote) ||
+        (filters?.showNonMedia === false && !entry.hasMedia)
+      ) {
+        return null;
+      }
       return (
         <TimelineStatus
           key={entry.id}
@@ -480,7 +493,7 @@ const Timeline: React.FC<ITimeline> = ({
     }
 
     return rendered;
-  }, [entries, contextType, timelineId, featuredStatusIds]);
+  }, [entries, contextType, timelineId, featuredStatusIds, filters]);
 
   return (
     <>
@@ -533,6 +546,8 @@ const getRestoredPosition = (me: string) => {
 const HomeTimelineColumn: React.FC<IBaseTimeline> = (props) => {
   const me = useAppSelector((state) => state.me);
 
+  const timelineFilters = useSettings().timelines.home;
+
   const maxId = useMemo(() => {
     if (!me) return undefined;
 
@@ -563,6 +578,7 @@ const HomeTimelineColumn: React.FC<IBaseTimeline> = (props) => {
       query={timelineQuery}
       contextType='home'
       onTopItemChanged={handleTopItemChanged}
+      filters={timelineFilters}
       {...props}
     />
   );
