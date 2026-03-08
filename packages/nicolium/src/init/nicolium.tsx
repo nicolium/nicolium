@@ -12,6 +12,7 @@ import { store } from '@/store';
 import NicoliumHead from './nicolium-head';
 import NicoliumLoad from './nicolium-load';
 import NicoliumMount from './nicolium-mount';
+import '../polyfills';
 
 // Preload happens synchronously
 store.dispatch(preload());

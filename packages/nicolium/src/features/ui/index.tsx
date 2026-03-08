@@ -92,13 +92,13 @@ const UI: React.FC = React.memo(() => {
     }
 
     if (account.locked) {
-      setTimeout(() => prefetchFollowRequests(client), 700);
+      requestIdleCallback(() => prefetchFollowRequests(client), { timeout: 2000 });
     }
 
     if (features.scheduledStatuses) {
-      setTimeout(() => {
-        queryClient.prefetchInfiniteQuery(scheduledStatusesQueryOptions);
-      }, 900);
+      requestIdleCallback(() => queryClient.prefetchInfiniteQuery(scheduledStatusesQueryOptions), {
+        timeout: 2000,
+      });
     }
   };
 
