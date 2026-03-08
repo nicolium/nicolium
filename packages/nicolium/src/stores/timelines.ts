@@ -83,12 +83,14 @@ const processPage = (statuses: Array<Status>): Array<TimelineEntry> => {
       (entry) => entry.type === 'status' && entry.id === (status.reblog || status).id,
     );
 
-    if (!status.reblog && existingEntry !== -1) {
-      const entry = timelinePage[existingEntry];
-      if (entry.type === 'status') entry.isReblog = false;
-    }
+    if (existingEntry !== -1) {
+      if (!status.reblog) {
+        const entry = timelinePage[existingEntry];
+        if (entry.type === 'status') entry.isReblog = false;
+      }
 
-    if (existingEntry !== -1) return existingEntry;
+      return existingEntry;
+    }
 
     let isConnectedTop = false;
     const inReplyToId = (status.reblog || status).in_reply_to_id;
