@@ -46,7 +46,17 @@ The server supports hot module reloading, so any changes you make to the source 
 
 ## Testing
 
-Currently, tests are disabled in Nicolium. They will be reintroduced after the ongoing refactor is complete.
+Nicolium has test infrastructure configured with Vitest, though only few files are covered with tests. You can run the test suite with:
+
+```bash
+pnpm -F nicolium test
+```
+
+For watch mode during development:
+
+```bash
+pnpm -F nicolium test:watch
+```
 
 ## Contributing guidelines
 
