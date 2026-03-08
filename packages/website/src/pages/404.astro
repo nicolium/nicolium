@@ -1,0 +1,23 @@
+---
+import BaseHead from "@mkljczk/astro-theme/components/BaseHead.astro";
+import Base404 from "@mkljczk/astro-theme/layouts/404.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+---
+
+<Base404
+  lang="en"
+  errorHeading="Page not found"
+  errorDescription="The page you are looking for does not exist or has been moved."
+  homeLinkHref="/"
+  homeLinkText="Go to homepage"
+>
+  <BaseHead
+    slot="head"
+    siteTitle="Nicolium"
+    title="404: Page not found"
+    description="The page you are looking for does not exist or has been moved."
+  />
+  <Header slot="header" />
+  <Footer slot="footer" />
+</Base404>
