@@ -17,7 +17,7 @@ import { useFeatures } from '@/hooks/use-features';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/hooks/use-instance';
 import { PaletteListItem } from '@/pages/dashboard/theme-editor';
-import { useSettings } from '@/stores/settings';
+import { useDefaultSettings, useSettings } from '@/stores/settings';
 import sourceCode from '@/utils/code';
 import colors from '@/utils/colors';
 import { isStandalone } from '@/utils/state';
@@ -158,6 +158,7 @@ const Preferences = () => {
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const settings = useSettings();
+  const defaultSettings = useDefaultSettings();
   const frontendConfig = useFrontendConfig();
   const instance = useInstance();
   const standalone = useAppSelector(isStandalone);
@@ -218,10 +219,8 @@ const Preferences = () => {
   };
 
   const onThemeReset = () => {
-    dispatch(
-      changeSetting(['themeMode'], frontendConfig.defaultSettings.themeMode, { save: false }),
-    );
-    dispatch(changeSetting(['theme'], frontendConfig.defaultSettings.theme, { showAlert: true }));
+    dispatch(changeSetting(['themeMode'], defaultSettings.themeMode, { save: false }));
+    dispatch(changeSetting(['theme'], defaultSettings.theme, { showAlert: true }));
   };
 
   const displayMediaOptions = React.useMemo(
