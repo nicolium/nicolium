@@ -3,17 +3,20 @@ import { create } from 'zustand';
 type State = {
   isDropdownMenuOpen: boolean;
   isSidebarOpen: boolean;
+  isSledzikRemoved: boolean;
   actions: {
     openDropdownMenu: () => void;
     closeDropdownMenu: () => void;
     openSidebar: () => void;
     closeSidebar: () => void;
+    removeSledzik: () => void;
   };
 };
 
 const useUiStore = create<State>((set) => ({
   isDropdownMenuOpen: false,
   isSidebarOpen: false,
+  isSledzikRemoved: false,
   actions: {
     openDropdownMenu: () => {
       set({ isDropdownMenuOpen: true });
@@ -26,6 +29,9 @@ const useUiStore = create<State>((set) => ({
     },
     closeSidebar: () => {
       set({ isSidebarOpen: false });
+    },
+    removeSledzik: () => {
+      set({ isSledzikRemoved: true });
     },
   },
 }));

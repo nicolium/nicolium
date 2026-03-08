@@ -20,6 +20,8 @@ import { useModalsActions, useModalsStore } from '@/stores/modals';
 import { useSettings, useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
 
+import { useUiStoreActions } from './ui';
+
 import type { AutoSuggestion } from '@/components/autosuggest-input';
 import type { Language } from '@/features/preferences';
 import type { NormalizedStatus as Status } from '@/normalizers/status';
@@ -709,6 +711,7 @@ const useSubmitCompose = (composeId: string) => {
   const dispatch = useAppDispatch();
   const features = useFeatures();
   const { openModal, closeModal } = useModalsActions();
+  const { removeSledzik } = useUiStoreActions();
   const settings = useSettings();
 
   const submitCompose = useCallback(
@@ -861,6 +864,10 @@ const useSubmitCompose = (composeId: string) => {
         if (compose.redacting) {
           // @ts-expect-error
           params.overwrite = compose.redactingOverwrite;
+        }
+
+        if (!compose.preview && compose.text.trim().toLocaleUpperCase() === '5P13RD4L4J-5L3D21U') {
+          removeSledzik();
         }
 
         try {

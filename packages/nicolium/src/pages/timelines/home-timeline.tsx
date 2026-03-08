@@ -8,6 +8,7 @@ import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/hooks/use-instance';
+import { useUiStore } from '@/stores/ui';
 
 const messages = defineMessages({
   title: { id: 'column.home', defaultMessage: 'Home' },
@@ -40,6 +41,10 @@ const HomeTimelinePage: React.FC = () => {
   const intl = useIntl();
   const features = useFeatures();
   const instance = useInstance();
+
+  const { isSledzikRemoved } = useUiStore();
+
+  if (isSledzikRemoved) return null;
 
   return (
     <Column className='py-0' label={intl.formatMessage(messages.title)} withHeader={false}>
