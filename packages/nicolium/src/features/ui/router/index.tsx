@@ -3,6 +3,7 @@ import {
   createRootRouteWithContext,
   createRoute,
   createRouter,
+  lazyRouteComponent as lazy,
   Navigate,
   notFound,
   redirect,
@@ -11,14 +12,12 @@ import {
 import React, { useMemo } from 'react';
 import * as v from 'valibot';
 
-import { FE_SUBDIRECTORY, WITH_LANDING_PAGE } from '@/build-config';
+import { FE_SUBDIRECTORY } from '@/build-config';
 import SiteError from '@/components/site-error';
 import Layout from '@/components/ui/layout';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/hooks/use-instance';
-import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import AdminLayout from '@/layouts/admin-layout';
 import ChatsLayout from '@/layouts/chats-layout';
@@ -30,7 +29,6 @@ import ExternalLoginLayout from '@/layouts/external-login-layout';
 import GroupLayout from '@/layouts/group-layout';
 import GroupsLayout from '@/layouts/groups-layout';
 import HomeLayout from '@/layouts/home-layout';
-import LandingLayout from '@/layouts/landing-layout';
 import ManageGroupsLayout from '@/layouts/manage-groups-layout';
 import ProfileLayout from '@/layouts/profile-layout';
 import RemoteInstanceLayout from '@/layouts/remote-instance-layout';
@@ -38,7 +36,6 @@ import SearchLayout from '@/layouts/search-layout';
 import StatusLayout from '@/layouts/status-layout';
 import { instanceInitialState } from '@/reducers/instance';
 import { LOCAL_STORAGE_REDIRECT_KEY } from '@/utils/redirect';
-import { isStandalone } from '@/utils/state';
 
 import ChatsPageChat from '../../chats/components/chats-page/components/chats-page-chat';
 import ChatsPageEmpty from '../../chats/components/chats-page/components/chats-page-empty';
@@ -46,112 +43,6 @@ import ChatsPageNew from '../../chats/components/chats-page/components/chats-pag
 import ChatsPageSettings from '../../chats/components/chats-page/components/chats-page-settings';
 import ChatsPageShoutbox from '../../chats/components/chats-page/components/chats-page-shoutbox';
 import ColumnLoading from '../components/column-loading';
-import {
-  AboutPage,
-  AccountGallery,
-  AccountTimeline,
-  AdminAccount,
-  Aliases,
-  Announcements,
-  Antennas,
-  AntennaTimeline,
-  AuthTokenList,
-  Backups,
-  Blocks,
-  BookmarkFolders,
-  Bookmarks,
-  BubbleTimeline,
-  ChatIndex,
-  Circle,
-  Circles,
-  CircleTimeline,
-  CommunityTimeline,
-  ComposeEvent,
-  Conversations,
-  CreateApp,
-  CryptoDonate,
-  Dashboard,
-  DeleteAccount,
-  Developers,
-  Directory,
-  DomainBlocks,
-  Domains,
-  DraftStatuses,
-  Drive,
-  EditEmail,
-  EditFilter,
-  EditGroup,
-  EditPassword,
-  EditProfile,
-  EventDiscussion,
-  EventInformation,
-  Events,
-  ExportData,
-  ExternalLogin,
-  FavouritedStatuses,
-  FederationRestrictions,
-  Filters,
-  FollowedTags,
-  Followers,
-  Following,
-  FollowRequests,
-  FrontendConfig,
-  GenericNotFound,
-  GroupBlockedMembers,
-  GroupGallery,
-  GroupMembers,
-  GroupMembershipRequests,
-  GroupTimeline,
-  Groups,
-  HashtagTimeline,
-  HomeTimeline,
-  ImportData,
-  IntentionalError,
-  InteractionPolicies,
-  InteractionRequests,
-  LandingPage,
-  LandingTimeline,
-  LinkTimeline,
-  Lists,
-  ListTimeline,
-  LoginPage,
-  LogoutPage,
-  ManageGroup,
-  MfaForm,
-  Migration,
-  ModerationLog,
-  Mutes,
-  NewStatus,
-  Notifications,
-  OutgoingFollowRequests,
-  PasswordReset,
-  PinnedStatuses,
-  PublicTimeline,
-  Quotes,
-  RegisterInvite,
-  RegistrationPage,
-  Relays,
-  RemoteTimeline,
-  Report,
-  RssFeedSubscriptions,
-  Rules,
-  ScheduledStatuses,
-  Search,
-  ServerInfo,
-  ServiceWorkerInfo,
-  Settings,
-  SettingsStore,
-  Share,
-  Status,
-  Subscribers,
-  ThemeEditor,
-  Privacy,
-  UserIndex,
-  WrenchedTimeline,
-  EditEvent,
-  Reports,
-  AwaitingApproval,
-} from '../util/async-components';
 
 import type { Features } from 'pl-api';
 
@@ -164,7 +55,7 @@ interface RouterContext {
 }
 
 const rootRoute = createRootRouteWithContext<RouterContext>()({
-  component: React.lazy(() => import('@/features/ui')),
+  component: lazy(() => import('@/features/ui')),
 });
 
 const requireAuth = ({
@@ -244,11 +135,6 @@ const layouts = {
     id: 'home-layout',
     component: HomeLayout,
   }),
-  landing: createRoute({
-    getParentRoute: () => rootRoute,
-    id: 'landing-layout',
-    component: LandingLayout,
-  }),
   manageGroups: createRoute({
     getParentRoute: () => rootRoute,
     id: 'manage-groups-layout',
@@ -278,67 +164,53 @@ const layouts = {
 };
 
 // Root routes
-const HomeRoute = () => {
-  const { redirectRootNoLogin } = useFrontendConfig();
-  const standalone = useAppSelector(isStandalone);
-  const { isLoggedIn } = useLoggedIn();
-
-  if (!isLoggedIn && redirectRootNoLogin) return <Navigate to={redirectRootNoLogin} replace />;
-  if (standalone && !isLoggedIn && !WITH_LANDING_PAGE)
-    return <Navigate to='/login/external' replace />;
-
-  if (isLoggedIn) return <HomeTimeline />;
-  if (standalone && WITH_LANDING_PAGE) return <LandingPage />;
-  return <LandingTimeline />;
-};
-
 export const homeRoute = createRoute({
   getParentRoute: () => layouts.home,
   path: '/',
-  component: HomeRoute,
+  component: lazy(() => import('./util')),
 });
 
 // Auth routes
 export const logoutRoute = createRoute({
   getParentRoute: () => layouts.empty,
   path: '/logout',
-  component: LogoutPage,
+  component: lazy(() => import('@/pages/auth/logout')),
 });
 
 export const loginRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/login',
-  component: LoginPage,
+  component: lazy(() => import('@/pages/auth/login')),
 });
 
 export const loginAddRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/login/add',
-  component: LoginPage,
+  component: lazy(() => import('@/pages/auth/login')),
 });
 
 export const loginExternalRoute = createRoute({
   getParentRoute: () => layouts.externalLogin,
   path: '/login/external',
-  component: ExternalLogin,
+  component: lazy(() => import('@/pages/auth/external-login')),
 });
 
 export const resetPasswordRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/reset-password',
-  component: PasswordReset,
+  component: lazy(() => import('@/pages/auth/password-reset')),
 });
 
 export const inviteRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/invite/$token',
-  component: RegisterInvite,
+  component: lazy(() => import('@/pages/auth/register-with-invite')),
 });
 
 export const signupRoute = createRoute({
   getParentRoute: () => layouts.empty,
   path: '/signup',
-  component: RegistrationPage,
+  component: lazy(() => import('@/pages/auth/registration')),
   beforeLoad: ({ context: { features, instance } }) => {
     if (!features.accountCreation || !instance.registrations.enabled) throw notFound();
   },
@@ -348,7 +220,7 @@ export const signupRoute = createRoute({
 export const localTimelineRoute = createRoute({
   getParentRoute: () => layouts.home,
   path: '/timeline/local',
-  component: CommunityTimeline,
+  component: lazy(() => import('@/pages/timelines/community-timeline')),
   beforeLoad: (options) => {
     const {
       context: { features, instance },
@@ -363,7 +235,7 @@ export const localTimelineRoute = createRoute({
 export const federatedTimelineRoute = createRoute({
   getParentRoute: () => layouts.home,
   path: '/timeline/fediverse',
-  component: PublicTimeline,
+  component: lazy(() => import('@/pages/timelines/public-timeline')),
   beforeLoad: (options) => {
     const {
       context: { features, instance },
@@ -378,7 +250,7 @@ export const federatedTimelineRoute = createRoute({
 export const bubbleTimelineRoute = createRoute({
   getParentRoute: () => layouts.home,
   path: '/timeline/bubble',
-  component: BubbleTimeline,
+  component: lazy(() => import('@/pages/timelines/bubble-timeline')),
   beforeLoad: (options) => {
     const {
       context: { features, instance },
@@ -393,7 +265,7 @@ export const bubbleTimelineRoute = createRoute({
 export const wrenchedTimelineRoute = createRoute({
   getParentRoute: () => layouts.home,
   path: '/timeline/wrenched',
-  component: WrenchedTimeline,
+  component: lazy(() => import('@/pages/timelines/wrenched-timeline')),
   beforeLoad: (options) => {
     const {
       context: { features, instance },
@@ -408,7 +280,7 @@ export const wrenchedTimelineRoute = createRoute({
 export const remoteTimelineRoute = createRoute({
   getParentRoute: () => layouts.remoteInstance,
   path: '/',
-  component: RemoteTimeline,
+  component: lazy(() => import('@/pages/timelines/remote-timeline')),
   beforeLoad: (options) => {
     const {
       context: { features, instance },
@@ -424,7 +296,7 @@ export const remoteTimelineRoute = createRoute({
 export const conversationsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/conversations',
-  component: Conversations,
+  component: lazy(() => import('@/pages/status-lists/conversations')),
   beforeLoad: (options) => {
     const {
       context: { features },
@@ -438,7 +310,7 @@ export const conversationsRoute = createRoute({
 export const hashtagTimelineRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/tags/$hashtag',
-  component: HashtagTimeline,
+  component: lazy(() => import('@/pages/timelines/hashtag-timeline')),
   beforeLoad: (options) => {
     const {
       context: { instance },
@@ -452,14 +324,14 @@ export const hashtagTimelineRoute = createRoute({
 export const linkTimelineRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/links/$url',
-  component: LinkTimeline,
+  component: lazy(() => import('@/pages/timelines/link-timeline')),
 });
 
 // Lists and circles
 export const listsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/lists',
-  component: Lists,
+  component: lazy(() => import('@/pages/account-lists/lists')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.lists) throw notFound();
   }),
@@ -468,7 +340,7 @@ export const listsRoute = createRoute({
 export const listTimelineRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/list/$listId',
-  component: ListTimeline,
+  component: lazy(() => import('@/pages/timelines/list-timeline')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.lists) throw notFound();
   }),
@@ -477,7 +349,7 @@ export const listTimelineRoute = createRoute({
 export const circlesRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/circles',
-  component: Circles,
+  component: lazy(() => import('@/pages/account-lists/circles')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.circles) throw notFound();
   }),
@@ -486,7 +358,7 @@ export const circlesRoute = createRoute({
 export const circleTimelineRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/circles/$circleId',
-  component: CircleTimeline,
+  component: lazy(() => import('@/pages/timelines/circle-timeline')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.circles) throw notFound();
   }),
@@ -495,7 +367,7 @@ export const circleTimelineRoute = createRoute({
 export const antennasRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/antennas',
-  component: Antennas,
+  component: lazy(() => import('@/pages/account-lists/antennas')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.antennas) throw notFound();
   }),
@@ -504,7 +376,7 @@ export const antennasRoute = createRoute({
 export const antennaTimelineRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/antennas/$antennaId',
-  component: AntennaTimeline,
+  component: lazy(() => import('@/pages/timelines/antenna-timeline')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.antennas) throw notFound();
   }),
@@ -514,7 +386,7 @@ export const antennaTimelineRoute = createRoute({
 export const bookmarkFoldersRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/bookmarks',
-  component: BookmarkFolders,
+  component: lazy(() => import('@/pages/status-lists/bookmark-folders')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.bookmarks) throw notFound();
     if (!features.bookmarkFolders)
@@ -525,7 +397,7 @@ export const bookmarkFoldersRoute = createRoute({
 export const bookmarksRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/bookmarks/$folderId',
-  component: Bookmarks,
+  component: lazy(() => import('@/pages/status-lists/bookmarks')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.bookmarks) throw notFound();
   }),
@@ -535,7 +407,7 @@ export const bookmarksRoute = createRoute({
 export const notificationsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/notifications',
-  component: Notifications,
+  component: lazy(() => import('@/pages/notifications/notifications')),
   beforeLoad: requireAuth,
 });
 
@@ -548,7 +420,7 @@ export const searchRoute = createRoute({
     q: v.optional(v.string()),
     accountId: v.optional(v.string()),
   }),
-  component: Search,
+  component: lazy(() => import('@/pages/search/search')),
 });
 
 export const directoryRoute = createRoute({
@@ -558,7 +430,7 @@ export const directoryRoute = createRoute({
     order: v.optional(v.picklist(['active', 'new']), 'active'),
     local: v.optional(v.boolean(), false),
   }),
-  component: Directory,
+  component: lazy(() => import('@/pages/account-lists/directory')),
   beforeLoad: ({ context: { features } }) => {
     if (!features.profileDirectory) throw notFound();
   },
@@ -568,7 +440,7 @@ export const directoryRoute = createRoute({
 export const eventsRoute = createRoute({
   getParentRoute: () => layouts.events,
   path: '/events',
-  component: Events,
+  component: lazy(() => import('@/pages/status-lists/events')),
   beforeLoad: ({ context: { features } }) => {
     if (!features.events) throw notFound();
   },
@@ -577,7 +449,7 @@ export const eventsRoute = createRoute({
 export const newEventRoute = createRoute({
   getParentRoute: () => layouts.events,
   path: '/events/new',
-  component: ComposeEvent,
+  component: lazy(() => import('@/pages/statuses/compose-event')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.events) throw notFound();
   }),
@@ -587,7 +459,7 @@ export const newEventRoute = createRoute({
 export const chatsRoute = createRoute({
   getParentRoute: () => layouts.chats,
   path: '/chats',
-  component: ChatIndex,
+  component: lazy(() => import('@/pages/chats/chats')),
 });
 
 export const chatsNewRoute = createRoute({
@@ -624,14 +496,14 @@ export const chatsEmptyRoute = createRoute({
 export const followRequestsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/follow_requests',
-  component: FollowRequests,
+  component: lazy(() => import('@/pages/account-lists/follow-requests')),
   beforeLoad: requireAuth,
 });
 
 export const outgoingFollowRequestsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/outgoing_follow_requests',
-  component: OutgoingFollowRequests,
+  component: lazy(() => import('@/pages/account-lists/outgoing-follow-requests')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.outgoingFollowRequests) throw notFound();
   }),
@@ -640,14 +512,14 @@ export const outgoingFollowRequestsRoute = createRoute({
 export const blocksRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/blocks',
-  component: Blocks,
+  component: lazy(() => import('@/pages/settings/blocks')),
   beforeLoad: requireAuth,
 });
 
 export const domainBlocksRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/domain_blocks',
-  component: DomainBlocks,
+  component: lazy(() => import('@/pages/settings/domain-blocks')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.federating) throw notFound();
   }),
@@ -656,7 +528,7 @@ export const domainBlocksRoute = createRoute({
 export const mutesRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/mutes',
-  component: Mutes,
+  component: lazy(() => import('@/pages/settings/mutes')),
   beforeLoad: requireAuth,
 });
 
@@ -664,7 +536,7 @@ export const mutesRoute = createRoute({
 export const filtersRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/filters',
-  component: Filters,
+  component: lazy(() => import('@/pages/settings/filters')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.filters && !features.filtersV2) throw notFound();
   }),
@@ -673,7 +545,7 @@ export const filtersRoute = createRoute({
 export const editFilterRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/filters/$filterId',
-  component: EditFilter,
+  component: lazy(() => import('@/pages/settings/edit-filter')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.filters && !features.filtersV2) throw notFound();
   }),
@@ -683,7 +555,7 @@ export const editFilterRoute = createRoute({
 export const followedTagsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/followed_tags',
-  component: FollowedTags,
+  component: lazy(() => import('@/pages/settings')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.followedHashtagsList) throw notFound();
   }),
@@ -692,7 +564,7 @@ export const followedTagsRoute = createRoute({
 export const rssFeedSubscriptionsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/rss_feed_subscriptions',
-  component: RssFeedSubscriptions,
+  component: lazy(() => import('@/pages/settings/rss-feed-subscriptions')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.rssFeedSubscriptions) throw notFound();
   }),
@@ -702,7 +574,7 @@ export const rssFeedSubscriptionsRoute = createRoute({
 export const interactionRequestsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/interaction_requests',
-  component: InteractionRequests,
+  component: lazy(() => import('@/pages/status-lists/interaction-requests')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.interactionRequests) throw notFound();
   }),
@@ -712,7 +584,7 @@ export const interactionRequestsRoute = createRoute({
 export const profileRoute = createRoute({
   getParentRoute: () => layouts.profile,
   path: '/',
-  component: AccountTimeline,
+  component: lazy(() => import('@/pages/accounts/account-timeline')),
   validateSearch: v.object({
     with_replies: v.optional(v.boolean()),
   }),
@@ -721,19 +593,19 @@ export const profileRoute = createRoute({
 export const profileFollowersRoute = createRoute({
   getParentRoute: () => layouts.profile,
   path: '/followers',
-  component: Followers,
+  component: lazy(() => import('@/pages/account-lists/followers')),
 });
 
 export const profileFollowingRoute = createRoute({
   getParentRoute: () => layouts.profile,
   path: '/following',
-  component: Following,
+  component: lazy(() => import('@/pages/account-lists/following')),
 });
 
 export const profileSubscribersRoute = createRoute({
   getParentRoute: () => layouts.profile,
   path: '/subscribers',
-  component: Subscribers,
+  component: lazy(() => import('@/pages/account-lists/subscribers')),
   validateSearch: v.object({
     include_expired: v.optional(v.boolean(), false),
   }),
@@ -742,45 +614,45 @@ export const profileSubscribersRoute = createRoute({
 export const profileMediaRoute = createRoute({
   getParentRoute: () => layouts.profile,
   path: '/media',
-  component: AccountGallery,
+  component: lazy(() => import('@/pages/accounts/account-gallery')),
 });
 
 export const profileTaggedRoute = createRoute({
   getParentRoute: () => layouts.profile,
   path: '/tagged/$tag',
-  component: AccountTimeline,
+  component: lazy(() => import('@/pages/accounts/account-timeline')),
 });
 
 export const profileFavoritesRoute = createRoute({
   getParentRoute: () => layouts.profile,
   path: '/favorites',
-  component: FavouritedStatuses,
+  component: lazy(() => import('@/pages/status-lists/favourited-statuses')),
 });
 
 export const profilePinsRoute = createRoute({
   getParentRoute: () => layouts.profile,
   path: '/pins',
-  component: PinnedStatuses,
+  component: lazy(() => import('@/pages/status-lists/pinned-statuses')),
 });
 
 // Status routes
 export const statusRoute = createRoute({
   getParentRoute: () => layouts.status,
   path: '/@{$username}/posts/$statusId',
-  component: Status,
+  component: lazy(() => import('@/pages/statuses/status')),
 });
 
 export const statusQuotesRoute = createRoute({
   getParentRoute: () => layouts.status,
   path: '/@{$username}/posts/$statusId/quotes',
-  component: Quotes,
+  component: lazy(() => import('@/pages/status-lists/quotes')),
 });
 
 // Event routes
 export const eventInformationRoute = createRoute({
   getParentRoute: () => layouts.event,
   path: '/',
-  component: EventInformation,
+  component: lazy(() => import('@/pages/statuses/event-information')),
   beforeLoad: ({ context: { features } }) => {
     if (!features.events) throw notFound();
   },
@@ -789,7 +661,9 @@ export const eventInformationRoute = createRoute({
 export const eventEditRoute = createRoute({
   getParentRoute: () => layouts.events,
   path: '/@{$username}/events/$statusId/edit',
-  component: EditEvent,
+  component: lazy(() =>
+    import('@/pages/statuses/compose-event').then((m) => ({ default: m.EditEventPage })),
+  ),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.events) throw notFound();
   }),
@@ -798,7 +672,7 @@ export const eventEditRoute = createRoute({
 export const eventDiscussionRoute = createRoute({
   getParentRoute: () => layouts.event,
   path: '/discussion',
-  component: EventDiscussion,
+  component: lazy(() => import('@/pages/statuses/event-discussion')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.events) throw notFound();
   }),
@@ -808,7 +682,7 @@ export const eventDiscussionRoute = createRoute({
 export const groupsRoute = createRoute({
   getParentRoute: () => layouts.groups,
   path: '/groups',
-  component: Groups,
+  component: lazy(() => import('@/pages/groups/groups')),
   beforeLoad: ({ context: { features } }) => {
     if (!features.groups) throw notFound();
   },
@@ -817,7 +691,7 @@ export const groupsRoute = createRoute({
 export const groupTimelineRoute = createRoute({
   getParentRoute: () => layouts.group,
   path: '/',
-  component: GroupTimeline,
+  component: lazy(() => import('@/pages/timelines/group-timeline')),
   beforeLoad: ({ context: { features } }) => {
     if (!features.groups) throw notFound();
   },
@@ -826,7 +700,7 @@ export const groupTimelineRoute = createRoute({
 export const groupMembersRoute = createRoute({
   getParentRoute: () => layouts.group,
   path: '/members',
-  component: GroupMembers,
+  component: lazy(() => import('@/pages/groups/group-members')),
   beforeLoad: ({ context: { features } }) => {
     if (!features.groups) throw notFound();
   },
@@ -835,7 +709,7 @@ export const groupMembersRoute = createRoute({
 export const groupGalleryRoute = createRoute({
   getParentRoute: () => layouts.group,
   path: '/media',
-  component: GroupGallery,
+  component: lazy(() => import('@/pages/groups/group-gallery')),
   beforeLoad: ({ context: { features } }) => {
     if (!features.groups) throw notFound();
   },
@@ -844,7 +718,7 @@ export const groupGalleryRoute = createRoute({
 export const manageGroupRoute = createRoute({
   getParentRoute: () => layouts.manageGroups,
   path: '/groups/$groupId/manage',
-  component: ManageGroup,
+  component: lazy(() => import('@/pages/groups/manage-group')),
   beforeLoad: ({ context: { features } }) => {
     if (!features.groups) throw notFound();
   },
@@ -853,7 +727,7 @@ export const manageGroupRoute = createRoute({
 export const editGroupRoute = createRoute({
   getParentRoute: () => layouts.manageGroups,
   path: '/groups/$groupId/manage/edit',
-  component: EditGroup,
+  component: lazy(() => import('@/pages/groups/edit-group')),
   beforeLoad: ({ context: { features } }) => {
     if (!features.groups) throw notFound();
   },
@@ -862,7 +736,7 @@ export const editGroupRoute = createRoute({
 export const groupBlocksRoute = createRoute({
   getParentRoute: () => layouts.manageGroups,
   path: '/groups/$groupId/manage/blocks',
-  component: GroupBlockedMembers,
+  component: lazy(() => import('@/pages/groups/group-blocked-members')),
   beforeLoad: ({ context: { features } }) => {
     if (!features.groups) throw notFound();
   },
@@ -871,7 +745,7 @@ export const groupBlocksRoute = createRoute({
 export const groupMembershipRequestsRoute = createRoute({
   getParentRoute: () => layouts.manageGroups,
   path: '/groups/$groupId/manage/requests',
-  component: GroupMembershipRequests,
+  component: lazy(() => import('@/pages/groups/group-membership-requests')),
   beforeLoad: ({ context: { features } }) => {
     if (!features.groups) throw notFound();
   },
@@ -881,13 +755,13 @@ export const groupMembershipRequestsRoute = createRoute({
 export const newStatusRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/statuses/new',
-  component: NewStatus,
+  component: lazy(() => import('@/pages/utils/new-status')),
 });
 
 export const scheduledStatusesRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/scheduled_statuses',
-  component: ScheduledStatuses,
+  component: lazy(() => import('@/pages/status-lists/scheduled-statuses')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.scheduledStatuses) throw notFound();
   }),
@@ -896,7 +770,7 @@ export const scheduledStatusesRoute = createRoute({
 export const draftStatusesRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/draft_statuses',
-  component: DraftStatuses,
+  component: lazy(() => import('@/pages/status-lists/draft-statuses')),
   beforeLoad: requireAuth,
 });
 
@@ -904,7 +778,7 @@ export const draftStatusesRoute = createRoute({
 export const driveRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/drive/{-$folderId}',
-  component: Drive,
+  component: lazy(() => import('@/pages/drive/drive')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.drive) throw notFound();
   }),
@@ -914,7 +788,7 @@ export const driveRoute = createRoute({
 export const circleRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/circle',
-  component: Circle,
+  component: lazy(() => import('@/pages/fun/circle')),
   beforeLoad: requireAuth,
 });
 
@@ -922,28 +796,28 @@ export const circleRoute = createRoute({
 export const settingsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings',
-  component: Settings,
+  component: lazy(() => import('@/pages/settings/settings')),
   beforeLoad: requireAuth,
 });
 
 export const settingsProfileRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/profile',
-  component: EditProfile,
+  component: lazy(() => import('@/pages/settings/edit-profile')),
   beforeLoad: requireAuth,
 });
 
 export const settingsExportRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/export',
-  component: ExportData,
+  component: lazy(() => import('@/pages/settings/export-data')),
   beforeLoad: requireAuth,
 });
 
 export const settingsImportRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/import',
-  component: ImportData,
+  component: lazy(() => import('@/pages/settings/import-data')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.importBlocks && !features.importFollows && !features.importMutes)
       throw notFound();
@@ -953,7 +827,7 @@ export const settingsImportRoute = createRoute({
 export const settingsAliasesRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/aliases',
-  component: Aliases,
+  component: lazy(() => import('@/pages/settings/aliases')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.manageAccountAliases) throw notFound();
   }),
@@ -962,7 +836,7 @@ export const settingsAliasesRoute = createRoute({
 export const settingsMigrationRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/migration',
-  component: Migration,
+  component: lazy(() => import('@/pages/settings/migration')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.accountMoving) throw notFound();
   }),
@@ -971,7 +845,7 @@ export const settingsMigrationRoute = createRoute({
 export const settingsBackupsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/backups',
-  component: Backups,
+  component: lazy(() => import('@/pages/settings/backups')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.accountBackups) throw notFound();
   }),
@@ -980,14 +854,14 @@ export const settingsBackupsRoute = createRoute({
 export const settingsEmailRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/email',
-  component: EditEmail,
+  component: lazy(() => import('@/pages/settings/edit-email')),
   beforeLoad: requireAuth,
 });
 
 export const settingsPasswordRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/password',
-  component: EditPassword,
+  component: lazy(() => import('@/pages/settings/edit-password')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.changePassword) throw notFound();
   }),
@@ -996,7 +870,7 @@ export const settingsPasswordRoute = createRoute({
 export const settingsAccountRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/account',
-  component: DeleteAccount,
+  component: lazy(() => import('@/pages/settings/delete-account')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.deleteAccount && !features.deleteAccountWithoutPassword) throw notFound();
   }),
@@ -1005,7 +879,7 @@ export const settingsAccountRoute = createRoute({
 export const settingsMfaRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/mfa',
-  component: MfaForm,
+  component: lazy(() => import('@/features/security/mfa-form')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.manageMfa) throw notFound();
   }),
@@ -1014,7 +888,7 @@ export const settingsMfaRoute = createRoute({
 export const settingsTokensRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/tokens',
-  component: AuthTokenList,
+  component: lazy(() => import('@/pages/settings/auth-token-list')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.sessions) throw notFound();
   }),
@@ -1023,7 +897,7 @@ export const settingsTokensRoute = createRoute({
 export const settingsInteractionPoliciesRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/interaction_policies',
-  component: InteractionPolicies,
+  component: lazy(() => import('@/pages/settings/interaction-policies')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.interactionRequests && !features.quoteApprovalPolicies) throw notFound();
   }),
@@ -1032,7 +906,7 @@ export const settingsInteractionPoliciesRoute = createRoute({
 export const settingsPrivacyRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/privacy',
-  component: Privacy,
+  component: lazy(() => import('@/pages/settings/privacy')),
   beforeLoad: requireAuth,
 });
 
@@ -1040,7 +914,7 @@ export const settingsPrivacyRoute = createRoute({
 export const frontendConfigRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/nicolium/config',
-  component: FrontendConfig,
+  component: lazy(() => import('@/pages/dashboard/frontend-config')),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   }),
@@ -1050,7 +924,7 @@ export const frontendConfigRoute = createRoute({
 export const adminDashboardRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin',
-  component: Dashboard,
+  component: lazy(() => import('@/pages/dashboard/dashboard')),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   }),
@@ -1059,7 +933,7 @@ export const adminDashboardRoute = createRoute({
 export const adminAccountRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin/accounts/$accountId',
-  component: AdminAccount,
+  component: lazy(() => import('@/pages/dashboard/account')),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   }),
@@ -1068,7 +942,7 @@ export const adminAccountRoute = createRoute({
 export const adminAwaitingApprovalRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin/approval',
-  component: AwaitingApproval,
+  component: lazy(() => import('@/pages/dashboard/awaiting-approval')),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   }),
@@ -1077,7 +951,7 @@ export const adminAwaitingApprovalRoute = createRoute({
 export const adminReportsRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin/reports',
-  component: Reports,
+  component: lazy(() => import('@/pages/dashboard/reports')),
   validateSearch: v.object({
     resolved: v.optional(v.boolean(), false),
     account_id: v.optional(v.string()),
@@ -1091,7 +965,7 @@ export const adminReportsRoute = createRoute({
 export const adminReportRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin/reports/$reportId',
-  component: Report,
+  component: lazy(() => import('@/pages/dashboard/report')),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   }),
@@ -1100,7 +974,7 @@ export const adminReportRoute = createRoute({
 export const adminLogRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin/log',
-  component: ModerationLog,
+  component: lazy(() => import('@/pages/dashboard/moderation-log')),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   }),
@@ -1109,7 +983,7 @@ export const adminLogRoute = createRoute({
 export const adminUsersRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin/users',
-  component: UserIndex,
+  component: lazy(() => import('@/pages/dashboard/user-index')),
   validateSearch: v.object({
     q: v.optional(v.string()),
   }),
@@ -1121,7 +995,7 @@ export const adminUsersRoute = createRoute({
 export const adminThemeRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin/theme',
-  component: ThemeEditor,
+  component: lazy(() => import('@/pages/dashboard/theme-editor')),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   }),
@@ -1130,7 +1004,7 @@ export const adminThemeRoute = createRoute({
 export const adminRelaysRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin/relays',
-  component: Relays,
+  component: lazy(() => import('@/pages/dashboard/relays')),
   beforeLoad: requireAuthMiddleware(({ context: { isAdmin } }) => {
     if (!isAdmin) throw notFound();
   }),
@@ -1139,7 +1013,7 @@ export const adminRelaysRoute = createRoute({
 export const adminAnnouncementsRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin/announcements',
-  component: Announcements,
+  component: lazy(() => import('@/pages/dashboard/announcements')),
   beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
     if (!isAdmin || !features.announcements) throw notFound();
   }),
@@ -1148,7 +1022,7 @@ export const adminAnnouncementsRoute = createRoute({
 export const adminDomainsRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin/domains',
-  component: Domains,
+  component: lazy(() => import('@/pages/dashboard/domains')),
   beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
     if (!isAdmin || !features.domains) throw notFound();
   }),
@@ -1157,7 +1031,7 @@ export const adminDomainsRoute = createRoute({
 export const adminRulesRoute = createRoute({
   getParentRoute: () => layouts.admin,
   path: '/nicolium/admin/rules',
-  component: Rules,
+  component: lazy(() => import('@/pages/dashboard/rules')),
   beforeLoad: requireAuthMiddleware(({ context: { features, isAdmin } }) => {
     if (!isAdmin || !features.adminRules) throw notFound();
   }),
@@ -1167,19 +1041,19 @@ export const adminRulesRoute = createRoute({
 export const serverInfoRoute = createRoute({
   getParentRoute: () => layouts.empty,
   path: '/info',
-  component: ServerInfo,
+  component: lazy(() => import('@/pages/utils/server-info')),
 });
 
 export const aboutRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/about/{-$slug}',
-  component: AboutPage,
+  component: lazy(() => import('@/pages/utils/about')),
 });
 
 export const shareRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/share',
-  component: Share,
+  component: lazy(() => import('@/pages/utils/share')),
   validateSearch: v.object({
     title: v.optional(v.string(), ''),
     text: v.optional(v.string(), ''),
@@ -1192,42 +1066,45 @@ export const shareRoute = createRoute({
 export const developersRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/developers',
-  component: Developers,
+  component: lazy(() => import('@/pages/developers/developers')),
   beforeLoad: requireAuth,
 });
 
 export const developersAppsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/developers/apps/create',
-  component: CreateApp,
+  component: lazy(() => import('@/pages/developers/create-app')),
   beforeLoad: requireAuth,
 });
 
 export const developersSettingsStoreRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/developers/settings_store',
-  component: SettingsStore,
+  component: lazy(() => import('@/pages/developers/settings-store')),
   beforeLoad: requireAuth,
 });
 
 export const developersSwRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/developers/sw',
-  component: ServiceWorkerInfo,
+  component: lazy(() => import('@/pages/developers/service-worker-info')),
   beforeLoad: requireAuth,
 });
 
 export const errorRoute = createRoute({
   getParentRoute: () => layouts.empty,
   path: '/error',
-  component: IntentionalError,
+  component: lazy(() => import('@/pages/utils/intentional-error')),
 });
 
 export const networkErrorRoute = createRoute({
   getParentRoute: () => layouts.empty,
   path: '/error/network',
-  component: React.lazy(() =>
-    Promise.reject(new TypeError('Failed to fetch dynamically imported module: TEST')),
+  component: lazy(
+    () =>
+      Promise.reject(
+        new TypeError('Failed to fetch dynamically imported module: TEST'),
+      ) as Promise<{ default: React.ComponentType<any> }>,
   ),
 });
 
@@ -1235,7 +1112,7 @@ export const networkErrorRoute = createRoute({
 export const cryptoDonateRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/donate/crypto',
-  component: CryptoDonate,
+  component: lazy(() => import('@/pages/utils/crypto-donate')),
   beforeLoad: ({ context: { hasCrypto } }) => {
     if (!hasCrypto) throw notFound();
   },
@@ -1245,7 +1122,7 @@ export const cryptoDonateRoute = createRoute({
 export const federationRestrictionsRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/federation_restrictions',
-  component: FederationRestrictions,
+  component: lazy(() => import('@/pages/utils/federation-restrictions')),
   beforeLoad: ({ context: { features } }) => {
     if (!features.federating) throw notFound();
   },
@@ -1538,9 +1415,6 @@ const routeTree = rootRoute.addChildren([
     bubbleTimelineRoute,
     wrenchedTimelineRoute,
   ]),
-  layouts.landing.addChildren([
-    /*landingTimelineRoute*/
-  ]),
   layouts.manageGroups.addChildren([
     manageGroupRoute,
     editGroupRoute,
@@ -1587,7 +1461,7 @@ const router = createRouter({
     isAdmin: false,
     hasCrypto: false,
   },
-  defaultNotFoundComponent: GenericNotFound,
+  defaultNotFoundComponent: lazy(() => import('@/pages/utils/generic-not-found')),
   defaultPendingComponent: PendingComponent,
   defaultErrorComponent: SiteError,
   defaultPreload: 'intent',
