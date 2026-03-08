@@ -37,7 +37,7 @@ This will start a Vite development server where you can use `pl-api` client insi
 
 ## Contributing guidelines
 
-Nicolium monorepo is hosted on [Codeberg](https://codeberg.org/mkljczk/nicolium) and [GitHub](https://github.com/mkljczk/nicolium). While issues are only tracked on Codeberg, you can submit pull requests on both platforms. Remember to follow the [Code of Conduct](../code-of-conduct.md) when interacting with the community.
+Nicolium monorepo is hosted on [Codeberg](https://codeberg.org/mkljczk/nicolium) and [GitHub](https://github.com/mkljczk/nicolium). While issues are only tracked on Codeberg, you can submit pull requests on both platforms. Remember to follow the [Code of Conduct](./code-of-conduct.mdx) when interacting with the community.
 
 The project uses [ESLint](https://eslint.org/) for code style checking. You can run the linter using the following command:
 
