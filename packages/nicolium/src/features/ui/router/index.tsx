@@ -1590,6 +1590,7 @@ const router = createRouter({
   defaultNotFoundComponent: GenericNotFound,
   defaultPendingComponent: PendingComponent,
   defaultErrorComponent: SiteError,
+  defaultPreload: 'intent',
   scrollRestoration: true,
   pathParamsAllowedCharacters: ['@'],
   defaultViewTransition: {
