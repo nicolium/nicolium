@@ -21,6 +21,7 @@ const config = defineConfig(() => ({
         assetFileNames: 'packs/assets/[name]-[hash].[ext]',
         chunkFileNames: 'packs/js/[name]-[hash].js',
         entryFileNames: 'packs/[name]-[hash].js',
+        experimentalMinChunkSize: 16 * 1024,
       },
     },
     sourcemap: true,
