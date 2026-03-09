@@ -12,6 +12,8 @@ While this is the only way to use some of Iceshrimp.NET-specific features with N
 
 ## Example Nginx configuration
 
+(Assuming Nicolium files are located in `/var/www/nicolium`)
+
 ```nginx
 map $http_upgrade $connection_upgrade {
   default upgrade;
@@ -29,7 +31,7 @@ map "$http_accept,$http_content_type" $maybe_activitypub {
 
 server {
   server_name iceshrimp.example.com;
-  root /var/www/;
+  root /var/www/nicolium/;
 
   location ~ ^/(Components|openapi|scalar|swagger|css|_content|js|files|avatars|banners|api|inbox|oauth|admin|manifest.json|nodeinfo|.well-known|@(.+)$|[a-zA-Z0-9.]+.css$) {
     try_files /dev/null @shrimp;
