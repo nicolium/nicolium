@@ -91,6 +91,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
             withRelationship={false}
             showAccountHoverCard={!compose}
             withLinkToProfile={!compose}
+            withLocked={false}
           />
         )}
 

@@ -619,6 +619,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
                 approvalStatus={actualStatus.approval_status}
                 avatarSize={avatarSize}
                 actionAlignment='top'
+                withLocked={false}
               />
             </div>
           )

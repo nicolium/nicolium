@@ -121,6 +121,7 @@ interface IAccount {
   withDate?: boolean;
   withLinkToProfile?: boolean;
   withRelationship?: boolean;
+  withLocked?: boolean;
   approvalStatus?: StatusApprovalStatus | null;
   emoji?: string;
   emojiUrl?: string;
@@ -149,6 +150,7 @@ const Account = ({
   withDate = false,
   withLinkToProfile = true,
   withRelationship = true,
+  withLocked = true,
   approvalStatus,
   emoji,
   emojiUrl,
@@ -309,7 +311,7 @@ const Account = ({
                     @{username}
                   </Text>
 
-                  {!timestamp && account.locked && (
+                  {withLocked && !timestamp && account.locked && (
                     <>
                       <Icon
                         src={require('@phosphor-icons/core/regular/lock.svg')}
@@ -420,7 +422,7 @@ const Account = ({
                   @{username}
                 </Text>
 
-                {!timestamp && account.locked && (
+                {withLocked && !timestamp && account.locked && (
                   <>
                     <Icon
                       src={require('@phosphor-icons/core/regular/lock.svg')}

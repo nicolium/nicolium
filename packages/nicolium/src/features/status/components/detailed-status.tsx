@@ -111,6 +111,7 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
             avatarSize={42}
             hideActions
             approvalStatus={actualStatus.approval_status}
+            withLocked={false}
           />
         </div>
       )}
