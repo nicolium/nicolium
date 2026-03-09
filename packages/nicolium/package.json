@@ -147,7 +147,7 @@
     "@types/react-dom": "^19.2.3",
     "@types/react-sparklines": "^1.7.5",
     "@types/react-swipeable-views": "^0.13.6",
-    "@typescript/native-preview": "7.0.0-dev.20260306.1",
+    "@typescript/native-preview": "7.0.0-dev.20260308.1",
     "@vitejs/plugin-react": "^5.1.4",
     "@vitest/coverage-v8": "4.0.18",
     "eslint-plugin-formatjs": "^6.2.0",
