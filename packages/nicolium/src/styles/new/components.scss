@@ -720,19 +720,23 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
   }
 
   &--active {
-    @apply bg-green-500 outline-green-400;
+    background: var(--hex-green-500);
+    @apply outline-green-400;
   }
 
   &--pending {
-    @apply bg-yellow-500 outline-yellow-400;
+    background: var(--hex-yellow-500);
+    @apply outline-yellow-400;
   }
 
   &--error {
-    @apply bg-red-500 outline-red-400;
+    background: var(--hex-red-500);
+    @apply outline-red-400;
   }
 
   &--inactive {
-    @apply bg-neutral-500 outline-neutral-400;
+    background: var(--hex-neutral-500);
+    @apply outline-neutral-400;
   }
 }
 
