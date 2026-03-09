@@ -13,11 +13,11 @@
   background: white;
   box-shadow: 0 25px 75px -15px #0004;
 
-  [dir="ltr"] & {
+  [dir='ltr'] & {
     right: 1.25rem;
   }
 
-  [dir="rtl"] & {
+  [dir='rtl'] & {
     left: 1.25rem;
   }
 
@@ -145,7 +145,6 @@
         padding-top: 2rem;
         opacity: 1;
         transition: opacity 500ms cubic-bezier(0.4, 0, 0.2, 1);
-
 
         .dark.black & {
           --gradient-from: #000;

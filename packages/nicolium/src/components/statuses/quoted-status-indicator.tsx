@@ -1,6 +1,5 @@
 import React from 'react';
 
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
@@ -18,14 +17,14 @@ const QuotedStatusIndicator: React.FC<IQuotedStatusIndicator> = ({ statusId, sta
   if (!statusUrl) return null;
 
   return (
-    <HStack alignItems='center' space={1}>
+    <div className='flex items-center gap-1'>
       <Icon
         className='size-5'
         src={require('@phosphor-icons/core/regular/quotes.svg')}
         aria-hidden
       />
       <Text truncate>{statusUrl}</Text>
-    </HStack>
+    </div>
   );
 };
 

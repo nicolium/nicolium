@@ -8,10 +8,8 @@ import SensitiveContentOverlay from '@/components/statuses/sensitive-content-ove
 import StatusContent from '@/components/statuses/status-content';
 import StatusMedia from '@/components/statuses/status-media';
 import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import AccountContainer from '@/containers/account-container';
 import { useCompose, useComposeActions } from '@/stores/compose';
@@ -50,8 +48,8 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
 
   return (
     <OutlineBox>
-      <Stack space={2}>
-        <HStack space={1} alignItems='center'>
+      <div className='flex flex-col gap-2'>
+        <div className='flex items-center gap-1'>
           <Icon
             className='size-4 text-gray-700 dark:text-gray-600'
             src={require('@phosphor-icons/core/regular/eye.svg')}
@@ -67,7 +65,7 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
             className='bg-transparent text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500'
             iconClassName='h-4 w-4'
           />
-        </HStack>
+        </div>
         <AccountContainer
           id={status.account_id}
           timestamp={status.created_at}
@@ -81,22 +79,20 @@ const PreviewComposeContainer: React.FC<IQuotedStatusContainer> = ({ composeId }
         {status.event ? (
           <EventPreview status={status} hideAction />
         ) : (
-          <Stack className='relative z-0'>
-            <Stack space={4}>
-              <StatusContent status={status} isQuote />
+          <div className='relative z-0 flex flex-col gap-4'>
+            <StatusContent status={status} isQuote />
 
-              {status.quote_id && <QuotedStatusIndicator statusId={status.quote_id} />}
+            {status.quote_id && <QuotedStatusIndicator statusId={status.quote_id} />}
 
-              {status.media_attachments?.length > 0 && (
-                <div className='relative'>
-                  <SensitiveContentOverlay status={status} />
-                  <StatusMedia status={status} muted />
-                </div>
-              )}
-            </Stack>
-          </Stack>
+            {status.media_attachments?.length > 0 && (
+              <div className='relative'>
+                <SensitiveContentOverlay status={status} />
+                <StatusMedia status={status} muted />
+              </div>
+            )}
+          </div>
         )}
-      </Stack>
+      </div>
     </OutlineBox>
   );
 };

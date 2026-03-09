@@ -263,7 +263,7 @@ const Account = ({
         ref={overflowRef}
       >
         <div>
-          <HStack alignItems='center' space={3} className='max-w-full'>
+          <div className='flex max-w-full items-center gap-3'>
             {disableUserProvidedMedia ? (
               <Avatar
                 src={account.avatar}
@@ -290,7 +290,7 @@ const Account = ({
             )}
 
             <div className='grow overflow-hidden'>
-              <HStack space={1} alignItems='center' grow>
+              <div className='flex flex-grow items-center gap-1'>
                 <Text size='sm' weight='semibold' truncate>
                   <Emojify text={account.display_name} emojis={account.emojis} />
                 </Text>
@@ -303,10 +303,10 @@ const Account = ({
                     title={<FormattedMessage id='account.badges.bot' defaultMessage='Bot' />}
                   />
                 )}
-              </HStack>
+              </div>
 
               <Stack space={withAccountNote || note ? 1 : 0}>
-                <HStack alignItems='center' space={1}>
+                <div className='flex items-center gap-1'>
                   <Text theme='muted' size='sm' direction='ltr' truncate>
                     @{username}
                   </Text>
@@ -330,10 +330,10 @@ const Account = ({
                   )}
 
                   {items}
-                </HStack>
+                </div>
               </Stack>
             </div>
-          </HStack>
+          </div>
 
           <div ref={actionRef}>{renderAction()}</div>
         </div>
@@ -399,7 +399,7 @@ const Account = ({
               )}
             >
               <LinkEl {...linkProps}>
-                <HStack space={1} alignItems='center' grow>
+                <div className='flex flex-grow items-center gap-1'>
                   <Text size='sm' weight='semibold' truncate>
                     <Emojify text={account.display_name} emojis={account.emojis} />
                   </Text>
@@ -412,12 +412,12 @@ const Account = ({
                       title={<FormattedMessage id='account.badges.bot' defaultMessage='Bot' />}
                     />
                   )}
-                </HStack>
+                </div>
               </LinkEl>
             </ProfilePopper>
 
             <Stack space={withAccountNote || note ? 1 : 0}>
-              <HStack alignItems='center' space={1}>
+              <div className='flex items-center gap-1'>
                 <Text theme='muted' size='sm' direction='ltr' truncate>
                   @{username}
                 </Text>
@@ -491,7 +491,7 @@ const Account = ({
                 ) : null}
 
                 {items}
-              </HStack>
+              </div>
 
               {note ? (
                 <Text size='sm' className='mr-2'>

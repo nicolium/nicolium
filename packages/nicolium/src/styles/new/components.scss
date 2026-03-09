@@ -95,7 +95,9 @@
   border-radius: 0.5rem;
   background: white;
   color: rgb(var(--text-gray-900));
-  box-shadow: 0 1px 3px 0 #0001, 0 1px 2px -1px #0001;
+  box-shadow:
+    0 1px 3px 0 #0001,
+    0 1px 2px -1px #0001;
 
   .dark & {
     background: rgb(var(--color-primary-800));
@@ -132,7 +134,6 @@
       height: 1.25rem;
       color: rgb(var(--color-gray-700));
       transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
-
 
       .dark & {
         color: rgb(var(--color-gray-600));
@@ -278,9 +279,13 @@
   align-items: center;
   justify-content: space-between;
   overflow: hidden;
-  background-image: linear-gradient(to right, rgb(var(--color-gradient-start) / 0.1), rgb(var(--color-gradient-end) / 0.1));
+  background-image: linear-gradient(
+    to right,
+    rgb(var(--color-gradient-start) / 0.1),
+    rgb(var(--color-gradient-end) / 0.1)
+  );
 
-  [dir="rtl"] & {
+  [dir='rtl'] & {
     flex-direction: row-reverse;
   }
 
@@ -309,7 +314,7 @@
     padding-bottom: 0.375rem;
     padding-right: 1rem;
 
-    [dir="rtl"] & {
+    [dir='rtl'] & {
       padding-left: 1rem;
       padding-right: 0;
     }
@@ -341,7 +346,7 @@
     overflow: hidden;
     color: rgb(var(--color-gray-700));
 
-    [dir="rtl"] & {
+    [dir='rtl'] & {
       flex-direction: row-reverse;
     }
 
@@ -352,7 +357,7 @@
     > .⁂-icon {
       margin-left: 0.25rem;
 
-      [dir="rtl"] & {
+      [dir='rtl'] & {
         transform: rotate(180deg);
       }
     }
@@ -364,11 +369,19 @@ a.⁂-list-item,
   cursor: pointer;
 
   &:hover {
-    background-image: linear-gradient(to right, rgb(var(--color-gradient-start) / 0.2), rgb(var(--color-gradient-end) / 0.2));
+    background-image: linear-gradient(
+      to right,
+      rgb(var(--color-gradient-start) / 0.2),
+      rgb(var(--color-gradient-end) / 0.2)
+    );
   }
 
   .dark &:hover {
-    background-image: linear-gradient(to right, rgb(var(--color-gradient-start) / 0.05), rgb(var(--color-gradient-end) / 0.05));
+    background-image: linear-gradient(
+      to right,
+      rgb(var(--color-gradient-start) / 0.05),
+      rgb(var(--color-gradient-end) / 0.05)
+    );
   }
 }
 
@@ -437,7 +450,7 @@ a.⁂-list-item,
       height: 1.5rem;
       width: 1.5rem;
 
-      [dir="rtl"] & {
+      [dir='rtl'] & {
         transform: rotate(180deg);
       }
     }
@@ -489,7 +502,6 @@ a.⁂-list-item,
     backdrop-filter: blur(12px) saturate(2);
     transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
-
     &:hover {
       transform: scale(1.05);
       background-color: rgb(var(--color-primary-700) / 0.8);
@@ -519,7 +531,9 @@ a.⁂-list-item,
   background-color: #fff;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
-  box-shadow: 0 1px 3px 0 #0001, 0 1px 2px -1px #0001;
+  box-shadow:
+    0 1px 3px 0 #0001,
+    0 1px 2px -1px #0001;
 
   &:focus {
     outline: 2px solid transparent;
@@ -644,7 +658,9 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
   text-align: start;
   vertical-align: middle;
   color: rgb(var(--color-gray-900));
-  box-shadow: 0 20px 25px -5px #0001, 0 8px 10px -6px #0001;
+  box-shadow:
+    0 20px 25px -5px #0001,
+    0 8px 10px -6px #0001;
   transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
   .dark.black & {
@@ -724,7 +740,7 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
         color: rgb(var(--color-gray-200));
       }
 
-      [dir="rtl"] & {
+      [dir='rtl'] & {
         transform: rotate(180deg);
       }
     }
@@ -819,7 +835,9 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     background-color: #fff;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
-    box-shadow: 0 10px 15px -3px #0001, 0 4px 6px -4px #0001;
+    box-shadow:
+      0 10px 15px -3px #0001,
+      0 4px 6px -4px #0001;
     transition-duration: 100ms;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -833,7 +851,7 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     }
 
     .no-reduce-motion & {
-transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .dark & {
@@ -927,7 +945,9 @@ transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
   &--rounded {
     background-color: #fff;
     color: rgb(var(--color-gray-900));
-    box-shadow: 0 10px 15px -3px #0001, 0 4px 6px -4px #0001;
+    box-shadow:
+      0 10px 15px -3px #0001,
+      0 4px 6px -4px #0001;
 
     .dark.black & {
       background-color: #000;
@@ -1094,7 +1114,6 @@ transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
 .⁂-emoji {
   transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
-
 
   &:hover {
     transform: scale(1.25);

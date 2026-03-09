@@ -24,7 +24,6 @@
   border-color: rgb(var(--color-gray-200));
   transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
-
   @media (max-width: variables.$breakpoint-sm) {
     border-bottom-width: 1px;
     box-shadow: none;

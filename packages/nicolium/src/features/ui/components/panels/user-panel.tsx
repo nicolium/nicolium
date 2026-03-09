@@ -7,7 +7,6 @@ import StillImage from '@/components/still-image';
 import Avatar from '@/components/ui/avatar';
 import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAcct } from '@/hooks/use-acct';
@@ -43,8 +42,8 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
 
   return (
     <div className='relative'>
-      <Stack space={2}>
-        <Stack>
+      <div className='flex flex-col gap-2'>
+        <div className='flex flex-col'>
           {!disableUserProvidedMedia && (
             <div className='relative -mx-4 -mt-4 h-24 overflow-hidden bg-gray-200'>
               {header && <StillImage src={account.header} alt={account.header_description} />}
@@ -73,11 +72,11 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
 
             {action && <div className='mt-2'>{action}</div>}
           </HStack>
-        </Stack>
+        </div>
 
-        <Stack>
+        <div className='flex flex-col'>
           <Link to='/@{$username}' params={{ username: account.acct }}>
-            <HStack space={1} alignItems='center'>
+            <div className='flex items-center gap-1'>
               <Text size='lg' weight='bold' truncate>
                 <Emojify text={account.display_name} emojis={account.emojis} />
               </Text>
@@ -85,14 +84,12 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
               {verified && <VerificationBadge />}
 
               {badges && badges.length > 0 && (
-                <HStack space={1} alignItems='center'>
-                  {badges}
-                </HStack>
+                <div className='flex items-center gap-1'>{badges}</div>
               )}
-            </HStack>
+            </div>
           </Link>
 
-          <HStack alignItems='center' space={1}>
+          <div className='flex items-center gap-1'>
             <Text size='sm' theme='muted' direction='ltr' truncate>
               @{displayedAcct}
             </Text>
@@ -104,25 +101,25 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
                 className='size-4 text-gray-600'
               />
             )}
-          </HStack>
-        </Stack>
+          </div>
+        </div>
 
         {!demetricator && (
-          <HStack alignItems='center' space={3}>
+          <div className='flex items-center gap-3'>
             {account.followers_count >= 0 && (
               <Link
                 to='/@{$username}/followers'
                 params={{ username: account.acct }}
                 title={intl.formatNumber(account.followers_count)}
               >
-                <HStack alignItems='center' space={1}>
+                <div className='flex items-center gap-1'>
                   <Text theme='primary' weight='bold' size='sm'>
                     {shortNumberFormat(account.followers_count)}
                   </Text>
                   <Text weight='bold' size='sm'>
                     <FormattedMessage id='account.followers' defaultMessage='Followers' />
                   </Text>
-                </HStack>
+                </div>
               </Link>
             )}
 
@@ -132,19 +129,19 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
                 params={{ username: account.acct }}
                 title={intl.formatNumber(account.following_count)}
               >
-                <HStack alignItems='center' space={1}>
+                <div className='flex items-center gap-1'>
                   <Text theme='primary' weight='bold' size='sm'>
                     {shortNumberFormat(account.following_count)}
                   </Text>
                   <Text weight='bold' size='sm'>
                     <FormattedMessage id='account.follows' defaultMessage='Following' />
                   </Text>
-                </HStack>
+                </div>
               </Link>
             )}
-          </HStack>
+          </div>
         )}
-      </Stack>
+      </div>
     </div>
   );
 };

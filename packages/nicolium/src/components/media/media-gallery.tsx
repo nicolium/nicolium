@@ -22,8 +22,6 @@ import {
   maximumAspectRatio,
 } from '@/utils/media-aspect-ratio';
 
-import HStack from '../ui/hstack';
-
 import type { MediaAttachment } from 'pl-api';
 
 const ATTACHMENT_LIMIT = 4;
@@ -376,10 +374,8 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
     return (
       <Stack space={2}>
         {media.map((attachment, index) => (
-          <HStack
-            element='button'
-            alignItems='center'
-            space={2}
+          <button
+            className='flex items-center gap-2'
             key={attachment.id}
             onClick={() => {
               handleClick(index);
@@ -416,7 +412,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
                   ),
                 }[attachment.type]}
             </Text>
-          </HStack>
+          </button>
           // <MediaItem key={index} item={item} />
         ))}
       </Stack>

@@ -9,9 +9,7 @@ import StatusInfo from '@/components/statuses/status-info';
 import StatusLanguagePicker from '@/components/statuses/status-language-picker';
 import StatusReactionsBar from '@/components/statuses/status-reactions-bar';
 import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -118,23 +116,21 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
 
       <StatusReplyMentions status={actualStatus} />
 
-      <Stack className='relative z-0'>
-        <Stack space={4}>
-          <StatusContent status={actualStatus} textSize='lg' translatable withMedia={withMedia} />
-        </Stack>
-      </Stack>
+      <div className='relative z-0 flex flex-col gap-4'>
+        <StatusContent status={actualStatus} textSize='lg' translatable withMedia={withMedia} />
+      </div>
 
       {!status.rss_feed && (
         <>
           <StatusReactionsBar status={actualStatus} />
 
-          <HStack space={2} justifyContent='between' alignItems='center' className='py-3' wrap>
+          <div className='flex flex-wrap items-center justify-between gap-2 py-3'>
             <StatusInteractionBar status={actualStatus} />
 
-            <HStack space={1} alignItems='center'>
+            <div className='flex items-center gap-1'>
               <span>
                 <Text tag='span' theme='muted' size='sm'>
-                  <HStack space={1} alignItems='center' wrap>
+                  <div className='flex flex-wrap items-center gap-1'>
                     <a
                       href={actualStatus.url}
                       target='_blank'
@@ -192,15 +188,15 @@ const DetailedStatus: React.FC<IDetailedStatus> = ({
                         </button>
                       </>
                     )}
-                  </HStack>
+                  </div>
                 </Text>
               </span>
 
               <StatusTypeIcon visibility={actualStatus.visibility} />
 
               <StatusLanguagePicker status={actualStatus} showLabel />
-            </HStack>
-          </HStack>
+            </div>
+          </div>
         </>
       )}
     </div>

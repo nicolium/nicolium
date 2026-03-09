@@ -1,6 +1,5 @@
 import React from 'react';
 
-import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
@@ -41,17 +40,17 @@ const GroupCard: React.FC<IGroupCard> = ({ groupId }) => {
 
       {/* Group Info */}
       <Stack alignItems='center' justifyContent='end' grow className='basis-1/2 py-4' space={0.5}>
-        <HStack alignItems='center' space={1.5}>
+        <div className='flex items-center gap-1.5'>
           <Text size='lg' weight='bold'>
             <Emojify text={group.display_name} emojis={group.emojis} />
           </Text>
-        </HStack>
+        </div>
 
-        <HStack className='text-gray-700 dark:text-gray-600' space={2} wrap>
+        <div className='flex flex-wrap gap-2 text-gray-700 dark:text-gray-600'>
           <GroupRelationship group={group} />
           <GroupPrivacy group={group} />
           <GroupMemberCount group={group} />
-        </HStack>
+        </div>
       </Stack>
     </Stack>
   );

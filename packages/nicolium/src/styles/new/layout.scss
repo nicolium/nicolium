@@ -70,7 +70,9 @@ body {
   overflow: hidden;
   border-radius: 0.75rem;
   background-color: #fffe;
-  box-shadow: 0 10px 15px -3px #0001, 0 4px 6px -4px #0001;
+  box-shadow:
+    0 10px 15px -3px #0001,
+    0 4px 6px -4px #0001;
   backdrop-filter: blur(12px) saturate(2);
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -81,7 +83,6 @@ body {
   .no-reduce-motion & {
     transform: scale(0);
     transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
-
   }
 
   .dark & {
@@ -91,7 +92,7 @@ body {
     box-shadow: none;
   }
 
-  [dir="rtl"] & {
+  [dir='rtl'] & {
     right: 0.5rem;
     transform-origin: bottom right;
   }
@@ -108,7 +109,6 @@ body {
 
     .no-reduce-motion & {
       transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
-
     }
 
     .dark & {
@@ -195,7 +195,6 @@ body {
       .⁂-icon {
         color: rgb(var(--color-gray-900));
         transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
-
 
         .dark & {
           color: rgb(var(--color-gray-100));
@@ -415,9 +414,15 @@ body {
   font-size: 0.875rem;
   line-height: 1.25rem;
   font-weight: 600;
-  transition: color, background-color, border-color, text-decoration-color, fill, stroke 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition:
+    color,
+    background-color,
+    border-color,
+    text-decoration-color,
+    fill,
+    stroke 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  [dir="rtl"] & {
+  [dir='rtl'] & {
     flex-direction: row-reverse;
   }
 
@@ -430,7 +435,13 @@ body {
     display: inline-flex;
     border-radius: 0.5rem;
     padding: 0.625rem;
-    transition: color, background-color, border-color, text-decoration-color, fill, stroke 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    transition:
+      color,
+      background-color,
+      border-color,
+      text-decoration-color,
+      fill,
+      stroke 200ms cubic-bezier(0.4, 0, 0.2, 1);
 
     svg {
       width: 1.25rem;
@@ -630,7 +641,6 @@ body {
     }
 
     &:not(&--full-width) {
-
       @media (min-width: variables.$breakpoint-md) {
         display: grid;
         max-width: 80rem;
@@ -774,7 +784,7 @@ body {
       color: #fff;
     }
 
-    [dir="rtl"] & {
+    [dir='rtl'] & {
       transform: rotate(180deg);
     }
   }
@@ -1030,7 +1040,9 @@ body {
   border-radius: 0.5rem;
   background-color: #fff;
   padding: 1rem;
-  box-shadow: 0 10px 15px -3px #0001, 0 4px 6px -4px #0001;
+  box-shadow:
+    0 10px 15px -3px #0001,
+    0 4px 6px -4px #0001;
 
   .dark.black & {
     background-color: #000;

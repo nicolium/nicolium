@@ -1,8 +1,6 @@
 import React from 'react';
 
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 
 import type { Location } from 'pl-api';
@@ -29,17 +27,17 @@ const AutosuggestLocation: React.FC<IAutosuggestLocation> = ({ location }) => {
   if (!location) return null;
 
   return (
-    <HStack alignItems='center' space={2}>
+    <div className='flex items-center gap-2'>
       <Icon src={ADDRESS_ICONS[location.type] || mapPinIcon} />
-      <Stack>
+      <div className='flex flex-col'>
         <Text>{location.description}</Text>
         <Text size='xs' theme='muted'>
           {[location.street, location.locality, location.country]
             .filter((val) => val?.trim())
             .join(' · ')}
         </Text>
-      </Stack>
-    </HStack>
+      </div>
+    </div>
   );
 };
 

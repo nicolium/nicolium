@@ -4,7 +4,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import AnimatedNumber from '@/components/animated-number';
-import HStack from '@/components/ui/hstack';
 import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -146,12 +145,12 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
   };
 
   return (
-    <HStack space={3}>
+    <div className='flex gap-3'>
       {getReposts()}
       {getQuotes()}
       {getFavourites()}
       {getDislikes()}
-    </HStack>
+    </div>
   );
 };
 
@@ -176,7 +175,7 @@ const InteractionCounter: React.FC<IInteractionCounter> = ({
   });
 
   const body = (
-    <HStack space={1} alignItems='center'>
+    <div className='flex items-center gap-1'>
       <Text weight='bold'>
         <AnimatedNumber value={count} short />
       </Text>
@@ -184,7 +183,7 @@ const InteractionCounter: React.FC<IInteractionCounter> = ({
       <Text tag='div' theme='muted'>
         {children}
       </Text>
-    </HStack>
+    </div>
   );
 
   if ('to' in rest) {

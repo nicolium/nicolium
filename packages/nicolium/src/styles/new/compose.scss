@@ -115,7 +115,7 @@
     align-items: center;
     gap: 1rem;
 
-    [dir="rtl"] & {
+    [dir='rtl'] & {
       margin-left: 0;
       margin-right: auto;
     }
@@ -190,7 +190,7 @@
       padding-bottom: 0.625rem;
       padding-left: 0.25rem;
       padding-right: 0.75rem;
-transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
       &:last-child {
         border-top-right-radius: 9999px;
@@ -295,7 +295,7 @@ transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
       padding-left: 0.5rem;
       padding-right: 0.5rem;
 
-      [dir="rtl"] & {
+      [dir='rtl'] & {
         left: 0;
         right: auto;
       }

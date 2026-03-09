@@ -1,7 +1,5 @@
 import React from 'react';
 
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 
 import { generateText, randomIntFromInterval } from '../utils';
@@ -10,17 +8,17 @@ const PlaceholderGroupSearch = ({ withJoinAction = true }: { withJoinAction?: bo
   const groupNameLength = randomIntFromInterval(12, 20);
 
   return (
-    <HStack alignItems='center' justifyContent='between' className='animate-pulse'>
-      <HStack alignItems='center' space={2} className='overflow-hidden'>
+    <div className='flex animate-pulse items-center justify-between'>
+      <div className='flex items-center gap-2 overflow-hidden'>
         {/* Group Avatar */}
         <div className='size-11 rounded-lg bg-gray-500 dark:bg-gray-700 dark:ring-primary-900' />
 
-        <Stack className='text-gray-500 dark:text-gray-700'>
+        <div className='flex flex-col text-gray-500 dark:text-gray-700'>
           <Text theme='inherit' weight='bold'>
             {generateText(groupNameLength)}
           </Text>
 
-          <HStack space={1} alignItems='center'>
+          <div className='flex items-center gap-1'>
             <Text theme='inherit' tag='span' size='sm' weight='medium'>
               {generateText(6)}
             </Text>
@@ -30,13 +28,13 @@ const PlaceholderGroupSearch = ({ withJoinAction = true }: { withJoinAction?: bo
             <Text theme='inherit' tag='span' size='sm' weight='medium'>
               {generateText(6)}
             </Text>
-          </HStack>
-        </Stack>
-      </HStack>
+          </div>
+        </div>
+      </div>
 
       {/* Join Group Button */}
       {withJoinAction && <div className='h-10 w-36 rounded-full bg-gray-300 dark:bg-gray-800' />}
-    </HStack>
+    </div>
   );
 };
 

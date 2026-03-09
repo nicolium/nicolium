@@ -5,7 +5,6 @@ import { getTextDirection } from '@/utils/rtl';
 
 import { accountsCountRenderer } from './hashtag';
 import Blurhash from './media/blurhash';
-import HStack from './ui/hstack';
 import Icon from './ui/icon';
 import Stack from './ui/stack';
 import Text from './ui/text';
@@ -55,15 +54,15 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
             {trendingLink.description}
           </Text>
         )}
-        <HStack alignItems='center' wrap className='divide-x-dot text-gray-700 dark:text-gray-600'>
-          <HStack space={1} alignItems='center'>
+        <div className='divide-x-dot flex flex-wrap items-center text-gray-700 dark:text-gray-600'>
+          <div className='flex items-center gap-1'>
             <Text tag='span' theme='muted'>
               <Icon src={require('@phosphor-icons/core/regular/link-simple.svg')} />
             </Text>
             <Text tag='span' theme='muted' size='sm' direction={direction}>
               {trendingLink.provider_name}
             </Text>
-          </HStack>
+          </div>
 
           {!!count && (
             <Link
@@ -74,7 +73,7 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
               {accountsCountRenderer(count)}
             </Link>
           )}
-        </HStack>
+        </div>
       </Stack>
     </a>
   );

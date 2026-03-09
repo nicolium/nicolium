@@ -3,9 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import RelativeTimestamp from '../relative-timestamp';
 import Avatar from '../ui/avatar';
-import HStack from '../ui/hstack';
 import Icon from '../ui/icon';
-import Stack from '../ui/stack';
 import Text from '../ui/text';
 
 import type { RssFeed } from 'pl-api';
@@ -17,43 +15,41 @@ interface IRssFeedInfo {
 
 const RssFeedInfo: React.FC<IRssFeedInfo> = ({ feed, timestamp }) => (
   <div className='group block w-full shrink-0'>
-    <HStack alignItems='center' space={3} className='overflow-hidden'>
+    <div className='flex items-center gap-3 overflow-hidden'>
       <div className='rounded-lg'>
         <Avatar src={feed.image_url || ''} size={42} alt={feed.title || ''} />
       </div>
 
       <div className='grow overflow-hidden'>
-        <HStack space={1} alignItems='center' grow>
+        <div className='flex flex-grow items-center gap-1'>
           <Text size='sm' weight='semibold' truncate>
             {feed.title}
           </Text>
-        </HStack>
+        </div>
 
-        <Stack>
-          <HStack alignItems='center' space={1}>
-            <Text theme='muted' size='sm'>
-              <FormattedMessage id='rss_feed.label' defaultMessage='RSS Feed' />
-            </Text>
+        <div className='flex items-center gap-1'>
+          <Text theme='muted' size='sm'>
+            <FormattedMessage id='rss_feed.label' defaultMessage='RSS Feed' />
+          </Text>
 
-            <Icon
-              className='size-4 text-gray-700 dark:text-gray-600'
-              src={require('@phosphor-icons/core/regular/rss.svg')}
-            />
+          <Icon
+            className='size-4 text-gray-700 dark:text-gray-600'
+            src={require('@phosphor-icons/core/regular/rss.svg')}
+          />
 
-            <Text tag='span' theme='muted' size='sm'>
-              &middot;
-            </Text>
+          <Text tag='span' theme='muted' size='sm'>
+            &middot;
+          </Text>
 
-            <RelativeTimestamp
-              timestamp={timestamp}
-              theme='muted'
-              size='sm'
-              className='whitespace-nowrap'
-            />
-          </HStack>
-        </Stack>
+          <RelativeTimestamp
+            timestamp={timestamp}
+            theme='muted'
+            size='sm'
+            className='whitespace-nowrap'
+          />
+        </div>
       </div>
-    </HStack>
+    </div>
   </div>
 );
 

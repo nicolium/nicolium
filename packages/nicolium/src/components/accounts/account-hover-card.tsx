@@ -6,7 +6,6 @@ import { useIntl, FormattedMessage } from 'react-intl';
 
 import Badge from '@/components/badge';
 import Card, { CardBody } from '@/components/ui/card';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
@@ -162,7 +161,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
             />
 
             {account.local ? (
-              <HStack alignItems='center' space={0.5}>
+              <div className='flex items-center gap-0.5'>
                 <Icon
                   src={require('@phosphor-icons/core/regular/calendar-dots.svg')}
                   className='size-4 text-gray-800 dark:text-gray-200'
@@ -177,13 +176,13 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
                     }}
                   />
                 </Text>
-              </HStack>
+              </div>
             ) : null}
 
             {timezoneField && <AccountLocalTime accountId={account.id} field={timezoneField} />}
 
             {account.pronouns.length > 0 && (
-              <HStack alignItems='center' space={0.5}>
+              <div className='flex items-center gap-0.5'>
                 <Icon
                   src={require('@phosphor-icons/core/regular/tag.svg')}
                   className='size-4 text-gray-800 dark:text-gray-200'
@@ -197,7 +196,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
                 >
                   {account.pronouns.join('/')}
                 </Text>
-              </HStack>
+              </div>
             )}
 
             {!!scrobble && <Scrobble scrobble={scrobble} />}

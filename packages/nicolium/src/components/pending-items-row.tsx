@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 
@@ -16,8 +15,8 @@ interface IPendingItemsRow extends LinkOptions {
 
 const PendingItemsRow: React.FC<IPendingItemsRow> = ({ count, size = 'md', ...props }) => (
   <Link {...props} className='group' data-testid='pending-items-row'>
-    <HStack alignItems='center' justifyContent='between'>
-      <HStack alignItems='center' space={2}>
+    <div className='flex items-center justify-between'>
+      <div className='flex items-center gap-2'>
         <div
           className={clsx(
             'rounded-full bg-primary-200 text-primary-500 dark:bg-primary-800 dark:text-primary-200',
@@ -43,13 +42,13 @@ const PendingItemsRow: React.FC<IPendingItemsRow> = ({ count, size = 'md', ...pr
             values={{ number: count }}
           />
         </Text>
-      </HStack>
+      </div>
 
       <Icon
         src={require('@phosphor-icons/core/regular/caret-right.svg')}
         className='size-5 text-gray-600 transition-colors group-hover:text-gray-700 dark:text-gray-600 dark:group-hover:text-gray-500'
       />
-    </HStack>
+    </div>
   </Link>
 );
 

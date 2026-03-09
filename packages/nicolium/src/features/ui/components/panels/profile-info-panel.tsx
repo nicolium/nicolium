@@ -6,9 +6,7 @@ import Badge from '@/components/badge';
 import Markup from '@/components/markup';
 import { dateFormatOptions } from '@/components/relative-timestamp';
 import { ParsedContent } from '@/components/statuses/parsed-content';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAcct } from '@/hooks/use-acct';
@@ -126,7 +124,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
     const hasBirthday = date.getDate() === today.getDate() && date.getMonth() === today.getMonth();
 
     return (
-      <HStack alignItems='center' space={0.5}>
+      <div className='flex items-center gap-0.5'>
         <Icon
           src={
             hasBirthday
@@ -147,22 +145,18 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
             />
           )}
         </Text>
-      </HStack>
+      </div>
     );
   };
 
   if (!account) {
     return (
       <div className='mt-6 min-w-0 flex-1 sm:px-2'>
-        <Stack space={2}>
-          <Stack>
-            <HStack space={1} alignItems='center'>
-              <Text size='sm' theme='muted' direction='ltr' truncate>
-                @{username}
-              </Text>
-            </HStack>
-          </Stack>
-        </Stack>
+        <div className='flex items-center gap-1'>
+          <Text size='sm' theme='muted' direction='ltr' truncate>
+            @{username}
+          </Text>
+        </div>
       </div>
     );
   }
@@ -172,9 +166,9 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
   return (
     <div className='mt-6 min-w-0 flex-1 sm:px-2'>
-      <Stack space={2}>
-        <Stack>
-          <HStack space={1} alignItems='center'>
+      <div className='flex flex-col gap-2'>
+        <div className='flex flex-col'>
+          <div className='flex items-center gap-1'>
             <Text size='lg' weight='bold' truncate>
               {account.deactivated ? (
                 <FormattedMessage id='account.deactivated' defaultMessage='Deactivated' />
@@ -185,14 +179,10 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
             {account.bot && <Badge slug='bot' title={intl.formatMessage(messages.bot)} />}
 
-            {badges.length > 0 && (
-              <HStack space={1} alignItems='center'>
-                {badges}
-              </HStack>
-            )}
-          </HStack>
+            {badges.length > 0 && <div className='flex items-center gap-1'>{badges}</div>}
+          </div>
 
-          <HStack alignItems='center' space={0.5}>
+          <div className='flex items-center gap-0.5'>
             <Text size='sm' theme='muted' direction='ltr' truncate>
               @{acct}
             </Text>
@@ -204,8 +194,8 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
                 className='size-4 text-gray-600'
               />
             )}
-          </HStack>
-        </Stack>
+          </div>
+        </div>
 
         <ProfileStats account={account} />
 
@@ -221,7 +211,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
         <div className='flex flex-col items-start gap-2 md:flex-row md:flex-wrap md:items-center'>
           {account.local ? (
-            <HStack alignItems='center' space={0.5}>
+            <div className='flex items-center gap-0.5'>
               <Icon
                 src={require('@phosphor-icons/core/regular/calendar-dots.svg')}
                 className='size-4 text-gray-800 dark:text-gray-200'
@@ -236,26 +226,25 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
                   }}
                 />
               </Text>
-            </HStack>
+            </div>
           ) : null}
 
           {account.location ? (
-            <HStack alignItems='center' space={0.5}>
+            <div className='flex items-center gap-0.5'>
               <Icon
                 src={require('@phosphor-icons/core/regular/map-pin.svg')}
                 className='size-4 text-gray-800 dark:text-gray-200'
               />
 
               <Text size='sm'>{account.location}</Text>
-            </HStack>
+            </div>
           ) : null}
 
           {renderBirthday()}
 
           {account.pronouns.length > 0 ? (
-            <HStack
-              alignItems='center'
-              space={0.5}
+            <div
+              className='flex items-center gap-0.5'
               title={intl.formatMessage(messages.pronouns, {
                 pronouns: account.pronouns.join('/'),
               })}
@@ -266,21 +255,21 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
               />
 
               <Text size='sm'>{account.pronouns.join('/')}</Text>
-            </HStack>
+            </div>
           ) : null}
         </div>
 
         {scrobble && <Scrobble scrobble={scrobble} />}
 
         {ownAccount ? null : <ProfileFamiliarFollowers account={account} />}
-      </Stack>
+      </div>
 
       {account.fields.length > 0 && (
-        <Stack space={2} className='mt-4 xl:hidden'>
+        <div className='mt-4 flex flex-col gap-2 xl:hidden'>
           {account.fields.map((field, i) => (
             <ProfileField field={field} key={i} emojis={account.emojis} accountId={account.id} />
           ))}
-        </Stack>
+        </div>
       )}
     </div>
   );

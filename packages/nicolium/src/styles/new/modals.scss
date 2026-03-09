@@ -177,7 +177,9 @@
     background-color: #fff;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
-    box-shadow: 0 10px 15px -3px #0001, 0 4px 6px -4px #0001;
+    box-shadow:
+      0 10px 15px -3px #0001,
+      0 4px 6px -4px #0001;
     transition-duration: 200ms;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 
@@ -191,7 +193,7 @@
     }
 
     .no-reduce-motion & {
-transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .dark & {
@@ -236,7 +238,7 @@ transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
       line-height: 1.25rem;
       font-weight: 500;
       color: rgb(var(--color-gray-700));
-transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
       &:hover {
         background-color: #fff1;

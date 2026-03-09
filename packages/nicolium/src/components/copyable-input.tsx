@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Button from '@/components/ui/button';
-import HStack from '@/components/ui/hstack';
 import Input from '@/components/ui/input';
 
 interface ICopyableInput {
@@ -31,7 +30,7 @@ const CopyableInput: React.FC<ICopyableInput> = ({ value, type = 'text', onCopy 
   };
 
   return (
-    <HStack alignItems='center'>
+    <div className='flex items-center'>
       <Input
         ref={input}
         type={type}
@@ -49,7 +48,7 @@ const CopyableInput: React.FC<ICopyableInput> = ({ value, type = 'text', onCopy 
       >
         <FormattedMessage id='input.copy' defaultMessage='Copy' />
       </Button>
-    </HStack>
+    </div>
   );
 };
 

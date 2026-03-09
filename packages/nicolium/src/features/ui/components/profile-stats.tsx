@@ -2,7 +2,6 @@ import { Link } from '@tanstack/react-router';
 import React from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
-import HStack from '@/components/ui/hstack';
 import Text from '@/components/ui/text';
 import { useSettings } from '@/stores/settings';
 import { shortNumberFormat } from '@/utils/numbers';
@@ -29,16 +28,16 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
   }
 
   return (
-    <HStack alignItems='center' className='gap-x-3' wrap>
+    <div className='flex flex-wrap items-center gap-x-3'>
       {!demetricator && (
-        <HStack alignItems='center' space={1}>
+        <div className='flex items-center gap-1'>
           <Text theme='primary' weight='bold' size='sm'>
             {shortNumberFormat(account.statuses_count)}
           </Text>
           <Text weight='bold' size='sm'>
             <FormattedMessage id='account.statuses' defaultMessage='Statuses' />
           </Text>
-        </HStack>
+        </div>
       )}
 
       <Link
@@ -48,7 +47,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
         title={intl.formatNumber(account.followers_count)}
         className='hover:underline'
       >
-        <HStack alignItems='center' space={1}>
+        <div className='flex items-center gap-1'>
           {!demetricator && (
             <Text theme='primary' weight='bold' size='sm'>
               {shortNumberFormat(account.followers_count)}
@@ -57,7 +56,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
           <Text weight='bold' size='sm'>
             <FormattedMessage id='account.followers' defaultMessage='Followers' />
           </Text>
-        </HStack>
+        </div>
       </Link>
 
       <Link
@@ -67,7 +66,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
         title={intl.formatNumber(account.following_count)}
         className='hover:underline'
       >
-        <HStack alignItems='center' space={1}>
+        <div className='flex items-center gap-1'>
           {!demetricator && (
             <Text theme='primary' weight='bold' size='sm'>
               {shortNumberFormat(account.following_count)}
@@ -76,7 +75,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
           <Text weight='bold' size='sm'>
             <FormattedMessage id='account.follows' defaultMessage='Following' />
           </Text>
-        </HStack>
+        </div>
       </Link>
 
       {account.subscribers_count > 0 && (
@@ -87,7 +86,7 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
           title={intl.formatNumber(account.subscribers_count)}
           className='hover:underline'
         >
-          <HStack alignItems='center' space={1}>
+          <div className='flex items-center gap-1'>
             {!demetricator && (
               <Text theme='primary' weight='bold' size='sm'>
                 {shortNumberFormat(account.subscribers_count)}
@@ -96,10 +95,10 @@ const ProfileStats: React.FC<IProfileStats> = ({ account, onClickHandler }) => {
             <Text weight='bold' size='sm'>
               <FormattedMessage id='account.subscribers' defaultMessage='Subscribers' />
             </Text>
-          </HStack>
+          </div>
         </Link>
       )}
-    </HStack>
+    </div>
   );
 };
 

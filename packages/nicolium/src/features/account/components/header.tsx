@@ -13,10 +13,8 @@ import Icon from '@/components/icon';
 import AltIndicator from '@/components/media/alt-indicator';
 import StillImage from '@/components/still-image';
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
 import Popover from '@/components/ui/popover';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import ActionButton from '@/features/ui/components/action-button';
@@ -50,7 +48,7 @@ interface IMovedNote {
 
 const MovedNote: React.FC<IMovedNote> = ({ from, to }) => (
   <div className='p-4'>
-    <HStack className='mb-2' alignItems='center' space={1.5}>
+    <div className='mb-2 flex items-center gap-1.5'>
       <Icon
         src={require('@phosphor-icons/core/regular/suitcase.svg')}
         className='flex-none text-primary-600 dark:text-primary-400'
@@ -72,7 +70,7 @@ const MovedNote: React.FC<IMovedNote> = ({ from, to }) => (
           />
         </Text>
       </div>
-    </HStack>
+    </div>
 
     <Account account={to} withRelationship={false} />
   </div>
@@ -117,11 +115,11 @@ const Header: React.FC<IHeader> = ({ account }) => {
         </div>
 
         <div className='px-4 sm:px-6'>
-          <HStack alignItems='bottom' space={5} className='-mt-12'>
+          <div className='-mt-12 flex items-end gap-5'>
             <div className='relative flex'>
               <div className='size-24 rounded-lg bg-gray-400 ring-4 ring-white dark:ring-gray-800' />
             </div>
-          </HStack>
+          </div>
         </div>
       </div>
     );
@@ -224,7 +222,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
             interaction='hover'
             referenceElementClassName='cursor-pointer'
             content={
-              <Stack space={1} className='max-h-[32rem] max-w-96 overflow-auto p-4'>
+              <div className='flex max-h-[32rem] max-w-96 flex-col gap-1 overflow-auto p-4'>
                 <Text weight='semibold'>
                   <FormattedMessage
                     id='account.header.description'
@@ -232,7 +230,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
                   />
                 </Text>
                 <Text className='whitespace-pre-wrap'>{account.header_description}</Text>
-              </Stack>
+              </div>
             }
             isFlush
             title={intl.formatMessage(messages.headerAlt)}
@@ -351,15 +349,13 @@ const Header: React.FC<IHeader> = ({ account }) => {
           {renderHeader()}
 
           <div className='absolute left-2 top-2'>
-            <HStack alignItems='center' space={1}>
-              {info}
-            </HStack>
+            <div className='flex items-center gap-1'>{info}</div>
           </div>
         </div>
       </div>
 
       <div className='px-4 sm:px-6'>
-        <HStack className='-mt-12' alignItems='bottom' space={5}>
+        <div className='-mt-12 flex items-end gap-5'>
           <div className='relative flex'>
             <a href={account.avatar} onClick={handleAvatarClick} target='_blank'>
               <Avatar
@@ -380,7 +376,7 @@ const Header: React.FC<IHeader> = ({ account }) => {
           </div>
 
           <div className='mt-6 flex w-full justify-end sm:pb-1'>
-            <HStack space={2} className='mt-10' justifyContent='end' wrap>
+            <div className='mt-10 flex flex-wrap justify-end gap-2'>
               {ownAccount && account.id !== ownAccount.id && (
                 <SubscriptionButton account={account} />
               )}
@@ -392,9 +388,9 @@ const Header: React.FC<IHeader> = ({ account }) => {
               {renderRssButton()}
 
               <ActionButton account={account} />
-            </HStack>
+            </div>
           </div>
-        </HStack>
+        </div>
       </div>
     </div>
   );

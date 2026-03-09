@@ -1,7 +1,6 @@
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 import { type Language, languages } from '@/features/preferences';
@@ -54,12 +53,12 @@ const StatusLanguagePicker: React.FC<IStatusLanguagePicker> = React.memo(
         >
           <button title={intl.formatMessage(messages.languageVersions)} className='hover:underline'>
             {showLabel ? (
-              <HStack space={1} alignItems='center'>
+              <div className='flex items-center gap-1'>
                 {icon}
                 <Text tag='span' theme='muted' size='sm'>
                   {languages[currentLanguage as Language] || currentLanguage}
                 </Text>
-              </HStack>
+              </div>
             ) : (
               icon
             )}

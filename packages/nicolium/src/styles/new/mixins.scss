@@ -133,7 +133,9 @@
   @if $variant == rounded {
     background-color: #fff;
     color: rgb(var(--color-gray-900));
-    box-shadow: 0 10px 15px -3px #0001, 0 4px 6px -4px #0001;
+    box-shadow:
+      0 10px 15px -3px #0001,
+      0 4px 6px -4px #0001;
 
     &:is(.dark.black *) {
       background-color: #000;

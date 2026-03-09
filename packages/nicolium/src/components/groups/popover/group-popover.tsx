@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 
 import Button from '@/components/ui/button';
 import Divider from '@/components/ui/divider';
-import HStack from '@/components/ui/hstack';
 import Popover from '@/components/ui/popover';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
@@ -70,10 +69,10 @@ const GroupPopover: React.FC<IGroupPopoverContainer> = (props) => {
                 <Emojify text={group.display_name} emojis={group.emojis} />
               </Text>
 
-              <HStack className='text-gray-700 dark:text-gray-600' space={2} wrap>
+              <div className='flex flex-wrap gap-2 text-gray-700 dark:text-gray-600'>
                 <GroupPrivacy group={group} />
                 <GroupMemberCount group={group} />
-              </HStack>
+              </div>
             </Stack>
           </Stack>
 
