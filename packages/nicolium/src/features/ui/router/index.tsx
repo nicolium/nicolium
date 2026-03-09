@@ -1467,9 +1467,9 @@ const router = createRouter({
   defaultPreload: 'intent',
   scrollRestoration: true,
   pathParamsAllowedCharacters: ['@'],
-  defaultViewTransition: {
-    types: ({ fromLocation }) => (fromLocation ? [''] : false),
-  },
+  // defaultViewTransition: {
+  //   types: ({ fromLocation }) => (fromLocation ? [''] : false),
+  // },
 });
 
 router.subscribe('onBeforeNavigate', (event) => {
