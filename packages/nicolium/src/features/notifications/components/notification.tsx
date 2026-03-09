@@ -91,6 +91,15 @@ const icons: Partial<Record<NotificationType | 'reply', string>> = {
   quoted_update: require('@phosphor-icons/core/regular/pencil-simple-line.svg'),
 };
 
+// For use by the service worker
+defineMessages({
+  group: {
+    id: 'notifications.group',
+    defaultMessage: '{count, plural, one {# notification} other {# notifications}}',
+  },
+  showMore: { id: 'status.show_more', defaultMessage: 'Show more' },
+});
+
 const messages: Record<NotificationType | 'reply', MessageDescriptor> = defineMessages({
   follow: {
     id: 'notification.follow',

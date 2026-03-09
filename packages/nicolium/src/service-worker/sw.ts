@@ -147,8 +147,10 @@ const cloneNotification = (notification: Notification): ClonedNotification => {
 };
 
 /** Get translated message for the user's locale. */
-const formatMessage = (messageId: string, locale: string, values = {}): string =>
-  new IntlMessageFormat(locales[locale][messageId], locale).format(values) as string;
+const formatMessage = (messageId: string, locale: string, values = {}): string => {
+  const message = locales[locale]?.[messageId] ?? locales['en'][messageId];
+  return new IntlMessageFormat(message, locale).format(values) as string;
+};
 
 /** Strip HTML for display in a native notification. */
 const htmlToPlainText = (html: string): string =>
