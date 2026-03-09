@@ -88,7 +88,7 @@
       color: rgb(var(--color-danger-200));
     }
 
-    &:hover:is(.dark *) {
+    .dark &:hover {
       background-color: rgb(var(--color-danger-500));
       color: rgb(var(--color-gray-100));
     }

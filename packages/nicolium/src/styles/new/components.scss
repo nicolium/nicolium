@@ -306,7 +306,7 @@
     padding-bottom: 0.375rem;
     padding-right: 1rem;
 
-    &:where([dir="rtl"], [dir="rtl"] *) {
+    [dir="rtl"] & {
       padding-left: 1rem;
       padding-right: 0;
     }
@@ -342,7 +342,7 @@
     > .⁂-icon {
       margin-left: 0.25rem;
 
-      &:where([dir="rtl"], [dir="rtl"] *) {
+      [dir="rtl"] & {
         transform: rotate(180deg);
       }
     }
@@ -357,7 +357,7 @@ a.⁂-list-item,
     background-image: linear-gradient(to right, rgb(var(--color-gradient-start) / 0.2), rgb(var(--color-gradient-end) / 0.2));
   }
 
-  &:hover:is(.dark *) {
+  .dark &:hover {
     background-image: linear-gradient(to right, rgb(var(--color-gradient-start) / 0.05), rgb(var(--color-gradient-end) / 0.05));
   }
 }
@@ -427,7 +427,7 @@ a.⁂-list-item,
       height: 1.5rem;
       width: 1.5rem;
 
-      &:where([dir="rtl"], [dir="rtl"] *) {
+      [dir="rtl"] & {
         transform: rotate(180deg);
       }
     }
@@ -553,11 +553,11 @@ a.⁂-list-item,
       color: rgb(var(--color-gray-500));
     }
 
-    &:hover:is(.dark *) {
+    .dark &:hover {
       background-color: rgb(var(--color-gray-800));
     }
 
-    &:focus:is(.dark *) {
+    .dark &:focus {
       background-color: rgb(var(--color-primary-800));
     }
 
@@ -572,7 +572,7 @@ a.⁂-list-item,
         background-color: rgb(var(--color-gray-800));
       }
 
-      &:hover:is(.dark *) {
+      .dark &:hover {
         background-color: rgb(var(--color-gray-800));
       }
     }
@@ -606,11 +606,11 @@ a.⁂-list-item,
       color: rgb(var(--color-gray-500));
     }
 
-    &:hover:is(.dark *) {
+    .dark &:hover {
       background-color: rgb(var(--color-gray-800));
     }
 
-    &:focus:is(.dark *) {
+    .dark &:focus {
       background-color: rgb(var(--color-primary-800));
     }
   }
@@ -710,11 +710,11 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
         color: rgb(var(--color-gray-300));
       }
 
-      &:hover:is(.dark *) {
+      .dark &:hover {
         color: rgb(var(--color-gray-200));
       }
 
-      &:where([dir="rtl"], [dir="rtl"] *) {
+      [dir="rtl"] & {
         transform: rotate(180deg);
       }
     }

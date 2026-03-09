@@ -13,11 +13,11 @@
   background: white;
   box-shadow: 0 25px 75px -15px #0004;
 
-  &:where([dir="ltr"], [dir="ltr"] *) {
+  [dir="ltr"] & {
     right: 1.25rem;
   }
 
-  &:where([dir="rtl"], [dir="rtl"] *) {
+  [dir="rtl"] & {
     left: 1.25rem;
   }
 
@@ -231,7 +231,7 @@
     background-color: rgb(var(--color-gray-100));
   }
 
-  &:hover:is(.dark *) {
+  .dark &:hover {
     background-color: rgb(var(--color-gray-800));
   }
 
@@ -331,7 +331,7 @@
         color: rgb(var(--color-gray-600));
       }
 
-      &:hover:is(.dark *) {
+      .dark &:hover {
         color: rgb(var(--color-gray-500));
       }
 

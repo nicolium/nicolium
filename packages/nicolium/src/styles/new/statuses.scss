@@ -236,7 +236,7 @@
     }
 
 
-    &:hover:is(.dark *) {
+    .dark &:hover {
       background-color: rgb(var(--color-primary-800));
       color: #fff;
     }
@@ -246,7 +246,7 @@
         color: rgb(var(--color-gray-600));
       }
 
-      &:hover:is(.dark *) {
+      .dark &:hover {
         color: #fff;
       }
     }
@@ -274,7 +274,7 @@
         color: rgb(var(--color-accent-300));
       }
 
-      &:hover:is(.dark *) {
+      .dark &:hover {
         color: rgb(var(--color-accent-300));
       }
 
@@ -289,7 +289,7 @@
           color: rgb(var(--color-success-400));
         }
 
-        &:hover:is(.dark *) {
+        .dark &:hover {
           color: rgb(var(--color-success-400));
         }
       }
@@ -520,7 +520,7 @@
           color: rgb(var(--color-success-400));
         }
 
-        &:hover:is(.dark *) {
+        .dark &:hover {
           color: rgb(var(--color-success-400));
         }
       }

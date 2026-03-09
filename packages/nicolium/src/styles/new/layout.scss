@@ -91,7 +91,7 @@ body {
     box-shadow: none;
   }
 
-  &:where([dir="rtl"], [dir="rtl"] *) {
+  [dir="rtl"] & {
     right: 0.5rem;
     transform-origin: bottom right;
   }
@@ -157,7 +157,7 @@ body {
       color: rgb(var(--color-gray-100));
     }
 
-    &:hover:is(.dark *) {
+    .dark &:hover {
       background-color: rgb(var(--color-gray-800));
     }
 
@@ -362,7 +362,7 @@ body {
           color: rgb(var(--color-gray-600));
         }
 
-        &:hover:is(.dark *) {
+        .dark &:hover {
           color: rgb(var(--color-gray-500));
         }
       }
@@ -465,7 +465,7 @@ body {
       color: rgb(var(--color-gray-400));
     }
 
-    &:hover:is(.dark *) {
+    .dark &:hover {
       color: rgb(var(--color-gray-200));
     }
 
@@ -775,7 +775,7 @@ body {
       color: #fff;
     }
 
-    &:where([dir="rtl"], [dir="rtl"] *) {
+    [dir="rtl"] & {
       transform: rotate(180deg);
     }
   }
@@ -1142,7 +1142,7 @@ body {
         color: rgb(var(--color-gray-600));
       }
 
-      &:hover:is(.dark *) {
+      .dark &:hover {
         color: rgb(var(--color-gray-500));
       }
     }

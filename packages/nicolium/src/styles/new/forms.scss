@@ -68,7 +68,7 @@
       outline: 2px solid rgb(var(--color-gray-800));
     }
 
-    &:focus:is(.dark *) {
+    .dark &:focus {
       border-color: rgb(var(--color-primary-500));
       outline-color: rgb(var(--color-primary-500));
     }
@@ -97,7 +97,7 @@
     @include mixins.text($size: xs, $theme: muted);
     text-align: right;
 
-    &:where([dir="rtl"], [dir="rtl"] *) {
+    [dir="rtl"] & {
       text-align: left;
     }
 
@@ -444,7 +444,7 @@
   &--sm:has(input:checked) .⁂-toggle__knob {
     transform: translateX(0.875rem);
 
-    :is([dir='rtl']) & {
+    [dir='rtl'] & {
       transform: translateX(-0.875rem);
     }
   }
@@ -452,7 +452,7 @@
   &--md:has(input:checked) .⁂-toggle__knob {
     transform: translateX(1rem);
 
-    :is([dir='rtl']) & {
+    [dir='rtl'] & {
       transform: translateX(-1rem);
     }
   }

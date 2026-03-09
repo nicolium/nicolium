@@ -133,7 +133,7 @@
     color: rgb(var(--color-gray-600));
   }
 
-  &:hover:is(.dark *) {
+  .dark &:hover {
     border-color: rgb(var(--color-primary-800));
     background-color: rgb(var(--color-primary-900));
   }
