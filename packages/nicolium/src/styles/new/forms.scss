@@ -367,6 +367,18 @@
   flex: none;
   border-radius: 9999px;
   padding: 0.125rem;
+  appearance: none;
+  height: unset;
+  border: none;
+  background: transparent;
+  background-image: none !important;
+
+  &::after {
+    display: block;
+    content: '';
+    border-radius: 9999px;
+    transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
 
   &:focus {
     outline: 2px solid rgb(var(--color-primary-500));
@@ -378,47 +390,63 @@
   }
 
   &:not(&--radio) {
-    &:not(:has(input:checked), :has(input:disabled)) {
+    &:not(:checked, :disabled) {
       background-color: rgb(var(--color-gray-500));
     }
 
-    &:not(:has(input:checked)):has(input:disabled) {
+    &:not(:checked):disabled {
       background-color: rgb(var(--color-gray-200));
     }
 
-    &:has(input:checked):not(:has(input:disabled)) {
+    &:checked:not(:disabled) {
       background-color: rgb(var(--color-primary-600));
     }
 
-    &:has(input:checked):has(input:disabled) {
+    &:checked:disabled {
       background-color: rgb(var(--color-primary-200));
+    }
+
+    &::after {
+      background: white;
     }
   }
 
   &--radio {
     border: 2px solid;
 
-    &:not(:has(input:checked), :has(input:disabled)) {
+    &::after {
+      background: transparent;
+    }
+
+    &:checked {
+      background: none !important;
+    }
+
+    &:not(:checked, :disabled) {
       border-color: rgb(var(--color-gray-500));
     }
 
-    &:not(:has(input:checked)):has(input:disabled) {
+    &:not(:checked):disabled {
       border-color: rgb(var(--color-gray-200));
     }
 
-    &:has(input:checked):not(:has(input:disabled)) {
+    &:checked:not(:disabled) {
       border-color: rgb(var(--color-primary-600));
     }
 
-    &:has(input:checked):has(input:disabled) {
+    &:checked:disabled {
       border-color: rgb(var(--color-primary-200));
+    }
+
+    &:checked::after {
+      background: rgb(var(--color-primary-500));
     }
   }
 
   &--sm {
     width: 2.25rem;
 
-    .⁂-toggle__knob {
+    &::after {
       width: 1.125rem;
       height: 1.125rem;
 
@@ -427,16 +455,20 @@
       }
     }
 
-    .⁂-toggle__knob--radio {
-      width: 0.75rem;
-      height: 0.75rem;
+    &.⁂-toggle--radio {
+      width: unset;
+
+      &::after {
+        width: 0.75rem;
+        height: 0.75rem;
+      }
     }
   }
 
   &--md {
     width: 2.75rem;
 
-    .⁂-toggle__knob {
+    &::after {
       width: 1.5rem;
       height: 1.5rem;
 
@@ -445,13 +477,17 @@
       }
     }
 
-    .⁂-toggle__knob--radio {
-      width: 1rem;
-      height: 1rem;
+    &.⁂-toggle--radio {
+      width: unset;
+
+      &::after {
+        width: 1rem;
+        height: 1rem;
+      }
     }
   }
 
-  &--sm:has(input:checked) .⁂-toggle__knob {
+  &--sm:not(.⁂-toggle--radio):checked::after {
     transform: translateX(0.875rem);
 
     [dir='rtl'] & {
@@ -459,7 +495,7 @@
     }
   }
 
-  &--md:has(input:checked) .⁂-toggle__knob {
+  &--md:not(.⁂-toggle--radio):checked::after {
     transform: translateX(1rem);
 
     [dir='rtl'] & {
@@ -467,20 +503,16 @@
     }
   }
 
-  &__knob {
-    border-radius: 9999px;
-    background-color: white;
-    transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
-  }
+  &--radio {
+    &::after {
+      border-radius: 9999px;
+    }
 
-  &__knob--radio {
-    border-radius: 9999px;
-
-    .⁂-toggle:has(input:checked):not(:has(input:disabled)) & {
+    &.⁂-toggle:checked:not(:disabled) & {
       background-color: rgb(var(--color-primary-600));
     }
 
-    .⁂-toggle:has(input:checked):has(input:disabled) & {
+    &.⁂-toggle:checked:disabled & {
       background-color: rgb(var(--color-primary-200));
     }
   }

@@ -136,7 +136,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
         target={typeof item.target === 'string' ? item.target : '_blank'}
         title={item.text}
         className={clsx(
-          'mx-2 my-1 flex cursor-pointer items-center rounded-md px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 rtl:flex-col-reverse',
+          'mx-2 my-1 flex cursor-pointer items-center rounded-md px-2 py-1.5 text-sm text-gray-700 dark:text-gray-300 rtl:flex-row-reverse',
           {
             'text-danger-600 dark:text-danger-400': item.destructive,
             'cursor-not-allowed opacity-50': item.disabled,

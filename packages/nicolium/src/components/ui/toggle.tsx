@@ -1,5 +1,5 @@
 import clsx from 'clsx';
-import React, { useRef } from 'react';
+import React from 'react';
 
 interface IToggle extends Pick<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -19,38 +19,19 @@ const Toggle: React.FC<IToggle> = ({
   required,
   disabled,
   radio,
-}) => {
-  const input = useRef<HTMLInputElement>(null);
-
-  const handleClick: React.MouseEventHandler<HTMLButtonElement> = () => {
-    input.current?.focus();
-    input.current?.click();
-  };
-
-  return (
-    <button
-      className={clsx('⁂-toggle', `⁂-toggle--${size}`, {
-        '⁂-toggle--radio': radio,
-      })}
-      onClick={handleClick}
-      type='button'
-    >
-      <div className={radio ? '⁂-toggle__knob--radio' : '⁂-toggle__knob'} />
-
-      <input
-        id={id}
-        ref={input}
-        name={name}
-        type='checkbox'
-        className='sr-only'
-        checked={checked}
-        onChange={onChange}
-        required={required}
-        disabled={disabled}
-        tabIndex={-1}
-      />
-    </button>
-  );
-};
+}) => (
+  <input
+    className={clsx('⁂-toggle', `⁂-toggle--${size}`, {
+      '⁂-toggle--radio': radio,
+    })}
+    type='checkbox'
+    id={id}
+    name={name}
+    checked={checked}
+    onChange={onChange}
+    required={required}
+    disabled={disabled}
+  />
+);
 
 export { Toggle as default };
