@@ -389,7 +389,7 @@
     cursor: default;
   }
 
-  &:not(&--radio) {
+  &:not([type="radio"]) {
     &:not(:checked, :disabled) {
       background-color: rgb(var(--color-gray-500));
     }
@@ -411,7 +411,7 @@
     }
   }
 
-  &--radio {
+  &[type="radio"] {
     border: 2px solid;
 
     &::after {
@@ -455,7 +455,7 @@
       }
     }
 
-    &.⁂-toggle--radio {
+    &[type="radio"] {
       width: unset;
 
       &::after {
@@ -477,7 +477,7 @@
       }
     }
 
-    &.⁂-toggle--radio {
+    &[type="radio"] {
       width: unset;
 
       &::after {
@@ -487,7 +487,7 @@
     }
   }
 
-  &--sm:not(.⁂-toggle--radio):checked::after {
+  &--sm:not([type="radio"]):checked::after {
     transform: translateX(0.875rem);
 
     [dir='rtl'] & {
@@ -495,7 +495,7 @@
     }
   }
 
-  &--md:not(.⁂-toggle--radio):checked::after {
+  &--md:not([type="radio"]):checked::after {
     transform: translateX(1rem);
 
     [dir='rtl'] & {
@@ -503,7 +503,7 @@
     }
   }
 
-  &--radio {
+  &[type="radio"] {
     &::after {
       border-radius: 9999px;
     }

@@ -1,5 +1,11 @@
-import clsx from 'clsx';
 import React from 'react';
+
+declare module 'react' {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  interface InputHTMLAttributes<T> {
+    switch?: boolean;
+  }
+}
 
 interface IToggle extends Pick<
   React.InputHTMLAttributes<HTMLInputElement>,
@@ -21,16 +27,15 @@ const Toggle: React.FC<IToggle> = ({
   radio,
 }) => (
   <input
-    className={clsx('⁂-toggle', `⁂-toggle--${size}`, {
-      '⁂-toggle--radio': radio,
-    })}
-    type='checkbox'
+    className={`⁂-toggle ⁂-toggle--${size}`}
+    type={radio ? 'radio' : 'checkbox'}
     id={id}
     name={name}
     checked={checked}
     onChange={onChange}
     required={required}
     disabled={disabled}
+    switch={!radio}
   />
 );
 
