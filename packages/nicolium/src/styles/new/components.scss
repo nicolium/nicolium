@@ -1211,3 +1211,24 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
   padding: 0.25rem;
   color: white;
 }
+
+.⁂-progress-bar {
+  height: 0.625rem;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background-color: rgb(var(--color-gray-300));
+
+  .dark & {
+    background-color: rgb(var(--color-primary-800));
+  }
+
+  &--sm {
+    height: 6px;
+  }
+
+  > div {
+    height: 100%;
+    background-color: rgb(var(--color-secondary-500));
+  }
+}
