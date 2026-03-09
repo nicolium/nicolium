@@ -47,17 +47,37 @@
   }
 
   @if $theme == default {
-    @apply text-gray-900 dark:text-gray-100;
+    color: rgb(var(--color-gray-900));
+
+    &:is(.dark *) {
+      color: rgb(var(--color-gray-100));
+    }
   } @else if $theme == danger {
-    @apply text-danger-700 dark:text-danger-500;
+    color: rgb(var(--color-danger-700));
+
+    &:is(.dark *) {
+      color: rgb(var(--color-danger-500));
+    }
   } @else if $theme == primary {
-    @apply text-primary-600 dark:text-primary-400;
+    color: rgb(var(--color-primary-600));
+
+    &:is(.dark *) {
+      color: rgb(var(--color-primary-400));
+    }
   } @else if $theme == muted {
-    @apply text-gray-700 dark:text-gray-600;
+    color: rgb(var(--color-gray-700));
+
+    &:is(.dark *) {
+      color: rgb(var(--color-gray-600));
+    }
   } @else if $theme == subtle {
-    @apply text-gray-400 dark:text-gray-500;
+    color: rgb(var(--color-gray-400));
+
+    &:is(.dark *) {
+      color: rgb(var(--color-gray-500));
+    }
   } @else if $theme == success {
-    @apply text-success-600;
+    color: rgb(var(--color-success-600));
   } @else if $theme == inherit {
     color: inherit;
   } @else if $theme == white {
@@ -111,7 +131,19 @@
 
 @mixin card($variant: default, $size: md) {
   @if $variant == rounded {
-    @apply bg-white dark:bg-primary-900 black:bg-black text-gray-900 dark:text-gray-100 shadow-lg dark:shadow-none;
+    background-color: #fff;
+    color: rgb(var(--color-gray-900));
+    box-shadow: 0 10px 15px -3px #0001, 0 4px 6px -4px #0001;
+
+    &:is(.dark.black *) {
+      background-color: #000;
+    }
+
+    &:is(.dark *) {
+      background-color: rgb(var(--color-primary-900));
+      color: rgb(var(--color-gray-100));
+      box-shadow: none;
+    }
 
     @if $size == md {
       padding: 1rem;
@@ -139,46 +171,226 @@
   }
 
   @if $size != xl {
-    @apply black:rounded-none;
+    &:is(.dark.black *) {
+      border-radius: 0;
+    }
   }
 }
 
 @mixin button($theme: secondary, $block: false, $size: md) {
-  @apply rtl:space-x-reverse inline-flex items-center place-content-center border font-medium rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 appearance-none transition-all disabled:select-none disabled:opacity-75 disabled:cursor-default;
+  display: inline-flex;
+  appearance: none;
+  place-content: center;
+  align-items: center;
+  border-radius: 9999px;
+  border-width: 1px;
+  font-weight: 500;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:focus {
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    cursor: default;
+    user-select: none;
+    opacity: 0.75;
+  }
 
   @if $theme == primary {
-    @apply bg-primary-500 hover:bg-primary-400 dark:hover:bg-primary-600 border-transparent focus:bg-primary-500 text-gray-100 focus:ring-primary-300;
+    border-color: transparent;
+    background-color: rgb(var(--color-primary-500));
+    color: rgb(var(--color-gray-100));
+
+    &:hover {
+      background-color: rgb(var(--color-primary-400));
+    }
+
+    &:focus {
+      background-color: rgb(var(--color-primary-500));
+      outline-color: rgb(var(--color-primary-300));
+    }
+
+    &:hover:is(.dark *) {
+      background-color: rgb(var(--color-primary-600));
+    }
   } @else if $theme == secondary {
-    @apply border-transparent bg-primary-100 dark:bg-primary-800 hover:bg-primary-50 dark:hover:bg-primary-700 focus:bg-primary-100 dark:focus:bg-primary-800 text-primary-500 dark:text-primary-200;
+    border-color: transparent;
+    background-color: rgb(var(--color-primary-100));
+    color: rgb(var(--color-primary-500));
+
+    &:hover {
+      background-color: rgb(var(--color-primary-50));
+    }
+
+    &:focus {
+      background-color: rgb(var(--color-primary-100));
+    }
+
+    &:is(.dark *) {
+      background-color: rgb(var(--color-primary-800));
+      color: rgb(var(--color-primary-200));
+    }
+
+    &:hover:is(.dark *) {
+      background-color: rgb(var(--color-primary-700));
+    }
+
+    &:focus:is(.dark *) {
+      background-color: rgb(var(--color-primary-800));
+    }
   } @else if $theme == tertiary {
-    @apply bg-white dark:bg-primary-900 border-gray-400 dark:border-gray-800 hover:border-primary-300 dark:hover:border-primary-700 focus:border-primary-500 text-gray-900 dark:text-gray-100 focus:ring-primary-500;
+    border-color: rgb(var(--color-gray-400));
+    background-color: #fff;
+    color: rgb(var(--color-gray-900));
+
+    &:hover {
+      border-color: rgb(var(--color-primary-300));
+    }
+
+    &:focus {
+      border-color: rgb(var(--color-primary-500));
+      outline-color: rgb(var(--color-primary-500));
+    }
+
+    &:is(.dark *) {
+      border-color: rgb(var(--color-gray-800));
+      background-color: rgb(var(--color-primary-900));
+      color: rgb(var(--color-gray-100));
+    }
+
+    &:hover:is(.dark *) {
+      border-color: rgb(var(--color-primary-700));
+    }
   } @else if $theme == accent {
-    @apply border-transparent bg-secondary-500 hover:bg-secondary-400 focus:bg-secondary-500 text-white focus:ring-secondary-300;
+    border-color: transparent;
+    background-color: rgb(var(--color-secondary-500));
+    color: #fff;
+
+    &:hover {
+      background-color: rgb(var(--color-secondary-400));
+    }
+
+    &:focus {
+      background-color: rgb(var(--color-secondary-500));
+      outline-color: rgb(var(--color-secondary-300));
+    }
   } @else if $theme == danger {
-    @apply border-transparent bg-danger-100 dark:bg-danger-900 text-danger-600 dark:text-danger-200 hover:bg-danger-600 hover:text-gray-100 dark:hover:text-gray-100 dark:hover:bg-danger-500 focus:ring-danger-500;
+    border-color: transparent;
+    background-color: rgb(var(--color-danger-100));
+    color: rgb(var(--color-danger-600));
+
+    &:hover {
+      background-color: rgb(var(--color-danger-600));
+      color: rgb(var(--color-gray-100));
+    }
+
+    &:focus {
+      outline-color: rgb(var(--color-danger-500));
+    }
+
+    &:is(.dark *) {
+      background-color: rgb(var(--color-danger-900));
+      color: rgb(var(--color-danger-200));
+    }
+
+    &:hover:is(.dark *) {
+      background-color: rgb(var(--color-danger-500));
+      color: rgb(var(--color-gray-100));
+    }
   } @else if $theme == transparent {
-    @apply border-transparent bg-transparent text-primary-600 dark:text-primary-400 dark:bg-transparent hover:bg-gray-200 dark:hover:bg-gray-800/50;
+    border-color: transparent;
+    background-color: transparent;
+    color: rgb(var(--color-primary-600));
+
+    &:hover {
+      background-color: rgb(var(--color-gray-200));
+    }
+
+    &:is(.dark *) {
+      background-color: transparent;
+      color: rgb(var(--color-primary-400));
+    }
+
+    &:hover:is(.dark *) {
+      background-color: rgb(var(--color-gray-800) / 0.5);
+    }
   } @else if $theme == outline {
-    @apply border-gray-100 border-2 bg-transparent text-gray-100 hover:bg-white/10;
+    border-width: 2px;
+    border-color: rgb(var(--color-gray-100));
+    background-color: transparent;
+    color: rgb(var(--color-gray-100));
+
+    &:hover {
+      background-color: #fff1;
+    }
   } @else if $theme == muted {
-    @apply border border-solid bg-transparent border-gray-400 dark:border-gray-800 hover:border-primary-300 dark:hover:border-primary-700 focus:border-primary-500 text-gray-800 dark:text-gray-100 focus:ring-primary-500;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgb(var(--color-gray-400));
+    background-color: transparent;
+    color: rgb(var(--color-gray-800));
+
+    &:hover {
+      border-color: rgb(var(--color-primary-300));
+    }
+
+    &:focus {
+      border-color: rgb(var(--color-primary-500));
+      outline: 2px solid rgb(var(--color-primary-500));
+    }
+
+    &:is(.dark *) {
+      border-color: rgb(var(--color-gray-800));
+      color: rgb(var(--color-gray-100));
+    }
+
+    &:hover:is(.dark *) {
+      border-color: rgb(var(--color-primary-700));
+    }
   } @else {
     @warn "Unknown button theme `#{$theme}`.";
   }
 
   @if $size == xs {
-    @apply gap-x-1.5 px-2 py-1 text-xs;
+    column-gap: 0.375rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
   } @else if $size == sm {
-    @apply gap-x-2 px-3 py-1.5 text-xs leading-4;
+    column-gap: 0.5rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
   } @else if $size == md {
-    @apply gap-x-2 px-4 py-2 text-sm;
+    column-gap: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
   } @else if $size == lg {
-    @apply gap-x-2 px-6 py-3 text-base;
+    column-gap: 0.5rem;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    font-size: 0.9375rem;
   } @else {
     @warn "Unknown button size `#{$size}`.";
   }
 
   @if $block {
-    @apply flex w-full justify-center;
+    display: flex;
+    width: 100%;
+    justify-content: center;
   }
 }

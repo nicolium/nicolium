@@ -32,23 +32,50 @@
     }
 
     &--loading {
-      @apply animate-pulse;
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
   }
 }
 
 .⁂-directory-card {
   overflow: clip;
-  @apply flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow dark:divide-primary-700 dark:bg-primary-800;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.5rem;
+  background-color: #fff;
+  text-align: center;
+  box-shadow: 0 1px 3px 0 #0001, 0 1px 2px -1px #0001;
+
+  & > :not([hidden]) ~ :not([hidden]) {
+    border-top-width: 1px;
+    border-color: rgb(var(--color-gray-200));
+  }
+
+  .dark & > :not([hidden]) ~ :not([hidden]) {
+    border-color: rgb(var(--color-primary-700));
+  }
+
+  .dark & {
+    background-color: rgb(var(--color-primary-800));
+  }
 
   &__header {
     position: relative;
 
     &__image {
-      @apply block h-32 w-full rounded-t-lg object-cover;
+      display: block;
+      height: 8rem;
+      width: 100%;
+      border-top-left-radius: 0.5rem;
+      border-top-right-radius: 0.5rem;
+      object-fit: cover;
 
       &--empty {
-        @apply bg-gray-200 dark:bg-primary-700;
+        background-color: rgb(var(--color-gray-200));
+
+        .dark & {
+          background-color: rgb(var(--color-primary-700));
+        }
       }
     }
   }
@@ -71,7 +98,14 @@
     position: absolute !important;
     bottom: 0;
     left: 0.75rem;
-    @apply translate-y-1/2 bg-white ring-2 ring-white dark:bg-primary-900 dark:ring-primary-900;
+    transform: translateY(50%);
+    background-color: #fff;
+    outline: 2px solid #fff;
+
+    .dark & {
+      background-color: rgb(var(--color-primary-900));
+      outline-color: rgb(var(--color-primary-900));
+    }
   }
 
   &__account {
@@ -82,7 +116,12 @@
   }
 
   &__bio {
-    @apply line-clamp-2 inline text-ellipsis;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    display: inline;
+    text-overflow: ellipsis;
     @include mixins.text($truncate: true);
 
     br {

@@ -1,11 +1,11 @@
 @use 'variables';
 
 .⁂-crypto-donate-modal {
-  @apply max-w-sm;
+  max-width: 24rem;
 }
 
 .⁂-hotkey-modal {
-  @apply max-w-4xl;
+  max-width: 56rem;
 }
 
 .⁂-media-modal {
@@ -17,7 +17,7 @@
   height: 100%;
   position: relative;
   touch-action: pan-y;
-  @apply bg-gray-900/90;
+  background-color: rgb(var(--color-gray-900) / 0.9);
 
   &__content {
     display: flex;
@@ -32,7 +32,7 @@
     @media (min-width: variables.$breakpoint-xl) {
       padding-right: 24rem;
     }
-    @apply transition-all;
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   &__closer {
@@ -85,7 +85,9 @@
 
   &--fullscreen {
     .⁂-media-modal__content {
-      @apply xl:pr-0;
+      @media (min-width: variables.$breakpoint-xl) {
+        padding-right: 0;
+      }
     }
 
     .⁂-media-modal__closer,
@@ -115,10 +117,20 @@
   }
 
   &__preview {
-    @apply size-auto max-h-[80%] max-w-full absolute z-[1] overflow-hidden;
+    position: absolute;
+    z-index: 1;
+    width: auto;
+    height: auto;
+    max-height: 80%;
+    max-width: 100%;
+    overflow: hidden;
 
     canvas {
-      @apply absolute size-full object-cover z-[-1];
+      position: absolute;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
 
@@ -149,26 +161,91 @@
   inset: 0;
 
   > div {
-    @apply pointer-events-auto fixed inset-x-0 z-[1001] mx-auto max-h-[calc(100dvh-1rem)] w-[calc(100vw-2rem)] max-w-lg overflow-auto rounded-t-xl bg-white py-1 shadow-lg duration-200 ease-in-out focus:outline-none black:bg-black no-reduce-motion:transition-all dark:bg-gray-900 dark:ring-2 dark:ring-primary-700;
+    pointer-events: auto;
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 1001;
+    margin-left: auto;
+    margin-right: auto;
+    max-height: calc(100dvh - 1rem);
+    width: calc(100vw - 2rem);
+    max-width: 32rem;
+    overflow: auto;
+    border-top-left-radius: 0.75rem;
+    border-top-right-radius: 0.75rem;
+    background-color: #fff;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    box-shadow: 0 10px 15px -3px #0001, 0 4px 6px -4px #0001;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+
+    &:focus {
+      outline: 2px solid transparent;
+      outline-offset: 2px;
+    }
+
+    .dark.black & {
+      background-color: #000;
+    }
+
+    .no-reduce-motion & {
+transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .dark & {
+      background-color: rgb(var(--color-gray-900));
+      outline: 2px solid rgb(var(--color-primary-700));
+    }
   }
 
   &:not(&--first-render) {
     > div {
-      @apply bottom-0 opacity-100;
+      bottom: 0;
+      opacity: 1;
     }
   }
 
   &--first-render {
     > div {
-      @apply no-reduce-motion:-bottom-32 no-reduce-motion:opacity-0;
+      .no-reduce-motion & {
+        bottom: -8rem;
+        opacity: 0;
+      }
     }
   }
 
   &__close {
-    @apply p-2 px-3;
+    padding: 0.5rem;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
 
     button {
-      @apply flex w-full appearance-none place-content-center items-center rounded-full border border-gray-700 bg-transparent p-2 text-sm font-medium text-gray-700 transition-all hover:bg-white/10 focus:outline-none focus:ring-2 focus:ring-offset-2 dark:border-gray-500 dark:text-gray-500;
+      display: flex;
+      width: 100%;
+      appearance: none;
+      place-content: center;
+      align-items: center;
+      border-radius: 9999px;
+      border-width: 1px;
+      border-color: rgb(var(--color-gray-700));
+      background-color: transparent;
+      padding: 0.5rem;
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+      font-weight: 500;
+      color: rgb(var(--color-gray-700));
+transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        background-color: #fff1;
+      }
+
+      .dark & {
+        border-color: rgb(var(--color-gray-500));
+        color: rgb(var(--color-gray-500));
+      }
     }
   }
 

@@ -19,7 +19,11 @@
 
   &__icon {
     flex: none;
-    @apply text-primary-600 dark:text-primary-400;
+    color: rgb(var(--color-primary-600));
+
+    .dark & {
+      color: rgb(var(--color-primary-400));
+    }
 
     &--emoji {
       height: 1rem;

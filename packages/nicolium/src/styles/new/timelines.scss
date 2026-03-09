@@ -1,35 +1,89 @@
 @use 'mixins';
+@use 'variables';
 
 .⁂-layout__main--home {
-  @apply black:space-y-0 black:divide-gray-800 dark:divide-primary-800 sm:space-y-4;
+  .dark.black & > :not([hidden]) ~ :not([hidden]) {
+    border-color: rgb(var(--color-gray-800));
+  }
+
+  .dark & > :not([hidden]) ~ :not([hidden]) {
+    border-color: rgb(var(--color-primary-800));
+  }
+
+  @media (min-width: variables.$breakpoint-sm) {
+    & > :not([hidden]) ~ :not([hidden]) {
+      margin-top: 1rem;
+    }
+  }
 }
 
 .⁂-compose-block {
   @include mixins.card($variant: rounded);
-  @apply relative z-[1] border-gray-200 transition black:border-b black:border-gray-800 dark:border-gray-800 max-sm:border-b max-sm:shadow-none;
+  position: relative;
+  z-index: 1;
+  border-color: rgb(var(--color-gray-200));
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+
+  @media (max-width: variables.$breakpoint-sm) {
+    border-bottom-width: 1px;
+    box-shadow: none;
+  }
+
+  .dark.black & {
+    border-bottom-width: 1px;
+    border-color: rgb(var(--color-gray-800));
+  }
+
+  .dark & {
+    border-color: rgb(var(--color-gray-800));
+  }
 
   &--dragging {
-    @apply border-2 border-primary-600 border-dashed z-[99];
+    z-index: 99;
+    border-width: 2px;
+    border-style: dashed;
+    border-color: rgb(var(--color-primary-600));
   }
 
   &--dragged-over {
-    @apply ring-2 ring-offset-2 ring-primary-600;
+    outline: 2px solid rgb(var(--color-primary-600));
+    outline-offset: 2px;
   }
 
   &__body {
-    @apply flex items-start gap-2;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
 
   &__form {
-    @apply w-full translate-y-0.5;
+    width: 100%;
+    transform: translateY(0.125rem);
   }
 }
 
 .⁂-status-list {
-  @apply divide-y divide-solid divide-gray-200 black:divide-gray-800 dark:divide-primary-800;
+  & > :not([hidden]) ~ :not([hidden]) {
+    border-top-width: 1px;
+    border-style: solid;
+    border-color: rgb(var(--color-gray-200));
+  }
+
+  .dark.black & > :not([hidden]) ~ :not([hidden]) {
+    border-color: rgb(var(--color-gray-800));
+  }
+
+  .dark & > :not([hidden]) ~ :not([hidden]) {
+    border-color: rgb(var(--color-primary-800));
+  }
 
   &__empty {
-    @apply flex flex-col gap-2 py-2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
 
     h2 {
       @include mixins.text($size: 2xl, $weight: bold, $align: center);
@@ -42,10 +96,51 @@
 }
 
 .⁂-skip-pinned {
-  @apply absolute right-6 z-10 flex w-fit max-w-full items-center gap-2 rounded-full border border-gray-200 bg-gray-100 px-3 py-1 hover:bg-gray-200 black:border-gray-800 black:bg-gray-900 black:hover:bg-gray-800 dark:border-transparent dark:hover:border-primary-800 dark:bg-primary-800 dark:hover:bg-primary-900 rtl:space-x-reverse text-gray-700 dark:text-gray-600;
+  position: absolute;
+  right: 1.5rem;
+  z-index: 10;
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 9999px;
+  border-width: 1px;
+  border-color: rgb(var(--color-gray-200));
+  background-color: rgb(var(--color-gray-100));
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  color: rgb(var(--color-gray-700));
+
+  &:hover {
+    background-color: rgb(var(--color-gray-200));
+  }
+
+  .dark.black & {
+    border-color: rgb(var(--color-gray-800));
+    background-color: rgb(var(--color-gray-900));
+  }
+
+  .dark.black &:hover {
+    background-color: rgb(var(--color-gray-800));
+  }
+
+  .dark & {
+    border-color: transparent;
+    background-color: rgb(var(--color-primary-800));
+    color: rgb(var(--color-gray-600));
+  }
+
+  &:hover:is(.dark *) {
+    border-color: rgb(var(--color-primary-800));
+    background-color: rgb(var(--color-primary-900));
+  }
 
   svg {
-    @apply size-4;
+    width: 1rem;
+    height: 1rem;
   }
 
   p {

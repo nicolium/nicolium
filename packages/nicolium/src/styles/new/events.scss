@@ -1,28 +1,58 @@
 @use 'mixins';
+@use 'variables';
 
 .⁂-event-card {
-  @apply relative w-full overflow-hidden rounded-lg bg-gray-100 black:border black:border-gray-800 black:bg-black dark:bg-primary-800;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background-color: rgb(var(--color-gray-100));
+
+  .dark.black & {
+    border-width: 1px;
+    border-color: rgb(var(--color-gray-800));
+    background-color: #000;
+  }
+
+  .dark & {
+    background-color: rgb(var(--color-primary-800));
+  }
 
   &__action {
     &__container {
-      @apply absolute right-3 top-28;
+      position: absolute;
+      right: 0.75rem;
+      top: 7rem;
     }
   }
 
   &__banner {
-    @apply h-40 bg-primary-200 dark:bg-gray-600;
+    height: 10rem;
+    background-color: rgb(var(--color-primary-200));
+
+    .dark & {
+      background-color: rgb(var(--color-gray-600));
+    }
 
     img {
-      @apply size-full object-cover;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
   }
 
   &__body {
-    @apply flex flex-col p-2.5 gap-2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.625rem;
   }
 
   &__heading {
-    @apply flex items-center justify-between gap-2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
 
     p {
       @include mixins.text($weight: semibold, $truncate: true);
@@ -30,34 +60,60 @@
   }
 
   &__info {
-    @apply flex flex-wrap gap-x-2 gap-y-1 text-gray-700 dark:text-gray-600;
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 0.5rem;
+    row-gap: 0.25rem;
+    color: rgb(var(--color-gray-700));
+
+    .dark & {
+      color: rgb(var(--color-gray-600));
+    }
   }
 
   &__author {
-    @apply flex items-center gap-2;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 
     &__name {
-      @apply flex items-center gap-1 grow;
+      display: flex;
+      flex-grow: 1;
+      align-items: center;
+      gap: 0.25rem;
     }
   }
 
   &__location {
-    @apply flex items-center gap-2;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 }
 
 .⁂-event-date {
-  @apply flex items-center gap-2;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .⁂-event-information {
-  @apply flex flex-col mt-4 sm:p-3 gap-2;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  @media (min-width: variables.$breakpoint-sm) {
+    padding: 0.75rem;
+  }
 
   &__content,
   &__location,
   &__date,
   &__links {
-    @apply flex flex-col gap-1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
 
     h2 {
       @include mixins.text($size: xl, $weight: bold);
@@ -67,7 +123,9 @@
   &__location,
   &__date {
     &__body {
-      @apply flex gap-2 items-center;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
 
       p {
         @include mixins.text;
@@ -77,10 +135,20 @@
 
   &__links {
     ul li {
-      @apply flex gap-2 items-center;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
 
       a {
-        @apply text-primary-600 hover:underline dark:text-primary-400;
+        color: rgb(var(--color-primary-600));
+
+        &:hover {
+          text-decoration-line: underline;
+        }
+
+        .dark & {
+          color: rgb(var(--color-primary-400));
+        }
       }
     }
   }
@@ -101,7 +169,29 @@
   }
 
   &__banner__container {
-    @apply dark:sm:shadow-inset relative flex h-24 items-center justify-center overflow-hidden rounded-lg bg-primary-100 text-primary-500 dark:bg-gray-800 dark:text-white sm:h-32 sm:shadow;
+    position: relative;
+    display: flex;
+    height: 6rem;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    background-color: rgb(var(--color-primary-100));
+    color: rgb(var(--color-primary-500));
+
+    .dark & {
+      background-color: rgb(var(--color-gray-800));
+      color: #fff;
+    }
+
+    @media (min-width: variables.$breakpoint-sm) {
+      height: 8rem;
+      box-shadow: 0 1px 3px 0 #0001, 0 1px 2px -1px #0001;
+
+      .dark & {
+        box-shadow: inset 0 0 0 1px #fff1;
+      }
+    }
 
     img {
       height: 100%;
@@ -123,16 +213,45 @@
     border: 1px solid rgb(var(--color-gray-400));
     background-color: rgb(var(--color-white));
     padding: 0.5rem 0.75rem;
-    font-size: 0.9375rem;
     color: rgb(var(--color-gray-900));
     outline: 1px solid transparent;
-    @apply placeholder:text-gray-600 focus-within:border-primary-500 black:bg-black dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:placeholder:text-gray-600 dark:focus-within:border-primary-500 sm:text-sm;
+
+    @media (min-width: variables.$breakpoint-sm) {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+
+    &::placeholder {
+      color: rgb(var(--color-gray-600));
+    }
+
+    &:focus-within {
+      border-color: rgb(var(--color-primary-500));
+    }
+
+    .dark.black & {
+      background-color: #000;
+    }
+
+    .dark & {
+      border-color: rgb(var(--color-gray-800));
+      background-color: rgb(var(--color-gray-900));
+      color: rgb(var(--color-gray-100));
+    }
+
+    .dark &::placeholder {
+      color: rgb(var(--color-gray-600));
+    }
+
+    &:focus-within:is(.dark *) {
+      border-color: rgb(var(--color-primary-500));
+    }
 
     &:focus-within {
       outline-color: rgb(var(--color-primary-500));
     }
 
-    &:is(.dark *) {
+    .dark & {
       outline-color: rgb(var(--color-gray-800));
 
       &:focus-within {
@@ -142,7 +261,7 @@
   }
 
   .⁂-compose-form__editor__placeholder {
-    @apply pt-2;
+    padding-top: 0.5rem;
   }
 }
 

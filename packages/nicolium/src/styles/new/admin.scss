@@ -42,7 +42,7 @@
   background-color: rgb(var(--color-gray-100));
   transition: transform 0.15s ease-in-out;
 
-  &:is(.dark *) {
+  .dark & {
     background-color: rgb(var(--color-gray-800));
   }
 

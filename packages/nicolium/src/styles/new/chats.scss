@@ -11,14 +11,21 @@
   height: 4rem;
   border-radius: 0.5rem 0.5rem 0 0;
   background: white;
-  box-shadow: 0 25px 75px -15px rgb(0, 0, 0, 0.25);
-  @apply ltr:right-5 rtl:left-5;
+  box-shadow: 0 25px 75px -15px #0004;
 
-  &:is(.dark *) {
+  &:where([dir="ltr"], [dir="ltr"] *) {
+    right: 1.25rem;
+  }
+
+  &:where([dir="rtl"], [dir="rtl"] *) {
+    left: 1.25rem;
+  }
+
+  .dark & {
     background: rgb(var(--color-gray-900));
   }
 
-  &:is(.black *) {
+  .black & {
     background: black;
     border: 1px solid rgb(var(--color-gray-800));
   }
@@ -33,7 +40,7 @@
   }
 
   &--placeholder {
-    @apply animate-pulse;
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
   &__container {
@@ -125,25 +132,55 @@
     > div {
       &::before,
       &::after {
-        @apply pointer-events-none absolute inset-x-0 flex justify-center from-white to-transparent pb-12 pt-8 transition-opacity duration-500 black:from-black dark:from-gray-900 opacity-100 black:opacity-50;
+        pointer-events: none;
+        position: absolute;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+
+        --gradient-from: #fff;
+        --gradient-to: transparent;
+        padding-bottom: 3rem;
+        padding-top: 2rem;
+        opacity: 1;
+        transition: opacity 500ms cubic-bezier(0.4, 0, 0.2, 1);
+
+
+        .dark.black & {
+          --gradient-from: #000;
+          --gradient-to: transparent;
+          opacity: 0.5;
+        }
+
+        .dark & {
+          --gradient-from: rgb(var(--color-gray-900));
+          --gradient-to: rgb(var(--color-gray-900) / 0);
+        }
         content: '';
         z-index: 2;
       }
 
       &::before {
-        @apply top-0 rounded-t-lg bg-gradient-to-b;
+        top: 0;
+        border-top-left-radius: 0.5rem;
+        border-top-right-radius: 0.5rem;
+        background-image: linear-gradient(to bottom, var(--gradient-from), var(--gradient-to));
       }
 
       &::after {
-        @apply bottom-0 rounded-b-lg bg-gradient-to-t;
+        bottom: 0;
+        border-bottom-right-radius: 0.5rem;
+        border-bottom-left-radius: 0.5rem;
+        background-image: linear-gradient(to top, var(--gradient-from), var(--gradient-to));
       }
 
       &.⁂-chat-widget__list--near-top::before,
       &.⁂-chat-widget__list--near-bottom::after {
         opacity: 0;
 
-        &:is(.black *) {
-          @apply opacity-0;
+        .black & {
+          opacity: 0;
         }
       }
     }
@@ -181,14 +218,29 @@
 }
 
 .⁂-chat-list-item {
-  @apply flex w-full flex-col rounded-lg px-2 py-3 hover:bg-gray-100 focus:shadow-inset-ring dark:hover:bg-gray-800;
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  border-radius: 0.5rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
 
-  &:focus {
-    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 10%);
+  &:hover {
+    background-color: rgb(var(--color-gray-100));
+  }
+
+  &:hover:is(.dark *) {
+    background-color: rgb(var(--color-gray-800));
   }
 
   > div {
-    @apply flex items-center justify-between gap-2 w-full;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
   }
 
   &--shoutbox > div {
@@ -203,15 +255,25 @@
   }
 
   &__avatar {
-    @apply flex-none;
+    flex: none;
   }
 
   &__content {
-    @apply flex flex-col items-start overflow-hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    overflow: hidden;
   }
 
   &__name {
-    @apply flex w-full grow items-center space-x-1;
+    display: flex;
+    width: 100%;
+    flex-grow: 1;
+    align-items: center;
+
+    & > :not([hidden]) ~ :not([hidden]) {
+      margin-left: 0.25rem;
+    }
 
     p {
       @include mixins.text($weight: bold, $size: sm, $align: left, $truncate: true);
@@ -220,14 +282,22 @@
 
   &__message {
     @include mixins.text($theme: muted, $size: sm, $align: left, $truncate: true);
-    @apply pointer-events-none h-5 w-full;
+    pointer-events: none;
+    height: 1.25rem;
+    width: 100%;
 
-    > * {
-      @apply truncate;
+    & > * {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     &--unread {
-      @apply text-gray-900 dark:text-gray-100;
+      color: rgb(var(--color-gray-900));
+
+      .dark & {
+        color: rgb(var(--color-gray-100));
+      }
     }
 
     &__author {
@@ -236,27 +306,51 @@
   }
 
   &__actions {
-    @apply flex items-center gap-2;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   &__menu {
-    @apply max-w-0 overflow-hidden text-gray-600 hover:text-gray-100;
+    max-width: 0;
+    overflow: hidden;
+    color: rgb(var(--color-gray-600));
+
+    &:hover {
+      color: rgb(var(--color-gray-100));
+    }
 
     .⁂-icon-button {
-      @apply text-gray-600 hover:text-gray-700 dark:text-gray-600 dark:hover:text-gray-500;
+      color: rgb(var(--color-gray-600));
+
+      &:hover {
+        color: rgb(var(--color-gray-700));
+      }
+
+      .dark & {
+        color: rgb(var(--color-gray-600));
+      }
+
+      &:hover:is(.dark *) {
+        color: rgb(var(--color-gray-500));
+      }
 
       svg {
-        @apply h-4 w-4;
+        height: 1rem;
+        width: 1rem;
       }
     }
   }
 
   &:hover .⁂-chat-list-item__menu {
-    @apply max-w-full;
+    max-width: 100%;
   }
 
   &__unread {
-    @apply size-2 rounded-full bg-secondary-500;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 9999px;
+    background-color: rgb(var(--color-secondary-500));
   }
 
   &__timestamp {
@@ -264,6 +358,10 @@
   }
 
   &__unread + &__timestamp {
-    @apply text-gray-900 dark:text-gray-100;
+    color: rgb(var(--color-gray-900));
+
+    .dark & {
+      color: rgb(var(--color-gray-100));
+    }
   }
 }
