@@ -7,12 +7,7 @@ interface ICheckbox extends Pick<
 
 /** A pretty checkbox input. */
 const Checkbox = React.forwardRef<HTMLInputElement, ICheckbox>((props, ref) => (
-  <input
-    {...props}
-    ref={ref}
-    type='checkbox'
-    className='size-4 rounded border-2 border-gray-300 text-primary-600 focus:ring-primary-500 black:bg-black dark:border-gray-800 dark:bg-gray-900'
-  />
+  <input {...props} ref={ref} type='checkbox' className='⁂-checkbox' />
 ));
 
 Checkbox.displayName = 'Checkbox';

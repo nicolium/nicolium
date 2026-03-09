@@ -46,7 +46,7 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
             <label
               htmlFor={formFieldId}
               data-testid='form-group-label'
-              className='-mt-0.5 block text-sm font-medium text-gray-900 dark:text-gray-100'
+              className='⁂-form-group__label ⁂-form-group__label--checkbox'
               title={labelTitle}
             >
               {labelText}
@@ -55,10 +55,7 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
 
           {hasError && (
             <div>
-              <p
-                data-testid='form-group-error'
-                className='form-error relative mt-0.5 inline-block rounded-md bg-danger-200 px-2 py-1 text-xs text-danger-900'
-              >
+              <p data-testid='form-group-error' className='⁂-form-group__error'>
                 {errors.join(', ')}
               </p>
             </div>
@@ -67,7 +64,7 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
           {hintText && (
             <p
               data-testid='form-group-hint'
-              className='mt-0.5 text-xs text-gray-700 dark:text-gray-600'
+              className='⁂-form-group__hint ⁂-form-group__hint--below'
             >
               {hintText}
             </p>
@@ -83,19 +80,16 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
         <label
           htmlFor={formFieldId}
           data-testid='form-group-label'
-          className='block text-sm font-medium text-gray-900 dark:text-gray-100'
+          className='⁂-form-group__label'
           title={labelTitle}
         >
           {labelText}
         </label>
       )}
 
-      <div className='mt-1 dark:text-white'>
+      <div className='⁂-form-group__content'>
         {hintText && (
-          <p
-            data-testid='form-group-hint'
-            className='mb-0.5 text-xs text-gray-700 dark:text-gray-600'
-          >
+          <p data-testid='form-group-hint' className='⁂-form-group__hint ⁂-form-group__hint--above'>
             {hintText}
           </p>
         )}
@@ -104,10 +98,7 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
         {inputChildren.filter((_, i) => i !== 0)}
 
         {hasError && (
-          <p
-            data-testid='form-group-error'
-            className='form-error relative mt-0.5 inline-block rounded-md bg-danger-200 px-2 py-1 text-xs text-danger-900'
-          >
+          <p data-testid='form-group-error' className='⁂-form-group__error'>
             {errors.join(', ')}
           </p>
         )}

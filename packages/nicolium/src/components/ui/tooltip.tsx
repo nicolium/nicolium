@@ -78,16 +78,12 @@ const Tooltip: React.FC<ITooltip> = (props) => {
               left: x ?? 0,
               ...styles,
             }}
-            className='pointer-events-none z-[100] whitespace-nowrap rounded bg-gray-800 px-2.5 py-1.5 text-xs font-medium text-gray-100 shadow dark:bg-gray-100 dark:text-gray-900'
+            className='⁂-tooltip'
             {...getFloatingProps()}
           >
             {text}
 
-            <FloatingArrow
-              ref={arrowRef}
-              context={context}
-              className='fill-gray-800 dark:fill-gray-100'
-            />
+            <FloatingArrow ref={arrowRef} context={context} className='⁂-tooltip__arrow' />
           </div>
         </FloatingPortal>
       )}

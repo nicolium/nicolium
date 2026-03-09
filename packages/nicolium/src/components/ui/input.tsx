@@ -92,45 +92,26 @@ const Input = React.forwardRef<HTMLInputElement, IInput>((props, ref) => {
   }, []);
 
   return (
-    <div
-      className={clsx('relative', {
-        'rounded-md': theme !== 'search',
-        'rounded-full': theme === 'search',
-        'mt-1': !String(outerClassName).includes('mt-'),
-        [String(outerClassName)]: typeof outerClassName !== 'undefined',
-      })}
-    >
+    <div className={clsx('⁂-input__wrapper', `⁂-input__wrapper--${theme}`, outerClassName)}>
       {icon ? (
-        <div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
-          <Icon src={icon} className='size-4 text-gray-700 dark:text-gray-600' aria-hidden='true' />
+        <div className='⁂-input__wrapper__icon'>
+          <Icon src={icon} aria-hidden='true' />
         </div>
       ) : null}
 
-      {prepend ? (
-        <div className='absolute inset-y-0 left-0 flex items-center'>{prepend}</div>
-      ) : null}
+      {prepend ? <div className='⁂-input__wrapper__prepend'>{prepend}</div> : null}
 
       <input
         {...filteredProps}
         type={revealed ? 'text' : type}
         ref={ref}
         className={clsx(
-          'block w-full text-base placeholder:text-gray-600 focus:border-primary-500 dark:placeholder:text-gray-600 dark:focus:border-primary-500 sm:text-sm',
+          '⁂-input',
+          `⁂-input--${theme}`,
           {
-            'ring-1 focus:ring-primary-500 dark:ring-gray-800 dark:focus:ring-primary-500': [
-              'search',
-              'normal',
-            ].includes(theme),
-            'border-none px-0 !ring-0': theme === 'transparent',
-            'text-gray-900 dark:text-gray-100': !props.disabled,
-            'text-gray-600': props.disabled,
-            'rounded-md border-gray-400 bg-white black:bg-black dark:border-gray-800 dark:bg-gray-900':
-              theme === 'normal',
-            'rounded-full border-gray-200 bg-gray-200 focus:bg-white dark:border-gray-800 dark:bg-gray-900':
-              theme === 'search',
-            'pr-10 rtl:pl-10 rtl:pr-3': isPassword || append,
-            'pl-8': typeof icon !== 'undefined',
-            'pl-16': typeof prepend !== 'undefined',
+            '⁂-input--with-icon': typeof icon !== 'undefined',
+            '⁂-input--with-prepend': typeof prepend !== 'undefined',
+            '⁂-input--with-trailing': isPassword || !!append,
           },
           className,
         )}
@@ -141,11 +122,7 @@ const Input = React.forwardRef<HTMLInputElement, IInput>((props, ref) => {
         }
       />
 
-      {append ? (
-        <div className='absolute inset-y-0 right-0 flex items-center px-3 rtl:left-0 rtl:right-auto'>
-          {append}
-        </div>
-      ) : null}
+      {append ? <div className='⁂-input__wrapper__append'>{append}</div> : null}
 
       {isPassword ? (
         <Tooltip
@@ -155,13 +132,8 @@ const Input = React.forwardRef<HTMLInputElement, IInput>((props, ref) => {
               : intl.formatMessage(messages.showPassword)
           }
         >
-          <div className='absolute inset-y-0 right-0 flex items-center rtl:left-0 rtl:right-auto'>
-            <button
-              type='button'
-              onClick={togglePassword}
-              tabIndex={-1}
-              className='h-full px-2 text-gray-700 hover:text-gray-500 focus:ring-2 focus:ring-primary-500 dark:text-gray-600 dark:hover:text-gray-400'
-            >
+          <div className='⁂-input__wrapper__password-toggle'>
+            <button type='button' onClick={togglePassword} tabIndex={-1}>
               <SvgIcon
                 src={
                   revealed

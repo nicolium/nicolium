@@ -29,47 +29,13 @@ const Toggle: React.FC<IToggle> = ({
 
   return (
     <button
-      className={clsx(
-        'flex-none rounded-full focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 dark:ring-gray-800 dark:ring-offset-0 dark:focus:ring-primary-500',
-        radio
-          ? {
-              'border-2 p-0.5': true,
-              'border-gray-500': !checked && !disabled,
-              'border-primary-600': checked && !disabled,
-              'border-gray-200': !checked && disabled,
-              'border-primary-200': checked && disabled,
-              'cursor-default': disabled,
-            }
-          : {
-              'bg-gray-500': !checked && !disabled,
-              'bg-primary-600': checked && !disabled,
-              'bg-gray-200': !checked && disabled,
-              'bg-primary-200': checked && disabled,
-              'w-9 p-0.5': size === 'sm',
-              'w-11 p-0.5': size === 'md',
-              'cursor-default': disabled,
-            },
-      )}
+      className={clsx('⁂-toggle', `⁂-toggle--${size}`, {
+        '⁂-toggle--radio': radio,
+      })}
       onClick={handleClick}
       type='button'
     >
-      <div
-        className={
-          radio
-            ? clsx('rounded-full', {
-                'h-3 w-3': size === 'sm',
-                'h-4 w-4': size === 'md',
-                'bg-primary-600': checked && !disabled,
-                'bg-primary-200': checked && disabled,
-              })
-            : clsx('rounded-full bg-white transition-transform', {
-                'h-4.5 w-4.5': size === 'sm',
-                'translate-x-3.5 rtl:-translate-x-3.5': size === 'sm' && checked,
-                'h-6 w-6': size === 'md',
-                'translate-x-4 rtl:-translate-x-4': size === 'md' && checked,
-              })
-        }
-      />
+      <div className={radio ? '⁂-toggle__knob--radio' : '⁂-toggle__knob'} />
 
       <input
         id={id}
