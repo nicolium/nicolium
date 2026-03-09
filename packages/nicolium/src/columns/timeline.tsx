@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import React, { useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
+import PullToRefresh from '@/components/pull-to-refresh';
 import ScrollTopButton from '@/components/scroll-top-button';
 import ScrollableList, { type IScrollableList } from '@/components/scrollable-list';
 import Status, { StatusFollowedTagInfo } from '@/components/statuses/status';
@@ -397,6 +398,7 @@ const Timeline: React.FC<ITimeline> = ({
     isFetching,
     isPending,
     hasNextPage,
+    refetch,
   } = query;
 
   const handleMoveUp = (index: number) => {
@@ -542,21 +544,23 @@ const Timeline: React.FC<ITimeline> = ({
       {featuredStatusIds && featuredStatusIds.length > 3 && entries?.length > 0 && (
         <SkipPinned onClick={handleSkipPinned} />
       )}
-      <ScrollableList
-        id='status-list'
-        key='scrollable-list'
-        scrollKey={timelineId}
-        isLoading={isFetching}
-        showLoading={isPending}
-        placeholderComponent={() => <PlaceholderTimelineStatus />}
-        placeholderCount={20}
-        ref={node}
-        hasMore={hasNextPage}
-        onLoadMore={fetchNextPage}
-        {...props}
-      >
-        {renderedEntries}
-      </ScrollableList>
+      <PullToRefresh onRefresh={refetch} isPullable={!isFetching}>
+        <ScrollableList
+          id='status-list'
+          key='scrollable-list'
+          scrollKey={timelineId}
+          isLoading={isFetching}
+          showLoading={isPending}
+          placeholderComponent={() => <PlaceholderTimelineStatus />}
+          placeholderCount={20}
+          ref={node}
+          hasMore={hasNextPage}
+          onLoadMore={fetchNextPage}
+          {...props}
+        >
+          {renderedEntries}
+        </ScrollableList>
+      </PullToRefresh>
     </>
   );
 };

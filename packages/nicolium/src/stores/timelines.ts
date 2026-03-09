@@ -72,6 +72,7 @@ interface State {
     replacePendingStatus: (idempotencyKey: string, status: Status) => void;
     deletePendingStatus: (idempotencyKey: string) => void;
     filterTimelines: (accountId: string) => void;
+    resetTimeline: (timelineId: string) => void;
   };
 }
 
@@ -396,6 +397,10 @@ const useTimelinesStore = create<State>()(
             );
             timeline.queuedCount = timeline.queuedEntries.length;
           }
+        }),
+      resetTimeline: (timelineId) =>
+        set((state) => {
+          state.timelines[timelineId] = createEmptyTimeline();
         }),
     },
   })),

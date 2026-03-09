@@ -33,16 +33,25 @@ const useTimeline = (
     fetchInitial();
   }, [timelineId]);
 
-  const fetchInitial = useCallback(async () => {
-    timelineActions.setLoading(timelineId, true);
-    try {
-      const response = await fetcher();
-      importEntities({ statuses: response.items });
-      timelineActions.expandTimeline(timelineId, response.items, !!response.next, true, restoring);
-    } catch (error) {
-      timelineActions.setError(timelineId, true);
-    }
-  }, [timelineId, restoring]);
+  const fetchInitial = useCallback(
+    async (isRestoring = restoring) => {
+      timelineActions.setLoading(timelineId, true);
+      try {
+        const response = await fetcher();
+        importEntities({ statuses: response.items });
+        timelineActions.expandTimeline(
+          timelineId,
+          response.items,
+          !!response.next,
+          true,
+          isRestoring,
+        );
+      } catch (error) {
+        timelineActions.setError(timelineId, true);
+      }
+    },
+    [timelineId, restoring],
+  );
 
   const fetchNextPage = useCallback(async () => {
     timelineActions.setLoading(timelineId, true);
@@ -82,9 +91,14 @@ const useTimeline = (
     [timelineId, fetcher],
   );
 
+  const refetch = useCallback(() => {
+    timelineActions.resetTimeline(timelineId);
+    return fetchInitial(false);
+  }, [timelineId, fetchInitial]);
+
   return useMemo(
-    () => ({ ...timeline, timelineId, fetchNextPage, dequeueEntries, fillGap }),
-    [timeline, timelineId, fetchNextPage, dequeueEntries, fillGap],
+    () => ({ ...timeline, timelineId, fetchNextPage, dequeueEntries, fillGap, refetch }),
+    [timeline, timelineId, fetchNextPage, dequeueEntries, fillGap, refetch],
   );
 };
 

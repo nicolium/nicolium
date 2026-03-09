@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+
 import { useClient } from '@/hooks/use-client';
 
 import { useTimeline } from './use-timeline';
@@ -23,11 +25,21 @@ const useHomeTimeline = (
 ) => {
   const client = useClient();
   const stream = 'user';
+  const restoreMaxId = useRef(maxId);
 
   return useTimeline(
     'home',
-    (paginationParams) =>
-      client.timelines.homeTimeline({ ...params, ...(paginationParams || { max_id: maxId }) }),
+    (paginationParams) => {
+      const initialPagination = restoreMaxId.current ? { max_id: restoreMaxId.current } : undefined;
+      if (paginationParams == null) {
+        restoreMaxId.current = undefined;
+      }
+
+      return client.timelines.homeTimeline({
+        ...params,
+        ...(paginationParams ?? initialPagination),
+      });
+    },
     { stream },
     !!maxId,
   );
