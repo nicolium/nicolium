@@ -106,26 +106,19 @@ const StepSlider: React.FC<IStepSlider> = ({
   };
 
   return (
-    <div
-      className='relative inline-flex h-6 cursor-pointer transition'
-      onMouseDown={handleMouseDown}
-      ref={node}
-    >
-      <div className='absolute top-1/2 h-1 w-full -translate-y-1/2 rounded-full bg-primary-200 dark:bg-primary-700' />
-      <div
-        className='absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-accent-500'
-        style={{ width: `${(value / (steps - 1)) * 100}%` }}
-      />
+    <div className='⁂-step-slider' onMouseDown={handleMouseDown} ref={node}>
+      <div className='⁂-step-slider__track' />
+      <div className='⁂-step-slider__fill' style={{ width: `${(value / (steps - 1)) * 100}%` }} />
       {[...Array(steps).fill(undefined)].map((_, step) => (
         <span
           key={step}
-          className='absolute top-1/2 z-10 h-3 w-1 -translate-y-1/2 bg-accent-300'
+          className='⁂-step-slider__step'
           style={{ left: `${(step / (steps - 1)) * 100}%` }}
         />
       ))}
       <span
         id={id}
-        className='absolute top-1/2 z-10 -ml-1.5 size-3 -translate-y-1/2 rounded-full bg-accent-500 shadow transition-[left] duration-100 ease-in-out'
+        className='⁂-step-slider__thumb'
         tabIndex={0}
         role='slider'
         aria-valuemin={0}

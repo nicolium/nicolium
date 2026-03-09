@@ -1232,3 +1232,53 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     background-color: rgb(var(--color-secondary-500));
   }
 }
+
+.⁂-slider {
+  position: relative;
+  display: inline-flex;
+  height: 1.5rem;
+  cursor: pointer;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &__track {
+    @apply absolute top-1/2 h-1 w-full -translate-y-1/2 rounded-full bg-primary-200 dark:bg-primary-700;
+  }
+
+  &__fill {
+    @apply absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-accent-500 transition-[width] duration-0 ease-in-out;
+  }
+
+  &__thumb {
+    @apply absolute top-1/2 z-10 -ml-1.5 size-3 -translate-y-1/2 rounded-full bg-accent-500 shadow transition-[left] duration-0 ease-in-out;
+  }
+
+  &--animate {
+    .⁂-slider__fill {
+      @apply duration-150;
+    }
+  }
+}
+
+.⁂-step-slider {
+  position: relative;
+  display: inline-flex;
+  height: 1.5rem;
+  cursor: pointer;
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  &__track {
+    @apply absolute top-1/2 h-1 w-full -translate-y-1/2 rounded-full bg-primary-200 dark:bg-primary-700;
+  }
+
+  &__fill {
+    @apply absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-accent-500;
+  }
+
+  &__step {
+    @apply absolute top-1/2 z-10 h-3 w-1 -translate-y-1/2 bg-accent-300;
+  }
+
+  &__thumb {
+    @apply absolute top-1/2 z-10 -ml-1.5 size-3 -translate-y-1/2 rounded-full bg-accent-500 shadow transition-[left] duration-100 ease-in-out;
+  }
+}

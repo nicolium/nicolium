@@ -139,24 +139,15 @@ const Slider: React.FC<ISlider> = ({
 
   return (
     <div
-      className='relative inline-flex h-6 cursor-pointer transition'
+      className={clsx('⁂-slider', animateKeyboardInput && '⁂-slider--animate')}
       onMouseDown={handleMouseDown}
       ref={node}
     >
-      <div className='absolute top-1/2 h-1 w-full -translate-y-1/2 rounded-full bg-primary-200 dark:bg-primary-700' />
-      <div
-        className={clsx(
-          'absolute top-1/2 h-1 -translate-y-1/2 rounded-full bg-accent-500 transition-[width] ease-in-out',
-          animateKeyboardInput ? 'duration-150' : 'duration-0',
-        )}
-        style={{ width: `${value * 100}%` }}
-      />
+      <div className='⁂-slider__track' />
+      <div className='⁂-slider__fill' style={{ width: `${value * 100}%` }} />
       <span
         id={id}
-        className={clsx(
-          'absolute top-1/2 z-10 -ml-1.5 size-3 -translate-y-1/2 rounded-full bg-accent-500 shadow transition-[left] ease-in-out',
-          animateKeyboardInput ? 'duration-150' : 'duration-0',
-        )}
+        className='⁂-slider__thumb'
         tabIndex={0}
         style={{ left: `${value * 100}%` }}
         role='slider'
