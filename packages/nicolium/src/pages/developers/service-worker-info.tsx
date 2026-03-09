@@ -5,7 +5,6 @@ import List, { ListItem } from '@/components/list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import FormActions from '@/components/ui/form-actions';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Indicator from '@/components/ui/indicator';
 import Stack from '@/components/ui/stack';
@@ -88,12 +87,12 @@ const ServiceWorkerInfo: React.FC = () => {
       <Stack space={4}>
         <List>
           <ListItem label={intl.formatMessage(messages.status)}>
-            <HStack alignItems='center' space={2}>
+            <div className='flex items-center gap-2'>
               <Indicator state={getState()} />
               <Text size='md' theme='muted'>
                 {getMessage()}
               </Text>
-            </HStack>
+            </div>
           </ListItem>
 
           {url && (

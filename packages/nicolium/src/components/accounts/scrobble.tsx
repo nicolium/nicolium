@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import React, { useMemo, useRef } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 
@@ -41,7 +40,7 @@ const Scrobble: React.FC<IScrobble> = ({ scrobble }) => {
   if (!isRecent) return null;
 
   return (
-    <HStack alignItems='center' space={0.5}>
+    <div className='flex items-center gap-0.5'>
       <Icon
         src={require('@phosphor-icons/core/regular/music-notes-simple.svg')}
         className='size-4 text-gray-800 dark:text-gray-200'
@@ -78,7 +77,7 @@ const Scrobble: React.FC<IScrobble> = ({ scrobble }) => {
           />
         </Text>
       </div>
-    </HStack>
+    </div>
   );
 };
 

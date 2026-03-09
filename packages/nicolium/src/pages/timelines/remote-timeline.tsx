@@ -4,7 +4,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { PublicTimelineColumn } from '@/columns/timeline';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
 import PinnedHostsPicker from '@/features/remote-timeline/components/pinned-hosts-picker';
@@ -35,7 +34,7 @@ const RemoteTimelinePage: React.FC = () => {
       {instance && <PinnedHostsPicker host={instance} />}
 
       {!pinned && (
-        <HStack className='mb-4 px-2' space={2}>
+        <div className='mb-4 flex gap-2 px-2'>
           <IconButton
             className='text-gray-400 hover:text-gray-600'
             iconClassName='h-5 w-5'
@@ -50,7 +49,7 @@ const RemoteTimelinePage: React.FC = () => {
               values={{ instance }}
             />
           </Text>
-        </HStack>
+        </div>
       )}
 
       <PublicTimelineColumn

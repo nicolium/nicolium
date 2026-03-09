@@ -7,7 +7,6 @@ import EventPreview from '@/components/statuses/event-preview';
 import Button from '@/components/ui/button';
 import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import PlaceholderEventPreview from '@/features/placeholder/components/placeholder-event-preview';
 import { useStatus } from '@/queries/statuses/use-status';
@@ -109,14 +108,14 @@ const EventsPage = () => {
 
   return (
     <Column label={intl.formatMessage(messages.title)}>
-      <HStack className='mb-2' space={2} justifyContent='between'>
+      <div className='mb-2 flex justify-between gap-2'>
         <CardTitle
           title={<FormattedMessage id='events.recent_events' defaultMessage='Recent events' />}
         />
         <Button className='ml-auto xl:hidden' theme='primary' size='sm' to='/events/new'>
           <FormattedMessage id='events.create_event' defaultMessage='Create event' />
         </Button>
-      </HStack>
+      </div>
       <CardBody className='mb-2'>
         <EventCarousel
           statusIds={recentEvents}

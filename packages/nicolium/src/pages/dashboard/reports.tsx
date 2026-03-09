@@ -4,7 +4,6 @@ import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-
 
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
 import Report from '@/features/admin/components/report';
@@ -46,11 +45,7 @@ const Reports: React.FC = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       {(accountId ?? targetAccountId) && (
-        <HStack
-          className='border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800'
-          alignItems='center'
-          space={2}
-        >
+        <div className='flex items-center gap-2 border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800'>
           <IconButton
             iconClassName='h-5 w-5'
             src={require('@phosphor-icons/core/regular/x.svg')}
@@ -91,7 +86,7 @@ const Reports: React.FC = () => {
               }}
             />
           </Text>
-        </HStack>
+        </div>
       )}
       <ScrollableList
         scrollKey='adminReports'

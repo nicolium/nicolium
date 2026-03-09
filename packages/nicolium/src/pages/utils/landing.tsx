@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import Button from '@/components/ui/button';
 import Card, { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import LinkFooter from '@/features/ui/components/link-footer';
@@ -25,14 +24,14 @@ const LandingPage = () => (
             defaultMessage='Nicolium is a feature-rich Fediverse web client.'
           />
         </Text>
-        <HStack justifyContent='end' space={4}>
+        <div className='flex justify-end gap-4'>
           <Button href={sourceCode.url}>
             <FormattedMessage id='landing.source_code' defaultMessage='Source code' />
           </Button>
           <Button to='/login/external' theme='primary'>
             <FormattedMessage id='landing.sign_in' defaultMessage='Sign in' />
           </Button>
-        </HStack>
+        </div>
         <Card variant='rounded'>
           <CardTitle
             title={

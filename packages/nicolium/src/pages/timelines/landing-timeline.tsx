@@ -7,7 +7,6 @@ import Markup from '@/components/markup';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import { useInstance } from '@/hooks/use-instance';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
@@ -64,7 +63,7 @@ const LandingTimelinePage = () => {
         <SiteBanner />
       </div>
 
-      <HStack className='mb-4 lg:hidden' justifyContent='end' space={4}>
+      <div className='mb-4 flex justify-end gap-4 lg:hidden'>
         <Button theme='tertiary' to='/login'>
           <FormattedMessage id='account.login' defaultMessage='Log in' />
         </Button>
@@ -73,7 +72,7 @@ const LandingTimelinePage = () => {
             <FormattedMessage id='account.register' defaultMessage='Sign up' />
           </Button>
         )}
-      </HStack>
+      </div>
 
       {timelineEnabled && !isError ? (
         <PublicTimelineColumn

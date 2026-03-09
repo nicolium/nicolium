@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import React from 'react';
 
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
 import { useAccounts } from '@/queries/accounts/use-accounts';
 
 interface IAvatarStack {
@@ -14,7 +13,7 @@ const AvatarStack: React.FC<IAvatarStack> = ({ accountIds, limit = 3 }) => {
   const { data: accounts } = useAccounts(accountIds.slice(0, limit));
 
   return (
-    <HStack className='relative' aria-hidden>
+    <div className='relative flex' aria-hidden>
       {accounts.map((account, i) => (
         <div
           className={clsx('relative', { '-ml-3': i !== 0 })}
@@ -31,7 +30,7 @@ const AvatarStack: React.FC<IAvatarStack> = ({ accountIds, limit = 3 }) => {
           />
         </div>
       ))}
-    </HStack>
+    </div>
   );
 };
 

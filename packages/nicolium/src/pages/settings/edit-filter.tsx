@@ -9,7 +9,6 @@ import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
-import HStack from '@/components/ui/hstack';
 import Input from '@/components/ui/input';
 import Select from '@/components/ui/select';
 import Stack from '@/components/ui/stack';
@@ -64,7 +63,7 @@ const FilterField: StreamfieldComponent<IFilterField> = ({ value, onChange }) =>
     };
 
   return (
-    <HStack space={2} grow>
+    <div className='flex flex-grow gap-2'>
       <Input
         type='text'
         outerClassName='w-2/5 grow'
@@ -72,14 +71,14 @@ const FilterField: StreamfieldComponent<IFilterField> = ({ value, onChange }) =>
         onChange={handleChange('keyword')}
         placeholder={intl.formatMessage(messages.keyword)}
       />
-      <HStack alignItems='center' space={2}>
+      <div className='flex items-center gap-2'>
         <Toggle checked={value.whole_word} onChange={handleChange('whole_word')} />
 
         <Text tag='span' theme='muted'>
           <FormattedMessage id='column.filters.whole_word' defaultMessage='Whole word' />
         </Text>
-      </HStack>
-    </HStack>
+      </div>
+    </div>
   );
 };
 

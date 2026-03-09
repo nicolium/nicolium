@@ -5,7 +5,6 @@ import Button from '@/components/ui/button';
 import Card from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import FormActions from '@/components/ui/form-actions';
-import HStack from '@/components/ui/hstack';
 import Spinner from '@/components/ui/spinner';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
@@ -51,7 +50,7 @@ const Backup: React.FC<IBackup> = ({ backup }) => {
             />
           </Text>
         </Stack>
-        <HStack justifyContent='end'>
+        <div className='flex justify-end'>
           {backup.processed ? (
             <a href={backup.url} target='_blank'>
               {button}
@@ -59,7 +58,7 @@ const Backup: React.FC<IBackup> = ({ backup }) => {
           ) : (
             button
           )}
-        </HStack>
+        </div>
       </Stack>
     </div>
   );

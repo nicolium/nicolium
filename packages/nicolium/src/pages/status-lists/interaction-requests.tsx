@@ -11,7 +11,6 @@ import ScrollableList from '@/components/scrollable-list';
 import StatusContent from '@/components/statuses/status-content';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import AccountContainer from '@/containers/account-container';
@@ -188,7 +187,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
   });
 
   const actions = (
-    <HStack space={2}>
+    <div className='flex gap-2'>
       <Button
         theme='secondary'
         size='sm'
@@ -205,7 +204,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
           handleReject();
         }}
       />
-    </HStack>
+    </div>
   );
 
   const handleMoveUp = () => {
@@ -230,7 +229,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
       <div className='focusable p-4'>
         <Stack space={2}>
           <div>
-            <HStack alignItems='center' space={3}>
+            <div className='flex items-center gap-3'>
               <div className='flex justify-end' style={{ flexBasis: avatarSize }}>
                 <Icon
                   src={icons[interactionRequest.type]}
@@ -256,7 +255,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
                   </Text>
                 </div>
               )}
-            </HStack>
+            </div>
           </div>
 
           {interactionRequest.status_id && (

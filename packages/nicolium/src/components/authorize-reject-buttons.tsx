@@ -2,7 +2,6 @@ import clsx from 'clsx';
 import React, { useEffect, useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
 
@@ -127,7 +126,7 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({
       );
     default:
       return (
-        <HStack space={3} alignItems='center'>
+        <div className='flex items-center gap-3'>
           <AuthorizeRejectButton
             theme='danger'
             icon={require('@phosphor-icons/core/regular/x.svg')}
@@ -146,7 +145,7 @@ const AuthorizeRejectButtons: React.FC<IAuthorizeRejectButtons> = ({
             style={renderStyle('authorizing')}
             title={intl.formatMessage(messages.authorize)}
           />
-        </HStack>
+        </div>
       );
   }
 };

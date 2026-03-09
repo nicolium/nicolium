@@ -4,7 +4,6 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useRules } from '@/queries/admin/use-rules';
@@ -67,14 +66,14 @@ const Rule: React.FC<IRule> = ({ rule }) => {
             {rule.priority}
           </Text>
         )}
-        <HStack justifyContent='end' space={2}>
+        <div className='flex justify-end gap-2'>
           <Button theme='primary' onClick={handleEditRule(rule)}>
             <FormattedMessage id='admin.rules.edit' defaultMessage='Edit' />
           </Button>
           <Button theme='primary' onClick={handleDeleteRule(rule.id)}>
             <FormattedMessage id='admin.rules.delete' defaultMessage='Delete' />
           </Button>
-        </HStack>
+        </div>
       </Stack>
     </div>
   );

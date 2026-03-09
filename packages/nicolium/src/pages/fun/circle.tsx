@@ -249,7 +249,7 @@ const CirclePage: React.FC = () => {
             <Stack space={2}>
               {users?.map((user) => (
                 <Link key={user.id} to='/@{$username}' params={{ username: user.acct }}>
-                  <HStack space={2} alignItems='center'>
+                  <div className='flex items-center gap-2'>
                     <Avatar
                       size={20}
                       src={user.avatar!}
@@ -259,7 +259,7 @@ const CirclePage: React.FC = () => {
                     <Text size='sm' weight='semibold' truncate>
                       {user.acct}
                     </Text>
-                  </HStack>
+                  </div>
                 </Link>
               ))}
             </Stack>

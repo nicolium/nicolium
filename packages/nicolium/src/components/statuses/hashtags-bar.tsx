@@ -3,7 +3,6 @@ import { Link } from '@tanstack/react-router';
 import React, { useCallback, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import HStack from '../ui/hstack';
 import Text from '../ui/text';
 
 // Fit on a single line on desktop
@@ -28,7 +27,7 @@ const HashtagsBar: React.FC<IHashtagsBar> = ({ hashtags }) => {
   const revealedHashtags = expanded ? hashtags : hashtags.slice(0, VISIBLE_HASHTAGS);
 
   return (
-    <HStack space={2} wrap>
+    <div className='flex flex-wrap gap-2'>
       {revealedHashtags.map((hashtag) => (
         <Link
           key={hashtag}
@@ -56,7 +55,7 @@ const HashtagsBar: React.FC<IHashtagsBar> = ({ hashtags }) => {
           </Text>
         </button>
       )}
-    </HStack>
+    </div>
   );
 };
 

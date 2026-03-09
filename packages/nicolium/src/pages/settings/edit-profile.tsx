@@ -12,7 +12,6 @@ import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
-import HStack from '@/components/ui/hstack';
 import Input from '@/components/ui/input';
 import Streamfield from '@/components/ui/streamfield';
 import Textarea from '@/components/ui/textarea';
@@ -230,7 +229,7 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
     };
 
   return (
-    <HStack space={2} grow>
+    <div className='flex flex-grow gap-2'>
       <Input
         type='text'
         outerClassName='w-2/5 grow'
@@ -265,7 +264,7 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
           if (field) field.draggable = true;
         }}
       />
-    </HStack>
+    </div>
   );
 };
 

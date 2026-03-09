@@ -6,7 +6,6 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import SearchColumn from '@/columns/search';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
 import SvgIcon from '@/components/ui/svg-icon';
@@ -193,11 +192,7 @@ const SearchResults = () => {
   return (
     <>
       {accountId ? (
-        <HStack
-          className='border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800'
-          alignItems='center'
-          space={2}
-        >
+        <div className='flex items-center gap-2 border-b border-solid border-gray-200 p-2 pb-4 dark:border-gray-800'>
           <IconButton
             className='text-gray-400 hover:text-gray-600'
             iconClassName='h-5 w-5'
@@ -212,7 +207,7 @@ const SearchResults = () => {
               values={{ acct: <strong className='break-words'>{account?.acct}</strong> }}
             />
           </Text>
-        </HStack>
+        </div>
       ) : (
         renderFilterBar()
       )}
