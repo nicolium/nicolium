@@ -280,6 +280,9 @@
   overflow: hidden;
   background-image: linear-gradient(to right, rgb(var(--color-gradient-start) / 0.1), rgb(var(--color-gradient-end) / 0.1));
 
+  [dir="rtl"] & {
+    flex-direction: row-reverse;
+  }
 
   &--md {
     padding: 0.5rem 1rem;
@@ -332,8 +335,15 @@
   }
 
   &__body {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
     overflow: hidden;
     color: rgb(var(--color-gray-700));
+
+    [dir="rtl"] & {
+      flex-direction: row-reverse;
+    }
 
     .dark & {
       color: rgb(var(--color-gray-600));

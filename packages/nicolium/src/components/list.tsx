@@ -2,7 +2,6 @@ import { Link, type LinkOptions } from '@tanstack/react-router';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Select from '@/components/ui/select';
 import { SelectDropdown } from '@/features/forms';
@@ -103,11 +102,11 @@ const ListItem: React.FC<IListItem> = ({
       </div>
 
       {'to' in rest || href || onClick ? (
-        <HStack space={1} alignItems='center' className='⁂-list-item__body'>
+        <div className='⁂-list-item__body'>
           {children}
 
           <Icon src={require('@phosphor-icons/core/regular/caret-right.svg')} aria-hidden />
-        </HStack>
+        </div>
       ) : null}
 
       {!('to' in rest) && typeof onClick === 'undefined' ? renderChildren() : null}
