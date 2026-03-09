@@ -32,11 +32,6 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'pnpm'
 
-    - name: Setup Python
-      uses: actions/setup-python@v5
-      with:
-        python-version: 3.x
-
     - name: Install deps
       working-directory: .
       run: pnpm install
@@ -91,13 +86,14 @@ jobs:
       working-directory: ./packages/pl-api
       run: cp docs ../nicolium/dist/pl-api-docs -r
 
-    - name: Build documentation
+    - name: Create docs redirect
       working-directory: .
-      run: pip install mkdocs-material mkdocs-include-markdown-plugin && mkdocs build
-
-    - name: Copy documentation
-      working-directory: .
-      run: cp site ./packages/nicolium/dist/docs -r
+      run: |
+        mkdir -p ./packages/nicolium/dist/docs
+        cat > ./packages/nicolium/dist/docs/index.html << 'EOF'
+        <!doctype html>
+        <html lang="en"><head><meta http-equiv="refresh" content="0; url=https://nicolium.app/docs" /><title>Redirecting…</title><script>window.location.replace('https://nicolium.app/docs');</script></head><body><p>Redirecting to <a href="https://nicolium.app/docs">https://nicolium.app/docs</a>…</p></body></html>
+        EOF
 
     - name: Upload Github Pages artifact
       uses: actions/upload-pages-artifact@v3
