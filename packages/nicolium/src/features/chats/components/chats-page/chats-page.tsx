@@ -5,6 +5,7 @@ import React, { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Stack from '@/components/ui/stack';
 import { chatsEmptyRoute } from '@/features/ui/router';
 import { useChats } from '@/queries/chats';
+import { useShoutboxIsLoading } from '@/stores/shoutbox';
 
 import ChatsPageSidebar from './components/chats-page-sidebar';
 
@@ -12,9 +13,11 @@ const ChatsPage: React.FC = () => {
   const {
     chatsQuery: { data: chats },
   } = useChats();
+  const showShoutbox = !useShoutboxIsLoading();
 
   const isSidebarHidden =
-    !useMatch({ from: chatsEmptyRoute.id, shouldThrow: false }) || chats?.length === 0;
+    !useMatch({ from: chatsEmptyRoute.id, shouldThrow: false }) ||
+    (chats?.length === 0 && !showShoutbox);
 
   const containerRef = useRef<HTMLDivElement>(null);
   const [height, setHeight] = useState<string | number>('100%');
