@@ -419,6 +419,10 @@
     .⁂-toggle__knob {
       width: 1.125rem;
       height: 1.125rem;
+
+      [dir='rtl'] & {
+        transform: translateX(0.875rem);
+      }
     }
 
     .⁂-toggle__knob--radio {
@@ -433,6 +437,10 @@
     .⁂-toggle__knob {
       width: 1.5rem;
       height: 1.5rem;
+
+      [dir='rtl'] & {
+        transform: translateX(1rem);
+      }
     }
 
     .⁂-toggle__knob--radio {
@@ -445,7 +453,7 @@
     transform: translateX(0.875rem);
 
     [dir='rtl'] & {
-      transform: translateX(-0.875rem);
+      transform: translateX(-0);
     }
   }
 
@@ -453,7 +461,7 @@
     transform: translateX(1rem);
 
     [dir='rtl'] & {
-      transform: translateX(-1rem);
+      transform: translateX(0);
     }
   }
 
