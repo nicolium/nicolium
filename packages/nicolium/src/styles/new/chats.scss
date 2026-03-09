@@ -183,6 +183,10 @@
 .⁂-chat-list-item {
   @apply flex w-full flex-col rounded-lg px-2 py-3 hover:bg-gray-100 focus:shadow-inset-ring dark:hover:bg-gray-800;
 
+  &:focus {
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 10%);
+  }
+
   > div {
     @apply flex items-center justify-between gap-2 w-full;
   }
@@ -216,14 +220,14 @@
 
   &__message {
     @include mixins.text($theme: muted, $size: sm, $align: left, $truncate: true);
-    @apply truncate-child pointer-events-none h-5 w-full;
+    @apply pointer-events-none h-5 w-full;
+
+    > * {
+      @apply truncate;
+    }
 
     &--unread {
       @apply text-gray-900 dark:text-gray-100;
-    }
-
-    &:not(&--blocking) > * {
-      @apply truncate;
     }
 
     &__author {
