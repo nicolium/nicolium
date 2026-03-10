@@ -28,7 +28,7 @@
     }
 
     &:hover,
-    &:focus {
+    &:focus-within {
       .⁂-drive-file__button {
         opacity: 1;
       }

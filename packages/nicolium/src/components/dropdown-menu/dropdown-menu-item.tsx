@@ -88,9 +88,11 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
     }
   };
 
-  const handleItemKeyPress: React.EventHandler<React.KeyboardEvent> = (event) => {
+  const handleItemKeyDown: React.KeyboardEventHandler<HTMLAnchorElement> = (event) => {
     if (event.key === 'Enter' || event.key === ' ') {
       handleClick(event);
+      event.preventDefault();
+      event.stopPropagation();
     }
   };
 
@@ -132,7 +134,7 @@ const DropdownMenuItem = ({ index, item, onClick, autoFocus, onSetTab }: IDropdo
         data-index={index}
         onClick={handleClick}
         onAuxClick={handleAuxClick}
-        onKeyPress={handleItemKeyPress}
+        onKeyDown={handleItemKeyDown}
         target={typeof item.target === 'string' ? item.target : '_blank'}
         title={item.text}
         className={clsx(

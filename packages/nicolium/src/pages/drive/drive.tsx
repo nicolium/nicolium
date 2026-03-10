@@ -2,7 +2,7 @@ import defaultIcon from '@phosphor-icons/core/regular/paperclip.svg';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { clsx } from 'clsx';
 import { mediaAttachmentSchema, type DriveFile, type DriveFolder } from 'pl-api';
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
@@ -126,6 +126,7 @@ const messages = defineMessages({
     defaultMessage: 'Folder created successfully.',
   },
   newFolderError: { id: 'drive.folder.new.error', defaultMessage: 'Failed to create folder.' },
+  home: { id: 'drive.breadcrumbs.home', defaultMessage: 'Home' },
 });
 
 interface IBreadcrumbs {
@@ -136,6 +137,7 @@ interface IBreadcrumbs {
 
 const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) => {
   const { data } = useDriveFolderQuery(folderId);
+  const intl = useIntl();
 
   if (!folderId) {
     const label = depth === 0 && (
@@ -152,8 +154,10 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
           })}
           onClick={() => onClick?.()}
           disabled={depth === 0}
+          aria-label={intl.formatMessage(messages.home)}
+          title={intl.formatMessage(messages.home)}
         >
-          <Icon src={require('@phosphor-icons/core/regular/house.svg')} />
+          <Icon src={require('@phosphor-icons/core/regular/house.svg')} aria-hidden />
           {label}
         </button>
       );
@@ -163,8 +167,10 @@ const Breadcrumbs: React.FC<IBreadcrumbs> = ({ folderId, depth = 0, onClick }) =
           to='/drive/{-$folderId}'
           params={{ folderId: undefined }}
           className='⁂-drive-breadcrumbs__home'
+          aria-label={intl.formatMessage(messages.home)}
+          title={intl.formatMessage(messages.home)}
         >
-          <Icon src={require('@phosphor-icons/core/regular/house.svg')} />
+          <Icon src={require('@phosphor-icons/core/regular/house.svg')} aria-hidden />
           {label}
         </Link>
       );
@@ -231,6 +237,7 @@ interface IFile {
 
 const File: React.FC<IFile> = ({ file }) => {
   const intl = useIntl();
+  const fileRef = useRef<HTMLDivElement | null>(null);
 
   const { openModal } = useModalsActions();
   const { mutate: updateFile } = useUpdateDriveFileMutation(file.id);
@@ -264,6 +271,23 @@ const File: React.FC<IFile> = ({ file }) => {
       media: [mediaAttachment],
       index: 0,
     });
+  };
+
+  const handleFileKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
+    switch (e.key) {
+      case 'Enter':
+      case ' ':
+        handleView();
+        e.preventDefault();
+        e.stopPropagation();
+    }
+  };
+
+  const handleContextMenu: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    fileRef.current?.querySelector('button')?.click();
   };
 
   const items = useMemo(() => {
@@ -442,7 +466,14 @@ const File: React.FC<IFile> = ({ file }) => {
   }, [file]);
 
   return (
-    <div className='⁂-drive-file' tabIndex={0} onDoubleClick={handleView}>
+    <div
+      ref={fileRef}
+      className='⁂-drive-file'
+      tabIndex={0}
+      onDoubleClick={handleView}
+      onKeyDown={handleFileKeyDown}
+      onContextMenu={handleContextMenu}
+    >
       <div className='⁂-drive-file__button'>
         <DropdownMenu items={items} placement='right-start'>
           <IconButton
@@ -474,6 +505,7 @@ interface IFolder {
 const Folder: React.FC<IFolder> = ({ folder }) => {
   const navigate = useNavigate();
   const intl = useIntl();
+  const folderRef = useRef<HTMLDivElement | null>(null);
 
   const { openModal } = useModalsActions();
   const { mutate: deleteFolder } = useDeleteDriveFolderMutation(folder.id!);
@@ -482,6 +514,22 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
 
   const handleEnterFolder = () => {
     navigate({ to: '/drive/{-$folderId}', params: { folderId: folder.id ?? undefined } });
+  };
+
+  const handleFolderKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
+    switch (e.key) {
+      case 'Enter':
+        handleEnterFolder();
+        e.preventDefault();
+        e.stopPropagation();
+    }
+  };
+
+  const handleContextMenu: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    folderRef.current?.querySelector('button')?.click();
   };
 
   const items: Menu = useMemo(() => {
@@ -575,7 +623,14 @@ const Folder: React.FC<IFolder> = ({ folder }) => {
   }, [folder]);
 
   return (
-    <div className='⁂-drive-file ⁂-drive-folder' tabIndex={0} onDoubleClick={handleEnterFolder}>
+    <div
+      className='⁂-drive-file ⁂-drive-folder'
+      ref={folderRef}
+      tabIndex={0}
+      onDoubleClick={handleEnterFolder}
+      onKeyDown={handleFolderKeyDown}
+      onContextMenu={handleContextMenu}
+    >
       <div className='⁂-drive-file__button'>
         <DropdownMenu items={items} placement='right-start'>
           <IconButton
