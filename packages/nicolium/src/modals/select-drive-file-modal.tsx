@@ -43,7 +43,7 @@ const Folder: React.FC<IFolder> = ({ folder, active, disabled, onSelect, onDoubl
         '⁂-drive-file--active': active,
         '⁂-drive-file--disabled': disabled,
       })}
-      tabIndex={0}
+      tabIndex={disabled ? -1 : 0}
       onDoubleClick={disabled ? undefined : () => onDoubleClick?.(folder)}
       onClick={disabled ? undefined : () => onSelect?.(folder)}
       disabled={disabled}
@@ -74,7 +74,7 @@ const File: React.FC<IFile> = ({ file, active, disabled, onSelect }) => {
         '⁂-drive-file--active': active,
         '⁂-drive-file--disabled': disabled,
       })}
-      tabIndex={0}
+      tabIndex={disabled ? -1 : 0}
       onClick={disabled ? undefined : () => onSelect?.(file)}
       disabled={disabled}
     >
