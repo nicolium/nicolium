@@ -10,51 +10,7 @@ import { filterBadges, getTagDiff } from '@/utils/badges';
 import type { AppDispatch, RootState } from '@/store';
 import type { PleromaConfig } from 'pl-api';
 
-const ADMIN_CONFIG_FETCH_SUCCESS = 'ADMIN_CONFIG_FETCH_SUCCESS' as const;
-
-const ADMIN_CONFIG_UPDATE_REQUEST = 'ADMIN_CONFIG_UPDATE_REQUEST' as const;
 const ADMIN_CONFIG_UPDATE_SUCCESS = 'ADMIN_CONFIG_UPDATE_SUCCESS' as const;
-
-const fetchConfig = () => (dispatch: AppDispatch, getState: () => RootState) =>
-  getClient(getState)
-    .admin.config.getPleromaConfig()
-    .then((data) => {
-      dispatch<AdminActions>({
-        type: ADMIN_CONFIG_FETCH_SUCCESS,
-        configs: data.configs,
-        needsReboot: data.need_reboot,
-      });
-    });
-
-const updateConfig =
-  (configs: PleromaConfig['configs']) => (dispatch: AppDispatch, getState: () => RootState) => {
-    dispatch<AdminActions>({ type: ADMIN_CONFIG_UPDATE_REQUEST, configs });
-    return getClient(getState)
-      .admin.config.updatePleromaConfig(configs)
-      .then((data) => {
-        dispatch<AdminActions>({
-          type: ADMIN_CONFIG_UPDATE_SUCCESS,
-          configs: data.configs,
-          needsReboot: data.need_reboot,
-        });
-      });
-  };
-
-const updateFrontendConfig = (data: Record<string, any>) => (dispatch: AppDispatch) => {
-  const params = [
-    {
-      group: ':pleroma',
-      key: ':frontend_configurations',
-      value: [
-        {
-          tuple: [':nicolium', data],
-        },
-      ],
-    },
-  ];
-
-  return dispatch(updateConfig(params));
-};
 
 const deactivateUser =
   (accountId: string, report_id?: string) => (dispatch: AppDispatch, getState: () => RootState) => {
@@ -150,26 +106,14 @@ const redactStatus = (statusId: string) => (dispatch: AppDispatch, getState: () 
     });
 };
 
-type AdminActions =
-  | {
-      type: typeof ADMIN_CONFIG_FETCH_SUCCESS;
-      configs: PleromaConfig['configs'];
-      needsReboot: boolean;
-    }
-  | { type: typeof ADMIN_CONFIG_UPDATE_REQUEST; configs: PleromaConfig['configs'] }
-  | {
-      type: typeof ADMIN_CONFIG_UPDATE_SUCCESS;
-      configs: PleromaConfig['configs'];
-      needsReboot: boolean;
-    };
+type AdminActions = {
+  type: typeof ADMIN_CONFIG_UPDATE_SUCCESS;
+  configs: PleromaConfig['configs'];
+  needsReboot: boolean;
+};
 
 export {
-  ADMIN_CONFIG_FETCH_SUCCESS,
-  ADMIN_CONFIG_UPDATE_REQUEST,
   ADMIN_CONFIG_UPDATE_SUCCESS,
-  fetchConfig,
-  updateConfig,
-  updateFrontendConfig,
   deactivateUser,
   deleteUser,
   deleteStatus,

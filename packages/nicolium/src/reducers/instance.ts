@@ -2,11 +2,7 @@ import { create } from 'mutative';
 import { type Instance, instanceSchema, type PleromaConfig } from 'pl-api';
 import * as v from 'valibot';
 
-import {
-  ADMIN_CONFIG_UPDATE_REQUEST,
-  ADMIN_CONFIG_UPDATE_SUCCESS,
-  type AdminActions,
-} from '@/actions/admin';
+import { ADMIN_CONFIG_UPDATE_SUCCESS, type AdminActions } from '@/actions/admin';
 import {
   INSTANCE_FETCH_FAIL,
   INSTANCE_FETCH_SUCCESS,
@@ -105,7 +101,6 @@ const instance = (
       return { fetched: true, ...action.instance };
     case INSTANCE_FETCH_FAIL:
       return handleInstanceFetchFail(state, action.error);
-    case ADMIN_CONFIG_UPDATE_REQUEST:
     case ADMIN_CONFIG_UPDATE_SUCCESS:
       return create(state, (draft) => importConfigs(draft, action.configs));
     default:

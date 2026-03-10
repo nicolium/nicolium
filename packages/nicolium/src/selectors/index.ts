@@ -1,35 +1,36 @@
-import { createSelector } from 'reselect';
+import { useQueryClient } from '@tanstack/react-query';
 
-import { getAccounts } from '@/queries/accounts/selectors';
+import { useInstance } from '@/hooks/use-instance';
+import { useAdminConfig } from '@/queries/admin/use-config';
+import { queryKeys } from '@/queries/keys';
 import { getDomain } from '@/utils/accounts';
 import ConfigDB from '@/utils/config-db';
-import { regexFromFilters } from '@/utils/filters';
 
 import type { MRFSimple } from '@/schemas/pleroma';
-import type { RootState } from '@/store';
-
-const getSimplePolicy = createSelector(
-  [
-    (state: RootState) => state.admin.configs,
-    (state: RootState) => state.instance.pleroma.metadata.federation.mrf_simple_info,
-  ],
-  (configs, instancePolicy): MRFSimple => ({
-    ...instancePolicy,
-    ...ConfigDB.toSimplePolicy(configs),
-  }),
-);
-
-const getRemoteInstanceFavicon = (_state: RootState, host: string) => {
-  const account = getAccounts().find((item) => item && getDomain(item) === host);
-  return account?.favicon ?? null;
-};
+import type { Account } from 'pl-api';
 
 type HostFederation = {
   [key in keyof MRFSimple]: boolean;
 };
 
-const getRemoteInstanceFederation = (state: RootState, host: string): HostFederation => {
-  const simplePolicy = getSimplePolicy(state);
+interface RemoteInstance {
+  host: string;
+  favicon: string | null;
+  federation: HostFederation;
+}
+
+const useSimplePolicy = () => {
+  const { data: config } = useAdminConfig();
+  const simplePolicy = useInstance().pleroma.metadata.federation.mrf_simple_info;
+
+  return {
+    ...simplePolicy,
+    ...ConfigDB.toSimplePolicy(config?.configs || []),
+  };
+};
+
+const useRemoteInstanceFederation = (host: string) => {
+  const simplePolicy = useSimplePolicy();
 
   return Object.fromEntries(
     Object.entries(simplePolicy).map(([key, hosts]) => [
@@ -39,33 +40,37 @@ const getRemoteInstanceFederation = (state: RootState, host: string): HostFedera
   ) as HostFederation;
 };
 
-const makeGetHosts = () =>
-  createSelector([getSimplePolicy], (simplePolicy) => {
-    const { accept, reject_deletes, report_removal, ...rest } = simplePolicy;
+const useRemoteInstanceFavicon = (host: string) => {
+  const queryClient = useQueryClient();
 
-    return [
-      ...new Set(Object.values(rest).reduce((acc, hosts) => (acc.push(...hosts), acc), [])),
-    ].toSorted();
-  });
-
-interface RemoteInstance {
-  host: string;
-  favicon: string | null;
-  federation: HostFederation;
-}
-
-const makeGetRemoteInstance = () =>
-  createSelector(
-    [
-      (_state: RootState, host: string) => host,
-      getRemoteInstanceFavicon,
-      getRemoteInstanceFederation,
-    ],
-    (host, favicon, federation): RemoteInstance => ({
-      host,
-      favicon,
-      federation,
-    }),
+  return (
+    queryClient
+      .getQueriesData<Account>({ queryKey: queryKeys.accounts.root })
+      .map(([, account]) => account)
+      .find(
+        (account): account is Account =>
+          typeof account?.id === 'string' && getDomain(account) === host,
+      )?.favicon ?? null
   );
+};
 
-export { type RemoteInstance, regexFromFilters, makeGetHosts, makeGetRemoteInstance };
+const useRemoteInstance = (host: string) => {
+  const federation = useRemoteInstanceFederation(host);
+  const favicon = useRemoteInstanceFavicon(host);
+
+  return {
+    host,
+    favicon,
+    federation,
+  };
+};
+
+const useHosts = () => {
+  const simplePolicy = useSimplePolicy();
+
+  return [
+    ...new Set(Object.values(simplePolicy).reduce((acc, hosts) => (acc.push(...hosts), acc), [])),
+  ].toSorted();
+};
+
+export { type RemoteInstance, useHosts, useRemoteInstance };

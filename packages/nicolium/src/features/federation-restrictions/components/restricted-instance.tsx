@@ -2,19 +2,16 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 
 import Icon from '@/components/icon';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { makeGetRemoteInstance } from '@/selectors';
+import { useRemoteInstance } from '@/selectors';
 
 import InstanceRestrictions from './instance-restrictions';
-
-const getRemoteInstance = makeGetRemoteInstance();
 
 interface IRestrictedInstance {
   host: string;
 }
 
 const RestrictedInstance: React.FC<IRestrictedInstance> = ({ host }) => {
-  const remoteInstance = useAppSelector((state) => getRemoteInstance(state, host));
+  const remoteInstance = useRemoteInstance(host);
 
   const [expanded, setExpanded] = useState(false);
 

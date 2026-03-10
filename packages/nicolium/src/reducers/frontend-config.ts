@@ -23,7 +23,7 @@ const fallbackState: PartialFrontendConfig = {
 const updateFromAdmin = (state: Record<string, any>, configs: PleromaConfig['configs']) => {
   try {
     return ConfigDB.find(configs, ':pleroma', ':frontend_configurations')!.value.find(
-      (value: Record<string, any>) => value.tuple?.[0] === ':pl_fe',
+      (value: Record<string, any>) => value.tuple?.[0] === ':nicolium',
     ).tuple?.[1];
   } catch {
     return state;
@@ -77,7 +77,7 @@ const frontendConfig = (
     case FRONTEND_CONFIG_REQUEST_FAIL:
       return { ...fallbackState, ...state };
     case ADMIN_CONFIG_UPDATE_SUCCESS:
-      return parseFrontendConfig(updateFromAdmin(state, action.configs ?? [])) || state;
+      return parseFrontendConfig(updateFromAdmin(state, action.configs)) || state;
     default:
       return state;
   }

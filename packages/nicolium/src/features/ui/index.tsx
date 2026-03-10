@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import React, { Suspense, useEffect, useRef } from 'react';
 import { Toaster } from 'react-hot-toast';
 
-import { fetchConfig } from '@/actions/admin';
 import { register as registerPushNotifications } from '@/actions/push-notifications/registerer';
 import { useUserStream } from '@/api/hooks/streaming/use-user-stream';
 import SidebarNavigation from '@/components/navigation/sidebar-navigation';
@@ -17,6 +16,7 @@ import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/hooks/use-instance';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { prefetchFollowRequests } from '@/queries/accounts/use-follow-requests';
+import { useAdminConfig } from '@/queries/admin/use-config';
 import { queryClient } from '@/queries/client';
 import { prefetchCustomEmojis } from '@/queries/instance/use-custom-emojis';
 import { usePrefetchNotificationsMarker } from '@/queries/markers/use-markers';
@@ -26,10 +26,11 @@ import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-stat
 import { useShoutboxSubscription } from '@/stores/shoutbox';
 import { useIsDropdownMenuOpen } from '@/stores/ui';
 import { getVapidKey } from '@/utils/auth';
-import { isStandalone } from '@/utils/state';
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
 import '@/components/statuses/status';
+import { isStandalone } from '@/utils/state';
+
 import {
   ModalRoot,
   AccountHoverCard,
@@ -53,6 +54,7 @@ const UI: React.FC = React.memo(() => {
   const isDropdownMenuOpen = useIsDropdownMenuOpen();
   const standalone = useAppSelector(isStandalone);
 
+  useAdminConfig();
   useShoutboxSubscription();
   useFilters();
   usePrefetchNotifications();
@@ -86,10 +88,6 @@ const UI: React.FC = React.memo(() => {
     if (!account) return;
 
     prefetchCustomEmojis(client);
-
-    if (account.is_admin && features.pleromaAdminAccounts) {
-      dispatch(fetchConfig());
-    }
 
     if (account.locked) {
       requestIdleCallback(() => prefetchFollowRequests(client), { timeout: 2000 });

@@ -3,7 +3,6 @@ import { combineReducers } from '@reduxjs/toolkit';
 import { AUTH_LOGGED_OUT } from '@/actions/auth';
 import * as BuildConfig from '@/build-config';
 
-import admin from './admin';
 import auth from './auth';
 import frontendConfig from './frontend-config';
 import instance from './instance';
@@ -12,7 +11,6 @@ import meta from './meta';
 import pushNotifications from './push-notifications';
 
 const reducers = {
-  admin,
   auth,
   frontendConfig,
   instance,

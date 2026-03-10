@@ -1,10 +1,9 @@
 import React from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
-import { updateConfig } from '@/actions/admin';
 import { RadioGroup, RadioItem } from '@/components/ui/radio';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useInstance } from '@/hooks/use-instance';
+import { useUpdateAdminConfig } from '@/queries/admin/use-config';
 import toast from '@/toast';
 
 import type { Instance } from 'pl-api';
@@ -45,18 +44,18 @@ const modeFromInstance = ({ registrations }: Instance): RegistrationMode => {
 /** Allows changing the registration mode of the instance, eg "open", "closed", "approval" */
 const RegistrationModePicker: React.FC = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const instance = useInstance();
+  const { mutate: updateConfig } = useUpdateAdminConfig();
 
   const mode = modeFromInstance(instance);
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const config = generateConfig(e.target.value as RegistrationMode);
-    dispatch(updateConfig(config))
-      .then(() => {
+    updateConfig(config, {
+      onSuccess: () => {
         toast.success(intl.formatMessage(messages.saved));
-      })
-      .catch(() => {});
+      },
+    });
   };
 
   return (

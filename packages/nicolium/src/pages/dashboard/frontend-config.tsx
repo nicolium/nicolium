@@ -3,7 +3,6 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import * as v from 'valibot';
 
-import { updateFrontendConfig } from '@/actions/admin';
 import { uploadMedia } from '@/actions/media';
 import List, { ListItem } from '@/components/list';
 import Accordion from '@/components/ui/accordion';
@@ -27,6 +26,7 @@ import ThemeSelector from '@/features/ui/components/theme-selector';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
+import { getUpdateFrontendConfigParams, useUpdateAdminConfig } from '@/queries/admin/use-config';
 import {
   cryptoAddressSchema,
   footerItemSchema,
@@ -69,8 +69,9 @@ const FrontendConfigEditor: React.FC = () => {
   const features = useFeatures();
 
   const initialData = useAppSelector((state) => state.frontendConfig);
+  console.log(initialData);
+  const { mutate: updateConfig, isPending } = useUpdateAdminConfig();
 
-  const [isLoading, setLoading] = useState(false);
   const [data, setData] = useState(v.parse(frontendConfigSchema, initialData));
   const [jsonEditorExpanded, setJsonEditorExpanded] = useState(false);
   const [rawJSON, setRawJSON] = useState<string>(JSON.stringify(initialData, null, 2));
@@ -89,15 +90,11 @@ const FrontendConfigEditor: React.FC = () => {
   };
 
   const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
-    dispatch(updateFrontendConfig(data))
-      .then(() => {
-        setLoading(false);
+    updateConfig(getUpdateFrontendConfigParams(data), {
+      onSuccess: () => {
         toast.success(intl.formatMessage(messages.saved));
-      })
-      .catch(() => {
-        setLoading(false);
-      });
-    setLoading(true);
+      },
+    });
     e.preventDefault();
   };
 
@@ -199,7 +196,7 @@ const FrontendConfigEditor: React.FC = () => {
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <Form onSubmit={handleSubmit}>
-        <fieldset className='space-y-6' disabled={isLoading}>
+        <fieldset className='space-y-6' disabled={isPending}>
           <SitePreview frontendConfig={frontendConfig} />
 
           <CardHeader>

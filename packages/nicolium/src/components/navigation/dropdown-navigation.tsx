@@ -149,7 +149,9 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
   const scheduledStatusCount =
     useInfiniteQuery(authenticatedScheduledStatusesCountQueryOptions).data ?? 0;
   const { data: draftCount = 0 } = useDraftStatusesCountQuery();
-  // const dashboardCount = useAppSelector((state) => state.admin.openReports.count() + state.admin.awaitingApproval.count());
+  // const { data: awaitingApprovalCount = 0 } = usePendingUsersCount();
+  // const { data: pendingReportsCount = 0 } = usePendingReportsCount();
+  // const dashboardCount = pendingReportsCount + awaitingApprovalCount;
   const [sidebarVisible, setSidebarVisible] = useState(isSidebarOpen);
   const touchStart = useRef(0);
   const touchEnd = useRef<number | null>(null);

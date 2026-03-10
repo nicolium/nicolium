@@ -2,7 +2,6 @@ import React, { useRef, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import { updateFrontendConfig } from '@/actions/admin';
 import { fetchFrontendConfig } from '@/actions/frontend-config';
 import { getHost } from '@/actions/instance';
 import DropdownMenu from '@/components/dropdown-menu';
@@ -17,6 +16,7 @@ import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { normalizeColors } from '@/hooks/use-theme-css';
+import { getUpdateFrontendConfigParams, useUpdateAdminConfig } from '@/queries/admin/use-config';
 import { frontendConfigSchema } from '@/schemas/frontend-config';
 import toast from '@/toast';
 import { download } from '@/utils/download';
@@ -56,6 +56,7 @@ const ThemeEditorPage: React.FC = () => {
   const frontendConfig = useFrontendConfig();
   const host = useAppSelector((state) => getHost(state));
   const rawConfig = useAppSelector((state) => state.frontendConfig);
+  const { mutate: updateConfig } = useUpdateAdminConfig();
 
   const [colors, setColors] = useState(normalizeColors(frontendConfig));
   const [isDefault, setIsDefault] = useState(false);
@@ -97,14 +98,14 @@ const ThemeEditorPage: React.FC = () => {
     setTheme(normalizeColors(frontendConfig));
   };
 
-  const updateTheme = async () => {
+  const updateTheme = () => {
     let params;
     if (isDefault) {
       params = { ...rawConfig, colors: undefined, brandColor: undefined, accentColor: undefined };
     } else {
       params = { ...rawConfig, colors };
     }
-    await dispatch(updateFrontendConfig(params));
+    return updateConfig(getUpdateFrontendConfigParams(params));
   };
 
   const restoreDefaultTheme = () => {

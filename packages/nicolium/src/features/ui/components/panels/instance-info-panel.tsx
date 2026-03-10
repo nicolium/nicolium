@@ -4,11 +4,8 @@ import { useIntl, defineMessages } from 'react-intl';
 import { pinHost, unpinHost } from '@/actions/remote-timeline';
 import Widget from '@/components/ui/widget';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { makeGetRemoteInstance } from '@/selectors';
+import { useRemoteInstance } from '@/selectors';
 import { useSettings } from '@/stores/settings';
-
-const getRemoteInstance = makeGetRemoteInstance();
 
 const messages = defineMessages({
   pinHost: { id: 'remote_instance.pin_host', defaultMessage: 'Pin {host}' },
@@ -26,7 +23,7 @@ const InstanceInfoPanel: React.FC<IInstanceInfoPanel> = ({ host }) => {
   const dispatch = useAppDispatch();
 
   const settings = useSettings();
-  const remoteInstance = useAppSelector((state) => getRemoteInstance(state, host));
+  const remoteInstance = useRemoteInstance(host);
   const pinned = settings.remote_timeline.pinnedHosts.includes(host);
 
   const handlePinHost = () => {

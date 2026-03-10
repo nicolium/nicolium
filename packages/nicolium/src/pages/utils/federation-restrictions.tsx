@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import ScrollableList from '@/components/scrollable-list';
@@ -7,7 +7,7 @@ import Column from '@/components/ui/column';
 import RestrictedInstance from '@/features/federation-restrictions/components/restricted-instance';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useInstance } from '@/hooks/use-instance';
-import { makeGetHosts } from '@/selectors';
+import { useHosts } from '@/selectors';
 import { federationRestrictionsDisclosed } from '@/utils/state';
 
 const messages = defineMessages({
@@ -27,9 +27,7 @@ const FederationRestrictionsPage = () => {
   const intl = useIntl();
   const instance = useInstance();
 
-  const getHosts = useCallback(makeGetHosts(), []);
-
-  const hosts = useAppSelector((state) => getHosts(state));
+  const hosts = useHosts();
   const disclosed = useAppSelector((state) => federationRestrictionsDisclosed(state));
 
   const [explanationBoxExpanded, setExplanationBoxExpanded] = useState(true);

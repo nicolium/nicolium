@@ -4,12 +4,9 @@ import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 import DropdownMenu from '@/components/dropdown-menu';
 import Widget from '@/components/ui/widget';
 import InstanceRestrictions from '@/features/federation-restrictions/components/instance-restrictions';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { makeGetRemoteInstance } from '@/selectors';
+import { useRemoteInstance } from '@/selectors';
 import { useModalsActions } from '@/stores/modals';
-
-const getRemoteInstance = makeGetRemoteInstance();
 
 const messages = defineMessages({
   editFederation: { id: 'remote_instance.edit_federation', defaultMessage: 'Edit federation' },
@@ -26,7 +23,7 @@ const InstanceModerationPanel: React.FC<IInstanceModerationPanel> = ({ host }) =
   const { openModal } = useModalsActions();
 
   const { data: account } = useOwnAccount();
-  const remoteInstance = useAppSelector((state) => getRemoteInstance(state, host));
+  const remoteInstance = useRemoteInstance(host);
 
   const handleEditFederation = () => {
     openModal('EDIT_FEDERATION', { host });

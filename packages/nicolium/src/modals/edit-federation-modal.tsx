@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { updateMrf } from '@/actions/mrf';
+import { getUpdatedMrf } from '@/actions/mrf';
 import List, { ListItem } from '@/components/list';
 import Modal from '@/components/ui/modal';
 import Toggle from '@/components/ui/toggle';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { makeGetRemoteInstance } from '@/selectors';
+import { useAdminConfig, useUpdateAdminConfig } from '@/queries/admin/use-config';
+import { useRemoteInstance } from '@/selectors';
 import toast from '@/toast';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
@@ -37,10 +36,10 @@ const EditFederationModal: React.FC<BaseModalProps & EditFederationModalProps> =
   onClose,
 }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
-  const getRemoteInstance = useCallback(makeGetRemoteInstance(), []);
-  const remoteInstance = useAppSelector((state) => getRemoteInstance(state, host));
+  const { data: config } = useAdminConfig();
+  const remoteInstance = useRemoteInstance(host);
+  const { mutate: updateConfig } = useUpdateAdminConfig();
 
   const [data, setData] = useState<Record<string, any>>({});
 
@@ -68,11 +67,11 @@ const EditFederationModal: React.FC<BaseModalProps & EditFederationModalProps> =
   };
 
   const handleSubmit = () => {
-    dispatch(updateMrf(host, data))
-      .then(() => {
+    updateConfig(getUpdatedMrf(config!.configs, host, data), {
+      onSuccess: () => {
         toast.success(intl.formatMessage(messages.success, { host }));
-      })
-      .catch(() => {});
+      },
+    });
 
     onClose('EDIT_FEDERATION');
   };

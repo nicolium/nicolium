@@ -53,6 +53,7 @@ import type {
   OauthToken,
   PaginatedResponse,
   PlApiClient,
+  PleromaConfig,
   Poll,
   Relationship,
   RssFeed,
@@ -304,6 +305,7 @@ const groupRelationships = {
 
 const admin = {
   root: ['admin'] as const,
+  config: ['admin', 'config'] as TaggedKey<['admin', 'config'], PleromaConfig>,
   accounts: {
     root: ['admin', 'accounts'] as const,
     show: (accountId: string) => {
