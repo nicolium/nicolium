@@ -110,15 +110,9 @@ const Header: React.FC<IHeader> = ({ account }) => {
   if (!account) {
     return (
       <div className='⁂-account-header__container'>
-        <div className='-mx-4 -mt-4 sm:-mx-6 sm:-mt-6'>
-          <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 md:rounded-t-xl lg:h-48' />
-        </div>
+        <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 md:rounded-t-xl lg:h-48' />
 
-        <div className='-mt-12 flex items-end gap-5'>
-          <div className='relative flex'>
-            <div className='size-24 rounded-lg bg-gray-400 ring-4 ring-white dark:ring-gray-800' />
-          </div>
-        </div>
+        <div className='relative mx-4 -mt-12 size-24 rounded-lg bg-gray-400 ring-4 ring-white dark:ring-gray-800' />
       </div>
     );
   }
@@ -335,24 +329,22 @@ const Header: React.FC<IHeader> = ({ account }) => {
         <MovedNote from={account} to={account.moved as AccountEntity} />
       )}
 
-      <div className='-mx-4 -mt-4 sm:-mx-6 sm:-mt-6'>
-        <div
-          className={clsx(
-            'relative isolate flex w-full flex-col justify-center overflow-hidden black:rounded-t-none md:rounded-t-xl',
-            {
-              'h-32 bg-gray-200 dark:bg-gray-900/50 lg:h-48': !settings.disableUserProvidedMedia,
-            },
-          )}
-        >
-          {renderHeader()}
+      <div
+        className={clsx(
+          'relative isolate flex w-full flex-col justify-center overflow-hidden black:rounded-t-none md:rounded-t-xl',
+          {
+            'h-32 bg-gray-200 dark:bg-gray-900/50 lg:h-48': !settings.disableUserProvidedMedia,
+          },
+        )}
+      >
+        {renderHeader()}
 
-          <div className='absolute left-2 top-2'>
-            <div className='flex items-center gap-1'>{info}</div>
-          </div>
+        <div className='absolute left-2 top-2'>
+          <div className='flex items-center gap-1'>{info}</div>
         </div>
       </div>
 
-      <div className='-mt-12 flex items-end gap-5'>
+      <div className='mx-4 -mt-12 flex items-end gap-5'>
         <div className='relative flex'>
           <a href={account.avatar} onClick={handleAvatarClick} target='_blank'>
             <Avatar
