@@ -541,10 +541,10 @@ const Timeline: React.FC<ITimeline> = ({
           liveRegionMessage={messages.queueLiveRegion}
         />
       </Portal>
-      {featuredStatusIds && featuredStatusIds.length > 3 && entries?.length > 0 && (
-        <SkipPinned onClick={handleSkipPinned} />
-      )}
       <PullToRefresh onRefresh={refetch} isPullable={!isFetching}>
+        {featuredStatusIds && featuredStatusIds.length > 3 && entries?.length > 0 && (
+          <SkipPinned onClick={handleSkipPinned} />
+        )}
         <ScrollableList
           id='status-list'
           key='scrollable-list'

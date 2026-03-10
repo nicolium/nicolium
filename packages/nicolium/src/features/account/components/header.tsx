@@ -109,16 +109,14 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
   if (!account) {
     return (
-      <div className='-mx-4 -mt-4 sm:-mx-6 sm:-mt-6'>
-        <div>
+      <div className='⁂-account-header__container'>
+        <div className='-mx-4 -mt-4 sm:-mx-6 sm:-mt-6'>
           <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 md:rounded-t-xl lg:h-48' />
         </div>
 
-        <div className='px-4 sm:px-6'>
-          <div className='-mt-12 flex items-end gap-5'>
-            <div className='relative flex'>
-              <div className='size-24 rounded-lg bg-gray-400 ring-4 ring-white dark:ring-gray-800' />
-            </div>
+        <div className='-mt-12 flex items-end gap-5'>
+          <div className='relative flex'>
+            <div className='size-24 rounded-lg bg-gray-400 ring-4 ring-white dark:ring-gray-800' />
           </div>
         </div>
       </div>
@@ -332,12 +330,12 @@ const Header: React.FC<IHeader> = ({ account }) => {
   const info = makeInfo();
 
   return (
-    <div className='-mx-4 -mt-4 sm:-mx-6 sm:-mt-6'>
+    <div className='⁂-account-header__container'>
       {account.moved && typeof account.moved === 'object' && (
         <MovedNote from={account} to={account.moved as AccountEntity} />
       )}
 
-      <div>
+      <div className='-mx-4 -mt-4 sm:-mx-6 sm:-mt-6'>
         <div
           className={clsx(
             'relative isolate flex w-full flex-col justify-center overflow-hidden black:rounded-t-none md:rounded-t-xl',
@@ -354,42 +352,36 @@ const Header: React.FC<IHeader> = ({ account }) => {
         </div>
       </div>
 
-      <div className='px-4 sm:px-6'>
-        <div className='-mt-12 flex items-end gap-5'>
-          <div className='relative flex'>
-            <a href={account.avatar} onClick={handleAvatarClick} target='_blank'>
-              <Avatar
-                src={account.avatar}
-                alt={account.avatar_description}
-                size={96}
-                className='relative size-24 rounded-lg bg-white ring-4 ring-white black:ring-black dark:bg-primary-900 dark:ring-primary-900'
-                isCat={account.is_cat}
-                username={account.username}
-                showAlt
-              />
-            </a>
-            {account.verified && (
-              <div className='absolute -bottom-2 -right-2'>
-                <VerificationBadge className='!size-[24px] rounded-full !p-[2px] ring-2 ring-white black:ring-black dark:ring-primary-900' />
-              </div>
-            )}
-          </div>
-
-          <div className='mt-6 flex w-full justify-end sm:pb-1'>
-            <div className='mt-10 flex flex-wrap justify-end gap-2'>
-              {ownAccount && account.id !== ownAccount.id && (
-                <SubscriptionButton account={account} />
-              )}
-              {renderMessageButton()}
-              {renderShareButton()}
-
-              <AccountMenu account={account} />
-
-              {renderRssButton()}
-
-              <ActionButton account={account} />
+      <div className='-mt-12 flex items-end gap-5'>
+        <div className='relative flex'>
+          <a href={account.avatar} onClick={handleAvatarClick} target='_blank'>
+            <Avatar
+              src={account.avatar}
+              alt={account.avatar_description}
+              size={96}
+              className='relative size-24 rounded-lg bg-white ring-4 ring-white black:ring-black dark:bg-primary-900 dark:ring-primary-900'
+              isCat={account.is_cat}
+              username={account.username}
+              showAlt
+            />
+          </a>
+          {account.verified && (
+            <div className='absolute -bottom-2 -right-2'>
+              <VerificationBadge className='!size-[24px] rounded-full !p-[2px] ring-2 ring-white black:ring-black dark:ring-primary-900' />
             </div>
-          </div>
+          )}
+        </div>
+
+        <div className='mt-6 flex w-full flex-wrap justify-end gap-2 sm:pb-1'>
+          {ownAccount && account.id !== ownAccount.id && <SubscriptionButton account={account} />}
+          {renderMessageButton()}
+          {renderShareButton()}
+
+          <AccountMenu account={account} />
+
+          {renderRssButton()}
+
+          <ActionButton account={account} />
         </div>
       </div>
     </div>

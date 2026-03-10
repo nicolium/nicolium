@@ -1,7 +1,9 @@
 @use 'mixins';
 
 .⁂-account-layout {
-  @include mixins.card($size: lg);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .⁂-account-card {

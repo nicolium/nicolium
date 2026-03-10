@@ -96,17 +96,20 @@ const ProfileLayout: React.FC = () => {
     <>
       {account?.local === false && <meta content='noindex, noarchive' name='robots' />}
       <Layout.Main>
-        <Column size='lg' label={account ? `@${acct}` : ''} withHeader={false}>
-          <div className='space-y-4'>
-            <Header key={`profile-header-${account?.id}`} account={account} />
-            <ProfileInfoPanel username={username} account={account} />
+        <Column
+          bodyClassName='⁂-account-layout'
+          size='lg'
+          label={account ? `@${acct}` : ''}
+          withHeader={false}
+        >
+          <Header key={`profile-header-${account?.id}`} account={account} />
+          <ProfileInfoPanel username={username} account={account} />
 
-            {account && showTabs && (
-              <Tabs key={`profile-tabs-${account.id}`} items={tabItems} activeItem={activeItem} />
-            )}
+          {account && showTabs && (
+            <Tabs key={`profile-tabs-${account.id}`} items={tabItems} activeItem={activeItem} />
+          )}
 
-            <Outlet />
-          </div>
+          <Outlet />
         </Column>
       </Layout.Main>
 

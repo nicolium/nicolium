@@ -151,7 +151,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
 
   if (!account) {
     return (
-      <div className='mt-6 min-w-0 flex-1 sm:px-2'>
+      <div className='min-w-0 flex-1 sm:px-2'>
         <div className='flex items-center gap-1'>
           <Text size='sm' theme='muted' direction='ltr' truncate>
             @{username}
@@ -165,7 +165,7 @@ const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) =>
   const badges = getBadges();
 
   return (
-    <div className='mt-6 min-w-0 flex-1 sm:px-2'>
+    <div className='min-w-0 flex-1 sm:px-2'>
       <div className='flex flex-col gap-2'>
         <div className='flex flex-col'>
           <div className='flex items-center gap-1'>
