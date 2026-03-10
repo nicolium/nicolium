@@ -241,6 +241,7 @@ const StatusPreview: React.FC<IStatusPreview> = ({ status }) => {
         truncate
         className='line-clamp-2 inline text-ellipsis [&_br]:hidden [&_p:first-child]:inline [&_p:first-child]:truncate [&_p]:hidden'
         size='sm'
+        tag='div'
       >
         <ParsedContent
           key='content'

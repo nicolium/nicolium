@@ -41,7 +41,7 @@ const SiteBanner: React.FC = () => {
       </LogoText>
 
       {instance.description.trim().length > 0 && (
-        <Markup size='lg' direction={getTextDirection(instance.description)}>
+        <Markup size='lg' direction={getTextDirection(instance.description)} tag='div'>
           <ParsedContent html={instance.description} />
         </Markup>
       )}

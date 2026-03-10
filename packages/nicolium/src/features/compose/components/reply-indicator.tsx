@@ -73,7 +73,12 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({
         hideActions={hideActions}
       />
 
-      <Markup className='break-words' size='sm' direction={getTextDirection(status.search_index)}>
+      <Markup
+        className='break-words'
+        size='sm'
+        direction={getTextDirection(status.search_index)}
+        tag='div'
+      >
         <ParsedContent
           html={status.content}
           mentions={status.mentions}

@@ -290,6 +290,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
             direction={direction}
             lang={status.language ?? undefined}
             size={textSize}
+            tag='div'
           >
             {parsedContent}
           </Markup>,
