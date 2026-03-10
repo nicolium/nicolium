@@ -54,6 +54,8 @@ const useTimeline = (
   );
 
   const fetchNextPage = useCallback(async () => {
+    if (timeline.isFetching) return;
+
     timelineActions.setLoading(timelineId, true);
 
     try {
@@ -65,7 +67,7 @@ const useTimeline = (
     } catch (error) {
       timelineActions.setError(timelineId, true);
     }
-  }, [timelineId, timeline.oldestStatusId]);
+  }, [timelineId, timeline.oldestStatusId, timeline.isFetching]);
 
   const dequeueEntries = useCallback(() => {
     timelineActions.dequeueEntries(timelineId);
