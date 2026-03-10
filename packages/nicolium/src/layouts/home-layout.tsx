@@ -31,7 +31,7 @@ const HomeLayout = () => {
   const { data: account } = useOwnAccount();
   const features = useFeatures();
   const frontendConfig = useFrontendConfig();
-  const { disableUserProvidedMedia } = useSettings();
+  const { disableUserProvidedMedia, composeInTimelines } = useSettings();
 
   const composeId = 'home';
   const composeBlock = useRef<HTMLDivElement>(null);
@@ -51,7 +51,7 @@ const HomeLayout = () => {
   return (
     <>
       <Layout.Main className='⁂-layout__main--home'>
-        {me && (
+        {composeInTimelines && me && (
           <div
             className={clsx('⁂-compose-block', {
               '⁂-compose-block--dragging': isDragging,
