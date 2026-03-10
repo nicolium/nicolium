@@ -6,6 +6,12 @@
   gap: 1rem;
 }
 
+.⁂-account-header {
+  &__container {
+    @apply -mx-4 -mt-4 sm:-mx-6 sm:-mt-6;
+  }
+}
+
 .⁂-account-card {
   display: block;
   width: 100%;
