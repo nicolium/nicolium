@@ -305,33 +305,31 @@ const Account = ({
                 )}
               </div>
 
-              <Stack space={withAccountNote || note ? 1 : 0}>
-                <div className='flex items-center gap-1'>
-                  <Text theme='muted' size='sm' direction='ltr' truncate>
-                    @{username}
-                  </Text>
+              <div className='flex items-center gap-1'>
+                <Text theme='muted' size='sm' direction='ltr' truncate>
+                  @{username}
+                </Text>
 
-                  {withLocked && !timestamp && account.locked && (
-                    <>
-                      <Icon
-                        src={require('@phosphor-icons/core/regular/lock.svg')}
-                        alt={intl.formatMessage(messages.accountLocked)}
-                        className='size-4 text-gray-600'
-                      />
+                {withLocked && !timestamp && account.locked && (
+                  <>
+                    <Icon
+                      src={require('@phosphor-icons/core/regular/lock.svg')}
+                      alt={intl.formatMessage(messages.accountLocked)}
+                      className='size-4 text-gray-600'
+                    />
 
-                      {account.favicon && !disableUserProvidedMedia && (
-                        <span className='⁂-separator' />
-                      )}
-                    </>
-                  )}
+                    {account.favicon && !disableUserProvidedMedia && (
+                      <span className='⁂-separator' />
+                    )}
+                  </>
+                )}
 
-                  {account.favicon && !disableUserProvidedMedia && (
-                    <InstanceFavicon account={account} disabled />
-                  )}
+                {account.favicon && !disableUserProvidedMedia && (
+                  <InstanceFavicon account={account} disabled />
+                )}
 
-                  {items}
-                </div>
-              </Stack>
+                {items}
+              </div>
             </div>
           </div>
 
