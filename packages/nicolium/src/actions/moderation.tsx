@@ -3,7 +3,6 @@ import { defineMessages, FormattedMessage, type IntlShape } from 'react-intl';
 
 import { deactivateUser, deleteUser, deleteStatus, toggleStatusSensitivity } from '@/actions/admin';
 import OutlineBox from '@/components/outline-box';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import AccountContainer from '@/containers/account-container';
 import { selectAccount } from '@/queries/accounts/selectors';
@@ -102,7 +101,7 @@ const deactivateUserModal =
     const name = selectAccount(accountId)!.username;
 
     const message = (
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <OutlineBox>
           <AccountContainer id={accountId} hideActions />
         </OutlineBox>
@@ -114,7 +113,7 @@ const deactivateUserModal =
             values={{ acct }}
           />
         </Text>
-      </Stack>
+      </div>
     );
 
     useModalsStore.getState().actions.openModal('CONFIRM', {
@@ -142,7 +141,7 @@ const deleteUserModal =
     const local = account.local;
 
     const message = (
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <OutlineBox>
           <AccountContainer id={accountId} hideActions />
         </OutlineBox>
@@ -154,7 +153,7 @@ const deleteUserModal =
             values={{ acct }}
           />
         </Text>
-      </Stack>
+      </div>
     );
 
     const confirm = intl.formatMessage(messages.deleteUserConfirm, { name });

@@ -9,10 +9,8 @@ import ScrollableList, { type IScrollableList } from '@/components/scrollable-li
 import Status, { StatusFollowedTagInfo } from '@/components/statuses/status';
 import StatusInfo from '@/components/statuses/status-info';
 import Tombstone from '@/components/statuses/tombstone';
-import Button from '@/components/ui/button';
 import Icon from '@/components/ui/icon';
 import Portal from '@/components/ui/portal';
-import Stack from '@/components/ui/stack';
 import Emojify from '@/features/emoji/emojify';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import PendingStatus from '@/features/ui/components/pending-status';
@@ -175,19 +173,15 @@ const TimelineGap: React.FC<ITimelineGap> = ({ gap, onFillGap, firstEntry }) => 
   };
 
   return (
-    <Stack className='⁂-timeline-gap mx-auto items-stretch'>
-      <Button
-        theme='transparent'
-        icon={require('@phosphor-icons/core/regular/caret-double-down.svg')}
-        onClick={() => handleFill('down')}
-        disabled={isLoading}
-      >
+    <div className='⁂-timeline-gap'>
+      <button onClick={() => handleFill('down')} disabled={isLoading}>
+        <Icon src={require('@phosphor-icons/core/regular/caret-double-down.svg')} aria-hidden />
         {firstEntry ? (
           <FormattedMessage id='timeline.gap.load_recent' defaultMessage='Load recent posts' />
         ) : (
           <FormattedMessage id='timeline.gap.load_older' defaultMessage='Load older posts' />
         )}
-      </Button>
+      </button>
       <div className='⁂-timeline-gap__separator'>
         <span
           title={intl.formatMessage(
@@ -197,15 +191,11 @@ const TimelineGap: React.FC<ITimelineGap> = ({ gap, onFillGap, firstEntry }) => 
           {renderTimeDistance()}
         </span>
       </div>
-      <Button
-        theme='transparent'
-        icon={require('@phosphor-icons/core/regular/caret-double-up.svg')}
-        onClick={() => handleFill('up')}
-        disabled={isLoading}
-      >
+      <button onClick={() => handleFill('up')} disabled={isLoading}>
+        <Icon src={require('@phosphor-icons/core/regular/caret-double-up.svg')} aria-hidden />
         <FormattedMessage id='timeline.gap.load_newer' defaultMessage='Load newer posts' />
-      </Button>
-    </Stack>
+      </button>
+    </div>
   );
 };
 
