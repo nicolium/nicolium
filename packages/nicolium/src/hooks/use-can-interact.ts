@@ -29,13 +29,13 @@ const useCanInteract = (
     }
     const interactionPolicy = status.interaction_policy;
 
-    if (me === status.account_id || interactionPolicy[type].always.includes('me'))
+    if (me === status.account_id || interactionPolicy[type].automatic_approval.includes('me'))
       return {
         canInteract: true,
         approvalRequired: false,
       };
 
-    if (interactionPolicy[type].with_approval.includes('me'))
+    if (interactionPolicy[type].manual_approval.includes('me'))
       return {
         canInteract: true,
         approvalRequired: true,
@@ -44,7 +44,10 @@ const useCanInteract = (
     return {
       canInteract: false,
       approvalRequired: null,
-      allowed: [...interactionPolicy[type].always, ...interactionPolicy[type].with_approval],
+      allowed: [
+        ...interactionPolicy[type].automatic_approval,
+        ...interactionPolicy[type].manual_approval,
+      ],
     };
   }, [me, status.id, type]);
 };

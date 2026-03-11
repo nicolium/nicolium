@@ -68,8 +68,10 @@ const ComposeInteractionPolicyModal: React.FC<
         draft.interactionPolicy ?? interactionPolicy,
         (draftPolicy: InteractionPolicy) => {
           draftPolicy[policy][rule] = value;
-          draftPolicy[policy][rule === 'always' ? 'with_approval' : 'always'] = draftPolicy[policy][
-            rule === 'always' ? 'with_approval' : 'always'
+          draftPolicy[policy][
+            rule === 'automatic_approval' ? 'manual_approval' : 'automatic_approval'
+          ] = draftPolicy[policy][
+            rule === 'automatic_approval' ? 'manual_approval' : 'automatic_approval'
           ].filter((r) => !value.includes(r as Scope));
         },
       );

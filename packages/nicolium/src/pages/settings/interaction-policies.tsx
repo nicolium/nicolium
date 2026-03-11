@@ -23,7 +23,7 @@ import type { CreateStatusParams, InteractionPolicy } from 'pl-api';
 
 type Visibility = 'public' | 'unlisted' | 'private';
 type Policy = 'can_favourite' | 'can_reblog' | 'can_reply';
-type Rule = 'always' | 'with_approval';
+type Rule = 'automatic_approval' | 'manual_approval';
 type Scope = 'followers' | 'following' | 'mentioned' | 'public';
 
 type QuoteApprovalPolicy = CreateStatusParams['quote_approval_policy'];
@@ -210,8 +210,8 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({
                 >
                   <InlineMultiselect<Scope>
                     items={items}
-                    value={interactionPolicy[policy].always as Array<Scope>}
-                    onChange={handleChange(policy, 'always')}
+                    value={interactionPolicy[policy].automatic_approval as Array<Scope>}
+                    onChange={handleChange(policy, 'automatic_approval')}
                     disabled={disabled}
                   />
                 </ListItem>
@@ -225,8 +225,8 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({
                 >
                   <InlineMultiselect
                     items={items}
-                    value={interactionPolicy[policy].with_approval as Array<Scope>}
-                    onChange={handleChange(policy, 'with_approval')}
+                    value={interactionPolicy[policy].manual_approval as Array<Scope>}
+                    onChange={handleChange(policy, 'manual_approval')}
                     disabled={disabled}
                   />
                 </ListItem>
@@ -294,11 +294,11 @@ const InteractionPoliciesPage = () => {
     setInteractionPolicies((policies) =>
       create(policies, (draft) => {
         draft[visibility][policy][rule] = value;
-        draft[visibility][policy][rule === 'always' ? 'with_approval' : 'always'] = draft[
-          visibility
-        ][policy][rule === 'always' ? 'with_approval' : 'always'].filter(
-          (rule) => !value.includes(rule as any),
-        );
+        draft[visibility][policy][
+          rule === 'automatic_approval' ? 'manual_approval' : 'automatic_approval'
+        ] = draft[visibility][policy][
+          rule === 'automatic_approval' ? 'manual_approval' : 'automatic_approval'
+        ].filter((rule) => !value.includes(rule as any));
       }),
     );
   };
@@ -321,7 +321,7 @@ const InteractionPoliciesPage = () => {
       );
     }
 
-    if (features.quoteApprovalPolicies) {
+    if (features.quoteApprovalPolicies && !features.interactionRequests) {
       promises.push(dispatch(patchMe({ source: { quote_policy: quotePolicy } })));
     }
 
