@@ -11,7 +11,7 @@ const quoteStateSchema = v.picklist([
   'unauthorized',
   'blocked_account',
   'blocked_domain',
-  'muted-account',
+  'muted_account',
 ]);
 
 /**
