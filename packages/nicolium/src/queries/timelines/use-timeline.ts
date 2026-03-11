@@ -21,7 +21,7 @@ const useTimeline = (
   timelineId: string,
   fetcher: TimelineFetcher,
   streamConfig?: StreamConfig,
-  restoring?: boolean,
+  restoringMaxId?: string,
 ) => {
   const timeline = useStoreTimeline(timelineId);
   const timelineActions = useTimelinesActions();
@@ -34,23 +34,30 @@ const useTimeline = (
   }, [timelineId]);
 
   const fetchInitial = useCallback(
-    async (isRestoring = restoring) => {
+    async (isRestoring = !!restoringMaxId) => {
       timelineActions.setLoading(timelineId, true);
       try {
-        const response = await fetcher();
+        const [response, shouldInsertGap] = await Promise.all([
+          fetcher(),
+          !restoringMaxId
+            ? Promise.resolve(false)
+            : fetcher({ since_id: restoringMaxId, limit: 1 })
+                .then((res) => res.items.length > 0)
+                .catch(() => true),
+        ]);
         importEntities({ statuses: response.items });
         timelineActions.expandTimeline(
           timelineId,
           response.items,
           !!response.next,
           true,
-          isRestoring,
+          isRestoring && shouldInsertGap,
         );
       } catch (error) {
         timelineActions.setError(timelineId, true);
       }
     },
-    [timelineId, restoring],
+    [timelineId, restoringMaxId],
   );
 
   const fetchNextPage = useCallback(async () => {

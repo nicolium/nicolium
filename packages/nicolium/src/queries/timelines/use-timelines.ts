@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 
 import { useClient } from '@/hooks/use-client';
+import { incrementId } from '@/utils/strings';
 
 import { useTimeline } from './use-timeline';
 
@@ -30,8 +31,10 @@ const useHomeTimeline = (
   return useTimeline(
     'home',
     (paginationParams) => {
-      const initialPagination = restoreMaxId.current ? { max_id: restoreMaxId.current } : undefined;
-      if (paginationParams == null) {
+      const initialPagination = restoreMaxId.current
+        ? { max_id: incrementId(restoreMaxId.current) }
+        : undefined;
+      if (!paginationParams) {
         restoreMaxId.current = undefined;
       }
 
@@ -41,7 +44,7 @@ const useHomeTimeline = (
       });
     },
     { stream },
-    !!maxId,
+    maxId,
   );
 };
 
