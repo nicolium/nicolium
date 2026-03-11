@@ -374,6 +374,46 @@ const Preferences = () => {
       </List>
 
       <List>
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.fields.remember_timeline_position_label'
+              defaultMessage='Remeber position of home timeline'
+            />
+          }
+          hint={
+            <FormattedMessage
+              id='preferences.fields.remember_timeline_position_hint'
+              defaultMessage='When enabled, the app will return to the place you left off in the home timeline last time you visited it.'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['rememberTimelinePosition']}
+            defaultValue
+            onChange={onToggleChange}
+          />
+        </ListItem>
+
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.fields.compose_in_timelines_label'
+              defaultMessage='Display post composer in timelines'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['composeInTimelines']}
+            defaultValue
+            onChange={onToggleChange}
+          />
+        </ListItem>
+      </List>
+
+      <List>
         <ListItem label={<FormattedMessage id='preferences.fields.theme' defaultMessage='Theme' />}>
           <ThemeToggle />
         </ListItem>

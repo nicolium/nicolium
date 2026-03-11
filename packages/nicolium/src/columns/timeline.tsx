@@ -584,10 +584,13 @@ const getRestoredPosition = (me: string) => {
 const HomeTimelineColumn: React.FC<IBaseTimeline> = (props) => {
   const me = useAppSelector((state) => state.me);
 
-  const timelineFilters = useSettings().timelines.home;
+  const {
+    timelines: { home: timelineFilters },
+    rememberTimelinePosition,
+  } = useSettings();
 
   const maxId = useMemo(() => {
-    if (!me) return undefined;
+    if (!me || !rememberTimelinePosition) return undefined;
 
     const position = getRestoredPosition(me);
 
@@ -608,7 +611,7 @@ const HomeTimelineColumn: React.FC<IBaseTimeline> = (props) => {
 
   const handleTopItemChanged = (index: number) => {
     const entry = timelineQuery.entries[index];
-    if (me) savePosition(me, entry, index);
+    if (me && rememberTimelinePosition) savePosition(me, entry, index);
   };
 
   return (
