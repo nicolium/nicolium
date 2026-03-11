@@ -683,6 +683,7 @@ const getFeatures = (instance: Instance) => {
       v.software === FIREFISH,
       v.software === FRIENDICA && gte(v.version, '2022.12.0'),
       v.software === GOTOSOCIAL && gte(v.version, '0.18.0'),
+      v.software === HOLLO,
       v.software === ICESHRIMP,
       v.software === ICESHRIMP_NET,
       v.software === MASTODON,
