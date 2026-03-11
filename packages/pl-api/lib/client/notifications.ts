@@ -167,7 +167,7 @@ const notifications = (client: PlApiBaseClient) => ({
    */
   acceptNotificationRequest: async (notificationRequestId: string) => {
     const response = await client.request<EmptyObject>(
-      `/api/v1/notifications/requests/${notificationRequestId}/dismiss`,
+      `/api/v1/notifications/requests/${notificationRequestId}/accept`,
       { method: 'POST' },
     );
 
