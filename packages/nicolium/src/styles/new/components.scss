@@ -536,7 +536,7 @@ a.⁂-list-item,
     0 1px 2px -1px #0001;
 
   &:focus {
-    outline: 2px solid transparent;
+    outline: 2px solid;
     outline-offset: 2px;
   }
 
@@ -842,7 +842,7 @@ div[data-viewport-type='window']:has(.⁂-empty-message) {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 
     &:focus {
-      outline: 2px solid transparent;
+      outline: 2px solid;
       outline-offset: 2px;
     }
 

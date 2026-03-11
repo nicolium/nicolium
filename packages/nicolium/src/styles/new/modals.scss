@@ -198,7 +198,7 @@
 
     .dark & {
       background-color: rgb(var(--color-gray-900));
-      outline: 2px solid rgb(var(--color-primary-700));
+      outline-color: rgb(var(--color-primary-700));
     }
   }
 
