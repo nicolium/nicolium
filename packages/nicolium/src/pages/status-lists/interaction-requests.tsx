@@ -11,7 +11,6 @@ import ScrollableList from '@/components/scrollable-list';
 import StatusContent from '@/components/statuses/status-content';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import AccountContainer from '@/containers/account-container';
 import { buildLink } from '@/features/notifications/components/notification';
@@ -87,7 +86,7 @@ const InteractionRequestStatus: React.FC<IInteractionRequestStatus> = ({
   if (!status) return null;
 
   return (
-    <Stack className='relative py-2' space={2}>
+    <div className='relative flex flex-col gap-2 py-2'>
       {hasReply && (
         <div className='absolute left-5 top-[62px] z-[1] block h-[calc(100%-58px)] w-0.5 bg-gray-200 black:bg-gray-800 dark:bg-primary-800 rtl:left-auto rtl:right-5' />
       )}
@@ -100,12 +99,12 @@ const InteractionRequestStatus: React.FC<IInteractionRequestStatus> = ({
         action={actions ?? <></>}
       />
 
-      <Stack space={2} className={clsx(hasReply && 'pl-[54px]')}>
+      <div className={clsx('flex flex-col gap-2', hasReply && 'pl-[54px]')}>
         <StatusContent status={status} preview={!isReply} />
 
         {status.media_attachments.length > 0 && <AttachmentThumbs status={status} />}
-      </Stack>
-    </Stack>
+      </div>
+    </div>
   );
 };
 
@@ -227,7 +226,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
   return (
     <Hotkeys handlers={handlers} className='notification focusable' tabIndex={0}>
       <div className='focusable p-4'>
-        <Stack space={2}>
+        <div className='flex flex-col gap-2'>
           <div>
             <div className='flex items-center gap-3'>
               <div className='flex justify-end' style={{ flexBasis: avatarSize }}>
@@ -268,7 +267,7 @@ const InteractionRequest: React.FC<IInteractionRequest> = ({
           {interactionRequest.reply_id && (
             <InteractionRequestStatus id={interactionRequest.reply_id} isReply actions={actions} />
           )}
-        </Stack>
+        </div>
       </div>
     </Hotkeys>
   );

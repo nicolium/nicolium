@@ -7,10 +7,8 @@ import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import Avatar from '@/components/ui/avatar';
 import Emoji from '@/components/ui/emoji';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import ActionButton from '@/features/ui/components/action-button';
@@ -347,10 +345,11 @@ const Account = ({
       ref={overflowRef}
     >
       <div>
-        <HStack
-          alignItems={withAccountNote || note ? 'top' : 'center'}
-          space={3}
-          className='max-w-full'
+        <div
+          className={clsx(
+            'flex max-w-full items-center gap-3',
+            withAccountNote || note ? 'items-start' : 'items-center',
+          )}
         >
           {withAvatar &&
             (disableUserProvidedMedia ? (
@@ -414,7 +413,8 @@ const Account = ({
               </LinkEl>
             </ProfilePopper>
 
-            <Stack space={withAccountNote || note ? 1 : 0}>
+            <div className='flex flex-col gap-1'>
+              {' '}
               <div className='flex items-center gap-1'>
                 <Text theme='muted' size='sm' direction='ltr' truncate>
                   @{username}
@@ -490,7 +490,6 @@ const Account = ({
 
                 {items}
               </div>
-
               {note ? (
                 <Text size='sm' className='mr-2'>
                   {note}
@@ -510,9 +509,9 @@ const Account = ({
                   </Text>
                 )
               )}
-            </Stack>
+            </div>
           </div>
-        </HStack>
+        </div>
 
         <div ref={actionRef}>{renderAction()}</div>
       </div>

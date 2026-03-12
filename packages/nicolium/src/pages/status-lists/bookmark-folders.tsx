@@ -7,11 +7,9 @@ import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Emoji from '@/components/ui/emoji';
 import Form from '@/components/ui/form';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
 import Spinner from '@/components/ui/spinner';
-import Stack from '@/components/ui/stack';
 import { useTextField } from '@/hooks/forms/use-text-field';
 import { useFeatures } from '@/hooks/use-features';
 import {
@@ -75,7 +73,7 @@ const NewFolderForm: React.FC<INewFolderForm> = ({ search, onChange }) => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <HStack space={2} alignItems='center'>
+      <div className='flex items-center gap-2'>
         <Input
           outerClassName='grow'
           type='text'
@@ -89,7 +87,7 @@ const NewFolderForm: React.FC<INewFolderForm> = ({ search, onChange }) => {
         <Button disabled={isPending} type='submit' theme='primary'>
           <FormattedMessage id='bookmark_folders.new.create_title' defaultMessage='Add folder' />
         </Button>
-      </HStack>
+      </div>
     </Form>
   );
 };
@@ -113,7 +111,7 @@ const BookmarkFoldersPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <NewFolderForm />
 
         <List>
@@ -121,7 +119,7 @@ const BookmarkFoldersPage: React.FC = () => {
             to='/bookmarks/$folderId'
             params={{ folderId: 'all' }}
             label={
-              <HStack alignItems='center' space={2}>
+              <div className='flex items-center gap-2'>
                 <Icon src={require('@phosphor-icons/core/regular/bookmarks.svg')} size={20} />
                 <span>
                   <FormattedMessage
@@ -129,7 +127,7 @@ const BookmarkFoldersPage: React.FC = () => {
                     defaultMessage='All bookmarks'
                   />
                 </span>
-              </HStack>
+              </div>
             }
           />
           {bookmarkFolders?.map((folder) => (
@@ -138,7 +136,7 @@ const BookmarkFoldersPage: React.FC = () => {
               to='/bookmarks/$folderId'
               params={{ folderId: folder.id }}
               label={
-                <HStack alignItems='center' space={2}>
+                <div className='flex items-center gap-2'>
                   {folder.emoji ? (
                     <Emoji
                       emoji={folder.emoji}
@@ -152,12 +150,12 @@ const BookmarkFoldersPage: React.FC = () => {
                     />
                   )}
                   <span>{folder.name}</span>
-                </HStack>
+                </div>
               }
             />
           ))}
         </List>
-      </Stack>
+      </div>
     </Column>
   );
 };

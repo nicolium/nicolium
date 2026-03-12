@@ -3,7 +3,6 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import Accordion from '@/components/ui/accordion';
 import Column from '@/components/ui/column';
-import Stack from '@/components/ui/stack';
 import SiteWallet from '@/features/crypto-donate/components/site-wallet';
 import { useInstance } from '@/hooks/use-instance';
 
@@ -19,7 +18,7 @@ const CryptoDonatePage: React.FC = (): React.JSX.Element => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)} withHeader>
-      <Stack space={5}>
+      <div className='flex flex-col gap-5'>
         <Accordion
           headline={
             <FormattedMessage
@@ -38,7 +37,7 @@ const CryptoDonatePage: React.FC = (): React.JSX.Element => {
         </Accordion>
 
         <SiteWallet />
-      </Stack>
+      </div>
     </Column>
   );
 };

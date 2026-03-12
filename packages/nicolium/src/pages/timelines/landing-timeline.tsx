@@ -7,7 +7,6 @@ import Markup from '@/components/markup';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import Stack from '@/components/ui/stack';
 import { useInstance } from '@/hooks/use-instance';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { About } from '@/pages/utils/about';
@@ -35,7 +34,7 @@ const SiteBanner: React.FC = () => {
   const instance = useInstance();
 
   return (
-    <Stack space={6}>
+    <div className='flex flex-col gap-6'>
       <LogoText className='-my-5' dir={getTextDirection(instance.title)}>
         {instance.title}
       </LogoText>
@@ -45,7 +44,7 @@ const SiteBanner: React.FC = () => {
           <ParsedContent html={instance.description} />
         </Markup>
       )}
-    </Stack>
+    </div>
   );
 };
 

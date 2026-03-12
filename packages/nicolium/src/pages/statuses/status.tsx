@@ -7,7 +7,6 @@ import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import MissingIndicator from '@/components/missing-indicator';
 import PullToRefresh from '@/components/pull-to-refresh';
 import Column from '@/components/ui/column';
-import Stack from '@/components/ui/stack';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import Thread from '@/features/status/components/thread';
 import { statusRoute } from '@/features/ui/router';
@@ -138,7 +137,7 @@ const StatusPage: React.FC = () => {
   };
 
   return (
-    <Stack space={4}>
+    <div className='flex flex-col gap-4'>
       <Column
         label={intl.formatMessage(titleMessage())}
         action={
@@ -158,7 +157,7 @@ const StatusPage: React.FC = () => {
           />
         </PullToRefresh>
       </Column>
-    </Stack>
+    </div>
   );
 };
 

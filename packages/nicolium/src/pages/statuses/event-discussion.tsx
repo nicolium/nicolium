@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import MissingIndicator from '@/components/missing-indicator';
 import ScrollableList from '@/components/scrollable-list';
 import Tombstone from '@/components/statuses/tombstone';
-import Stack from '@/components/ui/stack';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import ThreadStatus from '@/features/status/components/thread-status';
 import PendingStatus from '@/features/ui/components/pending-status';
@@ -94,7 +93,7 @@ const EventDiscussionPage: React.FC = () => {
   }
 
   return (
-    <Stack space={2}>
+    <div className='flex flex-col gap-2'>
       {me && (
         <div className='border-b border-solid border-gray-200 p-2 pt-0 dark:border-gray-800'>
           <ComposeForm id={`reply:${status.id}`} event={status.id} transparent />
@@ -116,7 +115,7 @@ const EventDiscussionPage: React.FC = () => {
           {children}
         </ScrollableList>
       </div>
-    </Stack>
+    </div>
   );
 };
 

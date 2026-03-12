@@ -7,7 +7,6 @@ import { useIntl, FormattedMessage } from 'react-intl';
 import Badge from '@/components/badge';
 import Card, { CardBody } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import ActionButton from '@/features/ui/components/action-button';
 import { isTimezoneLabel } from '@/features/ui/components/profile-field';
@@ -153,7 +152,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
         className='relative isolate overflow-hidden black:rounded-xl black:border black:border-gray-800'
       >
         <CardBody>
-          <Stack space={2}>
+          <div className='flex flex-col gap-2'>
             <UserPanel
               accountId={account.id}
               action={<ActionButton account={account} small />}
@@ -210,7 +209,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
                 <ParsedContent html={account.note} emojis={account.emojis} />
               </Text>
             )}
-          </Stack>
+          </div>
 
           {followedBy && (
             <div className='absolute left-2 top-2'>

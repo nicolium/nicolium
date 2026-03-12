@@ -7,11 +7,9 @@ import Button from '@/components/ui/button';
 import Card, { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useTextField } from '@/hooks/forms/use-text-field';
 import {
@@ -58,7 +56,7 @@ const NewFeedForm: React.FC = () => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <HStack space={2} alignItems='center'>
+      <div className='flex items-center gap-2'>
         <label className='grow'>
           <span style={{ display: 'none' }}>{label}</span>
 
@@ -71,7 +69,7 @@ const NewFeedForm: React.FC = () => {
             defaultMessage='Subscribe'
           />
         </Button>
-      </HStack>
+      </div>
     </Form>
   );
 };
@@ -96,7 +94,7 @@ const RssFeedSubscriptions = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <CardTitle
           title={
             <FormattedMessage
@@ -121,18 +119,18 @@ const RssFeedSubscriptions = () => {
               <ListItem
                 key={feed.id}
                 label={
-                  <HStack className='w-full' alignItems='center' space={2}>
+                  <div className='flex w-full items-center gap-2'>
                     {feed.image_url ? (
                       <Avatar size={40} src={feed.image_url} />
                     ) : (
                       <Icon src={require('@phosphor-icons/core/regular/rss.svg')} size={40} />
                     )}
-                    <Stack className='flex-1'>
+                    <div className='flex flex-1 flex-col'>
                       <span>{feed.title}</span>
                       <Text size='sm' theme='muted' truncate>
                         {feed.url}
                       </Text>
-                    </Stack>
+                    </div>
                     <IconButton
                       onClick={handleDelete(feed.url)}
                       disabled={isPending}
@@ -140,7 +138,7 @@ const RssFeedSubscriptions = () => {
                       src={require('@phosphor-icons/core/regular/x.svg')}
                       title={intl.formatMessage(messages.deleteFeed)}
                     />
-                  </HStack>
+                  </div>
                 }
               />
             ))}
@@ -152,7 +150,7 @@ const RssFeedSubscriptions = () => {
             </Card>
           )
         )}
-      </Stack>
+      </div>
     </Column>
   );
 };

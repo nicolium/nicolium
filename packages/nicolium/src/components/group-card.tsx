@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import GroupHeaderImage from '@/features/group/components/group-header-image';
@@ -21,17 +20,17 @@ const GroupCard: React.FC<IGroupCard> = ({ groupId }) => {
   if (!group) return null;
 
   return (
-    <Stack
-      className='relative h-[240px] rounded-lg border border-solid border-gray-300 bg-white black:bg-black dark:border-primary-800 dark:bg-primary-900'
+    <div
+      className='relative flex h-[240px] flex-col rounded-lg border border-solid border-gray-300 bg-white black:bg-black dark:border-primary-800 dark:bg-primary-900'
       data-testid='group-card'
     >
       {/* Group Cover Image */}
-      <Stack grow className='relative basis-1/2 rounded-t-lg bg-primary-100 dark:bg-gray-800'>
+      <div className='relative flex grow basis-1/2 flex-col rounded-t-lg bg-primary-100 dark:bg-gray-800'>
         <GroupHeaderImage
           group={group}
           className='absolute inset-0 size-full rounded-t-lg object-cover'
         />
-      </Stack>
+      </div>
 
       {/* Group Avatar */}
       <div className='absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2'>
@@ -39,7 +38,7 @@ const GroupCard: React.FC<IGroupCard> = ({ groupId }) => {
       </div>
 
       {/* Group Info */}
-      <Stack alignItems='center' justifyContent='end' grow className='basis-1/2 py-4' space={0.5}>
+      <div className='flex grow basis-1/2 flex-col items-center justify-end gap-0.5 py-4'>
         <div className='flex items-center gap-1.5'>
           <Text size='lg' weight='bold'>
             <Emojify text={group.display_name} emojis={group.emojis} />
@@ -51,8 +50,8 @@ const GroupCard: React.FC<IGroupCard> = ({ groupId }) => {
           <GroupPrivacy group={group} />
           <GroupMemberCount group={group} />
         </div>
-      </Stack>
-    </Stack>
+      </div>
+    </div>
   );
 };
 

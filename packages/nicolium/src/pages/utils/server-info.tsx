@@ -3,7 +3,6 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import Column from '@/components/ui/column';
 import Divider from '@/components/ui/divider';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import LinkFooter from '@/features/ui/components/link-footer';
 import PromoPanel from '@/features/ui/components/panels/promo-panel';
@@ -19,13 +18,13 @@ const ServerInfoPage = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <Stack space={4}>
-        <Stack>
+      <div className='flex flex-col gap-4'>
+        <div className='flex flex-col'>
           <Text size='lg' weight='medium'>
             {instance.title}
           </Text>
           <Text theme='muted'>{instance.description}</Text>
-        </Stack>
+        </div>
 
         <Divider />
 
@@ -34,7 +33,7 @@ const ServerInfoPage = () => {
         <Divider />
 
         <LinkFooter />
-      </Stack>
+      </div>
     </Column>
   );
 };

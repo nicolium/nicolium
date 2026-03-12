@@ -6,7 +6,6 @@ import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import { useDeleteFilter, useFilters } from '@/queries/settings/use-filters';
@@ -71,8 +70,8 @@ const FiltersPage = () => {
       >
         {filters.map((filter) => (
           <div key={filter.id} className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
-            <Stack space={2}>
-              <Stack className='grow' space={1}>
+            <div className='flex flex-col gap-2'>
+              <div className='flex grow flex-col gap-1'>
                 <Text weight='medium'>
                   <FormattedMessage
                     id='filters.filters_list_phrases_label'
@@ -137,7 +136,7 @@ const FiltersPage = () => {
                     </Text>
                   )}
                 </HStack>
-              </Stack>
+              </div>
               <HStack space={2} justifyContent='end'>
                 <Button theme='primary' to='/filters/$filterId' params={{ filterId: filter.id }}>
                   <FormattedMessage id='column.filters.edit' defaultMessage='Edit filter' />
@@ -146,7 +145,7 @@ const FiltersPage = () => {
                   <FormattedMessage id='column.filters.delete' defaultMessage='Delete' />
                 </Button>
               </HStack>
-            </Stack>
+            </div>
           </div>
         ))}
       </ScrollableList>

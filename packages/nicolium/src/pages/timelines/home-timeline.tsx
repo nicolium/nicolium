@@ -4,7 +4,6 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import { HomeTimelineColumn } from '@/columns/timeline';
 import { Link } from '@/components/link';
 import Column from '@/components/ui/column';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/hooks/use-instance';
@@ -50,7 +49,7 @@ const HomeTimelinePage: React.FC = () => {
     <Column className='py-0' label={intl.formatMessage(messages.title)} withHeader={false}>
       <HomeTimelineColumn
         emptyMessageText={
-          <Stack space={1}>
+          <div className='flex flex-col gap-1'>
             <Text size='xl' weight='medium' align='center'>
               <FormattedMessage
                 id='empty_column.home.title'
@@ -84,7 +83,7 @@ const HomeTimelinePage: React.FC = () => {
                 />
               </Text>
             )}
-          </Stack>
+          </div>
         }
         emptyMessageIcon={require('@phosphor-icons/core/regular/chat-centered-text.svg')}
       />

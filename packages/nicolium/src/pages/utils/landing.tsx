@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import Button from '@/components/ui/button';
 import Card, { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import LinkFooter from '@/features/ui/components/link-footer';
 import sourceCode from '@/utils/code';
@@ -14,7 +13,7 @@ import { LogoText } from '../timelines/landing-timeline';
 const LandingPage = () => (
   <>
     <Column withHeader={false}>
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <LogoText>
           <FormattedMessage id='landing.logo' defaultMessage='Nicolium' />
         </LogoText>
@@ -120,11 +119,11 @@ const LandingPage = () => (
             />
           </Text>
         </Card>
-      </Stack>
+      </div>
     </Column>
-    <Stack space={4} className='mt-4 px-4 xl:hidden'>
+    <div className='mt-4 flex flex-col gap-4 px-4 xl:hidden'>
       <LinkFooter />
-    </Stack>
+    </div>
   </>
 );
 
