@@ -18,6 +18,7 @@ import {
   adminReportSchema,
   adminRuleSchema,
   adminTagSchema,
+  pleromaConfigDescriptionSchema,
   pleromaConfigSchema,
   statusSchema,
   statusSourceSchema,
@@ -1458,6 +1459,12 @@ const admin = (client: PlApiBaseClient) => {
     },
 
     config: {
+      getPleromaConfigDescriptions: async () => {
+        const response = await client.request('/api/v1/pleroma/admin/config/descriptions');
+
+        return v.parse(v.array(pleromaConfigDescriptionSchema), response.json);
+      },
+
       getPleromaConfig: async () => {
         const response = await client.request('/api/v1/pleroma/admin/config');
 

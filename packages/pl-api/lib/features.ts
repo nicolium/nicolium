@@ -1361,6 +1361,14 @@ const getFeatures = (instance: Instance) => {
      */
     pleromaAdminAnnouncements: any([v.software === AKKOMA, v.software === PLEROMA]),
 
+    /**
+     * @see GET /api/v1/pleroma/admin/config/descriptions
+     * @see GET /api/v1/pleroma/admin/config
+     * @see POST /api/v1/pleroma/admin/config
+     * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminconfig}
+     */
+    pleromaAdminConfig: any([v.software === AKKOMA, v.software === PLEROMA]),
+
     pleromaAdminModerationLog: any([v.software === AKKOMA, v.software === PLEROMA]),
 
     pleromaAdminRelays: any([v.software === AKKOMA, v.software === PLEROMA]),
