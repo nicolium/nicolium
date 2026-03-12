@@ -16,7 +16,7 @@ import('./data')
     const sortedEmojis = Object.entries(emojis).toSorted((a, b) => a[0].localeCompare(b[0]));
     for (const [key, emoji] of sortedEmojis) {
       nativeData.push({
-        key: `${emoji.id} ${emoji.name} ${emoji.keywords.join(' ')}`,
+        key: `${emoji.id} ${emoji.name} ${emoji.keywords.join(' ')}`.replaceAll('-', '_'),
         id: 'n' + key,
       });
     }
@@ -25,14 +25,14 @@ import('./data')
 
 const addCustomToPool = (customEmojis: CustomEmoji[]) => {
   customData = customEmojis.map((emoji, i) => ({
-    key: emoji.shortcode,
+    key: emoji.shortcode.replaceAll('-', '_'),
     id: 'c' + i,
   }));
 };
 
 const search = (query: string, customEmojis: Array<CustomEmoji> = [], limit = 5): Emoji[] => {
   return fuzzysort
-    .go(query, [...nativeData, ...customData], { key: 'key', limit })
+    .go(query.replaceAll('-', '_'), [...nativeData, ...customData], { key: 'key', limit })
     .map((result) => {
       const { id } = result.obj;
 
