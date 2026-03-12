@@ -77,33 +77,32 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
   return (
     <OutlineBox
       data-testid='quoted-status'
-      className={clsx('cursor-pointer', {
-        'group hover:bg-gray-100 dark:hover:bg-gray-800': !compose,
+      className={clsx('⁂-quoted-status', {
+        '⁂-quoted-status--compose': compose,
       })}
+      onClick={handleExpandClick}
     >
-      <div className='flex flex-col gap-2' onClick={handleExpandClick}>
-        {account.id && (
-          <AccountContainer
-            {...actions}
-            id={account.id}
-            timestamp={status.created_at}
-            withRelationship={false}
-            showAccountHoverCard={!compose}
-            withLinkToProfile={!compose}
-            withLocked={false}
-          />
-        )}
+      {account.id && (
+        <AccountContainer
+          {...actions}
+          id={account.id}
+          timestamp={status.created_at}
+          withRelationship={false}
+          showAccountHoverCard={!compose}
+          withLinkToProfile={!compose}
+          withLocked={false}
+        />
+      )}
 
-        <StatusReplyMentions status={status} hoverable={false} />
+      <StatusReplyMentions status={status} hoverable={false} />
 
-        {status.event ? (
-          <EventPreview status={status} hideAction />
-        ) : (
-          <div className='relative z-0 flex flex-col gap-4'>
-            <StatusContent status={status} collapsable isQuote withMedia compose={compose} />
-          </div>
-        )}
-      </div>
+      {status.event ? (
+        <EventPreview status={status} hideAction />
+      ) : (
+        <div className='⁂-quoted-status__content'>
+          <StatusContent status={status} collapsable isQuote withMedia compose={compose} />
+        </div>
+      )}
     </OutlineBox>
   );
 };

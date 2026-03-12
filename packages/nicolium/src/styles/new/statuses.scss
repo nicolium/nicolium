@@ -606,15 +606,15 @@
   }
 
   &--quote + .⁂-read-more-button__container .⁂-read-more-button__gradient {
-    .group:hover & {
+    .⁂-quoted-status:hover & {
       background-image: linear-gradient(to bottom, transparent, rgb(var(--color-gray-100)));
     }
 
-    .dark.black .group:hover & {
+    .dark.black .⁂-quoted-status:hover & {
       background-image: linear-gradient(to bottom, transparent, rgb(var(--color-gray-800)));
     }
 
-    .dark .group:hover & {
+    .dark .⁂-quoted-status:hover & {
       background-image: linear-gradient(to bottom, transparent, rgb(var(--color-gray-800)));
     }
   }
@@ -817,5 +817,45 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
     &:hover {
       text-decoration: underline;
     }
+  }
+}
+
+.⁂-quoted-status {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  cursor: pointer;
+
+  &:not(&--compose) {
+    &:hover {
+      background: rgb(var(--color-gray-100));
+
+      .dark & {
+        background: rgb(var(--color-primary-800));
+      }
+    }
+  }
+
+  &__content {
+    position: relative;
+    z-index: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+.⁂-quoted-status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+
+  svg {
+    height: 1.25rem;
+    width: 1.25rem;
+  }
+
+  p {
+    @include mixins.text($truncate: true);
   }
 }

@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 
 interface IQuotedStatusIndicator {
@@ -17,13 +16,9 @@ const QuotedStatusIndicator: React.FC<IQuotedStatusIndicator> = ({ statusId, sta
   if (!statusUrl) return null;
 
   return (
-    <div className='flex items-center gap-1'>
-      <Icon
-        className='size-5'
-        src={require('@phosphor-icons/core/regular/quotes.svg')}
-        aria-hidden
-      />
-      <Text truncate>{statusUrl}</Text>
+    <div className='⁂-quoted-status-indicator'>
+      <Icon src={require('@phosphor-icons/core/regular/quotes.svg')} aria-hidden />
+      <p>{statusUrl}</p>
     </div>
   );
 };
