@@ -28,6 +28,4 @@ const env = compileTime(() => {
 
 const { NODE_ENV, BACKEND_URL, FE_SUBDIRECTORY, WITH_LANDING_PAGE, BANNER_HTML } = env;
 
-export type FrontendEnv = typeof env;
-
 export { NODE_ENV, BACKEND_URL, FE_SUBDIRECTORY, WITH_LANDING_PAGE, BANNER_HTML };

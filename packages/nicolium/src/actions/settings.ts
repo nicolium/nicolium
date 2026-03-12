@@ -3,7 +3,6 @@ import { defineMessage } from 'react-intl';
 import { patchMe } from '@/actions/me';
 import { getClient } from '@/api';
 import { NODE_ENV } from '@/build-config';
-import messages from '@/messages';
 import { selectOwnAccount } from '@/queries/accounts/selectors';
 import KVStore from '@/storage/kv-store';
 import { useSettingsStore } from '@/stores/settings';
@@ -115,14 +114,4 @@ const updateSettingsStore =
     }
   };
 
-const getLocale = (fallback = 'en') => {
-  const localeWithVariant = useSettingsStore.getState().settings.locale.replace('_', '-');
-  const locale = localeWithVariant.split('-')[0];
-  return Object.keys(messages).includes(localeWithVariant)
-    ? localeWithVariant
-    : Object.keys(messages).includes(locale)
-      ? locale
-      : fallback;
-};
-
-export { FE_NAME, LEGACY_FE_NAME, changeSetting, saveSettings, updateSettingsStore, getLocale };
+export { FE_NAME, LEGACY_FE_NAME, changeSetting, saveSettings, updateSettingsStore };

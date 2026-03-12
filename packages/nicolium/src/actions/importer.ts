@@ -153,6 +153,4 @@ const importEntities = (
   });
 };
 
-type ImporterAction = never;
-
-export { importEntities, type ImporterAction };
+export { importEntities };
