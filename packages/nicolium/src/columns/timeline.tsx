@@ -33,9 +33,10 @@ import {
 } from '@/queries/timelines/use-timelines';
 import { useSettings } from '@/stores/settings';
 import { selectChild } from '@/utils/scroll-utils';
+import { hasActiveFilters, sortFilteredTimeline } from '@/utils/timeline-filter';
 
 import type { FilterContextType } from '@/queries/settings/use-filters';
-import type { Settings } from '@/schemas/frontend-settings';
+import type { TimelineFilters } from '@/schemas/frontend-settings';
 import type { TimelineEntry } from '@/stores/timelines';
 import type { VirtuosoHandle } from 'react-virtuoso';
 
@@ -361,7 +362,7 @@ type IBaseTimeline = Pick<
   'emptyMessageIcon' | 'emptyMessageText' | 'onTopItemChanged'
 > & {
   featuredStatusIds?: Array<string>;
-  filters?: Settings['timelines'][string];
+  filters?: TimelineFilters;
 };
 
 interface ITimeline extends IBaseTimeline {
@@ -478,45 +479,32 @@ const Timeline: React.FC<ITimeline> = ({
       }
     }
 
-    entries
-      .map((entry) => {
-        if (entry.type === 'status') {
-          return {
-            ...entry,
-            filtered:
-              (filters?.showDirect === false && entry.isDirect) ||
-              (filters?.showReblogs === false && entry.isReblog) ||
-              (filters?.showReplies === false && entry.isReply) ||
-              (filters?.showQuotes === false && entry.isQuote) ||
-              (filters?.showNonMedia === false && !entry.hasMedia),
-          };
-        }
-        return entry;
-      })
-      .forEach((entry, entryIndex, entries) => {
-        if (entry.type === 'status' && entry.filtered) {
-          return;
-        }
+    const processedEntries = hasActiveFilters(filters)
+      ? sortFilteredTimeline(entries, filters)
+      : entries;
 
-        if (entry.type === 'status') {
-          const previousEntry = entries[entryIndex - 1];
-          const nextEntry = entries[entryIndex + 1];
+    processedEntries.forEach((entry, entryIndex, arr) => {
+      if (entry.type === 'status') {
+        const previousEntry = arr[entryIndex - 1];
+        const nextEntry = arr[entryIndex + 1];
 
-          rendered.push(
-            renderEntry(entry, rendered.length, {
-              isConnectedTop:
-                !!entry.isConnectedTop &&
-                previousEntry?.type === 'status' &&
-                !previousEntry.filtered,
-              isConnectedBottom:
-                !!entry.isConnectedBottom && nextEntry?.type === 'status' && !nextEntry.filtered,
-            }),
-          );
-          return;
-        }
+        rendered.push(
+          renderEntry(entry, rendered.length, {
+            isConnectedTop:
+              !!entry.isConnectedTop &&
+              previousEntry?.type === 'status' &&
+              !!previousEntry.isConnectedBottom,
+            isConnectedBottom:
+              !!entry.isConnectedBottom &&
+              nextEntry?.type === 'status' &&
+              !!nextEntry.isConnectedTop,
+          }),
+        );
+        return;
+      }
 
-        rendered.push(renderEntry(entry, rendered.length));
-      });
+      rendered.push(renderEntry(entry, rendered.length));
+    });
 
     return rendered;
   }, [entries, contextType, timelineId, featuredStatusIds, filters]);

@@ -125,5 +125,6 @@ const settingsSchema = v.object({
 });
 
 type Settings = v.InferOutput<typeof settingsSchema>;
+type TimelineFilters = Settings['timelines'][string];
 
-export { settingsSchema, type Settings };
+export { settingsSchema, type Settings, type TimelineFilters };
