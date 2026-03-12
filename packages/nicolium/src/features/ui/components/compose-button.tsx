@@ -3,7 +3,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import { useGroupQuery } from '@/queries/groups/use-group';
 import { useComposeActions } from '@/stores/compose';
@@ -61,7 +60,7 @@ const GroupComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
       {shrink ? (
         <Icon src={require('@phosphor-icons/core/regular/plus.svg')} />
       ) : (
-        <HStack space={3} alignItems='center'>
+        <div className='flex items-center gap-3'>
           <Avatar
             className='-my-1 border-2 border-white'
             size={30}
@@ -71,7 +70,7 @@ const GroupComposeButton: React.FC<IComposeButton> = ({ shrink }) => {
           <span>
             <FormattedMessage id='navigation.compose_group' defaultMessage='Compose to group' />
           </span>
-        </HStack>
+        </div>
       )}
     </button>
   );

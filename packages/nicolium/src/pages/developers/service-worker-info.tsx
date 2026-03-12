@@ -7,7 +7,6 @@ import Column from '@/components/ui/column';
 import FormActions from '@/components/ui/form-actions';
 import Icon from '@/components/ui/icon';
 import Indicator from '@/components/ui/indicator';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { unregisterSW } from '@/utils/sw';
 
@@ -84,7 +83,7 @@ const ServiceWorkerInfo: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)} backHref='/developers'>
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <List>
           <ListItem label={intl.formatMessage(messages.status)}>
             <div className='flex items-center gap-2'>
@@ -113,7 +112,7 @@ const ServiceWorkerInfo: React.FC = () => {
             <FormattedMessage id='sw.restart' defaultMessage='Restart' />
           </Button>
         </FormActions>
-      </Stack>
+      </div>
     </Column>
   );
 };

@@ -7,7 +7,6 @@ import Blurhash from '@/components/media/blurhash';
 import FormGroup from '@/components/ui/form-group';
 import Icon from '@/components/ui/icon';
 import Modal from '@/components/ui/modal';
-import Stack from '@/components/ui/stack';
 import Textarea from '@/components/ui/textarea';
 import { MIMETYPE_ICONS } from '@/components/upload';
 import { getPointerPosition } from '@/features/video';
@@ -259,7 +258,7 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
       }}
       secondaryText={<FormattedMessage id='alt_text_modal.cancel' defaultMessage='Cancel' />}
     >
-      <Stack space={2}>
+      <div className='flex flex-col gap-2'>
         <Preview media={media} position={position} onPositionChange={handlePositionChange} />
         <form>
           <FormGroup
@@ -281,7 +280,7 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
             />
           </FormGroup>
         </form>
-      </Stack>
+      </div>
     </Modal>
   );
 };

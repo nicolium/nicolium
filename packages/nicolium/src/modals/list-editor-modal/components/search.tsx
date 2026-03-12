@@ -5,7 +5,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import Icon from '@/components/icon';
 import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
-import HStack from '@/components/ui/hstack';
 import Input from '@/components/ui/input';
 
 const messages = defineMessages({
@@ -35,7 +34,7 @@ const Search: React.FC<ISearch> = ({ value, onSubmit }) => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <HStack space={2}>
+      <div className='flex gap-2'>
         <label className='relative grow' title={intl.formatMessage(messages.search)}>
           <Input
             type='text'
@@ -63,7 +62,7 @@ const Search: React.FC<ISearch> = ({ value, onSubmit }) => {
         <Button onClick={handleSubmit}>
           <FormattedMessage id='tabs_bar.search' defaultMessage='Search' />
         </Button>
-      </HStack>
+      </div>
     </Form>
   );
 };

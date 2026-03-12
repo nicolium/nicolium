@@ -5,7 +5,6 @@ import { FormattedMessage } from 'react-intl';
 import { logIn, switchAccount, verifyCredentials } from '@/actions/auth';
 import { fetchInstance } from '@/actions/instance';
 import Button from '@/components/ui/button';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import LoginForm from '@/features/auth-login/components/login-form';
 import OtpAuthForm from '@/features/auth-login/components/otp-auth-form';
@@ -75,10 +74,10 @@ const SignUpPanel = () => {
   if (me) return null;
 
   return (
-    <Stack space={2} data-testid='sign-up-panel'>
+    <div className='flex flex-col gap-2' data-testid='sign-up-panel'>
       {isOpen && (
         <>
-          <Stack>
+          <div className='flex flex-col'>
             <Text size='lg' weight='bold'>
               <FormattedMessage
                 id='signup_panel.title'
@@ -93,7 +92,7 @@ const SignUpPanel = () => {
                 defaultMessage="Sign up now to discuss what's happening."
               />
             </Text>
-          </Stack>
+          </div>
 
           <Button theme='primary' to='/signup' block>
             <FormattedMessage id='account.register' defaultMessage='Sign up' />
@@ -127,7 +126,7 @@ const SignUpPanel = () => {
           <LoginForm handleSubmit={handleSubmit} isLoading={isLoading} />
         </>
       )}
-    </Stack>
+    </div>
   );
 };
 

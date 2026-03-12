@@ -6,7 +6,6 @@ import { logIn, verifyCredentials, switchAccount } from '@/actions/auth';
 import { fetchInstance } from '@/actions/instance';
 import { BigCard } from '@/components/ui/big-card';
 import Button from '@/components/ui/button';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import ConsumersList from '@/features/auth-login/components/consumers-list';
 import LoginForm from '@/features/auth-login/components/login-form';
@@ -75,7 +74,7 @@ const LoginPage = () => {
 
   return (
     <BigCard title={<FormattedMessage id='login_form.header' defaultMessage='Sign in' />}>
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <LoginForm handleSubmit={handleSubmit} isLoading={isLoading} />
         <ConsumersList />
 
@@ -95,7 +94,7 @@ const LoginPage = () => {
             defaultMessage='Sign in from remote instance'
           />
         </Button>
-      </Stack>
+      </div>
     </BigCard>
   );
 };

@@ -3,7 +3,6 @@ import { FormattedMessage } from 'react-intl';
 
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
-import Stack from '@/components/ui/stack';
 import Textarea from '@/components/ui/textarea';
 
 import type { ButtonThemes } from '@/components/ui/button/useButtonStyles';
@@ -52,7 +51,7 @@ const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
       cancelText={<FormattedMessage id='confirmation_modal.cancel' defaultMessage='Cancel' />}
       cancelAction={handleCancel}
     >
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         {singleLine ? (
           <Input
             type='text'
@@ -73,7 +72,7 @@ const TextFieldModal: React.FC<TextFieldModalProps & BaseModalProps> = ({
             placeholder={placeholder}
           />
         )}
-      </Stack>
+      </div>
     </Modal>
   );
 };

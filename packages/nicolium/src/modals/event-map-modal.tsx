@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 
 import Button from '@/components/ui/button';
 import Modal from '@/components/ui/modal';
-import Stack from '@/components/ui/stack';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 
@@ -64,7 +63,7 @@ const EventMapModal: React.FC<BaseModalProps & EventMapModalProps> = ({ onClose,
       onClose={onClickClose}
       className='⁂-event-map-modal'
     >
-      <Stack alignItems='center' space={6}>
+      <div className='flex flex-col items-center gap-6'>
         <div className='h-96 w-full' id='event-map' />
         <Button
           onClick={onClickNavigate}
@@ -72,7 +71,7 @@ const EventMapModal: React.FC<BaseModalProps & EventMapModalProps> = ({ onClose,
         >
           <FormattedMessage id='event_map.navigate' defaultMessage='Navigate' />
         </Button>
-      </Stack>
+      </div>
     </Modal>
   );
 };

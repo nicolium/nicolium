@@ -7,12 +7,10 @@ import { CardHeader, CardTitle } from '@/components/ui/card';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import { SelectDropdown } from '@/features/forms';
@@ -105,7 +103,7 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
   };
 
   return (
-    <Stack space={2}>
+    <div className='flex flex-col gap-2'>
       {selectedAccountIds.length > 0 ? (
         <div className='min-h-24'>
           <CardHeader>
@@ -187,7 +185,7 @@ const AntennaAccountsForm: React.FC<IAntennaAccountsForm> = ({ antennaId, exclud
           ))}
         </div>
       </div>
-    </Stack>
+    </div>
   );
 };
 
@@ -248,7 +246,7 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
   };
 
   return (
-    <Stack space={2}>
+    <div className='flex flex-col gap-2'>
       {values.length > 0 ? (
         <div>
           <CardHeader>
@@ -256,13 +254,7 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
           </CardHeader>
           <div className='max-h-48 overflow-y-auto'>
             {values.map((item) => (
-              <HStack
-                key={item}
-                space={2}
-                alignItems='center'
-                justifyContent='between'
-                className='p-2.5'
-              >
+              <div key={item} className='flex items-center justify-between gap-2 p-2.5'>
                 <Text>{item}</Text>
                 <IconButton
                   src={require('@phosphor-icons/core/regular/x.svg')}
@@ -271,7 +263,7 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
                   title={removeTitle}
                   onClick={() => onRemove(item)}
                 />
-              </HStack>
+              </div>
             ))}
           </div>
         </div>
@@ -291,7 +283,7 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
         <CardHeader>
           <CardTitle title={addTitle} />
         </CardHeader>
-        <HStack space={2}>
+        <div className='flex gap-2'>
           <Input
             type='text'
             value={value}
@@ -301,7 +293,7 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
           <Button onClick={handleAdd}>
             <FormattedMessage id='common.add' defaultMessage='Add' />
           </Button>
-        </HStack>
+        </div>
       </Form>
 
       {excludedValues.length > 0 ? (
@@ -311,13 +303,7 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
           </CardHeader>
           <div className='max-h-48 overflow-y-auto'>
             {excludedValues.map((item) => (
-              <HStack
-                key={item}
-                space={2}
-                alignItems='center'
-                justifyContent='between'
-                className='p-2.5'
-              >
+              <div key={item} className='flex items-center justify-between gap-2 p-2.5'>
                 <Text>{item}</Text>
                 <IconButton
                   src={require('@phosphor-icons/core/regular/x.svg')}
@@ -326,7 +312,7 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
                   title={removeTitle}
                   onClick={() => onRemoveExcluded(item)}
                 />
-              </HStack>
+              </div>
             ))}
           </div>
         </div>
@@ -346,7 +332,7 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
         <CardHeader>
           <CardTitle title={addExcludedTitle} />
         </CardHeader>
-        <HStack space={2}>
+        <div className='flex gap-2'>
           <Input
             type='text'
             value={excludedValue}
@@ -356,9 +342,9 @@ const AntennaValuesForm: React.FC<IAntennaValuesForm> = ({
           <Button onClick={handleAddExcluded}>
             <FormattedMessage id='common.add' defaultMessage='Add' />
           </Button>
-        </HStack>
+        </div>
       </Form>
-    </Stack>
+    </div>
   );
 };
 

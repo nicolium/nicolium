@@ -5,7 +5,6 @@ import Account from '@/components/accounts/account';
 import { AuthorizeRejectButtons } from '@/components/authorize-reject-buttons';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import Spinner from '@/components/ui/spinner';
 import ColumnForbidden from '@/features/ui/components/column-forbidden';
 import { groupMembershipRequestsRoute } from '@/features/ui/router';
@@ -45,7 +44,7 @@ const MembershipRequest: React.FC<IMembershipRequest> = ({ accountId, onAuthoriz
   const handleReject = () => onReject(account);
 
   return (
-    <HStack space={1} alignItems='center' justifyContent='between' className='p-2.5'>
+    <div className='flex items-center justify-between gap-1 p-2.5'>
       <div className='w-full'>
         <Account account={account} withRelationship={false} />
       </div>
@@ -55,7 +54,7 @@ const MembershipRequest: React.FC<IMembershipRequest> = ({ accountId, onAuthoriz
         onReject={handleReject}
         countdown={3000}
       />
-    </HStack>
+    </div>
   );
 };
 

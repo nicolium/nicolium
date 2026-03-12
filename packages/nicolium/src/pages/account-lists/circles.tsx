@@ -6,11 +6,9 @@ import Button from '@/components/ui/button';
 import Card from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
 import Spinner from '@/components/ui/spinner';
-import Stack from '@/components/ui/stack';
 import { getOrderedLists } from '@/pages/account-lists/lists';
 import { useCircles, useCreateCircle } from '@/queries/accounts/use-circles';
 
@@ -43,7 +41,7 @@ const NewCircleForm: React.FC = () => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <HStack space={2} alignItems='center'>
+      <div className='flex items-center gap-2'>
         <label className='grow'>
           <span style={{ display: 'none' }}>{label}</span>
 
@@ -59,7 +57,7 @@ const NewCircleForm: React.FC = () => {
         <Button disabled={isPending} type='submit' theme='primary'>
           {create}
         </Button>
-      </HStack>
+      </div>
     </Form>
   );
 };
@@ -86,7 +84,7 @@ const CirclesPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <NewCircleForm />
 
         {!Object.keys(circles).length ? (
@@ -101,19 +99,19 @@ const CirclesPage: React.FC = () => {
                 to='/circles/$circleId'
                 params={{ circleId: circle.id }}
                 label={
-                  <HStack alignItems='center' space={2}>
+                  <div className='flex items-center gap-2'>
                     <Icon
                       src={require('@phosphor-icons/core/regular/list-bullets.svg')}
                       size={20}
                     />
                     <span>{circle.title}</span>
-                  </HStack>
+                  </div>
                 }
               />
             ))}
           </List>
         )}
-      </Stack>
+      </div>
     </Column>
   );
 };

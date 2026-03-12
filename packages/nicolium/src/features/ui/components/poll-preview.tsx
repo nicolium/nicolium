@@ -2,7 +2,6 @@ import noop from 'lodash/noop';
 import React from 'react';
 
 import PollOption from '@/components/polls/poll-option';
-import Stack from '@/components/ui/stack';
 
 import type { Poll } from 'pl-api';
 
@@ -16,7 +15,7 @@ const PollPreview: React.FC<IPollPreview> = ({ poll }) => {
   }
 
   return (
-    <Stack space={2}>
+    <div className='flex flex-col gap-2'>
       {poll.options.map((option, i) => (
         <PollOption
           key={i}
@@ -28,7 +27,7 @@ const PollPreview: React.FC<IPollPreview> = ({ poll }) => {
           onToggle={noop}
         />
       ))}
-    </Stack>
+    </div>
   );
 };
 

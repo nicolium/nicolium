@@ -1,11 +1,11 @@
 import { Link } from '@tanstack/react-router';
+import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import VerificationBadge from '@/components/accounts/verification-badge';
 import StillImage from '@/components/still-image';
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
@@ -50,7 +50,9 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
             </div>
           )}
 
-          <HStack justifyContent={disableUserProvidedMedia ? 'end' : 'between'}>
+          <div
+            className={clsx('flex', disableUserProvidedMedia ? 'justify-end' : 'justify-between')}
+          >
             {!disableUserProvidedMedia && (
               <Link
                 to='/@{$username}'
@@ -71,7 +73,7 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
             )}
 
             {action && <div className='mt-2'>{action}</div>}
-          </HStack>
+          </div>
         </div>
 
         <div className='flex flex-col'>

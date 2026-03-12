@@ -9,7 +9,6 @@ import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
 import Spinner from '@/components/ui/spinner';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import {
   useAddAccountsToCircle,
@@ -90,7 +89,7 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
       onClose={onClickClose}
     >
       {circle ? (
-        <Stack space={2}>
+        <div className='flex flex-col gap-2'>
           <Form onSubmit={handleSubmit}>
             <FormGroup
               labelText={<FormattedMessage id='circles.edit.title' defaultMessage='Circle title' />}
@@ -171,7 +170,7 @@ const CircleEditorModal: React.FC<BaseModalProps & CircleEditorModalProps> = ({
               ))}
             </div>
           </div>
-        </Stack>
+        </div>
       ) : (
         <Spinner />
       )}

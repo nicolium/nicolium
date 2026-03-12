@@ -7,10 +7,8 @@ import Account from '@/components/accounts/account';
 import List, { ListItem } from '@/components/list';
 import Card from '@/components/ui/card';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import StatusContainer from '@/containers/status-container';
 import ColumnLoading from '@/features/ui/components/column-loading';
@@ -170,7 +168,7 @@ const ReportPage: React.FC = () => {
             className='h-fit'
           >
             <Card variant='rounded'>
-              <Stack space={2}>
+              <div className='flex flex-col gap-2'>
                 <Text size='md' weight='medium'>
                   <FormattedMessage
                     id='admin.report.target_account'
@@ -178,7 +176,7 @@ const ReportPage: React.FC = () => {
                   />
                 </Text>
                 <Account account={report.target_account} disabled hideActions />
-              </Stack>
+              </div>
             </Card>
           </Link>
         )}
@@ -259,7 +257,7 @@ const ReportPage: React.FC = () => {
 
                 <td className='p-2.5 text-end'>
                   {report.assigned_account ? (
-                    <HStack space={2} alignItems='center' justifyContent='end'>
+                    <div className='flex items-center justify-end gap-2'>
                       <Text size='sm' className='hover:underline'>
                         <Link
                           to='/nicolium/admin/accounts/$accountId'
@@ -274,7 +272,7 @@ const ReportPage: React.FC = () => {
                         onClick={handleUnassignReport}
                         text={intl.formatMessage(messages.reportUnassign)}
                       />
-                    </HStack>
+                    </div>
                   ) : (
                     <IconButton
                       className='ml-auto'
@@ -292,12 +290,12 @@ const ReportPage: React.FC = () => {
       </div>
       {report.status_ids?.length > 0 && (
         <Card variant='rounded' className='mb-4'>
-          <Stack space={2}>
+          <div className='flex flex-col gap-2'>
             <Text size='md' weight='medium'>
               <FormattedMessage id='admin.report.statuses' defaultMessage='Reported content' />
             </Text>
             <ReportStatuses statusIds={report.status_ids} />
-          </Stack>
+          </div>
         </Card>
       )}
       <List>

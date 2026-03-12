@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useAppSelector } from '@/hooks/use-app-selector';
 
@@ -21,7 +20,7 @@ const ConfirmationStep: React.FC = () => {
   const links = useAppSelector((state) => state.frontendConfig.links);
 
   return (
-    <Stack space={1}>
+    <div className='flex flex-col gap-1'>
       <Text weight='semibold' tag='h1' size='xl'>
         <FormattedMessage
           id='report.confirmation.title'
@@ -43,7 +42,7 @@ const ConfirmationStep: React.FC = () => {
           }}
         />
       </Text>
-    </Stack>
+    </div>
   );
 };
 

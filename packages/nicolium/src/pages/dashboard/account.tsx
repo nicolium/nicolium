@@ -10,8 +10,6 @@ import MissingIndicator from '@/components/missing-indicator';
 import OutlineBox from '@/components/outline-box';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import TagInput from '@/components/ui/tag-input';
 import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
@@ -238,7 +236,7 @@ const AdminAccountPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.columnHeading, { acct: account.acct })}>
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <OutlineBox>
           <Account
             account={account}
@@ -300,12 +298,12 @@ const AdminAccountPage: React.FC = () => {
               }
             >
               <div className='grow'>
-                <HStack className='w-full' alignItems='center' space={2}>
+                <div className='flex w-full items-center gap-2'>
                   <BadgeInput badges={badges} onChange={setBadges} />
                   <Button onClick={handleSaveBadges}>
                     <FormattedMessage id='common.save' defaultMessage='Save' />
                   </Button>
-                </HStack>
+                </div>
               </div>
             </ListItem>
           )}
@@ -342,7 +340,7 @@ const AdminAccountPage: React.FC = () => {
         </Text>
 
         {features.version.software === PLEROMA && (
-          <HStack justifyContent='center'>
+          <div className='flex justify-center'>
             <Button
               icon={require('@phosphor-icons/core/regular/arrow-square-out.svg')}
               size='sm'
@@ -354,9 +352,9 @@ const AdminAccountPage: React.FC = () => {
                 defaultMessage='Open in AdminFE'
               />
             </Button>
-          </HStack>
+          </div>
         )}
-      </Stack>
+      </div>
     </Column>
   );
 };

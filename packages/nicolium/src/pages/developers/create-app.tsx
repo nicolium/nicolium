@@ -9,7 +9,6 @@ import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Textarea from '@/components/ui/textarea';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -111,7 +110,7 @@ const CreateAppPage: React.FC = () => {
   const renderResults = () => (
     <Column label={intl.formatMessage(messages.heading)} backHref='/developers'>
       <Form>
-        <Stack>
+        <div className='flex flex-col'>
           <Text size='lg' weight='medium'>
             <FormattedMessage
               id='app_create.results.explanation_title'
@@ -124,7 +123,7 @@ const CreateAppPage: React.FC = () => {
               defaultMessage='You created a new app and token! Please copy the credentials somewhere; you will not see them again after navigating away from this page.'
             />
           </Text>
-        </Stack>
+        </div>
 
         <FormGroup
           labelText={<FormattedMessage id='app_create.results.app_label' defaultMessage='App' />}

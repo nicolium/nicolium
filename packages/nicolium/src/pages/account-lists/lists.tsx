@@ -6,11 +6,9 @@ import Button from '@/components/ui/button';
 import Card from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
 import Spinner from '@/components/ui/spinner';
-import Stack from '@/components/ui/stack';
 import { useCreateList, useLists } from '@/queries/accounts/use-lists';
 
 import type { List as ListEntity } from 'pl-api';
@@ -54,7 +52,7 @@ const NewListForm: React.FC = () => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <HStack space={2} alignItems='center'>
+      <div className='flex items-center gap-2'>
         <label className='grow'>
           <span style={{ display: 'none' }}>{label}</span>
 
@@ -70,7 +68,7 @@ const NewListForm: React.FC = () => {
         <Button disabled={isPending} type='submit' theme='primary'>
           {create}
         </Button>
-      </HStack>
+      </div>
     </Form>
   );
 };
@@ -97,7 +95,7 @@ const ListsPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <NewListForm />
 
         {!Object.keys(lists).length ? (
@@ -112,19 +110,19 @@ const ListsPage: React.FC = () => {
                 to='/list/$listId'
                 params={{ listId: list.id }}
                 label={
-                  <HStack alignItems='center' space={2}>
+                  <div className='flex items-center gap-2'>
                     <Icon
                       src={require('@phosphor-icons/core/regular/list-bullets.svg')}
                       size={20}
                     />
                     <span>{list.title}</span>
-                  </HStack>
+                  </div>
                 }
               />
             ))}
           </List>
         )}
-      </Stack>
+      </div>
     </Column>
   );
 };

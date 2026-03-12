@@ -2,7 +2,6 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Button from '@/components/ui/button';
-import HStack from '@/components/ui/hstack';
 import Spinner from '@/components/ui/spinner';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
@@ -194,7 +193,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
 
   const followRequestAction = () => {
     return (
-      <HStack space={2}>
+      <div className='flex gap-2'>
         <Button
           theme='secondary'
           size='sm'
@@ -207,7 +206,7 @@ const ActionButton: React.FC<IActionButton> = ({ account, actionType, small = tr
           text={<FormattedMessage id='follow_request.reject' defaultMessage='Reject' />}
           onClick={handleReject}
         />
-      </HStack>
+      </div>
     );
   };
 

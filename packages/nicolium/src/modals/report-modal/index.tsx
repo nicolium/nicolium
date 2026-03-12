@@ -6,7 +6,6 @@ import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import StatusContent from '@/components/statuses/status-content';
 import Modal from '@/components/ui/modal';
 import ProgressBar from '@/components/ui/progress-bar';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import AccountContainer from '@/containers/account-container';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
@@ -42,7 +41,7 @@ const SelectedStatus = ({ statusId }: { statusId: string }) => {
   }
 
   return (
-    <Stack space={2} className='rounded-lg bg-gray-100 p-4 dark:bg-gray-800'>
+    <div className='flex flex-col gap-2 rounded-lg bg-gray-100 p-4 dark:bg-gray-800'>
       <AccountContainer
         id={status.account_id}
         showAccountHoverCard={false}
@@ -54,7 +53,7 @@ const SelectedStatus = ({ statusId }: { statusId: string }) => {
       <StatusContent status={status} />
 
       {status.media_attachments.length > 0 && <AttachmentThumbs status={status} />}
-    </Stack>
+    </div>
   );
 };
 
@@ -241,7 +240,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
       confirmationDisabled={isConfirmationButtonDisabled}
       skipFocus
     >
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <ProgressBar progress={calculateProgress()} />
 
         {currentStep !== Steps.THREE && !isReportingAccount && renderSelectedEntity()}
@@ -262,7 +261,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
             isSubmitting={isSubmitting}
           />
         )}
-      </Stack>
+      </div>
     </Modal>
   );
 };

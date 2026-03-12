@@ -6,7 +6,6 @@ import { useIntl } from 'react-intl';
 import ScrollableList from '@/components/scrollable-list';
 import StatusActionBar from '@/components/statuses/status-action-bar';
 import Tombstone from '@/components/statuses/tombstone';
-import Stack from '@/components/ui/stack';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
 import PendingStatus from '@/features/ui/components/pending-status';
@@ -388,9 +387,8 @@ const Thread = ({
   }, [thread]);
 
   return (
-    <Stack
-      space={2}
-      className={clsx({
+    <div
+      className={clsx('flex flex-col gap-2', {
         'h-full': isModal,
         'mt-2': !isModal,
       })}
@@ -420,7 +418,7 @@ const Thread = ({
           {children}
         </ScrollableList>
       </div>
-    </Stack>
+    </div>
   );
 };
 

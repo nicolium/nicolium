@@ -2,7 +2,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Button from '@/components/ui/button';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useModalsActions } from '@/stores/modals';
 
@@ -14,8 +13,8 @@ const NewGroupPanel = () => {
   };
 
   return (
-    <Stack space={2}>
-      <Stack>
+    <div className='flex flex-col gap-2'>
+      <div className='flex flex-col'>
         <Text size='lg' weight='bold'>
           <FormattedMessage id='new_group_panel.title' defaultMessage='Create group' />
         </Text>
@@ -26,12 +25,12 @@ const NewGroupPanel = () => {
             defaultMessage="Can't find what you're looking for? Start your own private or public group."
           />
         </Text>
-      </Stack>
+      </div>
 
       <Button onClick={createGroup} theme='secondary' block>
         <FormattedMessage id='new_group_panel.action' defaultMessage='Create group' />
       </Button>
-    </Stack>
+    </div>
   );
 };
 

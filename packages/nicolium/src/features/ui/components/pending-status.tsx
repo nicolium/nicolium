@@ -6,8 +6,6 @@ import Account from '@/components/accounts/account';
 import StatusContent from '@/components/statuses/status-content';
 import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
 import Card from '@/components/ui/card';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import PlaceholderCard from '@/features/placeholder/components/placeholder-card';
 import PlaceholderMediaGallery from '@/features/placeholder/components/placeholder-media-gallery';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
@@ -75,22 +73,20 @@ const PendingStatus: React.FC<IPendingStatus> = ({
           })}
           variant={variant}
         >
-          <div className='mb-4'>
-            <HStack justifyContent='between' alignItems='start'>
-              <Account
-                key={ownAccount.id}
-                account={ownAccount}
-                timestamp={status.created_at}
-                hideActions
-                withLinkToProfile={false}
-              />
-            </HStack>
+          <div className='mb-4 flex items-start justify-between'>
+            <Account
+              key={ownAccount.id}
+              account={ownAccount}
+              timestamp={status.created_at}
+              hideActions
+              withLinkToProfile={false}
+            />
           </div>
 
           <div className='status__content-wrapper'>
             <StatusReplyMentions status={status} />
 
-            <Stack space={4}>
+            <div className='flex flex-col gap-4'>
               <StatusContent status={status} collapsable />
 
               <PendingStatusMedia status={status} />
@@ -98,7 +94,7 @@ const PendingStatus: React.FC<IPendingStatus> = ({
               {poll && <PollPreview poll={poll} />}
 
               {status.quote_id && <QuotedStatus statusId={status.quote_id} />}
-            </Stack>
+            </div>
           </div>
 
           {/* TODO */}

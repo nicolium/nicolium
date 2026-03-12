@@ -3,7 +3,6 @@ import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-
 
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useModerationLog } from '@/queries/admin/use-moderation-log';
 
@@ -51,7 +50,7 @@ interface ILogItem {
 }
 
 const LogItem: React.FC<ILogItem> = ({ log }) => (
-  <Stack space={2} className='p-4'>
+  <div className='flex flex-col gap-2 p-4'>
     <Text>{log.message}</Text>
 
     <Text theme='muted' size='xs'>
@@ -65,7 +64,7 @@ const LogItem: React.FC<ILogItem> = ({ log }) => (
         minute='2-digit'
       />
     </Text>
-  </Stack>
+  </div>
 );
 
 export { ModerationLogPage as default };

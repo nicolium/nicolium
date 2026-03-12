@@ -11,7 +11,6 @@ import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Select from '@/components/ui/select';
-import Stack from '@/components/ui/stack';
 import Streamfield from '@/components/ui/streamfield';
 import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
@@ -239,7 +238,7 @@ const EditFilterPage: React.FC = () => {
           <SelectDropdown items={expirations} defaultValue='' onChange={handleSelectChange} />
         </FormGroup>
 
-        <Stack>
+        <div className='flex flex-col'>
           <Text size='sm' weight='medium'>
             <FormattedMessage id='filters.context_header' defaultMessage='Filter contexts' />
           </Text>
@@ -249,7 +248,7 @@ const EditFilterPage: React.FC = () => {
               defaultMessage='One or multiple contexts where the filter should apply'
             />
           </Text>
-        </Stack>
+        </div>
 
         <List>
           <ListItem

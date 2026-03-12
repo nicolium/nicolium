@@ -6,7 +6,6 @@ import { changeSetting, saveSettings } from '@/actions/settings';
 import List, { ListItem } from '@/components/list';
 import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
-import HStack from '@/components/ui/hstack';
 import { Multiselect } from '@/components/ui/multiselect';
 import StepSlider from '@/components/ui/step-slider';
 import { SelectDropdown } from '@/features/forms';
@@ -471,11 +470,11 @@ const Preferences = () => {
         )}
       </List>
 
-      <HStack justifyContent='end'>
+      <div className='flex justify-end'>
         <Button theme='secondary' onClick={onThemeReset}>
           <FormattedMessage id='preferences.fields.theme_reset' defaultMessage='Reset theme' />
         </Button>
-      </HStack>
+      </div>
 
       <List>
         <ListItem

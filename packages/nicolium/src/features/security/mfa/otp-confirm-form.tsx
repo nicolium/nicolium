@@ -8,7 +8,6 @@ import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
@@ -86,9 +85,9 @@ const OtpConfirmForm: React.FC = () => {
   };
 
   return (
-    <Stack space={4}>
+    <div className='flex flex-col gap-4'>
       <Form onSubmit={handleSubmit}>
-        <Stack>
+        <div className='flex flex-col'>
           <Text weight='semibold' size='lg'>
             1. <FormattedMessage id='mfa.mfa_setup_scan_title' defaultMessage='Scan' />
           </Text>
@@ -99,7 +98,7 @@ const OtpConfirmForm: React.FC = () => {
               defaultMessage='Using your two-factor app, scan this QR code or enter the text key.'
             />
           </Text>
-        </Stack>
+        </div>
 
         <QRCode className='rounded-lg' value={state.qrCodeURI} includeMargin />
         {state.confirmKey}
@@ -170,7 +169,7 @@ const OtpConfirmForm: React.FC = () => {
           />
         </FormActions>
       </Form>
-    </Stack>
+    </div>
   );
 };
 

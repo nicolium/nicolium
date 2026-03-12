@@ -5,7 +5,6 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
 import Spinner from '@/components/ui/spinner';
 import Text from '@/components/ui/text';
@@ -31,7 +30,7 @@ const Domain: React.FC<IDomain> = ({ domain }) => {
   };
 
   return (
-    <HStack alignItems='center' justifyContent='between' space={1} className='p-2'>
+    <div className='flex items-center justify-between gap-1 p-2'>
       <Text tag='span'>{domain}</Text>
       <IconButton
         iconClassName='h-5 w-5'
@@ -39,7 +38,7 @@ const Domain: React.FC<IDomain> = ({ domain }) => {
         title={intl.formatMessage(messages.unblockDomain, { domain })}
         onClick={handleDomainUnblock}
       />
-    </HStack>
+    </div>
   );
 };
 

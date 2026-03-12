@@ -5,8 +5,6 @@ import ScrollableList from '@/components/scrollable-list';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useAnnouncements, useDeleteAnnouncementMutation } from '@/queries/admin/use-announcements';
 import { useModalsActions } from '@/stores/modals';
@@ -61,13 +59,12 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement }) => {
 
   return (
     <div key={announcement.id} className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
-      <Stack space={2}>
-        n
+      <div className='flex flex-col gap-2'>
         <Text>
           <ParsedContent html={announcement.content} emojis={announcement.emojis} />
         </Text>
         {(announcement.starts_at ?? announcement.ends_at ?? announcement.all_day) && (
-          <HStack space={2} wrap>
+          <div className='flex flex-wrap gap-2'>
             {announcement.starts_at && (
               <Text size='sm'>
                 <Text tag='span' size='sm' weight='medium'>
@@ -104,17 +101,17 @@ const Announcement: React.FC<IAnnouncement> = ({ announcement }) => {
                 <FormattedMessage id='admin.announcements.all_day' defaultMessage='All day' />
               </Text>
             )}
-          </HStack>
+          </div>
         )}
-        <HStack justifyContent='end' space={2}>
+        <div className='flex justify-end gap-2'>
           <Button theme='primary' onClick={handleEditAnnouncement}>
             <FormattedMessage id='admin.announcements.edit' defaultMessage='Edit' />
           </Button>
           <Button theme='primary' onClick={handleDeleteAnnouncement}>
             <FormattedMessage id='admin.announcements.delete' defaultMessage='Delete' />
           </Button>
-        </HStack>
-      </Stack>
+        </div>
+      </div>
     </div>
   );
 };
@@ -138,7 +135,7 @@ const AdminAnnouncementsPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <Stack className='gap-4'>
+      <div className='flex flex-col gap-4'>
         <Button
           className='sm:w-fit sm:self-end'
           icon={require('@phosphor-icons/core/regular/plus.svg')}
@@ -159,7 +156,7 @@ const AdminAnnouncementsPage: React.FC = () => {
             <Announcement key={announcement.id} announcement={announcement} />
           ))}
         </ScrollableList>
-      </Stack>
+      </div>
     </Column>
   );
 };

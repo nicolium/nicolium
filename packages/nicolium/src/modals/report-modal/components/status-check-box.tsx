@@ -2,7 +2,6 @@ import noop from 'lodash/noop';
 import React, { Suspense } from 'react';
 
 import StatusContent from '@/components/statuses/status-content';
-import Stack from '@/components/ui/stack';
 import Toggle from '@/components/ui/toggle';
 import { MediaGallery, Video, Audio } from '@/features/ui/util/async-components';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
@@ -65,10 +64,10 @@ const StatusCheckBox: React.FC<IStatusCheckBox> = ({
 
   return (
     <div className='flex items-center justify-between'>
-      <Stack className='status-check-box__status py-2' space={1}>
+      <div className='status-check-box__status flex flex-col gap-1 py-2'>
         <StatusContent status={status} />
         <Suspense>{media}</Suspense>
-      </Stack>
+      </div>
 
       <div className='flex items-center justify-center p-2.5'>
         <Toggle checked={checked} onChange={onToggle} disabled={disabled} />

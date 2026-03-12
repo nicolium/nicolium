@@ -11,9 +11,7 @@ import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
-import HStack from '@/components/ui/hstack';
 import ProgressBar from '@/components/ui/progress-bar';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -221,19 +219,14 @@ const CirclePage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <Stack alignItems='center' space={6}>
+      <div className='flex flex-col items-center gap-4'>
         {state !== 'done' && (
-          <Stack
-            alignItems='center'
-            justifyContent='center'
-            className='absolute inset-0 z-40 w-full bg-gray-800/75 p-4 backdrop-blur-lg'
-            space={4}
-          >
+          <div className='absolute inset-0 z-40 flex w-full flex-col items-center justify-center gap-4 bg-gray-800/75 p-4 backdrop-blur-lg'>
             <ProgressBar progress={progress / 100} size='md' />
             <Text theme='white' weight='semibold'>
               {intl.formatMessage(messages[state])}
             </Text>
-          </Stack>
+          </div>
         )}
 
         <canvas className='max-w-full' ref={canvasRef} width={1000} height={1000} />
@@ -246,7 +239,7 @@ const CirclePage: React.FC = () => {
             expanded={expanded}
             onToggle={setExpanded}
           >
-            <Stack space={2}>
+            <div className='flex flex-col gap-2'>
               {users?.map((user) => (
                 <Link key={user.id} to='/@{$username}' params={{ username: user.acct }}>
                   <div className='flex items-center gap-2'>
@@ -262,11 +255,11 @@ const CirclePage: React.FC = () => {
                   </div>
                 </Link>
               ))}
-            </Stack>
+            </div>
           </Accordion>
         </div>
 
-        <HStack space={2}>
+        <div className='flex gap-2'>
           <Button
             onClick={onSave}
             icon={require('@phosphor-icons/core/regular/download-simple.svg')}
@@ -279,8 +272,8 @@ const CirclePage: React.FC = () => {
           >
             <FormattedMessage id='interactions_circle.compose' defaultMessage='Share' />
           </Button>
-        </HStack>
-      </Stack>
+        </div>
+      </div>
     </Column>
   );
 };

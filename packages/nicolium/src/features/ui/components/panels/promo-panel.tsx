@@ -2,7 +2,6 @@ import React from 'react';
 
 import ForkAwesomeIcon from '@/components/fork-awesome-icon';
 import List, { ListItem } from '@/components/list';
-import HStack from '@/components/ui/hstack';
 import Widget from '@/components/ui/widget';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/hooks/use-instance';
@@ -25,10 +24,10 @@ const PromoPanel: React.FC = () => {
             key={i}
             href={item.url}
             label={
-              <HStack alignItems='center' space={2}>
+              <div className='flex items-center gap-2'>
                 <ForkAwesomeIcon id={item.icon} className='flex-none text-lg' fixedWidth />
                 <span>{item.textLocales[locale] || item.text}</span>
-              </HStack>
+              </div>
             }
             size='sm'
           />

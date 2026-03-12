@@ -4,7 +4,6 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useRules } from '@/queries/admin/use-rules';
 import { useModalsActions } from '@/stores/modals';
@@ -53,7 +52,7 @@ const Rule: React.FC<IRule> = ({ rule }) => {
 
   return (
     <div key={rule.id} className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
-      <Stack space={2}>
+      <div className='flex flex-col gap-2'>
         <Text>{rule.text}</Text>
         <Text tag='span' theme='muted' size='sm'>
           {rule.hint}
@@ -74,7 +73,7 @@ const Rule: React.FC<IRule> = ({ rule }) => {
             <FormattedMessage id='admin.rules.delete' defaultMessage='Delete' />
           </Button>
         </div>
-      </Stack>
+      </div>
     </div>
   );
 };
@@ -98,7 +97,7 @@ const RulesPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <Stack className='gap-4'>
+      <div className='flex flex-col gap-4'>
         <Button
           className='sm:w-fit sm:self-end'
           icon={require('@phosphor-icons/core/regular/plus.svg')}
@@ -119,7 +118,7 @@ const RulesPage: React.FC = () => {
             <Rule key={rule.id} rule={rule} />
           ))}
         </ScrollableList>
-      </Stack>
+      </div>
     </Column>
   );
 };

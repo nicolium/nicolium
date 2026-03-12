@@ -4,7 +4,6 @@ import { createPortal } from 'react-dom';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import Emoji from '@/components/ui/emoji';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
 import Modal from '@/components/ui/modal';
@@ -168,7 +167,7 @@ const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModal
         <FormattedMessage id='edit_bookmark_folder_modal.confirm' defaultMessage='Save' />
       }
     >
-      <HStack space={2}>
+      <div className='flex gap-2'>
         {features.bookmarkFolderEmojis && (
           <EmojiPicker emoji={emoji} emojiUrl={emojiUrl} onPickEmoji={handleEmojiPick} />
         )}
@@ -181,7 +180,7 @@ const EditBookmarkFolderModal: React.FC<BaseModalProps & EditBookmarkFolderModal
           disabled={isPending}
           {...name}
         />
-      </HStack>
+      </div>
     </Modal>
   );
 };

@@ -8,7 +8,6 @@ import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
 import { CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
 import { useAppSelector } from '@/hooks/use-app-selector';
@@ -68,12 +67,12 @@ const Account: React.FC<IAccount> = ({ accountId, aliases }) => {
   }
 
   return (
-    <HStack space={1} alignItems='center' justifyContent='between' className='p-2.5'>
+    <div className='flex items-center justify-between gap-1 p-2.5'>
       <div className='w-full'>
         <AccountComponent account={account} withRelationship={false} />
       </div>
       {button}
-    </HStack>
+    </div>
   );
 };
 
@@ -198,8 +197,8 @@ const AliasesPage = () => {
       </CardHeader>
       <div className='flex-1'>
         <ScrollableList scrollKey='aliases' emptyMessageText={emptyMessage}>
-          {aliases.map((alias, i) => (
-            <HStack alignItems='center' justifyContent='between' space={1} key={i} className='p-2'>
+          {aliases.map((alias) => (
+            <div key={alias} className='flex items-center justify-between gap-1 p-2'>
               <div>
                 <Text tag='span' theme='muted'>
                   <FormattedMessage id='aliases.account_label' defaultMessage='Old account:' />
@@ -219,7 +218,7 @@ const AliasesPage = () => {
                   />
                 </Text>
               </button>
-            </HStack>
+            </div>
           ))}
         </ScrollableList>
       </div>

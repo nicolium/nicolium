@@ -1,7 +1,5 @@
 import React from 'react';
 
-import Stack from '@/components/ui/stack';
-
 import { randomIntFromInterval, generateText } from '../utils';
 
 const PlaceholderSidebarTrends = ({ limit }: { limit: number }) => {
@@ -11,10 +9,13 @@ const PlaceholderSidebarTrends = ({ limit }: { limit: number }) => {
   return (
     <>
       {new Array(limit).fill(undefined).map((_, idx) => (
-        <Stack key={idx} className='animate-pulse text-primary-200 dark:text-primary-700'>
+        <div
+          key={idx}
+          className='flex animate-pulse flex-col text-primary-200 dark:text-primary-700'
+        >
           <p>{generateText(trend)}</p>
           <p>{generateText(stat)}</p>
-        </Stack>
+        </div>
       ))}
     </>
   );

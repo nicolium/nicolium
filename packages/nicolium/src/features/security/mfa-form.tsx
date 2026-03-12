@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
 import Column from '@/components/ui/column';
-import Stack from '@/components/ui/stack';
 import { useFeatures } from '@/hooks/use-features';
 import { useMfaConfig } from '@/queries/security/use-mfa';
 
@@ -31,7 +30,7 @@ const MfaForm: React.FC = () => {
       {mfa?.settings.totp ? (
         <DisableOtpForm />
       ) : (
-        <Stack space={4}>
+        <div className='flex flex-col gap-4'>
           {features.manageMfaBackupCodes && (
             <EnableOtpForm
               displayOtpForm={displayOtpForm}
@@ -39,7 +38,7 @@ const MfaForm: React.FC = () => {
             />
           )}
           {(displayOtpForm || !features.manageMfaBackupCodes) && <OtpConfirmForm />}
-        </Stack>
+        </div>
       )}
     </Column>
   );

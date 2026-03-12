@@ -5,8 +5,6 @@ import { ParsedContent } from '@/components/statuses/parsed-content';
 import Avatar from '@/components/ui/avatar';
 import Button from '@/components/ui/button';
 import Divider from '@/components/ui/divider';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import toast from '@/toast';
 import copy from '@/utils/copy';
@@ -46,9 +44,9 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
   }
 
   return (
-    <Stack space={9}>
-      <Stack space={3}>
-        <Stack>
+    <div className='flex flex-col gap-9'>
+      <div className='flex flex-col gap-3'>
+        <div className='flex flex-col'>
           <label className='dark:sm:shadow-inset relative h-24 w-full cursor-pointer overflow-hidden rounded-lg bg-primary-100 text-primary-500 dark:bg-gray-800 dark:text-primary-400 sm:h-36 sm:shadow'>
             {group.header && (
               <img
@@ -62,9 +60,9 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
           <label className='z-[1] mx-auto -mt-10 cursor-pointer rounded-lg bg-primary-500 ring-2 ring-white dark:ring-primary-900'>
             {group.avatar && <Avatar src={group.avatar} alt={group.avatar_description} size={80} />}
           </label>
-        </Stack>
+        </div>
 
-        <Stack>
+        <div className='flex flex-col'>
           <Text size='2xl' weight='bold' align='center'>
             {group.display_name}
           </Text>
@@ -74,17 +72,17 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
           >
             <ParsedContent html={group.note} emojis={group.emojis} />
           </Text>
-        </Stack>
-      </Stack>
+        </div>
+      </div>
 
       <Divider />
 
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <Text size='3xl' weight='bold' align='center'>
           <FormattedMessage id='manage_group.confirmation.title' defaultMessage='You’re all set!' />
         </Text>
 
-        <Stack space={5}>
+        <div className='flex flex-col gap-5'>
           <InfoListItem number={1}>
             <Text theme='muted'>
               <FormattedMessage
@@ -111,10 +109,10 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
               />
             </Text>
           </InfoListItem>
-        </Stack>
-      </Stack>
+        </div>
+      </div>
 
-      <HStack space={2} justifyContent='center'>
+      <div className='flex justify-center gap-2'>
         {'share' in navigator && (
           <Button
             onClick={handleShare}
@@ -137,8 +135,8 @@ const ConfirmationStep: React.FC<IConfirmationStep> = ({ group }) => {
         >
           <FormattedMessage id='manage_group.confirmation.copy' defaultMessage='Copy link' />
         </Button>
-      </HStack>
-    </Stack>
+      </div>
+    </div>
   );
 };
 
@@ -160,10 +158,10 @@ interface IInfoListItem {
 }
 
 const InfoListItem: React.FC<IInfoListItem> = ({ number, children }) => (
-  <HStack alignItems='top' space={3}>
+  <div className='flex items-start gap-3'>
     <InfoListNumber number={number} />
     <div className='mt-0.5'>{children}</div>
-  </HStack>
+  </div>
 );
 
 export { ConfirmationStep as default };

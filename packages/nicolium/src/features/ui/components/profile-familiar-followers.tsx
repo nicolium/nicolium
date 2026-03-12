@@ -5,7 +5,6 @@ import { FormattedList, FormattedMessage } from 'react-intl';
 import AvatarStack from '@/components/accounts/avatar-stack';
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import VerificationBadge from '@/components/accounts/verification-badge';
-import HStack from '@/components/ui/hstack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -31,13 +30,13 @@ const FamiliarFollowerLink: React.FC<IFamiliarFollowerLink> = ({ id }) => {
       key={account.id}
     >
       <HoverAccountWrapper accountId={account.id} element='span'>
-        <HStack space={1} alignItems='center' grow>
+        <div className='flex flex-grow items-center gap-1'>
           <Text size='sm' theme='primary' truncate>
             <Emojify text={account.display_name} emojis={account.emojis} />
           </Text>
 
           {account.verified && <VerificationBadge />}
-        </HStack>
+        </div>
       </HoverAccountWrapper>
     </Link>
   );
@@ -84,7 +83,7 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
   }
 
   return (
-    <HStack space={2} alignItems='center'>
+    <div className='flex items-center gap-2'>
       <AvatarStack accountIds={familiarFollowerIds} />
       <Text theme='muted' size='sm' tag='div'>
         <FormattedMessage
@@ -95,7 +94,7 @@ const ProfileFamiliarFollowers: React.FC<IProfileFamiliarFollowers> = ({ account
           }}
         />
       </Text>
-    </HStack>
+    </div>
   );
 };
 

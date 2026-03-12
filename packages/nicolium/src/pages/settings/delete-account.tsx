@@ -8,7 +8,6 @@ import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
@@ -64,7 +63,7 @@ const DeleteAccountPage = () => {
       </CardHeader>
 
       <CardBody>
-        <Stack space={4}>
+        <div className='flex flex-col gap-4'>
           <Text theme='muted'>
             {features.deleteAccountWithoutPassword ? (
               features.federating ? (
@@ -113,7 +112,7 @@ const DeleteAccountPage = () => {
               </Button>
             </FormActions>
           </Form>
-        </Stack>
+        </div>
       </CardBody>
     </Card>
   );

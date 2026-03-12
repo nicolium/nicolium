@@ -5,9 +5,7 @@ import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
-import HStack from '@/components/ui/hstack';
 import Input from '@/components/ui/input';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useTextField } from '@/hooks/forms/use-text-field';
 import { useRelays } from '@/queries/admin/use-relays';
@@ -43,8 +41,8 @@ const Relay: React.FC<IRelay> = ({ relay }) => {
 
   return (
     <div key={relay.id} className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
-      <Stack space={2}>
-        <HStack alignItems='center' space={4} wrap>
+      <div className='flex flex-col gap-2'>
+        <div className='flex flex-wrap items-center gap-4'>
           <Text size='sm'>
             <Text tag='span' size='sm' weight='medium'>
               <FormattedMessage id='admin.relays.url' defaultMessage='Instance URL:' />
@@ -56,13 +54,13 @@ const Relay: React.FC<IRelay> = ({ relay }) => {
               <FormattedMessage id='admin.relays.followed_back' defaultMessage='Followed back' />
             </Text>
           )}
-        </HStack>
-        <HStack justifyContent='end' space={2}>
+        </div>
+        <div className='flex justify-end gap-2'>
           <Button theme='primary' onClick={handleDeleteRelay()}>
             <FormattedMessage id='admin.relays.unfollow' defaultMessage='Unfollow' />
           </Button>
-        </HStack>
-      </Stack>
+        </div>
+      </div>
     </div>
   );
 };
@@ -90,7 +88,7 @@ const NewRelayForm: React.FC = () => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <HStack space={2} alignItems='center'>
+      <div className='flex items-center gap-2'>
         <label className='grow'>
           <span style={{ display: 'none' }}>{label}</span>
 
@@ -100,7 +98,7 @@ const NewRelayForm: React.FC = () => {
         <Button disabled={isPendingFollow} type='submit' theme='primary'>
           <FormattedMessage id='admin.relays.new.follow' defaultMessage='Follow' />
         </Button>
-      </HStack>
+      </div>
     </Form>
   );
 };
@@ -119,7 +117,7 @@ const RelaysPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <Stack className='gap-4'>
+      <div className='flex flex-col gap-4'>
         <NewRelayForm />
 
         {relays && (
@@ -135,7 +133,7 @@ const RelaysPage: React.FC = () => {
             ))}
           </ScrollableList>
         )}
-      </Stack>
+      </div>
     </Column>
   );
 };

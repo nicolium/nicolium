@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Modal from '@/components/ui/modal';
-import Stack from '@/components/ui/stack';
 import Warning from '@/features/compose/components/warning';
 import { useClient } from '@/hooks/use-client';
 import {
@@ -100,7 +99,7 @@ const ComposeInteractionPolicyModal: React.FC<
       }
       closePosition={composeId === 'compose-modal' ? 'left' : undefined}
     >
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <Warning
           message={
             <FormattedMessage
@@ -127,7 +126,7 @@ const ComposeInteractionPolicyModal: React.FC<
           visibility={compose.visibility as 'public'}
           singlePost
         />
-      </Stack>
+      </div>
     </Modal>
   );
 };

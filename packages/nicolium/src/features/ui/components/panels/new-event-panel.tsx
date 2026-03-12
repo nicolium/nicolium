@@ -2,12 +2,11 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Button from '@/components/ui/button';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 
 const NewEventPanel = () => (
-  <Stack space={2}>
-    <Stack>
+  <div className='flex flex-col gap-2'>
+    <div className='flex flex-col'>
       <Text size='lg' weight='bold'>
         <FormattedMessage id='new_event_panel.title' defaultMessage='Create new event' />
       </Text>
@@ -18,7 +17,7 @@ const NewEventPanel = () => (
           defaultMessage="Can't find what you're looking for? Schedule your own event."
         />
       </Text>
-    </Stack>
+    </div>
 
     <Button
       icon={require('@phosphor-icons/core/regular/calendar-dot.svg')}
@@ -28,7 +27,7 @@ const NewEventPanel = () => (
     >
       <FormattedMessage id='new_event_panel.action' defaultMessage='Create event' />
     </Button>
-  </Stack>
+  </div>
 );
 
 export { NewEventPanel as default };

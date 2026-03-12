@@ -5,9 +5,7 @@ import { dateFormatOptions } from '@/components/relative-timestamp';
 import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import Indicator from '@/components/ui/indicator';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useDomains } from '@/queries/admin/use-domains';
 import { useModalsActions } from '@/stores/modals';
@@ -88,8 +86,8 @@ const Domain: React.FC<IDomain> = ({ domain }) => {
 
   return (
     <div key={domain.id} className='rounded-lg bg-gray-100 p-4 dark:bg-primary-800'>
-      <Stack space={2}>
-        <HStack alignItems='center' space={4} wrap>
+      <div className='flex flex-col gap-2'>
+        <div className='flex flex-wrap items-center gap-4'>
           <Text size='sm'>
             <Text tag='span' size='sm' weight='medium'>
               <FormattedMessage id='admin.domains.name' defaultMessage='Domain:' />
@@ -103,22 +101,22 @@ const Domain: React.FC<IDomain> = ({ domain }) => {
               <FormattedMessage id='admin.domains.private' defaultMessage='Private' />
             )}
           </Text>
-          <HStack alignItems='center' space={2} title={domainStateTitle}>
+          <div className='flex items-center gap-2' title={domainStateTitle}>
             <Indicator state={domainState} />
             <Text tag='span' size='sm' weight='medium'>
               {domainStateLabel}
             </Text>
-          </HStack>
-        </HStack>
-        <HStack justifyContent='end' space={2}>
+          </div>
+        </div>
+        <div className='flex justify-end gap-2'>
           <Button theme='primary' onClick={handleEditDomain(domain)}>
             <FormattedMessage id='admin.domains.edit' defaultMessage='Edit' />
           </Button>
           <Button theme='primary' onClick={handleDeleteDomain()}>
             <FormattedMessage id='admin.domains.delete' defaultMessage='Delete' />
           </Button>
-        </HStack>
-      </Stack>
+        </div>
+      </div>
     </div>
   );
 };
@@ -143,7 +141,7 @@ const AdminDomainsPage: React.FC = () => {
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
-      <Stack className='gap-4'>
+      <div className='flex flex-col gap-4'>
         <Button
           className='sm:w-fit sm:self-end'
           icon={require('@phosphor-icons/core/regular/plus.svg')}
@@ -166,7 +164,7 @@ const AdminDomainsPage: React.FC = () => {
             ))}
           </ScrollableList>
         )}
-      </Stack>
+      </div>
     </Column>
   );
 };

@@ -1,8 +1,5 @@
 import React from 'react';
 
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
-
 import { randomIntFromInterval, generateText } from '../utils';
 
 const PlaceholderSidebarSuggestions = ({ limit }: { limit: number }) => {
@@ -12,16 +9,14 @@ const PlaceholderSidebarSuggestions = ({ limit }: { limit: number }) => {
   return (
     <>
       {new Array(limit).fill(undefined).map((_, idx) => (
-        <HStack key={idx} alignItems='center' space={2} className='animate-pulse'>
-          <Stack space={3} className='text-center'>
-            <div className='mx-auto block size-9 rounded-full bg-primary-200 dark:bg-primary-700' />
-          </Stack>
+        <div key={idx} className='flex animate-pulse items-center gap-2'>
+          <div className='mx-auto block size-9 rounded-full bg-primary-200 text-center dark:bg-primary-700' />
 
-          <Stack className='text-primary-200 dark:text-primary-700'>
+          <div className='flex flex-col text-primary-200 dark:text-primary-700'>
             <p>{generateText(length)}</p>
             <p>{generateText(acctLength)}</p>
-          </Stack>
-        </HStack>
+          </div>
+        </div>
       ))}
     </>
   );

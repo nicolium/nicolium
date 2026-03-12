@@ -8,7 +8,6 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import ExtendedVideoPlayer from '@/components/media/extended-video-player';
 import MissingIndicator from '@/components/missing-indicator';
 import StatusActionBar from '@/components/statuses/status-action-bar';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Audio from '@/features/audio';
@@ -304,11 +303,9 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
         </animated.div>
 
         <div className='⁂-media-modal__navigation'>
-          <HStack
-            alignItems='center'
-            justifyContent='between'
+          <div
             className={clsx(
-              'pointer-events-auto z-10 flex-[0_0_60px] p-4 transition-opacity',
+              'pointer-events-auto z-10 flex flex-[0_0_60px] items-center justify-between p-4 transition-opacity',
               navigationHiddenClassName,
             )}
           >
@@ -323,7 +320,7 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
               iconClassName='h-5 w-5'
             />
 
-            <HStack alignItems='center' space={2}>
+            <div className='flex items-center gap-2'>
               {/* {zoomable && (
                 <IconButton
                   title={intl.formatMessage(zoomedIn ? messages.zoomOut : messages.zoomIn)}
@@ -360,10 +357,10 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                   }}
                 />
               )}
-            </HStack>
-          </HStack>
+            </div>
+          </div>
           {hasMultipleImages && (
-            <HStack className='z-10 mx-5' justifyContent='between'>
+            <div className='z-10 mx-5 flex justify-between'>
               <div
                 className={clsx(
                   'pointer-events-auto z-10 flex h-fit items-center transition-opacity',
@@ -400,18 +397,17 @@ const MediaModal: React.FC<MediaModalProps & BaseModalProps> = (props) => {
                   />
                 </button>
               </div>
-            </HStack>
+            </div>
           )}
           {status ? (
-            <HStack
-              justifyContent='center'
+            <div
               className={clsx(
-                'pointer-events-auto flex-[0_0_60px] transition-opacity',
+                'pointer-events-auto flex flex-[0_0_60px] justify-center transition-opacity',
                 navigationHiddenClassName,
               )}
             >
               <StatusActionBar status={status} space='md' expandable />
-            </HStack>
+            </div>
           ) : (
             <span />
           )}

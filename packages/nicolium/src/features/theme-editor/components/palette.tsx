@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import HStack from '@/components/ui/hstack';
 import Slider from '@/components/ui/slider';
-import Stack from '@/components/ui/stack';
 import { usePrevious } from '@/hooks/use-previous';
 import { compareId } from '@/utils/comparators';
 import { hueShift } from '@/utils/theme';
@@ -57,8 +55,8 @@ const Palette: React.FC<IPalette> = ({
   }, [resetKey]);
 
   return (
-    <Stack className='w-full'>
-      <HStack className='h-8 overflow-hidden rounded-md'>
+    <div className='flex w-full flex-col'>
+      <div className='flex h-8 overflow-hidden rounded-md'>
         {tints.map((tint) => (
           <Color
             key={tint}
@@ -66,10 +64,10 @@ const Palette: React.FC<IPalette> = ({
             onChange={allowTintChange ? handleChange(tint) : undefined}
           />
         ))}
-      </HStack>
+      </div>
 
       <Slider id={id} value={hue} onChange={setHue} />
-    </Stack>
+    </div>
   );
 };
 

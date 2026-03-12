@@ -5,7 +5,6 @@ import CopyableInput from '@/components/copyable-input';
 import SafeEmbed from '@/components/safe-embed';
 import Divider from '@/components/ui/divider';
 import Modal from '@/components/ui/modal';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import useEmbed from '@/queries/embed';
 
@@ -34,7 +33,7 @@ const EmbedModal: React.FC<BaseModalProps & EmbedModalProps> = ({ onClose, onErr
       title={<FormattedMessage id='status.embed' defaultMessage='Embed post' />}
       onClose={handleClose}
     >
-      <Stack space={4}>
+      <div className='flex flex-col gap-4'>
         <Text theme='muted'>
           <FormattedMessage
             id='embed.instructions'
@@ -43,7 +42,7 @@ const EmbedModal: React.FC<BaseModalProps & EmbedModalProps> = ({ onClose, onErr
         </Text>
 
         <CopyableInput value={embed?.html ?? ''} />
-      </Stack>
+      </div>
 
       <div className='py-9'>
         <Divider />

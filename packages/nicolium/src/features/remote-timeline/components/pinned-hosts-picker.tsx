@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Button from '@/components/ui/button';
-import HStack from '@/components/ui/hstack';
 import { useSettings } from '@/stores/settings';
 
 interface IPinnedHostsPicker {
@@ -16,7 +15,7 @@ const PinnedHostsPicker: React.FC<IPinnedHostsPicker> = ({ host: activeHost }) =
   if (!pinnedHosts.length) return null;
 
   return (
-    <HStack className='mb-4 black:mx-2' space={2}>
+    <div className='mb-4 flex gap-2 black:mx-2'>
       {pinnedHosts.map((host) => (
         <Button
           key={host}
@@ -28,7 +27,7 @@ const PinnedHostsPicker: React.FC<IPinnedHostsPicker> = ({ host: activeHost }) =
           {host}
         </Button>
       ))}
-    </HStack>
+    </div>
   );
 };
 

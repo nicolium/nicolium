@@ -5,7 +5,6 @@ import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 import Button from '@/components/ui/button';
 import FormActions from '@/components/ui/form-actions';
 import Spinner from '@/components/ui/spinner';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useClient } from '@/hooks/use-client';
 import toast from '@/toast';
@@ -40,8 +39,8 @@ const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupPr
   }, []);
 
   return (
-    <Stack space={4}>
-      <Stack space={4}>
+    <div className='flex flex-col gap-4'>
+      <div className='flex flex-col gap-4'>
         <Text theme='muted'>
           <FormattedMessage
             id='mfa.setup_warning'
@@ -50,7 +49,7 @@ const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupPr
         </Text>
 
         <div className='rounded-lg border-2 border-solid border-gray-200 p-4 dark:border-gray-800'>
-          <Stack space={3}>
+          <div className='flex flex-col gap-3'>
             <Text weight='medium' align='center'>
               <FormattedMessage id='mfa.setup_recoverycodes' defaultMessage='Recovery codes' />
             </Text>
@@ -66,9 +65,9 @@ const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupPr
             ) : (
               <Spinner />
             )}
-          </Stack>
+          </div>
         </div>
-      </Stack>
+      </div>
 
       {!displayOtpForm && (
         <FormActions>
@@ -87,7 +86,7 @@ const EnableOtpForm: React.FC<IEnableOtpForm> = ({ displayOtpForm, handleSetupPr
           )}
         </FormActions>
       )}
-    </Stack>
+    </div>
   );
 };
 

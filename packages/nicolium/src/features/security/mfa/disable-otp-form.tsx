@@ -7,7 +7,6 @@ import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useDisableMfa } from '@/queries/security/use-mfa';
@@ -46,7 +45,7 @@ const DisableOtpForm: React.FC = () => {
 
   return (
     <Form onSubmit={handleSubmit}>
-      <Stack>
+      <div className='flex flex-col'>
         <Text weight='medium'>
           <FormattedMessage id='mfa.otp_enabled_title' defaultMessage='OTP enabled' />
         </Text>
@@ -57,7 +56,7 @@ const DisableOtpForm: React.FC = () => {
             defaultMessage='You have enabled two-factor authentication via OTP.'
           />
         </Text>
-      </Stack>
+      </div>
 
       <FormGroup
         labelText={

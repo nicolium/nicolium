@@ -5,7 +5,6 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
 import Layout from '@/components/ui/layout';
-import Stack from '@/components/ui/stack';
 import Tabs, { type Item } from '@/components/ui/tabs';
 import Text from '@/components/ui/text';
 import GroupHeader from '@/features/group/components/group-header';
@@ -23,7 +22,7 @@ const messages = defineMessages({
 });
 
 const PrivacyBlankslate = () => (
-  <Stack space={4} className='py-10' alignItems='center'>
+  <div className='flex flex-col items-center gap-4 py-10'>
     <div className='rounded-full bg-gray-200 p-3 dark:bg-gray-800'>
       <Icon
         src={require('@phosphor-icons/core/regular/eye-slash.svg')}
@@ -37,7 +36,7 @@ const PrivacyBlankslate = () => (
         defaultMessage='Content is only visible to group members'
       />
     </Text>
-  </Stack>
+  </div>
 );
 
 /** Layout to display a group. */

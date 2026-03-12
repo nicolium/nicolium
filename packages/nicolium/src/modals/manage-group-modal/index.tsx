@@ -3,7 +3,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
 import Modal from '@/components/ui/modal';
-import Stack from '@/components/ui/stack';
 import { useCreateGroupMutation } from '@/queries/groups/use-group';
 import toast from '@/toast';
 
@@ -95,7 +94,7 @@ const CreateGroupModal: React.FC<BaseModalProps> = ({ onClose }) => {
       confirmationDisabled={isPending}
       onClose={handleClose}
     >
-      <Stack space={2}>{renderStep()}</Stack>
+      <div className='flex flex-col gap-2'>{renderStep()}</div>
     </Modal>
   );
 };
