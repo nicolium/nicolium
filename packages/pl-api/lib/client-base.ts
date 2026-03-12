@@ -37,6 +37,7 @@ class PlApiBaseClient {
     unlisten: (listener: (event: StreamingEvent) => void) => void;
     subscribe: (stream: string, params?: StreamingParams) => void;
     unsubscribe: (stream: string, params?: StreamingParams) => void;
+    onDisconnect: (callback: () => void) => () => void;
     close: () => void;
   };
   /** @internal */

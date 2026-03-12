@@ -49,8 +49,19 @@ const streaming = (client: PlApiBaseClient) => ({
       );
     };
 
+    let disconnectCallbacks: Array<() => void> = [];
+
     ws.onopen = () => {
       queue.forEach((fn) => fn());
+    };
+
+    ws.onerror = () => {
+      disconnectCallbacks.forEach((fn) => fn());
+    };
+
+    ws.onclose = () => {
+      client.socket = undefined;
+      disconnectCallbacks.forEach((fn) => fn());
     };
 
     client.socket = {
@@ -61,6 +72,12 @@ const streaming = (client: PlApiBaseClient) => ({
         enqueue(() => ws.send(JSON.stringify({ type: 'subscribe', stream, list, tag }))),
       unsubscribe: (stream, { list, tag } = {}) =>
         enqueue(() => ws.send(JSON.stringify({ type: 'unsubscribe', stream, list, tag }))),
+      onDisconnect: (callback) => {
+        disconnectCallbacks.push(callback);
+        return () => {
+          disconnectCallbacks = disconnectCallbacks.filter((fn) => fn !== callback);
+        };
+      },
       close: () => {
         ws.close();
         client.socket = undefined;

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useClient } from '@/hooks/use-client';
@@ -23,25 +23,41 @@ const useTimelineStream = (
     unlisten: (listener: (event: StreamingEvent) => void) => void;
     subscribe: (stream: string, params?: StreamingParams) => void;
     unsubscribe: (stream: string, params?: StreamingParams) => void;
+    onDisconnect: (callback: () => void) => () => void;
     close: () => void;
   } | null>(null);
+  const disconnectCleanup = useRef<(() => void) | null>(null);
 
   const accessToken = useAppSelector(getAccessToken);
   const streamingUrl = instance.configuration.urls.streaming;
+
+  const [connected, setConnected] = useState(false);
+
+  const handleDisconnect = useCallback(() => {
+    socket.current = null;
+    setConnected(false);
+  }, []);
 
   const connect = () => {
     if (!socket.current && streamingUrl) {
       socket.current = client.streaming.connect();
 
+      disconnectCleanup.current?.();
+      disconnectCleanup.current = socket.current.onDisconnect(handleDisconnect);
+
       socket.current.subscribe(stream, params);
       if (listener) socket.current.listen(listener);
+      setConnected(true);
     }
   };
 
   const disconnect = () => {
     if (socket.current) {
+      disconnectCleanup.current?.();
+      disconnectCleanup.current = null;
       socket.current.close();
       socket.current = null;
+      setConnected(false);
     }
   };
 
@@ -82,6 +98,7 @@ const useTimelineStream = (
 
   return {
     disconnect,
+    connected,
   };
 };
 

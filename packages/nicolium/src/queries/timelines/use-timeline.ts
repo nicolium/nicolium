@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 
 import { importEntities } from '@/actions/importer';
 import { useTimelineStream } from '@/api/hooks/streaming/use-timeline-stream';
 import {
+  useTimelinesStore,
   useTimeline as useStoreTimeline,
   useTimelinesActions,
   type TimelineEntry,
@@ -17,16 +18,66 @@ interface StreamConfig {
   params?: StreamingParams;
 }
 
+interface TimelineOptions {
+  polling?: boolean;
+  restoringMaxId?: string;
+}
+
+const POLLING_INTERVAL = 20_000;
+
 const useTimeline = (
   timelineId: string,
   fetcher: TimelineFetcher,
   streamConfig?: StreamConfig,
-  restoringMaxId?: string,
+  options?: TimelineOptions,
 ) => {
+  const polling = options?.polling ?? true;
+  const restoringMaxId = options?.restoringMaxId;
+
   const timeline = useStoreTimeline(timelineId);
   const timelineActions = useTimelinesActions();
 
-  useTimelineStream(streamConfig?.stream ?? '', streamConfig?.params, !!streamConfig?.stream);
+  const { connected: streamingConnected } = useTimelineStream(
+    streamConfig?.stream ?? '',
+    streamConfig?.params,
+    !!streamConfig?.stream,
+  );
+
+  const fetcherRef = useRef(fetcher);
+  fetcherRef.current = fetcher;
+
+  const newestStatusId = useRef<string | undefined>(undefined);
+
+  useEffect(() => {
+    if (timeline.entries[0]?.type === 'status') {
+      newestStatusId.current = timeline.entries[0].originalId;
+    }
+  }, [timeline.entries]);
+
+  // polling fallback when streaming is not connected
+  useEffect(() => {
+    if (!polling || streamingConnected || timeline.isPending || !newestStatusId) return;
+
+    const poll = async () => {
+      const sinceId =
+        useTimelinesStore.getState().timelines[timelineId]?.queuedEntries[0]?.id ??
+        newestStatusId.current;
+      if (!sinceId) return;
+
+      try {
+        const response = await fetcherRef.current({ since_id: sinceId });
+        if (response.items.length === 0) return;
+
+        importEntities({ statuses: response.items });
+        for (const status of response.items) {
+          timelineActions.receiveStreamingStatus(timelineId, status);
+        }
+      } catch {}
+    };
+
+    const interval = setInterval(poll, POLLING_INTERVAL);
+    return () => clearInterval(interval);
+  }, [timelineId, polling, streamingConnected, timeline.isPending]);
 
   useEffect(() => {
     if (!timeline.isPending || timeline.isFetching) return;

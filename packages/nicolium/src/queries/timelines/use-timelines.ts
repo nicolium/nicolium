@@ -44,7 +44,7 @@ const useHomeTimeline = (
       });
     },
     { stream },
-    maxId,
+    { restoringMaxId: maxId },
   );
 };
 
@@ -176,6 +176,8 @@ const useAccountTimeline = (
         ...params,
         ...paginationParams,
       }),
+    undefined,
+    { polling: false },
   );
 };
 
