@@ -32,7 +32,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
   // Rare, but it can happen.
   if (to.length === 0) {
     const body = (
-      <div className='mb-1 block text-sm text-gray-700 dark:text-gray-600'>
+      <div className='⁂-status-reply-mentions'>
         <FormattedMessage id='reply_mentions.reply_empty' defaultMessage='Replying to post' />
       </div>
     );
@@ -40,7 +40,7 @@ const StatusReplyMentions: React.FC<IStatusReplyMentions> = ({ status, hoverable
     if (hoverable) {
       return (
         <HoverStatusWrapper statusId={status.in_reply_to_id} inline>
-          <span key='hoverstatus' className='cursor-pointer hover:underline' role='presentation'>
+          <span className='cursor-pointer hover:underline' role='presentation'>
             {body}
           </span>
         </HoverStatusWrapper>

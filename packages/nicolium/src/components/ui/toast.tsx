@@ -123,7 +123,7 @@ const Toast: React.FC<IToast> = (props) => {
             title={intl.formatMessage(messages.close)}
             aria-label={intl.formatMessage(messages.close)}
           >
-            <Icon src={require('@phosphor-icons/core/regular/x.svg')} className='size-5' />
+            <Icon src={require('@phosphor-icons/core/regular/x.svg')} />
           </button>
         </div>
       </div>
