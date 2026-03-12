@@ -1,7 +1,6 @@
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import HStack from '@/components/ui/hstack';
 import Input from '@/components/ui/input';
 
 import IconPicker from './icon-picker';
@@ -32,7 +31,7 @@ const PromoPanelInput: StreamfieldComponent<PromoPanelItem> = ({ value, onChange
     };
 
   return (
-    <HStack space={2} alignItems='center' grow>
+    <div className='flex flex-grow items-center gap-2'>
       <IconPicker value={value.icon} onChange={handleIconChange} />
 
       <Input
@@ -49,7 +48,7 @@ const PromoPanelInput: StreamfieldComponent<PromoPanelItem> = ({ value, onChange
         value={value.url}
         onChange={handleChange('url')}
       />
-    </HStack>
+    </div>
   );
 };
 

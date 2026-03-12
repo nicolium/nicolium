@@ -5,7 +5,6 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import Account from '@/components/accounts/account';
 import DropdownMenu from '@/components/dropdown-menu/dropdown-menu';
-import HStack from '@/components/ui/hstack';
 import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useBlockGroupUserMutation } from '@/queries/groups/use-group-blocks';
@@ -203,12 +202,12 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
   }
 
   return (
-    <HStack alignItems='center' justifyContent='between' data-testid='group-member-list-item'>
+    <div className='flex items-center justify-between' data-testid='group-member-list-item'>
       <div className='w-full'>
         <Account account={account} withRelationship={false} />
       </div>
 
-      <HStack alignItems='center' space={2}>
+      <div className='flex items-center gap-2'>
         {isMemberOwner || isMemberAdmin ? (
           <span
             data-testid='role-badge'
@@ -226,8 +225,8 @@ const GroupMemberListItem = ({ member, group }: IGroupMemberListItem) => {
         ) : null}
 
         <DropdownMenu items={menu} />
-      </HStack>
-    </HStack>
+      </div>
+    </div>
   );
 };
 

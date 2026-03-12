@@ -6,9 +6,7 @@ import * as v from 'valibot';
 import GroupAvatar from '@/components/groups/group-avatar';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import StillImage from '@/components/still-image';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useModalsActions } from '@/stores/modals';
@@ -43,11 +41,11 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
         </div>
 
         <div className='px-4 sm:px-6'>
-          <HStack alignItems='bottom' space={5} className='-mt-12'>
+          <div className='-mt-12 flex items-end gap-5'>
             <div className='relative flex'>
               <div className='size-24 rounded-lg bg-gray-400 ring-4 ring-white dark:ring-gray-800' />
             </div>
-          </HStack>
+          </div>
         </div>
       </div>
     );
@@ -146,17 +144,17 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
         </div>
       </div>
 
-      <Stack alignItems='center' space={3} className='mx-auto mt-10 w-5/6 py-4'>
+      <div className='mx-auto mt-10 flex w-5/6 flex-col items-center gap-3 py-4'>
         <Text size='xl' weight='bold' data-testid='group-name'>
           <Emojify text={group.display_name} emojis={group.emojis} />
         </Text>
 
-        <Stack data-testid='group-meta' space={1} alignItems='center'>
-          <HStack className='text-gray-700 dark:text-gray-600' space={2} wrap>
+        <div className='flex flex-col items-center gap-1' data-testid='group-meta'>
+          <div className='flex flex-wrap gap-2 text-gray-700 dark:text-gray-600'>
             <GroupRelationship group={group} />
             <GroupPrivacy group={group} />
             <GroupMemberCount group={group} />
-          </HStack>
+          </div>
 
           <Text
             theme='muted'
@@ -165,13 +163,13 @@ const GroupHeader: React.FC<IGroupHeader> = ({ group }) => {
           >
             <ParsedContent html={group.note} emojis={group.emojis} />
           </Text>
-        </Stack>
+        </div>
 
-        <HStack alignItems='center' space={2} data-testid='group-actions'>
+        <div className='flex items-center gap-2' data-testid='group-actions'>
           <GroupOptionsButton group={group} />
           <GroupActionButton group={group} />
-        </HStack>
-      </Stack>
+        </div>
+      </div>
     </div>
   );
 };

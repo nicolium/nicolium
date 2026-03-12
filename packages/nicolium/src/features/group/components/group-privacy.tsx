@@ -1,10 +1,8 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Popover from '@/components/ui/popover';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 
 import type { Group } from 'pl-api';
@@ -17,7 +15,7 @@ const GroupPrivacy = ({ group }: IGroupPolicy) => (
   <Popover
     referenceElementClassName='cursor-help'
     content={
-      <Stack space={4} alignItems='center' className='w-72'>
+      <div className='flex w-72 flex-col items-center gap-4'>
         <div className='rounded-full bg-gray-200 p-3 dark:bg-gray-800'>
           <Icon
             src={
@@ -29,7 +27,7 @@ const GroupPrivacy = ({ group }: IGroupPolicy) => (
           />
         </div>
 
-        <Stack space={1} alignItems='center'>
+        <div className='flex flex-col items-center gap-1'>
           <Text size='lg' weight='bold' align='center'>
             {group.locked ? (
               <FormattedMessage id='group.privacy.locked.full' defaultMessage='Private Group' />
@@ -51,11 +49,11 @@ const GroupPrivacy = ({ group }: IGroupPolicy) => (
               />
             )}
           </Text>
-        </Stack>
-      </Stack>
+        </div>
+      </div>
     }
   >
-    <HStack space={1} alignItems='center' data-testid='group-privacy'>
+    <div className='flex items-center gap-1' data-testid='group-privacy'>
       <Icon
         className='size-4'
         src={
@@ -72,7 +70,7 @@ const GroupPrivacy = ({ group }: IGroupPolicy) => (
           <FormattedMessage id='group.privacy.public' defaultMessage='Public' />
         )}
       </Text>
-    </HStack>
+    </div>
   </Popover>
 );
 
