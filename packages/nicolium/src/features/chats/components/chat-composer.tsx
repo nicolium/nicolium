@@ -8,9 +8,7 @@ import Combobox, {
   ComboboxOption,
   ComboboxPopover,
 } from '@/components/ui/combobox';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useChatContext } from '@/contexts/chat-context';
 import UploadButton from '@/features/compose/components/upload-button';
@@ -171,7 +169,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
     if (isBlocking) {
       return (
         <div className='mt-auto p-6 shadow-3xl dark:border-t-2 dark:border-solid dark:border-gray-800'>
-          <Stack space={3} alignItems='center'>
+          <div className='flex flex-col items-center gap-3'>
             <Text align='center' theme='muted'>
               <FormattedMessage
                 id='chat_message_list.blocked'
@@ -182,7 +180,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
             <Button theme='secondary' onClick={handleUnblockUser}>
               <FormattedMessage id='chat_composer.unblock' defaultMessage='Unblock' />
             </Button>
-          </Stack>
+          </div>
         </div>
       );
     }
@@ -196,8 +194,8 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
         {/* Spacer */}
         <div className='h-5' />
 
-        <HStack alignItems='stretch' justifyContent='between' space={4}>
-          <Stack justifyContent='end' alignItems='center' className='mb-1.5 w-10'>
+        <div className='flex items-stretch justify-between gap-4'>
+          <div className='mb-1.5 flex w-10 flex-col items-center justify-end'>
             <UploadButton
               onSelectFile={onSelectFile}
               resetFileKey={resetFileKey}
@@ -205,9 +203,9 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
               className='text-primary-500'
               disabled={uploading ?? !!attachment}
             />
-          </Stack>
+          </div>
 
-          <Stack grow>
+          <div className='flex grow flex-col'>
             <Combobox onSelect={onSelectComboboxOption}>
               <ComboboxInput
                 key={resetContentKey}
@@ -244,9 +242,9 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
                 </ComboboxPopover>
               ) : null}
             </Combobox>
-          </Stack>
+          </div>
 
-          <Stack space={2} justifyContent='end' alignItems='center' className='mb-1.5 w-10'>
+          <div className='mb-1.5 flex w-10 flex-col items-center justify-end gap-2'>
             {isOverCharacterLimit ? (
               <Text size='sm' theme='danger'>
                 {overLimitText}
@@ -261,10 +259,10 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
               onClick={onSubmit}
               title={intl.formatMessage(messages.send)}
             />
-          </Stack>
-        </HStack>
+          </div>
+        </div>
 
-        <HStack alignItems='center' className='h-5' space={1}>
+        <div className='flex h-5 items-center gap-1'>
           {errorMessage && (
             <>
               <Text theme='danger' size='xs'>
@@ -278,7 +276,7 @@ const ChatComposer = React.forwardRef<HTMLTextAreaElement | null, IChatComposer>
               </button>
             </>
           )}
-        </HStack>
+        </div>
       </div>
     );
   },

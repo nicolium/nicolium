@@ -1,8 +1,6 @@
 import React, { useMemo } from 'react';
 
 import Checkbox from './checkbox';
-import HStack from './hstack';
-import Stack from './stack';
 
 interface IFormGroup {
   /** Input label message. */
@@ -38,10 +36,10 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
 
   if (isCheckboxFormGroup) {
     return (
-      <HStack alignItems='start' space={2}>
+      <div className='flex items-start gap-2'>
         {firstChild}
 
-        <Stack>
+        <div className='flex flex-col'>
           {labelText && (
             <label
               htmlFor={formFieldId}
@@ -69,8 +67,8 @@ const FormGroup: React.FC<IFormGroup> = (props) => {
               {hintText}
             </p>
           )}
-        </Stack>
-      </HStack>
+        </div>
+      </div>
     );
   }
 

@@ -3,8 +3,6 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import Button from '@/components/ui/button';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useCompose, useComposeActions } from '@/stores/compose';
 import toast from '@/toast';
@@ -50,7 +48,7 @@ const HashtagCasingSuggestion = ({ composeId }: IHashtagCasingSuggestion) => {
     <Warning
       animated
       message={
-        <Stack space={1}>
+        <div className='flex flex-col gap-1'>
           <span>
             <FormattedMessage
               id='compose.hashtag_casing_suggestion.body'
@@ -58,7 +56,7 @@ const HashtagCasingSuggestion = ({ composeId }: IHashtagCasingSuggestion) => {
               values={{ hashtag: <span className='font-medium'>{suggestion}</span> }}
             />
           </span>
-          <HStack space={2} justifyContent='end'>
+          <div className='flex justify-end gap-2'>
             <Button theme='muted' size='xs' onClick={onIgnore}>
               <FormattedMessage
                 id='compose.hashtag_casing_suggestion.ignore'
@@ -71,8 +69,8 @@ const HashtagCasingSuggestion = ({ composeId }: IHashtagCasingSuggestion) => {
                 defaultMessage='Don’t ask again'
               />
             </Button>
-          </HStack>
-        </Stack>
+          </div>
+        </div>
       }
     />
   );

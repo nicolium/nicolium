@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 
@@ -145,11 +144,7 @@ const PollOption: React.FC<IPollOption> = (props): React.JSX.Element | null => {
     <div key={option.title}>
       {showResults ? (
         <div title={message}>
-          <HStack
-            justifyContent='between'
-            alignItems='center'
-            className='relative w-full overflow-hidden rounded-md bg-white p-2 dark:bg-primary-800'
-          >
+          <div className='relative flex w-full items-center justify-between overflow-hidden rounded-md bg-white p-2 dark:bg-primary-800'>
             <PollPercentageBar percent={percent} />
 
             <div className='overflow-hidden text-primary-600 dark:text-white'>
@@ -167,7 +162,7 @@ const PollOption: React.FC<IPollOption> = (props): React.JSX.Element | null => {
               </Text>
             </div>
 
-            <HStack space={2} alignItems='center' className='relative'>
+            <div className='relative flex items-center gap-2'>
               {voted ? (
                 <Icon
                   src={require('@phosphor-icons/core/regular/check-circle.svg')}
@@ -183,8 +178,8 @@ const PollOption: React.FC<IPollOption> = (props): React.JSX.Element | null => {
                   {Math.round(percent)}%
                 </Text>
               </div>
-            </HStack>
-          </HStack>
+            </div>
+          </div>
         </div>
       ) : (
         <PollOptionText percent={percent} {...props} />

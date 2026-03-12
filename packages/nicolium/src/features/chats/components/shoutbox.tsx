@@ -1,7 +1,6 @@
 import clsx from 'clsx';
-import React, { type MutableRefObject, useEffect, useState } from 'react';
+import React, { type RefObject, useEffect, useState } from 'react';
 
-import Stack from '@/components/ui/stack';
 import { useCreateShoutboxMessage } from '@/stores/shoutbox';
 
 import { clearNativeInputValue } from './chat';
@@ -11,7 +10,7 @@ import ShoutboxMessageList from './shoutbox-message-list';
 const fileKeyGen = (): number => Math.floor(Math.random() * 0x10000);
 
 interface IShoutbox {
-  inputRef?: MutableRefObject<HTMLTextAreaElement | null>;
+  inputRef?: RefObject<HTMLTextAreaElement | null>;
   className?: string;
 }
 
@@ -68,7 +67,7 @@ const Shoutbox: React.FC<IShoutbox> = ({ inputRef, className }) => {
   }, [inputRef?.current]);
 
   return (
-    <Stack className={clsx('flex grow overflow-hidden', className)}>
+    <div className={clsx('flex grow flex-col overflow-hidden', className)}>
       <div className='flex h-full grow justify-center overflow-hidden'>
         <ShoutboxMessageList />
       </div>
@@ -82,7 +81,7 @@ const Shoutbox: React.FC<IShoutbox> = ({ inputRef, className }) => {
         resetContentKey={resetContentKey}
         disabled={!createShoutboxMessage}
       />
-    </Stack>
+    </div>
   );
 };
 

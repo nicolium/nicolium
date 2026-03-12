@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import React, { type MouseEventHandler } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import Stack from '@/components/ui/stack';
 import AccountContainer from '@/containers/account-container';
 
 import OutlineBox from '../outline-box';
@@ -82,7 +81,7 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
         'group hover:bg-gray-100 dark:hover:bg-gray-800': !compose,
       })}
     >
-      <Stack space={2} onClick={handleExpandClick}>
+      <div className='flex flex-col gap-2' onClick={handleExpandClick}>
         {account.id && (
           <AccountContainer
             {...actions}
@@ -100,11 +99,11 @@ const QuotedStatus: React.FC<IQuotedStatus> = ({ status, onCancel, compose }) =>
         {status.event ? (
           <EventPreview status={status} hideAction />
         ) : (
-          <Stack space={4} className='relative z-0'>
+          <div className='relative z-0 flex flex-col gap-4'>
             <StatusContent status={status} collapsable isQuote withMedia compose={compose} />
-          </Stack>
+          </div>
         )}
-      </Stack>
+      </div>
     </OutlineBox>
   );
 };

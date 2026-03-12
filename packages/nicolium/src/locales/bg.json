@@ -205,7 +205,6 @@
   "chat_list_item.settings": "Настройки на чата",
   "chat_list_item_shoutbox": "{instance} чат стая",
   "chat_message_list.blocked": "Блокирахте този потребител",
-  "chat_message_list.blocked_by": "Блокирани сте от",
   "chat_message_list.network_failure.action": "Опитайте отново",
   "chat_message_list.network_failure.subtitle": "Възникна мрежова грешка.",
   "chat_message_list.network_failure.title": "Опа!",

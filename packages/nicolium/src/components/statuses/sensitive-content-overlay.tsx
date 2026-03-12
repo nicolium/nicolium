@@ -3,7 +3,6 @@ import React, { useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Button from '@/components/ui/button';
-import HStack from '@/components/ui/hstack';
 import Text from '@/components/ui/text';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
@@ -119,7 +118,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
                 </Text>
               </div>
 
-              <HStack alignItems='center' justifyContent='center' space={2}>
+              <div className='flex items-center justify-center gap-2'>
                 <Button
                   type='button'
                   theme='outlined'
@@ -129,7 +128,7 @@ const SensitiveContentOverlay = React.forwardRef<HTMLDivElement, ISensitiveConte
                 >
                   <FormattedMessage id='moderation_overlay.show' defaultMessage='Show content' />
                 </Button>
-              </HStack>
+              </div>
             </div>
           </div>
         )}

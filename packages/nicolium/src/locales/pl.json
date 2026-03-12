@@ -326,7 +326,7 @@
   "chat_list_item.settings": "Ustawienia czatu",
   "chat_list_item_shoutbox": "Shoutbox {instance}",
   "chat_message_list.blocked": "Zablokowałeś(-aś) tego użytkownika",
-  "chat_message_list.blocked_by": "Jesteś blokowany(-a) przez tego użytkownika",
+  "chat_message_list.blocked_by": "Jesteś zablokowany(-a) przez @{acct}",
   "chat_message_list.network_failure.action": "Spróbuj ponownie",
   "chat_message_list.network_failure.subtitle": "Natrafiliśmy na błąd sieci.",
   "chat_message_list.network_failure.title": "O nie!",

@@ -1,8 +1,6 @@
 import React from 'react';
 
 import { AuthorizeRejectButtons } from '@/components/authorize-reject-buttons';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import {
   useAdminAccount,
@@ -26,15 +24,15 @@ const UnapprovedAccount: React.FC<IUnapprovedAccount> = ({ accountId }) => {
   if (!account) return null;
 
   return (
-    <HStack space={4} justifyContent='between'>
-      <Stack space={1}>
+    <div className='flex justify-between gap-4'>
+      <div className='flex flex-col gap-1'>
         <Text weight='semibold'>@{account.acct}</Text>
         <Text tag='blockquote' size='sm'>
           {adminAccount?.invite_request ?? ''}
         </Text>
-      </Stack>
+      </div>
 
-      <Stack justifyContent='center'>
+      <div className='flex flex-col justify-center'>
         <AuthorizeRejectButtons
           onAuthorize={() => {
             approveAccount();
@@ -44,8 +42,8 @@ const UnapprovedAccount: React.FC<IUnapprovedAccount> = ({ accountId }) => {
           }}
           countdown={3000}
         />
-      </Stack>
-    </HStack>
+      </div>
+    </div>
   );
 };
 

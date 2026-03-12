@@ -3,7 +3,6 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import AccountComponent from '@/components/accounts/account';
 import Icon from '@/components/icon';
-import HStack from '@/components/ui/hstack';
 import { useAccount } from '@/queries/accounts/use-account';
 
 const messages = defineMessages({
@@ -30,7 +29,7 @@ const Account: React.FC<IAccount> = ({ accountId }) => {
   });
 
   return (
-    <HStack space={1} alignItems='center' justifyContent='between' className='p-2.5'>
+    <div className='flex items-center justify-between gap-1 p-2.5'>
       <div className='w-full'>
         <AccountComponent account={account} withRelationship={false} />
       </div>
@@ -43,7 +42,7 @@ const Account: React.FC<IAccount> = ({ accountId }) => {
         <Icon src={require('@phosphor-icons/core/regular/cake.svg')} />
         {formattedBirthday}
       </div>
-    </HStack>
+    </div>
   );
 };
 

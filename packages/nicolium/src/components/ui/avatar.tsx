@@ -10,7 +10,6 @@ import AltIndicator from '../media/alt-indicator';
 
 import Icon from './icon';
 import Popover from './popover';
-import Stack from './stack';
 import Text from './text';
 
 const COLOR_CACHE = new Map<string, string>();
@@ -93,7 +92,7 @@ const Avatar: React.FC<IAvatar> = (props) => {
         interaction='hover'
         referenceElementClassName='cursor-pointer'
         content={
-          <Stack space={1} className='max-h-[32rem] max-w-96 overflow-auto p-4'>
+          <div className='flex max-h-[32rem] max-w-96 flex-col gap-1 overflow-auto p-4'>
             <Text weight='semibold'>
               <FormattedMessage
                 id='account.avatar.description'
@@ -101,7 +100,7 @@ const Avatar: React.FC<IAvatar> = (props) => {
               />
             </Text>
             <Text className='whitespace-pre-wrap'>{alt}</Text>
-          </Stack>
+          </div>
         }
         isFlush
       >

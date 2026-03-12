@@ -2,8 +2,6 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Button from '@/components/ui/button';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Tooltip from '@/components/ui/tooltip';
 import { usePollQuery, usePollVoteMutation } from '@/queries/statuses/use-poll';
@@ -81,14 +79,14 @@ const PollFooter: React.FC<IPollFooter> = ({
   }
 
   return (
-    <Stack space={4} data-testid='poll-footer'>
+    <div className='flex flex-col gap-4' data-testid='poll-footer'>
       {!showResults && poll.multiple && (
         <Button onClick={handleVote} theme='primary' block>
           <FormattedMessage id='poll.vote' defaultMessage='Submit Vote' />
         </Button>
       )}
 
-      <HStack space={1.5} alignItems='center' wrap>
+      <div className='flex flex-wrap items-center gap-1.5'>
         {poll.non_anonymous && (
           <>
             <Tooltip text={intl.formatMessage(messages.nonAnonymous)}>
@@ -151,8 +149,8 @@ const PollFooter: React.FC<IPollFooter> = ({
             </Text>
           </>
         )}
-      </HStack>
-    </Stack>
+      </div>
+    </div>
   );
 };
 

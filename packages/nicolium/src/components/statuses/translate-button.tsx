@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
@@ -202,7 +201,7 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
     const provider = translationQuery.data.provider;
 
     return (
-      <Stack space={3} alignItems='start'>
+      <div className='flex flex-col items-start gap-3'>
         {button}
         <Text theme='muted'>
           <FormattedMessage
@@ -225,7 +224,7 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
             }}
           />
         </Text>
-      </Stack>
+      </div>
     );
   }
 

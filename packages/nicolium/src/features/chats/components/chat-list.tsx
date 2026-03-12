@@ -4,7 +4,6 @@ import { Virtuoso, type VirtuosoHandle } from 'react-virtuoso';
 
 import PullToRefresh from '@/components/pull-to-refresh';
 import Spinner from '@/components/ui/spinner';
-import Stack from '@/components/ui/stack';
 import PlaceholderChat from '@/features/placeholder/components/placeholder-chat';
 import { useChats } from '@/queries/chats';
 import { useShoutboxIsLoading } from '@/stores/shoutbox';
@@ -91,11 +90,11 @@ const ChatList: React.FC<IChatList> = ({ onClickChat, useWindowScroll = false })
   const renderEmpty = () => {
     if (isFetching) {
       return (
-        <Stack space={2}>
+        <div className='flex flex-col gap-2'>
           <PlaceholderChat />
           <PlaceholderChat />
           <PlaceholderChat />
-        </Stack>
+        </div>
       );
     }
 

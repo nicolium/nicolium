@@ -2,8 +2,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Button from '@/components/ui/button';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import { useCompose } from '@/hooks/use-compose';
 
 import Warning from './warning';
@@ -24,7 +22,7 @@ const ClearLinkSuggestion = ({ composeId, handleAccept, handleReject }: IClearLi
     <Warning
       animated
       message={
-        <Stack space={1}>
+        <div className='flex flex-col gap-1'>
           <span>
             <FormattedMessage
               id='compose.clear_link_suggestion.body'
@@ -40,7 +38,7 @@ const ClearLinkSuggestion = ({ composeId, handleAccept, handleReject }: IClearLi
               }}
             />
           </span>
-          <HStack space={2} justifyContent='end'>
+          <div className='flex justify-end gap-2'>
             <Button
               theme='muted'
               size='xs'
@@ -59,8 +57,8 @@ const ClearLinkSuggestion = ({ composeId, handleAccept, handleReject }: IClearLi
             >
               <FormattedMessage id='compose.clear_link_suggestion.remove' defaultMessage='Remove' />
             </Button>
-          </HStack>
-        </Stack>
+          </div>
+        </div>
       }
     />
   );

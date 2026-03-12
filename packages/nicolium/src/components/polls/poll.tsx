@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { usePollQuery, usePollVoteMutation } from '@/queries/statuses/use-poll';
@@ -84,8 +83,8 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.El
         </Text>
       )}
 
-      <Stack space={4}>
-        <Stack space={2}>
+      <div className='flex flex-col gap-4'>
+        <div className='flex flex-col gap-2'>
           {poll.options.map((option, i) => (
             <PollOption
               key={i}
@@ -99,7 +98,7 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.El
               truncate={truncate}
             />
           ))}
-        </Stack>
+        </div>
 
         <PollFooter
           poll={poll}
@@ -107,7 +106,7 @@ const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.El
           selected={selected}
           statusId={status.id}
         />
-      </Stack>
+      </div>
     </div>
   );
 };

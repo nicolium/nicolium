@@ -6,7 +6,6 @@ import { getTextDirection } from '@/utils/rtl';
 import { accountsCountRenderer } from './hashtag';
 import Blurhash from './media/blurhash';
 import Icon from './ui/icon';
-import Stack from './ui/stack';
 import Text from './ui/text';
 
 import type { TrendsLink } from 'pl-api';
@@ -45,7 +44,7 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
       rel='noopener noreferrer'
     >
       {media}
-      <Stack space={2} className='flex-1 overflow-hidden'>
+      <div className='flex flex-1 flex-col gap-2 overflow-hidden'>
         <Text className='line-clamp-2' weight='bold' direction={direction}>
           {trendingLink.title}
         </Text>
@@ -74,7 +73,7 @@ const TrendingLink: React.FC<ITrendingLink> = ({ trendingLink }) => {
             </Link>
           )}
         </div>
-      </Stack>
+      </div>
     </a>
   );
 };

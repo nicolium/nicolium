@@ -380,7 +380,7 @@
   "chat_list_item.settings": "Chat settings",
   "chat_list_item_shoutbox": "{instance} shoutbox",
   "chat_message_list.blocked": "You blocked this user",
-  "chat_message_list.blocked_by": "You are blocked by",
+  "chat_message_list.blocked_by": "You are blocked by @{acct}",
   "chat_message_list.network_failure.action": "Try again",
   "chat_message_list.network_failure.subtitle": "We encountered a network failure.",
   "chat_message_list.network_failure.title": "Whoops!",

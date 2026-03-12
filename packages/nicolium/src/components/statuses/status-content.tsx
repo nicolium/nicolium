@@ -3,7 +3,6 @@ import React, { useState, useRef, useLayoutEffect, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Emojify from '@/features/emoji/emojify';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
@@ -268,7 +267,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
       const media = (quote ||
         status.card ||
         (withMedia && status.media_attachments.length > 0)) && (
-        <Stack space={4} key='media'>
+        <div className='flex flex-col gap-4' key='media'>
           {((withMedia && status.media_attachments.length > 0) || (status.card && !quote)) && (
             <div className='relative has-[div[data-testid="sensitive-overlay"]]:min-h-24'>
               <SensitiveContentOverlay status={status} />
@@ -277,7 +276,7 @@ const StatusContent: React.FC<IStatusContent> = React.memo(
           )}
 
           {quote}
-        </Stack>
+        </div>
       );
 
       if (status.content) {

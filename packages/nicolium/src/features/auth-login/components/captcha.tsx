@@ -3,7 +3,6 @@ import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
 import { fetchCaptcha } from '@/actions/auth';
 import Input from '@/components/ui/input';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 
@@ -121,7 +120,7 @@ const NativeCaptchaField: React.FC<INativeCaptchaField> = ({
   const intl = useIntl();
 
   return (
-    <Stack space={2}>
+    <div className='flex flex-col gap-2'>
       <div className='flex w-full items-center justify-center rounded-md border border-solid border-gray-300 bg-white dark:border-gray-600'>
         <img alt={intl.formatMessage(messages.captcha)} src={captcha.url} onClick={onClick} />
       </div>
@@ -137,7 +136,7 @@ const NativeCaptchaField: React.FC<INativeCaptchaField> = ({
         onChange={onChange}
         required
       />
-    </Stack>
+    </div>
   );
 };
 

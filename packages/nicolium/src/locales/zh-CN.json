@@ -349,7 +349,6 @@
   "chat_list_item.settings": "聊天设置",
   "chat_list_item_shoutbox": "{instance} 留言板",
   "chat_message_list.blocked": "您屏蔽了此用户",
-  "chat_message_list.blocked_by": "您被屏蔽自",
   "chat_message_list.network_failure.action": "重试",
   "chat_message_list.network_failure.subtitle": "我们遇到了网络错误。",
   "chat_message_list.network_failure.title": "啊哦！",

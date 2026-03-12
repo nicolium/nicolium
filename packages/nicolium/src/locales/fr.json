@@ -332,7 +332,6 @@
   "chat_list_item.settings": "Paramètre du chat",
   "chat_list_item_shoutbox": "Chatroom de {instance}",
   "chat_message_list.blocked": "Vous bloquez cette personne",
-  "chat_message_list.blocked_by": "Vous êtes bloqué par",
   "chat_message_list.network_failure.action": "Essayer à nouveau",
   "chat_message_list.network_failure.subtitle": "Une erreur de réseau s’est produite.",
   "chat_message_list.network_failure.title": "Oups !",

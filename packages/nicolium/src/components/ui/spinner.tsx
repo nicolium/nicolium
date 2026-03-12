@@ -1,7 +1,6 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Stack from './stack';
 import Text from './text';
 
 import './spinner.css';
@@ -15,7 +14,7 @@ interface ISpinner {
 
 /** Spinning loading placeholder. */
 const Spinner = ({ size = 30, withText = true }: ISpinner) => (
-  <Stack space={2} justifyContent='center' alignItems='center'>
+  <div className='flex flex-col items-center justify-center gap-2'>
     <div className='spinner' style={{ width: size, height: size }}>
       {Array.from(Array(12).keys()).map((i) => (
         <div key={i}>&nbsp;</div>
@@ -27,7 +26,7 @@ const Spinner = ({ size = 30, withText = true }: ISpinner) => (
         <FormattedMessage id='loading_indicator.label' defaultMessage='Loading…' />
       </Text>
     )}
-  </Stack>
+  </div>
 );
 
 export { Spinner as default };

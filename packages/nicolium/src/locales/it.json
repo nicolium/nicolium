@@ -303,7 +303,6 @@
   "chat_list_item.blocking": "Hai bloccato questa persona",
   "chat_list_item_shoutbox": "Chatroom di {instance}",
   "chat_message_list.blocked": "Hai bloccato questa persona",
-  "chat_message_list.blocked_by": "Blocco da",
   "chat_message_list.network_failure.action": "Riprova",
   "chat_message_list.network_failure.subtitle": "Si è verificato un errore di connessione.",
   "chat_message_list.network_failure.title": "Ooops!",

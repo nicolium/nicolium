@@ -2,9 +2,7 @@ import React, { useRef } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
 import Button from './button';
-import HStack from './hstack';
 import IconButton from './icon-button';
-import Stack from './stack';
 import Text from './text';
 
 const messages = defineMessages({
@@ -83,8 +81,8 @@ const Streamfield = <T,>({
   };
 
   return (
-    <Stack space={4}>
-      <Stack>
+    <div className='flex flex-col gap-2'>
+      <div className='flex flex-col'>
         {label && (
           <Text size='sm' weight='medium'>
             {label}
@@ -95,16 +93,15 @@ const Streamfield = <T,>({
             {hint}
           </Text>
         )}
-      </Stack>
+      </div>
 
       {values.length > 0 && (
-        <Stack space={1}>
+        <div className='flex flex-col gap-1'>
           {values.map((value, i) =>
             (value as Record<string, unknown>)?._destroy ? null : (
-              <HStack
+              <div
+                className='flex items-center gap-2'
                 key={i}
-                space={2}
-                alignItems='center'
                 draggable={draggable}
                 onDragStart={handleDragStart(i)}
                 onDragEnter={handleDragEnter(i)}
@@ -128,10 +125,10 @@ const Streamfield = <T,>({
                     title={intl.formatMessage(messages.remove)}
                   />
                 )}
-              </HStack>
+              </div>
             ),
           )}
-        </Stack>
+        </div>
       )}
 
       {onAddItem && values.length < maxItems && (
@@ -139,7 +136,7 @@ const Streamfield = <T,>({
           <FormattedMessage id='streamfield.add' defaultMessage='Add' />
         </Button>
       )}
-    </Stack>
+    </div>
   );
 };
 

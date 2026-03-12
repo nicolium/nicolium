@@ -4,8 +4,6 @@ import { FormattedMessage } from 'react-intl';
 
 import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useReport } from '@/queries/admin/use-reports';
@@ -30,10 +28,10 @@ const Report: React.FC<IReport> = ({ id }) => {
       params={{ reportId: id }}
       className='block rounded-lg bg-gray-100 p-4 dark:bg-primary-800'
     >
-      <Stack space={2} className='h-full justify-between'>
+      <div className='flex h-full flex-col justify-between gap-2'>
         {report.target_account && (
           <HoverAccountWrapper accountId={report.target_account.id} element='span'>
-            <HStack alignItems='center' space={2}>
+            <div className='flex items-center gap-2'>
               <Avatar
                 src={report.target_account.avatar}
                 alt={report.target_account.avatar_description}
@@ -41,7 +39,7 @@ const Report: React.FC<IReport> = ({ id }) => {
                 isCat={report.target_account.is_cat}
                 username={report.target_account.username}
               />
-              <Stack>
+              <div className='flex flex-col'>
                 <Text size='sm' weight='semibold' truncate>
                   <Emojify
                     text={report.target_account.display_name}
@@ -51,13 +49,13 @@ const Report: React.FC<IReport> = ({ id }) => {
                 <Text size='sm' theme='muted' direction='ltr' truncate>
                   @{report.target_account.fqn}
                 </Text>
-              </Stack>
-            </HStack>
+              </div>
+            </div>
           </HoverAccountWrapper>
         )}
 
         {!!account && (
-          <HStack space={1} alignItems='center' wrap>
+          <div className='flex flex-wrap items-center gap-1'>
             <Text size='sm' theme='muted'>
               <FormattedMessage id='admin.reports.account' defaultMessage='Reported by:' />
             </Text>
@@ -66,27 +64,27 @@ const Report: React.FC<IReport> = ({ id }) => {
                 @{reporterAcct}
               </Link>
             </HoverAccountWrapper>
-          </HStack>
+          </div>
         )}
 
         {!!report.comment && report.comment.length > 0 && (
-          <HStack space={1} alignItems='center' wrap>
+          <div className='flex flex-wrap items-center gap-1'>
             <Text size='sm' theme='muted'>
               <FormattedMessage id='admin.reports.comment' defaultMessage='Comment:' />
             </Text>
             {report.comment}
-          </HStack>
+          </div>
         )}
 
         {statusCount > 0 && (
-          <HStack space={1} alignItems='center' wrap>
+          <div className='flex flex-wrap items-center gap-1'>
             <Text size='sm' theme='muted'>
               <FormattedMessage id='admin.reports.statuses' defaultMessage='Reported posts:' />
             </Text>
             {statusCount}
-          </HStack>
+          </div>
         )}
-      </Stack>
+      </div>
     </Link>
   );
 };

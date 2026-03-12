@@ -7,7 +7,6 @@ import AltIndicator from '@/components/media/alt-indicator';
 import Blurhash from '@/components/media/blurhash';
 import StillImage from '@/components/still-image';
 import Popover from '@/components/ui/popover';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { MIMETYPE_ICONS } from '@/components/upload';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
@@ -222,7 +221,7 @@ const Item: React.FC<IItem> = ({
             interaction='click'
             referenceElementClassName='cursor-pointer'
             content={
-              <Stack space={1} className='max-h-[32rem] max-w-96 overflow-auto p-4'>
+              <div className='flex max-h-[32rem] max-w-96 flex-col gap-1 overflow-auto p-4'>
                 <Text weight='semibold'>
                   <FormattedMessage
                     id='media-gallery.description'
@@ -230,7 +229,7 @@ const Item: React.FC<IItem> = ({
                   />
                 </Text>
                 <Text className='whitespace-pre-wrap'>{attachment.description}</Text>
-              </Stack>
+              </div>
             }
             isFlush
             title={intl.formatMessage(messages.altText)}
@@ -372,7 +371,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
 
   if (disableUserProvidedMedia) {
     return (
-      <Stack space={2}>
+      <div className='flex flex-col gap-2'>
         {media.map((attachment, index) => (
           <button
             className='flex items-center gap-2'
@@ -415,7 +414,7 @@ const MediaGallery: React.FC<IMediaGallery> = (props) => {
           </button>
           // <MediaItem key={index} item={item} />
         ))}
-      </Stack>
+      </div>
     );
   }
 

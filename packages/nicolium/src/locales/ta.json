@@ -307,7 +307,6 @@
   "chat_list_item.blocking": "இந்த பயனரை நீங்கள் தடுத்துள்ளீர்கள்",
   "chat_list_item_shoutbox": "{instance} கத்தி பெட்டி",
   "chat_message_list.blocked": "இந்த பயனரைத் தடுத்தீர்கள்",
-  "chat_message_list.blocked_by": "நீங்கள் தடுக்கப்பட்டுள்ளீர்கள்",
   "chat_message_list.network_failure.action": "மீண்டும் முயற்சிக்கவும்",
   "chat_message_list.network_failure.subtitle": "பிணையம் தோல்வியை நாங்கள் சந்தித்தோம்.",
   "chat_message_list.network_failure.title": "அச்சச்சோ!",

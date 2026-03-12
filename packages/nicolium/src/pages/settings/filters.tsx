@@ -5,7 +5,6 @@ import RelativeTimestamp from '@/components/relative-timestamp';
 import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import HStack from '@/components/ui/hstack';
 import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
 import { useDeleteFilter, useFilters } from '@/queries/settings/use-filters';
@@ -57,11 +56,11 @@ const FiltersPage = () => {
 
   return (
     <Column className='filter-settings-panel' label={intl.formatMessage(messages.heading)}>
-      <HStack className='mb-4' space={2} justifyContent='end'>
+      <div className='mb-4 flex justify-end gap-2'>
         <Button to='/filters/$filterId' params={{ filterId: 'new' }} theme='primary' size='sm'>
           <FormattedMessage id='filters.create_filter' defaultMessage='Create filter' />
         </Button>
-      </HStack>
+      </div>
 
       <ScrollableList
         scrollKey='filters'
@@ -94,7 +93,7 @@ const FiltersPage = () => {
                       .join(', ')}
                   </Text>
                 </Text>
-                <HStack space={4} wrap>
+                <div className='flex flex-wrap gap-4'>
                   <Text weight='medium'>
                     {filtersV2 ? (
                       filter.filter_action === 'hide' ? (
@@ -135,16 +134,16 @@ const FiltersPage = () => {
                       )}
                     </Text>
                   )}
-                </HStack>
+                </div>
               </div>
-              <HStack space={2} justifyContent='end'>
+              <div className='flex justify-end gap-2'>
                 <Button theme='primary' to='/filters/$filterId' params={{ filterId: filter.id }}>
                   <FormattedMessage id='column.filters.edit' defaultMessage='Edit filter' />
                 </Button>
                 <Button theme='danger' onClick={handleFilterDelete(filter.id)}>
                   <FormattedMessage id='column.filters.delete' defaultMessage='Delete' />
                 </Button>
-              </HStack>
+              </div>
             </div>
           </div>
         ))}

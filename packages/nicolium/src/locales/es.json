@@ -232,7 +232,6 @@
   "chat_list_item.blocked_you": "Este usuario te ha bloqueado",
   "chat_list_item.blocking": "Has bloqueado a este usuario",
   "chat_message_list.blocked": "Bloqueaste a este usuario",
-  "chat_message_list.blocked_by": "Está bloqueado por",
   "chat_message_list.network_failure.action": "Inténtalo de nuevo",
   "chat_message_list.network_failure.subtitle": "Encontramos un falla de red.",
   "chat_message_list.network_failure.title": "¡Ups!",

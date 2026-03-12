@@ -9,7 +9,6 @@ import { fetchOwnAccounts, logOut, switchAccount } from '@/actions/auth';
 import Account from '@/components/accounts/account';
 import Divider from '@/components/ui/divider';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import ProfileStats from '@/features/ui/components/profile-stats';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
@@ -240,7 +239,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
               <ProfileStats account={account} onClickHandler={handleClose} />
             )}
 
-            <Stack space={4}>
+            <div className='flex flex-col gap-4'>
               <Divider />
 
               <DropdownNavigationLink
@@ -516,7 +515,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
 
                 {switcher && <AccountSwitcher handleClose={handleClose} />}
               </div>
-            </Stack>
+            </div>
           </div>
         ) : (
           <div>

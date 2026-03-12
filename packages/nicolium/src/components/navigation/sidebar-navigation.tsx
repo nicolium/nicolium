@@ -4,7 +4,6 @@ import React, { useMemo } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import { useStatContext } from '@/contexts/stat-context';
 import ComposeButton from '@/features/ui/components/compose-button';
 import ProfileDropdown from '@/features/ui/components/profile-dropdown';
@@ -424,7 +423,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
         )}
 
         {!account && (
-          <Stack className='xl:hidden' space={1.5}>
+          <div className='flex flex-col gap-1.5 xl:hidden'>
             <SidebarNavigationLink
               to='/login'
               icon={require('@phosphor-icons/core/regular/sign-in.svg')}
@@ -440,7 +439,7 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
                 text={<FormattedMessage id='account.register' defaultMessage='Sign up' />}
               />
             )}
-          </Stack>
+          </div>
         )}
       </ul>
 
