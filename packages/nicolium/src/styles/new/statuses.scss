@@ -784,3 +784,38 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
     }
   }
 }
+
+.⁂-hashtags-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  &__item {
+    display: flex;
+    align-items: center;
+    border-radius: 0.125rem;
+    background-color: rgb(var(--color-gray-100));
+    padding: 0.25rem 0.375rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    color: rgb(var(--color-primary-600));
+
+    .dark & {
+      background-color: rgb(var(--color-primary-700));
+      color: #fff;
+    }
+
+    .dark.black & {
+      background-color: rgb(var(--color-primary-900));
+    }
+  }
+
+  button {
+    @include mixins.text($theme: muted, $size: xs, $weight: semibold);
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

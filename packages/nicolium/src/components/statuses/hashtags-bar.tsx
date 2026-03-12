@@ -3,8 +3,6 @@ import { Link } from '@tanstack/react-router';
 import React, { useCallback, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import Text from '../ui/text';
-
 // Fit on a single line on desktop
 const VISIBLE_HASHTAGS = 3;
 
@@ -27,7 +25,7 @@ const HashtagsBar: React.FC<IHashtagsBar> = ({ hashtags }) => {
   const revealedHashtags = expanded ? hashtags : hashtags.slice(0, VISIBLE_HASHTAGS);
 
   return (
-    <div className='flex flex-wrap gap-2'>
+    <div className='⁂-hashtags-bar'>
       {revealedHashtags.map((hashtag) => (
         <Link
           key={hashtag}
@@ -36,23 +34,19 @@ const HashtagsBar: React.FC<IHashtagsBar> = ({ hashtags }) => {
           onClick={(e) => {
             e.stopPropagation();
           }}
-          className='flex items-center rounded-sm bg-gray-100 px-1.5 py-1 text-xs font-medium text-primary-600 black:bg-primary-900 dark:bg-primary-700 dark:text-white'
+          className='⁂-hashtags-bar__item'
         >
-          <Text size='xs' weight='semibold' theme='inherit'>
-            #<span>{hashtag}</span>
-          </Text>
+          #<span>{hashtag}</span>
         </Link>
       ))}
 
       {!expanded && hashtags.length > VISIBLE_HASHTAGS && (
         <button onClick={handleClick}>
-          <Text className='hover:underline' size='xs' weight='semibold' theme='muted'>
-            <FormattedMessage
-              id='hashtags.and_other'
-              defaultMessage='…and {count, plural, other {# more}}'
-              values={{ count: hashtags.length - VISIBLE_HASHTAGS }}
-            />
-          </Text>
+          <FormattedMessage
+            id='hashtags.and_other'
+            defaultMessage='…and {count, plural, other {# more}}'
+            values={{ count: hashtags.length - VISIBLE_HASHTAGS }}
+          />
         </button>
       )}
     </div>
