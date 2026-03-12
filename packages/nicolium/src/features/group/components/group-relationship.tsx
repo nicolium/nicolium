@@ -2,7 +2,6 @@ import { GroupRoles, type Group } from 'pl-api';
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 
@@ -19,11 +18,9 @@ const GroupRelationship = ({ group }: IGroupRelationship) => {
   }
 
   return (
-    <HStack
-      space={1}
-      alignItems='center'
+    <div
       data-testid='group-relationship'
-      className='text-primary-600 dark:text-primary-400'
+      className='flex items-center gap-1 text-primary-600 dark:text-primary-400'
     >
       <Icon
         className='size-4'
@@ -41,7 +38,7 @@ const GroupRelationship = ({ group }: IGroupRelationship) => {
           <FormattedMessage id='group.role.admin' defaultMessage='Admin' />
         )}
       </Text>
-    </HStack>
+    </div>
   );
 };
 

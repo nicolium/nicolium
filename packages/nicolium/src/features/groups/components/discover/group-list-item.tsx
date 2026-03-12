@@ -23,7 +23,7 @@ const GroupListItem: React.FC<IGroupListItem> = ({ groupId, withJoinAction = tru
   if (!group) return null;
 
   return (
-    <HStack alignItems='center' justifyContent='between' data-testid='group-list-item'>
+    <div className='flex items-center justify-between' data-testid='group-list-item'>
       <Link
         key={group.id}
         to='/groups/$groupId'
@@ -77,7 +77,7 @@ const GroupListItem: React.FC<IGroupListItem> = ({ groupId, withJoinAction = tru
       </Link>
 
       {withJoinAction && <GroupActionButton group={group} />}
-    </HStack>
+    </div>
   );
 };
 
