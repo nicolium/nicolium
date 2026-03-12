@@ -124,16 +124,20 @@ const useEmojiReactMutation = (statusId: string) => {
       importEntities({ statuses: [status] });
     },
     onMutate: (emoji) => {
-      const customEmoji = queryClient
-        .getQueryData(queryKeys.instance.customEmojis)
-        ?.find((e) => e.shortcode === emoji);
-
       return updateStatus(
         statusId,
-        (status) => ({
-          ...status,
-          emoji_reactions: simulateEmojiReact(status.emoji_reactions, emoji, customEmoji?.url),
-        }),
+        (status) => {
+          const customEmoji =
+            queryClient
+              .getQueryData(queryKeys.instance.customEmojis)
+              ?.find((e) => e.shortcode === emoji) ||
+            status.emoji_reactions?.find((r) => r.name === emoji);
+
+          return {
+            ...status,
+            emoji_reactions: simulateEmojiReact(status.emoji_reactions, emoji, customEmoji?.url),
+          };
+        },
         queryClient,
       );
     },
