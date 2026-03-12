@@ -5,9 +5,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import DropdownMenu from '@/components/dropdown-menu';
 import { ParsedContent } from '@/components/statuses/parsed-content';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { MediaGallery } from '@/features/ui/util/async-components';
 import { useAppSelector } from '@/hooks/use-app-selector';
@@ -191,33 +189,26 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
         )}
       </div>
 
-      <Stack
-        space={1.5}
-        className={clsx({
-          'ml-auto': isMyMessage,
-        })}
-      >
-        <HStack
-          alignItems='center'
-          justifyContent={isMyMessage ? 'end' : 'start'}
-          className={clsx({
+      <div className={clsx('flex flex-col gap-1.5', { 'ml-auto': isMyMessage })}>
+        <div
+          className={clsx('flex items-center', {
+            'justify-end': isMyMessage,
+            'justify-start': !isMyMessage,
             'opacity-50': chatMessage.pending,
           })}
         >
-          <Stack
-            space={0.5}
+          <div
             className={clsx({
-              'max-w-[85%]': true,
+              'flex max-w-[85%] flex-col gap-0.5': true,
               'flex-1': !!chatMessage.attachment,
-              'order-3': isMyMessage,
-              'order-1': !isMyMessage,
+              'order-3 items-end': isMyMessage,
+              'order-1 items-start': !isMyMessage,
             })}
-            alignItems={isMyMessage ? 'end' : 'start'}
           >
             {maybeRenderMedia(chatMessage)}
 
             {content && (
-              <HStack alignItems='bottom' className='max-w-full'>
+              <div className='flex max-w-full items-end'>
                 <div
                   title={getFormattedTimestamp(chatMessage)}
                   className={clsx({
@@ -238,15 +229,13 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
                     <ParsedContent html={content} emojis={chatMessage.emojis} />
                   </Text>
                 </div>
-              </HStack>
+              </div>
             )}
-          </Stack>
-        </HStack>
+          </div>
+        </div>
 
-        <HStack
-          alignItems='center'
-          space={2}
-          className={clsx({
+        <div
+          className={clsx('flex items-center gap-2', {
             'ml-auto': isMyMessage,
           })}
         >
@@ -262,8 +251,8 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
               </Text>
             </span>
           </div>
-        </HStack>
-      </Stack>
+        </div>
+      </div>
     </div>
   );
 });

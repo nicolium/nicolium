@@ -3,7 +3,6 @@ import React, { useRef } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import AltIndicator from '@/components/media/alt-indicator';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
@@ -89,13 +88,13 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
             alt={intl.formatMessage(messages.title)}
           />
         )}
-        <HStack
-          className={clsx('absolute top-0 size-full transition-opacity', {
-            'bg-primary-100 opacity-0 hover:opacity-90 dark:bg-gray-800': src,
-          })}
-          space={1.5}
-          alignItems='center'
-          justifyContent='center'
+        <div
+          className={clsx(
+            'absolute top-0 flex size-full items-center justify-center gap-1.5 transition-opacity',
+            {
+              'bg-primary-100 opacity-0 hover:opacity-90 dark:bg-gray-800': src,
+            },
+          )}
         >
           <Icon src={require('@phosphor-icons/core/regular/upload.svg')} className='size-4.5' />
 
@@ -114,7 +113,7 @@ const HeaderPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
             disabled={disabled}
             className='hidden'
           />
-        </HStack>
+        </div>
         {onClear && src && (
           <IconButton
             onClick={handleClear}

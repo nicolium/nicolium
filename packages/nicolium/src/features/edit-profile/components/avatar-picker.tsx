@@ -4,7 +4,6 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import AltIndicator from '@/components/media/alt-indicator';
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useModalsActions } from '@/stores/modals';
@@ -73,18 +72,19 @@ const AvatarPicker = React.forwardRef<HTMLInputElement, IMediaInput>(
         {src && (
           <Avatar className={clsx(onChangeDescription && '!rounded-lg')} src={src} size={80} />
         )}
-        <HStack
-          alignItems='center'
-          justifyContent='center'
-          className={clsx('absolute left-0 top-0 size-full rounded-lg transition-opacity', {
-            'bg-primary-500 opacity-0 hover:opacity-90': src,
-          })}
+        <div
+          className={clsx(
+            'absolute left-0 top-0 flex size-full items-center justify-center rounded-lg transition-opacity',
+            {
+              'bg-primary-500 opacity-0 hover:opacity-90': src,
+            },
+          )}
         >
           <Icon
             src={require('@phosphor-icons/core/regular/camera-plus.svg')}
             className='size-5 text-white'
           />
-        </HStack>
+        </div>
         <span className='sr-only'>
           <FormattedMessage id='group.upload_avatar' defaultMessage='Upload avatar' />
         </span>

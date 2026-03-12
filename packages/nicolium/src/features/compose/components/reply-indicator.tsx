@@ -5,7 +5,6 @@ import Markup from '@/components/markup';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import QuotedStatusIndicator from '@/components/statuses/quoted-status-indicator';
-import Stack from '@/components/ui/stack';
 import AccountContainer from '@/containers/account-container';
 import { getTextDirection } from '@/utils/rtl';
 
@@ -57,10 +56,9 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({
   }
 
   return (
-    <Stack
-      space={2}
+    <div
       className={clsx(
-        'max-h-72 overflow-y-auto rounded-lg bg-gray-100 p-4 black:bg-gray-900 dark:bg-gray-800',
+        'flex max-h-72 flex-col gap-2 overflow-y-auto rounded-lg bg-gray-100 p-4 black:bg-gray-900 dark:bg-gray-800',
         className,
       )}
     >
@@ -92,7 +90,7 @@ const ReplyIndicator: React.FC<IReplyIndicator> = ({
       {status.quote_id && (
         <QuotedStatusIndicator statusId={status.quote_id} statusUrl={status.quote_url} />
       )}
-    </Stack>
+    </div>
   );
 };
 

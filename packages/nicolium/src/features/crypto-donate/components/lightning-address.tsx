@@ -3,8 +3,6 @@ import { FormattedMessage } from 'react-intl';
 
 import CopyableInput from '@/components/copyable-input';
 import Emoji from '@/components/ui/emoji';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 
 interface ILightningAddress {
@@ -15,8 +13,8 @@ const LightningAddress: React.FC<ILightningAddress> = (props): React.JSX.Element
   const { address } = props;
 
   return (
-    <Stack>
-      <HStack alignItems='center' className='mb-1'>
+    <div className='flex flex-col'>
+      <div className='mb-1 flex items-center'>
         <Emoji
           className='mr-2.5 flex w-6 items-start justify-center rtl:ml-2.5 rtl:mr-0'
           emoji='⚡'
@@ -25,10 +23,10 @@ const LightningAddress: React.FC<ILightningAddress> = (props): React.JSX.Element
         <Text weight='bold'>
           <FormattedMessage id='crypto.lightning' defaultMessage='Lightning' />
         </Text>
-      </HStack>
+      </div>
 
       <CopyableInput value={address} />
-    </Stack>
+    </div>
   );
 };
 

@@ -3,9 +3,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import ScrollableList from '@/components/scrollable-list';
 import Button from '@/components/ui/button';
-import HStack from '@/components/ui/hstack';
 import Spinner from '@/components/ui/spinner';
-import Stack from '@/components/ui/stack';
 import AccountContainer from '@/containers/account-container';
 import {
   useAcceptEventParticipationRequestMutation,
@@ -58,7 +56,7 @@ const Account: React.FC<IAccount> = ({ eventId, id, participationMessage }) => {
       id={id}
       note={participationMessage ?? undefined}
       action={
-        <HStack space={2}>
+        <div className='flex gap-2'>
           <Button
             theme='secondary'
             size='sm'
@@ -89,7 +87,7 @@ const Account: React.FC<IAccount> = ({ eventId, id, participationMessage }) => {
               });
             }}
           />
-        </HStack>
+        </div>
       }
     />
   );
@@ -108,29 +106,27 @@ const ManagePendingParticipants: React.FC<IManagePendingParticipants> = ({ statu
   } = useEventParticipationRequests(statusId);
 
   return accounts ? (
-    <Stack space={3}>
-      <ScrollableList
-        scrollKey={`eventPendingParticipants:${statusId}`}
-        emptyMessageText={
-          <FormattedMessage
-            id='empty_column.event_participant_requests'
-            defaultMessage='There are no pending event participation requests.'
-          />
-        }
-        hasMore={hasNextPage}
-        isLoading={isLoading}
-        onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
-      >
-        {accounts.map(({ account_id, participation_message }) => (
-          <Account
-            key={account_id}
-            eventId={statusId}
-            id={account_id}
-            participationMessage={participation_message}
-          />
-        ))}
-      </ScrollableList>
-    </Stack>
+    <ScrollableList
+      scrollKey={`eventPendingParticipants:${statusId}`}
+      emptyMessageText={
+        <FormattedMessage
+          id='empty_column.event_participant_requests'
+          defaultMessage='There are no pending event participation requests.'
+        />
+      }
+      hasMore={hasNextPage}
+      isLoading={isLoading}
+      onLoadMore={() => fetchNextPage({ cancelRefetch: false })}
+    >
+      {accounts.map(({ account_id, participation_message }) => (
+        <Account
+          key={account_id}
+          eventId={statusId}
+          id={account_id}
+          participationMessage={participation_message}
+        />
+      ))}
+    </ScrollableList>
   ) : (
     <Spinner />
   );

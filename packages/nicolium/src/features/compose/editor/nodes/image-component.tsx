@@ -28,7 +28,6 @@ import { Suspense, useCallback, useEffect, useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import { useModalsActions } from '@/stores/modals';
@@ -297,7 +296,7 @@ const ImageComponent = ({
         onClick={handleClick}
         role='button'
       >
-        <HStack className='absolute right-2 top-2 z-10' space={2}>
+        <div className='absolute right-2 top-2 z-10 flex gap-2'>
           <IconButton
             onClick={previewImage}
             src={require('@phosphor-icons/core/regular/magnifying-glass-plus.svg')}
@@ -314,7 +313,7 @@ const ImageComponent = ({
             iconClassName='h-5 w-5'
             title={intl.formatMessage(messages.delete)}
           />
-        </HStack>
+        </div>
 
         <div
           className={clsx(

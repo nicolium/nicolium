@@ -4,8 +4,6 @@ import { Virtuoso } from 'react-virtuoso';
 
 import VerificationBadge from '@/components/accounts/verification-badge';
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useAccounts } from '@/queries/accounts/use-accounts';
 
@@ -41,7 +39,7 @@ const Results = ({ accountSearchResult, onSelect }: IResults) => {
         }}
         data-testid='account'
       >
-        <HStack alignItems='center' space={2}>
+        <div className='flex items-center gap-2'>
           <Avatar
             src={account.avatar}
             alt={account.avatar_description}
@@ -50,7 +48,7 @@ const Results = ({ accountSearchResult, onSelect }: IResults) => {
             username={account.username}
           />
 
-          <Stack alignItems='start'>
+          <div className='flex flex-col items-start'>
             <div className='flex grow items-center space-x-1'>
               <Text weight='bold' size='sm' truncate>
                 {account.display_name}
@@ -60,8 +58,8 @@ const Results = ({ accountSearchResult, onSelect }: IResults) => {
             <Text size='sm' weight='medium' theme='muted' direction='ltr' truncate>
               @{account.acct}
             </Text>
-          </Stack>
-        </HStack>
+          </div>
+        </div>
       </button>
     ),
     [],

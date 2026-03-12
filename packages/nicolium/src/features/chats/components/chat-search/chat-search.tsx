@@ -5,7 +5,6 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
 import Input from '@/components/ui/input';
-import Stack from '@/components/ui/stack';
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 import { useDebounce } from '@/hooks/use-debounce';
 import { useChats } from '@/queries/chats';
@@ -90,7 +89,7 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
   };
 
   return (
-    <Stack space={4} className='-mt-1 h-full grow'>
+    <div className='-mt-1 flex h-full grow flex-col gap-4'>
       <div className='px-4 pt-1'>
         <Input
           data-testid='search'
@@ -124,10 +123,10 @@ const ChatSearch: React.FC<IChatSearch> = ({ isMainPage = false }) => {
         />
       </div>
 
-      <Stack className='grow' ref={parentRef}>
+      <div className='flex grow flex-col' ref={parentRef}>
         {renderBody()}
-      </Stack>
-    </Stack>
+      </div>
+    </div>
   );
 };
 

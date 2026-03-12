@@ -12,11 +12,9 @@ import Button from '@/components/ui/button';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Input from '@/components/ui/input';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import ContentTypeButton from '@/features/compose/components/content-type-button';
@@ -225,18 +223,18 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
 
   const renderLocation = () =>
     location && (
-      <HStack className='h-[38px] text-gray-700 dark:text-gray-500' alignItems='center' space={2}>
+      <div className='flex h-[38px] items-center gap-2 text-gray-700 dark:text-gray-500'>
         <Icon
           src={ADDRESS_ICONS[location.type] || require('@phosphor-icons/core/regular/map-pin.svg')}
         />
-        <Stack className='grow'>
+        <div className='flex grow flex-col'>
           <Text>{location.description}</Text>
           <Text theme='muted' size='xs'>
             {[location.street, location.locality, location.country]
               .filter((val) => val?.trim())
               .join(' · ')}
           </Text>
-        </Stack>
+        </div>
         <IconButton
           title={intl.formatMessage(messages.resetLocation)}
           src={require('@phosphor-icons/core/regular/x.svg')}
@@ -244,7 +242,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
             onChangeLocation(null);
           }}
         />
-      </HStack>
+      </div>
     );
 
   return (
@@ -350,7 +348,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
           onChange={onChangeStartTime}
         />
       </FormGroup>
-      <HStack alignItems='center' space={2}>
+      <div className='flex items-center gap-2'>
         <Toggle checked={!!endTime} onChange={onChangeHasEndTime} id='has-end-time-toggle' />
         <Text htmlFor='has-end-time-toggle' tag='label' theme='muted'>
           <FormattedMessage
@@ -358,7 +356,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
             defaultMessage='This event has an end date'
           />
         </Text>
-      </HStack>
+      </div>
       {endTime && (
         <FormGroup
           labelText={
@@ -381,7 +379,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
         </FormGroup>
       )}
       {!statusId && (
-        <HStack alignItems='center' space={2}>
+        <div className='flex items-center gap-2'>
           <Toggle
             checked={approvalRequired}
             onChange={onChangeApprovalRequired}
@@ -393,7 +391,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
               defaultMessage='I want to approve participation requests manually'
             />
           </Text>
-        </HStack>
+        </div>
       )}
       <FormActions>
         <Button disabled={isDisabled} theme='primary' type='submit'>

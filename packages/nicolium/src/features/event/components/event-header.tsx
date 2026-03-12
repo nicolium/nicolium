@@ -12,7 +12,6 @@ import StillImage from '@/components/still-image';
 import Button from '@/components/ui/button';
 import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
@@ -468,8 +467,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
           )}
         </div>
       </div>
-      <Stack space={2}>
-        <HStack className='w-full' alignItems='start' space={2}>
+      <div className='flex flex-col gap-2'>
+        <div className='flex w-full items-start gap-2'>
           <Text className='grow' size='lg' weight='bold'>
             {event.name}
           </Text>
@@ -495,10 +494,10 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
           ) : (
             <EventActionButton status={status} />
           )}
-        </HStack>
+        </div>
 
-        <Stack space={1}>
-          <HStack alignItems='center' space={2}>
+        <div className='flex flex-col gap-1'>
+          <div className='flex items-center gap-2'>
             <Icon src={require('@phosphor-icons/core/regular/flag-banner.svg')} />
             <span>
               <FormattedMessage
@@ -522,10 +521,10 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
                 }}
               />
             </span>
-          </HStack>
+          </div>
 
           {(event.join_mode !== 'external' || event.participants_count > 0) && (
-            <HStack alignItems='center' space={2}>
+            <div className='flex items-center gap-2'>
               <Icon src={require('@phosphor-icons/core/regular/users.svg')} />
               <a href='#' className='hover:underline' onClick={handleParticipantsClick}>
                 <span>
@@ -539,19 +538,19 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
                   />
                 </span>
               </a>
-            </HStack>
+            </div>
           )}
 
           <EventDate status={status} />
 
           {event.location && (
-            <HStack alignItems='center' space={2}>
+            <div className='flex items-center gap-2'>
               <Icon src={require('@phosphor-icons/core/regular/map-pin.svg')} />
               <span>{event.location.name}</span>
-            </HStack>
+            </div>
           )}
-        </Stack>
-      </Stack>
+        </div>
+      </div>
     </>
   );
 };

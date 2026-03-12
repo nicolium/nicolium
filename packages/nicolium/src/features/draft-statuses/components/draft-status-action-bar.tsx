@@ -3,7 +3,6 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { fetchStatus } from '@/actions/statuses';
 import Button from '@/components/ui/button';
-import HStack from '@/components/ui/hstack';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
@@ -65,14 +64,14 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
   };
 
   return (
-    <HStack space={2} justifyContent='end'>
+    <div className='flex justify-end gap-2'>
       <Button theme='primary' size='sm' onClick={handleEditClick}>
         <FormattedMessage id='draft_status.edit' defaultMessage='Edit' />
       </Button>
       <Button theme='danger' size='sm' onClick={handleCancelClick}>
         <FormattedMessage id='draft_status.cancel' defaultMessage='Delete' />
       </Button>
-    </HStack>
+    </div>
   );
 };
 

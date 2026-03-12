@@ -7,8 +7,6 @@ import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import OutlineBox from '@/components/outline-box';
 import StatusContent from '@/components/statuses/status-content';
 import StatusReplyMentions from '@/components/statuses/status-reply-mentions';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import QuotedStatus from '@/features/status/containers/quoted-status-container';
 import PollPreview from '@/features/ui/components/poll-preview';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -65,18 +63,18 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
         data-id={status.id}
       >
         <div className='mb-4'>
-          <HStack justifyContent='between' alignItems='start'>
+          <div className='flex items-start justify-between'>
             <Account
               key={account.id}
               account={account}
               action={<DraftStatusActionBar source={draftStatus} status={status} {...other} />}
             />
-          </HStack>
+          </div>
         </div>
 
         <StatusReplyMentions status={status} />
 
-        <Stack space={4}>
+        <div className='flex flex-col gap-4'>
           <StatusContent status={status} collapsable />
 
           {status.media_attachments.length > 0 && <AttachmentThumbs status={status} />}
@@ -84,7 +82,7 @@ const DraftStatus: React.FC<IDraftStatus> = ({ draftStatus, ...other }) => {
           {quote}
 
           {poll && <PollPreview poll={poll} />}
-        </Stack>
+        </div>
       </div>
     </div>
   );
