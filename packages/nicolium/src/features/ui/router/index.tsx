@@ -879,7 +879,7 @@ export const settingsAccountRoute = createRoute({
 export const settingsMfaRoute = createRoute({
   getParentRoute: () => layouts.default,
   path: '/settings/mfa',
-  component: lazy(() => import('@/features/security/mfa-form')),
+  component: lazy(() => import('@/pages/settings/mfa-form')),
   beforeLoad: requireAuthMiddleware(({ context: { features } }) => {
     if (!features.manageMfa) throw notFound();
   }),

@@ -55,7 +55,6 @@ export const DropdownNavigation = lazy(() => import('@/components/navigation/dro
 export const EmojiPicker = lazy(() => import('@/features/emoji/components/emoji-picker'));
 export const EventHeader = lazy(() => import('@/features/event/components/event-header'));
 export const MediaGallery = lazy(() => import('@/components/media/media-gallery'));
-export const MfaForm = lazy(() => import('@/features/security/mfa-form'));
 export const ModalRoot = lazy(() => import('@/features/ui/components/modal-root'));
 export const ProfileField = lazy(() => import('@/features/ui/components/profile-field'));
 export const AccountHoverCard = lazy(() => import('@/components/accounts/account-hover-card'));
