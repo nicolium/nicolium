@@ -4,9 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import VerificationBadge from '@/components/accounts/verification-badge';
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 
@@ -63,7 +61,7 @@ const ChatWindow = () => {
     <>
       <ChatPaneHeader
         title={
-          <HStack alignItems='center' space={2}>
+          <div className='flex items-center gap-2'>
             {isOpen && (
               <button onClick={closeChat} title={intl.formatMessage(messages.back)}>
                 <Icon
@@ -73,7 +71,7 @@ const ChatWindow = () => {
               </button>
             )}
 
-            <HStack alignItems='center' space={3}>
+            <div className='flex items-center gap-3'>
               {isOpen && (
                 <Link to='/@{$username}' params={{ username: chat.account.acct }}>
                   <Avatar
@@ -86,7 +84,7 @@ const ChatWindow = () => {
                 </Link>
               )}
 
-              <Stack alignItems='start'>
+              <div className='flex flex-col items-start'>
                 <LinkWrapper
                   enabled={isOpen}
                   to='/@{$username}'
@@ -99,9 +97,9 @@ const ChatWindow = () => {
                     {chat.account.verified && <VerificationBadge />}
                   </div>
                 </LinkWrapper>
-              </Stack>
-            </HStack>
-          </HStack>
+              </div>
+            </div>
+          </div>
         }
         secondaryAction={isOpen ? openChatSettings : openSearch}
         secondaryActionIcon={
@@ -117,9 +115,9 @@ const ChatWindow = () => {
         onToggle={toggleChatPane}
       />
 
-      <Stack className='h-full grow overflow-hidden' space={2}>
+      <div className='flex h-full grow flex-col overflow-hidden'>
         <Chat chat={chat} inputRef={inputRef} />
-      </Stack>
+      </div>
     </>
   );
 };

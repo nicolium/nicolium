@@ -2,8 +2,6 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Icon from '@/components/icon';
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useInstance } from '@/hooks/use-instance';
 
@@ -20,11 +18,11 @@ interface IRestriction {
 }
 
 const Restriction: React.FC<IRestriction> = ({ icon, children }) => (
-  <HStack space={3}>
+  <div className='flex gap-3'>
     <Icon className='size-5 flex-none' src={icon} />
 
     <Text theme='muted'>{children}</Text>
-  </HStack>
+  </div>
 );
 
 interface IInstanceRestrictions {
@@ -155,7 +153,7 @@ const InstanceRestrictions: React.FC<IInstanceRestrictions> = ({ remoteInstance 
     }
   };
 
-  return <Stack space={3}>{renderContent()}</Stack>;
+  return <div className='flex flex-col gap-3'>{renderContent()}</div>;
 };
 
 export { InstanceRestrictions as default };

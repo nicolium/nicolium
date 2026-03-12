@@ -43,13 +43,11 @@ const GroupTimelinePage: React.FC = () => {
   }
 
   return (
-    <div clsasName='flex flex-col gap-2'>
+    <div className='flex flex-col gap-2'>
       {canComposeGroupStatus && (
         <div className='border-b border-solid border-gray-200 py-6 dark:border-gray-800'>
           <div
             ref={composer}
-            alignItems='start'
-            space={2}
             className={clsx('relative flex items-start gap-2 rounded-xl transition', {
               'z-[99] border-2 border-dashed border-primary-600 p-4': isDragging,
               'ring-2 ring-primary-600 ring-offset-2': isDraggedOver,

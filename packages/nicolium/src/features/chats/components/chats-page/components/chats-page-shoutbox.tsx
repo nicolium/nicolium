@@ -3,9 +3,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { useInstance } from '@/hooks/use-instance';
@@ -23,38 +21,36 @@ const ChatsPageShoutbox = () => {
   const { logo } = useFrontendConfig();
 
   return (
-    <Stack className='h-full overflow-hidden'>
-      <HStack alignItems='center' justifyContent='between' space={2} className='w-full p-4'>
-        <HStack alignItems='center' space={2} className='overflow-hidden'>
-          <HStack alignItems='center'>
-            <IconButton
-              src={require('@phosphor-icons/core/regular/arrow-left.svg')}
-              className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
-              onClick={() => navigate({ to: '/chats' })}
-              title={intl.formatMessage(messages.back)}
-            />
+    <div className='flex h-full flex-col overflow-hidden'>
+      <div className='flex w-full items-center gap-2 overflow-hidden p-4'>
+        <div className='flex items-center'>
+          <IconButton
+            src={require('@phosphor-icons/core/regular/arrow-left.svg')}
+            className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
+            onClick={() => navigate({ to: '/chats' })}
+            title={intl.formatMessage(messages.back)}
+          />
 
-            <Avatar src={logo} alt='' size={40} className='flex-none' />
-          </HStack>
+          <Avatar src={logo} alt='' size={40} className='flex-none' />
+        </div>
 
-          <Stack alignItems='start' className='h-11 overflow-hidden'>
-            <div className='flex w-full grow items-center space-x-1'>
-              <Text weight='bold' size='sm' align='left' truncate>
-                <FormattedMessage
-                  id='chat_list_item_shoutbox'
-                  defaultMessage='{instance} shoutbox'
-                  values={{ instance: instance.title }}
-                />
-              </Text>
-            </div>
-          </Stack>
-        </HStack>
-      </HStack>
+        <div className='flex h-11 flex-col items-start overflow-hidden'>
+          <div className='flex w-full grow items-center space-x-1'>
+            <Text weight='bold' size='sm' align='left' truncate>
+              <FormattedMessage
+                id='chat_list_item_shoutbox'
+                defaultMessage='{instance} shoutbox'
+                values={{ instance: instance.title }}
+              />
+            </Text>
+          </div>
+        </div>
+      </div>
 
       <div className='h-full overflow-hidden'>
         <Shoutbox className='h-full' />
       </div>
-    </Stack>
+    </div>
   );
 };
 

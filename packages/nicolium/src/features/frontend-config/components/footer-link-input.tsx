@@ -1,7 +1,6 @@
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import HStack from '@/components/ui/hstack';
 import Input from '@/components/ui/input';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
@@ -25,7 +24,7 @@ const PromoPanelInput: StreamfieldComponent<FooterItem> = ({ value, onChange }) 
     };
 
   return (
-    <HStack space={2} grow>
+    <div className='flex flex-grow gap-2'>
       <Input
         type='text'
         outerClassName='w-full grow'
@@ -40,7 +39,7 @@ const PromoPanelInput: StreamfieldComponent<FooterItem> = ({ value, onChange }) 
         value={value.url}
         onChange={handleChange('url')}
       />
-    </HStack>
+    </div>
   );
 };
 

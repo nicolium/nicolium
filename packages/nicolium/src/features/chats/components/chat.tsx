@@ -3,7 +3,6 @@ import React, { type MutableRefObject, useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { uploadMedia } from '@/actions/media';
-import Stack from '@/components/ui/stack';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useCreateChatMessage } from '@/queries/chats';
 import toast from '@/toast';
@@ -160,7 +159,7 @@ const Chat: React.FC<IChat> = ({ chat, inputRef, className }) => {
   }, [chat.id, inputRef?.current]);
 
   return (
-    <Stack className={clsx('flex grow overflow-hidden', className)}>
+    <div className={clsx('flex grow flex-col overflow-hidden', className)}>
       <div className='flex h-full grow justify-center overflow-hidden'>
         <ChatMessageList key={chat.id} chat={chat} />
       </div>
@@ -181,7 +180,7 @@ const Chat: React.FC<IChat> = ({ chat, inputRef, className }) => {
         uploading={uploading}
         uploadProgress={uploadProgress}
       />
-    </Stack>
+    </div>
   );
 };
 

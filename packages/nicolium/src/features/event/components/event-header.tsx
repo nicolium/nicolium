@@ -10,7 +10,6 @@ import DropdownMenu, { type Menu as MenuType } from '@/components/dropdown-menu'
 import Icon from '@/components/icon';
 import StillImage from '@/components/still-image';
 import Button from '@/components/ui/button';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
@@ -510,12 +509,12 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
                       to='/@{$username}'
                       params={{ username: account.acct }}
                     >
-                      <HStack space={1} alignItems='center' grow>
+                      <div className='flex flex-grow items-center gap-1'>
                         <span>
                           <Emojify text={account.display_name} emojis={account.emojis} />
                         </span>
                         {account.verified && <VerificationBadge />}
-                      </HStack>
+                      </div>
                     </Link>
                   ),
                 }}

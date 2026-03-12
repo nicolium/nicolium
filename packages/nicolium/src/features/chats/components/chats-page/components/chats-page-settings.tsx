@@ -7,9 +7,7 @@ import List, { ListItem } from '@/components/list';
 import Button from '@/components/ui/button';
 import { CardBody, CardTitle } from '@/components/ui/card';
 import Form from '@/components/ui/form';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
-import Stack from '@/components/ui/stack';
 import Toggle from '@/components/ui/toggle';
 import SettingToggle from '@/features/settings/components/setting-toggle';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
@@ -73,8 +71,8 @@ const ChatsPageSettings = () => {
   };
 
   return (
-    <Stack className='h-full space-y-8 px-4 py-6 sm:p-6'>
-      <HStack alignItems='center'>
+    <div className='flex h-full flex-col space-y-8 px-4 py-6 sm:p-6'>
+      <div className='flex items-center'>
         <IconButton
           src={require('@phosphor-icons/core/regular/arrow-left.svg')}
           className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
@@ -83,7 +81,7 @@ const ChatsPageSettings = () => {
         />
 
         <CardTitle title={intl.formatMessage(messages.title)} />
-      </HStack>
+      </div>
 
       <Form onSubmit={handleSubmit}>
         <CardTitle title={intl.formatMessage(messages.preferences)} />
@@ -120,7 +118,7 @@ const ChatsPageSettings = () => {
           {intl.formatMessage(messages.submit)}
         </Button>
       </Form>
-    </Stack>
+    </div>
   );
 };
 

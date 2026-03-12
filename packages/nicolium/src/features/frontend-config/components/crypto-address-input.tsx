@@ -1,7 +1,6 @@
 import React from 'react';
 import { useIntl, defineMessages } from 'react-intl';
 
-import HStack from '@/components/ui/hstack';
 import Input from '@/components/ui/input';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
@@ -32,7 +31,7 @@ const CryptoAddressInput: StreamfieldComponent<CryptoAddress> = ({ value, onChan
     };
 
   return (
-    <HStack space={2} grow>
+    <div className='flex grow flex-col gap-2'>
       <Input
         type='text'
         outerClassName='w-1/6 grow'
@@ -54,7 +53,7 @@ const CryptoAddressInput: StreamfieldComponent<CryptoAddress> = ({ value, onChan
         onChange={handleChange('note')}
         placeholder={intl.formatMessage(messages.note)}
       />
-    </HStack>
+    </div>
   );
 };
 

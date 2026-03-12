@@ -6,9 +6,7 @@ import Account from '@/components/accounts/account';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import Avatar from '@/components/ui/avatar';
-import HStack from '@/components/ui/hstack';
 import IconButton from '@/components/ui/icon-button';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import { chatRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
@@ -122,10 +120,10 @@ const ChatsPageChat = () => {
     });
 
   return (
-    <Stack className='h-full overflow-hidden'>
-      <HStack alignItems='center' justifyContent='between' space={2} className='w-full p-4'>
-        <HStack alignItems='center' space={2}>
-          <HStack alignItems='center'>
+    <div className='flex h-full flex-col overflow-hidden'>
+      <div className='flex w-full items-center justify-between gap-2 p-4'>
+        <div className='flex items-center gap-2'>
+          <div className='flex items-center'>
             <IconButton
               src={require('@phosphor-icons/core/regular/arrow-left.svg')}
               className='mr-2 size-7 sm:mr-0 sm:hidden rtl:rotate-180'
@@ -143,9 +141,9 @@ const ChatsPageChat = () => {
                 username={chat.account.username}
               />
             </Link>
-          </HStack>
+          </div>
 
-          <Stack alignItems='start' className='h-11 overflow-hidden'>
+          <div className='flex h-11 flex-col items-start overflow-hidden'>
             <div className='flex w-full grow items-center space-x-1'>
               <Link to='/@{$username}' params={{ username: chat.account.acct }}>
                 <Text weight='bold' size='sm' align='left' truncate>
@@ -154,8 +152,8 @@ const ChatsPageChat = () => {
               </Link>
               {chat.account.verified && <VerificationBadge />}
             </div>
-          </Stack>
-        </HStack>
+          </div>
+        </div>
 
         <DropdownMenu
           src={require('@phosphor-icons/core/regular/info.svg')}
@@ -166,12 +164,12 @@ const ChatsPageChat = () => {
           )}
           items={menuItems}
         />
-      </HStack>
+      </div>
 
       <div className='h-full overflow-hidden'>
         <Chat className='h-full' chat={chat} inputRef={inputRef} />
       </div>
-    </Stack>
+    </div>
   );
 };
 
