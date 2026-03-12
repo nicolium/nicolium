@@ -1,7 +1,5 @@
 import React from 'react';
 
-import HStack from '@/components/ui/hstack';
-
 import PlaceholderAvatar from './placeholder-avatar';
 import PlaceholderDisplayName from './placeholder-display-name';
 import PlaceholderStatusContent from './placeholder-status-content';
@@ -15,7 +13,7 @@ const PlaceholderNotification = React.memo(() => (
       </div>
 
       <div>
-        <HStack space={3} alignItems='center'>
+        <div className='flex items-center gap-3'>
           <div className='shrink-0'>
             <PlaceholderAvatar size={48} />
           </div>
@@ -23,7 +21,7 @@ const PlaceholderNotification = React.memo(() => (
           <div className='min-w-0 flex-1'>
             <PlaceholderDisplayName minLength={3} maxLength={25} />
           </div>
-        </HStack>
+        </div>
       </div>
 
       <div className='mt-4'>

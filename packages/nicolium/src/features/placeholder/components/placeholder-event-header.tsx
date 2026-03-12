@@ -1,7 +1,5 @@
 import React from 'react';
 
-import Stack from '@/components/ui/stack';
-
 import { generateText, randomIntFromInterval } from '../utils';
 
 const PlaceholderEventHeader = () => {
@@ -11,15 +9,15 @@ const PlaceholderEventHeader = () => {
   const locationLength = randomIntFromInterval(5, 30);
 
   return (
-    <Stack className='animate-pulse text-primary-50 dark:text-primary-800' space={2}>
+    <div className='flex animate-pulse flex-col gap-2 text-primary-50 dark:text-primary-800'>
       <p className='text-lg'>{generateText(eventNameLength)}</p>
 
-      <Stack space={1}>
+      <div className='flex flex-col gap-1'>
         <p>{generateText(organizerNameLength)}</p>
         <p>{generateText(dateLength)}</p>
         <p>{generateText(locationLength)}</p>
-      </Stack>
-    </Stack>
+      </div>
+    </div>
   );
 };
 

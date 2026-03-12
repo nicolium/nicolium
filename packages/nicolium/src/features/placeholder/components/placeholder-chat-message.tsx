@@ -1,8 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 
 import { randomIntFromInterval } from '../utils';
@@ -14,15 +12,19 @@ const PlaceholderChatMessage = ({ isMyMessage = false }: { isMyMessage?: boolean
   const messageLength = randomIntFromInterval(160, 220);
 
   return (
-    <Stack
+    <div
       data-testid='placeholder-chat-message'
-      space={1}
       className={clsx({
-        'max-w-[85%] animate-pulse': true,
+        'flex max-w-[85%] animate-pulse flex-col gap-1': true,
         'ml-auto': isMyMessage,
       })}
     >
-      <HStack alignItems='center' justifyContent={isMyMessage ? 'end' : 'start'}>
+      <div
+        className={clsx('flex items-center', {
+          'justify-end': isMyMessage,
+          'justify-start': !isMyMessage,
+        })}
+      >
         <div
           className={clsx({
             'relative text-ellipsis break-words rounded-md p-2': true,
@@ -39,12 +41,10 @@ const PlaceholderChatMessage = ({ isMyMessage = false }: { isMyMessage?: boolean
         <div className={clsx({ 'order-1': !isMyMessage })}>
           <PlaceholderAvatar size={34} />
         </div>
-      </HStack>
+      </div>
 
-      <HStack
-        alignItems='center'
-        space={2}
-        className={clsx({
+      <div
+        className={clsx('flex items-center gap-2', {
           'ml-auto': isMyMessage,
         })}
       >
@@ -65,8 +65,8 @@ const PlaceholderChatMessage = ({ isMyMessage = false }: { isMyMessage?: boolean
         <div className={clsx({ 'order-1': !isMyMessage })}>
           <div className='ml-2 w-[34px]' />
         </div>
-      </HStack>
-    </Stack>
+      </div>
+    </div>
   );
 };
 

@@ -3,9 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import GroupAvatar from '@/components/groups/group-avatar';
-import HStack from '@/components/ui/hstack';
 import Icon from '@/components/ui/icon';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
 import GroupActionButton from '@/features/group/components/group-action-button';
@@ -30,15 +28,15 @@ const GroupListItem: React.FC<IGroupListItem> = ({ groupId, withJoinAction = tru
         params={{ groupId: group.id }}
         className='overflow-hidden'
       >
-        <HStack alignItems='center' space={2}>
+        <div className='flex items-center gap-2'>
           <GroupAvatar group={group} size={44} />
 
-          <Stack className='overflow-hidden'>
+          <div className='flex flex-col overflow-hidden'>
             <Text weight='bold' truncate>
               <Emojify text={group.display_name} emojis={group.emojis} />
             </Text>
 
-            <HStack className='text-gray-700 dark:text-gray-600' space={1} alignItems='center'>
+            <div className='flex items-center gap-1 text-gray-700 dark:text-gray-600'>
               <Icon
                 className='size-4.5'
                 src={
@@ -71,9 +69,9 @@ const GroupListItem: React.FC<IGroupListItem> = ({ groupId, withJoinAction = tru
                   </Text>
                 </>
               )}
-            </HStack>
-          </Stack>
-        </HStack>
+            </div>
+          </div>
+        </div>
       </Link>
 
       {withJoinAction && <GroupActionButton group={group} />}

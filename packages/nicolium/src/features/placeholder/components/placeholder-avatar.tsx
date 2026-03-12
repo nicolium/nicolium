@@ -1,8 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
 
-import Stack from '@/components/ui/stack';
-
 interface IPlaceholderAvatar {
   size: number;
   withText?: boolean;
@@ -23,7 +21,7 @@ const PlaceholderAvatar: React.FC<IPlaceholderAvatar> = ({ size, withText = fals
   }, [size]);
 
   return (
-    <Stack space={2} className={clsx('animate-pulse text-center', className)}>
+    <div className={clsx('flex animate-pulse flex-col gap-2 text-center', className)}>
       <div className='mx-auto block rounded-lg bg-primary-50 dark:bg-primary-800' style={style} />
 
       {withText && (
@@ -32,7 +30,7 @@ const PlaceholderAvatar: React.FC<IPlaceholderAvatar> = ({ size, withText = fals
           className='mx-auto rounded-full bg-primary-50 dark:bg-primary-800'
         />
       )}
-    </Stack>
+    </div>
   );
 };
 

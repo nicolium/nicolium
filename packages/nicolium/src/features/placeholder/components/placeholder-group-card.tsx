@@ -1,7 +1,5 @@
 import React from 'react';
 
-import HStack from '@/components/ui/hstack';
-import Stack from '@/components/ui/stack';
 import Text from '@/components/ui/text';
 
 import { generateText, randomIntFromInterval } from '../utils';
@@ -11,7 +9,7 @@ const PlaceholderGroupCard = () => {
 
   return (
     <div className='animate-pulse'>
-      <Stack className='relative h-[240px] rounded-lg border border-solid border-gray-300 bg-white black:bg-black dark:border-primary-800 dark:bg-primary-900'>
+      <div className='relative flex h-[240px] flex-col rounded-lg border border-solid border-gray-300 bg-white black:bg-black dark:border-primary-800 dark:bg-primary-900'>
         {/* Group Cover Image */}
         <div className='relative grow basis-1/2 rounded-t-lg bg-gray-300 dark:bg-gray-800' />
 
@@ -21,17 +19,17 @@ const PlaceholderGroupCard = () => {
         </div>
 
         {/* Group Info */}
-        <Stack alignItems='center' justifyContent='end' grow className='basis-1/2 py-4' space={0.5}>
+        <div className='flex flex-grow basis-1/2 flex-col items-center justify-end gap-0.5 py-4'>
           <Text size='lg' theme='subtle' weight='bold'>
             {generateText(groupNameLength)}
           </Text>
 
-          <HStack className='text-gray-400 dark:text-gray-600' space={3} wrap>
+          <div className='flex flex-wrap gap-3 text-gray-400 dark:text-gray-600'>
             <span>{generateText(6)}</span>
             <span>{generateText(6)}</span>
-          </HStack>
-        </Stack>
-      </Stack>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
