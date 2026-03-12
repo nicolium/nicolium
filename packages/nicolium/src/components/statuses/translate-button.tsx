@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/hooks/use-instance';
@@ -180,16 +179,16 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   };
 
   const button = (
-    <button
-      className='flex w-fit items-center gap-1 text-primary-600 hover:underline dark:text-gray-600'
-      onClick={handleTranslate}
-    >
-      <Icon src={require('@phosphor-icons/core/regular/translate.svg')} className='size-4' />
+    <button className='⁂-translate-button' onClick={handleTranslate}>
+      <Icon
+        src={require('@phosphor-icons/core/regular/translate.svg')}
+        className='⁂-translate-button__icon'
+      />
       <span>{translationLabel()}</span>
       {translationQuery.isLoading && (
         <Icon
           src={require('@phosphor-icons/core/regular/circle-notch.svg')}
-          className='size-4 animate-spin'
+          className='⁂-translate-button__icon ⁂-translate-button__icon--loading'
         />
       )}
     </button>
@@ -201,9 +200,9 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
     const provider = translationQuery.data.provider;
 
     return (
-      <div className='flex flex-col items-start gap-3'>
+      <div className='⁂-translate-button__container'>
         {button}
-        <Text theme='muted'>
+        <p className='⁂-translate-button__info'>
           <FormattedMessage
             id='status.translated_from_with'
             defaultMessage='Translated from {lang} {provider}'
@@ -223,7 +222,7 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
               ) : undefined,
             }}
           />
-        </Text>
+        </p>
       </div>
     );
   }
