@@ -3,8 +3,8 @@
 
 .⁂-tokens {
   display: grid;
-  gap: 1rem;
   grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 1rem;
 
   @media (min-width: variables.$breakpoint-sm) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -13,13 +13,15 @@
 
 .⁂-token {
   display: flex;
-  height: 100%;
   flex-direction: column;
-  justify-content: space-between;
   gap: 0.5rem;
-  border-radius: 0.5rem;
-  background-color: rgb(var(--color-gray-100));
+  justify-content: space-between;
+
+  height: 100%;
   padding: 1rem;
+  border-radius: 0.5rem;
+
+  background-color: rgb(var(--color-gray-100));
 
   .dark & {
     background-color: rgb(var(--color-primary-800));
@@ -33,8 +35,9 @@
 
   &__name {
     display: flex;
-    align-items: center;
     gap: 0.25rem;
+    align-items: center;
+
     @include mixins.text($size: md, $weight: medium);
 
     svg {
@@ -48,8 +51,8 @@
   &__tokens {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
     gap: 0.5rem;
+    align-items: center;
 
     p {
       @include mixins.text($size: sm, $theme: muted);
@@ -71,12 +74,12 @@
 
   &--current button {
     border-color: transparent;
-    background-color: rgb(var(--color-danger-100));
     color: rgb(var(--color-danger-600));
+    background-color: rgb(var(--color-danger-100));
 
     &:hover {
-      background-color: rgb(var(--color-danger-600));
       color: rgb(var(--color-gray-100));
+      background-color: rgb(var(--color-danger-600));
     }
 
     &:focus {
@@ -84,13 +87,13 @@
     }
 
     .dark & {
-      background-color: rgb(var(--color-danger-900));
       color: rgb(var(--color-danger-200));
+      background-color: rgb(var(--color-danger-900));
     }
 
     .dark &:hover {
-      background-color: rgb(var(--color-danger-500));
       color: rgb(var(--color-gray-100));
+      background-color: rgb(var(--color-danger-500));
     }
   }
 }

@@ -2,25 +2,29 @@
 @use 'variables';
 
 html {
-  height: 100%;
-
   --font-sans:
     nicolium i18n, 'Inter', ui-sans-serif, system-ui, -apple-system, 'BlinkMacSystemFont',
     'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'Noto Sans', sans-serif, 'Apple Color Emoji',
     'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   --font-mono: 'Roboto Mono', ui-monospace, monospace;
+
+  height: 100%;
 }
 
 html:has(body.with-modals),
 body.with-modals {
   touch-action: none;
-  overscroll-behavior: none;
   scrollbar-gutter: stable;
+  overscroll-behavior: none;
 }
 
 body {
-  background-color: rgb(var(--color-primary-50));
+  height: 100%;
+
   font-size: 0.9375rem;
+
+  background-color: rgb(var(--color-primary-50));
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
@@ -31,7 +35,6 @@ body {
   .dark & {
     background-color: rgb(var(--color-gray-800));
   }
-  height: 100%;
 
   &.system-font,
   &.system-font .font-sans {
@@ -57,23 +60,27 @@ body {
 
 .⁂-dropdown-navigation {
   position: fixed;
+  z-index: 1000;
   bottom: 60px;
   left: 0.5rem;
-  z-index: 1000;
+  transform-origin: bottom left;
+
+  overflow: hidden;
   display: flex;
-  max-height: calc(100dvh - 68px);
+  flex: 1 1 0%;
+  flex-direction: column;
+
   width: 100%;
   max-width: 20rem;
-  flex: 1 1 0%;
-  transform-origin: bottom left;
-  flex-direction: column;
-  overflow: hidden;
+  max-height: calc(100dvh - 68px);
   border-radius: 0.75rem;
+
   background-color: #fffe;
+  backdrop-filter: blur(12px) saturate(2);
   box-shadow:
     0 10px 15px -3px #0001,
     0 4px 6px -4px #0001;
-  backdrop-filter: blur(12px) saturate(2);
+
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 
   .dark.black & {
@@ -86,8 +93,8 @@ body {
   }
 
   .dark & {
-    border-width: 1px;
     border-color: rgb(var(--color-gray-800));
+    border-width: 1px;
     background-color: rgb(var(--color-primary-900) / 0.9);
     box-shadow: none;
   }
@@ -98,9 +105,9 @@ body {
   }
 
   &__overlay {
+    cursor: default;
     position: fixed;
     inset: 0;
-    cursor: default;
     background-color: rgb(var(--color-gray-500));
 
     .dark.black & {
@@ -144,9 +151,11 @@ body {
 
   &__link {
     display: flex;
-    align-items: center;
     gap: 0.5rem;
+    align-items: center;
+
     border-radius: 0.5rem;
+
     color: rgb(var(--color-gray-900));
 
     &:hover {
@@ -163,10 +172,13 @@ body {
 
     &__icon {
       position: relative;
+
       display: inline-flex;
-      border-radius: 0.5rem;
-      background-color: rgb(var(--color-primary-100));
+
       padding: 0.5rem;
+      border-radius: 0.5rem;
+
+      background-color: rgb(var(--color-primary-100));
 
       .dark & {
         background-color: rgb(var(--color-gray-800));
@@ -189,6 +201,7 @@ body {
       display: flex;
       align-items: center;
       justify-content: space-between;
+
       padding-top: 0.25rem;
       padding-bottom: 0.25rem;
 
@@ -201,16 +214,16 @@ body {
         }
 
         > svg {
-          height: 1rem;
           width: 1rem;
+          height: 1rem;
         }
       }
     }
 
     &__accounts {
-      border-top-width: 2px;
-      border-style: solid;
       border-color: rgb(var(--color-gray-100));
+      border-style: solid;
+      border-top-width: 2px;
 
       .dark.black & {
         border-top-width: 1px;
@@ -255,35 +268,36 @@ body {
 
   > div {
     position: relative;
+
+    overflow: auto;
     display: flex;
-    width: 100%;
-    height: 100%;
     flex-direction: column;
     row-gap: 1rem;
-    overflow: auto;
+
+    width: 100%;
+    height: 100%;
     padding: 1rem;
   }
 }
 
 .⁂-thumb-navigation {
-  display: flex;
   position: fixed;
-  left: 0;
+  z-index: 50;
   right: 0;
   bottom: 0;
-  z-index: 50;
-  width: 100%;
-  overflow-x: auto;
-  border-top-width: 1px;
-  border-style: solid;
-  border-color: rgb(var(--color-gray-200));
-  background-color: #fffe;
-  box-shadow: 0 25px 50px -12px #0004;
-  backdrop-filter: blur(12px) saturate(2);
+  left: 0;
 
-  @media (min-width: variables.$breakpoint-lg) {
-    display: none;
-  }
+  overflow-x: auto;
+  display: flex;
+
+  width: 100%;
+  border-color: rgb(var(--color-gray-200));
+  border-style: solid;
+  border-top-width: 1px;
+
+  background-color: #fffe;
+  backdrop-filter: blur(12px) saturate(2);
+  box-shadow: 0 25px 50px -12px #0004;
 
   .dark.black & {
     background-color: #000b;
@@ -299,10 +313,12 @@ body {
     flex: 1 1 0%;
     flex-direction: column;
     align-items: center;
-    padding-left: 0.5rem;
-    padding-right: 0.5rem;
+
     padding-top: 1rem;
+    padding-right: 0.5rem;
     padding-bottom: 1rem;
+    padding-left: 0.5rem;
+
     font-size: 1.125rem;
     line-height: 1.75rem;
     color: rgb(var(--color-gray-600));
@@ -323,16 +339,20 @@ body {
     }
 
     &--compose {
-      padding-left: 0.375rem;
-      padding-right: 0.375rem;
       padding-top: 0.875rem;
+      padding-right: 0.375rem;
       padding-bottom: 0.875rem;
+      padding-left: 0.375rem;
 
       .⁂-icon {
         width: 1.5rem;
         height: 1.5rem;
       }
     }
+  }
+
+  @media (min-width: variables.$breakpoint-lg) {
+    display: none;
   }
 }
 
@@ -370,9 +390,9 @@ body {
   }
 
   .⁂-site-logo {
-    height: 3rem;
-    width: auto;
     cursor: pointer;
+    width: auto;
+    height: 3rem;
   }
 
   &--narrow {
@@ -406,14 +426,17 @@ body {
 
 .⁂-sidebar-navigation-link {
   display: flex;
-  width: 100%;
-  align-items: center;
   gap: 1rem;
+  align-items: center;
+
+  width: 100%;
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
+
   font-size: 0.875rem;
-  line-height: 1.25rem;
   font-weight: 600;
+  line-height: 1.25rem;
+
   transition:
     color,
     background-color,
@@ -426,15 +449,14 @@ body {
     flex-direction: row-reverse;
   }
 
-  @media (height >= 960px) {
-    padding: 0.5rem 0;
-  }
-
   &__icon {
     position: relative;
+
     display: inline-flex;
-    border-radius: 0.5rem;
+
     padding: 0.625rem;
+    border-radius: 0.5rem;
+
     transition:
       color,
       background-color,
@@ -512,6 +534,10 @@ body {
   > p {
     @include mixins.text($weight: semibold, $theme: inherit);
   }
+
+  @media (height >= 960px) {
+    padding: 0.5rem 0;
+  }
 }
 
 .⁂-modal-root {
@@ -524,14 +550,17 @@ body {
 
   &--visible {
     position: fixed;
-    left: 0;
-    top: 0;
     z-index: 100;
-    overflow-y: auto;
+    top: 0;
+    left: 0;
+
     overflow-x: hidden;
-    transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    overflow-y: auto;
+
     width: 100%;
     height: 100dvh;
+
+    transition: opacity 150ms cubic-bezier(0.4, 0, 0.2, 1);
   }
 
   &--revealed {
@@ -553,21 +582,24 @@ body {
   }
 
   &__container {
+    pointer-events: none;
+
     position: fixed;
+    z-index: 9999;
     top: 0;
     inset-inline-start: 0;
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
+
+    overscroll-behavior: none;
     display: flex;
     flex-direction: column;
+    align-content: space-around;
     align-items: center;
     justify-content: center;
-    align-content: space-around;
-    pointer-events: none;
-    overscroll-behavior: none;
+
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
     min-height: 100dvh;
-    z-index: 9999;
   }
 
   &[data-modal-type='DROPDOWN_MENU'] &__overlay {
@@ -592,12 +624,15 @@ body {
 }
 
 .⁂-dragging-area {
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
   pointer-events: none;
+
   position: fixed;
   z-index: 90;
-  height: 100vh;
+
   width: 100vw;
+  height: 100vh;
+
+  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
   &--dragging {
     backdrop-filter: blur(8px);
@@ -605,28 +640,20 @@ body {
 }
 
 .⁂-layout {
+  z-index: 1;
   display: flex;
   flex-grow: 1;
-  z-index: 1;
 
   &__content {
-    // FIXME: min-h-[100dvh] is a workaround for some Ladybird bug
-    min-height: 100dvh;
-    margin-left: auto;
-    margin-right: auto;
-    width: 100%;
-    max-width: 48rem;
     flex-grow: 1;
 
-    @media (min-width: variables.$breakpoint-sm) {
-      padding: 1rem 1.5rem 0;
-    }
+    width: 100%;
+    max-width: 48rem;
 
-    @media (min-width: variables.$breakpoint-md) {
-      gap: 1rem;
-      padding-left: 2rem;
-      padding-right: 2rem;
-    }
+    // FIXME: min-h-[100dvh] is a workaround for some Ladybird bug
+    min-height: 100dvh;
+    margin-right: auto;
+    margin-left: auto;
 
     .dark.black & {
       padding-top: 0;
@@ -643,28 +670,34 @@ body {
     &:not(&--full-width) {
       @media (min-width: variables.$breakpoint-md) {
         display: grid;
-        max-width: 80rem;
         grid-template-columns: repeat(12, minmax(0, 1fr));
+        max-width: 80rem;
       }
 
       @media (min-width: variables.$breakpoint-xl) {
         max-width: 90rem;
       }
     }
+
+    @media (min-width: variables.$breakpoint-sm) {
+      padding: 1rem 1.5rem 0;
+    }
+
+    @media (min-width: variables.$breakpoint-md) {
+      gap: 1rem;
+      padding-right: 2rem;
+      padding-left: 2rem;
+    }
   }
 
   &__container {
     display: flex;
-    min-height: 100vh;
     flex-direction: column;
+    min-height: 100vh;
   }
 
   &__sidebar {
     display: none;
-
-    @media (min-width: variables.$breakpoint-lg) {
-      display: block;
-    }
 
     &--shrink {
       width: 2.5rem;
@@ -677,6 +710,10 @@ body {
     &__content {
       padding-bottom: 1rem;
     }
+
+    @media (min-width: variables.$breakpoint-lg) {
+      display: block;
+    }
   }
 
   &__main {
@@ -685,26 +722,6 @@ body {
 
     .dark.black & {
       border-color: rgb(var(--color-gray-800));
-    }
-
-    @media (min-width: variables.$breakpoint-md) {
-      grid-column: span 12 / span 12;
-    }
-
-    @media (min-width: variables.$breakpoint-lg) {
-      grid-column: span 9 / span 9;
-
-      .dark.black & {
-        border-left-width: 1px;
-      }
-    }
-
-    @media (min-width: variables.$breakpoint-xl) {
-      grid-column: span 6 / span 6;
-
-      .dark.black & {
-        border-right-width: 1px;
-      }
     }
 
     &--with-chats {
@@ -726,15 +743,31 @@ body {
         padding-top: 0;
       }
     }
+
+    @media (min-width: variables.$breakpoint-md) {
+      grid-column: span 12 / span 12;
+    }
+
+    @media (min-width: variables.$breakpoint-lg) {
+      grid-column: span 9 / span 9;
+
+      .dark.black & {
+        border-left-width: 1px;
+      }
+    }
+
+    @media (min-width: variables.$breakpoint-xl) {
+      grid-column: span 6 / span 6;
+
+      .dark.black & {
+        border-right-width: 1px;
+      }
+    }
   }
 
   &__aside {
-    grid-column: span 3 / span 3;
     display: hidden;
-
-    @media (min-width: variables.$breakpoint-xl) {
-      display: block;
-    }
+    grid-column: span 3 / span 3;
 
     &__content {
       padding-bottom: 3rem;
@@ -743,6 +776,10 @@ body {
         margin-top: 1rem;
       }
     }
+
+    @media (min-width: variables.$breakpoint-xl) {
+      display: block;
+    }
   }
 }
 
@@ -750,29 +787,31 @@ body {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
   padding-bottom: 1.5rem;
-  border-bottom-width: 1px;
-  border-style: solid;
   border-color: rgb(var(--color-gray-200));
+  border-style: solid;
+  border-bottom-width: 1px;
 
   .dark & {
     @include mixins.card($variant: rounded);
+
     border-color: rgb(var(--color-primary-800));
     border-style: none;
   }
 
   .dark.black & {
-    border-color: rgb(var(--color-gray-800));
-    border-style: solid;
     padding: 0;
     padding-bottom: 1.5rem;
+    border-color: rgb(var(--color-gray-800));
+    border-style: solid;
   }
 
   &__header {
     display: flex;
+    gap: 0.5rem;
     align-items: center;
     justify-content: space-between;
-    gap: 0.5rem;
 
     h1 {
       @include mixins.text($size: xl, $weight: bold);
@@ -780,9 +819,9 @@ body {
   }
 
   &__icon {
-    margin-left: 0.5rem;
     width: 1.5rem;
     height: 1.5rem;
+    margin-left: 0.5rem;
     color: #000;
 
     .dark & {
@@ -806,35 +845,27 @@ body {
 
   a {
     @include mixins.text($size: inherit, $theme: subtle);
+
     text-decoration-line: underline;
   }
 }
 
 .⁂-separator::before {
   @include mixins.text($size: sm, $theme: muted);
+
   content: '·';
   user-select: none;
 }
 
 .⁂-site-error {
   display: flex;
-  height: 100vh;
   flex-direction: column;
-  background-color: #fff;
-  padding-bottom: 3rem;
+
+  height: 100vh;
   padding-top: 4rem;
+  padding-bottom: 3rem;
 
-  @media (min-width: variables.$breakpoint-md) {
-    grid-column: span 12 / span 12;
-  }
-
-  @media (min-width: variables.$breakpoint-lg) {
-    grid-column: span 9 / span 9;
-  }
-
-  @media (min-width: variables.$breakpoint-xl) {
-    grid-column: span 6 / span 6;
-  }
+  background-color: #fff;
 
   .dark.black & {
     background-color: #000;
@@ -845,25 +876,26 @@ body {
   }
 
   main {
-    margin-left: auto;
-    margin-right: auto;
     display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+
     width: 100%;
     max-width: 80rem;
-    flex-grow: 1;
-    flex-direction: column;
-    justify-content: center;
-    padding-left: 1rem;
+    margin-right: auto;
+    margin-left: auto;
     padding-right: 1rem;
+    padding-left: 1rem;
 
     @media (min-width: variables.$breakpoint-sm) {
-      padding-left: 1.5rem;
       padding-right: 1.5rem;
+      padding-left: 1.5rem;
     }
 
     @media (min-width: variables.$breakpoint-md) {
-      padding-left: 2rem;
       padding-right: 2rem;
+      padding-left: 2rem;
     }
   }
 
@@ -873,9 +905,9 @@ body {
   }
 
   &__message {
-    margin-left: auto;
-    margin-right: auto;
     max-width: 36rem;
+    margin-right: auto;
+    margin-left: auto;
     text-align: center;
 
     & > :not([hidden]) ~ :not([hidden]) {
@@ -884,18 +916,18 @@ body {
 
     h1 {
       font-size: 1.875%;
-      line-height: 2.25rem;
       font-weight: 800;
-      letter-spacing: -0.025em;
+      line-height: 2.25rem;
       color: rgb(var(--color-gray-900));
+      letter-spacing: -0.025em;
+
+      .dark & {
+        color: rgb(var(--color-gray-500));
+      }
 
       @media (min-width: variables.$breakpoint-sm) {
         font-size: 2.25rem;
         line-height: 2.5rem;
-      }
-
-      .dark & {
-        color: rgb(var(--color-gray-500));
       }
     }
 
@@ -923,9 +955,9 @@ body {
   }
 
   &__form {
-    margin-left: auto;
-    margin-right: auto;
     max-width: 32rem;
+    margin-right: auto;
+    margin-left: auto;
     padding-top: 4rem;
     padding-bottom: 4rem;
 
@@ -948,11 +980,12 @@ body {
   }
 
   footer {
-    margin-left: auto;
-    margin-right: auto;
+    flex-shrink: 0;
+
     width: 100%;
     max-width: 80rem;
-    flex-shrink: 0;
+    margin-right: auto;
+    margin-left: auto;
     padding: 0 1rem;
 
     @media (min-width: variables.$breakpoint-sm) {
@@ -966,19 +999,19 @@ body {
 
   nav {
     display: flex;
-    justify-content: center;
     gap: 1rem;
+    justify-content: center;
 
     span {
       display: inline-block;
-      border-left-width: 1px;
       border-color: rgb(var(--color-gray-300));
+      border-left-width: 1px;
     }
 
     a {
       font-size: 0.875rem;
-      line-height: 1.25rem;
       font-weight: 500;
+      line-height: 1.25rem;
       color: rgb(var(--color-gray-700));
 
       &:hover {
@@ -997,20 +1030,33 @@ body {
     justify-content: center;
 
     img {
-      height: 3rem;
       width: auto;
+      height: 3rem;
     }
+  }
+
+  @media (min-width: variables.$breakpoint-md) {
+    grid-column: span 12 / span 12;
+  }
+
+  @media (min-width: variables.$breakpoint-lg) {
+    grid-column: span 9 / span 9;
+  }
+
+  @media (min-width: variables.$breakpoint-xl) {
+    grid-column: span 6 / span 6;
   }
 }
 
 .⁂-network-error {
   display: flex;
-  min-height: 160px;
+  gap: 1rem;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
-  border-radius: 0.5rem;
+
+  min-height: 160px;
   padding: 2.5rem;
+  border-radius: 0.5rem;
 
   p {
     @include mixins.text($align: center, $theme: muted);
@@ -1023,15 +1069,18 @@ body {
 
 .⁂-toast {
   pointer-events: auto;
+
+  overflow: hidden;
   display: flex;
-  width: 100%;
-  max-width: 24rem;
   flex-direction: column;
   gap: 0.5rem;
-  overflow: hidden;
-  border-radius: 0.5rem;
-  background-color: #fff;
+
+  width: 100%;
+  max-width: 24rem;
   padding: 1rem;
+  border-radius: 0.5rem;
+
+  background-color: #fff;
   box-shadow:
     0 10px 15px -3px #0001,
     0 4px 6px -4px #0001;
@@ -1055,26 +1104,29 @@ body {
 
   > div {
     display: flex;
-    align-items: flex-start;
     gap: 1rem;
+    align-items: flex-start;
   }
 
   &__body {
     display: flex;
-    width: 0;
     flex: 1 1 0%;
+    gap: 0.75rem;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 0.75rem;
+
+    width: 0;
 
     button,
     a {
-      margin-top: 0.125rem;
       flex-shrink: 0;
+
+      margin-top: 0.125rem;
       border-radius: 9999px;
+
       font-size: 0.875rem;
-      line-height: 1.25rem;
       font-weight: 500;
+      line-height: 1.25rem;
       color: rgb(var(--color-primary-600));
 
       &:hover {
@@ -1093,13 +1145,15 @@ body {
 
   &__content {
     display: flex;
-    width: 0;
     flex: 1 1 0%;
-    align-items: flex-start;
     gap: 0.75rem;
+    align-items: flex-start;
+
+    width: 0;
 
     p {
       padding-top: 0.125rem;
+
       @include mixins.text($weight: normal, $size: sm);
     }
   }
@@ -1149,8 +1203,8 @@ body {
       }
 
       svg {
-        height: 1.25rem;
         width: 1.25rem;
+        height: 1.25rem;
       }
     }
   }

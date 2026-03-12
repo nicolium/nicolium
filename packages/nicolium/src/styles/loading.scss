@@ -1,10 +1,11 @@
 .loading-indicator-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100vw;
   height: 100vh;
   height: 100dvh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .loading-indicator {
@@ -12,13 +13,14 @@
 }
 
 .loading-indicator__container {
+  position: relative;
   width: 2.5rem;
   height: 2.5rem;
-  position: relative;
 }
 
 .loading-indicator__figure {
   @apply absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-transparent dark:bg-transparent border-[#e5e7eb] dark:border-gray-800;
+
   border: 0 solid;
   border-width: 6px;
 }
@@ -46,6 +48,7 @@
 
   30% {
     @apply w-12 h-12 bg-transparent opacity-100;
+
     border-width: 6px;
   }
 

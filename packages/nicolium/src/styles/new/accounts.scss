@@ -14,14 +14,14 @@
 
 .⁂-account-card {
   display: block;
-  width: 100%;
   flex-shrink: 0;
+  width: 100%;
 
   > div {
     display: flex;
     gap: 0.75rem;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
   }
 
   &--action-top {
@@ -48,35 +48,38 @@
   &--cat {
     background: rgb(var(--color-gray-200));
 
+    &::before,
+    &::after {
+      content: '';
+
+      display: inline-block;
+
+      box-sizing: border-box;
+      width: 50%;
+      height: 50%;
+      border: solid 0.05em currentcolor;
+
+      background: #ebbcba;
+    }
+
+    &::before {
+      transform: rotate(37.5deg) skew(30deg);
+      border-radius: 0 75% 75%;
+    }
+
+    &::after {
+      transform: rotate(-37.5deg) skew(-30deg);
+      border-radius: 75% 0 75% 75%;
+    }
+
     .dark & {
       background: rgb(var(--color-gray-900));
     }
 
     img {
       position: absolute;
-      inset: 0;
       z-index: 1;
-    }
-
-    &::before,
-    &::after {
-      background: #ebbcba;
-      border: solid 0.05em currentcolor;
-      box-sizing: border-box;
-      content: '';
-      display: inline-block;
-      height: 50%;
-      width: 50%;
-    }
-
-    &::before {
-      border-radius: 0 75% 75%;
-      transform: rotate(37.5deg) skew(30deg);
-    }
-
-    &::after {
-      border-radius: 75% 0 75% 75%;
-      transform: rotate(-37.5deg) skew(-30deg);
+      inset: 0;
     }
 
     &:hover {
@@ -141,10 +144,11 @@
   }
 
   &__attachments {
+    overflow: hidden;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 0.125rem;
-    overflow: hidden;
+
     border-radius: 0.375rem;
   }
 
@@ -168,8 +172,8 @@
 
   &__content {
     display: flex;
-    align-items: center;
     gap: 0.5rem;
+    align-items: center;
   }
 }
 
@@ -182,6 +186,7 @@
 
   span[data-markup] {
     @include mixins.text;
+
     overflow: hidden;
     overflow-wrap: break-word;
   }

@@ -69,10 +69,10 @@
 .react-datepicker__month-read-view--down-arrow,
 .react-datepicker__month-year-read-view--down-arrow,
 .react-datepicker__navigation-icon::before {
-  border-width: 2px 2px 0 0;
-  height: 7px;
-  width: 7px;
   top: 8px;
+  width: 7px;
+  height: 7px;
+  border-width: 2px 2px 0 0;
 }
 
 .react-datepicker__header__dropdown {
@@ -98,6 +98,7 @@
 .react-datepicker__day,
 .react-datepicker__time-name {
   @apply text-gray-900 dark:text-gray-300;
+
   width: 30px;
   height: 30px;
   line-height: 30px;
@@ -144,7 +145,8 @@
 
 .react-datepicker__close-icon::after {
   @apply bg-transparent text-gray-600 dark:text-gray-400 text-base;
-  font-family: 'Font Awesome 5 Free';
+
   content: '';
+  font-family: 'Font Awesome 5 Free';
   font-weight: 900;
 }

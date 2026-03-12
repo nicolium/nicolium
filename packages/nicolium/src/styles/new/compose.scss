@@ -9,15 +9,15 @@
 
   &__select-buttons {
     display: flex;
-    gap: 0.5rem;
     flex-wrap: wrap;
+    gap: 0.5rem;
 
     button {
       @include mixins.button($theme: muted, $size: xs);
 
       .⁂-icon svg {
-        height: 1rem;
         width: 1rem;
+        height: 1rem;
       }
     }
   }
@@ -33,25 +33,29 @@
 
   &__editor__placeholder {
     pointer-events: none;
+    user-select: none;
+
     position: absolute;
     top: 0;
-    user-select: none;
+
     font-size: 1rem;
     color: rgb(var(--color-gray-600));
+
+    visibility: visible !important;
 
     .dark &::placeholder {
       color: rgb(var(--color-gray-600));
     }
-    visibility: visible !important;
   }
 
   &:not(&--transparent) &__editor {
-    border-radius: 0.375rem;
-    border-color: rgb(var(--color-gray-400));
-    padding-left: 0.75rem;
-    padding-right: 0.75rem;
     padding-top: 0.5rem;
+    padding-right: 0.75rem;
     padding-bottom: 0.5rem;
+    padding-left: 0.75rem;
+    border-color: rgb(var(--color-gray-400));
+    border-radius: 0.375rem;
+
     outline: 2px solid transparent;
 
     &:focus-within {
@@ -78,6 +82,7 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+
     font-family: inherit;
     font-size: 0.875rem;
     line-height: 1.25rem;
@@ -105,42 +110,46 @@
 
   &__buttons {
     display: flex;
-    align-items: center;
     gap: 0.5rem;
+    align-items: center;
   }
 
   &__actions {
-    margin-left: auto;
     display: flex;
-    align-items: center;
     gap: 1rem;
+    align-items: center;
+    margin-left: auto;
 
     [dir='rtl'] & {
-      margin-left: 0;
       margin-right: auto;
+      margin-left: 0;
     }
   }
 
   &__counter {
     display: flex;
-    align-items: center;
     gap: 0.25rem;
+    align-items: center;
   }
 
   &__button {
+    user-select: none;
+
+    display: inline-flex;
+    gap: 0.5rem;
     place-content: center;
     align-items: center;
-    gap: 0.5rem;
+
     padding: 0.5rem 1rem;
-    display: inline-flex;
-    user-select: none;
-    appearance: none;
+    padding-right: 0.5rem;
+    border-color: transparent;
+    border-width: 1px;
     border-top-left-radius: 9999px;
     border-bottom-left-radius: 9999px;
-    border-width: 1px;
-    border-color: transparent;
+
+    appearance: none;
     background-color: rgb(var(--color-primary-500));
-    padding-right: 0.5rem;
+
     transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
     &:hover {
@@ -164,11 +173,12 @@
 
     &__container {
       display: flex;
-      align-items: center;
       gap: 1px;
+      align-items: center;
+
       font-size: 0.875rem;
-      line-height: 1.25rem;
       font-weight: 500;
+      line-height: 1.25rem;
       color: rgb(var(--color-gray-100));
 
       svg {
@@ -178,18 +188,22 @@
     }
 
     &__actions {
-      display: inline-flex;
-      height: 100%;
       cursor: pointer;
       user-select: none;
-      appearance: none;
-      border-width: 1px;
-      border-color: transparent;
-      background-color: rgb(var(--color-primary-500));
+
+      display: inline-flex;
+
+      height: 100%;
       padding-top: 0.625rem;
+      padding-right: 0.75rem;
       padding-bottom: 0.625rem;
       padding-left: 0.25rem;
-      padding-right: 0.75rem;
+      border-color: transparent;
+      border-width: 1px;
+
+      appearance: none;
+      background-color: rgb(var(--color-primary-500));
+
       transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
 
       &:last-child {
@@ -231,9 +245,9 @@
 
     &__option {
       display: flex;
+      gap: 1rem;
       align-items: center;
       justify-content: space-between;
-      gap: 1rem;
     }
   }
 
@@ -248,17 +262,17 @@
 
     &__date {
       display: flex;
-      align-items: center;
       gap: 0.5rem;
+      align-items: center;
     }
 
     .⁂-icon-button {
       color: rgb(var(--color-gray-400));
+      background: transparent;
 
       &:hover {
         color: rgb(var(--color-gray-600));
       }
-      background: transparent;
 
       svg {
         height: 1rem;
@@ -274,10 +288,12 @@
 .⁂-language-dropdown {
   &__search {
     position: relative;
-    margin: 0.5rem;
-    margin-top: 0.25rem;
+
     display: block;
     flex-grow: 1;
+
+    margin: 0.5rem;
+    margin-top: 0.25rem;
 
     > span {
       position: absolute;
@@ -285,19 +301,22 @@
     }
 
     button {
+      cursor: pointer;
+
       position: absolute;
       top: 0;
-      bottom: 0;
       right: 0;
+      bottom: 0;
+
       display: flex;
-      cursor: pointer;
       align-items: center;
-      padding-left: 0.5rem;
+
       padding-right: 0.5rem;
+      padding-left: 0.5rem;
 
       [dir='rtl'] & {
-        left: 0;
         right: auto;
+        left: 0;
       }
 
       svg {
@@ -309,22 +328,25 @@
   }
 
   &__options {
-    margin-bottom: -0.25rem;
-    height: 24rem;
-    width: 100%;
     overflow: auto;
+    width: 100%;
+    height: 24rem;
+    margin-bottom: -0.25rem;
   }
 
   &__option {
+    cursor: default;
+
     display: flex;
-    width: 100%;
     gap: 0.5rem;
+
+    width: 100%;
     padding: 0.625rem;
-    text-align: left;
+
     font-size: 0.875rem;
     line-height: 1.25;
-    cursor: default;
     color: rgb(var(--color-gray-700));
+    text-align: left;
 
     .dark & {
       color: rgb(var(--color-gray-400));
@@ -390,8 +412,8 @@
     }
 
     svg {
-      height: 1rem;
       width: 1rem;
+      height: 1rem;
     }
   }
 }

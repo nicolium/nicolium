@@ -127,35 +127,40 @@ $vertical-lr-langs: mn-mong, mnmong;
   }
 
   span.invisible {
-    font-size: 0 !important;
-    line-height: 0 !important;
+    position: absolute;
+
     display: inline-block;
+
     width: 0;
     height: 0;
-    position: absolute;
+
+    font-size: 0 !important;
+    line-height: 0 !important;
 
     img,
     svg {
-      margin: 0 !important;
-      border: 0 !important;
-      padding: 0 !important;
       width: 0 !important;
       height: 0 !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
     }
   }
 
   @each $lang in $vertical-lr-langs {
     &[lang='#{$lang}'] {
-      writing-mode: vertical-lr;
+      overflow-x: hidden; // read more
+
       width: 100%; // detecting overflow
       max-width: calc(100% - mod(100%, 22px)); // avoid cut-offs
       max-height: 209px; // roughly above 500 characters, readable
-      overflow-x: hidden; // read more
+
+      writing-mode: vertical-lr;
 
       &.⁂-status-content--expanded {
+        overflow-x: auto;
         max-width: unset;
         max-height: 50vh;
-        overflow-x: auto;
       }
     }
   }

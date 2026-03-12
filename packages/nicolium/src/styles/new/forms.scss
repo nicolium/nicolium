@@ -8,21 +8,20 @@
 
   &__actions {
     display: flex;
-    justify-content: flex-end;
     gap: 0.5rem;
+    justify-content: flex-end;
   }
 }
 
 .⁂-textarea {
-  display: block;
-  width: 100%;
   resize: none;
+
+  display: block;
+
+  width: 100%;
   border-radius: 0.375rem;
+
   color: rgb(var(--color-gray-900));
-  @media (min-width: variables.$breakpoint-sm) {
-    font-size: 0.875rem;
-    line-height: 1.25rem;
-  }
 
   &::placeholder {
     color: rgb(var(--color-gray-600));
@@ -37,16 +36,16 @@
   }
 
   &--transparent {
+    padding: 0;
     border-width: 0;
     background-color: transparent;
-    padding: 0;
   }
 
   &:not(&--transparent) {
-    border-width: 1px;
-    border-color: rgb(var(--color-gray-300));
-    background-color: #fff;
     padding: 0.5rem;
+    border-color: rgb(var(--color-gray-300));
+    border-width: 1px;
+    background-color: #fff;
 
     &:focus {
       border-color: rgb(var(--color-primary-500));
@@ -63,8 +62,8 @@
 
     .dark & {
       border-color: rgb(var(--color-gray-800));
-      background-color: rgb(var(--color-gray-900));
       color: rgb(var(--color-gray-100));
+      background-color: rgb(var(--color-gray-900));
       outline: 2px solid rgb(var(--color-gray-800));
     }
 
@@ -97,6 +96,7 @@
 
   &__max-length {
     @include mixins.text($size: xs, $theme: muted);
+
     text-align: right;
 
     [dir='rtl'] & {
@@ -111,6 +111,11 @@
       }
     }
   }
+
+  @media (min-width: variables.$breakpoint-sm) {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+  }
 }
 
 .⁂-input__wrapper {
@@ -124,12 +129,15 @@
 
   &__icon {
     pointer-events: none;
+
     position: absolute;
     top: 0;
     bottom: 0;
     inset-inline-start: 0;
+
     display: flex;
     align-items: center;
+
     padding-inline-start: 0.75rem;
 
     svg {
@@ -148,6 +156,7 @@
     top: 0;
     bottom: 0;
     inset-inline-start: 0;
+
     display: flex;
     align-items: center;
   }
@@ -157,8 +166,10 @@
     top: 0;
     bottom: 0;
     inset-inline-end: 0;
+
     display: flex;
     align-items: center;
+
     padding-inline: 0.75rem;
   }
 
@@ -167,6 +178,7 @@
     top: 0;
     bottom: 0;
     inset-inline-end: 0;
+
     display: flex;
     align-items: center;
 
@@ -201,10 +213,6 @@
   font-size: 0.9375rem;
   line-height: 1.25rem;
 
-  @media (min-width: variables.$breakpoint-sm) {
-    font-size: 0.875rem;
-  }
-
   &::placeholder {
     color: rgb(var(--color-gray-600));
   }
@@ -225,8 +233,8 @@
   &--search {
     &:focus {
       border-color: rgb(var(--color-primary-500));
-      box-shadow: 0 0 0 1px rgb(var(--color-primary-500));
       outline: none;
+      box-shadow: 0 0 0 1px rgb(var(--color-primary-500));
     }
 
     .dark & {
@@ -240,8 +248,8 @@
   }
 
   &--normal {
-    border-radius: 0.375rem;
     border: 1px solid rgb(var(--color-gray-400));
+    border-radius: 0.375rem;
     background-color: white;
 
     .dark & {
@@ -255,8 +263,8 @@
   }
 
   &--search {
-    border-radius: 9999px;
     border: 1px solid rgb(var(--color-gray-200));
+    border-radius: 9999px;
     background-color: rgb(var(--color-gray-200));
 
     &:focus {
@@ -270,8 +278,8 @@
   }
 
   &--transparent {
-    border: none;
     padding-inline: 0;
+    border: none;
     box-shadow: none !important;
   }
 
@@ -286,14 +294,19 @@
   &--with-trailing {
     padding-inline-end: 2.5rem;
   }
+
+  @media (min-width: variables.$breakpoint-sm) {
+    font-size: 0.875rem;
+  }
 }
 
 .⁂-form-group {
   &__label {
     display: block;
+
     font-size: 0.875rem;
-    line-height: 1.25rem;
     font-weight: 500;
+    line-height: 1.25rem;
     color: rgb(var(--color-gray-900));
 
     .dark & {
@@ -329,53 +342,63 @@
 
   &__error {
     position: relative;
-    margin-top: 0.125rem;
+
     display: inline-block;
-    border-radius: 0.375rem;
-    background-color: rgb(var(--color-danger-200));
+
+    margin-top: 0.125rem;
     padding: 0.25rem 0.5rem;
+    border-radius: 0.375rem;
+
     font-size: 0.75rem;
     line-height: 1rem;
     color: rgb(var(--color-danger-900));
 
+    background-color: rgb(var(--color-danger-200));
+
     &::before {
-      border-style: solid;
-      border-color: transparent;
-      border-bottom-color: rgb(var(--color-danger-200));
-      border-width: 6px;
-      height: 0;
-      width: 0;
-      left: 0.625rem;
-      margin-inline-start: -1px;
       pointer-events: none;
+
       position: absolute;
+      left: 0.625rem;
+
+      width: 0;
+      height: 0;
+      margin-inline-start: -1px;
+      border-color: transparent;
+      border-style: solid;
+      border-width: 6px;
+      border-bottom-color: rgb(var(--color-danger-200));
     }
 
     &::after {
-      border-style: solid;
-      border-color: transparent;
-      height: 0;
-      width: 0;
-      left: 0.625rem;
       pointer-events: none;
+
       position: absolute;
+      left: 0.625rem;
+
+      width: 0;
+      height: 0;
+      border-color: transparent;
+      border-style: solid;
     }
   }
 }
 
 .⁂-toggle {
   flex: none;
-  border-radius: 9999px;
-  padding: 0.125rem;
-  appearance: none;
+
   height: unset;
+  padding: 0.125rem;
   border: none;
+  border-radius: 9999px;
+
+  appearance: none;
   background: transparent;
   background-image: none !important;
 
   &::after {
-    display: block;
     content: '';
+    display: block;
     border-radius: 9999px;
     transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -390,6 +413,10 @@
   }
 
   &:not([type='radio']) {
+    &::after {
+      background: white;
+    }
+
     &:not(:checked, :disabled) {
       background-color: rgb(var(--color-gray-500));
     }
@@ -404,10 +431,6 @@
 
     &:checked:disabled {
       background-color: rgb(var(--color-primary-200));
-    }
-
-    &::after {
-      background: white;
     }
   }
 
@@ -521,8 +544,9 @@
 .⁂-checkbox {
   width: 1rem;
   height: 1rem;
-  border-radius: 0.25rem;
   border: 2px solid rgb(var(--color-gray-300));
+  border-radius: 0.25rem;
+
   color: rgb(var(--color-primary-600));
 
   &:focus {
@@ -546,21 +570,20 @@
   font-size: 0.875rem;
   color: rgb(var(--color-gray-800));
 
-  .dark & {
-    color: rgb(var(--color-gray-200));
-  }
-
   &::file-selector-button {
-    margin-inline-end: 0.5rem;
     cursor: pointer;
-    border-radius: 9999px;
-    border: 1px solid rgb(var(--color-gray-200));
-    background-color: white;
+
+    margin-inline-end: 0.5rem;
     padding: 0.375rem 0.75rem;
+    border: 1px solid rgb(var(--color-gray-200));
+    border-radius: 9999px;
+
     font-size: 0.75rem;
     font-weight: 500;
     line-height: 1rem;
     color: rgb(var(--color-gray-700));
+
+    background-color: white;
 
     &:hover {
       background-color: rgb(var(--color-gray-100));
@@ -568,33 +591,40 @@
 
     .dark & {
       border-color: rgb(var(--color-gray-800));
-      background-color: rgb(var(--color-gray-900));
       color: rgb(var(--color-gray-500));
+      background-color: rgb(var(--color-gray-900));
 
       &:hover {
         background-color: rgb(var(--color-gray-800));
       }
     }
   }
+
+  .dark & {
+    color: rgb(var(--color-gray-200));
+  }
 }
 
 .⁂-tag-input {
   position: relative;
-  margin-top: 0.25rem;
   flex-grow: 1;
+  margin-top: 0.25rem;
   box-shadow: 0 1px 2px 0 #0000000d;
 
   &__list {
     display: flex;
-    gap: 0.5rem;
     flex-wrap: wrap;
+    gap: 0.5rem;
+
     width: 100%;
-    border-radius: 0.375rem;
-    border: 1px solid rgb(var(--color-gray-400));
-    background-color: white;
     padding: 0.5rem;
     padding-bottom: 0;
+    border: 1px solid rgb(var(--color-gray-400));
+    border-radius: 0.375rem;
+
     color: rgb(var(--color-gray-900));
+
+    background-color: white;
 
     &::placeholder {
       color: rgb(var(--color-gray-600));
@@ -607,8 +637,8 @@
 
     .dark & {
       border-color: rgb(var(--color-gray-800));
-      background-color: rgb(var(--color-gray-900));
       color: rgb(var(--color-gray-100));
+      background-color: rgb(var(--color-gray-900));
       box-shadow: 0 0 0 1px rgb(var(--color-gray-800));
 
       &::placeholder {
@@ -631,12 +661,14 @@
   }
 
   &__field {
-    margin-bottom: 0.5rem;
-    height: 2rem;
-    width: 8rem;
     flex-grow: 1;
-    background-color: transparent;
+
+    width: 8rem;
+    height: 2rem;
+    margin-bottom: 0.5rem;
     padding: 0.25rem;
+
+    background-color: transparent;
     outline: none;
   }
 }

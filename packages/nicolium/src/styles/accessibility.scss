@@ -11,9 +11,9 @@ $black-emojis: '8ball' 'ant' 'back' 'black_circle' 'black_heart' 'black_large_sq
   'water_buffalo' 'waving_black_flag' 'wavy_dash';
 
 %white-emoji-outline {
+  transform: scale(0.71);
   filter: drop-shadow(1px 1px 0 #fff) drop-shadow(-1px 1px 0 #fff) drop-shadow(1px -1px 0 #fff)
     drop-shadow(-1px -1px 0 #fff);
-  transform: scale(0.71);
 }
 
 .dark .emojione {

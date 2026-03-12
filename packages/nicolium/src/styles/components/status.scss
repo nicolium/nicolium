@@ -41,10 +41,12 @@ a.status-card {
 
 .status-card__image {
   @apply relative overflow-hidden;
+
   flex: 0 0 40%;
 
   & > .svg-icon {
     @apply h-10 w-10 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2;
+
     transform-origin: 50% 50%;
 
     svg {

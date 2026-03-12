@@ -1,12 +1,4 @@
 .icon-button {
-  @apply text-black dark:text-white inline-flex items-center p-0 border-0 bg-transparent cursor-pointer transition duration-100 ease-in opacity-40;
-
-  &:hover,
-  &:active,
-  &:focus {
-    @apply opacity-60 transition-colors duration-200 ease-out;
-  }
-
   &::-moz-focus-inner {
     @apply border-0;
   }
@@ -16,6 +8,14 @@
   &:active {
     @apply outline-0 #{!important};
   }
+
+  &:hover,
+  &:active,
+  &:focus {
+    @apply opacity-60 transition-colors duration-200 ease-out;
+  }
+
+  @apply text-black dark:text-white inline-flex items-center p-0 border-0 bg-transparent cursor-pointer transition duration-100 ease-in opacity-40;
 }
 
 .react-datepicker-popper {
@@ -27,9 +27,7 @@
 }
 
 .react-swipeable-view-container {
-  & {
-    @apply h-full;
-  }
+  @apply h-full;
 }
 
 .react-swipeable-view-container > * {

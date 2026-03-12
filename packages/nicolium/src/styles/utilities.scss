@@ -1,5 +1,6 @@
 .divide-x-dot > *:not(:last-child)::after {
   @apply px-1;
+
   content: '·';
 }
 

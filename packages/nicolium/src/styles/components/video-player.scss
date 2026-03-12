@@ -13,14 +13,17 @@
 .video-player {
   &__controls {
     @apply bg-primary-200 dark:bg-primary-700 black:bg-primary-800 box-border ring-0 transition-all duration-300 ease-in-out;
+
     position: absolute;
-    left: 0.75rem;
+    z-index: 2;
     right: 0.75rem;
     bottom: -4rem;
-    z-index: 2;
-    opacity: 0.8;
-    border-radius: 0.625rem;
+    left: 0.75rem;
+
     padding: 0.25rem 0.75rem;
+    border-radius: 0.625rem;
+
+    opacity: 0.8;
 
     &--visible {
       bottom: 0.75rem;
@@ -33,10 +36,12 @@
 
   &__buttons {
     @apply flex items-center text-base whitespace-nowrap overflow-hidden text-ellipsis flex-initial gap-1;
+
     flex: 0 1 auto;
 
     .player-button {
       @apply block outline-0 bg-transparent text-base border-0 text-black dark:text-white rounded-full;
+
       flex: 0 0 auto;
       padding: 4px;
 
@@ -59,11 +64,13 @@
 
     &__current {
       @apply bg-accent-500 block absolute h-1 rounded left-0 top-1/2;
+
       transform: translate(0, -50%);
     }
 
     &__handle {
       @apply bg-accent-500 absolute z-[3] rounded-[50%] size-3 top-1/2 left-0 -ml-1.5;
+
       transform: translate(0, -50%);
     }
   }

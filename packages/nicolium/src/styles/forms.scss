@@ -1,5 +1,6 @@
 select {
   @apply pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md;
+
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
 }
 
@@ -14,8 +15,8 @@ select {
 // Adapted from [multiselect-react-dropdown](https://github.com/srigar/multiselect-react-dropdown), licensed under MIT License.
 .multiselect-container {
   position: relative;
-  text-align: left;
   width: 100%;
+  text-align: left;
 
   &--disabled {
     pointer-events: none;
@@ -23,8 +24,8 @@ select {
   }
 
   input {
-    border: none;
     margin-top: 3px;
+    border: none;
     background: transparent;
 
     &:focus {
@@ -33,28 +34,30 @@ select {
   }
 
   ul {
+    overflow-y: auto;
     display: block;
-    padding: 0;
+
+    max-height: 250px;
     margin: 0;
+    padding: 0;
     border: 1px solid #ccc;
     border-radius: 4px;
-    max-height: 250px;
-    overflow-y: auto;
   }
 
   li {
     padding: 10px;
 
     &:hover {
-      background: #0096fb;
-      color: #fff;
       cursor: pointer;
+      color: #fff;
+      background: #0096fb;
     }
   }
 
   .searchWrapper {
-    border: 1px solid;
     position: relative;
+    border: 1px solid;
+
     @apply rounded-md border-gray-300 bg-white min-h-[38px] max-w-[400px] py-0 pl-3 pr-10 text-base focus:border-primary-500 focus:outline-none focus:ring-primary-500 disabled:opacity-50 dark:border-gray-800 dark:bg-gray-900 dark:text-gray-100 dark:ring-1 dark:ring-gray-800 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:text-sm w-auto;
 
     > input {
@@ -63,25 +66,30 @@ select {
   }
 
   .chip {
-    padding: 4px 10px;
-    margin-right: 5px;
-    border-radius: 11px;
     display: inline-flex;
     align-items: center;
+
+    margin-right: 5px;
+    padding: 4px 10px;
+    border-radius: 11px;
+
     font-size: 13px;
     line-height: 19px;
     color: #fff;
     white-space: nowrap;
+
     @apply bg-primary-600 my-1;
   }
 
   .optionListContainer {
     position: absolute;
-    width: 100%;
-    background: #fff;
-    border-radius: 4px;
-    margin-top: 1px;
     z-index: 2;
+
+    width: 100%;
+    margin-top: 1px;
+    border-radius: 4px;
+
+    background: #fff;
   }
 
   .displayBlock {
@@ -93,8 +101,8 @@ select {
   }
 
   .notFound {
-    padding: 10px;
     display: block;
+    padding: 10px;
   }
 
   .optionContainer {
@@ -106,6 +114,7 @@ select {
 
     &:focus {
       @apply bg-primary-600;
+
       color: #fff;
     }
   }
