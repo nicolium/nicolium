@@ -1459,18 +1459,30 @@ const admin = (client: PlApiBaseClient) => {
     },
 
     config: {
+      /**
+       * Requires features{@link Features.pleromaAdminConfig}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminconfigdescriptions}
+       */
       getPleromaConfigDescriptions: async () => {
         const response = await client.request('/api/v1/pleroma/admin/config/descriptions');
 
         return v.parse(v.array(pleromaConfigDescriptionSchema), response.json);
       },
 
+      /**
+       * Requires features{@link Features.pleromaAdminConfig}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#get-apiv1pleromaadminconfig}
+       */
       getPleromaConfig: async () => {
         const response = await client.request('/api/v1/pleroma/admin/config');
 
         return v.parse(pleromaConfigSchema, response.json);
       },
 
+      /**
+       * Requires features{@link Features.pleromaAdminConfig}.
+       * @see {@link https://docs.pleroma.social/backend/development/API/admin_api/#post-apiv1pleromaadminconfig}
+       */
       updatePleromaConfig: async (params: PleromaConfig['configs']) => {
         const response = await client.request('/api/v1/pleroma/admin/config', {
           method: 'POST',
