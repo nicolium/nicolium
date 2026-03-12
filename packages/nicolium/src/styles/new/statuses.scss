@@ -859,3 +859,46 @@ div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
     @include mixins.text($truncate: true);
   }
 }
+
+.⁂-rss-feed-info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  flex-shrink: 0;
+  overflow: hidden;
+
+  &__avatar {
+    border-radius: 0.5rem;
+  }
+
+  &__content {
+    flex-grow: 1;
+    overflow: hidden;
+  }
+
+  &__title {
+    @include mixins.text($size: sm, $weight: semibold, $truncate: true);
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  &__details {
+    @include mixins.text($theme: muted, $size: xs);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+
+    svg {
+      width: 1rem;
+      height: 1rem;
+      color: rgb(var(--color-gray-700));
+
+      .dark & {
+        color: rgb(var(--color-gray-600));
+      }
+    }
+  }
+}
