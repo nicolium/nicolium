@@ -1,7 +1,5 @@
 import localforage from 'localforage';
 
-import { migrationComplete } from './migrate-legacy-data';
-
 interface IKVStore extends LocalForage {
   getItemOrError: (key: string) => Promise<any>;
 }
@@ -14,12 +12,6 @@ const KVStore = localforage.createInstance({
   driver: localforage.INDEXEDDB,
   storeName: 'keyvaluepairs',
 }) as IKVStore;
-
-const originalGetItem = KVStore.getItem.bind(KVStore);
-KVStore.getItem = async (...args) => {
-  await migrationComplete;
-  return originalGetItem(...args);
-};
 
 // localForage returns 'null' when a key isn't found.
 // In the Redux action flow, we want it to fail harder.
