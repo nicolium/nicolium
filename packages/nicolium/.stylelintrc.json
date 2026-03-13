@@ -1,4 +1,5 @@
 {
+  "plugins": ["@stylistic/stylelint-plugin"],
   "extends": ["stylelint-config-standard-scss", "stylelint-config-clean-order/error"],
   "rules": {
     "alpha-value-notation": null,
@@ -31,6 +32,7 @@
     ],
     "scss/operator-no-unspaced": null,
     "selector-class-pattern": null,
-    "no-invalid-position-declaration": null
+    "no-invalid-position-declaration": null,
+    "@stylistic/indentation": 2
   }
 }

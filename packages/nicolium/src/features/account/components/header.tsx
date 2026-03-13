@@ -9,10 +9,10 @@ import * as v from 'valibot';
 import Account from '@/components/accounts/account';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import Badge from '@/components/badge';
-import Icon from '@/components/icon';
 import AltIndicator from '@/components/media/alt-indicator';
 import StillImage from '@/components/still-image';
 import Avatar from '@/components/ui/avatar';
+import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Popover from '@/components/ui/popover';
 import Text from '@/components/ui/text';
@@ -47,29 +47,20 @@ interface IMovedNote {
 }
 
 const MovedNote: React.FC<IMovedNote> = ({ from, to }) => (
-  <div className='p-4'>
-    <div className='mb-2 flex items-center gap-1.5'>
-      <Icon
-        src={require('@phosphor-icons/core/regular/suitcase.svg')}
-        className='flex-none text-primary-600 dark:text-primary-400'
-      />
+  <div className='⁂-moved-note__container'>
+    <div className='⁂-moved-note'>
+      <Icon src={require('@phosphor-icons/core/regular/suitcase.svg')} />
 
-      <div className='truncate'>
-        <Text theme='muted' size='sm' truncate>
-          <FormattedMessage
-            id='notification.move'
-            defaultMessage='{name} moved to {targetName}'
-            values={{
-              name: (
-                <span>
-                  <Emojify text={from.display_name} emojis={from.emojis} />
-                </span>
-              ),
-              targetName: to.acct,
-            }}
-          />
-        </Text>
-      </div>
+      <p>
+        <FormattedMessage
+          id='notification.move'
+          defaultMessage='{name} moved to {targetName}'
+          values={{
+            name: <Emojify text={from.display_name} emojis={from.emojis} />,
+            targetName: to.acct,
+          }}
+        />
+      </p>
     </div>
 
     <Account account={to} withRelationship={false} />
@@ -109,9 +100,8 @@ const Header: React.FC<IHeader> = ({ account }) => {
 
   if (!account) {
     return (
-      <div className='⁂-account-header__container'>
-        <div className='relative h-32 w-full bg-gray-200 black:rounded-t-none dark:bg-gray-900/50 md:rounded-t-xl lg:h-48' />
-
+      <div className='⁂-account-header__container ⁂-account-header__container--placeholder'>
+        <div />
         <div className='relative mx-4 -mt-12 size-24 rounded-lg bg-gray-400 ring-4 ring-white dark:ring-gray-800' />
       </div>
     );
