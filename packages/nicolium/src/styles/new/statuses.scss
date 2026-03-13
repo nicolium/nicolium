@@ -756,19 +756,19 @@
     // Adapted from https://css-tricks.com/css-borders-using-masks/
     background:
       conic-gradient(
-          from -45deg at bottom,
-          transparent,
-          rgb(var(--separator-border)) 1deg 89deg,
-          transparent 90deg
-        )
-        bottom/2rem calc(50% + 1px) repeat-x,
+        from -45deg at bottom,
+        transparent,
+        rgb(var(--separator-border)) 1deg 89deg,
+        transparent 90deg
+      )
+      bottom/2rem calc(50% + 1px) repeat-x,
       conic-gradient(
-          from 135deg at top,
-          transparent,
-          rgb(var(--separator-border)) 1deg 89deg,
-          transparent 90deg
-        )
-        top / 2rem calc(50% + 1px) repeat-x;
+        from 135deg at top,
+        transparent,
+        rgb(var(--separator-border)) 1deg 89deg,
+        transparent 90deg
+      )
+      top / 2rem calc(50% + 1px) repeat-x;
     background-position-y:
       calc(100% + 1px),
       -1px;
@@ -791,19 +791,19 @@
 
       background:
         conic-gradient(
-            from -45deg at bottom,
-            transparent,
-            rgb(var(--separator-background)) 1deg 89deg,
-            transparent 90deg
-          )
-          bottom/2rem calc(50% + 1px) repeat-x,
+          from -45deg at bottom,
+          transparent,
+          rgb(var(--separator-background)) 1deg 89deg,
+          transparent 90deg
+        )
+        bottom/2rem calc(50% + 1px) repeat-x,
         conic-gradient(
-            from 135deg at top,
-            transparent,
-            rgb(var(--separator-background)) 1deg 89deg,
-            transparent 90deg
-          )
-          top / 2rem calc(50% + 1px) repeat-x;
+          from 135deg at top,
+          transparent,
+          rgb(var(--separator-background)) 1deg 89deg,
+          transparent 90deg
+        )
+        top / 2rem calc(50% + 1px) repeat-x;
 
       .dark & {
         color: rgb(var(--color-primary-400));
@@ -830,7 +830,7 @@ div:first-child:has(> .⁂-timeline-gap) {
 }
 
 div:has(> .⁂-timeline-status:not(.⁂-timeline-status--connected-bottom))
-  + div:has(> .⁂-timeline-status) {
++ div:has(> .⁂-timeline-status) {
   .⁂-timeline-status {
     border-top: 1px solid rgb(var(--color-gray-200));
 
