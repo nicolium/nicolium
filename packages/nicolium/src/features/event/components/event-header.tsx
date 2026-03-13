@@ -2,7 +2,7 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { deleteStatusModal, toggleStatusSensitivityModal } from '@/actions/moderation';
+import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/actions/moderation';
 import { initReport, ReportableEntities } from '@/actions/reports';
 import { deleteStatus } from '@/actions/statuses';
 import VerificationBadge from '@/components/accounts/verification-badge';
@@ -131,6 +131,8 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const { mutate: unbookmarkStatus } = useUnbookmarkStatus(status?.id!);
   const { mutate: pinStatus } = usePinStatus(status?.id!);
   const { mutate: unpinStatus } = useUnpinStatus(status?.id!);
+  const deleteStatusModal = useDeleteStatusModal(status?.id!);
+  const toggleStatusSensitivityModal = useToggleStatusSensitivityModal(status?.id!);
 
   if (!status || !status.event || !account) {
     return (
@@ -241,11 +243,11 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleToggleStatusSensitivity = () => {
-    dispatch(toggleStatusSensitivityModal(intl, status.id, status.sensitive));
+    toggleStatusSensitivityModal(status.sensitive);
   };
 
   const handleDeleteStatus = () => {
-    dispatch(deleteStatusModal(intl, status.id));
+    deleteStatusModal();
   };
 
   const makeMenu = (): MenuType => {

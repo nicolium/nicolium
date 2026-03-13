@@ -4,7 +4,7 @@ import React, { useCallback, useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { redactStatus } from '@/actions/admin';
-import { deleteStatusModal, toggleStatusSensitivityModal } from '@/actions/moderation';
+import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/actions/moderation';
 import { initReport, ReportableEntities } from '@/actions/reports';
 import { changeSetting } from '@/actions/settings';
 import {
@@ -739,9 +739,11 @@ const MenuButton: React.FC<IMenuButton> = ({
   const { getOrCreateChatByAccountId } = useChats();
   const { mutate: bookmarkStatus } = useBookmarkStatus(status.id);
   const { mutate: unbookmarkStatus } = useUnbookmarkStatus(status.id);
-  const { mutate: pinStatus } = usePinStatus(status?.id);
-  const { mutate: unpinStatus } = useUnpinStatus(status?.id);
+  const { mutate: pinStatus } = usePinStatus(status.id);
+  const { mutate: unpinStatus } = useUnpinStatus(status.id);
   const { mutate: unblockAccount } = useUnblockAccountMutation(status.account_id);
+  const deleteStatusModal = useDeleteStatusModal(status.id);
+  const toggleStatusSensitivityModal = useToggleStatusSensitivityModal(status.id);
 
   const features = useFeatures();
   const instance = useInstance();
@@ -920,11 +922,11 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleDeleteStatus: React.EventHandler<React.MouseEvent> = () => {
-      dispatch(deleteStatusModal(intl, status.id));
+      deleteStatusModal();
     };
 
     const handleToggleStatusSensitivity: React.EventHandler<React.MouseEvent> = () => {
-      dispatch(toggleStatusSensitivityModal(intl, status.id, status.sensitive));
+      toggleStatusSensitivityModal(status.sensitive);
     };
 
     const handleDeleteFromGroup: React.EventHandler<React.MouseEvent> = () => {

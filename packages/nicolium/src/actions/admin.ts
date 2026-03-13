@@ -1,10 +1,8 @@
-import { importEntities } from '@/actions/importer';
 import { getClient } from '@/api';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { useComposeStore } from '@/stores/compose';
 import { useModalsStore } from '@/stores/modals';
-import { useTimelinesStore } from '@/stores/timelines';
 import { filterBadges, getTagDiff } from '@/utils/badges';
 
 import type { AppDispatch, RootState } from '@/store';
@@ -23,22 +21,6 @@ const deactivateUser =
 
 const deleteUser = (accountId: string) => (dispatch: AppDispatch, getState: () => RootState) =>
   getClient(getState).admin.accounts.deleteAccount(accountId);
-
-const deleteStatus = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) =>
-  getClient(getState)
-    .admin.statuses.deleteStatus(statusId)
-    .then(() => {
-      useTimelinesStore.getState().actions.deleteStatus(statusId);
-      return { statusId };
-    });
-
-const toggleStatusSensitivity =
-  (statusId: string, sensitive: boolean) => (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState)
-      .admin.statuses.updateStatus(statusId, { sensitive: !sensitive })
-      .then((status) => {
-        importEntities({ statuses: [status] });
-      });
 
 const tagUser =
   (accountId: string, tags: string[]) => (dispatch: AppDispatch, getState: () => RootState) =>
@@ -116,8 +98,6 @@ export {
   ADMIN_CONFIG_UPDATE_SUCCESS,
   deactivateUser,
   deleteUser,
-  deleteStatus,
-  toggleStatusSensitivity,
   setBadges,
   setRole,
   redactStatus,

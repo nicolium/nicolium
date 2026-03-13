@@ -1,14 +1,19 @@
+import { useQueryClient } from '@tanstack/react-query';
 import React from 'react';
-import { defineMessages, FormattedMessage, type IntlShape } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl, type IntlShape } from 'react-intl';
 
-import { deactivateUser, deleteUser, deleteStatus, toggleStatusSensitivity } from '@/actions/admin';
+import { deactivateUser, deleteUser } from '@/actions/admin';
 import OutlineBox from '@/components/outline-box';
 import Text from '@/components/ui/text';
 import AccountContainer from '@/containers/account-container';
 import { selectAccount } from '@/queries/accounts/selectors';
+import {
+  useAdminDeleteStatusMutation,
+  useAdminUpdateStatusMutation,
+} from '@/queries/admin/use-statuses';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
-import { useModalsStore } from '@/stores/modals';
+import { useModalsActions, useModalsStore } from '@/stores/modals';
 import toast from '@/toast';
 
 import type { AppDispatch } from '@/store';
@@ -180,14 +185,18 @@ const deleteUserModal =
     });
   };
 
-const toggleStatusSensitivityModal =
-  (intl: IntlShape, statusId: string, sensitive: boolean, afterConfirm = () => {}) =>
-  (dispatch: AppDispatch) => {
+const useToggleStatusSensitivityModal = (statusId: string, afterConfirm = () => {}) => {
+  const intl = useIntl();
+  const { mutate: updateStatus } = useAdminUpdateStatusMutation(statusId);
+  const { openModal } = useModalsActions();
+  const queryClient = useQueryClient();
+
+  return (sensitive: boolean) => {
     const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
     const statusAccount = status ? selectAccount(status.account_id) : undefined;
     const acct = statusAccount?.acct;
 
-    useModalsStore.getState().actions.openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(
         !sensitive ? messages.markStatusSensitiveHeading : messages.markStatusNotSensitiveHeading,
       ),
@@ -199,43 +208,55 @@ const toggleStatusSensitivityModal =
         !sensitive ? messages.markStatusSensitiveConfirm : messages.markStatusNotSensitiveConfirm,
       ),
       onConfirm: () => {
-        dispatch(toggleStatusSensitivity(statusId, sensitive))
-          .then(() => {
-            const message = intl.formatMessage(
-              !sensitive ? messages.statusMarkedSensitive : messages.statusMarkedNotSensitive,
-              { acct },
-            );
-            toast.success(message);
-          })
-          .catch(() => {});
-        afterConfirm();
+        updateStatus(
+          { sensitive: !sensitive },
+          {
+            onSuccess: () => {
+              const message = intl.formatMessage(
+                !sensitive ? messages.statusMarkedSensitive : messages.statusMarkedNotSensitive,
+                { acct },
+              );
+              toast.success(message);
+              afterConfirm();
+            },
+          },
+        );
       },
     });
   };
+};
 
-const deleteStatusModal =
-  (intl: IntlShape, statusId: string, afterConfirm = () => {}) =>
-  (dispatch: AppDispatch) => {
+const useDeleteStatusModal = (statusId: string, afterConfirm = () => {}) => {
+  const intl = useIntl();
+  const { mutate: deleteStatus } = useAdminDeleteStatusMutation(statusId);
+  const { openModal } = useModalsActions();
+  const queryClient = useQueryClient();
+
+  return () => {
     const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
     const statusAccount = status ? selectAccount(status.account_id) : undefined;
     const acct = statusAccount?.acct;
 
-    useModalsStore.getState().actions.openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.deleteStatusHeading),
-      message: intl.formatMessage(messages.deleteStatusPrompt, {
-        acct: <strong className='break-words'>{acct}</strong>,
-      }),
+      message: intl.formatMessage(messages.deleteStatusPrompt, { acct }),
       confirm: intl.formatMessage(messages.deleteStatusConfirm),
       onConfirm: () => {
-        dispatch(deleteStatus(statusId))
-          .then(() => {
+        deleteStatus(undefined, {
+          onSuccess: () => {
             const message = intl.formatMessage(messages.statusDeleted, { acct });
             toast.success(message);
-          })
-          .catch(() => {});
-        afterConfirm();
+            afterConfirm();
+          },
+        });
       },
     });
   };
+};
 
-export { deactivateUserModal, deleteUserModal, toggleStatusSensitivityModal, deleteStatusModal };
+export {
+  deactivateUserModal,
+  deleteUserModal,
+  useToggleStatusSensitivityModal,
+  useDeleteStatusModal,
+};
