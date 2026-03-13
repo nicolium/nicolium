@@ -1,0 +1,35 @@
+import { useMutation } from '@tanstack/react-query';
+
+import { importEntities } from '@/actions/importer';
+import { useClient } from '@/hooks/use-client';
+import { useTimelinesActions } from '@/stores/timelines';
+
+import type { AdminUpdateStatusParams } from 'pl-api';
+
+const useAdminDeleteStatusMutation = (statusId: string) => {
+  const client = useClient();
+  const { deleteStatus: deleteTimelineStatus } = useTimelinesActions();
+
+  return useMutation({
+    mutationKey: ['admin', 'statuses', statusId],
+    mutationFn: () => client.admin.statuses.deleteStatus(statusId),
+    onSuccess: () => {
+      deleteTimelineStatus(statusId);
+    },
+  });
+};
+
+const useAdminUpdateStatusMutation = (statusId: string) => {
+  const client = useClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'statuses', statusId, 'sensitivity'],
+    mutationFn: (params: AdminUpdateStatusParams) =>
+      client.admin.statuses.updateStatus(statusId, params),
+    onSuccess: (status) => {
+      importEntities({ statuses: [status] });
+    },
+  });
+};
+
+export { useAdminDeleteStatusMutation, useAdminUpdateStatusMutation };
