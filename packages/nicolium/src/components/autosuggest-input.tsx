@@ -258,11 +258,10 @@ const AutosuggestInput: React.FC<IAutosuggestInput> = ({
   const visible = !suggestionsHidden && (props.suggestions.length || (props.menu && props.value));
 
   return [
-    <div key='input' className='relative w-full'>
+    <div key='input' className='⁂-autosuggest-input'>
       <Input
         type='text'
         className={props.className}
-        outerClassName='mt-0'
         ref={inputRef}
         disabled={props.disabled}
         placeholder={props.placeholder}

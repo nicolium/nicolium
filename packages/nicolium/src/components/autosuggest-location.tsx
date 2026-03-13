@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Icon from '@/components/ui/icon';
-import Text from '@/components/ui/text';
 
 import type { Location } from 'pl-api';
 
@@ -27,15 +26,15 @@ const AutosuggestLocation: React.FC<IAutosuggestLocation> = ({ location }) => {
   if (!location) return null;
 
   return (
-    <div className='flex items-center gap-2'>
+    <div className='⁂-autosuggest-location'>
       <Icon src={ADDRESS_ICONS[location.type] || mapPinIcon} />
-      <div className='flex flex-col'>
-        <Text>{location.description}</Text>
-        <Text size='xs' theme='muted'>
+      <div>
+        <p>{location.description}</p>
+        <p>
           {[location.street, location.locality, location.country]
             .filter((val) => val?.trim())
             .join(' · ')}
-        </Text>
+        </p>
       </div>
     </div>
   );
