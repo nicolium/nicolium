@@ -1,4 +1,5 @@
 @use 'mixins';
+@use 'variables';
 
 .⁂-account-layout {
   display: flex;
@@ -8,7 +9,11 @@
 
 .⁂-account-header {
   &__container {
-    @apply -mx-4 -mt-4 sm:-mx-6 sm:-mt-6;
+    margin: -1rem -1rem 0;
+
+    @media (min-width: variables.$breakpoint-sm) {
+    margin: -1.5rem -1.5rem 0;
+    }
   }
 }
 

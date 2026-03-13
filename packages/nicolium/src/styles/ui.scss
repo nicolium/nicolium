@@ -6,20 +6,21 @@
   &::-moz-focus-inner,
   &:focus,
   &:active {
-    @apply outline-0 #{!important};
+  outline: 0 !important;
   }
 
   &:hover,
   &:active,
   &:focus {
-    @apply opacity-60 transition-colors duration-200 ease-out;
+    opacity: 0.6;
+    @apply transition-colors duration-200 ease-out;
   }
 
   @apply text-black dark:text-white inline-flex items-center p-0 border-0 bg-transparent cursor-pointer transition duration-100 ease-in opacity-40;
 }
 
 .react-datepicker-popper {
-  @apply z-[9999] #{!important};
+z-index: 9999 !important;
 }
 
 .ellipsis::after {
@@ -27,11 +28,14 @@
 }
 
 .react-swipeable-view-container {
-  @apply h-full;
+height: 100%;
 }
 
 .react-swipeable-view-container > * {
-  @apply flex items-center justify-center h-full;
+display: flex;
+align-items: center;
+justify-content: center;
+height: 100%;
 }
 
 ::-webkit-scrollbar-thumb {
