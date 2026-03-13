@@ -669,6 +669,25 @@ a.⁂-list-item,
   }
 }
 
+.⁂-autosuggest-location {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  > div {
+    display: flex;
+    flex-direction: column;
+
+    p:first-child {
+    @include mixins.text;
+    }
+
+    p:last-child {
+      @include mixins.text($size: xs, $theme: muted);
+    }
+  }
+}
+
 div[data-viewport-type='window']:has(.⁂-empty-message) {
   position: initial !important;
 }
