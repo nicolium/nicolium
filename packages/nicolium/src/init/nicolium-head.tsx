@@ -13,7 +13,7 @@ import { useSettings } from '@/stores/settings';
 
 const Helmet = React.lazy(() => import('@/components/helmet'));
 
-/** Injects metadata into site head with Helmet. */
+/** Injects metadata into site head. */
 const NicoliumHead = () => {
   const locale = useLocale();
   const direction = useLocaleDirection(locale);
@@ -70,6 +70,21 @@ const NicoliumHead = () => {
     };
   }, []);
 
+  useEffect(() => {
+    document.documentElement.lang = locale;
+    document.documentElement.className = clsx(`text-${themeSettings?.interfaceSize ?? 'md'}`, {
+      dark: theme === 'dark',
+      'black dark': theme === 'black',
+      'window-controls-overlay': wcoVisible,
+      'window-controls-overlay--right': wcoRight,
+    });
+  }, [locale, themeSettings?.interfaceSize, theme, wcoVisible, wcoRight]);
+
+  useEffect(() => {
+    document.body.className = bodyClass;
+    document.body.dir = direction;
+  }, [bodyClass, direction]);
+
   const color = useMemo(() => {
     if (wcoVisible) {
       return window.getComputedStyle(document.body, null).getPropertyValue('background-color');
@@ -79,18 +94,7 @@ const NicoliumHead = () => {
 
   return (
     <>
-      <Helmet>
-        <html
-          lang={locale}
-          className={clsx(`text-${themeSettings?.interfaceSize ?? 'md'}`, {
-            dark: theme === 'dark',
-            'black dark': theme === 'black',
-            'window-controls-overlay': wcoVisible,
-            'window-controls-overlay--right': wcoRight,
-          })}
-        />
-        <body className={bodyClass} dir={direction} />
-      </Helmet>
+      <Helmet />
       <meta name='theme-color' content={color} />
       <InlineStyle>{`:root { ${themeCss} }`}</InlineStyle>
       {['dark', 'black'].includes(theme) && (

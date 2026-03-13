@@ -106,12 +106,9 @@ const Column: React.FC<IColumn> = (props): React.JSX.Element => {
       variant={transparent ? undefined : 'rounded'}
       className={clsx('⁂-column', className)}
     >
-      <Helmet>
-        <title>{label}</title>
-
+      <Helmet title={label}>
         {frontendConfig.appleAppId && (
           <meta
-            data-react-helmet='true'
             name='apple-itunes-app'
             content={`app-id=${frontendConfig.appleAppId}, app-argument=${location.href}`}
           />

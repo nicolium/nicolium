@@ -1,6 +1,5 @@
 import { QueryClientProvider } from '@tanstack/react-query';
 import React from 'react';
-import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
 
 import { preload } from '@/actions/preload';
@@ -23,12 +22,10 @@ const Nicolium: React.FC = () => (
     <QueryClientProvider client={queryClient}>
       <DefaultCurrentAccountProvider>
         <StatProvider>
-          <HelmetProvider>
-            <NicoliumHead />
-            <NicoliumLoad>
-              <NicoliumMount />
-            </NicoliumLoad>
-          </HelmetProvider>
+          <NicoliumHead />
+          <NicoliumLoad>
+            <NicoliumMount />
+          </NicoliumLoad>
         </StatProvider>
       </DefaultCurrentAccountProvider>
     </QueryClientProvider>

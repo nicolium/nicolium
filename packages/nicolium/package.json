@@ -111,7 +111,6 @@
     "react-color": "^2.19.3",
     "react-datepicker": "^9.1.0",
     "react-dom": "^19.2.4",
-    "react-helmet-async": "^3.0.0",
     "react-hot-toast": "^2.6.0",
     "react-inlinesvg": "^4.2.0",
     "react-intl": "^8.1.3",
