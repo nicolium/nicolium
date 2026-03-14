@@ -4,7 +4,7 @@ import { defineMessages, FormattedDate, useIntl } from 'react-intl';
 import IconButton from '@/components/ui/icon-button';
 import { DatePicker } from '@/features/ui/util/async-components';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 
 const messages = defineMessages({
   birthdayPlaceholder: {
@@ -15,6 +15,7 @@ const messages = defineMessages({
   nextMonth: { id: 'datepicker.next_month', defaultMessage: 'Next month' },
   previousYear: { id: 'datepicker.previous_year', defaultMessage: 'Previous year' },
   nextYear: { id: 'datepicker.next_year', defaultMessage: 'Next year' },
+  clear: { id: 'search.clear', defaultMessage: 'Clear input' },
 });
 
 interface IBirthdayInput {
@@ -137,6 +138,7 @@ const BirthdayInput: React.FC<IBirthdayInput> = ({ value, onChange, required }) 
         required={required}
         renderCustomHeader={renderCustomHeader}
         isClearable={!required}
+        ariaLabelClose={intl.formatMessage(messages.clear)}
       />
     </div>
   );
