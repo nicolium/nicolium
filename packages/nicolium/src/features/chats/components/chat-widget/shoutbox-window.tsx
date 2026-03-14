@@ -6,7 +6,7 @@ import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 import { ChatWidgetScreens, useChatContext } from '@/contexts/chat-context';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 
 import Shoutbox from '../shoutbox';
 

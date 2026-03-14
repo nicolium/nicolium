@@ -9,13 +9,13 @@ import { FE_NAME } from '@/actions/settings';
 import { createStatus } from '@/actions/statuses';
 import { getClient } from '@/api';
 import { isNativeEmoji } from '@/features/emoji';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { selectAccount, selectOwnAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
 import { cancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
+import { useAuthStore } from '@/stores/auth';
+import { useInstance } from '@/stores/instance';
 import { useModalsActions, useModalsStore } from '@/stores/modals';
 import { useSettings, useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
@@ -25,7 +25,6 @@ import { useUiStoreActions } from './ui';
 import type { AutoSuggestion } from '@/components/autosuggest-input';
 import type { Language } from '@/features/preferences';
 import type { NormalizedStatus as Status } from '@/normalizers/status';
-import type { AppDispatch, RootState } from '@/store';
 import type { LinkOptions } from '@tanstack/react-router';
 import type {
   Account,
@@ -373,9 +372,6 @@ interface ComposeActions {
 
 type ComposeStore = ComposeState & { actions: ComposeActions };
 
-let lazyStore: { dispatch: AppDispatch; getState: () => RootState };
-import('@/store').then(({ store }) => (lazyStore = store)).catch(() => {});
-
 const useComposeStore = create<ComposeStore>()(
   mutative(
     (set, get) => ({
@@ -414,7 +410,7 @@ const useComposeStore = create<ComposeStore>()(
           editorState = null,
           redacting = false,
         ) => {
-          const { features } = getClient(lazyStore.getState);
+          const { features } = getClient();
           const explicitAddressing =
             features.createStatusExplicitAddressing &&
             !useSettingsStore.getState().settings.forceImplicitAddressing;
@@ -473,13 +469,12 @@ const useComposeStore = create<ComposeStore>()(
         },
 
         replyCompose: (status, rebloggedBy, approvalRequired) => {
-          const state = lazyStore.getState();
-          const { features } = getClient(lazyStore.getState);
+          const { features } = getClient();
           const { forceImplicitAddressing, preserveSpoilers } =
             useSettingsStore.getState().settings;
           const explicitAddressing =
             features.createStatusExplicitAddressing && !forceImplicitAddressing;
-          const account = selectOwnAccount(state);
+          const account = selectOwnAccount();
 
           if (!account) return;
 
@@ -557,7 +552,7 @@ const useComposeStore = create<ComposeStore>()(
         },
 
         mentionCompose: (account) => {
-          if (!lazyStore.getState().me) return;
+          if (!useAuthStore.getState().currentAccountId) return;
 
           get().actions.updateCompose('compose-modal', (compose) => {
             compose.text = [compose.text.trim(), `@${account.acct} `]
@@ -606,8 +601,7 @@ const useComposeStore = create<ComposeStore>()(
         },
 
         eventDiscussionCompose: (composeId, status) => {
-          const state = lazyStore.getState();
-          const account = selectOwnAccount(state);
+          const account = selectOwnAccount();
 
           if (!account) return;
 
@@ -640,7 +634,7 @@ const useComposeStore = create<ComposeStore>()(
             startPosition = position - 1;
 
             useSettingsStore.getState().actions.rememberEmojiUse(suggestion);
-            lazyStore.dispatch(saveSettings());
+            saveSettings();
           } else if (typeof suggestion === 'string' && suggestion[0] === '#') {
             completion = suggestion;
             startPosition = position - 1;
@@ -708,7 +702,6 @@ const useComposeStore = create<ComposeStore>()(
 const useSubmitCompose = (composeId: string) => {
   const actions = useComposeActions();
   const client = useClient();
-  const dispatch = useAppDispatch();
   const features = useFeatures();
   const { openModal, closeModal } = useModalsActions();
   const { removeSledzik } = useUiStoreActions();
@@ -782,7 +775,7 @@ const useSubmitCompose = (composeId: string) => {
 
         if (compose.language && !editedId) {
           useSettingsStore.getState().actions.rememberLanguageUse(compose.language);
-          dispatch(saveSettings());
+          saveSettings();
         }
       }
 
@@ -871,19 +864,15 @@ const useSubmitCompose = (composeId: string) => {
         }
 
         try {
-          const data = await dispatch(
-            createStatus(params, idempotencyKey, editedId, compose.redacting),
-          );
+          const data = await createStatus(params, idempotencyKey, editedId, compose.redacting);
 
           const draftIdToCancel = compose.draftId;
 
           actions.resetCompose(composeId);
 
           if (draftIdToCancel) {
-            dispatch((_, getState) => {
-              const accountUrl = selectOwnAccount(getState())!.url;
-              cancelDraftStatus(queryClient, accountUrl, draftIdToCancel);
-            });
+            const accountUrl = selectOwnAccount()!.url;
+            cancelDraftStatus(queryClient, accountUrl, draftIdToCancel);
           }
 
           if (data.scheduled_at === null) {
@@ -931,7 +920,6 @@ const useComposeActions = () => useComposeStore((state) => state.actions);
 const useUploadCompose = (composeId: string) => {
   const { updateCompose } = useComposeActions();
   const instance = useInstance();
-  const dispatch = useAppDispatch();
   const intl = useIntl();
 
   return useCallback(
@@ -957,28 +945,26 @@ const useUploadCompose = (composeId: string) => {
       Array.from(files).forEach((f, i) => {
         if (mediaCount + i > attachmentLimit - 1) return;
 
-        dispatch(
-          uploadFile(
-            f,
-            intl,
-            (data) =>
-              updateCompose(composeId, (draft) => {
-                appendMedia(draft, data);
-              }),
-            () =>
-              updateCompose(composeId, (draft) => {
-                draft.isUploading = false;
-              }),
-            ({ loaded }) => {
-              progress[i] = loaded;
-              updateCompose(composeId, (draft) => {
-                draft.progress = Math.round((progress.reduce((a, v) => a + v, 0) / total) * 100);
-              });
-            },
-            (value) => {
-              total += value;
-            },
-          ),
+        uploadFile(
+          f,
+          intl,
+          (data) =>
+            updateCompose(composeId, (draft) => {
+              appendMedia(draft, data);
+            }),
+          () =>
+            updateCompose(composeId, (draft) => {
+              draft.isUploading = false;
+            }),
+          ({ loaded }) => {
+            progress[i] = loaded;
+            updateCompose(composeId, (draft) => {
+              draft.progress = Math.round((progress.reduce((a, v) => a + v, 0) / total) * 100);
+            });
+          },
+          (value) => {
+            total += value;
+          },
         );
       });
     },
@@ -988,7 +974,6 @@ const useUploadCompose = (composeId: string) => {
 
 const useChangeUploadCompose = (composeId: string) => {
   const { updateCompose } = useComposeActions();
-  const dispatch = useAppDispatch();
 
   return useCallback(
     async (mediaId: string, params: UpdateMediaParams) => {
@@ -1000,7 +985,7 @@ const useChangeUploadCompose = (composeId: string) => {
       });
 
       try {
-        const response = await dispatch(updateMedia(mediaId, params));
+        const response = await updateMedia(mediaId, params);
         updateCompose(composeId, (draft) => {
           draft.isChangingUpload = false;
           draft.mediaAttachments = draft.mediaAttachments.map((item) =>

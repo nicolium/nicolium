@@ -15,7 +15,6 @@ import Portal from '@/components/ui/portal';
 import Tabs from '@/components/ui/tabs';
 import Notification from '@/features/notifications/components/notification';
 import PlaceholderNotification from '@/features/placeholder/components/placeholder-notification';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
@@ -56,7 +55,6 @@ const messages = defineMessages({
 
 const FilterBar = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const settings = useSettings();
   const { changeSetting } = useSettingsStoreActions();
   const features = useFeatures();
@@ -66,7 +64,7 @@ const FilterBar = () => {
 
   const onClick = (filterType: FilterType) => () => {
     changeSetting(['notifications', 'quickFilter', 'active'], filterType);
-    dispatch(saveSettings());
+    saveSettings();
     if (filterType === selectedFilter) {
       queryClient.refetchQueries({
         queryKey: queryKeys.notifications.list(filterType),

@@ -2,13 +2,12 @@ import { Outlet } from '@tanstack/react-router';
 import React from 'react';
 
 import Layout from '@/components/ui/layout';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import LinkFooter from '@/features/ui/components/link-footer';
 import { WhoToFollowPanel, TrendsPanel, SignUpPanel } from '@/features/ui/util/async-components';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
-
 const DefaultLayout: React.FC = () => {
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const features = useFeatures();
 
   return (

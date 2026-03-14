@@ -10,7 +10,7 @@ import { CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useSearchAccounts } from '@/queries/search/use-search';
@@ -19,7 +19,6 @@ import {
   useAddAccountAlias,
   useDeleteAccountAlias,
 } from '@/queries/settings/use-account-aliases';
-
 const messages = defineMessages({
   heading: { id: 'column.aliases', defaultMessage: 'Account aliases' },
   delete: { id: 'column.aliases.delete', defaultMessage: 'Delete' },
@@ -37,7 +36,7 @@ const Account: React.FC<IAccount> = ({ accountId, aliases }) => {
   const intl = useIntl();
   const features = useFeatures();
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const { data: account } = useAccount(accountId);
 
   const { mutate: addAccountAlias } = useAddAccountAlias();

@@ -5,7 +5,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import FormGroup from '@/components/ui/form-group';
 import Text from '@/components/ui/text';
 import Textarea from '@/components/ui/textarea';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 
 import type { Account } from 'pl-api';
 

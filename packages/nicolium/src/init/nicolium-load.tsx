@@ -1,27 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { IntlProvider } from 'react-intl';
 
+import { fetchMe } from '@/actions/auth';
 import { loadFrontendConfig } from '@/actions/frontend-config';
 import { checkIfStandalone, fetchInstance } from '@/actions/instance';
-import { fetchMe } from '@/actions/me';
 import LoadingScreen from '@/components/loading-screen';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useLocale } from '@/hooks/use-locale';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import MESSAGES from '@/messages';
-
-import type { AppDispatch } from '@/store';
-
 /** Load initial data from the backend */
-const loadInitial = () => async (dispatch: AppDispatch) => {
-  dispatch(checkIfStandalone());
+const loadInitial = async () => {
+  checkIfStandalone();
   // Await for authenticated fetch
-  await dispatch(fetchMe());
+  await fetchMe();
   // Await for feature detection
-  await dispatch(fetchInstance());
+  await fetchInstance();
   // Await for configuration
-  await dispatch(loadFrontendConfig());
+  await loadFrontendConfig();
 };
 
 interface INicoliumLoad {
@@ -30,9 +26,7 @@ interface INicoliumLoad {
 
 /** Initial data loader. */
 const NicoliumLoad: React.FC<INicoliumLoad> = ({ children }) => {
-  const dispatch = useAppDispatch();
-
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const { data: account } = useOwnAccount();
   const locale = useLocale();
 
@@ -55,7 +49,7 @@ const NicoliumLoad: React.FC<INicoliumLoad> = ({ children }) => {
 
   // Load initial data from the API
   useEffect(() => {
-    dispatch(loadInitial())
+    loadInitial()
       .then(() => {
         setIsLoaded(true);
       })

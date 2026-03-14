@@ -2,7 +2,6 @@ import React, { useEffect, useLayoutEffect, useMemo, useState, Suspense } from '
 import { defineMessages, useIntl } from 'react-intl';
 
 import { changeSetting, saveSettings } from '@/actions/settings';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useTheme } from '@/hooks/use-theme';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
 import { useSettings, useSettingsStoreActions } from '@/stores/settings';
@@ -128,7 +127,6 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
   withCustom = true,
 }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const title = intl.formatMessage(messages.emoji);
   const theme = useTheme();
   const { rememberEmojiUse } = useSettingsStoreActions();
@@ -164,7 +162,7 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
     }
 
     rememberEmojiUse(pickedEmoji);
-    dispatch(saveSettings());
+    saveSettings();
 
     if (onPickEmoji) {
       onPickEmoji(pickedEmoji);
@@ -172,7 +170,7 @@ const EmojiPickerDropdown: React.FC<IEmojiPickerDropdown> = ({
   };
 
   const handleSkinTone = (skinTone: string) => {
-    dispatch(changeSetting(['skinTone'], skinTone));
+    changeSetting(['skinTone'], skinTone);
   };
 
   const getI18n = () => ({

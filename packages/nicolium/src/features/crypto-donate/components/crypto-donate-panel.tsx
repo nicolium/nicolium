@@ -5,7 +5,7 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import Text from '@/components/ui/text';
 import Widget from '@/components/ui/widget';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 
 import SiteWallet from './site-wallet';
 

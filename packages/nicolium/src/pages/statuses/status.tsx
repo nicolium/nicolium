@@ -10,7 +10,6 @@ import Column from '@/components/ui/column';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import Thread from '@/features/status/components/thread';
 import { statusRoute } from '@/features/ui/router';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useStatus } from '@/queries/statuses/use-status';
 import { useSettings } from '@/stores/settings';
 
@@ -46,8 +45,6 @@ const messages = defineMessages({
 
 const StatusPage: React.FC = () => {
   const { username, statusId } = statusRoute.useParams();
-
-  const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const {
@@ -74,7 +71,7 @@ const StatusPage: React.FC = () => {
       {
         text: intl.formatMessage(messages.treeView),
         action: () => {
-          dispatch(changeSetting(['threads', 'displayMode'], 'tree'));
+          changeSetting(['threads', 'displayMode'], 'tree');
         },
         icon: require('@phosphor-icons/core/regular/tree-view.svg'),
         type: 'radio',
@@ -83,7 +80,7 @@ const StatusPage: React.FC = () => {
       {
         text: intl.formatMessage(messages.linearView),
         action: () => {
-          dispatch(changeSetting(['threads', 'displayMode'], 'linear'));
+          changeSetting(['threads', 'displayMode'], 'linear');
         },
         icon: require('@phosphor-icons/core/regular/list-bullets.svg'),
         type: 'radio',

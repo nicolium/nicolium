@@ -2,7 +2,6 @@ import { getClient } from '@/api';
 import { useModalsStore } from '@/stores/modals';
 
 import type { NormalizedStatus as Status } from '@/normalizers/status';
-import type { AppDispatch, RootState } from '@/store';
 import type { Account } from 'pl-api';
 
 enum ReportableEntities {
@@ -29,20 +28,18 @@ const initReport = (
   });
 };
 
-const submitReport =
-  (
-    accountId: string,
-    statusIds: string[],
-    ruleIds?: string[],
-    comment?: string,
-    forward?: boolean,
-  ) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState()).accounts.reportAccount(accountId, {
-      status_ids: statusIds,
-      rule_ids: ruleIds,
-      comment: comment,
-      forward: forward,
-    });
+const submitReport = (
+  accountId: string,
+  statusIds: string[],
+  ruleIds?: string[],
+  comment?: string,
+  forward?: boolean,
+) =>
+  getClient().accounts.reportAccount(accountId, {
+    status_ids: statusIds,
+    rule_ids: ruleIds,
+    comment: comment,
+    forward: forward,
+  });
 
 export { ReportableEntities, initReport, submitReport };

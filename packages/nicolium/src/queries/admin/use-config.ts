@@ -1,10 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { ADMIN_CONFIG_UPDATE_SUCCESS, type AdminActions } from '@/actions/admin';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useFrontendConfigActions } from '@/stores/frontend-config';
+import { useInstanceActions } from '@/stores/instance';
 
 import { queryKeys } from '../keys';
 
@@ -22,19 +22,17 @@ const useAdminConfig = () => {
 
 const useUpdateAdminConfig = () => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
+  const instanceActions = useInstanceActions();
+  const frontendConfigActions = useFrontendConfigActions();
 
   return useMutation({
     mutationFn: (params: Parameters<typeof client.admin.config.updatePleromaConfig>[0]) =>
       client.admin.config.updatePleromaConfig(params),
     retry: false,
     onSuccess: (data) => {
-      dispatch<AdminActions>({
-        type: ADMIN_CONFIG_UPDATE_SUCCESS,
-        configs: data.configs,
-        needsReboot: data.need_reboot,
-      });
+      instanceActions.importAdminConfigs(data.configs);
+      frontendConfigActions.importAdminConfigs(data.configs);
       queryClient.setQueryData(queryKeys.admin.config, data);
     },
   });

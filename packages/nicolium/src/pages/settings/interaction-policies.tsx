@@ -2,7 +2,7 @@ import { create } from 'mutative';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { patchMe } from '@/actions/me';
+import { patchMe } from '@/actions/auth';
 import List, { ListItem } from '@/components/list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
@@ -13,7 +13,6 @@ import Tabs from '@/components/ui/tabs';
 import Text from '@/components/ui/text';
 import Warning from '@/features/compose/components/warning';
 import { SelectDropdown } from '@/features/forms';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useInteractionPolicies } from '@/queries/settings/use-interaction-policies';
@@ -258,7 +257,6 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({
 
 const InteractionPoliciesPage = () => {
   const client = useClient();
-  const dispatch = useAppDispatch();
   const features = useFeatures();
 
   const [quotePolicy, setQuotePolicy] = useState<QuoteApprovalPolicy>('public');
@@ -322,7 +320,7 @@ const InteractionPoliciesPage = () => {
     }
 
     if (features.quoteApprovalPolicies && !features.interactionRequests) {
-      promises.push(dispatch(patchMe({ source: { quote_policy: quotePolicy } })));
+      promises.push(patchMe({ source: { quote_policy: quotePolicy } }));
     }
 
     Promise.all(promises)

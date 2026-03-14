@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import Column from '@/components/ui/column';
 import Layout from '@/components/ui/layout';
 import Tabs, { type Item } from '@/components/ui/tabs';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import LinkFooter from '@/features/ui/components/link-footer';
 import { layouts } from '@/features/ui/router';
@@ -14,14 +15,12 @@ import {
   TrendsPanel,
   WhoToFollowPanel,
 } from '@/features/ui/util/async-components';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useStatus } from '@/queries/statuses/use-status';
-
 const EventLayout = () => {
   const { statusId } = layouts.event.useParams();
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const features = useFeatures();
 
   const navigate = useNavigate();

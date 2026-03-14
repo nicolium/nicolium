@@ -4,7 +4,7 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import Textarea from '@/components/ui/textarea';
 import Widget from '@/components/ui/widget';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useUpdateAccountNoteMutation } from '@/queries/accounts/use-relationship';
 
 import type { Account as AccountEntity } from 'pl-api';
@@ -19,7 +19,7 @@ interface IAccountNotePanel {
 
 const AccountNotePanel: React.FC<IAccountNotePanel> = ({ account }) => {
   const intl = useIntl();
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
 
   const { mutate: updateAccountNote } = useUpdateAccountNoteMutation(account.id);
 

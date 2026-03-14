@@ -7,25 +7,20 @@ import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import Text from '@/components/ui/text';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-
-import type { AppDispatch, RootState } from '@/store';
 
 interface ICSVExporter {
   inputLabel: React.ReactNode;
   inputHint: React.ReactNode;
   submitText: React.ReactNode;
-  action: () => (dispatch: AppDispatch, getState: () => RootState) => Promise<any>;
+  action: () => Promise<any>;
 }
 
 const CSVExporter: React.FC<ICSVExporter> = ({ inputLabel, inputHint, submitText, action }) => {
-  const dispatch = useAppDispatch();
-
   const [isLoading, setIsLoading] = useState(false);
 
   const handleClick: React.MouseEventHandler = () => {
     setIsLoading(true);
-    dispatch(action())
+    action()
       .then(() => {
         setIsLoading(false);
       })

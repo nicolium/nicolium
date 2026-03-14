@@ -14,13 +14,13 @@ import Avatar from '@/components/ui/avatar';
 import { CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import { RadioGroup, RadioItem } from '@/components/ui/radio';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import ActionButton from '@/features/ui/components/action-button';
 import { directoryRoute } from '@/features/ui/router';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useDirectory } from '@/queries/accounts/use-directory';
+import { useInstance } from '@/stores/instance';
 import { shortNumberFormat } from '@/utils/numbers';
 
 const messages = defineMessages({
@@ -36,7 +36,7 @@ interface IAccountCard {
 }
 
 const AccountCard: React.FC<IAccountCard> = ({ id }) => {
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const { data: account } = useAccount(id);
 
   if (!account) return null;

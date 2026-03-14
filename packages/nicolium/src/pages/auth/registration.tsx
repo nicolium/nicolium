@@ -4,8 +4,8 @@ import { FormattedMessage } from 'react-intl';
 import { BigCard } from '@/components/ui/big-card';
 import Text from '@/components/ui/text';
 import RegistrationForm from '@/features/auth-login/components/registration-form';
-import { useInstance } from '@/hooks/use-instance';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
+import { useInstance } from '@/stores/instance';
 
 const RegistrationPage: React.FC = () => {
   const instance = useInstance();

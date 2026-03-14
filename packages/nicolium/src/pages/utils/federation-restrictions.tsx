@@ -5,10 +5,9 @@ import ScrollableList from '@/components/scrollable-list';
 import Accordion from '@/components/ui/accordion';
 import Column from '@/components/ui/column';
 import RestrictedInstance from '@/features/federation-restrictions/components/restricted-instance';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { useInstance } from '@/hooks/use-instance';
 import { useHosts } from '@/selectors';
-import { federationRestrictionsDisclosed } from '@/utils/state';
+import { useInstance } from '@/stores/instance';
+import { useFederationRestrictionsDisclosed } from '@/utils/state';
 
 const messages = defineMessages({
   heading: { id: 'column.federation_restrictions', defaultMessage: 'Federation restrictions' },
@@ -28,7 +27,7 @@ const FederationRestrictionsPage = () => {
   const instance = useInstance();
 
   const hosts = useHosts();
-  const disclosed = useAppSelector((state) => federationRestrictionsDisclosed(state));
+  const disclosed = useFederationRestrictionsDisclosed();
 
   const [explanationBoxExpanded, setExplanationBoxExpanded] = useState(true);
 

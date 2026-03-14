@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Text from '@/components/ui/text';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { usePollQuery, usePollVoteMutation } from '@/queries/statuses/use-poll';
 import { useModalsActions } from '@/stores/modals';
 import { useStatusMeta } from '@/stores/status-meta';
@@ -24,7 +24,7 @@ interface IPoll {
 const Poll: React.FC<IPoll> = ({ id, status, language, truncate }): React.JSX.Element | null => {
   const { openModal } = useModalsActions();
 
-  const isLoggedIn = useAppSelector((state) => state.me);
+  const isLoggedIn = useCurrentAccount();
 
   const { data: poll } = usePollQuery(id);
   // TODO: handle pending mutation state

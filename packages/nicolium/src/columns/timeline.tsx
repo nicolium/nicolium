@@ -11,10 +11,10 @@ import StatusInfo from '@/components/statuses/status-info';
 import Tombstone from '@/components/statuses/tombstone';
 import Icon from '@/components/ui/icon';
 import Portal from '@/components/ui/portal';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import PendingStatus from '@/features/ui/components/pending-status';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccounts } from '@/queries/accounts/use-accounts';
 import { type SelectedStatus, useStatus } from '@/queries/statuses/use-status';
@@ -560,7 +560,7 @@ const getRestoredPosition = (me: string) => {
 };
 
 const HomeTimelineColumn: React.FC<IBaseTimeline> = (props) => {
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
 
   const {
     timelines: { home: timelineFilters },

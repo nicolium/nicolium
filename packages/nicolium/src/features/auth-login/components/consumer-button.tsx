@@ -4,7 +4,6 @@ import { useIntl, defineMessages } from 'react-intl';
 import { prepareRequest } from '@/actions/consumer-auth';
 import IconButton from '@/components/ui/icon-button';
 import Tooltip from '@/components/ui/tooltip';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { capitalize } from '@/utils/strings';
 
 const messages = defineMessages({
@@ -28,12 +27,11 @@ interface IConsumerButton {
 /** OAuth consumer button for logging in with a third-party service. */
 const ConsumerButton: React.FC<IConsumerButton> = ({ provider }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const icon = BRAND_ICONS[provider] || require('@phosphor-icons/core/regular/key.svg');
 
   const handleClick = () => {
-    dispatch(prepareRequest(provider));
+    prepareRequest(provider);
   };
 
   return (

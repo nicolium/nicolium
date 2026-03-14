@@ -13,7 +13,7 @@ import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import ProgressBar from '@/components/ui/progress-bar';
 import Text from '@/components/ui/text';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { useClient } from '@/hooks/use-client';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { appendMedia, useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
@@ -70,9 +70,9 @@ const CirclePage: React.FC = () => {
     useState<Array<{ id: string; avatar?: string; avatar_description?: string; acct: string }>>();
 
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const client = useClient();
   const { openModal } = useModalsActions();
   const { resetCompose, updateCompose } = useComposeActions();
   const { data: account } = useOwnAccount();
@@ -96,21 +96,19 @@ const CirclePage: React.FC = () => {
     canvasRef.current!.toBlob((blob) => {
       const file = new File([blob!], 'interactions_circle.png', { type: 'image/png' });
 
-      dispatch(
-        uploadFile(file, intl, (data) => {
-          updateCompose('compose-modal', (draft) => {
-            appendMedia(draft, data);
-          });
-          openModal('COMPOSE');
-        }),
-      );
+      uploadFile(file, intl, (data) => {
+        updateCompose('compose-modal', (draft) => {
+          appendMedia(draft, data);
+        });
+        openModal('COMPOSE');
+      });
     }, 'image/png');
   };
 
   const handleRequest = () => {
     setProgress({ state: 'pending', progress: 0 });
 
-    dispatch(processCircle(setProgress))
+    processCircle(client, setProgress)()
       .then(async (users) => {
         setUsers(users);
 

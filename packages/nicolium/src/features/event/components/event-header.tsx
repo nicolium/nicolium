@@ -13,7 +13,6 @@ import Button from '@/components/ui/button';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
 import Emojify from '@/features/emoji/emojify';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -110,7 +109,6 @@ interface IEventHeader {
 
 const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { quoteCompose, mentionCompose, directCompose } = useComposeActions();
 
@@ -212,7 +210,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
         />
       ),
       confirm: <FormattedMessage id='confirmations.delete_event.confirm' defaultMessage='Delete' />,
-      onConfirm: () => dispatch(deleteStatus(status.id)),
+      onConfirm: () => deleteStatus(status.id),
     });
   };
 

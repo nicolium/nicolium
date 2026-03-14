@@ -1,4 +1,3 @@
-import { useMutation } from '@tanstack/react-query';
 import { GOTOSOCIAL, MASTODON } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
@@ -18,10 +17,7 @@ import {
   useUnpinAccountMutation,
   useUpdateAccountNoteMutation,
 } from '@/queries/accounts/use-relationship';
-import {
-  blockDomainMutationOptions,
-  unblockDomainMutationOptions,
-} from '@/queries/settings/domain-blocks';
+import { useBlockDomainMutation, useUnblockDomainMutation } from '@/queries/settings/domain-blocks';
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
@@ -122,8 +118,8 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
 
   const { software } = features.version;
 
-  const { mutate: blockDomain } = useMutation(blockDomainMutationOptions);
-  const { mutate: unblockDomain } = useMutation(unblockDomainMutationOptions);
+  const { mutate: blockDomain } = useBlockDomainMutation();
+  const { mutate: unblockDomain } = useUnblockDomainMutation();
 
   const onBlock = () => {
     if (account.relationship?.blocking) {

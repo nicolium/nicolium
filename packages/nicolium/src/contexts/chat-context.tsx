@@ -3,7 +3,6 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from '
 
 import { toggleChatPane } from '@/actions/chats';
 import { chatRoute, layouts } from '@/features/ui/router';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useChat } from '@/queries/chats';
 import { useSettings } from '@/stores/settings';
 
@@ -26,7 +25,6 @@ interface IChatProvider {
 }
 
 const ChatProvider: React.FC<IChatProvider> = ({ children }) => {
-  const dispatch = useAppDispatch();
   const { chats } = useSettings();
 
   const isUsingMainChatPage = !!useMatch({ from: layouts.chats.id, shouldThrow: false });
@@ -46,7 +44,7 @@ const ChatProvider: React.FC<IChatProvider> = ({ children }) => {
   };
 
   const handleChatPaneToggle = () => {
-    dispatch(toggleChatPane());
+    toggleChatPane();
   };
 
   const value = useMemo(

@@ -8,7 +8,6 @@ import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import toast from '@/toast';
 
 const messages = defineMessages({
@@ -25,7 +24,6 @@ const initialState = { email: '', password: '' };
 
 const EditEmailPage = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const [state, setState] = React.useState(initialState);
   const [isLoading, setLoading] = React.useState(false);
@@ -43,7 +41,7 @@ const EditEmailPage = () => {
 
   const handleSubmit = React.useCallback(() => {
     setLoading(true);
-    dispatch(changeEmail(email, password))
+    changeEmail(email, password)
       .then(() => {
         setState(initialState);
         toast.success(intl.formatMessage(messages.updateEmailSuccess));
@@ -55,7 +53,7 @@ const EditEmailPage = () => {
         setState((prevState) => ({ ...prevState, password: '' }));
         toast.error(intl.formatMessage(messages.updateEmailFail));
       });
-  }, [email, password, dispatch, intl]);
+  }, [email, password, intl]);
 
   return (
     <Column label={intl.formatMessage(messages.header)} backHref='/settings'>

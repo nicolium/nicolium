@@ -13,12 +13,12 @@ import Text from '@/components/ui/text';
 import { useChatContext } from '@/contexts/chat-context';
 import UploadButton from '@/features/compose/components/upload-button';
 import emojiSearch from '@/features/emoji/search';
-import { useInstance } from '@/hooks/use-instance';
 import {
   useRelationshipQuery,
   useUnblockAccountMutation,
 } from '@/queries/accounts/use-relationship';
 import { useCustomEmojis } from '@/queries/instance/use-custom-emojis';
+import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import { textAtCursorMatchesToken } from '@/utils/suggestions';
 

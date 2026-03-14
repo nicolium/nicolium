@@ -2,8 +2,8 @@ import { useQuery } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { useLoggedIn } from '@/hooks/use-logged-in';
+import { useInstance } from '@/stores/instance';
 
 import { queryKeys } from '../keys';
 

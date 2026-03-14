@@ -8,7 +8,6 @@ import { useStatContext } from '@/contexts/stat-context';
 import ComposeButton from '@/features/ui/components/compose-button';
 import ProfileDropdown from '@/features/ui/components/profile-dropdown';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
@@ -18,6 +17,7 @@ import { useNotificationsUnreadCount } from '@/queries/notifications/use-notific
 import { scheduledStatusesCountQueryOptions } from '@/queries/statuses/scheduled-statuses';
 import { useDraftStatusesCountQuery } from '@/queries/statuses/use-draft-statuses';
 import { useInteractionRequestsCount } from '@/queries/statuses/use-interaction-requests';
+import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import sourceCode from '@/utils/code';
 

@@ -21,7 +21,6 @@ import AccountContainer from '@/containers/account-container';
 import StatusContainer from '@/containers/status-container';
 import Emojify from '@/features/emoji/emojify';
 import { Hotkeys } from '@/features/ui/components/hotkeys';
-import { useInstance } from '@/hooks/use-instance';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { useNotification } from '@/queries/notifications/use-notifications';
 import {
@@ -31,6 +30,7 @@ import {
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { useComposeActions } from '@/stores/compose';
+import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMetaActions } from '@/stores/status-meta';

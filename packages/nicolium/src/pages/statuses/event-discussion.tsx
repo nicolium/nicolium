@@ -4,12 +4,12 @@ import { FormattedMessage } from 'react-intl';
 import MissingIndicator from '@/components/missing-indicator';
 import ScrollableList from '@/components/scrollable-list';
 import Tombstone from '@/components/statuses/tombstone';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import PlaceholderStatus from '@/features/placeholder/components/placeholder-status';
 import ThreadStatus from '@/features/status/components/thread-status';
 import PendingStatus from '@/features/ui/components/pending-status';
 import { eventDiscussionRoute } from '@/features/ui/router';
 import { ComposeForm } from '@/features/ui/util/async-components';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useStatus } from '@/queries/statuses/use-status';
 import { useComposeActions } from '@/stores/compose';
 import { useDescendantsIds } from '@/stores/contexts';
@@ -24,7 +24,7 @@ const EventDiscussionPage: React.FC = () => {
 
   const { data: status, isPending } = useStatus(statusId);
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
 
   const descendantsIds = useDescendantsIds(statusId);
 

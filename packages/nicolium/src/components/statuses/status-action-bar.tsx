@@ -15,15 +15,13 @@ import {
 } from '@/actions/statuses';
 import DropdownMenu from '@/components/dropdown-menu';
 import StatusActionButton from '@/components/statuses/status-action-button';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdown-container';
 import { languages } from '@/features/preferences';
 import { layouts } from '@/features/ui/router';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useCanInteract } from '@/hooks/use-can-interact';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useUnblockAccountMutation } from '@/queries/accounts/use-relationship';
 import { useChats } from '@/queries/chats';
@@ -46,6 +44,7 @@ import {
   useUnreblogStatus,
 } from '@/queries/statuses/use-status-interactions';
 import { useComposeActions } from '@/stores/compose';
+import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
@@ -59,7 +58,7 @@ import type { Menu } from '@/components/dropdown-menu';
 import type { Emoji as EmojiType } from '@/features/emoji';
 import type { UnauthorizedModalAction } from '@/modals/unauthorized-modal';
 import type { SelectedStatus } from '@/queries/statuses/use-status';
-import type { Me } from '@/reducers/me';
+import type { Me } from '@/stores/auth';
 
 const messages = defineMessages({
   adminAccount: { id: 'status.admin_account', defaultMessage: 'Moderate @{name}' },
@@ -722,7 +721,6 @@ const MenuButton: React.FC<IMenuButton> = ({
 }) => {
   const intl = useIntl();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const { mentionCompose, directCompose } = useComposeActions();
   const match = useMatch({ from: layouts.group.id, shouldThrow: false });
   const { boostModal } = useSettings();
@@ -791,7 +789,7 @@ const MenuButton: React.FC<IMenuButton> = ({
 
     const doDeleteStatus = (withRedraft = false) => {
       if (!deleteModal) {
-        dispatch(deleteStatus(status.id, withRedraft));
+        deleteStatus(status.id, withRedraft);
       } else {
         openModal('CONFIRM', {
           heading: intl.formatMessage(
@@ -803,7 +801,7 @@ const MenuButton: React.FC<IMenuButton> = ({
           confirm: intl.formatMessage(
             withRedraft ? messages.redraftConfirm : messages.deleteConfirm,
           ),
-          onConfirm: () => dispatch(deleteStatus(status.id, withRedraft)),
+          onConfirm: () => deleteStatus(status.id, withRedraft),
         });
       }
     };
@@ -822,7 +820,7 @@ const MenuButton: React.FC<IMenuButton> = ({
           to: '/@{$username}/events/$statusId/edit',
           params: { username: status.account.acct, statusId: status.id },
         });
-      else dispatch(editStatus(status.id));
+      else editStatus(status.id);
     };
 
     const handlePinClick: React.EventHandler<React.MouseEvent> = () => {
@@ -890,7 +888,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleConversationMuteClick: React.EventHandler<React.MouseEvent> = () => {
-      dispatch(toggleMuteStatus(status));
+      toggleMuteStatus(status);
     };
 
     const handleLoadConversationClick = () => {
@@ -939,7 +937,7 @@ const MenuButton: React.FC<IMenuButton> = ({
         }),
         confirm: intl.formatMessage(messages.deleteConfirm),
         onConfirm: () => {
-          dispatch(deleteStatusFromGroup(status.id, group!.id));
+          deleteStatusFromGroup(status.id, group!.id);
         },
       });
     };
@@ -962,9 +960,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleIgnoreLanguage = () => {
-      dispatch(
-        changeSetting(['autoTranslate'], [...knownLanguages, status.language], { showAlert: true }),
-      );
+      changeSetting(['autoTranslate'], [...knownLanguages, status.language], { showAlert: true });
     };
 
     const handleTranslate = () => {
@@ -976,7 +972,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleRedactStatus: React.EventHandler<React.MouseEvent> = () => {
-      dispatch(redactStatus(status.id));
+      redactStatus(status.id);
     };
 
     const menu: Menu = [];
@@ -1308,7 +1304,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     status.emoji_reactions.length > 0,
     status.pinned,
     status.reblogged,
-    status.account.relationship,
+    status.account?.relationship,
   ]);
 
   return useMemo(
@@ -1343,7 +1339,7 @@ const StatusActionBar: React.FC<IStatusActionBar> = ({
 }) => {
   const { openModal } = useModalsActions();
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
 
   const publicStatus = useMemo(
     () => (status ? ['public', 'unlisted', 'group'].includes(status.visibility) : false),

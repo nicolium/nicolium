@@ -2,7 +2,7 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import Button from '@/components/ui/button';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import {
   useJoinEventMutation,
   useLeaveEventMutation,
@@ -31,7 +31,7 @@ const EventActionButton: React.FC<IEventAction> = ({ status, theme = 'secondary'
   const intl = useIntl();
 
   const { openModal } = useModalsActions();
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
 
   const { mutate: joinEvent } = useJoinEventMutation(status.id);
   const { mutate: leaveEvent } = useLeaveEventMutation(status.id);

@@ -6,7 +6,7 @@ import Avatar from '@/components/ui/avatar';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 
 import Shoutbox from '../../shoutbox';
 

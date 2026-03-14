@@ -10,10 +10,10 @@ import Emoji from '@/components/ui/emoji';
 import Icon from '@/components/ui/icon';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
 import ActionButton from '@/features/ui/components/action-button';
 import { useAcct } from '@/hooks/use-acct';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useSettings } from '@/stores/settings';
 
 import Badge from '../badge';
@@ -163,7 +163,7 @@ const Account = ({
 
   const [style, setStyle] = useState<React.CSSProperties>({});
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const username = useAcct(account);
   const { disableUserProvidedMedia } = useSettings();
 

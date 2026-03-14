@@ -11,7 +11,7 @@ import * as v from 'valibot';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { filteredArray } from '@/schemas/utils';
 import KVStore from '@/storage/kv-store';
-import { useComposeStore } from '@/stores/compose';
+import { useComposeActions } from '@/stores/compose';
 
 import { queryKeys } from '../keys';
 
@@ -85,9 +85,10 @@ const useDraftStatusesCountQuery = () =>
 const usePersistDraftStatus = () => {
   const { data: account } = useOwnAccount();
   const queryClient = useQueryClient();
+  const { getCompose } = useComposeActions();
 
   return (composeId: string) => {
-    const compose = useComposeStore.getState().actions.getCompose(composeId);
+    const compose = getCompose(composeId);
 
     const draft = {
       ...compose,

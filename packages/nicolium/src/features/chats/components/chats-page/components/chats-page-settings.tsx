@@ -10,7 +10,6 @@ import Form from '@/components/ui/form';
 import IconButton from '@/components/ui/icon-button';
 import Toggle from '@/components/ui/toggle';
 import SettingToggle from '@/features/settings/components/setting-toggle';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useUpdateCredentials } from '@/queries/accounts/use-account-credentials';
 import { useSettings } from '@/stores/settings';
@@ -45,7 +44,6 @@ const ChatsPageSettings = () => {
   const { data: account } = useOwnAccount();
   const intl = useIntl();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const settings = useSettings();
   const updateCredentials = useUpdateCredentials();
 
@@ -54,7 +52,7 @@ const ChatsPageSettings = () => {
   });
 
   const onToggleChange = (key: string[], checked: boolean) => {
-    dispatch(changeSetting(key, checked, { showAlert: true }));
+    changeSetting(key, checked, { showAlert: true });
   };
 
   const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (event) => {

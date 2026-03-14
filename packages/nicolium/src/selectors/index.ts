@@ -1,8 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
 
-import { useInstance } from '@/hooks/use-instance';
 import { useAdminConfig } from '@/queries/admin/use-config';
 import { queryKeys } from '@/queries/keys';
+import { useInstance } from '@/stores/instance';
 import { getDomain } from '@/utils/accounts';
 import ConfigDB from '@/utils/config-db';
 

@@ -1,6 +1,6 @@
 import { getFeatures, HOLLO, ICESHRIMP_NET, PLEROMA, TOKI, type Instance } from 'pl-api';
 
-import type { RootState } from '@/store';
+import { useInstanceStore } from '@/stores/instance';
 
 /**
  * Get the OAuth scopes to use for login & signup.
@@ -44,7 +44,7 @@ const getInstanceScopes = (
 };
 
 /** Convenience function to get scopes from instance in store. */
-const getScopes = (state: RootState, admin?: boolean, external?: boolean) =>
-  getInstanceScopes(state.instance, admin, external);
+const getScopes = (admin?: boolean, external?: boolean) =>
+  getInstanceScopes(useInstanceStore.getState().instance, admin, external);
 
 export { getInstanceScopes, getScopes };

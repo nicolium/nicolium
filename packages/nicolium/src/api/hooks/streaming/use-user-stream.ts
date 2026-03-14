@@ -2,7 +2,6 @@ import { useCallback } from 'react';
 
 import { importEntities } from '@/actions/importer';
 import { useStatContext } from '@/contexts/stat-context';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useLoggedIn } from '@/hooks/use-logged-in';
 import { updateReactions } from '@/queries/announcements/use-announcements';
 import { queryClient } from '@/queries/client';
@@ -10,13 +9,12 @@ import { updateConversations } from '@/queries/conversations/use-conversations';
 import { queryKeys } from '@/queries/keys';
 import { useProcessStreamNotification } from '@/queries/notifications/use-notifications';
 import { useSettings } from '@/stores/settings';
-import { useTimelinesStore } from '@/stores/timelines';
+import { useTimelinesActions } from '@/stores/timelines';
 import { getUnreadChatsCount, updateChatListItem } from '@/utils/chats';
 import { play, soundCache } from '@/utils/sounds';
 
 import { useTimelineStream } from './use-timeline-stream';
 
-import type { AppDispatch, RootState } from '@/store';
 import type {
   Announcement,
   AnnouncementReaction,
@@ -68,25 +66,20 @@ const followStateToRelationship = (followState: FollowRelationshipUpdate['state'
   }
 };
 
-const updateFollowRelationships =
-  (update: FollowRelationshipUpdate) => (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-
-    const me = state.me;
-
-    if (update.follower.id === me) {
-      queryClient.setQueryData(
-        queryKeys.accountRelationships.show(update.following.id),
-        (relationship) =>
-          relationship
-            ? {
-                ...relationship,
-                ...followStateToRelationship(update.state),
-              }
-            : undefined,
-      );
-    }
-  };
+const updateFollowRelationships = (update: FollowRelationshipUpdate, me: string) => {
+  if (update.follower.id === me) {
+    queryClient.setQueryData(
+      queryKeys.accountRelationships.show(update.following.id),
+      (relationship) =>
+        relationship
+          ? {
+              ...relationship,
+              ...followStateToRelationship(update.state),
+            }
+          : undefined,
+    );
+  }
+};
 
 const getTimelineFromStream = (stream: Array<string>) => {
   switch (stream[0]) {
@@ -102,25 +95,25 @@ const getTimelineFromStream = (stream: Array<string>) => {
 };
 
 const useUserStream = () => {
-  const { isLoggedIn } = useLoggedIn();
-  const dispatch = useAppDispatch();
+  const { isLoggedIn, me } = useLoggedIn();
   const statContext = useStatContext();
   const settings = useSettings();
   const processStreamNotification = useProcessStreamNotification();
+  const { deleteStatus, receiveStreamingStatus } = useTimelinesActions();
 
   const listener = useCallback((event: StreamingEvent) => {
     switch (event.event) {
       case 'update': {
         const timelineId = getTimelineFromStream(event.stream);
         importEntities({ statuses: [event.payload] });
-        useTimelinesStore.getState().actions.receiveStreamingStatus(timelineId, event.payload);
+        receiveStreamingStatus(timelineId, event.payload);
         break;
       }
       case 'status.update':
         importEntities({ statuses: [event.payload] });
         break;
       case 'delete':
-        useTimelinesStore.getState().actions.deleteStatus(event.payload);
+        deleteStatus(event.payload);
         break;
       case 'notification':
         processStreamNotification(event.payload);
@@ -132,9 +125,8 @@ const useUserStream = () => {
         queryClient.invalidateQueries({ queryKey: queryKeys.filters.all });
         break;
       case 'chat_update':
-        dispatch((_dispatch, getState) => {
+        {
           const chat = event.payload;
-          const me = getState().me;
           const messageOwned = chat.last_message?.account_id === me;
 
           // Don't update own messages from streaming
@@ -148,10 +140,10 @@ const useUserStream = () => {
             // Increment unread counter
             statContext?.setUnreadChatsCount(getUnreadChatsCount());
           }
-        });
+        }
         break;
       case 'follow_relationships_update':
-        dispatch(updateFollowRelationships(event.payload));
+        updateFollowRelationships(event.payload, me as string);
         break;
       case 'announcement':
         updateAnnouncement(event.payload);

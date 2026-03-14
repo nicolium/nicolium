@@ -1,10 +1,8 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
-
 import { queryKeys } from '../keys';
-import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';
+import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 import { minifyStatusList } from '../utils/minify-list';
 
-const recentEventsQueryOptions = makePaginatedResponseQueryOptions(
+const useRecentEventsTimeline = makePaginatedResponseQuery(
   queryKeys.statusLists.recentEvents,
   (client) =>
     client.timelines
@@ -16,23 +14,17 @@ const recentEventsQueryOptions = makePaginatedResponseQueryOptions(
         return res;
       })
       .then(minifyStatusList),
-)();
+  undefined,
+  'isLoggedIn',
+  { staleTime: 5 * 60 * 1000 }, // 5 minutes
+);
 
-const useRecentEventsTimeline = () =>
-  useInfiniteQuery({
-    ...recentEventsQueryOptions,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-  });
-
-const joinedEventsQueryOptions = makePaginatedResponseQueryOptions(
+const useJoinedEventsTimeline = makePaginatedResponseQuery(
   queryKeys.statusLists.joinedEvents,
   (client) => client.events.getJoinedEvents().then(minifyStatusList),
-)();
-
-const useJoinedEventsTimeline = () =>
-  useInfiniteQuery({
-    ...joinedEventsQueryOptions,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-  });
+  undefined,
+  'isLoggedIn',
+  { staleTime: 5 * 60 * 1000 }, // 5 minutes
+);
 
 export { useRecentEventsTimeline, useJoinedEventsTimeline };

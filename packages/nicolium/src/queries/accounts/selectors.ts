@@ -1,14 +1,14 @@
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
-
-import type { RootState } from '@/store';
+import { useAuthStore } from '@/stores/auth';
 
 const selectAccount = (accountId: string) =>
   queryClient.getQueryData(queryKeys.accounts.show(accountId));
 
-const selectOwnAccount = (state: RootState) => {
-  if (state.me) {
-    return selectAccount(state.me);
+const selectOwnAccount = () => {
+  const accountId = useAuthStore.getState().currentAccountId;
+  if (typeof accountId === 'string') {
+    return selectAccount(accountId);
   }
 };
 

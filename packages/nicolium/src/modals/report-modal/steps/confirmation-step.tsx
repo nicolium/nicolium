@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 
 import Text from '@/components/ui/text';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useFrontendConfig } from '@/hooks/use-frontend-config';
 
 const termsOfServiceText = <FormattedMessage id='shared.tos' defaultMessage='Terms of Service' />;
 
@@ -17,7 +17,7 @@ const renderTermsOfServiceLink = (href: string) => (
 );
 
 const ConfirmationStep: React.FC = () => {
-  const links = useAppSelector((state) => state.frontendConfig.links);
+  const { links } = useFrontendConfig();
 
   return (
     <div className='flex flex-col gap-1'>

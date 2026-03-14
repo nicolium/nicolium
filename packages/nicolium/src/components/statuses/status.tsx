@@ -415,39 +415,21 @@ const Status: React.FC<IStatus> = React.memo((props) => {
         />
       );
     } else if (isReblog) {
-      const accounts = status.accounts ?? [status.account];
-
-      const renderedAccounts = accounts.slice(0, 2).map(
-        (account) =>
-          !!account && (
-            <Link
-              key={account.acct}
-              to='/@{$username}'
-              params={{ username: account.acct }}
-              className='hover:underline'
-            >
-              <bdi className='truncate'>
-                <strong className='text-gray-800 dark:text-gray-200'>
-                  <Emojify text={account.display_name} emojis={account.emojis} />
-                </strong>
-              </bdi>
-            </Link>
-          ),
-      );
-
-      if (accounts.length > 2) {
-        renderedAccounts.push(
-          <FormattedMessage
-            id='notification.more'
-            defaultMessage='{count, plural, one {# other} other {# others}}'
-            values={{ count: accounts.length - renderedAccounts.length }}
-          />,
-        );
-      }
-
       const values = {
-        name: <FormattedList type='conjunction' value={renderedAccounts} />,
-        count: accounts.length,
+        name: (
+          <Link
+            key={status.account.acct}
+            to='/@{$username}'
+            params={{ username: status.account.acct }}
+            className='hover:underline'
+          >
+            <bdi className='truncate'>
+              <strong className='text-gray-800 dark:text-gray-200'>
+                <Emojify text={status.account.display_name} emojis={status.account.emojis} />
+              </strong>
+            </bdi>
+          </Link>
+        ),
       };
 
       return (
@@ -535,7 +517,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
         )
       );
     }
-  }, [status.accounts, group?.id]);
+  }, [status.account, group?.id]);
 
   if (!status) return null;
 

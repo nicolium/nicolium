@@ -2,8 +2,8 @@ import { PLEROMA } from 'pl-api';
 import React, { type ChangeEventHandler, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } from 'react-intl';
 
-import { setBadges as saveBadges, setRole } from '@/actions/admin';
-import { deactivateUserModal, deleteUserModal } from '@/actions/moderation';
+import { setRole } from '@/actions/admin';
+import { useDeactivateUserModal, useDeleteUserModal } from '@/actions/moderation';
 import Account from '@/components/accounts/account';
 import List, { ListItem } from '@/components/list';
 import MissingIndicator from '@/components/missing-indicator';
@@ -16,10 +16,10 @@ import Toggle from '@/components/ui/toggle';
 import { SelectDropdown } from '@/features/forms';
 import ColumnLoading from '@/features/ui/components/column-loading';
 import { adminAccountRoute } from '@/features/ui/router';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
+import { useAdminUpdateTagsMutation } from '@/queries/admin/use-accounts';
 import {
   useAdminSuggestAccountMutation,
   useAdminUnsuggestAccountMutation,
@@ -93,7 +93,6 @@ interface IStaffRolePicker {
 /** Picker for setting the staff role of an account. */
 const StaffRolePicker: React.FC<IStaffRolePicker> = ({ account }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const roles: Record<AccountRole, string> = useMemo(
     () => ({
@@ -107,7 +106,7 @@ const StaffRolePicker: React.FC<IStaffRolePicker> = ({ account }) => {
   const handleRoleChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
     const role = e.target.value as AccountRole;
 
-    dispatch(setRole(account.id, role))
+    setRole(account.id, role)
       .then(() => {
         let message: MessageDescriptor | undefined;
 
@@ -163,7 +162,6 @@ const AdminAccountPage: React.FC = () => {
   const { accountId } = adminAccountRoute.useParams();
 
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const { mutate: suggest } = useAdminSuggestAccountMutation(accountId);
   const { mutate: unsuggest } = useAdminUnsuggestAccountMutation(accountId);
@@ -172,6 +170,9 @@ const AdminAccountPage: React.FC = () => {
   const { data: ownAccount } = useOwnAccount();
   const features = useFeatures();
   const { data: account, isLoading } = useAccount(accountId);
+  const deactivateUserModal = useDeactivateUserModal(accountId);
+  const deleteUserModal = useDeleteUserModal(accountId);
+  const { mutate: updateTags } = useAdminUpdateTagsMutation(accountId);
 
   const accountBadges = account ? getBadges(account) : [];
   const [badges, setBadges] = useState<string[]>(accountBadges);
@@ -219,19 +220,20 @@ const AdminAccountPage: React.FC = () => {
   };
 
   const handleDeactivate = () => {
-    dispatch(deactivateUserModal(intl, account.id));
+    deactivateUserModal();
   };
 
   const handleDelete = () => {
-    dispatch(deleteUserModal(intl, account.id));
+    deleteUserModal();
   };
 
   const handleSaveBadges = () => {
-    dispatch(saveBadges(account.id, accountBadges, badges))
-      .then(() => {
-        toast.success(intl.formatMessage(messages.badgesSaved));
-      })
-      .catch(() => {});
+    updateTags(
+      { oldTags: accountBadges, newTags: badges },
+      {
+        onSuccess: () => toast.success(intl.formatMessage(messages.badgesSaved)),
+      },
+    );
   };
 
   return (

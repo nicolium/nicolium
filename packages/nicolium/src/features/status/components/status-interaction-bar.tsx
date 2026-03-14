@@ -48,7 +48,6 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
   const handleOpenReblogsModal: React.EventHandler<React.MouseEvent> = (e) => {
     e.preventDefault();
 
-    // if (!me) onOpenUnauthorizedModal();
     onOpenReblogsModal(status.id);
   };
 
@@ -93,14 +92,12 @@ const StatusInteractionBar: React.FC<IStatusInteractionBar> = ({
   ) => {
     e.preventDefault();
 
-    // if (!me) onOpenUnauthorizedModal();
     onOpenFavouritesModal(status.id);
   };
 
   const handleOpenDislikesModal: React.EventHandler<React.MouseEvent<HTMLButtonElement>> = (e) => {
     e.preventDefault();
 
-    // if (!me) onOpenUnauthorizedModal();
     onOpenDislikesModal(status.id);
   };
 

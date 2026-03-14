@@ -23,8 +23,6 @@ import FooterLinkInput from '@/features/frontend-config/components/footer-link-i
 import PromoPanelInput from '@/features/frontend-config/components/promo-panel-input';
 import SitePreview from '@/features/frontend-config/components/site-preview';
 import ThemeSelector from '@/features/ui/components/theme-selector';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { getUpdateFrontendConfigParams, useUpdateAdminConfig } from '@/queries/admin/use-config';
 import {
@@ -34,6 +32,7 @@ import {
   promoPanelItemSchema,
   type FrontendConfig,
 } from '@/schemas/frontend-config';
+import { useFrontendConfigStore } from '@/stores/frontend-config';
 import toast from '@/toast';
 
 const messages = defineMessages({
@@ -64,12 +63,10 @@ type ThemeChangeHandler = (theme: 'system' | 'light' | 'dark' | 'black') => void
 
 const FrontendConfigEditor: React.FC = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const features = useFeatures();
 
-  const initialData = useAppSelector((state) => state.frontendConfig);
-  console.log(initialData);
+  const initialData = useFrontendConfigStore((state) => state.partialConfig);
   const { mutate: updateConfig, isPending } = useUpdateAdminConfig();
 
   const [data, setData] = useState(v.parse(frontendConfigSchema, initialData));
@@ -122,7 +119,7 @@ const FrontendConfigEditor: React.FC = () => {
       const file = e.target.files?.item(0);
 
       if (file) {
-        dispatch(uploadMedia({ file }))
+        uploadMedia({ file })
           .then((data) => {
             handleChange(path, () => data.url)(e);
           })

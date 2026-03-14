@@ -9,7 +9,6 @@ import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
 import toast from '@/toast';
 
@@ -21,7 +20,6 @@ const messages = defineMessages({
 });
 
 const PasswordResetPage = () => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
   const features = useFeatures();
 
@@ -31,7 +29,7 @@ const PasswordResetPage = () => {
   const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (e) => {
     const nicknameOrEmail = e.target.nickname_or_email.value;
     setIsLoading(true);
-    dispatch(resetPassword(nicknameOrEmail))
+    resetPassword(nicknameOrEmail)
       .then(() => {
         setIsLoading(false);
         setSuccess(true);

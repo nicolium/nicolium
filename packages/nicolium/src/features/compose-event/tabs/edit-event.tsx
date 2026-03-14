@@ -20,10 +20,9 @@ import Toggle from '@/components/ui/toggle';
 import ContentTypeButton from '@/features/compose/components/content-type-button';
 import { isCurrentOrFutureDate } from '@/features/compose/components/schedule-form';
 import { ComposeEditor, DatePicker } from '@/features/ui/util/async-components';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useInstance } from '@/hooks/use-instance';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useChangeUploadCompose, useComposeActions } from '@/stores/compose';
+import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
@@ -66,7 +65,6 @@ interface IEditEvent {
 
 const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { openModal } = useModalsActions();
 
@@ -128,18 +126,16 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const handleFiles = (files: FileList) => {
     setIsUploading(true);
 
-    dispatch(
-      uploadFile(
-        files[0],
-        intl,
-        (data) => {
-          setBanner(data);
-          setIsUploading(false);
-        },
-        () => {
-          setIsUploading(false);
-        },
-      ),
+    uploadFile(
+      files[0],
+      intl,
+      (data) => {
+        setBanner(data);
+        setIsUploading(false);
+      },
+      () => {
+        setIsUploading(false);
+      },
     );
   };
 
@@ -170,18 +166,16 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const handleSubmit = () => {
     setIsDisabled(true);
 
-    dispatch(
-      submitEvent({
-        statusId,
-        name,
-        status: text,
-        banner,
-        startTime,
-        endTime,
-        joinMode: approvalRequired ? 'restricted' : 'free',
-        location,
-      }),
-    )
+    submitEvent({
+      statusId,
+      name,
+      status: text,
+      banner,
+      startTime,
+      endTime,
+      joinMode: approvalRequired ? 'restricted' : 'free',
+      location,
+    })
       .then((status) => {
         if (status)
           navigate({
@@ -195,7 +189,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
 
   useEffect(() => {
     if (statusId) {
-      Promise.all([dispatch(initEventEdit(statusId)), dispatch(fetchStatus(statusId))])
+      Promise.all([initEventEdit(statusId), fetchStatus(statusId)])
         .then(([source, status]) => {
           if (!source || !status) throw new Error();
 

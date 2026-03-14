@@ -6,24 +6,22 @@ import { logIn, switchAccount, verifyCredentials } from '@/actions/auth';
 import { fetchInstance } from '@/actions/instance';
 import Button from '@/components/ui/button';
 import Text from '@/components/ui/text';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import LoginForm from '@/features/auth-login/components/login-form';
 import OtpAuthForm from '@/features/auth-login/components/otp-auth-form';
 import ExternalLoginForm from '@/features/external-login/components/external-login-form';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { useInstance } from '@/hooks/use-instance';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
+import { useInstance } from '@/stores/instance';
 import { getRedirectUrl } from '@/utils/redirect';
-import { isStandalone } from '@/utils/state';
+import { useIsStandalone } from '@/utils/state';
 
 import type { NicoliumResponse } from '@/api';
 
 const SignUpPanel = () => {
-  const dispatch = useAppDispatch();
   const instance = useInstance();
   const { isOpen } = useRegistrationStatus();
-  const me = useAppSelector((state) => state.me);
-  const standalone = useAppSelector(isStandalone);
+  const me = useCurrentAccount();
+  const standalone = useIsStandalone();
 
   const token = new URLSearchParams(window.location.search).get('token');
 
@@ -39,15 +37,15 @@ const SignUpPanel = () => {
 
   const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (event) => {
     const { username, password } = getFormData(event.target);
-    dispatch(logIn(username, password))
-      .then(({ access_token }) => dispatch(verifyCredentials(access_token)))
+    logIn(username, password)
+      .then(({ access_token }) => verifyCredentials(access_token))
       // Refetch the instance for authenticated fetch
       .then(async (account) => {
-        await dispatch(fetchInstance());
+        await fetchInstance();
         return account;
       })
       .then((account: { id: string }) => {
-        dispatch(switchAccount(account.id));
+        switchAccount(account.id);
         if (typeof me !== 'string') {
           setShouldRedirect(true);
         }

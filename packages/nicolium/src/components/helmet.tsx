@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
 
 import { useStatContext } from '@/contexts/stat-context';
-import { useInstance } from '@/hooks/use-instance';
 import { usePendingUsersCount } from '@/queries/admin/use-accounts';
 import { usePendingReportsCount } from '@/queries/admin/use-reports';
 import { useNotificationsUnreadCount } from '@/queries/notifications/use-notifications';
+import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 import FaviconService from '@/utils/favicon-service';
 

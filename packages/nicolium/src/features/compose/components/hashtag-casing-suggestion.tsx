@@ -3,7 +3,6 @@ import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { changeSetting } from '@/actions/settings';
 import Button from '@/components/ui/button';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useCompose, useComposeActions } from '@/stores/compose';
 import toast from '@/toast';
 
@@ -21,7 +20,6 @@ interface IHashtagCasingSuggestion {
 }
 
 const HashtagCasingSuggestion = ({ composeId }: IHashtagCasingSuggestion) => {
-  const dispatch = useAppDispatch();
   const { updateCompose } = useComposeActions();
 
   const compose = useCompose(composeId);
@@ -35,9 +33,7 @@ const HashtagCasingSuggestion = ({ composeId }: IHashtagCasingSuggestion) => {
   };
 
   const onDontAskAgain = () => {
-    dispatch(
-      changeSetting(['ignoreHashtagCasingSuggestions'], true, { showAlert: false, save: true }),
-    );
+    changeSetting(['ignoreHashtagCasingSuggestions'], true, { showAlert: false, save: true });
     toast.info(messages.hashtagCasingSuggestionsDisabled);
     onIgnore();
   };

@@ -4,7 +4,7 @@ import { defineMessages, useIntl } from 'react-intl';
 import Combobox, { ComboboxInput } from '@/components/ui/combobox';
 import IconButton from '@/components/ui/icon-button';
 import Text from '@/components/ui/text';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 
 import ChatTextarea from './chat-textarea';
 

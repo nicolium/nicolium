@@ -13,9 +13,8 @@ import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Toggle from '@/components/ui/toggle';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { SelectDropdown } from '@/features/forms';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import KVStore from '@/storage/kv-store';
 import { useSettings } from '@/stores/settings';
 import { hasCanvasExtractPermission } from '@/utils/favicon-service';
@@ -43,8 +42,7 @@ const messages = defineMessages({
 });
 
 const Privacy = () => {
-  const dispatch = useAppDispatch();
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const intl = useIntl();
 
   const settings = useSettings();
@@ -86,14 +84,12 @@ const Privacy = () => {
         break;
     }
 
-    dispatch(changeSetting(['urlPrivacy'], value));
-    dispatch(changeSetting(['stripMetadata'], stripMetadata));
+    changeSetting(['urlPrivacy'], value);
+    changeSetting(['stripMetadata'], stripMetadata);
 
-    dispatch(
-      saveSettings({
-        showAlert: true,
-      }),
-    );
+    saveSettings({
+      showAlert: true,
+    });
   };
 
   const handleChangeRedirectLinksMode = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -118,7 +114,7 @@ const Privacy = () => {
     setRedirectLinksMode(event.target.value as 'off');
   };
 
-  useEffect(() => {}, [dispatch]);
+  useEffect(() => {}, []);
 
   return (
     <Column label={intl.formatMessage(messages.heading)} transparent withHeader={false}>

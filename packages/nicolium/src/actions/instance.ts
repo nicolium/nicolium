@@ -1,17 +1,11 @@
 import { getClient, staticFetch } from '@/api';
 import { useComposeStore } from '@/stores/compose';
+import { useInstanceStore } from '@/stores/instance';
 import { getAuthUserUrl, getMeUrl } from '@/utils/auth';
 
-import type { AppDispatch, RootState } from '@/store';
-import type { Instance } from 'pl-api';
-
-const INSTANCE_FETCH_SUCCESS = 'INSTANCE_FETCH_SUCCESS' as const;
-const INSTANCE_FETCH_FAIL = 'INSTANCE_FETCH_FAIL' as const;
-const STANDALONE_CHECK_SUCCESS = 'STANDALONE_CHECK_SUCCESS' as const;
-
 /** Figure out the appropriate instance to fetch depending on the state */
-const getHost = (state: RootState) => {
-  const accountUrl = getMeUrl(state) ?? (getAuthUserUrl(state) as string);
+const getHost = () => {
+  const accountUrl = getMeUrl() ?? (getAuthUserUrl() as string);
 
   try {
     return new URL(accountUrl).host;
@@ -20,58 +14,25 @@ const getHost = (state: RootState) => {
   }
 };
 
-interface InstanceFetchSuccessAction {
-  type: typeof INSTANCE_FETCH_SUCCESS;
-  instance: Instance;
-}
-
-interface InstanceFetchFailAction {
-  type: typeof INSTANCE_FETCH_FAIL;
-  error: unknown;
-}
-
-const fetchInstance = () => async (dispatch: AppDispatch, getState: () => RootState) => {
+const fetchInstance = async () => {
   try {
-    const instance = await getClient(getState).instance.getInstance();
+    const instance = await getClient().instance.getInstance();
 
-    dispatch<InstanceFetchSuccessAction>({ type: INSTANCE_FETCH_SUCCESS, instance });
+    useInstanceStore.getState().actions.loadInstance(instance);
     useComposeStore.getState().actions.importDefaultContentType(instance);
   } catch (error) {
-    dispatch({ type: INSTANCE_FETCH_FAIL, error });
+    useInstanceStore.getState().actions.instanceFetchFailed(error);
   }
 };
 
-interface StandaloneCheckSuccessAction {
-  type: typeof STANDALONE_CHECK_SUCCESS;
-  ok: boolean;
-}
-
-const checkIfStandalone = () => (dispatch: AppDispatch) =>
+const checkIfStandalone = () =>
   staticFetch('/api/v1/instance', { method: 'GET' })
-    .then(({ ok, headers }) =>
-      dispatch<StandaloneCheckSuccessAction>({
-        type: STANDALONE_CHECK_SUCCESS,
-        ok: ok && !!headers.get('content-type')?.includes('application/json'),
-      }),
-    )
-    .catch((err) =>
-      dispatch<StandaloneCheckSuccessAction>({
-        type: STANDALONE_CHECK_SUCCESS,
-        ok: err.response?.ok,
-      }),
-    );
+    .then(({ ok, headers }) => {
+      const isOk = ok && !!headers.get('content-type')?.includes('application/json');
+      useInstanceStore.getState().actions.setInstanceFetchFailed(!isOk);
+    })
+    .catch((err) => {
+      useInstanceStore.getState().actions.setInstanceFetchFailed(!err.response?.ok);
+    });
 
-type InstanceAction =
-  | InstanceFetchSuccessAction
-  | InstanceFetchFailAction
-  | StandaloneCheckSuccessAction;
-
-export {
-  INSTANCE_FETCH_SUCCESS,
-  INSTANCE_FETCH_FAIL,
-  STANDALONE_CHECK_SUCCESS,
-  getHost,
-  fetchInstance,
-  checkIfStandalone,
-  type InstanceAction,
-};
+export { getHost, fetchInstance, checkIfStandalone };

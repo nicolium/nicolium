@@ -9,15 +9,16 @@ import {
   redirect,
   RouterProvider,
 } from '@tanstack/react-router';
+import { instanceSchema } from 'pl-api';
 import React, { useMemo } from 'react';
 import * as v from 'valibot';
+import * as val from 'valibot';
 
 import { FE_SUBDIRECTORY } from '@/build-config';
 import SiteError from '@/components/site-error';
 import Layout from '@/components/ui/layout';
 import { useFeatures } from '@/hooks/use-features';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
-import { useInstance } from '@/hooks/use-instance';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import AdminLayout from '@/layouts/admin-layout';
 import ChatsLayout from '@/layouts/chats-layout';
@@ -34,7 +35,7 @@ import ProfileLayout from '@/layouts/profile-layout';
 import RemoteInstanceLayout from '@/layouts/remote-instance-layout';
 import SearchLayout from '@/layouts/search-layout';
 import StatusLayout from '@/layouts/status-layout';
-import { instanceInitialState } from '@/reducers/instance';
+import { useInstance } from '@/stores/instance';
 import { LOCAL_STORAGE_REDIRECT_KEY } from '@/utils/redirect';
 
 import ChatsPageChat from '../../chats/components/chats-page/components/chats-page-chat';
@@ -1455,7 +1456,7 @@ const router = createRouter({
   routeTree,
   basepath: FE_SUBDIRECTORY,
   context: {
-    instance: instanceInitialState,
+    instance: val.parse(instanceSchema, {}),
     features: {} as Features,
     isLoggedIn: false,
     isAdmin: false,

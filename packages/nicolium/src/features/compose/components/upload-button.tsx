@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import IconButton from '@/components/ui/icon-button';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 
 const messages = defineMessages({
   upload: { id: 'upload_button.label', defaultMessage: 'Add media attachment' },

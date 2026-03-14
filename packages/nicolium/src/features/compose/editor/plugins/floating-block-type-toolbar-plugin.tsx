@@ -23,9 +23,8 @@ import { createPortal } from 'react-dom';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { uploadFile } from '@/actions/media';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 
 import { $createImageNode } from '../nodes/image-node';
 import { setFloatingElemPosition } from '../utils/set-floating-elem-position';
@@ -47,7 +46,6 @@ interface IUploadButton {
 const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
   const intl = useIntl();
   const { configuration } = useInstance();
-  const dispatch = useAppDispatch();
   const [disabled, setDisabled] = useState(false);
 
   const fileElement = useRef<HTMLInputElement>(null);
@@ -57,18 +55,16 @@ const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
     if (e.target.files?.length) {
       setDisabled(true);
 
-      dispatch(
-        uploadFile(
-          e.target.files.item(0) as File,
-          intl,
-          ({ url }) => {
-            onSelectFile(url);
-            setDisabled(false);
-          },
-          () => {
-            setDisabled(false);
-          },
-        ),
+      uploadFile(
+        e.target.files.item(0) as File,
+        intl,
+        ({ url }) => {
+          onSelectFile(url);
+          setDisabled(false);
+        },
+        () => {
+          setDisabled(false);
+        },
       );
     }
   };

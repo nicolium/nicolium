@@ -10,11 +10,9 @@ import Account from '@/components/accounts/account';
 import Divider from '@/components/ui/divider';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import ProfileStats from '@/features/ui/components/profile-stats';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useFollowRequestsCount } from '@/queries/accounts/use-follow-requests';
@@ -22,6 +20,7 @@ import { useLoggedInAccounts } from '@/queries/accounts/use-logged-in-accounts';
 import { scheduledStatusesCountQueryOptions } from '@/queries/statuses/scheduled-statuses';
 import { useDraftStatusesCountQuery } from '@/queries/statuses/use-draft-statuses';
 import { useInteractionRequestsCount } from '@/queries/statuses/use-interaction-requests';
+import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
 import sourceCode from '@/utils/code';
@@ -33,8 +32,6 @@ interface IAccountSwitcher {
 }
 
 const AccountSwitcher: React.FC<IAccountSwitcher> = ({ handleClose }) => {
-  const dispatch = useAppDispatch();
-
   const { accounts: otherAccounts } = useLoggedInAccounts();
 
   const handleSwitchAccount =
@@ -43,7 +40,7 @@ const AccountSwitcher: React.FC<IAccountSwitcher> = ({ handleClose }) => {
       e.preventDefault();
       e.stopPropagation();
 
-      dispatch(switchAccount(account.id));
+      switchAccount(account.id);
     };
 
   const renderAccount = (account: AccountEntity) => (
@@ -125,12 +122,10 @@ const DropdownNavigationLink: React.FC<IDropdownNavigationLink> = React.memo(
 DropdownNavigationLink.displayName = 'DropdownNavigationLink';
 
 const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => {
-  const dispatch = useAppDispatch();
-
   const isSidebarOpen = useIsSidebarOpen();
   const { closeSidebar } = useUiStoreActions();
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const features = useFeatures();
 
   const authenticatedScheduledStatusesCountQueryOptions = useMemo(
@@ -179,7 +174,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
     e.preventDefault();
     e.stopPropagation();
 
-    dispatch(logOut());
+    logOut();
   };
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
@@ -199,7 +194,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
   };
 
   useEffect(() => {
-    dispatch(fetchOwnAccounts());
+    fetchOwnAccounts();
   }, []);
 
   useEffect(() => {

@@ -1,111 +1,68 @@
 import { getHost } from '@/actions/instance';
 import { getClient, staticFetch } from '@/api';
 import KVStore from '@/storage/kv-store';
+import { useAuthStore } from '@/stores/auth';
+import { useFrontendConfigStore } from '@/stores/frontend-config';
 import { useSettingsStore } from '@/stores/settings';
 
-import type { AppDispatch, RootState } from '@/store';
 import type { APIEntity } from '@/types/entities';
 
-const FRONTEND_CONFIG_REQUEST_SUCCESS = 'FRONTEND_CONFIG_REQUEST_SUCCESS' as const;
-const FRONTEND_CONFIG_REQUEST_FAIL = 'FRONTEND_CONFIG_REQUEST_FAIL' as const;
-
-const FRONTEND_CONFIG_REMEMBER_SUCCESS = 'FRONTEND_CONFIG_REMEMBER_SUCCESS' as const;
-
-const rememberFrontendConfig = (host: string | null) => (dispatch: AppDispatch) =>
+const rememberFrontendConfig = (host: string | null) =>
   KVStore.getItemOrError(`frontendConfig:${host}`)
     .then((frontendConfig) => {
-      dispatch<FrontendConfigAction>({
-        type: FRONTEND_CONFIG_REMEMBER_SUCCESS,
-        host,
-        frontendConfig,
-      });
+      useFrontendConfigStore.getState().actions.rememberConfig(frontendConfig);
       return true;
     })
     .catch(() => false);
 
-const fetchFrontendConfigurations = () => (dispatch: AppDispatch, getState: () => RootState) =>
-  getClient(getState).instance.getFrontendConfigurations();
-
 /** Conditionally fetches Nicolium config depending on backend features */
-const fetchFrontendConfig =
-  (host: string | null) => async (dispatch: AppDispatch, getState: () => RootState) => {
-    const features = getState().auth.client.features;
+const fetchFrontendConfig = async (host: string | null) => {
+  const features = useAuthStore.getState().client.features;
 
-    if (features.frontendConfigurations) {
-      const data = await dispatch(fetchFrontendConfigurations());
-      const legacyKey = 'pl_fe';
-      const key = 'nicolium';
+  if (features.frontendConfigurations) {
+    const data = await getClient().instance.getFrontendConfigurations();
+    const foundData = data['nicolium'] || data['pl_fe'];
 
-      const foundData = data[key] || data[legacyKey];
-
-      if (foundData) {
-        dispatch(importFrontendConfig(foundData, host));
-        return foundData;
-      }
+    if (foundData) {
+      importFrontendConfig(foundData, host);
+      return foundData;
     }
-    return dispatch(fetchFrontendConfigJson(host));
-  };
+  }
+  return fetchFrontendConfigJson(host);
+};
 
 /** Tries to remember the config from browser storage before fetching it */
-const loadFrontendConfig = () => async (dispatch: AppDispatch, getState: () => RootState) => {
-  const host = getHost(getState());
+const loadFrontendConfig = async () => {
+  const host = getHost();
 
-  const result = await dispatch(rememberFrontendConfig(host));
+  const result = await rememberFrontendConfig(host);
 
   if (result) {
-    dispatch(fetchFrontendConfig(host));
+    fetchFrontendConfig(host);
   } else {
-    return dispatch(fetchFrontendConfig(host));
+    return fetchFrontendConfig(host);
   }
 };
 
-const fetchFrontendConfigJson = (host: string | null) => (dispatch: AppDispatch) =>
+const fetchFrontendConfigJson = (host: string | null) =>
   staticFetch('/instance/nicolium.json')
     .then(({ json: data }) => {
       if (!isObject(data)) throw 'nicolium.json fetch failed';
-      dispatch(importFrontendConfig(data, host));
+      importFrontendConfig(data, host);
       return data;
     })
-    .catch((error) => {
-      dispatch(frontendConfigFail(error, host));
+    .catch(() => {
+      useFrontendConfigStore.getState().actions.configFetchFailed();
     });
 
 const importFrontendConfig = (frontendConfig: APIEntity, host: string | null) => {
   frontendConfig.brandColor ??= '#d80482';
 
   useSettingsStore.getState().actions.loadDefaultSettings(frontendConfig?.defaultSettings);
-
-  return {
-    type: FRONTEND_CONFIG_REQUEST_SUCCESS,
-    frontendConfig,
-    host,
-  };
+  useFrontendConfigStore.getState().actions.importConfig(frontendConfig, host || '');
 };
-
-const frontendConfigFail = (error: unknown, host: string | null) => ({
-  type: FRONTEND_CONFIG_REQUEST_FAIL,
-  error,
-  skipAlert: true,
-  host,
-});
 
 // https://stackoverflow.com/a/46663081
 const isObject = (o: any) => o instanceof Object && o.constructor === Object;
 
-type FrontendConfigAction =
-  | ReturnType<typeof importFrontendConfig>
-  | ReturnType<typeof frontendConfigFail>
-  | {
-      type: typeof FRONTEND_CONFIG_REMEMBER_SUCCESS;
-      frontendConfig: APIEntity;
-      host: string | null;
-    };
-
-export {
-  FRONTEND_CONFIG_REQUEST_SUCCESS,
-  FRONTEND_CONFIG_REQUEST_FAIL,
-  FRONTEND_CONFIG_REMEMBER_SUCCESS,
-  fetchFrontendConfig,
-  loadFrontendConfig,
-  type FrontendConfigAction,
-};
+export { fetchFrontendConfig, loadFrontendConfig };

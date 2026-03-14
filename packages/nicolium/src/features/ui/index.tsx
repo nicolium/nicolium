@@ -8,12 +8,10 @@ import { useUserStream } from '@/api/hooks/streaming/use-user-stream';
 import SidebarNavigation from '@/components/navigation/sidebar-navigation';
 import ThumbNavigation from '@/components/navigation/thumb-navigation';
 import Layout from '@/components/ui/layout';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { prefetchFollowRequests } from '@/queries/accounts/use-follow-requests';
 import { useAdminConfig } from '@/queries/admin/use-config';
@@ -23,13 +21,15 @@ import { usePrefetchNotificationsMarker } from '@/queries/markers/use-markers';
 import { usePrefetchNotifications } from '@/queries/notifications/use-notifications';
 import { useFilters } from '@/queries/settings/use-filters';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
-import { useShoutboxSubscription } from '@/stores/shoutbox';
-import { useIsDropdownMenuOpen } from '@/stores/ui';
-import { getVapidKey } from '@/utils/auth';
+import { useAuthStore } from '@/stores/auth';
+import { useInstance } from '@/stores/instance';
+import { useInstanceStore } from '@/stores/instance';
 // Dummy import, to make sure that <Status /> ends up in the application bundle.
 // Without this it ends up in ~8 very commonly used bundles.
 import '@/components/statuses/status';
-import { isStandalone } from '@/utils/state';
+import { useShoutboxSubscription } from '@/stores/shoutbox';
+import { useIsDropdownMenuOpen } from '@/stores/ui';
+import { useIsStandalone } from '@/utils/state';
 
 import {
   ModalRoot,
@@ -42,17 +42,18 @@ import GlobalHotkeys from './util/global-hotkeys';
 
 const UI: React.FC = React.memo(() => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
   const node = useRef<HTMLDivElement | null>(null);
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const { data: account } = useOwnAccount();
   const features = useFeatures();
-  const vapidKey = useAppSelector((state) => getVapidKey(state));
-  const client = useClient();
   const instance = useInstance();
+  const vapidKey =
+    useAuthStore((state) => state.app?.vapid_key) ?? instance.configuration.vapid.public_key;
+  const client = useClient();
 
   const isDropdownMenuOpen = useIsDropdownMenuOpen();
-  const standalone = useAppSelector(isStandalone);
+  const standalone = useIsStandalone();
+  const instanceFetched = useInstanceStore((state) => state.fetched);
 
   useAdminConfig();
   useShoutboxSubscription();
@@ -127,11 +128,11 @@ const UI: React.FC = React.memo(() => {
 
   // The user has logged in
   useEffect(() => {
-    if (instance.fetched) loadAccountData();
-  }, [!!account, instance.fetched]);
+    if (instanceFetched) loadAccountData();
+  }, [!!account, instanceFetched]);
 
   useEffect(() => {
-    dispatch(registerPushNotifications());
+    registerPushNotifications();
   }, [vapidKey]);
 
   // Wait for login to succeed or fail

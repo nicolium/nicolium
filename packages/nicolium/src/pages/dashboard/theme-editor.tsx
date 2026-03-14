@@ -12,12 +12,11 @@ import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import ColorPicker from '@/features/frontend-config/components/color-picker';
 import Palette, { type ColorGroup } from '@/features/theme-editor/components/palette';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
 import { normalizeColors } from '@/hooks/use-theme-css';
 import { getUpdateFrontendConfigParams, useUpdateAdminConfig } from '@/queries/admin/use-config';
 import { frontendConfigSchema } from '@/schemas/frontend-config';
+import { useFrontendConfigStore } from '@/stores/frontend-config';
 import toast from '@/toast';
 import { download } from '@/utils/download';
 
@@ -51,11 +50,10 @@ const messages = defineMessages({
 /** UI for editing Tailwind theme colors. */
 const ThemeEditorPage: React.FC = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const frontendConfig = useFrontendConfig();
-  const host = useAppSelector((state) => getHost(state));
-  const rawConfig = useAppSelector((state) => state.frontendConfig);
+  const host = getHost();
+  const rawConfig = useFrontendConfigStore((state) => state.partialConfig);
   const { mutate: updateConfig } = useUpdateAdminConfig();
 
   const [colors, setColors] = useState(normalizeColors(frontendConfig));
@@ -140,7 +138,7 @@ const ThemeEditorPage: React.FC = () => {
     setSubmitting(true);
 
     try {
-      await dispatch(fetchFrontendConfig(host));
+      await fetchFrontendConfig(host);
       await updateTheme();
       toast.success(intl.formatMessage(messages.saved));
       setSubmitting(false);

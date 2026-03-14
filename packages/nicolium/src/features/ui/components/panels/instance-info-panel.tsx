@@ -3,7 +3,6 @@ import { useIntl, defineMessages } from 'react-intl';
 
 import { pinHost, unpinHost } from '@/actions/remote-timeline';
 import Widget from '@/components/ui/widget';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useRemoteInstance } from '@/selectors';
 import { useSettings } from '@/stores/settings';
 
@@ -20,7 +19,6 @@ interface IInstanceInfoPanel {
 /** Widget that displays information about a remote instance to users. */
 const InstanceInfoPanel: React.FC<IInstanceInfoPanel> = ({ host }) => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const settings = useSettings();
   const remoteInstance = useRemoteInstance(host);
@@ -28,9 +26,9 @@ const InstanceInfoPanel: React.FC<IInstanceInfoPanel> = ({ host }) => {
 
   const handlePinHost = () => {
     if (!pinned) {
-      dispatch(pinHost(host));
+      pinHost(host);
     } else {
-      dispatch(unpinHost(host));
+      unpinHost(host);
     }
   };
 

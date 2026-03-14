@@ -2,8 +2,8 @@ import React from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
 import { RadioGroup, RadioItem } from '@/components/ui/radio';
-import { useInstance } from '@/hooks/use-instance';
 import { useUpdateAdminConfig } from '@/queries/admin/use-config';
+import { useInstance } from '@/stores/instance';
 import toast from '@/toast';
 
 import type { Instance } from 'pl-api';

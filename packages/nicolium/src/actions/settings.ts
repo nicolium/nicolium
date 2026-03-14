@@ -1,16 +1,14 @@
 import { defineMessage } from 'react-intl';
 
-import { patchMe } from '@/actions/me';
-import { getClient } from '@/api';
+import { patchMe } from '@/actions/auth';
 import { NODE_ENV } from '@/build-config';
 import { selectOwnAccount } from '@/queries/accounts/selectors';
 import KVStore from '@/storage/kv-store';
+import { useAuthStore } from '@/stores/auth';
 import { useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
-import { isLoggedIn } from '@/utils/auth';
 
 import type { Settings } from '@/schemas/frontend-settings';
-import type { AppDispatch, RootState } from '@/store';
 
 const LEGACY_FE_NAME = NODE_ENV === 'production' ? 'pl_fe' : 'pl_fe_dev';
 const FE_NAME = NODE_ENV === 'production' ? 'nicolium' : 'nicolium_dev';
@@ -31,34 +29,31 @@ const changeSetting = (path: string[], value: any, opts?: SettingOpts) => {
   useSettingsStore.getState().actions.changeSetting(path, value);
 
   if (opts?.save !== false) return saveSettings(opts, path[0] === 'storeSettingsInNotes');
-  return () => {};
 };
 
-const saveSettings =
-  (opts?: SettingOpts, isNotesChange?: boolean) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return;
+const saveSettings = (opts?: SettingOpts, isNotesChange?: boolean) => {
+  const { currentAccountId } = useAuthStore.getState();
+  if (typeof currentAccountId !== 'string') return;
 
-    const {
-      userSettings,
-      actions: { userSettingsSaving },
-    } = useSettingsStore.getState();
-    if (userSettings.saved) return;
+  const {
+    userSettings,
+    actions: { userSettingsSaving },
+  } = useSettingsStore.getState();
+  if (userSettings.saved) return;
 
-    const { saved, ...data } = userSettings;
+  const { saved, ...data } = userSettings;
 
-    dispatch(updateSettingsStore(data, isNotesChange))
-      .then(() => {
-        userSettingsSaving();
-
-        if (opts?.showAlert) {
-          toast.success(saveSuccessMessage);
-        }
-      })
-      .catch((error) => {
-        toast.showAlertForError(error);
-      });
-  };
+  updateSettingsStore(data, isNotesChange)
+    .then(() => {
+      userSettingsSaving();
+      if (opts?.showAlert) {
+        toast.success(saveSuccessMessage);
+      }
+    })
+    .catch((error) => {
+      toast.showAlertForError(error);
+    });
+};
 
 /** Update settings store for Mastodon, etc. */
 const updateAuthAccount = async (url: string, settings: any) => {
@@ -74,44 +69,38 @@ const updateAuthAccount = async (url: string, settings: any) => {
   }
 };
 
-const updateSettingsStore =
-  (settings: Partial<Settings>, isNotesChange?: boolean) =>
-  async (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-    const client = getClient(state);
+const updateSettingsStore = async (settings: Partial<Settings>, isNotesChange?: boolean) => {
+  const { client, currentAccountId } = useAuthStore.getState();
 
-    if (client.features.frontendConfigurations) {
-      return dispatch(
-        patchMe({
-          settings_store: {
-            [FE_NAME]: settings,
-          },
-        }),
-      );
-    } else {
-      if (client.features.notes && (settings.storeSettingsInNotes || isNotesChange)) {
-        // Inspired by Phanpy and designed for compatibility with other software doing this
-        // https://github.com/cheeaun/phanpy/commit/a8b5c8cd64d456d30aab09dc56da7e4e20100e67
-        const note = (await client.accounts.getRelationships([state.me as string]))[0]?.note;
-        const settingsNote = `<nicolium-config>${encodeURIComponent(JSON.stringify(settings))}</nicolium-config>`;
+  if (client.features.frontendConfigurations) {
+    return patchMe({
+      settings_store: {
+        [FE_NAME]: settings,
+      },
+    });
+  } else {
+    if (client.features.notes && (settings.storeSettingsInNotes || isNotesChange)) {
+      const note = (await client.accounts.getRelationships([currentAccountId as string]))[0]?.note;
+      const settingsNote = `<nicolium-config>${encodeURIComponent(JSON.stringify(settings))}</nicolium-config>`;
 
-        let newNote;
-        if (settings.storeSettingsInNotes) {
-          if (/<nicolium-config>(.*)<\/nicolium-config>/.test(note || '')) {
-            newNote = note!.replace(/<nicolium-config>(.*)<\/nicolium-config>/, settingsNote);
-          } else {
-            newNote = `${note || ''}\n\n${settingsNote}`;
-          }
+      let newNote;
+      if (settings.storeSettingsInNotes) {
+        if (/<nicolium-config>(.*)<\/nicolium-config>/.test(note || '')) {
+          newNote = note!.replace(/<nicolium-config>(.*)<\/nicolium-config>/, settingsNote);
         } else {
-          newNote = note ? note.replace(/<nicolium-config>(.*)<\/nicolium-config>/, '') : '';
+          newNote = `${note || ''}\n\n${settingsNote}`;
         }
-        client.accounts.updateAccountNote(state.me as string, newNote);
+      } else {
+        newNote = note ? note.replace(/<nicolium-config>(.*)<\/nicolium-config>/, '') : '';
       }
-
-      const accountUrl = selectOwnAccount(state)!.url;
-
-      return updateAuthAccount(accountUrl, settings);
+      client.accounts.updateAccountNote(currentAccountId as string, newNote);
     }
-  };
+
+    const account = selectOwnAccount();
+    if (!account) return;
+
+    return updateAuthAccount(account.url, settings);
+  }
+};
 
 export { FE_NAME, LEGACY_FE_NAME, changeSetting, saveSettings, updateSettingsStore };

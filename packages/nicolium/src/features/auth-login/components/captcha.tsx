@@ -4,7 +4,6 @@ import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 import { fetchCaptcha } from '@/actions/auth';
 import Input from '@/components/ui/input';
 import Text from '@/components/ui/text';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 
 const noOp = () => {};
 
@@ -37,13 +36,11 @@ const CaptchaField: React.FC<ICaptchaField> = ({
   refreshInterval = 5 * 60 * 1000, // 5 minutes, Pleroma default
   idempotencyKey,
 }) => {
-  const dispatch = useAppDispatch();
-
   const [captcha, setCaptcha] = useState<Record<string, any>>({});
   const [refresh, setRefresh] = useState<NodeJS.Timeout | undefined>(undefined);
 
   const getCaptcha = () => {
-    dispatch(fetchCaptcha())
+    fetchCaptcha()
       .then((captcha) => {
         setCaptcha(captcha);
         onFetch(captcha);

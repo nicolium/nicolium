@@ -7,8 +7,8 @@ import DropdownMenu from '@/components/dropdown-menu';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { MediaGallery } from '@/features/ui/util/async-components';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useDeleteChatMessage, type ChatMessage as ChatMessageEntity } from '@/queries/chats';
 import { useModalsActions } from '@/stores/modals';
 import { stripHTML } from '@/utils/html';
@@ -48,7 +48,7 @@ const ChatMessage: React.FC<IChatMessage> = React.memo((props) => {
   const { openModal } = useModalsActions();
   const intl = useIntl();
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const deleteChatMessage = useDeleteChatMessage(chat.id);
 
   const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);

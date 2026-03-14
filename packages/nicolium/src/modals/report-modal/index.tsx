@@ -8,12 +8,11 @@ import Modal from '@/components/ui/modal';
 import ProgressBar from '@/components/ui/progress-bar';
 import Text from '@/components/ui/text';
 import AccountContainer from '@/containers/account-container';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useInstance } from '@/hooks/use-instance';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useBlockAccountMutation } from '@/queries/accounts/use-relationship';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useAccountTimeline } from '@/queries/timelines/use-timelines';
+import { useInstance } from '@/stores/instance';
 
 import ConfirmationStep from './steps/confirmation-step';
 import OtherActionsStep from './steps/other-actions-step';
@@ -69,8 +68,6 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
   entityType,
   statusIds,
 }) => {
-  const dispatch = useAppDispatch();
-
   const { data: account } = useAccount(accountId || undefined);
 
   const { mutate: blockAccount } = useBlockAccountMutation(accountId);
@@ -93,7 +90,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
   const handleSubmit = () => {
     setIsSubmitting(true);
 
-    dispatch(submitReport(accountId, selectedStatusIds, [...ruleIds], comment, forward))
+    submitReport(accountId, selectedStatusIds, [...ruleIds], comment, forward)
       .then(() => {
         setIsSubmitting(false);
         setCurrentStep(Steps.THREE);

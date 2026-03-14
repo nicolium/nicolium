@@ -15,9 +15,8 @@ import HeaderPicker from '@/features/edit-profile/components/header-picker';
 import { editGroupRoute } from '@/features/ui/router';
 import { useImageField } from '@/hooks/forms/use-image-field';
 import { useTextField } from '@/hooks/forms/use-text-field';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import { useInstance } from '@/hooks/use-instance';
 import { useGroupQuery, useUpdateGroupMutation } from '@/queries/groups/use-group';
+import { useInstance } from '@/stores/instance';
 import toast from '@/toast';
 import { unescapeHTML } from '@/utils/html';
 
@@ -60,9 +59,7 @@ const EditGroup: React.FC = () => {
   const maxName = Number(instance.configuration.groups.max_characters_name);
   const maxNote = Number(instance.configuration.groups.max_characters_description);
 
-  const attachmentTypes = useAppSelector(
-    (state) => state.instance.configuration.media_attachments.supported_mime_types,
-  )
+  const attachmentTypes = instance.configuration.media_attachments.supported_mime_types
     ?.filter((type) => type.startsWith('image/'))
     .join(',');
 

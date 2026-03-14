@@ -1,47 +1,53 @@
-import { getClient } from '@/api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+
+import { useClient } from '@/hooks/use-client';
 
 import { queryClient } from '../client';
 import { queryKeys } from '../keys';
-import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';
-import { mutationOptions } from '../utils/mutation-options';
+import { makePaginatedResponseQuery } from '../utils/make-paginated-response-query';
 
-import type { RootState, Store } from '@/store';
 import type { Account } from 'pl-api';
 
-let store: Store;
-import('@/store').then((value) => (store = value.store)).catch(() => {});
+const useDomainBlocksQuery = makePaginatedResponseQuery(queryKeys.settings.domainBlocks, (client) =>
+  client.filtering.getDomainBlocks(),
+);
 
-const domainBlocksQueryOptions = makePaginatedResponseQueryOptions(
-  queryKeys.settings.domainBlocks,
-  (client) => client.filtering.getDomainBlocks(),
-)();
+const useBlockDomainMutation = () => {
+  const queryClient = useQueryClient();
+  const client = useClient();
 
-const blockDomainMutationOptions = mutationOptions({
-  mutationKey: queryKeys.settings.domainBlocks,
-  mutationFn: (domain: string) => getClient().filtering.blockDomain(domain),
-  onSettled: (_, __, domain) => {
-    queryClient.invalidateQueries(domainBlocksQueryOptions);
+  return useMutation({
+    mutationKey: queryKeys.settings.domainBlocks,
+    mutationFn: (domain: string) => client.filtering.blockDomain(domain),
+    onSettled: (_, __, domain) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.settings.domainBlocks });
 
-    const accounts = selectAccountsByDomain(store.getState(), domain);
-    if (!accounts) return;
+      const accounts = selectAccountsByDomain(domain);
+      if (!accounts) return;
 
-    queryClient.setQueryData(queryKeys.suggestions.all, (suggestions) =>
-      suggestions
-        ? suggestions.filter((suggestion) => !accounts.includes(suggestion.account_id))
-        : undefined,
-    );
-  },
-});
+      queryClient.setQueryData(queryKeys.suggestions.all, (suggestions) =>
+        suggestions
+          ? suggestions.filter((suggestion) => !accounts.includes(suggestion.account_id))
+          : undefined,
+      );
+    },
+  });
+};
 
-const unblockDomainMutationOptions = mutationOptions({
-  mutationKey: queryKeys.settings.domainBlocks,
-  mutationFn: (domain: string) => getClient().filtering.unblockDomain(domain),
-  onSettled: () => {
-    queryClient.invalidateQueries(domainBlocksQueryOptions);
-  },
-});
+const useUnblockDomainMutation = () => {
+  const queryClient = useQueryClient();
+  const client = useClient();
 
-const selectAccountsByDomain = (state: RootState, domain: string): string[] => {
+  return useMutation({
+    mutationKey: queryKeys.settings.domainBlocks,
+    mutationFn: (domain: string) => client.filtering.unblockDomain(domain),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.settings.domainBlocks });
+    },
+  });
+};
+
+const selectAccountsByDomain = (domain: string): string[] => {
   const accounts = queryClient
     .getQueriesData<Account>({ queryKey: queryKeys.accounts.root })
     .map(([, account]) => account)
@@ -51,4 +57,4 @@ const selectAccountsByDomain = (state: RootState, domain: string): string[] => {
   return accounts ?? [];
 };
 
-export { domainBlocksQueryOptions, blockDomainMutationOptions, unblockDomainMutationOptions };
+export { useDomainBlocksQuery, useBlockDomainMutation, useUnblockDomainMutation };

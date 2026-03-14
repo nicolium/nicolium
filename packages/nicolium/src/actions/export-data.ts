@@ -1,9 +1,9 @@
 import { defineMessages } from 'react-intl';
 
 import { getClient } from '@/api';
+import { useAuthStore } from '@/stores/auth';
 import toast from '@/toast';
 
-import type { AppDispatch, RootState } from '@/store';
 import type { Account, PaginatedResponse } from 'pl-api';
 
 const messages = defineMessages({
@@ -41,11 +41,11 @@ const listAccounts = async (response: PaginatedResponse<Account>) => {
   return Array.from(new Set(accounts));
 };
 
-const exportFollows = () => async (_dispatch: AppDispatch, getState: () => RootState) => {
-  const me = getState().me;
+const exportFollows = async () => {
+  const me = useAuthStore.getState().currentAccountId;
   if (!me) return;
 
-  const response = await getClient(getState()).accounts.getAccountFollowing(me, { limit: 40 });
+  const response = await getClient().accounts.getAccountFollowing(me, { limit: 40 });
   const followings = await listAccounts(response);
   const followingsCsv = followings.map((fqn) => fqn + ',true');
   followingsCsv.unshift('Account address,Show boosts');
@@ -54,16 +54,16 @@ const exportFollows = () => async (_dispatch: AppDispatch, getState: () => RootS
   toast.success(messages.followersSuccess);
 };
 
-const exportBlocks = () => async (_dispatch: AppDispatch, getState: () => RootState) => {
-  const response = await getClient(getState()).filtering.getBlocks({ limit: 40 });
+const exportBlocks = async () => {
+  const response = await getClient().filtering.getBlocks({ limit: 40 });
   const blocks = await listAccounts(response);
   fileExport(blocks.join('\n'), 'export_block.csv');
 
   toast.success(messages.blocksSuccess);
 };
 
-const exportMutes = () => async (_dispatch: AppDispatch, getState: () => RootState) => {
-  const response = await getClient(getState()).filtering.getMutes({ limit: 40 });
+const exportMutes = async () => {
+  const response = await getClient().filtering.getMutes({ limit: 40 });
   const mutes = await listAccounts(response);
   fileExport(mutes.join('\n'), 'export_mutes.csv');
 

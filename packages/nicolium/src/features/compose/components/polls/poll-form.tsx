@@ -7,8 +7,8 @@ import Divider from '@/components/ui/divider';
 import Text from '@/components/ui/text';
 import Toggle from '@/components/ui/toggle';
 import { useComposeSuggestions } from '@/hooks/use-compose-suggestions';
-import { useInstance } from '@/hooks/use-instance';
 import { useCompose, useComposeActions } from '@/stores/compose';
+import { useInstance } from '@/stores/instance';
 
 import DurationSelector from './duration-selector';
 

@@ -6,7 +6,7 @@ import Divider from '@/components/ui/divider';
 import Text from '@/components/ui/text';
 import LinkFooter from '@/features/ui/components/link-footer';
 import PromoPanel from '@/features/ui/components/panels/promo-panel';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 
 const messages = defineMessages({
   heading: { id: 'column.info', defaultMessage: 'Server information' },

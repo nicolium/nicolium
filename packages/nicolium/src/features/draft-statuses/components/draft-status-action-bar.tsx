@@ -3,7 +3,6 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { fetchStatus } from '@/actions/statuses';
 import Button from '@/components/ui/button';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
 import { useCancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
@@ -37,7 +36,6 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
   const { openModal } = useModalsActions();
   const { setComposeToStatus } = useComposeActions();
   const settings = useSettings();
-  const dispatch = useAppDispatch();
   const cancelDraftStatus = useCancelDraftStatus();
 
   const handleCancelClick = () => {
@@ -55,7 +53,7 @@ const DraftStatusActionBar: React.FC<IDraftStatusActionBar> = ({ source, status 
   };
 
   const handleEditClick = () => {
-    if (status.in_reply_to_id) dispatch(fetchStatus(status.in_reply_to_id));
+    if (status.in_reply_to_id) fetchStatus(status.in_reply_to_id);
     const poll = status.poll_id
       ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
       : undefined;

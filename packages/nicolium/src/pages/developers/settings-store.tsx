@@ -11,7 +11,6 @@ import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Textarea from '@/components/ui/textarea';
 import SettingToggle from '@/features/settings/components/setting-toggle';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useSettingsStore, useSettingsStoreActions } from '@/stores/settings';
 import toast from '@/toast';
 
@@ -30,7 +29,6 @@ const messages = defineMessages({
 
 const SettingsStore: React.FC = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const { settings, userSettings } = useSettingsStore();
   const { loadUserSettings } = useSettingsStoreActions();
 
@@ -45,14 +43,14 @@ const SettingsStore: React.FC = () => {
   };
 
   const onToggleChange = (key: string[], checked: boolean) => {
-    dispatch(changeSetting(key, checked, { showAlert: true }));
+    changeSetting(key, checked, { showAlert: true });
   };
 
   const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = () => {
     const settings = JSON.parse(rawJSON);
 
     setLoading(true);
-    dispatch(updateSettingsStore(settings))
+    updateSettingsStore(settings)
       .then(() => {
         loadUserSettings(settings);
         setLoading(false);

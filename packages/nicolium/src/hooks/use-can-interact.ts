@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { useAppSelector } from './use-app-selector';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 
 import type { NormalizedStatus } from '@/normalizers/status';
 import type { InteractionPolicy, InteractionPolicyEntry } from 'pl-api';
@@ -16,7 +16,7 @@ const useCanInteract = (
   approvalRequired: boolean | null;
   allowed?: Array<InteractionPolicyEntry>;
 } => {
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
 
   return useMemo(() => {
     if (type === 'can_quote') {

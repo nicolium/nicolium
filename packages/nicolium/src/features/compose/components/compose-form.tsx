@@ -13,7 +13,6 @@ import EmojiPickerDropdown from '@/features/emoji/containers/emoji-picker-dropdo
 import { ComposeEditor } from '@/features/ui/util/async-components';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { usePersistDraftStatus } from '@/queries/statuses/use-draft-statuses';
 import {
   useCompose,
@@ -21,6 +20,7 @@ import {
   useUploadCompose,
   useSubmitCompose,
 } from '@/stores/compose';
+import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 

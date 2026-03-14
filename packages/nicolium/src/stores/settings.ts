@@ -6,6 +6,7 @@ import { mutative } from 'zustand-mutative';
 
 import { settingsSchema, type Settings } from '@/schemas/frontend-settings';
 import KVStore from '@/storage/kv-store';
+import { useAuthStore } from '@/stores/auth';
 import toast from '@/toast';
 import {
   type KVStoreRedirectServicesItem,
@@ -16,11 +17,7 @@ import {
 } from '@/utils/url-purify';
 
 import type { Emoji } from '@/features/emoji';
-import type { store } from '@/store';
 import type { APIEntity } from '@/types/entities';
-
-let lazyStore: typeof store;
-import('@/store').then(({ store }) => (lazyStore = store)).catch(() => {});
 
 const messages = defineMessages({
   rulesUpdateSuccess: {
@@ -75,14 +72,14 @@ const changeSetting = (object: APIEntity, path: string[], value: any, root?: Set
 const mergeSettings = (state: State, updating = false) => {
   const mergedSettings = { ...state.defaultSettings, ...state.userSettings };
   if (updating) {
-    const me = lazyStore?.getState().me;
-    if (me) {
+    const currentAccountId = useAuthStore.getState().currentAccountId;
+    if (currentAccountId) {
       if (
         mergedSettings.urlPrivacy.rulesUrl &&
         state.settings.urlPrivacy.rulesUrl !== mergedSettings.urlPrivacy.rulesUrl
       ) {
         updateRulesFromUrl(
-          me,
+          currentAccountId,
           mergedSettings.urlPrivacy.rulesUrl,
           mergedSettings.urlPrivacy.hashUrl,
         )
@@ -96,7 +93,7 @@ const mergeSettings = (state: State, updating = false) => {
         !mergedSettings.urlPrivacy.rulesUrl &&
         state.settings.urlPrivacy.rulesUrl !== mergedSettings.urlPrivacy.rulesUrl
       ) {
-        resetRules(me)
+        resetRules(currentAccountId)
           .then(() => {
             toast.success(messages.rulesUpdateSuccess);
           })
@@ -110,7 +107,10 @@ const mergeSettings = (state: State, updating = false) => {
         state.settings.urlPrivacy.redirectServicesUrl !==
           mergedSettings.urlPrivacy.redirectServicesUrl
       ) {
-        updateRedirectServicesFromUrl(me, mergedSettings.urlPrivacy.redirectServicesUrl)
+        updateRedirectServicesFromUrl(
+          currentAccountId,
+          mergedSettings.urlPrivacy.redirectServicesUrl,
+        )
           .then(() => {
             toast.success(messages.redirectServicesUpdateSuccess);
           })
@@ -124,7 +124,7 @@ const mergeSettings = (state: State, updating = false) => {
           mergedSettings.urlPrivacy.redirectServices,
         )
       ) {
-        setManualRedirectServices(me, mergedSettings.urlPrivacy.redirectServices)
+        setManualRedirectServices(currentAccountId, mergedSettings.urlPrivacy.redirectServices)
           .then(() => {
             toast.success(messages.redirectServicesUpdateSuccess);
           })
@@ -161,14 +161,14 @@ const useSettingsStore = create<State>()(
 
             state.userSettings = v.parse(settingsSchemaPartial, settings);
 
-            const me = lazyStore?.getState().me;
-            if (me) {
+            const currentAccountId = useAuthStore.getState().currentAccountId;
+            if (currentAccountId) {
               KVStore.getItem<string>('url-purify-rules:last')
                 .then((value) => {
-                  if (value !== me) {
+                  if (value !== currentAccountId) {
                     if (state.userSettings.urlPrivacy?.rulesUrl) {
                       updateRulesFromUrl(
-                        me,
+                        currentAccountId,
                         state.userSettings.urlPrivacy.rulesUrl,
                         state.userSettings.urlPrivacy.hashUrl,
                       )
@@ -179,28 +179,28 @@ const useSettingsStore = create<State>()(
                           toast.error(messages.rulesUpdateFail);
                         });
                     } else {
-                      resetRules(me);
+                      resetRules(currentAccountId);
                     }
                     switch (state.userSettings.urlPrivacy?.redirectLinksMode) {
                       case 'auto':
                         updateRedirectServicesFromUrl(
-                          me,
+                          currentAccountId,
                           state.userSettings.urlPrivacy?.redirectServicesUrl,
                         );
                         break;
                       case 'manual':
                         setManualRedirectServices(
-                          me,
+                          currentAccountId,
                           state.userSettings.urlPrivacy.redirectServices,
                         );
                         break;
                       default:
-                        setManualRedirectServices(me, {});
+                        setManualRedirectServices(currentAccountId, {});
                         break;
                     }
                   } else {
                     KVStore.getItem<KVStoreRedirectServicesItem>(
-                      `url-purify-redirect-services:${me}`,
+                      `url-purify-redirect-services:${currentAccountId}`,
                     )
                       .then((services) => {
                         if (state.userSettings.urlPrivacy?.redirectLinksMode === 'auto') {
@@ -209,13 +209,13 @@ const useSettingsStore = create<State>()(
                             state.userSettings.urlPrivacy?.redirectServicesUrl
                           ) {
                             updateRedirectServicesFromUrl(
-                              me,
+                              currentAccountId,
                               state.userSettings.urlPrivacy?.redirectServicesUrl,
                             );
                           }
                         } else {
                           setManualRedirectServices(
-                            me,
+                            currentAccountId,
                             state.userSettings.urlPrivacy?.redirectServices ?? {},
                           );
                         }

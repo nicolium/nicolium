@@ -10,7 +10,6 @@ import Modal from '@/components/ui/modal';
 import Textarea from '@/components/ui/textarea';
 import { MIMETYPE_ICONS } from '@/components/upload';
 import { getPointerPosition } from '@/features/video';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useCompose } from '@/hooks/use-compose';
 import { useFeatures } from '@/hooks/use-features';
 import toast from '@/toast';
@@ -192,7 +191,6 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
   previousDescription,
   previousPosition,
 }) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const { language } = useCompose(composeId ?? 'default');
@@ -232,7 +230,7 @@ const AltTextModal: React.FC<BaseModalProps & AltTextModalProps> = ({
         setIsSaving(false);
         toast.error(messages.savingFailed);
       });
-  }, [dispatch, setIsSaving, media.id, onClose, description, position]);
+  }, [setIsSaving, media.id, onClose, description, position]);
 
   const handleKeyUp: React.KeyboardEventHandler<HTMLTextAreaElement> = useCallback(
     (e) => {

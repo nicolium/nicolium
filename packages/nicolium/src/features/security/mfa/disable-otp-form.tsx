@@ -8,7 +8,6 @@ import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Text from '@/components/ui/text';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useDisableMfa } from '@/queries/security/use-mfa';
 import toast from '@/toast';
 
@@ -22,7 +21,6 @@ const DisableOtpForm: React.FC = () => {
   const [password, setPassword] = useState('');
 
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const { mutate: disableMfa, isPending } = useDisableMfa();
@@ -37,7 +35,7 @@ const DisableOtpForm: React.FC = () => {
         toast.error(intl.formatMessage(messages.disableFail));
       },
     });
-  }, [password, dispatch, intl]);
+  }, [password, intl]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);

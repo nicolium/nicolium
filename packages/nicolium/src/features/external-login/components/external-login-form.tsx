@@ -6,7 +6,6 @@ import Form from '@/components/ui/form';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Spinner from '@/components/ui/spinner';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import toast from '@/toast';
 
 const messages = defineMessages({
@@ -29,7 +28,6 @@ const ExternalLoginForm: React.FC = () => {
   const server = query.get('server');
 
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const [host, setHost] = useState(server ?? '');
   const [isLoading, setLoading] = useState(false);
@@ -67,7 +65,7 @@ const ExternalLoginForm: React.FC = () => {
 
   useEffect(() => {
     if (code) {
-      dispatch(loginWithCode(code));
+      loginWithCode(code);
     }
   }, [code]);
 

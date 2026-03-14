@@ -13,7 +13,10 @@ const domParser = new DOMParser();
 
 type StatusApprovalStatus = Exclude<BaseStatus['approval_status'], null>;
 
-type OldStatus = Pick<BaseStatus, 'content' | 'spoiler_text'> & { search_index: string };
+type OldStatus = Pick<BaseStatus, 'content' | 'spoiler_text'> & {
+  search_index: string;
+  account_id: string;
+};
 
 // Gets titles of poll options from status
 const getPollOptionTitles = (poll?: BaseStatus['poll']): readonly string[] => {
@@ -84,7 +87,7 @@ const normalizeStatus = (
     }
   });
 
-  const accountId = (account || window.__PL_API_FALLBACK_ACCOUNT).id;
+  const accountId = account?.id || oldStatus?.account_id || window.__PL_API_FALLBACK_ACCOUNT.id;
 
   // Add self to mentions if it's a reply to self
   const isSelfReply = accountId === status.in_reply_to_account_id;

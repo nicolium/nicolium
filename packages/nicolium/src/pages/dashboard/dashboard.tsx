@@ -11,10 +11,10 @@ import { Dimension } from '@/features/admin/components/dimension';
 import RegistrationModePicker from '@/features/admin/components/registration-mode-picker';
 import { Retention } from '@/features/admin/components/retention';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { usePendingUsersCount } from '@/queries/admin/use-accounts';
 import { usePendingReportsCount } from '@/queries/admin/use-reports';
+import { useInstance } from '@/stores/instance';
 import sourceCode from '@/utils/code';
 
 const messages = defineMessages({

@@ -15,7 +15,6 @@ import { shouldHaveCard } from '@/utils/status';
 import { importEntities } from './importer';
 
 import type { NormalizedStatus as Status } from '@/normalizers/status';
-import type { AppDispatch, RootState } from '@/store';
 import type { CreateStatusParams, Status as BaseStatus } from 'pl-api';
 import type { IntlShape } from 'react-intl';
 
@@ -67,96 +66,92 @@ const decrementReplyCount = (
   }
 };
 
-const createStatus =
-  (
-    params: CreateStatusParams,
-    idempotencyKey: string,
-    editedId: string | null,
-    redacting = false,
-  ) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!params.preview) {
-      usePendingStatusesStore.getState().actions.importStatus(params, idempotencyKey);
-      useContextStore.getState().actions.importPendingStatus(params.in_reply_to_id, idempotencyKey);
-      useTimelinesStore.getState().actions.importPendingStatus(params, idempotencyKey);
-      if (!editedId) {
-        incrementReplyCount(params);
-      }
+const createStatus = (
+  params: CreateStatusParams,
+  idempotencyKey: string,
+  editedId: string | null,
+  redacting = false,
+) => {
+  if (!params.preview) {
+    usePendingStatusesStore.getState().actions.importStatus(params, idempotencyKey);
+    useContextStore.getState().actions.importPendingStatus(params.in_reply_to_id, idempotencyKey);
+    useTimelinesStore.getState().actions.importPendingStatus(params, idempotencyKey);
+    if (!editedId) {
+      incrementReplyCount(params);
     }
+  }
 
-    const client = getClient(getState());
+  const client = getClient();
 
-    return (
-      editedId === null
-        ? client.statuses.createStatus(params)
-        : redacting
-          ? client.admin.statuses.redactStatus(editedId, params)
-          : client.statuses.editStatus(editedId, params)
-    )
-      .then((status) => {
-        if (params.preview) return status;
+  return (
+    editedId === null
+      ? client.statuses.createStatus(params)
+      : redacting
+        ? client.admin.statuses.redactStatus(editedId, params)
+        : client.statuses.editStatus(editedId, params)
+  )
+    .then((status) => {
+      if (params.preview) return status;
 
-        // The backend might still be processing the rich media attachment
-        const expectsCard = status.scheduled_at === null && !status.card && shouldHaveCard(status);
+      // The backend might still be processing the rich media attachment
+      const expectsCard = status.scheduled_at === null && !status.card && shouldHaveCard(status);
 
-        if (status.scheduled_at === null) {
-          importEntities(
-            { statuses: [{ ...status, expectsCard }] },
-            { idempotencyKey, withParents: true },
-          );
-        } else {
-          queryClient.invalidateQueries(scheduledStatusesQueryOptions);
-        }
+      if (status.scheduled_at === null) {
+        importEntities(
+          { statuses: [{ ...status, expectsCard }] },
+          { idempotencyKey, withParents: true },
+        );
+      } else {
+        queryClient.invalidateQueries(scheduledStatusesQueryOptions);
+      }
 
-        useContextStore
-          .getState()
-          .actions.deletePendingStatus(
-            'in_reply_to_id' in status ? status.in_reply_to_id : null,
-            idempotencyKey,
-          );
+      useContextStore
+        .getState()
+        .actions.deletePendingStatus(
+          'in_reply_to_id' in status ? status.in_reply_to_id : null,
+          idempotencyKey,
+        );
 
-        if (status.scheduled_at === null) {
-          useTimelinesStore.getState().actions.replacePendingStatus(idempotencyKey, status);
-        } else {
-          useTimelinesStore.getState().actions.deletePendingStatus(idempotencyKey);
-        }
-
-        // Poll the backend for the updated card
-        if (expectsCard) {
-          const delay = 1000;
-
-          const poll = (retries = 5) => {
-            return getClient(getState())
-              .statuses.getStatus(status.id)
-              .then((response) => {
-                if (response.card) {
-                  importEntities({ statuses: [response] });
-                } else if (retries > 0 && response) {
-                  setTimeout(() => poll(retries - 1), delay);
-                }
-              })
-              .catch(console.error);
-          };
-
-          setTimeout(() => poll(), delay);
-        }
-
-        return status;
-      })
-      .catch((error) => {
-        usePendingStatusesStore.getState().actions.deleteStatus(idempotencyKey);
+      if (status.scheduled_at === null) {
+        useTimelinesStore.getState().actions.replacePendingStatus(idempotencyKey, status);
+      } else {
         useTimelinesStore.getState().actions.deletePendingStatus(idempotencyKey);
-        useContextStore
-          .getState()
-          .actions.deletePendingStatus(params.in_reply_to_id, idempotencyKey);
-        if (!editedId) {
-          decrementReplyCount(params);
-        }
-        throw error;
-      });
-  };
+      }
 
-const editStatus = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+      // Poll the backend for the updated card
+      if (expectsCard) {
+        const delay = 1000;
+
+        const poll = (retries = 5) => {
+          return getClient()
+            .statuses.getStatus(status.id)
+            .then((response) => {
+              if (response.card) {
+                importEntities({ statuses: [response] });
+              } else if (retries > 0 && response) {
+                setTimeout(() => poll(retries - 1), delay);
+              }
+            })
+            .catch(console.error);
+        };
+
+        setTimeout(() => poll(), delay);
+      }
+
+      return status;
+    })
+    .catch((error) => {
+      usePendingStatusesStore.getState().actions.deleteStatus(idempotencyKey);
+      useTimelinesStore.getState().actions.deletePendingStatus(idempotencyKey);
+      useContextStore.getState().actions.deletePendingStatus(params.in_reply_to_id, idempotencyKey);
+      if (!editedId) {
+        decrementReplyCount(params);
+      }
+      throw error;
+    });
+};
+
+const editStatus = (statusId: string) => {
   const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
   if (!status) return;
 
@@ -164,7 +159,7 @@ const editStatus = (statusId: string) => (dispatch: AppDispatch, getState: () =>
     ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
     : undefined;
 
-  return getClient(getState())
+  return getClient()
     .statuses.getStatusSource(statusId)
     .then((response) => {
       useComposeStore.getState().actions.setComposeToStatus(status, poll, response);
@@ -172,91 +167,87 @@ const editStatus = (statusId: string) => (dispatch: AppDispatch, getState: () =>
     });
 };
 
-const fetchStatus =
-  (statusId: string, intl?: IntlShape) => (dispatch: AppDispatch, getState: () => RootState) => {
-    const params =
-      intl && useSettingsStore.getState().settings.autoTranslate
-        ? {
-            language: intl.locale,
-          }
-        : undefined;
-
-    return getClient(getState())
-      .statuses.getStatus(statusId, params)
-      .then((status) => {
-        importEntities({ statuses: [status] });
-        return status;
-      });
-  };
-
-const deleteStatus =
-  (statusId: string, withRedraft = false) =>
-  (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return null;
-
-    const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
-    if (!status) return null;
-
-    const poll = status.poll_id
-      ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
+const fetchStatus = (statusId: string, intl?: IntlShape) => {
+  const params =
+    intl && useSettingsStore.getState().settings.autoTranslate
+      ? {
+          language: intl.locale,
+        }
       : undefined;
 
-    decrementReplyCount(status);
+  return getClient()
+    .statuses.getStatus(statusId, params)
+    .then((status) => {
+      importEntities({ statuses: [status] });
+      return status;
+    });
+};
 
-    return getClient(getState())
-      .statuses.deleteStatus(statusId)
-      .then((source) => {
-        usePendingStatusesStore.getState().actions.deleteStatus(statusId);
-        useTimelinesStore.getState().actions.deleteStatus(statusId);
-        updateStatus(
-          statusId,
-          (s) => {
-            s.deleted = true;
-          },
-          queryClient,
-        );
+const deleteStatus = (statusId: string, withRedraft = false) => {
+  if (!isLoggedIn()) return null;
 
-        if (withRedraft) {
-          useComposeStore.getState().actions.setComposeToStatus(status, poll, source, withRedraft);
-          useModalsStore.getState().actions.openModal('COMPOSE');
-        }
-      })
-      .catch(() => {
-        incrementReplyCount(status);
-      });
-  };
+  const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+  if (!status) return null;
 
-const deleteStatusFromGroup =
-  (statusId: string, groupId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-    if (!isLoggedIn(getState)) return null;
+  const poll = status.poll_id
+    ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
+    : undefined;
 
-    const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
-    if (!status) return null;
+  decrementReplyCount(status);
 
-    decrementReplyCount(status);
+  return getClient()
+    .statuses.deleteStatus(statusId)
+    .then((source) => {
+      usePendingStatusesStore.getState().actions.deleteStatus(statusId);
+      useTimelinesStore.getState().actions.deleteStatus(statusId);
+      updateStatus(
+        statusId,
+        (s) => {
+          s.deleted = true;
+        },
+        queryClient,
+      );
 
-    return getClient(getState())
-      .experimental.groups.deleteGroupStatus(statusId, groupId)
-      .then(() => {
-        usePendingStatusesStore.getState().actions.deleteStatus(statusId);
-        useTimelinesStore.getState().actions.deleteStatus(statusId);
-        updateStatus(
-          statusId,
-          (s) => {
-            s.deleted = true;
-          },
-          queryClient,
-        );
-      })
-      .catch(() => {
-        incrementReplyCount(status);
-      });
-  };
+      if (withRedraft) {
+        useComposeStore.getState().actions.setComposeToStatus(status, poll, source, withRedraft);
+        useModalsStore.getState().actions.openModal('COMPOSE');
+      }
+    })
+    .catch(() => {
+      incrementReplyCount(status);
+    });
+};
 
-const muteStatus = (statusId: string) => (_dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
+const deleteStatusFromGroup = (statusId: string, groupId: string) => {
+  if (!isLoggedIn()) return null;
 
-  return getClient(getState())
+  const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
+  if (!status) return null;
+
+  decrementReplyCount(status);
+
+  return getClient()
+    .experimental.groups.deleteGroupStatus(statusId, groupId)
+    .then(() => {
+      usePendingStatusesStore.getState().actions.deleteStatus(statusId);
+      useTimelinesStore.getState().actions.deleteStatus(statusId);
+      updateStatus(
+        statusId,
+        (s) => {
+          s.deleted = true;
+        },
+        queryClient,
+      );
+    })
+    .catch(() => {
+      incrementReplyCount(status);
+    });
+};
+
+const muteStatus = (statusId: string) => {
+  if (!isLoggedIn()) return;
+
+  return getClient()
     .statuses.muteStatus(statusId)
     .then(() => {
       updateStatus(
@@ -269,10 +260,10 @@ const muteStatus = (statusId: string) => (_dispatch: AppDispatch, getState: () =
     });
 };
 
-const unmuteStatus = (statusId: string) => (_dispatch: AppDispatch, getState: () => RootState) => {
-  if (!isLoggedIn(getState)) return;
+const unmuteStatus = (statusId: string) => {
+  if (!isLoggedIn()) return;
 
-  return getClient(getState())
+  return getClient()
     .statuses.unmuteStatus(statusId)
     .then(() => {
       updateStatus(
@@ -291,9 +282,8 @@ const toggleMuteStatus = (status: Pick<Status, 'id' | 'muted'>) =>
 // let TRANSLATIONS_QUEUE: Set<string> = new Set();
 // let TRANSLATIONS_TIMEOUT: NodeJS.Timeout | null = null;
 
-// const translateStatus = (statusId: string, targetLanguage: string, lazy?: boolean) =>
-//   (dispatch: AppDispatch, getState: () => RootState) => {
-//     const client = getClient(getState);
+// const translateStatus = (statusId: string, targetLanguage: string, lazy?: boolean) => {
+//     const client = getClient();
 //     const features = client.features;
 
 //     const handleTranslateMany = () => {
@@ -334,7 +324,6 @@ const toggleMuteStatus = (status: Pick<Status, 'id' | 'muted'>) =>
 //       TRANSLATIONS_QUEUE.add(statusId);
 
 //       handleTranslateMany();
-//     }
 //   };
 
 const unfilterStatus = (statusId: string) => {

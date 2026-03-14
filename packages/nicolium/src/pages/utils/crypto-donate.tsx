@@ -4,7 +4,7 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 import Accordion from '@/components/ui/accordion';
 import Column from '@/components/ui/column';
 import SiteWallet from '@/features/crypto-donate/components/site-wallet';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 
 const messages = defineMessages({
   heading: { id: 'column.crypto_donate', defaultMessage: 'Donate cryptocurrency' },

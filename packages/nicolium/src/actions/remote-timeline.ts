@@ -1,27 +1,21 @@
 import { changeSetting } from '@/actions/settings';
 import { useSettingsStore } from '@/stores/settings';
 
-import type { AppDispatch } from '@/store';
-
 const getPinnedHosts = () => {
   const { settings } = useSettingsStore.getState();
   return settings.remote_timeline.pinnedHosts;
 };
 
-const pinHost = (host: string) => (dispatch: AppDispatch) => {
+const pinHost = (host: string) => {
   const pinnedHosts = getPinnedHosts();
-
-  dispatch(changeSetting(['remote_timeline', 'pinnedHosts'], [...pinnedHosts, host]));
+  changeSetting(['remote_timeline', 'pinnedHosts'], [...pinnedHosts, host]);
 };
 
-const unpinHost = (host: string) => (dispatch: AppDispatch) => {
+const unpinHost = (host: string) => {
   const pinnedHosts = getPinnedHosts();
-
-  dispatch(
-    changeSetting(
-      ['remote_timeline', 'pinnedHosts'],
-      pinnedHosts.filter((value) => value !== host),
-    ),
+  changeSetting(
+    ['remote_timeline', 'pinnedHosts'],
+    pinnedHosts.filter((value) => value !== host),
   );
 };
 

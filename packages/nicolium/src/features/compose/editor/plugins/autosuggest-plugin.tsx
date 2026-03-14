@@ -34,7 +34,6 @@ import ReactDOM from 'react-dom';
 
 import { saveSettings } from '@/actions/settings';
 import AutosuggestEmoji from '@/components/autosuggest-emoji';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useComposeSuggestions } from '@/hooks/use-compose-suggestions';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
@@ -271,7 +270,6 @@ const AutosuggestPlugin = ({
   setSuggestionsHidden,
 }: AutosuggestPluginProps): React.JSX.Element | null => {
   const { rememberEmojiUse } = useSettingsStoreActions();
-  const dispatch = useAppDispatch();
 
   const [editor] = useLexicalComposerContext();
   const [resolution, setResolution] = useState<Resolution | null>(null);
@@ -309,7 +307,7 @@ const AutosuggestPlugin = ({
         if (!suggestion.id) return;
 
         rememberEmojiUse(suggestion as Emoji);
-        dispatch(saveSettings());
+        saveSettings();
 
         replaceMatch($createEmojiNode(suggestion as Emoji));
       } else if (typeof suggestion === 'string') {

@@ -1,6 +1,6 @@
 import { selectAccount, selectOwnAccount } from '@/queries/accounts/selectors';
-
-import type { RootState } from '@/store';
+import { useAuthStore } from '@/stores/auth';
+import { useInstanceStore } from '@/stores/instance';
 
 const validId = (id?: string | null | false) =>
   typeof id === 'string' && id !== 'null' && id !== 'undefined';
@@ -24,39 +24,38 @@ const parseBaseURL = (url?: string) => {
   }
 };
 
-const getLoggedInAccount = (state: RootState) => selectOwnAccount(state);
+const getLoggedInAccount = () => selectOwnAccount();
 
-const isLoggedIn = (getState: () => RootState) => validId(getState().me);
+const isLoggedIn = () => validId(useAuthStore.getState().currentAccountId);
 
-const getUserToken = (state: RootState, accountId?: string | false | null) => {
+const getUserToken = (accountId?: string | false | null) => {
   if (!accountId) return;
   const accountUrl = selectAccount(accountId)?.url;
   if (!accountUrl) return;
-  return state.auth.users[accountUrl]?.access_token;
+  return useAuthStore.getState().users[accountUrl]?.access_token;
 };
 
-const getAccessToken = (state: RootState) => {
-  const me = state.me;
-  return getUserToken(state, me);
+const getAccessToken = () => {
+  const { currentAccountId } = useAuthStore.getState();
+  return getUserToken(currentAccountId);
 };
 
-const getAuthUserId = (state: RootState) => {
-  const me = state.auth.me;
-
-  return [state.auth.users[me!]?.id, me].filter((id) => id).find(validId);
+const getAuthUserId = () => {
+  const { me, users } = useAuthStore.getState();
+  return [users[me!]?.id, me].filter((id) => id).find(validId);
 };
 
-const getAuthUserUrl = (state: RootState) => {
-  const me = state.auth.me;
-
-  return [state.auth.users[me!]?.url, me].filter((url) => url).find(isURL);
+const getAuthUserUrl = () => {
+  const { me, users } = useAuthStore.getState();
+  return [users[me!]?.url, me].filter((url) => url).find(isURL);
 };
 
 /** Get the VAPID public key. */
-const getVapidKey = (state: RootState) =>
-  state.auth.app?.vapid_key ?? state.instance.configuration.vapid.public_key;
+const getVapidKey = () =>
+  useAuthStore.getState().app?.vapid_key ??
+  useInstanceStore.getState().instance.configuration.vapid.public_key;
 
-const getMeUrl = (state: RootState) => selectOwnAccount(state)?.url;
+const getMeUrl = () => selectOwnAccount()?.url;
 
 export {
   validId,

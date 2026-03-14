@@ -1,22 +1,22 @@
 import { useQueryClient } from '@tanstack/react-query';
 import React from 'react';
-import { defineMessages, FormattedMessage, useIntl, type IntlShape } from 'react-intl';
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { deactivateUser, deleteUser } from '@/actions/admin';
 import OutlineBox from '@/components/outline-box';
 import Text from '@/components/ui/text';
 import AccountContainer from '@/containers/account-container';
 import { selectAccount } from '@/queries/accounts/selectors';
 import {
+  useAdminDeleteAccountMutation,
+  useAdminPerformAccountActionMutation,
+} from '@/queries/admin/use-accounts';
+import {
   useAdminDeleteStatusMutation,
   useAdminUpdateStatusMutation,
 } from '@/queries/admin/use-statuses';
-import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
-import { useModalsActions, useModalsStore } from '@/stores/modals';
+import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
-
-import type { AppDispatch } from '@/store';
 
 const messages = defineMessages({
   deactivateUserHeading: {
@@ -99,9 +99,15 @@ const messages = defineMessages({
   },
 });
 
-const deactivateUserModal =
-  (intl: IntlShape, accountId: string, afterConfirm = () => {}) =>
-  (dispatch: AppDispatch) => {
+const useDeactivateUserModal = (accountId: string) => {
+  const intl = useIntl();
+  const { mutate: performAccountAction } = useAdminPerformAccountActionMutation(
+    accountId,
+    'suspend',
+  );
+  const { openModal } = useModalsActions();
+
+  return () => {
     const acct = selectAccount(accountId)!.acct;
     const name = selectAccount(accountId)!.username;
 
@@ -121,25 +127,29 @@ const deactivateUserModal =
       </div>
     );
 
-    useModalsStore.getState().actions.openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.deactivateUserHeading, { acct }),
       message,
       confirm: intl.formatMessage(messages.deactivateUserConfirm, { name }),
       onConfirm: () => {
-        dispatch(deactivateUser(accountId))
-          .then(() => {
+        performAccountAction(undefined, {
+          onSuccess: () => {
             const message = intl.formatMessage(messages.userDeactivated, { acct });
             toast.success(message);
-            afterConfirm();
-          })
-          .catch(() => {});
+          },
+        });
       },
     });
   };
+};
 
-const deleteUserModal =
-  (intl: IntlShape, accountId: string, afterConfirm = () => {}) =>
-  (dispatch: AppDispatch) => {
+const useDeleteUserModal = (accountId: string) => {
+  const intl = useIntl();
+  const { mutate: deleteUser } = useAdminDeleteAccountMutation(accountId);
+  const { openModal } = useModalsActions();
+  const queryClient = useQueryClient();
+
+  return () => {
     const account = selectAccount(accountId)!;
     const acct = account.acct;
     const name = account.username;
@@ -164,28 +174,28 @@ const deleteUserModal =
     const confirm = intl.formatMessage(messages.deleteUserConfirm, { name });
     const checkbox = local ? intl.formatMessage(messages.deleteLocalUserCheckbox) : false;
 
-    useModalsStore.getState().actions.openModal('CONFIRM', {
+    openModal('CONFIRM', {
       heading: intl.formatMessage(messages.deleteUserHeading, { acct }),
       message,
       confirm,
       checkbox,
       onConfirm: () => {
-        dispatch(deleteUser(accountId))
-          .then(() => {
+        deleteUser(undefined, {
+          onSuccess: () => {
             const message = intl.formatMessage(messages.userDeleted, { acct });
             queryClient.invalidateQueries({ queryKey: queryKeys.accounts.show(accountId) });
             queryClient.invalidateQueries({
               queryKey: queryKeys.accounts.lookup(acct.toLocaleLowerCase()),
             });
             toast.success(message);
-            afterConfirm();
-          })
-          .catch(() => {});
+          },
+        });
       },
     });
   };
+};
 
-const useToggleStatusSensitivityModal = (statusId: string, afterConfirm = () => {}) => {
+const useToggleStatusSensitivityModal = (statusId: string) => {
   const intl = useIntl();
   const { mutate: updateStatus } = useAdminUpdateStatusMutation(statusId);
   const { openModal } = useModalsActions();
@@ -217,7 +227,6 @@ const useToggleStatusSensitivityModal = (statusId: string, afterConfirm = () => 
                 { acct },
               );
               toast.success(message);
-              afterConfirm();
             },
           },
         );
@@ -226,7 +235,7 @@ const useToggleStatusSensitivityModal = (statusId: string, afterConfirm = () => 
   };
 };
 
-const useDeleteStatusModal = (statusId: string, afterConfirm = () => {}) => {
+const useDeleteStatusModal = (statusId: string) => {
   const intl = useIntl();
   const { mutate: deleteStatus } = useAdminDeleteStatusMutation(statusId);
   const { openModal } = useModalsActions();
@@ -246,7 +255,6 @@ const useDeleteStatusModal = (statusId: string, afterConfirm = () => {}) => {
           onSuccess: () => {
             const message = intl.formatMessage(messages.statusDeleted, { acct });
             toast.success(message);
-            afterConfirm();
           },
         });
       },
@@ -255,8 +263,8 @@ const useDeleteStatusModal = (statusId: string, afterConfirm = () => {}) => {
 };
 
 export {
-  deactivateUserModal,
-  deleteUserModal,
+  useDeactivateUserModal,
+  useDeleteUserModal,
   useToggleStatusSensitivityModal,
   useDeleteStatusModal,
 };

@@ -10,7 +10,6 @@ import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 
 const messages = defineMessages({
   otpLoginFail: { id: 'login.otp_log_in.fail', defaultMessage: 'Invalid code, please try again.' },
@@ -22,7 +21,6 @@ interface IOtpAuthForm {
 }
 
 const OtpAuthForm: React.FC<IOtpAuthForm> = ({ mfa_token, small }) => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -36,14 +34,14 @@ const OtpAuthForm: React.FC<IOtpAuthForm> = ({ mfa_token, small }) => {
 
   const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     const { code } = getFormData(event.target);
-    dispatch(otpVerify(code, mfa_token))
+    otpVerify(code, mfa_token)
       .then(({ access_token }) => {
         setCodeError(false);
-        return dispatch(verifyCredentials(access_token));
+        return verifyCredentials(access_token);
       })
       .then((account: Record<string, any>) => {
         setShouldRedirect(true);
-        return dispatch(switchAccount(account.id));
+        return switchAccount(account.id);
       })
       .catch(() => {
         setIsLoading(false);

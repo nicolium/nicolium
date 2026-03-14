@@ -1,4 +1,3 @@
-import { useInfiniteQuery, useMutation } from '@tanstack/react-query';
 import clsx from 'clsx';
 import React from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
@@ -8,11 +7,8 @@ import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import Column from '@/components/ui/column';
 import Icon from '@/components/ui/icon';
 import Spinner from '@/components/ui/spinner';
-import { useAppSelector } from '@/hooks/use-app-selector';
-import {
-  oauthTokensQueryOptions,
-  revokeOauthTokenMutationOptions,
-} from '@/queries/security/oauth-tokens';
+import { useOauthTokensQuery, useRevokeOauthTokenMutation } from '@/queries/security/oauth-tokens';
+import { useAuthStore } from '@/stores/auth';
 import { useModalsActions } from '@/stores/modals';
 
 import type { OauthToken } from 'pl-api';
@@ -33,7 +29,7 @@ interface IAuthToken {
 const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
   const intl = useIntl();
 
-  const revokeMutation = useMutation(revokeOauthTokenMutationOptions(token.id));
+  const revokeMutation = useRevokeOauthTokenMutation(token.id);
 
   const { openModal } = useModalsActions();
 
@@ -156,12 +152,10 @@ const AuthToken: React.FC<IAuthToken> = ({ token, isCurrent }) => {
 const AuthTokenListPage: React.FC = () => {
   const intl = useIntl();
 
-  const { data: tokens } = useInfiniteQuery(oauthTokensQueryOptions);
+  const { data: tokens } = useOauthTokensQuery();
 
-  const currentTokenId = useAppSelector((state) => {
-    const currentToken = Object.values(state.auth.tokens).find(
-      (token) => token.me === state.auth.me,
-    );
+  const currentTokenId = useAuthStore((state) => {
+    const currentToken = Object.values(state.tokens).find((token) => token.me === state.me);
 
     return currentToken?.id;
   });

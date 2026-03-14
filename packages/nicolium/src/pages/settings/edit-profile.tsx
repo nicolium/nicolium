@@ -3,7 +3,7 @@ import { type CredentialAccount, GOTOSOCIAL, type UpdateCredentialsParams } from
 import React, { useState, useEffect } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { patchMe } from '@/actions/me';
+import { patchMe } from '@/actions/auth';
 import BirthdayInput from '@/components/birthday-input';
 import List, { ListItem } from '@/components/list';
 import Accordion from '@/components/ui/accordion';
@@ -20,12 +20,10 @@ import AvatarPicker from '@/features/edit-profile/components/avatar-picker';
 import HeaderPicker from '@/features/edit-profile/components/header-picker';
 import { SelectDropdown } from '@/features/forms';
 import { useImageField } from '@/hooks/forms/use-image-field';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useInstance } from '@/stores/instance';
 import toast from '@/toast';
 
 import type { StreamfieldComponent } from '@/components/ui/streamfield';
@@ -271,7 +269,6 @@ const ProfileField: StreamfieldComponent<AccountCredentialsField> = ({
 /** Edit profile page. */
 const EditProfilePage: React.FC = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const instance = useInstance();
   const client = useClient();
 
@@ -281,9 +278,7 @@ const EditProfilePage: React.FC = () => {
     ? instance.configuration.accounts.max_profile_fields
     : instance.pleroma.metadata.fields_limits.max_fields;
 
-  const attachmentTypes = useAppSelector(
-    (state) => state.instance.configuration.media_attachments.supported_mime_types,
-  )
+  const attachmentTypes = instance.configuration.media_attachments.supported_mime_types
     ?.filter((type) => type.startsWith('image/'))
     .join(',');
 
@@ -341,7 +336,7 @@ const EditProfilePage: React.FC = () => {
 
     if (!instance.configuration.accounts?.allow_custom_css) delete params.custom_css;
 
-    promises.push(dispatch(patchMe(params as any)));
+    promises.push(patchMe(params as any));
 
     if (features.muteStrangers) {
       promises.push(

@@ -8,9 +8,9 @@ import { dateFormatOptions } from '@/components/relative-timestamp';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
 import { useAcct } from '@/hooks/use-acct';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
 import { capitalize } from '@/utils/strings';
 
@@ -45,7 +45,7 @@ interface IProfileInfoPanel {
 const ProfileInfoPanel: React.FC<IProfileInfoPanel> = ({ account, username }) => {
   const intl = useIntl();
   const acct = useAcct(account);
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const ownAccount = account?.id === me;
 
   const { data: scrobble } = useAccountScrobbleQuery(account?.id);

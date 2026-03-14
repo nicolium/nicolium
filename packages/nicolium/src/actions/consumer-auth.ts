@@ -7,10 +7,8 @@ import { getScopes } from '@/utils/scopes';
 
 import { createApp } from './apps';
 
-import type { AppDispatch, RootState } from '@/store';
-
-const createProviderApp = () => (dispatch: AppDispatch, getState: () => RootState) => {
-  const scopes = getScopes(getState(), undefined, true);
+const createProviderApp = () => {
+  const scopes = getScopes(undefined, true);
 
   const params = {
     client_name: `${sourceCode.displayName} (${new URL(window.origin).host})`,
@@ -22,28 +20,27 @@ const createProviderApp = () => (dispatch: AppDispatch, getState: () => RootStat
   return createApp(params);
 };
 
-const prepareRequest =
-  (provider: string) => async (dispatch: AppDispatch, getState: () => RootState) => {
-    const baseURL = isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : '';
+const prepareRequest = async (provider: string) => {
+  const baseURL = isURL(BuildConfig.BACKEND_URL) ? BuildConfig.BACKEND_URL : '';
 
-    const scopes = getScopes(getState(), undefined, true);
-    const app = await dispatch(createProviderApp());
-    const { client_id, redirect_uri } = app;
+  const scopes = getScopes(undefined, true);
+  const app = await createProviderApp();
+  const { client_id, redirect_uri } = app;
 
-    localStorage.setItem('nicolium:external:app', JSON.stringify(app));
-    localStorage.setItem('nicolium:external:baseurl', baseURL);
-    localStorage.setItem('nicolium:external:scopes', scopes);
+  localStorage.setItem('nicolium:external:app', JSON.stringify(app));
+  localStorage.setItem('nicolium:external:baseurl', baseURL);
+  localStorage.setItem('nicolium:external:scopes', scopes);
 
-    const params = {
-      provider,
-      'authorization[client_id]': client_id,
-      'authorization[redirect_uri]': redirect_uri,
-      'authorization[scope]': scopes,
-    };
-
-    const query = queryString.stringify(params);
-
-    location.href = `${baseURL}/oauth/prepare_request?${query.toString()}`;
+  const params = {
+    provider,
+    'authorization[client_id]': client_id,
+    'authorization[redirect_uri]': redirect_uri,
+    'authorization[scope]': scopes,
   };
+
+  const query = queryString.stringify(params);
+
+  location.href = `${baseURL}/oauth/prepare_request?${query.toString()}`;
+};
 
 export { prepareRequest };

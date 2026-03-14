@@ -9,16 +9,15 @@ import {
   InstanceInfoPanel,
   InstanceModerationPanel,
 } from '@/features/ui/util/async-components';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useOwnAccount } from '@/hooks/use-own-account';
-import { federationRestrictionsDisclosed } from '@/utils/state';
+import { useFederationRestrictionsDisclosed } from '@/utils/state';
 
 /** Layout for viewing a remote instance timeline. */
 const RemoteInstanceLayout = () => {
   const { instance } = layouts.remoteInstance.useParams();
 
   const { data: account } = useOwnAccount();
-  const disclosed = useAppSelector(federationRestrictionsDisclosed);
+  const disclosed = useFederationRestrictionsDisclosed();
 
   return (
     <>

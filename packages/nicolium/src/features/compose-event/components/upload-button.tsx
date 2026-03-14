@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Icon from '@/components/icon';
 import Text from '@/components/ui/text';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useInstance } from '@/stores/instance';
 
 interface IUploadButton {
   disabled?: boolean;
@@ -13,9 +13,10 @@ interface IUploadButton {
 const UploadButton: React.FC<IUploadButton> = ({ disabled, onSelectFile }) => {
   const fileElement = useRef<HTMLInputElement>(null);
 
-  const attachmentTypes = useAppSelector(
-    (state) => state.instance.configuration.media_attachments.supported_mime_types,
-  )?.filter((type) => type.startsWith('image/'));
+  const attachmentTypes =
+    useInstance().configuration.media_attachments.supported_mime_types?.filter((type) =>
+      type.startsWith('image/'),
+    );
 
   let accept = attachmentTypes?.join(',');
   if (accept === 'application/octet-stream') accept = undefined;

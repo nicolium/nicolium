@@ -6,7 +6,6 @@ import toast from '@/toast';
 
 import { importEntities } from './importer';
 
-import type { AppDispatch, RootState } from '@/store';
 import type { CreateEventParams, Location, MediaAttachment } from 'pl-api';
 
 const messages = defineMessages({
@@ -27,60 +26,56 @@ const messages = defineMessages({
   },
 });
 
-const submitEvent =
-  ({
-    statusId,
+const submitEvent = async ({
+  statusId,
+  name,
+  status,
+  banner,
+  startTime,
+  endTime,
+  joinMode,
+  location,
+}: {
+  statusId: string | null;
+  name: string;
+  status: string;
+  banner: MediaAttachment | null;
+  startTime: Date;
+  endTime: Date | null;
+  joinMode: 'restricted' | 'free';
+  location: Location | null;
+}) => {
+  if (!name || !name.length) {
+    return;
+  }
+
+  const params: CreateEventParams = {
     name,
     status,
-    banner,
-    startTime,
-    endTime,
-    joinMode,
-    location,
-  }: {
-    statusId: string | null;
-    name: string;
-    status: string;
-    banner: MediaAttachment | null;
-    startTime: Date;
-    endTime: Date | null;
-    joinMode: 'restricted' | 'free';
-    location: Location | null;
-  }) =>
-  async (dispatch: AppDispatch, getState: () => RootState) => {
-    const state = getState();
-
-    if (!name || !name.length) {
-      return;
-    }
-
-    const params: CreateEventParams = {
-      name,
-      status,
-      start_time: startTime.toISOString(),
-      join_mode: joinMode,
-      content_type: 'text/markdown',
-    };
-
-    if (endTime) params.end_time = endTime?.toISOString();
-    if (banner) params.banner_id = banner.id;
-    if (location) params.location_id = location.origin_id;
-
-    const data = await (statusId === null
-      ? getClient(state).events.createEvent(params)
-      : getClient(state).events.editEvent(statusId, params));
-
-    importEntities({ statuses: [data] });
-    toast.success(statusId ? messages.editSuccess : messages.success, {
-      actionLabel: messages.view,
-      actionLinkOptions: {
-        to: '/@{$username}/events/$statusId',
-        params: { username: data.account.acct, statusId: data.id },
-      },
-    });
-
-    return data;
+    start_time: startTime.toISOString(),
+    join_mode: joinMode,
+    content_type: 'text/markdown',
   };
+
+  if (endTime) params.end_time = endTime?.toISOString();
+  if (banner) params.banner_id = banner.id;
+  if (location) params.location_id = location.origin_id;
+
+  const data = await (statusId === null
+    ? getClient().events.createEvent(params)
+    : getClient().events.editEvent(statusId, params));
+
+  importEntities({ statuses: [data] });
+  toast.success(statusId ? messages.editSuccess : messages.success, {
+    actionLabel: messages.view,
+    actionLinkOptions: {
+      to: '/@{$username}/events/$statusId',
+      params: { username: data.account.acct, statusId: data.id },
+    },
+  });
+
+  return data;
+};
 
 // todo: move to compose store?
 const cancelEventCompose = () => {
@@ -89,8 +84,8 @@ const cancelEventCompose = () => {
   });
 };
 
-const initEventEdit = (statusId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
-  return getClient(getState())
+const initEventEdit = (statusId: string) => {
+  return getClient()
     .statuses.getStatusSource(statusId)
     .then((response) => {
       useComposeStore

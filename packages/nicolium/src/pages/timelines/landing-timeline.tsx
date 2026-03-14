@@ -7,10 +7,10 @@ import Markup from '@/components/markup';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
-import { useInstance } from '@/hooks/use-instance';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { About } from '@/pages/utils/about';
 import { usePublicTimeline } from '@/queries/timelines/use-timelines';
+import { useInstance } from '@/stores/instance';
 import { getTextDirection } from '@/utils/rtl';
 
 interface ILogoText extends Pick<React.HTMLAttributes<HTMLHeadingElement>, 'className' | 'dir'> {

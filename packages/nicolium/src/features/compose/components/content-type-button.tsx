@@ -3,8 +3,8 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import DropdownMenu from '@/components/dropdown-menu';
 import Icon from '@/components/ui/icon';
-import { useInstance } from '@/hooks/use-instance';
 import { useCompose, useComposeActions } from '@/stores/compose';
+import { useInstance } from '@/stores/instance';
 
 const messages = defineMessages({
   contentTypePlaintext: {

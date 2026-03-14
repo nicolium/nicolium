@@ -1,7 +1,5 @@
-import { getClient } from '@/api';
+import { useAuthStore } from '@/stores/auth';
 
-import { useAppSelector } from './use-app-selector';
-
-const useClient = () => useAppSelector(getClient);
+const useClient = () => useAuthStore((state) => state.client);
 
 export { useClient };

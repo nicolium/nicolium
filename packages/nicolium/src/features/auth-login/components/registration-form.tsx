@@ -14,10 +14,9 @@ import Input from '@/components/ui/input';
 import Select from '@/components/ui/select';
 import Textarea from '@/components/ui/textarea';
 import CaptchaField from '@/features/auth-login/components/captcha';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
 
@@ -50,7 +49,6 @@ interface IRegistrationForm {
 const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   const intl = useIntl();
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
   const client = useClient();
   const { locale } = useSettings();
@@ -192,7 +190,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
       launchModal();
       return;
     } else {
-      return dispatch(verifyCredentials(access_token)).then(() => {
+      return verifyCredentials(access_token).then(() => {
         navigate({ to: '/' });
       });
     }
@@ -244,7 +242,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
 
     setSubmissionLoading(true);
 
-    dispatch(register(normalParams))
+    register(normalParams)
       .then(postRegisterAction)
       .catch(() => {
         setSubmissionLoading(false);

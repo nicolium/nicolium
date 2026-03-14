@@ -6,7 +6,7 @@ import { Link } from '@/components/link';
 import Column from '@/components/ui/column';
 import Text from '@/components/ui/text';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 import { useUiStore } from '@/stores/ui';
 
 const messages = defineMessages({
@@ -21,7 +21,7 @@ const messages = defineMessages({
 // const checkIfReloadNeeded = useCallback((isPartial: boolean) => {
 //   if (isPartial) {
 //     polling.current = setInterval(() => {
-//       dispatch(fetchHomeTimeline());
+//       fetchHomeTimeline();
 //     }, 3000);
 //   } else if (polling.current) {
 //     clearInterval(polling.current);

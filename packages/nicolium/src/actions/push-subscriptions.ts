@@ -1,11 +1,8 @@
-import { getClient } from '@/api';
+import { useAuthStore } from '@/stores/auth';
 
-import type { AppDispatch, RootState } from '@/store';
 import type { CreatePushNotificationsSubscriptionParams } from 'pl-api';
 
-const createPushSubscription =
-  (params: CreatePushNotificationsSubscriptionParams) =>
-  (dispatch: AppDispatch, getState: () => RootState) =>
-    getClient(getState).pushNotifications.createSubscription(params);
+const createPushSubscription = (params: CreatePushNotificationsSubscriptionParams) =>
+  useAuthStore.getState().client.pushNotifications.createSubscription(params);
 
 export { createPushSubscription };

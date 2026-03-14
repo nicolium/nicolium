@@ -7,23 +7,21 @@ import { fetchInstance } from '@/actions/instance';
 import { BigCard } from '@/components/ui/big-card';
 import Button from '@/components/ui/button';
 import Text from '@/components/ui/text';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import ConsumersList from '@/features/auth-login/components/consumers-list';
 import LoginForm from '@/features/auth-login/components/login-form';
 import OtpAuthForm from '@/features/auth-login/components/otp-auth-form';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useModalsActions } from '@/stores/modals';
 import { getRedirectUrl } from '@/utils/redirect';
-import { isStandalone } from '@/utils/state';
+import { useIsStandalone } from '@/utils/state';
 
 import type { NicoliumResponse } from '@/api';
 
 const LoginPage = () => {
-  const dispatch = useAppDispatch();
   const { closeModal } = useModalsActions();
 
-  const me = useAppSelector((state) => state.me);
-  const standalone = useAppSelector((state) => isStandalone(state));
+  const me = useCurrentAccount();
+  const standalone = useIsStandalone();
 
   const token = new URLSearchParams(window.location.search).get('token');
 
@@ -37,16 +35,16 @@ const LoginPage = () => {
 
   const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = (event) => {
     const { username, password } = getFormData(event.target);
-    dispatch(logIn(username, password))
-      .then(({ access_token }) => dispatch(verifyCredentials(access_token)))
+    logIn(username, password)
+      .then(({ access_token }) => verifyCredentials(access_token))
       // Refetch the instance for authenticated fetch
       .then(async (account) => {
-        await dispatch(fetchInstance());
+        await fetchInstance();
         return account;
       })
       .then((account: { id: string }) => {
         closeModal();
-        dispatch(switchAccount(account.id));
+        switchAccount(account.id);
         if (typeof me !== 'string') {
           setShouldRedirect(true);
         }

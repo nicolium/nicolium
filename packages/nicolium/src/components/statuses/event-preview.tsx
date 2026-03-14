@@ -5,10 +5,10 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import Icon from '@/components/icon';
 import Button from '@/components/ui/button';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
 import EventActionButton from '@/features/event/components/event-action-button';
 import EventDate from '@/features/event/components/event-date';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useAccount } from '@/queries/accounts/use-account';
 
 import type { NormalizedStatus as StatusEntity } from '@/normalizers/status';
@@ -38,7 +38,7 @@ const EventPreview: React.FC<IEventPreview> = ({
 }) => {
   const intl = useIntl();
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const { data: account } = useAccount(status.account_id);
 
   const event = status.event!;

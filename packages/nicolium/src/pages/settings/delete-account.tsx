@@ -9,7 +9,6 @@ import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Text from '@/components/ui/text';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useFeatures } from '@/hooks/use-features';
 import toast from '@/toast';
 
@@ -26,7 +25,6 @@ const messages = defineMessages({
 
 const DeleteAccountPage = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const features = useFeatures();
 
   const [password, setPassword] = React.useState('');
@@ -40,7 +38,7 @@ const DeleteAccountPage = () => {
 
   const handleSubmit = React.useCallback(() => {
     setLoading(true);
-    dispatch(deleteAccount(password))
+    deleteAccount(password)
       .then(() => {
         setPassword('');
         toast.success(intl.formatMessage(messages.deleteAccountSuccess));
@@ -52,7 +50,7 @@ const DeleteAccountPage = () => {
         setPassword('');
         toast.error(intl.formatMessage(messages.deleteAccountFail));
       });
-  }, [password, dispatch, intl]);
+  }, [password, intl]);
 
   return (
     <Card variant='rounded'>

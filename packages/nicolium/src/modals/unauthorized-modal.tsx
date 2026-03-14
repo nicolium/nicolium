@@ -9,9 +9,9 @@ import Modal from '@/components/ui/modal';
 import Text from '@/components/ui/text';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useAccount } from '@/queries/accounts/use-account';
+import { useInstance } from '@/stores/instance';
 import toast from '@/toast';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';

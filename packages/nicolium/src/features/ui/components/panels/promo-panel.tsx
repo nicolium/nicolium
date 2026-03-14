@@ -4,7 +4,7 @@ import ForkAwesomeIcon from '@/components/fork-awesome-icon';
 import List, { ListItem } from '@/components/list';
 import Widget from '@/components/ui/widget';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 
 const PromoPanel: React.FC = () => {

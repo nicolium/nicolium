@@ -31,7 +31,6 @@ type MinifiedContext = ReturnType<typeof minifyContext>;
 
 type SelectedStatus = NormalizedStatus & {
   account: Account;
-  accounts?: Array<Account>;
   reblog: SelectedStatus | null;
   quote: SelectedStatus | null;
 };
@@ -66,7 +65,6 @@ const useStatusQuery = (statusId?: string) => {
       data: {
         ...statusQuery.data,
         account: account.data!,
-        accounts: [account.data!],
       },
     };
   }, [statusQuery.data, account.data]) as unknown as UseQueryResult<NormalizedStatus>;

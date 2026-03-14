@@ -10,20 +10,16 @@ import { Multiselect } from '@/components/ui/multiselect';
 import StepSlider from '@/components/ui/step-slider';
 import { SelectDropdown } from '@/features/forms';
 import SettingToggle from '@/features/settings/components/setting-toggle';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
-import { useInstance } from '@/hooks/use-instance';
 import { PaletteListItem } from '@/pages/dashboard/theme-editor';
+import { useInstance } from '@/stores/instance';
 import { useDefaultSettings, useSettings } from '@/stores/settings';
 import sourceCode from '@/utils/code';
 import colors from '@/utils/colors';
-import { isStandalone } from '@/utils/state';
+import { useIsStandalone } from '@/utils/state';
 
 import ThemeToggle from '../ui/components/theme-toggle';
-
-import type { AppDispatch } from '@/store';
 
 const languages = {
   en: 'English',
@@ -148,38 +144,35 @@ const messages = defineMessages({
   black: { id: 'theme_toggle.black', defaultMessage: 'Black' },
 });
 
-const debouncedSave = debounce((dispatch: AppDispatch) => {
-  dispatch(saveSettings({ showAlert: true }));
+const debouncedSave = debounce(() => {
+  saveSettings({ showAlert: true });
 }, 1000);
 
 const Preferences = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const features = useFeatures();
   const settings = useSettings();
   const defaultSettings = useDefaultSettings();
   const frontendConfig = useFrontendConfig();
   const instance = useInstance();
-  const standalone = useAppSelector(isStandalone);
+  const standalone = useIsStandalone();
 
   const brandColor = (settings.theme?.brandColor ?? frontendConfig.brandColor) || '#d80482';
 
   const onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>, path: string[]) => {
-    dispatch(changeSetting(path, event.target.value, { showAlert: true }));
+    changeSetting(path, event.target.value, { showAlert: true });
   };
 
   const onSelectMultiple = (selectedList: string[], path: string[]) => {
-    dispatch(
-      changeSetting(
-        path,
-        selectedList.toSorted((a, b) => a.localeCompare(b)),
-        { showAlert: true },
-      ),
+    changeSetting(
+      path,
+      selectedList.toSorted((a, b) => a.localeCompare(b)),
+      { showAlert: true },
     );
   };
 
   const onToggleChange = (key: string[], checked: boolean) => {
-    dispatch(changeSetting(key, checked));
+    changeSetting(key, checked);
   };
 
   const onBrandColorChange = (newBrandColor: string) => {
@@ -187,39 +180,35 @@ const Preferences = () => {
 
     const theme = settings.theme ?? frontendConfig.defaultSettings.theme;
 
-    dispatch(
-      changeSetting(
-        ['theme'],
-        {
-          ...theme,
-          brandColor: newBrandColor,
-        },
-        { showAlert: true, save: false },
-      ),
+    changeSetting(
+      ['theme'],
+      {
+        ...theme,
+        brandColor: newBrandColor,
+      },
+      { showAlert: true, save: false },
     );
 
-    debouncedSave(dispatch);
+    debouncedSave();
   };
 
   const onInterfaceSizeChange = (value: number) => {
     const theme = settings.theme ?? frontendConfig.defaultSettings.theme;
 
-    dispatch(
-      changeSetting(
-        ['theme'],
-        {
-          ...theme,
-          interfaceSize: INTERFACE_SIZES[value],
-        },
-        { showAlert: true, save: false },
-      ),
+    changeSetting(
+      ['theme'],
+      {
+        ...theme,
+        interfaceSize: INTERFACE_SIZES[value],
+      },
+      { showAlert: true, save: false },
     );
-    debouncedSave(dispatch);
+    debouncedSave();
   };
 
   const onThemeReset = () => {
-    dispatch(changeSetting(['themeMode'], defaultSettings.themeMode, { save: false }));
-    dispatch(changeSetting(['theme'], defaultSettings.theme, { showAlert: true }));
+    changeSetting(['themeMode'], defaultSettings.themeMode, { save: false });
+    changeSetting(['theme'], defaultSettings.theme, { showAlert: true });
   };
 
   const displayMediaOptions = React.useMemo(

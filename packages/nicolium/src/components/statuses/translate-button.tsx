@@ -2,13 +2,13 @@ import React, { useEffect } from 'react';
 import { FormattedMessage, useIntl } from 'react-intl';
 
 import Icon from '@/components/ui/icon';
-import { useAppSelector } from '@/hooks/use-app-selector';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/hooks/use-instance';
 import { selectAccount } from '@/queries/accounts/selectors';
 import { useTranslationLanguages } from '@/queries/instance/use-translation-languages';
 import { useLocalStatusTranslation } from '@/queries/statuses/use-local-status-translation';
 import { useStatusTranslation } from '@/queries/statuses/use-status-translation';
+import { useInstance } from '@/stores/instance';
 import {
   useLanguageModelAvailability,
   useLanguageModelAvailabilityActions,
@@ -79,7 +79,7 @@ const TranslateButton: React.FC<ITranslateButton> = ({ status }) => {
   const autoTranslate = settings.autoTranslate;
   const knownLanguages = autoTranslate ? [...settings.knownLanguages, intl.locale] : [intl.locale];
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const { data: translationLanguages = {} } = useTranslationLanguages();
   const { fetchTranslation, hideTranslation } = useStatusMetaActions();
   const { fetchLocalTranslation, hideLocalTranslation } = useStatusMetaActions();

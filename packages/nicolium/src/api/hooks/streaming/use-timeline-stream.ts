@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useClient } from '@/hooks/use-client';
-import { useInstance } from '@/hooks/use-instance';
-import { getAccessToken } from '@/utils/auth';
+import { useAuthStore } from '@/stores/auth';
+import { useInstance } from '@/stores/instance';
 
 import type { StreamingEvent, StreamingParams } from 'pl-api';
 
@@ -28,7 +27,10 @@ const useTimelineStream = (
   } | null>(null);
   const disconnectCleanup = useRef<(() => void) | null>(null);
 
-  const accessToken = useAppSelector(getAccessToken);
+  const accessToken = useAuthStore((state) => {
+    const me = state.me;
+    return me ? state.users[me]?.access_token : undefined;
+  });
   const streamingUrl = instance.configuration.urls.streaming;
 
   const [connected, setConnected] = useState(false);

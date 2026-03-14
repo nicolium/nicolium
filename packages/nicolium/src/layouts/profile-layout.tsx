@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import Column from '@/components/ui/column';
 import Layout from '@/components/ui/layout';
 import Tabs, { type Item } from '@/components/ui/tabs';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import Header from '@/features/account/components/header';
 import LinkFooter from '@/features/ui/components/link-footer';
 import { layouts } from '@/features/ui/router';
@@ -18,7 +19,6 @@ import {
   AccountNotePanel,
 } from '@/features/ui/util/async-components';
 import { useAcct } from '@/hooks/use-acct';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useAccountLookup } from '@/queries/accounts/use-account-lookup';
 import { LOCAL_STORAGE_REDIRECT_KEY } from '@/utils/redirect';
@@ -30,7 +30,7 @@ const ProfileLayout: React.FC = () => {
 
   const { data: account, isUnauthorized } = useAccountLookup(username, true);
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const features = useFeatures();
   const acct = useAcct(account);
 

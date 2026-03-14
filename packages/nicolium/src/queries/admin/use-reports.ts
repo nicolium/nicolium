@@ -2,8 +2,8 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tansta
 import { useMemo } from 'react';
 
 import { useClient } from '@/hooks/use-client';
-import { useInstance } from '@/hooks/use-instance';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useInstanceStore } from '@/stores/instance';
 
 import { useAccount } from '../accounts/use-account';
 import { queryKeys } from '../keys';
@@ -61,13 +61,13 @@ const pendingReportsQuery = makePaginatedResponseQueryOptions(
 
 const usePendingReportsCount = () => {
   const { data: account } = useOwnAccount();
-  const instance = useInstance();
+  const fetched = useInstanceStore((state) => state.fetched);
 
   return useInfiniteQuery({
     ...pendingReportsQuery,
     select: (data) =>
       (data.pages.at(-1)?.total ?? data.pages.flatMap((page) => page.items).length) || 0,
-    enabled: !!instance.fetched && !!(account?.is_admin ?? account?.is_moderator),
+    enabled: fetched && !!(account?.is_admin ?? account?.is_moderator),
   });
 };
 

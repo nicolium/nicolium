@@ -1,8 +1,9 @@
 import {
+  useInfiniteQuery,
   type DataTag,
   type InfiniteData,
   type QueryKey,
-  useInfiniteQuery,
+  type UseInfiniteQueryOptions,
 } from '@tanstack/react-query';
 
 import { useClient } from '@/hooks/use-client';
@@ -59,15 +60,21 @@ const makePaginatedResponseQuery =
     queryFn: (client: PlApiClient, params: T1) => Promise<PaginatedResponse<T2, IsArray>>,
     select?: (data: InfiniteData<PaginatedResponse<T2, IsArray>>) => T3,
     enabled?: ((...params: T1) => boolean) | 'isLoggedIn' | 'isAdmin',
+    options?: Omit<
+      UseInfiniteQueryOptions<PaginatedResponse<T2, IsArray>>,
+      'queryKey' | 'queryFn' | 'initialPageParam' | 'getNextPageParam' | 'select' | 'enabled'
+    >,
   ) =>
   (...params: T1) => {
     const client = useClient();
     const { data: account } = useOwnAccount();
 
+    type PageParam = { next: (() => Promise<PaginatedResponse<T2, IsArray>>) | null };
+
     return useInfiniteQuery({
       queryKey: typeof queryKey === 'object' ? queryKey : queryKey(...params),
-      queryFn: ({ pageParam }) => pageParam.next?.() ?? queryFn(client, params),
-      initialPageParam: { next: null as (() => Promise<PaginatedResponse<T2, IsArray>>) | null },
+      queryFn: ({ pageParam }) => (pageParam as PageParam).next?.() ?? queryFn(client, params),
+      initialPageParam: { next: null } as PageParam,
       getNextPageParam: (page) => (page.next ? page : undefined),
       select:
         select ??
@@ -94,6 +101,7 @@ const makePaginatedResponseQuery =
           : enabled === 'isAdmin'
             ? !!(account?.is_admin ?? account?.is_moderator)
             : (enabled?.(...params) ?? true),
+      ...options,
     });
   };
 

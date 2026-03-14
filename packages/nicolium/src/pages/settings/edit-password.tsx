@@ -8,7 +8,6 @@ import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import toast from '@/toast';
 
 const messages = defineMessages({
@@ -31,7 +30,6 @@ const initialState = { currentPassword: '', newPassword: '', newPasswordConfirma
 
 const EditPasswordPage = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
 
   const [state, setState] = React.useState(initialState);
   const [isLoading, setLoading] = React.useState(false);
@@ -58,7 +56,7 @@ const EditPasswordPage = () => {
     }
 
     setLoading(true);
-    dispatch(changePassword(currentPassword, newPassword))
+    changePassword(currentPassword, newPassword)
       .then(() => {
         resetState();
         toast.success(intl.formatMessage(messages.updatePasswordSuccess));
@@ -70,7 +68,7 @@ const EditPasswordPage = () => {
         resetState();
         toast.error(intl.formatMessage(messages.updatePasswordFail));
       });
-  }, [currentPassword, newPassword, newPasswordConfirmation, dispatch, intl]);
+  }, [currentPassword, newPassword, newPasswordConfirmation, intl]);
 
   return (
     <Column label={intl.formatMessage(messages.header)} backHref='/settings'>

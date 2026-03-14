@@ -7,8 +7,7 @@ import { PublicTimelineColumn } from '@/columns/timeline';
 import Accordion from '@/components/ui/accordion';
 import Column from '@/components/ui/column';
 import PinnedHostsPicker from '@/features/remote-timeline/components/pinned-hosts-picker';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 
 const messages = defineMessages({
@@ -17,7 +16,6 @@ const messages = defineMessages({
 });
 
 const PublicTimelinePage = () => {
-  const dispatch = useAppDispatch();
   const intl = useIntl();
 
   const instance = useInstance();
@@ -27,11 +25,11 @@ const PublicTimelinePage = () => {
   const showExplanationBox = settings.showExplanationBox;
 
   const dismissExplanationBox = () => {
-    dispatch(changeSetting(['showExplanationBox'], false));
+    changeSetting(['showExplanationBox'], false);
   };
 
   const toggleExplanationBox = (setting: boolean) => {
-    dispatch(changeSetting(['explanationBox'], setting));
+    changeSetting(['explanationBox'], setting);
   };
 
   return (

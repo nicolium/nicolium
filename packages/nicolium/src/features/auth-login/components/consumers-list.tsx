@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl';
 
 import Card from '@/components/ui/card';
 import Text from '@/components/ui/text';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 
 import ConsumerButton from './consumer-button';
 

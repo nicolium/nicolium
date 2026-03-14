@@ -7,9 +7,9 @@ import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import { ParsedContent } from '@/components/statuses/parsed-content';
 import Avatar from '@/components/ui/avatar';
 import Text from '@/components/ui/text';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import Emojify from '@/features/emoji/emojify';
 import PlaceholderChatMessage from '@/features/placeholder/components/placeholder-chat-message';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useShoutboxIsLoading, useShoutboxMessages, type ShoutMessage } from '@/stores/shoutbox';
 
@@ -95,7 +95,7 @@ const ShoutboxMessageList: React.FC = () => {
   const node = useRef<VirtuosoHandle | null>(null);
   const [firstItemIndex, setFirstItemIndex] = useState(START_INDEX - 20);
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const shoutboxMessages = useShoutboxMessages() || [];
   const isLoading = useShoutboxIsLoading();
 

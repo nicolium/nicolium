@@ -7,7 +7,6 @@ import ThumbNavigationLink from '@/components/navigation/thumb-navigation-link';
 import Icon from '@/components/ui/icon';
 import { useStatContext } from '@/contexts/stat-context';
 import { layouts } from '@/features/ui/router';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { queryKeys } from '@/queries/keys';
@@ -15,7 +14,7 @@ import { useNotificationsUnreadCount } from '@/queries/notifications/use-notific
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
-import { isStandalone } from '@/utils/state';
+import { useIsStandalone } from '@/utils/state';
 
 const messages = defineMessages({
   home: { id: 'column.home', defaultMessage: 'Home' },
@@ -41,7 +40,7 @@ const ThumbNavigation: React.FC = React.memo((): React.JSX.Element => {
   const { groupComposeModal } = useComposeActions();
   const { unreadChatsCount } = useStatContext();
 
-  const standalone = useAppSelector(isStandalone);
+  const standalone = useIsStandalone();
   const notificationCount = useNotificationsUnreadCount();
 
   const handleOpenComposeModal = () => {

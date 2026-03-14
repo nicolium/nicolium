@@ -8,10 +8,10 @@ import Badge from '@/components/badge';
 import Card, { CardBody } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import ActionButton from '@/features/ui/components/action-button';
 import { isTimezoneLabel } from '@/features/ui/components/profile-field';
 import { UserPanel } from '@/features/ui/util/async-components';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useAccountScrobbleQuery } from '@/queries/accounts/account-scrobble';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useAccountHoverCardActions, useAccountHoverCardStore } from '@/stores/account-hover-card';
@@ -72,7 +72,7 @@ const AccountHoverCard: React.FC<IAccountHoverCard> = ({ visible = true }) => {
   const { accountId, ref } = useAccountHoverCardStore();
   const { updateAccountHoverCard, closeAccountHoverCard } = useAccountHoverCardActions();
 
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const { data: account } = useAccount(accountId ?? undefined, true);
   const { data: scrobble } = useAccountScrobbleQuery(account?.id);
   const badges = getBadges(account);

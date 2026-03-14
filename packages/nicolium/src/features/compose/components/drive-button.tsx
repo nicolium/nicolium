@@ -3,8 +3,8 @@ import React from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 import * as v from 'valibot';
 
-import { useInstance } from '@/hooks/use-instance';
 import { appendMedia, useComposeActions } from '@/stores/compose';
+import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 
 import ComposeFormButton from './compose-form-button';

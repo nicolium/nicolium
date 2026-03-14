@@ -1,15 +1,14 @@
 import { useMemo } from 'react';
 
-import { displayFqn } from '@/utils/state';
+import { useInstance } from '@/stores/instance';
 
-import { useAppSelector } from './use-app-selector';
-import { useInstance } from './use-instance';
+import { useFrontendConfig } from './use-frontend-config';
 import { useOwnAccount } from './use-own-account';
 
 import type { Account } from 'pl-api';
 
 const useAcct = (account?: Pick<Account, 'fqn' | 'acct' | 'local' | 'url'>): string | undefined => {
-  const fqn = useAppSelector((state) => displayFqn(state));
+  const { displayFqn: fqn } = useFrontendConfig();
   const instance = useInstance();
   const localUrl = useOwnAccount().data?.url;
 

@@ -6,6 +6,7 @@ import { BANNER_HTML } from '@/build-config';
 import Avatar from '@/components/ui/avatar';
 import Layout from '@/components/ui/layout';
 import Text from '@/components/ui/text';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import Warning from '@/features/compose/components/warning';
 import LinkFooter from '@/features/ui/components/link-footer';
 import {
@@ -18,7 +19,6 @@ import {
   AnnouncementsPanel,
   ComposeForm,
 } from '@/features/ui/util/async-components';
-import { useAppSelector } from '@/hooks/use-app-selector';
 import { useDraggedFiles } from '@/hooks/use-dragged-files';
 import { useFeatures } from '@/hooks/use-features';
 import { useFrontendConfig } from '@/hooks/use-frontend-config';
@@ -27,7 +27,7 @@ import { useUploadCompose } from '@/stores/compose';
 import { useSettings } from '@/stores/settings';
 
 const HomeLayout = () => {
-  const me = useAppSelector((state) => state.me);
+  const me = useCurrentAccount();
   const { data: account } = useOwnAccount();
   const features = useFeatures();
   const frontendConfig = useFrontendConfig();

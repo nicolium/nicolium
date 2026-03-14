@@ -10,8 +10,7 @@ import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Text from '@/components/ui/text';
-import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { useInstance } from '@/hooks/use-instance';
+import { useInstance } from '@/stores/instance';
 import toast from '@/toast';
 
 const messages = defineMessages({
@@ -36,7 +35,6 @@ const messages = defineMessages({
 
 const MigrationPage = () => {
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const instance = useInstance();
 
   const cooldownPeriod = instance.pleroma.metadata.migration_cooldown_period;
@@ -57,7 +55,7 @@ const MigrationPage = () => {
 
   const handleSubmit: React.SubmitEventHandler<HTMLFormElement> = () => {
     setIsLoading(true);
-    return dispatch(moveAccount(targetAccount, password))
+    return moveAccount(targetAccount, password)
       .then(() => {
         clearForm();
         toast.success(intl.formatMessage(messages.moveAccountSuccess));
