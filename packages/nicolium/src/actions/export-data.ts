@@ -39,7 +39,7 @@ const listAccounts = async (response: PaginatedResponse<Account>) => {
   return Array.from(new Set(accounts));
 };
 
-const exportFollows = async (client: PlApiClient) => {
+const exportFollows = async (client: PlApiClient, me: string) => {
   const response = await client.accounts.getAccountFollowing(me, { limit: 40 });
   const followings = await listAccounts(response);
   const followingsCsv = followings.map((fqn) => fqn + ',true');

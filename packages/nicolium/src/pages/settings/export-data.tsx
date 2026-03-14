@@ -7,6 +7,7 @@ import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import Text from '@/components/ui/text';
+import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useClient } from '@/hooks/use-client';
 
 interface ICSVExporter {
@@ -53,12 +54,13 @@ const messages = defineMessages({
 
 const ExportDataPage = () => {
   const client = useClient();
+  const accountId = useCurrentAccount();
   const intl = useIntl();
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <CSVExporter
-        action={() => exportFollows(client)}
+        action={() => exportFollows(client, accountId as string)}
         inputLabel={<FormattedMessage id='export_data.follows_label' defaultMessage='Follows' />}
         inputHint={
           <FormattedMessage
