@@ -65,7 +65,7 @@
     "@tailwindcss/typography": "^0.5.19",
     "@tanstack/react-pacer": "^0.20.0",
     "@tanstack/react-query": "^5.90.21",
-    "@tanstack/react-router": "^1.166.7",
+    "@tanstack/react-router": "^1.167.0",
     "@transfem-org/sfm-js": "^0.26.1",
     "@twemoji/svg": "^15.0.0",
     "@uidotdev/usehooks": "^2.4.1",
