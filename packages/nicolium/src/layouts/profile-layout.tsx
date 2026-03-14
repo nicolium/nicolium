@@ -26,6 +26,7 @@ import { LOCAL_STORAGE_REDIRECT_KEY } from '@/utils/redirect';
 /** Layout to display a user's profile. */
 const ProfileLayout: React.FC = () => {
   const { username } = layouts.profile.useParams();
+  const { with_replies: withReplies } = layouts.profile.useSearch();
   const location = useLocation();
 
   const { data: account, isUnauthorized } = useAccountLookup(username, true);
@@ -80,7 +81,7 @@ const ProfileLayout: React.FC = () => {
 
   let activeItem;
   const pathname = location.pathname.replace(`@${username}/`, '');
-  if (pathname.endsWith('/with_replies')) {
+  if (withReplies) {
     activeItem = 'replies';
   } else if (pathname.endsWith('/media')) {
     activeItem = 'media';
