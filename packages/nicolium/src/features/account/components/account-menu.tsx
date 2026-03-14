@@ -4,8 +4,10 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { initReport, ReportableEntities } from '@/actions/reports';
+import { changeSetting } from '@/actions/settings';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import IconButton from '@/components/ui/icon-button';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
@@ -91,6 +93,10 @@ const messages = defineMessages({
     id: 'account.load_activities.fail',
     defaultMessage: 'Failed to fetch latest posts',
   },
+  nickname: { id: 'account.nickname.modal_header', defaultMessage: 'Set nickname for @{name}' },
+  nicknamePlaceholder: { id: 'account.nickname.placeholder', defaultMessage: 'Enter a nickname' },
+  nicknameSave: { id: 'account.nickname.save', defaultMessage: 'Save nickname' },
+  nicknameSaved: { id: 'account.nickname.success', defaultMessage: 'Nickname saved' },
   note: { id: 'account_note.modal_header', defaultMessage: 'Edit note for @{name}' },
   notePlaceholder: { id: 'account_note.placeholder', defaultMessage: 'Add a note' },
   noteSaved: { id: 'account_note.success', defaultMessage: 'Note saved' },
@@ -105,6 +111,7 @@ interface IAccountMenu {
 
 const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
   const intl = useIntl();
+  const dispatch = useAppDispatch();
   const { mentionCompose, directCompose } = useComposeActions();
   const client = useClient();
 
@@ -209,6 +216,28 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
         });
       },
       text: account.relationship?.note ?? '',
+    });
+  };
+
+  const onEditNickname = () => {
+    const currentNickname = settings.accountNicknames[account.id] ?? '';
+    openModal('TEXT_FIELD', {
+      heading: (
+        <FormattedMessage
+          id='account.nickname.modal_header'
+          defaultMessage='Set nickname for @{name}'
+          values={{ name: account.acct }}
+        />
+      ),
+      placeholder: intl.formatMessage(messages.nicknamePlaceholder),
+      confirm: <FormattedMessage id='account.nickname.save' defaultMessage='Save nickname' />,
+      onConfirm: (value) => {
+        const trimmed = value.trim();
+        dispatch(changeSetting(['accountNicknames', account.id], trimmed || undefined));
+        toast.success(messages.nicknameSaved);
+      },
+      text: currentNickname,
+      singleLine: true,
     });
   };
 
@@ -460,6 +489,12 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
           icon: require('@phosphor-icons/core/regular/note-pencil.svg'),
         });
       }
+
+      menu.push({
+        text: intl.formatMessage(messages.nickname, { name: account.acct }),
+        action: onEditNickname,
+        icon: require('@phosphor-icons/core/regular/tag.svg'),
+      });
 
       menu.push(null);
 

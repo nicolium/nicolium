@@ -66,7 +66,6 @@ const useStatusQuery = (statusId?: string) => {
       data: {
         ...statusQuery.data,
         account: account.data!,
-        accounts: [account.data!],
       },
     };
   }, [statusQuery.data, account.data]) as unknown as UseQueryResult<NormalizedStatus>;

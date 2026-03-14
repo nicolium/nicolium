@@ -55,6 +55,7 @@ const settingsSchema = v.object({
   storeSettingsInNotes: v.fallback(v.boolean(), false),
   composeInTimelines: v.fallback(v.boolean(), true),
   rememberTimelinePosition: v.fallback(v.boolean(), true),
+  accountNicknames: v.fallback(v.record(v.string(), v.string()), {}),
 
   theme: v.optional(
     coerceObject({

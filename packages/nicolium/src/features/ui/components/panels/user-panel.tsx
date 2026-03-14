@@ -20,6 +20,10 @@ const messages = defineMessages({
     defaultMessage:
       'This account privacy status is set to locked. The owner manually reviews who can follow them.',
   },
+  originalDisplayName: {
+    id: 'account.original_display_name',
+    defaultMessage: 'You have assigned a nickname to this user.',
+  },
 });
 
 interface IUserPanel {
@@ -82,6 +86,19 @@ const UserPanel: React.FC<IUserPanel> = ({ accountId, action, badges, domain }) 
               <Text size='lg' weight='bold' truncate>
                 <Emojify text={account.display_name} emojis={account.emojis} />
               </Text>
+
+              {account.original_display_name &&
+                account.original_display_name !== account.display_name && (
+                  <Text
+                    theme='muted'
+                    truncate
+                    title={intl.formatMessage(messages.originalDisplayName)}
+                  >
+                    {'('}
+                    <Emojify text={account.original_display_name} emojis={account.emojis} />
+                    {')'}
+                  </Text>
+                )}
 
               {verified && <VerificationBadge />}
 

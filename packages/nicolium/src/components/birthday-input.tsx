@@ -4,7 +4,7 @@ import { defineMessages, FormattedDate, useIntl } from 'react-intl';
 import IconButton from '@/components/ui/icon-button';
 import { DatePicker } from '@/features/ui/util/async-components';
 import { useFeatures } from '@/hooks/use-features';
-import { useInstance } from '@/stores/instance';
+import { useInstance } from '@/hooks/use-instance';
 
 const messages = defineMessages({
   birthdayPlaceholder: {

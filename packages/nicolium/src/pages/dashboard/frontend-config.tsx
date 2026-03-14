@@ -69,7 +69,6 @@ const FrontendConfigEditor: React.FC = () => {
   const features = useFeatures();
 
   const initialData = useAppSelector((state) => state.frontendConfig);
-  console.log(initialData);
   const { mutate: updateConfig, isPending } = useUpdateAdminConfig();
 
   const [data, setData] = useState(v.parse(frontendConfigSchema, initialData));
