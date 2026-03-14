@@ -50,6 +50,7 @@
     &:focus {
       border-color: rgb(var(--color-primary-500));
       outline: 2px solid rgb(var(--color-primary-500));
+      outline-offset: 0;
     }
 
     &:disabled {
@@ -327,7 +328,7 @@
     }
   }
 
-  &__content {
+  &__content:not(:first-child) {
     margin-top: 0.25rem;
   }
 
