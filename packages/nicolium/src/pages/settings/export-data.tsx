@@ -7,6 +7,7 @@ import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import Text from '@/components/ui/text';
+import { useClient } from '@/hooks/use-client';
 
 interface ICSVExporter {
   inputLabel: React.ReactNode;
@@ -51,12 +52,13 @@ const messages = defineMessages({
 });
 
 const ExportDataPage = () => {
+  const client = useClient();
   const intl = useIntl();
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <CSVExporter
-        action={exportFollows}
+        action={() => exportFollows(client)}
         inputLabel={<FormattedMessage id='export_data.follows_label' defaultMessage='Follows' />}
         inputHint={
           <FormattedMessage
@@ -72,7 +74,7 @@ const ExportDataPage = () => {
         }
       />
       <CSVExporter
-        action={exportBlocks}
+        action={() => exportBlocks(client)}
         inputLabel={<FormattedMessage id='export_data.blocks_label' defaultMessage='Blocks' />}
         inputHint={
           <FormattedMessage
@@ -85,7 +87,7 @@ const ExportDataPage = () => {
         }
       />
       <CSVExporter
-        action={exportMutes}
+        action={() => exportMutes(client)}
         inputLabel={<FormattedMessage id='export_data.mutes_label' defaultMessage='Mutes' />}
         inputHint={
           <FormattedMessage
