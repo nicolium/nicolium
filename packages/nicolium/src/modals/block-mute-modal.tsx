@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { initReport, ReportableEntities } from '@/actions/reports';
 import FormGroup from '@/components/ui/form-group';
 import Modal from '@/components/ui/modal';
 import Text from '@/components/ui/text';
@@ -15,6 +14,7 @@ import {
   useMuteAccountMutation,
   useUpdateAccountNoteMutation,
 } from '@/queries/accounts/use-relationship';
+import { useModalsActions } from '@/stores/modals';
 import toast from '@/toast';
 
 import type { BaseModalProps } from '@/features/ui/components/modal-root';
@@ -46,6 +46,7 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
   const [note, setNote] = useState<string | undefined>(undefined);
   const { notes, blocksDuration, mutesDuration } = useFeatures();
   const canSetDuration = action === 'MUTE' ? mutesDuration : blocksDuration;
+  const { openModal } = useModalsActions();
 
   const currentNote = account?.relationship?.note;
 
@@ -79,7 +80,7 @@ const BlockMuteModal: React.FC<BlockMuteModalProps & BaseModalProps> = ({
 
   const handleBlockAndReport = () => {
     handleClick(() => {
-      initReport(ReportableEntities.STATUS, account, { statusId });
+      openModal('REPORT', { accountId: account.id, statusIds: statusId ? [statusId] : undefined });
     });
   };
 

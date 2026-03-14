@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { submitReport, ReportableEntities } from '@/actions/reports';
 import AttachmentThumbs from '@/components/media/attachment-thumbs';
 import StatusContent from '@/components/statuses/status-content';
 import Modal from '@/components/ui/modal';
@@ -10,6 +9,7 @@ import Text from '@/components/ui/text';
 import AccountContainer from '@/containers/account-container';
 import { useAccount } from '@/queries/accounts/use-account';
 import { useBlockAccountMutation } from '@/queries/accounts/use-relationship';
+import { useReportAccountMutation } from '@/queries/accounts/use-report';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useAccountTimeline } from '@/queries/timelines/use-timelines';
 import { useInstance } from '@/stores/instance';
@@ -58,19 +58,18 @@ const SelectedStatus = ({ statusId }: { statusId: string }) => {
 
 interface ReportModalProps {
   accountId: string;
-  entityType: ReportableEntities;
-  statusIds: Array<string>;
+  statusIds?: Array<string>;
 }
 
 const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
   onClose,
   accountId,
-  entityType,
-  statusIds,
+  statusIds = [],
 }) => {
   const { data: account } = useAccount(accountId || undefined);
 
   const { mutate: blockAccount } = useBlockAccountMutation(accountId);
+  const { mutate: reportAccount } = useReportAccountMutation(accountId);
 
   const [block, setBlock] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -82,22 +81,30 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
 
   const shouldRequireRule = rules.length > 0;
 
-  const isReportingAccount = entityType === ReportableEntities.ACCOUNT;
-  const isReportingStatus = entityType === ReportableEntities.STATUS;
+  const isReportingAccount = statusIds.length === 0;
 
   const [currentStep, setCurrentStep] = useState<Steps>(Steps.ONE);
 
   const handleSubmit = () => {
     setIsSubmitting(true);
 
-    submitReport(accountId, selectedStatusIds, [...ruleIds], comment, forward)
-      .then(() => {
-        setIsSubmitting(false);
-        setCurrentStep(Steps.THREE);
-      })
-      .catch(() => {
-        setIsSubmitting(false);
-      });
+    reportAccount(
+      {
+        status_ids: selectedStatusIds,
+        comment,
+        forward,
+        rule_ids: ruleIds,
+      },
+      {
+        onSuccess: () => {
+          setIsSubmitting(false);
+          setCurrentStep(Steps.THREE);
+        },
+        onError: () => {
+          setIsSubmitting(false);
+        },
+      },
+    );
 
     if (block && account) {
       blockAccount(undefined);
@@ -174,7 +181,7 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
   };
 
   const renderSelectedEntity = () => {
-    if (entityType === ReportableEntities.STATUS) return renderSelectedStatuses();
+    if (!isReportingAccount) return renderSelectedStatuses();
     return null;
   };
 
@@ -191,19 +198,8 @@ const ReportModal: React.FC<BaseModalProps & ReportModalProps> = ({
       return false;
     }
 
-    return (
-      isSubmitting ||
-      (shouldRequireRule && ruleIds.length === 0) ||
-      (isReportingStatus && selectedStatusIds.length === 0)
-    );
-  }, [
-    currentStep,
-    isSubmitting,
-    shouldRequireRule,
-    ruleIds.length,
-    selectedStatusIds.length,
-    isReportingStatus,
-  ]);
+    return isSubmitting || (shouldRequireRule && ruleIds.length === 0);
+  }, [currentStep, isSubmitting, shouldRequireRule, ruleIds.length, selectedStatusIds.length]);
 
   const calculateProgress = useCallback(() => {
     switch (currentStep) {

@@ -5,7 +5,6 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import { redactStatus } from '@/actions/admin';
 import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/actions/moderation';
-import { initReport, ReportableEntities } from '@/actions/reports';
 import { changeSetting } from '@/actions/settings';
 import {
   deleteStatus,
@@ -884,7 +883,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleReport: React.EventHandler<React.MouseEvent> = () => {
-      initReport(ReportableEntities.STATUS, status.account, { status });
+      openModal('REPORT', { accountId: status.account.id, statusIds: [status.id] });
     };
 
     const handleConversationMuteClick: React.EventHandler<React.MouseEvent> = () => {

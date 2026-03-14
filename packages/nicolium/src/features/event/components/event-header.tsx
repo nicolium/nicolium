@@ -3,7 +3,6 @@ import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
 import { useDeleteStatusModal, useToggleStatusSensitivityModal } from '@/actions/moderation';
-import { initReport, ReportableEntities } from '@/actions/reports';
 import { deleteStatus } from '@/actions/statuses';
 import VerificationBadge from '@/components/accounts/verification-badge';
 import DropdownMenu, { type Menu as MenuType } from '@/components/dropdown-menu';
@@ -237,7 +236,7 @@ const EventHeader: React.FC<IEventHeader> = ({ status }) => {
   };
 
   const handleReport = () => {
-    initReport(ReportableEntities.STATUS, account, { status });
+    openModal('REPORT', { accountId: account.id, statusIds: [status.id] });
   };
 
   const handleToggleStatusSensitivity = () => {

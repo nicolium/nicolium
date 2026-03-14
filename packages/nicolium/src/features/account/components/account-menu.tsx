@@ -2,7 +2,6 @@ import { GOTOSOCIAL, MASTODON } from 'pl-api';
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { initReport, ReportableEntities } from '@/actions/reports';
 import DropdownMenu, { type Menu } from '@/components/dropdown-menu';
 import IconButton from '@/components/ui/icon-button';
 import { useClient } from '@/hooks/use-client';
@@ -113,13 +112,12 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
   const { mutate: unpinAccount } = useUnpinAccountMutation(account?.id!);
   const { mutate: removeFromFollowers } = useRemoveAccountFromFollowersMutation(account?.id!);
   const { mutate: updateAccountNote } = useUpdateAccountNoteMutation(account?.id!);
+  const { mutate: blockDomain } = useBlockDomainMutation();
+  const { mutate: unblockDomain } = useUnblockDomainMutation();
   const { openModal } = useModalsActions();
   const settings = useSettings();
 
   const { software } = features.version;
-
-  const { mutate: blockDomain } = useBlockDomainMutation();
-  const { mutate: unblockDomain } = useUnblockDomainMutation();
 
   const onBlock = () => {
     if (account.relationship?.blocking) {
@@ -209,7 +207,7 @@ const AccountMenu: React.FC<IAccountMenu> = ({ account }) => {
   };
 
   const onReport = () => {
-    initReport(ReportableEntities.ACCOUNT, account);
+    openModal('REPORT', { accountId: account.id });
   };
 
   const onMute = () => {
