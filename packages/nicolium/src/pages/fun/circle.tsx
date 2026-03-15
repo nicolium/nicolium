@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
 import { processCircle } from '@/actions/circle';
@@ -76,8 +76,6 @@ const CirclePage: React.FC = () => {
   const { openModal } = useModalsActions();
   const { resetCompose, updateCompose } = useComposeActions();
   const { data: account } = useOwnAccount();
-
-  useEffect(() => {}, []);
 
   const onSave: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();

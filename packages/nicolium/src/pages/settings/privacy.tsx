@@ -1,5 +1,5 @@
 import { mappings } from '@mkljczk/url-purify';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
 import { useMutative } from 'use-mutative';
 
@@ -113,8 +113,6 @@ const Privacy = () => {
     }
     setRedirectLinksMode(event.target.value as 'off');
   };
-
-  useEffect(() => {}, []);
 
   return (
     <Column label={intl.formatMessage(messages.heading)} transparent withHeader={false}>
