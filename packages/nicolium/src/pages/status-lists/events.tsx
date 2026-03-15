@@ -1,8 +1,8 @@
 import { Link } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
-import ReactSwipeableViews from 'react-swipeable-views';
 
+import ReactSwipeableViews from '@/components/react-swipeable-views';
 import EventPreview from '@/components/statuses/event-preview';
 import Button from '@/components/ui/button';
 import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';

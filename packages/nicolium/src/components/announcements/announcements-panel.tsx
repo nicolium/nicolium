@@ -1,8 +1,8 @@
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
-import ReactSwipeableViews from 'react-swipeable-views';
 
+import ReactSwipeableViews from '@/components/react-swipeable-views';
 import Card from '@/components/ui/card';
 import Widget from '@/components/ui/widget';
 import { useAnnouncements } from '@/queries/announcements/use-announcements';

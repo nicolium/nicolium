@@ -12,8 +12,8 @@ import clsx from 'clsx';
 import { supportsPassiveEvents } from 'detect-passive-events';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
-import ReactSwipeableViews from 'react-swipeable-views';
 
+import ReactSwipeableViews from '@/components/react-swipeable-views';
 import IconButton from '@/components/ui/icon-button';
 import Portal from '@/components/ui/portal';
 import { useModalsActions } from '@/stores/modals';

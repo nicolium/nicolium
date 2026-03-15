@@ -1,10 +1,10 @@
 import { Link } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { defineMessages, FormattedDate, FormattedMessage, useIntl } from 'react-intl';
-import ReactSwipeableViews from 'react-swipeable-views';
 
 import Account from '@/components/accounts/account';
 import List, { ListItem } from '@/components/list';
+import ReactSwipeableViews from '@/components/react-swipeable-views';
 import StatusContainer from '@/components/statuses/status-container';
 import Card from '@/components/ui/card';
 import Column from '@/components/ui/column';
