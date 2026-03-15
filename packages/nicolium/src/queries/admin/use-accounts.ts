@@ -266,6 +266,28 @@ const useAdminUpdateTagsMutation = (accountId: string) => {
   });
 };
 
+const useAdminSetRoleMutation = (accountId: string) => {
+  const client = useClient();
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationKey: ['admin', 'acounts', accountId, 'setRole'],
+    mutationFn: (role: 'user' | 'moderator' | 'admin') => {
+      switch (role) {
+        case 'user':
+          return client.admin.accounts.demoteToUser(accountId);
+        case 'moderator':
+          return client.admin.accounts.promoteToModerator(accountId);
+        case 'admin':
+          return client.admin.accounts.promoteToAdmin(accountId);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.accounts.show(accountId) });
+    },
+  });
+};
+
 export {
   useAdminAccount,
   useAdminAccounts,
@@ -281,4 +303,5 @@ export {
   useAdminTagUserMutation,
   useAdminUntagUserMutation,
   useAdminUpdateTagsMutation,
+  useAdminSetRoleMutation,
 };

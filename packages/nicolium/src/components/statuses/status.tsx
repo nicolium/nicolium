@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { defineMessages, useIntl, FormattedList, FormattedMessage } from 'react-intl';
 
-import { unfilterStatus } from '@/actions/statuses';
 import Card from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
@@ -24,7 +23,7 @@ import {
 import { useComposeActions } from '@/stores/compose';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
-import { useStatusMetaActions } from '@/stores/status-meta';
+import { useStatusMeta, useStatusMetaActions } from '@/stores/status-meta';
 import { textForScreenReader } from '@/utils/status';
 
 import HashtagLink from '../hashtag-link';
@@ -206,7 +205,8 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   const router = useRouter();
   const features = useFeatures();
 
-  const { toggleStatusesMediaHidden } = useStatusMetaActions();
+  const { toggleStatusesMediaHidden, unfilterStatus } = useStatusMetaActions();
+  const { showFiltered } = useStatusMeta(status.id);
   const { openModal } = useModalsActions();
   const { replyCompose, mentionCompose } = useComposeActions();
   const { boostModal } = useSettings();
@@ -524,7 +524,7 @@ const Status: React.FC<IStatus> = React.memo((props) => {
   if (status.deleted)
     return <Tombstone id={status.id} onMoveUp={onMoveUp} onMoveDown={onMoveDown} deleted />;
 
-  if (filtered && actualStatus.showFiltered !== true) {
+  if (filtered && showFiltered !== true) {
     const body = (
       <div className={clsx('status__wrapper text-center')} ref={node}>
         <Text theme='muted'>

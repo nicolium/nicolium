@@ -326,16 +326,6 @@ const toggleMuteStatus = (status: Pick<Status, 'id' | 'muted'>) =>
 //       handleTranslateMany();
 //   };
 
-const unfilterStatus = (statusId: string) => {
-  updateStatus(
-    statusId,
-    (status) => {
-      status.showFiltered = true;
-    },
-    queryClient,
-  );
-};
-
 export {
   createStatus,
   editStatus,
@@ -343,5 +333,4 @@ export {
   deleteStatus,
   deleteStatusFromGroup,
   toggleMuteStatus,
-  unfilterStatus,
 };

@@ -11,6 +11,7 @@ type State = {
       targetLanguage?: string;
       localTargetLanguage?: string;
       showPollResults?: boolean;
+      showFiltered?: boolean;
     }
   >;
   actions: {
@@ -25,6 +26,7 @@ type State = {
     hideLocalTranslation: (statusId: string) => void;
     setStatusLanguage: (statusId: string, language: string) => void;
     toggleShowPollResults: (statusId: string) => void;
+    unfilterStatus: (statusId: string) => void;
   };
 };
 
@@ -115,6 +117,13 @@ const useStatusMetaStore = create<State>()(
           if (!state.statuses[statusId]) state.statuses[statusId] = {};
 
           state.statuses[statusId].showPollResults = !state.statuses[statusId].showPollResults;
+        });
+      },
+      unfilterStatus: (statusId) => {
+        set((state: State) => {
+          if (!state.statuses[statusId]) state.statuses[statusId] = {};
+
+          state.statuses[statusId].showFiltered = true;
         });
       },
     },

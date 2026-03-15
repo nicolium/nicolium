@@ -2,7 +2,6 @@ import { PLEROMA } from 'pl-api';
 import React, { type ChangeEventHandler, useMemo, useState } from 'react';
 import { defineMessages, FormattedMessage, type MessageDescriptor, useIntl } from 'react-intl';
 
-import { setRole } from '@/actions/admin';
 import { useDeactivateUserModal, useDeleteUserModal } from '@/actions/moderation';
 import Account from '@/components/accounts/account';
 import List, { ListItem } from '@/components/list';
@@ -19,7 +18,7 @@ import { adminAccountRoute } from '@/features/ui/router';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useAccount } from '@/queries/accounts/use-account';
-import { useAdminUpdateTagsMutation } from '@/queries/admin/use-accounts';
+import { useAdminSetRoleMutation, useAdminUpdateTagsMutation } from '@/queries/admin/use-accounts';
 import {
   useAdminSuggestAccountMutation,
   useAdminUnsuggestAccountMutation,
@@ -94,6 +93,8 @@ interface IStaffRolePicker {
 const StaffRolePicker: React.FC<IStaffRolePicker> = ({ account }) => {
   const intl = useIntl();
 
+  const { mutate: adminSetRole } = useAdminSetRoleMutation(account.id);
+
   const roles: Record<AccountRole, string> = useMemo(
     () => ({
       user: intl.formatMessage(messages.roleUser),
@@ -106,8 +107,8 @@ const StaffRolePicker: React.FC<IStaffRolePicker> = ({ account }) => {
   const handleRoleChange: React.ChangeEventHandler<HTMLSelectElement> = (e) => {
     const role = e.target.value as AccountRole;
 
-    setRole(account.id, role)
-      .then(() => {
+    adminSetRole(role, {
+      onSuccess: () => {
         let message: MessageDescriptor | undefined;
 
         if (role === 'admin') {
@@ -123,8 +124,8 @@ const StaffRolePicker: React.FC<IStaffRolePicker> = ({ account }) => {
         if (message) {
           toast.success(intl.formatMessage(message, { acct: account.acct }));
         }
-      })
-      .catch(() => {});
+      },
+    });
   };
 
   const accountRole = getRole(account);

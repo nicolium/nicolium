@@ -134,7 +134,6 @@ const normalizeStatus = (
     poll_id: poll?.id ?? null,
     group_id: group?.id ?? null,
     expectsCard: false,
-    showFiltered: null as null | boolean,
     deleted: false,
     ...status,
     quote_id: status.quote_id ?? null,
