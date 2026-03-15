@@ -1,8 +1,8 @@
 # Nicolium
 
-[![Codeberg Repo stars](https://img.shields.io/gitea/stars/mkljczk/nicolium?gitea_url=https%3A%2F%2Fcodeberg.org&logo=Codeberg)](https://codeberg.org/mkljczk/nicolium)
-[![GitHub Repo stars](https://img.shields.io/github/stars/mkljczk/nicolium)](https://github.com/mkljczk/nicolium)
-[![GitHub License](https://img.shields.io/github/license/mkljczk/nicolium)](https://github.com/mkljczk/nicolium?tab=AGPL-3.0-1-ov-file#readme)
+[![Codeberg Repo stars](https://img.shields.io/gitea/stars/nicolium/nicolium?gitea_url=https%3A%2F%2Fcodeberg.org&logo=Codeberg)](https://codeberg.org/nicolium/nicolium)
+[![GitHub Repo stars](https://img.shields.io/github/stars/nicolium/nicolium)](https://github.com/nicolium/nicolium)
+[![GitHub License](https://img.shields.io/github/license/nicolium/nicolium)](https://github.com/nicolium/nicolium?tab=AGPL-3.0-1-ov-file#readme)
 [![Weblate project translated](https://img.shields.io/weblate/progress/nicolium)](https://hosted.weblate.org/engage/nicolium/)
 ![trans rights btw](https://img.shields.io/badge/-rights_btw-wtf?style=flat&label=trans&labelColor=5BCEFA&color=F5A9B8)
 
@@ -30,7 +30,7 @@ The repository hosts Nicolium, but also libraries related to the project. Curren
 
 ## Contributing
 
-This project is hosted on [Codeberg](https://codeberg.org/mkljczk/nicolium) and [GitHub](https://github.com/mkljczk/nicolium). You can open issues on Codeberg or create pull requests on both platforms.
+This project is hosted on [Codeberg](https://codeberg.org/nicolium/nicolium) and [GitHub](https://github.com/nicolium/nicolium). You can open issues on Codeberg or create pull requests on both platforms.
 
 You can find more information about setting up the development environment in [the documentation](https://nicolium.app/docs/contributing/nicolium/).
 

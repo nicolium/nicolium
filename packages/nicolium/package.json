@@ -7,14 +7,14 @@
     "fediverse",
     "pleroma"
   ],
-  "homepage": "https://codeberg.org/mkljczk/nicolium",
+  "homepage": "https://codeberg.org/nicolium/nicolium",
   "bugs": {
-    "url": "https://codeberg.org/mkljczk/nicolium/issues"
+    "url": "https://codeberg.org/nicolium/nicolium/issues"
   },
   "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
-    "url": "https://codeberg.org/mkljczk/nicolium"
+    "url": "https://codeberg.org/nicolium/nicolium"
   },
   "type": "module",
   "scripts": {

@@ -1,14 +1,14 @@
 {
   "name": "pl-hooks",
   "version": "0.0.15",
-  "homepage": "https://codeberg.org/mkljczk/nicolium/src/branch/develop/packages/pl-hooks",
+  "homepage": "https://codeberg.org/nicolium/nicolium/src/branch/develop/packages/pl-hooks",
   "bugs": {
-    "url": "https://codeberg.org/mkljczk/nicolium/issues"
+    "url": "https://codeberg.org/nicolium/nicolium/issues"
   },
   "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
-    "url": "https://codeberg.org/mkljczk/nicolium"
+    "url": "https://codeberg.org/nicolium/nicolium"
   },
   "files": [
     "dist"

@@ -6,7 +6,7 @@ Changes made since the project forked from Soapbox in April 2024.
 
 ### Major changes
 
-- Switched to a separate library [`pl-api`](https://codeberg.org/mkljczk/nicolium/src/branch/develop/packages/pl-api) for Mastodon API integration. It is mostly written from scratch, inheriting minor code parts from Soapbox/Mastodon. This also comes with improved compatibility with various Mastodon API extensions and abstracts out the implementation details.
+- Switched to a separate library [`pl-api`](https://codeberg.org/nicolium/nicolium/src/branch/develop/packages/pl-api) for Mastodon API integration. It is mostly written from scratch, inheriting minor code parts from Soapbox/Mastodon. This also comes with improved compatibility with various Mastodon API extensions and abstracts out the implementation details.
 
 ### Added
 

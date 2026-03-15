@@ -1,14 +1,14 @@
 {
   "name": "pl-api",
   "version": "1.0.0-rc.99",
-  "homepage": "https://codeberg.org/mkljczk/nicolium/src/branch/develop/packages/pl-api",
+  "homepage": "https://codeberg.org/nicolium/nicolium/src/branch/develop/packages/pl-api",
   "bugs": {
-    "url": "https://codeberg.org/mkljczk/nicolium/issues"
+    "url": "https://codeberg.org/nicolium/nicolium/issues"
   },
   "license": "AGPL-3.0-or-later",
   "repository": {
     "type": "git",
-    "url": "git+https://codeberg.org/mkljczk/nicolium.git"
+    "url": "git+https://codeberg.org/nicolium/nicolium.git"
   },
   "files": [
     "dist"

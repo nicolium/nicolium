@@ -29,7 +29,7 @@ You can now proceed to fetching Nicolium Git repository, installing dependencies
 
 ```bash
 # Clone the Nicolium repository
-git clone https://codeberg.org/mkljczk/nicolium.git
+git clone https://codeberg.org/nicolium/nicoliumm.git
 cd nicolium
 # Install dependencies
 pnpm install
@@ -60,7 +60,7 @@ pnpm -F nicolium test:watch
 
 ## Contributing guidelines
 
-Nicolium hosts its repository on [Codeberg](https://codeberg.org/mkljczk/nicolium) and [GitHub](https://github.com/mkljczk/nicolium). While issues are only tracked on Codeberg, you can submit pull requests on both platforms. Remember to follow the [Code of Conduct](./code-of-conduct.mdx) when interacting with the community.
+Nicolium hosts its repository on [Codeberg](https://codeberg.org/nicolium/nicoliumm) and [GitHub](https://github.comnicolium/nicoliumum). While issues are only tracked on Codeberg, you can submit pull requests on both platforms. Remember to follow the [Code of Conduct](./code-of-conduct.mdx) when interacting with the community.
 The project uses [ESLint](https://eslint.org/) and [Stylelint](https://stylelint.io/) for code style checking, which is automatically run on every commit using [Husky](https://typicode.github.io/husky). You can run the linters manually using the following command:
 
 ```bash
