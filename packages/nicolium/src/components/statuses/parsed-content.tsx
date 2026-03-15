@@ -15,7 +15,6 @@ import { Link } from '@/components/link';
 import Emojify from '@/features/emoji/emojify';
 import { useSettings } from '@/stores/settings';
 import { makeEmojiMap } from '@/utils/normalizers';
-import nyaize from '@/utils/nyaize';
 import Purify from '@/utils/url-purify';
 
 import HoverAccountWrapper from '../accounts/hover-account-wrapper';
@@ -197,10 +196,8 @@ function parseContent(
 
   let hasSuspiciousUrl = false;
 
-  const transformText = (data: string, key?: React.Key) => {
-    const text = speakAsCat ? nyaize(data) : data;
-
-    return <Emojify key={key} text={text} emojis={emojiMap} />;
+  const transformText = (text: string, key?: React.Key) => {
+    return <Emojify key={key} text={text} emojis={emojiMap} nyaize={speakAsCat} />;
   };
 
   const options: HTMLReactParserOptions = {
