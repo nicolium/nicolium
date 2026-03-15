@@ -5,20 +5,45 @@ import {
   instanceSchema,
   PlApiClient,
   tokenSchema,
+  type CreateAccountParams,
   type CredentialAccount,
   type CredentialApplication,
   type Token,
+  type UpdateCredentialsParams,
 } from 'pl-api';
+import { defineMessages } from 'react-intl';
 import * as v from 'valibot';
 import { create } from 'zustand';
 import { mutative } from 'zustand-mutative';
 
+import { createApp } from '@/actions/apps';
+import { obtainOAuthToken, revokeOAuthToken } from '@/actions/oauth';
 import * as BuildConfig from '@/build-config';
+import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import { coerceObject } from '@/schemas/utils';
+import { setSentryAccount, unsetSentryAccount } from '@/sentry';
 import KVStore from '@/storage/kv-store';
+import toast from '@/toast';
 import { validId, isURL, parseBaseURL } from '@/utils/auth';
+import sourceCode from '@/utils/code';
+import { normalizeUsername } from '@/utils/input';
+import { getScopes } from '@/utils/scopes';
+import { isStandalone } from '@/utils/state';
 
 import type { NicoliumResponse } from '@/api';
+
+const messages = defineMessages({
+  loggedOut: { id: 'auth.logged_out', defaultMessage: 'Logged out.' },
+  awaitingApproval: {
+    id: 'auth.awaiting_approval',
+    defaultMessage: 'Your account is awaiting approval',
+  },
+  invalidCredentials: {
+    id: 'auth.invalid_credentials',
+    defaultMessage: 'Wrong username or password',
+  },
+});
 
 const instance = (() => {
   try {
@@ -91,29 +116,42 @@ interface AuthData {
   app: CredentialApplication | null;
   tokens: Record<string, TokenWithApp>;
   users: Record<string, AuthUser>;
-  // current user URL or id
+  /** current user URL or id */
   me: string | null;
 }
 
 interface AuthState extends AuthData {
-  client: InstanceType<typeof PlApiClient>;
-  // string = logged in, null = loading, false = not logged in
+  /** keyed by account URL */
+  clients: Record<string, PlApiClient>;
+  defaultClient: PlApiClient;
+  /** string = logged in, null = loading, false = not logged in */
   currentAccountId: Me;
 }
 
 interface AuthActions {
   setApp: (app: CredentialApplication) => void;
   setAppToken: (token: Token) => void;
-  importToken: (token: Token, app?: CredentialApplication) => void;
-  removeToken: (account: AccountEntity, standalone?: boolean) => void;
-  importCredentials: (token: string, account: CredentialAccount) => void;
-  importCredentialsSkip: () => void;
-  importCredentialsFailed: (error: { response: NicoliumResponse }) => void;
-  removeFailedToken: (token: string, error: { response: NicoliumResponse }) => void;
+  addToken: (token: Token, app?: CredentialApplication) => void;
+  removeAccount: (account: Pick<AccountEntity, 'url'>, standalone?: boolean) => void;
+  addCredentials: (token: string, account: CredentialAccount) => void;
+  skipCredentials: () => void;
+  onCredentialsFailed: (error: { response: NicoliumResponse }) => void;
+  onTokenFailed: (token: string, error: { response: NicoliumResponse }) => void;
   switchAccount: (account: AccountEntity) => void;
   setCurrentAccount: (account: CredentialAccount) => void;
   setCurrentAccountIfUnset: (account: CredentialAccount) => void;
-  importMastodonPreload: (data: Record<string, any>) => void;
+  loadMastodonPreload: (data: Record<string, any>) => void;
+
+  logIn: (username: string, password: string) => Promise<Token>;
+  verifyOtp: (code: string, mfa_token: string) => Promise<Token>;
+  verifyCredentials: (token: string, accountUrl?: string) => Promise<CredentialAccount>;
+  fetchMe: () => Promise<CredentialAccount | undefined>;
+  logOut: () => Promise<void>;
+  switchAccountById: (accountId: string) => void;
+  register: (params: CreateAccountParams) => Promise<Token | undefined>;
+  fetchCaptcha: () => ReturnType<PlApiClient['oauth']['getCaptcha']>;
+  updateMe: (params: UpdateCredentialsParams) => Promise<CredentialAccount>;
+  verifyAccounts: () => void;
 }
 
 const validUser = (user?: AuthUser) => {
@@ -167,25 +205,31 @@ const persistAuth = (state: AuthData) => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
 };
 
-const getLocalState = (): (AuthData & { client: InstanceType<typeof PlApiClient> }) | undefined => {
+const getLocalState = (): (AuthData & { clients: Record<string, PlApiClient> }) | undefined => {
   const raw = localStorage.getItem(STORAGE_KEY);
   if (!raw) return undefined;
   const state = JSON.parse(raw);
   if (!state) return undefined;
+
+  const parsedUsers = Object.fromEntries(
+    Object.entries(state.users).map(([key, value]) => [key, v.parse(authUserSchema, value)]),
+  ) as Record<string, AuthUser>;
+
+  const clients: Record<string, PlApiClient> = {};
+  for (const [url, user] of Object.entries(parsedUsers)) {
+    clients[url] = new PlApiClient(parseBaseURL(url) || backendUrl, user.access_token, {
+      instance,
+    });
+  }
+
   return {
     app: state.app && v.parse(applicationSchema, state.app),
     tokens: Object.fromEntries(
       Object.entries(state.tokens).map(([key, value]) => [key, v.parse(tokenWithAppSchema, value)]),
     ),
-    users: Object.fromEntries(
-      Object.entries(state.users).map(([key, value]) => [key, v.parse(authUserSchema, value)]),
-    ),
+    users: parsedUsers,
     me: state.me,
-    client: new PlApiClient(
-      parseBaseURL(state.me) || backendUrl,
-      state.users[state.me]?.access_token,
-      { instance },
-    ),
+    clients,
   };
 };
 
@@ -207,7 +251,9 @@ const initialAuthData: AuthData = initializeAuthData({
   ...localState,
 });
 
-const importToken = (state: AuthData, token: Token, app?: CredentialApplication) => {
+const defaultClient = new PlApiClient(backendUrl, undefined, { instance });
+
+const importTokenData = (state: AuthData, token: Token, app?: CredentialApplication) => {
   state.tokens[token.access_token] = {
     client_id: app?.client_id,
     client_secret: app?.client_secret,
@@ -229,7 +275,7 @@ const userMismatch =
     return sameToken && (differentUrl || differentId);
   };
 
-const importCredentials = (state: AuthData, token: string, account: CredentialAccount) => {
+const importCredentialsData = (state: AuthData, token: string, account: CredentialAccount) => {
   state.users[account.url] = v.parse(authUserSchema, {
     id: account.id,
     access_token: token,
@@ -283,16 +329,19 @@ const importMastodonPreloadData = (state: AuthData, data: Record<string, any>) =
   maybeShiftMe(state);
 };
 
-const persistAuthAccount = (account: CredentialAccount) => {
+const persistAuthAccount = (account: CredentialAccount, params?: Record<string, any>) => {
+  if (!account?.url) return;
   const key = `authAccount:${account.url}`;
   KVStore.getItem(key)
     .then((oldAccount: any) => {
       const settings = oldAccount?.settings_store ?? {};
       account.settings_store ??= settings;
+      if (params?.pleroma_settings_store) {
+        account.settings_store = { ...account.settings_store, ...params.pleroma_settings_store };
+      }
       KVStore.setItem(key, account);
     })
     .catch(console.error);
-  return account;
 };
 
 const deleteForbiddenToken = (
@@ -327,155 +376,503 @@ const handleForbiddenMe = (currentAccountId: Me, error: { response: NicoliumResp
   return currentAccountId;
 };
 
+/** Look up an account in the React Query cache. */
+const selectAccount = (accountId: string) =>
+  queryClient.getQueryData(queryKeys.accounts.show(accountId));
+
 type AuthStore = AuthState & { actions: AuthActions };
 
 const useAuthStore = create<AuthStore>()(
-  mutative((set, get) => ({
-    ...initialAuthData,
-    client: localState?.client ?? new PlApiClient(backendUrl, undefined, { instance }),
-    currentAccountId: null,
+  mutative((set, get) => {
+    const getMe = () => get().me;
+    const getMeClient = () => {
+      const { me, clients } = get();
+      return me ? (clients[me] ?? get().defaultClient) : get().defaultClient;
+    };
 
-    actions: {
-      setApp: (app) => {
-        set((state) => {
-          state.app = app;
-        });
-        persistAuth(get());
-      },
-      setAppToken: (token) => {
-        set((state) => {
-          if (state.app) state.app = { ...state.app, ...token } as CredentialApplication;
-        });
-        persistAuth(get());
-      },
-      importToken: (token, app) => {
-        set((state) => {
-          importToken(state, token, app);
-        });
-        persistAuth(get());
-      },
-      removeToken: (account, standalone) => {
-        const oldMe = get().me;
-        set((state) => {
-          deleteUser(state, account);
-          state.currentAccountId = false;
-        });
-        persistAuth(get());
+    const getMeUrl = () => {
+      const state = get();
+      const accountId = state.currentAccountId;
+      if (typeof accountId === 'string') {
+        return selectAccount(accountId)?.url ?? state.me;
+      }
+      return state.me;
+    };
 
-        if (BuildConfig.NODE_ENV === 'production') {
-          location.href = '/login';
-        }
+    const getMeToken = () => {
+      const state = get();
+      const accountUrl = getMeUrl() ?? state.me;
+      return state.users[accountUrl!]?.access_token;
+    };
 
-        const newMe = get().me;
-        if (standalone || userSwitched(oldMe, newMe, get().users)) {
-          reload();
-        }
-      },
-      importCredentials: (token, account) => {
-        const oldMe = get().me;
-        let newClient = get().client;
+    const createClientForAccount = (accountUrl: string, token: string) => {
+      const client = new PlApiClient(parseBaseURL(accountUrl) || backendUrl, token);
+      set({ clients: { ...get().clients, [accountUrl]: client } });
+      return client;
+    };
 
-        set((state) => {
-          importCredentials(state, token, persistAuthAccount(account));
-          state.currentAccountId = state.currentAccountId ?? account.id;
-        });
+    const removeClientForAccount = (accountUrl: string) => {
+      const { [accountUrl]: _, ...rest } = get().clients;
+      set({ clients: rest });
+    };
 
-        const s = get();
-        if (!oldMe) {
-          if (s.client.baseURL === parseBaseURL(account.url)) {
-            s.client.accessToken = token;
-          } else {
-            newClient = new PlApiClient(parseBaseURL(account.url) || backendUrl, token);
-            set({ client: newClient });
+    const authLoggedIn = (token: Token, app?: CredentialApplication | null) => {
+      get().actions.addToken(token, app ?? undefined);
+      return token;
+    };
+
+    const createAuthApp = async () => {
+      const params = {
+        client_name: `${sourceCode.displayName} (${new URL(window.origin).host})`,
+        redirect_uris: 'urn:ietf:wg:oauth:2.0:oob',
+        scopes: getScopes(),
+        website: sourceCode.homepage,
+      };
+      const app = await createApp(params);
+      get().actions.setApp(app);
+      return app;
+    };
+
+    const createAppToken = async () => {
+      const { app } = get();
+      const params = {
+        client_id: app?.client_id!,
+        client_secret: app?.client_secret!,
+        redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
+        grant_type: 'client_credentials',
+        scope: getScopes(),
+      };
+      const token = await obtainOAuthToken(params);
+      get().actions.setAppToken(token);
+      return token;
+    };
+
+    const fetchMeSuccess = async (account: CredentialAccount) => {
+      const client = getMeClient();
+
+      setSentryAccount(account);
+
+      const settings =
+        account.settings_store?.['nicolium'] ??
+        account.settings_store?.['nicolium_dev'] ??
+        account.settings_store?.['pl_fe'] ??
+        account.settings_store?.['pl_fe_dev'];
+
+      if (settings) {
+        // lazy import to avoid circular dependency at module init
+        const { useSettingsStore } = await import('@/stores/settings');
+        useSettingsStore.getState().actions.loadUserSettings(settings);
+      }
+
+      if (!client.features.frontendConfigurations && client.features.notes) {
+        const note = await client.accounts
+          .getRelationships([account.id])
+          .then((relationships) => relationships[0]?.note);
+
+        if (note) {
+          const match = note.match(/<nicolium-config>(.*)<\/nicolium-config>/);
+          if (match) {
+            try {
+              const frontendConfig = JSON.parse(decodeURIComponent(match[1]));
+              if (typeof frontendConfig === 'object' && frontendConfig !== null) {
+                frontendConfig.storeSettingsInNotes = true;
+              }
+              const { useSettingsStore } = await import('@/stores/settings');
+              useSettingsStore.getState().actions.loadUserSettings(frontendConfig);
+              get().actions.setCurrentAccount(account);
+              return frontendConfig;
+            } catch (error) {
+              console.error('Failed to parse frontend config from account note', error);
+            }
           }
         }
+      }
 
-        persistAuth(get());
-        const newMe = get().me;
-        if (userSwitched(oldMe, newMe, get().users)) {
-          reload();
-        }
-      },
-      importCredentialsSkip: () => {
-        const oldMe = get().me;
-        set((state) => {
-          state.me = null;
-          state.currentAccountId = false;
-        });
-        persistAuth(get());
-        const newMe = get().me;
-        if (userSwitched(oldMe, newMe, get().users)) {
-          reload();
-        }
-      },
-      importCredentialsFailed: (error) => {
-        set((state) => {
-          state.currentAccountId = handleForbiddenMe(state.currentAccountId, error);
-        });
-      },
-      removeFailedToken: (token, error) => {
-        const oldMe = get().me;
-        set((state) => {
-          deleteForbiddenToken(state, error, token);
-          if (state.currentAccountId === null) state.currentAccountId = false;
-        });
-        persistAuth(get());
-        const newMe = get().me;
-        if (userSwitched(oldMe, newMe, get().users)) {
-          reload();
-        }
-      },
-      switchAccount: (account) => {
-        const oldMe = get().me;
+      const { useComposeStore } = await import('@/stores/compose');
+      useComposeStore.getState().actions.importDefaultSettings(account);
+      get().actions.setCurrentAccount(account);
+    };
 
-        set((state) => {
-          state.me = account.url;
-          state.currentAccountId = account.id;
-        });
+    return {
+      ...initialAuthData,
+      clients: localState?.clients ?? {},
+      defaultClient,
+      currentAccountId: null,
 
-        const s = get();
-        const accessToken = s.users[account.url]?.access_token;
-        if (s.client.baseURL === parseBaseURL(account.url)) {
-          s.client.accessToken = accessToken;
-        } else {
-          set({
-            client: new PlApiClient(parseBaseURL(account.url) || backendUrl, accessToken),
+      actions: {
+        setApp: (app) => {
+          set((state) => {
+            state.app = app;
           });
-        }
+          persistAuth(get());
+        },
+        setAppToken: (token) => {
+          set((state) => {
+            if (state.app) state.app = { ...state.app, ...token } as CredentialApplication;
+          });
+          persistAuth(get());
+        },
+        addToken: (token, app) => {
+          set((state) => {
+            importTokenData(state, token, app);
+          });
+          persistAuth(get());
+        },
+        removeAccount: (account, standalone) => {
+          const oldMe = get().me;
+          set((state) => {
+            deleteUser(state, account);
+            state.currentAccountId = false;
+          });
+          removeClientForAccount(account.url);
+          persistAuth(get());
 
-        persistAuth(get());
-        const newMe = get().me;
-        if (userSwitched(oldMe, newMe, get().users)) {
-          reload();
-        }
+          if (BuildConfig.NODE_ENV === 'production') {
+            location.href = '/login';
+          }
+
+          const newMe = get().me;
+          if (standalone || userSwitched(oldMe, newMe, get().users)) {
+            reload();
+          }
+        },
+        addCredentials: (token, account) => {
+          const oldMe = get().me;
+
+          set((state) => {
+            importCredentialsData(state, token, account);
+            state.currentAccountId = state.currentAccountId ?? account.id;
+          });
+
+          persistAuthAccount(account);
+          createClientForAccount(account.url, token);
+
+          persistAuth(get());
+          const newMe = get().me;
+          if (userSwitched(oldMe, newMe, get().users)) {
+            reload();
+          }
+        },
+        skipCredentials: () => {
+          const oldMe = get().me;
+          set((state) => {
+            state.me = null;
+            state.currentAccountId = false;
+          });
+          persistAuth(get());
+          const newMe = get().me;
+          if (userSwitched(oldMe, newMe, get().users)) {
+            reload();
+          }
+        },
+        onCredentialsFailed: (error) => {
+          set((state) => {
+            state.currentAccountId = handleForbiddenMe(state.currentAccountId, error);
+          });
+        },
+        onTokenFailed: (token, error) => {
+          const oldMe = get().me;
+          set((state) => {
+            deleteForbiddenToken(state, error, token);
+            if (state.currentAccountId === null) state.currentAccountId = false;
+          });
+          persistAuth(get());
+          const newMe = get().me;
+          if (userSwitched(oldMe, newMe, get().users)) {
+            reload();
+          }
+        },
+        switchAccount: (account) => {
+          const oldMe = get().me;
+
+          set((state) => {
+            state.me = account.url;
+            state.currentAccountId = account.id;
+          });
+
+          // Ensure we have a client for the account
+          const accessToken = get().users[account.url]?.access_token;
+          if (accessToken && !get().clients[account.url]) {
+            createClientForAccount(account.url, accessToken);
+          }
+
+          persistAuth(get());
+          const newMe = get().me;
+          if (userSwitched(oldMe, newMe, get().users)) {
+            reload();
+          }
+        },
+        setCurrentAccount: (account) => {
+          set((state) => {
+            state.currentAccountId = account.id;
+          });
+        },
+        setCurrentAccountIfUnset: (account) => {
+          set((state) => {
+            state.currentAccountId = state.currentAccountId ?? account.id;
+          });
+        },
+        loadMastodonPreload: (data) => {
+          const oldMe = get().me;
+          set((state) => {
+            importMastodonPreloadData(state, data);
+          });
+          for (const [url, user] of Object.entries(get().users)) {
+            if (!get().clients[url]) {
+              createClientForAccount(url, user.access_token);
+            }
+          }
+          persistAuth(get());
+          const newMe = get().me;
+          if (userSwitched(oldMe, newMe, get().users)) {
+            reload();
+          }
+        },
+
+        logIn: async (username, password) => {
+          try {
+            await createAuthApp();
+
+            const { app } = get();
+            const params = {
+              client_id: app?.client_id!,
+              client_secret: app?.client_secret!,
+              redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
+              grant_type: 'password',
+              username: normalizeUsername(username),
+              password,
+              scope: getScopes(),
+            };
+
+            const token = await obtainOAuthToken(params);
+            authLoggedIn(token, app);
+            return token;
+          } catch (error: any) {
+            if (error.response?.json?.error === 'mfa_required') {
+              throw error;
+            } else if (error.response?.json?.identifier === 'awaiting_approval') {
+              toast.error(messages.awaitingApproval);
+            } else {
+              toast.error(messages.invalidCredentials);
+            }
+            throw error;
+          }
+        },
+
+        verifyOtp: async (code, mfaToken) => {
+          const { app } = get();
+          const me = getMe();
+          const baseUrl = parseBaseURL(me || undefined) || BuildConfig.BACKEND_URL;
+          const client = new PlApiClient(baseUrl);
+
+          const token = await client.oauth.mfaChallenge({
+            client_id: app?.client_id!,
+            client_secret: app?.client_secret!,
+            mfa_token: mfaToken,
+            code,
+            challenge_type: 'totp',
+          });
+
+          authLoggedIn(token, app);
+          return token;
+        },
+
+        verifyCredentials: async (token, accountUrl) => {
+          const baseURL = parseBaseURL(accountUrl) || BuildConfig.BACKEND_URL;
+          const client = new PlApiClient(baseURL, token);
+
+          await client.instance.getInstance();
+
+          try {
+            const account = await client.settings.verifyCredentials();
+            queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+            get().actions.addCredentials(token, account);
+            if (account.id === get().currentAccountId) fetchMeSuccess(account);
+            return account;
+          } catch (error: any) {
+            if (get().currentAccountId === null) get().actions.onCredentialsFailed(error);
+            get().actions.onTokenFailed(token, error);
+            throw error;
+          }
+        },
+
+        fetchMe: async () => {
+          const token = getMeToken();
+          const accountUrl = getMeUrl();
+
+          if (!token) {
+            get().actions.skipCredentials();
+            return;
+          }
+
+          try {
+            // Try to remember the account from KVStore first
+            try {
+              const account = await KVStore.getItemOrError(`authAccount:${accountUrl}`);
+              queryClient.setQueryData(queryKeys.accounts.show(account.id), account);
+              get().actions.setCurrentAccountIfUnset(account);
+              if (account.id === get().currentAccountId) fetchMeSuccess(account);
+            } catch {}
+
+            return await get().actions.verifyCredentials(token, accountUrl!);
+          } catch (error: any) {
+            get().actions.onCredentialsFailed(error);
+          }
+        },
+
+        logOut: async () => {
+          const state = get();
+          const accountId = state.currentAccountId;
+          const account = typeof accountId === 'string' ? selectAccount(accountId) : undefined;
+          const standalone = isStandalone();
+
+          if (!account) return;
+
+          const token = state.users[account.url]?.access_token;
+          const params = {
+            client_id: state.tokens[token]?.client_id ?? state.app?.client_id!,
+            client_secret: state.tokens[token]?.client_secret ?? state.app?.client_secret!,
+            token,
+          };
+
+          try {
+            await revokeOAuthToken(params);
+          } finally {
+            queryClient.invalidateQueries();
+            queryClient.clear();
+            unsetSentryAccount();
+            get().actions.removeAccount(account, standalone);
+            toast.success(messages.loggedOut);
+          }
+        },
+
+        switchAccountById: (accountId) => {
+          const account = selectAccount(accountId);
+          if (!account) return;
+
+          const { currentAccountId } = get();
+          if (typeof currentAccountId === 'string' && currentAccountId !== account.id) {
+            queryClient.invalidateQueries();
+            queryClient.clear();
+          }
+
+          get().actions.switchAccount(account);
+        },
+
+        register: async (params) => {
+          params.fullname = params.username;
+
+          const app = await createAuthApp();
+          await createAppToken();
+
+          const client = getMeClient();
+          const response = await client.settings.createAccount(params);
+          if ('identifier' in response) {
+            toast.info(response.message);
+          } else {
+            authLoggedIn(response, app);
+            return response;
+          }
+        },
+
+        fetchCaptcha: () => getMeClient().oauth.getCaptcha(),
+
+        updateMe: async (params) => {
+          const client = getMeClient();
+          const response = await client.settings.updateCredentials(params);
+          persistAuthAccount(response, params);
+
+          queryClient.setQueryData(queryKeys.accounts.show(response.id), response);
+          const { useComposeStore } = await import('@/stores/compose');
+          useComposeStore.getState().actions.importDefaultSettings(response);
+          get().actions.setCurrentAccount(response);
+
+          return response;
+        },
+
+        verifyAccounts: () => {
+          const { users } = get();
+          Object.values(users).forEach((user) => {
+            const account = selectAccount(user.id);
+            if (!account) {
+              get()
+                .actions.verifyCredentials(user.access_token, user.url)
+                .catch(() => {
+                  console.warn(`Failed to load account: ${user.url}`);
+                });
+            }
+          });
+        },
       },
-      setCurrentAccount: (account) => {
-        set((state) => {
-          state.currentAccountId = account.id;
-        });
-      },
-      setCurrentAccountIfUnset: (account) => {
-        set((state) => {
-          state.currentAccountId = state.currentAccountId ?? account.id;
-        });
-      },
-      importMastodonPreload: (data) => {
-        const oldMe = get().me;
-        set((state) => {
-          importMastodonPreloadData(state, data);
-        });
-        persistAuth(get());
-        const newMe = get().me;
-        if (userSwitched(oldMe, newMe, get().users)) {
-          reload();
-        }
-      },
-    },
-  })),
+    };
+  }),
 );
 
 const useMe = () => useAuthStore((state) => state.currentAccountId);
 
 const useAuthActions = () => useAuthStore((state) => state.actions);
 
-export { useAuthStore, useAuthActions, useMe, type Me, type AuthUser, type TokenWithApp };
+const getCurrentAccountId = () => useAuthStore.getState().currentAccountId;
+
+const getMe = () => useAuthStore.getState().me;
+
+const getClient = () => {
+  const { me, clients, defaultClient } = useAuthStore.getState();
+  return me ? (clients[me] ?? defaultClient) : defaultClient;
+};
+
+const getOwnAccount = () => {
+  const accountId = getCurrentAccountId();
+  if (typeof accountId === 'string') return selectAccount(accountId);
+};
+
+const getApp = () => useAuthStore.getState().app;
+
+const isLoggedIn = () => validId(getCurrentAccountId());
+
+const getAuthUserUrl = () => {
+  const { me, users } = useAuthStore.getState();
+  return [users[me!]?.url, me].filter((url) => url).find(isURL);
+};
+
+const getMeUrl = () => getOwnAccount()?.url;
+
+const verifyCredentials = (token: string, accountUrl?: string) =>
+  useAuthStore.getState().actions.verifyCredentials(token, accountUrl);
+
+const switchAccount = (accountId: string) =>
+  useAuthStore.getState().actions.switchAccountById(accountId);
+
+const updateMe = (params: UpdateCredentialsParams) =>
+  useAuthStore.getState().actions.updateMe(params);
+
+const addToken = (token: Token, app?: CredentialApplication | null) =>
+  useAuthStore.getState().actions.addToken(token, app ?? undefined);
+
+const loadMastodonPreload = (data: Record<string, any>) =>
+  useAuthStore.getState().actions.loadMastodonPreload(data);
+
+const removeAccount = (account: Pick<AccountEntity, 'url'>) =>
+  useAuthStore.getState().actions.removeAccount(account);
+
+export {
+  messages,
+  useAuthStore,
+  useAuthActions,
+  useMe,
+  getCurrentAccountId,
+  getMe,
+  getClient,
+  getOwnAccount,
+  getApp,
+  isLoggedIn,
+  getAuthUserUrl,
+  getMeUrl,
+  verifyCredentials,
+  switchAccount,
+  updateMe,
+  addToken,
+  loadMastodonPreload,
+  removeAccount,
+  type Me,
+};

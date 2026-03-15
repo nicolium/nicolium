@@ -7,6 +7,7 @@ import Icon from '@/components/ui/icon';
 import { useStatContext } from '@/contexts/stat-context';
 import ComposeButton from '@/features/ui/components/compose-button';
 import ProfileDropdown from '@/features/ui/components/profile-dropdown';
+import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
@@ -66,16 +67,17 @@ const SidebarNavigation: React.FC<ISidebarNavigation> = React.memo(({ shrink }) 
   const { openModal } = useModalsActions();
 
   const instance = useInstance();
+  const client = useClient();
   const features = useFeatures();
   const { data: account } = useOwnAccount();
   const { isOpen } = useRegistrationStatus();
 
   const authenticatedScheduledStatusesCountQueryOptions = useMemo(
     () => ({
-      ...scheduledStatusesCountQueryOptions,
+      ...scheduledStatusesCountQueryOptions(client),
       enabled: !!account && features.scheduledStatuses,
     }),
-    [!!account, features],
+    [client, !!account, features],
   );
 
   const notificationCount = useNotificationsUnreadCount();

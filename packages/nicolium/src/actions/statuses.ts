@@ -1,22 +1,20 @@
-import { getClient } from '@/api';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
-import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
 import { updateStatus } from '@/queries/statuses/use-status-interactions';
+import { isLoggedIn } from '@/stores/auth';
 import { useComposeStore } from '@/stores/compose';
 import { useContextStore } from '@/stores/contexts';
 import { useModalsStore } from '@/stores/modals';
 import { usePendingStatusesStore } from '@/stores/pending-statuses';
 import { useSettingsStore } from '@/stores/settings';
 import { useTimelinesStore } from '@/stores/timelines';
-import { isLoggedIn } from '@/utils/auth';
 import { shouldHaveCard } from '@/utils/status';
 
 import { importEntities } from '../queries/utils/import-entities';
 
 import type { NormalizedStatus as Status } from '@/normalizers/status';
 import type { useQueryClient } from '@tanstack/react-query';
-import type { CreateStatusParams, Status as BaseStatus } from 'pl-api';
+import type { CreateStatusParams, PlApiClient, Status as BaseStatus } from 'pl-api';
 import type { IntlShape } from 'react-intl';
 
 const incrementReplyCount = (
@@ -70,6 +68,7 @@ const decrementReplyCount = (
 };
 
 const createStatus = (
+  client: PlApiClient,
   params: CreateStatusParams,
   idempotencyKey: string,
   editedId: string | null,
@@ -83,8 +82,6 @@ const createStatus = (
       incrementReplyCount(params, queryClient);
     }
   }
-
-  const client = getClient();
 
   return (
     editedId === null
@@ -105,7 +102,7 @@ const createStatus = (
           { idempotencyKey, withParents: true },
         );
       } else {
-        queryClient.invalidateQueries(scheduledStatusesQueryOptions);
+        queryClient.invalidateQueries({ queryKey: queryKeys.scheduledStatuses.all });
       }
 
       useContextStore
@@ -126,8 +123,8 @@ const createStatus = (
         const delay = 1000;
 
         const poll = (retries = 5) => {
-          return getClient()
-            .statuses.getStatus(status.id)
+          return client.statuses
+            .getStatus(status.id)
             .then((response) => {
               if (response.card) {
                 importEntities({ statuses: [response] });
@@ -154,7 +151,7 @@ const createStatus = (
     });
 };
 
-const editStatus = (statusId: string) => {
+const editStatus = (client: PlApiClient, statusId: string) => {
   const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
   if (!status) return;
 
@@ -162,15 +159,13 @@ const editStatus = (statusId: string) => {
     ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
     : undefined;
 
-  return getClient()
-    .statuses.getStatusSource(statusId)
-    .then((response) => {
-      useComposeStore.getState().actions.setComposeToStatus(status, poll, response);
-      useModalsStore.getState().actions.openModal('COMPOSE');
-    });
+  return client.statuses.getStatusSource(statusId).then((response) => {
+    useComposeStore.getState().actions.setComposeToStatus(status, poll, response);
+    useModalsStore.getState().actions.openModal('COMPOSE');
+  });
 };
 
-const redactStatus = (statusId: string) => {
+const redactStatus = (client: PlApiClient, statusId: string) => {
   const status = queryClient.getQueryData(queryKeys.statuses.show(statusId));
   if (!status) return;
 
@@ -178,17 +173,15 @@ const redactStatus = (statusId: string) => {
     ? queryClient.getQueryData(queryKeys.statuses.polls.show(status.poll_id))
     : undefined;
 
-  return getClient()
-    .statuses.getStatusSource(statusId)
-    .then((source) => {
-      useComposeStore
-        .getState()
-        .actions.setComposeToStatus(status, poll, source, false, null, null, true);
-      useModalsStore.getState().actions.openModal('COMPOSE');
-    });
+  return client.statuses.getStatusSource(statusId).then((source) => {
+    useComposeStore
+      .getState()
+      .actions.setComposeToStatus(status, poll, source, false, null, null, true);
+    useModalsStore.getState().actions.openModal('COMPOSE');
+  });
 };
 
-const fetchStatus = (statusId: string, intl?: IntlShape) => {
+const fetchStatus = (client: PlApiClient, statusId: string, intl?: IntlShape) => {
   const params =
     intl && useSettingsStore.getState().settings.autoTranslate
       ? {
@@ -196,48 +189,42 @@ const fetchStatus = (statusId: string, intl?: IntlShape) => {
         }
       : undefined;
 
-  return getClient()
-    .statuses.getStatus(statusId, params)
-    .then((status) => {
-      importEntities({ statuses: [status] });
-      return status;
-    });
+  return client.statuses.getStatus(statusId, params).then((status) => {
+    importEntities({ statuses: [status] });
+    return status;
+  });
 };
 
-const muteStatus = (statusId: string) => {
+const muteStatus = (client: PlApiClient, statusId: string) => {
   if (!isLoggedIn()) return;
 
-  return getClient()
-    .statuses.muteStatus(statusId)
-    .then(() => {
-      updateStatus(
-        statusId,
-        (status) => {
-          status.muted = true;
-        },
-        queryClient,
-      );
-    });
+  return client.statuses.muteStatus(statusId).then(() => {
+    updateStatus(
+      statusId,
+      (status) => {
+        status.muted = true;
+      },
+      queryClient,
+    );
+  });
 };
 
-const unmuteStatus = (statusId: string) => {
+const unmuteStatus = (client: PlApiClient, statusId: string) => {
   if (!isLoggedIn()) return;
 
-  return getClient()
-    .statuses.unmuteStatus(statusId)
-    .then(() => {
-      updateStatus(
-        statusId,
-        (status) => {
-          status.muted = false;
-        },
-        queryClient,
-      );
-    });
+  return client.statuses.unmuteStatus(statusId).then(() => {
+    updateStatus(
+      statusId,
+      (status) => {
+        status.muted = false;
+      },
+      queryClient,
+    );
+  });
 };
 
-const toggleMuteStatus = (status: Pick<Status, 'id' | 'muted'>) =>
-  status.muted ? unmuteStatus(status.id) : muteStatus(status.id);
+const toggleMuteStatus = (client: PlApiClient, status: Pick<Status, 'id' | 'muted'>) =>
+  status.muted ? unmuteStatus(client, status.id) : muteStatus(client, status.id);
 
 export {
   createStatus,

@@ -9,7 +9,7 @@
 import { PlApiClient, type GetTokenParams, type RevokeTokenParams } from 'pl-api';
 
 import * as BuildConfig from '@/build-config';
-import { useAuthStore } from '@/stores/auth';
+import { getMe } from '@/stores/auth';
 import { parseBaseURL } from '@/utils/auth';
 
 const obtainOAuthToken = async (params: GetTokenParams, baseURL?: string) => {
@@ -20,7 +20,7 @@ const obtainOAuthToken = async (params: GetTokenParams, baseURL?: string) => {
 };
 
 const revokeOAuthToken = async (params: RevokeTokenParams) => {
-  const { me } = useAuthStore.getState();
+  const me = getMe();
   const baseURL = parseBaseURL(me || undefined) || BuildConfig.BACKEND_URL;
   const client = new PlApiClient(baseURL || '');
   return client.oauth.revokeToken(params);

@@ -61,13 +61,14 @@ const pendingUsersQuery = makePaginatedResponseQueryOptions(
     client.admin.accounts
       .getAccounts({ origin: 'local', status: 'pending' })
       .then(minifyAdminAccountList),
-)();
+);
 
 const usePendingUsersCount = () => {
+  const client = useClient();
   const { data: account } = useOwnAccount();
 
   return useInfiniteQuery({
-    ...pendingUsersQuery,
+    ...pendingUsersQuery(client),
     select: (data) =>
       (data.pages.at(-1)?.total ?? data.pages.flatMap((page) => page.items).length) || 0,
     enabled: !!(account?.is_admin ?? account?.is_moderator),

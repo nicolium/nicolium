@@ -1,9 +1,11 @@
 import { createPushSubscription } from '@/actions/push-subscriptions';
 import { pushNotificationsSettings } from '@/settings';
-import { useAuthStore, type Me } from '@/stores/auth';
+import { getApp, type Me } from '@/stores/auth';
+import { useInstanceStore } from '@/stores/instance';
 import { usePushNotificationsStore } from '@/stores/push-notifications';
-import { getVapidKey } from '@/utils/auth';
 import { decode as decodeBase64 } from '@/utils/base64';
+
+import type { PlApiClient } from 'pl-api';
 
 // Taken from https://www.npmjs.com/package/web-push
 const urlBase64ToUint8Array = (base64String: string) => {
@@ -26,6 +28,9 @@ const getPushSubscription = (registration: ServiceWorkerRegistration) =>
     .getSubscription()
     .then((subscription) => ({ registration, subscription }));
 
+const getVapidKey = () =>
+  getApp()?.vapid_key ?? useInstanceStore.getState().instance.configuration.vapid.public_key;
+
 const subscribe = (registration: ServiceWorkerRegistration) =>
   registration.pushManager.subscribe({
     userVisibleOnly: true,
@@ -45,7 +50,7 @@ const unsubscribe = ({
         r(registration);
       });
 
-const sendSubscriptionToBackend = (subscription: PushSubscription, me: Me) => {
+const sendSubscriptionToBackend = (subscription: PushSubscription, me: Me, client: PlApiClient) => {
   const alerts = usePushNotificationsStore.getState().alerts;
   const params: { subscription: PushSubscription; data: { alerts: Record<string, boolean> } } = {
     subscription,
@@ -59,7 +64,7 @@ const sendSubscriptionToBackend = (subscription: PushSubscription, me: Me) => {
     }
   }
 
-  return createPushSubscription(params);
+  return createPushSubscription(client, params);
 };
 
 // Last one checks for payload support: https://web-push-book.gauntface.com/chapter-06/01-non-standards-browsers/#no-payload
@@ -67,8 +72,7 @@ const sendSubscriptionToBackend = (subscription: PushSubscription, me: Me) => {
 const supportsPushNotifications =
   'serviceWorker' in navigator && 'PushManager' in window && 'getKey' in PushSubscription.prototype;
 
-const register = () => {
-  const me = useAuthStore.getState().currentAccountId;
+const register = (client: PlApiClient, me: Me) => {
   const vapidKey = getVapidKey();
 
   if (!supportsPushNotifications) {
@@ -101,12 +105,12 @@ const register = () => {
         } else {
           const swRegistration = await unsubscribe({ registration, subscription });
           const pushSubscription = await subscribe(swRegistration);
-          await sendSubscriptionToBackend(pushSubscription, me);
+          await sendSubscriptionToBackend(pushSubscription, me, client);
         }
       }
 
       return subscribe(registration).then((pushSubscription) =>
-        sendSubscriptionToBackend(pushSubscription, me),
+        sendSubscriptionToBackend(pushSubscription, me, client),
       );
     })
     .then((subscription) => {

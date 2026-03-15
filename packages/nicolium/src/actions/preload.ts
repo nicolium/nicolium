@@ -4,11 +4,9 @@ import * as v from 'valibot';
 
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
-import { useAuthStore } from '@/stores/auth';
+import { loadMastodonPreload, verifyCredentials } from '@/stores/auth';
 import { useFrontendConfigStore } from '@/stores/frontend-config';
 import { useInstanceStore } from '@/stores/instance';
-
-import { verifyCredentials } from './auth';
 
 // https://git.pleroma.social/pleroma/pleroma-fe/-/merge_requests/1176/diffs
 const decodeUTF8Base64 = (data: string) => {
@@ -61,7 +59,7 @@ const preloadMastodon = (data: Record<string, any>) => {
     }
   }
 
-  useAuthStore.getState().actions.importMastodonPreload(data);
+  loadMastodonPreload(data);
   verifyCredentials(access_token, url);
 };
 

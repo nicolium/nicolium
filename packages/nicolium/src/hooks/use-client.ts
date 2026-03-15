@@ -1,5 +1,5 @@
-import { useAuthStore } from '@/stores/auth';
+import { useCurrentAccountContext } from '@/contexts/current-account-context';
 
-const useClient = () => useAuthStore((state) => state.client);
+const useClient = () => useCurrentAccountContext().client;
 
 export { useClient };

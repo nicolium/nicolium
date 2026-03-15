@@ -124,9 +124,10 @@ const notificationsQueryOptions = makePaginatedResponseQueryOptions(
 
 const useNotifications = (activeFilter: FilterType) => {
   const { me } = useLoggedIn();
+  const client = useClient();
 
   return useInfiniteQuery({
-    ...notificationsQueryOptions(activeFilter),
+    ...notificationsQueryOptions(client, activeFilter),
     enabled: !!me,
   });
 };
@@ -292,12 +293,13 @@ const useNotificationsUnreadCount = () => {
 
 const usePrefetchNotifications = () => {
   const queryClient = useQueryClient();
+  const client = useClient();
   const { me } = useLoggedIn();
   const activeFilter = useActiveFilter();
 
   useEffect(() => {
     if (!me) return;
-    queryClient.prefetchInfiniteQuery(notificationsQueryOptions(activeFilter));
+    queryClient.prefetchInfiniteQuery(notificationsQueryOptions(client, activeFilter));
   }, [me]);
 };
 

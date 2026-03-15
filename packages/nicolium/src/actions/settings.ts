@@ -1,10 +1,10 @@
 import { defineMessage } from 'react-intl';
 
-import { patchMe } from '@/actions/auth';
 import { NODE_ENV } from '@/build-config';
-import { selectOwnAccount } from '@/queries/accounts/selectors';
+import { queryClient } from '@/queries/client';
+import { queryKeys } from '@/queries/keys';
 import KVStore from '@/storage/kv-store';
-import { useAuthStore } from '@/stores/auth';
+import { updateMe, getClient, getCurrentAccountId } from '@/stores/auth';
 import { useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
 
@@ -32,7 +32,7 @@ const changeSetting = (path: string[], value: any, opts?: SettingOpts) => {
 };
 
 const saveSettings = (opts?: SettingOpts, isNotesChange?: boolean) => {
-  const { currentAccountId } = useAuthStore.getState();
+  const currentAccountId = getCurrentAccountId();
   if (typeof currentAccountId !== 'string') return;
 
   const {
@@ -70,10 +70,11 @@ const updateAuthAccount = async (url: string, settings: any) => {
 };
 
 const updateSettingsStore = async (settings: Partial<Settings>, isNotesChange?: boolean) => {
-  const { client, currentAccountId } = useAuthStore.getState();
+  const client = getClient();
+  const currentAccountId = getCurrentAccountId();
 
   if (client.features.frontendConfigurations) {
-    return patchMe({
+    return updateMe({
       settings_store: {
         [FE_NAME]: settings,
       },
@@ -96,7 +97,9 @@ const updateSettingsStore = async (settings: Partial<Settings>, isNotesChange?: 
       client.accounts.updateAccountNote(currentAccountId as string, newNote);
     }
 
-    const account = selectOwnAccount();
+    const accountId = currentAccountId;
+    if (typeof accountId !== 'string') return;
+    const account = queryClient.getQueryData(queryKeys.accounts.show(accountId));
     if (!account) return;
 
     return updateAuthAccount(account.url, settings);

@@ -5,6 +5,7 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 import ScrollableList from '@/components/scrollable-list';
 import Column from '@/components/ui/column';
 import ScheduledStatus from '@/features/scheduled-statuses/components/scheduled-status';
+import { useClient } from '@/hooks/use-client';
 import { scheduledStatusesQueryOptions } from '@/queries/statuses/scheduled-statuses';
 
 const messages = defineMessages({
@@ -13,13 +14,14 @@ const messages = defineMessages({
 
 const ScheduledStatusesPage = () => {
   const intl = useIntl();
+  const client = useClient();
 
   const {
     data: scheduledStatuses = [],
     isLoading,
     hasNextPage,
     fetchNextPage,
-  } = useInfiniteQuery(scheduledStatusesQueryOptions);
+  } = useInfiniteQuery(scheduledStatusesQueryOptions(client));
 
   const emptyMessage = (
     <FormattedMessage

@@ -94,7 +94,7 @@ const CirclePage: React.FC = () => {
     canvasRef.current!.toBlob((blob) => {
       const file = new File([blob!], 'interactions_circle.png', { type: 'image/png' });
 
-      uploadFile(file, intl, (data) => {
+      uploadFile(client, file, intl, (data) => {
         updateCompose('compose-modal', (draft) => {
           appendMedia(draft, data);
         });
@@ -106,7 +106,7 @@ const CirclePage: React.FC = () => {
   const handleRequest = () => {
     setProgress({ state: 'pending', progress: 0 });
 
-    processCircle(client, setProgress)()
+    processCircle(client, account!.id, setProgress)()
       .then(async (users) => {
         setUsers(users);
 

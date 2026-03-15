@@ -3,6 +3,7 @@ import React, { type MutableRefObject, useEffect, useState } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { uploadMedia } from '@/actions/media';
+import { useClient } from '@/hooks/use-client';
 import { useCreateChatMessage } from '@/queries/chats';
 import toast from '@/toast';
 
@@ -50,6 +51,7 @@ const clearNativeInputValue = (element: HTMLTextAreaElement) => {
  */
 const Chat: React.FC<IChat> = ({ chat, inputRef, className }) => {
   const intl = useIntl();
+  const client = useClient();
 
   const createChatMessage = useCreateChatMessage();
 
@@ -140,7 +142,7 @@ const Chat: React.FC<IChat> = ({ chat, inputRef, className }) => {
 
     setUploading(true);
 
-    uploadMedia({ file: files[0] }, onUploadProgress)
+    uploadMedia(client, { file: files[0] }, onUploadProgress)
       .then((response) => {
         setAttachment(response);
         setUploading(false);

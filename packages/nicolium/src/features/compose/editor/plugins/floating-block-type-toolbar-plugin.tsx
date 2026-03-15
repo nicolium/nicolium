@@ -23,6 +23,7 @@ import { createPortal } from 'react-dom';
 import { defineMessages, useIntl } from 'react-intl';
 
 import { uploadFile } from '@/actions/media';
+import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useInstance } from '@/stores/instance';
 
@@ -45,6 +46,7 @@ interface IUploadButton {
 
 const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
   const intl = useIntl();
+  const client = useClient();
   const { configuration } = useInstance();
   const [disabled, setDisabled] = useState(false);
 
@@ -56,6 +58,7 @@ const UploadButton: React.FC<IUploadButton> = ({ onSelectFile }) => {
       setDisabled(true);
 
       uploadFile(
+        client,
         e.target.files.item(0) as File,
         intl,
         ({ url }) => {

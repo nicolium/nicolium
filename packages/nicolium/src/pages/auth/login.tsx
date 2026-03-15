@@ -2,7 +2,6 @@ import { Navigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { logIn, verifyCredentials, switchAccount } from '@/actions/auth';
 import { fetchInstance } from '@/actions/instance';
 import { BigCard } from '@/components/ui/big-card';
 import Button from '@/components/ui/button';
@@ -11,6 +10,7 @@ import { useCurrentAccount } from '@/contexts/current-account-context';
 import ConsumersList from '@/features/auth-login/components/consumers-list';
 import LoginForm from '@/features/auth-login/components/login-form';
 import OtpAuthForm from '@/features/auth-login/components/otp-auth-form';
+import { useAuthActions } from '@/stores/auth';
 import { useModalsActions } from '@/stores/modals';
 import { getRedirectUrl } from '@/utils/redirect';
 import { useIsStandalone } from '@/utils/state';
@@ -19,6 +19,7 @@ import type { NicoliumResponse } from '@/api';
 
 const LoginPage = () => {
   const { closeModal } = useModalsActions();
+  const { logIn, verifyCredentials, switchAccountById } = useAuthActions();
 
   const me = useCurrentAccount();
   const standalone = useIsStandalone();
@@ -44,7 +45,7 @@ const LoginPage = () => {
       })
       .then((account: { id: string }) => {
         closeModal();
-        switchAccount(account.id);
+        switchAccountById(account.id);
         if (typeof me !== 'string') {
           setShouldRedirect(true);
         }

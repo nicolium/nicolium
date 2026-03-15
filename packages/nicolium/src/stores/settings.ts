@@ -6,7 +6,7 @@ import { mutative } from 'zustand-mutative';
 
 import { settingsSchema, type Settings } from '@/schemas/frontend-settings';
 import KVStore from '@/storage/kv-store';
-import { useAuthStore } from '@/stores/auth';
+import { getCurrentAccountId } from '@/stores/auth';
 import toast from '@/toast';
 import {
   type KVStoreRedirectServicesItem,
@@ -72,7 +72,7 @@ const changeSetting = (object: APIEntity, path: string[], value: any, root?: Set
 const mergeSettings = (state: State, updating = false) => {
   const mergedSettings = { ...state.defaultSettings, ...state.userSettings };
   if (updating) {
-    const currentAccountId = useAuthStore.getState().currentAccountId;
+    const currentAccountId = getCurrentAccountId();
     if (currentAccountId) {
       if (
         mergedSettings.urlPrivacy.rulesUrl &&
@@ -161,7 +161,7 @@ const useSettingsStore = create<State>()(
 
             state.userSettings = v.parse(settingsSchemaPartial, settings);
 
-            const currentAccountId = useAuthStore.getState().currentAccountId;
+            const currentAccountId = getCurrentAccountId();
             if (currentAccountId) {
               KVStore.getItem<string>('url-purify-rules:last')
                 .then((value) => {

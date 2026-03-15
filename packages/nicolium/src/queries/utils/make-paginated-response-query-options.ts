@@ -5,8 +5,6 @@ import {
   type QueryKey,
 } from '@tanstack/react-query';
 
-import { getClient } from '@/api';
-
 import {
   PaginatedResponseArray,
   type PaginatedResponseQueryResult,
@@ -27,10 +25,10 @@ const makePaginatedResponseQueryOptions =
     queryFn: (client: PlApiClient, params: T1) => Promise<PaginatedResponse<T2, IsArray>>,
     select?: (data: InfiniteData<PaginatedResponse<T2, IsArray>>) => T3,
   ) =>
-  (...params: T1) =>
+  (client: PlApiClient, ...params: T1) =>
     infiniteQueryOptions({
       queryKey: typeof queryKey === 'object' ? queryKey : queryKey(...params),
-      queryFn: ({ pageParam }) => pageParam.next?.() ?? queryFn(getClient(), params),
+      queryFn: ({ pageParam }) => pageParam.next?.() ?? queryFn(client, params),
       initialPageParam: { next: null as (() => Promise<PaginatedResponse<T2, IsArray>>) | null },
       getNextPageParam: (page) => (page.next ? page : undefined),
       select:

@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import React, { useMemo } from 'react';
 import { defineMessages, useIntl } from 'react-intl';
 
-import { logOut, switchAccount } from '@/actions/auth';
 import Account from '@/components/accounts/account';
 import DropdownMenu from '@/components/dropdown-menu';
 import PlaceholderAccount from '@/features/placeholder/components/placeholder-account';
@@ -12,6 +11,7 @@ import {
   useLoggedInAccount,
   useLoggedInAccountIds,
 } from '@/queries/accounts/use-logged-in-accounts';
+import { useAuthActions } from '@/stores/auth';
 
 import ThemeToggle from './theme-toggle';
 
@@ -54,6 +54,7 @@ type IMenuItem = {
 const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   const features = useFeatures();
   const intl = useIntl();
+  const { logOut, switchAccountById } = useAuthActions();
 
   const otherAccountIds = useLoggedInAccountIds();
 
@@ -62,7 +63,7 @@ const ProfileDropdown: React.FC<IProfileDropdown> = ({ account, children }) => {
   };
 
   const handleSwitchAccount = (otherAccountId: string) => () => {
-    switchAccount(otherAccountId);
+    switchAccountById(otherAccountId);
   };
 
   const renderAccount = (account: AccountEntity) => (

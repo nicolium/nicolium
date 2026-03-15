@@ -23,6 +23,7 @@ import FooterLinkInput from '@/features/frontend-config/components/footer-link-i
 import PromoPanelInput from '@/features/frontend-config/components/promo-panel-input';
 import SitePreview from '@/features/frontend-config/components/site-preview';
 import ThemeSelector from '@/features/ui/components/theme-selector';
+import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { getUpdateFrontendConfigParams, useUpdateAdminConfig } from '@/queries/admin/use-config';
 import {
@@ -63,6 +64,7 @@ type ThemeChangeHandler = (theme: 'system' | 'light' | 'dark' | 'black') => void
 
 const FrontendConfigEditor: React.FC = () => {
   const intl = useIntl();
+  const client = useClient();
 
   const features = useFeatures();
 
@@ -119,7 +121,7 @@ const FrontendConfigEditor: React.FC = () => {
       const file = e.target.files?.item(0);
 
       if (file) {
-        uploadMedia({ file })
+        uploadMedia(client, { file })
           .then((data) => {
             handleChange(path, () => data.url)(e);
           })

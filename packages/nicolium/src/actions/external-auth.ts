@@ -10,8 +10,8 @@ import { instanceSchema, PlApiClient, type Instance } from 'pl-api';
 import * as v from 'valibot';
 
 import { createApp } from '@/actions/apps';
-import { authLoggedIn, verifyCredentials, switchAccount } from '@/actions/auth';
 import { obtainOAuthToken } from '@/actions/oauth';
+import { addToken, verifyCredentials, switchAccount } from '@/stores/auth';
 import { parseBaseURL } from '@/utils/auth';
 import sourceCode from '@/utils/code';
 import { getInstanceScopes } from '@/utils/scopes';
@@ -86,7 +86,7 @@ const loginWithCode = async (code: string) => {
   };
 
   const token = await obtainOAuthToken(params, baseURL);
-  authLoggedIn(token, app);
+  addToken(token, app);
   const account = await verifyCredentials(token.access_token, baseURL);
   switchAccount(account.id);
   window.location.href = '/';

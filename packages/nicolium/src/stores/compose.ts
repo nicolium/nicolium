@@ -7,14 +7,14 @@ import { uploadFile, updateMedia } from '@/actions/media';
 import { LEGACY_FE_NAME, saveSettings } from '@/actions/settings';
 import { FE_NAME } from '@/actions/settings';
 import { createStatus } from '@/actions/statuses';
-import { getClient } from '@/api';
 import { isNativeEmoji } from '@/features/emoji';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
-import { selectAccount, selectOwnAccount } from '@/queries/accounts/selectors';
+import { useOwnAccount } from '@/hooks/use-own-account';
+import { selectAccount } from '@/queries/accounts/selectors';
 import { queryClient } from '@/queries/client';
 import { cancelDraftStatus } from '@/queries/statuses/use-draft-statuses';
-import { useAuthStore } from '@/stores/auth';
+import { isLoggedIn, getClient, getOwnAccount } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 import { useModalsActions, useModalsStore } from '@/stores/modals';
 import { useSettings, useSettingsStore } from '@/stores/settings';
@@ -474,7 +474,7 @@ const useComposeStore = create<ComposeStore>()(
             useSettingsStore.getState().settings;
           const explicitAddressing =
             features.createStatusExplicitAddressing && !forceImplicitAddressing;
-          const account = selectOwnAccount();
+          const account = getOwnAccount();
 
           if (!account) return;
 
@@ -552,7 +552,7 @@ const useComposeStore = create<ComposeStore>()(
         },
 
         mentionCompose: (account) => {
-          if (!useAuthStore.getState().currentAccountId) return;
+          if (!isLoggedIn()) return;
 
           get().actions.updateCompose('compose-modal', (compose) => {
             compose.text = [compose.text.trim(), `@${account.acct} `]
@@ -601,7 +601,7 @@ const useComposeStore = create<ComposeStore>()(
         },
 
         eventDiscussionCompose: (composeId, status) => {
-          const account = selectOwnAccount();
+          const account = getOwnAccount();
 
           if (!account) return;
 
@@ -702,6 +702,7 @@ const useComposeStore = create<ComposeStore>()(
 const useSubmitCompose = (composeId: string) => {
   const actions = useComposeActions();
   const client = useClient();
+  const { data: ownAccount } = useOwnAccount();
   const features = useFeatures();
   const { openModal, closeModal } = useModalsActions();
   const { removeSledzik } = useUiStoreActions();
@@ -864,14 +865,20 @@ const useSubmitCompose = (composeId: string) => {
         }
 
         try {
-          const data = await createStatus(params, idempotencyKey, editedId, compose.redacting);
+          const data = await createStatus(
+            client,
+            params,
+            idempotencyKey,
+            editedId,
+            compose.redacting,
+          );
 
           const draftIdToCancel = compose.draftId;
 
           actions.resetCompose(composeId);
 
           if (draftIdToCancel) {
-            const accountUrl = selectOwnAccount()!.url;
+            const accountUrl = ownAccount!.url;
             cancelDraftStatus(queryClient, accountUrl, draftIdToCancel);
           }
 
@@ -919,6 +926,7 @@ const useComposeActions = () => useComposeStore((state) => state.actions);
 
 const useUploadCompose = (composeId: string) => {
   const { updateCompose } = useComposeActions();
+  const client = useClient();
   const instance = useInstance();
   const intl = useIntl();
 
@@ -946,6 +954,7 @@ const useUploadCompose = (composeId: string) => {
         if (mediaCount + i > attachmentLimit - 1) return;
 
         uploadFile(
+          client,
           f,
           intl,
           (data) =>
@@ -974,6 +983,7 @@ const useUploadCompose = (composeId: string) => {
 
 const useChangeUploadCompose = (composeId: string) => {
   const { updateCompose } = useComposeActions();
+  const client = useClient();
 
   return useCallback(
     async (mediaId: string, params: UpdateMediaParams) => {
@@ -985,7 +995,7 @@ const useChangeUploadCompose = (composeId: string) => {
       });
 
       try {
-        const response = await updateMedia(mediaId, params);
+        const response = await updateMedia(client, mediaId, params);
         updateCompose(composeId, (draft) => {
           draft.isChangingUpload = false;
           draft.mediaAttachments = draft.mediaAttachments.map((item) =>

@@ -1,12 +1,11 @@
 import { defineMessages } from 'react-intl';
 
-import { getClient } from '@/api';
 import { useComposeStore } from '@/stores/compose';
 import toast from '@/toast';
 
 import { importEntities } from '../queries/utils/import-entities';
 
-import type { CreateEventParams, Location, MediaAttachment } from 'pl-api';
+import type { CreateEventParams, Location, MediaAttachment, PlApiClient } from 'pl-api';
 
 const messages = defineMessages({
   exceededImageSizeLimit: {
@@ -27,6 +26,7 @@ const messages = defineMessages({
 });
 
 const submitEvent = async ({
+  client,
   statusId,
   name,
   status,
@@ -36,6 +36,7 @@ const submitEvent = async ({
   joinMode,
   location,
 }: {
+  client: PlApiClient;
   statusId: string | null;
   name: string;
   status: string;
@@ -62,8 +63,8 @@ const submitEvent = async ({
   if (location) params.location_id = location.origin_id;
 
   const data = await (statusId === null
-    ? getClient().events.createEvent(params)
-    : getClient().events.editEvent(statusId, params));
+    ? client.events.createEvent(params)
+    : client.events.editEvent(statusId, params));
 
   importEntities({ statuses: [data] });
   toast.success(statusId ? messages.editSuccess : messages.success, {
@@ -84,17 +85,13 @@ const cancelEventCompose = () => {
   });
 };
 
-const initEventEdit = (statusId: string) => {
-  return getClient()
-    .statuses.getStatusSource(statusId)
-    .then((response) => {
-      useComposeStore
-        .getState()
-        .actions.updateCompose(`compose-event-modal-${statusId}`, (draft) => {
-          draft.text = response.text;
-        });
-      return response;
+const initEventEdit = (client: PlApiClient, statusId: string) => {
+  return client.statuses.getStatusSource(statusId).then((response) => {
+    useComposeStore.getState().actions.updateCompose(`compose-event-modal-${statusId}`, (draft) => {
+      draft.text = response.text;
     });
+    return response;
+  });
 };
 
 export { submitEvent, cancelEventCompose, initEventEdit };

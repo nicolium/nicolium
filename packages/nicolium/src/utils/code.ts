@@ -49,6 +49,4 @@ const code = compileTime(() => {
   return code;
 });
 
-export type Code = typeof code;
-
 export default code;

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { IntlProvider } from 'react-intl';
 
-import { fetchMe } from '@/actions/auth';
 import { loadFrontendConfig } from '@/actions/frontend-config';
 import { checkIfStandalone, fetchInstance } from '@/actions/instance';
 import LoadingScreen from '@/components/loading-screen';
@@ -9,16 +8,7 @@ import { useCurrentAccount } from '@/contexts/current-account-context';
 import { useLocale } from '@/hooks/use-locale';
 import { useOwnAccount } from '@/hooks/use-own-account';
 import MESSAGES from '@/messages';
-/** Load initial data from the backend */
-const loadInitial = async () => {
-  checkIfStandalone();
-  // Await for authenticated fetch
-  await fetchMe();
-  // Await for feature detection
-  await fetchInstance();
-  // Await for configuration
-  await loadFrontendConfig();
-};
+import { useAuthActions } from '@/stores/auth';
 
 interface INicoliumLoad {
   children: React.ReactNode;
@@ -29,6 +19,7 @@ const NicoliumLoad: React.FC<INicoliumLoad> = ({ children }) => {
   const me = useCurrentAccount();
   const { data: account } = useOwnAccount();
   const locale = useLocale();
+  const { fetchMe } = useAuthActions();
 
   const [messages, setMessages] = useState<Record<string, string>>({});
   const [localeLoading, setLocaleLoading] = useState(true);
@@ -49,6 +40,17 @@ const NicoliumLoad: React.FC<INicoliumLoad> = ({ children }) => {
 
   // Load initial data from the API
   useEffect(() => {
+    /** Load initial data from the backend */
+    const loadInitial = async () => {
+      checkIfStandalone();
+      // Await for authenticated fetch
+      await fetchMe();
+      // Await for feature detection
+      await fetchInstance();
+      // Await for configuration
+      await loadFrontendConfig();
+    };
+
     loadInitial()
       .then(() => {
         setIsLoaded(true);

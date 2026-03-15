@@ -3,7 +3,6 @@ import debounce from 'lodash/debounce';
 import React, { useState, useRef, useCallback } from 'react';
 import { useIntl, FormattedMessage, defineMessages } from 'react-intl';
 
-import { register, verifyCredentials } from '@/actions/auth';
 import BirthdayInput from '@/components/birthday-input';
 import Button from '@/components/ui/button';
 import Checkbox from '@/components/ui/checkbox';
@@ -16,6 +15,7 @@ import Textarea from '@/components/ui/textarea';
 import CaptchaField from '@/features/auth-login/components/captcha';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useAuthActions } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 import { useModalsActions } from '@/stores/modals';
 import { useSettings } from '@/stores/settings';
@@ -55,6 +55,7 @@ const RegistrationForm: React.FC<IRegistrationForm> = ({ inviteToken }) => {
   const features = useFeatures();
   const instance = useInstance();
   const { openModal } = useModalsActions();
+  const { register, verifyCredentials } = useAuthActions();
 
   const needsConfirmation = instance.pleroma.metadata.account_activation_required;
   const needsApproval = instance.registrations.approval_required;

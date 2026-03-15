@@ -2,7 +2,6 @@ import { create } from 'mutative';
 import React, { useEffect, useState } from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { patchMe } from '@/actions/auth';
 import List, { ListItem } from '@/components/list';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
@@ -16,6 +15,7 @@ import { SelectDropdown } from '@/features/forms';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useInteractionPolicies } from '@/queries/settings/use-interaction-policies';
+import { useAuthActions } from '@/stores/auth';
 import toast from '@/toast';
 
 import type { CreateStatusParams, InteractionPolicy } from 'pl-api';
@@ -258,6 +258,7 @@ const InteractionPolicyConfig: React.FC<IInteractionPolicyConfig> = ({
 const InteractionPoliciesPage = () => {
   const client = useClient();
   const features = useFeatures();
+  const { updateMe } = useAuthActions();
 
   const [quotePolicy, setQuotePolicy] = useState<QuoteApprovalPolicy>('public');
 
@@ -320,7 +321,7 @@ const InteractionPoliciesPage = () => {
     }
 
     if (features.quoteApprovalPolicies && !features.interactionRequests) {
-      promises.push(patchMe({ source: { quote_policy: quotePolicy } }));
+      promises.push(updateMe({ source: { quote_policy: quotePolicy } }));
     }
 
     Promise.all(promises)

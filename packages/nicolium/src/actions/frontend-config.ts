@@ -1,7 +1,7 @@
 import { getHost } from '@/actions/instance';
-import { getClient, staticFetch } from '@/api';
+import { staticFetch } from '@/api';
 import KVStore from '@/storage/kv-store';
-import { useAuthStore } from '@/stores/auth';
+import { getClient } from '@/stores/auth';
 import { useFrontendConfigStore } from '@/stores/frontend-config';
 import { useSettingsStore } from '@/stores/settings';
 
@@ -17,10 +17,11 @@ const rememberFrontendConfig = (host: string | null) =>
 
 /** Conditionally fetches Nicolium config depending on backend features */
 const fetchFrontendConfig = async (host: string | null) => {
-  const features = useAuthStore.getState().client.features;
+  const client = getClient();
+  const features = client.features;
 
   if (features.frontendConfigurations) {
-    const data = await getClient().instance.getFrontendConfigurations();
+    const data = await client.instance.getFrontendConfigurations();
     const foundData = data['nicolium'] || data['pl_fe'];
 
     if (foundData) {

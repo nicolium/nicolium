@@ -822,7 +822,7 @@ const MenuButton: React.FC<IMenuButton> = ({
           to: '/@{$username}/events/$statusId/edit',
           params: { username: status.account.acct, statusId: status.id },
         });
-      else editStatus(status.id);
+      else editStatus(client, status.id);
     };
 
     const handlePinClick: React.EventHandler<React.MouseEvent> = () => {
@@ -890,7 +890,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleConversationMuteClick: React.EventHandler<React.MouseEvent> = () => {
-      toggleMuteStatus(status);
+      toggleMuteStatus(client, status);
     };
 
     const handleLoadConversationClick = () => {
@@ -974,7 +974,7 @@ const MenuButton: React.FC<IMenuButton> = ({
     };
 
     const handleRedactStatus: React.EventHandler<React.MouseEvent> = () => {
-      redactStatus(status.id);
+      redactStatus(client, status.id);
     };
 
     const menu: Menu = [];

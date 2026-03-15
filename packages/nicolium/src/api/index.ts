@@ -3,7 +3,6 @@
  * @module @/api
  */
 import * as BuildConfig from '@/build-config';
-import { useAuthStore } from '@/stores/auth';
 import { buildFullPath } from '@/utils/url';
 
 type NicoliumResponse<T = any> = Response & { data: string; json: T };
@@ -43,6 +42,4 @@ const staticFetch = async (input: URL | RequestInfo, init?: RequestInit) => {
   } as any as NicoliumResponse;
 };
 
-const getClient = () => useAuthStore.getState().client;
-
-export { type NicoliumResponse, staticFetch, getClient };
+export { type NicoliumResponse, staticFetch };

@@ -95,9 +95,12 @@ const UI: React.FC = React.memo(() => {
     }
 
     if (features.scheduledStatuses) {
-      requestIdleCallback(() => queryClient.prefetchInfiniteQuery(scheduledStatusesQueryOptions), {
-        timeout: 2000,
-      });
+      requestIdleCallback(
+        () => queryClient.prefetchInfiniteQuery(scheduledStatusesQueryOptions(client)),
+        {
+          timeout: 2000,
+        },
+      );
     }
   };
 
@@ -132,8 +135,8 @@ const UI: React.FC = React.memo(() => {
   }, [!!account, instanceFetched]);
 
   useEffect(() => {
-    registerPushNotifications();
-  }, [vapidKey]);
+    if (account) registerPushNotifications(client, account.id);
+  }, [vapidKey, !!account]);
 
   // Wait for login to succeed or fail
   if (me === null) return null;

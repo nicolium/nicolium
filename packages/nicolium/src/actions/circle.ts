@@ -1,6 +1,5 @@
 // Loosely adapted from twitter-interaction-circles, licensed under MIT License
 // https://github.com/duiker101/twitter-interaction-circles
-import { useAuthStore } from '@/stores/auth';
 
 import type { PaginatedResponse, PlApiClient, Status } from 'pl-api';
 
@@ -16,6 +15,7 @@ interface Interaction {
 const processCircle =
   (
     client: PlApiClient,
+    me: string,
     setProgress: (progress: {
       state:
         | 'pending'
@@ -29,8 +29,6 @@ const processCircle =
   ) =>
   async () => {
     setProgress({ state: 'pending', progress: 0 });
-
-    const me = useAuthStore.getState().currentAccountId as string;
 
     const interactions: Record<string, Interaction> = {};
 

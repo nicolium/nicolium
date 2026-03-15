@@ -8,6 +8,7 @@ import { useCallback, useEffect } from 'react';
 import { useIntl } from 'react-intl';
 
 import { fetchStatus } from '@/actions/statuses';
+import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { queryClient } from '@/queries/client';
 import { queryKeys } from '@/queries/keys';
@@ -29,6 +30,7 @@ interface IStatePlugin {
 
 const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
   const intl = useIntl();
+  const client = useClient();
   const [editor] = useLexicalComposerContext();
   const features = useFeatures();
   const { urlPrivacy, ignoreHashtagCasingSuggestions } = useSettings();
@@ -135,7 +137,7 @@ const StatePlugin: React.FC<IStatePlugin> = ({ composeId, isWysiwyg }) => {
             break;
           }
 
-          const status = await fetchStatus(id, intl);
+          const status = await fetchStatus(client, id, intl);
 
           if (status) {
             quoteId = status.id;

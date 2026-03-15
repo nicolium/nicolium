@@ -2,7 +2,6 @@ import { Navigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { logIn, switchAccount, verifyCredentials } from '@/actions/auth';
 import { fetchInstance } from '@/actions/instance';
 import Button from '@/components/ui/button';
 import Text from '@/components/ui/text';
@@ -11,6 +10,7 @@ import LoginForm from '@/features/auth-login/components/login-form';
 import OtpAuthForm from '@/features/auth-login/components/otp-auth-form';
 import ExternalLoginForm from '@/features/external-login/components/external-login-form';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
+import { useAuthActions } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 import { getRedirectUrl } from '@/utils/redirect';
 import { useIsStandalone } from '@/utils/state';
@@ -22,6 +22,7 @@ const SignUpPanel = () => {
   const { isOpen } = useRegistrationStatus();
   const me = useCurrentAccount();
   const standalone = useIsStandalone();
+  const { logIn, switchAccountById, verifyCredentials } = useAuthActions();
 
   const token = new URLSearchParams(window.location.search).get('token');
 
@@ -45,7 +46,7 @@ const SignUpPanel = () => {
         return account;
       })
       .then((account: { id: string }) => {
-        switchAccount(account.id);
+        switchAccountById(account.id);
         if (typeof me !== 'string') {
           setShouldRedirect(true);
         }

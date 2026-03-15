@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useIntl, defineMessages, FormattedMessage } from 'react-intl';
 
-import { fetchCaptcha } from '@/actions/auth';
 import Input from '@/components/ui/input';
 import Text from '@/components/ui/text';
+import { useAuthActions } from '@/stores/auth';
 
 const noOp = () => {};
 
@@ -38,6 +38,8 @@ const CaptchaField: React.FC<ICaptchaField> = ({
 }) => {
   const [captcha, setCaptcha] = useState<Record<string, any>>({});
   const [refresh, setRefresh] = useState<NodeJS.Timeout | undefined>(undefined);
+
+  const { fetchCaptcha } = useAuthActions();
 
   const getCaptcha = () => {
     fetchCaptcha()

@@ -5,13 +5,13 @@ import clsx from 'clsx';
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FormattedMessage } from 'react-intl';
 
-import { fetchOwnAccounts, logOut, switchAccount } from '@/actions/auth';
 import Account from '@/components/accounts/account';
 import Divider from '@/components/ui/divider';
 import Icon from '@/components/ui/icon';
 import Text from '@/components/ui/text';
 import { useCurrentAccount } from '@/contexts/current-account-context';
 import ProfileStats from '@/features/ui/components/profile-stats';
+import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useRegistrationStatus } from '@/hooks/use-registration-status';
 import { useAccount } from '@/queries/accounts/use-account';
@@ -20,6 +20,7 @@ import { useLoggedInAccounts } from '@/queries/accounts/use-logged-in-accounts';
 import { scheduledStatusesCountQueryOptions } from '@/queries/statuses/scheduled-statuses';
 import { useDraftStatusesCountQuery } from '@/queries/statuses/use-draft-statuses';
 import { useInteractionRequestsCount } from '@/queries/statuses/use-interaction-requests';
+import { useAuthActions } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 import { useSettings } from '@/stores/settings';
 import { useIsSidebarOpen, useUiStoreActions } from '@/stores/ui';
@@ -34,13 +35,15 @@ interface IAccountSwitcher {
 const AccountSwitcher: React.FC<IAccountSwitcher> = ({ handleClose }) => {
   const { accounts: otherAccounts } = useLoggedInAccounts();
 
+  const { switchAccountById } = useAuthActions();
+
   const handleSwitchAccount =
     (account: AccountEntity): React.MouseEventHandler =>
     (e) => {
       e.preventDefault();
       e.stopPropagation();
 
-      switchAccount(account.id);
+      switchAccountById(account.id);
     };
 
   const renderAccount = (account: AccountEntity) => (
@@ -124,16 +127,18 @@ DropdownNavigationLink.displayName = 'DropdownNavigationLink';
 const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => {
   const isSidebarOpen = useIsSidebarOpen();
   const { closeSidebar } = useUiStoreActions();
+  const { verifyAccounts, logOut } = useAuthActions();
 
   const me = useCurrentAccount();
+  const client = useClient();
   const features = useFeatures();
 
   const authenticatedScheduledStatusesCountQueryOptions = useMemo(
     () => ({
-      ...scheduledStatusesCountQueryOptions,
+      ...scheduledStatusesCountQueryOptions(client),
       enabled: !!me && features.scheduledStatuses,
     }),
-    [me, features],
+    [me, client, features],
   );
 
   const { data: account } = useAccount(me || undefined);
@@ -194,7 +199,7 @@ const DropdownNavigation: React.FC = React.memo((): React.JSX.Element | null => 
   };
 
   useEffect(() => {
-    fetchOwnAccounts();
+    verifyAccounts();
   }, []);
 
   useEffect(() => {

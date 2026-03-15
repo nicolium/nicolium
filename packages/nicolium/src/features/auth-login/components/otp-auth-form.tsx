@@ -2,7 +2,6 @@ import { Navigate } from '@tanstack/react-router';
 import React, { useState } from 'react';
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl';
 
-import { otpVerify, verifyCredentials, switchAccount } from '@/actions/auth';
 import { BigCard } from '@/components/ui/big-card';
 import Button from '@/components/ui/button';
 import Card, { CardBody, CardHeader, CardTitle } from '@/components/ui/card';
@@ -10,6 +9,7 @@ import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
+import { useAuthActions } from '@/stores/auth';
 
 const messages = defineMessages({
   otpLoginFail: { id: 'login.otp_log_in.fail', defaultMessage: 'Invalid code, please try again.' },
@@ -20,8 +20,9 @@ interface IOtpAuthForm {
   small?: boolean;
 }
 
-const OtpAuthForm: React.FC<IOtpAuthForm> = ({ mfa_token, small }) => {
+const OtpAuthForm: React.FC<IOtpAuthForm> = ({ mfa_token: mfaToken, small }) => {
   const intl = useIntl();
+  const { verifyOtp, verifyCredentials, switchAccountById } = useAuthActions();
 
   const [isLoading, setIsLoading] = useState(false);
   const [shouldRedirect, setShouldRedirect] = useState(false);
@@ -34,14 +35,14 @@ const OtpAuthForm: React.FC<IOtpAuthForm> = ({ mfa_token, small }) => {
 
   const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     const { code } = getFormData(event.target);
-    otpVerify(code, mfa_token)
+    verifyOtp(code, mfaToken)
       .then(({ access_token }) => {
         setCodeError(false);
         return verifyCredentials(access_token);
       })
       .then((account: Record<string, any>) => {
         setShouldRedirect(true);
-        return switchAccount(account.id);
+        return switchAccountById(account.id);
       })
       .catch(() => {
         setIsLoading(false);

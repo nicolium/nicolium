@@ -57,14 +57,15 @@ const useReport = (reportId: string) => {
 const pendingReportsQuery = makePaginatedResponseQueryOptions(
   queryKeys.admin.reportLists.show({ resolved: undefined }),
   (client) => client.admin.reports.getReports({ resolved: undefined }).then(minifyAdminReportList),
-)();
+);
 
 const usePendingReportsCount = () => {
+  const client = useClient();
   const { data: account } = useOwnAccount();
   const fetched = useInstanceStore((state) => state.fetched);
 
   return useInfiniteQuery({
-    ...pendingReportsQuery,
+    ...pendingReportsQuery(client),
     select: (data) =>
       (data.pages.at(-1)?.total ?? data.pages.flatMap((page) => page.items).length) || 0,
     enabled: fetched && !!(account?.is_admin ?? account?.is_moderator),

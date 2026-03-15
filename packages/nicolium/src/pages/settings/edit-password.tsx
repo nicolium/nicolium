@@ -1,13 +1,13 @@
 import React from 'react';
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl';
 
-import { changePassword } from '@/actions/security';
 import Button from '@/components/ui/button';
 import Column from '@/components/ui/column';
 import Form from '@/components/ui/form';
 import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
+import { useClient } from '@/hooks/use-client';
 import toast from '@/toast';
 
 const messages = defineMessages({
@@ -30,6 +30,7 @@ const initialState = { currentPassword: '', newPassword: '', newPasswordConfirma
 
 const EditPasswordPage = () => {
   const intl = useIntl();
+  const client = useClient();
 
   const [state, setState] = React.useState(initialState);
   const [isLoading, setLoading] = React.useState(false);
@@ -56,7 +57,8 @@ const EditPasswordPage = () => {
     }
 
     setLoading(true);
-    changePassword(currentPassword, newPassword)
+    client.settings
+      .changePassword(currentPassword, newPassword)
       .then(() => {
         resetState();
         toast.success(intl.formatMessage(messages.updatePasswordSuccess));

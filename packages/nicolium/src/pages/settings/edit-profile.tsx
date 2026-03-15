@@ -3,7 +3,6 @@ import { type CredentialAccount, GOTOSOCIAL, type UpdateCredentialsParams } from
 import React, { useState, useEffect } from 'react';
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl';
 
-import { patchMe } from '@/actions/auth';
 import BirthdayInput from '@/components/birthday-input';
 import List, { ListItem } from '@/components/list';
 import Accordion from '@/components/ui/accordion';
@@ -23,6 +22,7 @@ import { useImageField } from '@/hooks/forms/use-image-field';
 import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
 import { useOwnAccount } from '@/hooks/use-own-account';
+import { useAuthActions } from '@/stores/auth';
 import { useInstance } from '@/stores/instance';
 import toast from '@/toast';
 
@@ -272,6 +272,7 @@ const EditProfilePage: React.FC = () => {
   const instance = useInstance();
   const client = useClient();
 
+  const { updateMe } = useAuthActions();
   const { data: account } = useOwnAccount();
   const features = useFeatures();
   const maxFields = instance.configuration.accounts
@@ -336,7 +337,7 @@ const EditProfilePage: React.FC = () => {
 
     if (!instance.configuration.accounts?.allow_custom_css) delete params.custom_css;
 
-    promises.push(patchMe(params as any));
+    promises.push(updateMe(params as any));
 
     if (features.muteStrangers) {
       promises.push(

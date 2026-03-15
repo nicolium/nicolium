@@ -9,7 +9,9 @@ import FormActions from '@/components/ui/form-actions';
 import FormGroup from '@/components/ui/form-group';
 import Input from '@/components/ui/input';
 import Text from '@/components/ui/text';
+import { useClient } from '@/hooks/use-client';
 import { useFeatures } from '@/hooks/use-features';
+import { useOwnAccount } from '@/hooks/use-own-account';
 import toast from '@/toast';
 
 const messages = defineMessages({
@@ -25,7 +27,9 @@ const messages = defineMessages({
 
 const DeleteAccountPage = () => {
   const intl = useIntl();
+  const client = useClient();
   const features = useFeatures();
+  const { data: account } = useOwnAccount();
 
   const [password, setPassword] = React.useState('');
   const [isLoading, setLoading] = React.useState(false);
@@ -38,7 +42,7 @@ const DeleteAccountPage = () => {
 
   const handleSubmit = React.useCallback(() => {
     setLoading(true);
-    deleteAccount(password)
+    deleteAccount(client, password, { url: account!.url })
       .then(() => {
         setPassword('');
         toast.success(intl.formatMessage(messages.deleteAccountSuccess));

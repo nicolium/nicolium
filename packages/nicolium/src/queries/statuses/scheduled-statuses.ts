@@ -6,15 +6,18 @@ import { removePageItem } from '@/utils/queries';
 import { queryKeys } from '../keys';
 import { makePaginatedResponseQueryOptions } from '../utils/make-paginated-response-query-options';
 
+import type { PlApiClient } from 'pl-api';
+
 const scheduledStatusesQueryOptions = makePaginatedResponseQueryOptions(
   queryKeys.scheduledStatuses.all,
   (client) => client.scheduledStatuses.getScheduledStatuses(),
-)();
+);
 
-const scheduledStatusesCountQueryOptions = infiniteQueryOptions({
-  ...scheduledStatusesQueryOptions,
-  select: (data) => data.pages.flatMap((page) => page.items).length,
-});
+const scheduledStatusesCountQueryOptions = (client: PlApiClient) =>
+  infiniteQueryOptions({
+    ...scheduledStatusesQueryOptions(client),
+    select: (data) => data.pages.flatMap((page) => page.items).length,
+  });
 
 const useCancelScheduledStatusMutation = (scheduledStatusId: string) => {
   const client = useClient();

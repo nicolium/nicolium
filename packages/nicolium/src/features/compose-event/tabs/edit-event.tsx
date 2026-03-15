@@ -20,6 +20,7 @@ import Toggle from '@/components/ui/toggle';
 import ContentTypeButton from '@/features/compose/components/content-type-button';
 import { isCurrentOrFutureDate } from '@/features/compose/components/schedule-form';
 import { ComposeEditor, DatePicker } from '@/features/ui/util/async-components';
+import { useClient } from '@/hooks/use-client';
 import { useMinimalStatus } from '@/queries/statuses/use-status';
 import { useChangeUploadCompose, useComposeActions } from '@/stores/compose';
 import { useInstance } from '@/stores/instance';
@@ -65,6 +66,7 @@ interface IEditEvent {
 
 const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
   const intl = useIntl();
+  const client = useClient();
   const navigate = useNavigate();
   const { openModal } = useModalsActions();
 
@@ -127,6 +129,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
     setIsUploading(true);
 
     uploadFile(
+      client,
       files[0],
       intl,
       (data) => {
@@ -167,6 +170,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
     setIsDisabled(true);
 
     submitEvent({
+      client,
       statusId,
       name,
       status: text,
@@ -189,7 +193,7 @@ const EditEvent: React.FC<IEditEvent> = ({ statusId }) => {
 
   useEffect(() => {
     if (statusId) {
-      Promise.all([initEventEdit(statusId), fetchStatus(statusId)])
+      Promise.all([initEventEdit(client, statusId), fetchStatus(client, statusId)])
         .then(([source, status]) => {
           if (!source || !status) throw new Error();
 

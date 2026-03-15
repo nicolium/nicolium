@@ -1,14 +1,13 @@
 import { defineMessages, type IntlShape } from 'react-intl';
 
-import { getClient } from '@/api';
+import { isLoggedIn } from '@/stores/auth';
 import { useInstanceStore } from '@/stores/instance';
 import { useSettingsStore } from '@/stores/settings';
 import toast from '@/toast';
-import { isLoggedIn } from '@/utils/auth';
 import { formatBytes, getVideoDuration } from '@/utils/media';
 import resizeImage from '@/utils/resize-image';
 
-import type { MediaAttachment, UpdateMediaParams, UploadMediaParams } from 'pl-api';
+import type { MediaAttachment, PlApiClient, UpdateMediaParams, UploadMediaParams } from 'pl-api';
 
 const messages = defineMessages({
   exceededImageSizeLimit: {
@@ -28,15 +27,17 @@ const messages = defineMessages({
 
 const noOp = () => {};
 
-const updateMedia = (mediaId: string, params: UpdateMediaParams) =>
-  getClient().media.updateMedia(mediaId, params);
+const updateMedia = (client: PlApiClient, mediaId: string, params: UpdateMediaParams) =>
+  client.media.updateMedia(mediaId, params);
 
 const uploadMedia = (
+  client: PlApiClient,
   body: UploadMediaParams,
   onUploadProgress: (e: ProgressEvent) => void = noOp,
-) => getClient().media.uploadMedia(body, { onUploadProgress });
+) => client.media.uploadMedia(body, { onUploadProgress });
 
 const uploadFile = async (
+  client: PlApiClient,
   file: File,
   intl: IntlShape,
   onSuccess: (data: MediaAttachment) => void = () => {},
@@ -89,15 +90,15 @@ const uploadFile = async (
       // Account for disparity in size of original image and resized data
       changeTotal(resized.size - file.size);
 
-      return uploadMedia({ file: resized }, onProgress).then((data) => {
+      return uploadMedia(client, { file: resized }, onProgress).then((data) => {
         // If server-side processing of the media attachment has not completed yet,
         // poll the server until it is, before showing the media attachment as uploaded
         if (data.url) {
           onSuccess(data);
         } else if (data.url === null) {
           const poll = () => {
-            getClient()
-              .media.getMedia(data.id)
+            client.media
+              .getMedia(data.id)
               .then((data) => {
                 if (data.url) {
                   onSuccess(data);
