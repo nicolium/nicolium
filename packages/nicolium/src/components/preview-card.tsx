@@ -202,7 +202,7 @@ const PreviewCard: React.FC<IPreviewCard> = ({
   );
 
   const description = (
-    <div className='flex flex-1 flex-col overflow-hidden p-4'>
+    <div className='flex flex-1 flex-col gap-1 overflow-hidden p-4'>
       {trimmedTitle && (
         <Text weight='bold' direction={direction}>
           {title}
