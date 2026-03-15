@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import React, { useMemo, useRef, useState } from 'react';
 import { defineMessages, FormattedList, FormattedMessage, useIntl } from 'react-intl';
 
+import HoverAccountWrapper from '@/components/accounts/hover-account-wrapper';
 import PullToRefresh from '@/components/pull-to-refresh';
 import ScrollTopButton from '@/components/scroll-top-button';
 import ScrollableList, { type IScrollableList } from '@/components/scrollable-list';
@@ -217,18 +218,16 @@ const TimelineStatusInfo: React.FC<ITimelineStatusInfo> = ({ status, rebloggedBy
     const renderedAccounts = accounts.slice(0, 2).map(
       (account) =>
         !!account && (
-          <Link
-            key={account.acct}
-            to='/@{$username}'
-            params={{ username: account.acct }}
-            className='hover:underline'
-          >
-            <bdi className='truncate'>
-              <strong className='text-gray-800 dark:text-gray-200'>
-                <Emojify text={account.display_name} emojis={account.emojis} />
-              </strong>
-            </bdi>
-          </Link>
+          <HoverAccountWrapper key={account.id} accountId={account.id} element='bdi'>
+            <Link
+              key={account.acct}
+              to='/@{$username}'
+              params={{ username: account.acct }}
+              className='truncate font-bold text-gray-800 hover:underline dark:text-gray-200'
+            >
+              <Emojify text={account.display_name} emojis={account.emojis} />
+            </Link>
+          </HoverAccountWrapper>
         ),
     );
 
