@@ -54,13 +54,13 @@ const messages = defineMessages({
 
 const ExportDataPage = () => {
   const client = useClient();
-  const accountId = useCurrentAccount();
+  const currentAccountId = useCurrentAccount();
   const intl = useIntl();
 
   return (
     <Column label={intl.formatMessage(messages.heading)}>
       <CSVExporter
-        action={() => exportFollows(client, accountId as string)}
+        action={() => exportFollows(client, currentAccountId as string)}
         inputLabel={<FormattedMessage id='export_data.follows_label' defaultMessage='Follows' />}
         inputHint={
           <FormattedMessage
