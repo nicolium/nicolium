@@ -25,7 +25,7 @@ You can now proceed to fetching Nicolium Git repository, installing dependencies
 
 ```bash
 # Clone the Nicolium repository
-git clone https://codeberg.org/nicolium/nicoliumm.git
+git clone https://codeberg.org/nicolium/nicolium.git
 cd nicolium
 # Install dependencies
 pnpm install
@@ -37,7 +37,7 @@ This will start a Vite development server where you can use `pl-api` client insi
 
 ## Contributing guidelines
 
-Nicolium monorepo is hosted on [Codeberg](https://codeberg.org/nicolium/nicoliumm) and [GitHub](https://github.comnicolium/nicoliumum). While issues are only tracked on Codeberg, you can submit pull requests on both platforms. Remember to follow the [Code of Conduct](./code-of-conduct.mdx) when interacting with the community.
+Nicolium monorepo is hosted on [Codeberg](https://codeberg.org/nicolium/nicolium) and [GitHub](https://github.comnicolium/nicoliumum). While issues are only tracked on Codeberg, you can submit pull requests on both platforms. Remember to follow the [Code of Conduct](./code-of-conduct.mdx) when interacting with the community.
 
 The project uses [ESLint](https://eslint.org/) for code style checking. You can run the linter using the following command:
 
