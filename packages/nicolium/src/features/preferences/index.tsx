@@ -706,6 +706,21 @@ const Preferences = () => {
             onChange={onToggleChange}
           />
         </ListItem>
+
+        <ListItem
+          label={
+            <FormattedMessage
+              id='preferences.fields.use_system_media_controls_label'
+              defaultMessage='Use native media controls'
+            />
+          }
+        >
+          <SettingToggle
+            settings={settings}
+            settingPath={['useSystemMediaControls']}
+            onChange={onToggleChange}
+          />
+        </ListItem>
       </List>
 
       <List>

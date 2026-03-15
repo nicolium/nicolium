@@ -6,6 +6,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import Icon from '@/components/icon';
 import { formatTime, getPointerPosition } from '@/features/video';
+import { useSettings } from '@/stores/settings';
 
 import Visualizer from './visualizer';
 
@@ -56,6 +57,7 @@ const Audio: React.FC<IAudio> = (props) => {
   } = props;
 
   const intl = useIntl();
+  const { useSystemMediaControls } = useSettings();
 
   const [width, setWidth] = useState<number | undefined>(props.width);
   const [height, setHeight] = useState<number | undefined>(props.height);
@@ -450,23 +452,25 @@ const Audio: React.FC<IAudio> = (props) => {
   }, []);
 
   useEffect(() => {
-    _clear();
-    _draw();
-  }, [src, width, height, accentColor]);
+    if (!useSystemMediaControls) {
+      _clear();
+      _draw();
+    }
+  }, [src, width, height, accentColor, useSystemMediaControls]);
 
   return (
     <div
       className={clsx(
-        'relative box-border overflow-hidden rounded-[10px] bg-black pb-11 [direction:ltr]',
-        { 'h-full rounded-none': editable },
+        'relative box-border overflow-hidden rounded-[10px] bg-black [direction:ltr]',
+        { 'h-full rounded-none': editable, 'pb-11': !useSystemMediaControls },
       )}
       ref={player}
       style={{
         backgroundColor: _getBackgroundColor(),
         color: _getForegroundColor(),
         width: '100%',
-        height: fullscreen ? '100%' : undefined,
-        aspectRatio: fullscreen ? undefined : '16 / 9',
+        height: fullscreen && !useSystemMediaControls ? '100%' : undefined,
+        aspectRatio: fullscreen || useSystemMediaControls ? undefined : '16 / 9',
       }}
       tabIndex={0}
       onKeyDown={handleKeyDown}
@@ -484,136 +488,146 @@ const Audio: React.FC<IAudio> = (props) => {
         onVolumeChange={handleVolumeChange}
         onLoadedData={handleLoadedData}
         crossOrigin='anonymous'
+        controls={useSystemMediaControls}
+        className={clsx(useSystemMediaControls && 'w-full')}
       />
 
-      <canvas
-        role='button'
-        tabIndex={0}
-        className='audio-player__canvas absolute left-0 top-0 w-full'
-        width={width}
-        height={height}
-        ref={canvas}
-        onClick={togglePlay}
-        onKeyDown={handleAudioKeyDown}
-        title={alt}
-        aria-label={alt}
-      />
+      {!useSystemMediaControls && (
+        <>
+          <canvas
+            role='button'
+            tabIndex={0}
+            className='audio-player__canvas absolute left-0 top-0 w-full'
+            width={width}
+            height={height}
+            ref={canvas}
+            onClick={togglePlay}
+            onKeyDown={handleAudioKeyDown}
+            title={alt}
+            aria-label={alt}
+          />
 
-      {poster && (
-        <img
-          src={poster}
-          alt=''
-          className='pointer-events-none absolute aspect-1 -translate-x-1/2 -translate-y-1/2 rounded-full object-cover'
-          width={(_getRadius() - TICK_SIZE) * 2}
-          height={(_getRadius() - TICK_SIZE) * 2}
-          style={{
-            left: _getCX(),
-            top: _getCY(),
-          }}
-        />
-      )}
+          {poster && (
+            <img
+              src={poster}
+              alt=''
+              className='pointer-events-none absolute aspect-1 -translate-x-1/2 -translate-y-1/2 rounded-full object-cover'
+              width={(_getRadius() - TICK_SIZE) * 2}
+              height={(_getRadius() - TICK_SIZE) * 2}
+              style={{
+                left: _getCX(),
+                top: _getCY(),
+              }}
+            />
+          )}
 
-      <div
-        className='video-player__seek before:top-0 before:bg-white/10'
-        onMouseDown={handleMouseDown}
-        ref={seek}
-      >
-        <div
-          className='absolute top-0 block h-1 rounded bg-white/20'
-          style={{ width: `${buffer}%` }}
-        />
+          <div
+            className='video-player__seek before:top-0 before:bg-white/10'
+            onMouseDown={handleMouseDown}
+            ref={seek}
+          >
+            <div
+              className='absolute top-0 block h-1 rounded bg-white/20'
+              style={{ width: `${buffer}%` }}
+            />
 
-        <div
-          className='absolute top-0 block h-1 rounded bg-accent-500'
-          style={{ width: `${progress}%`, backgroundColor: accentColor }}
-        />
+            <div
+              className='absolute top-0 block h-1 rounded bg-accent-500'
+              style={{ width: `${progress}%`, backgroundColor: accentColor }}
+            />
 
-        <span
-          className={clsx('video-player__seek__handle -top-1', { 'opacity-100': dragging })}
-          tabIndex={0}
-          style={{ left: `${progress}%`, backgroundColor: accentColor }}
-          onKeyDown={handleAudioKeyDown}
-        />
-      </div>
+            <span
+              className={clsx('video-player__seek__handle -top-1', { 'opacity-100': dragging })}
+              tabIndex={0}
+              style={{ left: `${progress}%`, backgroundColor: accentColor }}
+              onKeyDown={handleAudioKeyDown}
+            />
+          </div>
 
-      <div className='video-player__controls video-player__controls--visible'>
-        <div className='mx-[-5px] my-0 flex justify-between'>
-          <div className='video-player__buttons left'>
-            <button
-              type='button'
-              title={intl.formatMessage(paused ? messages.play : messages.pause)}
-              aria-label={intl.formatMessage(paused ? messages.play : messages.pause)}
-              className={clsx('player-button', fullscreen && 'py-2.5')}
-              onClick={togglePlay}
-            >
-              <Icon
-                src={
-                  paused
-                    ? require('@phosphor-icons/core/regular/play.svg')
-                    : require('@phosphor-icons/core/regular/pause.svg')
-                }
-              />
-            </button>
+          <div className='video-player__controls video-player__controls--visible'>
+            <div className='mx-[-5px] my-0 flex justify-between'>
+              <div className='video-player__buttons left'>
+                <button
+                  type='button'
+                  title={intl.formatMessage(paused ? messages.play : messages.pause)}
+                  aria-label={intl.formatMessage(paused ? messages.play : messages.pause)}
+                  className={clsx('player-button', fullscreen && 'py-2.5')}
+                  onClick={togglePlay}
+                >
+                  <Icon
+                    src={
+                      paused
+                        ? require('@phosphor-icons/core/regular/play.svg')
+                        : require('@phosphor-icons/core/regular/pause.svg')
+                    }
+                  />
+                </button>
 
-            <button
-              type='button'
-              title={intl.formatMessage(muted ? messages.unmute : messages.mute)}
-              aria-label={intl.formatMessage(muted ? messages.unmute : messages.mute)}
-              className={clsx('player-button', fullscreen && 'py-2.5')}
-              onClick={toggleMute}
-            >
-              <Icon
-                src={
-                  muted
-                    ? require('@phosphor-icons/core/regular/speaker-x.svg')
-                    : require('@phosphor-icons/core/regular/speaker-high.svg')
-                }
-              />
-            </button>
+                <button
+                  type='button'
+                  title={intl.formatMessage(muted ? messages.unmute : messages.mute)}
+                  aria-label={intl.formatMessage(muted ? messages.unmute : messages.mute)}
+                  className={clsx('player-button', fullscreen && 'py-2.5')}
+                  onClick={toggleMute}
+                >
+                  <Icon
+                    src={
+                      muted
+                        ? require('@phosphor-icons/core/regular/speaker-x.svg')
+                        : require('@phosphor-icons/core/regular/speaker-high.svg')
+                    }
+                  />
+                </button>
 
-            <div className='video-player__volume' onMouseDown={handleVolumeMouseDown} ref={slider}>
-              <div
-                className='video-player__volume__current'
-                style={{ width: `${volume * 100}%`, backgroundColor: _getAccentColor() }}
-              />
-              <span
-                className='video-player__volume__handle'
-                tabIndex={0}
-                style={{ left: `${volume * 100}%`, backgroundColor: _getAccentColor() }}
-              />
-            </div>
+                <div
+                  className='video-player__volume'
+                  onMouseDown={handleVolumeMouseDown}
+                  ref={slider}
+                >
+                  <div
+                    className='video-player__volume__current'
+                    style={{ width: `${volume * 100}%`, backgroundColor: _getAccentColor() }}
+                  />
+                  <span
+                    className='video-player__volume__handle'
+                    tabIndex={0}
+                    style={{ left: `${volume * 100}%`, backgroundColor: _getAccentColor() }}
+                  />
+                </div>
 
-            <span className='my-0 inline flex-initial overflow-hidden text-ellipsis text-black dark:text-white'>
-              <span className='text-sm font-medium text-current'>
-                {formatTime(Math.floor(currentTime))}
-              </span>
-              {getDuration() && (
-                <>
-                  <span className='mx-1.5 my-0 inline-block text-sm font-medium text-current'>
-                    /
-                  </span>
+                <span className='my-0 inline flex-initial overflow-hidden text-ellipsis text-black dark:text-white'>
                   <span className='text-sm font-medium text-current'>
-                    {formatTime(Math.floor(getDuration()))}
+                    {formatTime(Math.floor(currentTime))}
                   </span>
-                </>
-              )}
-            </span>
-          </div>
+                  {getDuration() && (
+                    <>
+                      <span className='mx-1.5 my-0 inline-block text-sm font-medium text-current'>
+                        /
+                      </span>
+                      <span className='text-sm font-medium text-current'>
+                        {formatTime(Math.floor(getDuration()))}
+                      </span>
+                    </>
+                  )}
+                </span>
+              </div>
 
-          <div className='video-player__buttons right'>
-            <a
-              title={intl.formatMessage(messages.download)}
-              aria-label={intl.formatMessage(messages.download)}
-              className='player-button text-inherit'
-              href={src}
-              download
-              target='_blank'
-            >
-              <Icon src={require('@phosphor-icons/core/regular/download-simple.svg')} />
-            </a>
+              <div className='video-player__buttons right'>
+                <a
+                  title={intl.formatMessage(messages.download)}
+                  aria-label={intl.formatMessage(messages.download)}
+                  className='player-button text-inherit'
+                  href={src}
+                  download
+                  target='_blank'
+                >
+                  <Icon src={require('@phosphor-icons/core/regular/download-simple.svg')} />
+                </a>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };

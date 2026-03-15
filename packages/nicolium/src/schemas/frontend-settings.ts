@@ -56,6 +56,7 @@ const settingsSchema = v.object({
   composeInTimelines: v.fallback(v.boolean(), true),
   rememberTimelinePosition: v.fallback(v.boolean(), true),
   accountNicknames: v.fallback(v.record(v.string(), v.string()), {}),
+  useSystemMediaControls: v.fallback(v.boolean(), false),
 
   theme: v.optional(
     coerceObject({

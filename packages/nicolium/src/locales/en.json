@@ -1613,6 +1613,7 @@
   "preferences.fields.theme_reset": "Reset theme",
   "preferences.fields.underline_links_label": "Always underline links in posts",
   "preferences.fields.unfollow_modal_label": "Show confirmation dialog before unfollowing someone",
+  "preferences.fields.use_system_media_controls_label": "Use native media controls",
   "preferences.fields.web_include_boosts_label": "Include reposts in web view",
   "preferences.fields.web_layout_label": "Layout of the web view of your profile",
   "preferences.fields.web_visibility_label": "Visibility level of posts displayed on your profile",

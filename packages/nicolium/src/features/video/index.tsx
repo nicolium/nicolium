@@ -6,6 +6,7 @@ import { defineMessages, useIntl } from 'react-intl';
 
 import Icon from '@/components/icon';
 import Blurhash from '@/components/media/blurhash';
+import { useSettings } from '@/stores/settings';
 import {
   isPanoramic,
   isPortrait,
@@ -135,6 +136,7 @@ const Video: React.FC<IVideo> = ({
   blurhash,
 }) => {
   const intl = useIntl();
+  const { useSystemMediaControls } = useSettings();
 
   const player = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
@@ -528,120 +530,129 @@ const Video: React.FC<IVideo> = ({
         onLoadedData={handleLoadedData}
         onProgress={handleProgress}
         onVolumeChange={handleVolumeChange}
+        controls={useSystemMediaControls}
       />
 
-      <div
-        className={clsx('video-player__controls', {
-          'video-player__controls--visible': paused || hovered,
-        })}
-      >
-        <div className='video-player__seek' onMouseDown={handleMouseDown} ref={seek}>
-          <div
-            className='absolute top-1 block h-1 rounded bg-black/20 dark:bg-white/20'
-            style={{ width: `${buffer}%` }}
-          />
-          <div
-            className='absolute top-1 block h-1 rounded bg-accent-500'
-            style={{ width: `${progress}%` }}
-          />
+      {!useSystemMediaControls && (
+        <div
+          className={clsx('video-player__controls', {
+            'video-player__controls--visible': paused || hovered,
+          })}
+        >
+          <div className='video-player__seek' onMouseDown={handleMouseDown} ref={seek}>
+            <div
+              className='absolute top-1 block h-1 rounded bg-black/20 dark:bg-white/20'
+              style={{ width: `${buffer}%` }}
+            />
+            <div
+              className='absolute top-1 block h-1 rounded bg-accent-500'
+              style={{ width: `${progress}%` }}
+            />
 
-          <span
-            className={clsx('video-player__seek__handle', { 'opacity-100': dragging })}
-            tabIndex={0}
-            style={{ left: `${progress}%` }}
-            onKeyDown={handleVideoKeyDown}
-          />
-        </div>
+            <span
+              className={clsx('video-player__seek__handle', { 'opacity-100': dragging })}
+              tabIndex={0}
+              style={{ left: `${progress}%` }}
+              onKeyDown={handleVideoKeyDown}
+            />
+          </div>
 
-        <div className='mx-[-5px] my-0 flex justify-between'>
-          <div className='video-player__buttons left'>
-            <button
-              type='button'
-              title={intl.formatMessage(paused ? messages.play : messages.pause)}
-              aria-label={intl.formatMessage(paused ? messages.play : messages.pause)}
-              className={clsx('player-button', detailed || (fullscreen && 'py-2.5'))}
-              onClick={togglePlay}
-              autoFocus={autoFocus}
-            >
-              <Icon
-                src={
-                  paused
-                    ? require('@phosphor-icons/core/regular/play.svg')
-                    : require('@phosphor-icons/core/regular/pause.svg')
-                }
-              />
-            </button>
+          <div className='mx-[-5px] my-0 flex justify-between'>
+            <div className='video-player__buttons left'>
+              <button
+                type='button'
+                title={intl.formatMessage(paused ? messages.play : messages.pause)}
+                aria-label={intl.formatMessage(paused ? messages.play : messages.pause)}
+                className={clsx('player-button', detailed || (fullscreen && 'py-2.5'))}
+                onClick={togglePlay}
+                autoFocus={autoFocus}
+              >
+                <Icon
+                  src={
+                    paused
+                      ? require('@phosphor-icons/core/regular/play.svg')
+                      : require('@phosphor-icons/core/regular/pause.svg')
+                  }
+                />
+              </button>
 
-            <button
-              type='button'
-              title={intl.formatMessage(muted ? messages.unmute : messages.mute)}
-              aria-label={intl.formatMessage(muted ? messages.unmute : messages.mute)}
-              className={clsx('player-button', detailed || (fullscreen && 'py-2.5'))}
-              onClick={toggleMute}
-            >
-              <Icon
-                src={
-                  muted
-                    ? require('@phosphor-icons/core/regular/speaker-x.svg')
-                    : require('@phosphor-icons/core/regular/speaker-high.svg')
-                }
-              />
-            </button>
+              <button
+                type='button'
+                title={intl.formatMessage(muted ? messages.unmute : messages.mute)}
+                aria-label={intl.formatMessage(muted ? messages.unmute : messages.mute)}
+                className={clsx('player-button', detailed || (fullscreen && 'py-2.5'))}
+                onClick={toggleMute}
+              >
+                <Icon
+                  src={
+                    muted
+                      ? require('@phosphor-icons/core/regular/speaker-x.svg')
+                      : require('@phosphor-icons/core/regular/speaker-high.svg')
+                  }
+                />
+              </button>
 
-            <div className='video-player__volume' onMouseDown={handleVolumeMouseDown} ref={slider}>
               <div
-                className='video-player__volume__current'
-                style={{ width: `${volume * 100}%` }}
-              />
-              <span
-                className='video-player__volume__handle'
-                tabIndex={0}
-                style={{ left: `${volume * 100}%` }}
-              />
+                className='video-player__volume'
+                onMouseDown={handleVolumeMouseDown}
+                ref={slider}
+              >
+                <div
+                  className='video-player__volume__current'
+                  style={{ width: `${volume * 100}%` }}
+                />
+                <span
+                  className='video-player__volume__handle'
+                  tabIndex={0}
+                  style={{ left: `${volume * 100}%` }}
+                />
+              </div>
+
+              {(detailed || fullscreen) && (
+                <span className='text-black dark:text-white'>
+                  <span className='text-sm font-medium'>{formatTime(currentTime)}</span>
+                  <span className='mx-1.5 my-0 inline-block text-sm font-medium'>/</span>
+                  <span className='text-sm font-medium'>{formatTime(duration)}</span>
+                </span>
+              )}
+
+              {link && <span className='video-player__link'>{link}</span>}
             </div>
 
-            {(detailed || fullscreen) && (
-              <span className='text-black dark:text-white'>
-                <span className='text-sm font-medium'>{formatTime(currentTime)}</span>
-                <span className='mx-1.5 my-0 inline-block text-sm font-medium'>/</span>
-                <span className='text-sm font-medium'>{formatTime(duration)}</span>
-              </span>
-            )}
-
-            {link && <span className='video-player__link'>{link}</span>}
-          </div>
-
-          <div className='video-player__buttons right'>
-            <a
-              title={intl.formatMessage(messages.download)}
-              aria-label={intl.formatMessage(messages.download)}
-              className='player-button text-inherit'
-              href={src}
-              download
-              target='_blank'
-            >
-              <Icon src={require('@phosphor-icons/core/regular/download-simple.svg')} />
-            </a>
-            <button
-              type='button'
-              title={intl.formatMessage(fullscreen ? messages.exitFullscreen : messages.fullscreen)}
-              aria-label={intl.formatMessage(
-                fullscreen ? messages.exitFullscreen : messages.fullscreen,
-              )}
-              className={clsx('player-button', detailed || (fullscreen && 'py-2.5'))}
-              onClick={toggleFullscreen}
-            >
-              <Icon
-                src={
-                  fullscreen
-                    ? require('@phosphor-icons/core/regular/arrows-in-simple.svg')
-                    : require('@phosphor-icons/core/regular/arrows-out-simple.svg')
-                }
-              />
-            </button>
+            <div className='video-player__buttons right'>
+              <a
+                title={intl.formatMessage(messages.download)}
+                aria-label={intl.formatMessage(messages.download)}
+                className='player-button text-inherit'
+                href={src}
+                download
+                target='_blank'
+              >
+                <Icon src={require('@phosphor-icons/core/regular/download-simple.svg')} />
+              </a>
+              <button
+                type='button'
+                title={intl.formatMessage(
+                  fullscreen ? messages.exitFullscreen : messages.fullscreen,
+                )}
+                aria-label={intl.formatMessage(
+                  fullscreen ? messages.exitFullscreen : messages.fullscreen,
+                )}
+                className={clsx('player-button', detailed || (fullscreen && 'py-2.5'))}
+                onClick={toggleFullscreen}
+              >
+                <Icon
+                  src={
+                    fullscreen
+                      ? require('@phosphor-icons/core/regular/arrows-in-simple.svg')
+                      : require('@phosphor-icons/core/regular/arrows-out-simple.svg')
+                  }
+                />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
