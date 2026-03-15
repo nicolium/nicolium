@@ -21,7 +21,7 @@ import toast from '@/toast';
 
 const toRad = (x: number) => x * (Math.PI / 180);
 
-const avatarMissing: string = require('@/assets/images/avatar-missing.png');
+import avatarMissing from '@/assets/images/avatar-missing.png';
 
 const HEIGHT = 1000;
 const WIDTH = 1000;

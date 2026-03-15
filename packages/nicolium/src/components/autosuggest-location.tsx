@@ -1,13 +1,12 @@
+import buildingCommunityIcon from '@phosphor-icons/core/regular/city.svg';
+import homeIcon from '@phosphor-icons/core/regular/house.svg';
+import mapPinIcon from '@phosphor-icons/core/regular/map-pin.svg';
+import roadIcon from '@phosphor-icons/core/regular/road-horizon.svg';
 import React from 'react';
 
 import Icon from '@/components/ui/icon';
 
 import type { Location } from 'pl-api';
-
-const buildingCommunityIcon = require('@phosphor-icons/core/regular/city.svg');
-const homeIcon = require('@phosphor-icons/core/regular/house.svg');
-const mapPinIcon = require('@phosphor-icons/core/regular/map-pin.svg');
-const roadIcon = require('@phosphor-icons/core/regular/road-horizon.svg');
 
 const ADDRESS_ICONS: Record<string, string> = {
   house: homeIcon,
