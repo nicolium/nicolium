@@ -2,6 +2,8 @@
 
 > A JavaScript library for interacting with Mastodon API-compatible servers
 
+! for humans: this file is not actually maintained, i needed it once for a hackathon and didn't touch it since. i prefer writing documentation for humans lol
+
 ## Overview
 
 pl-api is a TypeScript/JavaScript library that provides a type-safe client for interacting with Mastodon API-compatible servers. It supports 12 independent Mastodon API implementations and 5 forks, abstracting implementation differences between various backends.
